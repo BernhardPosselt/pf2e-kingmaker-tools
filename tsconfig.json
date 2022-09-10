@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "types": ["@league-of-foundry-developers/foundry-vtt-types", "jest"],
+    "lib": ["dom", "ESNext"],
+    "target": "ES2022",
+    "moduleResolution": "Node",
+    "module": "commonjs",
+    "allowJs": false,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "rootDir": "src/",
+    "outDir": "dist/"
+  },
+  "include": ["src/"]
+}

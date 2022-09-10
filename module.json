@@ -1,0 +1,44 @@
+{
+  "title": "Pathfinder - Kingmaker Tools",
+  "description": "A collection of utilities to run Kingmaker",
+  "version": "0.0.1",
+  "scripts": [
+    "dist/main.js"
+  ],
+  "url": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools",
+  "license": "LICENSE",
+  "styles": [
+    "styles/style.css"
+  ],
+  "packs": [
+    {
+      "name": "kingmaker-tools-rolltables",
+      "label": "Kingmaker Tools Rolltables",
+      "path": "packs/rolltables.db",
+      "type": "RollTable",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-macros",
+      "label": "Kingmaker Tools Macros",
+      "path": "packs/macros.db",
+      "type": "Macro",
+      "private": false,
+      "flags": {}
+    }
+  ],
+  "manifest": "https://raw.githubusercontent.com/BernhardPosselt/pf2e-kingmaker-tools/master/module.json",
+  "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/0.1.0/release.zip"
+  "id": "pf2e-kingmaker-tools",
+  "authors": [
+    {
+      "name": "Bernhard Posselt",
+      "flags": {}
+    }
+  ],
+  "compatibility": {
+    "minimum": "10",
+    "maximum": "10"
+  }
+}
