@@ -3,6 +3,7 @@ import {isGm} from './utils';
 import {toTimeOfDayMacro} from './time/app';
 import {getNumberSetting, getRollMode} from "./settings";
 import {rollWeather} from "./kingmaker-weather";
+import {getWorldTableUuidMappings} from "./roll-tables";
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -19,18 +20,18 @@ Hooks.on('ready', async () => {
             blindroll: 'Blind GM Roll',
             selfroll: 'Self Roll',
         };
-        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableWeather', {
-            name: 'Enable Weather',
-            default: true,
-            config: true,
-            type: Boolean,
-            scope: 'world',
-        });
         gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'averagePartyLevel', {
             name: 'Average Party Level',
             default: 1,
             config: true,
             type: Number,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableWeather', {
+            name: 'Enable Weather',
+            default: true,
+            config: true,
+            type: Boolean,
             scope: 'world',
         });
         gameInstance.settings.register<string, string, string>('pf2e-kingmaker-tools', 'weatherRollMode', {

@@ -1,43 +1,45 @@
 import {RollMode} from "./settings";
+import {buildUuids, rollRollTable} from "./roll-tables";
+import {setWeather} from "./weather";
 
-const weatherEvents = [
-    {roll: [1, 2, 3], name: 'Fog', level: 0},
-    {roll: [4, 5, 6, 7], name: 'Heavy downpour', level: 0},
-    {roll: [8, 9], name: 'Cold snap', level: 1},
-    {roll: [10, 11, 12], name: 'Windstorm', level: 1},
-    {roll: [13], name: 'Hailstorm, severe', level: 2},
-    {roll: [14], name: 'Blizzard', level: 6},
-    {roll: [15], name: 'Supernatural storm', level: 6},
-    {roll: [16], name: 'Flash flood', level: 7},
-    {roll: [17], name: 'Wildfire', level: 4},
-    {roll: [18], name: 'Subsidence', level: 5},
-    {roll: [19], name: 'Thunderstorm', level: 7},
-    {roll: [20], name: 'Tornado', level: 12},
-];
+const eventLevels = new Map<string, number>();
+eventLevels.set('Fog', 0);
+eventLevels.set('Heavy downpour', 0);
+eventLevels.set('Cold snap', 1);
+eventLevels.set('Windstorm', 1);
+eventLevels.set('Hailstorm, severe', 2);
+eventLevels.set('Blizzard', 6);
+eventLevels.set('Supernatural storm', 6);
+eventLevels.set('Flash flood', 7);
+eventLevels.set('Wildfire', 4);
+eventLevels.set('Subsidence', 5);
+eventLevels.set('Thunderstorm', 7);
+eventLevels.set('Tornado', 12);
 
-async function rollOnWeatherEventTable(averagePartyLevel: number, rollMode: RollMode, rollTwice: boolean) {
-    const roll = await new Roll('1d20').evaluate({async: true});
-    const total = roll.total;
-    const event = weatherEvents.find(event => event.roll.includes(total))!!;
-    if ((averagePartyLevel + 4) <= event.level) {
-        console.info(`Rerolling event, level ${event.level} is 4 higher than party level ${averagePartyLevel}`)
-        await rollOnWeatherEventTable(averagePartyLevel, rollMode, rollTwice);
+async function rollOnWeatherEventTable(game: Game, averagePartyLevel: number, rollMode: RollMode, rollTwice: boolean) {
+    const uuids = await buildUuids(game);
+    const {table, draw} = await rollRollTable(game, uuids['Weather Events'], {rollMode, displayChat: false});
+    const {results} = draw;
+    const tableResult = results[0] as any; // FIXME: remove cast once v10 TS types are available
+    const event = tableResult.text;
+    const eventLevel = eventLevels.get(event) ?? 0;
+    if ((averagePartyLevel + 4) <= eventLevel) {
+        console.info(`Re-rolling event, level ${event.level} is 4 higher than party level ${averagePartyLevel}`)
+        await rollOnWeatherEventTable(game, averagePartyLevel, rollMode, rollTwice);
     } else {
-        await roll.toMessage({flavor: 'Rolling on weather event table'}, {rollMode});
-        let message = event.name;
+        await table.toMessage(results, {roll: draw.roll, messageOptions: {rollMode}});
         if (rollTwice) {
-            message += ', choose a second event';
+            await postMessage('Choose a second weather event!');
         }
-        await postMessage(message);
     }
 }
 
-async function rollWeatherEvent(averagePartyLevel: number, rollMode: RollMode) {
+async function rollWeatherEvent(game: Game, averagePartyLevel: number, rollMode: RollMode) {
     const {isSuccess, total} = await rollCheck(17, `Rolling for weather event with DC 17`, rollMode);
     if (total === 20) {
-        await rollOnWeatherEventTable(averagePartyLevel, rollMode, true);
+        await rollOnWeatherEventTable(game, averagePartyLevel, rollMode, true);
     } else if (isSuccess) {
-        await rollOnWeatherEventTable(averagePartyLevel, rollMode, false);
+        await rollOnWeatherEventTable(game, averagePartyLevel, rollMode, false);
     }
 }
 
@@ -83,21 +85,27 @@ export async function rollWeather(game: Game, averagePartyLevel: number, rollMod
             rollMode
         )).isSuccess;
         if (isCold && hasPrecipitation) {
+            await setWeather(game, 'snowfall');
             message = 'Weather: Cold & Snowing';
         } else if (isCold) {
+            await setWeather(game, 'sunny');
             message = 'Weather: Cold';
         } else if (hasPrecipitation) {
+            await setWeather(game, 'rain');
             message = 'Weather: Rainy';
         } else {
-            message = 'Weather: Normal';
+            await setWeather(game, 'sunny');
+            message = 'Weather: Sunny';
         }
     } else {
         if (hasPrecipitation) {
+            await setWeather(game, 'rain');
             message = 'Weather: Rainy';
         } else {
-            message = 'Weather: Normal';
+            await setWeather(game, 'sunny');
+            message = 'Weather: Sunny';
         }
     }
-    await rollWeatherEvent(averagePartyLevel, rollMode);
+    await rollWeatherEvent(game, averagePartyLevel, rollMode);
     await postMessage(message);
 }
