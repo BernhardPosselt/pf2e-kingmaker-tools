@@ -1,0 +1,25 @@
+#random-encounter-app form {
+    display: table;
+    border-spacing: 5px;
+}
+
+#random-encounter-app .form-row {
+    display: table-row;
+}
+
+#random-encounter-app .form-row > * {
+    display: table-cell;
+}
+
+#random-encounter-app .encounter-stats {
+    margin: 10px 0;
+}
+
+
+#random-encounter-app .encounter-stats td {
+    text-align: center;
+}
+
+#random-encounter-app .buttons {
+    display: flex;
+}

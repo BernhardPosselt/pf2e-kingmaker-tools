@@ -12,6 +12,12 @@ export function getWorldTableUuidMappings(game: Game): Record<string, string> {
     return Object.fromEntries(tables.map((t: RollTable) => [`RollTable.${t.id!}`, t.name!]));
 }
 
+export function findWorldTableUuid(game: Game, tableName: string): string | undefined {
+    return Object.entries(getWorldTableUuidMappings(game))
+        .filter(([_, value]) => value === tableName)
+        .map(([key]) => key)[0];
+}
+
 export async function rollRollTable(
     game: Game,
     tableUuid: string,

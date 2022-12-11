@@ -3,7 +3,7 @@ import {isGm} from './utils';
 import {toTimeOfDayMacro} from './time/app';
 import {getNumberSetting, getRollMode} from "./settings";
 import {rollWeather} from "./kingmaker-weather";
-import {getWorldTableUuidMappings} from "./roll-tables";
+import {randomEncounterDialog} from "./random-encounters";
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -12,6 +12,7 @@ Hooks.on('ready', async () => {
             macros: {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
                 toTimeOfDayMacro: toTimeOfDayMacro.bind(null, game),
+                randomEncounterMacro: randomEncounterDialog.bind(null, game)
             },
         };
         const rollModeChoices = {
@@ -49,6 +50,21 @@ Hooks.on('ready', async () => {
             config: true,
             default: 'sunny',
             type: String,
+        });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'currentRegion', {
+            name: 'Current Region',
+            hint: 'Region used for random encounters',
+            scope: 'world',
+            config: true,
+            default: 'Rostland',
+            type: String,
+        });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'currentEncounterDCModifier', {
+            name: 'Current Encounter DC Modifier',
+            scope: 'world',
+            config: true,
+            default: 0,
+            type: Number,
         });
         Hooks.on('updateWorldTime', async (_, delta) => {
             if (isGm(gameInstance) && dayHasChanged(gameInstance, delta)) {
