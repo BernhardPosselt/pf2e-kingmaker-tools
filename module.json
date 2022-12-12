@@ -30,6 +30,15 @@
       "flags": {}
     },
     {
+      "name": "kingmaker-tools-weather-effects",
+      "label": "Kingmaker Tools Weather Effects",
+      "path": "packs/weather-effects.db",
+      "type": "Item",
+      "system": "pf2e",
+      "private": false,
+      "flags": {}
+    },
+    {
       "name": "kingmaker-tools-journals",
       "label": "Kingmaker Tools Journals",
       "path": "packs/journals.db",
