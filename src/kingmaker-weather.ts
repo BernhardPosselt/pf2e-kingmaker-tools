@@ -22,7 +22,9 @@ async function rollOnWeatherEventTable(game: Game, averagePartyLevel: number, ro
     const {results} = draw;
     const tableResult = results[0] as any; // FIXME: remove cast once v10 TS types are available
     const event = tableResult.text;
-    const eventLevel = eventLevels.get(event) ?? 0;
+    const eventLevel = Array.from(eventLevels.entries())
+        .filter(([name]) => event.startsWith(name))
+        .map(([_, level]) => level)[0] ?? 0;
     if ((averagePartyLevel + 4) <= eventLevel) {
         console.info(`Re-rolling event, level ${event.level} is 4 higher than party level ${averagePartyLevel}`)
         await rollOnWeatherEventTable(game, averagePartyLevel, rollMode, rollTwice);
