@@ -1,5 +1,5 @@
 import {getNumberSetting, getStringSetting, setSetting} from "./settings";
-import {findWorldTableUuid, rollRollTable} from "./roll-tables";
+import {findRollTableUuidWithFallback, findWorldTableUuid, rollRollTable} from "./roll-tables";
 import {DegreeOfSuccess, determineDegreeOfSuccess} from "./degree-of-success";
 
 interface ZoneData {
@@ -41,7 +41,7 @@ async function rollHasEncounterFlatCheck(region: string, modifier: number): Prom
 }
 
 async function rollRandomEncounter(game: Game, region: string, modifier: number, forgoFlatCheck: boolean = false): Promise<void> {
-    const creatureRollTable = findWorldTableUuid(game, region)!;
+    const creatureRollTable = (await findRollTableUuidWithFallback(game, region, 'pf2e-kingmaker-tools.kingmaker-random-encounters'))!;
     const harmlessRollTable = findWorldTableUuid(game, 'Harmless Encounters')!;
     const encounterTypeRollTable = findWorldTableUuid(game, 'Random Encounter Types')!;
     const rollOptions: Partial<RollTable.DrawOptions> = {rollMode: 'gmroll'};

@@ -20,6 +20,22 @@
       "flags": {}
     },
     {
+      "name": "kingmaker-random-encounters",
+      "label": "Kingmaker Random Encounters",
+      "path": "packs/random-encounters.db",
+      "type": "RollTable",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-rumors",
+      "label": "Kingmaker Rumors",
+      "path": "packs/rumors.db",
+      "type": "RollTable",
+      "private": false,
+      "flags": {}
+    },
+    {
       "name": "kingmaker-tools-macros",
       "label": "Kingmaker Tools Macros",
       "path": "packs/macros.db",

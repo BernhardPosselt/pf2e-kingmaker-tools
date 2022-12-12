@@ -3,6 +3,17 @@ export interface RollTableResult {
     draw: RollTableDraw;
 }
 
+export async function findRollTableUuidWithFallback(
+    game: Game,
+    tableName: string,
+    compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables'
+): Promise<string | undefined> {
+    const worldUuid = findWorldTableUuid(game, tableName);
+    const compendiumUuid = await findCompendiumTableUuid(game, tableName, compendiumName);
+    // first look through world tables, then fall back to compendium tables
+    return worldUuid ?? compendiumUuid;
+}
+
 export function getWorldTables(game: Game): RollTable[] {
     return game?.tables?.map(t => t) ?? [];
 }
@@ -16,6 +27,15 @@ export function findWorldTableUuid(game: Game, tableName: string): string | unde
     return Object.entries(getWorldTableUuidMappings(game))
         .filter(([_, value]) => value === tableName)
         .map(([key]) => key)[0];
+}
+
+export async function findCompendiumTableUuid(
+    game: Game,
+    tableName: string,
+    compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables'
+): Promise<string | undefined> {
+    const compendiumUuids = await buildUuids(game, compendiumName);
+    return compendiumUuids[tableName];
 }
 
 export async function rollRollTable(
@@ -34,8 +54,10 @@ export async function rollRollTable(
     }
 }
 
-export async function buildUuids(game: Game): Promise<Record<string, string>> {
-    const compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables';
+export async function buildUuids(
+    game: Game,
+    compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables'
+): Promise<Record<string, string>> {
     const compendium = await game.packs.get(compendiumName, {strict: true});
     const documents = await compendium.getDocuments({});
     return Object.fromEntries(documents.map(document => [document.name, `Compendium.${compendiumName}.${document.id}`]));
