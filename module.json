@@ -12,6 +12,32 @@
   ],
   "packs": [
     {
+      "name": "kingmaker-tools-meal-effects",
+      "label": "Kingmaker Tools Meal Effects",
+      "path": "packs/meal-effects.db",
+      "type": "Item",
+      "system": "pf2e",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-camping-effects",
+      "label": "Kingmaker Tools Camping Effects",
+      "path": "packs/camping-effects.db",
+      "type": "Item",
+      "system": "pf2e",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-journals",
+      "label": "Kingmaker Tools Journals",
+      "path": "packs/journals.db",
+      "type": "JournalEntry",
+      "private": false,
+      "flags": {}
+    },
+    {
       "name": "kingmaker-tools-rolltables",
       "label": "Kingmaker Tools Rolltables",
       "path": "packs/rolltables.db",
