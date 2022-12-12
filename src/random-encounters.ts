@@ -10,7 +10,7 @@ interface ZoneData {
 
 const regions = new Map<string, ZoneData>();
 regions.set("Brevoy", {zoneDC: 14, encounterDC: 12, level: 0})
-regions.set("Rostland", {zoneDC: 15, encounterDC: 12, level: 1})
+regions.set("Rostland Hinterlands", {zoneDC: 15, encounterDC: 12, level: 1})
 regions.set("Greenbelt", {zoneDC: 16, encounterDC: 14, level: 2})
 regions.set("Tuskwater", {zoneDC: 18, encounterDC: 12, level: 3})
 regions.set("Kamelands", {zoneDC: 19, encounterDC: 12, level: 4})

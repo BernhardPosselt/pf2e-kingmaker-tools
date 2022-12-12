@@ -37,6 +37,11 @@
       "flags": {}
     }
   ],
+  "flags": {
+    "pf2e-kingmaker-tools": {
+      "pf2e-art": "modules/pf2e-kingmaker-tools/map.json"
+    }
+  },
   "compatibility": {
     "minimum": "10",
     "maximum": "10"
