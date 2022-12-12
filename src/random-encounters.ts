@@ -50,6 +50,7 @@ async function rollRandomEncounter(game: Game, region: string, modifier: number,
         const typeResult = await rollRollTable(game, encounterTypeRollTable, rollOptions);
         const tableResult = typeResult.draw.results[0] as any;
         if (tableResult.text?.trim() === 'Creature') {
+            console.log('Rolling on creature table ' + creatureRollTable)
             await rollRollTable(game, creatureRollTable, rollOptions);
         } else {
             await rollRollTable(game, harmlessRollTable, rollOptions);

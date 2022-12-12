@@ -11,6 +11,7 @@ export async function findRollTableUuidWithFallback(
     const worldUuid = findWorldTableUuid(game, tableName);
     const compendiumUuid = await findCompendiumTableUuid(game, tableName, compendiumName);
     // first look through world tables, then fall back to compendium tables
+    console.log(`Looking up ${tableName} in ${compendiumName}, world: ${worldUuid}, compendium: ${compendiumUuid}`)
     return worldUuid ?? compendiumUuid;
 }
 
