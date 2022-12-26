@@ -4,6 +4,7 @@ import {toTimeOfDayMacro} from './time/app';
 import {getNumberSetting, getRollMode} from "./settings";
 import {rollWeather} from "./kingmaker-weather";
 import {randomEncounterDialog} from "./random-encounters";
+import {rollExplorationSkillCheck, rollSkillDialog} from "./skill-checks";
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -12,7 +13,20 @@ Hooks.on('ready', async () => {
             macros: {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
                 toTimeOfDayMacro: toTimeOfDayMacro.bind(null, game),
-                randomEncounterMacro: randomEncounterDialog.bind(null, game)
+                randomEncounterMacro: randomEncounterDialog.bind(null, game),
+                rollExplorationSkillCheck: async (skill: string, effect: string) => {
+                    const actors = canvas?.scene?.tokens
+                        ?.filter(t => t !== null && t.actor !== null && t.actor.type === 'character')
+                        ?.map(t => t.actor!) ?? [];
+                    await rollExplorationSkillCheck(actors, skill, effect);
+                },
+                rollSkillDialog: async (actorNames: Set<string>) => {
+                    const actors = gameInstance?.actors
+                        ?.filter(actor => actor.type === 'character'
+                            && actor.name !== null
+                            && actorNames.has(actor.name)) ?? [];
+                    await rollSkillDialog(actors);
+                },
             },
         };
         const rollModeChoices = {
