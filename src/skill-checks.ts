@@ -33,6 +33,7 @@ function tpl(): string {
             <select name="skill" style="display: table-cell">
                 <option value="perception">Perception</option>
                 <option value="nature">Nature</option>
+                <option value="survival">Survival</option>
             </select>
         </div>
         <div style="display: table-row">
