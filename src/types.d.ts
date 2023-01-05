@@ -1,7 +1,6 @@
 import {DateTime} from 'luxon';
 import {RollTableDraw} from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/documents/table';
 import {FxMaster, WeatherEffects} from './fxmaster';
-import {rollSkillDialog} from "./skill-checks";
 
 declare global {
     interface Game {
@@ -10,8 +9,24 @@ declare global {
                 toggleWeatherMacro: () => void,
                 toTimeOfDayMacro: () => void,
                 randomEncounterMacro: () => void,
-                rollExplorationSkillCheck: (skill: string, effect: string) => void,
-                rollSkillDialog: (actorNames: Set<string>) => void,
+                kingdomEventsMacro: () => void,
+                postCompanionEffectsMacro: () => void,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                subsistMacro: (actor: any) => void,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                huntAndGatherMacro: (actor: any) => Promise<void>,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                camouflageCampsiteMacro: (actor: any) => Promise<void>,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                organizeWatchMacro: (actor: any) => Promise<void>,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                tellCampfireStoryMacro: (actor: any) => Promise<void>,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                prepareCampsiteMacro: (actor: any) => Promise<void>,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                cookRecipeMacro: (actor: any) => Promise<void>,
+                rollExplorationSkillCheck: (skill: string, effect: string) => Promise<void>,
+                rollSkillDialog: () => Promise<void>,
             };
         };
         pf2e: {

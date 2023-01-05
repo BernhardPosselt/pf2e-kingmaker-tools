@@ -2,7 +2,7 @@
     <form>
         <div class="form-row">
             <label for="region-input">Region</label>
-            <select name="region" id="region-input">
+            <select name="currentRegion" id="region-input">
                 {{#select currentRegion}}
                 {{#each regions}}
                     <option value="{{this}}">{{this}}</option>
@@ -12,10 +12,10 @@
         </div>
         <div class="form-row">
             <label for="modifier-input">Encounter DC modifier</label>
-            <input id="modifier-input" type="number" name="modifier" value="{{currentEncounterDCModifier}}">
+            <input id="modifier-input" type="number" name="currentEncounterDCModifier" value="{{currentEncounterDCModifier}}">
         </div>
     </form>
-    <table class="encounter-stats">
+    <table class="stats">
         <thead>
         <tr>
             <th>Level</th>
@@ -31,6 +31,7 @@
         </tr>
         </tbody>
     </table>
+    <p class="hint"><b>Hint</b>: "Roll" does not perform a Flat Check and always rolls an encounter. Use "Check" to perform the flat check first.</p>
     <div class="buttons">
         <button id="reset-dc"><i class="fa-solid fa-rotate-left"></i>Reset DC</button>
         <button id="roll-encounter-no-check"><i class="fa-solid fa-dice-d20"></i>Roll</button>

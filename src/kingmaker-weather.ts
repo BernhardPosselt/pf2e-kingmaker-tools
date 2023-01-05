@@ -1,6 +1,6 @@
-import {RollMode} from "./settings";
-import {buildUuids, rollRollTable} from "./roll-tables";
-import {setWeather} from "./weather";
+import {RollMode} from './settings';
+import {buildUuids, rollRollTable} from './roll-tables';
+import {setWeather} from './weather';
 
 const eventLevels = new Map<string, number>();
 eventLevels.set('Fog', 0);
@@ -16,17 +16,19 @@ eventLevels.set('Subsidence', 5);
 eventLevels.set('Thunderstorm', 7);
 eventLevels.set('Tornado', 12);
 
-async function rollOnWeatherEventTable(game: Game, averagePartyLevel: number, rollMode: RollMode, rollTwice: boolean) {
+async function rollOnWeatherEventTable(game: Game, averagePartyLevel: number, rollMode: RollMode, rollTwice: boolean): Promise<void> {
     const uuids = await buildUuids(game);
     const {table, draw} = await rollRollTable(game, uuids['Weather Events'], {rollMode, displayChat: false});
     const {results} = draw;
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     const tableResult = results[0] as any; // FIXME: remove cast once v10 TS types are available
     const event = tableResult.text;
     const eventLevel = Array.from(eventLevels.entries())
         .filter(([name]) => event.startsWith(name))
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .map(([_, level]) => level)[0] ?? 0;
     if ((averagePartyLevel + 4) <= eventLevel) {
-        console.info(`Re-rolling event, level ${event.level} is 4 higher than party level ${averagePartyLevel}`)
+        console.info(`Re-rolling event, level ${event.level} is 4 higher than party level ${averagePartyLevel}`);
         await rollOnWeatherEventTable(game, averagePartyLevel, rollMode, rollTwice);
     } else {
         await table.toMessage(results, {roll: draw.roll, messageOptions: {rollMode}});
@@ -36,8 +38,8 @@ async function rollOnWeatherEventTable(game: Game, averagePartyLevel: number, ro
     }
 }
 
-async function rollWeatherEvent(game: Game, averagePartyLevel: number, rollMode: RollMode) {
-    const {isSuccess, total} = await rollCheck(17, `Rolling for weather event with DC 17`, rollMode);
+async function rollWeatherEvent(game: Game, averagePartyLevel: number, rollMode: RollMode): Promise<void> {
+    const {isSuccess, total} = await rollCheck(17, 'Rolling for weather event with DC 17', rollMode);
     if (total === 20) {
         await rollOnWeatherEventTable(game, averagePartyLevel, rollMode, true);
     } else if (isSuccess) {
@@ -45,9 +47,9 @@ async function rollWeatherEvent(game: Game, averagePartyLevel: number, rollMode:
     }
 }
 
-function getSeason(month: string) {
+function getSeason(month: string): {season: string, precipitationDC: number, coldDC?: number} {
     if (['Kuthona', 'Abadius', 'Calistril'].includes(month)) {
-        const coldDC = month === 'Abadius' ? 16 : 18
+        const coldDC = month === 'Abadius' ? 16 : 18;
         return {season: 'winter', precipitationDC: 8, coldDC};
     } else if (['Pharast', 'Gozran', 'Desnus'].includes(month)) {
         return {season: 'spring', precipitationDC: 15};
@@ -58,7 +60,7 @@ function getSeason(month: string) {
     }
 }
 
-async function rollCheck(dc: number, flavor: string, rollMode: RollMode) {
+async function rollCheck(dc: number, flavor: string, rollMode: RollMode): Promise<{isSuccess: boolean, total: number}> {
     const roll = await new Roll('1d20').evaluate({async: true});
     const isSuccess = roll.total >= dc;
     await roll.toMessage({flavor}, {rollMode});

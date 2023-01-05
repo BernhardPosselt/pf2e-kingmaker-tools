@@ -8,26 +8,7 @@ set -e
 version="$1"
 token="$2"
 
-yarn run lint
-yarn run test
-yarn run clean
-yarn run build
-
-# create release directories
-rm -rf ./build
-mkdir -p build/pf2e-kingmaker-tools/
-
-# update manifest file
-sed -i "s/\"version\":.*/\"version\": \"$version\",/g" module.json
-sed -i "s/\"download\":.*/\"download\": \"https:\/\/github.com\/BernhardPosselt\/pf2e-kingmaker-tools\/releases\/download\/$version\/release.zip\"/g" module.json
-
-# create archive
-cp module.json build/pf2e-kingmaker-tools/module.json
-cp README.md LICENSE CHANGELOG.md OpenGameLicense.md build/pf2e-kingmaker-tools/
-cp -r packs/ maps/ templates/ styles/ dist/ build/pf2e-kingmaker-tools/
-cd build
-zip -r release.zip pf2e-kingmaker-tools
-cd -
+./package.sh "$1"
 
 # push new code
 git add module.json

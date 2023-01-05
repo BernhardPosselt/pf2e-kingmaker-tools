@@ -11,7 +11,7 @@ export async function findRollTableUuidWithFallback(
     const worldUuid = findWorldTableUuid(game, tableName);
     const compendiumUuid = await findCompendiumTableUuid(game, tableName, compendiumName);
     // first look through world tables, then fall back to compendium tables
-    console.log(`Looking up ${tableName} in ${compendiumName}, world: ${worldUuid}, compendium: ${compendiumUuid}`)
+    console.log(`Looking up ${tableName} in ${compendiumName}, world: ${worldUuid}, compendium: ${compendiumUuid}`);
     return worldUuid ?? compendiumUuid;
 }
 
@@ -26,6 +26,7 @@ export function getWorldTableUuidMappings(game: Game): Record<string, string> {
 
 export function findWorldTableUuid(game: Game, tableName: string): string | undefined {
     return Object.entries(getWorldTableUuidMappings(game))
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .filter(([_, value]) => value === tableName)
         .map(([key]) => key)[0];
 }

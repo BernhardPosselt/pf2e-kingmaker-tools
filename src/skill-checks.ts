@@ -2,14 +2,15 @@ async function rollSkillCheck(
     actors: Actor[],
     skill: string,
     dc: number | undefined = undefined
-) {
+): Promise<void> {
     const checkDc = dc === undefined ? undefined : {value: dc};
     for (const actor of actors) {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         const pf2eActor = actor as any;
         const check = skill === 'perception' ? pf2eActor.perception : pf2eActor.skills[skill];
         await check.roll({
             rollMode: 'gmroll',
-            dc: checkDc
+            dc: checkDc,
         });
     }
 }
@@ -65,5 +66,5 @@ export async function rollSkillDialog(actors: Actor[]): Promise<void> {
         default: 'roll',
     }, {
         jQuery: false,
-    }).render(true);
+    }).render(true, {width: 200});
 }

@@ -21,32 +21,345 @@ Clone this repository into your installation's module folder:
 
 Activate the module in FoundryVTT.
 
+### Journals
+
+The following journals are shipped:
+
+* **Calendar**: lists weekday and month names
+* **Camping** Activities: lists all camping activities linked to their respective effects
+* **Hexploration**: hexploration rules from AoN enriched with effects and clarifications
+* **Influence**: influence activities and a sheet to track points, weaknesses, resistances and biases of each NPC with an influence stat block
+* **Recipes**: a list of recipes by level linked to their respective effects
+* **Kingdom Activities**: All activities
+
 ### Macros
 
-* A macro to toggle weather on/off to change into non exposed areas
- 
+#### Camping Macros
+**Hint**: All camping macros that are based on a region or region DC are configured using the drop-down of the random encounter macro!
+
+![Camping Macros](docs/images/camping-macros.png)
+
+* **Subsist with -5 and Survival**: Even callable on the world map since the user's character is used instead of the selected token
+* **Prepare Camp**: Posts results to chat
+* **Camouflage Campsite**: Posts effects based on result to chat (only GM visible)
+* **Hunt and Gather**: Adds the ingredients into your inventory based on the result
+* **Organize Watch**: Posts effects based on result to chat
+* **Cook Recipe**: Links the recipe to chat after a Survival or Cooking Lore check
+ ![Cooking Macro](docs/images/cooking-macro.png)
+* **Tell Campfire Story**: Posts effects based on result to chat
+* **Companion Effects to Chat**: Allows the GM to quickly post the drag and drop effects of actions of companions to chat
+
+#### Other
+* A macro to toggle weather on/off to change into non-exposed areas
 * A macro to advance/retract to a certain day of time
+* A macro to roll on a custom Kingdom Events table. By default, the Roll Table is called "Kingdom Events", but you can change the name in the settings
+* 3 macros that help automate exploration mode. ![Exploration Macros](docs/images/exploration-macros.png)
+  
+  2 of them integrate with [PF2E Exploration Effects](https://foundryvtt.com/packages/pf2e-exploration-effects) and will roll secret checks for stealth and perception for all characters on the current canvas, that have the "Search" or "Avoid Notice" exploration effect. The other macro rolls checks for all configured characters and can be used to roll checks on the hex map without having the tokens be active on that scene.
+  ![Skills Macro](docs/images/skills-macro.png)
+  
+* A macro to roll a random encounter of a region.
+  ![Random Encounter Macro](docs/images/random-encounter-macro.png)
+  
+  Optionally, can be given a proxy roll table like the one listed in [The Hexploration](https://2e.aonprd.com/Rules.aspx?ID=1276) rules. If you do, the String value "Creature" indicates to roll on the region roll table. Leave the proxy table setting blank to roll on the region encounters directly
+
+  ![Proxy Table](docs/images/random-encounter-proxy-table.png)
+
+### Tokens
+
+**Note**: This module does not and can not ship any art! You are responsible for placing the appropriate images in the described folder structure. See further down for how the folder needs to be organized.
+
+The module ships with a settings to auto-configure all tokens from the adventure path by looking up files in a certain folder. If you don't want that, remove the following lines from the **module.json** file:
+
+```json
+"flags": {
+  "pf2e-kingmaker-tools": {
+    "pf2e-art": "modules/pf2e-kingmaker-tools/map.json"
+  }
+},
+```
+
+The tokens integrate with the [Token Pack](https://foundryvtt.com/packages/pf2e-tokens-bestiaries) and expect the other tokens to be placed into your **Data/pf2e-kingmaker-tools-tokens/** directory under the following paths:
+* **kingmaker/Token - Aecora Silverfire.webp**
+* **kingmaker/Token - Agai.webp**
+* **kingmaker/Token - Akiros.webp**
+* **kingmaker/Token - Akuzhail.webp**
+* **kingmaker/Token - Alasen.webp**
+* **kingmaker/Token - Ameon Trask.webp**
+* **kingmaker/Token - Annamede Belavarah.webp**
+* **kingmaker/Token - Armag.webp**
+* **kingmaker/Token - Auchs.webp**
+* **kingmaker/Token - Avatar of the Lantern King.webp**
+* **kingmaker/Token - Barbtongued Wyvern.webp**
+* **kingmaker/Token - Black Tear Cutthroat.webp**
+* **kingmaker/Token - Bloom Cultist 2.webp**
+* **kingmaker/Token - Bloom of Lamashtu.webp**
+* **kingmaker/Token - Bloom Wyvern.webp**
+* **kingmaker/Token - Bog Mummy Cultist.webp**
+* **kingmaker/Token - Brush Thylacine.webp**
+* **kingmaker/Token - Castruccio Irovetti.webp**
+* **kingmaker/Token - Cephal Lorentus.webp**
+* **kingmaker/Token - Chief Sootscale.webp**
+* **kingmaker/Token - Cleansed Cultist.webp**
+* **kingmaker/Token - Corax.webp**
+* **kingmaker/Token - Cursed Guardian.webp**
+* **kingmaker/Token - Cyclops Zombie.webp**
+* **kingmaker/Token - Darivan.webp**
+* **kingmaker/Token - Davik Nettles.webp**
+* **kingmaker/Token - Defaced Naiad Queen.webp**
+* **kingmaker/Token - Dog.webp**
+* **kingmaker/Token - Dovan.webp**
+* **kingmaker/Token - Drelev Guard.webp**
+* **kingmaker/Token - Elga Verniex.webp**
+* **kingmaker/Token - Elk.webp**
+* **kingmaker/Token - Endless Struggle.webp**
+* **kingmaker/Token - Engelidis.webp**
+* **kingmaker/Token - Eobald.webp**
+* **kingmaker/Token - Evindra.webp**
+* **kingmaker/Token - False Priestess.webp**
+* **kingmaker/Token - Fetch.webp**
+* **kingmaker/Token - Fetch.webp**
+* **kingmaker/Token - Fionn.webp**
+* **kingmaker/Token - Foras.webp**
+* **kingmaker/Token - Gaetane.webp**
+* **kingmaker/Token - Gedovius.webp**
+* **kingmaker/Token - General Avinash Jurg.webp**
+* **kingmaker/Token - Ghostly Guard.webp**
+* **kingmaker/Token - Goblin Bat-Dog.webp**
+* **kingmaker/Token - Grabbles.webp**
+* **kingmaker/Token - Grigori 2.webp**
+* **kingmaker/Token - Gromog.webp**
+* **kingmaker/Token - Gurija.webp**
+* **kingmaker/Token - Hannis Drelev 2.webp**
+* **kingmaker/Token - Happs Bydon.webp**
+* **kingmaker/Token - Hargulka.webp**
+* **kingmaker/Token - Hateful Hermit.webp**
+* **kingmaker/Token - Hillstomper.webp**
+* **kingmaker/Token - Hooktongue.webp**
+* **kingmaker/Token - Horagnamon.webp**
+* **kingmaker/Token - Ilora Nuski.webp**
+* **kingmaker/Token - Ilthuliak.webp**
+* **kingmaker/Token - Castruccio Irovetti.webp**
+* **kingmaker/Token - Jaggedbriar Hag.webp**
+* **kingmaker/Token - Jamandi Aldori.webp**
+* **kingmaker/Token - Jin Durwhimmer.webp**
+* **kingmaker/Token - Jurgrindor.webp**
+* **kingmaker/Token - Kargstaad.webp**
+* **kingmaker/Token - Kargstaads Giant.webp**
+* **kingmaker/Token - Kereek.webp**
+* **kingmaker/Token - King Vesket.webp**
+* **kingmaker/Token - Kob Moleg.webp**
+* **kingmaker/Token - Korog.webp**
+* **kingmaker/Token - Kressle.webp**
+* **kingmaker/Token - Kundal Werewolf.webp**
+* **kingmaker/Token - Leng Envoy.webp**
+* **kingmaker/Token - Lesser Jabberwock.webp**
+* **kingmaker/Token - Lickweed.webp**
+* **kingmaker/Token - Lintwerth.webp**
+* **kingmaker/Token - Lizardfolk Warrior.webp**
+* **kingmaker/Token - Logger.webp**
+* **kingmaker/Token - Malgorzata Niska.webp**
+* **kingmaker/Token - Mandragora Swarm.webp**
+* **kingmaker/Token - Mastiff of Tindalos.webp**
+* **kingmaker/Token - Elk.webp**
+* **kingmaker/Token - Melianse.webp**
+* **kingmaker/Token - Minognos-Ushad.webp**
+* **kingmaker/Token - Nighmare Rook.webp**
+* **kingmaker/Token - Nilak.webp**
+* **kingmaker/Token - Nishkiv.webp**
+* **kingmaker/Token - Ntavi.webp**
+* **kingmaker/Token - Nugrah.webp**
+* **kingmaker/Token - Nyrissa 2.webp**
+* **kingmaker/Token - Old Crackjaw.webp**
+* **kingmaker/Token - Oleg.webp**
+* **kingmaker/Token - Pavetta Stroon.webp**
+* **kingmaker/Token - Phomandala.webp**
+* **kingmaker/Token - Pitax Warden.webp**
+* **kingmaker/Token - Prazil.webp**
+* **kingmaker/Token - Primal Bandersnatch.webp**
+* **kingmaker/Token - Qunitessa Maray.webp**
+* **kingmaker/Token - Rickety Bridge.webp**
+* **kingmaker/Token - Rigg Gargadilly.webp**
+* **kingmaker/Token - Fetch.webp**
+* **kingmaker/Token - Satinder Morne.webp**
+* **kingmaker/Token - Sepoko.webp**
+* **kingmaker/Token - Sir Fredo Sinnet.webp**
+* **kingmaker/Token - Sister of the Bloodshot Eye.webp**
+* **kingmaker/Token - Skeletal Tiger Lord.webp**
+* **kingmaker/Token - Smoke-Filled Hallway.webp**
+* **kingmaker/Token - Stinging Nettle.webp**
+* **kingmaker/Token - Svetlana.webp**
+* **kingmaker/Token - Talon Peak Roc.webp**
+* **kingmaker/Token - Tartuk.webp**
+* **kingmaker/Token - Terrion Numesti.webp**
+* **kingmaker/Token - The Beast.webp**
+* **kingmaker/Token - The Dancing Lady.webp**
+* **kingmaker/Token - The First Faithful.webp**
+* **kingmaker/Token - The Gardener.webp**
+* **kingmaker/Token - The Horned Hunter.webp**
+* **kingmaker/Token - The Knurly Witch.webp**
+* **kingmaker/Token - The Lonely Warrior.webp**
+* **kingmaker/Token - The Misbegotten Troll.webp**
+* **kingmaker/Token - The Stag Lord.webp**
+* **kingmaker/Token - The Wriggling Man.webp**
+* **kingmaker/Token - Threshold Disciple.webp**
+* **kingmaker/Token - Threshold Hermeticist.webp**
+* **kingmaker/Token - Threshold Mystic.webp**
+* **kingmaker/Token - Brush Thylacine.webp**
+* **kingmaker/Token - Tiger Lord.webp**
+* **kingmaker/Token - Trapdoor Ogre Spider.webp**
+* **kingmaker/Token - Tree That Weeps.webp**
+* **kingmaker/Token - Troll Guard.webp**
+* **kingmaker/Token - Tulvak.webp**
+* **kingmaker/Token - Unstable Pit.webp**
+* **kingmaker/Token - Vilderavn Herald.webp**
+* **kingmaker/Token - Villamor Koth.webp**
+* **kingmaker/Token - Virthad.webp**
+* **kingmaker/Token - Volodmyra.webp**
+* **kingmaker/Token - Vordakai.webp**
+* **kingmaker/Token - Werendegar.webp**
+* **kingmaker/Token - Whimwyrm.webp**
+* **kingmaker/Token - Wild Hunt Archer.webp**
+* **kingmaker/Token - Wild Hunt Horse.webp**
+* **kingmaker/Token - Wild Hunt Hound.webp**
+* **kingmaker/Token - Wild Hunt Monarch.webp**
+* **kingmaker/Token - Wild Hunt Scout.webp**
+* **kingmaker/Token - Winged Owlbear.webp**
+* **kingmaker/Token - Xae.webp**
+* **kingmaker/Token - Zorek.webp**
+* **companions/Token - Amiri.webp**
+* **companions/Token - Ekundayo.webp**
+* **companions/Token - Jubilost.webp**
+* **companions/Token - Linzi.webp**
+* **companions/Token - Nok Nok.webp**
+* **companions/Token - Tristian.webp**
+* **companions/Token - Valerie.webp**
+* **gmg/Token - Bandit.webp**
+* **gmg/Token - Hunter.webp**
+* **gmg/Token - Antipaladin.webp**
+* **gmg/Token - Bandit.webp**
+* **gmg/Token - Barkeep.webp**
+* **gmg/Token - Bodyguard.webp**
+* **gmg/Token - Bounty Hunter.webp**
+* **gmg/Token - Cultist.webp**
+* **gmg/Token - Guard.webp**
+* **gmg/Token - Hunter.webp**
+* **gmg/Token - Mage for Hire.webp**
+* **gmg/Token - Monster Hunter.webp**
+* **gmg/Token - Noble.webp**
+* **gmg/Token - Palace Guard.webp**
+* **gmg/Token - Poacher.webp**
+* **gmg/Token - Ruffian.webp**
+* **gmg/Token - Servant.webp**
+* **structures/Academy.webp**
+* **structures/Alchemy Laboratory.webp**
+* **structures/Arcanist Tower.webp**
+* **structures/Arena.webp**
+* **structures/Bank.webp**
+* **structures/Barracks.webp**
+* **structures/Brewery.webp**
+* **structures/Bridge.webp**
+* **structures/Castle.webp**
+* **structures/Cathedral.webp**
+* **structures/Cemetery.webp**
+* **structures/Construction Yard.webp**
+* **structures/Dump.webp**
+* **structures/Embassy.webp**
+* **structures/Festival Hall.webp**
+* **structures/Foundry.webp**
+* **structures/Garrison.webp**
+* **structures/General Store.webp**
+* **structures/Gladiatorial Arena.webp**
+* **structures/Granary.webp**
+* **structures/Guildhall.webp**
+* **structures/Herbalist.webp**
+* **structures/Hospital.webp**
+* **structures/Houses.webp**
+* **structures/Illicit Market.webp**
+* **structures/Inn.webp**
+* **structures/Jail.webp**
+* **structures/Keep.webp**
+* **structures/Library.webp**
+* **structures/Lumberyard.webp**
+* **structures/Luxury Store.webp**
+* **structures/Magical Streetlamps.webp**
+* **structures/Magic Shop.webp**
+* **structures/Mansion.webp**
+* **structures/Marketplace.webp**
+* **structures/Menagerie.webp**
+* **structures/Military Academy.webp**
+* **structures/Mill.webp**
+* **structures/Mint.webp**
+* **structures/Monument.webp**
+* **structures/Museum.webp**
+* **structures/Noble Villa.webp**
+* **structures/Occult Shop.webp**
+* **structures/Opera House.webp**
+* **structures/Orphanage.webp**
+* **structures/Palace.webp**
+* **structures/Park.webp**
+* **structures/Paved Streets.webp**
+* **structures/Pier.webp**
+* **structures/Printing Press.webp**
+* **structures/Rubble.webp**
+* **structures/Sacred Grove.webp**
+* **structures/Secure Warehouse.webp**
+* **structures/Sewer System.webp**
+* **structures/Shrine.webp**
+* **structures/Smithy.webp**
+* **structures/Special Artisan.webp**
+* **structures/Stable.webp**
+* **structures/Stockyard.webp**
+* **structures/Stonemason.webp**
+* **structures/Tannery.webp**
+* **structures/Tavern, Dive.webp**
+* **structures/Tavern, Luxury.webp**
+* **structures/Tavern, Popular.webp**
+* **structures/Tavern, World Class.webp**
+* **structures/Temple.webp**
+* **structures/Tenement.webp**
+* **structures/Theater.webp**
+* **structures/Thieves Guild.webp**
+* **structures/Town Hall.webp**
+* **structures/Trade Shop.webp**
+* **structures/University.webp**
+* **structures/Wall, Stone.webp**
+* **structures/Wall, Wooden.webp**
+* **structures/Watchtower.webp**
+* **structures/Waterfront (Corner).webp**
+* **structures/Waterfront (Side).webp**
+ 
+### Camping Effects
+
+Effects to drag onto PCs after performing camping activities
+
+![Camping Effects](docs/images/camping-effects.png)
+
+### Meal Effects
+
+All meals that can be dragged onto PCs. Allows you to select favorite meal and degree of success.
+
+![Meal Effects](docs/images/meal-effects.png)
+
+### Structures
+
+Structures are implemented as NPC stat blocks, including the correct sizes. Their description is in the public notes. No rules have yet been implemented on them.
+
+![Meal Effects](docs/images/structures.png)
+
 
 ### Daily Weather
 
-Rolls daily weather, animates weather on maps and starts playlists.
+Rolls daily weather when your clock advances to a new day, animates weather on maps and starts playlists.
 
 Visual effects rely on [FxMaster](https://foundryvtt.com/packages/fxmaster).
 
-First configure the **Weather Roll Table** in settings. The name needs to be the same as an existing roll table in your game.
+First configure the **Average Party Level** in settings. This setting is used to re-roll weather events if an event with a level higher than APL+4 is rolled. You need to manually keep this value in sync with your party's level over the course of the game.
 
-The roll table itself can have the following values:
+In addition, you can configure sound effects that are played for rain, sunny and snowfall by creating playlists with the following names:
 
-* sunny
-* rain
-* heavyRain
-* fog
-* heavyFog
-* storm
-* snowfall
-* snowstorm
-* clouds
-
-Then optionally create playlists with the name **weather.NAME**, where NAME is one of the roll table values, e.g. **weather.clouds** for clouds.
+* **weather.sunny**
+* **weather.rain**
+* **weather.snowfall**
 
 Each day, a new value is rolled from the roll table and persisted across all scenes.
