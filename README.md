@@ -1,6 +1,6 @@
 # Kingmaker Tools (Unofficial)
 
-Tools for running Kingmaker
+This module ships macros, journal entries, roll tables, effect items, additional tooling for OGL/CUP licensed content from the Kingmaker Adventure Path for Pathfinder 2nd Edition.
 
 Uses the [Open Gaming License](./OpenGameLicense.md) and [CUP](https://paizo.com/community/communityuse)
 
