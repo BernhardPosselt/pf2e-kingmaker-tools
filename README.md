@@ -343,6 +343,8 @@ All meals that can be dragged onto PCs. Allows you to select favorite meal and d
 
 ### Structures
 
+**Note**: Images are not included!
+
 Structures are implemented as NPC stat blocks, including the correct sizes. Their description is in the public notes. No rules have yet been implemented on them.
 
 ![Meal Effects](docs/images/structures.png)
