@@ -1,4 +1,4 @@
-import {getStringSetting, RollMode, setSetting} from './settings';
+import {getStringSetting, setSetting} from './settings';
 import {getRegionInfo} from './random-encounters';
 import {DegreeOfSuccess} from './degree-of-success';
 import {createUUIDLink, getLevelBasedDC, postDegreeOfSuccessMessage, roll} from './utils';
@@ -481,7 +481,6 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
     override async _updateObject(event: Event, formData?: CookingFormData): Promise<void> {
         await setSetting(this.game, 'lastCookedMeal', formData?.selectedRecipe ?? 'Basic Meal');
         await setSetting(this.game, 'lastCookingSkill', formData?.selectedSkill ?? 'survival');
-        console.log(formData);
         this.render();
     }
 

@@ -1,5 +1,4 @@
 import {DegreeOfSuccess} from './degree-of-success';
-import {RollMode} from './settings';
 
 export function isGm(game: Game): boolean {
     return game?.user?.name === 'Gamemaster';
