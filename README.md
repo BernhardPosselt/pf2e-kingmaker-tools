@@ -10,6 +10,8 @@ Uses the [Open Gaming License](./OpenGameLicense.md) and [CUP](https://paizo.com
 
 The package is available through the [module registry](https://foundryvtt.com/packages/pf2e-kingmaker-tools)
 
+You may want to enable the [FXMaster](https://github.com/ghost-fvtt/fxmaster) to display rain and snow effects depending on the current weather. 
+
 ### Git
 
 Clone this repository into your installation's module folder:
