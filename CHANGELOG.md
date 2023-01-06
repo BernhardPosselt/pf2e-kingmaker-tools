@@ -15,7 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Only learned recipes are showin in the Cook Recipe macro
+* Only learned recipes are showing in the Cook Recipe macro
+
+### Fixed
+
+* Cooking macro not being able to store values in settings when a player used it; these settings are now stored per player
 
 ## [0.0.1] - 2023-01-05
 

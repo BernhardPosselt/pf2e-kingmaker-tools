@@ -175,28 +175,28 @@ Hooks.on('ready', async () => {
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'selectedCompanions', {
             name: 'Selected Companions',
-            scope: 'world',
+            scope: 'client',
             config: false,
             default: '',
             type: String,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'lastCookedMeal', {
             name: 'Last Cooked Meal',
-            scope: 'world',
+            scope: 'client',
             config: false,
             default: '',
             type: String,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'lastCookingSkill', {
             name: 'Last Cooking Skill',
-            scope: 'world',
+            scope: 'client',
             config: false,
             default: '',
             type: String,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'knownRecipes', {
             name: 'Known Recipes',
-            scope: 'world',
+            scope: 'client',
             config: false,
             default: '["Basic Meal", "Hearty Meal"]',
             type: String,
