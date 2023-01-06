@@ -566,7 +566,7 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
 
     private getSkills(): { attribute: string, label: string }[] {
         return Object.entries(this.actor.skills)
-            .filter(([attr]) => attr === 'survival' || attr === 'cooking-lore')
+            .filter(([attr]) => attr === 'survival' || attr === 'cooking-lore' || attr === 'cooking')
             .map(([attr, stat]) => {
                 return {attribute: attr, label: (stat as any).label};
             });
@@ -591,7 +591,7 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
         const cookButton = html[0].querySelector('#cook-button') as HTMLButtonElement;
         cookButton?.addEventListener('click', async () => {
             const selectedSkill = this.getSelectedSkill();
-            const dcKey = selectedSkill === 'cooking-lore' ? 'cookingLoreDC' : 'survivalDC';
+            const dcKey = selectedSkill === 'cooking-lore' || selectedSkill === 'cooking' ? 'cookingLoreDC' : 'survivalDC';
             const selectedRecipe = recipes.find(r => r.name === this.getSelectedRecipe())!;
             const result = await this.actor.skills[selectedSkill].roll({
                 dc: selectedRecipe?.[dcKey] ?? 0,
@@ -679,7 +679,8 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
     }
 
     private hasCookingLore(): boolean {
-        return Object.keys(this.actor.skills).includes('cooking-lore');
+        const skills = Object.keys(this.actor.skills);
+        return skills.includes('cooking-lore') || skills.includes('cooking');
     }
 
     private getKnownRecipes(): string[] {
@@ -730,7 +731,8 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
                 const button = event.target as HTMLButtonElement;
                 const recipeName = button.dataset.recipe!;
                 const selectedRecipe = recipes.find(r => r.name === recipeName)!;
-                const result = await this.actor.skills['cooking-lore'].roll({
+                const skill = 'cooking-lore' in this.actor.skills ? 'cooking-lore' : 'cooking';
+                const result = await this.actor.skills[skill].roll({
                     dc: selectedRecipe.cookingLoreDC ?? 0,
                 });
                 const degreeOfSuccess = result.degreeOfSuccess;
