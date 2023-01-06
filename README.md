@@ -354,7 +354,7 @@ Structures are implemented as NPC stat blocks, including the correct sizes. Thei
 
 ### Daily Weather
 
-Rolls daily weather when your clock advances to a new day, animates weather on maps and starts playlists.
+Rolls daily weather when your clock advances to a new day, animates weather on maps and starts playlists. If you prefer rolling manually, turn off auto rolling in the settings and use the provided "Roll Kingmaker Weather" macro.
 
 Visual effects rely on [FxMaster](https://foundryvtt.com/packages/fxmaster).
 

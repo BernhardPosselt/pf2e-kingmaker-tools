@@ -1,8 +1,8 @@
 import {dayHasChanged, syncWeather, toggleWeather} from './weather';
 import {getSelectedCharacter, isGm} from './utils';
 import {toTimeOfDayMacro} from './time/app';
-import {getBooleanSetting, getNumberSetting, getRollMode, getStringSetting} from './settings';
-import {rollWeather} from './kingmaker-weather';
+import {getBooleanSetting, getStringSetting} from './settings';
+import {rollKingmakerWeather} from './kingmaker-weather';
 import {randomEncounterDialog} from './random-encounters';
 import {rollExplorationSkillCheck, rollSkillDialog} from './skill-checks';
 import {rollKingdomEvent} from './kingdom-events';
@@ -26,6 +26,7 @@ Hooks.on('ready', async () => {
                 randomEncounterMacro: randomEncounterDialog.bind(null, game),
                 kingdomEventsMacro: rollKingdomEvent.bind(null, game),
                 postCompanionEffectsMacro: postCompanionEffects.bind(null, game),
+                rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 subsistMacro: async (actor: any): Promise<void> => {
                     const selectedActor = getBooleanSetting(gameInstance, 'useSelectedCharacter')
@@ -83,6 +84,14 @@ Hooks.on('ready', async () => {
         });
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableWeather', {
             name: 'Enable Weather',
+            default: true,
+            config: true,
+            type: Boolean,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'autoRollWeather', {
+            name: 'Automatically roll Weather',
+            hint: 'When a new day begins (00:00), automatically roll weather',
             default: true,
             config: true,
             type: Boolean,
@@ -188,10 +197,11 @@ Hooks.on('ready', async () => {
             scope: 'world',
         });
         Hooks.on('updateWorldTime', async (_, delta) => {
-            if (isGm(gameInstance) && dayHasChanged(gameInstance, delta)) {
-                const rollMode = getRollMode(gameInstance, 'weatherRollMode');
-                const averagePartyLevel = getNumberSetting(gameInstance, 'averagePartyLevel');
-                await rollWeather(gameInstance, averagePartyLevel, rollMode);
+            if (getBooleanSetting(gameInstance, 'autoRollWeather')
+                && isGm(gameInstance)
+                && dayHasChanged(gameInstance, delta)
+            ) {
+                await rollKingmakerWeather(gameInstance);
             }
         });
         Hooks.on('canvasReady', async () => {

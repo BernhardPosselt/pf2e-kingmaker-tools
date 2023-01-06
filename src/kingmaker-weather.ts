@@ -1,4 +1,4 @@
-import {RollMode} from './settings';
+import {getNumberSetting, getRollMode, RollMode} from './settings';
 import {buildUuids, rollRollTable} from './roll-tables';
 import {setWeather} from './weather';
 
@@ -71,7 +71,13 @@ async function postMessage(message: string): Promise<void> {
     await ChatMessage.create({content: message, blind: true});
 }
 
-export async function rollWeather(game: Game, averagePartyLevel: number, rollMode: RollMode): Promise<void> {
+export async function rollKingmakerWeather(game: Game): Promise<void> {
+    const rollMode = getRollMode(game, 'weatherRollMode');
+    const averagePartyLevel = getNumberSetting(game, 'averagePartyLevel');
+    await rollWeather(game, averagePartyLevel, rollMode);
+}
+
+async function rollWeather(game: Game, averagePartyLevel: number, rollMode: RollMode): Promise<void> {
     const month = game.pf2e.worldClock.month;
     const {precipitationDC, coldDC} = getSeason(month);
 
