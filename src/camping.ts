@@ -198,7 +198,19 @@ interface CookingFormData {
     selectedSkill: string;
 }
 
-const recipes = [
+interface Recipe {
+    name: string,
+    basicIngredients: number,
+    specialIngredients: number,
+    cookingLoreDC: number,
+    survivalDC: number,
+    uuid: string,
+    level: number,
+    cost: string,
+    rarity: 'common' | 'uncommon' | 'rare',
+}
+
+const recipes: Recipe[] = [
     {
         name: 'Basic Meal',
         basicIngredients: 2,
@@ -206,6 +218,9 @@ const recipes = [
         cookingLoreDC: 18,
         survivalDC: 22,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.J5nci1DS7i1wDph4',
+        level: 0,
+        cost: '0 gp',
+        rarity: 'common',
     },
     {
         name: 'Hearty Meal',
@@ -214,6 +229,9 @@ const recipes = [
         cookingLoreDC: 14,
         survivalDC: 16,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.K5l6QZci2mCofOBg',
+        level: 0,
+        cost: '0 gp',
+        rarity: 'common',
     },
     {
         name: 'Jeweled Rice',
@@ -222,6 +240,9 @@ const recipes = [
         cookingLoreDC: 14,
         survivalDC: 16,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.N3k7OGUKHn4kTu59',
+        level: 0,
+        cost: '5 sp',
+        rarity: 'common',
     },
     {
         name: 'Fish-On-A-Stick',
@@ -230,14 +251,20 @@ const recipes = [
         cookingLoreDC: 17,
         survivalDC: 19,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.b59ro2GHvRvBOko8',
+        level: 1,
+        cost: '1 gp',
+        rarity: 'common',
     },
     {
         name: 'Haggis',
         basicIngredients: 2,
-        specialIngredients:0 ,
+        specialIngredients: 0,
         cookingLoreDC: 15,
         survivalDC: 17,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.tKcKHaxGW48w5UMj',
+        level: 1,
+        cost: '1 gp',
+        rarity: 'common',
     },
     {
         name: 'Rice-N-Nut Pudding',
@@ -246,6 +273,9 @@ const recipes = [
         cookingLoreDC: 16,
         survivalDC: 18,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IrrRh2yttdTDU1A5',
+        level: 2,
+        cost: '2 gp',
+        rarity: 'common',
     },
     {
         name: 'Shepherd\'s Pie',
@@ -254,6 +284,9 @@ const recipes = [
         cookingLoreDC: 18,
         survivalDC: 20,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.GsPVSA1GNm4tvmcR',
+        level: 2,
+        cost: '2 gp',
+        rarity: 'uncommon',
     },
     {
         name: 'Broiled Tuskwater Oysters',
@@ -262,6 +295,9 @@ const recipes = [
         cookingLoreDC: 20,
         survivalDC: 22,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.aXmbLuQMQOMAlls3',
+        level: 3,
+        cost: '3 gp',
+        rarity: 'uncommon',
     },
     {
         name: 'Succulent Sausages',
@@ -270,6 +306,9 @@ const recipes = [
         cookingLoreDC: 18,
         survivalDC: 20,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IZoPx6QH5NRY1HBi',
+        level: 3,
+        cost: '3 gp',
+        rarity: 'common',
     },
     {
         name: 'Chocolate Ice Cream',
@@ -278,6 +317,9 @@ const recipes = [
         cookingLoreDC: 19,
         survivalDC: 21,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.xfIwKyG1pNFp8JbN',
+        level: 4,
+        cost: '5 gp',
+        rarity: 'common',
     },
     {
         name: 'Galt Ragout',
@@ -286,6 +328,9 @@ const recipes = [
         cookingLoreDC: 20,
         survivalDC: 22,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.agI35cH4peI3aIX5',
+        level: 4,
+        cost: '5 gp',
+        rarity: 'uncommon',
     },
     {
         name: 'Baked Spider Legs',
@@ -294,6 +339,9 @@ const recipes = [
         survivalDC: 22,
         cookingLoreDC: 20,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.OXKHrajfyBjEBLTM',
+        level: 5,
+        cost: '8 gp',
+        rarity: 'common',
     },
     {
         name: 'Cheese Crostata',
@@ -302,6 +350,9 @@ const recipes = [
         cookingLoreDC: 22,
         survivalDC: 24,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.GAf8W01ppdseIGbq',
+        level: 5,
+        cost: '8 gp',
+        rarity: 'uncommon',
     },
     {
         name: 'Grilled Silver Eel',
@@ -310,6 +361,9 @@ const recipes = [
         cookingLoreDC: 24,
         survivalDC: 26,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.UMgvKT6nNTPvp28R',
+        level: 6,
+        cost: '13 gp',
+        rarity: 'uncommon',
     },
     {
         name: 'Hunter\'s Roast',
@@ -318,6 +372,9 @@ const recipes = [
         cookingLoreDC: 22,
         survivalDC: 24,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.5QyW0eFSJRgmyRzU',
+        level: 6,
+        cost: '13 gp',
+        rarity: 'common',
     },
     {
         name: 'Owlbear Omelet',
@@ -326,6 +383,9 @@ const recipes = [
         cookingLoreDC: 25,
         survivalDC: 27,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.3ak0XG0Xf66q2ApV',
+        level: 7,
+        cost: '18 gp',
+        rarity: 'uncommon',
     },
     {
         name: 'Sweet Pancakes',
@@ -334,6 +394,9 @@ const recipes = [
         cookingLoreDC: 23,
         survivalDC: 25,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.WrDLx0FVkaglg1hh',
+        level: 7,
+        cost: '18 gp',
+        rarity: 'common',
     },
     {
         name: 'Smoked Trout And Hydra Pate',
@@ -342,6 +405,9 @@ const recipes = [
         cookingLoreDC: 26,
         survivalDC: 28,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.t5pXd39gRgNkPoiu',
+        level: 8,
+        cost: '25 gp',
+        rarity: 'uncommon',
     },
     {
         name: 'Onion Soup',
@@ -350,6 +416,9 @@ const recipes = [
         cookingLoreDC: 24,
         survivalDC: 26,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.laM0IfTV8eviU1vm',
+        level: 8,
+        cost: '25 gp',
+        rarity: 'common',
     },
     {
         name: 'Whiterose Oysters',
@@ -358,6 +427,9 @@ const recipes = [
         cookingLoreDC: 26,
         survivalDC: 28,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.p08orFcjqQzA7KdE',
+        level: 9,
+        cost: '35 gp',
+        rarity: 'common',
     },
     {
         name: 'Kameberry Pie',
@@ -366,6 +438,9 @@ const recipes = [
         cookingLoreDC: 27,
         survivalDC: 29,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.zX4S7wsOxB8CcVWw',
+        level: 10,
+        cost: '50 gp',
+        rarity: 'common',
     },
     {
         name: 'Monster Casserole',
@@ -374,6 +449,9 @@ const recipes = [
         cookingLoreDC: 28,
         survivalDC: 30,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.gqT2VQGYgDQIMYsW',
+        level: 11,
+        cost: '70 gp',
+        rarity: 'common',
     },
     {
         name: 'Seasoned Wings And Thighs',
@@ -382,6 +460,9 @@ const recipes = [
         cookingLoreDC: 30,
         survivalDC: 32,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.BTKN1IgANoof0tfB',
+        level: 12,
+        cost: '100 gp',
+        rarity: 'common',
     },
     {
         name: 'Giant Scrambled Egg With Shambletus',
@@ -390,6 +471,9 @@ const recipes = [
         cookingLoreDC: 33,
         survivalDC: 35,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IiV8wHXKZS1HbLLW',
+        level: 13,
+        cost: '150 gp',
+        rarity: 'uncommon',
     },
     {
         name: 'Mastodon Steak',
@@ -398,6 +482,9 @@ const recipes = [
         cookingLoreDC: 34,
         survivalDC: 36,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.SfNeVcYxBD4uCfrT',
+        level: 14,
+        cost: '225 gp',
+        rarity: 'uncommon',
     },
     {
         name: 'Hearty Purple Soup',
@@ -406,6 +493,9 @@ const recipes = [
         cookingLoreDC: 40,
         survivalDC: 42,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.yAB0s5JgzCZpf0dT',
+        level: 16,
+        cost: '500 gp',
+        rarity: 'rare',
     },
     {
         name: 'Black Linnorm Stew',
@@ -414,6 +504,9 @@ const recipes = [
         cookingLoreDC: 43,
         survivalDC: 45,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.V6uIWe6BVFV9Ewo3',
+        level: 18,
+        cost: '1200 gp',
+        rarity: 'rare',
     },
     {
         name: 'First World Mince Pie',
@@ -422,6 +515,9 @@ const recipes = [
         cookingLoreDC: 45,
         survivalDC: 47,
         uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.RmMZWrzgd8Wh8z5H',
+        level: 20,
+        cost: '3500 gp',
+        rarity: 'rare',
     },
 ];
 
@@ -449,17 +545,23 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
     }
 
     override getData(options?: Partial<FormApplicationOptions>): object {
-        const selectedRecipe = this.getSelectedRecipe();
+        const knownRecipeNames = new Set(this.getKnownRecipes());
+        const knownRecipes = recipes.filter(recipe => knownRecipeNames.has(recipe.name));
+        const selectedRecipe = knownRecipeNames.has(this.getSelectedRecipe()) ? this.getSelectedRecipe() : 'Basic Meal';
         const selectedRecipeData = recipes.find(r => r.name === selectedRecipe)!;
         return {
             ...super.getData(options),
             selectedRecipeName: selectedRecipe,
             selectedRecipe: selectedRecipeData,
             recipeLink: TextEditor.enrichHTML(createUUIDLink(selectedRecipeData.uuid, selectedRecipeData.name)),
-            recipes,
+            recipes: knownRecipes,
             skills: this.getSkills(),
             selectedSkill: this.getSelectedSkill(),
         };
+    }
+
+    private getKnownRecipes(): string[] {
+        return JSON.parse(getStringSetting(this.game, 'knownRecipes'));
     }
 
     private getSkills(): { attribute: string, label: string }[] {
@@ -507,6 +609,152 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
 export async function cookRecipe(game: Game, actor: any): Promise<void> {
     if (actor) {
         new CookApp(null, {game, actor}).render(true);
+    } else {
+        ui.notifications?.error('Please select a token');
+    }
+}
+
+interface LearnRecipeOptions {
+    game: Game;
+    actor: any;
+}
+
+class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions> {
+    static override get defaultOptions(): ApplicationOptions {
+        const options = super.defaultOptions;
+        options.id = 'recipe-app';
+        options.title = 'Recipes';
+        options.template = 'modules/pf2e-kingmaker-tools/templates/recipes.html';
+        options.classes = ['kingmaker-tools-app'];
+        options.width = 740;
+        options.height = 600;
+        return options;
+    }
+
+    private readonly game: Game;
+    private readonly actor: any;
+
+    constructor(options: Partial<ApplicationOptions> & LearnRecipeOptions) {
+        super(options);
+        this.actor = options.actor;
+        this.game = options.game;
+    }
+
+    override getData(options?: Partial<ApplicationOptions> & LearnRecipeOptions): object {
+        const knownRecipeNames = new Set(this.getKnownRecipes());
+        const {zoneLevel} = getRegionInfo(this.game);
+        const knownRecipes = recipes
+            .filter(recipe => knownRecipeNames.has(recipe.name))
+            .map(recipe => {
+                return {
+                    recipe: TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
+                    recipeName: recipe.name,
+                    canNotUnlearn: recipe.name === 'Basic Meal' || recipe.name === 'Hearty Meal',
+                };
+            });
+        const availableRecipes = recipes
+            .filter(recipe => !knownRecipeNames.has(recipe.name) && recipe.level <= zoneLevel)
+            .map(recipe => this.toTemplateRecipe(recipe));
+        const otherRecipes = recipes
+            .filter(recipe => !knownRecipeNames.has(recipe.name) && recipe.level > zoneLevel)
+            .map(recipe => this.toTemplateRecipe(recipe));
+        return {
+            ...super.getData(options),
+            knownRecipes,
+            availableRecipes,
+            otherRecipes,
+            noCookingLore: !this.hasCookingLore(),
+        };
+    }
+
+    private toTemplateRecipe(recipe: Recipe): object {
+        return {
+            recipe: TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
+            recipeName: recipe.name,
+            cookingLoreDC: recipe.cookingLoreDC,
+            ingredients: `Basic: ${recipe.basicIngredients * 2}, Special: ${recipe.specialIngredients * 2}`,
+            price: recipe.cost,
+            rarity: recipe.rarity,
+        };
+    }
+
+    private hasCookingLore(): boolean {
+        return Object.keys(this.actor.skills).includes('cooking-lore');
+    }
+
+    private getKnownRecipes(): string[] {
+        return JSON.parse(getStringSetting(this.game, 'knownRecipes'));
+    }
+
+    private async saveKnownRecipes(recipes: string[]): Promise<void> {
+        return await setSetting(this.game, 'knownRecipes', JSON.stringify(recipes));
+    }
+
+    private async addRecipe(recipe: string): Promise<void> {
+        const recipes = this.getKnownRecipes();
+        const newRecipes = Array.from(new Set([recipe, ...recipes]));
+        await this.saveKnownRecipes(newRecipes);
+    }
+
+    private async removeRecipe(recipe: string): Promise<void> {
+        const recipes = this.getKnownRecipes();
+        const newRecipes = Array.from(new Set(recipes.filter(r => r !== recipe)));
+        await this.saveKnownRecipes(newRecipes);
+    }
+
+    override activateListeners(html: JQuery): void {
+        super.activateListeners(html);
+        const removeRecipeButtons = html[0].querySelectorAll('.remove-recipe-button') as NodeListOf<HTMLButtonElement>;
+        removeRecipeButtons.forEach(removeRecipeButton => {
+            removeRecipeButton?.addEventListener('click', async (event) => {
+                const button = event.target as HTMLButtonElement;
+                const recipeName = button.dataset.recipe!;
+                console.log(button);
+                await this.removeRecipe(recipeName);
+                this.render();
+            });
+        });
+        const buyRecipeButtons = html[0].querySelectorAll('.buy-recipe-button') as NodeListOf<HTMLButtonElement>;
+        buyRecipeButtons.forEach(buyRecipeButton => {
+            buyRecipeButton?.addEventListener('click', async (event) => {
+                const button = event.target as HTMLButtonElement;
+                const recipeName = button.dataset.recipe!;
+                await this.addRecipe(recipeName);
+                this.render();
+            });
+        });
+        const learnRecipeButtons = html[0].querySelectorAll('.learn-recipe-button') as NodeListOf<HTMLButtonElement>;
+        learnRecipeButtons.forEach(learnRecipeButton => {
+            learnRecipeButton?.addEventListener('click', async (event) => {
+                console.log('learn', event);
+                const button = event.target as HTMLButtonElement;
+                const recipeName = button.dataset.recipe!;
+                const selectedRecipe = recipes.find(r => r.name === recipeName)!;
+                const result = await this.actor.skills['cooking-lore'].roll({
+                    dc: selectedRecipe.cookingLoreDC ?? 0,
+                });
+                const degreeOfSuccess = result.degreeOfSuccess;
+                if (degreeOfSuccess === DegreeOfSuccess.SUCCESS || degreeOfSuccess === DegreeOfSuccess.CRITICAL_SUCCESS) {
+                    await this.addRecipe(recipeName);
+                }
+                await postDegreeOfSuccessMessage(degreeOfSuccess, {
+                    critSuccess: `Critical Success: Successfully learned ${selectedRecipe.name} and halved recipe cost`,
+                    success: `Success: Successfully learned ${selectedRecipe.name}`,
+                    critFailure: `Critical Failure: Exposed to critical failure effect of ${createUUIDLink(selectedRecipe.uuid, selectedRecipe.name)}`,
+                });
+                this.render();
+            });
+        });
+    }
+}
+
+export
+
+async function
+
+discoverSpecialMeal(game: Game, actor: any): Promise<void> {
+    if (actor) {
+        new LearnRecipeApp({game, actor}).render(true);
     } else {
         ui.notifications?.error('Please select a token');
     }

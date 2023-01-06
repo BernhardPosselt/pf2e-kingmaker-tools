@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added a macro to roll weather and a setting to disable automatically rolling weather when a new day begins
+* Added a macro to learn or buy recipes
+
+### Changed
+
+* Only learned recipes are showin in the Cook Recipe macro
 
 ## [0.0.1] - 2023-01-05
 

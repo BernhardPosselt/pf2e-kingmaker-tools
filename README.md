@@ -46,9 +46,11 @@ The following journals are shipped:
 * **Camouflage Campsite**: Posts effects based on result to chat (only GM visible)
 * **Hunt and Gather**: Adds the ingredients into your inventory based on the result
 * **Organize Watch**: Posts effects based on result to chat
-* **Cook Recipe**: Links the recipe to chat after a Survival or Cooking Lore check
+* **Cook Recipe**: Links the recipe to chat after a Survival or Cooking Lore check; list of recipes is determined by learned recipes done via **Recipes** macro
  ![Cooking Macro](docs/images/cooking-macro.png)
 * **Tell Campfire Story**: Posts effects based on result to chat
+* **Recipes**: A macro to learn or buy special recipes
+![Learn Recipe Macro](docs/images/learn-recipe-macro.png)
 * **Companion Effects to Chat**: Allows the GM to quickly post the drag and drop effects of actions of companions to chat
 
 #### Other

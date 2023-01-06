@@ -8,7 +8,7 @@ import {rollExplorationSkillCheck, rollSkillDialog} from './skill-checks';
 import {rollKingdomEvent} from './kingdom-events';
 import {subsist} from './subsist';
 import {
-    camouflageCampsite, cookRecipe,
+    camouflageCampsite, cookRecipe, discoverSpecialMeal,
     huntAndGather,
     organizeWatch,
     postCompanionEffects,
@@ -43,6 +43,8 @@ Hooks.on('ready', async () => {
                 tellCampfireStoryMacro: (actor: any): Promise<void> => tellCampfireStory(gameInstance, actor),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 prepareCampsiteMacro: (actor: any): Promise<void> => prepareCampsite(gameInstance, actor),
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                discoverSpecialMealMacro: (actor: any): Promise<void> => discoverSpecialMeal(gameInstance, actor),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 cookRecipeMacro: (actor: any): Promise<void> => cookRecipe(gameInstance, actor),
                 rollExplorationSkillCheck: async (skill: string, effect: string): Promise<void> => {
@@ -186,6 +188,13 @@ Hooks.on('ready', async () => {
             scope: 'world',
             config: false,
             default: '',
+            type: String,
+        });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'knownRecipes', {
+            name: 'Known Recipes',
+            scope: 'world',
+            config: false,
+            default: '["Basic Meal", "Hearty Meal"]',
             type: String,
         });
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'useSelectedCharacter', {
