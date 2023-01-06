@@ -8,8 +8,8 @@ import {rollExplorationSkillCheck, rollSkillDialog} from './skill-checks';
 import {rollKingdomEvent} from './kingdom-events';
 import {subsist} from './subsist';
 import {
-    camouflageCampsite, cookRecipe, discoverSpecialMeal,
-    huntAndGather,
+    camouflageCampsite, campManagement, cookRecipe, discoverSpecialMeal,
+    huntAndGather, learnFromCompanion,
     organizeWatch,
     postCompanionEffects,
     prepareCampsite,
@@ -47,6 +47,10 @@ Hooks.on('ready', async () => {
                 discoverSpecialMealMacro: (actor: any): Promise<void> => discoverSpecialMeal(gameInstance, actor),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 cookRecipeMacro: (actor: any): Promise<void> => cookRecipe(gameInstance, actor),
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                learnFromCompanionMacro: (actor: any): Promise<void> => learnFromCompanion(gameInstance, actor),
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                campManagementMacro: (actor: any): Promise<void> => campManagement(gameInstance, actor),
                 rollExplorationSkillCheck: async (skill: string, effect: string): Promise<void> => {
                     const actors = canvas?.scene?.tokens
                         ?.filter(t => t !== null && t.actor !== null && t.actor.type === 'character')

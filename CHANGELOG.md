@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Added a macro to roll weather and a setting to disable automatically rolling weather when a new day begins
 * Added a macro to learn or buy recipes
+* Added a macro for Learn from a Companion
+* Added a macro for Camp Management
 
 ### Changed
 

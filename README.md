@@ -51,6 +51,8 @@ The following journals are shipped:
 * **Tell Campfire Story**: Posts effects based on result to chat
 * **Recipes**: A macro to learn or buy special recipes
 ![Learn Recipe Macro](docs/images/learn-recipe-macro.png)
+* **Learn from a Companion**: Posts result of check to chat
+* **Camp Management**: Posts results of check to chat
 * **Companion Effects to Chat**: Allows the GM to quickly post the drag and drop effects of actions of companions to chat
 
 #### Other

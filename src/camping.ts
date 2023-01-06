@@ -751,13 +751,42 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
     }
 }
 
-export
-
-async function
-
-discoverSpecialMeal(game: Game, actor: any): Promise<void> {
+export async function discoverSpecialMeal(game: Game, actor: any): Promise<void> {
     if (actor) {
         new LearnRecipeApp({game, actor}).render(true);
+    } else {
+        ui.notifications?.error('Please select a token');
+    }
+}
+
+export async function campManagement(game: Game, actor: any): Promise<void> {
+    const {zoneDC} = getRegionInfo(game);
+
+    if (actor) {
+        const result = await actor.skills.survival.roll({
+            dc: zoneDC,
+        });
+        await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
+            critSuccess: 'Camp Management: During the hour immediately following this critical success, each PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt.',
+            success: 'Camp Management: During the hour immediately following this critical success, one PC may attempt two Camping activities instead of one.',
+            critFailure: 'Camp Management: All checks made to resolve Camping activities take a –2 circumstance penalty for the remainder of this camping session. @UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.vpH13xgAqX4zsU6o]{Camp Management: Critical Failure}',
+        });
+    } else {
+        ui.notifications?.error('Please select a token');
+    }
+}
+
+export async function learnFromCompanion(game: Game, actor: any): Promise<void> {
+    if (actor) {
+        const result = await actor.perception.roll({
+            dc: 20,
+        });
+        await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
+            critSuccess: `Learn From a Companion: ${actor.name} learn the companion’s special activity. Any PC who meets that activity’s requirements can now perform that activity even when the companion isn’t in the camp.`,
+            success: `Learn From a Companion: ${actor.name} make progress in learning the special activity but require at least one more day to master it. If they attempt to Learn from this Companion the next time you camp, the result of that check is improved by one degree of success from the result rolled`,
+            failure: `Learn From a Companion: ${actor.name} fail to learn anything from the companion.`,
+            critFailure: `Learn From a Companion: ${actor.name} fail to learn from the companion, who grows frustrated with the party. No further attempts to Learn from this Companion can be attempted during this camping session.`,
+        });
     } else {
         ui.notifications?.error('Please select a token');
     }

@@ -28,6 +28,10 @@ declare global {
                 cookRecipeMacro: (actor: any) => Promise<void>,
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 discoverSpecialMealMacro: (actor: any) => Promise<void>,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                learnFromCompanionMacro: (actor: any) => Promise<void>,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                campManagementMacro: (actor: any) => Promise<void>,
                 rollExplorationSkillCheck: (skill: string, effect: string) => Promise<void>,
                 rollSkillDialog: () => Promise<void>,
             };
