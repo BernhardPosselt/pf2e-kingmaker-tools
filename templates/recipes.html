@@ -22,6 +22,7 @@
     <thead>
     <tr>
         <th>Recipe</th>
+        <th>Level</th>
         <th>Rarity</th>
         <th>Cooking Lore DC</th>
         <th>Cost to Learn</th>
@@ -34,6 +35,7 @@
     {{#each availableRecipes}}
     <tr>
         <td>{{{recipe}}}</td>
+        <td>{{level}}</td>
         <td>{{rarity}}</td>
         <td>{{cookingLoreDC}}</td>
         <td>{{ingredients}}</td>
@@ -50,6 +52,7 @@
     <thead>
     <tr>
         <th>Recipe</th>
+        <th>Level</th>
         <th>Rarity</th>
         <th>Cooking Lore DC</th>
         <th>Cost to Learn</th>
@@ -62,6 +65,7 @@
     {{#each otherRecipes}}
     <tr>
         <td>{{{recipe}}}</td>
+        <td>{{level}}</td>
         <td>{{rarity}}</td>
         <td>{{cookingLoreDC}}</td>
         <td>{{ingredients}}</td>

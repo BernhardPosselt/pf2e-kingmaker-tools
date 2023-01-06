@@ -626,7 +626,7 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
         options.title = 'Recipes';
         options.template = 'modules/pf2e-kingmaker-tools/templates/recipes.html';
         options.classes = ['kingmaker-tools-app'];
-        options.width = 740;
+        options.width = 760;
         options.height = 600;
         return options;
     }
@@ -675,6 +675,7 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
             ingredients: `Basic: ${recipe.basicIngredients * 2}, Special: ${recipe.specialIngredients * 2}`,
             price: recipe.cost,
             rarity: recipe.rarity,
+            level: recipe.level,
         };
     }
 
