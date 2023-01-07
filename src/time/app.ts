@@ -1,5 +1,7 @@
 import {getWorldTime, TimeChangeMode, TimeOfDay} from './calculation';
 import {DateTime} from 'luxon';
+import {getNumberSetting, setSetting} from '../settings';
+import {createUUIDLink, postDegreeOfSuccessMessage} from '../utils';
 
 function tpl(previousTime: string): string {
     return `<form>
@@ -47,4 +49,77 @@ export async function toTimeOfDayMacro(game: Game): Promise<void> {
     }, {
         jQuery: false,
     }).render(true);
+}
+
+interface StopWatchOptions {
+    game: Game;
+}
+
+class StopWatchApplication extends Application<object & ApplicationOptions> {
+    static override get defaultOptions(): ApplicationOptions {
+        const options = super.defaultOptions;
+        options.id = 'stopwatch-app';
+        options.title = 'Stopwatch';
+        options.template = 'modules/pf2e-kingmaker-tools/templates/stopwatch.html';
+        options.classes = ['kingmaker-tools-app'];
+        options.width = 200;
+        return options;
+    }
+
+    private readonly game: Game;
+
+    constructor(options: Partial<FormApplicationOptions> & StopWatchOptions) {
+        super(options);
+        this.game = options.game;
+    }
+
+    override getData(options?: Partial<ApplicationOptions> & StopWatchOptions): object {
+        return {
+            ...super.getData(options),
+            ...this.getElapsedTime(),
+        };
+    }
+
+    private getElapsedTime(): {seconds: number, formatted: string} {
+        const currentSeconds = this.game.time.worldTime;
+        const startedSeconds = getNumberSetting(this.game, 'stopWatchStart');
+        const sumElapsedSeconds = currentSeconds - startedSeconds;
+        const elapsedHours = Math.floor(sumElapsedSeconds / 3600);
+        const elapsedMinutes = Math.floor((sumElapsedSeconds % 3600) / 60);
+        const elapsedSeconds = sumElapsedSeconds % 60;
+        return {
+            seconds: sumElapsedSeconds,
+            formatted: `${this.padZero(elapsedHours)}:${this.padZero(elapsedMinutes)}:${this.padZero(elapsedSeconds)}`,
+        };
+    }
+
+    private padZero(num: number): string {
+        return `${num}`.padStart(2, '0');
+    }
+
+    private async reset(): Promise<void> {
+        return await setSetting(this.game, 'stopWatchStart', this.game.time.worldTime);
+    }
+
+    private async advance(): Promise<void> {
+        this.render();
+    }
+
+    override activateListeners(html: JQuery): void {
+        super.activateListeners(html);
+        Hooks.on('updateWorldTime', this.advance.bind(this));
+        const resetButton = html[0].querySelector('#reset-button') as HTMLButtonElement;
+        resetButton?.addEventListener('click', async () => {
+            await this.reset();
+            this.render();
+        });
+    }
+
+    override close(options?: Application.CloseOptions): Promise<void> {
+        Hooks.off('updateWorldTime', this.advance);
+        return super.close(options);
+    }
+}
+export async function stopWatch(game: Game): Promise<void> {
+    new StopWatchApplication({game}).render(true);
 }

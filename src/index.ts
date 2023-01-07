@@ -1,6 +1,6 @@
 import {dayHasChanged, syncWeather, toggleWeather} from './weather';
 import {getSelectedCharacter, isGm} from './utils';
-import {toTimeOfDayMacro} from './time/app';
+import {stopWatch, toTimeOfDayMacro} from './time/app';
 import {getBooleanSetting, getStringSetting} from './settings';
 import {rollKingmakerWeather} from './kingmaker-weather';
 import {randomEncounterDialog} from './random-encounters';
@@ -27,6 +27,7 @@ Hooks.on('ready', async () => {
                 kingdomEventsMacro: rollKingdomEvent.bind(null, game),
                 postCompanionEffectsMacro: postCompanionEffects.bind(null, game),
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
+                stopWatchMacro: stopWatch.bind(null, game),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 subsistMacro: async (actor: any): Promise<void> => {
                     const selectedActor = getBooleanSetting(gameInstance, 'useSelectedCharacter')
@@ -200,6 +201,13 @@ Hooks.on('ready', async () => {
             config: false,
             default: '["Basic Meal", "Hearty Meal"]',
             type: String,
+        });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'stopWatchStart', {
+            name: 'Stop Watch Start Timestamp',
+            scope: 'world',
+            config: false,
+            default: game.time.worldTime,
+            type: Number,
         });
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'useSelectedCharacter', {
             name: 'Subsist: Use user\'s character instead of token',

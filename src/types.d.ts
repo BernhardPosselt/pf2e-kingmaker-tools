@@ -12,6 +12,7 @@ declare global {
                 kingdomEventsMacro: () => void,
                 postCompanionEffectsMacro: () => void,
                 rollKingmakerWeatherMacro: () => void,
+                stopWatchMacro: () => void,
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 subsistMacro: (actor: any) => void,
                 /* eslint-disable @typescript-eslint/no-explicit-any */

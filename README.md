@@ -59,6 +59,7 @@ The following journals are shipped:
 * A macro to toggle weather on/off to change into non-exposed areas
 * A macro to manually roll weather, should you prefer to not automatically roll it.
 * A macro to advance/retract to a certain day of time
+* A stopwatch macro to track the end of daily preparations
 * A macro to roll on a custom Kingdom Events table. By default, the Roll Table is called "Kingdom Events", but you can change the name in the settings
 * 3 macros that help automate exploration mode. ![Exploration Macros](docs/images/exploration-macros.png)
   

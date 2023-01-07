@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added a macro to learn or buy recipes
 * Added a macro for Learn from a Companion
 * Added a macro for Camp Management
+* Added a stopwatch macro to track time elapsed after daily preparations
 
 ### Changed
 

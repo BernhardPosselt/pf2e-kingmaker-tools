@@ -187,7 +187,6 @@ export async function postCompanionEffects(game: Game): Promise<void> {
     }).render(true);
 }
 
-// TODO macro to record start of day
 interface CookingOptions {
     game: Game;
     actor: any;
