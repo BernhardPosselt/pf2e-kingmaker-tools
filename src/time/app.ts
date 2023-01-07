@@ -86,10 +86,10 @@ class StopWatchApplication extends Application<object & ApplicationOptions> {
         const sumElapsedSeconds = currentSeconds - startedSeconds;
         const elapsedHours = Math.floor(sumElapsedSeconds / 3600);
         const elapsedMinutes = Math.floor((sumElapsedSeconds % 3600) / 60);
-        const elapsedSeconds = sumElapsedSeconds % 60;
+        // const elapsedSeconds = sumElapsedSeconds % 60;
         return {
             seconds: sumElapsedSeconds,
-            formatted: `${this.padZero(elapsedHours)}:${this.padZero(elapsedMinutes)}:${this.padZero(elapsedSeconds)}`,
+            formatted: `${this.padZero(elapsedHours)}:${this.padZero(elapsedMinutes)}`,
         };
     }
 

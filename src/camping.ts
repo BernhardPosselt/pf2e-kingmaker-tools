@@ -158,7 +158,7 @@ export async function postCompanionEffects(game: Game): Promise<void> {
     };
     const preselectedCompanions = JSON.parse(getStringSetting(game, 'selectedCompanions') || '[]');
     new Dialog({
-        title: 'Advance/Retract to Time of Day',
+        title: 'Companion Effects to Chat',
         content: companionTpl(Object.keys(companionConfig), preselectedCompanions),
         buttons: {
             post: {
