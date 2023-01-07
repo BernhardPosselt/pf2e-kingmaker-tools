@@ -23,3 +23,9 @@
 .kingmaker-tools-app .buttons {
     display: flex;
 }
+
+#stopwatch-app button {
+    display: inline-block;
+    width: auto;
+    margin-left: 10px;
+}

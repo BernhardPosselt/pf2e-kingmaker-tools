@@ -62,7 +62,7 @@ class StopWatchApplication extends Application<object & ApplicationOptions> {
         options.title = 'Stopwatch';
         options.template = 'modules/pf2e-kingmaker-tools/templates/stopwatch.html';
         options.classes = ['kingmaker-tools-app'];
-        options.width = 200;
+        options.width = 100;
         return options;
     }
 
