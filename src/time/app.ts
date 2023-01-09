@@ -83,13 +83,13 @@ class StopWatchApplication extends Application<object & ApplicationOptions> {
     private getElapsedTime(): {seconds: number, formatted: string} {
         const currentSeconds = this.game.time.worldTime;
         const startedSeconds = getNumberSetting(this.game, 'stopWatchStart');
-        const sumElapsedSeconds = currentSeconds - startedSeconds;
+        const sumElapsedSeconds = Math.abs(currentSeconds - startedSeconds);
         const elapsedHours = Math.floor(sumElapsedSeconds / 3600);
         const elapsedMinutes = Math.floor((sumElapsedSeconds % 3600) / 60);
         // const elapsedSeconds = sumElapsedSeconds % 60;
         return {
             seconds: sumElapsedSeconds,
-            formatted: `${this.padZero(elapsedHours)}:${this.padZero(elapsedMinutes)}`,
+            formatted: `${startedSeconds > currentSeconds ? '-' : ''}${this.padZero(elapsedHours)}:${this.padZero(elapsedMinutes)}`,
         };
     }
 
