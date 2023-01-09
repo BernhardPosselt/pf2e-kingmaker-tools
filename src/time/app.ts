@@ -1,7 +1,6 @@
 import {getWorldTime, TimeChangeMode, TimeOfDay} from './calculation';
 import {DateTime} from 'luxon';
 import {getNumberSetting, setSetting} from '../settings';
-import {createUUIDLink, postDegreeOfSuccessMessage} from '../utils';
 
 function tpl(previousTime: string): string {
     return `<form>
