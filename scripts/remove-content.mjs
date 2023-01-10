@@ -38,14 +38,3 @@ await sanitizeRollTable('random-encounters.db', (_, result) => {
     }
     return result;
 });
-
-const sanitizeKingdomEventsRegex = /^@UUID\[.+]\{(?<name>.+)}(?<page>.+)$/i;
-await sanitizeRollTable('rolltables.db', (data, result) => {
-    if (data.name === 'Kingdom Events') {
-        const match = sanitizeKingdomEventsRegex.exec(result.text);
-        if (match) {
-            return {...result, text: match.groups.name + match.groups.page};
-        }
-    }
-    return result;
-});
