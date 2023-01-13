@@ -1,4 +1,4 @@
-import {getStringSetting, setSetting} from './settings';
+import {getNumberSetting, getStringSetting, setSetting} from './settings';
 import {getRegionInfo} from './random-encounters';
 import {DegreeOfSuccess} from './degree-of-success';
 import {createUUIDLink, getLevelBasedDC, postDegreeOfSuccessMessage, roll} from './utils';
@@ -195,6 +195,7 @@ interface CookingOptions {
 interface CookingFormData {
     selectedRecipe: string;
     selectedSkill: string;
+    servings: number;
 }
 
 interface Recipe {
@@ -548,15 +549,33 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
         const knownRecipes = recipes.filter(recipe => knownRecipeNames.has(recipe.name));
         const selectedRecipe = knownRecipeNames.has(this.getSelectedRecipe()) ? this.getSelectedRecipe() : 'Basic Meal';
         const selectedRecipeData = recipes.find(r => r.name === selectedRecipe)!;
+        const servings = this.getServings();
         return {
             ...super.getData(options),
             selectedRecipeName: selectedRecipe,
-            selectedRecipe: selectedRecipeData,
+            selectedRecipe: this.includeCalculatedServings(selectedRecipeData, servings),
             recipeLink: TextEditor.enrichHTML(createUUIDLink(selectedRecipeData.uuid, selectedRecipeData.name)),
             recipes: knownRecipes,
             skills: this.getSkills(),
             selectedSkill: this.getSelectedSkill(),
+            servings,
         };
+    }
+
+    private includeCalculatedServings(recipe: Recipe, servings: number): Recipe {
+        return {
+            ...recipe,
+            basicIngredients: recipe.basicIngredients * servings,
+            specialIngredients: recipe.specialIngredients * servings,
+        };
+    }
+
+    private getServings(): number {
+        return getNumberSetting(this.game, 'servings') || 1;
+    }
+
+    private async setServings(amount: number): Promise<void> {
+        await setSetting(this.game, 'servings', amount);
     }
 
     private getKnownRecipes(): string[] {
@@ -582,6 +601,7 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
     override async _updateObject(event: Event, formData?: CookingFormData): Promise<void> {
         await setSetting(this.game, 'lastCookedMeal', formData?.selectedRecipe ?? 'Basic Meal');
         await setSetting(this.game, 'lastCookingSkill', formData?.selectedSkill ?? 'survival');
+        await this.setServings(formData?.servings ?? 1);
         this.render();
     }
 
@@ -595,10 +615,13 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
             const result = await this.actor.skills[selectedSkill].roll({
                 dc: selectedRecipe?.[dcKey] ?? 0,
             });
+            const servings = this.getServings();
+            const recipe = this.includeCalculatedServings(selectedRecipe, servings);
+            const cost = `<br><b>Ingredients</b>: Basic: ${recipe.basicIngredients}, Special: ${recipe.specialIngredients}`;
             await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
-                critSuccess: `Critical Success: ${createUUIDLink(selectedRecipe.uuid, selectedRecipe.name)}`,
-                success: `Success: ${createUUIDLink(selectedRecipe.uuid, selectedRecipe.name)}`,
-                critFailure: `Critical Failure: ${createUUIDLink(selectedRecipe.uuid, selectedRecipe.name)}`,
+                critSuccess: `<b>Critical Success</b>: ${servings} x ${createUUIDLink(recipe.uuid, recipe.name)}${cost}`,
+                success: `<b>Success</b>: ${servings} x ${createUUIDLink(recipe.uuid, recipe.name)}${cost}`,
+                critFailure: `<b>Critical Failure</b>: ${servings} x ${createUUIDLink(recipe.uuid, recipe.name)}${cost}`,
             });
             await this.close();
         });

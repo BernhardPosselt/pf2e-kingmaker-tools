@@ -202,6 +202,13 @@ Hooks.on('ready', async () => {
             default: '["Basic Meal", "Hearty Meal"]',
             type: String,
         });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'servings', {
+            name: 'How Many Servings to Cook',
+            scope: 'client',
+            config: false,
+            default: 1,
+            type: Number,
+        });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'stopWatchStart', {
             name: 'Stop Watch Start Timestamp',
             scope: 'world',
