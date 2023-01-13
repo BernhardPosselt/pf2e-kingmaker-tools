@@ -49,7 +49,7 @@ export async function huntAndGather(game: Game, actor: any): Promise<void> {
         }
         basicIngredient.system.quantity = quantities.basic;
         await actor.addToInventory(basicIngredient, undefined, false);
-        const content = `${actor.name} gathered ${quantities.basic} basic and ${quantities.special} special ingredients`;
+        const content = `${actor.name} gathered ${quantities.basic} basic and ${quantities.special} special ingredients, automatically added to their inventory`;
         await ChatMessage.create({content});
     } else {
         ui.notifications?.error('Please select a token');
