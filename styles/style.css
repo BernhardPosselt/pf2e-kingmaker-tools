@@ -37,4 +37,5 @@
 .kingmaker-tools-app .input-row label {
     flex: 0 0 auto;
     padding-right: 10px;
+    line-height: 26px;
 }

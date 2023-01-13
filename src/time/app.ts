@@ -117,7 +117,7 @@ class StopWatchApplication extends Application<object & ApplicationOptions> {
                 buttons: {
                     advance: {
                         icon: '<i class="fa-solid fa-forward"></i>',
-                        label: 'Advance',
+                        label: 'Advance Time',
                         callback: async (html): Promise<void> => {
                             const $html = html as HTMLElement;
                             const gunsToClean = parseInt($html.querySelector('input')?.value ?? '0', 10);
@@ -147,7 +147,7 @@ class StopWatchApplication extends Application<object & ApplicationOptions> {
                 buttons: {
                     advance: {
                         icon: '<i class="fa-solid fa-forward"></i>',
-                        label: 'Advance',
+                        label: 'Advance Time',
                         callback: async (html): Promise<void> => {
                             const $html = html as HTMLElement;
                             const partySize = parseInt($html.querySelector('input')?.value ?? '0', 10);
