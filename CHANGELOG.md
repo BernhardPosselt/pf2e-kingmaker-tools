@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added an input for setting servings numbers for the cooking popup
+* Weather Event Maximum Level is now configurable. By RAW, it's 4, meaning no weather events that are more than 4 levels higher than the party's can occur, but you may want to turn that down to 2 to not TPK your party.
 
 ## [0.0.2] - 2023-01-11
 

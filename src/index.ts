@@ -89,6 +89,14 @@ Hooks.on('ready', async () => {
             type: Number,
             scope: 'world',
         });
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'weatherHazardRange', {
+            name: 'Weather Hazard Range',
+            hint: 'Maximum Level of Weather Event that can occur. Added to Average Party Level.',
+            default: 4,
+            config: true,
+            type: Number,
+            scope: 'world',
+        });
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableWeather', {
             name: 'Enable Weather',
             default: true,
