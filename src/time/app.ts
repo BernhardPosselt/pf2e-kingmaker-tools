@@ -54,6 +54,13 @@ interface StopWatchOptions {
     game: Game;
 }
 
+function formatHours(seconds: number, isNegative = false): string {
+    const padZero = (num: number): string => `${num}`.padStart(2, '0');
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${isNegative ? '-' : ''}${padZero(hours)}:${padZero(minutes)}`;
+}
+
 class StopWatchApplication extends Application<object & ApplicationOptions> {
     static override get defaultOptions(): ApplicationOptions {
         const options = super.defaultOptions;
@@ -61,7 +68,7 @@ class StopWatchApplication extends Application<object & ApplicationOptions> {
         options.title = 'Stopwatch';
         options.template = 'modules/pf2e-kingmaker-tools/templates/stopwatch.html';
         options.classes = ['kingmaker-tools-app'];
-        options.width = 100;
+        options.width = 300;
         return options;
     }
 
@@ -79,21 +86,14 @@ class StopWatchApplication extends Application<object & ApplicationOptions> {
         };
     }
 
-    private getElapsedTime(): {seconds: number, formatted: string} {
+    private getElapsedTime(): { seconds: number, formatted: string } {
         const currentSeconds = this.game.time.worldTime;
         const startedSeconds = getNumberSetting(this.game, 'stopWatchStart');
         const sumElapsedSeconds = Math.abs(currentSeconds - startedSeconds);
-        const elapsedHours = Math.floor(sumElapsedSeconds / 3600);
-        const elapsedMinutes = Math.floor((sumElapsedSeconds % 3600) / 60);
-        // const elapsedSeconds = sumElapsedSeconds % 60;
         return {
             seconds: sumElapsedSeconds,
-            formatted: `${startedSeconds > currentSeconds ? '-' : ''}${this.padZero(elapsedHours)}:${this.padZero(elapsedMinutes)}`,
+            formatted: formatHours(sumElapsedSeconds, startedSeconds > currentSeconds),
         };
-    }
-
-    private padZero(num: number): string {
-        return `${num}`.padStart(2, '0');
     }
 
     private async reset(): Promise<void> {
@@ -107,10 +107,72 @@ class StopWatchApplication extends Application<object & ApplicationOptions> {
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
         Hooks.on('updateWorldTime', this.advance.bind(this));
-        const resetButton = html[0].querySelector('#reset-button') as HTMLButtonElement;
-        resetButton?.addEventListener('click', async () => {
-            await this.reset();
-            this.render();
+
+        const prepsButton = html[0].querySelector('#daily-preps-button') as HTMLButtonElement;
+        prepsButton?.addEventListener('click', async () => {
+            const gunsToClean = getNumberSetting(this.game, 'gunsToClean');
+            new Dialog({
+                title: 'Daily Preparations',
+                content: `<p class="input-row"><label for="guns-to-clean">Guns to Clean</label><input id="guns-to-clean" type="number" value="${gunsToClean}"></p>`,
+                buttons: {
+                    advance: {
+                        icon: '<i class="fa-solid fa-forward"></i>',
+                        label: 'Advance',
+                        callback: async (html): Promise<void> => {
+                            const $html = html as HTMLElement;
+                            const gunsToClean = parseInt($html.querySelector('input')?.value ?? '0', 10);
+                            await setSetting(this.game, 'gunsToClean', gunsToClean);
+                            const seconds = gunsToClean === 0 ? 30 * 60 : Math.ceil(gunsToClean / 4) * 3600;
+                            await this.game.time.advance(seconds);
+                            await ChatMessage.create({content: `Daily Preparations completed in ${formatHours(seconds)}`});
+                            await this.reset();
+                            this.render();
+                        },
+                    },
+                },
+                default: 'yes',
+            }, {
+                jQuery: false,
+                width: 200,
+                classes: ['kingmaker-tools-app'],
+            }).render(true);
+        });
+
+        const restButton = html[0].querySelector('#rest-button') as HTMLButtonElement;
+        restButton?.addEventListener('click', async () => {
+            const partySize = getNumberSetting(this.game, 'partySize');
+            new Dialog({
+                title: 'Rest',
+                content: `<p class="input-row"><label for="party-size">Party Size</label><input id="party-size" type="number" value="${partySize}"></p>`,
+                buttons: {
+                    advance: {
+                        icon: '<i class="fa-solid fa-forward"></i>',
+                        label: 'Advance',
+                        callback: async (html): Promise<void> => {
+                            const $html = html as HTMLElement;
+                            const partySize = parseInt($html.querySelector('input')?.value ?? '0', 10);
+                            if (partySize < 2) {
+                                ui.notifications?.error('No watch possible with less than 2 characters');
+                            } else {
+                                await setSetting(this.game, 'partySize', partySize);
+                                let seconds = 8 * 3600 + Math.floor(8 * 3600 / (partySize - 1));
+                                // round up seconds to next minute
+                                if (seconds % 60 !== 0) {
+                                    seconds += 60 - (seconds % 60);
+                                }
+                                await this.game.time.advance(seconds);
+                                await ChatMessage.create({content: `Rest completed in ${formatHours(seconds)}`});
+                            }
+                            this.render();
+                        },
+                    },
+                },
+                default: 'yes',
+            }, {
+                jQuery: false,
+                width: 150,
+                classes: ['kingmaker-tools-app'],
+            }).render(true);
         });
     }
 
@@ -119,6 +181,7 @@ class StopWatchApplication extends Application<object & ApplicationOptions> {
         return super.close(options);
     }
 }
+
 export async function stopWatch(game: Game): Promise<void> {
     new StopWatchApplication({game}).render(true);
 }

@@ -224,6 +224,20 @@ Hooks.on('ready', async () => {
             default: game.time.worldTime,
             type: Number,
         });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'gunsToClean', {
+            name: 'Guns to Clean',
+            scope: 'world',
+            config: false,
+            default: 0,
+            type: Number,
+        });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'partySize', {
+            name: 'Party Size',
+            scope: 'world',
+            config: false,
+            default: 4,
+            type: Number,
+        });
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'useSelectedCharacter', {
             name: 'Subsist: Use user\'s character instead of token',
             hint: 'If true, a player can use the Subsist macro on the overland map without having the token to be present. Set to false if you always want to roll this for a selected token.',

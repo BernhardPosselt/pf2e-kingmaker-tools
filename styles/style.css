@@ -29,3 +29,12 @@
     width: auto;
     margin-left: 10px;
 }
+
+.kingmaker-tools-app .input-row {
+    display: flex;
+}
+
+.kingmaker-tools-app .input-row label {
+    flex: 0 0 auto;
+    padding-right: 10px;
+}
