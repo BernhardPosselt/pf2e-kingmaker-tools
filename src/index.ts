@@ -54,7 +54,9 @@ Hooks.on('ready', async () => {
                 campManagementMacro: (actor: any): Promise<void> => campManagement(gameInstance, actor),
                 rollExplorationSkillCheck: async (skill: string, effect: string): Promise<void> => {
                     const actors = canvas?.scene?.tokens
-                        ?.filter(t => t !== null && t.actor !== null && t.actor.type === 'character')
+                        ?.filter(t => t !== null
+                            && t.actor !== null
+                            && (t.actor.type === 'character' || t.actor.type === 'familiar'))
                         ?.map(t => t.actor!) ?? [];
                     await rollExplorationSkillCheck(actors, skill, effect);
                 },
@@ -68,7 +70,7 @@ Hooks.on('ready', async () => {
                     } else {
                         const actorNames = new Set(configuredActors);
                         const actors = gameInstance?.actors
-                            ?.filter(actor => actor.type === 'character'
+                            ?.filter(actor => (actor.type === 'character' || actor.type === 'familiar')
                                 && actor.name !== null
                                 && actorNames.has(actor.name)) ?? [];
                         await rollSkillDialog(actors);

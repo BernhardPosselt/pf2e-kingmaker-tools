@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Include missing Leadership Activities
+* Include missing Events
+
+### Fixed
+
+* Also include familiars in exploration macros
+
 ## [0.0.3] - 2023-01-13
 
 ### Added
