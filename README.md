@@ -88,6 +88,9 @@ The module ships with a settings to auto-configure all tokens from the adventure
 ```
 
 The tokens integrate with the [Token Pack](https://foundryvtt.com/packages/pf2e-tokens-bestiaries) and expect the other tokens to be placed into your **Data/pf2e-kingmaker-tools-tokens/** directory under the following paths:
+
+![Skills Macro](docs/images/token-structure.png)
+
 * **kingmaker/Token - Aecora Silverfire.webp**
 * **kingmaker/Token - Agai.webp**
 * **kingmaker/Token - Akiros.webp**
