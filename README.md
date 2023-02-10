@@ -61,10 +61,13 @@ The following journals are shipped:
 * A macro to advance/retract to a certain day of time
 * A stopwatch macro to advance time during rest, daily preparations and tracks adventuring time after daily preps
 * A macro to roll on a custom Kingdom Events table. By default, the Roll Table is called "Kingdom Events", but you can change the name in the settings
-* 3 macros that help automate exploration mode. ![Exploration Macros](docs/images/exploration-macros.png)
+* 3 macros that help automate exploration mode. 
+  
+![Exploration Macros](docs/images/exploration-macros.png)
   
   2 of them integrate with [PF2E Exploration Effects](https://foundryvtt.com/packages/pf2e-exploration-effects) and will roll secret checks for stealth and perception for all characters on the current canvas, that have the "Search" or "Avoid Notice" exploration effect. The other macro rolls checks for all configured characters and can be used to roll checks on the hex map without having the tokens be active on that scene.
-  ![Skills Macro](docs/images/skills-macro.png)
+
+![Skills Macro](docs/images/skills-macro.png)
   
 * A macro to roll a random encounter of a region.
   ![Random Encounter Macro](docs/images/random-encounter-macro.png)
