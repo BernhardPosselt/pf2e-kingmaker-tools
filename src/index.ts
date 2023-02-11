@@ -15,6 +15,7 @@ import {
     prepareCampsite,
     tellCampfireStory,
 } from './camping';
+import {showStructureBonuses, showStructureEditDialog} from './structures/settlements';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -27,6 +28,7 @@ Hooks.on('ready', async () => {
                 kingdomEventsMacro: rollKingdomEvent.bind(null, game),
                 postCompanionEffectsMacro: postCompanionEffects.bind(null, game),
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
+                viewSettlementMacro: showStructureBonuses.bind(null, game),
                 stopWatchMacro: stopWatch.bind(null, game),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 subsistMacro: async (actor: any): Promise<void> => {
@@ -74,6 +76,13 @@ Hooks.on('ready', async () => {
                                 && actor.name !== null
                                 && actorNames.has(actor.name)) ?? [];
                         await rollSkillDialog(actors);
+                    }
+                },
+                editStructureMacro: async (actor: any): Promise<void> => {
+                    if (actor === undefined) {
+                        ui.notifications?.error('Please select an actor');
+                    } else {
+                        await showStructureEditDialog(gameInstance, actor);
                     }
                 },
             },

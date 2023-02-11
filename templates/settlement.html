@@ -1,0 +1,111 @@
+<h2>Kingdom</h2>
+<table>
+    <tr>
+        <th><label for="kingdomSize">Kingdom Size</label></th>
+        <td><input type="number" id="kingdomSize" name="kingdomSize" value="{{kingdomSize}}"></td>
+    </tr>
+</table>
+
+<h2>Storage Maximum</h2>
+<table>
+    {{#each storage}}
+    <tr>
+        <th>{{label}}</th>
+        <td>{{value}}</td>
+    </tr>
+    {{/each}}
+</table>
+
+<form>
+    <h2>{{name}}</h2>
+    <table>
+        <tr>
+            <th><label for="settlement">Settlement</label></th>
+            <td>
+                <select name="settlement" id="settlement">
+                    {{#select settlementType}}
+                    {{#each settlementTypes}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="settlementLevel">Settlement Level</label></th>
+            <td><input type="number" id="settlementLevel" name="settlementLevel" value="{{settlementLevel}}"></td>
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td>{{type}}</td>
+        </tr>
+        <tr>
+            <th>Required Kingdom Level</th>
+            <td>{{requiredKingdomLevel}}</td>
+        </tr>
+        <tr>
+            <th>Consumption</th>
+            <td>{{consumption}}</td>
+        </tr>
+        <tr>
+            <th>Influence</th>
+            <td>{{influence}}</td>
+        </tr>
+        <tr>
+            <th>Lots</th>
+            <td>{{lots}}</td>
+        </tr>
+        <tr>
+            <th>Max Item Bonus</th>
+            <td>{{maxItemBonus}}</td>
+        </tr>
+        <tr>
+            <th>Population</th>
+            <td>{{population}}</td>
+        </tr>
+        <tr>
+            <th>Capital Investment Possible</th>
+            <td>{{capitalInvestmentPossible}}</td>
+        </tr>
+        <tr>
+            <th>Leadership Activities</th>
+            <td>{{leadershipActivities}}</td>
+        </tr>
+    </table>
+
+    <h2>Item Bonuses</h2>
+    <table>
+        <tr>
+            <th>Settlement Event Bonus</th>
+            <td>{{settlementEventBonus}}</td>
+        </tr>
+        {{#each skillItemBonuses}}
+        <tr>
+            <th>{{label}}</th>
+            <td>
+                <table>
+                    <tr><th>Item Bonus</th><td>{{value}}</td></tr>
+                    {{#each actions}}
+                    <tr><th>{{label}}</th><td>{{value}}</td></tr>
+                    {{/each}}
+                </table>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+    <h2>Available Items</h2>
+    <table>
+        {{#each availableItems}}
+        <tr>
+            <th>{{label}}</th>
+            <td>Up to level {{value}}</td>
+        </tr>
+        {{/each}}
+    </table>
+    <h2>Building Effects</h2>
+    <ul>
+        {{#each notes}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+</form>

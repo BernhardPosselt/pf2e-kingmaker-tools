@@ -39,3 +39,13 @@
     padding-right: 10px;
     line-height: 26px;
 }
+
+.kingmaker-tools-app.edit-structure-json form {
+    height: 400px;
+    width: 100%;
+}
+
+.kingmaker-tools-app.edit-structure-json textarea {
+    height: 400px;
+    width: 100%;
+}

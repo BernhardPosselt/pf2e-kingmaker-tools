@@ -1,14 +1,14 @@
-import {evaluate} from '../../src/structures/structures';
+import {evaluateStructures} from '../../src/structures/structures';
 
 describe('structures', () => {
     test('evaluate no buildings', () => {
-        const result = evaluate([], 3);
+        const result = evaluateStructures([], 3);
         expect(result.notes.length).toBe(0);
         expect(result.allowCapitalInvestment).toBe(false);
     });
 
     test('item bonuses should stack if from same building', () => {
-        const result = evaluate([{
+        const result = evaluateStructures([{
             name: 'a',
             kingdomSkillRules: [{
                 value: 1,
@@ -35,7 +35,7 @@ describe('structures', () => {
     });
 
     test('item bonuses from skills should override action bonuses', () => {
-        const result = evaluate([{
+        const result = evaluateStructures([{
             name: 'a',
             kingdomSkillRules: [{
                 value: 1,
@@ -55,7 +55,7 @@ describe('structures', () => {
     });
 
     test('max item bonuses should override skill bonuses', () => {
-        const result = evaluate([{
+        const result = evaluateStructures([{
             name: 'b',
             kingdomSkillRules: [{
                 value: 2,
@@ -66,7 +66,7 @@ describe('structures', () => {
     });
 
     test('should calculate item level bonuses', () => {
-        const result = evaluate([{
+        const result = evaluateStructures([{
             name: 'b',
             availableItemsRules: [{
                 value: 1,
@@ -86,7 +86,7 @@ describe('structures', () => {
     });
 
     test('should apply item level penalty', () => {
-        const result = evaluate([{
+        const result = evaluateStructures([{
             name: 'b',
             availableItemsRules: [{
                 value: 1,
@@ -105,7 +105,7 @@ describe('structures', () => {
     });
 
     test('should calcualte complex example', () => {
-        const result = evaluate([{
+        const result = evaluateStructures([{
             name: 'b',
             availableItemsRules: [{
                 value: 1,

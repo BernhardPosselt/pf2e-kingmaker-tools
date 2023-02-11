@@ -214,9 +214,11 @@ export interface Structure {
     leadershipActivityMaxBonus?: boolean;
 }
 
+export type ActionBonuses = Partial<Record<Action, number>>;
+
 export interface SkillItemBonus {
     value: number;
-    actions: Partial<Record<Action, number>>;
+    actions: ActionBonuses;
 }
 
 export interface SkillItemBonuses {
@@ -456,12 +458,118 @@ function applyConsumptionReduction(result: StructureResult, structures: Structur
         .reduce((a, b) => a + b, 0);
 }
 
+export interface SettlementData {
+    type: 'Village' | 'Town' | 'City' | 'Metropolis';
+    lots: string;
+    requiredKingdomLevel: number;
+    population: string;
+    level: number;
+    consumption: number;
+    maxItemBonus: number;
+    influence: number;
+}
+
+export function getSettlementData(settlementLevel: number): SettlementData {
+    if (settlementLevel < 2) {
+        return {
+            type: 'Village',
+            consumption: 1,
+            influence: 0,
+            lots: '1',
+            requiredKingdomLevel: 1,
+            level: settlementLevel,
+            maxItemBonus: 1,
+            population: '400 or less',
+        };
+    }
+    if (settlementLevel < 5) {
+        return {
+            type: 'Town',
+            consumption: 2,
+            influence: 1,
+            requiredKingdomLevel: 3,
+            lots: '4',
+            level: settlementLevel,
+            maxItemBonus: 1,
+            population: '401-2000',
+        };
+    } else if (settlementLevel < 10) {
+        return {
+            type: 'City',
+            consumption: 4,
+            influence: 2,
+            requiredKingdomLevel: 9,
+            lots: '9',
+            level: settlementLevel,
+            maxItemBonus: 2,
+            population: '2001–25000',
+        };
+    } else {
+        return {
+            type: 'Metropolis',
+            consumption: 6,
+            influence: 3,
+            lots: '10+',
+            requiredKingdomLevel: 15,
+            level: settlementLevel,
+            maxItemBonus: 3,
+            population: '25001+',
+        };
+    }
+}
+
+export interface KingdomData {
+    type: 'Territory' | 'Province' | 'State' | 'Country' | 'Dominion';
+    resourceDie: 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
+    controlDCModifier: number;
+    commodityStorage: number;
+}
+
+export function getKingdomData(kingdomSize: number): KingdomData {
+    if (kingdomSize < 10) {
+        return {
+            type: 'Territory',
+            resourceDie: 'd4',
+            controlDCModifier: 0,
+            commodityStorage: 4,
+        };
+    } else if (kingdomSize < 25) {
+        return {
+            type: 'Province',
+            resourceDie: 'd6',
+            controlDCModifier: 1,
+            commodityStorage: 8,
+        };
+    } else if (kingdomSize < 50) {
+        return {
+            type: 'State',
+            resourceDie: 'd8',
+            controlDCModifier: 2,
+            commodityStorage: 12,
+        };
+    } else if (kingdomSize < 100) {
+        return {
+            type: 'Country',
+            resourceDie: 'd10',
+            controlDCModifier: 3,
+            commodityStorage: 16,
+        };
+    } else {
+        return {
+            type: 'Dominion',
+            resourceDie: 'd12',
+            controlDCModifier: 4,
+            commodityStorage: 20,
+        };
+    }
+}
+
 /**
  * Calculate all Bonuses of a settlement
  * @param structures
  * @param maxItemBonus
  */
-export function evaluate(structures: Structure[], maxItemBonus: number): StructureResult {
+export function evaluateStructures(structures: Structure[], maxItemBonus: number): StructureResult {
     const allowCapitalInvestment = structures.some(structure => structure.enableCapitalInvestment === true);
     const notes = Array.from(new Set(structures.flatMap(result => result.notes ?? [])));
     const result: StructureResult = {
