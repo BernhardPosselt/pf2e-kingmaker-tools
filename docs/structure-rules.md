@@ -125,7 +125,7 @@ A full structure rule would look something like this:
 }
 ```
 
-* **name**: mandatory
+* **name**: optional, if absent taken from the actor name
 * **notes**: optional, is shown at the bottom in the **Building Effects** section
 * **preventItemLevelPenalty**: optional, if not at least one structure in your settlement has this set to true, it will reduce purchasable item level by 2 for this settlement
 * **enableCapitalInvestment**: optional, if not at least one structure in your settlement has this set to true, **Capital Investment** will be marked as not possible in this settlement
