@@ -232,6 +232,8 @@ export type ItemGroup = 'divine'
     | 'magical'
     | 'other';
 
+export const itemGroups: ItemGroup[] = ['divine', 'alchemical', 'primal', 'occult', 'arcane', 'luxury', 'magical', 'other'];
+
 export type ItemLevelBonuses = Record<ItemGroup, number>;
 
 export interface SettlementData {

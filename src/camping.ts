@@ -733,7 +733,6 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
             removeRecipeButton?.addEventListener('click', async (event) => {
                 const button = event.target as HTMLButtonElement;
                 const recipeName = button.dataset.recipe!;
-                console.log(button);
                 await this.removeRecipe(recipeName);
                 this.render();
             });

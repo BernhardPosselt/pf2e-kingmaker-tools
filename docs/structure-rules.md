@@ -1,8 +1,6 @@
 # Structure Rules
 
-All structure rules are JSON (not validated yet) and are persisted using actor flags. They can be edited using the **Edit Structure Rules** Macro. 
-
-There is currently no validation in place so be careful if you change these!
+All structure rules are JSON and are persisted using actor flags. They can be edited using the **Edit Structure Rules** Macro. 
 
 Rules can be one of the following types:
 

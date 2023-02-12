@@ -1,9 +1,10 @@
 import {evaluateStructures, includeCapital, SettlementData, Structure} from './structures';
 import {structuresByName} from './structure-data';
-import {createUUIDLink} from '../utils';
+import {ruleSchema} from './schema';
 
 class StructureError extends Error {
 }
+
 
 function parseStructureData(name: string | null, data: unknown): Structure | undefined {
     if (data === undefined || data === null) {
@@ -12,14 +13,21 @@ function parseStructureData(name: string | null, data: unknown): Structure | und
         const refData = data as { ref: string };
         const lookedUpStructure = structuresByName.get(refData.ref);
         if (lookedUpStructure === undefined) {
-            throw new StructureError(`No predefined structure data found for actor with name ${name}`);
+            throw new StructureError(`No predefined structure data found for actor with name ${name}, aborting`);
         }
         return lookedUpStructure;
     } else if (name !== null) {
-        return {
+        const rule = {
             name,
             ...data,
         };
+        const result = ruleSchema.validate(rule);
+        if (result.error) {
+            console.error(`Failed to validate structure with name ${name}`, data);
+            console.error('Validation Error', result.error);
+            throw new StructureError(`Structure with name ${name} failed to validate, aborting. See console log (F12) for more details`);
+        }
+        return rule;
     } else {
         return data as Structure;
     }
@@ -65,6 +73,7 @@ function getSceneData(scene: Scene): CurrentSceneData {
 export async function saveViewedSceneData(game: Game, data: SceneSettlementData): Promise<void> {
     const viewed = game.scenes?.viewed;
     if (viewed) {
+        await viewed.unsetFlag('pf2e-kingmaker-tools', 'settlementData');
         await viewed.setFlag('pf2e-kingmaker-tools', 'settlementData', data);
     }
 }

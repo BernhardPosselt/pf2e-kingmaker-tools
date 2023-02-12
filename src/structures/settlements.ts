@@ -177,7 +177,7 @@ function editTemplate(structureData: object | undefined): string {
     const root = document.createElement('form');
     const textarea = document.createElement('textarea');
     textarea.name = 'json';
-    textarea.innerText = structureData ? JSON.stringify(structureData) : '';
+    textarea.innerHTML = structureData ? JSON.stringify(structureData, null, 2) : '';
     root.appendChild(textarea);
     return root.outerHTML;
 }
@@ -196,7 +196,7 @@ export async function showStructureEditDialog(game: Game, actor: Actor): Promise
                     const $html = html as HTMLElement;
                     const json = $html.querySelector('textarea[name=json]') as HTMLInputElement;
                     const value = json.value.trim() === '' ? null : JSON.parse(json.value);
-                    console.log(value);
+                    await actor.unsetFlag('pf2e-kingmaker-tools', 'structureData');
                     await actor.setFlag('pf2e-kingmaker-tools', 'structureData', value);
                 },
             },

@@ -1126,6 +1126,13 @@
     expect "^29.0.0"
     pretty-format "^29.0.0"
 
+"@types/joi@^17.2.3":
+  version "17.2.3"
+  resolved "https://nexus.rwa-test.at/repository/npm-public/@types/joi/-/joi-17.2.3.tgz#b7768ed9d84f1ebd393328b9f97c1cf3d2b94798"
+  integrity sha512-dGjs/lhrWOa+eO0HwgxCSnDm5eMGCsXuvLglMghJq32F6q5LyyNuXb41DHzrg501CKNOSSAHmfB7FDGeUnDmzw==
+  dependencies:
+    joi "*"
+
 "@types/jquery@~3.5.9":
   version "3.5.16"
   resolved "https://nexus.rwa-test.at/repository/npm-public/@types/jquery/-/jquery-3.5.16.tgz#632131baf30951915b0317d48c98e9890bdf051d"
@@ -2843,7 +2850,7 @@ jest@^29.4.2:
     import-local "^3.0.2"
     jest-cli "^29.4.2"
 
-joi@^17.7.1:
+joi@*, joi@^17.7.1:
   version "17.7.1"
   resolved "https://nexus.rwa-test.at/repository/npm-public/joi/-/joi-17.7.1.tgz#854fc85c7fa3cfc47c91124d30bffdbb58e06cec"
   integrity sha512-teoLhIvWE298R6AeJywcjR4sX2hHjB3/xJX4qPjg+gTg+c0mzUDsziYlqPmLomq9gVsfaMcgPaGc7VxtD/9StA==
