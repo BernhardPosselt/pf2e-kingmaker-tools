@@ -15,7 +15,8 @@ import {
     prepareCampsite,
     tellCampfireStory,
 } from './camping';
-import {showStructureBonuses, showStructureEditDialog} from './structures/settlements';
+import {showSettlement, showStructureEditDialog} from './structures/settlements';
+import {showKingdom} from './kingdom/kingdom';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -28,7 +29,8 @@ Hooks.on('ready', async () => {
                 kingdomEventsMacro: rollKingdomEvent.bind(null, game),
                 postCompanionEffectsMacro: postCompanionEffects.bind(null, game),
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
-                viewSettlementMacro: showStructureBonuses.bind(null, game),
+                viewSettlementMacro: showSettlement.bind(null, game),
+                viewKingdomMacro: showKingdom.bind(null, game),
                 stopWatchMacro: stopWatch.bind(null, game),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 subsistMacro: async (actor: any): Promise<void> => {
@@ -257,13 +259,12 @@ Hooks.on('ready', async () => {
             type: Boolean,
             scope: 'world',
         });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomSize', {
-            name: 'Kingdom Size',
-            hint: 'How many hexes your kingdom spans',
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdom', {
+            name: 'Kingdom',
             scope: 'world',
             config: false,
-            default: 1,
-            type: Number,
+            default: null,
+            type: String,
         });
         Hooks.on('updateWorldTime', async (_, delta) => {
             if (getBooleanSetting(gameInstance, 'autoRollWeather')

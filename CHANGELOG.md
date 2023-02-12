@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Also include familiars in exploration macros
 * Change Marketplace Lots to 2
+* Changed Special Ingredients to 0 gp
 
 ## [0.0.3] - 2023-01-13
 

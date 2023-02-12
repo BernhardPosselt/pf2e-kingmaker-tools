@@ -1,12 +1,9 @@
 import {
     ActionBonuses,
-
     ItemLevelBonuses, SkillItemBonuses,
     SettlementData,
 } from './structures';
 import {getMergedData, saveViewedSceneData} from './scene';
-import {saveKingdomSize} from './kingdom';
-
 
 interface SettlementOptions {
     game: Game;
@@ -79,7 +76,6 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
     }
 
     override async _updateObject(event: Event, formData: SettlementFormData): Promise<void> {
-        await saveKingdomSize(this.game, formData.kingdomSize);
         await saveViewedSceneData(this.game, {
             settlementLevel: formData.settlementLevel,
             settlementType: formData.settlementType,
@@ -169,7 +165,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
     }
 }
 
-export async function showStructureBonuses(game: Game): Promise<void> {
+export async function showSettlement(game: Game): Promise<void> {
     new SettlementApp(null, {game}).render(true);
 }
 
