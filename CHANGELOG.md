@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Include missing Leadership Activities
 * Include missing Events
+* Added structure rules. Existing structures need to be replaced upon update to make use of it
+* Added a settlement overview that computes all settlement item bonuses, storages, notes and types; bonuses stack with the capital automatically
 
 ### Fixed
 
