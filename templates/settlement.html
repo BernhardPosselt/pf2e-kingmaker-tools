@@ -2,7 +2,7 @@
     <h2>{{name}}</h2>
     <table>
         <tr>
-            <th><label for="settlementType">Settlement</label></th>
+            <th><label for="settlementType">Settlement Type</label></th>
             <td>
                 <select name="settlementType" id="settlementType" {{#if isUser}}disabled{{/if}}>
                 {{#select settlementType}}
@@ -13,6 +13,7 @@
                 </select>
             </td>
         </tr>
+        {{#if isSettlement}}
         <tr>
             <th><label for="settlementLevel">Settlement Level</label></th>
             <td><input type="number" id="settlementLevel" name="settlementLevel" value="{{settlementLevel}}" {{#if
@@ -55,72 +56,74 @@
             <th>Leadership Activities</th>
             <td>{{leadershipActivities}}</td>
         </tr>
-    </table>
-
-    <h2>Item Bonuses</h2>
-    <table>
-        {{#if settlementEventBonus}}
-        <tr>
-            <th>Settlement Event Item Bonus</th>
-            <td>{{settlementEventBonus}}</td>
-        </tr>
         {{/if}}
-        {{#if leadershipActivityBonus}}
-        <tr>
-            <th>Leadership Activity Item Bonus</th>
-            <td>{{leadershipActivityBonus}}</td>
-        </tr>
-        {{/if}}
-        {{#each skillItemBonuses}}
-        <tr>
-            <th>{{label}}</th>
-            <td>
-                <table class="sub-table">
-                    {{#if value}}
-                    <tr>
-                        <th>Item Bonus</th>
-                        <td>{{value}}</td>
-                    </tr>
-                    {{/if}}
-                    {{#each actions}}
-                    <tr>
-                        <th>{{label}}</th>
-                        <td>{{value}}</td>
-                    </tr>
-                    {{/each}}
-                </table>
-            </td>
-        </tr>
-        {{/each}}
     </table>
-    <h2>Available Items</h2>
-    <table>
-        {{#each availableItems}}
-        <tr>
-            <th>{{label}}</th>
-            <td>Up to level {{value}}</td>
-        </tr>
-        {{/each}}
-    </table>
-    {{#if showStorage}}
-        <h2>Storage</h2>
+    {{#if isSettlement}}
+        <h2>Item Bonuses</h2>
         <table>
-            {{#each storage}}
+            {{#if settlementEventBonus}}
+            <tr>
+                <th>Settlement Event Item Bonus</th>
+                <td>{{settlementEventBonus}}</td>
+            </tr>
+            {{/if}}
+            {{#if leadershipActivityBonus}}
+            <tr>
+                <th>Leadership Activity Item Bonus</th>
+                <td>{{leadershipActivityBonus}}</td>
+            </tr>
+            {{/if}}
+            {{#each skillItemBonuses}}
             <tr>
                 <th>{{label}}</th>
-                <td>{{value}}</td>
+                <td>
+                    <table class="sub-table">
+                        {{#if value}}
+                        <tr>
+                            <th>Item Bonus</th>
+                            <td>{{value}}</td>
+                        </tr>
+                        {{/if}}
+                        {{#each actions}}
+                        <tr>
+                            <th>{{label}}</th>
+                            <td>{{value}}</td>
+                        </tr>
+                        {{/each}}
+                    </table>
+                </td>
             </tr>
             {{/each}}
         </table>
-    {{/if}}
-    </div>
-    {{#if showNotes}}
-    <h2>Building Effects</h2>
-    <ul>
-        {{#each notes}}
-        <li>{{this}}</li>
-        {{/each}}
-    </ul>
+        <h2>Available Items</h2>
+        <table>
+            {{#each availableItems}}
+            <tr>
+                <th>{{label}}</th>
+                <td>Up to level {{value}}</td>
+            </tr>
+            {{/each}}
+        </table>
+        {{#if showStorage}}
+            <h2>Storage</h2>
+            <table>
+                {{#each storage}}
+                <tr>
+                    <th>{{label}}</th>
+                    <td>{{value}}</td>
+                </tr>
+                {{/each}}
+            </table>
+        {{/if}}
+        </div>
+        {{#if showNotes}}
+        <h2>Building Effects</h2>
+        <ul>
+            {{#each notes}}
+            <li>{{this}}</li>
+            {{/each}}
+        </ul>
+        {{/if}}
     {{/if}}
 </form>
 </div>

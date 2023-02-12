@@ -37,6 +37,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
         options.closeOnSubmit = false;
         options.classes = ['kingmaker-tools-app', 'settlement-app'];
         options.width = 500;
+        options.height = 'auto';
         return options;
     }
 
@@ -73,6 +74,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
             skillItemBonuses: this.getSkillBonuses(structures.skillBonuses),
             isGM,
             isUser,
+            isSettlement: sceneData.settlementType === 'Capital' || sceneData.settlementType === 'Settlement',
         };
     }
 
