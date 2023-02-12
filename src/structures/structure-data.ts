@@ -3,7 +3,7 @@ import {Structure} from './structures';
 const structures: Structure[] = [
     {
         name: 'Academy',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 2,
             action: 'creative-solution',
         }],
@@ -11,45 +11,45 @@ const structures: Structure[] = [
     },
     {
         name: 'Alchemy Laboratory',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'demolish',
         }],
         availableItemsRules: [{
             value: 1,
-            predicate: ['item:trait:alchemical'],
+            group: 'alchemical',
         }],
         notes: 'Checks attempted to Identify Alchemy in any settlement with at least one alchemy laboratory gain a +1 item bonus.',
     },
     {
         name: 'Arcanist\'s Tower',
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 1,
             skill: 'magic',
-            predicate: ['action:quell-unrest'],
+            action: 'quell-unrest',
         }],
         availableItemsRules: [{
             value: 1,
-            predicate: ['item:trait:arcane'],
+            group: 'arcane',
         }],
         notes: 'While in a settlement with an arcanist\'s tower, you gain a +1 item bonus to checks made to Borrow an Arcane Spell or Learn a Spell.',
     },
     {
         name: 'Arena',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 2,
             action: 'celebrate-holiday',
         }],
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 1,
             skill: 'warfare',
-            predicate: ['action:quell-unrest'],
+            action: 'quell-unrest',
         }],
         notes: 'An arena lets you to retrain combat-themed feats more efficiently while in the settlement; doing so takes only 5 days rather than a week of downtime.',
     },
     {
         name: 'Bank',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'tap-treasury',
         }],
@@ -57,7 +57,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Barracks',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'garrison-army',
         }, {
@@ -70,14 +70,14 @@ const structures: Structure[] = [
     },
     {
         name: 'Brewery',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'establish-trade-agreement',
         }],
     },
     {
         name: 'Castle',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 2,
             action: 'new-leadership',
         }, {
@@ -100,7 +100,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Cathedral',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 3,
             action: 'celebrate-holiday',
         }, {
@@ -112,13 +112,13 @@ const structures: Structure[] = [
         }],
         availableItemsRules: [{
             value: 3,
-            predicate: ['item:trait:divine'],
+            group: 'divine',
         }],
         notes: 'While in a settlement with a cathedral, you gain a +3 item bonus to Lore and Religion checks made to Recall Knowledge while Investigating, and to all faith-themed checks made while Researching.',
     },
     {
         name: 'Construction Yard',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'build-structure',
         }, {
@@ -128,14 +128,14 @@ const structures: Structure[] = [
     },
     {
         name: 'Dump',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'demolish',
         }],
     },
     {
         name: 'Embassy',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'send-diplomatic-envoy',
         }, {
@@ -145,14 +145,14 @@ const structures: Structure[] = [
     },
     {
         name: 'Festival Hall',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'celebrate-holiday',
         }],
     },
     {
         name: 'Foundry',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'establish-work-site-mine',
         }],
@@ -162,7 +162,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Garrison',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'outfit-army',
         }, {
@@ -176,17 +176,17 @@ const structures: Structure[] = [
     },
     {
         name: 'Gladiatorial Arena',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 3,
             action: 'celebrate-holiday',
         }, {
             value: 3,
             action: 'hire-adventurers',
         }],
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 3,
             skill: 'warfare',
-            predicate: ['action:quell-unrest'],
+            action: 'quell-unrest',
         }],
         notes: 'A gladiatorial arena allows a PC in the settlement to retrain combat-themed feats (at the GM\'s discretion) more efficiently; doing so takes only 4 days rather than a week of downtime.',
     },
@@ -202,14 +202,14 @@ const structures: Structure[] = [
     },
     {
         name: 'Herbalist',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'provide-care',
         }],
     },
     {
         name: 'Hospital',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'provide-care',
         }, {
@@ -220,7 +220,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Illicit Market',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'clandestine-business',
         }],
@@ -230,22 +230,22 @@ const structures: Structure[] = [
     },
     {
         name: 'Inn',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'hire-adventurers',
         }],
     },
     {
         name: 'Jail',
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 1,
             skill: 'intrigue',
-            predicate: ['action:quell-unrest'],
+            action: 'quell-unrest',
         }],
     },
     {
         name: 'Keep',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'deploy-army',
         }, {
@@ -258,16 +258,16 @@ const structures: Structure[] = [
     },
     {
         name: 'Library',
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 1,
             skill: 'scholarship',
-            predicate: ['action:rest-and-relax'],
+            action: 'rest-and-relax',
         }],
         notes: 'While in a settlement with a library, you gain a +1 item bonus to Lore checks made to Recall Knowledge while Investigating, as well as to Researching checks, and to Decipher Writing checks.',
     },
     {
         name: 'Lumberyard',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'establish-work-site-lumber',
         }],
@@ -277,36 +277,36 @@ const structures: Structure[] = [
     },
     {
         name: 'Luxury Store',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'establish-trade-agreement',
         }],
         availableItemsRules: [{
             value: 1,
-            predicate: ['item:traits:luxury'],
+            group: 'luxury',
         }],
     },
     {
         name: 'Magic Shop',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'supernatural-solution',
         }],
         availableItemsRules: [{
             value: 1,
-            predicate: ['item:traits:magical'],
+            group: 'magical',
         }],
     },
     {
         name: 'Mansion',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'improve-lifestyle',
         }],
     },
     {
         name: 'Marketplace',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'establish-trade-agreement',
         }],
@@ -314,29 +314,29 @@ const structures: Structure[] = [
     },
     {
         name: 'Menagerie',
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 2,
             skill: 'wilderness',
-            predicate: ['action:rest-and-relax'],
+            action: 'rest-and-relax',
         }],
         notes: 'A menagerie typically contains a selection of level 5 or lower animals. If your party captures a living creature of level 6 or higher and can transport the creature back to a settlement with a menagerie, you can add that creature to the menagerie as long as your kingdom level is at least 4 higher than the creature\'s level. Each time such a creature is added to a menagerie, gain 1 Fame or Infamy point (as appropriate) or reduce one Ruin of your choice by 1.\n' +
             'Only creatures with Intelligence modifiers of –4 or –5 are appropriate to place in a menagerie. A kingdom gains 1 Unrest at the start of a Kingdom turn for each sapient creature (anything with an Intelligence modifier of –3 or higher) on display in a menagerie.',
     },
     {
         name: 'Military Academy',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 2,
             action: 'train-army',
         }],
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 2,
             skill: 'warfare',
-            predicate: ['action:pledge-of-fealty'],
+            action: 'pledge-of-fealty',
         }],
     },
     {
         name: 'Mill',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'harvest-crops',
         }],
@@ -344,7 +344,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Mint',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 3,
             action: 'capital-investment',
         }, {
@@ -357,40 +357,40 @@ const structures: Structure[] = [
     },
     {
         name: 'Museum',
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 1,
             skill: 'arts',
-            predicate: ['action:rest-and-relax'],
+            action: 'rest-and-relax',
         }],
         notes: 'A magic item of level 6 or higher that has a particular import or bears significant historical or regional value (at the GM\'s discretion) can be donated to a museum. Each time such an item is donated, reduce Unrest by 1. If that item is later removed from display, increase Unrest by 1.',
     },
     {
         name: 'Noble Villa',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'improve-lifestyle',
         }],
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 1,
             skill: 'politics',
-            predicate: ['action:quell-unrest'],
+            action: 'quell-unrest',
         }],
     },
     {
         name: 'Occult Shop',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 2,
             action: 'prognostication',
         }],
         availableItemsRules: [{
             value: 1,
-            predicate: ['item:traits:occult'],
+            group: 'occult',
         }],
         notes: 'While in a settlement with an occult shop, you gain a +2 item bonus to all checks made to Research esoteric subjects or to Recall Knowledge about the same.',
     },
     {
         name: 'Opera House',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 3,
             action: 'celebrate-holiday',
         }, {
@@ -401,7 +401,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Palace',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 3,
             action: 'new-leadership',
         }, {
@@ -420,27 +420,29 @@ const structures: Structure[] = [
             value: 3,
             action: 'recruit-army',
         }],
+        leadershipActivityRules: [{
+            value: 3,
+        }],
         increaseLeadershipActivities: true,
-        leadershipActivityMaxBonus: true,
     },
     {
         name: 'Park',
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 1,
             skill: 'wilderness',
-            predicate: ['action:rest-and-relax'],
+            action: 'rest-and-relax',
         }],
     },
     {
         name: 'Pier',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'go-fishing',
         }],
     },
     {
         name: 'Printing House',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 2,
             action: 'improve-lifestyle',
         }, {
@@ -451,19 +453,19 @@ const structures: Structure[] = [
     },
     {
         name: 'Sacred Grove',
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 1,
             skill: 'folklore',
-            predicate: ['action:quell-unrest'],
+            action: 'quell-unrest',
         }],
         availableItemsRules: [{
             value: 1,
-            predicate: ['item:traits:primal'],
+            group: 'primal',
         }],
     },
     {
         name: 'Secure Warehouse',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'craft-luxuries',
         }],
@@ -473,7 +475,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Sewer System',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'clandestine-business',
         }],
@@ -481,18 +483,18 @@ const structures: Structure[] = [
     },
     {
         name: 'Shrine',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'celebrate-holiday',
         }],
         availableItemsRules: [{
             value: 1,
-            predicate: ['item:traits:divine'],
+            group: 'divine',
         }],
     },
     {
         name: 'Smithy',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'trade-commodities',
         }, {
@@ -503,7 +505,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Specialized Artisan',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'craft-luxuries',
         }],
@@ -511,14 +513,14 @@ const structures: Structure[] = [
     },
     {
         name: 'Stable',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'establish-trade-agreement',
         }],
     },
     {
         name: 'Stockyard',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'gather-lifestock',
         }],
@@ -526,7 +528,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Stonemason',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'establish-work-site-quarry',
         }],
@@ -536,56 +538,56 @@ const structures: Structure[] = [
     },
     {
         name: 'Tannery',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'trade-commodities',
         }],
     },
     {
         name: 'Tavern, Luxury',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 2,
             action: 'hire-adventurers',
         }],
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 2,
             skill: 'trade',
-            predicate: ['action:rest-and-relax'],
+            action: 'rest-and-relax',
         }],
         notes: 'If attempt a Performance check to Earn Income in a settlement with a luxury tavern, you gain a +2 item bonus to the check. All checks made to Gather Information in a settlement with at least one luxury tavern gain a +2 item bonus.',
     },
     {
         name: 'Tavern, Popular',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'hire-adventurers',
         }],
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 1,
             skill: 'trade',
-            predicate: ['action:rest-and-relax'],
+            action: 'rest-and-relax',
         }],
         notes: 'If you attempt a Performance check to Earn Income in a settlement with a popular tavern, you gain a +1 item bonus to the check. All checks made to Gather Information in a settlement with at least one popular tavern gain a +1 item bonus.',
     },
     {
         name: 'Tavern, World-Class',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 3,
             action: 'hire-adventurers',
         }, {
             value: 3,
             action: 'repair-reputation-strife',
         }],
-        kingdomSkillRules: [{
+        skillBonusRules: [{
             value: 3,
             skill: 'trade',
-            predicate: ['action:rest-and-relax'],
+            action: 'rest-and-relax',
         }],
         notes: 'If you attempt a Performance check to Earn Income in a settlement with a world-class tavern, you gain a +3 item bonus to the check. All checks made to Gather Information in a settlement with a world-class tavern gain a +3 item bonus.',
     },
     {
         name: 'Temple',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'celebrate-holiday',
         }, {
@@ -594,12 +596,12 @@ const structures: Structure[] = [
         }],
         availableItemsRules: [{
             value: 1,
-            predicate: ['item:traits:divine'],
+            group: 'divine',
         }],
     },
     {
         name: 'Theater',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 2,
             action: 'celebrate-holiday',
         }],
@@ -607,7 +609,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Thieves\' Guild',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'infiltration',
         }],
@@ -619,7 +621,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Trade Shop',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'purchase-commodities',
         }],
@@ -627,7 +629,7 @@ const structures: Structure[] = [
     },
     {
         name: 'University',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 3,
             action: 'creative-solution',
         }],
@@ -641,7 +643,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Waterfront',
-        simpleKingdomSkillRules: [{
+        actionBonusRules: [{
             value: 1,
             action: 'go-fishing',
         }, {

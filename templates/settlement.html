@@ -59,19 +59,29 @@
 
     <h2>Item Bonuses</h2>
     <table>
+        {{#if settlementEventBonus}}
         <tr>
-            <th>Settlement Event Bonus</th>
+            <th>Settlement Event Item Bonus</th>
             <td>{{settlementEventBonus}}</td>
         </tr>
+        {{/if}}
+        {{#if leadershipActivityBonus}}
+        <tr>
+            <th>Leadership Activity Item Bonus</th>
+            <td>{{leadershipActivityBonus}}</td>
+        </tr>
+        {{/if}}
         {{#each skillItemBonuses}}
         <tr>
             <th>{{label}}</th>
             <td>
-                <table>
+                <table class="sub-table">
+                    {{#if value}}
                     <tr>
                         <th>Item Bonus</th>
                         <td>{{value}}</td>
                     </tr>
+                    {{/if}}
                     {{#each actions}}
                     <tr>
                         <th>{{label}}</th>

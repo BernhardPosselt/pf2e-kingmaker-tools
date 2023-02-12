@@ -4,11 +4,8 @@ import {
     ItemLevelBonuses, SkillItemBonuses,
     SettlementData,
 } from './structures';
-import {getNumberSetting, setSetting} from '../settings';
 import {getMergedData, saveViewedSceneData} from './scene';
-import {getKingdomData, getKingdomSize, saveKingdomSize} from './kingdom';
-
-
+import {saveKingdomSize} from './kingdom';
 
 
 interface SettlementOptions {
@@ -65,6 +62,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
             consumption: structures.consumption,
             capitalInvestmentPossible: structures.allowCapitalInvestment ? 'yes' : 'no',
             settlementEventBonus: structures.settlementEventBonus,
+            leadershipActivityBonus: structures.leadershipActivityBonus,
             notes: structures.notes,
             showNotes: structures.notes.length > 0,
             leadershipActivities: structures.increaseLeadershipActivities ? 3 : 2,
@@ -118,7 +116,19 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
     }
 
     private getAvailableItems(settlementLevel: number, itemLevelBonuses: ItemLevelBonuses): LabeledData<number>[] {
+        const magicTraits = new Set(['arcane', 'divine', 'primal', 'occult']);
+        const otherBonus = itemLevelBonuses.other;
+        const magicalBonus = itemLevelBonuses.magical;
         return Object.entries(itemLevelBonuses)
+            .filter(([type, bonus]) => {
+                if (magicTraits.has(type)) {
+                    return bonus > otherBonus && bonus > magicalBonus;
+                } else if (type !== 'other') {
+                    return bonus > otherBonus;
+                } else {
+                    return true;
+                }
+            })
             .map(([type, bonus]) => {
                 return {
                     label: this.capitalize(type),
@@ -140,6 +150,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
 
     private getSkillBonuses(skillBonuses: SkillItemBonuses): SkillBonusData[] {
         return Object.entries(skillBonuses)
+            .filter(([, bonus]) => bonus.value > 0 || (bonus.actions && Object.keys(bonus.actions).length > 0))
             .map(([skill, bonus]) => {
                 return {
                     label: this.capitalize(skill),

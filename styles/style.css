@@ -72,3 +72,13 @@
     /*background-color: rgba(0, 0, 0, 0.05);*/
     text-shadow: 0 0 10px var(--color-shadow-primary);
 }
+
+
+.kingmaker-tools-app .sub-table th {
+    text-align: left;
+}
+
+.kingmaker-tools-app .sub-table td {
+    text-align: right;
+    padding-right: 20px;
+}

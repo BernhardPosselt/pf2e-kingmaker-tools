@@ -165,25 +165,29 @@ export const actionSkills: Record<Action, (Skill)[] | ['*']> = {
     // TODO: companion actions
 };
 
-export interface SimpleKingdomSkillRule {
+export interface ActionBonusRule {
     value: number;
     action: Action;
 }
 
-export interface KingdomSkillRule {
+export interface SkillBonusRule {
     value: number;
     skill: Skill;
-    // e.g. ['action:quell-unrest']
-    predicate?: string[];
+    // e.g. 'quell-unrest'
+    action?: Action;
 }
 
-export interface ItemLevelsRule {
+export interface AvailableItemsRule {
     value: number;
-    // e.g. ['item:trait:alchemical'] or ['item:trait:magic']
-    predicate?: string[];
+    // e.g. 'alchemical' or 'magic'
+    group?: ItemGroup;
 }
 
 export interface SettlementEventsRule {
+    value: number;
+}
+
+export interface LeadershipActivityRule {
     value: number;
 }
 
@@ -196,20 +200,18 @@ export interface Storage {
 }
 
 export interface Structure {
-    // if no id is given, fall back to name
-    id?: string;
     name: string;
     notes?: string;
     preventItemLevelPenalty?: boolean;
     enableCapitalInvestment?: boolean,
-    kingdomSkillRules?: KingdomSkillRule[];
-    simpleKingdomSkillRules?: SimpleKingdomSkillRule[];
-    availableItemsRules?: ItemLevelsRule[];
+    skillBonusRules?: SkillBonusRule[];
+    actionBonusRules?: ActionBonusRule[];
+    availableItemsRules?: AvailableItemsRule[];
     settlementEventRules?: SettlementEventsRule[];
+    leadershipActivityRules?: LeadershipActivityRule[];
     storage?: Partial<Storage>;
     increaseLeadershipActivities?: boolean;
     consumptionReduction?: number;
-    leadershipActivityMaxBonus?: boolean;
 }
 
 export type ActionBonuses = Partial<Record<Action, number>>;
@@ -221,16 +223,16 @@ export interface SkillItemBonus {
 
 export type SkillItemBonuses = Record<Skill, SkillItemBonus>;
 
-export interface ItemLevelBonuses {
-    divine: number;
-    alchemical: number;
-    primal: number;
-    occult: number;
-    arcane: number;
-    luxury: number;
-    magical: number;
-    other: number;
-}
+export type ItemGroup = 'divine'
+    | 'alchemical'
+    | 'primal'
+    | 'occult'
+    | 'arcane'
+    | 'luxury'
+    | 'magical'
+    | 'other';
+
+export type ItemLevelBonuses = Record<ItemGroup, number>;
 
 export interface SettlementData {
     allowCapitalInvestment: boolean;
@@ -238,11 +240,11 @@ export interface SettlementData {
     skillBonuses: SkillItemBonuses;
     itemLevelBonuses: ItemLevelBonuses;
     settlementEventBonus: number;
+    leadershipActivityBonus: number;
     storage: Storage;
     increaseLeadershipActivities: boolean;
     consumptionReduction: number;
     consumption: number;
-    leadershipActivityMaxBonus: boolean;
     config: SettlementConfig;
 }
 
@@ -254,21 +256,17 @@ function count<T>(items: T[], idFunction: (item: T) => string): Map<string, { co
     }, new Map());
 }
 
-function getStructureId(structure: Structure): string {
-    return structure.id ?? structure.name;
-}
-
 /**
  * Add up item bonuses of same structure
  */
 function groupStructures(structures: Structure[], maxItemBonus: number): Structure[] {
-    const structureOccurrences = count(structures, s => getStructureId(s));
+    const structureOccurrences = count(structures, s => s.name);
     return Array.from(structureOccurrences.values())
         .map((data) => {
             const structure = data.item;
             const result: Structure = {
                 ...structure,
-                kingdomSkillRules: structure?.kingdomSkillRules?.map(rule => {
+                skillBonusRules: structure?.skillBonusRules?.map(rule => {
                     return {
                         ...rule,
                         value: Math.min(rule.value * data.count, maxItemBonus),
@@ -286,6 +284,12 @@ function groupStructures(structures: Structure[], maxItemBonus: number): Structu
                         value: Math.min(rule.value * data.count, maxItemBonus),
                     };
                 }),
+                leadershipActivityRules: structure?.leadershipActivityRules?.map(rule => {
+                    return {
+                        ...rule,
+                        value: Math.min(rule.value * data.count, maxItemBonus),
+                    };
+                }),
             };
             return result;
         });
@@ -294,9 +298,9 @@ function groupStructures(structures: Structure[], maxItemBonus: number): Structu
 function applySkillBonusRules(result: SkillItemBonuses, structures: Structure[]): void {
     // apply skills
     structures.forEach(structure => {
-        structure.kingdomSkillRules?.forEach(rule => {
+        structure.skillBonusRules?.forEach(rule => {
             const skill = result[rule.skill];
-            if (!rule.predicate) {
+            if (!rule.action) {
                 if (rule.value > skill.value) {
                     skill.value = rule.value;
                 }
@@ -305,11 +309,10 @@ function applySkillBonusRules(result: SkillItemBonuses, structures: Structure[])
     });
     // apply actions
     structures.forEach(structure => {
-        structure.kingdomSkillRules?.forEach(rule => {
+        structure.skillBonusRules?.forEach(rule => {
             const skill = result[rule.skill];
-            const predicate = rule.predicate;
-            if (predicate) {
-                const action = predicate[0].replaceAll('action:', '') as Action;
+            const action = rule.action;
+            if (action) {
                 if (rule.value > skill.value &&
                     rule.value > (skill.actions[action] ?? 0)) {
                     skill.actions[action] = rule.value;
@@ -335,24 +338,24 @@ function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Str
     const globallyStackingBonuses = Math.min(
         structures
             .flatMap(structures => structures.availableItemsRules ?? [])
-            .filter(rule => rule.predicate === undefined || rule.predicate.length === 0)
+            .filter(rule => rule.group === undefined)
             .map(rule => rule.value)
             .reduce((a, b) => a + b, 0),
         maxItemLevelBonus
     );
 
     const defaultBonus = calculateItemLevelBonus(defaultPenalty, globallyStackingBonuses, 0, maxItemLevelBonus);
-    (Object.keys(itemLevelBonuses) as (keyof ItemLevelBonuses)[]).forEach((key) => {
+    (Object.keys(itemLevelBonuses) as (ItemGroup)[]).forEach((key) => {
         itemLevelBonuses[key] = defaultBonus;
     });
 
     // magical overrides primal, divine, arcane, occult
     structures.forEach(structure => {
         structure.availableItemsRules?.forEach(rule => {
-            const predicate = rule.predicate;
-            if (predicate?.[0] === 'item:trait:magical') {
+            const group = rule.group;
+            if (group === 'magical') {
                 const value = calculateItemLevelBonus(defaultPenalty, globallyStackingBonuses, rule.value, maxItemLevelBonus);
-                const types = ['magical', 'divine', 'occult', 'primal', 'arcane'] as (keyof ItemLevelBonuses)[];
+                const types = ['magical', 'divine', 'occult', 'primal', 'arcane'] as (ItemGroup)[];
                 types.forEach(type => {
                     if (value > itemLevelBonuses[type]) {
                         itemLevelBonuses[type] = value;
@@ -364,13 +367,22 @@ function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Str
 
     structures.forEach(structure => {
         structure.availableItemsRules?.forEach(rule => {
-            const predicate = rule.predicate;
-            if (predicate) {
+            const group = rule.group;
+            if (group) {
                 const value = calculateItemLevelBonus(defaultPenalty, globallyStackingBonuses, rule.value, maxItemLevelBonus);
-                const type = predicate[0].replaceAll('item:trait:', '') as keyof ItemLevelBonuses;
-                if (value > itemLevelBonuses[type]) {
-                    itemLevelBonuses[type] = value;
+                if (value > itemLevelBonuses[group]) {
+                    itemLevelBonuses[group] = value;
                 }
+            }
+        });
+    });
+}
+
+function applyLeadershipActivityBonuses(result: SettlementData, structures: Structure[]): void {
+    structures.forEach(structure => {
+        structure.leadershipActivityRules?.forEach(rule => {
+            if (rule.value > result.leadershipActivityBonus) {
+                result.leadershipActivityBonus = rule.value;
             }
         });
     });
@@ -386,7 +398,7 @@ function applySettlementEventBonuses(result: SettlementData, structures: Structu
     });
 }
 
-function simplifyRules(rules: SimpleKingdomSkillRule[]): KingdomSkillRule[] {
+function simplifyRules(rules: ActionBonusRule[]): SkillBonusRule[] {
     return rules.flatMap(rule => {
         const action = rule.action;
         const skills = actionSkills[action];
@@ -395,7 +407,7 @@ function simplifyRules(rules: SimpleKingdomSkillRule[]): KingdomSkillRule[] {
             return {
                 value: rule.value,
                 skill,
-                predicate: [`action:${action}`],
+                action,
             };
         });
     });
@@ -403,10 +415,10 @@ function simplifyRules(rules: SimpleKingdomSkillRule[]): KingdomSkillRule[] {
 
 function unionizeStructures(structures: Structure[]): Structure[] {
     return structures.map(structure => {
-        const simplifiedRules = simplifyRules(structure.simpleKingdomSkillRules ?? []);
+        const simplifiedRules = simplifyRules(structure.actionBonusRules ?? []);
         return {
             ...structure,
-            kingdomSkillRules: [...(structure.kingdomSkillRules ?? []), ...simplifiedRules],
+            skillBonusRules: [...(structure.skillBonusRules ?? []), ...simplifiedRules],
         };
     });
 }
@@ -430,7 +442,7 @@ function calculateConsumptionReduction(structures: Structure[]): number {
     structures
         .filter(structure => structure.consumptionReduction)
         .forEach(structure => {
-            const id = getStructureId(structure);
+            const id = structure.name;
             const existingReduction = consumptionPerUniqueBuilding.get(id);
             const newReduction = structure?.consumptionReduction ?? 0;
             if (existingReduction === undefined || existingReduction < newReduction) {
@@ -535,8 +547,8 @@ function mergeBonuses(capital: SkillItemBonus, settlement: SkillItemBonus): Skil
 export function includeCapital(capital: SettlementData, settlement: SettlementData): SettlementData {
     return {
         ...settlement,
-        leadershipActivityMaxBonus: capital.leadershipActivityMaxBonus,
         increaseLeadershipActivities: capital.increaseLeadershipActivities,
+        leadershipActivityBonus: Math.max(capital.leadershipActivityBonus, settlement.leadershipActivityBonus),
         skillBonuses: mergeObjects(capital.skillBonuses, settlement.skillBonuses, mergeBonuses) as SkillItemBonuses,
     };
 }
@@ -583,6 +595,7 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
             other: 0,
         },
         settlementEventBonus: 0,
+        leadershipActivityBonus: 0,
         storage: {
             ore: 0,
             food: 0,
@@ -591,7 +604,6 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
             stone: 0,
         },
         increaseLeadershipActivities: structures.some(structure => structure.increaseLeadershipActivities === true),
-        leadershipActivityMaxBonus: structures.some(structure => structure.leadershipActivityMaxBonus === true),
         consumptionReduction,
         consumption: Math.max(0, settlementData.consumption - consumptionReduction),
     };
@@ -599,6 +611,7 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
     applyStorageIncreases(result.storage, structures);
     const groupedStructures = groupStructures(unionizedStructures, maxItemBonus);
     applySettlementEventBonuses(result, groupedStructures);
+    applyLeadershipActivityBonuses(result, groupedStructures);
     applySkillBonusRules(result.skillBonuses, groupedStructures);
     applyItemLevelRules(result.itemLevelBonuses, groupedStructures, maxItemBonus);
     return result;

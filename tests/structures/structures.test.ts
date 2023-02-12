@@ -10,24 +10,24 @@ describe('structures', () => {
     test('item bonuses should stack if from same building', () => {
         const result = evaluateStructures([{
             name: 'a',
-            kingdomSkillRules: [{
+            skillBonusRules: [{
                 value: 1,
                 skill: 'defense',
-                predicate: ['action:provide-care'],
+                action: 'provide-care',
             }],
         }, {
             name: 'b',
-            kingdomSkillRules: [{
+            skillBonusRules: [{
                 value: 1,
                 skill: 'defense',
-                predicate: ['action:provide-care'],
+                action: 'provide-care',
             }],
         }, {
             name: 'a',
-            kingdomSkillRules: [{
+            skillBonusRules: [{
                 value: 1,
                 skill: 'defense',
-                predicate: ['action:provide-care'],
+                action: 'provide-care',
             }],
         }], 10);
         expect(result.skillBonuses.defense.value).toBe(0);
@@ -37,14 +37,14 @@ describe('structures', () => {
     test('item bonuses from skills should override action bonuses', () => {
         const result = evaluateStructures([{
             name: 'a',
-            kingdomSkillRules: [{
+            skillBonusRules: [{
                 value: 1,
                 skill: 'defense',
-                predicate: ['action:provide-care'],
+                action: 'provide-care',
             }],
         }, {
             name: 'b',
-            kingdomSkillRules: [{
+            skillBonusRules: [{
                 value: 2,
                 skill: 'defense',
             }],
@@ -57,7 +57,7 @@ describe('structures', () => {
     test('max item bonuses should override skill bonuses', () => {
         const result = evaluateStructures([{
             name: 'b',
-            kingdomSkillRules: [{
+            skillBonusRules: [{
                 value: 2,
                 skill: 'defense',
             }],
@@ -104,7 +104,7 @@ describe('structures', () => {
         });
     });
 
-    test('should calcualte complex example', () => {
+    test('should calculate complex example', () => {
         const result = evaluateStructures([{
             name: 'b',
             availableItemsRules: [{
@@ -113,10 +113,10 @@ describe('structures', () => {
                 value: 1,
             }, {
                 value: 1,
-                predicate: ['item:trait:magical'],
+                group: 'magical',
             }, {
                 value: 2,
-                predicate: ['item:trait:arcane'],
+                group: 'arcane',
             }],
         }], 15);
         expect(result.itemLevelBonuses).toEqual({
@@ -130,6 +130,4 @@ describe('structures', () => {
             other: 0,
         });
     });
-
-    // dedup notes
 });
