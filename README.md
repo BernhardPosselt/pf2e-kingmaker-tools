@@ -359,10 +359,17 @@ All meals that can be dragged onto PCs. Allows you to select favorite meal and d
 
 **Note**: Images are not included!
 
-Structures are implemented as NPC stat blocks, including the correct sizes. Their description is in the public notes. No rules have yet been implemented on them.
+Structures are implemented as NPC stat blocks, including the correct sizes. Their description is in the public notes.
 
 ![Meal Effects](docs/images/structures.png)
 
+All structures in a settlement can be automatically summed up and calculated by using the **View Settlement** Macro. 
+
+![View Settlement](docs/images/view-settlement-macro.png)
+
+If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
+
+A guide on structure rules [is available here](docs/structure-rules.md)
 
 ### Daily Weather
 
