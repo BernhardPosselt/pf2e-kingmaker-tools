@@ -18,12 +18,39 @@ export interface Ruin {
     threshold: number;
 }
 
+interface WorkSite {
+    locations: number;
+    tappedResources: number;
+}
+
+interface Income {
+    food: number;
+    lumber: number;
+    luxuries: number;
+    ore: number;
+    stone: number;
+    bonusResourceDice: number;
+    bonusResourcePoints: number;
+}
+
 export interface Kingdom {
+    name: string;
+    charter: string;
+    government: string;
     fame: number;
     level: number;
     xp: number;
     size: number;
     unrest: number;
+    rp: number;
+    futureIncome: Income;
+    income: Income;
+    workSites: {
+        farmlands: WorkSite;
+        lumberCamps: WorkSite;
+        mines: WorkSite;
+        quarries: WorkSite;
+    }
     heartland: 'swamp' | 'hills' | 'plains' | 'mountains' | 'forest';
     armyConsumption: number;
     leaders: {
@@ -76,6 +103,39 @@ export interface Kingdom {
     }
 }
 
+export function getUnrestPenalty(unrest: number): number {
+    if (unrest < 1) {
+        return 0;
+    } else if (unrest < 5) {
+        return -1;
+    } else if (unrest < 10) {
+        return -2;
+    } else if (unrest < 15) {
+        return -3;
+    } else {
+        return -4;
+    }
+}
+
+interface KingdomLevelData {
+    claimHexAttempts: number;
+    claimHexCircumstanceBonus: number;
+    investedLeadershipBonus: number;
+    resourceDice: number;
+}
+
+export function getLevelData(kingdomLevel: number): KingdomLevelData {
+    const claimHexAttempts = kingdomLevel < 4 ? 1 : (kingdomLevel < 9 ? 2 : 3);
+    const claimHexCircumstanceBonus = kingdomLevel < 4 ? 0 : 2;
+    const investedLeadershipBonus = kingdomLevel < 8 ? 1 : (kingdomLevel < 16 ? 2 : 3);
+    return {
+        claimHexAttempts,
+        claimHexCircumstanceBonus,
+        investedLeadershipBonus,
+        resourceDice: kingdomLevel + 4,
+    };
+}
+
 export function getSizeData(kingdomSize: number): KingdomSizeData {
     if (kingdomSize < 10) {
         return {
@@ -123,11 +183,51 @@ export function getControlDC(level: number, size: number): number {
 
 export function getDefaultKingdomData(): Kingdom {
     return {
+        name: '',
+        charter: '',
+        government: '',
+        rp: 0,
         fame: 0,
         level: 0,
         xp: 0,
         size: 0,
         unrest: 0,
+        workSites: {
+            farmlands: {
+                locations: 0,
+                tappedResources: 0,
+            },
+            quarries: {
+                locations: 0,
+                tappedResources: 0,
+            },
+            lumberCamps: {
+                locations: 0,
+                tappedResources: 0,
+            },
+            mines: {
+                locations: 0,
+                tappedResources: 0,
+            },
+        },
+        futureIncome: {
+            food: 0,
+            ore: 0,
+            lumber: 0,
+            bonusResourceDice: 0,
+            stone: 0,
+            luxuries: 0,
+            bonusResourcePoints: 0,
+        },
+        income: {
+            food: 0,
+            ore: 0,
+            lumber: 0,
+            bonusResourceDice: 0,
+            stone: 0,
+            luxuries: 0,
+            bonusResourcePoints: 0,
+        },
         heartland: 'plains',
         armyConsumption: 0,
         leaders: {
