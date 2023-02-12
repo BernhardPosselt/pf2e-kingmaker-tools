@@ -1,39 +1,23 @@
-<h2>Kingdom</h2>
-<table>
-    <tr>
-        <th><label for="kingdomSize">Kingdom Size</label></th>
-        <td><input type="number" id="kingdomSize" name="kingdomSize" value="{{kingdomSize}}"></td>
-    </tr>
-</table>
-
-<h2>Storage Maximum</h2>
-<table>
-    {{#each storage}}
-    <tr>
-        <th>{{label}}</th>
-        <td>{{value}}</td>
-    </tr>
-    {{/each}}
-</table>
-
 <form>
     <h2>{{name}}</h2>
     <table>
         <tr>
-            <th><label for="settlement">Settlement</label></th>
+            <th><label for="settlementType">Settlement</label></th>
             <td>
-                <select name="settlement" id="settlement">
-                    {{#select settlementType}}
-                    {{#each settlementTypes}}
-                    <option value="{{this}}">{{this}}</option>
-                    {{/each}}
-                    {{/select}}
+                <select name="settlementType" id="settlementType" {{#if isUser}}disabled{{/if}}>
+                {{#select settlementType}}
+                {{#each settlementTypes}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+                {{/select}}
                 </select>
             </td>
         </tr>
         <tr>
             <th><label for="settlementLevel">Settlement Level</label></th>
-            <td><input type="number" id="settlementLevel" name="settlementLevel" value="{{settlementLevel}}"></td>
+            <td><input type="number" id="settlementLevel" name="settlementLevel" value="{{settlementLevel}}" {{#if
+                       isUser}}disabled{{/if}}>
+            </td>
         </tr>
         <tr>
             <th>Type</th>
@@ -84,9 +68,15 @@
             <th>{{label}}</th>
             <td>
                 <table>
-                    <tr><th>Item Bonus</th><td>{{value}}</td></tr>
+                    <tr>
+                        <th>Item Bonus</th>
+                        <td>{{value}}</td>
+                    </tr>
                     {{#each actions}}
-                    <tr><th>{{label}}</th><td>{{value}}</td></tr>
+                    <tr>
+                        <th>{{label}}</th>
+                        <td>{{value}}</td>
+                    </tr>
                     {{/each}}
                 </table>
             </td>
@@ -102,10 +92,25 @@
         </tr>
         {{/each}}
     </table>
+    {{#if showStorage}}
+        <h2>Storage</h2>
+        <table>
+            {{#each storage}}
+            <tr>
+                <th>{{label}}</th>
+                <td>{{value}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    {{/if}}
+    </div>
+    {{#if showNotes}}
     <h2>Building Effects</h2>
     <ul>
         {{#each notes}}
         <li>{{this}}</li>
         {{/each}}
     </ul>
+    {{/if}}
 </form>
+</div>

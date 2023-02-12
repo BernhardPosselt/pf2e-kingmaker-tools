@@ -257,6 +257,14 @@ Hooks.on('ready', async () => {
             type: Boolean,
             scope: 'world',
         });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomSize', {
+            name: 'Kingdom Size',
+            hint: 'How many hexes your kingdom spans',
+            scope: 'world',
+            config: false,
+            default: 1,
+            type: Number,
+        });
         Hooks.on('updateWorldTime', async (_, delta) => {
             if (getBooleanSetting(gameInstance, 'autoRollWeather')
                 && isGm(gameInstance)

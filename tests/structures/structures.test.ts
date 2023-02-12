@@ -29,7 +29,7 @@ describe('structures', () => {
                 skill: 'defense',
                 predicate: ['action:provide-care'],
             }],
-        }], 2);
+        }], 10);
         expect(result.skillBonuses.defense.value).toBe(0);
         expect(result.skillBonuses.defense?.actions?.['provide-care']).toBe(2);
     });
@@ -48,7 +48,7 @@ describe('structures', () => {
                 value: 2,
                 skill: 'defense',
             }],
-        }], 2);
+        }], 10);
         expect(result.skillBonuses.defense.value).toBe(2);
         expect(Object.keys(result.skillBonuses.defense?.actions)).toStrictEqual([]);
         expect(result.skillBonuses.defense?.actions?.['provide-care']).toBe(undefined);
@@ -72,7 +72,7 @@ describe('structures', () => {
                 value: 1,
             }],
             preventItemLevelPenalty: true,
-        }], 3);
+        }], 15);
         expect(result.itemLevelBonuses).toEqual({
             divine: 1,
             alchemical: 1,
@@ -91,7 +91,7 @@ describe('structures', () => {
             availableItemsRules: [{
                 value: 1,
             }],
-        }], 3);
+        }], 15);
         expect(result.itemLevelBonuses).toEqual({
             divine: -1,
             alchemical: -1,
@@ -118,7 +118,7 @@ describe('structures', () => {
                 value: 2,
                 predicate: ['item:trait:arcane'],
             }],
-        }], 3);
+        }], 15);
         expect(result.itemLevelBonuses).toEqual({
             divine: 1,
             alchemical: 0,

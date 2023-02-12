@@ -635,9 +635,8 @@ const structures: Structure[] = [
     },
     {
         name: 'Watchtower',
-        simpleKingdomSkillRules: [{
+        settlementEventRules: [{
             value: 1,
-            action: 'resolve-settlement-events',
         }],
     },
     {

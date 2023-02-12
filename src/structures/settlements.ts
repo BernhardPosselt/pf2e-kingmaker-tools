@@ -1,62 +1,14 @@
 import {
     ActionBonuses,
-    evaluateStructures,
-    getKingdomData,
-    getSettlementData,
-    ItemLevelBonuses, KingdomData, SkillItemBonuses,
-    Structure,
-    StructureResult,
+
+    ItemLevelBonuses, SkillItemBonuses,
+    SettlementData,
 } from './structures';
-import {structuresByName} from './structure-data';
+import {getNumberSetting, setSetting} from '../settings';
+import {getMergedData, saveViewedSceneData} from './scene';
+import {getKingdomData, getKingdomSize, saveKingdomSize} from './kingdom';
 
-function getViewedSceneStructures(game: Game): Structure[] {
-    const scene = game.scenes?.viewed;
-    if (scene) {
-        return getSceneStructures(scene);
-    } else {
-        return [];
-    }
-}
 
-class StructureError extends Error {
-}
-
-function parseStructureData(name: string | null, data: unknown): Structure | undefined {
-    if (data === undefined || data === null) {
-        return undefined;
-    } else if (typeof data === 'object' && 'ref' in data) {
-        const refData = data as { ref: string };
-        const lookedUpStructure = structuresByName.get(refData.ref);
-        if (lookedUpStructure === undefined) {
-            throw new StructureError(`No predefined structure data found for actor with name ${name}`);
-        }
-        return lookedUpStructure;
-    } else if (name !== null) {
-        return {
-            name,
-            ...data,
-        };
-    } else {
-        return data as Structure;
-    }
-}
-
-function getSceneStructures(scene: Scene): Structure[] {
-    try {
-        return scene.tokens
-            .filter(t => t.actor !== null && t.actor !== undefined)
-            .map(t => t.actor)
-            .map(actor => parseStructureData(actor!.name, actor!.getFlag('pf2e-kingmaker-tools', 'structureData')))
-            .filter(data => data !== undefined) as Structure[] ?? [];
-    } catch (e: unknown) {
-        if (e instanceof StructureError) {
-            ui.notifications?.error(e.message);
-        } else {
-            throw e;
-        }
-    }
-    return [];
-}
 
 
 interface SettlementOptions {
@@ -64,7 +16,9 @@ interface SettlementOptions {
 }
 
 interface SettlementFormData {
-
+    kingdomSize: number;
+    settlementType: string;
+    settlementLevel: number;
 }
 
 interface LabeledData<T = string> {
@@ -97,35 +51,39 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
     }
 
     override getData(options?: Partial<FormApplicationOptions>): object {
-        const scene = {
-            kingdomSize: 25,
-            settlementLevel: 14,
-            settlementType: 'Capital',
-            name: this.game.scenes?.viewed?.name,
-        };
-        const kingdom = getKingdomData(scene.kingdomSize);
-        const settlement = getSettlementData(scene.settlementLevel);
-        const structures = evaluateStructures(getViewedSceneStructures(this.game), settlement.maxItemBonus);
-        console.log(structures);
+        const isGM = this.game.user?.isGM ?? false;
+        const isUser = !isGM;
+        const data = getMergedData(this.game)!;
+        const structures = data.settlement;
+        const sceneData = data.scenedData;
+        const settlementLevel = sceneData.settlementLevel || 1;
+        const storage = this.getStorage(structures);
         return {
             ...super.getData(options),
-            ...scene,
-            ...settlement,
-            consumption: Math.max(0, settlement.consumption - structures.consumptionReduction),
+            ...structures.config,
+            ...sceneData,
+            consumption: structures.consumption,
             capitalInvestmentPossible: structures.allowCapitalInvestment ? 'yes' : 'no',
             settlementEventBonus: structures.settlementEventBonus,
             notes: structures.notes,
+            showNotes: structures.notes.length > 0,
             leadershipActivities: structures.increaseLeadershipActivities ? 3 : 2,
             settlementTypes: ['-', 'Settlement', 'Capital'],
-            availableItems: this.getAvailableItems(scene.settlementLevel, structures.itemLevelBonuses),
-            storage: this.calculateStorage(structures, kingdom),
+            availableItems: this.getAvailableItems(settlementLevel, structures.itemLevelBonuses),
+            storage,
+            showStorage: Object.keys(storage).length > 0,
             skillItemBonuses: this.getSkillBonuses(structures.skillBonuses),
+            isGM,
+            isUser,
         };
     }
 
-
-    override async _updateObject(event: Event, formData?: SettlementFormData): Promise<void> {
-        console.log(formData);
+    override async _updateObject(event: Event, formData: SettlementFormData): Promise<void> {
+        await saveKingdomSize(this.game, formData.kingdomSize);
+        await saveViewedSceneData(this.game, {
+            settlementLevel: formData.settlementLevel,
+            settlementType: formData.settlementType,
+        });
         this.render();
     }
 
@@ -136,11 +94,14 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
         Hooks.on('canvasReady', this.sceneChange.bind(this));
-
+        Hooks.on('createToken', this.sceneChange.bind(this));
+        Hooks.on('deleteToken', this.sceneChange.bind(this));
     }
 
     override close(options?: FormApplication.CloseOptions): Promise<void> {
         Hooks.off('canvasReady', this.sceneChange);
+        Hooks.off('createToken', this.sceneChange);
+        Hooks.off('deleteToken', this.sceneChange);
         return super.close(options);
     }
 
@@ -166,12 +127,13 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
             });
     }
 
-    private calculateStorage(structures: StructureResult, kingdom: KingdomData): LabeledData[] {
+    private getStorage(structures: SettlementData): LabeledData[] {
         return Object.entries(structures.storage)
+            .filter(([, bonus]) => bonus > 0)
             .map(([type, bonus]) => {
                 return {
                     label: this.capitalize(type),
-                    value: bonus + kingdom.commodityStorage,
+                    value: bonus,
                 };
             });
     }

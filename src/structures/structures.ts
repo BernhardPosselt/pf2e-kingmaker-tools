@@ -23,7 +23,6 @@ export type Action = 'establish-trade-agreement'
     | 'trade-commodities'
     | 'gather-lifestock'
     | 'purchase-commodities'
-    | 'resolve-settlement-events'
     | 'improve-lifestyle'
     | 'craft-luxuries'
     | 'tap-treasury'
@@ -161,7 +160,6 @@ export const actionSkills: Record<Action, (Skill)[] | ['*']> = {
     'gather-lifestock': ['wilderness'],
 
     // other
-    'resolve-settlement-events': ['*'],
     'build-structure': ['*'],
 
     // TODO: companion actions
@@ -221,24 +219,7 @@ export interface SkillItemBonus {
     actions: ActionBonuses;
 }
 
-export interface SkillItemBonuses {
-    agriculture: SkillItemBonus;
-    arts: SkillItemBonus;
-    boating: SkillItemBonus;
-    defense: SkillItemBonus;
-    engineering: SkillItemBonus;
-    exploration: SkillItemBonus;
-    folklore: SkillItemBonus;
-    industry: SkillItemBonus;
-    intrigue: SkillItemBonus;
-    magic: SkillItemBonus;
-    politics: SkillItemBonus;
-    scholarship: SkillItemBonus;
-    statecraft: SkillItemBonus;
-    trade: SkillItemBonus;
-    warfare: SkillItemBonus;
-    wilderness: SkillItemBonus;
-}
+export type SkillItemBonuses = Record<Skill, SkillItemBonus>;
 
 export interface ItemLevelBonuses {
     divine: number;
@@ -251,7 +232,7 @@ export interface ItemLevelBonuses {
     other: number;
 }
 
-export interface StructureResult {
+export interface SettlementData {
     allowCapitalInvestment: boolean;
     notes: string[];
     skillBonuses: SkillItemBonuses;
@@ -260,7 +241,9 @@ export interface StructureResult {
     storage: Storage;
     increaseLeadershipActivities: boolean;
     consumptionReduction: number;
+    consumption: number;
     leadershipActivityMaxBonus: boolean;
+    config: SettlementConfig;
 }
 
 function count<T>(items: T[], idFunction: (item: T) => string): Map<string, { count: number, item: T }> {
@@ -393,7 +376,7 @@ function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Str
     });
 }
 
-function applySettlementEventBonuses(result: StructureResult, structures: Structure[]): void {
+function applySettlementEventBonuses(result: SettlementData, structures: Structure[]): void {
     structures.forEach(structure => {
         structure.settlementEventRules?.forEach(rule => {
             if (rule.value > result.settlementEventBonus) {
@@ -442,7 +425,7 @@ function applyStorageIncreases(storage: Storage, structures: Structure[]): void 
         });
 }
 
-function applyConsumptionReduction(result: StructureResult, structures: Structure[]): void {
+function calculateConsumptionReduction(structures: Structure[]): number {
     const consumptionPerUniqueBuilding = new Map<string, number>();
     structures
         .filter(structure => structure.consumptionReduction)
@@ -454,11 +437,11 @@ function applyConsumptionReduction(result: StructureResult, structures: Structur
                 consumptionPerUniqueBuilding.set(id, newReduction);
             }
         });
-    result.consumptionReduction = Array.from(consumptionPerUniqueBuilding.values())
+    return Array.from(consumptionPerUniqueBuilding.values())
         .reduce((a, b) => a + b, 0);
 }
 
-export interface SettlementData {
+export interface SettlementConfig {
     type: 'Village' | 'Town' | 'City' | 'Metropolis';
     lots: string;
     requiredKingdomLevel: number;
@@ -469,7 +452,7 @@ export interface SettlementData {
     influence: number;
 }
 
-export function getSettlementData(settlementLevel: number): SettlementData {
+export function getSettlementConfig(settlementLevel: number): SettlementConfig {
     if (settlementLevel < 2) {
         return {
             type: 'Village',
@@ -518,61 +501,57 @@ export function getSettlementData(settlementLevel: number): SettlementData {
     }
 }
 
-export interface KingdomData {
-    type: 'Territory' | 'Province' | 'State' | 'Country' | 'Dominion';
-    resourceDie: 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
-    controlDCModifier: number;
-    commodityStorage: number;
+function mergeObjects<A extends Record<string, V>, B extends Record<string, V>, V>(
+    obj1: A,
+    obj2: B,
+    conflictFunction: (a: V, b: V) => V
+): Record<string, V> {
+    const entries: [string, V][] = [];
+    for (const key of [...Object.keys(obj1), ...Object.keys(obj2)]) {
+        if (key in obj1 && key in obj2) {
+            entries.push([key, conflictFunction(obj1[key], obj2[key])]);
+        } else if (key in obj1) {
+            entries.push([key, obj1[key]]);
+        } else if (key in obj2) {
+            entries.push([key, obj2[key]]);
+        }
+    }
+    return Object.fromEntries(entries);
 }
 
-export function getKingdomData(kingdomSize: number): KingdomData {
-    if (kingdomSize < 10) {
-        return {
-            type: 'Territory',
-            resourceDie: 'd4',
-            controlDCModifier: 0,
-            commodityStorage: 4,
-        };
-    } else if (kingdomSize < 25) {
-        return {
-            type: 'Province',
-            resourceDie: 'd6',
-            controlDCModifier: 1,
-            commodityStorage: 8,
-        };
-    } else if (kingdomSize < 50) {
-        return {
-            type: 'State',
-            resourceDie: 'd8',
-            controlDCModifier: 2,
-            commodityStorage: 12,
-        };
-    } else if (kingdomSize < 100) {
-        return {
-            type: 'Country',
-            resourceDie: 'd10',
-            controlDCModifier: 3,
-            commodityStorage: 16,
-        };
-    } else {
-        return {
-            type: 'Dominion',
-            resourceDie: 'd12',
-            controlDCModifier: 4,
-            commodityStorage: 20,
-        };
-    }
+function mergeBonuses(capital: SkillItemBonus, settlement: SkillItemBonus): SkillItemBonus {
+    const skillValue = capital.value > settlement.value ? capital.value : settlement.value;
+    const actions = mergeObjects(capital.actions, settlement.actions, (a: number, b: number) => Math.max(a, b));
+    const filteredActions = Object.fromEntries(
+        Object.entries(actions)
+            .filter(([, value]) => value > skillValue)
+    );
+    return {
+        value: skillValue,
+        actions: filteredActions,
+    };
+}
+
+export function includeCapital(capital: SettlementData, settlement: SettlementData): SettlementData {
+    return {
+        ...settlement,
+        leadershipActivityMaxBonus: capital.leadershipActivityMaxBonus,
+        increaseLeadershipActivities: capital.increaseLeadershipActivities,
+        skillBonuses: mergeObjects(capital.skillBonuses, settlement.skillBonuses, mergeBonuses) as SkillItemBonuses,
+    };
 }
 
 /**
  * Calculate all Bonuses of a settlement
- * @param structures
- * @param maxItemBonus
  */
-export function evaluateStructures(structures: Structure[], maxItemBonus: number): StructureResult {
+export function evaluateStructures(structures: Structure[], settlementLevel: number): SettlementData {
+    const settlementData = getSettlementConfig(settlementLevel);
+    const maxItemBonus = settlementData.maxItemBonus;
     const allowCapitalInvestment = structures.some(structure => structure.enableCapitalInvestment === true);
     const notes = Array.from(new Set(structures.flatMap(result => result.notes ?? [])));
-    const result: StructureResult = {
+    const consumptionReduction = calculateConsumptionReduction(structures);
+    const result: SettlementData = {
+        config: settlementData,
         allowCapitalInvestment,
         notes,
         skillBonuses: {
@@ -613,10 +592,10 @@ export function evaluateStructures(structures: Structure[], maxItemBonus: number
         },
         increaseLeadershipActivities: structures.some(structure => structure.increaseLeadershipActivities === true),
         leadershipActivityMaxBonus: structures.some(structure => structure.leadershipActivityMaxBonus === true),
-        consumptionReduction: 0,
+        consumptionReduction,
+        consumption: Math.max(0, settlementData.consumption - consumptionReduction),
     };
     const unionizedStructures = unionizeStructures(structures);
-    applyConsumptionReduction(result, structures);
     applyStorageIncreases(result.storage, structures);
     const groupedStructures = groupStructures(unionizedStructures, maxItemBonus);
     applySettlementEventBonuses(result, groupedStructures);
