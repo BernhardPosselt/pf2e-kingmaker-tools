@@ -1,4 +1,3 @@
-
 <table class="km-table">
     <tr>
         <th>Active Settlement</th>
@@ -13,75 +12,53 @@
         <td>16</td>
     </tr>
     <tr>
-        <th>Trade Agreements</th>
-        <td><input type="number" value="2"></td>
-    </tr>
-    <tr>
         <th>At War</th>
-        <td><input type="checkbox"></td>
+        <td><input type="checkbox" name="atWar" {{checked atWar}}></td>
     </tr>
-</table>
-<table class="km-table">
     <tr>
         <th>Unrest</th>
-        <th>Penalty</th>
-    </tr>
-    <tr>
-        <td><input type="number" value="3"></td>
-        <td>0</td>
+        <td><input type="number" value="{{unrest}}" name="unrest"></td>
     </tr>
 </table>
 <table class="km-table">
     <tr>
         <th>Ruin</th>
-        <th>Score</th>
+        <th>Value</th>
         <th>Penalty</th>
         <th>Threshold</th>
     </tr>
+    {{#each ruin}}
+        <tr>
+            <td>{{this.label}}</td>
+            <td><input type="number" value="{{this.value}}" name="ruin.{{@key}}.value"></td>
+            <td><input type="number" value="{{this.penalty}}" name="ruin.{{@key}}.penalty"></td>
+            <td><input type="number" value="{{this.threshold}}" name="ruin.{{@key}}.threshold"></td>
+        </tr>
+    {{/each}}
+</table>
+<table class="km-table">
     <tr>
-        <td>Corruption</td>
-        <td><input type="number" value="3"></td>
-        <td>0</td>
-        <td><input type="number" value="2"></td>
+        <th>Die Size</th>
+        <th>Dice</th>
+        <th>Bonus</th>
+        <th>Next</th>
     </tr>
     <tr>
-        <td>Crime</td>
-        <td><input type="number" value="3"></td>
-        <td>0</td>
-        <td><input type="number" value="2"></td>
-    </tr>
-    <tr>
-        <td>Decay</td>
-        <td><input type="number" value="3"></td>
-        <td>0</td>
-        <td><input type="number" value="0"></td>
-    </tr>
-    <tr>
-        <td>Strife</td>
-        <td><input type="number" value="3"></td>
-        <td>0</td>
-        <td><input type="number" value="0"></td>
+        <td>{{resourceDieSize}}</td>
+        <td>{{resourceDice}}</td>
+        <td><input type="number" value="{{resources.bonusResourceDice}}" name="resources.bonusResourceDice"></td>
+        <td><input type="number" value="{{resourcesNextRound.bonusResourceDice}}" name="incomeNextRound.bonusResourceDice"></td>
     </tr>
 </table>
 <table class="km-table">
     <tr>
-        <th>Resources</th>
-        <th>Quantity</th>
+        <th>Resource Points</th>
         <th>Next</th>
     </tr>
-    <tr>
-        <td>Die Size</td>
-        <td>d4</td>
     </tr>
     <tr>
-        <td>Dice</td>
-        <td><input type="number" value="10"></td>
-        <td><input type="number" value="3"></td>
-    </tr>
-    <tr>
-        <td>Points</td>
-        <td><input type="number" value="3"></td>
-        <td><input type="number" value="3"></td>
+        <td><input type="number" value="{{resources.resourcePoints}}" name="resources.resourcePoints"></td>
+        <td><input type="number" value="{{resourcesNextRound.resourcePoints}}" name="incomeNextRound.bonusResourcePoints"></td>
     </tr>
 </table>
 <table class="km-table">
@@ -91,48 +68,26 @@
         <th>Total Consumption</th>
     </tr>
     <tr>
-        <td><input type="number" valeu="4"></td>
-        <td>5</td>
-        <td>9</td>
+        <td><input type="number" value="{{armyConsumption}}" name="armyConsumption"></td>
+        <td>{{settlementConsumption}}</td>
+        <td>{{totalConsumption}}</td>
     </tr>
 </table>
 <table class="km-table">
     <tr>
         <th>Commodity</th>
         <th>Quantity</th>
-        <th>Maximum</th>
+        <th>Capacity</th>
         <th>Next</th>
     </tr>
-    <tr>
-        <td>Food</td>
-        <td><input type="number" value="3"></td>
-        <td><input type="number" value="10"></td>
-        <td><input type="number" value="3"></td>
-    </tr>
-    <tr>
-        <td>Lumber</td>
-        <td><input type="number" value="3"></td>
-        <td><input type="number" value="10"></td>
-        <td><input type="number" value="3"></td>
-    </tr>
-    <tr>
-        <td>Luxuries</td>
-        <td><input type="number" value="3"></td>
-        <td><input type="number" value="10"></td>
-        <td><input type="number" value="3"></td>
-    </tr>
-    <tr>
-        <td>Ore</td>
-        <td><input type="number" value="3"></td>
-        <td><input type="number" value="10"></td>
-        <td><input type="number" value="3"></td>
-    </tr>
-    <tr>
-        <td>Stone</td>
-        <td><input type="number" value="3"></td>
-        <td><input type="number" value="10"></td>
-        <td><input type="number" value="3"></td>
-    </tr>
+    {{#each commodities}}
+        <tr>
+            <td>{{label}}</td>
+            <td><input type="number" value="{{value}}" name="commodities.{{@key}}"></td>
+            <td>{{capacity}}</td>
+            <td><input type="number" value="{{next}}" name="commoditiesNextRound.{{@key}}"></td>
+        </tr>
+    {{/each}}
 </table>
 <table class="km-table">
     <tr>
@@ -140,24 +95,11 @@
         <th>Quantity</th>
         <th>Resources</th>
     </tr>
-    <tr>
-        <td>Farmlands</td>
-        <td><input type="number" value="3"></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Lumber Camps</td>
-        <td><input type="number" value="3"></td>
-        <td><input type="number" value="2"></td>
-    </tr>
-    <tr>
-        <td>Mines</td>
-        <td><input type="number" value="3"></td>
-        <td><input type="number" value="0"></td>
-    </tr>
-    <tr>
-        <td>Quarries</td>
-        <td><input type="number" value="3"></td>
-        <td><input type="number" value="0"></td>
-    </tr>
+    {{#each workSites}}
+        <tr>
+            <td>{{label}}</td>
+            <td><input type="number" value="{{quantity}}" name="workSites.{{@key}}.quantity"></td>
+            <td><input type="number" value="{{resources}}" name=workSites.{{@key}}.resources></td>
+        </tr>
+    {{/each}}
 </table>

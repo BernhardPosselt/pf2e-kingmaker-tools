@@ -1,7 +1,17 @@
 import {getStringSetting, setSetting} from '../settings';
-import {getDefaultKingdomData, Kingdom, SkillRanks} from './data';
+import {
+    Commodities,
+    getDefaultKingdomData,
+    getLevelData,
+    getSizeData,
+    Kingdom,
+    Resources,
+    Ruin,
+    SkillRanks, WorkSites,
+} from './data';
 import {capitalize} from '../utils';
 import {calculateSkills} from './skills';
+import {Storage} from '../structures/structures';
 
 export function getKingdom(game: Game): Kingdom {
     const kingdomString = getStringSetting(game, 'kingdom');
@@ -18,6 +28,8 @@ interface KingdomOptions {
 
 type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'trade-agreements';
 
+const levels = [...Array.from(Array(20).keys()).map(k => k + 1)];
+
 class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions, object, null> {
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -33,7 +45,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private readonly game: Game;
-    private nav: KingdomTabs = 'turn';
+    private nav: KingdomTabs = 'status';
 
     constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
@@ -43,10 +55,31 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     override getData(options?: Partial<FormApplicationOptions>): object {
         const isGM = this.game.user?.isGM ?? false;
         const kingdomData = getDefaultKingdomData();
+        const levelData = getLevelData(kingdomData.level);
+        const sizeData = getSizeData(kingdomData.size);
+        const leadershipActivityNumber = 2; // FIXME
+        const settlementConsumption = 0; // FIXME
+        const storage = {}; // FIXME
+        const totalConsumption = kingdomData.armyConsumption + settlementConsumption;
         return {
             ...super.getData(options),
             isGM,
             isUser: !isGM,
+            leadershipActivityNumber: leadershipActivityNumber,
+            ...kingdomData,
+            ...levelData,
+            ...sizeData,
+            levels,
+            settlementConsumption,
+            totalConsumption,
+            ruin: this.getRuin(kingdomData.ruin),
+            commodities: this.getCommodities(
+                kingdomData.commodities,
+                kingdomData.commoditiesNextRound,
+                sizeData.commodityStorage,
+                storage
+            ),
+            workSites: this.getWorkSites(kingdomData.workSites),
             ...this.getActiveTabs(),
             skills: calculateSkills({
                 ruin: kingdomData.ruin,
@@ -119,6 +152,33 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         return super.close(options);
     }
 
+    private getRuin(ruin: Ruin): object {
+        return Object.fromEntries(Object.entries(ruin)
+            .map(([ruin, values]) => [ruin, {label: capitalize(ruin), ...values}])
+        );
+    }
+
+    private getWorkSites(workSites: WorkSites): object {
+        return Object.fromEntries(Object.entries(workSites)
+            .map(([key, values]) => [key, {label: key === 'lumberCamps' ? 'Lumber Camps' : capitalize(key), ...values}])
+        );
+    }
+
+    private getCommodities(
+        commodities: Commodities,
+        commoditiesNextRound: Commodities,
+        capacity: number,
+        storage: Partial<Storage>,
+    ): object {
+        return Object.fromEntries((Object.entries(commodities) as [keyof Commodities, number][])
+            .map(([commodity, value]) => [commodity, {
+                label: capitalize(commodity),
+                value: value,
+                capacity: capacity + (storage[commodity] ?? 0),
+                next: commoditiesNextRound[commodity],
+            }])
+        );
+    }
 }
 
 export async function showKingdom(game: Game): Promise<void> {

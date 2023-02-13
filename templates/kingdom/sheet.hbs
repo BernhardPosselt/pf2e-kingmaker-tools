@@ -5,16 +5,26 @@
                 <tr>
                     <th>Name</th>
                     <th>Size</th>
+                    <th>Type</th>
                     <th>XP</th>
                     <th>Level</th>
                     <th>Fame</th>
                 </tr>
                 <tr>
-                    <td><input type="text" value="Legoland"></td>
-                    <td><input type="number" value="25"></td>
-                    <td><input type="number" value="3"> / <input type="number" value="1000"></td>
-                    <td><input type="number" value="500"></td>
-                    <td><input type="number" value="3"></td>
+                    <td><input type="text" value="{{name}}" name="name"></td>
+                    <td><input type="number" value="{{size}}" name="size"></td>
+                    <td>{{type}}</td>
+                    <td><input type="number" value="{{xp}}" name="xp"> / <input type="number" value="{{xpThreshold}}" name="xpThreshold"></td>
+                    <td>
+                        <select name="level">
+                        {{#select level}}
+                            {{#each levels}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        {{/select}}
+                        </select>
+                    </td>
+                    <td><input type="number" value="{{fame}}" name="fame"></td>
                 </tr>
             </table>
         </div>

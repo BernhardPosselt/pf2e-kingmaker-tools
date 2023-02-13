@@ -2,7 +2,7 @@ import {AbilityScores, Leader} from '../actions-and-skills';
 
 export interface KingdomSizeData {
     type: 'Territory' | 'Province' | 'State' | 'Country' | 'Dominion';
-    resourceDie: 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
+    resourceDieSize: 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
     controlDCModifier: number;
     commodityStorage: number;
 }
@@ -31,18 +31,28 @@ export interface Ruin {
 
 
 interface WorkSite {
-    locations: number;
-    tappedResources: number;
+    quantity: number;
+    resources: number;
 }
 
-interface Income {
+export interface WorkSites {
+    farmlands: WorkSite;
+    lumberCamps: WorkSite;
+    mines: WorkSite;
+    quarries: WorkSite;
+}
+
+export interface Resources {
+    bonusResourceDice: number;
+    resourcePoints: number;
+}
+
+export interface Commodities {
     food: number;
     lumber: number;
     luxuries: number;
     ore: number;
     stone: number;
-    bonusResourceDice: number;
-    bonusResourcePoints: number;
 }
 
 interface TradeAgreement {
@@ -77,28 +87,19 @@ export interface Kingdom {
     government: string;
     fame: number;
     level: number;
+    xpThreshold: number;
     xp: number;
     size: number;
     unrest: number;
-    rp: number;
-    futureIncome: Income;
-    income: Income;
-    workSites: {
-        farmlands: WorkSite;
-        lumberCamps: WorkSite;
-        mines: WorkSite;
-        quarries: WorkSite;
-    }
+    resourcesNextRound: Resources;
+    resources: Resources;
+    workSites: WorkSites;
     heartland: 'swamp' | 'hills' | 'plains' | 'mountains' | 'forest';
     armyConsumption: number;
     leaders: Leaders;
-    commodities: {
-        food: number;
-        lumber: number;
-        luxuries: number;
-        ore: number;
-        stone: number;
-    }
+    commodities: Commodities;
+    commoditiesNextRound: Commodities;
+
     tradeAgreements: TradeAgreement[];
 
     skillRanks: SkillRanks;
@@ -131,35 +132,35 @@ export function getSizeData(kingdomSize: number): KingdomSizeData {
     if (kingdomSize < 10) {
         return {
             type: 'Territory',
-            resourceDie: 'd4',
+            resourceDieSize: 'd4',
             controlDCModifier: 0,
             commodityStorage: 4,
         };
     } else if (kingdomSize < 25) {
         return {
             type: 'Province',
-            resourceDie: 'd6',
+            resourceDieSize: 'd6',
             controlDCModifier: 1,
             commodityStorage: 8,
         };
     } else if (kingdomSize < 50) {
         return {
             type: 'State',
-            resourceDie: 'd8',
+            resourceDieSize: 'd8',
             controlDCModifier: 2,
             commodityStorage: 12,
         };
     } else if (kingdomSize < 100) {
         return {
             type: 'Country',
-            resourceDie: 'd10',
+            resourceDieSize: 'd10',
             controlDCModifier: 3,
             commodityStorage: 16,
         };
     } else {
         return {
             type: 'Dominion',
-            resourceDie: 'd12',
+            resourceDieSize: 'd12',
             controlDCModifier: 4,
             commodityStorage: 20,
         };
@@ -177,47 +178,51 @@ export function getDefaultKingdomData(): Kingdom {
         name: '',
         charter: '',
         government: '',
-        rp: 0,
         fame: 0,
-        level: 0,
+        level: 1,
+        xpThreshold: 1000,
         xp: 0,
         size: 0,
         unrest: 0,
         workSites: {
             farmlands: {
-                locations: 0,
-                tappedResources: 0,
+                quantity: 0,
+                resources: 0,
             },
             quarries: {
-                locations: 0,
-                tappedResources: 0,
+                quantity: 0,
+                resources: 0,
             },
             lumberCamps: {
-                locations: 0,
-                tappedResources: 0,
+                quantity: 0,
+                resources: 0,
             },
             mines: {
-                locations: 0,
-                tappedResources: 0,
+                quantity: 0,
+                resources: 0,
             },
         },
-        futureIncome: {
+        commodities: {
             food: 0,
             ore: 0,
             lumber: 0,
-            bonusResourceDice: 0,
             stone: 0,
             luxuries: 0,
-            bonusResourcePoints: 0,
         },
-        income: {
+        resources: {
+            bonusResourceDice: 0,
+            resourcePoints: 0,
+        },
+        commoditiesNextRound: {
             food: 0,
             ore: 0,
             lumber: 0,
-            bonusResourceDice: 0,
             stone: 0,
             luxuries: 0,
-            bonusResourcePoints: 0,
+        },
+        resourcesNextRound: {
+            bonusResourceDice: 0,
+            resourcePoints: 0,
         },
         heartland: 'plains',
         armyConsumption: 0,
@@ -270,13 +275,6 @@ export function getDefaultKingdomData(): Kingdom {
                 vacant: false,
                 name: '',
             },
-        },
-        commodities: {
-            food: 0,
-            lumber: 0,
-            luxuries: 0,
-            ore: 0,
-            stone: 0,
         },
         tradeAgreements: [],
         skillRanks: {
