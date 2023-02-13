@@ -73,15 +73,18 @@ function calculateVacancy(
     }
 }
 
-function calculateInvestedBonus(
+export function isInvested(ability: Ability, leaders: Leaders): boolean {
+    const relevantLeaders = abilityLeaders[ability];
+    return leaders[relevantLeaders[0]].invested || leaders[relevantLeaders[1]].invested;
+}
+
+export function calculateInvestedBonus(
     kingdomLevel: number,
     ability: Ability,
     leaders: Leaders,
 ): number {
     const levelData = getLevelData(kingdomLevel);
-    const relevantLeaders = abilityLeaders[ability];
-    const roleInvested = leaders[relevantLeaders[0]].invested || leaders[relevantLeaders[1]].invested;
-    return roleInvested ? levelData.investedLeadershipBonus : 0;
+    return isInvested(ability, leaders) ? levelData.investedLeadershipBonus : 0;
 }
 
 export function calculateSkills(
@@ -115,7 +118,7 @@ export function calculateSkills(
         const rank = skillRanks[skill];
         const ruinAbility = abilityRuins[ability];
         const abilityBonus = calculateAbilityModifier(abilityScores[ability]);
-        const proficiencyBonus = kingdomLevel + rank * 2;
+        const proficiencyBonus = rank > 0 ? kingdomLevel + rank * 2 : 0;
         const itemPenalty = ruin[ruinAbility].penalty;
         const statusPenalty = calculateUnrestPenalty(unrest);
         const value = (abilityBonus + proficiencyBonus + statusBonus + circumstanceBonus + itemBonus) -

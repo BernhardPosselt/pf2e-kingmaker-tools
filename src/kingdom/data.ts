@@ -1,7 +1,31 @@
 import {AbilityScores, Leader} from '../actions-and-skills';
 
+const allActorTypes = [
+    'pc',
+    'npc',
+    'companion',
+] as const;
+
+export type ActorTypes = typeof allActorTypes[number];
+
+export const allCompanions = [
+    'Amiri',
+    'Ekundayo',
+    'Harrim',
+    'Jaethal',
+    'Jubilost',
+    'Kalikke',
+    'Kanerah',
+    'Linzi',
+    'Nok-Nok',
+    'Octavia',
+    'Regongar',
+    'Tristian',
+    'Valerie',
+];
+
 export interface KingdomSizeData {
-    type: 'Territory' | 'Province' | 'State' | 'Country' | 'Dominion';
+    type: 'territory' | 'province' | 'state' | 'country' | 'dominion';
     resourceDieSize: 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
     controlDCModifier: number;
     commodityStorage: number;
@@ -12,7 +36,7 @@ export type Leaders = Record<Leader, LeaderValues>;
 export interface LeaderValues {
     name: string;
     invested: boolean;
-    type: 'PC' | 'NPC' | 'Companion';
+    type: ActorTypes;
     vacant: boolean;
 }
 
@@ -81,11 +105,19 @@ export interface SkillRanks {
     wilderness: number;
 }
 
+export type Terrain = 'swamp' | 'hills' | 'plains' | 'mountains' | 'forest';
+
+export const allFameTypes = ['famous', 'infamous'] as const;
+
+export type FameType = typeof allFameTypes[number];
+
 export interface Kingdom {
     name: string;
+    atWar: boolean;
     charter: string;
     government: string;
     fame: number;
+    fameType: FameType;
     level: number;
     xpThreshold: number;
     xp: number;
@@ -94,7 +126,7 @@ export interface Kingdom {
     resourcesNextRound: Resources;
     resources: Resources;
     workSites: WorkSites;
-    heartland: 'swamp' | 'hills' | 'plains' | 'mountains' | 'forest';
+    heartland: Terrain;
     armyConsumption: number;
     leaders: Leaders;
     commodities: Commodities;
@@ -105,8 +137,8 @@ export interface Kingdom {
     skillRanks: SkillRanks;
     abilityScores: AbilityScores;
     ruin: Ruin;
+    activeSettlement: string;
 }
-
 
 
 interface KingdomLevelData {
@@ -131,35 +163,35 @@ export function getLevelData(kingdomLevel: number): KingdomLevelData {
 export function getSizeData(kingdomSize: number): KingdomSizeData {
     if (kingdomSize < 10) {
         return {
-            type: 'Territory',
+            type: 'territory',
             resourceDieSize: 'd4',
             controlDCModifier: 0,
             commodityStorage: 4,
         };
     } else if (kingdomSize < 25) {
         return {
-            type: 'Province',
+            type: 'province',
             resourceDieSize: 'd6',
             controlDCModifier: 1,
             commodityStorage: 8,
         };
     } else if (kingdomSize < 50) {
         return {
-            type: 'State',
+            type: 'state',
             resourceDieSize: 'd8',
             controlDCModifier: 2,
             commodityStorage: 12,
         };
     } else if (kingdomSize < 100) {
         return {
-            type: 'Country',
+            type: 'country',
             resourceDieSize: 'd10',
             controlDCModifier: 3,
             commodityStorage: 16,
         };
     } else {
         return {
-            type: 'Dominion',
+            type: 'dominion',
             resourceDieSize: 'd12',
             controlDCModifier: 4,
             commodityStorage: 20,
@@ -176,9 +208,12 @@ export function getControlDC(level: number, size: number): number {
 export function getDefaultKingdomData(): Kingdom {
     return {
         name: '',
+        atWar: false,
         charter: '',
         government: '',
+        activeSettlement: '',
         fame: 0,
+        fameType: 'famous',
         level: 1,
         xpThreshold: 1000,
         xp: 0,
@@ -229,49 +264,49 @@ export function getDefaultKingdomData(): Kingdom {
         leaders: {
             ruler: {
                 invested: false,
-                type: 'PC',
+                type: 'pc',
                 vacant: false,
                 name: '',
             },
             counselor: {
                 invested: false,
-                type: 'PC',
+                type: 'pc',
                 vacant: false,
                 name: '',
             },
             general: {
                 invested: false,
-                type: 'PC',
+                type: 'pc',
                 vacant: false,
                 name: '',
             },
             emissary: {
                 invested: false,
-                type: 'PC',
+                type: 'pc',
                 vacant: false,
                 name: '',
             },
             magister: {
                 invested: false,
-                type: 'PC',
+                type: 'pc',
                 vacant: false,
                 name: '',
             },
             treasurer: {
                 invested: false,
-                type: 'PC',
+                type: 'pc',
                 vacant: false,
                 name: '',
             },
             viceroy: {
                 invested: false,
-                type: 'PC',
+                type: 'pc',
                 vacant: false,
                 name: '',
             },
             warden: {
                 invested: false,
-                type: 'PC',
+                type: 'pc',
                 vacant: false,
                 name: '',
             },

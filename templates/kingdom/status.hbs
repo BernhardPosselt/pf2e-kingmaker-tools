@@ -1,19 +1,35 @@
 <table class="km-table">
     <tr>
+        <th>Fame Type</th>
+        <td>
+            <select name="fameType">
+            {{#select fameType}}
+                {{#each fameTypes}}
+                    <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            {{/select}}
+            </select>
+        </td>
+    </tr>
+    <tr>
         <th>Charter</th>
-        <td><input type="text" value="Expansion"></td>
+        <td><input name="charter" type="text" value="{{charter}}"></td>
     </tr>
     <tr>
         <th>Heartland</th>
         <td>
-            <select>
-                <option>Plains</option>
+            <select name="heartland">
+                {{#select heartland}}
+                    {{#each terrains}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/each}}
+                {{/select}}
             </select>
         </td>
     </tr>
     <tr>
         <th>Government</th>
-        <td><input type="text" value="Oligarchy"></td>
+        <td><input type="text" value="{{government}}" name="government"></td>
     </tr>
 </table>
 
@@ -25,150 +41,53 @@
         <th>Invested</th>
         <th>Status Bonus</th>
     </tr>
-    <tr>
-        <td>+3</td>
-        <td>Culture</td>
-        <td><input type="number" value="16"></td>
-        <td><input type="checkbox" checked></td>
-        <td>+2</td>
-    </tr>
-    <tr>
-        <td>+2</td>
-        <td>Economy</td>
-        <td><input type="number" value="14"></td>
-        <td><input type="checkbox"></td>
-        <td>+0</td>
-    </tr>
-    <tr>
-        <td>+0</td>
-        <td>Loyalty</td>
-        <td><input type="number" value="10"></td>
-        <td><input type="checkbox"></td>
-        <td>+0</td>
-    </tr>
-    <tr>
-        <td>+0</td>
-        <td>Stability</td>
-        <td><input type="number" value="10"></td>
-        <td><input type="checkbox"></td>
-        <td>+0</td>
-    </tr>
+    {{#each abilities}}
+        <tr>
+            <td>{{modifier}}</td>
+            <td>{{label}}</td>
+            <td><input type="number" value="{{score}}" name="abilityScores.{{@key}}"></td>
+            <td><input type="checkbox" {{checked invested}} disabled></td>
+            <td>{{investedBonus}}</td>
+        </tr>
+    {{/each}}
 </table>
 
 <table class="km-table">
     <tr>
         <th>Role</th>
-        <th>PC</th>
+        <th>Type</th>
         <th>Name</th>
         <th>Invested</th>
         <th>Vacant</th>
     </tr>
+    {{#each leaders}}
     <tr>
-        <td>Ruler</td>
+        <td>{{label}}</td>
         <td>
-            <select>
-                <option>Type</option>
-                <option>Companion</option>
-                <option>NPC</option>
+            <select name="leaders.{{@key}}.type">
+                {{#select type}}
+                    {{#each ../actorTypes}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/each}}
+                {{/select}}
             </select>
         </td>
-        <td><input type="text" value="Jake"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
+        <td>
+        {{#unless isCompanion}}
+            <input type="text" value="{{name}}" name="leaders.{{@key}}.name">
+        {{/unless}}
+        {{#if isCompanion}}
+            <select name="leaders.{{@key}}.name">
+                {{#select name}}
+                    {{#each ../companions}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                {{/select}}
+            </select>
+        {{/if}}
+        </td>
+        <td><input type="checkbox" {{checked invested}} name="leaders.{{@key}}.invested"></td>
+        <td><input type="checkbox" {{checked vacant}} name="leaders.{{@key}}.vacant"></td>
     </tr>
-    <tr>
-        <td>Counselor</td>
-        <td>
-            <select>
-                <option>PC</option>
-                <option selected>Companion</option>
-                <option>NPC</option>
-            </select>
-        </td>
-        <td>
-            <select>
-                <option>Regongar</option>
-            </select>
-        </td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-    </tr>
-    <tr>
-        <td>General</td>
-        <td>
-            <select>
-                <option>PC</option>
-                <option>Companion</option>
-                <option>NPC</option>
-            </select>
-        </td>
-        <td><input type="text" value=""></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-    </tr>
-    <tr>
-        <td>Emissary</td>
-        <td>
-            <select>
-                <option>PC</option>
-                <option>Companion</option>
-                <option>NPC</option>
-            </select>
-        </td>
-        <td><input type="text" value=""></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-    </tr>
-    <tr>
-        <td>Magister</td>
-        <td>
-            <select>
-                <option>PC</option>
-                <option>Companion</option>
-                <option>NPC</option>
-            </select>
-        </td>
-        <td><input type="text" value=""></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-    </tr>
-    <tr>
-        <td>Treasurer</td>
-        <td>
-            <select>
-                <option>PC</option>
-                <option>Companion</option>
-                <option>NPC</option>
-            </select>
-        </td>
-        <td><input type="text" value=""></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-    </tr>
-    <tr>
-        <td>Viceroy</td>
-        <td>
-            <select>
-                <option>PC</option>
-                <option>Companion</option>
-                <option>NPC</option>
-            </select>
-        </td>
-        <td><input type="text" value=""></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-    </tr>
-    <tr>
-        <td>Warden</td>
-        <td>
-            <select>
-                <option>PC</option>
-                <option>Companion</option>
-                <option>NPC</option>
-            </select>
-        </td>
-        <td><input type="text" value=""></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-    </tr>
+    {{/each}}
 </table>

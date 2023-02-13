@@ -1,17 +1,19 @@
 import {getStringSetting, setSetting} from '../settings';
 import {
-    Commodities,
+    allCompanions, allFameTypes,
+    Commodities, getControlDC,
     getDefaultKingdomData,
     getLevelData,
     getSizeData,
-    Kingdom,
-    Resources,
+    Kingdom, Leaders, LeaderValues,
     Ruin,
-    SkillRanks, WorkSites,
+    WorkSites,
 } from './data';
 import {capitalize} from '../utils';
-import {calculateSkills} from './skills';
+import {calculateAbilityModifier, calculateInvestedBonus, calculateSkills, isInvested} from './skills';
 import {Storage} from '../structures/structures';
+import {AbilityScores} from '../actions-and-skills';
+import {getSettlements} from '../structures/scene';
 
 export function getKingdom(game: Game): Kingdom {
     const kingdomString = getStringSetting(game, 'kingdom');
@@ -66,9 +68,26 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             isGM,
             isUser: !isGM,
             leadershipActivityNumber: leadershipActivityNumber,
-            ...kingdomData,
-            ...levelData,
-            ...sizeData,
+            name: kingdomData.name,
+            size: kingdomData.size,
+            xp: kingdomData.xp,
+            xpThreshold: kingdomData.xpThreshold,
+            level: kingdomData.level,
+            fame: kingdomData.fame,
+            fameType: kingdomData.fameType,
+            charter: kingdomData.charter,
+            heartland: kingdomData.heartland,
+            government: kingdomData.government,
+            type: capitalize(sizeData.type),
+            controlDC: getControlDC(kingdomData.level, kingdomData.size),
+            atWar: kingdomData.atWar,
+            unrest: kingdomData.unrest,
+            resourceDieSize: sizeData.resourceDieSize,
+            resourceDice: levelData.resourceDice,
+            resources: kingdomData.resources,
+            resourcesNextRound: kingdomData.resourcesNextRound,
+            armyConsumption: kingdomData.armyConsumption,
+            activeSettlement: kingdomData.activeSettlement,
             levels,
             settlementConsumption,
             totalConsumption,
@@ -89,6 +108,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 unrest: kingdomData.unrest,
                 kingdomLevel: kingdomData.level,
             }),
+            leaders: this.getLeaders(kingdomData.leaders),
+            abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
+            fameTypes: allFameTypes,
+            fameLabel: kingdomData.fameType === 'famous' ? 'Fame' : 'Infamy',
             tradeAgreementsSize: kingdomData.tradeAgreements.filter(t => t.relations === 'trade-agreement').length,
             ranks: [
                 {label: 'Untrained', rank: 0},
@@ -97,18 +120,21 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Master', rank: 3},
                 {label: 'Legendary', rank: 4},
             ],
+            terrains: [
+                {label: 'Swamp', value: 'swamp'},
+                {label: 'Hills', value: 'hills'},
+                {label: 'Plains', value: 'plains'},
+                {label: 'Mountains', value: 'mountains'},
+                {label: 'Forest', value: 'forest'},
+            ],
+            actorTypes: [
+                {label: 'PC', value: 'pc'},
+                {label: 'NPC', value: 'npc'},
+                {label: 'Companion', value: 'companion'},
+            ],
+            companions: allCompanions,
+            settlements: getSettlements(this.game),
         };
-    }
-
-    private buildSkills(skills: SkillRanks): object[] {
-        return Object.entries(skills)
-            .map(([skill, rank]) => {
-                return {
-                    name: capitalize(skill),
-                    rank,
-                    value: 0,
-                };
-            });
     }
 
     private getActiveTabs(): object {
@@ -122,7 +148,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     override async _updateObject(event: Event, formData: Kingdom): Promise<void> {
-        await saveKingdom(this.game, formData);
+        console.log(formData);
+        // await saveKingdom(this.game, formData);
         this.render();
     }
 
@@ -178,6 +205,30 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 next: commoditiesNextRound[commodity],
             }])
         );
+    }
+
+    private getLeaders(leaders: Leaders): object {
+        return Object.fromEntries((Object.entries(leaders) as [keyof Leaders, LeaderValues][])
+            .map(([leader, values]) => {
+                return [leader, {
+                    label: capitalize(leader),
+                    isCompanion: values.type === 'companion',
+                    ...values,
+                }];
+            }));
+    }
+
+    private getAbilities(abilityScores: AbilityScores, leaders: Leaders, kingdomLevel: number): object {
+        return Object.fromEntries((Object.entries(abilityScores) as [keyof AbilityScores, number][])
+            .map(([ability, score]) => {
+                return [ability, {
+                    label: capitalize(ability),
+                    score: score,
+                    modifier: calculateAbilityModifier(score),
+                    invested: isInvested(ability, leaders),
+                    investedBonus: calculateInvestedBonus(kingdomLevel, ability, leaders),
+                }];
+            }));
     }
 }
 

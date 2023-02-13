@@ -2,14 +2,18 @@
     <tr>
         <th>Active Settlement</th>
         <td>
-            <select>
-                <option>Tuskwater</option>
+            <select name="activeSettlement">
+                {{#select activeSettlement}}
+                    {{#each settlements}}
+                        <option value="{{id}}">{{name}}</option>
+                    {{/each}}
+                {{/select}}
             </select>
         </td>
     </tr>
     <tr>
         <th>Control DC</th>
-        <td>16</td>
+        <td>{{controlDC}}</td>
     </tr>
     <tr>
         <th>At War</th>

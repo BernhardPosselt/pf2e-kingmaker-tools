@@ -57,9 +57,12 @@ export interface SceneSettlementData {
     secondaryTerritory: boolean;
 }
 
-export interface CurrentSceneData extends SceneSettlementData {
+export interface SceneData {
     name: string | null;
     id: string | null;
+}
+
+export interface CurrentSceneData extends SceneSettlementData, SceneData {
 }
 
 function getSceneData(scene: Scene): CurrentSceneData {
@@ -120,3 +123,15 @@ export function getMergedData(game: Game): SettlementSceneData | undefined {
     }
 }
 
+export function getSettlements(game: Game): SceneData[] {
+    return game?.scenes
+        ?.filter(scene => {
+            const settlementType = getSceneData(scene).settlementType;
+            return settlementType === 'Settlement' || settlementType === 'Capital';
+        })?.map(scene => {
+            return {
+                name: scene.name,
+                id: scene.id,
+            };
+        }) ?? [];
+}
