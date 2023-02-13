@@ -16,7 +16,7 @@ interface KingdomOptions {
     game: Game;
 }
 
-type KingdomTabs = 'status' | 'skills' | 'turn';
+type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'trade-agreements';
 
 class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions, object, null> {
     static override get defaultOptions(): FormApplicationOptions {
@@ -33,7 +33,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private readonly game: Game;
-    private nav: KingdomTabs = 'skills';
+    private nav: KingdomTabs = 'turn';
 
     constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
@@ -56,6 +56,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 unrest: kingdomData.unrest,
                 kingdomLevel: kingdomData.level,
             }),
+            tradeAgreementsSize: kingdomData.tradeAgreements.filter(t => t.relations === 'trade-agreement').length,
             ranks: [
                 {label: 'Untrained', rank: 0},
                 {label: 'Trained', rank: 1},
@@ -82,6 +83,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             statusTab: this.nav === 'status',
             skillsTab: this.nav === 'skills',
             turnTab: this.nav === 'turn',
+            tradeAgreementsTab: this.nav === 'trade-agreements',
+            featsTab: this.nav === 'feats',
         };
     }
 

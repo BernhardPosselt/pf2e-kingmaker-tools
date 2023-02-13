@@ -45,6 +45,13 @@ interface Income {
     bonusResourcePoints: number;
 }
 
+interface TradeAgreement {
+    group: string;
+    negotiationDC: number;
+    atWar: boolean;
+    relations: 'none' | 'diplomatic' | 'trade-agreement';
+}
+
 export interface SkillRanks {
     agriculture: number;
     arts: number;
@@ -92,7 +99,7 @@ export interface Kingdom {
         ore: number;
         stone: number;
     }
-    tradeAgreements: number;
+    tradeAgreements: TradeAgreement[];
 
     skillRanks: SkillRanks;
     abilityScores: AbilityScores;
@@ -271,7 +278,7 @@ export function getDefaultKingdomData(): Kingdom {
             ore: 0,
             stone: 0,
         },
-        tradeAgreements: 0,
+        tradeAgreements: [],
         skillRanks: {
             agriculture: 0,
             arts: 0,

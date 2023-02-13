@@ -3,7 +3,7 @@ import {
     ItemLevelBonuses, SkillItemBonuses,
     SettlementData,
 } from './structures';
-import {getMergedData, saveViewedSceneData} from './scene';
+import {CurrentSceneData, getMergedData, saveViewedSceneData} from './scene';
 import {capitalize, unslugifyAction} from '../utils';
 
 interface SettlementOptions {
@@ -11,9 +11,10 @@ interface SettlementOptions {
 }
 
 interface SettlementFormData {
-    kingdomSize: number;
     settlementType: string;
     settlementLevel: number;
+    overcrowded: boolean;
+    secondaryTerritory: boolean;
 }
 
 interface LabeledData<T = string> {
@@ -30,7 +31,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
         const options = super.defaultOptions;
         options.id = 'settlement-app';
         options.title = 'Settlement';
-        options.template = 'modules/pf2e-kingmaker-tools/templates/settlement.html';
+        options.template = 'modules/pf2e-kingmaker-tools/templates/settlement.hbs';
         options.submitOnChange = true;
         options.closeOnSubmit = false;
         options.classes = ['kingmaker-tools-app', 'settlement-app'];
@@ -40,7 +41,6 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
     }
 
     private readonly game: Game;
-
     constructor(object: null, options: Partial<FormApplicationOptions> & SettlementOptions) {
         super(object, options);
         this.game = options.game;
@@ -80,6 +80,8 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
         await saveViewedSceneData(this.game, {
             settlementLevel: formData.settlementLevel,
             settlementType: formData.settlementType,
+            overcrowded: formData.overcrowded,
+            secondaryTerritory: formData.secondaryTerritory,
         });
         this.render();
     }

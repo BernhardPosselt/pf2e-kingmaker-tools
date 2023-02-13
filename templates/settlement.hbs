@@ -21,6 +21,18 @@
             </td>
         </tr>
         <tr>
+            <th><label for="secondaryTerritory">Secondary Territory</label></th>
+            <td><input type="checkbox" id="secondaryTerritory" name="secondaryTerritory" {{checked secondaryTerritory}} {{#if
+                    isUser}}disabled{{/if}}>
+            </td>
+        </tr>
+            <tr>
+                <th><label for="overcrowded">Overcrowded</label></th>
+                <td><input type="checkbox" id="overcrowded" name="overcrowded" {{checked overcrowded}} {{#if
+                        isUser}}disabled{{/if}}>
+                </td>
+            </tr>
+        <tr>
             <th>Type</th>
             <td>{{type}}</td>
         </tr>

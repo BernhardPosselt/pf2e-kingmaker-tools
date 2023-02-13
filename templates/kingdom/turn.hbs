@@ -1,0 +1,97 @@
+<!--
+<input type="checkbox"> Secondary Territories (TODO: move these into settlement dialogs)
+<input type="checkbox"> Check in Secondary Territory (TODO: move these into settlement dialogs)
+<input type="number" value="0"> Overcrowded Territories (TODO: move these into settlement dialogs)
+* TODO: check if active settlement is unconnected, resolving issues in secondary territories incurs a -4 circumstance penalty
+-->
+
+<h2>Upkeep Phase</h2>
+<ol>
+    <li><button>Gain 1 Fame</button></li>
+    <li><button class="kingdom-activity">New Leadership (optional)</button></li>
+    <li><button>Adjust Unrest</button> <!-- (1 per overcrowded settlement, 1 if at war, 1 if secondary territories, gain ruins)
+* If unrest >= 10, gain 1d10 points to ruins (distribute as you wish) and lose a hex on a DC 11 flat check (your choice)
+* If unrest >= 20 => anarchy and you can only Quell Unrest and all checks are worsened a degree
+* Anarchy can be staved off by spending all fame
+* Increasing ruin penalty can be staved off by spending all fame
+--></li>
+    <li><button>Collect Resources</button> <!-- clicking this adds values from next column, rolls RD and adds commodities --></li>
+    <li><button>Pay Consumption</button> <!-- reduces food by consumption; if not possible or reduces 5RP per missing food or allows to roll 1d4 unrest --></li>
+</ol>
+
+
+<h2>Commerce Phase</h2>
+
+<ol>
+    <li><div class="activity-choice"><button class="kingdom-activity">Collect Taxes</button><button>Reduce Unrest</button><!-- or flat check 11 to reduce unrest by 1 --></div></li>
+    <li><button class="kingdom-activity">Improve Lifestyle (optional)</button></li>
+    <li><button class="kingdom-activity">Tap Treasury (optional)</button></li>
+    <li><button class="kingdom-activity">Trade Commodities (optional)</button></li>
+    <li><button class="kingdom-activity">Manage Trade Agreements (optional)</button></li>
+</ol>
+
+
+
+
+
+<h2>Leadership Activities</h2>
+Activities per Player: 2
+
+TODO: list of activities
+
+<h2>Region Activities</h2>
+Activities: 3
+
+TODO: list of activities
+
+<h2>Civic Activities</h2>
+Activities per Settlement: 1
+
+TODO: list of activities
+
+<h2>Event Phase</h2>
+
+<button>Roll Kingdom Event</button>
+
+<table class="km-table">
+    <tr>
+        <th>Ongoing Events</th>
+        <th>Resolve/Add</th>
+    </tr>
+    <tr>
+        <td>Orcs Attack</td>
+        <td><button><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+    </tr>
+    <tr>
+        <td><input type="text" placeholder="Event Name"></td>
+        <td><button><i class="fa-solid fa-plus"></i></button></td>
+    </tr>
+</table>
+
+<h2>Apply Kingdom XP</h2>
+<div class="turn-form-line"><input type="number" value="0"><button>XP: Resolved Event Modifier</button></div>
+<div class="turn-form-line"><input type="number" value="0"><button>XP: Claimed Hexes</button></div> <!-- 10 xp per claimed hex -->
+<button>Convert RP to XP</button>
+
+<table class="km-table">
+    <tr>
+        <th>Milestone</th>
+        <th>XP</th>
+        <th>Check/Uncheck</th>
+    </tr>
+    <tr>
+        <td>Build A Structure</td>
+        <td>40</td>
+        <td><button><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+    </tr>
+    <tr>
+        <td class="completed-milestone">Build A Structure</td>
+        <td class="completed-milestone">30</td>
+        <td><button><i class="fa-regular fa-circle-check"></i></button></td>
+    </tr>
+</table>
+
+<h2>Level Up</h2>
+
+<button>Level Up</button> <!-- Button disabled if not enough xp -->
+

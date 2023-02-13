@@ -53,9 +53,11 @@ function getSceneStructures(scene: Scene): Structure[] {
 export interface SceneSettlementData {
     settlementLevel: number;
     settlementType: string;
+    overcrowded: boolean;
+    secondaryTerritory: boolean;
 }
 
-interface CurrentSceneData extends SceneSettlementData {
+export interface CurrentSceneData extends SceneSettlementData {
     name: string | null;
     id: string | null;
 }
@@ -67,6 +69,8 @@ function getSceneData(scene: Scene): CurrentSceneData {
         id: scene.id,
         settlementLevel: sceneData?.settlementLevel ?? 1,
         settlementType: sceneData?.settlementType ?? '-',
+        secondaryTerritory: sceneData?.secondaryTerritory ?? false,
+        overcrowded: sceneData?.overcrowded ?? false,
     };
 }
 

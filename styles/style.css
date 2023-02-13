@@ -108,6 +108,11 @@
     grid-column-end: 3;
 }
 
+.km-header input {
+    display: inline-block;
+    width: 100px;
+}
+
 .km-nav {
     grid-column-start: 2;
     grid-column-end: 3;
@@ -174,4 +179,33 @@ td.skill-penalty {
 td.skill-value {
 }
 
+.km-content button {
+    margin: 0;
+}
 
+.activity-choice {
+    display: flex;
+}
+
+.kingdom-event-list {
+    list-style: none;
+    margin: 0;
+}
+
+.turn-form-line {
+    display: flex;
+    gap: 10px;
+}
+
+.turn-form-line input {
+    flex-grow: 1;
+}
+
+.turn-form-line button {
+    flex-basis: 0;
+    white-space: nowrap;
+}
+
+.completed-milestone {
+    text-decoration: line-through;
+}
