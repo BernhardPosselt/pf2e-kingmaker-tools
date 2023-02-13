@@ -4,6 +4,7 @@ import {
     SettlementData,
 } from './structures';
 import {getMergedData, saveViewedSceneData} from './scene';
+import {capitalize, unslugifyAction} from '../utils';
 
 interface SettlementOptions {
     game: Game;
@@ -101,18 +102,6 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
         return super.close(options);
     }
 
-    private capitalize(word: string): string {
-        return word[0].toUpperCase() + word.substring(1);
-    }
-
-    private unslugifyAction(word: string): string {
-        return word
-            .replaceAll('action:', '')
-            .split('-')
-            .map(part => this.capitalize(part))
-            .join(' ');
-    }
-
     private getAvailableItems(settlementLevel: number, itemLevelBonuses: ItemLevelBonuses): LabeledData<number>[] {
         const magicTraits = new Set(['arcane', 'divine', 'primal', 'occult']);
         const otherBonus = itemLevelBonuses.other;
@@ -129,7 +118,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
             })
             .map(([type, bonus]) => {
                 return {
-                    label: this.capitalize(type),
+                    label: capitalize(type),
                     value: Math.max(0, settlementLevel + bonus),
                 };
             });
@@ -140,7 +129,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
             .filter(([, bonus]) => bonus > 0)
             .map(([type, bonus]) => {
                 return {
-                    label: this.capitalize(type),
+                    label: capitalize(type),
                     value: bonus,
                 };
             });
@@ -151,12 +140,12 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
             .filter(([, bonus]) => bonus.value > 0 || (bonus.actions && Object.keys(bonus.actions).length > 0))
             .map(([skill, bonus]) => {
                 return {
-                    label: this.capitalize(skill),
+                    label: capitalize(skill),
                     value: bonus.value,
                     actions: (Object.entries(bonus.actions) as ([keyof ActionBonuses, number])[])
                         .map(([action, value]) => {
                             return {
-                                label: this.unslugifyAction(action),
+                                label: unslugifyAction(action),
                                 value: value,
                             };
                         }),

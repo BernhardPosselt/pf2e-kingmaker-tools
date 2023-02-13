@@ -281,3 +281,12 @@ Hooks.on('ready', async () => {
         });
     }
 });
+
+Hooks.on('init', async () => {
+    await loadTemplates([
+        'modules/pf2e-kingmaker-tools/templates/kingdom/sidebar.hbs',
+        'modules/pf2e-kingmaker-tools/templates/kingdom/status.hbs',
+        'modules/pf2e-kingmaker-tools/templates/kingdom/skills.hbs',
+        'modules/pf2e-kingmaker-tools/templates/kingdom/turn.hbs',
+    ]);
+});

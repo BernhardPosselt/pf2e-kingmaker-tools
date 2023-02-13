@@ -1,0 +1,42 @@
+<table class="km-table">
+    <tr>
+        <th>Skill</th>
+        <th>Ability</th>
+        <th>Proficiency</th>
+        <th title="Ability Bonus">A</th>
+        <th title="Proficiency Bonus">P</th>
+        <th title="Status Bonus">S</th>
+        <th title="Circumstance Bonus">C</th>
+        <th title="Item Bonus">I</th>
+        <th title="Unrest Penalty">U</th>
+        <th title="Circumstance Penalty">C</th>
+        <th title="Ruin Penalty">R</th>
+        <th title="Vacancy Penalty">V</th>
+        <th>Value</th>
+    </tr>
+    {{#each skills}}
+        <tr>
+            <td>{{skillLabel}}</td>
+            <td>{{abilityLabel}}</td>
+            <td>
+                <select name="{{name}}.rank" {{#if isUser}}disabled{{/if}}>
+                    {{#select rank}}
+                        {{#each ../ranks}}
+                            <option value="{{value}}">{{label}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
+            </td>
+            <td class="skill-bonus">{{abilityBonus}}</td>
+            <td class="skill-bonus">{{proficiencyBonus}}</td>
+            <td class="skill-bonus">{{statusBonus}}</td>
+            <td class="skill-bonus">{{circumstanceBonus}}</td>
+            <td class="skill-bonus">{{itemBonus}}</td>
+            <td class="skill-penalty">{{statusPenalty}}</td>
+            <td class="skill-penalty">{{circumstancePenalty}}</td>
+            <td class="skill-penalty">{{itemPenalty}}</td>
+            <td class="skill-penalty">{{vacancyPenalty}}</td>
+            <td class="skill-value">{{value}}</td>
+        </tr>
+    {{/each}}
+</table>

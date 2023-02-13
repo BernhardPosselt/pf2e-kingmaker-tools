@@ -1,3 +1,5 @@
+import {AbilityScores, Leader} from '../actions-and-skills';
+
 export interface KingdomSizeData {
     type: 'Territory' | 'Province' | 'State' | 'Country' | 'Dominion';
     resourceDie: 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
@@ -5,18 +7,28 @@ export interface KingdomSizeData {
     commodityStorage: number;
 }
 
-export interface Leader {
+export type Leaders = Record<Leader, LeaderValues>;
+
+export interface LeaderValues {
     name: string;
     invested: boolean;
-    pc: boolean;
+    type: 'PC' | 'NPC' | 'Companion';
     vacant: boolean;
 }
 
-export interface Ruin {
+export interface RuinValues {
     value: number;
     penalty: number;
     threshold: number;
 }
+
+export interface Ruin {
+    corruption: RuinValues;
+    crime: RuinValues;
+    decay: RuinValues;
+    strife: RuinValues;
+}
+
 
 interface WorkSite {
     locations: number;
@@ -31,6 +43,25 @@ interface Income {
     stone: number;
     bonusResourceDice: number;
     bonusResourcePoints: number;
+}
+
+export interface SkillRanks {
+    agriculture: number;
+    arts: number;
+    boating: number;
+    defense: number;
+    engineering: number;
+    exploration: number;
+    folklore: number;
+    industry: number;
+    intrigue: number;
+    magic: number;
+    politics: number;
+    scholarship: number;
+    statecraft: number;
+    trade: number;
+    warfare: number;
+    wilderness: number;
 }
 
 export interface Kingdom {
@@ -53,15 +84,7 @@ export interface Kingdom {
     }
     heartland: 'swamp' | 'hills' | 'plains' | 'mountains' | 'forest';
     armyConsumption: number;
-    leaders: {
-        ruler: Leader;
-        counselor: Leader;
-        general: Leader;
-        emissary: Leader;
-        treasurer: Leader;
-        viceroy: Leader;
-        warden: Leader;
-    }
+    leaders: Leaders;
     commodities: {
         food: number;
         lumber: number;
@@ -71,51 +94,12 @@ export interface Kingdom {
     }
     tradeAgreements: number;
 
-    skills: {
-        agriculture: number;
-        arts: number;
-        boating: number;
-        defense: number;
-        engineering: number;
-        exploration: number;
-        folklore: number;
-        industry: number;
-        intrigue: number;
-        magic: number;
-        politics: number;
-        scholarship: number;
-        statecraft: number;
-        trade: number;
-        warfare: number;
-        wilderness: number;
-    }
-    abilities: {
-        culture: number;
-        economy: number;
-        loyalty: number;
-        stability: number;
-    }
-    ruin: {
-        corruption: Ruin;
-        crime: Ruin;
-        decay: Ruin;
-        strife: Ruin;
-    }
+    skillRanks: SkillRanks;
+    abilityScores: AbilityScores;
+    ruin: Ruin;
 }
 
-export function getUnrestPenalty(unrest: number): number {
-    if (unrest < 1) {
-        return 0;
-    } else if (unrest < 5) {
-        return -1;
-    } else if (unrest < 10) {
-        return -2;
-    } else if (unrest < 15) {
-        return -3;
-    } else {
-        return -4;
-    }
-}
+
 
 interface KingdomLevelData {
     claimHexAttempts: number;
@@ -233,43 +217,49 @@ export function getDefaultKingdomData(): Kingdom {
         leaders: {
             ruler: {
                 invested: false,
-                pc: false,
+                type: 'PC',
                 vacant: false,
                 name: '',
             },
             counselor: {
                 invested: false,
-                pc: false,
+                type: 'PC',
                 vacant: false,
                 name: '',
             },
             general: {
                 invested: false,
-                pc: false,
+                type: 'PC',
                 vacant: false,
                 name: '',
             },
             emissary: {
                 invested: false,
-                pc: false,
+                type: 'PC',
+                vacant: false,
+                name: '',
+            },
+            magister: {
+                invested: false,
+                type: 'PC',
                 vacant: false,
                 name: '',
             },
             treasurer: {
                 invested: false,
-                pc: false,
+                type: 'PC',
                 vacant: false,
                 name: '',
             },
             viceroy: {
                 invested: false,
-                pc: false,
+                type: 'PC',
                 vacant: false,
                 name: '',
             },
             warden: {
                 invested: false,
-                pc: false,
+                type: 'PC',
                 vacant: false,
                 name: '',
             },
@@ -282,7 +272,7 @@ export function getDefaultKingdomData(): Kingdom {
             stone: 0,
         },
         tradeAgreements: 0,
-        skills: {
+        skillRanks: {
             agriculture: 0,
             arts: 0,
             boating: 0,
@@ -300,11 +290,11 @@ export function getDefaultKingdomData(): Kingdom {
             warfare: 0,
             wilderness: 0,
         },
-        abilities: {
-            culture: 0,
-            economy: 0,
-            loyalty: 0,
-            stability: 0,
+        abilityScores: {
+            culture: 10,
+            economy: 10,
+            loyalty: 10,
+            stability: 10,
         },
         ruin: {
             corruption: {

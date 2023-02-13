@@ -1,0 +1,42 @@
+<form class="km-base-form">
+    <div class="km-container">
+        <div class="km-header">
+            <table class="km-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>XP</th>
+                    <th>Level</th>
+                    <th>Fame</th>
+                </tr>
+                <tr>
+                    <td><input type="text" value="Legoland"></td>
+                    <td><input type="number" value="25"></td>
+                    <td><input type="number" value="3"></td>
+                    <td><input type="number" value="500"></td>
+                    <td><input type="number" value="3"></td>
+                </tr>
+            </table>
+        </div>
+        <nav class="km-nav">
+            <a data-tab="status" class="{{#if statusTab}}active{{/if}}">Status</a>
+            <a data-tab="skills" class="{{#if skillsTab}}active{{/if}}">Skills</a>
+            <a data-tab="turn" class="{{#if turnTab}}active{{/if}}">Turn</a>
+        </nav>
+        <div class="km-sidebar">
+            {{> modules/pf2e-kingmaker-tools/templates/kingdom/sidebar.hbs}}
+        </div>
+
+        <div class="km-content">
+            <div {{#unless statusTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/kingdom/status.hbs}}
+            </div>
+            <div {{#unless skillsTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/kingdom/skills.hbs}}
+            </div>
+            <div {{#unless turnTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/kingdom/turn.hbs}}
+            </div>
+        </div>
+    </div>
+</form>

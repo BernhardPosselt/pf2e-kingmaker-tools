@@ -1,4 +1,4 @@
-.kingmaker-tools-app form {
+.kingmaker-tools-app .form-table {
     display: table;
     border-spacing: 5px;
 }
@@ -82,3 +82,96 @@
     text-align: right;
     padding-right: 20px;
 }
+
+
+/*Kingdom Sheet*/
+
+:root {
+    --primary-km: #275125;
+    --secondary-km: #789035;
+}
+
+.km-base-form {
+    height: 100%;
+}
+
+.km-container {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 280px auto;
+    grid-template-rows: auto minmax(auto, 40px) auto;
+    grid-gap: 0 10px;
+}
+
+.km-header {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.km-nav {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    text-align: center;
+    background-color: var(--secondary-km);
+    display: flex;
+}
+
+.km-nav a {
+    display: inline-block;
+    flex-grow: 1;
+    color: #fff;
+    text-decoration: none;
+    line-height: 40px;
+}
+
+.km-nav a.active {
+    color: var(--secondary-km);
+    background-color: #fff;
+}
+
+.km-nav a:hover {
+    text-shadow: none;
+    text-decoration: underline;
+}
+
+.km-content {
+    overflow-y: auto;
+}
+
+.km-sidebar {
+    grid-row-start: 2;
+    grid-row-end: 4;
+    overflow-y: auto;
+}
+
+.km-table {
+    width: 100%;
+}
+
+.km-table th {
+    background-color: var(--primary-km);
+    color: #fff;
+    padding: 5px;
+}
+
+.km-table td {
+    color: var(--primary-km);
+    border: 1px solid var(--primary-km);
+    padding: 5px;
+    text-align: center;
+}
+
+td.skill-bonus {
+    background-color: var(--secondary-km);
+    color: #fff;
+}
+
+td.skill-penalty {
+    background-color: #a81b1b;
+    color: #fff;
+}
+
+td.skill-value {
+}
+
+

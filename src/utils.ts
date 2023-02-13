@@ -51,3 +51,15 @@ export async function postDegreeOfSuccessMessage(degreeOfSuccess: DegreeOfSucces
         });
     }
 }
+
+export function capitalize(word: string): string {
+    return word[0].toUpperCase() + word.substring(1);
+}
+
+export function unslugifyAction(word: string): string {
+    return word
+        .replaceAll('action:', '')
+        .split('-')
+        .map(part => capitalize(part))
+        .join(' ');
+}
