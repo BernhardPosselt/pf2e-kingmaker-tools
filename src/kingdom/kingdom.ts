@@ -174,6 +174,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             canLevelUp: kingdomData.xp >= kingdomData.xpThreshold && kingdomData.level < 20,
             turnsWithoutEvent: kingdomData.turnsWithoutEvent,
             eventDC: this.calculateEventDC(kingdomData.turnsWithoutEvent),
+            useXpHomebrew: getBooleanSetting(this.game, 'vanceAndKerensharaXP'),
         };
     }
 

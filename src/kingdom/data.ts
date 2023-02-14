@@ -127,6 +127,7 @@ export interface MileStone {
     name: string;
     xp: number;
     completed: boolean;
+    homebrew: boolean;
 }
 
 export interface OngoingEvent {
@@ -239,20 +240,57 @@ export function getControlDC(level: number, size: number): number {
 
 function getDefaultMilestones(): MileStone[] {
     return [
-        {name: 'Claim your first Landmark', xp: 40, completed: false},
-        {name: 'Claim your first Refuge', xp: 40, completed: false},
-        {name: 'Establish your first village', xp: 40, completed: false},
-        {name: 'Reach kingdom Size 10', xp: 40, completed: false},
-        {name: 'Establish diplomatic relations for the first time', xp: 60, completed: false},
-        {name: 'Expand a village into your first town', xp: 60, completed: false},
-        {name: 'All eight leadership roles are assigned', xp: 60, completed: false},
-        {name: 'Reach kingdom Size 25', xp: 60, completed: false},
-        {name: 'Establish your first trade agreement', xp: 80, completed: false},
-        {name: 'Expand a town into your first city', xp: 80, completed: false},
-        {name: 'Reach kingdom Size 50', xp: 80, completed: false},
-        {name: 'Spend 100 RP during a Kingdom turn', xp: 80, completed: false},
-        {name: 'Expand a city into your first metropolis', xp: 120, completed: false},
-        {name: 'Reach kingdom Size 100', xp: 120, completed: false},
+        {name: 'Build Roads for the first time', xp: 20, completed: false, homebrew: true},
+        {name: 'Celebrate your first successful Holiday', xp: 20, completed: false, homebrew: true},
+        {name: 'Claim your first new Hex (2nd hex overall)', xp: 20, completed: false, homebrew: true},
+        {name: 'Complete your First successful Infiltration', xp: 20, completed: false, homebrew: true},
+        {name: 'Create your first Masterpiece', xp: 20, completed: false, homebrew: true},
+        {name: 'Establish your first Farmland', xp: 20, completed: false, homebrew: true},
+        {name: 'Establish your first Lumber Camp', xp: 20, completed: false, homebrew: true},
+        {name: 'Establish your first Mine', xp: 20, completed: false, homebrew: true},
+        {name: 'Establish your first Quarry', xp: 20, completed: false, homebrew: true},
+        {name: 'Fortify your first hex', xp: 20, completed: false, homebrew: true},
+        {name: 'Successfully use your first Creative Solution', xp: 20, completed: false, homebrew: true},
+        {name: 'Successfully use your first Supernatural Solution', xp: 20, completed: false, homebrew: true},
+        {
+            name: 'Build your first Structure requiring Expert in a Kingdom Skill',
+            xp: 20,
+            completed: false,
+            homebrew: true,
+        },
+        {name: 'Build your first Famous/Infamous Structure', xp: 20, completed: false, homebrew: true},
+        {
+            name: 'Build your first seat of government (Town Hall, Castle, or Palace)',
+            xp: 20,
+            completed: false,
+            homebrew: true,
+        },
+        {name: 'Claim your first Landmark', xp: 40, completed: false, homebrew: false},
+        {name: 'Claim your first Refuge', xp: 40, completed: false, homebrew: false},
+        {name: 'Establish your first village', xp: 40, completed: false, homebrew: false},
+        {name: 'Establish your second Village', xp: 40, completed: false, homebrew: true},
+        {name: 'Reach kingdom Size 10', xp: 40, completed: false, homebrew: false},
+        {name: 'Recruit your first regular Army', xp: 40, completed: false, homebrew: true},
+        {name: 'Successfully resolve a random Kingdom Event', xp: 40, completed: false, homebrew: true},
+        {name: 'Establish diplomatic relations for the first time', xp: 60, completed: false, homebrew: false},
+        {name: 'Expand a village into your first town', xp: 60, completed: false, homebrew: false},
+        {name: 'All eight leadership roles are assigned', xp: 60, completed: false, homebrew: false},
+        {
+            name: 'Build your first Structure requiring Master in a Kingdom Skill',
+            xp: 60,
+            completed: false,
+            homebrew: true,
+        },
+        {name: 'Reach kingdom Size 25', xp: 60, completed: false, homebrew: false},
+        {name: 'Recruit your first Specialized Army', xp: 60, completed: false, homebrew: true},
+        {name: 'Win your first War Encounter', xp: 60, completed: false, homebrew: true},
+        {name: 'Achieve your first successful Pledge of Fealty', xp: 60, completed: false, homebrew: true},
+        {name: 'Establish your first trade agreement', xp: 80, completed: false, homebrew: false},
+        {name: 'Expand a town into your first city', xp: 80, completed: false, homebrew: false},
+        {name: 'Reach kingdom Size 50', xp: 80, completed: false, homebrew: false},
+        {name: 'Spend 100 RP during a Kingdom turn', xp: 80, completed: false, homebrew: false},
+        {name: 'Expand a city into your first metropolis', xp: 120, completed: false, homebrew: false},
+        {name: 'Reach kingdom Size 100', xp: 120, completed: false, homebrew: false},
     ];
 }
 

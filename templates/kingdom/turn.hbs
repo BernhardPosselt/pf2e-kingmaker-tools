@@ -131,6 +131,7 @@ Claimed Hexes this Round:
         <th>Reached</th>
     </tr>
     {{#each milestones}}
+        <!-- TODO: print homebrew milestones -->
         <tr>
             <td>{{name}}<input type="hidden" name="milestones.{{@index}}.name" value="{{name}}" ></td>
             <td>{{xp}}<input type="hidden" name="milestones.{{@index}}.xp" value="{{xp}}" data-dtype="Number"></td>
