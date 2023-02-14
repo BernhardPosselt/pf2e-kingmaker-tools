@@ -27,6 +27,8 @@ import {
 import {allFeats, allFeatsByName} from './feats';
 import {addGroupDialog} from './add-group-dialog';
 import {AddBonusFeatDialog} from './add-bonus-feat-dialog';
+import {addOngoingEventDialog} from './add-ongoing-event-dialog';
+import {rollKingdomEvent} from '../kingdom-events';
 
 interface KingdomOptions {
     game: Game;
@@ -223,6 +225,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-adjust-unrest')
             ?.addEventListener('click', async () => {
                 console.warn('adjusting unrest');
+                // TODO
             });
         $html.querySelector('#km-collect-resources')
             ?.addEventListener('click', async () => await this.collectResources());
@@ -231,15 +234,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-pay-consumption')
             ?.addEventListener('click', async () => {
                 console.warn('paying consumption');
+                // TODO
             });
         $html.querySelector('#km-roll-event')
-            ?.addEventListener('click', async () => {
-                console.warn('roll event');
-            });
+            ?.addEventListener('click', async () => await rollKingdomEvent(this.game));
         $html.querySelector('#km-add-event')
-            ?.addEventListener('click', async () => {
-                console.warn('adding event');
-            });
+            ?.addEventListener('click', async () => addOngoingEventDialog((name) => {
+                const current = this.readKingdomData();
+                this.update({
+                    ongoingEvents: [...current.ongoingEvents, {name}],
+                });
+            }));
         $html.querySelectorAll('.km-remove-event')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'ongoingEvents'));
@@ -247,14 +252,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-resolve-event-xp')
             ?.addEventListener('click', async () => {
                 console.warn('adding event xp');
+                // TODO
             });
         $html.querySelector('#km-claimed-hexes-xp')
             ?.addEventListener('click', async () => {
                 console.warn('adding hex xp');
+                // TODO
             });
         $html.querySelector('#km-rp-to-xp')
             ?.addEventListener('click', async () => {
                 console.warn('adding rp xp');
+                // TODO
             });
         $html.querySelector('#km-level-up')
             ?.addEventListener('click', async () => {
@@ -294,6 +302,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const target = el.target as HTMLButtonElement;
                     const activity = target.dataset.activity;
                     console.warn('run kingdom activity ' + activity, el);
+                    // TODO
                 });
             });
     }
