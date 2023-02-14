@@ -148,6 +148,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Diplomatic Relations', value: 'diplomatic-relations'},
                 {label: 'Trade Agreement', value: 'trade-agreement'},
             ],
+            // TODO: filter out companion activities if not in position of leader
             leadershipActivities: allLeadershipActivities.map(a => {
                 return {label: unslugifyAction(a), value: a};
             }),

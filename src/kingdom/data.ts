@@ -1,5 +1,4 @@
 import {AbilityScores, Leader} from '../actions-and-skills';
-import {boolean} from 'joi';
 
 const allActorTypes = [
     'pc',
