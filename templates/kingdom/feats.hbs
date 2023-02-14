@@ -58,25 +58,5 @@
             </tr>
         {{/if}}
     {{/each}}
-    <tr>
-        <td>
-            <select name="newBonusFeat">
-                {{#select newBonusFeat.name}}
-                    {{#each featIds}}
-                        <option value="{{this}}">{{this}}</option>
-                    {{/each}}
-                {{/select}}
-            </select>
-        </td>
-        <td>{{newBonusFeat.level}}</td>
-        <td>{{newBonusFeat.prerequisites}}</td>
-        <td>
-            <button class="icon-action"><i class="fa-solid fa-plus"></i></button>
-        </td>
-    </tr>
-    {{#if newBonusFeat.text}}
-        <tr>
-            <td colspan="4">{{newBonusFeat.text}}</td>
-        </tr>
-    {{/if}}
 </table>
+<button>Add Bonus Feat <i class="fa-solid fa-plus"></i></button>

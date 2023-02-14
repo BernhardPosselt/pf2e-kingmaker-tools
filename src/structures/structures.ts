@@ -1,16 +1,16 @@
-import {Action, actionSkills, allSkills, Skill} from '../actions-and-skills';
+import {Activity, activitySkills, allSkills, Skill} from '../actions-and-skills';
 import {mergeObjects} from '../utils';
 
 export interface ActionBonusRule {
     value: number;
-    action: Action;
+    action: Activity;
 }
 
 export interface SkillBonusRule {
     value: number;
     skill: Skill;
     // e.g. 'quell-unrest'
-    action?: Action;
+    action?: Activity;
 }
 
 export interface AvailableItemsRule {
@@ -50,7 +50,7 @@ export interface Structure {
     consumptionReduction?: number;
 }
 
-export type ActionBonuses = Partial<Record<Action, number>>;
+export type ActionBonuses = Partial<Record<Activity, number>>;
 
 export interface SkillItemBonus {
     value: number;
@@ -239,7 +239,7 @@ function applySettlementEventBonuses(result: SettlementData, structures: Structu
 function simplifyRules(rules: ActionBonusRule[]): SkillBonusRule[] {
     return rules.flatMap(rule => {
         const action = rule.action;
-        const skills = actionSkills[action];
+        const skills = activitySkills[action];
         const flattenedSkills = skills[0] === '*' ? allSkills : skills as Skill[];
         return flattenedSkills.map(skill => {
             return {

@@ -15,10 +15,10 @@ import {
     Ruin,
     WorkSites,
 } from './data';
-import {capitalize, unpackFormArray} from '../utils';
+import {capitalize, unpackFormArray, unslugifyAction} from '../utils';
 import {calculateAbilityModifier, calculateInvestedBonus, calculateSkills, isInvested} from './skills';
 import {Storage} from '../structures/structures';
-import {AbilityScores} from '../actions-and-skills';
+import {AbilityScores, allArmyActivities, allLeadershipActivities, allRegionActivities} from '../actions-and-skills';
 import {getSettlements} from '../structures/scene';
 import {allFeatsByName} from './feats';
 
@@ -120,8 +120,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             fameTypes: allFameTypes,
             fameLabel: kingdomData.fameType === 'famous' ? 'Fame' : 'Infamy',
             tradeAgreements: kingdomData.tradeAgreements,
-            newTradeAgreement: kingdomData.newTradeAgreement ?? {atWar: false, group: '', negotiationDC: 0, relations: 'none'},
-            ...this.getFeats(kingdomData.feats, kingdomData.bonusFeats, kingdomData.newBonusFeat, kingdomData.level),
+            ...this.getFeats(kingdomData.feats, kingdomData.bonusFeats, kingdomData.level),
             tradeAgreementsSize: kingdomData.tradeAgreements.filter(t => t.relations === 'trade-agreement').length,
             ranks: [
                 {label: 'Untrained', value: 0},
@@ -149,6 +148,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Diplomatic Relations', value: 'diplomatic-relations'},
                 {label: 'Trade Agreement', value: 'trade-agreement'},
             ],
+            leadershipActivities: allLeadershipActivities.map(a => {
+                return {label: unslugifyAction(a), value: a};
+            }),
+            regionActivities: allRegionActivities.map(a => {
+                return {label: unslugifyAction(a), value: a};
+            }),
+            armyActivities: allArmyActivities.map(a => {
+                return {label: unslugifyAction(a), value: a};
+            }),
         };
     }
 
@@ -251,7 +259,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             }));
     }
 
-    private getFeats(feats: Feat[], bonusFeats: BonusFeat[], newBonusFeat: BonusFeat | undefined, kingdomLevel: number): object {
+    private getFeats(feats: Feat[], bonusFeats: BonusFeat[], kingdomLevel: number): object {
         const levelFeats = [];
         const takenFeatsByLevel = Object.fromEntries(feats.map(feat => [feat.level, feat]));
         const noFeat = allFeatsByName['-'];
@@ -263,14 +271,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 levelFeats.push({...noFeat, takenAt: featLevel});
             }
         }
-        const newFeat = newBonusFeat && newBonusFeat.id in allFeatsByName ? allFeatsByName[newBonusFeat.id] : {...noFeat};
         return {
             featIds: Object.keys(allFeatsByName),
             levelFeats: levelFeats,
             bonusFeats: bonusFeats
                 .filter(feat => feat.id in allFeatsByName)
                 .map(feat => allFeatsByName[feat.id]),
-            newBonusFeat: newFeat,
         };
     }
 

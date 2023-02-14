@@ -52,7 +52,7 @@ export const abilityRuins: Record<Ability, Ruin> = {
     loyalty: 'strife',
 };
 
-export const allActions = [
+export const allActivities = [
     'establish-trade-agreement',
     'provide-care',
     'hire-adventurers',
@@ -105,9 +105,24 @@ export const allActions = [
     'claim-hex',
     'relocate-capital',
     'manage-trade-agreements',
+    'focused-attention',
+    'evangelize-the-dead',
+    'decadent-feasts',
+    'deliberate-planning',
+    'false-victory',
+    'show-of-force',
+    'warfare-exercises',
+    'preventative-measures',
+    'spread-the-legend',
+    'read-all-about-it',
+    'recruit-monsters',
+    'process-hidden-fees',
+    'supplementary-hunting',
+    'disband-army',
+    'offensive-gambit',
 ] as const;
 
-export type Action = typeof allActions[number];
+export type Activity = typeof allActivities[number];
 export const allSkills = [
     'agriculture',
     'arts',
@@ -158,7 +173,7 @@ export const skillAbilities: Record<Skill, Ability> = {
 };
 
 export type AbilityScores = Record<Ability, number>;
-export const actionSkills: Record<Action, (Skill)[] | ['*']> = {
+export const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
     // agriculture
     'establish-farmland': ['agriculture'],
     'harvest-crops': ['agriculture'],
@@ -224,12 +239,96 @@ export const actionSkills: Record<Action, (Skill)[] | ['*']> = {
     'train-army': ['warfare'],
     'recover-army': ['warfare'],
     'recruit-army': ['warfare'],
+    'disband-army': ['warfare'],
+    'offensive-gambit': ['warfare'],
 
     // wilderness
     'gather-lifestock': ['wilderness'],
 
     // other
     'build-structure': ['*'],
+    'focused-attention': ['*'],
 
-    // TODO: companion actions
+    // companions
+    'evangelize-the-dead': ['folklore'],
+    'decadent-feasts': ['agriculture'],
+    'deliberate-planning': ['scholarship'],
+    'false-victory': ['intrigue'],
+    'show-of-force': ['warfare'],
+    'warfare-exercises': ['warfare'],
+    'preventative-measures': ['magic'],
+    'spread-the-legend': ['arts'],
+    'read-all-about-it': ['scholarship'],
+    'recruit-monsters': ['intrigue'],
+    'process-hidden-fees': ['trade'],
+    'supplementary-hunting': ['wilderness'],
 };
+
+export const allLeadershipActivities: Activity[] = [
+    'capital-investment',
+    'celebrate-holiday',
+    'clandestine-business',
+    'craft-luxuries',
+    'create-a-masterpiece',
+    'creative-solution',
+    'decadent-feasts',
+    'deliberate-planning',
+
+    'establish-trade-agreement',
+    'evangelize-the-dead',
+    'false-victory',
+
+    'focused-attention',
+    'hire-adventurers',
+    'infiltration',
+    'pledge-of-fealty',
+    'process-hidden-fees',
+    'prognostication',
+    'provide-care',
+    'preventative-measures',
+    'purchase-commodities',
+    'quell-unrest',
+    'read-all-about-it',
+    'recruit-army',
+    'relocate-capital',
+    'repair-reputation-corruption',
+    'repair-reputation-crime',
+    'repair-reputation-decay',
+    'repair-reputation-strife',
+    'request-foreign-aid',
+    'send-diplomatic-envoy',
+    'show-of-force',
+    'spread-the-legend',
+    'supernatural-solution',
+    'warfare-exercises',
+];
+
+export const allRegionActivities: Activity[] = [
+    'abandon-hex',
+    'build-roads',
+    'claim-hex',
+    'clear-hex',
+    'establish-farmland',
+    'establish-settlement',
+    'establish-work-site-quarry',
+    'establish-work-site-lumber',
+    'establish-work-site-mine',
+    'go-fishing',
+    'gather-lifestock',
+    'harvest-crops',
+    'irrigation',
+    'recruit-monsters',
+    'supplementary-hunting',
+];
+
+
+export const allArmyActivities: Activity[] = [
+    'deploy-army',
+    'disband-army',
+    'garrison-army',
+    'offensive-gambit',
+    'outfit-army',
+    'recover-army',
+    'recruit-army',
+    'train-army',
+];

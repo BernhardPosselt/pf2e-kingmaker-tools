@@ -145,8 +145,6 @@ export interface Kingdom {
     tradeAgreements: TradeAgreement[];
     feats: Feat[];
     bonusFeats: BonusFeat[];
-    newBonusFeat?: BonusFeat;
-    newTradeAgreement?: TradeAgreement;
     skillRanks: SkillRanks;
     abilityScores: AbilityScores;
     ruin: Ruin;

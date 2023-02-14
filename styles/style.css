@@ -184,6 +184,10 @@ td.skill-value {
     margin: 2px 0;
 }
 
+.km-content h2 {
+    margin: 10px 0;
+}
+
 .km-content button.icon-action {
     width: auto;
 }
@@ -214,3 +218,4 @@ td.skill-value {
 .completed-milestone {
     text-decoration: line-through;
 }
+

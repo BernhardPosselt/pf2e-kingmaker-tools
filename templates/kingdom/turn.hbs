@@ -55,33 +55,28 @@
 
 <h2>Leadership Activities ({{leadershipActivityNumber}} per player)</h2>
 
-<table class="km-table">
-    <tr>
-        <th>Activity</th>
-        <th>Skill</th>
-    </tr>
-    <tr>
-        <td>
-            <button>Quell Unrest</button>
-        </td>
-        <td>
-            <select>
-                <option>Magic: +7</option>
-            </select>
-        </td>
-    </tr>
-</table>
+{{#each leadershipActivities}}
+    <button data-activity="{{value}}">{{label}}</button>
+{{/each}}
 
 <h2>Region Activities (3)</h2>
 
+{{#each regionActivities}}
+    <button data-activity="{{value}}">{{label}}</button>
+{{/each}}
 
 <h2>Civic Activities (1 per settlement)</h2>
 
 <!-- display claimhex circ bonus and how many attempts are possible -->
 
+<button>Build Structure</button>
+<button>Demolish</button>
+
 <h2>Army Activities (1 per army)</h2>
 
-TBD
+{{#each armyActivities}}
+    <button data-activity="{{value}}">{{label}}</button>
+{{/each}}
 
 <h2>Event Phase</h2>
 
@@ -98,21 +93,12 @@ TBD
             <button class="icon-action"><i class="fa fa-trash" aria-hidden="true"></i></button>
         </td>
     </tr>
-    <tr>
-        <td><input type="text" placeholder="Event Name"></td>
-        <td>
-            <button class="icon-action"><i class="fa-solid fa-plus"></i></button>
-        </td>
-    </tr>
 </table>
+<button>Add Ongoing Event <i class="fa-solid fa-plus"></i></button>
 
 <h2>Apply Kingdom XP</h2>
-<div class="turn-form-line"><input type="number" value="0">
-    <button>XP: Resolved Event Modifier</button>
-</div>
-<div class="turn-form-line"><input type="number" value="0">
-    <button>XP: Claimed Hexes</button>
-</div> <!-- 10 xp per claimed hex -->
+<button>Gain XP: Resolved Event Modifier</button>
+<button>Gain XP: Claimed Hexes</button> <!-- 10 xp per claimed hex -->
 <button>Convert RP to XP</button>
 
 <table class="km-table">

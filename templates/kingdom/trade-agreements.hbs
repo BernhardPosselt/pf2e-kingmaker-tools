@@ -26,22 +26,6 @@
             </td>
         </tr>
     {{/each}}
-    <tr>
-        <td><input type="text" name="newTradeAgreement.group" value="{{newTradeAgreement.group}}"></td>
-        <td><input type="number" name="newTradeAgreement.negotiationDC" value="{{newTradeAgreement.negotiationDC}}"></td>
-        <td><input type="checkbox" name="newTradeAgreement.atWar" {{checked newTradeAgreement.atWar}}></td>
-        <td>
-            <select name="newTradeAgreement.relations">
-                {{#select newTradeAgreement.relations}}
-                    {{#each tradeAgreementRelationTypes}}
-                        <option value="{{value}}">{{label}}</option>
-                    {{/each}}
-                {{/select}}
-            </select>
-        </td>
-        <td>
-            <button class="icon-action"><i class="fa-solid fa-plus"></i></button>
-        </td>
-    </tr>
 </table>
+<button>Add Group <i class="fa-solid fa-plus"></i></button>
 
