@@ -100,10 +100,30 @@
 <button type="button" id="km-add-event">Add Ongoing Event <i class="fa-solid fa-plus"></i></button>
 
 <h2>Apply Kingdom XP</h2>
-<button type="button" id="km-resolve-event-xp">Gain XP: Resolved Event Modifier</button>
-<button type="button" id="km-claimed-hexes-xp">Gain XP: Claimed Hexes</button> <!-- 10 xp per claimed hex -->
-<button type="button" id="km-rp-to-xp">Convert RP to XP</button>
+Resolved Event with Modifier:
 
+<div class="activity-choice">
+    <button type="button" class="km-event-xp" data-modifier="-4">-4</button>
+    <button type="button" class="km-event-xp" data-modifier="-3">-3</button>
+    <button type="button" class="km-event-xp" data-modifier="-2">-2</button>
+    <button type="button" class="km-event-xp" data-modifier="-1">-1</button>
+    <button type="button" class="km-event-xp" data-modifier="0">0</button>
+    <button type="button" class="km-event-xp" data-modifier="1">1</button>
+    <button type="button" class="km-event-xp" data-modifier="2">2</button>
+    <button type="button" class="km-event-xp" data-modifier="3">3</button>
+    <button type="button" class="km-event-xp" data-modifier="4">4</button>
+</div>
+<hr>
+Claimed Hexes this Round:
+
+<div class="activity-choice">
+    <button type="button" class="km-claimed-hexes-xp" data-hexes="1">1 Hex</button>
+    <button type="button" class="km-claimed-hexes-xp" data-hexes="2">2 Hexes</button>
+    <button type="button" class="km-claimed-hexes-xp" data-hexes="3">3 Hexes</button>
+</div>
+<hr>
+<button type="button" id="km-rp-to-xp">Convert RP to XP</button>
+<hr>
 <table class="km-table">
     <tr>
         <th>Milestone</th>

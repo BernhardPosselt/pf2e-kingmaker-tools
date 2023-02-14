@@ -266,6 +266,14 @@ Hooks.on('ready', async () => {
             default: null,
             type: String,
         });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'vanceAndKerensharaXP', {
+            name: 'Enable Vance and Kerenshara XP rules',
+            hint: 'Adds additional Milestone Events, more XP for claiming hexes and RP',
+            scope: 'world',
+            config: true,
+            default: false,
+            type: Boolean,
+        });
         Hooks.on('updateWorldTime', async (_, delta) => {
             if (getBooleanSetting(gameInstance, 'autoRollWeather')
                 && isGm(gameInstance)

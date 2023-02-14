@@ -1,4 +1,4 @@
-import {getStringSetting, setSetting} from '../settings';
+import {getBooleanSetting} from '../settings';
 import {
     allCompanions,
     allFameTypes,
@@ -29,6 +29,7 @@ import {addGroupDialog} from './add-group-dialog';
 import {AddBonusFeatDialog} from './add-bonus-feat-dialog';
 import {addOngoingEventDialog} from './add-ongoing-event-dialog';
 import {rollKingdomEvent} from '../kingdom-events';
+import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 
 interface KingdomOptions {
     game: Game;
@@ -253,20 +254,39 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'ongoingEvents'));
             });
-        $html.querySelector('#km-resolve-event-xp')
-            ?.addEventListener('click', async () => {
-                console.warn('adding event xp');
-                // TODO
+        $html.querySelectorAll('.km-event-xp')
+            ?.forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const target = ev.target as HTMLButtonElement;
+                    const modifier = parseInt(target.dataset.modifier ?? '0', 10);
+                    await this.update({
+                        xp: calculateEventXP(modifier),
+                    });
+                });
             });
-        $html.querySelector('#km-claimed-hexes-xp')
-            ?.addEventListener('click', async () => {
-                console.warn('adding hex xp');
-                // TODO
+        $html.querySelectorAll('.km-claimed-hexes-xp')
+            ?.forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const target = ev.target as HTMLButtonElement;
+                    const hexes = parseInt(target.dataset.hexes ?? '0', 10);
+                    const current = this.readKingdomData();
+                    const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
+                    await this.update({
+                        xp: calculateHexXP(hexes, current.size, useHomeBrew),
+                    });
+                });
             });
         $html.querySelector('#km-rp-to-xp')
             ?.addEventListener('click', async () => {
-                console.warn('adding rp xp');
-                // TODO
+                const current = this.readKingdomData();
+                const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
+                await this.update({
+                    resources: {
+                        bonusResourceDice: current.resources.bonusResourceDice,
+                        resourcePoints: 0,
+                    },
+                    xp: calculateRpXP(current.resources.resourcePoints, current.level, useHomeBrew),
+                });
             });
         $html.querySelector('#km-level-up')
             ?.addEventListener('click', async () => {
