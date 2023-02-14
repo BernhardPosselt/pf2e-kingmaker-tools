@@ -8,23 +8,23 @@
 <h2>Upkeep Phase</h2>
 <ol>
     <li>
-        <button id="km-gain-fame">Gain 1 {{fameLabel}}</button>
+        <button type="button" id="km-gain-fame">Gain 1 {{fameLabel}}</button>
     </li>
     <li>
-        <button class="kingdom-activity" data-activity="new-leadership">New Leadership (optional)</button>
+        <button type="button" class="kingdom-activity" data-activity="new-leadership">New Leadership (optional)</button>
     </li>
     <li>
-        <button id="km-adjust-unrest">Adjust Unrest</button> <!-- (1 per overcrowded settlement, 1 if at war, 1 if secondary territories, gain ruins)
+        <button type="button" id="km-adjust-unrest">Adjust Unrest</button> <!-- (1 per overcrowded settlement, 1 if at war, 1 if secondary territories, gain ruins)
 * If unrest >= 10, gain 1d10 points to ruins (distribute as you wish) and lose a hex on a DC 11 flat check (your choice)
 * If unrest >= 20 => anarchy and you can only Quell Unrest and all checks are worsened a degree
 * Anarchy can be staved off by spending all fame
 * Increasing ruin penalty can be staved off by spending all fame
 --></li>
     <li>
-        <button id="km-collect-resources">Collect Resources</button>
+        <button type="button" id="km-collect-resources">Collect Resources</button>
         <!-- clicking this adds values from next column, rolls RD and adds commodities --></li>
     <li>
-        <button id="km-pay-consumption">Pay Consumption</button>
+        <button type="button" id="km-pay-consumption">Pay Consumption</button>
         <!-- reduces food by consumption; if not possible or reduces 5RP per missing food or allows to roll 1d4 unrest -->
     </li>
 </ol>
@@ -35,20 +35,20 @@
 <ol>
     <li>
         <div class="activity-choice">
-            <button class="kingdom-activity" data-activity="collect-taxes">Collect Taxes</button>
-            <button id="km-reduce-unrest">Reduce Unrest</button><!-- or flat check 11 to reduce unrest by 1 --></div>
+            <button type="button" class="kingdom-activity" data-activity="collect-taxes">Collect Taxes</button>
+            <button type="button" id="km-reduce-unrest">Reduce Unrest</button><!-- or flat check 11 to reduce unrest by 1 --></div>
     </li>
     <li>
-        <button class="kingdom-activity" data-activity="improve-lifestyle">Improve Lifestyle (optional)</button>
+        <button type="button" class="kingdom-activity" data-activity="improve-lifestyle">Improve Lifestyle (optional)</button>
     </li>
     <li>
-        <button class="kingdom-activity" data-activity="tap-treasury">Tap Treasury (optional)</button>
+        <button type="button" class="kingdom-activity" data-activity="tap-treasury">Tap Treasury (optional)</button>
     </li>
     <li>
-        <button class="kingdom-activity" data-activity="trade-commodities">Trade Commodities (optional)</button>
+        <button type="button" class="kingdom-activity" data-activity="trade-commodities">Trade Commodities (optional)</button>
     </li>
     <li>
-        <button class="kingdom-activity" data-activity="manage-trade-agreements">Manage Trade Agreements (optional)</button>
+        <button type="button" class="kingdom-activity" data-activity="manage-trade-agreements">Manage Trade Agreements (optional)</button>
     </li>
 </ol>
 
@@ -56,52 +56,52 @@
 <h2>Leadership Activities ({{leadershipActivityNumber}} per player)</h2>
 <!-- Use a Magic check to attempt: Celebrate Holiday, Craft Luxuries, Create a Masterpiece, Rest and Relax if octavia magister-->
 {{#each leadershipActivities}}
-    <button class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
+    <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
 {{/each}}
 
 <h2>Region Activities (3)</h2>
 
 {{#each regionActivities}}
-    <button class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
+    <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
 {{/each}}
 
 <h2>Civic Activities (1 per settlement)</h2>
 
 <!-- display claimhex circ bonus and how many attempts are possible -->
 
-<button class="kingdom-activity" data-activity="build-structure">Build Structure</button>
-<button class="kingdom-activity" data-activity="demolish">Demolish</button>
+<button type="button" class="kingdom-activity" data-activity="build-structure">Build Structure</button>
+<button type="button" class="kingdom-activity" data-activity="demolish">Demolish</button>
 
 <h2>Army Activities (1 per army)</h2>
 
 {{#each armyActivities}}
-    <button class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
+    <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
 {{/each}}
 
 <h2>Event Phase</h2>
 
-<button id="km-roll-event">Roll Kingdom Event</button>
+<button type="button" id="km-roll-event">Roll Kingdom Event</button>
 
 <table class="km-table">
     <tr>
         <th>Ongoing Events</th>
-        <th>Resolve/Add</th>
+        <th>Resolve</th>
     </tr>
     {{#each ongoingEvents}}
     <tr>
         <td>{{name}}</td>
         <td>
-            <button class="icon-action"><i class="fa fa-trash" aria-hidden="true" class="km-remove-event" data-name="{{name}}"></i></button>
+            <button type="button" class="icon-action km-remove-event" data-name="{{name}}"><i class="fa fa-trash" aria-hidden="true"></i></button>
         </td>
     </tr>
     {{/each}}
 </table>
-<button id="km-add-event">Add Ongoing Event <i class="fa-solid fa-plus"></i></button>
+<button type="button" id="km-add-event">Add Ongoing Event <i class="fa-solid fa-plus"></i></button>
 
 <h2>Apply Kingdom XP</h2>
-<button id="km-resolve-event-xp">Gain XP: Resolved Event Modifier</button>
-<button id="km-claimed-hexes-xp">Gain XP: Claimed Hexes</button> <!-- 10 xp per claimed hex -->
-<button id="kmm-rp-to-xp">Convert RP to XP</button>
+<button type="button" id="km-resolve-event-xp">Gain XP: Resolved Event Modifier</button>
+<button type="button" id="km-claimed-hexes-xp">Gain XP: Claimed Hexes</button> <!-- 10 xp per claimed hex -->
+<button type="button" id="km-rp-to-xp">Convert RP to XP</button>
 
 <table class="km-table">
     <tr>
@@ -122,5 +122,5 @@
 
 <h2>Level Up</h2>
 
-<button id="km-level-up" {{#unless canLevelUp}}disabled{{/unless}}>Level Up</button>
+<button type="button" id="km-level-up" {{#unless canLevelUp}}disabled{{/unless}}>Level Up</button>
 

@@ -277,7 +277,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-add-bonus-feat')
             ?.addEventListener('click', async () => {
-                console.warn('adding group');
+                console.warn('adding bonus feat');
             });
         $html.querySelectorAll('.km-delete-bonus-feat')
             ?.forEach(el => {
@@ -285,16 +285,25 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     console.warn('deleting bonus feat');
                 });
             });
+        $html.querySelectorAll('.kingdom-activity')
+            ?.forEach(el => {
+                el.addEventListener('click', async (el) => {
+                    const target = el.target as HTMLButtonElement;
+                    const activity = target.dataset.activity;
+                    console.warn('run kingdom activity ' + activity, el);
+                });
+            });
     }
 
     private async collectResources(): Promise<void> {
         const current = this.readKingdomData();
         const sizeData = getSizeData(current.size);
+        const levelData = getLevelData(current.size);
         const featDice = 0; // FIXME: feat?
         const settlementSceneDataAndStructures = getAllSettlementSceneDataAndStructures(this.game);
         const {storage} = this.getSettlementData(settlementSceneDataAndStructures);
         const capacity = this.calculateStorageCapacity(sizeData.commodityStorage, storage);
-        const dice = current.resources.bonusResourceDice + featDice;
+        const dice = levelData.resourceDice + current.resources.bonusResourceDice + featDice;
         const resourcePoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
         await this.update({
             resources: {
