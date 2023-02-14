@@ -15,7 +15,7 @@ import {
     Ruin,
     WorkSites,
 } from './data';
-import {capitalize, mergeObjects, unpackFormArray, unslugifyAction} from '../utils';
+import {capitalize, unpackFormArray, unslugifyAction} from '../utils';
 import {calculateAbilityModifier, calculateInvestedBonus, calculateSkills, isInvested} from './skills';
 import {Storage} from '../structures/structures';
 import {AbilityScores, allArmyActivities, allLeadershipActivities, allRegionActivities} from '../actions-and-skills';
@@ -184,6 +184,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         };
     }
 
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     override async _updateObject(event: Event, formData: any): Promise<void> {
         console.log(formData);
         const kingdom = expandObject(formData);
