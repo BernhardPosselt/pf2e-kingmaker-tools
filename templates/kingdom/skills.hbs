@@ -19,7 +19,7 @@
             <td>{{skillLabel}}</td>
             <td>{{abilityLabel}}</td>
             <td>
-                <select name="{{name}}.rank" {{#if isUser}}disabled{{/if}}>
+                <select name="skillRanks.{{skill}}" data-dtype="Number">
                     {{#select rank}}
                         {{#each ../ranks}}
                             <option value="{{value}}">{{label}}</option>

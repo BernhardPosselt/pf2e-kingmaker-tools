@@ -1,4 +1,5 @@
 import {Action, actionSkills, allSkills, Skill} from '../actions-and-skills';
+import {mergeObjects} from '../utils';
 
 export interface ActionBonusRule {
     value: number;
@@ -348,24 +349,6 @@ export function getSettlementConfig(settlementLevel: number): SettlementConfig {
             population: '25001+',
         };
     }
-}
-
-function mergeObjects<A extends Record<string, V>, B extends Record<string, V>, V>(
-    obj1: A,
-    obj2: B,
-    conflictFunction: (a: V, b: V) => V
-): Record<string, V> {
-    const entries: [string, V][] = [];
-    for (const key of [...Object.keys(obj1), ...Object.keys(obj2)]) {
-        if (key in obj1 && key in obj2) {
-            entries.push([key, conflictFunction(obj1[key], obj2[key])]);
-        } else if (key in obj1) {
-            entries.push([key, obj1[key]]);
-        } else if (key in obj2) {
-            entries.push([key, obj2[key]]);
-        }
-    }
-    return Object.fromEntries(entries);
 }
 
 function mergeBonuses(capital: SkillItemBonus, settlement: SkillItemBonus): SkillItemBonus {

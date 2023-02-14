@@ -1,19 +1,26 @@
 import {getStringSetting, setSetting} from '../settings';
 import {
-    allCompanions, allFameTypes,
-    Commodities, getControlDC,
+    allCompanions,
+    allFameTypes,
+    BonusFeat,
+    Commodities,
+    Feat,
+    getControlDC,
     getDefaultKingdomData,
     getLevelData,
     getSizeData,
-    Kingdom, Leaders, LeaderValues,
+    Kingdom,
+    Leaders,
+    LeaderValues,
     Ruin,
     WorkSites,
 } from './data';
-import {capitalize} from '../utils';
+import {capitalize, unpackFormArray} from '../utils';
 import {calculateAbilityModifier, calculateInvestedBonus, calculateSkills, isInvested} from './skills';
 import {Storage} from '../structures/structures';
 import {AbilityScores} from '../actions-and-skills';
 import {getSettlements} from '../structures/scene';
+import {allFeatsByName} from './feats';
 
 export function getKingdom(game: Game): Kingdom {
     const kingdomString = getStringSetting(game, 'kingdom');
@@ -47,7 +54,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private readonly game: Game;
-    private nav: KingdomTabs = 'status';
+    private nav: KingdomTabs = 'trade-agreements';
 
     constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
@@ -112,13 +119,16 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
             fameTypes: allFameTypes,
             fameLabel: kingdomData.fameType === 'famous' ? 'Fame' : 'Infamy',
+            tradeAgreements: kingdomData.tradeAgreements,
+            newTradeAgreement: kingdomData.newTradeAgreement ?? {atWar: false, group: '', negotiationDC: 0, relations: 'none'},
+            ...this.getFeats(kingdomData.feats, kingdomData.bonusFeats, kingdomData.newBonusFeat, kingdomData.level),
             tradeAgreementsSize: kingdomData.tradeAgreements.filter(t => t.relations === 'trade-agreement').length,
             ranks: [
-                {label: 'Untrained', rank: 0},
-                {label: 'Trained', rank: 1},
-                {label: 'Expert', rank: 2},
-                {label: 'Master', rank: 3},
-                {label: 'Legendary', rank: 4},
+                {label: 'Untrained', value: 0},
+                {label: 'Trained', value: 1},
+                {label: 'Expert', value: 2},
+                {label: 'Master', value: 3},
+                {label: 'Legendary', value: 4},
             ],
             terrains: [
                 {label: 'Swamp', value: 'swamp'},
@@ -134,6 +144,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ],
             companions: allCompanions,
             settlements: getSettlements(this.game),
+            tradeAgreementRelationTypes: [
+                {label: 'None', value: 'none'},
+                {label: 'Diplomatic Relations', value: 'diplomatic-relations'},
+                {label: 'Trade Agreement', value: 'trade-agreement'},
+            ],
         };
     }
 
@@ -147,8 +162,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         };
     }
 
-    override async _updateObject(event: Event, formData: Kingdom): Promise<void> {
+    override async _updateObject(event: Event, formData: any): Promise<void> {
         console.log(formData);
+        const kingdom = expandObject(formData);
+        kingdom.tradeAgreements = unpackFormArray(kingdom.tradeAgreements);
+        kingdom.feats = unpackFormArray(kingdom.feats);
+        kingdom.bonusFeats = unpackFormArray(kingdom.bonusFeats);
+        console.log(kingdom);
         // await saveKingdom(this.game, formData);
         this.render();
     }
@@ -230,6 +250,30 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 }];
             }));
     }
+
+    private getFeats(feats: Feat[], bonusFeats: BonusFeat[], newBonusFeat: BonusFeat | undefined, kingdomLevel: number): object {
+        const levelFeats = [];
+        const takenFeatsByLevel = Object.fromEntries(feats.map(feat => [feat.level, feat]));
+        const noFeat = allFeatsByName['-'];
+        for (let featLevel = 2; featLevel <= kingdomLevel; featLevel += 2) {
+            const existingFeat = takenFeatsByLevel[featLevel];
+            if (existingFeat && existingFeat.id in allFeatsByName) {
+                levelFeats.push({...allFeatsByName[existingFeat.id], takenAt: featLevel});
+            } else {
+                levelFeats.push({...noFeat, takenAt: featLevel});
+            }
+        }
+        const newFeat = newBonusFeat && newBonusFeat.id in allFeatsByName ? allFeatsByName[newBonusFeat.id] : {...noFeat};
+        return {
+            featIds: Object.keys(allFeatsByName),
+            levelFeats: levelFeats,
+            bonusFeats: bonusFeats
+                .filter(feat => feat.id in allFeatsByName)
+                .map(feat => allFeatsByName[feat.id]),
+            newBonusFeat: newFeat,
+        };
+    }
+
 }
 
 export async function showKingdom(game: Game): Promise<void> {

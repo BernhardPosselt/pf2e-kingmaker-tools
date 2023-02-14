@@ -56,10 +56,45 @@ export function capitalize(word: string): string {
     return word[0].toUpperCase() + word.substring(1);
 }
 
+export function unpackFormArray<T>(obj: Record<string, T> | undefined | null): T[] {
+    if (obj) {
+        return Object.keys(obj)
+            .map(index => parseInt(index, 10))
+            .sort()
+            .map(index => `${index}`)
+            .map(index => obj[index]);
+    } else {
+        return [];
+    }
+}
+
 export function unslugifyAction(word: string): string {
     return word
         .replaceAll('action:', '')
         .split('-')
         .map(part => capitalize(part))
         .join(' ');
+}
+
+export function mergeObjects<A extends Record<string, V>, B extends Record<string, V>, V>(
+    obj1: A,
+    obj2: B,
+    conflictFunction: (a: V, b: V) => V
+): Record<string, V> {
+    const entries: [string, V][] = [];
+    for (const key of [...Object.keys(obj1), ...Object.keys(obj2)]) {
+        if (key in obj1 && key in obj2) {
+            entries.push([key, conflictFunction(obj1[key], obj2[key])]);
+        } else if (key in obj1) {
+            entries.push([key, obj1[key]]);
+        } else if (key in obj2) {
+            entries.push([key, obj2[key]]);
+        }
+    }
+    return Object.fromEntries(entries);
+}
+
+export function range(start: number, end: number): number[] {
+    return Array.apply(0, Array(end - 1))
+        .map((element, index) => index + start);
 }

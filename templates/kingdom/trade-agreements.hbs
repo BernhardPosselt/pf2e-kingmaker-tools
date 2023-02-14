@@ -2,26 +2,42 @@
     <tr>
         <th>Group</th>
         <th>Negotiation DC</th>
+        <th>At War</th>
         <th>State</th>
         <th>Remove/Add</th>
     </tr>
+    {{#each tradeAgreements}}
+        <tr>
+            <td>{{group}}<input type="hidden" name="tradeAgreements.{{@index}}.group" value="{{group}}"></td>
+            <td>{{negotiationDC}}<input type="hidden" name="tradeAgreements.{{@index}}.negotiationDC"
+                                        value="{{negotiationDC}}" data-dtype="Number"></td>
+            <td><input type="checkbox" {{checked atWar}} name="tradeAgreements.{{@index}}.atWar"></td>
+            <td>
+                <select name="tradeAgreements.{{@index}}.relations">
+                    {{#select relations}}
+                        {{#each ../tradeAgreementRelationTypes}}
+                            <option value="{{value}}">{{label}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
+            </td>
+            <td>
+                <button class="icon-action"><i class="fa-solid fa-trash"></i></button>
+            </td>
+        </tr>
+    {{/each}}
     <tr>
-        <td>Luckies</td>
-        <td>45</td>
+        <td><input type="text" name="newTradeAgreement.group" value="{{newTradeAgreement.group}}"></td>
+        <td><input type="number" name="newTradeAgreement.negotiationDC" value="{{newTradeAgreement.negotiationDC}}"></td>
+        <td><input type="checkbox" name="newTradeAgreement.atWar" {{checked newTradeAgreement.atWar}}></td>
         <td>
-            <select>
-                <option>Diplomatic Relations</option>
+            <select name="newTradeAgreement.relations">
+                {{#select newTradeAgreement.relations}}
+                    {{#each tradeAgreementRelationTypes}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/each}}
+                {{/select}}
             </select>
-        </td>
-        <td><button class="icon-action"><i class="fa-solid fa-trash"></i></button></td>
-    </tr>
-    <tr>
-        <td><input type="text" placeholder="Group Name"></td>
-        <td><input type="number" value="3"></td>
-        <td>
-            <select>
-            <option>None</option>
-        </select>
         </td>
         <td>
             <button class="icon-action"><i class="fa-solid fa-plus"></i></button>

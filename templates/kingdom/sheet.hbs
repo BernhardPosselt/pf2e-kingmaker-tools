@@ -16,7 +16,7 @@
                     <td>{{type}}</td>
                     <td><input type="number" value="{{xp}}" name="xp"> / <input type="number" value="{{xpThreshold}}" name="xpThreshold"></td>
                     <td>
-                        <select name="level">
+                        <select name="level" data-dtype="Number">
                         {{#select level}}
                             {{#each levels}}
                                 <option value="{{this}}">{{this}}</option>

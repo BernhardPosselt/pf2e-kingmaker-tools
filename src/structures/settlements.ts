@@ -3,7 +3,7 @@ import {
     ItemLevelBonuses, SkillItemBonuses,
     SettlementData,
 } from './structures';
-import {CurrentSceneData, getMergedData, saveViewedSceneData} from './scene';
+import {getMergedData, saveViewedSceneData} from './scene';
 import {capitalize, unslugifyAction} from '../utils';
 
 interface SettlementOptions {

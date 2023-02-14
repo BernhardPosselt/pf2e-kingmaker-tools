@@ -2,64 +2,81 @@
     <tr>
         <th>Level</th>
         <th>Feat</th>
+        <th>Minimum Level</th>
         <th>Prerequisites</th>
-        <th>Benefits</th>
     </tr>
-    <tr>
-        <td>1</td>
-        <td>
-            <select>
-                <option>Feat</option>
-            </select>
-        </td>
-        <td>Trained in Warfare</td>
-        <td>Everyone has a place and a role, and as long as those
-            roles are filled, the government functions. When you
-            select this feat, choose one leadership role; that role is
-            now supported by your efficient civil servants, so its
-            vacancy penalty is no longer applicable. If you wish to
-            change the leadership role to which Civil Service applies,
-            you can do so using the New Leadership activity at the
-            start of a Kingdom turn.
-            You gain a +2 status bonus to New Leadership checks.</td>
-    </tr>
+    {{#each levelFeats}}
+        <tr>
+            <td>{{takenAt}}<input type="hidden" name="feats.{{@index}}.level" value="{{takenAt}}"></td>
+            <td>
+                <select name="feats.{{@index}}.id">
+                    {{#select name}}
+                        {{#each ../featIds}}
+                            <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
+            </td>
+            <td>{{level}}</td>
+            <td>{{prerequisites}}</td>
+        </tr>
+        {{#if text}}
+            <tr>
+                <td colspan="4">{{text}}</td>
+            </tr>
+        {{/if}}
+    {{/each}}
 </table>
 
 <table class="km-table">
     <tr>
         <th>Bonus Feat</th>
+        <th>Minimum Level</th>
         <th>Prerequisites</th>
-        <th>Benefits</th>
         <th>Remove/Add</th>
     </tr>
+    {{#each bonusFeats}}
+        <tr>
+            <td>
+                <select name="bonusFeats.{{@index}}.id">
+                    {{#select name}}
+                        {{#each ../featIds}}
+                            <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
+            </td>
+            <td>{{level}}</td>
+            <td>{{prerequisites}}</td>
+            <td>
+                <button class="icon-action"><i class="fa-solid fa-trash"></i></button>
+            </td>
+        </tr>
+        {{#if text}}
+            <tr>
+                <td colspan="4">{{text}}</td>
+            </tr>
+        {{/if}}
+    {{/each}}
     <tr>
         <td>
-            <select>
-                <option>Feat</option>
+            <select name="newBonusFeat">
+                {{#select newBonusFeat.name}}
+                    {{#each featIds}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                {{/select}}
             </select>
         </td>
-        <td>Trained in Warfare</td>
-        <td>Everyone has a place and a role, and as long as those
-            roles are filled, the government functions. When you
-            select this feat, choose one leadership role; that role is
-            now supported by your efficient civil servants, so its
-            vacancy penalty is no longer applicable. If you wish to
-            change the leadership role to which Civil Service applies,
-            you can do so using the New Leadership activity at the
-            start of a Kingdom turn.
-            You gain a +2 status bonus to New Leadership checks.</td>
-        <td><button class="icon-action"><i class="fa-solid fa-trash"></i></button></td>
-    </tr>
-    <tr>
-        <td>
-            <select>
-                <option>-</option>
-            </select>
-        </td>
-        <td></td>
-        <td></td>
+        <td>{{newBonusFeat.level}}</td>
+        <td>{{newBonusFeat.prerequisites}}</td>
         <td>
             <button class="icon-action"><i class="fa-solid fa-plus"></i></button>
         </td>
     </tr>
+    {{#if newBonusFeat.text}}
+        <tr>
+            <td colspan="4">{{newBonusFeat.text}}</td>
+        </tr>
+    {{/if}}
 </table>

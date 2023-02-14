@@ -125,13 +125,9 @@ export function getMergedData(game: Game): SettlementSceneData | undefined {
 
 export function getSettlements(game: Game): SceneData[] {
     return game?.scenes
+        ?.map(scene => getSceneData(scene))
         ?.filter(scene => {
-            const settlementType = getSceneData(scene).settlementType;
+            const settlementType = scene.settlementType;
             return settlementType === 'Settlement' || settlementType === 'Capital';
-        })?.map(scene => {
-            return {
-                name: scene.name,
-                id: scene.id,
-            };
         }) ?? [];
 }

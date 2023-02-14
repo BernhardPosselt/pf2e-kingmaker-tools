@@ -1,4 +1,5 @@
 import {AbilityScores, Leader} from '../actions-and-skills';
+import {boolean} from 'joi';
 
 const allActorTypes = [
     'pc',
@@ -83,7 +84,7 @@ interface TradeAgreement {
     group: string;
     negotiationDC: number;
     atWar: boolean;
-    relations: 'none' | 'diplomatic' | 'trade-agreement';
+    relations: 'none' | 'diplomatic-relations' | 'trade-agreement';
 }
 
 export interface SkillRanks {
@@ -111,6 +112,15 @@ export const allFameTypes = ['famous', 'infamous'] as const;
 
 export type FameType = typeof allFameTypes[number];
 
+export interface Feat {
+    id: string;
+    level: number;
+}
+
+export interface BonusFeat {
+    id: string;
+}
+
 export interface Kingdom {
     name: string;
     atWar: boolean;
@@ -133,7 +143,10 @@ export interface Kingdom {
     commoditiesNextRound: Commodities;
 
     tradeAgreements: TradeAgreement[];
-
+    feats: Feat[];
+    bonusFeats: BonusFeat[];
+    newBonusFeat?: BonusFeat;
+    newTradeAgreement?: TradeAgreement;
     skillRanks: SkillRanks;
     abilityScores: AbilityScores;
     ruin: Ruin;
@@ -214,11 +227,18 @@ export function getDefaultKingdomData(): Kingdom {
         activeSettlement: '',
         fame: 0,
         fameType: 'famous',
-        level: 1,
+        level: 11,
         xpThreshold: 1000,
         xp: 0,
         size: 0,
         unrest: 0,
+        feats: [{
+            level: 2,
+            id: 'Crush Dissent',
+        }],
+        bonusFeats: [{
+            id: 'Crush Dissent',
+        }],
         workSites: {
             farmlands: {
                 quantity: 0,
@@ -311,7 +331,12 @@ export function getDefaultKingdomData(): Kingdom {
                 name: '',
             },
         },
-        tradeAgreements: [],
+        tradeAgreements: [{
+            atWar: true,
+            relations: 'diplomatic-relations',
+            negotiationDC: 34,
+            group: 'Chess',
+        }],
         skillRanks: {
             agriculture: 0,
             arts: 0,
