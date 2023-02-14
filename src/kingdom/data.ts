@@ -120,6 +120,16 @@ export interface BonusFeat {
     id: string;
 }
 
+export interface MileStone {
+    name: string;
+    xp: number;
+    completed: boolean;
+}
+
+export interface OngoingEvent {
+    name: string;
+}
+
 export interface Kingdom {
     name: string;
     atWar: boolean;
@@ -148,6 +158,8 @@ export interface Kingdom {
     abilityScores: AbilityScores;
     ruin: Ruin;
     activeSettlement: string;
+    milestones: MileStone[];
+    ongoingEvents: OngoingEvent[];
 }
 
 
@@ -224,17 +236,24 @@ export function getDefaultKingdomData(): Kingdom {
         activeSettlement: '',
         fame: 0,
         fameType: 'famous',
-        level: 11,
+        level: 1,
         xpThreshold: 1000,
         xp: 0,
         size: 0,
         unrest: 0,
-        feats: [{
-            level: 2,
-            id: 'Crush Dissent',
+        feats: [],
+        bonusFeats: [],
+        ongoingEvents: [{
+            name: 'hi',
         }],
-        bonusFeats: [{
-            id: 'Crush Dissent',
+        milestones: [{
+            name: 'build a structure',
+            completed: false,
+            xp: 30,
+        }, {
+            name: 'build a shit',
+            completed: true,
+            xp: 40,
         }],
         workSites: {
             farmlands: {
@@ -281,7 +300,7 @@ export function getDefaultKingdomData(): Kingdom {
         leaders: {
             ruler: {
                 invested: false,
-                type: 'pc',
+                type: 'companion',
                 vacant: false,
                 name: '',
             },

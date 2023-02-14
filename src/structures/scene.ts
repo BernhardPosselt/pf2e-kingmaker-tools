@@ -33,7 +33,7 @@ function parseStructureData(name: string | null, data: unknown): Structure | und
     }
 }
 
-function getSceneStructures(scene: Scene): Structure[] {
+export function getSceneStructures(scene: Scene): Structure[] {
     try {
         return scene.tokens
             .filter(t => t.actor !== null && t.actor !== undefined)
@@ -123,7 +123,7 @@ export function getMergedData(game: Game): SettlementSceneData | undefined {
     }
 }
 
-export function getSettlements(game: Game): SceneData[] {
+export function getAllSettlementSceneData(game: Game): SceneData[] {
     return game?.scenes
         ?.map(scene => getSceneData(scene))
         ?.filter(scene => {
@@ -131,3 +131,21 @@ export function getSettlements(game: Game): SceneData[] {
             return settlementType === 'Settlement' || settlementType === 'Capital';
         }) ?? [];
 }
+
+export function getAllSettlemenScenetDataAndStructures(game: Game): SettlementSceneData[] {
+    return game?.scenes
+        ?.map(scene => [scene, getSceneData(scene)] as [Scene, CurrentSceneData])
+        ?.filter(([, sceneData]) => {
+            const settlementType = sceneData.settlementType;
+            return settlementType === 'Settlement' || settlementType === 'Capital';
+        })
+        ?.map(([scene, sceneData]) => {
+            const sceneStructures = getSceneStructures(scene);
+            const settlementData = evaluateStructures(sceneStructures, sceneData.settlementLevel);
+            return {
+                scenedData: sceneData,
+                settlement: settlementData,
+            };
+        }) ?? [];
+}
+

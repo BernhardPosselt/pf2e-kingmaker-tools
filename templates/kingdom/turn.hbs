@@ -87,12 +87,14 @@
         <th>Ongoing Events</th>
         <th>Resolve/Add</th>
     </tr>
+    {{#each ongoingEvents}}
     <tr>
-        <td>Orcs Attack</td>
+        <td>{{name}}</td>
         <td>
             <button class="icon-action"><i class="fa fa-trash" aria-hidden="true"></i></button>
         </td>
     </tr>
+    {{/each}}
 </table>
 <button>Add Ongoing Event <i class="fa-solid fa-plus"></i></button>
 
@@ -107,23 +109,18 @@
         <th>XP</th>
         <th>Check/Uncheck</th>
     </tr>
-    <tr>
-        <td>Build A Structure</td>
-        <td>40</td>
-        <td>
-            <button class="icon-action"><i class="fa-solid fa-circle-check"></i></button>
-        </td>
-    </tr>
-    <tr>
-        <td class="completed-milestone">Build A Structure</td>
-        <td class="completed-milestone">30</td>
-        <td>
-            <button class="icon-action"><i class="fa-regular fa-circle-check"></i></button>
-        </td>
-    </tr>
+    {{#each milestones}}
+        <tr>
+            <td>{{name}}<input type="hidden" name="milestones.{{@index}}.name" value="{{name}}" ></td>
+            <td>{{xp}}<input type="hidden" name="milestones.{{@index}}.xp" value="{{xp}}" data-dtype="Number"></td>
+            <td>
+                <input type="checkbox" name="milestones.{{@index}}.completed" {{checked completed}}>
+            </td>
+        </tr>
+    {{/each}}
 </table>
 
 <h2>Level Up</h2>
 
-<button>Level Up</button> <!-- Button disabled if not enough xp -->
+<button {{#unless canLevelUp}}disabled{{/unless}}>Level Up</button>
 

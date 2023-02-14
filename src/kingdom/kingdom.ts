@@ -15,11 +15,15 @@ import {
     Ruin,
     WorkSites,
 } from './data';
-import {capitalize, unpackFormArray, unslugifyAction} from '../utils';
+import {capitalize, mergeObjects, unpackFormArray, unslugifyAction} from '../utils';
 import {calculateAbilityModifier, calculateInvestedBonus, calculateSkills, isInvested} from './skills';
 import {Storage} from '../structures/structures';
 import {AbilityScores, allArmyActivities, allLeadershipActivities, allRegionActivities} from '../actions-and-skills';
-import {getSettlements} from '../structures/scene';
+import {
+    getAllSettlemenScenetDataAndStructures,
+    getAllSettlementSceneData,
+    SettlementSceneData,
+} from '../structures/scene';
 import {allFeatsByName} from './feats';
 
 export function getKingdom(game: Game): Kingdom {
@@ -50,6 +54,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         options.classes = ['kingmaker-tools-app', 'kingdom-app'];
         options.width = 800;
         options.height = 'auto';
+        options.scrollY = ['.km-content', '.km-sidebar'];
         return options;
     }
 
@@ -66,9 +71,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const kingdomData = getDefaultKingdomData();
         const levelData = getLevelData(kingdomData.level);
         const sizeData = getSizeData(kingdomData.size);
-        const leadershipActivityNumber = 2; // FIXME
-        const settlementConsumption = 0; // FIXME
-        const storage = {}; // FIXME
+        const allSettlementSceneData = getAllSettlementSceneData(this.game);
+        const settlementSceneDataAndStructures = getAllSettlemenScenetDataAndStructures(this.game);
+        const {
+            leadershipActivityNumber,
+            settlementConsumption,
+            storage,
+        } = this.getSettlementData(settlementSceneDataAndStructures);
         const totalConsumption = kingdomData.armyConsumption + settlementConsumption;
         return {
             ...super.getData(options),
@@ -142,12 +151,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Companion', value: 'companion'},
             ],
             companions: allCompanions,
-            settlements: getSettlements(this.game),
+            settlements: allSettlementSceneData,
             tradeAgreementRelationTypes: [
                 {label: 'None', value: 'none'},
                 {label: 'Diplomatic Relations', value: 'diplomatic-relations'},
                 {label: 'Trade Agreement', value: 'trade-agreement'},
             ],
+            ongoingEvents: kingdomData.ongoingEvents,
+            // TODO: allow milestone homebrewing and sort by xp => name
+            milestones: kingdomData.milestones,
             // TODO: filter out companion activities if not in position of leader
             leadershipActivities: allLeadershipActivities.map(a => {
                 return {label: unslugifyAction(a), value: a};
@@ -158,6 +170,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             armyActivities: allArmyActivities.map(a => {
                 return {label: unslugifyAction(a), value: a};
             }),
+            canLevelUp: kingdomData.xp >= kingdomData.xpThreshold,
         };
     }
 
@@ -177,6 +190,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         kingdom.tradeAgreements = unpackFormArray(kingdom.tradeAgreements);
         kingdom.feats = unpackFormArray(kingdom.feats);
         kingdom.bonusFeats = unpackFormArray(kingdom.bonusFeats);
+        kingdom.milestones = unpackFormArray(kingdom.milestones);
+        // kingdom.ongoingEvents = unpackFormArray(kingdom.ongoingEvents);
         console.log(kingdom);
         // await saveKingdom(this.game, formData);
         this.render();
@@ -281,6 +296,35 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         };
     }
 
+    private getSettlementData(settlements: SettlementSceneData[]):
+        { leadershipActivityNumber: number; settlementConsumption: number; storage: Partial<Storage> } {
+        return settlements
+            .map(settlement => {
+                return {
+                    leadershipActivityNumber: settlement.settlement.leadershipActivityBonus ? 3 : 2,
+                    settlementConsumption: settlement.settlement.consumption,
+                    storage: settlement.settlement.storage,
+                };
+            })
+            .reduce((prev, curr) => {
+                return {
+                    leadershipActivityNumber: Math.max(prev.leadershipActivityNumber, curr.leadershipActivityNumber),
+                    settlementConsumption: prev.settlementConsumption + curr.settlementConsumption,
+                    storage: {
+                        ore: prev.storage.ore + curr.storage.ore,
+                        stone: prev.storage.stone + curr.storage.stone,
+                        luxuries: prev.storage.luxuries + curr.storage.luxuries,
+                        lumber: prev.storage.lumber + curr.storage.lumber,
+                        food: prev.storage.food + curr.storage.food,
+                    },
+                };
+            }, {
+                leadershipActivityNumber: 2,
+                settlementConsumption: 0,
+                storage: {ore: 0, stone: 0, luxuries: 0, lumber: 0, food: 0},
+            });
+
+    }
 }
 
 export async function showKingdom(game: Game): Promise<void> {
