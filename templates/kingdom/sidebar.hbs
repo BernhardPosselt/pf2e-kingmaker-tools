@@ -19,9 +19,15 @@
         <th>At War</th>
         <td><input type="checkbox" name="atWar" {{checked atWar}}></td>
     </tr>
+</table>
+<table class="km-table">
     <tr>
         <th>Unrest</th>
+        <th>Anarchy</th>
+    </tr>
+    <tr>
         <td><input type="number" value="{{unrest}}" name="unrest"></td>
+        <td>{{anarchyAt}}</td>
     </tr>
 </table>
 <table class="km-table">
@@ -44,12 +50,14 @@
     <tr>
         <th>Die Size</th>
         <th>Dice</th>
-        <th title="This will be moved to Turn and reset to 0">Next</th>
+        <th>Now</th>
+        <th>Next</th>
     </tr>
     <tr>
         <td>{{resourceDieSize}}</td>
-        <td>{{resourceDice}}</td>
-        <td><input type="number" value="{{resourcesNextRound.bonusResourceDice}}" name="resourcesNextRound.bonusResourceDice"></td>
+        <td>{{resourceDiceNum}}</td>
+        <td><input type="number" value="{{resourceDice.now}}" name="resourceDice.now"></td>
+        <td><input type="number" value="{{resourceDice.next}}" name="resourceDice.next"></td>
     </tr>
 </table>
 <table class="km-table">
@@ -59,23 +67,23 @@
     </tr>
     </tr>
     <tr>
-        <td><input type="number" value="{{resources.resourcePoints}}" name="resources.resourcePoints"></td>
-        <td><input type="number" value="{{resourcesNextRound.resourcePoints}}" name="resourcesNextRound.resourcePoints"></td>
+        <td><input type="number" value="{{resourcePoints.now}}" name="resourcePoints.now"></td>
+        <td><input type="number" value="{{resourcePoints.next}}" name="resourcePoints.next"></td>
     </tr>
 </table>
 <table class="km-table">
     <tr>
         <th>Consumption</th>
-<!--        <th>Settlement</th>-->
+        <!--        <th>Settlement</th>-->
         <th>Armies</th>
-        <th title="This turn only, will be reset to 0">Turn</th>
-        <th title="This will be moved to Turn and reset to 0">Next</th>
+        <th>Now</th>
+        <th>Next</th>
     </tr>
     <tr>
         <td>{{totalConsumption}}</td>
-<!--        <td>{{settlementConsumption}}</td>-->
+        <!--        <td>{{settlementConsumption}}</td>-->
         <td><input type="number" value="{{consumption.armies}}" name="consumption.armies"></td>
-        <td><input type="number" value="{{consumption.other}}" name="consumption.other"></td>
+        <td><input type="number" value="{{consumption.now}}" name="consumption.now"></td>
         <td><input type="number" value="{{consumption.next}}" name="consumption.next"></td>
 
     </tr>
@@ -90,9 +98,9 @@
     {{#each commodities}}
         <tr>
             <td>{{label}}</td>
-            <td><input type="number" value="{{value}}" name="commodities.{{@key}}"></td>
+            <td><input type="number" value="{{value}}" name="commodities.now.{{@key}}"></td>
             <td>{{capacity}}</td>
-            <td><input type="number" value="{{next}}" name="commoditiesNextRound.{{@key}}"></td>
+            <td><input type="number" value="{{next}}" name="commodities.next.{{@key}}"></td>
         </tr>
     {{/each}}
 </table>

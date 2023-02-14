@@ -1,34 +1,15 @@
 <!--
-<input type="checkbox"> Secondary Territories (TODO: move these into settlement dialogs)
-<input type="checkbox"> Check in Secondary Territory (TODO: move these into settlement dialogs)
-<input type="number" value="0"> Overcrowded Territories (TODO: move these into settlement dialogs)
 * TODO: check if active settlement is unconnected, resolving issues in secondary territories incurs a -4 circumstance penalty
 -->
 
 <h2>Upkeep Phase</h2>
 <ol>
-    <li>
-        <button type="button" id="km-gain-fame">Gain 1 {{fameLabel}}</button>
-    </li>
-    <li>
-        <button type="button" class="kingdom-activity" data-activity="new-leadership">New Leadership (optional)</button>
-    </li>
-    <li>
-        <button type="button" id="km-adjust-unrest">Adjust Unrest</button> <!-- (1 per overcrowded settlement, 1 if at war, 1 if secondary territories, gain ruins)
-* If unrest >= 10, gain 1d10 points to ruins (distribute as you wish) and lose a hex on a DC 11 flat check (your choice)
-* If unrest >= 20 => anarchy and you can only Quell Unrest and all checks are worsened a degree
-* Anarchy can be staved off by spending all fame
-* Increasing ruin penalty can be staved off by spending all fame
---></li>
-    <li>
-        <button type="button" id="km-collect-resources">Collect Resources</button>
-        <!-- clicking this adds values from next column, rolls RD and adds commodities --></li>
-    <li>
-        <button type="button" id="km-pay-consumption">Pay Consumption</button>
-        <!-- reduces food by consumption; if not possible or reduces 5RP per missing food or allows to roll 1d4 unrest -->
-    </li>
+    <li><button type="button" id="km-gain-fame">Gain 1 {{fameLabel}}</button></li>
+    <li><button type="button" class="kingdom-activity" data-activity="new-leadership">New Leadership (optional)</button></li>
+    <li><button type="button" id="km-adjust-unrest">Adjust Unrest</button></li>
+    <li><button type="button" id="km-collect-resources">Collect Resources</button></li>
+    <li><button type="button" id="km-pay-consumption">Pay Consumption</button></li>
 </ol>
-
 
 <h2>Commerce Phase</h2>
 
@@ -36,19 +17,24 @@
     <li>
         <div class="activity-choice">
             <button type="button" class="kingdom-activity" data-activity="collect-taxes">Collect Taxes</button>
-            <button type="button" id="km-reduce-unrest">Reduce Unrest</button><!-- or flat check 11 to reduce unrest by 1 --></div>
+            <button type="button" id="km-reduce-unrest">Reduce Unrest</button>
+        </div>
     </li>
     <li>
-        <button type="button" class="kingdom-activity" data-activity="improve-lifestyle">Improve Lifestyle (optional)</button>
+        <button type="button" class="kingdom-activity" data-activity="improve-lifestyle">Improve Lifestyle (optional)
+        </button>
     </li>
     <li>
         <button type="button" class="kingdom-activity" data-activity="tap-treasury">Tap Treasury (optional)</button>
     </li>
     <li>
-        <button type="button" class="kingdom-activity" data-activity="trade-commodities">Trade Commodities (optional)</button>
+        <button type="button" class="kingdom-activity" data-activity="trade-commodities">Trade Commodities (optional)
+        </button>
     </li>
     <li>
-        <button type="button" class="kingdom-activity" data-activity="manage-trade-agreements">Manage Trade Agreements (optional)</button>
+        <button type="button" class="kingdom-activity" data-activity="manage-trade-agreements">Manage Trade Agreements
+            (optional)
+        </button>
     </li>
 </ol>
 
@@ -89,12 +75,13 @@
         <th>Resolve</th>
     </tr>
     {{#each ongoingEvents}}
-    <tr>
-        <td>{{name}}</td>
-        <td>
-            <button type="button" class="icon-action km-remove-event" data-delete-index="{{@index}}"><i class="fa fa-trash" aria-hidden="true"></i></button>
-        </td>
-    </tr>
+        <tr>
+            <td>{{name}}</td>
+            <td>
+                <button type="button" class="icon-action km-remove-event" data-delete-index="{{@index}}"><i
+                        class="fa fa-trash" aria-hidden="true"></i></button>
+            </td>
+        </tr>
     {{/each}}
 </table>
 <button type="button" id="km-add-event">Add Ongoing Event <i class="fa-solid fa-plus"></i></button>
@@ -131,9 +118,8 @@ Claimed Hexes this Round:
         <th>Reached</th>
     </tr>
     {{#each milestones}}
-        <!-- TODO: print homebrew milestones -->
-        <tr>
-            <td>{{name}}<input type="hidden" name="milestones.{{@index}}.name" value="{{name}}" ></td>
+        <tr {{#unless display}}hidden{{/unless}}>
+            <td>{{name}}<input type="hidden" name="milestones.{{@index}}.name" value="{{name}}"></td>
             <td>{{xp}}<input type="hidden" name="milestones.{{@index}}.xp" value="{{xp}}" data-dtype="Number"></td>
             <td>
                 <input type="checkbox" name="milestones.{{@index}}.completed" {{checked completed}}>
@@ -146,3 +132,4 @@ Claimed Hexes this Round:
 
 <button type="button" id="km-level-up" {{#unless canLevelUp}}disabled{{/unless}}>Level Up</button>
 
+<button type="button" id="km-end-turn">End Turn</button>

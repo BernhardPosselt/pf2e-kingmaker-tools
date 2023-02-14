@@ -170,7 +170,7 @@ a Kingdom skill of your choice. You can select this feat
 multiple times, choosing a new skill each time.`,
     }),
     {
-        automated: false,
+        automated: true,
         name: 'Endure Anarchy',
         level: 3,
         prerequisites: 'Loyalty 14',

@@ -30,7 +30,7 @@ export interface KingdomSizeData {
     type: 'territory' | 'province' | 'state' | 'country' | 'dominion';
     resourceDieSize: ResourceDieSize;
     controlDCModifier: number;
-    commodityStorage: number;
+    commodityCapacity: number;
 }
 
 export type Leaders = Record<Leader, LeaderValues>;
@@ -70,8 +70,8 @@ export interface WorkSites {
 }
 
 export interface Resources {
-    bonusResourceDice: number;
-    resourcePoints: number;
+    now: number;
+    next: number;
 }
 
 export interface Commodities {
@@ -146,21 +146,20 @@ export interface Kingdom {
     xp: number;
     size: number;
     unrest: number;
-    resourcesNextRound: {
-        resourcePoints: number;
-    };
-    resources: Resources;
+    resourcePoints: Resources;
+    resourceDice: Resources;
     workSites: WorkSites;
     heartland: Terrain;
     consumption: {
         armies: number;
-        other: number;
+        now: number;
         next: number;
     };
     leaders: Leaders;
-    commodities: Commodities;
-    commoditiesNextRound: Commodities;
-
+    commodities: {
+        now: Commodities;
+        next: Commodities;
+    };
     groups: Group[];
     feats: Feat[];
     bonusFeats: BonusFeat[];
@@ -199,35 +198,35 @@ export function getSizeData(kingdomSize: number): KingdomSizeData {
             type: 'territory',
             resourceDieSize: 'd4',
             controlDCModifier: 0,
-            commodityStorage: 4,
+            commodityCapacity: 4,
         };
     } else if (kingdomSize < 25) {
         return {
             type: 'province',
             resourceDieSize: 'd6',
             controlDCModifier: 1,
-            commodityStorage: 8,
+            commodityCapacity: 8,
         };
     } else if (kingdomSize < 50) {
         return {
             type: 'state',
             resourceDieSize: 'd8',
             controlDCModifier: 2,
-            commodityStorage: 12,
+            commodityCapacity: 12,
         };
     } else if (kingdomSize < 100) {
         return {
             type: 'country',
             resourceDieSize: 'd10',
             controlDCModifier: 3,
-            commodityStorage: 16,
+            commodityCapacity: 16,
         };
     } else {
         return {
             type: 'dominion',
             resourceDieSize: 'd12',
             controlDCModifier: 4,
-            commodityStorage: 20,
+            commodityCapacity: 20,
         };
     }
 }
@@ -314,7 +313,7 @@ export function getDefaultKingdomData(): Kingdom {
             level: 2,
         }],
         bonusFeats: [{
-            id: 'Crush Dissent',
+            id: 'Insider Trading',
         }],
         ongoingEvents: [{
             name: 'hi',
@@ -349,30 +348,33 @@ export function getDefaultKingdomData(): Kingdom {
             },
         },
         commodities: {
-            food: 0,
-            ore: 0,
-            lumber: 0,
-            stone: 0,
-            luxuries: 0,
+            now: {
+                food: 0,
+                ore: 0,
+                lumber: 0,
+                stone: 0,
+                luxuries: 0,
+            },
+            next: {
+                food: 0,
+                ore: 0,
+                lumber: 0,
+                stone: 0,
+                luxuries: 0,
+            },
         },
-        resources: {
-            bonusResourceDice: 0,
-            resourcePoints: 0,
+        resourceDice: {
+            now: 0,
+            next: 0,
         },
-        commoditiesNextRound: {
-            food: 0,
-            ore: 0,
-            lumber: 0,
-            stone: 0,
-            luxuries: 0,
-        },
-        resourcesNextRound: {
-            resourcePoints: 0,
+        resourcePoints: {
+            next: 0,
+            now: 0,
         },
         heartland: 'plains',
         consumption: {
             armies: 0,
-            other: 0,
+            now: 0,
             next: 0,
         },
         leaders: {
