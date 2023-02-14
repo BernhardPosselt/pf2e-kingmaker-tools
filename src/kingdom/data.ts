@@ -269,10 +269,21 @@ export function getDefaultKingdomData(): Kingdom {
         xp: 0,
         size: 1,
         unrest: 0,
-        feats: [],
-        bonusFeats: [],
+        feats: [{
+            id: 'Muddle Through',
+            level: 2,
+        }],
+        bonusFeats: [{
+            id: 'Crush Dissent',
+        }],
         ongoingEvents: [{
             name: 'hi',
+        }],
+        groups: [{
+            name: 'chee',
+            relations: 'trade-agreement',
+            atWar: false,
+            negotiationDC: 30,
         }],
         milestones: getDefaultMilestones(),
         workSites: {
@@ -374,7 +385,6 @@ export function getDefaultKingdomData(): Kingdom {
                 name: '',
             },
         },
-        groups: [],
         skillRanks: {
             agriculture: 0,
             arts: 0,

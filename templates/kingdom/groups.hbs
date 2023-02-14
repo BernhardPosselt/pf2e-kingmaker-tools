@@ -15,14 +15,14 @@
             <td>
                 <select name="tradeAgreements.{{@index}}.relations">
                     {{#select relations}}
-                        {{#each ../tradeAgreementRelationTypes}}
+                        {{#each ../groupRelationTypes}}
                             <option value="{{value}}">{{label}}</option>
                         {{/each}}
                     {{/select}}
                 </select>
             </td>
             <td>
-                <button type="button" class="icon-action km-delete-group"><i class="fa-solid fa-trash"></i></button>
+                <button type="button" class="icon-action km-delete-group" data-delete-index="{{@index}}"><i class="fa-solid fa-trash"></i></button>
             </td>
         </tr>
     {{/each}}

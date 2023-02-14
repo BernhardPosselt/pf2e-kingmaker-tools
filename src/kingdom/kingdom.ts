@@ -149,7 +149,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ],
             companions: allCompanions,
             settlements: allSettlementSceneData,
-            tradeAgreementRelationTypes: [
+            groupRelationTypes: [
                 {label: 'None', value: 'none'},
                 {label: 'Diplomatic Relations', value: 'diplomatic-relations'},
                 {label: 'Trade Agreement', value: 'trade-agreement'},
@@ -186,7 +186,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     override async _updateObject(event: Event, formData: any): Promise<void> {
         console.log(formData);
         const kingdom = expandObject(formData);
-        kingdom.tradeAgreements = unpackFormArray(kingdom.tradeAgreements);
+        kingdom.groups = unpackFormArray(kingdom.groups);
         kingdom.feats = unpackFormArray(kingdom.feats);
         kingdom.bonusFeats = unpackFormArray(kingdom.bonusFeats);
         kingdom.milestones = unpackFormArray(kingdom.milestones);
@@ -242,9 +242,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelectorAll('.km-remove-event')
             ?.forEach(el => {
-                el.addEventListener('click', async () => {
-                    console.warn('removing event');
-                });
+                el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'ongoingEvents'));
             });
         $html.querySelector('#km-resolve-event-xp')
             ?.addEventListener('click', async () => {
@@ -275,9 +273,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelectorAll('.km-delete-group')
             ?.forEach(el => {
-                el.addEventListener('click', async () => {
-                    console.warn('deleting group');
-                });
+                el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'groups'));
             });
         $html.querySelector('#km-add-bonus-feat')
             ?.addEventListener('click', async () => {
@@ -290,9 +286,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelectorAll('.km-delete-bonus-feat')
             ?.forEach(el => {
-                el.addEventListener('click', async () => {
-                    console.warn('deleting bonus feat');
-                });
+                el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'bonusFeats'));
             });
         $html.querySelectorAll('.kingdom-activity')
             ?.forEach(el => {
@@ -302,6 +296,19 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     console.warn('run kingdom activity ' + activity, el);
                 });
             });
+    }
+
+    private async deleteKingdomPropertyAtIndex(ev: Event, property: keyof Kingdom): Promise<void> {
+        const target = ev.currentTarget as HTMLButtonElement;
+        const deleteIndex = target.dataset.deleteIndex;
+        if (deleteIndex) {
+            const deleteAt = parseInt(deleteIndex, 10);
+            const values = [...this.readKingdomData()[property] as unknown[]];
+            values.splice(deleteAt, 1);
+            await this.update({
+                [property]: values,
+            });
+        }
     }
 
     private async collectResources(): Promise<void> {
