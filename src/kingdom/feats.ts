@@ -6,6 +6,7 @@ export interface KingdomFeat {
     level: number;
     text: string;
     prerequisites?: string;
+    automated: boolean;
 }
 
 
@@ -35,11 +36,13 @@ export const allFeats: KingdomFeat[] = [
     // assurance
     // anarchy at 26
     {
+        automated: true,
         name: '-',
         level: 0,
         text: '',
     },
     {
+        automated: false,
         name: 'Civil Service',
         level: 1,
         text: `Everyone has a place and a role, and as long as those
@@ -53,6 +56,7 @@ start of a Kingdom turn.
 You gain a +2 status bonus to New Leadership checks.`,
     },
     {
+        automated: false,
         name: 'Cooperative Leadership',
         level: 1,
         text: `Your leaders are skilled at working with one another.
@@ -71,6 +75,7 @@ does not allow you to ever improve a critical failure to
 a success.)`,
     },
     {
+        automated: false,
         name: 'Crush Dissent',
         level: 1,
         prerequisites: 'Trained in Warfare',
@@ -85,6 +90,7 @@ kingdom events that involve internal bickering, such as
 Feud.`,
     },
     {
+        automated: false,
         name: 'Fortified Fiefs',
         level: 1,
         prerequisites: 'Trained in Defense',
@@ -100,6 +106,7 @@ attempted during dangerous events that directly impact
 your settlements’ defenses.`,
     },
     {
+        automated: false,
         name: 'Insider Trading',
         level: 1,
         prerequisites: 'Trained in Industry',
@@ -115,6 +122,7 @@ Die at the start of each Kingdom
 turn.`,
     },
     {
+        automated: false,
         name: 'Muddle Through',
         level: 1,
         prerequisites: 'Trained in Wilderness',
@@ -124,6 +132,7 @@ pile up into bigger problems. Increase two of your Ruin
 thresholds by 1 and one of them by 2.`,
     },
     {
+        automated: false,
         name: 'Practical Magic',
         level: 1,
         prerequisites: 'Trained in Magic',
@@ -136,6 +145,7 @@ nation a comfortable place to live and work, you reduce
 the cost of using the Hire Adventurers activity to 1 RP.`,
     },
     {
+        automated: false,
         name: 'Pull Together',
         level: 1,
         prerequisites: 'Trained in Politics',
@@ -152,6 +162,7 @@ of 11) for each Kingdom turn that passes when you do
 not use it.`,
     },
     ...generateForAllSkills({
+        automated: false,
         name: 'Skill Training',
         level: 1,
         text: `Your kingdom receives the trained proficiency rank in
@@ -159,6 +170,7 @@ a Kingdom skill of your choice. You can select this feat
 multiple times, choosing a new skill each time.`,
     }),
     {
+        automated: false,
         name: 'Endure Anarchy',
         level: 3,
         prerequisites: 'Loyalty 14',
@@ -169,6 +181,7 @@ decrease the Unrest by an additional 1. You do not fall
 into anarchy unless your kingdom’s Unrest reaches 24`,
     },
     {
+        automated: false,
         name: 'Inspiring Entertainment',
         level: 3,
         prerequisites: 'Culture 14',
@@ -187,6 +200,7 @@ skill checks whenever your kingdom has at least 1 Unrest.`,
     },
     ...generateForAllSkills({
         name: 'Kingdom Assurance',
+        automated: false,
         level: 1,
         text: `Even when things go poorly in other areas, you can
 count on consistency in carrying out kingdom activities
@@ -201,6 +215,7 @@ time, choose a different skill and gain the benefits of this
 feat for that skill.`,
     }),
     {
+        automated: false,
         name: 'Liquidate Resources',
         level: 3,
         prerequisites: 'Economy 14',
@@ -214,6 +229,7 @@ paid in full. At the start of your next Kingdom turn, roll
 4 fewer Resource Dice than normal.`,
     },
     {
+        automated: false,
         name: 'Quick Recovery',
         level: 3,
         prerequisites: 'Stability 14',
@@ -223,6 +239,7 @@ ongoing harmful kingdom event, you gain a +4 status
 bonus to the check.`,
     },
     {
+        automated: false,
         name: 'Free and Fair',
         level: 7,
         text: `Your reputation for transparency and fairness in
@@ -237,6 +254,7 @@ trait. You must take the result of the second roll, even if it
 is worse than the original roll.`,
     },
     {
+        automated: false,
         name: 'Quality of Life',
         level: 7,
         text: `Your kingdom’s robust economy makes the creature
@@ -249,6 +267,7 @@ determining what sorts of magic items might be offered
 for sale at their markets and shops.`,
     },
     {
+        automated: false,
         name: 'Fame and Fortune',
         level: 11,
         text: `Your kingdom’s reputation has spread far and wide,

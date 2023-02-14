@@ -44,20 +44,18 @@
     <tr>
         <th>Die Size</th>
         <th>Dice</th>
-        <th>Bonus</th>
-        <th>Next</th>
+        <th title="This will be moved to Turn and reset to 0">Next</th>
     </tr>
     <tr>
         <td>{{resourceDieSize}}</td>
         <td>{{resourceDice}}</td>
-        <td><input type="number" value="{{resources.bonusResourceDice}}" name="resources.bonusResourceDice"></td>
         <td><input type="number" value="{{resourcesNextRound.bonusResourceDice}}" name="resourcesNextRound.bonusResourceDice"></td>
     </tr>
 </table>
 <table class="km-table">
     <tr>
         <th>Resource Points</th>
-        <th>Next</th>
+        <th title="This will be moved to Turn and reset to 0">Next</th>
     </tr>
     </tr>
     <tr>
@@ -67,14 +65,19 @@
 </table>
 <table class="km-table">
     <tr>
+        <th>Consumption</th>
+<!--        <th>Settlement</th>-->
         <th>Armies</th>
-        <th>Settlement</th>
-        <th>Total Consumption</th>
+        <th title="This turn only, will be reset to 0">Turn</th>
+        <th title="This will be moved to Turn and reset to 0">Next</th>
     </tr>
     <tr>
-        <td><input type="number" value="{{armyConsumption}}" name="armyConsumption"></td>
-        <td>{{settlementConsumption}}</td>
         <td>{{totalConsumption}}</td>
+<!--        <td>{{settlementConsumption}}</td>-->
+        <td><input type="number" value="{{consumption.armies}}" name="consumption.armies"></td>
+        <td><input type="number" value="{{consumption.other}}" name="consumption.other"></td>
+        <td><input type="number" value="{{consumption.next}}" name="consumption.next"></td>
+
     </tr>
 </table>
 <table class="km-table">
@@ -82,7 +85,7 @@
         <th>Commodity</th>
         <th>Quantity</th>
         <th>Capacity</th>
-        <th>Next</th>
+        <th title="This will be moved to Turn and reset to 0">Next</th>
     </tr>
     {{#each commodities}}
         <tr>

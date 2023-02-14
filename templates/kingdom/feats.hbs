@@ -4,6 +4,7 @@
         <th>Feat</th>
         <th>Minimum Level</th>
         <th>Prerequisites</th>
+        <th title="Comes With Automation">Auto</th>
     </tr>
     {{#each levelFeats}}
         <tr>
@@ -19,10 +20,17 @@
             </td>
             <td>{{level}}</td>
             <td>{{prerequisites}}</td>
+            <td>
+            {{#if automated}}
+                <i class="fa-solid fa-circle-check"></i>
+            {{else}}
+                <i class="fa-solid fa-circle-xmark"></i>
+            {{/if}}
+            </td>
         </tr>
         {{#if text}}
             <tr>
-                <td colspan="4">{{text}}</td>
+                <td colspan="5">{{text}}</td>
             </tr>
         {{/if}}
     {{/each}}
@@ -33,6 +41,7 @@
         <th>Bonus Feat</th>
         <th>Minimum Level</th>
         <th>Prerequisites</th>
+        <th>Automated</th>
         <th>Remove/Add</th>
     </tr>
     {{#each bonusFeats}}
@@ -49,12 +58,19 @@
             <td>{{level}}</td>
             <td>{{prerequisites}}</td>
             <td>
+                {{#if automated}}
+                    <i class="fa-solid fa-circle-check"></i>
+                {{else}}
+                    <i class="fa-solid fa-circle-xmark"></i>
+                {{/if}}
+            </td>
+            <td>
                 <button class="icon-action"><i class="fa-solid fa-trash"></i></button>
             </td>
         </tr>
         {{#if text}}
             <tr>
-                <td colspan="4">{{text}}</td>
+                <td colspan="5">{{text}}</td>
             </tr>
         {{/if}}
     {{/each}}

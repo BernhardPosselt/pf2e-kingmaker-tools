@@ -11,7 +11,7 @@ import {
     getSizeData,
     Kingdom,
     Leaders,
-    LeaderValues,
+    LeaderValues, ResourceDieSize,
     Ruin,
     WorkSites,
 } from './data';
@@ -20,7 +20,7 @@ import {calculateAbilityModifier, calculateInvestedBonus, calculateSkills, isInv
 import {Storage} from '../structures/structures';
 import {AbilityScores, allArmyActivities, allLeadershipActivities, allRegionActivities} from '../actions-and-skills';
 import {
-    getAllSettlemenScenetDataAndStructures,
+    getAllSettlementSceneDataAndStructures,
     getAllSettlementSceneData,
     SettlementSceneData,
 } from '../structures/scene';
@@ -66,19 +66,23 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         this.game = options.game;
     }
 
+    private readKingdomData(): Kingdom {
+        return getDefaultKingdomData();
+    }
+
     override getData(options?: Partial<FormApplicationOptions>): object {
         const isGM = this.game.user?.isGM ?? false;
-        const kingdomData = getDefaultKingdomData();
+        const kingdomData = this.readKingdomData();
         const levelData = getLevelData(kingdomData.level);
         const sizeData = getSizeData(kingdomData.size);
         const allSettlementSceneData = getAllSettlementSceneData(this.game);
-        const settlementSceneDataAndStructures = getAllSettlemenScenetDataAndStructures(this.game);
+        const settlementSceneDataAndStructures = getAllSettlementSceneDataAndStructures(this.game);
         const {
             leadershipActivityNumber,
             settlementConsumption,
             storage,
         } = this.getSettlementData(settlementSceneDataAndStructures);
-        const totalConsumption = kingdomData.armyConsumption + settlementConsumption;
+        const totalConsumption = kingdomData.consumption.armies + kingdomData.consumption.other + settlementConsumption;
         return {
             ...super.getData(options),
             isGM,
@@ -102,7 +106,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             resourceDice: levelData.resourceDice,
             resources: kingdomData.resources,
             resourcesNextRound: kingdomData.resourcesNextRound,
-            armyConsumption: kingdomData.armyConsumption,
+            consumption: kingdomData.consumption,
             activeSettlement: kingdomData.activeSettlement,
             levels,
             settlementConsumption,
@@ -158,7 +162,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Trade Agreement', value: 'trade-agreement'},
             ],
             ongoingEvents: kingdomData.ongoingEvents,
-            // TODO: allow milestone homebrewing and sort by xp => name
+            // TODO: allow milestone home brewing and sort by xp => name
             milestones: kingdomData.milestones,
             // TODO: filter out companion activities if not in position of leader
             leadershipActivities: allLeadershipActivities.map(a => {
@@ -170,7 +174,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             armyActivities: allArmyActivities.map(a => {
                 return {label: unslugifyAction(a), value: a};
             }),
-            canLevelUp: kingdomData.xp >= kingdomData.xpThreshold,
+            canLevelUp: kingdomData.xp >= kingdomData.xpThreshold && kingdomData.level < 20,
         };
     }
 
@@ -198,6 +202,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         this.render();
     }
 
+    private async update(data: Partial<Kingdom>): Promise<void> {
+        console.log('Update', data);
+        this.render();
+    }
+
     public sceneChange(): void {
         this.render();
     }
@@ -215,6 +224,86 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 this.render();
             });
         });
+        $html.querySelector('#km-gain-fame')
+            ?.addEventListener('click', async () => await this.update({fame: this.readKingdomData().fame + 1}));
+        $html.querySelector('#km-adjust-unrest')
+            ?.addEventListener('click', async () => {
+                console.warn('adjusting unrest');
+            });
+        $html.querySelector('#km-collect-resources')
+            ?.addEventListener('click', async () => await this.collectResources());
+        $html.querySelector('#km-reduce-unrest')
+            ?.addEventListener('click', async () => await this.reduceUnrest());
+        $html.querySelector('#km-pay-consumption')
+            ?.addEventListener('click', async () => {
+                console.warn('paying consumption');
+            });
+        $html.querySelector('#km-add-event')
+            ?.addEventListener('click', async () => {
+                console.warn('adding event');
+            });
+        // TODO: delete event
+        $html.querySelector('#km-resolve-event-xp')
+            ?.addEventListener('click', async () => {
+                console.warn('adding event xp');
+            });
+        $html.querySelector('#km-claimed-hexes-xp')
+            ?.addEventListener('click', async () => {
+                console.warn('adding hex xp');
+            });
+        $html.querySelector('#km-rp-to-xp')
+            ?.addEventListener('click', async () => {
+                console.warn('adding rp xp');
+            });
+        $html.querySelector('#km-leve-up')
+            ?.addEventListener('click', async () => {
+                const current = this.readKingdomData();
+                if (current.xp >= current.xpThreshold) {
+                    await this.update({level: current.level + 1, xp: current.xp - current.xpThreshold});
+                } else {
+                    ui.notifications?.error('Can not level up, not enough XP');
+                }
+            });
+    }
+
+    private async collectResources(): Promise<void> {
+        const current = this.readKingdomData();
+        const sizeData = getSizeData(current.size);
+        const featDice = 0; // FIXME: feat?
+        const settlementSceneDataAndStructures = getAllSettlementSceneDataAndStructures(this.game);
+        const {storage} = this.getSettlementData(settlementSceneDataAndStructures);
+        const capacity = this.calculateStorageCapacity(sizeData.commodityStorage, storage);
+        const dice = current.resources.bonusResourceDice + featDice;
+        const resourcePoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
+        await this.update({
+            resources: {
+                bonusResourceDice: 0,
+                resourcePoints,
+            },
+            commodities: this.calculateCommoditiesThisTurn(capacity, current),
+            commoditiesNextRound: {
+                food: 0,
+                ore: 0,
+                lumber: 0,
+                luxuries: 0,
+                stone: 0,
+            },
+        });
+    }
+
+    private calculateCommoditiesThisTurn(
+        capacity: Commodities,
+        kingdom: Kingdom,
+    ): Commodities {
+        const next = kingdom.commoditiesNextRound;
+        const sites = kingdom.workSites;
+        return {
+            food: Math.max(capacity.food, next.food),
+            ore: Math.max(capacity.ore, next.ore + sites.mines.quantity + sites.mines.resources),
+            lumber: Math.max(capacity.lumber, next.lumber + sites.mines.quantity + sites.mines.resources),
+            luxuries: Math.max(capacity.luxuries, next.luxuries + sites.luxurySources.quantity + sites.luxurySources.resources),
+            stone: Math.max(capacity.stone, next.stone + sites.lumberCamps.quantity + sites.lumberCamps.resources),
+        };
     }
 
     override close(options?: FormApplication.CloseOptions): Promise<void> {
@@ -232,21 +321,35 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private getWorkSites(workSites: WorkSites): object {
         return Object.fromEntries(Object.entries(workSites)
-            .map(([key, values]) => [key, {label: key === 'lumberCamps' ? 'Lumber Camps' : capitalize(key), ...values}])
+            .map(([key, values]) => {
+                const label = key === 'lumberCamps' ? 'Lumber Camps' : (key === 'luxurySources' ? 'Luxury Sources' : capitalize(key));
+                return [key, {label: label, ...values}];
+            })
         );
+    }
+
+    private calculateStorageCapacity(capacity: number, storage: Storage): Commodities {
+        return {
+            food: capacity + storage.food,
+            ore: capacity + storage.ore,
+            luxuries: capacity + storage.luxuries,
+            lumber: capacity + storage.lumber,
+            stone: capacity + storage.stone,
+        };
     }
 
     private getCommodities(
         commodities: Commodities,
         commoditiesNextRound: Commodities,
         capacity: number,
-        storage: Partial<Storage>,
+        storage: Storage,
     ): object {
+        const storageCapacity = this.calculateStorageCapacity(capacity, storage);
         return Object.fromEntries((Object.entries(commodities) as [keyof Commodities, number][])
             .map(([commodity, value]) => [commodity, {
                 label: capitalize(commodity),
                 value: value,
-                capacity: capacity + (storage[commodity] ?? 0),
+                capacity: storageCapacity[commodity],
                 next: commoditiesNextRound[commodity],
             }])
         );
@@ -298,7 +401,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private getSettlementData(settlements: SettlementSceneData[]):
-        { leadershipActivityNumber: number; settlementConsumption: number; storage: Partial<Storage> } {
+        { leadershipActivityNumber: number; settlementConsumption: number; storage: Storage } {
         return settlements
             .map(settlement => {
                 return {
@@ -325,6 +428,22 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 storage: {ore: 0, stone: 0, luxuries: 0, lumber: 0, food: 0},
             });
 
+    }
+
+    private async rollResourceDice(resourceDieSize: ResourceDieSize, dice: number): Promise<number> {
+        const roll = await (new Roll(dice + resourceDieSize).roll());
+        await roll.toMessage({flavor: 'Rolling Resource Dice'});
+        return roll.total;
+    }
+
+    private async reduceUnrest(): Promise<void> {
+        const roll = await (new Roll('1d20').roll());
+        await roll.toMessage({flavor: 'Reducing Unrest by 1 on an 11 or higher'});
+        if (roll.total > 10) {
+            await this.update({
+                unrest: Math.max(0, this.readKingdomData().unrest - 1),
+            });
+        }
     }
 }
 

@@ -24,9 +24,11 @@ export const allCompanions = [
     'Valerie',
 ];
 
+export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
+
 export interface KingdomSizeData {
     type: 'territory' | 'province' | 'state' | 'country' | 'dominion';
-    resourceDieSize: 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
+    resourceDieSize: ResourceDieSize;
     controlDCModifier: number;
     commodityStorage: number;
 }
@@ -64,6 +66,7 @@ export interface WorkSites {
     lumberCamps: WorkSite;
     mines: WorkSite;
     quarries: WorkSite;
+    luxurySources: WorkSite;
 }
 
 export interface Resources {
@@ -142,11 +145,17 @@ export interface Kingdom {
     xp: number;
     size: number;
     unrest: number;
-    resourcesNextRound: Resources;
+    resourcesNextRound: {
+        resourcePoints: number;
+    };
     resources: Resources;
     workSites: WorkSites;
     heartland: Terrain;
-    armyConsumption: number;
+    consumption: {
+        armies: number;
+        other: number;
+        next: number;
+    };
     leaders: Leaders;
     commodities: Commodities;
     commoditiesNextRound: Commodities;
@@ -227,6 +236,25 @@ export function getControlDC(level: number, size: number): number {
     return 14 + adjustedLevel + Math.floor(adjustedLevel / 3) + sizeModifier;
 }
 
+function getDefaultMilestones(): MileStone[] {
+    return [
+        {name: 'Claim your first Landmark', xp: 40, completed: false},
+        {name: 'Claim your first Refuge', xp: 40, completed: false},
+        {name: 'Establish your first village', xp: 40, completed: false},
+        {name: 'Reach kingdom Size 10', xp: 40, completed: false},
+        {name: 'Establish diplomatic relations for the first time', xp: 60, completed: false},
+        {name: 'Expand a village into your first town', xp: 60, completed: false},
+        {name: 'All eight leadership roles are assigned', xp: 60, completed: false},
+        {name: 'Reach kingdom Size 25', xp: 60, completed: false},
+        {name: 'Establish your first trade agreement', xp: 80, completed: false},
+        {name: 'Expand a town into your first city', xp: 80, completed: false},
+        {name: 'Reach kingdom Size 50', xp: 80, completed: false},
+        {name: 'Spend 100 RP during a Kingdom turn', xp: 80, completed: false},
+        {name: 'Expand a city into your first metropolis', xp: 120, completed: false},
+        {name: 'Reach kingdom Size 100', xp: 120, completed: false},
+    ];
+}
+
 export function getDefaultKingdomData(): Kingdom {
     return {
         name: '',
@@ -246,15 +274,7 @@ export function getDefaultKingdomData(): Kingdom {
         ongoingEvents: [{
             name: 'hi',
         }],
-        milestones: [{
-            name: 'build a structure',
-            completed: false,
-            xp: 30,
-        }, {
-            name: 'build a shit',
-            completed: true,
-            xp: 40,
-        }],
+        milestones: getDefaultMilestones(),
         workSites: {
             farmlands: {
                 quantity: 0,
@@ -269,6 +289,10 @@ export function getDefaultKingdomData(): Kingdom {
                 resources: 0,
             },
             mines: {
+                quantity: 0,
+                resources: 0,
+            },
+            luxurySources: {
                 quantity: 0,
                 resources: 0,
             },
@@ -292,15 +316,18 @@ export function getDefaultKingdomData(): Kingdom {
             luxuries: 0,
         },
         resourcesNextRound: {
-            bonusResourceDice: 0,
             resourcePoints: 0,
         },
         heartland: 'plains',
-        armyConsumption: 0,
+        consumption: {
+            armies: 0,
+            other: 0,
+            next: 0,
+        },
         leaders: {
             ruler: {
                 invested: false,
-                type: 'companion',
+                type: 'pc',
                 vacant: false,
                 name: '',
             },
@@ -347,12 +374,7 @@ export function getDefaultKingdomData(): Kingdom {
                 name: '',
             },
         },
-        tradeAgreements: [{
-            atWar: true,
-            relations: 'diplomatic-relations',
-            negotiationDC: 34,
-            group: 'Chess',
-        }],
+        tradeAgreements: [],
         skillRanks: {
             agriculture: 0,
             arts: 0,

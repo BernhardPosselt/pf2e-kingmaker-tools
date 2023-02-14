@@ -132,7 +132,7 @@ export function getAllSettlementSceneData(game: Game): SceneData[] {
         }) ?? [];
 }
 
-export function getAllSettlemenScenetDataAndStructures(game: Game): SettlementSceneData[] {
+export function getAllSettlementSceneDataAndStructures(game: Game): SettlementSceneData[] {
     return game?.scenes
         ?.map(scene => [scene, getSceneData(scene)] as [Scene, CurrentSceneData])
         ?.filter(([, sceneData]) => {
