@@ -26,15 +26,6 @@ import {
 } from '../structures/scene';
 import {allFeatsByName} from './feats';
 
-export function getKingdom(game: Game): Kingdom {
-    const kingdomString = getStringSetting(game, 'kingdom');
-    return kingdomString === '' ? getDefaultKingdomData() : JSON.parse(kingdomString);
-}
-
-export async function saveKingdom(game: Game, kingdom: Kingdom): Promise<void> {
-    return await setSetting(game, 'kingdom', JSON.stringify(kingdom));
-}
-
 interface KingdomOptions {
     game: Game;
 }
@@ -165,6 +156,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             // TODO: allow milestone home brewing and sort by xp => name
             milestones: kingdomData.milestones,
             // TODO: filter out companion activities if not in position of leader
+            // TODO: consider companions in leadership positions
             leadershipActivities: allLeadershipActivities.map(a => {
                 return {label: unslugifyAction(a), value: a};
             }),
@@ -238,11 +230,20 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => {
                 console.warn('paying consumption');
             });
+        $html.querySelector('#km-roll-event')
+            ?.addEventListener('click', async () => {
+                console.warn('roll event');
+            });
         $html.querySelector('#km-add-event')
             ?.addEventListener('click', async () => {
                 console.warn('adding event');
             });
-        // TODO: delete event
+        $html.querySelectorAll('.km-remove-event')
+            ?.forEach(el => {
+                el.addEventListener('click', async () => {
+                    console.warn('removing event');
+                });
+            });
         $html.querySelector('#km-resolve-event-xp')
             ?.addEventListener('click', async () => {
                 console.warn('adding event xp');
@@ -255,7 +256,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => {
                 console.warn('adding rp xp');
             });
-        $html.querySelector('#km-leve-up')
+        $html.querySelector('#km-level-up')
             ?.addEventListener('click', async () => {
                 const current = this.readKingdomData();
                 if (current.xp >= current.xpThreshold) {
@@ -263,6 +264,26 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 } else {
                     ui.notifications?.error('Can not level up, not enough XP');
                 }
+            });
+        $html.querySelector('#km-add-group')
+            ?.addEventListener('click', async () => {
+                console.warn('adding group');
+            });
+        $html.querySelectorAll('.km-delete-group')
+            ?.forEach(el => {
+                el.addEventListener('click', async () => {
+                    console.warn('deleting group');
+                });
+            });
+        $html.querySelector('#km-add-bonus-feat')
+            ?.addEventListener('click', async () => {
+                console.warn('adding group');
+            });
+        $html.querySelectorAll('.km-delete-bonus-feat')
+            ?.forEach(el => {
+                el.addEventListener('click', async () => {
+                    console.warn('deleting bonus feat');
+                });
             });
     }
 

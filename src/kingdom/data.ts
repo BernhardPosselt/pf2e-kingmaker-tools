@@ -267,7 +267,7 @@ export function getDefaultKingdomData(): Kingdom {
         level: 1,
         xpThreshold: 1000,
         xp: 0,
-        size: 0,
+        size: 1,
         unrest: 0,
         feats: [],
         bonusFeats: [],

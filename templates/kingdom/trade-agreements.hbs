@@ -4,7 +4,7 @@
         <th>Negotiation DC</th>
         <th>At War</th>
         <th>State</th>
-        <th>Remove/Add</th>
+        <th>Remove</th>
     </tr>
     {{#each tradeAgreements}}
         <tr>
@@ -22,10 +22,10 @@
                 </select>
             </td>
             <td>
-                <button class="icon-action"><i class="fa-solid fa-trash"></i></button>
+                <button class="icon-action delete-group"><i class="fa-solid fa-trash"></i></button>
             </td>
         </tr>
     {{/each}}
 </table>
-<button>Add Group <i class="fa-solid fa-plus"></i></button>
+<button id="add-group">Add Group <i class="fa-solid fa-plus"></i></button>
 
