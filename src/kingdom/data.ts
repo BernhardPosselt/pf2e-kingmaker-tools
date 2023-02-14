@@ -169,6 +169,7 @@ export interface Kingdom {
     activeSettlement: string;
     milestones: MileStone[];
     ongoingEvents: OngoingEvent[];
+    turnsWithoutEvent: number;
 }
 
 
@@ -257,6 +258,7 @@ function getDefaultMilestones(): MileStone[] {
 
 export function getDefaultKingdomData(): Kingdom {
     return {
+        turnsWithoutEvent: 0,
         name: '',
         atWar: false,
         charter: '',

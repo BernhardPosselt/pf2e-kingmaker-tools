@@ -171,6 +171,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 return {label: unslugifyAction(a), value: a};
             }),
             canLevelUp: kingdomData.xp >= kingdomData.xpThreshold && kingdomData.level < 20,
+            turnsWithoutEvent: kingdomData.turnsWithoutEvent,
+            eventDC: this.calculateEventDC(kingdomData.turnsWithoutEvent),
         };
     }
 
@@ -236,6 +238,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 console.warn('paying consumption');
                 // TODO
             });
+        $html.querySelector('#km-check-event')
+            ?.addEventListener('click', async () => await this.checkForEvent());
         $html.querySelector('#km-roll-event')
             ?.addEventListener('click', async () => await rollKingdomEvent(this.game));
         $html.querySelector('#km-add-event')
@@ -305,6 +309,23 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     // TODO
                 });
             });
+    }
+
+    private async checkForEvent(): Promise<void> {
+        const turnsWithoutEvent = this.readKingdomData().turnsWithoutEvent;
+        const dc = this.calculateEventDC(turnsWithoutEvent);
+        const roll = await (new Roll('1d20').roll());
+        await roll.toMessage({flavor: `Checking for Event on DC ${dc}`});
+        if (roll.total >= dc) {
+            await ChatMessage.create({
+                type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+                content: 'An event occurs',
+                rollMode: 'blindroll',
+            });
+            await this.update({turnsWithoutEvent: 0});
+        } else {
+            await this.update({turnsWithoutEvent: turnsWithoutEvent + 1});
+        }
     }
 
     private async deleteKingdomPropertyAtIndex(ev: Event, property: keyof Kingdom): Promise<void> {
@@ -499,6 +520,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 unrest: Math.max(0, this.readKingdomData().unrest - 1),
             });
         }
+    }
+
+    private calculateEventDC(turnsWithoutEvent: number): number {
+        return Math.max(1, 16 - (turnsWithoutEvent * 5));
     }
 }
 
