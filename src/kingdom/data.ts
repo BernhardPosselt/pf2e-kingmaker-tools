@@ -308,22 +308,10 @@ export function getDefaultKingdomData(): Kingdom {
         xp: 0,
         size: 1,
         unrest: 0,
-        feats: [{
-            id: 'Muddle Through',
-            level: 2,
-        }],
-        bonusFeats: [{
-            id: 'Insider Trading',
-        }],
-        ongoingEvents: [{
-            name: 'hi',
-        }],
-        groups: [{
-            name: 'chee',
-            relations: 'trade-agreement',
-            atWar: false,
-            negotiationDC: 30,
-        }],
+        feats: [],
+        bonusFeats: [],
+        ongoingEvents: [],
+        groups: [],
         milestones: getDefaultMilestones(),
         workSites: {
             farmlands: {

@@ -32,9 +32,11 @@ import {AddBonusFeatDialog} from './add-bonus-feat-dialog';
 import {addOngoingEventDialog} from './add-ongoing-event-dialog';
 import {rollKingdomEvent} from '../kingdom-events';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
+import {setupDialog} from './setup-dialog';
 
 interface KingdomOptions {
     game: Game;
+    sheetActor: Actor;
 }
 
 type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'groups';
@@ -56,21 +58,20 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         return options;
     }
 
+    private sheetActor: Actor;
+
     private readonly game: Game;
     private nav: KingdomTabs = 'turn';
 
     constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
         this.game = options.game;
-    }
-
-    private readKingdomData(): Kingdom {
-        return getDefaultKingdomData();
+        this.sheetActor = options.sheetActor;
     }
 
     override getData(options?: Partial<FormApplicationOptions>): object {
         const isGM = this.game.user?.isGM ?? false;
-        const kingdomData = this.readKingdomData();
+        const kingdomData = this.getKingdom();
         const levelData = getLevelData(kingdomData.level);
         const sizeData = getSizeData(kingdomData.size);
         const allSettlementSceneData = getAllSettlementSceneData(this.game);
@@ -201,14 +202,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         kingdom.feats = unpackFormArray(kingdom.feats);
         kingdom.bonusFeats = unpackFormArray(kingdom.bonusFeats);
         kingdom.milestones = unpackFormArray(kingdom.milestones);
-        // kingdom.ongoingEvents = unpackFormArray(kingdom.ongoingEvents);
         console.log(kingdom);
-        // await saveKingdom(this.game, formData);
+        await this.saveKingdom(kingdom);
         this.render();
     }
 
     private async update(data: Partial<Kingdom>): Promise<void> {
-        console.log('Update', data);
+        await this.saveKingdom(data);
         this.render();
     }
 
@@ -230,7 +230,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         });
         $html.querySelector('#km-gain-fame')
-            ?.addEventListener('click', async () => await this.update({fame: this.readKingdomData().fame + 1}));
+            ?.addEventListener('click', async () => await this.update({fame: this.getKingdom().fame + 1}));
         $html.querySelector('#km-adjust-unrest')
             ?.addEventListener('click', async () => await this.adjustUnrest());
         $html.querySelector('#km-collect-resources')
@@ -245,7 +245,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => await rollKingdomEvent(this.game));
         $html.querySelector('#km-add-event')
             ?.addEventListener('click', async () => addOngoingEventDialog((name) => {
-                const current = this.readKingdomData();
+                const current = this.getKingdom();
                 this.update({
                     ongoingEvents: [...current.ongoingEvents, {name}],
                 });
@@ -269,7 +269,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 el.addEventListener('click', async (ev) => {
                     const target = ev.target as HTMLButtonElement;
                     const hexes = parseInt(target.dataset.hexes ?? '0', 10);
-                    const current = this.readKingdomData();
+                    const current = this.getKingdom();
                     const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
                     await this.update({
                         xp: calculateHexXP(hexes, current.size, useHomeBrew),
@@ -278,7 +278,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-rp-to-xp')
             ?.addEventListener('click', async () => {
-                const current = this.readKingdomData();
+                const current = this.getKingdom();
                 const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
                 await this.update({
                     xp: calculateRpXP(current.resourceDice.next, current.level, useHomeBrew),
@@ -286,7 +286,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-level-up')
             ?.addEventListener('click', async () => {
-                const current = this.readKingdomData();
+                const current = this.getKingdom();
                 if (current.xp >= current.xpThreshold) {
                     await this.update({level: current.level + 1, xp: current.xp - current.xpThreshold});
                 } else {
@@ -296,7 +296,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-add-group')
             ?.addEventListener('click', async () => {
                 addGroupDialog((group) => this.update({
-                    groups: [...this.readKingdomData().groups, group],
+                    groups: [...this.getKingdom().groups, group],
                 }));
             });
         $html.querySelectorAll('.km-delete-group')
@@ -308,7 +308,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 new AddBonusFeatDialog(null, {
                     feats: allFeats,
                     onOk: (feat) => this.update({
-                        bonusFeats: [...this.readKingdomData().bonusFeats, feat],
+                        bonusFeats: [...this.getKingdom().bonusFeats, feat],
                     }),
                 }).render(true);
             });
@@ -327,7 +327,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-end-turn')
             ?.addEventListener('click', async () => {
-                const current = this.readKingdomData();
+                const current = this.getKingdom();
                 const sizeData = getSizeData(current.size);
                 const capacity = this.getCapacity(sizeData);
                 await this.update({
@@ -365,7 +365,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async adjustUnrest(): Promise<void> {
-        const current = this.readKingdomData();
+        const current = this.getKingdom();
         const data = getAllSettlementSceneDataAndStructures(this.game);
         const atWar = current.atWar ? 1 : 0;
         const overcrowdedSettlements = data.filter(s => s.scenedData.overcrowded).length;
@@ -390,7 +390,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async checkForEvent(): Promise<void> {
-        const turnsWithoutEvent = this.readKingdomData().turnsWithoutEvent;
+        const turnsWithoutEvent = this.getKingdom().turnsWithoutEvent;
         const dc = this.calculateEventDC(turnsWithoutEvent);
         const roll = await (new Roll('1d20').roll());
         await roll.toMessage({flavor: `Checking for Event on DC ${dc}`});
@@ -411,7 +411,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const deleteIndex = target.dataset.deleteIndex;
         if (deleteIndex) {
             const deleteAt = parseInt(deleteIndex, 10);
-            const values = [...this.readKingdomData()[property] as unknown[]];
+            const values = [...this.getKingdom()[property] as unknown[]];
             values.splice(deleteAt, 1);
             await this.update({
                 [property]: values,
@@ -429,7 +429,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async collectResources(): Promise<void> {
-        const current = this.readKingdomData();
+        const current = this.getKingdom();
         const levelData = getLevelData(current.size);
         const featDice = this.insiderTradingResources(current.feats, current.bonusFeats);
         const sizeData = getSizeData(current.size);
@@ -609,7 +609,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         await roll.toMessage({flavor: 'Reducing Unrest by 1 on an 11 or higher'});
         if (roll.total > 10) {
             await this.update({
-                unrest: Math.max(0, this.readKingdomData().unrest - 1),
+                unrest: Math.max(0, this.getKingdom().unrest - 1),
             });
         }
     }
@@ -625,7 +625,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async payConsumption(): Promise<void> {
-        const current = this.readKingdomData();
+        const current = this.getKingdom();
         const settlementSceneDataAndStructures = getAllSettlementSceneDataAndStructures(this.game);
         const {settlementConsumption} = this.getSettlementData(settlementSceneDataAndStructures);
         const totalConsumption = current.consumption.armies + current.consumption.now + settlementConsumption;
@@ -647,8 +647,25 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         }
     }
+
+    private async saveKingdom(kingdom: Partial<Kingdom>): Promise<void> {
+        await this.sheetActor.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', kingdom);
+    }
+
+    private getKingdom(): Kingdom {
+        return this.sheetActor.getFlag('pf2e-kingmaker-tools', 'kingdom-sheet') as Kingdom;
+    }
 }
 
 export async function showKingdom(game: Game): Promise<void> {
-    new KingdomApp(null, {game}).render(true);
+    const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
+    if (sheetActor) {
+        new KingdomApp(null, {game, sheetActor}).render(true);
+    } else {
+        setupDialog(game, async () => {
+            const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
+            await sheetActor?.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', getDefaultKingdomData());
+            await showKingdom(game);
+        });
+    }
 }

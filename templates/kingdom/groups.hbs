@@ -8,12 +8,12 @@
     </tr>
     {{#each groups}}
         <tr>
-            <td>{{name}}<input type="hidden" name="tradeAgreements.{{@index}}.name" value="{{name}}"></td>
-            <td>{{negotiationDC}}<input type="hidden" name="tradeAgreements.{{@index}}.negotiationDC"
+            <td>{{name}}<input type="hidden" name="groups.{{@index}}.name" value="{{name}}"></td>
+            <td>{{negotiationDC}}<input type="hidden" name="groups.{{@index}}.negotiationDC"
                                         value="{{negotiationDC}}" data-dtype="Number"></td>
-            <td><input type="checkbox" {{checked atWar}} name="tradeAgreements.{{@index}}.atWar"></td>
+            <td><input type="checkbox" {{checked atWar}} name="groups.{{@index}}.atWar"></td>
             <td>
-                <select name="tradeAgreements.{{@index}}.relations">
+                <select name="groups.{{@index}}.relations">
                     {{#select relations}}
                         {{#each ../groupRelationTypes}}
                             <option value="{{value}}">{{label}}</option>
