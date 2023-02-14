@@ -219,3 +219,18 @@ td.skill-value {
     text-decoration: line-through;
 }
 
+/* popups */
+.simple-dialog-form {
+    display: table;
+    border-spacing: 10px;
+}
+
+.simple-dialog-form > div {
+    display: table-row;
+}
+
+
+.simple-dialog-form label,
+.simple-dialog-form input {
+    display: table-cell;
+}

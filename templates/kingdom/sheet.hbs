@@ -32,7 +32,7 @@
             <a data-tab="status" class="{{#if statusTab}}active{{/if}}">Status</a>
             <a data-tab="skills" class="{{#if skillsTab}}active{{/if}}">Skills</a>
             <a data-tab="turn" class="{{#if turnTab}}active{{/if}}">Turn</a>
-            <a data-tab="trade-agreements" class="{{#if tradeAgreementsTab}}active{{/if}}">Trade Agreements ({{tradeAgreementsSize}})</a>
+            <a data-tab="groups" class="{{#if groupsTab}}active{{/if}}">Trade Agreements ({{tradeAgreementsSize}})</a>
             <a data-tab="feats" class="{{#if featsTab}}active{{/if}}">Feats</a>
         </nav>
         <div class="km-sidebar">
@@ -50,7 +50,7 @@
                 {{> modules/pf2e-kingmaker-tools/templates/kingdom/turn.hbs}}
             </div>
             <div {{#unless tradeAgreementsTab}}hidden{{/unless}}>
-                {{> modules/pf2e-kingmaker-tools/templates/kingdom/trade-agreements.hbs}}
+                {{> modules/pf2e-kingmaker-tools/templates/kingdom/groups.hbs}}
             </div>
             <div {{#unless featsTab}}hidden{{/unless}}>
                 {{> modules/pf2e-kingmaker-tools/templates/kingdom/feats.hbs}}

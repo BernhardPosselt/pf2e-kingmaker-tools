@@ -1,0 +1,36 @@
+<form>
+    <table class="km-table">
+        <tr>
+            <th>Bonus Feat</th>
+            <th>Minimum Level</th>
+            <th>Prerequisites</th>
+            <th title="Comes With Automation">Auto</th>
+        </tr>
+        <tr>
+            <td>
+                <select name="selected">
+                    {{#select selected}}
+                        {{#each feats}}
+                            <option value="{{name}}">{{name}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
+            </td>
+            <td>{{feat.level}}</td>
+            <td>{{feat.prerequisites}}</td>
+            <td>
+                {{#if feat.automated}}
+                    <i class="fa-solid fa-circle-check"></i>
+                {{else}}
+                    <i class="fa-solid fa-circle-xmark"></i>
+                {{/if}}
+            </td>
+        </tr>
+        {{#if feat.text}}
+            <tr>
+                <td colspan="5">{{feat.text}}</td>
+            </tr>
+        {{/if}}
+    </table>
+    <button>Add</button>
+</form>

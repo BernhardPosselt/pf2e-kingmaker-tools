@@ -6,9 +6,9 @@
         <th>State</th>
         <th>Remove</th>
     </tr>
-    {{#each tradeAgreements}}
+    {{#each groups}}
         <tr>
-            <td>{{group}}<input type="hidden" name="tradeAgreements.{{@index}}.group" value="{{group}}"></td>
+            <td>{{name}}<input type="hidden" name="tradeAgreements.{{@index}}.name" value="{{name}}"></td>
             <td>{{negotiationDC}}<input type="hidden" name="tradeAgreements.{{@index}}.negotiationDC"
                                         value="{{negotiationDC}}" data-dtype="Number"></td>
             <td><input type="checkbox" {{checked atWar}} name="tradeAgreements.{{@index}}.atWar"></td>

@@ -82,8 +82,8 @@ export interface Commodities {
     stone: number;
 }
 
-interface TradeAgreement {
-    group: string;
+export interface Group {
+    name: string;
     negotiationDC: number;
     atWar: boolean;
     relations: 'none' | 'diplomatic-relations' | 'trade-agreement';
@@ -160,7 +160,7 @@ export interface Kingdom {
     commodities: Commodities;
     commoditiesNextRound: Commodities;
 
-    tradeAgreements: TradeAgreement[];
+    groups: Group[];
     feats: Feat[];
     bonusFeats: BonusFeat[];
     skillRanks: SkillRanks;
@@ -374,7 +374,7 @@ export function getDefaultKingdomData(): Kingdom {
                 name: '',
             },
         },
-        tradeAgreements: [],
+        groups: [],
         skillRanks: {
             agriculture: 0,
             arts: 0,

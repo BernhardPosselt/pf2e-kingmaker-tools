@@ -24,13 +24,15 @@ import {
     getAllSettlementSceneData,
     SettlementSceneData,
 } from '../structures/scene';
-import {allFeatsByName} from './feats';
+import {allFeats, allFeatsByName} from './feats';
+import {addGroupDialog} from './add-group-dialog';
+import {AddBonusFeatDialog} from './add-bonus-feat-dialog';
 
 interface KingdomOptions {
     game: Game;
 }
 
-type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'trade-agreements';
+type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'groups';
 
 const levels = [...Array.from(Array(20).keys()).map(k => k + 1)];
 
@@ -50,7 +52,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private readonly game: Game;
-    private nav: KingdomTabs = 'trade-agreements';
+    private nav: KingdomTabs = 'groups';
 
     constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
@@ -123,9 +125,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
             fameTypes: allFameTypes,
             fameLabel: kingdomData.fameType === 'famous' ? 'Fame' : 'Infamy',
-            tradeAgreements: kingdomData.tradeAgreements,
+            groups: kingdomData.groups,
             ...this.getFeats(kingdomData.feats, kingdomData.bonusFeats, kingdomData.level),
-            tradeAgreementsSize: kingdomData.tradeAgreements.filter(t => t.relations === 'trade-agreement').length,
+            tradeAgreementsSize: kingdomData.groups.filter(t => t.relations === 'trade-agreement').length,
             ranks: [
                 {label: 'Untrained', value: 0},
                 {label: 'Trained', value: 1},
@@ -175,7 +177,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             statusTab: this.nav === 'status',
             skillsTab: this.nav === 'skills',
             turnTab: this.nav === 'turn',
-            tradeAgreementsTab: this.nav === 'trade-agreements',
+            groupsTab: this.nav === 'groups',
             featsTab: this.nav === 'feats',
         };
     }
@@ -267,7 +269,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-add-group')
             ?.addEventListener('click', async () => {
-                console.warn('adding group');
+                addGroupDialog((group) => this.update({
+                    groups: [...this.readKingdomData().groups, group],
+                }));
             });
         $html.querySelectorAll('.km-delete-group')
             ?.forEach(el => {
@@ -277,7 +281,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-add-bonus-feat')
             ?.addEventListener('click', async () => {
-                console.warn('adding bonus feat');
+                new AddBonusFeatDialog(null, {
+                    feats: allFeats,
+                    onOk: (feat) => this.update({
+                        bonusFeats: [...this.readKingdomData().bonusFeats, feat],
+                    }),
+                }).render(true);
             });
         $html.querySelectorAll('.km-delete-bonus-feat')
             ?.forEach(el => {

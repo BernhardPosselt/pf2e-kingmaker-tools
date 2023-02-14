@@ -288,7 +288,7 @@ Hooks.on('init', async () => {
         'modules/pf2e-kingmaker-tools/templates/kingdom/status.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/skills.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/turn.hbs',
-        'modules/pf2e-kingmaker-tools/templates/kingdom/trade-agreements.hbs',
+        'modules/pf2e-kingmaker-tools/templates/kingdom/groups.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/feats.hbs',
     ]);
 });
