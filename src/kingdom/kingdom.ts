@@ -20,7 +20,13 @@ import {
 import {capitalize, unpackFormArray, unslugifyAction} from '../utils';
 import {calculateAbilityModifier, calculateInvestedBonus, calculateSkills, isInvested} from './skills';
 import {Storage} from '../structures/structures';
-import {AbilityScores, allArmyActivities, allLeadershipActivities, allRegionActivities} from '../actions-and-skills';
+import {
+    AbilityScores,
+    Activity,
+    allArmyActivities,
+    allLeadershipActivities,
+    allRegionActivities, oncePerRoundActivity, trainedActivities,
+} from '../actions-and-skills';
 import {
     getAllSettlementSceneData,
     getAllSettlementSceneDataAndStructures,
@@ -33,6 +39,7 @@ import {addOngoingEventDialog} from './add-ongoing-event-dialog';
 import {rollCultEvent, rollKingdomEvent} from '../kingdom-events';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './setup-dialog';
+import {featuresByLevel, uniqueFeatures} from './features';
 
 interface KingdomOptions {
     game: Game;
@@ -173,18 +180,23 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             }),
             // TODO: filter out companion activities if not in position of leader
             // TODO: consider companions in leadership positions
-            leadershipActivities: allLeadershipActivities.map(a => {
-                return {label: unslugifyAction(a), value: a};
+            leadershipActivities: allLeadershipActivities.map(activity => {
+                return {label: this.createActivityLabel(activity, kingdomData.level), value: activity};
             }),
-            regionActivities: allRegionActivities.map(a => {
-                return {label: unslugifyAction(a), value: a};
+            regionActivities: allRegionActivities.map(activity => {
+                return {label: this.createActivityLabel(activity, kingdomData.level), value: activity};
             }),
-            armyActivities: allArmyActivities.map(a => {
-                return {label: unslugifyAction(a), value: a};
+            armyActivities: allArmyActivities.map(activity => {
+                return {label: this.createActivityLabel(activity, kingdomData.level), value: activity};
             }),
+            featuresByLevel: Array.from(featuresByLevel.entries()).map(([level, features]) => {
+                return {level, features: features.map(f => f.name).join(', ')};
+            }),
+            uniqueFeatures: uniqueFeatures,
             canLevelUp: kingdomData.xp >= kingdomData.xpThreshold && kingdomData.level < 20,
             turnsWithoutEvent: kingdomData.turnsWithoutEvent,
             eventDC: this.calculateEventDC(kingdomData.turnsWithoutEvent),
+            civicPlanning: kingdomData.level >= 12,
             useXpHomebrew,
             // TODO: print debug for xp to chat
             // TODO: print debug for end turn to chat
@@ -192,6 +204,27 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             // TODO: print debug for collect resources
             // TODO: print debug for pay consumption
         };
+    }
+
+    private createActivityLabel(activity: Activity, kingdomLevel: number): string {
+        let label = unslugifyAction(activity);
+        if (activity === 'claim-hex') {
+            if (kingdomLevel >= 9) {
+                label += ' (three times per round)';
+            } else if (kingdomLevel >= 4) {
+                label += ' (twice per round)';
+            } else {
+                label += ' (once per round)';
+            }
+        }
+        if (trainedActivities.has(activity) && oncePerRoundActivity.has(activity)) {
+            label += ' (once per round, trained)';
+        } else if (trainedActivities.has(activity)) {
+            label += ' (trained)';
+        } else if (oncePerRoundActivity.has(activity)) {
+            label += ' (once per round)';
+        }
+        return label;
     }
 
     private getActiveTabs(): object {
@@ -241,7 +274,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         });
         $html.querySelector('#km-gain-fame')
-            ?.addEventListener('click', async () => await this.update({fame: this.getKingdom().fame + 1}));
+            ?.addEventListener('click', async () =>
+                await this.update({fame: Math.min(3, this.getKingdom().fame + 1)}));
         $html.querySelector('#km-adjust-unrest')
             ?.addEventListener('click', async () => await this.adjustUnrest());
         $html.querySelector('#km-collect-resources')
@@ -389,7 +423,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const overcrowdedSettlements = data.filter(s => s.scenedData.overcrowded).length;
         const secondaryTerritories = data.some(s => s.scenedData.secondaryTerritory) ? 1 : 0;
         const newUnrest = atWar + overcrowdedSettlements + secondaryTerritories;
-        const unrest = newUnrest + current.unrest;
+        let unrest = newUnrest + current.unrest;
+        if (current.level >= 20 && unrest > 0) {
+           unrest = 0;
+            await ChatMessage.create({content: 'Ignoring Unrest increase due to "Envy of the World" Kingdom Feature'});
+        }
         if (unrest >= 10) {
             const ruinRoll = await (new Roll('1d10').roll());
             await ruinRoll.toMessage({flavor: 'Gaining points to Ruin (distribute as you wish)'});

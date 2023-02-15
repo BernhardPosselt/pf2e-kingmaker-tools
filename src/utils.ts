@@ -98,3 +98,31 @@ export function range(start: number, end: number): number[] {
     return Array.apply(0, Array(end - 1))
         .map((element, index) => index + start);
 }
+
+export function groupBy<T, R>(array: T[], criterion: (value: T) => R): Map<R, T[]> {
+    const result = new Map<R, T[]>();
+    for (const elem of array) {
+        const key = criterion(elem);
+        const group = result.get(key);
+        if (group) {
+            group.push(elem);
+        } else {
+            result.set(key, [elem]);
+        }
+    }
+    return result;
+}
+
+export function distinctBy<T, R>(array: T[], criterion: (value: T) => R): T[] {
+    const existing = new Set();
+    const result = [];
+
+    for (const elem of array) {
+        const key = criterion(elem);
+        if (!existing.has(key)) {
+            result.push(elem);
+            existing.add(key);
+        }
+    }
+    return result;
+}

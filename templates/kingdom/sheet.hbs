@@ -14,17 +14,27 @@
                     <td><input type="text" value="{{name}}" name="name"></td>
                     <td><input type="number" value="{{size}}" name="size"></td>
                     <td>{{type}}</td>
-                    <td><input type="number" value="{{xp}}" name="xp"> / <input type="number" value="{{xpThreshold}}" name="xpThreshold"></td>
+                    <td><input type="number" value="{{xp}}" name="xp"> / <input type="number" value="{{xpThreshold}}"
+                                                                                name="xpThreshold"></td>
                     <td>
                         <select name="level" data-dtype="Number">
-                        {{#select level}}
-                            {{#each levels}}
-                                <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        {{/select}}
+                            {{#select level}}
+                                {{#each levels}}
+                                    <option value="{{this}}">{{this}}</option>
+                                {{/each}}
+                            {{/select}}
                         </select>
                     </td>
-                    <td><input type="number" value="{{fame}}" name="fame"></td>
+                    <td>
+                        <select name="fame" data-dtype="Number">
+                            {{#select fame}}
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            {{/select}}
+                        </select>
+                    </td>
                 </tr>
             </table>
         </div>

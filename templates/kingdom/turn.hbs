@@ -1,14 +1,20 @@
-<!--
-* TODO: check if active settlement is unconnected, resolving issues in secondary territories incurs a -4 circumstance penalty
--->
-
 <h2>Upkeep Phase</h2>
 <ol>
-    <li><button type="button" id="km-gain-fame">Gain 1 {{fameLabel}}</button></li>
-    <li><button type="button" class="kingdom-activity" data-activity="new-leadership">New Leadership (optional)</button></li>
-    <li><button type="button" id="km-adjust-unrest">Adjust Unrest</button></li>
-    <li><button type="button" id="km-collect-resources">Collect Resources</button></li>
-    <li><button type="button" id="km-pay-consumption">Pay Consumption</button></li>
+    <li>
+        <button type="button" id="km-gain-fame">Gain 1 {{fameLabel}}</button>
+    </li>
+    <li>
+        <button type="button" class="kingdom-activity" data-activity="new-leadership">New Leadership (optional)</button>
+    </li>
+    <li>
+        <button type="button" id="km-adjust-unrest">Adjust Unrest</button>
+    </li>
+    <li>
+        <button type="button" id="km-collect-resources">Collect Resources</button>
+    </li>
+    <li>
+        <button type="button" id="km-pay-consumption">Pay Consumption</button>
+    </li>
 </ol>
 
 <h2>Commerce Phase</h2>
@@ -38,11 +44,7 @@
     </li>
 </ol>
 
-<!-- TODO: add how many times per turn to button, print description in popup -->
-
-
 <h2>Leadership Activities ({{leadershipActivityNumber}} per player)</h2>
-<!-- Use a Magic check to attempt: Celebrate Holiday, Craft Luxuries, Create a Masterpiece, Rest and Relax if octavia magister-->
 {{#each leadershipActivities}}
     <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
 {{/each}}
@@ -57,7 +59,9 @@ You can attempt 2 Region activities simultaneously as long as both activities ta
 
 <h2>Civic Activities (1 per settlement)</h2>
 
-<!-- display claimhex circ bonus and how many attempts are possible -->
+{{#if civicPlanning}}
+    During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs after all other settlements have taken their individual Civic activities.
+{{/if}}
 
 <button type="button" class="kingdom-activity" data-activity="build-structure">Build Structure</button>
 <button type="button" class="kingdom-activity" data-activity="demolish">Demolish</button>
@@ -127,7 +131,11 @@ Claimed Hexes this Round:
     </tr>
     {{#each milestones}}
         <tr {{#unless display}}hidden{{/unless}}>
-            <td>{{name}}<input type="hidden" name="milestones.{{@index}}.name" value="{{name}}"><input type="hidden" name="milestones.{{@index}}.homebrew" value="{{homebrew}}" data-dtype="Boolean"></td>
+            <td>{{name}}<input type="hidden" name="milestones.{{@index}}.name" value="{{name}}"><input type="hidden"
+                                                                                                       name="milestones.{{@index}}.homebrew"
+                                                                                                       value="{{homebrew}}"
+                                                                                                       data-dtype="Boolean">
+            </td>
             <td>{{xp}}<input type="hidden" name="milestones.{{@index}}.xp" value="{{xp}}" data-dtype="Number"></td>
             <td>
                 <input type="checkbox" name="milestones.{{@index}}.completed" {{checked completed}}>

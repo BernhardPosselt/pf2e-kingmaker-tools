@@ -332,3 +332,24 @@ export const allArmyActivities: Activity[] = [
     'recruit-army',
     'train-army',
 ];
+
+export const  oncePerRoundActivity: Set<Activity> = new Set(['quell-unrest', 'create-a-masterpiece']);
+export const trainedActivities: Set<Activity> = new Set([
+    'pledge-of-fealty',
+    'repair-reputation-decay',
+    'repair-reputation-crime',
+    'repair-reputation-corruption',
+    'repair-reputation-strife',
+    'create-a-masterpiece',
+    'irrigation',
+    'relocate-capital',
+    'clandestine-business',
+    'prognostication',
+    'request-foreign-aid',
+    'collect-taxes',
+    'prognostication',
+    'send-diplomatic-envoy',
+]);
+
+
+

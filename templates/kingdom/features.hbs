@@ -1,1 +1,17 @@
-hi
+<table class="km-table">
+    <tr>
+        <th>Level</th>
+        <th>Features</th>
+    </tr>
+    {{#each featuresByLevel}}
+        <tr>
+            <td>{{level}}</td>
+            <td>{{features}}</td>
+        </tr>
+    {{/each}}
+</table>
+
+{{#each uniqueFeatures}}
+    <h2>Level {{level}}: {{name}}</h2>
+    <p>{{description}}</p>
+{{/each}}
