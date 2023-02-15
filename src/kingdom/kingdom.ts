@@ -177,7 +177,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Trade Agreement', value: 'trade-agreement'},
             ],
             ongoingEvents: kingdomData.ongoingEvents,
-            // TODO: sort by xp and name
             milestones: kingdomData.milestones.map(m => {
                 return {...m, display: useXpHomebrew || !m.homebrew};
             }),
