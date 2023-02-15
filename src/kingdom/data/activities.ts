@@ -1,56 +1,5 @@
-export const allLeaders = [
-    'ruler',
-    'counselor',
-    'general',
-    'emissary',
-    'magister',
-    'treasurer',
-    'viceroy',
-    'warden',
-] as const;
-
-export type Leader = typeof allLeaders[number];
-
-export const leaderAbilities: Record<Leader, Ability> = {
-    ruler: 'loyalty',
-    counselor: 'culture',
-    general: 'stability',
-    emissary: 'loyalty',
-    magister: 'culture',
-    treasurer: 'economy',
-    viceroy: 'economy',
-    warden: 'stability',
-};
-
-export const abilityLeaders: Record<Ability, [Leader, Leader]> = {
-    loyalty: ['ruler', 'emissary'],
-    culture: ['counselor', 'magister'],
-    stability: ['general', 'warden'],
-    economy: ['treasurer', 'viceroy'],
-};
-
-export const allRuins = [
-    'corruption',
-    'crime',
-    'decay',
-    'strife',
-] as const;
-
-export type Ruin = typeof allRuins[number];
-
-export const ruinAbilities: Record<Ruin, Ability> = {
-    corruption: 'culture',
-    crime: 'economy',
-    decay: 'stability',
-    strife: 'loyalty',
-};
-
-export const abilityRuins: Record<Ability, Ruin> = {
-    culture: 'corruption',
-    economy: 'crime',
-    stability: 'decay',
-    loyalty: 'strife',
-};
+import {Skill} from './skills';
+import {Ability} from './abilities';
 
 export const allActivities = [
     'establish-trade-agreement',
@@ -123,35 +72,6 @@ export const allActivities = [
 ] as const;
 
 export type Activity = typeof allActivities[number];
-export const allSkills = [
-    'agriculture',
-    'arts',
-    'boating',
-    'defense',
-    'engineering',
-    'exploration',
-    'folklore',
-    'industry',
-    'intrigue',
-    'magic',
-    'politics',
-    'scholarship',
-    'statecraft',
-    'trade',
-    'warfare',
-    'wilderness',
-] as const;
-
-export type Skill = typeof allSkills[number];
-
-export const allAbilities = [
-    'culture',
-    'economy',
-    'loyalty',
-    'stability',
-] as const;
-
-export type Ability = typeof allAbilities[number];
 
 export const skillAbilities: Record<Skill, Ability> = {
     agriculture: 'stability',
@@ -333,7 +253,7 @@ export const allArmyActivities: Activity[] = [
     'train-army',
 ];
 
-export const  oncePerRoundActivity: Set<Activity> = new Set(['quell-unrest', 'create-a-masterpiece']);
+export const  oncePerRoundActivities: Set<Activity> = new Set(['quell-unrest', 'create-a-masterpiece']);
 export const trainedActivities: Set<Activity> = new Set([
     'pledge-of-fealty',
     'repair-reputation-decay',

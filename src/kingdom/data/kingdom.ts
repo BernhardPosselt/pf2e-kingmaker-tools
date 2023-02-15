@@ -1,28 +1,6 @@
-import {AbilityScores, Leader} from '../actions-and-skills';
-
-const allActorTypes = [
-    'pc',
-    'npc',
-    'companion',
-] as const;
-
-export type ActorTypes = typeof allActorTypes[number];
-
-export const allCompanions = [
-    'Amiri',
-    'Ekundayo',
-    'Harrim',
-    'Jaethal',
-    'Jubilost',
-    'Kalikke',
-    'Kanerah',
-    'Linzi',
-    'Nok-Nok',
-    'Octavia',
-    'Regongar',
-    'Tristian',
-    'Valerie',
-];
+import {AbilityScores} from './activities';
+import {ActorTypes} from './companions';
+import {Leader} from './leaders';
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
 

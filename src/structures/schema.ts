@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {structuresByName} from './structure-data';
 import {itemGroups} from './structures';
-import {allSkills} from '../actions-and-skills';
+import {allSkills} from '../kingdom/data/skills';
 
 const builtInRefs = structuresByName.keys();
 export const refSchema = Joi.object({

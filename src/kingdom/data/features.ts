@@ -1,4 +1,4 @@
-import {distinctBy, groupBy, range} from '../utils';
+import {distinctBy, groupBy} from '../../utils';
 
 interface KingdomFeature {
     level: number;

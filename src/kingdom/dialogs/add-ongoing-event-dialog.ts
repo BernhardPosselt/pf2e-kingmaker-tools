@@ -1,5 +1,5 @@
-import {Group} from './data';
-import {TimeChangeMode} from '../time/calculation';
+import {Group} from '../data/kingdom';
+import {TimeChangeMode} from '../../time/calculation';
 
 export function addOngoingEventDialog(onOk: (name: string) => void): void {
     new Dialog({

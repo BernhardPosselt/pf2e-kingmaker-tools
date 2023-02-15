@@ -1,5 +1,6 @@
-import {Activity, activitySkills, allSkills, Skill} from '../actions-and-skills';
 import {mergeObjects} from '../utils';
+import {Activity, activitySkills} from '../kingdom/data/activities';
+import {allSkills, Skill} from '../kingdom/data/skills';
 
 export interface ActionBonusRule {
     value: number;

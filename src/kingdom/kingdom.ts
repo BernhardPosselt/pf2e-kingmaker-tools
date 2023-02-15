@@ -1,6 +1,5 @@
 import {getBooleanSetting, getStringSetting} from '../settings';
 import {
-    allCompanions,
     allFameTypes,
     BonusFeat,
     Commodities,
@@ -16,32 +15,33 @@ import {
     ResourceDieSize,
     Ruin,
     WorkSites,
-} from './data';
+} from './data/kingdom';
 import {capitalize, unpackFormArray, unslugifyAction} from '../utils';
 import {calculateAbilityModifier, calculateInvestedBonus, calculateSkills, isInvested} from './skills';
 import {Storage} from '../structures/structures';
+import {
+    getAllSettlementSceneData,
+    getAllSettlementSceneDataAndStructures,
+    SettlementSceneData,
+} from '../structures/scene';
+import {allFeats, allFeatsByName} from './data/feats';
+import {addGroupDialog} from './dialogs/add-group-dialog';
+import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
+import {addOngoingEventDialog} from './dialogs/add-ongoing-event-dialog';
+import {rollCultEvent, rollKingdomEvent} from '../kingdom-events';
+import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
+import {setupDialog} from './setup-dialog';
+import {featuresByLevel, uniqueFeatures} from './data/features';
+import {allCompanions} from './data/companions';
 import {
     AbilityScores,
     Activity,
     allArmyActivities,
     allLeadershipActivities,
     allRegionActivities,
-    oncePerRoundActivity,
+    oncePerRoundActivities,
     trainedActivities,
-} from '../actions-and-skills';
-import {
-    getAllSettlementSceneData,
-    getAllSettlementSceneDataAndStructures,
-    SettlementSceneData,
-} from '../structures/scene';
-import {allFeats, allFeatsByName} from './feats';
-import {addGroupDialog} from './add-group-dialog';
-import {AddBonusFeatDialog} from './add-bonus-feat-dialog';
-import {addOngoingEventDialog} from './add-ongoing-event-dialog';
-import {rollCultEvent, rollKingdomEvent} from '../kingdom-events';
-import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
-import {setupDialog} from './setup-dialog';
-import {featuresByLevel, uniqueFeatures} from './features';
+} from './data/activities';
 
 interface KingdomOptions {
     game: Game;
@@ -220,11 +220,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 label += ' (once per round)';
             }
         }
-        if (trainedActivities.has(activity) && oncePerRoundActivity.has(activity)) {
+        if (trainedActivities.has(activity) && oncePerRoundActivities.has(activity)) {
             label += ' (once per round, trained)';
         } else if (trainedActivities.has(activity)) {
             label += ' (trained)';
-        } else if (oncePerRoundActivity.has(activity)) {
+        } else if (oncePerRoundActivities.has(activity)) {
             label += ' (once per round)';
         }
         return label;

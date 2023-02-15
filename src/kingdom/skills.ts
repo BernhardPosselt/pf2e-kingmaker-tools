@@ -1,14 +1,10 @@
-import {
-    Ability,
-    abilityLeaders,
-    abilityRuins,
-    AbilityScores,
-    allSkills,
-    Skill,
-    skillAbilities,
-} from '../actions-and-skills';
-import {getLevelData, Leaders, Ruin, SkillRanks} from './data';
+import {getLevelData, Leaders, Ruin, SkillRanks} from './data/kingdom';
 import {capitalize} from '../utils';
+import {Ability} from './data/abilities';
+import {allSkills, Skill} from './data/skills';
+import {abilityLeaders} from './data/leaders';
+import {abilityRuins} from './data/ruin';
+import {AbilityScores, skillAbilities} from './data/activities';
 
 export function calculateAbilityModifier(score: number): number {
     return Math.floor((score - 10) / 2);
@@ -106,8 +102,8 @@ export function calculateSkills(
         alwaysAddLevel: boolean,
     }
 ): SkillStats[] {
-    const isRegionActivity = false; // FIXME
-    const isWarfareActivity = false; // FIXME
+    const isRegionActivity = false; // TODO
+    const isWarfareActivity = false; // TODO
     return allSkills.map(skill => {
         const circumstanceBonus = 0;
         const itemBonus = 0;

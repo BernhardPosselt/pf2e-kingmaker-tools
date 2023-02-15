@@ -1,4 +1,4 @@
-import {getControlDC} from '../../src/kingdom/data';
+import {getControlDC} from '../../src/kingdom/data/data';
 
 describe('control DC', () => {
     test('calculate DC', () => {

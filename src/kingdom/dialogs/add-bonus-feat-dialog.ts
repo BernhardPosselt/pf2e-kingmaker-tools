@@ -1,5 +1,5 @@
-import {KingdomFeat} from './feats';
-import {BonusFeat} from './data';
+import {KingdomFeat} from '../data/feats';
+import {BonusFeat} from '../data/kingdom';
 
 
 type AddBonusFeatOptions = {

@@ -1,5 +1,5 @@
-import {allSkills} from '../actions-and-skills';
-import {capitalize} from '../utils';
+import {capitalize} from '../../utils';
+import {allSkills} from './skills';
 
 export interface KingdomFeat {
     name: string;
