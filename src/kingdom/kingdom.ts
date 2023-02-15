@@ -1,4 +1,4 @@
-import {getBooleanSetting} from '../settings';
+import {getBooleanSetting, getStringSetting} from '../settings';
 import {
     allCompanions,
     allFameTypes,
@@ -395,15 +395,16 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async checkForEvent(): Promise<void> {
+        const rollMode = getStringSetting(this.game, 'kingdomEventRollMode') as unknown as keyof CONFIG.Dice.RollModes;
         const turnsWithoutEvent = this.getKingdom().turnsWithoutEvent;
         const dc = this.calculateEventDC(turnsWithoutEvent);
         const roll = await (new Roll('1d20').roll());
-        await roll.toMessage({flavor: `Checking for Event on DC ${dc}`});
+        await roll.toMessage({flavor: `Checking for Event on DC ${dc}`}, {rollMode});
         if (roll.total >= dc) {
             await ChatMessage.create({
                 type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-                content: 'An event occurs',
-                rollMode: 'blindroll',
+                content: 'An event occurs, roll a Kingdom Event!',
+                rollMode,
             });
             await this.update({turnsWithoutEvent: 0});
         } else {
