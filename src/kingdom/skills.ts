@@ -1,28 +1,13 @@
 import {getLevelData, Leaders, Ruin, SkillRanks} from './data/kingdom';
 import {capitalize} from '../utils';
-import {Ability} from './data/abilities';
+import {Ability, calculateAbilityModifier} from './data/abilities';
 import {allSkills, Skill} from './data/skills';
-import {abilityLeaders} from './data/leaders';
 import {abilityRuins} from './data/ruin';
-import {AbilityScores, skillAbilities} from './data/activities';
+import {AbilityScores, Activity, KingdomPhase, skillAbilities} from './data/activities';
+import {calculateUnrestPenalty} from './data/unrest';
+import {isInvested} from './data/leaders';
+import {calculateModifiers, disableModifiers, Modifier, ModifierTotals} from './modifiers';
 
-export function calculateAbilityModifier(score: number): number {
-    return Math.floor((score - 10) / 2);
-}
-
-export function calculateUnrestPenalty(unrest: number): number {
-    if (unrest < 1) {
-        return 0;
-    } else if (unrest < 5) {
-        return 1;
-    } else if (unrest < 10) {
-        return 2;
-    } else if (unrest < 15) {
-        return 3;
-    } else {
-        return 4;
-    }
-}
 
 interface SkillStats {
     skill: Skill;
@@ -30,57 +15,187 @@ interface SkillStats {
     ability: Ability;
     abilityLabel: string;
     rank: number;
-    abilityBonus: number;
-    proficiencyBonus: number;
-    statusBonus: number;
-    circumstanceBonus: number;
-    itemBonus: number;
-    statusPenalty: number;
-    circumstancePenalty: number;
-    itemPenalty: number;
-    vacancyPenalty: number;
-    value: number;
-
+    total: ModifierTotals;
 }
 
-function calculateVacancy(
+function createVacancyModifier(value: number, rulerVacant: boolean, phase?: KingdomPhase): Modifier {
+    return {
+        name: 'Vacancy',
+        value: -(rulerVacant ? value + 1 : value),
+        phases: phase ? [phase] : undefined,
+        type: 'vacancy',
+        enabled: true,
+    };
+}
+
+export function createVacancyModifiers(
     ability: Ability,
     leaders: Leaders,
-    isRegionActivity: boolean,
-    isWarfareActivity: boolean,
-): number {
-    const rulerVacancyPenalty = leaders.ruler.vacant ? 1 : 0;
+): Modifier[] {
+    const modifiers = [];
+    const rulerVacant = leaders.ruler.vacant;
     if (leaders.counselor.vacant && ability === 'culture') {
-        return 1 + rulerVacancyPenalty;
-    } else if (leaders.general.vacant && isWarfareActivity) {
-        return 4 + rulerVacancyPenalty;
-    } else if (leaders.emissary.vacant && ability === 'loyalty') {
-        return 1 + rulerVacancyPenalty;
-    } else if (leaders.magister.vacant && isWarfareActivity) {
-        return 4 + rulerVacancyPenalty;
-    } else if (leaders.treasurer.vacant && ability === 'economy') {
-        return 1 + rulerVacancyPenalty;
-    } else if (leaders.viceroy.vacant && ability === 'stability') {
-        return 1 + rulerVacancyPenalty;
-    } else if (leaders.warden.vacant && isRegionActivity) {
-        return 4 + rulerVacancyPenalty;
-    } else {
-        return rulerVacancyPenalty;
+        modifiers.push(createVacancyModifier(1, rulerVacant));
     }
+    if (leaders.general.vacant) {
+        modifiers.push(createVacancyModifier(4, rulerVacant, 'warfare'));
+    }
+    if (leaders.emissary.vacant && ability === 'loyalty') {
+        modifiers.push(createVacancyModifier(1, rulerVacant));
+    }
+    if (leaders.magister.vacant) {
+        modifiers.push(createVacancyModifier(4, rulerVacant, 'warfare'));
+    }
+    if (leaders.treasurer.vacant && ability === 'economy') {
+        modifiers.push(createVacancyModifier(1, rulerVacant));
+    }
+    if (leaders.viceroy.vacant && ability === 'stability') {
+        modifiers.push(createVacancyModifier(1, rulerVacant));
+    }
+    if (leaders.warden.vacant) {
+        modifiers.push(createVacancyModifier(4, rulerVacant, 'region'));
+    }
+    if (rulerVacant) {
+        modifiers.push(createVacancyModifier(0, rulerVacant));
+    }
+    return modifiers;
 }
 
-export function isInvested(ability: Ability, leaders: Leaders): boolean {
-    const relevantLeaders = abilityLeaders[ability];
-    return leaders[relevantLeaders[0]].invested || leaders[relevantLeaders[1]].invested;
-}
-
-export function calculateInvestedBonus(
+function createInvestedModifier(
     kingdomLevel: number,
     ability: Ability,
     leaders: Leaders,
-): number {
-    const levelData = getLevelData(kingdomLevel);
-    return isInvested(ability, leaders) ? levelData.investedLeadershipBonus : 0;
+): Modifier | undefined {
+    if (isInvested(ability, leaders)) {
+        return {
+            value: getLevelData(kingdomLevel).investedLeadershipBonus,
+            enabled: true,
+            name: 'Invested Leadership Role',
+            type: 'status',
+        };
+    }
+}
+
+function createAbilityModifier(ability: Ability, abilityScores: AbilityScores): Modifier {
+    return {
+        type: 'ability',
+        name: capitalize(ability),
+        enabled: true,
+        value: calculateAbilityModifier(abilityScores[ability]),
+    };
+}
+
+function rankToLabel(rank: number): string {
+    if (rank === 0) {
+        return 'Untrained';
+    } else if (rank === 1) {
+        return 'Trained';
+    } else if (rank === 2) {
+        return 'Expert';
+    } else if (rank === 3) {
+        return 'Master';
+    } else {
+        return 'Legendary';
+    }
+}
+
+function createProficiencyModifier(rank: number, alwaysAddLevel: boolean, kingdomLevel: number): Modifier {
+    const value = rank > 0 ? (kingdomLevel + rank * 2) : (alwaysAddLevel ? kingdomLevel : 0);
+    const name = rank > 0 ? rankToLabel(rank) : 'Kingdom Level';
+    return {
+        value,
+        enabled: true,
+        name,
+        type: 'proficiency',
+    };
+}
+
+function createUnrestModifier(unrest: number): Modifier | undefined {
+    const penalty = calculateUnrestPenalty(unrest);
+    if (penalty > 0) {
+        return {
+            type: 'status',
+            name: 'Unrest',
+            enabled: true,
+            value: -penalty,
+        };
+    }
+}
+
+function createRuinModifier(ability: Ability, ruin: Ruin): Modifier | undefined {
+    const ruinAbility = abilityRuins[ability];
+    const itemPenalty = ruin[ruinAbility].penalty;
+    if (itemPenalty > 0) {
+        return {
+            value: -itemPenalty,
+            enabled: true,
+            name: 'Ruin',
+            type: 'item',
+        };
+    }
+}
+
+function createStructureModifiers(): Modifier[] {
+    // TODO
+    return [];
+}
+
+export function createSkillModifiers(
+    {
+        skill,
+        ruin,
+        unrest,
+        skillRank,
+        abilityScores,
+        leaders,
+        kingdomLevel,
+        alwaysAddLevel,
+        ability,
+        activity,
+        phase,
+    }: {
+        skill: Skill,
+        ability: Ability,
+        ruin: Ruin,
+        unrest: number,
+        skillRank: number,
+        abilityScores: AbilityScores,
+        kingdomLevel: number,
+        leaders: Leaders,
+        alwaysAddLevel: boolean,
+        activity?: Activity,
+        phase?: boolean,
+    }
+): Modifier[] {
+    const abilityModifier = createAbilityModifier(ability, abilityScores);
+    const proficiencyModifier = createProficiencyModifier(skillRank, alwaysAddLevel, kingdomLevel);
+    const vacancyModifiers = createVacancyModifiers(ability, leaders);
+    // status bonus
+    const investedModifier = createInvestedModifier(kingdomLevel, ability, leaders);
+    // item bonus
+    const structureModifiers = createStructureModifiers();
+    // TODO: circumstance bonus
+    // status penalty
+    const unrestModifier = createUnrestModifier(unrest);
+    // item penalty
+    const ruinModifier = createRuinModifier(ability, ruin);
+    // TODO: circumstance penalty
+    const result = [
+        abilityModifier,
+        proficiencyModifier,
+        ...vacancyModifiers,
+        ...structureModifiers,
+    ];
+    if (ruinModifier) {
+        result.push(ruinModifier);
+    }
+    if (unrestModifier) {
+        result.push(unrestModifier);
+    }
+    if (investedModifier) {
+        result.push(investedModifier);
+    }
+    return result;
 }
 
 export function calculateSkills(
@@ -102,41 +217,28 @@ export function calculateSkills(
         alwaysAddLevel: boolean,
     }
 ): SkillStats[] {
-    const isRegionActivity = false; // TODO
-    const isWarfareActivity = false; // TODO
     return allSkills.map(skill => {
-        const circumstanceBonus = 0;
-        const itemBonus = 0;
-        const circumstancePenalty = 0;
-
         const ability = skillAbilities[skill];
-        const investedBonus = calculateInvestedBonus(kingdomLevel, ability, leaders);
-        const vacancyPenalty = calculateVacancy(ability, leaders, isRegionActivity, isWarfareActivity);
-        const statusBonus = investedBonus;
-        const rank = skillRanks[skill];
-        const ruinAbility = abilityRuins[ability];
-        const abilityBonus = calculateAbilityModifier(abilityScores[ability]);
-        const proficiencyBonus = rank > 0 ? (kingdomLevel + rank * 2) : (alwaysAddLevel ? kingdomLevel : 0);
-        const itemPenalty = ruin[ruinAbility].penalty;
-        const statusPenalty = calculateUnrestPenalty(unrest);
-        const value = (abilityBonus + proficiencyBonus + statusBonus + circumstanceBonus + itemBonus) -
-            (statusPenalty + circumstancePenalty + itemPenalty + vacancyPenalty);
+        const modifiers = createSkillModifiers({
+            ruin,
+            unrest,
+            skillRank: skillRanks[skill],
+            abilityScores,
+            leaders,
+            kingdomLevel,
+            alwaysAddLevel,
+            skill,
+            ability,
+        });
+        const enabledModifiers = disableModifiers(modifiers);
+        const total = calculateModifiers(enabledModifiers);
         return {
             skill,
-            skillLabel: capitalize(skill),
+            rank: skillRanks[skill],
             ability,
+            skillLabel: capitalize(skill),
             abilityLabel: capitalize(ability),
-            rank,
-            abilityBonus,
-            statusBonus,
-            proficiencyBonus,
-            circumstanceBonus,
-            itemBonus,
-            statusPenalty,
-            circumstancePenalty,
-            itemPenalty,
-            vacancyPenalty,
-            value,
+            total,
         };
     });
 }

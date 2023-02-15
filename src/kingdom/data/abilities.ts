@@ -6,3 +6,7 @@ export const allAbilities = [
 ] as const;
 
 export type Ability = typeof allAbilities[number];
+
+export function calculateAbilityModifier(score: number): number {
+    return Math.floor((score - 10) / 2);
+}

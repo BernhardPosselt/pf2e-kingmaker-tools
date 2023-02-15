@@ -1,6 +1,7 @@
 import {Skill} from './skills';
 import {Ability} from './abilities';
 
+export type KingdomPhase = 'leadership' | 'region' | 'event' | 'warfare';
 export const allActivities = [
     'establish-trade-agreement',
     'provide-care',

@@ -27,16 +27,16 @@
                     {{/select}}
                 </select>
             </td>
-            <td class="skill-bonus" title="Ability Bonus">{{abilityBonus}}</td>
-            <td class="skill-bonus" title="Proficiency Bonus">{{proficiencyBonus}}</td>
-            <td class="skill-bonus" title="Status Bonus">{{statusBonus}}</td>
-            <td class="skill-bonus" title="Circumstance Bonus">{{circumstanceBonus}}</td>
-            <td class="skill-bonus" title="Item Bonus">{{itemBonus}}</td>
-            <td class="skill-penalty" title="Unrest Penalty">{{statusPenalty}}</td>
-            <td class="skill-penalty" title="Circumstance Penalty">{{circumstancePenalty}}</td>
-            <td class="skill-penalty" title="Ruin Penalty">{{itemPenalty}}</td>
-            <td class="skill-penalty" title="Vacancy Penalty">{{vacancyPenalty}}</td>
-            <td class="skill-value">{{value}}</td>
+            <td class="skill-bonus" title="Ability Bonus">{{total.ability.bonus}}</td>
+            <td class="skill-bonus" title="Proficiency Bonus">{{total.proficiency.bonus}}</td>
+            <td class="skill-bonus" title="Status Bonus">{{total.status.bonus}}</td>
+            <td class="skill-bonus" title="Circumstance Bonus">{{total.circumstance.bonus}}</td>
+            <td class="skill-bonus" title="Item Bonus">{{total.item.bonus}}</td>
+            <td class="skill-penalty" title="Unrest Penalty">{{total.status.penalty}}</td>
+            <td class="skill-penalty" title="Circumstance Penalty">{{total.circumstance.penalty}}</td>
+            <td class="skill-penalty" title="Ruin Penalty">{{total.item.penalty}}</td>
+            <td class="skill-penalty" title="Vacancy Penalty">{{total.vacancyPenalty}}</td>
+            <td class="skill-value">{{total.value}}</td>
         </tr>
     {{/each}}
 </table>

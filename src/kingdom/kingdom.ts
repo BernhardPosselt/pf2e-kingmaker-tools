@@ -17,7 +17,6 @@ import {
     WorkSites,
 } from './data/kingdom';
 import {capitalize, unpackFormArray, unslugifyAction} from '../utils';
-import {calculateAbilityModifier, calculateInvestedBonus, calculateSkills, isInvested} from './skills';
 import {Storage} from '../structures/structures';
 import {
     getAllSettlementSceneData,
@@ -42,6 +41,9 @@ import {
     oncePerRoundActivities,
     trainedActivities,
 } from './data/activities';
+import {calculateAbilityModifier} from './data/abilities';
+import {calculateSkills} from './skills';
+import {calculateInvestedBonus, isInvested} from './data/leaders';
 
 interface KingdomOptions {
     game: Game;
