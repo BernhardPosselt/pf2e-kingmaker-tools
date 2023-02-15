@@ -290,7 +290,7 @@ Hooks.on('ready', async () => {
             type: Boolean,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomSkillIncreaseEveryLevel', {
-            name: 'Kingdom Increase Evey Level',
+            name: 'Double Skill Increases',
             hint: 'If enabled, adds Skill Increases for all even levels from level 2 onwards',
             scope: 'world',
             config: true,

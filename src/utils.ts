@@ -60,7 +60,7 @@ export function unpackFormArray<T>(obj: Record<string, T> | undefined | null): T
     if (obj) {
         return Object.keys(obj)
             .map(index => parseInt(index, 10))
-            .sort()
+            .sort((a, b) => a - b)
             .map(index => `${index}`)
             .map(index => obj[index]);
     } else {
@@ -126,3 +126,4 @@ export function distinctBy<T, R>(array: T[], criterion: (value: T) => R): T[] {
     }
     return result;
 }
+

@@ -247,11 +247,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     /* eslint-disable @typescript-eslint/no-explicit-any */
     override async _updateObject(event: Event, formData: any): Promise<void> {
         console.log(formData);
+        const milestones = this.getKingdom().milestones;
         const kingdom = expandObject(formData);
         kingdom.groups = unpackFormArray(kingdom.groups);
         kingdom.feats = unpackFormArray(kingdom.feats);
         kingdom.bonusFeats = unpackFormArray(kingdom.bonusFeats);
-        kingdom.milestones = unpackFormArray(kingdom.milestones);
+        kingdom.milestones = unpackFormArray(kingdom.milestones).map((milestone, index) => {
+            return {
+                ...milestones[index],
+                completed: (milestone as {completed: boolean}).completed,
+            };
+        });
         console.log(kingdom);
         await this.saveKingdom(kingdom);
         this.render();

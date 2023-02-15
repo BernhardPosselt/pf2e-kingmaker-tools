@@ -131,12 +131,8 @@ Claimed Hexes this Round:
     </tr>
     {{#each milestones}}
         <tr {{#unless display}}hidden{{/unless}}>
-            <td>{{name}}<input type="hidden" name="milestones.{{@index}}.name" value="{{name}}"><input type="hidden"
-                                                                                                       name="milestones.{{@index}}.homebrew"
-                                                                                                       value="{{homebrew}}"
-                                                                                                       data-dtype="Boolean">
-            </td>
-            <td>{{xp}}<input type="hidden" name="milestones.{{@index}}.xp" value="{{xp}}" data-dtype="Number"></td>
+            <td>{{name}}</td>
+            <td>{{xp}}</td>
             <td>
                 <input type="checkbox" name="milestones.{{@index}}.completed" {{checked completed}}>
             </td>
