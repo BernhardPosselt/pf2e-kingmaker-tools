@@ -98,28 +98,33 @@ export interface SettlementSceneData {
     scenedData: CurrentSceneData;
 }
 
-export function getMergedData(game: Game): SettlementSceneData | undefined {
+export function getMergedData(game: Game, settlementScene: Scene): SettlementSceneData {
     const capitalScene = getCapitalScene(game);
-    const currentScene = getCurrentScene(game);
-    if (capitalScene !== undefined && currentScene !== undefined && capitalScene.id !== currentScene.id) {
+    if (capitalScene !== undefined && settlementScene !== undefined && capitalScene.id !== settlementScene.id) {
         const capitalSceneData = getSceneData(capitalScene);
         const capitalStructures = getSceneStructures(capitalScene);
         const capitalSettlement = evaluateStructures(capitalStructures, capitalSceneData.settlementLevel);
-        const currentSceneData = getSceneData(currentScene);
-        const currentStructures = getSceneStructures(currentScene);
+        const currentSceneData = getSceneData(settlementScene);
+        const currentStructures = getSceneStructures(settlementScene);
         const currentSettlement = evaluateStructures(currentStructures, currentSceneData.settlementLevel);
         return {
             scenedData: currentSceneData,
             settlement: includeCapital(capitalSettlement, currentSettlement),
         };
-    } else if (currentScene !== undefined) {
-        const currentSceneData = getSceneData(currentScene);
-        const currentStructures = getSceneStructures(currentScene);
+    } else {
+        const currentSceneData = getSceneData(settlementScene);
+        const currentStructures = getSceneStructures(settlementScene);
         const currentSettlement = evaluateStructures(currentStructures, currentSceneData.settlementLevel);
         return {
             scenedData: currentSceneData,
             settlement: currentSettlement,
         };
+    }
+}
+export function getViewedSceneMergedData(game: Game): SettlementSceneData | undefined {
+    const currentScene = getCurrentScene(game);
+    if (currentScene) {
+        return getMergedData(game, currentScene);
     }
 }
 

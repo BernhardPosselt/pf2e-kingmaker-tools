@@ -10,9 +10,47 @@ export interface Modifier {
     enabled: boolean;
 }
 
-export function disableModifiers(modifiers: Modifier[], phase?: KingdomPhase, activity?: Activity): Modifier[] {
+/**
+ * Disables all modifiers that do not have the highest/lowest number
+ * @param modifiers
+ */
+export function disableLowestModifiers(modifiers: Modifier[]): Modifier[] {
+    const groupedModifiers = groupBy(modifiers, (modifier) => {
+        if (modifier.value > 0) {
+            return modifier.type;
+        } else {
+            return modifier.type + '-penalty';
+        }
+    });
+    const result = [];
+    for (const [type, modifiers] of groupedModifiers.entries()) {
+        if (type !== 'untyped' && type !== 'untyped-penalty') {
+            const highest = modifiers
+                .reduce((prev, curr) => Math.abs(prev.value) < Math.abs(curr.value) ? curr : prev);
+            for (const mod of modifiers) {
+                if (mod !== highest) {
+                    result.push({
+                        ...mod,
+                        enabled: false,
+                    });
+                } else {
+                    result.push(mod);
+                }
+            }
+        }
+    }
+    return result;
+}
+
+/**
+ * Disable all modifiers that are not in a given phase or activity
+ * @param modifiers
+ * @param phase phase to select modifiers for; if undefined, removes all modifiers in that phase
+ * @param activity activity to select modifiers for; if undefined, removes all modifiers in with that activity
+ */
+export function disablePhaseActivityModifiers(modifiers: Modifier[], phase?: KingdomPhase, activity?: Activity): Modifier[] {
     // first check if any modifiers need to be disabled based on phase or activity
-    const enabledModifiers = modifiers
+    return modifiers
         .map(modifier => {
             let enabled = modifier.enabled;
             // if we aren't running in a phase, disable all modifiers relevant to a phase
@@ -34,26 +72,6 @@ export function disableModifiers(modifiers: Modifier[], phase?: KingdomPhase, ac
                 enabled,
             };
         });
-    // then disable modifiers that are lower than others in their group
-    const groupedModifiers = groupBy(modifiers, (modifier) => {
-        if (modifier.value > 0) {
-            return modifier.type;
-        } else {
-            return modifier.type + '-penalty';
-        }
-    });
-    for (const [type, modifiers] of groupedModifiers.entries()) {
-        if (type !== 'untyped' && type !== 'untyped-penalty') {
-            const highest = modifiers
-                .reduce((prev, curr) => Math.abs(prev.value) < Math.abs(curr.value) ? curr : prev);
-            for (const mod of modifiers) {
-                if (mod !== highest) {
-                    mod.enabled = false;
-                }
-            }
-        }
-    }
-    return enabledModifiers;
 }
 
 export interface ModifierTotal {

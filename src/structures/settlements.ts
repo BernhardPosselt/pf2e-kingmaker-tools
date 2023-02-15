@@ -1,9 +1,9 @@
 import {
-    ActionBonuses,
+    ActivityBonuses,
     ItemLevelBonuses, SkillItemBonuses,
     SettlementData,
 } from './structures';
-import {getMergedData, saveViewedSceneData} from './scene';
+import {getViewedSceneMergedData, saveViewedSceneData} from './scene';
 import {capitalize, unslugifyAction} from '../utils';
 
 interface SettlementOptions {
@@ -49,7 +49,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
     override getData(options?: Partial<FormApplicationOptions>): object {
         const isGM = this.game.user?.isGM ?? false;
         const isUser = !isGM;
-        const data = getMergedData(this.game)!;
+        const data = getViewedSceneMergedData(this.game)!;
         const structures = data.settlement;
         const sceneData = data.scenedData;
         const settlementLevel = sceneData.settlementLevel || 1;
@@ -144,7 +144,7 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
                 return {
                     label: capitalize(skill),
                     value: bonus.value,
-                    actions: (Object.entries(bonus.actions) as ([keyof ActionBonuses, number])[])
+                    actions: (Object.entries(bonus.actions) as ([keyof ActivityBonuses, number])[])
                         .map(([action, value]) => {
                             return {
                                 label: unslugifyAction(action),

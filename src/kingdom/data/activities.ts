@@ -224,6 +224,8 @@ export const allLeadershipActivities: Activity[] = [
     'warfare-exercises',
 ];
 
+const leadershipActivities = new Set(allLeadershipActivities);
+
 export const allRegionActivities: Activity[] = [
     'abandon-hex',
     'build-roads',
@@ -242,8 +244,9 @@ export const allRegionActivities: Activity[] = [
     'supplementary-hunting',
 ];
 
+const regionActivities = new Set(allRegionActivities);
 
-export const allArmyActivities: Activity[] = [
+export const allWarfareActivities: Activity[] = [
     'deploy-army',
     'disband-army',
     'garrison-army',
@@ -253,6 +256,8 @@ export const allArmyActivities: Activity[] = [
     'recruit-army',
     'train-army',
 ];
+
+const warfareActivities = new Set(allWarfareActivities);
 
 export const  oncePerRoundActivities: Set<Activity> = new Set(['quell-unrest', 'create-a-masterpiece']);
 export const trainedActivities: Set<Activity> = new Set([
@@ -272,5 +277,12 @@ export const trainedActivities: Set<Activity> = new Set([
     'send-diplomatic-envoy',
 ]);
 
-
-
+export function getActivityPhase(activity: Activity): KingdomPhase | undefined {
+    if (regionActivities.has(activity)) {
+        return 'region';
+    } else if (warfareActivities.has(activity)) {
+        return 'warfare';
+    } else if (leadershipActivities.has(activity)) {
+        return 'region';
+    }
+}

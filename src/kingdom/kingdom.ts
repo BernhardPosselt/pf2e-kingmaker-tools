@@ -20,7 +20,7 @@ import {capitalize, unpackFormArray, unslugifyAction} from '../utils';
 import {Storage} from '../structures/structures';
 import {
     getAllSettlementSceneData,
-    getAllSettlementSceneDataAndStructures,
+    getAllSettlementSceneDataAndStructures, getMergedData, getViewedSceneMergedData,
     SettlementSceneData,
 } from '../structures/scene';
 import {allFeats, allFeatsByName} from './data/feats';
@@ -35,7 +35,7 @@ import {allCompanions} from './data/companions';
 import {
     AbilityScores,
     Activity,
-    allArmyActivities,
+    allWarfareActivities,
     allLeadershipActivities,
     allRegionActivities,
     oncePerRoundActivities,
@@ -95,6 +95,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const totalConsumption = kingdomData.consumption.armies + kingdomData.consumption.now + settlementConsumption;
         const useXpHomebrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
         const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
+        const settlementScene = this.game?.scenes?.get(kingdomData.activeSettlement);
+        const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
         return {
             ...super.getData(options),
             isGM,
@@ -144,6 +146,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 unrest: kingdomData.unrest,
                 kingdomLevel: kingdomData.level,
                 alwaysAddLevel: getBooleanSetting(this.game, 'kingdomAlwaysAddLevel'),
+                skillItemBonuses: activeSettlement?.settlement?.skillBonuses,
             }),
             leaders: this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
@@ -190,7 +193,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             regionActivities: allRegionActivities.map(activity => {
                 return {label: this.createActivityLabel(activity, kingdomData.level), value: activity};
             }),
-            armyActivities: allArmyActivities.map(activity => {
+            armyActivities: allWarfareActivities.map(activity => {
                 return {label: this.createActivityLabel(activity, kingdomData.level), value: activity};
             }),
             featuresByLevel: Array.from(featuresByLevel.entries())

@@ -1,12 +1,19 @@
 import {getLevelData, Leaders, Ruin, SkillRanks} from './data/kingdom';
-import {capitalize} from '../utils';
+import {capitalize, unslugifyAction} from '../utils';
 import {Ability, calculateAbilityModifier} from './data/abilities';
 import {allSkills, Skill} from './data/skills';
 import {abilityRuins} from './data/ruin';
-import {AbilityScores, Activity, KingdomPhase, skillAbilities} from './data/activities';
+import {AbilityScores, Activity, getActivityPhase, KingdomPhase, skillAbilities} from './data/activities';
 import {calculateUnrestPenalty} from './data/unrest';
 import {isInvested} from './data/leaders';
-import {calculateModifiers, disableModifiers, Modifier, ModifierTotals} from './modifiers';
+import {
+    calculateModifiers,
+    disableLowestModifiers,
+    disablePhaseActivityModifiers,
+    Modifier,
+    ModifierTotals,
+} from './modifiers';
+import {ActivityBonuses, SkillItemBonus, SkillItemBonuses} from '../structures/structures';
 
 
 interface SkillStats {
@@ -135,14 +142,44 @@ function createRuinModifier(ability: Ability, ruin: Ruin): Modifier | undefined 
     }
 }
 
-function createStructureModifiers(): Modifier[] {
-    // TODO
-    return [];
+function createSkillModifier(value: number): Modifier | undefined {
+    if (value > 0) {
+        return {
+            value,
+            enabled: true,
+            name: 'Structure',
+            type: 'item',
+        };
+    }
+}
+
+function createActivityModifiers(activities: ActivityBonuses): Modifier[] {
+    return (Object.entries(activities) as ([Activity, number])[])
+        .map(([activity, value]) => {
+            const activityPhase = getActivityPhase(activity);
+            const phases = activityPhase ? [activityPhase] : undefined;
+            return {
+                type: 'item',
+                enabled: true,
+                value,
+                name: unslugifyAction(activity),
+                activities: [activity],
+                phases,
+            };
+        });
+}
+
+function createStructureModifiers(skillItemBonus: SkillItemBonus): Modifier[] {
+    const result = createActivityModifiers(skillItemBonus.actions);
+    const skillBonus = createSkillModifier(skillItemBonus.value);
+    if (skillBonus) {
+        result.push(skillBonus);
+    }
+    return result;
 }
 
 export function createSkillModifiers(
     {
-        skill,
         ruin,
         unrest,
         skillRank,
@@ -150,11 +187,12 @@ export function createSkillModifiers(
         leaders,
         kingdomLevel,
         alwaysAddLevel,
+        skillItemBonus,
         ability,
         activity,
         phase,
+        additionalModifiers = [],
     }: {
-        skill: Skill,
         ability: Ability,
         ruin: Ruin,
         unrest: number,
@@ -163,8 +201,10 @@ export function createSkillModifiers(
         kingdomLevel: number,
         leaders: Leaders,
         alwaysAddLevel: boolean,
+        skillItemBonus?: SkillItemBonus,
         activity?: Activity,
-        phase?: boolean,
+        phase?: KingdomPhase,
+        additionalModifiers?: Modifier[],
     }
 ): Modifier[] {
     const abilityModifier = createAbilityModifier(ability, abilityScores);
@@ -173,7 +213,7 @@ export function createSkillModifiers(
     // status bonus
     const investedModifier = createInvestedModifier(kingdomLevel, ability, leaders);
     // item bonus
-    const structureModifiers = createStructureModifiers();
+    const structureModifiers = skillItemBonus ? createStructureModifiers(skillItemBonus) : [];
     // TODO: circumstance bonus
     // status penalty
     const unrestModifier = createUnrestModifier(unrest);
@@ -185,6 +225,7 @@ export function createSkillModifiers(
         proficiencyModifier,
         ...vacancyModifiers,
         ...structureModifiers,
+        ...additionalModifiers,
     ];
     if (ruinModifier) {
         result.push(ruinModifier);
@@ -195,7 +236,7 @@ export function createSkillModifiers(
     if (investedModifier) {
         result.push(investedModifier);
     }
-    return result;
+    return disableLowestModifiers(disablePhaseActivityModifiers(result, phase, activity));
 }
 
 export function calculateSkills(
@@ -207,6 +248,7 @@ export function calculateSkills(
         leaders,
         kingdomLevel,
         alwaysAddLevel,
+        skillItemBonuses,
     }: {
         ruin: Ruin,
         unrest: number,
@@ -215,6 +257,7 @@ export function calculateSkills(
         kingdomLevel: number,
         leaders: Leaders,
         alwaysAddLevel: boolean,
+        skillItemBonuses?: SkillItemBonuses,
     }
 ): SkillStats[] {
     return allSkills.map(skill => {
@@ -227,11 +270,10 @@ export function calculateSkills(
             leaders,
             kingdomLevel,
             alwaysAddLevel,
-            skill,
             ability,
+            skillItemBonus: skillItemBonuses?.[skill],
         });
-        const enabledModifiers = disableModifiers(modifiers);
-        const total = calculateModifiers(enabledModifiers);
+        const total = calculateModifiers(modifiers);
         return {
             skill,
             rank: skillRanks[skill],

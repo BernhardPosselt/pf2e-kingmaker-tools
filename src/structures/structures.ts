@@ -51,11 +51,11 @@ export interface Structure {
     consumptionReduction?: number;
 }
 
-export type ActionBonuses = Partial<Record<Activity, number>>;
+export type ActivityBonuses = Partial<Record<Activity, number>>;
 
 export interface SkillItemBonus {
     value: number;
-    actions: ActionBonuses;
+    actions: ActivityBonuses;
 }
 
 export type SkillItemBonuses = Record<Skill, SkillItemBonus>;
