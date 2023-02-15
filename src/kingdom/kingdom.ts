@@ -39,7 +39,7 @@ interface KingdomOptions {
     sheetActor: Actor;
 }
 
-type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'groups';
+type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'groups' | 'features';
 
 const levels = [...Array.from(Array(20).keys()).map(k => k + 1)];
 
@@ -201,6 +201,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             turnTab: this.nav === 'turn',
             groupsTab: this.nav === 'groups',
             featsTab: this.nav === 'feats',
+            featuresTab: this.nav === 'features',
         };
     }
 

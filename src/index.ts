@@ -313,5 +313,6 @@ Hooks.on('init', async () => {
         'modules/pf2e-kingmaker-tools/templates/kingdom/turn.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/groups.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/feats.hbs',
+        'modules/pf2e-kingmaker-tools/templates/kingdom/features.hbs',
     ]);
 });
