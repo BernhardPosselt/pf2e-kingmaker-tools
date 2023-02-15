@@ -19,7 +19,7 @@
         <th>Heartland</th>
         <td>
             <select name="heartland">
-                {{#select heartland}}
+                {{#select heartland.value}}
                     {{#each terrains}}
                         <option value="{{value}}">{{label}}</option>
                     {{/each}}

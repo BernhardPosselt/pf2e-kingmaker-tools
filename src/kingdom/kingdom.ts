@@ -30,7 +30,7 @@ import {allFeats, allFeatsByName} from './feats';
 import {addGroupDialog} from './add-group-dialog';
 import {AddBonusFeatDialog} from './add-bonus-feat-dialog';
 import {addOngoingEventDialog} from './add-ongoing-event-dialog';
-import {rollKingdomEvent} from '../kingdom-events';
+import {rollCultEvent, rollKingdomEvent} from '../kingdom-events';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './setup-dialog';
 
@@ -96,7 +96,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             fame: kingdomData.fame,
             fameType: kingdomData.fameType,
             charter: kingdomData.charter,
-            heartland: kingdomData.heartland,
+            heartland: {
+                value: kingdomData.heartland,
+                label: capitalize(kingdomData.heartland),
+            },
             government: kingdomData.government,
             type: capitalize(sizeData.type),
             controlDC: getControlDC(kingdomData.level, kingdomData.size),
@@ -128,6 +131,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 abilityScores: kingdomData.abilityScores,
                 unrest: kingdomData.unrest,
                 kingdomLevel: kingdomData.level,
+                alwaysAddLevel: getBooleanSetting(this.game, 'kingdomAlwaysAddLevel'),
             }),
             leaders: this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
@@ -182,6 +186,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             turnsWithoutEvent: kingdomData.turnsWithoutEvent,
             eventDC: this.calculateEventDC(kingdomData.turnsWithoutEvent),
             useXpHomebrew,
+            // TODO: print debug for xp to chat
+            // TODO: print debug for end turn to chat
+            // TODO: print debug for adjust unrest
+            // TODO: print debug for collect resources
+            // TODO: print debug for pay consumption
         };
     }
 
@@ -244,6 +253,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => await this.checkForEvent());
         $html.querySelector('#km-roll-event')
             ?.addEventListener('click', async () => await rollKingdomEvent(this.game));
+        $html.querySelector('#km-roll-cult-event')
+            ?.addEventListener('click', async () => await rollCultEvent(this.game));
         $html.querySelector('#km-add-event')
             ?.addEventListener('click', async () => addOngoingEventDialog((name) => {
                 const current = this.getKingdom();
@@ -330,6 +341,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-end-turn')
             ?.addEventListener('click', async () => await this.endTurn());
     }
+
 
     private async endTurn(): Promise<void> {
         const current = this.getKingdom();

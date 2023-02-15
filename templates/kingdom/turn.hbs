@@ -47,6 +47,8 @@
 
 <h2>Region Activities (3)</h2>
 
+You can attempt 2 Region activities simultaneously as long as both activities take place in the same {{heartland.label}} hex. You take a –2 penalty to Kingdom skill checks made during these two activities.
+
 {{#each regionActivities}}
     <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
 {{/each}}
@@ -67,7 +69,10 @@
 <h2>Event Phase</h2>
 <button type="button" id="km-check-event">Check for Kingdom Event (DC {{eventDC}})</button>
 
-<button type="button" id="km-roll-event">Roll Kingdom Event</button>
+<div class="activity-choice">
+    <button type="button" id="km-roll-event">Roll Kingdom Event</button>
+    <button type="button" id="km-roll-cult-event">Roll Cult Event</button>
+</div>
 
 <table class="km-table" {{#unless ongoingEvents}}hidden{{/unless}}>
     <tr>
@@ -129,7 +134,7 @@ Claimed Hexes this Round:
     {{/each}}
 </table>
 
-<h2>Level Up</h2>
+<h2>Ending Turn</h2>
 
 <button type="button" id="km-level-up" {{#unless canLevelUp}}disabled{{/unless}}>Level Up</button>
 

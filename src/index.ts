@@ -195,6 +195,13 @@ Hooks.on('ready', async () => {
             default: 'Kingdom Events',
             type: String,
         });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomCultTable', {
+            name: 'Kingdom Cult Events Table Name',
+            scope: 'world',
+            config: true,
+            default: 'Random Cult Events',
+            type: String,
+        });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'selectedCompanions', {
             name: 'Selected Companions',
             scope: 'client',
@@ -269,6 +276,14 @@ Hooks.on('ready', async () => {
         gameInstance.settings.register('pf2e-kingmaker-tools', 'vanceAndKerensharaXP', {
             name: 'Enable Vance and Kerenshara XP rules',
             hint: 'Adds additional Milestone Events, more XP for claiming hexes and RP',
+            scope: 'world',
+            config: true,
+            default: false,
+            type: Boolean,
+        });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomAlwaysAddLevel', {
+            name: 'Always add Level to Skill',
+            hint: 'If enabled, always adds the kingdom\'s level to a skill, even if it is untrained',
             scope: 'world',
             config: true,
             default: false,

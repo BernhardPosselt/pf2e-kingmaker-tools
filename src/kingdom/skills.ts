@@ -95,6 +95,7 @@ export function calculateSkills(
         abilityScores,
         leaders,
         kingdomLevel,
+        alwaysAddLevel,
     }: {
         ruin: Ruin,
         unrest: number,
@@ -102,6 +103,7 @@ export function calculateSkills(
         abilityScores: AbilityScores,
         kingdomLevel: number,
         leaders: Leaders,
+        alwaysAddLevel: boolean,
     }
 ): SkillStats[] {
     const isRegionActivity = false; // FIXME
@@ -118,7 +120,7 @@ export function calculateSkills(
         const rank = skillRanks[skill];
         const ruinAbility = abilityRuins[ability];
         const abilityBonus = calculateAbilityModifier(abilityScores[ability]);
-        const proficiencyBonus = rank > 0 ? kingdomLevel + rank * 2 : 0;
+        const proficiencyBonus = rank > 0 ? (kingdomLevel + rank * 2) : (alwaysAddLevel ? kingdomLevel : 0);
         const itemPenalty = ruin[ruinAbility].penalty;
         const statusPenalty = calculateUnrestPenalty(unrest);
         const value = (abilityBonus + proficiencyBonus + statusBonus + circumstanceBonus + itemBonus) -
