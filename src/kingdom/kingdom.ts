@@ -90,6 +90,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         } = this.getSettlementData(settlementSceneDataAndStructures);
         const totalConsumption = kingdomData.consumption.armies + kingdomData.consumption.now + settlementConsumption;
         const useXpHomebrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
+        const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
         return {
             ...super.getData(options),
             isGM,
@@ -189,9 +190,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             armyActivities: allArmyActivities.map(activity => {
                 return {label: this.createActivityLabel(activity, kingdomData.level), value: activity};
             }),
-            featuresByLevel: Array.from(featuresByLevel.entries()).map(([level, features]) => {
-                return {level, features: features.map(f => f.name).join(', ')};
-            }),
+            featuresByLevel: Array.from(featuresByLevel.entries())
+                .map(([level, features]) => {
+                    const featureNames = features.map(f => f.name);
+                    if (homebrewSkillIncreases && level % 2 == 0) {
+                        featureNames.push('Skill Increase');
+                    }
+                    return {level, features: featureNames.join(', ')};
+                }),
             uniqueFeatures: uniqueFeatures,
             canLevelUp: kingdomData.xp >= kingdomData.xpThreshold && kingdomData.level < 20,
             turnsWithoutEvent: kingdomData.turnsWithoutEvent,
@@ -425,7 +431,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const newUnrest = atWar + overcrowdedSettlements + secondaryTerritories;
         let unrest = newUnrest + current.unrest;
         if (current.level >= 20 && unrest > 0) {
-           unrest = 0;
+            unrest = 0;
             await ChatMessage.create({content: 'Ignoring Unrest increase due to "Envy of the World" Kingdom Feature'});
         }
         if (unrest >= 10) {

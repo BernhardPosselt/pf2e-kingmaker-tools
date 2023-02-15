@@ -281,3 +281,4 @@ Die at the start of your next Kingdom turn.`,
 
 export const allFeatsByName = Object.fromEntries((allFeats)
     .map((feat) => [feat.name, feat]));
+

@@ -289,6 +289,14 @@ Hooks.on('ready', async () => {
             default: false,
             type: Boolean,
         });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomSkillIncreaseEveryLevel', {
+            name: 'Kingdom Increase Evey Level',
+            hint: 'If enabled, adds Skill Increases for all even levels from level 2 onwards',
+            scope: 'world',
+            config: true,
+            default: false,
+            type: Boolean,
+        });
         Hooks.on('updateWorldTime', async (_, delta) => {
             if (getBooleanSetting(gameInstance, 'autoRollWeather')
                 && isGm(gameInstance)
