@@ -25,7 +25,9 @@ import {
     Activity,
     allArmyActivities,
     allLeadershipActivities,
-    allRegionActivities, oncePerRoundActivity, trainedActivities,
+    allRegionActivities,
+    oncePerRoundActivity,
+    trainedActivities,
 } from '../actions-and-skills';
 import {
     getAllSettlementSceneData,
@@ -204,11 +206,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             eventDC: this.calculateEventDC(kingdomData.turnsWithoutEvent),
             civicPlanning: kingdomData.level >= 12,
             useXpHomebrew,
-            // TODO: print debug for xp to chat
-            // TODO: print debug for end turn to chat
-            // TODO: print debug for adjust unrest
-            // TODO: print debug for collect resources
-            // TODO: print debug for pay consumption
+
         };
     }
 
@@ -316,12 +314,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.km-event-xp')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => {
-                    const current = this.getKingdom();
                     const target = ev.target as HTMLButtonElement;
                     const modifier = parseInt(target.dataset.modifier ?? '0', 10);
-                    await this.update({
-                        xp: calculateEventXP(modifier) + current.xp,
-                    });
+                    await this.increaseXP(calculateEventXP(modifier));
                 });
             });
         $html.querySelectorAll('.km-claimed-hexes-xp')
@@ -331,18 +326,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const hexes = parseInt(target.dataset.hexes ?? '0', 10);
                     const current = this.getKingdom();
                     const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
-                    await this.update({
-                        xp: calculateHexXP(hexes, current.size, useHomeBrew) + current.xp,
-                    });
+                    await this.increaseXP(calculateHexXP(hexes, current.size, useHomeBrew));
                 });
             });
         $html.querySelector('#km-rp-to-xp')
             ?.addEventListener('click', async () => {
                 const current = this.getKingdom();
                 const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
-                await this.update({
-                    xp: calculateRpXP(current.resourcePoints.now, current.level, useHomeBrew) + current.xp,
-                });
+                await this.increaseXP(calculateRpXP(current.resourcePoints.now, current.level, useHomeBrew));
             });
         $html.querySelector('#km-level-up')
             ?.addEventListener('click', async () => {
@@ -390,11 +381,21 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
 
+    private async increaseXP(xp: number): Promise<void> {
+        await ChatMessage.create({content: `Gained ${xp} Kingdom XP`});
+        await this.update({xp: this.getKingdom().xp + xp});
+    }
+
     private async endTurn(): Promise<void> {
         const current = this.getKingdom();
         const sizeData = getSizeData(current.size);
         const capacity = this.getCapacity(sizeData);
-        console.log(capacity);
+        await ChatMessage.create({content: `<h2>Ending Turn</h2>
+            <ul>
+                <li>Setting Resource Points to 0</li>
+                <li>Adding values from the <b>next</b> columns to the <b>now</b> columns respecting their resource limits</li>
+            </ul>
+            `});
         await this.update({
             resourceDice: {
                 now: current.resourcePoints.next,
@@ -439,6 +440,16 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         if (current.level >= 20 && unrest > 0) {
             unrest = 0;
             await ChatMessage.create({content: 'Ignoring Unrest increase due to "Envy of the World" Kingdom Feature'});
+        }
+        if (unrest > 0) {
+            await ChatMessage.create({content: `<h2>Gaining Unrest</h2> 
+                <ul>
+                    <li><b>Overcrowded Settlements</b>: ${overcrowdedSettlements}</li>
+                    <li><b>Secondary Territories</b>: ${secondaryTerritories}</li>
+                    <li><b>Kingdom At War</b>: ${atWar}</li>
+                    <li><b>Total</b>: ${newUnrest}</li>
+                </ul>
+                `});
         }
         if (unrest >= 10) {
             const ruinRoll = await (new Roll('1d10').roll());
@@ -505,6 +516,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const capacity = this.getCapacity(sizeData);
         const dice = levelData.resourceDice + current.resourceDice.now + featDice;
         const rolledPoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
+        const commodities = this.calculateCommoditiesThisTurn(current);
+        await ChatMessage.create({content: `
+        <h2>Collecting Resources</h2>
+        <ul>
+            <li><b>Resource Points</b>: ${rolledPoints}</li>
+            <li><b>Ore</b>: ${commodities.ore}</li>
+            <li><b>Lumber</b>: ${commodities.lumber}</li>
+            <li><b>Stone</b>: ${commodities.stone}</li>
+            <li><b>Luxuries</b>: ${commodities.luxuries}</li>
+        </ul>
+        `});
         await this.update({
             resourcePoints: {
                 now: current.resourcePoints.now + rolledPoints,
@@ -516,7 +538,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             },
             commodities: {
                 now: {
-                    ...this.calculateCommoditiesThisTurn(capacity, current),
+                    ore: Math.min(capacity.ore, commodities.ore),
+                    lumber: Math.min(capacity.lumber, commodities.lumber),
+                    luxuries: Math.min(capacity.luxuries, commodities.luxuries),
+                    stone: Math.min(capacity.stone, commodities.stone),
                     food: current.commodities.now.food,
                 },
                 next: current.commodities.next,
@@ -530,16 +555,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         return this.calculateStorageCapacity(sizeData.commodityCapacity, storage);
     }
 
-    private calculateCommoditiesThisTurn(
-        capacity: Commodities,
-        kingdom: Kingdom,
-    ): Omit<Commodities, 'food'> {
+    private calculateCommoditiesThisTurn(kingdom: Kingdom): Omit<Commodities, 'food'> {
         const sites = kingdom.workSites;
         return {
-            ore: Math.min(capacity.ore, sites.mines.quantity + sites.mines.resources),
-            lumber: Math.min(capacity.lumber, sites.mines.quantity + sites.mines.resources),
-            luxuries: Math.min(capacity.luxuries, sites.luxurySources.quantity + sites.luxurySources.resources),
-            stone: Math.min(capacity.stone, sites.lumberCamps.quantity + sites.lumberCamps.resources),
+            ore: sites.mines.quantity + sites.mines.resources,
+            lumber: sites.mines.quantity + sites.mines.resources,
+            luxuries: sites.luxurySources.quantity + sites.luxurySources.resources,
+            stone: sites.lumberCamps.quantity + sites.lumberCamps.resources,
         };
     }
 
@@ -699,12 +721,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const {settlementConsumption} = this.getSettlementData(settlementSceneDataAndStructures);
         const totalConsumption = current.consumption.armies + current.consumption.now + settlementConsumption;
         const currentFood = current.commodities.now.food;
-        if (totalConsumption > currentFood) {
-            const missingFood = totalConsumption - currentFood;
-            const pay = missingFood * 5;
-            await ChatMessage.create({content: `Missing ${missingFood} food commodities. Either pay ${pay} RP or gain [[/r 1d4]] Unrest`});
-        }
+        const missingFood = totalConsumption - currentFood;
+        const pay = missingFood * 5;
         if (totalConsumption > 0) {
+            await ChatMessage.create({content: `<h2>Paying Consumption</h2>
+            <ul>
+                <li>Reducing food commodities by ${Math.min(currentFood, totalConsumption)}</li>
+                ${missingFood > 0 ? `<li>Missing ${missingFood} food commodities. Either pay ${pay} RP or gain [[/r 1d4]] Unrest</li>` : ''}
+            </ul>
+            `});
             await this.update({
                 commodities: {
                     now: {
