@@ -61,7 +61,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private sheetActor: Actor;
 
     private readonly game: Game;
-    private nav: KingdomTabs = 'turn';
+    private nav: KingdomTabs = 'status';
 
     constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
@@ -163,6 +163,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Trade Agreement', value: 'trade-agreement'},
             ],
             ongoingEvents: kingdomData.ongoingEvents,
+            // TODO: sort by xp and name
             milestones: kingdomData.milestones.map(m => {
                 return {...m, display: useXpHomebrew || !m.homebrew};
             }),
@@ -257,10 +258,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.km-event-xp')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => {
+                    const current = this.getKingdom();
                     const target = ev.target as HTMLButtonElement;
                     const modifier = parseInt(target.dataset.modifier ?? '0', 10);
                     await this.update({
-                        xp: calculateEventXP(modifier),
+                        xp: calculateEventXP(modifier) + current.xp,
                     });
                 });
             });
@@ -272,7 +274,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const current = this.getKingdom();
                     const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
                     await this.update({
-                        xp: calculateHexXP(hexes, current.size, useHomeBrew),
+                        xp: calculateHexXP(hexes, current.size, useHomeBrew) + current.xp,
                     });
                 });
             });
@@ -281,7 +283,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 const current = this.getKingdom();
                 const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
                 await this.update({
-                    xp: calculateRpXP(current.resourceDice.next, current.level, useHomeBrew),
+                    xp: calculateRpXP(current.resourcePoints.now, current.level, useHomeBrew) + current.xp,
                 });
             });
         $html.querySelector('#km-level-up')
@@ -326,42 +328,45 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 });
             });
         $html.querySelector('#km-end-turn')
-            ?.addEventListener('click', async () => {
-                const current = this.getKingdom();
-                const sizeData = getSizeData(current.size);
-                const capacity = this.getCapacity(sizeData);
-                await this.update({
-                    resourceDice: {
-                        now: current.resourcePoints.next,
-                        next: 0,
-                    },
-                    resourcePoints: {
-                        now: current.resourcePoints.next,
-                        next: 0,
-                    },
-                    consumption: {
-                        now: current.consumption.next,
-                        next: 0,
-                        armies: current.consumption.armies,
-                    },
-                    commodities: {
-                        now: {
-                            food: Math.max(capacity.food, current.commodities.now.food + current.commodities.next.food),
-                            luxuries: Math.max(capacity.luxuries, current.commodities.now.luxuries + current.commodities.next.luxuries),
-                            stone: Math.max(capacity.stone, current.commodities.now.stone + current.commodities.next.stone),
-                            lumber: Math.max(capacity.lumber, current.commodities.now.lumber + current.commodities.next.lumber),
-                            ore: Math.max(capacity.ore, current.commodities.now.ore + current.commodities.next.ore),
-                        },
-                        next: {
-                            food: 0,
-                            luxuries: 0,
-                            stone: 0,
-                            lumber: 0,
-                            ore: 0,
-                        },
-                    },
-                });
-            });
+            ?.addEventListener('click', async () => await this.endTurn());
+    }
+
+    private async endTurn(): Promise<void> {
+        const current = this.getKingdom();
+        const sizeData = getSizeData(current.size);
+        const capacity = this.getCapacity(sizeData);
+        console.log(capacity);
+        await this.update({
+            resourceDice: {
+                now: current.resourcePoints.next,
+                next: 0,
+            },
+            resourcePoints: {
+                now: current.resourcePoints.next,
+                next: 0,
+            },
+            consumption: {
+                now: current.consumption.next,
+                next: 0,
+                armies: current.consumption.armies,
+            },
+            commodities: {
+                now: {
+                    food: Math.min(capacity.food, current.commodities.now.food + current.commodities.next.food),
+                    luxuries: Math.min(capacity.luxuries, current.commodities.now.luxuries + current.commodities.next.luxuries),
+                    stone: Math.min(capacity.stone, current.commodities.now.stone + current.commodities.next.stone),
+                    lumber: Math.min(capacity.lumber, current.commodities.now.lumber + current.commodities.next.lumber),
+                    ore: Math.min(capacity.ore, current.commodities.now.ore + current.commodities.next.ore),
+                },
+                next: {
+                    food: 0,
+                    luxuries: 0,
+                    stone: 0,
+                    lumber: 0,
+                    ore: 0,
+                },
+            },
+        });
     }
 
     private async adjustUnrest(): Promise<void> {

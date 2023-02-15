@@ -69,7 +69,7 @@
 
 <button type="button" id="km-roll-event">Roll Kingdom Event</button>
 
-<table class="km-table">
+<table class="km-table" {{#unless ongoingEvents}}hidden{{/unless}}>
     <tr>
         <th>Ongoing Events</th>
         <th>Resolve</th>
@@ -84,6 +84,7 @@
         </tr>
     {{/each}}
 </table>
+
 <button type="button" id="km-add-event">Add Ongoing Event <i class="fa-solid fa-plus"></i></button>
 
 <h2>Apply Kingdom XP</h2>
