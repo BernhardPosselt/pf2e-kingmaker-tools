@@ -62,7 +62,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
         options.id = 'kingdom-app';
-        options.title = 'Kingdom';
+        options.title = 'Kingdom (Alpha! - Eats Kingdom Babies Many)';
         options.template = 'modules/pf2e-kingmaker-tools/templates/kingdom/sheet.hbs';
         options.submitOnChange = true;
         options.closeOnSubmit = false;

@@ -4,10 +4,10 @@ import {Activity, getActivityPhase, getActivitySkills, skillAbilities} from '../
 import {Skill} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getBooleanSetting} from '../../settings';
-import {getMergedData, SettlementSceneData} from '../../structures/scene';
-import {getLevelData, Kingdom, SkillRanks} from '../data/kingdom';
-import {getCompanionUnlockActivities, getCompanionSkillUnlocks} from '../data/companions';
-import {activityData} from '../data/activityData';
+import {getMergedData} from '../../structures/scene';
+import {Kingdom, SkillRanks} from '../data/kingdom';
+import {getCompanionSkillUnlocks} from '../data/companions';
+import {unslugifyActivity} from '../../utils';
 
 
 export type CheckType = 'skill' | 'activity';
@@ -96,6 +96,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             return [skill, {total, modifiers}];
         }));
         return {
+            activity: this.activity ? unslugifyActivity(this.activity) : undefined,
             selectableSkills: Object.values(skillModifiers),
             selectedSkill: this.selectedSkill,
             selectedModifiers: skillModifiers[this.selectedSkill],

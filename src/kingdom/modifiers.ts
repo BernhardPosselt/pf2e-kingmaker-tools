@@ -122,7 +122,7 @@ export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
         vacancyPenalty: 0,
         value: 0,
     };
-    const enabledModifiers = modifiers.filter(modifier => modifier.enabled);
+    const enabledModifiers = modifiers.filter(modifier => modifier.enabled && modifier.value !== 0);
     for (const modifier of enabledModifiers) {
         if (modifier.type === 'vacancy') {
             result.vacancyPenalty = modifier.value;

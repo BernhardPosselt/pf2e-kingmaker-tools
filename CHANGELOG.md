@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 2023-02-17
+
+### Added
+
+* Add Kingdom Sheet
+
 ### Changed
 
 * All mentions of **action** in structure rules have been replaced with **activity**

@@ -1,1 +1,58 @@
+<h2>Skill Check</h2>
 
+{{#if activity}}
+    <p><b>Activity</b>: {{activity}}</p>
+    <p><label>Applicable Skills: <select>
+        <option>Magic + 8</option>
+    </select>
+    </label>
+    </p>
+{{else}}
+    <p><label>Event Phase: <input type="checkbox" checked></label></p>
+{{/if}}
+
+<h3>Modifier Breakdown</h3>
+
+<table class="km-table">
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Value</th>
+        <th>Enabled</th>
+    </tr>
+    <tr>
+        <td>Bad Luck haha</td>
+        <td>Circumstance Penalty</td>
+        <td>-1</td>
+        <td><input type="checkbox" checked></td>
+    </tr>
+</table>
+
+<h3>Custom modifiers</h3>
+<table class="km-table">
+    <tr>
+        <th>Type</th>
+        <th>Bonus</th>
+        <th>Penalty</th>
+    </tr>
+    <tr>
+        <td>Status</td>
+        <td><input type="number" value="0"></td>
+        <td><input type="number" value="0"></td>
+    </tr>
+    <tr>
+        <td>Circumstance</td>
+        <td><input type="number" value="0"></td>
+        <td><input type="number" value="0"></td>
+    </tr>
+    <tr>
+        <td>Item</td>
+        <td><input type="number" value="0"></td>
+        <td><input type="number" value="0"></td>
+    </tr>
+</table>
+
+<div class="activity-choice">
+    <button type="button" id="km-roll-skill-assurance">Assurance +32 <i class="fa-solid fa-dice-d20"></i></button>
+    <button type="button" id="km-roll-skill">Roll +22 <i class="fa-solid fa-dice-d20"></i></button>
+</div>
