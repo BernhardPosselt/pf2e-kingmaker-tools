@@ -20,8 +20,7 @@ import {capitalize, unpackFormArray, unslugifyAction} from '../utils';
 import {Storage} from '../structures/structures';
 import {
     getAllSettlementSceneData,
-    getAllSettlementSceneDataAndStructures, getMergedData, getViewedSceneMergedData,
-    SettlementSceneData,
+    getAllSettlementSceneDataAndStructures, getMergedData, SettlementSceneData,
 } from '../structures/scene';
 import {allFeats, allFeatsByName} from './data/feats';
 import {addGroupDialog} from './dialogs/add-group-dialog';
@@ -29,7 +28,7 @@ import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
 import {addOngoingEventDialog} from './dialogs/add-ongoing-event-dialog';
 import {rollCultEvent, rollKingdomEvent} from '../kingdom-events';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
-import {setupDialog} from './setup-dialog';
+import {setupDialog} from './dialogs/setup-dialog';
 import {featuresByLevel, uniqueFeatures} from './data/features';
 import {allCompanions} from './data/companions';
 import {
@@ -44,6 +43,8 @@ import {
 import {calculateAbilityModifier} from './data/abilities';
 import {calculateSkills} from './skills';
 import {calculateInvestedBonus, isInvested} from './data/leaders';
+import {CheckDialog} from './dialogs/check-dialog';
+import {Skill} from './data/skills';
 
 interface KingdomOptions {
     game: Game;
@@ -282,7 +283,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const $html = html[0];
         $html.querySelectorAll('.km-nav a')?.forEach(el => {
             el.addEventListener('click', (event) => {
-                const tab = event.target as HTMLAnchorElement;
+                const tab = event.currentTarget as HTMLAnchorElement;
                 this.nav = tab.dataset.tab as KingdomTabs;
                 this.render();
             });
@@ -318,7 +319,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.km-event-xp')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => {
-                    const target = ev.target as HTMLButtonElement;
+                    const target = ev.currentTarget as HTMLButtonElement;
                     const modifier = parseInt(target.dataset.modifier ?? '0', 10);
                     await this.increaseXP(calculateEventXP(modifier));
                 });
@@ -326,7 +327,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.km-claimed-hexes-xp')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => {
-                    const target = ev.target as HTMLButtonElement;
+                    const target = ev.currentTarget as HTMLButtonElement;
                     const hexes = parseInt(target.dataset.hexes ?? '0', 10);
                     const current = this.getKingdom();
                     const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
@@ -374,10 +375,28 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.kingdom-activity')
             ?.forEach(el => {
                 el.addEventListener('click', async (el) => {
-                    const target = el.target as HTMLButtonElement;
+                    const target = el.currentTarget as HTMLButtonElement;
                     const activity = target.dataset.activity;
-                    console.warn('run kingdom activity ' + activity, el);
-                    // TODO
+                    new CheckDialog(null, {
+                        activity: activity as Activity,
+                        kingdom: this.getKingdom(),
+                        game: this.game,
+                        type: 'activity',
+                    }).render(true);
+                });
+            });
+        $html.querySelectorAll('.kingdom-skill')
+            ?.forEach(el => {
+                el.addEventListener('click', async (el) => {
+                    const target = el.currentTarget as HTMLButtonElement;
+                    const skill = target.dataset.skill;
+                    console.log(skill);
+                    new CheckDialog(null, {
+                        kingdom: this.getKingdom(),
+                        game: this.game,
+                        skill: skill as Skill,
+                        type: 'skill',
+                    }).render(true);
                 });
             });
         $html.querySelector('#km-end-turn')

@@ -1,4 +1,4 @@
-import {Skill} from './skills';
+import {allSkills, Skill} from './skills';
 import {Ability} from './abilities';
 
 export type KingdomPhase = 'leadership' | 'region' | 'event' | 'warfare';
@@ -94,7 +94,7 @@ export const skillAbilities: Record<Skill, Ability> = {
 };
 
 export type AbilityScores = Record<Ability, number>;
-export const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
+const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
     // agriculture
     'establish-farmland': ['agriculture'],
     'harvest-crops': ['agriculture'],
@@ -184,6 +184,15 @@ export const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
     'process-hidden-fees': ['trade'],
     'supplementary-hunting': ['wilderness'],
 };
+
+export function getActivitySkills(activity: Activity): Skill[] {
+    const skills = activitySkills[activity!];
+    if (skills[0] === '*') {
+        return [...allSkills];
+    } else {
+        return skills as Skill[];
+    }
+}
 
 export const allLeadershipActivities: Activity[] = [
     'capital-investment',

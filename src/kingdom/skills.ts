@@ -238,7 +238,6 @@ export function createSkillModifiers(
     }
     return disableLowestModifiers(disablePhaseActivityModifiers(result, phase, activity));
 }
-
 export function calculateSkills(
     {
         ruin,

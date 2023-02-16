@@ -1,6 +1,6 @@
 import {mergeObjects} from '../utils';
-import {Activity, activitySkills} from '../kingdom/data/activities';
-import {allSkills, Skill} from '../kingdom/data/skills';
+import {Activity, getActivitySkills} from '../kingdom/data/activities';
+import {Skill} from '../kingdom/data/skills';
 
 export interface ActionBonusRule {
     value: number;
@@ -240,9 +240,8 @@ function applySettlementEventBonuses(result: SettlementData, structures: Structu
 function simplifyRules(rules: ActionBonusRule[]): SkillBonusRule[] {
     return rules.flatMap(rule => {
         const action = rule.action;
-        const skills = activitySkills[action];
-        const flattenedSkills = skills[0] === '*' ? allSkills : skills as Skill[];
-        return flattenedSkills.map(skill => {
+        const skills = getActivitySkills(action);
+        return skills.map(skill => {
             return {
                 value: rule.value,
                 skill,

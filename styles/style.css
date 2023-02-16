@@ -234,3 +234,15 @@ td.skill-value {
 .simple-dialog-form input {
     display: table-cell;
 }
+
+.kingdom-skill i {
+    display: none;
+}
+
+.kingdom-skill:hover i {
+    display: inline-block;
+}
+
+.kingdom-skill:hover span {
+    display: none;
+}
