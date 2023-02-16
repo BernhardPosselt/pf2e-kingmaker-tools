@@ -215,12 +215,10 @@ export function createSkillModifiers(
     const investedModifier = createInvestedModifier(kingdomLevel, ability, leaders);
     // item bonus
     const structureModifiers = skillItemBonus ? createStructureModifiers(skillItemBonus) : [];
-    // TODO: circumstance bonus
     // status penalty
     const unrestModifier = createUnrestModifier(unrest);
     // item penalty
     const ruinModifier = createRuinModifier(ability, ruin);
-    // TODO: circumstance penalty
     const result = [
         abilityModifier,
         proficiencyModifier,

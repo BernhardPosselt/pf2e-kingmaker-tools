@@ -38,7 +38,7 @@ import {
     AbilityScores,
     Activity, allActivities,
     createActivityLabel,
-    getCompanionUnlockedActivities,
+    enableCompanionActivities,
 } from './data/activities';
 import {calculateAbilityModifier} from './data/abilities';
 import {calculateSkills} from './skills';
@@ -198,15 +198,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             milestones: kingdomData.milestones.map(m => {
                 return {...m, display: useXpHomebrew || !m.homebrew};
             }),
-            leadershipActivities: getCompanionUnlockedActivities('leadership', unlockedActivities)
+            leadershipActivities: enableCompanionActivities('leadership', unlockedActivities)
                 .map(activity => {
                     return {label: createActivityLabel(activity, kingdomData.level), value: activity};
                 }),
-            regionActivities: getCompanionUnlockedActivities('region', unlockedActivities)
+            regionActivities: enableCompanionActivities('region', unlockedActivities)
                 .map(activity => {
                     return {label: createActivityLabel(activity, kingdomData.level), value: activity};
                 }),
-            armyActivities: getCompanionUnlockedActivities('army', unlockedActivities)
+            armyActivities: enableCompanionActivities('army', unlockedActivities)
                 .map(activity => {
                     return {label: createActivityLabel(activity, kingdomData.level), value: activity};
                 }),

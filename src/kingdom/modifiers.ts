@@ -1,5 +1,8 @@
 import {Activity, KingdomPhase} from './data/activities';
 import {groupBy} from '../utils';
+import {getLevelData, Kingdom} from './data/kingdom';
+import {SettlementSceneData} from '../structures/scene';
+import {allFeatsByName} from './data/feats';
 
 export interface Modifier {
     type: 'ability' | 'proficiency' | 'item' | 'status' | 'circumstance' | 'vacancy' | 'untyped';
@@ -134,5 +137,51 @@ export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
     result.value = enabledModifiers
         .map(m => m.value)
         .reduce((a, b) => a + b, 0);
+    return result;
+}
+
+/**
+ * Add modifiers from feats or other rules
+ * @param kingdom
+ * @param activeSettlement
+ */
+export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: SettlementSceneData | undefined): Modifier[] {
+    const levelData = getLevelData(kingdom.level);
+    const feats = new Set([...kingdom.feats.map(f => f.id), ...kingdom.feats.map(f => f.id)]);
+    const result: Modifier[] = Array.from(feats)
+        .flatMap(feat => allFeatsByName[feat]?.modifiers ?? []);
+    if (activeSettlement?.scenedData?.secondaryTerritory) {
+        result.push({
+            name: 'Check in Secondary Territory',
+            type: 'circumstance',
+            value: -4,
+            enabled: true,
+        });
+    }
+    if (kingdom.level >= 4) {
+        result.push({
+            name: 'Expansion Expert',
+            type: 'circumstance',
+            value: 2,
+            enabled: true,
+        });
+    }
+    const settlementEventBonus = activeSettlement?.settlement?.settlementEventBonus ?? 0;
+    if (settlementEventBonus > 0) {
+        result.push({
+            name: 'Event Phase',
+            type: 'circumstance',
+            value: settlementEventBonus,
+            enabled: true,
+            phases: ['event'],
+        });
+    }
+    result.push({
+        name: 'Invested, non Vacant Leader involved in Event',
+        type: 'circumstance',
+        value: levelData.investedLeadershipBonus,
+        enabled: true,
+        phases: ['event'],
+    });
     return result;
 }

@@ -1,5 +1,7 @@
 import {capitalize} from '../../utils';
 import {allSkills} from './skills';
+import {Modifier} from '../modifiers';
+import {string} from 'joi';
 
 export interface KingdomFeat {
     name: string;
@@ -7,6 +9,7 @@ export interface KingdomFeat {
     text: string;
     prerequisites?: string;
     automated: boolean;
+    modifiers?: Modifier[];
 }
 
 
@@ -21,20 +24,6 @@ function generateForAllSkills(feat: KingdomFeat): KingdomFeat[] {
 }
 
 export const allFeats: KingdomFeat[] = [
-    // choose leadership
-    // +2 status bonus to New Leadership
-    // +1 status to resolve dangerous events
-    // +2 circumstance to fortify hex
-    // +1 circumstance to dangerous events that threaten settlement
-    // +4 status to harmful event
-    // +2 circumstance bonus to pledge of fealty and new leadership
-    // +1 status bonus to Establish Work Site, Establish Trade Agreement and Trade Commodities activities.
-    // +2 status to culture if 1+ unrest
-    // +1 status to magic, can use Magic instead of Engineering based checks
-    // 1 bonus Resource at start of turn
-    // +1 to level for magic items
-    // assurance
-    // anarchy at 26
     {
         automated: true,
         name: '-',
@@ -42,7 +31,7 @@ export const allFeats: KingdomFeat[] = [
         text: '',
     },
     {
-        automated: false,
+        automated: true,
         name: 'Civil Service',
         level: 1,
         text: `Everyone has a place and a role, and as long as those
@@ -54,6 +43,13 @@ change the leadership role to which Civil Service applies,
 you can do so using the New Leadership activity at the
 start of a Kingdom turn.
 You gain a +2 status bonus to New Leadership checks.`,
+        modifiers: [{
+            name: 'Swapping Civil Service',
+            enabled: false,
+            value: 2,
+            type: 'status',
+            activities: ['new-leadership'],
+        }],
     },
     {
         automated: false,
@@ -75,7 +71,7 @@ does not allow you to ever improve a critical failure to
 a success.)`,
     },
     {
-        automated: false,
+        automated: true,
         name: 'Crush Dissent',
         level: 1,
         prerequisites: 'Trained in Warfare',
@@ -88,9 +84,16 @@ failure, the Unrest increase is doubled. In addition, you
 gain a +1 status bonus to checks to resolve dangerous
 kingdom events that involve internal bickering, such as
 Feud.`,
+        modifiers: [{
+            name: 'Dangerous Kingdom Event involving internal bickering',
+            enabled: false,
+            value: 1,
+            type: 'status',
+            phases: ['event'],
+        }],
     },
     {
-        automated: false,
+        automated: true,
         name: 'Fortified Fiefs',
         level: 1,
         prerequisites: 'Trained in Defense',
@@ -104,9 +107,22 @@ Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In
 addition, you gain a +1 status bonus to all kingdom checks
 attempted during dangerous events that directly impact
 your settlements’ defenses.`,
+        modifiers: [{
+            name: 'Fortified Fiefs',
+            type: 'circumstance',
+            activities: ['fortify-hex'],
+            enabled: true,
+            value: 2,
+        }, {
+            name: 'Build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall',
+            type: 'circumstance',
+            activities: ['build-structure'],
+            enabled: false,
+            value: 2,
+        }],
     },
     {
-        automated: false,
+        automated: true,
         name: 'Insider Trading',
         level: 1,
         prerequisites: 'Trained in Industry',
@@ -120,6 +136,13 @@ and Trade Commodities activities.
 In addition, gain 1 bonus Resource
 Die at the start of each Kingdom
 turn.`,
+        modifiers: [{
+            name: 'Insider Trading',
+            type: 'status',
+            activities: ['establish-work-site-quarry', 'establish-work-site-lumber', 'establish-work-site-mine', 'establish-trade-agreement', 'trade-commodities'],
+            enabled: true,
+            value: 2,
+        }],
     },
     {
         automated: false,
@@ -143,6 +166,12 @@ and you can use Magic checks in place of Engineering
 checks. In addition, as magic-wielding NPCs find your
 nation a comfortable place to live and work, you reduce
 the cost of using the Hire Adventurers activity to 1 RP.`,
+        modifiers: [{
+            name: 'Magic Based Skill',
+            type: 'status',
+            enabled: false,
+            value: 1,
+        }],
     },
     {
         automated: false,
@@ -181,7 +210,7 @@ decrease the Unrest by an additional 1. You do not fall
 into anarchy unless your kingdom’s Unrest reaches 24`,
     },
     {
-        automated: false,
+        automated: true,
         name: 'Inspiring Entertainment',
         level: 3,
         prerequisites: 'Culture 14',
@@ -191,12 +220,14 @@ never a shortage of new plays,
 operas, novels, music, sculptures,
 paintings, or other forms of distraction
 to entertain the citizens, even during
-times of upheaval. When you check
-for Unrest during the Upkeep phase of
-a Kingdom turn, you may roll a Culture-based check rather
-than a Loyalty-based check to determine the outcome. Your
-kingdom also gains a +2 status bonus to all Culture-based
+times of upheaval. Your kingdom gains a +2 status bonus to all Culture-based
 skill checks whenever your kingdom has at least 1 Unrest.`,
+        modifiers: [{
+            name: 'At least 1 Unrest and Culture-based skill check',
+            type: 'status',
+            enabled: false,
+            value: 2,
+        }],
     },
     ...generateForAllSkills({
         name: 'Kingdom Assurance',
@@ -229,7 +260,7 @@ paid in full. At the start of your next Kingdom turn, roll
 4 fewer Resource Dice than normal.`,
     },
     {
-        automated: false,
+        automated: true,
         name: 'Quick Recovery',
         level: 3,
         prerequisites: 'Stability 14',
@@ -237,9 +268,16 @@ paid in full. At the start of your next Kingdom turn, roll
 disaster. Whenever you attempt a skill check to end an
 ongoing harmful kingdom event, you gain a +4 status
 bonus to the check.`,
+        modifiers: [{
+            name: 'Ongoing Harmful Event',
+            type: 'status',
+            enabled: false,
+            phases: ['event'],
+            value: 4,
+        }],
     },
     {
-        automated: false,
+        automated: true,
         name: 'Free and Fair',
         level: 7,
         text: `Your reputation for transparency and fairness in
@@ -252,6 +290,19 @@ you can spend 2 RP to reroll the check (but without the
 +2 circumstance bonus); attempting this adds the Fortune
 trait. You must take the result of the second roll, even if it
 is worse than the original roll.`,
+        modifiers: [{
+            name: 'Loyalty Based Skill',
+            type: 'circumstance',
+            activities: ['new-leadership'],
+            enabled: false,
+            value: 2,
+        }, {
+            name: 'Loyalty Based Skill',
+            type: 'circumstance',
+            activities: ['pledge-of-fealty'],
+            enabled: false,
+            value: 2,
+        }],
     },
     {
         automated: false,

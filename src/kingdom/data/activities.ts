@@ -127,9 +127,9 @@ export function getActivityPhase(activity: Activity): KingdomPhase {
     return activityData[activity].phase;
 }
 
-export const lockedActivities: Set<Activity> = new Set(
+export const companionActivities: Set<Activity> = new Set(
     (Object.entries(activityData) as [Activity, ActivityContent][])
-        .filter(([, data]) => !data.enabled && data.companion)
+        .filter(([, data]) => data.companion)
         .map(([activity]) => activity)
 );
 
@@ -151,11 +151,11 @@ const activitiesByPhase: Record<KingdomPhase, Activity[]> = (Object.entries(acti
         return mergeObjects(prev, curr, (a, b) => [...a, ...b]);
     }, {'leadership': [], 'region': [], 'event': [], 'army': [], 'commerce': [], 'upkeep': [], 'civic': []});
 
-export function getCompanionUnlockedActivities(type: 'leadership' | 'army' | 'region', unlockActivities: Set<Activity>): Activity[] {
+export function enableCompanionActivities(type: KingdomPhase, unlockedCompanionActivities: Set<Activity>): Activity[] {
     return activitiesByPhase[type]
         .filter(activity => {
-            if (lockedActivities.has(activity)) {
-                return unlockActivities.has(activity);
+            if (companionActivities.has(activity)) {
+                return unlockedCompanionActivities.has(activity);
             } else {
                 return true;
             }

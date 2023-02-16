@@ -2,8 +2,7 @@ import {Activity} from './activities';
 import {Skill} from './skills';
 import {Leader} from './leaders';
 import {Leaders, LeaderValues} from './kingdom';
-import retryTimes = jest.retryTimes;
-import {capitalize, mergeObjects} from '../../utils';
+import {mergeObjects} from '../../utils';
 
 const allActorTypes = [
     'pc',
@@ -107,7 +106,7 @@ export function getCompanionUnlockActivities(leaders: Leaders): Activity[] {
         .flatMap(unlock => unlock.activities);
 }
 
-export function getCompanionUnlockSkills(leaders: Leaders): UnlockSkills {
+export function getCompanionSkillUnlocks(leaders: Leaders): UnlockSkills {
     return getCompanionUnlocks(leaders)
         .map(unlock => unlock.actionSkills)
         .reduce((prev, curr) => mergeObjects(prev, curr, (a, b) => [...a, ...b]), {});
