@@ -1,5 +1,5 @@
 import {getLevelData, Leaders, Ruin, SkillRanks} from './data/kingdom';
-import {capitalize, unslugifyAction} from '../utils';
+import {capitalize, unslugifyActivity} from '../utils';
 import {Ability, calculateAbilityModifier} from './data/abilities';
 import {allSkills, Skill} from './data/skills';
 import {abilityRuins} from './data/ruin';
@@ -164,7 +164,7 @@ function createActivityModifiers(activities: ActivityBonuses): Modifier[] {
                 type: 'item',
                 enabled: true,
                 value,
-                name: unslugifyAction(activity),
+                name: unslugifyActivity(activity),
                 activities: [activity],
                 phases,
             };

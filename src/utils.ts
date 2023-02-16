@@ -68,7 +68,7 @@ export function unpackFormArray<T>(obj: Record<string, T> | undefined | null): T
     }
 }
 
-export function unslugifyAction(word: string): string {
+export function unslugifyActivity(word: string): string {
     return word
         .replaceAll('action:', '')
         .split('-')

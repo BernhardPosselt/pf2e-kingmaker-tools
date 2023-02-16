@@ -1,6 +1,6 @@
 import {allSkills, Skill} from './skills';
 import {Ability} from './abilities';
-import {unslugifyAction} from '../../utils';
+import {unslugifyActivity} from '../../utils';
 
 export type KingdomPhase = 'leadership' | 'region' | 'event' | 'warfare';
 export const allActivities = [
@@ -338,7 +338,7 @@ export function getUnlockedActivities(type: 'leadership' | 'warfare' | 'region',
 }
 
 export function createActivityLabel(activity: Activity, kingdomLevel: number): string {
-    let label = unslugifyAction(activity);
+    let label = unslugifyActivity(activity);
     if (activity === 'claim-hex') {
         if (kingdomLevel >= 9) {
             label += ' (three times per round)';

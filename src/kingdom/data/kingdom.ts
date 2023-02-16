@@ -1,4 +1,4 @@
-import {AbilityScores} from './activities';
+import {AbilityScores, Activity} from './activities';
 import {ActorTypes} from './companions';
 import {Leader} from './leaders';
 
@@ -148,6 +148,7 @@ export interface Kingdom {
     milestones: MileStone[];
     ongoingEvents: OngoingEvent[];
     turnsWithoutEvent: number;
+    activityBlacklist: Activity[];
 }
 
 
@@ -443,5 +444,6 @@ export function getDefaultKingdomData(): Kingdom {
                 value: 0,
             },
         },
+      activityBlacklist: [],
     };
 }

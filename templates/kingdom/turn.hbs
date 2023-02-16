@@ -1,10 +1,14 @@
+{{#if isGM}}
+    <p>You can hide activities from this page by checking them in the following popup. This allows you to introduce them gradually or just remove them flat out</p>
+    <button type="button" id="blacklist-activities">Activity Blacklist</button>
+{{/if}}
 <h2>Upkeep Phase</h2>
 <ol>
     <li>
         <button type="button" id="km-gain-fame">Gain 1 {{fameLabel}}</button>
     </li>
-    <li>
-        <button type="button" class="kingdom-activity" data-activity="new-leadership">New Leadership (optional)</button>
+    <li {{#if (lookup hideActivities 'new-leadership')}}hidden{{/if}}>
+        <button type="button" class="kingdom-activity" data-activity="new-leadership" >New Leadership (optional)</button>
     </li>
     <li>
         <button type="button" id="km-adjust-unrest">Adjust Unrest</button>
@@ -22,23 +26,23 @@
 <ol>
     <li>
         <div class="activity-choice">
-            <button type="button" class="kingdom-activity" data-activity="collect-taxes">Collect Taxes</button>
+            <button type="button" class="kingdom-activity" data-activity="collect-taxes" {{#if (lookup hideActivities 'collect-taxes')}}hidden{{/if}}>Collect Taxes</button>
             <button type="button" id="km-reduce-unrest">Reduce Unrest</button>
         </div>
     </li>
-    <li>
-        <button type="button" class="kingdom-activity" data-activity="improve-lifestyle">Improve Lifestyle (optional)
+    <li {{#if (lookup hideActivities 'improve-lifestyle')}}hidden{{/if}}>
+        <button type="button" class="kingdom-activity" data-activity="improve-lifestyle" >Improve Lifestyle (optional)
         </button>
     </li>
-    <li>
-        <button type="button" class="kingdom-activity" data-activity="tap-treasury">Tap Treasury (optional)</button>
+    <li {{#if (lookup hideActivities 'tap-treasury')}}hidden{{/if}}>
+        <button type="button" class="kingdom-activity" data-activity="tap-treasury" >Tap Treasury (optional)</button>
     </li>
-    <li>
-        <button type="button" class="kingdom-activity" data-activity="trade-commodities">Trade Commodities (optional)
+    <li {{#if (lookup hideActivities 'trade-commodities')}}hidden{{/if}}>
+        <button type="button" class="kingdom-activity" data-activity="trade-commodities" >Trade Commodities (optional)
         </button>
     </li>
-    <li>
-        <button type="button" class="kingdom-activity" data-activity="manage-trade-agreements">Manage Trade Agreements
+    <li {{#if (lookup hideActivities 'manage-trade-agreements')}}hidden{{/if}}>
+        <button type="button" class="kingdom-activity" data-activity="manage-trade-agreements" >Manage Trade Agreements
             (optional)
         </button>
     </li>
@@ -46,7 +50,7 @@
 
 <h2>Leadership Activities ({{leadershipActivityNumber}} per player)</h2>
 {{#each leadershipActivities}}
-    <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
+    <button type="button" class="kingdom-activity" data-activity="{{value}}" {{#if (lookup ../hideActivities value)}}hidden{{/if}}>{{label}}</button>
 {{/each}}
 
 <h2>Region Activities (3)</h2>
@@ -54,7 +58,7 @@
 You can attempt 2 Region activities simultaneously as long as both activities take place in the same {{heartland.label}} hex. You take a –2 penalty to Kingdom skill checks made during these two activities.
 
 {{#each regionActivities}}
-    <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
+    <button type="button" class="kingdom-activity" data-activity="{{value}}" {{#if (lookup ../hideActivities value)}}hidden{{/if}}>{{label}}</button>
 {{/each}}
 
 <h2>Civic Activities (1 per settlement)</h2>
@@ -63,13 +67,13 @@ You can attempt 2 Region activities simultaneously as long as both activities ta
     During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs after all other settlements have taken their individual Civic activities.
 {{/if}}
 
-<button type="button" class="kingdom-activity" data-activity="build-structure">Build Structure</button>
-<button type="button" class="kingdom-activity" data-activity="demolish">Demolish</button>
+<button type="button" class="kingdom-activity" data-activity="build-structure" {{#if (lookup hideActivities 'build-structure')}}hidden{{/if}}>Build Structure</button>
+<button type="button" class="kingdom-activity" data-activity="demolish" {{#if (lookup hideActivities 'demolish')}}hidden{{/if}}>Demolish</button>
 
 <h2>Army Activities (1 per army)</h2>
 
 {{#each armyActivities}}
-    <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
+    <button type="button" class="kingdom-activity" data-activity="{{value}}" {{#if (lookup ../hideActivities value)}}hidden{{/if}}>{{label}}</button>
 {{/each}}
 
 <h2>Event Phase</h2>

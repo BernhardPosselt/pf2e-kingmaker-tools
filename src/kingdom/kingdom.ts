@@ -32,13 +32,11 @@ import {featuresByLevel, uniqueFeatures} from './data/features';
 import {
     allCompanions,
     applyLeaderCompanionRules,
-    getCompanionUnlock,
     getCompanionUnlockActivities,
-    getCompanionUnlocks,
 } from './data/companions';
 import {
     AbilityScores,
-    Activity,
+    Activity, allActivities,
     createActivityLabel,
     getUnlockedActivities,
 } from './data/activities';
@@ -48,6 +46,7 @@ import {calculateInvestedBonus, isInvested} from './data/leaders';
 import {CheckDialog} from './dialogs/check-dialog';
 import {Skill} from './data/skills';
 import {CommodityStorage} from './data/structures';
+import {activityBlacklistDialog} from './dialogs/activity-blacklist-dialog';
 
 interface KingdomOptions {
     game: Game;
@@ -103,8 +102,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const settlementScene = this.game?.scenes?.get(kingdomData.activeSettlement);
         const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
         const unlockedActivities = new Set<Activity>([...unlockedSettlementActivities, ...getCompanionUnlockActivities(kingdomData.leaders)]);
+        const hideActivities = kingdomData.activityBlacklist
+            .map(activity => {
+                return {[activity]: true};
+            })
+            .reduce((a, b) => Object.assign(a, b), {});
+        console.log(hideActivities);
         return {
             ...super.getData(options),
+            hideActivities,
             isGM,
             isUser: !isGM,
             leadershipActivityNumber: leadershipActivityNumber,
@@ -191,15 +197,18 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             milestones: kingdomData.milestones.map(m => {
                 return {...m, display: useXpHomebrew || !m.homebrew};
             }),
-            leadershipActivities: getUnlockedActivities('leadership', unlockedActivities).map(activity => {
-                return {label: createActivityLabel(activity, kingdomData.level), value: activity};
-            }),
-            regionActivities: getUnlockedActivities('region', unlockedActivities).map(activity => {
-                return {label: createActivityLabel(activity, kingdomData.level), value: activity};
-            }),
-            armyActivities: getUnlockedActivities('warfare', unlockedActivities).map(activity => {
-                return {label: createActivityLabel(activity, kingdomData.level), value: activity};
-            }),
+            leadershipActivities: getUnlockedActivities('leadership', unlockedActivities)
+                .map(activity => {
+                    return {label: createActivityLabel(activity, kingdomData.level), value: activity};
+                }),
+            regionActivities: getUnlockedActivities('region', unlockedActivities)
+                .map(activity => {
+                    return {label: createActivityLabel(activity, kingdomData.level), value: activity};
+                }),
+            armyActivities: getUnlockedActivities('warfare', unlockedActivities)
+                .map(activity => {
+                    return {label: createActivityLabel(activity, kingdomData.level), value: activity};
+                }),
             featuresByLevel: Array.from(featuresByLevel.entries())
                 .map(([level, features]) => {
                     const featureNames = features.map(f => f.name);
@@ -240,10 +249,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         kingdom.milestones = unpackFormArray(kingdom.milestones).map((milestone, index) => {
             return {
                 ...milestones[index],
-                completed: (milestone as {completed: boolean}).completed,
+                completed: (milestone as { completed: boolean }).completed,
             };
         });
-        console.log(kingdom);
         await this.saveKingdom(kingdom);
         this.render();
     }
@@ -350,6 +358,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     }),
                 }).render(true);
             });
+        $html.querySelector('#blacklist-activities')
+            ?.addEventListener('click', async () => {
+                const current = this.getKingdom();
+                await activityBlacklistDialog(current.activityBlacklist, [...allActivities], (activityBlacklist) => {
+                    this.update({
+                        activityBlacklist,
+                    });
+                });
+            });
         $html.querySelectorAll('.km-delete-bonus-feat')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'bonusFeats'));
@@ -395,12 +412,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const current = this.getKingdom();
         const sizeData = getSizeData(current.size);
         const capacity = this.getCapacity(sizeData);
-        await ChatMessage.create({content: `<h2>Ending Turn</h2>
+        await ChatMessage.create({
+            content: `<h2>Ending Turn</h2>
             <ul>
                 <li>Setting Resource Points to 0</li>
                 <li>Adding values from the <b>next</b> columns to the <b>now</b> columns respecting their resource limits</li>
             </ul>
-            `});
+            `,
+        });
         await this.update({
             resourceDice: {
                 now: current.resourcePoints.next,
@@ -447,14 +466,16 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             await ChatMessage.create({content: 'Ignoring Unrest increase due to "Envy of the World" Kingdom Feature'});
         }
         if (unrest > 0) {
-            await ChatMessage.create({content: `<h2>Gaining Unrest</h2> 
+            await ChatMessage.create({
+                content: `<h2>Gaining Unrest</h2> 
                 <ul>
                     <li><b>Overcrowded Settlements</b>: ${overcrowdedSettlements}</li>
                     <li><b>Secondary Territories</b>: ${secondaryTerritories}</li>
                     <li><b>Kingdom At War</b>: ${atWar}</li>
                     <li><b>Total</b>: ${newUnrest}</li>
                 </ul>
-                `});
+                `,
+            });
         }
         if (unrest >= 10) {
             const ruinRoll = await (new Roll('1d10').roll());
@@ -522,7 +543,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const dice = levelData.resourceDice + current.resourceDice.now + featDice;
         const rolledPoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
         const commodities = this.calculateCommoditiesThisTurn(current);
-        await ChatMessage.create({content: `
+        await ChatMessage.create({
+            content: `
         <h2>Collecting Resources</h2>
         <ul>
             <li><b>Resource Points</b>: ${rolledPoints}</li>
@@ -531,7 +553,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             <li><b>Stone</b>: ${commodities.stone}</li>
             <li><b>Luxuries</b>: ${commodities.luxuries}</li>
         </ul>
-        `});
+        `,
+        });
         await this.update({
             resourcePoints: {
                 now: current.resourcePoints.now + rolledPoints,
@@ -733,12 +756,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const missingFood = totalConsumption - currentFood;
         const pay = missingFood * 5;
         if (totalConsumption > 0) {
-            await ChatMessage.create({content: `<h2>Paying Consumption</h2>
+            await ChatMessage.create({
+                content: `<h2>Paying Consumption</h2>
             <ul>
                 <li>Reducing food commodities by ${Math.min(currentFood, totalConsumption)}</li>
                 ${missingFood > 0 ? `<li>Missing ${missingFood} food commodities. Either pay ${pay} RP or gain [[/r 1d4]] Unrest</li>` : ''}
             </ul>
-            `});
+            `,
+            });
             await this.update({
                 commodities: {
                     now: {
@@ -752,6 +777,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async saveKingdom(kingdom: Partial<Kingdom>): Promise<void> {
+        console.info('Saving', kingdom);
         await this.sheetActor.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', kingdom);
     }
 
