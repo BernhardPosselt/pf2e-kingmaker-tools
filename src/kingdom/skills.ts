@@ -94,7 +94,7 @@ function createAbilityModifier(ability: Ability, abilityScores: AbilityScores): 
     };
 }
 
-function rankToLabel(rank: number): string {
+export function rankToLabel(rank: number): string {
     if (rank === 0) {
         return 'Untrained';
     } else if (rank === 1) {
@@ -158,8 +158,7 @@ function createSkillModifier(value: number): Modifier | undefined {
 function createActivityModifiers(activities: ActivityBonuses): Modifier[] {
     return (Object.entries(activities) as ([Activity, number])[])
         .map(([activity, value]) => {
-            const activityPhase = getActivityPhase(activity);
-            const phases = activityPhase ? [activityPhase] : undefined;
+            const phases = [getActivityPhase(activity)];
             return {
                 type: 'item',
                 enabled: true,

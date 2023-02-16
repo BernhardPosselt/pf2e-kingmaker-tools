@@ -178,7 +178,7 @@ function applySettlementEventBonuses(result: SettlementData, structures: Structu
 function simplifyRules(rules: ActivityBonusRule[]): SkillBonusRule[] {
     return rules.flatMap(rule => {
         const activity = rule.activity;
-        const skills = getActivitySkills(activity, false);
+        const skills = getActivitySkills(activity);
         return skills.map(skill => {
             return {
                 value: rule.value,

@@ -1,6 +1,8 @@
-import {allSkills, Skill} from './skills';
+import {Skill} from './skills';
 import {Ability} from './abilities';
-import {unslugifyActivity} from '../../utils';
+import {mergeObjects, unslugifyActivity} from '../../utils';
+import {SkillRanks} from './kingdom';
+import {ActivityContent, activityData} from './activityData';
 
 export type KingdomPhase = 'leadership' | 'region' | 'event' | 'army' | 'commerce' | 'upkeep' | 'civic';
 export const allActivities = [
@@ -97,249 +99,67 @@ export const skillAbilities: Record<Skill, Ability> = {
 };
 
 export type AbilityScores = Record<Ability, number>;
-const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
-    'repair-the-flooded-mine': ['engineering'],
-    'restore-the-temple-of-the-elk': ['folklore'],
-    // agriculture
-    'establish-farmland': ['agriculture'],
-    'harvest-crops': ['agriculture'],
-    // arts
-    'craft-luxuries': ['arts'],
-    'rest-and-relax': ['arts', 'boating', 'scholarship', 'trade', 'wilderness'],
-    'quell-unrest': ['arts', 'folklore', 'intrigue', 'magic', 'politics', 'warfare'],
-    'create-a-masterpiece': ['arts'],
-    'repair-reputation-corruption': ['arts'],
-    'harvest-azure-lily-pollen': ['agriculture'],
-    // boating
-    'establish-trade-agreement': ['boating', 'magic', 'trade'],
-    'go-fishing': ['boating'],
-    // defense
-    'fortify-hex': ['defense'],
-    'provide-care': ['defense'],
-    // engineering
-    'build-roads': ['engineering'],
-    'clear-hex': ['engineering', 'exploration'],
-    'demolish': ['engineering'],
-    'establish-settlement': ['engineering', 'industry', 'politics', 'scholarship'],
-    'establish-work-site-quarry': ['engineering'],
-    'establish-work-site-lumber': ['engineering'],
-    'establish-work-site-mine': ['engineering'],
-    'irrigation': ['engineering'],
-    'repair-reputation-decay': ['engineering'],
-    // exploration
-    'abandon-hex': ['exploration', 'wilderness'],
-    'claim-hex': ['exploration', 'wilderness'],
-    'hire-adventurers': ['exploration'],
-    // folklore
-    'celebrate-holiday': ['folklore'],
-    // industry
-    'relocate-capital': ['industry'],
-    'trade-commodities': ['industry'],
-    // intrigue
-    'infiltration': ['intrigue'],
-    'new-leadership': ['intrigue', 'politics', 'statecraft', 'warfare'],
-    'clandestine-business': ['intrigue'],
-    'pledge-of-fealty': ['intrigue', 'statecraft', 'warfare'],
-    'repair-reputation-strife': ['intrigue'],
-    // magic
-    'supernatural-solution': ['magic'],
-    'prognostication': ['magic'],
-    // politics
-    'improve-lifestyle': ['politics'],
-    // scholarship
-    'creative-solution': ['scholarship'],
-    // statecraft
-    'tap-treasury': ['statecraft'],
-    'request-foreign-aid': ['statecraft'],
-    'send-diplomatic-envoy': ['statecraft'],
-    // trade
-    'capital-investment': ['trade'],
-    'manage-trade-agreements': ['trade'],
-    'purchase-commodities': ['trade'],
-    'collect-taxes': ['trade'],
-    'repair-reputation-crime': ['trade'],
-    // warfare
-    'garrison-army': ['warfare'],
-    'deploy-army': ['warfare'],
-    'outfit-army': ['warfare'],
-    'train-army': ['warfare'],
-    'recover-army': ['warfare'],
-    'recruit-army': ['warfare'],
-    'disband-army': ['warfare'],
-    'offensive-gambit': ['warfare'],
 
-    // wilderness
-    'gather-livestock': ['wilderness'],
 
-    // other
-    'build-structure': ['*'],
-    'focused-attention': ['*'],
-
-    // companions
-    'evangelize-the-dead': ['folklore'],
-    'decadent-feasts': ['agriculture'],
-    'deliberate-planning': ['scholarship'],
-    'false-victory': ['intrigue'],
-    'show-of-force': ['warfare'],
-    'warfare-exercises': ['warfare'],
-    'preventative-measures': ['magic'],
-    'spread-the-legend': ['arts'],
-    'read-all-about-it': ['scholarship'],
-    'recruit-monsters': ['intrigue'],
-    'process-hidden-fees': ['trade'],
-    'supplementary-hunting': ['wilderness'],
-};
-
-export function getActivitySkills(activity: Activity, masterInMagic : boolean): Skill[] {
-    const skills = activitySkills[activity!];
-    if (skills[0] === '*') {
-        return [...allSkills];
+export function getActivitySkills(activity: Activity, skillRanks?: SkillRanks): Skill[] {
+    const skills = activityData[activity].skills;
+    if (skillRanks) {
+        return (Object.entries(skills) as [Skill, number][])
+            .filter(([skill, rank]) => rank <= skillRanks[skill])
+            .map(([skill]) => skill);
     } else {
-        const masterUnlockSkills: Skill[] = masterInMagic && activity === 'establish-trade-agreement' ? ['magic'] : [];
-        const onlySkills = skills as Skill[];
-        return masterUnlockSkills.concat(onlySkills);
+        return Object.keys(skills) as Skill[];
     }
 }
 
-export const allLeadershipActivities: Activity[] = [
-    'capital-investment',
-    'celebrate-holiday',
-    'clandestine-business',
-    'craft-luxuries',
-    'create-a-masterpiece',
-    'creative-solution',
-    'decadent-feasts',
-    'deliberate-planning',
+export const oncePerRoundActivities: Set<Activity> = new Set(
+    (Object.entries(activityData) as [Activity, ActivityContent][])
+        .filter(([, data]) => data.oncePerRound)
+        .map(([activity]) => activity)
+);
+export const trainedActivities: Set<Activity> = new Set(
+    (Object.entries(activityData) as [Activity, ActivityContent][])
+        .filter(([, data]) => Object.values(data.skills).every(rank => rank === 1))
+        .map(([activity]) => activity)
+);
 
-    'establish-trade-agreement',
-    'evangelize-the-dead',
-    'false-victory',
-
-    'focused-attention',
-    'hire-adventurers',
-    'infiltration',
-    'pledge-of-fealty',
-    'process-hidden-fees',
-    'prognostication',
-    'provide-care',
-    'preventative-measures',
-    'purchase-commodities',
-    'quell-unrest',
-    'read-all-about-it',
-    'recruit-army',
-    'relocate-capital',
-    'repair-reputation-corruption',
-    'repair-reputation-crime',
-    'repair-reputation-decay',
-    'repair-reputation-strife',
-    'request-foreign-aid',
-    'send-diplomatic-envoy',
-    'show-of-force',
-    'spread-the-legend',
-    'supernatural-solution',
-    'warfare-exercises',
-];
-
-const leadershipActivities = new Set(allLeadershipActivities);
-
-export const allRegionActivities: Activity[] = [
-    'abandon-hex',
-    'build-roads',
-    'claim-hex',
-    'clear-hex',
-    'establish-farmland',
-    'establish-settlement',
-    'establish-work-site-quarry',
-    'establish-work-site-lumber',
-    'establish-work-site-mine',
-    'go-fishing',
-    'gather-livestock',
-    'harvest-crops',
-    'irrigation',
-    'recruit-monsters',
-    'supplementary-hunting',
-    'harvest-azure-lily-pollen',
-];
-
-const regionActivities = new Set(allRegionActivities);
-
-export const allWarfareActivities: Activity[] = [
-    'deploy-army',
-    'disband-army',
-    'garrison-army',
-    'offensive-gambit',
-    'outfit-army',
-    'recover-army',
-    'recruit-army',
-    'train-army',
-];
-
-const warfareActivities = new Set(allWarfareActivities);
-
-export const  oncePerRoundActivities: Set<Activity> = new Set(['quell-unrest', 'create-a-masterpiece']);
-export const trainedActivities: Set<Activity> = new Set([
-    'pledge-of-fealty',
-    'repair-reputation-decay',
-    'repair-reputation-crime',
-    'repair-reputation-corruption',
-    'repair-reputation-strife',
-    'create-a-masterpiece',
-    'irrigation',
-    'relocate-capital',
-    'clandestine-business',
-    'prognostication',
-    'request-foreign-aid',
-    'collect-taxes',
-    'prognostication',
-    'send-diplomatic-envoy',
-]);
-
-export function getActivityPhase(activity: Activity): KingdomPhase | undefined {
-    if (regionActivities.has(activity)) {
-        return 'region';
-    } else if (warfareActivities.has(activity)) {
-        return 'army';
-    } else if (leadershipActivities.has(activity)) {
-        return 'region';
-    }
+export function getActivityPhase(activity: Activity): KingdomPhase {
+    return activityData[activity].phase;
 }
 
-export const lockedActivities: Set<Activity> = new Set([
-    'read-all-about-it',
-    'evangelize-the-dead',
-    'decadent-feasts',
-    'deliberate-planning',
-    'false-victory',
-    'show-of-force',
-    'warfare-exercises',
-    'preventative-measures',
-    'spread-the-legend',
-    'read-all-about-it',
-    'recruit-monsters',
-    'process-hidden-fees',
-    'supplementary-hunting',
-]);
+export const lockedActivities: Set<Activity> = new Set(
+    (Object.entries(activityData) as [Activity, ActivityContent][])
+        .filter(([, data]) => !data.enabled && data.companion)
+        .map(([activity]) => activity)
+);
 
-function filterUnlocked(activities: Activity[], unlockActivities: Set<Activity>): Activity[] {
-    return activities.filter(activity => {
-        if (lockedActivities.has(activity)) {
-            return unlockActivities.has(activity);
-        } else {
-            return activity;
-        }
-    });
-}
+const activitiesByPhase: Record<KingdomPhase, Activity[]> = (Object.entries(activityData) as [Activity, ActivityContent][])
+    .map(([activity, data]) => {
+        const result: Record<KingdomPhase, Activity[]> = {
+            'leadership': [],
+            'region': [],
+            'event': [],
+            'army': [],
+            'commerce': [],
+            'upkeep': [],
+            'civic': [],
+        };
+        result[data.phase].push(activity);
+        return result;
+    })
+    .reduce((prev, curr) => {
+        return mergeObjects(prev, curr, (a, b) => [...a, ...b]);
+    }, {'leadership': [], 'region': [], 'event': [], 'army': [], 'commerce': [], 'upkeep': [], 'civic': []});
 
-export function getUnlockedActivities(type: 'leadership' | 'warfare' | 'region', unlockActivities: Set<Activity>): Activity[] {
-    if (type === 'leadership') {
-        return filterUnlocked(allLeadershipActivities, unlockActivities);
-    } else if (type === 'region') {
-        return filterUnlocked(allRegionActivities, unlockActivities);
-    } else if (type === 'warfare') {
-        return filterUnlocked(allWarfareActivities, unlockActivities);
-    } else {
-        return [];
-    }
+export function getCompanionUnlockedActivities(type: 'leadership' | 'army' | 'region', unlockActivities: Set<Activity>): Activity[] {
+    return activitiesByPhase[type]
+        .filter(activity => {
+            if (lockedActivities.has(activity)) {
+                return unlockActivities.has(activity);
+            } else {
+                return true;
+            }
+        });
 }
 
 export function createActivityLabel(activity: Activity, kingdomLevel: number): string {

@@ -14,6 +14,7 @@ const config: Configuration = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
+    devtool: 'source-map',
 };
 
 // noinspection JSUnusedGlobalSymbols

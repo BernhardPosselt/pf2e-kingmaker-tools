@@ -1,6 +1,7 @@
 import {AbilityScores, Activity} from './activities';
 import {ActorTypes} from './companions';
 import {Leader} from './leaders';
+import {ActivityContent, activityData} from './activityData';
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
 
@@ -444,6 +445,8 @@ export function getDefaultKingdomData(): Kingdom {
                 value: 0,
             },
         },
-      activityBlacklist: ['harvest-azure-lily-pollen'],
+      activityBlacklist: (Object.entries(activityData) as [Activity, ActivityContent][])
+          .filter(([, data]) => !data.enabled && !data.companion)
+          .map(([key]) => key),
     };
 }

@@ -1,21 +1,37 @@
 import {Activity} from '../data/activities';
-import {findHelp} from '../data/help';
+import {findHelp} from '../data/activityData';
+import {capitalize} from '../../utils';
+import {rankToLabel} from '../skills';
 
-export function showHelpDialog(help: string): void {
+export async function showHelpDialog(help: string): Promise<void> {
     const data = findHelp(help as Activity);
-    new Dialog({
+    const traits = (data.fortune ? [capitalize(data.phase), 'Downtime', 'Fortune'] : [capitalize(data.phase), 'Downtime'])
+        .join(', ');
+    const skills = Object.entries(data.skills)
+        .map(([skill, rank]) => {
+            if (rank === 0) {
+                return capitalize(skill);
+            } else {
+                return `${capitalize(skill)}: ${rankToLabel(rank)}`;
+            }
+        })
+        .join(', ');
+
+    await new Dialog({
         title: data.title,
         content: `
         <h2>${data.title}</h2>
-        ${data.requirement ? `<b>Requirements</b>: ${data.requirement}<hr>`: ''}
-        <div>${data.description}</div>
+        <p><b>Skills</b>: ${skills}</p>
+        <p><b>Traits</b>: ${traits}</p>
+        ${data.companion ? '<p><b>Companion</b>: ${data.companion}</p>' : ''}
+        ${data.requirement ? `<p><b>Requirements</b>: ${data.requirement}</p>`: ''}
         <hr>
-        <ul>
-            ${data.criticalSuccess ? `<li><b>Critical Success</b>: ${data.criticalSuccess}</li>`: ''}
-            ${data.success ? `<li><b>Success</b>: ${data.success}</li>`: ''}
-            ${data.failure ? `<li><b>Failure</b>: ${data.failure}</li>`: ''}
-            ${data.criticalFailure ? `<li><b>Critical Failure</b>: ${data.criticalFailure}</li>`: ''}
-        </ul>
+        <div>${await TextEditor.enrichHTML(data.description)}</div>
+        <hr>
+        ${data.criticalSuccess ? `<p><b>Critical Success</b>: ${await TextEditor.enrichHTML(data.criticalSuccess)}</p>`: ''}
+        ${data.success ? `<p><b>Success</b>: ${await TextEditor.enrichHTML(data.success)}</p>`: ''}
+        ${data.failure ? `<p><b>Failure</b>: ${await TextEditor.enrichHTML(data.failure)}</p>`: ''}
+        ${data.criticalFailure ? `<p><b>Critical Failure</b>: ${await TextEditor.enrichHTML(data.criticalFailure)}</p>`: ''}
         ${data.special ? `<hr><b>Special</b>: ${data.special}`: ''}
         `,
         buttons: {
@@ -27,6 +43,6 @@ export function showHelpDialog(help: string): void {
         default: 'close',
     }, {
         jQuery: false,
-        width: 400,
+        width: 500,
     }).render(true);
 }

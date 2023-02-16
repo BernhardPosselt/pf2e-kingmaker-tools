@@ -60,7 +60,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     }
 
     private getActivitySkills(ranks: SkillRanks): Skill[] {
-        return getActivitySkills(this.activity!, ranks.magic > 2);
+        return getActivitySkills(this.activity!, ranks);
     }
 
     override getData(options?: Partial<FormApplicationOptions & { feats: KingdomFeat[] }>): Promise<object> | object {
