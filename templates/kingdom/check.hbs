@@ -1,67 +1,105 @@
-<h2>{{title}}</h2>
+<form>
+    <h2>{{title}}</h2>
 
-<div class="simple-dialog-form">
-    {{#if activity}}
-        <div>
-            <label for="km-applicable-skills">Applicable Skills:</label>
-            <select id="km-applicable-skills">
-                <option>Magic + 8</option>
-            </select>
+    {{#if invalid}}
+        <div>No valid skill found. This is most likely due to the activity requiring a higher skill proficiency than
+            currently available.
         </div>
     {{else}}
-        <div>
-            <label for="km-event-phase-toggle">Event Phase:</label>
-            <input id="km-event-phase-toggle" type="checkbox" checked>
+        <div class="simple-dialog-form">
+            {{#if activity}}
+                <div>
+                    <label for="km-applicable-skills">Applicable Skills:</label>
+                    <select id="km-applicable-skills" name="selectedSkill">
+                        {{#select selectedSkill}}
+                            {{#each selectableSkills}}
+                                <option value="{{value}}">{{label}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            {{else}}
+                <input type="hidden" name="selectedSkill" value="{{selectedSkill}}">
+                <div>
+                    <label for="km-event-phase-toggle">Event Phase:</label>
+                    <input id="km-event-phase-toggle" type="checkbox" name="isEventPhase" {{checked isEventPhase}}>
+                </div>
+            {{/if}}
+            <div>
+                <label for="km-check-dc">DC:</label>
+                <input id="km-check-dc" type="number" value="{{dc}}" name="dc">
+            </div>
+        </div>
+
+        <h3>Modifier Breakdown</h3>
+
+        <table class="km-table">
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Value</th>
+                <th>Enabled</th>
+            </tr>
+            {{#each modifiers}}
+            <tr>
+                <td>Bad Luck haha</td>
+                <td>Circumstance Penalty</td>
+                <td>-1</td>
+                <td><input type="checkbox" checked></td>
+            </tr>
+            {{/each}}
+        </table>
+
+        <h3>Custom modifiers</h3>
+        <table class="km-table">
+            <tr>
+                <th>Type</th>
+                <th>Bonus</th>
+                <th>Penalty</th>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td><input type="number" value="{{customModifiers.status.bonus}}" name="customModifiers.status.bonus">
+                </td>
+                <td><input type="number" value="{{customModifiers.status.penalty}}"
+                           name="customModifiers.status.penalty"></td>
+            </tr>
+            <tr>
+                <td>Circumstance</td>
+                <td><input type="number" value="{{customModifiers.circumstance.bonus}}"
+                           name="customModifiers.circumstance.bonus"></td>
+                <td><input type="number" value="{{customModifiers.circumstance.penalty}}"
+                           name="customModifiers.circumstance.penalty"></td>
+            </tr>
+            <tr>
+                <td>Item</td>
+                <td><input type="number" value="{{customModifiers.item.bonus}}" name="customModifiers.item.bonus"></td>
+                <td><input type="number" value="{{customModifiers.item.penalty}}" name="customModifiers.item.penalty">
+                </td>
+            </tr>
+            <tr>
+                <td>Untyped</td>
+                <td><input type="number" value="{{customModifiers.untyped.bonus}}" name="customModifiers.untyped.bonus">
+                </td>
+                <td><input type="number" value="{{customModifiers.untyped.penalty}}"
+                           name="customModifiers.untyped.penalty"></td>
+            </tr>
+        </table>
+
+        <div class="activity-choice">
+            <button type="button" id="km-roll-skill-assurance"
+                    data-modifier="{{modifiers.total.assurance}}"
+                    data-type="{{title}}"
+                    {{#if activity}}data-activity="{{activity}}"{{/if}}
+                    data-dc="{{dc}}">
+                Assurance {{modifiers.total.assurance}} <i class="fa-solid fa-dice-d20"></i></button>
+            <button type="button" id="km-roll-skill"
+                    {{#if activity}}data-activity="{{activity}}"{{/if}}
+                    data-dc="{{dc}}"
+                    data-type="{{title}}"
+                    data-modifier="{{modifiers.total.value}}">Roll
+                +{{modifiers.total.value}}
+                <i class="fa-solid fa-dice-d20"></i></button>
         </div>
     {{/if}}
-    <div>
-        <label for="km-check-dc">DC:</label>
-        <input id="km-check-dc" type="number" value="{{dc}}" name="dc">
-    </div>
-</div>
-
-<h3>Modifier Breakdown</h3>
-
-<table class="km-table">
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Value</th>
-        <th>Enabled</th>
-    </tr>
-    <tr>
-        <td>Bad Luck haha</td>
-        <td>Circumstance Penalty</td>
-        <td>-1</td>
-        <td><input type="checkbox" checked></td>
-    </tr>
-</table>
-
-<h3>Custom modifiers</h3>
-<table class="km-table">
-    <tr>
-        <th>Type</th>
-        <th>Bonus</th>
-        <th>Penalty</th>
-    </tr>
-    <tr>
-        <td>Status</td>
-        <td><input type="number" value="0"></td>
-        <td><input type="number" value="0"></td>
-    </tr>
-    <tr>
-        <td>Circumstance</td>
-        <td><input type="number" value="0"></td>
-        <td><input type="number" value="0"></td>
-    </tr>
-    <tr>
-        <td>Item</td>
-        <td><input type="number" value="0"></td>
-        <td><input type="number" value="0"></td>
-    </tr>
-</table>
-
-<div class="activity-choice">
-    <button type="button" id="km-roll-skill-assurance">Assurance +32 <i class="fa-solid fa-dice-d20"></i></button>
-    <button type="button" id="km-roll-skill">Roll +22 <i class="fa-solid fa-dice-d20"></i></button>
-</div>
+</form>

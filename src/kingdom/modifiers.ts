@@ -4,8 +4,10 @@ import {getLevelData, Kingdom} from './data/kingdom';
 import {SettlementSceneData} from '../structures/scene';
 import {allFeatsByName} from './data/feats';
 
+export type ModifierType = 'ability' | 'proficiency' | 'item' | 'status' | 'circumstance' | 'vacancy' | 'untyped';
+
 export interface Modifier {
-    type: 'ability' | 'proficiency' | 'item' | 'status' | 'circumstance' | 'vacancy' | 'untyped';
+    type: ModifierType;
     value: number;
     name: string;
     phases?: KingdomPhase[];
@@ -91,6 +93,7 @@ export interface ModifierTotals {
     untyped: ModifierTotal;
     vacancyPenalty: number;
     value: number;
+    assurance: number;
 }
 
 export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
@@ -121,6 +124,7 @@ export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
         },
         vacancyPenalty: 0,
         value: 0,
+        assurance: 10,
     };
     const enabledModifiers = modifiers.filter(modifier => modifier.enabled && modifier.value !== 0);
     for (const modifier of enabledModifiers) {
@@ -129,11 +133,14 @@ export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
         } else {
             const part = result[modifier.type];
             const key = modifier.value > 0 ? 'bonus' : 'penalty';
-            // adding here because untyped values stack and no other duplicates
-            // for certain types should exist anymore
-            part[key] += modifier.value;
+            if (modifier.type === 'untyped') {
+                part[key] += modifier.value;
+            } else {
+                part[key] = modifier.value;
+            }
         }
     }
+    result.assurance = 10 + (enabledModifiers.find(m => m.type === 'proficiency' && m.value > 0)?.value ?? 0);
     result.value = enabledModifiers
         .map(m => m.value)
         .reduce((a, b) => a + b, 0);

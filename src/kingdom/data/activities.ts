@@ -123,6 +123,18 @@ export const trainedActivities: Set<Activity> = new Set(
         .map(([activity]) => activity)
 );
 
+export const expertActivities: Set<Activity> = new Set(
+    (Object.entries(activityData) as [Activity, ActivityContent][])
+        .filter(([, data]) => Object.values(data.skills).every(rank => rank === 2))
+        .map(([activity]) => activity)
+);
+
+export const masterActivities: Set<Activity> = new Set(
+    (Object.entries(activityData) as [Activity, ActivityContent][])
+        .filter(([, data]) => Object.values(data.skills).every(rank => rank === 3))
+        .map(([activity]) => activity)
+);
+
 export function getActivityPhase(activity: Activity): KingdomPhase {
     return activityData[activity].phase;
 }
@@ -177,6 +189,10 @@ export function createActivityLabel(activity: Activity, kingdomLevel: number): s
         label += ' (once per round, trained)';
     } else if (trainedActivities.has(activity)) {
         label += ' (trained)';
+    } else if (expertActivities.has(activity)) {
+        label += ' (expert)';
+    } else if (masterActivities.has(activity)) {
+        label += ' (master)';
     } else if (oncePerRoundActivities.has(activity)) {
         label += ' (once per round)';
     }
