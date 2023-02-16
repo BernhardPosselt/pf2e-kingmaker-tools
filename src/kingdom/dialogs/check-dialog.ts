@@ -1,13 +1,14 @@
-import {allFeats, allFeatsByName, KingdomFeat} from '../data/feats';
+import {KingdomFeat} from '../data/feats';
 import {calculateModifiers, createAdditionalModifiers, Modifier} from '../modifiers';
 import {Activity, getActivityPhase, getActivitySkills, skillAbilities} from '../data/activities';
 import {Skill} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getBooleanSetting} from '../../settings';
 import {getMergedData} from '../../structures/scene';
-import {Kingdom, SkillRanks} from '../data/kingdom';
+import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
-import {unslugifyActivity} from '../../utils';
+import {capitalize, unslugifyActivity} from '../../utils';
+import {activityData} from '../data/activityData';
 
 
 export type CheckType = 'skill' | 'activity';
@@ -33,11 +34,12 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private game: Game;
     private kingdom: Kingdom;
     private selectedSkill: Skill;
+    private dc: number;
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
         options.id = 'kingdom-check';
-        options.title = 'Kingdom';
+        options.title = 'Skill Check';
         options.template = 'modules/pf2e-kingmaker-tools/templates/kingdom/check.hbs';
         options.submitOnChange = true;
         options.closeOnSubmit = false;
@@ -54,10 +56,22 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.skill = options.skill;
         this.game = options.game;
         this.kingdom = options.kingdom;
+        const controlDC = getControlDC(this.kingdom.level, this.kingdom.size);
         if (this.type === 'skill') {
             this.selectedSkill = options.skill!;
+            this.dc = controlDC;
         } else {
             this.selectedSkill = this.getActivitySkills(options.kingdom.skillRanks)[0];
+            const activityDCType = activityData[this.activity!].dc;
+            if (activityDCType === 'control') {
+                this.dc = controlDC;
+            } else if (activityDCType === 'custom') {
+                this.dc = 0;
+            } else if (activityDCType === 'none') {
+                throw Error('Can not perform activity with no DC');
+            } else {
+                this.dc = activityDCType;
+            }
         }
     }
 
@@ -96,11 +110,13 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             return [skill, {total, modifiers}];
         }));
         return {
-            activity: this.activity ? unslugifyActivity(this.activity) : undefined,
+            ...super.getData(options),
+            dc: this.dc,
+            title: this.activity ? unslugifyActivity(this.activity) : capitalize(this.skill!),
+            activity: this.activity,
             selectableSkills: Object.values(skillModifiers),
             selectedSkill: this.selectedSkill,
             selectedModifiers: skillModifiers[this.selectedSkill],
-            ...super.getData(options),
         };
     }
 

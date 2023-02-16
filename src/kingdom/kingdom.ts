@@ -48,6 +48,7 @@ import {Skill} from './data/skills';
 import {CommodityStorage} from './data/structures';
 import {activityBlacklistDialog} from './dialogs/activity-blacklist-dialog';
 import {showHelpDialog} from './dialogs/show-help-dialog';
+import {activityData} from './data/activityData';
 
 interface KingdomOptions {
     game: Game;
@@ -376,13 +377,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (el) => {
                     const target = el.currentTarget as HTMLButtonElement;
-                    const activity = target.dataset.activity;
-                    new CheckDialog(null, {
-                        activity: activity as Activity,
-                        kingdom: this.getKingdom(),
-                        game: this.game,
-                        type: 'activity',
-                    }).render(true);
+                    const activity = target.dataset.activity as Activity;
+                    if (activityData[activity].dc === 'none') {
+                        await showHelpDialog(activity);
+                    } else {
+                        new CheckDialog(null, {
+                            activity,
+                            kingdom: this.getKingdom(),
+                            game: this.game,
+                            type: 'activity',
+                        }).render(true);
+                    }
                 });
             });
         $html.querySelectorAll('.kingdom-skill')
@@ -407,7 +412,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const target = el.currentTarget as HTMLButtonElement;
                     const help = target.dataset.help;
                     if (help) {
-                        showHelpDialog(help);
+                        await showHelpDialog(help);
                     }
                 });
             });

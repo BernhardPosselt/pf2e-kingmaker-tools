@@ -1,15 +1,24 @@
-<h2>Skill Check</h2>
+<h2>{{title}}</h2>
 
-{{#if activity}}
-    <p><b>Activity</b>: {{activity}}</p>
-    <p><label>Applicable Skills: <select>
-        <option>Magic + 8</option>
-    </select>
-    </label>
-    </p>
-{{else}}
-    <p><label>Event Phase: <input type="checkbox" checked></label></p>
-{{/if}}
+<div class="simple-dialog-form">
+    {{#if activity}}
+        <div>
+            <label for="km-applicable-skills">Applicable Skills:</label>
+            <select id="km-applicable-skills">
+                <option>Magic + 8</option>
+            </select>
+        </div>
+    {{else}}
+        <div>
+            <label for="km-event-phase-toggle">Event Phase:</label>
+            <input id="km-event-phase-toggle" type="checkbox" checked>
+        </div>
+    {{/if}}
+    <div>
+        <label for="km-check-dc">DC:</label>
+        <input id="km-check-dc" type="number" value="{{dc}}" name="dc">
+    </div>
+</div>
 
 <h3>Modifier Breakdown</h3>
 
