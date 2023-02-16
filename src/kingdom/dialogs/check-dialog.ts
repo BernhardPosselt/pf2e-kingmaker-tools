@@ -5,7 +5,7 @@ import {Skill} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getBooleanSetting} from '../../settings';
 import {getMergedData} from '../../structures/scene';
-import {Kingdom} from '../data/kingdom';
+import {Kingdom, SkillRanks} from '../data/kingdom';
 
 
 export type CheckType = 'skill' | 'activity';
@@ -55,21 +55,26 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         if (this.type === 'skill') {
             this.selectedSkill = options.skill!;
         } else {
-            this.selectedSkill = getActivitySkills(this.activity!)[0];
+            this.selectedSkill = this.getActivitySkills(options.kingdom.skillRanks)[0];
         }
+    }
+
+    private getActivitySkills(ranks: SkillRanks): Skill[] {
+        return getActivitySkills(this.activity!, ranks.magic > 2);
     }
 
     override getData(options?: Partial<FormApplicationOptions & { feats: KingdomFeat[] }>): Promise<object> | object {
         const settlementScene = this.game?.scenes?.get(this.kingdom.activeSettlement);
         const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
-        const applicableSkills = this.type === 'skill' ? [this.skill!] : getActivitySkills(this.activity!);
+        const skillRanks = this.kingdom.skillRanks;
+        const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(skillRanks);
         const additionalModifiers: Modifier[] = []; // TODO
         const skillModifiers = Object.fromEntries(applicableSkills.map(skill => {
             const ability = skillAbilities[skill];
             const modifiers = createSkillModifiers({
                 ruin: this.kingdom.ruin,
                 unrest: this.kingdom.unrest,
-                skillRank: this.kingdom.skillRanks[skill],
+                skillRank: skillRanks[skill],
                 abilityScores: this.kingdom.abilityScores,
                 leaders: this.kingdom.leaders,
                 kingdomLevel: this.kingdom.level,

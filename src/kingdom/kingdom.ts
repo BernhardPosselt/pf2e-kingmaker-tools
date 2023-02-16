@@ -16,8 +16,7 @@ import {
     Ruin,
     WorkSites,
 } from './data/kingdom';
-import {capitalize, unpackFormArray, unslugifyAction} from '../utils';
-import {Storage} from '../structures/structures';
+import {capitalize, unpackFormArray} from '../utils';
 import {
     getAllSettlementSceneData,
     getAllSettlementSceneDataAndStructures, getMergedData, SettlementSceneData,
@@ -30,21 +29,25 @@ import {rollCultEvent, rollKingdomEvent} from '../kingdom-events';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
 import {featuresByLevel, uniqueFeatures} from './data/features';
-import {allCompanions} from './data/companions';
+import {
+    allCompanions,
+    applyLeaderCompanionRules,
+    getCompanionUnlock,
+    getCompanionUnlockActivities,
+    getCompanionUnlocks,
+} from './data/companions';
 import {
     AbilityScores,
     Activity,
-    allWarfareActivities,
-    allLeadershipActivities,
-    allRegionActivities,
-    oncePerRoundActivities,
-    trainedActivities,
+    createActivityLabel,
+    getUnlockedActivities,
 } from './data/activities';
 import {calculateAbilityModifier} from './data/abilities';
 import {calculateSkills} from './skills';
 import {calculateInvestedBonus, isInvested} from './data/leaders';
 import {CheckDialog} from './dialogs/check-dialog';
 import {Skill} from './data/skills';
+import {CommodityStorage} from './data/structures';
 
 interface KingdomOptions {
     game: Game;
@@ -92,12 +95,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             leadershipActivityNumber,
             settlementConsumption,
             storage,
+            unlockedActivities: unlockedSettlementActivities,
         } = this.getSettlementData(settlementSceneDataAndStructures);
         const totalConsumption = kingdomData.consumption.armies + kingdomData.consumption.now + settlementConsumption;
         const useXpHomebrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
         const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
         const settlementScene = this.game?.scenes?.get(kingdomData.activeSettlement);
         const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
+        const unlockedActivities = new Set<Activity>([...unlockedSettlementActivities, ...getCompanionUnlockActivities(kingdomData.leaders)]);
         return {
             ...super.getData(options),
             isGM,
@@ -186,16 +191,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             milestones: kingdomData.milestones.map(m => {
                 return {...m, display: useXpHomebrew || !m.homebrew};
             }),
-            // TODO: filter out companion activities if not in position of leader
-            // TODO: consider companions in leadership positions
-            leadershipActivities: allLeadershipActivities.map(activity => {
-                return {label: this.createActivityLabel(activity, kingdomData.level), value: activity};
+            leadershipActivities: getUnlockedActivities('leadership', unlockedActivities).map(activity => {
+                return {label: createActivityLabel(activity, kingdomData.level), value: activity};
             }),
-            regionActivities: allRegionActivities.map(activity => {
-                return {label: this.createActivityLabel(activity, kingdomData.level), value: activity};
+            regionActivities: getUnlockedActivities('region', unlockedActivities).map(activity => {
+                return {label: createActivityLabel(activity, kingdomData.level), value: activity};
             }),
-            armyActivities: allWarfareActivities.map(activity => {
-                return {label: this.createActivityLabel(activity, kingdomData.level), value: activity};
+            armyActivities: getUnlockedActivities('warfare', unlockedActivities).map(activity => {
+                return {label: createActivityLabel(activity, kingdomData.level), value: activity};
             }),
             featuresByLevel: Array.from(featuresByLevel.entries())
                 .map(([level, features]) => {
@@ -213,27 +216,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             useXpHomebrew,
 
         };
-    }
-
-    private createActivityLabel(activity: Activity, kingdomLevel: number): string {
-        let label = unslugifyAction(activity);
-        if (activity === 'claim-hex') {
-            if (kingdomLevel >= 9) {
-                label += ' (three times per round)';
-            } else if (kingdomLevel >= 4) {
-                label += ' (twice per round)';
-            } else {
-                label += ' (once per round)';
-            }
-        }
-        if (trainedActivities.has(activity) && oncePerRoundActivities.has(activity)) {
-            label += ' (once per round, trained)';
-        } else if (trainedActivities.has(activity)) {
-            label += ' (trained)';
-        } else if (oncePerRoundActivities.has(activity)) {
-            label += ' (once per round)';
-        }
-        return label;
     }
 
     private getActiveTabs(): object {
@@ -610,7 +592,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         );
     }
 
-    private calculateStorageCapacity(capacity: number, storage: Storage): Commodities {
+    private calculateStorageCapacity(capacity: number, storage: CommodityStorage): Commodities {
         return {
             food: capacity + storage.food,
             ore: capacity + storage.ore,
@@ -624,7 +606,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         commodities: Commodities,
         commoditiesNextRound: Commodities,
         capacity: number,
-        storage: Storage,
+        storage: CommodityStorage,
     ): object {
         const storageCapacity = this.calculateStorageCapacity(capacity, storage);
         return Object.fromEntries((Object.entries(commodities) as [keyof Commodities, number][])
@@ -638,7 +620,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private getLeaders(leaders: Leaders): object {
-        return Object.fromEntries((Object.entries(leaders) as [keyof Leaders, LeaderValues][])
+        const appliedLeaders = applyLeaderCompanionRules(leaders);
+        return Object.fromEntries((Object.entries(appliedLeaders) as [keyof Leaders, LeaderValues][])
             .map(([leader, values]) => {
                 return [leader, {
                     label: capitalize(leader),
@@ -683,13 +666,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private getSettlementData(settlements: SettlementSceneData[]):
-        { leadershipActivityNumber: number; settlementConsumption: number; storage: Storage } {
+        { leadershipActivityNumber: number; settlementConsumption: number; storage: CommodityStorage, unlockedActivities: Set<Activity> } {
         return settlements
             .map(settlement => {
                 return {
                     leadershipActivityNumber: settlement.settlement.leadershipActivityBonus ? 3 : 2,
                     settlementConsumption: settlement.settlement.consumption,
                     storage: settlement.settlement.storage,
+                    unlockedActivities: new Set(settlement.settlement.unlockActivities),
                 };
             })
             .reduce((prev, curr) => {
@@ -703,11 +687,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         lumber: prev.storage.lumber + curr.storage.lumber,
                         food: prev.storage.food + curr.storage.food,
                     },
+                    unlockedActivities: new Set<Activity>([...prev.unlockedActivities, ...curr.unlockedActivities]),
                 };
             }, {
                 leadershipActivityNumber: 2,
                 settlementConsumption: 0,
                 storage: {ore: 0, stone: 0, luxuries: 0, lumber: 0, food: 0},
+                unlockedActivities: new Set<Activity>(),
             });
 
     }

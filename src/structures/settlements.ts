@@ -1,10 +1,7 @@
-import {
-    ActivityBonuses,
-    ItemLevelBonuses, SkillItemBonuses,
-    SettlementData,
-} from './structures';
 import {getViewedSceneMergedData, saveViewedSceneData} from './scene';
 import {capitalize, unslugifyAction} from '../utils';
+import {ActivityBonuses, ItemLevelBonuses, SkillItemBonuses} from '../kingdom/data/structures';
+import {SettlementData} from './structures';
 
 interface SettlementOptions {
     game: Game;
@@ -139,12 +136,12 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
 
     private getSkillBonuses(skillBonuses: SkillItemBonuses): SkillBonusData[] {
         return Object.entries(skillBonuses)
-            .filter(([, bonus]) => bonus.value > 0 || (bonus.actions && Object.keys(bonus.actions).length > 0))
+            .filter(([, bonus]) => bonus.value > 0 || (bonus.activities && Object.keys(bonus.activities).length > 0))
             .map(([skill, bonus]) => {
                 return {
                     label: capitalize(skill),
                     value: bonus.value,
-                    actions: (Object.entries(bonus.actions) as ([keyof ActivityBonuses, number])[])
+                    actions: (Object.entries(bonus.activities) as ([keyof ActivityBonuses, number])[])
                         .map(([action, value]) => {
                             return {
                                 label: unslugifyAction(action),

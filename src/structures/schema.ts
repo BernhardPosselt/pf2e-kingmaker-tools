@@ -1,7 +1,7 @@
 import Joi from 'joi';
-import {structuresByName} from './structure-data';
-import {itemGroups} from './structures';
 import {allSkills} from '../kingdom/data/skills';
+import {allActivities} from '../kingdom/data/activities';
+import {itemGroups, structuresByName} from '../kingdom/data/structures';
 
 const builtInRefs = structuresByName.keys();
 export const refSchema = Joi.object({
@@ -16,14 +16,14 @@ export const ruleSchema = Joi.object({
     enableCapitalInvestment: Joi.boolean().optional(),
     increaseLeadershipActivities: Joi.boolean().optional(),
     consumptionReduction: Joi.number().optional(),
-    actionBonusRules: Joi.array().items(Joi.object({
+    activityBonusRules: Joi.array().items(Joi.object({
         value: Joi.number().required(),
-        action: Joi.string().required(),
+        activity: Joi.string().valid(...allActivities).required(),
     })).optional(),
     skillBonusRules: Joi.array().items(Joi.object({
         value: Joi.number().required(),
         skill: Joi.string().valid(...allSkills).required(),
-        action: Joi.string().optional(),
+        activity: Joi.string().valid(...allActivities).optional(),
     })).optional(),
     availableItemsRules: Joi.array().items(Joi.object({
         value: Joi.number().required(),
@@ -42,4 +42,5 @@ export const ruleSchema = Joi.object({
         stone: Joi.number().optional(),
         luxuries: Joi.number().optional(),
     }).optional(),
+    unlockActivities: Joi.array().items(Joi.string().valid(...allActivities)).optional(),
 });

@@ -13,7 +13,8 @@ import {
     Modifier,
     ModifierTotals,
 } from './modifiers';
-import {ActivityBonuses, SkillItemBonus, SkillItemBonuses} from '../structures/structures';
+import {ActivityBonuses, SkillItemBonus, SkillItemBonuses} from './data/structures';
+import {applyLeaderCompanionRules} from './data/companions';
 
 
 interface SkillStats {
@@ -73,7 +74,8 @@ function createInvestedModifier(
     ability: Ability,
     leaders: Leaders,
 ): Modifier | undefined {
-    if (isInvested(ability, leaders)) {
+    const appliedLeaders = applyLeaderCompanionRules(leaders);
+    if (isInvested(ability, appliedLeaders)) {
         return {
             value: getLevelData(kingdomLevel).investedLeadershipBonus,
             enabled: true,
@@ -170,7 +172,7 @@ function createActivityModifiers(activities: ActivityBonuses): Modifier[] {
 }
 
 function createStructureModifiers(skillItemBonus: SkillItemBonus): Modifier[] {
-    const result = createActivityModifiers(skillItemBonus.actions);
+    const result = createActivityModifiers(skillItemBonus.activities);
     const skillBonus = createSkillModifier(skillItemBonus.value);
     if (skillBonus) {
         result.push(skillBonus);

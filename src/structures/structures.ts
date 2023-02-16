@@ -1,77 +1,15 @@
 import {mergeObjects} from '../utils';
 import {Activity, getActivitySkills} from '../kingdom/data/activities';
-import {Skill} from '../kingdom/data/skills';
-
-export interface ActionBonusRule {
-    value: number;
-    action: Activity;
-}
-
-export interface SkillBonusRule {
-    value: number;
-    skill: Skill;
-    // e.g. 'quell-unrest'
-    action?: Activity;
-}
-
-export interface AvailableItemsRule {
-    value: number;
-    // e.g. 'alchemical' or 'magic'
-    group?: ItemGroup;
-}
-
-export interface SettlementEventsRule {
-    value: number;
-}
-
-export interface LeadershipActivityRule {
-    value: number;
-}
-
-export interface Storage {
-    ore: number;
-    food: number;
-    lumber: number;
-    stone: number;
-    luxuries: number;
-}
-
-export interface Structure {
-    name: string;
-    notes?: string;
-    preventItemLevelPenalty?: boolean;
-    enableCapitalInvestment?: boolean,
-    skillBonusRules?: SkillBonusRule[];
-    actionBonusRules?: ActionBonusRule[];
-    availableItemsRules?: AvailableItemsRule[];
-    settlementEventRules?: SettlementEventsRule[];
-    leadershipActivityRules?: LeadershipActivityRule[];
-    storage?: Partial<Storage>;
-    increaseLeadershipActivities?: boolean;
-    consumptionReduction?: number;
-}
-
-export type ActivityBonuses = Partial<Record<Activity, number>>;
-
-export interface SkillItemBonus {
-    value: number;
-    actions: ActivityBonuses;
-}
-
-export type SkillItemBonuses = Record<Skill, SkillItemBonus>;
-
-export type ItemGroup = 'divine'
-    | 'alchemical'
-    | 'primal'
-    | 'occult'
-    | 'arcane'
-    | 'luxury'
-    | 'magical'
-    | 'other';
-
-export const itemGroups: ItemGroup[] = ['divine', 'alchemical', 'primal', 'occult', 'arcane', 'luxury', 'magical', 'other'];
-
-export type ItemLevelBonuses = Record<ItemGroup, number>;
+import {
+    ActivityBonusRule, CommodityStorage,
+    ItemGroup,
+    ItemLevelBonuses,
+    magicalItemGroups,
+    SkillBonusRule,
+    SkillItemBonus,
+    SkillItemBonuses,
+    Structure,
+} from '../kingdom/data/structures';
 
 export interface SettlementData {
     allowCapitalInvestment: boolean;
@@ -80,11 +18,12 @@ export interface SettlementData {
     itemLevelBonuses: ItemLevelBonuses;
     settlementEventBonus: number;
     leadershipActivityBonus: number;
-    storage: Storage;
+    storage: CommodityStorage;
     increaseLeadershipActivities: boolean;
     consumptionReduction: number;
     consumption: number;
     config: SettlementConfig;
+    unlockActivities: Activity[];
 }
 
 function count<T>(items: T[], idFunction: (item: T) => string): Map<string, { count: number, item: T }> {
@@ -139,22 +78,22 @@ function applySkillBonusRules(result: SkillItemBonuses, structures: Structure[])
     structures.forEach(structure => {
         structure.skillBonusRules?.forEach(rule => {
             const skill = result[rule.skill];
-            if (!rule.action) {
+            if (!rule.activity) {
                 if (rule.value > skill.value) {
                     skill.value = rule.value;
                 }
             }
         });
     });
-    // apply actions
+    // apply activities
     structures.forEach(structure => {
         structure.skillBonusRules?.forEach(rule => {
             const skill = result[rule.skill];
-            const action = rule.action;
-            if (action) {
+            const activity = rule.activity;
+            if (activity) {
                 if (rule.value > skill.value &&
-                    rule.value > (skill.actions[action] ?? 0)) {
-                    skill.actions[action] = rule.value;
+                    rule.value > (skill.activities[activity] ?? 0)) {
+                    skill.activities[activity] = rule.value;
                 }
             }
         });
@@ -194,8 +133,7 @@ function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Str
             const group = rule.group;
             if (group === 'magical') {
                 const value = calculateItemLevelBonus(defaultPenalty, globallyStackingBonuses, rule.value, maxItemLevelBonus);
-                const types = ['magical', 'divine', 'occult', 'primal', 'arcane'] as (ItemGroup)[];
-                types.forEach(type => {
+                magicalItemGroups.forEach(type => {
                     if (value > itemLevelBonuses[type]) {
                         itemLevelBonuses[type] = value;
                     }
@@ -237,15 +175,15 @@ function applySettlementEventBonuses(result: SettlementData, structures: Structu
     });
 }
 
-function simplifyRules(rules: ActionBonusRule[]): SkillBonusRule[] {
+function simplifyRules(rules: ActivityBonusRule[]): SkillBonusRule[] {
     return rules.flatMap(rule => {
-        const action = rule.action;
-        const skills = getActivitySkills(action);
+        const activity = rule.activity;
+        const skills = getActivitySkills(activity, false);
         return skills.map(skill => {
             return {
                 value: rule.value,
                 skill,
-                action,
+                activity: activity,
             };
         });
     });
@@ -253,7 +191,7 @@ function simplifyRules(rules: ActionBonusRule[]): SkillBonusRule[] {
 
 function unionizeStructures(structures: Structure[]): Structure[] {
     return structures.map(structure => {
-        const simplifiedRules = simplifyRules(structure.actionBonusRules ?? []);
+        const simplifiedRules = simplifyRules(structure.activityBonusRules ?? []);
         return {
             ...structure,
             skillBonusRules: [...(structure.skillBonusRules ?? []), ...simplifiedRules],
@@ -261,11 +199,11 @@ function unionizeStructures(structures: Structure[]): Structure[] {
     });
 }
 
-function applyStorageIncreases(storage: Storage, structures: Structure[]): void {
+function applyStorageIncreases(storage: CommodityStorage, structures: Structure[]): void {
     structures
         .filter(structures => structures.storage)
         .forEach(structure => {
-            const keys = ['ore', 'lumber', 'food', 'stone', 'luxuries'] as (keyof Storage)[];
+            const keys = ['ore', 'lumber', 'food', 'stone', 'luxuries'] as (keyof CommodityStorage)[];
             keys.forEach(key => {
                 const structureStorage = structure.storage;
                 if (structureStorage && key in structureStorage) {
@@ -353,14 +291,14 @@ export function getSettlementConfig(settlementLevel: number): SettlementConfig {
 
 function mergeBonuses(capital: SkillItemBonus, settlement: SkillItemBonus): SkillItemBonus {
     const skillValue = capital.value > settlement.value ? capital.value : settlement.value;
-    const actions = mergeObjects(capital.actions, settlement.actions, (a: number, b: number) => Math.max(a, b));
-    const filteredActions = Object.fromEntries(
-        Object.entries(actions)
+    const activities = mergeObjects(capital.activities, settlement.activities, (a: number, b: number) => Math.max(a, b));
+    const filteredActivities = Object.fromEntries(
+        Object.entries(activities)
             .filter(([, value]) => value > skillValue)
     );
     return {
         value: skillValue,
-        actions: filteredActions,
+        activities: filteredActivities,
     };
 }
 
@@ -368,9 +306,18 @@ export function includeCapital(capital: SettlementData, settlement: SettlementDa
     return {
         ...settlement,
         increaseLeadershipActivities: capital.increaseLeadershipActivities,
+        unlockActivities: capital.unlockActivities.concat(settlement.unlockActivities),
         leadershipActivityBonus: Math.max(capital.leadershipActivityBonus, settlement.leadershipActivityBonus),
         skillBonuses: mergeObjects(capital.skillBonuses, settlement.skillBonuses, mergeBonuses) as SkillItemBonuses,
     };
+}
+
+function applyUnlockedActivities(unlockActivities: Activity[], groupedStructures: Structure[]): void {
+    groupedStructures
+        .flatMap(structure => structure?.unlockActivities ?? [])
+        .forEach(activity => {
+            unlockActivities.push(activity);
+        });
 }
 
 /**
@@ -387,22 +334,22 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
         allowCapitalInvestment,
         notes,
         skillBonuses: {
-            agriculture: {value: 0, actions: {}},
-            arts: {value: 0, actions: {}},
-            boating: {value: 0, actions: {}},
-            defense: {value: 0, actions: {}},
-            engineering: {value: 0, actions: {}},
-            exploration: {value: 0, actions: {}},
-            folklore: {value: 0, actions: {}},
-            industry: {value: 0, actions: {}},
-            intrigue: {value: 0, actions: {}},
-            magic: {value: 0, actions: {}},
-            politics: {value: 0, actions: {}},
-            scholarship: {value: 0, actions: {}},
-            statecraft: {value: 0, actions: {}},
-            trade: {value: 0, actions: {}},
-            warfare: {value: 0, actions: {}},
-            wilderness: {value: 0, actions: {}},
+            agriculture: {value: 0, activities: {}},
+            arts: {value: 0, activities: {}},
+            boating: {value: 0, activities: {}},
+            defense: {value: 0, activities: {}},
+            engineering: {value: 0, activities: {}},
+            exploration: {value: 0, activities: {}},
+            folklore: {value: 0, activities: {}},
+            industry: {value: 0, activities: {}},
+            intrigue: {value: 0, activities: {}},
+            magic: {value: 0, activities: {}},
+            politics: {value: 0, activities: {}},
+            scholarship: {value: 0, activities: {}},
+            statecraft: {value: 0, activities: {}},
+            trade: {value: 0, activities: {}},
+            warfare: {value: 0, activities: {}},
+            wilderness: {value: 0, activities: {}},
         },
         itemLevelBonuses: {
             divine: 0,
@@ -426,10 +373,12 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
         increaseLeadershipActivities: structures.some(structure => structure.increaseLeadershipActivities === true),
         consumptionReduction,
         consumption: Math.max(0, settlementData.consumption - consumptionReduction),
+        unlockActivities: [],
     };
     const unionizedStructures = unionizeStructures(structures);
     applyStorageIncreases(result.storage, structures);
     const groupedStructures = groupStructures(unionizedStructures, maxItemBonus);
+    applyUnlockedActivities(result.unlockActivities, groupedStructures);
     applySettlementEventBonuses(result, groupedStructures);
     applyLeadershipActivityBonuses(result, groupedStructures);
     applySkillBonusRules(result.skillBonuses, groupedStructures);

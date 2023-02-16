@@ -13,25 +13,25 @@ describe('structures', () => {
             skillBonusRules: [{
                 value: 1,
                 skill: 'defense',
-                action: 'provide-care',
+                activity: 'provide-care',
             }],
         }, {
             name: 'b',
             skillBonusRules: [{
                 value: 1,
                 skill: 'defense',
-                action: 'provide-care',
+                activity: 'provide-care',
             }],
         }, {
             name: 'a',
             skillBonusRules: [{
                 value: 1,
                 skill: 'defense',
-                action: 'provide-care',
+                activity: 'provide-care',
             }],
         }], 10);
         expect(result.skillBonuses.defense.value).toBe(0);
-        expect(result.skillBonuses.defense?.actions?.['provide-care']).toBe(2);
+        expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(2);
     });
 
     test('item bonuses from skills should override action bonuses', () => {
@@ -40,7 +40,7 @@ describe('structures', () => {
             skillBonusRules: [{
                 value: 1,
                 skill: 'defense',
-                action: 'provide-care',
+                activity: 'provide-care',
             }],
         }, {
             name: 'b',
@@ -50,8 +50,8 @@ describe('structures', () => {
             }],
         }], 10);
         expect(result.skillBonuses.defense.value).toBe(2);
-        expect(Object.keys(result.skillBonuses.defense?.actions)).toStrictEqual([]);
-        expect(result.skillBonuses.defense?.actions?.['provide-care']).toBe(undefined);
+        expect(Object.keys(result.skillBonuses.defense?.activities)).toStrictEqual([]);
+        expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(undefined);
     });
 
     test('max item bonuses should override skill bonuses', () => {

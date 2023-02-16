@@ -96,14 +96,14 @@ A full structure rule would look something like this:
   "enableCapitalInvestment": false,
   "increaseLeadershipActivities": false,
   "consumptionReduction": 1,
-  "actionBonusRules": [{
+  "activityBonusRules": [{
     "value": 1,
-    "action": "create-a-masterpiece"
+    "activity": "create-a-masterpiece"
   }],
   "skillBonusRules": [{
     "value": 2,
     "skill": "warfare",
-    "action": "pledge-of-fealty"
+    "activity": "pledge-of-fealty"
   }],
   "availableItemsRules": [{
     "value": 1,
@@ -121,7 +121,8 @@ A full structure rule would look something like this:
     "lumber": 1,
     "stone": 1,
     "luxuries": 1
-  }
+  },
+  "unlockActivities": ["read-all-about-it"]
 }
 ```
 
@@ -131,13 +132,13 @@ A full structure rule would look something like this:
 * **enableCapitalInvestment**: optional, if not at least one structure in your settlement has this set to true, **Capital Investment** will be marked as not possible in this settlement
 * **increaseLeadershipActivities**: optional, if one building in your capital has this set to true, your Leadership Activity number will increase from 2 to 3
 * **consumptionReduction**: optional, is only used once for all structures with the same name, decreases its settlement's consumption by the amount
-* **actionBonusRules**: optional, stack up to settlement item bonus and capital item bonuses
+* **activityBonusRules**: optional, stack up to settlement item bonus and capital item bonuses
   * **value**: mandatory, bonus
-  * **action**: mandatory, kingdom activity in lowercase with spaces converted to dashes (e.g. **Rest and Relax** -> **rest-and-relax**)
-* **skillBonusRules**: optional, similar to **actionBonusRules** but allow you to add a flat skill bonus or limit an action bonus to a certain skill
+  * **activity**: mandatory, kingdom activity in lowercase with spaces converted to dashes (e.g. **Rest and Relax** -> **rest-and-relax**)
+* **skillBonusRules**: optional, similar to **activityBonusRules** but allow you to add a flat skill bonus or limit an activity bonus to a certain skill
   * **value**: mandatory, bonus
   * **skill**: mandatory, Kingdom skill in lowercase
-  * **action**: optional, if provided, only applies to a single action, formatting similar to actions of **actionBonusRules**
+  * **activity**: optional, if provided, only applies to a single activity, formatting similar to activities of **activityBonusRules**
 * **availableItemsRules**: optional, if given increase the item level for purchasing items in this settlement
   * **value**: mandatory, level increase
   * **group**: optional, if absent **stacks with everything else** up to 3 times, otherwise one of:
@@ -161,3 +162,17 @@ A full structure rule would look something like this:
     }
   }
   ```
+* **unlockActivities**: optional, contains a list of activity names that should be unlocked on the character sheet. The following activities are not enabled by default out of the box; most of them however are enabled by putting companions into certain leadership rules:
+  * read-all-about-it
+  * evangelize-the-dead
+  * decadent-feasts
+  * deliberate-planning
+  * false-victory
+  * show-of-force
+  * warfare-exercises
+  * preventative-measures
+  * spread-the-legend
+  * read-all-about-it
+  * recruit-monsters
+  * process-hidden-fees
+  * supplementary-hunting

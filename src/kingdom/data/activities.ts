@@ -1,5 +1,6 @@
 import {allSkills, Skill} from './skills';
 import {Ability} from './abilities';
+import {unslugifyAction} from '../../utils';
 
 export type KingdomPhase = 'leadership' | 'region' | 'event' | 'warfare';
 export const allActivities = [
@@ -185,12 +186,14 @@ const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
     'supplementary-hunting': ['wilderness'],
 };
 
-export function getActivitySkills(activity: Activity): Skill[] {
+export function getActivitySkills(activity: Activity, masterInMagic : boolean): Skill[] {
     const skills = activitySkills[activity!];
     if (skills[0] === '*') {
         return [...allSkills];
     } else {
-        return skills as Skill[];
+        const masterUnlockSkills: Skill[] = masterInMagic && activity === 'establish-trade-agreement' ? ['magic'] : [];
+        const onlySkills = skills as Skill[];
+        return masterUnlockSkills.concat(onlySkills);
     }
 }
 
@@ -294,4 +297,63 @@ export function getActivityPhase(activity: Activity): KingdomPhase | undefined {
     } else if (leadershipActivities.has(activity)) {
         return 'region';
     }
+}
+
+export const lockedActivities: Set<Activity> = new Set([
+    'read-all-about-it',
+    'evangelize-the-dead',
+    'decadent-feasts',
+    'deliberate-planning',
+    'false-victory',
+    'show-of-force',
+    'warfare-exercises',
+    'preventative-measures',
+    'spread-the-legend',
+    'read-all-about-it',
+    'recruit-monsters',
+    'process-hidden-fees',
+    'supplementary-hunting',
+]);
+
+function filterUnlocked(activities: Activity[], unlockActivities: Set<Activity>): Activity[] {
+    return activities.filter(activity => {
+        if (lockedActivities.has(activity)) {
+            return unlockActivities.has(activity);
+        } else {
+            return activity;
+        }
+    });
+}
+
+export function getUnlockedActivities(type: 'leadership' | 'warfare' | 'region', unlockActivities: Set<Activity>): Activity[] {
+    if (type === 'leadership') {
+        return filterUnlocked(allLeadershipActivities, unlockActivities);
+    } else if (type === 'region') {
+        return filterUnlocked(allRegionActivities, unlockActivities);
+    } else if (type === 'warfare') {
+        return filterUnlocked(allWarfareActivities, unlockActivities);
+    } else {
+        return [];
+    }
+}
+
+export function createActivityLabel(activity: Activity, kingdomLevel: number): string {
+    let label = unslugifyAction(activity);
+    if (activity === 'claim-hex') {
+        if (kingdomLevel >= 9) {
+            label += ' (three times per round)';
+        } else if (kingdomLevel >= 4) {
+            label += ' (twice per round)';
+        } else {
+            label += ' (once per round)';
+        }
+    }
+    if (trainedActivities.has(activity) && oncePerRoundActivities.has(activity)) {
+        label += ' (once per round, trained)';
+    } else if (trainedActivities.has(activity)) {
+        label += ' (trained)';
+    } else if (oncePerRoundActivities.has(activity)) {
+        label += ' (once per round)';
+    }
+    return label;
 }

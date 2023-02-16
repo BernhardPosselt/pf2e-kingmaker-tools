@@ -1,19 +1,96 @@
-import {Structure} from './structures';
+import {Activity} from './activities';
+import {Skill} from './skills';
+
+
+export interface ActivityBonusRule {
+    value: number;
+    activity: Activity;
+}
+
+export interface SkillBonusRule {
+    value: number;
+    skill: Skill;
+    // e.g. 'quell-unrest'
+    activity?: Activity;
+}
+
+export interface AvailableItemsRule {
+    value: number;
+    // e.g. 'alchemical' or 'magic'
+    group?: ItemGroup;
+}
+
+export interface SettlementEventsRule {
+    value: number;
+}
+
+export interface LeadershipActivityRule {
+    value: number;
+}
+
+export interface CommodityStorage {
+    ore: number;
+    food: number;
+    lumber: number;
+    stone: number;
+    luxuries: number;
+}
+
+export interface Structure {
+    name: string;
+    notes?: string;
+    preventItemLevelPenalty?: boolean;
+    enableCapitalInvestment?: boolean,
+    skillBonusRules?: SkillBonusRule[];
+    activityBonusRules?: ActivityBonusRule[];
+    availableItemsRules?: AvailableItemsRule[];
+    settlementEventRules?: SettlementEventsRule[];
+    leadershipActivityRules?: LeadershipActivityRule[];
+    storage?: Partial<CommodityStorage>;
+    increaseLeadershipActivities?: boolean;
+    consumptionReduction?: number;
+    unlockActivities?: Activity[];
+}
+
+export type ActivityBonuses = Partial<Record<Activity, number>>;
+
+export interface SkillItemBonus {
+    value: number;
+    activities: ActivityBonuses;
+}
+
+export type SkillItemBonuses = Record<Skill, SkillItemBonus>;
+
+export type ItemGroup = 'divine'
+    | 'alchemical'
+    | 'primal'
+    | 'occult'
+    | 'arcane'
+    | 'luxury'
+    | 'magical'
+    | 'other';
+
+export const magicalItemGroups: ItemGroup[] = ['magical', 'divine', 'occult', 'primal', 'arcane'];
+
+export const mundaneItemGroups: ItemGroup[] = ['alchemical', 'luxury', 'other'];
+export const itemGroups: ItemGroup[] = mundaneItemGroups.concat(magicalItemGroups);
+
+export type ItemLevelBonuses = Record<ItemGroup, number>;
 
 const structures: Structure[] = [
     {
         name: 'Academy',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 2,
-            action: 'creative-solution',
+            activity: 'creative-solution',
         }],
         notes: 'While in a settlement with an Academy, you gain a +2 item bonus to Lore checks made to Recall Knowledge while Investigate, to all checks made while Researching, and to Decipher Writing.',
     },
     {
         name: 'Alchemy Laboratory',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'demolish',
+            activity: 'demolish',
         }],
         availableItemsRules: [{
             value: 1,
@@ -26,7 +103,7 @@ const structures: Structure[] = [
         skillBonusRules: [{
             value: 1,
             skill: 'magic',
-            action: 'quell-unrest',
+            activity: 'quell-unrest',
         }],
         availableItemsRules: [{
             value: 1,
@@ -36,79 +113,79 @@ const structures: Structure[] = [
     },
     {
         name: 'Arena',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 2,
-            action: 'celebrate-holiday',
+            activity: 'celebrate-holiday',
         }],
         skillBonusRules: [{
             value: 1,
             skill: 'warfare',
-            action: 'quell-unrest',
+            activity: 'quell-unrest',
         }],
         notes: 'An arena lets you to retrain combat-themed feats more efficiently while in the settlement; doing so takes only 5 days rather than a week of downtime.',
     },
     {
         name: 'Bank',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'tap-treasury',
+            activity: 'tap-treasury',
         }],
         enableCapitalInvestment: true,
     },
     {
         name: 'Barracks',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'garrison-army',
+            activity: 'garrison-army',
         }, {
             value: 1,
-            action: 'recover-army',
+            activity: 'recover-army',
         }, {
             value: 1,
-            action: 'recruit-army',
+            activity: 'recruit-army',
         }],
     },
     {
         name: 'Brewery',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'establish-trade-agreement',
+            activity: 'establish-trade-agreement',
         }],
     },
     {
         name: 'Castle',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 2,
-            action: 'new-leadership',
+            activity: 'new-leadership',
         }, {
             value: 2,
-            action: 'pledge-of-fealty',
+            activity: 'pledge-of-fealty',
         }, {
             value: 2,
-            action: 'send-diplomatic-envoy',
+            activity: 'send-diplomatic-envoy',
         }, {
             value: 2,
-            action: 'garrison-army',
+            activity: 'garrison-army',
         }, {
             value: 2,
-            action: 'recruit-army',
+            activity: 'recruit-army',
         }, {
             value: 2,
-            action: 'recover-army',
+            activity: 'recover-army',
         }],
         increaseLeadershipActivities: true,
     },
     {
         name: 'Cathedral',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 3,
-            action: 'celebrate-holiday',
+            activity: 'celebrate-holiday',
         }, {
             value: 3,
-            action: 'provide-care',
+            activity: 'provide-care',
         }, {
             value: 3,
-            action: 'repair-reputation-corruption',
+            activity: 'repair-reputation-corruption',
         }],
         availableItemsRules: [{
             value: 3,
@@ -118,43 +195,43 @@ const structures: Structure[] = [
     },
     {
         name: 'Construction Yard',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'build-structure',
+            activity: 'build-structure',
         }, {
             value: 1,
-            action: 'repair-reputation-decay',
+            activity: 'repair-reputation-decay',
         }],
     },
     {
         name: 'Dump',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'demolish',
+            activity: 'demolish',
         }],
     },
     {
         name: 'Embassy',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'send-diplomatic-envoy',
+            activity: 'send-diplomatic-envoy',
         }, {
             value: 1,
-            action: 'request-foreign-aid',
+            activity: 'request-foreign-aid',
         }],
     },
     {
         name: 'Festival Hall',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'celebrate-holiday',
+            activity: 'celebrate-holiday',
         }],
     },
     {
         name: 'Foundry',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'establish-work-site-mine',
+            activity: 'establish-work-site-mine',
         }],
         storage: {
             ore: 1,
@@ -162,12 +239,12 @@ const structures: Structure[] = [
     },
     {
         name: 'Garrison',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'outfit-army',
+            activity: 'outfit-army',
         }, {
             value: 1,
-            action: 'train-army',
+            activity: 'train-army',
         }],
     },
     {
@@ -176,17 +253,17 @@ const structures: Structure[] = [
     },
     {
         name: 'Gladiatorial Arena',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 3,
-            action: 'celebrate-holiday',
+            activity: 'celebrate-holiday',
         }, {
             value: 3,
-            action: 'hire-adventurers',
+            activity: 'hire-adventurers',
         }],
         skillBonusRules: [{
             value: 3,
             skill: 'warfare',
-            action: 'quell-unrest',
+            activity: 'quell-unrest',
         }],
         notes: 'A gladiatorial arena allows a PC in the settlement to retrain combat-themed feats (at the GM\'s discretion) more efficiently; doing so takes only 4 days rather than a week of downtime.',
     },
@@ -202,27 +279,27 @@ const structures: Structure[] = [
     },
     {
         name: 'Herbalist',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'provide-care',
+            activity: 'provide-care',
         }],
     },
     {
         name: 'Hospital',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'provide-care',
+            activity: 'provide-care',
         }, {
             value: 1,
-            action: 'quell-unrest',
+            activity: 'quell-unrest',
         }],
         notes: 'While in a settlement with a hospital, you gain a +2 item bonus to Medicine checks to Treat Disease and Treat Wounds.',
     },
     {
         name: 'Illicit Market',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'clandestine-business',
+            activity: 'clandestine-business',
         }],
         availableItemsRules: [{
             value: 1,
@@ -230,9 +307,9 @@ const structures: Structure[] = [
     },
     {
         name: 'Inn',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'hire-adventurers',
+            activity: 'hire-adventurers',
         }],
     },
     {
@@ -240,20 +317,20 @@ const structures: Structure[] = [
         skillBonusRules: [{
             value: 1,
             skill: 'intrigue',
-            action: 'quell-unrest',
+            activity: 'quell-unrest',
         }],
     },
     {
         name: 'Keep',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'deploy-army',
+            activity: 'deploy-army',
         }, {
             value: 1,
-            action: 'garrison-army',
+            activity: 'garrison-army',
         }, {
             value: 1,
-            action: 'train-army',
+            activity: 'train-army',
         }],
     },
     {
@@ -261,15 +338,15 @@ const structures: Structure[] = [
         skillBonusRules: [{
             value: 1,
             skill: 'scholarship',
-            action: 'rest-and-relax',
+            activity: 'rest-and-relax',
         }],
         notes: 'While in a settlement with a library, you gain a +1 item bonus to Lore checks made to Recall Knowledge while Investigating, as well as to Researching checks, and to Decipher Writing checks.',
     },
     {
         name: 'Lumberyard',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'establish-work-site-lumber',
+            activity: 'establish-work-site-lumber',
         }],
         storage: {
             lumber: 1,
@@ -277,9 +354,9 @@ const structures: Structure[] = [
     },
     {
         name: 'Luxury Store',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'establish-trade-agreement',
+            activity: 'establish-trade-agreement',
         }],
         availableItemsRules: [{
             value: 1,
@@ -288,9 +365,9 @@ const structures: Structure[] = [
     },
     {
         name: 'Magic Shop',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'supernatural-solution',
+            activity: 'supernatural-solution',
         }],
         availableItemsRules: [{
             value: 1,
@@ -299,16 +376,16 @@ const structures: Structure[] = [
     },
     {
         name: 'Mansion',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'improve-lifestyle',
+            activity: 'improve-lifestyle',
         }],
     },
     {
         name: 'Marketplace',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'establish-trade-agreement',
+            activity: 'establish-trade-agreement',
         }],
         preventItemLevelPenalty: true,
     },
@@ -317,42 +394,42 @@ const structures: Structure[] = [
         skillBonusRules: [{
             value: 2,
             skill: 'wilderness',
-            action: 'rest-and-relax',
+            activity: 'rest-and-relax',
         }],
         notes: 'A menagerie typically contains a selection of level 5 or lower animals. If your party captures a living creature of level 6 or higher and can transport the creature back to a settlement with a menagerie, you can add that creature to the menagerie as long as your kingdom level is at least 4 higher than the creature\'s level. Each time such a creature is added to a menagerie, gain 1 Fame or Infamy point (as appropriate) or reduce one Ruin of your choice by 1.\n' +
             'Only creatures with Intelligence modifiers of –4 or –5 are appropriate to place in a menagerie. A kingdom gains 1 Unrest at the start of a Kingdom turn for each sapient creature (anything with an Intelligence modifier of –3 or higher) on display in a menagerie.',
     },
     {
         name: 'Military Academy',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 2,
-            action: 'train-army',
+            activity: 'train-army',
         }],
         skillBonusRules: [{
             value: 2,
             skill: 'warfare',
-            action: 'pledge-of-fealty',
+            activity: 'pledge-of-fealty',
         }],
     },
     {
         name: 'Mill',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'harvest-crops',
+            activity: 'harvest-crops',
         }],
         consumptionReduction: 1,
     },
     {
         name: 'Mint',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 3,
-            action: 'capital-investment',
+            activity: 'capital-investment',
         }, {
             value: 3,
-            action: 'collect-taxes',
+            activity: 'collect-taxes',
         }, {
             value: 3,
-            action: 'repair-reputation-crime',
+            activity: 'repair-reputation-crime',
         }],
     },
     {
@@ -360,27 +437,27 @@ const structures: Structure[] = [
         skillBonusRules: [{
             value: 1,
             skill: 'arts',
-            action: 'rest-and-relax',
+            activity: 'rest-and-relax',
         }],
         notes: 'A magic item of level 6 or higher that has a particular import or bears significant historical or regional value (at the GM\'s discretion) can be donated to a museum. Each time such an item is donated, reduce Unrest by 1. If that item is later removed from display, increase Unrest by 1.',
     },
     {
         name: 'Noble Villa',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'improve-lifestyle',
+            activity: 'improve-lifestyle',
         }],
         skillBonusRules: [{
             value: 1,
             skill: 'politics',
-            action: 'quell-unrest',
+            activity: 'quell-unrest',
         }],
     },
     {
         name: 'Occult Shop',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 2,
-            action: 'prognostication',
+            activity: 'prognostication',
         }],
         availableItemsRules: [{
             value: 1,
@@ -390,35 +467,35 @@ const structures: Structure[] = [
     },
     {
         name: 'Opera House',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 3,
-            action: 'celebrate-holiday',
+            activity: 'celebrate-holiday',
         }, {
             value: 3,
-            action: 'create-a-masterpiece',
+            activity: 'create-a-masterpiece',
         }],
         notes: 'While in a settlement with an opera house, you gain a +3 item bonus to Performance checks made to Earn Income.',
     },
     {
         name: 'Palace',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 3,
-            action: 'new-leadership',
+            activity: 'new-leadership',
         }, {
             value: 3,
-            action: 'pledge-of-fealty',
+            activity: 'pledge-of-fealty',
         }, {
             value: 3,
-            action: 'send-diplomatic-envoy',
+            activity: 'send-diplomatic-envoy',
         }, {
             value: 3,
-            action: 'garrison-army',
+            activity: 'garrison-army',
         }, {
             value: 3,
-            action: 'recover-army',
+            activity: 'recover-army',
         }, {
             value: 3,
-            action: 'recruit-army',
+            activity: 'recruit-army',
         }],
         leadershipActivityRules: [{
             value: 3,
@@ -430,33 +507,34 @@ const structures: Structure[] = [
         skillBonusRules: [{
             value: 1,
             skill: 'wilderness',
-            action: 'rest-and-relax',
+            activity: 'rest-and-relax',
         }],
     },
     {
         name: 'Pier',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'go-fishing',
+            activity: 'go-fishing',
         }],
     },
     {
         name: 'Printing House',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 2,
-            action: 'improve-lifestyle',
+            activity: 'improve-lifestyle',
         }, {
             value: 2,
-            action: 'quell-unrest',
+            activity: 'quell-unrest',
         }],
         notes: 'A PC in a settlement with a printing house gains a +2 item bonus to checks to Gather Information or to Research any topic in a library or similar structure.',
+        unlockActivities: ['read-all-about-it'],
     },
     {
         name: 'Sacred Grove',
         skillBonusRules: [{
             value: 1,
             skill: 'folklore',
-            action: 'quell-unrest',
+            activity: 'quell-unrest',
         }],
         availableItemsRules: [{
             value: 1,
@@ -465,9 +543,9 @@ const structures: Structure[] = [
     },
     {
         name: 'Secure Warehouse',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'craft-luxuries',
+            activity: 'craft-luxuries',
         }],
         storage: {
             luxuries: 1,
@@ -475,17 +553,17 @@ const structures: Structure[] = [
     },
     {
         name: 'Sewer System',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'clandestine-business',
+            activity: 'clandestine-business',
         }],
         consumptionReduction: 1,
     },
     {
         name: 'Shrine',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'celebrate-holiday',
+            activity: 'celebrate-holiday',
         }],
         availableItemsRules: [{
             value: 1,
@@ -494,43 +572,43 @@ const structures: Structure[] = [
     },
     {
         name: 'Smithy',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'trade-commodities',
+            activity: 'trade-commodities',
         }, {
             value: 1,
-            action: 'outfit-army',
+            activity: 'outfit-army',
         }],
         notes: 'While in a settlement with a smithy, you gain a +1 item bonus to Craft checks made to work with metal.',
     },
     {
         name: 'Specialized Artisan',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'craft-luxuries',
+            activity: 'craft-luxuries',
         }],
         notes: 'While in a settlement with a specialized artisan, you gain a +1 item bonus to Craft checks made to craft specialized goods like jewelry.',
     },
     {
         name: 'Stable',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'establish-trade-agreement',
+            activity: 'establish-trade-agreement',
         }],
     },
     {
         name: 'Stockyard',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'gather-lifestock',
+            activity: 'gather-lifestock',
         }],
         consumptionReduction: 1,
     },
     {
         name: 'Stonemason',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'establish-work-site-quarry',
+            activity: 'establish-work-site-quarry',
         }],
         storage: {
             stone: 1,
@@ -538,61 +616,61 @@ const structures: Structure[] = [
     },
     {
         name: 'Tannery',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'trade-commodities',
+            activity: 'trade-commodities',
         }],
     },
     {
         name: 'Tavern, Luxury',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 2,
-            action: 'hire-adventurers',
+            activity: 'hire-adventurers',
         }],
         skillBonusRules: [{
             value: 2,
             skill: 'trade',
-            action: 'rest-and-relax',
+            activity: 'rest-and-relax',
         }],
         notes: 'If attempt a Performance check to Earn Income in a settlement with a luxury tavern, you gain a +2 item bonus to the check. All checks made to Gather Information in a settlement with at least one luxury tavern gain a +2 item bonus.',
     },
     {
         name: 'Tavern, Popular',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'hire-adventurers',
+            activity: 'hire-adventurers',
         }],
         skillBonusRules: [{
             value: 1,
             skill: 'trade',
-            action: 'rest-and-relax',
+            activity: 'rest-and-relax',
         }],
         notes: 'If you attempt a Performance check to Earn Income in a settlement with a popular tavern, you gain a +1 item bonus to the check. All checks made to Gather Information in a settlement with at least one popular tavern gain a +1 item bonus.',
     },
     {
         name: 'Tavern, World-Class',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 3,
-            action: 'hire-adventurers',
+            activity: 'hire-adventurers',
         }, {
             value: 3,
-            action: 'repair-reputation-strife',
+            activity: 'repair-reputation-strife',
         }],
         skillBonusRules: [{
             value: 3,
             skill: 'trade',
-            action: 'rest-and-relax',
+            activity: 'rest-and-relax',
         }],
         notes: 'If you attempt a Performance check to Earn Income in a settlement with a world-class tavern, you gain a +3 item bonus to the check. All checks made to Gather Information in a settlement with a world-class tavern gain a +3 item bonus.',
     },
     {
         name: 'Temple',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'celebrate-holiday',
+            activity: 'celebrate-holiday',
         }, {
             value: 1,
-            action: 'provide-care',
+            activity: 'provide-care',
         }],
         availableItemsRules: [{
             value: 1,
@@ -601,17 +679,17 @@ const structures: Structure[] = [
     },
     {
         name: 'Theater',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 2,
-            action: 'celebrate-holiday',
+            activity: 'celebrate-holiday',
         }],
         notes: 'While in a settlement with a theater, you gain a +2 item bonus to Performance checks made to Earn Income.',
     },
     {
         name: 'Thieves\' Guild',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'infiltration',
+            activity: 'infiltration',
         }],
         notes: 'While in a settlement with a thieves\' guild, you gain a +1 item bonus to Create Forgeries.',
     },
@@ -621,17 +699,17 @@ const structures: Structure[] = [
     },
     {
         name: 'Trade Shop',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'purchase-commodities',
+            activity: 'purchase-commodities',
         }],
         notes: 'When you build a trade shop, indicate the kind of shop it is, such as a bakery, carpenter, tailor, and so on. While in a settlement with a trade shop, you gain a +1 item bonus to all associated Crafting checks.',
     },
     {
         name: 'University',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 3,
-            action: 'creative-solution',
+            activity: 'creative-solution',
         }],
         notes: 'While in a settlement with a university, you gain a +3 item bonus to Lore checks made to Recall Knowledge while Investigating, to Research checks (Gamemastery Guide 154), and to Decipher Writing.',
     },
@@ -643,12 +721,12 @@ const structures: Structure[] = [
     },
     {
         name: 'Waterfront',
-        actionBonusRules: [{
+        activityBonusRules: [{
             value: 1,
-            action: 'go-fishing',
+            activity: 'go-fishing',
         }, {
             value: 1,
-            action: 'establish-trade-agreement',
+            activity: 'establish-trade-agreement',
         }],
         availableItemsRules: [{
             value: 1,

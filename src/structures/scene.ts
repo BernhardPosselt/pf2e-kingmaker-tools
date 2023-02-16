@@ -1,6 +1,6 @@
-import {evaluateStructures, includeCapital, SettlementData, Structure} from './structures';
-import {structuresByName} from './structure-data';
+import {evaluateStructures, includeCapital, SettlementData} from './structures';
 import {ruleSchema} from './schema';
+import {Structure, structuresByName} from '../kingdom/data/structures';
 
 class StructureError extends Error {
 }
