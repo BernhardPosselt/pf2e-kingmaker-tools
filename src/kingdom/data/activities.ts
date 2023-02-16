@@ -2,8 +2,9 @@ import {allSkills, Skill} from './skills';
 import {Ability} from './abilities';
 import {unslugifyActivity} from '../../utils';
 
-export type KingdomPhase = 'leadership' | 'region' | 'event' | 'warfare';
+export type KingdomPhase = 'leadership' | 'region' | 'event' | 'army' | 'commerce' | 'upkeep' | 'civic';
 export const allActivities = [
+    'repair-the-flooded-mine',
     'establish-trade-agreement',
     'provide-care',
     'hire-adventurers',
@@ -21,13 +22,13 @@ export const allActivities = [
     'establish-work-site-mine',
     'establish-work-site-lumber',
     'establish-work-site-quarry',
-    'establish-work-site',
     'establish-farmland',
     'create-a-masterpiece',
     'fortify-hex',
     'go-fishing',
     'trade-commodities',
-    'gather-lifestock',
+    'gather-livestock',
+    'harvest-azure-lily-pollen',
     'purchase-commodities',
     'improve-lifestyle',
     'craft-luxuries',
@@ -71,6 +72,7 @@ export const allActivities = [
     'supplementary-hunting',
     'disband-army',
     'offensive-gambit',
+    'restore-the-temple-of-the-elk',
 ] as const;
 
 export type Activity = typeof allActivities[number];
@@ -96,6 +98,8 @@ export const skillAbilities: Record<Skill, Ability> = {
 
 export type AbilityScores = Record<Ability, number>;
 const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
+    'repair-the-flooded-mine': ['engineering'],
+    'restore-the-temple-of-the-elk': ['folklore'],
     // agriculture
     'establish-farmland': ['agriculture'],
     'harvest-crops': ['agriculture'],
@@ -105,6 +109,7 @@ const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
     'quell-unrest': ['arts', 'folklore', 'intrigue', 'magic', 'politics', 'warfare'],
     'create-a-masterpiece': ['arts'],
     'repair-reputation-corruption': ['arts'],
+    'harvest-azure-lily-pollen': ['agriculture'],
     // boating
     'establish-trade-agreement': ['boating', 'magic', 'trade'],
     'go-fishing': ['boating'],
@@ -116,7 +121,6 @@ const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
     'clear-hex': ['engineering', 'exploration'],
     'demolish': ['engineering'],
     'establish-settlement': ['engineering', 'industry', 'politics', 'scholarship'],
-    'establish-work-site': ['engineering'],
     'establish-work-site-quarry': ['engineering'],
     'establish-work-site-lumber': ['engineering'],
     'establish-work-site-mine': ['engineering'],
@@ -165,7 +169,7 @@ const activitySkills: Record<Activity, (Skill)[] | ['*']> = {
     'offensive-gambit': ['warfare'],
 
     // wilderness
-    'gather-lifestock': ['wilderness'],
+    'gather-livestock': ['wilderness'],
 
     // other
     'build-structure': ['*'],
@@ -249,11 +253,12 @@ export const allRegionActivities: Activity[] = [
     'establish-work-site-lumber',
     'establish-work-site-mine',
     'go-fishing',
-    'gather-lifestock',
+    'gather-livestock',
     'harvest-crops',
     'irrigation',
     'recruit-monsters',
     'supplementary-hunting',
+    'harvest-azure-lily-pollen',
 ];
 
 const regionActivities = new Set(allRegionActivities);
@@ -293,7 +298,7 @@ export function getActivityPhase(activity: Activity): KingdomPhase | undefined {
     if (regionActivities.has(activity)) {
         return 'region';
     } else if (warfareActivities.has(activity)) {
-        return 'warfare';
+        return 'army';
     } else if (leadershipActivities.has(activity)) {
         return 'region';
     }

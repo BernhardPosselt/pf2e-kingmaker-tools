@@ -246,3 +246,11 @@ td.skill-value {
 .kingdom-skill:hover span {
     display: none;
 }
+
+.activity-help:not([hidden]) {
+    display: flex;
+}
+.activity-help .show-help {
+    flex-basis: 0;
+    min-width: 34px;
+}

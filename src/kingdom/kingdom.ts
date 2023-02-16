@@ -47,6 +47,7 @@ import {CheckDialog} from './dialogs/check-dialog';
 import {Skill} from './data/skills';
 import {CommodityStorage} from './data/structures';
 import {activityBlacklistDialog} from './dialogs/activity-blacklist-dialog';
+import {showHelpDialog} from './dialogs/show-help-dialog';
 
 interface KingdomOptions {
     game: Game;
@@ -400,6 +401,16 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-end-turn')
             ?.addEventListener('click', async () => await this.endTurn());
+        $html.querySelectorAll('.show-help')
+            ?.forEach(el => {
+                el.addEventListener('click', async (el) => {
+                    const target = el.currentTarget as HTMLButtonElement;
+                    const help = target.dataset.help;
+                    if (help) {
+                        showHelpDialog(help);
+                    }
+                });
+            });
     }
 
 

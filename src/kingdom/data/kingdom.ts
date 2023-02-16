@@ -444,6 +444,6 @@ export function getDefaultKingdomData(): Kingdom {
                 value: 0,
             },
         },
-      activityBlacklist: [],
+      activityBlacklist: ['harvest-azure-lily-pollen'],
     };
 }

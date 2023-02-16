@@ -600,7 +600,7 @@ const structures: Structure[] = [
         name: 'Stockyard',
         activityBonusRules: [{
             value: 1,
-            activity: 'gather-lifestock',
+            activity: 'gather-livestock',
         }],
         consumptionReduction: 1,
     },

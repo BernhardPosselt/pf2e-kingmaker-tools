@@ -46,13 +46,13 @@ export function createVacancyModifiers(
         modifiers.push(createVacancyModifier(1, rulerVacant));
     }
     if (leaders.general.vacant) {
-        modifiers.push(createVacancyModifier(4, rulerVacant, 'warfare'));
+        modifiers.push(createVacancyModifier(4, rulerVacant, 'army'));
     }
     if (leaders.emissary.vacant && ability === 'loyalty') {
         modifiers.push(createVacancyModifier(1, rulerVacant));
     }
     if (leaders.magister.vacant) {
-        modifiers.push(createVacancyModifier(4, rulerVacant, 'warfare'));
+        modifiers.push(createVacancyModifier(4, rulerVacant, 'army'));
     }
     if (leaders.treasurer.vacant && ability === 'economy') {
         modifiers.push(createVacancyModifier(1, rulerVacant));
