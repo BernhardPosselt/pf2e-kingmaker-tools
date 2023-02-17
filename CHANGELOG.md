@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Fixed Ekundayo's and Nok-Nok's activities not being blacklisted
+
 ## [0.0.8] - 2023-02-17
 
 ### Changed
