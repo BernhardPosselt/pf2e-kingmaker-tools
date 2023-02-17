@@ -12,10 +12,10 @@
             <tr>
                 <td>{{name}}<input type="hidden" value="{{id}}" name="settlements.{{@index}}.id"></td>
                 <td><input type="number" value="{{settlementLevel}}" style="width: 30px"
-                           name="settlements.{{@index}}.settlementLevel" {{#if isUser}}disabled{{/if}}></td>
+                           name="settlements.{{@index}}.settlementLevel" {{#if ../isUser}}disabled{{/if}}></td>
                 <td>
                     {{#select settlementType}}
-                        <select name="settlements.{{@index}}.settlementType" {{#if isUser}}disabled{{/if}}>
+                        <select name="settlements.{{@index}}.settlementType" {{#if ../isUser}}disabled{{/if}}>
                             <option value="-">-</option>
                             <option value="Capital">Capital</option>
                             <option value="Settlement">Settlement</option>
@@ -23,9 +23,9 @@
                     {{/select}}
                 </td>
                 <td><input type="checkbox" name="settlements.{{@index}}.overcrowded" {{checked overcrowded}} {{#if
-                        isUser}}disabled{{/if}}></td>
+                        ../isUser}}disabled{{/if}}></td>
                 <td><input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked
-                        secondaryTerritory}} {{#if isUser}}disabled{{/if}}></td>
+                        secondaryTerritory}} {{#if ../isUser}}disabled{{/if}}></td>
                 <td>
                     <button type="button" class="inspect-settlement" data-id="{{id}}"><i
                             class="fa-solid fa-magnifying-glass"></i></button>

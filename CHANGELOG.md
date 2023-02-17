@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+* Disable input for users
+
 ## [0.0.6] - 2023-02-17
 
 ### Changed
