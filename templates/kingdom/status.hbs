@@ -3,11 +3,11 @@
         <th>Fame Type</th>
         <td>
             <select name="fameType">
-            {{#select fameType}}
-                {{#each fameTypes}}
-                    <option value="{{this}}">{{this}}</option>
-                {{/each}}
-            {{/select}}
+                {{#select fameType}}
+                    {{#each fameTypes}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                {{/select}}
             </select>
         </td>
     </tr>
@@ -46,7 +46,13 @@
             <td>{{modifier}}</td>
             <td>{{label}}</td>
             <td><input type="number" value="{{score}}" name="abilityScores.{{@key}}"></td>
-            <td><input type="checkbox" {{checked invested}} disabled></td>
+            <td>
+                {{#if invested}}
+                    <i class="fa-solid fa-circle-check"></i>
+                {{else}}
+                    <i class="fa-solid fa-circle-xmark"></i>
+                {{/if}}
+            </td>
             <td>{{investedBonus}}</td>
         </tr>
     {{/each}}
@@ -61,33 +67,33 @@
         <th>Vacant</th>
     </tr>
     {{#each leaders}}
-    <tr>
-        <td>{{label}}</td>
-        <td>
-            <select name="leaders.{{@key}}.type">
-                {{#select type}}
-                    {{#each ../actorTypes}}
-                        <option value="{{value}}">{{label}}</option>
-                    {{/each}}
-                {{/select}}
-            </select>
-        </td>
-        <td>
-        {{#unless isCompanion}}
-            <input type="text" value="{{name}}" name="leaders.{{@key}}.name">
-        {{/unless}}
-        {{#if isCompanion}}
-            <select name="leaders.{{@key}}.name">
-                {{#select name}}
-                    {{#each ../companions}}
-                        <option value="{{this}}">{{this}}</option>
-                    {{/each}}
-                {{/select}}
-            </select>
-        {{/if}}
-        </td>
-        <td><input type="checkbox" {{checked invested}} name="leaders.{{@key}}.invested"></td>
-        <td><input type="checkbox" {{checked vacant}} name="leaders.{{@key}}.vacant"></td>
-    </tr>
+        <tr>
+            <td>{{label}}</td>
+            <td>
+                <select name="leaders.{{@key}}.type">
+                    {{#select type}}
+                        {{#each ../actorTypes}}
+                            <option value="{{value}}">{{label}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
+            </td>
+            <td>
+                {{#unless isCompanion}}
+                    <input type="text" value="{{name}}" name="leaders.{{@key}}.name">
+                {{/unless}}
+                {{#if isCompanion}}
+                    <select name="leaders.{{@key}}.name">
+                        {{#select name}}
+                            {{#each ../companions}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                {{/if}}
+            </td>
+            <td><input type="checkbox" {{checked invested}} name="leaders.{{@key}}.invested"></td>
+            <td><input type="checkbox" {{checked vacant}} name="leaders.{{@key}}.vacant"></td>
+        </tr>
     {{/each}}
 </table>
