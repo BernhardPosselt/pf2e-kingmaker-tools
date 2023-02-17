@@ -252,8 +252,11 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
 
     private createModifiers(skillModifier: TotalAndModifiers | undefined): object | undefined {
         if (skillModifier) {
+            const total = skillModifier.total.value;
+            const totalLabel = total >= 0 ? `+${total}` : total;
             return {
-                total: skillModifier.total.value,
+                total,
+                totalLabel,
                 assurance: skillModifier.total.assurance,
                 modifiers: skillModifier.modifiers.map(modifier => {
                     const type = capitalize(modifier.type);
