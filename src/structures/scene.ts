@@ -93,6 +93,17 @@ function getCapitalScene(game: Game): Scene | undefined {
     return game?.scenes?.find(scene => getSceneData(scene).settlementType === 'Capital');
 }
 
+export function getSettlementScene(game: Game, id: string): Scene | undefined {
+    const scene = game?.scenes?.get(id);
+    if (scene) {
+        const sceneData = getSceneData(scene);
+        const settlementType = sceneData.settlementType;
+        if (settlementType === 'Capital' || settlementType === 'Settlement') {
+            return scene;
+        }
+    }
+}
+
 export interface SettlementSceneData {
     settlement: SettlementData;
     scenedData: CurrentSceneData;

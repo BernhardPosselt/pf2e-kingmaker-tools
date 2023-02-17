@@ -2,6 +2,7 @@
     <tr>
         <th>Active Settlement</th>
         <td>
+            {{#if settlements}}
             <select name="activeSettlement">
                 {{#select activeSettlement}}
                     {{#each settlements}}
@@ -9,6 +10,9 @@
                     {{/each}}
                 {{/select}}
             </select>
+            {{else}}
+                No settlements found!
+            {{/if}}
         </td>
     </tr>
     <tr>

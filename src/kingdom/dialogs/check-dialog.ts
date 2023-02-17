@@ -11,7 +11,7 @@ import {Activity, getActivityPhase, getActivitySkills, KingdomPhase} from '../da
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getBooleanSetting} from '../../settings';
-import {getMergedData} from '../../structures/scene';
+import {getMergedData, getSettlementScene} from '../../structures/scene';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
 import {capitalize, postDegreeOfSuccessMessage, unslugifyActivity} from '../../utils';
@@ -22,7 +22,6 @@ export type CheckType = 'skill' | 'activity';
 
 export interface CheckDialogFeatOptions {
     type: CheckType;
-    activeSettlementSceneId?: string;
     activity?: Activity;
     skill?: Skill;
     game: Game;
@@ -47,7 +46,6 @@ type CustomModifiers = Pick<ModifierTotals, TotalFields>;
 
 export class CheckDialog extends FormApplication<FormApplicationOptions & CheckDialogFeatOptions, object, null> {
     private type: CheckType;
-    private activeSettlementSceneId: string | undefined;
     private activity: Activity | undefined;
     private skill: Skill | undefined;
     private game: Game;
@@ -78,7 +76,6 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     constructor(object: null, options: Partial<FormApplicationOptions> & CheckDialogFeatOptions) {
         super(object, options);
         this.type = options.type;
-        this.activeSettlementSceneId = options.activeSettlementSceneId;
         this.activity = options.activity;
         this.skill = options.skill;
         this.game = options.game;
@@ -113,9 +110,10 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     }
 
     override getData(options?: Partial<FormApplicationOptions & { feats: KingdomFeat[] }>): Promise<object> | object {
-        const settlementScene = this.game?.scenes?.get(this.kingdom.activeSettlement);
+        const settlementScene = getSettlementScene(this.game, this.kingdom.activeSettlement);
         const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
         const skillRanks = this.kingdom.skillRanks;
+        console.log(activeSettlement);
         const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(skillRanks);
         const additionalModifiers: Modifier[] = createAdditionalModifiers(this.kingdom, activeSettlement);
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
