@@ -108,16 +108,24 @@ export function removeLowestModifiers(modifiers: Modifier[]): Modifier[] {
             return modifier.type + '-penalty';
         }
     });
-    const result = [];
+    const result: Modifier[] = [];
     for (const [type, modifiers] of groupedModifiers.entries()) {
-        if (type !== 'untyped' && type !== 'untyped-penalty') {
+        if (type === 'untyped' || type === 'untyped-penalty') {
+            modifiers.forEach(m => result.push(m));
+        } else {
             // only take the highest modifier of a type if there is an enabled one
             // if no modifier is enabled, offer all as a choice
             const highest = modifiers
                 .reduce((prev, curr) => Math.abs(prev.value) < Math.abs(curr.value) ? curr : prev);
             const hasEnabled = modifiers.some(modifier => modifier.enabled);
             for (const mod of modifiers) {
-                if ((hasEnabled && mod.value === highest.value) || !hasEnabled) {
+                // dedup modifiers that are enabled and have the same value
+                const isHighestUniquePerType =
+                    hasEnabled &&
+                    !result.find(existingMod => existingMod.type === mod.type && (mod.value < 0 === existingMod.value < 0)) &&
+                    mod.value === highest.value;
+
+                if (isHighestUniquePerType || !hasEnabled) {
                     result.push(mod);
                 }
             }

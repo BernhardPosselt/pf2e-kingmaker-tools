@@ -1,4 +1,4 @@
-import {Modifier, removePredicatedModifiers} from '../../src/kingdom/modifiers';
+import {Modifier, removeLowestModifiers, removePredicatedModifiers} from '../../src/kingdom/modifiers';
 
 describe('predicate modifiers', () => {
     test('only keep very specific one', () => {
@@ -66,5 +66,68 @@ describe('predicate modifiers', () => {
         }];
         const result = removePredicatedModifiers(modifiers, 'event', 'create-a-masterpiece', 'arts', 0);
         expect(result.length).toBe(0);
+    });
+});
+
+describe('removeLowestModifiers', () => {
+    test('remove lowest modifiers if at least one is enabled per type', () => {
+        const modifiers: Modifier[] = [{
+            name: 'highest',
+            enabled: true,
+            value: 3,
+            type: 'ability',
+        }, {
+            name: 'match',
+            enabled: true,
+            value: 2,
+            type: 'ability',
+        }];
+        const result = removeLowestModifiers(modifiers);
+        expect(result.length).toBe(1);
+        expect(result[0].name).toBe('highest');
+    });
+
+    test('remove on modifiers if no one is enabled per type', () => {
+        const modifiers: Modifier[] = [{
+            name: 'highest',
+            enabled: false,
+            value: 3,
+            type: 'ability',
+        }, {
+            name: 'match',
+            enabled: false,
+            value: 2,
+            type: 'ability',
+        }];
+        const result = removeLowestModifiers(modifiers);
+        expect(result.length).toBe(2);
+    });
+
+    test('if two modifiers have the same value and both are enabled, only keep the first one', () => {
+        const modifiers: Modifier[] = [{
+            name: 'first',
+            enabled: true,
+            value: 3,
+            type: 'ability',
+        }, {
+            name: 'second',
+            enabled: true,
+            value: 3,
+            type: 'ability',
+        }, {
+            name: 'third',
+            enabled: true,
+            value: -3,
+            type: 'ability',
+        }, {
+            name: 'fourth',
+            enabled: true,
+            value: -3,
+            type: 'ability',
+        }];
+        const result = removeLowestModifiers(modifiers);
+        expect(result.length).toBe(2);
+        expect(result[0].name).toBe('first');
+        expect(result[1].name).toBe('third');
     });
 });
