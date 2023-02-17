@@ -161,7 +161,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.dc = data.dc;
         this.phase = data.phase === '-' ? undefined : data.phase;
         this.customModifiers = data.customModifiers;
-        this.modifierOverrides = (Object.entries(data.overrideModifiers) as [string, string][])
+        this.modifierOverrides = (Object.entries(data.overrideModifiers ?? {}) as [string, string][])
             .filter(([, state]) => state !== '-')
             .map(([id, state]) => {
                 return {[id]: state === 'enabled'};

@@ -17,22 +17,23 @@
                             {{/each}}
                         {{/select}}
                     </select>
+                    <input type="hidden" name="phase" value="{{phase}}">
                 </div>
             {{else}}
                 <input type="hidden" name="selectedSkill" value="{{selectedSkill}}">
                 <div>
                     <label for="km-event-phase-toggle">Phase:</label>
                     <select name="phase">
-                    {{#select phase}}
-                        <option value="-">-</option>
-                        <option value="leadership">Leadership</option>
-                        <option value="region">Region</option>
-                        <option value="event">Event</option>
-                        <option value="army">Army</option>
-                        <option value="commerce">Commerce</option>
-                        <option value="upkeep">Upkeep</option>
-                        <option value="civic">Civic</option>
-                    {{/select}}
+                        {{#select phase}}
+                            <option value="-">-</option>
+                            <option value="leadership">Leadership</option>
+                            <option value="region">Region</option>
+                            <option value="event">Event</option>
+                            <option value="army">Army</option>
+                            <option value="commerce">Commerce</option>
+                            <option value="upkeep">Upkeep</option>
+                            <option value="civic">Civic</option>
+                        {{/select}}
                     </select>
                 </div>
             {{/if}}
@@ -42,38 +43,40 @@
             </div>
         </div>
 
-        <h3>Modifier Breakdown</h3>
-        <table class="km-table">
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Value</th>
-                <th>Enabled</th>
-                <th>Override</th>
-            </tr>
-            {{#each modifiers.modifiers}}
-            <tr>
-                <td>{{name}}</td>
-                <td>{{type}}</td>
-                <td>{{value}}</td>
-                <td>
-                    {{#if enabled}}
-                        <i class="fa-solid fa-circle-check"></i>
-                    {{else}}
-                        <i class="fa-solid fa-circle-xmark"></i>
-                    {{/if}}
-                </td>
-                <td>
-                    <select name="overrideModifiers.{{id}}">
-                        {{#select override}}
-                            <option value="-">-</option>
-                            <option value="enabled">Enable</option>
-                            <option value="disabled">Disable</option>
-                        {{/select}}
-                    </select>
-            </tr>
-            {{/each}}
-        </table>
+        {{#if modifiers.modifiers}}
+            <h3>Modifier Breakdown</h3>
+            <table class="km-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Enabled</th>
+                    <th>Override</th>
+                </tr>
+                {{#each modifiers.modifiers}}
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>{{type}}</td>
+                        <td>{{value}}</td>
+                        <td>
+                            {{#if enabled}}
+                                <i class="fa-solid fa-circle-check"></i>
+                            {{else}}
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            {{/if}}
+                        </td>
+                        <td>
+                            <select name="overrideModifiers.{{id}}">
+                                {{#select override}}
+                                    <option value="-">-</option>
+                                    <option value="enabled">Enable</option>
+                                    <option value="disabled">Disable</option>
+                                {{/select}}
+                            </select>
+                    </tr>
+                {{/each}}
+            </table>
+        {{/if}}
 
         <h3>Custom modifiers</h3>
         <table class="km-table">

@@ -69,10 +69,10 @@ export function removePredicatedModifiers(
                     .some(activity => {
                         const data = activityData[activity];
                         const activitySkillRank = data.skills[skill];
-                        if (activitySkillRank) {
-                            return activitySkillRank <= rank;
-                        } else {
+                        if (activitySkillRank === undefined) {
                             return false;
+                        } else {
+                            return activitySkillRank <= rank;
                         }
                     })
                 );

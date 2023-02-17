@@ -73,6 +73,19 @@ describe('predicate modifiers', () => {
         const result = removePredicatedModifiers(modifiers, 'event', 'create-a-masterpiece', 'arts', 0);
         expect(result.length).toBe(0);
     });
+
+    test('should add activity in leadership phase', () => {
+        const modifiers: ModifierWithId[] = [{
+            id: '1',
+            name: 'match',
+            enabled: true,
+            value: 3,
+            type: 'ability',
+            activities: ['new-leadership'],
+        }];
+        const result = removePredicatedModifiers(modifiers, 'upkeep', 'new-leadership', 'intrigue', 0);
+        expect(result.length).toBe(1);
+    });
 });
 
 describe('removeLowestModifiers', () => {
