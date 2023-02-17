@@ -43,6 +43,7 @@ export function createSkillModifiers(
         activity,
         phase,
         additionalModifiers = [],
+        overrides = {},
     }: {
         skill: Skill,
         ability: Ability,
@@ -57,6 +58,7 @@ export function createSkillModifiers(
         activity?: Activity,
         phase?: KingdomPhase,
         additionalModifiers?: Modifier[],
+        overrides?: Record<string, boolean>;
     }
 ): Modifier[] {
     const abilityModifier = createAbilityModifier(ability, abilityScores);
@@ -86,7 +88,14 @@ export function createSkillModifiers(
     if (investedModifier) {
         result.push(investedModifier);
     }
-    return processModifiers(result, skill, skillRank, phase, activity);
+    return processModifiers({
+        modifiers: result,
+        skill,
+        rank: skillRank,
+        phase,
+        activity,
+        overrides,
+    });
 }
 export function calculateSkills(
     {

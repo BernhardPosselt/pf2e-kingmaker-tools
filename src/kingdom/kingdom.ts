@@ -395,7 +395,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 el.addEventListener('click', async (el) => {
                     const target = el.currentTarget as HTMLButtonElement;
                     const skill = target.dataset.skill;
-                    console.log(skill);
                     new CheckDialog(null, {
                         kingdom: this.getKingdom(),
                         game: this.game,

@@ -1,5 +1,12 @@
 import {KingdomFeat} from '../data/feats';
-import {calculateModifiers, createAdditionalModifiers, Modifier, ModifierTotal, ModifierTotals} from '../modifiers';
+import {
+    calculateModifiers,
+    createAdditionalModifiers,
+    Modifier,
+    ModifierTotal,
+    ModifierTotals,
+    ModifierWithId,
+} from '../modifiers';
 import {Activity, getActivityPhase, getActivitySkills, KingdomPhase} from '../data/activities';
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
@@ -7,7 +14,7 @@ import {getBooleanSetting} from '../../settings';
 import {getMergedData} from '../../structures/scene';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
-import {capitalize, postDegreeOfSuccessMessage, unpackFormArray, unslugifyActivity} from '../../utils';
+import {capitalize, postDegreeOfSuccessMessage, unslugifyActivity} from '../../utils';
 import {activityData} from '../data/activityData';
 import {DegreeOfSuccess, determineDegreeOfSuccess} from '../../degree-of-success';
 
@@ -23,16 +30,16 @@ export interface CheckDialogFeatOptions {
 }
 
 interface CheckFormData {
-    isEventPhase: boolean;
+    phase: KingdomPhase | '-';
     dc: number;
     selectedSkill: Skill;
     customModifiers: CustomModifiers;
-    overrideModifiersEnabled: Record<string, boolean>;
+    overrideModifiers: Record<string, string>;
 }
 
 interface TotalAndModifiers {
     total: ModifierTotals;
-    modifiers: Modifier[];
+    modifiers: ModifierWithId[];
 }
 
 type TotalFields = 'circumstance' | 'untyped' | 'item' | 'status';
@@ -47,13 +54,14 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private kingdom: Kingdom;
     private selectedSkill: Skill;
     private dc: number;
-    private isEventPhase = false;
+    private phase: KingdomPhase | undefined;
     private customModifiers: CustomModifiers = {
         item: {bonus: 0, penalty: 0},
         circumstance: {bonus: 0, penalty: 0},
         status: {bonus: 0, penalty: 0},
         untyped: {bonus: 0, penalty: 0},
     };
+    private modifierOverrides: Record<string, boolean> = {};
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -80,6 +88,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             this.selectedSkill = options.skill!;
             this.dc = controlDC;
         } else {
+            this.phase = getActivityPhase(this.activity!);
             this.selectedSkill = this.getActivitySkills(options.kingdom.skillRanks)[0];
             const activityDCType = activityData[this.activity!].dc;
             if (activityDCType === 'control') {
@@ -108,12 +117,6 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
         const skillRanks = this.kingdom.skillRanks;
         const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(skillRanks);
-        const phase = this.getPhase();
-        console.log('phase', phase);
-        console.log('activity', this.activity);
-        console.log('skill', this.skill);
-        console.log('selectedSkill', this.selectedSkill);
-        console.log('applicableSkills', applicableSkills);
         const additionalModifiers: Modifier[] = createAdditionalModifiers(this.kingdom, activeSettlement);
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
         const skillModifiers = Object.fromEntries(applicableSkills.map(skill => {
@@ -130,8 +133,9 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 skillItemBonus: activeSettlement?.settlement?.skillBonuses?.[skill],
                 additionalModifiers: [...additionalModifiers, ...convertedCustomModifiers],
                 activity: this.activity,
-                phase,
+                phase: this.phase,
                 skill,
+                overrides: this.modifierOverrides,
             });
             const total = calculateModifiers(modifiers);
             return [skill, {total, modifiers}];
@@ -145,29 +149,24 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             selectableSkills: this.createSelectableSkills(skillModifiers),
             selectedSkill: this.selectedSkill,
             modifiers: this.createModifiers(skillModifiers[this.selectedSkill]),
-            isEventPhase: this.isEventPhase,
+            phase: this.phase,
             customModifiers: this.customModifiers,
         };
-    }
-
-    private getPhase(): KingdomPhase | undefined {
-        if (this.isEventPhase) {
-            return 'event';
-        } else if (this.type === 'activity') {
-            return getActivityPhase(this.activity!);
-        } else {
-            return undefined;
-        }
     }
 
     protected async _updateObject(event: Event, formData: any): Promise<void> {
         const data = expandObject(formData) as CheckFormData;
         console.log(data);
-        const overrides = unpackFormArray(data.overrideModifiersEnabled);
         this.selectedSkill = data.selectedSkill;
         this.dc = data.dc;
-        this.isEventPhase = data.isEventPhase;
+        this.phase = data.phase === '-' ? undefined : data.phase;
         this.customModifiers = data.customModifiers;
+        this.modifierOverrides = (Object.entries(data.overrideModifiers) as [string, string][])
+            .filter(([, state]) => state !== '-')
+            .map(([id, state]) => {
+                return {[id]: state === 'enabled'};
+            })
+            .reduce((a, b) => Object.assign(a, b), {});
         this.render();
     }
 
@@ -260,11 +259,14 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 assurance: skillModifier.total.assurance,
                 modifiers: skillModifier.modifiers.map(modifier => {
                     const type = capitalize(modifier.type);
+                    const override = this.modifierOverrides[modifier.id];
                     return {
                         name: modifier.name,
                         type: modifier.value < 0 ? `${type} Penalty` : `${type} Bonus`,
                         value: modifier.value,
                         enabled: modifier.enabled,
+                        override: override === undefined ? '-' : (override ? 'enabled' : 'disabled'),
+                        id: modifier.id,
                     };
                 }),
             };

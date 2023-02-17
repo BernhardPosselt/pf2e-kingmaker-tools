@@ -25,7 +25,11 @@ export interface Modifier {
     enabled: boolean;
 }
 
-export function removeUninterestingZeroModifiers(modifiers: Modifier[]): Modifier[] {
+export interface ModifierWithId extends Modifier {
+    id: string;
+}
+
+export function removeUninterestingZeroModifiers(modifiers: ModifierWithId[]): ModifierWithId[] {
     return modifiers.filter(modifier => modifier.value !== 0);
 }
 
@@ -33,12 +37,12 @@ export function removeUninterestingZeroModifiers(modifiers: Modifier[]): Modifie
  * Deletes all modifiers that are not in a given phase or activity
  */
 export function removePredicatedModifiers(
-    modifiers: Modifier[],
+    modifiers: ModifierWithId[],
     phase: KingdomPhase | undefined,
     activity: Activity | undefined,
     skill: Skill,
     rank: number,
-): Modifier[] {
+): ModifierWithId[] {
     return modifiers
         .filter(modifier => {
             const predicates: ((modifier: Modifier) => boolean)[] = [];
@@ -63,9 +67,6 @@ export function removePredicatedModifiers(
             if (modifier.activities) {
                 predicates.push((m) => m.activities!
                     .some(activity => {
-                        if (activity === 'create-a-masterpiece') {
-                            console.log('bb', activityData[activity], skill, rank);
-                        }
                         const data = activityData[activity];
                         const activitySkillRank = data.skills[skill];
                         if (activitySkillRank) {
@@ -102,7 +103,7 @@ export function removePredicatedModifiers(
  * Disables all modifiers that do not have the highest/lowest number
  * @param modifiers
  */
-export function removeLowestModifiers(modifiers: Modifier[]): Modifier[] {
+export function removeLowestModifiers(modifiers: ModifierWithId[]): ModifierWithId[] {
     const groupedModifiers = groupBy(modifiers, (modifier) => {
         if (modifier.value > 0) {
             return modifier.type;
@@ -110,7 +111,7 @@ export function removeLowestModifiers(modifiers: Modifier[]): Modifier[] {
             return modifier.type + '-penalty';
         }
     });
-    const result: Modifier[] = [];
+    const result: ModifierWithId[] = [];
     for (const [type, modifiers] of groupedModifiers.entries()) {
         if (type === 'untyped' || type === 'untyped-penalty') {
             modifiers.forEach(m => result.push(m));
@@ -252,29 +253,53 @@ export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: Se
 }
 
 export function processModifiers(
-    modifiers: Modifier[],
-    skill: Skill,
-    rank: number,
-    phase?: KingdomPhase,
-    activity?: Activity,
-): Modifier[] {
-    const copied = modifiers.map(modifier => {
-        // make a copy
+    {
+        modifiers,
+        skill,
+        rank,
+        phase,
+        activity,
+        overrides = {},
+    }: {
+        modifiers: Modifier[];
+        skill: Skill;
+        rank: number;
+        phase?: KingdomPhase;
+        activity?: Activity;
+        overrides?: Record<string, boolean>;
+    }
+): ModifierWithId[] {
+    const copied = modifiers.map((modifier, index) => {
+        // make a copy and assign every modifier an id
         return {
             ...modifier,
             phases: modifier.phases ? [...modifier.phases] : undefined,
             activities: modifier.activities ? [...modifier.activities] : undefined,
+            id: `${index}`,
         };
     });
     const withoutZeroes = removeUninterestingZeroModifiers(copied);
     const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, activity, skill, rank);
-    return removeLowestModifiers(withoutMismatchedPhaseOrActivity);
+    // enable/disable overrides
+    const withOverrides = withoutMismatchedPhaseOrActivity
+        .map(modifier => {
+            const override = overrides[modifier.id];
+            if (override === undefined) {
+                return modifier;
+            } else {
+                return {
+                    ...modifier,
+                    enabled: override,
+                };
+            }
+        });
+    return removeLowestModifiers(withOverrides);
 }
 
 
-function createVacancyModifier(value: number, rulerVacant: boolean, phase?: KingdomPhase): Modifier {
+function createVacancyModifier(value: number, name: string, rulerVacant: boolean, phase?: KingdomPhase): Modifier {
     return {
-        name: 'Vacancy',
+        name,
         value: -(rulerVacant ? value + 1 : value),
         phases: phase ? [phase] : undefined,
         type: 'vacancy',
@@ -289,28 +314,28 @@ export function createVacancyModifiers(
     const modifiers = [];
     const rulerVacant = leaders.ruler.vacant;
     if (leaders.counselor.vacant && ability === 'culture') {
-        modifiers.push(createVacancyModifier(1, rulerVacant));
+        modifiers.push(createVacancyModifier(1, 'Vacancy: Counselor', rulerVacant));
     }
     if (leaders.general.vacant) {
-        modifiers.push(createVacancyModifier(4, rulerVacant, 'army'));
+        modifiers.push(createVacancyModifier(4, 'Vacancy: General', rulerVacant, 'army'));
     }
     if (leaders.emissary.vacant && ability === 'loyalty') {
-        modifiers.push(createVacancyModifier(1, rulerVacant));
+        modifiers.push(createVacancyModifier(1, 'Vacancy: Emissary', rulerVacant));
     }
     if (leaders.magister.vacant) {
-        modifiers.push(createVacancyModifier(4, rulerVacant, 'army'));
+        modifiers.push(createVacancyModifier(4, 'Vacancy: Magister', rulerVacant, 'army'));
     }
     if (leaders.treasurer.vacant && ability === 'economy') {
-        modifiers.push(createVacancyModifier(1, rulerVacant));
+        modifiers.push(createVacancyModifier(1, 'Vacancy: Treasurer', rulerVacant));
     }
     if (leaders.viceroy.vacant && ability === 'stability') {
-        modifiers.push(createVacancyModifier(1, rulerVacant));
+        modifiers.push(createVacancyModifier(1, 'Vacancy: Viceroy', rulerVacant));
     }
     if (leaders.warden.vacant) {
-        modifiers.push(createVacancyModifier(4, rulerVacant, 'region'));
+        modifiers.push(createVacancyModifier(4, 'Vacancy: Warden', rulerVacant, 'region'));
     }
     if (rulerVacant) {
-        modifiers.push(createVacancyModifier(0, rulerVacant));
+        modifiers.push(createVacancyModifier(0, 'Vacancy: Ruler', rulerVacant));
     }
     return modifiers;
 }

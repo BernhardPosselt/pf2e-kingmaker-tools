@@ -1,8 +1,9 @@
-import {Modifier, removeLowestModifiers, removePredicatedModifiers} from '../../src/kingdom/modifiers';
+import {ModifierWithId, removeLowestModifiers, removePredicatedModifiers} from '../../src/kingdom/modifiers';
 
 describe('predicate modifiers', () => {
     test('only keep very specific one', () => {
-        const modifiers: Modifier[] = [{
+        const modifiers: ModifierWithId[] = [{
+            id: '1',
             name: 'match',
             enabled: true,
             abilities: ['culture'],
@@ -12,6 +13,7 @@ describe('predicate modifiers', () => {
             phases: ['leadership'],
             activities: ['create-a-masterpiece'],
         }, {
+            id: '2',
             name: 'no-match1',
             enabled: true,
             abilities: ['economy'],
@@ -21,6 +23,7 @@ describe('predicate modifiers', () => {
             phases: ['leadership'],
             activities: ['create-a-masterpiece'],
         }, {
+            id: '3',
             name: 'no-match2',
             enabled: true,
             abilities: ['culture'],
@@ -30,6 +33,7 @@ describe('predicate modifiers', () => {
             phases: ['leadership'],
             activities: ['create-a-masterpiece'],
         }, {
+            id: '4',
             name: 'no-match3',
             enabled: true,
             abilities: ['culture'],
@@ -39,6 +43,7 @@ describe('predicate modifiers', () => {
             phases: ['event'],
             activities: ['create-a-masterpiece'],
         }, {
+            id: '5',
             name: 'no-match4',
             enabled: true,
             abilities: ['culture'],
@@ -54,7 +59,8 @@ describe('predicate modifiers', () => {
     });
 
     test('do not keep modifier if rank is not possible', () => {
-        const modifiers: Modifier[] = [{
+        const modifiers: ModifierWithId[] = [{
+            id: '1',
             name: 'match',
             enabled: true,
             abilities: ['culture'],
@@ -71,12 +77,14 @@ describe('predicate modifiers', () => {
 
 describe('removeLowestModifiers', () => {
     test('remove lowest modifiers if at least one is enabled per type', () => {
-        const modifiers: Modifier[] = [{
+        const modifiers: ModifierWithId[] = [{
+            id: '1',
             name: 'highest',
             enabled: true,
             value: 3,
             type: 'ability',
         }, {
+            id: '2',
             name: 'match',
             enabled: true,
             value: 2,
@@ -88,12 +96,14 @@ describe('removeLowestModifiers', () => {
     });
 
     test('remove on modifiers if no one is enabled per type', () => {
-        const modifiers: Modifier[] = [{
+        const modifiers: ModifierWithId[] = [{
+            id: '1',
             name: 'highest',
             enabled: false,
             value: 3,
             type: 'ability',
         }, {
+            id: '2',
             name: 'match',
             enabled: false,
             value: 2,
@@ -104,22 +114,26 @@ describe('removeLowestModifiers', () => {
     });
 
     test('if two modifiers have the same value and both are enabled, only keep the first one', () => {
-        const modifiers: Modifier[] = [{
+        const modifiers: ModifierWithId[] = [{
+            id: '1',
             name: 'first',
             enabled: true,
             value: 3,
             type: 'ability',
         }, {
+            id: '2',
             name: 'second',
             enabled: true,
             value: 3,
             type: 'ability',
         }, {
+            id: '3',
             name: 'third',
             enabled: true,
             value: -3,
             type: 'ability',
         }, {
+            id: '4',
             name: 'fourth',
             enabled: true,
             value: -3,

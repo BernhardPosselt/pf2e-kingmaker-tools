@@ -168,7 +168,6 @@ function editTemplate(structureData: object | undefined): string {
 
 export async function showStructureEditDialog(game: Game, actor: Actor): Promise<void> {
     const structureData = actor!.getFlag('pf2e-kingmaker-tools', 'structureData') ?? undefined;
-    console.log(structureData);
     new Dialog({
         title: 'Edit Structure Data',
         content: editTemplate(structureData),

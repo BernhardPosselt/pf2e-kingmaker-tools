@@ -167,6 +167,14 @@
     text-align: center;
 }
 
+.km-table td select {
+    width: 100%;
+}
+
+.km-table td.left-align {
+    text-align: left;
+}
+
 td.skill-bonus {
     background-color: var(--secondary-km);
     color: #fff;
@@ -253,4 +261,8 @@ td.skill-value {
 .activity-help .show-help {
     flex-basis: 0;
     min-width: 34px;
+}
+
+#km-kingdom-name {
+    width: 267px;
 }
