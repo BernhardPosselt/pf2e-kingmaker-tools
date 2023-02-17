@@ -3,8 +3,9 @@ import {groupBy} from '../utils';
 import {getLevelData, Kingdom} from './data/kingdom';
 import {SettlementSceneData} from '../structures/scene';
 import {allFeatsByName} from './data/feats';
-import {Skill} from './data/skills';
+import {Skill, skillAbilities} from './data/skills';
 import {activityData} from './data/activityData';
+import {Ability} from './data/abilities';
 
 export type ModifierType = 'ability' | 'proficiency' | 'item' | 'status' | 'circumstance' | 'vacancy' | 'untyped';
 
@@ -14,7 +15,85 @@ export interface Modifier {
     name: string;
     phases?: KingdomPhase[];
     activities?: Activity[];
+    skills?: Skill[];
+    abilities?: Ability[];
     enabled: boolean;
+}
+
+export function removeUninterestingZeroModifiers(modifiers: Modifier[]): Modifier[] {
+    return modifiers.filter(modifier => {
+        // keep ability and proficiency
+        return modifier.type === 'ability' || modifier.type === 'proficiency' || modifier.value !== 0;
+    });
+}
+
+/**
+ * Deletes all modifiers that are not in a given phase or activity
+ */
+export function removePredicatedModifiers(
+    modifiers: Modifier[],
+    phase: KingdomPhase | undefined,
+    activity: Activity | undefined,
+    skill: Skill,
+    rank: number,
+): Modifier[] {
+    return modifiers
+        .filter(modifier => {
+            const predicates: ((modifier: Modifier) => boolean)[] = [];
+            if (modifier.abilities) {
+                predicates.push((m) => m.abilities?.includes(skillAbilities[skill]) === true);
+            }
+            if (modifier.skills) {
+                predicates.push((m) => m.skills?.includes(skill) === true);
+            }
+
+            // if we aren't running in a phase, remove all modifiers relevant to a phase
+            if (phase && modifier.phases) {
+                predicates.push((m) => m.phases?.includes(phase) === true);
+            }
+            // if we aren't running in an activity, remove all modifiers not matching the activity
+            if (activity && modifier.activities) {
+                predicates.push((m) => m.activities?.includes(activity) === true);
+            }
+
+            // regardless of if we are running in an activity, we need to check
+            // if it is actually possible to skill check for the given skill and rank
+            if (modifier.activities) {
+                predicates.push((m) => m.activities!
+                    .some(activity => {
+                        if (activity === 'create-a-masterpiece') {
+                            console.log('bb', activityData[activity], skill, rank);
+                        }
+                        const data = activityData[activity];
+                        const activitySkillRank = data.skills[skill];
+                        if (activitySkillRank) {
+                            return activitySkillRank <= rank;
+                        } else {
+                            return false;
+                        }
+                    })
+                );
+            }
+            let keepModifier = true;
+            for (const predicate of predicates) {
+                keepModifier = keepModifier && predicate(modifier);
+            }
+            return keepModifier;
+        }).map(modifier => {
+            let enabled = modifier.enabled;
+            // modifiers that are running outside a phase or activity should be
+            // disabled by default if they belong to one
+            if (!phase && modifier.phases) {
+                enabled = false;
+            }
+            if (!activity && modifier.activities) {
+                enabled = false;
+            }
+            return {
+                ...modifier,
+                enabled,
+            };
+        });
 }
 
 /**
@@ -32,86 +111,19 @@ export function removeLowestModifiers(modifiers: Modifier[]): Modifier[] {
     const result = [];
     for (const [type, modifiers] of groupedModifiers.entries()) {
         if (type !== 'untyped' && type !== 'untyped-penalty') {
-            // only take the highest modifier of a type
-            // if multiple modifiers are the same, choose the one that's enabled
-            // otherwise push all
+            // only take the highest modifier of a type if there is an enabled one
+            // if no modifier is enabled, offer all as a choice
             const highest = modifiers
                 .reduce((prev, curr) => Math.abs(prev.value) < Math.abs(curr.value) ? curr : prev);
             const hasEnabled = modifiers.some(modifier => modifier.enabled);
             for (const mod of modifiers) {
-                if (mod.value === highest.value && mod.enabled === hasEnabled) {
+                if ((hasEnabled && mod.value === highest.value) || !hasEnabled) {
                     result.push(mod);
                 }
             }
         }
     }
     return result;
-}
-
-export function removeUninterestingZeroModifiers(modifiers: Modifier[]): Modifier[] {
-    return modifiers.filter(modifier => {
-        // keep ability and proficiency
-        return modifier.type === 'ability' || modifier.type === 'proficiency' || modifier.value !== 0;
-    });
-}
-
-/**
- * Deletes all modifiers that are not in a given phase or activity
- */
-export function removePhaseActivityModifiers(
-    modifiers: Modifier[],
-    phase: KingdomPhase | undefined,
-    activity: Activity | undefined,
-    skill: Skill,
-    rank: number,
-): Modifier[] {
-    return modifiers
-        .filter(modifier => {
-            // if we aren't running in a phase, remove all modifiers relevant to a phase
-            // if we are, check if a modifier is only green lit for a certain phase
-            // repeat for activities
-            if (phase && modifier.phases && activity && modifier.activities) {
-                return modifier.phases.includes(phase) &&
-                    modifier.activities.includes(activity);
-            } else if (phase && modifier.phases) {
-                return modifier.phases.includes(phase);
-            } else if (activity && modifier.activities) {
-                return modifier.activities.includes(activity);
-            } else {
-                // lastly, if a modifier has an activity, check if that activity
-                // is actually possible to skill check for the given skill and rank
-                if (modifier.activities) {
-                    return modifier.activities
-                        .some(activity => {
-                            if (activity === 'create-a-masterpiece') {
-                                console.log('bb', activityData[activity], skill, rank);
-                            }
-                            const data = activityData[activity];
-                            const activitySkillRank = data.skills[skill];
-                            if (activitySkillRank) {
-                                return activitySkillRank <= rank;
-                            } else {
-                                return false;
-                            }
-                        });
-                }
-                return true;
-            }
-        }).map(modifier => {
-            let enabled = modifier.enabled;
-            // modifiers that are running outside a phase or activity should be
-            // disabled by default if they belong to one
-            if (!phase && modifier.phases) {
-                enabled = false;
-            }
-            if (!activity && modifier.activities) {
-                enabled = false;
-            }
-            return {
-                ...modifier,
-                enabled,
-            };
-        });
 }
 
 export interface ModifierTotal {
@@ -245,6 +257,6 @@ export function processModifiers(
         };
     });
     const withoutZeroes = removeUninterestingZeroModifiers(copied);
-    const withoutMismatchedPhaseOrActivity = removePhaseActivityModifiers(withoutZeroes, phase, activity, skill, rank);
+    const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, activity, skill, rank);
     return removeLowestModifiers(withoutMismatchedPhaseOrActivity);
 }

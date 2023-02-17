@@ -3,6 +3,7 @@ export function setupDialog(game: Game, onOk: () => void): void {
     new Dialog({
         title: 'Kingdom Sheet Setup',
         content: `
+        <p><b>This is an alpha preview! Updates may completely break it forcing a re-import or just get lost! Keep a backup!</b></p>
         <p>No Kingdom Sheet found! Click "Import" which creates an NPC actor called"Kingdom Sheet"</p>
         <p>This actor will be used to store your kingdom sheet.</p>
         <p>You can only open the sheet using the Kingdom Macro!</p>

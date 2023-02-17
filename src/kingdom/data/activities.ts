@@ -1,5 +1,4 @@
 import {Skill} from './skills';
-import {Ability} from './abilities';
 import {mergeObjects, unslugifyActivity} from '../../utils';
 import {SkillRanks} from './kingdom';
 import {ActivityContent, activityData} from './activityData';
@@ -79,26 +78,7 @@ export const allActivities = [
 
 export type Activity = typeof allActivities[number];
 
-export const skillAbilities: Record<Skill, Ability> = {
-    agriculture: 'stability',
-    arts: 'culture',
-    boating: 'economy',
-    defense: 'stability',
-    engineering: 'stability',
-    exploration: 'economy',
-    folklore: 'culture',
-    industry: 'economy',
-    intrigue: 'loyalty',
-    magic: 'culture',
-    politics: 'loyalty',
-    scholarship: 'culture',
-    statecraft: 'loyalty',
-    trade: 'economy',
-    warfare: 'loyalty',
-    wilderness: 'stability',
-};
 
-export type AbilityScores = Record<Ability, number>;
 
 
 export function getActivitySkills(activity: Activity, skillRanks?: SkillRanks): Skill[] {
@@ -197,4 +177,13 @@ export function createActivityLabel(activity: Activity, kingdomLevel: number): s
         label += ' (once per round)';
     }
     return label;
+}
+
+export function getActivityProficiencies(ranks: SkillRanks): Record<Activity, boolean> {
+    return Object.fromEntries(allActivities.map(activity => {
+        const activityRanks = activityData[activity].skills;
+        const enabled = (Object.entries(activityRanks) as [Skill, number][])
+            .some(([skill, rank]) => ranks[skill] >= rank);
+        return [activity, enabled];
+    })) as Record<Activity, boolean>;
 }

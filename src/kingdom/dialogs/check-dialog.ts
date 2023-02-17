@@ -1,7 +1,7 @@
 import {KingdomFeat} from '../data/feats';
 import {calculateModifiers, createAdditionalModifiers, Modifier, ModifierTotal, ModifierTotals} from '../modifiers';
-import {Activity, getActivityPhase, getActivitySkills, KingdomPhase, skillAbilities} from '../data/activities';
-import {Skill} from '../data/skills';
+import {Activity, getActivityPhase, getActivitySkills, KingdomPhase} from '../data/activities';
+import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getBooleanSetting} from '../../settings';
 import {getMergedData} from '../../structures/scene';

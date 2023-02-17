@@ -32,9 +32,13 @@
     <li>
         <div class="activity-choice activity-help">
             <button type="button" class="kingdom-activity" data-activity="collect-taxes"
-                    {{#if (lookup hideActivities 'collect-taxes')}}hidden{{/if}}>Collect Taxes (trained)
+                {{#unless
+                        (lookup enabledActivities 'collect-taxes')}}title="Insufficient Proficiencies" disabled{{/unless}}
+                {{#if (lookup hideActivities 'collect-taxes')}}hidden{{/if}}
+            >Collect Taxes (trained)
             </button>
-            <button type="button" class="show-help" data-help="collect-taxes" {{#if (lookup hideActivities 'collect-taxes')}}hidden{{/if}}><i class="fa-solid fa-question"></i>
+            <button type="button" class="show-help" data-help="collect-taxes"
+                    {{#if (lookup hideActivities 'collect-taxes')}}hidden{{/if}}><i class="fa-solid fa-question"></i>
             </button>
             <button type="button" id="km-reduce-unrest">Reduce Unrest</button>
         </div>
@@ -80,7 +84,9 @@
 <h2>Leadership Activities ({{leadershipActivityNumber}} per player)</h2>
 {{#each leadershipActivities}}
     <div class="activity-help" {{#if (lookup ../hideActivities value)}}hidden{{/if}}>
-        <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
+        <button type="button" class="kingdom-activity" data-activity="{{value}}"
+            {{#unless (lookup ../enabledActivities value)}}title="Insufficient Proficiencies" disabled{{/unless}}
+        >{{label}}</button>
         <button type="button" class="show-help" data-help="{{value}}"><i
                 class="fa-solid fa-question"></i>
         </button>
@@ -93,7 +99,9 @@ You can attempt 2 Region activities simultaneously as long as both activities ta
 
 {{#each regionActivities}}
     <div class="activity-help" {{#if (lookup ../hideActivities value)}}hidden{{/if}}>
-        <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
+        <button type="button" class="kingdom-activity"
+            {{#unless (lookup ../enabledActivities value)}}title="Insufficient Proficiencies" disabled{{/unless}}
+                data-activity="{{value}}">{{label}}</button>
         <button type="button" class="show-help" data-help="{{value}}"><i
                 class="fa-solid fa-question"></i>
         </button>
@@ -125,7 +133,9 @@ You can attempt 2 Region activities simultaneously as long as both activities ta
 
 {{#each armyActivities}}
     <div class="activity-help" {{#if (lookup ../hideActivities value)}}hidden{{/if}}>
-        <button type="button" class="kingdom-activity" data-activity="{{value}}">{{label}}</button>
+        <button type="button" class="kingdom-activity"
+            {{#unless (lookup ../enabledActivities value)}}title="Insufficient Proficiencies" disabled{{/unless}}
+                data-activity="{{value}}">{{label}}</button>
         <button type="button" class="show-help" data-help="{{value}}"><i
                 class="fa-solid fa-question"></i>
         </button>

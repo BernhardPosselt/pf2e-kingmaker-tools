@@ -19,7 +19,9 @@ import {
 import {capitalize, unpackFormArray} from '../utils';
 import {
     getAllSettlementSceneData,
-    getAllSettlementSceneDataAndStructures, getMergedData, SettlementSceneData,
+    getAllSettlementSceneDataAndStructures,
+    getMergedData,
+    SettlementSceneData,
 } from '../structures/scene';
 import {allFeats, allFeatsByName} from './data/feats';
 import {addGroupDialog} from './dialogs/add-group-dialog';
@@ -29,18 +31,15 @@ import {rollCultEvent, rollKingdomEvent} from '../kingdom-events';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
 import {featuresByLevel, uniqueFeatures} from './data/features';
+import {allCompanions, applyLeaderCompanionRules, getCompanionUnlockActivities} from './data/companions';
 import {
-    allCompanions,
-    applyLeaderCompanionRules,
-    getCompanionUnlockActivities,
-} from './data/companions';
-import {
-    AbilityScores,
-    Activity, allActivities,
+    Activity,
+    allActivities,
     createActivityLabel,
     enableCompanionActivities,
+    getActivityProficiencies,
 } from './data/activities';
-import {calculateAbilityModifier} from './data/abilities';
+import {AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {calculateSkills} from './skills';
 import {calculateInvestedBonus, isInvested} from './data/leaders';
 import {CheckDialog} from './dialogs/check-dialog';
@@ -109,12 +108,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 return {[activity]: true};
             })
             .reduce((a, b) => Object.assign(a, b), {});
-        console.log(hideActivities);
+        const enabledActivities = getActivityProficiencies(kingdomData.skillRanks);
         return {
             ...super.getData(options),
             hideActivities,
             isGM,
             isUser: !isGM,
+            enabledActivities: enabledActivities,
             leadershipActivityNumber: leadershipActivityNumber,
             name: kingdomData.name,
             size: kingdomData.size,

@@ -1,7 +1,8 @@
-import {AbilityScores, Activity} from './activities';
+import {Activity} from './activities';
 import {ActorTypes} from './companions';
 import {Leader} from './leaders';
 import {ActivityContent, activityData} from './activityData';
+import {AbilityScores} from './abilities';
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
 
