@@ -248,6 +248,16 @@ export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: Se
             phases: ['event'],
         });
     }
+    const leadershipBonus = activeSettlement?.settlement.leadershipActivityBonus ?? 0;
+    if (leadershipBonus > 0) {
+        result.push({
+            name: 'PC in Ruler Leadership Role',
+            type: 'item',
+            value: leadershipBonus,
+            enabled: false,
+            phases: ['leadership'],
+        });
+    }
     result.push({
         name: 'Invested, non Vacant Leader involved in Event',
         type: 'circumstance',
