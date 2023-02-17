@@ -198,7 +198,13 @@ export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
             }
         }
     }
-    result.assurance = 10 + (enabledModifiers.find(m => m.type === 'proficiency' && m.value > 0)?.value ?? 0);
+    result.assurance = 10 + enabledModifiers
+        .filter(m => {
+            // proficiency includes only negative modifiers or positive proficiency ones
+            return (m.type === 'proficiency' && m.value > 0) || m.value < 0;
+        })
+        .map(m => m.value)
+        .reduce((a, b) => a + b, 0);
     result.value = enabledModifiers
         .map(m => m.value)
         .reduce((a, b) => a + b, 0);
