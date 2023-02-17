@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.7] - 2023-02-17
+
 ### Fixed
 * Disable settlement inputs for users because these are persisted on scenes where they don't have permissions
 
