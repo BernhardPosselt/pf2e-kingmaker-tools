@@ -440,9 +440,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.inspect-settlement')
             ?.forEach(el => {
                 el.addEventListener('click', async (el) => {
+                    const current = this.getKingdom();
                     const target = el.currentTarget as HTMLButtonElement;
                     const id = target.dataset.id!;
-                    await showSettlement(this.game, id);
+                    await showSettlement(this.game, id, current);
                 });
             });
     }
