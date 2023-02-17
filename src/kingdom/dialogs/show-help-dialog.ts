@@ -1,7 +1,7 @@
 import {Activity} from '../data/activities';
 import {findHelp} from '../data/activityData';
 import {capitalize} from '../../utils';
-import {rankToLabel} from '../skills';
+import {rankToLabel} from '../modifiers';
 
 export async function showHelpDialog(help: string): Promise<void> {
     const data = findHelp(help as Activity);

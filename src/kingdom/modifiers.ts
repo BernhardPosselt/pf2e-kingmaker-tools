@@ -1,11 +1,16 @@
-import {Activity, KingdomPhase} from './data/activities';
-import {groupBy} from '../utils';
-import {getLevelData, Kingdom} from './data/kingdom';
+import {Activity, getActivityPhase, KingdomPhase} from './data/activities';
+import {capitalize, groupBy, unslugifyActivity} from '../utils';
+import {getLevelData, Kingdom, Leaders, Ruin} from './data/kingdom';
 import {SettlementSceneData} from '../structures/scene';
 import {allFeatsByName} from './data/feats';
 import {Skill, skillAbilities} from './data/skills';
 import {activityData} from './data/activityData';
-import {Ability} from './data/abilities';
+import {Ability, AbilityScores, calculateAbilityModifier} from './data/abilities';
+import {applyLeaderCompanionRules} from './data/companions';
+import {isInvested} from './data/leaders';
+import {calculateUnrestPenalty} from './data/unrest';
+import {abilityRuins} from './data/ruin';
+import {ActivityBonuses, SkillItemBonus} from './data/structures';
 
 export type ModifierType = 'ability' | 'proficiency' | 'item' | 'status' | 'circumstance' | 'vacancy' | 'untyped';
 
@@ -21,10 +26,7 @@ export interface Modifier {
 }
 
 export function removeUninterestingZeroModifiers(modifiers: Modifier[]): Modifier[] {
-    return modifiers.filter(modifier => {
-        // keep ability and proficiency
-        return modifier.type === 'ability' || modifier.type === 'proficiency' || modifier.value !== 0;
-    });
+    return modifiers.filter(modifier => modifier.value !== 0);
 }
 
 /**
@@ -267,4 +269,158 @@ export function processModifiers(
     const withoutZeroes = removeUninterestingZeroModifiers(copied);
     const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, activity, skill, rank);
     return removeLowestModifiers(withoutMismatchedPhaseOrActivity);
+}
+
+
+function createVacancyModifier(value: number, rulerVacant: boolean, phase?: KingdomPhase): Modifier {
+    return {
+        name: 'Vacancy',
+        value: -(rulerVacant ? value + 1 : value),
+        phases: phase ? [phase] : undefined,
+        type: 'vacancy',
+        enabled: true,
+    };
+}
+
+export function createVacancyModifiers(
+    ability: Ability,
+    leaders: Leaders,
+): Modifier[] {
+    const modifiers = [];
+    const rulerVacant = leaders.ruler.vacant;
+    if (leaders.counselor.vacant && ability === 'culture') {
+        modifiers.push(createVacancyModifier(1, rulerVacant));
+    }
+    if (leaders.general.vacant) {
+        modifiers.push(createVacancyModifier(4, rulerVacant, 'army'));
+    }
+    if (leaders.emissary.vacant && ability === 'loyalty') {
+        modifiers.push(createVacancyModifier(1, rulerVacant));
+    }
+    if (leaders.magister.vacant) {
+        modifiers.push(createVacancyModifier(4, rulerVacant, 'army'));
+    }
+    if (leaders.treasurer.vacant && ability === 'economy') {
+        modifiers.push(createVacancyModifier(1, rulerVacant));
+    }
+    if (leaders.viceroy.vacant && ability === 'stability') {
+        modifiers.push(createVacancyModifier(1, rulerVacant));
+    }
+    if (leaders.warden.vacant) {
+        modifiers.push(createVacancyModifier(4, rulerVacant, 'region'));
+    }
+    if (rulerVacant) {
+        modifiers.push(createVacancyModifier(0, rulerVacant));
+    }
+    return modifiers;
+}
+
+export function createInvestedModifier(
+    kingdomLevel: number,
+    ability: Ability,
+    leaders: Leaders,
+): Modifier | undefined {
+    const appliedLeaders = applyLeaderCompanionRules(leaders);
+    if (isInvested(ability, appliedLeaders)) {
+        return {
+            value: getLevelData(kingdomLevel).investedLeadershipBonus,
+            enabled: true,
+            name: 'Invested Leadership Role',
+            type: 'status',
+        };
+    }
+}
+
+export function createAbilityModifier(ability: Ability, abilityScores: AbilityScores): Modifier {
+    return {
+        type: 'ability',
+        name: capitalize(ability),
+        enabled: true,
+        value: calculateAbilityModifier(abilityScores[ability]),
+    };
+}
+
+export function rankToLabel(rank: number): string {
+    if (rank === 0) {
+        return 'Untrained';
+    } else if (rank === 1) {
+        return 'Trained';
+    } else if (rank === 2) {
+        return 'Expert';
+    } else if (rank === 3) {
+        return 'Master';
+    } else {
+        return 'Legendary';
+    }
+}
+
+export function createProficiencyModifier(rank: number, alwaysAddLevel: boolean, kingdomLevel: number): Modifier {
+    const value = rank > 0 ? (kingdomLevel + rank * 2) : (alwaysAddLevel ? kingdomLevel : 0);
+    const name = rank > 0 ? rankToLabel(rank) : 'Kingdom Level';
+    return {
+        value,
+        enabled: true,
+        name,
+        type: 'proficiency',
+    };
+}
+
+export function createUnrestModifier(unrest: number): Modifier | undefined {
+    const penalty = calculateUnrestPenalty(unrest);
+    if (penalty > 0) {
+        return {
+            type: 'status',
+            name: 'Unrest',
+            enabled: true,
+            value: -penalty,
+        };
+    }
+}
+
+export function createRuinModifier(ability: Ability, ruin: Ruin): Modifier | undefined {
+    const ruinAbility = abilityRuins[ability];
+    const itemPenalty = ruin[ruinAbility].penalty;
+    if (itemPenalty > 0) {
+        return {
+            value: -itemPenalty,
+            enabled: true,
+            name: 'Ruin',
+            type: 'item',
+        };
+    }
+}
+
+function createSkillModifier(value: number): Modifier | undefined {
+    if (value > 0) {
+        return {
+            value,
+            enabled: true,
+            name: 'Structure',
+            type: 'item',
+        };
+    }
+}
+
+export function createActivityModifiers(activities: ActivityBonuses): Modifier[] {
+    return (Object.entries(activities) as ([Activity, number])[])
+        .map(([activity, value]) => {
+            const phases = [getActivityPhase(activity)];
+            return {
+                type: 'item',
+                enabled: true,
+                value,
+                name: unslugifyActivity(activity),
+                activities: [activity],
+                phases,
+            };
+        });
+}
+
+export function createStructureModifiers(skillItemBonus: SkillItemBonus): Modifier[] {
+    const result = createActivityModifiers(skillItemBonus.activities);
+    const skillBonus = createSkillModifier(skillItemBonus.value);
+    if (skillBonus) {
+        result.push(skillBonus);
+    }
+    return result;
 }
