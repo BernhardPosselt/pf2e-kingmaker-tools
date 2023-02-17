@@ -1,0 +1,127 @@
+<form class="settlement-content">
+    <div>
+        <h2>{{name}}</h2>
+        <table class="km-table">
+            <tr>
+                <th>Type</th>
+                <td>{{type}}</td>
+            </tr>
+            <tr>
+                <th>Settlement Level</th>
+                <td>{{settlementLevel}}</td>
+            </tr>
+            <tr>
+                <th>Overcrowded</th>
+                <td>
+                    {{#if overcrowded}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{else}}
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    {{/if}}
+                </td>
+            </tr>
+            <tr>
+                <th>Secondary Territory</th>
+                <td>
+                    {{#if secondaryTerritory}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{else}}
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    {{/if}}
+                </td>
+            </tr>
+            <tr>
+                <th>Required Kingdom Level</th>
+                <td>{{requiredKingdomLevel}}</td>
+            </tr>
+            <tr>
+                <th>Consumption</th>
+                <td>{{consumption}}</td>
+            </tr>
+            <tr>
+                <th>Influence</th>
+                <td>{{influence}}</td>
+            </tr>
+            <tr>
+                <th>Maximum Lots</th>
+                <td>{{lots}}</td>
+            </tr>
+            <tr>
+                <th>Max Item Bonus</th>
+                <td>{{maxItemBonus}}</td>
+            </tr>
+            <tr>
+                <th>Population</th>
+                <td>{{population}}</td>
+            </tr>
+            <tr>
+                <th>Capital Investment Possible</th>
+                <td>{{capitalInvestmentPossible}}</td>
+            </tr>
+            <tr>
+                <th>Leadership Activities</th>
+                <td>{{leadershipActivities}}</td>
+            </tr>
+        </table>
+        <h2>Available Items</h2>
+        <table class="km-table">
+            {{#each availableItems}}
+                <tr>
+                    <th>{{label}}</th>
+                    <td>Up to level {{value}}</td>
+                </tr>
+            {{/each}}
+        </table>
+        {{#if showStorage}}
+            <h2>Storage</h2>
+            <table class="km-table">
+                {{#each storage}}
+                    <tr>
+                        <th>{{label}}</th>
+                        <td>{{value}}</td>
+                    </tr>
+                {{/each}}
+            </table>
+        {{/if}}
+        {{#if showNotes}}
+            <h2>Building Effects</h2>
+            <ul>
+                {{#each notes}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    </div>
+    <div>
+        <h2>Item Bonuses</h2>
+        <table class="km-table">
+            {{#if settlementEventBonus}}
+                <tr>
+                    <th>Settlement Event Item Bonus</th>
+                    <td>{{settlementEventBonus}}</td>
+                </tr>
+            {{/if}}
+            {{#if leadershipActivityBonus}}
+                <tr>
+                    <th>Leadership Activity Item Bonus</th>
+                    <td>{{leadershipActivityBonus}}</td>
+                </tr>
+            {{/if}}
+            {{#each skillItemBonuses}}
+                <tr>
+                    <th>{{label}}</th>
+                    <td>
+                        <ul>
+                            {{#if value}}
+                                <li><b>Item Bonus</b>: {{value}}</li>
+                            {{/if}}
+                            {{#each actions}}
+                                <li><b>{{label}}</b>: {{value}}</li>
+                            {{/each}}
+                        </ul>
+                    </td>
+                </tr>
+            {{/each}}
+        </table>
+    </div>
+</form>

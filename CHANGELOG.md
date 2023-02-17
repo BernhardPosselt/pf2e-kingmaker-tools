@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 * Palace now gives a +3 item bonus during leadership activities
+* Better feedback when no settlement exists yet and players open kingdom sheet
+
+### Added
+
+* Moved Settlement Macro into Kingdom Sheet
+
+### Removed
+
+* Remove view settlement macro and moved functionality into kingdom sheet
 
 ## [0.0.5] - 2023-02-17
 

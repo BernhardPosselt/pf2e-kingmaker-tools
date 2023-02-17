@@ -8,15 +8,19 @@ import {rollExplorationSkillCheck, rollSkillDialog} from './skill-checks';
 import {rollKingdomEvent} from './kingdom-events';
 import {subsist} from './subsist';
 import {
-    camouflageCampsite, campManagement, cookRecipe, discoverSpecialMeal,
-    huntAndGather, learnFromCompanion,
+    camouflageCampsite,
+    campManagement,
+    cookRecipe,
+    discoverSpecialMeal,
+    huntAndGather,
+    learnFromCompanion,
     organizeWatch,
     postCompanionEffects,
     prepareCampsite,
     tellCampfireStory,
 } from './camping';
-import {showSettlement, showStructureEditDialog} from './structures/settlements';
 import {showKingdom} from './kingdom/kingdom';
+import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -29,7 +33,6 @@ Hooks.on('ready', async () => {
                 kingdomEventsMacro: rollKingdomEvent.bind(null, game),
                 postCompanionEffectsMacro: postCompanionEffects.bind(null, game),
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
-                viewSettlementMacro: showSettlement.bind(null, game),
                 viewKingdomMacro: showKingdom.bind(null, game),
                 stopWatchMacro: stopWatch.bind(null, game),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -322,5 +325,7 @@ Hooks.on('init', async () => {
         'modules/pf2e-kingmaker-tools/templates/kingdom/groups.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/feats.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/features.hbs',
+        'modules/pf2e-kingmaker-tools/templates/kingdom/settlements.hbs',
+        'modules/pf2e-kingmaker-tools/templates/kingdom/settlement.hbs',
     ]);
 });

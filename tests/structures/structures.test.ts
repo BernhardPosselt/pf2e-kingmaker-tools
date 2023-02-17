@@ -1,4 +1,4 @@
-import {evaluateStructures} from '../../src/structures/structures';
+import {evaluateStructures} from '../../src/kingdom/structures';
 
 describe('structures', () => {
     test('evaluate no buildings', () => {

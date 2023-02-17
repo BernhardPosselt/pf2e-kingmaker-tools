@@ -1,7 +1,7 @@
 import {Activity, getActivityPhase, KingdomPhase} from './data/activities';
 import {capitalize, groupBy, unslugifyActivity} from '../utils';
 import {getLevelData, Kingdom, Leaders, Ruin} from './data/kingdom';
-import {SettlementSceneData} from '../structures/scene';
+import {SettlementSceneData} from './scene';
 import {allFeatsByName} from './data/feats';
 import {Skill, skillAbilities} from './data/skills';
 import {activityData} from './data/activityData';

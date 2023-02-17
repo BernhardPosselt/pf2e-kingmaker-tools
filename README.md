@@ -363,9 +363,9 @@ Structures are implemented as NPC stat blocks, including the correct sizes. Thei
 
 ![Meal Effects](docs/images/structures.png)
 
-All structures in a settlement can be automatically summed up and calculated by using the **View Settlement** Macro. 
+All structures in a settlement can be automatically summed up and calculated by using the **Kingdom Sheet** Macro. 
 
-![View Settlement](docs/images/view-settlement-macro.png)
+![View Settlement](docs/images/kingdom-sheet-macro.png)
 
 If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
 

@@ -1,7 +1,8 @@
 import {mergeObjects} from '../utils';
-import {Activity, getActivitySkills} from '../kingdom/data/activities';
+import {Activity, getActivitySkills} from './data/activities';
 import {
-    ActivityBonusRule, CommodityStorage,
+    ActivityBonusRule,
+    CommodityStorage,
     ItemGroup,
     ItemLevelBonuses,
     magicalItemGroups,
@@ -9,7 +10,7 @@ import {
     SkillItemBonus,
     SkillItemBonuses,
     Structure,
-} from '../kingdom/data/structures';
+} from './data/structures';
 
 export interface SettlementData {
     allowCapitalInvestment: boolean;

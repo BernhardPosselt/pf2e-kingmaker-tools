@@ -18,11 +18,17 @@ import {
 } from './data/kingdom';
 import {capitalize, unpackFormArray} from '../utils';
 import {
+    CurrentSceneData,
+    currentSceneIsSettlement,
     getAllSettlementSceneData,
     getAllSettlementSceneDataAndStructures,
     getMergedData,
+    getSettlementScene,
+    getViewedSceneData,
+    saveSceneData,
+    saveViewedSceneData,
     SettlementSceneData,
-} from '../structures/scene';
+} from './scene';
 import {allFeats, allFeatsByName} from './data/feats';
 import {addGroupDialog} from './dialogs/add-group-dialog';
 import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
@@ -48,13 +54,14 @@ import {CommodityStorage} from './data/structures';
 import {activityBlacklistDialog} from './dialogs/activity-blacklist-dialog';
 import {showHelpDialog} from './dialogs/show-help-dialog';
 import {activityData} from './data/activityData';
+import {showSettlement} from './dialogs/settlement';
 
 interface KingdomOptions {
     game: Game;
     sheetActor: Actor;
 }
 
-type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'groups' | 'features';
+type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'groups' | 'features' | 'settlements';
 
 const levels = [...Array.from(Array(20).keys()).map(k => k + 1)];
 
@@ -225,7 +232,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             eventDC: this.calculateEventDC(kingdomData.turnsWithoutEvent),
             civicPlanning: kingdomData.level >= 12,
             useXpHomebrew,
-
+            canAddCurrentSceneSettlement: currentSceneIsSettlement(this.game) && isGM,
         };
     }
 
@@ -237,6 +244,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             groupsTab: this.nav === 'groups',
             featsTab: this.nav === 'feats',
             featuresTab: this.nav === 'features',
+            settlementsTab: this.nav === 'settlements',
         };
     }
 
@@ -254,6 +262,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 completed: (milestone as { completed: boolean }).completed,
             };
         });
+
+        const settlements: CurrentSceneData[] = unpackFormArray(kingdom.settlements);
+        await this.saveSettlements(settlements);
+        delete kingdom['settlements'];
+
         await this.saveKingdom(kingdom);
         this.render();
     }
@@ -413,6 +426,23 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     if (help) {
                         await showHelpDialog(help);
                     }
+                });
+            });
+        $html.querySelector('#make-current-scene-settlement')
+            ?.addEventListener('click', async () => {
+                const data = getViewedSceneData(this.game);
+                if (data) {
+                    data.settlementType = 'Settlement';
+                    await saveViewedSceneData(this.game, data);
+                }
+                this.render();
+            });
+        $html.querySelectorAll('.inspect-settlement')
+            ?.forEach(el => {
+                el.addEventListener('click', async (el) => {
+                    const target = el.currentTarget as HTMLButtonElement;
+                    const id = target.dataset.id!;
+                    await showSettlement(this.game, id);
                 });
             });
     }
@@ -798,6 +828,25 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private getKingdom(): Kingdom {
         return this.sheetActor.getFlag('pf2e-kingmaker-tools', 'kingdom-sheet') as Kingdom;
+    }
+
+    private async saveSettlements(settlements: CurrentSceneData[]): Promise<void> {
+        if (!this.game.user?.isGM) {
+            console.info('Not performing save because only GM has permissions');
+            return;
+        }
+        console.log('Saving settlements', settlements);
+        for (const settlement of settlements) {
+            const scene = getSettlementScene(this.game, settlement.id!);
+            if (scene) {
+                await saveSceneData(this.game, scene, {
+                    settlementType: settlement.settlementType,
+                    settlementLevel: settlement.settlementLevel,
+                    secondaryTerritory: settlement.secondaryTerritory,
+                    overcrowded: settlement.overcrowded,
+                });
+            }
+        }
     }
 }
 

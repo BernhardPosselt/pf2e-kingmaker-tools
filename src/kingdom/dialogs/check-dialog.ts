@@ -11,7 +11,7 @@ import {Activity, getActivityPhase, getActivitySkills, KingdomPhase} from '../da
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getBooleanSetting} from '../../settings';
-import {getMergedData, getSettlementScene} from '../../structures/scene';
+import {getMergedData, getSettlementScene} from '../scene';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
 import {capitalize, postDegreeOfSuccessMessage, unslugifyActivity} from '../../utils';

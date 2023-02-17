@@ -1,17 +1,11 @@
-import {getViewedSceneMergedData, saveViewedSceneData} from './scene';
-import {capitalize, unslugifyActivity} from '../utils';
-import {ActivityBonuses, ItemLevelBonuses, SkillItemBonuses} from '../kingdom/data/structures';
-import {SettlementData} from './structures';
+import {getMergedData, getSettlementScene} from '../scene';
+import {ActivityBonuses, ItemLevelBonuses, SkillItemBonuses} from '../data/structures';
+import {capitalize, unslugifyActivity} from '../../utils';
+import {SettlementData} from '../structures';
 
 interface SettlementOptions {
     game: Game;
-}
-
-interface SettlementFormData {
-    settlementType: string;
-    settlementLevel: number;
-    overcrowded: boolean;
-    secondaryTerritory: boolean;
+    settlementId: string;
 }
 
 interface LabeledData<T = string> {
@@ -23,30 +17,29 @@ interface SkillBonusData extends LabeledData<number> {
     actions: LabeledData<number>[];
 }
 
-class SettlementApp extends FormApplication<FormApplicationOptions & SettlementOptions, object, null> {
-    static override get defaultOptions(): FormApplicationOptions {
+class SettlementApp extends Application<ApplicationOptions & SettlementOptions> {
+    static override get defaultOptions(): ApplicationOptions {
         const options = super.defaultOptions;
         options.id = 'settlement-app';
         options.title = 'Settlement';
-        options.template = 'modules/pf2e-kingmaker-tools/templates/settlement.hbs';
-        options.submitOnChange = true;
-        options.closeOnSubmit = false;
+        options.template = 'modules/pf2e-kingmaker-tools/templates/kingdom/settlement.hbs';
         options.classes = ['kingmaker-tools-app', 'settlement-app'];
-        options.width = 500;
+        options.width = 800;
         options.height = 'auto';
         return options;
     }
 
     private readonly game: Game;
-    constructor(object: null, options: Partial<FormApplicationOptions> & SettlementOptions) {
-        super(object, options);
+    private readonly settlementId: string;
+    constructor(options: Partial<ApplicationOptions> & SettlementOptions) {
+        super(options);
         this.game = options.game;
+        this.settlementId = options.settlementId;
     }
 
-    override getData(options?: Partial<FormApplicationOptions>): object {
-        const isGM = this.game.user?.isGM ?? false;
-        const isUser = !isGM;
-        const data = getViewedSceneMergedData(this.game)!;
+    override getData(options?: Partial<ApplicationOptions>): object {
+        const scene = getSettlementScene(this.game, this.settlementId)!;
+        const data = getMergedData(this.game, scene)!;
         const structures = data.settlement;
         const sceneData = data.scenedData;
         const settlementLevel = sceneData.settlementLevel || 1;
@@ -62,40 +55,23 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
             notes: structures.notes,
             showNotes: structures.notes.length > 0,
             leadershipActivities: structures.increaseLeadershipActivities ? 3 : 2,
-            settlementTypes: ['-', 'Settlement', 'Capital'],
             availableItems: this.getAvailableItems(settlementLevel, structures.itemLevelBonuses),
             storage,
             showStorage: Object.keys(storage).length > 0,
             skillItemBonuses: this.getSkillBonuses(structures.skillBonuses),
-            isGM,
-            isUser,
-            isSettlement: sceneData.settlementType === 'Capital' || sceneData.settlementType === 'Settlement',
         };
     }
-
-    override async _updateObject(event: Event, formData: SettlementFormData): Promise<void> {
-        await saveViewedSceneData(this.game, {
-            settlementLevel: formData.settlementLevel,
-            settlementType: formData.settlementType,
-            overcrowded: formData.overcrowded,
-            secondaryTerritory: formData.secondaryTerritory,
-        });
-        this.render();
-    }
-
     public sceneChange(): void {
         this.render();
     }
 
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
-        Hooks.on('canvasReady', this.sceneChange.bind(this));
         Hooks.on('createToken', this.sceneChange.bind(this));
         Hooks.on('deleteToken', this.sceneChange.bind(this));
     }
 
     override close(options?: FormApplication.CloseOptions): Promise<void> {
-        Hooks.off('canvasReady', this.sceneChange);
         Hooks.off('createToken', this.sceneChange);
         Hooks.off('deleteToken', this.sceneChange);
         return super.close(options);
@@ -153,39 +129,6 @@ class SettlementApp extends FormApplication<FormApplicationOptions & SettlementO
     }
 }
 
-export async function showSettlement(game: Game): Promise<void> {
-    new SettlementApp(null, {game}).render(true);
-}
-
-function editTemplate(structureData: object | undefined): string {
-    const root = document.createElement('form');
-    const textarea = document.createElement('textarea');
-    textarea.name = 'json';
-    textarea.innerHTML = structureData ? JSON.stringify(structureData, null, 2) : '';
-    root.appendChild(textarea);
-    return root.outerHTML;
-}
-
-export async function showStructureEditDialog(game: Game, actor: Actor): Promise<void> {
-    const structureData = actor!.getFlag('pf2e-kingmaker-tools', 'structureData') ?? undefined;
-    new Dialog({
-        title: 'Edit Structure Data',
-        content: editTemplate(structureData),
-        buttons: {
-            roll: {
-                icon: '<i class="fa-solid fa-save"></i>',
-                label: 'Save',
-                callback: async (html): Promise<void> => {
-                    const $html = html as HTMLElement;
-                    const json = $html.querySelector('textarea[name=json]') as HTMLInputElement;
-                    const value = json.value.trim() === '' ? null : JSON.parse(json.value);
-                    await actor.unsetFlag('pf2e-kingmaker-tools', 'structureData');
-                    await actor.setFlag('pf2e-kingmaker-tools', 'structureData', value);
-                },
-            },
-        },
-        default: 'roll',
-    }, {
-        jQuery: false,
-    }).render(true, {width: 400, classes: ['edit-structure-json', 'kingmaker-tools-app']});
+export async function showSettlement(game: Game, settlementId: string): Promise<void> {
+    new SettlementApp({game, settlementId}).render(true);
 }

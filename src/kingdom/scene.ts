@@ -1,6 +1,6 @@
 import {evaluateStructures, includeCapital, SettlementData} from './structures';
 import {ruleSchema} from './schema';
-import {Structure, structuresByName} from '../kingdom/data/structures';
+import {Structure, structuresByName} from './data/structures';
 
 class StructureError extends Error {
 }
@@ -65,6 +65,13 @@ export interface SceneData {
 export interface CurrentSceneData extends SceneSettlementData, SceneData {
 }
 
+export function getViewedSceneData(game: Game): CurrentSceneData | undefined {
+    const scene = getCurrentScene(game);
+    if (scene) {
+        return getSceneData(scene);
+    }
+}
+
 function getSceneData(scene: Scene): CurrentSceneData {
     const sceneData = scene.getFlag('pf2e-kingmaker-tools', 'settlementData') as SceneSettlementData | undefined;
     return {
@@ -77,12 +84,25 @@ function getSceneData(scene: Scene): CurrentSceneData {
     };
 }
 
+export async function saveSceneData(game: Game, scene: Scene, data: SceneSettlementData): Promise<void> {
+    await scene.unsetFlag('pf2e-kingmaker-tools', 'settlementData');
+    await scene.setFlag('pf2e-kingmaker-tools', 'settlementData', data);
+}
+
 export async function saveViewedSceneData(game: Game, data: SceneSettlementData): Promise<void> {
     const viewed = game.scenes?.viewed;
     if (viewed) {
-        await viewed.unsetFlag('pf2e-kingmaker-tools', 'settlementData');
-        await viewed.setFlag('pf2e-kingmaker-tools', 'settlementData', data);
+        await saveSceneData(game, viewed, data);
     }
+}
+
+export function currentSceneIsSettlement(game: Game): boolean {
+    const current = getCurrentScene(game);
+    if (current) {
+        const data = getSceneData(current);
+        return data.settlementType === '-';
+    }
+    return false;
 }
 
 function getCurrentScene(game: Game): Scene | undefined {
@@ -132,14 +152,8 @@ export function getMergedData(game: Game, settlementScene: Scene): SettlementSce
         };
     }
 }
-export function getViewedSceneMergedData(game: Game): SettlementSceneData | undefined {
-    const currentScene = getCurrentScene(game);
-    if (currentScene) {
-        return getMergedData(game, currentScene);
-    }
-}
 
-export function getAllSettlementSceneData(game: Game): SceneData[] {
+export function getAllSettlementSceneData(game: Game): CurrentSceneData[] {
     return game?.scenes
         ?.map(scene => getSceneData(scene))
         ?.filter(scene => {

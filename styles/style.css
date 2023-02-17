@@ -266,3 +266,22 @@ td.skill-value {
 #km-kingdom-name {
     width: 267px;
 }
+
+.settlement-content {
+    display: flex;
+    gap: 10px;
+}
+
+.settlement-content td ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.settlement-content > div:first-child {
+    flex-basis: 350px;
+}
+
+.settlement-content > div:nth-child(2) {
+    flex-grow: 1;
+}
