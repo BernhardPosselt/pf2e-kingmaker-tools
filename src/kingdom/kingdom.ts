@@ -823,6 +823,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async saveKingdom(kingdom: Partial<Kingdom>): Promise<void> {
+        const ruin = kingdom.ruin;
+        if (ruin !== undefined) {
+            ruin.corruption.penalty = Math.abs(ruin.corruption.penalty);
+            ruin.crime.penalty = Math.abs(ruin.crime.penalty);
+            ruin.decay.penalty = Math.abs(ruin.decay.penalty);
+            ruin.strife.penalty = Math.abs(ruin.strife.penalty);
+        }
         console.info('Saving', kingdom);
         await this.sheetActor.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', kingdom);
     }

@@ -158,7 +158,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.selectedSkill = data.selectedSkill;
         this.dc = data.dc;
         this.phase = data.phase === '-' ? undefined : data.phase;
-        this.customModifiers = data.customModifiers;
+        this.customModifiers = this.homogenize(data.customModifiers);
         this.modifierOverrides = (Object.entries(data.overrideModifiers ?? {}) as [string, string][])
             .filter(([, state]) => state !== '-')
             .map(([id, state]) => {
@@ -239,7 +239,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                     name: 'Custom',
                     enabled: true,
                 }, {
-                    value: values.penalty,
+                    value: -values.penalty,
                     type,
                     name: 'Custom',
                     enabled: true,
@@ -269,5 +269,21 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 }),
             };
         }
+    }
+
+    /**
+     * Make all bonuses and penalties positive
+     * @param customModifiers
+     * @private
+     */
+    private homogenize(customModifiers: CustomModifiers): CustomModifiers {
+        return Object.fromEntries((Object.entries(customModifiers) as [TotalFields, ModifierTotal][])
+            .map(([type, values]) => {
+                const x: [TotalFields, ModifierTotal] = [type, {
+                    bonus: Math.abs(values.bonus),
+                    penalty: Math.abs(values.penalty),
+                }];
+                return x;
+            })) as CustomModifiers;
     }
 }
