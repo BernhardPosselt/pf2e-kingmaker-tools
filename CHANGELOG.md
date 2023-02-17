@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] - 2023-02-17
+
+### Changed
+* Don't render tables when there's no data
+
 ### Fixed
 * Palace now gives a +3 item bonus during leadership activities
 * Better feedback when no settlement exists yet and players open kingdom sheet
@@ -13,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Moved Settlement Macro into Kingdom Sheet
+* Implement QoL feat
 
 ### Removed
 

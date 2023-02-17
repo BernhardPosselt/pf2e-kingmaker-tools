@@ -1,3 +1,4 @@
+{{#if levelFeats}}
 <table class="km-table">
     <tr>
         <th>Level</th>
@@ -35,7 +36,9 @@
         {{/if}}
     {{/each}}
 </table>
+{{/if}}
 
+{{#if bonusFeats}}
 <table class="km-table">
     <tr>
         <th>Bonus Feat</th>
@@ -75,4 +78,5 @@
         {{/if}}
     {{/each}}
 </table>
+{{/if}}
 <button type="button" id="km-add-bonus-feat">Add Bonus Feat <i class="fa-solid fa-plus"></i></button>
