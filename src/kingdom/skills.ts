@@ -6,13 +6,7 @@ import {abilityRuins} from './data/ruin';
 import {AbilityScores, Activity, getActivityPhase, KingdomPhase, skillAbilities} from './data/activities';
 import {calculateUnrestPenalty} from './data/unrest';
 import {isInvested} from './data/leaders';
-import {
-    calculateModifiers,
-    disableLowestModifiers,
-    disablePhaseActivityModifiers,
-    Modifier,
-    ModifierTotals,
-} from './modifiers';
+import {calculateModifiers, Modifier, ModifierTotals, processModifiers} from './modifiers';
 import {ActivityBonuses, SkillItemBonus, SkillItemBonuses} from './data/structures';
 import {applyLeaderCompanionRules} from './data/companions';
 
@@ -181,6 +175,7 @@ function createStructureModifiers(skillItemBonus: SkillItemBonus): Modifier[] {
 
 export function createSkillModifiers(
     {
+        skill,
         ruin,
         unrest,
         skillRank,
@@ -194,6 +189,7 @@ export function createSkillModifiers(
         phase,
         additionalModifiers = [],
     }: {
+        skill: Skill,
         ability: Ability,
         ruin: Ruin,
         unrest: number,
@@ -235,7 +231,7 @@ export function createSkillModifiers(
     if (investedModifier) {
         result.push(investedModifier);
     }
-    return disableLowestModifiers(disablePhaseActivityModifiers(result, phase, activity));
+    return processModifiers(result, skill, skillRank, phase, activity);
 }
 export function calculateSkills(
     {
@@ -270,6 +266,7 @@ export function calculateSkills(
             alwaysAddLevel,
             ability,
             skillItemBonus: skillItemBonuses?.[skill],
+            skill,
         });
         const total = calculateModifiers(modifiers);
         return {

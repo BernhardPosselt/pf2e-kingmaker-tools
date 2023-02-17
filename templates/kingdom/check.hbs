@@ -10,6 +10,7 @@
             {{#if activity}}
                 <div>
                     <label for="km-applicable-skills">Applicable Skills:</label>
+                    <!-- todo: should probably be a radio thingy -->
                     <select id="km-applicable-skills" name="selectedSkill">
                         {{#select selectedSkill}}
                             {{#each selectableSkills}}
@@ -40,12 +41,12 @@
                 <th>Value</th>
                 <th>Enabled</th>
             </tr>
-            {{#each modifiers}}
+            {{#each modifiers.modifiers}}
             <tr>
-                <td>Bad Luck haha</td>
-                <td>Circumstance Penalty</td>
-                <td>-1</td>
-                <td><input type="checkbox" checked></td>
+                <td>{{name}}</td>
+                <td>{{type}}</td>
+                <td>{{value}}</td>
+                <td><input type="checkbox" {{checked enabled}}></td>
             </tr>
             {{/each}}
         </table>
@@ -88,17 +89,17 @@
 
         <div class="activity-choice">
             <button type="button" id="km-roll-skill-assurance"
-                    data-modifier="{{modifiers.total.assurance}}"
+                    data-modifier="{{modifiers.assurance}}"
                     data-type="{{title}}"
                     {{#if activity}}data-activity="{{activity}}"{{/if}}
                     data-dc="{{dc}}">
-                Assurance {{modifiers.total.assurance}} <i class="fa-solid fa-dice-d20"></i></button>
+                Assurance {{modifiers.assurance}} <i class="fa-solid fa-dice-d20"></i></button>
             <button type="button" id="km-roll-skill"
                     {{#if activity}}data-activity="{{activity}}"{{/if}}
                     data-dc="{{dc}}"
                     data-type="{{title}}"
-                    data-modifier="{{modifiers.total.value}}">Roll
-                +{{modifiers.total.value}}
+                    data-modifier="{{modifiers.total}}">Roll
+                +{{modifiers.total}}
                 <i class="fa-solid fa-dice-d20"></i></button>
         </div>
     {{/if}}

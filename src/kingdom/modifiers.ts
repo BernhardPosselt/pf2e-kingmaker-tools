@@ -3,6 +3,8 @@ import {groupBy} from '../utils';
 import {getLevelData, Kingdom} from './data/kingdom';
 import {SettlementSceneData} from '../structures/scene';
 import {allFeatsByName} from './data/feats';
+import {Skill} from './data/skills';
+import {activityData} from './data/activityData';
 
 export type ModifierType = 'ability' | 'proficiency' | 'item' | 'status' | 'circumstance' | 'vacancy' | 'untyped';
 
@@ -19,7 +21,7 @@ export interface Modifier {
  * Disables all modifiers that do not have the highest/lowest number
  * @param modifiers
  */
-export function disableLowestModifiers(modifiers: Modifier[]): Modifier[] {
+export function removeLowestModifiers(modifiers: Modifier[]): Modifier[] {
     const groupedModifiers = groupBy(modifiers, (modifier) => {
         if (modifier.value > 0) {
             return modifier.type;
@@ -33,12 +35,7 @@ export function disableLowestModifiers(modifiers: Modifier[]): Modifier[] {
             const highest = modifiers
                 .reduce((prev, curr) => Math.abs(prev.value) < Math.abs(curr.value) ? curr : prev);
             for (const mod of modifiers) {
-                if (mod !== highest) {
-                    result.push({
-                        ...mod,
-                        enabled: false,
-                    });
-                } else {
+                if (mod === highest) {
                     result.push(mod);
                 }
             }
@@ -47,29 +44,63 @@ export function disableLowestModifiers(modifiers: Modifier[]): Modifier[] {
     return result;
 }
 
+export function removeUninterestingZeroModifiers(modifiers: Modifier[]): Modifier[] {
+    return modifiers.filter(modifier => {
+        // keep ability and proficiency
+        return modifier.type === 'ability' || modifier.type === 'proficiency' || modifier.value !== 0;
+    });
+}
+
 /**
- * Disable all modifiers that are not in a given phase or activity
- * @param modifiers
- * @param phase phase to select modifiers for; if undefined, removes all modifiers in that phase
- * @param activity activity to select modifiers for; if undefined, removes all modifiers in with that activity
+ * Deletes all modifiers that are not in a given phase or activity
  */
-export function disablePhaseActivityModifiers(modifiers: Modifier[], phase?: KingdomPhase, activity?: Activity): Modifier[] {
-    // first check if any modifiers need to be disabled based on phase or activity
+export function removePhaseActivityModifiers(
+    modifiers: Modifier[],
+    phase: KingdomPhase | undefined,
+    activity: Activity | undefined,
+    skill: Skill,
+    rank: number,
+): Modifier[] {
     return modifiers
-        .map(modifier => {
-            let enabled = modifier.enabled;
-            // if we aren't running in a phase, disable all modifiers relevant to a phase
+        .filter(modifier => {
+            // if we aren't running in a phase, remove all modifiers relevant to a phase
             // if we are, check if a modifier is only green lit for a certain phase
-            if (enabled && phase && modifier.phases) {
-                enabled = modifier.phases.includes(phase);
-            } else if (enabled && !phase && modifier.phases) {
+            // repeat for activities
+            if (phase && modifier.phases && activity && modifier.activities) {
+                return modifier.phases.includes(phase) &&
+                    modifier.activities.includes(activity);
+            } else if (phase && modifier.phases) {
+                return modifier.phases.includes(phase);
+            } else if (activity && modifier.activities) {
+                return modifier.activities.includes(activity);
+            } else {
+                // lastly, if a modifier has an activity, check if that activity
+                // is actually possible to skill check for the given skill and rank
+                if (modifier.activities) {
+                    return modifier.activities
+                        .some(activity => {
+                            if (activity === 'create-a-masterpiece') {
+                                console.log('bb', activityData[activity], skill, rank);
+                            }
+                            const data = activityData[activity];
+                            const activitySkillRank = data.skills[skill];
+                            if (activitySkillRank) {
+                                return activitySkillRank <= rank;
+                            } else {
+                                return false;
+                            }
+                        });
+                }
+                return true;
+            }
+        }).map(modifier => {
+            let enabled = modifier.enabled;
+            // modifiers that are running outside a phase or activity should be
+            // disabled by default if they belong to one
+            if (!phase && modifier.phases) {
                 enabled = false;
             }
-            // if we aren't running an activity, disable all modifiers relevant only to activities
-            // if we are, check if the modifier applies to the activity
-            if (enabled && activity && modifier.activities) {
-                enabled = modifier.activities.includes(activity);
-            } else if (enabled && !activity && modifier.activities) {
+            if (!activity && modifier.activities) {
                 enabled = false;
             }
             return {
@@ -169,6 +200,7 @@ export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: Se
         result.push({
             name: 'Expansion Expert',
             type: 'circumstance',
+            activities: ['claim-hex'],
             value: 2,
             enabled: true,
         });
@@ -176,7 +208,7 @@ export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: Se
     const settlementEventBonus = activeSettlement?.settlement?.settlementEventBonus ?? 0;
     if (settlementEventBonus > 0) {
         result.push({
-            name: 'Event Phase',
+            name: 'Event Phase Structure Bonus',
             type: 'circumstance',
             value: settlementEventBonus,
             enabled: true,
@@ -191,4 +223,24 @@ export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: Se
         phases: ['event'],
     });
     return result;
+}
+
+export function processModifiers(
+    modifiers: Modifier[],
+    skill: Skill,
+    rank: number,
+    phase?: KingdomPhase,
+    activity?: Activity,
+): Modifier[] {
+    const copied = modifiers.map(modifier => {
+        // make a copy
+        return {
+            ...modifier,
+            phases: modifier.phases ? [...modifier.phases] : undefined,
+            activities: modifier.activities ? [...modifier.activities] : undefined,
+        };
+    });
+    const withoutZeroes = removeUninterestingZeroModifiers(copied);
+    const withoutMismatchedPhaseOrActivity = removePhaseActivityModifiers(withoutZeroes, phase, activity, skill, rank);
+    return removeLowestModifiers(withoutMismatchedPhaseOrActivity);
 }

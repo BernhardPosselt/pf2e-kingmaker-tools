@@ -1,12 +1,5 @@
 import {KingdomFeat} from '../data/feats';
-import {
-    calculateModifiers,
-    createAdditionalModifiers,
-    Modifier,
-    ModifierTotal,
-    ModifierTotals,
-    ModifierType,
-} from '../modifiers';
+import {calculateModifiers, createAdditionalModifiers, Modifier, ModifierTotal, ModifierTotals} from '../modifiers';
 import {Activity, getActivityPhase, getActivitySkills, KingdomPhase, skillAbilities} from '../data/activities';
 import {Skill} from '../data/skills';
 import {createSkillModifiers} from '../skills';
@@ -15,8 +8,7 @@ import {getMergedData} from '../../structures/scene';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
 import {capitalize, postDegreeOfSuccessMessage, unslugifyActivity} from '../../utils';
-import {ActivityContent, activityData} from '../data/activityData';
-import retryTimes = jest.retryTimes;
+import {activityData} from '../data/activityData';
 import {DegreeOfSuccess, determineDegreeOfSuccess} from '../../degree-of-success';
 
 export type CheckType = 'skill' | 'activity';
@@ -116,6 +108,11 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const skillRanks = this.kingdom.skillRanks;
         const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(skillRanks);
         const phase = this.getPhase();
+        console.log('phase', phase);
+        console.log('activity', this.activity);
+        console.log('skill', this.skill);
+        console.log('selectedSkill', this.selectedSkill);
+        console.log('applicableSkills', applicableSkills);
         const additionalModifiers: Modifier[] = createAdditionalModifiers(this.kingdom, activeSettlement);
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
         const skillModifiers = Object.fromEntries(applicableSkills.map(skill => {
@@ -133,6 +130,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 additionalModifiers: [...additionalModifiers, ...convertedCustomModifiers],
                 activity: this.activity,
                 phase,
+                skill,
             });
             const total = calculateModifiers(modifiers);
             return [skill, {total, modifiers}];
@@ -145,7 +143,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             activity: this.activity,
             selectableSkills: this.createSelectableSkills(skillModifiers),
             selectedSkill: this.selectedSkill,
-            modifiers: skillModifiers[this.selectedSkill],
+            modifiers: this.createModifiers(skillModifiers[this.selectedSkill]),
             isEventPhase: this.isEventPhase,
             customModifiers: this.customModifiers,
         };
@@ -248,5 +246,23 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                     enabled: true,
                 }];
             });
+    }
+
+    private createModifiers(skillModifier: TotalAndModifiers | undefined): object | undefined {
+        if (skillModifier) {
+            return {
+                total: skillModifier.total.value,
+                assurance: skillModifier.total.assurance,
+                modifiers: skillModifier.modifiers.map(modifier => {
+                    const type = capitalize(modifier.type);
+                    return {
+                        name: modifier.name,
+                        type: modifier.value < 0 ? `${type} Penalty` : `${type} Bonus`,
+                        value: modifier.value,
+                        enabled: modifier.enabled,
+                    };
+                }),
+            };
+        }
     }
 }
