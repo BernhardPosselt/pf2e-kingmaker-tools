@@ -7,7 +7,7 @@ import {getBooleanSetting} from '../../settings';
 import {getMergedData} from '../../structures/scene';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
-import {capitalize, postDegreeOfSuccessMessage, unslugifyActivity} from '../../utils';
+import {capitalize, postDegreeOfSuccessMessage, unpackFormArray, unslugifyActivity} from '../../utils';
 import {activityData} from '../data/activityData';
 import {DegreeOfSuccess, determineDegreeOfSuccess} from '../../degree-of-success';
 
@@ -27,6 +27,7 @@ interface CheckFormData {
     dc: number;
     selectedSkill: Skill;
     customModifiers: CustomModifiers;
+    overrideModifiersEnabled: Record<string, boolean>;
 }
 
 interface TotalAndModifiers {
@@ -162,6 +163,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     protected async _updateObject(event: Event, formData: any): Promise<void> {
         const data = expandObject(formData) as CheckFormData;
         console.log(data);
+        const overrides = unpackFormArray(data.overrideModifiersEnabled);
         this.selectedSkill = data.selectedSkill;
         this.dc = data.dc;
         this.isEventPhase = data.isEventPhase;

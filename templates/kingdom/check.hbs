@@ -10,7 +10,6 @@
             {{#if activity}}
                 <div>
                     <label for="km-applicable-skills">Applicable Skills:</label>
-                    <!-- todo: should probably be a radio thingy -->
                     <select id="km-applicable-skills" name="selectedSkill">
                         {{#select selectedSkill}}
                             {{#each selectableSkills}}
@@ -46,7 +45,7 @@
                 <td>{{name}}</td>
                 <td>{{type}}</td>
                 <td>{{value}}</td>
-                <td><input type="checkbox" {{checked enabled}}></td>
+                <td><input type="checkbox" {{checked enabled}} name="overrideModifiersEnabled.{{@index}}"></td>
             </tr>
             {{/each}}
         </table>

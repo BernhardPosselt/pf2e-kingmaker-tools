@@ -32,10 +32,14 @@ export function removeLowestModifiers(modifiers: Modifier[]): Modifier[] {
     const result = [];
     for (const [type, modifiers] of groupedModifiers.entries()) {
         if (type !== 'untyped' && type !== 'untyped-penalty') {
+            // only take the highest modifier of a type
+            // if multiple modifiers are the same, choose the one that's enabled
+            // otherwise push all
             const highest = modifiers
                 .reduce((prev, curr) => Math.abs(prev.value) < Math.abs(curr.value) ? curr : prev);
+            const hasEnabled = modifiers.some(modifier => modifier.enabled);
             for (const mod of modifiers) {
-                if (mod === highest) {
+                if (mod.value === highest.value && mod.enabled === hasEnabled) {
                     result.push(mod);
                 }
             }
