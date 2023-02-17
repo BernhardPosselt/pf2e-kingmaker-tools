@@ -16,7 +16,7 @@ import {
     Ruin,
     WorkSites,
 } from './data/kingdom';
-import {capitalize, unpackFormArray} from '../utils';
+import {capitalize, groupBy, unpackFormArray} from '../utils';
 import {
     CurrentSceneData,
     currentSceneIsSettlement,
@@ -268,12 +268,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         delete kingdom['settlements'];
 
         await this.saveKingdom(kingdom);
-        this.render();
-    }
-
-    private async update(data: Partial<Kingdom>): Promise<void> {
-        await this.saveKingdom(data);
-        this.render();
     }
 
     public sceneChange(): void {
@@ -295,7 +289,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         });
         $html.querySelector('#km-gain-fame')
             ?.addEventListener('click', async () =>
-                await this.update({fame: Math.min(3, this.getKingdom().fame + 1)}));
+                await this.saveKingdom({fame: Math.min(3, this.getKingdom().fame + 1)}));
         $html.querySelector('#km-adjust-unrest')
             ?.addEventListener('click', async () => await this.adjustUnrest());
         $html.querySelector('#km-collect-resources')
@@ -313,7 +307,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-add-event')
             ?.addEventListener('click', async () => addOngoingEventDialog((name) => {
                 const current = this.getKingdom();
-                this.update({
+                this.saveKingdom({
                     ongoingEvents: [...current.ongoingEvents, {name}],
                 });
             }));
@@ -349,14 +343,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => {
                 const current = this.getKingdom();
                 if (current.xp >= current.xpThreshold) {
-                    await this.update({level: current.level + 1, xp: current.xp - current.xpThreshold});
+                    await this.saveKingdom({level: current.level + 1, xp: current.xp - current.xpThreshold});
                 } else {
                     ui.notifications?.error('Can not level up, not enough XP');
                 }
             });
         $html.querySelector('#km-add-group')
             ?.addEventListener('click', async () => {
-                addGroupDialog((group) => this.update({
+                addGroupDialog((group) => this.saveKingdom({
                     groups: [...this.getKingdom().groups, group],
                 }));
             });
@@ -368,7 +362,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => {
                 new AddBonusFeatDialog(null, {
                     feats: allFeats,
-                    onOk: (feat) => this.update({
+                    onOk: (feat) => this.saveKingdom({
                         bonusFeats: [...this.getKingdom().bonusFeats, feat],
                     }),
                 }).render(true);
@@ -377,7 +371,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => {
                 const current = this.getKingdom();
                 await activityBlacklistDialog(current.activityBlacklist, [...allActivities], (activityBlacklist) => {
-                    this.update({
+                    this.saveKingdom({
                         activityBlacklist,
                     });
                 });
@@ -451,7 +445,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async increaseXP(xp: number): Promise<void> {
         await ChatMessage.create({content: `Gained ${xp} Kingdom XP`});
-        await this.update({xp: this.getKingdom().xp + xp});
+        await this.saveKingdom({xp: this.getKingdom().xp + xp});
     }
 
     private async endTurn(): Promise<void> {
@@ -466,7 +460,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             </ul>
             `,
         });
-        await this.update({
+        await this.saveKingdom({
             resourceDice: {
                 now: current.resourcePoints.next,
                 next: 0,
@@ -535,7 +529,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         if (unrest >= this.calculateAnarchy(current.feats, current.bonusFeats)) {
             await ChatMessage.create({content: 'Kingdom falls into anarchy, unless you spend all fame/infamy points. Only Quell Unrest leadership activities can be performed and all checks are worsened by a degree'});
         }
-        await this.update({
+        await this.saveKingdom({
             unrest,
         });
     }
@@ -552,9 +546,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 content: 'An event occurs, roll a Kingdom Event!',
                 rollMode,
             });
-            await this.update({turnsWithoutEvent: 0});
+            await this.saveKingdom({turnsWithoutEvent: 0});
         } else {
-            await this.update({turnsWithoutEvent: turnsWithoutEvent + 1});
+            await this.saveKingdom({turnsWithoutEvent: turnsWithoutEvent + 1});
         }
     }
 
@@ -565,7 +559,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             const deleteAt = parseInt(deleteIndex, 10);
             const values = [...this.getKingdom()[property] as unknown[]];
             values.splice(deleteAt, 1);
-            await this.update({
+            await this.saveKingdom({
                 [property]: values,
             });
         }
@@ -601,7 +595,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         </ul>
         `,
         });
-        await this.update({
+        await this.saveKingdom({
             resourcePoints: {
                 now: current.resourcePoints.now + rolledPoints,
                 next: current.resourcePoints.next,
@@ -777,7 +771,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const roll = await (new Roll('1d20').roll());
         await roll.toMessage({flavor: 'Reducing Unrest by 1 on an 11 or higher'});
         if (roll.total > 10) {
-            await this.update({
+            await this.saveKingdom({
                 unrest: Math.max(0, this.getKingdom().unrest - 1),
             });
         }
@@ -810,7 +804,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             </ul>
             `,
             });
-            await this.update({
+            await this.saveKingdom({
                 commodities: {
                     now: {
                         ...current.commodities.now,
@@ -823,6 +817,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async saveKingdom(kingdom: Partial<Kingdom>): Promise<void> {
+        this.makeRuinPenaltiesPositive(kingdom);
+        await this.giveMilestoneXP(kingdom);
+        console.info('Saving', kingdom);
+        await this.sheetActor.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', kingdom);
+        this.render();
+    }
+
+    private makeRuinPenaltiesPositive(kingdom: Partial<Kingdom>): void {
         const ruin = kingdom.ruin;
         if (ruin !== undefined) {
             ruin.corruption.penalty = Math.abs(ruin.corruption.penalty);
@@ -830,8 +832,28 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ruin.decay.penalty = Math.abs(ruin.decay.penalty);
             ruin.strife.penalty = Math.abs(ruin.strife.penalty);
         }
-        console.info('Saving', kingdom);
-        await this.sheetActor.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', kingdom);
+    }
+
+    private async giveMilestoneXP(kingdom: Partial<Kingdom>): Promise<void> {
+        const milestones = kingdom.milestones;
+        if (milestones !== undefined) {
+            const existingKingdom = this.getKingdom();
+            const existingMilestones = existingKingdom.milestones;
+            const existingMap = groupBy(existingMilestones, m => m.name);
+            const newMap = groupBy(milestones, m => m.name);
+            for (const key of existingMap.keys()) {
+                const existingVal = existingMap.get(key)?.[0];
+                const newVal = newMap.get(key)?.[0];
+                if (newVal !== undefined &&
+                    existingVal !== undefined &&
+                    newVal.completed !== existingVal.completed) {
+                    const xp = newVal.completed ? newVal.xp : -newVal.xp;
+                    const result = newVal.completed ? 'Gained' : 'Lost';
+                    await ChatMessage.create({content: `${result} ${Math.abs(xp)} Kingdom XP`});
+                    kingdom.xp = existingKingdom.xp + xp;
+                }
+            }
+        }
     }
 
     private getKingdom(): Kingdom {
