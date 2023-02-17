@@ -365,7 +365,7 @@ Structures are implemented as NPC stat blocks, including the correct sizes. Thei
 
 All structures in a settlement can be automatically summed up and calculated by using the **Kingdom Sheet** Macro. 
 
-![View Settlement](docs/images/kingdom-sheet-macro.png)
+![Kingdom Sheet Macro](docs/images/kingdom-sheet-macro.png)
 
 If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
 
@@ -386,3 +386,26 @@ In addition, you can configure sound effects that are played for rain, sunny and
 * **weather.snowfall**
 
 Each day, a new value is rolled from the roll table and persisted across all scenes.
+
+### Kingdom Sheet (Alpha)
+
+**NOTE**: this implementation is an alpha and might eat your data or break at any point in time. Keep a digital/physical sheet on the side!
+
+![Kingdom Sheet](docs/images/kingdom-sheet.png)
+
+The Kingdom sheet auto calculates almost everything related to kingdom building. You launch it exclusively with the **View Kingdom** Macro. 
+
+On first launch, it copies an actor with the name **Kingdom Sheet** into your actors folder. This actor is used to store the sheet data and can be placed anywhere but you must not change its name.
+
+If you want to give your players access to the sheet, edit the actor's permissions as usually.
+
+In addition, you want to add a settlement scene. To do that, navigate to the tab holding your structures and click **Add Current Scene** in your **Settlements** tab. You need to repeat this for all of your scenes that hold structures.
+
+![Add Settlement](docs/images/add-current-scene.png)
+
+
+The following variant rules are supported in the settings:
+
+* Always add level to skill for untrained skills
+* Double Skill Increases in the Feature Section
+* Additional XP and milestones from [Vance and Kerenshara](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit)
