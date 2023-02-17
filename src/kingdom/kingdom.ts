@@ -107,7 +107,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const totalConsumption = kingdomData.consumption.armies + kingdomData.consumption.now + settlementConsumption;
         const useXpHomebrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
         const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
-        const settlementScene = this.game?.scenes?.get(kingdomData.activeSettlement);
+        const settlementScene = getSettlementScene(this.game, kingdomData.activeSettlement);
         const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
         const unlockedActivities = new Set<Activity>([...unlockedSettlementActivities, ...getCompanionUnlockActivities(kingdomData.leaders)]);
         const hideActivities = kingdomData.activityBlacklist
