@@ -28,10 +28,10 @@ export async function showHelpDialog(help: string): Promise<void> {
         <hr>
         <div>${await TextEditor.enrichHTML(data.description)}</div>
         <hr>
-        ${data.criticalSuccess ? `<p><b>Critical Success</b>: ${await TextEditor.enrichHTML(data.criticalSuccess)}</p>`: ''}
-        ${data.success ? `<p><b>Success</b>: ${await TextEditor.enrichHTML(data.success)}</p>`: ''}
-        ${data.failure ? `<p><b>Failure</b>: ${await TextEditor.enrichHTML(data.failure)}</p>`: ''}
-        ${data.criticalFailure ? `<p><b>Critical Failure</b>: ${await TextEditor.enrichHTML(data.criticalFailure)}</p>`: ''}
+        ${data.criticalSuccess ? `<p><b>Critical Success</b>: ${await TextEditor.enrichHTML(data.criticalSuccess.msg)}</p>`: ''}
+        ${data.success ? `<p><b>Success</b>: ${await TextEditor.enrichHTML(data.success.msg)}</p>`: ''}
+        ${data.failure ? `<p><b>Failure</b>: ${await TextEditor.enrichHTML(data.failure.msg)}</p>`: ''}
+        ${data.criticalFailure ? `<p><b>Critical Failure</b>: ${await TextEditor.enrichHTML(data.criticalFailure.msg)}</p>`: ''}
         ${data.special ? `<hr><b>Special</b>: ${data.special}`: ''}
         `,
         buttons: {

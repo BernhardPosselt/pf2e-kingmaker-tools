@@ -12,13 +12,17 @@ function simpleRank(skills: Skill[], rank = 0): SkillRanks {
         .reduce((a, b) => Object.assign(a, b), {});
 }
 
+interface ActivityResult {
+    msg: string;
+}
+
 export interface ActivityContent {
     title: string;
     description: string;
-    criticalSuccess?: string;
-    success?: string;
-    failure?: string;
-    criticalFailure?: string;
+    criticalSuccess?: ActivityResult;
+    success?: ActivityResult;
+    failure?: ActivityResult;
+    criticalFailure?: ActivityResult;
     requirement?: string;
     special?: string;
     skills: SkillRanks;
@@ -41,10 +45,19 @@ export const activityData: Record<Activity, ActivityContent> = {
         description: 'After careful consideration, you decide that you would rather not hold onto a particular hex as part of your claimed territory. You renounce your claim to it and pull back any settlers or explorers. Attempt a basic Exploration or Wilderness check. You can abandon more than one hex at a time, but each additional hex you abandon increases the DC of this check by 1.',
         requirement: 'The hex to be abandoned must be controlled.',
         skills: simpleRank(['exploration', 'wilderness']),
-        criticalSuccess: 'You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. Gain 1 RP per abandoned hex.',
-        success: 'You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. Increase Unrest by 1.',
-        failure: 'You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. Increase Unrest by 2 and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, your kingdom experiences a Squatters kingdom event automatically in addition to any other event that might occur.',
-        criticalFailure: 'You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. Increase Unrest by 3  and automatically experience a Bandit Activity kingdom event.',
+        criticalSuccess: {
+            msg:
+                'You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. Gain 1 RP per abandoned hex.',
+        },
+        success: {
+            msg: 'You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. Increase Unrest by 1.',
+        },
+        failure: {
+            msg: 'You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. Increase Unrest by 2 and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, your kingdom experiences a Squatters kingdom event automatically in addition to any other event that might occur.',
+        },
+        criticalFailure: {
+            msg: 'You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. Increase Unrest by 3  and automatically experience a Bandit Activity kingdom event.',
+        },
         special: 'The Unrest gained from abandoning a hex doubles if it includes a settlement. A settlement in an abandoned hex becomes a Freehold (page 536).',
     },
     'build-roads': {
@@ -64,10 +77,19 @@ Spend RP as determined by the hex’s most inhospitable terrain (if the hex incl
 Then attempt a basic check. Work with the GM to determine where your roads appear on the map.`,
         requirement: 'The hex in which you seek to build roads must be claimed by your kingdom.',
         skills: simpleRank(['engineering']),
-        criticalSuccess: 'You build roads into the target hex and one adjacent claimed hex that doesn’t yet have roads and whose terrain features are at least as hospitable as those of the target hex. If no adjacent hex is appropriate, treat this result as a Success instead.',
-        success: 'You build roads in the hex.',
-        failure: 'You fail to build roads in the hex.',
-        criticalFailure: 'Your attempt to build roads ends in disaster. Not only do you fail to build roads, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'You build roads into the target hex and one adjacent claimed hex that doesn’t yet have roads and whose terrain features are at least as hospitable as those of the target hex. If no adjacent hex is appropriate, treat this result as a Success instead.',
+        },
+        success: {
+            msg: 'You build roads in the hex.',
+        },
+        failure: {
+            msg: 'You fail to build roads in the hex.',
+        },
+        criticalFailure: {
+            msg:
+                'Your attempt to build roads ends in disaster. Not only do you fail to build roads, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        },
     },
     'build-structure': {
         oncePerRound: false,
@@ -83,10 +105,18 @@ You can also use this activity to attempt to repair a structure that was damaged
 On a success, record the new construction on the Urban Grid. Unless the structure’s entry states otherwise, its effects are immediate; if the structure adjusts a Ruin’s point total, adjust it upon construction.
 `,
         skills: simpleRank([...allSkills]),
-        criticalSuccess: 'You construct or repair the structure with great efficiency and get back half of the Commodities spent in construction or repair.',
-        success: 'You construct or repair the structure.',
-        failure: 'You fail to construct or repair the structure. You can try to complete it next Kingdom turn; if you do so, you do not need to re-pay the RP and Commodity cost.',
-        criticalFailure: 'You fail to construct the structure; if you were attempting to repair a damaged structure, it is reduced to Rubble. In either event, Rubble now fills the structure’s lots, which must be cleared with the Demolish activity before you can attempt to Build a Structure in them again.',
+        criticalSuccess: {
+            msg: 'You construct or repair the structure with great efficiency and get back half of the Commodities spent in construction or repair.',
+        },
+        success: {
+            msg: 'You construct or repair the structure.',
+        },
+        failure: {
+            msg: 'You fail to construct or repair the structure. You can try to complete it next Kingdom turn; if you do so, you do not need to re-pay the RP and Commodity cost.',
+        },
+        criticalFailure: {
+            msg: 'You fail to construct the structure; if you were attempting to repair a damaged structure, it is reduced to Rubble. In either event, Rubble now fills the structure’s lots, which must be cleared with the Demolish activity before you can attempt to Build a Structure in them again.',
+        },
     },
     'capital-investment': {
         oncePerRound: false,
@@ -100,10 +130,18 @@ On a success, record the new construction on the Urban Grid. Unless the structur
 You can use Capital Investment to repay funds from Tap Treasury (page 528). In this case, no roll is needed and you simply deduct the appropriate amount of funds from your personal wealth to pay back that which was borrowed. When you use Capital Investment to generate RP, the amount of gp required to make an investment is set by your kingdom’s level. Investments below this amount cause your attempt at Capital Investment to suffer an automatic critical failure, while investments above this amount are lost. The investment required is equal to the value listed on Table 10–9: Party Treasure by Level @UUID[Compendium.pf2e.journals.S55aqwWIzpQRFhcq.JournalEntryPage.Ly8l2GT6dbvuY3A2]{Treasure}; use the value for your kingdom’s level under the “Currency per Additional PC” as the required investment value. This is a basic check.`,
         requirement: 'You must be within the influence of a settlement that contains at least one Bank.',
         skills: simpleRank(['trade']),
-        criticalSuccess: 'Success Your kingdom reaps the benefits of your investment. Immediately roll 4 Resource Dice. Gain RP equal to the result.',
-        success: 'Your investment helps the economy. Immediately roll 2 Resource Dice. Gain RP equal to the result.',
-        failure: 'Your investment ends up being used to shore up shortfalls elsewhere. Gain [[/r 1d4]] RP.',
-        criticalFailure: 'Your investment is embezzled, lost, or otherwise misappropriated. Choose one of the following: either roll 1 Resource Die and gain RP equal to the result and also increase your Crime by an equal amount, or gain 0 RP and increase Crime by 1.',
+        criticalSuccess: {
+            msg: 'Success Your kingdom reaps the benefits of your investment. Immediately roll 4 Resource Dice. Gain RP equal to the result.',
+        },
+        success: {
+            msg: 'Your investment helps the economy. Immediately roll 2 Resource Dice. Gain RP equal to the result.',
+        },
+        failure: {
+            msg: 'Your investment ends up being used to shore up shortfalls elsewhere. Gain [[/r 1d4]] RP.',
+        },
+        criticalFailure: {
+            msg: 'Your investment is embezzled, lost, or otherwise misappropriated. Choose one of the following: either roll 1 Resource Die and gain RP equal to the result and also increase your Crime by an equal amount, or gain 0 RP and increase Crime by 1.',
+        },
     },
     'celebrate-holiday': {
         oncePerRound: false,
@@ -114,10 +152,18 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         title: 'Celebrate Holiday',
         description: 'You declare a day of celebration. Holidays may be religious, historical, martial, or simply festive, but all relieve your citizens from their labors and give them a chance to make merry at the kingdom’s expense. Attempt a basic check, but if your kingdom Celebrated a Holiday the previous turn, the DC increases by 4, as your kingdom hasn’t had a chance to recover from the previous gala.',
         skills: simpleRank(['folklore']),
-        criticalSuccess: 'Your holidays are a delight to your people. The event is expensive, but incidental income from the celebrants covers the cost. You gain a +2 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn.',
-        success: 'Your holidays are a success, but they’re also expensive. You gain a +1 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn. Immediately roll 1 Resource Die and spend RP equal to the result. If you can’t afford this cost, treat this result as a Critical Failure instead.',
-        failure: 'The holiday passes with little enthusiasm, but is still expensive. Immediately roll 1 Resource Die and spend RP equal to the result. If you can’t afford this cost, treat this result as a Critical Failure instead.',
-        criticalFailure: 'Your festival days are poorly organized, and the citizens actively mock your failed attempt to celebrate. During the next turn, reduce your Resource Dice total by 4. The failure also causes you to take a –1 circumstance penalty to Loyalty-based checks until the end of the next Kingdom turn.',
+        criticalSuccess: {
+            msg: 'Your holidays are a delight to your people. The event is expensive, but incidental income from the celebrants covers the cost. You gain a +2 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn.',
+        },
+        success: {
+            msg: 'Your holidays are a success, but they’re also expensive. You gain a +1 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn. Immediately roll 1 Resource Die and spend RP equal to the result. If you can’t afford this cost, treat this result as a Critical Failure instead.',
+        },
+        failure: {
+            msg: 'The holiday passes with little enthusiasm, but is still expensive. Immediately roll 1 Resource Die and spend RP equal to the result. If you can’t afford this cost, treat this result as a Critical Failure instead.',
+        },
+        criticalFailure: {
+            msg: 'Your festival days are poorly organized, and the citizens actively mock your failed attempt to celebrate. During the next turn, reduce your Resource Dice total by 4. The failure also causes you to take a –1 circumstance penalty to Loyalty-based checks until the end of the next Kingdom turn.',
+        },
     },
     'claim-hex': {
         title: 'Claim Hex',
@@ -129,10 +175,18 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         requirement: 'You have Reconnoitered the hex to be claimed during hexploration. This hex must be adjacent to at least one hex that’s already part of your kingdom. If the hex to be claimed contains dangerous hazards or monsters, they must first be cleared out—either via standard adventuring or the Clear Hex activity.',
         description: 'Your surveyors fully explore the hex and attempt to add it into your kingdom’s domain. Spend 1 RP and then attempt a basic Exploration, Intrigue, Magic, or Wilderness check.',
         skills: simpleRank(['exploration', 'intrigue', 'magic', 'wilderness']),
-        criticalSuccess: 'You claim the hex and immediately add it to your territory, increasing your kingdom’s Size by 1 (this affects all statistics determined by Size; see page 532). Your occupation of the hex goes so smoothly that you can immediately attempt another Region activity.',
-        success: 'You claim the hex and add it to your territory, increasing your kingdom’s Size by 1 (this affects all statistics determined by Size; see page 532).',
-        failure: 'You fail to claim the hex.',
-        criticalFailure: 'You fail to claim the hex, and a number of early settlers and explorers are lost, causing you to take a –1 circumstance penalty to Stability-based checks until the end of your next Kingdom turn.',
+        criticalSuccess: {
+            msg: 'You claim the hex and immediately add it to your territory, increasing your kingdom’s Size by 1 (this affects all statistics determined by Size; see page 532). Your occupation of the hex goes so smoothly that you can immediately attempt another Region activity.',
+        },
+        success: {
+            msg: 'You claim the hex and add it to your territory, increasing your kingdom’s Size by 1 (this affects all statistics determined by Size; see page 532).',
+        },
+        failure: {
+            msg: 'You fail to claim the hex.',
+        },
+        criticalFailure: {
+            msg: 'You fail to claim the hex, and a number of early settlers and explorers are lost, causing you to take a –1 circumstance penalty to Stability-based checks until the end of your next Kingdom turn.',
+        },
         special: 'At 1st level, when selecting the three activities you take during the Region Activities step of the Activity phase of the Kingdom turn, you may select this activity no more than once. Once your kingdom reaches 4th level, you may select it up to twice per turn, and after reaching 9th level you may select it up to three times per turn. When you successfully claim a hex, gain 10 kingdom XP (see page 540). Many hexes have terrain features that grant benefits to your kingdom when claimed; see Terrain Features on page 535.',
     },
     'clandestine-business': {
@@ -144,10 +198,18 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         title: 'Clandestine Business',
         description: 'You know there are criminals in your kingdom, and they know you know. You encourage them to send kickbacks in the form of resources and Commodities to the government, but the common citizens will be more than upset if they find out! This starts as a basic check against your Control DC, but every subsequent Kingdom turn you pursue Clandestine Business, the DC increases by 2. Every Kingdom turn that passes without Clandestine Business reduces the DC by 1 (until you reach your Control DC).',
         skills: simpleRank(['intrigue'], 1),
-        criticalSuccess: 'Immediately roll 2 Resource Dice. Gain RP equal to the result. In addition, you gain [[/r 1d4]] Luxury Commodities. The public is none the wiser.',
-        success: 'Either immediately roll 2 Resource Dice and gain RP equal to the result, or gain [[/r 1d4]] Luxury Commodities. Regardless of your choice, rumors spread about where the government is getting these “gifts.” Increase Unrest by 1.',
-        failure: 'Immediately roll 1 Resource Die and gain RP equal to the result. Rumors are backed up with eyewitness accounts. Increase Unrest by 1 and Corruption by 1.',
-        criticalFailure: 'You gain nothing from the Clandestine Business but angry citizens. Increase Unrest by [[/r 1d6]], Corruption by 2, and one other Ruin of your choice by 1.',
+        criticalSuccess: {
+            msg: 'Immediately roll 2 Resource Dice. Gain RP equal to the result. In addition, you gain [[/r 1d4]] Luxury Commodities. The public is none the wiser.',
+        },
+        success: {
+            msg: 'Either immediately roll 2 Resource Dice and gain RP equal to the result, or gain [[/r 1d4]] Luxury Commodities. Regardless of your choice, rumors spread about where the government is getting these “gifts.” Increase Unrest by 1.',
+        },
+        failure: {
+            msg: 'Immediately roll 1 Resource Die and gain RP equal to the result. Rumors are backed up with eyewitness accounts. Increase Unrest by 1 and Corruption by 1.',
+        },
+        criticalFailure: {
+            msg: 'You gain nothing from the Clandestine Business but angry citizens. Increase Unrest by [[/r 1d6]], Corruption by 2, and one other Ruin of your choice by 1.',
+        },
     },
     'clear-hex': {
         oncePerRound: false,
@@ -170,10 +232,18 @@ Then attempt a basic Engineering check. If you’re trying to remove a hazard or
 
 If the hex you’re attempting to Clear has existing Ruins or an existing Structure, your action doesn’t physically remove the buildings from the area and you can later incorporate these buildings (or repair ruined ones) into a Settlement you build here later (see page 542). Regardless of the skill used, increase the basic DC by 2 if the hex to be cleared is not yet part of your kingdom.`,
         skills: simpleRank(['engineering', 'exploration']),
-        criticalSuccess: 'You successfully clear the hex. If you spent RP to attempt this activity, you’re refunded half of the RP cost. If you were removing dangerous creatures (but not hazards) from the hex, your explorers and mercenaries recover 2 Luxury Commodities as treasure.',
-        success: 'You successfully clear the hex.',
-        failure: 'You fail to clear the hex.',
-        criticalFailure: 'You catastrophically fail to clear the hex and several workers lose their lives. Gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'You successfully clear the hex. If you spent RP to attempt this activity, you’re refunded half of the RP cost. If you were removing dangerous creatures (but not hazards) from the hex, your explorers and mercenaries recover 2 Luxury Commodities as treasure.',
+        },
+        success: {
+            msg: 'You successfully clear the hex.',
+        },
+        failure: {
+            msg: 'You fail to clear the hex.',
+        },
+        criticalFailure: {
+            msg: 'You catastrophically fail to clear the hex and several workers lose their lives. Gain 1 Unrest.',
+        },
     },
     'collect-taxes': {
         oncePerRound: false,
@@ -184,10 +254,18 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         title: 'Collect Taxes',
         description: 'Tax collectors travel through the lands to collect funds for the betterment of the kingdom. Attempt a basic check.',
         skills: simpleRank(['trade'], 1),
-        criticalSuccess: 'Your tax collectors are wildly successful! For the remainder of the Kingdom turn, gain a +2 circumstance bonus to Economy-based checks.',
-        success: 'Your tax collectors gather enough to grant you a +1 circumstance bonus to Economy-based checks for the remainder of the Kingdom turn. If you attempted to Collect Taxes during the previous turn, increase Unrest by 1.',
-        failure: 'As success, but the people are unhappy about taxes—increase Unrest by 1 (or by 2 if you attempted to Collect Taxes the previous turn).',
-        criticalFailure: 'Your tax collectors encounter resistance from the citizens and their attempts to gather taxes are rebuffed. While the tax collectors still manage to gather enough taxes to support essential government',
+        criticalSuccess: {
+            msg: 'Your tax collectors are wildly successful! For the remainder of the Kingdom turn, gain a +2 circumstance bonus to Economy-based checks.',
+        },
+        success: {
+            msg: 'Your tax collectors gather enough to grant you a +1 circumstance bonus to Economy-based checks for the remainder of the Kingdom turn. If you attempted to Collect Taxes during the previous turn, increase Unrest by 1.',
+        },
+        failure: {
+            msg: 'As success, but the people are unhappy about taxes—increase Unrest by 1 (or by 2 if you attempted to Collect Taxes the previous turn).',
+        },
+        criticalFailure: {
+            msg: 'Your tax collectors encounter resistance from the citizens and their attempts to gather taxes are rebuffed. While the tax collectors still manage to gather enough taxes to support essential government',
+        },
     },
     'craft-luxuries': {
         oncePerRound: false,
@@ -198,10 +276,18 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         title: 'Craft Luxuries',
         description: 'You encourage your artisans to craft luxury goods and may even aid them in this pursuit. Roll 1 Resource Die and spend RP equal to the result. Then attempt a basic check.',
         skills: simpleRank(['arts']),
-        criticalSuccess: 'Your artisans exceed expectations and craft extravagant goods. Gain [[/r 1d4]] Luxury Commodities.',
-        success: 'Your artisans produce some delightful goods. Gain 1 Luxury Commodity.',
-        failure: 'Your artisans fail to produce anything noteworthy.',
-        criticalFailure: 'Your artisans not only fail to produce anything noteworthy, but some took advantage of the opportunity to push their own agendas or earn more for themselves by selling to underground markets. Increase one of your Ruins by 1.',
+        criticalSuccess: {
+            msg: 'Your artisans exceed expectations and craft extravagant goods. Gain [[/r 1d4]] Luxury Commodities.',
+        },
+        success: {
+            msg: 'Your artisans produce some delightful goods. Gain 1 Luxury Commodity.',
+        },
+        failure: {
+            msg: 'Your artisans fail to produce anything noteworthy.',
+        },
+        criticalFailure: {
+            msg: 'Your artisans not only fail to produce anything noteworthy, but some took advantage of the opportunity to push their own agendas or earn more for themselves by selling to underground markets. Increase one of your Ruins by 1.',
+        },
     },
     'create-a-masterpiece': {
         oncePerRound: true,
@@ -212,10 +298,18 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         title: 'Create a Masterpiece',
         description: 'You encourage your kingdom’s artists to create and display a masterful work of art to bolster your kingdom’s reputation. Attempt a basic check; the result affects either Fame or Infamy (depending on the type of kingdom you’re running). Create a Masterpiece may be attempted only once per Kingdom turn regardless of the number of leaders pursuing activities.',
         skills: simpleRank(['arts'], 1),
-        criticalSuccess: 'Gain 1 Fame or Infamy point immediately, and at the start of your next Kingdom turn, gain 1 additional Fame or Infamy point. Immediately roll 2 Resource Dice. Gain RP equal to the result.',
-        success: 'Gain 1 Fame or Infamy point immediately.',
-        failure: 'Your attempt to create a masterpiece fails.',
-        criticalFailure: 'Not only does your attempt to create a masterpiece fail, it does so in a dramatic and humiliating way. Lose 1 Fame or Infamy point; if you have no Fame or Infamy points to lose, instead gain [[/r 1d4]] Unrest.',
+        criticalSuccess: {
+            msg: 'Gain 1 Fame or Infamy point immediately, and at the start of your next Kingdom turn, gain 1 additional Fame or Infamy point. Immediately roll 2 Resource Dice. Gain RP equal to the result.',
+        },
+        success: {
+            msg: 'Gain 1 Fame or Infamy point immediately.',
+        },
+        failure: {
+            msg: 'Your attempt to create a masterpiece fails.',
+        },
+        criticalFailure: {
+            msg: 'Not only does your attempt to create a masterpiece fail, it does so in a dramatic and humiliating way. Lose 1 Fame or Infamy point; if you have no Fame or Infamy points to lose, instead gain [[/r 1d4]] Unrest.',
+        },
     },
     'creative-solution': {
         enabled: true,
@@ -226,10 +320,18 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         title: 'Creative Solution',
         description: 'You work with your kingdom’s scholars, thinkers, and practitioners of magical and mundane experimentation to come up with new ways to resolve issues when business as usual is just not working. Attempt a basic check.',
         skills: simpleRank(['scholarship']),
-        criticalSuccess: 'You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10 kingdom XP instead.',
-        success: 'You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10 kingdom XP instead. In addition, the Creative Solution costs the kingdom [[/r 1d4]] RP to research. This cost is paid now, whether or not you use your Creative Solution.',
-        failure: 'Your attempt at researching a Creative Solution costs the kingdom [[/r 2d6]] RP but is ultimately a failure. It provides no advantage.',
-        criticalFailure: 'Your attempt at researching a Creative Solution costs the kingdom [[/r 2d6]] RP but is ultimately a failure. It provides no advantage. In addition, your scholars and thinkers are so frustrated that you take a –1 circumstance penalty to Culture-based checks until the end of the next Kingdom turn.',
+        criticalSuccess: {
+            msg: 'You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10 kingdom XP instead.',
+        },
+        success: {
+            msg: 'You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10 kingdom XP instead. In addition, the Creative Solution costs the kingdom [[/r 1d4]] RP to research. This cost is paid now, whether or not you use your Creative Solution.',
+        },
+        failure: {
+            msg: 'Your attempt at researching a Creative Solution costs the kingdom [[/r 2d6]] RP but is ultimately a failure. It provides no advantage.',
+        },
+        criticalFailure: {
+            msg: 'Your attempt at researching a Creative Solution costs the kingdom [[/r 2d6]] RP but is ultimately a failure. It provides no advantage. In addition, your scholars and thinkers are so frustrated that you take a –1 circumstance penalty to Culture-based checks until the end of the next Kingdom turn.',
+        },
         special: 'You cannot influence a check with Supernatural Solution and Creative Solution simultaneously.',
     },
     'decadent-feasts': {
@@ -242,10 +344,19 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         title: 'Decadent Feasts',
         description: 'Urgathoa is more than just the goddess of undeath— she’s also the goddess of gluttony. And Jaethal is no fool; she understands the fear her goddess inspires in the living and knows that focusing on other aspects of her worship are more likely to result in positive growth for the nation. In order to distract the populace, she arranges for decadent feasts for the people, simultaneously feeding the hungry while camouflaging some of her faith’s more sinister aspects. Spend [[/r 1d8]] Food commodities and 1 Luxury commodity, then attempt a basic Agriculture or Trade check to determine how effective the feasts are.',
         skills: simpleRank(['agriculture']),
-        criticalSuccess: 'The people rejoice and glut themselves on the repast! Reduce Unrest by [[/r 1d6]], and the next time this Kingdom turn you suffer an effect that increases Unrest, do not increase your Unrest.',
-        success: 'The people enjoy the meal, but no longer than it takes to gulp it down. Reduce Unrest by [[/r 1d3]].',
-        failure: 'The meal is appreciated, but the people remain suspicious. Reduce Unrest by 1.',
-        criticalFailure: 'The people are too suspicious of the feast to enjoy it. Worse, rumors that Jaethal is trying to distract the citizens from an evil ritual spread. Increase Unrest by [[/r 1d4]] and increase Corruption by 1.',
+        criticalSuccess: {
+            msg:
+                'The people rejoice and glut themselves on the repast! Reduce Unrest by [[/r 1d6]], and the next time this Kingdom turn you suffer an effect that increases Unrest, do not increase your Unrest.',
+        },
+        success: {
+            msg: 'The people enjoy the meal, but no longer than it takes to gulp it down. Reduce Unrest by [[/r 1d3]].',
+        },
+        failure: {
+            msg: 'The meal is appreciated, but the people remain suspicious. Reduce Unrest by 1.',
+        },
+        criticalFailure: {
+            msg: 'The people are too suspicious of the feast to enjoy it. Worse, rumors that Jaethal is trying to distract the citizens from an evil ritual spread. Increase Unrest by [[/r 1d4]] and increase Corruption by 1.',
+        },
     },
     'deliberate-planning': {
         companion: 'Kalikke',
@@ -257,10 +368,19 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         title: 'Deliberate Planning',
         description: 'Kalikke takes time and weighs all options when faced with decisions, regardless of their importance. While this can sometimes lead her to taking too long to make choices, her theoretical analysis can be quite helpful in navigating continuous events. Choose a single continuous event that will affect your kingdom on this turn’s Event Phase, then attempt a Scholarship check against that event’s DC.',
         skills: simpleRank([...allSkills]),
-        criticalSuccess: 'Kalikke’s aid has been monumentally helpful. When you roll to resolve the continuous event you chose, you can roll twice and choose which result to apply. You gain a +1 status bonus to each roll. This is a Fortune effect.',
-        success: 'Kalikke’s suggestions are useful, granting you a +1 status bonus to rolls to resolve the chosen continuous event.',
-        failure: 'Kalikke’s advice isn’t helpful, but neither does it hinder your ability to handle the event.',
-        criticalFailure: 'You got too caught up in Kalikke’s theoretical analysis and spent too much time preparing. When you roll to resolve the continuous event you tried to plan for, roll twice and take the worse result.',
+        criticalSuccess: {
+            msg: 'Kalikke’s aid has been monumentally helpful. When you roll to resolve the continuous event you chose, you can roll twice and choose which result to apply. You gain a +1 status bonus to each roll. This is a Fortune effect.',
+        },
+        success: {
+            msg: 'Kalikke’s suggestions are useful, granting you a +1 status bonus to rolls to resolve the chosen continuous event.',
+        },
+        failure: {
+            msg: 'Kalikke’s advice isn’t helpful, but neither does it hinder your ability to handle the event.',
+        },
+        criticalFailure: {
+            msg:
+                'You got too caught up in Kalikke’s theoretical analysis and spent too much time preparing. When you roll to resolve the continuous event you tried to plan for, roll twice and take the worse result.',
+        },
     },
     'demolish': {
         oncePerRound: false,
@@ -271,10 +391,18 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         title: 'Demolish',
         description: 'Choose a single occupied lot in one of your settlements and attempt a basic check to reduce it to Rubble and then clear the Rubble away to make ready for a new structure. For multiple-lot structures, you’ll need to perform multiple Demolish activities (or critically succeed at the activity) to fully clear all of the lots. As soon as you begin Demolishing a multiple-lot structure, all of the lots occupied by that structure no longer function.',
         skills: simpleRank(['engineering']),
-        criticalSuccess: 'Choose one of the following effects: you demolish an entire multiple-lot structure all at once and clear all of the lots it occupied, or you recover [[/r 1d6]] Commodities (chosen from lumber, stone, and ore) from the Rubble of a single-lot demolition.',
-        success: 'You demolish the lot successfully.',
-        failure: 'You fail to demolish the lot. It remains in Rubble and cannot be used for further construction until you successfully Demolish it.',
-        criticalFailure: 'You fail to demolish the lot. It remains in Rubble and cannot be used for further construction until you successfully Demolish it. In addition, accidents during the demolition cost you the lives of some of your workers. Gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'Choose one of the following effects: you demolish an entire multiple-lot structure all at once and clear all of the lots it occupied, or you recover [[/r 1d6]] Commodities (chosen from lumber, stone, and ore) from the Rubble of a single-lot demolition.',
+        },
+        success: {
+            msg: 'You demolish the lot successfully.',
+        },
+        failure: {
+            msg: 'You fail to demolish the lot. It remains in Rubble and cannot be used for further construction until you successfully Demolish it.',
+        },
+        criticalFailure: {
+            msg: 'You fail to demolish the lot. It remains in Rubble and cannot be used for further construction until you successfully Demolish it. In addition, accidents during the demolition cost you the lives of some of your workers. Gain 1 Unrest.',
+        },
     },
     'deploy-army': {
         oncePerRound: false,
@@ -291,10 +419,18 @@ When you use a Boating check, the army’s starting point and ending point must 
 
 You must be at least master in Magic to attempt a Magic check. When you do so, choose any location within 30 hexes of the army’s current hex, then roll your check. If the army’s deployment causes it to cross your kingdom’s border, the DC increases by 5. If the army’s deployment causes it to cross an enemy kingdom’s border, the DC instead increases by 10.`,
         skills: simpleRank(['warfare']),
-        criticalSuccess: 'The army arrives much more quickly than you anticipated; it arrives at its destination and then becomes efficient.',
-        success: 'The army arrives at its destination. ',
-        failure: 'The army arrives at its destination, but ran into some sort of trouble along the way. Increase the army’s weary condition by 1 and attempt a @Check[type:flat|dc:6]; on a failure, reduce the army’s HP by 1.',
-        criticalFailure: 'Rather than arriving at its destination, the army becomes lost until it recovers from this condition. Increase Unrest by [[/r 1d4]], and attempt a @Check[type:flat|dc:11]; on a failure, reduce the army’s HP by 1.',
+        criticalSuccess: {
+            msg: 'The army arrives much more quickly than you anticipated; it arrives at its destination and then becomes efficient.',
+        },
+        success: {
+            msg: 'The army arrives at its destination. ',
+        },
+        failure: {
+            msg: 'The army arrives at its destination, but ran into some sort of trouble along the way. Increase the army’s weary condition by 1 and attempt a @Check[type:flat|dc:6]; on a failure, reduce the army’s HP by 1.',
+        },
+        criticalFailure: {
+            msg: 'Rather than arriving at its destination, the army becomes lost until it recovers from this condition. Increase Unrest by [[/r 1d4]], and attempt a @Check[type:flat|dc:11]; on a failure, reduce the army’s HP by 1.',
+        },
     },
     'disband-army': {
         oncePerRound: false,
@@ -316,10 +452,18 @@ You must be at least master in Magic to attempt a Magic check. When you do so, c
         description: 'You plant crops and establish livestock in permanent farms, ranches, and other growing operations to create Farmland (page 535). If you’re attempting to Establish Farmland in a hex that is predominantly plains, you must spend 1 RP and the check is against your Control DC. If you’re targeting a hex that is predominantly hills, you must spend 2 RP and the check is against your Control DC + 5.',
         requirement: 'Plains or hills are the predominant terrain feature in the hex; the hex is in the influence of one of your settlements.',
         skills: simpleRank(['agriculture']),
-        criticalSuccess: 'You establish two adjacent Farmland hexes instead of one. If your target hex was a hills hex, the additional hex may be a hills hex or a plains hex; otherwise, the additional hex must be a plains hex. If no appropriate hex is available, treat this result as a regular success instead.',
-        success: 'You establish one Farmland hex.',
-        failure: 'You fail to establish a Farmland hex.',
-        criticalFailure: 'You fail to establish a Farmland hex, and your attempt potentially causes the spread of a blight. At the start of each of the next two Event phases, attempt a @Check[type:flat|dc:6|showDC:all]; on a failure, your kingdom experiences a Crop Failure event in this and all adjacent hexes.',
+        criticalSuccess: {
+            msg: 'You establish two adjacent Farmland hexes instead of one. If your target hex was a hills hex, the additional hex may be a hills hex or a plains hex; otherwise, the additional hex must be a plains hex. If no appropriate hex is available, treat this result as a regular success instead.',
+        },
+        success: {
+            msg: 'You establish one Farmland hex.',
+        },
+        failure: {
+            msg: 'You fail to establish a Farmland hex.',
+        },
+        criticalFailure: {
+            msg: 'You fail to establish a Farmland hex, and your attempt potentially causes the spread of a blight. At the start of each of the next two Event phases, attempt a @Check[type:flat|dc:6|showDC:all]; on a failure, your kingdom experiences a Crop Failure event in this and all adjacent hexes.',
+        },
     },
     'establish-settlement': {
         title: 'Establish Settlement',
@@ -331,10 +475,18 @@ You must be at least master in Magic to attempt a Magic check. When you do so, c
         description: 'You draw up plans, gather resources, entice citizens, and establish boundaries to found a brand new settlement in the hex. Attempt a basic Engineering, Industry, Politics, or Scholarship check. If you cannot pay the RP required by the result of this check, treat your result as a critical failure. A settlement always starts as a village. See page 540 for further details about building settlements.',
         requirement: 'The hex in which you’re establishing the settlement has been Cleared and doesn’t currently have a settlement (including a Freehold) in it.',
         skills: simpleRank(['engineering', 'industry', 'politics', 'scholarship']),
-        criticalSuccess: 'You establish the settlement largely with the aid of enthusiastic volunteers. Spend [[/r 1d6]] RP.',
-        success: 'You establish the settlement. Spend [[/r 3d6]] RP.',
-        failure: 'You establish the settlement, but inefficiently and at great expense. [[/r Spend 6d6]] RP.',
-        criticalFailure: 'You fail to establish the settlement.',
+        criticalSuccess: {
+            msg: 'You establish the settlement largely with the aid of enthusiastic volunteers. Spend [[/r 1d6]] RP.',
+        },
+        success: {
+            msg: 'You establish the settlement. Spend [[/r 3d6]] RP.',
+        },
+        failure: {
+            msg: 'You establish the settlement, but inefficiently and at great expense. [[/r Spend 6d6]] RP.',
+        },
+        criticalFailure: {
+            msg: 'You fail to establish the settlement.',
+        },
     },
     'establish-trade-agreement': {
         oncePerRound: false,
@@ -352,10 +504,18 @@ The check’s DC is either the group’s Negotiation DC (see sidebar) or your ki
             trade: 0,
             magic: 3,
         },
-        criticalSuccess: 'You successfully establish a trade agreement with your target, and your merchants return with gifts! Immediately roll 2 Resource Dice, then gain RP equal to the result of roll.',
-        success: 'You successfully establish a trade agreement.',
-        failure: 'Your traders reach their destination but need to sweeten the deal to secure the trade agreement. Immediately roll 2 Resource Dice, and then spend RP equal to the result of this roll. If you do so, you successfully establish a trade agreement, otherwise the attempt fails.',
-        criticalFailure: 'Your trade agreement is a total loss and your traders do not return. Gain 1 Unrest, and until the end of the next Kingdom turn, take a –1 circumstance penalty to all Economy-related checks.',
+        criticalSuccess: {
+            msg: 'You successfully establish a trade agreement with your target, and your merchants return with gifts! Immediately roll 2 Resource Dice, then gain RP equal to the result of roll.',
+        },
+        success: {
+            msg: 'You successfully establish a trade agreement.',
+        },
+        failure: {
+            msg: 'Your traders reach their destination but need to sweeten the deal to secure the trade agreement. Immediately roll 2 Resource Dice, and then spend RP equal to the result of this roll. If you do so, you successfully establish a trade agreement, otherwise the attempt fails.',
+        },
+        criticalFailure: {
+            msg: 'Your trade agreement is a total loss and your traders do not return. Gain 1 Unrest, and until the end of the next Kingdom turn, take a –1 circumstance penalty to all Economy-related checks.',
+        },
     },
     'establish-work-site-lumber': {
         title: 'Establish Work Site Lumber',
@@ -374,10 +534,19 @@ The check’s DC is either the group’s Negotiation DC (see sidebar) or your ki
 
 Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.`,
         skills: simpleRank(['engineering']),
-        criticalSuccess: 'You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.',
-        success: 'You establish a Work Site in the hex.',
-        failure: 'You fail to establish a Work Site in the hex.',
-        criticalFailure: 'Not only do you fail to establish a Work Site, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.',
+        },
+        success: {
+            msg: 'You establish a Work Site in the hex.',
+        },
+        failure: {
+            msg:
+                'You fail to establish a Work Site in the hex.',
+        },
+        criticalFailure: {
+            msg: 'Not only do you fail to establish a Work Site, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        },
     },
     'establish-work-site-mine': {
         title: 'Establish Work Site Mine',
@@ -396,10 +565,18 @@ Then attempt a basic check. Lumber camps can be established in any hex that cont
 
 Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.`,
         skills: simpleRank(['engineering']),
-        criticalSuccess: 'You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.',
-        success: 'You establish a Work Site in the hex.',
-        failure: 'You fail to establish a Work Site in the hex.',
-        criticalFailure: 'Not only do you fail to establish a Work Site, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.',
+        },
+        success: {
+            msg: 'You establish a Work Site in the hex.',
+        },
+        failure: {
+            msg: 'You fail to establish a Work Site in the hex.',
+        },
+        criticalFailure: {
+            msg: 'Not only do you fail to establish a Work Site, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        },
     },
     'establish-work-site-quarry': {
         title: 'Establish Work Site Quarry',
@@ -418,10 +595,18 @@ Then attempt a basic check. Lumber camps can be established in any hex that cont
 
 Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.`,
         skills: simpleRank(['engineering']),
-        criticalSuccess: 'You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.',
-        success: 'You establish a Work Site in the hex.',
-        failure: 'You fail to establish a Work Site in the hex.',
-        criticalFailure: 'Not only do you fail to establish a Work Site, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.',
+        },
+        success: {
+            msg: 'You establish a Work Site in the hex.',
+        },
+        failure: {
+            msg: 'You fail to establish a Work Site in the hex.',
+        },
+        criticalFailure: {
+            msg: 'Not only do you fail to establish a Work Site, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        },
     },
     'evangelize-the-dead': {
         companion: 'Harrim',
@@ -433,10 +618,18 @@ Then attempt a basic check. Lumber camps can be established in any hex that cont
         title: 'Evangelize the Dead',
         description: 'Harrim spends time preaching the End Times. While his sermons certainly aren’t for everyone, his methods avoid deliberately antagonizing those who see hope in the world while simultaneously providing ease and calm to the more desperate among the kingdom’s citizens. Attempt a basic Folklore check to determine how effective his sermons are.',
         skills: simpleRank(['folklore']),
-        criticalSuccess: 'Harrim’s prayers soothe and calm the more criminal-minded citizens for the time being. Reduce Unrest by [[/r 1d4]], and either reduce Crime by 2 or reduce Corruption or Strife by 1.',
-        success: 'Harrim’s prayers serve to redirect and calm discord. Reduce Unrest by [[/r 1d3]].',
-        failure: 'Harrim’s prayers serve to redirect and calm discord. Reduce Unrest by 1',
-        criticalFailure: 'Harrim’s prayers have unsettled some of your citizens. Increase Unrest by [[/r 1d4]] and increase Decay by 1.',
+        criticalSuccess: {
+            msg: 'Harrim’s prayers soothe and calm the more criminal-minded citizens for the time being. Reduce Unrest by [[/r 1d4]], and either reduce Crime by 2 or reduce Corruption or Strife by 1.',
+        },
+        success: {
+            msg: 'Harrim’s prayers serve to redirect and calm discord. Reduce Unrest by [[/r 1d3]].',
+        },
+        failure: {
+            msg: 'Harrim’s prayers serve to redirect and calm discord. Reduce Unrest by 1',
+        },
+        criticalFailure: {
+            msg: 'Harrim’s prayers have unsettled some of your citizens. Increase Unrest by [[/r 1d4]] and increase Decay by 1.',
+        },
     },
     'false-victory': {
         companion: 'Kanerah',
@@ -448,10 +641,18 @@ Then attempt a basic check. Lumber camps can be established in any hex that cont
         title: 'False Victory',
         description: 'Kanerah’s contacts with the criminal underworld and her knack for dodging punishment and claiming responsibility for victories she had no direct role in can be harnessed to engineer false victories to trick the kingdom’s citizens into thinking their leaders are doing more than they actually are to create a safe place to live. Such attempts are not without risks, though, for if things backfire, you can cause problems where none existed in the first place. When setting up a false victory, attempt a basic Intrigue check.',
         skills: simpleRank(['intrigue']),
-        criticalSuccess: 'At the end of this Kingdom turn’s Event Phase, roll again on the random kingdom events table. Rumors of this event being resolved spread throughout your kingdom. You don’t gain any of the benefits of resolving this false victory, but instead reduce Unrest by [[/r 1d6]] and one Ruin of your choice by 1. If you randomly roll that same random kingdom event at any time during the next four kingdom turns, you can attempt an Intrigue check with a +1 circumstance bonus to resolve it rather than the normal check to resolve it.',
-        success: 'Vague rumors of the kingdom’s leaders attaining victories over vague threats spread through the kingdom. Reduce Unrest by [[/r 1d3]].',
-        failure: 'The false event fails to manifest, and rumors of the truth spread throughout the kingdom. Gain 1 Unrest. You cannot attempt False Victory on your next Kingdom turn.',
-        criticalFailure: 'The truth comes out, and the citizens revolt against this attempt to manipulate them. A Public Scandal event takes place during this kingdom’s event phase, in addition to any other events that would normally take place. Attempt a DC @Check[type:flat|dc:11|showDC:all] check. On a success, the Public Scandal involves a randomly determined leader, but on a failure, the blame falls on Kanerah. Regardless of how the Public Scandal plays out, you cannot attempt False Victory again for 6 Kingdom turns.',
+        criticalSuccess: {
+            msg: 'At the end of this Kingdom turn’s Event Phase, roll again on the random kingdom events table. Rumors of this event being resolved spread throughout your kingdom. You don’t gain any of the benefits of resolving this false victory, but instead reduce Unrest by [[/r 1d6]] and one Ruin of your choice by 1. If you randomly roll that same random kingdom event at any time during the next four kingdom turns, you can attempt an Intrigue check with a +1 circumstance bonus to resolve it rather than the normal check to resolve it.',
+        },
+        success: {
+            msg: 'Vague rumors of the kingdom’s leaders attaining victories over vague threats spread through the kingdom. Reduce Unrest by [[/r 1d3]].',
+        },
+        failure: {
+            msg: 'The false event fails to manifest, and rumors of the truth spread throughout the kingdom. Gain 1 Unrest. You cannot attempt False Victory on your next Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'The truth comes out, and the citizens revolt against this attempt to manipulate them. A Public Scandal event takes place during this kingdom’s event phase, in addition to any other events that would normally take place. Attempt a DC @Check[type:flat|dc:11|showDC:all] check. On a success, the Public Scandal involves a randomly determined leader, but on a failure, the blame falls on Kanerah. Regardless of how the Public Scandal plays out, you cannot attempt False Victory again for 6 Kingdom turns.',
+        },
     },
     'focused-attention': {
         oncePerRound: false,
@@ -464,8 +665,12 @@ Then attempt a basic check. Lumber camps can be established in any hex that cont
 
 The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of this activity.`,
         skills: simpleRank([...allSkills]),
-        criticalSuccess: 'You grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn',
-        success: 'You grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn',
+        criticalSuccess: {
+            msg: 'You grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn',
+        },
+        success: {
+            msg: 'You grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn',
+        },
     },
     'fortify-hex': {
         oncePerRound: false,
@@ -485,10 +690,19 @@ The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of t
 Then attempt a basic check. A fortified hex grants an additional bonus in warfare (see Appendix 3), but also gives traveling PCs a place to rest that prevents wandering monsters from interrupting their rest.`,
         requirement: 'The target hex must be claimed by your kingdom and must not have a settlement in it.',
         skills: simpleRank(['defense']),
-        criticalSuccess: 'You find a defensible position for your fortification and finish construction efficiently. Gain a refund of half the RP you spent to build in the hex, then reduce Unrest by 1.',
-        success: 'You establish your fortification in the hex. Reduce Unrest by 1.',
-        failure: 'You fail to fortify the hex.',
-        criticalFailure: 'Your attempt ends in disaster. Not only do you fail to build a structure, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'You find a defensible position for your fortification and finish construction efficiently. Gain a refund of half the RP you spent to build in the hex, then reduce Unrest by 1.',
+        },
+        success: {
+            msg:
+                'You establish your fortification in the hex. Reduce Unrest by 1.',
+        },
+        failure: {
+            msg: 'You fail to fortify the hex.',
+        },
+        criticalFailure: {
+            msg: 'Your attempt ends in disaster. Not only do you fail to build a structure, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. Gain 1 Unrest.',
+        },
     },
     'garrison-army': {
         oncePerRound: false,
@@ -500,10 +714,18 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
         description: 'You move an army into a fortification and assign them to guard it. In order to garrison, the army must be located in a hex that contains a Refuge, Settlement, or Work Site. If you’re garrisoning the army in a Refuge hex, attempt a basic Defense check. If you’re garrisoning the army in a settlement, attempt a basic Politics check. If you’re garrisoning the army in a Work Site hex, attempt a basic Engineering check. This check’s DC increases by 5 if the hex is not part of your kingdom, or by 10 if the location is part of an enemy kingdom.',
         requirement: 'The army is in the same hex as a Refuge, Settlement, or Work Site.',
         skills: simpleRank(['defense', 'politics', 'engineering']),
-        criticalSuccess: 'The army becomes fortified until it is deployed. Additionally, the efficiency of the garrisoning reduces this army’s Consumption by 2 (to a minimum of 1) until it is deployed.',
-        success: 'The army becomes fortified until it is deployed.',
-        failure: 'The army becomes fortified until the next Kingdom turn begins, at which point you must use this activity again to maintain the fortified condition.',
-        criticalFailure: 'Your army clashes with local citizens, abuses their authority, lets their watchful readiness slack, and/or provokes confrontations where they are not needed. It does not become fortified, and you cannot attempt to garrison that army at this location again for 4 Kingdom turns. Increase Unrest by 1.',
+        criticalSuccess: {
+            msg: 'The army becomes fortified until it is deployed. Additionally, the efficiency of the garrisoning reduces this army’s Consumption by 2 (to a minimum of 1) until it is deployed.',
+        },
+        success: {
+            msg: 'The army becomes fortified until it is deployed.',
+        },
+        failure: {
+            msg: 'The army becomes fortified until the next Kingdom turn begins, at which point you must use this activity again to maintain the fortified condition.',
+        },
+        criticalFailure: {
+            msg: 'Your army clashes with local citizens, abuses their authority, lets their watchful readiness slack, and/or provokes confrontations where they are not needed. It does not become fortified, and you cannot attempt to garrison that army at this location again for 4 Kingdom turns. Increase Unrest by 1.',
+        },
     },
     'gather-livestock': {
         title: 'Gather Livestock',
@@ -514,10 +736,18 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
         dc: 'control',
         description: 'Attempt a basic check to gather excess livestock from local wildlife, ranches, and farms. This generates a number of Food commodities.',
         skills: simpleRank(['wilderness']),
-        criticalSuccess: ' Gain [[/r 1d4]] Food commodities.',
-        success: 'Gain 1 Food commodity.',
-        failure: 'Gain no Food commodities.',
-        criticalFailure: 'Lose [[/r 1d4]] Food commodities to spoilage. If you have no Food to lose, you instead gain 1 Unrest.',
+        criticalSuccess: {
+            msg: ' Gain [[/r 1d4]] Food commodities.',
+        },
+        success: {
+            msg: 'Gain 1 Food commodity.',
+        },
+        failure: {
+            msg: 'Gain no Food commodities.',
+        },
+        criticalFailure: {
+            msg: 'Lose [[/r 1d4]] Food commodities to spoilage. If you have no Food to lose, you instead gain 1 Unrest.',
+        },
     },
     'go-fishing': {
         title: 'Go Fishing',
@@ -529,10 +759,18 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
         description: 'Attempt a basic check to fish for food from the rivers and lakes in your kingdom.',
         requirement: 'Must have at least one claimed hex that includes river or lake terrain.',
         skills: simpleRank(['boating']),
-        criticalSuccess: 'Gain [[/r 1d4]] Food commodities.',
-        success: 'Gain 1 Food commodity.',
-        failure: 'Gain no Food commodities.',
-        criticalFailure: 'You lose some fishers to tragic accidents; gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'Gain [[/r 1d4]] Food commodities.',
+        },
+        success: {
+            msg: 'Gain 1 Food commodity.',
+        },
+        failure: {
+            msg: 'Gain no Food commodities.',
+        },
+        criticalFailure: {
+            msg: 'You lose some fishers to tragic accidents; gain 1 Unrest.',
+        },
     },
     'harvest-azure-lily-pollen': {
         oncePerRound: false,
@@ -543,10 +781,20 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
         title: 'Harvest Azure Lily Pollen',
         description: 'You or a small group of trained herbalists or naturalists work to harvest and process azure lily pollen in hopes of creating a few doses of the poison (detailed on page 584). Attempt a DC 30 Agriculture check. You must then wait 1 Kingdom turn before attempting this activity again, to give the lilies time to recover.',
         skills: simpleRank(['agriculture'], 3),
-        criticalSuccess: 'You create 2 doses of azure lily pollen.',
-        success: 'You create 1 dose of azure lily pollen but must also attempt a @Check[type:basic|dc:11|showDC:all]. On a failure, some of the poison makes its way into criminal hands; increase Crime by 1.',
-        failure: 'You fail to harvest any azure lily pollen, in part because many of the resources make their way into the kingdom’s criminal underworld. Increase Crime by 1.',
-        criticalFailure: 'Not only do you fail to harvest any pollen, and not only do resources make their way into the hands of criminals, but whispers and rumors that you allowed this to happen on purpose spread through the kingdom. Increase Unrest by [[/r 1d4]], Corruption by 1, and Crime by 2.',
+        criticalSuccess: {
+            msg: 'You create 2 doses of azure lily pollen.',
+        },
+        success: {
+            msg:
+                'You create 1 dose of azure lily pollen but must also attempt a @Check[type:basic|dc:11|showDC:all]. On a failure, some of the poison makes its way into criminal hands; increase Crime by 1.',
+        },
+        failure: {
+            msg:
+                'You fail to harvest any azure lily pollen, in part because many of the resources make their way into the kingdom’s criminal underworld. Increase Crime by 1.',
+        },
+        criticalFailure: {
+            msg: 'Not only do you fail to harvest any pollen, and not only do resources make their way into the hands of criminals, but whispers and rumors that you allowed this to happen on purpose spread through the kingdom. Increase Unrest by [[/r 1d4]], Corruption by 1, and Crime by 2.',
+        },
     },
     'harvest-crops': {
         title: 'Harvest Crops',
@@ -557,10 +805,18 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
         dc: 'control',
         description: 'Attempt a basic check to forage for wild edibles or gather excess crops from farms.',
         skills: simpleRank(['agriculture']),
-        criticalSuccess: 'Gain [[/r 1d4]] Food commodities.',
-        success: 'Gain 1 Food commodity.',
-        failure: 'Gain no Food commodities.',
-        criticalFailure: 'Lose [[/r 1d4]] Food commodities to spoilage; if you have no Food to lose, you instead gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'Gain [[/r 1d4]] Food commodities.',
+        },
+        success: {
+            msg: 'Gain 1 Food commodity.',
+        },
+        failure: {
+            msg: 'Gain no Food commodities.',
+        },
+        criticalFailure: {
+            msg: 'Lose [[/r 1d4]] Food commodities to spoilage; if you have no Food to lose, you instead gain 1 Unrest.',
+        },
     },
     'hire-adventurers': {
         oncePerRound: false,
@@ -571,10 +827,18 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
         title: 'Hire Adventurers',
         description: 'While the PCs can strike out themselves to deal with ongoing events, it’s often more efficient to Hire Adventurers. When you Hire Adventurers to help end an ongoing event, the DC is equal to your Control DC adjusted by the event’s level modifier. Roll 1 Resource Die and spend RP equal to the result each time you attempt this activity.',
         skills: simpleRank(['exploration']),
-        criticalSuccess: 'You end the continuous event.',
-        success: 'The continuous event doesn’t end, but you gain a +2 circumstance bonus to resolve the event during the next Event phase.',
-        failure: 'You fail to end the continuous event. If you try to end the continuous event again, the cost in RP increases to 2 Resource Dice.',
-        criticalFailure: 'You fail to end the continuous event. If you try to end the continuous event again, the cost in RP increases to 2 Resource Dice. In addition, word spreads quickly through the region—you can no longer attempt to end this continuous event by Hiring Adventurers.',
+        criticalSuccess: {
+            msg: 'You end the continuous event.',
+        },
+        success: {
+            msg: 'The continuous event doesn’t end, but you gain a +2 circumstance bonus to resolve the event during the next Event phase.',
+        },
+        failure: {
+            msg: 'You fail to end the continuous event. If you try to end the continuous event again, the cost in RP increases to 2 Resource Dice.',
+        },
+        criticalFailure: {
+            msg: 'You fail to end the continuous event. If you try to end the continuous event again, the cost in RP increases to 2 Resource Dice. In addition, word spreads quickly through the region—you can no longer attempt to end this continuous event by Hiring Adventurers.',
+        },
     },
     'improve-lifestyle': {
         oncePerRound: false,
@@ -585,10 +849,19 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
         title: 'Improve Lifestyle',
         description: 'Attempt a basic check to draw upon your kingdom’s treasury to enhance the quality of life for your citizens. This activity can be taken only during the Commerce phase of a Kingdom turn',
         skills: simpleRank(['politics']),
-        criticalSuccess: 'Your push to Improve Lifestyles affords your citizens significant free time to pursue recreational activities. For the remainder of the Kingdom turn, you gain a +2 circumstance bonus to Culture-based checks.',
-        success: 'Your push to Improve Lifestyles helps your citizens enjoy life. For the remainder of the Kingdom turn, you gain a +1 circumstance bonus to Culture-based checks.',
-        failure: 'Your push to Improve Lifestyles helps your citizens enjoy life. For the remainder of the Kingdom turn, you gain a +1 circumstance bonus to Culture-based checks. In addition, you’ve strained your treasury. Take a –1 circumstance penalty to Economy-based checks for the remainder of this Kingdom turn.',
-        criticalFailure: 'Your attempt to Improve Lifestyles backfires horribly as criminal elements in your kingdom abuse your generosity. You take a –1 circumstance penalty to Economy-based checks for the remainder of the Kingdom turn, gain 1 Unrest, and add 1 to a Ruin of your choice.',
+        criticalSuccess: {
+            msg: 'Your push to Improve Lifestyles affords your citizens significant free time to pursue recreational activities. For the remainder of the Kingdom turn, you gain a +2 circumstance bonus to Culture-based checks.',
+        },
+        success: {
+            msg: 'Your push to Improve Lifestyles helps your citizens enjoy life. For the remainder of the Kingdom turn, you gain a +1 circumstance bonus to Culture-based checks.',
+        },
+        failure: {
+            msg:
+                'Your push to Improve Lifestyles helps your citizens enjoy life. For the remainder of the Kingdom turn, you gain a +1 circumstance bonus to Culture-based checks. In addition, you’ve strained your treasury. Take a –1 circumstance penalty to Economy-based checks for the remainder of this Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'Your attempt to Improve Lifestyles backfires horribly as criminal elements in your kingdom abuse your generosity. You take a –1 circumstance penalty to Economy-based checks for the remainder of the Kingdom turn, gain 1 Unrest, and add 1 to a Ruin of your choice.',
+        },
     },
     'infiltration': {
         oncePerRound: false,
@@ -599,10 +872,18 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
         title: 'Infiltration',
         description: 'You send spies out to gather intelligence on a neighboring nation, a cult or thieves’ guild within your borders, an unclaimed Freehold, or even an unexplored adventure site. Alternately, you can simply send your spies out to investigate the current health of your kingdom. Attempt a basic check.',
         skills: simpleRank(['intrigue']),
-        criticalSuccess: 'You learn something valuable or helpful. If you were infiltrating a specific target, the GM decides what is learned, but the information is exact and precise. For example, if you were infiltrating an unexplored ruin, you might learn that the site is infested with web lurkers and spider swarms. If you were investigating your kingdom’s health, your spies reveal easy methods to address citizen dissatisfaction, allowing you to choose one of the following: reduce Unrest by [[/r 1d4]] or reduce a Ruin of your choice by 1.',
-        success: 'You learn something helpful about the target, but the information is vague and imprecise. For example, if you were infiltrating the same ruin mentioned in the critical success above, you might learn that some sort of aberration uses the ruins as its lair. If you were investigating your kingdom’s health, your spies learn enough that you can take action. Reduce your kingdom’s Unrest by 1.',
-        failure: 'Your spies fail to learn anything of import, but they are not themselves compromised.',
-        criticalFailure: 'You never hear from your spies again, but someone certainly does! You take a –2 circumstance penalty on all kingdom checks until the end of the next Kingdom turn as counter-infiltration from an unknown enemy tampers with your kingdom’s inner workings.',
+        criticalSuccess: {
+            msg: 'You learn something valuable or helpful. If you were infiltrating a specific target, the GM decides what is learned, but the information is exact and precise. For example, if you were infiltrating an unexplored ruin, you might learn that the site is infested with web lurkers and spider swarms. If you were investigating your kingdom’s health, your spies reveal easy methods to address citizen dissatisfaction, allowing you to choose one of the following: reduce Unrest by [[/r 1d4]] or reduce a Ruin of your choice by 1.',
+        },
+        success: {
+            msg: 'You learn something helpful about the target, but the information is vague and imprecise. For example, if you were infiltrating the same ruin mentioned in the critical success above, you might learn that some sort of aberration uses the ruins as its lair. If you were investigating your kingdom’s health, your spies learn enough that you can take action. Reduce your kingdom’s Unrest by 1.',
+        },
+        failure: {
+            msg: 'Your spies fail to learn anything of import, but they are not themselves compromised.',
+        },
+        criticalFailure: {
+            msg: 'You never hear from your spies again, but someone certainly does! You take a –2 circumstance penalty on all kingdom checks until the end of the next Kingdom turn as counter-infiltration from an unknown enemy tampers with your kingdom’s inner workings.',
+        },
     },
     'irrigation': {
         oncePerRound: false,
@@ -622,10 +903,18 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
 Then attempt a basic check.`,
         requirement: 'You control a hex adjacent to a river or lake that itself does not contain a river or lake.',
         skills: simpleRank(['engineering'], 1),
-        criticalSuccess: 'The hex gains a river or lake terrain feature (or you change the effects of a previous critical failure at Irrigation in this hex into a failure); work with your GM to determine where these features appear in the hex. In addition, your workers were efficient and quick, and you regain half the RP you spent building the waterways.',
-        success: 'The hex gains a river or lake terrain feature (or you change the effects of a previous critical failure at Irrigation in this hex into a failure); work with your GM to determine where these features appear in the hex.',
-        failure: 'You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature.',
-        criticalFailure: 'You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature. Your attempts at Irrigation are so completely useless that they become breeding grounds for disease. Gain 1 Unrest. From this point onward, at the start of your Kingdom turn’s Event phase, attempt a @Check[type:flat|dc:4]. This flat check’s DC increases by 1 for each hex in your kingdom that contains a critically failed attempt at Irrigation. If you fail this flat check, your kingdom suffers a Plague event in addition to any other event it might have. You can attempt this activity again in a later Kingdom turn to undo a critically failed Irrigation attempt.',
+        criticalSuccess: {
+            msg: 'The hex gains a river or lake terrain feature (or you change the effects of a previous critical failure at Irrigation in this hex into a failure); work with your GM to determine where these features appear in the hex. In addition, your workers were efficient and quick, and you regain half the RP you spent building the waterways.',
+        },
+        success: {
+            msg: 'The hex gains a river or lake terrain feature (or you change the effects of a previous critical failure at Irrigation in this hex into a failure); work with your GM to determine where these features appear in the hex.',
+        },
+        failure: {
+            msg: 'You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature.',
+        },
+        criticalFailure: {
+            msg: 'You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature. Your attempts at Irrigation are so completely useless that they become breeding grounds for disease. Gain 1 Unrest. From this point onward, at the start of your Kingdom turn’s Event phase, attempt a @Check[type:flat|dc:4]. This flat check’s DC increases by 1 for each hex in your kingdom that contains a critically failed attempt at Irrigation. If you fail this flat check, your kingdom suffers a Plague event in addition to any other event it might have. You can attempt this activity again in a later Kingdom turn to undo a critically failed Irrigation attempt.',
+        },
     },
     'manage-trade-agreements': {
         oncePerRound: false,
@@ -636,10 +925,19 @@ Then attempt a basic check.`,
         title: 'Manage Trade Agreements',
         description: 'You send agents out to attend to established trade agreements. Spend 2 RP per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.',
         skills: simpleRank(['trade']),
-        criticalSuccess: 'At the start of your next Kingdom turn, you gain 1 bonus Resource Die per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).',
-        success: 'At the start of your next Kingdom turn, choose between gaining 1 bonus Resource Die per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).',
-        failure: 'You gain 1 RP per trade agreement at the start of your next turn.',
-        criticalFailure: 'You gain no benefit, as your traders and merchants met with bad luck on the road. You can’t Manage Trade Agreements for 1 Kingdom turn.',
+        criticalSuccess: {
+            msg: 'At the start of your next Kingdom turn, you gain 1 bonus Resource Die per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).',
+        },
+        success: {
+            msg: 'At the start of your next Kingdom turn, choose between gaining 1 bonus Resource Die per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).',
+        },
+        failure: {
+            msg: 'You gain 1 RP per trade agreement at the start of your next turn.',
+        },
+        criticalFailure: {
+            msg:
+                'You gain no benefit, as your traders and merchants met with bad luck on the road. You can’t Manage Trade Agreements for 1 Kingdom turn.',
+        },
     },
     'new-leadership': {
         oncePerRound: false,
@@ -658,10 +956,18 @@ Then attempt a basic check.`,
 
 Rulers are particularly difficult to assign; when you take this activity to assign a new Ruler, you take a –4 circumstance penalty to the skill check, and unless you achieve a critical success, you gain 1 additional Unrest. Whether or not you are simultaneously assigning a leader, you may also use this activity to attempt to reselect the four leadership roles that you have invested. Any result other than a critical failure allows this.`,
         skills: simpleRank(['intrigue', 'politics', 'statecraft', 'warfare']),
-        criticalSuccess: 'The people love the new leader. The leader immediately provides the benefits tied to occupying the new role and gains a +1 circumstance bonus to all Kingdom skill checks they attempt before the end of the next Kingdom turn.',
-        success: 'The people accept the new leader. The leader immediately provides the benefits tied to occupying the new role.',
-        failure: 'The people are unsure about the new leader. The leader takes a –1 circumstance penalty to all checks they attempt as part of their activities during the Activity phase of each Kingdom turn. At the end of the next Kingdom turn, the leader can attempt any Loyalty-based basic skill check to ingratiate themselves with the populace. The leader may attempt this check at the end of each Kingdom turn until they succeed. Success removes this penalty, but a critical failure results in the development detailed in Critical Failure below.',
-        criticalFailure: 'The people reject the new leader. The leadership role is treated as vacant and you must attempt to reassign it using the New Leadership activity at the start of the next Kingdom turn. Unrest increases by 1.',
+        criticalSuccess: {
+            msg: 'The people love the new leader. The leader immediately provides the benefits tied to occupying the new role and gains a +1 circumstance bonus to all Kingdom skill checks they attempt before the end of the next Kingdom turn.',
+        },
+        success: {
+            msg: 'The people accept the new leader. The leader immediately provides the benefits tied to occupying the new role.',
+        },
+        failure: {
+            msg: 'The people are unsure about the new leader. The leader takes a –1 circumstance penalty to all checks they attempt as part of their activities during the Activity phase of each Kingdom turn. At the end of the next Kingdom turn, the leader can attempt any Loyalty-based basic skill check to ingratiate themselves with the populace. The leader may attempt this check at the end of each Kingdom turn until they succeed. Success removes this penalty, but a critical failure results in the development detailed in Critical Failure below.',
+        },
+        criticalFailure: {
+            msg: 'The people reject the new leader. The leadership role is treated as vacant and you must attempt to reassign it using the New Leadership activity at the start of the next Kingdom turn. Unrest increases by 1.',
+        },
     },
     'offensive-gambit': {
         oncePerRound: false,
@@ -673,10 +979,18 @@ Rulers are particularly difficult to assign; when you take this activity to assi
         description: 'You order an attack against an enemy army, causing a war encounter to begin after this Kingdom turn ends. No check is necessary if you wish to engage the enemy without attempting to gain an advantage in initiative. If you want to gain an advantage by surprising the enemy, attempt an Intrigue check. If you want to gain an advantage by intimidating the enemy, attempt a Warfare check. In either case, the DC is equal to the enemy army’s Scouting DC.',
         requirement: 'You have at least one army in the same hex as an enemy army.',
         skills: simpleRank(['intrigue']),
-        criticalSuccess: 'Your approach surprises or intimidates the enemy. Your armies in this hex gain a +2 circumstance bonus on their initiative checks, and one enemy army of the party’s choice in this hex becomes shaken 1.',
-        success: 'Your approach gives you an advantage. Your armies in this hex gain a +2 circumstance bonus on their initiative checks.',
-        failure: 'You gain no advantage in the battle. ',
-        criticalFailure: 'Not only do you fail to gain advantage, but the enemy forces have anticipated the attack. Enemy armies in this hex at the time of the Offensive',
+        criticalSuccess: {
+            msg: 'Your approach surprises or intimidates the enemy. Your armies in this hex gain a +2 circumstance bonus on their initiative checks, and one enemy army of the party’s choice in this hex becomes shaken 1.',
+        },
+        success: {
+            msg: 'Your approach gives you an advantage. Your armies in this hex gain a +2 circumstance bonus on their initiative checks.',
+        },
+        failure: {
+            msg: 'You gain no advantage in the battle. ',
+        },
+        criticalFailure: {
+            msg: 'Not only do you fail to gain advantage, but the enemy forces have anticipated the attack. Enemy armies in this hex at the time of the Offensive',
+        },
     },
     'outfit-army': {
         oncePerRound: false,
@@ -691,10 +1005,18 @@ If you’re purchasing the gear, this activity requires a basic Trade check and 
 
 If you’re distributing gear gained from battle, this activity requires a basic Warfare check and does not cost RP.`,
         skills: simpleRank(['trade', 'warfare']),
-        criticalSuccess: 'The gear proved particularly easy to outfit, and the army becomes efficient.',
-        success: 'The gear is sufficient, and your army becomes outfitted with it immediately.',
-        failure: 'The gear proves to be unusable and the attempt to outfit the army fails. If you spent RP on the check, it is refunded.',
-        criticalFailure: 'The gear proves to be unusable and the attempt to outfit the army fails.',
+        criticalSuccess: {
+            msg: 'The gear proved particularly easy to outfit, and the army becomes efficient.',
+        },
+        success: {
+            msg: 'The gear is sufficient, and your army becomes outfitted with it immediately.',
+        },
+        failure: {
+            msg: 'The gear proves to be unusable and the attempt to outfit the army fails. If you spent RP on the check, it is refunded.',
+        },
+        criticalFailure: {
+            msg: 'The gear proves to be unusable and the attempt to outfit the army fails.',
+        },
     },
     'pledge-of-fealty': {
         oncePerRound: false,
@@ -707,10 +1029,19 @@ If you’re distributing gear gained from battle, this activity requires a basic
 
 You can attempt this skill check with Intrigue, Statecraft, or Warfare; however, certain groups will respond better (or worse) to specific skills. The DC is the group’s Negotiation DC (see the sidebar on page 519).`,
         skills: simpleRank(['intrigue', 'statecraft', 'warfare'], 1),
-        criticalSuccess: 'The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, gaining 10 kingdom XP and increasing your kingdom’s Size by 1 (this affects all statistics determined by Size; see page 532). If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty.',
-        success: 'The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty. Immediately roll 1 Resource Die. You must spend RP equal to the result to integrate the group into your kingdom.',
-        failure: 'The group refuses to pledge to you at this time. You can attempt to get them to Pledge Fealty next turn. Increase Unrest by 1.',
-        criticalFailure: 'The group refuses to pledge to you—furthermore, it will never Pledge Fealty to your kingdom, barring significant in-play changes or actions by the PCs (subject to the GM’s approval). The group’s potentially violent rebuff of your offer increases Unrest by 2 and increases a Ruin of your choice by 1.',
+        criticalSuccess: {
+            msg: 'The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, gaining 10 kingdom XP and increasing your kingdom’s Size by 1 (this affects all statistics determined by Size; see page 532). If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty.',
+        },
+        success: {
+            msg: 'The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty. Immediately roll 1 Resource Die. You must spend RP equal to the result to integrate the group into your kingdom.',
+        },
+        failure: {
+            msg:
+                'The group refuses to pledge to you at this time. You can attempt to get them to Pledge Fealty next turn. Increase Unrest by 1.',
+        },
+        criticalFailure: {
+            msg: 'The group refuses to pledge to you—furthermore, it will never Pledge Fealty to your kingdom, barring significant in-play changes or actions by the PCs (subject to the GM’s approval). The group’s potentially violent rebuff of your offer increases Unrest by 2 and increases a Ruin of your choice by 1.',
+        },
     },
     'preventative-measures': {
         companion: 'Tristian',
@@ -722,9 +1053,15 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         title: 'Preventative Measures',
         description: 'Tristian helps to organize magical defenses and resources to combat potential upcoming disasters or dangers to the kingdom. Attempt a basic Magic check to determine how effective the magical preparations are.',
         skills: simpleRank(['magic']),
-        criticalSuccess: 'The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check and, unless you roll a critical failure, the result is improved one degree. If you reach the end of this Kingdom turn and haven’t had a dangerous event, you may decrease one Ruin of your choice by 1.',
-        success: 'The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check.',
-        criticalFailure: 'The attempt to put preventative measures in place has resulted in significant waste of resources. You can’t use Preventative Measures again on your next Kingdom turn, and when your next Kingdom turn begins, reduce your Resource Dice total by 2.',
+        criticalSuccess: {
+            msg: 'The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check and, unless you roll a critical failure, the result is improved one degree. If you reach the end of this Kingdom turn and haven’t had a dangerous event, you may decrease one Ruin of your choice by 1.',
+        },
+        success: {
+            msg: 'The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check.',
+        },
+        criticalFailure: {
+            msg: 'The attempt to put preventative measures in place has resulted in significant waste of resources. You can’t use Preventative Measures again on your next Kingdom turn, and when your next Kingdom turn begins, reduce your Resource Dice total by 2.',
+        },
     },
     'process-hidden-fees': {
         companion: 'Jubilost',
@@ -736,10 +1073,18 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         title: 'Process Hidden Fees',
         description: 'With Jubilost’s aid, you can process additional taxes, fees, and payments. Attempt a basic Trade check to determine what sorts of additional resources you gather.',
         skills: simpleRank(['trade']),
-        criticalSuccess: 'You gain 2 bonus Resource Dice at the start of your next Kingdom turn.',
-        success: 'You gain 1 bonus Resource Die at the start of your next Kingdom turn, but the citizens suspect something is going on: if you attempt to Process Hidden Fees on the next Kingdom turn, the result is worsened one degree.',
-        failure: 'As success, but the citizens catch wind of the fees and grow unhappy. Gain 1 Unrest, and you cannot Process Hidden Fees on your next Kingdom turn.',
-        criticalFailure: 'As failure, but gain [[/r 1d6]] Unrest.',
+        criticalSuccess: {
+            msg: 'You gain 2 bonus Resource Dice at the start of your next Kingdom turn.',
+        },
+        success: {
+            msg: 'You gain 1 bonus Resource Die at the start of your next Kingdom turn, but the citizens suspect something is going on: if you attempt to Process Hidden Fees on the next Kingdom turn, the result is worsened one degree.',
+        },
+        failure: {
+            msg: 'As success, but the citizens catch wind of the fees and grow unhappy. Gain 1 Unrest, and you cannot Process Hidden Fees on your next Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'As failure, but gain [[/r 1d6]] Unrest.',
+        },
     },
     'prognostication': {
         oncePerRound: false,
@@ -750,10 +1095,18 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         title: 'Prognostication',
         description: 'Your kingdom’s spellcasters read the omens and provide advice on how best to prepare for near-future events. Attempt a basic check.',
         skills: simpleRank(['magic'], 1),
-        criticalSuccess: 'If you have a random kingdom event this turn, roll twice to determine the event that takes place. The players choose which of the two results occurs, and the kingdom gains a +2 circumstance bonus to the check to resolve the event.',
-        success: 'Gain a +1 circumstance bonus to checks made to resolve random kingdom events this turn.',
-        failure: 'Your spellcasters divine no aid.',
-        criticalFailure: 'Your spellcasters provide inaccurate readings of the future. You automatically have a random kingdom event this turn. Roll twice to determine the event that takes place; the GM decides which of the two results occurs.',
+        criticalSuccess: {
+            msg: 'If you have a random kingdom event this turn, roll twice to determine the event that takes place. The players choose which of the two results occurs, and the kingdom gains a +2 circumstance bonus to the check to resolve the event.',
+        },
+        success: {
+            msg: 'Gain a +1 circumstance bonus to checks made to resolve random kingdom events this turn.',
+        },
+        failure: {
+            msg: 'Your spellcasters divine no aid.',
+        },
+        criticalFailure: {
+            msg: 'Your spellcasters provide inaccurate readings of the future. You automatically have a random kingdom event this turn. Roll twice to determine the event that takes place; the GM decides which of the two results occurs.',
+        },
     },
     'provide-care': {
         oncePerRound: false,
@@ -764,10 +1117,18 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         title: 'Provide Care',
         description: 'Attempt a basic check to organize and encourage your settlements’ healers, apothecaries, medics, and other caregivers to provide care and support for citizens in need.',
         skills: simpleRank(['defense']),
-        criticalSuccess: 'You provide unexpectedly compassionate support for the people. Reduce Unrest by 1 and reduce one Ruin of your choice by 1.',
-        success: 'Your care soothes the worries and fears of the populace; reduce Unrest by 1.',
-        failure: 'You don’t provide any notable care for the citizens, but at least you don’t make things worse.',
-        criticalFailure: 'Your attempt to provide care backfires. Increase your Unrest or a Ruin of your choice by 1.',
+        criticalSuccess: {
+            msg: 'You provide unexpectedly compassionate support for the people. Reduce Unrest by 1 and reduce one Ruin of your choice by 1.',
+        },
+        success: {
+            msg: 'Your care soothes the worries and fears of the populace; reduce Unrest by 1.',
+        },
+        failure: {
+            msg: 'You don’t provide any notable care for the citizens, but at least you don’t make things worse.',
+        },
+        criticalFailure: {
+            msg: 'Your attempt to provide care backfires. Increase your Unrest or a Ruin of your choice by 1.',
+        },
     },
     'purchase-commodities': {
         oncePerRound: false,
@@ -778,10 +1139,19 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         title: 'Purchase Commodities',
         description: 'You can spend RP to Purchase Commodities, but doing so is more expensive than gathering them or relying upon trade agreements. When you Purchase Commodities, select the Commodity you wish to purchase (Food, Lumber, Luxuries, Ore, or Stone). Expend 8 RP if you’re purchasing Luxuries or 4 RP if you’re purchasing any other Commodity. Then attempt a basic check.',
         skills: simpleRank(['trade']),
-        criticalSuccess: 'You immediately gain 4 Commodities of the chosen type and 2 Commodities of any other type (except Luxuries).',
-        success: 'You gain 2 Commodities of the chosen type.',
-        failure: 'You gain 1 Commodity of the chosen type.',
-        criticalFailure: 'Failure You gain no Commodities.',
+        criticalSuccess: {
+            msg: 'You immediately gain 4 Commodities of the chosen type and 2 Commodities of any other type (except Luxuries).',
+        },
+        success: {
+            msg: 'You gain 2 Commodities of the chosen type.',
+        },
+        failure: {
+            msg: 'You gain 1 Commodity of the chosen type.',
+        },
+        criticalFailure: {
+            msg:
+                'Failure You gain no Commodities.',
+        },
     },
     'quell-unrest': {
         oncePerRound: true,
@@ -792,10 +1162,18 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         title: 'Quell Unrest',
         description: 'You send your agents among the citizenry with the charge of suppressing dissent and calming unrest. You can attempt a basic Arts, Folklore, Intrigue, Magic, Politics, or Warfare check to Quell Unrest, but you can never use the same skill for this activity in consecutive Kingdom turns. This activity cannot be attempted more than once per Kingdom turn.',
         skills: simpleRank(['arts', 'folklore', 'intrigue', 'magic', 'politics', 'warfare']),
-        criticalSuccess: 'Reduce Unrest by [[/r 1d6]].',
-        success: 'Reduce Unrest by 1.',
-        failure: 'You fail to reduce Unrest.',
-        criticalFailure: 'You not only fail to reduce Unrest, but actually incite further anger among the citizenry. Choose one of the following: increase Unrest by [[/r 1d4]] or increase two Ruins of your choice by 1.',
+        criticalSuccess: {
+            msg: 'Reduce Unrest by [[/r 1d6]].',
+        },
+        success: {
+            msg: 'Reduce Unrest by 1.',
+        },
+        failure: {
+            msg: 'You fail to reduce Unrest.',
+        },
+        criticalFailure: {
+            msg: 'You not only fail to reduce Unrest, but actually incite further anger among the citizenry. Choose one of the following: increase Unrest by [[/r 1d4]] or increase two Ruins of your choice by 1.',
+        },
     },
     'read-all-about-it': {
         companion: 'Linzi',
@@ -808,10 +1186,18 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         description: 'You take advantage of your nation’s paper to print an extra edition, a bonus-sized issue, or something to spread news to the citizens of the nation so that they are more prepared for upcoming events or more informed on how to deal with ongoing events. Attempt a basic Scholarship check to determine how helpful the information proves to be.',
         requirement: 'You have built a Printing Press',
         skills: simpleRank(['scholarship']),
-        criticalSuccess: 'Your kingdom becomes particularly prepared. The next time you attempt a skill check to resolve any event during this Kingdom turn, you gain a +4 circumstance bonus to the roll.',
-        success: 'The information is helpful, but only against ongoing events. The next time you attempt a skill check to resolve an ongoing event during this Kingdom turn, you gain a +2 circumstance bonus to the roll.',
-        failure: 'You fail to prepare your people for the worst.',
-        criticalFailure: 'Critical parts of the information you published are false. You take a –2 circumstance penalty to all skill checks made to resolve Kingdom events for the remainder of this Kingdom turn',
+        criticalSuccess: {
+            msg: 'Your kingdom becomes particularly prepared. The next time you attempt a skill check to resolve any event during this Kingdom turn, you gain a +4 circumstance bonus to the roll.',
+        },
+        success: {
+            msg: 'The information is helpful, but only against ongoing events. The next time you attempt a skill check to resolve an ongoing event during this Kingdom turn, you gain a +2 circumstance bonus to the roll.',
+        },
+        failure: {
+            msg: 'You fail to prepare your people for the worst.',
+        },
+        criticalFailure: {
+            msg: 'Critical parts of the information you published are false. You take a –2 circumstance penalty to all skill checks made to resolve Kingdom events for the remainder of this Kingdom turn',
+        },
     },
     'recover-army': {
         oncePerRound: false,
@@ -864,10 +1250,18 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
             'magic': 2,
             'arts': 2,
         },
-        criticalSuccess: 'You reduce the affliction’s value by 2 (or in the case of a damaged army, increase its HP by 2 up to its maximum). If the affliction does not have a value, it is removed.',
-        success: 'As critical success but you reduce the affliction’s value by 1 (or in the case of a damaged army, increase its HP by 1 up to its maximum).',
-        failure: 'You fail to remove the affliction. ',
-        criticalFailure: 'You fail to remove the affliction and your soldier’s lowered morale spreads discontent; increase Unrest by 1. If you were attempting to recover a defeated army, the army is destroyed.',
+        criticalSuccess: {
+            msg: 'You reduce the affliction’s value by 2 (or in the case of a damaged army, increase its HP by 2 up to its maximum). If the affliction does not have a value, it is removed.',
+        },
+        success: {
+            msg: 'As critical success but you reduce the affliction’s value by 1 (or in the case of a damaged army, increase its HP by 1 up to its maximum).',
+        },
+        failure: {
+            msg: 'You fail to remove the affliction. ',
+        },
+        criticalFailure: {
+            msg: 'You fail to remove the affliction and your soldier’s lowered morale spreads discontent; increase Unrest by 1. If you were attempting to recover a defeated army, the army is destroyed.',
+        },
     },
     'recruit-army': {
         oncePerRound: false,
@@ -878,10 +1272,18 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         title: 'Recruit Army',
         description: 'Either you recruit an army from your kingdom’s citizens, or you secure the allegiance of a specialized army you encountered in the Stolen Lands. If you’re recruiting an army from your kingdom’s citizens, choose one of the basic armies listed at the start of page 570 and attempt a Warfare check against the army’s Recruitment DC. If you’re securing a specialized army, you must attempt a Statecraft check against the Recruitment DC;',
         skills: simpleRank(['warfare']),
-        criticalSuccess: 'You recruit the army; it becomes efficient.',
-        success: 'You recruit the army.',
-        failure: 'You fail to recruit the army.',
-        criticalFailure: 'Many of the individuals in the army you attempted to recruit took offense at the attempt. Gain 1 Unrest, and you cannot attempt to recruit an army again until the next Kingdom turn.',
+        criticalSuccess: {
+            msg: 'You recruit the army; it becomes efficient.',
+        },
+        success: {
+            msg: 'You recruit the army.',
+        },
+        failure: {
+            msg: 'You fail to recruit the army.',
+        },
+        criticalFailure: {
+            msg: 'Many of the individuals in the army you attempted to recruit took offense at the attempt. Gain 1 Unrest, and you cannot attempt to recruit an army again until the next Kingdom turn.',
+        },
     },
     'recruit-monsters': {
         companion: 'Nok-Nok',
@@ -893,12 +1295,20 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         title: 'Recruit Monsters',
         description: 'While Nok-Nok is quick to suggest that most of the monsters the party encounters during their adventures deserve killing, he also understands that there can be exceptions. Some can be bribed or allied with, while others can be trusted to act on their instincts—a canny person can capitalize on these instincts or alliances to bolster a kingdom’s defenses. Attempt a basic Intrigue check.',
         skills: simpleRank(['intrigue']),
-        criticalSuccess: `You manage to locate a monster’s lair and take steps to incorporate it into your kingdom’s defense. The next time your kingdom suffers a Bandit Activity, Monster Activity, Sacrifices, or Undead Uprising random event, you can use your recruited monster to help resolve the event. Doing so removes the Recruited Monster from your kingdom (you can attempt to recruit a new monster on a future kingdom turn though) but allows you to roll a skill check twice when resolving the Dangerous Hex event, taking the better of the two results as your actual result. This is a fortune effect.
+        criticalSuccess: {
+            msg: `You manage to locate a monster’s lair and take steps to incorporate it into your kingdom’s defense. The next time your kingdom suffers a Bandit Activity, Monster Activity, Sacrifices, or Undead Uprising random event, you can use your recruited monster to help resolve the event. Doing so removes the Recruited Monster from your kingdom (you can attempt to recruit a new monster on a future kingdom turn though) but allows you to roll a skill check twice when resolving the Dangerous Hex event, taking the better of the two results as your actual result. This is a fortune effect.
 
 Your kingdom can support 1 Recruited Monster at a time. If your kingdom is master in Intrigue, you can support up to 2 Recruited Monsters at a time, and if your kingdom is legendary in Intrigue, you can support up to 3 Recruited Monsters at a time.`,
-        success: 'You locate a monster’s lair but can’t recruit it into your kingdom’s defense just yet. If you attempt this activity on your next kingdom turn; the result of that check is improved one degree as you continue to build a rapport with the monster.',
-        failure: 'You fail to locate a monster, or if you were recruiting a monster you didn’t succeed at recruiting on the previous turn, that monster moves on and you must start the recruitment procedure from scratch in the future.',
-        criticalFailure: 'You found a monster, but it proves impossible to recruit. Worse, you’ve attracted its attention. A Monster Activity event occurs during the kingdom’s next Event Phase, in addition to any other potential random events.',
+        },
+        success: {
+            msg: 'You locate a monster’s lair but can’t recruit it into your kingdom’s defense just yet. If you attempt this activity on your next kingdom turn; the result of that check is improved one degree as you continue to build a rapport with the monster.',
+        },
+        failure: {
+            msg: 'You fail to locate a monster, or if you were recruiting a monster you didn’t succeed at recruiting on the previous turn, that monster moves on and you must start the recruitment procedure from scratch in the future.',
+        },
+        criticalFailure: {
+            msg: 'You found a monster, but it proves impossible to recruit. Worse, you’ve attracted its attention. A Monster Activity event occurs during the kingdom’s next Event Phase, in addition to any other potential random events.',
+        },
     },
     'relocate-capital': {
         oncePerRound: false,
@@ -909,10 +1319,18 @@ Your kingdom can support 1 Recruited Monster at a time. If your kingdom is maste
         title: 'Relocate Capital',
         description: 'One of your settlements that is not your current capital must contain a Castle, Palace, or Town Hall. All leaders must spend all of their leadership activities during the Activity phase of a Kingdom turn on this activity. The kingdom leaders announce that they are uprooting the seat of government from its current home and reestablishing it in another settlement. Attempt a check with a DC equal to the kingdom’s Control DC + 5. You cannot Relocate your Capital again for at least 3 Kingdom turns.',
         skills: simpleRank(['industry'], 1),
-        criticalSuccess: 'The move goes off splendidly, with people excited about the new capital and celebrating the leadership’s wisdom.',
-        success: 'The move goes smoothly and with minimal disruption, but some folks are upset or homesick. Increase Unrest by 1.',
-        failure: 'The move causes unhappiness. Gain 1 Unrest and increase two Ruins of your choice by 1.',
-        criticalFailure: 'The people reject the idea of the new capital and demand you move it back. The move is unsuccessful, and your capital remains unchanged. Gain [[/r 1d4]] Unrest. Increase three Ruins of your choice by 1 and the fourth Ruin by 3.',
+        criticalSuccess: {
+            msg: 'The move goes off splendidly, with people excited about the new capital and celebrating the leadership’s wisdom.',
+        },
+        success: {
+            msg: 'The move goes smoothly and with minimal disruption, but some folks are upset or homesick. Increase Unrest by 1.',
+        },
+        failure: {
+            msg: 'The move causes unhappiness. Gain 1 Unrest and increase two Ruins of your choice by 1.',
+        },
+        criticalFailure: {
+            msg: 'The people reject the idea of the new capital and demand you move it back. The move is unsuccessful, and your capital remains unchanged. Gain [[/r 1d4]] Unrest. Increase three Ruins of your choice by 1 and the fourth Ruin by 3.',
+        },
     },
     'repair-reputation-corruption': {
         oncePerRound: false,
@@ -925,10 +1343,19 @@ Your kingdom can support 1 Recruited Monster at a time. If your kingdom is maste
 
 The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.`,
         skills: simpleRank(['arts'], 1),
-        criticalSuccess: 'You reduce the targeted Ruin by 2 and reduce its current ruin penalty by 1 to a minimum of 0.',
-        success: 'You reduce the targeted Ruin by 1.',
-        failure: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
-        criticalFailure: 'You fail to reduce the targeted Ruin in a particularly public and embarrassing way. Increase Unrest by [[/r 1d4]], and you cannot attempt to Repair Reputation for 3 Kingdom turns.',
+        criticalSuccess: {
+            msg: 'You reduce the targeted Ruin by 2 and reduce its current ruin penalty by 1 to a minimum of 0.',
+        },
+        success: {
+            msg: 'You reduce the targeted Ruin by 1.',
+        },
+        failure: {
+            msg: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
+        },
+        criticalFailure: {
+            msg:
+                'You fail to reduce the targeted Ruin in a particularly public and embarrassing way. Increase Unrest by [[/r 1d4]], and you cannot attempt to Repair Reputation for 3 Kingdom turns.',
+        },
     },
     'repair-reputation-crime': {
         oncePerRound: false,
@@ -941,10 +1368,18 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
 
 The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.`,
         skills: simpleRank(['trade'], 1),
-        criticalSuccess: 'You reduce the targeted Ruin by 2 and reduce its current ruin penalty by 1 to a minimum of 0.',
-        success: 'You reduce the targeted Ruin by 1.',
-        failure: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
-        criticalFailure: 'You fail to reduce the targeted Ruin in a particularly public and embarrassing way. Increase Unrest by [[/r 1d4]], and you cannot attempt to Repair Reputation for 3 Kingdom turns.',
+        criticalSuccess: {
+            msg: 'You reduce the targeted Ruin by 2 and reduce its current ruin penalty by 1 to a minimum of 0.',
+        },
+        success: {
+            msg: 'You reduce the targeted Ruin by 1.',
+        },
+        failure: {
+            msg: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'You fail to reduce the targeted Ruin in a particularly public and embarrassing way. Increase Unrest by [[/r 1d4]], and you cannot attempt to Repair Reputation for 3 Kingdom turns.',
+        },
     },
     'repair-reputation-decay': {
         oncePerRound: false,
@@ -957,10 +1392,18 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
 
 The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.`,
         skills: simpleRank(['engineering'], 1),
-        criticalSuccess: 'You reduce the targeted Ruin by 2 and reduce its current ruin penalty by 1 to a minimum of 0.',
-        success: 'You reduce the targeted Ruin by 1.',
-        failure: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
-        criticalFailure: 'You fail to reduce the targeted Ruin in a particularly public and embarrassing way. Increase Unrest by [[/r 1d4]], and you cannot attempt to Repair Reputation for 3 Kingdom turns.',
+        criticalSuccess: {
+            msg: 'You reduce the targeted Ruin by 2 and reduce its current ruin penalty by 1 to a minimum of 0.',
+        },
+        success: {
+            msg: 'You reduce the targeted Ruin by 1.',
+        },
+        failure: {
+            msg: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'You fail to reduce the targeted Ruin in a particularly public and embarrassing way. Increase Unrest by [[/r 1d4]], and you cannot attempt to Repair Reputation for 3 Kingdom turns.',
+        },
     },
     'repair-reputation-strife': {
         oncePerRound: false,
@@ -973,10 +1416,18 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
 
 The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.`,
         skills: simpleRank(['intrigue'], 1),
-        criticalSuccess: 'You reduce the targeted Ruin by 2 and reduce its current ruin penalty by 1 to a minimum of 0.',
-        success: 'You reduce the targeted Ruin by 1.',
-        failure: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
-        criticalFailure: 'You fail to reduce the targeted Ruin in a particularly public and embarrassing way. Increase Unrest by [[/r 1d4]], and you cannot attempt to Repair Reputation for 3 Kingdom turns.',
+        criticalSuccess: {
+            msg: 'You reduce the targeted Ruin by 2 and reduce its current ruin penalty by 1 to a minimum of 0.',
+        },
+        success: {
+            msg: 'You reduce the targeted Ruin by 1.',
+        },
+        failure: {
+            msg: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'You fail to reduce the targeted Ruin in a particularly public and embarrassing way. Increase Unrest by [[/r 1d4]], and you cannot attempt to Repair Reputation for 3 Kingdom turns.',
+        },
     },
     'repair-the-flooded-mine': {
         oncePerRound: false,
@@ -987,10 +1438,18 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
         title: 'Repair the Flooded Mine',
         description: 'A group of engineers work to drain the flooded mine, shore up its damaged section, and establish the mine as a functional Work Site. Spend 20 RP, then attempt a DC 32 Engineering check.',
         skills: simpleRank(['engineering'], 3),
-        criticalSuccess: 'The mine is repaired, and as a bonus, your workers Establish a Work Site at the mine immediately. This mine produces 2 Ore Commodities per Kingdom turn.',
-        success: 'The mine is repaired. This mine produces 2 Ore Commodities per Kingdom turn.',
-        failure: 'Work on repairing the mine proceeds, but at a much slower (and more expensive) pace than you’d hoped. The mine remains flooded, but you can attempt this check again on the next Kingdom turn.',
-        criticalFailure: 'Work on repairing the mine proceeds, but at a much slower (and more expensive) pace than you’d hoped. The mine remains flooded, but you can attempt this check again on the next Kingdom turn. In addition, a catastrophic failure costs the lives of several workers. Increase Unrest by 2 and Decay by 1. The next time you attempt to Repair the Flooded Mine, it costs 40 RP.',
+        criticalSuccess: {
+            msg: 'The mine is repaired, and as a bonus, your workers Establish a Work Site at the mine immediately. This mine produces 2 Ore Commodities per Kingdom turn.',
+        },
+        success: {
+            msg: 'The mine is repaired. This mine produces 2 Ore Commodities per Kingdom turn.',
+        },
+        failure: {
+            msg: 'Work on repairing the mine proceeds, but at a much slower (and more expensive) pace than you’d hoped. The mine remains flooded, but you can attempt this check again on the next Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'Work on repairing the mine proceeds, but at a much slower (and more expensive) pace than you’d hoped. The mine remains flooded, but you can attempt this check again on the next Kingdom turn. In addition, a catastrophic failure costs the lives of several workers. Increase Unrest by 2 and Decay by 1. The next time you attempt to Repair the Flooded Mine, it costs 40 RP.',
+        },
     },
     'request-foreign-aid': {
         oncePerRound: false,
@@ -1002,10 +1461,18 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
         description: 'When disaster strikes, you send out a call for help to another nation with whom you have diplomatic relations. The DC of this check is equal to the other group’s Negotiation DC +2 (see the sidebar on page 519).',
         requirement: 'You have diplomatic relations with the group you are requesting aid from.',
         skills: simpleRank(['statecraft'], 1),
-        criticalSuccess: 'Your ally’s aid grants a +4 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn. You can choose to apply this bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known. In addition, immediately roll 2 Resource Dice and gain RP equal to the result; this RP does not accrue into XP at the end of the turn if you don’t spend it.',
-        success: 'Your ally’s aid grants you either a +2 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn or 2 Resource Dice. You can choose to apply this bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known. In addition, immediately roll 2 Resource Dice and gain RP equal to the result; this RP does not accrue into XP at the end of the turn if you don’t spend it.',
-        failure: 'Your ally marshals its resources but cannot get aid to you in time to deal with your current situation. At the start of your next Kingdom turn, gain [[/r 1d4]] RP.',
-        criticalFailure: 'Your ally is tangled up in its own problems and is unable to assist you, is insulted by your request for aid, or might even have an interest in seeing your kingdom struggle against one of your ongoing events. Whatever the case, your pleas for aid make your kingdom look desperate. You gain no aid, but you do increase Unrest by [[/r 1d4]].',
+        criticalSuccess: {
+            msg: 'Your ally’s aid grants a +4 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn. You can choose to apply this bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known. In addition, immediately roll 2 Resource Dice and gain RP equal to the result; this RP does not accrue into XP at the end of the turn if you don’t spend it.',
+        },
+        success: {
+            msg: 'Your ally’s aid grants you either a +2 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn or 2 Resource Dice. You can choose to apply this bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known. In addition, immediately roll 2 Resource Dice and gain RP equal to the result; this RP does not accrue into XP at the end of the turn if you don’t spend it.',
+        },
+        failure: {
+            msg: 'Your ally marshals its resources but cannot get aid to you in time to deal with your current situation. At the start of your next Kingdom turn, gain [[/r 1d4]] RP.',
+        },
+        criticalFailure: {
+            msg: 'Your ally is tangled up in its own problems and is unable to assist you, is insulted by your request for aid, or might even have an interest in seeing your kingdom struggle against one of your ongoing events. Whatever the case, your pleas for aid make your kingdom look desperate. You gain no aid, but you do increase Unrest by [[/r 1d4]].',
+        },
     },
     'rest-and-relax': {
         oncePerRound: false,
@@ -1018,10 +1485,18 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
 
 You take time to relax, and you extend the chance to unwind to your citizens as well. The Kingdom skill you use to determine the effectiveness of your time off depends on how you want to spend it: Use a basic Arts check to spend the time engaged in entertainment or the pursuit of a hobby. Use a basic Boating check to enjoy trips on the lakes and rivers of your kingdom. Use a basic Scholarship check to spend the time reading or studying a topic of personal interest beyond your daily duties. Use a basic Trade check to spend your time shopping or feasting. Use a basic Wilderness check to get away from the bustle and relax in the countryside. If your kingdom Rested and Relaxed the previous Kingdom turn, the DC increases by 4, as your kingdom’s production and output hasn’t had a chance to catch up to all those vacation days.`,
         skills: simpleRank(['arts', 'boating', 'scholarship', 'trade', 'wilderness']),
-        criticalSuccess: 'The citizens enjoy the time off and are ready to get back to work. Reduce Unrest by 1, and the next Leadership activity you take gains a +2 circumstance bonus.',
-        success: 'The time spent relaxing has calmed nerves; reduce Unrest by 1.',
-        failure: 'The rest is welcome, but not particularly beneficial in the long term.',
-        criticalFailure: 'The time is wasted, and when you get back to work, you have to spend extra time catching up. Take a –2 circumstance penalty to your next skill check made as a Leadership activity.',
+        criticalSuccess: {
+            msg: 'The citizens enjoy the time off and are ready to get back to work. Reduce Unrest by 1, and the next Leadership activity you take gains a +2 circumstance bonus.',
+        },
+        success: {
+            msg: 'The time spent relaxing has calmed nerves; reduce Unrest by 1.',
+        },
+        failure: {
+            msg: 'The rest is welcome, but not particularly beneficial in the long term.',
+        },
+        criticalFailure: {
+            msg: 'The time is wasted, and when you get back to work, you have to spend extra time catching up. Take a –2 circumstance penalty to your next skill check made as a Leadership activity.',
+        },
     },
     'restore-the-temple-of-the-elk': {
         oncePerRound: false,
@@ -1032,10 +1507,20 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         title: 'Restore the Temple of the Elk',
         description: 'You work with several worshippers of Erastil, gifted masons, and skilled laborers to restore the temple and once more consecrate it as a sacred place devoted to the worship of Erastil. Spend [[/r 1d6]] RP, then attempt a DC 25 Folklore check.',
         skills: simpleRank(['folklore']),
-        criticalSuccess: 'The temple is restored and can now serve as a Refuge terrain feature. If you later build a settlement here, the temple instead functions as a free Shrine in the settlement. In addition, your work was so excellent that you’ve attracted Erastil’s attention! The PC who rolled the Folklore check is granted Erastil’s minor boon: whenever that PC critically fails a check to Subsist in the wild, they gain a failure instead. @UUID[Compendium.pf2e.boons-and-curses.hrTl9kfSNrOQeNze]{Erastil - Minor Boon}',
-        success: 'The temple is restored and can now serve as a Refuge terrain feature. If you later build a settlement here, the temple instead functions as a free Shrine in the settlement.',
-        failure: 'Work proceeds but is not yet complete; you can attempt to restore the temple again on the next Kingdom turn.',
-        criticalFailure: 'Disaster strikes as the temple’s cavern collapses and rubble spills out to bury and destroy much of the temple’s plaza. Gain 1 Decay and [[/r 1d4]] Unrest. You can still attempt to Restore the Temple, but the DC for success increases by 4. This increase is cumulative with successive critical failures.',
+        criticalSuccess: {
+            msg:
+                'The temple is restored and can now serve as a Refuge terrain feature. If you later build a settlement here, the temple instead functions as a free Shrine in the settlement. In addition, your work was so excellent that you’ve attracted Erastil’s attention! The PC who rolled the Folklore check is granted Erastil’s minor boon: whenever that PC critically fails a check to Subsist in the wild, they gain a failure instead. @UUID[Compendium.pf2e.boons-and-curses.hrTl9kfSNrOQeNze]{Erastil - Minor Boon}',
+        },
+        success: {
+            msg: 'The temple is restored and can now serve as a Refuge terrain feature. If you later build a settlement here, the temple instead functions as a free Shrine in the settlement.',
+        },
+        failure: {
+            msg:
+                'Work proceeds but is not yet complete; you can attempt to restore the temple again on the next Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'Disaster strikes as the temple’s cavern collapses and rubble spills out to bury and destroy much of the temple’s plaza. Gain 1 Decay and [[/r 1d4]] Unrest. You can still attempt to Restore the Temple, but the DC for success increases by 4. This increase is cumulative with successive critical failures.',
+        },
     },
     'send-diplomatic-envoy': {
         oncePerRound: false,
@@ -1046,10 +1531,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         title: 'Send Diplomatic Envoy',
         description: 'You send emissaries to another group to foster positive relations and communication. The DC of this check is the group’s Negotiation DC (see the sidebar on page 519). Attempts to Send a Diplomatic Envoy to a nation with which your kingdom is at war take a –4 circumstance penalty to the check and have the result worsened one degree. At the GM’s option, some wars might be so heated that this activity has no chance of success.',
         skills: simpleRank(['statecraft'], 1),
-        criticalSuccess: 'Your envoys are received quite warmly and make a good first impression. You establish diplomatic relations with the group (see page 534 for more information) and gain a +2 circumstance bonus to all checks made with that group until the next Kingdom turn.',
-        success: 'You establish diplomatic relations.',
-        failure: 'Your envoys are received, but the target organization isn’t ready to engage in diplomatic relations. If you attempt to Send a Diplomatic Envoy to the group next Kingdom turn, you gain a +2 circumstance bonus to that check.',
-        criticalFailure: 'Disaster! Your envoy fails to reach their destination, is turned back at the border, or is taken prisoner or executed, at the GM’s discretion. The repercussions on your kingdom’s morale and reputation are significant. Choose one of the following results: gain [[/r 1d4]] Unrest, add 1 to a Ruin of your choice, or immediately roll 2 Resource Dice and spend RP equal to the result. In any event, you cannot attempt to Send a Diplomatic Envoy to this same target for the next 3 Kingdom Turns.',
+        criticalSuccess: {
+            msg: 'Your envoys are received quite warmly and make a good first impression. You establish diplomatic relations with the group (see page 534 for more information) and gain a +2 circumstance bonus to all checks made with that group until the next Kingdom turn.',
+        },
+        success: {
+            msg: 'You establish diplomatic relations.',
+        },
+        failure: {
+            msg: 'Your envoys are received, but the target organization isn’t ready to engage in diplomatic relations. If you attempt to Send a Diplomatic Envoy to the group next Kingdom turn, you gain a +2 circumstance bonus to that check.',
+        },
+        criticalFailure: {
+            msg: 'Disaster! Your envoy fails to reach their destination, is turned back at the border, or is taken prisoner or executed, at the GM’s discretion. The repercussions on your kingdom’s morale and reputation are significant. Choose one of the following results: gain [[/r 1d4]] Unrest, add 1 to a Ruin of your choice, or immediately roll 2 Resource Dice and spend RP equal to the result. In any event, you cannot attempt to Send a Diplomatic Envoy to this same target for the next 3 Kingdom Turns.',
+        },
     },
     'show-of-force': {
         companion: 'Regongar',
@@ -1061,10 +1554,19 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         title: 'Show of Force',
         description: 'Using Regongar’s advice, a public show of force is performed in an attempt to curtail criminal activity or subversive activity in the kingdom. Attempt a basic Warfare check to determine how effective the Show of Force is.',
         skills: simpleRank(['warfare']),
-        criticalSuccess: 'The kingdom’s criminals are cowed by the show of force. Reduce Crime by 2 and reduce one other Ruin of your choice by 1.',
-        success: 'The kingdom’s criminals take note of the show of force. Reduce Crime by 1.',
-        failure: 'The show of force fails to impress criminals but unsettles the rest of the citizens. Increase Unrest by 1.',
-        criticalFailure: 'The criminals are emboldened by the failed show of force. Increase Unrest by [[/r 1d4]] and Crime by 1.',
+        criticalSuccess: {
+            msg:
+                'The kingdom’s criminals are cowed by the show of force. Reduce Crime by 2 and reduce one other Ruin of your choice by 1.',
+        },
+        success: {
+            msg: 'The kingdom’s criminals take note of the show of force. Reduce Crime by 1.',
+        },
+        failure: {
+            msg: 'The show of force fails to impress criminals but unsettles the rest of the citizens. Increase Unrest by 1.',
+        },
+        criticalFailure: {
+            msg: 'The criminals are emboldened by the failed show of force. Increase Unrest by [[/r 1d4]] and Crime by 1.',
+        },
     },
     'spread-the-legend': {
         companion: 'Linzi',
@@ -1076,10 +1578,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         title: 'Spread the Legend',
         description: 'Linzi works to spread the word of the party’s heroics and achievements, both through word of mouth and by distributing chapbooks or one-sheets detailing their exploits. Attempt a basic Arts check to determine the success of Linzi’s efforts. If she has secured a printing press for the kingdom after the PCs help with her quest (see To Ask for Forgiveness, below), the Arts check gains a +2 item bonus.',
         skills: simpleRank(['arts']),
-        criticalSuccess: 'Not only do Linzi’s stories bring pride and patriotism to the nation, but they also help increase its glory. Reduce Unrest by [[/r 1d6]], and at the start of the next Kingdom turn, gain one bonus Fame. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.',
-        success: 'The rousing and inspiring stories Linzi spreads about the PCs helps to bring the nation together. Reduce Unrest by [[/r 1d6]].',
-        failure: 'Linzi avoids spreading unfortunate news, but only just barely. The citizens are only slightly entertained by their leaders’ exploits. Reduce Unrest by 1.',
-        criticalFailure: 'Linzi accidentally spreads news of a humiliating or embarrassing nature, causing the people of the kingdom to lose respect for their leaders. Increase Unrest by [[/r 1d4]].',
+        criticalSuccess: {
+            msg: 'Not only do Linzi’s stories bring pride and patriotism to the nation, but they also help increase its glory. Reduce Unrest by [[/r 1d6]], and at the start of the next Kingdom turn, gain one bonus Fame. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.',
+        },
+        success: {
+            msg: 'The rousing and inspiring stories Linzi spreads about the PCs helps to bring the nation together. Reduce Unrest by [[/r 1d6]].',
+        },
+        failure: {
+            msg: 'Linzi avoids spreading unfortunate news, but only just barely. The citizens are only slightly entertained by their leaders’ exploits. Reduce Unrest by 1.',
+        },
+        criticalFailure: {
+            msg: 'Linzi accidentally spreads news of a humiliating or embarrassing nature, causing the people of the kingdom to lose respect for their leaders. Increase Unrest by [[/r 1d4]].',
+        },
     },
     'supernatural-solution': {
         enabled: true,
@@ -1090,10 +1600,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         oncePerRound: false,
         fortune: true,
         skills: simpleRank(['magic']),
-        criticalSuccess: 'You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10 kingdom XP instead.',
-        success: 'As critical success, but the solution costs the kingdom [[/r 1d4]] RP to research. This cost is paid now, whether or not you use your supernatural solution.',
-        failure: 'Your attempt at researching a supernatural solution costs the kingdom [[/r 2d6]] RP, but is ultimately a failure, providing no advantage.',
-        criticalFailure: 'As failure, but your spellcasters’ resources and morale are impacted such that you cannot attempt a Supernatural Solution again for 2 Kingdom turns. Special You cannot influence a check with Supernatural Solution and Creative Solution simultaneously.',
+        criticalSuccess: {
+            msg: 'You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10 kingdom XP instead.',
+        },
+        success: {
+            msg: 'As critical success, but the solution costs the kingdom [[/r 1d4]] RP to research. This cost is paid now, whether or not you use your supernatural solution.',
+        },
+        failure: {
+            msg: 'Your attempt at researching a supernatural solution costs the kingdom [[/r 2d6]] RP, but is ultimately a failure, providing no advantage.',
+        },
+        criticalFailure: {
+            msg: 'As failure, but your spellcasters’ resources and morale are impacted such that you cannot attempt a Supernatural Solution again for 2 Kingdom turns. Special You cannot influence a check with Supernatural Solution and Creative Solution simultaneously.',
+        },
     },
     'supplementary-hunting': {
         companion: 'Ekundayo',
@@ -1105,10 +1623,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         title: 'Supplementary Hunting',
         description: 'Following Ekundayo’s advice, rural-dwelling citizens work to supplement stores of food and resources through hunting and trapping. Attempt a basic Wilderness check to gather excess livestock from the local wildlife, ranches, and farms to generate food commodities.',
         skills: simpleRank(['wilderness']),
-        criticalSuccess: 'Gain [[/r 1d4]] Food commodities, 1 Luxury commodity, and 1 bonus Resource Die at the start of your next Kingdom turn.',
-        success: 'Choose one: gain [[/r 1d4]] Food commodities, 1 Luxury commodity, or 1 bonus Resource Die at the start of your next Kingdom turn.',
-        failure: 'Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn.',
-        criticalFailure: 'Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn. In addition, your hunters and trappers have accidentally attracted the attention of dangerous wildlife. Either gain [[/r 1d4]] Unrest or increase a Ruin of your choice by 1.',
+        criticalSuccess: {
+            msg: 'Gain [[/r 1d4]] Food commodities, 1 Luxury commodity, and 1 bonus Resource Die at the start of your next Kingdom turn.',
+        },
+        success: {
+            msg: 'Choose one: gain [[/r 1d4]] Food commodities, 1 Luxury commodity, or 1 bonus Resource Die at the start of your next Kingdom turn.',
+        },
+        failure: {
+            msg: 'Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn. In addition, your hunters and trappers have accidentally attracted the attention of dangerous wildlife. Either gain [[/r 1d4]] Unrest or increase a Ruin of your choice by 1.',
+        },
     },
     'tap-treasury': {
         oncePerRound: false,
@@ -1119,10 +1645,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         title: 'Tap Treasury',
         description: 'You tap into the cash reserves of your kingdom for the PCs’ personal use or to provide emergency funding for an event. This is a basic check, but after you succeed or critically succeed at this activity, all future attempts to Tap Treasury have their results worsened two degrees. This penalty persists until funds equal to those taken from the treasury are repaid via Capital Investment',
         skills: simpleRank(['statecraft']),
-        criticalSuccess: 'You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.S55aqwWIzpQRFhcq.JournalEntryPage.Ly8l2GT6dbvuY3A2]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury.',
-        success: 'You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.S55aqwWIzpQRFhcq.JournalEntryPage.Ly8l2GT6dbvuY3A2]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury. In addition, you overdraw your treasury in the attempt. You take a –1 circumstance penalty to all Economy-based checks until the end of your next Kingdom turn.',
-        failure: 'You fail to secure the funds you need, and rumors about the kingdom’s potential shortfall of cash cause you to take a –1 circumstance penalty to all Loyalty- and Economy-based checks until the end of your next Kingdom turn.',
-        criticalFailure: 'You fail to secure the funds you need, and rumors about the kingdom’s potential shortfall of cash cause you to take a –1 circumstance penalty to all Loyalty- and Economy-based checks until the end of your next Kingdom turn. In addition, rumors spiral out of control. Increase Unrest by 1 and add 1 to a Ruin of your choice.',
+        criticalSuccess: {
+            msg: 'You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.S55aqwWIzpQRFhcq.JournalEntryPage.Ly8l2GT6dbvuY3A2]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury.',
+        },
+        success: {
+            msg: 'You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.S55aqwWIzpQRFhcq.JournalEntryPage.Ly8l2GT6dbvuY3A2]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury. In addition, you overdraw your treasury in the attempt. You take a –1 circumstance penalty to all Economy-based checks until the end of your next Kingdom turn.',
+        },
+        failure: {
+            msg: 'You fail to secure the funds you need, and rumors about the kingdom’s potential shortfall of cash cause you to take a –1 circumstance penalty to all Loyalty- and Economy-based checks until the end of your next Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'You fail to secure the funds you need, and rumors about the kingdom’s potential shortfall of cash cause you to take a –1 circumstance penalty to all Loyalty- and Economy-based checks until the end of your next Kingdom turn. In addition, rumors spiral out of control. Increase Unrest by 1 and add 1 to a Ruin of your choice.',
+        },
     },
     'trade-commodities': {
         oncePerRound: false,
@@ -1133,10 +1667,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         title: 'Trade Commodities',
         description: 'There are five different categories of Commodities: Food, Lumber, Luxuries, Ore, and Stone. When you Trade Commodities, select one Commodity that your kingdom currently stockpiles and reduce that Commodity’s stockpile by up to 4. Then attempt a basic check. If you trade with a group that you’ve established diplomatic relations with, you gain a +1 circumstance bonus to the check.',
         skills: simpleRank(['industry']),
-        criticalSuccess: 'At the beginning of the next Kingdom turn, you gain 2 bonus Resource Dice per point of stockpile expended from your Commodity now.',
-        success: 'At the beginning of your next Kingdom turn, you gain 1 bonus Resource Die per point of stockpile expended from your Commodity now.',
-        failure: 'You gain 1 bonus Resource Die at the beginning of your next Kingdom turn.',
-        criticalFailure: 'You gain no bonus Resource Dice (though the Commodity remains depleted). If you Traded Commodities the previous turn, gain 1 Unrest.',
+        criticalSuccess: {
+            msg: 'At the beginning of the next Kingdom turn, you gain 2 bonus Resource Dice per point of stockpile expended from your Commodity now.',
+        },
+        success: {
+            msg: 'At the beginning of your next Kingdom turn, you gain 1 bonus Resource Die per point of stockpile expended from your Commodity now.',
+        },
+        failure: {
+            msg: 'You gain 1 bonus Resource Die at the beginning of your next Kingdom turn.',
+        },
+        criticalFailure: {
+            msg: 'You gain no bonus Resource Dice (though the Commodity remains depleted). If you Traded Commodities the previous turn, gain 1 Unrest.',
+        },
     },
     'train-army': {
         oncePerRound: false,
@@ -1147,10 +1689,19 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         title: 'Train Army',
         description: 'You train an army in the use of a tactic. Choose one of the tactics from those listed starting on page 68, then attempt a Scholarship or Warfare check against the tactic’s Training DC. If your army has already learned its maximum number of tactics, the newly learned tactic replaces a previously learned tactic of your choice. ',
         skills: simpleRank(['scholarship', 'warfare']),
-        criticalSuccess: 'The army learns the tactic and then becomes efficient.',
-        success: 'The army learns the tactic.',
-        failure: 'The army fails to learn the tactic.',
-        criticalFailure: 'The army not only fails to learn the tactic but becomes frustrated and exhausted from the training; increase the army’s weary condition by 1.',
+        criticalSuccess: {
+            msg:
+                'The army learns the tactic and then becomes efficient.',
+        },
+        success: {
+            msg: 'The army learns the tactic.',
+        },
+        failure: {
+            msg: 'The army fails to learn the tactic.',
+        },
+        criticalFailure: {
+            msg: 'The army not only fails to learn the tactic but becomes frustrated and exhausted from the training; increase the army’s weary condition by 1.',
+        },
     },
     'warfare-exercises': {
         companion: 'Valerie',
@@ -1162,10 +1713,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         title: 'Warfare Exercises',
         description: 'Valerie spends time studying the nation’s armies, speaking with its commanders, researching historical records of battles, and running simulations in war rooms to help predict the best ways to prepare for upcoming conflicts. Attempt a basic Warfare check to determine the success of these exercises.',
         skills: simpleRank(['warfare']),
-        criticalSuccess: 'The exercises reveal a wide range of suggestions for the PCs to use during that month’s military exercises. All Army activities taken during this Kingdom turn’s Activity Phase gain a +1 circumstance bonus. This bonus increases to +2 at Kingdom level 9 and +3 at Kingdom level 15. In addition, the next time this Kingdom turn that you roll a critical failure on an Army activity, the result is improved to a regular failure instead.',
-        success: 'The exercises grant a +1 circumstance bonus to your first Army activity taken during the Kingdom turn’s Activity Phase. This bonus increases to +2 at Kingdom level 9 and +3 at Kingdom level 15.',
-        failure: 'The warfare exercises provide no insight this turn.',
-        criticalFailure: 'You accidentally form incorrect assumptions about your military tactics. The next time you roll a failure on an Army activity this Kingdom turn, it becomes a critical failure instead.',
+        criticalSuccess: {
+            msg: 'The exercises reveal a wide range of suggestions for the PCs to use during that month’s military exercises. All Army activities taken during this Kingdom turn’s Activity Phase gain a +1 circumstance bonus. This bonus increases to +2 at Kingdom level 9 and +3 at Kingdom level 15. In addition, the next time this Kingdom turn that you roll a critical failure on an Army activity, the result is improved to a regular failure instead.',
+        },
+        success: {
+            msg: 'The exercises grant a +1 circumstance bonus to your first Army activity taken during the Kingdom turn’s Activity Phase. This bonus increases to +2 at Kingdom level 9 and +3 at Kingdom level 15.',
+        },
+        failure: {
+            msg: 'The warfare exercises provide no insight this turn.',
+        },
+        criticalFailure: {
+            msg: 'You accidentally form incorrect assumptions about your military tactics. The next time you roll a failure on an Army activity this Kingdom turn, it becomes a critical failure instead.',
+        },
     },
 };
 
