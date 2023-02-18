@@ -60,6 +60,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
             ...super.getData(options),
             ...structures.config,
             ...sceneData,
+            residentialBuildings: structures.residentialBuildings,
             consumption: structures.consumption,
             capitalInvestmentPossible: structures.allowCapitalInvestment ? 'yes' : 'no',
             settlementEventBonus: structures.settlementEventBonus,

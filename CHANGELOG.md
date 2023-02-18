@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.9] - 2023-02-18
+
 ### Added
-* Added Structure traits to automatically calculate residential buildings. You need to re-import the following structures:
+* Added Structure traits to automatically calculate residential buildings. All the buildings should now have data references. You need to re-import the following structures:
   * Bridge
   * Cemetery
   * Houses
