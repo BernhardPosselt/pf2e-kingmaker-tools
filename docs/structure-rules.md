@@ -81,6 +81,17 @@ and reference to built-in rules that get maintained and updated with the module.
 * University
 * Watchtower
 * Waterfront
+* Bridge
+* Cemetery
+* Houses
+* Magical Streetlamps
+* Orphanage
+* Paved Streets
+* Rubble
+* Tavern, Dive
+* Tenement
+* Wall, Stone
+* Wall, Wooden
 
 ## Full Rules
 
@@ -122,7 +133,8 @@ A full structure rule would look something like this:
     "stone": 1,
     "luxuries": 1
   },
-  "unlockActivities": ["read-all-about-it"]
+  "unlockActivities": ["read-all-about-it"],
+  "traits": ["edifice"]
 }
 ```
 
@@ -176,3 +188,11 @@ A full structure rule would look something like this:
   * recruit-monsters
   * process-hidden-fees
   * supplementary-hunting
+* **traits**: optional, may include:
+  * edifice
+  * yard
+  * building
+  * famous
+  * infamous
+  * residential
+  * infrastructure

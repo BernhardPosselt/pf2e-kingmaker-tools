@@ -50,7 +50,12 @@ export interface Structure {
     increaseLeadershipActivities?: boolean;
     consumptionReduction?: number;
     unlockActivities?: Activity[];
+    traits?: BuildingTrait[];
 }
+
+export const allBuildingTraits = ['edifice', 'yard', 'building', 'famous', 'infamous', 'residential', 'infrastructure'];
+
+export type BuildingTrait = typeof allBuildingTraits[number];
 
 export type ActivityBonuses = Partial<Record<Activity, number>>;
 
@@ -85,6 +90,7 @@ const structures: Structure[] = [
             activity: 'creative-solution',
         }],
         notes: 'While in a settlement with an Academy, you gain a +2 item bonus to Lore checks made to Recall Knowledge while Investigate, to all checks made while Researching, and to Decipher Writing.',
+        traits: ['building', 'edifice'],
     },
     {
         name: 'Alchemy Laboratory',
@@ -97,6 +103,7 @@ const structures: Structure[] = [
             group: 'alchemical',
         }],
         notes: 'Checks attempted to Identify Alchemy in any settlement with at least one alchemy laboratory gain a +1 item bonus.',
+        traits: ['building'],
     },
     {
         name: 'Arcanist\'s Tower',
@@ -110,6 +117,7 @@ const structures: Structure[] = [
             group: 'arcane',
         }],
         notes: 'While in a settlement with an arcanist\'s tower, you gain a +1 item bonus to checks made to Borrow an Arcane Spell or Learn a Spell.',
+        traits: ['building'],
     },
     {
         name: 'Arena',
@@ -123,6 +131,7 @@ const structures: Structure[] = [
             activity: 'quell-unrest',
         }],
         notes: 'An arena lets you to retrain combat-themed feats more efficiently while in the settlement; doing so takes only 5 days rather than a week of downtime.',
+        traits: ['edifice', 'yard'],
     },
     {
         name: 'Bank',
@@ -131,6 +140,7 @@ const structures: Structure[] = [
             activity: 'tap-treasury',
         }],
         enableCapitalInvestment: true,
+        traits: ['building'],
     },
     {
         name: 'Barracks',
@@ -144,6 +154,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'recruit-army',
         }],
+        traits: ['building', 'residential'],
     },
     {
         name: 'Brewery',
@@ -151,6 +162,11 @@ const structures: Structure[] = [
             value: 1,
             activity: 'establish-trade-agreement',
         }],
+        traits: ['building'],
+    },
+    {
+        name: 'Bridge',
+        traits: ['infrastructure'],
     },
     {
         name: 'Castle',
@@ -174,6 +190,7 @@ const structures: Structure[] = [
             activity: 'recover-army',
         }],
         increaseLeadershipActivities: true,
+        traits: ['building', 'edifice', 'famous', 'infamous'],
     },
     {
         name: 'Cathedral',
@@ -192,6 +209,11 @@ const structures: Structure[] = [
             group: 'divine',
         }],
         notes: 'While in a settlement with a cathedral, you gain a +3 item bonus to Lore and Religion checks made to Recall Knowledge while Investigating, and to all faith-themed checks made while Researching.',
+        traits: ['building', 'edifice', 'famous', 'infamous'],
+    },
+    {
+        name: 'Cemetery',
+        traits: ['yard'],
     },
     {
         name: 'Construction Yard',
@@ -202,6 +224,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'repair-reputation-decay',
         }],
+        traits: ['yard'],
     },
     {
         name: 'Dump',
@@ -209,6 +232,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'demolish',
         }],
+        traits: ['yard'],
     },
     {
         name: 'Embassy',
@@ -219,6 +243,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'request-foreign-aid',
         }],
+        traits: ['building'],
     },
     {
         name: 'Festival Hall',
@@ -226,6 +251,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'celebrate-holiday',
         }],
+        traits: ['building'],
     },
     {
         name: 'Foundry',
@@ -236,6 +262,7 @@ const structures: Structure[] = [
         storage: {
             ore: 1,
         },
+        traits: ['building'],
     },
     {
         name: 'Garrison',
@@ -246,10 +273,12 @@ const structures: Structure[] = [
             value: 1,
             activity: 'train-army',
         }],
+        traits: ['building', 'residential'],
     },
     {
         name: 'General Store',
         preventItemLevelPenalty: true,
+        traits: ['building'],
     },
     {
         name: 'Gladiatorial Arena',
@@ -266,16 +295,23 @@ const structures: Structure[] = [
             activity: 'quell-unrest',
         }],
         notes: 'A gladiatorial arena allows a PC in the settlement to retrain combat-themed feats (at the GM\'s discretion) more efficiently; doing so takes only 4 days rather than a week of downtime.',
+        traits: ['edifice', 'famous', 'infamous', 'yard'],
+    },
+    {
+        name: 'Houses',
+        traits: ['building', 'residential'],
     },
     {
         name: 'Granary',
         storage: {
             food: 1,
         },
+        traits: ['building'],
     },
     {
         name: 'Guildhall',
         notes: 'While in a settlement with a guildhall, you gain a +1 item bonus to all related skill checks to Earn Income or to Repair.',
+        traits: ['building'],
     },
     {
         name: 'Herbalist',
@@ -283,6 +319,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'provide-care',
         }],
+        traits: ['building'],
     },
     {
         name: 'Hospital',
@@ -294,6 +331,7 @@ const structures: Structure[] = [
             activity: 'quell-unrest',
         }],
         notes: 'While in a settlement with a hospital, you gain a +2 item bonus to Medicine checks to Treat Disease and Treat Wounds.',
+        traits: ['building'],
     },
     {
         name: 'Illicit Market',
@@ -304,6 +342,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
         }],
+        traits: ['building', 'infamous'],
     },
     {
         name: 'Inn',
@@ -311,6 +350,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'hire-adventurers',
         }],
+        traits: ['building', 'residential'],
     },
     {
         name: 'Jail',
@@ -319,6 +359,7 @@ const structures: Structure[] = [
             skill: 'intrigue',
             activity: 'quell-unrest',
         }],
+        traits: ['building'],
     },
     {
         name: 'Keep',
@@ -332,6 +373,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'train-army',
         }],
+        traits: ['building', 'edifice'],
     },
     {
         name: 'Library',
@@ -341,6 +383,7 @@ const structures: Structure[] = [
             activity: 'rest-and-relax',
         }],
         notes: 'While in a settlement with a library, you gain a +1 item bonus to Lore checks made to Recall Knowledge while Investigating, as well as to Researching checks, and to Decipher Writing checks.',
+        traits: ['building'],
     },
     {
         name: 'Lumberyard',
@@ -351,6 +394,7 @@ const structures: Structure[] = [
         storage: {
             lumber: 1,
         },
+        traits: ['yard'],
     },
     {
         name: 'Luxury Store',
@@ -362,6 +406,7 @@ const structures: Structure[] = [
             value: 1,
             group: 'luxury',
         }],
+        traits: ['building'],
     },
     {
         name: 'Magic Shop',
@@ -373,6 +418,11 @@ const structures: Structure[] = [
             value: 1,
             group: 'magical',
         }],
+        traits: ['building'],
+    },
+    {
+        name: 'Magical Streetlamps',
+        traits: ['infrastructure'],
     },
     {
         name: 'Mansion',
@@ -380,6 +430,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'improve-lifestyle',
         }],
+        traits: ['building', 'residential'],
     },
     {
         name: 'Marketplace',
@@ -388,6 +439,7 @@ const structures: Structure[] = [
             activity: 'establish-trade-agreement',
         }],
         preventItemLevelPenalty: true,
+        traits: ['building', 'residential'],
     },
     {
         name: 'Menagerie',
@@ -398,6 +450,7 @@ const structures: Structure[] = [
         }],
         notes: 'A menagerie typically contains a selection of level 5 or lower animals. If your party captures a living creature of level 6 or higher and can transport the creature back to a settlement with a menagerie, you can add that creature to the menagerie as long as your kingdom level is at least 4 higher than the creature\'s level. Each time such a creature is added to a menagerie, gain 1 Fame or Infamy point (as appropriate) or reduce one Ruin of your choice by 1.\n' +
             'Only creatures with Intelligence modifiers of –4 or –5 are appropriate to place in a menagerie. A kingdom gains 1 Unrest at the start of a Kingdom turn for each sapient creature (anything with an Intelligence modifier of –3 or higher) on display in a menagerie.',
+        traits: ['building', 'edifice'],
     },
     {
         name: 'Military Academy',
@@ -410,6 +463,7 @@ const structures: Structure[] = [
             skill: 'warfare',
             activity: 'pledge-of-fealty',
         }],
+        traits: ['building', 'edifice'],
     },
     {
         name: 'Mill',
@@ -418,6 +472,7 @@ const structures: Structure[] = [
             activity: 'harvest-crops',
         }],
         consumptionReduction: 1,
+        traits: ['building'],
     },
     {
         name: 'Mint',
@@ -431,6 +486,7 @@ const structures: Structure[] = [
             value: 3,
             activity: 'repair-reputation-crime',
         }],
+        traits: ['building', 'edifice'],
     },
     {
         name: 'Museum',
@@ -440,6 +496,7 @@ const structures: Structure[] = [
             activity: 'rest-and-relax',
         }],
         notes: 'A magic item of level 6 or higher that has a particular import or bears significant historical or regional value (at the GM\'s discretion) can be donated to a museum. Each time such an item is donated, reduce Unrest by 1. If that item is later removed from display, increase Unrest by 1.',
+        traits: ['building', 'edifice'],
     },
     {
         name: 'Noble Villa',
@@ -452,6 +509,7 @@ const structures: Structure[] = [
             skill: 'politics',
             activity: 'quell-unrest',
         }],
+        traits: ['building', 'residential'],
     },
     {
         name: 'Occult Shop',
@@ -464,6 +522,7 @@ const structures: Structure[] = [
             group: 'occult',
         }],
         notes: 'While in a settlement with an occult shop, you gain a +2 item bonus to all checks made to Research esoteric subjects or to Recall Knowledge about the same.',
+        traits: ['building'],
     },
     {
         name: 'Opera House',
@@ -475,6 +534,11 @@ const structures: Structure[] = [
             activity: 'create-a-masterpiece',
         }],
         notes: 'While in a settlement with an opera house, you gain a +3 item bonus to Performance checks made to Earn Income.',
+        traits: ['building', 'edifice', 'famous', 'infamous'],
+    },
+    {
+        name: 'Orphanage',
+        traits: ['building', 'residential'],
     },
     {
         name: 'Palace',
@@ -501,6 +565,7 @@ const structures: Structure[] = [
             value: 3,
         }],
         increaseLeadershipActivities: true,
+        traits: ['building', 'edifice', 'famous', 'infamous'],
     },
     {
         name: 'Park',
@@ -509,6 +574,11 @@ const structures: Structure[] = [
             skill: 'wilderness',
             activity: 'rest-and-relax',
         }],
+        traits: ['yard'],
+    },
+    {
+      name: 'Paved Streets',
+        traits: ['infrastructure'],
     },
     {
         name: 'Pier',
@@ -516,6 +586,11 @@ const structures: Structure[] = [
             value: 1,
             activity: 'go-fishing',
         }],
+        traits: ['yard'],
+    },
+    {
+        name: 'Rubble',
+        traits: ['yard'],
     },
     {
         name: 'Printing House',
@@ -528,6 +603,7 @@ const structures: Structure[] = [
         }],
         notes: 'A PC in a settlement with a printing house gains a +2 item bonus to checks to Gather Information or to Research any topic in a library or similar structure.',
         unlockActivities: ['read-all-about-it'],
+        traits: ['building', 'edifice'],
     },
     {
         name: 'Sacred Grove',
@@ -540,6 +616,7 @@ const structures: Structure[] = [
             value: 1,
             group: 'primal',
         }],
+        traits: ['yard'],
     },
     {
         name: 'Secure Warehouse',
@@ -550,6 +627,7 @@ const structures: Structure[] = [
         storage: {
             luxuries: 1,
         },
+        traits: ['building'],
     },
     {
         name: 'Sewer System',
@@ -558,6 +636,7 @@ const structures: Structure[] = [
             activity: 'clandestine-business',
         }],
         consumptionReduction: 1,
+        traits: ['infrastructure'],
     },
     {
         name: 'Shrine',
@@ -569,6 +648,7 @@ const structures: Structure[] = [
             value: 1,
             group: 'divine',
         }],
+        traits: ['building'],
     },
     {
         name: 'Smithy',
@@ -580,6 +660,7 @@ const structures: Structure[] = [
             activity: 'outfit-army',
         }],
         notes: 'While in a settlement with a smithy, you gain a +1 item bonus to Craft checks made to work with metal.',
+        traits: ['building'],
     },
     {
         name: 'Specialized Artisan',
@@ -588,6 +669,7 @@ const structures: Structure[] = [
             activity: 'craft-luxuries',
         }],
         notes: 'While in a settlement with a specialized artisan, you gain a +1 item bonus to Craft checks made to craft specialized goods like jewelry.',
+        traits: ['building'],
     },
     {
         name: 'Stable',
@@ -595,6 +677,7 @@ const structures: Structure[] = [
             value: 1,
             activity: 'establish-trade-agreement',
         }],
+        traits: ['yard'],
     },
     {
         name: 'Stockyard',
@@ -603,6 +686,7 @@ const structures: Structure[] = [
             activity: 'gather-livestock',
         }],
         consumptionReduction: 1,
+        traits: ['yard'],
     },
     {
         name: 'Stonemason',
@@ -613,6 +697,7 @@ const structures: Structure[] = [
         storage: {
             stone: 1,
         },
+        traits: ['building'],
     },
     {
         name: 'Tannery',
@@ -620,6 +705,11 @@ const structures: Structure[] = [
             value: 1,
             activity: 'trade-commodities',
         }],
+        traits: ['building'],
+    },
+    {
+        name: 'Tavern, Dive',
+        traits: ['building'],
     },
     {
         name: 'Tavern, Luxury',
@@ -633,6 +723,7 @@ const structures: Structure[] = [
             activity: 'rest-and-relax',
         }],
         notes: 'If attempt a Performance check to Earn Income in a settlement with a luxury tavern, you gain a +2 item bonus to the check. All checks made to Gather Information in a settlement with at least one luxury tavern gain a +2 item bonus.',
+        traits: ['building', 'famous'],
     },
     {
         name: 'Tavern, Popular',
@@ -646,6 +737,7 @@ const structures: Structure[] = [
             activity: 'rest-and-relax',
         }],
         notes: 'If you attempt a Performance check to Earn Income in a settlement with a popular tavern, you gain a +1 item bonus to the check. All checks made to Gather Information in a settlement with at least one popular tavern gain a +1 item bonus.',
+        traits: ['building'],
     },
     {
         name: 'Tavern, World-Class',
@@ -662,6 +754,7 @@ const structures: Structure[] = [
             activity: 'rest-and-relax',
         }],
         notes: 'If you attempt a Performance check to Earn Income in a settlement with a world-class tavern, you gain a +3 item bonus to the check. All checks made to Gather Information in a settlement with a world-class tavern gain a +3 item bonus.',
+        traits: ['building', 'edifice', 'famous'],
     },
     {
         name: 'Temple',
@@ -676,6 +769,11 @@ const structures: Structure[] = [
             value: 1,
             group: 'divine',
         }],
+        traits: ['building', 'famous', 'infamous'],
+    },
+    {
+        name: 'Tenement',
+        traits: ['building', 'residential'],
     },
     {
         name: 'Theater',
@@ -684,6 +782,7 @@ const structures: Structure[] = [
             activity: 'celebrate-holiday',
         }],
         notes: 'While in a settlement with a theater, you gain a +2 item bonus to Performance checks made to Earn Income.',
+        traits: ['building'],
     },
     {
         name: 'Thieves\' Guild',
@@ -692,10 +791,12 @@ const structures: Structure[] = [
             activity: 'infiltration',
         }],
         notes: 'While in a settlement with a thieves\' guild, you gain a +1 item bonus to Create Forgeries.',
+        traits: ['building', 'infamous'],
     },
     {
         name: 'Town Hall',
         increaseLeadershipActivities: true,
+        traits: ['building', 'edifice'],
     },
     {
         name: 'Trade Shop',
@@ -704,6 +805,7 @@ const structures: Structure[] = [
             activity: 'purchase-commodities',
         }],
         notes: 'When you build a trade shop, indicate the kind of shop it is, such as a bakery, carpenter, tailor, and so on. While in a settlement with a trade shop, you gain a +1 item bonus to all associated Crafting checks.',
+        traits: ['building'],
     },
     {
         name: 'University',
@@ -712,12 +814,22 @@ const structures: Structure[] = [
             activity: 'creative-solution',
         }],
         notes: 'While in a settlement with a university, you gain a +3 item bonus to Lore checks made to Recall Knowledge while Investigating, to Research checks (Gamemastery Guide 154), and to Decipher Writing.',
+        traits: ['building', 'edifice', 'famous'],
+    },
+    {
+        name: 'Wall, Stone',
+        traits: ['infrastructure'],
+    },
+    {
+        name: 'Wall, Wooden',
+        traits: ['infrastructure'],
     },
     {
         name: 'Watchtower',
         settlementEventRules: [{
             value: 1,
         }],
+        traits: ['building'],
     },
     {
         name: 'Waterfront',
@@ -731,6 +843,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
         }],
+        traits: ['yard'],
     },
 ];
 

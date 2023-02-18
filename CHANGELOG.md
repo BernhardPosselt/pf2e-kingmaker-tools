@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+* Added Structure traits to automatically calculate residential buildings. You need to re-import the following structures:
+  * Bridge
+  * Cemetery
+  * Houses
+  * Magical Streetlamps
+  * Orphanage
+  * Paved Streets
+  * Rubble
+  * Tavern, Dive
+  * Tenement
+  * Wall, Stone
+  * Wall, Wooden
+
 ### Fixed
 
 * Fixed Ekundayo's and Nok-Nok's activities not being blacklisted

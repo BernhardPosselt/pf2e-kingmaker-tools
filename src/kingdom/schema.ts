@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {allSkills} from './data/skills';
 import {allActivities} from './data/activities';
-import {itemGroups, structuresByName} from './data/structures';
+import {allBuildingTraits, itemGroups, structuresByName} from './data/structures';
 
 const builtInRefs = structuresByName.keys();
 export const refSchema = Joi.object({
@@ -43,4 +43,5 @@ export const ruleSchema = Joi.object({
         luxuries: Joi.number().optional(),
     }).optional(),
     unlockActivities: Joi.array().items(Joi.string().valid(...allActivities)).optional(),
+    traits: Joi.array().items(Joi.string().valid(...allBuildingTraits)).optional(),
 });
