@@ -344,13 +344,17 @@ Hooks.on('renderChatLog', () => {
             const index = parseInt(target.dataset.index ?? '0', 10);
             const modifier = activityData[activity]?.[degree]?.modifiers?.[index];
             if (modifier !== undefined && game instanceof Game) {
+                // copy modifier because we alter the consumeId
+                const modifierCopy = {
+                    ...modifier,
+                };
                 const sheetActor = getKingdomSheetActor(game);
                 if (sheetActor) {
-                    if (modifier.consumeId !== undefined) {
-                        modifier.consumeId = crypto.randomUUID();
+                    if (modifierCopy.consumeId !== undefined) {
+                        modifierCopy.consumeId = crypto.randomUUID();
                     }
                     const kingdom = getKingdom(sheetActor);
-                    const modifiers = [...kingdom.modifiers, modifier];
+                    const modifiers = [...kingdom.modifiers, modifierCopy];
                     await saveKingdom(sheetActor, {modifiers});
                     document.dispatchEvent(new Event('kmAppliedModifierFromChat'));
                 } else {
