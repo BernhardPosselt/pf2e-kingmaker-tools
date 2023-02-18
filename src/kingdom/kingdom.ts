@@ -71,13 +71,16 @@ interface Effect {
     name: string;
     effect: string;
     turns: string;
+    consumable: boolean;
 }
+
 function createEffects(modifiers: Modifier[]): Effect[] {
     return modifiers.map(modifier => {
         return {
             name: modifier.name,
             effect: modifierToLabel(modifier),
             turns: modifier.turns === undefined ? 'indefinite' : `${modifier.turns}`,
+            consumable: modifier.consumeId !== undefined,
         };
     });
 }
@@ -413,6 +416,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                             kingdom: this.getKingdom(),
                             game: this.game,
                             type: 'activity',
+                            onRoll: this.consumeModifiers.bind(this),
                         }).render(true);
                     }
                 });
@@ -427,6 +431,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         game: this.game,
                         skill: skill as Skill,
                         type: 'skill',
+                        onRoll: this.consumeModifiers.bind(this),
                     }).render(true);
                 });
             });
@@ -474,6 +479,20 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
     }
 
+    private async consumeModifiers(consumeIds: Set<string>): Promise<void> {
+        const current = this.getKingdom();
+        await this.saveKingdom({
+            modifiers: current.modifiers
+                .filter(modifier => {
+                    const id = modifier.consumeId;
+                    if (id === undefined || id === null) {
+                        return true;
+                    } else {
+                        return !consumeIds.has(id);
+                    }
+                }),
+        });
+    }
 
     private async increaseXP(xp: number): Promise<void> {
         await ChatMessage.create({content: `Gained ${xp} Kingdom XP`});

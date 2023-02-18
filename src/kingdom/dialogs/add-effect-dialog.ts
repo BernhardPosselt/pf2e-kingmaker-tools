@@ -25,8 +25,6 @@ const activities = createLabels(allActivities, true);
 const skills = createLabels(allSkills);
 const abilities = createLabels(allAbilities);
 
-console.log(phases, allKingdomPhases);
-
 function tpl(): string {
     return `
         <form class="simple-dialog-form">
@@ -80,6 +78,10 @@ function tpl(): string {
                 <label for="km-effect-turns">Turns (0 for indefinite)</label>
                 <input type="number" name="turns" id="km-effect-turns" value="1">
             </div>
+            <div>
+                <label for="km-effect-consumable">Consume after Use</label>
+                <input type="checkbox" name="consumable" id="km-effect-consumable">
+            </div>
         </form>
         `;
 }
@@ -128,6 +130,7 @@ export function addEffectDialog(
                         type,
                         value,
                         enabled: parseCheckbox($html, 'enabled'),
+                        consumeId: parseCheckbox($html, 'consumable') ? crypto.randomUUID() : undefined,
                         phases,
                         activities,
                         skills,

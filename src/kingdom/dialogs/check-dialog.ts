@@ -26,6 +26,7 @@ export interface CheckDialogFeatOptions {
     skill?: Skill;
     game: Game;
     kingdom: Kingdom;
+    onRoll: (consumeModifiers: Set<string>) => Promise<void>;
 }
 
 interface CheckFormData {
@@ -34,6 +35,7 @@ interface CheckFormData {
     selectedSkill: Skill;
     customModifiers: CustomModifiers;
     overrideModifiers: Record<string, string>;
+    consumeModifiers: Record<string, boolean>;
 }
 
 interface TotalAndModifiers {
@@ -60,6 +62,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         untyped: {bonus: 0, penalty: 0},
     };
     private modifierOverrides: Record<string, boolean> = {};
+    private consumeModifiers: Set<string> = new Set();
+    private onRoll: (consumeModifiers: Set<string>) => Promise<void>;
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -80,6 +84,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.skill = options.skill;
         this.game = options.game;
         this.kingdom = options.kingdom;
+        this.onRoll = options.onRoll;
         const controlDC = getControlDC(this.kingdom.level, this.kingdom.size);
         if (this.type === 'skill') {
             this.selectedSkill = options.skill!;
@@ -113,7 +118,6 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const settlementScene = getSettlementScene(this.game, this.kingdom.activeSettlement);
         const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
         const skillRanks = this.kingdom.skillRanks;
-        console.log(activeSettlement);
         const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(skillRanks);
         const additionalModifiers: Modifier[] = createAdditionalModifiers(this.kingdom, activeSettlement);
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
@@ -138,6 +142,10 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const total = calculateModifiers(modifiers);
             return [skill, {total, modifiers}];
         })) as Record<Skill, TotalAndModifiers>;
+        // set all modifiers as consumed that have a consumeId and are enabled
+        this.consumeModifiers = new Set(skillModifiers[this.selectedSkill].modifiers
+            .filter(modifier => modifier.enabled && modifier.consumeId !== undefined)
+            .map(modifier => modifier.consumeId!));
         return {
             ...super.getData(options),
             invalid: this.selectedSkill === undefined,
@@ -152,6 +160,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         };
     }
 
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     protected async _updateObject(event: Event, formData: any): Promise<void> {
         const data = expandObject(formData) as CheckFormData;
         console.log(data);
@@ -179,6 +188,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const type = target.dataset.type!;
 
             await this.rollCheck(`${modifier}`, type, activity, dc);
+            await this.onRoll(this.consumeModifiers);
             await this.close();
         });
 
@@ -190,6 +200,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const type = target.dataset.type!;
 
             await this.rollCheck(`1d20+${modifier}`, type, activity, dc);
+            await this.onRoll(this.consumeModifiers);
             await this.close();
         });
     }
@@ -265,6 +276,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                         enabled: modifier.enabled,
                         override: override === undefined ? '-' : (override ? 'enabled' : 'disabled'),
                         id: modifier.id,
+                        consumable: modifier.consumeId !== undefined &&
+                            this.consumeModifiers.has(modifier.consumeId),
                     };
                 }),
             };

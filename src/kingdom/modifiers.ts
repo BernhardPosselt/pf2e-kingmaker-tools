@@ -34,6 +34,7 @@ export interface Modifier {
     abilities?: Ability[];
     enabled: boolean;
     turns?: number;
+    consumeId?: string;
 }
 
 function createPredicateName(values: string[] | undefined, label: string): string | undefined {

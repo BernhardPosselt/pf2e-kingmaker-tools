@@ -4,6 +4,7 @@
             <th>Name</th>
             <th>Value</th>
             <th>Turns</th>
+            <th>Consumable</th>
             <th>Delete</th>
         </tr>
         {{#each effects}}
@@ -11,6 +12,13 @@
                 <td>{{name}}</td>
                 <td>{{effect}}</td>
                 <td>{{turns}}</td>
+                <td>
+                    {{#if consumable}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{else}}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {{/if}}
+                </td>
                 <td>
                     <button type="button" class="icon-action km-delete-effect" data-delete-index="{{@index}}"><i class="fa-solid fa-trash"></i></button>
                 </td>

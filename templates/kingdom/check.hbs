@@ -52,6 +52,7 @@
                     <th>Value</th>
                     <th>Enabled</th>
                     <th>Override</th>
+                    <th title="If enabled, remove modifier after roll">Consumable</th>
                 </tr>
                 {{#each modifiers.modifiers}}
                     <tr>
@@ -73,6 +74,14 @@
                                     <option value="disabled">Disable</option>
                                 {{/select}}
                             </select>
+                        </td>
+                        <td title="If enabled, remove modifier after roll">
+                            {{#if consumable}}
+                                <i class="fa-solid fa-circle-check"></i>
+                            {{else}}
+                                <i class="fa-regular fa-circle-xmark"></i>
+                            {{/if}}
+                        </td>
                     </tr>
                 {{/each}}
             </table>
