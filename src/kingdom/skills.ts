@@ -107,6 +107,7 @@ export function calculateSkills(
         kingdomLevel,
         alwaysAddLevel,
         skillItemBonuses,
+        additionalModifiers,
     }: {
         ruin: Ruin,
         unrest: number,
@@ -116,6 +117,7 @@ export function calculateSkills(
         leaders: Leaders,
         alwaysAddLevel: boolean,
         skillItemBonuses?: SkillItemBonuses,
+        additionalModifiers?: Modifier[],
     }
 ): SkillStats[] {
     return allSkills.map(skill => {
@@ -131,6 +133,7 @@ export function calculateSkills(
             ability,
             skillItemBonus: skillItemBonuses?.[skill],
             skill,
+            additionalModifiers,
         });
         const total = calculateModifiers(modifiers);
         return {

@@ -1,6 +1,6 @@
 import {getMergedData, getSettlementScene} from '../scene';
 import {ActivityBonuses, ItemGroup, ItemLevelBonuses, SkillItemBonuses} from '../data/structures';
-import {capitalize, unslugifyActivity} from '../../utils';
+import {capitalize, unslugify} from '../../utils';
 import {SettlementData} from '../structures';
 import {Kingdom} from '../data/kingdom';
 
@@ -157,7 +157,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
                     actions: (Object.entries(bonus.activities) as ([keyof ActivityBonuses, number])[])
                         .map(([action, value]) => {
                             return {
-                                label: unslugifyActivity(action),
+                                label: unslugify(action),
                                 value: value,
                             };
                         }),

@@ -55,15 +55,32 @@ import {activityBlacklistDialog} from './dialogs/activity-blacklist-dialog';
 import {showHelpDialog} from './dialogs/show-help-dialog';
 import {activityData} from './data/activityData';
 import {showSettlement} from './dialogs/settlement';
+import {createAdditionalModifiers, Modifier, modifierToLabel} from './modifiers';
+import {addEffectDialog} from './dialogs/add-effect-dialog';
 
 interface KingdomOptions {
     game: Game;
     sheetActor: Actor;
 }
 
-type KingdomTabs = 'status' | 'skills' | 'turn' | 'feats' | 'groups' | 'features' | 'settlements';
+type KingdomTab = 'status' | 'skills' | 'turn' | 'feats' | 'groups' | 'features' | 'settlements' | 'effects';
 
 const levels = [...Array.from(Array(20).keys()).map(k => k + 1)];
+
+interface Effect {
+    name: string;
+    effect: string;
+    turns: string;
+}
+function createEffects(modifiers: Modifier[]): Effect[] {
+    return modifiers.map(modifier => {
+        return {
+            name: modifier.name,
+            effect: modifierToLabel(modifier),
+            turns: modifier.turns === undefined ? 'indefinite' : `${modifier.turns}`,
+        };
+    });
+}
 
 class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions, object, null> {
     static override get defaultOptions(): FormApplicationOptions {
@@ -74,7 +91,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         options.submitOnChange = true;
         options.closeOnSubmit = false;
         options.classes = ['kingmaker-tools-app', 'kingdom-app'];
-        options.width = 800;
+        options.width = 850;
         options.height = 'auto';
         options.scrollY = ['.km-content', '.km-sidebar'];
         return options;
@@ -83,7 +100,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private sheetActor: Actor;
 
     private readonly game: Game;
-    private nav: KingdomTabs = 'status';
+    private nav: KingdomTab = 'status';
 
     constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
@@ -168,6 +185,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 kingdomLevel: kingdomData.level,
                 alwaysAddLevel: getBooleanSetting(this.game, 'kingdomAlwaysAddLevel'),
                 skillItemBonuses: activeSettlement?.settlement?.skillBonuses,
+                additionalModifiers: createAdditionalModifiers(kingdomData, activeSettlement),
             }),
             leaders: this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
@@ -233,10 +251,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             civicPlanning: kingdomData.level >= 12,
             useXpHomebrew,
             canAddCurrentSceneSettlement: currentSceneIsSettlement(this.game) && isGM,
+            effects: createEffects(kingdomData.modifiers),
         };
     }
 
-    private getActiveTabs(): object {
+    private getActiveTabs(): Record<string, boolean> {
         return {
             statusTab: this.nav === 'status',
             skillsTab: this.nav === 'skills',
@@ -245,6 +264,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             featsTab: this.nav === 'feats',
             featuresTab: this.nav === 'features',
             settlementsTab: this.nav === 'settlements',
+            effectsTab: this.nav === 'effects',
         };
     }
 
@@ -283,7 +303,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.km-nav a')?.forEach(el => {
             el.addEventListener('click', (event) => {
                 const tab = event.currentTarget as HTMLAnchorElement;
-                this.nav = tab.dataset.tab as KingdomTabs;
+                this.nav = tab.dataset.tab as KingdomTab;
                 this.render();
             });
         });
@@ -440,6 +460,18 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     await showSettlement(this.game, id, current);
                 });
             });
+        $html.querySelector('#km-add-effect')
+            ?.addEventListener('click', async () => {
+                addEffectDialog(async (modifier) => {
+                    const current = this.getKingdom();
+                    current.modifiers.push(modifier);
+                    await this.saveKingdom(current);
+                });
+            });
+        $html.querySelectorAll('.km-delete-effect')
+            ?.forEach(el => {
+                el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'modifiers'));
+            });
     }
 
 
@@ -456,11 +488,23 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             content: `<h2>Ending Turn</h2>
             <ul>
                 <li>Setting Resource Points to 0</li>
+                <li>Reducing Effects' Turns by 1</li>
                 <li>Adding values from the <b>next</b> columns to the <b>now</b> columns respecting their resource limits</li>
             </ul>
             `,
         });
+        // tick down modifiers
+        const modifiers = current.modifiers
+            .map(modifier => {
+                const turns = modifier.turns === undefined ? undefined : modifier.turns - 1;
+                return {
+                    ...modifier,
+                    turns: turns,
+                };
+            })
+            .filter(modifier => (modifier?.turns ?? 1) > 0);
         await this.saveKingdom({
+            modifiers,
             resourceDice: {
                 now: current.resourcePoints.next,
                 next: 0,
@@ -857,7 +901,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private getKingdom(): Kingdom {
-        return this.sheetActor.getFlag('pf2e-kingmaker-tools', 'kingdom-sheet') as Kingdom;
+        const kingdom = this.sheetActor.getFlag('pf2e-kingmaker-tools', 'kingdom-sheet') as Kingdom;
+        // migrations
+        if (kingdom.modifiers === undefined) {
+            kingdom.modifiers = [];
+        }
+        console.log(kingdom);
+        return kingdom;
     }
 
     private async saveSettlements(settlements: CurrentSceneData[]): Promise<void> {

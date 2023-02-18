@@ -1,0 +1,21 @@
+{{#if effects}}
+    <table class="km-table">
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Turns</th>
+            <th>Delete</th>
+        </tr>
+        {{#each effects}}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{effect}}</td>
+                <td>{{turns}}</td>
+                <td>
+                    <button type="button" class="icon-action km-delete-effect" data-delete-index="{{@index}}"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+        {{/each}}
+    </table>
+{{/if}}
+<button id="km-add-effect">Add Effect <i class="fa-solid fa-plus"></i></button>

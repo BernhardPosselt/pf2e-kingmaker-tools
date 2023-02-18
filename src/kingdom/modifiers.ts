@@ -1,5 +1,5 @@
 import {Activity, getActivityPhase, KingdomPhase} from './data/activities';
-import {capitalize, groupBy, unslugifyActivity} from '../utils';
+import {capitalize, groupBy, unslugify} from '../utils';
 import {getLevelData, Kingdom, Leaders, Ruin} from './data/kingdom';
 import {SettlementSceneData} from './scene';
 import {allFeatsByName} from './data/feats';
@@ -12,7 +12,17 @@ import {calculateUnrestPenalty} from './data/unrest';
 import {abilityRuins} from './data/ruin';
 import {ActivityBonuses, SkillItemBonus} from './data/structures';
 
-export type ModifierType = 'ability' | 'proficiency' | 'item' | 'status' | 'circumstance' | 'vacancy' | 'untyped';
+export const allModifierTypes = [
+    'ability',
+    'proficiency',
+    'item',
+    'status',
+    'circumstance',
+    'vacancy',
+    'untyped',
+] as const;
+
+export type ModifierType = typeof allModifierTypes[number];
 
 export interface Modifier {
     type: ModifierType;
@@ -23,6 +33,26 @@ export interface Modifier {
     skills?: Skill[];
     abilities?: Ability[];
     enabled: boolean;
+    turns?: number;
+}
+
+function createPredicateName(values: string[] | undefined, label: string): string | undefined {
+    return values ? `${label}: ${values.map(v => unslugify(v)).join(', ')}` : undefined;
+}
+
+export function modifierToLabel(modifier: Modifier): string {
+    const value = modifier.value >= 0 ? `+${modifier.value}` : `${modifier.value}`;
+    const type = modifier.value >= 0 ? capitalize(modifier.type) + ' Bonus' : capitalize(modifier.type) + ' Penalty';
+    const to = modifier.skills || modifier.abilities || modifier.activities || modifier.phases ? ' to: ' : '';
+    const predicates = [
+        createPredicateName(modifier.phases, 'Phases'),
+        createPredicateName(modifier.activities, 'Activities'),
+        createPredicateName(modifier.abilities, 'Abilities'),
+        createPredicateName(modifier.skills, 'Skills'),
+    ]
+        .filter(v => v !== undefined)
+        .join('; ');
+    return `${value} ${type}${to}${predicates}`;
 }
 
 export interface ModifierWithId extends Modifier {
@@ -221,6 +251,7 @@ export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: Se
     const feats = new Set([...kingdom.feats.map(f => f.id), ...kingdom.feats.map(f => f.id)]);
     const result: Modifier[] = Array.from(feats)
         .flatMap(feat => allFeatsByName[feat]?.modifiers ?? []);
+    kingdom.modifiers.forEach(modifier => result.push(modifier));
     if (activeSettlement?.scenedData?.secondaryTerritory) {
         result.push({
             name: 'Check in Secondary Territory',
@@ -450,7 +481,7 @@ export function createActivityModifiers(activities: ActivityBonuses): Modifier[]
                 type: 'item',
                 enabled: true,
                 value,
-                name: unslugifyActivity(activity),
+                name: unslugify(activity),
                 activities: [activity],
                 phases,
             };

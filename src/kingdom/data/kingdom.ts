@@ -3,6 +3,7 @@ import {ActorTypes} from './companions';
 import {Leader} from './leaders';
 import {ActivityContent, activityData} from './activityData';
 import {AbilityScores} from './abilities';
+import {Modifier} from '../modifiers';
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
 
@@ -151,6 +152,7 @@ export interface Kingdom {
     ongoingEvents: OngoingEvent[];
     turnsWithoutEvent: number;
     activityBlacklist: Activity[];
+    modifiers: Modifier[];
 }
 
 
@@ -446,8 +448,9 @@ export function getDefaultKingdomData(): Kingdom {
                 value: 0,
             },
         },
-      activityBlacklist: (Object.entries(activityData) as [Activity, ActivityContent][])
-          .filter(([, data]) => !data.enabled && !data.companion)
-          .map(([key]) => key),
+        activityBlacklist: (Object.entries(activityData) as [Activity, ActivityContent][])
+            .filter(([, data]) => !data.enabled && !data.companion)
+            .map(([key]) => key),
+        modifiers: [],
     };
 }

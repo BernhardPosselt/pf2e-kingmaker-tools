@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.10] - 2023-02-18
+
+### Added
+
+* Added an effects tab allowing you to add custom modifiers that expire and get removed at the end of a kingdom turn
+
 ## [0.0.9] - 2023-02-18
 
 ### Added

@@ -14,7 +14,7 @@ import {getBooleanSetting} from '../../settings';
 import {getMergedData, getSettlementScene} from '../scene';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
-import {capitalize, postDegreeOfSuccessMessage, unslugifyActivity} from '../../utils';
+import {capitalize, postDegreeOfSuccessMessage, unslugify} from '../../utils';
 import {activityData} from '../data/activityData';
 import {DegreeOfSuccess, determineDegreeOfSuccess} from '../../degree-of-success';
 
@@ -142,7 +142,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             ...super.getData(options),
             invalid: this.selectedSkill === undefined,
             dc: this.dc,
-            title: this.activity ? unslugifyActivity(this.activity) : capitalize(this.skill!),
+            title: this.activity ? unslugify(this.activity) : capitalize(this.skill!),
             activity: this.activity,
             selectableSkills: this.createSelectableSkills(skillModifiers),
             selectedSkill: this.selectedSkill,

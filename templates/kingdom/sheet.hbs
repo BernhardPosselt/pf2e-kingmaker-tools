@@ -46,6 +46,7 @@
             <a data-tab="feats" class="{{#if featsTab}}active{{/if}}">Feats</a>
             <a data-tab="features" class="{{#if featuresTab}}active{{/if}}">Features</a>
             <a data-tab="settlements" class="{{#if settlementsTab}}active{{/if}}">Settlements</a>
+            <a data-tab="effects" class="{{#if effectsTab}}active{{/if}}">Effects</a>
         </nav>
         <div class="km-sidebar">
             {{> modules/pf2e-kingmaker-tools/templates/kingdom/sidebar.hbs}}
@@ -72,6 +73,9 @@
             </div>
             <div {{#unless settlementsTab}}hidden{{/unless}}>
                 {{> modules/pf2e-kingmaker-tools/templates/kingdom/settlements.hbs}}
+            </div>
+            <div {{#unless effectsTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/kingdom/effects.hbs}}
             </div>
         </div>
     </div>

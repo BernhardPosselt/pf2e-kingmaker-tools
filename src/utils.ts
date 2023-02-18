@@ -68,7 +68,7 @@ export function unpackFormArray<T>(obj: Record<string, T> | undefined | null): T
     }
 }
 
-export function unslugifyActivity(word: string): string {
+export function unslugify(word: string): string {
     return word
         .replaceAll('action:', '')
         .split('-')
@@ -127,3 +127,43 @@ export function distinctBy<T, R>(array: T[], criterion: (value: T) => R): T[] {
     return result;
 }
 
+export interface LabelAndValue {
+    label: string;
+    value: string;
+}
+
+export function createLabel(value: string, slug = false): LabelAndValue {
+    return {
+        label: slug ? unslugify(value) : capitalize(value),
+        value: value,
+    };
+}
+
+export function createLabels(values: readonly string[], slug = false): LabelAndValue[] {
+    return values.map(value => createLabel(value, slug));
+}
+
+export function parseNumberInput($html: HTMLElement, name: string): number {
+    const input = $html.querySelector(`input[name="${name}"]`) as HTMLInputElement;
+    return parseInt(input.value, 10);
+}
+
+export function parseTextInput($html: HTMLElement, name: string): string {
+    const input = $html.querySelector(`input[name="${name}"]`) as HTMLInputElement;
+    return input.value;
+}
+
+export function parseNumberSelect($html: HTMLElement, name: string): number {
+    const input = $html.querySelector(`select[name="${name}"]`) as HTMLSelectElement;
+    return parseInt(input.value, 10);
+}
+
+export function parseSelect($html: HTMLElement, name: string): string {
+    const input = $html.querySelector(`select[name="${name}"]`) as HTMLSelectElement;
+    return input.value;
+}
+
+export function parseCheckbox($html: HTMLElement, name: string): boolean {
+    const input = $html.querySelector(`input[name="${name}"]`) as HTMLInputElement;
+    return input.checked;
+}

@@ -1,13 +1,13 @@
 import {Activity} from '../data/activities';
-import {unslugifyActivity} from '../../utils';
+import {unslugify} from '../../utils';
 
 function tpl(blacklistedActivities: Activity[], activities: Activity[]): string {
     const blacklisted = new Set(blacklistedActivities);
     return activities
-        .sort((a, b) => unslugifyActivity(a).localeCompare(unslugifyActivity(b)))
+        .sort((a, b) => unslugify(a).localeCompare(unslugify(b)))
         .map(activity => {
         return `<div>
-            <label for="activity-${activity}">${unslugifyActivity(activity)}</label>
+            <label for="activity-${activity}">${unslugify(activity)}</label>
             <input id="activity-${activity}" name="${activity}" type="checkbox" ${blacklisted.has(activity) ? 'checked' : ''}>
         </div>`;
     }).join('\n');

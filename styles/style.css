@@ -237,9 +237,17 @@ td.skill-value {
     display: table-row;
 }
 
+.simple-dialog-form label {
+    text-align: right;
+}
 
+.simple-dialog-form input,
+.simple-dialog-form select {
+    width: 100%;
+}
 .simple-dialog-form label,
-.simple-dialog-form input {
+.simple-dialog-form input,
+.simple-dialog-form select {
     display: table-cell;
 }
 
