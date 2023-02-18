@@ -44,7 +44,7 @@ select this feat, choose one leadership role; that role is now supported by your
         }],
     },
     {
-        // not automated: +3 to focused attention, increase degree of success
+        // not automated: increase degree of success
         automated: false,
         name: 'Cooperative Leadership',
         level: 1,

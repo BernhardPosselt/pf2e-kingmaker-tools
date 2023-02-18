@@ -454,3 +454,7 @@ export function getDefaultKingdomData(): Kingdom {
         modifiers: [],
     };
 }
+
+export function hasFeat(kingdom: Kingdom, id: string): boolean {
+    return [...kingdom.feats, ...kingdom.bonusFeats].map(f => f.id).includes(id);
+}

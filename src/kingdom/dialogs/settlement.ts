@@ -2,7 +2,7 @@ import {getMergedData, getSettlementScene} from '../scene';
 import {ActivityBonuses, ItemGroup, ItemLevelBonuses, SkillItemBonuses} from '../data/structures';
 import {capitalize, unslugify} from '../../utils';
 import {SettlementData} from '../structures';
-import {Kingdom} from '../data/kingdom';
+import {hasFeat, Kingdom} from '../data/kingdom';
 
 interface SettlementOptions {
     game: Game;
@@ -92,8 +92,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
     }
 
     private getAvailableItems(settlementLevel: number, itemLevelBonuses: ItemLevelBonuses): ItemLevelBonusData[] {
-        const qualityOfLifeBonus = [...this.kingdom.feats, ...this.kingdom.bonusFeats]
-            .some(f => f.id === 'Quality of Life') ? 1 : 0;
+        const qualityOfLifeBonus = hasFeat(this.kingdom, 'Quality of Life') ? 1 : 0;
         const magicTraits = new Set(['arcane', 'divine', 'primal', 'occult']);
         return this.dedupBonuses(this.dedupBonuses((Object.entries(itemLevelBonuses) as [ItemGroup, number][])
             .map(([type, bonus]) => {

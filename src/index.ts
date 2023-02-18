@@ -342,26 +342,28 @@ Hooks.on('renderChatLog', () => {
             const activity = target.dataset.activity! as Activity;
             const degree = target.dataset.degree! as keyof ActivityResults;
             const index = parseInt(target.dataset.index ?? '0', 10);
-            const modifier = activityData[activity]?.[degree]?.modifiers?.[index];
-            if (modifier !== undefined && game instanceof Game) {
-                // copy modifier because we alter the consumeId
-                const modifierCopy = {
-                    ...modifier,
-                };
+            if (game instanceof Game) {
                 const sheetActor = getKingdomSheetActor(game);
-                if (sheetActor) {
-                    if (modifierCopy.consumeId !== undefined) {
-                        modifierCopy.consumeId = crypto.randomUUID();
-                    }
+                if (sheetActor !== undefined) {
                     const kingdom = getKingdom(sheetActor);
-                    const modifiers = [...kingdom.modifiers, modifierCopy];
-                    await saveKingdom(sheetActor, {modifiers});
-                    document.dispatchEvent(new Event('kmAppliedModifierFromChat'));
+                    const modifier = activityData[activity]?.[degree]?.modifiers?.(kingdom)?.[index];
+                    if (modifier !== undefined) {
+                        // copy modifier because we alter the consumeId
+                        const modifierCopy = {
+                            ...modifier,
+                        };
+                        if (modifierCopy.consumeId !== undefined) {
+                            modifierCopy.consumeId = crypto.randomUUID();
+                        }
+                        const modifiers = [...kingdom.modifiers, modifierCopy];
+                        await saveKingdom(sheetActor, {modifiers});
+                        document.dispatchEvent(new Event('kmAppliedModifierFromChat'));
+                    } else {
+                        console.error(`Can not find modifier ${activity}.${degree}.modifiers.${index}`);
+                    }
                 } else {
                     console.error('No Kingdom Sheet actor found');
                 }
-            } else {
-                console.error(`Can not find modifier ${activity}.${degree}.modifiers.${index}`);
             }
         });
 });

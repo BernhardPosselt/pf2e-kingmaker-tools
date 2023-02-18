@@ -43,8 +43,9 @@ async function giveMilestoneXP(kingdom: Partial<Kingdom>, existingKingdom: Kingd
 }
 
 export async function saveKingdom(sheetActor: Actor, kingdom: Partial<Kingdom>): Promise<void> {
+    const currentKingdom = getKingdom(sheetActor);
     makeRuinPenaltiesPositive(kingdom);
-    await giveMilestoneXP(kingdom, getKingdom(sheetActor));
+    await giveMilestoneXP(kingdom, currentKingdom);
     console.info('Saving', kingdom);
     await sheetActor.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', kingdom);
 }

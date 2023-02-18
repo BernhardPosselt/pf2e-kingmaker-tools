@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Added automation for Warfare Exercises and Cooperative's Leadership bonus to work for Focused Attention
+
 ## [0.0.12] - 2023-02-18
 
 ### Fixed

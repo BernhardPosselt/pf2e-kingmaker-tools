@@ -263,7 +263,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         if (results) {
             const modifiers = results.modifiers;
             const message = results.msg;
-            const buttons = modifiers === undefined ? '' : this.buildButtons(modifiers, activity, resultKey);
+            const buttons = modifiers === undefined ? '' : this.buildButtons(modifiers(this.kingdom), activity, resultKey);
             await postDegreeOfSuccessMessage(degreeOfSuccess, {
                 critSuccess: `<b>Critical Success</b>: ${message}${buttons}`,
                 success: `<b>Success</b>: ${message}${buttons}`,
