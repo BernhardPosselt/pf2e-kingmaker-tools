@@ -16,7 +16,7 @@ import {
     Ruin,
     WorkSites,
 } from './data/kingdom';
-import {capitalize, groupBy, unpackFormArray} from '../utils';
+import {capitalize, unpackFormArray} from '../utils';
 import {
     CurrentSceneData,
     currentSceneIsSettlement,
@@ -57,6 +57,7 @@ import {activityData} from './data/activityData';
 import {showSettlement} from './dialogs/settlement';
 import {createAdditionalModifiers, Modifier, modifierToLabel} from './modifiers';
 import {addEffectDialog} from './dialogs/add-effect-dialog';
+import {getKingdom, getKingdomSheetActor, saveKingdom} from './storage';
 
 interface KingdomOptions {
     game: Game;
@@ -302,6 +303,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.on('canvasReady', this.sceneChange.bind(this));
         Hooks.on('createToken', this.sceneChange.bind(this));
         Hooks.on('deleteToken', this.sceneChange.bind(this));
+        document.addEventListener('kmAppliedModifierFromChat', this.sceneChange.bind(this));
         const $html = html[0];
         $html.querySelectorAll('.km-nav a')?.forEach(el => {
             el.addEventListener('click', (event) => {
@@ -700,6 +702,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.off('canvasReady', this.sceneChange);
         Hooks.off('createToken', this.sceneChange);
         Hooks.off('deleteToken', this.sceneChange);
+        document.removeEventListener('kmAppliedModifierFromChat', this.sceneChange);
         return super.close(options);
     }
 
@@ -880,53 +883,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async saveKingdom(kingdom: Partial<Kingdom>): Promise<void> {
-        this.makeRuinPenaltiesPositive(kingdom);
-        await this.giveMilestoneXP(kingdom);
-        console.info('Saving', kingdom);
-        await this.sheetActor.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', kingdom);
+        await saveKingdom(this.sheetActor, kingdom);
         this.render();
     }
 
-    private makeRuinPenaltiesPositive(kingdom: Partial<Kingdom>): void {
-        const ruin = kingdom.ruin;
-        if (ruin !== undefined) {
-            ruin.corruption.penalty = Math.abs(ruin.corruption.penalty);
-            ruin.crime.penalty = Math.abs(ruin.crime.penalty);
-            ruin.decay.penalty = Math.abs(ruin.decay.penalty);
-            ruin.strife.penalty = Math.abs(ruin.strife.penalty);
-        }
-    }
-
-    private async giveMilestoneXP(kingdom: Partial<Kingdom>): Promise<void> {
-        const milestones = kingdom.milestones;
-        if (milestones !== undefined) {
-            const existingKingdom = this.getKingdom();
-            const existingMilestones = existingKingdom.milestones;
-            const existingMap = groupBy(existingMilestones, m => m.name);
-            const newMap = groupBy(milestones, m => m.name);
-            for (const key of existingMap.keys()) {
-                const existingVal = existingMap.get(key)?.[0];
-                const newVal = newMap.get(key)?.[0];
-                if (newVal !== undefined &&
-                    existingVal !== undefined &&
-                    newVal.completed !== existingVal.completed) {
-                    const xp = newVal.completed ? newVal.xp : -newVal.xp;
-                    const result = newVal.completed ? 'Gained' : 'Lost';
-                    await ChatMessage.create({content: `${result} ${Math.abs(xp)} Kingdom XP`});
-                    kingdom.xp = existingKingdom.xp + xp;
-                }
-            }
-        }
-    }
-
     private getKingdom(): Kingdom {
-        const kingdom = this.sheetActor.getFlag('pf2e-kingmaker-tools', 'kingdom-sheet') as Kingdom;
-        // migrations
-        if (kingdom.modifiers === undefined) {
-            kingdom.modifiers = [];
-        }
-        console.log(kingdom);
-        return kingdom;
+        return getKingdom(this.sheetActor);
     }
 
     private async saveSettlements(settlements: CurrentSceneData[]): Promise<void> {
@@ -955,7 +917,7 @@ export async function showKingdom(game: Game): Promise<void> {
         new KingdomApp(null, {game, sheetActor}).render(true);
     } else {
         setupDialog(game, async () => {
-            const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
+            const sheetActor = getKingdomSheetActor(game);
             await sheetActor?.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', getDefaultKingdomData());
             await showKingdom(game);
         });

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.11] - 2023-02-18
+
+### Added
+
+* Added effects to events that can be applied to the kingdom when rolled in chat
+
 ## [0.0.10] - 2023-02-18
 
 ### Added

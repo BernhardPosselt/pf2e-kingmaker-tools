@@ -13,18 +13,21 @@ function simpleRank(skills: Skill[], rank = 0): SkillRanks {
         .reduce((a, b) => Object.assign(a, b), {});
 }
 
-interface ActivityResult {
+export interface ActivityResult {
     msg: string;
     modifiers?: Modifier[];
 }
 
-export interface ActivityContent {
-    title: string;
-    description: string;
+export interface ActivityResults {
     criticalSuccess?: ActivityResult;
     success?: ActivityResult;
     failure?: ActivityResult;
     criticalFailure?: ActivityResult;
+}
+
+export interface ActivityContent extends ActivityResults {
+    title: string;
+    description: string;
     requirement?: string;
     special?: string;
     skills: SkillRanks;
@@ -2057,11 +2060,11 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
                 name: 'Warfare Exercises: Critical Success',
                 type: 'circumstance',
             }, {
-                turns: 3,
+                turns: 1,
                 consumeId: '',
                 enabled: true,
                 phases: ['army'],
-                value: 1,
+                value: 3,
                 name: 'Warfare Exercises: Critical Success',
                 type: 'circumstance',
             }],

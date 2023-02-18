@@ -21,6 +21,9 @@ import {
 } from './camping';
 import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
+import {activityData, ActivityResults} from './kingdom/data/activityData';
+import {Activity} from './kingdom/data/activities';
+import {getKingdom, getKingdomSheetActor, saveKingdom} from './kingdom/storage';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -329,4 +332,32 @@ Hooks.on('init', async () => {
         'modules/pf2e-kingmaker-tools/templates/kingdom/settlement.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/effects.hbs',
     ]);
+});
+
+Hooks.on('renderChatLog', () => {
+    $('#chat-log')
+        .on('click', '.km-apply-modifier-effect', async (event: Event) => {
+            event.preventDefault();
+            const target = event.currentTarget as HTMLButtonElement;
+            const activity = target.dataset.activity! as Activity;
+            const degree = target.dataset.degree! as keyof ActivityResults;
+            const index = parseInt(target.dataset.index ?? '0', 10);
+            const modifier = activityData[activity]?.[degree]?.modifiers?.[index];
+            if (modifier !== undefined && game instanceof Game) {
+                const sheetActor = getKingdomSheetActor(game);
+                if (sheetActor) {
+                    if (modifier.consumeId !== undefined) {
+                        modifier.consumeId = crypto.randomUUID();
+                    }
+                    const kingdom = getKingdom(sheetActor);
+                    const modifiers = [...kingdom.modifiers, modifier];
+                    await saveKingdom(sheetActor, {modifiers});
+                    document.dispatchEvent(new Event('kmAppliedModifierFromChat'));
+                } else {
+                    console.error('No Kingdom Sheet actor found');
+                }
+            } else {
+                console.error(`Can not find modifier ${activity}.${degree}.modifiers.${index}`);
+            }
+        });
 });

@@ -3,6 +3,7 @@ import {
     calculateModifiers,
     createAdditionalModifiers,
     Modifier,
+    modifierToLabel,
     ModifierTotal,
     ModifierTotals,
     ModifierWithId,
@@ -15,7 +16,7 @@ import {getMergedData, getSettlementScene} from '../scene';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
 import {capitalize, postDegreeOfSuccessMessage, unslugify} from '../../utils';
-import {activityData} from '../data/activityData';
+import {activityData, ActivityResults} from '../data/activityData';
 import {DegreeOfSuccess, determineDegreeOfSuccess} from '../../degree-of-success';
 
 export type CheckType = 'skill' | 'activity';
@@ -216,20 +217,61 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
 
     private async postDegreeOfSuccess(activity: Activity | undefined, degreeOfSuccess: DegreeOfSuccess): Promise<void> {
         if (activity) {
-            const results = activityData[activity];
+            await this.postComplexDegreeOfSuccess(degreeOfSuccess, activity);
+        } else {
+            await this.postSimpleDegreeOfSuccess(degreeOfSuccess);
+        }
+    }
+
+    private async postSimpleDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess): Promise<void> {
+        await postDegreeOfSuccessMessage(degreeOfSuccess, {
+            critSuccess: '<b>Critical Success</b>',
+            success: '<b>Success</b>',
+            failure: '<b>Failure</b>',
+            critFailure: '<b>Critical Failure</b>',
+        });
+    }
+
+    private getResultKey(degreeOfSuccess: DegreeOfSuccess): keyof ActivityResults {
+        if (degreeOfSuccess === DegreeOfSuccess.CRITICAL_SUCCESS) {
+            return 'criticalSuccess';
+        } else if (degreeOfSuccess === DegreeOfSuccess.SUCCESS) {
+            return 'success';
+        } else if (degreeOfSuccess === DegreeOfSuccess.FAILURE) {
+            return 'failure';
+        } else {
+            return 'criticalFailure';
+        }
+    }
+
+    private buildButtons(modifiers: Modifier[], activity: Activity, resultKey: keyof ActivityResults): string {
+        return`
+        <div class="activity-modifier-chat-buttons">
+            ${modifiers.map((modifier, index) => {
+            const label = modifierToLabel(modifier);
+            return `<button class="km-apply-modifier-effect" 
+                data-activity="${activity}" 
+                data-degree="${resultKey}" 
+                data-index="${index}">Apply Effect: ${label}</button>`;
+        })}    
+        </div>`;
+    }
+
+    private async postComplexDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess, activity: Activity): Promise<void> {
+        const resultKey = this.getResultKey(degreeOfSuccess);
+        const results = activityData[activity][resultKey];
+        if (results) {
+            const modifiers = results.modifiers;
+            const message = results.msg;
+            const buttons = modifiers === undefined ? '' : this.buildButtons(modifiers, activity, resultKey);
             await postDegreeOfSuccessMessage(degreeOfSuccess, {
-                critSuccess: `<b>Critical Success</b>${results.criticalSuccess ? `: ${results.criticalSuccess}` : ''}`,
-                success: `<b>Success</b>${results.success ? `: ${results.success}` : ''}`,
-                failure: `<b>Failure</b>${results.failure ? `: ${results.failure}` : ''}`,
-                critFailure: `<b>Critical Failure</b>${results.criticalFailure ? `: ${results.criticalFailure}` : ''}`,
+                critSuccess: `<b>Critical Success</b>: ${message}${buttons}`,
+                success: `<b>Success</b>: ${message}${buttons}`,
+                failure: `<b>Failure</b>: ${message}${buttons}`,
+                critFailure: `<b>Critical Failure</b>: ${message}${buttons}`,
             });
         } else {
-            await postDegreeOfSuccessMessage(degreeOfSuccess, {
-                critSuccess: '<b>Critical Success</b>',
-                success: '<b>Success</b>',
-                failure: '<b>Failure</b>',
-                critFailure: '<b>Critical Failure</b>',
-            });
+            await this.postSimpleDegreeOfSuccess(degreeOfSuccess);
         }
     }
 
