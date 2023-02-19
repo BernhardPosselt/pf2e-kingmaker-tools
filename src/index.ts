@@ -23,7 +23,7 @@ import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
 import {activityData, ActivityResults} from './kingdom/data/activityData';
 import {Activity} from './kingdom/data/activities';
-import {getKingdom, getKingdomSheetActorOrThrow, saveKingdom} from './kingdom/storage';
+import {getKingdom, getKingdomSheetActorOrThrow, reRenderKingdomSheet, saveKingdom} from './kingdom/storage';
 import {parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
 
 Hooks.on('ready', async () => {
@@ -273,19 +273,13 @@ Hooks.on('ready', async () => {
             type: Boolean,
             scope: 'world',
         });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdom', {
-            name: 'Kingdom',
-            scope: 'world',
-            config: false,
-            default: null,
-            type: String,
-        });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'vanceAndKerensharaXP', {
             name: 'Enable Vance and Kerenshara XP rules',
             hint: 'Adds additional Milestone Events, more XP for claiming hexes and RP',
             scope: 'world',
             config: true,
             default: false,
+            onChange: () => reRenderKingdomSheet(),
             type: Boolean,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomAlwaysAddLevel', {
@@ -294,6 +288,7 @@ Hooks.on('ready', async () => {
             scope: 'world',
             config: true,
             default: false,
+            onChange: () => reRenderKingdomSheet(),
             type: Boolean,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomSkillIncreaseEveryLevel', {
@@ -302,6 +297,7 @@ Hooks.on('ready', async () => {
             scope: 'world',
             config: true,
             default: false,
+            onChange: () => reRenderKingdomSheet(),
             type: Boolean,
         });
         Hooks.on('updateWorldTime', async (_, delta) => {

@@ -48,6 +48,10 @@ export async function saveKingdom(sheetActor: Actor, kingdom: Partial<Kingdom>):
     await giveMilestoneXP(kingdom, currentKingdom);
     console.info('Saving', kingdom);
     await sheetActor.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', kingdom);
+    reRenderKingdomSheet();
+}
+
+export function reRenderKingdomSheet(): void {
     document.dispatchEvent(new Event('kmReRenderKingdomSheet'));
 }
 
