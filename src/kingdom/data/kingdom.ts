@@ -429,22 +429,22 @@ export function getDefaultKingdomData(): Kingdom {
         ruin: {
             corruption: {
                 penalty: 0,
-                threshold: 0,
+                threshold: 10,
                 value: 0,
             },
             crime: {
                 penalty: 0,
-                threshold: 0,
+                threshold: 10,
                 value: 0,
             },
             decay: {
                 penalty: 0,
-                threshold: 0,
+                threshold: 10,
                 value: 0,
             },
             strife: {
                 penalty: 0,
-                threshold: 0,
+                threshold: 10,
                 value: 0,
             },
         },
