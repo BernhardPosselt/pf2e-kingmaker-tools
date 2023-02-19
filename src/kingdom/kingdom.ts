@@ -8,6 +8,7 @@ import {
     getDefaultKingdomData,
     getLevelData,
     getSizeData,
+    hasFeat,
     Kingdom,
     KingdomSizeData,
     Leaders,
@@ -115,7 +116,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     override getData(options?: Partial<FormApplicationOptions>): object {
         const isGM = this.game.user?.isGM ?? false;
         const kingdomData = this.getKingdom();
-        const levelData = getLevelData(kingdomData.level);
         const sizeData = getSizeData(kingdomData.size);
         const allSettlementSceneData = getAllSettlementSceneData(this.game);
         const settlementSceneDataAndStructures = getAllSettlementSceneDataAndStructures(this.game);
@@ -137,7 +137,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             })
             .reduce((a, b) => Object.assign(a, b), {});
         const enabledActivities = getPerformableActivities(
-            kingdomData.skillRanks, 
+            kingdomData.skillRanks,
             activeSettlement?.settlement?.allowCapitalInvestment === true,
         );
         return {
@@ -166,7 +166,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             unrest: kingdomData.unrest,
             anarchyAt: this.calculateAnarchy(kingdomData.feats, kingdomData.bonusFeats),
             resourceDieSize: sizeData.resourceDieSize,
-            resourceDiceNum: levelData.resourceDice + this.insiderTradingResources(kingdomData.feats, kingdomData.bonusFeats),
+            resourceDiceNum: this.getResourceDiceNum(kingdomData),
             resourceDice: kingdomData.resourceDice,
             resourcePoints: kingdomData.resourcePoints,
             consumption: kingdomData.consumption,
@@ -633,22 +633,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         }
     }
 
-    /**
-     * Hardcode for now
-     */
-    private insiderTradingResources(feats: Feat[], bonusFeat: BonusFeat[]): number {
-        const hasInsiderTrading = feats.some(f => f.id === 'Insider Trading') ||
-            bonusFeat.some(f => f.id === 'Insider Trading');
-        return hasInsiderTrading ? 1 : 0;
-    }
-
     private async collectResources(): Promise<void> {
         const current = this.getKingdom();
-        const levelData = getLevelData(current.size);
-        const featDice = this.insiderTradingResources(current.feats, current.bonusFeats);
         const sizeData = getSizeData(current.size);
         const capacity = this.getCapacity(sizeData);
-        const dice = levelData.resourceDice + current.resourceDice.now + featDice;
+        const dice = this.getResourceDiceNum(current);
         const rolledPoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
         const commodities = this.calculateCommoditiesThisTurn(current);
         await ChatMessage.create({
@@ -683,6 +672,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 next: current.commodities.next,
             },
         });
+    }
+
+    private getResourceDiceNum(kingdom: Kingdom): number {
+        const featDice = hasFeat(kingdom, 'Insider Trading') ? 1 : 0;
+        const levelData = getLevelData(kingdom.size);
+        return levelData.resourceDice + kingdom.resourceDice.now + featDice;
     }
 
     private getCapacity(sizeData: KingdomSizeData): Commodities {
