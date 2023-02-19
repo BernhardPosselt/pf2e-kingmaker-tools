@@ -188,11 +188,12 @@ export function createActivityLabel(activity: Activity, kingdomLevel: number): s
     return label;
 }
 
-export function getActivityProficiencies(ranks: SkillRanks): Record<Activity, boolean> {
+export function getPerformableActivities(ranks: SkillRanks, enableCapitalInvestment: boolean): Record<Activity, boolean> {
     return Object.fromEntries(allActivities.map(activity => {
         const activityRanks = activityData[activity].skills;
+        const noBuildingPreventsActivity = activity !== 'capital-investment' || enableCapitalInvestment;
         const enabled = (Object.entries(activityRanks) as [Skill, number][])
-            .some(([skill, rank]) => ranks[skill] >= rank);
+            .some(([skill, rank]) => ranks[skill] >= rank) && noBuildingPreventsActivity;
         return [activity, enabled];
     })) as Record<Activity, boolean>;
 }

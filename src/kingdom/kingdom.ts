@@ -43,7 +43,7 @@ import {
     allActivities,
     createActivityLabel,
     enableCompanionActivities,
-    getActivityProficiencies,
+    getPerformableActivities,
 } from './data/activities';
 import {AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {calculateSkills} from './skills';
@@ -136,7 +136,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 return {[activity]: true};
             })
             .reduce((a, b) => Object.assign(a, b), {});
-        const enabledActivities = getActivityProficiencies(kingdomData.skillRanks);
+        const enabledActivities = getPerformableActivities(
+            kingdomData.skillRanks, 
+            activeSettlement?.settlement?.allowCapitalInvestment === true,
+        );
         return {
             ...super.getData(options),
             hideActivities,

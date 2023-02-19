@@ -85,7 +85,7 @@
 {{#each leadershipActivities}}
     <div class="activity-help" {{#if (lookup ../hideActivities value)}}hidden{{/if}}>
         <button type="button" class="kingdom-activity" data-activity="{{value}}"
-            {{#unless (lookup ../enabledActivities value)}}title="Insufficient Proficiencies" disabled{{/unless}}
+            {{#unless (lookup ../enabledActivities value)}}title="Insufficient Proficiencies or Lacking Buildings" disabled{{/unless}}
         >{{label}}</button>
         <button type="button" class="show-help" data-help="{{value}}"><i
                 class="fa-solid fa-question"></i>
