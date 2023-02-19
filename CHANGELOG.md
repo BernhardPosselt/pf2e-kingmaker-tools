@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.15] - 2023-02-19
+
 ### Fixed
 * Disable Capital Investment in active settlement when no Bank is built
 
