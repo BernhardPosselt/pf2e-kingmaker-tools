@@ -294,7 +294,7 @@ td.skill-value {
     flex-grow: 1;
 }
 
-.activity-modifier-chat-buttons {
+.km-chat-buttons {
     border-top: 1px solid grey;
     padding: 10px 5px 5px 5px;
     margin-top: 5px;

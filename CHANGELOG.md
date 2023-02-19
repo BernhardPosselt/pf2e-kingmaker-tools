@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.13] - 2023-02-19
+
+### Fixed
+* A 1 or 20 on a d20 should now correctly upgrade/downgrade a roll
+
+### Added
+
+* Rolls from kingdom sheets can now be re-rolled, re-rolled and keep higher/lower and re-rolled using fame points with a right click on the roll chat message
+* Activity results can now be upgraded/downgrade with a right click on the chat message
+
 ## [0.0.13] - 2023-02-18
 
 ### Added

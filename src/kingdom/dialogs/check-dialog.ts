@@ -3,7 +3,6 @@ import {
     calculateModifiers,
     createAdditionalModifiers,
     Modifier,
-    modifierToLabel,
     ModifierTotal,
     ModifierTotals,
     ModifierWithId,
@@ -15,9 +14,9 @@ import {getBooleanSetting} from '../../settings';
 import {getMergedData, getSettlementScene} from '../scene';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
-import {capitalize, postDegreeOfSuccessMessage, unslugify} from '../../utils';
-import {activityData, ActivityResults} from '../data/activityData';
-import {DegreeOfSuccess, determineDegreeOfSuccess} from '../../degree-of-success';
+import {capitalize, unslugify} from '../../utils';
+import {activityData} from '../data/activityData';
+import {rollCheck} from '../rolls';
 
 export type CheckType = 'skill' | 'activity';
 
@@ -187,8 +186,9 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const modifier = parseInt(target.dataset.modifier ?? '0', 10);
             const activity = target.dataset.activity as Activity | undefined;
             const type = target.dataset.type!;
+            const skill = target.dataset.skill as Skill;
 
-            await this.rollCheck(`${modifier}`, type, activity, dc);
+            await rollCheck(`${modifier}`, type, activity, dc, skill, modifier);
             await this.onRoll(this.consumeModifiers);
             await this.close();
         });
@@ -199,81 +199,16 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const modifier = parseInt(target.dataset.modifier ?? '0', 10);
             const activity = target.dataset.activity as Activity | undefined;
             const type = target.dataset.type!;
+            const skill = target.dataset.skill as Skill;
 
-            await this.rollCheck(`1d20+${modifier}`, type, activity, dc);
+            await rollCheck(`1d20+${modifier}`, type, activity, dc, skill, modifier);
             await this.onRoll(this.consumeModifiers);
             await this.close();
         });
     }
 
 
-    private async rollCheck(formula: string, type: string, activity: Activity | undefined, dc: number): Promise<void> {
-        const roll = await new Roll(formula).roll();
-        await roll.toMessage({flavor: `Rolling Skill Check: ${type}, DC ${dc}`});
-        const total = roll.total;
-        const degreeOfSuccess = determineDegreeOfSuccess(10, total, dc);
-        await this.postDegreeOfSuccess(activity, degreeOfSuccess);
-    }
 
-    private async postDegreeOfSuccess(activity: Activity | undefined, degreeOfSuccess: DegreeOfSuccess): Promise<void> {
-        if (activity) {
-            await this.postComplexDegreeOfSuccess(degreeOfSuccess, activity);
-        } else {
-            await this.postSimpleDegreeOfSuccess(degreeOfSuccess);
-        }
-    }
-
-    private async postSimpleDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess): Promise<void> {
-        await postDegreeOfSuccessMessage(degreeOfSuccess, {
-            critSuccess: '<b>Critical Success</b>',
-            success: '<b>Success</b>',
-            failure: '<b>Failure</b>',
-            critFailure: '<b>Critical Failure</b>',
-        });
-    }
-
-    private getResultKey(degreeOfSuccess: DegreeOfSuccess): keyof ActivityResults {
-        if (degreeOfSuccess === DegreeOfSuccess.CRITICAL_SUCCESS) {
-            return 'criticalSuccess';
-        } else if (degreeOfSuccess === DegreeOfSuccess.SUCCESS) {
-            return 'success';
-        } else if (degreeOfSuccess === DegreeOfSuccess.FAILURE) {
-            return 'failure';
-        } else {
-            return 'criticalFailure';
-        }
-    }
-
-    private buildButtons(modifiers: Modifier[], activity: Activity, resultKey: keyof ActivityResults): string {
-        return`
-        <div class="activity-modifier-chat-buttons">
-            ${modifiers.map((modifier, index) => {
-            const label = modifierToLabel(modifier);
-            return `<button class="km-apply-modifier-effect" 
-                data-activity="${activity}" 
-                data-degree="${resultKey}" 
-                data-index="${index}">Apply Effect: ${label}</button>`;
-        })}    
-        </div>`;
-    }
-
-    private async postComplexDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess, activity: Activity): Promise<void> {
-        const resultKey = this.getResultKey(degreeOfSuccess);
-        const results = activityData[activity][resultKey];
-        if (results) {
-            const modifiers = results.modifiers;
-            const message = results.msg;
-            const buttons = modifiers === undefined ? '' : this.buildButtons(modifiers(this.kingdom), activity, resultKey);
-            await postDegreeOfSuccessMessage(degreeOfSuccess, {
-                critSuccess: `<b>Critical Success</b>: ${message}${buttons}`,
-                success: `<b>Success</b>: ${message}${buttons}`,
-                failure: `<b>Failure</b>: ${message}${buttons}`,
-                critFailure: `<b>Critical Failure</b>: ${message}${buttons}`,
-            });
-        } else {
-            await this.postSimpleDegreeOfSuccess(degreeOfSuccess);
-        }
-    }
 
     private createSelectableSkills(skillModifiers: Record<Skill, TotalAndModifiers>): object {
         return Object.entries(skillModifiers).map(([skill, data]) => {

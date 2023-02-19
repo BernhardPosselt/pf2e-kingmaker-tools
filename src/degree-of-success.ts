@@ -16,6 +16,20 @@ function adjustByDieNumber(dieNumber: number, degree: DegreeOfSuccess): DegreeOf
     }
 }
 
+export type StringDegreeOfSuccess = 'criticalSuccess' | 'success' | 'failure' | 'criticalFailure';
+
+export function degreeToProperty(degree: DegreeOfSuccess): StringDegreeOfSuccess {
+    if (degree === DegreeOfSuccess.CRITICAL_SUCCESS) {
+        return 'criticalSuccess';
+    } else if (degree === DegreeOfSuccess.SUCCESS) {
+        return 'success';
+    } else if (degree === DegreeOfSuccess.FAILURE) {
+        return 'failure';
+    } else {
+        return 'criticalFailure';
+    }
+}
+
 export function determineDegreeOfSuccess(
     dieNumber: number,
     result: number,

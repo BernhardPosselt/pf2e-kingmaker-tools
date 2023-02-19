@@ -23,7 +23,8 @@ import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
 import {activityData, ActivityResults} from './kingdom/data/activityData';
 import {Activity} from './kingdom/data/activities';
-import {getKingdom, getKingdomSheetActor, saveKingdom} from './kingdom/storage';
+import {getKingdom, getKingdomSheetActorOrThrow, saveKingdom} from './kingdom/storage';
+import {parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -342,28 +343,68 @@ Hooks.on('renderChatLog', () => {
             const activity = target.dataset.activity! as Activity;
             const degree = target.dataset.degree! as keyof ActivityResults;
             const index = parseInt(target.dataset.index ?? '0', 10);
-            if (game instanceof Game) {
-                const sheetActor = getKingdomSheetActor(game);
-                if (sheetActor !== undefined) {
-                    const kingdom = getKingdom(sheetActor);
-                    const modifier = activityData[activity]?.[degree]?.modifiers?.(kingdom)?.[index];
-                    if (modifier !== undefined) {
-                        // copy modifier because we alter the consumeId
-                        const modifierCopy = {
-                            ...modifier,
-                        };
-                        if (modifierCopy.consumeId !== undefined) {
-                            modifierCopy.consumeId = crypto.randomUUID();
-                        }
-                        const modifiers = [...kingdom.modifiers, modifierCopy];
-                        await saveKingdom(sheetActor, {modifiers});
-                        document.dispatchEvent(new Event('kmAppliedModifierFromChat'));
-                    } else {
-                        console.error(`Can not find modifier ${activity}.${degree}.modifiers.${index}`);
-                    }
-                } else {
-                    console.error('No Kingdom Sheet actor found');
+            const sheetActor = getKingdomSheetActorOrThrow();
+            const kingdom = getKingdom(sheetActor);
+            const modifier = activityData[activity]?.[degree]?.modifiers?.(kingdom)?.[index];
+            if (modifier !== undefined) {
+                // copy modifier because we alter the consumeId
+                const modifierCopy = {
+                    ...modifier,
+                };
+                if (modifierCopy.consumeId !== undefined) {
+                    modifierCopy.consumeId = crypto.randomUUID();
                 }
+                const modifiers = [...kingdom.modifiers, modifierCopy];
+                await saveKingdom(sheetActor, {modifiers});
+            } else {
+                console.error(`Can not find modifier ${activity}.${degree}.modifiers.${index}`);
             }
         });
+});
+
+type LogEntry = {
+    name: string,
+    icon?: string,
+    condition?: (html: JQuery) => boolean,
+    callback: (html: JQuery) => void,
+};
+
+Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
+    console.log(html, items);
+    const hasMeta = (li: JQuery): boolean => li[0].querySelector('.km-roll-meta') !== null;
+    const isActivityResult = (li: JQuery): boolean => li[0].querySelector('.km-upgrade-result') !== null;
+    const canReRollUsingFame = (li: JQuery): boolean => getKingdom(getKingdomSheetActorOrThrow()).fame > 0 && hasMeta(li);
+    const canUpgrade = (li: JQuery): boolean => isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalSuccess';
+    const canDowngrade = (li: JQuery): boolean => isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalFailure';
+    items.push({
+        name: 'Re-Roll Using Fame/Infamy',
+        icon: '<i class="fa-solid fa-dice-d20"></i>',
+        condition: canReRollUsingFame,
+        callback: el => reRoll(el[0], 'fame'),
+    }, {
+        name: 'Re-Roll',
+        condition: hasMeta,
+        icon: '<i class="fa-solid fa-dice-d20"></i>',
+        callback: el => reRoll(el[0], 're-roll'),
+    }, {
+        name: 'Re-Roll Keep Higher',
+        condition: hasMeta,
+        icon: '<i class="fa-solid fa-dice-d20"></i>',
+        callback: el => reRoll(el[0], 'keep-higher'),
+    }, {
+        name: 'Re-Roll Keep Lower',
+        condition: hasMeta,
+        icon: '<i class="fa-solid fa-dice-d20"></i>',
+        callback: el => reRoll(el[0], 'keep-lower'),
+    }, {
+        name: 'Upgrade Degree of Success',
+        condition: canUpgrade,
+        icon: '<i class="fa-solid fa-arrow-up"></i>',
+        callback: el => upgradeDowngrade(el[0], 'upgrade'),
+    }, {
+        name: 'Downgrade Degree of Success',
+        condition: canDowngrade,
+        icon: '<i class="fa-solid fa-arrow-down"></i>',
+        callback: el => upgradeDowngrade(el[0], 'downgrade'),
+    });
 });
