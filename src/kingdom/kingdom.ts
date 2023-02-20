@@ -11,7 +11,6 @@ import {
     getSizeData,
     hasFeat,
     Kingdom,
-    KingdomSizeData,
     Leaders,
     LeaderValues,
     ResourceDieSize,
@@ -29,7 +28,6 @@ import {
     getViewedSceneData,
     saveSceneData,
     saveViewedSceneData,
-    SettlementSceneData,
 } from './scene';
 import {allFeats, allFeatsByName} from './data/feats';
 import {addGroupDialog} from './dialogs/add-group-dialog';
@@ -119,13 +117,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const kingdomData = this.getKingdom();
         const sizeData = getSizeData(kingdomData.size);
         const allSettlementSceneData = getAllSettlementSceneData(this.game);
-        const settlementSceneDataAndStructures = getAllSettlementSceneDataAndStructures(this.game);
         const {
             leadershipActivityNumber,
             settlementConsumption,
             storage,
             unlockedActivities: unlockedSettlementActivities,
-        } = this.getSettlementData(settlementSceneDataAndStructures);
+        } = getSettlementData(this.game);
         const totalConsumption = kingdomData.consumption.armies + kingdomData.consumption.now + settlementConsumption;
         const useXpHomebrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
         const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
@@ -499,7 +496,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private async endTurn(): Promise<void> {
         const current = this.getKingdom();
         const sizeData = getSizeData(current.size);
-        const capacity = this.getCapacity(sizeData);
+        const capacity = getCapacity(this.game, sizeData.commodityCapacity);
         await ChatMessage.create({
             content: `<h2>Ending Turn</h2>
             <ul>
@@ -628,7 +625,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private async collectResources(): Promise<void> {
         const current = this.getKingdom();
         const sizeData = getSizeData(current.size);
-        const capacity = this.getCapacity(sizeData);
+        const capacity = getCapacity(this.game, sizeData.commodityCapacity);
         const dice = this.getResourceDiceNum(current);
         const rolledPoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
         const commodities = this.calculateCommoditiesThisTurn(current);
@@ -669,14 +666,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private getResourceDiceNum(kingdom: Kingdom): number {
         const featDice = hasFeat(kingdom, 'Insider Trading') ? 1 : 0;
         const levelData = getLevelData(kingdom.size);
-        return levelData.resourceDice + kingdom.resourceDice.now + featDice;
+        return Math.max(0, levelData.resourceDice + kingdom.resourceDice.now + featDice);
     }
 
-    private getCapacity(sizeData: KingdomSizeData): Commodities {
-        const settlementSceneDataAndStructures = getAllSettlementSceneDataAndStructures(this.game);
-        const {storage} = this.getSettlementData(settlementSceneDataAndStructures);
-        return this.calculateStorageCapacity(sizeData.commodityCapacity, storage);
-    }
 
     private calculateCommoditiesThisTurn(kingdom: Kingdom): Omit<Commodities, 'food'> {
         const sites = kingdom.workSites;
@@ -711,23 +703,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         );
     }
 
-    private calculateStorageCapacity(capacity: number, storage: CommodityStorage): Commodities {
-        return {
-            food: capacity + storage.food,
-            ore: capacity + storage.ore,
-            luxuries: capacity + storage.luxuries,
-            lumber: capacity + storage.lumber,
-            stone: capacity + storage.stone,
-        };
-    }
-
     private getCommodities(
         commodities: Commodities,
         commoditiesNextRound: Commodities,
         capacity: number,
         storage: CommodityStorage,
     ): object {
-        const storageCapacity = this.calculateStorageCapacity(capacity, storage);
+        const storageCapacity = calculateStorageCapacity(capacity, storage);
         return Object.fromEntries((Object.entries(commodities) as [keyof Commodities, number][])
             .map(([commodity, value]) => [commodity, {
                 label: capitalize(commodity),
@@ -784,39 +766,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         };
     }
 
-    private getSettlementData(settlements: SettlementSceneData[]):
-        { leadershipActivityNumber: number; settlementConsumption: number; storage: CommodityStorage, unlockedActivities: Set<Activity> } {
-        return settlements
-            .map(settlement => {
-                return {
-                    leadershipActivityNumber: settlement.settlement.leadershipActivityBonus ? 3 : 2,
-                    settlementConsumption: settlement.settlement.consumption,
-                    storage: settlement.settlement.storage,
-                    unlockedActivities: new Set(settlement.settlement.unlockActivities),
-                };
-            })
-            .reduce((prev, curr) => {
-                return {
-                    leadershipActivityNumber: Math.max(prev.leadershipActivityNumber, curr.leadershipActivityNumber),
-                    settlementConsumption: prev.settlementConsumption + curr.settlementConsumption,
-                    storage: {
-                        ore: prev.storage.ore + curr.storage.ore,
-                        stone: prev.storage.stone + curr.storage.stone,
-                        luxuries: prev.storage.luxuries + curr.storage.luxuries,
-                        lumber: prev.storage.lumber + curr.storage.lumber,
-                        food: prev.storage.food + curr.storage.food,
-                    },
-                    unlockedActivities: new Set<Activity>([...prev.unlockedActivities, ...curr.unlockedActivities]),
-                };
-            }, {
-                leadershipActivityNumber: 2,
-                settlementConsumption: 0,
-                storage: {ore: 0, stone: 0, luxuries: 0, lumber: 0, food: 0},
-                unlockedActivities: new Set<Activity>(),
-            });
-
-    }
-
     private async rollResourceDice(resourceDieSize: ResourceDieSize, dice: number): Promise<number> {
         const roll = await (new Roll(dice + resourceDieSize).roll());
         await roll.toMessage({flavor: 'Rolling Resource Dice'});
@@ -845,8 +794,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async payConsumption(): Promise<void> {
         const current = this.getKingdom();
-        const settlementSceneDataAndStructures = getAllSettlementSceneDataAndStructures(this.game);
-        const {settlementConsumption} = this.getSettlementData(settlementSceneDataAndStructures);
+        const {settlementConsumption} = getSettlementData(this.game);
         const totalConsumption = current.consumption.armies + current.consumption.now + settlementConsumption;
         const currentFood = current.commodities.now.food;
         const missingFood = totalConsumption - currentFood;
@@ -898,6 +846,53 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             }
         }
     }
+}
+
+function getSettlementData(game: Game):
+{ leadershipActivityNumber: number; settlementConsumption: number; storage: CommodityStorage, unlockedActivities: Set<Activity> } {
+    return getAllSettlementSceneDataAndStructures(game)
+        .map(settlement => {
+            return {
+                leadershipActivityNumber: settlement.settlement.leadershipActivityBonus ? 3 : 2,
+                settlementConsumption: settlement.settlement.consumption,
+                storage: settlement.settlement.storage,
+                unlockedActivities: new Set(settlement.settlement.unlockActivities),
+            };
+        })
+        .reduce((prev, curr) => {
+            return {
+                leadershipActivityNumber: Math.max(prev.leadershipActivityNumber, curr.leadershipActivityNumber),
+                settlementConsumption: prev.settlementConsumption + curr.settlementConsumption,
+                storage: {
+                    ore: prev.storage.ore + curr.storage.ore,
+                    stone: prev.storage.stone + curr.storage.stone,
+                    luxuries: prev.storage.luxuries + curr.storage.luxuries,
+                    lumber: prev.storage.lumber + curr.storage.lumber,
+                    food: prev.storage.food + curr.storage.food,
+                },
+                unlockedActivities: new Set<Activity>([...prev.unlockedActivities, ...curr.unlockedActivities]),
+            };
+        }, {
+            leadershipActivityNumber: 2,
+            settlementConsumption: 0,
+            storage: {ore: 0, stone: 0, luxuries: 0, lumber: 0, food: 0},
+            unlockedActivities: new Set<Activity>(),
+        });
+}
+
+function calculateStorageCapacity(capacity: number, storage: CommodityStorage): Commodities {
+    return {
+        food: capacity + storage.food,
+        ore: capacity + storage.ore,
+        luxuries: capacity + storage.luxuries,
+        lumber: capacity + storage.lumber,
+        stone: capacity + storage.stone,
+    };
+}
+
+export function getCapacity(game: Game, commodityCapacity:number): Commodities {
+    const {storage} = getSettlementData(game);
+    return calculateStorageCapacity(commodityCapacity, storage);
 }
 
 export async function showKingdom(game: Game): Promise<void> {

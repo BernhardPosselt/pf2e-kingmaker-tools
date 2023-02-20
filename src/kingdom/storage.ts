@@ -59,15 +59,20 @@ export function getKingdomSheetActor(game: Game): Actor | undefined {
     return game?.actors?.find(a => a.name === 'Kingdom Sheet');
 }
 
-export function getKingdomSheetActorOrThrow(): Actor {
+export function getGameOrThrow(): Game {
     if (game instanceof Game) {
-        const actor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
-        if (actor !== undefined) {
-            return actor;
-        } else {
-            throw new Error('No Kingdom Sheet Actor Found');
-        }
+        return game;
     } else {
         throw new Error('Game not initialized');
+    }
+}
+
+export function getKingdomSheetActorOrThrow(): Actor {
+    const game = getGameOrThrow();
+    const actor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
+    if (actor !== undefined) {
+        return actor;
+    } else {
+        throw new Error('No Kingdom Sheet Actor Found');
     }
 }

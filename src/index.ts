@@ -21,10 +21,9 @@ import {
 } from './camping/camping';
 import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
-import {activityData, ActivityResults} from './kingdom/data/activityData';
-import {Activity} from './kingdom/data/activities';
-import {getKingdom, getKingdomSheetActorOrThrow, reRenderKingdomSheet, saveKingdom} from './kingdom/storage';
+import {getGameOrThrow, getKingdom, getKingdomSheetActor, reRenderKingdomSheet} from './kingdom/storage';
 import {parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
+import {kingdomChatButtons} from './kingdom/chat-buttons';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -339,30 +338,10 @@ Hooks.on('init', async () => {
 });
 
 Hooks.on('renderChatLog', () => {
-    $('#chat-log')
-        .on('click', '.km-apply-modifier-effect', async (event: Event) => {
-            event.preventDefault();
-            const target = event.currentTarget as HTMLButtonElement;
-            const activity = target.dataset.activity! as Activity;
-            const degree = target.dataset.degree! as keyof ActivityResults;
-            const index = parseInt(target.dataset.index ?? '0', 10);
-            const sheetActor = getKingdomSheetActorOrThrow();
-            const kingdom = getKingdom(sheetActor);
-            const modifier = activityData[activity]?.[degree]?.modifiers?.(kingdom)?.[index];
-            if (modifier !== undefined) {
-                // copy modifier because we alter the consumeId
-                const modifierCopy = {
-                    ...modifier,
-                };
-                if (modifierCopy.consumeId !== undefined) {
-                    modifierCopy.consumeId = crypto.randomUUID();
-                }
-                const modifiers = [...kingdom.modifiers, modifierCopy];
-                await saveKingdom(sheetActor, {modifiers});
-            } else {
-                console.error(`Can not find modifier ${activity}.${degree}.modifiers.${index}`);
-            }
-        });
+    const chatLog = $('#chat-log');
+    for (const button of kingdomChatButtons) {
+        chatLog.on(button.selector, button.callback);
+    }
 });
 
 type LogEntry = {
@@ -373,10 +352,17 @@ type LogEntry = {
 };
 
 Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
-    console.log(html, items);
+    const game = getGameOrThrow();
     const hasMeta = (li: JQuery): boolean => li[0].querySelector('.km-roll-meta') !== null;
     const isActivityResult = (li: JQuery): boolean => li[0].querySelector('.km-upgrade-result') !== null;
-    const canReRollUsingFame = (li: JQuery): boolean => getKingdom(getKingdomSheetActorOrThrow()).fame > 0 && hasMeta(li);
+    const canReRollUsingFame = (li: JQuery): boolean => {
+        const actor = getKingdomSheetActor(game);
+        if (actor) {
+            return getKingdom(actor).fame > 0 && hasMeta(li);
+        } else {
+            return false;
+        }
+    };
     const canUpgrade = (li: JQuery): boolean => isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalSuccess';
     const canDowngrade = (li: JQuery): boolean => isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalFailure';
     items.push({
