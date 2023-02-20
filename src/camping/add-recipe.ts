@@ -2,7 +2,7 @@ import {Rarity, Recipe} from './camping';
 import {parseNumberInput, parseSelect, parseTextInput} from '../utils';
 
 export function addRecipeDialog(
-    onOk: (recipe: Recipe) => Promise<void>
+    onOk: (recipe: Recipe) => Promise<void>,
 ): void {
     new Dialog({
         title: 'Add Recipe',

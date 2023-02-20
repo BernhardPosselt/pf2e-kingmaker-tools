@@ -106,7 +106,7 @@ function calculateItemLevelBonus(
     defaultPenalty: number,
     globallyStackingBonuses: number,
     value: number,
-    maxItemLevelBonus: number
+    maxItemLevelBonus: number,
 ): number {
     return Math.min(value + globallyStackingBonuses + defaultPenalty, maxItemLevelBonus);
 }
@@ -121,7 +121,7 @@ function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Str
             .filter(rule => rule.group === undefined)
             .map(rule => rule.value)
             .reduce((a, b) => a + b, 0),
-        maxItemLevelBonus
+        maxItemLevelBonus,
     );
 
     const defaultBonus = calculateItemLevelBonus(defaultPenalty, globallyStackingBonuses, 0, maxItemLevelBonus);
@@ -296,7 +296,7 @@ function mergeBonuses(capital: SkillItemBonus, settlement: SkillItemBonus): Skil
     const activities = mergeObjects(capital.activities, settlement.activities, (a: number, b: number) => Math.max(a, b));
     const filteredActivities = Object.fromEntries(
         Object.entries(activities)
-            .filter(([, value]) => value > skillValue)
+            .filter(([, value]) => value > skillValue),
     );
     return {
         value: skillValue,

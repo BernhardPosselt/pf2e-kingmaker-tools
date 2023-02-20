@@ -63,7 +63,7 @@ export class TimeOfYear implements TimeDiff {
             hour: HourNumbers,
             minute: MinuteNumbers,
             second: SecondNumbers,
-        }
+        },
     ) {
         this.year = year;
         this.month = month;
@@ -105,7 +105,7 @@ export class TimeOfDay implements TimeDiff {
             hour: HourNumbers,
             minute: MinuteNumbers,
             second: SecondNumbers,
-        }
+        },
     ) {
         this.hour = hour;
         this.minute = minute;

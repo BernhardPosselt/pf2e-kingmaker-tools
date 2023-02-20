@@ -6,7 +6,7 @@ export interface RollTableResult {
 export async function findRollTableUuidWithFallback(
     game: Game,
     tableName: string,
-    compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables'
+    compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables',
 ): Promise<string | undefined> {
     const worldUuid = findWorldTableUuid(game, tableName);
     const compendiumUuid = await findCompendiumTableUuid(game, tableName, compendiumName);
@@ -34,7 +34,7 @@ export function findWorldTableUuid(game: Game, tableName: string): string | unde
 export async function findCompendiumTableUuid(
     game: Game,
     tableName: string,
-    compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables'
+    compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables',
 ): Promise<string | undefined> {
     const compendiumUuids = await buildUuids(game, compendiumName);
     return compendiumUuids[tableName];
@@ -58,7 +58,7 @@ export async function rollRollTable(
 
 export async function buildUuids(
     game: Game,
-    compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables'
+    compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-rolltables',
 ): Promise<Record<string, string>> {
     const compendium = await game.packs.get(compendiumName, {strict: true});
     const documents = await compendium.getDocuments({});

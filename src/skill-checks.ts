@@ -1,7 +1,7 @@
 async function rollSkillCheck(
     actors: Actor[],
     skill: string,
-    dc: number | undefined = undefined
+    dc: number | undefined = undefined,
 ): Promise<void> {
     const checkDc = dc === undefined ? undefined : {value: dc};
     for (const actor of actors) {
@@ -19,7 +19,7 @@ export async function rollExplorationSkillCheck(
     actors: Actor[],
     skill: string,
     effect: string,
-    dc: number | undefined = undefined
+    dc: number | undefined = undefined,
 ): Promise<void> {
     const actorsWithEffectApplied = actors
         .filter(actor => actor.items.find(item => item.name === effect && item.type === 'effect'));

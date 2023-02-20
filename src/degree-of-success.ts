@@ -33,7 +33,7 @@ export function degreeToProperty(degree: DegreeOfSuccess): StringDegreeOfSuccess
 export function determineDegreeOfSuccess(
     dieNumber: number,
     result: number,
-    dc: number
+    dc: number,
 ): DegreeOfSuccess {
     if (result <= dc - 10) {
         return adjustByDieNumber(dieNumber, DegreeOfSuccess.CRITICAL_FAILURE);

@@ -176,7 +176,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 kingdomData.commodities.now,
                 kingdomData.commodities.next,
                 sizeData.commodityCapacity,
-                storage
+                storage,
             ),
             workSites: this.getWorkSites(kingdomData.workSites),
             ...this.getActiveTabs(),
@@ -698,7 +698,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private getRuin(ruin: Ruin): object {
         return Object.fromEntries(Object.entries(ruin)
-            .map(([ruin, values]) => [ruin, {label: capitalize(ruin), ...values}])
+            .map(([ruin, values]) => [ruin, {label: capitalize(ruin), ...values}]),
         );
     }
 
@@ -707,7 +707,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             .map(([key, values]) => {
                 const label = key === 'lumberCamps' ? 'Lumber Camps' : (key === 'luxurySources' ? 'Luxury Sources' : capitalize(key));
                 return [key, {label: label, ...values}];
-            })
+            }),
         );
     }
 
@@ -724,7 +724,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 value: value,
                 capacity: storageCapacity[commodity],
                 next: commoditiesNextRound[commodity],
-            }])
+            }]),
         );
     }
 

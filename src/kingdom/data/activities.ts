@@ -104,24 +104,24 @@ export function getActivitySkills(activity: Activity, skillRanks?: SkillRanks): 
 export const oncePerRoundActivities: Set<Activity> = new Set(
     (Object.entries(activityData) as [Activity, ActivityContent][])
         .filter(([, data]) => data.oncePerRound)
-        .map(([activity]) => activity)
+        .map(([activity]) => activity),
 );
 export const trainedActivities: Set<Activity> = new Set(
     (Object.entries(activityData) as [Activity, ActivityContent][])
         .filter(([, data]) => Object.values(data.skills).every(rank => rank === 1))
-        .map(([activity]) => activity)
+        .map(([activity]) => activity),
 );
 
 export const expertActivities: Set<Activity> = new Set(
     (Object.entries(activityData) as [Activity, ActivityContent][])
         .filter(([, data]) => Object.values(data.skills).every(rank => rank === 2))
-        .map(([activity]) => activity)
+        .map(([activity]) => activity),
 );
 
 export const masterActivities: Set<Activity> = new Set(
     (Object.entries(activityData) as [Activity, ActivityContent][])
         .filter(([, data]) => Object.values(data.skills).every(rank => rank === 3))
-        .map(([activity]) => activity)
+        .map(([activity]) => activity),
 );
 
 export function getActivityPhase(activity: Activity): KingdomPhase {
@@ -131,7 +131,7 @@ export function getActivityPhase(activity: Activity): KingdomPhase {
 export const companionActivities: Set<Activity> = new Set(
     (Object.entries(activityData) as [Activity, ActivityContent][])
         .filter(([, data]) => data.companion)
-        .map(([activity]) => activity)
+        .map(([activity]) => activity),
 );
 
 const activitiesByPhase: Record<KingdomPhase, Activity[]> = (Object.entries(activityData) as [Activity, ActivityContent][])

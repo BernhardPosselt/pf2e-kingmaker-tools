@@ -105,7 +105,7 @@ function parseOptionalSelect<T extends string>($html: HTMLElement, name: string)
 }
 
 export function addEffectDialog(
-    onOk: (modifier: Modifier) => void
+    onOk: (modifier: Modifier) => void,
 ): void {
     new Dialog({
         title: 'Add Effect',

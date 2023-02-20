@@ -79,7 +79,7 @@ export function unslugify(word: string): string {
 export function mergeObjects<A extends Record<string, V>, B extends Record<string, V>, V>(
     obj1: A,
     obj2: B,
-    conflictFunction: (a: V, b: V) => V
+    conflictFunction: (a: V, b: V) => V,
 ): Record<string, V> {
     const entries: [string, V][] = [];
     for (const key of [...Object.keys(obj1), ...Object.keys(obj2)]) {

@@ -59,7 +59,7 @@ export function createSkillModifiers(
         phase?: KingdomPhase,
         additionalModifiers?: Modifier[],
         overrides?: Record<string, boolean>;
-    }
+    },
 ): Modifier[] {
     const abilityModifier = createAbilityModifier(ability, abilityScores);
     const proficiencyModifier = createProficiencyModifier(skillRank, alwaysAddLevel, kingdomLevel);
@@ -118,7 +118,7 @@ export function calculateSkills(
         alwaysAddLevel: boolean,
         skillItemBonuses?: SkillItemBonuses,
         additionalModifiers?: Modifier[],
-    }
+    },
 ): SkillStats[] {
     return allSkills.map(skill => {
         const ability = skillAbilities[skill];

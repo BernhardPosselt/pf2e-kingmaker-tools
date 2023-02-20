@@ -21,7 +21,7 @@ async function rollOnWeatherEventTable(
     averagePartyLevel: number,
     weatherHazardRange: number,
     rollMode: RollMode,
-    rollTwice: boolean
+    rollTwice: boolean,
 ): Promise<void> {
     const uuids = await buildUuids(game);
     const {table, draw} = await rollRollTable(game, uuids['Weather Events'], {rollMode, displayChat: false});
@@ -48,7 +48,7 @@ async function rollWeatherEvent(
     game: Game,
     averagePartyLevel: number,
     weatherHazardRange: number,
-    rollMode: RollMode
+    rollMode: RollMode,
 ): Promise<void> {
     const {isSuccess, total} = await rollCheck(17, 'Rolling for weather event with DC 17', rollMode);
     if (total === 20) {
@@ -96,7 +96,7 @@ async function rollWeather(game: Game, averagePartyLevel: number, weatherHazardR
     const hasPrecipitation = (await rollCheck(
         precipitationDC,
         `Checking for precipitation on a DC of ${precipitationDC}`,
-        rollMode
+        rollMode,
     )).isSuccess;
 
     let message;
@@ -104,7 +104,7 @@ async function rollWeather(game: Game, averagePartyLevel: number, weatherHazardR
         const isCold = (await rollCheck(
             coldDC,
             `Checking for mild cold on a DC of ${coldDC}`,
-            rollMode
+            rollMode,
         )).isSuccess;
         if (isCold && hasPrecipitation) {
             await setWeather(game, 'snowfall');

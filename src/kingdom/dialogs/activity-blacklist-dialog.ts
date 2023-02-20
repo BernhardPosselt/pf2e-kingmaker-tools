@@ -16,7 +16,7 @@ function tpl(blacklistedActivities: Activity[], activities: Activity[]): string 
 export function activityBlacklistDialog(
     blacklistedActivities: Activity[],
     activities: Activity[],
-    onOk: (blacklistedActivities: Activity[]) => void
+    onOk: (blacklistedActivities: Activity[]) => void,
 ): void {
     new Dialog({
         title: 'Activity Blacklist',

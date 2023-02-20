@@ -2,25 +2,10 @@ import {Activity, KingdomPhase} from './activities';
 import {allSkills, Skill} from './skills';
 import {Companion} from './companions';
 import {Modifier} from '../modifiers';
-import {hasFeat, Kingdom} from './kingdom';
-import {
-    createResourceButton,
-    gainCommodities,
-    gainFame,
-    gainRolledRD,
-    gainRP,
-    gainRuin,
-    gainSize,
-    gainUnrest,
-    gainXp,
-    loseCommodities,
-    loseFame,
-    loseRolledRD,
-    loseRP,
-    loseRuin,
-    loseSize,
-    loseUnrest,
-} from '../resources';
+import {Commodities, hasFeat, Kingdom} from './kingdom';
+import {Ruin} from './ruin';
+import {unslugify} from '../../utils';
+import {ResourceMode, ResourceTurn, RolledResources} from '../resources';
 
 type SkillRanks = Partial<Record<Skill, number>>;
 
@@ -2128,4 +2113,83 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
 
 export function findHelp(activity: Activity): ActivityContent {
     return activityData[activity];
+}
+
+
+interface CreateResourceButton {
+    type: RolledResources,
+    mode?: ResourceMode,
+    turn?: ResourceTurn,
+    value: string,
+    hints?: string;
+}
+
+export function gainXp(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'xp'});
+}
+export function gainFame(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'fame'});
+}
+
+export function loseFame(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'fame', mode: 'lose'});
+}
+
+export function gainCommodities(type: keyof Commodities, value: number | string): string {
+    return createResourceButton({value: `${value}`, type});
+}
+
+export function loseCommodities(type: keyof Commodities, value: number | string): string {
+    return createResourceButton({value: `${value}`, type, mode: 'lose'});
+}
+
+export function gainRuin(type: Ruin, value: number | string): string {
+    return createResourceButton({value: `${value}`, type});
+}
+
+export function loseRuin(type: Ruin, value: number | string): string {
+    return createResourceButton({value: `${value}`, type, mode: 'lose'});
+}
+
+export function gainRolledRD(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'rolled-resource-dice'});
+}
+
+export function loseRolledRD(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'rolled-resource-dice', mode: 'lose'});
+}
+
+export function gainRP(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'resource-points'});
+}
+
+export function loseRP(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'resource-points', mode: 'lose'});
+}
+
+export function gainUnrest(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'unrest'});
+}
+
+export function loseUnrest(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'unrest', mode: 'lose'});
+}
+
+export function gainSize(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'size'});
+}
+
+export function loseSize(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'size', mode: 'lose'});
+}
+
+export function createResourceButton({turn = 'now', value, mode = 'gain', type, hints}: CreateResourceButton): string {
+    const turnLabel = turn === 'now' ? '' : ' Next Turn';
+    const label = `${mode === 'gain' ? 'Gain' : 'Lose'} ${value} ${unslugify(type)}${turnLabel}`;
+    return `<button type="button" class="km-gain-lose" 
+        data-type="${type}"
+        data-mode="${mode}"
+        data-turn="${turn}"
+        ${value !== undefined ? `data-value="${value}"` : ''}
+        >${label}${hints !== undefined ? `(${hints})` : ''}</button>`;
 }

@@ -105,7 +105,7 @@ export function removePredicatedModifiers(
                         } else {
                             return activitySkillRank <= rank;
                         }
-                    })
+                    }),
                 );
             }
             let keepModifier = true;
@@ -315,7 +315,7 @@ export function processModifiers(
         phase?: KingdomPhase;
         activity?: Activity;
         overrides?: Record<string, boolean>;
-    }
+    },
 ): ModifierWithId[] {
     const copied = modifiers.map((modifier, index) => {
         // make a copy and assign every modifier an id

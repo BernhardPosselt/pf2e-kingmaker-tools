@@ -1,8 +1,7 @@
 import {unslugify} from '../utils';
-import {Commodities, getSizeData, Kingdom} from './data/kingdom';
+import {getSizeData, Kingdom} from './data/kingdom';
 import {getCapacity} from './kingdom';
 import {getGameOrThrow, getKingdom, getKingdomSheetActorOrThrow, saveKingdom} from './storage';
-import {Ruin} from './data/ruin';
 
 interface ResourceValues {
     value: number;
@@ -25,7 +24,7 @@ export function calculateNewValue(
         turn: ResourceTurn,
         mode: ResourceMode,
         limit?: number,
-    }
+    },
 ): ResourceValues {
     const value = mode === 'gain' ? currentValue + newValue : currentValue - newValue;
     const missing = value < 0 ? Math.abs(value) : 0;
@@ -190,83 +189,6 @@ export function parseResourceButton(element: HTMLButtonElement): ResourceButton 
     };
 }
 
-interface CreateResourceButton {
-    type: RolledResources,
-    mode?: ResourceMode,
-    turn?: ResourceTurn,
-    value: string,
-    hints?: string;
-}
-
-export function gainXp(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'xp'});
-}
-export function gainFame(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'fame'});
-}
-
-export function loseFame(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'fame', mode: 'lose'});
-}
-
-export function gainCommodities(type: keyof Commodities, value: number | string): string {
-    return createResourceButton({value: `${value}`, type});
-}
-
-export function loseCommodities(type: keyof Commodities, value: number | string): string {
-    return createResourceButton({value: `${value}`, type, mode: 'lose'});
-}
-
-export function gainRuin(type: Ruin, value: number | string): string {
-    return createResourceButton({value: `${value}`, type});
-}
-
-export function loseRuin(type: Ruin, value: number | string): string {
-    return createResourceButton({value: `${value}`, type, mode: 'lose'});
-}
-
-export function gainRolledRD(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'rolled-resource-dice'});
-}
-
-export function loseRolledRD(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'rolled-resource-dice', mode: 'lose'});
-}
-
-export function gainRP(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'resource-points'});
-}
-
-export function loseRP(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'resource-points', mode: 'lose'});
-}
-
-export function gainUnrest(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'unrest'});
-}
-
-export function loseUnrest(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'unrest', mode: 'lose'});
-}
-
-export function gainSize(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'size'});
-}
-
-export function loseSize(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'size', mode: 'lose'});
-}
-
-export function createResourceButton({turn = 'now', value, mode = 'gain', type, hints}: CreateResourceButton): string {
-    const turnLabel = turn === 'now' ? '' : ' Next Turn';
-    const label = `${mode === 'gain' ? 'Gain' : 'Lose'} ${value} ${unslugify(type)}${turnLabel}`;
-    return `<button type="button" class="km-gain-lose" 
-        data-type="${type}"
-        data-mode="${mode}"
-        data-turn="${turn}"
-        ${value !== undefined ? `data-value="${value}"` : ''}
-        >${label}${hints !== undefined ? `(${hints})` : ''}</button>`;
-}
 
 export async function updateResources(target: HTMLButtonElement): Promise<void> {
     const {type, mode, turn, value: parsedValue} = parseResourceButton(target);
