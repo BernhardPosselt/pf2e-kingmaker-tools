@@ -1,6 +1,7 @@
 import {getBooleanSetting, getStringSetting} from '../settings';
 import {
     allFameTypes,
+    allHeartlands,
     BonusFeat,
     Commodities,
     Feat,
@@ -17,7 +18,7 @@ import {
     Ruin,
     WorkSites,
 } from './data/kingdom';
-import {capitalize, unpackFormArray} from '../utils';
+import {capitalize, unpackFormArray, unslugify} from '../utils';
 import {
     CurrentSceneData,
     currentSceneIsSettlement,
@@ -155,10 +156,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             fame: kingdomData.fame,
             fameType: kingdomData.fameType,
             charter: kingdomData.charter,
-            heartland: {
-                value: kingdomData.heartland,
-                label: capitalize(kingdomData.heartland),
-            },
+            heartland: kingdomData.heartland,
             government: kingdomData.government,
             type: capitalize(sizeData.type),
             controlDC: getControlDC(kingdomData.level, kingdomData.size),
@@ -208,13 +206,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Master', value: 3},
                 {label: 'Legendary', value: 4},
             ],
-            terrains: [
-                {label: 'Swamp', value: 'swamp'},
-                {label: 'Hills', value: 'hills'},
-                {label: 'Plains', value: 'plains'},
-                {label: 'Mountains', value: 'mountains'},
-                {label: 'Forest', value: 'forest'},
-            ],
+            heartlands: allHeartlands.map(heartland => {return {label: unslugify(heartland), value: heartland};}),
             actorTypes: [
                 {label: 'PC', value: 'pc'},
                 {label: 'NPC', value: 'npc'},

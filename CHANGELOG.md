@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.18] - 2023-02-20
 
+### Fixed
+
+* Fixed Heartland dropdown to include correct values
+
+## [0.0.18] - 2023-02-20
+
 ### Added
 
 * You can now add homebrew recipes to the Learn Recipe macro

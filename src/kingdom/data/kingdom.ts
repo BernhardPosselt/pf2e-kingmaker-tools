@@ -89,7 +89,14 @@ export interface SkillRanks {
     wilderness: number;
 }
 
-export type Terrain = 'swamp' | 'hills' | 'plains' | 'mountains' | 'forest';
+export const allHeartlands = [
+    'forest-or-swamp',
+    'hill-or-plain',
+    'lake-or-river',
+    'mountain-or-ruins',
+] as const;
+
+export type Heartland = typeof allHeartlands[number];
 
 export const allFameTypes = ['famous', 'infamous'] as const;
 
@@ -130,7 +137,7 @@ export interface Kingdom {
     resourcePoints: Resources;
     resourceDice: Resources;
     workSites: WorkSites;
-    heartland: Terrain;
+    heartland: Heartland;
     consumption: {
         armies: number;
         now: number;
@@ -346,7 +353,7 @@ export function getDefaultKingdomData(): Kingdom {
             next: 0,
             now: 0,
         },
-        heartland: 'plains',
+        heartland: 'hill-or-plain',
         consumption: {
             armies: 0,
             now: 0,
