@@ -1,7 +1,9 @@
-import {getNumberSetting, getStringSetting, setSetting} from './settings';
-import {getRegionInfo} from './random-encounters';
-import {DegreeOfSuccess} from './degree-of-success';
-import {createUUIDLink, getLevelBasedDC, postDegreeOfSuccessMessage, roll} from './utils';
+import {getNumberSetting, getStringSetting, setSetting} from '../settings';
+import {getRegionInfo} from '../random-encounters';
+import {DegreeOfSuccess} from '../degree-of-success';
+import {createUUIDLink, getLevelBasedDC, postDegreeOfSuccessMessage, roll} from '../utils';
+import {addRecipeDialog} from './add-recipe';
+
 
 async function getQuantities(
     degreeOfSuccess: DegreeOfSuccess,
@@ -198,7 +200,9 @@ interface CookingFormData {
     servings: number;
 }
 
-interface Recipe {
+export type Rarity = 'common' | 'uncommon' | 'rare' | 'unique';
+
+export interface Recipe {
     name: string,
     basicIngredients: number,
     specialIngredients: number,
@@ -207,319 +211,333 @@ interface Recipe {
     uuid: string,
     level: number,
     cost: string,
-    rarity: 'common' | 'uncommon' | 'rare',
+    rarity: Rarity,
+    isHomebrew?: boolean;
 }
 
-const recipes: Recipe[] = [
-    {
-        name: 'Basic Meal',
-        basicIngredients: 2,
-        specialIngredients: 0,
-        cookingLoreDC: 18,
-        survivalDC: 22,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.J5nci1DS7i1wDph4',
-        level: 0,
-        cost: '0 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Hearty Meal',
-        basicIngredients: 4,
-        specialIngredients: 0,
-        cookingLoreDC: 14,
-        survivalDC: 16,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.K5l6QZci2mCofOBg',
-        level: 0,
-        cost: '0 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Jeweled Rice',
-        basicIngredients: 1,
-        specialIngredients: 0,
-        cookingLoreDC: 14,
-        survivalDC: 16,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.N3k7OGUKHn4kTu59',
-        level: 0,
-        cost: '5 sp',
-        rarity: 'common',
-    },
-    {
-        name: 'Fish-On-A-Stick',
-        basicIngredients: 2,
-        specialIngredients: 0,
-        cookingLoreDC: 17,
-        survivalDC: 19,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.b59ro2GHvRvBOko8',
-        level: 1,
-        cost: '1 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Haggis',
-        basicIngredients: 2,
-        specialIngredients: 0,
-        cookingLoreDC: 15,
-        survivalDC: 17,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.tKcKHaxGW48w5UMj',
-        level: 1,
-        cost: '1 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Rice-N-Nut Pudding',
-        basicIngredients: 2,
-        specialIngredients: 1,
-        cookingLoreDC: 16,
-        survivalDC: 18,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IrrRh2yttdTDU1A5',
-        level: 2,
-        cost: '2 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Shepherd\'s Pie',
-        basicIngredients: 4,
-        specialIngredients: 0,
-        cookingLoreDC: 18,
-        survivalDC: 20,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.GsPVSA1GNm4tvmcR',
-        level: 2,
-        cost: '2 gp',
-        rarity: 'uncommon',
-    },
-    {
-        name: 'Broiled Tuskwater Oysters',
-        basicIngredients: 2,
-        specialIngredients: 1,
-        cookingLoreDC: 20,
-        survivalDC: 22,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.aXmbLuQMQOMAlls3',
-        level: 3,
-        cost: '3 gp',
-        rarity: 'uncommon',
-    },
-    {
-        name: 'Succulent Sausages',
-        basicIngredients: 3,
-        specialIngredients: 1,
-        cookingLoreDC: 18,
-        survivalDC: 20,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IZoPx6QH5NRY1HBi',
-        level: 3,
-        cost: '3 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Chocolate Ice Cream',
-        basicIngredients: 2,
-        specialIngredients: 1,
-        cookingLoreDC: 19,
-        survivalDC: 21,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.xfIwKyG1pNFp8JbN',
-        level: 4,
-        cost: '5 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Galt Ragout',
-        basicIngredients: 4,
-        specialIngredients: 0,
-        cookingLoreDC: 20,
-        survivalDC: 22,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.agI35cH4peI3aIX5',
-        level: 4,
-        cost: '5 gp',
-        rarity: 'uncommon',
-    },
-    {
-        name: 'Baked Spider Legs',
-        basicIngredients: 4,
-        specialIngredients: 1,
-        survivalDC: 22,
-        cookingLoreDC: 20,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.OXKHrajfyBjEBLTM',
-        level: 5,
-        cost: '8 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Cheese Crostata',
-        basicIngredients: 4,
-        specialIngredients: 0,
-        cookingLoreDC: 22,
-        survivalDC: 24,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.GAf8W01ppdseIGbq',
-        level: 5,
-        cost: '8 gp',
-        rarity: 'uncommon',
-    },
-    {
-        name: 'Grilled Silver Eel',
-        basicIngredients: 4,
-        specialIngredients: 1,
-        cookingLoreDC: 24,
-        survivalDC: 26,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.UMgvKT6nNTPvp28R',
-        level: 6,
-        cost: '13 gp',
-        rarity: 'uncommon',
-    },
-    {
-        name: 'Hunter\'s Roast',
-        basicIngredients: 4,
-        specialIngredients: 0,
-        cookingLoreDC: 22,
-        survivalDC: 24,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.5QyW0eFSJRgmyRzU',
-        level: 6,
-        cost: '13 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Owlbear Omelet',
-        basicIngredients: 4,
-        specialIngredients: 1,
-        cookingLoreDC: 25,
-        survivalDC: 27,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.3ak0XG0Xf66q2ApV',
-        level: 7,
-        cost: '18 gp',
-        rarity: 'uncommon',
-    },
-    {
-        name: 'Sweet Pancakes',
-        basicIngredients: 2,
-        specialIngredients: 2,
-        cookingLoreDC: 23,
-        survivalDC: 25,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.WrDLx0FVkaglg1hh',
-        level: 7,
-        cost: '18 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Smoked Trout And Hydra Pate',
-        basicIngredients: 6,
-        specialIngredients: 2,
-        cookingLoreDC: 26,
-        survivalDC: 28,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.t5pXd39gRgNkPoiu',
-        level: 8,
-        cost: '25 gp',
-        rarity: 'uncommon',
-    },
-    {
-        name: 'Onion Soup',
-        basicIngredients: 2,
-        specialIngredients: 1,
-        cookingLoreDC: 24,
-        survivalDC: 26,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.laM0IfTV8eviU1vm',
-        level: 8,
-        cost: '25 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Whiterose Oysters',
-        basicIngredients: 3,
-        specialIngredients: 2,
-        cookingLoreDC: 26,
-        survivalDC: 28,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.p08orFcjqQzA7KdE',
-        level: 9,
-        cost: '35 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Kameberry Pie',
-        basicIngredients: 3,
-        specialIngredients: 2,
-        cookingLoreDC: 27,
-        survivalDC: 29,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.zX4S7wsOxB8CcVWw',
-        level: 10,
-        cost: '50 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Monster Casserole',
-        basicIngredients: 7,
-        specialIngredients: 2,
-        cookingLoreDC: 28,
-        survivalDC: 30,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.gqT2VQGYgDQIMYsW',
-        level: 11,
-        cost: '70 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Seasoned Wings And Thighs',
-        basicIngredients: 4,
-        specialIngredients: 2,
-        cookingLoreDC: 30,
-        survivalDC: 32,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.BTKN1IgANoof0tfB',
-        level: 12,
-        cost: '100 gp',
-        rarity: 'common',
-    },
-    {
-        name: 'Giant Scrambled Egg With Shambletus',
-        basicIngredients: 6,
-        specialIngredients: 2,
-        cookingLoreDC: 33,
-        survivalDC: 35,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IiV8wHXKZS1HbLLW',
-        level: 13,
-        cost: '150 gp',
-        rarity: 'uncommon',
-    },
-    {
-        name: 'Mastodon Steak',
-        basicIngredients: 4,
-        specialIngredients: 3,
-        cookingLoreDC: 34,
-        survivalDC: 36,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.SfNeVcYxBD4uCfrT',
-        level: 14,
-        cost: '225 gp',
-        rarity: 'uncommon',
-    },
-    {
-        name: 'Hearty Purple Soup',
-        basicIngredients: 6,
-        specialIngredients: 3,
-        cookingLoreDC: 40,
-        survivalDC: 42,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.yAB0s5JgzCZpf0dT',
-        level: 16,
-        cost: '500 gp',
-        rarity: 'rare',
-    },
-    {
-        name: 'Black Linnorm Stew',
-        basicIngredients: 8,
-        specialIngredients: 3,
-        cookingLoreDC: 43,
-        survivalDC: 45,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.V6uIWe6BVFV9Ewo3',
-        level: 18,
-        cost: '1200 gp',
-        rarity: 'rare',
-    },
-    {
-        name: 'First World Mince Pie',
-        basicIngredients: 8,
-        specialIngredients: 4,
-        cookingLoreDC: 45,
-        survivalDC: 47,
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.RmMZWrzgd8Wh8z5H',
-        level: 20,
-        cost: '3500 gp',
-        rarity: 'rare',
-    },
-];
+function getCustomRecipes(game: Game): Recipe[] {
+    const custom = getStringSetting(game, 'customRecipes') ?? '[]';
+    return JSON.parse(custom);
+}
+
+async function saveCustomRecipes(game: Game, customRecipes: Recipe[]): Promise<void> {
+    await setSetting(game, 'customRecipes', JSON.stringify(customRecipes));
+}
+
+function recipes(game: Game): Recipe[] {
+    const defaultRecipes: Recipe[] =
+        [
+            {
+                name: 'Basic Meal',
+                basicIngredients: 2,
+                specialIngredients: 0,
+                cookingLoreDC: 18,
+                survivalDC: 22,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.J5nci1DS7i1wDph4',
+                level: 0,
+                cost: '0 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Hearty Meal',
+                basicIngredients: 4,
+                specialIngredients: 0,
+                cookingLoreDC: 14,
+                survivalDC: 16,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.K5l6QZci2mCofOBg',
+                level: 0,
+                cost: '0 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Jeweled Rice',
+                basicIngredients: 1,
+                specialIngredients: 0,
+                cookingLoreDC: 14,
+                survivalDC: 16,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.N3k7OGUKHn4kTu59',
+                level: 0,
+                cost: '5 sp',
+                rarity: 'common',
+            },
+            {
+                name: 'Fish-On-A-Stick',
+                basicIngredients: 2,
+                specialIngredients: 0,
+                cookingLoreDC: 17,
+                survivalDC: 19,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.b59ro2GHvRvBOko8',
+                level: 1,
+                cost: '1 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Haggis',
+                basicIngredients: 2,
+                specialIngredients: 0,
+                cookingLoreDC: 15,
+                survivalDC: 17,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.tKcKHaxGW48w5UMj',
+                level: 1,
+                cost: '1 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Rice-N-Nut Pudding',
+                basicIngredients: 2,
+                specialIngredients: 1,
+                cookingLoreDC: 16,
+                survivalDC: 18,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IrrRh2yttdTDU1A5',
+                level: 2,
+                cost: '2 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Shepherd\'s Pie',
+                basicIngredients: 4,
+                specialIngredients: 0,
+                cookingLoreDC: 18,
+                survivalDC: 20,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.GsPVSA1GNm4tvmcR',
+                level: 2,
+                cost: '2 gp',
+                rarity: 'uncommon',
+            },
+            {
+                name: 'Broiled Tuskwater Oysters',
+                basicIngredients: 2,
+                specialIngredients: 1,
+                cookingLoreDC: 20,
+                survivalDC: 22,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.aXmbLuQMQOMAlls3',
+                level: 3,
+                cost: '3 gp',
+                rarity: 'uncommon',
+            },
+            {
+                name: 'Succulent Sausages',
+                basicIngredients: 3,
+                specialIngredients: 1,
+                cookingLoreDC: 18,
+                survivalDC: 20,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IZoPx6QH5NRY1HBi',
+                level: 3,
+                cost: '3 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Chocolate Ice Cream',
+                basicIngredients: 2,
+                specialIngredients: 1,
+                cookingLoreDC: 19,
+                survivalDC: 21,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.xfIwKyG1pNFp8JbN',
+                level: 4,
+                cost: '5 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Galt Ragout',
+                basicIngredients: 4,
+                specialIngredients: 0,
+                cookingLoreDC: 20,
+                survivalDC: 22,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.agI35cH4peI3aIX5',
+                level: 4,
+                cost: '5 gp',
+                rarity: 'uncommon',
+            },
+            {
+                name: 'Baked Spider Legs',
+                basicIngredients: 4,
+                specialIngredients: 1,
+                survivalDC: 22,
+                cookingLoreDC: 20,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.OXKHrajfyBjEBLTM',
+                level: 5,
+                cost: '8 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Cheese Crostata',
+                basicIngredients: 4,
+                specialIngredients: 0,
+                cookingLoreDC: 22,
+                survivalDC: 24,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.GAf8W01ppdseIGbq',
+                level: 5,
+                cost: '8 gp',
+                rarity: 'uncommon',
+            },
+            {
+                name: 'Grilled Silver Eel',
+                basicIngredients: 4,
+                specialIngredients: 1,
+                cookingLoreDC: 24,
+                survivalDC: 26,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.UMgvKT6nNTPvp28R',
+                level: 6,
+                cost: '13 gp',
+                rarity: 'uncommon',
+            },
+            {
+                name: 'Hunter\'s Roast',
+                basicIngredients: 4,
+                specialIngredients: 0,
+                cookingLoreDC: 22,
+                survivalDC: 24,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.5QyW0eFSJRgmyRzU',
+                level: 6,
+                cost: '13 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Owlbear Omelet',
+                basicIngredients: 4,
+                specialIngredients: 1,
+                cookingLoreDC: 25,
+                survivalDC: 27,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.3ak0XG0Xf66q2ApV',
+                level: 7,
+                cost: '18 gp',
+                rarity: 'uncommon',
+            },
+            {
+                name: 'Sweet Pancakes',
+                basicIngredients: 2,
+                specialIngredients: 2,
+                cookingLoreDC: 23,
+                survivalDC: 25,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.WrDLx0FVkaglg1hh',
+                level: 7,
+                cost: '18 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Smoked Trout And Hydra Pate',
+                basicIngredients: 6,
+                specialIngredients: 2,
+                cookingLoreDC: 26,
+                survivalDC: 28,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.t5pXd39gRgNkPoiu',
+                level: 8,
+                cost: '25 gp',
+                rarity: 'uncommon',
+            },
+            {
+                name: 'Onion Soup',
+                basicIngredients: 2,
+                specialIngredients: 1,
+                cookingLoreDC: 24,
+                survivalDC: 26,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.laM0IfTV8eviU1vm',
+                level: 8,
+                cost: '25 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Whiterose Oysters',
+                basicIngredients: 3,
+                specialIngredients: 2,
+                cookingLoreDC: 26,
+                survivalDC: 28,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.p08orFcjqQzA7KdE',
+                level: 9,
+                cost: '35 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Kameberry Pie',
+                basicIngredients: 3,
+                specialIngredients: 2,
+                cookingLoreDC: 27,
+                survivalDC: 29,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.zX4S7wsOxB8CcVWw',
+                level: 10,
+                cost: '50 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Monster Casserole',
+                basicIngredients: 7,
+                specialIngredients: 2,
+                cookingLoreDC: 28,
+                survivalDC: 30,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.gqT2VQGYgDQIMYsW',
+                level: 11,
+                cost: '70 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Seasoned Wings And Thighs',
+                basicIngredients: 4,
+                specialIngredients: 2,
+                cookingLoreDC: 30,
+                survivalDC: 32,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.BTKN1IgANoof0tfB',
+                level: 12,
+                cost: '100 gp',
+                rarity: 'common',
+            },
+            {
+                name: 'Giant Scrambled Egg With Shambletus',
+                basicIngredients: 6,
+                specialIngredients: 2,
+                cookingLoreDC: 33,
+                survivalDC: 35,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IiV8wHXKZS1HbLLW',
+                level: 13,
+                cost: '150 gp',
+                rarity: 'uncommon',
+            },
+            {
+                name: 'Mastodon Steak',
+                basicIngredients: 4,
+                specialIngredients: 3,
+                cookingLoreDC: 34,
+                survivalDC: 36,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.SfNeVcYxBD4uCfrT',
+                level: 14,
+                cost: '225 gp',
+                rarity: 'uncommon',
+            },
+            {
+                name: 'Hearty Purple Soup',
+                basicIngredients: 6,
+                specialIngredients: 3,
+                cookingLoreDC: 40,
+                survivalDC: 42,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.yAB0s5JgzCZpf0dT',
+                level: 16,
+                cost: '500 gp',
+                rarity: 'rare',
+            },
+            {
+                name: 'Black Linnorm Stew',
+                basicIngredients: 8,
+                specialIngredients: 3,
+                cookingLoreDC: 43,
+                survivalDC: 45,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.V6uIWe6BVFV9Ewo3',
+                level: 18,
+                cost: '1200 gp',
+                rarity: 'rare',
+            },
+            {
+                name: 'First World Mince Pie',
+                basicIngredients: 8,
+                specialIngredients: 4,
+                cookingLoreDC: 45,
+                survivalDC: 47,
+                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.RmMZWrzgd8Wh8z5H',
+                level: 20,
+                cost: '3500 gp',
+                rarity: 'rare',
+            },
+        ];
+    return [...defaultRecipes, ...getCustomRecipes(game)];
+}
 
 
 class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, object, null> {
@@ -546,9 +564,9 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
 
     override getData(options?: Partial<FormApplicationOptions>): object {
         const knownRecipeNames = new Set(this.getKnownRecipes());
-        const knownRecipes = recipes.filter(recipe => knownRecipeNames.has(recipe.name));
+        const knownRecipes = recipes(this.game).filter(recipe => knownRecipeNames.has(recipe.name));
         const selectedRecipe = knownRecipeNames.has(this.getSelectedRecipe()) ? this.getSelectedRecipe() : 'Basic Meal';
-        const selectedRecipeData = recipes.find(r => r.name === selectedRecipe)!;
+        const selectedRecipeData = recipes(this.game).find(r => r.name === selectedRecipe)!;
         const servings = this.getServings();
         return {
             ...super.getData(options),
@@ -611,7 +629,7 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
         cookButton?.addEventListener('click', async () => {
             const selectedSkill = this.getSelectedSkill();
             const dcKey = selectedSkill === 'cooking-lore' || selectedSkill === 'cooking' ? 'cookingLoreDC' : 'survivalDC';
-            const selectedRecipe = recipes.find(r => r.name === this.getSelectedRecipe())!;
+            const selectedRecipe = recipes(this.game).find(r => r.name === this.getSelectedRecipe())!;
             const result = await this.actor.skills[selectedSkill].roll({
                 dc: selectedRecipe?.[dcKey] ?? 0,
             });
@@ -646,9 +664,9 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
         const options = super.defaultOptions;
         options.id = 'recipe-app';
         options.title = 'Recipes';
-        options.template = 'modules/pf2e-kingmaker-tools/templates/recipes.html';
+        options.template = 'modules/pf2e-kingmaker-tools/templates/camping/recipes.hbs';
         options.classes = ['kingmaker-tools-app'];
-        options.width = 760;
+        options.width = 850;
         options.height = 600;
         return options;
     }
@@ -665,19 +683,21 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
     override getData(options?: Partial<ApplicationOptions> & LearnRecipeOptions): object {
         const knownRecipeNames = new Set(this.getKnownRecipes());
         const {zoneLevel} = getRegionInfo(this.game);
-        const knownRecipes = recipes
+        const isGM = this.game.user?.isGM;
+        const knownRecipes = recipes(this.game)
             .filter(recipe => knownRecipeNames.has(recipe.name))
             .map(recipe => {
                 return {
                     recipe: TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
                     recipeName: recipe.name,
                     canNotUnlearn: recipe.name === 'Basic Meal' || recipe.name === 'Hearty Meal',
+                    canDelete: recipe.isHomebrew && isGM,
                 };
             });
-        const availableRecipes = recipes
+        const availableRecipes = recipes(this.game)
             .filter(recipe => !knownRecipeNames.has(recipe.name) && recipe.level <= zoneLevel)
             .map(recipe => this.toTemplateRecipe(recipe));
-        const otherRecipes = recipes
+        const otherRecipes = recipes(this.game)
             .filter(recipe => !knownRecipeNames.has(recipe.name) && recipe.level > zoneLevel)
             .map(recipe => this.toTemplateRecipe(recipe));
         return {
@@ -686,6 +706,7 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
             availableRecipes,
             otherRecipes,
             noCookingLore: !this.hasCookingLore(),
+            isGM,
         };
     }
 
@@ -698,6 +719,7 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
             price: recipe.cost,
             rarity: recipe.rarity,
             level: recipe.level,
+            canDelete: recipe.isHomebrew && this.game.user?.isGM,
         };
     }
 
@@ -728,7 +750,25 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
 
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
-        const removeRecipeButtons = html[0].querySelectorAll('.remove-recipe-button') as NodeListOf<HTMLButtonElement>;
+        const $html = html[0];
+        $html.querySelector('#km-add-custom-recipe')
+            ?.addEventListener('click',
+                () => addRecipeDialog(async (recipe) => {
+                    const customRecipes = getCustomRecipes(this.game);
+                    await saveCustomRecipes(this.game, [...customRecipes, recipe]);
+                    this.render();
+                }));
+        $html.querySelectorAll('.km-delete-recipe')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const target = ev.currentTarget as HTMLButtonElement;
+                    const nameToDelete = target.dataset.name;
+                    const customRecipes = getCustomRecipes(this.game);
+                    await saveCustomRecipes(this.game, customRecipes.filter(r => r.name !== nameToDelete));
+                    this.render();
+                });
+            });
+        const removeRecipeButtons = $html.querySelectorAll('.remove-recipe-button') as NodeListOf<HTMLButtonElement>;
         removeRecipeButtons.forEach(removeRecipeButton => {
             removeRecipeButton?.addEventListener('click', async (event) => {
                 const button = event.target as HTMLButtonElement;
@@ -737,7 +777,7 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
                 this.render();
             });
         });
-        const buyRecipeButtons = html[0].querySelectorAll('.buy-recipe-button') as NodeListOf<HTMLButtonElement>;
+        const buyRecipeButtons = $html.querySelectorAll('.buy-recipe-button') as NodeListOf<HTMLButtonElement>;
         buyRecipeButtons.forEach(buyRecipeButton => {
             buyRecipeButton?.addEventListener('click', async (event) => {
                 const button = event.target as HTMLButtonElement;
@@ -746,13 +786,13 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
                 this.render();
             });
         });
-        const learnRecipeButtons = html[0].querySelectorAll('.learn-recipe-button') as NodeListOf<HTMLButtonElement>;
+        const learnRecipeButtons = $html.querySelectorAll('.learn-recipe-button') as NodeListOf<HTMLButtonElement>;
         learnRecipeButtons.forEach(learnRecipeButton => {
             learnRecipeButton?.addEventListener('click', async (event) => {
                 console.log('learn', event);
                 const button = event.target as HTMLButtonElement;
                 const recipeName = button.dataset.recipe!;
-                const selectedRecipe = recipes.find(r => r.name === recipeName)!;
+                const selectedRecipe = recipes(this.game).find(r => r.name === recipeName)!;
                 const skill = 'cooking-lore' in this.actor.skills ? 'cooking-lore' : 'cooking';
                 const result = await this.actor.skills[skill].roll({
                     dc: selectedRecipe.cookingLoreDC ?? 0,

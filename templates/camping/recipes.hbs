@@ -1,0 +1,111 @@
+<div>
+
+    <h1>Known Recipes <button {{#unless isGM}}hidden{{/unless}} id="km-add-custom-recipe">Add Homebrew Recipe <i class="fa-solid fa-plus"></i></button></h1>
+    <table class="stats">
+        <thead>
+        <tr>
+            <th>Recipe</th>
+            <th>Unlearn</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each knownRecipes}}
+            <tr>
+                <td>{{{recipe}}}</td>
+                <td>
+                    <button class="remove-recipe-button" data-recipe="{{recipeName}}"
+                            {{#if canNotUnlearn}}disabled="disabled"{{/if}}>Unlearn
+                    </button>
+                </td>
+                <td {{#unless canDelete}}hidden{{/unless}}>
+                    <button class="km-delete-recipe" data-name="{{recipeName}}"><i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+
+    <h1>Recipes Learnable in Zone</h1>
+    <table class="stats">
+        <thead>
+        <tr>
+            <th>Recipe</th>
+            <th>Level</th>
+            <th>Rarity</th>
+            <th>Cooking Lore DC</th>
+            <th>Cost to Learn</th>
+            <th>Learn</th>
+            <th>Price</th>
+            <th>Buy</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each availableRecipes}}
+            <tr>
+                <td>{{{recipe}}}</td>
+                <td>{{level}}</td>
+                <td>{{rarity}}</td>
+                <td>{{cookingLoreDC}}</td>
+                <td>{{ingredients}}</td>
+                <td>
+                    <button class="learn-recipe-button" data-recipe="{{recipeName}}" {{#if
+                            ../noCookingLore}}disabled="disabled" title="Cooking Lore required to learn" {{/if}}>Learn
+                    </button>
+                </td>
+                <td>{{price}}</td>
+                <td>
+                    <button class="buy-recipe-button" data-recipe="{{recipeName}}">Buy</button>
+                </td>
+                <td {{#unless canDelete}}hidden{{/unless}}>
+                    <button class="km-delete-recipe" data-name="{{recipeName}}"><i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+
+    <h1>Other Recipes</h1>
+    <table class="stats">
+        <thead>
+        <tr>
+            <th>Recipe</th>
+            <th>Level</th>
+            <th>Rarity</th>
+            <th>Cooking Lore DC</th>
+            <th>Cost to Learn</th>
+            <th>Learn</th>
+            <th>Price</th>
+            <th>Buy</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each otherRecipes}}
+            <tr>
+                <td>{{{recipe}}}</td>
+                <td>{{level}}</td>
+                <td>{{rarity}}</td>
+                <td>{{cookingLoreDC}}</td>
+                <td>{{ingredients}}</td>
+                <td>
+                    <button class="learn-recipe-button" data-recipe="{{recipeName}}" {{#if
+                            ../noCookingLore}}disabled="disabled" title="Cooking Lore required to learn" {{/if}}>Learn
+                    </button>
+                </td>
+                <td>{{price}}</td>
+                <td>
+                    <button class="buy-recipe-button" data-recipe="{{recipeName}}">Buy</button>
+                </td>
+                <td {{#unless canDelete}}hidden{{/unless}}>
+                    <button class="km-delete-recipe" data-name="{{recipeName}}"><i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>

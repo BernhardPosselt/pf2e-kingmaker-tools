@@ -49,7 +49,7 @@ The following journals are shipped:
 * **Cook Recipe**: Links the recipe to chat after a Survival or Cooking Lore check; list of recipes is determined by learned recipes done via **Recipes** macro. **Note**: does not consume rations nor ingredients!
  ![Cooking Macro](docs/images/cooking-macro.png)
 * **Tell Campfire Story**: Posts effects based on result to chat
-* **Recipes**: A macro to learn or buy special recipes. Note that the list of known recipes is stored on per-user basis due to limitations of the foundry permissions API, so recipe changes don't propagate to others. **Note**: Buying recipes does not subtract the required coins from your inventory!
+* **Recipes**: A macro to learn or buy special recipes. You can also add homebrew recipes. The UUID of your item recipe can be found under its Rules tab: ![Learn Recipe Macro](docs/images/uuid.png) Note that the list of known recipes is stored on per-user basis due to limitations of the foundry permissions API, so recipe changes don't propagate to others. **Note**: Buying recipes does not subtract the required coins from your inventory!
 ![Learn Recipe Macro](docs/images/learn-recipe-macro.png)
 * **Learn from a Companion**: Posts result of check to chat
 * **Camp Management**: Posts results of check to chat

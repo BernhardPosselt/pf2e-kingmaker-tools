@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.18] - 2023-02-20
+
+### Added
+
+* You can now add homebrew recipes to the Learn Recipe macro
+
 ## [0.0.17] - 2023-02-19
 
 ### Fixed

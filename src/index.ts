@@ -18,7 +18,7 @@ import {
     postCompanionEffects,
     prepareCampsite,
     tellCampfireStory,
-} from './camping';
+} from './camping/camping';
 import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
 import {activityData, ActivityResults} from './kingdom/data/activityData';
@@ -235,6 +235,13 @@ Hooks.on('ready', async () => {
             scope: 'client',
             config: false,
             default: '["Basic Meal", "Hearty Meal"]',
+            type: String,
+        });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'customRecipes', {
+            name: 'Custom Recipes',
+            scope: 'world',
+            config: false,
+            default: '[]',
             type: String,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'servings', {
