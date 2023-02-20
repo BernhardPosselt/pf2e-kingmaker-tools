@@ -167,3 +167,7 @@ export function parseCheckbox($html: HTMLElement, name: string): boolean {
     const input = $html.querySelector(`input[name="${name}"]`) as HTMLInputElement;
     return input.checked;
 }
+
+export function clamped(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
+}

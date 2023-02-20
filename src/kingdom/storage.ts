@@ -7,6 +7,9 @@ export function getKingdom(sheetActor: Actor): Kingdom {
     if (kingdom.modifiers === undefined) {
         kingdom.modifiers = [];
     }
+    if (kingdom.fameNext === undefined) {
+        kingdom.fameNext = 0;
+    }
     console.log(kingdom);
     return kingdom;
 }

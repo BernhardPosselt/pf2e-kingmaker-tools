@@ -1,7 +1,8 @@
 import {unslugify} from '../utils';
-import {getSizeData, Kingdom} from './data/kingdom';
+import {Commodities, getSizeData, Kingdom} from './data/kingdom';
 import {getCapacity} from './kingdom';
 import {getGameOrThrow, getKingdom, getKingdomSheetActorOrThrow, saveKingdom} from './storage';
+import {Ruin} from './data/ruin';
 
 interface ResourceValues {
     value: number;
@@ -28,13 +29,13 @@ export function calculateNewValue(
 ): ResourceValues {
     const value = mode === 'gain' ? currentValue + newValue : currentValue - newValue;
     const missing = value < 0 ? Math.abs(value) : 0;
-    const limitedValue = limit === undefined ? value : Math.max(limit, value);
-    const label = unslugify(type);
+    const limitedValue = limit === undefined ? value : Math.min(limit, value);
+    const label = type === 'rolled-resource-dice' ? 'Resource Points' : unslugify(type);
     const turnLabel = turn === 'now' ? 'this turn' : 'next turn';
-    const message = `${mode === 'gain' ? 'Gaining' : 'Losing'} ${limitedValue} ${label} ${turnLabel}`;
+    const message = `${mode === 'gain' ? 'Gaining' : 'Losing'} ${Math.abs(newValue)} ${label} ${turnLabel}`;
     const missingMessage = missing > 0 && turn === 'now' ? `Missing ${missing} ${label}` : '';
     return {
-        value: limitedValue,
+        value: turn === 'now' ? Math.max(0, limitedValue) : limitedValue,
         message,
         missingMessage,
     };
@@ -47,20 +48,30 @@ export function getCurrentValue(kingdom: Kingdom, type: RolledResources, turn: R
         return kingdom.unrest;
     } else if (type === 'resource-dice') {
         return kingdom.resourceDice[turn];
-    } else if (type === 'resource-points' || type === 'roll-resource-dice') {
+    } else if (type === 'resource-points' || type === 'rolled-resource-dice') {
         return kingdom.resourcePoints[turn];
     } else if (type === 'crime' || type === 'decay' || type === 'strife' || type === 'corruption') {
         return kingdom.ruin[type].value;
+    } else if (type === 'fame') {
+        if (turn === 'now') {
+            return kingdom.fame;
+        } else {
+            return kingdom.fameNext;
+        }
+    } else if (type === 'size') {
+        return kingdom.size;
     } else {
         throw Error(`Unhandled type ${type}`);
     }
 }
 
 export function getLimit(game: Game, kingdom: Kingdom, type: RolledResources, turn: ResourceTurn): number | undefined {
-    if (turn === 'next' && (type === 'food' || type === 'luxuries' || type === 'lumber' || type === 'ore' || type === 'stone')) {
+    if (turn === 'now' && (type === 'food' || type === 'luxuries' || type === 'lumber' || type === 'ore' || type === 'stone')) {
         const commodityCapacity = getSizeData(kingdom.size).commodityCapacity;
         const capacity = getCapacity(game, commodityCapacity);
         return capacity[type];
+    } else if (type === 'fame') {
+        return 3;
     } else {
         return undefined;
     }
@@ -68,9 +79,10 @@ export function getLimit(game: Game, kingdom: Kingdom, type: RolledResources, tu
 
 
 export async function evaluateValue(kingdom: Kingdom, resources: RolledResources, value: string): Promise<number> {
-    if (resources === 'roll-resource-dice') {
+    if (resources === 'rolled-resource-dice') {
+        const num = value.includes('d') ? `(${value})` : value;
         const dice = getSizeData(kingdom.size).resourceDieSize;
-        const roll = await new Roll(`${value}${dice}`).roll();
+        const roll = await new Roll(`${num}${dice}`).roll();
         await roll.toMessage({flavor: 'Rolling Resource Dice'});
         return roll.total;
     } else if (value.includes('d')) {
@@ -83,13 +95,21 @@ export async function evaluateValue(kingdom: Kingdom, resources: RolledResources
 }
 
 export function createUpdate(kingdom: Kingdom, type: RolledResources, turn: ResourceTurn, value: number): Partial<Kingdom> {
-    if (type === 'roll-resource-dice' || type === 'resource-points') {
+    if (type === 'rolled-resource-dice' || type === 'resource-points') {
         return {
             resourcePoints: {
                 ...kingdom.resourcePoints,
                 [turn]: value,
             },
         };
+    } else if (type === 'fame') {
+        if (turn === 'now') {
+            return {fame: value};
+        } else {
+            return {fameNext: value};
+        }
+    } else if (type === 'size') {
+        return {size: value};
     } else if (type === 'resource-dice') {
         return {
             resourceDice: {
@@ -101,7 +121,7 @@ export function createUpdate(kingdom: Kingdom, type: RolledResources, turn: Reso
         return {
             unrest: value,
         };
-    } else if (type === 'strife' || type === 'crime' || type === 'decay' || type === 'corruption'){
+    } else if (type === 'strife' || type === 'crime' || type === 'decay' || type === 'corruption') {
         return {
             ruin: {
                 ...kingdom.ruin,
@@ -139,8 +159,10 @@ export type RolledResources = 'resource-dice'
     | 'unrest'
     | 'ore'
     | 'lumber'
+    | 'fame'
     | 'stone'
-    | 'roll-resource-dice'; // TODO: add ruin, commodities
+    | 'size'
+    | 'rolled-resource-dice'; // TODO: add ruin, commodities
 export type ResourceTurn = 'now' | 'next';
 
 interface ResourceButton {
@@ -171,9 +193,65 @@ interface CreateResourceButton {
     hints?: string;
 }
 
+export function gainFame(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'fame'});
+}
+
+export function loseFame(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'fame', mode: 'lose'});
+}
+
+export function gainCommodities(type: keyof Commodities, value: number | string): string {
+    return createResourceButton({value: `${value}`, type});
+}
+
+export function loseCommodities(type: keyof Commodities, value: number | string): string {
+    return createResourceButton({value: `${value}`, type, mode: 'lose'});
+}
+
+export function gainRuin(type: Ruin, value: number | string): string {
+    return createResourceButton({value: `${value}`, type});
+}
+
+export function loseRuin(type: Ruin, value: number | string): string {
+    return createResourceButton({value: `${value}`, type, mode: 'lose'});
+}
+
+export function gainRolledRD(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'rolled-resource-dice'});
+}
+
+export function loseRolledRD(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'rolled-resource-dice', mode: 'lose'});
+}
+
+export function gainRP(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'resource-points'});
+}
+
+export function loseRP(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'resource-points', mode: 'lose'});
+}
+
+export function gainUnrest(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'unrest'});
+}
+
+export function loseUnrest(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'unrest', mode: 'lose'});
+}
+
+export function gainSize(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'size'});
+}
+
+export function loseSize(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'size', mode: 'lose'});
+}
+
 export function createResourceButton({turn = 'now', value, mode = 'gain', type, hints}: CreateResourceButton): string {
-    const turnLabel = turn === 'now' ? 'this turn' : 'next turn';
-    const label = `${mode === 'gain' ? 'Gain' : 'Lose'} ${value} ${turnLabel}`;
+    const turnLabel = turn === 'now' ? '' : ' Next Turn';
+    const label = `${mode === 'gain' ? 'Gain' : 'Lose'} ${value} ${unslugify(type)}${turnLabel}`;
     return `<button type="button" class="km-gain-lose" 
         data-type="${type}"
         data-mode="${mode}"

@@ -1,0 +1,32 @@
+<div>
+    <h2>{{title}}</h2>
+    <p><b>Skills</b>: {{skills}}</p>
+    <p><b>Traits</b>: {{traits}}</p>
+    {{#if companion}}
+        <p><b>Companion</b>: {{{companion}}}</p>
+    {{/if}}
+    {{#if requirement}}
+        <p><b>Requirements</b>: {{{requirement}}}</p>
+    {{/if}}
+    <hr>
+    <div>{{{description}}}</div>
+    <hr>
+    {{#if criticalSuccess}}
+    <p><b>Critical Success</b>: {{{criticalSuccess}}}
+    {{/if}}
+    {{#if success}}
+    <p><b>Success</b>: {{{success}}}
+    {{/if}}
+    {{#if failure}}
+    <p><b>Failure</b>: {{{failure}}}
+    {{/if}}
+    {{#if criticalFailure}}
+    <p><b>Critical Failure</b>: {{{criticalFailure}}}
+    {{/if}}
+    {{#if special}}
+        <hr>
+        <b>Special</b>: {{{special}}}
+    {{/if}}
+
+    <button type="button" id="km-close-help">Close</button>
+</div>

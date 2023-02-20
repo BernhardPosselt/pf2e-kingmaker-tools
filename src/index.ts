@@ -21,7 +21,13 @@ import {
 } from './camping/camping';
 import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
-import {getGameOrThrow, getKingdom, getKingdomSheetActor, reRenderKingdomSheet} from './kingdom/storage';
+import {
+    getGameOrThrow,
+    getKingdom,
+    getKingdomSheetActor,
+    getKingdomSheetActorOrThrow,
+    reRenderKingdomSheet,
+} from './kingdom/storage';
 import {parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
 
@@ -340,7 +346,7 @@ Hooks.on('init', async () => {
 Hooks.on('renderChatLog', () => {
     const chatLog = $('#chat-log');
     for (const button of kingdomChatButtons) {
-        chatLog.on(button.selector, button.callback);
+        chatLog.on('click', button.selector, button.callback);
     }
 });
 
@@ -351,20 +357,18 @@ type LogEntry = {
     callback: (html: JQuery) => void,
 };
 
-Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
+function hasActor(): boolean {
     const game = getGameOrThrow();
-    const hasMeta = (li: JQuery): boolean => li[0].querySelector('.km-roll-meta') !== null;
-    const isActivityResult = (li: JQuery): boolean => li[0].querySelector('.km-upgrade-result') !== null;
-    const canReRollUsingFame = (li: JQuery): boolean => {
-        const actor = getKingdomSheetActor(game);
-        if (actor) {
-            return getKingdom(actor).fame > 0 && hasMeta(li);
-        } else {
-            return false;
-        }
-    };
-    const canUpgrade = (li: JQuery): boolean => isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalSuccess';
-    const canDowngrade = (li: JQuery): boolean => isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalFailure';
+    return getKingdomSheetActor(game) !== undefined;
+}
+
+Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
+
+    const hasMeta = (li: JQuery): boolean => hasActor() && li[0].querySelector('.km-roll-meta') !== null;
+    const isActivityResult = (li: JQuery): boolean => hasActor() && li[0].querySelector('.km-upgrade-result') !== null;
+    const canReRollUsingFame = (li: JQuery): boolean => hasActor() && getKingdom(getKingdomSheetActorOrThrow()).fame > 0 && hasMeta(li);
+    const canUpgrade = (li: JQuery): boolean => hasActor() && isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalSuccess';
+    const canDowngrade = (li: JQuery): boolean => hasActor() && isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalFailure';
     items.push({
         name: 'Re-Roll Using Fame/Infamy',
         icon: '<i class="fa-solid fa-dice-d20"></i>',

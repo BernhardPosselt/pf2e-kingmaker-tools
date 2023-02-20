@@ -128,6 +128,7 @@ export interface Kingdom {
     charter: string;
     government: string;
     fame: number;
+    fameNext: number;
     fameType: FameType;
     level: number;
     xpThreshold: number;
@@ -296,6 +297,7 @@ export function getDefaultKingdomData(): Kingdom {
         government: '',
         activeSettlement: '',
         fame: 0,
+        fameNext: 0,
         fameType: 'famous',
         level: 1,
         xpThreshold: 1000,

@@ -12,9 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.19] - 2023-02-20
 
+### Added
+* There is now a Fame Next column
+* Added buttons to easily subtract/add resources, unrest and ruin from activities
+
 ### Fixed
 
 * Fixed Heartland dropdown to include correct values
+* Consumption can no longer go into negatives
 
 ## [0.0.18] - 2023-02-20
 

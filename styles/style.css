@@ -272,7 +272,7 @@ td.skill-value {
 }
 
 #km-kingdom-name {
-    width: 267px;
+    width: 250px;
 }
 
 .settlement-content {
@@ -307,4 +307,16 @@ td.skill-value {
 
 .km-delete-recipe {
     width: auto;
+}
+
+.km-gain-lose {
+    width: auto;
+}
+
+#km-close-help {
+    margin-top: 10px;
+}
+
+#help-app hr {
+    width: 100%;
 }

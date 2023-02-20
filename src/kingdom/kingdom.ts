@@ -4,6 +4,7 @@ import {
     allHeartlands,
     BonusFeat,
     Commodities,
+    FameType,
     Feat,
     getControlDC,
     getDefaultKingdomData,
@@ -17,7 +18,7 @@ import {
     Ruin,
     WorkSites,
 } from './data/kingdom';
-import {capitalize, unpackFormArray, unslugify} from '../utils';
+import {capitalize, clamped, unpackFormArray, unslugify} from '../utils';
 import {
     CurrentSceneData,
     currentSceneIsSettlement,
@@ -123,7 +124,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             storage,
             unlockedActivities: unlockedSettlementActivities,
         } = getSettlementData(this.game);
-        const totalConsumption = kingdomData.consumption.armies + kingdomData.consumption.now + settlementConsumption;
+        const totalConsumption = this.getTotalConsumption(kingdomData, settlementConsumption);
         const useXpHomebrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
         const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
         const settlementScene = getSettlementScene(this.game, kingdomData.activeSettlement);
@@ -151,6 +152,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             xpThreshold: kingdomData.xpThreshold,
             level: kingdomData.level,
             fame: kingdomData.fame,
+            fameNext: kingdomData.fameNext,
             fameType: kingdomData.fameType,
             charter: kingdomData.charter,
             heartland: kingdomData.heartland,
@@ -192,7 +194,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             leaders: this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
             fameTypes: allFameTypes,
-            fameLabel: kingdomData.fameType === 'famous' ? 'Fame' : 'Infamy',
+            fameLabel: this.getFameLabel(kingdomData.fameType),
             groups: kingdomData.groups,
             ...this.getFeats(kingdomData.feats, kingdomData.bonusFeats, kingdomData.level),
             tradeAgreementsSize: kingdomData.groups.filter(t => t.relations === 'trade-agreement').length,
@@ -249,6 +251,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             canAddCurrentSceneSettlement: currentSceneIsSettlement(this.game) && isGM,
             effects: createEffects(kingdomData.modifiers),
         };
+    }
+
+    private getFameLabel(fameType: FameType): string {
+        return fameType === 'famous' ? 'Fame' : 'Infamy';
     }
 
     private getActiveTabs(): Record<string, boolean> {
@@ -435,7 +441,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (el) => {
                     const target = el.currentTarget as HTMLButtonElement;
-                    const help = target.dataset.help;
+                    const help = target.dataset.help as Activity;
                     if (help) {
                         await showHelpDialog(help);
                     }
@@ -518,8 +524,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             .filter(modifier => (modifier?.turns ?? 1) > 0);
         await this.saveKingdom({
             modifiers,
+            fame: clamped(current.fame + current.fameNext, 0, 3),
+            fameNext: 0,
             resourceDice: {
-                now: current.resourcePoints.next,
+                now: current.resourceDice.next,
                 next: 0,
             },
             resourcePoints: {
@@ -665,7 +673,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private getResourceDiceNum(kingdom: Kingdom): number {
         const featDice = hasFeat(kingdom, 'Insider Trading') ? 1 : 0;
-        const levelData = getLevelData(kingdom.size);
+        const levelData = getLevelData(kingdom.level);
         return Math.max(0, levelData.resourceDice + kingdom.resourceDice.now + featDice);
     }
 
@@ -795,7 +803,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private async payConsumption(): Promise<void> {
         const current = this.getKingdom();
         const {settlementConsumption} = getSettlementData(this.game);
-        const totalConsumption = current.consumption.armies + current.consumption.now + settlementConsumption;
+        const totalConsumption = this.getTotalConsumption(current, settlementConsumption);
         const currentFood = current.commodities.now.food;
         const missingFood = totalConsumption - currentFood;
         const pay = missingFood * 5;
@@ -818,6 +826,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 },
             });
         }
+    }
+
+    private getTotalConsumption(current: Kingdom, settlementConsumption: number): number {
+        return Math.max(0, current.consumption.armies + current.consumption.now + settlementConsumption);
     }
 
     private async saveKingdom(kingdom: Partial<Kingdom>): Promise<void> {

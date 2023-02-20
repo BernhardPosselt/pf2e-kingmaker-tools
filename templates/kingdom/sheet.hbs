@@ -9,6 +9,7 @@
                     <th>XP</th>
                     <th>Level</th>
                     <th>{{fameLabel}}</th>
+                    <th>{{fameLabel}} Next</th>
                 </tr>
                 <tr>
                     <td><input id="km-kingdom-name" type="text" value="{{name}}" name="name"></td>
@@ -28,6 +29,16 @@
                     <td>
                         <select name="fame" data-dtype="Number">
                             {{#select fame}}
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="fameNext" data-dtype="Number">
+                            {{#select fameNext}}
                                 <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
