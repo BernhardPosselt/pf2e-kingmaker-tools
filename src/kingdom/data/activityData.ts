@@ -8,14 +8,17 @@ import {
     gainCommodities,
     gainFame,
     gainRolledRD,
+    gainRP,
     gainRuin,
     gainSize,
     gainUnrest,
+    gainXp,
     loseCommodities,
     loseFame,
     loseRolledRD,
     loseRP,
     loseRuin,
+    loseSize,
     loseUnrest,
 } from '../resources';
 
@@ -67,21 +70,16 @@ export const activityData: Record<Activity, ActivityContent> = {
         requirement: 'The hex to be abandoned must be controlled.',
         skills: simpleRank(['exploration', 'wilderness']),
         criticalSuccess: {
-            // TODO: resources per hex
-            // TODO: decrease size by n
-            msg: 'You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. Gain 1 RP per abandoned hex.',
+            msg: `You abandon the hex or hexes, ${loseSize(1)} per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. ${gainRP(1)} per abandoned hex.`,
         },
         success: {
-            // TODO: decrease size by n
-            msg: `You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. ${gainUnrest(1)}`,
+            msg: `You abandon the hex or hexes, ${loseSize(1)} per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. ${gainUnrest(1)}`,
         },
         failure: {
-            // TODO: decrease size by n
-            msg: `You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. ${gainUnrest(2)} and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, your kingdom experiences a Squatters kingdom event automatically in addition to any other event that might occur.`,
+            msg: `You abandon the hex or hexes, ${loseSize(1)} per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. ${gainUnrest(2)} and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, your kingdom experiences a Squatters kingdom event automatically in addition to any other event that might occur.`,
         },
         criticalFailure: {
-            // TODO: decrease size by n
-            msg: `You abandon the hex or hexes, decreasing your kingdom’s Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. ${gainUnrest(3)} and automatically experience a Bandit Activity kingdom event.`,
+            msg: `You abandon the hex or hexes, ${loseSize(1)} per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. ${gainUnrest(3)} and automatically experience a Bandit Activity kingdom event.`,
         },
         special: 'The Unrest gained from abandoning a hex doubles if it includes a settlement. A settlement in an abandoned hex becomes a Freehold (page 536).',
     },
@@ -249,7 +247,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
                 type: 'circumstance',
             }],
         },
-        special: 'At 1st level, when selecting the three activities you take during the Region Activities step of the Activity phase of the Kingdom turn, you may select this activity no more than once. Once your kingdom reaches 4th level, you may select it up to twice per turn, and after reaching 9th level you may select it up to three times per turn. When you successfully claim a hex, gain 10 kingdom XP (see page 540). Many hexes have terrain features that grant benefits to your kingdom when claimed; see Terrain Features on page 535.',
+        special: 'At 1st level, when selecting the three activities you take during the Region Activities step of the Activity phase of the Kingdom turn, you may select this activity no more than once. Once your kingdom reaches 4th level, you may select it up to twice per turn, and after reaching 9th level you may select it up to three times per turn. When you successfully claim a hex, gain kingdom XP (see page 540). Many hexes have terrain features that grant benefits to your kingdom when claimed; see Terrain Features on page 535.',
     },
     'clandestine-business': {
         oncePerRound: false,
@@ -350,7 +348,7 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
             }],
         },
         criticalFailure: {
-            msg: 'Your tax collectors encounter resistance from the citizens and their attempts to gather taxes are rebuffed. While the tax collectors still manage to gather enough taxes to support essential government',
+            msg: `Your tax collectors encounter resistance from the citizens and their attempts to gather taxes are rebuffed. While the tax collectors still manage to gather enough taxes to support essential government, they have angered the kingdom's citizens and encouraged rebellious acts. ${gainUnrest(2)}, and choose one Ruin to increase by 1.`,
         },
     },
     'craft-luxuries': {
@@ -412,7 +410,7 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         description: 'You work with your kingdom’s scholars, thinkers, and practitioners of magical and mundane experimentation to come up with new ways to resolve issues when business as usual is just not working. Attempt a basic check.',
         skills: simpleRank(['scholarship']),
         criticalSuccess: {
-            msg: 'You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10 kingdom XP instead.',
+            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and ${gainXp(10)} instead.`,
             modifiers: () => [{
                 turns: 1,
                 enabled: false,
@@ -423,7 +421,7 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
             }],
         },
         success: {
-            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10 kingdom XP instead. In addition, the Creative Solution costs the kingdom ${loseRP('1d4')} to research. This cost is paid now, whether or not you use your Creative Solution.`,
+            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and ${gainXp(10)} instead. In addition, ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your Creative Solution.`,
             modifiers: () => [{
                 turns: 1,
                 enabled: false,
@@ -434,10 +432,10 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
             }],
         },
         failure: {
-            msg: `Your attempt at researching a Creative Solution costs the kingdom ${loseRP('2d6')} but is ultimately a failure. It provides no advantage.`,
+            msg: `Your attempt at researching is a failure and you ${loseRP('2d6')}. It provides no advantage.`,
         },
         criticalFailure: {
-            msg: `Your attempt at researching a Creative Solution costs the kingdom ${loseRP('2d6')} but is ultimately a failure. It provides no advantage. In addition, your scholars and thinkers are so frustrated that you take a –1 circumstance penalty to Culture-based checks until the end of the next Kingdom turn.`,
+            msg: `Your attempt at researching is a failure and you ${loseRP('2d6')}. It provides no advantage. In addition, your scholars and thinkers are so frustrated that you take a –1 circumstance penalty to Culture-based checks until the end of the next Kingdom turn.`,
             modifiers: () => [{
                 turns: 2,
                 enabled: true,
@@ -578,7 +576,7 @@ You must be at least master in Magic to attempt a Magic check. When you do so, c
         enabled: true,
         phase: 'region',
         dc: 'control',
-        description: `You plant crops and establish livestock in permanent farms, ranches, and other growing operations to create Farmland (page 535). If you’re attempting to Establish Farmland in a hex that is predominantly plains, you must spend 1 RP and the check is against your Control DC. If you’re targeting a hex that is predominantly hills, you must spend ${loseRP(2)} and the check is against your Control DC + 5.`,
+        description: `You plant crops and establish livestock in permanent farms, ranches, and other growing operations to create Farmland (page 535). If you’re attempting to Establish Farmland in a hex that is predominantly plains, you must ${loseRP(1)} and the check is against your Control DC. If you’re targeting a hex that is predominantly hills, you must spend ${loseRP(2)} and the check is against your Control DC + 5.`,
         requirement: 'Plains or hills are the predominant terrain feature in the hex; the hex is in the influence of one of your settlements.',
         skills: simpleRank(['agriculture']),
         criticalSuccess: {
@@ -1129,7 +1127,7 @@ Then attempt a basic check.`,
             msg: 'You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature.',
         },
         criticalFailure: {
-            msg: 'You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature. Your attempts at Irrigation are so completely useless that they become breeding grounds for disease. Gain 1 Unrest. From this point onward, at the start of your Kingdom turn’s Event phase, attempt a @Check[type:flat|dc:4]. This flat check’s DC increases by 1 for each hex in your kingdom that contains a critically failed attempt at Irrigation. If you fail this flat check, your kingdom suffers a Plague event in addition to any other event it might have. You can attempt this activity again in a later Kingdom turn to undo a critically failed Irrigation attempt.',
+            msg: `You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature. Your attempts at Irrigation are so completely useless that they become breeding grounds for disease. ${gainUnrest(1)}. From this point onward, at the start of your Kingdom turn’s Event phase, attempt a @Check[type:flat|dc:4]. This flat check’s DC increases by 1 for each hex in your kingdom that contains a critically failed attempt at Irrigation. If you fail this flat check, your kingdom suffers a Plague event in addition to any other event it might have. You can attempt this activity again in a later Kingdom turn to undo a critically failed Irrigation attempt.`,
         },
     },
     'manage-trade-agreements': {
@@ -1258,7 +1256,7 @@ If you’re distributing gear gained from battle, this activity requires a basic
 You can attempt this skill check with Intrigue, Statecraft, or Warfare; however, certain groups will respond better (or worse) to specific skills. The DC is the group’s Negotiation DC (see the sidebar on page 519).`,
         skills: simpleRank(['intrigue', 'statecraft', 'warfare'], 1),
         criticalSuccess: {
-            msg: 'The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, gaining 10 kingdom XP and increasing your kingdom’s Size by 1 (this affects all statistics determined by Size; see page 532). If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty.',
+            msg: `The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, ${gainXp(10)} and ${gainSize(1)} (this affects all statistics determined by Size; see page 532). If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty.`,
         },
         success: {
             msg: `The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty. ${loseRolledRD(1)} to the result to integrate the group into your kingdom.`,
@@ -1960,10 +1958,10 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         fortune: true,
         skills: simpleRank(['magic']),
         criticalSuccess: {
-            msg: 'You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10 kingdom XP instead.',
+            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you ${gainXp(10)} instead.`,
         },
         success: {
-            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10 kingdom XP instead. However, ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your supernatural solution.`,
+            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you ${gainXp(10)} instead. However, you ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your supernatural solution.`,
         },
         failure: {
             msg: `Your attempt at researching a supernatural solution costs additional RP to research, but is ultimately a failure, providing no advantage. ${loseRP('2d6')}`,

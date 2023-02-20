@@ -52,6 +52,8 @@ export function getCurrentValue(kingdom: Kingdom, type: RolledResources, turn: R
         return kingdom.resourcePoints[turn];
     } else if (type === 'crime' || type === 'decay' || type === 'strife' || type === 'corruption') {
         return kingdom.ruin[type].value;
+    } else if (type === 'xp') {
+        return kingdom.xp;
     } else if (type === 'fame') {
         if (turn === 'now') {
             return kingdom.fame;
@@ -102,6 +104,8 @@ export function createUpdate(kingdom: Kingdom, type: RolledResources, turn: Reso
                 [turn]: value,
             },
         };
+    } else if (type === 'xp') {
+        return {xp: value};
     } else if (type === 'fame') {
         if (turn === 'now') {
             return {fame: value};
@@ -162,6 +166,7 @@ export type RolledResources = 'resource-dice'
     | 'fame'
     | 'stone'
     | 'size'
+    | 'xp'
     | 'rolled-resource-dice'; // TODO: add ruin, commodities
 export type ResourceTurn = 'now' | 'next';
 
@@ -193,6 +198,9 @@ interface CreateResourceButton {
     hints?: string;
 }
 
+export function gainXp(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'xp'});
+}
 export function gainFame(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'fame'});
 }
