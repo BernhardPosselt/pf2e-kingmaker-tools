@@ -6,15 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-* Do not throw error on left click in chat if no Kingdom Sheet actor is present
-
-## [0.0.19] - 2023-02-20
+## [0.0.20] - 2023-02-20
 
 ### Added
 * There is now a Fame Next column
 * Added buttons to easily subtract/add resources, unrest and ruin from activities
+
+### Fixed
+
+* Do not throw error on left click in chat if no Kingdom Sheet actor is present
+* Double check and fixed various activities
+
+## [0.0.19] - 2023-02-20
 
 ### Fixed
 
