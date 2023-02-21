@@ -124,7 +124,7 @@ export interface OngoingEvent {
 
 export interface Settlement {
     sceneId: string;
-    lotsWithStructures: number;
+    lots: number;
     level: number;
     type: 'capital' | 'settlement';
     secondaryTerritory: boolean;

@@ -104,11 +104,13 @@ describe('removeLowestModifiers', () => {
             type: 'ability',
         }];
         const result = removeLowestModifiers(modifiers);
-        expect(result.length).toBe(1);
+        expect(result.length).toBe(2);
         expect(result[0].name).toBe('highest');
+        expect(result[0].enabled).toBe(true);
+        expect(result[1].enabled).toBe(false);
     });
 
-    test('remove on modifiers if no one is enabled per type', () => {
+    test('remove no modifiers if no one is enabled per type', () => {
         const modifiers: ModifierWithId[] = [{
             id: '1',
             name: 'highest',
@@ -126,7 +128,29 @@ describe('removeLowestModifiers', () => {
         expect(result.length).toBe(2);
     });
 
-    test('if two modifiers have the same value and both are enabled, only keep the first one', () => {
+    test('remove no modifiers if no one is enabled per type and both are the same', () => {
+        const modifiers: ModifierWithId[] = [{
+            id: '1',
+            name: 'highest',
+            enabled: false,
+            value: 1,
+            type: 'circumstance',
+        }, {
+            id: '2',
+            name: 'match',
+            enabled: true,
+            value: 1,
+            type: 'circumstance',
+        }];
+        const result = removeLowestModifiers(modifiers);
+        expect(result.length).toBe(2);
+        expect(result[0].name).toBe('match');
+        expect(result[0].enabled).toBe(true);
+        expect(result[1].name).toBe('highest');
+        expect(result[1].enabled).toBe(false);
+    });
+
+    test('if two modifiers have the same value and both are enabled, only enable the first one', () => {
         const modifiers: ModifierWithId[] = [{
             id: '1',
             name: 'first',
@@ -153,8 +177,14 @@ describe('removeLowestModifiers', () => {
             type: 'ability',
         }];
         const result = removeLowestModifiers(modifiers);
-        expect(result.length).toBe(2);
+        expect(result.length).toBe(4);
         expect(result[0].name).toBe('first');
-        expect(result[1].name).toBe('third');
+        expect(result[0].enabled).toBe(true);
+        expect(result[1].name).toBe('second');
+        expect(result[1].enabled).toBe(false);
+        expect(result[2].name).toBe('third');
+        expect(result[2].enabled).toBe(true);
+        expect(result[3].name).toBe('fourth');
+        expect(result[3].enabled).toBe(false);
     });
 });

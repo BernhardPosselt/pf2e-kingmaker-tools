@@ -58,7 +58,6 @@ export function addRecipeDialog(
                 callback: async (html): Promise<void> => {
                     const $html = html as HTMLElement;
                     const uuid = parseTextInput($html, 'uuid');
-                    console.log(uuid);
                     const item = await fromUuid(uuid);
                     if (item === null) {
                         ui.notifications?.error(`Can not find item with uuid ${uuid}`);

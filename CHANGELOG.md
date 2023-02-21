@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.21] - 2023-02-21
+
+### Changed
+* Settlement data is now no longer saved on the scene itself, allowing players to edit their values as well. You need to re-add existing scenes
+* Rather than configuring an overcrowded flag, you configure a "lots" value now which is compared to the amount of residential buildings
+* Improve modifier handling
+
 ## [0.0.20] - 2023-02-20
 
 ### Added

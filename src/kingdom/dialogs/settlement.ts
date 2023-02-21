@@ -1,8 +1,8 @@
-import {getMergedData, getSettlementScene} from '../scene';
 import {ActivityBonuses, ItemGroup, ItemLevelBonuses, SkillItemBonuses} from '../data/structures';
 import {capitalize, unslugify} from '../../utils';
-import {SettlementData} from '../structures';
+import {StructureResult} from '../structures';
 import {hasFeat, Kingdom} from '../data/kingdom';
+import {getCapitalSettlement, getSettlement, getStructureResult} from '../scene';
 
 interface SettlementOptions {
     game: Game;
@@ -50,16 +50,19 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
     }
 
     override getData(options?: Partial<ApplicationOptions>): object {
-        const scene = getSettlementScene(this.game, this.settlementId)!;
-        const data = getMergedData(this.game, scene)!;
-        const structures = data.settlement;
-        const sceneData = data.scenedData;
-        const settlementLevel = sceneData.settlementLevel || 1;
+        const settlement = getSettlement(this.game, this.kingdom, this.settlementId)!;
+        const capital = getCapitalSettlement(this.game, this.kingdom);
+        const structures = getStructureResult(settlement, capital);
         const storage = this.getStorage(structures);
         return {
             ...super.getData(options),
-            ...structures.config,
-            ...sceneData,
+            name: settlement.scene.name,
+            type: capitalize(settlement.settlement.type),
+            level: settlement.settlement.level,
+            secondaryTerritory: settlement.settlement.secondaryTerritory,
+            lots: settlement.settlement.lots,
+            config: structures.config,
+            overcrowded: settlement.settlement.lots > structures.residentialBuildings,
             residentialBuildings: structures.residentialBuildings,
             consumption: structures.consumption,
             capitalInvestmentPossible: structures.allowCapitalInvestment ? 'yes' : 'no',
@@ -68,7 +71,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
             notes: structures.notes,
             showNotes: structures.notes.length > 0,
             leadershipActivities: structures.increaseLeadershipActivities ? 3 : 2,
-            availableItems: this.getAvailableItems(settlementLevel, structures.itemLevelBonuses),
+            availableItems: this.getAvailableItems(settlement.settlement.level, structures.itemLevelBonuses),
             storage,
             showStorage: Object.keys(storage).length > 0,
             skillItemBonuses: this.getSkillBonuses(structures.skillBonuses),
@@ -135,7 +138,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
         });
     }
 
-    private getStorage(structures: SettlementData): LabeledData[] {
+    private getStorage(structures: StructureResult): LabeledData[] {
         return Object.entries(structures.storage)
             .filter(([, bonus]) => bonus > 0)
             .map(([type, bonus]) => {

@@ -15,6 +15,10 @@ export function getKingdom(sheetActor: Actor): Kingdom {
     if (kingdom.modifiers === undefined) {
         kingdom.modifiers = [];
     }
+    if (kingdom.settlements === undefined) {
+        kingdom.settlements = [];
+        kingdom.activeSettlement = '';
+    }
     console.log(kingdom);
     return kingdom;
 }
