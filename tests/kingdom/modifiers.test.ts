@@ -144,10 +144,10 @@ describe('removeLowestModifiers', () => {
         }];
         const result = removeLowestModifiers(modifiers);
         expect(result.length).toBe(2);
-        expect(result[0].name).toBe('match');
-        expect(result[0].enabled).toBe(true);
-        expect(result[1].name).toBe('highest');
-        expect(result[1].enabled).toBe(false);
+        expect(result[0].name).toBe('highest');
+        expect(result[0].enabled).toBe(false);
+        expect(result[1].name).toBe('match');
+        expect(result[1].enabled).toBe(true);
     });
 
     test('if two modifiers have the same value and both are enabled, only enable the first one', () => {
