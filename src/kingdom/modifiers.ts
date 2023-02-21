@@ -491,7 +491,7 @@ export function createActivityModifiers(activities: ActivityBonuses): Modifier[]
                 type: 'item',
                 enabled: true,
                 value,
-                name: 'Structure',
+                name: `Structure - ${unslugify(activity)}`,
                 activities: [activity],
                 phases,
             };
