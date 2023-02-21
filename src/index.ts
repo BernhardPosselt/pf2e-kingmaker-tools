@@ -366,7 +366,7 @@ Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
 
     const hasMeta = (li: JQuery): boolean => hasActor() && li[0].querySelector('.km-roll-meta') !== null;
     const isActivityResult = (li: JQuery): boolean => hasActor() && li[0].querySelector('.km-upgrade-result') !== null;
-    const canReRollUsingFame = (li: JQuery): boolean => hasActor() && getKingdom(getKingdomSheetActorOrThrow()).fame > 0 && hasMeta(li);
+    const canReRollUsingFame = (li: JQuery): boolean => hasActor() && getKingdom(getKingdomSheetActorOrThrow()).fame.now > 0 && hasMeta(li);
     const canUpgrade = (li: JQuery): boolean => hasActor() && isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalSuccess';
     const canDowngrade = (li: JQuery): boolean => hasActor() && isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalFailure';
     items.push({

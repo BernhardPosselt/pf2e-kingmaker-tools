@@ -152,8 +152,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             xpThreshold: kingdomData.xpThreshold,
             level: kingdomData.level,
             fame: kingdomData.fame,
-            fameNext: kingdomData.fameNext,
-            fameType: kingdomData.fameType,
             charter: kingdomData.charter,
             heartland: kingdomData.heartland,
             government: kingdomData.government,
@@ -194,7 +192,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             leaders: this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
             fameTypes: allFameTypes,
-            fameLabel: this.getFameLabel(kingdomData.fameType),
+            fameLabel: this.getFameLabel(kingdomData.fame.type),
             groups: kingdomData.groups,
             ...this.getFeats(kingdomData.feats, kingdomData.bonusFeats, kingdomData.level),
             tradeAgreementsSize: kingdomData.groups.filter(t => t.relations === 'trade-agreement').length,
@@ -312,7 +310,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         });
         $html.querySelector('#km-gain-fame')
             ?.addEventListener('click', async () =>
-                await this.saveKingdom({fame: Math.min(3, this.getKingdom().fame + 1)}));
+                await this.gainFame(1));
         $html.querySelector('#km-adjust-unrest')
             ?.addEventListener('click', async () => await this.adjustUnrest());
         $html.querySelector('#km-collect-resources')
@@ -479,6 +477,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
     }
 
+    private async gainFame(fame: number): Promise<void> {
+        const current = this.getKingdom();
+        const newFame = Math.min(3, current.fame.now + fame);
+        await this.saveKingdom({
+            fame: {
+                ...current.fame,
+                now: newFame,
+            },
+        });
+    }
+
     private async consumeModifiers(consumeIds: Set<string>): Promise<void> {
         const current = this.getKingdom();
         await this.saveKingdom({
@@ -524,8 +533,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             .filter(modifier => (modifier?.turns ?? 1) > 0);
         await this.saveKingdom({
             modifiers,
-            fame: clamped(current.fame + current.fameNext, 0, 3),
-            fameNext: 0,
+            fame: {
+                ...current.fame,
+                now: clamped(current.fame.now + current.fame.next, 0, 3),
+                next: 0,
+            },
             resourceDice: {
                 now: current.resourceDice.next,
                 next: 0,

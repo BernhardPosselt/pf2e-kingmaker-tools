@@ -122,14 +122,24 @@ export interface OngoingEvent {
     name: string;
 }
 
+export interface Settlement {
+    sceneId: string;
+    lotsWithStructures: number;
+    level: number;
+    type: 'capital' | 'settlement';
+    secondaryTerritory: boolean;
+}
+
 export interface Kingdom {
     name: string;
     atWar: boolean;
     charter: string;
     government: string;
-    fame: number;
-    fameNext: number;
-    fameType: FameType;
+    fame: {
+        now: number;
+        next: number;
+        type: FameType;
+    };
     level: number;
     xpThreshold: number;
     xp: number;
@@ -161,6 +171,7 @@ export interface Kingdom {
     turnsWithoutEvent: number;
     activityBlacklist: Activity[];
     modifiers: Modifier[];
+    settlements: Settlement[];
 }
 
 
@@ -296,14 +307,17 @@ export function getDefaultKingdomData(): Kingdom {
         charter: '',
         government: '',
         activeSettlement: '',
-        fame: 0,
-        fameNext: 0,
-        fameType: 'famous',
+        fame: {
+            type: 'famous',
+            now: 0,
+            next: 0,
+        },
         level: 1,
         xpThreshold: 1000,
         xp: 0,
         size: 1,
         unrest: 0,
+        settlements: [],
         feats: [],
         bonusFeats: [],
         ongoingEvents: [],

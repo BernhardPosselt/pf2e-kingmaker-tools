@@ -54,11 +54,7 @@ export function getCurrentValue(kingdom: Kingdom, type: RolledResources, turn: R
     } else if (type === 'xp') {
         return kingdom.xp;
     } else if (type === 'fame') {
-        if (turn === 'now') {
-            return kingdom.fame;
-        } else {
-            return kingdom.fameNext;
-        }
+        return kingdom.fame[turn];
     } else if (type === 'size') {
         return kingdom.size;
     } else {
@@ -106,11 +102,12 @@ export function createUpdate(kingdom: Kingdom, type: RolledResources, turn: Reso
     } else if (type === 'xp') {
         return {xp: value};
     } else if (type === 'fame') {
-        if (turn === 'now') {
-            return {fame: value};
-        } else {
-            return {fameNext: value};
-        }
+        return {
+            fame: {
+                ...kingdom.fame,
+                [turn]: value,
+            },
+        };
     } else if (type === 'size') {
         return {size: value};
     } else if (type === 'resource-dice') {

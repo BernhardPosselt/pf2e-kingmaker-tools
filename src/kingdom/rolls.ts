@@ -52,7 +52,10 @@ export async function reRoll(el: HTMLElement, type: 'fame' | 're-roll' | 'keep-h
         const actor = getKingdomSheetActorOrThrow();
         const kingdom = getKingdom(actor);
         await saveKingdom(actor, {
-            fame: kingdom.fame - 1,
+            fame: {
+                ...kingdom.fame,
+                now: kingdom.fame.now - 1,
+            },
         });
     } else if (type === 'keep-higher') {
         reRollFormula = `{${formula},${total}}kh`;

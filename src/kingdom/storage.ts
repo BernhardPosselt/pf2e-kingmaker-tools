@@ -1,14 +1,19 @@
-import {Kingdom} from './data/kingdom';
+import {FameType, Kingdom} from './data/kingdom';
 import {groupBy} from '../utils';
 
 export function getKingdom(sheetActor: Actor): Kingdom {
     const kingdom = sheetActor.getFlag('pf2e-kingmaker-tools', 'kingdom-sheet') as Kingdom;
     // migrations
+    if (typeof kingdom.fame === 'number' && 'fameNext' in kingdom && 'fameType' in kingdom) {
+        const current = kingdom as Kingdom & {fame: number, fameNext: number, fameType: FameType};
+        kingdom.fame = {
+            now: current.fame,
+            next: current?.fameNext ?? 0,
+            type: current?.fameType ?? 'famous',
+        };
+    }
     if (kingdom.modifiers === undefined) {
         kingdom.modifiers = [];
-    }
-    if (kingdom.fameNext === undefined) {
-        kingdom.fameNext = 0;
     }
     console.log(kingdom);
     return kingdom;
