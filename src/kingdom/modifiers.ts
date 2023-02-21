@@ -1,7 +1,6 @@
 import {Activity, getActivityPhase, KingdomPhase} from './data/activities';
 import {capitalize, groupBy, unslugify} from '../utils';
-import {getLevelData, Kingdom, Leaders, Ruin} from './data/kingdom';
-import {SettlementSceneData} from './scene';
+import {getLevelData, Kingdom, Leaders, Ruin, Settlement} from './data/kingdom';
 import {allFeatsByName} from './data/feats';
 import {Skill, skillAbilities} from './data/skills';
 import {activityData} from './data/activityData';
@@ -11,6 +10,7 @@ import {isInvested} from './data/leaders';
 import {calculateUnrestPenalty} from './data/unrest';
 import {abilityRuins} from './data/ruin';
 import {ActivityBonuses, SkillItemBonus} from './data/structures';
+import {ActiveSettlementStructureResult} from './scene';
 
 export const allModifierTypes = [
     'ability',
@@ -147,21 +147,27 @@ export function removeLowestModifiers(modifiers: ModifierWithId[]): ModifierWith
         if (type === 'untyped' || type === 'untyped-penalty') {
             modifiers.forEach(m => result.push(m));
         } else {
-            // only take the highest modifier of a type if there is an enabled one
-            // if no modifier is enabled, offer all as a choice
-            const highest = modifiers
-                .reduce((prev, curr) => Math.abs(prev.value) < Math.abs(curr.value) ? curr : prev);
+            const highestEnabledValue = Math.max(0, ...modifiers
+                .filter(modifier => modifier.enabled)
+                .map(modifier => Math.abs(modifier.value)));
             const hasEnabled = modifiers.some(modifier => modifier.enabled);
-            for (const mod of modifiers) {
-                // dedup modifiers that are enabled and have the same value
-                const isHighestUniquePerType =
-                    hasEnabled &&
-                    !result.find(existingMod => existingMod.type === mod.type && (mod.value < 0 === existingMod.value < 0)) &&
-                    mod.value === highest.value;
-
-                if (isHighestUniquePerType || !hasEnabled) {
-                    result.push(mod);
-                }
+            // only take the highest modifier of a type if there is an enabled one
+            // if no modifier is enabled, offer all as a choice#
+            if (hasEnabled) {
+                // only keep first one active, disable all other modifiers
+                const highest = modifiers.find(m => m.enabled && Math.abs(m.value) === highestEnabledValue)!;
+                modifiers.forEach(modifier => {
+                    if (modifier.id !== highest.id) {
+                        result.push({
+                            ...modifier,
+                            enabled: false,
+                        });
+                    } else {
+                        result.push(modifier);
+                    }
+                });
+            } else {
+                modifiers.forEach(mod => result.push(mod));
             }
         }
     }
@@ -244,16 +250,19 @@ export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
 
 /**
  * Add modifiers from feats or other rules
- * @param kingdom
- * @param activeSettlement
  */
-export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: SettlementSceneData | undefined): Modifier[] {
+export function createActiveSettlementModifiers(
+    kingdom: Kingdom,
+    activeSettlement: Settlement | undefined,
+    activeSettlementStructureResult: ActiveSettlementStructureResult | undefined,
+): Modifier[] {
     const levelData = getLevelData(kingdom.level);
     const feats = new Set([...kingdom.feats.map(f => f.id), ...kingdom.feats.map(f => f.id)]);
     const result: Modifier[] = Array.from(feats)
         .flatMap(feat => allFeatsByName[feat]?.modifiers ?? []);
     kingdom.modifiers.forEach(modifier => result.push(modifier));
-    if (activeSettlement?.scenedData?.secondaryTerritory) {
+    const isSecondaryTerritory = activeSettlement?.secondaryTerritory;
+    if (isSecondaryTerritory) {
         result.push({
             name: 'Check in Secondary Territory',
             type: 'circumstance',
@@ -270,7 +279,7 @@ export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: Se
             enabled: true,
         });
     }
-    const settlementEventBonus = activeSettlement?.settlement?.settlementEventBonus ?? 0;
+    const settlementEventBonus = activeSettlementStructureResult?.active.settlementEventBonus ?? 0;
     if (settlementEventBonus > 0) {
         result.push({
             name: 'Event Phase Structure Bonus',
@@ -280,10 +289,10 @@ export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: Se
             phases: ['event'],
         });
     }
-    const leadershipBonus = activeSettlement?.settlement.leadershipActivityBonus ?? 0;
+    const leadershipBonus = activeSettlementStructureResult?.merged.leadershipActivityBonus ?? 0;
     if (leadershipBonus > 0) {
         result.push({
-            name: 'PC in Ruler Leadership Role',
+            name: 'Ruler performs Leadership Activity',
             type: 'item',
             value: leadershipBonus,
             enabled: false,
@@ -291,10 +300,10 @@ export function createAdditionalModifiers(kingdom: Kingdom, activeSettlement: Se
         });
     }
     result.push({
-        name: 'Invested, non Vacant Leader involved in Event',
+        name: 'Invested, Non-Vacant Leader Handles Event',
         type: 'circumstance',
         value: levelData.investedLeadershipBonus,
-        enabled: true,
+        enabled: false,
         phases: ['event'],
     });
     return result;
@@ -482,7 +491,7 @@ export function createActivityModifiers(activities: ActivityBonuses): Modifier[]
                 type: 'item',
                 enabled: true,
                 value,
-                name: unslugify(activity),
+                name: `Structure - ${unslugify(activity)}`,
                 activities: [activity],
                 phases,
             };

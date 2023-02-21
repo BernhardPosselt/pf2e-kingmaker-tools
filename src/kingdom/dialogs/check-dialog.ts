@@ -1,7 +1,7 @@
 import {KingdomFeat} from '../data/feats';
 import {
     calculateModifiers,
-    createAdditionalModifiers,
+    createActiveSettlementModifiers,
     Modifier,
     ModifierTotal,
     ModifierTotals,
@@ -11,12 +11,12 @@ import {Activity, getActivityPhase, getActivitySkills, KingdomPhase} from '../da
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getBooleanSetting} from '../../settings';
-import {getMergedData, getSettlementScene} from '../scene';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
 import {capitalize, unslugify} from '../../utils';
 import {activityData} from '../data/activityData';
 import {rollCheck} from '../rolls';
+import {getActiveSettlementStructureResult, getSettlement} from '../scene';
 
 export type CheckType = 'skill' | 'activity';
 
@@ -115,11 +115,15 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     }
 
     override getData(options?: Partial<FormApplicationOptions & { feats: KingdomFeat[] }>): Promise<object> | object {
-        const settlementScene = getSettlementScene(this.game, this.kingdom.activeSettlement);
-        const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
+        const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, this.kingdom);
+        const activeSettlement = getSettlement(this.game, this.kingdom, this.kingdom.activeSettlement);
         const skillRanks = this.kingdom.skillRanks;
         const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(skillRanks);
-        const additionalModifiers: Modifier[] = createAdditionalModifiers(this.kingdom, activeSettlement);
+        const additionalModifiers: Modifier[] = createActiveSettlementModifiers(
+            this.kingdom,
+            activeSettlement?.settlement,
+            activeSettlementStructureResult
+        );
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
         const skillModifiers = Object.fromEntries(applicableSkills.map(skill => {
             const ability = skillAbilities[skill];
@@ -132,7 +136,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 kingdomLevel: this.kingdom.level,
                 alwaysAddLevel: getBooleanSetting(this.game, 'kingdomAlwaysAddLevel'),
                 ability,
-                skillItemBonus: activeSettlement?.settlement?.skillBonuses?.[skill],
+                skillItemBonus: activeSettlementStructureResult?.merged?.skillBonuses?.[skill],
                 additionalModifiers: [...additionalModifiers, ...convertedCustomModifiers],
                 activity: this.activity,
                 phase: this.phase,

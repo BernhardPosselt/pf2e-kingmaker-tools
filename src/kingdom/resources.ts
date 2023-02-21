@@ -1,7 +1,7 @@
 import {unslugify} from '../utils';
 import {getSizeData, Kingdom} from './data/kingdom';
-import {getCapacity} from './kingdom';
 import {getGameOrThrow, getKingdom, getKingdomSheetActorOrThrow, saveKingdom} from './storage';
+import {getCapacity} from './capacity-consumption';
 
 interface ResourceValues {
     value: number;
@@ -64,9 +64,7 @@ export function getCurrentValue(kingdom: Kingdom, type: RolledResources, turn: R
 
 export function getLimit(game: Game, kingdom: Kingdom, type: RolledResources, turn: ResourceTurn): number | undefined {
     if (turn === 'now' && (type === 'food' || type === 'luxuries' || type === 'lumber' || type === 'ore' || type === 'stone')) {
-        const commodityCapacity = getSizeData(kingdom.size).commodityCapacity;
-        const capacity = getCapacity(game, commodityCapacity);
-        return capacity[type];
+        return (getCapacity(game, kingdom))[type];
     } else if (type === 'fame') {
         return 3;
     } else {

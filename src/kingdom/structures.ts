@@ -12,7 +12,7 @@ import {
     Structure,
 } from './data/structures';
 
-export interface SettlementData {
+export interface StructureResult {
     allowCapitalInvestment: boolean;
     notes: string[];
     skillBonuses: SkillItemBonuses;
@@ -157,7 +157,7 @@ function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Str
     });
 }
 
-function applyLeadershipActivityBonuses(result: SettlementData, structures: Structure[]): void {
+function applyLeadershipActivityBonuses(result: StructureResult, structures: Structure[]): void {
     structures.forEach(structure => {
         structure.leadershipActivityRules?.forEach(rule => {
             if (rule.value > result.leadershipActivityBonus) {
@@ -167,7 +167,7 @@ function applyLeadershipActivityBonuses(result: SettlementData, structures: Stru
     });
 }
 
-function applySettlementEventBonuses(result: SettlementData, structures: Structure[]): void {
+function applySettlementEventBonuses(result: StructureResult, structures: Structure[]): void {
     structures.forEach(structure => {
         structure.settlementEventRules?.forEach(rule => {
             if (rule.value > result.settlementEventBonus) {
@@ -233,7 +233,7 @@ function calculateConsumptionReduction(structures: Structure[]): number {
 
 export interface SettlementConfig {
     type: 'Village' | 'Town' | 'City' | 'Metropolis';
-    lots: string;
+    maximumLots: string;
     requiredKingdomLevel: number;
     population: string;
     level: number;
@@ -248,7 +248,7 @@ export function getSettlementConfig(settlementLevel: number): SettlementConfig {
             type: 'Village',
             consumption: 1,
             influence: 0,
-            lots: '1',
+            maximumLots: '1',
             requiredKingdomLevel: 1,
             level: settlementLevel,
             maxItemBonus: 1,
@@ -261,7 +261,7 @@ export function getSettlementConfig(settlementLevel: number): SettlementConfig {
             consumption: 2,
             influence: 1,
             requiredKingdomLevel: 3,
-            lots: '4',
+            maximumLots: '4',
             level: settlementLevel,
             maxItemBonus: 1,
             population: '401-2000',
@@ -272,7 +272,7 @@ export function getSettlementConfig(settlementLevel: number): SettlementConfig {
             consumption: 4,
             influence: 2,
             requiredKingdomLevel: 9,
-            lots: '9',
+            maximumLots: '9',
             level: settlementLevel,
             maxItemBonus: 2,
             population: '2001–25000',
@@ -282,7 +282,7 @@ export function getSettlementConfig(settlementLevel: number): SettlementConfig {
             type: 'Metropolis',
             consumption: 6,
             influence: 3,
-            lots: '10+',
+            maximumLots: '10+',
             requiredKingdomLevel: 15,
             level: settlementLevel,
             maxItemBonus: 3,
@@ -304,7 +304,7 @@ function mergeBonuses(capital: SkillItemBonus, settlement: SkillItemBonus): Skil
     };
 }
 
-export function includeCapital(capital: SettlementData, settlement: SettlementData): SettlementData {
+export function includeCapital(capital: StructureResult, settlement: StructureResult): StructureResult {
     return {
         ...settlement,
         increaseLeadershipActivities: capital.increaseLeadershipActivities,
@@ -325,13 +325,13 @@ function applyUnlockedActivities(unlockActivities: Activity[], groupedStructures
 /**
  * Calculate all Bonuses of a settlement
  */
-export function evaluateStructures(structures: Structure[], settlementLevel: number): SettlementData {
+export function evaluateStructures(structures: Structure[], settlementLevel: number): StructureResult {
     const settlementData = getSettlementConfig(settlementLevel);
     const maxItemBonus = settlementData.maxItemBonus;
     const allowCapitalInvestment = structures.some(structure => structure.enableCapitalInvestment === true);
     const notes = Array.from(new Set(structures.flatMap(result => result.notes ?? [])));
     const consumptionReduction = calculateConsumptionReduction(structures);
-    const result: SettlementData = {
+    const result: StructureResult = {
         config: settlementData,
         allowCapitalInvestment,
         notes,

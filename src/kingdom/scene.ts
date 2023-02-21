@@ -1,6 +1,8 @@
-import {evaluateStructures, includeCapital, SettlementData} from './structures';
+import {evaluateStructures, includeCapital, StructureResult} from './structures';
 import {ruleSchema} from './schema';
-import {Structure, structuresByName} from './data/structures';
+import {CommodityStorage, Structure, structuresByName} from './data/structures';
+import {Kingdom, Settlement} from './data/kingdom';
+import {Activity} from './data/activities';
 
 class StructureError extends Error {
 }
@@ -33,7 +35,7 @@ function parseStructureData(name: string | null, data: unknown): Structure | und
     }
 }
 
-export function getSceneStructures(scene: Scene): Structure[] {
+function getSceneStructures(scene: Scene): Structure[] {
     try {
         return scene.tokens
             .filter(t => t.actor !== null && t.actor !== undefined)
@@ -50,132 +52,114 @@ export function getSceneStructures(scene: Scene): Structure[] {
     return [];
 }
 
-export interface SceneSettlementData {
-    settlementLevel: number;
-    settlementType: string;
-    overcrowded: boolean;
-    secondaryTerritory: boolean;
+export function getScene(game: Game, sceneId: string): Scene | undefined {
+    return game?.scenes?.find(scene => scene.id === sceneId);
 }
 
-export interface SceneData {
-    name: string | null;
-    id: string | null;
-}
-
-export interface CurrentSceneData extends SceneSettlementData, SceneData {
-}
-
-export function getViewedSceneData(game: Game): CurrentSceneData | undefined {
-    const scene = getCurrentScene(game);
-    if (scene) {
-        return getSceneData(scene);
-    }
-}
-
-function getSceneData(scene: Scene): CurrentSceneData {
-    const sceneData = scene.getFlag('pf2e-kingmaker-tools', 'settlementData') as SceneSettlementData | undefined;
-    return {
-        name: scene.name,
-        id: scene.id,
-        settlementLevel: sceneData?.settlementLevel ?? 1,
-        settlementType: sceneData?.settlementType ?? '-',
-        secondaryTerritory: sceneData?.secondaryTerritory ?? false,
-        overcrowded: sceneData?.overcrowded ?? false,
-    };
-}
-
-export async function saveSceneData(game: Game, scene: Scene, data: SceneSettlementData): Promise<void> {
-    await scene.unsetFlag('pf2e-kingmaker-tools', 'settlementData');
-    await scene.setFlag('pf2e-kingmaker-tools', 'settlementData', data);
-}
-
-export async function saveViewedSceneData(game: Game, data: SceneSettlementData): Promise<void> {
-    const viewed = game.scenes?.viewed;
-    if (viewed) {
-        await saveSceneData(game, viewed, data);
-    }
-}
-
-export function currentSceneIsSettlement(game: Game): boolean {
-    const current = getCurrentScene(game);
-    if (current) {
-        const data = getSceneData(current);
-        return data.settlementType === '-';
-    }
-    return false;
-}
-
-function getCurrentScene(game: Game): Scene | undefined {
+export function getCurrentScene(game: Game): Scene | undefined {
     return game.scenes?.viewed;
 }
 
-function getCapitalScene(game: Game): Scene | undefined {
-    return game?.scenes?.find(scene => getSceneData(scene).settlementType === 'Capital');
+export interface SettlementAndScene {
+    settlement: Settlement;
+    scene: Scene;
 }
 
-export function getSettlementScene(game: Game, id: string): Scene | undefined {
-    const scene = game?.scenes?.get(id);
-    if (scene) {
-        const sceneData = getSceneData(scene);
-        const settlementType = sceneData.settlementType;
-        if (settlementType === 'Capital' || settlementType === 'Settlement') {
-            return scene;
-        }
+export function getCapitalSettlement(game: Game, kingdom: Kingdom): SettlementAndScene | undefined {
+    const settlement = kingdom.settlements.find(settlement => settlement.type === 'capital');
+    const scene = settlement ? getScene(game, settlement.sceneId) : undefined;
+    if (scene && settlement) {
+        return {
+            scene: scene,
+            settlement: settlement,
+        };
     }
 }
 
-export interface SettlementSceneData {
-    settlement: SettlementData;
-    scenedData: CurrentSceneData;
+export function getSettlement(game: Game, kingdom: Kingdom, sceneId: string): SettlementAndScene | undefined {
+    const settlement = kingdom.settlements.find(settlement => settlement.sceneId === sceneId);
+    const scene = getScene(game, sceneId);
+    if (scene && settlement) {
+        return {
+            settlement,
+            scene,
+        };
+    }
 }
 
-export function getMergedData(game: Game, settlementScene: Scene): SettlementSceneData {
-    const capitalScene = getCapitalScene(game);
-    if (capitalScene !== undefined && settlementScene !== undefined && capitalScene.id !== settlementScene.id) {
-        const capitalSceneData = getSceneData(capitalScene);
-        const capitalStructures = getSceneStructures(capitalScene);
-        const capitalSettlement = evaluateStructures(capitalStructures, capitalSceneData.settlementLevel);
-        const currentSceneData = getSceneData(settlementScene);
-        const currentStructures = getSceneStructures(settlementScene);
-        const currentSettlement = evaluateStructures(currentStructures, currentSceneData.settlementLevel);
-        return {
-            scenedData: currentSceneData,
-            settlement: includeCapital(capitalSettlement, currentSettlement),
-        };
+export function getAllSettlements(game: Game, kingdom: Kingdom): SettlementAndScene[] {
+    return game.scenes
+        ?.map(scene => getSettlement(game, kingdom, scene.id))
+        ?.filter(scene => scene !== undefined) as SettlementAndScene[] ?? [];
+}
+
+function getSettlementStructureResult(settlement: SettlementAndScene): StructureResult {
+    const structures = getSceneStructures(settlement.scene);
+    return evaluateStructures(structures, settlement.settlement.level);
+}
+
+
+export function getStructureResult(active: SettlementAndScene, capital?: SettlementAndScene): StructureResult {
+    if (capital && capital.scene.id !== active.scene.id) {
+        return includeCapital(getSettlementStructureResult(capital), getSettlementStructureResult(active));
     } else {
-        const currentSceneData = getSceneData(settlementScene);
-        const currentStructures = getSceneStructures(settlementScene);
-        const currentSettlement = evaluateStructures(currentStructures, currentSceneData.settlementLevel);
-        return {
-            scenedData: currentSceneData,
-            settlement: currentSettlement,
-        };
+        return getSettlementStructureResult(active);
     }
 }
 
-export function getAllSettlementSceneData(game: Game): CurrentSceneData[] {
-    return game?.scenes
-        ?.map(scene => getSceneData(scene))
-        ?.filter(scene => {
-            const settlementType = scene.settlementType;
-            return settlementType === 'Settlement' || settlementType === 'Capital';
-        }) ?? [];
+interface MergedSettlements {
+    leadershipActivityNumber: number;
+    settlementConsumption: number;
+    storage: CommodityStorage,
+    unlockedActivities: Set<Activity>
 }
 
-export function getAllSettlementSceneDataAndStructures(game: Game): SettlementSceneData[] {
-    return game?.scenes
-        ?.map(scene => [scene, getSceneData(scene)] as [Scene, CurrentSceneData])
-        ?.filter(([, sceneData]) => {
-            const settlementType = sceneData.settlementType;
-            return settlementType === 'Settlement' || settlementType === 'Capital';
-        })
-        ?.map(([scene, sceneData]) => {
-            const sceneStructures = getSceneStructures(scene);
-            const settlementData = evaluateStructures(sceneStructures, sceneData.settlementLevel);
+export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSettlements {
+    return getAllSettlements(game, kingdom)
+        .map(settlement => {
+            const structureResult = getSettlementStructureResult(settlement);
             return {
-                scenedData: sceneData,
-                settlement: settlementData,
+                leadershipActivityNumber: structureResult.leadershipActivityBonus ? 3 : 2,
+                settlementConsumption: structureResult.consumption,
+                storage: structureResult.storage,
+                unlockedActivities: new Set(structureResult.unlockActivities),
             };
-        }) ?? [];
+        })
+        .reduce((prev, curr) => {
+            return {
+                leadershipActivityNumber: Math.max(prev.leadershipActivityNumber, curr.leadershipActivityNumber),
+                settlementConsumption: prev.settlementConsumption + curr.settlementConsumption,
+                storage: {
+                    ore: prev.storage.ore + curr.storage.ore,
+                    stone: prev.storage.stone + curr.storage.stone,
+                    luxuries: prev.storage.luxuries + curr.storage.luxuries,
+                    lumber: prev.storage.lumber + curr.storage.lumber,
+                    food: prev.storage.food + curr.storage.food,
+                },
+                unlockedActivities: new Set<Activity>([...prev.unlockedActivities, ...curr.unlockedActivities]),
+            };
+        }, {
+            leadershipActivityNumber: 2,
+            settlementConsumption: 0,
+            storage: {ore: 0, stone: 0, luxuries: 0, lumber: 0, food: 0},
+            unlockedActivities: new Set<Activity>(),
+        });
 }
 
+export interface ActiveSettlementStructureResult {
+    active: StructureResult;
+    merged: StructureResult;
+}
+
+export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom): ActiveSettlementStructureResult | undefined {
+    const activeSettlement = getSettlement(game, kingdom, kingdom.activeSettlement);
+    const capitalSettlement = getCapitalSettlement(game, kingdom);
+    if (activeSettlement) {
+        const activeSettlementStructures = getStructureResult(activeSettlement);
+        const mergedSettlementStructures = getStructureResult(activeSettlement, capitalSettlement);
+        return {
+            active: activeSettlementStructures,
+            merged: mergedSettlementStructures,
+        };
+    }
+}

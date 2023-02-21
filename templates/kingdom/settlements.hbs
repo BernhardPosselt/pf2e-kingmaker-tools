@@ -1,39 +1,39 @@
-<p><b>Note</b>: Since settlement data is stored on the scenes directly, users are unable to adjust these.</p>
 {{#if settlements}}
     <table class="km-table">
         <tr>
             <th>Name</th>
             <th>Level</th>
             <th>Type</th>
-            <th>Overcrowded</th>
+            <th>Lots</th>
             <th>Secondary</th>
+            <th>Delete</th>
             <th>Open</th>
         </tr>
         {{#each settlements}}
             <tr>
-                <td>{{name}}<input type="hidden" value="{{id}}" name="settlements.{{@index}}.id"></td>
-                <td><input type="number" value="{{settlementLevel}}" style="width: 30px"
-                           name="settlements.{{@index}}.settlementLevel" {{#if ../isUser}}disabled{{/if}}></td>
+                <td>{{name}}<input type="hidden" value="{{sceneId}}" name="settlements.{{@index}}.sceneId"></td>
+                <td><input type="number" value="{{level}}" style="width: 30px" name="settlements.{{@index}}.level"></td>
                 <td>
-                    {{#select settlementType}}
-                        <select name="settlements.{{@index}}.settlementType" {{#if ../isUser}}disabled{{/if}}>
-                            <option value="-">-</option>
-                            <option value="Capital">Capital</option>
-                            <option value="Settlement">Settlement</option>
+                    {{#select type}}
+                        <select name="settlements.{{@index}}.type">
+                            <option value="capital">Capital</option>
+                            <option value="settlement">Settlement</option>
                         </select>
                     {{/select}}
                 </td>
-                <td><input type="checkbox" name="settlements.{{@index}}.overcrowded" {{checked overcrowded}} {{#if
-                        ../isUser}}disabled{{/if}}></td>
-                <td><input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked
-                        secondaryTerritory}} {{#if ../isUser}}disabled{{/if}}></td>
+                <td><input type="number" style="width: 30px" name="settlements.{{@index}}.lots" value="{{lots}}"></td>
+                <td><input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked secondaryTerritory}}></td>
                 <td>
-                    <button type="button" class="inspect-settlement" data-id="{{id}}"><i
+                    <button type="button" class="icon-action km-delete-settlement" data-delete-index="{{@index}}"><i
+                            class="fa-solid fa-trash"></i></button>
+                </td>
+                <td>
+                    <button type="button" class="inspect-settlement" data-id="{{sceneId}}"><i
                             class="fa-solid fa-magnifying-glass"></i></button>
                 </td>
             </tr>
         {{/each}}
     </table>
 {{/if}}
-<button id="make-current-scene-settlement" {{#unless canAddCurrentSceneSettlement}}disabled{{/unless}}>Add Current Scene
+<button type="button" id="make-current-scene-settlement" {{#unless canAddSettlement}}disabled{{/unless}}>Add Current Scene
     <i class="fa-solid fa-plus"></i></button>

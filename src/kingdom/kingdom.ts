@@ -16,19 +16,18 @@ import {
     LeaderValues,
     ResourceDieSize,
     Ruin,
+    Settlement,
     WorkSites,
 } from './data/kingdom';
 import {capitalize, clamped, unpackFormArray, unslugify} from '../utils';
 import {
-    CurrentSceneData,
-    currentSceneIsSettlement,
-    getAllSettlementSceneData,
-    getAllSettlementSceneDataAndStructures,
-    getMergedData,
-    getSettlementScene,
-    getViewedSceneData,
-    saveSceneData,
-    saveViewedSceneData,
+    getActiveSettlementStructureResult,
+    getAllMergedSettlements,
+    getAllSettlements,
+    getCurrentScene,
+    getScene,
+    getSettlement,
+    getStructureResult,
 } from './scene';
 import {allFeats, allFeatsByName} from './data/feats';
 import {addGroupDialog} from './dialogs/add-group-dialog';
@@ -51,14 +50,14 @@ import {calculateSkills} from './skills';
 import {calculateInvestedBonus, isInvested} from './data/leaders';
 import {CheckDialog} from './dialogs/check-dialog';
 import {Skill} from './data/skills';
-import {CommodityStorage} from './data/structures';
 import {activityBlacklistDialog} from './dialogs/activity-blacklist-dialog';
 import {showHelpDialog} from './dialogs/show-help-dialog';
 import {activityData} from './data/activityData';
 import {showSettlement} from './dialogs/settlement';
-import {createAdditionalModifiers, Modifier, modifierToLabel} from './modifiers';
+import {createActiveSettlementModifiers, Modifier, modifierToLabel} from './modifiers';
 import {addEffectDialog} from './dialogs/add-effect-dialog';
 import {getKingdom, getKingdomSheetActor, saveKingdom} from './storage';
+import {getCapacity, getConsumption} from './capacity-consumption';
 
 interface KingdomOptions {
     game: Game;
@@ -86,6 +85,7 @@ function createEffects(modifiers: Modifier[]): Effect[] {
         };
     });
 }
+
 
 class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions, object, null> {
     static override get defaultOptions(): FormApplicationOptions {
@@ -117,18 +117,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const isGM = this.game.user?.isGM ?? false;
         const kingdomData = this.getKingdom();
         const sizeData = getSizeData(kingdomData.size);
-        const allSettlementSceneData = getAllSettlementSceneData(this.game);
         const {
             leadershipActivityNumber,
             settlementConsumption,
-            storage,
             unlockedActivities: unlockedSettlementActivities,
-        } = getSettlementData(this.game);
-        const totalConsumption = this.getTotalConsumption(kingdomData, settlementConsumption);
+        } = getAllMergedSettlements(this.game, kingdomData);
+        const totalConsumption = getConsumption(this.game, kingdomData);
         const useXpHomebrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
         const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
-        const settlementScene = getSettlementScene(this.game, kingdomData.activeSettlement);
-        const activeSettlement = settlementScene ? getMergedData(this.game, settlementScene) : undefined;
+        const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, kingdomData);
+        const activeSettlement = getSettlement(this.game, kingdomData, kingdomData.activeSettlement);
+
         const unlockedActivities = new Set<Activity>([...unlockedSettlementActivities, ...getCompanionUnlockActivities(kingdomData.leaders)]);
         const hideActivities = kingdomData.activityBlacklist
             .map(activity => {
@@ -137,8 +136,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             .reduce((a, b) => Object.assign(a, b), {});
         const enabledActivities = getPerformableActivities(
             kingdomData.skillRanks,
-            activeSettlement?.settlement?.allowCapitalInvestment === true,
+            activeSettlementStructureResult?.active?.allowCapitalInvestment === true,
         );
+        const currentSceneId = getCurrentScene(this.game)?.id;
+        const canAddSettlement = kingdomData.settlements.find(settlement => settlement.sceneId === currentSceneId) === undefined;
         return {
             ...super.getData(options),
             hideActivities,
@@ -170,12 +171,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             settlementConsumption,
             totalConsumption,
             ruin: this.getRuin(kingdomData.ruin),
-            commodities: this.getCommodities(
-                kingdomData.commodities.now,
-                kingdomData.commodities.next,
-                sizeData.commodityCapacity,
-                storage,
-            ),
+            commodities: this.getCommodities(kingdomData),
             workSites: this.getWorkSites(kingdomData.workSites),
             ...this.getActiveTabs(),
             skills: calculateSkills({
@@ -186,8 +182,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 unrest: kingdomData.unrest,
                 kingdomLevel: kingdomData.level,
                 alwaysAddLevel: getBooleanSetting(this.game, 'kingdomAlwaysAddLevel'),
-                skillItemBonuses: activeSettlement?.settlement?.skillBonuses,
-                additionalModifiers: createAdditionalModifiers(kingdomData, activeSettlement),
+                skillItemBonuses: activeSettlementStructureResult?.merged?.skillBonuses,
+                additionalModifiers: createActiveSettlementModifiers(
+                    kingdomData,
+                    activeSettlement?.settlement,
+                    activeSettlementStructureResult
+                ),
             }),
             leaders: this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
@@ -203,14 +203,21 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Master', value: 3},
                 {label: 'Legendary', value: 4},
             ],
-            heartlands: allHeartlands.map(heartland => {return {label: unslugify(heartland), value: heartland};}),
+            heartlands: allHeartlands.map(heartland => {
+                return {label: unslugify(heartland), value: heartland};
+            }),
             actorTypes: [
                 {label: 'PC', value: 'pc'},
                 {label: 'NPC', value: 'npc'},
                 {label: 'Companion', value: 'companion'},
             ],
             companions: allCompanions,
-            settlements: allSettlementSceneData,
+            settlements: kingdomData.settlements.map(settlement => {
+                return {
+                    ...settlement,
+                    name: getScene(this.game, settlement.sceneId)?.name ?? undefined,
+                };
+            }),
             groupRelationTypes: [
                 {label: 'None', value: 'none'},
                 {label: 'Diplomatic Relations', value: 'diplomatic-relations'},
@@ -246,7 +253,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             eventDC: this.calculateEventDC(kingdomData.turnsWithoutEvent),
             civicPlanning: kingdomData.level >= 12,
             useXpHomebrew,
-            canAddCurrentSceneSettlement: currentSceneIsSettlement(this.game) && isGM,
+            canAddSettlement,
             effects: createEffects(kingdomData.modifiers),
         };
     }
@@ -276,17 +283,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         kingdom.groups = unpackFormArray(kingdom.groups);
         kingdom.feats = unpackFormArray(kingdom.feats);
         kingdom.bonusFeats = unpackFormArray(kingdom.bonusFeats);
+        kingdom.settlements = unpackFormArray(kingdom.settlements);
         kingdom.milestones = unpackFormArray(kingdom.milestones).map((milestone, index) => {
             return {
                 ...milestones[index],
                 completed: (milestone as { completed: boolean }).completed,
             };
         });
-
-        const settlements: CurrentSceneData[] = unpackFormArray(kingdom.settlements);
-        await this.saveSettlements(settlements);
-        delete kingdom['settlements'];
-
         await this.saveKingdom(kingdom);
     }
 
@@ -447,12 +450,25 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#make-current-scene-settlement')
             ?.addEventListener('click', async () => {
-                const data = getViewedSceneData(this.game);
-                if (data) {
-                    data.settlementType = 'Settlement';
-                    await saveViewedSceneData(this.game, data);
+                const scene = getCurrentScene(this.game);
+                const id = scene?.id;
+                if (id) {
+                    const newSettlement: Settlement = {
+                        sceneId: id,
+                        level: 0,
+                        type: 'settlement',
+                        lots: 0,
+                        secondaryTerritory: false,
+                    };
+                    const current = this.getKingdom();
+                    await this.saveKingdom({
+                        settlements: [...current.settlements, newSettlement],
+                    });
                 }
-                this.render();
+            });
+        $html.querySelectorAll('.km-delete-settlement')
+            ?.forEach(el => {
+                el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'settlements'));
             });
         $html.querySelectorAll('.inspect-settlement')
             ?.forEach(el => {
@@ -510,8 +526,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async endTurn(): Promise<void> {
         const current = this.getKingdom();
-        const sizeData = getSizeData(current.size);
-        const capacity = getCapacity(this.game, sizeData.commodityCapacity);
+        const capacity = getCapacity(this.game, current);
         await ChatMessage.create({
             content: `<h2>Ending Turn</h2>
             <ul>
@@ -572,10 +587,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async adjustUnrest(): Promise<void> {
         const current = this.getKingdom();
-        const data = getAllSettlementSceneDataAndStructures(this.game);
+        const data = getAllSettlements(this.game, current);
+        const overcrowdedSettlements = data.filter(s => {
+            const structures = getStructureResult(s);
+            return s.settlement.lots > structures.residentialBuildings;
+        }).length;
+        const secondaryTerritories = data.some(s => s.settlement.secondaryTerritory) ? 1 : 0;
         const atWar = current.atWar ? 1 : 0;
-        const overcrowdedSettlements = data.filter(s => s.scenedData.overcrowded).length;
-        const secondaryTerritories = data.some(s => s.scenedData.secondaryTerritory) ? 1 : 0;
         const newUnrest = atWar + overcrowdedSettlements + secondaryTerritories;
         let unrest = newUnrest + current.unrest;
         if (current.level >= 20 && unrest > 0) {
@@ -645,7 +663,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private async collectResources(): Promise<void> {
         const current = this.getKingdom();
         const sizeData = getSizeData(current.size);
-        const capacity = getCapacity(this.game, sizeData.commodityCapacity);
+        const capacity = getCapacity(this.game, current);
         const dice = this.getResourceDiceNum(current);
         const rolledPoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
         const commodities = this.calculateCommoditiesThisTurn(current);
@@ -723,13 +741,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         );
     }
 
-    private getCommodities(
-        commodities: Commodities,
-        commoditiesNextRound: Commodities,
-        capacity: number,
-        storage: CommodityStorage,
-    ): object {
-        const storageCapacity = calculateStorageCapacity(capacity, storage);
+    private getCommodities(kingdom: Kingdom): object {
+        const commodities = kingdom.commodities.now;
+        const commoditiesNextRound = kingdom.commodities.next;
+        const storageCapacity = getCapacity(this.game, kingdom);
         return Object.fromEntries((Object.entries(commodities) as [keyof Commodities, number][])
             .map(([commodity, value]) => [commodity, {
                 label: capitalize(commodity),
@@ -814,8 +829,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async payConsumption(): Promise<void> {
         const current = this.getKingdom();
-        const {settlementConsumption} = getSettlementData(this.game);
-        const totalConsumption = this.getTotalConsumption(current, settlementConsumption);
+        const totalConsumption = getConsumption(this.game, current);
         const currentFood = current.commodities.now.food;
         const missingFood = totalConsumption - currentFood;
         const pay = missingFood * 5;
@@ -840,10 +854,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         }
     }
 
-    private getTotalConsumption(current: Kingdom, settlementConsumption: number): number {
-        return Math.max(0, current.consumption.armies + current.consumption.now + settlementConsumption);
-    }
-
     private async saveKingdom(kingdom: Partial<Kingdom>): Promise<void> {
         await saveKingdom(this.sheetActor, kingdom);
     }
@@ -851,73 +861,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private getKingdom(): Kingdom {
         return getKingdom(this.sheetActor);
     }
-
-    private async saveSettlements(settlements: CurrentSceneData[]): Promise<void> {
-        if (!this.game.user?.isGM) {
-            console.info('Not performing save because only GM has permissions');
-            return;
-        }
-        console.log('Saving settlements', settlements);
-        for (const settlement of settlements) {
-            const scene = getSettlementScene(this.game, settlement.id!);
-            if (scene) {
-                await saveSceneData(this.game, scene, {
-                    settlementType: settlement.settlementType,
-                    settlementLevel: settlement.settlementLevel,
-                    secondaryTerritory: settlement.secondaryTerritory,
-                    overcrowded: settlement.overcrowded,
-                });
-            }
-        }
-    }
 }
 
-function getSettlementData(game: Game):
-{ leadershipActivityNumber: number; settlementConsumption: number; storage: CommodityStorage, unlockedActivities: Set<Activity> } {
-    return getAllSettlementSceneDataAndStructures(game)
-        .map(settlement => {
-            return {
-                leadershipActivityNumber: settlement.settlement.leadershipActivityBonus ? 3 : 2,
-                settlementConsumption: settlement.settlement.consumption,
-                storage: settlement.settlement.storage,
-                unlockedActivities: new Set(settlement.settlement.unlockActivities),
-            };
-        })
-        .reduce((prev, curr) => {
-            return {
-                leadershipActivityNumber: Math.max(prev.leadershipActivityNumber, curr.leadershipActivityNumber),
-                settlementConsumption: prev.settlementConsumption + curr.settlementConsumption,
-                storage: {
-                    ore: prev.storage.ore + curr.storage.ore,
-                    stone: prev.storage.stone + curr.storage.stone,
-                    luxuries: prev.storage.luxuries + curr.storage.luxuries,
-                    lumber: prev.storage.lumber + curr.storage.lumber,
-                    food: prev.storage.food + curr.storage.food,
-                },
-                unlockedActivities: new Set<Activity>([...prev.unlockedActivities, ...curr.unlockedActivities]),
-            };
-        }, {
-            leadershipActivityNumber: 2,
-            settlementConsumption: 0,
-            storage: {ore: 0, stone: 0, luxuries: 0, lumber: 0, food: 0},
-            unlockedActivities: new Set<Activity>(),
-        });
-}
-
-function calculateStorageCapacity(capacity: number, storage: CommodityStorage): Commodities {
-    return {
-        food: capacity + storage.food,
-        ore: capacity + storage.ore,
-        luxuries: capacity + storage.luxuries,
-        lumber: capacity + storage.lumber,
-        stone: capacity + storage.stone,
-    };
-}
-
-export function getCapacity(game: Game, commodityCapacity:number): Commodities {
-    const {storage} = getSettlementData(game);
-    return calculateStorageCapacity(commodityCapacity, storage);
-}
 
 export async function showKingdom(game: Game): Promise<void> {
     const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
