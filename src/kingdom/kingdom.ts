@@ -155,6 +155,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             fame: kingdomData.fame,
             charter: kingdomData.charter,
             heartland: kingdomData.heartland,
+            heartlandLabel: unslugify(kingdomData.heartland),
             government: kingdomData.government,
             type: capitalize(sizeData.type),
             controlDC: getControlDC(kingdomData.level, kingdomData.size),

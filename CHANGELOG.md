@@ -6,9 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Heartland is now correctly rendered again in the turn tab
+
 ### Added
 
 * Bring back overcrowded in settlement overview
+* Added clarification about building terrain features in the turn's region section
 
 ## [0.0.21] - 2023-02-21
 
