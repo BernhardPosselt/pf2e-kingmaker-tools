@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Bring back overcrowded in settlement overview
+
 ## [0.0.21] - 2023-02-21
 
 ### Changed

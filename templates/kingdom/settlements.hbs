@@ -2,17 +2,17 @@
     <table class="km-table">
         <tr>
             <th>Name</th>
-            <th>Level</th>
             <th>Type</th>
             <th>Lots</th>
+            <th>Level</th>
             <th>Secondary</th>
+            <th>Overcrowded</th>
             <th>Delete</th>
             <th>Open</th>
         </tr>
         {{#each settlements}}
             <tr>
                 <td>{{name}}<input type="hidden" value="{{sceneId}}" name="settlements.{{@index}}.sceneId"></td>
-                <td><input type="number" value="{{level}}" style="width: 30px" name="settlements.{{@index}}.level"></td>
                 <td>
                     {{#select type}}
                         <select name="settlements.{{@index}}.type">
@@ -22,13 +22,21 @@
                     {{/select}}
                 </td>
                 <td><input type="number" style="width: 30px" name="settlements.{{@index}}.lots" value="{{lots}}"></td>
+                <td><input type="number" value="{{level}}" style="width: 30px" name="settlements.{{@index}}.level"></td>
                 <td><input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked secondaryTerritory}}></td>
+                <td>
+                    {{#if overcrowded}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{else}}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {{/if}}
+                </td>
                 <td>
                     <button type="button" class="icon-action km-delete-settlement" data-delete-index="{{@index}}"><i
                             class="fa-solid fa-trash"></i></button>
                 </td>
                 <td>
-                    <button type="button" class="inspect-settlement" data-id="{{sceneId}}"><i
+                    <button type="button" class="icon-action inspect-settlement" data-id="{{sceneId}}"><i
                             class="fa-solid fa-magnifying-glass"></i></button>
                 </td>
             </tr>

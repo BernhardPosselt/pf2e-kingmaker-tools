@@ -25,9 +25,9 @@ import {
     getAllMergedSettlements,
     getAllSettlements,
     getCurrentScene,
-    getScene,
     getSettlement,
     getStructureResult,
+    SettlementAndScene,
 } from './scene';
 import {allFeats, allFeatsByName} from './data/feats';
 import {addGroupDialog} from './dialogs/add-group-dialog';
@@ -212,12 +212,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Companion', value: 'companion'},
             ],
             companions: allCompanions,
-            settlements: kingdomData.settlements.map(settlement => {
-                return {
-                    ...settlement,
-                    name: getScene(this.game, settlement.sceneId)?.name ?? undefined,
-                };
-            }),
+            settlements: kingdomData.settlements
+                .map(settlement => getSettlement(this.game, kingdomData, settlement.sceneId))
+                .filter(settlement => settlement !== undefined)
+                .map(settlement => {
+                    const s = settlement as SettlementAndScene;
+                    return {
+                        ...s.settlement,
+                        overcrowded: this.isOvercrowded(s),
+                        name: s.scene.name ?? undefined,
+                    };
+                }),
             groupRelationTypes: [
                 {label: 'None', value: 'none'},
                 {label: 'Diplomatic Relations', value: 'diplomatic-relations'},
@@ -585,13 +590,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         });
     }
 
+    private isOvercrowded(settlement: SettlementAndScene): boolean {
+        const structures = getStructureResult(settlement);
+        return settlement.settlement.lots > structures.residentialBuildings;
+    }
+
     private async adjustUnrest(): Promise<void> {
         const current = this.getKingdom();
         const data = getAllSettlements(this.game, current);
-        const overcrowdedSettlements = data.filter(s => {
-            const structures = getStructureResult(s);
-            return s.settlement.lots > structures.residentialBuildings;
-        }).length;
+        const overcrowdedSettlements = data.filter(s => this.isOvercrowded(s)).length;
         const secondaryTerritories = data.some(s => s.settlement.secondaryTerritory) ? 1 : 0;
         const atWar = current.atWar ? 1 : 0;
         const newUnrest = atWar + overcrowdedSettlements + secondaryTerritories;
