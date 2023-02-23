@@ -94,6 +94,8 @@ The tokens integrate with the [Token Pack](https://foundryvtt.com/packages/pf2e-
 
 ![Skills Macro](docs/images/token-structure.png)
 
+![Upload popup](docs/images/upload-location.png)
+
 * **kingmaker/Token - Aecora Silverfire.webp**
 * **kingmaker/Token - Agai.webp**
 * **kingmaker/Token - Akiros.webp**
