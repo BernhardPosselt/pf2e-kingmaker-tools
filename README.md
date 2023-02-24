@@ -96,6 +96,10 @@ The tokens integrate with the [Token Pack](https://foundryvtt.com/packages/pf2e-
 
 ![Upload popup](docs/images/upload-location.png)
 
+**The Forge**: If you are using The Forge, you need to place the folder in **My Asset Library** instead. If a file is not found under User Data, The Forge will instead try to look it up under the same path in **My Asset Library** instead.
+
+![The Forge](docs/images/the-forge.png)
+
 * **kingmaker/Token - Aecora Silverfire.webp**
 * **kingmaker/Token - Agai.webp**
 * **kingmaker/Token - Akiros.webp**
