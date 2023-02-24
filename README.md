@@ -411,3 +411,9 @@ The following variant rules are supported in the settings:
 * Always add level to skill for untrained skills
 * Double Skill Increases in the Feature Section
 * Additional XP and milestones from [Vance and Kerenshara](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit)
+
+### Homebrew Built-in Changes
+
+* [Based on James Jacob's answers](https://paizo.com/threads/rzs43olf?Kingmaker-Adventure-Path-2E-Errata#19), event XP is bumped to 40XP from 30XP and the event modifier acts as a level modifier for the [XP Awards table](https://2e.aonprd.com/Rules.aspx?ID=575)
+* [Based on James Jacob's answers](https://paizo.com/threads/rzs43ogm?How-am-I-misreading-the-camping-rules#3) all camping activities included in the journals are extended to 2 hours.
+* Kallike's **Deliberate Planning** activity had its status bonus changed to a circumstance bonus. Reasoning for that is that not a single activity uses a status bonus, it's all circumstance bonuses. Plus a +1 status bonus is obsolete from level 1. 

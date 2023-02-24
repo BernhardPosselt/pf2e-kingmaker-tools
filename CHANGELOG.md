@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+* Kalikke's Deliberate Planning activity now provides a circumstance rather than a status bonus. See reasoning in the [README](README.md)
+
 ## [0.0.22] - 2023-02-22
 
 ### Fixed

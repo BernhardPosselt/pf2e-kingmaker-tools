@@ -466,24 +466,24 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         description: 'Kalikke takes time and weighs all options when faced with decisions, regardless of their importance. While this can sometimes lead her to taking too long to make choices, her theoretical analysis can be quite helpful in navigating continuous events. Choose a single continuous event that will affect your kingdom on this turn’s Event Phase, then attempt a Scholarship check against that event’s DC.',
         skills: simpleRank([...allSkills]),
         criticalSuccess: {
-            msg: 'Kalikke’s aid has been monumentally helpful. When you roll to resolve the continuous event you chose, you can roll twice and choose which result to apply. You gain a +1 status bonus to each roll. This is a Fortune effect.',
+            msg: 'Kalikke’s aid has been monumentally helpful. When you roll to resolve the continuous event you chose, you can roll twice and choose which result to apply. You gain a +1 circumstance bonus to each roll. This is a Fortune effect.',
             modifiers: () => [{
                 turns: 1,
                 enabled: false,
                 value: 1,
                 name: 'Deliberate Planning: Critical Success',
-                type: 'status',
+                type: 'circumstance',
                 phases: ['event'],
             }],
         },
         success: {
-            msg: 'Kalikke’s suggestions are useful, granting you a +1 status bonus to rolls to resolve the chosen continuous event.',
+            msg: 'Kalikke’s suggestions are useful, granting you a +1 circumstance bonus to rolls to resolve the chosen continuous event.',
             modifiers: () => [{
                 turns: 1,
                 enabled: false,
                 value: 1,
                 name: 'Deliberate Planning: Success',
-                type: 'status',
+                type: 'circumstance',
                 phases: ['event'],
             }],
         },
