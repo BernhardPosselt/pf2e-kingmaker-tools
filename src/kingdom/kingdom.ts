@@ -698,10 +698,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             },
             commodities: {
                 now: {
-                    ore: Math.min(capacity.ore, commodities.ore),
-                    lumber: Math.min(capacity.lumber, commodities.lumber),
-                    luxuries: Math.min(capacity.luxuries, commodities.luxuries),
-                    stone: Math.min(capacity.stone, commodities.stone),
+                    ore: Math.min(capacity.ore, current.commodities.now.ore + commodities.ore),
+                    lumber: Math.min(capacity.lumber, current.commodities.now.lumber + commodities.lumber),
+                    luxuries: Math.min(capacity.luxuries, current.commodities.now.luxuries + commodities.luxuries),
+                    stone: Math.min(capacity.stone, current.commodities.now.stone + commodities.stone),
                     food: current.commodities.now.food,
                 },
                 next: current.commodities.next,
@@ -720,9 +720,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const sites = kingdom.workSites;
         return {
             ore: sites.mines.quantity + sites.mines.resources,
-            lumber: sites.mines.quantity + sites.mines.resources,
+            lumber: sites.lumberCamps.quantity + sites.lumberCamps.resources,
             luxuries: sites.luxurySources.quantity + sites.luxurySources.resources,
-            stone: sites.lumberCamps.quantity + sites.lumberCamps.resources,
+            stone: sites.quarries.quantity + sites.quarries.resources,
         };
     }
 

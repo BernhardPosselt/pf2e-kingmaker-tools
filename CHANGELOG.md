@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Collecting resources now adds values to the current ones instead of replacing them
+
 ### Changed
 * Kalikke's Deliberate Planning activity now provides a circumstance rather than a status bonus. See reasoning in the [README](README.md)
 
