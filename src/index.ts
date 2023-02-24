@@ -21,13 +21,7 @@ import {
 } from './camping/camping';
 import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
-import {
-    getGameOrThrow,
-    getKingdom,
-    getKingdomSheetActor,
-    getKingdomSheetActorOrThrow,
-    reRenderKingdomSheet,
-} from './kingdom/storage';
+import {getGameOrThrow, getKingdom, getKingdomSheetActor, getKingdomSheetActorOrThrow} from './kingdom/storage';
 import {parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
 
@@ -291,27 +285,27 @@ Hooks.on('ready', async () => {
             scope: 'world',
             config: true,
             default: false,
-            onChange: () => reRenderKingdomSheet(),
+            requiresReload: true,
             type: Boolean,
-        });
+        } as any);
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomAlwaysAddLevel', {
             name: 'Always add Level to Skill',
             hint: 'If enabled, always adds the kingdom\'s level to a skill, even if it is untrained',
             scope: 'world',
             config: true,
             default: false,
-            onChange: () => reRenderKingdomSheet(),
+            requiresReload: true,
             type: Boolean,
-        });
+        } as any);
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomSkillIncreaseEveryLevel', {
             name: 'Double Skill Increases',
             hint: 'If enabled, adds Skill Increases for all even levels from level 2 onwards',
             scope: 'world',
             config: true,
             default: false,
-            onChange: () => reRenderKingdomSheet(),
+            requiresReload: true,
             type: Boolean,
-        });
+        } as any);
         Hooks.on('updateWorldTime', async (_, delta) => {
             if (getBooleanSetting(gameInstance, 'autoRollWeather')
                 && isGm(gameInstance)

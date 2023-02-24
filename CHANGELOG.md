@@ -6,9 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.23] - 2023-02-24
+
 ### Fixed
 
 * Collecting resources now adds values to the current ones instead of replacing them
+* Distribute kingdom sheet changes across clients
 
 ### Changed
 * Kalikke's Deliberate Planning activity now provides a circumstance rather than a status bonus. See reasoning in the [README](README.md)

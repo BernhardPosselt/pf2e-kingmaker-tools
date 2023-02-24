@@ -111,6 +111,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         super(object, options);
         this.game = options.game;
         this.sheetActor = options.sheetActor;
+        this.sheetActor.apps[this.appId] = this;
     }
 
     override getData(options?: Partial<FormApplicationOptions>): object {
@@ -308,7 +309,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.on('canvasReady', this.sceneChange.bind(this));
         Hooks.on('createToken', this.sceneChange.bind(this));
         Hooks.on('deleteToken', this.sceneChange.bind(this));
-        document.addEventListener('kmReRenderKingdomSheet', this.sceneChange.bind(this));
         const $html = html[0];
         $html.querySelectorAll('.km-nav a')?.forEach(el => {
             el.addEventListener('click', (event) => {
@@ -730,7 +730,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.off('canvasReady', this.sceneChange);
         Hooks.off('createToken', this.sceneChange);
         Hooks.off('deleteToken', this.sceneChange);
-        document.removeEventListener('kmReRenderKingdomSheet', this.sceneChange);
         return super.close(options);
     }
 
