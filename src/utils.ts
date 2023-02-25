@@ -1,7 +1,7 @@
 import {DegreeOfSuccess} from './degree-of-success';
 
 export function isGm(game: Game): boolean {
-    return game?.user?.name === 'Gamemaster';
+    return game?.user?.id === game.users?.find((u) => u.isGM && u.active)?.id;
 }
 
 export function getLevelBasedDC(level: number): number {
