@@ -114,7 +114,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         this.sheetActor.apps[this.appId] = this;
     }
 
-    override getData(options?: Partial<FormApplicationOptions>): object {
+    override async getData(options?: Partial<FormApplicationOptions>): Promise<object> {
         const isGM = this.game.user?.isGM ?? false;
         const kingdomData = this.getKingdom();
         const sizeData = getSizeData(kingdomData.size);
@@ -142,7 +142,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const currentSceneId = getCurrentScene(this.game)?.id;
         const canAddSettlement = kingdomData.settlements.find(settlement => settlement.sceneId === currentSceneId) === undefined;
         return {
-            ...super.getData(options),
             hideActivities,
             isGM,
             isUser: !isGM,
@@ -230,7 +229,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'Diplomatic Relations', value: 'diplomatic-relations'},
                 {label: 'Trade Agreement', value: 'trade-agreement'},
             ],
-            ongoingEvents: kingdomData.ongoingEvents,
+            ongoingEvents: await Promise.all(kingdomData.ongoingEvents
+                .map(event => TextEditor.enrichHTML(event.name))),
             milestones: kingdomData.milestones.map(m => {
                 return {...m, display: useXpHomebrew || !m.homebrew};
             }),
@@ -416,7 +416,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const target = el.currentTarget as HTMLButtonElement;
                     const activity = target.dataset.activity as Activity;
                     if (activityData[activity].dc === 'none') {
-                        await showHelpDialog(activity);
+                        await showHelpDialog(this.game, activity);
                     } else {
                         new CheckDialog(null, {
                             activity,
@@ -450,7 +450,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const target = el.currentTarget as HTMLButtonElement;
                     const help = target.dataset.help as Activity;
                     if (help) {
-                        await showHelpDialog(help);
+                        await showHelpDialog(this.game, help);
                     }
                 });
             });

@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.25] - 2023-02-26
+
+### Added
+
+* You can now right-click on a rolled kingdom event in chat and add it to your ongoing events list
+
+### Fixed
+
+* Fix flat checks in help popup
+
 ## [0.0.24] - 2023-02-25
 
 ### Fixed

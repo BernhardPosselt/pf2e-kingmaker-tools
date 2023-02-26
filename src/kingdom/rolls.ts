@@ -197,3 +197,12 @@ async function postComplexDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess, acti
         await postSimpleDegreeOfSuccess(degreeOfSuccess);
     }
 }
+
+export async function addOngoingEvent(uuid: string, label: string): Promise<void> {
+    const actor = getKingdomSheetActorOrThrow();
+    const kingdom = getKingdom(actor);
+    const name = `@UUID[${uuid}]{${label}}`;
+    await saveKingdom(actor, {
+        ongoingEvents: [...kingdom.ongoingEvents, {name}],
+    });
+}

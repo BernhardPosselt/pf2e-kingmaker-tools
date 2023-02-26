@@ -22,7 +22,7 @@ import {
 import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
 import {getGameOrThrow, getKingdom, getKingdomSheetActor, getKingdomSheetActorOrThrow} from './kingdom/storage';
-import {parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
+import {addOngoingEvent, parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
 
 Hooks.on('ready', async () => {
@@ -393,5 +393,17 @@ Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
         condition: canDowngrade,
         icon: '<i class="fa-solid fa-arrow-down"></i>',
         callback: el => upgradeDowngrade(el[0], 'downgrade'),
+    }, {
+        name: 'Add to Ongoing Events',
+        icon: '<i class="fa-solid fa-plus"></i>',
+        condition: (el) => hasActor() && el[0].querySelector('.content-link') !== null,
+        callback: async (el) => {
+            const link = el[0].querySelector('.content-link') as HTMLElement | null;
+            const uuid = link?.dataset?.uuid;
+            const text = link?.innerText;
+            if (uuid && text) {
+                await addOngoingEvent(uuid, text);
+            }
+        },
     });
 });

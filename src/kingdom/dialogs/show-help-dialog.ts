@@ -6,10 +6,12 @@ import {updateResources} from '../resources';
 
 interface HelpOptions {
     activity: Activity;
+    game: Game;
 }
 
 class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
     private activity: Activity;
+    private game: Game;
 
     static override get defaultOptions(): ApplicationOptions {
         const options = super.defaultOptions;
@@ -25,6 +27,7 @@ class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
     constructor(options: Partial<ApplicationOptions> & HelpOptions) {
         super(options);
         this.activity = options.activity;
+        this.game = options.game;
     }
 
     async getData(options?: Partial<ApplicationOptions>): Promise<unknown> {
@@ -70,15 +73,26 @@ class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
                 await updateResources(target);
             });
         });
+        // bind pf2e flat checks :/
+        $html.querySelectorAll('[data-pf2-check]')?.forEach(el => {
+            el.addEventListener('click', async (event) => {
+                event.preventDefault();
+                const target = event.currentTarget as HTMLSpanElement;
+                const dc = target.dataset.pf2Dc ?? 1;
+                const pf2eGame = this.game as any;
+                const checkModifier = new pf2eGame.pf2e.CheckModifier('Flat Check', {modifiers: []});
+                await pf2eGame.pf2e.Check.roll(checkModifier, {type: 'flat-check', dc: {value: dc}});
+            });
+        });
     }
 
     private async enrichIfDefined(msg: string | undefined): Promise<string | undefined> {
         if (msg) {
-            return await TextEditor.enrichHTML(msg);
+            return await TextEditor.enrichHTML(msg, {async: true} as any);
         }
     }
 }
 
-export async function showHelpDialog(activity: Activity): Promise<void> {
-    new HelpApplication({activity}).render(true);
+export async function showHelpDialog(game: Game, activity: Activity): Promise<void> {
+    new HelpApplication({activity, game}).render(true);
 }
