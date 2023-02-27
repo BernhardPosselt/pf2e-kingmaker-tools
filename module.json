@@ -110,6 +110,15 @@
             "pf2e-art": "modules/pf2e-kingmaker-tools/map.json"
         }
     },
+    "relationships": {
+      "systems": [
+        {
+          "id": "pf2e",
+          "type": "system",
+          "compatibility": {}
+        }
+      ]
+    },
     "compatibility": {
         "minimum": "10",
         "maximum": "10"
