@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.26] - 2023-02-28
+
 ### Fixed
 
 * Palace and Town Hall now correctly increase leadership activity number to 3 in turn tab
