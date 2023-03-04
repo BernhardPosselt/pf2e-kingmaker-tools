@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Farmlands now reduce consumption
+
 ## [0.0.26] - 2023-02-28
 
 ### Fixed

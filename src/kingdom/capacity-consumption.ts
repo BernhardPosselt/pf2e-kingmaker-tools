@@ -20,5 +20,7 @@ export function getCapacity(game: Game, kingdom: Kingdom): Commodities {
 
 export function getConsumption(game: Game, kingdom: Kingdom): number {
     const settlementConsumption = getAllMergedSettlements(game, kingdom).settlementConsumption;
-    return Math.max(0, kingdom.consumption.armies + kingdom.consumption.now + settlementConsumption);
+    const farmlands = kingdom.workSites.farmlands.resources + kingdom.workSites.farmlands.quantity;
+    return Math.max(0, kingdom.consumption.armies + kingdom.consumption.now + settlementConsumption -
+        farmlands);
 }
