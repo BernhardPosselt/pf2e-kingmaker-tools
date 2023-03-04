@@ -60,6 +60,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
             type: capitalize(settlement.settlement.type),
             level: settlement.settlement.level,
             secondaryTerritory: settlement.settlement.secondaryTerritory,
+            hasBridge: structures.hasBridge,
             lots: settlement.settlement.lots,
             config: structures.config,
             overcrowded: settlement.settlement.lots > structures.residentialBuildings,

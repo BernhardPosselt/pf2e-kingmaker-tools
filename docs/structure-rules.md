@@ -133,6 +133,7 @@ A full structure rule would look something like this:
     "stone": 1,
     "luxuries": 1
   },
+  "isBridge": false,
   "unlockActivities": ["read-all-about-it"],
   "traits": ["edifice"]
 }
@@ -166,6 +167,7 @@ A full structure rule would look something like this:
   * **value**: mandatory, bonus
 * **settlementEventRules**: optional, if given increase the leadership activity item bonus
   * **value**: mandatory, bonus
+* **isBridge**: optional, if true, gets rid of the trade penalty when a settlement has 4 water borders
 * **storage**: optional, marks up the current settlement's storage capacity, stacks with all values in the settlement. Each key is optional, so denoting only ore capacity increases would look something like:
   ```json
   {

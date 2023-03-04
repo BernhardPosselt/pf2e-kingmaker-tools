@@ -48,6 +48,7 @@ export interface Structure {
     leadershipActivityRules?: LeadershipActivityRule[];
     storage?: Partial<CommodityStorage>;
     increaseLeadershipActivities?: boolean;
+    isBridge?: boolean;
     consumptionReduction?: number;
     unlockActivities?: Activity[];
     traits?: BuildingTrait[];
@@ -166,6 +167,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Bridge',
+        isBridge: true,
         traits: ['infrastructure'],
     },
     {

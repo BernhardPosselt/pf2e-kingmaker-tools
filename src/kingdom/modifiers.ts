@@ -255,6 +255,7 @@ export function createActiveSettlementModifiers(
     kingdom: Kingdom,
     activeSettlement: Settlement | undefined,
     activeSettlementStructureResult: ActiveSettlementStructureResult | undefined,
+    settlementsWithoutLandBorders: number,
 ): Modifier[] {
     const levelData = getLevelData(kingdom.level);
     const feats = new Set([...kingdom.feats.map(f => f.id), ...kingdom.feats.map(f => f.id)]);
@@ -262,6 +263,15 @@ export function createActiveSettlementModifiers(
         .flatMap(feat => allFeatsByName[feat]?.modifiers ?? []);
     kingdom.modifiers.forEach(modifier => result.push(modifier));
     const isSecondaryTerritory = activeSettlement?.secondaryTerritory;
+    if (settlementsWithoutLandBorders > 0) {
+        result.push({
+            name: 'Settlements Without Land Borders',
+            value: settlementsWithoutLandBorders * -1,
+            type: 'item',
+            skills: ['trade'],
+            enabled: true,
+        });
+    }
     if (isSecondaryTerritory) {
         result.push({
             name: 'Check in Secondary Territory',

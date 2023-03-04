@@ -5,14 +5,14 @@
             <th>Type</th>
             <th>Lots</th>
             <th>Level</th>
+            <th>Water Borders</th>
             <th>Secondary</th>
-            <th>Overcrowded</th>
             <th>Delete</th>
             <th>Open</th>
         </tr>
         {{#each settlements}}
             <tr>
-                <td>{{name}}<input type="hidden" value="{{sceneId}}" name="settlements.{{@index}}.sceneId"></td>
+                <td>{{name}}<input type="hidden" value="{{sceneId}}" name="settlements.{{@index}}.sceneId">{{#if overcrowded}} <i class="fa-solid fa-people-roof" title="Overcrowded"></i>{{/if}}{{#if lacksBridge}} <i class="fa-solid fa-bridge-circle-xmark" title="No Bridge"></i>{{/if}}</td>
                 <td>
                     {{#select type}}
                         <select name="settlements.{{@index}}.type">
@@ -23,14 +23,8 @@
                 </td>
                 <td><input type="number" style="width: 30px" name="settlements.{{@index}}.lots" value="{{lots}}"></td>
                 <td><input type="number" value="{{level}}" style="width: 30px" name="settlements.{{@index}}.level"></td>
+                <td><input type="number" value="{{waterBorders}}" style="width: 30px" name="settlements.{{@index}}.waterBorders"></td>
                 <td><input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked secondaryTerritory}}></td>
-                <td>
-                    {{#if overcrowded}}
-                        <i class="fa-solid fa-circle-check"></i>
-                    {{else}}
-                        <i class="fa-regular fa-circle-xmark"></i>
-                    {{/if}}
-                </td>
                 <td>
                     <button type="button" class="icon-action km-delete-settlement" data-delete-index="{{@index}}"><i
                             class="fa-solid fa-trash"></i></button>

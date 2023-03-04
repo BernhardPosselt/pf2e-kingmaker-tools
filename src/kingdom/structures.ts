@@ -26,6 +26,7 @@ export interface StructureResult {
     config: SettlementConfig;
     unlockActivities: Activity[];
     residentialBuildings: number;
+    hasBridge: boolean;
 }
 
 function count<T>(items: T[], idFunction: (item: T) => string): Map<string, { count: number, item: T }> {
@@ -377,6 +378,7 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
         consumption: Math.max(0, settlementData.consumption - consumptionReduction),
         unlockActivities: [],
         residentialBuildings: structures.filter(structure => structure?.traits?.includes('residential')).length,
+        hasBridge: structures.some(structure => structure.isBridge),
     };
     const unionizedStructures = unionizeStructures(structures);
     applyStorageIncreases(result.storage, structures);

@@ -39,6 +39,16 @@
                 </td>
             </tr>
             <tr>
+                <th>Has Bridge</th>
+                <td>
+                    {{#if hasBridge}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{else}}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {{/if}}
+                </td>
+            </tr>
+            <tr>
                 <th>Required Kingdom Level</th>
                 <td>{{config.requiredKingdomLevel}}</td>
             </tr>

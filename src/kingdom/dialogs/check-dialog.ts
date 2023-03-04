@@ -16,7 +16,7 @@ import {getCompanionSkillUnlocks} from '../data/companions';
 import {capitalize, unslugify} from '../../utils';
 import {activityData} from '../data/activityData';
 import {rollCheck} from '../rolls';
-import {getActiveSettlementStructureResult, getSettlement} from '../scene';
+import {getActiveSettlementStructureResult, getSettlement, getSettlementsWithoutLandBorders} from '../scene';
 
 export type CheckType = 'skill' | 'activity';
 
@@ -122,7 +122,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const additionalModifiers: Modifier[] = createActiveSettlementModifiers(
             this.kingdom,
             activeSettlement?.settlement,
-            activeSettlementStructureResult
+            activeSettlementStructureResult,
+            getSettlementsWithoutLandBorders(this.game, this.kingdom),
         );
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
         const skillModifiers = Object.fromEntries(applicableSkills.map(skill => {

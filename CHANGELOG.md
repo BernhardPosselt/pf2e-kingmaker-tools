@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Automate Settlements without Land Borders penalty
+
 ## [0.0.27] - 2023-03-04
 
 ### Fixed

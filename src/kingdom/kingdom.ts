@@ -26,6 +26,7 @@ import {
     getAllSettlements,
     getCurrentScene,
     getSettlement,
+    getSettlementsWithoutLandBorders,
     getStructureResult,
     SettlementAndScene,
 } from './scene';
@@ -187,7 +188,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 additionalModifiers: createActiveSettlementModifiers(
                     kingdomData,
                     activeSettlement?.settlement,
-                    activeSettlementStructureResult
+                    activeSettlementStructureResult,
+                    getSettlementsWithoutLandBorders(this.game, kingdomData),
                 ),
             }),
             leaders: this.getLeaders(kingdomData.leaders),
@@ -218,9 +220,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 .filter(settlement => settlement !== undefined)
                 .map(settlement => {
                     const s = settlement as SettlementAndScene;
+                    const waterBorders = s.settlement.waterBorders ?? 0;
                     return {
                         ...s.settlement,
+                        waterBorders,
                         overcrowded: this.isOvercrowded(s),
+                        lacksBridge: waterBorders >= 4 && !getStructureResult(s).hasBridge,
                         name: s.scene.name ?? undefined,
                     };
                 }),
@@ -465,6 +470,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         type: 'settlement',
                         lots: 0,
                         secondaryTerritory: false,
+                        waterBorders: 0,
                     };
                     const current = this.getKingdom();
                     await this.saveKingdom({

@@ -110,8 +110,8 @@ export function getStructureResult(active: SettlementAndScene, capital?: Settlem
 interface MergedSettlements {
     leadershipActivityNumber: number;
     settlementConsumption: number;
-    storage: CommodityStorage,
-    unlockedActivities: Set<Activity>
+    storage: CommodityStorage;
+    unlockedActivities: Set<Activity>;
 }
 
 export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSettlements {
@@ -162,4 +162,13 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
             merged: mergedSettlementStructures,
         };
     }
+}
+
+export function getSettlementsWithoutLandBorders(game: Game, kingdom: Kingdom): number {
+    return getAllSettlements(game, kingdom)
+        .filter(settlementAndScene => {
+            const structures = getStructureResult(settlementAndScene);
+            return (settlementAndScene.settlement?.waterBorders ?? 0) >= 4 && !structures.hasBridge;
+        })
+        .length;
 }

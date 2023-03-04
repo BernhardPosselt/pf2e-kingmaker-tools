@@ -128,6 +128,7 @@ export interface Settlement {
     level: number;
     type: 'capital' | 'settlement';
     secondaryTerritory: boolean;
+    waterBorders: number;
 }
 
 export interface Kingdom {
