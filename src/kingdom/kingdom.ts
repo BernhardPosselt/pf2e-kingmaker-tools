@@ -882,7 +882,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private async claimedHexFeature(feature: 'landmark' | 'refuge'): Promise<void> {
         const current = this.getKingdom();
         if (feature === 'refuge') {
-            await ChatMessage.create({content: 'Claimed a Refuge, please reduce a ruin of your choice by 1'});
+            await ChatMessage.create({content: 'Claimed a Refuge, please reduce a Ruin of your choice by 1'});
             await this.saveKingdom({
                 modifiers: [...current.modifiers, {
                     name: 'Claimed Refuge',
@@ -895,7 +895,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         } else {
             const unrestRoll = await (new Roll('1d4').roll());
-            await unrestRoll.toMessage({flavor: 'Claimed a Landmark, reducing unrest by:'});
+            await unrestRoll.toMessage({flavor: 'Claimed a Landmark, reducing Unrest by:'});
             await this.saveKingdom({
                 unrest: Math.max(0, current.unrest - unrestRoll.total),
                 modifiers: [...current.modifiers, {
