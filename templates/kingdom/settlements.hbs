@@ -3,10 +3,10 @@
         <tr>
             <th>Name</th>
             <th>Type</th>
-            <th>Lots</th>
-            <th>Level</th>
+            <th title="Lots with at least 1 structure">Lots</th>
+            <th title="Lots completely filled with structures">Level</th>
             <th>Water Borders</th>
-            <th>Secondary</th>
+            <th title="Not connected to capital via claimed hexes">Secondary</th>
             <th>Delete</th>
             <th>Open</th>
         </tr>
@@ -21,10 +21,10 @@
                         </select>
                     {{/select}}
                 </td>
-                <td><input type="number" style="width: 30px" name="settlements.{{@index}}.lots" value="{{lots}}"></td>
-                <td><input type="number" value="{{level}}" style="width: 30px" name="settlements.{{@index}}.level"></td>
+                <td title="Lots with at least 1 structure"><input type="number" style="width: 30px" name="settlements.{{@index}}.lots" value="{{lots}}"></td>
+                <td title="Lots completely filled with structures"><input type="number" value="{{level}}" style="width: 30px" name="settlements.{{@index}}.level"></td>
                 <td><input type="number" value="{{waterBorders}}" style="width: 30px" name="settlements.{{@index}}.waterBorders"></td>
-                <td><input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked secondaryTerritory}}></td>
+                <td title="Not connected to capital via claimed hexes"><input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked secondaryTerritory}}></td>
                 <td>
                     <button type="button" class="icon-action km-delete-settlement" data-delete-index="{{@index}}"><i
                             class="fa-solid fa-trash"></i></button>
