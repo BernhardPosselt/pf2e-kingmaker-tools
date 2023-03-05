@@ -110,12 +110,18 @@
     </div>
 {{/each}}
 
+Click these buttons after successfully claiming a hex containing a refuge or landmark:
+
+<div class="activity-choice">
+    <button type="button" id="claimed-refuge">Claimed Refuge</button>
+    <button type="button" id="claimed-landmark">Claimed Landmark</button>
+</div>
+
 <h2>Civic Activities (1 per settlement)</h2>
 
 {{#if civicPlanning}}
     During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs after all other settlements have taken their individual Civic activities.
 {{/if}}
-<!-- collect lilis, elk, mine -->
 <div class="activity-help" {{#if (lookup hideActivities 'build-structure')}}hidden{{/if}}>
     <button type="button" class="kingdom-activity" data-activity="build-structure">Build Structure
     </button>

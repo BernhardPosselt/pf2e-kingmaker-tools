@@ -339,6 +339,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => await rollKingdomEvent(this.game));
         $html.querySelector('#km-roll-cult-event')
             ?.addEventListener('click', async () => await rollCultEvent(this.game));
+        $html.querySelector('#claimed-refuge')
+            ?.addEventListener('click', async () => await this.claimedHexFeature('refuge'));
+        $html.querySelector('#claimed-landmark')
+            ?.addEventListener('click', async () => await this.claimedHexFeature('landmark'));
         $html.querySelector('#km-add-event')
             ?.addEventListener('click', async () => addOngoingEventDialog((name) => {
                 const current = this.getKingdom();
@@ -873,6 +877,37 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private getKingdom(): Kingdom {
         return getKingdom(this.sheetActor);
+    }
+
+    private async claimedHexFeature(feature: 'landmark' | 'refuge'): Promise<void> {
+        const current = this.getKingdom();
+        if (feature === 'refuge') {
+            await ChatMessage.create({content: 'Claimed a Refuge, please reduce a ruin of your choice by 1'});
+            await this.saveKingdom({
+                modifiers: [...current.modifiers, {
+                    name: 'Claimed Refuge',
+                    enabled: true,
+                    value: 2,
+                    type: 'circumstance',
+                    abilities: ['loyalty', 'stability'],
+                    turns: 2,
+                }],
+            });
+        } else {
+            const unrestRoll = await (new Roll('1d4').roll());
+            await unrestRoll.toMessage({flavor: 'Claimed a Landmark, reducing unrest by:'});
+            await this.saveKingdom({
+                unrest: Math.max(0, current.unrest - unrestRoll.total),
+                modifiers: [...current.modifiers, {
+                    name: 'Claimed Landmark',
+                    enabled: true,
+                    value: 2,
+                    type: 'circumstance',
+                    abilities: ['culture', 'economy'],
+                    turns: 2,
+                }],
+            });
+        }
     }
 }
 

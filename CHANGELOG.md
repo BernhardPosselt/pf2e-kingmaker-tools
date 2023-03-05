@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.29] - 2023-03-05
+
+### Added
+
+* Automate claiming refuges and landmarks
+
 ## [0.0.28] - 2023-03-04
 
 ### Added
