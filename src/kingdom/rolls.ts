@@ -1,10 +1,10 @@
 import {Activity} from './data/activities';
 import {DegreeOfSuccess, degreeToProperty, determineDegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {Skill} from './data/skills';
-import {capitalize, postDegreeOfSuccessMessage} from '../utils';
+import {postDegreeOfSuccessMessage, unslugify} from '../utils';
 import {activityData, ActivityResults} from './data/activityData';
 import {Modifier, modifierToLabel} from './modifiers';
-import {getKingdom, getKingdomSheetActorOrThrow, saveKingdom} from './storage';
+import {getKingdom, saveKingdom} from './storage';
 
 export interface RollMeta {
     formula: string;
@@ -43,13 +43,12 @@ export function parseUpgradeMeta(el: HTMLElement): ActivityResultMeta {
 }
 
 
-export async function reRoll(el: HTMLElement, type: 'fame' | 're-roll' | 'keep-higher' | 'keep-lower'): Promise<void> {
+export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-roll' | 'keep-higher' | 'keep-lower'): Promise<void> {
     const {total, formula, activity, skill, dc, modifier} = parseMeta(el);
-    const label = activity ? capitalize(activity) : capitalize(skill);
+    const label = activity ? unslugify(activity) : unslugify(skill);
     let reRollFormula = formula;
     if (type === 'fame') {
         // deduct points from sheet
-        const actor = getKingdomSheetActorOrThrow();
         const kingdom = getKingdom(actor);
         await saveKingdom(actor, {
             fame: {
@@ -62,7 +61,15 @@ export async function reRoll(el: HTMLElement, type: 'fame' | 're-roll' | 'keep-h
     } else if (type === 'keep-lower') {
         reRollFormula = `{${formula},${total}}kl`;
     }
-    await rollCheck(reRollFormula, label, activity, dc, skill, modifier);
+    await rollCheck({
+        formula: reRollFormula,
+        label,
+        activity,
+        dc,
+        skill,
+        modifier,
+        actor,
+    });
 }
 
 function upgradeDegree(degree: StringDegreeOfSuccess): StringDegreeOfSuccess {
@@ -89,19 +96,30 @@ function downgradeDegree(degree: StringDegreeOfSuccess): StringDegreeOfSuccess {
     }
 }
 
-export async function upgradeDowngrade(el: HTMLElement, type: 'upgrade' | 'downgrade'): Promise<void> {
+export async function changeDegree(actor: Actor, el: HTMLElement, type: 'upgrade' | 'downgrade'): Promise<void> {
     const {activity, degree} = parseUpgradeMeta(el);
     const newDegree = type === 'upgrade' ? upgradeDegree(degree) : downgradeDegree(degree);
-    await postComplexDegreeOfSuccess(getDegreeFromKey(newDegree), activity);
+    await postComplexDegreeOfSuccess(actor, getDegreeFromKey(newDegree), activity);
 }
 
 export async function rollCheck(
-    formula: string,
-    type: string,
-    activity: Activity | undefined,
-    dc: number,
-    skill: Skill,
-    modifier: number,
+    {
+        formula,
+        label,
+        activity,
+        dc,
+        skill,
+        modifier,
+        actor,
+    }: {
+        formula: string,
+        label: string,
+        activity: Activity | undefined,
+        dc: number,
+        skill: Skill,
+        modifier: number,
+        actor: Actor,
+    }
 ): Promise<void> {
     const roll = await new Roll(formula).roll();
     const total = roll.total;
@@ -117,13 +135,13 @@ export async function rollCheck(
             data-total="${total}"
             data-modifier="${modifier}"
         ></div>`;
-    await roll.toMessage({flavor: `Rolling Skill Check: ${type}, DC ${dc}${meta}`});
-    await postDegreeOfSuccess(activity, degreeOfSuccess);
+    await roll.toMessage({flavor: `Rolling Skill Check: ${label}, DC ${dc}${meta}`});
+    await postDegreeOfSuccess(actor, activity, degreeOfSuccess);
 }
 
-async function postDegreeOfSuccess(activity: Activity | undefined, degreeOfSuccess: DegreeOfSuccess): Promise<void> {
+async function postDegreeOfSuccess(actor: Actor, activity: Activity | undefined, degreeOfSuccess: DegreeOfSuccess): Promise<void> {
     if (activity) {
-        await postComplexDegreeOfSuccess(degreeOfSuccess, activity);
+        await postComplexDegreeOfSuccess(actor, degreeOfSuccess, activity);
     } else {
         await postSimpleDegreeOfSuccess(degreeOfSuccess);
     }
@@ -175,11 +193,10 @@ function buildModifierButtons(modifiers: Modifier[], activity: Activity, resultK
         </div>`;
 }
 
-async function postComplexDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess, activity: Activity): Promise<void> {
+async function postComplexDegreeOfSuccess(actor: Actor, degreeOfSuccess: DegreeOfSuccess, activity: Activity): Promise<void> {
     const resultKey = getResultKey(degreeOfSuccess);
     const results = activityData[activity][resultKey];
     if (results) {
-        const actor = getKingdomSheetActorOrThrow();
         const kingdom = getKingdom(actor);
         const modifiers = results.modifiers;
         const message = results.msg;
@@ -198,8 +215,7 @@ async function postComplexDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess, acti
     }
 }
 
-export async function addOngoingEvent(uuid: string, label: string): Promise<void> {
-    const actor = getKingdomSheetActorOrThrow();
+export async function addOngoingEvent(actor: Actor, uuid: string, label: string): Promise<void> {
     const kingdom = getKingdom(actor);
     const name = `@UUID[${uuid}]{${label}}`;
     await saveKingdom(actor, {

@@ -1,6 +1,6 @@
 import {unslugify} from '../utils';
 import {getSizeData, Kingdom} from './data/kingdom';
-import {getGameOrThrow, getKingdom, getKingdomSheetActorOrThrow, saveKingdom} from './storage';
+import {getKingdom, saveKingdom} from './storage';
 import {getCapacity} from './capacity-consumption';
 
 interface ResourceValues {
@@ -185,10 +185,8 @@ export function parseResourceButton(element: HTMLButtonElement): ResourceButton 
 }
 
 
-export async function updateResources(target: HTMLButtonElement): Promise<void> {
+export async function updateResources(game: Game, actor: Actor, target: HTMLButtonElement): Promise<void> {
     const {type, mode, turn, value: parsedValue} = parseResourceButton(target);
-    const game = getGameOrThrow();
-    const actor = getKingdomSheetActorOrThrow();
     const kingdom = getKingdom(actor);
 
     const evaluatedValue = await evaluateValue(kingdom, type, parsedValue);

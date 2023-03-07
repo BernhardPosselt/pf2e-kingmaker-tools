@@ -1,5 +1,4 @@
 import {Group} from '../data/kingdom';
-import {TimeChangeMode} from '../../time/calculation';
 
 export function addGroupDialog(onOk: (group: Group) => void): void {
     new Dialog({

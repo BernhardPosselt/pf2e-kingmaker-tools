@@ -21,9 +21,10 @@ import {
 } from './camping/camping';
 import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
-import {getGameOrThrow, getKingdom, getKingdomSheetActor, getKingdomSheetActorOrThrow} from './kingdom/storage';
-import {addOngoingEvent, parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
+import {getKingdom} from './kingdom/storage';
+import {addOngoingEvent, changeDegree, parseUpgradeMeta, reRoll} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
+import {StringDegreeOfSuccess} from './degree-of-success';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -338,9 +339,15 @@ Hooks.on('init', async () => {
 });
 
 Hooks.on('renderChatLog', () => {
-    const chatLog = $('#chat-log');
-    for (const button of kingdomChatButtons) {
-        chatLog.on('click', button.selector, button.callback);
+    if (game instanceof Game) {
+        const gameInstance = game;
+        const actor = getKingdomSheetActor(gameInstance);
+        if (actor) {
+            const chatLog = $('#chat-log');
+            for (const button of kingdomChatButtons) {
+                chatLog.on('click', button.selector, (event: Event) => button.callback(gameInstance, actor, event));
+            }
+        }
     }
 });
 
@@ -351,59 +358,79 @@ type LogEntry = {
     callback: (html: JQuery) => void,
 };
 
-function hasActor(): boolean {
-    const game = getGameOrThrow();
-    return getKingdomSheetActor(game) !== undefined;
+function getKingdomSheetActor(game: Game): Actor | undefined {
+    return game?.actors?.find(a => a.name === 'Kingdom Sheet');
+}
+
+function ifKingdomActorExists(game: Game, el: HTMLElement, callback: (actor: Actor) => void): void {
+    // TODO: replace this with a data-actor-id lookup in the el
+    const actor = getKingdomSheetActor(game);
+    if (actor) {
+        callback(actor);
+    } else {
+        ui.notifications?.error('Could not find actor with name Kingdom Sheet');
+    }
 }
 
 Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
-
-    const hasMeta = (li: JQuery): boolean => hasActor() && li[0].querySelector('.km-roll-meta') !== null;
-    const isActivityResult = (li: JQuery): boolean => hasActor() && li[0].querySelector('.km-upgrade-result') !== null;
-    const canReRollUsingFame = (li: JQuery): boolean => hasActor() && getKingdom(getKingdomSheetActorOrThrow()).fame.now > 0 && hasMeta(li);
-    const canUpgrade = (li: JQuery): boolean => hasActor() && isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalSuccess';
-    const canDowngrade = (li: JQuery): boolean => hasActor() && isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalFailure';
-    items.push({
-        name: 'Re-Roll Using Fame/Infamy',
-        icon: '<i class="fa-solid fa-dice-d20"></i>',
-        condition: canReRollUsingFame,
-        callback: el => reRoll(el[0], 'fame'),
-    }, {
-        name: 'Re-Roll',
-        condition: hasMeta,
-        icon: '<i class="fa-solid fa-dice-d20"></i>',
-        callback: el => reRoll(el[0], 're-roll'),
-    }, {
-        name: 'Re-Roll Keep Higher',
-        condition: hasMeta,
-        icon: '<i class="fa-solid fa-dice-d20"></i>',
-        callback: el => reRoll(el[0], 'keep-higher'),
-    }, {
-        name: 'Re-Roll Keep Lower',
-        condition: hasMeta,
-        icon: '<i class="fa-solid fa-dice-d20"></i>',
-        callback: el => reRoll(el[0], 'keep-lower'),
-    }, {
-        name: 'Upgrade Degree of Success',
-        condition: canUpgrade,
-        icon: '<i class="fa-solid fa-arrow-up"></i>',
-        callback: el => upgradeDowngrade(el[0], 'upgrade'),
-    }, {
-        name: 'Downgrade Degree of Success',
-        condition: canDowngrade,
-        icon: '<i class="fa-solid fa-arrow-down"></i>',
-        callback: el => upgradeDowngrade(el[0], 'downgrade'),
-    }, {
-        name: 'Add to Ongoing Events',
-        icon: '<i class="fa-solid fa-plus"></i>',
-        condition: (el) => hasActor() && el[0].querySelector('.content-link') !== null,
-        callback: async (el) => {
-            const link = el[0].querySelector('.content-link') as HTMLElement | null;
-            const uuid = link?.dataset?.uuid;
-            const text = link?.innerText;
-            if (uuid && text) {
-                await addOngoingEvent(uuid, text);
-            }
-        },
-    });
+    if (game instanceof Game) {
+        const gameInstance = game;
+        const hasActor = (): boolean => getKingdomSheetActor(gameInstance) !== undefined;
+        const hasContentLink = (el: JQuery): boolean => hasActor() && el[0].querySelector('.content-link') !== null;
+        const hasMeta = (el: JQuery): boolean => hasActor() && el[0].querySelector('.km-roll-meta') !== null;
+        const canChangeDegree = (chatMessage: HTMLElement, direction: 'upgrade' | 'downgrade'): boolean => {
+            const cantChangeDegreeUnless: StringDegreeOfSuccess = direction === 'upgrade' ? 'criticalSuccess' : 'criticalFailure';
+            const meta = chatMessage.querySelector('.km-upgrade-result');
+            return hasActor() && meta !== null && parseUpgradeMeta(chatMessage).degree !== cantChangeDegreeUnless;
+        };
+        const canReRollUsingFame = (el: JQuery): boolean => {
+            const actor = getKingdomSheetActor(gameInstance);
+            return actor ? getKingdom(actor).fame.now > 0 && hasMeta(el) : false;
+        };
+        items.push({
+            name: 'Re-Roll Using Fame/Infamy',
+            icon: '<i class="fa-solid fa-dice-d20"></i>',
+            condition: canReRollUsingFame,
+            callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => reRoll(actor, el[0], 'fame')),
+        }, {
+            name: 'Re-Roll',
+            condition: hasMeta,
+            icon: '<i class="fa-solid fa-dice-d20"></i>',
+            callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => reRoll(actor, el[0], 're-roll')),
+        }, {
+            name: 'Re-Roll Keep Higher',
+            condition: hasMeta,
+            icon: '<i class="fa-solid fa-dice-d20"></i>',
+            callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => reRoll(actor, el[0], 'keep-higher')),
+        }, {
+            name: 'Re-Roll Keep Lower',
+            condition: hasMeta,
+            icon: '<i class="fa-solid fa-dice-d20"></i>',
+            callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => reRoll(actor, el[0], 'keep-lower')),
+        }, {
+            name: 'Upgrade Degree of Success',
+            condition: (el: JQuery) => canChangeDegree(el[0], 'upgrade'),
+            icon: '<i class="fa-solid fa-arrow-up"></i>',
+            callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => changeDegree(actor, el[0], 'upgrade')),
+        }, {
+            name: 'Downgrade Degree of Success',
+            condition: (el: JQuery) => canChangeDegree(el[0], 'downgrade'),
+            icon: '<i class="fa-solid fa-arrow-down"></i>',
+            callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => changeDegree(actor, el[0], 'downgrade')),
+        }, {
+            name: 'Add to Ongoing Events',
+            icon: '<i class="fa-solid fa-plus"></i>',
+            condition: hasContentLink,
+            callback: async (el) => {
+                ifKingdomActorExists(gameInstance, el[0], async (actor) => {
+                    const link = el[0].querySelector('.content-link') as HTMLElement | null;
+                    const uuid = link?.dataset?.uuid;
+                    const text = link?.innerText;
+                    if (uuid && text) {
+                        await addOngoingEvent(actor, uuid, text);
+                    }
+                });
+            },
+        });
+    }
 });

@@ -7,11 +7,13 @@ import {updateResources} from '../resources';
 interface HelpOptions {
     activity: Activity;
     game: Game;
+    actor: Actor;
 }
 
 class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
     private activity: Activity;
     private game: Game;
+    private actor: Actor;
 
     static override get defaultOptions(): ApplicationOptions {
         const options = super.defaultOptions;
@@ -28,9 +30,10 @@ class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
         super(options);
         this.activity = options.activity;
         this.game = options.game;
+        this.actor = options.actor;
     }
 
-    async getData(options?: Partial<ApplicationOptions>): Promise<unknown> {
+    async getData(): Promise<unknown> {
         const data = findHelp(this.activity);
         const traits = (data.fortune ? [capitalize(data.phase), 'Downtime', 'Fortune'] : [capitalize(data.phase), 'Downtime'])
             .join(', ');
@@ -70,7 +73,7 @@ class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
             el.addEventListener('click', async (event) => {
                 event.preventDefault();
                 const target = event.currentTarget as HTMLButtonElement;
-                await updateResources(target);
+                await updateResources(this.game, this.actor, target);
             });
         });
         // bind pf2e flat checks :/
@@ -79,6 +82,7 @@ class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
                 event.preventDefault();
                 const target = event.currentTarget as HTMLSpanElement;
                 const dc = target.dataset.pf2Dc ?? 1;
+                /* eslint-disable @typescript-eslint/no-explicit-any */
                 const pf2eGame = this.game as any;
                 const checkModifier = new pf2eGame.pf2e.CheckModifier('Flat Check', {modifiers: []});
                 await pf2eGame.pf2e.Check.roll(checkModifier, {type: 'flat-check', dc: {value: dc}});
@@ -88,11 +92,13 @@ class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
 
     private async enrichIfDefined(msg: string | undefined): Promise<string | undefined> {
         if (msg) {
-            return await TextEditor.enrichHTML(msg, {async: true} as any);
+            /* eslint-disable @typescript-eslint/no-explicit-any */
+            const mode = {async: true} as any;
+            return await TextEditor.enrichHTML(msg, mode);
         }
     }
 }
 
-export async function showHelpDialog(game: Game, activity: Activity): Promise<void> {
-    new HelpApplication({activity, game}).render(true);
+export async function showHelpDialog(game: Game, actor: Actor, activity: Activity): Promise<void> {
+    new HelpApplication({activity, actor, game}).render(true);
 }

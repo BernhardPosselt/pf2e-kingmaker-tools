@@ -57,7 +57,7 @@ import {activityData} from './data/activityData';
 import {showSettlement} from './dialogs/settlement';
 import {createActiveSettlementModifiers, Modifier, modifierToLabel} from './modifiers';
 import {addEffectDialog} from './dialogs/add-effect-dialog';
-import {getKingdom, getKingdomSheetActor, saveKingdom} from './storage';
+import {getKingdom, saveKingdom} from './storage';
 import {getCapacity, getConsumption} from './capacity-consumption';
 
 interface KingdomOptions {
@@ -115,7 +115,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         this.sheetActor.apps[this.appId] = this;
     }
 
-    override async getData(options?: Partial<FormApplicationOptions>): Promise<object> {
+    override async getData(): Promise<object> {
         const isGM = this.game.user?.isGM ?? false;
         const kingdomData = this.getKingdom();
         const sizeData = getSizeData(kingdomData.size);
@@ -425,7 +425,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const target = el.currentTarget as HTMLButtonElement;
                     const activity = target.dataset.activity as Activity;
                     if (activityData[activity].dc === 'none') {
-                        await showHelpDialog(this.game, activity);
+                        await showHelpDialog(this.game, this.sheetActor, activity);
                     } else {
                         new CheckDialog(null, {
                             activity,
@@ -433,6 +433,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                             game: this.game,
                             type: 'activity',
                             onRoll: this.consumeModifiers.bind(this),
+                            actor: this.sheetActor,
                         }).render(true);
                     }
                 });
@@ -448,6 +449,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         skill: skill as Skill,
                         type: 'skill',
                         onRoll: this.consumeModifiers.bind(this),
+                        actor: this.sheetActor,
                     }).render(true);
                 });
             });
@@ -459,7 +461,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const target = el.currentTarget as HTMLButtonElement;
                     const help = target.dataset.help as Activity;
                     if (help) {
-                        await showHelpDialog(this.game, help);
+                        await showHelpDialog(this.game, this.sheetActor, help);
                     }
                 });
             });
@@ -918,7 +920,7 @@ export async function showKingdom(game: Game): Promise<void> {
         new KingdomApp(null, {game, sheetActor}).render(true);
     } else {
         setupDialog(game, async () => {
-            const sheetActor = getKingdomSheetActor(game);
+            const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
             await sheetActor?.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', getDefaultKingdomData());
             await showKingdom(game);
         });

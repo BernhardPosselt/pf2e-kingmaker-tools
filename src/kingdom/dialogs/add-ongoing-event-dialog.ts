@@ -1,6 +1,3 @@
-import {Group} from '../data/kingdom';
-import {TimeChangeMode} from '../../time/calculation';
-
 export function addOngoingEventDialog(onOk: (name: string) => void): void {
     new Dialog({
         title: 'Add Ongoing Event',

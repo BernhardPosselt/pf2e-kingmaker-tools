@@ -813,7 +813,7 @@ The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of t
                 enabled: false,
                 consumeId: '',
                 value: hasFeat(kingdom, 'Cooperative Leadership') ? 3 : 2,
-                name: 'Focused Attention: Critical Success',
+                name: 'Focused Attention: Success',
                 type: 'circumstance',
             }],
         },

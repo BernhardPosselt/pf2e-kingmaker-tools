@@ -26,6 +26,7 @@ export interface CheckDialogFeatOptions {
     skill?: Skill;
     game: Game;
     kingdom: Kingdom;
+    actor: Actor;
     onRoll: (consumeModifiers: Set<string>) => Promise<void>;
 }
 
@@ -64,6 +65,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private modifierOverrides: Record<string, boolean> = {};
     private consumeModifiers: Set<string> = new Set();
     private onRoll: (consumeModifiers: Set<string>) => Promise<void>;
+    private actor: Actor;
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -84,6 +86,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.skill = options.skill;
         this.game = options.game;
         this.kingdom = options.kingdom;
+        this.actor = options.actor;
         this.onRoll = options.onRoll;
         const controlDC = getControlDC(this.kingdom.level, this.kingdom.size);
         if (this.type === 'skill') {
@@ -190,10 +193,19 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const dc = parseInt(target.dataset.dc ?? '0', 10);
             const modifier = parseInt(target.dataset.modifier ?? '0', 10);
             const activity = target.dataset.activity as Activity | undefined;
-            const type = target.dataset.type!;
+            const label = target.dataset.type!;
             const skill = target.dataset.skill as Skill;
 
-            await rollCheck(`${modifier}`, type, activity, dc, skill, modifier);
+            const formula = `${modifier}`;
+            await rollCheck({
+                formula,
+                label,
+                activity,
+                dc,
+                skill,
+                modifier,
+                actor: this.actor,
+            });
             await this.onRoll(this.consumeModifiers);
             await this.close();
         });
@@ -203,10 +215,19 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const dc = parseInt(target.dataset.dc ?? '0', 10);
             const modifier = parseInt(target.dataset.modifier ?? '0', 10);
             const activity = target.dataset.activity as Activity | undefined;
-            const type = target.dataset.type!;
+            const label = target.dataset.type!;
             const skill = target.dataset.skill as Skill;
 
-            await rollCheck(`1d20+${modifier}`, type, activity, dc, skill, modifier);
+            const formula = `1d20+${modifier}`;
+            await rollCheck({
+                formula,
+                label,
+                activity,
+                dc,
+                skill,
+                modifier,
+                actor: this.actor,
+            });
             await this.onRoll(this.consumeModifiers);
             await this.close();
         });
