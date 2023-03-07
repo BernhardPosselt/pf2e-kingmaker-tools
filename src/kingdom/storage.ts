@@ -62,8 +62,8 @@ export async function saveKingdom(sheetActor: Actor, kingdom: Partial<Kingdom>):
     await sheetActor.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', kingdom);
 }
 
-export function getKingdomSheetActor(game: Game): Actor | undefined {
-    return game?.actors?.find(a => a.name === 'Kingdom Sheet');
+export function getKingdomSheetActorById(game: Game, id: string): Actor | undefined {
+    return game?.actors?.find(a => a.id === id);
 }
 
 export function getGameOrThrow(): Game {
@@ -71,6 +71,16 @@ export function getGameOrThrow(): Game {
         return game;
     } else {
         throw new Error('Game not initialized');
+    }
+}
+
+export function getKingdomSheetActorByIdOrThrow(id: string): Actor {
+    const game = getGameOrThrow();
+    const actor = getKingdomSheetActorById(game, id);
+    if (actor !== undefined) {
+        return actor;
+    } else {
+        throw new Error('No Kingdom Sheet Actor Found');
     }
 }
 

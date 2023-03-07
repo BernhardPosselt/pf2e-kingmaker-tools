@@ -21,8 +21,8 @@ import {
 } from './camping/camping';
 import {showKingdom} from './kingdom/kingdom';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
-import {getGameOrThrow, getKingdom, getKingdomSheetActor, getKingdomSheetActorOrThrow} from './kingdom/storage';
-import {addOngoingEvent, parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
+import {getGameOrThrow, getKingdom} from './kingdom/storage';
+import {addOngoingEvent, getActorFromChat, parseUpgradeMeta, reRoll, upgradeDowngrade} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
 
 Hooks.on('ready', async () => {
@@ -351,18 +351,23 @@ type LogEntry = {
     callback: (html: JQuery) => void,
 };
 
-function hasActor(): boolean {
-    const game = getGameOrThrow();
-    return getKingdomSheetActor(game) !== undefined;
-}
+
 
 Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
+    const game = getGameOrThrow();
+    const hasMeta = (li: JQuery): boolean => li[0].querySelector('.km-roll-meta') !== null
+        && getActorFromChat(game, li[0]) !== undefined;
+    const isUpgradableResult = (li: JQuery): boolean => li[0].querySelector('.km-upgrade-result') !== null
+        && getActorFromChat(game, li[0]) !== undefined;
+    const canReRollUsingFame = (li: JQuery): boolean => {
+        const actor = getActorFromChat(game, li[0]);
+        return actor === undefined ? false : getKingdom(actor).fame.now > 0;
+    };
+    const canUpgrade = (li: JQuery): boolean => isUpgradableResult(li)
+        && parseUpgradeMeta(li[0]).degree !== 'criticalSuccess';
+    const canDowngrade = (li: JQuery): boolean => isUpgradableResult(li)
+        && parseUpgradeMeta(li[0]).degree !== 'criticalFailure';
 
-    const hasMeta = (li: JQuery): boolean => hasActor() && li[0].querySelector('.km-roll-meta') !== null;
-    const isActivityResult = (li: JQuery): boolean => hasActor() && li[0].querySelector('.km-upgrade-result') !== null;
-    const canReRollUsingFame = (li: JQuery): boolean => hasActor() && getKingdom(getKingdomSheetActorOrThrow()).fame.now > 0 && hasMeta(li);
-    const canUpgrade = (li: JQuery): boolean => hasActor() && isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalSuccess';
-    const canDowngrade = (li: JQuery): boolean => hasActor() && isActivityResult(li) && parseUpgradeMeta(li[0]).degree !== 'criticalFailure';
     items.push({
         name: 'Re-Roll Using Fame/Infamy',
         icon: '<i class="fa-solid fa-dice-d20"></i>',
@@ -396,7 +401,8 @@ Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
     }, {
         name: 'Add to Ongoing Events',
         icon: '<i class="fa-solid fa-plus"></i>',
-        condition: (el) => hasActor() && el[0].querySelector('.content-link') !== null,
+        condition: (el) => el[0].querySelector('.content-link') !== null
+            && getActorFromChat(game, el[0]) !== undefined,
         callback: async (el) => {
             const link = el[0].querySelector('.content-link') as HTMLElement | null;
             const uuid = link?.dataset?.uuid;

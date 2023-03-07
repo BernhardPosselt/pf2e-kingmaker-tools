@@ -24,3 +24,12 @@ export function getConsumption(game: Game, kingdom: Kingdom): number {
     return Math.max(0, kingdom.consumption.armies + kingdom.consumption.now + settlementConsumption -
         farmlands);
 }
+
+export function gainFame(kingdom: Kingdom, fame: number): Partial<Kingdom> {
+    return {
+        fame: {
+            ...kingdom.fame,
+            now: Math.min(3, kingdom.fame.now + fame),
+        },
+    };
+}

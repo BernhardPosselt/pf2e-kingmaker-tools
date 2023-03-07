@@ -1,7 +1,7 @@
 import {unslugify} from '../utils';
 import {getSizeData, Kingdom} from './data/kingdom';
 import {getGameOrThrow, getKingdom, getKingdomSheetActorOrThrow, saveKingdom} from './storage';
-import {getCapacity} from './capacity-consumption';
+import {getCapacity} from './kingdom-utils';
 
 interface ResourceValues {
     value: number;
@@ -188,6 +188,7 @@ export function parseResourceButton(element: HTMLButtonElement): ResourceButton 
 export async function updateResources(target: HTMLButtonElement): Promise<void> {
     const {type, mode, turn, value: parsedValue} = parseResourceButton(target);
     const game = getGameOrThrow();
+    // TODO get actor by id
     const actor = getKingdomSheetActorOrThrow();
     const kingdom = getKingdom(actor);
 

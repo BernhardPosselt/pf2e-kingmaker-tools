@@ -1,7 +1,8 @@
-import {getKingdom, getKingdomSheetActorOrThrow, saveKingdom} from './storage';
+import {getKingdom, getKingdomSheetActorByIdOrThrow, saveKingdom} from './storage';
 import {Activity} from './data/activities';
 import {activityData, ActivityResults} from './data/activityData';
 import {updateResources} from './resources';
+import {gainFame} from './kingdom-utils';
 
 interface KingdomChatButton {
     selector: string;
@@ -9,6 +10,18 @@ interface KingdomChatButton {
 }
 
 export const kingdomChatButtons: KingdomChatButton[] = [
+    {
+        selector: '.km-gain-fame-button',
+        callback: async (event: Event): Promise<void> => {
+            event.preventDefault();
+            const target = event.currentTarget as HTMLButtonElement;
+            const actorId = target.dataset.actorId!;
+            const actor = getKingdomSheetActorByIdOrThrow(actorId);
+            const kingdom = getKingdom(actor);
+            const update = gainFame(kingdom, 1);
+            await saveKingdom(actor, update);
+        },
+    },
     {
         selector: '.km-gain-lose',
         callback: async (event: Event): Promise<void> => {
@@ -24,8 +37,9 @@ export const kingdomChatButtons: KingdomChatButton[] = [
             const target = event.currentTarget as HTMLButtonElement;
             const activity = target.dataset.activity! as Activity;
             const degree = target.dataset.degree! as keyof ActivityResults;
+            const actorId = target.dataset.actorId! as string;
             const index = parseInt(target.dataset.index ?? '0', 10);
-            const sheetActor = getKingdomSheetActorOrThrow();
+            const sheetActor = getKingdomSheetActorByIdOrThrow(actorId);
             const kingdom = getKingdom(sheetActor);
             const modifier = activityData[activity]?.[degree]?.modifiers?.(kingdom)?.[index];
             if (modifier !== undefined) {

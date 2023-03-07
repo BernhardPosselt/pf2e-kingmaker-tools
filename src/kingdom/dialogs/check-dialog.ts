@@ -26,6 +26,7 @@ export interface CheckDialogFeatOptions {
     skill?: Skill;
     game: Game;
     kingdom: Kingdom;
+    actor: Actor;
     onRoll: (consumeModifiers: Set<string>) => Promise<void>;
 }
 
@@ -64,6 +65,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private modifierOverrides: Record<string, boolean> = {};
     private consumeModifiers: Set<string> = new Set();
     private onRoll: (consumeModifiers: Set<string>) => Promise<void>;
+    private actor: Actor;
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -84,6 +86,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.skill = options.skill;
         this.game = options.game;
         this.kingdom = options.kingdom;
+        this.actor = options.actor;
         this.onRoll = options.onRoll;
         const controlDC = getControlDC(this.kingdom.level, this.kingdom.size);
         if (this.type === 'skill') {
@@ -193,7 +196,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const type = target.dataset.type!;
             const skill = target.dataset.skill as Skill;
 
-            await rollCheck(`${modifier}`, type, activity, dc, skill, modifier);
+            await rollCheck(`${modifier}`, type, activity, dc, skill, modifier, this.actor.id!);
             await this.onRoll(this.consumeModifiers);
             await this.close();
         });
@@ -206,7 +209,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const type = target.dataset.type!;
             const skill = target.dataset.skill as Skill;
 
-            await rollCheck(`1d20+${modifier}`, type, activity, dc, skill, modifier);
+            await rollCheck(`1d20+${modifier}`, type, activity, dc, skill, modifier, this.actor.id!);
             await this.onRoll(this.consumeModifiers);
             await this.close();
         });

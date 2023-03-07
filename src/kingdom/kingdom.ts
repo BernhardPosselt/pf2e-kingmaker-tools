@@ -57,8 +57,8 @@ import {activityData} from './data/activityData';
 import {showSettlement} from './dialogs/settlement';
 import {createActiveSettlementModifiers, Modifier, modifierToLabel} from './modifiers';
 import {addEffectDialog} from './dialogs/add-effect-dialog';
-import {getKingdom, getKingdomSheetActor, saveKingdom} from './storage';
-import {getCapacity, getConsumption} from './capacity-consumption';
+import {getKingdom, saveKingdom} from './storage';
+import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
 
 interface KingdomOptions {
     game: Game;
@@ -324,7 +324,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         });
         $html.querySelector('#km-gain-fame')
             ?.addEventListener('click', async () =>
-                await this.gainFame(1));
+                await this.saveKingdom(gainFame(this.getKingdom(), 1)));
         $html.querySelector('#km-adjust-unrest')
             ?.addEventListener('click', async () => await this.adjustUnrest());
         $html.querySelector('#km-collect-resources')
@@ -433,6 +433,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                             game: this.game,
                             type: 'activity',
                             onRoll: this.consumeModifiers.bind(this),
+                            actor: this.sheetActor,
                         }).render(true);
                     }
                 });
@@ -448,6 +449,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         skill: skill as Skill,
                         type: 'skill',
                         onRoll: this.consumeModifiers.bind(this),
+                        actor: this.sheetActor,
                     }).render(true);
                 });
             });
@@ -507,17 +509,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'modifiers'));
             });
-    }
-
-    private async gainFame(fame: number): Promise<void> {
-        const current = this.getKingdom();
-        const newFame = Math.min(3, current.fame.now + fame);
-        await this.saveKingdom({
-            fame: {
-                ...current.fame,
-                now: newFame,
-            },
-        });
     }
 
     private async consumeModifiers(consumeIds: Set<string>): Promise<void> {
@@ -918,7 +909,7 @@ export async function showKingdom(game: Game): Promise<void> {
         new KingdomApp(null, {game, sheetActor}).render(true);
     } else {
         setupDialog(game, async () => {
-            const sheetActor = getKingdomSheetActor(game);
+            const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
             await sheetActor?.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', getDefaultKingdomData());
             await showKingdom(game);
         });
