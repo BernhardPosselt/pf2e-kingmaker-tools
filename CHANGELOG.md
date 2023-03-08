@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.31] - 2023-03-08
+
+### Added
+
+* Add buttons to roll Flat Check to reduce ruin
+
 ## [0.0.30] - 2023-03-08
 
 ### Added

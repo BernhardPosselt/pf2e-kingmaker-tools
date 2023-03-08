@@ -98,7 +98,7 @@
 .km-container {
     height: 100%;
     display: grid;
-    grid-template-columns: 280px auto;
+    grid-template-columns: 282px auto;
     grid-template-rows: auto minmax(auto, 40px) auto;
     grid-gap: 0 10px;
 }

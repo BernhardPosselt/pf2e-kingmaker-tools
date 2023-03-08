@@ -322,6 +322,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 this.render();
             });
         });
+        $html.querySelectorAll('.km-reduce-ruin')
+            .forEach(el => el.addEventListener('click', async (ev) => await this.reduceRuin(ev)));
         $html.querySelector('#km-gain-fame')
             ?.addEventListener('click', async () =>
                 await this.saveKingdom(gainFame(this.getKingdom(), 1)));
@@ -510,6 +512,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'modifiers'));
             });
     }
+
     private async consumeModifiers(consumeIds: Set<string>): Promise<void> {
         const current = this.getKingdom();
         await this.saveKingdom({
@@ -523,6 +526,25 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     }
                 }),
         });
+    }
+
+    private async reduceRuin(event: Event): Promise<void> {
+        const button = event.currentTarget as HTMLButtonElement;
+        const ruin = button.dataset.ruin as keyof Ruin;
+        const roll = await new Roll('1d20').roll();
+        await roll.toMessage({flavor: `Reducing ${capitalize(ruin)} on a 16 or higher`});
+        if (roll.total >= 16) {
+            const current = this.getKingdom();
+            await this.saveKingdom({
+                ruin: {
+                    ...current.ruin,
+                    [ruin]: {
+                        ...current.ruin[ruin],
+                        penalty: Math.max(0, current.ruin[ruin].penalty - 1),
+                    },
+                },
+            });
+        }
     }
 
     private async increaseXP(xp: number): Promise<void> {
@@ -735,7 +757,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private getRuin(ruin: Ruin): object {
         return Object.fromEntries(Object.entries(ruin)
-            .map(([ruin, values]) => [ruin, {label: capitalize(ruin), ...values}]),
+            .map(([ruin, values]) => [ruin, {
+                label: capitalize(ruin),
+                ...values,
+                canReduce: values.value === 0 && values.penalty > 0,
+            }]),
         );
     }
 
