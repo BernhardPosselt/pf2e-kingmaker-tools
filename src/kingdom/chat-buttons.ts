@@ -2,6 +2,7 @@ import {getKingdom, saveKingdom} from './storage';
 import {Activity} from './data/activities';
 import {activityData, ActivityResults} from './data/activityData';
 import {updateResources} from './resources';
+import {gainFame} from './kingdom-utils';
 
 interface KingdomChatButton {
     selector: string;
@@ -9,6 +10,14 @@ interface KingdomChatButton {
 }
 
 export const kingdomChatButtons: KingdomChatButton[] = [
+    {
+        selector: '.km-gain-fame-button',
+        callback: async (game: Game, actor: Actor, event: Event): Promise<void> => {
+            event.preventDefault();
+            const update = gainFame(getKingdom(actor), 1);
+            await saveKingdom(actor, update);
+        },
+    },
     {
         selector: '.km-gain-lose',
         callback: async (game: Game, actor: Actor, event: Event): Promise<void> => {

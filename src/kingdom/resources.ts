@@ -1,7 +1,7 @@
 import {unslugify} from '../utils';
 import {getSizeData, Kingdom} from './data/kingdom';
 import {getKingdom, saveKingdom} from './storage';
-import {getCapacity} from './capacity-consumption';
+import {getCapacity} from './kingdom-utils';
 
 interface ResourceValues {
     value: number;

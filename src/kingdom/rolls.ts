@@ -5,6 +5,7 @@ import {postDegreeOfSuccessMessage, unslugify} from '../utils';
 import {activityData, ActivityResults} from './data/activityData';
 import {Modifier, modifierToLabel} from './modifiers';
 import {getKingdom, saveKingdom} from './storage';
+import {gainFame} from './kingdom-utils';
 
 export interface RollMeta {
     formula: string;
@@ -50,12 +51,7 @@ export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-r
     if (type === 'fame') {
         // deduct points from sheet
         const kingdom = getKingdom(actor);
-        await saveKingdom(actor, {
-            fame: {
-                ...kingdom.fame,
-                now: kingdom.fame.now - 1,
-            },
-        });
+        await saveKingdom(actor, gainFame(kingdom, -1));
     } else if (type === 'keep-higher') {
         reRollFormula = `{${formula},${total}}kh`;
     } else if (type === 'keep-lower') {
@@ -149,7 +145,7 @@ async function postDegreeOfSuccess(actor: Actor, activity: Activity | undefined,
 
 async function postSimpleDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess): Promise<void> {
     await postDegreeOfSuccessMessage(degreeOfSuccess, {
-        critSuccess: '<b>Critical Success</b>',
+        critSuccess: `<b>Critical Success</b>${buildChatButtons([], 'criticalSuccess')}`,
         success: '<b>Success</b>',
         failure: '<b>Failure</b>',
         critFailure: '<b>Critical Failure</b>',
@@ -180,17 +176,22 @@ function getDegreeFromKey(degreeOfSuccess: keyof ActivityResults): DegreeOfSucce
     }
 }
 
-function buildModifierButtons(modifiers: Modifier[], activity: Activity, resultKey: keyof ActivityResults): string {
-    return `
+function buildChatButtons(modifiers: Modifier[], resultKey: keyof ActivityResults, activity?: Activity): string {
+    if (modifiers.length > 0 || resultKey === 'criticalSuccess') {
+        return `
         <div class="km-chat-buttons">
+            ${resultKey === 'criticalSuccess' ? '<button type="button" class="km-gain-fame-button">Gain 1 Fame</button>' : ''}
             ${modifiers.map((modifier, index) => {
-        const label = modifierToLabel(modifier);
-        return `<button class="km-apply-modifier-effect" 
+            const label = modifierToLabel(modifier);
+            return `<button class="km-apply-modifier-effect" 
                         data-activity="${activity}" 
                         data-degree="${resultKey}" 
                         data-index="${index}">Apply Effect: ${label}</button>`;
-    })}    
+        }).join('')}    
         </div>`;
+    } else {
+        return '';
+    }
 }
 
 async function postComplexDegreeOfSuccess(actor: Actor, degreeOfSuccess: DegreeOfSuccess, activity: Activity): Promise<void> {
@@ -200,7 +201,9 @@ async function postComplexDegreeOfSuccess(actor: Actor, degreeOfSuccess: DegreeO
         const kingdom = getKingdom(actor);
         const modifiers = results.modifiers;
         const message = results.msg;
-        const buttons = modifiers === undefined ? '' : buildModifierButtons(modifiers(kingdom), activity, resultKey);
+        const buttons = modifiers === undefined
+            ? buildChatButtons([], resultKey)
+            : buildChatButtons(modifiers(kingdom), resultKey, activity);
         // div allows to upgrade/downgrade on right click
         const upgrade = `<div class="km-upgrade-result" data-activity="${activity}" data-degree="${resultKey}" hidden></div>`;
         const msg = message + buttons + upgrade;

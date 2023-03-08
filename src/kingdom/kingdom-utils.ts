@@ -1,6 +1,7 @@
 import {CommodityStorage} from './data/structures';
 import {Commodities, getSizeData, Kingdom} from './data/kingdom';
 import {getAllMergedSettlements} from './scene';
+import {clamped} from '../utils';
 
 function calculateStorageCapacity(capacity: number, storage: CommodityStorage): Commodities {
     return {
@@ -23,4 +24,13 @@ export function getConsumption(game: Game, kingdom: Kingdom): number {
     const farmlands = kingdom.workSites.farmlands.resources + kingdom.workSites.farmlands.quantity;
     return Math.max(0, kingdom.consumption.armies + kingdom.consumption.now + settlementConsumption -
         farmlands);
+}
+
+export function gainFame(kingdom: Kingdom, fame: number): Partial<Kingdom> {
+    return {
+        fame: {
+            ...kingdom.fame,
+            now: clamped(kingdom.fame.now + fame, 0, 3),
+        },
+    };
 }
