@@ -70,7 +70,7 @@ export async function camouflageCampsite(game: Game, actor: any): Promise<void> 
             critSuccess: `Camouflage Camp: ${actor.name}'s camouflage attempt exceeds expectation. Increase the Encounter DC for your camp by 2. The first time a flat check would result in an encounter during this camping session, instead treat that result as a failure with no encounter`,
             success: `Camouflage Camp: ${actor.name}'s work helps hide your camp from detection. Increase the Encounter DC for your camp by 1.`,
             failure: `Camouflage Camp: ${actor.name}'s work does not help in particular`,
-            critFailure: `Camouflage Camp: ${actor.name} believe they’ve done well at your camouflage attempt but have actually forgotten something important or accidentally did something to make the campsite more noticeable. Decrease the Encounter DC for your camp by 2, and flat checks made to determine encounters result in a critical success on a roll of 19 or 20.`,
+            critFailure: `Camouflage Camp: ${actor.name} believes they’ve done well at your camouflage attempt but have actually forgotten something important or accidentally did something to make the campsite more noticeable. Decrease the Encounter DC for your camp by 2, and flat checks made to determine encounters result in a critical success on a roll of 19 or 20.`,
             isPrivate: true,
         });
     } else {
@@ -106,8 +106,8 @@ export async function tellCampfireStory(game: Game, actor: any): Promise<void> {
             dc,
         });
         await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
-            critSuccess: `Tell Campfire Story: ${actor.name} inspire your allies dramatically. For the remainder of the camping session, their allies gain a +2 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. If an ally spent the hour Relaxing, they can also choose to reroll a failed roll at any time once during the remainder of the camping session while the status bonus persists; this is a fortune effect. @UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.2vdskbqd0VrWKR9Y]{Campfire Story: Critical Success}`,
-            success: `Tell Campfire Story: ${actor.name} inspire their allies. For the remainder of the camping session, their allies gain a +1 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. @UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.wT2NzrfgmWmCMRtv]{Campfire Story: Success}`,
+            critSuccess: `Tell Campfire Story: ${actor.name} inspires their allies dramatically. For the remainder of the camping session, their allies gain a +2 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. If an ally spent the hour Relaxing, they can also choose to reroll a failed roll at any time once during the remainder of the camping session while the status bonus persists; this is a fortune effect. @UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.2vdskbqd0VrWKR9Y]{Campfire Story: Critical Success}`,
+            success: `Tell Campfire Story: ${actor.name} inspires their allies. For the remainder of the camping session, their allies gain a +1 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. @UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.wT2NzrfgmWmCMRtv]{Campfire Story: Success}`,
             failure: `Tell Campfire Story: ${actor.name}'s allies are unmoved and receive no benefits.`,
             critFailure: `Tell Campfire Story: ${actor.name}'s story distracts or unsettles your allies. They each take a –1 status penalty to skill checks until they Relax or until they begin daily preparations. @UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.y5Jqw40SWNOgcxvC]{Campfire Story: Critical Failure}`,
         });
@@ -125,8 +125,8 @@ export async function prepareCampsite(game: Game, actor: any): Promise<void> {
             dc,
         });
         await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
-            critSuccess: `Prepare Campsite: ${actor.name} find the perfect spot for a camp. Flat checks to determine encounters at the campsite for the next 24 hours have a DC 2 higher than normal, and the first 2 hours spent performing Camping activities does not incur the usual flat check for random encounters.`,
-            success: `Prepare Campsite: ${actor.name} find a serviceable spot for a camp and for Camping activities.`,
+            critSuccess: `Prepare Campsite: ${actor.name} finds the perfect spot for a camp. Flat checks to determine encounters at the campsite for the next 24 hours have a DC 2 higher than normal, and the first 2 hours spent performing Camping activities does not incur the usual flat check for random encounters.`,
+            success: `Prepare Campsite: ${actor.name} finds a serviceable spot for a camp and for Camping activities.`,
             failure: `Prepare Campsite: ${actor.name}'s campsite will work, but it’s not the best. Campsite activities that require checks take a –2 penalty.`,
             critFailure: `Prepare Campsite: ${actor.name}'s campsite is a mess. You can use it to rest and to perform daily preparations, but it isn’t good enough to allow for Campsite activities at all. Worse, your attempt to secure a campsite has possibly attracted unwanted attention—attempt a flat check against the zone’s Encounter DC. If successful, a random encounter automatically occurs.`,
         });
@@ -843,10 +843,10 @@ export async function learnFromCompanion(game: Game, actor: any): Promise<void> 
             dc: 20,
         });
         await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
-            critSuccess: `Learn From a Companion: ${actor.name} learn the companion’s special activity. Any PC who meets that activity’s requirements can now perform that activity even when the companion isn’t in the camp.`,
-            success: `Learn From a Companion: ${actor.name} make progress in learning the special activity but require at least one more day to master it. If they attempt to Learn from this Companion the next time you camp, the result of that check is improved by one degree of success from the result rolled`,
-            failure: `Learn From a Companion: ${actor.name} fail to learn anything from the companion.`,
-            critFailure: `Learn From a Companion: ${actor.name} fail to learn from the companion, who grows frustrated with the party. No further attempts to Learn from this Companion can be attempted during this camping session.`,
+            critSuccess: `Learn From a Companion: ${actor.name} learns the companion’s special activity. Any PC who meets that activity’s requirements can now perform that activity even when the companion isn’t in the camp.`,
+            success: `Learn From a Companion: ${actor.name} makes progress in learning the special activity but requires at least one more day to master it. If they attempt to Learn from this Companion the next time you camp, the result of that check is improved by one degree of success from the result rolled`,
+            failure: `Learn From a Companion: ${actor.name} fails to learn anything from the companion.`,
+            critFailure: `Learn From a Companion: ${actor.name} fails to learn from the companion, who grows frustrated with the party. No further attempts to Learn from this Companion can be attempted during this camping session.`,
         });
     } else {
         ui.notifications?.error('Please select a token');
