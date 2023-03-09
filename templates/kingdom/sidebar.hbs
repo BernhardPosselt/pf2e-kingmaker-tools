@@ -40,7 +40,7 @@
         <th>Value</th>
         <th title="Threshold">Thresh.</th>
         <th>Penalty</th>
-        <th title="DC 16 Flat Check to reduce Ruin by 1">Check</th>
+        <th title="DC 16 Flat Check to reduce Ruin Penalty by 1">Check</th>
     </tr>
     {{#each ruin}}
         <tr>
@@ -48,7 +48,7 @@
             <td><input type="number" value="{{this.value}}" name="ruin.{{@key}}.value"></td>
             <td><input type="number" value="{{this.threshold}}" name="ruin.{{@key}}.threshold"></td>
             <td><input type="number" value="{{this.penalty}}" name="ruin.{{@key}}.penalty"></td>
-            <td title="DC 16 Flat Check to reduce {{this.label}} by 1">
+            <td title="DC 16 Flat Check to reduce {{this.label}} Penalty by 1">
                 <button class="km-reduce-ruin" data-ruin="{{@key}}" type="button" {{#unless this.canReduce}}disabled{{/unless}}><i class="fa-solid fa-dice-d20"></i></button>
             </td>
         </tr>

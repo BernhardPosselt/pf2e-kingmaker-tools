@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* @zarmstrong: Fixed prepare campsite to use region DC instead of actor level dc
+* @zarmstrong: Fixed grammatical issues with regards to camping activities
+* @rectulo: fix typo in Abandon Hex activity
+
 ## [0.0.31] - 2023-03-08
 
 ### Added
