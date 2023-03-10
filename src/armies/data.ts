@@ -1,3 +1,5 @@
+import {capitalize} from '../utils';
+
 export interface Fortification {
     name: string;
     ac: number;
@@ -51,27 +53,429 @@ const allArmyStatistics: ArmyStatistic[] = [
 export const armyStatisticsByLevel: Map<number, ArmyStatistic> = new Map<number, ArmyStatistic>();
 allArmyStatistics.forEach(army => armyStatisticsByLevel.set(army.level, army));
 
+export const allArmyActionNames = [
+    'Advance',
+    'Battle',
+    'Disengage',
+    'Guard',
+    'Rally',
+    'Retreat',
+    'All-Out Assault',
+    'Battlefield Medicine',
+    'Counterattack',
+    'Covering Fire',
+    'Defensive Stance',
+    'Dirty Fighting',
+    'False Retreat',
+    'Feint',
+    'Outflank',
+    'Overwhelming Bombardment',
+    'Taunt',
+    'Trampling Charge',
+    'Trample',
+    'Swift Recovery',
+    'Accustomed to Panic',
+    'Furious Charge',
+    'Reactive Rally',
+    'Revel in Battle',
+] as const;
+
+export type ArmyActionName = typeof allArmyActionNames[number];
+
 export interface ArmyAction {
-    name: string;
-    type: 'attack' | 'morale' | 'maneuver';
+    name: ArmyActionName;
+    trigger?: string;
+    type?: 'attack' | 'morale' | 'maneuver';
     actions: '1' | '2' | '3' | 'r';
+    requiresUnlock?: boolean;
     restrictedTypes?: ArmyType[];
-    description: string;
-    prerequisites?: string;
+    description?: string;
+    requirements?: string;
+    criticalSuccess?: string;
+    success?: string;
+    failure?: string;
+    criticalFailure?: string;
+    frequency?: string;
+    effect?: string;
 }
 
-const allArmyActions: ArmyAction[] = [
-    // TODO:
-];
+const allArmyActions: ArmyAction[] = [{
+    name: 'Advance',
+    actions: '1',
+    type: 'maneuver',
+    description: 'Your army attempts to close the distance with a target enemy army it is not engaged with by attempting a Maneuver check.',
+    criticalSuccess: 'The enemy army becomes engaged with your army, even if it previously had the distant condition (in which case it loses that condition and becomes engaged).',
+    success: 'If the target army is distant, it loses that condition; otherwise, it becomes engaged.',
+    failure: 'Your army’s attempt to advance fails.',
+    criticalFailure: 'Your army’s attempt to advance fails, and it becomes disorganized, becoming mired 1 until the start of its next turn.',
+}, {
+    name: 'Battle',
+    actions: '1',
+    description: 'Your army attacks an enemy army with a Strike against the enemy army’s AC. You can do so with a melee Strike only if you are engaged with the target army. Otherwise, you must use a ranged Strike. An army can attempt a maximum of 5 ranged Strikes per war encounter (unless it has the Increased Ammunition tactic). As with any attack, multiple Strikes in a single round suffer a multiple attack penalty. A siege engine can use the Battle action to attack and damage a fortification.',
+    type: 'attack',
+    criticalSuccess: 'You deal 2 points of damage to the army.',
+    success: 'You deal 1 point of damage to the army.',
+}, {
+    name: 'Disengage',
+    actions: '2',
+    description: 'Your army attempts to disengage from enemy armies to put some distance between itself and the enemy. Attempt a Maneuver check against each army your army is engaged with.',
+    type: 'maneuver',
+    criticalSuccess: 'Your army is no longer engaged with the target army. In addition, your army is automatically no longer engaged with any armies you haven’t yet rolled a Maneuver check against during this war action.',
+    success: 'Your army breaks free and is no longer engaged with the target army.',
+    failure: 'Your army remains engaged with the target army.',
+    criticalFailure: 'Your army remains engaged with the target army and, for the remainder of this turn, your army cannot attempt to disengage from any army with which it is still engaged.',
+}, {
+    name: 'Guard',
+    actions: '1',
+    description: 'Your army spends a war action to adopt a defensive pose—raising shields, focusing on parrying attacks, or seeking cover. Attempt a Maneuver check against a target army.',
+    type: 'maneuver',
+    criticalSuccess: 'Your army gains a +2 item bonus to its AC until the start of your next turn; this bonus applies to all attacks against this army, not just from the targeted army.',
+    success: 'Your army gains a +2 item bonus to its AC until the start of your next turn against attacks from the target army.',
+    failure: 'Your army fails to guard against the target army.',
+    criticalFailure: 'Your army fails spectacularly to guard against the target army and becomes mired 1.',
+}, {
+    name: 'Rally',
+    actions: '2',
+    description: 'Your army’s leaders attempt to bolster the soldiers’ morale and fight back the effects of fear and panic. Attempt a Morale check against a target enemy army of your choice.',
+    type: 'morale',
+    criticalSuccess: 'If your army is routed, it loses the routed condition. Reduce your army’s shaken condition by 2.',
+    success: 'Reduce your army’s shaken condition by 1.',
+    criticalFailure: 'Your attempt to rally backfires—increase your army’s shaken condition by 1.',
+}, {
+    name: 'Retreat',
+    requirements: 'Your army is not engaged.',
+    actions: '1',
+    description: 'Your army tries to escape from the battlefield. If your army is already distant, it flees the battlefield, is no longer part of the war encounter, and becomes routed. Otherwise, your army gains the distant condition.',
+}, {
+    name: 'All-Out Assault',
+    actions: '2',
+    requiresUnlock: true,
+    restrictedTypes: ['cavalry', 'infantry'],
+    description: 'Your army attacks with frightening vigor. Attempt a melee Strike against an enemy army’s AC.',
+    type: 'attack',
+    criticalSuccess: 'Your army inflicts 3 points of damage to the target army. If your army’s next war action this turn is an attack war action against a different target army, you gain a +1 circumstance bonus to the Strike as your fury continues to the new target.',
+    success: 'Your army deals 2 points of damage to the target army.',
+    failure: 'Your army falters, but still deals 1 point of damage to the target army.',
+    criticalFailure: 'Your army deals no damage to the target army and becomes outflanked until the start of its next turn.',
+}, {
+    name: 'Battlefield Medicine',
+    actions: '3',
+    requiresUnlock: true,
+    restrictedTypes: ['skirmisher', 'infantry'],
+    description: 'Your army attempts to patch up an allied army’s wounds during battle. Once you attempt this war action on an army, that army is temporarily immune to Battlefield Medicine for the remainder of the war encounter. Attempt a DC 25 Scouting check to successfully sort the army’s wounded and provide swift aid.',
+    criticalSuccess: 'You restore 2 HP to the target army.',
+    success: 'You restore 1 HP to the target army',
+    criticalFailure: 'Your attempt to heal the army fails, and that army’s weary condition value increases by 1.',
+}, {
+    requiresUnlock: true,
+    restrictedTypes: ['skirmisher', 'infantry'],
+    name: 'Counterattack',
+    trigger: 'An army you are engaged with attempts a maneuver war action.',
+    actions: 'r',
+    description: 'Your army lashes out at the foe as they attempt to perform a maneuver. Attempt a melee Strike against the triggering army’s AC. Counterattack doesn’t count toward your multiple attack penalty, and your multiple attack penalty doesn’t apply to this Strike.',
+    criticalSuccess: `You inflict 1 point of damage on the
+army and increase its shaken condition value by 1.`,
+    success: 'You inflict 1 point of damage on the army.',
+}, {
+    requiresUnlock: true,
+    restrictedTypes: ['skirmisher', 'infantry', 'cavalry'],
+    name: 'Covering Fire',
+    actions: '2',
+    description: 'Your army’s ranged fire provides cover and protection for an allied army to maneuver. Attempt a ranged Strike against a target army’s AC.',
+    type: 'attack',
+    criticalSuccess: 'You inflict 2 points of damage to the target army, and it cannot take reactions triggered by maneuver war actions from any army until the start of your next turn.',
+    success: 'You inflict 1 point of damage to the target army, and it can’t take reactions triggered by maneuver war actions from any army until the start of your next turn.',
+    failure: 'Your attack fails to provide covering fire, but you inflict 1 point of damage to the target army.',
+    criticalFailure: 'Your attempt fails.',
+}, {
+    requiresUnlock: true,
+    restrictedTypes: ['infantry'],
+    name: 'Defensive Stance',
+    actions: '2',
+    description: 'Your army hunkers down behind its shields, presents pole arms in a wall of blades, or moves into position to protect a target allied army that is outflanked. Attempt a Maneuver check against an enemy army.',
+    criticalSuccess: 'The target allied army is no longer outflanked by any army.',
+    success: 'The target allied army is no longer outflanked by the target army.',
+    criticalFailure: 'Your defensive stance fails, and your army is now outflanked by the target enemy army.',
+}, {
+    requiresUnlock: true,
+    restrictedTypes: ['skirmisher'],
+    name: 'Dirty Fighting',
+    actions: '1',
+    description: 'Your army uses trickery, deception, and unfair tactics to attempt a devastating attack against an outflanked army. Attempt a melee Strike or a ranged Strike against the AC of a target outflanked army that is not distant.',
+    type: 'attack',
+    criticalSuccess: 'The target army becomes weary 2 until the start of your next turn.',
+    success: 'The target army becomes weary 1 until the start of your next turn.',
+    criticalFailure: 'Your attack deals no damage to the target army, which is emboldened by your failed attempt at dirty fighting. This reduces the target army’s weary value by 1.',
+}, {
+    requiresUnlock: true,
+    restrictedTypes: ['skirmisher', 'infantry'],
+    name: 'False Retreat',
+    actions: '1',
+    trigger: 'Your army succeeds at a morale check.',
+    description: 'Your army feigns defeat to trick an enemy army. Attempt a Morale check against a target army.',
+    type: 'morale',
+    criticalSuccess: 'The target army is caught off guard by your army’s deception. It becomes outflanked and is unable to take reactions until the start of your next turn.',
+    success: 'The target army is caught off guard by your army’s deception and is outflanked until the start of its next turn.',
+    criticalFailure: 'The enemy anticipated your tactic and moves to take advantage of the situation. Your army becomes outflanked until the start of your next turn.',
+}, {
+    requiresUnlock: true,
+    restrictedTypes: ['skirmisher', 'infantry'],
+    name: 'Feint',
+    actions: '1',
+    description: 'Your army launches a probing attack meant to trick the enemy into thinking you are attacking from one quarter while your real thrust comes elsewhere.',
+    type: 'attack',
+    criticalSuccess: `The target army’s defenses are thrown
+off; it is outflanked until the end of your turn.`,
+    success: 'The target army is fooled, but only momentarily. It is outflanked against the next melee Strike your army attempts against it before the end of your current turn.',
+    criticalFailure: 'The enemy anticipates your feint and presses the advantage. You are outflanked by the target army until the end of your next turn.',
+}, {
+    requiresUnlock: true,
+    restrictedTypes: ['skirmisher', 'cavalry'],
+    name: 'Outflank',
+    actions: '2',
+    requirements: 'You aren\'t engaged',
+    description: 'You send your army around an enemy’s flank to get a better attacking position and to push your enemy into disorder. Attempt a Maneuver check against the target army.',
+    type: 'maneuver',
+    criticalSuccess: 'The target army becomes outflanked until the start of your next turn. You can choose to become engaged with that army or not.',
+    success: 'The target army is outflanked until the start of your next turn. You are now engaged with that army.',
+    criticalFailure: 'You underestimate the target army’s position, and the blunder causes your army to become outflanked until the start of your next turn.',
+}, {
+    requiresUnlock: true,
+    restrictedTypes: ['siege'],
+    name: 'Overwhelming Bombardment',
+    actions: '2',
+    description: `Your siege engines focus all their fire on a fortification. This war action counts as using two ranged Strikes for
+the purposes of depleting an army’s shots. Attempt a ranged Strike against the target fortification’s AC.`,
+    type: 'attack',
+    criticalSuccess: 'You deal 2 points of damage to the fortification. You also deal 1 point of damage to up to two armies of your choice that are within the fortification.',
+    success: 'You deal 1 point of damage to the fortification, and an additional 1 point of damage either to the fortification or to an army within the fortification (your choice of which).',
+    failure: 'You deal 1 damage to the fortification.',
+    criticalFailure: 'You deal no damage, and your army becomes outflanked until the start of its next turn.',
+}, {
+    name: 'Taunt',
+    requiresUnlock: true,
+    actions: '1',
+    description: `Your army attempts to frighten and cow an enemy army.
+Attempt a Morale check against the target army.`,
+    type: 'morale',
+    criticalSuccess: 'The target army becomes shaken 2 until the start of your next turn.',
+    success: 'The target army becomes shaken 1 until the start of your next turn.',
+    criticalFailure: 'Your failed attempt bolsters the enemy’s spirits. This reduces the target army’s shaken value by 1',
+}, {
+    name: 'Trampling Charge',
+    type: 'maneuver',
+    actions: '3',
+    requiresUnlock: true,
+    description: 'The Riders trample an enemy army. They attempt a Maneuver check against a target non-engaged army’s Maneuver DC. Trampling Charge does not trigger Counterattack reactions.',
+    criticalSuccess: 'Critical Success The target army takes 2 points of damage and increases their Shaken value by 1.',
+    success: 'Success The target army takes 1 point of damage.',
+    failure: 'Failure The target army takes 1 point of damage. The Tusker Riders are now engaged with the target army.',
+    criticalFailure: 'Critical Failure The Tusker Riders are now engaged with the target army and are flat-footed until the start of their next turn.',
+}, {
+    name: 'Swift Recovery',
+    requiresUnlock: true,
+    actions: '2',
+    frequency: 'Once Per Battle',
+    effect: 'The army calls upon its magical connection to the First World to recover. This either restores 2 hit points or reduces the army’s Weary condition value by 2.',
+}, {
+    name: 'Trample',
+    requiresUnlock: true,
+    actions: '3',
+    description: 'Nomen Scouts can attempt to trample an engaged enemy army by attempting a +20 melee Strike against the army’s AC. On a hit, they inflict 1 point of damage (2 points on a critical hit) and automatically move away from the army—they are no longer engaged with that army.',
+}, {
+    name: 'Accustomed to Panic',
+    requiresUnlock: true,
+    actions: 'r',
+    trigger: 'The Sootscale Warriors’ shaken condition increases while they are not routed',
+    effect: 'The Sootscales take comfort in their fear and channel the panic into energy. Rather than increase their shaken condition, they reduce their weary condition value by 1. Additionally, when the Sootscales use the Disengage action, the result is improved one degree.',
+}, {
+    name: 'Furious Charge',
+    requiresUnlock: true,
+    actions: '1',
+    frequency: 'Oncer Per War Encounter',
+    effect: 'The Tiger Lord Berserkers charge at an enemy army, taking an Advance action to attempt to engage. If the Tiger Lords manage to engage successfully, they can attempt a melee Strike against the army as a reaction.',
+}, {
+    name: 'Reactive Rally',
+    requiresUnlock: true,
+    actions: '3',
+    requirements: 'The Tiger Lords are routed;',
+    effect: 'Instead of taking a Retreat action, the Tiger Lord Berserkers can attempt to Rally.',
+}, {
+    name: 'Revel in Battle',
+    requiresUnlock: true,
+    actions: 'r',
+    trigger: 'The Tiger Lord Berserkers score a critical hit with a melee Strike.',
+    effect: 'The barbarians are infused with vigor and furious passion at their devastating blow. The army restores 1 hit point.',
+}];
+
+type ModifierType = 'circumstance' | 'item' | 'status' | 'untyped';
+
+type ModifierSelector = 'ac' | 'morale' | 'maneuver' | 'attack' | 'ranged-attack' | 'melee-attack';
+
+interface ArmyModifier {
+    value: number | 'self.value';
+    type: ModifierType;
+    selector: ModifierSelector;
+    action?: ArmyActionName;
+}
+
+export const allConditionNames = [
+    'concealed',
+    'defeated',
+    'destroyed',
+    'distant',
+    'efficient',
+    'engaged',
+    'fortified',
+    'lost',
+    'mired',
+    'outflanked',
+    'pinned',
+    'routed',
+    'shaken',
+    'weary',
+] as const;
+
+type ArmyConditionName = typeof allConditionNames[number];
+
+
+export interface ConditionPredicate {
+    name: ArmyConditionName,
+    min: number;
+}
 
 export interface ArmyCondition {
-    name: string;
-    // todo: modifiers?
+    name: ArmyConditionName;
+    description: string;
+    value?: number;
+    grantConditions?: ConditionPredicate[],
+    modifiers?: ArmyModifier[];
+    targetModifiers?: ArmyModifier[];
 }
 
-const allArmyConditions: ArmyCondition[] = [
-    // todo
-];
+const allArmyConditions: ArmyCondition[] = [{
+    name: 'concealed',
+    description: 'A concealed army is tougher to target, and gains a +2 circumstance bonus on its Maneuver checks. Attacks against it take a –2 circumstance penalty. This condition lasts as long as the event granting the concealment persists.',
+    modifiers: [{
+        value: 2,
+        type: 'circumstance',
+        selector: 'maneuver',
+    }],
+    targetModifiers: [{
+        value: -2,
+        selector: 'attack',
+        type: 'circumstance',
+    }],
+}, {
+    name: 'defeated',
+    description: 'When an army has zero Hit Points, it becomes defeated. A defeated army cannot take war actions. A defeated army can be restored to 1 Hit Point with the Recover Army activity (although the basic DC is increased by 5 for this check). Any effect that restores a defeated army to at least 1 Hit Point removes the defeated condition. A defeated army can only be moved one hex at a time with the Deploy Army activity. A defeated army can be Disbanded normally. It can’t be used for any other Army activity as long as it remains defeated. If a defeated army takes damage, it must succeed at a DC 16 flat check or be destroyed. If all armies on a side are defeated, those armies are destroyed.',
+}, {
+    name: 'destroyed',
+    description: 'The army has been completely devastated, and it cannot be restored—it can only be replaced by a new army. Any gear the army had is ruined.',
+}, {
+    name: 'distant',
+    description: 'An army that has the distant condition has managed to retreat a fair range away from enemy armies, and is potentially poised to make an escape from the field of battle. Armies can attempt ranged Strikes against distant armies, but they take a –5 penalty on that Strike.',
+    targetModifiers: [{
+        selector: 'ranged-attack',
+        type: 'untyped',
+        value: -5,
+    }],
+}, {
+    name: 'efficient',
+    description: `The army has performed an Army activity with such speed that it can be used to attempt a second Army activity immediately, but doing so causes it to lose the efficient condition. The second Army activity suffers a –5 penalty on its check, and
+the result of this second Army activity check cannot grant the efficient condition. If the army doesn’t attempt a second Army activity, it instead loses the efficient condition and reduces the value of one condition of its choice by 1.`,
+}, {
+    name: 'engaged',
+    description: 'An army that is in close combat with one or more enemy armies becomes engaged. An army must be engaged in order to attempt melee Strikes. If an army is engaged and attempts a maneuver war action that would cause it to disengage, it provokes reactions from any enemy armies they were engaged with.',
+}, {
+    name: 'fortified',
+    description: `The army is in a defensive position as the result of a Garrison Army activity. While fortified, enemy armies cannot engage the army and the army cannot engage enemy armies. A fortified army gains a +4 item bonus to its AC and to Morale checks made
+to rally. A fortified army that uses a maneuver war action immediately loses its fortified condition.`,
+    modifiers: [{
+        value: 4,
+        type: 'item',
+        selector: 'ac',
+    }, {
+        value: 4,
+        type: 'item',
+        selector: 'morale',
+        action: 'Rally',
+    }],
+}, {
+    name: 'lost',
+    description: `When an army’s attempt to deploy to a new location fails, it can become lost. A lost army can take no Army activity other than Recover, and that only in an attempt to remove the lost condition. When an army recovers from the lost condition,
+the GM decides what the army’s new location is (typically this is at an approximate midpoint between the army’s starting point and its intended destination).`,
+}, {
+    name: 'mired',
+    description: 'The army’s movement is severely impaired. It may be bogged down in mud, snow, underbrush, rubble, or similar terrain, encumbered by carrying heavy burdens, or any other reason. Mired always has a value. A mired army takes a circumstance penalty on all maneuvers equal to its mired value and to Deploy Army checks. If an army ever becomes mired 4, it becomes pinned.',
+    // TODO: circumstance penalty to deploy army checks equal to mired value
+    value: 1,
+    modifiers: [{
+        value: 'self.value',
+        type: 'circumstance',
+        selector: 'maneuver',
+    }],
+    grantConditions: [{
+        min: 4,
+        name: 'pinned',
+    }],
+}, {
+    name: 'outflanked',
+    description: 'The army has enemies coming at it from many directions and must split its forces to deal with threats on every side. The army takes a –2 circumstance penalty to its AC.',
+    modifiers: [{
+        value: -2,
+        type: 'circumstance',
+        selector: 'ac',
+    }],
+
+}, {
+    name: 'pinned',
+    description: 'The army and cannot move freely. It has the outflanked condition and cannot use any maneuver war actions. A pinned army cannot be deployed.',
+    grantConditions: [{
+        name: 'outflanked',
+        min: 0,
+    }],
+    modifiers: [],
+}, {
+    name: 'routed',
+    description: 'The army retreats, whether due to magical compulsion or simply broken morale. On its turn, a routed army must use the Retreat war action. While routed, the army takes a –2 circumstance penalty to Morale checks. This condition ends automatically once a war encounter is resolved, but the routed army increases its shaken value by 1 in this case. If all armies on one side of a battle are routed simultaneously, the battle ends and the other army is victorious.',
+    value: 1,
+    modifiers: [{
+        value: -2,
+        type: 'circumstance',
+        selector: 'morale',
+    }],
+}, {
+    name: 'shaken',
+    description: `The army’s morale has begun to falter, be it fear in the face of a powerful enemy, a supernatural effect such as a dragon’s frightful presence, or simply the result of ill fortune in the tide of battle. Shaken always has a numerical value.
+The army’s Morale checks take a circumstance penalty equal to its shaken value, and whenever the army takes damage, it must succeed on a DC 11 flat check or its shaken value increases by 1. An army that becomes shaken 4 is automatically routed. An army reduces the value of this condition by 1 each Kingdom turn that passes during which it does not attempt an Army activity or engage in a war encounter.`,
+    value: 1,
+    grantConditions: [{
+        name: 'routed',
+        min: 4,
+    }],
+    modifiers: [{
+        selector: 'morale',
+        value: 'self.value',
+        type: 'circumstance',
+    }],
+}, {
+    name: 'weary',
+    description: 'The army is exhausted. Weary always has a numerical value. A weary army takes a circumstance penalty equal to its weary value to its AC, to its Maneuver checks, and to its Army activity checks; it takes double this circumstance penalty on Deploy Army checks. An army reduces the value of this condition by 1 each Kingdom turn that passes during which it does not attempt an Army activity or engage in a war encounter.',
+    value: 1,
+    // TODO circumstance penalty equal to value army activities, double on deploy army
+    modifiers: [{
+        selector: 'ac',
+        value: 'self.value',
+        type: 'circumstance',
+    }, {
+        selector: 'maneuver',
+        value: 'self.value',
+        type: 'circumstance',
+    }],
+}];
+
+// TODO: terrain
 
 export interface ArmyGear {
     name: string;
@@ -81,7 +485,62 @@ export interface ArmyGear {
     description: string;
     type?: string;
     quantity?: number;
-    // todo: modifiers?
+    modifiers?: ArmyModifier[];
+}
+
+function createMagicWeapon(
+    {
+        bonus,
+        type,
+        level,
+        price,
+    }: {
+        bonus: number,
+        type: 'ranged' | 'melee',
+        level: number,
+        price: number
+    }
+): ArmyGear {
+    return {
+        name: `Magic Weapons +${bonus} (${capitalize(type)})`,
+        traits: ['army', 'evocation', 'magical'],
+        type: 'magic-weapons',
+        level,
+        price,
+        description: `The army’s weapons are magic. If the army has melee and ranged weapons, choose which one is made magic when
+this gear is purchased. You can buy this gear twice—once for melee weapons and once for ranged weapons. If you purchase a more powerful version, it replaces the previous version, and the RP cost of the more powerful version is reduced by the RP cost of the replaced weapons. These weapons increase the army’s Strike with that weapon by ${bonus}.`,
+        modifiers: [{
+            type: 'item',
+            value: bonus,
+            selector: type === 'ranged' ? 'ranged-attack' : 'melee-attack',
+        }],
+    };
+}
+
+function createMagicArmor(
+    {
+        bonus,
+        level,
+        price,
+    }: {
+        bonus: number,
+        level: number,
+        price: number
+    }
+): ArmyGear {
+    return {
+        name: `Magic Armor +${bonus}`,
+        traits: ['army', 'evocation', 'magical'],
+        type: 'magic-weapons',
+        level,
+        price,
+        description: `Magic armor is magically enchanted to bolster the protection it affords to the soldiers. This armor increases the army’s AC by ${bonus}.`,
+        modifiers: [{
+            type: 'item',
+            value: bonus,
+            selector: 'ac',
+        }],
+    };
 }
 
 const allGear: ArmyGear[] = [{
@@ -97,56 +556,23 @@ const allGear: ArmyGear[] = [{
     quantity: 1,
     traits: ['army', 'consumable', 'healing', 'magical', 'necromancy', 'potion'],
     description: 'An army equipped with healing potions (these rules are the same if you instead supply the army with alchemical healing elixirs) can use a single dose as part of any Maneuver action. When an army uses a dose of healing potions, it regains 1 HP. An army can be outfitted with up to 3 doses of healing potions at a time; unlike ranged Strike shots, healing potion doses do not automatically replenish after a war encounter—new doses must be purchased.',
-}, {
-    name: 'Magic Armor +1',
-    type: 'magic-armor',
-    level: 5,
-    traits: ['abjuration', 'army', 'magical'],
-    description: 'Magic armor is magically enchanted to bolster the protection it affords to the soldiers. This armor increases the army’s AC by 1',
-    price: 5,
-}, {
-    name: 'Magic Armor +2',
-    type: 'magic-armor',
-    level: 11,
-    traits: ['abjuration', 'army', 'magical'],
-    description: 'Magic armor is magically enchanted to bolster the protection it affords to the soldiers. This armor increases the army’s AC by 2',
-    price: 50,
-}, {
-    name: 'Magic Armor +3',
-    type: 'magic-armor',
-    level: 18,
-    traits: ['abjuration', 'army', 'magical'],
-    description: 'Magic armor is magically enchanted to bolster the protection it affords to the soldiers. This armor increases the army’s AC by 3',
-    price: 75,
-}, {
-    name: 'Magic Weapons',
-    traits: ['army', 'evocation', 'magical'],
-    type: 'magic-weapons',
-    level: 2,
-    price: 20,
-    description: `The army’s weapons are magic. If the army has melee and ranged weapons, choose which one is made magic when
-this gear is purchased. You can buy this gear twice—once for melee weapons and once for ranged weapons. If you purchase a more powerful version, it replaces the previous version, and the RP cost of the more powerful version is reduced by the RP cost of the replaced weapons. These weapons increase the army’s Strike with that weapon by 1.`,
-}, {
-    name: 'Magic Weapons +2',
-    traits: ['army', 'evocation', 'magical'],
-    type: 'magic-weapons',
-    level: 10,
-    price: 40,
-    description: `The army’s weapons are magic. If the army has melee and ranged weapons, choose which one is made magic when
-this gear is purchased. You can buy this gear twice—once for melee weapons and once for ranged weapons. If you purchase a more powerful version, it replaces the previous version, and the RP cost of the more powerful version is reduced by the RP cost of the replaced weapons. These weapons increase the army’s Strike with that weapon by 2.`,
-}, {
-    name: 'Magic Weapons +3',
-    traits: ['army', 'evocation', 'magical'],
-    type: 'magic-weapons',
-    level: 16,
-    price: 60,
-    description: `The army’s weapons are magic. If the army has melee and ranged weapons, choose which one is made magic when
-this gear is purchased. You can buy this gear twice—once for melee weapons and once for ranged weapons. If you purchase a more powerful version, it replaces the previous version, and the RP cost of the more powerful version is reduced by the RP cost of the replaced weapons. These weapons increase the army’s Strike with that weapon by 3.`,
-}];
+},
+    createMagicArmor({bonus: 1, price: 25, level: 5}),
+    createMagicArmor({bonus: 2, price: 50, level: 11}),
+    createMagicArmor({bonus: 3, price: 75, level: 18}),
+    createMagicWeapon({bonus: 1, type: 'ranged', price: 20, level: 2}),
+    createMagicWeapon({bonus: 1, type: 'melee', price: 20, level: 2}),
+    createMagicWeapon({bonus: 2, type: 'ranged', price: 40, level: 10}),
+    createMagicWeapon({bonus: 2, type: 'melee', price: 40, level: 10}),
+    createMagicWeapon({bonus: 3, type: 'ranged', price: 60, level: 16}),
+    createMagicWeapon({bonus: 3, type: 'melee', price: 60, level: 16}),
+];
 
 export interface ArmyTactics {
     name: string;
-    description: string;
+    description?: string;
+    level?: number;
+    grantsActions?: ArmyActionName[];
     countsAgainstLimit?: boolean;
     unique?: boolean;
     traits?: string[];
@@ -155,6 +581,117 @@ export interface ArmyTactics {
 }
 
 const allTactics: ArmyTactics[] = [{
+    name: 'Ambush',
+    level: 8,
+    restrictedTypes: ['skirmisher'],
+    description: 'Your skirmishers are experts at ambushing. On the first round of a war encounter, if your turn occurs before any enemy army turns, you can choose to start the encounter with your army already engaged with an enemy army whose initiative result is lower than yours. If you do so, your army gains a +2 status bonus on the first Attack war action they make against that army on the first round of the encounter.',
+}, {
+    name: 'Bloodied But Unbroken',
+    level: 5,
+    restrictedTypes: ['cavalry', 'infantry', 'skirmisher'],
+}, {
+    name: 'Cavalry Experts',
+    level: 6,
+    restrictedTypes: ['cavalry'],
+    description: 'The army’s expert training with mounts increases its status bonus from its Overrun ability to +2. At 12th level, the army ignores the status penalty to Maneuver and Morale saves from its Overrun ability.',
+}, {
+    name: 'Darkvision',
+    level: 1,
+    restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
+    description: 'The army includes several spotters and scouts who have darkvision, and the rest of the soldiers have been trained to follow their lead so that the army itself functions as if it had darkvision.',
+}, {
+    name: 'Defensive Tactics',
+    level: 3,
+    restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
+    description: `The army is especially good at enacting defensive tactics. The army gains a +1 status bonus on Maneuver checks
+made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. The army can use the Defensive Stance tactical war action.`,
+    grantsActions: ['Defensive Stance'],
+}, {
+    name: 'Explosive Shot',
+    level: 11,
+    restrictedTypes: ['siege'],
+    description: 'The army’s ranged attacks explode and spray fire, shrapnel, or other damaging material in every direction. Whenever the army critically hits a non-distant army with a ranged Strike, inflict 1 point of additional damage to another non-distant enemy army of your choice. You can use the Overwhelming Bombardment tactical war action with the army.',
+    grantsActions: ['Overwhelming Bombardment'],
+}, {
+    name: 'Field Triage',
+    level: 6,
+    restrictedTypes: ['infantry', 'skirmisher'],
+    description: 'The army’s soldiers are adept at using emergency methods to treat wounds. The army gains the Battlefield Medicine tactical war action.',
+    grantsActions: ['Battlefield Medicine'],
+}, {
+    name: 'Flaming Shot',
+    level: 9,
+    restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
+    description: 'The army attacks with projectiles treated with alchemical or magical oils that ignite as they are fired. When your army succeeds at a ranged Strike, the target army must attempt a Maneuver check against your army’s attack DC; if it fails, the Strike inflicts 1 additional point of damage.',
+}, {
+    name: 'Flexible Tactics',
+    level: 5,
+    restrictedTypes: ['infantry', 'skirmisher'],
+    description: 'The army uses unconventional tactics. You can use the Dirty Fighting, False Retreat, and Feint tactical war actions, and the Counterattack tactical reaction with the army.',
+    grantsActions: ['Dirty Fighting', 'False Retreat', 'Feint'],
+}, {
+    name: 'Focused Devotion',
+    level: 3,
+    restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
+    description: 'The army is particularly loyal to your cause. The army gains a +1 status bonus on Morale checks made to Rally. This bonus increases to +2 at 9th level, and +3 at 17th level. The army can use the Taunt tactical war action.',
+}, {
+    name: 'Hold the Line',
+    level: 1,
+    restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
+    description: 'The army has trained to maintain position even in the face of overwhelming opponents. The army gains a +1 status bonus on Morale checks made to resist rout, and its Rout Threshold is equal to 1/4 it’s total Hit Points (rounded up).',
+}, {
+    name: 'Increased Ammunition',
+    level: 5,
+    restrictedTypes: ['cavalry', 'infantry', 'skirmisher', 'siege'],
+    description: 'You increase the number of times your army can use ranged Strikes in each war encounter by 2. This tactic can be taken multiple times; each time you do so, increase the army’s maximum number of ranged Strikes by 2.',
+}, {
+    name: 'Keen Eyed',
+    level: 1,
+    restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
+    description: 'The army includes several spotters and scouts who are particularly keen-eyed. The army gains a +2 status bonus on initiative checks.',
+}, {
+    name: 'Keep Up The Pressure',
+    level: 3,
+    restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
+    description: 'The commander’s swift, decisive directions help the army attack more accurately. If an army attacks the same target a second time in a round, its multiple attack penalty is –4 rather than –5, and if they attack that same army a third time in a round, its multiple attack penalty is –8 rather than –10.',
+}, {
+    name: 'Live Off The Land',
+    level: 1,
+    restrictedTypes: ['cavalry', 'infantry', 'skirmisher'],
+    description: 'The army is trained to be self-sufficient and sustains itself via hunting and gathering when they’re in the wild. If during a Kingdom turn’s Upkeep phase this army is located in a hex that doesn’t include a settlement, and if the army is not garrisoned, it reduces its Consumption by 1.',
+}, {
+    name: 'Low-Light Vision',
+    level: 1,
+    restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
+    description: 'The army includes several spotters and scouts who have low-light vision, and the rest of the soldiers have been trained to follow their lead so that the army itself functions as if it had low-light vision.',
+}, {
+    name: 'Merciless',
+    level: 5,
+    restrictedTypes: ['cavalry', 'infantry'],
+    description: 'This army is difficult to escape from. The army’s Mobility DC gains a +2 status bonus when other armies attempt Mobility checks against it while attempting to Disengage. This army can use the All-Out Assault tactical war action.',
+    grantsActions: ['All-Out Assault'],
+}, {
+    name: 'Opening Salvo',
+    level: 8,
+    restrictedTypes: ['cavalry', 'siege', 'skirmisher'],
+    description: 'Your army has trained to take the first shot at distant foes. On the first round of a war encounter, if your turn occurs before any enemy army turns, you can choose to start the encounter with your army distant from all enemy armies.',
+}, {
+    name: 'Reckless Flankers',
+    level: 5,
+    restrictedTypes: ['cavalry', 'skirmisher'],
+    description: 'Your army is skilled at surrounding their foes and distracting them, at the cost of spreading out too much and being more vulnerable. When you use the Advance war action to successfully engage an army, you can choose to take a –2 circumstance penalty to your AC in order to gain a +1 circumstance bonus on attack rolls. If you do so, these modifiers remain in effect until you are no longer engaged. You can use the Outflank tactical war action.',
+}, {
+    name: 'Sharpshooter',
+    level: 5,
+    restrictedTypes: ['cavalry', 'infantry', 'skirmisher'],
+    description: 'The commander drills the army in precision ranged attacks. You gain a +1 status bonus on attacks with ranged Strikes, but suffer a –2 status bonus on attacks with melee Strikes. At 9th level, the penalty to melee Strikes is reduced to –1, and at 15th level the penalty to melee Strikes is removed. The army can use the Covering Fire tactical war action.',
+    grantsActions: ['Covering Fire'],
+}, {
+    name: 'Toughened Soldiers',
+    level: 1,
+    restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
+    description: 'The army is particularly hardy. Increase its maximum Hit Points by 1. You can take this tactic multiple times; each time you do, increase the army’s maximum Hit Points by 1.',
+}, {
     name: 'Overrun',
     description: 'Cavalry armies gain a +1 status bonus on weapon attacks against infantry and skirmisher armies, but they suffer a –1 status penalty on Maneuver and Morale saves against area attacks and mental attacks.',
 }, {
@@ -164,10 +701,12 @@ const allTactics: ArmyTactics[] = [{
     name: 'Brutal Assault',
     description: 'The Troll Marauders can use the All-Out Assault action. When they do, an army damaged by the assault must succeed at a DC 24 Morale check to avoid becoming shaken 1 (or shaken 2 on a critical failure) as a result of the brutality of this attack.',
     unique: true,
+    grantsActions: ['All-Out Assault'],
 }, {
     name: 'Frightening Foe',
     description: 'The Troll Marauders can use the Taunt tactical action. When they do, they gain a +2 status bonus on their Morale check if they used the Regeneration tactic this turn.',
     unique: true,
+    grantsActions: ['Taunt'],
 }, {
     name: 'Regeneration',
     unique: true,
@@ -176,6 +715,7 @@ const allTactics: ArmyTactics[] = [{
     name: 'Tactical Training',
     unique: true,
     description: 'The Drelev Irregulars can use the All-Out Assault, Counterattack, and Dirty Fighting tactical actions.',
+    grantsActions: ['All-Out Assault', 'Counterattack', 'Dirty Fighting'],
 }, {
     name: 'Unpredictable Movement',
     unique: true,
@@ -188,34 +728,31 @@ const allTactics: ArmyTactics[] = [{
     name: 'Wyvern Venom',
     unique: true,
     description: `An army that takes damage from a Wyvern Flight’s melee strike increases its weary condition value by 1. If this would cause an army to increase its weary condition above 4, it instead takes 1 point of damage. Each time an army regains Hit Points
-during a battle, it can attempt a DC 11 flat check; on a success, it no longer suffers the ongoing effects of Wyvern Venom (but can still be affected by it later from a future attack, and does not reset its weary condition). The effects of Wyvern Venom also end as soon as an
-army escapes the battlefield or once the battle ends.`,
+during a battle, it can attempt a DC 11 flat check; on a success, it no longer suffers the ongoing effects of Wyvern Venom (but can still be affected by it later from a future attack, and does not reset its weary condition). The effects of Wyvern Venom also end as soon as an army escapes the battlefield or once the battle ends.`,
 }, {
     name: 'Wyvern Tactics',
     unique: true,
     description: 'The Wyvern Flight can use the All-Out Assault and Counterattack tactical actions.',
+    grantsActions: ['All-Out Assault', 'Counterattack'],
 }, {
     name: 'Pitaxian Training',
     unique: true,
     description: 'The Pitaxian Raiders can use the Counterattack, Dirty Fighting, and Feint tactical actions.',
+    grantsActions: ['Counterattack', 'Dirty Fighting', 'Feint'],
 }, {
     name: 'Tusker Training',
     unique: true,
     description: 'The Tusker Riders can use the All-Out Assault, Covering Fire, and Taunt tactical actions.',
+    grantsActions: ['All-Out Assault', 'Covering Fire', 'Taunt'],
 }, {
     name: 'Trampling Charge',
     unique: true,
-    description: `The Riders trample an enemy army. They attempt a Maneuver check against a target non-engaged army’s Maneuver DC. Trampling
-Charge does not trigger Counterattack reactions. 
-Critical Success The target army takes 2 points of damage and increases their Shaken value by 1.
-Success The target army takes 1 point of damage.
-Failure The target army takes 1 point of damage. The Tusker Riders are now engaged with the target army.
-Critical Failure The Tusker Riders are now engaged with the target army and are flat-footed until the start of their next turn.`,
+    description: 'The Riders trample an enemy army.',
+    grantsActions: ['Trampling Charge'],
 }, {
     name: 'Battlefield Adaptability',
     unique: true,
-    description: `The First World army has a wide range of creatures in its ranks, and it can shift its tactics to support those with different mobilities. It can take this action to achieve one of the following benefits: ignore ground-based difficult terrain, reduce
-Mired to 0, become concealed, or gain a +2 circumstance bonus on Maneuver checks to Advance and to Disengage. The effect lasts until the start of the First World Army’s next turn.`,
+    description: 'The First World army has a wide range of creatures in its ranks, and it can shift its tactics to support those with different mobilities. It can take this action to achieve one of the following benefits: ignore ground-based difficult terrain, reduce Mired to 0, become concealed, or gain a +2 circumstance bonus on Maneuver checks to Advance and to Disengage. The effect lasts until the start of the First World Army’s next turn.',
 }, {
     name: 'Primal Magic',
     traits: ['primal'],
@@ -232,14 +769,12 @@ and rain (see Battlefield Terrain Features on page 578).
     name: 'Supernatural Attacks',
     unique: true,
     traits: ['primal'],
-    description: `Whenever a First World army scores a critical hit on another army, it increases that army’s Weary condition by 1 as their
-attacks cause some soldiers to become poisoned, fall asleep, shrink in size, or suffer other eerie side effects.`,
+    description: 'Whenever a First World army scores a critical hit on another army, it increases that army’s Weary condition by 1 as their attacks cause some soldiers to become poisoned, fall asleep, shrink in size, or suffer other eerie side effects.',
 }, {
     name: 'Swift Recovery',
     traits: ['primal'],
     unique: true,
-    description: `Frequency once per battle; Effect The army calls upon its magical connection to the First World to recover. This either
-restores 2 hit points or reduces the army’s Weary condition value by 2.`,
+    grantsActions: ['Swift Recovery'],
 }, {
     name: 'Burning Weaponry',
     unique: true,
@@ -247,8 +782,7 @@ restores 2 hit points or reduces the army’s Weary condition value by 2.`,
 }, {
     name: 'Explosive Defeat',
     unique: true,
-    description: `When the Greengripe Bombardiers are defeated, their alchemical siege engine explodes. Any army engaged with the Greengripe
-Bombardiers must succeed at a Maneuver check against the Greengripe Bombardier’s Maneuver DC or take 1 point of damage (2 points of damage on a critical failure). As long as the Greengripe Bombardiers aren’t destroyed, their siege engine gear is rebuilt automatically once the army loses the defeated condition.`,
+    description: 'When the Greengripe Bombardiers are defeated, their alchemical siege engine explodes. Any army engaged with the Greengripe Bombardiers must succeed at a Maneuver check against the Greengripe Bombardier’s Maneuver DC or take 1 point of damage (2 points of damage on a critical failure). As long as the Greengripe Bombardiers aren’t destroyed, their siege engine gear is rebuilt automatically once the army loses the defeated condition.',
 }, {
     name: 'Swamp Dwellers',
     unique: true,
@@ -277,27 +811,28 @@ Bombardiers must succeed at a Maneuver check against the Greengripe Bombardier�
     name: 'Trample',
     unique: true,
     description: 'Nomen Scouts can attempt to trample an engaged enemy army by attempting a +20 melee Strike against the army’s AC. On a hit, they inflict 1 point of damage (2 points on a critical hit) and automatically move away from the army—they are no longer engaged with that army.',
+    grantsActions: ['Trample'],
 }, {
     name: 'Accustomed to Panic',
     unique: true,
-    description: `Trigger The Sootscale Warriors’ shaken condition increases while they are not routed. Effect The Sootscales take comfort
-in their fear and channel the panic into energy. Rather than increase their shaken condition, they reduce their weary condition value by 1. Additionally, when the Sootscales use the Disengage action, the result is improved one degree.`,
+    grantsActions: ['Accustomed to Panic'],
 }, {
     name: 'Furious Charge',
     unique: true,
-    description: 'Frequency once per war encounter; Effect The Tiger Lord Berserkers charge at an enemy army, taking an Advance action to attempt to engage. If the Tiger Lords manage to engage successfully, they can attempt a melee Strike against the army as a reaction.',
+    grantsActions: ['Furious Charge'],
 }, {
     name: 'Reactive Rally',
     unique: true,
-    description: 'Requirement The Tiger Lords are routed; Effect Instead of taking a Retreat action, the Tiger Lord Berserkers can attempt to Rally.',
+    grantsActions: ['Reactive Rally'],
 }, {
     name: 'Revel in Battle',
     unique: true,
-    description: 'Trigger The Tiger Lord Berserkers score a critical hit with a melee Strike. Effect The barbarians are infused with vigor and furious passion at their devastating blow. The army restores 1 hit point.',
+    grantsActions: ['Revel in Battle'],
 }, {
     name: 'Warmongers',
     unique: true,
     description: 'The Tiger Lord Berserkers can use the following Tactical Actions without needing to meet additional requirements: All-Out Assault, Counterattack, and Taunt.',
+    grantsActions: ['All-Out Assault', 'Counterattack', 'Taunt'],
 }, {
     name: 'Hurl Nets',
     unique: true,
