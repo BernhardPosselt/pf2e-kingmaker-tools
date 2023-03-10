@@ -1,0 +1,23 @@
+.km-content .editor {
+    min-height: 100px;
+}
+
+.km-name input {
+    width: 100%;
+}
+
+.km-hp {
+
+}
+
+.km-hp input {
+    width: 76px;
+}
+
+.km-shots {
+    width: 84px;
+}
+
+.km-shots input {
+    width: 30px;
+}

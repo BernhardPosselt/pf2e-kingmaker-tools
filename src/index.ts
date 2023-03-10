@@ -19,12 +19,13 @@ import {
     prepareCampsite,
     tellCampfireStory,
 } from './camping/camping';
-import {showKingdom} from './kingdom/kingdom';
+import {showKingdom} from './kingdom/sheet';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
 import {getKingdom} from './kingdom/storage';
 import {addOngoingEvent, changeDegree, parseUpgradeMeta, reRoll} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
 import {StringDegreeOfSuccess} from './degree-of-success';
+import {showArmy} from './armies/sheet';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -38,6 +39,7 @@ Hooks.on('ready', async () => {
                 postCompanionEffectsMacro: postCompanionEffects.bind(null, game),
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
                 viewKingdomMacro: showKingdom.bind(null, game),
+                viewArmyMacro: (actor: Actor, token: Token): Promise<void> => showArmy(gameInstance, actor, token),
                 stopWatchMacro: stopWatch.bind(null, game),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 subsistMacro: async (actor: any): Promise<void> => {
@@ -325,6 +327,12 @@ Hooks.on('ready', async () => {
 
 Hooks.on('init', async () => {
     await loadTemplates([
+        'modules/pf2e-kingmaker-tools/templates/army/sidebar.hbs',
+        'modules/pf2e-kingmaker-tools/templates/army/status.hbs',
+        'modules/pf2e-kingmaker-tools/templates/army/gear.hbs',
+        'modules/pf2e-kingmaker-tools/templates/army/actions.hbs',
+        'modules/pf2e-kingmaker-tools/templates/army/conditions.hbs',
+        'modules/pf2e-kingmaker-tools/templates/army/tactics.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/sidebar.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/status.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/skills.hbs',

@@ -1,0 +1,89 @@
+<table class="km-table">
+    <tr>
+        <th>HP</th>
+        <td class="km-hp">
+            <input name="currentHp" id="km-army-currentHp" value="{{currentHp}}" type="number"> /
+            <input name="hp" id="km-army-hp" value="{{hp}}" type="number">
+        </td>
+    </tr>
+    <tr>
+        <th>Route Threshold</th>
+        <td><input name="routeThreshold" id="km-army-routeThreshold" value="{{routeThreshold}}" type="number"></td>
+    </tr>
+    <tr>
+        <th>Armor Class</th>
+        <td>{{ac}}</td>
+    </tr>
+    <tr>
+        <th>Scouting</th>
+        <td>{{scouting}}</td>
+    </tr>
+    <tr>
+        <th>Recruitment DC</th>
+        <td>{{recruitmentDC}}</td>
+    </tr>
+    <tr>
+        <th>Consumption</th>
+        <td><input name="consumption" id="km-army-consumption" value="{{consumption}}" type="number"></td>
+    </tr>
+    <tr>
+        <th>High Save</th>
+        <td>
+            <select name="highSave" id="km-army-highSave">
+                {{#select highSave}}
+                    {{#each saves}}
+                        <option value="{{this.value}}">{{this.label}}</option>
+                    {{/each}}
+                {{/select}}
+            </select>
+        </td>
+    </tr>
+</table>
+
+<table class="km-table">
+    <tr>
+        <th>Save</th>
+        <th>Modifier</th>
+    </tr>
+    <tr>
+        <td>Morale</td>
+        <td><button type="button">{{morale}} <i class="fa-solid fa-dice-d20"></i></button></td>
+    </tr>
+    <tr>
+        <td>Maneuver</td>
+        <td><button type="button">{{maneuver}} <i class="fa-solid fa-dice-d20"></i></button></td>
+    </tr>
+</table>
+
+{{#if melee}}
+    <table class="km-table">
+        <tr>
+            <th>Melee Weapon</th>
+            <th>Modifier</th>
+            <!-- todo plus -->
+        </tr>
+        <tr>
+            <td><input name="melee.name" id="km-army-melee-name" value="{{melee.name}}" type="text"></td>
+            <td><button type="button">{{meleeModifier}} <i class="fa-solid fa-dice-d20"></i></button></td>
+        </tr>
+    </table>
+{{/if}}
+
+{{#if ranged}}
+    <table class="km-table">
+        <tr>
+            <th>Ranged Weapon</th>
+            <th>Shots</th>
+            <th>Modifier</th>
+            <!-- todo plus -->
+        </tr>
+        <tr>
+            <td><input name="ranged.name" id="km-army-ranged-name" value="{{ranged.name}}" type="text"></td>
+            <td class="km-shots">
+                <input name="ranged.currentShots" id="km-army-ranged-current-shots" value="{{ranged.currentShots}}" type="number"> /
+                <input name="ranged.shots" id="km-army-ranged-shots" value="{{ranged.shots}}" type="number">
+            </td>
+            <td><button type="button">{{rangedModifier}} <i class="fa-solid fa-dice-d20"></i></button></td>
+        </tr>
+    </table>
+{{/if}}

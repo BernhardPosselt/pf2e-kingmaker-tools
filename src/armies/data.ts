@@ -1,11 +1,11 @@
-interface Fortification {
+export interface Fortification {
     name: string;
     ac: number;
     hp: number;
     maximumArmies: number;
 }
 
-const allFortifications: Fortification[] = [
+export const allFortifications: Fortification[] = [
     {name: 'Castle', ac: 30, hp: 8, maximumArmies: 6},
     {name: 'Keep', ac: 25, hp: 5, maximumArmies: 4},
     {name: 'Tower', ac: 20, hp: 2, maximumArmies: 1},
@@ -34,7 +34,7 @@ const allArmyStatistics: ArmyStatistic[] = [
     {level: 6, scouting: 14, standardDC: 22, ac: 24, highSave: 17, lowSave: 11, attack: 17, maximumTactics: 2},
     {level: 7, scouting: 15, standardDC: 23, ac: 25, highSave: 18, lowSave: 12, attack: 18, maximumTactics: 2},
     {level: 8, scouting: 16, standardDC: 24, ac: 27, highSave: 19, lowSave: 13, attack: 20, maximumTactics: 3},
-    {level: 9, scouting: 18, standardDC: 26, ac: 28,highSave: 21, lowSave: 15, attack: 21, maximumTactics: 3},
+    {level: 9, scouting: 18, standardDC: 26, ac: 28, highSave: 21, lowSave: 15, attack: 21, maximumTactics: 3},
     {level: 10, scouting: 19, standardDC: 27, ac: 30, highSave: 22, lowSave: 16, attack: 23, maximumTactics: 3},
     {level: 11, scouting: 21, standardDC: 28, ac: 31, highSave: 24, lowSave: 18, attack: 24, maximumTactics: 3},
     {level: 12, scouting: 22, standardDC: 30, ac: 33, highSave: 25, lowSave: 19, attack: 26, maximumTactics: 4},
@@ -48,7 +48,10 @@ const allArmyStatistics: ArmyStatistic[] = [
     {level: 20, scouting: 33, standardDC: 40, ac: 45, highSave: 36, lowSave: 30, attack: 38, maximumTactics: 6},
 ];
 
-interface ArmyAction {
+export const armyStatisticsByLevel: Map<number, ArmyStatistic> = new Map<number, ArmyStatistic>();
+allArmyStatistics.forEach(army => armyStatisticsByLevel.set(army.level, army));
+
+export interface ArmyAction {
     name: string;
     type: 'attack' | 'morale' | 'maneuver';
     actions: '1' | '2' | '3' | 'r';
@@ -61,7 +64,7 @@ const allArmyActions: ArmyAction[] = [
     // TODO:
 ];
 
-interface ArmyCondition {
+export interface ArmyCondition {
     name: string;
     // todo: modifiers?
 }
@@ -70,7 +73,7 @@ const allArmyConditions: ArmyCondition[] = [
     // todo
 ];
 
-interface ArmyGear {
+export interface ArmyGear {
     name: string;
     level: number;
     price: number;
@@ -141,7 +144,7 @@ this gear is purchased. You can buy this gear twice—once for melee weapons and
 this gear is purchased. You can buy this gear twice—once for melee weapons and once for ranged weapons. If you purchase a more powerful version, it replaces the previous version, and the RP cost of the more powerful version is reduced by the RP cost of the replaced weapons. These weapons increase the army’s Strike with that weapon by 3.`,
 }];
 
-interface ArmyTactics {
+export interface ArmyTactics {
     name: string;
     description: string;
     countsAgainstLimit?: boolean;
@@ -314,194 +317,290 @@ export const allTacticsByName: Record<string, ArmyTactics> = Object.fromEntries(
     .map((tactic) => [tactic.name, tactic]));
 
 
-
-
-interface MeleeAttack {
+export interface MeleeAttack {
     name: string;
-    modifier: number;
     plus?: string[];
 }
 
-interface RangedAttack extends MeleeAttack {
+export interface RangedAttack extends MeleeAttack {
     shots: number;
+    currentShots: number;
 }
 
-type ArmyType = 'skirmisher' | 'infantry' | 'cavalry' | 'siege'
+export const allArmyTypes = ['skirmisher', 'infantry', 'cavalry', 'siege'] as const;
+export const allAlignments = ['LG', 'NG', 'CG', 'LN', 'N', 'CN', 'LE', 'NE', 'CE'] as const;
+export const allAlignmentLabels = [
+    'Lawful Good', 'Neutral Good', 'Chaotic Good',
+    'Lawful Neutral', 'Neutral', 'Chaotic Neutral',
+    'Lawful Evil', 'Neutral Evil', 'Chaotic Evil',
+];
+export const allRarities = ['common', 'uncommon', 'rare', 'unique'] as const;
+export const allLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] as const;
+export type ArmyType = typeof allArmyTypes[number];
 
-interface Army {
-    adjustments?: {
-        scouting?: number;
-        recruitmentDC?: number;
-        ac?: number;
-        melee?: number;
-        ranged?: number;
-        morale?: number;
-        maneuver?: number;
-    },
-    alignment?: 'LG' | 'NG' | 'CG' | 'LN' | 'N' | 'CN' | 'LE' | 'NE' | 'CE';
-    rarity?: 'common' | 'uncommon' | 'rare' | 'unique';
+export type Alignment = typeof allAlignments[number];
+
+export type Rarity = typeof allRarities[number];
+
+
+export interface ArmyAdjustments {
     scouting: number;
-    maneuver: number;
-    morale: number;
-    recruitmentDC?: number;
-    consumption?: number;
-    description: string;
+    recruitmentDC: number;
     ac: number;
+    melee: number;
+    ranged: number;
+    morale: number;
+    maneuver: number;
+}
+
+export const allArmySaves = [
+    'maneuver',
+    'morale',
+] as const;
+
+export type ArmySave = typeof allArmySaves[number];
+
+export interface Army {
+    adjustments: ArmyAdjustments,
+    alignment: Alignment;
+    rarity: Rarity;
+    highSave: ArmySave
+    consumption: number;
+    description: string;
     hp: number;
-    routeThreshold?: number;
+    currentHp: number;
+    routeThreshold: number;
     level: number;
     name: string;
     melee?: MeleeAttack;
     ranged?: RangedAttack;
     type: ArmyType;
-    gear?: ArmyGear[];
-    conditions?: ArmyCondition[];
-    tactics?: ArmyTactics[];
-    specialAbilities?: any;
+    gear: ArmyGear[];
+    conditions: ArmyCondition[];
+    tactics: ArmyTactics[];
 }
 
 
-
-
 const armies: Army[] = [{
+    adjustments: {
+        ranged: 0,
+        melee: 0,
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        ac: 0,
+        scouting: 0,
+    },
+    rarity: 'common',
+    alignment: 'N',
     name: 'Infantry',
-    recruitmentDC: 15,
     consumption: 1,
     description: 'This is a platoon of armored soldiers armed with melee weapons.',
-    ac: 16,
-    maneuver: 4,
-    morale: 10,
+    highSave: 'morale',
     hp: 4,
+    currentHp: 4,
+    routeThreshold: 2,
     melee: {
         name: 'Weapons',
-        modifier: 9,
     },
     level: 1,
-    scouting: 7,
     type: 'infantry',
+    tactics: [],
+    gear: [],
+    conditions: [],
 }, {
+    adjustments: {
+        ranged: 0,
+        melee: 0,
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        ac: 0,
+        scouting: 0,
+    },
+    rarity: 'common',
+    alignment: 'N',
     name: 'Cavalry',
     level: 3,
-    scouting: 9,
     type: 'cavalry',
     consumption: 2,
-    recruitmentDC: 18,
-    ac: 19,
     hp: 4,
+    currentHp: 4,
+    routeThreshold: 2,
     melee: {
         name: 'Weapons',
-        modifier: 12,
     },
-    morale: 6,
-    maneuver: 12,
+    highSave: 'maneuver',
     description: 'Cavalry consists of armored soldiers armed with melee weapons and mounted on horses.',
     tactics: [allTacticsByName['Overrun']],
+    gear: [],
+    conditions: [],
 }, {
+    rarity: 'common',
+    alignment: 'N',
     name: 'Skirmishers',
     level: 5,
     type: 'skirmisher',
-    scouting: 12,
-    recruitmentDC: 20,
     consumption: 1,
+    routeThreshold: 2,
     description: 'Skirmishers are lightly armored, but their ability to move quickly and to focus on individual tactics rather than working as a unit make them more resilient in other ways. A skirmisher army’s AC is two lower than normal for its level, but its Maneuver and Morale are two higher than normal for its level.',
-    ac: 20,
-    maneuver: 17,
-    morale: 11,
+    highSave: 'maneuver',
+    adjustments: {
+        ranged: 0,
+        melee: 0,
+        recruitmentDC: 0,
+        scouting: 0,
+        ac: -2,
+        maneuver: 2,
+        morale: 2,
+    },
     hp: 4,
+    currentHp: 4,
     melee: {
-        modifier: 15,
         name: 'Weapons',
     },
+    tactics: [],
+    gear: [],
+    conditions: [],
 }, {
+    rarity: 'common',
+    alignment: 'N',
     name: 'Siege Engines',
     level: 7,
     type: 'siege',
-    scouting: 15,
-    recruitmentDC: 23,
     consumption: 1,
     description: 'A siege engine army consists of several catapults, ballistae, trebuchets, or other mechanized engines of war.',
-    ac: 25,
-    maneuver: 12,
-    morale: 18,
+    highSave: 'morale',
     hp: 6,
+    currentHp: 6,
+    routeThreshold: 3,
+    adjustments: {
+        melee: 0,
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        ac: 0,
+        scouting: 0,
+        ranged: -3,
+    },
     ranged: {
+        currentShots: 5,
         name: 'Siege Engine',
-        modifier: 15,
         shots: 5,
     },
     tactics: [allTacticsByName['Engines of War']],
+    gear: [],
+    conditions: [],
 }, {
+    adjustments: {
+        ranged: 0,
+        melee: 0,
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        ac: 0,
+        scouting: 0,
+    },
+    rarity: 'common',
     name: 'Tatzlford Town Guard',
     alignment: 'NG',
     type: 'infantry',
     level: 7,
-    scouting: 15,
     consumption: 1,
     description: 'Tatzlford’s town guards have been organized into an impromptu army armed with longswords and led by Captain Coren Lawry.',
-    ac: 25,
-    maneuver: 12,
-    morale: 18,
+    highSave: 'morale',
     hp: 5,
+    currentHp: 5,
     routeThreshold: 2,
     melee: {
-        modifier: 18,
         name: 'Longswords',
     },
     tactics: [allTacticsByName['Hold the Line'], allTacticsByName['Toughened Soldiers']],
+    gear: [],
+    conditions: [],
 }, {
+    rarity: 'common',
     name: 'Narlmarch Hunters',
     level: 6,
     alignment: 'NG',
     type: 'skirmisher',
-    scouting: 14,
     consumption: 1,
     description: 'This army is a band of hunters and trappers who have gathered into a ragtag group of archers led by Mayor Loy Rezbin.',
-    ac: 24,
-    maneuver: 17,
-    morale: 11,
+    highSave: 'maneuver',
     hp: 4,
+    currentHp: 4,
+    routeThreshold: 2,
+    adjustments: {
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        ac: 0,
+        scouting: 0,
+        melee: -2,
+        ranged: 1,
+    },
     melee: {
         name: 'Hatchets and Shortswords',
-        modifier: 15,
     },
     ranged: {
+        currentShots: 7,
         name: 'Longbows',
-        modifier: 18,
         shots: 7,
     },
     tactics: [allTacticsByName['Efficient Ammunition'], allTacticsByName['Sharpshooter']],
+    gear: [],
+    conditions: [],
 }, {
+    consumption: 0,
+    rarity: 'common',
     name: 'Drelev Irregulars',
     level: 7,
     alignment: 'CE',
     type: 'infantry',
-    scouting: 15,
     description: `The Drelev Irregulars are composed of equal parts Tiger Lords and mercenaries who were once bandits. Their fighting style is more akin to a mob than a disciplined force; while this allows the irregulars an advantage in mobility, it decentralizes their command
 structure and lessens their morale.`,
-    ac: 25,
-    maneuver: 19,
-    morale: 11,
+    highSave: 'maneuver',
+    adjustments: {
+        ranged: 0,
+        melee: 0,
+        recruitmentDC: 0,
+        ac: 0,
+        scouting: 0,
+        maneuver: 1,
+        morale: -1,
+    },
     hp: 4,
+    currentHp: 4,
+    routeThreshold: 2,
     melee: {
         name: 'Swords and Axes',
-        modifier: 18,
     },
     tactics: [allTacticsByName['Tactical Training']],
+    gear: [],
+    conditions: [],
 }, {
+    rarity: 'common',
+    consumption: 0,
     name: 'Troll Marauders',
     level: 8,
     alignment: 'NE',
     type: 'infantry',
-    scouting: 14,
+    adjustments: {
+        ranged: 0,
+        melee: 0,
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        scouting: -2,
+        ac: 1,
+    },
     description: 'There are only a few dozen trolls in this army, but their ferocity and regenerative capability make them a dangerous force nonetheless.',
-    ac: 28,
-    maneuver: 13,
-    morale: 19,
+    highSave: 'morale',
     hp: 5,
+    currentHp: 5,
     routeThreshold: 1,
     melee: {
         name: 'Claws and Fangs',
-        modifier: 20,
     },
     tactics: [
         allTacticsByName['Brutal Assault'],
@@ -509,45 +608,67 @@ structure and lessens their morale.`,
         allTacticsByName['Frightening Foe'],
         allTacticsByName['Regeneration'],
     ],
+    gear: [],
+    conditions: [],
 }, {
+    consumption: 0,
+    rarity: 'common',
     name: 'Pitaxian Raiders',
     level: 12,
     alignment: 'CN',
     type: 'skirmisher',
-    scouting: 22,
     description: 'The Pitaxian Raiders consist of a mix of Pitax city guards and mercenaries eager for battle.',
-    ac: 33,
-    maneuver: 25,
-    morale: 19,
+    highSave: 'maneuver',
     hp: 4,
+    currentHp: 4,
+    routeThreshold: 2,
+    adjustments: {
+        melee: 0,
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        ac: 0,
+        scouting: 0,
+        ranged: -2,
+    },
     melee: {
         name: 'Swords',
-        modifier: 26,
     },
     ranged: {
+        currentShots: 7,
         name: 'Longbows',
-        modifier: 24,
         shots: 7,
     },
     tactics: [allTacticsByName['Pitaxian Training']],
+    gear: [],
+    conditions: [],
 }, {
+    consumption: 0,
+    rarity: 'common',
     name: 'Tusker Riders',
     level: 14,
     type: 'cavalry',
     alignment: 'CE',
-    scouting: 24,
+    adjustments: {
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        scouting: 1,
+        ac: -1,
+        melee: 1,
+        ranged: -1,
+    },
     description: 'The hill giant warlord Kob Moleg sent these mammoth-mounted hill giants to King Irovetti as a gift.',
-    ac: 35,
-    maneuver: 22,
-    morale: 28,
+    highSave: 'morale',
     hp: 8,
+    currentHp: 8,
+    routeThreshold: 4,
     melee: {
         name: 'Morningstars and Tusks',
-        modifier: 30,
     },
     ranged: {
+        currentShots: 5,
         name: 'Thrown Rock',
-        modifier: 28,
         shots: 5,
     },
     tactics: [
@@ -555,21 +676,31 @@ structure and lessens their morale.`,
         allTacticsByName['Trampling Charge'],
         allTacticsByName['Darkvision'],
     ],
+    gear: [],
+    conditions: [],
 }, {
+    consumption: 0,
+    rarity: 'common',
     name: 'Wyvern Flight',
     level: 12,
     alignment: 'CE',
     type: 'skirmisher',
-    scouting: 23,
+    adjustments: {
+        ranged: 0,
+        maneuver: 0,
+        recruitmentDC: 0,
+        ac: 0,
+        scouting: 1,
+        morale: -2,
+        melee: -8,
+    },
     description: 'This flight of wyverns has been trained to obey orders in battle',
-    ac: 33,
-    maneuver: 25,
-    morale: 17,
+    highSave: 'maneuver',
     hp: 4,
+    currentHp: 4,
     routeThreshold: 3,
     melee: {
         name: 'Fangs, Claws and Stingers',
-        modifier: 18,
         plus: ['Wyvern Venom'],
     },
     tactics: [
@@ -578,41 +709,65 @@ structure and lessens their morale.`,
         allTacticsByName['Wyvern Venom'],
         allTacticsByName['Wyvern Tactics'],
     ],
+    gear: [],
+    conditions: [],
 }, {
+    consumption: 0,
+    rarity: 'common',
     name: 'Pitax Horde',
     level: 10,
     alignment: 'CN',
     type: 'infantry',
-    scouting: 19, // TODO: 22 in encounter site gl2,
+    adjustments: {
+        // 22 for scouting in gl2
+        // 24 for maneuver in gl2
+        ranged: 0,
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        ac: 0,
+        scouting: 0,
+        melee: 2,
+    },
     description: 'The Pitax Horde consists of human warriors from seven different minor clans in Glenebon.',
-    ac: 30,
-    maneuver: 22, // TODO: 24 in encounter site gl2
-    morale: 16,
+    highSave: 'maneuver',
     hp: 5,
+    currentHp: 5,
     routeThreshold: 2,
     melee: {
         name: 'Greater Magic Axes',
-        modifier: 25,
     },
     tactics: [
         allTacticsByName['Live off the Land'],
         allTacticsByName['Merciless'],
         allTacticsByName['Toughened Soldiers'],
     ],
+    gear: [],
+    conditions: [],
 }, {
+    consumption: 0,
+    adjustments: {
+        ranged: 0,
+        melee: 0,
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        ac: 0,
+        scouting: 0,
+    },
+    rarity: 'common',
     name: 'Pitax War Machines',
     level: 14,
     alignment: 'CN',
     type: 'siege',
-    scouting: 25,
     description: 'These siege weapons are positioned atop all of the city’s watchtowers and afford a controlling view of all approaches.',
-    ac: 36,
-    maneuver: 22,
-    morale: 28,
+    highSave: 'morale',
     hp: 8,
+    currentHp: 8,
+    routeThreshold: 4,
     ranged: {
+        currentShots: 7,
         name: 'Siege Engine',
-        modifier: 29,
         shots: 7,
     },
     tactics: [
@@ -621,25 +776,35 @@ structure and lessens their morale.`,
         allTacticsByName['Toughened Soldiers'],
         allTacticsByName['Toughened Soldiers'],
     ],
+    gear: [],
+    conditions: [],
 }, {
+    consumption: 0,
     name: 'First World Army',
     level: 16,
     rarity: 'rare',
     alignment: 'CE',
     type: 'skirmisher',
-    scouting: 28,
+    adjustments: {
+        maneuver: 0,
+        recruitmentDC: 0,
+        morale: 0,
+        scouting: 0,
+        ac: -1,
+        ranged: 1,
+        melee: 1,
+    },
     description: 'This army is composed of an eclectic mix of fey, beasts, and plants—a supernatural mob of monsters with a wide range of options in battle.',
-    ac: 38,
-    maneuver: 30,
-    morale: 25,
+    highSave: 'maneuver',
     hp: 6,
+    currentHp: 6,
+    routeThreshold: 3,
     melee: {
         name: 'Weapons and Claws',
-        modifier: 33,
     },
     ranged: {
+        currentShots: 5,
         name: 'Bows and Hurled Thorns',
-        modifier: 33,
         shots: 5,
     },
     tactics: [
@@ -654,32 +819,35 @@ structure and lessens their morale.`,
             description: 'The First World Army can use the following tactical actions: counterattack, dirty fighting, feint, and taunt.',
         },
     ],
+    gear: [],
+    conditions: [],
 }, {
+    alignment: 'N',
     name: 'Greengripe Bombardiers',
     level: 7,
     rarity: 'rare',
     type: 'siege',
     adjustments: {
+        ranged: 0,
+        maneuver: 0,
+        morale: 0,
         scouting: -2,
         recruitmentDC: 5,
         ac: -2,
         melee: 1,
     },
-    scouting: 13,
-    recruitmentDC: 28,
     consumption: 2,
     description: 'Greengripe goblins have built a mobile platform outfitted with a catapult-like flinging arm that can throw flammable debris.',
-    ac: 23,
-    maneuver: 12,
-    morale: 18,
+    highSave: 'morale',
     hp: 6,
+    currentHp: 6,
+    routeThreshold: 3,
     melee: {
         name: 'Dogslicers and Torches',
-        modifier: 19,
     },
     ranged: {
+        currentShots: 5,
         name: 'Burning Debris',
-        modifier: 18,
         shots: 5,
     },
     tactics: [
@@ -687,61 +855,69 @@ structure and lessens their morale.`,
         allTacticsByName['Darkvision'],
         allTacticsByName['Explosive Defeat'],
     ],
+    gear: [],
+    conditions: [],
 }, {
+    alignment: 'N',
     name: 'Lizardfolk Defenders',
     level: 5,
     rarity: 'uncommon',
     type: 'skirmisher',
     adjustments: {
+        ranged: 0,
+        melee: 0,
+        maneuver: 0,
+        morale: 0,
         scouting: 2,
         recruitmentDC: 2,
         ac: 1,
     },
-    scouting: 14,
-    recruitmentDC: 22,
     consumption: 1,
     description: 'These lizardfolk are from the settlement on the banks of Candlemere (encounter site KL3); they fight with flails and javelins.',
-    ac: 23,
-    maneuver: 9,
-    morale: 15,
+    highSave: 'morale',
     hp: 4,
+    currentHp: 4,
+    routeThreshold: 2,
     melee: {
         name: 'Flails',
-        modifier: 12,
     },
     ranged: {
+        currentShots: 5,
         name: 'Javelins',
-        modifier: 12,
         shots: 5,
     },
     tactics: [
         allTacticsByName['Swamp Dwellers'],
     ],
+    gear: [],
+    conditions: [],
 }, {
     name: 'M\'Botuu Frog Riders',
+    alignment: 'N',
     level: 10,
     rarity: 'rare',
     type: 'cavalry',
     adjustments: {
+        ranged: 0,
+        maneuver: 0,
+        ac: 0,
+        scouting: 0,
         recruitmentDC: 5,
         morale: 2,
         melee: 2,
     },
-    scouting: 19,
-    recruitmentDC: 32,
     consumption: 2,
     description: 'These lance-armed boggards from M’botuu and ride giant frogs trained for warfare into battle.',
-    ac: 27,
-    maneuver: 22,
-    morale: 18,
+    highSave: 'maneuver',
     hp: 6,
+    currentHp: 6,
+    routeThreshold: 3,
     melee: {
         name: 'Lances',
-        modifier: 25,
     },
     ranged: {
+        currentShots: 5,
         name: 'Javelins',
-        modifier: 23,
         shots: 5,
     },
     tactics: [
@@ -750,31 +926,35 @@ structure and lessens their morale.`,
         allTacticsByName['Darkvision'],
         allTacticsByName['Swamp Charge'],
     ],
+    gear: [],
+    conditions: [],
 }, {
     name: 'Nomen Scouts',
+    alignment: 'N',
     level: 8,
     rarity: 'uncommon',
     type: 'cavalry',
     adjustments: {
+        ranged: 0,
+        melee: 0,
+        morale: 0,
+        ac: 0,
         scouting: 2,
         maneuver: 1,
         recruitmentDC: 2,
     },
-    scouting: 18,
-    recruitmentDC: 26,
     consumption: -1,
     description: 'This band of Nomen centaurs fight with spears and longbows.',
-    ac: 27,
-    maneuver: 14,
-    morale: 19,
+    highSave: 'morale',
     hp: 4,
+    currentHp: 4,
+    routeThreshold: 2,
     melee: {
         name: 'Spears',
-        modifier: 20,
     },
     ranged: {
+        currentShots: 5,
         name: 'Longbows',
-        modifier: 20,
         shots: 5,
     },
     tactics: [
@@ -783,62 +963,66 @@ structure and lessens their morale.`,
         allTacticsByName['Self-Sufficient'],
         allTacticsByName['Trample'],
     ],
+    gear: [],
+    conditions: [],
 }, {
     name: 'Sootscale Warriors',
+    alignment: 'N',
     level: 3,
     rarity: 'uncommon',
     type: 'infantry',
     adjustments: {
+        ranged: 0,
+        melee: 0,
+        scouting: 0,
         recruitmentDC: 2,
         ac: 1,
         maneuver: 2,
         morale: -1,
     },
-    scouting: 9,
-    recruitmentDC: 20,
     consumption: 1,
     description: 'Sootscale kobolds fight with shortswords and crossbows, although they tend to do so warily and cautiously.',
-    ac: 20,
-    maneuver: 14,
-    morale: 5,
+    highSave: 'maneuver',
     hp: 4,
+    currentHp: 4,
     routeThreshold: 3,
     melee: {
         name: 'Shortswords',
-        modifier: 12,
     },
     ranged: {
+        currentShots: 7,
         name: 'Crossbows',
-        modifier: 12,
         shots: 7,
     },
     tactics: [
         allTacticsByName['Accustomed to Panic'],
         allTacticsByName['Darkvision'],
     ],
+    gear: [],
+    conditions: [],
 }, {
     name: 'Tiger Lord Berserkers',
+    alignment: 'N',
     level: 12,
     rarity: 'uncommon',
     type: 'infantry',
     adjustments: {
+        ranged: 0,
+        maneuver: 0,
+        morale: 0,
         scouting: 1,
         recruitmentDC: 2,
         ac: -1,
         melee: 2,
     },
-    scouting: 23,
-    recruitmentDC: 32,
     consumption: 1,
     description: 'These Tiger Lord barbarians use rage in battle; they fight with greataxes.',
-    ac: 32,
-    maneuver: 19,
-    morale: 25,
+    highSave: 'morale',
     hp: 6,
+    currentHp: 6,
     routeThreshold: 2,
     melee: {
         name: 'Greataxes',
-        modifier: 28,
     },
     tactics: [
         allTacticsByName['Furious Charge'],
@@ -846,32 +1030,35 @@ structure and lessens their morale.`,
         allTacticsByName['Revel in Battle'],
         allTacticsByName['Warmongers'],
     ],
+    gear: [],
+    conditions: [],
 }, {
     name: 'Tok-Nikrat Scouts',
+    alignment: 'N',
     level: 10,
     rarity: 'rare',
     type: 'skirmisher',
     adjustments: {
+        ranged: 0,
+        melee: 0,
+        maneuver: 0,
         scouting: 1,
         recruitmentDC: 5,
         ac: 1,
         morale: 2,
     },
-    scouting: 20,
-    recruitmentDC: 32,
     consumption: 1,
     description: 'Capable of striding across water, these bog striders from the settlement of Tok-Nikrat fight with nets and spears.',
-    ac: 31,
-    maneuver: 22,
-    morale: 18,
+    highSave: 'maneuver',
     hp: 4,
+    currentHp: 4,
+    routeThreshold: 2,
     melee: {
         name: 'Spears',
-        modifier: 23,
     },
     ranged: {
+        currentShots: 5,
         name: 'Net',
-        modifier: 23,
         shots: 5,
     },
     tactics: [
@@ -880,4 +1067,9 @@ structure and lessens their morale.`,
         allTacticsByName['Water Retreat'],
         allTacticsByName['Water Stride'],
     ],
+    gear: [],
+    conditions: [],
 }];
+
+export const armiesByName = new Map<string, Army>();
+armies.forEach(army => armiesByName.set(army.name, army));

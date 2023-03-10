@@ -8,7 +8,8 @@
     "url": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools",
     "license": "LICENSE",
     "styles": [
-        "styles/style.css"
+        "styles/style.css",
+        "styles/army.css"
     ],
     "packs": [
         {

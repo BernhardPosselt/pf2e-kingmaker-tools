@@ -1,0 +1,83 @@
+<form class="km-base-form">
+    <div class="km-container">
+        <div class="km-header">
+            <table class="km-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Rarity</th>
+                    <th>Alignment</th>
+                    <th>Type</th>
+                    <th>Level</th>
+                </tr>
+                <tr>
+                    <td class="km-name">
+                        <input name="name" id="km-army-name" value="{{name}}" type="text">
+                    </td>
+                    <td>
+                        <select name="rarity" id="km-army-rarity">
+                            {{#select rarity}}
+                                {{#each rarities}}
+                                    <option value="{{this.value}}">{{this.label}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="alignment" id="km-army-alignment">
+                            {{#select alignment}}
+                                {{#each alignments}}
+                                    <option value="{{this.value}}">{{this.label}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="type" id="km-army-type">
+                            {{#select type}}
+                                {{#each types}}
+                                    <option value="{{this.value}}">{{this.label}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="level" id="km-army-level">
+                            {{#select level}}
+                                {{#each levels}}
+                                    <option value="{{this.value}}">{{this.label}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <nav class="km-nav">
+            <a data-tab="status" class="{{#if tabs.statusTab}}active{{/if}}">Status</a>
+            <a data-tab="actions" class="{{#if tabs.actionsTab}}active{{/if}}">Actions</a>
+            <a data-tab="gear" class="{{#if tabs.gearTab}}active{{/if}}">Gear</a>
+            <a data-tab="tactics" class="{{#if tabs.tacticsTab}}active{{/if}}">Tactics</a>
+            <a data-tab="conditions" class="{{#if tabs.conditionsTab}}active{{/if}}">Conditions</a>
+        </nav>
+        <div class="km-sidebar">
+            {{> modules/pf2e-kingmaker-tools/templates/army/sidebar.hbs}}
+        </div>
+        <div class="km-content">
+            <div {{#unless tabs.statusTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/army/status.hbs}}
+            </div>
+            <div {{#unless tabs.actionsTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/army/actions.hbs}}
+            </div>
+            <div {{#unless tabs.gearTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/army/gear.hbs}}
+            </div>
+            <div {{#unless tabs.tacticsTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/army/tactics.hbs}}
+            </div>
+            <div {{#unless tabs.conditionsTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/army/conditions.hbs}}
+            </div>
+        </div>
+    </div>
+</form>
