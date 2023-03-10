@@ -124,7 +124,6 @@ export async function prepareCampsite(game: Game, actor: any): Promise<void> {
         const result = await actor.skills.survival.roll({
             dc: zoneDC,
         });
-        console.log(result);
         await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
             critSuccess: `Prepare Campsite: ${actor.name} finds the perfect spot for a camp. Flat checks to determine encounters at the campsite for the next 24 hours have a DC 2 higher than normal, and the first 2 hours spent performing Camping activities does not incur the usual flat check for random encounters.`,
             success: `Prepare Campsite: ${actor.name} finds a serviceable spot for a camp and for Camping activities.`,
