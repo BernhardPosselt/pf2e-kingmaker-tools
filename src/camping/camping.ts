@@ -122,8 +122,9 @@ export async function prepareCampsite(game: Game, actor: any): Promise<void> {
 
     if (actor) {
         const result = await actor.skills.survival.roll({
-            zoneDC,
+            dc: zoneDC,
         });
+        console.log(result);
         await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
             critSuccess: `Prepare Campsite: ${actor.name} finds the perfect spot for a camp. Flat checks to determine encounters at the campsite for the next 24 hours have a DC 2 higher than normal, and the first 2 hours spent performing Camping activities does not incur the usual flat check for random encounters.`,
             success: `Prepare Campsite: ${actor.name} finds a serviceable spot for a camp and for Camping activities.`,
@@ -563,21 +564,34 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
     }
 
     override getData(options?: Partial<FormApplicationOptions>): object {
-        const knownRecipeNames = new Set(this.getKnownRecipes());
-        const knownRecipes = recipes(this.game).filter(recipe => knownRecipeNames.has(recipe.name));
-        const selectedRecipe = knownRecipeNames.has(this.getSelectedRecipe()) ? this.getSelectedRecipe() : 'Basic Meal';
-        const selectedRecipeData = recipes(this.game).find(r => r.name === selectedRecipe)!;
+        const {knownRecipeData, selectedRecipeName, selectedRecipeData} = this.getRecipeData();
         const servings = this.getServings();
         return {
             ...super.getData(options),
-            selectedRecipeName: selectedRecipe,
+            selectedRecipeName,
             selectedRecipe: this.includeCalculatedServings(selectedRecipeData, servings),
             recipeLink: TextEditor.enrichHTML(createUUIDLink(selectedRecipeData.uuid, selectedRecipeData.name)),
-            recipes: knownRecipes,
+            recipes: knownRecipeData,
             skills: this.getSkills(),
             selectedSkill: this.getSelectedSkill(),
             servings,
         };
+    }
+
+    private getRecipeData(): {
+        knownRecipeNames: Set<string>,
+        knownRecipeData: Recipe[],
+        selectedRecipeName: string,
+        selectedRecipeData: Recipe
+    } {
+        const knownRecipeNames = new Set(this.getKnownRecipes());
+        const recipeData = recipes(this.game);
+        const knownRecipeData = recipeData.filter(recipe => knownRecipeNames.has(recipe.name));
+        const selectedRecipeName = knownRecipeData.find(data => data.name === this.getSelectedRecipe())
+            ? this.getSelectedRecipe()
+            : 'Basic Meal';
+        const selectedRecipeData = recipeData.find(r => r.name === selectedRecipeName)!;
+        return {knownRecipeNames, knownRecipeData, selectedRecipeName, selectedRecipeData};
     }
 
     private includeCalculatedServings(recipe: Recipe, servings: number): Recipe {
@@ -629,12 +643,12 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
         cookButton?.addEventListener('click', async () => {
             const selectedSkill = this.getSelectedSkill();
             const dcKey = selectedSkill === 'cooking-lore' || selectedSkill === 'cooking' ? 'cookingLoreDC' : 'survivalDC';
-            const selectedRecipe = recipes(this.game).find(r => r.name === this.getSelectedRecipe())!;
+            const {selectedRecipeData} = this.getRecipeData();
             const result = await this.actor.skills[selectedSkill].roll({
-                dc: selectedRecipe?.[dcKey] ?? 0,
+                dc: selectedRecipeData?.[dcKey] ?? 0,
             });
             const servings = this.getServings();
-            const recipe = this.includeCalculatedServings(selectedRecipe, servings);
+            const recipe = this.includeCalculatedServings(selectedRecipeData, servings);
             const cost = `<br><b>Ingredients</b>: Basic: ${recipe.basicIngredients}, Special: ${recipe.specialIngredients}`;
             await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
                 critSuccess: `<b>Critical Success</b>: ${servings} x ${createUUIDLink(recipe.uuid, recipe.name)}${cost}`,
