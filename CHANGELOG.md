@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.32] - 2023-03-10
+
 ### Fixed
 
 * @zarmstrong: Fixed prepare campsite to use region DC instead of actor level dc
