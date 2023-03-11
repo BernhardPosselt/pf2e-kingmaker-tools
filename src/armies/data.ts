@@ -627,8 +627,13 @@ const allTactics: ArmyTactics[] = [{
     name: 'Cavalry Experts',
     level: 6,
     restrictedTypes: ['cavalry'],
-    description: 'The army’s expert training with mounts increases its status bonus from its Overrun ability to +2. At 12th level, the army ignores the status penalty to Maneuver and Morale saves from its Overrun ability.',
-    // TODO: modifiers
+    description: 'The army’s expert training with mounts increases its status bonus from its Overrun ability to +2',
+    modifiers: [{
+        type: 'status',
+        selector: 'attack',
+        value: 2,
+        targetTypes: ['infantry', 'skirmisher'],
+    }],
 }, {
     name: 'Darkvision',
     level: 1,
@@ -847,7 +852,14 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Flight',
     unique: true,
     description: 'The Wyvern Flight ignores all ground-based difficult terrain and cannot become mired by effects that can be escaped by flight. When they use the Disengage action against armies that can’t fly, their check result is improved one degree. Armies that lack the ability to fly suffer a –2 circumstance penalty on Advance actions against a Wyvern Flight',
-    // TODO automate
+    targetModifiers: [{
+        enabled: false,
+        label: 'Can Fly',
+        selector: 'maneuver',
+        type: 'circumstance',
+        action: 'Advance',
+        value: -2,
+    }],
 }, {
     name: 'Wyvern Venom',
     unique: true,
@@ -959,7 +971,13 @@ and rain (see Battlefield Terrain Features on page 578).
     name: 'Brave',
     unique: true,
     description: 'Nomen scouts are extraordinarily fearless and do not possess a Rout Threshold, and gain a +2 circumstance bonus on Morale checks made to avoid rout from other sources.',
-    // TODO automate
+    modifiers: [{
+        enabled: false,
+        label: 'Avoid Rout',
+        value: 2,
+        type: 'circumstance',
+        selector: 'morale',
+    }],
 }, {
     name: 'Self-Sufficient',
     unique: true,
