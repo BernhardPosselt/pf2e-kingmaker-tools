@@ -78,6 +78,7 @@ export const allArmyActionNames = [
     'Furious Charge',
     'Reactive Rally',
     'Revel in Battle',
+    'Battlefield Adaptability',
 ] as const;
 
 export type ArmyActionName = typeof allArmyActionNames[number];
@@ -99,7 +100,7 @@ export interface ArmyAction {
     effect?: string;
 }
 
-const allArmyActions: ArmyAction[] = [{
+export const allArmyActions: ArmyAction[] = [{
     name: 'Advance',
     actions: '1',
     type: 'maneuver',
@@ -306,17 +307,43 @@ Attempt a Morale check against the target army.`,
     actions: 'r',
     trigger: 'The Tiger Lord Berserkers score a critical hit with a melee Strike.',
     effect: 'The barbarians are infused with vigor and furious passion at their devastating blow. The army restores 1 hit point.',
+}, {
+    name: 'Battlefield Adaptability',
+    requiresUnlock: true,
+    actions: '1',
+    description: 'The First World army has a wide range of creatures in its ranks, and it can shift its tactics to support those with different mobilities. It can take this action to achieve one of the following benefits: ignore ground-based difficult terrain, reduce Mired to 0, become concealed, or gain a +2 circumstance bonus on Maneuver checks to Advance and to Disengage. The effect lasts until the start of the First World Army’s next turn.',
 }];
 
 type ModifierType = 'circumstance' | 'item' | 'status' | 'untyped';
 
-type ModifierSelector = 'ac' | 'morale' | 'maneuver' | 'attack' | 'ranged-attack' | 'melee-attack';
+type ModifierSelector = 'ac'
+    | 'morale'
+    | 'maneuver'
+    | 'attack'
+    | 'ranged-attack'
+    | 'melee-attack'
+    | 'route-threshold'
+    | 'shots'
+    | 'hp'
+    | 'initiative'
+    | 'consumption'
+    | 'scouting';
+
+interface Brackets {
+    start: number;
+    end?: number;
+    value: number;
+}
 
 interface ArmyModifier {
-    value: number | 'self.value';
+    value: number | string | Brackets[];
     type: ModifierType;
+    label?: string;
     selector: ModifierSelector;
+    toggle?: string;
     action?: ArmyActionName;
+    targetTypes?: ArmyType[];
+    enabled?: boolean;
 }
 
 export const allConditionNames = [
@@ -353,7 +380,7 @@ export interface ArmyCondition {
     targetModifiers?: ArmyModifier[];
 }
 
-const allArmyConditions: ArmyCondition[] = [{
+export const allArmyConditions: ArmyCondition[] = [{
     name: 'concealed',
     description: 'A concealed army is tougher to target, and gains a +2 circumstance bonus on its Maneuver checks. Attacks against it take a –2 circumstance penalty. This condition lasts as long as the event granting the concealment persists.',
     modifiers: [{
@@ -411,7 +438,7 @@ the GM decides what the army’s new location is (typically this is at an approx
     // TODO: circumstance penalty to deploy army checks equal to mired value
     value: 1,
     modifiers: [{
-        value: 'self.value',
+        value: '$value',
         type: 'circumstance',
         selector: 'maneuver',
     }],
@@ -456,7 +483,7 @@ The army’s Morale checks take a circumstance penalty equal to its shaken value
     }],
     modifiers: [{
         selector: 'morale',
-        value: 'self.value',
+        value: '$value',
         type: 'circumstance',
     }],
 }, {
@@ -466,11 +493,11 @@ The army’s Morale checks take a circumstance penalty equal to its shaken value
     // TODO circumstance penalty equal to value army activities, double on deploy army
     modifiers: [{
         selector: 'ac',
-        value: 'self.value',
+        value: '$value',
         type: 'circumstance',
     }, {
         selector: 'maneuver',
-        value: 'self.value',
+        value: '$value',
         type: 'circumstance',
     }],
 }];
@@ -543,7 +570,7 @@ function createMagicArmor(
     };
 }
 
-const allGear: ArmyGear[] = [{
+export const allGear: ArmyGear[] = [{
     name: 'Additional Weapon',
     level: 1,
     price: 10,
@@ -577,7 +604,8 @@ export interface ArmyTactics {
     unique?: boolean;
     traits?: string[];
     restrictedTypes?: ArmyType[];
-    // todo: modifiers
+    modifiers?: ArmyModifier[];
+    targetModifiers?: ArmyModifier[];
 }
 
 const allTactics: ArmyTactics[] = [{
@@ -585,6 +613,12 @@ const allTactics: ArmyTactics[] = [{
     level: 8,
     restrictedTypes: ['skirmisher'],
     description: 'Your skirmishers are experts at ambushing. On the first round of a war encounter, if your turn occurs before any enemy army turns, you can choose to start the encounter with your army already engaged with an enemy army whose initiative result is lower than yours. If you do so, your army gains a +2 status bonus on the first Attack war action they make against that army on the first round of the encounter.',
+    modifiers: [{
+        value: 2,
+        type: 'status',
+        enabled: false,
+        selector: 'attack',
+    }],
 }, {
     name: 'Bloodied But Unbroken',
     level: 5,
@@ -594,6 +628,7 @@ const allTactics: ArmyTactics[] = [{
     level: 6,
     restrictedTypes: ['cavalry'],
     description: 'The army’s expert training with mounts increases its status bonus from its Overrun ability to +2. At 12th level, the army ignores the status penalty to Maneuver and Morale saves from its Overrun ability.',
+    // TODO: modifiers
 }, {
     name: 'Darkvision',
     level: 1,
@@ -606,6 +641,12 @@ const allTactics: ArmyTactics[] = [{
     description: `The army is especially good at enacting defensive tactics. The army gains a +1 status bonus on Maneuver checks
 made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. The army can use the Defensive Stance tactical war action.`,
     grantsActions: ['Defensive Stance'],
+    modifiers: [{
+        type: 'status',
+        selector: 'maneuver',
+        action: 'Guard',
+        value: [{start: 0, end: 8, value: 1}, {start: 9, end: 16, value: 2}, {start: 17, value: 3}],
+    }],
 }, {
     name: 'Explosive Shot',
     level: 11,
@@ -634,21 +675,47 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     level: 3,
     restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
     description: 'The army is particularly loyal to your cause. The army gains a +1 status bonus on Morale checks made to Rally. This bonus increases to +2 at 9th level, and +3 at 17th level. The army can use the Taunt tactical war action.',
+    modifiers: [{
+        type: 'status',
+        selector: 'morale',
+        action: 'Rally',
+        value: [{start: 0, end: 8, value: 1}, {start: 9, end: 16, value: 2}, {start: 17, value: 3}],
+    }],
 }, {
     name: 'Hold the Line',
     level: 1,
     restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
     description: 'The army has trained to maintain position even in the face of overwhelming opponents. The army gains a +1 status bonus on Morale checks made to resist rout, and its Rout Threshold is equal to 1/4 it’s total Hit Points (rounded up).',
+    modifiers: [{
+        label: 'Resist Route',
+        type: 'status',
+        selector: 'morale',
+        value: 1,
+    }, {
+        type: 'untyped',
+        value: '@hp*0.25|ceil',
+        selector: 'route-threshold',
+    }],
 }, {
     name: 'Increased Ammunition',
     level: 5,
     restrictedTypes: ['cavalry', 'infantry', 'skirmisher', 'siege'],
     description: 'You increase the number of times your army can use ranged Strikes in each war encounter by 2. This tactic can be taken multiple times; each time you do so, increase the army’s maximum number of ranged Strikes by 2.',
+    modifiers: [{
+        type: 'untyped',
+        value: '2',
+        selector: 'shots',
+    }],
 }, {
     name: 'Keen Eyed',
     level: 1,
     restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
     description: 'The army includes several spotters and scouts who are particularly keen-eyed. The army gains a +2 status bonus on initiative checks.',
+    modifiers: [{
+        type: 'status',
+        value: 2,
+        selector: 'initiative',
+    }],
 }, {
     name: 'Keep Up The Pressure',
     level: 3,
@@ -659,6 +726,12 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     level: 1,
     restrictedTypes: ['cavalry', 'infantry', 'skirmisher'],
     description: 'The army is trained to be self-sufficient and sustains itself via hunting and gathering when they’re in the wild. If during a Kingdom turn’s Upkeep phase this army is located in a hex that doesn’t include a settlement, and if the army is not garrisoned, it reduces its Consumption by 1.',
+    modifiers: [{
+        type: 'untyped',
+        value: -1,
+        selector: 'consumption',
+        toggle: 'Hex includes no settlement and not garrisoned',
+    }],
 }, {
     name: 'Low-Light Vision',
     level: 1,
@@ -668,8 +741,14 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Merciless',
     level: 5,
     restrictedTypes: ['cavalry', 'infantry'],
-    description: 'This army is difficult to escape from. The army’s Mobility DC gains a +2 status bonus when other armies attempt Mobility checks against it while attempting to Disengage. This army can use the All-Out Assault tactical war action.',
+    description: 'This army is difficult to escape from. The army’s Mobility DC gains a +2 status bonus when other armies attempt Maneuver checks against it while attempting to Disengage. This army can use the All-Out Assault tactical war action.',
     grantsActions: ['All-Out Assault'],
+    targetModifiers: [{
+        type: 'status',
+        value: 2,
+        selector: 'maneuver',
+        action: 'Disengage',
+    }],
 }, {
     name: 'Opening Salvo',
     level: 8,
@@ -680,20 +759,51 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     level: 5,
     restrictedTypes: ['cavalry', 'skirmisher'],
     description: 'Your army is skilled at surrounding their foes and distracting them, at the cost of spreading out too much and being more vulnerable. When you use the Advance war action to successfully engage an army, you can choose to take a –2 circumstance penalty to your AC in order to gain a +1 circumstance bonus on attack rolls. If you do so, these modifiers remain in effect until you are no longer engaged. You can use the Outflank tactical war action.',
+    modifiers: [{
+        type: 'circumstance',
+        value: 1,
+        selector: 'attack',
+        toggle: 'Reckless Flankers',
+    }, {
+        type: 'circumstance',
+        value: -2,
+        selector: 'ac',
+        toggle: 'Reckless Flankers',
+    }],
 }, {
     name: 'Sharpshooter',
     level: 5,
     restrictedTypes: ['cavalry', 'infantry', 'skirmisher'],
     description: 'The commander drills the army in precision ranged attacks. You gain a +1 status bonus on attacks with ranged Strikes, but suffer a –2 status bonus on attacks with melee Strikes. At 9th level, the penalty to melee Strikes is reduced to –1, and at 15th level the penalty to melee Strikes is removed. The army can use the Covering Fire tactical war action.',
     grantsActions: ['Covering Fire'],
+    modifiers: [{
+        type: 'circumstance',
+        value: 1,
+        selector: 'ranged-attack',
+    }, {
+        type: 'status',
+        value: [{start: 0, end: 8, value: -2}, {start: 9, end: 16, value: -1}, {start: 17, value: 0}],
+        selector: 'melee-attack',
+    }],
 }, {
     name: 'Toughened Soldiers',
     level: 1,
     restrictedTypes: ['cavalry', 'infantry', 'siege', 'skirmisher'],
     description: 'The army is particularly hardy. Increase its maximum Hit Points by 1. You can take this tactic multiple times; each time you do, increase the army’s maximum Hit Points by 1.',
+    modifiers: [{
+        type: 'untyped',
+        selector: 'hp',
+        value: 1,
+    }],
 }, {
     name: 'Overrun',
-    description: 'Cavalry armies gain a +1 status bonus on weapon attacks against infantry and skirmisher armies, but they suffer a –1 status penalty on Maneuver and Morale saves against area attacks and mental attacks.',
+    description: 'Cavalry armies gain a +1 status bonus on weapon attacks against infantry and skirmisher armies',
+    modifiers: [{
+        type: 'status',
+        selector: 'attack',
+        value: 1,
+        targetTypes: ['infantry', 'skirmisher'],
+    }],
 }, {
     name: 'Engines of War',
     description: 'Siege engines cannot be outfitted with gear. They cannot attack engaged armies. They are more difficult to destroy due to their higher hit points than other basic armies. A siege engine can attack and damage fortifications with its ranged attacks as part of the Battle or Overwhelming Bombardment actions.',
@@ -707,6 +817,14 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     description: 'The Troll Marauders can use the Taunt tactical action. When they do, they gain a +2 status bonus on their Morale check if they used the Regeneration tactic this turn.',
     unique: true,
     grantsActions: ['Taunt'],
+    modifiers: [{
+        enabled: false,
+        label: 'Regeneration used this turn',
+        action: 'Taunt',
+        value: 2,
+        type: 'status',
+        selector: 'morale',
+    }],
 }, {
     name: 'Regeneration',
     unique: true,
@@ -720,10 +838,16 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Unpredictable Movement',
     unique: true,
     description: 'It’s difficult to do significant damage to the Drelev Irregulars with ranged attacks, as the mob moves about in a haphazard manner. All ranged attacks against the Drelev Irregulars suffer a –2 circumstance penalty as a result.',
+    targetModifiers: [{
+        selector: 'ranged-attack',
+        type: 'circumstance',
+        value: -2,
+    }],
 }, {
     name: 'Flight',
     unique: true,
     description: 'The Wyvern Flight ignores all ground-based difficult terrain and cannot become mired by effects that can be escaped by flight. When they use the Disengage action against armies that can’t fly, their check result is improved one degree. Armies that lack the ability to fly suffer a –2 circumstance penalty on Advance actions against a Wyvern Flight',
+    // TODO automate
 }, {
     name: 'Wyvern Venom',
     unique: true,
@@ -753,6 +877,20 @@ during a battle, it can attempt a DC 11 flat check; on a success, it no longer s
     name: 'Battlefield Adaptability',
     unique: true,
     description: 'The First World army has a wide range of creatures in its ranks, and it can shift its tactics to support those with different mobilities. It can take this action to achieve one of the following benefits: ignore ground-based difficult terrain, reduce Mired to 0, become concealed, or gain a +2 circumstance bonus on Maneuver checks to Advance and to Disengage. The effect lasts until the start of the First World Army’s next turn.',
+    grantsActions: ['Battlefield Adaptability'],
+    modifiers: [{
+        type: 'circumstance',
+        selector: 'maneuver',
+        action: 'Disengage',
+        value: 2,
+        toggle: 'Battlefield Adaptability Bonus',
+    }, {
+        type: 'circumstance',
+        selector: 'maneuver',
+        action: 'Advance',
+        value: 2,
+        toggle: 'Battlefield Adaptability Bonus',
+    }],
 }, {
     name: 'Primal Magic',
     traits: ['primal'],
@@ -787,10 +925,22 @@ and rain (see Battlefield Terrain Features on page 578).
     name: 'Swamp Dwellers',
     unique: true,
     description: 'The lizardfolk defenders have the Live off the Land tactic for free (it does not count against the maximum number of tactics the army can possess), do not treat water or swamp on a battlefield as difficult terrain, and gain a +2 circumstance bonus to Scouting checks attempted in hexes that include swamps or water.',
+    modifiers: [{
+        value: 2,
+        toggle: 'Hex includes Swamp or Water',
+        type: 'circumstance',
+        selector: 'scouting',
+    }],
 }, {
     name: 'Amphibious',
     unique: true,
     description: 'Frog Riders ignore difficult terrain caused by swamps or water and gain a +2 circumstance bonus on Maneuver checks while fighting on a battlefield that features either of these terrains.',
+    modifiers: [{
+        value: 2,
+        toggle: 'Hex includes Swamp or Water',
+        type: 'circumstance',
+        selector: 'maneuver',
+    }],
 }, {
     name: 'Chorus of Croaks',
     unique: true,
@@ -799,14 +949,27 @@ and rain (see Battlefield Terrain Features on page 578).
     name: 'Swamp Charge',
     unique: true,
     description: 'If the battlefield includes swamp or water, the M’botuu Frog Riders can start the encounter engaged with a target enemy army. If they do so, they gain a +1 circumstance bonus on melee Strikes against that army on the first turn of the encounter.',
+    modifiers: [{
+        value: 1,
+        toggle: 'Swamp Charge',
+        type: 'circumstance',
+        selector: 'melee-attack',
+    }],
 }, {
     name: 'Brave',
     unique: true,
     description: 'Nomen scouts are extraordinarily fearless and do not possess a Rout Threshold, and gain a +2 circumstance bonus on Morale checks made to avoid rout from other sources.',
+    // TODO automate
 }, {
     name: 'Self-Sufficient',
     unique: true,
     description: 'Nomen scouts are adept at providing for themselves, and never count against the kingdom’s consumption. Furthermore, they can provide for other armies, and as long as they are not defeated during a Kingdom turn’s Upkeep phase, they reduce the kingdom’s consumption value by 1.',
+    modifiers: [{
+        value: -1,
+        toggle: 'Not Defeated',
+        type: 'untyped',
+        selector: 'consumption',
+    }],
 }, {
     name: 'Trample',
     unique: true,
@@ -841,10 +1004,23 @@ and rain (see Battlefield Terrain Features on page 578).
     name: 'Water Retreat',
     unique: true,
     description: 'If the battlefield features water terrain, Tok-Nikrat Scouts gain a +4 circumstance bonus on Maneuver checks made to Disengage.',
+    modifiers: [{
+        value: 4,
+        toggle: 'Hex includes Water',
+        type: 'circumstance',
+        selector: 'maneuver',
+        action: 'Disengage',
+    }],
 }, {
     name: 'Water Stride',
     unique: true,
     description: 'The Tok-Nikrat Scouts stride over watery surfaces, and they ignore difficult terrain caused by water or swamps. They gain a +4 circumstance bonus on initiative checks in war encounters when the battlefield features either terrain.',
+    modifiers: [{
+        value: 4,
+        toggle: 'Hex includes Water or Swamp',
+        type: 'circumstance',
+        selector: 'initiative',
+    }],
 }];
 
 
@@ -1423,6 +1599,7 @@ structure and lessens their morale.`,
     },
     tactics: [
         allTacticsByName['Swamp Dwellers'],
+        allTacticsByName['Live Off The Land'],
     ],
     gear: [],
     conditions: [],
