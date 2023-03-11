@@ -336,6 +336,7 @@ interface Brackets {
 }
 
 interface ArmyModifier {
+    target?: 'self' | 'attacker';
     value: number | string | Brackets[];
     type: ModifierType;
     label?: string;
@@ -377,7 +378,6 @@ export interface ArmyCondition {
     value?: number;
     grantConditions?: ConditionPredicate[],
     modifiers?: ArmyModifier[];
-    targetModifiers?: ArmyModifier[];
 }
 
 export const allArmyConditions: ArmyCondition[] = [{
@@ -387,8 +387,8 @@ export const allArmyConditions: ArmyCondition[] = [{
         value: 2,
         type: 'circumstance',
         selector: 'maneuver',
-    }],
-    targetModifiers: [{
+    }, {
+        target: 'attacker',
         value: -2,
         selector: 'attack',
         type: 'circumstance',
@@ -402,7 +402,8 @@ export const allArmyConditions: ArmyCondition[] = [{
 }, {
     name: 'distant',
     description: 'An army that has the distant condition has managed to retreat a fair range away from enemy armies, and is potentially poised to make an escape from the field of battle. Armies can attempt ranged Strikes against distant armies, but they take a –5 penalty on that Strike.',
-    targetModifiers: [{
+    modifiers: [{
+        target: 'attacker',
         selector: 'ranged-attack',
         type: 'untyped',
         value: -5,
@@ -605,7 +606,6 @@ export interface ArmyTactics {
     traits?: string[];
     restrictedTypes?: ArmyType[];
     modifiers?: ArmyModifier[];
-    targetModifiers?: ArmyModifier[];
 }
 
 const allTactics: ArmyTactics[] = [{
@@ -748,7 +748,8 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     restrictedTypes: ['cavalry', 'infantry'],
     description: 'This army is difficult to escape from. The army’s Mobility DC gains a +2 status bonus when other armies attempt Maneuver checks against it while attempting to Disengage. This army can use the All-Out Assault tactical war action.',
     grantsActions: ['All-Out Assault'],
-    targetModifiers: [{
+    modifiers: [{
+        target: 'attacker',
         type: 'status',
         value: 2,
         selector: 'maneuver',
@@ -843,7 +844,8 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Unpredictable Movement',
     unique: true,
     description: 'It’s difficult to do significant damage to the Drelev Irregulars with ranged attacks, as the mob moves about in a haphazard manner. All ranged attacks against the Drelev Irregulars suffer a –2 circumstance penalty as a result.',
-    targetModifiers: [{
+    modifiers: [{
+        target: 'attacker',
         selector: 'ranged-attack',
         type: 'circumstance',
         value: -2,
@@ -852,8 +854,9 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Flight',
     unique: true,
     description: 'The Wyvern Flight ignores all ground-based difficult terrain and cannot become mired by effects that can be escaped by flight. When they use the Disengage action against armies that can’t fly, their check result is improved one degree. Armies that lack the ability to fly suffer a –2 circumstance penalty on Advance actions against a Wyvern Flight',
-    targetModifiers: [{
+    modifiers: [{
         enabled: false,
+        target: 'attacker',
         label: 'Can Fly',
         selector: 'maneuver',
         type: 'circumstance',
