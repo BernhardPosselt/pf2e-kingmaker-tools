@@ -70,6 +70,7 @@ export const allArmyActionNames = [
     'Feint',
     'Outflank',
     'Overwhelming Bombardment',
+    'Primal Magic',
     'Taunt',
     'Trampling Charge',
     'Trample',
@@ -312,6 +313,19 @@ Attempt a Morale check against the target army.`,
     requiresUnlock: true,
     actions: '1',
     description: 'The First World army has a wide range of creatures in its ranks, and it can shift its tactics to support those with different mobilities. It can take this action to achieve one of the following benefits: ignore ground-based difficult terrain, reduce Mired to 0, become concealed, or gain a +2 circumstance bonus on Maneuver checks to Advance and to Disengage. The effect lasts until the start of the First World Army’s next turn.',
+}, {
+    name: 'Primal Magic',
+    requiresUnlock: true,
+    actions: '2',
+    requirements: 'The First World army is not engaged',
+    description: `The First World army uses its primal magic against another army on the battlefield and must attempt a Morale check against the target’s Morale DC. If they succeed, the First World army applies one of the following effects, determined randomly, to the target army.
+<ul> 
+    <li><b>1–2</b> Entangling Vines Coils of whipping vines grow out of the ground to entangle the army. The army increases its Mired condition by 1 (2 on a critical hit).</li>
+    <li><b>3–4</b> Horrific Visions The soldiers’ minds are assaulted with horrific illusions. The army increases its Shaken condition by 1 (2 on a critical hit).</li>
+    <li><b>5–6</b> Primal Storm A churning storm cloud above the army strikes the soldiers dozens of times with bolts of lightning, inflicting 1 point of damage to the army (2 points of damage on a critical hit). Until the end of the targeted army’s next turn, it functions as if in high wind and rain (see Battlefield Terrain Features on page 578).</li> 
+    <li><b>7–8</b> Sensory Assault The soldiers become overwhelmed with strange lights or tricked by illusions. Until the end of their next turn, the army takes a –2 circumstance penalty on all attacks and Maneuver checks.</li>
+    <li><b>9-10</b> Overwhelming Magic Roll twice and apply both results, but the First World army suffers a –4 circumstance penalty on its Morale check against the target army’s Morale DC.</li>
+</ul>`,
 }];
 
 type ModifierType = 'circumstance' | 'item' | 'status' | 'untyped';
@@ -626,7 +640,6 @@ export interface ArmyTactics {
     description?: string;
     level?: number;
     grantsActions?: ArmyActionName[];
-    countsAgainstLimit?: boolean;
     unique?: boolean;
     traits?: string[];
     restrictedTypes?: ArmyType[];
@@ -681,13 +694,13 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Explosive Shot',
     level: 11,
     restrictedTypes: ['siege'],
-    description: 'The army’s ranged attacks explode and spray fire, shrapnel, or other damaging material in every direction. Whenever the army critically hits a non-distant army with a ranged Strike, inflict 1 point of additional damage to another non-distant enemy army of your choice. You can use the Overwhelming Bombardment tactical war action with the army.',
+    description: 'The army’s ranged attacks explode and spray fire, shrapnel, or other damaging material in every direction. Whenever the army critically hits a non-distant army with a ranged Strike, inflict 1 point of additional damage to another non-distant enemy army of your choice.',
     grantsActions: ['Overwhelming Bombardment'],
 }, {
     name: 'Field Triage',
     level: 6,
     restrictedTypes: ['infantry', 'skirmisher'],
-    description: 'The army’s soldiers are adept at using emergency methods to treat wounds. The army gains the Battlefield Medicine tactical war action.',
+    description: 'The army’s soldiers are adept at using emergency methods to treat wounds.',
     grantsActions: ['Battlefield Medicine'],
 }, {
     name: 'Flaming Shot',
@@ -698,7 +711,7 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Flexible Tactics',
     level: 5,
     restrictedTypes: ['infantry', 'skirmisher'],
-    description: 'The army uses unconventional tactics. You can use the Dirty Fighting, False Retreat, and Feint tactical war actions, and the Counterattack tactical reaction with the army.',
+    description: 'The army uses unconventional tactics.',
     grantsActions: ['Dirty Fighting', 'False Retreat', 'Feint'],
 }, {
     name: 'Focused Devotion',
@@ -771,7 +784,7 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Merciless',
     level: 5,
     restrictedTypes: ['cavalry', 'infantry'],
-    description: 'This army is difficult to escape from. The army’s Mobility DC gains a +2 status bonus when other armies attempt Maneuver checks against it while attempting to Disengage. This army can use the All-Out Assault tactical war action.',
+    description: 'This army is difficult to escape from. The army’s Mobility DC gains a +2 status bonus when other armies attempt Maneuver checks against it while attempting to Disengage.',
     grantsActions: ['All-Out Assault'],
     modifiers: [{
         target: 'attacker',
@@ -789,7 +802,8 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Reckless Flankers',
     level: 5,
     restrictedTypes: ['cavalry', 'skirmisher'],
-    description: 'Your army is skilled at surrounding their foes and distracting them, at the cost of spreading out too much and being more vulnerable. When you use the Advance war action to successfully engage an army, you can choose to take a –2 circumstance penalty to your AC in order to gain a +1 circumstance bonus on attack rolls. If you do so, these modifiers remain in effect until you are no longer engaged. You can use the Outflank tactical war action.',
+    description: 'Your army is skilled at surrounding their foes and distracting them, at the cost of spreading out too much and being more vulnerable. When you use the Advance war action to successfully engage an army, you can choose to take a –2 circumstance penalty to your AC in order to gain a +1 circumstance bonus on attack rolls. If you do so, these modifiers remain in effect until you are no longer engaged.',
+    grantsActions: ['Outflank'],
     modifiers: [{
         type: 'circumstance',
         value: 1,
@@ -805,7 +819,7 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     name: 'Sharpshooter',
     level: 5,
     restrictedTypes: ['cavalry', 'infantry', 'skirmisher'],
-    description: 'The commander drills the army in precision ranged attacks. You gain a +1 status bonus on attacks with ranged Strikes, but suffer a –2 status bonus on attacks with melee Strikes. At 9th level, the penalty to melee Strikes is reduced to –1, and at 15th level the penalty to melee Strikes is removed. The army can use the Covering Fire tactical war action.',
+    description: 'The commander drills the army in precision ranged attacks. You gain a +1 status bonus on attacks with ranged Strikes, but suffer a –2 status bonus on attacks with melee Strikes. At 9th level, the penalty to melee Strikes is reduced to –1, and at 15th level the penalty to melee Strikes is removed.',
     grantsActions: ['Covering Fire'],
     modifiers: [{
         type: 'circumstance',
@@ -863,7 +877,6 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
 }, {
     name: 'Tactical Training (Drelev Irregulars)',
     unique: true,
-    description: 'The Drelev Irregulars can use the All-Out Assault, Counterattack, and Dirty Fighting tactical actions.',
     grantsActions: ['All-Out Assault', 'Counterattack', 'Dirty Fighting'],
 }, {
     name: 'Unpredictable Movement',
@@ -901,12 +914,10 @@ during a battle, it can attempt a DC 11 flat check; on a success, it no longer s
 }, {
     name: 'Pitaxian Training',
     unique: true,
-    description: 'The Pitaxian Raiders can use the Counterattack, Dirty Fighting, and Feint tactical actions.',
     grantsActions: ['Counterattack', 'Dirty Fighting', 'Feint'],
 }, {
     name: 'Tusker Training',
     unique: true,
-    description: 'The Tusker Riders can use the All-Out Assault, Covering Fire, and Taunt tactical actions.',
     grantsActions: ['All-Out Assault', 'Covering Fire', 'Taunt'],
 }, {
     name: 'Trampling Charge',
@@ -916,7 +927,7 @@ during a battle, it can attempt a DC 11 flat check; on a success, it no longer s
 }, {
     name: 'Battlefield Adaptability',
     unique: true,
-    description: 'The First World army has a wide range of creatures in its ranks, and it can shift its tactics to support those with different mobilities. It can take this action to achieve one of the following benefits: ignore ground-based difficult terrain, reduce Mired to 0, become concealed, or gain a +2 circumstance bonus on Maneuver checks to Advance and to Disengage. The effect lasts until the start of the First World Army’s next turn.',
+    description: 'The First World army has a wide range of creatures in its ranks, and it can shift its tactics to support those with different mobilities.',
     grantsActions: ['Battlefield Adaptability'],
     modifiers: [{
         type: 'circumstance',
@@ -935,14 +946,7 @@ during a battle, it can attempt a DC 11 flat check; on a success, it no longer s
     name: 'Primal Magic',
     traits: ['primal'],
     unique: true,
-    description: `Requirement The First World army is not engaged; Effect The First World army uses its primal magic against another army on the battlefield and must attempt a Morale check against the target’s Morale DC. If they succeed, the First World
-army applies one of the following effects, determined randomly, to the target army. 
-1–2 Entangling Vines Coils of whipping vines grow out of the ground to entangle the army. The army increases its Mired condition by 1 (2 on a critical hit).
-3–4 Horrific Visions The soldiers’ minds are assaulted with horrific illusions. The army increases its Shaken condition by 1 (2 on a critical hit).
-5–6 Primal Storm A churning storm cloud above the army strikes the soldiers dozens of times with bolts of lightning, inflicting 1 point of damage to the army (2 points of damage on a critical hit). Until the end of the targeted army’s next turn, it functions as if in high wind
-and rain (see Battlefield Terrain Features on page 578). 
-7–8 Sensory Assault The soldiers become overwhelmed with strange lights or tricked by illusions. Until the end of their next turn, the army takes a –2 circumstance penalty on all attacks and Maneuver checks.
-9–10 Overwhelming Magic Roll twice and apply both results, but the First World army suffers a –4 circumstance penalty on its Morale check against the target army’s Morale DC.`,
+    grantsActions: ['Primal Magic'],
 }, {
     name: 'Supernatural Attacks',
     unique: true,
@@ -1019,7 +1023,6 @@ and rain (see Battlefield Terrain Features on page 578).
 }, {
     name: 'Trample',
     unique: true,
-    description: 'Nomen Scouts can attempt to trample an engaged enemy army by attempting a +20 melee Strike against the army’s AC. On a hit, they inflict 1 point of damage (2 points on a critical hit) and automatically move away from the army—they are no longer engaged with that army.',
     grantsActions: ['Trample'],
 }, {
     name: 'Accustomed to Panic',
@@ -1040,7 +1043,6 @@ and rain (see Battlefield Terrain Features on page 578).
 }, {
     name: 'Warmongers',
     unique: true,
-    description: 'The Tiger Lord Berserkers can use the following Tactical Actions without needing to meet additional requirements: All-Out Assault, Counterattack, and Taunt.',
     grantsActions: ['All-Out Assault', 'Counterattack', 'Taunt'],
 }, {
     name: 'Hurl Nets',
@@ -1070,11 +1072,7 @@ and rain (see Battlefield Terrain Features on page 578).
 }, {
     name: 'Tactical Training (First World Army)',
     unique: true,
-    description: 'The First World Army can use the following tactical actions: counterattack, dirty fighting, feint, and taunt.',
     grantsActions: ['Counterattack', 'Dirty Fighting', 'Feint', 'Taunt'],
-}, {
-    name: 'Efficient Ammunition',
-    description: 'Placeholder, not mentioned in the book, needs errata',
 }];
 
 const allArmyTacticNames = [
@@ -1134,7 +1132,6 @@ const allArmyTacticNames = [
     'Hurl Nets',
     'Water Retreat',
     'Water Stride',
-    'Efficient Ammunition',
 ] as const;
 
 export type ArmyTacticsName = typeof allArmyTacticNames[number];
@@ -1203,7 +1200,12 @@ export interface Army {
     type: ArmyType;
     gear: ArmyItem[];
     conditions: ArmyConditionName[];
-    tactics: ArmyTacticsName[];
+    tactics: ArmyTacticItem[];
+}
+
+export interface ArmyTacticItem {
+    name: ArmyTacticsName;
+    doesNotCountsAgainstLimit?: boolean;
 }
 
 
@@ -1258,7 +1260,7 @@ const armies: Army[] = [{
     },
     highSave: 'maneuver',
     description: 'Cavalry consists of armored soldiers armed with melee weapons and mounted on horses.',
-    tactics: ['Overrun'],
+    tactics: [{name: 'Overrun'}],
     gear: [],
     conditions: [],
 }, {
@@ -1314,7 +1316,7 @@ const armies: Army[] = [{
         name: 'Siege Engine',
         shots: 5,
     },
-    tactics: ['Engines of War'],
+    tactics: [{name: 'Engines of War'}],
     gear: [],
     conditions: [],
 }, {
@@ -1341,7 +1343,7 @@ const armies: Army[] = [{
     melee: {
         name: 'Longswords',
     },
-    tactics: ['Hold the Line', 'Toughened Soldiers'],
+    tactics: [{name: 'Hold the Line'}, {name: 'Toughened Soldiers'}],
     gear: [],
     conditions: [],
 }, {
@@ -1373,7 +1375,7 @@ const armies: Army[] = [{
         name: 'Longbows',
         shots: 7,
     },
-    tactics: ['Efficient Ammunition', 'Sharpshooter'],
+    tactics: [{name: 'Increased Ammunition'}, {name: 'Sharpshooter'}],
     gear: [],
     conditions: [],
 }, {
@@ -1401,7 +1403,7 @@ structure and lessens their morale.`,
     melee: {
         name: 'Swords and Axes',
     },
-    tactics: ['Tactical Training (Drelev Irregulars)'],
+    tactics: [{name: 'Tactical Training (Drelev Irregulars)'}],
     gear: [],
     conditions: [],
 }, {
@@ -1429,10 +1431,10 @@ structure and lessens their morale.`,
         name: 'Claws and Fangs',
     },
     tactics: [
-        'Brutal Assault',
-        'Darkvision',
-        'Frightening Foe',
-        'Regeneration',
+        {name: 'Brutal Assault'},
+        {name: 'Darkvision'},
+        {name: 'Frightening Foe'},
+        {name: 'Regeneration'},
     ],
     gear: [],
     conditions: [],
@@ -1465,7 +1467,7 @@ structure and lessens their morale.`,
         name: 'Longbows',
         shots: 7,
     },
-    tactics: ['Pitaxian Training'],
+    tactics: [{name: 'Pitaxian Training'}],
     gear: [],
     conditions: [],
 }, {
@@ -1498,9 +1500,9 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        'Tusker Training',
-        'Trampling Charge',
-        'Darkvision',
+        {name: 'Tusker Training'},
+        {name: 'Trampling Charge'},
+        {name: 'Darkvision'},
     ],
     gear: [],
     conditions: [],
@@ -1530,10 +1532,10 @@ structure and lessens their morale.`,
         plus: ['Wyvern Venom'],
     },
     tactics: [
-        'Darkvision',
-        'Flight',
-        'Wyvern Venom',
-        'Wyvern Tactics',
+        {name: 'Darkvision'},
+        {name: 'Flight'},
+        {name: 'Wyvern Venom'},
+        {name: 'Wyvern Tactics'},
     ],
     gear: [],
     conditions: [],
@@ -1564,9 +1566,9 @@ structure and lessens their morale.`,
         name: 'Greater Magic Axes',
     },
     tactics: [
-        'Live Off The Land',
-        'Merciless',
-        'Toughened Soldiers',
+        {name: 'Live Off The Land'},
+        {name: 'Merciless'},
+        {name: 'Toughened Soldiers'},
     ],
     gear: [],
     conditions: [],
@@ -1597,10 +1599,10 @@ structure and lessens their morale.`,
         shots: 7,
     },
     tactics: [
-        'Efficient Ammunition',
-        'Explosive Shot',
-        'Toughened Soldiers',
-        'Toughened Soldiers',
+        {name: 'Increased Ammunition'},
+        {name: 'Explosive Shot'},
+        {name: 'Toughened Soldiers'},
+        {name: 'Toughened Soldiers'},
     ],
     gear: [],
     conditions: [],
@@ -1634,12 +1636,12 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        'Battlefield Adaptability',
-        'Primal Magic',
-        'Darkvision',
-        'Supernatural Attacks',
-        'Swift Recovery',
-        'Tactical Training (First World Army)',
+        {name: 'Battlefield Adaptability'},
+        {name: 'Primal Magic'},
+        {name: 'Darkvision'},
+        {name: 'Supernatural Attacks'},
+        {name: 'Swift Recovery'},
+        {name: 'Tactical Training (First World Army)'},
     ],
     gear: [],
     conditions: [],
@@ -1673,9 +1675,9 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        'Burning Weaponry',
-        'Darkvision',
-        'Explosive Defeat',
+        {name: 'Burning Weaponry'},
+        {name: 'Darkvision'},
+        {name: 'Explosive Defeat'},
     ],
     gear: [],
     conditions: [],
@@ -1709,8 +1711,8 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        'Swamp Dwellers',
-        'Live Off The Land',
+        {name: 'Swamp Dwellers'},
+        {name: 'Live Off The Land', doesNotCountsAgainstLimit: true},
     ],
     gear: [],
     conditions: [],
@@ -1744,10 +1746,10 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        'Amphibious',
-        'Chorus of Croaks',
-        'Darkvision',
-        'Swamp Charge',
+        {name: 'Amphibious'},
+        {name: 'Chorus of Croaks'},
+        {name: 'Darkvision'},
+        {name: 'Swamp Charge'},
     ],
     gear: [],
     conditions: [],
@@ -1781,10 +1783,10 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        'Brave',
-        'Darkvision',
-        'Self-Sufficient',
-        'Trample',
+        {name: 'Brave'},
+        {name: 'Darkvision'},
+        {name: 'Self-Sufficient'},
+        {name: 'Trample'},
     ],
     gear: [],
     conditions: [],
@@ -1818,8 +1820,8 @@ structure and lessens their morale.`,
         shots: 7,
     },
     tactics: [
-        'Accustomed to Panic',
-        'Darkvision',
+        {name: 'Accustomed to Panic'},
+        {name: 'Darkvision'},
     ],
     gear: [],
     conditions: [],
@@ -1848,10 +1850,10 @@ structure and lessens their morale.`,
         name: 'Greataxes',
     },
     tactics: [
-        'Furious Charge',
-        'Reactive Rally',
-        'Revel in Battle',
-        'Warmongers',
+        {name: 'Furious Charge'},
+        {name: 'Reactive Rally'},
+        {name: 'Revel in Battle'},
+        {name: 'Warmongers'},
     ],
     gear: [],
     conditions: [],
@@ -1885,10 +1887,10 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        'Darkvision',
-        'Hurl Nets',
-        'Water Retreat',
-        'Water Stride',
+        {name: 'Darkvision'},
+        {name: 'Hurl Nets'},
+        {name: 'Water Retreat'},
+        {name: 'Water Stride'},
     ],
     gear: [],
     conditions: [],

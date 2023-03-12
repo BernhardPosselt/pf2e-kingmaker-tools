@@ -10,7 +10,9 @@ import {
     allRarities,
     allTacticsByName,
     armiesByName,
+    ArmyActionName,
     ArmyItem,
+    ArmyTacticItem,
     ArmyTacticsName,
 } from './data';
 import {capitalize} from '../utils';
@@ -26,7 +28,7 @@ interface LabeledValue {
     value: string;
 }
 
-interface ArmyData extends Omit<CalculatedArmy, 'gear'> {
+interface ArmyData extends Omit<CalculatedArmy, 'gear' | 'tactics'> {
     rarities: LabeledValue[];
     saves: LabeledValue[];
     alignments: LabeledValue[];
@@ -35,6 +37,18 @@ interface ArmyData extends Omit<CalculatedArmy, 'gear'> {
     tabs: Record<string, boolean>;
     actions: Actions[];
     gear: Gear[];
+    tactics: Tactics[];
+    currentTactics: number;
+}
+
+interface Tactics {
+    name: string;
+    description?: string;
+    level?: number;
+    traits: string[];
+    unique: boolean;
+    doesNotCountAgainstLimit: boolean;
+    grantsActions?: ArmyActionName[];
 }
 
 interface Actions {
@@ -123,8 +137,10 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
                 return {value: `${level}`, label: `${level}`};
             }),
             tabs: this.getActiveTabs(),
-            actions: this.buildActions(army.tactics),
+            actions: this.buildActions(army.tactics.map(t => t.name)),
             gear: this.buildGear(gear),
+            tactics: this.buildTactics(army.tactics),
+            currentTactics: army.tactics.filter(t => t.doesNotCountsAgainstLimit === false || t.doesNotCountsAgainstLimit === undefined).length,
         };
     }
 
@@ -199,6 +215,22 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
                 maximumQuantity: data.quantity,
                 quantity: g.quantity,
                 traits: ['Army', ...data.traits.map(trait => capitalize(trait))],
+            };
+        });
+    }
+
+    private buildTactics(tactics: ArmyTacticItem[]): Tactics[] {
+        return tactics.map(tactic => {
+            const data = allTacticsByName[tactic.name];
+            const traits = [...(data.restrictedTypes?.map(t => capitalize(t)) ?? [])];
+            return {
+                name: data.name,
+                description: data.description,
+                doesNotCountAgainstLimit: tactic.doesNotCountsAgainstLimit === true,
+                level: data.level,
+                traits,
+                unique: data.unique === true,
+                grantsActions: data.grantsActions,
             };
         });
     }

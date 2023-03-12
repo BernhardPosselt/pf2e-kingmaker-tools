@@ -1,1 +1,30 @@
-<p>maximumTactics: {{maximumTactics}}</p>
+<p><button class="km-army-tactics-add" type="button">Add Tactics <i class="fa-solid fa-plus"></i></button></p>
+{{#each tactics}}
+    <div class="km-army-tactics">
+        <div class="km-army-tactics-header">
+            <div class="km-army-tactics-name">{{name}}</div>
+            {{#if unique}}
+                <div class="km-army-tactics-level">Unique</div>
+            {{else}}
+                <div class="km-army-tactics-level">Tactics {{level}}</div>
+            {{/if}}
+        </div>
+        <ul class="km-army-traits">
+            {{#each traits}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+        {{#if traits}}<hr>{{/if}}
+        <div class="km-army-tactics-description">{{{description}}}</div>
+        {{#if grantsActions}}
+            <p>Grants the following actions</p>
+            <ul>
+            {{#each grantsActions}}
+                <li>{{this}}</li>
+            {{/each}}
+            </ul>
+        {{/if}}
+        <p><button class="km-army-tactics-remove" data-index="{{@index}}" type="button">Remove <i class="fa-solid fa-trash"></i></button></p>
+    </div>
+{{/each}}
+
