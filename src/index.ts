@@ -330,6 +330,7 @@ Hooks.on('init', async () => {
         'modules/pf2e-kingmaker-tools/templates/army/sidebar.hbs',
         'modules/pf2e-kingmaker-tools/templates/army/status.hbs',
         'modules/pf2e-kingmaker-tools/templates/army/gear.hbs',
+        'modules/pf2e-kingmaker-tools/templates/army/effects.hbs',
         'modules/pf2e-kingmaker-tools/templates/army/actions.hbs',
         'modules/pf2e-kingmaker-tools/templates/army/conditions.hbs',
         'modules/pf2e-kingmaker-tools/templates/army/tactics.hbs',

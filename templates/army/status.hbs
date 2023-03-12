@@ -1,5 +1,38 @@
 <table class="km-table">
     <tr>
+        <th>Hp</th>
+        <td><input name="hp" id="km-army-hp" value="{{hp}}" type="number"></td>
+    </tr>
+    <tr>
+        <th>Route Threshold</th>
+        <td><input name="routeThreshold" id="km-army-routeThreshold" value="{{routeThreshold}}" type="number"></td>
+    </tr>
+    <tr>
+        <th>High Save</th>
+        <td>
+            <select name="highSave" id="km-army-highSave">
+                {{#select highSave}}
+                    {{#each saves}}
+                        <option value="{{this.value}}">{{this.label}}</option>
+                    {{/each}}
+                {{/select}}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Consumption</th>
+        <td><input name="consumption" id="km-army-consumption" value="{{consumption}}" type="number"></td>
+    </tr>
+    {{#if ranged}}
+    <tr>
+        <th>Shots</th>
+        <td><input name="ranged.shots" id="km-army-ranged-shots" value="{{ranged.shots}}" type="number"></td>
+    </tr>
+    {{/if}}
+</table>
+
+<table class="km-table">
+    <tr>
         <th>Type</th>
         <th>Modifier Adjustment</th>
     </tr>

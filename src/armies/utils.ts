@@ -37,9 +37,15 @@ export interface CalculatedArmyStats {
     meleeModifier: number;
     rangedModifier: number;
     maximumTactics: number;
+    shots?: number;
+    initiative: number;
+    consumption: number;
+    hp: number;
+    routeThreshold: number;
 }
 
-export interface CalculatedArmy extends Army, CalculatedArmyStats {
+export interface CalculatedArmy extends Army {
+    calculated: CalculatedArmyStats;
 }
 
 function calculateArmyStats(army: Army): CalculatedArmyStats {
@@ -48,21 +54,27 @@ function calculateArmyStats(army: Army): CalculatedArmyStats {
     const data = armyStatisticsByLevel.get(level)!;
     const maneuver = highSave === 'maneuver' ? data.highSave : data.lowSave;
     const morale = highSave === 'morale' ? data.highSave : data.lowSave;
+    const scouting = data.scouting + army.adjustments.scouting;
     return {
         ac: data.ac + army.adjustments.ac,
         maneuver: maneuver + army.adjustments.maneuver,
         morale: morale + army.adjustments.morale,
-        scouting: data.scouting + army.adjustments.scouting,
+        scouting,
         recruitmentDC: data.standardDC + army.adjustments.recruitmentDC,
         meleeModifier: data.attack + army.adjustments.melee,
         rangedModifier: data.attack + army.adjustments.ranged,
         maximumTactics: data.maximumTactics,
+        consumption: army.consumption,
+        routeThreshold: army.routeThreshold,
+        shots: army.ranged?.shots,
+        initiative: scouting,
+        hp: army.hp,
     };
 }
 
 export function calculateArmyData(army: Army): CalculatedArmy {
     return {
         ...army,
-        ...calculateArmyStats(army),
+        calculated: calculateArmyStats(army),
     };
 }

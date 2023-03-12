@@ -505,8 +505,14 @@ The army’s Morale checks take a circumstance penalty equal to its shaken value
 
 // TODO: terrain
 
+
+export interface ArmyItem {
+    name: ArmyGearName;
+    quantity?: number;
+}
+
 export interface ArmyGear {
-    name: string;
+    name: ArmyGearName;
     level: number;
     price: number;
     traits: string[];
@@ -530,7 +536,7 @@ function createMagicWeapon(
     }
 ): ArmyGear {
     return {
-        name: `Magic Weapons +${bonus} (${capitalize(type)})`,
+        name: `Magic Weapons +${bonus} (${capitalize(type)})` as ArmyGearName,
         traits: ['army', 'evocation', 'magical'],
         type: 'magic-weapons',
         level,
@@ -557,7 +563,7 @@ function createMagicArmor(
     }
 ): ArmyGear {
     return {
-        name: `Magic Armor +${bonus}`,
+        name: `Magic Armor +${bonus}` as ArmyGearName,
         traits: ['army', 'evocation', 'magical'],
         type: 'magic-weapons',
         level,
@@ -596,8 +602,27 @@ export const allGear: ArmyGear[] = [{
     createMagicWeapon({bonus: 3, type: 'melee', price: 60, level: 16}),
 ];
 
+const allArmyGearNames = [
+    'Additional Weapon',
+    'Healing Potion',
+    'Magic Weapons +1 (Ranged)',
+    'Magic Weapons +2 (Ranged)',
+    'Magic Weapons +3 (Ranged)',
+    'Magic Weapons +1 (Melee)',
+    'Magic Weapons +2 (Melee)',
+    'Magic Weapons +3 (Melee)',
+    'Magic Armor +1',
+    'Magic Armor +2',
+    'Magic Armor +3',
+] as const;
+
+export type ArmyGearName = typeof allArmyGearNames[number];
+
+export const allGearByName: Record<ArmyGearName, ArmyGear> = Object.fromEntries((allGear)
+    .map((tactic) => [tactic.name, tactic])) as Record<ArmyGearName, ArmyGear>;
+
 export interface ArmyTactics {
-    name: string;
+    name: ArmyTacticsName;
     description?: string;
     level?: number;
     grantsActions?: ArmyActionName[];
@@ -836,7 +861,7 @@ made to Guard. This bonus increases to +2 at 9th level, and +3 at 17th level. Th
     unique: true,
     description: 'At the beginning of its turn, the Troll Marauders regain 1 Hit Point. The Troll Marauders cannot be destroyed as usual unless they lose this tactic. The PCs can cause the trolls to lose the Regeneration tactic via prepared firepots (see page 296); while the trolls’ Regeneration tactic is lost, their RT increases to 3. Otherwise, an army that engages the Troll Marauders while they are defeated can take a three-round action to burn the trolls and destroy their army.',
 }, {
-    name: 'Tactical Training',
+    name: 'Tactical Training (Drelev Irregulars)',
     unique: true,
     description: 'The Drelev Irregulars can use the All-Out Assault, Counterattack, and Dirty Fighting tactical actions.',
     grantsActions: ['All-Out Assault', 'Counterattack', 'Dirty Fighting'],
@@ -1042,11 +1067,80 @@ and rain (see Battlefield Terrain Features on page 578).
         type: 'circumstance',
         selector: 'initiative',
     }],
+}, {
+    name: 'Tactical Training (First World Army)',
+    unique: true,
+    description: 'The First World Army can use the following tactical actions: counterattack, dirty fighting, feint, and taunt.',
+    grantsActions: ['Counterattack', 'Dirty Fighting', 'Feint', 'Taunt'],
+}, {
+    name: 'Efficient Ammunition',
+    description: 'Placeholder, not mentioned in the book, needs errata',
 }];
 
+const allArmyTacticNames = [
+    'Ambush',
+    'Bloodied But Unbroken',
+    'Cavalry Experts',
+    'Darkvision',
+    'Defensive Tactics',
+    'Explosive Shot',
+    'Field Triage',
+    'Flaming Shot',
+    'Flexible Tactics',
+    'Focused Devotion',
+    'Hold the Line',
+    'Increased Ammunition',
+    'Keen Eyed',
+    'Keep Up The Pressure',
+    'Live Off The Land',
+    'Low-Light Vision',
+    'Merciless',
+    'Opening Salvo',
+    'Reckless Flankers',
+    'Sharpshooter',
+    'Toughened Soldiers',
+    'Overrun',
+    'Engines of War',
+    'Brutal Assault',
+    'Frightening Foe',
+    'Regeneration',
+    'Tactical Training (Drelev Irregulars)',
+    'Tactical Training (First World Army)',
+    'Unpredictable Movement',
+    'Flight',
+    'Wyvern Venom',
+    'Wyvern Tactics',
+    'Pitaxian Training',
+    'Tusker Training',
+    'Trampling Charge',
+    'Battlefield Adaptability',
+    'Primal Magic',
+    'Supernatural Attacks',
+    'Swift Recovery',
+    'Burning Weaponry',
+    'Explosive Defeat',
+    'Swamp Dwellers',
+    'Amphibious',
+    'Chorus of Croaks',
+    'Swamp Charge',
+    'Brave',
+    'Self-Sufficient',
+    'Trample',
+    'Accustomed to Panic',
+    'Furious Charge',
+    'Reactive Rally',
+    'Revel in Battle',
+    'Warmongers',
+    'Hurl Nets',
+    'Water Retreat',
+    'Water Stride',
+    'Efficient Ammunition',
+] as const;
 
-export const allTacticsByName: Record<string, ArmyTactics> = Object.fromEntries((allTactics)
-    .map((tactic) => [tactic.name, tactic]));
+export type ArmyTacticsName = typeof allArmyTacticNames[number];
+
+export const allTacticsByName: Record<ArmyTacticsName, ArmyTactics> = Object.fromEntries((allTactics)
+    .map((tactic) => [tactic.name, tactic])) as Record<ArmyTacticsName, ArmyTactics>;
 
 
 export interface MeleeAttack {
@@ -1107,9 +1201,9 @@ export interface Army {
     melee?: MeleeAttack;
     ranged?: RangedAttack;
     type: ArmyType;
-    gear: ArmyGear[];
-    conditions: ArmyCondition[];
-    tactics: ArmyTactics[];
+    gear: ArmyItem[];
+    conditions: ArmyConditionName[];
+    tactics: ArmyTacticsName[];
 }
 
 
@@ -1164,7 +1258,7 @@ const armies: Army[] = [{
     },
     highSave: 'maneuver',
     description: 'Cavalry consists of armored soldiers armed with melee weapons and mounted on horses.',
-    tactics: [allTacticsByName['Overrun']],
+    tactics: ['Overrun'],
     gear: [],
     conditions: [],
 }, {
@@ -1220,7 +1314,7 @@ const armies: Army[] = [{
         name: 'Siege Engine',
         shots: 5,
     },
-    tactics: [allTacticsByName['Engines of War']],
+    tactics: ['Engines of War'],
     gear: [],
     conditions: [],
 }, {
@@ -1247,7 +1341,7 @@ const armies: Army[] = [{
     melee: {
         name: 'Longswords',
     },
-    tactics: [allTacticsByName['Hold the Line'], allTacticsByName['Toughened Soldiers']],
+    tactics: ['Hold the Line', 'Toughened Soldiers'],
     gear: [],
     conditions: [],
 }, {
@@ -1279,7 +1373,7 @@ const armies: Army[] = [{
         name: 'Longbows',
         shots: 7,
     },
-    tactics: [allTacticsByName['Efficient Ammunition'], allTacticsByName['Sharpshooter']],
+    tactics: ['Efficient Ammunition', 'Sharpshooter'],
     gear: [],
     conditions: [],
 }, {
@@ -1307,7 +1401,7 @@ structure and lessens their morale.`,
     melee: {
         name: 'Swords and Axes',
     },
-    tactics: [allTacticsByName['Tactical Training']],
+    tactics: ['Tactical Training (Drelev Irregulars)'],
     gear: [],
     conditions: [],
 }, {
@@ -1335,10 +1429,10 @@ structure and lessens their morale.`,
         name: 'Claws and Fangs',
     },
     tactics: [
-        allTacticsByName['Brutal Assault'],
-        allTacticsByName['Darkvision'],
-        allTacticsByName['Frightening Foe'],
-        allTacticsByName['Regeneration'],
+        'Brutal Assault',
+        'Darkvision',
+        'Frightening Foe',
+        'Regeneration',
     ],
     gear: [],
     conditions: [],
@@ -1371,7 +1465,7 @@ structure and lessens their morale.`,
         name: 'Longbows',
         shots: 7,
     },
-    tactics: [allTacticsByName['Pitaxian Training']],
+    tactics: ['Pitaxian Training'],
     gear: [],
     conditions: [],
 }, {
@@ -1404,9 +1498,9 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        allTacticsByName['Tusker Training'],
-        allTacticsByName['Trampling Charge'],
-        allTacticsByName['Darkvision'],
+        'Tusker Training',
+        'Trampling Charge',
+        'Darkvision',
     ],
     gear: [],
     conditions: [],
@@ -1436,10 +1530,10 @@ structure and lessens their morale.`,
         plus: ['Wyvern Venom'],
     },
     tactics: [
-        allTacticsByName['Darkvision'],
-        allTacticsByName['Flight'],
-        allTacticsByName['Wyvern Venom'],
-        allTacticsByName['Wyvern Tactics'],
+        'Darkvision',
+        'Flight',
+        'Wyvern Venom',
+        'Wyvern Tactics',
     ],
     gear: [],
     conditions: [],
@@ -1470,9 +1564,9 @@ structure and lessens their morale.`,
         name: 'Greater Magic Axes',
     },
     tactics: [
-        allTacticsByName['Live off the Land'],
-        allTacticsByName['Merciless'],
-        allTacticsByName['Toughened Soldiers'],
+        'Live Off The Land',
+        'Merciless',
+        'Toughened Soldiers',
     ],
     gear: [],
     conditions: [],
@@ -1503,10 +1597,10 @@ structure and lessens their morale.`,
         shots: 7,
     },
     tactics: [
-        allTacticsByName['Efficient Ammunition'],
-        allTacticsByName['Explosive Shot'],
-        allTacticsByName['Toughened Soldiers'],
-        allTacticsByName['Toughened Soldiers'],
+        'Efficient Ammunition',
+        'Explosive Shot',
+        'Toughened Soldiers',
+        'Toughened Soldiers',
     ],
     gear: [],
     conditions: [],
@@ -1540,16 +1634,12 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        allTacticsByName['Battlefield Adaptability'],
-        allTacticsByName['Primal Magic'],
-        allTacticsByName['Darkvision'],
-        allTacticsByName['Supernatural Attacks'],
-        allTacticsByName['Swift Recovery'],
-        {
-            name: 'Tactical Training',
-            unique: true,
-            description: 'The First World Army can use the following tactical actions: counterattack, dirty fighting, feint, and taunt.',
-        },
+        'Battlefield Adaptability',
+        'Primal Magic',
+        'Darkvision',
+        'Supernatural Attacks',
+        'Swift Recovery',
+        'Tactical Training (First World Army)',
     ],
     gear: [],
     conditions: [],
@@ -1583,9 +1673,9 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        allTacticsByName['Burning Weaponry'],
-        allTacticsByName['Darkvision'],
-        allTacticsByName['Explosive Defeat'],
+        'Burning Weaponry',
+        'Darkvision',
+        'Explosive Defeat',
     ],
     gear: [],
     conditions: [],
@@ -1619,8 +1709,8 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        allTacticsByName['Swamp Dwellers'],
-        allTacticsByName['Live Off The Land'],
+        'Swamp Dwellers',
+        'Live Off The Land',
     ],
     gear: [],
     conditions: [],
@@ -1654,10 +1744,10 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        allTacticsByName['Amphibious'],
-        allTacticsByName['Chorus of Croaks'],
-        allTacticsByName['Darkvision'],
-        allTacticsByName['Swamp Charge'],
+        'Amphibious',
+        'Chorus of Croaks',
+        'Darkvision',
+        'Swamp Charge',
     ],
     gear: [],
     conditions: [],
@@ -1691,10 +1781,10 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        allTacticsByName['Brave'],
-        allTacticsByName['Darkvision'],
-        allTacticsByName['Self-Sufficient'],
-        allTacticsByName['Trample'],
+        'Brave',
+        'Darkvision',
+        'Self-Sufficient',
+        'Trample',
     ],
     gear: [],
     conditions: [],
@@ -1728,8 +1818,8 @@ structure and lessens their morale.`,
         shots: 7,
     },
     tactics: [
-        allTacticsByName['Accustomed to Panic'],
-        allTacticsByName['Darkvision'],
+        'Accustomed to Panic',
+        'Darkvision',
     ],
     gear: [],
     conditions: [],
@@ -1758,10 +1848,10 @@ structure and lessens their morale.`,
         name: 'Greataxes',
     },
     tactics: [
-        allTacticsByName['Furious Charge'],
-        allTacticsByName['Reactive Rally'],
-        allTacticsByName['Revel in Battle'],
-        allTacticsByName['Warmongers'],
+        'Furious Charge',
+        'Reactive Rally',
+        'Revel in Battle',
+        'Warmongers',
     ],
     gear: [],
     conditions: [],
@@ -1795,10 +1885,10 @@ structure and lessens their morale.`,
         shots: 5,
     },
     tactics: [
-        allTacticsByName['Darkvision'],
-        allTacticsByName['Hurl Nets'],
-        allTacticsByName['Water Retreat'],
-        allTacticsByName['Water Stride'],
+        'Darkvision',
+        'Hurl Nets',
+        'Water Retreat',
+        'Water Stride',
     ],
     gear: [],
     conditions: [],

@@ -58,6 +58,7 @@
             <a data-tab="gear" class="{{#if tabs.gearTab}}active{{/if}}">Gear</a>
             <a data-tab="tactics" class="{{#if tabs.tacticsTab}}active{{/if}}">Tactics</a>
             <a data-tab="conditions" class="{{#if tabs.conditionsTab}}active{{/if}}">Conditions</a>
+            <a data-tab="effects" class="{{#if tabs.effectsTab}}active{{/if}}">Effects</a>
         </nav>
         <div class="km-sidebar">
             {{> modules/pf2e-kingmaker-tools/templates/army/sidebar.hbs}}
@@ -77,6 +78,9 @@
             </div>
             <div {{#unless tabs.conditionsTab}}hidden{{/unless}}>
                 {{> modules/pf2e-kingmaker-tools/templates/army/conditions.hbs}}
+            </div>
+            <div {{#unless tabs.effectsTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/army/effects.hbs}}
             </div>
         </div>
     </div>

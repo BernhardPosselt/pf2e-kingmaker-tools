@@ -2,11 +2,16 @@ import {calculateArmyData, CalculatedArmy} from './utils';
 import {
     allAlignmentLabels,
     allAlignments,
+    allArmyActions,
     allArmySaves,
     allArmyTypes,
+    allGearByName,
     allLevels,
     allRarities,
+    allTacticsByName,
     armiesByName,
+    ArmyItem,
+    ArmyTacticsName,
 } from './data';
 import {capitalize} from '../utils';
 
@@ -16,21 +21,51 @@ interface ArmyOptions {
     token: Token;
 }
 
-interface SelectValue {
+interface LabeledValue {
     label: string;
     value: string;
 }
 
-interface ArmyData extends CalculatedArmy {
-    rarities: SelectValue[];
-    saves: SelectValue[];
-    alignments: SelectValue[];
-    types: SelectValue[];
-    levels: SelectValue[];
+interface ArmyData extends Omit<CalculatedArmy, 'gear'> {
+    rarities: LabeledValue[];
+    saves: LabeledValue[];
+    alignments: LabeledValue[];
+    types: LabeledValue[];
+    levels: LabeledValue[];
     tabs: Record<string, boolean>;
+    actions: Actions[];
+    gear: Gear[];
 }
 
-type ArmyTab = 'status' | 'gear' | 'conditions' | 'tactics' | 'actions';
+interface Actions {
+    name: string;
+    icon: string;
+    traits: string[];
+    requirements?: string;
+    trigger?: string;
+    description?: string;
+    type?: LabeledValue;
+    frequency?: string;
+    effect?: string;
+    results?: {
+        criticalSuccess?: string;
+        success?: string;
+        failure?: string;
+        criticalFailure?: string;
+    }
+}
+
+interface Gear {
+    name: string;
+    level: number;
+    traits: string[];
+    quantity?: number;
+    maximumQuantity?: number;
+    description: string;
+    price: number;
+}
+
+type ArmyTab = 'status' | 'gear' | 'conditions' | 'tactics' | 'actions' | 'effects';
 
 
 class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, object, null> {
@@ -68,6 +103,8 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
         const data = armiesByName.get(name)!;
         const army = calculateArmyData(data);
         console.log(army);
+        // const gear = army.gear;
+        const gear: ArmyItem[] = [{name: 'Healing Potion', quantity: 3}, {name: 'Magic Armor +1'}];
         return {
             ...army,
             alignments: allAlignments.map((alignment, index) => {
@@ -86,6 +123,8 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
                 return {value: `${level}`, label: `${level}`};
             }),
             tabs: this.getActiveTabs(),
+            actions: this.buildActions(army.tactics),
+            gear: this.buildGear(gear),
         };
     }
 
@@ -96,6 +135,7 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
             gearTab: this.nav === 'gear',
             tacticsTab: this.nav === 'tactics',
             conditionsTab: this.nav === 'conditions',
+            effectsTab: this.nav === 'effects',
         };
     }
 
@@ -114,6 +154,52 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
                 this.nav = tab.dataset.tab as ArmyTab;
                 this.render();
             });
+        });
+    }
+
+    private buildActions(tactics: ArmyTacticsName[]): Actions[] {
+        const unlockedActionNames = new Set(tactics.flatMap(tactic => allTacticsByName[tactic].grantsActions ?? []));
+        const actions = allArmyActions.filter(action => !action.requiresUnlock || unlockedActionNames.has(action.name));
+        return actions.map(action => {
+            const traits: string[] = [
+                ...(action.type ? [capitalize(action.type)] : []),
+                ...(action.restrictedTypes ?? [])].map(value => capitalize(value)
+            );
+            const results = action.criticalSuccess || action.success || action.failure || action.criticalFailure
+                ? {
+                    criticalSuccess: action.criticalSuccess,
+                    success: action.success,
+                    failure: action.failure,
+                    criticalFailure: action.criticalFailure,
+                }
+                : undefined;
+            return {
+                icon: action.actions,
+                name: action.name,
+                description: action.description,
+                trigger: action.trigger,
+                requirements: action.requirements,
+                frequency: action.frequency,
+                effect: action.effect,
+                type: action.type ? {label: capitalize(action.type), value: action.type} : undefined,
+                traits,
+                results,
+            };
+        });
+    }
+
+    private buildGear(gear: ArmyItem[]): Gear[] {
+        return gear.map(g => {
+            const data = allGearByName[g.name];
+            return {
+                level: data.level,
+                name: data.name,
+                description: data.description,
+                price: data.price,
+                maximumQuantity: data.quantity,
+                quantity: g.quantity,
+                traits: ['Army', ...data.traits.map(trait => capitalize(trait))],
+            };
         });
     }
 }
