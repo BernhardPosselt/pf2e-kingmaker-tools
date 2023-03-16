@@ -1748,7 +1748,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
         fortune: false,
         enabled: true,
         phase: 'leadership',
-        dc: 'control',
+        dc: 'custom',
         title: 'Request Foreign Aid',
         description: 'When disaster strikes, you send out a call for help to another nation with whom you have diplomatic relations. The DC of this check is equal to the other group’s Negotiation DC +2 (see the sidebar on page 519).',
         requirement: 'You have diplomatic relations with the group you are requesting aid from.',
