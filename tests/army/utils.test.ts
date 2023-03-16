@@ -17,14 +17,20 @@ describe('Calculate Army', () => {
         const calculated = calculateArmyData(army);
         const expected: CalculatedArmy = {
             ...army,
-            ac: 33,
-            meleeModifier: 17,
-            rangedModifier: 30,
-            scouting: 21,
-            recruitmentDC: 31,
-            morale: 17,
-            maneuver: 27,
-            maximumTactics: 3,
+            calculated: {
+                ac: 33,
+                meleeModifier: 17,
+                rangedModifier: 30,
+                scouting: 21,
+                recruitmentDC: 31,
+                morale: 17,
+                maneuver: 27,
+                maximumTactics: 3,
+                initiative: 21,
+                consumption: 0,
+                hp: 0,
+                routeThreshold: 0,
+            },
         };
         expect(calculated).toEqual(expected);
     });
