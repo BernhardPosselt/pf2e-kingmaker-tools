@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.34] - 2023-03-19
+
+### Added
+
+* Display errors when actors with name Kingdom Sheet exist that haven't been imported with the View Kingdom Macro
+
+
 ## [0.0.33] - 2023-03-16
 
 ### Fixed

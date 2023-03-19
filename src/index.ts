@@ -322,6 +322,7 @@ Hooks.on('ready', async () => {
                 await syncWeather(gameInstance);
             }
         });
+        checkKingdomErrors(gameInstance);
     }
 });
 
@@ -443,3 +444,10 @@ Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
         });
     }
 });
+
+function checkKingdomErrors(game: Game): void {
+    const actor = getKingdomSheetActor(game);
+    if (actor && actor.getFlag('pf2e-kingmaker-tools', 'kingdom-sheet') === undefined) {
+        ui.notifications?.error('Found an Actor with name "Kingdom Sheet" that has not been imported using the "View Kingdom" Macro! Please delete the actor and re-import it.');
+    }
+}
