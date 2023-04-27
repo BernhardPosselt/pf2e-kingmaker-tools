@@ -12,6 +12,12 @@ export function getKingdom(sheetActor: Actor): Kingdom {
             type: current?.fameType ?? 'famous',
         };
     }
+    if (kingdom.supernaturalSolutions === undefined) {
+        kingdom.supernaturalSolutions = 0;
+    }
+    if (kingdom.creativeSolutions === undefined) {
+        kingdom.creativeSolutions = 0;
+    }
     if (kingdom.modifiers === undefined) {
         kingdom.modifiers = [];
     }

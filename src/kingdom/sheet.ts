@@ -169,6 +169,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             resourcePoints: kingdomData.resourcePoints,
             consumption: kingdomData.consumption,
             activeSettlement: kingdomData.activeSettlement,
+            supernaturalSolutions: kingdomData.supernaturalSolutions,
+            creativeSolutions: kingdomData.creativeSolutions,
             levels,
             settlementConsumption,
             totalConsumption,
@@ -380,6 +382,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
                 await this.increaseXP(calculateRpXP(current.resourcePoints.now, current.level, useHomeBrew));
             });
+        $html.querySelector('#solutions-to-xp')
+            ?.addEventListener('click', async () => {
+                const current = this.getKingdom();
+                await this.increaseXP((current.supernaturalSolutions + current.creativeSolutions) * 10);
+            });
         $html.querySelector('#km-level-up')
             ?.addEventListener('click', async () => {
                 const current = this.getKingdom();
@@ -560,6 +567,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             <ul>
                 <li>Setting Resource Points to 0</li>
                 <li>Reducing Effects' Turns by 1</li>
+                <li>Setting available Supernatural and Creative Solutions to 0</li>
                 <li>Adding values from the <b>next</b> columns to the <b>now</b> columns respecting their resource limits</li>
             </ul>
             `,
@@ -585,6 +593,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 now: current.resourceDice.next,
                 next: 0,
             },
+            supernaturalSolutions: 0,
+            creativeSolutions: 0,
             resourcePoints: {
                 now: current.resourcePoints.next,
                 next: 0,

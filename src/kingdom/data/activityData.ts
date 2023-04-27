@@ -395,7 +395,7 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         description: 'You work with your kingdom’s scholars, thinkers, and practitioners of magical and mundane experimentation to come up with new ways to resolve issues when business as usual is just not working. Attempt a basic check.',
         skills: simpleRank(['scholarship']),
         criticalSuccess: {
-            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and ${gainXp(10)} instead.`,
+            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('creative-solution')}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and ${gainXp(10)} instead.`,
             modifiers: () => [{
                 turns: 1,
                 enabled: false,
@@ -406,7 +406,7 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
             }],
         },
         success: {
-            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and ${gainXp(10)} instead. In addition, ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your Creative Solution.`,
+            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('creative-solution')}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and ${gainXp(10)} instead. In addition, ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your Creative Solution.`,
             modifiers: () => [{
                 turns: 1,
                 enabled: false,
@@ -1943,17 +1943,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         fortune: true,
         skills: simpleRank(['magic']),
         criticalSuccess: {
-            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you ${gainXp(10)} instead.`,
+            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('supernatural-solution')}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you ${gainXp(10)} instead.`,
         },
         success: {
-            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you ${gainXp(10)} instead. However, you ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your supernatural solution.`,
+            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('supernatural-solution')}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you ${gainXp(10)} instead. However, you ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your supernatural solution.`,
         },
         failure: {
             msg: `Your attempt at researching a supernatural solution costs additional RP to research, but is ultimately a failure, providing no advantage. ${loseRP('2d6')}`,
         },
         criticalFailure: {
-            msg: `Your attempt at researching a supernatural solution costs additional RP to research, but is ultimately a failure, providing no advantage. ${loseRP('2d6')}. In addition, your spellcasters’ resources and morale are impacted such that you cannot attempt a Supernatural Solution again for 2 Kingdom turns. Special You cannot influence a check with Supernatural Solution and Creative Solution simultaneously.`,
+            msg: `Your attempt at researching a supernatural solution costs additional RP to research, but is ultimately a failure, providing no advantage. ${loseRP('2d6')}. In addition, your spellcasters’ resources and morale are impacted such that you cannot attempt a Supernatural Solution again for 2 Kingdom turns.`,
         },
+        special: 'You cannot influence a check with Supernatural Solution and Creative Solution simultaneously.',
     },
     'supplementary-hunting': {
         companion: 'Ekundayo',
@@ -2181,6 +2182,10 @@ export function gainSize(value: number | string): string {
 
 export function loseSize(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'size', mode: 'lose'});
+}
+
+export function gainSolution(type: 'creative-solution' | 'supernatural-solution'): string {
+    return createResourceButton({value: '1', type, mode: 'gain'});
 }
 
 export function createResourceButton({turn = 'now', value, mode = 'gain', type, hints}: CreateResourceButton): string {

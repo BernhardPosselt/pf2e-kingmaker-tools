@@ -155,6 +155,8 @@ export interface Kingdom {
         now: number;
         next: number;
     };
+    supernaturalSolutions: number;
+    creativeSolutions: number;
     leaders: Leaders;
     commodities: {
         now: Commodities;
@@ -314,6 +316,8 @@ export function getDefaultKingdomData(): Kingdom {
             now: 0,
             next: 0,
         },
+        supernaturalSolutions: 0,
+        creativeSolutions: 0,
         level: 1,
         xpThreshold: 1000,
         xp: 0,

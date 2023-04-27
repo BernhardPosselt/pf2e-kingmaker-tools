@@ -57,6 +57,10 @@ export function getCurrentValue(kingdom: Kingdom, type: RolledResources, turn: R
         return kingdom.fame[turn];
     } else if (type === 'size') {
         return kingdom.size;
+    } else if (type === 'supernatural-solution') {
+        return kingdom.supernaturalSolutions;
+    } else if (type === 'creative-solution') {
+        return kingdom.creativeSolutions;
     } else {
         throw Error(`Unhandled type ${type}`);
     }
@@ -108,6 +112,10 @@ export function createUpdate(kingdom: Kingdom, type: RolledResources, turn: Reso
         };
     } else if (type === 'size') {
         return {size: value};
+    } else if (type === 'supernatural-solution') {
+        return {supernaturalSolutions: value};
+    } else if (type === 'creative-solution') {
+        return {creativeSolutions: value};
     } else if (type === 'resource-dice') {
         return {
             resourceDice: {
@@ -161,6 +169,8 @@ export type RolledResources = 'resource-dice'
     | 'stone'
     | 'size'
     | 'xp'
+    | 'supernatural-solution'
+    | 'creative-solution'
     | 'rolled-resource-dice'; // TODO: add ruin, commodities
 export type ResourceTurn = 'now' | 'next';
 
