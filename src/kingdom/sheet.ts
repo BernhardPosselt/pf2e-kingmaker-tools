@@ -159,7 +159,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             heartlandLabel: unslugify(kingdomData.heartland),
             government: kingdomData.government,
             type: capitalize(sizeData.type),
-            controlDC: getControlDC(kingdomData.level, kingdomData.size),
+            controlDC: getControlDC(kingdomData.level, kingdomData.size, kingdomData.leaders.ruler.vacant),
             atWar: kingdomData.atWar,
             unrest: kingdomData.unrest,
             anarchyAt: this.calculateAnarchy(kingdomData.feats, kingdomData.bonusFeats),
@@ -624,19 +624,25 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const overcrowdedSettlements = data.filter(s => this.isOvercrowded(s)).length;
         const secondaryTerritories = data.some(s => s.settlement.secondaryTerritory) ? 1 : 0;
         const atWar = current.atWar ? 1 : 0;
-        const newUnrest = atWar + overcrowdedSettlements + secondaryTerritories;
+        let rulerVacancyUnrest = 0;
+        if (current.leaders.ruler.vacant) {
+            const roll = await (new Roll('1d4').roll());
+            await roll.toMessage({flavor: 'Gaining Unrest because Leader is vacant'});
+            rulerVacancyUnrest = roll.total;
+        }
+        const newUnrest = atWar + overcrowdedSettlements + secondaryTerritories + rulerVacancyUnrest;
         let unrest = newUnrest + current.unrest;
         if (current.level >= 20 && unrest > 0) {
             unrest = 0;
-            await ChatMessage.create({content: 'Ignoring Unrest increase due to "Envy of the World" Kingdom Feature'});
-        }
-        if (unrest > 0) {
+            await ChatMessage.create({content: 'Ignoring any Unrest increase due to "Envy of the World" Kingdom Feature'});
+        } else {
             await ChatMessage.create({
                 content: `<h2>Gaining Unrest</h2> 
                 <ul>
                     <li><b>Overcrowded Settlements</b>: ${overcrowdedSettlements}</li>
                     <li><b>Secondary Territories</b>: ${secondaryTerritories}</li>
                     <li><b>Kingdom At War</b>: ${atWar}</li>
+                    <li><b>Ruler Vacancy Penalty</b>: ${rulerVacancyUnrest}</li>
                     <li><b>Total</b>: ${newUnrest}</li>
                 </ul>
                 `,

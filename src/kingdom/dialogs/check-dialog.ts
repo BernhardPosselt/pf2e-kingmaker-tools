@@ -88,7 +88,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.kingdom = options.kingdom;
         this.actor = options.actor;
         this.onRoll = options.onRoll;
-        const controlDC = getControlDC(this.kingdom.level, this.kingdom.size);
+        const controlDC = getControlDC(this.kingdom.level, this.kingdom.size, this.kingdom.leaders.ruler.vacant);
         if (this.type === 'skill') {
             this.selectedSkill = options.skill!;
             this.dc = controlDC;

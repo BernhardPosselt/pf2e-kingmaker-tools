@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Ruler Vacancy Penalty correctly increases Control DC by 2 and causes you to gain 1d4 Unrest during Upkeep
+
+### Added
+
+* Add a way to be able to track Creative and Supernatural Solutions
+* Added a Button to gain XP from unused Creative and Supernatural Solutions
+
 ## [0.0.34] - 2023-03-19
 
 ### Added
