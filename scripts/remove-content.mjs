@@ -31,10 +31,10 @@ async function sanitizeRollTable(packFileName, resultSanitizer) {
 }
 
 const sanitizeRandomEncounterRegex = /^(?<text>.*\((?:Moderate|Severe|Low|Trivial|Extreme) \d+\))(.+)?$/i;
-await sanitizeRollTable('random-encounters.db', (_, result) => {
-    const match = sanitizeRandomEncounterRegex.exec(result.text);
-    if (match) {
-        return {...result, text: match.groups.text};
-    }
-    return result;
-});
+// await sanitizeRollTable('random-encounters.db', (_, result) => {
+//     const match = sanitizeRandomEncounterRegex.exec(result.text);
+//     if (match) {
+//         return {...result, text: match.groups.text};
+//     }
+//     return result;
+// });

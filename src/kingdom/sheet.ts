@@ -25,6 +25,7 @@ import {
     getAllMergedSettlements,
     getAllSettlements,
     getCurrentScene,
+    getScene,
     getSettlement,
     getSettlementsWithoutLandBorders,
     getStructureResult,
@@ -59,6 +60,8 @@ import {createActiveSettlementModifiers, Modifier, modifierToLabel} from './modi
 import {addEffectDialog} from './dialogs/add-effect-dialog';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
+import {calculateUnrestPenalty} from './data/unrest';
+import {editSettlementDialog} from './dialogs/edit-settlement-dialog';
 
 interface KingdomOptions {
     game: Game;
@@ -162,6 +165,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             controlDC: getControlDC(kingdomData.level, kingdomData.size, kingdomData.leaders.ruler.vacant),
             atWar: kingdomData.atWar,
             unrest: kingdomData.unrest,
+            unrestPenalty: calculateUnrestPenalty(kingdomData.unrest),
             anarchyAt: this.calculateAnarchy(kingdomData.feats, kingdomData.bonusFeats),
             resourceDieSize: sizeData.resourceDieSize,
             resourceDiceNum: this.getResourceDiceNum(kingdomData),
@@ -228,6 +232,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         waterBorders,
                         overcrowded: this.isOvercrowded(s),
                         lacksBridge: waterBorders >= 4 && !getStructureResult(s).hasBridge,
+                        isCapital: settlement?.settlement.type === 'capital',
                         name: s.scene.name ?? undefined,
                     };
                 }),
@@ -517,6 +522,22 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.km-delete-effect')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'modifiers'));
+            });
+        $html.querySelectorAll('.edit-settlement')
+            ?.forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const target = ev?.currentTarget as HTMLButtonElement | null;
+                    const index = parseInt(target?.dataset?.index as string, 10);
+                    const current = this.getKingdom();
+                    const data = current.settlements[index];
+                    const name = getScene(this.game, data.sceneId)?.name as string;
+                    await editSettlementDialog(name, data, (savedData) => {
+                        current.settlements[index] = savedData;
+                        this.saveKingdom({
+                            settlements: current.settlements,
+                        });
+                    });
+                });
             });
     }
 

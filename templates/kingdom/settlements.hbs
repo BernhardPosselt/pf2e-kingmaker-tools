@@ -2,40 +2,61 @@
     <table class="km-table">
         <tr>
             <th>Name</th>
-            <th>Type</th>
-            <th title="Lots with at least 1 structure">Lots</th>
-            <th title="Lots completely filled with structures">Level</th>
-            <th>Water Borders</th>
-            <th title="Not connected to capital via claimed hexes">Secondary</th>
+            <th>Level</th>
+            <th>Capital</th>
+            <th>Overcrowded</th>
+            <th>Lacks Bridge</th>
             <th>Delete</th>
-            <th>Open</th>
+            <th>Edit</th>
+            <th>Inspect</th>
         </tr>
         {{#each settlements}}
             <tr>
-                <td>{{name}}<input type="hidden" value="{{sceneId}}" name="settlements.{{@index}}.sceneId">{{#if overcrowded}} <i class="fa-solid fa-people-roof" title="Overcrowded"></i>{{/if}}{{#if lacksBridge}} <i class="fa-solid fa-bridge-circle-xmark" title="No Bridge"></i>{{/if}}</td>
+                <td>{{name}}<input type="hidden" value="{{sceneId}}" name="settlements.{{@index}}.sceneId"></td>
+                <td>{{level}}</td>
                 <td>
-                    {{#select type}}
-                        <select name="settlements.{{@index}}.type">
-                            <option value="capital">Capital</option>
-                            <option value="settlement">Settlement</option>
-                        </select>
-                    {{/select}}
+                    {{#if isCapital}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{else}}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {{/if}}
                 </td>
-                <td title="Lots with at least 1 structure"><input type="number" style="width: 30px" name="settlements.{{@index}}.lots" value="{{lots}}"></td>
-                <td title="Lots completely filled with structures"><input type="number" value="{{level}}" style="width: 30px" name="settlements.{{@index}}.level"></td>
-                <td><input type="number" value="{{waterBorders}}" style="width: 30px" name="settlements.{{@index}}.waterBorders"></td>
-                <td title="Not connected to capital via claimed hexes"><input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked secondaryTerritory}}></td>
                 <td>
-                    <button type="button" class="icon-action km-delete-settlement" data-delete-index="{{@index}}"><i
+                    {{#if overcrowded}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{else}}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {{/if}}
+                </td>
+                <td>
+                    {{#if lacksBridge}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{else}}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {{/if}}
+                </td>
+                <td>
+                    <button type="button" class="icon-action km-delete-settlement"
+                            data-delete-index="{{@index}}"><i
                             class="fa-solid fa-trash"></i></button>
+                </td>
+                <td>
+                    <button type="button" class="icon-action edit-settlement" data-index="{{@index}}"><i
+                            class="fa-solid fa-bars"></i></button>
                 </td>
                 <td>
                     <button type="button" class="icon-action inspect-settlement" data-id="{{sceneId}}"><i
                             class="fa-solid fa-magnifying-glass"></i></button>
+                    <input type="hidden" value="{{lots}}" name="settlements.{{@index}}.lots">
+                    <input type="hidden" value="{{level}}" name="settlements.{{@index}}.level">
+                    <input type="hidden" value="{{waterBorders}}" name="settlements.{{@index}}.waterBorders">
+                    <input type="hidden" value="{{type}}" name="settlements.{{@index}}.type">
+                    <input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked secondaryTerritory}} hidden>
                 </td>
             </tr>
         {{/each}}
     </table>
 {{/if}}
-<button type="button" id="make-current-scene-settlement" {{#unless canAddSettlement}}disabled{{/unless}}>Add Current Scene
+<button type="button" id="make-current-scene-settlement" {{#unless canAddSettlement}}disabled{{/unless}}>Add Current
+    Scene
     <i class="fa-solid fa-plus"></i></button>

@@ -562,14 +562,13 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
         this.game = options.game;
     }
 
-    override getData(options?: Partial<FormApplicationOptions>): object {
+    override async getData(options?: Partial<FormApplicationOptions>): Promise<object> {
         const {knownRecipeData, selectedRecipeName, selectedRecipeData} = this.getRecipeData();
         const servings = this.getServings();
         return {
-            ...super.getData(options),
             selectedRecipeName,
             selectedRecipe: this.includeCalculatedServings(selectedRecipeData, servings),
-            recipeLink: TextEditor.enrichHTML(createUUIDLink(selectedRecipeData.uuid, selectedRecipeData.name)),
+            recipeLink: await TextEditor.enrichHTML(createUUIDLink(selectedRecipeData.uuid, selectedRecipeData.name)),
             recipes: knownRecipeData,
             skills: this.getSkills(),
             selectedSkill: this.getSelectedSkill(),
@@ -693,28 +692,27 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
         this.game = options.game;
     }
 
-    override getData(options?: Partial<ApplicationOptions> & LearnRecipeOptions): object {
+    override async getData(options?: Partial<ApplicationOptions> & LearnRecipeOptions): Promise<object> {
         const knownRecipeNames = new Set(this.getKnownRecipes());
         const {zoneLevel} = getRegionInfo(this.game);
         const isGM = this.game.user?.isGM;
-        const knownRecipes = recipes(this.game)
+        const knownRecipes = await Promise.all(recipes(this.game)
             .filter(recipe => knownRecipeNames.has(recipe.name))
-            .map(recipe => {
+            .map(async recipe => {
                 return {
-                    recipe: TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
+                    recipe: await TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
                     recipeName: recipe.name,
                     canNotUnlearn: recipe.name === 'Basic Meal' || recipe.name === 'Hearty Meal',
                     canDelete: recipe.isHomebrew && isGM,
                 };
-            });
-        const availableRecipes = recipes(this.game)
+            }));
+        const availableRecipes = await Promise.all(recipes(this.game)
             .filter(recipe => !knownRecipeNames.has(recipe.name) && recipe.level <= zoneLevel)
-            .map(recipe => this.toTemplateRecipe(recipe));
-        const otherRecipes = recipes(this.game)
+            .map(recipe => this.toTemplateRecipe(recipe)));
+        const otherRecipes = await Promise.all(recipes(this.game)
             .filter(recipe => !knownRecipeNames.has(recipe.name) && recipe.level > zoneLevel)
-            .map(recipe => this.toTemplateRecipe(recipe));
+            .map(recipe => this.toTemplateRecipe(recipe)));
         return {
-            ...super.getData(options),
             knownRecipes,
             availableRecipes,
             otherRecipes,
@@ -723,9 +721,9 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
         };
     }
 
-    private toTemplateRecipe(recipe: Recipe): object {
+    private async toTemplateRecipe(recipe: Recipe): Promise<object> {
         return {
-            recipe: TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
+            recipe: await TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
             recipeName: recipe.name,
             cookingLoreDC: recipe.cookingLoreDC,
             ingredients: `Basic: ${recipe.basicIngredients * 2}, Special: ${recipe.specialIngredients * 2}`,

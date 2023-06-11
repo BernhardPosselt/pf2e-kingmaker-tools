@@ -15,7 +15,6 @@
         {
             "name": "kingmaker-tools-structures",
             "label": "Kingmaker Tools Structures",
-            "path": "packs/structures.db",
             "type": "Actor",
             "system": "pf2e",
             "private": false,
@@ -24,7 +23,6 @@
         {
             "name": "kingmaker-tools-meal-effects",
             "label": "Kingmaker Tools Meal Effects",
-            "path": "packs/meal-effects.db",
             "type": "Item",
             "system": "pf2e",
             "private": false,
@@ -33,7 +31,6 @@
         {
             "name": "kingmaker-tools-camping-effects",
             "label": "Kingmaker Tools Camping Effects",
-            "path": "packs/camping-effects.db",
             "type": "Item",
             "system": "pf2e",
             "private": false,
@@ -42,7 +39,6 @@
         {
             "name": "kingmaker-tools-weather-effects",
             "label": "Kingmaker Tools Weather Effects",
-            "path": "packs/weather-effects.db",
             "type": "Item",
             "system": "pf2e",
             "private": false,
@@ -51,7 +47,6 @@
         {
             "name": "kingmaker-tools-journals",
             "label": "Kingmaker Tools Journals",
-            "path": "packs/journals.db",
             "type": "JournalEntry",
             "private": false,
             "flags": {},
@@ -60,7 +55,6 @@
         {
             "name": "kingmaker-tools-custom-journals",
             "label": "Kingmaker Tools Custom Journals",
-            "path": "packs/custom-journals.db",
             "type": "JournalEntry",
             "private": false,
             "flags": {},
@@ -69,7 +63,6 @@
         {
             "name": "kingmaker-tools-rolltables",
             "label": "Kingmaker Tools Rolltables",
-            "path": "packs/rolltables.db",
             "type": "RollTable",
             "private": false,
             "flags": {},
@@ -78,7 +71,6 @@
         {
             "name": "kingmaker-tools-random-encounters",
             "label": "Kingmaker Random Encounters",
-            "path": "packs/random-encounters.db",
             "type": "RollTable",
             "private": false,
             "flags": {},
@@ -87,7 +79,6 @@
         {
             "name": "kingmaker-tools-custom-rolltables",
             "label": "Kingmaker Custom Rolltables",
-            "path": "packs/custom-rolltables.db",
             "type": "RollTable",
             "private": false,
             "flags": {},
@@ -96,11 +87,28 @@
         {
             "name": "kingmaker-tools-macros",
             "label": "Kingmaker Tools Macros",
-            "path": "packs/macros.db",
             "type": "Macro",
             "private": false,
             "flags": {},
             "system": "pf2e"
+        }
+    ],
+    "packFolders": [
+        {
+            "name": "Kingmaker Tools",
+            "sorting": "m",
+            "packs": [
+                "kingmaker-tools-structures",
+                "kingmaker-tools-meal-effects",
+                "kingmaker-tools-camping-effects",
+                "kingmaker-tools-weather-effects",
+                "kingmaker-tools-journals",
+                "kingmaker-tools-custom-journals",
+                "kingmaker-tools-rolltables",
+                "kingmaker-tools-random-encounters",
+                "kingmaker-tools-custom-rolltables",
+                "kingmaker-tools-macros"
+            ]
         }
     ],
     "manifest": "https://raw.githubusercontent.com/BernhardPosselt/pf2e-kingmaker-tools/master/module.json",
@@ -127,7 +135,7 @@
         ]
     },
     "compatibility": {
-        "minimum": "10",
-        "maximum": "10"
+        "minimum": "11",
+        "maximum": "11"
     }
 }
