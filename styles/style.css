@@ -175,6 +175,10 @@
     text-align: left;
 }
 
+.kingmaker-tools-app .smaller-number-input {
+    width: 80px;
+}
+
 td.skill-bonus {
     background-color: var(--secondary-km);
     color: #fff;

@@ -27,10 +27,12 @@
 <table class="km-table">
     <tr>
         <th>Unrest</th>
-        <th>Anarchy</th>
+        <th>Penalty</th>
+        <th>Anarchy At</th>
     </tr>
     <tr>
-        <td><input type="number" value="{{unrest}}" name="unrest"></td>
+        <td class="smaller-number-input"><input type="number" value="{{unrest}}" name="unrest"></td>
+        <td>{{unrestPenalty}}</td>
         <td>{{anarchyAt}}</td>
     </tr>
 </table>
@@ -64,8 +66,8 @@
     <tr>
         <td>{{resourceDieSize}}</td>
         <td>{{resourceDiceNum}}</td>
-        <td><input type="number" value="{{resourceDice.now}}" name="resourceDice.now"></td>
-        <td><input type="number" value="{{resourceDice.next}}" name="resourceDice.next"></td>
+        <td class="smaller-number-input"><input type="number" value="{{resourceDice.now}}" name="resourceDice.now"></td>
+        <td class="smaller-number-input"><input type="number" value="{{resourceDice.next}}" name="resourceDice.next"></td>
     </tr>
 </table>
 <table class="km-table">

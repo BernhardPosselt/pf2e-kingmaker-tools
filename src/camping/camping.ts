@@ -562,14 +562,14 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
         this.game = options.game;
     }
 
-    override getData(options?: Partial<FormApplicationOptions>): object {
+    override async getData(options?: Partial<FormApplicationOptions>): Promise<object> {
+        await migrateRecipesFromLocalStorage(this.game, this.actor as Actor);
         const {knownRecipeData, selectedRecipeName, selectedRecipeData} = this.getRecipeData();
         const servings = this.getServings();
         return {
-            ...super.getData(options),
             selectedRecipeName,
             selectedRecipe: this.includeCalculatedServings(selectedRecipeData, servings),
-            recipeLink: TextEditor.enrichHTML(createUUIDLink(selectedRecipeData.uuid, selectedRecipeData.name)),
+            recipeLink: await TextEditor.enrichHTML(createUUIDLink(selectedRecipeData.uuid, selectedRecipeData.name)),
             recipes: knownRecipeData,
             skills: this.getSkills(),
             selectedSkill: this.getSelectedSkill(),
@@ -583,7 +583,7 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
         selectedRecipeName: string,
         selectedRecipeData: Recipe
     } {
-        const knownRecipeNames = new Set(this.getKnownRecipes());
+        const knownRecipeNames = new Set(getKnownRecipes(this.actor as Actor));
         const recipeData = recipes(this.game);
         const knownRecipeData = recipeData.filter(recipe => knownRecipeNames.has(recipe.name));
         const selectedRecipeName = knownRecipeData.find(data => data.name === this.getSelectedRecipe())
@@ -607,10 +607,6 @@ class CookApp extends FormApplication<CookingOptions & FormApplicationOptions, o
 
     private async setServings(amount: number): Promise<void> {
         await setSetting(this.game, 'servings', amount);
-    }
-
-    private getKnownRecipes(): string[] {
-        return JSON.parse(getStringSetting(this.game, 'knownRecipes'));
     }
 
     private getSkills(): { attribute: string, label: string }[] {
@@ -672,6 +668,24 @@ interface LearnRecipeOptions {
     actor: any;
 }
 
+async function migrateRecipesFromLocalStorage(game: Game, actor: Actor): Promise<void> {
+    // fucking Foundry stores client settings in localStorage, so migrate data to token instead
+    const localSettings = getStringSetting(game, 'knownRecipes');
+    if (localSettings !== '') {
+        const oldRecipes = JSON.parse(localSettings);
+        await saveKnownRecipes(actor, oldRecipes);
+        await setSetting(game, 'knownRecipes', '');
+    }
+}
+
+function getKnownRecipes(actor: Actor): string[] {
+    return actor.getFlag('pf2e-kingmaker-tools', 'knownRecipes') as string[];
+}
+
+async function saveKnownRecipes(actor: Actor, recipes: string[]): Promise<void> {
+    await actor.setFlag('pf2e-kingmaker-tools', 'knownRecipes', recipes);
+}
+
 class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions> {
     static override get defaultOptions(): ApplicationOptions {
         const options = super.defaultOptions;
@@ -693,28 +707,28 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
         this.game = options.game;
     }
 
-    override getData(options?: Partial<ApplicationOptions> & LearnRecipeOptions): object {
-        const knownRecipeNames = new Set(this.getKnownRecipes());
+    override async getData(options?: Partial<ApplicationOptions> & LearnRecipeOptions): Promise<object> {
+        await migrateRecipesFromLocalStorage(this.game, this.actor as Actor);
+        const knownRecipeNames = new Set(getKnownRecipes(this.actor as Actor));
         const {zoneLevel} = getRegionInfo(this.game);
         const isGM = this.game.user?.isGM;
-        const knownRecipes = recipes(this.game)
+        const knownRecipes = await Promise.all(recipes(this.game)
             .filter(recipe => knownRecipeNames.has(recipe.name))
-            .map(recipe => {
+            .map(async recipe => {
                 return {
-                    recipe: TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
+                    recipe: await TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
                     recipeName: recipe.name,
                     canNotUnlearn: recipe.name === 'Basic Meal' || recipe.name === 'Hearty Meal',
                     canDelete: recipe.isHomebrew && isGM,
                 };
-            });
-        const availableRecipes = recipes(this.game)
+            }));
+        const availableRecipes = await Promise.all(recipes(this.game)
             .filter(recipe => !knownRecipeNames.has(recipe.name) && recipe.level <= zoneLevel)
-            .map(recipe => this.toTemplateRecipe(recipe));
-        const otherRecipes = recipes(this.game)
+            .map(recipe => this.toTemplateRecipe(recipe)));
+        const otherRecipes = await Promise.all(recipes(this.game)
             .filter(recipe => !knownRecipeNames.has(recipe.name) && recipe.level > zoneLevel)
-            .map(recipe => this.toTemplateRecipe(recipe));
+            .map(recipe => this.toTemplateRecipe(recipe)));
         return {
-            ...super.getData(options),
             knownRecipes,
             availableRecipes,
             otherRecipes,
@@ -723,9 +737,9 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
         };
     }
 
-    private toTemplateRecipe(recipe: Recipe): object {
+    private async toTemplateRecipe(recipe: Recipe): Promise<object> {
         return {
-            recipe: TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
+            recipe: await TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
             recipeName: recipe.name,
             cookingLoreDC: recipe.cookingLoreDC,
             ingredients: `Basic: ${recipe.basicIngredients * 2}, Special: ${recipe.specialIngredients * 2}`,
@@ -741,24 +755,16 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
         return skills.includes('cooking-lore') || skills.includes('cooking');
     }
 
-    private getKnownRecipes(): string[] {
-        return JSON.parse(getStringSetting(this.game, 'knownRecipes'));
-    }
-
-    private async saveKnownRecipes(recipes: string[]): Promise<void> {
-        return await setSetting(this.game, 'knownRecipes', JSON.stringify(recipes));
-    }
-
     private async addRecipe(recipe: string): Promise<void> {
-        const recipes = this.getKnownRecipes();
+        const recipes = getKnownRecipes(this.actor as Actor);
         const newRecipes = Array.from(new Set([recipe, ...recipes]));
-        await this.saveKnownRecipes(newRecipes);
+        await saveKnownRecipes(this.actor as Actor, newRecipes);
     }
 
     private async removeRecipe(recipe: string): Promise<void> {
-        const recipes = this.getKnownRecipes();
+        const recipes = getKnownRecipes(this.actor as Actor);
         const newRecipes = Array.from(new Set(recipes.filter(r => r !== recipe)));
-        await this.saveKnownRecipes(newRecipes);
+        await saveKnownRecipes(this.actor as Actor, newRecipes);
     }
 
     override activateListeners(html: JQuery): void {

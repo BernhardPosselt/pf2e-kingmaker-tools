@@ -1,1 +1,2 @@
-custom*.db
+*custom*
+_source

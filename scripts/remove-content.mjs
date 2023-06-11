@@ -1,7 +1,7 @@
 // call with: node remove-content.mjs 0.0.1
 
 import * as fs from 'fs';
-import * as readline from "readline";
+import * as path from 'path';
 
 const excludedPacks = new Set([
     'kingmaker-tools-custom-rolltables',
@@ -10,28 +10,24 @@ const excludedPacks = new Set([
 
 const data = JSON.parse(fs.readFileSync('build/pf2e-kingmaker-tools/module.json', 'utf-8'));
 excludedPacks.forEach(packName => {
-    const config = data.packs.find(p => p.name === packName)
-    fs.unlinkSync(`build/pf2e-kingmaker-tools/${config.path}`);
+    fs.rmSync(`build/pf2e-kingmaker-tools/packs/${packName}`, {recursive: true});
 });
 data.packs = data.packs.filter(p => !excludedPacks.has(p.name));
 fs.writeFileSync('build/pf2e-kingmaker-tools/module.json', JSON.stringify(data));
 
 async function sanitizeRollTable(packFileName, resultSanitizer) {
-    const stream = readline.createInterface({
-        input: fs.createReadStream(`build/pf2e-kingmaker-tools/packs/${packFileName}`),
-        crlfDelay: Infinity
-    });
-    const sanitizedLines = [];
-    for await (const line of stream) {
-        const data = JSON.parse(line);
-        data.results = data.results.map(result => resultSanitizer(data, result));
-        sanitizedLines.push(JSON.stringify(data));
+    const directory = `build/tmp/${packFileName}`;
+    for (const fileName of fs.readdirSync(directory)) {
+        const fullPath = path.join(directory, fileName);
+        const value = JSON.parse(fs.readFileSync(fullPath));
+        const result = resultSanitizer(value);
+        fs.writeFileSync(fullPath, JSON.stringify(result));
     }
-    fs.writeFileSync(`build/pf2e-kingmaker-tools/packs/${packFileName}`, sanitizedLines.join('\n'));
 }
 
+console.log("hi")
 const sanitizeRandomEncounterRegex = /^(?<text>.*\((?:Moderate|Severe|Low|Trivial|Extreme) \d+\))(.+)?$/i;
-await sanitizeRollTable('random-encounters.db', (_, result) => {
+await sanitizeRollTable('kingmaker-tools-random-encounters', (result) => {
     const match = sanitizeRandomEncounterRegex.exec(result.text);
     if (match) {
         return {...result, text: match.groups.text};

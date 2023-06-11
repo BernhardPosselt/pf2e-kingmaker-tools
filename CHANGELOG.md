@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2023-06-??
+
+### Fixed
+
+* Store and migrate recipe data to actor instead of using client settings: client settings were unknowingly stored in local storage; local storage is local to a browser and is wiped when deleting browser data; this also caused recipes form one world to be present in another world. We now store the settings on the actor and migrate existing data once you first run the recipes macro again
+
+### Added
+
+* Foundry 11 support
+
+### Removed
+
+* Foundry 10 support
+
+### Changed
+
+* Show unrest penalty in sidebar
+* Group compendia in new compendia folders
+* Move Settlement config into separate dialog
+
 ## [0.0.35] - 2023-04-27
 
 ### Fixed
