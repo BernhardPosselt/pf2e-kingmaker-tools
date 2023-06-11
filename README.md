@@ -23,6 +23,12 @@ Clone this repository into your installation's module folder:
 
 Activate the module in FoundryVTT.
 
+Run the following before packaging once and set your paths:
+
+    ./node_modules/.bin/fvtt configure
+    ./node_modules/.bin/fvtt configure set installPath /home/bernhard/dev/FoundryVTT-11.301
+    ./node_modules/.bin/fvtt configure set dataPath /home/bernhard/.local/share/FoundryVTT/Data
+
 ### Journals
 
 The following journals are shipped:
