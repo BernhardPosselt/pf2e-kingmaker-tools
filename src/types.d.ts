@@ -14,6 +14,7 @@ declare global {
                 rollKingmakerWeatherMacro: () => void,
                 stopWatchMacro: () => void,
                 viewKingdomMacro: () => void,
+                openCampingSheet: () => void,
                 viewArmyMacro: (actor: Actor, token: Token) => void,
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 subsistMacro: (actor: any) => void,

@@ -26,6 +26,7 @@ import {addOngoingEvent, changeDegree, parseUpgradeMeta, reRoll} from './kingdom
 import {kingdomChatButtons} from './kingdom/chat-buttons';
 import {StringDegreeOfSuccess} from './degree-of-success';
 import {showArmy} from './armies/sheet';
+import {openCampingSheet} from './camping/sheet';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -47,6 +48,8 @@ Hooks.on('ready', async () => {
                         ? getSelectedCharacter(gameInstance) : actor;
                     await subsist(gameInstance, selectedActor);
                 },
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                openCampingSheet: (): void => openCampingSheet(gameInstance),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 huntAndGatherMacro: (actor: any): Promise<void> => huntAndGather(gameInstance, actor),
                 /* eslint-disable @typescript-eslint/no-explicit-any */

@@ -156,6 +156,7 @@ export interface Kingdom {
         next: number;
     };
     supernaturalSolutions: number;
+    turnsWithoutCultEvent: number;
     creativeSolutions: number;
     leaders: Leaders;
     commodities: {
@@ -297,15 +298,25 @@ function getDefaultMilestones(): MileStone[] {
         {name: 'Expand a town into your first city', xp: 80, completed: false, homebrew: false},
         {name: 'Reach kingdom Size 50', xp: 80, completed: false, homebrew: false},
         {name: 'Spend 100 RP during a Kingdom turn', xp: 80, completed: false, homebrew: false},
-
+        ...getCultEventMilestones(),
         {name: 'Expand a city into your first metropolis', xp: 120, completed: false, homebrew: false},
         {name: 'Reach kingdom Size 100', xp: 120, completed: false, homebrew: false},
+    ];
+}
+
+export function getCultEventMilestones(): MileStone[] {
+    return [
+        {name: 'Cult Event (Chapter 5): Cult Activity', xp: 80, completed: false, homebrew: false},
+        {name: 'Cult Event (Chapter 5): Public Outburst', xp: 80, completed: false, homebrew: false},
+        {name: 'Cult Event (Chapter 5): Too Close to Home', xp: 80, completed: false, homebrew: false},
+        {name: 'Cult Event (Chapter 5): Urban Outburst', xp: 80, completed: false, homebrew: false},
     ];
 }
 
 export function getDefaultKingdomData(): Kingdom {
     return {
         turnsWithoutEvent: 0,
+        turnsWithoutCultEvent: 0,
         name: '',
         atWar: false,
         charter: '',

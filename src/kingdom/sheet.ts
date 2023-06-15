@@ -270,6 +270,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             canLevelUp: kingdomData.xp >= kingdomData.xpThreshold && kingdomData.level < 20,
             turnsWithoutEvent: kingdomData.turnsWithoutEvent,
             eventDC: this.calculateEventDC(kingdomData.turnsWithoutEvent),
+            turnsWithoutCultEvent: kingdomData.turnsWithoutCultEvent,
+            cultEventDC: this.calculateCultEventDC(kingdomData.turnsWithoutCultEvent),
             civicPlanning: kingdomData.level >= 12,
             useXpHomebrew,
             canAddSettlement,
@@ -344,6 +346,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => await this.payConsumption());
         $html.querySelector('#km-check-event')
             ?.addEventListener('click', async () => await this.checkForEvent());
+        $html.querySelector('#km-check-cult-event')
+            ?.addEventListener('click', async () => await this.checkForCultEvent());
         $html.querySelector('#km-roll-event')
             ?.addEventListener('click', async () => await rollKingdomEvent(this.game));
         $html.querySelector('#km-roll-cult-event')
@@ -714,6 +718,24 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         }
     }
 
+    private async checkForCultEvent(): Promise<void> {
+        const rollMode = getStringSetting(this.game, 'kingdomEventRollMode') as unknown as keyof CONFIG.Dice.RollModes;
+        const turnsWithoutCultEvent = this.getKingdom().turnsWithoutCultEvent;
+        const dc = this.calculateCultEventDC(turnsWithoutCultEvent);
+        const roll = await (new Roll('1d20').roll());
+        await roll.toMessage({flavor: `Checking for Cult Event on DC ${dc}`}, {rollMode});
+        if (roll.total >= dc) {
+            await ChatMessage.create({
+                type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+                content: 'An event occurs, roll a Cult Event!',
+                rollMode,
+            });
+            await this.saveKingdom({turnsWithoutCultEvent: 0});
+        } else {
+            await this.saveKingdom({turnsWithoutCultEvent: turnsWithoutCultEvent + 1});
+        }
+    }
+
     private async deleteKingdomPropertyAtIndex(ev: Event, property: keyof Kingdom): Promise<void> {
         const target = ev.currentTarget as HTMLButtonElement;
         const deleteIndex = target.dataset.deleteIndex;
@@ -889,6 +911,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private calculateEventDC(turnsWithoutEvent: number): number {
         return Math.max(1, 16 - (turnsWithoutEvent * 5));
+    }
+
+    private calculateCultEventDC(turnsWithoutEvent: number): number {
+        return Math.max(1, 20 - (turnsWithoutEvent * 2));
     }
 
     private calculateAnarchy(feats: Feat[], bonusFeats: BonusFeat[]): number {

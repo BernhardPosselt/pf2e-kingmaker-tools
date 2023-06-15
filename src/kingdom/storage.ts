@@ -1,4 +1,4 @@
-import {FameType, Kingdom} from './data/kingdom';
+import {FameType, getCultEventMilestones, Kingdom} from './data/kingdom';
 import {groupBy} from '../utils';
 
 export function getKingdom(sheetActor: Actor): Kingdom {
@@ -12,8 +12,14 @@ export function getKingdom(sheetActor: Actor): Kingdom {
             type: current?.fameType ?? 'famous',
         };
     }
+    if (!kingdom.milestones.some(milestone => milestone.name.startsWith('Cult Event'))) {
+        getCultEventMilestones().forEach(milestone => kingdom.milestones.push(milestone));
+    }
     if (kingdom.supernaturalSolutions === undefined) {
         kingdom.supernaturalSolutions = 0;
+    }
+    if (kingdom.turnsWithoutCultEvent === undefined) {
+        kingdom.turnsWithoutCultEvent = 0;
     }
     if (kingdom.creativeSolutions === undefined) {
         kingdom.creativeSolutions = 0;
