@@ -10,8 +10,6 @@ Uses the [Open Gaming License](./OpenGameLicense.md) and [CUP](https://paizo.com
 
 The package is available through the [module registry](https://foundryvtt.com/packages/pf2e-kingmaker-tools)
 
-You may want to enable the [FXMaster](https://github.com/ghost-fvtt/fxmaster) to display rain and snow effects depending on the current weather. 
-
 ### Git
 
 Clone this repository into your installation's module folder:
@@ -387,7 +385,7 @@ A guide on structure rules [is available here](docs/structure-rules.md)
 
 Rolls daily weather when your clock advances to a new day, animates weather on maps and starts playlists. If you prefer rolling manually, turn off auto rolling in the settings and use the provided "Roll Kingmaker Weather" macro.
 
-Visual effects rely on [FxMaster](https://foundryvtt.com/packages/fxmaster).
+Visual effects rely on the built-in V11 weather effects. If you upgrade from a previous version, use FXMaster to get rid of existing effects.
 
 First configure the **Average Party Level** in settings. This setting is used to re-roll weather events if an event with a level higher than APL+4 is rolled. You need to manually keep this value in sync with your party's level over the course of the game.
 
