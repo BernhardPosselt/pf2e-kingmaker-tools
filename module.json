@@ -9,6 +9,7 @@
     "license": "LICENSE",
     "styles": [
         "styles/style.css",
+        "styles/camping.css",
         "styles/army.css"
     ],
     "packs": [

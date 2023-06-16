@@ -1,0 +1,134 @@
+:root {
+    --actor-image-height: 200px;
+    --actor-image-width: calc((var(--actor-image-height)/4)*3);
+    --actor-image-sidebar-height: 120px;
+    --actor-image-sidebar-width: calc((var(--actor-image-sidebar-height)/4)*3);
+}
+
+.camping-sheet {
+    display: grid;
+    grid-gap: 10px;
+    height: 100%;
+    grid-template-areas: "header header" "sidebar content";
+}
+
+.camping-header {
+    grid-area: header;
+}
+
+.camping-sidebar {
+    grid-area: sidebar;
+    overflow-y: auto;
+    padding: 10px 5px;
+}
+
+.camping-content {
+    padding: 10px 5px;
+    grid-area: content;
+    overflow-y: auto;
+}
+
+/* camping actors component */
+.camping-actors {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+    row-gap: 10px;
+    flex-wrap: wrap;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 0;
+}
+
+.camping-sidebar .camping-actors {
+    flex-direction: column;
+}
+
+.camping-content .camping-actors {
+    flex-direction: row;
+}
+
+.adventuring-since .label,
+.camping-header label {
+    font-weight: bold;
+}
+
+.adventuring-since {
+    margin-right: 10px;
+}
+
+.camping-sheet h2 button {
+    width: auto;
+    float: right;
+    margin-top: -6px;
+}
+
+/* activity partial */
+
+.camping-content .actor-image-container {
+    position: relative;
+    width: var(--actor-image-width);
+}
+
+.camping-content .camping-actors .actor-image,
+.camping-content .camping-actors .no-actor-image {
+    height: var(--actor-image-height);
+    width: var(--actor-image-width);
+}
+
+.camping-sidebar .actor-image-container {
+    position: relative;
+    width: var(--actor-image-sidebar-width);
+}
+
+.camping-sidebar .camping-actors .actor-image,
+.camping-sidebar .camping-actors .no-actor-image {
+    height: var(--actor-image-sidebar-height);
+    width: var(--actor-image-sidebar-width);
+}
+
+.actor-image-container .remove-actor {
+    position: absolute;
+    top: -9px;
+    right: -10px;
+    opacity: 1;
+    background: white;
+    border: 1px solid red;
+    border-radius: 100%;
+}
+
+.actor-image-container .remove-actor i {
+    margin: 0;
+}
+
+.activity-degree-of-success {
+    display: flex;
+}
+
+.activity-degree-of-success select {
+    flex-grow: 1;
+}
+
+.camping-actors button {
+    width: 30px;
+    display: block;
+}
+
+.camping-actors .actor-check {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.camping-actors .actor-check select {
+    flex-grow: 1;
+    height: 36px;
+}
+
+
+
+.camping-actors .actor-image {
+    object-fit: cover;
+    object-position: top center;
+    cursor: pointer;
+}

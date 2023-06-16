@@ -1,0 +1,27 @@
+<header>{{activity}}</header>
+<div class="activity-degree-of-success">
+    <!-- TODO: if secret, don't show result to players -->
+    <select>
+        <option>-</option>
+        <option>Critical Success</option>
+        <option>Success</option>
+        <option>Failure</option>
+        <option>Critical Failure</option>
+    </select>
+</div>
+<div class="actor-image-container">
+    {{#if actor}}
+        <img src="{{actor.image}}" title="{{actor.name}}" class="actor-image" data-uuid="{{actor.uuid}}">
+        <button type="button" class="remove-actor" data-uuid="{{actor.uuid}}" data-type="{{activity}}"><i
+                class="fa-solid fa-xmark"></i></button>
+    {{else}}
+        <img src="modules/pf2e-kingmaker-tools/static/img/add-actor.webp" title="Drop Actor Here"
+             class="no-actor-image">
+    {{/if}}
+</div>
+<div class="actor-check">
+    <select>
+        <option>Survival</option>
+    </select>
+    <button type="button" class="roll-check" data-name="{{activity}}"><i class="fa-solid fa-dice-d20"></i></button>
+</div>

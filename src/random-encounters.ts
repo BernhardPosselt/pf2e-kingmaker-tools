@@ -65,7 +65,7 @@ async function rollRandomEncounter(game: Game, region: string, modifier: number,
     }
 }
 
-interface RandomEncounterFormData {
+export interface RandomEncounterFormData {
     currentEncounterDCModifier: number;
     currentRegion: string;
 }

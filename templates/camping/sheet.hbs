@@ -1,25 +1,75 @@
-<h2>Available actors</h2>
-<!-- clicking on an actor opens the character sheet -->
-<ul class="available-actors">
-    {{#each actors}}
-        <li><img src="{{image}}"><button><i class="fa-solid fa-xmark"></i></button></li>
-    {{/each}}
-    <li>
-        <img src="generic" alt="Add"></i>
-    </li>
-</ul>
+<form class="camping-sheet">
+    <div class="camping-header">
+        <span class="adventuring-since"><span class="label">Adventuring:</span> {{adventuringSince}}</span>
+        <label for="region-input">Region</label>:
+        <select name="currentRegion" id="region-input">
+            {{#select currentRegion}}
+                {{#each regions}}
+                    <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            {{/select}}
+        </select>
+    </div>
+    <div class="camping-sidebar">
+        <h2>Actors in Camp</h2>
+        <ul class="camping-actors">
+            {{#each actors}}
+                <li class="camping-actor" data-uuid="{{uuid}}">
+                    <div class="actor-image-container">
+                        <img src="{{image}}" class="actor-image" title="{{name}}" data-uuid="{{uuid}}">
+                        <button type="button" class="remove-actor" data-uuid="{{uuid}}" data-type="camping-actors"><i
+                                class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </li>
+            {{/each}}
+            <li class="new-camping-actor">
+                <img src="modules/pf2e-kingmaker-tools/static/img/add-actor.webp" title="Drop Actor Here"
+                     class="no-actor-image">
+            </li>
+        </ul>
+    </div>
 
-<h2>Activities</h2>
+    <div class="camping-content">
+        <h2>Prepare a Campsite
+            <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}"><i
+                    class="fa-solid fa-skull"></i></button>
+            <button type="button" class="advance-hours" data-hours="2">+2 hours <i class="fa-solid fa-clock"></i>
+            </button>
+            <button type="button" class="advance-hours" data-hours="1">+1 hours <i class="fa-solid fa-clock"></i>
+            </button>
+        </h2>
 
-Choose a maximum of 4 total
+        <ul class="camping-actors">
+            <li class="prepare-camp-actor">
+                {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs actor=prepareCamp activity="Prepare Camp"}}
+            </li>
+        </ul>
 
-<section>
-    <header>Camouflage Camp</header>
-    <img>
-    <button><i class="fa-solid fa-d20"></i></button>
-    <button><i class="fa-solid fa-xmark"></i></button>
-</section>
+        <h2>Camping Activities
+            <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}"><i
+                    class="fa-solid fa-skull"></i></button>
+            <button type="button" class="advance-hours" data-hours="2">+2 hours <i class="fa-solid fa-clock"></i>
+            </button>
+            <button type="button" class="advance-hours" data-hours="1">+1 hour <i class="fa-solid fa-clock"></i>
+            </button>
+            <button type="button" class="advance-hours" data-hours="1">Add <i class="fa-solid fa-plus"></i></button>
+            <button type="button" class="advance-hours" data-hours="1">Clear <i class="fa-solid fa-trash"></i></button>
+        </h2>
 
-<h2>Cooking</h2>
+        <ul class="camping-actors">
+            {{#each campingActivities}}
+                <li class="camping-activity" data-name="{{name}}">
+                    {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs actor=actor activity=name}}
+                </li>
+            {{/each}}
+        </ul>
 
-<h2>Watch</h2>
+        <h2>Eating</h2>
+
+        <h2>Resting
+            <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}"><i
+                    class="fa-solid fa-skull"></i></button>
+        </h2>
+    </div>
+</form>
