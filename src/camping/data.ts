@@ -1,24 +1,52 @@
-export const allCampingActivities = ['Camouflage Campsite'
-    , 'Cook Meal'
-    , 'Discover Special Meal'
-    , 'Hunt and Gather'
-    , 'Learn from a Companion'
-    , 'Organize Watch'
-    , 'Relax'
-    , 'Tell Campfire Story'
-    , 'Blend Into the Night'
-    , 'Bolster Confidence'
-    , 'Camp Management'
-    , 'Dawnflower\'s Blessing'
-    , 'Enhance Campfire'
-    , 'Enhance Weapons'
-    , 'Intimidating Posture'
-    , 'Maintain Armor'
-    , 'Set Alarms'
-    , 'Set Traps'
-    , 'Undead Guardians'
-    , 'Water Hazards'
-    , 'Wilderness Survival'] as const;
+export const allCampingActivities = [
+    'Camouflage Campsite',
+    'Cook Meal',
+    'Discover Special Meal',
+    'Hunt and Gather',
+    'Learn from a Companion',
+    'Organize Watch',
+    'Relax',
+    'Tell Campfire Story',
+    'Blend Into the Night',
+    'Bolster Confidence',
+    'Camp Management',
+    'Dawnflower\'s Blessing',
+    'Enhance Campfire',
+    'Enhance Weapons',
+    'Intimidating Posture',
+    'Maintain Armor',
+    'Set Alarms',
+    'Set Traps',
+    'Undead Guardians',
+    'Water Hazards',
+    'Wilderness Survival',
+    'Influence Amiri',
+    'Discover Amiri',
+    'Influence Ekundayo',
+    'Discover Ekundayo',
+    'Influence Jubilost',
+    'Discover Jubilost',
+    'Influence Linzi',
+    'Discover Linzi',
+    'Influence Nok-Nok',
+    'Discover Nok-Nok',
+    'Influence Tristian',
+    'Discover Tristian',
+    'Influence Valerie',
+    'Discover Valerie',
+    'Influence Harrim',
+    'Discover Harrim',
+    'Influence Jaethal',
+    'Discover Jaethal',
+    'Influence Kalikke',
+    'Discover Kalikke',
+    'Influence Kanerah',
+    'Discover Kanerah',
+    'Influence Octavia',
+    'Discover Octavia',
+    'Influence Regongar',
+    'Discover Regongar',
+] as const;
 
 export type CampingActivityName = typeof allCampingActivities[number];
 

@@ -1,5 +1,5 @@
 :root {
-    --actor-image-height: 200px;
+    --actor-image-height: 220px;
     --actor-image-width: calc((var(--actor-image-height)/4)*3);
     --actor-image-sidebar-height: 120px;
     --actor-image-sidebar-width: calc((var(--actor-image-sidebar-height)/4)*3);
@@ -19,6 +19,7 @@
 .camping-sidebar {
     grid-area: sidebar;
     overflow-y: auto;
+    width: 115px;
     padding: 10px 5px;
 }
 
@@ -28,12 +29,37 @@
     overflow-y: auto;
 }
 
+.camping-section-header {
+    display: flex;
+    border-bottom: 1px solid #275125;
+    border-top: 1px solid #275125;
+    margin: 25px 0 15px 0;
+    padding: 1px 0;
+}
+
+.camping-section-header h2 {
+    flex-grow: 1;
+    border-bottom: 0;
+    margin-bottom: 0;
+    line-height: 2;
+}
+
+.camping-section-header .camping-gm-buttons {
+    flex-basis: fit-content;
+    display: flex;
+}
+
+.camping-section-header button {
+    flex-basis: fit-content;
+}
+
 /* camping actors component */
 .camping-actors {
     list-style-type: none;
     display: flex;
     justify-content: space-evenly;
-    row-gap: 10px;
+    row-gap: 20px;
+    column-gap: 5px;
     flex-wrap: wrap;
     margin-block-start: 0;
     margin-block-end: 0;
@@ -92,8 +118,9 @@
     top: -9px;
     right: -10px;
     opacity: 1;
-    background: white;
-    border: 1px solid red;
+    background-color: #cb0808;
+    border: 0;
+    color: white;
     border-radius: 100%;
 }
 
@@ -125,10 +152,21 @@
     height: 36px;
 }
 
-
-
 .camping-actors .actor-image {
     object-fit: cover;
     object-position: top center;
     cursor: pointer;
+}
+
+.camping-actors header {
+    text-align: center;
+    font-weight: bold;
+    background-color: #789035;
+    color: #fff;
+    padding: 5px;
+}
+
+.camping-actors .actor-wrapper {
+    border: 1px solid #000;
+    border-radius: 2px;
 }

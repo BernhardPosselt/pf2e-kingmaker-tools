@@ -2,7 +2,7 @@
     <div class="camping-header">
         <span class="adventuring-since"><span class="label">Adventuring:</span> {{adventuringSince}}</span>
         <label for="region-input">Region</label>:
-        <select name="currentRegion" id="region-input">
+        <select name="currentRegion" id="region-input" {{#if isUser}}disabled{{/if}}>
             {{#select currentRegion}}
                 {{#each regions}}
                     <option value="{{this}}">{{this}}</option>
@@ -11,7 +11,7 @@
         </select>
     </div>
     <div class="camping-sidebar">
-        <h2>Actors in Camp</h2>
+        <h2>Available</h2>
         <ul class="camping-actors">
             {{#each actors}}
                 <li class="camping-actor" data-uuid="{{uuid}}">
@@ -31,14 +31,14 @@
     </div>
 
     <div class="camping-content">
-        <h2>Prepare a Campsite
-            <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}"><i
-                    class="fa-solid fa-skull"></i></button>
-            <button type="button" class="advance-hours" data-hours="2">+2 hours <i class="fa-solid fa-clock"></i>
-            </button>
-            <button type="button" class="advance-hours" data-hours="1">+1 hours <i class="fa-solid fa-clock"></i>
-            </button>
-        </h2>
+        <header class="camping-section-header">
+            <h2>Prepare a Campsite</h2>
+            <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
+                <button type="button" class="advance-hours" data-hours="1">+1h <i class="fa-solid fa-clock"></i></button>
+                <button type="button" class="advance-hours" data-hours="2">+2h <i class="fa-solid fa-clock"></i></button>
+                <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}" data-phase="activities"><i class="fa-solid fa-skull"></i></button>
+            </div>
+        </header>
 
         <ul class="camping-actors">
             <li class="prepare-camp-actor">
@@ -46,16 +46,17 @@
             </li>
         </ul>
 
-        <h2>Camping Activities
-            <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}"><i
-                    class="fa-solid fa-skull"></i></button>
-            <button type="button" class="advance-hours" data-hours="2">+2 hours <i class="fa-solid fa-clock"></i>
-            </button>
-            <button type="button" class="advance-hours" data-hours="1">+1 hour <i class="fa-solid fa-clock"></i>
-            </button>
-            <button type="button" class="advance-hours" data-hours="1">Add <i class="fa-solid fa-plus"></i></button>
-            <button type="button" class="advance-hours" data-hours="1">Clear <i class="fa-solid fa-trash"></i></button>
-        </h2>
+        <header class="camping-section-header">
+            <h2>Camping Activities</h2>
+            <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
+                <button type="button" class="unlock-activities" data-hours="1">Unlock <i class="fa-solid fa-lock-open"></i></button>
+                <button type="button" class="add-activities" data-hours="1">Add <i class="fa-solid fa-plus"></i></button>
+                <button type="button" class="clear-activities" data-hours="1">Clear <i class="fa-solid fa-trash"></i></button>
+                <button type="button" class="advance-hours" data-hours="1">+1h <i class="fa-solid fa-clock"></i></button>
+                <button type="button" class="advance-hours" data-hours="2">+2h <i class="fa-solid fa-clock"></i></button>
+                <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}" data-phase="activities"><i class="fa-solid fa-skull"></i></button>
+            </div>
+        </header>
 
         <ul class="camping-actors">
             {{#each campingActivities}}
@@ -65,11 +66,17 @@
             {{/each}}
         </ul>
 
-        <h2>Eating</h2>
+        <header class="camping-section-header">
+            <h2>Eating</h2>
+            <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
+            </div>
+        </header>
 
-        <h2>Resting
-            <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}"><i
-                    class="fa-solid fa-skull"></i></button>
-        </h2>
+        <header class="camping-section-header">
+            <h2>Resting</h2>
+            <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
+                <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}" data-phase="watch"><i class="fa-solid fa-skull"></i></button>
+            </div>
+        </header>
     </div>
 </form>

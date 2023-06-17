@@ -8,6 +8,8 @@ export interface ViewCampingData {
     regions: string[];
     adventuringSince: string;
     encounterDC: number;
+    isGM: boolean;
+    isUser: boolean;
 }
 
 export interface ViewActor {
@@ -54,7 +56,7 @@ export async function toViewActors(actorUuids: string[]): Promise<ViewActor[]> {
 }
 
 export async function toViewCampingActivities(activities: CampingActivity[]): Promise<ViewCampingActivities[]> {
-    return await Promise.all(activities.map(async (activity) => {
+    const result = await Promise.all(activities.map(async (activity) => {
         const actorUuid = activity.actorUuid;
         return {
             name: activity.name,
@@ -63,4 +65,8 @@ export async function toViewCampingActivities(activities: CampingActivity[]): Pr
             skills: [],
         };
     }));
+    result.sort((a, b) => {
+        return ((b.actor ? 1 : 0) - (a.actor ? 1 : 0)) || a.name.localeCompare(b.name);
+    });
+    return result;
 }

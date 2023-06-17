@@ -44,8 +44,12 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const currentRegionData = regions.get(getStringSetting(this.game, 'currentRegion') || 'Rostland');
         const sumElapsedSeconds = Math.abs(currentSeconds - startedSeconds);
         const data = await this.read();
+        const isGM = this.game.user?.isGM ?? false;
+        const isUser = !isGM;
         console.log(data);
         return {
+            isGM,
+            isUser,
             encounterDC: currentEncounterDCModifier + (currentRegionData?.encounterDC ?? 0),
             adventuringSince: formatHours(sumElapsedSeconds, startedSeconds > currentSeconds),
             regions: Array.from(regions.keys()),
@@ -56,8 +60,26 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         };
     }
 
+    protected _getHeaderButtons(): Application.HeaderButton[] {
+        const buttons = super._getHeaderButtons();
+        if (this.game.user?.isGM ?? false) {
+            buttons.unshift({
+                label: 'Show Players',
+                class: '',
+                icon: 'fas fa-eye',
+                // for sockets: https://github.com/League-of-Foundry-Developers/foundryvtt-forien-quest-log/blob/master/src/view/log/QuestLog.js#L65-L84
+                onclick: () => console.log('show'),
+            });
+        }
+        return buttons;
+    }
+
+    private onUpdateWorldTime(): void {
+        this.render();
+    }
+
     override activateListeners(html: JQuery): void {
-        Hooks.on('updateWorldTime', this.render.bind(this));
+        Hooks.on('updateWorldTime', this.onUpdateWorldTime.bind(this));
         super.activateListeners(html);
         const $html = html[0];
         $html.querySelectorAll('.remove-actor')
@@ -69,6 +91,44 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                     if (uuid !== undefined && type !== undefined) {
                         await this.removeActor(uuid, type);
                     }
+                });
+            });
+        $html.querySelectorAll('.advance-hours')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const target = ev.currentTarget as HTMLButtonElement;
+                    const hours = target.dataset.hours ?? '0';
+                    await this.advanceHours(parseInt(hours, 10));
+                });
+            });
+        $html.querySelectorAll('.roll-encounter')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+
+                });
+            });
+        $html.querySelectorAll('.add-activities')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+
+                });
+            });
+        $html.querySelectorAll('.unlock-activities')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+
+                });
+            });
+        $html.querySelectorAll('.clear-activities')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+
+                });
+            });
+        $html.querySelectorAll('.roll-check')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+
                 });
             });
         $html.querySelectorAll('.camping-actors .actor-image')
@@ -88,13 +148,17 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         return super.close(options);
     }
 
+    private async advanceHours(hours: number): Promise<void> {
+        await this.game.time.advance(hours * 3600);
+    }
+
     private async removeActor(uuid: string, type: string): Promise<void> {
         const current = await this.read();
         if (type === 'camping-actors') {
             await this.update({
                 actorUuids: current.actorUuids.filter(id => id !== uuid),
             });
-        } else if(type === 'prepare-camp') {
+        } else if (type === 'prepare-camp') {
             await this.update({
                 prepareCamp: {actorUuid: null},
             });
