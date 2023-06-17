@@ -42,7 +42,7 @@
 
         <ul class="camping-actors">
             <li class="prepare-camp-actor">
-                {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs actor=prepareCamp activity="Prepare Camp"}}
+                {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs actor=prepareCamp.actor activity=prepareCamp.name journalUuid=prepareCamp.journalUuid}}
             </li>
         </ul>
 
@@ -61,7 +61,7 @@
         <ul class="camping-actors">
             {{#each campingActivities}}
                 <li class="camping-activity" data-name="{{name}}">
-                    {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs actor=actor activity=name}}
+                    {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs actor=actor activity=name journalUuid=journalUuid}}
                 </li>
             {{/each}}
         </ul>

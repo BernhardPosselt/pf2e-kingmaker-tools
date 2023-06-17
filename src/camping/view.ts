@@ -2,7 +2,7 @@ import {CampingActivity} from './data';
 
 export interface ViewCampingData {
     actors: ViewActor[];
-    prepareCamp: ViewActor | null;
+    prepareCamp: ViewCampingActivities | null;
     campingActivities: ViewCampingActivities[];
     currentRegion: string;
     regions: string[];
@@ -30,13 +30,21 @@ export interface ViewCampingSkill {
 export interface ViewCampingActivities {
     name: string;
     actor: ViewActor | null;
+    journalUuid: string;
     locked: boolean;
     skills: ViewCampingSkill[];
 }
 
-export async function toViewPrepareCamp(data: { actorUuid: string | null }): Promise<ViewActor | null> {
+export async function toViewPrepareCamp(data: { actorUuid: string | null }): Promise<ViewCampingActivities | null> {
     if (data.actorUuid) {
-        return await toViewActor(data.actorUuid);
+        const actor = await toViewActor(data.actorUuid);
+        return {
+            name: 'Prepare Camp',
+            skills: [{skill: 'survival', dc: 'zone'}],
+            journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.Iuen7iSvZAlnAJFB',
+            locked: false,
+            actor,
+        };
     }
     return null;
 }
@@ -64,6 +72,7 @@ export async function toViewCampingActivities(activities: CampingActivity[]): Pr
         return {
             name: activity.name,
             actor: actorUuid ? await toViewActor(actorUuid) : null,
+            journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.D83mNy8bYqKULEnu',
             locked: false,
             skills: [],
         };

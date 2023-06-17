@@ -141,7 +141,17 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                     const button = ev.currentTarget as HTMLButtonElement;
                     const uuid = button.dataset.uuid;
                     if (uuid !== undefined) {
-                        await this.openActorSheet(uuid);
+                        await this.openUuidSheet(uuid);
+                    }
+                });
+            });
+        $html.querySelectorAll('.camping-actors .actor-header')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const button = ev.currentTarget as HTMLElement;
+                    const uuid = button.dataset.uuid;
+                    if (uuid !== undefined) {
+                        await this.openUuidJournal(uuid);
                     }
                 });
             });
@@ -251,10 +261,22 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         return JSON.parse(config);
     }
 
-    private async openActorSheet(uuid: string): Promise<void> {
+    private async openUuidSheet(uuid: string): Promise<void> {
         const actor = await fromUuid(uuid);
         // @ts-ignore
         actor.sheet.render(true);
+    }
+
+    private async openUuidJournal(uuid: string): Promise<void> {
+        // @ts-ignore
+        const journal = await fromUuid(uuid) as JournalEntry | JournalEntryPage | null;
+        // @ts-ignore
+        if (journal instanceof JournalEntryPage) {
+            journal?.parent?.sheet?.render(true, {pageId: journal.id});
+        } else {
+            journal.sheet.render();
+        }
+
     }
 
     protected async _updateObject(event: Event, formData: RandomEncounterFormData): Promise<void> {

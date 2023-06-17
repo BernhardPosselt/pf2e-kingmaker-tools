@@ -179,6 +179,7 @@
     background-color: #789035;
     color: #fff;
     padding: 5px;
+    cursor: pointer;
 }
 
 .camping-actors .actor-wrapper {
