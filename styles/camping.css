@@ -24,7 +24,7 @@
 }
 
 .camping-content {
-    padding: 10px 5px;
+    padding: 10px 5px 30px 5px;
     grid-area: content;
     overflow-y: auto;
 }
@@ -45,6 +45,11 @@
 }
 
 .camping-section-header .camping-gm-buttons {
+    flex-basis: fit-content;
+    display: flex;
+}
+
+.camping-section-header .camping-user-buttons {
     flex-basis: fit-content;
     display: flex;
 }
@@ -89,6 +94,15 @@
     margin-top: -6px;
 }
 
+.camping-cook {
+    display: flex;
+    column-gap: 10px;
+}
+
+.resting-progress {
+    display: flex;
+}
+
 /* activity partial */
 
 .camping-content .actor-image-container {
@@ -100,6 +114,7 @@
 .camping-content .camping-actors .no-actor-image {
     height: var(--actor-image-height);
     width: var(--actor-image-width);
+    display: block;
 }
 
 .camping-sidebar .actor-image-container {
@@ -170,3 +185,4 @@
     border: 1px solid #000;
     border-radius: 2px;
 }
+

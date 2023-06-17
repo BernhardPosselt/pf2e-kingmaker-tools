@@ -84,6 +84,9 @@ export function getCampingActivities(): any[] {
     // TODO: Provide Aid, influencing
     return [{
         name: 'Camouflage Campsite',
+        requirements: [{
+
+        }],
         skills: [{
             skill: 'stealth',
             proficiency: 'trained',

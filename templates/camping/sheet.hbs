@@ -68,15 +68,85 @@
 
         <header class="camping-section-header">
             <h2>Eating</h2>
+            <div class="camping-user-buttons">
+                <!-- settings include: companions consume meals, track rations -->
+                <button type="button" class="eating-settings"><i class="fa-solid fa-gear"></i></button>
+            </div>
             <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
             </div>
         </header>
 
+        <ul class="camping-actors">
+            {{#each actors}}
+            <li class="eating-actors">
+                {{> modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs actor=this}}
+            </li>
+            {{/each}}
+        </ul>
+
+        <div>
+            <table class="km-table">
+                <tr>
+                    <th>Consumables</th>
+                    <th>Rations</th>
+                    <th>Subsistence</th>
+                    <th>Magical Subsistence</th>
+                    <th>Basic Ingredients</th>
+                    <th>Special Ingredients</th>
+                    <th>Meals</th>
+                </tr>
+                <tr>
+                    <td>Current</td>
+                    <td>0</td>
+                    <td><input type="number" value="0"></td>
+                    <td><input type="number" value="0"></td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Consumed</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+            </table>
+            <div class="camping-cook">
+                <label>Servings <input type="number" value="0"></label>
+                <label>Recipe
+                    <select>
+                        <option>Jeweled Rice</option>
+                    </select>
+                </label>
+                <span><span class="label">DC</span> 20</span>
+                <!-- chooses cooking lore if higher, otherwise survival -->
+                <button type="button" class="cook-recipe">Cook and Consume <i class="fa-solid fa-dice-d20"></i></button>
+            </div>
+        </div>
+
         <header class="camping-section-header">
             <h2>Resting</h2>
             <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
+
+                <!--
+                    click on button checks for x encounters and otherwise advances to the end of the rest plus runs daily preps at the end
+                    if an encounter happens, it calculates the time it happens, and stops at that point in time, determines the character on watch and gives you a button to roll a perception check
+                    if the encounter is over and the GM clicks continue rest, it advances after daily preps
+                    and executes rest for the night (with additional healing depending on the meal or activity)
+                -->
+                <!-- button swaps to continue rest when interrupted -->
+                <button type="button" class="rest">Begin Rest <i class="fa-solid fa-bed"></i></button>
                 <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}" data-phase="watch"><i class="fa-solid fa-skull"></i></button>
+                <!-- settings include: exclude companions from watch, 1 check per rest or 1 every 4 hours, guns to clean -->
+                <button type="button" class="watch-settings"><i class="fa-solid fa-gear"></i></button>
             </div>
         </header>
+        <div class="resting-progress">
+            <label>Time Rested: <progress value="100" max="150"></progress></label>
+            <div>3:53 of 19:32</div>
+        </div>
     </div>
 </form>

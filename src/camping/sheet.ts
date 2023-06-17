@@ -41,7 +41,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const currentSeconds = this.game.time.worldTime;
         const startedSeconds = getNumberSetting(this.game, 'stopWatchStart');
         const currentEncounterDCModifier = getNumberSetting(this.game, 'currentEncounterDCModifier');
-        const currentRegionData = regions.get(getStringSetting(this.game, 'currentRegion') || 'Rostland');
+        const currentRegion = getStringSetting(this.game, 'currentRegion') || 'Rostland';
+        const currentRegionData = regions.get(currentRegion);
         const sumElapsedSeconds = Math.abs(currentSeconds - startedSeconds);
         const data = await this.read();
         const isGM = this.game.user?.isGM ?? false;
@@ -50,10 +51,13 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         return {
             isGM,
             isUser,
+            rations: 2,
+            specialIngredients: 3,
+            basicIngredients: 8,
             encounterDC: currentEncounterDCModifier + (currentRegionData?.encounterDC ?? 0),
             adventuringSince: formatHours(sumElapsedSeconds, startedSeconds > currentSeconds),
             regions: Array.from(regions.keys()),
-            currentRegion: getStringSetting(this.game, 'currentRegion') || 'Rostland',
+            currentRegion,
             prepareCamp: await toViewPrepareCamp(data.prepareCamp),
             actors: await toViewActors(data.actorUuids),
             campingActivities: await toViewCampingActivities(data.campingActivities),

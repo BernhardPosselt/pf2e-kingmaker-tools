@@ -332,6 +332,7 @@ Hooks.on('ready', async () => {
 Hooks.on('init', async () => {
     await loadTemplates([
         'modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs',
+        'modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs',
         'modules/pf2e-kingmaker-tools/templates/army/sidebar.hbs',
         'modules/pf2e-kingmaker-tools/templates/army/status.hbs',
         'modules/pf2e-kingmaker-tools/templates/army/gear.hbs',

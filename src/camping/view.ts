@@ -10,6 +10,9 @@ export interface ViewCampingData {
     encounterDC: number;
     isGM: boolean;
     isUser: boolean;
+    rations: number;
+    specialIngredients: number;
+    basicIngredients: number;
 }
 
 export interface ViewActor {
