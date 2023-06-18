@@ -1,11 +1,27 @@
 <div class="actor-wrapper">
+    <header class="actor-header">Favorite Meal</header>
+    <select>
+        <option>Jeweled Rice</option>
+    </select>
+    <div class="actor-subheader">
+        <!-- TODO: if secret, don't show result to players -->
+        <select>
+            <option>-</option>
+            <option>Critical Success</option>
+            <option>Success</option>
+            <option>Failure</option>
+            <option>Critical Failure</option>
+        </select>
+    </div>
     <div class="actor-image-container">
         <img src="{{actor.image}}" title="{{actor.name}}" class="actor-image" data-uuid="{{actor.uuid}}">
     </div>
     <div class="actor-check">
         <select>
-            <option>Meal</option>
+            <option>Basic Meal</option>
+            <option>Special Meal</option>
             <option>Rations/Subsistence</option>
+            <option>Nothing</option>
         </select>
     </div>
 </div>

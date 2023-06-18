@@ -3,22 +3,9 @@ import {getSelectedCharacter, isGm} from './utils';
 import {stopWatch, toTimeOfDayMacro} from './time/app';
 import {getBooleanSetting, getStringSetting} from './settings';
 import {rollKingmakerWeather} from './kingmaker-weather';
-import {randomEncounterDialog} from './random-encounters';
+import {randomEncounterDialog} from './camping/random-encounters';
 import {rollExplorationSkillCheck, rollSkillDialog} from './skill-checks';
 import {rollKingdomEvent} from './kingdom-events';
-import {subsist} from './subsist';
-import {
-    camouflageCampsite,
-    campManagement,
-    cookRecipe,
-    discoverSpecialMeal,
-    huntAndGather,
-    learnFromCompanion,
-    organizeWatch,
-    postCompanionEffects,
-    prepareCampsite,
-    tellCampfireStory,
-} from './camping/camping';
 import {showKingdom} from './kingdom/sheet';
 import {showStructureEditDialog} from './kingdom/dialogs/edit-structure-rules';
 import {getKingdom} from './kingdom/storage';
@@ -27,6 +14,7 @@ import {kingdomChatButtons} from './kingdom/chat-buttons';
 import {StringDegreeOfSuccess} from './degree-of-success';
 import {showArmy} from './armies/sheet';
 import {openCampingSheet} from './camping/sheet';
+import {postCompanionEffects, subsist} from './camping/macros';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -50,24 +38,6 @@ Hooks.on('ready', async () => {
                 },
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 openCampingSheet: (): void => openCampingSheet(gameInstance),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                huntAndGatherMacro: (actor: any): Promise<void> => huntAndGather(gameInstance, actor),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                camouflageCampsiteMacro: (actor: any): Promise<void> => camouflageCampsite(gameInstance, actor),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                organizeWatchMacro: (actor: any): Promise<void> => organizeWatch(gameInstance, actor),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                tellCampfireStoryMacro: (actor: any): Promise<void> => tellCampfireStory(gameInstance, actor),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                prepareCampsiteMacro: (actor: any): Promise<void> => prepareCampsite(gameInstance, actor),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                discoverSpecialMealMacro: (actor: any): Promise<void> => discoverSpecialMeal(gameInstance, actor),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                cookRecipeMacro: (actor: any): Promise<void> => cookRecipe(gameInstance, actor),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                learnFromCompanionMacro: (actor: any): Promise<void> => learnFromCompanion(gameInstance, actor),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                campManagementMacro: (actor: any): Promise<void> => campManagement(gameInstance, actor),
                 rollExplorationSkillCheck: async (skill: string, effect: string): Promise<void> => {
                     const actors = canvas?.scene?.tokens
                         ?.filter(t => t !== null

@@ -1,8 +1,10 @@
 import {toViewActors, toViewCampingActivities, toViewPrepareCamp, ViewCampingData} from './view';
-import {Camping, CampingActivityName, getDefaultConfiguration} from './data';
 import {getNumberSetting, getStringSetting, setSetting} from '../settings';
-import {RandomEncounterFormData, regions} from '../random-encounters';
 import {formatHours} from '../time/app';
+import {RandomEncounterFormData} from './random-encounters';
+import {regions} from './regions';
+import {CampingActivityName} from './activities';
+import {Camping, getDefaultConfiguration} from './camping';
 
 interface CampingOptions {
     game: Game;
@@ -33,6 +35,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     private readonly game: Game;
 
     constructor(options: CampingOptions) {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         super({} as any, options);
         this.game = options.game;
     }
@@ -231,8 +234,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 return null;
             }
             const actor = await fromUuid(uuid);
-            // @ts-ignore
-            const actorType = actor?.type;
+            /* eslint-disable @typescript-eslint/no-explicit-any */
+            const actorType = (actor as any)?.type;
             if (actorType !== 'character') {
                 console.error('No character actor type, instead found: ' + actorType);
                 return null;
@@ -292,14 +295,4 @@ export function openCampingSheet(game: Game): void {
     new CampingSheet({game}).render(true);
 }
 
-/* use this to supress stuff
-{
-    "key": "AdjustModifier",
-    "predicate": [
-    "substitute:assurance",
-    { "not": "bonus:type:proficiency" }
-],
-    "selector": "{item|flags.pf2e.rulesSelections.assurance}",
-    "suppress": true
-}
-*/
+

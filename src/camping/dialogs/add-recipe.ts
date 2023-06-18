@@ -1,8 +1,8 @@
-import {Rarity, Recipe} from './camping';
-import {parseNumberInput, parseSelect, parseTextInput} from '../utils';
+import {parseNumberInput, parseSelect, parseTextInput} from '../../utils';
+import {Rarity, RecipeData} from '../recipes';
 
 export function addRecipeDialog(
-    onOk: (recipe: Recipe) => Promise<void>,
+    onOk: (recipe: RecipeData) => Promise<void>,
 ): void {
     new Dialog({
         title: 'Add Recipe',
@@ -49,6 +49,38 @@ export function addRecipeDialog(
                 <label for="km-recipe-cost">Cost</label>
                 <input type="text" name="cost" id="km-recipe-cost">
             </div>
+            <div>
+                <label for="km-favorite-meal-message">Favorite Meal Description</label>
+                <input type="text" name="favorite-meal-message" id="km-favorite-meal-message">
+            </div>
+            <div>
+                <label for="km-favorite-meal-effect-uuid">Favorite Meal Effect UUID</label>
+                <input type="text" name="favorite-meal-effect-uuid" id="km-favorite-meal-effect-uuid">
+            </div>
+            <div>
+                <label for="km-critical-success-message">Critical Success Description</label>
+                <input type="text" name="critical-success-message" id="km-critical-success-message">
+            </div>
+            <div>
+                <label for="km-critical-success-effect-uuid">Critical Success  Effect UUID</label>
+                <input type="text" name="critical-success-effect-uuid" id="km-critical-success-effect-uuid">
+            </div>
+            <div>
+                <label for="km-success-message">Success Description</label>
+                <input type="text" name="success-message" id="km-success-message">
+            </div>
+            <div>
+                <label for="km-success-effect-uuid">Success Effect UUID</label>
+                <input type="text" name="success-effect-uuid" id="km-success-effect-uuid">
+            </div>
+            <div>
+                <label for="km-critical-failure-message">Critical Failure Description</label>
+                <input type="text" name="critical-failure-message" id="km-critical-failure-message">
+            </div>
+            <div>
+                <label for="km-critical-failure-effect-uuid">Critical Failure Effect UUID</label>
+                <input type="text" name="critical-failure-effect-uuid" id="km-critical-failure-effect-uuid">
+            </div>
         </form>
         `,
         buttons: {
@@ -73,6 +105,22 @@ export function addRecipeDialog(
                             survivalDC: parseNumberInput($html, 'survival-dc'),
                             basicIngredients: parseNumberInput($html, 'basic-ingredients'),
                             cookingLoreDC: parseNumberInput($html, 'cooking-lore-dc'),
+                            favoriteMeal: {
+                                message: parseTextInput($html, 'favorite-meal-message'),
+                                effectUuid: parseTextInput($html, 'favorite-meal-effect-uuid') || undefined,
+                            },
+                            criticalSuccess: {
+                                message: parseTextInput($html, 'critical-success-message'),
+                                effectUuid: parseTextInput($html, 'critical-success-effect-uuid') || undefined,
+                            },
+                            success: {
+                                message: parseTextInput($html, 'success-message'),
+                                effectUuid: parseTextInput($html, 'success-effect-uuid') || undefined,
+                            },
+                            criticalFailure: {
+                                message: parseTextInput($html, 'critical-failure-message'),
+                                effectUuid: parseTextInput($html, 'critical-failure-effect-uuid') || undefined,
+                            },
                         });
                     }
                 },

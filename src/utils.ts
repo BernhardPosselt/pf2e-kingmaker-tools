@@ -1,5 +1,12 @@
 import {DegreeOfSuccess} from './degree-of-success';
 
+export function escapeHtml(html: string): string {
+    const text = document.createTextNode(html);
+    const p = document.createElement('p');
+    p.appendChild(text);
+    return p.innerHTML;
+}
+
 export function isGm(game: Game): boolean {
     return game?.user?.id === game.users?.find((u) => u.isGM && u.active)?.id;
 }
@@ -66,6 +73,12 @@ export function unpackFormArray<T>(obj: Record<string, T> | undefined | null): T
     } else {
         return [];
     }
+}
+
+export function slugify(word: string): string {
+    return word
+        .replaceAll(' ', '-')
+        .toLowerCase();
 }
 
 export function unslugify(word: string): string {

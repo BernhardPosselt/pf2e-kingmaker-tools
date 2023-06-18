@@ -69,8 +69,7 @@
         <header class="camping-section-header">
             <h2>Eating</h2>
             <div class="camping-user-buttons">
-                <!-- settings include: companions consume meals, track rations -->
-                <button type="button" class="eating-settings"><i class="fa-solid fa-gear"></i></button>
+                <button type="button" class="manage-recipes">Manage Recipes <i class="fa-solid fa-book-open"></i></button>
             </div>
             <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
             </div>
@@ -140,13 +139,14 @@
                 <!-- button swaps to continue rest when interrupted -->
                 <button type="button" class="rest">Begin Rest <i class="fa-solid fa-bed"></i></button>
                 <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}" data-phase="watch"><i class="fa-solid fa-skull"></i></button>
-                <!-- settings include: exclude companions from watch, 1 check per rest or 1 every 4 hours, guns to clean -->
+                <!-- settings include: 1 check per rest or 1 every 4 hours, guns to clean -->
                 <button type="button" class="watch-settings"><i class="fa-solid fa-gear"></i></button>
             </div>
         </header>
         <div class="resting-progress">
             <label>Time Rested: <progress value="100" max="150"></progress></label>
             <div>3:53 of 19:32</div>
+            insert perception check and random watch PC here
         </div>
     </div>
 </form>

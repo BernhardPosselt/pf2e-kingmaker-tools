@@ -143,11 +143,11 @@
     margin: 0;
 }
 
-.activity-degree-of-success {
+.actor-subheader {
     display: flex;
 }
 
-.activity-degree-of-success select {
+.actor-subheader select {
     flex-grow: 1;
 }
 
