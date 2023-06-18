@@ -9,6 +9,11 @@
                 {{/each}}
             {{/select}}
         </select>
+        <label {{#if isUser}}hidden{{/if}}>Zone DC Modifier
+            <input type="number" name="">
+        </label>
+        <button {{#if isUser}}hidden{{/if}} type="button" class="reset-zone-dc-modifier" title="Reset Modifier"><i class="fa-solid fa-rotate-left"></i></button>
+        <span {{#if isUser}}hidden{{/if}}><span class="label">Zone DC:</span> {{encounterDC}}</span>
     </div>
     <div class="camping-sidebar">
         <h2>Available</h2>
@@ -96,12 +101,12 @@
                 </tr>
                 <tr>
                     <td>Current</td>
-                    <td>0</td>
-                    <td><input type="number" value="0"></td>
-                    <td><input type="number" value="0"></td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td>{{rations}}</td>
+                    <td><input type="number" value="{{subsistenceAmount}}"></td>
+                    <td><input type="number" value="{{magicalSubsistenceAmount}}"></td>
+                    <td>{{basicIngredients}}</td>
+                    <td>{{specialIngredients}}</td>
+                    <td>{{servings}}</td>
                 </tr>
                 <tr>
                     <td>Consumed</td>
@@ -144,8 +149,8 @@
             </div>
         </header>
         <div class="resting-progress">
-            <label>Time Rested: <progress value="100" max="150"></progress></label>
-            <div>3:53 of 19:32</div>
+            <label>Time Rested: <progress value="{{watchSecondsElapsed}}" max="{{watchSecondsDuration}}"></progress></label>
+            <div>{{watchElapsed}} of {{watchDuration}}</div>
             insert perception check and random watch PC here
         </div>
     </div>

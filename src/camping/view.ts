@@ -1,18 +1,27 @@
-import {CampingActivity} from './data';
+import {CampingActivity} from './camping';
+import {CampingActivityData, CampingActivityName} from './activities';
 
 export interface ViewCampingData {
     actors: ViewActor[];
-    prepareCamp: ViewCampingActivities | null;
-    campingActivities: ViewCampingActivities[];
+    prepareCamp: ViewCampingActivity;
+    campingActivities: ViewCampingActivity[];
     currentRegion: string;
     regions: string[];
     adventuringSince: string;
     encounterDC: number;
+    currentEncounterDCModifier: number;
     isGM: boolean;
     isUser: boolean;
     rations: number;
     specialIngredients: number;
     basicIngredients: number;
+    watchSecondsElapsed: number;
+    watchSecondsDuration: number;
+    watchDuration: string;
+    watchElapsed: string;
+    subsistenceAmount: number;
+    magicalSubsistenceAmount: number;
+    servings: number;
 }
 
 export interface ViewActor {
@@ -21,32 +30,34 @@ export interface ViewActor {
     name: string;
 }
 
-export interface ViewCampingSkill {
-    dc: 'zone' | 'meal' | 'actorLevel' | number;
-    skill?: string;
-    proficiency?: 'trained' | 'expert' | 'master' | 'legendary';
-}
 
-export interface ViewCampingActivities {
+export interface ViewCampingActivity {
     name: string;
     actor: ViewActor | null;
     journalUuid: string;
-    locked: boolean;
-    skills: ViewCampingSkill[];
+    isSkillCheck: boolean;
+    isCustomAction: boolean;
+    skills: string[];
 }
 
-export async function toViewPrepareCamp(data: { actorUuid: string | null }): Promise<ViewCampingActivities | null> {
-    if (data.actorUuid) {
-        const actor = await toViewActor(data.actorUuid);
-        return {
-            name: 'Prepare Camp',
-            skills: [{skill: 'survival', dc: 'zone'}],
-            journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.Iuen7iSvZAlnAJFB',
-            locked: false,
-            actor,
-        };
-    }
-    return null;
+async function toViewActivity(activity: CampingActivity | undefined, activityData: CampingActivityData): Promise<ViewCampingActivity> {
+    return {
+        name: activityData.name,
+        actor: activity?.actorUuid ? await toViewActor(activity.actorUuid) : null,
+        journalUuid: activityData.journalUuid,
+        isCustomAction: activityData.isCustomAction ?? false,
+        isSkillCheck: activityData.skills.length > 0,
+        skills: activityData.skills,
+    };
+}
+
+export async function toViewPrepareCamp(
+    activities: CampingActivity[],
+    activityData: CampingActivityData[]
+): Promise<ViewCampingActivity> {
+    const activity = activities.find(a => a.activity === 'Prepare Campsite');
+    const data = activityData.find(a => a.name === 'Prepare Campsite')!;
+    return await toViewActivity(activity, data);
 }
 
 export async function toViewActor(uuid: string): Promise<ViewActor | null> {
@@ -66,17 +77,17 @@ export async function toViewActors(actorUuids: string[]): Promise<ViewActor[]> {
     return actorInfos.filter(a => a !== null) as ViewActor[];
 }
 
-export async function toViewCampingActivities(activities: CampingActivity[]): Promise<ViewCampingActivities[]> {
-    const result = await Promise.all(activities.map(async (activity) => {
-        const actorUuid = activity.actorUuid;
-        return {
-            name: activity.name,
-            actor: actorUuid ? await toViewActor(actorUuid) : null,
-            journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.D83mNy8bYqKULEnu',
-            locked: false,
-            skills: [],
-        };
-    }));
+export async function toViewCampingActivities(
+    activities: CampingActivity[],
+    data: CampingActivityData[],
+    lockedActivities: Set<CampingActivityName>,
+    ): Promise<ViewCampingActivity[]> {
+    const result = (await Promise.all(
+        data
+            .filter(a => a.name !== 'Prepare Campsite')
+            .filter(a => !lockedActivities.has(a.name))
+            .map(a => toViewActivity(activities.find(d => d.activity === a.name), a))
+    ));
     result.sort((a, b) => {
         return ((b.actor ? 1 : 0) - (a.actor ? 1 : 0)) || a.name.localeCompare(b.name);
     });

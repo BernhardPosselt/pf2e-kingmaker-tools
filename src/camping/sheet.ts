@@ -3,8 +3,8 @@ import {getNumberSetting, getStringSetting, setSetting} from '../settings';
 import {formatHours} from '../time/app';
 import {RandomEncounterFormData} from './random-encounters';
 import {regions} from './regions';
-import {CampingActivityName} from './activities';
-import {Camping, getDefaultConfiguration} from './camping';
+import {CampingActivityName, getCampingActivityData} from './activities';
+import {calculateRestSeconds, Camping, getActorConsumables, getDefaultConfiguration} from './camping';
 
 interface CampingOptions {
     game: Game;
@@ -50,20 +50,29 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const data = await this.read();
         const isGM = this.game.user?.isGM ?? false;
         const isUser = !isGM;
+        const activityData = getCampingActivityData();
+        const actors = await Promise.all(data.actorUuids.map(a => fromUuid(a))) as Actor[];
         console.log(data);
+        const watchSecondsDuration = calculateRestSeconds(actors.length);
         return {
             isGM,
             isUser,
-            rations: 2,
-            specialIngredients: 3,
-            basicIngredients: 8,
+            ...(await getActorConsumables(actors)),
+            currentEncounterDCModifier,
             encounterDC: currentEncounterDCModifier + (currentRegionData?.encounterDC ?? 0),
             adventuringSince: formatHours(sumElapsedSeconds, startedSeconds > currentSeconds),
             regions: Array.from(regions.keys()),
             currentRegion,
-            prepareCamp: await toViewPrepareCamp(data.prepareCamp),
+            prepareCamp: await toViewPrepareCamp(data.campingActivities, activityData),
             actors: await toViewActors(data.actorUuids),
-            campingActivities: await toViewCampingActivities(data.campingActivities),
+            campingActivities: await toViewCampingActivities(data.campingActivities, activityData, new Set(data.lockedActivities)),
+            watchSecondsElapsed: data.watchSecondsElapsed,
+            watchElapsed: formatHours(data.watchSecondsElapsed),
+            watchSecondsDuration,
+            watchDuration: formatHours(watchSecondsDuration),
+            subsistenceAmount: data.cooking.subsistenceAmount,
+            magicalSubsistenceAmount: data.cooking.magicalSubsistenceAmount,
+            servings: data.cooking.servings,
         };
     }
 
@@ -175,14 +184,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             await this.update({
                 actorUuids: current.actorUuids.filter(id => id !== uuid),
             });
-        } else if (type === 'prepare-camp') {
-            await this.update({
-                prepareCamp: {actorUuid: null},
-            });
         } else {
             const campingConfiguration = await this.read();
             const activity = campingConfiguration.campingActivities
-                .find(a => a.name === type);
+                .find(a => a.activity === type);
             if (activity) {
                 activity.actorUuid = null;
                 await this.update({campingActivities: campingConfiguration.campingActivities});
@@ -202,20 +207,31 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const uuid = await this.parseCharacterUuid(event);
         if (uuid) {
             const campingConfiguration = await this.read();
+            console.log(uuid);
             if (target.classList.contains('prepare-camp-actor')) {
-                await this.update({prepareCamp: {actorUuid: uuid}});
+                await this.setActivityActor(campingConfiguration, 'Prepare Campsite', uuid);
             } else if (target.classList.contains('camping-activity')) {
                 const activityName = target.dataset.name as CampingActivityName;
-                const activity = campingConfiguration.campingActivities
-                    .find(a => a.name === activityName);
-                if (activity) {
-                    activity.actorUuid = uuid;
-                    await this.update({campingActivities: campingConfiguration.campingActivities});
-                }
+                await this.setActivityActor(campingConfiguration, activityName, uuid);
             } else if (target.classList.contains('new-camping-actor') && !campingConfiguration.actorUuids.includes(uuid)) {
                 await this.update({actorUuids: [...(campingConfiguration.actorUuids), uuid]});
             }
         }
+    }
+
+    private async setActivityActor(campingConfiguration: Camping, activityName: CampingActivityName, uuid: string): Promise<void> {
+        const data = getCampingActivityData().find(a => a.name === activityName);
+        const activity = campingConfiguration.campingActivities
+            .find(a => a.activity === activityName);
+        if (activity) {
+            activity.actorUuid = uuid;
+        } else {
+            campingConfiguration.campingActivities.push({
+                activity: activityName,
+                actorUuid: uuid,
+            });
+        }
+        await this.update({campingActivities: campingConfiguration.campingActivities});
     }
 
     private async parseCharacterUuid(event: DragEvent): Promise<string | null> {

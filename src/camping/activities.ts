@@ -1,6 +1,6 @@
 import {DegreeOfSuccess} from '../degree-of-success';
 import {roll} from '../utils';
-import {DcType} from './data';
+import {basicIngredientUuid, DcType, specialIngredientUuid} from './data';
 import {getRegionInfo} from './regions';
 
 export const allCampingActivityNames = [
@@ -103,6 +103,7 @@ export interface CampingActivityData {
     isSecret: boolean;
     isLocked: boolean;
     effectUuid?: string;
+    isCustomAction?: boolean;
     modifyRandomEncounterDc?: {
         camping: number;
         watch: number;
@@ -140,7 +141,7 @@ function influenceCompanions(): CampingActivityData[] {
     });
 }
 
-export const allCampingActivities: CampingActivityData[] = [{
+const allCampingActivities: CampingActivityData[] = [{
     name: 'Camouflage Campsite',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.mlLCjokti3RXAlUP',
     isLocked: false,
@@ -203,6 +204,7 @@ export const allCampingActivities: CampingActivityData[] = [{
     criticalFailure: {
         message: 'As failure, but you also expose yourself to the special meal’s critical failure effect while performing an unwise taste test.',
     },
+    isCustomAction: true,
 }, {
     name: 'Hunt and Gather',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.RujdVNvLpoQBBdVV',
@@ -437,6 +439,10 @@ export const allCampingActivities: CampingActivityData[] = [{
     },
 }];
 
+export function getCampingActivityData(): CampingActivityData[] {
+    return allCampingActivities;
+}
+
 interface Ingredients {
     basic: number;
     special: number;
@@ -471,8 +477,8 @@ export async function getHuntAndGatherQuantities(
 }
 
 export async function addIngredientsToActor(actor: Actor, ingredients: Ingredients): Promise<void> {
-    const basicIngredient = (await fromUuid('Compendium.pf2e.equipment-srd.Item.OCTireuX60MaPcEi'))?.toObject();
-    const specialIngredient = (await fromUuid('Compendium.pf2e.equipment-srd.Item.kKnMlymiqZLVEAtI'))?.toObject();
+    const basicIngredient = (await fromUuid(basicIngredientUuid))?.toObject();
+    const specialIngredient = (await fromUuid(specialIngredientUuid))?.toObject();
     if (ingredients.basic > 0) {
         basicIngredient.system.quantity = ingredients.basic;
         /* eslint-disable @typescript-eslint/no-explicit-any */

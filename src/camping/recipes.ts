@@ -22,7 +22,7 @@ export interface RecipeData {
     favoriteMeal?: CookingOutcome;
 }
 
-export const allRecipes: RecipeData[] = [
+const allRecipes: RecipeData[] = [
     {
         'name': 'Basic Meal',
         'basicIngredients': 2,
@@ -777,6 +777,10 @@ export const allRecipes: RecipeData[] = [
     },
 ];
 
+export function getRecipeData(): RecipeData[] {
+    return allRecipes;
+}
+
 export const recipeEffectUuids = new Set(allRecipes.flatMap(a => {
     return [a.criticalSuccess?.effectUuid, a.criticalFailure?.effectUuid, a.favoriteMeal?.effectUuid, a.success?.effectUuid]
         .filter(a => a !== undefined) as string[];
@@ -785,3 +789,5 @@ export const recipeEffectUuids = new Set(allRecipes.flatMap(a => {
 export function getRecipesKnownInZone(zoneLevel: number, recipes: RecipeData[]): RecipeData[] {
     return recipes.filter(recipe => recipe.rarity === 'common' && recipe.level <= zoneLevel);
 }
+
+

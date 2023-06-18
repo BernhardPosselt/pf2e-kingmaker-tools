@@ -1,14 +1,14 @@
-import {allCampingActivities, CampingActivityName} from './activities';
+import {CampingActivityName, getCampingActivityData} from './activities';
 import {getRegionInfo} from './regions';
 import {getLevelBasedDC, slugify} from '../utils';
 import {DegreeOfSuccess} from '../degree-of-success';
-import {DcType} from './data';
-import {allRecipes} from './recipes';
+import {basicIngredientUuid, DcType, rationUuid, specialIngredientUuid} from './data';
+import {getRecipeData, RecipeData} from './recipes';
 
 
 export interface CampingActivity {
     activity: CampingActivityName;
-    actorUuid: string;
+    actorUuid: string | null;
     result?: 'Critical Success' | 'Success' | 'Failure' | 'Critical Failure',
     selectedSkill?: string;
 }
@@ -26,13 +26,16 @@ interface Cooking {
     chosenMeal: string;
     servings: number;
     actorMeals: ActorMeals[];
+    homebrewMeals: RecipeData[];
 }
 
 
 export interface Camping {
     actorUuids: string[];
     campingActivities: CampingActivity[];
+    lockedActivities: CampingActivityName[];
     cooking: Cooking;
+    watchSecondsElapsed: number;
 }
 
 export function getDefaultConfiguration(): Camping {
@@ -46,7 +49,12 @@ export function getDefaultConfiguration(): Camping {
             magicalSubsistenceAmount: 0,
             subsistenceAmount: 0,
             knownRecipes: ['Basic Meal'],
+            homebrewMeals: [],
         },
+        watchSecondsElapsed: 0,
+        lockedActivities: getCampingActivityData()
+            .filter(a => a.isLocked)
+            .map(a => a.name),
     };
 }
 
@@ -216,8 +224,8 @@ export async function afterDailyPreparations(
 ): Promise<void> {
     for (const actor of actors) {
         const healMoreHp = await hasAnyEffectOf(actor, [
-            allRecipes.find(r => r.name === 'Basic Meal')!.criticalSuccess!.effectUuid!,
-            allCampingActivities.find(a => a.name === 'Dawnflower\'s Blessing')!.effectUuid!,
+            getRecipeData().find(r => r.name === 'Basic Meal')!.criticalSuccess!.effectUuid!,
+            getCampingActivityData().find(a => a.name === 'Dawnflower\'s Blessing')!.effectUuid!,
         ]);
         if (healMoreHp) {
             /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -253,4 +261,31 @@ export function calculateRestSeconds(partySize: number): number {
 
 export function calculateDailyPreparationsSeconds(gunsToClean: number): number {
     return gunsToClean === 0 ? 30 * 60 : Math.ceil(gunsToClean / 4) * 3600;
+}
+
+export interface ActorConsumables {
+    rations: number;
+    specialIngredients: number;
+    basicIngredients: number;
+}
+
+export async function getActorConsumables(actors: Actor[]): Promise<ActorConsumables> {
+    const rationSourceId = ((await fromUuid(rationUuid)) as any).sourceId;
+    const specialIngredientsSourceId = ((await fromUuid(specialIngredientUuid)) as any).sourceId;
+    const basicIngredientsId = ((await fromUuid(basicIngredientUuid)) as any).sourceId;
+    const result: ActorConsumables = {
+        rations: 0,
+        specialIngredients: 0,
+        basicIngredients: 0,
+    };
+    for (const actor of actors) {
+        const consumables = actor.itemTypes.consumable;
+        const ration = consumables.find(c => (c as any).sourceId === rationSourceId) as any | undefined;
+        const specialIngredient = consumables.find(c => (c as any).sourceId === specialIngredientsSourceId) as any | undefined;
+        const basicIngredient = consumables.find(c => (c as any).sourceId === basicIngredientsId) as any | undefined;
+        result.rations += ration ? ration.system.charges.value * ration.quantity : 0;
+        result.basicIngredients += basicIngredient ? basicIngredient.quantity : 0;
+        result.specialIngredients += specialIngredient ? specialIngredient.quantity : 0;
+    }
+    return result;
 }
