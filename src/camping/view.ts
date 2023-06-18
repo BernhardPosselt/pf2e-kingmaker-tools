@@ -22,6 +22,7 @@ export interface ViewCampingData {
     subsistenceAmount: number;
     magicalSubsistenceAmount: number;
     servings: number;
+    gunsToClean: number;
 }
 
 export interface ViewActor {

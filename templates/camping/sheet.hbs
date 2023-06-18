@@ -141,10 +141,10 @@
                     and executes rest for the night (with additional healing depending on the meal or activity)
                 -->
                 <!-- button swaps to continue rest when interrupted -->
-                <button type="button" class="rest">Begin Rest <i class="fa-solid fa-bed"></i></button>
+                <label>Guns to Clean <input type="number" value="{{gunsToClean}}"></label>
+                <button type="button" class="watch">Random Time <i class="fa-solid fa-clock"></i></button>
+                <button type="button" class="end-rest">End Rest <i class="fa-solid fa-bed"></i></button>
                 <button type="button" class="roll-encounter" title="Roll Random Encounter DC {{encounterDC}}" data-phase="watch"><i class="fa-solid fa-skull"></i></button>
-                <!-- settings include: 1 check per rest or 1 every 4 hours, guns to clean -->
-                <button type="button" class="watch-settings"><i class="fa-solid fa-gear"></i></button>
             </div>
         </header>
         <div class="resting-progress">

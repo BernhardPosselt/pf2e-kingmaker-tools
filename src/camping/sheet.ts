@@ -77,6 +77,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             subsistenceAmount: data.cooking.subsistenceAmount,
             magicalSubsistenceAmount: data.cooking.magicalSubsistenceAmount,
             servings: data.cooking.servings,
+            gunsToClean: data.gunsToClean,
         };
     }
 

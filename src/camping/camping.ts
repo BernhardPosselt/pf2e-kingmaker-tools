@@ -36,6 +36,7 @@ export interface Camping {
     lockedActivities: CampingActivityName[];
     cooking: Cooking;
     watchSecondsElapsed: number;
+    gunsToClean: number;
 }
 
 export function getDefaultConfiguration(): Camping {
@@ -51,6 +52,7 @@ export function getDefaultConfiguration(): Camping {
             knownRecipes: ['Basic Meal', 'Hearty Meal'],
             homebrewMeals: [],
         },
+        gunsToClean: 0,
         watchSecondsElapsed: 0,
         lockedActivities: getCampingActivityData()
             .filter(a => a.isLocked)
