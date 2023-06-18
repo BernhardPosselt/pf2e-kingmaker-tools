@@ -72,10 +72,9 @@
 
         <header class="camping-section-header">
             <h2>Eating</h2>
-            <div class="camping-user-buttons">
-                <button type="button" class="manage-recipes">Manage Recipes <i class="fa-solid fa-book-open"></i></button>
-            </div>
             <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
+                <button type="button" class="add-recipes">Add Recipes <i class="fa-solid fa-plus"></i></button>
+                <button type="button" class="manage-recipes">Manage Recipes <i class="fa-solid fa-book-open"></i></button>
             </div>
         </header>
 
@@ -126,7 +125,8 @@
                 </label>
                 <span><span class="label">DC</span> 20</span>
                 <!-- chooses cooking lore if higher, otherwise survival -->
-                <button type="button" class="cook-recipe">Cook and Consume <i class="fa-solid fa-dice-d20"></i></button>
+                <button type="button" class="cook-recipe">Cook <i class="fa-solid fa-dice-d20"></i></button>
+                <button type="button" class="cook-recipe">Consume Ingredients <i class="fa-solid fa-minus"></i></button>
             </div>
         </div>
 

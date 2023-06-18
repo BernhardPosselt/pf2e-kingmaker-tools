@@ -1,9 +1,12 @@
 import {parseNumberInput, parseSelect, parseTextInput} from '../../utils';
 import {Rarity, RecipeData} from '../recipes';
 
-export function addRecipeDialog(
-    onOk: (recipe: RecipeData) => Promise<void>,
-): void {
+export interface AddRecipeOptions {
+    onSubmit: (recipe: RecipeData) => Promise<void>;
+    recipes: RecipeData[];
+}
+
+export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
     new Dialog({
         title: 'Add Recipe',
         content: `
@@ -91,14 +94,17 @@ export function addRecipeDialog(
                     const $html = html as HTMLElement;
                     const uuid = parseTextInput($html, 'uuid');
                     const item = await fromUuid(uuid);
+                    const name = parseTextInput($html, 'name');
                     if (item === null) {
                         ui.notifications?.error(`Can not find item with uuid ${uuid}`);
+                    } else if (recipes.find(r => r.name === 'name')){
+                        ui.notifications?.error(`Recipe with name ${name} exists already`);
                     } else {
-                        await onOk({
+                        await onSubmit({
                             isHomebrew: true,
                             specialIngredients: parseNumberInput($html, 'special-ingredients'),
                             level: parseNumberInput($html, 'level'),
-                            name: parseTextInput($html, 'name'),
+                            name,
                             rarity: parseSelect($html, 'rarity') as Rarity,
                             cost: parseTextInput($html, 'cost'),
                             uuid,

@@ -48,7 +48,7 @@ export function getDefaultConfiguration(): Camping {
             actorMeals: [],
             magicalSubsistenceAmount: 0,
             subsistenceAmount: 0,
-            knownRecipes: ['Basic Meal'],
+            knownRecipes: ['Basic Meal', 'Hearty Meal'],
             homebrewMeals: [],
         },
         watchSecondsElapsed: 0,

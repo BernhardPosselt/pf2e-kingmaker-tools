@@ -6,6 +6,9 @@ import {regions} from './regions';
 import {CampingActivityName, getCampingActivityData} from './activities';
 import {calculateRestSeconds, Camping, getActorConsumables, getDefaultConfiguration} from './camping';
 import {manageActivitiesDialog} from './dialogs/manage-activities';
+import {manageRecipesDialog} from './dialogs/manage-recipes';
+import {getRecipeData} from './recipes';
+import {addRecipeDialog} from './dialogs/add-recipe';
 
 interface CampingOptions {
     game: Game;
@@ -80,6 +83,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     protected _getHeaderButtons(): Application.HeaderButton[] {
         const buttons = super._getHeaderButtons();
         if (this.game.user?.isGM ?? false) {
+            // TODO
             buttons.unshift({
                 label: 'Show Players',
                 class: '',
@@ -121,7 +125,36 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         $html.querySelectorAll('.roll-encounter')
             .forEach(el => {
                 el.addEventListener('click', async (ev) => {
-
+                    // TODO
+                });
+            });
+        $html.querySelectorAll('.manage-recipes')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const current = await this.read();
+                    await manageRecipesDialog({
+                        recipes: getRecipeData().concat(current.cooking.homebrewMeals),
+                        learnedRecipes: new Set(current.cooking.knownRecipes),
+                        onSubmit: async (knownRecipes, deletedRecipes) => {
+                            current.cooking.knownRecipes = Array.from(knownRecipes);
+                            current.cooking.homebrewMeals = current.cooking.homebrewMeals
+                                .filter(m => !deletedRecipes.has(m.name));
+                            await this.update({cooking: current.cooking});
+                        },
+                    });
+                });
+            });
+        $html.querySelectorAll('.add-recipes')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const current = await this.read();
+                    await addRecipeDialog({
+                        recipes: getRecipeData().concat(current.cooking.homebrewMeals),
+                        onSubmit: async (recipe) => {
+                            current.cooking.homebrewMeals.push(recipe);
+                            await this.update({cooking: current.cooking});
+                        },
+                    });
                 });
             });
         $html.querySelectorAll('.unlock-activities')
@@ -152,7 +185,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         $html.querySelectorAll('.roll-check')
             .forEach(el => {
                 el.addEventListener('click', async (ev) => {
-
+                    // TODO
                 });
             });
         $html.querySelectorAll('.camping-actors .actor-image')

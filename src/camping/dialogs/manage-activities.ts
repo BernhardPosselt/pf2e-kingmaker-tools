@@ -9,7 +9,7 @@ interface ManageActivitiesOptions {
 
 function tpl(data: CampingActivityData[], lockedActivities: Set<CampingActivityName>): string {
     return `
-        <form>
+        <form class="camping-dialog">
             <table class="km-table">
                 <tr>
                     <th>Name</th>
@@ -53,5 +53,6 @@ export async function manageActivitiesDialog(options: ManageActivitiesOptions): 
     }, {
         jQuery: false,
         width: 420,
+        height: 600,
     }).render(true);
 }

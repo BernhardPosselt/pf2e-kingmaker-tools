@@ -4,7 +4,7 @@ import {createUUIDLink, escapeHtml, parseCheckbox} from '../../utils';
 interface ManageRecipesOptions {
     recipes: RecipeData[];
     learnedRecipes: Set<string>;
-    onSubmit: (learnedRecipes: Set<string>) => Promise<void>
+    onSubmit: (learnedRecipes: Set<string>, deletedRecipes: Set<string>) => Promise<void>
 }
 
 export interface ViewRecipeData {
@@ -17,6 +17,7 @@ export interface ViewRecipeData {
     rarity: Rarity,
     level: number;
     name: string;
+    isHomebrew: boolean;
 }
 
 export async function toTemplateRecipe(recipe: RecipeData, learnedRecipes: Set<string>): Promise<ViewRecipeData> {
@@ -30,12 +31,13 @@ export async function toTemplateRecipe(recipe: RecipeData, learnedRecipes: Set<s
         price: recipe.cost,
         rarity: recipe.rarity,
         level: recipe.level,
+        isHomebrew: recipe.isHomebrew ?? false,
     };
 }
 
 function tpl(data: ViewRecipeData[]): string {
     return `
-        <form>
+        <form class="camping-dialog">
             <table class="km-table">
                 <tr>
                     <th>Name</th>
@@ -45,18 +47,20 @@ function tpl(data: ViewRecipeData[]): string {
                     <th>Learning Cost</th>
                     <th>Purchase Cost</th>
                     <th>Learned</th>
+                    <th>Delete</th>
                 </tr>
-                ${data.map(r => {
-                    return `<tr>
-                        <td>${escapeHtml(r.recipe)}</td>
+                ${data.map((r, index) => {
+        return `<tr>
+                        <td>${r.recipe}</td>
                         <td>${escapeHtml(r.rarity)}</td>
-                        <td>r.level</td>
-                        <td>r.cookingLoreDC</td>
+                        <td>${r.level}</td>
+                        <td>${r.cookingLoreDC}</td>
                         <td>${escapeHtml(r.ingredients)}</td>
                         <td>${escapeHtml(r.price)}</td>
-                        <td><input type="checkbox" name="${escapeHtml(r.name)}" ${r.learned ? 'checked': ''}></td>
-                    </tr>`;    
-                }).join('\n')}
+                        <td><input type="checkbox" name="add-${index}" ${r.learned ? 'checked' : ''} ${r.name === 'Basic Meal' || r.name === 'Hearty Meal' ? 'disabled' : ''}></td>
+                        <td><input type="checkbox" name="delete-${index}" ${r.isHomebrew ? '' : 'disabled'}></td>
+                    </tr>`;
+    }).join('\n')}
             </table>
         </form>
         `;
@@ -75,20 +79,28 @@ export async function manageRecipesDialog(options: ManageRecipesOptions): Promis
                 label: 'Save',
                 callback: async (html): Promise<void> => {
                     const $html = html as HTMLElement;
-                    const recipes = options.recipes
-                        .map(r => {
-                            const enabled = parseCheckbox($html, r.name);
+                    const enableRecipes = data
+                        .map((r, index) => {
+                            const enabled = parseCheckbox($html, `add-${index}`);
                             return {enabled, name: r.name};
                         })
                         .filter(r => r.enabled)
                         .map(r => r.name);
-                    await options.onSubmit(new Set(recipes));
+                    const deleteRecipes = data
+                        .map((r, index) => {
+                            const enabled = parseCheckbox($html, `delete-${index}`);
+                            return {enabled, name: r.name};
+                        })
+                        .filter(r => r.enabled)
+                        .map(r => r.name);
+                    await options.onSubmit(new Set(enableRecipes), new Set(deleteRecipes));
                 },
             },
         },
         default: 'save',
     }, {
         jQuery: false,
-        width: 420,
+        width: 800,
+        height: 600,
     }).render(true);
 }

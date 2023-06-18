@@ -179,6 +179,9 @@
     background-color: #789035;
     color: #fff;
     padding: 5px;
+}
+
+.camping-actors header[data-uuid] {
     cursor: pointer;
 }
 
@@ -187,3 +190,7 @@
     border-radius: 2px;
 }
 
+.camping-dialog {
+    max-height: 520px;
+    overflow: scroll;
+}
