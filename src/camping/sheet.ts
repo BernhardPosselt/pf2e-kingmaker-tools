@@ -5,6 +5,7 @@ import {RandomEncounterFormData} from './random-encounters';
 import {regions} from './regions';
 import {CampingActivityName, getCampingActivityData} from './activities';
 import {calculateRestSeconds, Camping, getActorConsumables, getDefaultConfiguration} from './camping';
+import {manageActivitiesDialog} from './dialogs/manage-activities';
 
 interface CampingOptions {
     game: Game;
@@ -123,22 +124,29 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
 
                 });
             });
-        $html.querySelectorAll('.add-activities')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-
-                });
-            });
         $html.querySelectorAll('.unlock-activities')
             .forEach(el => {
                 el.addEventListener('click', async (ev) => {
-
+                    const current = await this.read();
+                    await manageActivitiesDialog({
+                        data: getCampingActivityData(),
+                        lockedActivities: new Set(current.lockedActivities),
+                        onSubmit: async (lockedActivities) => {
+                            await this.update({lockedActivities: Array.from(lockedActivities)});
+                        },
+                    });
                 });
             });
         $html.querySelectorAll('.clear-activities')
             .forEach(el => {
                 el.addEventListener('click', async (ev) => {
-
+                    const current = await this.read();
+                    current.campingActivities.forEach(a => {
+                        if (a.activity !== 'Prepare Campsite') {
+                            a.actorUuid = null;
+                        }
+                    });
+                    await this.update({campingActivities: current.campingActivities});
                 });
             });
         $html.querySelectorAll('.roll-check')

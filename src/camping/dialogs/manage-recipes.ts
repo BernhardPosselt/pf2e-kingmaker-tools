@@ -2,8 +2,6 @@ import {Rarity, RecipeData} from '../recipes';
 import {createUUIDLink, escapeHtml, parseCheckbox} from '../../utils';
 
 interface ManageRecipesOptions {
-    game: Game;
-    actor: Actor;
     recipes: RecipeData[];
     learnedRecipes: Set<string>;
     onSubmit: (learnedRecipes: Set<string>) => Promise<void>

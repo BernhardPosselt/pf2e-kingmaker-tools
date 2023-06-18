@@ -3,7 +3,6 @@ import {DegreeOfSuccess} from '../../degree-of-success';
 import {toTemplateRecipe, ViewRecipeData} from './manage-recipes';
 
 export interface LearnRecipeOptions {
-    game: Game;
     actor: Actor;
     availableRecipes: RecipeData[];
     onSubmit: (recipe: RecipeData, degreeOfSuccess: DegreeOfSuccess) => Promise<void>
@@ -21,13 +20,11 @@ class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions
 
     private onSubmit: (recipe: RecipeData, degreeOfSuccess: DegreeOfSuccess) => Promise<void>;
     private availableRecipes: RecipeData[];
-    private readonly game: Game;
     private readonly actor: Actor;
 
     constructor(options: Partial<ApplicationOptions> & LearnRecipeOptions) {
         super(options);
         this.actor = options.actor;
-        this.game = options.game;
         this.availableRecipes = options.availableRecipes;
         this.onSubmit = options.onSubmit;
     }
