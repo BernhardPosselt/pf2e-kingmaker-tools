@@ -10,6 +10,7 @@ import {
     Camping,
     getActorConsumables,
     getDefaultConfiguration,
+    removeFood,
 } from './camping';
 import {manageActivitiesDialog} from './dialogs/manage-activities';
 import {manageRecipesDialog} from './dialogs/manage-recipes';
@@ -19,6 +20,7 @@ import {campingSettingsDialog} from './dialogs/camping-settings';
 import {StringDegreeOfSuccess} from '../degree-of-success';
 import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
+import {listenClick} from '../utils';
 
 interface CampingOptions {
     game: Game;
@@ -71,7 +73,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const isGM = this.game.user?.isGM ?? false;
         const isUser = !isGM;
         const activityData = getCampingActivityData();
-        const actors = await Promise.all(data.actorUuids.map(a => fromUuid(a))) as Actor[];
+        const actors = await this.getActors(data);
         console.log(data);
         const watchSecondsDuration = calculateRestSeconds(actors.length);
         const currentEncounterDCModifier = data.encounterModifier;
@@ -115,6 +117,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         };
     }
 
+    private async getActors(data: Camping) {
+        return await Promise.all(data.actorUuids.map(a => fromUuid(a))) as Actor[];
+    }
+
     protected _getHeaderButtons(): Application.HeaderButton[] {
         const buttons = super._getHeaderButtons();
         if (this.game.user?.isGM ?? false) {
@@ -141,140 +147,96 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         Hooks.on('deleteItem', this.reRender.bind(this));
         super.activateListeners(html);
         const $html = html[0];
-        $html.querySelectorAll('.remove-actor')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    const button = ev.currentTarget as HTMLButtonElement;
-                    const uuid = button.dataset.uuid;
-                    const type = button.dataset.type;
-                    if (uuid !== undefined && type !== undefined) {
-                        await this.removeActor(uuid, type);
-                    }
-                });
+        listenClick($html, '.remove-actor', async (ev) => {
+            const button = ev.currentTarget as HTMLButtonElement;
+            const uuid = button.dataset.uuid;
+            const type = button.dataset.type;
+            if (uuid !== undefined && type !== undefined) {
+                await this.removeActor(uuid, type);
+            }
+        });
+        listenClick($html, '.advance-hours', async (ev) => {
+            const target = ev.currentTarget as HTMLButtonElement;
+            const hours = target.dataset.hours ?? '0';
+            await this.advanceHours(parseInt(hours, 10));
+        });
+        listenClick($html, '.manage-recipes', async (ev) => {
+            const current = await this.read();
+            await manageRecipesDialog({
+                recipes: getRecipeData().concat(current.cooking.homebrewMeals),
+                learnedRecipes: new Set(current.cooking.knownRecipes),
+                onSubmit: async (knownRecipes, deletedRecipes) => {
+                    current.cooking.knownRecipes = Array.from(knownRecipes);
+                    current.cooking.homebrewMeals = current.cooking.homebrewMeals
+                        .filter(m => !deletedRecipes.has(m.name));
+                    await this.update({cooking: current.cooking});
+                },
             });
-        $html.querySelectorAll('.advance-hours')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    const target = ev.currentTarget as HTMLButtonElement;
-                    const hours = target.dataset.hours ?? '0';
-                    await this.advanceHours(parseInt(hours, 10));
-                });
+        });
+        listenClick($html, '.add-recipes', async (ev) => {
+            const current = await this.read();
+            await addRecipeDialog({
+                recipes: getRecipeData().concat(current.cooking.homebrewMeals),
+                onSubmit: async (recipe) => {
+                    current.cooking.homebrewMeals.push(recipe);
+                    await this.update({cooking: current.cooking});
+                },
             });
-        $html.querySelectorAll('.manage-recipes')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    const current = await this.read();
-                    await manageRecipesDialog({
-                        recipes: getRecipeData().concat(current.cooking.homebrewMeals),
-                        learnedRecipes: new Set(current.cooking.knownRecipes),
-                        onSubmit: async (knownRecipes, deletedRecipes) => {
-                            current.cooking.knownRecipes = Array.from(knownRecipes);
-                            current.cooking.homebrewMeals = current.cooking.homebrewMeals
-                                .filter(m => !deletedRecipes.has(m.name));
-                            await this.update({cooking: current.cooking});
-                        },
-                    });
-                });
+        });
+        listenClick($html, '.unlock-activities', async (ev) => {
+            const current = await this.read();
+            await manageActivitiesDialog({
+                data: getCampingActivityData(),
+                lockedActivities: new Set(current.lockedActivities),
+                onSubmit: async (lockedActivities) => {
+                    await this.update({lockedActivities: Array.from(lockedActivities)});
+                },
             });
-        $html.querySelectorAll('.add-recipes')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    const current = await this.read();
-                    await addRecipeDialog({
-                        recipes: getRecipeData().concat(current.cooking.homebrewMeals),
-                        onSubmit: async (recipe) => {
-                            current.cooking.homebrewMeals.push(recipe);
-                            await this.update({cooking: current.cooking});
-                        },
-                    });
-                });
+        });
+        listenClick($html, '.clear-activities', async (ev) => {
+            const current = await this.read();
+            current.campingActivities.forEach(a => a.actorUuid = null);
+            await this.update({campingActivities: current.campingActivities});
+        });
+        listenClick($html, '.roll-encounter', async () => await this.rollRandomEncounter(true));
+        listenClick($html, '.check-encounter', async () => await this.rollRandomEncounter());
+        listenClick($html, '.consume-food', async () => await this.consumeFood());
+        listenClick($html, '.decrease-zone-dc-modifier', async () => {
+            const current = await this.read();
+            await this.update({encounterModifier: current.encounterModifier - 1});
+        });
+        listenClick($html, '.increase-zone-dc-modifier', async () => {
+            const current = await this.read();
+            await this.update({encounterModifier: current.encounterModifier + 1});
+        });
+        listenClick($html, '.reset-zone-dc-modifier', async () => await this.update({encounterModifier: 0}));
+        listenClick($html, '.roll-check', async (ev) => {
+            // TODO
+        });
+        listenClick($html, '.camping-settings', async (ev) => {
+            const current = await this.read();
+            campingSettingsDialog({
+                data: {
+                    restRollMode: current.restRollMode,
+                    gunsToClean: current.gunsToClean,
+                },
+                onSubmit: async (data) => await this.update(data),
             });
-        $html.querySelectorAll('.unlock-activities')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    const current = await this.read();
-                    await manageActivitiesDialog({
-                        data: getCampingActivityData(),
-                        lockedActivities: new Set(current.lockedActivities),
-                        onSubmit: async (lockedActivities) => {
-                            await this.update({lockedActivities: Array.from(lockedActivities)});
-                        },
-                    });
-                });
-            });
-        $html.querySelectorAll('.clear-activities')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    const current = await this.read();
-                    current.campingActivities.forEach(a => a.actorUuid = null);
-                    await this.update({campingActivities: current.campingActivities});
-                });
-            });
-        $html.querySelectorAll('.roll-encounter')
-            .forEach(el => {
-                el.addEventListener('click', async () => await this.rollRandomEncounter(true));
-            });
-        $html.querySelectorAll('.check-encounter')
-            .forEach(el => {
-                el.addEventListener('click', async () => await this.rollRandomEncounter());
-            });
-        $html.querySelectorAll('.decrease-zone-dc-modifier')
-            .forEach(el => {
-                el.addEventListener('click', async () => {
-                    const current = await this.read();
-                    await this.update({encounterModifier: current.encounterModifier - 1});
-                });
-            });
-        $html.querySelectorAll('.increase-zone-dc-modifier')
-            .forEach(el => {
-                el.addEventListener('click', async () => {
-                    const current = await this.read();
-                    await this.update({encounterModifier: current.encounterModifier + 1});
-                });
-            });
-        $html.querySelectorAll('.reset-zone-dc-modifier')
-            .forEach(el => {
-                el.addEventListener('click', async () => await this.update({encounterModifier: 0}));
-            });
-        $html.querySelectorAll('.roll-check')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    // TODO
-                });
-            });
-        $html.querySelectorAll('.camping-settings')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    const current = await this.read();
-                    campingSettingsDialog({
-                        data: {
-                            restRollMode: current.restRollMode,
-                            gunsToClean: current.gunsToClean,
-                        },
-                        onSubmit: async (data) => await this.update(data),
-                    });
-                });
-            });
-        $html.querySelectorAll('.camping-actors .actor-image')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    const button = ev.currentTarget as HTMLButtonElement;
-                    const uuid = button.dataset.uuid;
-                    if (uuid !== undefined) {
-                        await this.openUuidSheet(uuid);
-                    }
-                });
-            });
-        $html.querySelectorAll('.camping-actors .actor-header')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    const button = ev.currentTarget as HTMLElement;
-                    const uuid = button.dataset.uuid;
-                    if (uuid !== undefined) {
-                        await this.openUuidJournal(uuid);
-                    }
-                });
-            });
+        });
+        listenClick($html, '.camping-actors .actor-image', async (ev) => {
+            const button = ev.currentTarget as HTMLButtonElement;
+            const uuid = button.dataset.uuid;
+            if (uuid !== undefined) {
+                await this.openUuidSheet(uuid);
+            }
+        });
+        listenClick($html, '.camping-actors .actor-header', async (ev) => {
+            const button = ev.currentTarget as HTMLElement;
+            const uuid = button.dataset.uuid;
+            if (uuid !== undefined) {
+                await this.openUuidJournal(uuid);
+            }
+        });
     }
 
     private async rollRandomEncounter(forgoFlatCheck = false): Promise<void> {
@@ -439,6 +401,28 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             return null;
         }
         return formData as StringDegreeOfSuccess;
+    }
+
+    private async consumeFood(): Promise<void> {
+        const current = await this.read();
+        const actors = await this.getActors(current);
+        const actorConsumables = await getActorConsumables(actors);
+        const chosenMealData = getRecipeData().concat(current.cooking.homebrewMeals)
+            .find(a => a.name === current.cooking.chosenMeal);
+        const consumed = calculateConsumedFood(actorConsumables, {
+            actorsConsumingRations: current.cooking.actorMeals.filter(a => a.consume === 'rationsOrSubsistence').length,
+            actorsConsumingMeals: current.cooking.actorMeals.filter(a => a.consume === 'meal').length,
+            mealServings: current.cooking.servings,
+            availableSubsistence: current.cooking.subsistenceAmount,
+            availableMagicalSubsistence: current.cooking.magicalSubsistenceAmount,
+            recipeBasicIngredientCost: chosenMealData?.basicIngredients ?? 0,
+            recipeSpecialIngredientCost: chosenMealData?.specialIngredients ?? 0,
+        });
+        await removeFood(actors, {
+            rations: consumed.rations.value,
+            specialIngredients: consumed.specialIngredients.value,
+            basicIngredients: consumed.basicIngredients.value,
+        });
     }
 }
 

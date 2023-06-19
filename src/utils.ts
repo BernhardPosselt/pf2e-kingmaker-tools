@@ -152,6 +152,13 @@ export function createLabel(value: string, slug = false): LabelAndValue {
     };
 }
 
+export function listenClick(html: HTMLElement, selector: string, callback: (ev: Event) => Promise<void>): void {
+    html.querySelectorAll(selector)
+        .forEach(el => {
+            el.addEventListener('click', async (ev) => await callback(ev));
+        });
+}
+
 export function createLabels(values: readonly string[], slug = false): LabelAndValue[] {
     return values.map(value => createLabel(value, slug));
 }

@@ -4,6 +4,7 @@ import {getLevelBasedDC, slugify} from '../utils';
 import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {basicIngredientUuid, DcType, rationUuid, specialIngredientUuid} from './data';
 import {getRecipeData, RecipeData} from './recipes';
+import {getItemsBySourceId, getItemsByUuid, hasItemByUuid, removeExpiredEffects, removeItemsBySourceId} from './actor';
 
 export type RestRollMode = 'one' | 'none' | 'one-every-4-hours';
 
@@ -121,49 +122,6 @@ export async function rollCampingCheck(
 }
 
 /**
- * Given an array of uuids of existing effects, retrieve their sourceIds
- * @param applicableUuids
- */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-async function getApplicableSourceIds(applicableUuids: string[]): Promise<Set<string>> {
-    const applicableEffects = await Promise.all(applicableUuids.map(uuid => {
-        return fromUuid(uuid);
-    }));
-    const sourceIds = applicableEffects
-        .filter(eff => eff !== undefined && eff !== null)
-        .map((eff: any) => eff.sourceId);
-    return new Set(sourceIds);
-}
-
-/**
- * Retrieve all effects on an actor whose sourceId matches the given source ids
- * @param actor
- * @param applicableSourceIds
- */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function getApplicableEffectsOnActor(actor: Actor, applicableSourceIds: Set<string>): any[] {
-    return actor.itemTypes.effect
-        .filter((a: any) => applicableSourceIds.has(a.sourceId));
-}
-
-/**
- * Remove all expired effects whose sourceIds match the given array
- * @param actors
- * @param applicableSourceIds
- */
-export async function removeExpiredEffects(actors: Actor[], applicableSourceIds: Set<string>): Promise<void> {
-    for (const actor of actors) {
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        const expiredEffectIds = getApplicableEffectsOnActor(actor, applicableSourceIds)
-            .filter((a: any) => a.isExpired)
-            .map(a => a.id) as string[];
-        await actor.deleteEmbeddedDocuments('Item', expiredEffectIds);
-    }
-}
-
-/**
  * Retrieves all effects from all actors that are in the applicableSourceIds whitelist
  * Then adds all effects from the given uuids and deletes effects not present in the given uuids
  *
@@ -173,8 +131,8 @@ export async function removeExpiredEffects(actors: Actor[], applicableSourceIds:
  */
 export async function syncEffects(actors: Actor[], uuids: string[], applicableSourceIds: Set<string>): Promise<void> {
     for (const actor of actors) {
-        const existingEffects = getApplicableEffectsOnActor(actor, applicableSourceIds);
-        const existingEffectIds = new Set(existingEffects.map(a => a.id) as string[]);
+        const existingEffects = getItemsBySourceId(actor, 'effect', applicableSourceIds);
+        const existingEffectIds = new Set(existingEffects.map((a: any) => a.id) as string[]);
         /* eslint-disable @typescript-eslint/no-explicit-any */
         const effectsToSync = (await Promise.all(uuids.map(uuid => fromUuid(uuid))))
             .filter((eff: any) => eff !== undefined && eff !== null);
@@ -190,19 +148,6 @@ export async function syncEffects(actors: Actor[], uuids: string[], applicableSo
         await actor.deleteEmbeddedDocuments('Item', effectIdsToRemove);
         await actor.createEmbeddedDocuments('Item', effectsToAdd);
     }
-}
-
-export async function removeEffects(actors: Actor[], applicableSourceIds: Set<string>): Promise<void> {
-    for (const actor of actors) {
-        const existingEffects = getApplicableEffectsOnActor(actor, applicableSourceIds);
-        const existingEffectIds = existingEffects.map(a => a.id) as string[];
-        await actor.deleteEmbeddedDocuments('Item', existingEffectIds);
-    }
-}
-
-export async function hasAnyEffectOf(actor: Actor, uuids: string[]): Promise<boolean> {
-    const sourceIds = await getApplicableSourceIds(uuids);
-    return getApplicableEffectsOnActor(actor, sourceIds).length > 0;
 }
 
 export async function afterPrepareCamp(
@@ -236,10 +181,10 @@ export async function afterDailyPreparations(
     activitySourceIds: Set<string>
 ): Promise<void> {
     for (const actor of actors) {
-        const healMoreHp = await hasAnyEffectOf(actor, [
+        const healMoreHp = await hasItemByUuid(actor, 'effect', new Set([
             getRecipeData().find(r => r.name === 'Basic Meal')!.criticalSuccess!.effectUuid!,
             getCampingActivityData().find(a => a.name === 'Dawnflower\'s Blessing')!.effectUuid!,
-        ]);
+        ]));
         if (healMoreHp) {
             /* eslint-disable @typescript-eslint/no-explicit-any */
             const currentHp = (actor as any).attributes.hp.value;
@@ -254,7 +199,7 @@ export async function afterDailyPreparations(
             }
         }
     }
-    await removeEffects(actors, activitySourceIds);
+    await removeItemsBySourceId(actors, 'effect', activitySourceIds);
     /* eslint-disable @typescript-eslint/no-explicit-any */
     await (game.pf2e as any).actions.restForTheNight(actors);
 }
@@ -367,4 +312,87 @@ export function calculateConsumedFood(actorConsumables: ActorConsumables, foodCo
             warning: actorsConsumingMeals > mealServings,
         },
     };
+}
+
+export interface RemoveFoodAmount {
+    rations: number;
+    specialIngredients: number;
+    basicIngredients: number;
+}
+
+/**
+ * Special case for rations because these are fucked up
+ * @param actors
+ * @param amount
+ */
+async function removeRations(actors: Actor[], amount: number): Promise<void> {
+    let remainingToRemove = amount;
+    for (const actor of actors) {
+        if (remainingToRemove > 0) {
+            const updates = [];
+            const rations = await getItemsByUuid(actor, 'consumable', new Set([rationUuid]));
+            for (const ration of rations) {
+                if (remainingToRemove > 0) {
+                    const system = (ration as any).system;
+                    const quantity = system.quantity;
+                    const charges = system.charges.value;
+                    const quantitiesOf7 = Math.max(0, quantity - 1);
+                    const available = quantitiesOf7 * 7 + charges;
+                    if (remainingToRemove >= available) {
+                        await ration.delete();
+                        remainingToRemove -= available;
+                    } else {
+                        const leftOver = available - remainingToRemove;
+                        const leftOverCharges = leftOver % 7;
+                        const leftOverQuantity = Math.ceil(leftOver / 7);
+                        updates.push({
+                            _id: ration.id,
+                            'system.quantity': leftOverQuantity,
+                            'system.charges.value': leftOverCharges === 0 ? 7 : leftOverCharges,
+                        });
+                        remainingToRemove = 0;
+                    }
+                }
+            }
+            if (updates.length > 0) {
+                await actor.updateEmbeddedDocuments('Item', updates);
+            }
+        }
+    }
+}
+
+async function removeItems(actors: Actor[], amount: number, uuid: string): Promise<void> {
+    let remainingToRemove = amount;
+    for (const actor of actors) {
+        if (remainingToRemove > 0) {
+            const updates = [];
+            const items = await getItemsByUuid(actor, 'consumable', new Set([uuid]));
+            for (const item of items) {
+                if (remainingToRemove > 0) {
+                    const system = (item as any).system;
+                    const quantity = system.quantity;
+                    if (remainingToRemove >= quantity) {
+                        await item.delete();
+                        remainingToRemove -= quantity;
+                    } else {
+                        const leftOverQuantity = quantity - remainingToRemove;
+                        updates.push({
+                            _id: item.id,
+                            'system.quantity': leftOverQuantity,
+                        });
+                        remainingToRemove = 0;
+                    }
+                }
+            }
+            if (updates.length > 0) {
+                await actor.updateEmbeddedDocuments('Item', updates);
+            }
+        }
+    }
+}
+
+export async function removeFood(actors: Actor[], config: RemoveFoodAmount): Promise<void> {
+    await removeRations(actors, config.rations);
+    await removeItems(actors, config.basicIngredients, basicIngredientUuid);
+    await removeItems(actors, config.specialIngredients, specialIngredientUuid);
 }
