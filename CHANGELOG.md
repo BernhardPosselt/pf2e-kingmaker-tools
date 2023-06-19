@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add support for rolling cult events with descending DC
 * Add support for tracking and gaining XP from cult events that have already occurred
 * Use built in V11 weather effects instead of FXMaster; you need to manually clear existing weather in FXMaster
+* Fully automate "Set Alarms" effect
 
 ### Removed
 * Removed the following macros (these are now available through the camping sheet):
@@ -27,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Tell Campfire Story
   * Recipes
   * Learn from a Companion
+  * Random Encounter
+  * Stopwatch
 
 ## [0.1.0] - 2023-06-11
 

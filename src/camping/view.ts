@@ -1,9 +1,9 @@
-import {CampingActivity} from './camping';
+import {CampingActivity, ConsumedFood} from './camping';
 import {CampingActivityData, CampingActivityName} from './activities';
+import {StringDegreeOfSuccess} from '../degree-of-success';
 
 export interface ViewCampingData {
     actors: ViewActor[];
-    prepareCamp: ViewCampingActivity;
     campingActivities: ViewCampingActivity[];
     currentRegion: string;
     regions: string[];
@@ -18,11 +18,18 @@ export interface ViewCampingData {
     watchSecondsElapsed: number;
     watchSecondsDuration: number;
     watchDuration: string;
+    dailyPrepsDuration: string;
     watchElapsed: string;
     subsistenceAmount: number;
     magicalSubsistenceAmount: number;
     servings: number;
-    gunsToClean: number;
+    knownRecipes: string[];
+    chosenMeal: string;
+    degreesOfSuccesses: ViewDegreeOfSuccess[];
+    mealDegreeOfSuccess: StringDegreeOfSuccess | null;
+    time: string;
+    timeMarkerPositionPx: number;
+    consumedFood: ConsumedFood;
 }
 
 export interface ViewActor {
@@ -52,15 +59,6 @@ async function toViewActivity(activity: CampingActivity | undefined, activityDat
     };
 }
 
-export async function toViewPrepareCamp(
-    activities: CampingActivity[],
-    activityData: CampingActivityData[]
-): Promise<ViewCampingActivity> {
-    const activity = activities.find(a => a.activity === 'Prepare Campsite');
-    const data = activityData.find(a => a.name === 'Prepare Campsite')!;
-    return await toViewActivity(activity, data);
-}
-
 export async function toViewActor(uuid: string): Promise<ViewActor | null> {
     const actor = await fromUuid(uuid) as Actor | null;
     if (actor) {
@@ -82,15 +80,27 @@ export async function toViewCampingActivities(
     activities: CampingActivity[],
     data: CampingActivityData[],
     lockedActivities: Set<CampingActivityName>,
-    ): Promise<ViewCampingActivity[]> {
+): Promise<ViewCampingActivity[]> {
     const result = (await Promise.all(
-        data
-            .filter(a => a.name !== 'Prepare Campsite')
-            .filter(a => !lockedActivities.has(a.name))
+        data.filter(a => !lockedActivities.has(a.name))
             .map(a => toViewActivity(activities.find(d => d.activity === a.name), a))
     ));
-    result.sort((a, b) => {
-        return ((b.actor ? 1 : 0) - (a.actor ? 1 : 0)) || a.name.localeCompare(b.name);
-    });
+    result.sort((a, b) =>
+        (a.name === 'Prepare Campsite' ? -1 : 0) - (b.name === 'Prepare Campsite' ? -1 : 0)
+        || a.name.localeCompare(b.name));
     return result;
+}
+
+interface ViewDegreeOfSuccess {
+    value: StringDegreeOfSuccess;
+    label: string;
+}
+
+export function toViewDegrees(): ViewDegreeOfSuccess[] {
+    return [
+        {value: 'criticalFailure', label: 'Critical Failure'},
+        {value: 'failure', label: 'Failure'},
+        {value: 'success', label: 'Success'},
+        {value: 'criticalSuccess', label: 'Critical Success'},
+    ];
 }

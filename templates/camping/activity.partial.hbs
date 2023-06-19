@@ -1,15 +1,5 @@
 <div class="actor-wrapper">
     <header class="actor-header" data-uuid="{{journalUuid}}">{{activity}}</header>
-    <div class="actor-subheader">
-        <!-- TODO: if secret, don't show result to players -->
-        <select>
-            <option>-</option>
-            <option>Critical Success</option>
-            <option>Success</option>
-            <option>Failure</option>
-            <option>Critical Failure</option>
-        </select>
-    </div>
     <div class="actor-image-container">
         {{#if actor}}
             <img src="{{actor.image}}" title="{{actor.name}}" class="actor-image" data-uuid="{{actor.uuid}}">
@@ -25,5 +15,15 @@
             <option>Survival</option>
         </select>
         <button type="button" class="roll-check" data-name="{{activity}}"><i class="fa-solid fa-dice-d20"></i></button>
+    </div>
+    <div class="actor-subheader">
+        <!-- TODO: if secret, don't show result to players -->
+        <select>
+            <option>-</option>
+            <option>Critical Success</option>
+            <option>Success</option>
+            <option>Failure</option>
+            <option>Critical Failure</option>
+        </select>
     </div>
 </div>

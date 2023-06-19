@@ -1,16 +1,17 @@
 import {CampingActivityName, getCampingActivityData} from './activities';
 import {getRegionInfo} from './regions';
 import {getLevelBasedDC, slugify} from '../utils';
-import {DegreeOfSuccess} from '../degree-of-success';
+import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {basicIngredientUuid, DcType, rationUuid, specialIngredientUuid} from './data';
 import {getRecipeData, RecipeData} from './recipes';
 
+export type RestRollMode = 'one' | 'none' | 'one-every-4-hours';
 
 export interface CampingActivity {
     activity: CampingActivityName;
     actorUuid: string | null;
-    result?: 'Critical Success' | 'Success' | 'Failure' | 'Critical Failure',
-    selectedSkill?: string;
+    result: StringDegreeOfSuccess | null,
+    selectedSkill: string | null;
 }
 
 interface ActorMeals {
@@ -27,6 +28,7 @@ interface Cooking {
     servings: number;
     actorMeals: ActorMeals[];
     homebrewMeals: RecipeData[];
+    degreeOfSuccess: StringDegreeOfSuccess | null;
 }
 
 
@@ -37,9 +39,13 @@ export interface Camping {
     cooking: Cooking;
     watchSecondsElapsed: number;
     gunsToClean: number;
+    dailyPrepsAtTime: number;
+    currentRegion: string;
+    encounterModifier: number;
+    restRollMode: RestRollMode;
 }
 
-export function getDefaultConfiguration(): Camping {
+export function getDefaultConfiguration(game: Game): Camping {
     return {
         actorUuids: [],
         campingActivities: [],
@@ -51,7 +57,12 @@ export function getDefaultConfiguration(): Camping {
             subsistenceAmount: 0,
             knownRecipes: ['Basic Meal', 'Hearty Meal'],
             homebrewMeals: [],
+            degreeOfSuccess: null,
         },
+        restRollMode: 'one',
+        currentRegion: 'Rostland Hinterlands',
+        dailyPrepsAtTime: game.time.worldTime,
+        encounterModifier: 0,
         gunsToClean: 0,
         watchSecondsElapsed: 0,
         lockedActivities: getCampingActivityData()
@@ -290,4 +301,70 @@ export async function getActorConsumables(actors: Actor[]): Promise<ActorConsuma
         result.specialIngredients += specialIngredient ? specialIngredient.quantity : 0;
     }
     return result;
+}
+
+
+interface ConsumedResource {
+    value: number;
+    warning: boolean;
+}
+
+export interface ConsumedFood {
+    magicalSubsistence: number;
+    subsistence: number;
+    rations: ConsumedResource;
+    basicIngredients: ConsumedResource;
+    specialIngredients: ConsumedResource;
+    meals: ConsumedResource;
+}
+
+interface FoodCost {
+    recipeSpecialIngredientCost: number;
+    recipeBasicIngredientCost: number;
+    actorsConsumingRations: number;
+    actorsConsumingMeals: number;
+    mealServings: number;
+    availableSubsistence: number;
+    availableMagicalSubsistence: number;
+}
+
+export function calculateConsumedFood(actorConsumables: ActorConsumables, foodCost: FoodCost): ConsumedFood {
+    const availableBasicIngredients = actorConsumables.basicIngredients;
+    const availableSpecialIngredients = actorConsumables.specialIngredients;
+    const availableRations = actorConsumables.rations;
+    const {
+        recipeSpecialIngredientCost,
+        recipeBasicIngredientCost,
+        availableMagicalSubsistence,
+        availableSubsistence,
+        mealServings,
+        actorsConsumingRations,
+        actorsConsumingMeals,
+    } = foodCost;
+    const requiredRationsTotal = mealServings + actorsConsumingRations;
+    const availableRationsTotal = availableRations + availableSubsistence + availableMagicalSubsistence;
+
+    const consumedRations = Math.max(0, requiredRationsTotal - availableSubsistence - availableMagicalSubsistence);
+    const consumedSubsistence = Math.max(0, requiredRationsTotal - consumedRations - availableMagicalSubsistence);
+    const consumedMagicalSubsistence = Math.max(0, requiredRationsTotal - consumedSubsistence - consumedRations);
+    return {
+        magicalSubsistence: consumedMagicalSubsistence,
+        subsistence: consumedSubsistence,
+        rations: {
+            value: consumedRations,
+            warning: (availableRationsTotal - requiredRationsTotal) < 0,
+        },
+        specialIngredients: {
+            value: recipeSpecialIngredientCost * mealServings,
+            warning: recipeSpecialIngredientCost * mealServings > availableSpecialIngredients,
+        },
+        basicIngredients: {
+            value: recipeBasicIngredientCost * mealServings,
+            warning: recipeBasicIngredientCost * mealServings > availableBasicIngredients,
+        },
+        meals: {
+            value: actorsConsumingMeals,
+            warning: actorsConsumingMeals > mealServings,
+        },
+    };
 }

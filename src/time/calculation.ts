@@ -147,3 +147,8 @@ export class TimeOfDay implements TimeDiff {
         }
     }
 }
+
+export function getTimeOfDayPercent(time: DateTime): number {
+    const elapsedSeconds = time.second + time.minute * 30 + time.hour * 3600;
+    return Math.floor(elapsedSeconds/(36*24));
+}

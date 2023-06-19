@@ -16,7 +16,8 @@ function adjustByDieNumber(dieNumber: number, degree: DegreeOfSuccess): DegreeOf
     }
 }
 
-export type StringDegreeOfSuccess = 'criticalSuccess' | 'success' | 'failure' | 'criticalFailure';
+export const allDegreesOfSuccesses = ['criticalSuccess', 'success', 'failure', 'criticalFailure'] as const;
+export type StringDegreeOfSuccess = typeof allDegreesOfSuccesses[number];
 
 export function degreeToProperty(degree: DegreeOfSuccess): StringDegreeOfSuccess {
     if (degree === DegreeOfSuccess.CRITICAL_SUCCESS) {

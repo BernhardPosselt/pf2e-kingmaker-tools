@@ -1,20 +1,38 @@
-import {toViewActors, toViewCampingActivities, toViewPrepareCamp, ViewCampingData} from './view';
-import {getNumberSetting, getStringSetting, setSetting} from '../settings';
+import {toViewActors, toViewCampingActivities, toViewDegrees, ViewCampingData} from './view';
 import {formatHours} from '../time/app';
-import {RandomEncounterFormData} from './random-encounters';
+import {rollRandomEncounter} from './random-encounters';
 import {regions} from './regions';
 import {CampingActivityName, getCampingActivityData} from './activities';
-import {calculateRestSeconds, Camping, getActorConsumables, getDefaultConfiguration} from './camping';
+import {
+    calculateConsumedFood,
+    calculateDailyPreparationsSeconds,
+    calculateRestSeconds,
+    Camping,
+    getActorConsumables,
+    getDefaultConfiguration,
+} from './camping';
 import {manageActivitiesDialog} from './dialogs/manage-activities';
 import {manageRecipesDialog} from './dialogs/manage-recipes';
 import {getRecipeData} from './recipes';
 import {addRecipeDialog} from './dialogs/add-recipe';
+import {campingSettingsDialog} from './dialogs/camping-settings';
+import {StringDegreeOfSuccess} from '../degree-of-success';
+import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
+import {formatWorldTime} from '../time/format';
 
 interface CampingOptions {
     game: Game;
 }
 
-type CampingData = RandomEncounterFormData
+interface CampingData {
+    chosenMeal: string;
+    subsistenceAmount: number;
+    magicalSubsistenceAmount: number;
+    servings: number;
+    currentRegion: string;
+    mealDegreeOfSuccess: StringDegreeOfSuccess | null;
+}
+
 
 export class CampingSheet extends FormApplication<CampingOptions & FormApplicationOptions, ViewCampingData, CampingData> {
     static override get defaultOptions(): FormApplicationOptions {
@@ -27,7 +45,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         options.width = 862;
         options.height = 'auto';
         options.dragDrop = [{
-            dropSelector: '.new-camping-actor, .camping-activity, .prepare-camp-actor',
+            dropSelector: '.new-camping-actor, .camping-activity',
             dragSelector: '.camping-actor',
         }];
         options.closeOnSubmit = false;
@@ -45,39 +63,55 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     }
 
     override async getData(options?: Partial<CampingOptions & FormApplicationOptions>): Promise<ViewCampingData> {
-        const currentSeconds = this.game.time.worldTime;
-        const startedSeconds = getNumberSetting(this.game, 'stopWatchStart');
-        const currentEncounterDCModifier = getNumberSetting(this.game, 'currentEncounterDCModifier');
-        const currentRegion = getStringSetting(this.game, 'currentRegion') || 'Rostland';
-        const currentRegionData = regions.get(currentRegion);
-        const sumElapsedSeconds = Math.abs(currentSeconds - startedSeconds);
         const data = await this.read();
+        const currentSeconds = this.game.time.worldTime;
+        const currentRegion = data.currentRegion;
+        const currentRegionData = regions.get(currentRegion);
+        const sumElapsedSeconds = Math.abs(currentSeconds - data.dailyPrepsAtTime);
         const isGM = this.game.user?.isGM ?? false;
         const isUser = !isGM;
         const activityData = getCampingActivityData();
         const actors = await Promise.all(data.actorUuids.map(a => fromUuid(a))) as Actor[];
         console.log(data);
         const watchSecondsDuration = calculateRestSeconds(actors.length);
+        const currentEncounterDCModifier = data.encounterModifier;
+        const actorConsumables = await getActorConsumables(actors);
+        const chosenMealData = getRecipeData().concat(data.cooking.homebrewMeals).find(a => a.name === data.cooking.chosenMeal);
         return {
             isGM,
             isUser,
-            ...(await getActorConsumables(actors)),
+            ...actorConsumables,
             currentEncounterDCModifier,
             encounterDC: currentEncounterDCModifier + (currentRegionData?.encounterDC ?? 0),
-            adventuringSince: formatHours(sumElapsedSeconds, startedSeconds > currentSeconds),
+            adventuringSince: formatHours(sumElapsedSeconds, data.dailyPrepsAtTime > currentSeconds),
             regions: Array.from(regions.keys()),
             currentRegion,
-            prepareCamp: await toViewPrepareCamp(data.campingActivities, activityData),
             actors: await toViewActors(data.actorUuids),
             campingActivities: await toViewCampingActivities(data.campingActivities, activityData, new Set(data.lockedActivities)),
             watchSecondsElapsed: data.watchSecondsElapsed,
             watchElapsed: formatHours(data.watchSecondsElapsed),
             watchSecondsDuration,
+            dailyPrepsDuration: formatHours(calculateDailyPreparationsSeconds(data.gunsToClean)),
             watchDuration: formatHours(watchSecondsDuration),
             subsistenceAmount: data.cooking.subsistenceAmount,
             magicalSubsistenceAmount: data.cooking.magicalSubsistenceAmount,
             servings: data.cooking.servings,
-            gunsToClean: data.gunsToClean,
+            chosenMeal: data.cooking.chosenMeal,
+            knownRecipes: data.cooking.knownRecipes,
+            degreesOfSuccesses: toViewDegrees(),
+            mealDegreeOfSuccess: data.cooking.degreeOfSuccess,
+            time: formatWorldTime(getWorldTime(this.game)),
+            // 4px offset is half of the element's width including borders
+            timeMarkerPositionPx: Math.floor(getTimeOfDayPercent(getWorldTime(this.game)) * 8.46) - 4,
+            consumedFood: calculateConsumedFood(actorConsumables, {
+                actorsConsumingRations: data.cooking.actorMeals.filter(a => a.consume === 'rationsOrSubsistence').length,
+                actorsConsumingMeals: data.cooking.actorMeals.filter(a => a.consume === 'meal').length,
+                mealServings: data.cooking.servings,
+                availableSubsistence: data.cooking.subsistenceAmount,
+                availableMagicalSubsistence: data.cooking.magicalSubsistenceAmount,
+                recipeBasicIngredientCost: chosenMealData?.basicIngredients ?? 0,
+                recipeSpecialIngredientCost: chosenMealData?.specialIngredients ?? 0,
+            }),
         };
     }
 
@@ -96,12 +130,15 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         return buttons;
     }
 
-    private onUpdateWorldTime(): void {
+    private reRender(): void {
         this.render();
     }
 
     override activateListeners(html: JQuery): void {
-        Hooks.on('updateWorldTime', this.onUpdateWorldTime.bind(this));
+        Hooks.on('updateWorldTime', this.reRender.bind(this));
+        Hooks.on('updateItem', this.reRender.bind(this));
+        Hooks.on('createItem', this.reRender.bind(this));
+        Hooks.on('deleteItem', this.reRender.bind(this));
         super.activateListeners(html);
         const $html = html[0];
         $html.querySelectorAll('.remove-actor')
@@ -121,12 +158,6 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                     const target = ev.currentTarget as HTMLButtonElement;
                     const hours = target.dataset.hours ?? '0';
                     await this.advanceHours(parseInt(hours, 10));
-                });
-            });
-        $html.querySelectorAll('.roll-encounter')
-            .forEach(el => {
-                el.addEventListener('click', async (ev) => {
-                    // TODO
                 });
             });
         $html.querySelectorAll('.manage-recipes')
@@ -175,18 +206,53 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             .forEach(el => {
                 el.addEventListener('click', async (ev) => {
                     const current = await this.read();
-                    current.campingActivities.forEach(a => {
-                        if (a.activity !== 'Prepare Campsite') {
-                            a.actorUuid = null;
-                        }
-                    });
+                    current.campingActivities.forEach(a => a.actorUuid = null);
                     await this.update({campingActivities: current.campingActivities});
                 });
+            });
+        $html.querySelectorAll('.roll-encounter')
+            .forEach(el => {
+                el.addEventListener('click', async () => await this.rollRandomEncounter(true));
+            });
+        $html.querySelectorAll('.check-encounter')
+            .forEach(el => {
+                el.addEventListener('click', async () => await this.rollRandomEncounter());
+            });
+        $html.querySelectorAll('.decrease-zone-dc-modifier')
+            .forEach(el => {
+                el.addEventListener('click', async () => {
+                    const current = await this.read();
+                    await this.update({encounterModifier: current.encounterModifier - 1});
+                });
+            });
+        $html.querySelectorAll('.increase-zone-dc-modifier')
+            .forEach(el => {
+                el.addEventListener('click', async () => {
+                    const current = await this.read();
+                    await this.update({encounterModifier: current.encounterModifier + 1});
+                });
+            });
+        $html.querySelectorAll('.reset-zone-dc-modifier')
+            .forEach(el => {
+                el.addEventListener('click', async () => await this.update({encounterModifier: 0}));
             });
         $html.querySelectorAll('.roll-check')
             .forEach(el => {
                 el.addEventListener('click', async (ev) => {
                     // TODO
+                });
+            });
+        $html.querySelectorAll('.camping-settings')
+            .forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const current = await this.read();
+                    campingSettingsDialog({
+                        data: {
+                            restRollMode: current.restRollMode,
+                            gunsToClean: current.gunsToClean,
+                        },
+                        onSubmit: async (data) => await this.update(data),
+                    });
                 });
             });
         $html.querySelectorAll('.camping-actors .actor-image')
@@ -211,8 +277,17 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             });
     }
 
+    private async rollRandomEncounter(forgoFlatCheck = false): Promise<void> {
+        const current = await this.read();
+        const modifier = current.encounterModifier; // FIXME: include activity modifiers
+        await rollRandomEncounter(this.game, current.currentRegion, modifier, forgoFlatCheck);
+    }
+
     override close(options?: Application.CloseOptions): Promise<void> {
         Hooks.off('updateWorldTime', this.render);
+        Hooks.off('updateItem', this.render);
+        Hooks.off('createItem', this.render);
+        Hooks.off('deleteItem', this.render);
         return super.close(options);
     }
 
@@ -250,9 +325,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         if (uuid) {
             const campingConfiguration = await this.read();
             console.log(uuid);
-            if (target.classList.contains('prepare-camp-actor')) {
-                await this.setActivityActor(campingConfiguration, 'Prepare Campsite', uuid);
-            } else if (target.classList.contains('camping-activity')) {
+            if (target.classList.contains('camping-activity')) {
                 const activityName = target.dataset.name as CampingActivityName;
                 await this.setActivityActor(campingConfiguration, activityName, uuid);
             } else if (target.classList.contains('new-camping-actor') && !campingConfiguration.actorUuids.includes(uuid)) {
@@ -262,7 +335,6 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     }
 
     private async setActivityActor(campingConfiguration: Camping, activityName: CampingActivityName, uuid: string): Promise<void> {
-        const data = getCampingActivityData().find(a => a.name === activityName);
         const activity = campingConfiguration.campingActivities
             .find(a => a.activity === activityName);
         if (activity) {
@@ -271,6 +343,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             campingConfiguration.campingActivities.push({
                 activity: activityName,
                 actorUuid: uuid,
+                result: null,
+                selectedSkill: null,
             });
         }
         await this.update({campingActivities: campingConfiguration.campingActivities});
@@ -317,7 +391,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     private async read(): Promise<Camping> {
         const config = localStorage.getItem('campingConfig');
         if (config === null) {
-            return getDefaultConfiguration();
+            localStorage.setItem('campingConfig', JSON.stringify(getDefaultConfiguration(this.game)));
+            return await this.read();
         }
         return JSON.parse(config);
     }
@@ -340,12 +415,30 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
 
     }
 
-    protected async _updateObject(event: Event, formData: RandomEncounterFormData): Promise<void> {
-        // const modifier = formData?.currentEncounterDCModifier ?? 0;
-        const region = formData?.currentRegion ?? 'Rostland';
-        await setSetting(this.game, 'currentRegion', region);
-        // await setSetting(this.game, 'currentEncounterDCModifier', modifier);
+    protected async _updateObject(event: Event, formData: CampingData): Promise<void> {
+        console.log('formdata', formData);
+        const current = await this.read();
+        await this.update({
+            currentRegion: formData.currentRegion,
+            cooking: {
+                servings: formData.servings,
+                magicalSubsistenceAmount: formData.magicalSubsistenceAmount,
+                subsistenceAmount: formData.subsistenceAmount,
+                chosenMeal: formData.chosenMeal,
+                homebrewMeals: current.cooking.homebrewMeals,
+                knownRecipes: current.cooking.knownRecipes,
+                degreeOfSuccess: this.parseFormDegreeOfSuccess(formData.mealDegreeOfSuccess),
+                actorMeals: [], // FIXME
+            },
+        });
         this.render();
+    }
+
+    private parseFormDegreeOfSuccess(formData: string | null): StringDegreeOfSuccess | null {
+        if (formData === null || formData.length === 0 || formData === '-') {
+            return null;
+        }
+        return formData as StringDegreeOfSuccess;
     }
 }
 

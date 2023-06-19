@@ -7,11 +7,9 @@ declare global {
             macros: {
                 toggleWeatherMacro: () => void,
                 toTimeOfDayMacro: () => void,
-                randomEncounterMacro: () => void,
                 kingdomEventsMacro: () => void,
                 postCompanionEffectsMacro: () => void,
                 rollKingmakerWeatherMacro: () => void,
-                stopWatchMacro: () => void,
                 viewKingdomMacro: () => void,
                 openCampingSheet: () => void,
                 viewArmyMacro: (actor: Actor, token: Token) => void,

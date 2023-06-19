@@ -1,9 +1,8 @@
 import {dayHasChanged, syncWeather, toggleWeather} from './weather';
 import {getSelectedCharacter, isGm} from './utils';
-import {stopWatch, toTimeOfDayMacro} from './time/app';
+import {toTimeOfDayMacro} from './time/app';
 import {getBooleanSetting, getStringSetting} from './settings';
 import {rollKingmakerWeather} from './kingmaker-weather';
-import {randomEncounterDialog} from './camping/random-encounters';
 import {rollExplorationSkillCheck, rollSkillDialog} from './skill-checks';
 import {rollKingdomEvent} from './kingdom-events';
 import {showKingdom} from './kingdom/sheet';
@@ -23,13 +22,11 @@ Hooks.on('ready', async () => {
             macros: {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
                 toTimeOfDayMacro: toTimeOfDayMacro.bind(null, game),
-                randomEncounterMacro: randomEncounterDialog.bind(null, game),
                 kingdomEventsMacro: rollKingdomEvent.bind(null, game),
                 postCompanionEffectsMacro: postCompanionEffects.bind(null, game),
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
                 viewKingdomMacro: showKingdom.bind(null, game),
                 viewArmyMacro: (actor: Actor, token: Token): Promise<void> => showArmy(gameInstance, actor, token),
-                stopWatchMacro: stopWatch.bind(null, game),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 subsistMacro: async (actor: any): Promise<void> => {
                     const selectedActor = getBooleanSetting(gameInstance, 'useSelectedCharacter')

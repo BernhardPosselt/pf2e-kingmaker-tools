@@ -1,6 +1,6 @@
 import {TimeChangeMode, TimeOfDay, TimeOfYear, TimeUnit} from '../src/time/calculation';
 import {DateTime} from 'luxon';
-import {formatWorldTime} from '../src/time/format';
+import {formatWorldDateTime} from '../src/time/format';
 
 const noon = DateTime.fromObject({
     day: 1,
@@ -92,7 +92,7 @@ describe('time of year', () => {
 
 describe('time formatting', () => {
     it('should format a date', () => {
-        const result = formatWorldTime(noon, 'AR');
+        const result = formatWorldDateTime(noon, 'AR');
         expect(result).toBe('Starday, 1st of Abadius, 4722 AR (12:00:00)');
     });
 
