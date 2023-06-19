@@ -293,6 +293,16 @@ Hooks.on('ready', async () => {
             }
         });
         checkKingdomErrors(gameInstance);
+
+        // listen for camping sheet open
+        gameInstance.socket!.on('module.pf2e-kingmaker-tools', (data: {action: string}) => {
+            if (data.action === 'openCampingSheet') {
+                openCampingSheet(gameInstance);
+            }
+            if (data.action === 'openKingdomSheet') {
+                showKingdom(gameInstance);
+            }
+        });
     }
 });
 

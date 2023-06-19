@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added a camping sheet + macro
+* Button to open kingdom sheet for players
 
 ### Changed
 

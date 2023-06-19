@@ -118,13 +118,13 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     protected _getHeaderButtons(): Application.HeaderButton[] {
         const buttons = super._getHeaderButtons();
         if (this.game.user?.isGM ?? false) {
-            // TODO
             buttons.unshift({
                 label: 'Show Players',
-                class: '',
+                class: 'something-made-up',
                 icon: 'fas fa-eye',
-                // for sockets: https://github.com/League-of-Foundry-Developers/foundryvtt-forien-quest-log/blob/master/src/view/log/QuestLog.js#L65-L84
-                onclick: () => console.log('show'),
+                onclick: () => this.game.socket!.emit('module.pf2e-kingmaker-tools', {
+                    action: 'openCampingSheet',
+                }),
             });
         }
         return buttons;

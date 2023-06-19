@@ -296,6 +296,21 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         };
     }
 
+    protected _getHeaderButtons(): Application.HeaderButton[] {
+        const buttons = super._getHeaderButtons();
+        if (this.game.user?.isGM ?? false) {
+            buttons.unshift({
+                label: 'Show Players',
+                class: 'something-made-up',
+                icon: 'fas fa-eye',
+                onclick: () => this.game.socket!.emit('module.pf2e-kingmaker-tools', {
+                    action: 'openKingdomSheet',
+                }),
+            });
+        }
+        return buttons;
+    }
+
     /* eslint-disable @typescript-eslint/no-explicit-any */
     override async _updateObject(event: Event, formData: any): Promise<void> {
         console.log(formData);

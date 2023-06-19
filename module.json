@@ -115,6 +115,7 @@
     "manifest": "https://raw.githubusercontent.com/BernhardPosselt/pf2e-kingmaker-tools/master/module.json",
     "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/0.1.0/release.zip",
     "id": "pf2e-kingmaker-tools",
+    "socket": true,
     "authors": [
         {
             "name": "Bernhard Posselt",
