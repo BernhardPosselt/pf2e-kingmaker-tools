@@ -1,6 +1,6 @@
 import {DegreeOfSuccess} from '../degree-of-success';
 import {roll} from '../utils';
-import {basicIngredientUuid, DcType, specialIngredientUuid} from './data';
+import {basicIngredientUuid, DcType, Proficiency, specialIngredientUuid} from './data';
 import {getRegionInfo} from './regions';
 
 export const allCampingActivityNames = [
@@ -84,9 +84,9 @@ interface ActivityOutcome {
     checkRandomEncounter?: boolean;
 }
 
-interface SkillRequirement {
+export interface SkillRequirement {
     skill: string;
-    proficiency: 'trained' | 'expert' | 'master' | 'legendary';
+    proficiency: Proficiency;
 }
 
 export interface CampingActivityData {

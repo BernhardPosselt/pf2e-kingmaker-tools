@@ -5,7 +5,6 @@
   * Anything else than critical failure shows all other activities:
     * pre-selected effects like Bolster Confidence are automatically applied and synced to actors
 * activities without checks should not show a degree of success nor check dropdown
-* Dropping characters on activities that don't satisfy proficiency requirements shows an error message and does not set the actor
 * changing a degree of success dropdown should remove all effects except the current one and roll a random encounter check if noted
 * clicking the roll button should
   * if activity has no predefined dc, show a dc popup, then: 

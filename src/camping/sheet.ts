@@ -2,7 +2,7 @@ import {toViewActorMeals, toViewActors, toViewCampingActivities, toViewDegrees, 
 import {formatHours} from '../time/app';
 import {rollRandomEncounter} from './random-encounters';
 import {regions} from './regions';
-import {CampingActivityName, getCampingActivityData} from './activities';
+import {CampingActivityData, CampingActivityName, getCampingActivityData} from './activities';
 import {
     ActorMeal,
     calculateConsumedFood,
@@ -27,7 +27,7 @@ import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
 import {camelCase, LabelAndValue, listenClick} from '../utils';
 import {postCombatEffects} from './dialogs/post-combat-fx';
-import {hasCookingLore} from './actor';
+import {hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
 
 interface CampingOptions {
     game: Game;
@@ -80,7 +80,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const currentRegionData = regions.get(currentRegion);
         const sumElapsedSeconds = Math.abs(currentSeconds - data.dailyPrepsAtTime);
         const isUser = !this.isGM;
-        const activityData = getCampingActivityData();
+        const activityData = this.getActivityData(data);
         const actors = await this.getActors(data);
         const watchSecondsDuration = calculateRestSeconds(actors.length);
         const currentEncounterDCModifier = data.encounterModifier;
@@ -259,7 +259,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         listenClick($html, '.unlock-activities', async (ev) => {
             const current = await this.read();
             await manageActivitiesDialog({
-                data: getCampingActivityData(),
+                data: this.getActivityData(current),
                 lockedActivities: new Set(current.lockedActivities),
                 onSubmit: async (lockedActivities) => {
                     await this.update({lockedActivities: Array.from(lockedActivities)});
@@ -390,7 +390,23 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             const campingConfiguration = await this.read();
             if (target.classList.contains('camping-activity')) {
                 const activityName = target.dataset.name as CampingActivityName;
-                await this.setActivityActor(campingConfiguration, activityName, uuid);
+                const current = await this.read();
+                const data = this.getActivityData(current);
+                const proficiencyRequirements = data
+                    .find(a => a.name === activityName)?.skillRequirements ?? [];
+                const actor = await fromUuid(uuid) as Actor | null;
+                if (actor) {
+                    try {
+                        await validateSkillProficiencies(actor, proficiencyRequirements);
+                        await this.setActivityActor(campingConfiguration, activityName, uuid);
+                    } catch (e) {
+                        if (e instanceof NotProficientError) {
+                            ui.notifications?.error(e.message);
+                        } else {
+                            throw e;
+                        }
+                    }
+                }
             } else if (target.classList.contains('new-camping-actor') && !campingConfiguration.actorUuids.includes(uuid)) {
                 await this.update({actorUuids: [...(campingConfiguration.actorUuids), uuid]});
             }
@@ -559,6 +575,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             };
             return x;
         });
+    }
+
+    private getActivityData(current: Camping): CampingActivityData[] {
+        return getCampingActivityData();
     }
 }
 

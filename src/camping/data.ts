@@ -4,3 +4,5 @@ export const basicIngredientUuid = 'Compendium.pf2e.equipment-srd.Item.kKnMlymiq
 export const rationUuid = 'Compendium.pf2e.equipment-srd.Item.L9ZV076913otGtiB';
 
 export type CombatEffectCompanions = 'Amiri' | 'Nok-Nok' | 'Jaethal' | 'Kalikke';
+
+export type Proficiency = 'trained' | 'expert' | 'master' | 'legendary';
