@@ -11,6 +11,11 @@
     grid-template-areas: "header header" "sidebar content";
 }
 
+.camping-sheet img {
+    border-radius: 0;
+    border: 0;
+}
+
 .camping-sheet select {
     height: 36px;
 }
@@ -29,8 +34,34 @@
 .camping-sidebar {
     grid-area: sidebar;
     overflow-y: auto;
-    width: 115px;
+    width: 130px;
     padding: 10px 5px;
+}
+
+.chosen-camping-activity {
+    writing-mode: vertical-lr;
+    transform: scale(-1, -1);
+    background-color: #cb0808;
+    color: white;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    border: 1px solid #000;
+    border-left: 0;
+    padding: 5px 2px;
+}
+
+.chosen-camping-activity.activity-result {
+    background-color: #789035;
+}
+
+.camping-actor {
+    display: flex;
+    height: var(--actor-image-sidebar-height);
+}
+
+.camping-actor img {
+    border: 1px solid #000;
 }
 
 .camping-content {
@@ -160,6 +191,8 @@
 .camping-content .actor-image-container {
     position: relative;
     width: var(--actor-image-width);
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
 }
 
 .camping-content .camping-actors .actor-image,

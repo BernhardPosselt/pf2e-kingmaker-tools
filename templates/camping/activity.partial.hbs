@@ -18,12 +18,13 @@
     </div>
     <div class="actor-subheader">
         <!-- TODO: if secret, don't show result to players -->
-        <select>
-            <option>-</option>
-            <option>Critical Success</option>
-            <option>Success</option>
-            <option>Failure</option>
-            <option>Critical Failure</option>
+        <select name="actorActivityDegreeOfSuccess.{{slug}}">
+            {{#select degreeOfSuccess}}
+                <option>-</option>
+                {{#each degreesOfSuccesses}}
+                    <option value="{{value}}">{{label}}</option>
+                {{/each}}
+            {{/select}}
         </select>
     </div>
 </div>

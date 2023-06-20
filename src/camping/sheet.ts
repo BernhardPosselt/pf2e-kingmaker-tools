@@ -25,7 +25,7 @@ import {campingSettingsDialog} from './dialogs/camping-settings';
 import {degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
 import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
-import {LabelAndValue, listenClick} from '../utils';
+import {camelCase, LabelAndValue, listenClick} from '../utils';
 import {postCombatEffects} from './dialogs/post-combat-fx';
 import {hasCookingLore} from './actor';
 
@@ -97,7 +97,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             adventuringSince: formatHours(sumElapsedSeconds, data.dailyPrepsAtTime > currentSeconds),
             regions: Array.from(regions.keys()),
             currentRegion,
-            actors: await toViewActors(data.actorUuids),
+            actors: await toViewActors(data.actorUuids, data.campingActivities),
             campingActivities: await toViewCampingActivities(data.campingActivities, activityData, new Set(data.lockedActivities)),
             watchSecondsElapsed: data.watchSecondsElapsed,
             watchElapsed: formatHours(data.watchSecondsElapsed),
@@ -484,6 +484,11 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const mealDegreeOfSuccess = this.parseNullableSelect(formData.mealDegreeOfSuccess) as StringDegreeOfSuccess | null;
         await this.update({
             currentRegion: formData.currentRegion,
+            campingActivities: current.campingActivities.map(a => {
+                const formKey = `actorActivityDegreeOfSuccess.${camelCase(a.activity)}`;
+                a.result = this.parseNullableSelect((formData as any)[formKey]) as StringDegreeOfSuccess | null;
+                return a;
+            }),
             cooking: {
                 magicalSubsistenceAmount: formData.magicalSubsistenceAmount,
                 subsistenceAmount: formData.subsistenceAmount,

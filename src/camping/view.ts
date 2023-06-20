@@ -1,16 +1,22 @@
 import {ActorMeal, CampingActivity, ConsumedFood, CookingSkill} from './camping';
 import {CampingActivityData, CampingActivityName} from './activities';
 import {StringDegreeOfSuccess} from '../degree-of-success';
-import {LabelAndValue} from '../utils';
+import {camelCase, LabelAndValue} from '../utils';
 
 interface ViewActorMeal extends ViewActor {
     favoriteMeal: string | null;
     chosenMeal: string;
 }
 
+interface ViewCampingActor extends ViewActor {
+    hasActivityResult: boolean;
+    noActivityChosen: boolean;
+    activity: string | null;
+}
+
 export interface ViewCampingData {
     actorMeals: ViewActorMeal[];
-    actors: ViewActor[];
+    actors: ViewCampingActor[];
     campingActivities: ViewCampingActivity[];
     currentRegion: string;
     regions: string[];
@@ -52,10 +58,12 @@ export interface ViewActor {
 
 export interface ViewCampingActivity {
     name: string;
+    slug: string;
     actor: ViewActor | null;
     journalUuid: string;
     isSkillCheck: boolean;
     isCustomAction: boolean;
+    degreeOfSuccess: StringDegreeOfSuccess | null;
     skills: string[];
 }
 
@@ -67,6 +75,8 @@ async function toViewActivity(activity: CampingActivity | undefined, activityDat
         isCustomAction: activityData.isCustomAction ?? false,
         isSkillCheck: activityData.skills.length > 0,
         skills: activityData.skills,
+        degreeOfSuccess: activity?.result ?? null,
+        slug: camelCase(activityData.name),
     };
 }
 
@@ -79,9 +89,22 @@ export async function toViewActor(uuid: string): Promise<ViewActor> {
     };
 }
 
-export async function toViewActors(actorUuids: string[]): Promise<ViewActor[]> {
+export async function toViewActors(actorUuids: string[], activities: CampingActivity[]): Promise<ViewCampingActor[]> {
     const actorInfos = await Promise.all(actorUuids.map(uuid => toViewActor(uuid)));
-    return actorInfos.filter(a => a !== null) as ViewActor[];
+    return actorInfos
+        .filter(a => a !== null)
+        .map(actor => {
+            const chosenActivity = activities
+                .filter(a => a.activity !== 'Prepare Campsite')
+                .find(a => a.actorUuid === actor.uuid);
+            const result = chosenActivity?.result;
+            return {
+                ...actor,
+                hasActivityResult: result !== null && result !== undefined,
+                noActivityChosen: !chosenActivity,
+                activity: chosenActivity?.activity ?? null,
+            };
+        });
 }
 
 export async function toViewCampingActivities(

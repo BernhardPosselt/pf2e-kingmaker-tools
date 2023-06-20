@@ -63,6 +63,10 @@ export function capitalize(word: string): string {
     return word[0].toUpperCase() + word.substring(1);
 }
 
+export function uncapitalize(word: string): string {
+    return word[0].toLowerCase() + word.substring(1);
+}
+
 export function unpackFormArray<T>(obj: Record<string, T> | undefined | null): T[] {
     if (obj) {
         return Object.keys(obj)
@@ -190,4 +194,10 @@ export function parseCheckbox($html: HTMLElement, name: string): boolean {
 
 export function clamped(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
+}
+
+export function camelCase(value: string): string {
+    return uncapitalize(value.split(' ')
+        .map(s => capitalize(s))
+        .join(''));
 }

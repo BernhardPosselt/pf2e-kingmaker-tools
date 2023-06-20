@@ -57,6 +57,7 @@
         <ul class="camping-actors">
             {{#each actors}}
                 <li class="camping-actor" data-uuid="{{uuid}}">
+                    <div class="chosen-camping-activity {{#if hasActivityResult}}activity-result{{/if}}" {{#if noActivityChosen}}hidden{{/if}}>{{activity}}</div>
                     <div class="actor-image-container">
                         <img src="{{image}}" class="actor-image" title="{{name}}" data-uuid="{{uuid}}">
                         <button type="button" class="remove-actor" data-uuid="{{uuid}}" data-type="camping-actors"><i
@@ -72,6 +73,7 @@
         </ul>
     </div>
 
+    <!-- content -->
     <div class="camping-content">
         <header class="camping-section-header">
             <h2>Camping Activities</h2>
@@ -86,7 +88,7 @@
         <ul class="camping-actors">
             {{#each campingActivities}}
                 <li class="camping-activity" data-name="{{name}}">
-                    {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs actor=actor activity=name journalUuid=journalUuid}}
+                    {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs actor=actor activity=name journalUuid=journalUuid degreesOfSuccesses=../degreesOfSuccesses degreeOfSuccess=degreeOfSuccess slug=slug}}
                 </li>
             {{/each}}
         </ul>

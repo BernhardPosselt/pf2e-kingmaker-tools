@@ -1,7 +1,3 @@
-## available actors:
-* should give GM a hint that camping activity result has been set
-* should show which activities (excluding prepare camp) have been chosen
-
 ## activities
 * Setting 'Prepare Campsite'
   * Critical Success should increase encounter dc
