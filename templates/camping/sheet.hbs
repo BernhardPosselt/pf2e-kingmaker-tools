@@ -57,7 +57,7 @@
         <ul class="camping-actors">
             {{#each actors}}
                 <li class="camping-actor" data-uuid="{{uuid}}">
-                    <div class="chosen-camping-activity {{#if hasActivityResult}}activity-result{{/if}}" {{#if noActivityChosen}}hidden{{/if}}>{{activity}}</div>
+                    <div class="chosen-camping-activity {{#if activityResult}}{{activityResult}}{{/if}}" {{#if noActivityChosen}}hidden{{/if}}>{{activity}}</div>
                     <div class="actor-image-container">
                         <img src="{{image}}" class="actor-image" title="{{name}}" data-uuid="{{uuid}}">
                         <button type="button" class="remove-actor" data-uuid="{{uuid}}" data-type="camping-actors"><i

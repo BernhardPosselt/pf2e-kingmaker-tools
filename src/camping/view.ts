@@ -9,7 +9,7 @@ interface ViewActorMeal extends ViewActor {
 }
 
 interface ViewCampingActor extends ViewActor {
-    hasActivityResult: boolean;
+    activityResult: StringDegreeOfSuccess | null;
     noActivityChosen: boolean;
     activity: string | null;
 }
@@ -97,12 +97,11 @@ export async function toViewActors(actorUuids: string[], activities: CampingActi
             const chosenActivity = activities
                 .filter(a => a.activity !== 'Prepare Campsite')
                 .find(a => a.actorUuid === actor.uuid);
-            const result = chosenActivity?.result;
             return {
                 ...actor,
-                hasActivityResult: result !== null && result !== undefined,
                 noActivityChosen: !chosenActivity,
                 activity: chosenActivity?.activity ?? null,
+                activityResult: chosenActivity?.result ?? null,
             };
         });
 }
@@ -129,10 +128,10 @@ interface ViewDegreeOfSuccess {
 
 export function toViewDegrees(): ViewDegreeOfSuccess[] {
     return [
-        {value: 'criticalFailure', label: 'Critical Failure'},
-        {value: 'failure', label: 'Failure'},
-        {value: 'success', label: 'Success'},
         {value: 'criticalSuccess', label: 'Critical Success'},
+        {value: 'success', label: 'Success'},
+        {value: 'failure', label: 'Failure'},
+        {value: 'criticalFailure', label: 'Critical Failure'},
     ];
 }
 

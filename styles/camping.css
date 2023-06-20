@@ -41,8 +41,8 @@
 .chosen-camping-activity {
     writing-mode: vertical-lr;
     transform: scale(-1, -1);
-    background-color: #cb0808;
-    color: white;
+    background-color: white;
+    color: black;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -51,8 +51,22 @@
     padding: 5px 2px;
 }
 
-.chosen-camping-activity.activity-result {
-    background-color: #789035;
+.chosen-camping-activity.criticalSuccess {
+    color: white;
+    background-color: #244cb3;
+}
+
+.chosen-camping-activity.success {
+    background-color: #7d8fb3;
+}
+
+.chosen-camping-activity.failure {
+    background-color: #cc8f8f;
+}
+
+.chosen-camping-activity.criticalFailure {
+    color: white;
+    background-color: #cc2929;
 }
 
 .camping-actor {
