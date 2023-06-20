@@ -13,7 +13,7 @@ import {kingdomChatButtons} from './kingdom/chat-buttons';
 import {StringDegreeOfSuccess} from './degree-of-success';
 import {showArmy} from './armies/sheet';
 import {openCampingSheet} from './camping/sheet';
-import {postCompanionEffects, subsist} from './camping/macros';
+import {subsist} from './camping/macros';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -23,7 +23,6 @@ Hooks.on('ready', async () => {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
                 toTimeOfDayMacro: toTimeOfDayMacro.bind(null, game),
                 kingdomEventsMacro: rollKingdomEvent.bind(null, game),
-                postCompanionEffectsMacro: postCompanionEffects.bind(null, game),
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
                 viewKingdomMacro: showKingdom.bind(null, game),
                 viewArmyMacro: (actor: Actor, token: Token): Promise<void> => showArmy(gameInstance, actor, token),

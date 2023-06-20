@@ -152,3 +152,11 @@ export function getTimeOfDayPercent(time: DateTime): number {
     const elapsedSeconds = time.second + time.minute * 30 + time.hour * 3600;
     return Math.floor(elapsedSeconds/(36*24));
 }
+
+export function isDayOrNight(time: DateTime): 'day' | 'night' {
+    if (time.hour >= 6 && time.hour <18) {
+        return 'day';
+    } else {
+        return 'night';
+    }
+}

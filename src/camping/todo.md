@@ -8,7 +8,6 @@
   * Failure should apply a -2 to all camping effect on all actors
   * Anything else than critical failure shows all other activities:
     * pre-selected effects like Bolster Confidence are automatically applied and synced to actors
-* unsetting an actor should clear the success drop down
 * activities without checks should not show a degree of success nor check dropdown
 * Dropping characters on activities that don't satisfy proficiency requirements shows an error message and does not set the actor
 * changing a degree of success dropdown should remove all effects except the current one and roll a random encounter check if noted
@@ -29,8 +28,6 @@
   * figure out how to deal with Relax (probably not at all)
 
 ## Eating
-* Favorite Meal should be taken from known recipes and persisted
-* Cook button performs the check on the actor that selected the "Cook Meal" camping activity and change the degree outcome
 * Changing the degree outcome should:
   * delete all previous meal effects
   * apply effects of meal to all actors that choose "Meal" in their dropdown; if favorite meal matches, apply that one as well

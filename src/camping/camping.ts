@@ -2,7 +2,7 @@ import {CampingActivityName, getCampingActivityData} from './activities';
 import {getRegionInfo} from './regions';
 import {getLevelBasedDC, slugify} from '../utils';
 import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
-import {basicIngredientUuid, DcType, rationUuid, specialIngredientUuid} from './data';
+import {basicIngredientUuid, CombatEffectCompanions, DcType, rationUuid, specialIngredientUuid} from './data';
 import {getRecipeData, RecipeData} from './recipes';
 import {getItemsBySourceId, getItemsByUuid, hasItemByUuid, removeExpiredEffects, removeItemsBySourceId} from './actor';
 
@@ -15,19 +15,23 @@ export interface CampingActivity {
     selectedSkill: string | null;
 }
 
-interface ActorMeals {
+export type ChosenMeal = 'meal' | 'rationsOrSubsistence' | 'nothing';
+
+export interface ActorMeal {
     actorUuid: string;
-    favoriteMeal?: string;
-    consume: 'meal' | 'rationsOrSubsistence' | 'nothing';
+    favoriteMeal: string | null;
+    chosenMeal: ChosenMeal;
 }
 
-interface Cooking {
+export type CookingSkill = 'survival' | 'cooking';
+
+export interface Cooking {
     knownRecipes: string[];
     subsistenceAmount: number;
     magicalSubsistenceAmount: number;
     chosenMeal: string;
-    servings: number;
-    actorMeals: ActorMeals[];
+    cookingSkill: CookingSkill;
+    actorMeals: ActorMeal[];
     homebrewMeals: RecipeData[];
     degreeOfSuccess: StringDegreeOfSuccess | null;
 }
@@ -44,6 +48,7 @@ export interface Camping {
     currentRegion: string;
     encounterModifier: number;
     restRollMode: RestRollMode;
+    combatEffectCompanions: CombatEffectCompanions[];
 }
 
 export function getDefaultConfiguration(game: Game): Camping {
@@ -52,12 +57,12 @@ export function getDefaultConfiguration(game: Game): Camping {
         campingActivities: [],
         cooking: {
             chosenMeal: 'Basic Meal',
-            servings: 0,
             actorMeals: [],
             magicalSubsistenceAmount: 0,
             subsistenceAmount: 0,
             knownRecipes: ['Basic Meal', 'Hearty Meal'],
             homebrewMeals: [],
+            cookingSkill: 'survival',
             degreeOfSuccess: null,
         },
         restRollMode: 'one',
@@ -66,6 +71,7 @@ export function getDefaultConfiguration(game: Game): Camping {
         encounterModifier: 0,
         gunsToClean: 0,
         watchSecondsElapsed: 0,
+        combatEffectCompanions: [],
         lockedActivities: getCampingActivityData()
             .filter(a => a.isLocked)
             .map(a => a.name),
@@ -98,7 +104,7 @@ export async function rollCampingCheck(
         skill: string,
         secret?: boolean,
         activity?: string,
-    }): Promise<DegreeOfSuccess> {
+    }): Promise<DegreeOfSuccess | null> {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     const rollData: Record<string, any> = {
         extraRollOptions: ['camping'],
@@ -113,12 +119,16 @@ export async function rollCampingCheck(
         rollData['rollMode'] = 'blindroll';
     }
     let result;
+    const skills = (actor as any).skills;
+    const cookingLoreSkill = 'cooking' in skills ? 'cooking' : 'cooking-lore';
     if (skill === 'perception') {
         result = await (actor as any).perception.roll(rollData);
+    } else if (skill === 'cooking') {
+        result = await skills[cookingLoreSkill].roll(rollData);
     } else {
-        result = await (actor as any).skills[skill].roll(rollData);
+        result = await skills[skill].roll(rollData);
     }
-    return result.degreeOfSuccess;
+    return result?.degreeOfSuccess ?? null;
 }
 
 /**
@@ -260,7 +270,6 @@ export interface ConsumedFood {
     rations: ConsumedResource;
     basicIngredients: ConsumedResource;
     specialIngredients: ConsumedResource;
-    meals: ConsumedResource;
 }
 
 interface FoodCost {
@@ -268,7 +277,6 @@ interface FoodCost {
     recipeBasicIngredientCost: number;
     actorsConsumingRations: number;
     actorsConsumingMeals: number;
-    mealServings: number;
     availableSubsistence: number;
     availableMagicalSubsistence: number;
 }
@@ -282,11 +290,10 @@ export function calculateConsumedFood(actorConsumables: ActorConsumables, foodCo
         recipeBasicIngredientCost,
         availableMagicalSubsistence,
         availableSubsistence,
-        mealServings,
         actorsConsumingRations,
         actorsConsumingMeals,
     } = foodCost;
-    const requiredRationsTotal = mealServings + actorsConsumingRations;
+    const requiredRationsTotal = actorsConsumingMeals + actorsConsumingRations;
     const availableRationsTotal = availableRations + availableSubsistence + availableMagicalSubsistence;
 
     const consumedRations = Math.max(0, requiredRationsTotal - availableSubsistence - availableMagicalSubsistence);
@@ -300,16 +307,12 @@ export function calculateConsumedFood(actorConsumables: ActorConsumables, foodCo
             warning: (availableRationsTotal - requiredRationsTotal) < 0,
         },
         specialIngredients: {
-            value: recipeSpecialIngredientCost * mealServings,
-            warning: recipeSpecialIngredientCost * mealServings > availableSpecialIngredients,
+            value: recipeSpecialIngredientCost * actorsConsumingMeals,
+            warning: recipeSpecialIngredientCost * actorsConsumingMeals > availableSpecialIngredients,
         },
         basicIngredients: {
-            value: recipeBasicIngredientCost * mealServings,
-            warning: recipeBasicIngredientCost * mealServings > availableBasicIngredients,
-        },
-        meals: {
-            value: actorsConsumingMeals,
-            warning: actorsConsumingMeals > mealServings,
+            value: recipeBasicIngredientCost * actorsConsumingMeals,
+            warning: recipeBasicIngredientCost * actorsConsumingMeals > availableBasicIngredients,
         },
     };
 }
@@ -395,4 +398,17 @@ export async function removeFood(actors: Actor[], config: RemoveFoodAmount): Pro
     await removeRations(actors, config.rations);
     await removeItems(actors, config.basicIngredients, basicIngredientUuid);
     await removeItems(actors, config.specialIngredients, specialIngredientUuid);
+}
+
+export function getCookingActorUuid(data: Camping): string | null {
+    return data.campingActivities
+        .find(a => a.activity === 'Cook Meal')?.actorUuid ?? null;
+}
+
+export async function getCookingActorByUuid(data: Camping): Promise<Actor | null> {
+    const uuid = getCookingActorUuid(data);
+    if (uuid) {
+        return await fromUuid(uuid) as Actor | null;
+    }
+    return null;
 }

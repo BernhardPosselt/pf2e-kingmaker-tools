@@ -1,15 +1,6 @@
-import {getStringSetting, setSetting} from '../settings';
 import {postDegreeOfSuccessMessage} from '../utils';
 import {getRegionInfo} from './regions';
 
-function companionTpl(allCompanions: string[], preselectedCompanions: string[]): string {
-    return `<form>
-        ${allCompanions.map(name => {
-        const checked = preselectedCompanions.includes(name) ? 'checked="checked"' : '';
-        return `<div><input name="${name}" type="checkbox" value="${name}" ${checked}>${name}</div>`;
-    }).join('\n')}
-    </form>`;
-}
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export async function subsist(game: Game, actor: any): Promise<void> {
@@ -37,40 +28,4 @@ export async function subsist(game: Game, actor: any): Promise<void> {
     }
 }
 
-export async function postCompanionEffects(game: Game): Promise<void> {
-    const companionConfig = {
-        'Amiri': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.ZKJlIqyFgbKDACnG]{Enhance Weapons}',
-        'Nok-Nok': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.PSBOS7ZEl9RGWBqD]{Set Traps}',
-        'Jaethal': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.KysTaC245mOnSnmE]{Undead Guardians}',
-        'Kalikke': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.LN6mH7Muj4hgvStt]{Water Hazards}',
-    };
-    const preselectedCompanions = JSON.parse(getStringSetting(game, 'selectedCompanions') || '[]');
-    new Dialog({
-        title: 'Companion Effects to Chat',
-        content: companionTpl(Object.keys(companionConfig), preselectedCompanions),
-        buttons: {
-            post: {
-                label: 'Post Effects',
-                callback: async (html): Promise<void> => {
-                    const $html = html as HTMLInputElement;
-                    const companionsAndLabels = Object.entries(companionConfig)
-                        .map(([name, link]) => {
-                            const checkbox = $html.querySelector(`input[name=${name}]`) as HTMLInputElement;
-                            if (checkbox.checked) {
-                                return {[name]: `${name}: ${link}`};
-                            } else {
-                                return null;
-                            }
-                        })
-                        .filter(v => v !== null)
-                        .reduce((a: object, b) => Object.assign(a, b), {});
-                    await setSetting(game, 'selectedCompanions', JSON.stringify(Object.keys(companionsAndLabels)));
-                    await ChatMessage.create({content: Object.values(companionsAndLabels).join('<br>')});
-                },
-            },
-        },
-        default: 'post',
-    }, {
-        jQuery: false,
-    }).render(true);
-}
+

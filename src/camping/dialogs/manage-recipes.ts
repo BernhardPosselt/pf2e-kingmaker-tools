@@ -3,6 +3,7 @@ import {createUUIDLink, escapeHtml, parseCheckbox} from '../../utils';
 
 interface ManageRecipesOptions {
     recipes: RecipeData[];
+    isGM: boolean;
     learnedRecipes: Set<string>;
     onSubmit: (learnedRecipes: Set<string>, deletedRecipes: Set<string>) => Promise<void>
 }
@@ -12,12 +13,24 @@ export interface ViewRecipeData {
     recipe: string;
     recipeName: string;
     cookingLoreDC: number;
-    ingredients: string;
+    learningCost: string;
+    cookingCost: string;
     price: string;
     rarity: Rarity,
     level: number;
     name: string;
     isHomebrew: boolean;
+}
+
+function formatCost(basic: number, special: number): string {
+    const result = [];
+    if (basic > 0) {
+        result.push(`Basic: ${basic}`);
+    }
+    if (special > 0) {
+        result.push(`Special: ${special}`);
+    }
+    return result.join(', ');
 }
 
 export async function toTemplateRecipe(recipe: RecipeData, learnedRecipes: Set<string>): Promise<ViewRecipeData> {
@@ -27,7 +40,8 @@ export async function toTemplateRecipe(recipe: RecipeData, learnedRecipes: Set<s
         recipe: await TextEditor.enrichHTML(createUUIDLink(recipe.uuid, recipe.name)),
         recipeName: recipe.name,
         cookingLoreDC: recipe.cookingLoreDC,
-        ingredients: `Basic: ${recipe.basicIngredients * 2}, Special: ${recipe.specialIngredients * 2}`,
+        cookingCost: formatCost(recipe.basicIngredients, recipe.specialIngredients),
+        learningCost: formatCost(recipe.basicIngredients*2, recipe.specialIngredients*2),
         price: recipe.cost,
         rarity: recipe.rarity,
         level: recipe.level,
@@ -35,7 +49,7 @@ export async function toTemplateRecipe(recipe: RecipeData, learnedRecipes: Set<s
     };
 }
 
-function tpl(data: ViewRecipeData[]): string {
+function tpl(data: ViewRecipeData[], isGM: boolean): string {
     return `
         <form class="camping-dialog">
             <table class="km-table">
@@ -44,6 +58,7 @@ function tpl(data: ViewRecipeData[]): string {
                     <th>Rarity</th>
                     <th>Level</th>
                     <th>DC</th>
+                    <th>Cooking Cost</th>
                     <th>Learning Cost</th>
                     <th>Purchase Cost</th>
                     <th>Learned</th>
@@ -55,10 +70,11 @@ function tpl(data: ViewRecipeData[]): string {
                         <td>${escapeHtml(r.rarity)}</td>
                         <td>${r.level}</td>
                         <td>${r.cookingLoreDC}</td>
-                        <td>${escapeHtml(r.ingredients)}</td>
+                        <td>${escapeHtml(r.cookingCost)}</td>
+                        <td>${escapeHtml(r.learningCost)}</td>
                         <td>${escapeHtml(r.price)}</td>
                         <td><input type="checkbox" name="add-${index}" ${r.learned ? 'checked' : ''} ${r.name === 'Basic Meal' || r.name === 'Hearty Meal' ? 'disabled' : ''}></td>
-                        <td><input type="checkbox" name="delete-${index}" ${r.isHomebrew ? '' : 'disabled'}></td>
+                        <td><input type="checkbox" name="delete-${index}" ${r.isHomebrew && isGM ? '' : 'disabled'}></td>
                     </tr>`;
     }).join('\n')}
             </table>
@@ -68,11 +84,11 @@ function tpl(data: ViewRecipeData[]): string {
 
 export async function manageRecipesDialog(options: ManageRecipesOptions): Promise<void> {
     const recipes = [...options.recipes];
-    recipes.sort((a, b) => a.name.localeCompare(b.name));
+    recipes.sort((a, b) => a.level-b.level || a.name.localeCompare(b.name));
     const data = await Promise.all(recipes.map(r => toTemplateRecipe(r, options.learnedRecipes)));
     new Dialog({
         title: 'Manage Recipes',
-        content: tpl(data),
+        content: tpl(data, options.isGM),
         buttons: {
             save: {
                 icon: '<i class="fa-solid fa-save"></i>',
@@ -100,7 +116,7 @@ export async function manageRecipesDialog(options: ManageRecipesOptions): Promis
         default: 'save',
     }, {
         jQuery: false,
-        width: 800,
+        width: 900,
         height: 600,
     }).render(true);
 }

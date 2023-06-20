@@ -1,26 +1,33 @@
-import {toViewActors, toViewCampingActivities, toViewDegrees, ViewCampingData} from './view';
+import {toViewActorMeals, toViewActors, toViewCampingActivities, toViewDegrees, ViewCampingData} from './view';
 import {formatHours} from '../time/app';
 import {rollRandomEncounter} from './random-encounters';
 import {regions} from './regions';
 import {CampingActivityName, getCampingActivityData} from './activities';
 import {
+    ActorMeal,
     calculateConsumedFood,
     calculateDailyPreparationsSeconds,
     calculateRestSeconds,
     Camping,
+    CookingSkill,
     getActorConsumables,
+    getCookingActorByUuid,
+    getCookingActorUuid,
     getDefaultConfiguration,
     removeFood,
+    rollCampingCheck,
 } from './camping';
 import {manageActivitiesDialog} from './dialogs/manage-activities';
 import {manageRecipesDialog} from './dialogs/manage-recipes';
-import {getRecipeData} from './recipes';
+import {getRecipeData, RecipeData} from './recipes';
 import {addRecipeDialog} from './dialogs/add-recipe';
 import {campingSettingsDialog} from './dialogs/camping-settings';
-import {StringDegreeOfSuccess} from '../degree-of-success';
+import {degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
 import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
-import {listenClick} from '../utils';
+import {LabelAndValue, listenClick} from '../utils';
+import {postCombatEffects} from './dialogs/post-combat-fx';
+import {hasCookingLore} from './actor';
 
 interface CampingOptions {
     game: Game;
@@ -30,9 +37,9 @@ interface CampingData {
     chosenMeal: string;
     subsistenceAmount: number;
     magicalSubsistenceAmount: number;
-    servings: number;
     currentRegion: string;
     mealDegreeOfSuccess: StringDegreeOfSuccess | null;
+    cookingSkill: CookingSkill;
 }
 
 
@@ -56,12 +63,14 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         return options;
     }
 
+    private isGM: boolean;
     private readonly game: Game;
 
     constructor(options: CampingOptions) {
         /* eslint-disable @typescript-eslint/no-explicit-any */
         super({} as any, options);
         this.game = options.game;
+        this.isGM = this.game.user?.isGM ?? false;
     }
 
     override async getData(options?: Partial<CampingOptions & FormApplicationOptions>): Promise<ViewCampingData> {
@@ -70,17 +79,17 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const currentRegion = data.currentRegion;
         const currentRegionData = regions.get(currentRegion);
         const sumElapsedSeconds = Math.abs(currentSeconds - data.dailyPrepsAtTime);
-        const isGM = this.game.user?.isGM ?? false;
-        const isUser = !isGM;
+        const isUser = !this.isGM;
         const activityData = getCampingActivityData();
         const actors = await this.getActors(data);
-        console.log(data);
         const watchSecondsDuration = calculateRestSeconds(actors.length);
         const currentEncounterDCModifier = data.encounterModifier;
         const actorConsumables = await getActorConsumables(actors);
-        const chosenMealData = getRecipeData().concat(data.cooking.homebrewMeals).find(a => a.name === data.cooking.chosenMeal);
-        return {
-            isGM,
+        const knownRecipes = data.cooking.knownRecipes;
+        const chosenMealData = this.getChosenMealData(data);
+        const chosenMeal = chosenMealData.name;
+        const viewData: ViewCampingData = {
+            isGM: this.isGM,
             isUser,
             ...actorConsumables,
             currentEncounterDCModifier,
@@ -97,27 +106,74 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             watchDuration: formatHours(watchSecondsDuration),
             subsistenceAmount: data.cooking.subsistenceAmount,
             magicalSubsistenceAmount: data.cooking.magicalSubsistenceAmount,
-            servings: data.cooking.servings,
-            chosenMeal: data.cooking.chosenMeal,
-            knownRecipes: data.cooking.knownRecipes,
+            chosenMeal: chosenMeal,
+            knownRecipes: knownRecipes,
+            knownFavoriteRecipes: knownRecipes.filter(r => r !== 'Basic Meal'),
             degreesOfSuccesses: toViewDegrees(),
             mealDegreeOfSuccess: data.cooking.degreeOfSuccess,
             time: formatWorldTime(getWorldTime(this.game)),
             // 4px offset is half of the element's width including borders
             timeMarkerPositionPx: Math.floor(getTimeOfDayPercent(getWorldTime(this.game)) * 8.46) - 4,
+            hasCookingActor: !!getCookingActorUuid(data),
             consumedFood: calculateConsumedFood(actorConsumables, {
-                actorsConsumingRations: data.cooking.actorMeals.filter(a => a.consume === 'rationsOrSubsistence').length,
-                actorsConsumingMeals: data.cooking.actorMeals.filter(a => a.consume === 'meal').length,
-                mealServings: data.cooking.servings,
+                actorsConsumingRations: data.cooking.actorMeals.filter(a => a.chosenMeal === 'rationsOrSubsistence').length,
+                actorsConsumingMeals: data.cooking.actorMeals.filter(a => a.chosenMeal === 'meal').length,
                 availableSubsistence: data.cooking.subsistenceAmount,
                 availableMagicalSubsistence: data.cooking.magicalSubsistenceAmount,
                 recipeBasicIngredientCost: chosenMealData?.basicIngredients ?? 0,
                 recipeSpecialIngredientCost: chosenMealData?.specialIngredients ?? 0,
             }),
+            actorMeals: await toViewActorMeals(data.actorUuids, data.cooking.actorMeals),
+            ...(await this.getCookingSkillData(data)),
+            chosenMealDc: await this.getMealDc(data, chosenMealData),
+        };
+        console.log('viewData', viewData);
+        return viewData;
+    }
+
+    private getChosenMealData(data: Camping): RecipeData {
+        const knownRecipes = data.cooking.knownRecipes;
+        const chosenMeal = knownRecipes.includes(data.cooking.chosenMeal) ? data.cooking.chosenMeal : 'Basic Meal';
+        const recipeData = this.getRecipeData(data);
+        return recipeData.find(a => a.name === chosenMeal) ??
+            recipeData.find(a => a.name === 'Basic Meal')!;
+    }
+
+    private async getCookingSkillData(data: Camping): Promise<{
+        cookingSkill: CookingSkill,
+        cookingSkills: LabelAndValue[]
+    }> {
+        const hasCookingLore = await this.cookingActorHasCookingLore(data);
+        const cookingSkills = [
+            ...(hasCookingLore ? [{value: 'cooking', label: 'Cooking'}] : []),
+            {value: 'survival', label: 'Survival'},
+        ];
+        const cookingSkill = hasCookingLore ? data.cooking.cookingSkill : 'survival';
+        return {
+            cookingSkills,
+            cookingSkill,
         };
     }
 
-    private async getActors(data: Camping) {
+    private async getMealDc(data: Camping, chosenMealData: RecipeData): Promise<number> {
+        const skillData = await this.getCookingSkillData(data);
+        if (skillData.cookingSkill === 'survival') {
+            return chosenMealData.survivalDC;
+        } else {
+            return chosenMealData.cookingLoreDC;
+        }
+    }
+
+    private async cookingActorHasCookingLore(data: Camping): Promise<boolean> {
+        const cookingActor = getCookingActorUuid(data);
+        if (cookingActor) {
+            return await hasCookingLore(cookingActor);
+        } else {
+            return false;
+        }
+    }
+
+    private async getActors(data: Camping): Promise<Actor[]> {
         return await Promise.all(data.actorUuids.map(a => fromUuid(a))) as Actor[];
     }
 
@@ -128,12 +184,16 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 label: 'Show Players',
                 class: 'something-made-up',
                 icon: 'fas fa-eye',
-                onclick: () => this.game.socket!.emit('module.pf2e-kingmaker-tools', {
+                onclick: () => this.emit({
                     action: 'openCampingSheet',
                 }),
             });
         }
         return buttons;
+    }
+
+    private emit(args: object): void {
+        this.game.socket!.emit('module.pf2e-kingmaker-tools', args);
     }
 
     private reRender(): void {
@@ -155,6 +215,18 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 await this.removeActor(uuid, type);
             }
         });
+        listenClick($html, '.post-combat-effects', async () => {
+            const current = await this.read();
+            await postCombatEffects({
+                game: this.game,
+                preselectedCompanions: current.combatEffectCompanions,
+                onSubmit: async (selectedCompanions) => {
+                    await this.update({
+                        combatEffectCompanions: selectedCompanions,
+                    });
+                },
+            });
+        });
         listenClick($html, '.advance-hours', async (ev) => {
             const target = ev.currentTarget as HTMLButtonElement;
             const hours = target.dataset.hours ?? '0';
@@ -163,7 +235,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         listenClick($html, '.manage-recipes', async (ev) => {
             const current = await this.read();
             await manageRecipesDialog({
-                recipes: getRecipeData().concat(current.cooking.homebrewMeals),
+                isGM: this.isGM,
+                recipes: this.getRecipeData(current),
                 learnedRecipes: new Set(current.cooking.knownRecipes),
                 onSubmit: async (knownRecipes, deletedRecipes) => {
                     current.cooking.knownRecipes = Array.from(knownRecipes);
@@ -176,7 +249,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         listenClick($html, '.add-recipes', async (ev) => {
             const current = await this.read();
             await addRecipeDialog({
-                recipes: getRecipeData().concat(current.cooking.homebrewMeals),
+                recipes: this.getRecipeData(current),
                 onSubmit: async (recipe) => {
                     current.cooking.homebrewMeals.push(recipe);
                     await this.update({cooking: current.cooking});
@@ -193,11 +266,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 },
             });
         });
-        listenClick($html, '.clear-activities', async (ev) => {
-            const current = await this.read();
-            current.campingActivities.forEach(a => a.actorUuid = null);
-            await this.update({campingActivities: current.campingActivities});
-        });
+        listenClick($html, '.clear-activities', async () => await this.update({campingActivities: []}));
         listenClick($html, '.roll-encounter', async () => await this.rollRandomEncounter(true));
         listenClick($html, '.check-encounter', async () => await this.rollRandomEncounter());
         listenClick($html, '.consume-food', async () => await this.consumeFood());
@@ -210,8 +279,36 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             await this.update({encounterModifier: current.encounterModifier + 1});
         });
         listenClick($html, '.reset-zone-dc-modifier', async () => await this.update({encounterModifier: 0}));
+        listenClick($html, '.cook-food', async () => {
+            const current = await this.read();
+            const cookingActor = await getCookingActorByUuid(current);
+            if (cookingActor) {
+                const {cookingSkill} = await this.getCookingSkillData(current);
+                const chosenMealData = this.getChosenMealData(current);
+                const dc = await this.getMealDc(current, chosenMealData);
+                const result = await rollCampingCheck({
+                    game: this.game,
+                    actor: cookingActor,
+                    activity: 'Cook Meal',
+                    dc,
+                    skill: cookingSkill,
+                });
+                if (result !== null) {
+                    current.cooking.degreeOfSuccess = degreeToProperty(result);
+                    await this.update({
+                        cooking: current.cooking,
+                    });
+                }
+            }
+        });
         listenClick($html, '.roll-check', async (ev) => {
             // TODO
+        });
+        listenClick($html, '.recipe-info', async (ev) => {
+            const current = await this.read();
+            const recipe = this.getChosenMealData(current);
+            const item = await fromUuid(recipe.uuid);
+            (item as any).sheet.render(true);
         });
         listenClick($html, '.camping-settings', async (ev) => {
             const current = await this.read();
@@ -239,6 +336,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         });
     }
 
+    private getRecipeData(current: Camping): RecipeData[] {
+        return getRecipeData().concat(current.cooking.homebrewMeals);
+    }
+
     private async rollRandomEncounter(forgoFlatCheck = false): Promise<void> {
         const current = await this.read();
         const modifier = current.encounterModifier; // FIXME: include activity modifiers
@@ -262,6 +363,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         if (type === 'camping-actors') {
             await this.update({
                 actorUuids: current.actorUuids.filter(id => id !== uuid),
+                campingActivities: current.campingActivities.filter(a => a.actorUuid !== uuid),
             });
         } else {
             const campingConfiguration = await this.read();
@@ -286,7 +388,6 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const uuid = await this.parseCharacterUuid(event);
         if (uuid) {
             const campingConfiguration = await this.read();
-            console.log(uuid);
             if (target.classList.contains('camping-activity')) {
                 const activityName = target.dataset.name as CampingActivityName;
                 await this.setActivityActor(campingConfiguration, activityName, uuid);
@@ -345,7 +446,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     private async update(data: Partial<Camping>): Promise<void> {
         const existing = await this.read();
         const toSave = Object.assign({}, existing, data);
-        console.log(existing, data, toSave);
+        console.log('toSave', toSave);
         localStorage.setItem('campingConfig', JSON.stringify(toSave));
         this.render();
     }
@@ -380,48 +481,78 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     protected async _updateObject(event: Event, formData: CampingData): Promise<void> {
         console.log('formdata', formData);
         const current = await this.read();
+        const mealDegreeOfSuccess = this.parseNullableSelect(formData.mealDegreeOfSuccess) as StringDegreeOfSuccess | null;
         await this.update({
             currentRegion: formData.currentRegion,
             cooking: {
-                servings: formData.servings,
                 magicalSubsistenceAmount: formData.magicalSubsistenceAmount,
                 subsistenceAmount: formData.subsistenceAmount,
                 chosenMeal: formData.chosenMeal,
                 homebrewMeals: current.cooking.homebrewMeals,
                 knownRecipes: current.cooking.knownRecipes,
-                degreeOfSuccess: this.parseFormDegreeOfSuccess(formData.mealDegreeOfSuccess),
-                actorMeals: [], // FIXME
+                degreeOfSuccess: mealDegreeOfSuccess,
+                actorMeals: await this.parseActorMeals(formData),
+                cookingSkill: formData.cookingSkill as CookingSkill,
             },
         });
+        // TODO: add effect syncing
+        // TODO: add listener
+        if (mealDegreeOfSuccess !== null) {
+            this.emit({
+                action: 'syncMealEffects',
+            });
+        }
         this.render();
     }
 
-    private parseFormDegreeOfSuccess(formData: string | null): StringDegreeOfSuccess | null {
+    private parseNullableSelect(formData: string | null): string | null {
         if (formData === null || formData.length === 0 || formData === '-') {
             return null;
         }
-        return formData as StringDegreeOfSuccess;
+        return formData;
     }
 
     private async consumeFood(): Promise<void> {
         const current = await this.read();
         const actors = await this.getActors(current);
         const actorConsumables = await getActorConsumables(actors);
-        const chosenMealData = getRecipeData().concat(current.cooking.homebrewMeals)
+        const chosenMealData = this.getRecipeData(current)
             .find(a => a.name === current.cooking.chosenMeal);
         const consumed = calculateConsumedFood(actorConsumables, {
-            actorsConsumingRations: current.cooking.actorMeals.filter(a => a.consume === 'rationsOrSubsistence').length,
-            actorsConsumingMeals: current.cooking.actorMeals.filter(a => a.consume === 'meal').length,
-            mealServings: current.cooking.servings,
+            actorsConsumingRations: current.cooking.actorMeals.filter(a => a.chosenMeal === 'rationsOrSubsistence').length,
+            actorsConsumingMeals: current.cooking.actorMeals.filter(a => a.chosenMeal === 'meal').length,
             availableSubsistence: current.cooking.subsistenceAmount,
             availableMagicalSubsistence: current.cooking.magicalSubsistenceAmount,
             recipeBasicIngredientCost: chosenMealData?.basicIngredients ?? 0,
             recipeSpecialIngredientCost: chosenMealData?.specialIngredients ?? 0,
         });
-        await removeFood(actors, {
+        const config = {
             rations: consumed.rations.value,
             specialIngredients: consumed.specialIngredients.value,
             basicIngredients: consumed.basicIngredients.value,
+        };
+        await removeFood(actors, config);
+        await ChatMessage.create({
+            content: `Removed up to the following amounts from actor inventories
+                <ul>
+                    <li><b>Rations</b>: ${config.rations}</li>
+                    <li><b>Basic Ingredients</b>: ${config.basicIngredients}</li>
+                    <li><b>Special Ingredients</b>: ${config.specialIngredients}</li>
+                </ul>
+            `,
+        });
+    }
+
+    private async parseActorMeals(formData: CampingData): Promise<ActorMeal[]> {
+        const current = await this.read();
+        const data = formData as any;
+        return current.actorUuids.map(uuid => {
+            const x: ActorMeal = {
+                actorUuid: uuid,
+                favoriteMeal: this.parseNullableSelect(data['actorFavoriteMeal.' + uuid]),
+                chosenMeal: data['actorChosenMeal.' + uuid],
+            };
+            return x;
         });
     }
 }

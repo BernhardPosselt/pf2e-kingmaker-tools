@@ -40,3 +40,14 @@ export async function removeExpiredEffects(actors: Actor[], applicableSourceIds:
         await actor.deleteEmbeddedDocuments('Item', expiredEffectIds);
     }
 }
+
+export async function hasCookingLore(actorUuid: string): Promise<boolean> {
+    const actor = await fromUuid(actorUuid);
+    if (actor) {
+        const skills = (actor as any).skills;
+        return 'cooking' in skills || 'cooking-lore' in skills;
+    } else {
+        return false;
+    }
+}
+

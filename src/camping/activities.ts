@@ -6,8 +6,7 @@ import {getRegionInfo} from './regions';
 export const allCampingActivityNames = [
     'Prepare Campsite',
     'Camouflage Campsite',
-    'Cook Basic Meal',
-    'Cook Special Meal',
+    'Cook Meal',
     'Discover Special Meal',
     'Hunt and Gather',
     'Learn from a Companion',
@@ -105,8 +104,8 @@ export interface CampingActivityData {
     effectUuid?: string;
     isCustomAction?: boolean;
     modifyRandomEncounterDc?: {
-        camping: number;
-        watch: number;
+        day: number;
+        night: number;
     },
     isHomebrew?: boolean;
 }
@@ -171,14 +170,7 @@ const allCampingActivities: CampingActivityData[] = [{
         },
     },
 }, {
-    name: 'Cook Basic Meal',
-    journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.vsE5Uv19lx9cQpwr',
-    isLocked: false,
-    isSecret: false,
-    skillRequirements: [],
-    skills: [],
-}, {
-    name: 'Cook Special Meal',
+    name: 'Cook Meal',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.S72BNBTfKfkCjriU',
     isLocked: false,
     isSecret: false,
@@ -307,8 +299,8 @@ const allCampingActivities: CampingActivityData[] = [{
     skillRequirements: [],
     skills: [],
     modifyRandomEncounterDc: {
-        camping: 0,
-        watch: 2,
+        day: 0,
+        night: 2,
     },
 }, {
     name: 'Bolster Confidence',

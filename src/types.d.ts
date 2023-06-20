@@ -8,7 +8,6 @@ declare global {
                 toggleWeatherMacro: () => void,
                 toTimeOfDayMacro: () => void,
                 kingdomEventsMacro: () => void,
-                postCompanionEffectsMacro: () => void,
                 rollKingmakerWeatherMacro: () => void,
                 viewKingdomMacro: () => void,
                 openCampingSheet: () => void,

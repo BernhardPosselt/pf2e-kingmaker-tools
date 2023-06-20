@@ -1,8 +1,15 @@
-import {CampingActivity, ConsumedFood} from './camping';
+import {ActorMeal, CampingActivity, ConsumedFood, CookingSkill} from './camping';
 import {CampingActivityData, CampingActivityName} from './activities';
 import {StringDegreeOfSuccess} from '../degree-of-success';
+import {LabelAndValue} from '../utils';
+
+interface ViewActorMeal extends ViewActor {
+    favoriteMeal: string | null;
+    chosenMeal: string;
+}
 
 export interface ViewCampingData {
+    actorMeals: ViewActorMeal[];
     actors: ViewActor[];
     campingActivities: ViewCampingActivity[];
     currentRegion: string;
@@ -22,14 +29,18 @@ export interface ViewCampingData {
     watchElapsed: string;
     subsistenceAmount: number;
     magicalSubsistenceAmount: number;
-    servings: number;
     knownRecipes: string[];
+    knownFavoriteRecipes: string[];
     chosenMeal: string;
     degreesOfSuccesses: ViewDegreeOfSuccess[];
     mealDegreeOfSuccess: StringDegreeOfSuccess | null;
     time: string;
     timeMarkerPositionPx: number;
+    hasCookingActor: boolean;
     consumedFood: ConsumedFood;
+    chosenMealDc: number;
+    cookingSkill: CookingSkill;
+    cookingSkills: LabelAndValue[];
 }
 
 export interface ViewActor {
@@ -59,16 +70,13 @@ async function toViewActivity(activity: CampingActivity | undefined, activityDat
     };
 }
 
-export async function toViewActor(uuid: string): Promise<ViewActor | null> {
+export async function toViewActor(uuid: string): Promise<ViewActor> {
     const actor = await fromUuid(uuid) as Actor | null;
-    if (actor) {
-        return {
-            image: actor.img ?? 'modules/pf2e-kingmaker-tools/static/img/add-actor.webp',
-            uuid: actor.uuid!,
-            name: actor.name ?? 'Unnamed Actor',
-        };
-    }
-    return null;
+    return {
+        image: actor?.img ?? 'modules/pf2e-kingmaker-tools/static/img/add-actor.webp',
+        uuid,
+        name: actor?.name ?? 'Unknown Actor',
+    };
 }
 
 export async function toViewActors(actorUuids: string[]): Promise<ViewActor[]> {
@@ -103,4 +111,14 @@ export function toViewDegrees(): ViewDegreeOfSuccess[] {
         {value: 'success', label: 'Success'},
         {value: 'criticalSuccess', label: 'Critical Success'},
     ];
+}
+
+export async function toViewActorMeals(actorUuids: string[], actorMeals: ActorMeal[]): Promise<ViewActorMeal[]> {
+    return await Promise.all(actorUuids.map(async uuid => {
+        return {
+            ...(await toViewActor(uuid)),
+            favoriteMeal: actorMeals.find(m => m.actorUuid === uuid)?.favoriteMeal ?? null,
+            chosenMeal: actorMeals.find(m => m.actorUuid === uuid)?.chosenMeal ?? 'meal',
+        };
+    }));
 }

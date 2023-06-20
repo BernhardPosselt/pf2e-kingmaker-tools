@@ -1,18 +1,25 @@
 <div class="actor-wrapper">
     <header class="actor-header">Favorite Meal</header>
     <div class="actor-subheader">
-        <select>
-            <option>Jeweled Rice</option>
+        <select name="actorFavoriteMeal.{{actor.uuid}}">
+            {{#select actor.favoriteMeal}}
+                <option>-</option>
+                {{#each knownRecipes}}
+                    <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            {{/select}}
         </select>
     </div>
     <div class="actor-image-container">
         <img src="{{actor.image}}" title="{{actor.name}}" class="actor-image" data-uuid="{{actor.uuid}}">
     </div>
     <div class="actor-check">
-        <select>
-            <option>Meal</option>
-            <option>Rations/Subsistence</option>
-            <option>Nothing</option>
+        <select name="actorChosenMeal.{{actor.uuid}}">
+            {{#select actor.chosenMeal}}
+                <option value="meal">Meal</option>
+                <option value="rationsOrSubsistence">Rations/Subsistence</option>
+                <option value="nothing">Nothing</option>
+            {{/select}}
         </select>
     </div>
 </div>

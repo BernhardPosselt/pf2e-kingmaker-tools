@@ -23,6 +23,7 @@
                     <button type="button" class="reset-zone-dc-modifier" title="Reset Modifier"><i class="fa-solid fa-rotate-left"></i></button>
                 </div>
                 <div>
+                    <button type="button" class="post-combat-effects" title="Post Companion Combat Effects to Chat"><i class="fa-solid fa-swords"></i></button>
                     <div><span class="label">DC:</span> {{encounterDC}}</div>
                     <button type="button" class="roll-encounter" title="Roll Random Encounter" data-phase="activities"><i class="fa-solid fa-skull"></i></button>
                     <button type="button" class="check-encounter" title="Check Random Encounter" data-phase="activities"><i class="fa-solid fa-dice-d20"></i><i class="fa-solid fa-skull"></i></button>
@@ -92,22 +93,24 @@
 
         <header class="camping-section-header">
             <h2>Eating</h2>
+            <div class="camping-user-buttons">
+                <button type="button" class="manage-recipes">Manage Recipes <i class="fa-solid fa-book-open"></i></button>
+            </div>
             <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
                 <button type="button" class="add-recipes">Add Recipes <i class="fa-solid fa-plus"></i></button>
-                <button type="button" class="manage-recipes">Manage Recipes <i class="fa-solid fa-book-open"></i></button>
             </div>
         </header>
 
         <ul class="camping-actors">
-            {{#each actors}}
+            {{#each actorMeals}}
             <li class="eating-actors">
-                {{> modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs actor=this}}
+                {{> modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs actor=this knownRecipes=../knownFavoriteRecipes}}
             </li>
             {{/each}}
         </ul>
 
         <div>
-            <table class="km-table">
+            <table class="km-table cost-table">
                 <tr>
                     <th>Consumables</th>
                     <th>Rations</th>
@@ -115,16 +118,16 @@
                     <th>Magical Subsistence</th>
                     <th>Basic Ingredients</th>
                     <th>Special Ingredients</th>
-                    <th>Meals</th>
+                    <th>Pay</th>
                 </tr>
                 <tr>
-                    <td>Current</td>
+                    <td>Available</td>
                     <td>{{rations}}</td>
                     <td><input type="number" name="subsistenceAmount" value="{{subsistenceAmount}}"></td>
                     <td><input type="number" name="magicalSubsistenceAmount" value="{{magicalSubsistenceAmount}}"></td>
                     <td>{{basicIngredients}}</td>
                     <td>{{specialIngredients}}</td>
-                    <td>{{servings}}</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Consumed</td>
@@ -133,32 +136,47 @@
                     <td>{{consumedFood.magicalSubsistence}}</td>
                     <td {{#if consumedFood.basicIngredients.warning}}class="consume-warning"{{/if}}>{{consumedFood.basicIngredients.value}}</td>
                     <td {{#if consumedFood.specialIngredients.warning}}class="consume-warning"{{/if}}>{{consumedFood.specialIngredients.value}}</td>
-                    <td {{#if consumedFood.meals.warning}}class="consume-warning"{{/if}}>{{consumedFood.meals.value}}</td>
+                    <td><button type="button" class="consume-food" title="Remove from Actor's inventories" {{#if isUser}}disabled{{/if}}><i class="fa-solid fa-minus"></i></button></td>
                 </tr>
             </table>
             <div class="camping-cook">
-                <label>Servings <input type="number" name="servings" value="{{servings}}"></label>
-                <label>Recipe
-                    <select name="chosenMeal">
-                        {{#select chosenMeal}}
-                            {{#each knownRecipes}}
-                                <option value="{{this}}">{{this}}</option>
+                <div>
+                    <label>Recipe
+                        <select name="chosenMeal">
+                            {{#select chosenMeal}}
+                                {{#each knownRecipes}}
+                                    <option value="{{this}}">{{this}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </label>
+                    <button type="button" class="recipe-info" title="Recipe Info"><i class="fa-solid fa-question"></i></button>
+                </div>
+                <div>
+                    <label>Skill
+                    <select name="cookingSkill">
+                        {{#select cookingSkill}}
+                            {{#each cookingSkills}}
+                                <option value="{{value}}">{{label}}</option>
                             {{/each}}
                         {{/select}}
                     </select>
-                </label>
-                <span><span class="label">DC</span> 20</span>
-                <!-- chooses cooking lore if higher, otherwise survival -->
-                <button type="button" class="cook-recipe">Cook <i class="fa-solid fa-dice-d20"></i></button>
-                <select name="mealDegreeOfSuccess">
-                    {{#select mealDegreeOfSuccess}}
-                        <option>-</option>
-                        {{#each degreesOfSuccesses}}
-                            <option value="{{value}}">{{label}}</option>
-                        {{/each}}
-                    {{/select}}
-                </select>
-                <button type="button" class="consume-food" {{#if isUser}}disabled{{/if}}>Consume Food <i class="fa-solid fa-minus"></i></button>
+                    </label>
+                    <span><span class="label">DC</span> {{chosenMealDc}}</span>
+                    <button type="button" class="cook-food" {{#unless hasCookingActor}}disabled{{/unless}}><i class="fa-solid fa-dice-d20"></i></button>
+                </div>
+                <div>
+                    <label>Degree of Success
+                        <select name="mealDegreeOfSuccess">
+                            {{#select mealDegreeOfSuccess}}
+                                <option>-</option>
+                                {{#each degreesOfSuccesses}}
+                                    <option value="{{value}}">{{label}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </label>
+                </div>
             </div>
         </div>
     </div>

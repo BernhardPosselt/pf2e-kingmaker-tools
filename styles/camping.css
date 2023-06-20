@@ -11,6 +11,16 @@
     grid-template-areas: "header header" "sidebar content";
 }
 
+.camping-sheet select {
+    height: 36px;
+}
+
+
+.camping-sheet .label,
+.camping-sheet label {
+    font-weight: bold;
+}
+
 .camping-header {
     grid-area: header;
     border-bottom: 1px solid #000;
@@ -108,10 +118,6 @@
     flex-direction: row;
 }
 
-.adventuring-since .label,
-.camping-header label {
-    font-weight: bold;
-}
 
 .adventuring-since {
     margin-right: 10px;
@@ -125,7 +131,24 @@
 
 .camping-cook {
     display: flex;
-    column-gap: 10px;
+    justify-content: space-between;
+}
+
+.camping-cook > * {
+    display: flex;
+    column-gap: 5px;
+}
+
+.camping-cook select {
+    max-width: 150px;
+}
+
+.camping-cook span {
+    line-height: 36px;
+}
+
+.camping-cook button {
+    width: auto;
 }
 
 .resting-progress {
@@ -178,6 +201,7 @@
 
 .actor-subheader select {
     flex-grow: 1;
+    max-width: var(--actor-image-width);
 }
 
 .camping-actors button {
@@ -193,7 +217,6 @@
 
 .camping-actors .actor-check select {
     flex-grow: 1;
-    height: 36px;
 }
 
 .camping-actors .actor-image {
@@ -250,10 +273,10 @@
     width: auto;
 }
 
-.region-controls .label {
-    font-weight: bold;
-}
-
 td.consume-warning {
     color: red;
+}
+
+.camping-sheet .cost-table input {
+    width: 40px;
 }
