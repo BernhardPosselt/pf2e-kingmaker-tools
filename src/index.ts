@@ -1,5 +1,5 @@
 import {dayHasChanged, syncWeather, toggleWeather} from './weather';
-import {getSelectedCharacter, isGm} from './utils';
+import {isGm} from './utils';
 import {toTimeOfDayMacro} from './time/app';
 import {getBooleanSetting, getStringSetting} from './settings';
 import {rollKingmakerWeather} from './kingmaker-weather';
@@ -13,7 +13,6 @@ import {kingdomChatButtons} from './kingdom/chat-buttons';
 import {StringDegreeOfSuccess} from './degree-of-success';
 import {showArmy} from './armies/sheet';
 import {openCampingSheet} from './camping/sheet';
-import {subsist} from './camping/macros';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -26,12 +25,6 @@ Hooks.on('ready', async () => {
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
                 viewKingdomMacro: showKingdom.bind(null, game),
                 viewArmyMacro: (actor: Actor, token: Token): Promise<void> => showArmy(gameInstance, actor, token),
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                subsistMacro: async (actor: any): Promise<void> => {
-                    const selectedActor = getBooleanSetting(gameInstance, 'useSelectedCharacter')
-                        ? getSelectedCharacter(gameInstance) : actor;
-                    await subsist(gameInstance, selectedActor);
-                },
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 openCampingSheet: (): void => openCampingSheet(gameInstance),
                 rollExplorationSkillCheck: async (skill: string, effect: string): Promise<void> => {
@@ -242,14 +235,6 @@ Hooks.on('ready', async () => {
             config: false,
             default: 4,
             type: Number,
-        });
-        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'useSelectedCharacter', {
-            name: 'Subsist: Use user\'s character instead of token',
-            hint: 'If true, a player can use the Subsist macro on the overland map without having the token to be present. Set to false if you always want to roll this for a selected token.',
-            default: true,
-            config: true,
-            type: Boolean,
-            scope: 'world',
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'vanceAndKerensharaXP', {
             name: 'Enable Vance and Kerenshara XP rules',

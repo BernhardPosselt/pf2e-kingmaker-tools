@@ -41,6 +41,7 @@
 * Blend into the night should increase encounter dc between 6pm and 6am
 
 ## TODO:
+* move subsist to camping menu
 * sync sheet using imported actor
 * check how well recipes are implemented and document
 * think about recipe migration

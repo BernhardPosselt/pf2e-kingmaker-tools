@@ -14,6 +14,9 @@
         <img src="{{actor.image}}" title="{{actor.name}}" class="actor-image" data-uuid="{{actor.uuid}}">
     </div>
     <div class="actor-check">
+        <button type="button" class="subsist" data-uuid="{{actor.uuid}}">Subsist <i class="fa-solid fa-dice-d20"></i></button>
+    </div>
+    <div class="actor-subheader">
         <select name="actorChosenMeal.{{actor.uuid}}">
             {{#select actor.chosenMeal}}
                 <option value="meal">Meal</option>

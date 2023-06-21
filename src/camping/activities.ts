@@ -317,13 +317,13 @@ export const allCampingActivities: CampingActivityData[] = [{
     skillRequirements: [],
     skills: ['survival'],
     criticalSuccess: {
-        message: 'Jubilost’s advice speeds things along significantly. During the hour immediately following this critical success, each PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt.',
+        message: 'During the hour immediately following this critical success, each PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt.',
     },
     success: {
-        message: 'Jubilost’s advice speeds things along significantly. During the hour immediately following this critical success, one PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt.',
+        message: 'During the hour immediately following this critical success, one PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt.',
     },
     criticalFailure: {
-        message: 'Jubilost’s advice backfires, resulting in inefficiencies during the rest of the camping session. All checks made to resolve Camping activities take a –2 circumstance penalty for the remainder of this camping session.',
+        message: 'All checks made to resolve Camping activities take a –2 circumstance penalty for the remainder of this camping session.',
         effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.vpH13xgAqX4zsU6o',
     },
 }, {

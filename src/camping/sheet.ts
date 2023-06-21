@@ -20,6 +20,7 @@ import {
     removeFood,
     rollCampingCheck,
     SkillCheckOptions,
+    subsist,
 } from './camping';
 import {manageActivitiesDialog} from './dialogs/manage-activities';
 import {manageRecipesDialog} from './dialogs/manage-recipes';
@@ -59,8 +60,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         options.width = 862;
         options.height = 'auto';
         options.dragDrop = [{
-            dropSelector: '.new-camping-actor, .camping-activity',
-            dragSelector: '.camping-actor',
+            dropSelector: '.new-camping-actor, .camping-activity, .camping-actor',
+            dragSelector: '.camping-actor, .content-link[data-type=Item]',
         }];
         options.closeOnSubmit = false;
         options.submitOnChange = true;
@@ -275,6 +276,15 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 campingActivities: current.campingActivities,
             });
         });
+        listenClick($html, '.subsist', async (ev) => {
+            const button = ev.currentTarget as HTMLButtonElement;
+            const uuid = button.dataset.uuid!;
+            const current = await this.read();
+            const actor = await fromUuid(uuid) as Actor | null;
+            if (actor) {
+                await subsist(this.game, actor, current.currentRegion);
+            }
+        });
         listenClick($html, '.roll-encounter', async () => await this.rollRandomEncounter(true));
         listenClick($html, '.check-encounter', async () => await this.rollRandomEncounter());
         listenClick($html, '.consume-food', async () => await this.consumeFood());
@@ -426,8 +436,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
 
     protected async _onDrop(event: DragEvent): Promise<void> {
         const target = event.currentTarget as HTMLLIElement;
-        const uuid = await this.parseCharacterUuid(event);
-        if (uuid) {
+        const document = await this.parseDropData(event);
+        if (document) {
             const campingConfiguration = await this.read();
             if (target.classList.contains('camping-activity')) {
                 const activityName = target.dataset.name as CampingActivityName;
@@ -435,11 +445,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 const data = getCampingActivityData(current);
                 const proficiencyRequirements = data
                     .find(a => a.name === activityName)?.skillRequirements ?? [];
-                const actor = await fromUuid(uuid) as Actor | null;
-                if (actor) {
+                if (document instanceof Actor) {
                     try {
-                        await validateSkillProficiencies(actor, proficiencyRequirements);
-                        await this.setActivityActor(campingConfiguration, activityName, uuid);
+                        await validateSkillProficiencies(document, proficiencyRequirements);
+                        await this.setActivityActor(campingConfiguration, activityName, document.uuid);
                     } catch (e) {
                         if (e instanceof NotProficientError) {
                             ui.notifications?.error(e.message);
@@ -447,9 +456,13 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                             throw e;
                         }
                     }
+                } else {
+                    await this.handleItemDrop(document, target.dataset.actorUuid!);
                 }
-            } else if (target.classList.contains('new-camping-actor') && !campingConfiguration.actorUuids.includes(uuid)) {
-                await this.update({actorUuids: [...(campingConfiguration.actorUuids), uuid]});
+            } else if (target.classList.contains('new-camping-actor') && !campingConfiguration.actorUuids.includes(document.uuid)) {
+                await this.update({actorUuids: [...(campingConfiguration.actorUuids), document.uuid]});
+            } else if (target.classList.contains('camping-actor') && document instanceof Item) {
+                await this.handleItemDrop(document, target.dataset.actorUuid!);
             }
         }
     }
@@ -470,8 +483,9 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         await this.update({campingActivities: campingConfiguration.campingActivities});
     }
 
-    private async parseCharacterUuid(event: DragEvent): Promise<string | null> {
+    private async parseDropData(event: DragEvent): Promise<Actor | Item | null> {
         const dropData = event.dataTransfer?.getData('text/plain');
+        console.log(dropData);
         if (!dropData) return null;
         try {
             const data = JSON.parse(dropData);
@@ -480,23 +494,21 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 console.error('No uuid found on drop data: ' + dropData);
                 return null;
             }
-            const isActor = 'type' in data && data.type === 'Actor';
-            if (!isActor) {
-                console.error('No actor on drop data: ' + dropData);
-                return null;
+            const document = await fromUuid(uuid) as Actor | Item | null;
+            if (document) {
+                const type = document?.type;
+                if (document instanceof Actor && type === 'character' || document instanceof Item) {
+                    return document;
+                } else {
+                    console.error('No character or item document type, instead found: ' + type);
+                    return null;
+                }
             }
-            const actor = await fromUuid(uuid) as Actor | null;
-            const actorType = actor?.type;
-            if (actorType !== 'character') {
-                console.error('No character actor type, instead found: ' + actorType);
-                return null;
-            }
-            return uuid;
         } catch (e) {
             console.error(e);
             console.info(dropData);
-            return null;
         }
+        return null;
     }
 
     private async update(data: Partial<Camping>): Promise<void> {
@@ -629,6 +641,13 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             await this.update({
                 campingActivities: current.campingActivities,
             });
+        }
+    }
+
+    private async handleItemDrop(document: Item, actorUuid: string): Promise<void> {
+        const actor = await fromUuid(actorUuid) as Actor | null;
+        if (actor) {
+            await actor.createEmbeddedDocuments('Item', [document.toObject()]);
         }
     }
 }

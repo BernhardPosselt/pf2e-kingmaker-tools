@@ -1,6 +1,6 @@
 import {allCampingActivities, CampingActivityData, CampingActivityName} from './activities';
 import {getRegionInfo} from './regions';
-import {getLevelBasedDC, slugify, unslugify} from '../utils';
+import {getLevelBasedDC, postDegreeOfSuccessMessage, slugify, unslugify} from '../utils';
 import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {basicIngredientUuid, CombatEffectCompanions, DcType, rationUuid, specialIngredientUuid} from './data';
 import {allRecipes, RecipeData} from './recipes';
@@ -448,4 +448,24 @@ export function getRecipeData(data: Camping): RecipeData[] {
 
 export function getCampingActivityData(current: Camping): CampingActivityData[] {
     return allCampingActivities.concat(current.homebrewCampingActivities);
+}
+
+export async function subsist(game: Game, actor: Actor, region: string): Promise<void> {
+    const {zoneDC} = getRegionInfo(game, region);
+    const result = await actor.skills.survival.roll({
+        modifiers: [new game.pf2e.Modifier({
+            type: 'untyped',
+            modifier: -5,
+            label: 'Subsist After Exploring',
+        })],
+        dc: zoneDC,
+        extraRollOptions: ['action:subsist'],
+    });
+    if (result === null) return;
+    await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
+        critSuccess: `${actor.name} provide a subsistence living for themselves and one additional creature`,
+        success: `${actor.name} provide a subsistence living for themselves`,
+        failure: `${actor.name} are exposed to the elements and don’t get enough food, becoming @UUID[Compendium.pf2e.conditionitems.HL2l2VRSaQHu9lUw]{Fatigued} until they attain sufficient food and shelter`,
+        critFailure: `${actor.name} attract trouble, eat something they shouldn’t, or otherwise worsen their situation. They take a –2 circumstance penalty to checks to Subsist for 1 week @UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.tWDpGhZivvosT4QO]{Subsist: Critical Failure}. They don’t find any food at all; if they don’t have any stored up, they’re in danger of starving or dying of thirst if they continue failing`,
+    });
 }

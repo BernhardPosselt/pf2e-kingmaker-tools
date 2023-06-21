@@ -18,8 +18,6 @@ declare global {
                 openCampingSheet: () => void,
                 viewArmyMacro: (actor: Actor, token: Token) => void,
                 /* eslint-disable @typescript-eslint/no-explicit-any */
-                subsistMacro: (actor: any) => void,
-                /* eslint-disable @typescript-eslint/no-explicit-any */
                 editStructureMacro: (actor: any) => Promise<void>,
                 rollExplorationSkillCheck: (skill: string, effect: string) => Promise<void>,
                 rollSkillDialog: () => Promise<void>,
@@ -68,7 +66,7 @@ declare global {
 
         addToInventory(value: object, container?: Item, newStack: false): Promise<Item | null>;
 
-        createEmbeddedDocuments(type: 'Item', data: object[]);
+        createEmbeddedDocuments(type: 'Item', data: object[]): Promise<void>;
 
         skills: Record<string, ActorSkill>;
         attributes: {

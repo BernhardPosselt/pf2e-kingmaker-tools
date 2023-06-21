@@ -326,3 +326,7 @@ td.consume-warning {
 .camping-sheet .cost-table input {
     width: 40px;
 }
+
+button.subsist {
+    width: 100%;
+}
