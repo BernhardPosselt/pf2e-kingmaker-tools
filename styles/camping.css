@@ -146,9 +146,8 @@
 .camping-actors {
     list-style-type: none;
     display: flex;
-    justify-content: space-evenly;
     row-gap: 20px;
-    column-gap: 5px;
+    column-gap: 10px;
     flex-wrap: wrap;
     margin-block-start: 0;
     margin-block-end: 0;

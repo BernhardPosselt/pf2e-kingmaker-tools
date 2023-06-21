@@ -3,13 +3,11 @@ import {getRegionInfo} from './regions';
 
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export async function subsist(game: Game, actor: any): Promise<void> {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    const pf2e = game.pf2e as unknown as any;
+export async function subsist(game: Game, actor: Actor): Promise<void> {
     const {zoneDC} = getRegionInfo(game);
     if (actor) {
         const result = await actor.skills.survival.roll({
-            modifiers: [new pf2e.Modifier({
+            modifiers: [new game.pf2e.Modifier({
                 type: 'untyped',
                 modifier: -5,
                 label: 'Subist After Exploring',
@@ -17,6 +15,7 @@ export async function subsist(game: Game, actor: any): Promise<void> {
             dc: zoneDC,
             extraRollOptions: ['action:subsist'],
         });
+        if (result === null) return;
         await postDegreeOfSuccessMessage(result.degreeOfSuccess, {
             critSuccess: `${actor.name} provide a subsistence living for themselves and one additional creature`,
             success: `${actor.name} provide a subsistence living for themselves`,

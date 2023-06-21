@@ -1,7 +1,7 @@
 import {ActorMeal, CampingActivity, ConsumedFood, CookingSkill} from './camping';
 import {CampingActivityData, CampingActivityName} from './activities';
 import {StringDegreeOfSuccess} from '../degree-of-success';
-import {camelCase, LabelAndValue} from '../utils';
+import {camelCase, LabelAndValue, unslugify} from '../utils';
 
 interface ViewActorMeal extends ViewActor {
     favoriteMeal: string | null;
@@ -9,7 +9,7 @@ interface ViewActorMeal extends ViewActor {
 }
 
 interface ViewCampingActor extends ViewActor {
-    activityResult: StringDegreeOfSuccess | null;
+    cssClass: StringDegreeOfSuccess | null;
     noActivityChosen: boolean;
     activity: string | null;
 }
@@ -62,21 +62,43 @@ export interface ViewCampingActivity {
     actor: ViewActor | null;
     journalUuid: string;
     isSkillCheck: boolean;
-    isCustomAction: boolean;
     degreeOfSuccess: StringDegreeOfSuccess | null;
-    skills: string[];
+    skills: LabelAndValue[];
+    selectedSkill: string | null;
+    isSecret: boolean;
+    isHidden: boolean;
+    askDc: boolean;
 }
 
-async function toViewActivity(activity: CampingActivity | undefined, activityData: CampingActivityData): Promise<ViewCampingActivity> {
+async function toViewActivity(
+    activity: CampingActivity | undefined,
+    activityData: CampingActivityData,
+    isHidden: boolean
+): Promise<ViewCampingActivity> {
+    const skills: string[] = [];
+    const activityDataSkills = activityData.skills;
+    if (activityDataSkills === 'any' && activity?.actorUuid) {
+        const actor = await fromUuid(activity.actorUuid) as Actor | null;
+        if (actor) {
+            Object.keys(actor.skills).forEach(s => skills.push(s));
+        }
+    } else if (Array.isArray(activityDataSkills)) {
+        activityDataSkills.forEach(a => skills.push(a));
+    }
     return {
         name: activityData.name,
         actor: activity?.actorUuid ? await toViewActor(activity.actorUuid) : null,
         journalUuid: activityData.journalUuid,
-        isCustomAction: activityData.isCustomAction ?? false,
-        isSkillCheck: activityData.skills.length > 0,
-        skills: activityData.skills,
+        isSkillCheck: skills.length > 0,
+        skills: skills.map(s => {
+            return {value: s, label: unslugify(s)};
+        }),
         degreeOfSuccess: activity?.result ?? null,
         slug: camelCase(activityData.name),
+        isSecret: activityData.isSecret,
+        selectedSkill: activity?.selectedSkill ?? null,
+        isHidden,
+        askDc: activityData.dc === undefined,
     };
 }
 
@@ -89,7 +111,7 @@ export async function toViewActor(uuid: string): Promise<ViewActor> {
     };
 }
 
-export async function toViewActors(actorUuids: string[], activities: CampingActivity[]): Promise<ViewCampingActor[]> {
+export async function toViewActors(actorUuids: string[], activities: CampingActivity[], activityData: CampingActivityData[]): Promise<ViewCampingActor[]> {
     const actorInfos = await Promise.all(actorUuids.map(uuid => toViewActor(uuid)));
     return actorInfos
         .filter(a => a !== null)
@@ -97,11 +119,14 @@ export async function toViewActors(actorUuids: string[], activities: CampingActi
             const chosenActivity = activities
                 .filter(a => a.activity !== 'Prepare Campsite')
                 .find(a => a.actorUuid === actor.uuid);
+            const hasSkillCheck = (activityData
+                .find(a => a.name === chosenActivity?.activity && chosenActivity.activity !== undefined)
+                ?.skills ?? []).length > 0;
             return {
                 ...actor,
                 noActivityChosen: !chosenActivity,
                 activity: chosenActivity?.activity ?? null,
-                activityResult: chosenActivity?.result ?? null,
+                cssClass: chosenActivity?.result ?? (!hasSkillCheck ? 'criticalSuccess' : null),
             };
         });
 }
@@ -111,10 +136,17 @@ export async function toViewCampingActivities(
     data: CampingActivityData[],
     lockedActivities: Set<CampingActivityName>,
 ): Promise<ViewCampingActivity[]> {
+    const prepareCampActivity = activities.find(a => a.activity === 'Prepare Campsite')!;
+    const prepareCampDegreeOfSuccess = prepareCampActivity.result;
+    const canPerformActivities = prepareCampDegreeOfSuccess !== 'criticalFailure' && prepareCampDegreeOfSuccess !== null;
     const result = (await Promise.all(
-        data.filter(a => !lockedActivities.has(a.name))
-            .map(a => toViewActivity(activities.find(d => d.activity === a.name), a))
+        data.map(a => {
+                const isHidden = (lockedActivities.has(a.name) || !canPerformActivities) && a.name !== 'Prepare Campsite';
+                return toViewActivity(activities.find(d => d.activity === a.name), a, isHidden);
+            }
+        )
     ));
+
     result.sort((a, b) =>
         (a.name === 'Prepare Campsite' ? -1 : 0) - (b.name === 'Prepare Campsite' ? -1 : 0)
         || a.name.localeCompare(b.name));

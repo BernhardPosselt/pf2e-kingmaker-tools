@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fully automate "Set Alarms" effect
 
 ### Removed
+* Removed Special and Basic Ingredient items; these are now shipped in the 2e system
 * Removed the following macros (these are now available through the camping sheet):
   * Hunt and Gather
   * Camp Management

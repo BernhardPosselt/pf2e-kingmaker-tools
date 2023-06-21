@@ -98,11 +98,10 @@ export interface CampingActivityData {
     journalUuid: string;
     skillRequirements: SkillRequirement[];
     dc?: DcType;
-    skills: string[];
+    skills: string[] | 'any';
     isSecret: boolean;
     isLocked: boolean;
     effectUuid?: string;
-    isCustomAction?: boolean;
     modifyRandomEncounterDc?: {
         day: number;
         night: number;
@@ -118,7 +117,7 @@ function influenceCompanions(): CampingActivityData[] {
             isLocked: true,
             isSecret: false,
             skillRequirements: [],
-            skills: [],
+            skills: 'any',
             criticalSuccess: {message: `You gain 2 Influence Points with ${c}`},
             success: {message: `You gain 1 Influence Points with ${c}`},
             failure: {message: `You gain no Influence Points with ${c}`},
@@ -130,7 +129,7 @@ function influenceCompanions(): CampingActivityData[] {
             isLocked: true,
             isSecret: true,
             skillRequirements: [],
-            skills: [],
+            skills: 'any',
             criticalSuccess: {message: `Choose two of the following: You learn which skill that can Influence ${c} has the lowest DC (skipping any skills that you already know), one of ${c}’s personal biases, one of ${c}’s resistances, or one of ${c}’s weaknesses. you can choose the same option twice to learn two pieces of information from the same category.`},
             success: {message: `Choose one of the following: You learn which skill that can Influence ${c} has the lowest DC (skipping any skills that you already know), one of ${c}’s personal biases, one of ${c}’s resistances, or one of ${c}’s weaknesses.`},
             failure: {message: 'You learn no information.'},
@@ -140,7 +139,7 @@ function influenceCompanions(): CampingActivityData[] {
     });
 }
 
-const allCampingActivities: CampingActivityData[] = [{
+export const allCampingActivities: CampingActivityData[] = [{
     name: 'Camouflage Campsite',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.mlLCjokti3RXAlUP',
     isLocked: false,
@@ -196,7 +195,6 @@ const allCampingActivities: CampingActivityData[] = [{
     criticalFailure: {
         message: 'As failure, but you also expose yourself to the special meal’s critical failure effect while performing an unwise taste test.',
     },
-    isCustomAction: true,
 }, {
     name: 'Hunt and Gather',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.RujdVNvLpoQBBdVV',
@@ -275,7 +273,7 @@ const allCampingActivities: CampingActivityData[] = [{
     isSecret: false,
     dc: 'actorLevel',
     skillRequirements: [],
-    skills: [],
+    skills: ['performance'],
     criticalSuccess: {
         message: 'You inspire your allies dramatically. For the remainder of the camping session, your allies gain a +2 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. If an ally spent the hour Relaxing, they can also choose to reroll a failed roll at any time once during the remainder of the camping session while the status bonus persists; this is a fortune effect.',
         effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.2vdskbqd0VrWKR9Y',
@@ -317,7 +315,7 @@ const allCampingActivities: CampingActivityData[] = [{
     isSecret: false,
     dc: 'zone',
     skillRequirements: [],
-    skills: [],
+    skills: ['survival'],
     criticalSuccess: {
         message: 'Jubilost’s advice speeds things along significantly. During the hour immediately following this critical success, each PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt.',
     },
@@ -431,10 +429,6 @@ const allCampingActivities: CampingActivityData[] = [{
     },
 }];
 
-export function getCampingActivityData(): CampingActivityData[] {
-    return allCampingActivities;
-}
-
 interface Ingredients {
     basic: number;
     special: number;
@@ -473,13 +467,11 @@ export async function addIngredientsToActor(actor: Actor, ingredients: Ingredien
     const specialIngredient = (await fromUuid(specialIngredientUuid))?.toObject();
     if (ingredients.basic > 0) {
         basicIngredient.system.quantity = ingredients.basic;
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        await (actor as any).addToInventory(basicIngredient, undefined, false);
+        await actor.addToInventory(basicIngredient, undefined, false);
     }
     if (ingredients.special > 0) {
         specialIngredient.system.quantity = ingredients.special;
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        await (actor as any).addToInventory(specialIngredient, undefined, false);
+        await actor.addToInventory(specialIngredient, undefined, false);
     }
 }
 

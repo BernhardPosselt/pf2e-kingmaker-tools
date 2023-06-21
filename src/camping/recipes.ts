@@ -22,7 +22,7 @@ export interface RecipeData {
     favoriteMeal?: CookingOutcome;
 }
 
-const allRecipes: RecipeData[] = [
+export const allRecipes: RecipeData[] = [
     {
         'name': 'Basic Meal',
         'basicIngredients': 2,
@@ -776,10 +776,6 @@ const allRecipes: RecipeData[] = [
         },
     },
 ];
-
-export function getRecipeData(): RecipeData[] {
-    return allRecipes;
-}
 
 export const recipeEffectUuids = new Set(allRecipes.flatMap(a => {
     return [a.criticalSuccess?.effectUuid, a.criticalFailure?.effectUuid, a.favoriteMeal?.effectUuid, a.success?.effectUuid]

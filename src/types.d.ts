@@ -1,7 +1,12 @@
 import {DateTime} from 'luxon';
 import {RollTableDraw} from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/documents/table';
+import {DegreeOfSuccess} from './degree-of-success';
 
 declare global {
+    declare class PF2EModifier {
+        constructor({type: string, modifier: number, label: string})
+    }
+
     interface Game {
         pf2eKingmakerTools: {
             macros: {
@@ -25,11 +30,83 @@ declare global {
                 worldTime: DateTime;
                 month: string;
             }
+            actions: {
+                restForTheNight: (actors: Actor[]) => Promise<void>;
+            }
+            Modifier: typeof PF2EModifier
         }
     }
 
     // fix roll table types
     interface RollTable {
         draw(options?: Partial<RollTable.DrawOptions>): Promise<RollTableDraw>;
+    }
+
+    interface RollResult {
+        degreeOfSuccess: DegreeOfSuccess;
+    }
+
+    interface RollOptions {
+        dc?: number;
+        extraRollOptions?: string[];
+        rollMode?: 'publicroll' | 'roll' | 'gmroll' | 'blindroll' | 'selfroll';
+    }
+
+    interface ActorSkill {
+        rank: number;
+        roll: (data: RollData) => Promise<null | RollResult>
+    }
+
+    interface Actor {
+        id: string;
+        perception: ActorSkill;
+        level: number;
+        itemTypes: {
+            consumable: Item[];
+            effect: Item[];
+        };
+
+        addToInventory(value: object, container?: Item, newStack: false): Promise<Item | null>;
+
+        createEmbeddedDocuments(type: 'Item', data: object[]);
+
+        skills: Record<string, ActorSkill>;
+        attributes: {
+            hp: { value: number, max: number },
+        };
+        abilities: {
+            con: { mod: number }
+        };
+    }
+
+    class ItemSheet {
+        render: (force: true, args?: Record<string, string>) => void;
+    }
+
+    class JournalEntryPage {
+        id: string;
+        parent?: {
+            sheet?: ItemSheet
+        };
+    }
+
+    interface Item {
+        id: string;
+        sourceId: string;
+        sheet: ItemSheet;
+        type: 'effect' | 'consumable';
+    }
+
+    interface EffectItem {
+        isExpired: boolean;
+    }
+
+    interface ConsumableItem {
+        system: {
+            charges: {
+                value: number;
+            }
+        }
+        quantity: number;
     }
 }

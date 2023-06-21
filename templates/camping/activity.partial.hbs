@@ -1,30 +1,35 @@
-<div class="actor-wrapper">
-    <header class="actor-header" data-uuid="{{journalUuid}}">{{activity}}</header>
+<div class="actor-wrapper" {{#if activity.isHidden}}hidden{{/if}}>
+    <header class="actor-header" data-uuid="{{activity.journalUuid}}">{{activity.name}}</header>
     <div class="actor-image-container">
         {{#if actor}}
-            <img src="{{actor.image}}" title="{{actor.name}}" class="actor-image" data-uuid="{{actor.uuid}}">
-            <button type="button" class="remove-actor" title="Clear Actor" data-uuid="{{actor.uuid}}" data-type="{{activity}}"><i
+            <img src="{{activity.actor.image}}" title="{{activity.actor.name}}" class="actor-image" data-uuid="{{activity.actor.uuid}}">
+            <button type="button" class="remove-actor" title="Clear Actor" data-uuid="{{activity.actor.uuid}}" data-type="{{activity.name}}"><i
                     class="fa-solid fa-xmark"></i></button>
         {{else}}
             <img src="modules/pf2e-kingmaker-tools/static/img/add-actor.webp" title="Drop Actor Here"
                  class="no-actor-image">
         {{/if}}
     </div>
-    <div class="actor-check">
-        <select>
-            <option>Survival</option>
-        </select>
-        <button type="button" class="roll-check" data-name="{{activity}}"><i class="fa-solid fa-dice-d20"></i></button>
-    </div>
-    <div class="actor-subheader">
-        <!-- TODO: if secret, don't show result to players -->
-        <select name="actorActivityDegreeOfSuccess.{{slug}}">
-            {{#select degreeOfSuccess}}
-                <option>-</option>
-                {{#each degreesOfSuccesses}}
+    {{#if activity.isSkillCheck}}
+        <div class="actor-check">
+            <select name="selectedSkill.{{activity.slug}}">
+            {{#select activity.selectedSkill}}
+                {{#each activity.skills}}
                     <option value="{{value}}">{{label}}</option>
                 {{/each}}
             {{/select}}
-        </select>
-    </div>
+            </select>
+            <button type="button" class="roll-check" data-name="{{activity.name}}" data-secret="{{activity.isSecret}}" data-ask-dc="{{activity.askDc}}"><i class="fa-solid fa-dice-d20"></i></button>
+        </div>
+        <div class="actor-subheader">
+            <select name="actorActivityDegreeOfSuccess.{{activity.slug}}" {{#if activity.isSecret}}{{#if isUser}}hidden{{/if}}{{/if}}>
+                {{#select activity.degreeOfSuccess}}
+                    <option>-</option>
+                    {{#each degreesOfSuccesses}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/each}}
+                {{/select}}
+            </select>
+        </div>
+    {{/if}}
 </div>

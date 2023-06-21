@@ -2,15 +2,12 @@
 * Setting 'Prepare Campsite'
   * Critical Success should increase encounter dc
   * Failure should apply a -2 to all camping effect on all actors
-  * Anything else than critical failure shows all other activities:
-    * pre-selected effects like Bolster Confidence are automatically applied and synced to actors
-* activities without checks should not show a degree of success nor check dropdown
-* changing a degree of success dropdown should remove all effects except the current one and roll a random encounter check if noted
+* pre-selected effects like Bolster Confidence are automatically applied and synced to actors
+* changing a degree of success dropdown of an activity with an actor that is not hidden should remove all effects except the current one and roll a random encounter check if noted
 * clicking the roll button should
   * if activity has no predefined dc, show a dc popup, then: 
   * show the check popup
   * rolling the check should auto set the degree of success dropdown
-  * rolled check should have the actors name
   * if action was hunt and gather:
     * should add ingredients to PC's inventory 
     * should display a message how many ingredients were added including an undo button to remove said quantities in case of a re-roll
@@ -44,6 +41,7 @@
 * Blend into the night should increase encounter dc between 6pm and 6am
 
 ## TODO:
+* sync sheet using imported actor
 * check how well recipes are implemented and document
 * think about recipe migration
 * think about adding custom actions

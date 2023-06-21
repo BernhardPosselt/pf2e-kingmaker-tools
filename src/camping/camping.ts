@@ -1,10 +1,17 @@
-import {CampingActivityName, getCampingActivityData} from './activities';
+import {allCampingActivities, CampingActivityData, CampingActivityName} from './activities';
 import {getRegionInfo} from './regions';
 import {getLevelBasedDC, slugify} from '../utils';
 import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {basicIngredientUuid, CombatEffectCompanions, DcType, rationUuid, specialIngredientUuid} from './data';
-import {getRecipeData, RecipeData} from './recipes';
-import {getItemsBySourceId, getItemsByUuid, hasItemByUuid, removeExpiredEffects, removeItemsBySourceId} from './actor';
+import {allRecipes, RecipeData} from './recipes';
+import {
+    getConsumablesByUuid,
+    getItemsBySourceId,
+    hasItemByUuid,
+    isConsumableItem,
+    removeExpiredEffects,
+    removeItemsBySourceId,
+} from './actor';
 
 export type RestRollMode = 'one' | 'none' | 'one-every-4-hours';
 
@@ -40,6 +47,7 @@ export interface Cooking {
 export interface Camping {
     actorUuids: string[];
     campingActivities: CampingActivity[];
+    homebrewCampingActivities: CampingActivityData[];
     lockedActivities: CampingActivityName[];
     cooking: Cooking;
     watchSecondsElapsed: number;
@@ -68,11 +76,12 @@ export function getDefaultConfiguration(game: Game): Camping {
         restRollMode: 'one',
         currentRegion: 'Rostland Hinterlands',
         dailyPrepsAtTime: game.time.worldTime,
+        homebrewCampingActivities: [],
         encounterModifier: 0,
         gunsToClean: 0,
         watchSecondsElapsed: 0,
         combatEffectCompanions: [],
-        lockedActivities: getCampingActivityData()
+        lockedActivities: allCampingActivities
             .filter(a => a.isLocked)
             .map(a => a.name),
     };
@@ -82,8 +91,7 @@ export function getDC(game: Game, actor: Actor, dcType: DcType): number {
     if (dcType === 'zone') {
         return getRegionInfo(game).zoneDC;
     } else if (dcType === 'actorLevel') {
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        return getLevelBasedDC((actor as any).level);
+        return getLevelBasedDC(actor.level);
     } else {
         return dcType;
     }
@@ -105,12 +113,11 @@ export async function rollCampingCheck(
         secret?: boolean,
         activity?: string,
     }): Promise<DegreeOfSuccess | null> {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    const rollData: Record<string, any> = {
+    const rollData: RollOptions = {
         extraRollOptions: ['camping'],
     };
     if (activity) {
-        rollData['extraRollOptions'].push('action:' + slugify(activity));
+        rollData['extraRollOptions']?.push('action:' + slugify(activity));
     }
     if (dc) {
         rollData['dc'] = getDC(game, actor, dc);
@@ -119,10 +126,10 @@ export async function rollCampingCheck(
         rollData['rollMode'] = 'blindroll';
     }
     let result;
-    const skills = (actor as any).skills;
+    const skills = actor.skills;
     const cookingLoreSkill = 'cooking' in skills ? 'cooking' : 'cooking-lore';
     if (skill === 'perception') {
-        result = await (actor as any).perception.roll(rollData);
+        result = await actor.perception.roll(rollData);
     } else if (skill === 'cooking') {
         result = await skills[cookingLoreSkill].roll(rollData);
     } else {
@@ -142,18 +149,17 @@ export async function rollCampingCheck(
 export async function syncEffects(actors: Actor[], uuids: string[], applicableSourceIds: Set<string>): Promise<void> {
     for (const actor of actors) {
         const existingEffects = getItemsBySourceId(actor, 'effect', applicableSourceIds);
-        const existingEffectIds = new Set(existingEffects.map((a: any) => a.id) as string[]);
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        const effectsToSync = (await Promise.all(uuids.map(uuid => fromUuid(uuid))))
-            .filter((eff: any) => eff !== undefined && eff !== null);
-        const effectIdsToSync = new Set(effectsToSync.map((a: any) => a.id) as string[]);
+        const existingEffectIds = new Set(existingEffects.map(a => a.id) as string[]);
+        const effectsToSync = (await Promise.all(uuids.map(uuid => fromUuid(uuid))) as (Item | null)[])
+            .filter(eff => eff !== undefined && eff !== null) as Item[];
+        const effectIdsToSync = new Set(effectsToSync.map(a => a.id) as string[]);
 
         const effectsToAdd = effectsToSync
-            .filter((eff: any) => !existingEffectIds.has(eff.sourceId))
-            .map((eff: any) => eff.toObject());
+            .filter(eff => !existingEffectIds.has(eff.sourceId))
+            .map(eff => eff.toObject());
         const effectIdsToRemove = Array.from(existingEffects)
-            .filter((eff: any) => !effectIdsToSync.has(eff.id))
-            .map((eff: any) => eff.id);
+            .filter(eff => !effectIdsToSync.has(eff.id))
+            .map(eff => eff.id);
 
         await actor.deleteEmbeddedDocuments('Item', effectIdsToRemove);
         await actor.createEmbeddedDocuments('Item', effectsToAdd);
@@ -188,19 +194,19 @@ export async function afterCookingChange(
 export async function afterDailyPreparations(
     game: Game,
     actors: Actor[],
-    activitySourceIds: Set<string>
+    activitySourceIds: Set<string>,
+    data: Camping,
 ): Promise<void> {
     for (const actor of actors) {
         const healMoreHp = await hasItemByUuid(actor, 'effect', new Set([
-            getRecipeData().find(r => r.name === 'Basic Meal')!.criticalSuccess!.effectUuid!,
-            getCampingActivityData().find(a => a.name === 'Dawnflower\'s Blessing')!.effectUuid!,
+            getRecipeData(data).find(r => r.name === 'Basic Meal')!.criticalSuccess!.effectUuid!,
+            getCampingActivityData(data).find(a => a.name === 'Dawnflower\'s Blessing')!.effectUuid!,
         ]));
         if (healMoreHp) {
-            /* eslint-disable @typescript-eslint/no-explicit-any */
-            const currentHp = (actor as any).attributes.hp.value;
-            const maxHp = (actor as any).attributes.hp.max;
-            const conMod = (actor as any).abilities.con.mod;
-            const level = (actor as any).level;
+            const currentHp = actor.attributes.hp.value;
+            const maxHp = actor.attributes.hp.max;
+            const conMod = actor.abilities.con.mod;
+            const level = actor.level;
             const maxRestored = Math.max(conMod, 1) * level;
             const hpLost = maxHp - currentHp;
             const hpRestored = hpLost >= maxRestored ? maxRestored : hpLost;
@@ -210,8 +216,7 @@ export async function afterDailyPreparations(
         }
     }
     await removeItemsBySourceId(actors, 'effect', activitySourceIds);
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    await (game.pf2e as any).actions.restForTheNight(actors);
+    await game.pf2e.actions.restForTheNight(actors);
 }
 
 export function calculateRestSeconds(partySize: number): number {
@@ -237,10 +242,18 @@ export interface ActorConsumables {
     basicIngredients: number;
 }
 
+export async function getConsumableFromUuid(uuid: string): Promise<(Item & ConsumableItem) | null> {
+    const item = await fromUuid(uuid) as Item | null;
+    if (item && isConsumableItem(item)) {
+        return item;
+    }
+    return null;
+}
+
 export async function getActorConsumables(actors: Actor[]): Promise<ActorConsumables> {
-    const rationSourceId = ((await fromUuid(rationUuid)) as any).sourceId;
-    const specialIngredientsSourceId = ((await fromUuid(specialIngredientUuid)) as any).sourceId;
-    const basicIngredientsId = ((await fromUuid(basicIngredientUuid)) as any).sourceId;
+    const rationSourceId = (await getConsumableFromUuid(rationUuid))?.sourceId;
+    const specialIngredientsSourceId = (await getConsumableFromUuid(specialIngredientUuid))?.sourceId;
+    const basicIngredientsId = (await getConsumableFromUuid(basicIngredientUuid))?.sourceId;
     const result: ActorConsumables = {
         rations: 0,
         specialIngredients: 0,
@@ -248,9 +261,12 @@ export async function getActorConsumables(actors: Actor[]): Promise<ActorConsuma
     };
     for (const actor of actors) {
         const consumables = actor.itemTypes.consumable;
-        const ration = consumables.find(c => (c as any).sourceId === rationSourceId) as any | undefined;
-        const specialIngredient = consumables.find(c => (c as any).sourceId === specialIngredientsSourceId) as any | undefined;
-        const basicIngredient = consumables.find(c => (c as any).sourceId === basicIngredientsId) as any | undefined;
+        const ration = consumables
+            .find(c => c.sourceId === rationSourceId && rationSourceId !== undefined) as ConsumableItem | undefined;
+        const specialIngredient = consumables
+            .find(c => c.sourceId === specialIngredientsSourceId && specialIngredientsSourceId !== undefined) as ConsumableItem | undefined;
+        const basicIngredient = consumables
+            .find(c => c.sourceId === basicIngredientsId && basicIngredientsId !== undefined) as ConsumableItem | undefined;
         result.rations += ration ? ration.system.charges.value * ration.quantity : 0;
         result.basicIngredients += basicIngredient ? basicIngredient.quantity : 0;
         result.specialIngredients += specialIngredient ? specialIngredient.quantity : 0;
@@ -333,11 +349,11 @@ async function removeRations(actors: Actor[], amount: number): Promise<void> {
     for (const actor of actors) {
         if (remainingToRemove > 0) {
             const updates = [];
-            const rations = await getItemsByUuid(actor, 'consumable', new Set([rationUuid]));
+            const rations = await getConsumablesByUuid(actor, new Set([rationUuid]));
             for (const ration of rations) {
                 if (remainingToRemove > 0) {
-                    const system = (ration as any).system;
-                    const quantity = system.quantity;
+                    const system = ration.system;
+                    const quantity = ration.quantity;
                     const charges = system.charges.value;
                     const quantitiesOf7 = Math.max(0, quantity - 1);
                     const available = quantitiesOf7 * 7 + charges;
@@ -369,11 +385,10 @@ async function removeItems(actors: Actor[], amount: number, uuid: string): Promi
     for (const actor of actors) {
         if (remainingToRemove > 0) {
             const updates = [];
-            const items = await getItemsByUuid(actor, 'consumable', new Set([uuid]));
+            const items = await getConsumablesByUuid(actor, new Set([uuid]));
             for (const item of items) {
                 if (remainingToRemove > 0) {
-                    const system = (item as any).system;
-                    const quantity = system.quantity;
+                    const quantity = item.quantity;
                     if (remainingToRemove >= quantity) {
                         await item.delete();
                         remainingToRemove -= quantity;
@@ -411,4 +426,20 @@ export async function getCookingActorByUuid(data: Camping): Promise<Actor | null
         return await fromUuid(uuid) as Actor | null;
     }
     return null;
+}
+
+export function getChosenMealData(data: Camping): RecipeData {
+    const knownRecipes = data.cooking.knownRecipes;
+    const chosenMeal = knownRecipes.includes(data.cooking.chosenMeal) ? data.cooking.chosenMeal : 'Basic Meal';
+    const recipeData = getRecipeData(data);
+    return recipeData.find(a => a.name === chosenMeal) ??
+        recipeData.find(a => a.name === 'Basic Meal')!;
+}
+
+export function getRecipeData(data: Camping): RecipeData[] {
+    return allRecipes.concat(data.cooking.homebrewMeals);
+}
+
+export function getCampingActivityData(current: Camping): CampingActivityData[] {
+    return allCampingActivities.concat(current.homebrewCampingActivities);
 }
