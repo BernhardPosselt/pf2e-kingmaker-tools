@@ -87,7 +87,7 @@
 
         <ul class="camping-actors">
             {{#each campingActivities}}
-                <li class="camping-activity" data-name="{{name}}">
+                <li class="camping-activity" data-name="{{name}}" {{#if isHidden}}hidden{{/if}}>
                     {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs activity=this isUser=isUser degreesOfSuccesses=../degreesOfSuccesses}}
                 </li>
             {{/each}}

@@ -19,18 +19,20 @@ import {
     getRecipeData,
     removeFood,
     rollCampingCheck,
+    SkillCheckOptions,
 } from './camping';
 import {manageActivitiesDialog} from './dialogs/manage-activities';
 import {manageRecipesDialog} from './dialogs/manage-recipes';
 import {RecipeData} from './recipes';
 import {addRecipeDialog} from './dialogs/add-recipe';
 import {campingSettingsDialog} from './dialogs/camping-settings';
-import {degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
+import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
 import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
 import {camelCase, LabelAndValue, listenClick} from '../utils';
 import {postCombatEffects} from './dialogs/post-combat-fx';
 import {hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
+import {askDcDialog} from './dialogs/ask-dc';
 
 interface CampingOptions {
     game: Game;
@@ -263,7 +265,16 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 },
             });
         });
-        listenClick($html, '.clear-activities', async () => await this.update({campingActivities: []}));
+        listenClick($html, '.clear-activities', async () => {
+            const current = await this.read();
+            current.campingActivities.forEach(a => {
+                a.result = null;
+                a.actorUuid = null;
+            });
+            await this.update({
+                campingActivities: current.campingActivities,
+            });
+        });
         listenClick($html, '.roll-encounter', async () => await this.rollRandomEncounter(true));
         listenClick($html, '.check-encounter', async () => await this.rollRandomEncounter());
         listenClick($html, '.consume-food', async () => await this.consumeFood());
@@ -289,6 +300,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                     activity: 'Cook Meal',
                     dc,
                     skill: cookingSkill,
+                    region: current.currentRegion,
                 });
                 if (result !== null) {
                     current.cooking.degreeOfSuccess = degreeToProperty(result);
@@ -299,7 +311,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             }
         });
         listenClick($html, '.roll-check', async (ev) => {
-            // TODO
+            const button = ev.currentTarget as HTMLButtonElement;
+            const activity = button.dataset.activity!;
+            const skill = button.dataset.skill!;
+            await this.rollCheck(activity, skill);
         });
         listenClick($html, '.recipe-info', async (ev) => {
             const current = await this.read();
@@ -331,6 +346,39 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 await this.openUuidJournal(uuid);
             }
         });
+    }
+
+    private async rollCheck(activity: string, skill: string): Promise<void> {
+        const current = await this.read();
+        const activityData = getCampingActivityData(current)
+            .find(a => a.name === activity);
+        const actorUuid = current.campingActivities
+            .find(a => a.activity === activity)
+            ?.actorUuid;
+        const actor = actorUuid ? (await fromUuid(actorUuid)) as Actor | null : null;
+        if (activityData && actor) {
+            const dcType = activityData.dc;
+            const rollOptions: SkillCheckOptions = {
+                skill,
+                secret: activityData.isSecret,
+                activity,
+                actor,
+                game: this.game,
+                region: current.currentRegion,
+            };
+            if (dcType) {
+                rollOptions.dc = dcType;
+                await this.setActivityResult(activity, await rollCampingCheck(rollOptions));
+            } else {
+                askDcDialog({
+                    activity,
+                    onSubmit: async (dc) => {
+                        rollOptions.dc = dc;
+                        await this.setActivityResult(activity, await rollCampingCheck(rollOptions));
+                    },
+                });
+            }
+        }
     }
 
     private async rollRandomEncounter(forgoFlatCheck = false): Promise<void> {
@@ -571,6 +619,17 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             };
             return x;
         });
+    }
+
+    private async setActivityResult(activityName: string, degreeOfSuccess: DegreeOfSuccess | null): Promise<void> {
+        const current = await this.read();
+        const activity = current.campingActivities.find(a => a.activity === activityName);
+        if (degreeOfSuccess !== null && activity) {
+            activity.result = degreeToProperty(degreeOfSuccess);
+            await this.update({
+                campingActivities: current.campingActivities,
+            });
+        }
     }
 }
 

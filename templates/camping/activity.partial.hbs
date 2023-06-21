@@ -1,4 +1,4 @@
-<div class="actor-wrapper" {{#if activity.isHidden}}hidden{{/if}}>
+<div class="actor-wrapper">
     <header class="actor-header" data-uuid="{{activity.journalUuid}}">{{activity.name}}</header>
     <div class="actor-image-container">
         {{#if actor}}
@@ -19,7 +19,7 @@
                 {{/each}}
             {{/select}}
             </select>
-            <button type="button" class="roll-check" data-name="{{activity.name}}" data-secret="{{activity.isSecret}}" data-ask-dc="{{activity.askDc}}"><i class="fa-solid fa-dice-d20"></i></button>
+            <button type="button" class="roll-check" data-activity="{{activity.name}}" data-skill="{{activity.selectedSkill}}"><i class="fa-solid fa-dice-d20"></i></button>
         </div>
         <div class="actor-subheader">
             <select name="actorActivityDegreeOfSuccess.{{activity.slug}}" {{#if activity.isSecret}}{{#if isUser}}hidden{{/if}}{{/if}}>

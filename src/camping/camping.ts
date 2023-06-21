@@ -1,6 +1,6 @@
 import {allCampingActivities, CampingActivityData, CampingActivityName} from './activities';
 import {getRegionInfo} from './regions';
-import {getLevelBasedDC, slugify} from '../utils';
+import {getLevelBasedDC, slugify, unslugify} from '../utils';
 import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {basicIngredientUuid, CombatEffectCompanions, DcType, rationUuid, specialIngredientUuid} from './data';
 import {allRecipes, RecipeData} from './recipes';
@@ -87,14 +87,24 @@ export function getDefaultConfiguration(game: Game): Camping {
     };
 }
 
-export function getDC(game: Game, actor: Actor, dcType: DcType): number {
+export function getDC(game: Game, actor: Actor, dcType: DcType, region: string): number {
     if (dcType === 'zone') {
-        return getRegionInfo(game).zoneDC;
+        return getRegionInfo(game, region).zoneDC;
     } else if (dcType === 'actorLevel') {
         return getLevelBasedDC(actor.level);
     } else {
         return dcType;
     }
+}
+
+export interface SkillCheckOptions {
+    game: Game,
+    actor: Actor,
+    dc?: DcType,
+    skill: string,
+    secret?: boolean,
+    activity?: string,
+    region: string;
 }
 
 export async function rollCampingCheck(
@@ -104,15 +114,9 @@ export async function rollCampingCheck(
         dc,
         skill,
         secret = false,
+        region,
         activity,
-    }: {
-        game: Game,
-        actor: Actor,
-        dc?: DcType,
-        skill: string,
-        secret?: boolean,
-        activity?: string,
-    }): Promise<DegreeOfSuccess | null> {
+    }: SkillCheckOptions): Promise<DegreeOfSuccess | null> {
     const rollData: RollOptions = {
         extraRollOptions: ['camping'],
     };
@@ -120,18 +124,20 @@ export async function rollCampingCheck(
         rollData['extraRollOptions']?.push('action:' + slugify(activity));
     }
     if (dc) {
-        rollData['dc'] = getDC(game, actor, dc);
+        rollData['dc'] = getDC(game, actor, dc, region);
     }
     if (secret) {
         rollData['rollMode'] = 'blindroll';
     }
     let result;
     const skills = actor.skills;
-    const cookingLoreSkill = 'cooking' in skills ? 'cooking' : 'cooking-lore';
+    const loreSkill = `${skill}-lore`;
+    const skillToRoll = skill in skills ? skill : (loreSkill in skills ? loreSkill : null);
     if (skill === 'perception') {
         result = await actor.perception.roll(rollData);
-    } else if (skill === 'cooking') {
-        result = await skills[cookingLoreSkill].roll(rollData);
+    } else if (skillToRoll === null) {
+        ui.notifications?.error(`Actor does not have skill ${unslugify(skill)}`);
+        return null;
     } else {
         result = await skills[skill].roll(rollData);
     }

@@ -4,7 +4,8 @@ import {getRegionInfo} from './regions';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export async function subsist(game: Game, actor: Actor): Promise<void> {
-    const {zoneDC} = getRegionInfo(game);
+    // TODO: move to camping sheet
+    const {zoneDC} = getRegionInfo(game, '');
     if (actor) {
         const result = await actor.skills.survival.roll({
             modifiers: [new game.pf2e.Modifier({

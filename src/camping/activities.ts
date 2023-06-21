@@ -475,8 +475,8 @@ export async function addIngredientsToActor(actor: Actor, ingredients: Ingredien
     }
 }
 
-export async function huntAndGather(game: Game, actor: Actor, degreeOfSuccess: DegreeOfSuccess): Promise<void> {
-    const {zoneDC, zoneLevel} = getRegionInfo(game);
+export async function huntAndGather(game: Game, actor: Actor, degreeOfSuccess: DegreeOfSuccess, region: string): Promise<void> {
+    const {zoneDC, zoneLevel} = getRegionInfo(game, region);
     const quantities = await getHuntAndGatherQuantities(degreeOfSuccess, zoneDC, zoneLevel);
     await addIngredientsToActor(actor, quantities);
 }

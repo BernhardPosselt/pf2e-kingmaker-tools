@@ -96,7 +96,7 @@ async function toViewActivity(
         degreeOfSuccess: activity?.result ?? null,
         slug: camelCase(activityData.name),
         isSecret: activityData.isSecret,
-        selectedSkill: activity?.selectedSkill ?? null,
+        selectedSkill: activity?.selectedSkill ?? (activityDataSkills.length > 0 ? activityDataSkills[0] : null),
         isHidden,
         askDc: activityData.dc === undefined,
     };
@@ -136,8 +136,8 @@ export async function toViewCampingActivities(
     data: CampingActivityData[],
     lockedActivities: Set<CampingActivityName>,
 ): Promise<ViewCampingActivity[]> {
-    const prepareCampActivity = activities.find(a => a.activity === 'Prepare Campsite')!;
-    const prepareCampDegreeOfSuccess = prepareCampActivity.result;
+    const prepareCampActivity = activities.find(a => a.activity === 'Prepare Campsite');
+    const prepareCampDegreeOfSuccess = prepareCampActivity?.result ?? null;
     const canPerformActivities = prepareCampDegreeOfSuccess !== 'criticalFailure' && prepareCampDegreeOfSuccess !== null;
     const result = (await Promise.all(
         data.map(a => {

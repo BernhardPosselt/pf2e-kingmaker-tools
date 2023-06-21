@@ -1,5 +1,3 @@
-import {getStringSetting} from '../settings';
-
 interface ZoneData {
     zoneDC: number;
     encounterDC: number;
@@ -33,9 +31,8 @@ interface RegionInfo {
     zoneLevel: number
 }
 
-export function getRegionInfo(game: Game): RegionInfo {
+export function getRegionInfo(game: Game, region: string): RegionInfo {
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    const region = getStringSetting(game, 'currentRegion') || 'Rostland';
     const zone = regions.get(region);
     const zoneDC = zone?.zoneDC ?? 14;
     const zoneLevel = zone?.level ?? 0;
