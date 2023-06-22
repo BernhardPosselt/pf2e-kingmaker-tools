@@ -215,7 +215,6 @@
     position: relative;
     width: var(--actor-image-width);
     border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
 }
 
 .camping-content .camping-actors .actor-image,
@@ -269,6 +268,7 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    border-top: 1px solid #000;
 }
 
 .camping-actors .actor-check select {

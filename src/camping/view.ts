@@ -115,7 +115,7 @@ export async function toViewActor(uuid: string): Promise<ViewActor> {
 
 function getCssClass(chosenActivity: CampingActivity | undefined, hasSkillCheck: boolean, isUser: boolean): CssClass {
     const result = chosenActivity?.result;
-    if (result !== undefined) {
+    if (result !== undefined && result !== null) {
         if (isUser) {
             return 'secret';
         } else {
@@ -144,11 +144,12 @@ export async function toViewActors(
             const hasSkillCheck = (activityData
                 .find(a => a.name === chosenActivity?.activity && chosenActivity.activity !== undefined)
                 ?.skills ?? []).length > 0;
+            const cssClass = getCssClass(chosenActivity, hasSkillCheck, isUser);
             return {
                 ...actor,
                 noActivityChosen: !chosenActivity,
                 activity: chosenActivity?.activity ?? null,
-                cssClass: getCssClass(chosenActivity, hasSkillCheck, isUser),
+                cssClass,
             };
         });
 }
