@@ -1,4 +1,11 @@
-import {toViewActorMeals, toViewActors, toViewCampingActivities, toViewDegrees, ViewCampingData} from './view';
+import {
+    combatEffectsToChat,
+    toViewActorMeals,
+    toViewActors,
+    toViewCampingActivities,
+    toViewDegrees,
+    ViewCampingData,
+} from './view';
 import {formatHours} from '../time/app';
 import {rollRandomEncounter} from './random-encounters';
 import {regions} from './regions';
@@ -31,7 +38,6 @@ import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degre
 import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
 import {camelCase, LabelAndValue, listenClick} from '../utils';
-import {postCombatEffects} from './dialogs/post-combat-fx';
 import {hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
 import {askDcDialog} from './dialogs/ask-dc';
 
@@ -88,7 +94,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const isUser = !this.isGM;
         const activityData = getCampingActivityData(data);
         const actors = await this.getActors(data);
-        const watchSecondsDuration = calculateRestSeconds(actors.length);
+        const watchSecondsDuration = this.getWatchSecondsDuration(actors, data);
         const currentEncounterDCModifier = data.encounterModifier;
         const actorConsumables = await getActorConsumables(actors);
         const knownRecipes = data.cooking.knownRecipes;
@@ -138,6 +144,14 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     }
 
 
+    private getWatchSecondsDuration(actors: Actor[], data: Camping): number {
+        const organizeWatchCritSuccess = data.campingActivities
+            .find(a => a.activity === 'Organize Watch' && a.result === 'criticalSuccess');
+        // 1 person can't keep watch, so don't increase to 2
+        const additionalWatchers = actors.length > 1 ? (organizeWatchCritSuccess ? 1 : 0) : 0;
+        return calculateRestSeconds(actors.length + additionalWatchers);
+    }
+
     private async getCookingSkillData(data: Camping): Promise<{
         cookingSkill: CookingSkill,
         cookingSkills: LabelAndValue[]
@@ -179,6 +193,13 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
 
     protected _getHeaderButtons(): Application.HeaderButton[] {
         const buttons = super._getHeaderButtons();
+        buttons.unshift({
+            label: 'Help',
+            class: 'something-made-up',
+            icon: 'fas fa-question',
+            // onclick: () => showCampingHelp(),
+            onclick: () => console.error('nooo'),
+        });
         if (this.game.user?.isGM ?? false) {
             buttons.unshift({
                 label: 'Show Players',
@@ -217,15 +238,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         });
         listenClick($html, '.post-combat-effects', async () => {
             const current = await this.read();
-            await postCombatEffects({
-                game: this.game,
-                preselectedCompanions: current.combatEffectCompanions,
-                onSubmit: async (selectedCompanions) => {
-                    await this.update({
-                        combatEffectCompanions: selectedCompanions,
-                    });
-                },
-            });
+            await combatEffectsToChat(current);
         });
         listenClick($html, '.advance-hours', async (ev) => {
             const target = ev.currentTarget as HTMLButtonElement;

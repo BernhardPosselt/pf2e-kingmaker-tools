@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add support for tracking and gaining XP from cult events that have already occurred
 * Use built in V11 weather effects instead of FXMaster; you need to manually clear existing weather in FXMaster
 * Fully automate "Set Alarms" effect
+* Fully reviewed, fixed and updated meal and camping effects
 
 ### Removed
 * Removed Special and Basic Ingredient items; these are now shipped in the 2e system

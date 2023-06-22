@@ -1,5 +1,5 @@
-import {parseNumberInput, parseSelect, parseTextInput} from '../../utils';
-import {Rarity, RecipeData} from '../recipes';
+import {parseCheckbox, parseNumberInput, parseSelect, parseTextInput} from '../../utils';
+import {MealEffect, Rarity, RecipeData} from '../recipes';
 
 export interface AddRecipeOptions {
     onSubmit: (recipe: RecipeData) => Promise<void>;
@@ -52,37 +52,73 @@ export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
                 <label for="km-recipe-cost">Cost</label>
                 <input type="text" name="cost" id="km-recipe-cost">
             </div>
+            
             <div>
-                <label for="km-favorite-meal-message">Favorite Meal Description</label>
-                <input type="text" name="favorite-meal-message" id="km-favorite-meal-message">
-            </div>
-            <div>
-                <label for="km-favorite-meal-effect-uuid">Favorite Meal Effect UUID</label>
+                <label for="km-favorite-meal-effect-uuid">Favorite Meal: Effect UUID</label>
                 <input type="text" name="favorite-meal-effect-uuid" id="km-favorite-meal-effect-uuid">
             </div>
             <div>
-                <label for="km-critical-success-message">Critical Success Description</label>
-                <input type="text" name="critical-success-message" id="km-critical-success-message">
+                <label for="km-favorite-meal-sleep-seconds">Favorite Meal: Modify Sleep by Seconds</label>
+                <input type="number" name="favorite-meal-sleep-seconds" id="km-favorite-meal-sleep-seconds">
             </div>
             <div>
-                <label for="km-critical-success-effect-uuid">Critical Success  Effect UUID</label>
+                <label for="km-favorite-meal-remove-rest">Favorite Meal: Remove Effect after Rest</label>
+                <input type="checkbox" name="favorite-meal-remove-rest" id="km-favorite-meal-remove-rest">
+            </div>
+            <div>
+                <label for="km-favorite-meal-additional-rations">Favorite Meal: Consume Additional Rations</label>
+                <input type="checkbox" name="favorite-meal-additional-rations" id="km-favorite-meal-additional-rations">
+            </div>
+            
+            <div>
+                <label for="km-critical-success-effect-uuid">Critical Success: Effect UUID</label>
                 <input type="text" name="critical-success-effect-uuid" id="km-critical-success-effect-uuid">
             </div>
             <div>
-                <label for="km-success-message">Success Description</label>
-                <input type="text" name="success-message" id="km-success-message">
+                <label for="km-critical-success-sleep-seconds">Critical Success: Modify Sleep by Seconds</label>
+                <input type="number" name="critical-success-sleep-seconds" id="km-critical-success-sleep-seconds">
             </div>
             <div>
-                <label for="km-success-effect-uuid">Success Effect UUID</label>
+                <label for="km-critical-success-remove-rest">Critical Success: Remove Effect after Rest</label>
+                <input type="checkbox" name="critical-success-remove-rest" id="km-critical-success-remove-rest">
+            </div>
+            <div>
+                <label for="km-critical-success-additional-rations">Critical Success: Consume Additional Rations</label>
+                <input type="checkbox" name="critical-success-additional-rations" id="km-critical-success-additional-rations">
+            </div>
+            
+            <div>
+                <label for="km-success-effect-uuid">Success: Effect UUID</label>
                 <input type="text" name="success-effect-uuid" id="km-success-effect-uuid">
             </div>
             <div>
-                <label for="km-critical-failure-message">Critical Failure Description</label>
-                <input type="text" name="critical-failure-message" id="km-critical-failure-message">
+                <label for="km-success-sleep-seconds">Success: Modify Sleep by Seconds</label>
+                <input type="number" name="success-sleep-seconds" id="km-success-sleep-seconds">
             </div>
             <div>
-                <label for="km-critical-failure-effect-uuid">Critical Failure Effect UUID</label>
+                <label for="km-success-remove-rest">Success: Remove Effect after Rest</label>
+                <input type="checkbox" name="success-remove-rest" id="km-success-remove-rest">
+            </div>
+            <div>
+                <label for="km-success-additional-rations">Success: Consume Additional Rations</label>
+                <input type="checkbox" name="success-additional-rations" id="km-success-additional-rations">
+            </div>
+            
+            <div>
+                <label for="km-critical-failure-effect-uuid">Critical Failure: Effect UUID</label>
                 <input type="text" name="critical-failure-effect-uuid" id="km-critical-failure-effect-uuid">
+            </div>
+            <div>
+                <label for="km-critical-failure-sleep-seconds">Critical Failure: Modify Sleep by Seconds</label>
+                <input type="number" name="critical-failure-sleep-seconds" id="km-critical-failure-sleep-seconds">
+            </div>
+            <div>
+                <label for="km-critical-failure-remove-rest">Critical Failure: Remove Effect after Rest</label>
+                <input type="checkbox" name="critical-failure-remove-rest" id="km-critical-failure-remove-rest">
+            </div>
+            <div>
+                <label for="km-critical-failure-additional-rations">Critical Failure: Consume Additional Rations</label>
+                <input type="checkbox" name="critical-failure-additional-rations" id="km-critical-failure-additional-rations">
             </div>
         </form>
         `,
@@ -100,6 +136,10 @@ export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
                     } else if (recipes.find(r => r.name === 'name')){
                         ui.notifications?.error(`Recipe with name ${name} exists already`);
                     } else {
+                        const favoriteEffect = parseEffects($html, 'favorite-meal');
+                        const critSuccEffect = parseEffects($html, 'critical-success');
+                        const succEffect = parseEffects($html, 'success');
+                        const failEffect = parseEffects($html, 'critical-failure');
                         await onSubmit({
                             isHomebrew: true,
                             specialIngredients: parseNumberInput($html, 'special-ingredients'),
@@ -112,20 +152,16 @@ export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
                             basicIngredients: parseNumberInput($html, 'basic-ingredients'),
                             cookingLoreDC: parseNumberInput($html, 'cooking-lore-dc'),
                             favoriteMeal: {
-                                message: parseTextInput($html, 'favorite-meal-message'),
-                                effectUuid: parseTextInput($html, 'favorite-meal-effect-uuid') || undefined,
+                                effects: favoriteEffect,
                             },
                             criticalSuccess: {
-                                message: parseTextInput($html, 'critical-success-message'),
-                                effectUuid: parseTextInput($html, 'critical-success-effect-uuid') || undefined,
+                                effects: critSuccEffect,
                             },
                             success: {
-                                message: parseTextInput($html, 'success-message'),
-                                effectUuid: parseTextInput($html, 'success-effect-uuid') || undefined,
+                                effects: succEffect,
                             },
                             criticalFailure: {
-                                message: parseTextInput($html, 'critical-failure-message'),
-                                effectUuid: parseTextInput($html, 'critical-failure-effect-uuid') || undefined,
+                                effects: failEffect,
                             },
                         });
                     }
@@ -135,6 +171,23 @@ export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
         default: 'add',
     }, {
         jQuery: false,
-        width: 420,
+        width: 510,
     }).render(true);
+}
+
+function parseEffects($html: HTMLElement, name: string): MealEffect[] {
+    const effect = parseTextInput($html, name + '-effect-uuid') || undefined;
+    const modifyRationConsumption = parseCheckbox($html, name + '-additional-rations') || false;
+    const modifySleepDurationSeconds = parseNumberInput($html, name + '-sleep-seconds') || undefined;
+    const removeAfterRest = parseCheckbox($html, name + '-remove-rest') || false;
+    if (effect) {
+        return [{
+            uuid: effect,
+            modifyRationConsumption: modifyRationConsumption ? 1 : undefined,
+            modifySleepDurationSeconds,
+            removeAfterRest,
+        }];
+    } else {
+        return [];
+    }
 }

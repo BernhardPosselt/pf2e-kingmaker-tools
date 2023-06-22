@@ -1,4 +1,4 @@
-import {ActorMeal, CampingActivity, ConsumedFood, CookingSkill} from './camping';
+import {ActorMeal, Camping, CampingActivity, ConsumedFood, CookingSkill, getCombatEffects} from './camping';
 import {CampingActivityData, CampingActivityName} from './activities';
 import {StringDegreeOfSuccess} from '../degree-of-success';
 import {camelCase, LabelAndValue, unslugify} from '../utils';
@@ -175,4 +175,14 @@ export async function toViewActorMeals(actorUuids: string[], actorMeals: ActorMe
             chosenMeal: actorMeals.find(m => m.actorUuid === uuid)?.chosenMeal ?? 'meal',
         };
     }));
+}
+
+export async function combatEffectsToChat(data: Camping): Promise<void> {
+    const effects = getCombatEffects(data);
+    if (Object.keys(effects).length > 0) {
+        const companionsAndLabels = Object.entries(effects)
+            .map(([name, link]) => `<b>${name}<b>: ${link}`)
+            .join('<br>');
+        await ChatMessage.create({content: companionsAndLabels});
+    }
 }

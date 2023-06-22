@@ -23,6 +23,8 @@
 * Changing the degree outcome should:
   * delete all previous meal effects
   * apply effects of meal to all actors that choose "Meal" in their dropdown; if favorite meal matches, apply that one as well
+* implement meal effect increases to rest time, ration consumption and effect removal after rest
+
 
 ## Rest
 * Rest duration + daily preps duration should be shown in the timeline
@@ -42,7 +44,8 @@
 
 ## TODO:
 * sync sheet using imported actor
-* check how well recipes are implemented and document
 * think about recipe migration
 * think about adding custom actions
-* Critical Success: organize watch: add 1 additional watcher
+* allow drag and drop onto eating pcs
+* automate posting effects to chat
+

@@ -23,7 +23,6 @@
                     <button type="button" class="reset-zone-dc-modifier" title="Reset Modifier"><i class="fa-solid fa-rotate-left"></i></button>
                 </div>
                 <div>
-                    <button type="button" class="post-combat-effects" title="Post Companion Combat Effects to Chat"><i class="fa-solid fa-swords"></i></button>
                     <div><span class="label">DC:</span> {{encounterDC}}</div>
                     <button type="button" class="roll-encounter" title="Roll Random Encounter" data-phase="activities"><i class="fa-solid fa-skull"></i></button>
                     <button type="button" class="check-encounter" title="Check Random Encounter" data-phase="activities"><i class="fa-solid fa-dice-d20"></i><i class="fa-solid fa-skull"></i></button>
@@ -78,6 +77,7 @@
         <header class="camping-section-header">
             <h2>Camping Activities</h2>
             <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
+                <button type="button" class="post-combat-effects">Combat Effects to Chat <i class="fa-solid fa-swords"></i></button>
                 <button type="button" class="unlock-activities" data-hours="1">Unlock <i class="fa-solid fa-lock-open"></i></button>
                 <button type="button" class="clear-activities" data-hours="1">Clear <i class="fa-solid fa-trash"></i></button>
                 <button type="button" class="advance-hours" data-hours="1">+1h <i class="fa-solid fa-clock"></i></button>

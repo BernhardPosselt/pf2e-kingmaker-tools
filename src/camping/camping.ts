@@ -2,7 +2,7 @@ import {allCampingActivities, CampingActivityData, CampingActivityName} from './
 import {getRegionInfo} from './regions';
 import {getLevelBasedDC, slugify, unslugify} from '../utils';
 import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
-import {basicIngredientUuid, CombatEffectCompanions, DcType, rationUuid, specialIngredientUuid} from './data';
+import {basicIngredientUuid, DcType, rationUuid, specialIngredientUuid} from './data';
 import {allRecipes, RecipeData} from './recipes';
 import {
     getConsumablesByUuid,
@@ -56,7 +56,6 @@ export interface Camping {
     currentRegion: string;
     encounterModifier: number;
     restRollMode: RestRollMode;
-    combatEffectCompanions: CombatEffectCompanions[];
 }
 
 export function getDefaultConfiguration(game: Game): Camping {
@@ -80,7 +79,6 @@ export function getDefaultConfiguration(game: Game): Camping {
         encounterModifier: 0,
         gunsToClean: 0,
         watchSecondsElapsed: 0,
-        combatEffectCompanions: [],
         lockedActivities: allCampingActivities
             .filter(a => a.isLocked)
             .map(a => a.name),
@@ -205,7 +203,7 @@ export async function afterDailyPreparations(
 ): Promise<void> {
     for (const actor of actors) {
         const healMoreHp = await hasItemByUuid(actor, 'effect', new Set([
-            getRecipeData(data).find(r => r.name === 'Basic Meal')!.criticalSuccess!.effectUuid!,
+            getRecipeData(data).find(r => r.name === 'Basic Meal')!.criticalSuccess!.effects![0].uuid!,
             getCampingActivityData(data).find(a => a.name === 'Dawnflower\'s Blessing')!.effectUuid!,
         ]));
         if (healMoreHp) {
@@ -457,4 +455,22 @@ export async function subsist(game: Game, actor: Actor, region: string): Promise
         skill: 'survival',
         difficultyClass: zoneDC,
     });
+}
+
+const combatEffects: Partial<Record<CampingActivityName, string>> = {
+    'Enhance Weapons': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.ZKJlIqyFgbKDACnG]{Enhance Weapons}',
+    'Set Traps': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.PSBOS7ZEl9RGWBqD]{Set Traps}',
+    'Undead Guardians': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.KysTaC245mOnSnmE]{Undead Guardians}',
+    'Water Hazards': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.LN6mH7Muj4hgvStt]{Water Hazards}',
+};
+
+export function getCombatEffects(data: Camping): Partial<Record<CampingActivityName, string>> {
+    const result: Partial<Record<CampingActivityName, string>> = {};
+    data.campingActivities.forEach(a => {
+        const activityName = a.activity;
+        if (activityName in combatEffects && a.actorUuid) {
+            result[activityName] = combatEffects[activityName];
+        }
+    });
+    return result;
 }
