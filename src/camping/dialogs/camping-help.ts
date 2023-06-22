@@ -34,8 +34,6 @@ const content = `
     
     <p>If you want to apply other effects from chat or add items to PC's inventories, you can also drag and drop them onto their profile pictures in the sidebar, activity list or eating sections.</p>
     
-    <p>If you want to completely remove all selected activities and their results, hit the <b>Clear</b> button.</p>
-    
     <p>At the end of a rest, all camping effects will be removed from the actors in the sidebar.</p>
     
     <h3>Eating</h3>

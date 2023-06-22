@@ -293,15 +293,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 },
             });
         });
-        listenClick($html, '.clear-activities', async () => {
-            const current = await this.read();
-            current.campingActivities.forEach(a => {
-                a.result = null;
-                a.actorUuid = null;
-            });
-            await this.update({
-                campingActivities: current.campingActivities,
-            });
+        listenClick($html, '.add-activity', async () => {
+            // TODO
         });
         listenClick($html, '.subsist', async (ev) => {
             const button = ev.currentTarget as HTMLButtonElement;
