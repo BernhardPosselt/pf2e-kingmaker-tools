@@ -1,4 +1,7 @@
-## activities
+# TODOs
+* sync sheet using imported actor
+ 
+## Activities
 * changing a degree of success dropdown of an activity with an actor that is not hidden should remove all effects except the non expired applicable one and roll a random encounter check if noted
 * pre-selected effects like Bolster Confidence are automatically applied and synced to actors
 * clicking the roll button should
@@ -6,6 +9,7 @@
     * should display a message to chat to add ingredients
   * if action was learn a recipe:
     * should display a message to chat to learn recipe, pay ingredients and potentially apply crit fail effect
+* Add a way to add and remove custom activities
 
 ## Eating
 * Changing the degree outcome should:
@@ -14,6 +18,7 @@
 * implement meal effect:
   * increases to rest time
   * increases ration consumption
+* add a way to migrate previous known recipes
 
 ## Rest
 * Clicking on Begin Rest button:
@@ -28,8 +33,5 @@
   * Reset all degree of success dropdowns to not selected
   * Remove all meal degrees that expire after resting
 
-## TODO:
-* sync sheet using imported actor
-* think about recipe migration
-* think about adding custom actions
+
 

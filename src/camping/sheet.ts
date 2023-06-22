@@ -42,9 +42,12 @@ import {hasCookingLore, NotProficientError, validateSkillProficiencies} from './
 import {askDcDialog} from './dialogs/ask-dc';
 import {showCampingHelp} from './dialogs/camping-help';
 import {discoverSpecialMeal} from './dialogs/learn-recipe';
+import {setupDialog} from '../kingdom/dialogs/setup-dialog';
+import {getCamping, saveCamping} from './storage';
 
 interface CampingOptions {
     game: Game;
+    actor: Actor;
 }
 
 interface CampingData {
@@ -57,7 +60,8 @@ interface CampingData {
 }
 
 
-export class CampingSheet extends FormApplication<CampingOptions & FormApplicationOptions, ViewCampingData, CampingData> {
+export class CampingSheet extends FormApplication<CampingOptions & FormApplicationOptions, ViewCampingData, null> {
+
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
         options.id = 'camping-app';
@@ -74,17 +78,20 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         options.closeOnSubmit = false;
         options.submitOnChange = true;
         options.submitOnClose = false;
+        options.editable = true;
         return options;
     }
 
     private isGM: boolean;
     private readonly game: Game;
+    private actor: Actor;
 
     constructor(options: CampingOptions) {
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        super({} as any, options);
+        super(null, options);
         this.game = options.game;
         this.isGM = this.game.user?.isGM ?? false;
+        this.actor = options.actor;
+        this.actor.apps[this.appId] = this;
     }
 
     override async getData(options?: Partial<CampingOptions & FormApplicationOptions>): Promise<ViewCampingData> {
@@ -92,7 +99,6 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const currentSeconds = this.game.time.worldTime;
         const currentRegion = data.currentRegion;
         const sumElapsedSeconds = Math.abs(currentSeconds - data.dailyPrepsAtTime);
-        const isUser = !this.isGM;
         const activityData = getCampingActivityData(data);
         const actors = await this.getActors(data);
         const watchSecondsDuration = this.getWatchSecondsDuration(actors, data);
@@ -101,6 +107,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const knownRecipes = data.cooking.knownRecipes;
         const chosenMealData = getChosenMealData(data);
         const chosenMeal = chosenMealData.name;
+        const isUser = !this.isGM;
         const viewData: ViewCampingData = {
             isGM: this.isGM,
             isUser,
@@ -110,7 +117,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             adventuringSince: formatHours(sumElapsedSeconds, data.dailyPrepsAtTime > currentSeconds),
             regions: Array.from(regions.keys()),
             currentRegion,
-            actors: await toViewActors(data.actorUuids, data.campingActivities, getCampingActivityData(data)),
+            actors: await toViewActors(data.actorUuids, data.campingActivities, getCampingActivityData(data), isUser),
             campingActivities: await toViewCampingActivities(data.campingActivities, activityData, new Set(data.lockedActivities)),
             watchSecondsElapsed: data.watchSecondsElapsed,
             watchElapsed: formatHours(data.watchSecondsElapsed),
@@ -166,6 +173,14 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             cookingSkills,
             cookingSkill,
         };
+    }
+
+    protected _canDragDrop(selector: string): boolean {
+        return true;
+    }
+
+    protected _canDragStart(selector: string): boolean {
+        return true;
     }
 
     private async getMealDc(data: Camping, chosenMealData: RecipeData): Promise<number> {
@@ -544,20 +559,11 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     }
 
     private async update(data: Partial<Camping>): Promise<void> {
-        const existing = await this.read();
-        const toSave = Object.assign({}, existing, data);
-        console.log('toSave', toSave);
-        localStorage.setItem('campingConfig', JSON.stringify(toSave));
-        this.render();
+        await saveCamping(this.actor, data);
     }
 
     private async read(): Promise<Camping> {
-        const config = localStorage.getItem('campingConfig');
-        if (config === null) {
-            localStorage.setItem('campingConfig', JSON.stringify(getDefaultConfiguration(this.game)));
-            return await this.read();
-        }
-        return JSON.parse(config);
+        return getCamping(this.actor);
     }
 
     private async openUuidSheet(uuid: string): Promise<void> {
@@ -768,7 +774,16 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
 }
 
 export function openCampingSheet(game: Game): void {
-    new CampingSheet({game}).render(true);
+    const sheetActor = game?.actors?.find(a => a.name === 'Camping Sheet');
+    if (sheetActor) {
+        new CampingSheet({game, actor: sheetActor}).render(true);
+    } else {
+        setupDialog(game, 'Camping','yybLhORz4PeZxCp0', async () => {
+            const sheetActor = game?.actors?.find(a => a.name === 'Camping Sheet');
+            await sheetActor?.setFlag('pf2e-kingmaker-tools', 'camping-sheet', getDefaultConfiguration(game));
+            await openCampingSheet(game);
+        });
+    }
 }
 
 

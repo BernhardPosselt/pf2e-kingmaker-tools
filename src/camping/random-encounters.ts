@@ -79,9 +79,10 @@ export function getEncounterDC(data: Camping, game: Game): EncounterDc {
     const activityModifier = getCampingActivityData(data)
         .map(campingActivityData => {
             const campingActivity = data.campingActivities
-                .find(ca => ca.activity === campingActivityData.name)!;
-            const result = campingActivity.result;
-            if (campingActivity.actorUuid !== null && (result !== null || campingActivityData.skills.length === 0)) {
+                .find(ca => ca.activity === campingActivityData.name);
+            const result = campingActivity?.result ?? null;
+            const actorUuid = campingActivity?.actorUuid ?? null;
+            if (actorUuid !== null && (result !== null || campingActivityData.skills.length === 0)) {
                 const mods = getActivityModifier(campingActivityData, result);
                 return mods[isDayOrNight(getWorldTime(game))];
             } else {

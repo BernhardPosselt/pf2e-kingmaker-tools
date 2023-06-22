@@ -8,8 +8,10 @@ interface ViewActorMeal extends ViewActor {
     chosenMeal: string;
 }
 
+type CssClass = StringDegreeOfSuccess | 'secret' | null;
+
 interface ViewCampingActor extends ViewActor {
-    cssClass: StringDegreeOfSuccess | null;
+    cssClass: CssClass;
     noActivityChosen: boolean;
     activity: string | null;
 }
@@ -111,7 +113,27 @@ export async function toViewActor(uuid: string): Promise<ViewActor> {
     };
 }
 
-export async function toViewActors(actorUuids: string[], activities: CampingActivity[], activityData: CampingActivityData[]): Promise<ViewCampingActor[]> {
+function getCssClass(chosenActivity: CampingActivity | undefined, hasSkillCheck: boolean, isUser: boolean): CssClass {
+    const result = chosenActivity?.result;
+    if (result !== undefined) {
+        if (isUser) {
+            return 'secret';
+        } else {
+            return result;
+        }
+    } else if (!hasSkillCheck) {
+        return 'criticalSuccess';
+    } else {
+        return null;
+    }
+}
+
+export async function toViewActors(
+    actorUuids: string[],
+    activities: CampingActivity[],
+    activityData: CampingActivityData[],
+    isUser: boolean,
+): Promise<ViewCampingActor[]> {
     const actorInfos = await Promise.all(actorUuids.map(uuid => toViewActor(uuid)));
     return actorInfos
         .filter(a => a !== null)
@@ -126,7 +148,7 @@ export async function toViewActors(actorUuids: string[], activities: CampingActi
                 ...actor,
                 noActivityChosen: !chosenActivity,
                 activity: chosenActivity?.activity ?? null,
-                cssClass: chosenActivity?.result ?? (!hasSkillCheck ? 'criticalSuccess' : null),
+                cssClass: getCssClass(chosenActivity, hasSkillCheck, isUser),
             };
         });
 }

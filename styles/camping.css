@@ -11,6 +11,11 @@
     grid-template-areas: "header header" "sidebar content";
 }
 
+/* fix for flexbox disregarding html hidden attribute */
+.camping-sheet [hidden]{
+    display: none !important;
+}
+
 .camping-sheet img {
     border-radius: 0;
     border: 0;
@@ -49,6 +54,11 @@
     border: 1px solid #000;
     border-left: 0;
     padding: 5px 2px;
+}
+
+.chosen-camping-activity.secret {
+    color: black;
+    background-color: #aaa;
 }
 
 .chosen-camping-activity.criticalSuccess {
