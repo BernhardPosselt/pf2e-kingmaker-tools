@@ -46,10 +46,9 @@ const content = `
     <p>Values set in the <b>Subsistence</b> and <b>Magical Subsistence</b> fields will not be touched, since casting <b>Create Food</b> and successfully executing <b>Subsist</b> will become the default after level 5 if your players optimize. Before that, you will need to manually change these values each camping session.</p>
     
     <h3>Resting</h3>
-    <!-- TODO -->
-    <p>You can start a rest by hitting the <b>Begin Rest</b> button. By default, one random encounter will be rolled automatically per rest. If the encounter occurs, a random point in time between now and the end of the rest will be chosen and time will automatically advance to that point in time. Afterwards, a random actor that is present in the sidebar will be chosen as having watch. A secret perception check is then rolled in chat.</p>
+    <p>You can start a rest by hitting the <b>Begin Rest</b> button. By default, one random encounter will be rolled automatically per rest. If the encounter occurs, a random point in time between now and the end of the rest will be chosen and time will automatically advance to that point in time. Afterward, a random actor that is present in the sidebar will be chosen as having watch. A secret perception check is then rolled in chat.</p>
     
-    <p>Once you finish the random encounter, you can continue the rest by pressing <b>Continue Rest<b>no more random encounters will happen. Time will advance to after your daily preparations.</p>
+    <p>Once you finish the random encounter, you can continue the rest by pressing <b>Continue Rest</b>. No more random encounters will happen. Time will advance to after your daily preparations and the <b>Adventuring</b> time tracker will reset to 0.</p>
     
     <p>Then the following things happen:</p>
     <ul>
@@ -115,8 +114,8 @@ const content = `
         <li>Rice-N-Nut Pudding: Critical Failure</li>
     </ul>
 </div>`;
+
 export function showCampingHelp(): void {
-    alert('hi');
     new Dialog({
         title: 'Camping',
         content,

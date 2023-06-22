@@ -40,6 +40,7 @@ import {formatWorldTime} from '../time/format';
 import {camelCase, LabelAndValue, listenClick} from '../utils';
 import {hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
 import {askDcDialog} from './dialogs/ask-dc';
+import {showCampingHelp} from './dialogs/camping-help';
 
 interface CampingOptions {
     game: Game;
@@ -195,15 +196,14 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const buttons = super._getHeaderButtons();
         buttons.unshift({
             label: 'Help',
-            class: 'something-made-up',
+            class: 'pf2e-kingmaker-tools-hb1',
             icon: 'fas fa-question',
-            // onclick: () => showCampingHelp(),
-            onclick: () => console.error('nooo'),
+            onclick: () => showCampingHelp(),
         });
         if (this.game.user?.isGM ?? false) {
             buttons.unshift({
                 label: 'Show Players',
-                class: 'something-made-up',
+                class: 'pf2e-kingmaker-tools-hb2',
                 icon: 'fas fa-eye',
                 onclick: () => this.emit({
                     action: 'openCampingSheet',
