@@ -1,6 +1,5 @@
 ## activities
 * pre-selected effects like Bolster Confidence are automatically applied and synced to actors
-* encounter dc increase should be applied
 * changing a degree of success dropdown of an activity with an actor that is not hidden should remove all effects except the current one and roll a random encounter check if noted
 * clicking the roll button should
   * if action was hunt and gather:
@@ -14,7 +13,6 @@
   * apply effects of meal to all actors that choose "Meal" in their dropdown; if favorite meal matches, apply that one as well
 * implement meal effect increases to rest time, ration consumption and effect removal after rest
 
-
 ## Rest
 * Rest duration + daily preps duration should be shown in the timeline
 * Clicking on Begin Rest button:
@@ -27,14 +25,10 @@
   * Remove all camping activity effects
   * Reset daily preps counter to 0
   * Reset all degree of success dropdowns to empty
-
-## Miscellaneous
-* Blend into the night should increase encounter dc between 6pm and 6am
+  * Remove all meal degrees that expire after resting
 
 ## TODO:
 * sync sheet using imported actor
 * think about recipe migration
 * think about adding custom actions
-* allow drag and drop onto eating pcs
-* automate posting effects to chat
 

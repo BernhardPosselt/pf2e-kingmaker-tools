@@ -105,7 +105,7 @@
 
         <ul class="camping-actors">
             {{#each actorMeals}}
-            <li class="eating-actors">
+            <li class="eating-actor" data-actor-uuid="{{uuid}}">
                 {{> modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs actor=this knownRecipes=../knownFavoriteRecipes}}
             </li>
             {{/each}}

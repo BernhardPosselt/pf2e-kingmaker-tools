@@ -79,8 +79,8 @@ interface ActivityOutcome {
     message: string;
     effectUuid?: string;
     modifyRandomEncounterDc?: {
-        camping: number;
-        watch: number;
+        day: number;
+        night: number;
     }
     checkRandomEncounter?: boolean;
 }
@@ -151,22 +151,22 @@ export const allCampingActivities: CampingActivityData[] = [{
     criticalSuccess: {
         message: 'Your camouflage attempt exceeds expectation. Increase the Encounter DC for your camp by 2. The first time a flat check would result in an encounter during this camping session, instead treat that result as a failure with no encounter.',
         modifyRandomEncounterDc: {
-            camping: 2,
-            watch: 2,
+            day: 2,
+            night: 2,
         },
     },
     success: {
         message: 'Your work helps hide your camp from detection. Increase the Encounter DC for your camp by 1.',
         modifyRandomEncounterDc: {
-            camping: 1,
-            watch: 1,
+            day: 1,
+            night: 1,
         },
     },
     criticalFailure: {
         message: 'You believe you’ve done well at your camouflage attempt but have actually forgotten something important or accidentally did something to make the campsite more noticeable. Decrease the Encounter DC for your camp by 2, and flat checks made to determine encounters result in a critical success on a roll of 19 or 20.',
         modifyRandomEncounterDc: {
-            camping: -2,
-            watch: -2,
+            day: -2,
+            night: -2,
         },
     },
 }, {
@@ -426,8 +426,8 @@ export const allCampingActivities: CampingActivityData[] = [{
     criticalSuccess: {
         message: 'Prepare Campsite: You find the perfect spot for a camp. Flat checks to determine encounters at the campsite for the next 24 hours have a DC 2 higher than normal, and the first 2 hours spent performing Camping activities does not incur the usual flat check for random encounters.',
         modifyRandomEncounterDc: {
-            camping: 2,
-            watch: 2,
+            day: 2,
+            night: 2,
         },
     },
     success: {

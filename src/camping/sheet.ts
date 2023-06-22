@@ -7,7 +7,7 @@ import {
     ViewCampingData,
 } from './view';
 import {formatHours} from '../time/app';
-import {rollRandomEncounter} from './random-encounters';
+import {getEncounterDC, rollRandomEncounter} from './random-encounters';
 import {regions} from './regions';
 import {CampingActivityData, CampingActivityName, huntAndGather, postHuntAndGatherResult} from './activities';
 import {
@@ -68,7 +68,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         options.width = 862;
         options.height = 'auto';
         options.dragDrop = [{
-            dropSelector: '.new-camping-actor, .camping-activity, .camping-actor',
+            dropSelector: '.new-camping-actor, .camping-activity, .camping-actor, .eating-actor',
             dragSelector: '.camping-actor, .content-link[data-type=Item]',
         }];
         options.closeOnSubmit = false;
@@ -91,13 +91,12 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const data = await this.read();
         const currentSeconds = this.game.time.worldTime;
         const currentRegion = data.currentRegion;
-        const currentRegionData = regions.get(currentRegion);
         const sumElapsedSeconds = Math.abs(currentSeconds - data.dailyPrepsAtTime);
         const isUser = !this.isGM;
         const activityData = getCampingActivityData(data);
         const actors = await this.getActors(data);
         const watchSecondsDuration = this.getWatchSecondsDuration(actors, data);
-        const currentEncounterDCModifier = data.encounterModifier;
+        const {total: encounterDC, modifier: currentEncounterDCModifier} = getEncounterDC(data, this.game);
         const actorConsumables = await getActorConsumables(actors);
         const knownRecipes = data.cooking.knownRecipes;
         const chosenMealData = getChosenMealData(data);
@@ -107,7 +106,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             isUser,
             ...actorConsumables,
             currentEncounterDCModifier,
-            encounterDC: currentEncounterDCModifier + (currentRegionData?.encounterDC ?? 0),
+            encounterDC,
             adventuringSince: formatHours(sumElapsedSeconds, data.dailyPrepsAtTime > currentSeconds),
             regions: Array.from(regions.keys()),
             currentRegion,
@@ -144,7 +143,6 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         console.log('viewData', viewData);
         return viewData;
     }
-
 
     private getWatchSecondsDuration(actors: Actor[], data: Camping): number {
         const organizeWatchCritSuccess = data.campingActivities
@@ -425,8 +423,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
 
     private async rollRandomEncounter(forgoFlatCheck = false): Promise<void> {
         const current = await this.read();
-        const modifier = current.encounterModifier; // FIXME: include activity modifiers
-        await rollRandomEncounter(this.game, current.currentRegion, modifier, forgoFlatCheck);
+        const dc = getEncounterDC(current, this.game);
+        await rollRandomEncounter(this.game, current.currentRegion, dc, forgoFlatCheck);
     }
 
     override close(options?: Application.CloseOptions): Promise<void> {
@@ -494,6 +492,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             } else if (target.classList.contains('new-camping-actor') && !campingConfiguration.actorUuids.includes(document.uuid)) {
                 await this.update({actorUuids: [...(campingConfiguration.actorUuids), document.uuid]});
             } else if (target.classList.contains('camping-actor') && document instanceof Item) {
+                await this.handleItemDrop(document, target.dataset.actorUuid!);
+            } else if (target.classList.contains('eating-actor') && document instanceof Item) {
                 await this.handleItemDrop(document, target.dataset.actorUuid!);
             }
         }
