@@ -1,6 +1,6 @@
 ## activities
+* changing a degree of success dropdown of an activity with an actor that is not hidden should remove all effects except the non expired applicable one and roll a random encounter check if noted
 * pre-selected effects like Bolster Confidence are automatically applied and synced to actors
-* changing a degree of success dropdown of an activity with an actor that is not hidden should remove all effects except the current one and roll a random encounter check if noted
 * clicking the roll button should
   * if action was hunt and gather:
     * should display a message to chat to add ingredients
@@ -11,10 +11,11 @@
 * Changing the degree outcome should:
   * delete all previous meal effects
   * apply effects of meal to all actors that choose "Meal" in their dropdown; if favorite meal matches, apply that one as well
-* implement meal effect increases to rest time, ration consumption and effect removal after rest
+* implement meal effect:
+  * increases to rest time
+  * increases ration consumption
 
 ## Rest
-* Rest duration + daily preps duration should be shown in the timeline
 * Clicking on Begin Rest button:
   * rolls x random encounters until: 1 is positive or none is left
   * if a check is a success determine a point in time randomly between rest start and end date
@@ -23,8 +24,8 @@
   * If random point is reached, Begin Rest button turns into: Continue Rest; clicking that button advances to the end
   * Run daily preps
   * Remove all camping activity effects
-  * Reset daily preps counter to 0
-  * Reset all degree of success dropdowns to empty
+  * Reset Adventuring time tracker to 0
+  * Reset all degree of success dropdowns to not selected
   * Remove all meal degrees that expire after resting
 
 ## TODO:
