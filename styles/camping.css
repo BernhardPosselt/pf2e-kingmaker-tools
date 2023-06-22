@@ -214,7 +214,6 @@
 .camping-content .actor-image-container {
     position: relative;
     width: var(--actor-image-width);
-    border-top: 1px solid #000;
 }
 
 .camping-content .camping-actors .actor-image,
@@ -269,6 +268,7 @@
     flex-direction: row;
     justify-content: center;
     border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
 }
 
 .camping-actors .actor-check select {
@@ -285,6 +285,7 @@
     text-align: center;
     font-weight: bold;
     background-color: #789035;
+    border-bottom: 1px solid #000;
     color: #fff;
     padding: 5px;
 }
@@ -296,6 +297,10 @@
 .camping-actors .actor-wrapper {
     border: 1px solid #000;
     border-radius: 2px;
+}
+
+.camping-actors .actor-wrapper select {
+    border-radius: 0;
 }
 
 .camping-dialog {

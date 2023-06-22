@@ -2,9 +2,11 @@ import {ActorMeal, Camping, CampingActivity, ConsumedFood, CookingSkill, getComb
 import {CampingActivityData, CampingActivityName} from './activities';
 import {StringDegreeOfSuccess} from '../degree-of-success';
 import {camelCase, LabelAndValue, unslugify} from '../utils';
+import {RecipeData} from './recipes';
 
 interface ViewActorMeal extends ViewActor {
     favoriteMeal: string | null;
+    favoriteMealUuid: string | null;
     chosenMeal: string;
 }
 
@@ -115,14 +117,14 @@ export async function toViewActor(uuid: string): Promise<ViewActor> {
 
 function getCssClass(chosenActivity: CampingActivity | undefined, hasSkillCheck: boolean, isUser: boolean): CssClass {
     const result = chosenActivity?.result;
-    if (result !== undefined && result !== null) {
+    if (!hasSkillCheck) {
+        return 'criticalSuccess';
+    } else if (result !== undefined && result !== null) {
         if (isUser) {
             return 'secret';
         } else {
             return result;
         }
-    } else if (!hasSkillCheck) {
-        return 'criticalSuccess';
     } else {
         return null;
     }
@@ -190,11 +192,14 @@ export function toViewDegrees(): ViewDegreeOfSuccess[] {
     ];
 }
 
-export async function toViewActorMeals(actorUuids: string[], actorMeals: ActorMeal[]): Promise<ViewActorMeal[]> {
+export async function toViewActorMeals(actorUuids: string[], actorMeals: ActorMeal[], recipeData: RecipeData[]): Promise<ViewActorMeal[]> {
     return await Promise.all(actorUuids.map(async uuid => {
+        const favoriteMeal = actorMeals.find(m => m.actorUuid === uuid)?.favoriteMeal ?? null;
+        const favoriteMealUuid = favoriteMeal ? recipeData.find(r => r.name === favoriteMeal)?.uuid ?? null : null;
         return {
             ...(await toViewActor(uuid)),
-            favoriteMeal: actorMeals.find(m => m.actorUuid === uuid)?.favoriteMeal ?? null,
+            favoriteMeal,
+            favoriteMealUuid,
             chosenMeal: actorMeals.find(m => m.actorUuid === uuid)?.chosenMeal ?? 'meal',
         };
     }));

@@ -143,7 +143,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 recipeBasicIngredientCost: chosenMealData?.basicIngredients ?? 0,
                 recipeSpecialIngredientCost: chosenMealData?.specialIngredients ?? 0,
             }),
-            actorMeals: await toViewActorMeals(data.actorUuids, data.cooking.actorMeals),
+            actorMeals: await toViewActorMeals(data.actorUuids, data.cooking.actorMeals, getRecipeData(data)),
             ...(await this.getCookingSkillData(data)),
             chosenMealDc: await this.getMealDc(data, chosenMealData),
         };
@@ -576,7 +576,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         if (journal instanceof JournalEntryPage) {
             journal?.parent?.sheet?.render(true, {pageId: journal.id});
         } else {
-            (journal as any).sheet.render();
+            (journal as any).sheet.render(true);
         }
 
     }
