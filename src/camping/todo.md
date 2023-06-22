@@ -1,5 +1,4 @@
 # TODOs
-* sync sheet using imported actor
  
 ## Activities
 * changing a degree of success dropdown of an activity with an actor that is not hidden should remove all effects except the non expired applicable one and roll a random encounter check if noted
