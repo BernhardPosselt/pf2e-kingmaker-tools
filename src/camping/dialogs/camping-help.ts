@@ -56,6 +56,7 @@ const content = `
         <li>All meal effects that expire after resting will be removed</li>
         <li>The <b>Rest for the Night</b> macro will be executed for all actors in the sidebar</li>
         <li>Additional healing received from <b>Basic Meal</b> and <b>Dawnflower's Blessing</b> will be applied</li>
+        <li>All camping activity results are reset to <b>-</b></li>
     </ul>
     
     <h2>Automation</h2>

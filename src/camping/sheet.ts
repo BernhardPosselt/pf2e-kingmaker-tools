@@ -9,7 +9,7 @@ import {
 import {formatHours} from '../time/app';
 import {rollRandomEncounter} from './random-encounters';
 import {regions} from './regions';
-import {CampingActivityName} from './activities';
+import {CampingActivityData, CampingActivityName, huntAndGather, postHuntAndGatherResult} from './activities';
 import {
     ActorMeal,
     calculateConsumedFood,
@@ -31,7 +31,7 @@ import {
 } from './camping';
 import {manageActivitiesDialog} from './dialogs/manage-activities';
 import {manageRecipesDialog} from './dialogs/manage-recipes';
-import {RecipeData} from './recipes';
+import {getRecipesKnownInRegion, postDiscoverSpecialMealResult, RecipeData} from './recipes';
 import {addRecipeDialog} from './dialogs/add-recipe';
 import {campingSettingsDialog} from './dialogs/camping-settings';
 import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
@@ -41,6 +41,7 @@ import {camelCase, LabelAndValue, listenClick} from '../utils';
 import {hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
 import {askDcDialog} from './dialogs/ask-dc';
 import {showCampingHelp} from './dialogs/camping-help';
+import {discoverSpecialMeal} from './dialogs/learn-recipe';
 
 interface CampingOptions {
     game: Game;
@@ -317,10 +318,12 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 const {cookingSkill} = await this.getCookingSkillData(current);
                 const chosenMealData = getChosenMealData(current);
                 const dc = await this.getMealDc(current, chosenMealData);
+                const activity = getCampingActivityData(current)
+                    .find(a => a.name === 'Cook Meal')!;
                 const result = await rollCampingCheck({
                     game: this.game,
                     actor: cookingActor,
-                    activity: 'Cook Meal',
+                    activity,
                     dc,
                     skill: cookingSkill,
                     region: current.currentRegion,
@@ -380,27 +383,43 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             ?.actorUuid;
         const actor = actorUuid ? (await fromUuid(actorUuid)) as Actor | null : null;
         if (activityData && actor) {
-            const dcType = activityData.dc;
-            const rollOptions: SkillCheckOptions = {
-                skill,
-                secret: activityData.isSecret,
-                activity,
-                actor,
-                game: this.game,
-                region: current.currentRegion,
-            };
-            if (dcType) {
-                rollOptions.dc = dcType;
-                await this.setActivityResult(activity, await rollCampingCheck(rollOptions));
+            if (activity === 'Discover Special Meal') {
+                await this.discoverSpecialMeal(activityData, skill, actor, getRecipeData(current), current.currentRegion);
+            } else if (activity === 'Hunt and Gather') {
+                await this.huntAndGather(activityData, skill, actor, current.currentRegion);
             } else {
-                askDcDialog({
-                    activity,
-                    onSubmit: async (dc) => {
-                        rollOptions.dc = dc;
-                        await this.setActivityResult(activity, await rollCampingCheck(rollOptions));
-                    },
-                });
+                await this.rollStandardCheck(activityData, skill, actor, current.currentRegion);
             }
+        }
+    }
+
+    private async rollStandardCheck(
+        activity: CampingActivityData,
+        skill: string,
+        actor: Actor,
+        currentRegion: string,
+    ): Promise<void> {
+        const dcType = activity.dc;
+        const rollOptions: SkillCheckOptions = {
+            skill,
+            secret: activity.isSecret,
+            activity,
+            actor,
+            game: this.game,
+            region: currentRegion,
+        };
+        const activityName = activity.name;
+        if (dcType) {
+            rollOptions.dc = dcType;
+            await this.setActivityResult(activityName, await rollCampingCheck(rollOptions));
+        } else {
+            askDcDialog({
+                activity: activityName,
+                onSubmit: async (dc) => {
+                    rollOptions.dc = dc;
+                    await this.setActivityResult(activityName, await rollCampingCheck(rollOptions));
+                },
+            });
         }
     }
 
@@ -661,6 +680,89 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const actor = await fromUuid(actorUuid) as Actor | null;
         if (actor) {
             await actor.createEmbeddedDocuments('Item', [document.toObject()]);
+        }
+    }
+
+    private async discoverSpecialMeal(
+        activityData: CampingActivityData,
+        skill: string,
+        actor: Actor,
+        recipeData: RecipeData[],
+        currentRegion: string
+    ): Promise<void> {
+        const current = await this.read();
+        const availableFood = await getActorConsumables(await this.getActors(current));
+        const availableRecipes = getRecipesKnownInRegion(this.game, currentRegion, recipeData)
+            .filter(r => !current.cooking.knownRecipes.includes(r.name));
+        await discoverSpecialMeal({
+            actor,
+            availableFood,
+            availableRecipes,
+            onSubmit: async (recipeName) => {
+                const data = availableRecipes.find(r => r.name === recipeName);
+                if (recipeName !== null && data) {
+                    const current = await this.read();
+                    const activity = getCampingActivityData(current)
+                        .find(a => a.name === 'Discover Special Meal');
+                    const result = await rollCampingCheck({
+                        game: this.game,
+                        actor: actor,
+                        dc: data.cookingLoreDC,
+                        skill,
+                        activity,
+                        region: currentRegion,
+                    });
+                    if (result !== null) {
+                        const isCriticalSuccess = DegreeOfSuccess.CRITICAL_SUCCESS;
+                        const isSuccess = DegreeOfSuccess.SUCCESS;
+                        const removeIngredients = {
+                            specialIngredients: isCriticalSuccess ? data.specialIngredients : data.specialIngredients * 2,
+                            basicIngredients: isCriticalSuccess ? data.basicIngredients : data.basicIngredients * 2,
+                            rations: 2,
+                        };
+                        const recipeToAdd = isSuccess || isCriticalSuccess ? data.name : null;
+                        await postDiscoverSpecialMealResult(actor.uuid, result, recipeToAdd, removeIngredients);
+                        await this.persistActivityDegreeOfSuccess(current, result, 'Discover Special Meal');
+                    }
+                }
+            },
+        });
+    }
+
+    private async persistActivityDegreeOfSuccess(
+        current: Camping,
+        degreeOfSuccess: DegreeOfSuccess,
+        activity: string,
+    ): Promise<void> {
+        current.campingActivities.forEach(a => {
+            if (a.activity === activity) {
+                a.result = degreeToProperty(degreeOfSuccess);
+            }
+        });
+        await this.update({
+            campingActivities: current.campingActivities,
+        });
+    }
+
+    private async huntAndGather(
+        activity: CampingActivityData,
+        skill: string,
+        actor: Actor,
+        currentRegion: string
+    ): Promise<void> {
+        const current = await this.read();
+        const result = await rollCampingCheck({
+            game: this.game,
+            actor: actor,
+            region: currentRegion,
+            skill,
+            activity,
+            dc: activity.dc,
+        });
+        if (result !== null) {
+            const ingredients = await huntAndGather(this.game, actor, result, currentRegion);
+            await postHuntAndGatherResult(actor.uuid, result, ingredients);
+            await this.persistActivityDegreeOfSuccess(current, result, activity.name);
         }
     }
 }

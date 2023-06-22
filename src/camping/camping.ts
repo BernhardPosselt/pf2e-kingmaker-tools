@@ -1,6 +1,6 @@
 import {allCampingActivities, CampingActivityData, CampingActivityName} from './activities';
 import {getRegionInfo} from './regions';
-import {getLevelBasedDC, slugify, unslugify} from '../utils';
+import {getLevelBasedDC, postDegreeOfSuccessMessage, slugify, unslugify} from '../utils';
 import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {basicIngredientUuid, DcType, rationUuid, specialIngredientUuid} from './data';
 import {allRecipes, RecipeData} from './recipes';
@@ -101,7 +101,7 @@ export interface SkillCheckOptions {
     dc?: DcType,
     skill: string,
     secret?: boolean,
-    activity?: string,
+    activity?: CampingActivityData,
     region: string;
 }
 
@@ -119,7 +119,7 @@ export async function rollCampingCheck(
         extraRollOptions: ['camping'],
     };
     if (activity) {
-        rollData['extraRollOptions']?.push('action:' + slugify(activity));
+        rollData['extraRollOptions']?.push('action:' + slugify(activity.name));
     }
     if (dc) {
         rollData['dc'] = getDC(game, actor, dc, region);
@@ -134,12 +134,22 @@ export async function rollCampingCheck(
     if (skill === 'perception') {
         result = await actor.perception.roll(rollData);
     } else if (skillToRoll === null) {
-        ui.notifications?.error(`Actor does not have skill ${unslugify(skill)}`);
+        ui.notifications?.error(`${actor.name} does not have skill ${unslugify(skill)}`);
         return null;
     } else {
-        result = await skills[skill].roll(rollData);
+        result = await skills[skillToRoll].roll(rollData);
     }
-    return result?.degreeOfSuccess ?? null;
+    const degree = result?.degreeOfSuccess ?? null;
+    if (degree !== null) {
+        await postDegreeOfSuccessMessage(degree, {
+            isPrivate: secret,
+            critSuccess: activity?.criticalSuccess?.message,
+            success: activity?.success?.message,
+            failure: activity?.failure?.message,
+            critFailure: activity?.criticalFailure?.message,
+        });
+    }
+    return degree;
 }
 
 /**
@@ -240,11 +250,6 @@ export function calculateDailyPreparationsSeconds(gunsToClean: number): number {
     return gunsToClean === 0 ? 30 * 60 : Math.ceil(gunsToClean / 4) * 3600;
 }
 
-export interface ActorConsumables {
-    rations: number;
-    specialIngredients: number;
-    basicIngredients: number;
-}
 
 export async function getConsumableFromUuid(uuid: string): Promise<(Item & ConsumableItem) | null> {
     const item = await fromUuid(uuid) as Item | null;
@@ -254,11 +259,11 @@ export async function getConsumableFromUuid(uuid: string): Promise<(Item & Consu
     return null;
 }
 
-export async function getActorConsumables(actors: Actor[]): Promise<ActorConsumables> {
+export async function getActorConsumables(actors: Actor[]): Promise<FoodAmount> {
     const rationSourceId = (await getConsumableFromUuid(rationUuid))?.sourceId;
     const specialIngredientsSourceId = (await getConsumableFromUuid(specialIngredientUuid))?.sourceId;
     const basicIngredientsId = (await getConsumableFromUuid(basicIngredientUuid))?.sourceId;
-    const result: ActorConsumables = {
+    const result: FoodAmount = {
         rations: 0,
         specialIngredients: 0,
         basicIngredients: 0,
@@ -301,7 +306,7 @@ interface FoodCost {
     availableMagicalSubsistence: number;
 }
 
-export function calculateConsumedFood(actorConsumables: ActorConsumables, foodCost: FoodCost): ConsumedFood {
+export function calculateConsumedFood(actorConsumables: FoodAmount, foodCost: FoodCost): ConsumedFood {
     const availableBasicIngredients = actorConsumables.basicIngredients;
     const availableSpecialIngredients = actorConsumables.specialIngredients;
     const availableRations = actorConsumables.rations;
@@ -337,7 +342,7 @@ export function calculateConsumedFood(actorConsumables: ActorConsumables, foodCo
     };
 }
 
-export interface RemoveFoodAmount {
+export interface FoodAmount {
     rations: number;
     specialIngredients: number;
     basicIngredients: number;
@@ -413,7 +418,7 @@ async function removeItems(actors: Actor[], amount: number, uuid: string): Promi
     }
 }
 
-export async function removeFood(actors: Actor[], config: RemoveFoodAmount): Promise<void> {
+export async function removeFood(actors: Actor[], config: FoodAmount): Promise<void> {
     await removeRations(actors, config.rations);
     await removeItems(actors, config.basicIngredients, basicIngredientUuid);
     await removeItems(actors, config.specialIngredients, specialIngredientUuid);

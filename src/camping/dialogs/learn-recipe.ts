@@ -1,63 +1,74 @@
 import {RecipeData} from '../recipes';
-import {DegreeOfSuccess} from '../../degree-of-success';
 import {toTemplateRecipe, ViewRecipeData} from './manage-recipes';
+import {escapeHtml, parseRadio} from '../../utils';
+import {FoodAmount} from '../camping';
 
 export interface LearnRecipeOptions {
     actor: Actor;
+    availableFood: FoodAmount;
     availableRecipes: RecipeData[];
-    onSubmit: (recipe: RecipeData, degreeOfSuccess: DegreeOfSuccess) => Promise<void>
+    onSubmit: (recipe: string | null) => Promise<void>
 }
 
-class LearnRecipeApp extends Application<LearnRecipeOptions & ApplicationOptions> {
-    static override get defaultOptions(): ApplicationOptions {
-        const options = super.defaultOptions;
-        options.id = 'recipe-app';
-        options.title = 'Recipes';
-        options.template = 'modules/pf2e-kingmaker-tools/templates/camping/recipes.hbs';
-        options.classes = ['kingmaker-tools-app'];
-        return options;
-    }
-
-    private onSubmit: (recipe: RecipeData, degreeOfSuccess: DegreeOfSuccess) => Promise<void>;
-    private availableRecipes: RecipeData[];
-    private readonly actor: Actor;
-
-    constructor(options: Partial<ApplicationOptions> & LearnRecipeOptions) {
-        super(options);
-        this.actor = options.actor;
-        this.availableRecipes = options.availableRecipes;
-        this.onSubmit = options.onSubmit;
-    }
-
-    override async getData(options?: Partial<ApplicationOptions> & LearnRecipeOptions): Promise<{recipes: ViewRecipeData[]}> {
+function tpl(availableRecipes: ViewRecipeData[], availableFood: FoodAmount): string {
+    const recipes = availableRecipes.map((r) => {
         return {
-            recipes: await Promise.all(this.availableRecipes.map(recipe => toTemplateRecipe(recipe, new Set()))),
+            ...r,
+            disabled: availableFood.specialIngredients < (r.specialIngredients * 2) ||
+                availableFood.basicIngredients < (r.basicIngredients * 2),
         };
-    }
-
-    override activateListeners(html: JQuery): void {
-        super.activateListeners(html);
-        const $html = html[0];
-        const learnRecipeButtons = $html.querySelectorAll('.learn-recipe-button') as NodeListOf<HTMLButtonElement>;
-        learnRecipeButtons.forEach(learnRecipeButton => {
-            learnRecipeButton?.addEventListener('click', async (event) => {
-                console.log('learn', event);
-                const button = event.target as HTMLButtonElement;
-                const recipeName = button.dataset.recipe!;
-                const selectedRecipe = this.availableRecipes.find(r => r.name === recipeName)!;
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                const skill = 'cooking-lore' in (this.actor as any).skills ? 'cooking-lore' : 'cooking';
-                const result = await (this.actor as any).skills[skill].roll({
-                    dc: selectedRecipe.cookingLoreDC ?? 0,
-                });
-                const degreeOfSuccess = result.degreeOfSuccess;
-                await this.onSubmit(selectedRecipe, degreeOfSuccess);
-                await this.close();
-            });
-        });
-    }
+    });
+    const checkedIndex = recipes.findIndex(r => !r.disabled);
+    return `
+    <form>
+        <h1>Recipes Learnable in Zone</h1>
+        <p><b>Available Basic Ingredients</b>: ${availableFood.basicIngredients}</p>
+        <p><b>Available Special Ingredients</b>: ${availableFood.specialIngredients}</p>
+        <table class="km-table">
+            <thead>
+            <tr>
+                <th>Recipe</th>
+                <th>DC</th>
+                <th>Cost</th>
+                <th>Learn</th>
+            </tr>
+            </thead>
+            <tbody>
+            ${recipes.map((r, index) => {
+                const checked = checkedIndex === index;
+                return `<tr>
+                    <td>${r.recipe}</td>
+                    <td>${r.cookingLoreDC}</td>
+                    <td>${escapeHtml(r.learningCost)}</td>
+                    <td><input type="radio" name="recipe" value="${escapeHtml(r.name)}" ${checked ? 'checked' : ''} ${r.disabled ? 'disabled' : ''}></td>
+                </tr>`;
+    }).join('')}
+            </tbody>
+        </table>
+    </form>
+`;
 }
 
-export function discoverSpecialMeal(options: LearnRecipeOptions): void {
-    new LearnRecipeApp(options).render(true);
+export async function discoverSpecialMeal(options: LearnRecipeOptions): Promise<void> {
+    const availableRecipes = await Promise.all(options.availableRecipes
+        .map(r => toTemplateRecipe(r, new Set())));
+    new Dialog({
+        title: 'Discover Special Meal',
+        content: tpl(availableRecipes, options.availableFood),
+        buttons: {
+            learn: {
+                icon: '<i class="fa-solid fa-dice-d20"></i>',
+                label: 'Learn',
+                callback: async (html): Promise<void> => {
+                    const $html = html as HTMLElement;
+                    const recipe = parseRadio($html, 'recipe');
+                    await options.onSubmit(recipe);
+                },
+            },
+        },
+        default: 'learn',
+    }, {
+        jQuery: false,
+        width: 510,
+    }).render(true);
 }

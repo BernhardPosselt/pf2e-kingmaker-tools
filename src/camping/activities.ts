@@ -2,6 +2,7 @@ import {DegreeOfSuccess} from '../degree-of-success';
 import {roll} from '../utils';
 import {basicIngredientUuid, DcType, Proficiency, specialIngredientUuid} from './data';
 import {getRegionInfo} from './regions';
+import {FoodAmount} from './camping';
 
 export const allCampingActivityNames = [
     'Prepare Campsite',
@@ -175,6 +176,18 @@ export const allCampingActivities: CampingActivityData[] = [{
     isSecret: false,
     skillRequirements: [],
     skills: [],
+    criticalSuccess: {
+        message: 'The character gains the recipe’s listed critical success effect.',
+    },
+    success: {
+        message: 'The character gains the recipe’s listed success effect.',
+    },
+    failure: {
+        message: 'The character gains no special benefit from the meal, though it still prevents starvation.',
+    },
+    criticalFailure: {
+        message: 'The character suffers the recipe’s critical failure effect.',
+    },
 }, {
     name: 'Discover Special Meal',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.5I8jnFjirbbIUkGy',
@@ -266,6 +279,7 @@ export const allCampingActivities: CampingActivityData[] = [{
     isSecret: false,
     skillRequirements: [],
     skills: [],
+    effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.QvR2yvuIVQuztCwQ',
 }, {
     name: 'Tell Campfire Story',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.XaKD1oGTAgZUjlQ5',
@@ -438,26 +452,30 @@ export async function getHuntAndGatherQuantities(
     degreeOfSuccess: DegreeOfSuccess,
     zoneDc: number,
     zoneLevel: number,
-): Promise<Ingredients> {
+): Promise<FoodAmount> {
     if (degreeOfSuccess === DegreeOfSuccess.CRITICAL_SUCCESS) {
         return {
-            basic: 2 * zoneDc,
-            special: zoneLevel >= 14 ? 12 : (zoneLevel >= 7 ? 8 : 4),
+            basicIngredients: 2 * zoneDc,
+            specialIngredients: zoneLevel >= 14 ? 12 : (zoneLevel >= 7 ? 8 : 4),
+            rations: 0,
         };
     } else if (degreeOfSuccess === DegreeOfSuccess.SUCCESS) {
         return {
-            basic: zoneDc,
-            special: await roll((zoneLevel >= 14 ? 3 : (zoneLevel >= 7 ? 2 : 1)) + 'd4', 'Special Ingredients'),
+            basicIngredients: zoneDc,
+            specialIngredients: await roll((zoneLevel >= 14 ? 3 : (zoneLevel >= 7 ? 2 : 1)) + 'd4', 'Special Ingredients'),
+            rations: 0,
         };
     } else if (degreeOfSuccess === DegreeOfSuccess.FAILURE) {
         return {
-            basic: zoneDc,
-            special: 0,
+            basicIngredients: zoneDc,
+            specialIngredients: 0,
+            rations: 0,
         };
     } else {
         return {
-            basic: await roll('1d4', 'Basic Ingredients'),
-            special: 0,
+            basicIngredients: await roll('1d4', 'Basic Ingredients'),
+            specialIngredients: 0,
+            rations: 0,
         };
     }
 }
@@ -475,13 +493,16 @@ export async function addIngredientsToActor(actor: Actor, ingredients: Ingredien
     }
 }
 
-export async function huntAndGather(game: Game, actor: Actor, degreeOfSuccess: DegreeOfSuccess, region: string): Promise<void> {
+export async function huntAndGather(game: Game, actor: Actor, degreeOfSuccess: DegreeOfSuccess, region: string): Promise<FoodAmount> {
     const {zoneDC, zoneLevel} = getRegionInfo(game, region);
-    const quantities = await getHuntAndGatherQuantities(degreeOfSuccess, zoneDC, zoneLevel);
-    await addIngredientsToActor(actor, quantities);
+    return await getHuntAndGatherQuantities(degreeOfSuccess, zoneDC, zoneLevel);
 }
 
 export const campingEffectUuids = new Set(allCampingActivities.flatMap(a => {
     return [a.criticalSuccess?.effectUuid, a.criticalFailure?.effectUuid, a.failure?.effectUuid, a.success?.effectUuid]
         .filter(a => a!== undefined) as string[];
 }));
+
+export async function postHuntAndGatherResult(actorUuid: string, result: DegreeOfSuccess, ingredients: FoodAmount): Promise<void> {
+    // TODO: post
+}

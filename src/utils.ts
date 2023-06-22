@@ -187,6 +187,11 @@ export function parseSelect($html: HTMLElement, name: string): string {
     return input.value;
 }
 
+export function parseRadio($html: HTMLElement, name: string): string | null {
+    const input = Array.from($html.querySelectorAll(`input[name="${name}"]`)) as HTMLInputElement[];
+    return input.find(i => i.checked)?.value ?? null;
+}
+
 export function parseCheckbox($html: HTMLElement, name: string): boolean {
     const input = $html.querySelector(`input[name="${name}"]`) as HTMLInputElement;
     return input.checked;

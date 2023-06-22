@@ -1,23 +1,12 @@
 ## activities
-* Setting 'Prepare Campsite'
-  * Critical Success should increase encounter dc
-  * Failure should apply a -2 to all camping effect on all actors
 * pre-selected effects like Bolster Confidence are automatically applied and synced to actors
+* encounter dc increase should be applied
 * changing a degree of success dropdown of an activity with an actor that is not hidden should remove all effects except the current one and roll a random encounter check if noted
 * clicking the roll button should
-  * if activity has no predefined dc, show a dc popup, then: 
-  * show the check popup
-  * rolling the check should auto set the degree of success dropdown
   * if action was hunt and gather:
-    * should add ingredients to PC's inventory 
-    * should display a message how many ingredients were added including an undo button to remove said quantities in case of a re-roll
+    * should display a message to chat to add ingredients
   * if action was learn a recipe:
-    * show learn a recipe popup
-    * popup should list all common recipes learnable in zone
-    * 3 choices: add, learn
-    * learn check button is greyed out if more recipe requires more ingredients than available across actors; clicking ok should add the recipe to current recipes and subtract ingredients
-    * add adds the recipe without check
-  * figure out how to deal with Relax (probably not at all)
+    * should display a message to chat to learn recipe, pay ingredients and potentially apply crit fail effect
 
 ## Eating
 * Changing the degree outcome should:

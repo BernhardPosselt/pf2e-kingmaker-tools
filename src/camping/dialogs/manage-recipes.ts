@@ -20,6 +20,8 @@ export interface ViewRecipeData {
     level: number;
     name: string;
     isHomebrew: boolean;
+    basicIngredients: number;
+    specialIngredients: number;
 }
 
 function formatCost(basic: number, special: number): string {
@@ -42,6 +44,8 @@ export async function toTemplateRecipe(recipe: RecipeData, learnedRecipes: Set<s
         cookingLoreDC: recipe.cookingLoreDC,
         cookingCost: formatCost(recipe.basicIngredients, recipe.specialIngredients),
         learningCost: formatCost(recipe.basicIngredients*2, recipe.specialIngredients*2),
+        basicIngredients: recipe.basicIngredients,
+        specialIngredients: recipe.specialIngredients,
         price: recipe.cost,
         rarity: recipe.rarity,
         level: recipe.level,

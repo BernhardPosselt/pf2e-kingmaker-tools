@@ -1,3 +1,7 @@
+import {getRegionInfo} from './regions';
+import {DegreeOfSuccess} from '../degree-of-success';
+import {FoodAmount} from './camping';
+
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'unique';
 
 export interface MealEffect {
@@ -787,8 +791,18 @@ export const allRecipes: RecipeData[] = [
 ];
 
 
-export function getRecipesKnownInZone(zoneLevel: number, recipes: RecipeData[]): RecipeData[] {
+export function getRecipesKnownInRegion(game: Game, region: string, recipes: RecipeData[]): RecipeData[] {
+    const {zoneLevel} = getRegionInfo(game, region);
     return recipes.filter(recipe => recipe.rarity === 'common' && recipe.level <= zoneLevel);
 }
 
-
+export async function postDiscoverSpecialMealResult(
+    actorUuid: string,
+    degreeOfSuccess: DegreeOfSuccess,
+    recipeToAdd: string | null,
+    removeIngredients: FoodAmount
+): Promise<void> {
+    // todo: button to learn recipe if not null
+    // todo: button to consume ingredients
+    // todo: button to apply crit fail effects to actor
+}
