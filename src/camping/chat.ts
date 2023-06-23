@@ -22,7 +22,7 @@ async function parseIngredientButton(element: HTMLElement): Promise<ActorAndIngr
 
 export async function addRecipe(game: Game, element: HTMLElement): Promise<void> {
     const actorAndIngredients = await parseIngredientButton(element);
-    const critFailUuids = JSON.parse(element.dataset.critFailUuids ?? '[]');
+    const critFailUuids = element.dataset.critFailUuids?.split(',') ?? [];
     const recipe = element.dataset.recipe || null;
     const campingActor = getCampingActor(game);
     if (actorAndIngredients && campingActor) {
@@ -41,15 +41,12 @@ export async function addRecipe(game: Game, element: HTMLElement): Promise<void>
             await actor.createEmbeddedDocuments('Item', itemsToAdd);
         }
         const content = `<p>Removed:</p>
-        <ul>
-            <li><b>Basic Ingredients</b>: ${basicIngredients}</li>
-            <li><b>Special Ingredients</b>: ${specialIngredients}</li>
-        </ul>
+        <ul>${getIngredientList(basicIngredients, specialIngredients)}</ul>
         ${recipe || itemsToAdd.length > 0 ? `
             <p>Added:</p>
             <ul>
-                ${recipe === null ? '' : `<li><b>Recipe</b>: ${recipe}</li>`}
-                ${itemsToAdd.length > 0 ? '' : `<li><b>Meal Effects</b>: ${itemsToAdd.map(i => i.name).join(', ')}</li>`}
+                ${recipe ? `<li><b>Recipe</b>: ${recipe}</li>` : ''}
+                ${itemsToAdd.length === 0 ? '' : `<li><b>Meal Effects</b>: ${itemsToAdd.map(i => i.name).join(', ')}</li>`}
             </ul>
         ` : ''}
         `;
@@ -82,18 +79,29 @@ export async function addIngredients(element: HTMLElement): Promise<void> {
     }
 }
 
+function getIngredientList(basicIngredients: number, specialIngredients: number): string {
+    const result = [];
+    if (basicIngredients) result.push(`<b>Basic Ingredients</b>: ${basicIngredients}`);
+    if (specialIngredients) result.push(`<b>Special Ingredients</b>: ${specialIngredients}`);
+    return result
+        .map(a => `<li>${a}</li>`)
+        .join('');
+}
+
 export async function postHuntAndGatherResult(actor: Actor, food: FoodAmount): Promise<void> {
     const basicIngredients = food.basicIngredients;
     const specialIngredients = food.specialIngredients;
+    const ingredients = getIngredientList(basicIngredients, specialIngredients);
     const content = `
-        <p><b>${actor.name}</b>: Add ${basicIngredients} basic ingredients, ${specialIngredients} special ingredients:</p>
+        <p><b>${actor.name}</b>: Add:</p>
+        <ul>${ingredients}</ul>
         <button 
             type="button" 
             class="km-add-food" 
             data-actor-uuid="${actor.uuid}"
             data-basic-ingredients="${basicIngredients}"
             data-special-ingredients="${specialIngredients}"
-        >Add</button>
+        >Apply</button>
     `;
     await ChatMessage.create({content});
 }
@@ -106,17 +114,19 @@ export async function postDiscoverSpecialMealResult(
 ): Promise<void> {
     const basicIngredients = cost.basicIngredients;
     const specialIngredients = cost.specialIngredients;
+    console.log(critFailUuids);
     const content = `
-        <p><b>${actor.name}</b>: Learn ${recipe} and remove ${basicIngredients} basic ingredients, ${specialIngredients} special ingredients:</p>
+        <p>${recipe ? `Learn ${recipe} and remove` : 'Remove'}${critFailUuids.length > 0 ? ' and suffer the Critical Failure effect' : ''}:</p>
+        <ul>${getIngredientList(basicIngredients, specialIngredients)}</ul>
         <button 
             type="button" 
             class="km-add-recipe" 
             data-actor-uuid="${actor.uuid}"
             data-basic-ingredients="${basicIngredients}"
             data-special-ingredients="${specialIngredients}"
-            data-recipe="${recipe}"
-            data-crit-fail-uuids="${JSON.stringify(critFailUuids)}"
-        >Add</button>
+            ${recipe ? `data-recipe="${recipe}"` : ''}
+            data-crit-fail-uuids="${critFailUuids.join(',')}"
+        >Apply</button>
     `;
     await ChatMessage.create({content});
 }

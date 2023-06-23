@@ -104,7 +104,6 @@ export const allRecipes: RecipeData[] = [
                 uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.MGFPIxwSgRLvkV71',
                 modifyRationConsumption: 1,
             }],
-
         },
         'criticalSuccess': {
             'effects': [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.OxEApkXu0hw34Ci5'}],
@@ -137,7 +136,6 @@ export const allRecipes: RecipeData[] = [
                 uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.c9qgXgiAJikyTM0p',
                 modifySleepDurationSeconds: 3600,
             }],
-
         },
         'favoriteMeal': {
             'effects': [{
@@ -732,12 +730,14 @@ export const allRecipes: RecipeData[] = [
         'criticalSuccess': {
             'effects': [
                 {uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.hLGCjXajAYEcII9J'},
-                {uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.TQXXVzD1ZZHnouTI'},
-                {uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.SJvEGeMryIekwIKk'},
             ],
         },
         'criticalFailure': {
-            'effects': [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.o6F8QZbTvt9os8Ni'}],
+            'effects': [
+                {uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.o6F8QZbTvt9os8Ni'},
+                {uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.TQXXVzD1ZZHnouTI'},
+                {uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.SJvEGeMryIekwIKk'},
+            ],
         },
     },
     {
