@@ -1,5 +1,13 @@
 import {DegreeOfSuccess} from './degree-of-success';
 
+export function addOf(name: string): string {
+    if (name.endsWith('s')) {
+        return name + '\'';
+    } else {
+        return name + '\'s';
+    }
+}
+
 export function escapeHtml(html: string): string {
     const text = document.createTextNode(html);
     const p = document.createElement('p');

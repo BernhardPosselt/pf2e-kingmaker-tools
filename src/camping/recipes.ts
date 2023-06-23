@@ -1,6 +1,4 @@
 import {getRegionInfo} from './regions';
-import {DegreeOfSuccess} from '../degree-of-success';
-import {FoodAmount} from './camping';
 
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'unique';
 
@@ -796,13 +794,3 @@ export function getRecipesKnownInRegion(game: Game, region: string, recipes: Rec
     return recipes.filter(recipe => recipe.rarity === 'common' && recipe.level <= zoneLevel);
 }
 
-export async function postDiscoverSpecialMealResult(
-    actorUuid: string,
-    degreeOfSuccess: DegreeOfSuccess,
-    recipeToAdd: string | null,
-    removeIngredients: FoodAmount
-): Promise<void> {
-    // todo: button to learn recipe if not null
-    // todo: button to consume ingredients
-    // todo: button to apply crit fail effects to actor
-}

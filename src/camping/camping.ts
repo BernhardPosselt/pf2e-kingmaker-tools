@@ -1,4 +1,4 @@
-import {allCampingActivities, CampingActivityData, CampingActivityName} from './activities';
+import {addIngredientsToActor, allCampingActivities, CampingActivityData, CampingActivityName} from './activities';
 import {getRegionInfo} from './regions';
 import {getLevelBasedDC, postDegreeOfSuccessMessage, slugify, unslugify} from '../utils';
 import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
@@ -183,7 +183,7 @@ export async function syncEffects(actors: Actor[], uuids: string[], applicableSo
 export async function afterPrepareCamp(
     actors: Actor[],
     activityUuids: string[],
-    activitySourceIds: Set<string>
+    activitySourceIds: Set<string>,
 ): Promise<void> {
     await removeExpiredEffects(actors, activitySourceIds);
     await syncEffects(actors, activityUuids, activitySourceIds);
@@ -192,7 +192,7 @@ export async function afterPrepareCamp(
 export async function afterCampingChange(
     actors: Actor[],
     activityUuids: string[],
-    activitySourceIds: Set<string>
+    activitySourceIds: Set<string>,
 ): Promise<void> {
     await syncEffects(actors, activityUuids, activitySourceIds);
 }
@@ -200,7 +200,7 @@ export async function afterCampingChange(
 export async function afterCookingChange(
     actors: Actor[],
     mealEffectUuids: string[],
-    mealEffectSourceIds: Set<string>
+    mealEffectSourceIds: Set<string>,
 ): Promise<void> {
     await syncEffects(actors, mealEffectUuids, mealEffectSourceIds);
 }
@@ -422,6 +422,10 @@ export async function removeFood(actors: Actor[], config: FoodAmount): Promise<v
     await removeRations(actors, config.rations);
     await removeItems(actors, config.basicIngredients, basicIngredientUuid);
     await removeItems(actors, config.specialIngredients, specialIngredientUuid);
+}
+
+export async function addFood(actors: Actor[], food: FoodAmount): Promise<void> {
+    await Promise.all(actors.map(a => addIngredientsToActor(a, food)));
 }
 
 export function getCookingActorUuid(data: Camping): string | null {

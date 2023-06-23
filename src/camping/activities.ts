@@ -1,8 +1,9 @@
 import {DegreeOfSuccess} from '../degree-of-success';
 import {roll} from '../utils';
-import {basicIngredientUuid, DcType, Proficiency, specialIngredientUuid} from './data';
+import {basicIngredientUuid, DcType, Proficiency, rationUuid, specialIngredientUuid} from './data';
 import {getRegionInfo} from './regions';
 import {FoodAmount} from './camping';
+import {isConsumableItem} from './actor';
 
 export const allCampingActivityNames = [
     'Prepare Campsite',
@@ -81,7 +82,7 @@ interface ActivityOutcome {
     modifyRandomEncounterDc?: {
         day: number;
         night: number;
-    }
+    };
     checkRandomEncounter?: boolean;
 }
 
@@ -480,17 +481,25 @@ export async function getHuntAndGatherQuantities(
     }
 }
 
-export async function addIngredientsToActor(actor: Actor, ingredients: Ingredients): Promise<void> {
-    const basicIngredient = (await fromUuid(basicIngredientUuid))?.toObject();
-    const specialIngredient = (await fromUuid(specialIngredientUuid))?.toObject();
-    if (ingredients.basic > 0) {
-        basicIngredient.system.quantity = ingredients.basic;
-        await actor.addToInventory(basicIngredient, undefined, false);
+export async function addToInventory(actor: Actor, uuid: string, quantity: number): Promise<void> {
+    if (quantity > 0) {
+        const item = (await fromUuid(uuid))?.toObject();
+        if (isConsumableItem(item) && item.system.charges.max > 0) {
+            const max = item.system.charges.max;
+            item.system.quantity = Math.ceil(quantity / max);
+            item.system.charges.value = quantity % max;
+        } else {
+            item.system.quantity = quantity;
+        }
+        await actor.addToInventory(item, undefined, false);
     }
-    if (ingredients.special > 0) {
-        specialIngredient.system.quantity = ingredients.special;
-        await actor.addToInventory(specialIngredient, undefined, false);
-    }
+
+}
+
+export async function addIngredientsToActor(actor: Actor, ingredients: FoodAmount): Promise<void> {
+    await addToInventory(actor, basicIngredientUuid, ingredients.basicIngredients);
+    await addToInventory(actor, specialIngredientUuid, ingredients.specialIngredients);
+    await addToInventory(actor, rationUuid, ingredients.rations);
 }
 
 export async function huntAndGather(game: Game, actor: Actor, degreeOfSuccess: DegreeOfSuccess, region: string): Promise<FoodAmount> {
@@ -500,9 +509,5 @@ export async function huntAndGather(game: Game, actor: Actor, degreeOfSuccess: D
 
 export const campingEffectUuids = new Set(allCampingActivities.flatMap(a => {
     return [a.criticalSuccess?.effectUuid, a.criticalFailure?.effectUuid, a.failure?.effectUuid, a.success?.effectUuid]
-        .filter(a => a!== undefined) as string[];
+        .filter(a => a !== undefined) as string[];
 }));
-
-export async function postHuntAndGatherResult(actorUuid: string, result: DegreeOfSuccess, ingredients: FoodAmount): Promise<void> {
-    // TODO: post
-}

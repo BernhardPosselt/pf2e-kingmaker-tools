@@ -9,7 +9,7 @@ import {
 import {formatHours} from '../time/app';
 import {getEncounterDC, rollRandomEncounter} from './random-encounters';
 import {regions} from './regions';
-import {CampingActivityData, CampingActivityName, huntAndGather, postHuntAndGatherResult} from './activities';
+import {CampingActivityData, CampingActivityName, huntAndGather} from './activities';
 import {
     ActorMeal,
     calculateConsumedFood,
@@ -31,7 +31,7 @@ import {
 } from './camping';
 import {manageActivitiesDialog} from './dialogs/manage-activities';
 import {manageRecipesDialog} from './dialogs/manage-recipes';
-import {getRecipesKnownInRegion, postDiscoverSpecialMealResult, RecipeData} from './recipes';
+import {getRecipesKnownInRegion, RecipeData} from './recipes';
 import {addRecipeDialog} from './dialogs/add-recipe';
 import {campingSettingsDialog} from './dialogs/camping-settings';
 import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
@@ -44,6 +44,7 @@ import {showCampingHelp} from './dialogs/camping-help';
 import {discoverSpecialMeal} from './dialogs/learn-recipe';
 import {setupDialog} from '../kingdom/dialogs/setup-dialog';
 import {getCamping, saveCamping} from './storage';
+import {postDiscoverSpecialMealResult, postHuntAndGatherResult} from './chat';
 
 interface CampingOptions {
     game: Game;
@@ -687,7 +688,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         skill: string,
         actor: Actor,
         recipeData: RecipeData[],
-        currentRegion: string
+        currentRegion: string,
     ): Promise<void> {
         const current = await this.read();
         const availableFood = await getActorConsumables(await this.getActors(current));
@@ -701,26 +702,28 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 const data = availableRecipes.find(r => r.name === recipeName);
                 if (recipeName !== null && data) {
                     const current = await this.read();
-                    const activity = getCampingActivityData(current)
-                        .find(a => a.name === 'Discover Special Meal');
                     const result = await rollCampingCheck({
                         game: this.game,
                         actor: actor,
                         dc: data.cookingLoreDC,
                         skill,
-                        activity,
+                        activity: activityData,
                         region: currentRegion,
                     });
                     if (result !== null) {
-                        const isCriticalSuccess = DegreeOfSuccess.CRITICAL_SUCCESS;
-                        const isSuccess = DegreeOfSuccess.SUCCESS;
+                        const isCriticalSuccess = result === DegreeOfSuccess.CRITICAL_SUCCESS;
+                        const isSuccess = result === DegreeOfSuccess.SUCCESS;
+                        const isCriticalFailure = result === DegreeOfSuccess.CRITICAL_FAILURE;
                         const removeIngredients = {
                             specialIngredients: isCriticalSuccess ? data.specialIngredients : data.specialIngredients * 2,
                             basicIngredients: isCriticalSuccess ? data.basicIngredients : data.basicIngredients * 2,
                             rations: 2,
                         };
                         const recipeToAdd = isSuccess || isCriticalSuccess ? data.name : null;
-                        await postDiscoverSpecialMealResult(actor.uuid, result, recipeToAdd, removeIngredients);
+                        const critFailUuids = isCriticalFailure
+                            ? data.criticalFailure.effects?.map(e => e.uuid) ?? []
+                            : [];
+                        await postDiscoverSpecialMealResult(actor, removeIngredients, recipeToAdd, critFailUuids);
                         await this.persistActivityDegreeOfSuccess(current, result, 'Discover Special Meal');
                     }
                 }
@@ -747,7 +750,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         activity: CampingActivityData,
         skill: string,
         actor: Actor,
-        currentRegion: string
+        currentRegion: string,
     ): Promise<void> {
         const current = await this.read();
         const result = await rollCampingCheck({
@@ -760,7 +763,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         });
         if (result !== null) {
             const ingredients = await huntAndGather(this.game, actor, result, currentRegion);
-            await postHuntAndGatherResult(actor.uuid, result, ingredients);
+            await postHuntAndGatherResult(actor, ingredients);
             await this.persistActivityDegreeOfSuccess(current, result, activity.name);
         }
     }
@@ -771,7 +774,7 @@ export function openCampingSheet(game: Game): void {
     if (sheetActor) {
         new CampingSheet({game, actor: sheetActor}).render(true);
     } else {
-        setupDialog(game, 'Camping','yybLhORz4PeZxCp0', async () => {
+        setupDialog(game, 'Camping', 'yybLhORz4PeZxCp0', async () => {
             const sheetActor = game?.actors?.find(a => a.name === 'Camping Sheet');
             await sheetActor?.setFlag('pf2e-kingmaker-tools', 'camping-sheet', getDefaultConfiguration(game));
             await openCampingSheet(game);

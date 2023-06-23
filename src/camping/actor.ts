@@ -26,22 +26,22 @@ export function isConsumableItem(item: Item): item is Item & ConsumableItem {
     return item.type === 'consumable';
 }
 
-export async function getItemsByUuid(actor: Actor, type: ItemType, uuids: Set<string>): Promise<Item[]> {
+export async function getActorItemsByUuid(actor: Actor, type: ItemType, uuids: Set<string>): Promise<Item[]> {
     return getItemsBySourceId(actor, type, await getSourceIds(uuids));
 }
 
 export async function getEffectsByUuid(actor: Actor, uuids: Set<string>): Promise<(Item & EffectItem)[]> {
-    const items = await getItemsByUuid(actor, 'effect', uuids);
+    const items = await getActorItemsByUuid(actor, 'effect', uuids);
     return items.filter(isEffectItem);
 }
 
 export async function getConsumablesByUuid(actor: Actor, uuids: Set<string>): Promise<(Item & ConsumableItem)[]> {
-    const items = await getItemsByUuid(actor, 'consumable', uuids);
+    const items = await getActorItemsByUuid(actor, 'consumable', uuids);
     return items.filter(isConsumableItem);
 }
 
 export async function hasItemByUuid(actor: Actor, type: ItemType, uuids: Set<string>): Promise<boolean> {
-    return (await getItemsByUuid(actor, type, uuids)).length > 0;
+    return (await getActorItemsByUuid(actor, type, uuids)).length > 0;
 }
 
 export async function removeItemsBySourceId(actors: Actor[], type: ItemType, applicableSourceIds: Set<string>): Promise<void> {
@@ -119,3 +119,28 @@ export async function hasCookingLore(actorUuid: string): Promise<boolean> {
     }
 }
 
+export async function getActorByUuid(uuid: string): Promise<Actor | null> {
+    const document = await fromUuid(uuid);
+    if (document instanceof Actor) {
+        return document;
+    }
+    return null;
+}
+
+export async function getActorsByUuid(uuids: string[]): Promise<Actor[]> {
+    return (await Promise.all(uuids.map(a => getActorByUuid(a))))
+        .filter(a => a !== null) as Actor[];
+}
+
+export async function getItemByUuid(uuid: string): Promise<Item | null> {
+    const document = await fromUuid(uuid);
+    if (document instanceof Item) {
+        return document;
+    }
+    return null;
+}
+
+export async function getItemsByUuid(uuids: string[]): Promise<Item[]> {
+    return (await Promise.all(uuids.map(i => getItemByUuid(i))))
+        .filter(a => a !== null) as Item[];
+}

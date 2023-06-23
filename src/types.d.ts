@@ -30,10 +30,10 @@ declare global {
             }
             actions: {
                 restForTheNight: (actors: Actor[]) => Promise<void>;
-                subsist: (options: {actors: Actor[], skill: string, difficultyClass?: number; }) => void;
+                subsist: (options: { actors: Actor[], skill: string, difficultyClass?: number; }) => void;
             }
             Modifier: typeof PF2EModifier
-        }
+        };
     }
 
     // fix roll table types
@@ -53,7 +53,7 @@ declare global {
 
     interface ActorSkill {
         rank: number;
-        roll: (data: RollData) => Promise<null | RollResult>
+        roll: (data: RollData) => Promise<null | RollResult>;
     }
 
     interface Actor {
@@ -104,8 +104,10 @@ declare global {
         system: {
             charges: {
                 value: number;
+                max: number;
             }
-        }
+            quantity: number;
+        };
         quantity: number;
     }
 }

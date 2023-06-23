@@ -13,6 +13,7 @@ import {kingdomChatButtons} from './kingdom/chat-buttons';
 import {StringDegreeOfSuccess} from './degree-of-success';
 import {showArmy} from './armies/sheet';
 import {openCampingSheet} from './camping/sheet';
+import {bindCampingChatEventListeners} from './camping/chat';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -279,7 +280,7 @@ Hooks.on('ready', async () => {
         checkKingdomErrors(gameInstance);
 
         // listen for camping sheet open
-        gameInstance.socket!.on('module.pf2e-kingmaker-tools', (data: {action: string}) => {
+        gameInstance.socket!.on('module.pf2e-kingmaker-tools', (data: { action: string }) => {
             if (data.action === 'openCampingSheet') {
                 openCampingSheet(gameInstance);
             }
@@ -324,6 +325,7 @@ Hooks.on('renderChatLog', () => {
                 chatLog.on('click', button.selector, (event: Event) => button.callback(gameInstance, actor, event));
             }
         }
+        bindCampingChatEventListeners(gameInstance);
     }
 });
 
