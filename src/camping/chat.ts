@@ -1,7 +1,7 @@
 import {addFood, FoodAmount, removeFood} from './camping';
 import {getActorByUuid, getActorsByUuid, getItemsByUuid} from './actor';
 import {addOf} from '../utils';
-import {getCamping, getCampingActor} from './storage';
+import {getCamping, getCampingActor, saveCamping} from './storage';
 
 interface ActorAndIngredients {
     specialIngredients: number;
@@ -53,6 +53,10 @@ export async function addRecipe(game: Game, element: HTMLElement): Promise<void>
             </ul>
         ` : ''}
         `;
+        if (recipe) {
+            camping.cooking.knownRecipes.push(recipe);
+            await saveCamping(campingActor, camping);
+        }
         await ChatMessage.create({content});
     }
 }
