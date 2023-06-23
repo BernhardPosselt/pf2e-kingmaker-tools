@@ -1,5 +1,5 @@
 import {getWorldTime, TimeChangeMode, TimeOfDay} from './calculation';
-import {DateTime} from 'luxon';
+import {DateTime, HourNumbers, MinuteNumbers, SecondNumbers} from 'luxon';
 
 function tpl(previousTime: string): string {
     return `<form>
@@ -13,9 +13,9 @@ async function toTimeOfDay(game: Game, body: HTMLElement, mode: TimeChangeMode):
     const timeValue = DateTime.fromFormat(timeInput.value, 'HH:mm');
     const currentTime = getWorldTime(game);
     const diff = new TimeOfDay({
-        hour: timeValue.hour,
-        minute: timeValue.minute,
-        second: timeValue.second,
+        hour: timeValue.hour as HourNumbers,
+        minute: timeValue.minute as MinuteNumbers,
+        second: timeValue.second as SecondNumbers,
     });
     const seconds = diff.diffSeconds(currentTime, mode);
     await game.time.advance(seconds);

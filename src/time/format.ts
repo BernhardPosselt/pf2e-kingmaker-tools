@@ -53,8 +53,8 @@ export function calculateYear(dateTime: DateTime, mode: 'AR'): number {
 export function formatWorldDateTime(worldTime: DateTime, mode: 'AR'): string {
     const format = timeFormats[mode];
     // convert to map to get TS to like indexing config
-    const weekday = new Map(Object.entries(format.Weekdays)).get(worldTime.weekdayLong);
-    const month = new Map(Object.entries(format.Months)).get(worldTime.monthLong);
+    const weekday = new Map(Object.entries(format.Weekdays)).get(worldTime.weekdayLong!);
+    const month = new Map(Object.entries(format.Months)).get(worldTime.monthLong!);
     const year = calculateYear(worldTime, mode);
     const time = worldTime.toFormat('hh:mm:ss');
     const era = format.Era;
