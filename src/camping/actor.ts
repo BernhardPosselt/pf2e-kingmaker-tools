@@ -4,7 +4,7 @@ import {capitalize, unslugify} from '../utils';
 
 type ItemType = 'effect' | 'consumable';
 
-async function getSourceIds(uuids: Set<string>): Promise<Set<string>> {
+export async function getItemSourceIds(uuids: Set<string>): Promise<Set<string>> {
     const applicableItems = (await Promise.all(Array.from(uuids).map(uuid => fromUuid(uuid))) as (Item | null)[])
         .filter(i => i !== null) as Item[];
     const sourceIds = applicableItems
@@ -27,10 +27,10 @@ export function isConsumableItem(item: Item): item is Item & ConsumableItem {
 }
 
 export async function getActorItemsByUuid(actor: Actor, type: ItemType, uuids: Set<string>): Promise<Item[]> {
-    return getItemsBySourceId(actor, type, await getSourceIds(uuids));
+    return getItemsBySourceId(actor, type, await getItemSourceIds(uuids));
 }
 
-export async function getEffectsByUuid(actor: Actor, uuids: Set<string>): Promise<(Item & EffectItem)[]> {
+export async function getActorEffectsByUuid(actor: Actor, uuids: Set<string>): Promise<(Item & EffectItem)[]> {
     const items = await getActorItemsByUuid(actor, 'effect', uuids);
     return items.filter(isEffectItem);
 }
@@ -144,3 +144,22 @@ export async function getItemsByUuid(uuids: string[]): Promise<Item[]> {
     return (await Promise.all(uuids.map(i => getItemByUuid(i))))
         .filter(a => a !== null) as Item[];
 }
+
+export async function getEffectsByUuid(uuids: string[]): Promise<(Item & EffectItem)[]> {
+    const items = await getItemsByUuid(uuids);
+    return items.filter(isEffectItem) as (Item & EffectItem)[];
+}
+
+
+async function removeActorEffects(actor: Actor, sourceIds: Set<string>): Promise<void> {
+    const existingEffects = getItemsBySourceId(actor, 'effect', sourceIds);
+    const idsToRemove = existingEffects
+        .filter(e => sourceIds.has(e.sourceId))
+        .map(e => e.id);
+    await actor.deleteEmbeddedDocuments('Item', idsToRemove);
+}
+
+export async function removeActorsEffects(actors: Actor[], sourceIds: Set<string>): Promise<void> {
+    await Promise.all(actors.map(a => removeActorEffects(a, sourceIds)));
+}
+

@@ -4,14 +4,7 @@ import {getLevelBasedDC, postDegreeOfSuccessMessage, slugify, unslugify} from '.
 import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {basicIngredientUuid, DcType, rationUuid, specialIngredientUuid} from './data';
 import {allRecipes, RecipeData} from './recipes';
-import {
-    getConsumablesByUuid,
-    getItemsBySourceId,
-    hasItemByUuid,
-    isConsumableItem,
-    removeExpiredEffects,
-    removeItemsBySourceId,
-} from './actor';
+import {getConsumablesByUuid, hasItemByUuid, isConsumableItem, removeItemsBySourceId} from './actor';
 
 export type RestRollMode = 'one' | 'none' | 'one-every-4-hours';
 
@@ -152,57 +145,24 @@ export async function rollCampingCheck(
     return degree;
 }
 
-/**
- * Retrieves all effects from all actors that are in the applicableSourceIds whitelist
- * Then adds all effects from the given uuids and deletes effects not present in the given uuids
- *
- * @param actors
- * @param uuids
- * @param applicableSourceIds
- */
-export async function syncEffects(actors: Actor[], uuids: string[], applicableSourceIds: Set<string>): Promise<void> {
-    for (const actor of actors) {
-        const existingEffects = getItemsBySourceId(actor, 'effect', applicableSourceIds);
-        const existingEffectIds = new Set(existingEffects.map(a => a.id) as string[]);
-        const effectsToSync = (await Promise.all(uuids.map(uuid => fromUuid(uuid))) as (Item | null)[])
-            .filter(eff => eff !== undefined && eff !== null) as Item[];
-        const effectIdsToSync = new Set(effectsToSync.map(a => a.id) as string[]);
 
-        const effectsToAdd = effectsToSync
-            .filter(eff => !existingEffectIds.has(eff.sourceId))
-            .map(eff => eff.toObject());
-        const effectIdsToRemove = Array.from(existingEffects)
-            .filter(eff => !effectIdsToSync.has(eff.id))
-            .map(eff => eff.id);
-
-        await actor.deleteEmbeddedDocuments('Item', effectIdsToRemove);
-        await actor.createEmbeddedDocuments('Item', effectsToAdd);
+async function healMoreHp(actor: Actor, data: Camping): Promise<void> {
+    const healMoreHp = await hasItemByUuid(actor, 'effect', new Set([
+        getRecipeData(data).find(r => r.name === 'Basic Meal')!.criticalSuccess!.effects![0].uuid!,
+        getCampingActivityData(data).find(a => a.name === 'Dawnflower\'s Blessing')!.effectUuids![0]!.uuid!,
+    ]));
+    if (healMoreHp) {
+        const currentHp = actor.attributes.hp.value;
+        const maxHp = actor.attributes.hp.max;
+        const conMod = actor.abilities.con.mod;
+        const level = actor.level;
+        const maxRestored = Math.max(conMod, 1) * level;
+        const hpLost = maxHp - currentHp;
+        const hpRestored = hpLost >= maxRestored ? maxRestored : hpLost;
+        if (hpRestored > 0) {
+            await actor.update({'system.attributes.hp.value': currentHp + hpRestored});
+        }
     }
-}
-
-export async function afterPrepareCamp(
-    actors: Actor[],
-    activityUuids: string[],
-    activitySourceIds: Set<string>,
-): Promise<void> {
-    await removeExpiredEffects(actors, activitySourceIds);
-    await syncEffects(actors, activityUuids, activitySourceIds);
-}
-
-export async function afterCampingChange(
-    actors: Actor[],
-    activityUuids: string[],
-    activitySourceIds: Set<string>,
-): Promise<void> {
-    await syncEffects(actors, activityUuids, activitySourceIds);
-}
-
-export async function afterCookingChange(
-    actors: Actor[],
-    mealEffectUuids: string[],
-    mealEffectSourceIds: Set<string>,
-): Promise<void> {
-    await syncEffects(actors, mealEffectUuids, mealEffectSourceIds);
 }
 
 export async function afterDailyPreparations(
@@ -211,24 +171,7 @@ export async function afterDailyPreparations(
     activitySourceIds: Set<string>,
     data: Camping,
 ): Promise<void> {
-    for (const actor of actors) {
-        const healMoreHp = await hasItemByUuid(actor, 'effect', new Set([
-            getRecipeData(data).find(r => r.name === 'Basic Meal')!.criticalSuccess!.effects![0].uuid!,
-            getCampingActivityData(data).find(a => a.name === 'Dawnflower\'s Blessing')!.effectUuid!,
-        ]));
-        if (healMoreHp) {
-            const currentHp = actor.attributes.hp.value;
-            const maxHp = actor.attributes.hp.max;
-            const conMod = actor.abilities.con.mod;
-            const level = actor.level;
-            const maxRestored = Math.max(conMod, 1) * level;
-            const hpLost = maxHp - currentHp;
-            const hpRestored = hpLost >= maxRestored ? maxRestored : hpLost;
-            if (hpRestored > 0) {
-                await actor.update({'system.attributes.hp.value': currentHp + hpRestored});
-            }
-        }
-    }
+    await Promise.all(actors.map(async actor => await healMoreHp(actor, data)));
     await removeItemsBySourceId(actors, 'effect', activitySourceIds);
     await game.pf2e.actions.restForTheNight(actors);
 }

@@ -794,3 +794,23 @@ export function getRecipesKnownInRegion(game: Game, region: string, recipes: Rec
     return recipes.filter(recipe => recipe.rarity === 'common' && recipe.level <= zoneLevel);
 }
 
+export function getOutcomeEffects(outcome: CookingOutcome | undefined): string[] {
+    return outcome?.effects?.flatMap(e => e.uuid) ?? [];
+}
+
+export function getAllMealEffectUuids(recipes: RecipeData[]): string[] {
+    return recipes.flatMap(r => [
+        ...getOutcomeEffects(r.criticalFailure),
+        ...getOutcomeEffects(r.success),
+        ...getOutcomeEffects(r.criticalSuccess),
+        ...getOutcomeEffects(r.favoriteMeal),
+    ]);
+}
+
+export function getMealEffectUuids(recipe: RecipeData, favoriteMeal: string | undefined, degree: string): string[] {
+    const favoriteMealEffects = recipe.name === favoriteMeal ? getOutcomeEffects(recipe.favoriteMeal) : [];
+    const effects = degree === 'criticalSuccess'
+    || degree === 'success'
+    || degree === 'criticalFailure' ? getOutcomeEffects(recipe[degree]) : [];
+    return degree === 'criticalSuccess' || degree === 'success' ? [...effects, ...favoriteMealEffects] : effects;
+}

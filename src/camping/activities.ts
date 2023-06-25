@@ -76,9 +76,14 @@ export const allCompanionNames = [
 
 export type CompanionNames = typeof allCompanionNames[number];
 
-interface ActivityOutcome {
+export interface ActivityEffect {
+    uuid: string;
+    targetAll?: boolean;
+}
+
+export interface ActivityOutcome {
     message: string;
-    effectUuid?: string;
+    effectUuids?: ActivityEffect[];
     modifyRandomEncounterDc?: {
         day: number;
         night: number;
@@ -103,7 +108,7 @@ export interface CampingActivityData {
     skills: string[] | 'any';
     isSecret: boolean;
     isLocked: boolean;
-    effectUuid?: string;
+    effectUuids?: ActivityEffect[];
     modifyRandomEncounterDc?: {
         day: number;
         night: number;
@@ -260,11 +265,11 @@ export const allCampingActivities: CampingActivityData[] = [{
     skills: ['perception'],
     criticalSuccess: {
         message: 'The camp’s watch is efficient. Treat the total time required for rest as if the party size were 1 more, and all characters gain a +2 status bonus to Perception checks made during their shift on watch.',
-        effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.010XlkzzjX38BHsO',
+        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.010XlkzzjX38BHsO'}],
     },
     success: {
         message: 'Characters gain a +1 status bonus to Perception checks made during their shift on watch.',
-        effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.MOXWga7l8dsypUPy',
+        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.MOXWga7l8dsypUPy'}],
     },
     failure: {
         message: 'Your attempt to organize the watch doesn’t grant any additional benefits.',
@@ -280,7 +285,10 @@ export const allCampingActivities: CampingActivityData[] = [{
     isSecret: false,
     skillRequirements: [],
     skills: [],
-    effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.QvR2yvuIVQuztCwQ',
+    effectUuids: [{
+        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.QvR2yvuIVQuztCwQ',
+        targetAll: false,
+    }],
 }, {
     name: 'Tell Campfire Story',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.XaKD1oGTAgZUjlQ5',
@@ -291,18 +299,18 @@ export const allCampingActivities: CampingActivityData[] = [{
     skills: ['performance'],
     criticalSuccess: {
         message: 'You inspire your allies dramatically. For the remainder of the camping session, your allies gain a +2 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. If an ally spent the hour Relaxing, they can also choose to reroll a failed roll at any time once during the remainder of the camping session while the status bonus persists; this is a fortune effect.',
-        effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.2vdskbqd0VrWKR9Y',
+        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.2vdskbqd0VrWKR9Y'}],
     },
     success: {
         message: 'You inspire your allies dramatically. For the remainder of the camping session, your allies gain a +1 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. An ally who spent the hour Relaxing receives a +2 status bonus.',
-        effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.wT2NzrfgmWmCMRtv',
+        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.wT2NzrfgmWmCMRtv'}],
     },
     failure: {
         message: 'Your allies are unmoved and receive no benefits.',
     },
     criticalFailure: {
         message: 'Your story distracts or unsettles your allies. They each take a –1 status penalty to skill checks until they Relax or until they begin daily preparations.',
-        effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.y5Jqw40SWNOgcxvC',
+        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.y5Jqw40SWNOgcxvC'}],
     },
 }, ...influenceCompanions(), {
     name: 'Blend Into The Night',
@@ -322,7 +330,7 @@ export const allCampingActivities: CampingActivityData[] = [{
     isSecret: false,
     skillRequirements: [],
     skills: [],
-    effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.mAEvnTqFuLIASQLB',
+    effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.mAEvnTqFuLIASQLB'}],
 }, {
     name: 'Camp Management',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.JRScwsFTXTpTwWYA',
@@ -339,7 +347,7 @@ export const allCampingActivities: CampingActivityData[] = [{
     },
     criticalFailure: {
         message: 'All checks made to resolve Camping activities take a –2 circumstance penalty for the remainder of this camping session.',
-        effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.vpH13xgAqX4zsU6o',
+        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.vpH13xgAqX4zsU6o'}],
     },
 }, {
     name: 'Dawnflower\'s Blessing',
@@ -348,7 +356,7 @@ export const allCampingActivities: CampingActivityData[] = [{
     isSecret: false,
     skillRequirements: [],
     skills: [],
-    effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.eaWmjDOIvUF9aDbq',
+    effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.eaWmjDOIvUF9aDbq'}],
 }, {
     name: 'Enhance Campfire',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.ytyW9F39m7xf0gx5',
@@ -356,7 +364,7 @@ export const allCampingActivities: CampingActivityData[] = [{
     isSecret: false,
     skillRequirements: [],
     skills: [],
-    effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.NFPQHxvpJd2vsKMe',
+    effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.NFPQHxvpJd2vsKMe'}],
 }, {
     name: 'Enhance Weapons',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.2Dn89HrY7gyvQiOH',
@@ -385,7 +393,7 @@ export const allCampingActivities: CampingActivityData[] = [{
     isSecret: false,
     skillRequirements: [],
     skills: [],
-    effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.ptjs54eoEX8EAQNq',
+    effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.ptjs54eoEX8EAQNq'}],
 }, {
     name: 'Set Traps',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.5ynOh085kwNp75t4',
@@ -415,7 +423,7 @@ export const allCampingActivities: CampingActivityData[] = [{
     dc: 'zone',
     skillRequirements: [],
     skills: [],
-    effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.v9i9W49PeJ9NkfXX',
+    effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.v9i9W49PeJ9NkfXX'}],
 }, {
     name: 'Prepare Campsite',
     dc: 'zone',
@@ -436,7 +444,7 @@ export const allCampingActivities: CampingActivityData[] = [{
     },
     failure: {
         message: 'Prepare Campsite: Your campsite will work, but it’s not the best. Campsite activities that require checks take a –2 penalty.',
-        effectUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.X1OvR5j1cAXZ4Lbp',
+        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.X1OvR5j1cAXZ4Lbp'}],
     },
     criticalFailure: {
         message: 'Prepare Campsite: Your campsite is a mess. You can use it to rest and to perform daily preparations, but it isn’t good enough to allow for Campsite activities at all. Worse, your attempt to secure a campsite has possibly attracted unwanted attention—attempt a flat check against the zone’s Encounter DC. If successful, a random encounter automatically occurs.',
@@ -506,8 +514,3 @@ export async function huntAndGather(game: Game, actor: Actor, degreeOfSuccess: D
     const {zoneDC, zoneLevel} = getRegionInfo(game, region);
     return await getHuntAndGatherQuantities(degreeOfSuccess, zoneDC, zoneLevel);
 }
-
-export const campingEffectUuids = new Set(allCampingActivities.flatMap(a => {
-    return [a.criticalSuccess?.effectUuid, a.criticalFailure?.effectUuid, a.failure?.effectUuid, a.success?.effectUuid]
-        .filter(a => a !== undefined) as string[];
-}));
