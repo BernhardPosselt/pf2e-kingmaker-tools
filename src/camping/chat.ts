@@ -2,6 +2,7 @@ import {addFood, FoodAmount, removeFood} from './camping';
 import {getActorByUuid, getActorsByUuid, getItemsByUuid} from './actor';
 import {addOf} from '../utils';
 import {getCamping, getCampingActor, saveCamping} from './storage';
+import {getEncounterDC, rollRandomEncounter} from './random-encounters';
 
 interface ActorAndIngredients {
     specialIngredients: number;
@@ -131,11 +132,29 @@ export async function postDiscoverSpecialMealResult(
     await ChatMessage.create({content});
 }
 
+export async function checkRandomEncounterMessage(): Promise<void> {
+    await ChatMessage.create({
+        content: '<button class="km-random-encounter" type="button">Check for Random Encounter</button>',
+        type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+        rollMode: 'blindroll',
+    });
+}
+
+async function checkForRandomEncounter(game: Game): Promise<void> {
+    const actor = getCampingActor(game);
+    if (actor) {
+        const current = getCamping(actor);
+        const dc = getEncounterDC(current, game);
+        await rollRandomEncounter(game, current.currentRegion, dc, false);
+    }
+}
+
 export function bindCampingChatEventListeners(game: Game): void {
     const actor = getCampingActor(game);
     if (actor) {
         const chatLog = $('#chat-log');
         chatLog.on('click', '.km-add-food', (event) => addIngredients(event.currentTarget));
         chatLog.on('click', '.km-add-recipe', (event) => addRecipe(game, event.currentTarget));
+        chatLog.on('click', '.km-random-encounter', () => checkForRandomEncounter(game));
     }
 }

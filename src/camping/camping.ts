@@ -1,10 +1,11 @@
 import {addIngredientsToActor, allCampingActivities, CampingActivityData, CampingActivityName} from './activities';
 import {getRegionInfo} from './regions';
 import {getLevelBasedDC, postDegreeOfSuccessMessage, slugify, unslugify} from '../utils';
-import {DegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
+import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
 import {basicIngredientUuid, DcType, rationUuid, specialIngredientUuid} from './data';
 import {allRecipes, RecipeData} from './recipes';
 import {getConsumablesByUuid, hasItemByUuid, isConsumableItem, removeItemsBySourceId} from './actor';
+import {checkRandomEncounterMessage} from './chat';
 
 export type RestRollMode = 'one' | 'none' | 'one-every-4-hours';
 
@@ -141,6 +142,9 @@ export async function rollCampingCheck(
             failure: activity?.failure?.message,
             critFailure: activity?.criticalFailure?.message,
         });
+        if (activity !== undefined && activity[degreeToProperty(degree)]?.checkRandomEncounter) {
+            await checkRandomEncounterMessage();
+        }
     }
     return degree;
 }

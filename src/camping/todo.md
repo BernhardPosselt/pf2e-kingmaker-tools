@@ -2,9 +2,6 @@
 
 ## Activities
 
-* changing a degree of success dropdown of an activity with an actor that is not hidden should remove all effects except
-  the non expired applicable one and roll a random encounter check if noted
-* pre-selected effects like Bolster Confidence are automatically applied and synced to actors
 * Add a way to add and remove custom activities
 
 ## Eating
