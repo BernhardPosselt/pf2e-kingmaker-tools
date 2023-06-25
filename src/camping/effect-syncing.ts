@@ -4,7 +4,6 @@ import {ActivityEffect, ActivityOutcome, CampingActivityData, CampingActivityNam
 import {groupBySingle, isGm} from '../utils';
 import {
     getActorByUuid,
-    getActorEffectsByUuid,
     getActorsByUuid,
     getEffectsByUuid,
     getItemsByUuid,
@@ -48,7 +47,6 @@ interface CampingActivityResult {
 }
 
 export interface SyncActorCampingEffectOptions {
-    removeExisting: boolean;
     actors: Actor[];
     campingActivities: CampingActivityData[];
     actorCampingActivities: Map<string, CampingActivityResult>;
@@ -114,25 +112,15 @@ function getEffectUuidsForActors(options: SyncActorCampingEffectOptions): Effect
         };
     });
 }
-
-async function syncActorCampingEffects(e: EffectsForActor, uuids: Set<string>): Promise<void> {
-    const existingEffects = await getActorEffectsByUuid(e.actor, uuids);
-    const existingEffectIds = new Set(existingEffects.map(e => e.id));
-    const effectsToSync = await getEffectsByUuid(e.effectUuids);
-    const effectToSyncIds = new Set(effectsToSync.map(e => e.id));
-    const effectsToAdd = effectsToSync.filter(e => !existingEffectIds.has(e.id));
-    const effectsToRemove = existingEffects.filter(e => !effectToSyncIds.has(e.id));
-    await e.actor.deleteEmbeddedDocuments('Item', effectsToRemove.map(e => e.id));
-    await e.actor.createEmbeddedDocuments('Item', effectsToAdd.map(e => e.toObject()));
-}
-
 export async function syncActorsCampingEffects(options: SyncActorCampingEffectOptions): Promise<void> {
     console.log(options);
     const uuids = new Set(getAllCampingEffectUuids(options.campingActivities));
-    if (options.removeExisting) {
-        await removeActorsEffects(options.actors, await getItemSourceIds(uuids));
-    }
-    await Promise.all(getEffectUuidsForActors(options).map(e => syncActorCampingEffects(e, uuids)));
+    await removeActorsEffects(options.actors, await getItemSourceIds(uuids));
+    const effectUuidsForActors = getEffectUuidsForActors(options);
+    await Promise.all(effectUuidsForActors.map(async effectsForActor => {
+        const effects = await getEffectsByUuid(effectsForActor.effectUuids);
+        await effectsForActor.actor.createEmbeddedDocuments('Item', effects.map(e => e.toObject()));
+    }));
 }
 
 export abstract class DiffListener {
@@ -207,7 +195,6 @@ export class CampingActivitiesListener extends DiffListener {
         await syncActorsCampingEffects({
             actors: await getActorsByUuid(camping.actorUuids),
             campingActivities: getCampingActivityData(camping),
-            removeExisting: true,
             actorCampingActivities,
         });
     }

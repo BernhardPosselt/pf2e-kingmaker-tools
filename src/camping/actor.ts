@@ -101,7 +101,9 @@ export async function satisfiesSkillProficiency(actor: Actor, skill: string, min
 export async function getSkill(actor: Actor, skill: string): Promise<ActorSkill | null> {
     const skills = actor.skills;
     const loreSkill = `${skill}-lore`;
-    if (skill in skills) {
+    if (skill === 'perception') {
+        return actor.perception;
+    } else if (skill in skills) {
         return skills[skill];
     } else if (loreSkill in skills) {
         return skills[loreSkill];
