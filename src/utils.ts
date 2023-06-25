@@ -138,6 +138,13 @@ export function groupBy<T, R>(array: T[], criterion: (value: T) => R): Map<R, T[
     return result;
 }
 
+export function groupBySingle<T, R>(array: T[], criterion: (value: T) => R): Map<R, T> {
+    return new Map(
+        array.map(elem => [criterion(elem), elem])
+    );
+}
+
+
 export function distinctBy<T, R>(array: T[], criterion: (value: T) => R): T[] {
     const existing = new Set();
     const result = [];

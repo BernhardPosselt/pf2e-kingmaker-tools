@@ -1,14 +1,20 @@
 import {Camping} from './camping';
+import {getDiffListeners} from './effect-syncing';
 
-export async function saveCamping(sheetActor: Actor, camping: Partial<Camping>): Promise<void> {
-    console.info('Saving', camping);
-    await sheetActor.setFlag('pf2e-kingmaker-tools', 'camping-sheet', camping);
+export async function saveCamping(game: Game, sheetActor: Actor, update: Partial<Camping>): Promise<void> {
+    const current = getCamping(sheetActor);
+    console.info('Saving', update);
+    await sheetActor.setFlag('pf2e-kingmaker-tools', 'camping-sheet', update);
+    console.log('diff', diffObject(current, update));
+    for (const l of getDiffListeners(game)) {
+        await l.shouldFire(current, update);
+    }
 }
 
 export function getCamping(sheetActor: Actor): Camping {
     const camping = sheetActor.getFlag('pf2e-kingmaker-tools', 'camping-sheet') as Camping;
     console.log('Reading', camping);
-    return camping;
+    return deepClone(camping);
 }
 
 export function getCampingActor(game: Game): Actor | null {

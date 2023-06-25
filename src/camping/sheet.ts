@@ -45,6 +45,7 @@ import {discoverSpecialMeal} from './dialogs/learn-recipe';
 import {setupDialog} from '../kingdom/dialogs/setup-dialog';
 import {getCamping, saveCamping} from './storage';
 import {postDiscoverSpecialMealResult, postHuntAndGatherResult} from './chat';
+import {DiffListener, getDiffListeners} from './effect-syncing';
 
 interface CampingOptions {
     game: Game;
@@ -62,6 +63,7 @@ interface CampingData {
 
 
 export class CampingSheet extends FormApplication<CampingOptions & FormApplicationOptions, ViewCampingData, null> {
+    private diffListeners: DiffListener[];
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -93,6 +95,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         this.isGM = this.game.user?.isGM ?? false;
         this.actor = options.actor;
         this.actor.apps[this.appId] = this;
+        this.diffListeners = getDiffListeners(this.game);
     }
 
     override async getData(options?: Partial<CampingOptions & FormApplicationOptions>): Promise<ViewCampingData> {
@@ -526,7 +529,6 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
 
     private async parseDropData(event: DragEvent): Promise<Actor | Item | null> {
         const dropData = event.dataTransfer?.getData('text/plain');
-        console.log(dropData);
         if (!dropData) return null;
         try {
             const data = JSON.parse(dropData);
@@ -553,7 +555,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     }
 
     private async update(data: Partial<Camping>): Promise<void> {
-        await saveCamping(this.actor, data);
+        await saveCamping(this.game, this.actor, data);
     }
 
     private async read(): Promise<Camping> {
@@ -579,7 +581,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         console.log('formdata', formData);
         const current = await this.read();
         const mealDegreeOfSuccess = this.parseNullableSelect(formData.mealDegreeOfSuccess) as StringDegreeOfSuccess | null;
-        await this.update({
+        const update = {
             currentRegion: formData.currentRegion,
             campingActivities: getCampingActivityData(current).map(activityData => {
                 const data = formData as any;
@@ -603,14 +605,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 actorMeals: await this.parseActorMeals(formData),
                 cookingSkill: formData.cookingSkill as CookingSkill,
             },
-        });
-        // TODO: add effect syncing
-        // TODO: add listener
-        if (mealDegreeOfSuccess !== null) {
-            this.emit({
-                action: 'syncMealEffects',
-            });
-        }
+        };
+        await this.update(update);
         this.render();
     }
 

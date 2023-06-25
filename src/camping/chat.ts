@@ -52,7 +52,7 @@ export async function addRecipe(game: Game, element: HTMLElement): Promise<void>
         `;
         if (recipe) {
             camping.cooking.knownRecipes.push(recipe);
-            await saveCamping(campingActor, camping);
+            await saveCamping(game, campingActor, camping);
         }
         await ChatMessage.create({content});
     }

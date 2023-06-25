@@ -14,6 +14,8 @@ import {StringDegreeOfSuccess} from './degree-of-success';
 import {showArmy} from './armies/sheet';
 import {openCampingSheet} from './camping/sheet';
 import {bindCampingChatEventListeners} from './camping/chat';
+import {getDiffListeners} from './camping/effect-syncing';
+import {getCamping, getCampingActor} from './camping/storage';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -280,12 +282,23 @@ Hooks.on('ready', async () => {
         checkKingdomErrors(gameInstance);
 
         // listen for camping sheet open
+        const listeners = getDiffListeners(gameInstance);
         gameInstance.socket!.on('module.pf2e-kingmaker-tools', (data: { action: string }) => {
             if (data.action === 'openCampingSheet') {
                 openCampingSheet(gameInstance);
-            }
-            if (data.action === 'openKingdomSheet') {
+            } else if (data.action === 'openKingdomSheet') {
                 showKingdom(gameInstance);
+            } else {
+                // players changed data and GM needs to sync effects
+                const sheetActor = getCampingActor(gameInstance);
+                if (sheetActor && isGm(gameInstance)) {
+                    const camping = getCamping(sheetActor);
+                    for (const listener of listeners) {
+                        if (listener.canHandle(data.action)) {
+                            listener.onReceive(camping);
+                        }
+                    }
+                }
             }
         });
     }
