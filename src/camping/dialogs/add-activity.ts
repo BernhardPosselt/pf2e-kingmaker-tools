@@ -57,10 +57,6 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                 <label for="km-secret">Secret Check</label>
                 <input type="checkbox" name="secret" id="km-secret">
             </div>
-            <div>
-                <label for="km-locked">Locked by default</label>
-                <input type="checkbox" name="locked" id="km-locked">
-            </div>
             ${['critical-success', 'success', 'failure', 'critical-failure'].map(d => {
             return `
                   <div>
@@ -138,7 +134,7 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                                 night: parseNumberInput($html, 'night-encounter-dc') || 0,
                             },
                             isSecret: parseCheckbox($html, 'secret'),
-                            isLocked: parseCheckbox($html, 'locked'),
+                            isLocked: false,
                             effectUuids: effectUuid ? [{
                                 uuid: effectUuid,
                                 targetAll: parseSelect($html, 'effect-target') === 'all',
