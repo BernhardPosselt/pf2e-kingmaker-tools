@@ -38,14 +38,20 @@ import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degre
 import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
 import {camelCase, LabelAndValue, listenClick} from '../utils';
-import {hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
+import {
+    actorHasEffectByUuid,
+    getActorsByUuid,
+    hasCookingLore,
+    NotProficientError,
+    validateSkillProficiencies,
+} from './actor';
 import {askDcDialog} from './dialogs/ask-dc';
 import {showCampingHelp} from './dialogs/camping-help';
 import {discoverSpecialMeal} from './dialogs/learn-recipe';
 import {setupDialog} from '../kingdom/dialogs/setup-dialog';
 import {getCamping, saveCamping} from './storage';
 import {postDiscoverSpecialMealResult, postHuntAndGatherResult} from './chat';
-import {DiffListener, getDiffListeners} from './effect-syncing';
+import {DiffListener, eat, getDiffListeners} from './effect-syncing';
 
 interface CampingOptions {
     game: Game;
@@ -105,7 +111,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const sumElapsedSeconds = Math.abs(currentSeconds - data.dailyPrepsAtTime);
         const activityData = getCampingActivityData(data);
         const actors = await this.getActors(data);
-        const watchSecondsDuration = this.getWatchSecondsDuration(actors, data);
+        const watchSecondsDuration = await this.getWatchSecondsDuration(actors, data);
         const {total: encounterDC, modifier: currentEncounterDCModifier} = getEncounterDC(data, this.game);
         const actorConsumables = await getActorConsumables(actors);
         const knownRecipes = data.cooking.knownRecipes;
@@ -155,12 +161,32 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         return viewData;
     }
 
-    private getWatchSecondsDuration(actors: Actor[], data: Camping): number {
+    private async getWatchSecondsDuration(actors: Actor[], data: Camping): Promise<number> {
         const organizeWatchCritSuccess = data.campingActivities
             .find(a => a.activity === 'Organize Watch' && a.result === 'criticalSuccess');
         // 1 person can't keep watch, so don't increase to 2
         const additionalWatchers = actors.length > 1 ? (organizeWatchCritSuccess ? 1 : 0) : 0;
-        return calculateRestSeconds(actors.length + additionalWatchers);
+        const current = await this.read();
+        return calculateRestSeconds(actors.length + additionalWatchers, await this.getAverageRestDuration(current));
+    }
+
+    private async getAverageRestDuration(camping: Camping): Promise<number> {
+        // hardcode fish on a stick
+        const fishOnAStick = getRecipeData(camping).find(r => r.name === 'Fish-On-A-Stick')!;
+        const favoriteMeal = fishOnAStick.favoriteMeal!.effects![0]!.uuid;
+        const criticalFailure = fishOnAStick.criticalFailure!.effects![0]!.uuid;
+        const actors = await getActorsByUuid(new Set(camping.actorUuids));
+        const actorsFavoriteMeal = (await Promise.all(actors
+            .map(async a => (await actorHasEffectByUuid(a, favoriteMeal)) ? 1 : 0)))
+            .reduce((a: number, b: number) => a + b, 0);
+        const actorsCriticalFailure = (await Promise.all(actors
+            .map(async a => (await actorHasEffectByUuid(a, criticalFailure)) ? 1 : 0)))
+            .reduce((a: number, b: number) => a + b, 0);
+        const actorsHavingNeither = actors.length - (actorsCriticalFailure + actorsFavoriteMeal);
+        return Math.floor(
+            ((8 * 3600 * actorsHavingNeither) +
+                (7 * 3600 * actorsFavoriteMeal) +
+                (9 * 3600 * actorsCriticalFailure)) / actors.length);
     }
 
     private async getCookingSkillData(data: Camping): Promise<{
@@ -316,6 +342,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             const current = await this.read();
             await this.update({encounterModifier: current.encounterModifier - 1});
         });
+        listenClick($html, '.eat-food', async () => await eat(this.game, await this.read()));
         listenClick($html, '.increase-zone-dc-modifier', async () => {
             const current = await this.read();
             await this.update({encounterModifier: current.encounterModifier + 1});

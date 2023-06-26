@@ -4,7 +4,7 @@ import {getLevelBasedDC, postDegreeOfSuccessMessage, slugify, unslugify} from '.
 import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
 import {basicIngredientUuid, DcType, rationUuid, specialIngredientUuid} from './data';
 import {allRecipes, RecipeData} from './recipes';
-import {getConsumablesByUuid, hasItemByUuid, isConsumableItem, removeItemsBySourceId} from './actor';
+import {getConsumablesByUuid, hasItemByUuid, isConsumableItem} from './actor';
 import {checkRandomEncounterMessage} from './chat';
 
 export type RestRollMode = 'one' | 'none' | 'one-every-4-hours';
@@ -176,15 +176,14 @@ export async function afterDailyPreparations(
     data: Camping,
 ): Promise<void> {
     await Promise.all(actors.map(async actor => await healMoreHp(actor, data)));
-    await removeItemsBySourceId(actors, 'effect', activitySourceIds);
     await game.pf2e.actions.restForTheNight(actors);
 }
 
-export function calculateRestSeconds(partySize: number): number {
+export function calculateRestSeconds(partySize: number, restDurationSeconds: number): number {
     if (partySize < 2) {
-        return 8 * 3600;
+        return restDurationSeconds;
     } else {
-        let seconds = 8 * 3600 + Math.floor(8 * 3600 / (partySize - 1));
+        let seconds = restDurationSeconds + Math.floor(restDurationSeconds / (partySize - 1));
         // round up seconds to next minute
         if (seconds % 60 !== 0) {
             seconds += 60 - (seconds % 60);

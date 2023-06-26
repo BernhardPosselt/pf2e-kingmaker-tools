@@ -4,18 +4,22 @@ import {capitalize, unslugify} from '../utils';
 
 type ItemType = 'effect' | 'consumable';
 
-export async function getItemSourceIds(uuids: Set<string>): Promise<Set<string>> {
+async function getItemNames(uuids: Set<string>): Promise<Set<string>> {
     const applicableItems = (await Promise.all(Array.from(uuids).map(uuid => fromUuid(uuid))) as (Item | null)[])
         .filter(i => i !== null) as Item[];
-    const sourceIds = applicableItems
+    const names = applicableItems
         .filter(item => item !== undefined && item !== null)
-        .map(item => item.sourceId);
-    return new Set(sourceIds);
+        .map(item => item.name);
+    return new Set(names);
 }
 
-export function getItemsBySourceId(actor: Actor, type: ItemType, sourceIds: Set<string>): Item[] {
+function getItemsByName(actor: Actor, type: ItemType, names: Set<string>): Item[] {
     return actor.itemTypes[type]
-        .filter(i => sourceIds.has(i.sourceId));
+        .filter(i => names.has(i.name));
+}
+
+export async function getActorItemsByUuid(actor: Actor, type: ItemType, uuids: Set<string>): Promise<Item[]> {
+    return getItemsByName(actor, type, await getItemNames(uuids));
 }
 
 export function isEffectItem(item: Item): item is Item & EffectItem {
@@ -26,14 +30,16 @@ export function isConsumableItem(item: Item): item is Item & ConsumableItem {
     return item.type === 'consumable';
 }
 
-export async function getActorItemsByUuid(actor: Actor, type: ItemType, uuids: Set<string>): Promise<Item[]> {
-    return getItemsBySourceId(actor, type, await getItemSourceIds(uuids));
-}
-
 export async function getActorEffectsByUuid(actor: Actor, uuids: Set<string>): Promise<(Item & EffectItem)[]> {
     const items = await getActorItemsByUuid(actor, 'effect', uuids);
     return items.filter(isEffectItem);
 }
+
+export async function actorHasEffectByUuid(actor: Actor, uuid: string): Promise<boolean> {
+    const effects = await getActorEffectsByUuid(actor, new Set([uuid]));
+    return effects.length > 0;
+}
+
 
 export async function getConsumablesByUuid(actor: Actor, uuids: Set<string>): Promise<(Item & ConsumableItem)[]> {
     const items = await getActorItemsByUuid(actor, 'consumable', uuids);
@@ -42,24 +48,6 @@ export async function getConsumablesByUuid(actor: Actor, uuids: Set<string>): Pr
 
 export async function hasItemByUuid(actor: Actor, type: ItemType, uuids: Set<string>): Promise<boolean> {
     return (await getActorItemsByUuid(actor, type, uuids)).length > 0;
-}
-
-export async function removeItemsBySourceId(actors: Actor[], type: ItemType, applicableSourceIds: Set<string>): Promise<void> {
-    for (const actor of actors) {
-        const existingEffects = getItemsBySourceId(actor, type, applicableSourceIds);
-        const existingEffectIds = existingEffects.map((a) => a.id) as string[];
-        await actor.deleteEmbeddedDocuments('Item', existingEffectIds);
-    }
-}
-
-export async function removeExpiredEffects(actors: Actor[], applicableSourceIds: Set<string>): Promise<void> {
-    for (const actor of actors) {
-        const expiredEffectIds = getItemsBySourceId(actor, 'effect', applicableSourceIds)
-            .filter(isEffectItem)
-            .filter(a => a.isExpired)
-            .map(a => a.id) as string[];
-        await actor.deleteEmbeddedDocuments('Item', expiredEffectIds);
-    }
 }
 
 export function proficiencyToRank(proficiency: Proficiency): number {
@@ -129,8 +117,8 @@ export async function getActorByUuid(uuid: string): Promise<Actor | null> {
     return null;
 }
 
-export async function getActorsByUuid(uuids: string[]): Promise<Actor[]> {
-    return (await Promise.all(uuids.map(a => getActorByUuid(a))))
+export async function getActorsByUuid(uuids: Set<string>): Promise<Actor[]> {
+    return (await Promise.all(Array.from(uuids).map(a => getActorByUuid(a))))
         .filter(a => a !== null) as Actor[];
 }
 
@@ -142,26 +130,24 @@ export async function getItemByUuid(uuid: string): Promise<Item | null> {
     return null;
 }
 
-export async function getItemsByUuid(uuids: string[]): Promise<Item[]> {
-    return (await Promise.all(uuids.map(i => getItemByUuid(i))))
+export async function getItemsByUuid(uuids: Set<string>): Promise<Item[]> {
+    return (await Promise.all(Array.from(uuids).map(i => getItemByUuid(i))))
         .filter(a => a !== null) as Item[];
 }
 
-export async function getEffectsByUuid(uuids: string[]): Promise<(Item & EffectItem)[]> {
+export async function getEffectsByUuid(uuids: Set<string>): Promise<(Item & EffectItem)[]> {
     const items = await getItemsByUuid(uuids);
     return items.filter(isEffectItem) as (Item & EffectItem)[];
 }
 
 
-async function removeActorEffects(actor: Actor, sourceIds: Set<string>): Promise<void> {
-    const existingEffects = getItemsBySourceId(actor, 'effect', sourceIds);
-    const idsToRemove = existingEffects
-        .filter(e => sourceIds.has(e.sourceId))
-        .map(e => e.id);
-    await actor.deleteEmbeddedDocuments('Item', idsToRemove);
+async function removeActorEffects(actor: Actor, uuids: Set<string>): Promise<void> {
+    const existingEffects = await getActorEffectsByUuid(actor, uuids);
+    await actor.deleteEmbeddedDocuments('Item', existingEffects.map(e => e.id));
 }
 
-export async function removeActorsEffects(actors: Actor[], sourceIds: Set<string>): Promise<void> {
-    await Promise.all(actors.map(a => removeActorEffects(a, sourceIds)));
+export async function removeActorsEffectsByUuid(actors: Actor[], uuids: Set<string>): Promise<void> {
+    await Promise.all(actors.map(a => removeActorEffects(a, uuids)));
 }
+
 

@@ -39,7 +39,7 @@ const content = `
     <h3>Eating</h3>
     <p>Each character in camp is available in the <b>Eating</b> section where you can choose their food for the day, change their favorite meal or even roll a Survival <b>Subsist</b> check. If you wish to forgo tracking rations or meals for that character, set the meal to <b>Nothing</b>. <b>Ration/Subsistence</b> will first reduce Magical Subsistence from spells like <b>Create Food</b>, then normal Subsistence from actions like Subsist, then available rations from players' inventories.</p>
     
-    <p>If a PC has chosen the <b>Cook Meal</b> activity, you will be able to select a recipe and a skill to cook it. Rolling a check will automatically apply fill in the degree of success. Upon changing this value, all expired and previously applied meal effects will be removed from every actor. Then all meal effects related to the recipe and degree of success will be applied to the actors that have chosen the <b>Meal</b> value.</p>
+    <p>If a PC has chosen the <b>Cook Meal</b> activity, you will be able to select a recipe and a skill to cook it. Rolling a check will automatically fill in the degree of success. Contrary to camping activities, meal effects are not automatically applied to PCs, because meal effects persist beyond camping sessions. To apply them, hit the <i class="fa-solid fa-utensils"></i> button. Then all meal effects related to the recipe and degree of success will be applied to the actors that have chosen the <b>Meal</b> value.</p>
     
     <p>By default, none of the ingredients nor rations will be removed from players' inventories. Hitting the <i class="fa-solid fa-minus"></i> button in the <b>Pay</b> column will remove the appropriate number of ingredients and items from character inventories that are present in the sidebar. If you are lacking ingredients and rations, values in the <b>Consumed</b> row will be shown in red. Paying while not having enough resources will reduce as many rations and ingredients as possible, but will have no further effect.</p>
     
@@ -86,6 +86,7 @@ const content = `
     <h3>Meals</h3>
     <p>The following meals are not fully automated:</p>
     <ul>
+        <li><b>Jeweled Rice</b>: Critical Failure does not increase ration consumption</li>
         <li><b>Hunter's Roast</b>: Critical Failure Does not roll poison damage</li>
         <li><b>Kameberry Pie</b>: Does not restore any hit points</li>
         <li><b>Mastodon Steak</b>: Does not restore any hit points nor reduce conditions</li>

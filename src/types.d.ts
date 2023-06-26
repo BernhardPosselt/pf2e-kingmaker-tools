@@ -91,6 +91,7 @@ declare global {
 
     interface Item {
         id: string;
+        name: string;
         sourceId: string;
         sheet: ItemSheet;
         type: 'effect' | 'consumable';

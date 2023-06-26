@@ -65,10 +65,6 @@ export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
                 <label for="km-favorite-meal-remove-rest">Favorite Meal: Remove Effect after Rest</label>
                 <input type="checkbox" name="favorite-meal-remove-rest" id="km-favorite-meal-remove-rest">
             </div>
-            <div>
-                <label for="km-favorite-meal-additional-rations">Favorite Meal: Consume Additional Rations</label>
-                <input type="checkbox" name="favorite-meal-additional-rations" id="km-favorite-meal-additional-rations">
-            </div>
             
             <div>
                 <label for="km-critical-success-effect-uuid">Critical Success: Effect UUID</label>
@@ -81,10 +77,6 @@ export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
             <div>
                 <label for="km-critical-success-remove-rest">Critical Success: Remove Effect after Rest</label>
                 <input type="checkbox" name="critical-success-remove-rest" id="km-critical-success-remove-rest">
-            </div>
-            <div>
-                <label for="km-critical-success-additional-rations">Critical Success: Consume Additional Rations</label>
-                <input type="checkbox" name="critical-success-additional-rations" id="km-critical-success-additional-rations">
             </div>
             
             <div>
@@ -99,10 +91,6 @@ export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
                 <label for="km-success-remove-rest">Success: Remove Effect after Rest</label>
                 <input type="checkbox" name="success-remove-rest" id="km-success-remove-rest">
             </div>
-            <div>
-                <label for="km-success-additional-rations">Success: Consume Additional Rations</label>
-                <input type="checkbox" name="success-additional-rations" id="km-success-additional-rations">
-            </div>
             
             <div>
                 <label for="km-critical-failure-effect-uuid">Critical Failure: Effect UUID</label>
@@ -115,10 +103,6 @@ export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
             <div>
                 <label for="km-critical-failure-remove-rest">Critical Failure: Remove Effect after Rest</label>
                 <input type="checkbox" name="critical-failure-remove-rest" id="km-critical-failure-remove-rest">
-            </div>
-            <div>
-                <label for="km-critical-failure-additional-rations">Critical Failure: Consume Additional Rations</label>
-                <input type="checkbox" name="critical-failure-additional-rations" id="km-critical-failure-additional-rations">
             </div>
         </form>
         `,
@@ -177,13 +161,11 @@ export function addRecipeDialog({onSubmit, recipes}: AddRecipeOptions): void {
 
 function parseEffects($html: HTMLElement, name: string): MealEffect[] {
     const effect = parseTextInput($html, name + '-effect-uuid') || undefined;
-    const modifyRationConsumption = parseCheckbox($html, name + '-additional-rations') || false;
     const modifySleepDurationSeconds = parseNumberInput($html, name + '-sleep-seconds') || undefined;
     const removeAfterRest = parseCheckbox($html, name + '-remove-rest') || false;
     if (effect) {
         return [{
             uuid: effect,
-            modifyRationConsumption: modifyRationConsumption ? 1 : undefined,
             modifySleepDurationSeconds,
             removeAfterRest,
         }];

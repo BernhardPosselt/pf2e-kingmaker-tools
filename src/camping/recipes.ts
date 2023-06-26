@@ -1,4 +1,5 @@
 import {getRegionInfo} from './regions';
+import {StringDegreeOfSuccess} from '../degree-of-success';
 
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'unique';
 
@@ -6,7 +7,6 @@ export interface MealEffect {
     uuid: string;
     removeAfterRest?: boolean;
     modifySleepDurationSeconds?: number;
-    modifyRationConsumption?: number;
 }
 
 export interface CookingOutcome {
@@ -100,10 +100,7 @@ export const allRecipes: RecipeData[] = [
         'cost': '5 sp',
         'rarity': 'common',
         'criticalFailure': {
-            'effects': [{
-                uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.MGFPIxwSgRLvkV71',
-                modifyRationConsumption: 1,
-            }],
+            'effects': [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.MGFPIxwSgRLvkV71'}],
         },
         'criticalSuccess': {
             'effects': [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.OxEApkXu0hw34Ci5'}],
@@ -134,13 +131,11 @@ export const allRecipes: RecipeData[] = [
         'criticalFailure': {
             'effects': [{
                 uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.c9qgXgiAJikyTM0p',
-                modifySleepDurationSeconds: 3600,
             }],
         },
         'favoriteMeal': {
             'effects': [{
                 uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.dZTQ5rfedrpLUTxE',
-                modifySleepDurationSeconds: -3600,
             }],
         },
     },
@@ -807,7 +802,7 @@ export function getAllMealEffectUuids(recipes: RecipeData[]): string[] {
     ]);
 }
 
-export function getMealEffectUuids(recipe: RecipeData, favoriteMeal: string | undefined, degree: string): string[] {
+export function getMealEffectUuids(recipe: RecipeData, favoriteMeal: string | undefined, degree: StringDegreeOfSuccess): string[] {
     const favoriteMealEffects = recipe.name === favoriteMeal ? getOutcomeEffects(recipe.favoriteMeal) : [];
     const effects = degree === 'criticalSuccess'
     || degree === 'success'

@@ -5,14 +5,6 @@
 * Add a way to add and remove custom activities
 
 ## Eating
-
-* Changing the degree outcome should:
-    * delete all previous meal effects
-    * apply effects of meal to all actors that choose "Meal" in their dropdown; if favorite meal matches, apply that one
-      as well
-* implement meal effect:
-    * increases to rest time
-    * increases ration consumption
 * add a way to migrate previous known recipes
 
 ## Rest

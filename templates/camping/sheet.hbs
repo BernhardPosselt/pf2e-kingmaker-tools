@@ -168,7 +168,7 @@
                     <button type="button" class="cook-food" {{#unless hasCookingActor}}disabled{{/unless}}><i class="fa-solid fa-dice-d20"></i></button>
                 </div>
                 <div>
-                    <label>Degree of Success
+                    <label>Degree
                         <select name="mealDegreeOfSuccess">
                             {{#select mealDegreeOfSuccess}}
                                 <option>-</option>
@@ -178,6 +178,7 @@
                             {{/select}}
                         </select>
                     </label>
+                    <button type="button" title="Apply Meal Effects" class="eat-food" {{#if isUser}}disabled{{/if}}><i class="fa-solid fa-utensils"></i></button>
                 </div>
             </div>
         </div>

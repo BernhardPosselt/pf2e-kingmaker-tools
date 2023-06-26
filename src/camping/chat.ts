@@ -28,7 +28,7 @@ export async function addRecipe(game: Game, element: HTMLElement): Promise<void>
     const campingActor = getCampingActor(game);
     if (actorAndIngredients && campingActor) {
         const camping = getCamping(campingActor);
-        const actors = await getActorsByUuid(camping.actorUuids);
+        const actors = await getActorsByUuid(new Set(camping.actorUuids));
         const actor = actorAndIngredients.actor;
         const basicIngredients = actorAndIngredients.basicIngredients;
         const specialIngredients = actorAndIngredients.specialIngredients;
@@ -37,7 +37,7 @@ export async function addRecipe(game: Game, element: HTMLElement): Promise<void>
             basicIngredients,
             rations: 0,
         });
-        const itemsToAdd = (await getItemsByUuid(critFailUuids)).map(i => i.toObject());
+        const itemsToAdd = (await getItemsByUuid(new Set(critFailUuids))).map(i => i.toObject());
         if (itemsToAdd.length > 0) {
             await actor.createEmbeddedDocuments('Item', itemsToAdd);
         }

@@ -2,14 +2,7 @@ import {getAllMealEffectUuids, getMealEffectUuids, RecipeData} from './recipes';
 import {StringDegreeOfSuccess} from '../degree-of-success';
 import {ActivityEffect, ActivityOutcome, CampingActivityData, CampingActivityName} from './activities';
 import {groupBySingle, isGm} from '../utils';
-import {
-    getActorByUuid,
-    getActorsByUuid,
-    getEffectsByUuid,
-    getItemsByUuid,
-    getItemSourceIds,
-    removeActorsEffects,
-} from './actor';
+import {getActorByUuid, getActorsByUuid, getEffectsByUuid, getItemsByUuid, removeActorsEffectsByUuid} from './actor';
 import {Camping, getCampingActivityData, getRecipeData} from './camping';
 import {getCamping, getCampingActor} from './storage';
 
@@ -20,7 +13,7 @@ async function addActorRecipeEffect(
     favoriteMeal: string | undefined,
 ): Promise<void> {
     const effectUuids = getMealEffectUuids(recipe, favoriteMeal, degree);
-    const items = await getItemsByUuid(effectUuids);
+    const items = await getItemsByUuid(new Set(effectUuids));
     await actor.createEmbeddedDocuments('Item', items.map(i => i.toObject()));
 }
 
@@ -29,15 +22,16 @@ export interface SyncMealEffectOptions {
     recipe: RecipeData;
     recipes: RecipeData[];
     degree: StringDegreeOfSuccess;
+    actorUuidsEatingMeal: Set<string>;
     actorUuidAndFavoriteMeal: Map<string, string>;
 }
 
 export async function syncActorMealEffects(options: SyncMealEffectOptions): Promise<void> {
     const uuids = getAllMealEffectUuids(options.recipes);
-    const sourceIds = await getItemSourceIds(new Set(uuids));
-    await removeActorsEffects(options.actors, sourceIds);
-    await Promise.all(options.actors.map(a =>
-        addActorRecipeEffect(a, options.recipe, options.degree, options.actorUuidAndFavoriteMeal.get(a.uuid))));
+    await removeActorsEffectsByUuid(options.actors, new Set(uuids));
+    await Promise.all(options.actors
+        .filter(a => options.actorUuidsEatingMeal.has(a.uuid))
+        .map(a => addActorRecipeEffect(a, options.recipe, options.degree, options.actorUuidAndFavoriteMeal.get(a.uuid))));
 }
 
 interface CampingActivityResult {
@@ -113,12 +107,11 @@ function getEffectUuidsForActors(options: SyncActorCampingEffectOptions): Effect
     });
 }
 export async function syncActorsCampingEffects(options: SyncActorCampingEffectOptions): Promise<void> {
-    console.log(options);
     const uuids = new Set(getAllCampingEffectUuids(options.campingActivities));
-    await removeActorsEffects(options.actors, await getItemSourceIds(uuids));
+    await removeActorsEffectsByUuid(options.actors, new Set(uuids));
     const effectUuidsForActors = getEffectUuidsForActors(options);
     await Promise.all(effectUuidsForActors.map(async effectsForActor => {
-        const effects = await getEffectsByUuid(effectsForActor.effectUuids);
+        const effects = await getEffectsByUuid(new Set(effectsForActor.effectUuids));
         await effectsForActor.actor.createEmbeddedDocuments('Item', effects.map(e => e.toObject()));
     }));
 }
@@ -127,21 +120,25 @@ export abstract class DiffListener {
     protected constructor(protected action: string, protected game: Game) {
     }
 
-    async shouldFire(previous: Camping, update: Partial<Camping>): Promise<void> {
+    async testFireChange(previous: Camping, update: Partial<Camping>): Promise<void> {
         if (this.shouldFireChange(previous, update)) {
             console.log('Firing Sync Event: ' + this.action, previous, update);
-            // GM has all of the permissions so change can be immediately made
-            if (isGm(this.game)) {
-                const current = this.getCurrent();
-                if (current) {
-                    await this.onReceive(current);
-                }
-            } else {
-                // otherwise we're a player and need to send the event to the GM in index.ts
-                this.game.socket?.emit('module.pf2e-kingmaker-tools', {
-                    action: this.action,
-                });
+            await this.fireChange();
+        }
+    }
+
+    async fireChange(): Promise<void> {
+        // GM has all of the permissions so change can be immediately made
+        if (isGm(this.game)) {
+            const current = this.getCurrent();
+            if (current) {
+                await this.onReceive(current);
             }
+        } else {
+            // otherwise we're a player and need to send the event to the GM in index.ts
+            this.game.socket?.emit('module.pf2e-kingmaker-tools', {
+                action: this.action,
+            });
         }
     }
 
@@ -193,7 +190,7 @@ export class CampingActivitiesListener extends DiffListener {
         )).filter(([, result]) => result.actor !== null);
         const actorCampingActivities = new Map<CampingActivityName, CampingActivityResult>(activities);
         await syncActorsCampingEffects({
-            actors: await getActorsByUuid(camping.actorUuids),
+            actors: await getActorsByUuid(new Set(camping.actorUuids)),
             campingActivities: getCampingActivityData(camping),
             actorCampingActivities,
         });
@@ -216,48 +213,39 @@ export class ClearCampingActivitiesListener extends DiffListener {
 
     async onReceive(camping: Camping): Promise<void> {
         await super.onReceive(camping);
-        const actors = await getActorsByUuid(camping.actorUuids);
+        const actors = await getActorsByUuid(new Set(camping.actorUuids));
         const campingActivityData = getCampingActivityData(camping);
         const campingEffectUuids = getAllCampingEffectUuids(campingActivityData);
-        await removeActorsEffects(actors, await getItemSourceIds(new Set(campingEffectUuids)));
+        await removeActorsEffectsByUuid(actors, new Set(campingEffectUuids));
     }
 
 }
 
-export class MealListener extends DiffListener {
-    constructor(game: Game) {
-        super('syncMealEffects', game);
-    }
-
-    protected shouldFireChange(previous: Camping, update: Partial<Camping>): boolean {
-        const diff = diffObject(previous, update) as Partial<Camping>;
-        return 'cooking' in diff
-            && update?.cooking?.degreeOfSuccess !== null;
-    }
-
-    async onReceive(camping: Camping): Promise<void> {
-        await super.onReceive(camping);
-        const actorUuidAndMeal = groupBySingle(camping.cooking.actorMeals, a => a.actorUuid);
-        const actorUuidAndFavoriteMeal = new Map();
-        Array.from(actorUuidAndMeal.values())
-            .filter(a => a.favoriteMeal !== null)
-            .forEach(a => actorUuidAndFavoriteMeal.set(a.actorUuid, a.favoriteMeal));
-        const recipes = getRecipeData(camping);
-        const recipe = recipes.find(r => r.name === camping.cooking.chosenMeal);
-        const degree = camping.cooking.degreeOfSuccess;
-        const actors = await getActorsByUuid(camping.actorUuids);
-        if (degree !== null && recipe !== undefined) {
-            await syncActorMealEffects({
-                actors,
-                degree,
-                recipe,
-                recipes,
-                actorUuidAndFavoriteMeal,
-            });
-        } else {
-            const recipeEffectUuids = getAllMealEffectUuids(recipes);
-            await removeActorsEffects(actors, await getItemSourceIds(new Set(recipeEffectUuids)));
-        }
+export async function eat(game: Game, camping: Camping): Promise<void> {
+    const actorUuidAndMeal = groupBySingle(camping.cooking.actorMeals, a => a.actorUuid);
+    const actorUuidAndFavoriteMeal = new Map();
+    Array.from(actorUuidAndMeal.values())
+        .filter(a => a.favoriteMeal !== null)
+        .forEach(a => actorUuidAndFavoriteMeal.set(a.actorUuid, a.favoriteMeal));
+    const recipes = getRecipeData(camping);
+    const recipe = recipes.find(r => r.name === camping.cooking.chosenMeal);
+    const degree = camping.cooking.degreeOfSuccess;
+    const actors = await getActorsByUuid(new Set(camping.actorUuids));
+    if (degree !== null && recipe !== undefined) {
+        const actorUuidsEatingMeal = new Set(camping.cooking.actorMeals
+            .filter(a => a.chosenMeal === 'meal')
+            .map(a => a.actorUuid));
+        await syncActorMealEffects({
+            actors,
+            degree,
+            recipe,
+            recipes,
+            actorUuidAndFavoriteMeal,
+            actorUuidsEatingMeal,
+        });
+    } else {
+        const recipeEffectUuids = getAllMealEffectUuids(recipes);
+        await removeActorsEffectsByUuid(actors, new Set(recipeEffectUuids));
     }
 }
 
@@ -265,6 +253,5 @@ export function getDiffListeners(game: Game): DiffListener[] {
     return [
         new ClearCampingActivitiesListener(game),
         new CampingActivitiesListener(game),
-        new MealListener(game),
     ];
 }
