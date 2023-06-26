@@ -222,7 +222,7 @@ export async function getActorConsumables(actors: Actor[]): Promise<FoodAmount> 
             .find(c => c.sourceId === specialIngredientsSourceId && specialIngredientsSourceId !== undefined) as ConsumableItem | undefined;
         const basicIngredient = consumables
             .find(c => c.sourceId === basicIngredientsId && basicIngredientsId !== undefined) as ConsumableItem | undefined;
-        result.rations += ration ? ration.system.charges.value * ration.quantity : 0;
+        result.rations += ration ? ration.system.charges.value + (Math.max(0, ration.quantity - 1) * ration.system.charges.max) : 0;
         result.basicIngredients += basicIngredient ? basicIngredient.quantity : 0;
         result.specialIngredients += specialIngredient ? specialIngredient.quantity : 0;
     }
