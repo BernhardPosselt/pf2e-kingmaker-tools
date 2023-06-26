@@ -60,7 +60,7 @@ const content = `
     </ul>
     
     <h2>Automation</h2>
-    <p>The camping rules are implemented as RAW and flexible as feasible. Compared to RAW, the following rules are not automated:</p>
+    <p>The camping rules are implemented as RAW and flexible as feasible. Meal effects and consumables such as rations are tracked by their name, so <b>if you rename Rations, ingredients or effects, tracking will be broken</b>. Compared to RAW, the following rules are not automated:</p>
     
     <h3>General</h3>
     <ul>
@@ -90,7 +90,7 @@ const content = `
         <li><b>Hunter's Roast</b>: Critical Failure Does not roll poison damage</li>
         <li><b>Kameberry Pie</b>: Does not restore any hit points</li>
         <li><b>Mastodon Steak</b>: Does not restore any hit points nor reduce conditions</li>
-        <li><b></b>Shepherd's Pie</b>: Does not restore any hit points nor reduce conditions. A critical failure won't reduce healing by half.</li> 
+        <li><b>Shepherd's Pie</b>: Does not restore any hit points nor reduce conditions. A critical failure won't reduce healing by half.</li> 
         <li><b>Smoked Trout And Hydra Pate</b>: Does not add the comfort trait to light armors</li>
         <li><b>Succulent Sausages</b>: Does not reduce flat checks to end persistent damage</li>
     </ul>
