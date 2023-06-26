@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-06-26
+
 ### Added
 
-* Added a camping sheet + macro
+* Camping sheet implementation
 * Button to open kingdom sheet for players
 
 ### Changed
@@ -16,7 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add support for rolling cult events with descending DC
 * Add support for tracking and gaining XP from cult events that have already occurred
 * Use built in V11 weather effects instead of FXMaster; you need to manually clear existing weather in FXMaster
-* Fully automate "Set Alarms" effect
 * Fully reviewed, fixed and updated meal and camping effects
 
 ### Removed
