@@ -1,8 +1,8 @@
-import {addFood, FoodAmount, removeFood} from './camping';
 import {getActorByUuid, getActorsByUuid, getItemsByUuid} from './actor';
 import {addOf} from '../utils';
 import {getCamping, getCampingActor, saveCamping} from './storage';
 import {getEncounterDC, rollRandomEncounter} from './random-encounters';
+import {addFood, FoodAmount, removeFood} from './eating';
 
 interface ActorAndIngredients {
     specialIngredients: number;

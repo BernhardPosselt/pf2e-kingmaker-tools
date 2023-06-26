@@ -135,6 +135,14 @@ export async function getItemsByUuid(uuids: Set<string>): Promise<Item[]> {
         .filter(a => a !== null) as Item[];
 }
 
+export async function getEffectByUuid(uuid: string): Promise<Item & EffectItem | null> {
+    const document = await fromUuid(uuid);
+    if (document instanceof Item && isEffectItem(document)) {
+        return document;
+    }
+    return null;
+}
+
 export async function getEffectsByUuid(uuids: Set<string>): Promise<(Item & EffectItem)[]> {
     const items = await getItemsByUuid(uuids);
     return items.filter(isEffectItem) as (Item & EffectItem)[];

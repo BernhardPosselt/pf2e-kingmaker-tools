@@ -1,8 +1,9 @@
-import {ActorMeal, Camping, CampingActivity, ConsumedFood, CookingSkill, getCombatEffects} from './camping';
+import {ActorMeal, Camping, CampingActivity, CookingSkill, getCombatEffects} from './camping';
 import {CampingActivityData, CampingActivityName} from './activities';
 import {StringDegreeOfSuccess} from '../degree-of-success';
 import {camelCase, LabelAndValue, unslugify} from '../utils';
 import {RecipeData} from './recipes';
+import {ConsumedFood} from './eating';
 
 interface ViewActorMeal extends ViewActor {
     favoriteMeal: string | null;
@@ -32,11 +33,9 @@ export interface ViewCampingData {
     rations: number;
     specialIngredients: number;
     basicIngredients: number;
-    watchSecondsElapsed: number;
     watchSecondsDuration: number;
     watchDuration: string;
     dailyPrepsDuration: string;
-    watchElapsed: string;
     subsistenceAmount: number;
     magicalSubsistenceAmount: number;
     knownRecipes: string[];
@@ -51,6 +50,10 @@ export interface ViewCampingData {
     chosenMealDc: number;
     cookingSkill: CookingSkill;
     cookingSkills: LabelAndValue[];
+    showContinueRest: boolean;
+    watchEnabled: boolean;
+    restHours: string;
+    currentRestHours: string;
 }
 
 export interface ViewActor {

@@ -1,12 +1,13 @@
 import {getRegionInfo} from './regions';
 import {StringDegreeOfSuccess} from '../degree-of-success';
+import {Camping} from './camping';
+import {getRecipeData} from './eating';
 
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'unique';
 
 export interface MealEffect {
     uuid: string;
     removeAfterRest?: boolean;
-    modifySleepDurationSeconds?: number;
 }
 
 export interface CookingOutcome {
@@ -793,6 +794,12 @@ export function getOutcomeEffects(outcome: CookingOutcome | undefined): string[]
     return outcome?.effects?.flatMap(e => e.uuid) ?? [];
 }
 
+export function getExpiringOutcomeEffects(outcome: CookingOutcome | undefined): string[] {
+    return outcome?.effects
+        ?.filter(e => e.removeAfterRest)
+        ?.flatMap(e => e.uuid) ?? [];
+}
+
 export function getAllMealEffectUuids(recipes: RecipeData[]): string[] {
     return recipes.flatMap(r => [
         ...getOutcomeEffects(r.criticalFailure),
@@ -802,10 +809,24 @@ export function getAllMealEffectUuids(recipes: RecipeData[]): string[] {
     ]);
 }
 
+export function getAllExpiringMealEffectUuids(recipes: RecipeData[]): string[] {
+    return recipes.flatMap(r => [
+        ...getExpiringOutcomeEffects(r.criticalFailure),
+        ...getExpiringOutcomeEffects(r.success),
+        ...getExpiringOutcomeEffects(r.criticalSuccess),
+        ...getExpiringOutcomeEffects(r.favoriteMeal),
+    ]);
+}
+
 export function getMealEffectUuids(recipe: RecipeData, favoriteMeal: string | undefined, degree: StringDegreeOfSuccess): string[] {
     const favoriteMealEffects = recipe.name === favoriteMeal ? getOutcomeEffects(recipe.favoriteMeal) : [];
     const effects = degree === 'criticalSuccess'
     || degree === 'success'
     || degree === 'criticalFailure' ? getOutcomeEffects(recipe[degree]) : [];
     return degree === 'criticalSuccess' || degree === 'success' ? [...effects, ...favoriteMealEffects] : effects;
+}
+
+export function getKnownRecipes(camping: Camping): string[] {
+    const recipes = new Set(getRecipeData(camping).map(r => r.name));
+    return camping.cooking.knownRecipes.filter(r => recipes.has(r));
 }

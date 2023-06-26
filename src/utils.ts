@@ -192,6 +192,11 @@ export function parseTextInput($html: HTMLElement, name: string): string {
     return input.value;
 }
 
+export function parseTextArea($html: HTMLElement, name: string): string {
+    const input = $html.querySelector(`textarea[name="${name}"]`) as HTMLTextAreaElement;
+    return input.value;
+}
+
 export function parseNumberSelect($html: HTMLElement, name: string): number {
     const input = $html.querySelector(`select[name="${name}"]`) as HTMLSelectElement;
     return parseInt(input.value, 10);

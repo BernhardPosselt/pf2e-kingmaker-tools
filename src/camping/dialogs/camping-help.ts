@@ -24,7 +24,7 @@ const content = `
     <p>From the sidebar, you can drag and drop actors onto activities. If they don't fulfill the skill requirements, you will get an error notification.</p> 
     <p>In order to start a camping session, you have to set <b>Prepare Campsite</b> to a result other than <b>Critical Failure</b> or <b>-</b>. This opens up the remaining, enabled activities.</p>
     
-    <p>Most of the existing activities are hidden and can be enabled by clicking the <b>Unlock</b> button. This allows you to selectively enable actions related to companions.</p>
+    <p>Most of the existing activities are hidden and can be enabled by clicking the <b>Manage</b> button. This allows you to selectively enable actions related to companions. You can also add custom individual activities or delete them in the <b>Manage</b> dialog.</p>
     
     <p>PCs can now drop their actor onto the desired activity, select the designated skill and perform the check. The result is immediately populated into the result drop down below and shown in the sidebar using different colors for the degrees. This allows you to quickly check how many PCs still need to perform an activity. Activities without checks will show up in the sidebar as if they had a critical success.</p>
     

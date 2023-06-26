@@ -288,6 +288,10 @@
     border-bottom: 1px solid #000;
     color: #fff;
     padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: var(--actor-image-width);
+    white-space: nowrap;
 }
 
 .camping-actors header[data-uuid] {

@@ -34,19 +34,20 @@
         </div>
         <div class="region-controls">
             <div class="region-player-controls">
+                {{#if watchEnabled}}
                 <div>
-                    <div><span class="label">Watch Duration:</span> {{watchDuration}}</div>
+                    <div title="Watch: {{watchDuration}}, Daily Preparations: {{dailyPrepsDuration}}"><span class="label">Rest:</span> {{currentRestHours}} of {{restHours}}</div>
                 </div>
-                <div>
-                    <div><span class="label">Daily Preps Duration:</span> {{dailyPrepsDuration}}</div>
-                </div>
+                {{/if}}
             </div>
+            {{#if watchEnabled}}
             <div {{#if isUser}}hidden{{/if}} class="region-gm-controls">
                 <div>
-                    <button type="button" class="end-rest">Begin Rest <i class="fa-solid fa-bed"></i></button>
+                    <button type="button" class="rest">{{#if showContinueRest}}Continue Rest{{else}}Begin Rest{{/if}} <i class="fa-solid fa-bed"></i></button>
                     <button type="button" class="camping-settings"><i class="fa-solid fa-cog"></i></button>
                 </div>
             </div>
+            {{/if}}
         </div>
     </div>
 
@@ -78,7 +79,7 @@
             <h2>Camping Activities</h2>
             <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
                 <button type="button" class="post-combat-effects">Combat Effects to Chat <i class="fa-solid fa-swords"></i></button>
-                <button type="button" class="unlock-activities">Unlock <i class="fa-solid fa-lock-open"></i></button>
+                <button type="button" class="unlock-activities">Manage <i class="fa-solid fa-book-open"></i></button>
                 <button type="button" class="add-activity">Add <i class="fa-solid fa-plus"></i></button>
                 <button type="button" class="advance-hours" data-hours="1">+1h <i class="fa-solid fa-clock"></i></button>
                 <button type="button" class="advance-hours" data-hours="2">+2h <i class="fa-solid fa-clock"></i></button>

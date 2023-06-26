@@ -15,7 +15,7 @@ async function succeededEncounterFlatCheck(region: string, dc: EncounterDc): Pro
     return degreeOfSuccess === DegreeOfSuccess.CRITICAL_SUCCESS || degreeOfSuccess === DegreeOfSuccess.SUCCESS;
 }
 
-export async function rollRandomEncounter(game: Game, region: string, dc: EncounterDc, forgoFlatCheck = false): Promise<void> {
+export async function rollRandomEncounter(game: Game, region: string, dc: EncounterDc, forgoFlatCheck = false): Promise<boolean> {
     const creatureRollTable = (await findRollTableUuidWithFallback(game, region, 'pf2e-kingmaker-tools.kingmaker-tools-random-encounters'))!;
     const worldEncounterTable = getStringSetting(game, 'proxyEncounterTable')?.trim();
     const encounterTypeRollTable = findWorldTableUuid(game, worldEncounterTable)!;
@@ -37,7 +37,9 @@ export async function rollRandomEncounter(game: Game, region: string, dc: Encoun
                 await rollRollTable(game, creatureRollTable, rollOptions);
             }
         }
+        return true;
     }
+    return false;
 }
 
 

@@ -63,5 +63,5 @@ export function formatWorldDateTime(worldTime: DateTime, mode: 'AR'): string {
 }
 
 export function formatWorldTime(worldTime: DateTime): string {
-    return worldTime.toFormat('hh:mm:ss');
+    return worldTime.toLocaleString({...DateTime.TIME_24_SIMPLE});
 }

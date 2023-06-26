@@ -2,7 +2,7 @@ import {DegreeOfSuccess} from '../degree-of-success';
 import {roll} from '../utils';
 import {basicIngredientUuid, DcType, Proficiency, rationUuid, specialIngredientUuid} from './data';
 import {getRegionInfo} from './regions';
-import {FoodAmount} from './camping';
+import {FoodAmount} from './eating';
 import {isConsumableItem} from './actor';
 
 export const allCampingActivityNames = [
@@ -98,22 +98,22 @@ export interface SkillRequirement {
 
 export interface CampingActivityData {
     name: CampingActivityName;
-    criticalSuccess?: ActivityOutcome;
-    success?: ActivityOutcome;
-    failure?: ActivityOutcome;
-    criticalFailure?: ActivityOutcome;
     journalUuid: string;
     skillRequirements: SkillRequirement[];
     dc?: DcType;
     skills: string[] | 'any';
-    isSecret: boolean;
-    isLocked: boolean;
-    effectUuids?: ActivityEffect[];
     modifyRandomEncounterDc?: {
         day: number;
         night: number;
     },
+    isSecret: boolean;
+    isLocked: boolean;
+    effectUuids?: ActivityEffect[];
     isHomebrew?: boolean;
+    criticalSuccess?: ActivityOutcome;
+    success?: ActivityOutcome;
+    failure?: ActivityOutcome;
+    criticalFailure?: ActivityOutcome;
 }
 
 function influenceCompanions(): CampingActivityData[] {

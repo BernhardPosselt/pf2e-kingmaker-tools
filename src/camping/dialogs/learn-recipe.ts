@@ -1,7 +1,7 @@
 import {RecipeData} from '../recipes';
 import {toTemplateRecipe, ViewRecipeData} from './manage-recipes';
 import {escapeHtml, parseRadio} from '../../utils';
-import {FoodAmount} from '../camping';
+import {FoodAmount} from '../eating';
 
 export interface LearnRecipeOptions {
     actor: Actor;

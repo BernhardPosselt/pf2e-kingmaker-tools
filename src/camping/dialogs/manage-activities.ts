@@ -4,21 +4,24 @@ import {CampingActivityData, CampingActivityName} from '../activities';
 interface ManageActivitiesOptions {
     data: CampingActivityData[];
     lockedActivities: Set<CampingActivityName>;
-    onSubmit: (lockedActivities: Set<CampingActivityName>) => Promise<void>
+    onSubmit: (lockedActivities: Set<CampingActivityName>, deletedActivities: Set<CampingActivityName>) => Promise<void>;
+    isGM: boolean;
 }
 
-function tpl(data: CampingActivityData[], lockedActivities: Set<CampingActivityName>): string {
+function tpl(data: CampingActivityData[], lockedActivities: Set<CampingActivityName>, isGM: boolean): string {
     return `
         <form class="camping-dialog">
             <table class="km-table">
                 <tr>
                     <th>Name</th>
                     <th>Enabled</th>
+                    <th>Delete</th>
                 </tr>
                 ${data.map(r => {
                     return `<tr>
                         <td>${escapeHtml(r.name)}</td>
-                        <td><input type="checkbox" name="${escapeHtml(r.name)}" ${!lockedActivities.has(r.name) ? 'checked': ''}></td>
+                        <td><input type="checkbox" name="lock-${escapeHtml(r.name)}" ${!lockedActivities.has(r.name) ? 'checked': ''}></td>
+                        <td><input type="checkbox" name="delete-${escapeHtml(r.name)}" ${!isGM || !r.isHomebrew ? 'disabled': ''}></td>                      
                     </tr>`;    
                 }).join('\n')}
             </table>
@@ -31,7 +34,7 @@ export async function manageActivitiesDialog(options: ManageActivitiesOptions): 
     data.sort((a, b) => a.name.localeCompare(b.name));
     new Dialog({
         title: 'Manage Activities',
-        content: tpl(data, options.lockedActivities),
+        content: tpl(data, options.lockedActivities, options.isGM),
         buttons: {
             save: {
                 icon: '<i class="fa-solid fa-save"></i>',
@@ -40,12 +43,19 @@ export async function manageActivitiesDialog(options: ManageActivitiesOptions): 
                     const $html = html as HTMLElement;
                     const lockedActivities = options.data
                         .map(r => {
-                            const enabled = parseCheckbox($html, r.name);
+                            const enabled = parseCheckbox($html, `lock-${r.name}`);
                             return {enabled, name: r.name};
                         })
                         .filter(r => !r.enabled)
                         .map(r => r.name);
-                    await options.onSubmit(new Set(lockedActivities));
+                    const deletedActivities = options.data
+                        .map(r => {
+                            const enabled = parseCheckbox($html, `delete-${r.name}`);
+                            return {enabled, name: r.name};
+                        })
+                        .filter(r => r.enabled)
+                        .map(r => r.name);
+                    await options.onSubmit(new Set(lockedActivities), new Set(deletedActivities));
                 },
             },
         },

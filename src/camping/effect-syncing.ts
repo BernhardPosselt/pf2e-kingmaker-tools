@@ -3,8 +3,9 @@ import {StringDegreeOfSuccess} from '../degree-of-success';
 import {ActivityEffect, ActivityOutcome, CampingActivityData, CampingActivityName} from './activities';
 import {groupBySingle, isGm} from '../utils';
 import {getActorByUuid, getActorsByUuid, getEffectsByUuid, getItemsByUuid, removeActorsEffectsByUuid} from './actor';
-import {Camping, getCampingActivityData, getRecipeData} from './camping';
+import {Camping, getCampingActivityData} from './camping';
 import {getCamping, getCampingActor} from './storage';
+import {getRecipeData} from './eating';
 
 async function addActorRecipeEffect(
     actor: Actor,

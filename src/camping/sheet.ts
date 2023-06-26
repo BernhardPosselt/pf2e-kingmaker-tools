@@ -12,39 +12,23 @@ import {regions} from './regions';
 import {CampingActivityData, CampingActivityName, huntAndGather} from './activities';
 import {
     ActorMeal,
-    calculateConsumedFood,
-    calculateDailyPreparationsSeconds,
-    calculateRestSeconds,
     Camping,
     CookingSkill,
-    getActorConsumables,
     getCampingActivityData,
-    getChosenMealData,
-    getCookingActorByUuid,
-    getCookingActorUuid,
     getDefaultConfiguration,
-    getRecipeData,
-    removeFood,
     rollCampingCheck,
     SkillCheckOptions,
-    subsist,
 } from './camping';
 import {manageActivitiesDialog} from './dialogs/manage-activities';
 import {manageRecipesDialog} from './dialogs/manage-recipes';
-import {getRecipesKnownInRegion, RecipeData} from './recipes';
+import {getKnownRecipes, getRecipesKnownInRegion, RecipeData} from './recipes';
 import {addRecipeDialog} from './dialogs/add-recipe';
 import {campingSettingsDialog} from './dialogs/camping-settings';
 import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
 import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
 import {camelCase, LabelAndValue, listenClick} from '../utils';
-import {
-    actorHasEffectByUuid,
-    getActorsByUuid,
-    hasCookingLore,
-    NotProficientError,
-    validateSkillProficiencies,
-} from './actor';
+import {getActorsByUuid, hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
 import {askDcDialog} from './dialogs/ask-dc';
 import {showCampingHelp} from './dialogs/camping-help';
 import {discoverSpecialMeal} from './dialogs/learn-recipe';
@@ -52,6 +36,18 @@ import {setupDialog} from '../kingdom/dialogs/setup-dialog';
 import {getCamping, saveCamping} from './storage';
 import {postDiscoverSpecialMealResult, postHuntAndGatherResult} from './chat';
 import {DiffListener, eat, getDiffListeners} from './effect-syncing';
+import {calculateDailyPreparationsSeconds, getRestHours, getWatchSecondsDuration, rest} from './resting';
+import {
+    calculateConsumedFood,
+    getActorConsumables,
+    getChosenMealData,
+    getCookingActorByUuid,
+    getCookingActorUuid,
+    getRecipeData,
+    removeFood,
+    subsist,
+} from './eating';
+import {addActivityDialog} from './dialogs/add-activity';
 
 interface CampingOptions {
     game: Game;
@@ -111,28 +107,29 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const sumElapsedSeconds = Math.abs(currentSeconds - data.dailyPrepsAtTime);
         const activityData = getCampingActivityData(data);
         const actors = await this.getActors(data);
-        const watchSecondsDuration = await this.getWatchSecondsDuration(actors, data);
+        const watchSecondsDuration = await getWatchSecondsDuration(actors, data);
         const {total: encounterDC, modifier: currentEncounterDCModifier} = getEncounterDC(data, this.game);
         const actorConsumables = await getActorConsumables(actors);
-        const knownRecipes = data.cooking.knownRecipes;
+        const knownRecipes = getKnownRecipes(data);
         const chosenMealData = getChosenMealData(data);
         const chosenMeal = chosenMealData.name;
         const isUser = !this.isGM;
+        const viewActors = await toViewActors(data.actorUuids, data.campingActivities, getCampingActivityData(data), isUser);
+        const dailyPrepsSeconds = calculateDailyPreparationsSeconds(data.gunsToClean);
         const viewData: ViewCampingData = {
             isGM: this.isGM,
             isUser,
             ...actorConsumables,
             currentEncounterDCModifier,
             encounterDC,
+            watchEnabled: viewActors.length > 0,
             adventuringSince: formatHours(sumElapsedSeconds, data.dailyPrepsAtTime > currentSeconds),
             regions: Array.from(regions.keys()),
             currentRegion,
-            actors: await toViewActors(data.actorUuids, data.campingActivities, getCampingActivityData(data), isUser),
+            actors: viewActors,
             campingActivities: await toViewCampingActivities(data.campingActivities, activityData, new Set(data.lockedActivities)),
-            watchSecondsElapsed: data.watchSecondsElapsed,
-            watchElapsed: formatHours(data.watchSecondsElapsed),
             watchSecondsDuration,
-            dailyPrepsDuration: formatHours(calculateDailyPreparationsSeconds(data.gunsToClean)),
+            dailyPrepsDuration: formatHours(dailyPrepsSeconds),
             watchDuration: formatHours(watchSecondsDuration),
             subsistenceAmount: data.cooking.subsistenceAmount,
             magicalSubsistenceAmount: data.cooking.magicalSubsistenceAmount,
@@ -156,37 +153,11 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             actorMeals: await toViewActorMeals(data.actorUuids, data.cooking.actorMeals, getRecipeData(data)),
             ...(await this.getCookingSkillData(data)),
             chosenMealDc: await this.getMealDc(data, chosenMealData),
+            showContinueRest: data.watchSecondsRemaining !== 0,
+            ...getRestHours(watchSecondsDuration, dailyPrepsSeconds, data.watchSecondsRemaining),
         };
         console.log('viewData', viewData);
         return viewData;
-    }
-
-    private async getWatchSecondsDuration(actors: Actor[], data: Camping): Promise<number> {
-        const organizeWatchCritSuccess = data.campingActivities
-            .find(a => a.activity === 'Organize Watch' && a.result === 'criticalSuccess');
-        // 1 person can't keep watch, so don't increase to 2
-        const additionalWatchers = actors.length > 1 ? (organizeWatchCritSuccess ? 1 : 0) : 0;
-        const current = await this.read();
-        return calculateRestSeconds(actors.length + additionalWatchers, await this.getAverageRestDuration(current));
-    }
-
-    private async getAverageRestDuration(camping: Camping): Promise<number> {
-        // hardcode fish on a stick
-        const fishOnAStick = getRecipeData(camping).find(r => r.name === 'Fish-On-A-Stick')!;
-        const favoriteMeal = fishOnAStick.favoriteMeal!.effects![0]!.uuid;
-        const criticalFailure = fishOnAStick.criticalFailure!.effects![0]!.uuid;
-        const actors = await getActorsByUuid(new Set(camping.actorUuids));
-        const actorsFavoriteMeal = (await Promise.all(actors
-            .map(async a => (await actorHasEffectByUuid(a, favoriteMeal)) ? 1 : 0)))
-            .reduce((a: number, b: number) => a + b, 0);
-        const actorsCriticalFailure = (await Promise.all(actors
-            .map(async a => (await actorHasEffectByUuid(a, criticalFailure)) ? 1 : 0)))
-            .reduce((a: number, b: number) => a + b, 0);
-        const actorsHavingNeither = actors.length - (actorsCriticalFailure + actorsFavoriteMeal);
-        return Math.floor(
-            ((8 * 3600 * actorsHavingNeither) +
-                (7 * 3600 * actorsFavoriteMeal) +
-                (9 * 3600 * actorsCriticalFailure)) / actors.length);
     }
 
     private async getCookingSkillData(data: Camping): Promise<{
@@ -232,8 +203,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     }
 
     private async getActors(data: Camping): Promise<Actor[]> {
-        const actors = data.actorUuids.map(async a => await fromUuid(a) as Actor | null);
-        return (await Promise.all(actors)).filter(a => a !== null) as Actor[];
+        return await getActorsByUuid(new Set(data.actorUuids));
     }
 
     protected _getHeaderButtons(): Application.HeaderButton[] {
@@ -294,7 +264,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             await manageRecipesDialog({
                 isGM: this.isGM,
                 recipes: getRecipeData(current),
-                learnedRecipes: new Set(current.cooking.knownRecipes),
+                learnedRecipes: new Set(getKnownRecipes(current)),
                 onSubmit: async (knownRecipes, deletedRecipes) => {
                     current.cooking.knownRecipes = Array.from(knownRecipes);
                     current.cooking.homebrewMeals = current.cooking.homebrewMeals
@@ -317,14 +287,31 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             const current = await this.read();
             await manageActivitiesDialog({
                 data: getCampingActivityData(current),
+                isGM: this.isGM,
                 lockedActivities: new Set(current.lockedActivities),
-                onSubmit: async (lockedActivities) => {
-                    await this.update({lockedActivities: Array.from(lockedActivities)});
+                onSubmit: async (lockedActivities, deletedActivities) => {
+                    await this.update({
+                            lockedActivities: Array.from(lockedActivities)
+                                .filter(a => !deletedActivities.has(a)),
+                            homebrewCampingActivities: current.homebrewCampingActivities
+                                .filter(a => !deletedActivities.has(a.name)),
+                            campingActivities: current.campingActivities
+                                .filter(a => !deletedActivities.has(a.activity)),
+                        }
+                    );
                 },
             });
         });
         listenClick($html, '.add-activity', async () => {
-            // TODO
+            const current = await this.read();
+            await addActivityDialog({
+                activities: getCampingActivityData(current),
+                onSubmit: async (activity) => {
+                    await this.update({
+                        homebrewCampingActivities: [...current.homebrewCampingActivities, activity],
+                    });
+                },
+            });
         });
         listenClick($html, '.subsist', async (ev) => {
             const button = ev.currentTarget as HTMLButtonElement;
@@ -372,6 +359,16 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                     });
                 }
             }
+        });
+        listenClick($html, '.rest', async () => {
+            const camping = await this.read();
+            const actors = await this.getActors(camping);
+            await rest({
+                camping,
+                sheetActor: this.actor,
+                game: this.game,
+                watchDurationSeconds: await getWatchSecondsDuration(actors, camping),
+            });
         });
         listenClick($html, '.roll-check', async (ev) => {
             const button = ev.currentTarget as HTMLButtonElement;
@@ -627,7 +624,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 subsistenceAmount: formData.subsistenceAmount,
                 chosenMeal: formData.chosenMeal,
                 homebrewMeals: current.cooking.homebrewMeals,
-                knownRecipes: current.cooking.knownRecipes,
+                knownRecipes: getKnownRecipes(current),
                 degreeOfSuccess: mealDegreeOfSuccess,
                 actorMeals: await this.parseActorMeals(formData),
                 cookingSkill: formData.cookingSkill as CookingSkill,
@@ -716,7 +713,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const current = await this.read();
         const availableFood = await getActorConsumables(await this.getActors(current));
         const availableRecipes = getRecipesKnownInRegion(this.game, currentRegion, recipeData)
-            .filter(r => !current.cooking.knownRecipes.includes(r.name));
+            .filter(r => !getKnownRecipes(current).includes(r.name));
         await discoverSpecialMeal({
             actor,
             availableFood,
@@ -799,7 +796,17 @@ export function openCampingSheet(game: Game): void {
     } else {
         setupDialog(game, 'Camping', 'yybLhORz4PeZxCp0', async () => {
             const sheetActor = game?.actors?.find(a => a.name === 'Camping Sheet');
-            await sheetActor?.setFlag('pf2e-kingmaker-tools', 'camping-sheet', getDefaultConfiguration(game));
+            // migrate old recipes
+            const migratedRecipes = game?.actors?.filter(a => a.type === 'character')
+                ?.flatMap(a => {
+                    const knownRecipes = a.getFlag('pf2e-kingmaker-tools', 'knownRecipes');
+                    if (Array.isArray(knownRecipes)) {
+                        return knownRecipes as string[];
+                    } else {
+                        return [];
+                    }
+                }) ?? [];
+            await sheetActor?.setFlag('pf2e-kingmaker-tools', 'camping-sheet', getDefaultConfiguration(game, migratedRecipes));
             await openCampingSheet(game);
         });
     }
