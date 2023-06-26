@@ -40,30 +40,33 @@ The following journals are shipped:
 
 ### Macros
 
-#### Camping Macros
-**Hint**: All camping macros that are based on a region or region DC are configured using the drop-down of the random encounter macro!
+#### Camping Sheet
 
-![Camping Macros](docs/images/camping-macros.png)
+Since 0.2.0, this module ships a camping sheet which includes all meals and camping activities. You can launch the sheet with the camping macro: 
 
-* **Subsist with -5 and Survival**: Even callable on the world map since the user's character is used instead of the selected token
-* **Prepare Camp**: Posts results to chat
-* **Camouflage Campsite**: Posts effects based on result to chat (only GM visible)
-* **Hunt and Gather**: Adds the ingredients into your inventory based on the result
-* **Organize Watch**: Posts effects based on result to chat
-* **Cook Recipe**: Links the recipe to chat after a Survival or Cooking Lore check; list of recipes is determined by learned recipes done via **Recipes** macro. **Note**: does not consume rations nor ingredients!
- ![Cooking Macro](docs/images/cooking-macro.png)
-* **Tell Campfire Story**: Posts effects based on result to chat
-* **Recipes**: A macro to learn or buy special recipes. You can also add homebrew recipes. The UUID of your item recipe can be found under its Rules tab: ![Learn Recipe Macro](docs/images/uuid.png) Note that the list of known recipes is stored on per-user basis due to limitations of the foundry permissions API, so recipe changes don't propagate to others. **Note**: Buying recipes does not subtract the required coins from your inventory!
-![Learn Recipe Macro](docs/images/learn-recipe-macro.png)
-* **Learn from a Companion**: Posts result of check to chat
-* **Camp Management**: Posts results of check to chat
-* **Companion Effects to Chat**: Allows the GM to quickly post the drag and drop effects of actions of companions to chat
+![Camping Macros](docs/images/camping-macro.png)
 
+Once run the macro, it will ask you to import an actor to store your camping sheet data on.
+
+![Camping Sheet 1](docs/images/camping-sheet-1.png)
+![Camping Sheet 2](docs/images/camping-sheet-2.png)
+
+The camping sheet does the following:
+
+* Gives players a way to select camping activities & make skill checks
+* Automates all camping and meal effects based on their check outcomes
+* Allows you to add custom recipes and activities
+* Takes care of calculating and adding/subtracting rations and ingredients based on the chosen recipes
+* Allows you to roll random encounter checks
+* Completely automates resting by automatically rolling random encounters, perception checks and running the **Rest for the Night** macro for all actors
+
+**Note**: Random Encounters can be given a proxy roll table like the one listed in [The Hexploration](https://2e.aonprd.com/Rules.aspx?ID=1276) rules. If you do, the String value "Creature" indicates to roll on the region roll table. Leave the proxy table setting blank to roll on the region encounters directly
+
+  ![Proxy Table](docs/images/random-encounter-proxy-table.png)
 #### Other
 * A macro to toggle weather on/off to change into non-exposed areas
 * A macro to manually roll weather, should you prefer to not automatically roll it.
 * A macro to advance/retract to a certain day of time
-* A stopwatch macro to advance time during rest, daily preparations and tracks adventuring time after daily preps
 * A macro to roll on a custom Kingdom Events table. By default, the Roll Table is called "Kingdom Events", but you can change the name in the settings
 * 3 macros that help automate exploration mode. 
   
@@ -72,13 +75,6 @@ The following journals are shipped:
   2 of them integrate with [PF2E Exploration Effects](https://foundryvtt.com/packages/pf2e-exploration-effects) and will roll secret checks for stealth and perception for all characters on the current canvas, that have the "Search" or "Avoid Notice" exploration effect. The other macro rolls checks for all configured characters and can be used to roll checks on the hex map without having the tokens be active on that scene.
 
 ![Skills Macro](docs/images/skills-macro.png)
-  
-* A macro to roll a random encounter of a region.
-  ![Random Encounter Macro](docs/images/random-encounter-macro.png)
-  
-  Optionally, can be given a proxy roll table like the one listed in [The Hexploration](https://2e.aonprd.com/Rules.aspx?ID=1276) rules. If you do, the String value "Creature" indicates to roll on the region roll table. Leave the proxy table setting blank to roll on the region encounters directly
-
-  ![Proxy Table](docs/images/random-encounter-proxy-table.png)
 
 ### Tokens
 
