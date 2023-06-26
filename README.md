@@ -393,9 +393,7 @@ In addition, you can configure sound effects that are played for rain, sunny and
 
 Each day, a new value is rolled from the roll table and persisted across all scenes.
 
-### Kingdom Sheet (Alpha)
-
-**NOTE**: this implementation is an alpha and might eat your data or break at any point in time. Keep a digital/physical sheet on the side!
+### Kingdom Sheet
 
 ![Kingdom Sheet](docs/images/kingdom-sheet.png)
 
