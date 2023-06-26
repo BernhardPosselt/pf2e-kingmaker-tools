@@ -2,7 +2,14 @@ import {getAllMealEffectUuids, getMealEffectUuids, RecipeData} from './recipes';
 import {StringDegreeOfSuccess} from '../degree-of-success';
 import {ActivityEffect, ActivityOutcome, CampingActivityData, CampingActivityName} from './activities';
 import {groupBySingle, isGm} from '../utils';
-import {getActorByUuid, getActorsByUuid, getEffectsByUuid, getItemsByUuid, removeActorsEffectsByUuid} from './actor';
+import {
+    getActorByUuid,
+    getActorEffectsByUuid,
+    getActorsByUuid,
+    getEffectsByUuid,
+    getItemsByUuid,
+    removeActorsEffectsByUuid,
+} from './actor';
 import {Camping, getCampingActivityData} from './camping';
 import {getCamping, getCampingActor} from './storage';
 import {getRecipeData} from './eating';
@@ -107,13 +114,25 @@ function getEffectUuidsForActors(options: SyncActorCampingEffectOptions): Effect
         };
     });
 }
+
+async function syncActorCampingEffects(actor: Actor, effects: (Item & EffectItem)[], allUuids: Set<string>): Promise<void> {
+    const effectNames = new Set(effects.map(e => e.name));
+    const existingEffects = await getActorEffectsByUuid(actor, allUuids);
+    const existingEffectNames = new Set(existingEffects.map(e => e.name));
+    const effectsToAdd = effects.filter(e => !existingEffectNames.has(e.name));
+    const effectsToRemove = existingEffects.filter(e => !effectNames.has(e.name)).map(e => e.id);
+    await Promise.all([
+        actor.createEmbeddedDocuments('Item', effectsToAdd.map(e => e.toObject())),
+        actor.deleteEmbeddedDocuments('Item', effectsToRemove),
+    ]);
+}
+
 export async function syncActorsCampingEffects(options: SyncActorCampingEffectOptions): Promise<void> {
     const uuids = new Set(getAllCampingEffectUuids(options.campingActivities));
-    await removeActorsEffectsByUuid(options.actors, new Set(uuids));
     const effectUuidsForActors = getEffectUuidsForActors(options);
     await Promise.all(effectUuidsForActors.map(async effectsForActor => {
         const effects = await getEffectsByUuid(new Set(effectsForActor.effectUuids));
-        await effectsForActor.actor.createEmbeddedDocuments('Item', effects.map(e => e.toObject()));
+        await syncActorCampingEffects(effectsForActor.actor, effects, uuids);
     }));
 }
 

@@ -1,5 +1,10 @@
 const content = `
 <div>
+    <h2>Important Notes</h2>
+    <ul>
+        <li>Syncing camping effects is a very slow process, so if you want to run all companions, create 1 companion <b>character</b> sheet instead of adding all 13 companions</li>
+        <li>Do not forget to change the camping sheet actor's permissions so your players can do stuff</li>
+    </ul>
     <h2>Usage</h2>
     <p>The basic idea of the sheet is to make camping incredibly fast by:</p>
     <ul>

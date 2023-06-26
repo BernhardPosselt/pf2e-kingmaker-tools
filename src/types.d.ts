@@ -29,7 +29,7 @@ declare global {
                 month: string;
             }
             actions: {
-                restForTheNight: (actors: Actor[]) => Promise<void>;
+                restForTheNight: (options: {actors: Actor[]}) => Promise<void>;
                 subsist: (options: { actors: Actor[], skill: string, difficultyClass?: number; }) => void;
             }
             Modifier: typeof PF2EModifier

@@ -19,7 +19,8 @@ function getItemsByName(actor: Actor, type: ItemType, names: Set<string>): Item[
 }
 
 export async function getActorItemsByUuid(actor: Actor, type: ItemType, uuids: Set<string>): Promise<Item[]> {
-    return getItemsByName(actor, type, await getItemNames(uuids));
+    const names = await getItemNames(uuids);
+    return getItemsByName(actor, type, names);
 }
 
 export function isEffectItem(item: Item): item is Item & EffectItem {
