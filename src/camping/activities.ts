@@ -98,7 +98,7 @@ export interface SkillRequirement {
 
 export interface CampingActivityData {
     name: CampingActivityName;
-    journalUuid: string;
+    journalUuid?: string;
     skillRequirements: SkillRequirement[];
     dc?: DcType;
     skills: string[] | 'any';

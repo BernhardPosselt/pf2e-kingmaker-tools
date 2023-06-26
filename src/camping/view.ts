@@ -67,7 +67,7 @@ export interface ViewCampingActivity {
     name: string;
     slug: string;
     actor: ViewActor | null;
-    journalUuid: string;
+    journalUuid: string | null;
     isSkillCheck: boolean;
     degreeOfSuccess: StringDegreeOfSuccess | null;
     skills: LabelAndValue[];
@@ -95,7 +95,7 @@ async function toViewActivity(
     return {
         name: activityData.name,
         actor: activity?.actorUuid ? await toViewActor(activity.actorUuid) : null,
-        journalUuid: activityData.journalUuid,
+        journalUuid: activityData.journalUuid ?? null,
         isSkillCheck: skills.length > 0,
         skills: skills.map(s => {
             return {value: s, label: unslugify(s)};

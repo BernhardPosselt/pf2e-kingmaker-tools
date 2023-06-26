@@ -1,5 +1,5 @@
 <div class="actor-wrapper">
-    <header class="actor-header" data-uuid="{{activity.journalUuid}}">{{activity.name}}</header>
+    <header class="actor-header" {{#if activity.journalUuid}}data-uuid="{{activity.journalUuid}}"{{/if}}>{{activity.name}}</header>
     <div class="actor-image-container">
         {{#if actor}}
             <img src="{{activity.actor.image}}" title="{{activity.actor.name}}" class="actor-image" data-uuid="{{activity.actor.uuid}}">

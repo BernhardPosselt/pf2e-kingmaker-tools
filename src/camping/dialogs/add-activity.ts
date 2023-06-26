@@ -114,10 +114,10 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                     const $html = html as HTMLElement;
                     const journalUuid = parseTextInput($html, 'journal');
                     const effectUuid = parseTextInput($html, 'effect');
-                    const item = await fromUuid(journalUuid);
+                    const journal = await fromUuid(journalUuid);
                     const effectItem = await getEffectByUuid(effectUuid);
                     const name = (parseTextInput($html, 'name') || 'Unknown Activity') as CampingActivityName;
-                    if (item === null) {
+                    if (journalUuid && journal === null) {
                         ui.notifications?.error(`Can not find journal with uuid ${journalUuid}`);
                     } else if (effectUuid && effectItem === null) {
                         ui.notifications?.error(`Can not find effect item with uuid ${effectUuid}`);
