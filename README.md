@@ -73,6 +73,8 @@ For more detailed information, consult the **Help** button in the camping sheet'
 * A macro to toggle weather on/off to change into non-exposed areas
 * A macro to manually roll weather, should you prefer to not automatically roll it.
 * A macro to advance/retract to a certain day of time
+* A macro to award XP to players and level them up once they cross the XP threshold
+* A macro to reset hero points to 1
 * A macro to roll on a custom Kingdom Events table. By default, the Roll Table is called "Kingdom Events", but you can change the name in the settings
 * 3 macros that help automate exploration mode. 
   

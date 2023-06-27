@@ -21,6 +21,8 @@ declare global {
                 editStructureMacro: (actor: any) => Promise<void>,
                 rollExplorationSkillCheck: (skill: string, effect: string) => Promise<void>,
                 rollSkillDialog: () => Promise<void>,
+                awardXpMacro: () => Promise<void>,
+                resetHeroPointsMacro: () => Promise<void>,
             };
         };
         pf2e: {
@@ -76,6 +78,12 @@ declare global {
         abilities: {
             con: { mod: number }
         };
+        system: {
+            details: {
+                xp: {value: number, max: number},
+                level: {value: number}
+            }
+        }
     }
 
     class ItemSheet {

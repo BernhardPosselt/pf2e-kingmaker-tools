@@ -16,6 +16,7 @@ import {openCampingSheet} from './camping/sheet';
 import {bindCampingChatEventListeners} from './camping/chat';
 import {getDiffListeners} from './camping/effect-syncing';
 import {getCamping, getCampingActor} from './camping/storage';
+import {resetHeroPoints, showAwardXPDialog} from './macros';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -27,6 +28,8 @@ Hooks.on('ready', async () => {
                 kingdomEventsMacro: rollKingdomEvent.bind(null, game),
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
                 viewKingdomMacro: showKingdom.bind(null, game),
+                awardXpMacro: showAwardXPDialog.bind(null, game),
+                resetHeroPointsMacro: resetHeroPoints.bind(null, game),
                 viewArmyMacro: (actor: Actor, token: Token): Promise<void> => showArmy(gameInstance, actor, token),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 openCampingSheet: (): void => openCampingSheet(gameInstance),
@@ -115,21 +118,6 @@ Hooks.on('ready', async () => {
             default: 'sunny',
             type: String,
         });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'currentRegion', {
-            name: 'Current Region',
-            hint: 'Region used for random encounters',
-            scope: 'world',
-            config: false,
-            default: 'Rostland',
-            type: String,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'currentEncounterDCModifier', {
-            name: 'Current Encounter DC Modifier',
-            scope: 'world',
-            config: false,
-            default: 0,
-            type: Number,
-        });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'proxyEncounterTable', {
             name: 'Proxy Random Encounter Table',
             hint: 'Name of the in world roll table that is rolled first to check what kind of encounter is rolled. Use the string "Creature" to roll on the region roll table in the proxy roll table or link another roll table of your choice. Leave blank to always roll on the region random encounter tables.',
@@ -175,69 +163,6 @@ Hooks.on('ready', async () => {
             config: true,
             default: 'Random Cult Events',
             type: String,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'selectedCompanions', {
-            name: 'Selected Companions',
-            scope: 'client',
-            config: false,
-            default: '',
-            type: String,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'lastCookedMeal', {
-            name: 'Last Cooked Meal',
-            scope: 'client',
-            config: false,
-            default: '',
-            type: String,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'lastCookingSkill', {
-            name: 'Last Cooking Skill',
-            scope: 'client',
-            config: false,
-            default: '',
-            type: String,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'knownRecipes', {
-            name: 'Known Recipes',
-            scope: 'client',
-            config: false,
-            default: '["Basic Meal", "Hearty Meal"]',
-            type: String,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'customRecipes', {
-            name: 'Custom Recipes',
-            scope: 'world',
-            config: false,
-            default: '[]',
-            type: String,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'servings', {
-            name: 'How Many Servings to Cook',
-            scope: 'client',
-            config: false,
-            default: 1,
-            type: Number,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'stopWatchStart', {
-            name: 'Stop Watch Start Timestamp',
-            scope: 'world',
-            config: false,
-            default: game.time.worldTime,
-            type: Number,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'gunsToClean', {
-            name: 'Guns to Clean',
-            scope: 'world',
-            config: false,
-            default: 0,
-            type: Number,
-        });
-        gameInstance.settings.register('pf2e-kingmaker-tools', 'partySize', {
-            name: 'Party Size',
-            scope: 'world',
-            config: false,
-            default: 4,
-            type: Number,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'vanceAndKerensharaXP', {
             name: 'Enable Vance and Kerenshara XP rules',
