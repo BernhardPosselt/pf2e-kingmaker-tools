@@ -6,10 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2023-06-27
+
 ### Added
 
 * Macros to Award XP
 * Macro to reset Hero Points to 1
+
+## Fixed
+
+* Also ship static folder
 
 ## [0.2.0] - 2023-06-26
 
