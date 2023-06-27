@@ -19,7 +19,7 @@ mkdir -p build/pf2e-kingmaker-tools/
 # create archive
 node ./scripts/update-module-json.mjs "$version"
 cp module.json map.json README.md LICENSE CHANGELOG.md OpenGameLicense.md build/pf2e-kingmaker-tools/
-cp -r packs/ docs/ templates/ styles/ dist/ build/pf2e-kingmaker-tools/
+cp -r packs/ docs/ templates/ styles/ dist/ static/ build/pf2e-kingmaker-tools/
 
 # remove broken links
 ./node_modules/.bin/fvtt package workon "pf2e-kingmaker-tools"
