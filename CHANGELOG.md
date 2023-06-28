@@ -6,6 +6,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [0.2.2] - 2023-06-28
+## Added
+
+* Note on how to implement Relax if desired in the help menu
+* Combat effects no mention if they target enemies or allies
+
+## Removed
+
+* Relax camping activity
+* Unused camping effects
+
+## Fixed
+
+* Fully automate **Relaxed** effect
+* Fix effect rendering by renaming all effects containing a colon to use parenthesis. Existing effects are synced by name, so you will need to remove them manually
+* Adjust fortify camp to only apply to watches
+
+
 ## [0.2.1] - 2023-06-27
 
 ### Added

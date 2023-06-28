@@ -77,8 +77,9 @@ const content = `
     
     <h3>Camping Activities</h3>
     <ul>
-        <li><b>Relax</b>: Does not remove the penalty from a Tell Campfire Story Critical Failure activity nor receive any different benefits from Tell Campfire Story Success and Critical Success results. Reason for this is that this requires a way to track when effects were performed which not only leads to a lot of work but also reduces the sheet's usability by a significant amount.</b></li>
+        <li><b>Relax</b>: Since this action can be taken by everyone and depends on the order, only a <b>Relaxed</b> camping effect is available in the Camping Effects compendium. If you wish to, you can create a custom activity for each PC and give it the Effect UUID <b>Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.QvR2yvuIVQuztCwQ</b> and Effect Target <b>Self</b> which handles all of the automation</li>
         <li><b>Camp Management</b>: There is no concept of sequential activities</li>
+        <li><b>Provide Aid</b>: Roll this one as a separate check from your character sheet and apply the circumstance bonus for the roll separately</li>
         <li><b>Exploration Activities</b>: Activities that can be taken by more than one PC such as Exploration Activities are not supported since they require a different way of tracking time and have no clear way of automating them. You can execute these directly from your PC's sheet instead</li>
     </ul>
     

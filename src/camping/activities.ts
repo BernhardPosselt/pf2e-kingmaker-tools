@@ -13,7 +13,6 @@ export const allCampingActivityNames = [
     'Hunt and Gather',
     'Learn from a Companion',
     'Organize Watch',
-    'Relax',
     'Tell Campfire Story',
     'Blend Into The Night',
     'Bolster Confidence',
@@ -278,17 +277,6 @@ export const allCampingActivities: CampingActivityData[] = [{
         message: 'As failure, but you may have attracted unwanted attention. Attempt a flat check against the zone’s Encounter DC to determine if a random encounter occurs.',
         checkRandomEncounter: true,
     },
-}, {
-    name: 'Relax',
-    journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.J2SaSNjxAKy9IhzI',
-    isLocked: false,
-    isSecret: false,
-    skillRequirements: [],
-    skills: [],
-    effectUuids: [{
-        uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.QvR2yvuIVQuztCwQ',
-        targetAll: false,
-    }],
 }, {
     name: 'Tell Campfire Story',
     journalUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.XaKD1oGTAgZUjlQ5',

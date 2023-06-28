@@ -158,19 +158,40 @@ export function getCampingActivityData(current: Camping): CampingActivityData[] 
     return allCampingActivities.concat(current.homebrewCampingActivities);
 }
 
-const combatEffects: Partial<Record<CampingActivityName, string>> = {
-    'Enhance Weapons': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.ZKJlIqyFgbKDACnG]{Enhance Weapons}',
-    'Set Traps': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.PSBOS7ZEl9RGWBqD]{Set Traps}',
-    'Undead Guardians': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.KysTaC245mOnSnmE]{Undead Guardians}',
-    'Water Hazards': '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.LN6mH7Muj4hgvStt]{Water Hazards}',
+export interface CombatEffect {
+    uuid: string;
+    target: string;
+}
+
+const combatEffects: Partial<Record<CampingActivityName, CombatEffect>> = {
+    'Enhance Weapons':
+        {
+            uuid: '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.ZKJlIqyFgbKDACnG]{Enhance Weapons}',
+            target: 'Allies',
+        },
+    'Set Traps':
+        {
+            uuid: '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.PSBOS7ZEl9RGWBqD]{Set Traps}',
+            target: 'Enemies',
+        },
+    'Undead Guardians':
+        {
+            uuid: '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.KysTaC245mOnSnmE]{Undead Guardians}',
+            target: '1 Ally',
+        },
+    'Water Hazards':
+        {
+            uuid: '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.LN6mH7Muj4hgvStt]{Water Hazards}',
+            target: 'Enemies',
+        },
 };
 
-export function getCombatEffects(data: Camping): Partial<Record<CampingActivityName, string>> {
-    const result: Partial<Record<CampingActivityName, string>> = {};
+export function getCombatEffects(data: Camping): Partial<Record<CampingActivityName, CombatEffect>> {
+    const result: Partial<Record<CampingActivityName, CombatEffect>> = {};
     data.campingActivities.forEach(a => {
         const activityName = a.activity;
         if (activityName in combatEffects && a.actorUuid) {
-            result[activityName] = combatEffects[activityName];
+            result[activityName] = combatEffects[activityName]!;
         }
     });
     return result;

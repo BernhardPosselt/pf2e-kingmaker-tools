@@ -212,7 +212,7 @@ export async function combatEffectsToChat(data: Camping): Promise<void> {
     const effects = getCombatEffects(data);
     if (Object.keys(effects).length > 0) {
         const companionsAndLabels = Object.entries(effects)
-            .map(([name, link]) => `<b>${name}<b>: ${link}`)
+            .map(([name, link]) => `<b>${name} (${link.target})<b>: ${link.uuid}`)
             .join('<br>');
         await ChatMessage.create({content: companionsAndLabels});
     }
