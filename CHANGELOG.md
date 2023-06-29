@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.5] - 2023-06-xx
+
+## Changed
+
+* Improved docs and add label onto sidebar actor silhouette to clearly communicate that actors can be dropped there
+
 ## [0.2.4] - 2023-06-29
 
 ## Changed

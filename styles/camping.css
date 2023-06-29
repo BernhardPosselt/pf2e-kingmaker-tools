@@ -79,6 +79,21 @@
     background-color: #cc2929;
 }
 
+.new-camping-actor {
+    position: relative;
+}
+
+.new-camping-actor-label {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 5px black;
+    top: calc((var(--actor-image-sidebar-height)/2) - 9px);
+    font-size: 12px;
+    text-align: center;
+    width: var(--actor-image-sidebar-width);
+}
+
 .camping-actor {
     display: flex;
     height: var(--actor-image-sidebar-height);
@@ -222,6 +237,11 @@
     width: var(--actor-image-width);
     display: block;
 }
+
+.camping-sidebar .camping-actors .no-actor-image {
+    border: 1px solid #000;
+}
+
 
 .camping-sidebar .actor-image-container {
     position: relative;

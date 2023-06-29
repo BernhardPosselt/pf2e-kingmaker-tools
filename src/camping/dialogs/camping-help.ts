@@ -18,7 +18,7 @@ const content = `
     
     <p>Change the actor's permission so that everyone is assigned as <b>Owner</b>.</p>
     
-    <p>Once the actor exists, you set up the camping sheet by drag and dropping actors from your actor tab into the <b>In Camp</b> sidebar. These actors are considered to be available for watches, eating and activity selection. <b>Important</b>: Note, that users can't drag and drop their own actors from the sidebar by default, so the GM needs to pre-populate it. Inside the camping sheet, every player can move every and change every actor but dropping items onto non-owned players will fail</p>
+    <p>Once the actor exists, you set up the camping sheet by drag and dropping actors from your actor tab onto the silhouette in the <b>In Camp</b> sidebar. These actors are considered to be available for watches, eating and activity selection. After that, you can drag and drop the actor image from the sidebar onto the silhouettes in the <b>Activities</b> section. <b>Important</b>: Note, that users can't drag and drop their own actors from the sidebar by default, so the GM needs to pre-populate it. Inside the camping sheet, every player can move and change every actor but dropping items onto non-owned players will fail</p>
     
     <h3>Random Encounters</h3>
     <p>Random encounters are managed at the very top by selecting the region drop down, changing the flat check modifier if necessary and then clicking the <i class="fa-solid fa-skull"></i><i class="fa-solid fa-dice-d20"></i> button. If you don't want to perform a flat check hit the <i class="fa-solid fa-skull"></i> button</p>
