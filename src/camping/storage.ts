@@ -13,6 +13,13 @@ export async function saveCamping(game: Game, sheetActor: Actor, update: Partial
 
 export function getCamping(sheetActor: Actor): Camping {
     const camping = sheetActor.getFlag('pf2e-kingmaker-tools', 'camping-sheet') as Camping;
+    // migrations
+    if (camping.increaseWatchActorNumber === undefined) {
+        camping.increaseWatchActorNumber = 0;
+    }
+    if (camping.actorUuidsNotKeepingWatch === undefined) {
+        camping.actorUuidsNotKeepingWatch = [];
+    }
     console.log('Reading', camping);
     return deepClone(camping);
 }

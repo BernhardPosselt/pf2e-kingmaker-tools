@@ -49,6 +49,8 @@ export interface Camping {
     currentRegion: string;
     encounterModifier: number;
     restRollMode: RestRollMode;
+    increaseWatchActorNumber: number;
+    actorUuidsNotKeepingWatch: string[];
 }
 
 export function getDefaultConfiguration(game: Game, migratedRecipes: string[]): Camping {
@@ -72,6 +74,8 @@ export function getDefaultConfiguration(game: Game, migratedRecipes: string[]): 
         encounterModifier: 0,
         gunsToClean: 0,
         watchSecondsRemaining: 0,
+        actorUuidsNotKeepingWatch: [],
+        increaseWatchActorNumber: 0,
         lockedActivities: allCampingActivities
             .filter(a => a.isLocked)
             .map(a => a.name),

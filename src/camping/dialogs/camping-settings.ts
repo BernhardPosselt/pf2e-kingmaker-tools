@@ -1,12 +1,20 @@
-import {parseNumberInput, parseSelect} from '../../utils';
+import {escapeHtml, parseCheckbox, parseNumberInput, parseSelect} from '../../utils';
 import {RestRollMode} from '../camping';
 
 export interface SettingData {
     gunsToClean: number;
     restRollMode: RestRollMode;
+    increaseWatchActorNumber: number;
+    actorsKeepingWatch: { uuid: string, name: string, watchEnabled: boolean }[]
 }
+
 export interface CampingSettingOptions {
-    onSubmit: (data: SettingData) => Promise<void>;
+    onSubmit: (data: {
+        gunsToClean: number,
+        restRollMode: RestRollMode,
+        increaseWatchActorNumber: number,
+        actorUuidsNotKeepingWatch: string[]
+    }) => Promise<void>;
     data: SettingData;
 }
 
@@ -19,6 +27,18 @@ export function campingSettingsDialog({onSubmit, data}: CampingSettingOptions): 
                 <label for="km-guns-to-clean">Guns To Clean</label>
                 <input type="number" name="guns-to-clean" id="km-guns-to-clean" value="${data.gunsToClean}">
             </div>
+            <div>
+                <label for="km-increase-actor-watch-number">Increase Actors Keeping Watch</label>
+                <input type="number" name="increase-actor-watch-number" id="km-increase-actor-watch-number" value="${data.increaseWatchActorNumber}">
+            </div>
+            ${data.actorsKeepingWatch.map(a => {
+            return `
+                <div>
+                    <label for="km-actor-uuids-keeping-watch-${a.uuid}">Keep Watch: ${escapeHtml(a.name)}</label>
+                    <input type="checkbox" name="actor-uuids-keeping-watch-${a.uuid}" id="km-actor-uuids-keeping-watch-${a.uuid}" ${a.watchEnabled ? 'checked' : ''}>
+                </div>
+                `;
+        }).join('')}
             <div>
                 <label for="km-rest-roll-mode">Rest Random Encounter Roll Mode</label>
                 <select name="rest-roll-mode" id="km-rest-roll-mode">
@@ -36,8 +56,17 @@ export function campingSettingsDialog({onSubmit, data}: CampingSettingOptions): 
                 callback: async (html): Promise<void> => {
                     const $html = html as HTMLElement;
                     const gunsToClean = parseNumberInput($html, 'guns-to-clean');
+                    const increaseWatchActorNumber = parseNumberInput($html, 'increase-actor-watch-number') || 0;
                     const restRollMode = parseSelect($html, 'rest-roll-mode') as RestRollMode;
-                    await onSubmit({gunsToClean, restRollMode});
+                    const actorUuidsNotKeepingWatch = data.actorsKeepingWatch
+                        .filter(a => !parseCheckbox($html, `actor-uuids-keeping-watch-${a.uuid}`))
+                        .map(a => a.uuid);
+                    await onSubmit({
+                        gunsToClean,
+                        restRollMode,
+                        increaseWatchActorNumber,
+                        actorUuidsNotKeepingWatch,
+                    });
                 },
             },
         },

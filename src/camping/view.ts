@@ -54,6 +54,7 @@ export interface ViewCampingData {
     watchEnabled: boolean;
     restHours: string;
     currentRestHours: string;
+    actorsKeepingWatch: number;
 }
 
 export interface ViewActor {

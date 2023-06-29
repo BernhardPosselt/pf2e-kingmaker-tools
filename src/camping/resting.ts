@@ -68,12 +68,15 @@ async function getAverageRestDuration(camping: Camping): Promise<number> {
             (9 * 3600 * actorsCriticalFailure)) / actors.length);
 }
 
-function getActorsKeepingWatch(data: Camping, actors: Actor[]): number {
+export function getActorsKeepingWatch(data: Camping, actors: Actor[]): number {
     const organizeWatchCritSuccess = data.campingActivities
         .find(a => a.activity === 'Organize Watch' && a.result === 'criticalSuccess');
     // 1 person can't keep watch, so don't increase to 2
     const additionalWatchers = actors.length > 1 ? (organizeWatchCritSuccess ? 1 : 0) : 0;
-    return actors.length + additionalWatchers;
+    const blacklistedActorNumber = data.actorUuidsNotKeepingWatch
+        .filter(uuid => data.actorUuids.includes(uuid))
+        .length;
+    return actors.length + additionalWatchers + data.increaseWatchActorNumber - blacklistedActorNumber;
 }
 
 export async function getWatchSecondsDuration(actors: Actor[], data: Camping): Promise<number> {
@@ -173,7 +176,7 @@ async function startWatch(game: Game, camping: Camping, watchDurationSeconds: nu
     } = await getWatchRandomEncounterData(game, camping, watchDurationSeconds);
     await game.time.advance(advanceToSeconds);
     if (encounter) {
-        const actorsKeepingWatch = actors.filter(a => a.hasPlayerOwner);
+        const actorsKeepingWatch = actors.filter(a => !camping.actorUuidsNotKeepingWatch.includes(a.uuid));
         if (actorsKeepingWatch.length > 0) {
             const actorKeepingWatchIndex = Math.floor(Math.random() * actorsKeepingWatch.length);
             await rollCampingCheck({

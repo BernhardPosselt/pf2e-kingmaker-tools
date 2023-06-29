@@ -36,7 +36,13 @@ import {setupDialog} from '../kingdom/dialogs/setup-dialog';
 import {getCamping, saveCamping} from './storage';
 import {postDiscoverSpecialMealResult, postHuntAndGatherResult} from './chat';
 import {DiffListener, eat, getDiffListeners} from './effect-syncing';
-import {calculateDailyPreparationsSeconds, getRestHours, getWatchSecondsDuration, rest} from './resting';
+import {
+    calculateDailyPreparationsSeconds,
+    getActorsKeepingWatch,
+    getRestHours,
+    getWatchSecondsDuration,
+    rest,
+} from './resting';
 import {
     calculateConsumedFood,
     getActorConsumables,
@@ -108,6 +114,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const activityData = getCampingActivityData(data);
         const actors = await this.getActors(data);
         const watchSecondsDuration = await getWatchSecondsDuration(actors, data);
+        const actorsKeepingWatch = getActorsKeepingWatch(data, actors);
         const {total: encounterDC, modifier: currentEncounterDCModifier} = getEncounterDC(data, this.game);
         const actorConsumables = await getActorConsumables(actors);
         const knownRecipes = getKnownRecipes(data);
@@ -155,6 +162,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             chosenMealDc: await this.getMealDc(data, chosenMealData),
             showContinueRest: data.watchSecondsRemaining !== 0,
             ...getRestHours(watchSecondsDuration, dailyPrepsSeconds, data.watchSecondsRemaining),
+            actorsKeepingWatch,
         };
         console.log('viewData', viewData);
         return viewData;
@@ -384,10 +392,20 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         });
         listenClick($html, '.camping-settings', async (ev) => {
             const current = await this.read();
+            const actors = await getActorsByUuid(new Set(current.actorUuids));
             campingSettingsDialog({
                 data: {
                     restRollMode: current.restRollMode,
                     gunsToClean: current.gunsToClean,
+                    increaseWatchActorNumber: current.increaseWatchActorNumber,
+                    actorsKeepingWatch: actors
+                        .map(a => {
+                            return {
+                                uuid: a.uuid,
+                                name: a.name ?? 'Unknown Actor',
+                                watchEnabled: !current.actorUuidsNotKeepingWatch.includes(a.uuid),
+                            };
+                        }),
                 },
                 onSubmit: async (data) => await this.update(data),
             });

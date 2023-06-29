@@ -51,7 +51,15 @@ const content = `
     <p>Values set in the <b>Subsistence</b> and <b>Magical Subsistence</b> fields will not be touched, since casting <b>Create Food</b> and successfully executing <b>Subsist</b> will become the default after level 5 if your players optimize. Before that, you will need to manually change these values each camping session.</p>
     
     <h3>Resting</h3>
-    <p>You can start a rest by hitting the <b>Begin Rest</b> button. By default, one random encounter will be rolled automatically per rest. If the encounter occurs, a random point in time between now and the end of the rest will be chosen and time will automatically advance to that point in time. Afterward, a random actor owned by a player who is also present in the sidebar will be chosen as having watch. A secret perception check is then rolled in chat.</p>
+    <p>Rest duration is affected by the following parameters:</p>
+    <ul>
+        <li>Number of all actors in camp that are enabled in the watch rest settings, plus</li>
+        <li><b>Increase actors keeping watch</b> rest setting, plus</li>
+        <li>1 if <b>Organize Watch</b> was a Critical Success, plus</li>
+        <li>Fish-on-a-Stick rest duration effects</li>
+        <li><b>Guns To Clean</b> setting (affects Daily Preparations)</li>
+    </ul>
+    <p>You can start a rest by hitting the <b>Begin Rest</b> button. By default, one random encounter will be rolled automatically per rest. If the encounter occurs, a random point in time between now and the end of the rest will be chosen and time will automatically advance to that point in time. Afterward, a random actor who is present in the sidebar and enabled in the <b>Keep Watch</b> rest setting will be chosen as having watch. A secret perception check is then rolled in chat.</p>
     
     <p>Once you finish the random encounter, you can continue the rest by pressing <b>Continue Rest</b>. No more random encounters will happen. Time will advance to after your daily preparations</p>
     

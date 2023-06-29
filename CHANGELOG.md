@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.4] - 2023-06-29
+
+## Changed
+
+* Actors can now be blacklisted for the random encounter perception roll during rest. You can configure that in the rest settings by deselecting the actor from having watch. This is useful if you want to except companions from rolling perception checks during watch or if you have a party actor that includes ingredients/rations that should not have an impact on rest duration
+* Number of actors can now be increased by setting the **Increase actors keeping watch** rest setting. This is useful if you use a single companion actor but want all companions to have an effect on the watch duration 
+
+
 ## [0.2.3] - 2023-06-28
 ## Fixed
 
