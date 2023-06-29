@@ -87,7 +87,7 @@
     position: absolute;
     color: white;
     font-weight: bold;
-    text-shadow: 0 0 5px black;
+    text-shadow: 0 0 2px black;
     top: calc((var(--actor-image-sidebar-height)/2) - 9px);
     font-size: 12px;
     text-align: center;
