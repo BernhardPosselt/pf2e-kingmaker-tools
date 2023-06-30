@@ -401,6 +401,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                     restRollMode: current.restRollMode,
                     gunsToClean: current.gunsToClean,
                     increaseWatchActorNumber: current.increaseWatchActorNumber,
+                    ignoreSkillRequirements: current.ignoreSkillRequirements,
                     actorsKeepingWatch: actors
                         .map(a => {
                             return {
@@ -534,7 +535,9 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                     .find(a => a.name === activityName)?.skillRequirements ?? [];
                 if (document instanceof Actor) {
                     try {
-                        await validateSkillProficiencies(document, proficiencyRequirements);
+                        if (!current.ignoreSkillRequirements) {
+                            await validateSkillProficiencies(document, proficiencyRequirements);
+                        }
                         await this.setActivityActor(campingConfiguration, activityName, document.uuid);
                     } catch (e) {
                         if (e instanceof NotProficientError) {

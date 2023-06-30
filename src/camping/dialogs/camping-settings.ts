@@ -7,7 +7,8 @@ export interface SettingData {
     increaseWatchActorNumber: number;
     huntAndGatherTargetActorUuid: string | null | undefined;
     actors: Actor[];
-    actorsKeepingWatch: { uuid: string, name: string, watchEnabled: boolean }[]
+    actorsKeepingWatch: { uuid: string, name: string, watchEnabled: boolean }[];
+    ignoreSkillRequirements: boolean;
 }
 
 export interface CampingSettingOptions {
@@ -17,6 +18,7 @@ export interface CampingSettingOptions {
         increaseWatchActorNumber: number,
         actorUuidsNotKeepingWatch: string[],
         huntAndGatherTargetActorUuid: string | null,
+        ignoreSkillRequirements: boolean,
     }) => Promise<void>;
     data: SettingData;
 }
@@ -61,6 +63,10 @@ export function campingSettingsDialog({onSubmit, data}: CampingSettingOptions): 
                     }).join('')}
                 </select>
             </div>
+            <div>
+                <label for="km-ignore-skill-requirements">Do not validate Activity Skill Proficiency</label>
+                <input type="checkbox" name="ignore-skill-requirements" id="km-ignore-skill-requirements" ${data.ignoreSkillRequirements ? 'checked' : ''}>
+            </div>
         </form>
         `,
         buttons: {
@@ -73,6 +79,7 @@ export function campingSettingsDialog({onSubmit, data}: CampingSettingOptions): 
                     const increaseWatchActorNumber = parseNumberInput($html, 'increase-actor-watch-number') || 0;
                     const restRollMode = parseSelect($html, 'rest-roll-mode') as RestRollMode;
                     const huntAndGatherTargetActorUuid = parseSelect($html, 'hunt-and-gather-actor') || null;
+                    const ignoreSkillRequirements = parseCheckbox($html, 'ignore-skill-requirements') || false;
                     const actorUuidsNotKeepingWatch = data.actorsKeepingWatch
                         .filter(a => !parseCheckbox($html, `actor-uuids-keeping-watch-${a.uuid}`))
                         .map(a => a.uuid);
@@ -82,6 +89,7 @@ export function campingSettingsDialog({onSubmit, data}: CampingSettingOptions): 
                         increaseWatchActorNumber,
                         actorUuidsNotKeepingWatch,
                         huntAndGatherTargetActorUuid,
+                        ignoreSkillRequirements,
                     });
                 },
             },

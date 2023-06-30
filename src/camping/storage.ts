@@ -20,6 +20,9 @@ export function getCamping(sheetActor: Actor): Camping {
     if (camping.actorUuidsNotKeepingWatch === undefined) {
         camping.actorUuidsNotKeepingWatch = [];
     }
+    if (camping.ignoreSkillRequirements === undefined) {
+        camping.ignoreSkillRequirements = false;
+    }
     console.log('Reading', camping);
     return deepClone(camping);
 }

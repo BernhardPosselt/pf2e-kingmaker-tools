@@ -53,6 +53,7 @@ export interface Camping {
     increaseWatchActorNumber: number;
     actorUuidsNotKeepingWatch: string[];
     huntAndGatherTargetActorUuid?: string | null;
+    ignoreSkillRequirements: boolean;
 }
 
 export function getDefaultConfiguration(game: Game, migratedRecipes: string[]): Camping {
@@ -81,6 +82,7 @@ export function getDefaultConfiguration(game: Game, migratedRecipes: string[]): 
         lockedActivities: allCampingActivities
             .filter(a => a.isLocked)
             .map(a => a.name),
+        ignoreSkillRequirements: false,
     };
 }
 
