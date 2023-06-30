@@ -214,7 +214,7 @@ Hooks.on('ready', async () => {
             if (data.action === 'openCampingSheet') {
                 openCampingSheet(gameInstance);
             } else if (data.action === 'openKingdomSheet') {
-                showKingdom(gameInstance);
+                await showKingdom(gameInstance);
             } else if (data.action === 'addDiscoverSpecialMealResult' && isGm(gameInstance)) {
                 const recipe = data.data.recipe as string | null;
                 const criticalFailUuids = data.data.critFailUuids as string[];

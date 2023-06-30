@@ -62,18 +62,27 @@ interface FoodCost {
     availableMagicalSubsistence: number;
 }
 
-export function calculateConsumedFood(actorConsumables: FoodAmount, foodCost: FoodCost): ConsumedFood {
+export function canCook(camping: Camping): boolean {
+    const hasPreparedCampsite = camping.campingActivities
+        .find(a => a.activity === 'Prepare Campsite'
+            && (a.result === 'success' || a.result === 'criticalSuccess' || a.result === 'failure')) !== undefined;
+    const actorIsCooking = camping.campingActivities
+        .find(a => a.activity === 'Cook Meal' && a.actorUuid) !== undefined;
+    return hasPreparedCampsite && actorIsCooking;
+}
+
+export function calculateConsumedFood(canCook: boolean, actorConsumables: FoodAmount, foodCost: FoodCost): ConsumedFood {
     const availableBasicIngredients = actorConsumables.basicIngredients;
     const availableSpecialIngredients = actorConsumables.specialIngredients;
     const availableRations = actorConsumables.rations;
     const {
-        recipeSpecialIngredientCost,
-        recipeBasicIngredientCost,
         availableMagicalSubsistence,
         availableSubsistence,
         actorsConsumingRations,
         actorsConsumingMeals,
     } = foodCost;
+    const recipeSpecialIngredientCost = canCook ? foodCost.recipeSpecialIngredientCost : 0;
+    const recipeBasicIngredientCost = canCook ? foodCost.recipeBasicIngredientCost : 0;
     const requiredRationsTotal = actorsConsumingMeals + actorsConsumingRations;
     const availableRationsTotal = availableRations + availableSubsistence + availableMagicalSubsistence;
 

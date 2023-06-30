@@ -45,6 +45,7 @@ import {
 } from './resting';
 import {
     calculateConsumedFood,
+    canCook,
     getActorConsumables,
     getChosenMealData,
     getCookingActorByUuid,
@@ -148,8 +149,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             time: formatWorldTime(getWorldTime(this.game)),
             // 4px offset is half of the element's width including borders
             timeMarkerPositionPx: Math.floor(getTimeOfDayPercent(getWorldTime(this.game)) * 8.46) - 4,
-            hasCookingActor: !!getCookingActorUuid(data),
-            consumedFood: calculateConsumedFood(actorConsumables, {
+            hasCookingActor: canCook(data),
+            consumedFood: calculateConsumedFood(canCook(data), actorConsumables, {
                 actorsConsumingRations: data.cooking.actorMeals.filter(a => a.chosenMeal === 'rationsOrSubsistence').length,
                 actorsConsumingMeals: data.cooking.actorMeals.filter(a => a.chosenMeal === 'meal').length,
                 availableSubsistence: data.cooking.subsistenceAmount,
@@ -667,7 +668,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const actorConsumables = await getActorConsumables(actors);
         const chosenMealData = getRecipeData(current)
             .find(a => a.name === current.cooking.chosenMeal);
-        const consumed = calculateConsumedFood(actorConsumables, {
+        const consumed = calculateConsumedFood(canCook(current), actorConsumables, {
             actorsConsumingRations: current.cooking.actorMeals.filter(a => a.chosenMeal === 'rationsOrSubsistence').length,
             actorsConsumingMeals: current.cooking.actorMeals.filter(a => a.chosenMeal === 'meal').length,
             availableSubsistence: current.cooking.subsistenceAmount,

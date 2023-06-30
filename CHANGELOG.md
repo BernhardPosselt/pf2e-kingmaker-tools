@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Fixed
+
+* Do not display basic nor special ingredient costs if Prepare Campsite was a Critical Failure or has not been set and if no actor selected the cook meal activity
+
 ## [0.2.5] - 2023-06-30
 
 ## Added
