@@ -1,14 +1,15 @@
-import {getActorByUuid, getActorsByUuid, getItemsByUuid} from './actor';
-import {addOf} from '../utils';
-import {getCamping, getCampingActor, saveCamping} from './storage';
+import {getActorByUuid} from './actor';
+import {isGm} from '../utils';
+import {getCamping, getCampingActor} from './storage';
 import {getEncounterDC, rollRandomEncounter} from './random-encounters';
-import {addFood, FoodAmount, removeFood} from './eating';
+import {
+    ActorAndIngredients,
+    addDiscoverSpecialMealResult,
+    addHuntAndGatherResult,
+    FoodAmount,
+    getIngredientList,
+} from './eating';
 
-interface ActorAndIngredients {
-    specialIngredients: number;
-    basicIngredients: number;
-    actor: Actor;
-}
 
 async function parseIngredientButton(element: HTMLElement): Promise<ActorAndIngredients | null> {
     const actorUuid = element.dataset.actorUuid ?? '';
@@ -25,69 +26,42 @@ export async function addRecipe(game: Game, element: HTMLElement): Promise<void>
     const actorAndIngredients = await parseIngredientButton(element);
     const critFailUuids = element.dataset.critFailUuids?.split(',') ?? [];
     const recipe = element.dataset.recipe || null;
-    const campingActor = getCampingActor(game);
-    if (actorAndIngredients && campingActor) {
-        const camping = getCamping(campingActor);
-        const actors = await getActorsByUuid(new Set(camping.actorUuids));
-        const actor = actorAndIngredients.actor;
-        const basicIngredients = actorAndIngredients.basicIngredients;
-        const specialIngredients = actorAndIngredients.specialIngredients;
-        await removeFood(actors, {
-            specialIngredients,
-            basicIngredients,
-            rations: 0,
-        });
-        const itemsToAdd = (await getItemsByUuid(new Set(critFailUuids))).map(i => i.toObject());
-        if (itemsToAdd.length > 0) {
-            await actor.createEmbeddedDocuments('Item', itemsToAdd);
+    if (actorAndIngredients) {
+        if (isGm(game)) {
+            await addDiscoverSpecialMealResult(game, actorAndIngredients, recipe, critFailUuids);
+        } else {
+            game.socket?.emit('module.pf2e-kingmaker-tools', {
+                action: 'addDiscoverSpecialMealResult',
+                data: {
+                    actorUuid: actorAndIngredients.actor.uuid,
+                    specialIngredients: actorAndIngredients.specialIngredients,
+                    basicIngredients: actorAndIngredients.basicIngredients,
+                    critFailUuids,
+                    recipe,
+                },
+            });
         }
-        const content = `<p>Removed:</p>
-        <ul>${getIngredientList(basicIngredients, specialIngredients)}</ul>
-        ${recipe || itemsToAdd.length > 0 ? `
-            <p>Added:</p>
-            <ul>
-                ${recipe ? `<li><b>Recipe</b>: ${recipe}</li>` : ''}
-                ${itemsToAdd.length === 0 ? '' : `<li><b>Meal Effects</b>: ${itemsToAdd.map(i => i.name).join(', ')}</li>`}
-            </ul>
-        ` : ''}
-        `;
-        if (recipe) {
-            camping.cooking.knownRecipes.push(recipe);
-            await saveCamping(game, campingActor, camping);
-        }
-        await ChatMessage.create({content});
     }
 }
 
-export async function addIngredients(element: HTMLElement): Promise<void> {
+export async function addIngredients(game: Game, element: HTMLElement): Promise<void> {
     const actorAndIngredients = await parseIngredientButton(element);
     if (actorAndIngredients) {
-        const actor = actorAndIngredients.actor;
-        const specialIngredients = actorAndIngredients.specialIngredients;
-        const basicIngredients = actorAndIngredients.basicIngredients;
-        await addFood([actorAndIngredients.actor], {
-            specialIngredients,
-            basicIngredients,
-            rations: 0,
-        });
-        const content = `<p>Added to ${addOf(actor.name ?? actor.uuid)} inventory:</p>
-        <ul>
-            <li><b>Basic Ingredients</b>: ${basicIngredients}</li>
-            <li><b>Special Ingredients</b>: ${specialIngredients}</li>
-        </ul>
-        `;
-        await ChatMessage.create({content});
+        if (isGm(game)) {
+            await addHuntAndGatherResult(game, actorAndIngredients);
+        } else {
+            game.socket?.emit('module.pf2e-kingmaker-tools', {
+                action: 'addHuntAndGatherResult',
+                data: {
+                    actorUuid: actorAndIngredients.actor.uuid,
+                    specialIngredients: actorAndIngredients.specialIngredients,
+                    basicIngredients: actorAndIngredients.basicIngredients,
+                },
+            });
+        }
     }
 }
 
-function getIngredientList(basicIngredients: number, specialIngredients: number): string {
-    const result = [];
-    if (basicIngredients) result.push(`<b>Basic Ingredients</b>: ${basicIngredients}`);
-    if (specialIngredients) result.push(`<b>Special Ingredients</b>: ${specialIngredients}`);
-    return result
-        .map(a => `<li>${a}</li>`)
-        .join('');
-}
 
 export async function postHuntAndGatherResult(actor: Actor, food: FoodAmount): Promise<void> {
     const basicIngredients = food.basicIngredients;
@@ -153,7 +127,7 @@ export function bindCampingChatEventListeners(game: Game): void {
     const actor = getCampingActor(game);
     if (actor) {
         const chatLog = $('#chat-log');
-        chatLog.on('click', '.km-add-food', (event) => addIngredients(event.currentTarget));
+        chatLog.on('click', '.km-add-food', (event) => addIngredients(game, event.currentTarget));
         chatLog.on('click', '.km-add-recipe', (event) => addRecipe(game, event.currentTarget));
         chatLog.on('click', '.km-random-encounter', () => checkForRandomEncounter(game));
     }

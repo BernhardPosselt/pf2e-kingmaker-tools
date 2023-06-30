@@ -5,6 +5,7 @@ import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degre
 import {DcType} from './data';
 import {RecipeData} from './recipes';
 import {checkRandomEncounterMessage} from './chat';
+import {getActorByUuid} from './actor';
 
 export type RestRollMode = 'one' | 'none' | 'one-every-4-hours';
 
@@ -51,6 +52,7 @@ export interface Camping {
     restRollMode: RestRollMode;
     increaseWatchActorNumber: number;
     actorUuidsNotKeepingWatch: string[];
+    huntAndGatherTargetActorUuid?: string | null;
 }
 
 export function getDefaultConfiguration(game: Game, migratedRecipes: string[]): Camping {
@@ -199,4 +201,12 @@ export function getCombatEffects(data: Camping): Partial<Record<CampingActivityN
         }
     });
     return result;
+}
+
+export async function getHuntAndGatherActor(data: Camping): Promise<Actor | null>{
+    const uuid = data.huntAndGatherTargetActorUuid;
+    if (uuid && data.actorUuids.includes(uuid)) {
+        return  await getActorByUuid(uuid);
+    }
+    return null;
 }

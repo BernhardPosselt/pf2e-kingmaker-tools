@@ -17,6 +17,8 @@ import {bindCampingChatEventListeners} from './camping/chat';
 import {getDiffListeners} from './camping/effect-syncing';
 import {getCamping, getCampingActor} from './camping/storage';
 import {resetHeroPoints, showAwardXPDialog} from './macros';
+import {addDiscoverSpecialMealResult, addHuntAndGatherResult} from './camping/eating';
+import {getActorByUuid} from './camping/actor';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -208,11 +210,30 @@ Hooks.on('ready', async () => {
 
         // listen for camping sheet open
         const listeners = getDiffListeners(gameInstance);
-        gameInstance.socket!.on('module.pf2e-kingmaker-tools', (data: { action: string }) => {
+        gameInstance.socket!.on('module.pf2e-kingmaker-tools', async (data: { action: string, data: any }) => {
             if (data.action === 'openCampingSheet') {
                 openCampingSheet(gameInstance);
             } else if (data.action === 'openKingdomSheet') {
                 showKingdom(gameInstance);
+            } else if (data.action === 'addDiscoverSpecialMealResult' && isGm(gameInstance)) {
+                const recipe = data.data.recipe as string | null;
+                const criticalFailUuids = data.data.critFailUuids as string[];
+                const actor = await getActorByUuid(data.data.actorUuid);
+                const {specialIngredients, basicIngredients} = data.data;
+                if (actor) {
+                    const actorAndIngredients = {actor, specialIngredients, basicIngredients};
+                    await addDiscoverSpecialMealResult(gameInstance, actorAndIngredients, recipe, criticalFailUuids);
+                }
+            } else if (data.action === 'addHuntAndGatherResult' && isGm(gameInstance)) {
+                const actor = await getActorByUuid(data.data.actorUuid);
+                const {specialIngredients, basicIngredients} = data.data;
+                if (actor) {
+                    await addHuntAndGatherResult(gameInstance, {
+                        actor,
+                        basicIngredients,
+                        specialIngredients,
+                    });
+                }
             } else {
                 // players changed data and GM needs to sync effects
                 const sheetActor = getCampingActor(gameInstance);

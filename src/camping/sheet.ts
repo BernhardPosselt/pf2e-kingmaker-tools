@@ -395,6 +395,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             const actors = await getActorsByUuid(new Set(current.actorUuids));
             campingSettingsDialog({
                 data: {
+                    actors: actors,
+                    huntAndGatherTargetActorUuid: current.huntAndGatherTargetActorUuid,
                     restRollMode: current.restRollMode,
                     gunsToClean: current.gunsToClean,
                     increaseWatchActorNumber: current.increaseWatchActorNumber,

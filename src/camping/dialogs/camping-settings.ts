@@ -5,6 +5,8 @@ export interface SettingData {
     gunsToClean: number;
     restRollMode: RestRollMode;
     increaseWatchActorNumber: number;
+    huntAndGatherTargetActorUuid: string | null | undefined;
+    actors: Actor[];
     actorsKeepingWatch: { uuid: string, name: string, watchEnabled: boolean }[]
 }
 
@@ -13,7 +15,8 @@ export interface CampingSettingOptions {
         gunsToClean: number,
         restRollMode: RestRollMode,
         increaseWatchActorNumber: number,
-        actorUuidsNotKeepingWatch: string[]
+        actorUuidsNotKeepingWatch: string[],
+        huntAndGatherTargetActorUuid: string | null,
     }) => Promise<void>;
     data: SettingData;
 }
@@ -47,6 +50,17 @@ export function campingSettingsDialog({onSubmit, data}: CampingSettingOptions): 
                     <option value="one-every-4-hours" ${data.restRollMode === 'one-every-4-hours' ? 'selected' : ''}>Roll 1 Encounter Check Every 4 Hours</option>
                 </select>
             </div>
+            <div>
+                <label for="km-hunt-and-gather-actor">Add Ingredients from Hunt and Gather To</label>
+                <select name="hunt-and-gather-actor" id="km-hunt-and-gather-actor">
+                    <option value="">Actor performing Hunt and Gather</option>
+                    ${data.actors.map(a => {
+                        return `
+                        <option value="${a.uuid}" ${a.uuid === data.huntAndGatherTargetActorUuid ? 'selected': ''}>${a.name}</option>
+                        `;    
+                    }).join('')}
+                </select>
+            </div>
         </form>
         `,
         buttons: {
@@ -58,6 +72,7 @@ export function campingSettingsDialog({onSubmit, data}: CampingSettingOptions): 
                     const gunsToClean = parseNumberInput($html, 'guns-to-clean');
                     const increaseWatchActorNumber = parseNumberInput($html, 'increase-actor-watch-number') || 0;
                     const restRollMode = parseSelect($html, 'rest-roll-mode') as RestRollMode;
+                    const huntAndGatherTargetActorUuid = parseSelect($html, 'hunt-and-gather-actor') || null;
                     const actorUuidsNotKeepingWatch = data.actorsKeepingWatch
                         .filter(a => !parseCheckbox($html, `actor-uuids-keeping-watch-${a.uuid}`))
                         .map(a => a.uuid);
@@ -66,6 +81,7 @@ export function campingSettingsDialog({onSubmit, data}: CampingSettingOptions): 
                         restRollMode,
                         increaseWatchActorNumber,
                         actorUuidsNotKeepingWatch,
+                        huntAndGatherTargetActorUuid,
                     });
                 },
             },

@@ -6,10 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.5] - 2023-06-xx
+## [0.2.5] - 2023-06-30
+
+## Added
+
+* Setting to configure the actor to add Hund and Gather Ingredients to; this is useful if you are using a party loot actor to store ingredients in
 
 ## Changed
 
+* Hunt and Gather and Discover Special Meal buttons in chat can now be pressed by all actors
 * Improved docs and add label onto sidebar actor silhouette to clearly communicate that actors can be dropped there
 
 ## [0.2.4] - 2023-06-29

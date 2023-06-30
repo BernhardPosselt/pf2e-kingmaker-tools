@@ -1,9 +1,11 @@
-import {getConsumablesByUuid, isConsumableItem} from './actor';
+import {getActorsByUuid, getConsumablesByUuid, getItemsByUuid, isConsumableItem} from './actor';
 import {basicIngredientUuid, rationUuid, specialIngredientUuid} from './data';
 import {addIngredientsToActor} from './activities';
 import {allRecipes, getKnownRecipes, RecipeData} from './recipes';
-import {Camping} from './camping';
+import {Camping, getHuntAndGatherActor} from './camping';
 import {getRegionInfo} from './regions';
+import {addOf} from '../utils';
+import {getCamping, getCampingActor, saveCamping} from './storage';
 
 export async function getConsumableFromUuid(uuid: string): Promise<(Item & ConsumableItem) | null> {
     const item = await fromUuid(uuid) as Item | null;
@@ -180,6 +182,83 @@ export async function removeFood(actors: Actor[], config: FoodAmount): Promise<v
 
 export async function addFood(actors: Actor[], food: FoodAmount): Promise<void> {
     await Promise.all(actors.map(a => addIngredientsToActor(a, food)));
+}
+
+export interface ActorAndIngredients {
+    specialIngredients: number;
+    basicIngredients: number;
+    actor: Actor;
+}
+
+export function getIngredientList(basicIngredients: number, specialIngredients: number): string {
+    const result = [];
+    if (basicIngredients) result.push(`<b>Basic Ingredients</b>: ${basicIngredients}`);
+    if (specialIngredients) result.push(`<b>Special Ingredients</b>: ${specialIngredients}`);
+    return result
+        .map(a => `<li>${a}</li>`)
+        .join('');
+}
+
+export async function addDiscoverSpecialMealResult(
+    game: Game,
+    actorAndIngredients: ActorAndIngredients,
+    recipe: string | null,
+    critFailUuids: string[]
+): Promise<void> {
+    const campingActor = getCampingActor(game);
+    if (campingActor) {
+        const camping = getCamping(campingActor);
+        const actors = await getActorsByUuid(new Set(camping.actorUuids));
+        const actor = actorAndIngredients.actor;
+        const basicIngredients = actorAndIngredients.basicIngredients;
+        const specialIngredients = actorAndIngredients.specialIngredients;
+        await removeFood(actors, {
+            specialIngredients,
+            basicIngredients,
+            rations: 0,
+        });
+        const itemsToAdd = (await getItemsByUuid(new Set(critFailUuids))).map(i => i.toObject());
+        if (itemsToAdd.length > 0) {
+            await actor.createEmbeddedDocuments('Item', itemsToAdd);
+        }
+        const content = `<p>Removed:</p>
+        <ul>${getIngredientList(basicIngredients, specialIngredients)}</ul>
+        ${recipe || itemsToAdd.length > 0 ? `
+            <p>Added:</p>
+            <ul>
+                ${recipe ? `<li><b>Recipe</b>: ${recipe}</li>` : ''}
+                ${itemsToAdd.length === 0 ? '' : `<li><b>Meal Effects</b>: ${itemsToAdd.map(i => i.name).join(', ')}</li>`}
+            </ul>
+        ` : ''}
+        `;
+        if (recipe) {
+            camping.cooking.knownRecipes = Array.from(new Set([...camping.cooking.knownRecipes, recipe]));
+            await saveCamping(game, campingActor, camping);
+        }
+        await ChatMessage.create({content});
+    }
+}
+
+export async function addHuntAndGatherResult(game: Game, actorAndIngredients: ActorAndIngredients): Promise<void> {
+    const campingActor = getCampingActor(game);
+    if (campingActor) {
+        const camping = getCamping(campingActor);
+        const actor = (await getHuntAndGatherActor(camping)) || actorAndIngredients.actor;
+        const specialIngredients = actorAndIngredients.specialIngredients;
+        const basicIngredients = actorAndIngredients.basicIngredients;
+        await addFood([actor], {
+            specialIngredients,
+            basicIngredients,
+            rations: 0,
+        });
+        const content = `<p>Added to ${addOf(actor.name ?? actor.uuid)} inventory:</p>
+        <ul>
+            <li><b>Basic Ingredients</b>: ${basicIngredients}</li>
+            <li><b>Special Ingredients</b>: ${specialIngredients}</li>
+        </ul>
+        `;
+        await ChatMessage.create({content});
+    }
 }
 
 export function getCookingActorUuid(data: Camping): string | null {
