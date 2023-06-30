@@ -15,6 +15,7 @@
     "packs": [
         {
             "name": "kingmaker-tools-structures",
+            "path": "packs/kingmaker-tools-structures",
             "label": "Structures",
             "type": "Actor",
             "system": "pf2e",
@@ -24,6 +25,7 @@
         },
         {
             "name": "kingmaker-tools-meal-effects",
+            "path": "packs/kingmaker-tools-meal-effects",
             "label": "Meal Effects",
             "type": "Item",
             "system": "pf2e",
@@ -33,6 +35,7 @@
         },
         {
             "name": "kingmaker-tools-camping-effects",
+            "path": "packs/kingmaker-tools-camping-effects",
             "label": "Camping Effects",
             "type": "Item",
             "system": "pf2e",
@@ -42,6 +45,7 @@
         },
         {
             "name": "kingmaker-tools-weather-effects",
+            "path": "packs/kingmaker-tools-weather-effects",
             "label": "Weather Effects",
             "type": "Item",
             "system": "pf2e",
@@ -51,6 +55,7 @@
         },
         {
             "name": "kingmaker-tools-journals",
+            "path": "packs/kingmaker-tools-journals",
             "label": "Journals",
             "type": "JournalEntry",
             "private": false,
@@ -60,6 +65,7 @@
         },
         {
             "name": "kingmaker-tools-custom-journals",
+            "path": "packs/kingmaker-tools-custom-journals",
             "label": "Custom Journals",
             "type": "JournalEntry",
             "banner": "systems/pf2e/assets/compendium-banner/red.webp",
@@ -69,6 +75,7 @@
         },
         {
             "name": "kingmaker-tools-rolltables",
+            "path": "packs/kingmaker-tools-rolltables",
             "label": "Rolltables",
             "type": "RollTable",
             "private": false,
@@ -78,6 +85,7 @@
         },
         {
             "name": "kingmaker-tools-random-encounters",
+            "path": "packs/kingmaker-tools-random-encounters",
             "label": "Random Encounters",
             "type": "RollTable",
             "private": false,
@@ -87,6 +95,7 @@
         },
         {
             "name": "kingmaker-tools-custom-rolltables",
+            "path": "packs/kingmaker-tools-custom-rolltables",
             "label": "Custom Rolltables",
             "type": "RollTable",
             "private": false,
@@ -96,6 +105,7 @@
         },
         {
             "name": "kingmaker-tools-macros",
+            "path": "packs/kingmaker-tools-macros",
             "label": "Macros",
             "type": "Macro",
             "private": false,
