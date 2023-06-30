@@ -161,7 +161,6 @@
 }
 
 .km-table td {
-    color: var(--primary-km);
     border: 1px solid var(--primary-km);
     padding: 5px;
     text-align: center;
