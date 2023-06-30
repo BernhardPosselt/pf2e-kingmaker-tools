@@ -6,46 +6,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Fixed
+## [0.2.6] - 2023-06-30
+
+### Fixed
 
 * Do not display basic nor special ingredient costs if Prepare Campsite was a Critical Failure or has not been set and if no actor selected the cook meal activity
 
 ## [0.2.5] - 2023-06-30
 
-## Added
+### Added
 
 * Setting to configure the actor to add Hund and Gather Ingredients to; this is useful if you are using a party loot actor to store ingredients in
 
-## Changed
+### Changed
 
 * Hunt and Gather and Discover Special Meal buttons in chat can now be pressed by all actors
 * Improved docs and add label onto sidebar actor silhouette to clearly communicate that actors can be dropped there
 
 ## [0.2.4] - 2023-06-29
 
-## Changed
+### Changed
 
 * Actors can now be blacklisted for the random encounter perception roll during rest. You can configure that in the rest settings by deselecting the actor from having watch. This is useful if you want to except companions from rolling perception checks during watch or if you have a party actor that includes ingredients/rations that should not have an impact on rest duration
 * Number of actors can now be increased by setting the **Increase actors keeping watch** rest setting. This is useful if you use a single companion actor but want all companions to have an effect on the watch duration 
 
 
 ## [0.2.3] - 2023-06-28
-## Fixed
+### Fixed
 
 * Remove labels from all meal and camping effects
 
 ## [0.2.2] - 2023-06-28
-## Added
+### Added
 
 * Note on how to implement Relax if desired in the help menu
 * Combat effects no mention if they target enemies or allies
 
-## Removed
+### Removed
 
 * Relax camping activity
 * Unused camping effects
 
-## Fixed
+### Fixed
 
 * Fully automate **Relaxed** effect
 * Fix effect rendering by renaming all effects containing a colon to use parenthesis. Existing effects are synced by name, so you will need to remove them manually
@@ -59,7 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Macros to Award XP
 * Macro to reset Hero Points to 1
 
-## Fixed
+### Fixed
 
 * Also ship static folder
 
