@@ -55,6 +55,7 @@ import {
     subsist,
 } from './eating';
 import {addActivityDialog} from './dialogs/add-activity';
+import {allowedActors} from './data';
 
 interface CampingOptions {
     game: Game;
@@ -306,7 +307,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                                 .filter(a => !deletedActivities.has(a.name)),
                             campingActivities: current.campingActivities
                                 .filter(a => !deletedActivities.has(a.activity)),
-                        }
+                        },
                     );
                 },
             });
@@ -588,7 +589,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             const document = await fromUuid(uuid) as Actor | Item | null;
             if (document) {
                 const type = document?.type;
-                if (document instanceof Actor && type === 'character' || document instanceof Item) {
+                if (document instanceof Actor && allowedActors.has(type) || document instanceof Item) {
                     return document;
                 } else {
                     console.error('No character or item document type, instead found: ' + type);

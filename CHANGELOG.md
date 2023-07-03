@@ -1,10 +1,18 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.10] - 2023-07-04
+
+### Changed
+
+* Allow npcs, loot and vehicle actors in addition to characters in the camping sheet
+
 ## [0.2.9] - 2023-06-30
 
 ### Fixed
@@ -27,13 +35,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Do not display basic nor special ingredient costs if Prepare Campsite was a Critical Failure or has not been set or if no actor selected the cook meal activity
+* Do not display basic nor special ingredient costs if Prepare Campsite was a Critical Failure or has not been set or if
+  no actor selected the cook meal activity
 
 ## [0.2.5] - 2023-06-30
 
 ### Added
 
-* Setting to configure the actor to add Hund and Gather Ingredients to; this is useful if you are using a party loot actor to store ingredients in
+* Setting to configure the actor to add Hund and Gather Ingredients to; this is useful if you are using a party loot
+  actor to store ingredients in
 
 ### Changed
 
@@ -44,16 +54,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Actors can now be blacklisted for the random encounter perception roll during rest. You can configure that in the rest settings by deselecting the actor from having watch. This is useful if you want to except companions from rolling perception checks during watch or if you have a party actor that includes ingredients/rations that should not have an impact on rest duration
-* Number of actors can now be increased by setting the **Increase actors keeping watch** rest setting. This is useful if you use a single companion actor but want all companions to have an effect on the watch duration 
-
+* Actors can now be blacklisted for the random encounter perception roll during rest. You can configure that in the rest
+  settings by deselecting the actor from having watch. This is useful if you want to except companions from rolling
+  perception checks during watch or if you have a party actor that includes ingredients/rations that should not have an
+  impact on rest duration
+* Number of actors can now be increased by setting the **Increase actors keeping watch** rest setting. This is useful if
+  you use a single companion actor but want all companions to have an effect on the watch duration
 
 ## [0.2.3] - 2023-06-28
+
 ### Fixed
 
 * Remove labels from all meal and camping effects
 
 ## [0.2.2] - 2023-06-28
+
 ### Added
 
 * Note on how to implement Relax if desired in the help menu
@@ -67,9 +82,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fully automate **Relaxed** effect
-* Fix effect rendering by renaming all effects containing a colon to use parenthesis. Existing effects are synced by name, so you will need to remove them manually
+* Fix effect rendering by renaming all effects containing a colon to use parenthesis. Existing effects are synced by
+  name, so you will need to remove them manually
 * Adjust fortify camp to only apply to watches
-
 
 ## [0.2.1] - 2023-06-27
 
@@ -97,27 +112,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fully reviewed, fixed and updated meal and camping effects
 
 ### Removed
+
 * Removed Special and Basic Ingredient items; these are now shipped in the 2e system
 * Removed the following macros (these are now available through the camping sheet):
-  * Hunt and Gather
-  * Camp Management
-  * Prepare Camp
-  * Camouflage Campsite
-  * Organize Watch
-  * Cook Recipe
-  * Tell Campfire Story
-  * Recipes
-  * Learn from a Companion
-  * Random Encounter
-  * Stopwatch
-  * Companion Effects to Chat
-  * Subsist
+    * Hunt and Gather
+    * Camp Management
+    * Prepare Camp
+    * Camouflage Campsite
+    * Organize Watch
+    * Cook Recipe
+    * Tell Campfire Story
+    * Recipes
+    * Learn from a Companion
+    * Random Encounter
+    * Stopwatch
+    * Companion Effects to Chat
+    * Subsist
 
 ## [0.1.0] - 2023-06-11
 
 ### Fixed
 
-* Store and migrate recipe data to actor instead of using client settings: client settings were unknowingly stored in local storage; local storage is local to a browser and is wiped when deleting browser data; this also caused recipes form one world to be present in another world. We now store the settings on the actor and migrate existing data once you first run the recipes macro again
+* Store and migrate recipe data to actor instead of using client settings: client settings were unknowingly stored in
+  local storage; local storage is local to a browser and is wiped when deleting browser data; this also caused recipes
+  form one world to be present in another world. We now store the settings on the actor and migrate existing data once
+  you first run the recipes macro again
 
 ### Added
 
@@ -149,7 +168,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Display errors when actors with name Kingdom Sheet exist that haven't been imported with the View Kingdom Macro
-
 
 ## [0.0.33] - 2023-03-16
 
@@ -202,7 +220,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Palace and Town Hall now correctly increase leadership activity number to 3 in turn tab
 
-
 ## [0.0.25] - 2023-02-26
 
 ### Added
@@ -227,7 +244,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Distribute kingdom sheet changes across clients
 
 ### Changed
-* Kalikke's Deliberate Planning activity now provides a circumstance rather than a status bonus. See reasoning in the [README](README.md)
+
+* Kalikke's Deliberate Planning activity now provides a circumstance rather than a status bonus. See reasoning in
+  the [README](README.md)
 
 ## [0.0.22] - 2023-02-22
 
@@ -243,13 +262,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.21] - 2023-02-21
 
 ### Changed
-* Settlement data is now no longer saved on the scene itself, allowing players to edit their values as well. You need to re-add existing scenes
-* Rather than configuring an overcrowded flag, you configure a "lots" value now which is compared to the amount of residential buildings
+
+* Settlement data is now no longer saved on the scene itself, allowing players to edit their values as well. You need to
+  re-add existing scenes
+* Rather than configuring an overcrowded flag, you configure a "lots" value now which is compared to the amount of
+  residential buildings
 * Improve modifier handling
 
 ## [0.0.20] - 2023-02-20
 
 ### Added
+
 * There is now a Fame Next column
 * Added buttons to easily subtract/add resources, unrest and ruin from activities
 
@@ -274,27 +297,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.17] - 2023-02-19
 
 ### Fixed
+
 * Set initial ruin threshold values to 10
 * Updating dice in now column correctly adjust dice in dice column
 
 ## [0.0.16] - 2023-02-19
 
 ### Fixed
+
 * Re-Render kingdom sheet on relevant config changes
 
 ## [0.0.15] - 2023-02-19
 
 ### Fixed
+
 * Disable Capital Investment in active settlement when no Bank is built
 
 ## [0.0.14] - 2023-02-19
 
 ### Fixed
+
 * A 1 or 20 on a d20 should now correctly upgrade/downgrade a roll
 
 ### Added
 
-* Rolls from kingdom sheets can now be re-rolled, re-rolled and keep higher/lower and re-rolled using fame points with a right click on the roll chat message
+* Rolls from kingdom sheets can now be re-rolled, re-rolled and keep higher/lower and re-rolled using fame points with a
+  right click on the roll chat message
 * Activity results can now be upgraded/downgrade with a right click on the chat message
 
 ## [0.0.13] - 2023-02-18
@@ -324,18 +352,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.9] - 2023-02-18
 
 ### Added
-* Added Structure traits to automatically calculate residential buildings. All the buildings should now have data references. You need to re-import the following structures:
-  * Bridge
-  * Cemetery
-  * Houses
-  * Magical Streetlamps
-  * Orphanage
-  * Paved Streets
-  * Rubble
-  * Tavern, Dive
-  * Tenement
-  * Wall, Stone
-  * Wall, Wooden
+
+* Added Structure traits to automatically calculate residential buildings. All the buildings should now have data
+  references. You need to re-import the following structures:
+    * Bridge
+    * Cemetery
+    * Houses
+    * Magical Streetlamps
+    * Orphanage
+    * Paved Streets
+    * Rubble
+    * Tavern, Dive
+    * Tenement
+    * Wall, Stone
+    * Wall, Wooden
 
 ### Fixed
 
@@ -344,22 +374,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.8] - 2023-02-17
 
 ### Changed
+
 * Automate milestone XP gain
 
 ### Fixed
+
 * Ensure that modifier penalties and modifiers are always positive
 
 ## [0.0.7] - 2023-02-17
 
 ### Fixed
+
 * Disable settlement inputs for users because these are persisted on scenes where they don't have permissions
 
 ## [0.0.6] - 2023-02-17
 
 ### Changed
+
 * Don't render tables when there's no data
 
 ### Fixed
+
 * Palace now gives a +3 item bonus during leadership activities
 * Better feedback when no settlement exists yet and players open kingdom sheet
 
@@ -389,7 +424,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Include missing Leadership Activities
 * Include missing Events
 * Added structure rules. Existing structures need to be replaced upon update to make use of it
-* Added a settlement overview that computes all settlement item bonuses, storages, notes and types; bonuses stack with the capital automatically
+* Added a settlement overview that computes all settlement item bonuses, storages, notes and types; bonuses stack with
+  the capital automatically
 * Added a macro to edit structure rules
 
 ### Fixed
@@ -403,11 +439,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added an input for setting servings numbers for the cooking popup
-* Weather Event Maximum Level is now configurable. By RAW, it's 4, meaning no weather events that are more than 4 levels higher than the party's can occur, but you may want to turn that down to 2 to not TPK your party.
+* Weather Event Maximum Level is now configurable. By RAW, it's 4, meaning no weather events that are more than 4 levels
+  higher than the party's can occur, but you may want to turn that down to 2 to not TPK your party.
 
 ### Changed
 
-* The Stopwatch app has been reworked into a watch and daily preparations tracker that automatically calculates watch time and daily preps time
+* The Stopwatch app has been reworked into a watch and daily preparations tracker that automatically calculates watch
+  time and daily preps time
 
 ### Fixed
 
@@ -431,7 +469,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Cooking macro not being able to store values in settings when a player used it; these settings are now stored per player
+* Cooking macro not being able to store values in settings when a player used it; these settings are now stored per
+  player
 
 ## [0.0.1] - 2023-01-05
 
