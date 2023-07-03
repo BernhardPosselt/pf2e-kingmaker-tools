@@ -130,10 +130,12 @@ async function syncActorCampingEffects(actor: Actor, effects: (Item & EffectItem
 export async function syncActorsCampingEffects(options: SyncActorCampingEffectOptions): Promise<void> {
     const uuids = new Set(getAllCampingEffectUuids(options.campingActivities));
     const effectUuidsForActors = getEffectUuidsForActors(options);
-    await Promise.all(effectUuidsForActors.map(async effectsForActor => {
-        const effects = await getEffectsByUuid(new Set(effectsForActor.effectUuids));
-        await syncActorCampingEffects(effectsForActor.actor, effects, uuids);
-    }));
+    await Promise.all(effectUuidsForActors
+        .filter(a => a.actor.type === 'npc' || a.actor.type === 'character')
+        .map(async effectsForActor => {
+            const effects = await getEffectsByUuid(new Set(effectsForActor.effectUuids));
+            await syncActorCampingEffects(effectsForActor.actor, effects, uuids);
+        }));
 }
 
 export abstract class DiffListener {
@@ -191,7 +193,7 @@ export class CampingActivitiesListener extends DiffListener {
         return 'campingActivities' in diff
             && update?.campingActivities?.find(a => a.activity === 'Prepare Campsite'
                 && a.result !== null
-                && a.result !== 'criticalFailure'
+                && a.result !== 'criticalFailure',
             ) !== undefined;
     }
 
@@ -206,7 +208,7 @@ export class CampingActivitiesListener extends DiffListener {
                     actor: await getActorByUuid(a.actorUuid!) as Actor,
                 };
                 return [a.activity, result] as [CampingActivityName, CampingActivityResult];
-            })
+            }),
         )).filter(([, result]) => result.actor !== null);
         const actorCampingActivities = new Map<CampingActivityName, CampingActivityResult>(activities);
         await syncActorsCampingEffects({
@@ -227,7 +229,7 @@ export class ClearCampingActivitiesListener extends DiffListener {
         const diff = diffObject(previous, update) as Partial<Camping>;
         return 'campingActivities' in diff
             && update?.campingActivities?.find(a => a.activity === 'Prepare Campsite'
-                && (a.result === null || a.result === 'criticalFailure')
+                && (a.result === null || a.result === 'criticalFailure'),
             ) !== undefined;
     }
 
