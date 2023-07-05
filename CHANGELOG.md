@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.12] - 2023-07-05
+
 ### Added
 
 * Add setting to add half proficiency to untrained kingdom skill
