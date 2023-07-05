@@ -528,7 +528,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const document = await this.parseDropData(event);
         if (document) {
             const campingConfiguration = await this.read();
-            if (target.classList.contains('camping-activity')) {
+            if (target.classList.contains('camping-activity') && (document.type === 'character' || document.type === 'npc')) {
                 const activityName = target.dataset.name as CampingActivityName;
                 const current = await this.read();
                 const data = getCampingActivityData(current);

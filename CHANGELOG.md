@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Add setting to add half proficiency to untrained kingdom skill
+
+### Fixed
+
+* Remove combat effects after rest as well
+* Prevent loot and vehicle actors from being dropped onto camping activities
+
 ## [0.2.11] - 2023-07-04
 
 ### Fixed

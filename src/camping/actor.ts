@@ -150,13 +150,21 @@ export async function getEffectsByUuid(uuids: Set<string>): Promise<(Item & Effe
 }
 
 
-async function removeActorEffects(actor: Actor, uuids: Set<string>): Promise<void> {
+async function removeActorEffectsByUuid(actor: Actor, uuids: Set<string>): Promise<void> {
     const existingEffects = await getActorEffectsByUuid(actor, uuids);
     await actor.deleteEmbeddedDocuments('Item', existingEffects.map(e => e.id));
 }
 
-export async function removeActorsEffectsByUuid(actors: Actor[], uuids: Set<string>): Promise<void> {
-    await Promise.all(actors.map(a => removeActorEffects(a, uuids)));
+async function removeActorEffectsByName(actor: Actor, names: Set<string>): Promise<void> {
+    const existingEffects = getItemsByName(actor, 'effect', names);
+    await actor.deleteEmbeddedDocuments('Item', existingEffects.map(e => e.id));
 }
 
+export async function removeActorsEffectsByUuid(actors: Actor[], uuids: Set<string>): Promise<void> {
+    await Promise.all(actors.map(a => removeActorEffectsByUuid(a, uuids)));
+}
+
+export async function removeActorsEffectsByName(actors: Actor[], names: Set<string>): Promise<void> {
+    await Promise.all(actors.map(a => removeActorEffectsByName(a, names)));
+}
 

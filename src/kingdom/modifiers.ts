@@ -11,6 +11,19 @@ import {calculateUnrestPenalty} from './data/unrest';
 import {abilityRuins} from './data/ruin';
 import {ActivityBonuses, SkillItemBonus} from './data/structures';
 import {ActiveSettlementStructureResult} from './scene';
+import {getBooleanSetting} from '../settings';
+
+export type UntrainedProficiencyMode = 'half' | 'full' | 'none';
+
+export function getUntrainedProficiencyMode(game: Game): UntrainedProficiencyMode {
+    if (getBooleanSetting(game, 'kingdomAlwaysAddLevel')) {
+        return 'full';
+    } else if (getBooleanSetting(game, 'kingdomAlwaysAddHalfLevel')) {
+        return 'half';
+    } else {
+        return 'none';
+    }
+}
 
 export const allModifierTypes = [
     'ability',
@@ -446,8 +459,20 @@ export function rankToLabel(rank: number): string {
     }
 }
 
-export function createProficiencyModifier(rank: number, alwaysAddLevel: boolean, kingdomLevel: number): Modifier {
-    const value = rank > 0 ? (kingdomLevel + rank * 2) : (alwaysAddLevel ? kingdomLevel : 0);
+function calculateUntrainedProficiency(rank: number, kingdomLevel: number, untrainedProficiencyMode: UntrainedProficiencyMode): number {
+    if (rank > 0) {
+        return kingdomLevel + rank * 2;
+    } else if (untrainedProficiencyMode === 'full') {
+        return kingdomLevel;
+    } else if (untrainedProficiencyMode === 'half') {
+        return Math.floor(kingdomLevel / 2);
+    } else {
+        return 0;
+    }
+}
+
+export function createProficiencyModifier(rank: number, untrainedProficiencyMode: UntrainedProficiencyMode, kingdomLevel: number): Modifier {
+    const value = calculateUntrainedProficiency(rank, kingdomLevel, untrainedProficiencyMode);
     const name = rank > 0 ? rankToLabel(rank) : 'Kingdom Level';
     return {
         value,

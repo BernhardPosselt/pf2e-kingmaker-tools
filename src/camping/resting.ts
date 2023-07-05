@@ -1,4 +1,10 @@
-import {actorHasEffectByUuid, getActorsByUuid, hasItemByUuid, removeActorsEffectsByUuid} from './actor';
+import {
+    actorHasEffectByUuid,
+    getActorsByUuid,
+    hasItemByUuid,
+    removeActorsEffectsByName,
+    removeActorsEffectsByUuid,
+} from './actor';
 import {Camping, getCampingActivityData, rollCampingCheck} from './camping';
 import {saveCamping} from './storage';
 import {getAllExpiringMealEffectUuids} from './recipes';
@@ -106,7 +112,7 @@ interface RestAdvanceTo {
 export async function getWatchRandomEncounterData(
     game: Game,
     camping: Camping,
-    watchDurationSeconds: number
+    watchDurationSeconds: number,
 ): Promise<RestAdvanceTo> {
     const dailyPrepsDuration = calculateDailyPreparationsSeconds(camping.gunsToClean);
     const mode = camping.restRollMode;
@@ -176,7 +182,8 @@ async function startWatch(game: Game, camping: Camping, watchDurationSeconds: nu
     } = await getWatchRandomEncounterData(game, camping, watchDurationSeconds);
     await game.time.advance(advanceToSeconds);
     if (encounter) {
-        const actorsKeepingWatch = actors.filter(a => !camping.actorUuidsNotKeepingWatch.includes(a.uuid));
+        const actorsKeepingWatch = actors
+            .filter(a => !camping.actorUuidsNotKeepingWatch.includes(a.uuid) && (a.type === 'character' || a.type === 'npc'));
         if (actorsKeepingWatch.length > 0) {
             const actorKeepingWatchIndex = Math.floor(Math.random() * actorsKeepingWatch.length);
             await rollCampingCheck({
@@ -202,6 +209,15 @@ async function completeDailyPreparations(
     data.cooking.degreeOfSuccess = null;
     data.campingActivities.forEach(a => a.result = null);
     data.dailyPrepsAtTime = game.time.worldTime;
+    await removeActorsEffectsByName(actors, new Set([
+        'Undead Guardians (Aided)',
+        'Undead Guardians (Defended)',
+    ]));
+    await removeActorsEffectsByUuid(actors, new Set([
+        'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.ZKJlIqyFgbKDACnG', // enhance weapons
+        'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.pbhKANmDOvwuuchk', // aided
+        'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.tERAC9KHwBjoUt5u', // defended
+    ]));
     await removeExpiredMealEffects(actors, data);
     await saveCamping(game, sheetActor, data);
     await game.pf2e.actions.restForTheNight({actors});

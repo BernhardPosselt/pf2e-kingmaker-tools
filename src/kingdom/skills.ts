@@ -15,6 +15,7 @@ import {
     Modifier,
     ModifierTotals,
     processModifiers,
+    UntrainedProficiencyMode,
 } from './modifiers';
 import {SkillItemBonus, SkillItemBonuses} from './data/structures';
 
@@ -37,7 +38,7 @@ export function createSkillModifiers(
         abilityScores,
         leaders,
         kingdomLevel,
-        alwaysAddLevel,
+        untrainedProficiencyMode,
         skillItemBonus,
         ability,
         activity,
@@ -53,7 +54,7 @@ export function createSkillModifiers(
         abilityScores: AbilityScores,
         kingdomLevel: number,
         leaders: Leaders,
-        alwaysAddLevel: boolean,
+        untrainedProficiencyMode: UntrainedProficiencyMode,
         skillItemBonus?: SkillItemBonus,
         activity?: Activity,
         phase?: KingdomPhase,
@@ -62,7 +63,7 @@ export function createSkillModifiers(
     },
 ): Modifier[] {
     const abilityModifier = createAbilityModifier(ability, abilityScores);
-    const proficiencyModifier = createProficiencyModifier(skillRank, alwaysAddLevel, kingdomLevel);
+    const proficiencyModifier = createProficiencyModifier(skillRank, untrainedProficiencyMode, kingdomLevel);
     const vacancyModifiers = createVacancyModifiers(ability, leaders);
     // status bonus
     const investedModifier = createInvestedModifier(kingdomLevel, ability, leaders);
@@ -97,6 +98,7 @@ export function createSkillModifiers(
         overrides,
     });
 }
+
 export function calculateSkills(
     {
         ruin,
@@ -105,7 +107,7 @@ export function calculateSkills(
         abilityScores,
         leaders,
         kingdomLevel,
-        alwaysAddLevel,
+        untrainedProficiencyMode,
         skillItemBonuses,
         additionalModifiers,
     }: {
@@ -115,7 +117,7 @@ export function calculateSkills(
         abilityScores: AbilityScores,
         kingdomLevel: number,
         leaders: Leaders,
-        alwaysAddLevel: boolean,
+        untrainedProficiencyMode: UntrainedProficiencyMode,
         skillItemBonuses?: SkillItemBonuses,
         additionalModifiers?: Modifier[],
     },
@@ -129,7 +131,7 @@ export function calculateSkills(
             abilityScores,
             leaders,
             kingdomLevel,
-            alwaysAddLevel,
+            untrainedProficiencyMode,
             ability,
             skillItemBonus: skillItemBonuses?.[skill],
             skill,

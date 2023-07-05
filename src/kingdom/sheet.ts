@@ -56,7 +56,7 @@ import {activityBlacklistDialog} from './dialogs/activity-blacklist-dialog';
 import {showHelpDialog} from './dialogs/show-help-dialog';
 import {activityData} from './data/activityData';
 import {showSettlement} from './dialogs/settlement';
-import {createActiveSettlementModifiers, Modifier, modifierToLabel} from './modifiers';
+import {createActiveSettlementModifiers, getUntrainedProficiencyMode, Modifier, modifierToLabel} from './modifiers';
 import {addEffectDialog} from './dialogs/add-effect-dialog';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
@@ -189,7 +189,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 abilityScores: kingdomData.abilityScores,
                 unrest: kingdomData.unrest,
                 kingdomLevel: kingdomData.level,
-                alwaysAddLevel: getBooleanSetting(this.game, 'kingdomAlwaysAddLevel'),
+                untrainedProficiencyMode: getUntrainedProficiencyMode(this.game),
                 skillItemBonuses: activeSettlementStructureResult?.merged?.skillBonuses,
                 additionalModifiers: createActiveSettlementModifiers(
                     kingdomData,
@@ -1011,7 +1011,7 @@ export async function showKingdom(game: Game): Promise<void> {
     if (sheetActor) {
         new KingdomApp(null, {game, sheetActor}).render(true);
     } else {
-        setupDialog(game, 'Kingdom','rRFZtEjqw2foI0GJ', async () => {
+        setupDialog(game, 'Kingdom', 'rRFZtEjqw2foI0GJ', async () => {
             const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
             await sheetActor?.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', getDefaultKingdomData());
             await showKingdom(game);

@@ -2,6 +2,7 @@ import {KingdomFeat} from '../data/feats';
 import {
     calculateModifiers,
     createActiveSettlementModifiers,
+    getUntrainedProficiencyMode,
     Modifier,
     ModifierTotal,
     ModifierTotals,
@@ -10,7 +11,6 @@ import {
 import {Activity, getActivityPhase, getActivitySkills, KingdomPhase} from '../data/activities';
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
-import {getBooleanSetting} from '../../settings';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks} from '../data/companions';
 import {capitalize, unslugify} from '../../utils';
@@ -138,7 +138,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 abilityScores: this.kingdom.abilityScores,
                 leaders: this.kingdom.leaders,
                 kingdomLevel: this.kingdom.level,
-                alwaysAddLevel: getBooleanSetting(this.game, 'kingdomAlwaysAddLevel'),
+                untrainedProficiencyMode: getUntrainedProficiencyMode(this.game),
                 ability,
                 skillItemBonus: activeSettlementStructureResult?.merged?.skillBonuses?.[skill],
                 additionalModifiers: [...additionalModifiers, ...convertedCustomModifiers],
@@ -232,8 +232,6 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             await this.close();
         });
     }
-
-
 
 
     private createSelectableSkills(skillModifiers: Record<Skill, TotalAndModifiers>): object {
