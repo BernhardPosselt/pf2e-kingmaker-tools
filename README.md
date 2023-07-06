@@ -109,11 +109,13 @@ The module ships with a settings to auto-configure all tokens from the adventure
 folder. If you don't want that, remove the following lines from the **module.json** file:
 
 ```json
-"flags": {
-"pf2e-kingmaker-tools": {
-"pf2e-art": "modules/pf2e-kingmaker-tools/map.json"
+{
+  "flags": {
+    "pf2e-kingmaker-tools": {
+      "pf2e-art": "modules/pf2e-kingmaker-tools/map.json"
+    }
+  }
 }
-},
 ```
 
 The tokens integrate with the [Token Pack](https://foundryvtt.com/packages/pf2e-tokens-bestiaries) and expect the other
