@@ -1,10 +1,14 @@
 # Kingmaker Tools (Unofficial)
 
-This module ships macros, journal entries, roll tables, effect items, additional tooling for OGL/CUP licensed content from the Kingmaker Adventure Path for Pathfinder 2nd Edition.
+This module ships macros, journal entries, roll tables, effect items, additional tooling for OGL/CUP licensed content
+from the Kingmaker Adventure Path for Pathfinder 2nd Edition.
 
 Uses the [Open Gaming License](./OpenGameLicense.md) and [CUP](https://paizo.com/community/communityuse)
 
-> This FoundryVTT module uses trademarks and/or copyrights owned by Paizo Inc., used under Paizo's Community Use Policy (paizo.com/communityuse). We are expressly prohibited from charging you to use or access this content. This FoundryVTT module is not published, endorsed, or specifically approved by Paizo. For more information about Paizo Inc. and Paizo products, visit paizo.com.
+> This FoundryVTT module uses trademarks and/or copyrights owned by Paizo Inc., used under Paizo's Community Use
+> Policy (paizo.com/communityuse). We are expressly prohibited from charging you to use or access this content. This
+> FoundryVTT module is not published, endorsed, or specifically approved by Paizo. For more information about Paizo Inc.
+> and Paizo products, visit paizo.com.
 
 ## Installation
 
@@ -19,7 +23,7 @@ Clone this repository into your installation's module folder:
     yarn install
     yarn run build
 
-Activate the module in FoundryVTT.
+If your Foundry instance is running, you need to restart it to clear its module cache.
 
 Run the following before packaging once and set your paths:
 
@@ -34,7 +38,8 @@ The following journals are shipped:
 * **Calendar**: lists weekday and month names
 * **Camping** Activities: lists all camping activities linked to their respective effects
 * **Hexploration**: hexploration rules from AoN enriched with effects and clarifications
-* **Influence**: influence activities and a sheet to track points, weaknesses, resistances and biases of each NPC with an influence stat block
+* **Influence**: influence activities and a sheet to track points, weaknesses, resistances and biases of each NPC with
+  an influence stat block
 * **Recipes**: a list of recipes by level linked to their respective effects
 * **Kingdom Activities**: All activities
 
@@ -42,7 +47,8 @@ The following journals are shipped:
 
 #### Camping Sheet
 
-Since 0.2.0, this module ships a camping sheet which includes all meals and camping activities. You can launch the sheet with the camping macro: 
+Since 0.2.0, this module ships a camping sheet which includes all meals and camping activities. You can launch the sheet
+with the camping macro:
 
 ![Camping Macros](docs/images/camping-macro.png)
 
@@ -60,51 +66,65 @@ The camping sheet does the following:
 * Allows you to add custom recipes and activities
 * Takes care of calculating and adding/subtracting rations and ingredients based on the chosen recipes
 * Allows you to roll random encounter checks
-* Completely automates resting by automatically rolling random encounters, perception checks and running the **Rest for the Night** macro for all actors
+* Completely automates resting by automatically rolling random encounters, perception checks and running the **Rest for
+  the Night** macro for all actors
 
 For more detailed information, consult the **Help** button in the camping sheet's title bar.
 
-**Note**: Syncing camping effects is a very slow process, so if you want to run all companions, create 1 companion **character** sheet instead of adding all 13 companions   
+**Note**: Syncing camping effects is a very slow process, so if you want to run all companions, create 1 companion *
+*character** sheet instead of adding all 13 companions
 
-**Note**: Random Encounters can be given a proxy roll table like the one listed in [The Hexploration](https://2e.aonprd.com/Rules.aspx?ID=1276) rules. If you do, the String value "Creature" indicates to roll on the region roll table. Leave the proxy table setting blank to roll on the region encounters directly
+**Note**: Random Encounters can be given a proxy roll table like the one listed
+in [The Hexploration](https://2e.aonprd.com/Rules.aspx?ID=1276) rules. If you do, the String value "Creature" indicates
+to roll on the region roll table. Leave the proxy table setting blank to roll on the region encounters directly
 
-  ![Proxy Table](docs/images/random-encounter-proxy-table.png)
+![Proxy Table](docs/images/random-encounter-proxy-table.png)
+
 #### Other
+
 * A macro to toggle weather on/off to change into non-exposed areas
 * A macro to manually roll weather, should you prefer to not automatically roll it.
 * A macro to advance/retract to a certain day of time
 * A macro to award XP to players and level them up once they cross the XP threshold
 * A macro to reset hero points to 1
-* A macro to roll on a custom Kingdom Events table. By default, the Roll Table is called "Kingdom Events", but you can change the name in the settings
-* 3 macros that help automate exploration mode. 
-  
+* A macro to roll on a custom Kingdom Events table. By default, the Roll Table is called "Kingdom Events", but you can
+  change the name in the settings
+* 3 macros that help automate exploration mode.
+
 ![Exploration Macros](docs/images/exploration-macros.png)
-  
-  2 of them integrate with [PF2E Exploration Effects](https://foundryvtt.com/packages/pf2e-exploration-effects) and will roll secret checks for stealth and perception for all characters on the current canvas, that have the "Search" or "Avoid Notice" exploration effect. The other macro rolls checks for all configured characters and can be used to roll checks on the hex map without having the tokens be active on that scene.
+
+2 of them integrate with [PF2E Exploration Effects](https://foundryvtt.com/packages/pf2e-exploration-effects) and will
+roll secret checks for stealth and perception for all characters on the current canvas, that have the "Search" or "Avoid
+Notice" exploration effect. The other macro rolls checks for all configured characters and can be used to roll checks on
+the hex map without having the tokens be active on that scene.
 
 ![Skills Macro](docs/images/skills-macro.png)
 
 ### Tokens
 
-**Note**: This module does not and can not ship any art! You are responsible for placing the appropriate images in the described folder structure. See further down for how the folder needs to be organized.
+**Note**: This module does not and can not ship any art! You are responsible for placing the appropriate images in the
+described folder structure. See further down for how the folder needs to be organized.
 
-The module ships with a settings to auto-configure all tokens from the adventure path by looking up files in a certain folder. If you don't want that, remove the following lines from the **module.json** file:
+The module ships with a settings to auto-configure all tokens from the adventure path by looking up files in a certain
+folder. If you don't want that, remove the following lines from the **module.json** file:
 
 ```json
 "flags": {
-  "pf2e-kingmaker-tools": {
-    "pf2e-art": "modules/pf2e-kingmaker-tools/map.json"
-  }
+"pf2e-kingmaker-tools": {
+"pf2e-art": "modules/pf2e-kingmaker-tools/map.json"
+}
 },
 ```
 
-The tokens integrate with the [Token Pack](https://foundryvtt.com/packages/pf2e-tokens-bestiaries) and expect the other tokens to be placed into your **Data/pf2e-kingmaker-tools-tokens/** directory under the following paths:
+The tokens integrate with the [Token Pack](https://foundryvtt.com/packages/pf2e-tokens-bestiaries) and expect the other
+tokens to be placed into your **Data/pf2e-kingmaker-tools-tokens/** directory under the following paths:
 
 ![Skills Macro](docs/images/token-structure.png)
 
 ![Upload popup](docs/images/upload-location.png)
 
-**The Forge**: If you are using The Forge, you need to place the folder in **My Asset Library** instead. If a file is not found under User Data, The Forge will instead try to look it up under the same path in **My Asset Library** instead.
+**The Forge**: If you are using The Forge, you need to place the folder in **My Asset Library** instead. If a file is
+not found under User Data, The Forge will instead try to look it up under the same path in **My Asset Library** instead.
 
 ![The Forge](docs/images/the-forge.png)
 
@@ -356,7 +376,7 @@ The tokens integrate with the [Token Pack](https://foundryvtt.com/packages/pf2e-
 * **structures/Watchtower.webp**
 * **structures/Waterfront (Corner).webp**
 * **structures/Waterfront (Side).webp**
- 
+
 ### Camping Effects
 
 Effects to drag onto PCs after performing camping activities
@@ -377,23 +397,29 @@ Structures are implemented as NPC stat blocks, including the correct sizes. Thei
 
 ![Meal Effects](docs/images/structures.png)
 
-All structures in a settlement can be automatically summed up and calculated by using the **Kingdom Sheet** Macro. 
+All structures in a settlement can be automatically summed up and calculated by using the **Kingdom Sheet** Macro.
 
 ![Kingdom Sheet Macro](docs/images/kingdom-sheet-macro.png)
 
-If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
+If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are
+not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
 
 A guide on structure rules [is available here](docs/structure-rules.md)
 
 ### Daily Weather
 
-Rolls daily weather when your clock advances to a new day, animates weather on maps and starts playlists. If you prefer rolling manually, turn off auto rolling in the settings and use the provided "Roll Kingmaker Weather" macro.
+Rolls daily weather when your clock advances to a new day, animates weather on maps and starts playlists. If you prefer
+rolling manually, turn off auto rolling in the settings and use the provided "Roll Kingmaker Weather" macro.
 
-Visual effects rely on the built-in V11 weather effects. If you upgrade from a previous version, use FXMaster to get rid of existing effects.
+Visual effects rely on the built-in V11 weather effects. If you upgrade from a previous version, use FXMaster to get rid
+of existing effects.
 
-First configure the **Average Party Level** in settings. This setting is used to re-roll weather events if an event with a level higher than APL+4 is rolled. You need to manually keep this value in sync with your party's level over the course of the game.
+First configure the **Average Party Level** in settings. This setting is used to re-roll weather events if an event with
+a level higher than APL+4 is rolled. You need to manually keep this value in sync with your party's level over the
+course of the game.
 
-In addition, you can configure sound effects that are played for rain, sunny and snowfall by creating playlists with the following names:
+In addition, you can configure sound effects that are played for rain, sunny and snowfall by creating playlists with the
+following names:
 
 * **weather.sunny**
 * **weather.rain**
@@ -405,25 +431,33 @@ Each day, a new value is rolled from the roll table and persisted across all sce
 
 ![Kingdom Sheet](docs/images/kingdom-sheet.png)
 
-The Kingdom sheet auto calculates almost everything related to kingdom building. You launch it exclusively with the **View Kingdom** Macro. 
+The Kingdom sheet auto calculates almost everything related to kingdom building. You launch it exclusively with the *
+*View Kingdom** Macro.
 
-On first launch, it copies an actor with the name **Kingdom Sheet** into your actors folder. This actor is used to store the sheet data and can be placed anywhere but you must not change its name.
+On first launch, it copies an actor with the name **Kingdom Sheet** into your actors folder. This actor is used to store
+the sheet data and can be placed anywhere but you must not change its name.
 
 If you want to give your players access to the sheet, edit the actor's permissions as usually.
 
-In addition, you want to add a settlement scene. To do that, navigate to the tab holding your structures and click **Add Current Scene** in your **Settlements** tab. You need to repeat this for all of your scenes that hold structures.
+In addition, you want to add a settlement scene. To do that, navigate to the tab holding your structures and click **Add
+Current Scene** in your **Settlements** tab. You need to repeat this for all of your scenes that hold structures.
 
 ![Add Settlement](docs/images/add-current-scene.png)
-
 
 The following variant rules are supported in the settings:
 
 * Always add level to skill for untrained skills
 * Double Skill Increases in the Feature Section
-* Additional XP and milestones from [Vance and Kerenshara](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit)
+* Additional XP and milestones
+  from [Vance and Kerenshara](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit)
 
 ### Homebrew Built-in Changes
 
-* [Based on James Jacob's answers](https://paizo.com/threads/rzs43olf?Kingmaker-Adventure-Path-2E-Errata#19), event XP is bumped to 40XP from 30XP and the event modifier acts as a level modifier for the [XP Awards table](https://2e.aonprd.com/Rules.aspx?ID=575)
-* [Based on James Jacob's answers](https://paizo.com/threads/rzs43ogm?How-am-I-misreading-the-camping-rules#3) all camping activities included in the journals are extended to 2 hours.
-* Kallike's **Deliberate Planning** activity had its status bonus changed to a circumstance bonus. Reasoning for that is that not a single activity uses a status bonus, it's all circumstance bonuses. Plus a +1 status bonus is obsolete from level 1. 
+* [Based on James Jacob's answers](https://paizo.com/threads/rzs43olf?Kingmaker-Adventure-Path-2E-Errata#19), event XP
+  is bumped to 40XP from 30XP and the event modifier acts as a level modifier for
+  the [XP Awards table](https://2e.aonprd.com/Rules.aspx?ID=575)
+* [Based on James Jacob's answers](https://paizo.com/threads/rzs43ogm?How-am-I-misreading-the-camping-rules#3) all
+  camping activities included in the journals are extended to 2 hours.
+* Kallike's **Deliberate Planning** activity had its status bonus changed to a circumstance bonus. Reasoning for that is
+  that not a single activity uses a status bonus, it's all circumstance bonuses. Plus a +1 status bonus is obsolete from
+  level 1. 
