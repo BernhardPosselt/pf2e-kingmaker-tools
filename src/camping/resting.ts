@@ -220,5 +220,5 @@ async function completeDailyPreparations(
     ]));
     await removeExpiredMealEffects(actors, data);
     await saveCamping(game, sheetActor, data);
-    await game.pf2e.actions.restForTheNight({actors});
+    await game.pf2e.actions.restForTheNight({actors, skipDialog: true});
 }

@@ -31,7 +31,7 @@ declare global {
                 month: string;
             }
             actions: {
-                restForTheNight: (options: {actors: Actor[]}) => Promise<void>;
+                restForTheNight: (options: { actors: Actor[], skipDialog?: boolean }) => Promise<void>;
                 subsist: (options: { actors: Actor[], skill: string, difficultyClass?: number; }) => void;
             }
             Modifier: typeof PF2EModifier
@@ -80,10 +80,10 @@ declare global {
         };
         system: {
             details: {
-                xp: {value: number, max: number},
-                level: {value: number}
+                xp: { value: number, max: number },
+                level: { value: number }
             }
-        }
+        };
     }
 
     class ItemSheet {

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.13] - 2023-07-09
+
+### Changed
+
+* Skip Rest for the Night dialog, requires PF2 system v5.1.2
+
 ## [0.2.12] - 2023-07-05
 
 ### Added
