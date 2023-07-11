@@ -152,10 +152,12 @@
 
 <h2>Event Phase</h2>
 
-<h3>Cult of the Bloom Events</h3>
-<p>These events happen after completing a day of downtime researching the Cult of the Bloom in Chapter 5. The first time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the kingdom was in dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet tracks them as milestones.</p>
-<button type="button" id="km-check-cult-event">Check for Cult Event (DC {{cultEventDC}})</button>
-<button type="button" id="km-roll-cult-event">Roll Cult Event</button>
+<div {{#unless isGM}}hidden{{/unless}}>
+    <h3>Cult of the Bloom Events</h3>
+    <p>These events happen after completing a day of downtime researching the Cult of the Bloom in Chapter 5. The first time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the kingdom was in dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet tracks them as milestones.</p>
+    <button type="button" id="km-check-cult-event">Check for Cult Event (DC {{cultEventDC}})</button>
+    <button type="button" id="km-roll-cult-event">Roll Cult Event</button>
+</div>
 
 <h3>Kingdom Events</h3>
 <button type="button" id="km-check-event">Check for Kingdom Event (DC {{eventDC}})</button>

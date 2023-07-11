@@ -244,7 +244,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ongoingEvents: await Promise.all(kingdomData.ongoingEvents
                 .map(event => TextEditor.enrichHTML(event.name))),
             milestones: kingdomData.milestones.map(m => {
-                return {...m, display: useXpHomebrew || !m.homebrew};
+                return {...m, display: (useXpHomebrew || !m.homebrew) && (isGM || !m.name.startsWith('Cult Event'))};
             }),
             leadershipActivities: enableCompanionActivities('leadership', unlockedActivities)
                 .map(activity => {
