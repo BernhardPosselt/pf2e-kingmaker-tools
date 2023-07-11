@@ -1,20 +1,8 @@
 import {getNumberSetting, getRollMode, RollMode} from './settings';
 import {buildUuids, rollRollTable} from './roll-tables';
 import {setWeather} from './weather';
+import {eventLevels, getSeason, GolarionMonth} from './camping/regions';
 
-const eventLevels = new Map<string, number>();
-eventLevels.set('Fog', 0);
-eventLevels.set('Heavy downpour', 0);
-eventLevels.set('Cold snap', 1);
-eventLevels.set('Windstorm', 1);
-eventLevels.set('Hailstorm, severe', 2);
-eventLevels.set('Blizzard', 6);
-eventLevels.set('Supernatural storm', 6);
-eventLevels.set('Flash flood', 7);
-eventLevels.set('Wildfire', 4);
-eventLevels.set('Subsidence', 5);
-eventLevels.set('Thunderstorm', 7);
-eventLevels.set('Tornado', 12);
 
 async function rollOnWeatherEventTable(
     game: Game,
@@ -58,20 +46,11 @@ async function rollWeatherEvent(
     }
 }
 
-function getSeason(month: string): { season: string, precipitationDC: number, coldDC?: number } {
-    if (['Kuthona', 'Abadius', 'Calistril'].includes(month)) {
-        const coldDC = month === 'Abadius' ? 16 : 18;
-        return {season: 'winter', precipitationDC: 8, coldDC};
-    } else if (['Pharast', 'Gozran', 'Desnus'].includes(month)) {
-        return {season: 'spring', precipitationDC: 15};
-    } else if (['Sarenith', 'Erastus', 'Arodus'].includes(month)) {
-        return {season: 'summer', precipitationDC: 20};
-    } else {
-        return {season: 'fall', precipitationDC: 15};
-    }
-}
 
-async function rollCheck(dc: number, flavor: string, rollMode: RollMode): Promise<{ isSuccess: boolean, total: number }> {
+async function rollCheck(dc: number, flavor: string, rollMode: RollMode): Promise<{
+    isSuccess: boolean,
+    total: number
+}> {
     const roll = await new Roll('1d20').evaluate({async: true});
     const isSuccess = roll.total >= dc;
     await roll.toMessage({flavor}, {rollMode});
@@ -91,7 +70,7 @@ export async function rollKingmakerWeather(game: Game): Promise<void> {
 
 async function rollWeather(game: Game, averagePartyLevel: number, weatherHazardRange: number, rollMode: RollMode): Promise<void> {
     const month = game.pf2e.worldClock.month;
-    const {precipitationDC, coldDC} = getSeason(month);
+    const {precipitationDC, coldDC} = getSeason(month as GolarionMonth);
 
     const hasPrecipitation = (await rollCheck(
         precipitationDC,

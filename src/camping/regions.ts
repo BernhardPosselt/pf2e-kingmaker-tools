@@ -38,3 +38,54 @@ export function getRegionInfo(game: Game, region: string): RegionInfo {
     const zoneLevel = zone?.level ?? 0;
     return {zoneDC, zoneLevel};
 }
+
+export type GolarionMonth = 'Abadius'
+    | 'Calistril'
+    | 'Pharast'
+    | 'Gozran'
+    | 'Desnus'
+    | 'Sarenith'
+    | 'Erastus'
+    | 'Arodus'
+    | 'Rova'
+    | 'Lamashan'
+    | 'Neth'
+    | 'Kuthona';
+
+export interface WeatherData {
+    precipitationDC: number;
+    coldDC?: number;
+    season: 'spring' | 'summer' | 'fall' | 'winter';
+}
+
+const weatherData = new Map<GolarionMonth, WeatherData>();
+weatherData.set('Abadius', {coldDC: 16, precipitationDC: 8, season: 'winter'});
+weatherData.set('Calistril', {coldDC: 18, precipitationDC: 8, season: 'winter'});
+weatherData.set('Pharast', {precipitationDC: 15, season: 'spring'});
+weatherData.set('Gozran', {precipitationDC: 15, season: 'spring'});
+weatherData.set('Desnus', {precipitationDC: 15, season: 'spring'});
+weatherData.set('Sarenith', {precipitationDC: 20, season: 'summer'});
+weatherData.set('Erastus', {precipitationDC: 20, season: 'summer'});
+weatherData.set('Arodus', {precipitationDC: 20, season: 'summer'});
+weatherData.set('Rova', {precipitationDC: 15, season: 'fall'});
+weatherData.set('Lamashan', {precipitationDC: 15, season: 'fall'});
+weatherData.set('Neth', {precipitationDC: 15, season: 'fall'});
+weatherData.set('Kuthona', {coldDC: 18, precipitationDC: 8, season: 'winter'});
+
+export function getSeason(month: GolarionMonth): WeatherData {
+    return weatherData.get(month)!;
+}
+
+export const eventLevels = new Map<string, number>();
+eventLevels.set('Fog', 0);
+eventLevels.set('Heavy downpour', 0);
+eventLevels.set('Cold snap', 1);
+eventLevels.set('Windstorm', 1);
+eventLevels.set('Hailstorm, severe', 2);
+eventLevels.set('Blizzard', 6);
+eventLevels.set('Supernatural storm', 6);
+eventLevels.set('Flash flood', 7);
+eventLevels.set('Wildfire', 4);
+eventLevels.set('Subsidence', 5);
+eventLevels.set('Thunderstorm', 7);
+eventLevels.set('Tornado', 12);
