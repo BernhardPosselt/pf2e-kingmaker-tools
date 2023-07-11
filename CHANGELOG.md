@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.14] - 2023-07-11
+
 ### Fixed
 
-* Assurance doesn't add penalties nor bonuses
+* Kingdom Assurance doesn't add penalties nor bonuses
 
 ## [0.2.13] - 2023-07-09
 
