@@ -189,12 +189,12 @@ export function parseNumberInput($html: HTMLElement, name: string): number {
 
 export function parseTextInput($html: HTMLElement, name: string): string {
     const input = $html.querySelector(`input[name="${name}"]`) as HTMLInputElement;
-    return input.value;
+    return input.value?.trim();
 }
 
 export function parseTextArea($html: HTMLElement, name: string): string {
     const input = $html.querySelector(`textarea[name="${name}"]`) as HTMLTextAreaElement;
-    return input.value;
+    return input.value?.trim();
 }
 
 export function parseNumberSelect($html: HTMLElement, name: string): number {
@@ -222,7 +222,7 @@ export function clamped(value: number, min: number, max: number): number {
 }
 
 export function camelCase(value: string): string {
-    return uncapitalize(value.split(' ')
+    return uncapitalize(value.trim().split(' ')
         .map(s => capitalize(s))
         .join(''));
 }
