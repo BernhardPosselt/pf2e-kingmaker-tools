@@ -43,9 +43,7 @@ The following journals are shipped:
 * **Recipes**: a list of recipes by level linked to their respective effects
 * **Kingdom Activities**: All activities
 
-### Macros
-
-#### Camping Sheet
+### Camping Sheet
 
 Since 0.2.0, this module ships a camping sheet which includes all meals and camping activities. You can launch the sheet
 with the camping macro:
@@ -80,7 +78,59 @@ to roll on the region roll table. Leave the proxy table setting blank to roll on
 
 ![Proxy Table](docs/images/random-encounter-proxy-table.png)
 
-#### Other
+### Kingdom Sheet
+
+![Kingdom Sheet](docs/images/kingdom-sheet.png)
+
+The Kingdom sheet auto calculates almost everything related to kingdom building. You launch it exclusively with the *
+*View Kingdom** Macro.
+
+On first launch, it copies an actor with the name **Kingdom Sheet** into your actors folder. This actor is used to store
+the sheet data and can be placed anywhere but you must not change its name.
+
+If you want to give your players access to the sheet, edit the actor's permissions as usually.
+
+In addition, you want to add a settlement scene. To do that, navigate to the tab holding your structures and click **Add
+Current Scene** in your **Settlements** tab. You need to repeat this for all of your scenes that hold structures.
+
+![Add Settlement](docs/images/add-current-scene.png)
+
+The following variant rules are supported in the settings:
+
+* Always add level to skill for untrained skills
+* Double Skill Increases in the Feature Section
+* Additional XP and milestones
+  from [Vance and Kerenshara](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit)
+
+#### Homebrew Built-in Changes
+
+* [Based on James Jacob's answers](https://paizo.com/threads/rzs43olf?Kingmaker-Adventure-Path-2E-Errata#19), event XP
+  is bumped to 40XP from 30XP and the event modifier acts as a level modifier for
+  the [XP Awards table](https://2e.aonprd.com/Rules.aspx?ID=575)
+* [Based on James Jacob's answers](https://paizo.com/threads/rzs43ogm?How-am-I-misreading-the-camping-rules#3) all
+  camping activities included in the journals are extended to 2 hours.
+* Kalikke's **Deliberate Planning** activity had its status bonus changed to a circumstance bonus. Reasoning for that is
+  that not a single activity uses a status bonus, it's all circumstance bonuses. Plus a +1 status bonus is obsolete from
+  level 1.
+
+### Structures
+
+**Note**: Images are not included!
+
+Structures are implemented as NPC stat blocks, including the correct sizes. Their description is in the public notes.
+
+![Meal Effects](docs/images/structures.png)
+
+All structures in a settlement can be automatically summed up and calculated by using the **Kingdom Sheet** Macro.
+
+![Kingdom Sheet Macro](docs/images/kingdom-sheet-macro.png)
+
+If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are
+not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
+
+A guide on structure rules [is available here](docs/structure-rules.md)
+
+### Macros
 
 * A macro to toggle weather on/off to change into non-exposed areas
 * A macro to manually roll weather, should you prefer to not automatically roll it.
@@ -396,23 +446,6 @@ Ships the remaining prebuilt companions:
 * Octavia
 * Regongar
 
-### Structures
-
-**Note**: Images are not included!
-
-Structures are implemented as NPC stat blocks, including the correct sizes. Their description is in the public notes.
-
-![Meal Effects](docs/images/structures.png)
-
-All structures in a settlement can be automatically summed up and calculated by using the **Kingdom Sheet** Macro.
-
-![Kingdom Sheet Macro](docs/images/kingdom-sheet-macro.png)
-
-If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are
-not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
-
-A guide on structure rules [is available here](docs/structure-rules.md)
-
 ### Daily Weather
 
 Rolls daily weather when your clock advances to a new day, animates weather on maps and starts playlists. If you prefer
@@ -433,41 +466,6 @@ following names:
 * **weather.snowfall**
 
 Each day, a new value is rolled from the roll table and persisted across all scenes.
-
-### Kingdom Sheet
-
-![Kingdom Sheet](docs/images/kingdom-sheet.png)
-
-The Kingdom sheet auto calculates almost everything related to kingdom building. You launch it exclusively with the *
-*View Kingdom** Macro.
-
-On first launch, it copies an actor with the name **Kingdom Sheet** into your actors folder. This actor is used to store
-the sheet data and can be placed anywhere but you must not change its name.
-
-If you want to give your players access to the sheet, edit the actor's permissions as usually.
-
-In addition, you want to add a settlement scene. To do that, navigate to the tab holding your structures and click **Add
-Current Scene** in your **Settlements** tab. You need to repeat this for all of your scenes that hold structures.
-
-![Add Settlement](docs/images/add-current-scene.png)
-
-The following variant rules are supported in the settings:
-
-* Always add level to skill for untrained skills
-* Double Skill Increases in the Feature Section
-* Additional XP and milestones
-  from [Vance and Kerenshara](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit)
-
-### Homebrew Built-in Changes
-
-* [Based on James Jacob's answers](https://paizo.com/threads/rzs43olf?Kingmaker-Adventure-Path-2E-Errata#19), event XP
-  is bumped to 40XP from 30XP and the event modifier acts as a level modifier for
-  the [XP Awards table](https://2e.aonprd.com/Rules.aspx?ID=575)
-* [Based on James Jacob's answers](https://paizo.com/threads/rzs43ogm?How-am-I-misreading-the-camping-rules#3) all
-  camping activities included in the journals are extended to 2 hours.
-* Kallike's **Deliberate Planning** activity had its status bonus changed to a circumstance bonus. Reasoning for that is
-  that not a single activity uses a status bonus, it's all circumstance bonuses. Plus a +1 status bonus is obsolete from
-  level 1.
 
 ## Combat Tracks
 
