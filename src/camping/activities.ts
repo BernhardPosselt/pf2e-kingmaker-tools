@@ -440,11 +440,6 @@ export const allCampingActivities: CampingActivityData[] = [{
     },
 }];
 
-interface Ingredients {
-    basic: number;
-    special: number;
-}
-
 export async function getHuntAndGatherQuantities(
     degreeOfSuccess: DegreeOfSuccess,
     zoneDc: number,

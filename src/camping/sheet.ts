@@ -108,7 +108,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         this.diffListeners = getDiffListeners(this.game);
     }
 
-    override async getData(options?: Partial<CampingOptions & FormApplicationOptions>): Promise<ViewCampingData> {
+    override async getData(): Promise<ViewCampingData> {
         const data = await this.read();
         const currentSeconds = this.game.time.worldTime;
         const currentRegion = data.currentRegion;
@@ -186,11 +186,11 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         };
     }
 
-    protected _canDragDrop(selector: string): boolean {
+    protected _canDragDrop(): boolean {
         return true;
     }
 
-    protected _canDragStart(selector: string): boolean {
+    protected _canDragStart(): boolean {
         return true;
     }
 
@@ -269,7 +269,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             const hours = target.dataset.hours ?? '0';
             await this.advanceHours(parseInt(hours, 10));
         });
-        listenClick($html, '.manage-recipes', async (ev) => {
+        listenClick($html, '.manage-recipes', async () => {
             const current = await this.read();
             await manageRecipesDialog({
                 isGM: this.isGM,
@@ -283,7 +283,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 },
             });
         });
-        listenClick($html, '.add-recipes', async (ev) => {
+        listenClick($html, '.add-recipes', async () => {
             const current = await this.read();
             await addRecipeDialog({
                 recipes: getRecipeData(current),
@@ -293,7 +293,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 },
             });
         });
-        listenClick($html, '.unlock-activities', async (ev) => {
+        listenClick($html, '.unlock-activities', async () => {
             const current = await this.read();
             await manageActivitiesDialog({
                 data: getCampingActivityData(current),
@@ -386,13 +386,13 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             const skill = button.dataset.skill!;
             await this.rollCheck(activity, skill);
         });
-        listenClick($html, '.recipe-info', async (ev) => {
+        listenClick($html, '.recipe-info', async () => {
             const current = await this.read();
             const recipe = getChosenMealData(current);
             const item = await fromUuid(recipe.uuid) as Item | null;
             item?.sheet?.render(true);
         });
-        listenClick($html, '.camping-settings', async (ev) => {
+        listenClick($html, '.camping-settings', async () => {
             const current = await this.read();
             const actors = await getActorsByUuid(new Set(current.actorUuids));
             campingSettingsDialog({
@@ -621,6 +621,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         if (journal instanceof JournalEntryPage) {
             journal?.parent?.sheet?.render(true, {pageId: journal.id});
         } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (journal as any).sheet.render(true);
         }
 
@@ -633,6 +634,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const update = {
             currentRegion: formData.currentRegion,
             campingActivities: getCampingActivityData(current).map(activityData => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const data = formData as any;
                 const degreeKey = `actorActivityDegreeOfSuccess.${camelCase(activityData.name)}`;
                 const skillKey = `selectedSkill.${camelCase(activityData.name)}`;
@@ -699,6 +701,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
 
     private async parseActorMeals(formData: CampingData): Promise<ActorMeal[]> {
         const current = await this.read();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data = formData as any;
         return current.actorUuids.map(uuid => {
             const x: ActorMeal = {

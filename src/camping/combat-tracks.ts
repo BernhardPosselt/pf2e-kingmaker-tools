@@ -3,14 +3,8 @@ import {getCamping, getCampingActor} from './storage';
 import {getBooleanSetting} from '../settings';
 
 // FIXME
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 type EntityDocument<T> = any;
-
-// export interface Combat {
-//     round: number;
-//     combatants: {
-//         actor: Actor;
-//     }[];
-// }
 
 export interface CombatUpdate {
     round: number;
