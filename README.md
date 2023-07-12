@@ -71,8 +71,8 @@ The camping sheet does the following:
 
 For more detailed information, consult the **Help** button in the camping sheet's title bar.
 
-**Note**: Syncing camping effects is a very slow process, so if you want to run all companions, create 1 companion *
-*character** sheet instead of adding all 13 companions
+**Note**: Syncing camping effects is a very slow process, so if you want to run all companions, create 1 companion
+**character** sheet instead of adding all 13 companions
 
 **Note**: Random Encounters can be given a proxy roll table like the one listed
 in [The Hexploration](https://2e.aonprd.com/Rules.aspx?ID=1276) rules. If you do, the String value "Creature" indicates
