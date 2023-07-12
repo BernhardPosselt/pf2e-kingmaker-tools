@@ -479,4 +479,4 @@ actor (e.g. Vordakai). If Combat Tracks are enabled, it tries to find a playlist
 If any playlist is found, at the start of combat, that playlist is played and the active scene's playlist is disabled.
 Afterward, the games active scene's playlist is started again.
 
-If you wish to quickly disable combat tracks, e.g. when fighting a boss, you can use the Toggle Combat Tracks Macro.
+If you wish to quickly disable combat tracks, e.g. when fighting a boss, you can use the **Toggle Combat Tracks** Macro.
