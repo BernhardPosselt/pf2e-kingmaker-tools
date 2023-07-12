@@ -31,18 +31,6 @@ Run the following before packaging once and set your paths:
     ./node_modules/.bin/fvtt configure set installPath /home/bernhard/dev/FoundryVTT-11.301
     ./node_modules/.bin/fvtt configure set dataPath /home/bernhard/.local/share/FoundryVTT/Data
 
-### Journals
-
-The following journals are shipped:
-
-* **Calendar**: lists weekday and month names
-* **Camping** Activities: lists all camping activities linked to their respective effects
-* **Hexploration**: hexploration rules from AoN enriched with effects and clarifications
-* **Influence**: influence activities and a sheet to track points, weaknesses, resistances and biases of each NPC with
-  an influence stat block
-* **Recipes**: a list of recipes by level linked to their respective effects
-* **Kingdom Activities**: All activities
-
 ### Camping Sheet
 
 Since 0.2.0, this module ships a camping sheet which includes all meals and camping activities. You can launch the sheet
@@ -445,6 +433,18 @@ Ships the remaining prebuilt companions:
 * Kalikke (TBD)
 * Octavia
 * Regongar
+
+### Journals
+
+The following journals are shipped:
+
+* **Calendar**: lists weekday and month names
+* **Camping** Activities: lists all camping activities linked to their respective effects
+* **Hexploration**: hexploration rules from AoN enriched with effects and clarifications
+* **Influence**: influence activities and a sheet to track points, weaknesses, resistances and biases of each NPC with
+  an influence stat block
+* **Recipes**: a list of recipes by level linked to their respective effects
+* **Kingdom Activities**: All activities
 
 ### Daily Weather
 
