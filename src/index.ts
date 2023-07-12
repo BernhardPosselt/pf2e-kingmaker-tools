@@ -105,7 +105,7 @@ Hooks.on('ready', async () => {
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'enableCombatTracks', {
             name: 'Enable Combat Tracks',
-            hint: 'If enabled, starts a combat track depending on the current region. Combat track has to be named after the region, e.g. "Kingmaker.Rostland Hinterlands"; "Kingmaker.Default" is played if no region playlist is found instead',
+            hint: 'If enabled, starts a combat track depending on the current region, actor or scene. Region combat tracks have to be named after the region, e.g. "Kingmaker.Rostland Hinterlands"; "Kingmaker.Default" is played if no region playlist is found instead',
             scope: 'world',
             config: true,
             default: true,

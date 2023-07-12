@@ -472,8 +472,8 @@ playlist in the following order:
 * Combat playlist of the first actor on the combat tracker (Configurable via **Set Combat Playlist** Macro by
   selecting a token)
 * Combat playlist of the active scene (Configurable via **Set Combat Playlist** Macro by not selecting a token)
-* Combat playlist of the current region (e.g. **Kingmaker.Combat.Rostland Hinterlands**)
-* Combat playlist called **Kingmaker.Combat.Default**
+* Combat playlist of the current region (e.g. **Kingmaker.Rostland Hinterlands**)
+* Combat playlist called **Kingmaker.Default**
 
 If any playlist is found, at the start of combat, that playlist is played and the active scene's playlist is disabled.
 Afterward, the games active scene's playlist is started again.
