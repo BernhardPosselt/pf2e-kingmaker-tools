@@ -279,9 +279,15 @@ not found under User Data, The Forge will instead try to look it up under the sa
 * **kingmaker/Token - Zorek.webp**
 * **companions/Token - Amiri.webp**
 * **companions/Token - Ekundayo.webp**
+* **companions/Token - Harrim.webp**
+* **companions/Token - Jaethal.webp**
+* **companions/Token - Kanerah.webp**
+* **companions/Token - Kalikke.webp**
 * **companions/Token - Jubilost.webp**
 * **companions/Token - Linzi.webp**
 * **companions/Token - Nok Nok.webp**
+* **companions/Token - Octavia.webp**
+* **companions/Token - Regongar.webp**
 * **companions/Token - Tristian.webp**
 * **companions/Token - Valerie.webp**
 * **gmg/Token - Bandit.webp**
@@ -390,6 +396,17 @@ Effects to drag onto PCs after performing camping activities
 All meals that can be dragged onto PCs. Allows you to select favorite meal and degree of success.
 
 ![Meal Effects](docs/images/meal-effects.png)
+
+### Companions
+
+Ships the remaining prebuilt companions:
+
+* Jaethal
+* Harrim
+* Kanerah (TBD)
+* Kalikke (TBD)
+* Octavia
+* Regongar
 
 ### Structures
 
