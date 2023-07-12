@@ -395,7 +395,7 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
         description: 'You work with your kingdom’s scholars, thinkers, and practitioners of magical and mundane experimentation to come up with new ways to resolve issues when business as usual is just not working. Attempt a basic check.',
         skills: simpleRank(['scholarship']),
         criticalSuccess: {
-            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('creative-solution')}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and ${gainXp(10)} instead.`,
+            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('creative-solution')}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead.`,
             modifiers: () => [{
                 turns: 1,
                 enabled: false,
@@ -406,7 +406,7 @@ If the hex you’re attempting to Clear has existing Ruins or an existing Struct
             }],
         },
         success: {
-            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('creative-solution')}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and ${gainXp(10)} instead. In addition, ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your Creative Solution.`,
+            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('creative-solution')}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead. In addition, ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your Creative Solution.`,
             modifiers: () => [{
                 turns: 1,
                 enabled: false,
@@ -1125,10 +1125,18 @@ Then attempt a basic check.`,
         description: `You send agents out to attend to established trade agreements. ${loseRP(2)} per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.`,
         skills: simpleRank(['trade']),
         criticalSuccess: {
-            msg: `${createResourceButton({value: '1', turn: 'next', type: 'resource-dice'})} per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
+            msg: `${createResourceButton({
+                value: '1',
+                turn: 'next',
+                type: 'resource-dice',
+            })} per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
         },
         success: {
-            msg: `${createResourceButton({value: '1', turn: 'next', type: 'resource-dice'})} per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
+            msg: `${createResourceButton({
+                value: '1',
+                turn: 'next',
+                type: 'resource-dice',
+            })} per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
         },
         failure: {
             msg: `${createResourceButton({value: '1', turn: 'next', type: 'resource-points'})} per trade agreement`,
@@ -1241,7 +1249,7 @@ If you’re distributing gear gained from battle, this activity requires a basic
 You can attempt this skill check with Intrigue, Statecraft, or Warfare; however, certain groups will respond better (or worse) to specific skills. The DC is the group’s Negotiation DC (see the sidebar on page 519).`,
         skills: simpleRank(['intrigue', 'statecraft', 'warfare'], 1),
         criticalSuccess: {
-            msg: `The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, ${gainXp(10)} and ${gainSize(1)} (this affects all statistics determined by Size; see page 532). If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty.`,
+            msg: `The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, gain 10XP and ${gainSize(1)} (this affects all statistics determined by Size; see page 532). If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty.`,
         },
         success: {
             msg: `The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty. ${loseRolledRD(1)} to the result to integrate the group into your kingdom.`,
@@ -1553,7 +1561,7 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
             msg: 'You fail to remove the affliction. ',
         },
         criticalFailure: {
-            msg: 'You fail to remove the affliction and your soldier’s lowered morale spreads discontent; ' + gainUnrest(1) +'. If you were attempting to recover a defeated army, the army is destroyed.',
+            msg: 'You fail to remove the affliction and your soldier’s lowered morale spreads discontent; ' + gainUnrest(1) + '. If you were attempting to recover a defeated army, the army is destroyed.',
         },
     },
     'recruit-army': {
@@ -1798,7 +1806,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
 You take time to relax, and you extend the chance to unwind to your citizens as well. The Kingdom skill you use to determine the effectiveness of your time off depends on how you want to spend it: Use a basic Arts check to spend the time engaged in entertainment or the pursuit of a hobby. Use a basic Boating check to enjoy trips on the lakes and rivers of your kingdom. Use a basic Scholarship check to spend the time reading or studying a topic of personal interest beyond your daily duties. Use a basic Trade check to spend your time shopping or feasting. Use a basic Wilderness check to get away from the bustle and relax in the countryside. If your kingdom Rested and Relaxed the previous Kingdom turn, the DC increases by 4, as your kingdom’s production and output hasn’t had a chance to catch up to all those vacation days.`,
         skills: simpleRank(['arts', 'boating', 'scholarship', 'trade', 'wilderness']),
         criticalSuccess: {
-            msg: 'The citizens enjoy the time off and are ready to get back to work. ' + loseUnrest(1) +', and the next Leadership activity you take gains a +2 circumstance bonus.',
+            msg: 'The citizens enjoy the time off and are ready to get back to work. ' + loseUnrest(1) + ', and the next Leadership activity you take gains a +2 circumstance bonus.',
             modifiers: () => [{
                 turns: 1,
                 consumeId: '',
@@ -1921,7 +1929,11 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         description: 'Linzi works to spread the word of the party’s heroics and achievements, both through word of mouth and by distributing chapbooks or one-sheets detailing their exploits. Attempt a basic Arts check to determine the success of Linzi’s efforts. If she has secured a printing press for the kingdom after the PCs help with her quest (see To Ask for Forgiveness, below), the Arts check gains a +2 item bonus.',
         skills: simpleRank(['arts']),
         criticalSuccess: {
-            msg: `Not only do Linzi’s stories bring pride and patriotism to the nation, but they also help increase its glory. ${loseUnrest('1d6')}, and ${createResourceButton({type: 'fame', turn: 'next', value: '1'})}. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.`,
+            msg: `Not only do Linzi’s stories bring pride and patriotism to the nation, but they also help increase its glory. ${loseUnrest('1d6')}, and ${createResourceButton({
+                type: 'fame',
+                turn: 'next',
+                value: '1',
+            })}. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.`,
         },
         success: {
             msg: `The rousing and inspiring stories Linzi spreads about the PCs helps to bring the nation together. ${loseUnrest('1d6')}`,
@@ -1943,10 +1955,10 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         fortune: true,
         skills: simpleRank(['magic']),
         criticalSuccess: {
-            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('supernatural-solution')}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you ${gainXp(10)} instead.`,
+            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('supernatural-solution')}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10XP instead.`,
         },
         success: {
-            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('supernatural-solution')}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you ${gainXp(10)} instead. However, you ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your supernatural solution.`,
+            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('supernatural-solution')}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10XP instead. However, you ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your supernatural solution.`,
         },
         failure: {
             msg: `Your attempt at researching a supernatural solution costs additional RP to research, but is ultimately a failure, providing no advantage. ${loseRP('2d6')}`,
@@ -1967,10 +1979,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         description: 'Following Ekundayo’s advice, rural-dwelling citizens work to supplement stores of food and resources through hunting and trapping. Attempt a basic Wilderness check to gather excess livestock from the local wildlife, ranches, and farms to generate food commodities.',
         skills: simpleRank(['wilderness']),
         criticalSuccess: {
-            msg: `${gainCommodities('food', '1d4')}, ${gainCommodities('luxuries', 1)}, and ${createResourceButton({type: 'resource-dice', turn: 'next', value: '1'})}`,
+            msg: `${gainCommodities('food', '1d4')}, ${gainCommodities('luxuries', 1)}, and ${createResourceButton({
+                type: 'resource-dice',
+                turn: 'next',
+                value: '1',
+            })}`,
         },
         success: {
-            msg: `Choose one: ${gainCommodities('food', '1d4')}, ${gainCommodities('luxuries', 1)}, or ${createResourceButton({type: 'resource-dice', turn: 'next', value: '1'})}`,
+            msg: `Choose one: ${gainCommodities('food', '1d4')}, ${gainCommodities('luxuries', 1)}, or ${createResourceButton({
+                type: 'resource-dice',
+                turn: 'next',
+                value: '1',
+            })}`,
         },
         failure: {
             msg: 'Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn.',
@@ -2035,10 +2055,18 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         description: 'There are five different categories of Commodities: Food, Lumber, Luxuries, Ore, and Stone. When you Trade Commodities, select one Commodity that your kingdom currently stockpiles and reduce that Commodity’s stockpile by up to 4. Then attempt a basic check. If you trade with a group that you’ve established diplomatic relations with, you gain a +1 circumstance bonus to the check.',
         skills: simpleRank(['industry']),
         criticalSuccess: {
-            msg: `${createResourceButton({type: 'resource-dice', turn: 'next', value: '2'})} per point of stockpile expended from your Commodity now.`,
+            msg: `${createResourceButton({
+                type: 'resource-dice',
+                turn: 'next',
+                value: '2',
+            })} per point of stockpile expended from your Commodity now.`,
         },
         success: {
-            msg: `${createResourceButton({type: 'resource-dice', turn: 'next', value: '1'})} per point of stockpile expended from your Commodity now.`,
+            msg: `${createResourceButton({
+                type: 'resource-dice',
+                turn: 'next',
+                value: '1',
+            })} per point of stockpile expended from your Commodity now.`,
         },
         failure: {
             msg: createResourceButton({type: 'resource-dice', turn: 'next', value: '1'}),
@@ -2128,6 +2156,7 @@ interface CreateResourceButton {
 export function gainXp(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'xp'});
 }
+
 export function gainFame(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'fame'});
 }
