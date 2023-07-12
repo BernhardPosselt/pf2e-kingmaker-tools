@@ -10,6 +10,7 @@ declare global {
     interface Game {
         pf2eKingmakerTools: {
             macros: {
+                toggleCombatTracksMacro: () => void,
                 toggleWeatherMacro: () => void,
                 toTimeOfDayMacro: () => void,
                 kingdomEventsMacro: () => void,
@@ -23,6 +24,8 @@ declare global {
                 rollSkillDialog: () => Promise<void>,
                 awardXpMacro: () => Promise<void>,
                 resetHeroPointsMacro: () => Promise<void>,
+                /* eslint-disable @typescript-eslint/no-explicit-any */
+                setSceneCombatPlaylistDialogMacro: (actor: Actor | undefined) => Promise<void>,
             };
         };
         pf2e: {

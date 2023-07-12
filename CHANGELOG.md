@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.16] - 2023-07-12
+
+### Added
+
+* Added a way to play combat tracks based on current region, scene or actors in combat
+
 ## [0.2.15] - 2023-07-11
 
 ### Fixed

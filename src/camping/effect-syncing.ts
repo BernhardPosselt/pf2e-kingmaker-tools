@@ -1,7 +1,7 @@
 import {getAllMealEffectUuids, getMealEffectUuids, RecipeData} from './recipes';
 import {StringDegreeOfSuccess} from '../degree-of-success';
 import {ActivityEffect, ActivityOutcome, CampingActivityData, CampingActivityName} from './activities';
-import {groupBySingle, isGm} from '../utils';
+import {groupBySingle, isFirstGm} from '../utils';
 import {
     getActorByUuid,
     getActorEffectsByUuid,
@@ -151,7 +151,7 @@ export abstract class DiffListener {
 
     async fireChange(): Promise<void> {
         // GM has all of the permissions so change can be immediately made
-        if (isGm(this.game)) {
+        if (isFirstGm(this.game)) {
             const current = this.getCurrent();
             if (current) {
                 await this.onReceive(current);

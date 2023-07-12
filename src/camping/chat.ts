@@ -1,5 +1,5 @@
 import {getActorByUuid} from './actor';
-import {isGm} from '../utils';
+import {isFirstGm} from '../utils';
 import {getCamping, getCampingActor} from './storage';
 import {getEncounterDC, rollRandomEncounter} from './random-encounters';
 import {
@@ -27,7 +27,7 @@ export async function addRecipe(game: Game, element: HTMLElement): Promise<void>
     const critFailUuids = element.dataset.critFailUuids?.split(',') ?? [];
     const recipe = element.dataset.recipe || null;
     if (actorAndIngredients) {
-        if (isGm(game)) {
+        if (isFirstGm(game)) {
             await addDiscoverSpecialMealResult(game, actorAndIngredients, recipe, critFailUuids);
         } else {
             game.socket?.emit('module.pf2e-kingmaker-tools', {
@@ -47,7 +47,7 @@ export async function addRecipe(game: Game, element: HTMLElement): Promise<void>
 export async function addIngredients(game: Game, element: HTMLElement): Promise<void> {
     const actorAndIngredients = await parseIngredientButton(element);
     if (actorAndIngredients) {
-        if (isGm(game)) {
+        if (isFirstGm(game)) {
             await addHuntAndGatherResult(game, actorAndIngredients);
         } else {
             game.socket?.emit('module.pf2e-kingmaker-tools', {

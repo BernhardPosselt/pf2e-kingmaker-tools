@@ -1,7 +1,7 @@
 import {dayHasChanged, syncWeather, toggleWeather} from './weather';
-import {isGm} from './utils';
+import {isFirstGm} from './utils';
 import {toTimeOfDayMacro} from './time/app';
-import {getBooleanSetting, getStringSetting} from './settings';
+import {getBooleanSetting, getStringSetting, setSetting} from './settings';
 import {rollKingmakerWeather} from './kingmaker-weather';
 import {rollExplorationSkillCheck, rollSkillDialog} from './skill-checks';
 import {rollKingdomEvent} from './kingdom-events';
@@ -19,6 +19,7 @@ import {getCamping, getCampingActor} from './camping/storage';
 import {resetHeroPoints, showAwardXPDialog} from './macros';
 import {addDiscoverSpecialMealResult, addHuntAndGatherResult} from './camping/eating';
 import {getActorByUuid} from './camping/actor';
+import {checkBeginCombat, CombatUpdate, showSetSceneCombatPlaylistDialog, stopCombat} from './camping/combat-tracks';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -27,6 +28,19 @@ Hooks.on('ready', async () => {
             macros: {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
                 toTimeOfDayMacro: toTimeOfDayMacro.bind(null, game),
+                toggleCombatTracksMacro: async () => {
+                    const enabled = getBooleanSetting(gameInstance, 'enableCombatTracks');
+                    await stopCombat(gameInstance, gameInstance.combat);
+                    await setSetting(gameInstance, 'enableCombatTracks', !enabled);
+                },
+                setSceneCombatPlaylistDialogMacro: async (actor: Actor | undefined) => {
+                    const scene = gameInstance.scenes?.current;
+                    if (actor) {
+                        await showSetSceneCombatPlaylistDialog(gameInstance, actor);
+                    } else if (scene) {
+                        await showSetSceneCombatPlaylistDialog(gameInstance, scene);
+                    }
+                },
                 kingdomEventsMacro: rollKingdomEvent.bind(null, game),
                 rollKingmakerWeatherMacro: rollKingmakerWeather.bind(null, game),
                 viewKingdomMacro: showKingdom.bind(null, game),
@@ -89,6 +103,14 @@ Hooks.on('ready', async () => {
             type: Number,
             scope: 'world',
         });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'enableCombatTracks', {
+            name: 'Enable Combat Tracks',
+            hint: 'If enabled, starts a combat track depending on the current region. Combat track has to be named after the region, e.g. "Kingmaker.Rostland Hinterlands"; "Kingmaker.Default" is played if no region playlist is found instead',
+            scope: 'world',
+            config: true,
+            default: true,
+            type: Boolean,
+        } as any);
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableWeather', {
             name: 'Enable Weather',
             default: true,
@@ -204,17 +226,19 @@ Hooks.on('ready', async () => {
         } as any);
         Hooks.on('updateWorldTime', async (_, delta) => {
             if (getBooleanSetting(gameInstance, 'autoRollWeather')
-                && isGm(gameInstance)
+                && isFirstGm(gameInstance)
                 && dayHasChanged(gameInstance, delta)
             ) {
                 await rollKingmakerWeather(gameInstance);
             }
         });
         Hooks.on('canvasReady', async () => {
-            if (isGm(gameInstance)) {
+            if (isFirstGm(gameInstance)) {
                 await syncWeather(gameInstance);
             }
         });
+        Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => checkBeginCombat(gameInstance, combat, update));
+        Hooks.on('deleteCombat', (combat: StoredDocument<Combat>) => stopCombat(gameInstance, combat));
         checkKingdomErrors(gameInstance);
 
         // listen for camping sheet open
@@ -224,7 +248,7 @@ Hooks.on('ready', async () => {
                 openCampingSheet(gameInstance);
             } else if (data.action === 'openKingdomSheet') {
                 await showKingdom(gameInstance);
-            } else if (data.action === 'addDiscoverSpecialMealResult' && isGm(gameInstance)) {
+            } else if (data.action === 'addDiscoverSpecialMealResult' && isFirstGm(gameInstance)) {
                 const recipe = data.data.recipe as string | null;
                 const criticalFailUuids = data.data.critFailUuids as string[];
                 const actor = await getActorByUuid(data.data.actorUuid);
@@ -233,7 +257,7 @@ Hooks.on('ready', async () => {
                     const actorAndIngredients = {actor, specialIngredients, basicIngredients};
                     await addDiscoverSpecialMealResult(gameInstance, actorAndIngredients, recipe, criticalFailUuids);
                 }
-            } else if (data.action === 'addHuntAndGatherResult' && isGm(gameInstance)) {
+            } else if (data.action === 'addHuntAndGatherResult' && isFirstGm(gameInstance)) {
                 const actor = await getActorByUuid(data.data.actorUuid);
                 const {specialIngredients, basicIngredients} = data.data;
                 if (actor) {
@@ -246,7 +270,7 @@ Hooks.on('ready', async () => {
             } else {
                 // players changed data and GM needs to sync effects
                 const sheetActor = getCampingActor(gameInstance);
-                if (sheetActor && isGm(gameInstance)) {
+                if (sheetActor && isFirstGm(gameInstance)) {
                     const camping = getCamping(sheetActor);
                     for (const listener of listeners) {
                         if (listener.canHandle(data.action)) {

@@ -462,4 +462,20 @@ The following variant rules are supported in the settings:
   camping activities included in the journals are extended to 2 hours.
 * Kallike's **Deliberate Planning** activity had its status bonus changed to a circumstance bonus. Reasoning for that is
   that not a single activity uses a status bonus, it's all circumstance bonuses. Plus a +1 status bonus is obsolete from
-  level 1. 
+  level 1.
+
+## Combat Tracks
+
+The CRPG ships with various combat tracks that depend on the region. If Combat Tracks are enabled, it tries to find a
+playlist in the following order:
+
+* Combat playlist of the first actor on the combat tracker (Configurable via **Set Combat Playlist** Macro by
+  selecting a token)
+* Combat playlist of the active scene (Configurable via **Set Combat Playlist** Macro by not selecting a token)
+* Combat playlist of the current region (e.g. **Kingmaker.Combat.Rostland Hinterlands**)
+* Combat playlist called **Kingmaker.Combat.Default**
+
+If any playlist is found, at the start of combat, that playlist is played and the active scene's playlist is disabled.
+Afterward, the games active scene's playlist is started again.
+
+If you wish to quickly disable combat tracks, e.g. when fighting a boss, you can use the Toggle Combat Tracks Macro.

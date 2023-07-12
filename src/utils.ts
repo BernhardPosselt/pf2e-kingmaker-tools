@@ -15,7 +15,7 @@ export function escapeHtml(html: string): string {
     return p.innerHTML;
 }
 
-export function isGm(game: Game): boolean {
+export function isFirstGm(game: Game): boolean {
     return game?.user?.id === game.users?.find((u) => u.isGM && u.active)?.id;
 }
 
@@ -140,7 +140,7 @@ export function groupBy<T, R>(array: T[], criterion: (value: T) => R): Map<R, T[
 
 export function groupBySingle<T, R>(array: T[], criterion: (value: T) => R): Map<R, T> {
     return new Map(
-        array.map(elem => [criterion(elem), elem])
+        array.map(elem => [criterion(elem), elem]),
     );
 }
 
@@ -225,4 +225,12 @@ export function camelCase(value: string): string {
     return uncapitalize(value.split(' ')
         .map(s => capitalize(s))
         .join(''));
+}
+
+export function isBlank(value: string | null | undefined): boolean {
+    if (value === null || value === undefined) {
+        return true;
+    } else {
+        return value.trim().length === 0;
+    }
 }
