@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.17] - 2023-07-12
+
+### Added
+
+* Added prebuilt companions for Jaethal, Harrim, Octavia and Regongar. Waiting for Rage of Elements to add the
+  Kineticist sisters
+
+### Fixed
+
+* Fix macro typo
+
 ## [0.2.16] - 2023-07-12
 
 ### Added
