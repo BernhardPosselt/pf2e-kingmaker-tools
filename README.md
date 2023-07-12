@@ -466,10 +466,11 @@ The following variant rules are supported in the settings:
 
 ## Combat Tracks
 
-The CRPG ships with various combat tracks that depend on the region. If Combat Tracks are enabled, it tries to find a
-playlist in the following order:
+The CRPG ships with various combat tracks that depend on the region (e.g. Narlmarches), scene (e.g. caves, ruins) or
+actor (e.g. Vordakai). If Combat Tracks are enabled, it tries to find a playlist in the following order:
 
-* Combat playlist of the first actor on the combat tracker (Configurable via **Set Combat Playlist** Macro by
+* Combat playlist of the first actor with a playlist on the combat tracker (Configurable via **Set Combat Playlist**
+  Macro by
   selecting a token)
 * Combat playlist of the active scene (Configurable via **Set Combat Playlist** Macro by not selecting a token)
 * Combat playlist of the current region (e.g. **Kingmaker.Rostland Hinterlands**)
