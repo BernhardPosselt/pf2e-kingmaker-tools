@@ -385,18 +385,6 @@ not found under User Data, The Forge will instead try to look it up under the sa
 * **structures/Waterfront (Corner).webp**
 * **structures/Waterfront (Side).webp**
 
-### Camping Effects
-
-Effects to drag onto PCs after performing camping activities
-
-![Camping Effects](docs/images/camping-effects.png)
-
-### Meal Effects
-
-All meals that can be dragged onto PCs. Allows you to select favorite meal and degree of success.
-
-![Meal Effects](docs/images/meal-effects.png)
-
 ### Companions
 
 Ships the remaining prebuilt companions:
@@ -497,3 +485,5 @@ If any playlist is found, at the start of combat, that playlist is played and th
 Afterward, the games active scene's playlist is started again.
 
 If you wish to quickly disable combat tracks, e.g. when fighting a boss, you can use the **Toggle Combat Tracks** Macro.
+
+![Add Settlement](docs/images/track-macros.png)
