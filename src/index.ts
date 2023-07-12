@@ -28,12 +28,12 @@ Hooks.on('ready', async () => {
             macros: {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
                 toTimeOfDayMacro: toTimeOfDayMacro.bind(null, game),
-                toggleCombatTracksMacro: async () => {
+                toggleCombatTracksMacro: async (): Promise<void> => {
                     const enabled = getBooleanSetting(gameInstance, 'enableCombatTracks');
                     await stopCombat(gameInstance, gameInstance.combat);
                     await setSetting(gameInstance, 'enableCombatTracks', !enabled);
                 },
-                setSceneCombatPlaylistDialogMacro: async (actor: Actor | undefined) => {
+                setSceneCombatPlaylistDialogMacro: async (actor: Actor | undefined): Promise<void> => {
                     const scene = gameInstance.scenes?.current;
                     if (actor) {
                         await showSetSceneCombatPlaylistDialog(gameInstance, actor);
