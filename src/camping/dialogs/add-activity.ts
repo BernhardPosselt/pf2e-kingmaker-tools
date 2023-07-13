@@ -1,4 +1,12 @@
-import {parseCheckbox, parseNumberInput, parseSelect, parseTextArea, parseTextInput, unslugify} from '../../utils';
+import {
+    parseCheckbox,
+    parseNumberInput,
+    parseSelect,
+    parseTextArea,
+    parseTextInput,
+    slugifyable,
+    unslugify,
+} from '../../utils';
 import {ActivityOutcome, CampingActivityData, CampingActivityName} from '../activities';
 import {getEffectByUuid} from '../actor';
 import {DcType, Proficiency} from '../data';
@@ -16,7 +24,7 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
         <p>Hint: UUIDs can be found in the item's <b>Rules</b> tab</p>
         <form class="simple-dialog-form">
             <div>
-                <label for="km-name">Name</label>
+                <label for="km-name">Name (English characters and numbers separate by 1 space max)</label>
                 <input type="text" name="name" id="km-name" placeholder="Unknown Activity">
             </div>
             <div>
@@ -119,6 +127,8 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                         ui.notifications?.error(`Can not find effect item with uuid ${effectUuid}`);
                     } else if (activities.find(r => r.name === name)) {
                         ui.notifications?.error(`Activity with name ${name} exists already`);
+                    } else if (!slugifyable(name)) {
+                        ui.notifications?.error(`Name "${name}" contains illegal characters, please only use numbers and English letters, separated by a maximum of 1 space`);
                     } else {
                         const skillRequirements = parseSkillList(parseTextInput($html, 'skill-requirement'));
                         const skillProficiency = parseProficiency(parseSelect($html, 'skill-proficiency'));

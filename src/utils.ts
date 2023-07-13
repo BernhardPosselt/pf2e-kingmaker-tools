@@ -227,6 +227,10 @@ export function camelCase(value: string): string {
         .join(''));
 }
 
+export function slugifyable(value: string): boolean {
+    return /^([a-zA-Z0-9]+)(\s[a-zA-Z0-9]+)*$/.test(value);
+}
+
 export function isBlank(value: string | null | undefined): boolean {
     if (value === null || value === undefined) {
         return true;
