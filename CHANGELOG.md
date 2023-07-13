@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.20] - 2023-07-13
+
+### Fixed
+
+* Whitelist characters for camping activities explicitly to not run errors when creating activities with special
+  characters
+
 ## [0.2.19] - 2023-07-13
 
 ### Fixed
