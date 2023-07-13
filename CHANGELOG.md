@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.19] - 2023-07-13
+
+### Fixed
+
+* Fix First World Mince Pie
+
 ## [0.2.18] - 2023-07-12
 
 ### Fixed

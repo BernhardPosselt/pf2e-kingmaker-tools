@@ -12,6 +12,7 @@ export interface MealEffect {
 
 export interface CookingOutcome {
     effects?: MealEffect[];
+    chooseRandomly?: boolean;
 }
 
 export interface RecipeData {
@@ -30,6 +31,33 @@ export interface RecipeData {
     criticalFailure: CookingOutcome;
     favoriteMeal?: CookingOutcome;
 }
+
+const firstWorldMincePieEffects = {
+    strength: {
+        criticalSuccessUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.69VWFB5UNLau1Rzt',
+        successUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.iV22sORhjIhWZMKw',
+    },
+    dexterity: {
+        criticalSuccessUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.OAxcELiLh04BLVvP',
+        successUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.CQGJi8WiBq0T8Kc6',
+    },
+    constitution: {
+        criticalSuccessUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.WVRQf9SLX0iRh3Ur',
+        successUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.L8HdDXKrfa3gDakt',
+    },
+    wisdom: {
+        criticalSuccessUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.69MQw1WMMlN4hEzb',
+        successUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.6CjFExnLSe9qij9z',
+    },
+    intelligence: {
+        criticalSuccessUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.yLf2n65zVocqsl6r',
+        successUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Af25wacbdYDnFKwM',
+    },
+    charisma: {
+        criticalSuccessUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.sd45BQ4P7BtsYEuP',
+        successUuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.VhzUKWFVrZ7tgcEQ',
+    },
+};
 
 export const allRecipes: RecipeData[] = [
     {
@@ -770,13 +798,19 @@ export const allRecipes: RecipeData[] = [
         'cost': '3500 gp',
         'rarity': 'rare',
         'criticalSuccess': {
-            'effects': [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.1XbYyFCnlAZkhHhe'}],
+            'effects': Object.values(firstWorldMincePieEffects).map(v => {
+                return {uuid: v.criticalSuccessUuid};
+            }),
+            chooseRandomly: true,
         },
         'criticalFailure': {
             'effects': [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.72N0nZAAo2iuCGBd'}],
         },
         'success': {
-            'effects': [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.GesHppaIt6v7WBzT'}],
+            'effects': Object.values(firstWorldMincePieEffects).map(v => {
+                return {uuid: v.successUuid};
+            }),
+            chooseRandomly: true,
         },
         'favoriteMeal': {
             'effects': [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Wfmt1NvfIqF3gFav'}],
@@ -790,8 +824,14 @@ export function getRecipesKnownInRegion(game: Game, region: string, recipes: Rec
     return recipes.filter(recipe => recipe.rarity === 'common' && recipe.level <= zoneLevel);
 }
 
-export function getOutcomeEffects(outcome: CookingOutcome | undefined): string[] {
-    return outcome?.effects?.flatMap(e => e.uuid) ?? [];
+export function getOutcomeEffects(outcome: CookingOutcome | undefined, includeAll: boolean): string[] {
+    const effects = outcome?.effects?.flatMap(e => e.uuid) ?? [];
+    if (!includeAll && outcome?.chooseRandomly && effects.length > 0) {
+        const randomIndex = Math.floor(Math.random() * (effects.length - 1));
+        return [effects[randomIndex]];
+    } else {
+        return effects;
+    }
 }
 
 export function getExpiringOutcomeEffects(outcome: CookingOutcome | undefined): string[] {
@@ -802,10 +842,10 @@ export function getExpiringOutcomeEffects(outcome: CookingOutcome | undefined): 
 
 export function getAllMealEffectUuids(recipes: RecipeData[]): string[] {
     return recipes.flatMap(r => [
-        ...getOutcomeEffects(r.criticalFailure),
-        ...getOutcomeEffects(r.success),
-        ...getOutcomeEffects(r.criticalSuccess),
-        ...getOutcomeEffects(r.favoriteMeal),
+        ...getOutcomeEffects(r.criticalFailure, true),
+        ...getOutcomeEffects(r.success, true),
+        ...getOutcomeEffects(r.criticalSuccess, true),
+        ...getOutcomeEffects(r.favoriteMeal, true),
     ]);
 }
 
@@ -819,10 +859,10 @@ export function getAllExpiringMealEffectUuids(recipes: RecipeData[]): string[] {
 }
 
 export function getMealEffectUuids(recipe: RecipeData, favoriteMeal: string | undefined, degree: StringDegreeOfSuccess): string[] {
-    const favoriteMealEffects = recipe.name === favoriteMeal ? getOutcomeEffects(recipe.favoriteMeal) : [];
+    const favoriteMealEffects = recipe.name === favoriteMeal ? getOutcomeEffects(recipe.favoriteMeal, false) : [];
     const effects = degree === 'criticalSuccess'
     || degree === 'success'
-    || degree === 'criticalFailure' ? getOutcomeEffects(recipe[degree]) : [];
+    || degree === 'criticalFailure' ? getOutcomeEffects(recipe[degree], false) : [];
     return degree === 'criticalSuccess' || degree === 'success' ? [...effects, ...favoriteMealEffects] : effects;
 }
 
