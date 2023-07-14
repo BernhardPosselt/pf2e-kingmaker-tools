@@ -7,7 +7,6 @@ import {
     slugify,
     slugifyable,
     unslugify,
-    usableInForms,
 } from '../../utils';
 import {ActivityOutcome, CampingActivityData, CampingActivityName} from '../activities';
 import {getEffectByUuid} from '../actor';
@@ -27,7 +26,7 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
         <p><b>Slugifyable</b>: Must contain English letters or numbers only; must be separated by a single space</p>
         <form class="simple-dialog-form">
             <div>
-                <label for="km-name">Name (no "<>\\' characters)</label>
+                <label for="km-name">Name</label>
                 <input type="text" name="name" id="km-name" placeholder="Unknown Activity">
             </div>
             <div>
@@ -132,8 +131,6 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                         ui.notifications?.error(`Can not find effect item with uuid ${effectUuid}`);
                     } else if (activities.find(r => r.name === name)) {
                         ui.notifications?.error(`Activity with name ${name} exists already`);
-                    } else if (!usableInForms(name)) {
-                        ui.notifications?.error(`Name "${name}" must not contain any of: "<>\\'`);
                     } else if (!skillRequirements.every(s => slugifyable(s))) {
                         ui.notifications?.error(`Skill Requirements "${skillRequirements}" can not be slugified`);
                     } else if (skills !== 'any' && !skills.every(s => slugifyable(s))) {
