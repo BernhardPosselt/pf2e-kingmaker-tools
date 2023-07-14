@@ -17,13 +17,13 @@ function tpl(data: CampingActivityData[], lockedActivities: Set<CampingActivityN
                     <th>Enabled</th>
                     <th>Delete</th>
                 </tr>
-                ${data.map(r => {
-                    return `<tr>
+                ${data.map((r, i) => {
+        return `<tr>
                         <td>${escapeHtml(r.name)}</td>
-                        <td><input type="checkbox" name="lock-${escapeHtml(r.name)}" ${!lockedActivities.has(r.name) ? 'checked': ''}></td>
-                        <td><input type="checkbox" name="delete-${escapeHtml(r.name)}" ${!isGM || !r.isHomebrew ? 'disabled': ''}></td>                      
-                    </tr>`;    
-                }).join('\n')}
+                        <td><input type="checkbox" name="lock-${i}" ${!lockedActivities.has(r.name) ? 'checked' : ''}></td>
+                        <td><input type="checkbox" name="delete-${i}" ${!isGM || !r.isHomebrew ? 'disabled' : ''}></td>                      
+                    </tr>`;
+    }).join('\n')}
             </table>
         </form>
         `;
@@ -41,16 +41,16 @@ export async function manageActivitiesDialog(options: ManageActivitiesOptions): 
                 label: 'Save',
                 callback: async (html): Promise<void> => {
                     const $html = html as HTMLElement;
-                    const lockedActivities = options.data
-                        .map(r => {
-                            const enabled = parseCheckbox($html, `lock-${r.name}`);
+                    const lockedActivities = data
+                        .map((r, i) => {
+                            const enabled = parseCheckbox($html, `lock-${i}`);
                             return {enabled, name: r.name};
                         })
                         .filter(r => !r.enabled)
                         .map(r => r.name);
-                    const deletedActivities = options.data
-                        .map(r => {
-                            const enabled = parseCheckbox($html, `delete-${r.name}`);
+                    const deletedActivities = data
+                        .map((r, i) => {
+                            const enabled = parseCheckbox($html, `delete-${i}`);
                             return {enabled, name: r.name};
                         })
                         .filter(r => r.enabled)
