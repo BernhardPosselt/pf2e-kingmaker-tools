@@ -2,7 +2,7 @@
     <header class="actor-header" {{#if activity.journalUuid}}data-uuid="{{activity.journalUuid}}"{{/if}}>{{activity.name}}</header>
     <div class="actor-image-container">
         {{#if actor}}
-            <img src="{{activity.actor.image}}" title="{{activity.actor.name}}" class="actor-image" data-uuid="{{activity.actor.uuid}}">
+            <img src="{{activity.actor.image}}" class="actor-image" data-uuid="{{activity.actor.uuid}}">
             <button type="button" class="remove-actor" title="Clear Actor" data-uuid="{{activity.actor.uuid}}" data-type="{{activity.name}}"><i
                     class="fa-solid fa-xmark"></i></button>
         {{else}}

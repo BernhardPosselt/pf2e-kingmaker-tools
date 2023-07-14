@@ -227,8 +227,12 @@ export function camelCase(value: string): string {
         .join(''));
 }
 
+export function usableInForms(value: string): boolean {
+    return /^[^'"<>\\]+$/.test(value);
+}
+
 export function slugifyable(value: string): boolean {
-    return /^([a-zA-Z0-9]+)(\s[a-zA-Z0-9]+)*$/.test(value);
+    return /^([a-zA-Z0-9]*)(\s[a-zA-Z0-9]*)*$/.test(value);
 }
 
 export function isBlank(value: string | null | undefined): boolean {

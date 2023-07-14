@@ -27,7 +27,7 @@ import {campingSettingsDialog} from './dialogs/camping-settings';
 import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
 import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
-import {camelCase, LabelAndValue, listenClick} from '../utils';
+import {LabelAndValue, listenClick} from '../utils';
 import {getActorsByUuid, hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
 import {askDcDialog} from './dialogs/ask-dc';
 import {showCampingHelp} from './dialogs/camping-help';
@@ -636,8 +636,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             campingActivities: getCampingActivityData(current).map(activityData => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const data = formData as any;
-                const degreeKey = `actorActivityDegreeOfSuccess.${camelCase(activityData.name)}`;
-                const skillKey = `selectedSkill.${camelCase(activityData.name)}`;
+                const degreeKey = `actorActivityDegreeOfSuccess.${activityData.name}`;
+                const skillKey = `selectedSkill.${activityData.name}`;
                 return {
                     activity: activityData.name,
                     selectedSkill: this.parseNullableSelect(data[skillKey]),

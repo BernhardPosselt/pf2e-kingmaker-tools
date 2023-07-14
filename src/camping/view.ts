@@ -1,7 +1,7 @@
 import {ActorMeal, Camping, CampingActivity, CookingSkill, getCombatEffects} from './camping';
 import {CampingActivityData, CampingActivityName} from './activities';
 import {StringDegreeOfSuccess} from '../degree-of-success';
-import {camelCase, LabelAndValue, unslugify} from '../utils';
+import {escapeHtml, LabelAndValue, unslugify} from '../utils';
 import {RecipeData} from './recipes';
 import {ConsumedFood} from './eating';
 
@@ -60,7 +60,6 @@ export interface ViewCampingData {
 export interface ViewActor {
     uuid: string;
     image: string;
-    name: string;
 }
 
 
@@ -81,7 +80,7 @@ export interface ViewCampingActivity {
 async function toViewActivity(
     activity: CampingActivity | undefined,
     activityData: CampingActivityData,
-    isHidden: boolean
+    isHidden: boolean,
 ): Promise<ViewCampingActivity> {
     const skills: string[] = [];
     const activityDataSkills = activityData.skills;
@@ -102,7 +101,7 @@ async function toViewActivity(
             return {value: s, label: unslugify(s)};
         }),
         degreeOfSuccess: activity?.result ?? null,
-        slug: camelCase(activityData.name),
+        slug: escapeHtml(activityData.name),
         isSecret: activityData.isSecret,
         selectedSkill: activity?.selectedSkill ?? (activityDataSkills.length > 0 ? activityDataSkills[0] : null),
         isHidden,
@@ -115,7 +114,6 @@ export async function toViewActor(uuid: string): Promise<ViewActor> {
     return {
         image: actor?.img ?? 'modules/pf2e-kingmaker-tools/static/img/add-actor.webp',
         uuid,
-        name: actor?.name ?? 'Unknown Actor',
     };
 }
 
@@ -172,8 +170,8 @@ export async function toViewCampingActivities(
         data.map(a => {
                 const isHidden = (lockedActivities.has(a.name) || !canPerformActivities) && a.name !== 'Prepare Campsite';
                 return toViewActivity(activities.find(d => d.activity === a.name), a, isHidden);
-            }
-        )
+            },
+        ),
     ));
 
     result.sort((a, b) =>

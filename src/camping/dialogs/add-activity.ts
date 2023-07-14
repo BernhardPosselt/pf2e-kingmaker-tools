@@ -4,8 +4,10 @@ import {
     parseSelect,
     parseTextArea,
     parseTextInput,
+    slugify,
     slugifyable,
     unslugify,
+    usableInForms,
 } from '../../utils';
 import {ActivityOutcome, CampingActivityData, CampingActivityName} from '../activities';
 import {getEffectByUuid} from '../actor';
@@ -21,10 +23,11 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
         title: 'Add Camping Activity',
         content: `
         <div>
-        <p>Hint: UUIDs can be found in the item's <b>Rules</b> tab</p>
+        <p><b>UUIDs</b> can be found in the item's <b>Rules</b> tab</p>
+        <p><b>Slugifyable</b>: Must contain English letters or numbers only; must be separated by a single space</p>
         <form class="simple-dialog-form">
             <div>
-                <label for="km-name">Name (English characters and numbers separate by 1 space max)</label>
+                <label for="km-name">Name (no "<>\\' characters)</label>
                 <input type="text" name="name" id="km-name" placeholder="Unknown Activity">
             </div>
             <div>
@@ -32,7 +35,7 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                 <input type="text" name="journal" id="km-journal">
             </div>
             <div>
-                <label for="km-skills">Skills (<b>any</b> or skill name)</label>
+                <label for="km-skills">Skills (<b>any</b> or skill name (slugifyable))</label>
                 <input id="km-skills" type="text" placeholder="Survival,Perception" name="skills">
             </div>
             <div>
@@ -40,8 +43,8 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                 <input id="km-dc" type="text" placeholder="" name="dc">
             </div>
             <div>
-                <label for="km-skill-requirement">Skill Requirement</label>
-                <input id="km-skill-requirement" type="text" placeholder="Survival" name="skill-requirement">
+                <label for="km-skill-requirement">Skill Requirement (slugifyable)</label>
+                <input id="km-skill-requirement" type="text" placeholder="Survival,Perception" name="skill-requirement">
             </div>
             <div>
                 <label for="km-skill-proficiency">Skill Proficiency Requirement</label>
@@ -121,23 +124,28 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                     const journal = await fromUuid(journalUuid);
                     const effectItem = await getEffectByUuid(effectUuid);
                     const name = (parseTextInput($html, 'name') || 'Unknown Activity') as CampingActivityName;
+                    const skillRequirements = parseSkillList(parseTextInput($html, 'skill-requirement'));
+                    const skills = parseSkills(parseTextInput($html, 'skills'));
                     if (journalUuid && journal === null) {
                         ui.notifications?.error(`Can not find journal with uuid ${journalUuid}`);
                     } else if (effectUuid && effectItem === null) {
                         ui.notifications?.error(`Can not find effect item with uuid ${effectUuid}`);
                     } else if (activities.find(r => r.name === name)) {
                         ui.notifications?.error(`Activity with name ${name} exists already`);
-                    } else if (!slugifyable(name)) {
-                        ui.notifications?.error(`Name "${name}" contains illegal characters, please only use numbers and English letters, separated by a maximum of 1 space`);
+                    } else if (!usableInForms(name)) {
+                        ui.notifications?.error(`Name "${name}" must not contain any of: "<>\\'`);
+                    } else if (!skillRequirements.every(s => slugifyable(s))) {
+                        ui.notifications?.error(`Skill Requirements "${skillRequirements}" can not be slugified`);
+                    } else if (skills !== 'any' && !skills.every(s => slugifyable(s))) {
+                        ui.notifications?.error(`Skills "${skills}" can not be slugified`);
                     } else {
-                        const skillRequirements = parseSkillList(parseTextInput($html, 'skill-requirement'));
                         const skillProficiency = parseProficiency(parseSelect($html, 'skill-proficiency'));
                         await onSubmit({
                             name,
                             journalUuid: journalUuid,
-                            skills: parseSkills(parseTextInput($html, 'skills')),
+                            skills: skills === 'any' ? 'any' : skills.map(s => slugify(s)),
                             skillRequirements: skillProficiency ? skillRequirements.map(s => {
-                                return {skill: s, proficiency: skillProficiency};
+                                return {skill: slugify(s), proficiency: skillProficiency};
                             }) : [],
                             modifyRandomEncounterDc: {
                                 day: parseNumberInput($html, 'day-encounter-dc') || 0,
@@ -172,8 +180,7 @@ function parseSkillList(value: string): string[] {
         return value.split(',')
             .map(s => s.toLowerCase()
                 .replace('lore', '')
-                .trim()
-                .replace(' ', '-'));
+                .trim());
     }
     return [];
 }
