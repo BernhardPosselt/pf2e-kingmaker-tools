@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.22] - 2023-07-14
+
+### Fixed
+
+* Fix activity naming issues, relaxed naming restrictions
+
 ## [0.2.21] - 2023-07-14
 
 ### Fixed
