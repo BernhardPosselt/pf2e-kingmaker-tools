@@ -98,6 +98,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
     private getAvailableItems(settlementLevel: number, itemLevelBonuses: ItemLevelBonuses): ItemLevelBonusData[] {
         const qualityOfLifeBonus = hasFeat(this.kingdom, 'Quality of Life') ? 1 : 0;
         const magicTraits = new Set(['arcane', 'divine', 'primal', 'occult']);
+        console.log(itemLevelBonuses, settlementLevel);
         return this.dedupBonuses(this.dedupBonuses((Object.entries(itemLevelBonuses) as [ItemGroup, number][])
             .map(([type, bonus]) => {
                 return {

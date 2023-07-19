@@ -12,7 +12,7 @@
         </tr>
         {{#each settlements}}
             <tr>
-                <td>{{name}}<input type="hidden" value="{{sceneId}}" name="settlements.{{@index}}.sceneId"></td>
+                <td>{{name}}</td>
                 <td>{{level}}</td>
                 <td>
                     {{#if isCapital}}
@@ -47,11 +47,6 @@
                 <td>
                     <button type="button" class="icon-action inspect-settlement" data-id="{{sceneId}}"><i
                             class="fa-solid fa-magnifying-glass"></i></button>
-                    <input type="hidden" value="{{lots}}" name="settlements.{{@index}}.lots">
-                    <input type="hidden" value="{{level}}" name="settlements.{{@index}}.level">
-                    <input type="hidden" value="{{waterBorders}}" name="settlements.{{@index}}.waterBorders">
-                    <input type="hidden" value="{{type}}" name="settlements.{{@index}}.type">
-                    <input type="checkbox" name="settlements.{{@index}}.secondaryTerritory" {{checked secondaryTerritory}} hidden>
                 </td>
             </tr>
         {{/each}}

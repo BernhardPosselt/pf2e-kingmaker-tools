@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.23] - 2023-07-19
+
+### Fixed
+
+* Fix settlement levels randomly turning into strings; to fix this permanently, you need to edit a settlement and click
+  on save
+
 ## [0.2.22] - 2023-07-14
 
 ### Fixed

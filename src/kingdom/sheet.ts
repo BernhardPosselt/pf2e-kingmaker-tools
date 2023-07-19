@@ -319,7 +319,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         kingdom.groups = unpackFormArray(kingdom.groups);
         kingdom.feats = unpackFormArray(kingdom.feats);
         kingdom.bonusFeats = unpackFormArray(kingdom.bonusFeats);
-        kingdom.settlements = unpackFormArray(kingdom.settlements);
         kingdom.milestones = unpackFormArray(kingdom.milestones).map((milestone, index) => {
             return {
                 ...milestones[index],
