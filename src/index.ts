@@ -20,6 +20,7 @@ import {resetHeroPoints, showAwardXPDialog} from './macros';
 import {addDiscoverSpecialMealResult, addHuntAndGatherResult} from './camping/eating';
 import {getActorByUuid} from './camping/actor';
 import {checkBeginCombat, CombatUpdate, showSetSceneCombatPlaylistDialog, stopCombat} from './camping/combat-tracks';
+import {migrate} from './migrations';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -224,6 +225,18 @@ Hooks.on('ready', async () => {
             requiresReload: true,
             type: Boolean,
         } as any);
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'schemaVersion', {
+            name: 'Schema Version',
+            default: 1,
+            config: false,
+            type: Number,
+            scope: 'world',
+        });
+
+        // migrations
+        await migrate(game, getKingdomSheetActor(game), getCampingActor(game));
+
+        // hooks
         Hooks.on('updateWorldTime', async (_, delta) => {
             if (getBooleanSetting(gameInstance, 'autoRollWeather')
                 && isFirstGm(gameInstance)
