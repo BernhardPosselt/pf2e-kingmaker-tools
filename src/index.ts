@@ -232,6 +232,13 @@ Hooks.on('ready', async () => {
             type: Number,
             scope: 'world',
         });
+        gameInstance.settings.register<string, string, string>('pf2e-kingmaker-tools', 'latestMigrationBackup', {
+            name: 'Schema Version',
+            default: '',
+            config: false,
+            type: String,
+            scope: 'world',
+        });
 
         // migrations
         await migrate(game, getKingdomSheetActor(game), getCampingActor(game));
