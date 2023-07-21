@@ -1,4 +1,4 @@
-import {dayHasChanged, syncWeather, toggleWeather} from './weather';
+import {dayHasChanged, setCurrentWeatherDialog, syncWeather, toggleShelterd, toggleWeather} from './weather';
 import {isFirstGm} from './utils';
 import {toTimeOfDayMacro} from './time/app';
 import {getBooleanSetting, getStringSetting, setSetting} from './settings';
@@ -28,6 +28,8 @@ Hooks.on('ready', async () => {
         gameInstance.pf2eKingmakerTools = {
             macros: {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
+                toggleShelteredMacro: toggleShelterd.bind(null, game),
+                setCurrentWeatherMacro: setCurrentWeatherDialog.bind(null, game),
                 toTimeOfDayMacro: toTimeOfDayMacro.bind(null, game),
                 toggleCombatTracksMacro: async (): Promise<void> => {
                     const enabled = getBooleanSetting(gameInstance, 'enableCombatTracks');
@@ -96,14 +98,6 @@ Hooks.on('ready', async () => {
             type: Number,
             scope: 'world',
         });
-        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'weatherHazardRange', {
-            name: 'Weather Hazard Range',
-            hint: 'Maximum Level of Weather Event that can occur. Added to Average Party Level.',
-            default: 4,
-            config: true,
-            type: Number,
-            scope: 'world',
-        });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'enableCombatTracks', {
             name: 'Enable Combat Tracks',
             hint: 'If enabled, starts a combat track depending on the current region, actor or scene. Region combat tracks have to be named after the region, e.g. "Kingmaker.Rostland Hinterlands"; "Kingmaker.Default" is played if no region playlist is found instead',
@@ -116,6 +110,13 @@ Hooks.on('ready', async () => {
             name: 'Enable Weather',
             default: true,
             config: true,
+            type: Boolean,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableSheltered', {
+            name: 'Enabled Sheltered',
+            default: true,
+            config: false,
             type: Boolean,
             scope: 'world',
         });
@@ -134,6 +135,14 @@ Hooks.on('ready', async () => {
             default: 'gmroll',
             type: String,
             choices: rollModeChoices,
+        });
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'weatherHazardRange', {
+            name: 'Weather Hazard Range',
+            hint: 'Maximum Level of Weather Event that can occur. Added to Average Party Level.',
+            default: 4,
+            config: true,
+            type: Number,
+            scope: 'world',
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'currentWeatherFx', {
             name: 'Current Weather FX',

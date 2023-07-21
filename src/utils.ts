@@ -227,6 +227,13 @@ export function camelCase(value: string): string {
         .join(''));
 }
 
+export function deCamelCase(value: string): string {
+    return value.replace(/([a-z])([A-Z])/g, '$1 $2')
+        .split(' ')
+        .map(capitalize)
+        .join(' ');
+}
+
 export function usableInForms(value: string): boolean {
     return /^[^'"<>\\]+$/.test(value);
 }

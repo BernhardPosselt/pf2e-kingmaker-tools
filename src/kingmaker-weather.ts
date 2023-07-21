@@ -86,7 +86,7 @@ async function rollWeather(game: Game, averagePartyLevel: number, weatherHazardR
             rollMode,
         )).isSuccess;
         if (isCold && hasPrecipitation) {
-            await setWeather(game, 'snowfall');
+            await setWeather(game, 'snow');
             message = 'Weather: Cold & Snowing';
         } else if (isCold) {
             await setWeather(game, 'sunny');

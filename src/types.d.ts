@@ -12,6 +12,8 @@ declare global {
             macros: {
                 toggleCombatTracksMacro: () => void,
                 toggleWeatherMacro: () => void,
+                toggleShelteredMacro: () => void,
+                setCurrentWeatherMacro: () => void,
                 toTimeOfDayMacro: () => void,
                 kingdomEventsMacro: () => void,
                 rollKingmakerWeatherMacro: () => void,

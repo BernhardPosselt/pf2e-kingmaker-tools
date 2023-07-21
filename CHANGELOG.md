@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2023-07-21
+
+### Added
+
+* Added a macro to manually set weather
+* Expanded weather playlists to leaves, rainStorm, fog and blizzard
+
+### Changed
+
+* Disabling weather in settings does not override scene's weather effects anymore
+* The **Toggle Weather** macro's job is being replaced by the **Toggle Sheltered from Weather** macro which will now
+  also stop all weather playlists instead of playing the **weather.sunny** one
+* The **weather.snowfall** playlist has been changed to **weather.snow** to match the Foundry weather effect value. You
+  will need to manually override the value via the **Set Current Weather** macro if its snowing
+
 ## [0.2.23] - 2023-07-21
 
 ### Added
