@@ -53,7 +53,7 @@ export async function setWeather(game: Game, effectName: WeatherEffectName): Pro
         const eff = getBooleanSetting(game, 'enableSheltered') ? effectName : 'none';
         await applyWeatherSound(game, eff);
         console.info(`Setting weather to ${eff}`);
-        if (eff !== 'sunny' && eff !== 'none') {
+        if (eff !== 'sunny' && eff !== 'none' && allWeatherNames.includes(eff)) {
             await game.scenes?.current?.update({'weather': eff});
         } else {
             await game.scenes?.current?.update({'weather': ''});
@@ -98,9 +98,9 @@ export function setCurrentWeatherDialog(game: Game): void {
         </form>
         `,
         buttons: {
-            roll: {
+            save: {
                 icon: '<i class="fa-solid fa-save"></i>',
-                label: 'Roll',
+                label: 'Save',
                 callback: async (html): Promise<void> => {
                     const $html = html as HTMLElement;
                     const weather = parseSelect($html, 'weather') as WeatherEffectName;
@@ -108,7 +108,7 @@ export function setCurrentWeatherDialog(game: Game): void {
                 },
             },
         },
-        default: 'roll',
+        default: 'save',
     }, {
         jQuery: false,
         width: 250,
