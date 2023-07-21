@@ -50,7 +50,7 @@ export async function setWeather(game: Game, effectName: WeatherEffectName): Pro
         // always persist the current one without checking for turned off weather
         await game.settings.set('pf2e-kingmaker-tools', 'currentWeatherFx', effectName);
         // fall back to sunny if weather is disabled
-        const eff = getBooleanSetting(game, 'enableSheltered') ? effectName : 'none';
+        const eff = getBooleanSetting(game, 'enableSheltered') ? 'none' : effectName;
         await applyWeatherSound(game, eff);
         console.info(`Setting weather to ${eff}`);
         if (eff !== 'sunny' && eff !== 'none' && allWeatherNames.includes(eff)) {

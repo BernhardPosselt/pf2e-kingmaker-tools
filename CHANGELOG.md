@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2023-07-21
+
+### Fixed
+
+* Properly handle sheltered. If you are upgrading from 0.3.1 or 0.3.0, you need to retoggle the sheltered macro
+
 ## [0.3.1] - 2023-07-21
 
 ### Fixed

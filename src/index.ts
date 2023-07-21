@@ -115,7 +115,7 @@ Hooks.on('ready', async () => {
         });
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableSheltered', {
             name: 'Enabled Sheltered',
-            default: true,
+            default: false,
             config: false,
             type: Boolean,
             scope: 'world',
