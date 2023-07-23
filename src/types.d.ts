@@ -1,6 +1,7 @@
 import {DateTime} from 'luxon';
 import {RollTableDraw} from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/documents/table';
 import {DegreeOfSuccess} from './degree-of-success';
+import {WeatherEffectName} from './weather/data';
 
 declare global {
     declare class PF2EModifier {
@@ -14,6 +15,7 @@ declare global {
                 toggleWeatherMacro: () => void,
                 toggleShelteredMacro: () => void,
                 setCurrentWeatherMacro: () => void,
+                sceneWeatherSettingsMacro: () => void,
                 toTimeOfDayMacro: () => void,
                 kingdomEventsMacro: () => void,
                 rollKingmakerWeatherMacro: () => void,
@@ -123,5 +125,9 @@ declare global {
             quantity: number;
         };
         quantity: number;
+    }
+
+    interface Scene {
+        weather: WeatherEffectName;
     }
 }

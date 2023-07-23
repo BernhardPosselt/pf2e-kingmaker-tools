@@ -1,8 +1,10 @@
-import {dayHasChanged, setCurrentWeatherDialog, syncWeather, toggleShelterd, toggleWeather} from './weather';
+import {dayHasChanged, syncWeather, toggleSheltered, toggleWeather} from './weather/weather';
+import {sceneWeatherSettingsDialog} from './weather/dialogs/scene-weather-settings';
+import {setCurrentWeatherDialog} from './weather/dialogs/set-current-weather';
 import {isFirstGm} from './utils';
 import {toTimeOfDayMacro} from './time/app';
 import {getBooleanSetting, getStringSetting, setSetting} from './settings';
-import {rollKingmakerWeather} from './kingmaker-weather';
+import {rollKingmakerWeather} from './weather/roll-weather';
 import {rollExplorationSkillCheck, rollSkillDialog} from './skill-checks';
 import {rollKingdomEvent} from './kingdom-events';
 import {showKingdom} from './kingdom/sheet';
@@ -28,8 +30,14 @@ Hooks.on('ready', async () => {
         gameInstance.pf2eKingmakerTools = {
             macros: {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
-                toggleShelteredMacro: toggleShelterd.bind(null, game),
+                toggleShelteredMacro: toggleSheltered.bind(null, game),
                 setCurrentWeatherMacro: setCurrentWeatherDialog.bind(null, game),
+                sceneWeatherSettingsMacro: () => {
+                    const scene = gameInstance?.scenes?.current;
+                    if (scene) {
+                        sceneWeatherSettingsDialog(gameInstance, scene);
+                    }
+                },
                 toTimeOfDayMacro: toTimeOfDayMacro.bind(null, game),
                 toggleCombatTracksMacro: async (): Promise<void> => {
                     const enabled = getBooleanSetting(gameInstance, 'enableCombatTracks');
@@ -263,6 +271,11 @@ Hooks.on('ready', async () => {
         });
         Hooks.on('canvasReady', async () => {
             if (isFirstGm(gameInstance)) {
+                await syncWeather(gameInstance);
+            }
+        });
+        Hooks.on('updateScene', async (scene: StoredDocument<Scene>, update: Partial<Scene>) => {
+            if ('active' in update && update.active === true) {
                 await syncWeather(gameInstance);
             }
         });

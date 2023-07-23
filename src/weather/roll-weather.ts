@@ -1,7 +1,7 @@
-import {getNumberSetting, getRollMode, RollMode} from './settings';
-import {buildUuids, rollRollTable} from './roll-tables';
+import {getNumberSetting, getRollMode, RollMode} from '../settings';
+import {buildUuids, rollRollTable} from '../roll-tables';
 import {setWeather} from './weather';
-import {eventLevels, getSeason, GolarionMonth} from './camping/regions';
+import {eventLevels, getSeason, GolarionMonth} from '../camping/regions';
 
 
 async function rollOnWeatherEventTable(

@@ -228,7 +228,9 @@ export function camelCase(value: string): string {
 }
 
 export function deCamelCase(value: string): string {
-    return value.replace(/([a-z])([A-Z])/g, '$1 $2')
+    const val = value.trim();
+    if (val === '') return '';
+    return val.replace(/([a-z])([A-Z])/g, '$1 $2')
         .split(' ')
         .map(capitalize)
         .join(' ');

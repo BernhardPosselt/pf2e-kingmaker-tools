@@ -453,9 +453,14 @@ rolling manually, turn off auto rolling in the settings and use the provided **R
 it manually with the **Set Current Weather** macro.
 
 Visual effects rely on the built-in V11 weather effects. This means that all scenes' weather effects will be overridden
-by the currently active weather when viewing that scene. If you want to allow a certain scene to override this behavior,
-you will need to disable weather in the settings or via the **Toggle Weather** macro before viewing the scene. You can
-also set the current scene's weather through the **Set Current Weather** macro or run the **Toggle Sheltered from
+by the currently active weather when viewing that scene.
+
+If you want to allow a certain scene to override this behavior,
+use the **Scene Weather Settings** macro and disable syncing weather. Note that this will also prevent the usage of the
+**Set Current Weather** macro, but you can decide to reuse the weather playlist functionality by enabling **Sync Weather
+Playlist** in the scene's weather settings. You can
+also set the current scene's weather on the fly through the **Set Current Weather** macro or run the **Toggle Sheltered
+from
 Weather** macro, which will
 disable all weather playlists and weather effects until you turn it back on.
 

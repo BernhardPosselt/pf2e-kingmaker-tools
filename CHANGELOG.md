@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.3] - 2023-07-21
+
+### Changed
+
+* Add **Scene Weather Settings** macro which allows you to disable syncing weather based on the global weather settings
+  on a per-scene basis.
+
 ## [0.3.2] - 2023-07-21
 
 ### Fixed
