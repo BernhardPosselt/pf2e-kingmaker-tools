@@ -32,7 +32,7 @@ Hooks.on('ready', async () => {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
                 toggleShelteredMacro: toggleSheltered.bind(null, game),
                 setCurrentWeatherMacro: setCurrentWeatherDialog.bind(null, game),
-                sceneWeatherSettingsMacro: () => {
+                sceneWeatherSettingsMacro: (): void => {
                     const scene = gameInstance?.scenes?.current;
                     if (scene) {
                         sceneWeatherSettingsDialog(gameInstance, scene);
