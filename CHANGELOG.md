@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Automate succulent sausage success and critical success
+
 ## [0.3.3] - 2023-07-21
 
 ### Changed

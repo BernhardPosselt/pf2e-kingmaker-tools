@@ -107,7 +107,6 @@ const content = `
         <li><b>Mastodon Steak</b>: Does not restore any hit points nor reduce conditions</li>
         <li><b>Shepherd's Pie</b>: Does not restore any hit points nor reduce conditions. A critical failure won't reduce healing by half.</li> 
         <li><b>Smoked Trout And Hydra Pate</b>: Does not add the comfort trait to light armors</li>
-        <li><b>Succulent Sausages</b>: Does not reduce flat checks to end persistent damage</li>
     </ul>
     <p>The following meals lack the Poison trait:</p>
     <ul>
