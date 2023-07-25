@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.4] - 2023-07-26
+
 ### Fixed
 
 * Automate succulent sausage success and critical success
+* Only sync weather effect when activating a scene or via macros to prevent inherent Foundry race conditions from
+  occurring
 
 ## [0.3.3] - 2023-07-21
 

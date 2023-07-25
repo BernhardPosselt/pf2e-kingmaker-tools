@@ -1,4 +1,11 @@
-import {dayHasChanged, syncWeather, toggleSheltered, toggleWeather} from './weather/weather';
+import {
+    dayHasChanged,
+    onPreUpdateScene,
+    onRenderScene,
+    onUpdateScene,
+    toggleSheltered,
+    toggleWeather,
+} from './weather/weather';
 import {sceneWeatherSettingsDialog} from './weather/dialogs/scene-weather-settings';
 import {setCurrentWeatherDialog} from './weather/dialogs/set-current-weather';
 import {isFirstGm} from './utils';
@@ -270,14 +277,13 @@ Hooks.on('ready', async () => {
             }
         });
         Hooks.on('canvasReady', async () => {
-            if (isFirstGm(gameInstance)) {
-                await syncWeather(gameInstance);
-            }
+            await onRenderScene(gameInstance);
+        });
+        Hooks.on('preUpdateScene', async (scene: StoredDocument<Scene>, update: Partial<Scene>) => {
+            await onPreUpdateScene(gameInstance, scene, update);
         });
         Hooks.on('updateScene', async (scene: StoredDocument<Scene>, update: Partial<Scene>) => {
-            if ('active' in update && update.active === true) {
-                await syncWeather(gameInstance);
-            }
+            await onUpdateScene(gameInstance, scene, update);
         });
         Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => checkBeginCombat(gameInstance, combat, update));
         Hooks.on('deleteCombat', (combat: StoredDocument<Combat>) => stopCombat(gameInstance, combat));
