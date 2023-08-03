@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.5] - 2023-08-04
+
+### Added
+
+* Also warn when user accidentally created a camping actor manually
+* Kalikke and Kanerah companion actors
+
 ## [0.3.4] - 2023-07-26
 
 ### Fixed

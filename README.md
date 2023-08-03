@@ -429,8 +429,8 @@ Ships the remaining prebuilt companions:
 
 * Jaethal
 * Harrim
-* Kanerah (TBD)
-* Kalikke (TBD)
+* Kanerah
+* Kalikke
 * Octavia
 * Regongar
 

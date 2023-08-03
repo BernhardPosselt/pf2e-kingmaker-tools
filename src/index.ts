@@ -288,6 +288,7 @@ Hooks.on('ready', async () => {
         Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => checkBeginCombat(gameInstance, combat, update));
         Hooks.on('deleteCombat', (combat: StoredDocument<Combat>) => stopCombat(gameInstance, combat));
         checkKingdomErrors(gameInstance);
+        checkCampingErrors(gameInstance);
 
         // listen for camping sheet open
         const listeners = getDiffListeners(gameInstance);
@@ -455,7 +456,14 @@ Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
 
 function checkKingdomErrors(game: Game): void {
     const actor = getKingdomSheetActor(game);
-    if (actor && actor.getFlag('pf2e-kingmaker-tools', 'kingdom-sheet') === undefined) {
+    if (actor && !actor.getFlag('pf2e-kingmaker-tools', 'kingdom-sheet')) {
         ui.notifications?.error('Found an Actor with name "Kingdom Sheet" that has not been imported using the "View Kingdom" Macro! Please delete the actor and re-import it.');
+    }
+}
+
+function checkCampingErrors(game: Game): void {
+    const actor = getCampingActor(game);
+    if (actor && !actor.getFlag('pf2e-kingmaker-tools', 'camping-sheet')) {
+        ui.notifications?.error('Found an Actor with name "Camping Sheet" that has not been imported using the "Camping" Macro! Please delete the actor and re-import it.');
     }
 }
