@@ -131,7 +131,7 @@ A guide on structure rules [is available here](docs/structure-rules.md)
 
 ![Exploration Macros](docs/images/exploration-macros.png)
 
-2 of them integrate with [PF2E Exploration Effects](https://foundryvtt.com/packages/pf2e-exploration-effects) and will
+2 of them integrate with the new party sheet and will
 roll secret checks for stealth and perception for all characters on the current canvas, that have the "Search" or "Avoid
 Notice" exploration effect. The other macro rolls checks for all configured characters and can be used to roll checks on
 the hex map without having the tokens be active on that scene.

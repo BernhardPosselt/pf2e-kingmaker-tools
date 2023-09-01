@@ -89,7 +89,8 @@ declare global {
             details: {
                 xp: { value: number, max: number },
                 level: { value: number }
-            }
+            };
+            exploration: string[];
         };
     }
 

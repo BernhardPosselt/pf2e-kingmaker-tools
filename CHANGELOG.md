@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2023-10-xx
+
+### Changed
+
+* Search and Avoid Notice check macros now use the party sheet instead of the exploration macros module
+
 ## [0.3.6] - 2023-10-01
 
 ### Fixed

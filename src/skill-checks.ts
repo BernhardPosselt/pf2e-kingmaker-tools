@@ -13,6 +13,12 @@ async function rollSkillCheck(
     }
 }
 
+function getActiveExplorationEffects(actor: Actor): Set<string> {
+    return new Set(actor.system.exploration
+        .flatMap(id => actor.items.get(id)?.name)
+        .filter(name => name !== undefined && name !== null) as string[]);
+}
+
 export async function rollExplorationSkillCheck(
     actors: Actor[],
     skill: string,
@@ -20,7 +26,7 @@ export async function rollExplorationSkillCheck(
     dc: number | undefined = undefined,
 ): Promise<void> {
     const actorsWithEffectApplied = actors
-        .filter(actor => actor.items.find(item => item.name === effect && item.type === 'effect'));
+        .filter(actor => getActiveExplorationEffects(actor).has(effect));
     await rollSkillCheck(actorsWithEffectApplied, skill, dc);
 }
 
