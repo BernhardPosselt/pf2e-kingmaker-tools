@@ -128,7 +128,7 @@ export async function rollCampingCheck(
         rollData['extraRollOptions']?.push('action:' + slugify(activity.name));
     }
     if (dc) {
-        rollData['dc'] = getDC(game, actor, dc, region);
+        rollData['dc'] = {value: getDC(game, actor, dc, region)};
     }
     if (secret) {
         rollData['rollMode'] = 'blindroll';
@@ -205,10 +205,10 @@ export function getCombatEffects(data: Camping): Partial<Record<CampingActivityN
     return result;
 }
 
-export async function getHuntAndGatherActor(data: Camping): Promise<Actor | null>{
+export async function getHuntAndGatherActor(data: Camping): Promise<Actor | null> {
     const uuid = data.huntAndGatherTargetActorUuid;
     if (uuid && data.actorUuids.includes(uuid)) {
-        return  await getActorByUuid(uuid);
+        return await getActorByUuid(uuid);
     }
     return null;
 }

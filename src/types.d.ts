@@ -55,7 +55,7 @@ declare global {
     }
 
     interface RollOptions {
-        dc?: number;
+        dc?: { value: number };
         extraRollOptions?: string[];
         rollMode?: 'publicroll' | 'roll' | 'gmroll' | 'blindroll' | 'selfroll';
     }

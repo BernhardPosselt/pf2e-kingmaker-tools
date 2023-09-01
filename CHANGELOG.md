@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.6] - 2023-10-01
+
+### Fixed
+
+* Fix API breaks in PF2E 5.4.1 that prevented you from rolling checks from your kingdom sheet
+
+### Removed
+
+* Drop compatibility with versions lower than 5.4.1
+
 ## [0.3.5] - 2023-08-04
 
 ### Added
