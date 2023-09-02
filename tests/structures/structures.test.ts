@@ -2,7 +2,7 @@ import {evaluateStructures} from '../../src/kingdom/structures';
 
 describe('structures', () => {
     test('evaluate no buildings', () => {
-        const result = evaluateStructures([], 3);
+        const result = evaluateStructures([], 3, 'same-structures-stack');
         expect(result.notes.length).toBe(0);
         expect(result.allowCapitalInvestment).toBe(false);
     });
@@ -29,9 +29,62 @@ describe('structures', () => {
                 skill: 'defense',
                 activity: 'provide-care',
             }],
-        }], 10);
+        }], 10, 'same-structures-stack');
         expect(result.skillBonuses.defense.value).toBe(0);
         expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(2);
+    });
+
+    test('vance & kerenshara: item bonuses should stack', () => {
+        const result = evaluateStructures([{
+            name: 'a',
+            skillBonusRules: [{
+                value: 1,
+                skill: 'defense',
+                activity: 'provide-care',
+            }],
+        }, {
+            name: 'b',
+            skillBonusRules: [{
+                value: 1,
+                skill: 'defense',
+                activity: 'provide-care',
+            }],
+        }, {
+            name: 'a',
+            skillBonusRules: [{
+                value: 1,
+                skill: 'defense',
+                activity: 'provide-care',
+            }],
+        }], 10, 'all-structures-stack');
+        expect(result.skillBonuses.defense.value).toBe(0);
+        expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(3);
+    });
+
+    test('vance & kerenshara: item bonuses should stack with skill only bonuses', () => {
+        const result = evaluateStructures([{
+            name: 'a',
+            skillBonusRules: [{
+                value: 1,
+                skill: 'defense',
+                activity: 'provide-care',
+            }],
+        }, {
+            name: 'b',
+            skillBonusRules: [{
+                value: 1,
+                skill: 'defense',
+                activity: 'provide-care',
+            }],
+        }, {
+            name: 'c',
+            skillBonusRules: [{
+                value: 1,
+                skill: 'defense',
+            }],
+        }], 10, 'all-structures-stack');
+        expect(result.skillBonuses.defense.value).toBe(1);
+        expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(3);
     });
 
     test('item bonuses from skills should override action bonuses', () => {
@@ -48,7 +101,7 @@ describe('structures', () => {
                 value: 2,
                 skill: 'defense',
             }],
-        }], 10);
+        }], 10, 'same-structures-stack');
         expect(result.skillBonuses.defense.value).toBe(2);
         expect(Object.keys(result.skillBonuses.defense?.activities)).toStrictEqual([]);
         expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(undefined);
@@ -61,7 +114,7 @@ describe('structures', () => {
                 value: 2,
                 skill: 'defense',
             }],
-        }], 1);
+        }], 1, 'same-structures-stack');
         expect(result.skillBonuses.defense.value).toBe(1);
     });
 
@@ -72,7 +125,7 @@ describe('structures', () => {
                 value: 1,
             }],
             preventItemLevelPenalty: true,
-        }], 15);
+        }], 15, 'same-structures-stack');
         expect(result.itemLevelBonuses).toEqual({
             divine: 1,
             alchemical: 1,
@@ -91,7 +144,7 @@ describe('structures', () => {
             availableItemsRules: [{
                 value: 1,
             }],
-        }], 15);
+        }], 15, 'same-structures-stack');
         expect(result.itemLevelBonuses).toEqual({
             divine: -1,
             alchemical: -1,
@@ -118,7 +171,7 @@ describe('structures', () => {
                 value: 2,
                 group: 'arcane',
             }],
-        }], 15);
+        }], 15, 'same-structures-stack');
         expect(result.itemLevelBonuses).toEqual({
             divine: 1,
             alchemical: 0,

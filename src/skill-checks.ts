@@ -14,9 +14,11 @@ async function rollSkillCheck(
 }
 
 function getActiveExplorationEffects(actor: Actor): Set<string> {
-    return new Set(actor.system.exploration
-        .flatMap(id => actor.items.get(id)?.name)
-        .filter(name => name !== undefined && name !== null) as string[]);
+    const explorationActionItemIds = actor.system.exploration ?? [];
+    const names = explorationActionItemIds
+        .map(id => actor.items.get(id)?.name)
+        .filter(name => name !== undefined && name !== null) as string[];
+    return new Set(names);
 }
 
 export async function rollExplorationSkillCheck(

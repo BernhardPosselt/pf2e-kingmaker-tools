@@ -29,6 +29,7 @@ import {
     getSettlement,
     getSettlementsWithoutLandBorders,
     getStructureResult,
+    getStructureStackMode,
     SettlementAndScene,
 } from './scene';
 import {allFeats, allFeatsByName} from './data/feats';
@@ -145,6 +146,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         );
         const currentSceneId = getCurrentScene(this.game)?.id;
         const canAddSettlement = kingdomData.settlements.find(settlement => settlement.sceneId === currentSceneId) === undefined;
+        const structureStackMode = getStructureStackMode(this.game);
         return {
             hideActivities,
             isGM,
@@ -231,7 +233,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         ...s.settlement,
                         waterBorders,
                         overcrowded: this.isOvercrowded(s),
-                        lacksBridge: waterBorders >= 4 && !getStructureResult(s).hasBridge,
+                        lacksBridge: waterBorders >= 4 && !getStructureResult(structureStackMode, s).hasBridge,
                         isCapital: settlement?.settlement.type === 'capital',
                         name: s.scene.name ?? undefined,
                     };
@@ -663,7 +665,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private isOvercrowded(settlement: SettlementAndScene): boolean {
-        const structures = getStructureResult(settlement);
+        const structureStackMode = getStructureStackMode(this.game);
+        const structures = getStructureResult(structureStackMode, settlement);
         return settlement.settlement.lots > structures.residentialBuildings;
     }
 

@@ -1,8 +1,9 @@
-import {evaluateStructures, includeCapital, StructureResult} from './structures';
+import {evaluateStructures, includeCapital, StructureResult, StructureStackRule} from './structures';
 import {ruleSchema} from './schema';
 import {CommodityStorage, Structure, structuresByName} from './data/structures';
 import {Kingdom, Settlement} from './data/kingdom';
 import {Activity} from './data/activities';
+import {getBooleanSetting} from '../settings';
 
 class StructureError extends Error {
 }
@@ -93,17 +94,17 @@ export function getAllSettlements(game: Game, kingdom: Kingdom): SettlementAndSc
         ?.filter(scene => scene !== undefined) as SettlementAndScene[] ?? [];
 }
 
-function getSettlementStructureResult(settlement: SettlementAndScene): StructureResult {
+function getSettlementStructureResult(settlement: SettlementAndScene, mode: StructureStackRule): StructureResult {
     const structures = getSceneStructures(settlement.scene);
-    return evaluateStructures(structures, settlement.settlement.level);
+    return evaluateStructures(structures, settlement.settlement.level, mode);
 }
 
 
-export function getStructureResult(active: SettlementAndScene, capital?: SettlementAndScene): StructureResult {
+export function getStructureResult(mode: StructureStackRule, active: SettlementAndScene, capital?: SettlementAndScene): StructureResult {
     if (capital && capital.scene.id !== active.scene.id) {
-        return includeCapital(getSettlementStructureResult(capital), getSettlementStructureResult(active));
+        return includeCapital(getSettlementStructureResult(capital, mode), getSettlementStructureResult(active, mode));
     } else {
-        return getSettlementStructureResult(active);
+        return getSettlementStructureResult(active, mode);
     }
 }
 
@@ -114,10 +115,15 @@ interface MergedSettlements {
     unlockedActivities: Set<Activity>;
 }
 
+export function getStructureStackMode(game: Game): StructureStackRule {
+    return getBooleanSetting(game, 'kingdomAllStructureItemBonusesStack') ? 'all-structures-stack' : 'same-structures-stack';
+}
+
 export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSettlements {
+    const mode = getStructureStackMode(game);
     return getAllSettlements(game, kingdom)
         .map(settlement => {
-            const structureResult = getSettlementStructureResult(settlement);
+            const structureResult = getSettlementStructureResult(settlement, mode);
             return {
                 leadershipActivityNumber: structureResult.increaseLeadershipActivities ? 3 : 2,
                 settlementConsumption: structureResult.consumption,
@@ -155,8 +161,9 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
     const activeSettlement = getSettlement(game, kingdom, kingdom.activeSettlement);
     const capitalSettlement = getCapitalSettlement(game, kingdom);
     if (activeSettlement) {
-        const activeSettlementStructures = getStructureResult(activeSettlement);
-        const mergedSettlementStructures = getStructureResult(activeSettlement, capitalSettlement);
+        const mode = getStructureStackMode(game);
+        const activeSettlementStructures = getStructureResult(mode, activeSettlement);
+        const mergedSettlementStructures = getStructureResult(mode, activeSettlement, capitalSettlement);
         return {
             active: activeSettlementStructures,
             merged: mergedSettlementStructures,
@@ -165,9 +172,10 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
 }
 
 export function getSettlementsWithoutLandBorders(game: Game, kingdom: Kingdom): number {
+    const mode = getStructureStackMode(game);
     return getAllSettlements(game, kingdom)
         .filter(settlementAndScene => {
-            const structures = getStructureResult(settlementAndScene);
+            const structures = getStructureResult(mode, settlementAndScene);
             return (settlementAndScene.settlement?.waterBorders ?? 0) >= 4 && !structures.hasBridge;
         })
         .length;

@@ -249,6 +249,15 @@ Hooks.on('ready', async () => {
             requiresReload: true,
             type: Boolean,
         } as any);
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomAllStructureItemBonusesStack', {
+            name: 'All Structure Item Bonuses Stack',
+            hint: 'If enabled, groups item bonuses from all structures, regardless of if they are same building type',
+            scope: 'world',
+            config: true,
+            default: false,
+            requiresReload: true,
+            type: Boolean,
+        } as any);
         gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'schemaVersion', {
             name: 'Schema Version',
             default: 1,

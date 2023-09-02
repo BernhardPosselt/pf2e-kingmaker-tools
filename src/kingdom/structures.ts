@@ -11,6 +11,7 @@ import {
     SkillItemBonuses,
     Structure,
 } from './data/structures';
+import {Skill} from './data/skills';
 
 export interface StructureResult {
     allowCapitalInvestment: boolean;
@@ -40,7 +41,7 @@ function count<T>(items: T[], idFunction: (item: T) => string): Map<string, { co
 /**
  * Add up item bonuses of same structure
  */
-function groupStructures(structures: Structure[], maxItemBonus: number): Structure[] {
+export function groupStructures(structures: Structure[], maxItemBonus: number): Structure[] {
     const structureOccurrences = count(structures, s => s.name);
     return Array.from(structureOccurrences.values())
         .map((data) => {
@@ -323,10 +324,60 @@ function applyUnlockedActivities(unlockActivities: Activity[], groupedStructures
         });
 }
 
+export type StructureStackRule = 'all-structures-stack' | 'same-structures-stack'
+
+// brainfuck ahead :(
+function stackAllStructureBonuses(groupedStructures: Structure[], maxItemBonus: number): Structure[] {
+    const allSkillBonusRules = groupedStructures.flatMap(s => s.skillBonusRules ?? []);
+    const activityBonusRules = allSkillBonusRules.filter(r => r.activity);
+    const skillOnlyBonusRules = allSkillBonusRules.filter(r => !r.activity);
+    // first calculate all skill modifiers
+    const skillOnlyBonuses: Map<Skill, number> = new Map();
+    skillOnlyBonusRules.forEach(rule => {
+        const existingValue = skillOnlyBonuses.get(rule.skill) ?? 0;
+        skillOnlyBonuses.set(rule.skill, Math.min(maxItemBonus, existingValue + rule.value));
+    });
+    // then calculate all modifiers only applicable for an activity
+    const activityBonuses: Map<Skill, Map<Activity, number>> = new Map();
+    activityBonusRules.forEach(rule => {
+        const skill = rule.skill;
+        activityBonuses.set(skill, activityBonuses.get(skill) ?? new Map());
+        const activity = rule.activity!;
+        const existingValue = activityBonuses.get(skill)?.get(activity) ?? 0;
+        const newValue = Math.min(maxItemBonus, existingValue + rule.value);
+        activityBonuses.get(skill)?.set(activity, newValue);
+    });
+    // then add skill modifiers to skill modifiers limited to an activity
+    Array.from(activityBonuses.keys()).forEach(skill => {
+        const map = activityBonuses.get(skill) ?? new Map();
+        Array.from(map.keys()).forEach(activity => {
+            const existingValue = map.get(activity) ?? 0;
+            const newValue = Math.min(maxItemBonus, existingValue + (skillOnlyBonuses.get(skill) ?? 0));
+            activityBonuses.get(skill)?.set(activity, newValue);
+        });
+    });
+    // finally, apply value overrides
+    return groupedStructures.map(s => {
+        return {
+            ...s,
+            skillBonusRules: s.skillBonusRules
+                ?.map(r => {
+                    const value = r.activity
+                        ? activityBonuses.get(r.skill)?.get(r.activity)
+                        : skillOnlyBonuses.get(r.skill);
+                    return {
+                        ...r,
+                        value: value ?? 0,
+                    };
+                }),
+        };
+    });
+}
+
 /**
  * Calculate all Bonuses of a settlement
  */
-export function evaluateStructures(structures: Structure[], settlementLevel: number): StructureResult {
+export function evaluateStructures(structures: Structure[], settlementLevel: number, mode: StructureStackRule): StructureResult {
     const settlementData = getSettlementConfig(settlementLevel);
     const maxItemBonus = settlementData.maxItemBonus;
     const allowCapitalInvestment = structures.some(structure => structure.enableCapitalInvestment === true);
@@ -383,10 +434,13 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
     const unionizedStructures = unionizeStructures(structures);
     applyStorageIncreases(result.storage, structures);
     const groupedStructures = groupStructures(unionizedStructures, maxItemBonus);
-    applyUnlockedActivities(result.unlockActivities, groupedStructures);
-    applySettlementEventBonuses(result, groupedStructures);
-    applyLeadershipActivityBonuses(result, groupedStructures);
-    applySkillBonusRules(result.skillBonuses, groupedStructures);
-    applyItemLevelRules(result.itemLevelBonuses, groupedStructures, maxItemBonus);
+    const allGroupedStructures = mode === 'all-structures-stack'
+        ? stackAllStructureBonuses(groupedStructures, maxItemBonus)
+        : groupedStructures;
+    applyUnlockedActivities(result.unlockActivities, allGroupedStructures);
+    applySettlementEventBonuses(result, allGroupedStructures);
+    applyLeadershipActivityBonuses(result, allGroupedStructures);
+    applySkillBonusRules(result.skillBonuses, allGroupedStructures);
+    applyItemLevelRules(result.itemLevelBonuses, allGroupedStructures, maxItemBonus);
     return result;
 }

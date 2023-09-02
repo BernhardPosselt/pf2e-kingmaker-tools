@@ -2,7 +2,7 @@ import {ActivityBonuses, ItemGroup, ItemLevelBonuses, SkillItemBonuses} from '..
 import {capitalize, unslugify} from '../../utils';
 import {StructureResult} from '../structures';
 import {hasFeat, Kingdom} from '../data/kingdom';
-import {getCapitalSettlement, getSettlement, getStructureResult} from '../scene';
+import {getCapitalSettlement, getSettlement, getStructureResult, getStructureStackMode} from '../scene';
 
 interface SettlementOptions {
     game: Game;
@@ -52,7 +52,8 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
     override getData(options?: Partial<ApplicationOptions>): object {
         const settlement = getSettlement(this.game, this.kingdom, this.settlementId)!;
         const capital = getCapitalSettlement(this.game, this.kingdom);
-        const structures = getStructureResult(settlement, capital);
+        const structureStackMode = getStructureStackMode(this.game);
+        const structures = getStructureResult(structureStackMode, settlement, capital);
         const storage = this.getStorage(structures);
         return {
             ...super.getData(options),

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - 2023-10-xx
 
+### Added
+
+* Implemented Vance & Kerenshara Structure Item Bonus Stack rules that allow all item bonuses of all structures to stack
+
 ### Changed
 
 * Search and Avoid Notice check macros now use the party sheet instead of the exploration macros module
