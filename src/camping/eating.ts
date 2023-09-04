@@ -212,7 +212,7 @@ export async function addDiscoverSpecialMealResult(
     game: Game,
     actorAndIngredients: ActorAndIngredients,
     recipe: string | null,
-    critFailUuids: string[]
+    critFailUuids: string[],
 ): Promise<void> {
     const campingActor = getCampingActor(game);
     if (campingActor) {
@@ -300,6 +300,6 @@ export async function subsist(game: Game, actor: Actor, region: string): Promise
     game.pf2e.actions.subsist({
         actors: [actor],
         skill: 'survival',
-        difficultyClass: zoneDC,
+        difficultyClass: {value: zoneDC},
     });
 }

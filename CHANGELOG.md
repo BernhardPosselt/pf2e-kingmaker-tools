@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2023-09-04
+
 ### Fixed
 
 * Capital investment failure now correctly gives you 1d4 RP
+* Fix Subsist button that suffered from the same API break issue as other skill check buttons
 
 ## [0.4.0] - 2023-09-02
 

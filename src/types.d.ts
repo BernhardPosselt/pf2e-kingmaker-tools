@@ -39,7 +39,7 @@ declare global {
             }
             actions: {
                 restForTheNight: (options: { actors: Actor[], skipDialog?: boolean }) => Promise<void>;
-                subsist: (options: { actors: Actor[], skill: string, difficultyClass?: number; }) => void;
+                subsist: (options: { actors: Actor[], skill: string, difficultyClass?: { value: number }; }) => void;
             }
             Modifier: typeof PF2EModifier
         };
