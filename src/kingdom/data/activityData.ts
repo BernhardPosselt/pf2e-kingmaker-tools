@@ -144,7 +144,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
             msg: `Your investment helps the economy. ${gainRolledRD(2)}`,
         },
         failure: {
-            msg: `Your investment ends up being used to shore up shortfalls elsewhere. ${gainRolledRD('1d4')}`,
+            msg: `Your investment ends up being used to shore up shortfalls elsewhere. ${gainRP('1d4')}`,
         },
         criticalFailure: {
             // TODO: increase crime by an equal amount
