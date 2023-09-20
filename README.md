@@ -158,13 +158,12 @@ not found under User Data, The Forge will instead try to look it up under the sa
 
 ![The Forge](docs/images/the-forge.png)
 
-* **companions/Token - Amiri.webp**
-* **companions/Token - Ekundayo.webp**
-* **companions/Token - Jubilost.webp**
-* **companions/Token - Linzi.webp**
-* **companions/Token - Nok Nok.webp**
-* **companions/Token - Tristian.webp**
-* **companions/Token - Valerie.webp**
+* **companions/Token - Harrim.webp**
+* **companions/Token - Jaethal.webp**
+* **companions/Token - Kanerah.webp**
+* **companions/Token - Kalikke.webp**
+* **companions/Token - Octavia.webp**
+* **companions/Token - Regongar.webp**
 * **structures/Academy.webp**
 * **structures/Alchemy Laboratory.webp**
 * **structures/Arcanist Tower.webp**
