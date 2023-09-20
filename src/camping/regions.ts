@@ -26,6 +26,11 @@ regions.set('Numeria', {zoneDC: 36, encounterDC: 12, level: 17});
 regions.set('Thousand Voices', {zoneDC: 43, encounterDC: 14, level: 18});
 regions.set('Branthlend Mountains', {zoneDC: 41, encounterDC: 16, level: 19});
 
+export function toOfficialKingmakerRollTableName(regionName: string, data: ZoneData): string {
+    const zoneId = `${data.level}`.padStart(2, '0');
+    return `Zone ${zoneId}: ${regionName}`;
+}
+
 interface RegionInfo {
     zoneDC: number,
     zoneLevel: number

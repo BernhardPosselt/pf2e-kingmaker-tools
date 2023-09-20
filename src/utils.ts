@@ -251,3 +251,7 @@ export function isBlank(value: string | null | undefined): boolean {
         return value.trim().length === 0;
     }
 }
+
+export function isKingmakerInstalled(game: Game): boolean {
+    return game.modules.get('pf2e-kingmaker')?.active === true;
+}

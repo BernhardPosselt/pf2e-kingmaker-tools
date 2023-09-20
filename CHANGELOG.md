@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Pull out token mappings into the https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping mapping module
   so that you can use both the Kingmaker and Kingmaker Tools module at the same time
+* Roll from Kingmaker module roll tables when Kingmaker module is enabled
+
+### Fixed
+
+* Fix Elk reference in Rostland Hinterlands roll table
 
 ## [0.4.1] - 2023-09-04
 

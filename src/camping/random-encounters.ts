@@ -1,10 +1,11 @@
 import {getStringSetting} from '../settings';
 import {findRollTableUuidWithFallback, findWorldTableUuid, rollRollTable} from '../roll-tables';
 import {DegreeOfSuccess, determineDegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
-import {regions} from './regions';
+import {regions, toOfficialKingmakerRollTableName} from './regions';
 import {CampingActivityData} from './activities';
 import {Camping, getCampingActivityData} from './camping';
 import {getWorldTime, isDayOrNight} from '../time/calculation';
+import {isKingmakerInstalled} from '../utils';
 
 
 async function succeededEncounterFlatCheck(region: string, dc: EncounterDc): Promise<boolean> {
@@ -15,8 +16,13 @@ async function succeededEncounterFlatCheck(region: string, dc: EncounterDc): Pro
     return degreeOfSuccess === DegreeOfSuccess.CRITICAL_SUCCESS || degreeOfSuccess === DegreeOfSuccess.SUCCESS;
 }
 
+async function findCreatureRollTable(game: Game, region: string): Promise<string> {
+    const key = isKingmakerInstalled(game) ? toOfficialKingmakerRollTableName(region, regions.get(region)!) : region;
+    return (await findRollTableUuidWithFallback(game, key, 'pf2e-kingmaker-tools.kingmaker-tools-random-encounters'))!;
+}
+
 export async function rollRandomEncounter(game: Game, region: string, dc: EncounterDc, forgoFlatCheck = false): Promise<boolean> {
-    const creatureRollTable = (await findRollTableUuidWithFallback(game, region, 'pf2e-kingmaker-tools.kingmaker-tools-random-encounters'))!;
+    const creatureRollTable = await findCreatureRollTable(game, region);
     const worldEncounterTable = getStringSetting(game, 'proxyEncounterTable')?.trim();
     const encounterTypeRollTable = findWorldTableUuid(game, worldEncounterTable)!;
     const rollMode = getStringSetting(game, 'randomEncounterRollMode') as unknown as keyof CONFIG.Dice.RollModes;
@@ -50,7 +56,7 @@ export interface ActivityModifier {
 
 export function getActivityModifier(
     campingActivityData: CampingActivityData,
-    result: StringDegreeOfSuccess | null
+    result: StringDegreeOfSuccess | null,
 ): ActivityModifier {
     if (campingActivityData.modifyRandomEncounterDc) {
         return {
