@@ -144,8 +144,9 @@ the hex map without having the tokens be active on that scene.
 described folder structure. See further down for how the folder needs to be organized.
 
 The module ships with a settings to auto-configure all tokens from the adventure path by looking up files in a certain
-folder. Bestiary tokens have been moved to
-a [separate module](https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping)
+folder. Tokens that ship with the official module Kingmaker have been moved to
+a [separate module](https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping). If you haven't purchased the
+official module and want to retain your token mappings, you need to install that module as well.
 
 The tokens should be placed into your **Data/pf2e-kingmaker-tools-tokens/** directory under the following paths:
 
