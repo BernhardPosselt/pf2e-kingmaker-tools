@@ -12,7 +12,7 @@ function getWeatherSoundFX(game: Game, weather: WeatherEffectName): PlaylistSoun
     const overridenPlaylist = game.playlists?.getName(`weather.${weather}`);
     const kingmakerModuleSound = kingmakerModuleWeather.get(weather);
     if (isKingmakerInstalled(game)
-        && overridenPlaylist !== undefined
+        && overridenPlaylist === undefined
         && kingmakerModuleSound !== undefined
     ) {
         return game?.playlists
@@ -41,6 +41,7 @@ async function stopWeatherEffects(game: Game, currentWeather: WeatherEffectName)
 async function playWeatherEffect(game: Game, weather: WeatherEffectName): Promise<void> {
     if (weather !== '') {
         const track = getWeatherSoundFX(game, weather);
+        console.log(weather, track);
         if (track !== undefined && !track.playing) {
             if (track instanceof Playlist) {
                 await track.playAll();
@@ -95,7 +96,9 @@ async function syncSceneWeather(game: Game, scene: Scene | null | undefined): Pr
 async function syncScenePlaylist(game: Game, scene: Scene | null | undefined): Promise<void> {
     const weatherEffect = getWeatherPlaylist(game, scene);
     console.info(`Setting weather playlist to to ${weatherEffect}`);
-    await applyWeatherSound(game, weatherEffect);
+    if (getBooleanSetting(game, 'enableWeatherSoundFx')) {
+        await applyWeatherSound(game, weatherEffect);
+    }
 }
 
 async function syncWeather(game: Game): Promise<void> {

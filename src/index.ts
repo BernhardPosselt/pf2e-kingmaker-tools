@@ -128,6 +128,13 @@ Hooks.on('ready', async () => {
             type: Boolean,
             scope: 'world',
         });
+        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableWeatherSoundFx', {
+            name: 'Enable Weather Sound Effects',
+            default: true,
+            config: true,
+            type: Boolean,
+            scope: 'world',
+        });
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableSheltered', {
             name: 'Enabled Sheltered',
             default: false,
