@@ -203,7 +203,7 @@ Hooks.on('ready', async () => {
             name: 'Kingdom Events Table Name',
             scope: 'world',
             config: true,
-            default: 'Kingdom Events',
+            default: 'Random Kingdom Events',
             type: String,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomCultTable', {
