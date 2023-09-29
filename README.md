@@ -31,6 +31,21 @@ Run the following before packaging once and set your paths:
     ./node_modules/.bin/fvtt configure set installPath /home/bernhard/dev/FoundryVTT-11.301
     ./node_modules/.bin/fvtt configure set dataPath /home/bernhard/.local/share/FoundryVTT/Data
 
+### Official Kingmaker Module Integration
+
+If you've enabled the official module, the following things are automatically taken care of:
+
+* Token Mappings for all companions and structures except for a few exceptions (see Tokens)
+* Weather Sound Effects for rain, rain storms, blizzard and snow
+* Default and Region combat tracks
+* Rolltable integration for:
+    * Kingdom Events
+    * Random Encounters
+    * Cult Events
+
+If you are not running the official module, check out
+the [Kingmaker Tools Token Mapping](https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping) module
+
 ### Camping Sheet
 
 Since 0.2.0, this module ships a camping sheet which includes all meals and camping activities. You can launch the sheet
@@ -52,13 +67,11 @@ The camping sheet does the following:
 * Allows you to add custom recipes and activities
 * Takes care of calculating and adding/subtracting rations and ingredients based on the chosen recipes
 * Allows you to roll random encounter checks
-* Completely automates resting by automatically rolling random encounters, perception checks and running the **Rest for
-  the Night** macro for all actors
+* Completely automates resting by automatically rolling random encounters, perception checks and running the **Rest for the Night** macro for all actors
 
 For more detailed information, consult the **Help** button in the camping sheet's title bar.
 
-**Note**: Syncing camping effects is a very slow process, so if you want to run all companions, create 1 companion
-**character** sheet instead of adding all 13 companions
+**Note**: Syncing camping effects is a very slow process, so if you want to run all companions, create 1 companion **character** sheet instead of adding all 13 companions
 
 **Note**: Random Encounters can be given a proxy roll table like the one listed
 in [The Hexploration](https://2e.aonprd.com/Rules.aspx?ID=1276) rules. If you do, the String value "Creature" indicates
@@ -70,16 +83,13 @@ to roll on the region roll table. Leave the proxy table setting blank to roll on
 
 ![Kingdom Sheet](docs/images/kingdom-sheet.png)
 
-The Kingdom sheet auto calculates almost everything related to kingdom building. You launch it exclusively with the *
-*View Kingdom** Macro.
+The Kingdom sheet auto calculates almost everything related to kingdom building. You launch it exclusively with the **View Kingdom** Macro.
 
-On first launch, it copies an actor with the name **Kingdom Sheet** into your actors folder. This actor is used to store
-the sheet data and can be placed anywhere but you must not change its name.
+On first launch, it copies an actor with the name **Kingdom Sheet** into your actors folder. This actor is used to store the sheet data and can be placed anywhere but you must not change its name.
 
 If you want to give your players access to the sheet, edit the actor's permissions as usually.
 
-In addition, you want to add a settlement scene. To do that, navigate to the tab holding your structures and click **Add
-Current Scene** in your **Settlements** tab. You need to repeat this for all of your scenes that hold structures.
+In addition, you want to add a settlement scene. To do that, navigate to the tab holding your structures and click **Add Current Scene** in your **Settlements** tab. You need to repeat this for all of your scenes that hold structures.
 
 ![Add Settlement](docs/images/add-current-scene.png)
 
@@ -103,7 +113,7 @@ The following variant rules are supported in the settings:
 
 ### Structures
 
-**Note**: Images are not included!
+**Note**: See **Tokens** for more information on token mappings
 
 Structures are implemented as NPC stat blocks, including the correct sizes. Their description is in the public notes.
 
@@ -113,8 +123,7 @@ All structures in a settlement can be automatically summed up and calculated by 
 
 ![Kingdom Sheet Macro](docs/images/kingdom-sheet-macro.png)
 
-If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are
-not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
+If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
 
 A guide on structure rules [is available here](docs/structure-rules.md)
 
@@ -140,15 +149,14 @@ the hex map without having the tokens be active on that scene.
 
 ### Tokens
 
-**Note**: This module does not and can not ship any art! You are responsible for placing the appropriate images in the
-described folder structure. See further down for how the folder needs to be organized.
+**Note**: This module autoconfigures existing tokens from the official Kingmaker module. If you run your game without
+it, you need to install a [separate module](https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping) and
+follow the provided instructions.
 
-The module ships with a settings to auto-configure all tokens from the adventure path by looking up files in a certain
-folder. Tokens that ship with the official module Kingmaker have been moved to
-a [separate module](https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping). If you haven't purchased the
-official module and want to retain your token mappings, you need to install that module as well.
+**Note**: The official module does not ship Regongar's token. This module links to the expected location, so it should
+fix itself automatically once they release an update.
 
-The tokens should be placed into your **Data/pf2e-kingmaker-tools-tokens/** directory under the following paths:
+Some tokens are not provided by the official module and you need to gather place these into your **Data/pf2e-kingmaker-tools-tokens/** directory under the following paths:
 
 ![Skills Macro](docs/images/token-structure.png)
 
@@ -159,89 +167,14 @@ not found under User Data, The Forge will instead try to look it up under the sa
 
 ![The Forge](docs/images/the-forge.png)
 
-* **companions/Token - Harrim.webp**
-* **companions/Token - Jaethal.webp**
-* **companions/Token - Kanerah.webp**
-* **companions/Token - Kalikke.webp**
-* **companions/Token - Octavia.webp**
-* **companions/Token - Regongar.webp**
-* **structures/Academy.webp**
-* **structures/Alchemy Laboratory.webp**
-* **structures/Arcanist Tower.webp**
-* **structures/Arena.webp**
-* **structures/Bank.webp**
-* **structures/Barracks.webp**
-* **structures/Brewery.webp**
 * **structures/Bridge.webp**
-* **structures/Castle.webp**
-* **structures/Cathedral.webp**
-* **structures/Cemetery.webp**
-* **structures/Construction Yard.webp**
-* **structures/Dump.webp**
-* **structures/Embassy.webp**
-* **structures/Festival Hall.webp**
-* **structures/Foundry.webp**
-* **structures/Garrison.webp**
-* **structures/General Store.webp**
 * **structures/Gladiatorial Arena.webp**
-* **structures/Granary.webp**
-* **structures/Guildhall.webp**
-* **structures/Herbalist.webp**
-* **structures/Hospital.webp**
-* **structures/Houses.webp**
-* **structures/Illicit Market.webp**
-* **structures/Inn.webp**
-* **structures/Jail.webp**
-* **structures/Keep.webp**
-* **structures/Library.webp**
-* **structures/Lumberyard.webp**
-* **structures/Luxury Store.webp**
 * **structures/Magical Streetlamps.webp**
-* **structures/Magic Shop.webp**
-* **structures/Mansion.webp**
-* **structures/Marketplace.webp**
-* **structures/Menagerie.webp**
-* **structures/Military Academy.webp**
-* **structures/Mill.webp**
-* **structures/Mint.webp**
-* **structures/Monument.webp**
-* **structures/Museum.webp**
-* **structures/Noble Villa.webp**
-* **structures/Occult Shop.webp**
-* **structures/Opera House.webp**
-* **structures/Orphanage.webp**
-* **structures/Palace.webp**
-* **structures/Park.webp**
 * **structures/Paved Streets.webp**
-* **structures/Pier.webp**
 * **structures/Printing Press.webp**
-* **structures/Rubble.webp**
-* **structures/Sacred Grove.webp**
-* **structures/Secure Warehouse.webp**
 * **structures/Sewer System.webp**
-* **structures/Shrine.webp**
-* **structures/Smithy.webp**
-* **structures/Special Artisan.webp**
-* **structures/Stable.webp**
-* **structures/Stockyard.webp**
-* **structures/Stonemason.webp**
-* **structures/Tannery.webp**
-* **structures/Tavern, Dive.webp**
-* **structures/Tavern, Luxury.webp**
-* **structures/Tavern, Popular.webp**
-* **structures/Tavern, World Class.webp**
-* **structures/Temple.webp**
-* **structures/Tenement.webp**
-* **structures/Theater.webp**
-* **structures/Thieves Guild.webp**
-* **structures/Town Hall.webp**
-* **structures/Trade Shop.webp**
-* **structures/University.webp**
 * **structures/Wall, Stone.webp**
 * **structures/Wall, Wooden.webp**
-* **structures/Watchtower.webp**
-* **structures/Waterfront (Corner).webp**
-* **structures/Waterfront (Side).webp**
 
 ### Companions
 
@@ -299,6 +232,9 @@ In addition, you can configure sound effects that are played by creating playlis
 * **weather.rainStorm**
 * **weather.leaves**
 
+**Note**: If you are using the official module, rain, snow, rainStorm and blizzard are autoconfigured for you, but you
+can still override the mechanism by creating the appropriately named playlists
+
 Each day, a new value is rolled from the roll table and persisted across all scenes.
 
 ## Combat Tracks
@@ -306,9 +242,7 @@ Each day, a new value is rolled from the roll table and persisted across all sce
 The CRPG ships with various combat tracks that depend on the region (e.g. Narlmarches), scene (e.g. caves, ruins) or
 actor (e.g. Vordakai). If Combat Tracks are enabled, it tries to find a playlist in the following order:
 
-* Combat playlist of the first actor with a playlist on the combat tracker (Configurable via **Set Combat Playlist**
-  Macro by
-  selecting a token)
+* Combat playlist of the first actor with a playlist on the combat tracker (Configurable via **Set Combat Playlist** Macro by selecting a token)
 * Combat playlist of the active scene (Configurable via **Set Combat Playlist** Macro by not selecting a token)
 * Combat playlist of the current region (e.g. **Kingmaker.Rostland Hinterlands**)
 * Combat playlist called **Kingmaker.Default**
@@ -318,4 +252,8 @@ Afterward, the games active scene's playlist is started again.
 
 If you wish to quickly disable combat tracks, e.g. when fighting a boss, you can use the **Toggle Combat Tracks** Macro.
 
-![Add Settlement](docs/images/track-macros.png)
+**Note**: If you are using the official module, the default and region combat tracks are autoconfigured for you, but you
+can still
+override the mechanism by creating the appropriately named playlists
+
+![Combat Tracks Macro](docs/images/track-macros.png)

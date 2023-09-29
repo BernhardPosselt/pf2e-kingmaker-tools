@@ -128,6 +128,13 @@ Hooks.on('ready', async () => {
             type: Boolean,
             scope: 'world',
         });
+        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableWeatherSoundFx', {
+            name: 'Enable Weather Sound Effects',
+            default: true,
+            config: true,
+            type: Boolean,
+            scope: 'world',
+        });
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'enableSheltered', {
             name: 'Enabled Sheltered',
             default: false,
@@ -203,7 +210,7 @@ Hooks.on('ready', async () => {
             name: 'Kingdom Events Table Name',
             scope: 'world',
             config: true,
-            default: 'Kingdom Events',
+            default: 'Random Kingdom Events',
             type: String,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomCultTable', {

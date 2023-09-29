@@ -1,4 +1,4 @@
-import {escapeHtml, isBlank, isFirstGm, parseSelect} from '../utils';
+import {escapeHtml, isBlank, isFirstGm, isKingmakerInstalled, parseSelect} from '../utils';
 import {getCamping, getCampingActor} from './storage';
 import {getBooleanSetting} from '../settings';
 
@@ -80,7 +80,55 @@ export async function showSetSceneCombatPlaylistDialog(game: Game, entity: Entit
     });
 }
 
-async function ifPlaylistExists(game: Game, actors: Actor[], callback: (playlist: Playlist) => Promise<void>): Promise<void> {
+const defaultKingmakerModuleSound = 'The Shrike Hills';
+
+const kingmakerModulePlaylists = new Map<string, string>();
+// kingmakerModulePlaylists.set('Dunsward', '');  // TODO: Dunsward
+kingmakerModulePlaylists.set('Hootongue', 'The Narlmarches');
+kingmakerModulePlaylists.set('Kamelands', 'Glenebon');
+kingmakerModulePlaylists.set('Narlmarches', 'The Narlmarches');
+// kingmakerModulePlaylists.set('Nomen Heights', ''); // TODO: Dunsward
+kingmakerModulePlaylists.set('Pitax', 'Capital Under Attack');
+kingmakerModulePlaylists.set('Sellen Hills', 'Glenebon');
+kingmakerModulePlaylists.set('Thousand Voices', 'First World');
+// kingmakerModulePlaylists.set('Tor of Levenies', ''); // TODO: Dunsward
+kingmakerModulePlaylists.set('Tuswater', 'Glenebon');
+
+function getKingmakerCombatSound(game: Game, name: string): PlaylistSound | undefined {
+    const combatPlaylistSourceId = '7CiwVus60FiuKFhK';
+    return game.playlists
+        ?.find(p => p._source._id === combatPlaylistSourceId)
+        ?.sounds
+        ?.getName(name);
+}
+
+/**
+ * use overriden playlist first if it exists, otherwise fall back to kingmaker module one if
+ * kingmaker has one available
+ */
+function getRegionPlaylist(game: Game, region: string): Playlist | PlaylistSound | undefined {
+    const defaultRegionPlaylist = game.playlists?.getName(`Kingmaker.${region}`);
+    const kingmakerModulePlaylistSound = kingmakerModulePlaylists.get(region);
+    if (isKingmakerInstalled(game)
+        && defaultRegionPlaylist === undefined
+        && kingmakerModulePlaylistSound) {
+        return getKingmakerCombatSound(game, kingmakerModulePlaylistSound);
+    } else {
+        return defaultRegionPlaylist;
+    }
+}
+
+function getDefaultPlaylist(game: Game): Playlist | PlaylistSound | undefined {
+    const defaultPlaylist = game.playlists?.getName('Kingmaker.Default');
+    if (isKingmakerInstalled(game)
+        && defaultPlaylist === undefined) {
+        return getKingmakerCombatSound(game, defaultKingmakerModuleSound);
+    } else {
+        return defaultPlaylist;
+    }
+}
+
+async function ifPlaylistExists(game: Game, actors: Actor[], callback: (playlist: Playlist | PlaylistSound) => Promise<void>): Promise<void> {
     if (isFirstGm(game) && getBooleanSetting(game, 'enableCombatTracks')) {
         const campingActor = getCampingActor(game);
         if (campingActor) {
@@ -90,13 +138,13 @@ async function ifPlaylistExists(game: Game, actors: Actor[], callback: (playlist
                 .map(a => getEntityPlaylist(a))
                 .find(a => !isBlank(a));
             const sceneCombatPlaylist = game.scenes?.active ? getEntityPlaylist(game.scenes.active) : undefined;
-            const regionPlaylistName = `Kingmaker.${region}`;
-            const defaultPlaylistName = 'Kingmaker.Default';
+            const regionPlaylist = getRegionPlaylist(game, region);
+            const defaultPlaylist = getDefaultPlaylist(game);
             const playlist =
                 (actorsPlaylist ? game.playlists?.getName(actorsPlaylist) : undefined)
                 ?? (sceneCombatPlaylist ? game.playlists?.getName(sceneCombatPlaylist) : undefined)
-                ?? game.playlists?.getName(regionPlaylistName)
-                ?? game.playlists?.getName(defaultPlaylistName);
+                ?? regionPlaylist
+                ?? defaultPlaylist;
             console.log('Found Playlist ' + playlist?.name);
             if (playlist) {
                 await callback(playlist);
@@ -110,9 +158,13 @@ export async function checkBeginCombat(game: Game, combat: StoredDocument<Combat
         const actors = combat.combatants
             .map(a => a.actor)
             .filter(a => a !== null) as Actor[];
-        await ifPlaylistExists(game, actors, async (playlist) => {
+        await ifPlaylistExists(game, actors, async (music) => {
             await game.scenes?.active?.playlist?.stopAll();
-            await playlist.playAll();
+            if (music instanceof Playlist) {
+                await music.playAll();
+            } else {
+                await music.update({playing: true});
+            }
         });
     }
 }
@@ -121,9 +173,13 @@ export async function stopCombat(game: Game, combat: StoredDocument<Combat> | nu
     const actors = (combat?.combatants
         ?.map(a => a.actor)
         ?.filter(a => a !== null) ?? []) as Actor[];
-    await ifPlaylistExists(game, actors, async (playlist) => {
-        if (playlist.playing) {
-            await playlist.stopAll();
+    await ifPlaylistExists(game, actors, async (music) => {
+        if (music.playing) {
+            if (music instanceof Playlist) {
+                await music.stopAll();
+            } else {
+                await music.update({playing: false});
+            }
             if (game.scenes?.active?.playlistSound) {
                 await game.scenes.active.playlistSound.update({playing: true});
             } else {

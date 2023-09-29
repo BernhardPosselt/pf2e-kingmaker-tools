@@ -7,7 +7,7 @@ export class Migration2 extends Migration {
         super(2);
     }
 
-    override migrateKingdom(kingdom: Kingdom): void {
+    override async migrateKingdom(game: Game, kingdom: Kingdom): Promise<void> {
         if (typeof kingdom.fame === 'number' && 'fameNext' in kingdom && 'fameType' in kingdom) {
             const current = kingdom as Kingdom & { fame: number, fameNext: number, fameType: FameType };
             kingdom.fame = {
@@ -44,7 +44,7 @@ export class Migration2 extends Migration {
         console.log(JSON.stringify(kingdom.settlements));
     }
 
-    override migrateCamping(camping: Camping): void {
+    override async migrateCamping(game: Game, camping: Camping): Promise<void> {
         if (camping.increaseWatchActorNumber === undefined) {
             camping.increaseWatchActorNumber = 0;
         }

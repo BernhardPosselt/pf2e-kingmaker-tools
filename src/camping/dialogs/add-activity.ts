@@ -22,6 +22,7 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
         title: 'Add Camping Activity',
         content: `
         <div>
+        <p><b>Note</b> Activities will only show up after rolling <b>Prepare Campsite</b></p>
         <p><b>UUIDs</b> can be found in the item's <b>Rules</b> tab</p>
         <p><b>Slugifyable</b>: Must contain English letters or numbers only; must be separated by a single space</p>
         <form class="simple-dialog-form">

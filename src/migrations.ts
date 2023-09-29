@@ -4,10 +4,12 @@ import {getCamping, saveCamping} from './camping/storage';
 import {isFirstGm} from './utils';
 import {Migration} from './migrations/migration';
 import {Migration2} from './migrations/migration2';
+import {Migration3} from './migrations/migration3';
 
 
 const migrations: Migration[] = [
     new Migration2(),
+    new Migration3(),
 ];
 
 interface BackupParams {
@@ -37,14 +39,22 @@ export async function migrate(game: Game, kingdomActor: Actor | undefined | null
 
         if (kingdomActor) {
             const kingdom = getKingdom(kingdomActor);
-            migrationsToRun.forEach(m => m.migrateKingdom(kingdom));
+            for (const migration of migrationsToRun) {
+                await migration.migrateKingdom(game, kingdom);
+            }
             await saveKingdom(kingdomActor, kingdom);
         }
 
         if (campingActor) {
             const camping = getCamping(campingActor);
-            migrationsToRun.forEach(m => m.migrateCamping(camping));
+            for (const migration of migrationsToRun) {
+                await migration.migrateCamping(game, camping);
+            }
             await saveCamping(game, campingActor, camping);
+        }
+
+        for (const migration of migrationsToRun) {
+            await migration.migrateOther(game);
         }
 
         await setSetting(game, 'schemaVersion', latestMigration);

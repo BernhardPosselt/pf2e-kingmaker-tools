@@ -1,37 +1,66 @@
 import {getBooleanSetting, getStringSetting} from '../settings';
 import {allWeatherNames, getWeatherSettings, WeatherEffectName} from './data';
-import {isFirstGm} from '../utils';
+import {isFirstGm, isKingmakerInstalled} from '../utils';
+
+const kingmakerModuleWeather = new Map<WeatherEffectName, { playlistSourceId: string, soundName: string }>();
+kingmakerModuleWeather.set('rain', {playlistSourceId: 'c6WJzHWMM72zP19H', soundName: 'Rain'});
+kingmakerModuleWeather.set('snow', {playlistSourceId: 'c6WJzHWMM72zP19H', soundName: 'Cold Wind'});
+kingmakerModuleWeather.set('blizzard', {playlistSourceId: 'c6WJzHWMM72zP19H', soundName: 'Colder Wind'});
+kingmakerModuleWeather.set('rainStorm', {playlistSourceId: 'c6WJzHWMM72zP19H', soundName: 'Thunderstorm'});
+
+function getWeatherSoundFX(game: Game, weather: WeatherEffectName): PlaylistSound | Playlist | undefined {
+    const overridenPlaylist = game.playlists?.getName(`weather.${weather}`);
+    const kingmakerModuleSound = kingmakerModuleWeather.get(weather);
+    if (isKingmakerInstalled(game)
+        && overridenPlaylist === undefined
+        && kingmakerModuleSound !== undefined
+    ) {
+        return game?.playlists
+            ?.filter(p => p._source._id === kingmakerModuleSound.playlistSourceId)
+            ?.map(p => p.sounds.getName(kingmakerModuleSound.soundName))
+            ?.[0];
+    } else {
+        return overridenPlaylist;
+    }
+}
+
+async function stopWeatherEffects(game: Game, currentWeather: WeatherEffectName): Promise<void> {
+    const tracksToStop = allWeatherNames
+        .filter(e => e !== '' && e !== currentWeather)
+        .map(e => getWeatherSoundFX(game, e))
+        .filter(s => s !== undefined && s.playing);
+    for (const track of tracksToStop) {
+        if (track instanceof Playlist) {
+            await track.stopAll();
+        } else {
+            await track?.update({playing: false});
+        }
+    }
+}
+
+async function playWeatherEffect(game: Game, weather: WeatherEffectName): Promise<void> {
+    if (weather !== '') {
+        const track = getWeatherSoundFX(game, weather);
+        console.log(weather, track);
+        if (track !== undefined && !track.playing) {
+            if (track instanceof Playlist) {
+                await track.playAll();
+            } else {
+                await track.update({playing: true});
+            }
+        }
+    }
+}
+
+async function applyWeatherSound(game: Game, effectName: WeatherEffectName): Promise<void> {
+    await stopWeatherEffects(game, effectName);
+    await playWeatherEffect(game, effectName);
+}
 
 export function dayHasChanged(game: Game, deltaInSeconds: number): boolean {
     const now = game.pf2e.worldClock.worldTime;
     const previous = now.minus({second: deltaInSeconds});
     return now.day !== previous.day || now.month !== previous.month || now.year !== previous.year;
-}
-
-function getCurrentlyPlayingWeather(game: Game): StoredDocument<Playlist>[] {
-    return game
-            ?.playlists
-            ?.filter(p => (p.name?.startsWith('weather.') ?? false) && p?.playing)
-        ?? [];
-}
-
-async function applyWeatherSound(game: Game, effectName: WeatherEffectName): Promise<void> {
-    const playlistName = `weather.${effectName}`;
-
-    // stop all others playlists
-    for (const p of getCurrentlyPlayingWeather(game).filter(p => p.name !== playlistName)) {
-        await p.stopAll();
-    }
-
-    // if playlist is not yet playing, start it
-    if (getCurrentlyPlayingWeather(game).length === 0 && effectName !== '') {
-        const playlist = game.playlists?.getName(playlistName);
-        if (playlist) {
-            await playlist.playAll();
-        } else {
-            console.warn(`No playlist found with name ${playlistName}`);
-        }
-    }
 }
 
 function getSceneWeather(game: Game, scene: Scene | null | undefined): WeatherEffectName | null {
@@ -67,7 +96,9 @@ async function syncSceneWeather(game: Game, scene: Scene | null | undefined): Pr
 async function syncScenePlaylist(game: Game, scene: Scene | null | undefined): Promise<void> {
     const weatherEffect = getWeatherPlaylist(game, scene);
     console.info(`Setting weather playlist to to ${weatherEffect}`);
-    await applyWeatherSound(game, weatherEffect);
+    if (getBooleanSetting(game, 'enableWeatherSoundFx')) {
+        await applyWeatherSound(game, weatherEffect);
+    }
 }
 
 async function syncWeather(game: Game): Promise<void> {

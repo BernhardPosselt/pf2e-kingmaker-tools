@@ -6,12 +6,17 @@ export abstract class Migration {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    migrateKingdom(kingdom: Kingdom): void {
+    async migrateKingdom(game: Game, kingdom: Kingdom): Promise<void> {
 
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    migrateCamping(camping: Camping): void {
+    async migrateCamping(game: Game, camping: Camping): Promise<void> {
+
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async migrateOther(game: Game): Promise<void> {
 
     }
 }

@@ -7,11 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2023-09-29
+
+### Changed
+
+* Roll from Kingmaker Cult & Kingdom events if Kingmaker module is enabled
+* Set Token paths for buildings and companions to Kingmaker module; the previous behavior is now available by installing the https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping module
+* Autoconfigure region and default combat tracks to point to Kingmaker playlists and tracks
+* Autoconfigure snow, rain, rain storm and blizzard to point to Kingmaker SFX tracks
+* Add a setting to disable weather effects
+
 ## [0.5.0] - 2023-09-20
 
 ### Changed
 
-* Pull out token mappings into the https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping mapping module
+* Pull out token mappings into the https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping module
   so that you can use both the Kingmaker and Kingmaker Tools module at the same time
 * Roll from Kingmaker module roll tables when Kingmaker module is enabled
 
