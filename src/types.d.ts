@@ -128,6 +128,12 @@ declare global {
         quantity: number;
     }
 
+    interface Playlist {
+        _source: {
+            _id: string;
+        };
+    }
+
     interface Scene {
         weather: WeatherEffectName;
     }
