@@ -41,6 +41,7 @@ If you've enabled the official module, the following things are automatically ta
 * Rolltable integration for:
     * Kingdom Events
     * Random Encounters
+    * Cult Events
 
 If you are not running the official module, check out
 the [Kingmaker Tools Token Mapping](https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping) module
