@@ -1,10 +1,16 @@
-import {getDefaultArmyAdjustment} from './utils';
-import {getArmyAdjustment} from './storage';
+import {calculateArmyAdjustments, getDefaultArmyAdjustment} from './utils';
+import {getArmyAdjustment, saveArmyAdjustment} from './storage';
 import {ArmyAdjustments} from './data';
 
 interface ArmyOptions {
     game: Game;
     actor: Actor;
+}
+
+interface ArmyData {
+    adjustments: ArmyAdjustments;
+    actorLevel: number,
+    calculated: ArmyAdjustments;
 }
 
 class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, object, null> {
@@ -33,27 +39,32 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
         this.actor.apps[this.appId] = this;
     }
 
-    override async getData(): Promise<{ adjustments: ArmyAdjustments }> {
+    override async getData(): Promise<ArmyData> {
         const adjustments = getArmyAdjustment(this.actor) || getDefaultArmyAdjustment();
+        const actorLevel = this.actor.system.details.level.value;
         return {
             adjustments,
+            actorLevel,
+            calculated: calculateArmyAdjustments(this.actor, actorLevel, adjustments),
         };
     }
 
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
     override async _updateObject(event: Event, formData: any): Promise<void> {
+        const data = expandObject(formData);
+        console.log('form', formData);
         const update = {
-            melee: formData.melee ?? 0,
-            ac: formData.melee ?? 0,
-            maneuver: formData.maneuver ?? 0,
-            morale: formData.morale ?? 0,
-            scouting: formData.scouting ?? 0,
-            ranged: formData.ranged ?? 0,
-            recruitmentDC: formData.recruitmentDC ?? 0,
+            melee: data.adjustments?.melee ?? 0,
+            ac: data.adjustments?.ac ?? 0,
+            maneuver: data.adjustments?.maneuver ?? 0,
+            morale: data.adjustments?.morale ?? 0,
+            scouting: data.adjustments?.scouting ?? 0,
+            ranged: data.adjustments?.ranged ?? 0,
+            recruitmentDC: data.adjustments?.recruitmentDC ?? 0,
         };
         console.log(update);
-        // await saveArmyAdjustment(this.actor, update);
+        await saveArmyAdjustment(this.actor, update);
     }
 
     override activateListeners(html: JQuery): void {

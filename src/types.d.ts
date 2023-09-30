@@ -91,6 +91,7 @@ declare global {
                 level: { value: number }
             };
             attributes: {
+                ac: { value: number },
                 perception: { value: number },
                 hp: { value: number, max: number },
             }

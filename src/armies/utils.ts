@@ -29,27 +29,37 @@ export function onPreUpdateArmy(game: Game, actor: Actor, data: Partial<Actor>):
 
 
 export function updateCalculatedArmyStats(actor: Actor, update: Partial<Actor>, level: number, adjustments: ArmyAdjustments): void {
-    const data = armyStatisticsByLevel.get(level)!;
-    const highSave = actor.system.saves.will > actor.system.saves.reflex ? 'morale' : 'maneuver';
-    const maneuver = highSave === 'maneuver' ? data.highSave : data.lowSave;
-    const morale = highSave === 'morale' ? data.highSave : data.lowSave;
-    const updates = {
-        ac: data.ac + adjustments.ac,
+    const calculated = calculateArmyAdjustments(actor, level, adjustments);
+    const calculatedUpdate = {
         system: {
             saves: {
-                reflex: {value: maneuver + adjustments.maneuver},
-                will: {value: morale + adjustments.morale},
-                fortitude: {value: data.standardDC + adjustments.recruitmentDC},
+                reflex: {value: calculated.maneuver},
+                will: {value: calculated.morale},
+                fortitude: {value: calculated.recruitmentDC},
             },
             attributes: {
-                perception: {
-                    value: data.scouting + adjustments.scouting,
-                },
+                ac: {value: calculated.ac},
+                perception: {value: calculated.scouting},
             },
         },
     };
+    foundry.utils.mergeObject(update, calculatedUpdate);
     // TODO: update ranged or melee attack modifiers
-    const meleeModifier = data.attack + adjustments.melee;
-    const rangedModifier = data.attack + adjustments.ranged;
-    console.log(updates, meleeModifier, rangedModifier);
+    console.log(update, calculated.melee, calculated.ranged);
+}
+
+export function calculateArmyAdjustments(actor: Actor, level: number, adjustments: ArmyAdjustments): ArmyAdjustments {
+    const data = armyStatisticsByLevel.get(level) ?? armyStatisticsByLevel.get(1)!;
+    const highSave = actor.system.saves.will > actor.system.saves.reflex ? 'morale' : 'maneuver';
+    const maneuver = highSave === 'maneuver' ? data.highSave : data.lowSave;
+    const morale = highSave === 'morale' ? data.highSave : data.lowSave;
+    return {
+        ac: data.ac + adjustments.ac,
+        recruitmentDC: data.standardDC + adjustments.recruitmentDC,
+        melee: data.attack + adjustments.melee,
+        ranged: data.attack + adjustments.ranged,
+        maneuver: maneuver + adjustments.maneuver,
+        scouting: data.scouting + adjustments.scouting,
+        morale: morale + adjustments.morale,
+    };
 }
