@@ -1,80 +1,55 @@
-import {Army, armyStatisticsByLevel} from './data';
+import {ArmyAdjustments, armyStatisticsByLevel} from './data';
+import {getArmyAdjustment} from './storage';
+import {isFirstGm} from '../utils';
 
-export function createDefaultArmy(): Army {
+export function getDefaultArmyAdjustment(): ArmyAdjustments {
     return {
-        level: 1,
-        description: '',
-        type: 'infantry',
-        hp: 0,
-        highSave: 'morale',
-        name: 'Army Name',
-        routeThreshold: 0,
-        currentHp: 0,
-        alignment: 'N',
-        consumption: 0,
-        rarity: 'common',
-        adjustments: {
-            ranged: 0,
-            melee: 0,
-            maneuver: 0,
-            recruitmentDC: 0,
-            morale: 0,
-            ac: 0,
-            scouting: 0,
-        },
-        gear: [],
-        tactics: [],
-        conditions: [],
+        ac: 0,
+        melee: 0,
+        morale: 0,
+        maneuver: 0,
+        scouting: 0,
+        recruitmentDC: 0,
+        ranged: 0,
     };
 }
 
-export interface CalculatedArmyStats {
-    ac: number;
-    maneuver: number;
-    morale: number;
-    scouting: number;
-    recruitmentDC: number;
-    meleeModifier: number;
-    rangedModifier: number;
-    maximumTactics: number;
-    shots?: number;
-    initiative: number;
-    consumption: number;
-    hp: number;
-    routeThreshold: number;
+export function onPreUpdateArmy(game: Game, actor: Actor, data: Partial<Actor>): void {
+    // we're updating level so calculate new statistics
+    const level = data?.system?.details?.level?.value;
+    const adjustments = getArmyAdjustment(actor);
+    if (isFirstGm(game)
+        && actor.type === 'npc'
+        && adjustments !== undefined
+        && level !== undefined
+        && level >= 1 && level <= 20) {
+        updateCalculatedArmyStats(actor, data, level, adjustments);
+    }
 }
 
-export interface CalculatedArmy extends Army {
-    calculated: CalculatedArmyStats;
-}
 
-function calculateArmyStats(army: Army): CalculatedArmyStats {
-    const level = army.level;
-    const highSave = army.highSave;
+export function updateCalculatedArmyStats(actor: Actor, update: Partial<Actor>, level: number, adjustments: ArmyAdjustments): void {
     const data = armyStatisticsByLevel.get(level)!;
+    const highSave = actor.system.saves.will > actor.system.saves.reflex ? 'morale' : 'maneuver';
     const maneuver = highSave === 'maneuver' ? data.highSave : data.lowSave;
     const morale = highSave === 'morale' ? data.highSave : data.lowSave;
-    const scouting = data.scouting + army.adjustments.scouting;
-    return {
-        ac: data.ac + army.adjustments.ac,
-        maneuver: maneuver + army.adjustments.maneuver,
-        morale: morale + army.adjustments.morale,
-        scouting,
-        recruitmentDC: data.standardDC + army.adjustments.recruitmentDC,
-        meleeModifier: data.attack + army.adjustments.melee,
-        rangedModifier: data.attack + army.adjustments.ranged,
-        maximumTactics: data.maximumTactics,
-        consumption: army.consumption,
-        routeThreshold: army.routeThreshold,
-        shots: army.ranged?.shots,
-        initiative: scouting,
-        hp: army.hp,
+    const updates = {
+        ac: data.ac + adjustments.ac,
+        system: {
+            saves: {
+                reflex: {value: maneuver + adjustments.maneuver},
+                will: {value: morale + adjustments.morale},
+                fortitude: {value: data.standardDC + adjustments.recruitmentDC},
+            },
+            attributes: {
+                perception: {
+                    value: data.scouting + adjustments.scouting,
+                },
+            },
+        },
     };
-}
-
-export function calculateArmyData(army: Army): CalculatedArmy {
-    return {
-        ...army,
-        calculated: calculateArmyStats(army),
-    };
+    // TODO: update ranged or melee attack modifiers
+    const meleeModifier = data.attack + adjustments.melee;
+    const rangedModifier = data.attack + adjustments.ranged;
+    console.log(updates, meleeModifier, rangedModifier);
 }

@@ -21,7 +21,7 @@ declare global {
                 rollKingmakerWeatherMacro: () => void,
                 viewKingdomMacro: () => void,
                 openCampingSheet: () => void,
-                viewArmyMacro: (actor: Actor, token: Token) => void,
+                editArmyStatisticsMacro: (actor: Actor) => void,
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 editStructureMacro: (actor: any) => Promise<void>,
                 rollExplorationSkillCheck: (skill: string, effect: string) => Promise<void>,
@@ -90,7 +90,16 @@ declare global {
                 xp: { value: number, max: number },
                 level: { value: number }
             };
+            attributes: {
+                perception: { value: number },
+                hp: { value: number, max: number },
+            }
             exploration?: string[];
+            saves: {
+                fortitude: { value: number },
+                reflex: { value: number },
+                will: { value: number },
+            },
         };
     }
 
