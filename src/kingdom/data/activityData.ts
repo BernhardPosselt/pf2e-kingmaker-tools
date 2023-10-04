@@ -37,6 +37,7 @@ export interface ActivityContent extends ActivityResults {
     skills: SkillRanks;
     phase: KingdomPhase;
     dc: 'control' | 'custom' | 'none' | number;
+    dcAdjustment?: number;
     enabled: boolean;
     companion?: Companion;
     fortune: boolean;
@@ -1639,6 +1640,7 @@ Your kingdom can support 1 Recruited Monster at a time. If your kingdom is maste
         enabled: true,
         phase: 'leadership',
         dc: 'control',
+        dcAdjustment: 2,
         title: 'Repair Reputation Corruption',
         description: `When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.
 
@@ -1663,6 +1665,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
         enabled: true,
         phase: 'leadership',
         dc: 'control',
+        dcAdjustment: 2,
         title: 'Repair Reputation Crime',
         description: `When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.
 
@@ -1687,6 +1690,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
         enabled: true,
         phase: 'leadership',
         dc: 'control',
+        dcAdjustment: 2,
         title: 'Repair Reputation Decay',
         description: `When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.
 
@@ -1711,6 +1715,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
         enabled: true,
         phase: 'leadership',
         dc: 'control',
+        dcAdjustment: 2,
         title: 'Repair Reputation Strife',
         description: `When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.
 

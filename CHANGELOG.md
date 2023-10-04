@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fix broken ingredient links in Hunt & Gather journal
+* Repair reputation now correctly increases control DC by 2
 
 ## [0.6.0] - 2023-09-29
 
