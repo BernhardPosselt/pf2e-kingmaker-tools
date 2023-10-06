@@ -1,7 +1,7 @@
 import {ArmyAdjustments} from './data';
 import {getArmyAdjustment} from './storage';
 import {isFirstGm} from '../utils';
-import {addArmyStats, addAttackModifiers, syncAttackModifiers} from './utils';
+import {addArmyStats, addAttackModifiers, calculateArmyAdjustments, syncAttackModifiers} from './utils';
 import {CombatUpdate} from '../camping/combat-tracks';
 
 function onUpdateArmyLevel<T>(
@@ -35,7 +35,7 @@ export async function onPreUpdateArmy(game: Game, actor: Actor, data: Partial<Ac
         actor,
         game,
         callback: (_, data, level, adjustments): void => {
-            addArmyStats(data, level, adjustments);
+            addArmyStats(actor, data, level, adjustments);
         },
     });
 }
@@ -74,11 +74,9 @@ export async function updateAmmunition(game: Game, combat: StoredDocument<Combat
             if (adjustments !== undefined) {
                 const ammunition = actor.itemTypes.equipment
                     .find(item => item.name === 'Ammunition');
-                const increasedAmmunitionCount = actor.itemTypes.action
-                    .filter(i => i.name.startsWith('Increased Ammunition'))
-                    .length;
+                const ammunitionQuantity = calculateArmyAdjustments(actor, actor.level, adjustments).ammunition;
                 if (ammunition) {
-                    await ammunition.update({'system.quantity': 5 + increasedAmmunitionCount * 2});
+                    await ammunition.update({'system.quantity': ammunitionQuantity});
                 }
             }
         }

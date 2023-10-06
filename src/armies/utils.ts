@@ -10,6 +10,7 @@ export function getDefaultArmyAdjustment(): ArmyAdjustments {
         recruitmentDC: 0,
         ranged: 0,
         highSave: 'maneuver',
+        ammunition: 0,
     };
 }
 
@@ -19,7 +20,7 @@ function isRanged(item: Item): boolean {
 
 export async function addAttackModifiers(actor: Actor, item: Item, update: Partial<Item>, level: number, adjustments: ArmyAdjustments): Promise<void> {
     if (item.type === 'melee') { // true for both melee and ranged
-        const calculated = calculateArmyAdjustments(level, adjustments);
+        const calculated = calculateArmyAdjustments(actor, level, adjustments);
         const attackModifier = isRanged(item) ? calculated.ranged : calculated.melee;
         const calculatedUpdate = {system: {bonus: {value: attackModifier}}};
         await item.update(calculatedUpdate);
@@ -29,7 +30,7 @@ export async function addAttackModifiers(actor: Actor, item: Item, update: Parti
 
 
 export async function syncAttackModifiers(actor: Actor, level: number, adjustments: ArmyAdjustments): Promise<void> {
-    const calculated = calculateArmyAdjustments(level, adjustments);
+    const calculated = calculateArmyAdjustments(actor, level, adjustments);
     const updates = actor.items
         .filter(item => item.type === 'melee')
         .map(item => {
@@ -41,8 +42,8 @@ export async function syncAttackModifiers(actor: Actor, level: number, adjustmen
 }
 
 
-export function addArmyStats(update: Partial<Actor>, level: number, adjustments: ArmyAdjustments): void {
-    const calculated = calculateArmyAdjustments(level, adjustments);
+export function addArmyStats(actor: Actor, update: Partial<Actor>, level: number, adjustments: ArmyAdjustments): void {
+    const calculated = calculateArmyAdjustments(actor, level, adjustments);
     const calculatedUpdate = {
         system: {
             saves: {
@@ -59,10 +60,13 @@ export function addArmyStats(update: Partial<Actor>, level: number, adjustments:
     foundry.utils.mergeObject(update, calculatedUpdate);
 }
 
-export function calculateArmyAdjustments(level: number, adjustments: ArmyAdjustments): ArmyAdjustments {
+export function calculateArmyAdjustments(actor: Actor, level: number, adjustments: ArmyAdjustments): ArmyAdjustments {
     const data = armyStatisticsByLevel.get(level) ?? armyStatisticsByLevel.get(1)!;
     const maneuver = adjustments.highSave === 'maneuver' ? data.highSave : data.lowSave;
     const morale = adjustments.highSave === 'morale' ? data.highSave : data.lowSave;
+    const increasedAmmunitionCount = actor.itemTypes.action
+        .filter(i => i.name.startsWith('Increased Ammunition'))
+        .length;
     return {
         ac: data.ac + adjustments.ac,
         recruitmentDC: data.standardDC + adjustments.recruitmentDC,
@@ -72,5 +76,6 @@ export function calculateArmyAdjustments(level: number, adjustments: ArmyAdjustm
         scouting: data.scouting + adjustments.scouting,
         morale: morale + adjustments.morale,
         highSave: adjustments.highSave,
+        ammunition: 5 + adjustments.ammunition + 2 * increasedAmmunitionCount,
     };
 }

@@ -44,5 +44,6 @@ export interface ArmyAdjustments {
     morale: number;
     maneuver: number;
     highSave: 'maneuver' | 'morale';
+    ammunition: number;
 }
 

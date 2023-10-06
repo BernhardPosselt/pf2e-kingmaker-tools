@@ -48,7 +48,7 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
         return {
             adjustments,
             actorLevel,
-            calculated: calculateArmyAdjustments(actorLevel, adjustments),
+            calculated: calculateArmyAdjustments(this.actor, actorLevel, adjustments),
         };
     }
 
@@ -65,6 +65,7 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
             scouting: data.adjustments?.scouting ?? 0,
             ranged: data.adjustments?.ranged ?? 0,
             recruitmentDC: data.adjustments?.recruitmentDC ?? 0,
+            ammunition: data.adjustments?.ammunition ?? 0,
             highSave: data.adjustments?.highSave ?? 'maneuver',
         };
         console.log(update);
