@@ -250,15 +250,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             }),
             leadershipActivities: enableCompanionActivities('leadership', unlockedActivities)
                 .map(activity => {
-                    return {label: createActivityLabel(activity, kingdomData.level), value: activity};
+                    return {label: createActivityLabel(activity, kingdomData), value: activity};
                 }),
             regionActivities: enableCompanionActivities('region', unlockedActivities)
                 .map(activity => {
-                    return {label: createActivityLabel(activity, kingdomData.level), value: activity};
+                    return {label: createActivityLabel(activity, kingdomData), value: activity};
                 }),
             armyActivities: enableCompanionActivities('army', unlockedActivities)
                 .map(activity => {
-                    return {label: createActivityLabel(activity, kingdomData.level), value: activity};
+                    return {label: createActivityLabel(activity, kingdomData), value: activity};
                 }),
             featuresByLevel: Array.from(featuresByLevel.entries())
                 .map(([level, features]) => {

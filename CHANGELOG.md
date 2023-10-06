@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Armies
+
 ### Fixed
 
 * Fix broken ingredient links in Hunt & Gather journal

@@ -72,6 +72,8 @@ declare global {
         itemTypes: {
             consumable: Item[];
             effect: Item[];
+            equipment: Item[];
+            action: Item[];
         };
 
         addToInventory(value: object, container?: Item, newStack: false): Promise<Item | null>;
@@ -120,7 +122,18 @@ declare global {
         name: string;
         sourceId: string;
         sheet: ItemSheet;
-        type: 'effect' | 'consumable';
+        type: 'effect' | 'consumable' | 'melee';
+        system: {
+            traits: {
+                value: string[]
+            }
+            bonus: {
+                value: number
+            };
+            weaponType: {
+                value: string
+            }
+        };
     }
 
     interface EffectItem {

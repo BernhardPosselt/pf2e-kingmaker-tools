@@ -1,0 +1,56 @@
+<div>
+    <h1>Armies</h1>
+    <p>Armies are implemented as NPC stat blocks because attacks and rule elements already work like out of the box. The
+        following stats are present in the following locations:</p>
+    <ul>
+        <li><b>Name</b>: Name</li>
+        <li><b>Level</b>: Level</li>
+        <li><b>Alignment</b>: Alignment</li>
+        <li><b>Rarity</b>: Rarity</li>
+        <li><b>Traits</b>: The row below traits (no support for army traits yet in the pf2e system)</li>
+        <li><b>Scouting</b>: Perception</li>
+        <li><b>Recruitment/Standard DC</b>: Fortitude</li>
+        <li><b>Consumption</b>: Con</li>
+        <li><b>Description</b>: -</li>
+        <li><b>AC</b>: AC</li>
+        <li><b>Maneuver</b>: Reflex</li>
+        <li><b>Morale</b>: Will</li>
+        <li><b>HP</b>: HP</li>
+        <li><b>Rout Threshold</b>: Str</li>
+        <li><b>Melee</b>: Generated from Army Melee Weapons</li>
+        <li><b>Ranged</b>: Generated from Army Ranged Weapons</li>
+        <li><b>Tactics</b>: Passive Abilities ending in (Tactic X) where X is the level</li>
+        <li><b>Gear</b>: Items in Inventory (RP is equal to gold pieces)</li>
+        <li><b>Special Abilities</b>: Passive Abilities</li>
+        <li><b>Ammunition</b>: Ammunition Army Gear, automatically reset to 5 (more with Increased Ammunition) at begin
+            of combat
+        </li>
+        <li><b>Maximum Tactics</b>: Shown in your Kingdom sheet in the <b>Train Army</b> help section</li>
+    </ul>
+    <p>To turn an NPC into an army, use the <b>Edit Army Statistics</b> Macro and add their attacks by clicking on the
+        <i class="fa-solid fa-bolt fa-fw"></i> icon in their inventory.
+        <b>Keep in mind</b>: NPC sheets are unlinked actors by default, meaning that changes to their base actor will
+        only
+        be
+        synced to their actors, if they weren't overridden. This means that you should <b>always edit their level on the
+            original actor</b> (in the actor sidebar rather than on the token).</p>
+    <p>To adjust for Battlefield Terrain Features, this module ships a variety of effects that can be pulled from the
+        <b>Battlefield Terrain Features</b> compendium.</p>
+
+    <h2>Automation Notes</h2>
+    <p>Kingdom Sheet:</p>
+    <ul>
+        <li>Any conditions that apply to Army Activities do not gain modifiers in the Kingdom sheet</li>
+    </ul>
+    <p>Tactics:</p>
+    <ul>
+        <li>Increased Ammunition: Increase Ammo</li>
+    </ul>
+    <h2>Homebrew Errata</h2>
+    <ul>
+        <li><b>Guard</b>: This action reads very similar to <b>Raise Shield</b> yet gives you an item bonus instead
+            of a circumstance bonus. This action therefore becomes absolute once you obtain +2 armor. This was changed
+            to a circumstance bonus instead
+        </li>
+    </ul>
+</div>

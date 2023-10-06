@@ -30,7 +30,7 @@ import {addDiscoverSpecialMealResult, addHuntAndGatherResult} from './camping/ea
 import {getActorByUuid} from './camping/actor';
 import {checkBeginCombat, CombatUpdate, showSetSceneCombatPlaylistDialog, stopCombat} from './camping/combat-tracks';
 import {migrate} from './migrations';
-import {onPreUpdateArmy} from './armies/utils';
+import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} from './armies/hooks';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -304,7 +304,11 @@ Hooks.on('ready', async () => {
         });
         Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => checkBeginCombat(gameInstance, combat, update));
         Hooks.on('deleteCombat', (combat: StoredDocument<Combat>) => stopCombat(gameInstance, combat));
+        // armies
         Hooks.on('preUpdateActor', (actor: StoredDocument<Actor>, update: Partial<Actor>) => onPreUpdateArmy(gameInstance, actor, update));
+        Hooks.on('updateActor', (actor: StoredDocument<Actor>, update: Partial<Actor>) => onPostUpdateArmy(gameInstance, actor, update));
+        Hooks.on('createItem', (item: StoredDocument<Item>, update: Partial<Item>) => onCreateArmyItem(gameInstance, item, update));
+        Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => updateAmmunition(gameInstance, combat, update));
         checkKingdomErrors(gameInstance);
         checkCampingErrors(gameInstance);
 

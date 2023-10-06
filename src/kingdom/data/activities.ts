@@ -1,6 +1,6 @@
 import {Skill} from './skills';
 import {mergeObjects, unslugify} from '../../utils';
-import {SkillRanks} from './kingdom';
+import {Kingdom, SkillRanks} from './kingdom';
 import {ActivityContent, activityData} from './activityData';
 
 export const allKingdomPhases = [
@@ -163,7 +163,8 @@ export function enableCompanionActivities(type: KingdomPhase, unlockedCompanionA
         });
 }
 
-export function createActivityLabel(activity: Activity, kingdomLevel: number): string {
+export function createActivityLabel(activity: Activity, kingdom: Kingdom): string {
+    const kingdomLevel = kingdom.level;
     let label = unslugify(activity);
     if (activity === 'claim-hex') {
         if (kingdomLevel >= 9) {
@@ -184,6 +185,11 @@ export function createActivityLabel(activity: Activity, kingdomLevel: number): s
         label += ' (master)';
     } else if (oncePerRoundActivities.has(activity)) {
         label += ' (once per round)';
+    }
+    const data = activityData[activity];
+    const hint = data.hint;
+    if (hint) {
+        label += ` (${hint(kingdom)})`;
     }
     return label;
 }

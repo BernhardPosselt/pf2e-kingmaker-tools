@@ -1,6 +1,4 @@
 import {ArmyAdjustments, armyStatisticsByLevel} from './data';
-import {getArmyAdjustment} from './storage';
-import {isFirstGm} from '../utils';
 
 export function getDefaultArmyAdjustment(): ArmyAdjustments {
     return {
@@ -14,21 +12,35 @@ export function getDefaultArmyAdjustment(): ArmyAdjustments {
     };
 }
 
-export function onPreUpdateArmy(game: Game, actor: Actor, data: Partial<Actor>): void {
-    // we're updating level so calculate new statistics
-    const level = data?.system?.details?.level?.value;
-    const adjustments = getArmyAdjustment(actor);
-    if (isFirstGm(game)
-        && actor.type === 'npc'
-        && adjustments !== undefined
-        && level !== undefined
-        && level >= 1 && level <= 20) {
-        updateCalculatedArmyStats(actor, data, level, adjustments);
+function isRanged(item: Item): boolean {
+    return item.system?.weaponType?.value === 'ranged';
+}
+
+export async function addAttackModifiers(actor: Actor, item: Item, update: Partial<Item>, level: number, adjustments: ArmyAdjustments): Promise<void> {
+    if (item.type === 'melee') { // true for both melee and ranged
+        const calculated = calculateArmyAdjustments(actor, level, adjustments);
+        const attackModifier = isRanged(item) ? calculated.ranged : calculated.melee;
+        const calculatedUpdate = {system: {bonus: {value: attackModifier}}};
+        await item.update(calculatedUpdate);
+        console.log('oncreate', update);
     }
 }
 
 
-export function updateCalculatedArmyStats(actor: Actor, update: Partial<Actor>, level: number, adjustments: ArmyAdjustments): void {
+export async function syncAttackModifiers(actor: Actor, level: number, adjustments: ArmyAdjustments): Promise<void> {
+    const calculated = calculateArmyAdjustments(actor, level, adjustments);
+    const updates = actor.items
+        .filter(item => item.type === 'melee')
+        .map(item => {
+            const attackModifier = isRanged(item) ? calculated.ranged : calculated.melee;
+            return {'_id': item.id, 'system.bonus.value': attackModifier};
+        });
+    console.log('onactorupdate', updates);
+    await actor.updateEmbeddedDocuments('Item', updates);
+}
+
+
+export function addArmyStats(actor: Actor, update: Partial<Actor>, level: number, adjustments: ArmyAdjustments): void {
     const calculated = calculateArmyAdjustments(actor, level, adjustments);
     const calculatedUpdate = {
         system: {
@@ -44,8 +56,6 @@ export function updateCalculatedArmyStats(actor: Actor, update: Partial<Actor>, 
         },
     };
     foundry.utils.mergeObject(update, calculatedUpdate);
-    // TODO: update ranged or melee attack modifiers
-    console.log(update, calculated.melee, calculated.ranged);
 }
 
 export function calculateArmyAdjustments(actor: Actor, level: number, adjustments: ArmyAdjustments): ArmyAdjustments {

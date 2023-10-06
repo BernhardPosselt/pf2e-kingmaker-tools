@@ -6,6 +6,7 @@ import {Commodities, hasFeat, Kingdom} from './kingdom';
 import {Ruin} from './ruin';
 import {unslugify} from '../../utils';
 import {ResourceMode, ResourceTurn, RolledResources} from '../resources';
+import {armyStatisticsByLevel} from '../../armies/data';
 
 type SkillRanks = Partial<Record<Skill, number>>;
 
@@ -42,6 +43,7 @@ export interface ActivityContent extends ActivityResults {
     companion?: Companion;
     fortune: boolean;
     oncePerRound: boolean;
+    hint?: (kingdom: Kingdom) => string;
 }
 
 export const activityData: Record<Activity, ActivityContent> = {
@@ -2087,6 +2089,10 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         phase: 'army',
         dc: 'control',
         title: 'Train Army',
+        hint: (kingdom) => {
+            const maxTactics = armyStatisticsByLevel.get(kingdom.level)?.maximumTactics ?? 6;
+            return `Max ${maxTactics} per Army`;
+        },
         description: 'You train an army in the use of a tactic. Choose one of the tactics from those listed starting on page 68, then attempt a Scholarship or Warfare check against the tactic’s Training DC. If your army has already learned its maximum number of tactics, the newly learned tactic replaces a previously learned tactic of your choice. ',
         skills: simpleRank(['scholarship', 'warfare']),
         criticalSuccess: {

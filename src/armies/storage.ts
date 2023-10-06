@@ -1,13 +1,15 @@
 import {ArmyAdjustments} from './data';
-import {updateCalculatedArmyStats} from './utils';
+import {addArmyStats, syncAttackModifiers} from './utils';
 
 export async function saveArmyAdjustment(actor: Actor, update: Partial<ArmyAdjustments>): Promise<void> {
     console.info('Saving', update);
     await actor.setFlag('pf2e-kingmaker-tools', 'army-adjustment', update);
+    const adjustments = getArmyAdjustment(actor)!;
+    const level = actor.system.details.level.value;
     const syncedActorUpdates = {};
-    updateCalculatedArmyStats(actor, syncedActorUpdates, actor.system.details.level.value, getArmyAdjustment(actor)!);
+    addArmyStats(actor, syncedActorUpdates, level, adjustments);
     await actor.update(syncedActorUpdates);
-    // TODO: update melee and ranged weapons
+    await syncAttackModifiers(actor, level, adjustments);
 }
 
 export function getArmyAdjustment(sheetActor: Actor): ArmyAdjustments | undefined {
