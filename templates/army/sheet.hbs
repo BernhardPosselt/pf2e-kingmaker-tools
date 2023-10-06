@@ -25,6 +25,18 @@
             <td>{{calculated.recruitmentDC}}</td>
         </tr>
         <tr>
+            <td>High Save</td>
+            <td>
+                <select name="adjustments.highSave" id="km-army-adjustment-high-save">
+                    {{#select adjustments.highSave}}
+                        <option value="maneuver">Maneuver</option>
+                        <option value="morale">Morale</option>
+                    {{/select}}
+                </select>
+            </td>
+            <td>-</td>
+        </tr>
+        <tr>
             <td>Moral</td>
             <td><input name="adjustments.morale" id="km-army-adjustment-morale" value="{{adjustments.morale}}"
                        type="number"></td>

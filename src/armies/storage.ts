@@ -7,7 +7,7 @@ export async function saveArmyAdjustment(actor: Actor, update: Partial<ArmyAdjus
     const adjustments = getArmyAdjustment(actor)!;
     const level = actor.system.details.level.value;
     const syncedActorUpdates = {};
-    addArmyStats(actor, syncedActorUpdates, level, adjustments);
+    addArmyStats(syncedActorUpdates, level, adjustments);
     await actor.update(syncedActorUpdates);
     await syncAttackModifiers(actor, level, adjustments);
 }

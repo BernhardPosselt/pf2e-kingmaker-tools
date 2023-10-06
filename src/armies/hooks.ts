@@ -34,8 +34,8 @@ export async function onPreUpdateArmy(game: Game, actor: Actor, data: Partial<Ac
         data,
         actor,
         game,
-        callback: (actor, data, level, adjustments): void => {
-            addArmyStats(actor, data, level, adjustments);
+        callback: (_, data, level, adjustments): void => {
+            addArmyStats(data, level, adjustments);
         },
     });
 }

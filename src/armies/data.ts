@@ -43,5 +43,6 @@ export interface ArmyAdjustments {
     ranged: number;
     morale: number;
     maneuver: number;
+    highSave: 'maneuver' | 'morale';
 }
 
