@@ -1,4 +1,8 @@
 import {ArmyAdjustments, armyStatisticsByLevel} from './data';
+import {getArmyAdjustment} from './storage';
+import {Kingdom} from '../kingdom/data/kingdom';
+import {saveKingdom} from '../kingdom/storage';
+import {getBooleanSetting} from '../settings';
 
 export function getDefaultArmyAdjustment(): ArmyAdjustments {
     return {
@@ -77,4 +81,48 @@ export function calculateArmyAdjustments(actor: Actor, level: number, adjustment
         highSave: adjustments.highSave,
         ammunition: 5 + adjustments.ammunition + 2 * increasedAmmunitionCount,
     };
+}
+
+
+function isArmyActor(actor: Actor | null | undefined): boolean {
+    return actor?.type === 'npc' && getArmyAdjustment(actor) !== undefined;
+}
+
+export async function updateKingdomArmyConsumption(
+    {
+        actor = null,
+        kingdomActor,
+        game,
+        forceUpdate = false,
+    }: {
+        actor?: Actor | null | undefined,
+        kingdomActor: Actor | null | undefined,
+        game: Game,
+        forceUpdate?: boolean,
+    },
+): Promise<void> {
+    const autoCalculationEnabled = getBooleanSetting(game, 'autoCalculateArmyConsumption');
+    if (autoCalculationEnabled && kingdomActor && (forceUpdate || isArmyActor(actor))) {
+        await saveKingdom(kingdomActor, {
+            consumption: {
+                armies: Math.max(calculateTotalArmyConsumption(game), 0),
+            },
+        } as Partial<Kingdom>);
+    }
+}
+
+export function calculateTotalArmyConsumption(game: Game): number {
+    // fucking foundry collection APIs :/
+    const actors: Actor[] = [];
+    game?.scenes?.map(s => s.tokens)
+        ?.forEach(tokenCollection => {
+            tokenCollection.forEach(token => {
+                const actor = token.actor;
+                if (actor && token.hidden === false && getArmyAdjustment(actor) !== undefined) {
+                    actors.push(actor);
+                }
+            });
+        });
+    return actors.map(a => a.abilities.con.mod)
+        .reduce((a, b) => a + b, 0);
 }

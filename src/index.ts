@@ -31,6 +31,7 @@ import {getActorByUuid} from './camping/actor';
 import {checkBeginCombat, CombatUpdate, showSetSceneCombatPlaylistDialog, stopCombat} from './camping/combat-tracks';
 import {migrate} from './migrations';
 import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} from './armies/hooks';
+import {updateKingdomArmyConsumption} from './armies/utils';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -266,6 +267,15 @@ Hooks.on('ready', async () => {
             requiresReload: true,
             type: Boolean,
         } as any);
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'autoCalculateArmyConsumption', {
+            name: 'Automatically Calculate Army Consumption',
+            hint: 'If enabled, gets all visible army tokens on all scenes and sums up their consumption',
+            scope: 'world',
+            config: true,
+            default: true,
+            requiresReload: true,
+            type: Boolean,
+        } as any);
         gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'schemaVersion', {
             name: 'Schema Version',
             default: 1,
@@ -309,6 +319,29 @@ Hooks.on('ready', async () => {
         Hooks.on('updateActor', (actor: StoredDocument<Actor>, update: Partial<Actor>) => onPostUpdateArmy(gameInstance, actor, update));
         Hooks.on('createItem', (item: StoredDocument<Item>) => onCreateArmyItem(gameInstance, item));
         Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => updateAmmunition(gameInstance, combat, update));
+        // army consumption
+        const updateConsumption = async (actor: Actor | null): Promise<void> => {
+            await updateKingdomArmyConsumption({
+                actor,
+                kingdomActor: getKingdomSheetActor(gameInstance),
+                game: gameInstance,
+            });
+        };
+        const forceUpdateConsumption = async (): Promise<void> => {
+            await updateKingdomArmyConsumption({
+                forceUpdate: true,
+                kingdomActor: getKingdomSheetActor(gameInstance),
+                game: gameInstance,
+            });
+        };
+        Hooks.on('createToken', (token: StoredDocument<Token>) => updateConsumption(token.actor));
+        Hooks.on('updateToken', (token: StoredDocument<Token>) => updateConsumption(token.actor));
+        Hooks.on('deleteToken', (token: StoredDocument<Token>) => updateConsumption(token.actor));
+        Hooks.on('updateActor', (actor: StoredDocument<Actor>) => updateConsumption(actor));
+        Hooks.on('updateItem', (item: StoredDocument<Item>) => updateConsumption(item.actor));
+        Hooks.on('createItem', (item: StoredDocument<Item>) => updateConsumption(item.actor));
+        Hooks.on('deleteItem', (item: StoredDocument<Item>) => updateConsumption(item.actor));
+        Hooks.on('deleteScene', () => forceUpdateConsumption());
         checkKingdomErrors(gameInstance);
         checkCampingErrors(gameInstance);
 

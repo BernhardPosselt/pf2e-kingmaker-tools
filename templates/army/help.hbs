@@ -1,5 +1,17 @@
 <div>
     <h1>Armies</h1>
+    <h2>IMPORTANT DISCLAIMER</h2>
+    <p>Army statblocks are implemented as NPC actors which use unlinked token actors. This means that changing the actor
+        in the sidebar will propagate all changes to all existing tokens, unless the token has specifically overriden a
+        value.
+        This implies the following:</p>
+    <ul>
+        <li>Adding a tactic to an army actor in the sidebar will add it to all token copies on all scenes</li>
+        <li>Changing values like level on a token will prevent it from being leveled up automatically when changing the
+            actor level on an actor in the sidebar
+        </li>
+    </ul>
+    <h2>Army Statblocks</h2>
     <p>Armies are implemented as NPC stat blocks because attacks and rule elements already work like out of the box. The
         following stats are present in the following locations:</p>
     <ul>
@@ -11,7 +23,7 @@
         <li><b>Scouting</b>: Perception</li>
         <li><b>Recruitment/Standard DC</b>: Fortitude</li>
         <li><b>Consumption</b>: Con</li>
-        <li><b>Description</b>: -</li>
+        <li><b>Description</b>: Likely not covered under the OGL so omitted</li>
         <li><b>AC</b>: AC</li>
         <li><b>Maneuver</b>: Reflex</li>
         <li><b>Morale</b>: Will</li>
@@ -27,6 +39,7 @@
         </li>
         <li><b>Maximum Tactics</b>: Shown in your Kingdom sheet in the <b>Train Army</b> help section</li>
     </ul>
+    <h2>Creating a new Army</h2>
     <p>To create an army, follow the following steps</p>
     <ul>
         <li>Create a new NPC</li>
@@ -41,23 +54,20 @@
         <li>Add Alignment, Rarity, Consumption, Route Threshold, HP, Tactics and Gear</li>
         <li>Drag a token onto the sheet</li>
         <li>Run <b>Edit Army Statistics</b> Macro for final adjustments</li>
+        <li>Delete the token</li>
     </ul>
-    <p><b>Keep in mind</b>: NPC sheets are unlinked actors by default, meaning that changes to their base actor will
-        only
-        be
-        synced to their actors, if they weren't overridden. This means that you should <b>always edit their level on the
-            original actor</b> (in the actor sidebar rather than on the token).</p>
-    <p>To adjust for Battlefield Terrain Features, this module ships a variety of effects that can be pulled from the
-        <b>Battlefield Terrain Features</b> compendium.</p>
-
+    <h2>Levelling up armies</h2>
+    <p>Edit the army stat block by clicking on your army actor in the sidebar and edit their level. All tokens are
+        updated automatically.</p>
+    <h2>Changing army statistics</h2>
+    <p>Drag the army token onto your sheet and use the <b>Edit Army Statistics</b>. Then delete the token. All tokens
+        are updated automatically.</p>
+    <h2>Changing Army Tactics, Gear, Conditions & HP</h2>
+    <p>Edit these values directly by double-clicking on the token on the scene</p>
     <h2>Automation Notes</h2>
     <p>Kingdom Sheet:</p>
     <ul>
         <li>Any conditions that apply to Army Activities do not gain modifiers in the Kingdom sheet</li>
-    </ul>
-    <p>Tactics:</p>
-    <ul>
-        <li><b>Self-Sufficient</b>: not automated</li>
     </ul>
     <h2>Homebrew Errata</h2>
     <ul>
