@@ -20,7 +20,7 @@ import {getKingdom} from './kingdom/storage';
 import {addOngoingEvent, changeDegree, parseUpgradeMeta, reRoll} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
 import {StringDegreeOfSuccess} from './degree-of-success';
-import {showArmy} from './armies/sheet';
+import {editArmyStatistics} from './armies/sheet';
 import {openCampingSheet} from './camping/sheet';
 import {bindCampingChatEventListeners} from './camping/chat';
 import {getDiffListeners} from './camping/effect-syncing';
@@ -30,6 +30,7 @@ import {addDiscoverSpecialMealResult, addHuntAndGatherResult} from './camping/ea
 import {getActorByUuid} from './camping/actor';
 import {checkBeginCombat, CombatUpdate, showSetSceneCombatPlaylistDialog, stopCombat} from './camping/combat-tracks';
 import {migrate} from './migrations';
+import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} from './armies/hooks';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -64,7 +65,7 @@ Hooks.on('ready', async () => {
                 viewKingdomMacro: showKingdom.bind(null, game),
                 awardXpMacro: showAwardXPDialog.bind(null, game),
                 resetHeroPointsMacro: resetHeroPoints.bind(null, game),
-                viewArmyMacro: (actor: Actor, token: Token): Promise<void> => showArmy(gameInstance, actor, token),
+                editArmyStatisticsMacro: (actor: Actor): Promise<void> => editArmyStatistics(gameInstance, actor),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 openCampingSheet: (): void => openCampingSheet(gameInstance),
                 rollExplorationSkillCheck: async (skill: string, effect: string): Promise<void> => {
@@ -303,6 +304,11 @@ Hooks.on('ready', async () => {
         });
         Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => checkBeginCombat(gameInstance, combat, update));
         Hooks.on('deleteCombat', (combat: StoredDocument<Combat>) => stopCombat(gameInstance, combat));
+        // armies
+        Hooks.on('preUpdateActor', (actor: StoredDocument<Actor>, update: Partial<Actor>) => onPreUpdateArmy(gameInstance, actor, update));
+        Hooks.on('updateActor', (actor: StoredDocument<Actor>, update: Partial<Actor>) => onPostUpdateArmy(gameInstance, actor, update));
+        Hooks.on('createItem', (item: StoredDocument<Item>) => onCreateArmyItem(gameInstance, item));
+        Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => updateAmmunition(gameInstance, combat, update));
         checkKingdomErrors(gameInstance);
         checkCampingErrors(gameInstance);
 
@@ -352,13 +358,6 @@ Hooks.on('init', async () => {
     await loadTemplates([
         'modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs',
         'modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs',
-        'modules/pf2e-kingmaker-tools/templates/army/sidebar.hbs',
-        'modules/pf2e-kingmaker-tools/templates/army/status.hbs',
-        'modules/pf2e-kingmaker-tools/templates/army/gear.hbs',
-        'modules/pf2e-kingmaker-tools/templates/army/effects.hbs',
-        'modules/pf2e-kingmaker-tools/templates/army/actions.hbs',
-        'modules/pf2e-kingmaker-tools/templates/army/conditions.hbs',
-        'modules/pf2e-kingmaker-tools/templates/army/tactics.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/sidebar.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/status.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/skills.hbs',

@@ -21,7 +21,7 @@ declare global {
                 rollKingmakerWeatherMacro: () => void,
                 viewKingdomMacro: () => void,
                 openCampingSheet: () => void,
-                viewArmyMacro: (actor: Actor, token: Token) => void,
+                editArmyStatisticsMacro: (actor: Actor) => void,
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 editStructureMacro: (actor: any) => Promise<void>,
                 rollExplorationSkillCheck: (skill: string, effect: string) => Promise<void>,
@@ -72,6 +72,8 @@ declare global {
         itemTypes: {
             consumable: Item[];
             effect: Item[];
+            equipment: Item[];
+            action: Item[];
         };
 
         addToInventory(value: object, container?: Item, newStack: false): Promise<Item | null>;
@@ -90,7 +92,17 @@ declare global {
                 xp: { value: number, max: number },
                 level: { value: number }
             };
+            attributes: {
+                ac: { value: number },
+                perception: { value: number },
+                hp: { value: number, max: number },
+            }
             exploration?: string[];
+            saves: {
+                fortitude: { value: number },
+                reflex: { value: number },
+                will: { value: number },
+            },
         };
     }
 
@@ -110,7 +122,19 @@ declare global {
         name: string;
         sourceId: string;
         sheet: ItemSheet;
-        type: 'effect' | 'consumable';
+        type: 'effect' | 'consumable' | 'melee' | 'weapon';
+        system: {
+            traits: {
+                value: string[]
+            }
+            bonus: {
+                value: number
+            };
+            weaponType: {
+                value: string
+            }
+            damageRolls: Record<string, { damage: number }>
+        };
     }
 
     interface EffectItem {

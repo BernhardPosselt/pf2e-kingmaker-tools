@@ -1,87 +1,70 @@
 <form class="km-base-form">
-    <div class="km-container">
-        <div class="km-header">
-            <table class="km-table">
-                <tr>
-                    <th>Name</th>
-                    <th>Rarity</th>
-                    <th>Alignment</th>
-                    <th>Type</th>
-                    <th>Level</th>
-                </tr>
-                <tr>
-                    <td class="km-name">
-                        <input name="name" id="km-army-name" value="{{name}}" type="text">
-                    </td>
-                    <td>
-                        <select name="rarity" id="km-army-rarity">
-                            {{#select rarity}}
-                                {{#each rarities}}
-                                    <option value="{{this.value}}">{{this.label}}</option>
-                                {{/each}}
-                            {{/select}}
-                        </select>
-                    </td>
-                    <td>
-                        <select name="alignment" id="km-army-alignment">
-                            {{#select alignment}}
-                                {{#each alignments}}
-                                    <option value="{{this.value}}">{{this.label}}</option>
-                                {{/each}}
-                            {{/select}}
-                        </select>
-                    </td>
-                    <td>
-                        <select name="type" id="km-army-type">
-                            {{#select type}}
-                                {{#each types}}
-                                    <option value="{{this.value}}">{{this.label}}</option>
-                                {{/each}}
-                            {{/select}}
-                        </select>
-                    </td>
-                    <td>
-                        <select name="level" id="km-army-level">
-                            {{#select level}}
-                                {{#each levels}}
-                                    <option value="{{this.value}}">{{this.label}}</option>
-                                {{/each}}
-                            {{/select}}
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <nav class="km-nav">
-            <a data-tab="status" class="{{#if tabs.statusTab}}active{{/if}}">Status</a>
-            <a data-tab="actions" class="{{#if tabs.actionsTab}}active{{/if}}">Actions</a>
-            <a data-tab="gear" class="{{#if tabs.gearTab}}active{{/if}}">Gear</a>
-            <a data-tab="tactics" class="{{#if tabs.tacticsTab}}active{{/if}}">Tactics</a>
-            <a data-tab="conditions" class="{{#if tabs.conditionsTab}}active{{/if}}">Conditions</a>
-            <a data-tab="effects" class="{{#if tabs.effectsTab}}active{{/if}}">Effects</a>
-        </nav>
-        <div class="km-sidebar">
-            {{> modules/pf2e-kingmaker-tools/templates/army/sidebar.hbs}}
-        </div>
-        <div class="km-content">
-            <div {{#unless tabs.statusTab}}hidden{{/unless}}>
-                {{> modules/pf2e-kingmaker-tools/templates/army/status.hbs}}
-            </div>
-            <div {{#unless tabs.actionsTab}}hidden{{/unless}}>
-                {{> modules/pf2e-kingmaker-tools/templates/army/actions.hbs}}
-            </div>
-            <div {{#unless tabs.gearTab}}hidden{{/unless}}>
-                {{> modules/pf2e-kingmaker-tools/templates/army/gear.hbs}}
-            </div>
-            <div {{#unless tabs.tacticsTab}}hidden{{/unless}}>
-                {{> modules/pf2e-kingmaker-tools/templates/army/tactics.hbs}}
-            </div>
-            <div {{#unless tabs.conditionsTab}}hidden{{/unless}}>
-                {{> modules/pf2e-kingmaker-tools/templates/army/conditions.hbs}}
-            </div>
-            <div {{#unless tabs.effectsTab}}hidden{{/unless}}>
-                {{> modules/pf2e-kingmaker-tools/templates/army/effects.hbs}}
-            </div>
-        </div>
-    </div>
+    <p><b>Actor Level</b>: {{actorLevel}}</p>
+    <table class="km-table">
+        <tr>
+            <th>Type</th>
+            <th>Modifier Adjustment</th>
+            <th>Calculated</th>
+        </tr>
+        <tr>
+            <td>Scouting</td>
+            <td><input name="adjustments.scouting" id="km-army-adjustment-scouting" value="{{adjustments.scouting}}"
+                       type="number"></td>
+            <td>{{calculated.scouting}}</td>
+        </tr>
+        <tr>
+            <td>AC</td>
+            <td><input name="adjustments.ac" id="km-army-adjustment-ac" value="{{adjustments.ac}}" type="number"></td>
+            <td>{{calculated.ac}}</td>
+        </tr>
+        <tr>
+            <td>Ammunition</td>
+            <td><input name="adjustments.ammunition" id="km-army-adjustment-ammunition"
+                       value="{{adjustments.ammunition}}" type="number"></td>
+            <td>{{calculated.ammunition}}</td>
+        </tr>
+        <tr>
+            <td>Recruitment DC</td>
+            <td><input name="adjustments.recruitmentDC" id="km-army-adjustment-recruitmentDC"
+                       value="{{adjustments.recruitmentDC}}" type="number">
+            </td>
+            <td>{{calculated.recruitmentDC}}</td>
+        </tr>
+        <tr>
+            <td>High Save</td>
+            <td>
+                <select name="adjustments.highSave" id="km-army-adjustment-high-save">
+                    {{#select adjustments.highSave}}
+                        <option value="maneuver">Maneuver</option>
+                        <option value="morale">Morale</option>
+                    {{/select}}
+                </select>
+            </td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td>Moral</td>
+            <td><input name="adjustments.morale" id="km-army-adjustment-morale" value="{{adjustments.morale}}"
+                       type="number"></td>
+            <td>{{calculated.morale}}</td>
+        </tr>
+        <tr>
+            <td>Maneuver</td>
+            <td><input name="adjustments.maneuver" id="km-army-adjustment-maneuver" value="{{adjustments.maneuver}}"
+                       type="number"></td>
+            <td>{{calculated.maneuver}}</td>
+        </tr>
+        <tr>
+            <td>Melee</td>
+            <td><input name="adjustments.melee" id="km-army-adjustment-melee" value="{{adjustments.melee}}"
+                       type="number"></td>
+            <td>{{calculated.melee}}</td>
+        </tr>
+        <tr>
+            <td>Ranged</td>
+            <td><input name="adjustments.ranged" id="km-army-adjustment-ranged" value="{{adjustments.ranged}}"
+                       type="number"></td>
+            <td>{{calculated.ranged}}</td>
+        </tr>
+    </table>
 </form>

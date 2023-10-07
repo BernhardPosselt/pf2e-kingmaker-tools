@@ -23,6 +23,7 @@ export type CheckType = 'skill' | 'activity';
 export interface CheckDialogFeatOptions {
     type: CheckType;
     activity?: Activity;
+    dcAdjustment?: number;
     skill?: Skill;
     game: Game;
     kingdom: Kingdom;
@@ -95,7 +96,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         } else {
             this.phase = getActivityPhase(this.activity!);
             this.selectedSkill = this.getActivitySkills(options.kingdom.skillRanks)[0];
-            const activityDCType = activityData[this.activity!].dc;
+            const data = activityData[this.activity!];
+            const activityDCType = data.dc;
             if (activityDCType === 'control') {
                 this.dc = controlDC;
             } else if (activityDCType === 'custom') {
@@ -105,6 +107,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             } else {
                 this.dc = activityDCType;
             }
+            // increase DC by adjustment if present
+            this.dc = this.dc + (data.dcAdjustment ?? 0);
         }
     }
 

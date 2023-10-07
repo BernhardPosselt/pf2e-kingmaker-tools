@@ -1,86 +1,20 @@
-import {calculateArmyData, CalculatedArmy} from './utils';
-import {
-    allAlignmentLabels,
-    allAlignments,
-    allArmyActions,
-    allArmySaves,
-    allArmyTypes,
-    allGearByName,
-    allLevels,
-    allRarities,
-    allTacticsByName,
-    armiesByName,
-    ArmyActionName,
-    ArmyItem,
-    ArmyTacticItem,
-    ArmyTacticsName,
-} from './data';
-import {capitalize} from '../utils';
+import {calculateArmyAdjustments, getDefaultArmyAdjustment} from './utils';
+import {getArmyAdjustment, saveArmyAdjustment} from './storage';
+import {ArmyAdjustments} from './data';
+import {disableArmyDialog} from './dialogs/disable';
+import {showArmyHelpDialog} from './dialogs/help';
+import {armySetupDialog} from './dialogs/army-setup';
 
 interface ArmyOptions {
     game: Game;
     actor: Actor;
-    token: Token;
 }
 
-interface LabeledValue {
-    label: string;
-    value: string;
+interface ArmyData {
+    adjustments: ArmyAdjustments;
+    actorLevel: number,
+    calculated: ArmyAdjustments;
 }
-
-interface ArmyData extends Omit<CalculatedArmy, 'gear' | 'tactics'> {
-    rarities: LabeledValue[];
-    saves: LabeledValue[];
-    alignments: LabeledValue[];
-    types: LabeledValue[];
-    levels: LabeledValue[];
-    tabs: Record<string, boolean>;
-    actions: Actions[];
-    gear: Gear[];
-    tactics: Tactics[];
-    currentTactics: number;
-}
-
-interface Tactics {
-    name: string;
-    description?: string;
-    level?: number;
-    traits: string[];
-    unique: boolean;
-    doesNotCountAgainstLimit: boolean;
-    grantsActions?: ArmyActionName[];
-}
-
-interface Actions {
-    name: string;
-    icon: string;
-    traits: string[];
-    requirements?: string;
-    trigger?: string;
-    description?: string;
-    type?: LabeledValue;
-    frequency?: string;
-    effect?: string;
-    results?: {
-        criticalSuccess?: string;
-        success?: string;
-        failure?: string;
-        criticalFailure?: string;
-    }
-}
-
-interface Gear {
-    name: string;
-    level: number;
-    traits: string[];
-    quantity?: number;
-    maximumQuantity?: number;
-    description: string;
-    price: number;
-}
-
-type ArmyTab = 'status' | 'gear' | 'conditions' | 'tactics' | 'actions' | 'effects';
-
 
 class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, object, null> {
     static override get defaultOptions(): FormApplicationOptions {
@@ -91,155 +25,115 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
         options.submitOnChange = true;
         options.closeOnSubmit = false;
         options.classes = ['kingmaker-tools-app', 'army-app'];
-        options.width = 850;
+        options.width = 450;
         options.height = 'auto';
         options.scrollY = ['.km-content', '.km-sidebar'];
         return options;
     }
 
-    private token: Token;
-
     private actor: Actor;
     private readonly game: Game;
-    private nav: ArmyTab = 'status';
 
 
     constructor(object: null, options: Partial<FormApplicationOptions> & ArmyOptions) {
         super(object, options);
         this.game = options.game;
         this.actor = options.actor;
-        this.token = options.token;
         this.actor.apps[this.appId] = this;
     }
 
     override async getData(): Promise<ArmyData> {
-        const name = 'First World Army';
-        const data = armiesByName.get(name)!;
-        const army = calculateArmyData(data);
-        console.log(army);
-        // const gear = army.gear;
-        const gear: ArmyItem[] = [{name: 'Healing Potion', quantity: 3}, {name: 'Magic Armor +1'}];
+        const adjustments = getArmyAdjustment(this.actor)!;
+        const actorLevel = this.actor.system.details.level.value;
         return {
-            ...army,
-            alignments: allAlignments.map((alignment, index) => {
-                return {value: alignment, label: allAlignmentLabels[index]};
-            }),
-            rarities: allRarities.map(rarity => {
-                return {value: rarity, label: capitalize(rarity)};
-            }),
-            types: allArmyTypes.map(type => {
-                return {value: type, label: capitalize(type)};
-            }),
-            saves: allArmySaves.map(save => {
-                return {value: save, label: capitalize(save)};
-            }),
-            levels: allLevels.map(level => {
-                return {value: `${level}`, label: `${level}`};
-            }),
-            tabs: this.getActiveTabs(),
-            actions: this.buildActions(army.tactics.map(t => t.name)),
-            gear: this.buildGear(gear),
-            tactics: this.buildTactics(army.tactics),
-            currentTactics: army.tactics.filter(t => t.doesNotCountsAgainstLimit === false || t.doesNotCountsAgainstLimit === undefined).length,
+            adjustments,
+            actorLevel,
+            calculated: calculateArmyAdjustments(this.actor, actorLevel, adjustments),
         };
     }
 
-    private getActiveTabs(): Record<string, boolean> {
-        return {
-            statusTab: this.nav === 'status',
-            actionsTab: this.nav === 'actions',
-            gearTab: this.nav === 'gear',
-            tacticsTab: this.nav === 'tactics',
-            conditionsTab: this.nav === 'conditions',
-            effectsTab: this.nav === 'effects',
-        };
-    }
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
     override async _updateObject(event: Event, formData: any): Promise<void> {
-        console.log(formData);
-        return;
+        const data = expandObject(formData);
+        console.log('form', formData);
+        const update = {
+            melee: data.adjustments?.melee ?? 0,
+            ac: data.adjustments?.ac ?? 0,
+            maneuver: data.adjustments?.maneuver ?? 0,
+            morale: data.adjustments?.morale ?? 0,
+            scouting: data.adjustments?.scouting ?? 0,
+            ranged: data.adjustments?.ranged ?? 0,
+            recruitmentDC: data.adjustments?.recruitmentDC ?? 0,
+            ammunition: data.adjustments?.ammunition ?? 0,
+            highSave: data.adjustments?.highSave ?? 'maneuver',
+        };
+        console.log(update);
+        await saveArmyAdjustment(this.actor, update);
     }
 
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
-        const $html = html[0];
-        $html.querySelectorAll('.km-nav a')?.forEach(el => {
-            el.addEventListener('click', (event) => {
-                const tab = event.currentTarget as HTMLAnchorElement;
-                this.nav = tab.dataset.tab as ArmyTab;
-                this.render();
+    }
+
+    protected _getHeaderButtons(): Application.HeaderButton[] {
+        const buttons = super._getHeaderButtons();
+        if (this.game.user?.isGM ?? false) {
+            buttons.unshift({
+                label: 'Help',
+                class: 'something-made-up-help',
+                icon: 'fas fa-question',
+                onclick: () => showArmyHelpDialog(),
             });
-        });
-    }
-
-    private buildActions(tactics: ArmyTacticsName[]): Actions[] {
-        const unlockedActionNames = new Set(tactics.flatMap(tactic => allTacticsByName[tactic].grantsActions ?? []));
-        const actions = allArmyActions.filter(action => !action.requiresUnlock || unlockedActionNames.has(action.name));
-        return actions.map(action => {
-            const traits: string[] = [
-                ...(action.type ? [capitalize(action.type)] : []),
-                ...(action.restrictedTypes ?? [])].map(value => capitalize(value)
-            );
-            const results = action.criticalSuccess || action.success || action.failure || action.criticalFailure
-                ? {
-                    criticalSuccess: action.criticalSuccess,
-                    success: action.success,
-                    failure: action.failure,
-                    criticalFailure: action.criticalFailure,
-                }
-                : undefined;
-            return {
-                icon: action.actions,
-                name: action.name,
-                description: action.description,
-                trigger: action.trigger,
-                requirements: action.requirements,
-                frequency: action.frequency,
-                effect: action.effect,
-                type: action.type ? {label: capitalize(action.type), value: action.type} : undefined,
-                traits,
-                results,
-            };
-        });
-    }
-
-    private buildGear(gear: ArmyItem[]): Gear[] {
-        return gear.map(g => {
-            const data = allGearByName[g.name];
-            return {
-                level: data.level,
-                name: data.name,
-                description: data.description,
-                price: data.price,
-                maximumQuantity: data.quantity,
-                quantity: g.quantity,
-                traits: ['Army', ...data.traits.map(trait => capitalize(trait))],
-            };
-        });
-    }
-
-    private buildTactics(tactics: ArmyTacticItem[]): Tactics[] {
-        return tactics.map(tactic => {
-            const data = allTacticsByName[tactic.name];
-            const traits = [...(data.restrictedTypes?.map(t => capitalize(t)) ?? [])];
-            return {
-                name: data.name,
-                description: data.description,
-                doesNotCountAgainstLimit: tactic.doesNotCountsAgainstLimit === true,
-                level: data.level,
-                traits,
-                unique: data.unique === true,
-                grantsActions: data.grantsActions,
-            };
-        });
+            buttons.unshift({
+                label: 'Disable',
+                class: 'something-made-up-disable',
+                icon: 'fas fa-trash',
+                onclick: () => disableArmyDialog({
+                    actor: this.actor,
+                    onYes: async (): Promise<void> => {
+                        await this.close();
+                        await this.actor.unsetFlag('pf2e-kingmaker-tools', 'army-adjustment');
+                    },
+                }),
+            });
+        }
+        return buttons;
     }
 }
 
 
-export async function showArmy(game: Game, actor: Actor, token: Token): Promise<void> {
+async function initArmy(actor: Actor, additionalUuids: string[], type: string): Promise<ArmyAdjustments> {
+    const defaultItems = await Promise.all([
+            'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.59vwuUVFAEs0yfKt', // advance
+            'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.qNxyZfS4Ald098Gy', // battle
+            'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.21aSK6Dh0FpcdWbb', // disengage
+            'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.wfy7fmnnhlJ66Gfz', // guard
+            'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.kKnpTt39LwP8uUvf', // rally
+            'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.D680ctCFIpsmz82i', // retreat
+            ...additionalUuids,
+        ].map(uuid => fromUuid(uuid) as Promise<Item>),
+    );
+    const data = defaultItems.map(i => i.toObject());
+    await actor.createEmbeddedDocuments('Item', data);
+    await actor.update({'system.details.blurb': type});
+    await saveArmyAdjustment(actor, getDefaultArmyAdjustment());
+    return getArmyAdjustment(actor)!;
+}
+
+export async function editArmyStatistics(game: Game, actor: Actor): Promise<void> {
     if (actor) {
-        new ArmySheet(null, {game, actor, token}).render(true);
+        if (getArmyAdjustment(actor) === undefined) {
+            armySetupDialog({
+                actor,
+                onConfirm: async (additionalUuids, type): Promise<void> => {
+                    await initArmy(actor, additionalUuids, type);
+                    await editArmyStatistics(game, actor);
+                },
+            });
+        } else {
+            new ArmySheet(null, {game, actor}).render(true);
+        }
     } else {
         ui.notifications?.error('Please select a token');
     }

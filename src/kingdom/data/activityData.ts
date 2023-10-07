@@ -6,6 +6,7 @@ import {Commodities, hasFeat, Kingdom} from './kingdom';
 import {Ruin} from './ruin';
 import {unslugify} from '../../utils';
 import {ResourceMode, ResourceTurn, RolledResources} from '../resources';
+import {armyStatisticsByLevel} from '../../armies/data';
 
 type SkillRanks = Partial<Record<Skill, number>>;
 
@@ -37,10 +38,12 @@ export interface ActivityContent extends ActivityResults {
     skills: SkillRanks;
     phase: KingdomPhase;
     dc: 'control' | 'custom' | 'none' | number;
+    dcAdjustment?: number;
     enabled: boolean;
     companion?: Companion;
     fortune: boolean;
     oncePerRound: boolean;
+    hint?: (kingdom: Kingdom) => string;
 }
 
 export const activityData: Record<Activity, ActivityContent> = {
@@ -1639,6 +1642,7 @@ Your kingdom can support 1 Recruited Monster at a time. If your kingdom is maste
         enabled: true,
         phase: 'leadership',
         dc: 'control',
+        dcAdjustment: 2,
         title: 'Repair Reputation Corruption',
         description: `When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.
 
@@ -1663,6 +1667,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
         enabled: true,
         phase: 'leadership',
         dc: 'control',
+        dcAdjustment: 2,
         title: 'Repair Reputation Crime',
         description: `When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.
 
@@ -1687,6 +1692,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
         enabled: true,
         phase: 'leadership',
         dc: 'control',
+        dcAdjustment: 2,
         title: 'Repair Reputation Decay',
         description: `When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.
 
@@ -1711,6 +1717,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
         enabled: true,
         phase: 'leadership',
         dc: 'control',
+        dcAdjustment: 2,
         title: 'Repair Reputation Strife',
         description: `When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.
 
@@ -2082,6 +2089,10 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         phase: 'army',
         dc: 'control',
         title: 'Train Army',
+        hint: (kingdom) => {
+            const maxTactics = armyStatisticsByLevel.get(kingdom.level)?.maximumTactics ?? 6;
+            return `Max ${maxTactics} per Army`;
+        },
         description: 'You train an army in the use of a tactic. Choose one of the tactics from those listed starting on page 68, then attempt a Scholarship or Warfare check against the tactic’s Training DC. If your army has already learned its maximum number of tactics, the newly learned tactic replaces a previously learned tactic of your choice. ',
         skills: simpleRank(['scholarship', 'warfare']),
         criticalSuccess: {
