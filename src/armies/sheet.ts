@@ -122,7 +122,7 @@ async function initArmy(actor: Actor, additionalUuids: string[], type: string): 
 }
 
 export async function editArmyStatistics(game: Game, actor: Actor): Promise<void> {
-    if (actor) {
+    if (actor && actor.type === 'npc') {
         if (getArmyAdjustment(actor) === undefined) {
             armySetupDialog({
                 actor,
@@ -135,6 +135,6 @@ export async function editArmyStatistics(game: Game, actor: Actor): Promise<void
             new ArmySheet(null, {game, actor}).render(true);
         }
     } else {
-        ui.notifications?.error('Please select a token');
+        ui.notifications?.error('Please select an NPC token');
     }
 }

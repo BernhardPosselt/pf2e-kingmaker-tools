@@ -46,6 +46,15 @@ If you've enabled the official module, the following things are automatically ta
 If you are not running the official module, check out
 the [Kingmaker Tools Token Mapping](https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping) module
 
+### Armies
+
+This module ships a stop gap solution to armies which use NPC statblocks which are automatically scaled once their level changes.
+To create a new army, use the **Edit Army Statistic** macro and follow the guidelines in the **Help** Section (button in title bar) or **Army Help** macro. The automatic level scaling can be undone by clicking on the **Disable** button next to the **Help** button
+![Army Macro](docs/images/army-macro.png)
+
+All armies use NPC statblocks which use unlinked actor tokens. Follow the **Help** section in **Edit Army Statistic** or **Army Help** macro.
+![Army Macro](docs/images/armies.png)
+
 ### Camping Sheet
 
 Since 0.2.0, this module ships a camping sheet which includes all meals and camping activities. You can launch the sheet
