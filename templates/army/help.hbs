@@ -27,9 +27,22 @@
         </li>
         <li><b>Maximum Tactics</b>: Shown in your Kingdom sheet in the <b>Train Army</b> help section</li>
     </ul>
-    <p>To turn an NPC into an army, use the <b>Edit Army Statistics</b> Macro and add their attacks by clicking on the
-        <i class="fa-solid fa-bolt fa-fw"></i> icon in their inventory.
-        <b>Keep in mind</b>: NPC sheets are unlinked actors by default, meaning that changes to their base actor will
+    <p>To create an army, follow the following steps</p>
+    <ul>
+        <li>Create a new NPC</li>
+        <li>Drag a token of it onto the canvas</li>
+        <li>Use the <b>Edit Army Statistics</b> Macro</li>
+        <li>Delete the token</li>
+        <li>Open the NPC actor from the sidebar</li>
+        <li>Go to Inventory</li>
+        <li>Click <i class="fa-solid fa-bolt fa-fw"></i> next to the items to generate attacks</li>
+        <li>Adjust the army level (if it's one, change it to 2 and then back to 1 to update the modifiers correctly)
+        </li>
+        <li>Add Alignment, Rarity, Consumption, Route Threshold, HP, Tactics and Gear</li>
+        <li>Drag a token onto the sheet</li>
+        <li>Run <b>Edit Army Statistics</b> Macro for final adjustments</li>
+    </ul>
+    <p><b>Keep in mind</b>: NPC sheets are unlinked actors by default, meaning that changes to their base actor will
         only
         be
         synced to their actors, if they weren't overridden. This means that you should <b>always edit their level on the
@@ -52,5 +65,8 @@
             of a circumstance bonus. This action therefore becomes absolute once you obtain +2 armor. This was changed
             to a circumstance bonus instead
         </li>
+        <li><b>Wyvern Flight</b>: Changed attack modifier to 26 instead of way too low 18</li>
+        <li><b>Lizardfolk Defenders</b>: Changed attack modifier from 12 to 15 since there were no adjusted stats</li>
+        <li><b>M'Botuu Frog Riders</b>: Changed ac from 27 to 30 since there were no adjusted stats</li>
     </ul>
 </div>

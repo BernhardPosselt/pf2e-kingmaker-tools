@@ -18,13 +18,12 @@ function isRanged(item: Item): boolean {
     return item.system?.weaponType?.value === 'ranged';
 }
 
-export async function addAttackModifiers(actor: Actor, item: Item, update: Partial<Item>, level: number, adjustments: ArmyAdjustments): Promise<void> {
+export async function addAttackModifiers(actor: Actor, item: Item, level: number, adjustments: ArmyAdjustments): Promise<void> {
     if (item.type === 'melee') { // true for both melee and ranged
         const calculated = calculateArmyAdjustments(actor, level, adjustments);
         const attackModifier = isRanged(item) ? calculated.ranged : calculated.melee;
         const calculatedUpdate = {system: {bonus: {value: attackModifier}}};
         await item.update(calculatedUpdate);
-        console.log('oncreate', update);
     }
 }
 

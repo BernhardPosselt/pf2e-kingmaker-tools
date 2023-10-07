@@ -307,7 +307,7 @@ Hooks.on('ready', async () => {
         // armies
         Hooks.on('preUpdateActor', (actor: StoredDocument<Actor>, update: Partial<Actor>) => onPreUpdateArmy(gameInstance, actor, update));
         Hooks.on('updateActor', (actor: StoredDocument<Actor>, update: Partial<Actor>) => onPostUpdateArmy(gameInstance, actor, update));
-        Hooks.on('createItem', (item: StoredDocument<Item>, update: Partial<Item>) => onCreateArmyItem(gameInstance, item, update));
+        Hooks.on('createItem', (item: StoredDocument<Item>) => onCreateArmyItem(gameInstance, item));
         Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => updateAmmunition(gameInstance, combat, update));
         checkKingdomErrors(gameInstance);
         checkCampingErrors(gameInstance);

@@ -40,7 +40,7 @@ export async function onPreUpdateArmy(game: Game, actor: Actor, data: Partial<Ac
     });
 }
 
-export async function onCreateArmyItem(game: Game, item: Item, data: Partial<Item>): Promise<void> {
+export async function onCreateArmyItem(game: Game, item: Item): Promise<void> {
     const actor = item.actor!;
     const actorData = {system: {details: {level: {value: actor.system.details.level.value}}}} as Partial<Actor>;
     onUpdateArmyLevel({
@@ -48,7 +48,7 @@ export async function onCreateArmyItem(game: Game, item: Item, data: Partial<Ite
         actor,
         game,
         callback: async (actor, _, level, adjustments): Promise<void> => {
-            await addAttackModifiers(actor, item, data, level, adjustments);
+            await addAttackModifiers(actor, item, level, adjustments);
         },
     });
 }

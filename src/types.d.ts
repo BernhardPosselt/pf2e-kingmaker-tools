@@ -122,7 +122,7 @@ declare global {
         name: string;
         sourceId: string;
         sheet: ItemSheet;
-        type: 'effect' | 'consumable' | 'melee';
+        type: 'effect' | 'consumable' | 'melee' | 'weapon';
         system: {
             traits: {
                 value: string[]
@@ -133,6 +133,7 @@ declare global {
             weaponType: {
                 value: string
             }
+            damageRolls: Record<string, { damage: number }>
         };
     }
 

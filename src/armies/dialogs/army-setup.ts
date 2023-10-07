@@ -1,4 +1,4 @@
-import {parseSelect} from '../../utils';
+import {parseCheckbox, parseSelect} from '../../utils';
 
 export interface ArmySetupOptions {
     actor: Actor;
@@ -23,11 +23,12 @@ export function armySetupDialog(options: ArmySetupOptions): void {
                 </select>
             </div>
             <div>
-                <label for="km-army-weapon-type">Army Type:</label>
-                <select name="weapon-type" id="km-army-weapon-type">
-                    <option value="melee">Melee</option>
-                    <option value="ranged">Ranged</option>
-                </select>
+                <label for="km-army-weapon-type-melee">Melee Weapons?</label>
+                <input type="checkbox" name="weapon-type-melee" id="km-army-weapon-type-melee">
+            </div>
+            <div>
+                <label for="km-army-weapon-type-ranged">Ranged Weapons?</label>
+                <input type="checkbox" name="weapon-type-ranged" id="km-army-weapon-type-ranged">
             </div>
         </form>
         `,
@@ -44,13 +45,15 @@ export function armySetupDialog(options: ArmySetupOptions): void {
                 callback: async (html): Promise<void> => {
                     const $html = html as HTMLElement;
                     const type = parseSelect($html, 'type');
-                    const weaponType = parseSelect($html, 'weapon-type');
-                    const uuids = weaponType === 'ranged'
-                        ? [
+                    const weaponTypeMelee = parseCheckbox($html, 'weapon-type-melee');
+                    const weaponTypeRanged = parseCheckbox($html, 'weapon-type-ranged');
+                    const uuids = [
+                        ...(weaponTypeRanged ? [
                             'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-gear.Item.osC5Z0FdEU47WAqp',
                             'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-gear.Item.UAYsXm698g1iyC2v',
-                        ]
-                        : ['Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-gear.Item.hIjD8V24RKLlIV2N'];
+                        ] : []),
+                        ...(weaponTypeMelee ? ['Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-gear.Item.hIjD8V24RKLlIV2N'] : []),
+                    ];
                     await options.onConfirm(uuids, type);
                 },
             },
