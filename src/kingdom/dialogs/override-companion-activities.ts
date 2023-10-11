@@ -37,7 +37,7 @@ export class CompanionLeadershipBenefits extends FormApplication<FormApplication
         return options;
     }
 
-    override getData(options?: Partial<FormApplicationOptions>): Promise<CompanionData> | CompanionData {
+    override getData(): Promise<CompanionData> | CompanionData {
         if (game instanceof Game) {
             const settings = new Set(getStringArraySetting(game, 'forceEnabledCompanionLeadershipBenefits')
                 .filter(isCompanionName));

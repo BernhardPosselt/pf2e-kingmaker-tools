@@ -25,6 +25,6 @@ export function getBooleanSetting(game: Game, settingsKey: string): boolean {
     return game.settings.get(namespace, settingsKey) as boolean | undefined ?? false;
 }
 
-export async function setSetting(game: Game, settingsKey: string, value: string | boolean | number | any[]): Promise<void> {
+export async function setSetting<T>(game: Game, settingsKey: string, value: T): Promise<void> {
     await game.settings.set(namespace, settingsKey, value);
 }
