@@ -12,7 +12,7 @@ import {Activity, getActivityPhase, getActivitySkills, KingdomPhase} from '../da
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
-import {getCompanionSkillUnlocks} from '../data/companions';
+import {getCompanionSkillUnlocks, getOverrideUnlockCompanionNames} from '../data/companions';
 import {capitalize, unslugify} from '../../utils';
 import {activityData} from '../data/activityData';
 import {rollCheck} from '../rolls';
@@ -114,7 +114,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
 
     private getActivitySkills(ranks: SkillRanks): Skill[] {
         const activity = this.activity!;
-        const companionUnlockSkills = (Object.entries(getCompanionSkillUnlocks(this.kingdom.leaders)) as [Skill, Activity[]][])
+        const companionSkillUnlocks = getCompanionSkillUnlocks(this.kingdom.leaders, getOverrideUnlockCompanionNames(this.game));
+        const companionUnlockSkills = (Object.entries(companionSkillUnlocks) as [Skill, Activity[]][])
             .filter(([, activities]) => activities.includes(activity))
             .map(([skill]) => skill);
         const activitySkills = getActivitySkills(activity, ranks);

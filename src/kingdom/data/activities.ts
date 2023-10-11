@@ -85,6 +85,9 @@ export const allActivities = [
     'trade-commodities',
     'train-army',
     'warfare-exercises',
+    // V&K
+    'reconnoiter-hex',
+    'take-charge',
 ] as const;
 
 export type Activity = typeof allActivities[number];

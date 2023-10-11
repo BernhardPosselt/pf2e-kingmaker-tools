@@ -5,11 +5,13 @@ import {isFirstGm} from './utils';
 import {Migration} from './migrations/migration';
 import {Migration2} from './migrations/migration2';
 import {Migration3} from './migrations/migration3';
+import {Migration4} from './migrations/migration4';
 
 
 const migrations: Migration[] = [
     new Migration2(),
     new Migration3(),
+    new Migration4(),
 ];
 
 interface BackupParams {

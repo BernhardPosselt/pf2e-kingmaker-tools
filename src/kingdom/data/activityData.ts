@@ -2149,6 +2149,74 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
             msg: 'You accidentally form incorrect assumptions about your military tactics. The next time you roll a failure on an Army activity this Kingdom turn, it becomes a critical failure instead.',
         },
     },
+    'reconnoiter-hex': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: false,
+        phase: 'leadership',
+        dc: 'control',
+        title: 'Reconnoiter Hex',
+        description: `You send a team to spend time surveying and exploring a specific hex, getting the lay of the land and looking for unusual features and specific sites. ${loseRP(1)} and then attempt a Basic check.`,
+        skills: simpleRank(['wilderness']),
+        criticalSuccess: {
+            msg: 'Your team successfully explores the hex and it is now Reconnoitered for the purpose of Claim Hex. Your team automatically finds one Special or Hidden feature if the hex contains one. If the hex contains multiple Special or Hidden Features the GM chooses one. If the hex contains an Encounter or Hazard, the team avoids it and reports back useful and detailed information on it. In addition, your team\'s reconnaissance of the hex goes so smoothly you may immediately attempt an additional Reconnoiter Hex activity on an adjacent hex. Treat a Critical Success on this additional check as a Success instead.',
+        },
+        success: {
+            msg: 'Your team successfully explores the hex and it is now Reconnoitered for the purpose of Claim Hex. If the hex contains a Special feature your team may find it if your GM wishes. If the hex contains an Encounter or Hazard, the team avoids it and reports basic information on it.',
+        },
+        failure: {
+            msg: 'Your team fails to explore the hex sufficiently. If the hex contains an Encounter or Hazard, the team escapes it and reports basic information on it.',
+        },
+        criticalFailure: {
+            msg: 'Your team fails to explore the hex sufficiently and a number of the team are lost, causing you to take a -1 circumstance penalty to Loyalty-based checks until the end of your next Kingdom turn. If the hex contains an Encounter or Hazard, the team members were lost to it and the survivors can report back basic information on it.',
+            modifiers: () => [{
+                turns: 2,
+                enabled: true,
+                abilities: ['loyalty'],
+                value: -1,
+                name: 'Reconnoiter Hex: Critical Failure',
+                type: 'circumstance',
+            }],
+        },
+    },
+    'take-charge': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: false,
+        phase: 'leadership',
+        dc: 'control',
+        title: 'Reconnoiter Hex',
+        description: 'You spend some time getting directly involved in helping your kingdom. Choose a skill that your Kingdom is at least Trained in, then attempt a basic check. You can never use the same skill for this activity twice in the same Kingdom turn.',
+        skills: simpleRank([...allSkills], 1),
+        criticalSuccess: {
+            msg: `${gainRP(1)}. In addition you get a +1 Circumstance Bonus to the next Check you make this turn with the chosen skill. `,
+            modifiers: () => [{
+                turns: 1,
+                consumeId: '',
+                enabled: false,
+                value: 1,
+                name: 'Take Charge: Critical Success',
+                type: 'circumstance',
+            }],
+        },
+        success: {
+            msg: gainRP(1),
+        },
+        failure: {
+            msg: 'You fail to generate RP.',
+        },
+        criticalFailure: {
+            msg: 'You take a -1 Circumstance Penalty to the next Check you make this turn with the chosen skill.',
+            modifiers: () => [{
+                turns: 1,
+                consumeId: '',
+                enabled: false,
+                value: -1,
+                name: 'Take Charge: Critical Failure',
+                type: 'circumstance',
+            }],
+        },
+    },
 };
 
 export function findHelp(activity: Activity): ActivityContent {

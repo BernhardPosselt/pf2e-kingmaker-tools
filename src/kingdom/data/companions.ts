@@ -3,6 +3,7 @@ import {Skill} from './skills';
 import {Leader} from './leaders';
 import {Leaders, LeaderValues} from './kingdom';
 import {mergeObjects} from '../../utils';
+import {getStringArraySetting} from '../../settings';
 
 const allActorTypes = [
     'pc',
@@ -29,6 +30,10 @@ export const allCompanions = [
 ] as const;
 
 export type Companion = typeof allCompanions[number];
+
+export function isCompanionName(name: string): name is Companion {
+    return allCompanions.includes(name as Companion);
+}
 
 export type UnlockSkills = Partial<Record<Skill, Activity[]>>;
 
@@ -58,9 +63,9 @@ export const companionActivityUnlocks: Record<Companion, CompanionUnlock> = {
     },
 };
 
-export function getCompanionUnlock(role: Leader, values: LeaderValues): CompanionUnlock | undefined {
-    const name = values.name;
-    const unlock = name in companionActivityUnlocks ? companionActivityUnlocks[name as Companion] : undefined;
+function getCompanionUnlock(role: Leader, values: LeaderValues): CompanionUnlock | undefined {
+    const leaderName = values.name;
+    const unlock = leaderName in companionActivityUnlocks ? companionActivityUnlocks[leaderName as Companion] : undefined;
     if (values.type === 'companion' && unlock?.roles?.has(role)) {
         return unlock;
     } else {
@@ -68,17 +73,21 @@ export function getCompanionUnlock(role: Leader, values: LeaderValues): Companio
     }
 }
 
-export function getCompanionUnlocks(leaders: Leaders): CompanionUnlock[] {
-    return (Object.entries(leaders) as [Leader, LeaderValues][])
+function getCompanionUnlocks(leaders: Leaders, alwaysEnableCompanionNames: Set<Companion>): CompanionUnlock[] {
+    const overridenUnlocks = Array.from(alwaysEnableCompanionNames)
+        .map(name => companionActivityUnlocks[name]) as CompanionUnlock[];
+    const leaderUnlocks = (Object.entries(leaders) as [Leader, LeaderValues][])
         .flatMap(([role, values]) => {
             const unlock = getCompanionUnlock(role, values);
-            if (unlock) {
+            const companionName = values.name;
+            const overridden = isCompanionName(companionName) && alwaysEnableCompanionNames.has(companionName);
+            if (!overridden && unlock) {
                 return unlock;
             } else {
                 return [];
             }
         });
-
+    return [...leaderUnlocks, ...overridenUnlocks];
 }
 
 function checkCompanionRoleInvested(leader: Leader, values: LeaderValues): boolean {
@@ -88,6 +97,7 @@ function checkCompanionRoleInvested(leader: Leader, values: LeaderValues): boole
         return values.invested;
     }
 }
+
 export function applyLeaderCompanionRules(leaders: Leaders): Leaders {
     return {
         counselor: {...leaders.counselor, invested: checkCompanionRoleInvested('counselor', leaders.counselor)},
@@ -101,13 +111,19 @@ export function applyLeaderCompanionRules(leaders: Leaders): Leaders {
     };
 }
 
-export function getCompanionUnlockActivities(leaders: Leaders): Activity[] {
-    return getCompanionUnlocks(leaders)
+export function getCompanionUnlockActivities(leaders: Leaders, alwaysEnableCompanionNames: Set<Companion>): Activity[] {
+    return getCompanionUnlocks(leaders, alwaysEnableCompanionNames)
         .flatMap(unlock => unlock.activities);
 }
 
-export function getCompanionSkillUnlocks(leaders: Leaders): UnlockSkills {
-    return getCompanionUnlocks(leaders)
+export function getCompanionSkillUnlocks(leaders: Leaders, alwaysEnableCompanionNames: Set<Companion>): UnlockSkills {
+    return getCompanionUnlocks(leaders, alwaysEnableCompanionNames)
         .map(unlock => unlock.actionSkills)
         .reduce((prev, curr) => mergeObjects(prev, curr, (a, b) => [...a, ...b]), {});
+}
+
+export function getOverrideUnlockCompanionNames(game: Game): Set<Companion> {
+    const setting = getStringArraySetting(game, 'forceEnabledCompanionLeadershipBenefits')
+        .filter(isCompanionName);
+    return new Set<Companion>(setting);
 }

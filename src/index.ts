@@ -33,6 +33,7 @@ import {migrate} from './migrations';
 import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} from './armies/hooks';
 import {updateKingdomArmyConsumption} from './armies/utils';
 import {showArmyHelpDialog} from './armies/dialogs/help';
+import {CompanionLeadershipBenefits} from './kingdom/dialogs/override-companion-activities';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -161,6 +162,21 @@ Hooks.on('ready', async () => {
             default: 'gmroll',
             type: String,
             choices: rollModeChoices,
+        });
+        gameInstance.settings.register<string, string, []>('pf2e-kingmaker-tools', 'forceEnabledCompanionLeadershipBenefits', {
+            name: 'Force Enabled Companion Leadership Benefits',
+            scope: 'world',
+            config: false,
+            default: [],
+            type: Array,
+        });
+        game.settings.registerMenu('pf2e-kingmaker-tools', 'forceEnabledCompanionLeadershipBenefitsMenu', {
+            name: 'Force Enable Companion Leadership Benefits',
+            label: 'Configure',
+            hint: 'Enable companion leadership bonuses to be shown regardless of if they are filling a leadership role',
+            icon: 'fas fa-gears',
+            type: CompanionLeadershipBenefits,
+            restricted: true,
         });
         gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'weatherHazardRange', {
             name: 'Weather Hazard Range',

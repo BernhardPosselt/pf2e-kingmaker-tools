@@ -40,7 +40,12 @@ import {rollCultEvent, rollKingdomEvent} from '../kingdom-events';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
 import {featuresByLevel, uniqueFeatures} from './data/features';
-import {allCompanions, applyLeaderCompanionRules, getCompanionUnlockActivities} from './data/companions';
+import {
+    allCompanions,
+    applyLeaderCompanionRules,
+    getCompanionUnlockActivities,
+    getOverrideUnlockCompanionNames,
+} from './data/companions';
 import {
     Activity,
     allActivities,
@@ -134,7 +139,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, kingdomData);
         const activeSettlement = getSettlement(this.game, kingdomData, kingdomData.activeSettlement);
 
-        const unlockedActivities = new Set<Activity>([...unlockedSettlementActivities, ...getCompanionUnlockActivities(kingdomData.leaders)]);
+        const unlockedActivities = new Set<Activity>([
+            ...unlockedSettlementActivities,
+            ...getCompanionUnlockActivities(kingdomData.leaders, getOverrideUnlockCompanionNames(this.game)),
+        ]);
         const hideActivities = kingdomData.activityBlacklist
             .map(activity => {
                 return {[activity]: true};
