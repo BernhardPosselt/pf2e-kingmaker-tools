@@ -8,8 +8,23 @@ import {getBooleanSetting} from '../settings';
 class StructureError extends Error {
 }
 
+function calculateLots(structure: Structure, tokenWidth: number, tokenHeight: number): Structure {
+    if (structure.lots !== undefined) {
+        return structure;
+    } else {
+        return {
+            ...structure,
+            lots: tokenWidth * tokenHeight,
+        };
+    }
+}
 
-function parseStructureData(name: string | null, data: unknown): Structure | undefined {
+function parseStructureData(
+    name: string | null,
+    data: unknown,
+    tokenWidth: number,
+    tokenHeight: number,
+): Structure | undefined {
     if (data === undefined || data === null) {
         return undefined;
     } else if (typeof data === 'object' && 'ref' in data) {
@@ -18,7 +33,7 @@ function parseStructureData(name: string | null, data: unknown): Structure | und
         if (lookedUpStructure === undefined) {
             throw new StructureError(`No predefined structure data found for actor with name ${name}, aborting`);
         }
-        return lookedUpStructure;
+        return calculateLots(lookedUpStructure, tokenWidth, tokenHeight);
     } else if (name !== null) {
         const rule = {
             name,
@@ -30,9 +45,10 @@ function parseStructureData(name: string | null, data: unknown): Structure | und
             console.error('Validation Error', result.error);
             throw new StructureError(`Structure with name ${name} failed to validate, aborting. See console log (F12) for more details`);
         }
-        return rule;
+        return calculateLots(rule, tokenWidth, tokenHeight);
     } else {
-        return data as Structure;
+        const result: Structure = data as Structure;
+        return calculateLots(result, tokenWidth, tokenHeight);
     }
 }
 
@@ -40,8 +56,12 @@ function getSceneStructures(scene: Scene): Structure[] {
     try {
         return scene.tokens
             .filter(t => t.actor !== null && t.actor !== undefined)
-            .map(t => t.actor)
-            .map(actor => parseStructureData(actor!.name, actor!.getFlag('pf2e-kingmaker-tools', 'structureData')))
+            .map(t => {
+                const result: [Actor | null, number, number] = [t.actor, t.width ?? 1, t.height ?? 1];
+                return result;
+            })
+            .map(([actor, width, height]) =>
+                parseStructureData(actor!.name, actor!.getFlag('pf2e-kingmaker-tools', 'structureData'), width, height))
             .filter(data => data !== undefined) as Structure[] ?? [];
     } catch (e: unknown) {
         if (e instanceof StructureError) {

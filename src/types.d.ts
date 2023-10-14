@@ -159,6 +159,11 @@ declare global {
         };
     }
 
+    interface TokenDocument {
+        height: number;
+        width: number;
+    }
+
     interface Scene {
         weather: WeatherEffectName;
     }

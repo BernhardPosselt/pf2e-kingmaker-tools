@@ -44,4 +44,5 @@ export const ruleSchema = Joi.object({
     }).optional(),
     unlockActivities: Joi.array().items(Joi.string().valid(...allActivities)).optional(),
     traits: Joi.array().items(Joi.string().valid(...allBuildingTraits)).optional(),
+    lots: Joi.number().optional(),
 });

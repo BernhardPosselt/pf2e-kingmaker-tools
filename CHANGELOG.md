@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.1] - 2023-10-14
+
+### Fixed
+
+* Previously only the number of Residential buildings was used to calculate Overcrowded; this is now the sum of all Residential buildings' token size (width * height); this can be overridden via a new **lots** building rules element
+
 ## [0.8.0] - 2023-10-12
 
 ### Added

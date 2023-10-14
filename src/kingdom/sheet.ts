@@ -675,7 +675,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private isOvercrowded(settlement: SettlementAndScene): boolean {
         const structureStackMode = getStructureStackMode(this.game);
         const structures = getStructureResult(structureStackMode, settlement);
-        return settlement.settlement.lots > structures.residentialBuildings;
+        return settlement.settlement.lots > structures.residentialLots;
     }
 
     private async adjustUnrest(): Promise<void> {

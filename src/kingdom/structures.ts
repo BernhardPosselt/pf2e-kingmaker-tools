@@ -26,8 +26,9 @@ export interface StructureResult {
     consumption: number;
     config: SettlementConfig;
     unlockActivities: Activity[];
-    residentialBuildings: number;
+    residentialLots: number;
     hasBridge: boolean;
+    lots: number;
 }
 
 function count<T>(items: T[], idFunction: (item: T) => string): Map<string, { count: number, item: T }> {
@@ -428,7 +429,11 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
         consumptionReduction,
         consumption: Math.max(0, settlementData.consumption - consumptionReduction),
         unlockActivities: [],
-        residentialBuildings: structures.filter(structure => structure?.traits?.includes('residential')).length,
+        residentialLots: structures
+            .filter(structure => structure?.traits?.includes('residential'))
+            .map(s => s.lots ?? 1)
+            .reduce((a, b) => a + b, 0),
+        lots: structures.map(s => s.lots ?? 1).reduce((a, b) => a + b, 0),
         hasBridge: structures.some(structure => structure.isBridge),
     };
     const unionizedStructures = unionizeStructures(structures);

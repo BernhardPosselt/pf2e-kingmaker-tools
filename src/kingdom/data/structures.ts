@@ -52,6 +52,7 @@ export interface Structure {
     consumptionReduction?: number;
     unlockActivities?: Activity[];
     traits?: BuildingTrait[];
+    lots?: number;
 }
 
 export const allBuildingTraits = ['edifice', 'yard', 'building', 'famous', 'infamous', 'residential', 'infrastructure'];
@@ -169,6 +170,7 @@ const structures: Structure[] = [
         name: 'Bridge',
         isBridge: true,
         traits: ['infrastructure'],
+        lots: 0,
     },
     {
         name: 'Castle',
@@ -425,6 +427,7 @@ const structures: Structure[] = [
     {
         name: 'Magical Streetlamps',
         traits: ['infrastructure'],
+        lots: 0,
     },
     {
         name: 'Mansion',
@@ -579,8 +582,9 @@ const structures: Structure[] = [
         traits: ['yard'],
     },
     {
-      name: 'Paved Streets',
+        name: 'Paved Streets',
         traits: ['infrastructure'],
+        lots: 0,
     },
     {
         name: 'Pier',
@@ -639,6 +643,7 @@ const structures: Structure[] = [
         }],
         consumptionReduction: 1,
         traits: ['infrastructure'],
+        lots: 0,
     },
     {
         name: 'Shrine',
@@ -821,10 +826,12 @@ const structures: Structure[] = [
     {
         name: 'Wall, Stone',
         traits: ['infrastructure'],
+        lots: 0,
     },
     {
         name: 'Wall, Wooden',
         traits: ['infrastructure'],
+        lots: 0,
     },
     {
         name: 'Watchtower',
