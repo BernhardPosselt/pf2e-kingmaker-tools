@@ -191,6 +191,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ruin: this.getRuin(kingdomData.ruin),
             commodities: this.getCommodities(kingdomData),
             workSites: this.getWorkSites(kingdomData.workSites),
+            farmlands: kingdomData.workSites.farmlands.quantity,
             ...this.getActiveTabs(),
             skills: calculateSkills({
                 ruin: kingdomData.ruin,
@@ -850,12 +851,28 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private getWorkSites(workSites: WorkSites): object {
-        return Object.fromEntries(Object.entries(workSites)
-            .map(([key, values]) => {
-                const label = key === 'lumberCamps' ? 'Lumber Camps' : (key === 'luxurySources' ? 'Luxury Sources' : capitalize(key));
-                return [key, {label: label, ...values}];
-            }),
-        );
+        return {
+            lumberCamps: {
+                label: 'Lumber',
+                total: workSites.lumberCamps.quantity + workSites.lumberCamps.resources,
+                ...workSites.lumberCamps,
+            },
+            mines: {
+                label: 'Ore',
+                total: workSites.mines.quantity + workSites.mines.resources,
+                ...workSites.mines,
+            },
+            quarries: {
+                label: 'Stone',
+                total: workSites.quarries.quantity + workSites.quarries.resources,
+                ...workSites.quarries,
+            },
+            luxurySources: {
+                label: 'Luxuries',
+                total: workSites.luxurySources.quantity + workSites.luxurySources.resources,
+                ...workSites.luxurySources,
+            },
+        };
     }
 
     private getCommodities(kingdom: Kingdom): object {

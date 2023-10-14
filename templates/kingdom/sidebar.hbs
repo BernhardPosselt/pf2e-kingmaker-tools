@@ -3,13 +3,13 @@
         <th>Active Settlement</th>
         <td>
             {{#if settlements}}
-            <select name="activeSettlement">
-                {{#select activeSettlement}}
-                    {{#each settlements}}
-                        <option value="{{sceneId}}">{{name}}</option>
-                    {{/each}}
-                {{/select}}
-            </select>
+                <select name="activeSettlement">
+                    {{#select activeSettlement}}
+                        {{#each settlements}}
+                            <option value="{{sceneId}}">{{name}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
             {{else}}
                 No settlements found!
             {{/if}}
@@ -51,7 +51,8 @@
             <td><input type="number" value="{{this.threshold}}" name="ruin.{{@key}}.threshold"></td>
             <td><input type="number" value="{{this.penalty}}" name="ruin.{{@key}}.penalty"></td>
             <td title="DC 16 Flat Check to reduce {{this.label}} Penalty by 1">
-                <button class="km-reduce-ruin" data-ruin="{{@key}}" type="button" {{#unless this.canReduce}}disabled{{/unless}}><i class="fa-solid fa-dice-d20"></i></button>
+                <button class="km-reduce-ruin" data-ruin="{{@key}}" type="button"
+                        {{#unless this.canReduce}}disabled{{/unless}}><i class="fa-solid fa-dice-d20"></i></button>
             </td>
         </tr>
     {{/each}}
@@ -67,7 +68,8 @@
         <td>{{resourceDieSize}}</td>
         <td>{{resourceDiceNum}}</td>
         <td class="smaller-number-input"><input type="number" value="{{resourceDice.now}}" name="resourceDice.now"></td>
-        <td class="smaller-number-input"><input type="number" value="{{resourceDice.next}}" name="resourceDice.next"></td>
+        <td class="smaller-number-input"><input type="number" value="{{resourceDice.next}}" name="resourceDice.next">
+        </td>
     </tr>
 </table>
 <table class="km-table">
@@ -126,17 +128,31 @@
         </tr>
     {{/each}}
 </table>
+
 <table class="km-table">
     <tr>
-        <th>Worksite</th>
-        <th>Quantity</th>
-        <th>Resources</th>
+        <th>Farmlands</th>
+    </tr>
+    <tr>
+        <td><input type="number" value="{{farmlands}}" name="workSites.farmlands.quantity"></td>
+    </tr>
+</table>
+
+<table class="km-table">
+    <tr>
+        <th>Income</th>
+        <th>Worksites</th>
+        <th>+</th>
+        <th>Extra Resources</th>
+        <th>Total</th>
     </tr>
     {{#each workSites}}
         <tr>
             <td>{{label}}</td>
             <td><input type="number" value="{{quantity}}" name="workSites.{{@key}}.quantity"></td>
+            <td>+</td>
             <td><input type="number" value="{{resources}}" name=workSites.{{@key}}.resources></td>
+            <td>{{total}}</td>
         </tr>
     {{/each}}
 </table>
