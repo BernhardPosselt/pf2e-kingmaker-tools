@@ -171,15 +171,15 @@ export function createActivityLabel(activity: Activity, kingdom: Kingdom): strin
     let label = unslugify(activity);
     if (activity === 'claim-hex') {
         if (kingdomLevel >= 9) {
-            label += ' (three times per round)';
+            label += ' (three times per turn)';
         } else if (kingdomLevel >= 4) {
-            label += ' (twice per round)';
+            label += ' (twice per turn)';
         } else {
-            label += ' (once per round)';
+            label += ' (once per turn)';
         }
     }
     if (trainedActivities.has(activity) && oncePerRoundActivities.has(activity)) {
-        label += ' (once per round, trained)';
+        label += ' (once per turn, trained)';
     } else if (trainedActivities.has(activity)) {
         label += ' (trained)';
     } else if (expertActivities.has(activity)) {
@@ -187,7 +187,7 @@ export function createActivityLabel(activity: Activity, kingdom: Kingdom): strin
     } else if (masterActivities.has(activity)) {
         label += ' (master)';
     } else if (oncePerRoundActivities.has(activity)) {
-        label += ' (once per round)';
+        label += ' (once per turn)';
     }
     const data = activityData[activity];
     const hint = data.hint;
