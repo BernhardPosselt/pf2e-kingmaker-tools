@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2023-10-14
+
+### Added
+
+* Setting to configure rp to xp conversion rate
+* Setting to configure xp per claimed hex
+* Setting to configure rp to xp conversion limit
+* Move kingdom settings into kingdom sheet
+
 ### Changed
 
 * Improve visual design for marking up farmlands and resource income
+* Kingdom Settings have been moved to the Kingdom Sheet header
 
 ## [0.8.1] - 2023-10-14
 

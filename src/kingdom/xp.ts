@@ -1,5 +1,17 @@
-export function calculateHexXP(hexes: number, kingdomSize: number, useHomebrew: boolean): number {
-    if (useHomebrew) {
+export function calculateHexXP(
+    {
+        hexes,
+        kingdomSize,
+        useVK,
+        xpPerClaimedHex,
+    }: {
+        hexes: number,
+        xpPerClaimedHex: number,
+        kingdomSize: number,
+        useVK: boolean
+    },
+): number {
+    if (useVK) {
         if (kingdomSize < 10) {
             return hexes * 100;
         } else if (kingdomSize < 25) {
@@ -12,13 +24,27 @@ export function calculateHexXP(hexes: number, kingdomSize: number, useHomebrew: 
             return hexes * 5;
         }
     } else {
-        return hexes * 10;
+        return hexes * xpPerClaimedHex;
     }
 }
 
-export function calculateRpXP(rp: number, kingdomLevel: number, useHomebrew: boolean): number {
+export function calculateRpXP(
+    {
+        rp,
+        kingdomLevel,
+        rpToXpConversionRate,
+        rpToXpConversionLimit,
+        useVK,
+    }: {
+        rp: number,
+        kingdomLevel: number,
+        rpToXpConversionRate: number,
+        rpToXpConversionLimit: number,
+        useVK: boolean
+    },
+): number {
     let xp = 0;
-    if (useHomebrew) {
+    if (useVK) {
         if (kingdomLevel < 5) {
             xp = rp * 10;
         } else if (kingdomLevel < 9) {
@@ -29,9 +55,9 @@ export function calculateRpXP(rp: number, kingdomLevel: number, useHomebrew: boo
             xp = rp * 2;
         }
     } else {
-        xp = rp;
+        xp = rp * rpToXpConversionRate;
     }
-    return Math.min(120, xp);
+    return Math.min(rpToXpConversionLimit, xp);
 }
 
 export function calculateEventXP(modifier: number): number {

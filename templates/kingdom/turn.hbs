@@ -85,7 +85,8 @@
 {{#each leadershipActivities}}
     <div class="activity-help" {{#if (lookup ../hideActivities value)}}hidden{{/if}}>
         <button type="button" class="kingdom-activity" data-activity="{{value}}"
-            {{#unless (lookup ../enabledActivities value)}}title="Insufficient Proficiencies or Lacking Buildings" disabled{{/unless}}
+            {{#unless (lookup ../enabledActivities value)}}title="Insufficient Proficiencies or Lacking Buildings"
+                disabled{{/unless}}
         >{{label}}</button>
         <button type="button" class="show-help" data-help="{{value}}"><i
                 class="fa-solid fa-question"></i>
@@ -95,9 +96,12 @@
 
 <h2>Region Activities (3)</h2>
 
-<p>You can attempt 2 Region activities simultaneously as long as both activities take place in the same hex and the hex is either a {{heartlandLabel}}. You take a –2 penalty to Kingdom skill checks made during these two activities.</p>
+<p>You can attempt 2 Region activities simultaneously as long as both activities take place in the same hex and the hex
+    is either a {{heartlandLabel}}. You take a –2 penalty to Kingdom skill checks made during these two activities.</p>
 
-<p>A hex can have at most one of these: Farmland, Freehold, Ruins, Settlement, Structure, or Work Site. A Settlement can be built in a hex that contains Ruins or a Structure. A Free Hold can be brought into your kingdom in which case it becomes a Settlement instead.</p>
+<p>A hex can have at most one of these: Farmland, Freehold, Ruins, Settlement, Structure, or Work Site. A Settlement can
+    be built in a hex that contains Ruins or a Structure. A Free Hold can be brought into your kingdom in which case it
+    becomes a Settlement instead.</p>
 
 {{#each regionActivities}}
     <div class="activity-help" {{#if (lookup ../hideActivities value)}}hidden{{/if}}>
@@ -152,9 +156,12 @@
 
 <h2>Event Phase</h2>
 
-<div {{#unless isGM}}hidden{{/unless}}>
+<div {{#unless cultOfTheBloomEvents}}hidden{{/unless}}>
     <h3>Cult of the Bloom Events</h3>
-    <p>These events happen after completing a day of downtime researching the Cult of the Bloom in Chapter 5. The first time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the kingdom was in dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet tracks them as milestones.</p>
+    <p>These events happen after completing a day of downtime researching the Cult of the Bloom in Chapter 5. The first
+        time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the kingdom was in
+        dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet tracks them as
+        milestones.</p>
     <button type="button" id="km-check-cult-event">Check for Cult Event (DC {{cultEventDC}})</button>
     <button type="button" id="km-roll-cult-event">Roll Cult Event</button>
 </div>
@@ -179,7 +186,8 @@
     {{/each}}
 </table>
 <button type="button" id="km-add-event">Add Ongoing Event <i class="fa-solid fa-plus"></i></button>
-<p><b>Hint:</b> You can also add an ongoing event by right-clicking on the rolled event in chat and choosing <b>Add to Ongoing Events</b></p>
+<p><b>Hint:</b> You can also add an ongoing event by right-clicking on the rolled event in chat and choosing <b>Add to
+    Ongoing Events</b></p>
 
 <h2>Apply Kingdom XP</h2>
 Resolved Event with Modifier:

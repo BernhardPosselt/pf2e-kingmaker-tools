@@ -1,0 +1,205 @@
+<form class="km-settings-form">
+    <h2>General</h2>
+    <div>
+        <div class="form-elements">
+            <label for="km-cult-of-the-bloom-events">Enable Cult of the Bloom Events</label>
+            <input name="cultOfTheBloomEvents" type="checkbox" id="km-cult-of-the-bloom-events" {{checked
+                    cultOfTheBloomEvents}}>
+        </div>
+        <div class="help">
+            <p>If enabled, adds a <b>Cult of the Bloom Events</b> section in <b>Event Phase</b></p>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-kingdom-events-roll-mode">Kingdom Events Roll Mode</label>
+            <select name="kingdomEventRollMode" id="km-kingdom-events-roll-mode">
+                {{#select kingdomEventRollMode}}
+                    <option value="publicroll">Public Roll</option>
+                    <option value="gmroll">Private GM Roll</option>
+                    <option value="blindroll">Blind GM Roll</option>
+                    <option value="selfroll">Self Roll</option>
+                {{/select}}
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-kingdom-events-table-name">Kingdom Events Table Name</label>
+            <input name="kingdomEventsTable" type="text" id="km-kingdom-events-table-name"
+                   value="{{kingdomEventsTable}}">
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-cult-events-table-name">Cult Events Table Name</label>
+            <input name="kingdomCultTable" type="text" id="km-cult-events-table-name" value="{{kingdomCultTable}}">
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-vk-xp-rules">Vance & Kerenshara XP Rules</label>
+            <input name="vkXpRules" type="checkbox" id="km-vk-xp-rules" {{checked vkXpRules}}>
+        </div>
+        <div class="help">
+            <p>Adds additional milestones and increases XP for claiming hexes and converting XP at lower levels</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-xp-per-claimed-hex">XP Per Claimed Hex</label>
+            <input name="xpPerClaimedHex"
+                   type="number"
+                   id="km-xp-per-claimed-hex"
+                   value="{{xpPerClaimedHex}}"
+                   {{#if vkXpRules}}disabled{{/if}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-xp-to-rp-conversion-rate">RP to XP Conversion Rate</label>
+            <input name="rpToXPConversionRate"
+                   type="number"
+                   id="km-xp-to-rp-conversion-rate"
+                   value="{{rpToXPConversionRate}}"
+                   {{#if vkXpRules}}disabled{{/if}}>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-rp-to-xp-conversion-limit">RP to XP Conversion Limit</label>
+            <input name="rpToXpConversionLimit"
+                   type="number"
+                   id="km-rp-to-xp-conversion-limit"
+                   value="{{rpToXpConversionLimit}}">
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-double-skill-increases">Double Skill Increases</label>
+            <input name="doubleSkillIncreases" type="checkbox"
+                   id="km-double-skill-increases" {{checked doubleSkillIncreases}}>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-untrained-skill-proficiency">Always Increase Untrained Skills By</label>
+            <select name="untrainedSkillProficiency" id="km-untrained-skill-proficiency">
+                {{#select untrainedSkillProficiency}}
+                    <option value="level">Full Level</option>
+                    <option value="halfLevel">Half Level</option>
+                    <option value="none">None</option>
+                {{/select}}
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-all-structure-item-bonuses-stack">All Structures Item Bonuses Stack</label>
+            <input name="allStructuresItemBonusesStack" type="checkbox"
+                   id="km-all-structure-item-bonuses-stack" {{checked allStructuresItemBonusesStack}}>
+        </div>
+        <div class="help"><p>If enabled, groups item bonuses from all structures, regardless of if they are same
+            building type</p></div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-automatically-calculate-army-consumption">Automatically Calculate Army Consumption</label>
+            <input name="automaticallyCalculateArmyConsumption" type="checkbox"
+                   id="km-automatically-calculate-army-consumption" {{checked automaticallyCalculateArmyConsumption}}>
+        </div>
+        <div class="help"><p>If enabled, gets all visible army tokens on all scenes and sums up their consumption</p>
+        </div>
+    </div>
+
+    <h2>Force Enable Companion Leader Benefits</h2>
+    <p>If enabled, will add the companions activity or other benefit without them being assigned to their respective
+        leader position</p>
+    <div>
+        <div class="form-elements">
+            <label for="km-amiri">Amiri</label>
+            <input id="km-amiri" name="companions.amiri" type="checkbox" {{checked companions.amiri}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-ekundayo">Ekundayo</label>
+            <input id="km-ekundayo" name="companions.ekunday" type="checkbox" {{checked companions.ekunday}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-harrim">Harrim</label>
+            <input id="km-harrim" name="companions.harrim" type="checkbox" {{checked companions.harrim}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-jaethal">Jaethal</label>
+            <input id="km-jaethal" name="companions.jaethal" type="checkbox" {{checked companions.jaethal}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-jubilost">Jubilost</label>
+            <input id="km-jubilost" name="companions.jubilost" type="checkbox" {{checked companions.jubilost}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-kalikke">Kalikke</label>
+            <input id="km-kalikke" name="companions.kalikke" type="checkbox" {{checked companions.kalikke}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-kanerah">Kanerah</label>
+            <input id="km-kanerah" name="companions.kanerah" type="checkbox" {{checked companions.kanerah}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-linzi">Linzi</label>
+            <input id="km-linzi" name="companions.linzi" type="checkbox" {{checked companions.linzi}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-nok-nok">Nok-Nok</label>
+            <input id="km-nok-nok" name="companions.noknok" type="checkbox" {{checked companions.noknok}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-octavia">Octavia</label>
+            <input id="km-octavia" name="companions.octavia" type="checkbox" {{checked companions.octavia}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-regongar">Regongar</label>
+            <input id="km-regongar" name="companions.regongar" type="checkbox" {{checked companions.regongar}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-tristian">Tristian</label>
+            <input id="km-tristian" name="companions.tristian" type="checkbox" {{checked companions.tristian}}>
+        </div>
+    </div>
+    <div>
+        <div class="form-elements">
+            <label for="km-valerie">Valerie</label>
+            <input id="km-valerie" name="companions.valerie" type="checkbox" {{checked companions.valerie}}>
+        </div>
+    </div>
+    <button class="save">Save</button>
+</form>

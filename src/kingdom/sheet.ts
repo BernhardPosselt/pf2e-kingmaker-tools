@@ -1,4 +1,4 @@
-import {getBooleanSetting, getStringSetting} from '../settings';
+import {getBooleanSetting, getNumberSetting, getStringSetting} from '../settings';
 import {
     allFameTypes,
     allHeartlands,
@@ -68,6 +68,7 @@ import {getKingdom, saveKingdom} from './storage';
 import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
 import {calculateUnrestPenalty} from './data/unrest';
 import {editSettlementDialog} from './dialogs/edit-settlement-dialog';
+import {showKingdomSettings} from './dialogs/kingdom-settings';
 
 interface KingdomOptions {
     game: Game;
@@ -287,6 +288,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             useXpHomebrew,
             canAddSettlement,
             effects: createEffects(kingdomData.modifiers),
+            cultOfTheBloomEvents: getBooleanSetting(this.game, 'cultOfTheBloomEvents') && isGM,
         };
     }
 
@@ -407,14 +409,25 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const hexes = parseInt(target.dataset.hexes ?? '0', 10);
                     const current = this.getKingdom();
                     const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
-                    await this.increaseXP(calculateHexXP(hexes, current.size, useHomeBrew));
+                    await this.increaseXP(calculateHexXP({
+                        hexes,
+                        kingdomSize: current.size,
+                        useVK: useHomeBrew,
+                        xpPerClaimedHex: getNumberSetting(this.game, 'xpPerClaimedHex'),
+                    }));
                 });
             });
         $html.querySelector('#km-rp-to-xp')
             ?.addEventListener('click', async () => {
                 const current = this.getKingdom();
                 const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
-                await this.increaseXP(calculateRpXP(current.resourcePoints.now, current.level, useHomeBrew));
+                await this.increaseXP(calculateRpXP({
+                    useVK: useHomeBrew,
+                    kingdomLevel: current.level,
+                    rpToXpConversionLimit: getNumberSetting(this.game, 'rpToXpConversionLimit'),
+                    rpToXpConversionRate: getNumberSetting(this.game, 'rpToXpConversionRate'),
+                    rp: current.resourcePoints.now,
+                }));
             });
         $html.querySelector('#solutions-to-xp')
             ?.addEventListener('click', async () => {
@@ -552,6 +565,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'modifiers'));
             });
+        $html.querySelector('.kingdom-settings')?.addEventListener('click', () => showKingdomSettings({
+            game: this.game,
+            sheetActor: this.sheetActor,
+            onSave: () => {
+                this.render();
+            },
+        }));
         $html.querySelectorAll('.edit-settlement')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => {

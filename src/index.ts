@@ -33,7 +33,6 @@ import {migrate} from './migrations';
 import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} from './armies/hooks';
 import {updateKingdomArmyConsumption} from './armies/utils';
 import {showArmyHelpDialog} from './armies/dialogs/help';
-import {CompanionLeadershipBenefits} from './kingdom/dialogs/override-companion-activities';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -170,20 +169,36 @@ Hooks.on('ready', async () => {
             default: [],
             type: Array,
         });
-        game.settings.registerMenu('pf2e-kingmaker-tools', 'forceEnabledCompanionLeadershipBenefitsMenu', {
-            name: 'Force Enable Companion Leadership Benefits',
-            label: 'Configure',
-            hint: 'Enable companion leadership bonuses to be shown regardless of if they are filling a leadership role',
-            icon: 'fas fa-gears',
-            type: CompanionLeadershipBenefits,
-            restricted: true,
-        });
         gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'weatherHazardRange', {
             name: 'Weather Hazard Range',
             hint: 'Maximum Level of Weather Event that can occur. Added to Average Party Level.',
             default: 4,
             config: true,
             type: Number,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'rpToXpConversionRate', {
+            default: 1,
+            config: false,
+            type: Number,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'rpToXpConversionLimit', {
+            default: 120,
+            config: false,
+            type: Number,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'xpPerClaimedHex', {
+            default: 10,
+            config: false,
+            type: Number,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'cultOfTheBloomEvents', {
+            default: true,
+            config: false,
+            type: Boolean,
             scope: 'world',
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'currentWeatherFx', {
@@ -221,7 +236,7 @@ Hooks.on('ready', async () => {
         gameInstance.settings.register<string, string, string>('pf2e-kingmaker-tools', 'kingdomEventRollMode', {
             name: 'Kingdom Events Roll Mode',
             scope: 'world',
-            config: true,
+            config: false,
             default: 'gmroll',
             type: String,
             choices: rollModeChoices,
@@ -229,14 +244,14 @@ Hooks.on('ready', async () => {
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomEventsTable', {
             name: 'Kingdom Events Table Name',
             scope: 'world',
-            config: true,
+            config: false,
             default: 'Random Kingdom Events',
             type: String,
         });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomCultTable', {
             name: 'Kingdom Cult Events Table Name',
             scope: 'world',
-            config: true,
+            config: false,
             default: 'Random Cult Events',
             type: String,
         });
@@ -244,7 +259,7 @@ Hooks.on('ready', async () => {
             name: 'Enable Vance and Kerenshara XP rules',
             hint: 'Adds additional Milestone Events, more XP for claiming hexes and RP',
             scope: 'world',
-            config: true,
+            config: false,
             default: false,
             requiresReload: true,
             type: Boolean,
@@ -253,7 +268,7 @@ Hooks.on('ready', async () => {
             name: 'Always add half Level to Skill',
             hint: 'If enabled, always adds half of the kingdom\'s level to a skill, even if it is untrained',
             scope: 'world',
-            config: true,
+            config: false,
             default: false,
             requiresReload: true,
             type: Boolean,
@@ -262,7 +277,7 @@ Hooks.on('ready', async () => {
             name: 'Always add Level to Skill',
             hint: 'If enabled, always adds the kingdom\'s level to a skill, even if it is untrained. Overrides Always add half Level to Skill',
             scope: 'world',
-            config: true,
+            config: false,
             default: false,
             requiresReload: true,
             type: Boolean,
@@ -271,7 +286,7 @@ Hooks.on('ready', async () => {
             name: 'Double Skill Increases',
             hint: 'If enabled, adds Skill Increases for all even levels from level 2 onwards',
             scope: 'world',
-            config: true,
+            config: false,
             default: false,
             requiresReload: true,
             type: Boolean,
@@ -280,7 +295,7 @@ Hooks.on('ready', async () => {
             name: 'All Structure Item Bonuses Stack',
             hint: 'If enabled, groups item bonuses from all structures, regardless of if they are same building type',
             scope: 'world',
-            config: true,
+            config: false,
             default: false,
             requiresReload: true,
             type: Boolean,
@@ -289,7 +304,7 @@ Hooks.on('ready', async () => {
             name: 'Automatically Calculate Army Consumption',
             hint: 'If enabled, gets all visible army tokens on all scenes and sums up their consumption',
             scope: 'world',
-            config: true,
+            config: false,
             default: true,
             requiresReload: true,
             type: Boolean,

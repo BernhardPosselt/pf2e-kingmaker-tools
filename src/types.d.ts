@@ -55,10 +55,12 @@ declare global {
         degreeOfSuccess: DegreeOfSuccess;
     }
 
+    export type RollMode = 'publicroll' | 'roll' | 'gmroll' | 'blindroll' | 'selfroll';
+
     interface RollOptions {
         dc?: { value: number };
         extraRollOptions?: string[];
-        rollMode?: 'publicroll' | 'roll' | 'gmroll' | 'blindroll' | 'selfroll';
+        rollMode?: RollMode;
     }
 
     interface ActorSkill {

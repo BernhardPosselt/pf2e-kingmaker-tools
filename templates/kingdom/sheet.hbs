@@ -10,10 +10,11 @@
                     <th>Level</th>
                     <th>{{fameLabel}}</th>
                     <th>Next</th>
+                    <th {{#unless isGM}}hidden{{/unless}}>Config</th>
                 </tr>
                 <tr>
                     <td><input id="km-kingdom-name" type="text" value="{{name}}" name="name"></td>
-                    <td><input type="number" value="{{size}}" name="size"></td>
+                    <td class="km-size"><input type="number" value="{{size}}" name="size"></td>
                     <td>{{type}}</td>
                     <td><input type="number" value="{{xp}}" name="xp"> / <input type="number" value="{{xpThreshold}}"
                                                                                 name="xpThreshold"></td>
@@ -45,6 +46,9 @@
                                 <option value="3">3</option>
                             {{/select}}
                         </select>
+                    </td>
+                    <td {{#unless isGM}}hidden{{/unless}}>
+                        <button type="button" class="kingdom-settings"><i class="fas fa-cog"></i></button>
                     </td>
                 </tr>
             </table>
