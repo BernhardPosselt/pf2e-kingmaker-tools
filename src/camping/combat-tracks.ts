@@ -103,7 +103,7 @@ function getKingmakerCombatSound(game: Game, name: string): PlaylistSound | unde
 }
 
 /**
- * use overriden playlist first if it exists, otherwise fall back to kingmaker module one if
+ * use overridden playlist first if it exists, otherwise fall back to kingmaker module one if
  * kingmaker has one available
  */
 function getRegionPlaylist(game: Game, region: string): Playlist | PlaylistSound | undefined {
@@ -128,27 +128,33 @@ function getDefaultPlaylist(game: Game): Playlist | PlaylistSound | undefined {
     }
 }
 
+function getRegion(game: Game): string {
+    const campingActor = getCampingActor(game);
+    if (campingActor) {
+        const camping = getCamping(campingActor);
+        return camping.currentRegion;
+    } else {
+        return 'Brevoy';
+    }
+}
+
 async function ifPlaylistExists(game: Game, actors: Actor[], callback: (playlist: Playlist | PlaylistSound) => Promise<void>): Promise<void> {
     if (isFirstGm(game) && getBooleanSetting(game, 'enableCombatTracks')) {
-        const campingActor = getCampingActor(game);
-        if (campingActor) {
-            const camping = getCamping(campingActor);
-            const region = camping.currentRegion;
-            const actorsPlaylist = actors
-                .map(a => getEntityPlaylist(a))
-                .find(a => !isBlank(a));
-            const sceneCombatPlaylist = game.scenes?.active ? getEntityPlaylist(game.scenes.active) : undefined;
-            const regionPlaylist = getRegionPlaylist(game, region);
-            const defaultPlaylist = getDefaultPlaylist(game);
-            const playlist =
-                (actorsPlaylist ? game.playlists?.getName(actorsPlaylist) : undefined)
-                ?? (sceneCombatPlaylist ? game.playlists?.getName(sceneCombatPlaylist) : undefined)
-                ?? regionPlaylist
-                ?? defaultPlaylist;
-            console.log('Found Playlist ' + playlist?.name);
-            if (playlist) {
-                await callback(playlist);
-            }
+        const region = getRegion(game);
+        const actorsPlaylist = actors
+            .map(a => getEntityPlaylist(a))
+            .find(a => !isBlank(a));
+        const sceneCombatPlaylist = game.scenes?.active ? getEntityPlaylist(game.scenes.active) : undefined;
+        const regionPlaylist = getRegionPlaylist(game, region);
+        const defaultPlaylist = getDefaultPlaylist(game);
+        const playlist =
+            (actorsPlaylist ? game.playlists?.getName(actorsPlaylist) : undefined)
+            ?? (sceneCombatPlaylist ? game.playlists?.getName(sceneCombatPlaylist) : undefined)
+            ?? regionPlaylist
+            ?? defaultPlaylist;
+        console.log('Found Playlist ' + playlist?.name);
+        if (playlist) {
+            await callback(playlist);
         }
     }
 }
