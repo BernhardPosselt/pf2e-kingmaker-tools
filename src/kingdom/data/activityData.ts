@@ -533,7 +533,11 @@ When you use an Exploration check, choose a location within 20 hexes of the army
 When you use a Boating check, the army’s starting point and ending point must be connected by a body of water; choose any location within 20 hexes along this route.
 
 You must be at least master in Magic to attempt a Magic check. When you do so, choose any location within 30 hexes of the army’s current hex, then roll your check. If the army’s deployment causes it to cross your kingdom’s border, the DC increases by 5. If the army’s deployment causes it to cross an enemy kingdom’s border, the DC instead increases by 10.`,
-        skills: simpleRank(['warfare']),
+        skills: {
+            warfare: 0,
+            boating: 0,
+            magic: 3,
+        },
         criticalSuccess: {
             msg: 'The army arrives much more quickly than you anticipated; it arrives at its destination and then becomes efficient.',
         },
