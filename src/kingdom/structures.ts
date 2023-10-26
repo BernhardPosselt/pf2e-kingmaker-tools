@@ -58,7 +58,7 @@ export function groupStructures(structures: Structure[], maxItemBonus: number): 
                 availableItemsRules: structure?.availableItemsRules?.map(rule => {
                     return {
                         ...rule,
-                        value: Math.min(rule.value * data.count, maxItemBonus),
+                        value: Math.min(rule.value * data.count, 3),
                     };
                 }),
                 settlementEventRules: structure?.settlementEventRules?.map(rule => {
@@ -114,7 +114,8 @@ function calculateItemLevelBonus(
     return Math.min(value + globallyStackingBonuses + defaultPenalty, maxItemLevelBonus);
 }
 
-function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Structure[], maxItemLevelBonus: number): void {
+function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Structure[]): void {
+    const maxItemLevelBonus = 3;
     const defaultPenalty = structures.some(structure => structure.preventItemLevelPenalty === true) ? 0 : -2;
 
     // apply base values that stack with everything
@@ -446,6 +447,6 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
     applySettlementEventBonuses(result, allGroupedStructures);
     applyLeadershipActivityBonuses(result, allGroupedStructures);
     applySkillBonusRules(result.skillBonuses, allGroupedStructures);
-    applyItemLevelRules(result.itemLevelBonuses, allGroupedStructures, maxItemBonus);
+    applyItemLevelRules(result.itemLevelBonuses, allGroupedStructures);
     return result;
 }

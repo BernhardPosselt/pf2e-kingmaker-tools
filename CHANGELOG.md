@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2023-10-14
 
 ### Added
-
+ 
 * Setting to configure rp to xp conversion rate
 * Setting to configure xp per claimed hex
 * Setting to configure rp to xp conversion limit
