@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Turn kingdom feat bonuses all into status bonuses since about half of them provide circumstance bonuses anyway
+* Turn kingdom feat bonuses all into circumstance bonuses since about half of them provide circumstance bonuses anyway
 
 ## [0.10.0] - 2023-10-27
 
