@@ -125,9 +125,11 @@ The following variant rules are supported in the settings:
   the [XP Awards table](https://2e.aonprd.com/Rules.aspx?ID=575)
 * [Based on James Jacob's answers](https://paizo.com/threads/rzs43ogm?How-am-I-misreading-the-camping-rules#3) all
   camping activities included in the journals are extended to 2 hours.
-* Kalikke's **Deliberate Planning** activity had its status bonus changed to a circumstance bonus. Reasoning for that is
-  that not a single activity uses a status bonus, it's all circumstance bonuses. Plus a +1 status bonus is obsolete from
+* Kalikke's **Deliberate Planning** activity had its Status Bonus changed to a Circumstance Bonus. Reasoning for that is
+  that not a single leadership activity grants a status bonus, it's all Circumstance Bonuses. Plus a +1 Status bonus is
+  obsolete from
   level 1.
+* Using a similar line of reasoning, Kingdom Feats provide Circumstance Bonuses instead of Status Bonuses
 * Occult Shop ups the limit for Occult and not Magical items in your settlements
 
 ### Structures

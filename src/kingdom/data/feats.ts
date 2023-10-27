@@ -33,12 +33,12 @@ export const allFeats: KingdomFeat[] = [
         name: 'Civil Service',
         level: 1,
         text: `Everyone has a place and a role, and as long as those roles are filled, the government functions. When you
-select this feat, choose one leadership role; that role is now supported by your efficient civil servants, so its vacancy penalty is no longer applicable. If you wish to change the leadership role to which Civil Service applies, you can do so using the New Leadership activity at the start of a Kingdom turn. You gain a +2 status bonus to New Leadership checks.`,
+select this feat, choose one leadership role; that role is now supported by your efficient civil servants, so its vacancy penalty is no longer applicable. If you wish to change the leadership role to which Civil Service applies, you can do so using the New Leadership activity at the start of a Kingdom turn. You gain a +2 circumstance bonus to New Leadership checks.`,
         modifiers: [{
             name: 'Swapping Civil Service',
             enabled: false,
             value: 2,
-            type: 'status',
+            type: 'circumstance',
             activities: ['new-leadership'],
         }],
     },
@@ -56,12 +56,12 @@ does not allow you to ever improve a critical failure to a success.)`,
         level: 1,
         prerequisites: 'Trained in Warfare',
         text: `Your rule brooks no dissent and stamps out traitors, making harsh examples of them. Once per Kingdom
-turn when you gain Unrest, you can attempt to crush the dissent by attempting a basic Warfare check. On a success, the Unrest increase is canceled, but on a critical failure, the Unrest increase is doubled. In addition, you gain a +1 status bonus to checks to resolve dangerous kingdom events that involve internal bickering, such as Feud.`,
+turn when you gain Unrest, you can attempt to crush the dissent by attempting a basic Warfare check. On a success, the Unrest increase is canceled, but on a critical failure, the Unrest increase is doubled. In addition, you gain a +1 circumstance bonus to checks to resolve dangerous kingdom events that involve internal bickering, such as Feud.`,
         modifiers: [{
             name: 'Dangerous Kingdom Event involving internal bickering',
             enabled: false,
             value: 1,
-            type: 'status',
+            type: 'circumstance',
             phases: ['event'],
         }],
     },
@@ -70,7 +70,7 @@ turn when you gain Unrest, you can attempt to crush the dissent by attempting a 
         level: 1,
         prerequisites: 'Trained in Defense',
         text: `Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize
-the value of a strong defense when it comes to building settlements and fortifications. You gain a +2 circumstance bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 status bonus to all kingdom checks attempted during dangerous events that directly impact
+the value of a strong defense when it comes to building settlements and fortifications. You gain a +2 circumstance bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 circumstance bonus to all kingdom checks attempted during dangerous events that directly impact
 your settlements’ defenses.`,
         modifiers: [{
             name: 'Fortified Fiefs',
@@ -86,7 +86,7 @@ your settlements’ defenses.`,
             value: 2,
         }, {
             name: 'Dangerous Event impacting settlement defenses',
-            type: 'status',
+            type: 'circumstance',
             phases: ['event'],
             enabled: false,
             value: 1,
@@ -97,10 +97,10 @@ your settlements’ defenses.`,
         level: 1,
         prerequisites: 'Trained in Industry',
         text: `Your leading citizens share valuable business information with one another and with associates in
-other lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 status bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn.`,
+other lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 circumstance bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn.`,
         modifiers: [{
             name: 'Insider Trading',
-            type: 'status',
+            type: 'circumstance',
             activities: ['establish-work-site-quarry', 'establish-work-site-lumber', 'establish-work-site-mine', 'establish-trade-agreement', 'trade-commodities'],
             enabled: true,
             value: 1,
@@ -119,10 +119,10 @@ other lands, and they hire one another’s workers to supply the labor they need
         level: 1,
         prerequisites: 'Trained in Magic',
         text: `Magic has an honored place in your society, and your people incorporate it into their everyday work to make
-life easier. You gain a +1 status bonus to Magic checks, and you can use Magic checks in place of Engineering checks. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.`,
+life easier. You gain a +1 circumstance bonus to Magic checks, and you can use Magic checks in place of Engineering checks. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.`,
         modifiers: [{
             name: 'Practical Magic',
-            type: 'status',
+            type: 'circumstance',
             skills: ['magic'],
             enabled: true,
             value: 1,
@@ -156,10 +156,10 @@ multiple times, choosing a new skill each time.`,
         level: 3,
         prerequisites: 'Culture 14',
         text: `Your kingdom’s artists and entertainers are talented and prolific, and there’s never a shortage of new plays, operas, novels, music, sculptures, paintings, or other forms of distraction to entertain the citizens, even during
-times of upheaval. Your kingdom gains a +2 status bonus to all Culture-based skill checks whenever your kingdom has at least 1 Unrest.`,
+times of upheaval. Your kingdom gains a +2 circumstance bonus to all Culture-based skill checks whenever your kingdom has at least 1 Unrest.`,
         modifiers: [{
             name: 'Inspiring Entertainment',
-            type: 'status',
+            type: 'circumstance',
             enabled: true,
             abilities: ['culture'],
             value: 2,
@@ -184,10 +184,10 @@ a Kingdom turn in which you are forced to spend RP as the result of a failed ski
         name: 'Quick Recovery',
         level: 3,
         prerequisites: 'Stability 14',
-        text: 'Your kingdom recovers more quickly from danger and disaster. Whenever you attempt a skill check to end an ongoing harmful kingdom event, you gain a +4 status bonus to the check.',
+        text: 'Your kingdom recovers more quickly from danger and disaster. Whenever you attempt a skill check to end an ongoing harmful kingdom event, you gain a +4 circumstance bonus to the check.',
         modifiers: [{
             name: 'Ongoing Harmful Event',
-            type: 'status',
+            type: 'circumstance',
             enabled: false,
             phases: ['event'],
             value: 4,
