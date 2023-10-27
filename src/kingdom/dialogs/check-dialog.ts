@@ -11,7 +11,7 @@ import {
 import {Activity, getActivityPhase, getActivitySkills, KingdomPhase} from '../data/activities';
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
-import {getControlDC, Kingdom, SkillRanks} from '../data/kingdom';
+import {getControlDC, hasFeat, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks, getOverrideUnlockCompanionNames} from '../data/companions';
 import {capitalize, unslugify} from '../../utils';
 import {activityData} from '../data/activityData';
@@ -119,7 +119,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             .filter(([, activities]) => activities.includes(activity))
             .map(([skill]) => skill);
         const activitySkills = getActivitySkills(activity, ranks);
-        return Array.from(new Set([...activitySkills, ...companionUnlockSkills]));
+        const practicalMagic: Skill[] = activitySkills.includes('engineering') && hasFeat(this.kingdom, 'Practical Magic') ? ['magic'] : [];
+        return Array.from(new Set([...activitySkills, ...companionUnlockSkills, ...practicalMagic]));
     }
 
     override getData(options?: Partial<FormApplicationOptions & { feats: KingdomFeat[] }>): Promise<object> | object {

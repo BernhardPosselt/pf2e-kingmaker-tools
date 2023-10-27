@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* Add Magic to usable skills when Engineering is allowed and Practical Magic is chosen
 * Fortified Fiefs now gives you a +1 status bonus to dangerous events
 * Available item calculation does not cap out at the maximum item level bonus anymore and buildings stack with more
   specific ones now enabling a maximum bonus of +13
