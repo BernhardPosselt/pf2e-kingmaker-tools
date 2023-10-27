@@ -105,15 +105,6 @@ function applySkillBonusRules(result: SkillItemBonuses, structures: Structure[])
     });
 }
 
-function calculateItemLevelBonus(
-    defaultPenalty: number,
-    globallyStackingBonuses: number,
-    value: number,
-    maxItemLevelBonus: number,
-): number {
-    return Math.min(value + globallyStackingBonuses + defaultPenalty, maxItemLevelBonus);
-}
-
 function calculateItemLevelGroupBonus(
     structures: Structure[],
     maximum: number,
