@@ -128,7 +128,7 @@ The following variant rules are supported in the settings:
 * Kalikke's **Deliberate Planning** activity had its status bonus changed to a circumstance bonus. Reasoning for that is
   that not a single activity uses a status bonus, it's all circumstance bonuses. Plus a +1 status bonus is obsolete from
   level 1.
-* Occult shop ups the limit for Occult and not Magical items in your settlements
+* Occult Shop ups the limit for Occult and not Magical items in your settlements
 
 ### Structures
 
