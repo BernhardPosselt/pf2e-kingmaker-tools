@@ -1,4 +1,4 @@
-import {ActivityBonuses, ItemGroup, ItemLevelBonuses, SkillItemBonuses} from '../data/structures';
+import {ActivityBonuses, ItemLevelBonuses, SkillItemBonuses} from '../data/structures';
 import {capitalize, unslugify} from '../../utils';
 import {StructureResult} from '../structures';
 import {hasFeat, Kingdom} from '../data/kingdom';
@@ -21,7 +21,6 @@ interface SkillBonusData extends LabeledData<number> {
 
 interface ItemLevelBonusData {
     label: string;
-    type: ItemGroup;
     value: number;
 }
 
@@ -98,47 +97,34 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
 
     private getAvailableItems(settlementLevel: number, itemLevelBonuses: ItemLevelBonuses): ItemLevelBonusData[] {
         const qualityOfLifeBonus = hasFeat(this.kingdom, 'Quality of Life') ? 1 : 0;
-        const magicTraits = new Set(['arcane', 'divine', 'primal', 'occult']);
-        console.log(itemLevelBonuses, settlementLevel);
-        return this.dedupBonuses(this.dedupBonuses((Object.entries(itemLevelBonuses) as [ItemGroup, number][])
-            .map(([type, bonus]) => {
-                return {
-                    type,
-                    label: capitalize(type),
-                    value: bonus,
-                };
-            }))
-            .map(value => {
-                return {
-                    ...value,
-                    value: Math.max(0, settlementLevel + value.value),
-                };
-            })
-            .map(value => {
-                if (value.type === 'magical' || magicTraits.has(value.type)) {
-                    return {
-                        ...value,
-                        value: value.value + qualityOfLifeBonus,
-                    };
-                } else {
-                    return value;
-                }
-            }));
-    }
-
-    private dedupBonuses(bonuses: ItemLevelBonusData[]): ItemLevelBonusData[] {
-        const magicTraits = new Set(['arcane', 'divine', 'primal', 'occult']);
-        const otherBonus = bonuses.find(v => v.type === 'other')?.value;
-        const magicalBonus = bonuses.find(v => v.type === 'magical')?.value;
-        return bonuses.filter(value => {
-            if (otherBonus !== undefined && magicalBonus !== undefined && magicTraits.has(value.type)) {
-                return value.value > otherBonus && value.value > magicalBonus;
-            } else if (otherBonus !== undefined && value.type !== 'other') {
-                return value.value > otherBonus;
-            } else {
-                return true;
-            }
-        });
+        const bonuses: ItemLevelBonuses = {
+            alchemical: itemLevelBonuses.alchemical + settlementLevel,
+            magical: itemLevelBonuses.magical + qualityOfLifeBonus + settlementLevel,
+            luxuryMagical: itemLevelBonuses.luxuryMagical + qualityOfLifeBonus + settlementLevel,
+            arcane: itemLevelBonuses.arcane + qualityOfLifeBonus + settlementLevel,
+            luxuryArcane: itemLevelBonuses.luxuryArcane + qualityOfLifeBonus + settlementLevel,
+            divine: itemLevelBonuses.divine + qualityOfLifeBonus + settlementLevel,
+            luxuryDivine: itemLevelBonuses.luxuryDivine + qualityOfLifeBonus + settlementLevel,
+            occult: itemLevelBonuses.occult + qualityOfLifeBonus + settlementLevel,
+            luxuryOccult: itemLevelBonuses.luxuryOccult + qualityOfLifeBonus + settlementLevel,
+            primal: itemLevelBonuses.primal + qualityOfLifeBonus + settlementLevel,
+            luxuryPrimal: itemLevelBonuses.luxuryPrimal + qualityOfLifeBonus + settlementLevel,
+            other: itemLevelBonuses.other + settlementLevel,
+        };
+        return [
+            {label: 'Alchemical', value: bonuses.alchemical},
+            {label: 'Magical', value: bonuses.magical},
+            {label: 'Magical (Luxury)', value: bonuses.luxuryMagical},
+            {label: 'Arcane', value: bonuses.arcane},
+            {label: 'Arcane (Luxury)', value: bonuses.luxuryArcane},
+            {label: 'Divine', value: bonuses.divine},
+            {label: 'Divine (Luxury)', value: bonuses.luxuryDivine},
+            {label: 'Occult', value: bonuses.occult},
+            {label: 'Occult (Luxury)', value: bonuses.luxuryOccult},
+            {label: 'Primal', value: bonuses.primal},
+            {label: 'Primal (Luxury)', value: bonuses.luxuryPrimal},
+            {label: 'Other', value: bonuses.other},
+        ];
     }
 
     private getStorage(structures: StructureResult): LabeledData[] {

@@ -132,9 +132,13 @@ describe('structures', () => {
             primal: 1,
             occult: 1,
             arcane: 1,
-            luxury: 1,
             magical: 1,
             other: 1,
+            luxuryMagical: 1,
+            luxuryArcane: 1,
+            luxuryPrimal: 1,
+            luxuryDivine: 1,
+            luxuryOccult: 1,
         });
     });
 
@@ -151,35 +155,344 @@ describe('structures', () => {
             primal: -1,
             occult: -1,
             arcane: -1,
-            luxury: -1,
+            luxuryMagical: -1,
+            luxuryPrimal: -1,
+            luxuryDivine: -1,
+            luxuryArcane: -1,
+            luxuryOccult: -1,
             magical: -1,
             other: -1,
         });
     });
 
-    test('should calculate complex example', () => {
+    test('limit stacking of specific categories to 3', () => {
         const result = evaluateStructures([{
+            name: 'a',
+            preventItemLevelPenalty: true,
+        }, {
             name: 'b',
             availableItemsRules: [{
                 value: 1,
-            }, {
+                group: 'divine',
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
                 value: 1,
-            }, {
+                group: 'divine',
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
                 value: 1,
-                group: 'magical',
-            }, {
-                value: 2,
-                group: 'arcane',
+                group: 'divine',
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }], 15, 'same-structures-stack');
+        expect(result.itemLevelBonuses).toEqual({
+            divine: 3,
+            alchemical: 0,
+            primal: 0,
+            occult: 0,
+            arcane: 0,
+            luxuryOccult: 0,
+            luxuryArcane: 0,
+            luxuryDivine: 3,
+            luxuryMagical: 0,
+            luxuryPrimal: 0,
+            magical: 0,
+            other: 0,
+        });
+    });
+
+    test('categories do not stack across different structures', () => {
+        const result = evaluateStructures([{
+            name: 'a',
+            preventItemLevelPenalty: true,
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
             }],
         }], 15, 'same-structures-stack');
         expect(result.itemLevelBonuses).toEqual({
             divine: 1,
             alchemical: 0,
-            primal: 1,
-            occult: 1,
+            primal: 0,
+            occult: 0,
+            arcane: 0,
+            luxuryOccult: 0,
+            luxuryArcane: 0,
+            luxuryDivine: 1,
+            luxuryMagical: 0,
+            luxuryPrimal: 0,
+            magical: 0,
+            other: 0,
+        });
+    });
+
+    test('other item level bonuses always stack', () => {
+        const result = evaluateStructures([{
+            name: 'a',
+            preventItemLevelPenalty: true,
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+            }],
+        }], 15, 'same-structures-stack');
+        expect(result.itemLevelBonuses).toEqual({
+            divine: 2,
+            alchemical: 2,
+            primal: 2,
+            occult: 2,
             arcane: 2,
-            luxury: 0,
-            magical: 1,
+            luxuryOccult: 2,
+            luxuryArcane: 2,
+            luxuryDivine: 2,
+            luxuryMagical: 2,
+            luxuryPrimal: 2,
+            magical: 2,
+            other: 2,
+        });
+    });
+
+    test('magic item should stack with more specific ones', () => {
+        const result = evaluateStructures([{
+            name: 'a',
+            preventItemLevelPenalty: true,
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'magical',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'magical',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'magical',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'magical',
+            }],
+        }], 15, 'same-structures-stack');
+        expect(result.itemLevelBonuses).toEqual({
+            divine: 6,
+            alchemical: 0,
+            primal: 3,
+            occult: 3,
+            arcane: 3,
+            luxuryOccult: 3,
+            luxuryArcane: 3,
+            luxuryDivine: 6,
+            luxuryMagical: 3,
+            luxuryPrimal: 3,
+            magical: 3,
+            other: 0,
+        });
+    });
+
+    test('ungrouped should stack with magical and specific ones', () => {
+        const result = evaluateStructures([{
+            name: 'a',
+            preventItemLevelPenalty: true,
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'magical',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'magical',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'magical',
+            }],
+        }, {
+            name: 'c',
+            availableItemsRules: [{
+                value: 1,
+                group: 'magical',
+            }],
+        }, {
+            name: 'd',
+            availableItemsRules: [{
+                value: 1,
+                maximumStacks: 3,
+            }],
+        }, {
+            name: 'd',
+            availableItemsRules: [{
+                value: 1,
+                maximumStacks: 3,
+            }],
+        }, {
+            name: 'd',
+            availableItemsRules: [{
+                value: 1,
+                maximumStacks: 3,
+            }],
+        }, {
+            name: 'd',
+            availableItemsRules: [{
+                value: 1,
+                maximumStacks: 3,
+            }],
+        }, {
+            name: 'e',
+            availableItemsRules: [{
+                value: 1,
+                group: 'luxury',
+            }],
+        }], 15, 'same-structures-stack');
+        expect(result.itemLevelBonuses).toEqual({
+            divine: 9,
+            alchemical: 3,
+            primal: 6,
+            occult: 6,
+            arcane: 6,
+            magical: 6,
+            luxuryOccult: 7,
+            luxuryArcane: 7,
+            luxuryDivine: 10,
+            luxuryMagical: 7,
+            luxuryPrimal: 7,
+            other: 3,
+        });
+    });
+
+    test('max stacks should be respected', () => {
+        const result = evaluateStructures([{
+            name: 'a',
+            preventItemLevelPenalty: true,
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+                maximumStacks: 2,
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+                maximumStacks: 2,
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+                maximumStacks: 2,
+            }],
+        }, {
+            name: 'b',
+            availableItemsRules: [{
+                value: 1,
+                group: 'divine',
+                maximumStacks: 2,
+            }],
+        }], 15, 'same-structures-stack');
+        expect(result.itemLevelBonuses).toEqual({
+            divine: 2,
+            alchemical: 0,
+            primal: 0,
+            occult: 0,
+            arcane: 0,
+            luxuryOccult: 0,
+            luxuryArcane: 0,
+            luxuryDivine: 2,
+            luxuryMagical: 0,
+            luxuryPrimal: 0,
+            magical: 0,
             other: 0,
         });
     });

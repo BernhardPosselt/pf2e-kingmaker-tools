@@ -9,15 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* Available item calculation does not cap out at the maximum item level bonus anymore and buildings stack with more
+  specific ones now enabling a maximum bonus of +13
 * Marketplace structure description
 * Enable combat tracks without having to import the camping sheet first
-* Fix Sharpshooter scaling after level 8
-* Fix Deploy Army skills
+* Sharpshooter scaling after level 8
+* Deploy Army skill selection
 
 ## [0.9.0] - 2023-10-14
 
 ### Added
- 
+
 * Setting to configure rp to xp conversion rate
 * Setting to configure xp per claimed hex
 * Setting to configure rp to xp conversion limit
@@ -32,13 +34,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Previously only the number of Residential buildings was used to calculate Overcrowded; this is now the sum of all Residential buildings' token size (width * height); this can be overridden via a new **lots** building rules element
+* Previously only the number of Residential buildings was used to calculate Overcrowded; this is now the sum of all
+  Residential buildings' token size (width * height); this can be overridden via a new **lots** building rules element
 
 ## [0.8.0] - 2023-10-12
 
 ### Added
 
-* Leadership activities Reconnoiter Hex & Take Charge from Vance & Kerenshara; these have to be enabled in the activity blacklist
+* Leadership activities Reconnoiter Hex & Take Charge from Vance & Kerenshara; these have to be enabled in the activity
+  blacklist
 * You can now enable companion leadership activities without adding them as leaders
 
 ## [0.7.2] - 2023-10-10
@@ -69,7 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Roll from Kingmaker Cult & Kingdom events if Kingmaker module is enabled
-* Set Token paths for buildings and companions to Kingmaker module; the previous behavior is now available by installing the https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping module
+* Set Token paths for buildings and companions to Kingmaker module; the previous behavior is now available by installing
+  the https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping module
 * Autoconfigure region and default combat tracks to point to Kingmaker playlists and tracks
 * Autoconfigure snow, rain, rain storm and blizzard to point to Kingmaker SFX tracks
 * Add a setting to disable weather effects

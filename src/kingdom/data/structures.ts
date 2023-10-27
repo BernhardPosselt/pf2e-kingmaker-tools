@@ -18,6 +18,7 @@ export interface AvailableItemsRule {
     value: number;
     // e.g. 'alchemical' or 'magic'
     group?: ItemGroup;
+    maximumStacks?: number;
 }
 
 export interface SettlementEventsRule {
@@ -82,7 +83,20 @@ export const magicalItemGroups: ItemGroup[] = ['magical', 'divine', 'occult', 'p
 export const mundaneItemGroups: ItemGroup[] = ['alchemical', 'luxury', 'other'];
 export const itemGroups: ItemGroup[] = mundaneItemGroups.concat(magicalItemGroups);
 
-export type ItemLevelBonuses = Record<ItemGroup, number>;
+export type ItemLevelBonuses = {
+    alchemical: number;
+    magical: number;
+    divine: number;
+    occult: number;
+    primal: number;
+    arcane: number;
+    luxuryMagical: number;
+    luxuryDivine: number;
+    luxuryPrimal: number;
+    luxuryArcane: number;
+    luxuryOccult: number;
+    other: number;
+};
 
 const structures: Structure[] = [
     {
@@ -103,6 +117,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
             group: 'alchemical',
+            maximumStacks: 3,
         }],
         notes: 'Checks attempted to Identify Alchemy in any settlement with at least one alchemy laboratory gain a +1 item bonus.',
         traits: ['building'],
@@ -117,6 +132,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
             group: 'arcane',
+            maximumStacks: 3,
         }],
         notes: 'While in a settlement with an arcanist\'s tower, you gain a +1 item bonus to checks made to Borrow an Arcane Spell or Learn a Spell.',
         traits: ['building'],
@@ -211,6 +227,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 3,
             group: 'divine',
+            maximumStacks: 3,
         }],
         notes: 'While in a settlement with a cathedral, you gain a +3 item bonus to Lore and Religion checks made to Recall Knowledge while Investigating, and to all faith-themed checks made while Researching.',
         traits: ['building', 'edifice', 'famous', 'infamous'],
@@ -345,6 +362,7 @@ const structures: Structure[] = [
         }],
         availableItemsRules: [{
             value: 1,
+            maximumStacks: 3,
         }],
         traits: ['building', 'infamous'],
     },
@@ -409,6 +427,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
             group: 'luxury',
+            maximumStacks: 3,
         }],
         traits: ['building'],
     },
@@ -421,6 +440,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
             group: 'magical',
+            maximumStacks: 3,
         }],
         traits: ['building'],
     },
@@ -525,6 +545,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
             group: 'occult',
+            maximumStacks: 3,
         }],
         notes: 'While in a settlement with an occult shop, you gain a +2 item bonus to all checks made to Research esoteric subjects or to Recall Knowledge about the same.',
         traits: ['building'],
@@ -621,6 +642,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
             group: 'primal',
+            maximumStacks: 3,
         }],
         traits: ['yard'],
     },
@@ -654,6 +676,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
             group: 'divine',
+            maximumStacks: 3,
         }],
         traits: ['building'],
     },
@@ -775,6 +798,7 @@ const structures: Structure[] = [
         availableItemsRules: [{
             value: 1,
             group: 'divine',
+            maximumStacks: 3,
         }],
         traits: ['building', 'famous', 'infamous'],
     },
@@ -851,6 +875,7 @@ const structures: Structure[] = [
         }],
         availableItemsRules: [{
             value: 1,
+            maximumStacks: 1,
         }],
         traits: ['yard'],
     },

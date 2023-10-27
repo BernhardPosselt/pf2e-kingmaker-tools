@@ -1,11 +1,10 @@
-import {mergeObjects} from '../utils';
+import {mergeObjects, sum} from '../utils';
 import {Activity, getActivitySkills} from './data/activities';
 import {
     ActivityBonusRule,
     CommodityStorage,
     ItemGroup,
     ItemLevelBonuses,
-    magicalItemGroups,
     SkillBonusRule,
     SkillItemBonus,
     SkillItemBonuses,
@@ -56,9 +55,10 @@ export function groupStructures(structures: Structure[], maxItemBonus: number): 
                     };
                 }),
                 availableItemsRules: structure?.availableItemsRules?.map(rule => {
+                    const values = rule.value * data.count;
                     return {
                         ...rule,
-                        value: Math.min(rule.value * data.count, 3),
+                        value: rule.maximumStacks === undefined ? values : Math.min(values, rule.maximumStacks),
                     };
                 }),
                 settlementEventRules: structure?.settlementEventRules?.map(rule => {
@@ -114,51 +114,52 @@ function calculateItemLevelBonus(
     return Math.min(value + globallyStackingBonuses + defaultPenalty, maxItemLevelBonus);
 }
 
+function calculateItemLevelGroupBonus(
+    structures: Structure[],
+    maximum: number,
+    group: ItemGroup | undefined,
+    stackMode: 'always-stack' | 'never-stack' = 'never-stack',
+): number {
+    const structureValues = structures
+        .flatMap(structures => structures.availableItemsRules ?? [])
+        .filter(rule => rule.group === group)
+        .map(rule => rule.value);
+    if (stackMode === 'always-stack') {
+        return sum(structureValues);
+    } else {
+        return Math.min(
+            Math.max(...structureValues, 0),
+            maximum,
+        );
+    }
+}
+
 function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Structure[]): void {
     const maxItemLevelBonus = 3;
     const defaultPenalty = structures.some(structure => structure.preventItemLevelPenalty === true) ? 0 : -2;
 
-    // apply base values that stack with everything
-    const globallyStackingBonuses = Math.min(
-        structures
-            .flatMap(structures => structures.availableItemsRules ?? [])
-            .filter(rule => rule.group === undefined)
-            .map(rule => rule.value)
-            .reduce((a, b) => a + b, 0),
-        maxItemLevelBonus,
-    );
+    // calculate untyped bonuses
+    const otherBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, undefined, 'always-stack');
+    const alchemicalBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'alchemical');
+    const luxuryBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'luxury');
+    const magicalBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'magical');
+    const divineBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'divine');
+    const primalBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'primal');
+    const arcaneBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'arcane');
+    const occultBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'occult');
 
-    const defaultBonus = calculateItemLevelBonus(defaultPenalty, globallyStackingBonuses, 0, maxItemLevelBonus);
-    (Object.keys(itemLevelBonuses) as (ItemGroup)[]).forEach((key) => {
-        itemLevelBonuses[key] = defaultBonus;
-    });
-
-    // magical overrides primal, divine, arcane, occult
-    structures.forEach(structure => {
-        structure.availableItemsRules?.forEach(rule => {
-            const group = rule.group;
-            if (group === 'magical') {
-                const value = calculateItemLevelBonus(defaultPenalty, globallyStackingBonuses, rule.value, maxItemLevelBonus);
-                magicalItemGroups.forEach(type => {
-                    if (value > itemLevelBonuses[type]) {
-                        itemLevelBonuses[type] = value;
-                    }
-                });
-            }
-        });
-    });
-
-    structures.forEach(structure => {
-        structure.availableItemsRules?.forEach(rule => {
-            const group = rule.group;
-            if (group) {
-                const value = calculateItemLevelBonus(defaultPenalty, globallyStackingBonuses, rule.value, maxItemLevelBonus);
-                if (value > itemLevelBonuses[group]) {
-                    itemLevelBonuses[group] = value;
-                }
-            }
-        });
-    });
+    itemLevelBonuses.other = otherBonuses + defaultPenalty;
+    itemLevelBonuses.alchemical = alchemicalBonuses + itemLevelBonuses.other;
+    itemLevelBonuses.magical = magicalBonuses + itemLevelBonuses.other;
+    itemLevelBonuses.divine = itemLevelBonuses.magical + divineBonuses;
+    itemLevelBonuses.primal = itemLevelBonuses.magical + primalBonuses;
+    itemLevelBonuses.arcane = itemLevelBonuses.magical + arcaneBonuses;
+    itemLevelBonuses.occult = itemLevelBonuses.magical + occultBonuses;
+    itemLevelBonuses.luxuryMagical = itemLevelBonuses.magical + luxuryBonuses;
+    itemLevelBonuses.luxuryOccult = itemLevelBonuses.occult + luxuryBonuses;
+    itemLevelBonuses.luxuryArcane = itemLevelBonuses.arcane + luxuryBonuses;
+    itemLevelBonuses.luxuryPrimal = itemLevelBonuses.primal + luxuryBonuses;
+    itemLevelBonuses.luxuryDivine = itemLevelBonuses.divine + luxuryBonuses;
 }
 
 function applyLeadershipActivityBonuses(result: StructureResult, structures: Structure[]): void {
@@ -413,9 +414,13 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
             primal: 0,
             occult: 0,
             arcane: 0,
-            luxury: 0,
             magical: 0,
             other: 0,
+            luxuryOccult: 0,
+            luxuryArcane: 0,
+            luxuryDivine: 0,
+            luxuryMagical: 0,
+            luxuryPrimal: 0,
         },
         settlementEventBonus: 0,
         leadershipActivityBonus: 0,

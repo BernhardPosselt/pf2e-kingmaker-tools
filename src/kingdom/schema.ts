@@ -28,6 +28,7 @@ export const ruleSchema = Joi.object({
     availableItemsRules: Joi.array().items(Joi.object({
         value: Joi.number().required(),
         group: Joi.string().valid(...itemGroups).optional(),
+        maximumStacks: Joi.number().optional(),
     })).optional(),
     settlementEventRules: Joi.array().items(Joi.object({
         value: Joi.number().required(),
