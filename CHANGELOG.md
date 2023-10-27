@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* Marketplace structure description
 * Enable combat tracks without having to import the camping sheet first
 * Fix Sharpshooter scaling after level 8
 * Fix Deploy Army skills
