@@ -48,11 +48,15 @@ the [Kingmaker Tools Token Mapping](https://github.com/BernhardPosselt/pf2e-king
 
 ### Armies
 
-This module ships a stop gap solution to armies which use NPC statblocks which are automatically scaled once their level changes.
-To create a new army, use the **Edit Army Statistic** macro and follow the guidelines in the **Help** Section (button in title bar) or **Army Help** macro. The automatic level scaling can be undone by clicking on the **Disable** button next to the **Help** button
+This module ships a stop gap solution to armies which use NPC statblocks which are automatically scaled once their level
+changes.
+To create a new army, use the **Edit Army Statistic** macro and follow the guidelines in the **Help** Section (button in
+title bar) or **Army Help** macro. The automatic level scaling can be undone by clicking on the **Disable** button next
+to the **Help** button
 ![Army Macro](docs/images/army-macro.png)
 
-All armies use NPC statblocks which use unlinked actor tokens. Follow the **Help** section in **Edit Army Statistic** or **Army Help** macro.
+All armies use NPC statblocks which use unlinked actor tokens. Follow the **Help** section in **Edit Army Statistic** or
+**Army Help** macro.
 ![Army Macro](docs/images/armies.png)
 
 ### Camping Sheet
@@ -76,11 +80,13 @@ The camping sheet does the following:
 * Allows you to add custom recipes and activities
 * Takes care of calculating and adding/subtracting rations and ingredients based on the chosen recipes
 * Allows you to roll random encounter checks
-* Completely automates resting by automatically rolling random encounters, perception checks and running the **Rest for the Night** macro for all actors
+* Completely automates resting by automatically rolling random encounters, perception checks and running the **Rest for
+  the Night** macro for all actors
 
 For more detailed information, consult the **Help** button in the camping sheet's title bar.
 
-**Note**: Syncing camping effects is a very slow process, so if you want to run all companions, create 1 companion **character** sheet instead of adding all 13 companions
+**Note**: Syncing camping effects is a very slow process, so if you want to run all companions, create 1 companion *
+*character** sheet instead of adding all 13 companions
 
 **Note**: Random Encounters can be given a proxy roll table like the one listed
 in [The Hexploration](https://2e.aonprd.com/Rules.aspx?ID=1276) rules. If you do, the String value "Creature" indicates
@@ -92,13 +98,16 @@ to roll on the region roll table. Leave the proxy table setting blank to roll on
 
 ![Kingdom Sheet](docs/images/kingdom-sheet.png)
 
-The Kingdom sheet auto calculates almost everything related to kingdom building. You launch it exclusively with the **View Kingdom** Macro.
+The Kingdom sheet auto calculates almost everything related to kingdom building. You launch it exclusively with the *
+*View Kingdom** Macro.
 
-On first launch, it copies an actor with the name **Kingdom Sheet** into your actors folder. This actor is used to store the sheet data and can be placed anywhere but you must not change its name.
+On first launch, it copies an actor with the name **Kingdom Sheet** into your actors folder. This actor is used to store
+the sheet data and can be placed anywhere but you must not change its name.
 
 If you want to give your players access to the sheet, edit the actor's permissions as usually.
 
-In addition, you want to add a settlement scene. To do that, navigate to the tab holding your structures and click **Add Current Scene** in your **Settlements** tab. You need to repeat this for all of your scenes that hold structures.
+In addition, you want to add a settlement scene. To do that, navigate to the tab holding your structures and click **Add
+Current Scene** in your **Settlements** tab. You need to repeat this for all of your scenes that hold structures.
 
 ![Add Settlement](docs/images/add-current-scene.png)
 
@@ -119,6 +128,7 @@ The following variant rules are supported in the settings:
 * Kalikke's **Deliberate Planning** activity had its status bonus changed to a circumstance bonus. Reasoning for that is
   that not a single activity uses a status bonus, it's all circumstance bonuses. Plus a +1 status bonus is obsolete from
   level 1.
+* Occult shop ups the limit for Occult and not Magical items in your settlements
 
 ### Structures
 
@@ -132,7 +142,8 @@ All structures in a settlement can be automatically summed up and calculated by 
 
 ![Kingdom Sheet Macro](docs/images/kingdom-sheet-macro.png)
 
-If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
+If you want to home brew structure rules, you can use the **Edit Structure Rules** Macro but be aware, that these **are
+not considered stable yet and won't be migrated**, so you need to keep up with any changes manually.
 
 A guide on structure rules [is available here](docs/structure-rules.md)
 
@@ -165,7 +176,8 @@ follow the provided instructions.
 **Note**: The official module does not ship Regongar's token. This module links to the expected location, so it should
 fix itself automatically once they release an update.
 
-Some tokens are not provided by the official module and you need to gather place these into your **Data/pf2e-kingmaker-tools-tokens/** directory under the following paths:
+Some tokens are not provided by the official module and you need to gather place these into your *
+*Data/pf2e-kingmaker-tools-tokens/** directory under the following paths:
 
 ![Skills Macro](docs/images/token-structure.png)
 
@@ -251,7 +263,8 @@ Each day, a new value is rolled from the roll table and persisted across all sce
 The CRPG ships with various combat tracks that depend on the region (e.g. Narlmarches), scene (e.g. caves, ruins) or
 actor (e.g. Vordakai). If Combat Tracks are enabled, it tries to find a playlist in the following order:
 
-* Combat playlist of the first actor with a playlist on the combat tracker (Configurable via **Set Combat Playlist** Macro by selecting a token)
+* Combat playlist of the first actor with a playlist on the combat tracker (Configurable via **Set Combat Playlist**
+  Macro by selecting a token)
 * Combat playlist of the active scene (Configurable via **Set Combat Playlist** Macro by not selecting a token)
 * Combat playlist of the current region (e.g. **Kingmaker.Rostland Hinterlands**)
 * Combat playlist called **Kingmaker.Default**
