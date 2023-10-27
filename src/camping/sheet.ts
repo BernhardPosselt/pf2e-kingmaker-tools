@@ -339,6 +339,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             const current = await this.read();
             await this.update({encounterModifier: current.encounterModifier - 1});
         });
+        listenClick($html, '.reset-adventuring-time', async () => await this.resetAdventuringSince());
         listenClick($html, '.eat-food', async () => await eat(this.game, await this.read()));
         listenClick($html, '.increase-zone-dc-modifier', async () => {
             const current = await this.read();
@@ -814,6 +815,12 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             await postHuntAndGatherResult(actor, ingredients);
             await this.persistActivityDegreeOfSuccess(current, result, activity.name);
         }
+    }
+
+    private async resetAdventuringSince(): Promise<void> {
+        await saveCamping(this.game, this.actor, {
+            dailyPrepsAtTime: this.game.time.worldTime,
+        });
     }
 }
 

@@ -1,7 +1,8 @@
 import {getNumberSetting, getRollMode, RollMode} from '../settings';
 import {buildUuids, rollRollTable} from '../roll-tables';
 import {setWeather} from './weather';
-import {eventLevels, getSeason, GolarionMonth} from '../camping/regions';
+import {eventLevels, getSeason, GolarionMonth, golarionMonths} from '../camping/regions';
+import {MonthNumbers} from 'luxon';
 
 
 async function rollOnWeatherEventTable(
@@ -69,12 +70,12 @@ export async function rollKingmakerWeather(game: Game): Promise<void> {
 }
 
 async function rollWeather(game: Game, averagePartyLevel: number, weatherHazardRange: number, rollMode: RollMode): Promise<void> {
-    const month = game.pf2e.worldClock.month;
+    const month = golarionMonths.get(game.pf2e.worldClock.worldTime.month as MonthNumbers);
     const {precipitationDC, coldDC} = getSeason(month as GolarionMonth);
 
     const hasPrecipitation = (await rollCheck(
         precipitationDC,
-        `Checking for precipitation on a DC of ${precipitationDC}`,
+        `Checking for precipitation in ${month} on a DC of ${precipitationDC}`,
         rollMode,
     )).isSuccess;
 
@@ -82,7 +83,7 @@ async function rollWeather(game: Game, averagePartyLevel: number, weatherHazardR
     if (coldDC !== undefined) {
         const isCold = (await rollCheck(
             coldDC,
-            `Checking for mild cold on a DC of ${coldDC}`,
+            `Checking for mild cold in ${month} on a DC of ${coldDC}`,
             rollMode,
         )).isSuccess;
         if (isCold && hasPrecipitation) {

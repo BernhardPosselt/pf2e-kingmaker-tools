@@ -12,9 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Improve kingdom feat automation notes by displaying what is not automated on hovering over the cell
+* Add a reset button to camping adventuring time
 
 ### Fixed
 
+* Do not fail rolling weather if calendar does not use Golarion mode
 * Add Magic to usable skills when Engineering is allowed and Practical Magic is chosen
 * Fortified Fiefs now gives you a +1 status bonus to dangerous events
 * Available item calculation does not cap out at the maximum item level bonus anymore and buildings stack with more

@@ -1,3 +1,5 @@
+import {MonthNumbers} from 'luxon';
+
 interface ZoneData {
     zoneDC: number;
     encounterDC: number;
@@ -62,6 +64,20 @@ export interface WeatherData {
     coldDC?: number;
     season: 'spring' | 'summer' | 'fall' | 'winter';
 }
+
+export const golarionMonths = new Map<MonthNumbers, GolarionMonth>();
+golarionMonths.set(1, 'Abadius');
+golarionMonths.set(2, 'Calistril');
+golarionMonths.set(3, 'Pharast');
+golarionMonths.set(4, 'Gozran');
+golarionMonths.set(5, 'Desnus');
+golarionMonths.set(6, 'Sarenith');
+golarionMonths.set(7, 'Erastus');
+golarionMonths.set(8, 'Arodus');
+golarionMonths.set(9, 'Rova');
+golarionMonths.set(10, 'Lamashan');
+golarionMonths.set(11, 'Neth');
+golarionMonths.set(12, 'Kuthona');
 
 const weatherData = new Map<GolarionMonth, WeatherData>();
 weatherData.set('Abadius', {coldDC: 16, precipitationDC: 8, season: 'winter'});

@@ -3,7 +3,11 @@
         <div class="region-controls">
             <div class="region-player-controls">
                 <div><span class="label">Time:</span> {{time}}</div>
-                <div><span class="label">Adventuring:</span> {{adventuringSince}}</div>
+                <div><span class="label">Adventuring:</span> {{adventuringSince}}
+                    <button type="button" class="reset-adventuring-time" title="reset to 00:00"><i
+                            class="fa-solid fa-rotate-left"></i>
+                    </button>
+                </div>
             </div>
             <div {{#if isUser}}hidden{{/if}} class="region-gm-controls">
                 <div>
@@ -17,36 +21,44 @@
                     </select>
                 </div>
                 <div>
-                <div><span class="label">Modifier:</span> {{currentEncounterDCModifier}}</div>
-                    <button type="button" class="decrease-zone-dc-modifier" title="Decrease Modifier"><i class="fa-solid fa-minus"></i></button>
-                    <button type="button" class="increase-zone-dc-modifier" title="Increase Modifier"><i class="fa-solid fa-plus"></i></button>
-                    <button type="button" class="reset-zone-dc-modifier" title="Reset Modifier"><i class="fa-solid fa-rotate-left"></i></button>
+                    <div><span class="label">Modifier:</span> {{currentEncounterDCModifier}}</div>
+                    <button type="button" class="decrease-zone-dc-modifier" title="Decrease Modifier"><i
+                            class="fa-solid fa-minus"></i></button>
+                    <button type="button" class="increase-zone-dc-modifier" title="Increase Modifier"><i
+                            class="fa-solid fa-plus"></i></button>
+                    <button type="button" class="reset-zone-dc-modifier" title="Reset Modifier"><i
+                            class="fa-solid fa-rotate-left"></i></button>
                 </div>
                 <div>
                     <div><span class="label">DC:</span> {{encounterDC}}</div>
-                    <button type="button" class="roll-encounter" title="Roll Random Encounter" data-phase="activities"><i class="fa-solid fa-skull"></i></button>
-                    <button type="button" class="check-encounter" title="Check Random Encounter" data-phase="activities"><i class="fa-solid fa-dice-d20"></i><i class="fa-solid fa-skull"></i></button>
+                    <button type="button" class="roll-encounter" title="Roll Random Encounter" data-phase="activities">
+                        <i class="fa-solid fa-skull"></i></button>
+                    <button type="button" class="check-encounter" title="Check Random Encounter"
+                            data-phase="activities"><i class="fa-solid fa-dice-d20"></i><i
+                            class="fa-solid fa-skull"></i></button>
                 </div>
             </div>
         </div>
         <div class="time">
-            <div style="left: {{timeMarkerPositionPx}}px"  class="time-marker"></div>
+            <div style="left: {{timeMarkerPositionPx}}px" class="time-marker"></div>
         </div>
         <div class="region-controls">
             <div class="region-player-controls">
                 {{#if watchEnabled}}
-                <div>
-                    <div title="Watch: {{watchDuration}}, Daily Preparations: {{dailyPrepsDuration}}, Actors keeping watch: {{actorsKeepingWatch}}"><span class="label">Rest:</span> {{currentRestHours}} of {{restHours}}</div>
-                </div>
+                    <div>
+                        <div title="Watch: {{watchDuration}}, Daily Preparations: {{dailyPrepsDuration}}, Actors keeping watch: {{actorsKeepingWatch}}">
+                            <span class="label">Rest:</span> {{currentRestHours}} of {{restHours}}</div>
+                    </div>
                 {{/if}}
             </div>
             {{#if watchEnabled}}
-            <div {{#if isUser}}hidden{{/if}} class="region-gm-controls">
-                <div>
-                    <button type="button" class="rest">{{#if showContinueRest}}Continue Rest{{else}}Begin Rest{{/if}} <i class="fa-solid fa-bed"></i></button>
-                    <button type="button" class="camping-settings"><i class="fa-solid fa-cog"></i></button>
+                <div {{#if isUser}}hidden{{/if}} class="region-gm-controls">
+                    <div>
+                        <button type="button" class="rest">{{#if showContinueRest}}
+                            Continue Rest{{else}}Begin Rest{{/if}} <i class="fa-solid fa-bed"></i></button>
+                        <button type="button" class="camping-settings"><i class="fa-solid fa-cog"></i></button>
+                    </div>
                 </div>
-            </div>
             {{/if}}
         </div>
     </div>
@@ -57,7 +69,8 @@
         <ul class="camping-actors">
             {{#each actors}}
                 <li class="camping-actor" data-uuid="{{uuid}}" data-actor-uuid="{{uuid}}">
-                    <div class="chosen-camping-activity {{#if cssClass}}{{cssClass}}{{/if}}" {{#if noActivityChosen}}hidden{{/if}}>{{activity}}</div>
+                    <div class="chosen-camping-activity {{#if cssClass}}{{cssClass}}{{/if}}"
+                         {{#if noActivityChosen}}hidden{{/if}}>{{activity}}</div>
                     <div class="actor-image-container">
                         <img src="{{image}}" class="actor-image" data-uuid="{{uuid}}">
                         <button type="button" class="remove-actor" data-uuid="{{uuid}}" data-type="camping-actors"><i
@@ -79,7 +92,8 @@
         <header class="camping-section-header">
             <h2>Activities</h2>
             <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
-                <button type="button" class="post-combat-effects">Combat Effects to Chat <i class="fa-solid fa-swords"></i></button>
+                <button type="button" class="post-combat-effects">Combat Effects to Chat <i
+                        class="fa-solid fa-swords"></i></button>
                 <button type="button" class="unlock-activities">Manage <i class="fa-solid fa-book-open"></i></button>
                 <button type="button" class="add-activity">Add <i class="fa-solid fa-plus"></i></button>
                 <button type="button" class="advance-hours" data-hours="-1">-1h</button>
@@ -91,7 +105,8 @@
 
         <ul class="camping-actors">
             {{#each campingActivities}}
-                <li class="camping-activity" data-name="{{name}}" {{#if isHidden}}hidden{{/if}} {{#if actor}}data-actor-uuid="{{actor.uuid}}"{{/if}}>
+                <li class="camping-activity" data-name="{{name}}" {{#if isHidden}}hidden{{/if}} {{#if
+                        actor}}data-actor-uuid="{{actor.uuid}}"{{/if}}>
                     {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs activity=this isUser=../isUser degreesOfSuccesses=../degreesOfSuccesses}}
                 </li>
             {{/each}}
@@ -100,7 +115,8 @@
         <header class="camping-section-header">
             <h2>Eating</h2>
             <div class="camping-user-buttons">
-                <button type="button" class="manage-recipes">Manage Recipes <i class="fa-solid fa-book-open"></i></button>
+                <button type="button" class="manage-recipes">Manage Recipes <i class="fa-solid fa-book-open"></i>
+                </button>
             </div>
             <div {{#if isUser}}hidden{{/if}} class="camping-gm-buttons">
                 <button type="button" class="add-recipes">Add Recipes <i class="fa-solid fa-plus"></i></button>
@@ -109,9 +125,9 @@
 
         <ul class="camping-actors">
             {{#each actorMeals}}
-            <li class="eating-actor" data-actor-uuid="{{uuid}}">
-                {{> modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs actor=this knownRecipes=../knownFavoriteRecipes}}
-            </li>
+                <li class="eating-actor" data-actor-uuid="{{uuid}}">
+                    {{> modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs actor=this knownRecipes=../knownFavoriteRecipes}}
+                </li>
             {{/each}}
         </ul>
 
@@ -142,7 +158,10 @@
                     <td>{{consumedFood.magicalSubsistence}}</td>
                     <td {{#if consumedFood.basicIngredients.warning}}class="consume-warning"{{/if}}>{{consumedFood.basicIngredients.value}}</td>
                     <td {{#if consumedFood.specialIngredients.warning}}class="consume-warning"{{/if}}>{{consumedFood.specialIngredients.value}}</td>
-                    <td><button type="button" class="consume-food" title="Remove from Actor's inventories" {{#if isUser}}disabled{{/if}}><i class="fa-solid fa-minus"></i></button></td>
+                    <td>
+                        <button type="button" class="consume-food" title="Remove from Actor's inventories"
+                                {{#if isUser}}disabled{{/if}}><i class="fa-solid fa-minus"></i></button>
+                    </td>
                 </tr>
             </table>
             <div class="camping-cook">
@@ -156,20 +175,22 @@
                             {{/select}}
                         </select>
                     </label>
-                    <button type="button" class="recipe-info" title="Recipe Info"><i class="fa-solid fa-question"></i></button>
+                    <button type="button" class="recipe-info" title="Recipe Info"><i class="fa-solid fa-question"></i>
+                    </button>
                 </div>
                 <div>
                     <label>Skill
-                    <select name="cookingSkill">
-                        {{#select cookingSkill}}
-                            {{#each cookingSkills}}
-                                <option value="{{value}}">{{label}}</option>
-                            {{/each}}
-                        {{/select}}
-                    </select>
+                        <select name="cookingSkill">
+                            {{#select cookingSkill}}
+                                {{#each cookingSkills}}
+                                    <option value="{{value}}">{{label}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
                     </label>
                     <span><span class="label">DC</span> {{chosenMealDc}}</span>
-                    <button type="button" class="cook-food" {{#unless hasCookingActor}}disabled{{/unless}}><i class="fa-solid fa-dice-d20"></i></button>
+                    <button type="button" class="cook-food" {{#unless hasCookingActor}}disabled{{/unless}}><i
+                            class="fa-solid fa-dice-d20"></i></button>
                 </div>
                 <div>
                     <label>Degree
@@ -182,7 +203,8 @@
                             {{/select}}
                         </select>
                     </label>
-                    <button type="button" title="Apply Meal Effects" class="eat-food" {{#if isUser}}disabled{{/if}}><i class="fa-solid fa-utensils"></i></button>
+                    <button type="button" title="Apply Meal Effects" class="eat-food" {{#if isUser}}disabled{{/if}}><i
+                            class="fa-solid fa-utensils"></i></button>
                 </div>
             </div>
         </div>
