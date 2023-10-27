@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2023-10-27
+
 ### Added
 
 * Improve kingdom feat automation notes by displaying what is not automated on hovering over the cell
@@ -17,10 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fortified Fiefs now gives you a +1 status bonus to dangerous events
 * Available item calculation does not cap out at the maximum item level bonus anymore and buildings stack with more
   specific ones now enabling a maximum bonus of +13
-* Marketplace structure description
+* Marketplace structure description uses the correct one
 * Enable combat tracks without having to import the camping sheet first
-* Sharpshooter scaling after level 8
-* Deploy Army skill selection
+* Sharpshooter scaling after level 8 to 14 now properly adds a -1 to melee checks; you need to re-import the feat on
+  imported actors
+* Deploy Army skill selection now includes boating and magic when master
 
 ## [0.9.0] - 2023-10-14
 
