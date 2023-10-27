@@ -18,11 +18,11 @@
             </td>
             <td>{{feat.level}}</td>
             <td>{{feat.prerequisites}}</td>
-            <td>
-                {{#if feat.automated}}
-                    <i class="fa-solid fa-circle-check"></i>
-                {{else}}
+            <td title="{{feat.automationNotes}}">
+                {{#if feat.automationNotes}}
                     <i class="fa-regular fa-circle-xmark"></i>
+                {{else}}
+                    <i class="fa-solid fa-circle-check"></i>
                 {{/if}}
             </td>
         </tr>

@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Improve kingdom feat automation notes by displaying what is not automated on hovering over the cell
+
 ### Fixed
 
+* Fortified Fiefs now gives you a +1 status bonus to dangerous events
 * Available item calculation does not cap out at the maximum item level bonus anymore and buildings stack with more
   specific ones now enabling a maximum bonus of +13
 * Marketplace structure description

@@ -7,7 +7,7 @@ export interface KingdomFeat {
     level: number;
     text: string;
     prerequisites?: string;
-    automated: boolean;
+    automationNotes?: string;
     modifiers?: Modifier[];
 }
 
@@ -24,13 +24,12 @@ function generateForAllSkills(feat: KingdomFeat): KingdomFeat[] {
 
 export const allFeats: KingdomFeat[] = [
     {
-        automated: true,
         name: '-',
         level: 0,
         text: '',
     },
     {
-        automated: true,
+        automationNotes: 'Vacancy role penalty removal is not automated',
         name: 'Civil Service',
         level: 1,
         text: `Everyone has a place and a role, and as long as those roles are filled, the government functions. When you
@@ -44,8 +43,7 @@ select this feat, choose one leadership role; that role is now supported by your
         }],
     },
     {
-        // not automated: increase degree of success
-        automated: false,
+        automationNotes: 'Degree of Success is not increased',
         name: 'Cooperative Leadership',
         level: 1,
         text: `Your leaders are skilled at working with one another. When a leader uses the Focused Attention kingdom
@@ -54,7 +52,6 @@ At 11th level, your leaders’ collaborative style leads them to ever greater su
 does not allow you to ever improve a critical failure to a success.)`,
     },
     {
-        automated: true,
         name: 'Crush Dissent',
         level: 1,
         prerequisites: 'Trained in Warfare',
@@ -69,7 +66,6 @@ turn when you gain Unrest, you can attempt to crush the dissent by attempting a 
         }],
     },
     {
-        automated: true,
         name: 'Fortified Fiefs',
         level: 1,
         prerequisites: 'Trained in Defense',
@@ -88,10 +84,15 @@ your settlements’ defenses.`,
             activities: ['build-structure'],
             enabled: false,
             value: 2,
+        }, {
+            name: 'Dangerous Event impacting settlement defenses',
+            type: 'status',
+            phases: ['event'],
+            enabled: false,
+            value: 1,
         }],
     },
     {
-        automated: true,
         name: 'Insider Trading',
         level: 1,
         prerequisites: 'Trained in Industry',
@@ -102,20 +103,18 @@ other lands, and they hire one another’s workers to supply the labor they need
             type: 'status',
             activities: ['establish-work-site-quarry', 'establish-work-site-lumber', 'establish-work-site-mine', 'establish-trade-agreement', 'trade-commodities'],
             enabled: true,
-            value: 2,
+            value: 1,
         }],
     },
     {
-        // not automated: choose ruin thresholds and increase them
-        automated: false,
+        automationNotes: 'You need to manually increase the ruin thresholds',
         name: 'Muddle Through',
         level: 1,
         prerequisites: 'Trained in Wilderness',
         text: 'Your people are independent-minded and take care of the small things around the kingdom, not letting them pile up into bigger problems. Increase two of your Ruin thresholds by 1 and one of them by 2.',
     },
     {
-        // not automated magic for engineering checks
-        automated: false,
+        automationNotes: 'Hire Adventurers RP reduction is not implemented',
         name: 'Practical Magic',
         level: 1,
         prerequisites: 'Trained in Magic',
@@ -130,8 +129,7 @@ life easier. You gain a +1 status bonus to Magic checks, and you can use Magic c
         }],
     },
     {
-        // not automated: re-roll on a crit failure after flat check 11
-        automated: false,
+        automationNotes: 'Nothing automated',
         name: 'Pull Together',
         level: 1,
         prerequisites: 'Trained in Politics',
@@ -140,21 +138,20 @@ far off track. Once per Kingdom turn when you roll a critical failure on a Kingd
     },
     ...generateForAllSkills({
         // not automated: choose skill
-        automated: false,
+        automationNotes: 'You need to manually increase the skill proficiency',
         name: 'Skill Training',
         level: 1,
         text: `Your kingdom receives the trained proficiency rank in a Kingdom skill of your choice. You can select this feat
 multiple times, choosing a new skill each time.`,
     }),
     {
-        automated: true,
+        automationNotes: 'If your kingdom’s Unrest is 6 or higher and you use a kingdom activity that decreases Unrest, decrease the Unrest by an additional 1 is not automated.',
         name: 'Endure Anarchy',
         level: 3,
         prerequisites: 'Loyalty 14',
         text: 'Your kingdom holds together even in the midst of extreme peril. If your kingdom’s Unrest is 6 or higher and you use a kingdom activity that decreases Unrest, decrease the Unrest by an additional 1. You do not fall into anarchy unless your kingdom’s Unrest reaches 24',
     },
     {
-        automated: true,
         name: 'Inspiring Entertainment',
         level: 3,
         prerequisites: 'Culture 14',
@@ -169,16 +166,14 @@ times of upheaval. Your kingdom gains a +2 status bonus to all Culture-based ski
         }],
     },
     ...generateForAllSkills({
-        // not automated: only show assurance in popup if enabled
         name: 'Kingdom Assurance',
-        automated: false,
+        automationNotes: 'You need to manually choose Assurance in the modifier popup',
         level: 1,
         text: `Even when things go poorly in other areas, you can count on consistency in carrying out kingdom activities
 with a chosen skill. Choose one Kingdom skill in which your kingdom is trained. Once per Kingdom turn, when you would attempt a skill check for that skill, you can forgo rolling and instead take a result equal to 10 + your proficiency bonus; do not apply any other bonuses, penalties, or modifiers to this result. Special You can select this feat multiple times. Each time, choose a different skill and gain the benefits of this feat for that skill.`,
     }),
     {
-        // not automated: choose to not reduce rp
-        automated: false,
+        automationNotes: 'Not automated',
         name: 'Liquidate Resources',
         level: 3,
         prerequisites: 'Economy 14',
@@ -186,7 +181,6 @@ with a chosen skill. Choose one Kingdom skill in which your kingdom is trained. 
 a Kingdom turn in which you are forced to spend RP as the result of a failed skill check or a dangerous event, and that expense reduces you to 0 RP, you may instead reduce your RP to 1 and treat the expense as if it were paid in full. At the start of your next Kingdom turn, roll 4 fewer Resource Dice than normal.`,
     },
     {
-        automated: true,
         name: 'Quick Recovery',
         level: 3,
         prerequisites: 'Stability 14',
@@ -200,7 +194,7 @@ a Kingdom turn in which you are forced to spend RP as the result of a failed ski
         }],
     },
     {
-        automated: true,
+        automationNotes: 'Re-rolling a failure or crit failure for 2 RP is not automated',
         name: 'Free and Fair',
         level: 7,
         text: 'Your reputation for transparency and fairness in conducting elections, appointments, and other changes in government inspires tremendous public trust. You gain a +2 circumstance bonus to Loyalty-based checks attempted as part of the New Leadership and Pledge of Fealty activities. If you fail or critically fail such a check, you can spend 2 RP to reroll the check (but without the +2 circumstance bonus); attempting this adds the Fortune trait. You must take the result of the second roll, even if it is worse than the original roll.',
@@ -221,15 +215,13 @@ a Kingdom turn in which you are forced to spend RP as the result of a failed ski
         }],
     },
     {
-        // not automated: increase item level and luxuries +1 first time
-        automated: false,
+        automationNotes: 'First time you get luxuries is not automated',
         name: 'Quality of Life',
         level: 7,
         text: 'Your kingdom’s robust economy makes the creature comforts of civilization more readily available to all, and even finer luxuries are more easily had. The first time you gain Luxury Commodities in a Kingdom turn, increase the total gained by 1. All of your settlements are treated as 1 level higher than their actual level for the purposes of determining what sorts of magic items might be offered for sale at their markets and shops.',
     },
     {
-        // not automated: get additional RD when critical success once
-        automated: false,
+        automationNotes: 'You do not get 1 extra RP at the start of your next turn on a critical success',
         name: 'Fame and Fortune',
         level: 11,
         text: 'Your kingdom’s reputation has spread far and wide, bringing in visitors to behold the spectacle of your greatness and pay their respects. Whenever you achieve a critical success on any Kingdom skill check during the Activity phase of a Kingdom turn, gain 1 bonus Resource Die at the start of your next Kingdom turn.',

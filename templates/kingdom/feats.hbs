@@ -1,82 +1,83 @@
 {{#if levelFeats}}
-<table class="km-table">
-    <tr>
-        <th>Level</th>
-        <th>Feat</th>
-        <th>Minimum Level</th>
-        <th>Prerequisites</th>
-        <th title="Comes With Automation">Auto</th>
-    </tr>
-    {{#each levelFeats}}
+    <table class="km-table">
         <tr>
-            <td>{{takenAt}}<input type="hidden" name="feats.{{@index}}.level" value="{{takenAt}}"></td>
-            <td>
-                <select name="feats.{{@index}}.id">
-                    {{#select name}}
-                        {{#each ../featIds}}
-                            <option value="{{this}}">{{this}}</option>
-                        {{/each}}
-                    {{/select}}
-                </select>
-            </td>
-            <td>{{level}}</td>
-            <td>{{prerequisites}}</td>
-            <td>
-            {{#if automated}}
-                <i class="fa-solid fa-circle-check"></i>
-            {{else}}
-                <i class="fa-regular fa-circle-xmark"></i>
-            {{/if}}
-            </td>
+            <th>Level</th>
+            <th>Feat</th>
+            <th>Minimum Level</th>
+            <th>Prerequisites</th>
+            <th title="Comes With Automation">Auto</th>
         </tr>
-        {{#if text}}
+        {{#each levelFeats}}
             <tr>
-                <td colspan="5" class="left-align">{{text}}</td>
+                <td>{{takenAt}}<input type="hidden" name="feats.{{@index}}.level" value="{{takenAt}}"></td>
+                <td>
+                    <select name="feats.{{@index}}.id">
+                        {{#select name}}
+                            {{#each ../featIds}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                </td>
+                <td>{{level}}</td>
+                <td>{{prerequisites}}</td>
+                <td {{#if automationNotes}}title="{{automationNotes}}"{{/if}}>
+                    {{#if automationNotes}}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {{else}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{/if}}
+                </td>
             </tr>
-        {{/if}}
-    {{/each}}
-</table>
+            {{#if text}}
+                <tr>
+                    <td colspan="5" class="left-align">{{text}}</td>
+                </tr>
+            {{/if}}
+        {{/each}}
+    </table>
 {{/if}}
 
 {{#if bonusFeats}}
-<table class="km-table">
-    <tr>
-        <th>Bonus Feat</th>
-        <th>Minimum Level</th>
-        <th>Prerequisites</th>
-        <th title="Comes With Automation">Auto</th>
-        <th>Remove</th>
-    </tr>
-    {{#each bonusFeats}}
+    <table class="km-table">
         <tr>
-            <td>
-                <select name="bonusFeats.{{@index}}.id">
-                    {{#select name}}
-                        {{#each ../featIds}}
-                            <option value="{{this}}">{{this}}</option>
-                        {{/each}}
-                    {{/select}}
-                </select>
-            </td>
-            <td>{{level}}</td>
-            <td>{{prerequisites}}</td>
-            <td>
-                {{#if automated}}
-                    <i class="fa-solid fa-circle-check"></i>
-                {{else}}
-                    <i class="fa-regular fa-circle-xmark"></i>
-                {{/if}}
-            </td>
-            <td>
-                <button type="button" class="icon-action km-delete-bonus-feat" data-delete-index="{{@index}}"><i class="fa-solid fa-trash"></i></button>
-            </td>
+            <th>Bonus Feat</th>
+            <th>Minimum Level</th>
+            <th>Prerequisites</th>
+            <th title="Comes With Automation">Auto</th>
+            <th>Remove</th>
         </tr>
-        {{#if text}}
+        {{#each bonusFeats}}
             <tr>
-                <td colspan="5" class="left-align">{{text}}</td>
+                <td>
+                    <select name="bonusFeats.{{@index}}.id">
+                        {{#select name}}
+                            {{#each ../featIds}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                </td>
+                <td>{{level}}</td>
+                <td>{{prerequisites}}</td>
+                <td {{#if automationNotes}}title="{{automationNotes}}"{{/if}}>
+                    {{#if automationNotes}}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {{else}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{/if}}
+                </td>
+                <td>
+                    <button type="button" class="icon-action km-delete-bonus-feat" data-delete-index="{{@index}}"><i
+                            class="fa-solid fa-trash"></i></button>
+                </td>
             </tr>
-        {{/if}}
-    {{/each}}
-</table>
+            {{#if text}}
+                <tr>
+                    <td colspan="5" class="left-align">{{text}}</td>
+                </tr>
+            {{/if}}
+        {{/each}}
+    </table>
 {{/if}}
 <button type="button" id="km-add-bonus-feat">Add Bonus Feat <i class="fa-solid fa-plus"></i></button>
