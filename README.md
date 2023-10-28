@@ -111,12 +111,17 @@ Current Scene** in your **Settlements** tab. You need to repeat this for all of 
 
 ![Add Settlement](docs/images/add-current-scene.png)
 
-The following variant rules are supported in the settings:
+### Vance & Kerenshara Integration
 
-* Always add level to skill for untrained skills
-* Double Skill Increases in the Feature Section
-* Additional XP and milestones
-  from [Vance and Kerenshara](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit)
+[Vance & Kerenshara Homebrew](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit?pli=1#heading=h.2bowazxvnvid)
+adds a multitude of adjustments and fixes to Kingdom Building. The module allows you to opt into many changes using the
+Config button on the Kingdom Sheet, except for the following:
+
+* **Request Foreign Aid**: The activity does not mention the increased DC stacking; you need to manage that manually
+* **Kingdom Feats**:
+    * **Status Bonuses**: don't stack; instead this module turns all Feat Status Bonuses into Circumstance Bonuses to
+      match other Kingdom Feats
+    * **Practical Magic**: no +2 bonus when hitting Master in Magic
 
 #### Homebrew Built-in Changes
 
