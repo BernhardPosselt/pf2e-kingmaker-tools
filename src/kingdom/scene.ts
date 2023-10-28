@@ -31,6 +31,7 @@ function parseStructureData(
         const refData = data as { ref: string };
         const lookedUpStructure = structuresByName.get(refData.ref);
         if (lookedUpStructure === undefined) {
+            console.log(refData, structuresByName);
             throw new StructureError(`No predefined structure data found for actor with name ${name}, aborting`);
         }
         return calculateLots(lookedUpStructure, tokenWidth, tokenHeight);

@@ -514,6 +514,10 @@ const structures: Structure[] = [
         traits: ['building', 'edifice'],
     },
     {
+        name: 'Monument',
+        traits: ['building', 'edifice'],
+    },
+    {
         name: 'Museum',
         skillBonusRules: [{
             value: 1,
@@ -883,3 +887,75 @@ const structures: Structure[] = [
 
 export const structuresByName = new Map<string, Structure>();
 structures.forEach(s => structuresByName.set(s.name, s));
+
+interface VKAdjustment {
+    skillBonusRules?: SkillBonusRule[];
+    activityBonusRules?: ActivityBonusRule[];
+}
+
+// add v&k adjustments
+const vkAdjustments: Record<string, VKAdjustment> = {
+    'Bank': {activityBonusRules: [{value: 1, activity: 'capital-investment'}, {value: 1, activity: 'collect-taxes'}]},
+    'Castle': {
+        activityBonusRules: [
+            {
+                value: 2,
+                activity: 'manage-trade-agreements',
+            }, {
+                value: 2,
+                activity: 'relocate-capital',
+            }],
+    },
+    'Construction Yard': {
+        activityBonusRules: [{
+            value: 1,
+            activity: 'build-roads',
+        }, {
+            value: 1,
+            activity: 'irrigation',
+        }],
+    },
+    'Festival Hall': {skillBonusRules: [{activity: 'quell-unrest', skill: 'arts', value: 1}]},
+    'Garrison': {activityBonusRules: [{value: 1, activity: 'fortify-hex'}]},
+    'Granary': {activityBonusRules: [{value: 1, activity: 'establish-farmland'}]},
+    'Inn': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'exploration'}]},
+    'Library': {activityBonusRules: [{value: 1, activity: 'creative-solution'}]},
+    'Magic Shop': {activityBonusRules: [{value: 1, activity: 'prognostication'}]},
+    'Monument': {activityBonusRules: [{value: 1, activity: 'create-a-masterpiece'}]},
+    'Occult Shop': {activityBonusRules: [{value: 2, activity: 'supernatural-solution'}]},
+    'Palace': {
+        activityBonusRules: [{value: 3, activity: 'manage-trade-agreements'}, {
+            value: 3,
+            activity: 'relocate-capital',
+        }],
+    },
+    'Smithy': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'engineering'}]},
+    'Tavern, Dive': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'exploration'}]},
+    'Tavern, Luxury': {activityBonusRules: [{value: 2, activity: 'reconnoiter-hex'}]},
+    'Tavern, Popular': {activityBonusRules: [{value: 1, activity: 'reconnoiter-hex'}]},
+    'Tavern, World-Class': {activityBonusRules: [{value: 3, activity: 'reconnoiter-hex'}]},
+    'Town Hall': {activityBonusRules: [{value: 1, activity: 'manage-trade-agreements'}]},
+};
+
+Array.from(Object.entries(vkAdjustments))
+    .forEach(([name, adjustment]) => {
+        const existing = structuresByName.get(name);
+        if (existing === undefined) {
+            throw new Error(`VK Adjustment typo: ${name}`);
+        }
+        const copy = JSON.parse(JSON.stringify(existing)) as Structure;
+        adjustment.skillBonusRules?.forEach(rule => {
+            if (copy.skillBonusRules === undefined) {
+                copy.skillBonusRules = [];
+            }
+            copy.skillBonusRules?.push(rule);
+        });
+        adjustment.activityBonusRules?.forEach(rule => {
+            if (copy.activityBonusRules === undefined) {
+                copy.activityBonusRules = [];
+            }
+            copy.activityBonusRules?.push(rule);
+        });
+        copy.name = `${copy.name} (V&K)`;
+        structuresByName.set(copy.name, copy);
+    });

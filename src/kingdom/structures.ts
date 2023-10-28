@@ -55,10 +55,11 @@ export function groupStructures(structures: Structure[], maxItemBonus: number): 
                     };
                 }),
                 availableItemsRules: structure?.availableItemsRules?.map(rule => {
-                    const values = rule.value * data.count;
+                    const count = rule.maximumStacks === undefined ? data.count : Math.min(data.count, rule.maximumStacks);
+                    const value = rule.value * count;
                     return {
                         ...rule,
-                        value: rule.maximumStacks === undefined ? values : Math.min(values, rule.maximumStacks),
+                        value,
                     };
                 }),
                 settlementEventRules: structure?.settlementEventRules?.map(rule => {
@@ -107,7 +108,6 @@ function applySkillBonusRules(result: SkillItemBonuses, structures: Structure[])
 
 function calculateItemLevelGroupBonus(
     structures: Structure[],
-    maximum: number,
     group: ItemGroup | undefined,
     stackMode: 'always-stack' | 'never-stack' = 'never-stack',
 ): number {
@@ -118,26 +118,22 @@ function calculateItemLevelGroupBonus(
     if (stackMode === 'always-stack') {
         return sum(structureValues);
     } else {
-        return Math.min(
-            Math.max(...structureValues, 0),
-            maximum,
-        );
+        return Math.max(...structureValues, 0);
     }
 }
 
 function applyItemLevelRules(itemLevelBonuses: ItemLevelBonuses, structures: Structure[]): void {
-    const maxItemLevelBonus = 3;
     const defaultPenalty = structures.some(structure => structure.preventItemLevelPenalty === true) ? 0 : -2;
 
     // calculate untyped bonuses
-    const otherBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, undefined, 'always-stack');
-    const alchemicalBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'alchemical');
-    const luxuryBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'luxury');
-    const magicalBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'magical');
-    const divineBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'divine');
-    const primalBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'primal');
-    const arcaneBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'arcane');
-    const occultBonuses = calculateItemLevelGroupBonus(structures, maxItemLevelBonus, 'occult');
+    const otherBonuses = calculateItemLevelGroupBonus(structures, undefined, 'always-stack');
+    const alchemicalBonuses = calculateItemLevelGroupBonus(structures, 'alchemical');
+    const luxuryBonuses = calculateItemLevelGroupBonus(structures, 'luxury');
+    const magicalBonuses = calculateItemLevelGroupBonus(structures, 'magical');
+    const divineBonuses = calculateItemLevelGroupBonus(structures, 'divine');
+    const primalBonuses = calculateItemLevelGroupBonus(structures, 'primal');
+    const arcaneBonuses = calculateItemLevelGroupBonus(structures, 'arcane');
+    const occultBonuses = calculateItemLevelGroupBonus(structures, 'occult');
 
     itemLevelBonuses.other = otherBonuses + defaultPenalty;
     itemLevelBonuses.alchemical = alchemicalBonuses + itemLevelBonuses.other;

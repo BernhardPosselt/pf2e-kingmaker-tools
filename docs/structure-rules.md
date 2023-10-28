@@ -25,41 +25,54 @@ and reference to built-in rules that get maintained and updated with the module.
 * Arcanist's Tower
 * Arena
 * Bank
+* Bank (V&K)
 * Barracks
 * Brewery
 * Castle
+* Castle (V&K)
 * Cathedral
 * Construction Yard
+* Construction Yard (V&K)
 * Dump
 * Embassy
 * Festival Hall
+* Festival Hall (V&K)
 * Foundry
 * Garrison
+* Garrison (V&K)
 * General Store
 * Gladiatorial Arena
 * Granary
+* Granary (V&K)
 * Guildhall
 * Herbalist
 * Hospital
 * Illicit Market
 * Inn
+* Inn (V&K)
 * Jail
 * Keep
 * Library
+* Library (V&K)
 * Lumberyard
 * Luxury Store
 * Magic Shop
+* Magic Shop (V&K)
 * Mansion
 * Marketplace
 * Menagerie
 * Military Academy
 * Mill
 * Mint
+* Monument
+* Monument (V&K)
 * Museum
 * Noble Villa
 * Occult Shop
+* Occult Shop (V&K)
 * Opera House
 * Palace
+* Palace (V&K)
 * Park
 * Pier
 * Printing House
@@ -68,18 +81,25 @@ and reference to built-in rules that get maintained and updated with the module.
 * Sewer System
 * Shrine
 * Smithy
+* Smithy (V&K)
 * Specialized Artisan
 * Stable
 * Stockyard
 * Stonemason
 * Tannery
+* Tavern, Dive
+* Tavern, Dive (V&K)
 * Tavern, Luxury
+* Tavern, Luxury (V&K)
 * Tavern, Popular
+* Tavern, Popular (V&K)
 * Tavern, World-Class
+* Tavern, World-Class (V&K)
 * Temple
 * Theater
 * Thieves' Guild
 * Town Hall
+* Town Hall (V&K)
 * Trade Shop
 * University
 * Watchtower
