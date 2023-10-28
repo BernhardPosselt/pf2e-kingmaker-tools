@@ -4,9 +4,11 @@
             <div class="region-player-controls">
                 <div><span class="label">Time:</span> {{time}}</div>
                 <div><span class="label">Adventuring:</span> {{adventuringSince}}
-                    <button type="button" class="reset-adventuring-time" title="reset to 00:00"><i
-                            class="fa-solid fa-rotate-left"></i>
-                    </button>
+                    {{#if isGM}}
+                        <button type="button" class="reset-adventuring-time" title="reset to 00:00"><i
+                                class="fa-solid fa-rotate-left"></i>
+                        </button>
+                    {{/if}}
                 </div>
             </div>
             <div {{#if isUser}}hidden{{/if}} class="region-gm-controls">
