@@ -192,14 +192,35 @@ const combatEffects: Partial<Record<CampingActivityName, CombatEffect>> = {
             uuid: '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.LN6mH7Muj4hgvStt]{Water Hazards}',
             target: 'Enemies',
         },
+    'Maintain Armor': {
+        uuid: '@UUID[Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.wojV4NiAOYsnfFby]{Maintain Armor: Armor}',
+        target: '',
+    },
 };
 
-export function getCombatEffects(data: Camping): Partial<Record<CampingActivityName, CombatEffect>> {
+async function getMaintainArmorTarget(actorUuids: string[]): Promise<string> {
+    const actors = await Promise.all(actorUuids.map(uuid => fromUuid(uuid) as Promise<Actor | null>));
+    const level = Math.max(1, ...(actors.map(a => a?.system.details.level.value ?? 1)));
+    if (level < 3) {
+        return '1 Ally';
+    } else {
+        const allies = 1 + Math.floor((level - 1) / 2);
+        return `${allies} Allies`;
+    }
+}
+
+export async function getCombatEffects(data: Camping): Promise<Partial<Record<CampingActivityName, CombatEffect>>> {
     const result: Partial<Record<CampingActivityName, CombatEffect>> = {};
+    const maintainArmorTarget = await getMaintainArmorTarget(data.actorUuids);
     data.campingActivities.forEach(a => {
         const activityName = a.activity;
         if (activityName in combatEffects && a.actorUuid) {
-            result[activityName] = combatEffects[activityName]!;
+            const combatEffect = combatEffects[activityName]!;
+            const target = activityName === 'Maintain Armor' ? maintainArmorTarget : combatEffect.target;
+            result[activityName] = {
+                ...combatEffect,
+                target,
+            };
         }
     });
     return result;

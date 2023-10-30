@@ -208,7 +208,7 @@ export async function toViewActorMeals(actorUuids: string[], actorMeals: ActorMe
 }
 
 export async function combatEffectsToChat(data: Camping): Promise<void> {
-    const effects = getCombatEffects(data);
+    const effects = await getCombatEffects(data);
     if (Object.keys(effects).length > 0) {
         const companionsAndLabels = Object.entries(effects)
             .map(([name, link]) => `<b>${name} (${link.target})<b>: ${link.uuid}`)

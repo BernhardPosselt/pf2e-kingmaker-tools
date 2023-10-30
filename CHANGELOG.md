@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* When set to public roll, display weather roll result publicly as well
+
+### Added
+
+* Effect to gain temporary HP from Maintain Armor and post the effect into chat when clicking the **Combat Effects to
+  Chat** button
+
 ## [0.11.0] - 2023-10-28
 
 ### Fixed
