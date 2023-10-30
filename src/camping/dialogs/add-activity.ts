@@ -8,7 +8,7 @@ import {
     slugifyable,
     unslugify,
 } from '../../utils';
-import {ActivityOutcome, CampingActivityData, CampingActivityName} from '../activities';
+import {ActivityOutcome, CampingActivityData, CampingActivityName, EffectTarget} from '../activities';
 import {getEffectByUuid} from '../actor';
 import {DcType, Proficiency} from '../data';
 
@@ -78,6 +78,7 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                     <label for="km-${d}-effect-target">${unslugify(d)}: Effect Target</label>
                     <select name="${d}-effect-target" id="km-${d}-effect-target">
                         <option value="all">All</option>
+                        <option value="allies">Allies</option>
                         <option value="self">Self</option>
                     </select>
                   </div>
@@ -107,6 +108,7 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                 <label for="km-effect-target">Effect Target</label>
                 <select name="effect-target" id="km-effect-target">
                     <option value="all">All</option>
+                    <option value="allies">Allies</option>
                     <option value="self">Self</option>
                 </select>
             </div>
@@ -153,7 +155,7 @@ export function addActivityDialog({onSubmit, activities}: AddActivityOptions): v
                             isLocked: false,
                             effectUuids: effectUuid ? [{
                                 uuid: effectUuid,
-                                targetAll: parseSelect($html, 'effect-target') === 'all',
+                                target: parseSelect($html, 'effect-target') as EffectTarget,
                             }] : undefined,
                             dc: parseDC(parseTextInput($html, 'dc')),
                             isHomebrew: true,
@@ -237,7 +239,7 @@ async function parseEffects($html: HTMLElement, name: 'critical-success' | 'succ
                 },
                 effectUuids: [{
                     uuid: effect,
-                    targetAll: parseSelect($html, `${name}-effect-target`) === 'all',
+                    target: parseSelect($html, `${name}-effect-target`) as EffectTarget,
                 }],
             };
         }

@@ -75,9 +75,11 @@ export const allCompanionNames = [
 
 export type CompanionNames = typeof allCompanionNames[number];
 
+export type EffectTarget = 'all' | 'self' | 'allies';
+
 export interface ActivityEffect {
     uuid: string;
-    targetAll?: boolean;
+    target?: EffectTarget;
 }
 
 export interface ActivityOutcome {
@@ -287,18 +289,27 @@ export const allCampingActivities: CampingActivityData[] = [{
     skills: ['performance'],
     criticalSuccess: {
         message: 'You inspire your allies dramatically. For the remainder of the camping session, your allies gain a +2 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. If an ally spent the hour Relaxing, they can also choose to reroll a failed roll at any time once during the remainder of the camping session while the status bonus persists; this is a fortune effect.',
-        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.2vdskbqd0VrWKR9Y'}],
+        effectUuids: [{
+            uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.2vdskbqd0VrWKR9Y',
+            target: 'allies',
+        }],
     },
     success: {
         message: 'You inspire your allies dramatically. For the remainder of the camping session, your allies gain a +1 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. An ally who spent the hour Relaxing receives a +2 status bonus.',
-        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.wT2NzrfgmWmCMRtv'}],
+        effectUuids: [{
+            uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.wT2NzrfgmWmCMRtv',
+            target: 'allies',
+        }],
     },
     failure: {
         message: 'Your allies are unmoved and receive no benefits.',
     },
     criticalFailure: {
         message: 'Your story distracts or unsettles your allies. They each take a –1 status penalty to skill checks until they Relax or until they begin daily preparations.',
-        effectUuids: [{uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.y5Jqw40SWNOgcxvC'}],
+        effectUuids: [{
+            uuid: 'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.y5Jqw40SWNOgcxvC',
+            target: 'allies',
+        }],
     },
 }, ...influenceCompanions(), {
     name: 'Blend Into The Night',
