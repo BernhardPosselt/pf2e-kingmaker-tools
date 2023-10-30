@@ -28,7 +28,7 @@ async function rollOnWeatherEventTable(
     } else {
         await table.toMessage(results, {roll: draw.roll, messageOptions: {rollMode}});
         if (rollTwice) {
-            await postMessage('Choose a second weather event!', rollMode !== 'publicroll');
+            await postMessage('Choose a second weather event!', rollMode);
         }
     }
 }
@@ -58,8 +58,12 @@ async function rollCheck(dc: number, flavor: string, rollMode: RollMode): Promis
     return {isSuccess, total: roll.total};
 }
 
-async function postMessage(message: string, blind: boolean): Promise<void> {
-    await ChatMessage.create({content: message, blind});
+async function postMessage(message: string, rollMode: RollMode): Promise<void> {
+    await ChatMessage.create({
+        content: message,
+        type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+        rollMode,
+    });
 }
 
 export async function rollKingmakerWeather(game: Game): Promise<void> {
@@ -109,5 +113,5 @@ async function rollWeather(game: Game, averagePartyLevel: number, weatherHazardR
         }
     }
     await rollWeatherEvent(game, averagePartyLevel, weatherHazardRange, rollMode);
-    await postMessage(message, rollMode !== 'publicroll');
+    await postMessage(message, rollMode);
 }
