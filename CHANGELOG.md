@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.2] - 2023-11-02
+
+### Fixed
+
+* Tell Campfire story does not include the storyteller but only their allies
+
 ## [0.12.1] - 2023-10-30
 
 ### Fixed

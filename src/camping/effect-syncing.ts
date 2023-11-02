@@ -90,19 +90,21 @@ function getActivityEffectsByResult(data: CampingActivityData | undefined, resul
 
 function getEffectUuidsForActors(options: SyncActorCampingEffectOptions): EffectsForActor[] {
     const actorActivityDataByName = groupBySingle(options.campingActivities, a => a.name);
-    const allEffects = Array.from(options.actorCampingActivities.values())
+    const effectsPerformedByActor = Array.from(options.actorCampingActivities.values())
         .map(e => {
             const data = actorActivityDataByName.get(e.activityName);
             const effects = getActivityEffectsByResult(data, e.result);
             return {actor: e.actor, effects};
         });
     const effectsForActors = new Map();
-    const actorUuids = options.actors.map(a => a.uuid);
-    allEffects.forEach(actorAndEffect => {
+    const allActors = options.actors;
+    const actorUuids = allActors.map(a => a.uuid);
+    effectsPerformedByActor.forEach(actorAndEffect => {
         actorAndEffect.effects.forEach(effect => {
             actorUuids.forEach(actorUuid => {
-                if (effect.target === 'self'
-                    || effect.target === 'all'
+                if (effect.target === 'all'
+                    || effect.target === undefined
+                    || (effect.target === 'self' && actorUuid === actorAndEffect.actor.uuid)
                     || (effect.target === 'allies' && actorUuid !== actorAndEffect.actor.uuid)) {
                     const existingEffects = effectsForActors.get(actorUuid) ?? [];
                     existingEffects.push(effect.uuid);
@@ -111,10 +113,10 @@ function getEffectUuidsForActors(options: SyncActorCampingEffectOptions): Effect
             });
         });
     });
-    return options.actors.map(a => {
+    return allActors.map(actor => {
         return {
-            actor: a,
-            effectUuids: [...(effectsForActors.get(a.uuid) ?? [])],
+            actor,
+            effectUuids: [...(effectsForActors.get(actor.uuid) ?? [])],
         };
     });
 }
