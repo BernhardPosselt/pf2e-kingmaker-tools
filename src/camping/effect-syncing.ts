@@ -90,28 +90,33 @@ function getActivityEffectsByResult(data: CampingActivityData | undefined, resul
 
 function getEffectUuidsForActors(options: SyncActorCampingEffectOptions): EffectsForActor[] {
     const actorActivityDataByName = groupBySingle(options.campingActivities, a => a.name);
-    const allEffects = Array.from(options.actorCampingActivities.values())
+    const effectsPerformedByActor = Array.from(options.actorCampingActivities.values())
         .map(e => {
             const data = actorActivityDataByName.get(e.activityName);
             const effects = getActivityEffectsByResult(data, e.result);
             return {actor: e.actor, effects};
         });
-    const effectsUuidsForAllActors = allEffects
-        .flatMap(e => e.effects)
-        .filter(e => e?.targetAll !== false)
-        .map(e => e.uuid);
     const effectsForActors = new Map();
-    allEffects.forEach(e => {
-        const actorUuid = e.actor.uuid;
-        const uuids = e.effects
-            .filter(e => e.targetAll === false)
-            .map(e => e.uuid);
-        effectsForActors.set(actorUuid, [...(effectsForActors.get(actorUuid) ?? []), ...uuids]);
+    const allActors = options.actors;
+    const actorUuids = allActors.map(a => a.uuid);
+    effectsPerformedByActor.forEach(actorAndEffect => {
+        actorAndEffect.effects.forEach(effect => {
+            actorUuids.forEach(actorUuid => {
+                if (effect.target === 'all'
+                    || effect.target === undefined
+                    || (effect.target === 'self' && actorUuid === actorAndEffect.actor.uuid)
+                    || (effect.target === 'allies' && actorUuid !== actorAndEffect.actor.uuid)) {
+                    const existingEffects = effectsForActors.get(actorUuid) ?? [];
+                    existingEffects.push(effect.uuid);
+                    effectsForActors.set(actorUuid, existingEffects);
+                }
+            });
+        });
     });
-    return options.actors.map(a => {
+    return allActors.map(actor => {
         return {
-            actor: a,
-            effectUuids: [...effectsUuidsForAllActors, ...(effectsForActors.get(a.uuid) ?? [])],
+            actor,
+            effectUuids: [...(effectsForActors.get(actor.uuid) ?? [])],
         };
     });
 }

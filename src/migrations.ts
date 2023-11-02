@@ -6,12 +6,14 @@ import {Migration} from './migrations/migration';
 import {Migration2} from './migrations/migration2';
 import {Migration3} from './migrations/migration3';
 import {Migration4} from './migrations/migration4';
+import {Migration5} from './migrations/migration5';
 
 
 const migrations: Migration[] = [
     new Migration2(),
     new Migration3(),
     new Migration4(),
+    new Migration5(),
 ];
 
 interface BackupParams {
