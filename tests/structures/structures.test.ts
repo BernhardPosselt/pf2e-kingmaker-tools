@@ -1,4 +1,5 @@
-import {evaluateStructures} from '../../src/kingdom/structures';
+import {evaluateStructures, groupAvailableItems} from '../../src/kingdom/structures';
+import {ItemLevelBonuses} from '../../src/kingdom/data/structures';
 
 describe('structures', () => {
     test('evaluate no buildings', () => {
@@ -446,3 +447,60 @@ describe('structures', () => {
         });
     });
 });
+
+describe('group available items', () => {
+
+    it('should group luxury bonuses', () => {
+        const actual = groupAvailableItems(createBonuses({
+            luxuryMagical: 3,
+            luxuryArcane: 4,
+        }));
+        expect(actual).toEqual({
+            other: 0,
+            luxuryMagical: 3,
+            luxuryArcane: 4,
+            luxuryDivine: 0,
+            luxuryPrimal: 0,
+            luxuryOccult: 0,
+        });
+    });
+
+    it('should group magical bonuses', () => {
+        const actual = groupAvailableItems(createBonuses({
+            magical: 3,
+            luxuryMagical: 3,
+            luxuryArcane: 3,
+            luxuryDivine: 3,
+            luxuryPrimal: 3,
+            luxuryOccult: 3,
+            arcane: 4,
+            divine: 3,
+            occult: 3,
+            primal: 3,
+        }));
+        expect(actual).toEqual({
+            other: 0,
+            magical: 3,
+            arcane: 4,
+        });
+    });
+
+});
+
+function createBonuses(overrides: Partial<ItemLevelBonuses>): ItemLevelBonuses {
+    return {
+        divine: 0,
+        alchemical: 0,
+        primal: 0,
+        occult: 0,
+        arcane: 0,
+        luxuryOccult: 0,
+        luxuryArcane: 0,
+        luxuryDivine: 0,
+        luxuryMagical: 0,
+        luxuryPrimal: 0,
+        magical: 0,
+        other: 0,
+        ...overrides,
+    };
+}

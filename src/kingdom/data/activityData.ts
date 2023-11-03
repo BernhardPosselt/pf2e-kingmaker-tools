@@ -1579,7 +1579,7 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         dc: 'custom',
         title: 'Recruit Army',
         description: 'Either you recruit an army from your kingdom’s citizens, or you secure the allegiance of a specialized army you encountered in the Stolen Lands. If you’re recruiting an army from your kingdom’s citizens, choose one of the basic armies listed at the start of page 570 and attempt a Warfare check against the army’s Recruitment DC. If you’re securing a specialized army, you must attempt a Statecraft check against the Recruitment DC;',
-        skills: simpleRank(['warfare']),
+        skills: simpleRank(['warfare', 'statecraft']),
         criticalSuccess: {
             msg: 'You recruit the army; it becomes efficient.',
         },

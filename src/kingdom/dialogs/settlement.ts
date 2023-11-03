@@ -1,6 +1,6 @@
 import {ActivityBonuses, ItemLevelBonuses, SkillItemBonuses} from '../data/structures';
 import {capitalize, unslugify} from '../../utils';
-import {StructureResult} from '../structures';
+import {calculateAvailableItems, groupAvailableItems, StructureResult} from '../structures';
 import {hasFeat, Kingdom} from '../data/kingdom';
 import {getCapitalSettlement, getSettlement, getStructureResult, getStructureStackMode} from '../scene';
 
@@ -97,34 +97,12 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
 
     private getAvailableItems(settlementLevel: number, itemLevelBonuses: ItemLevelBonuses): ItemLevelBonusData[] {
         const qualityOfLifeBonus = hasFeat(this.kingdom, 'Quality of Life') ? 1 : 0;
-        const bonuses: ItemLevelBonuses = {
-            alchemical: itemLevelBonuses.alchemical + settlementLevel,
-            magical: itemLevelBonuses.magical + qualityOfLifeBonus + settlementLevel,
-            luxuryMagical: itemLevelBonuses.luxuryMagical + qualityOfLifeBonus + settlementLevel,
-            arcane: itemLevelBonuses.arcane + qualityOfLifeBonus + settlementLevel,
-            luxuryArcane: itemLevelBonuses.luxuryArcane + qualityOfLifeBonus + settlementLevel,
-            divine: itemLevelBonuses.divine + qualityOfLifeBonus + settlementLevel,
-            luxuryDivine: itemLevelBonuses.luxuryDivine + qualityOfLifeBonus + settlementLevel,
-            occult: itemLevelBonuses.occult + qualityOfLifeBonus + settlementLevel,
-            luxuryOccult: itemLevelBonuses.luxuryOccult + qualityOfLifeBonus + settlementLevel,
-            primal: itemLevelBonuses.primal + qualityOfLifeBonus + settlementLevel,
-            luxuryPrimal: itemLevelBonuses.luxuryPrimal + qualityOfLifeBonus + settlementLevel,
-            other: itemLevelBonuses.other + settlementLevel,
-        };
-        return [
-            {label: 'Alchemical', value: bonuses.alchemical},
-            {label: 'Magical', value: bonuses.magical},
-            {label: 'Magical (Luxury)', value: bonuses.luxuryMagical},
-            {label: 'Arcane', value: bonuses.arcane},
-            {label: 'Arcane (Luxury)', value: bonuses.luxuryArcane},
-            {label: 'Divine', value: bonuses.divine},
-            {label: 'Divine (Luxury)', value: bonuses.luxuryDivine},
-            {label: 'Occult', value: bonuses.occult},
-            {label: 'Occult (Luxury)', value: bonuses.luxuryOccult},
-            {label: 'Primal', value: bonuses.primal},
-            {label: 'Primal (Luxury)', value: bonuses.luxuryPrimal},
-            {label: 'Other', value: bonuses.other},
-        ];
+        const bonuses = calculateAvailableItems(itemLevelBonuses, settlementLevel, qualityOfLifeBonus);
+        const groupedBonuses = groupAvailableItems(bonuses);
+        return (Array.from(Object.entries(groupedBonuses)) as [keyof ItemLevelBonuses, number][])
+            .map(([key, value]) => {
+                return {label: itemBonusLabels[key], value};
+            });
     }
 
     private getStorage(structures: StructureResult): LabeledData[] {
@@ -160,3 +138,18 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
 export async function showSettlement(game: Game, settlementId: string, kingdom: Kingdom): Promise<void> {
     new SettlementApp({game, settlementId, kingdom}).render(true);
 }
+
+const itemBonusLabels: Record<keyof ItemLevelBonuses, string> = {
+    'alchemical': 'Alchemical',
+    'magical': 'Magical',
+    'luxuryMagical': 'Magical (Luxury)',
+    'arcane': 'Arcane',
+    'luxuryArcane': 'Arcane (Luxury)',
+    'divine': 'Divine',
+    'luxuryDivine': 'Divine (Luxury)',
+    'occult': 'Occult',
+    'luxuryOccult': 'Occult (Luxury)',
+    'primal': 'Primal',
+    'luxuryPrimal': 'Primal (Luxury)',
+    'other': 'Other',
+};

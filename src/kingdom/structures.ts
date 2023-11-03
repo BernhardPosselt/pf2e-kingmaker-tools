@@ -442,3 +442,52 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
     applyItemLevelRules(result.itemLevelBonuses, allGroupedStructures);
     return result;
 }
+
+export function calculateAvailableItems(
+    itemLevelBonuses: ItemLevelBonuses,
+    settlementLevel: number,
+    additionalMagicItemLevel: number = 0,
+): ItemLevelBonuses {
+    return {
+        alchemical: itemLevelBonuses.alchemical + settlementLevel,
+        magical: itemLevelBonuses.magical + additionalMagicItemLevel + settlementLevel,
+        luxuryMagical: itemLevelBonuses.luxuryMagical + additionalMagicItemLevel + settlementLevel,
+        arcane: itemLevelBonuses.arcane + additionalMagicItemLevel + settlementLevel,
+        luxuryArcane: itemLevelBonuses.luxuryArcane + additionalMagicItemLevel + settlementLevel,
+        divine: itemLevelBonuses.divine + additionalMagicItemLevel + settlementLevel,
+        luxuryDivine: itemLevelBonuses.luxuryDivine + additionalMagicItemLevel + settlementLevel,
+        occult: itemLevelBonuses.occult + additionalMagicItemLevel + settlementLevel,
+        luxuryOccult: itemLevelBonuses.luxuryOccult + additionalMagicItemLevel + settlementLevel,
+        primal: itemLevelBonuses.primal + additionalMagicItemLevel + settlementLevel,
+        luxuryPrimal: itemLevelBonuses.luxuryPrimal + additionalMagicItemLevel + settlementLevel,
+        other: itemLevelBonuses.other + settlementLevel,
+    };
+}
+
+function groupByItemType(
+    itemLevelBonuses: ItemLevelBonuses,
+    superCategory: keyof ItemLevelBonuses,
+    categories: (keyof ItemLevelBonuses)[],
+): Partial<ItemLevelBonuses> {
+    const result: Partial<ItemLevelBonuses> = {};
+    const superCategoryBonus = itemLevelBonuses[superCategory];
+    categories.forEach(category => {
+        const itemLevelBonus = itemLevelBonuses[category];
+        if (itemLevelBonus !== superCategoryBonus) {
+            result[category] = itemLevelBonus;
+        }
+    });
+    return result;
+}
+
+export function groupAvailableItems(itemLevelBonuses: ItemLevelBonuses): Partial<ItemLevelBonuses> {
+    return {
+        other: itemLevelBonuses.other,
+        ...groupByItemType(itemLevelBonuses, 'luxuryMagical',
+            ['luxuryArcane', 'luxuryDivine', 'luxuryOccult', 'luxuryPrimal']),
+        ...groupByItemType(itemLevelBonuses, 'magical',
+            ['arcane', 'divine', 'occult', 'primal', 'luxuryMagical']),
+        ...groupByItemType(itemLevelBonuses, 'other',
+            ['magical', 'alchemical']),
+    };
+}

@@ -1,8 +1,8 @@
-2023/11/02-11:13:07.672449 7f453cbf26c0 Recovering log #556
-2023/11/02-11:13:07.714301 7f453cbf26c0 Delete type=0 #556
-2023/11/02-11:13:07.714359 7f453cbf26c0 Delete type=3 #555
-2023/11/02-13:00:14.257037 7f452a9df6c0 Level-0 table #560: started
-2023/11/02-13:00:14.257063 7f452a9df6c0 Level-0 table #560: 0 bytes OK
-2023/11/02-13:00:14.269492 7f452a9df6c0 Delete type=0 #558
-2023/11/02-13:00:14.301537 7f452a9df6c0 Manual compaction at level-0 from '!actors!0RhKx0DxXSpZMDT4' @ 72057594037927935 : 1 .. '!actors!zuLeNdscFSXWUJ6a' @ 0 : 0; will stop at (end)
-2023/11/02-13:00:14.321221 7f452a9df6c0 Manual compaction at level-1 from '!actors!0RhKx0DxXSpZMDT4' @ 72057594037927935 : 1 .. '!actors!zuLeNdscFSXWUJ6a' @ 0 : 0; will stop at (end)
+2023/11/03-10:22:25.605307 7ff8659f16c0 Recovering log #562
+2023/11/03-10:22:25.634982 7ff8659f16c0 Delete type=0 #562
+2023/11/03-10:22:25.635046 7ff8659f16c0 Delete type=3 #561
+2023/11/03-13:47:45.357101 7ff8613fd6c0 Level-0 table #566: started
+2023/11/03-13:47:45.357120 7ff8613fd6c0 Level-0 table #566: 0 bytes OK
+2023/11/03-13:47:45.369679 7ff8613fd6c0 Delete type=0 #564
+2023/11/03-13:47:45.383959 7ff8613fd6c0 Manual compaction at level-0 from '!actors!0RhKx0DxXSpZMDT4' @ 72057594037927935 : 1 .. '!actors!zuLeNdscFSXWUJ6a' @ 0 : 0; will stop at (end)
+2023/11/03-13:47:45.383991 7ff8613fd6c0 Manual compaction at level-1 from '!actors!0RhKx0DxXSpZMDT4' @ 72057594037927935 : 1 .. '!actors!zuLeNdscFSXWUJ6a' @ 0 : 0; will stop at (end)

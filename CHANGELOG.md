@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.3] - 2023-11-03
+
+### Fixed
+
+* Make Statecraft selectable as a skill to recruit an army
+* Group available item levels again
+
 ## [0.12.2] - 2023-11-02
 
 ### Fixed
