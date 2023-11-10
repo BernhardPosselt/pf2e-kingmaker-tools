@@ -111,6 +111,7 @@ async function initArmy(actor: Actor, additionalUuids: string[], type: string): 
             'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.wfy7fmnnhlJ66Gfz', // guard
             'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.kKnpTt39LwP8uUvf', // rally
             'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.D680ctCFIpsmz82i', // retreat
+            'Compendium.pf2e-kingmaker-tools.kingmaker-tools-army-actions.Item.SfLoAnZ1O19OTLQo', // notes and rules
             ...additionalUuids,
         ].map(uuid => fromUuid(uuid) as Promise<Item>),
     );

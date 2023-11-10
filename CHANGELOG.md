@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.4] - 2023-11-10
+
+### Fixed
+
+* Rename **Tusk Riders** to **Tusker Riders**
+* Add full text on Defeated army condition
+* Added an **Army** ability in the **Army Actions** compendium to make armies unflankable and add additional notes. You
+  need to manually add this ability to imported actors
+
 ## [0.12.3] - 2023-11-03
 
 ### Fixed
