@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2023-11-12
+
+### Added
+
+* Trouble in Tatzlford: Army Effects for defenses
+
 ## [0.12.4] - 2023-11-10
 
 ### Fixed
