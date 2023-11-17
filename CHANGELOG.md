@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Errataed the Feint Army action to be a Maneuver and remove the Attack trait
+
 ## [0.13.1] - 2023-11-12
 
 ### Fixed

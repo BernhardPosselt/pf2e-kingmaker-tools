@@ -31,6 +31,23 @@ Run the following before packaging once and set your paths:
     ./node_modules/.bin/fvtt configure set installPath /home/bernhard/dev/FoundryVTT-11.301
     ./node_modules/.bin/fvtt configure set dataPath /home/bernhard/.local/share/FoundryVTT/Data
 
+### Homebrew Built-in Changes
+
+* [Based on James Jacob's answers](https://paizo.com/threads/rzs43olf?Kingmaker-Adventure-Path-2E-Errata#19), event XP
+  is bumped to 40XP from 30XP and the event modifier acts as a level modifier for
+  the [XP Awards table](https://2e.aonprd.com/Rules.aspx?ID=575)
+* [Based on James Jacob's answers](https://paizo.com/threads/rzs43ogm?How-am-I-misreading-the-camping-rules#3) all
+  camping activities included in the journals are extended to 2 hours.
+* Kalikke's **Deliberate Planning** activity had its Status Bonus changed to a Circumstance Bonus. Reasoning for that is
+  that not a single leadership activity grants a status bonus, it's all Circumstance Bonuses. Plus a +1 Status bonus is
+  obsolete from
+  level 1.
+* Using a similar line of reasoning, Kingdom Feats provide Circumstance Bonuses instead of Status Bonuses
+* Occult Shop ups the limit for Occult and not Magical items in your settlements
+* The Feint Army action does not specify a check and lists the Attack trait. Using this action will give a -5 to give
+  the enemy a -2 to their next attack which does not make sense. Since Outflank is similar but uses more actions and
+  lasts longer, Feint was changed to not have the Attack trait and made a Maneuver
+
 ### Official Kingmaker Module Integration
 
 If you've enabled the official module, the following things are automatically taken care of:
@@ -122,20 +139,6 @@ Config button on the Kingdom Sheet, except for the following:
     * **Status Bonuses**: don't stack; instead this module turns all Feat Status Bonuses into Circumstance Bonuses to
       match other Kingdom Feats
     * **Practical Magic**: no +2 bonus when hitting Master in Magic
-
-#### Homebrew Built-in Changes
-
-* [Based on James Jacob's answers](https://paizo.com/threads/rzs43olf?Kingmaker-Adventure-Path-2E-Errata#19), event XP
-  is bumped to 40XP from 30XP and the event modifier acts as a level modifier for
-  the [XP Awards table](https://2e.aonprd.com/Rules.aspx?ID=575)
-* [Based on James Jacob's answers](https://paizo.com/threads/rzs43ogm?How-am-I-misreading-the-camping-rules#3) all
-  camping activities included in the journals are extended to 2 hours.
-* Kalikke's **Deliberate Planning** activity had its Status Bonus changed to a Circumstance Bonus. Reasoning for that is
-  that not a single leadership activity grants a status bonus, it's all Circumstance Bonuses. Plus a +1 Status bonus is
-  obsolete from
-  level 1.
-* Using a similar line of reasoning, Kingdom Feats provide Circumstance Bonuses instead of Status Bonuses
-* Occult Shop ups the limit for Occult and not Magical items in your settlements
 
 ### Structures
 
