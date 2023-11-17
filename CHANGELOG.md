@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 2023-11-12
+
 ### Changed
 
 * Errataed the Feint Army action to be a Maneuver and remove the Attack trait
+* Migrate to Remaster
+* Require 5.9.1 as minimum pf2e version
 
 ## [0.13.1] - 2023-11-12
 
