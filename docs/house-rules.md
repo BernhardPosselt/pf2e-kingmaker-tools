@@ -102,6 +102,7 @@ Furthermore, giving your players the ability to reconnoiter a hex using an activ
 
 ### House Rules
 
+* PCs can attempt the same Activity multiple times unless it's specifically forbidden: the rules aren't super clear on this, this seems to be the RAI and prevents players from running out of things to do.
 * Increase XP gains and milestones similar to the Vance & Karenshara house rules: the amount of rounds it takes to gain a kingdom level is out of whack at low levels; these rules will level up your kingdom roughly every 5 turns
 * Use the adjusted buildings from Vance & Kerenshara
 * Additional Skill Increases like in Vance & Kerenshara: many buildings are proficiency gated; having very few increases takes the fun out of that
