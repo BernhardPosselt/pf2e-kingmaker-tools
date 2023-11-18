@@ -31,6 +31,10 @@ Run the following before packaging once and set your paths:
     ./node_modules/.bin/fvtt configure set installPath /home/bernhard/dev/FoundryVTT-11.301
     ./node_modules/.bin/fvtt configure set dataPath /home/bernhard/.local/share/FoundryVTT/Data
 
+### House Rules & GM Tips
+
+You can look up my tips and house rules [here](./docs/house-rules.md)
+
 ### Homebrew Built-in Changes
 
 * [Based on James Jacob's answers](https://paizo.com/threads/rzs43olf?Kingmaker-Adventure-Path-2E-Errata#19), event XP
