@@ -32,6 +32,7 @@ import {checkBeginCombat, CombatUpdate, showSetSceneCombatPlaylistDialog, stopCo
 import {migrate} from './migrations';
 import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} from './armies/hooks';
 import {updateKingdomArmyConsumption} from './armies/utils';
+import {openJournal} from './foundry-utils';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -115,6 +116,13 @@ Hooks.on('ready', async () => {
             type: Number,
             scope: 'world',
         });
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'showManual', {
+            name: 'Show Manual',
+            scope: 'world',
+            config: false,
+            default: true,
+            type: Boolean,
+        } as any);
         gameInstance.settings.register('pf2e-kingmaker-tools', 'enableCombatTracks', {
             name: 'Enable Combat Tracks',
             hint: 'If enabled, starts a combat track depending on the current region, actor or scene. Region combat tracks have to be named after the region, e.g. "Kingmaker.Rostland Hinterlands"; "Kingmaker.Default" is played if no region playlist is found instead',
@@ -415,6 +423,11 @@ Hooks.on('ready', async () => {
                 }
             }
         });
+
+        if (isFirstGm(gameInstance) && getBooleanSetting(gameInstance, 'showManual')) {
+            await setSetting(gameInstance, 'showManual', false);
+            await openJournal('Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY');
+        }
     }
 });
 
