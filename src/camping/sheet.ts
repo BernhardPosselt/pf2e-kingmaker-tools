@@ -30,7 +30,6 @@ import {formatWorldTime} from '../time/format';
 import {LabelAndValue, listenClick} from '../utils';
 import {getActorsByUuid, hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
 import {askDcDialog} from './dialogs/ask-dc';
-import {showCampingHelp} from './dialogs/camping-help';
 import {discoverSpecialMeal} from './dialogs/learn-recipe';
 import {setupDialog} from '../kingdom/dialogs/setup-dialog';
 import {getCamping, saveCamping} from './storage';
@@ -56,6 +55,7 @@ import {
 } from './eating';
 import {addActivityDialog} from './dialogs/add-activity';
 import {allowedActors} from './data';
+import {openJournal} from '../foundry-utils';
 
 interface CampingOptions {
     game: Game;
@@ -222,7 +222,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             label: 'Help',
             class: 'pf2e-kingmaker-tools-hb1',
             icon: 'fas fa-question',
-            onclick: () => showCampingHelp(),
+            onclick: () => openJournal('Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY.JournalEntryPage.bmKVD2uzBK6Qu8QS'),
         });
         if (this.game.user?.isGM ?? false) {
             buttons.unshift({
@@ -427,7 +427,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             const button = ev.currentTarget as HTMLElement;
             const uuid = button.dataset.uuid;
             if (uuid !== undefined) {
-                await this.openUuidJournal(uuid);
+                await openJournal(uuid);
             }
         });
     }
@@ -615,17 +615,6 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
     private async openUuidSheet(uuid: string): Promise<void> {
         const item = await fromUuid(uuid) as Item | null;
         item?.sheet?.render(true);
-    }
-
-    private async openUuidJournal(uuid: string): Promise<void> {
-        const journal = await fromUuid(uuid) as JournalEntry | JournalEntryPage | null;
-        if (journal instanceof JournalEntryPage) {
-            journal?.parent?.sheet?.render(true, {pageId: journal.id});
-        } else {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (journal as any).sheet.render(true);
-        }
-
     }
 
     protected async _updateObject(event: Event, formData: CampingData): Promise<void> {

@@ -1,8 +1,15 @@
-2023/11/17-10:53:48.685115 7f7d3bbf16c0 Recovering log #583
-2023/11/17-10:53:48.704112 7f7d3bbf16c0 Delete type=0 #583
-2023/11/17-10:53:48.704173 7f7d3bbf16c0 Delete type=3 #582
-2023/11/17-11:04:01.074984 7f7dc0bfb6c0 Level-0 table #587: started
-2023/11/17-11:04:01.075014 7f7dc0bfb6c0 Level-0 table #587: 0 bytes OK
-2023/11/17-11:04:01.087080 7f7dc0bfb6c0 Delete type=0 #585
-2023/11/17-11:04:01.099346 7f7dc0bfb6c0 Manual compaction at level-0 from '!actors!0RhKx0DxXSpZMDT4' @ 72057594037927935 : 1 .. '!actors!zuLeNdscFSXWUJ6a' @ 0 : 0; will stop at (end)
-2023/11/17-11:04:01.123845 7f7dc0bfb6c0 Manual compaction at level-1 from '!actors!0RhKx0DxXSpZMDT4' @ 72057594037927935 : 1 .. '!actors!zuLeNdscFSXWUJ6a' @ 0 : 0; will stop at (end)
+2023/11/17-11:04:37.143212 7f7d3bbf16c0 Recovering log #586
+2023/11/17-11:04:37.162196 7f7d3bbf16c0 Delete type=3 #584
+2023/11/17-11:04:37.162275 7f7d3bbf16c0 Delete type=0 #586
+2023/11/17-11:24:30.322227 7f7dc0bfb6c0 Level-0 table #591: started
+2023/11/17-11:24:30.330190 7f7dc0bfb6c0 Level-0 table #591: 127286 bytes OK
+2023/11/17-11:24:30.342585 7f7dc0bfb6c0 Delete type=0 #589
+2023/11/17-11:24:30.365588 7f7dc0bfb6c0 Manual compaction at level-0 from '!actors!0RhKx0DxXSpZMDT4' @ 72057594037927935 : 1 .. '!actors!zuLeNdscFSXWUJ6a' @ 0 : 0; will stop at (end)
+2023/11/17-11:24:30.384658 7f7dc0bfb6c0 Manual compaction at level-1 from '!actors!0RhKx0DxXSpZMDT4' @ 72057594037927935 : 1 .. '!actors!zuLeNdscFSXWUJ6a' @ 0 : 0; will stop at '!actors!zuLeNdscFSXWUJ6a' @ 529 : 1
+2023/11/17-11:24:30.384667 7f7dc0bfb6c0 Compacting 1@1 + 1@2 files
+2023/11/17-11:24:30.393311 7f7dc0bfb6c0 Generated table #592@1: 97 keys, 127286 bytes
+2023/11/17-11:24:30.393329 7f7dc0bfb6c0 Compacted 1@1 + 1@2 files => 127286 bytes
+2023/11/17-11:24:30.405663 7f7dc0bfb6c0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/11/17-11:24:30.405749 7f7dc0bfb6c0 Delete type=2 #544
+2023/11/17-11:24:30.405920 7f7dc0bfb6c0 Delete type=2 #591
+2023/11/17-11:24:30.444082 7f7dc0bfb6c0 Manual compaction at level-1 from '!actors!zuLeNdscFSXWUJ6a' @ 529 : 1 .. '!actors!zuLeNdscFSXWUJ6a' @ 0 : 0; will stop at (end)

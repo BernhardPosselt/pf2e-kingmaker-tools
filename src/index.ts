@@ -32,14 +32,12 @@ import {checkBeginCombat, CombatUpdate, showSetSceneCombatPlaylistDialog, stopCo
 import {migrate} from './migrations';
 import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} from './armies/hooks';
 import {updateKingdomArmyConsumption} from './armies/utils';
-import {showArmyHelpDialog} from './armies/dialogs/help';
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
         const gameInstance = game;
         gameInstance.pf2eKingmakerTools = {
             macros: {
-                armyHelpMacro: (): void => showArmyHelpDialog(),
                 toggleWeatherMacro: toggleWeather.bind(null, game),
                 toggleShelteredMacro: toggleSheltered.bind(null, game),
                 setCurrentWeatherMacro: setCurrentWeatherDialog.bind(null, game),

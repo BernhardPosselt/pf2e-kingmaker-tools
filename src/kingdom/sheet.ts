@@ -69,6 +69,7 @@ import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
 import {calculateUnrestPenalty} from './data/unrest';
 import {editSettlementDialog} from './dialogs/edit-settlement-dialog';
 import {showKingdomSettings} from './dialogs/kingdom-settings';
+import {openJournal} from '../foundry-utils';
 
 interface KingdomOptions {
     game: Game;
@@ -311,6 +312,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     protected _getHeaderButtons(): Application.HeaderButton[] {
         const buttons = super._getHeaderButtons();
+        buttons.unshift({
+            label: 'Help',
+            class: 'pf2e-kingmaker-tools-hb1',
+            icon: 'fas fa-question',
+            onclick: () => openJournal('Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY.JournalEntryPage.ty6BS5eSI7ScfVBk'),
+        });
         if (this.game.user?.isGM ?? false) {
             buttons.unshift({
                 label: 'Show Players',

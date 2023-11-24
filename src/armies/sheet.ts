@@ -2,8 +2,8 @@ import {calculateArmyAdjustments, getDefaultArmyAdjustment} from './utils';
 import {getArmyAdjustment, saveArmyAdjustment} from './storage';
 import {ArmyAdjustments} from './data';
 import {disableArmyDialog} from './dialogs/disable';
-import {showArmyHelpDialog} from './dialogs/help';
 import {armySetupDialog} from './dialogs/army-setup';
+import {openJournal} from '../foundry-utils';
 
 interface ArmyOptions {
     game: Game;
@@ -83,7 +83,7 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
                 label: 'Help',
                 class: 'something-made-up-help',
                 icon: 'fas fa-question',
-                onclick: () => showArmyHelpDialog(),
+                onclick: () => openJournal('Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY.JournalEntryPage.5lizPMtMY3ZILDK6'),
             });
             buttons.unshift({
                 label: 'Disable',

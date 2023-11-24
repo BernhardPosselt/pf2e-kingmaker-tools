@@ -12,7 +12,6 @@ declare global {
         pf2eKingmakerTools: {
             macros: {
                 toggleCombatTracksMacro: () => void,
-                armyHelpMacro: () => void,
                 toggleWeatherMacro: () => void,
                 toggleShelteredMacro: () => void,
                 setCurrentWeatherMacro: () => void,

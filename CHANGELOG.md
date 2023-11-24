@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Link Pinned condition in Mired condition
+
+### Added
+
+* Added Manual journal that includes help on how to use armies, camping and kingdom building
+
+### Removed
+
+* Remove army help macro
+
 ## [0.14.0] - 2023-11-12
 
 ### Changed
