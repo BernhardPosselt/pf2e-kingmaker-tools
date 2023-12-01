@@ -84,7 +84,7 @@ const defaultKingmakerModuleSound = 'The Shrike Hills';
 
 const kingmakerModulePlaylists = new Map<string, string>();
 // kingmakerModulePlaylists.set('Dunsward', '');  // TODO: Dunsward
-kingmakerModulePlaylists.set('Hootongue', 'The Narlmarches');
+kingmakerModulePlaylists.set('Hooktongue', 'The Narlmarches');
 kingmakerModulePlaylists.set('Kamelands', 'Glenebon');
 kingmakerModulePlaylists.set('Narlmarches', 'The Narlmarches');
 // kingmakerModulePlaylists.set('Nomen Heights', ''); // TODO: Dunsward
@@ -92,7 +92,13 @@ kingmakerModulePlaylists.set('Pitax', 'Capital Under Attack');
 kingmakerModulePlaylists.set('Sellen Hills', 'Glenebon');
 kingmakerModulePlaylists.set('Thousand Voices', 'First World');
 // kingmakerModulePlaylists.set('Tor of Levenies', ''); // TODO: Dunsward
-kingmakerModulePlaylists.set('Tuswater', 'Glenebon');
+kingmakerModulePlaylists.set('Tuskwater', 'Glenebon');
+kingmakerModulePlaylists.set('Glenebon Lowlands', 'Glenebon');
+kingmakerModulePlaylists.set('Glenebon Uplands', 'Glenebon');
+kingmakerModulePlaylists.set('Tiger Lords', 'Glenebon');
+kingmakerModulePlaylists.set('Drelev', 'Glenebon');
+kingmakerModulePlaylists.set('Numeria', 'Glenebon');
+kingmakerModulePlaylists.set('Branthlend Mountains', 'Glenebon');
 
 function getKingmakerCombatSound(game: Game, name: string): PlaylistSound | undefined {
     const combatPlaylistSourceId = '7CiwVus60FiuKFhK';
