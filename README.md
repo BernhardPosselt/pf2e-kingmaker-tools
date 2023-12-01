@@ -64,3 +64,11 @@ If you've enabled the official module, the following things are automatically ta
     * Cult Events
 
 If you are not running the official module, check out the [Kingmaker Tools Token Mapping](https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping) module
+
+### Examples
+
+![kingdom-sheet.png](docs%2Fimages%2Fkingdom-sheet.png)
+
+![camping-sheet-1.png](docs%2Fimages%2Fcamping-sheet-1.png)
+
+![armies.png](docs%2Fimages%2Farmies.png)
