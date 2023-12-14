@@ -4,7 +4,7 @@ Spoilers ahead!
 
 ## Should You Buy the Companion Guide
 
-The additional rules are hit or miss. If you can't automate Camping, it's horrible. I've dropped weather in my game. The additional quests themselves are mid to good, I've enjoyed Valerie's, Linzi's and Jublilost's quest in particular. You will not get custom quests for 6 out of 13 companions which sucks.
+The additional rules are hit or miss. If you can't automate Camping, it's horrible. I've dropped weather in my game. The additional quests themselves are mid to good, I've enjoyed Amiri's, Valerie's, Linzi's and Jublilost's quest in particular. You will not get custom quests for 6 out of 13 companions which sucks.
 
 Therefore, I would only recommend buying the book if you want to include the companions from the CRPG.
 
@@ -156,7 +156,7 @@ The system currently punishes you for building structures with item bonuses outs
 
 There are no buildings that provide item bonuses to companion Leadership Activities
 
-**Shacks**:
+**Shacks (level 2)**:
 
 * **Lots**: 1 **Cost** 4 RP, 4 Lumber, 4 Stone
 * **Construction**: Engineering DC 16
@@ -164,7 +164,7 @@ There are no buildings that provide item bonuses to companion Leadership Activit
 * **Item Bonuses**: +1 to All Companion Activities
 * **Effects**: You can only build one of these
 
-**Rooms**:
+**Rooms (level 9)**:
 
 * **Lots**: 2 **Cost** 30 RP, 10 Lumber, 10 Stone
 * **Construction**: Engineering DC 26
@@ -173,7 +173,7 @@ There are no buildings that provide item bonuses to companion Leadership Activit
 * **Item Bonuses**: +2 to All Companion Activities
 * **Effects**: You can only build one of these
 
-**Quarters**:
+**Quarters (level 15)**:
 
 * **Lots**: 4 **Cost** 45 RP, 10 Lumber, 20 Stone, 15 Luxuries
 * **Construction**: Engineering DC 34
