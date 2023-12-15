@@ -122,6 +122,20 @@ My players asked for additional rewards for completing these:
 
 To make kingdom building fun, structures should not only give a flat bonus to a skill, but also provide the PCs themselves benefits, that they could not have gotten otherwise. Also think of additional quests or RP encounters that might be unlocked by building a structure, e.g. a specialized artisan, that might forge a single weapon for a PC.
 
+#### Trainers
+
+The following buildings allow you to retrain:
+
+* **Shrine**: Cleric, Oracle
+* **Library**: Investigator, Thaumaturge, Psychic
+* **Alchemy Laboratory**: Alchemist, Gunslinger, Inventor
+* **Tavern**: Bard
+* **Arcanist's Tower**: Wizard, Witch, Sorcerer, Magus
+* **Garrison**: Fighter, Barbarian, Champion, Monk
+* **Sacred Grove**: Druid, Kineticist, Summoner, Ranger
+* **Thieves' Guild**: Rogue
+* **Pier**: Swashbuckler
+
 #### Crafting
 
 The following buildings give you access to crafting items:
