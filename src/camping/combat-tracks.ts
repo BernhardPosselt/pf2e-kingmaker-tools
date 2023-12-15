@@ -83,15 +83,15 @@ export async function showSetSceneCombatPlaylistDialog(game: Game, entity: Entit
 const defaultKingmakerModuleSound = 'The Shrike Hills';
 
 const kingmakerModulePlaylists = new Map<string, string>();
-// kingmakerModulePlaylists.set('Dunsward', '');  // TODO: Dunsward
+kingmakerModulePlaylists.set('Dunsward', 'Dunsward');
 kingmakerModulePlaylists.set('Hooktongue', 'The Narlmarches');
 kingmakerModulePlaylists.set('Kamelands', 'Glenebon');
 kingmakerModulePlaylists.set('Narlmarches', 'The Narlmarches');
-// kingmakerModulePlaylists.set('Nomen Heights', ''); // TODO: Dunsward
+kingmakerModulePlaylists.set('Nomen Heights', 'Dunsward');
 kingmakerModulePlaylists.set('Pitax', 'Capital Under Attack');
 kingmakerModulePlaylists.set('Sellen Hills', 'Glenebon');
 kingmakerModulePlaylists.set('Thousand Voices', 'First World');
-// kingmakerModulePlaylists.set('Tor of Levenies', ''); // TODO: Dunsward
+kingmakerModulePlaylists.set('Tor of Levenies', 'Dunsward');
 kingmakerModulePlaylists.set('Tuskwater', 'Glenebon');
 kingmakerModulePlaylists.set('Glenebon Lowlands', 'Glenebon');
 kingmakerModulePlaylists.set('Glenebon Uplands', 'Glenebon');

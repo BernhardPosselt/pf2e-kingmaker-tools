@@ -486,10 +486,10 @@ export async function getHuntAndGatherQuantities(
 export async function addToInventory(actor: Actor, uuid: string, quantity: number): Promise<void> {
     if (quantity > 0) {
         const item = (await fromUuid(uuid))?.toObject();
-        if (isConsumableItem(item) && item.system.charges.max > 0) {
-            const max = item.system.charges.max;
+        if (isConsumableItem(item) && item.system.uses.max > 0) {
+            const max = item.system.uses.max;
             item.system.quantity = Math.ceil(quantity / max);
-            item.system.charges.value = quantity % max;
+            item.system.uses.value = quantity % max;
         } else {
             item.system.quantity = quantity;
         }

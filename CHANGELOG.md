@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.0] - 2023-12-15
+
+### Changed
+
+* Require 5.11 as minimum 2e version
+* Correctly play Dunsward combat track
+
+### Fixed
+
+* Fix camping sheet; 2e system data model renamed charges to uses
+
 ## [0.15.1] - 2023-12-01
 
 ### Fixed

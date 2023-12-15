@@ -32,7 +32,7 @@ export async function getActorConsumables(actors: Actor[]): Promise<FoodAmount> 
             .find(c => c.sourceId === specialIngredientsSourceId && specialIngredientsSourceId !== undefined) as ConsumableItem | undefined;
         const basicIngredient = consumables
             .find(c => c.sourceId === basicIngredientsId && basicIngredientsId !== undefined) as ConsumableItem | undefined;
-        result.rations += ration ? ration.system.charges.value + (Math.max(0, ration.quantity - 1) * ration.system.charges.max) : 0;
+        result.rations += ration ? ration.system.uses.value + (Math.max(0, ration.quantity - 1) * ration.system.uses.max) : 0;
         result.basicIngredients += basicIngredient ? basicIngredient.quantity : 0;
         result.specialIngredients += specialIngredient ? specialIngredient.quantity : 0;
     }
@@ -128,20 +128,21 @@ async function removeRations(actors: Actor[], amount: number): Promise<void> {
                 if (remainingToRemove > 0) {
                     const system = ration.system;
                     const quantity = ration.quantity;
-                    const charges = system.charges.value;
+                    const charges = system.uses.value;
+                    const max = system.uses.max;
                     const quantitiesOf7 = Math.max(0, quantity - 1);
-                    const available = quantitiesOf7 * 7 + charges;
+                    const available = quantitiesOf7 * max + charges;
                     if (remainingToRemove >= available) {
                         await ration.delete();
                         remainingToRemove -= available;
                     } else {
                         const leftOver = available - remainingToRemove;
-                        const leftOverCharges = leftOver % 7;
-                        const leftOverQuantity = Math.ceil(leftOver / 7);
+                        const leftOverCharges = leftOver % max;
+                        const leftOverQuantity = Math.ceil(leftOver / max);
                         updates.push({
                             _id: ration.id,
                             'system.quantity': leftOverQuantity,
-                            'system.charges.value': leftOverCharges === 0 ? 7 : leftOverCharges,
+                            'system.uses.value': leftOverCharges === 0 ? max : leftOverCharges,
                         });
                         remainingToRemove = 0;
                     }
