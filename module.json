@@ -1,238 +1,238 @@
 {
-    "title": "Pathfinder - Kingmaker Tools (Unofficial)",
-    "description": "A collection of utilities to run Kingmaker",
-    "version": "0.16.0",
-    "scripts": [
-        "dist/main.js"
-    ],
-    "url": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools",
-    "license": "LICENSE",
-    "styles": [
-        "styles/style.css",
-        "styles/camping.css"
-    ],
-    "packs": [
-        {
-            "name": "kingmaker-tools-battlefield-terrain-features",
-            "path": "packs/kingmaker-tools-battlefield-terrain-features",
-            "label": "Battlefield Terrain Features",
-            "type": "Item",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-army-actions",
-            "path": "packs/kingmaker-tools-army-actions",
-            "label": "Army Actions",
-            "type": "Item",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-army-gear",
-            "path": "packs/kingmaker-tools-army-gear",
-            "label": "Army Gear",
-            "type": "Item",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-army-conditions",
-            "path": "packs/kingmaker-tools-army-conditions",
-            "label": "Army Conditions",
-            "type": "Item",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-army-effects",
-            "path": "packs/kingmaker-tools-army-effects",
-            "label": "Army Effects",
-            "type": "Item",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-armies",
-            "path": "packs/kingmaker-tools-armies",
-            "label": "Armies",
-            "type": "Actor",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-fortifications",
-            "path": "packs/kingmaker-tools-fortifications",
-            "label": "Fortifications",
-            "type": "Actor",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-army-tactics",
-            "path": "packs/kingmaker-tools-army-tactics",
-            "label": "Army Tactics",
-            "type": "Item",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-companions",
-            "path": "packs/kingmaker-tools-companions",
-            "label": "Companions",
-            "type": "Actor",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-structures",
-            "path": "packs/kingmaker-tools-structures",
-            "label": "Structures",
-            "type": "Actor",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-meal-effects",
-            "path": "packs/kingmaker-tools-meal-effects",
-            "label": "Meal Effects",
-            "type": "Item",
-            "system": "pf2e",
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "private": false,
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-camping-effects",
-            "path": "packs/kingmaker-tools-camping-effects",
-            "label": "Camping Effects",
-            "type": "Item",
-            "system": "pf2e",
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "private": false,
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-weather-effects",
-            "path": "packs/kingmaker-tools-weather-effects",
-            "label": "Weather Effects",
-            "type": "Item",
-            "system": "pf2e",
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "private": false,
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-journals",
-            "path": "packs/kingmaker-tools-journals",
-            "label": "Journals",
-            "type": "JournalEntry",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {},
-            "system": "pf2e"
-        },
-        {
-            "name": "kingmaker-tools-rolltables",
-            "path": "packs/kingmaker-tools-rolltables",
-            "label": "Rolltables",
-            "type": "RollTable",
-            "private": false,
-            "flags": {},
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "system": "pf2e"
-        },
-        {
-            "name": "kingmaker-tools-random-encounters",
-            "path": "packs/kingmaker-tools-random-encounters",
-            "label": "Random Encounters",
-            "type": "RollTable",
-            "private": false,
-            "flags": {},
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "system": "pf2e"
-        },
-        {
-            "name": "kingmaker-tools-macros",
-            "path": "packs/kingmaker-tools-macros",
-            "label": "Macros",
-            "type": "Macro",
-            "private": false,
-            "flags": {},
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "system": "pf2e"
-        }
-    ],
-    "packFolders": [
-        {
-            "name": "Kingmaker Tools",
-            "sorting": "m",
-            "packs": [
-                "kingmaker-tools-structures",
-                "kingmaker-tools-meal-effects",
-                "kingmaker-tools-camping-effects",
-                "kingmaker-tools-weather-effects",
-                "kingmaker-tools-journals",
-                "kingmaker-tools-custom-journals",
-                "kingmaker-tools-rolltables",
-                "kingmaker-tools-random-encounters",
-                "kingmaker-tools-custom-rolltables",
-                "kingmaker-tools-macros",
-                "kingmaker-tools-companions",
-                "kingmaker-tools-army-effects",
-                "kingmaker-tools-army-gear",
-                "kingmaker-tools-army-tactics",
-                "kingmaker-tools-army-conditions",
-                "kingmaker-tools-army-actions",
-                "kingmaker-tools-armies",
-                "kingmaker-tools-fortifications",
-                "kingmaker-tools-battlefield-terrain-features"
-            ]
-        }
-    ],
-    "manifest": "https://raw.githubusercontent.com/BernhardPosselt/pf2e-kingmaker-tools/master/module.json",
-    "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/0.16.0/release.zip",
-    "id": "pf2e-kingmaker-tools",
-    "socket": true,
-    "authors": [
-        {
-            "name": "Bernhard Posselt",
-            "flags": {}
-        }
-    ],
-    "relationships": {
-        "systems": [
-            {
-                "id": "pf2e",
-                "compatibility": {
-                    "minimum": "5.11.0"
-                }
-            }
-        ]
+  "title": "Pathfinder - Kingmaker Tools (Unofficial)",
+  "description": "A collection of utilities to run Kingmaker",
+  "version": "0.16.0",
+  "scripts": [
+    "dist/main.js"
+  ],
+  "url": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools",
+  "license": "LICENSE",
+  "styles": [
+    "styles/style.css",
+    "styles/camping.css"
+  ],
+  "packs": [
+    {
+      "name": "kingmaker-tools-battlefield-terrain-features",
+      "path": "packs/kingmaker-tools-battlefield-terrain-features",
+      "label": "Battlefield Terrain Features",
+      "type": "Item",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
     },
-    "compatibility": {
-        "minimum": "11",
-        "maximum": "11",
-        "verified": "11"
+    {
+      "name": "kingmaker-tools-army-actions",
+      "path": "packs/kingmaker-tools-army-actions",
+      "label": "Army Actions",
+      "type": "Item",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-army-gear",
+      "path": "packs/kingmaker-tools-army-gear",
+      "label": "Army Gear",
+      "type": "Item",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-army-conditions",
+      "path": "packs/kingmaker-tools-army-conditions",
+      "label": "Army Conditions",
+      "type": "Item",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-army-effects",
+      "path": "packs/kingmaker-tools-army-effects",
+      "label": "Army Effects",
+      "type": "Item",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-armies",
+      "path": "packs/kingmaker-tools-armies",
+      "label": "Armies",
+      "type": "Actor",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-fortifications",
+      "path": "packs/kingmaker-tools-fortifications",
+      "label": "Fortifications",
+      "type": "Actor",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-army-tactics",
+      "path": "packs/kingmaker-tools-army-tactics",
+      "label": "Army Tactics",
+      "type": "Item",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-companions",
+      "path": "packs/kingmaker-tools-companions",
+      "label": "Companions",
+      "type": "Actor",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-structures",
+      "path": "packs/kingmaker-tools-structures",
+      "label": "Structures",
+      "type": "Actor",
+      "system": "pf2e",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-meal-effects",
+      "path": "packs/kingmaker-tools-meal-effects",
+      "label": "Meal Effects",
+      "type": "Item",
+      "system": "pf2e",
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-camping-effects",
+      "path": "packs/kingmaker-tools-camping-effects",
+      "label": "Camping Effects",
+      "type": "Item",
+      "system": "pf2e",
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-weather-effects",
+      "path": "packs/kingmaker-tools-weather-effects",
+      "label": "Weather Effects",
+      "type": "Item",
+      "system": "pf2e",
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "kingmaker-tools-journals",
+      "path": "packs/kingmaker-tools-journals",
+      "label": "Journals",
+      "type": "JournalEntry",
+      "private": false,
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "flags": {},
+      "system": "pf2e"
+    },
+    {
+      "name": "kingmaker-tools-rolltables",
+      "path": "packs/kingmaker-tools-rolltables",
+      "label": "Rolltables",
+      "type": "RollTable",
+      "private": false,
+      "flags": {},
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "system": "pf2e"
+    },
+    {
+      "name": "kingmaker-tools-random-encounters",
+      "path": "packs/kingmaker-tools-random-encounters",
+      "label": "Random Encounters",
+      "type": "RollTable",
+      "private": false,
+      "flags": {},
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "system": "pf2e"
+    },
+    {
+      "name": "kingmaker-tools-macros",
+      "path": "packs/kingmaker-tools-macros",
+      "label": "Macros",
+      "type": "Macro",
+      "private": false,
+      "flags": {},
+      "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+      "system": "pf2e"
     }
+  ],
+  "packFolders": [
+    {
+      "name": "Kingmaker Tools",
+      "sorting": "m",
+      "packs": [
+        "kingmaker-tools-structures",
+        "kingmaker-tools-meal-effects",
+        "kingmaker-tools-camping-effects",
+        "kingmaker-tools-weather-effects",
+        "kingmaker-tools-journals",
+        "kingmaker-tools-custom-journals",
+        "kingmaker-tools-rolltables",
+        "kingmaker-tools-random-encounters",
+        "kingmaker-tools-custom-rolltables",
+        "kingmaker-tools-macros",
+        "kingmaker-tools-companions",
+        "kingmaker-tools-army-effects",
+        "kingmaker-tools-army-gear",
+        "kingmaker-tools-army-tactics",
+        "kingmaker-tools-army-conditions",
+        "kingmaker-tools-army-actions",
+        "kingmaker-tools-armies",
+        "kingmaker-tools-fortifications",
+        "kingmaker-tools-battlefield-terrain-features"
+      ]
+    }
+  ],
+  "manifest": "https://raw.githubusercontent.com/BernhardPosselt/pf2e-kingmaker-tools/master/module.json",
+  "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/0.16.0/release.zip",
+  "id": "pf2e-kingmaker-tools",
+  "socket": true,
+  "authors": [
+    {
+      "name": "Bernhard Posselt",
+      "flags": {}
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "pf2e",
+        "compatibility": {
+          "minimum": "5.12.7"
+        }
+      }
+    ]
+  },
+  "compatibility": {
+    "minimum": "11",
+    "maximum": "11",
+    "verified": "11"
+  }
 }
