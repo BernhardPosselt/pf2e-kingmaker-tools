@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.1] - 2024-01-14
+
+### Fixed
+
+* Clicking on the settlement link will not open a new browser tab anymore
+
 ## [0.17.0] - 2024-01-14
 
 ### Added

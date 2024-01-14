@@ -1065,6 +1065,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async viewSettlementScene(ev: Event): Promise<void> {
+        ev.preventDefault();
+        ev.stopPropagation();
         const a = ev.currentTarget as HTMLElement;
         const id = a.dataset.id;
         const scene = this.game.scenes?.filter(scene => scene.id === id)?.[0];
