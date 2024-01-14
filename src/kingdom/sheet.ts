@@ -663,7 +663,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             modifiers,
             fame: {
                 ...current.fame,
-                now: clamped(current.fame.now + current.fame.next, 0, 3),
+                now: clamped(current.fame.next, 0, 3),
                 next: 0,
             },
             resourceDice: {

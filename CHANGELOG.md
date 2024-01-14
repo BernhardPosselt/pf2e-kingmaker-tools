@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Fame/Infamy points are now correctly reset to 0 at the end of the turn
+
 ## [0.16.0] - 2023-12-15
 
 ### Changed
