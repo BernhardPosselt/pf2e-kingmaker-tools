@@ -390,6 +390,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => await rollCultEvent(this.game));
         $html.querySelector('#claimed-refuge')
             ?.addEventListener('click', async () => await this.claimedHexFeature('refuge'));
+        $html.querySelectorAll('.km-view-settlement-scene')
+            ?.forEach(el => {
+                el.addEventListener('click', async (ev) => await this.viewSettlementScene(ev));
+            });
         $html.querySelector('#claimed-landmark')
             ?.addEventListener('click', async () => await this.claimedHexFeature('landmark'));
         $html.querySelector('#km-add-event')
@@ -1057,6 +1061,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     turns: 2,
                 }],
             });
+        }
+    }
+
+    private async viewSettlementScene(ev: Event): Promise<void> {
+        const a = ev.currentTarget as HTMLElement;
+        const id = a.dataset.id;
+        const scene = this.game.scenes?.filter(scene => scene.id === id)?.[0];
+        if (scene) {
+            await scene.view();
         }
     }
 }

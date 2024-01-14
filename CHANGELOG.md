@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.0] - 2024-01-14
+
 ### Added
 
+* Make it possible to view settlement scenes by clicking on their name in the kingdom sheet settlement list
 * Added a setting to disable activity skill proficiency requirements
 
 ### Fixed
