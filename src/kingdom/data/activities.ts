@@ -197,11 +197,15 @@ export function createActivityLabel(activity: Activity, kingdom: Kingdom): strin
     return label;
 }
 
-export function getPerformableActivities(ranks: SkillRanks, enableCapitalInvestment: boolean): Record<Activity, boolean> {
+export function getPerformableActivities(
+    ranks: SkillRanks,
+    enableCapitalInvestment: boolean,
+    ignoreSkillRequirements: boolean,
+): Record<Activity, boolean> {
     return Object.fromEntries(allActivities.map(activity => {
         const activityRanks = activityData[activity].skills;
         const noBuildingPreventsActivity = activity !== 'capital-investment' || enableCapitalInvestment;
-        const enabled = (Object.entries(activityRanks) as [Skill, number][])
+        const enabled = ignoreSkillRequirements || (Object.entries(activityRanks) as [Skill, number][])
             .some(([skill, rank]) => ranks[skill] >= rank) && noBuildingPreventsActivity;
         return [activity, enabled];
     })) as Record<Activity, boolean>;

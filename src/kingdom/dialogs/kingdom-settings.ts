@@ -34,6 +34,7 @@ interface KingdomSettingData {
     kingdomEventRollMode: string;
     kingdomEventsTable: string;
     kingdomCultTable: string;
+    ignoreSkillRequirements: boolean;
 }
 
 interface KingdomSettingOptions {
@@ -56,6 +57,7 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
         this.data = {
             companions: this.getCompanionBenefits(),
             allStructuresItemBonusesStack: getBooleanSetting(this.game, 'kingdomAllStructureItemBonusesStack'),
+            ignoreSkillRequirements: getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements'),
             automaticallyCalculateArmyConsumption: getBooleanSetting(this.game, 'autoCalculateArmyConsumption'),
             doubleSkillIncreases: getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel'),
             rpToXpConversionLimit: getNumberSetting(this.game, 'rpToXpConversionLimit'),
@@ -164,6 +166,7 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
         await setSetting(this.game, 'kingdomEventsTable', this.data.kingdomEventsTable);
         await setSetting(this.game, 'kingdomCultTable', this.data.kingdomCultTable);
         await setSetting(this.game, 'kingdomEventRollMode', this.data.kingdomEventRollMode);
+        await setSetting(this.game, 'kingdomIgnoreSkillRequirements', this.data.ignoreSkillRequirements);
         if (this.data.untrainedSkillProficiency === 'level') {
             await setSetting(this.game, 'kingdomAlwaysAddLevel', true);
             await setSetting(this.game, 'kingdomAlwaysAddHalfLevel', false);

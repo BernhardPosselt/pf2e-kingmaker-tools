@@ -150,9 +150,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 return {[activity]: true};
             })
             .reduce((a, b) => Object.assign(a, b), {});
+        const ignoreSkillRequirements = getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements');
         const enabledActivities = getPerformableActivities(
             kingdomData.skillRanks,
             activeSettlementStructureResult?.active?.allowCapitalInvestment === true,
+            ignoreSkillRequirements,
         );
         const currentSceneId = getCurrentScene(this.game)?.id;
         const canAddSettlement = kingdomData.settlements.find(settlement => settlement.sceneId === currentSceneId) === undefined;

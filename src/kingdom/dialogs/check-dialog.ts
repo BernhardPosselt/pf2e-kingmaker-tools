@@ -17,6 +17,7 @@ import {capitalize, unslugify} from '../../utils';
 import {activityData} from '../data/activityData';
 import {rollCheck} from '../rolls';
 import {getActiveSettlementStructureResult, getSettlement, getSettlementsWithoutLandBorders} from '../scene';
+import {getBooleanSetting} from '../../settings';
 
 export type CheckType = 'skill' | 'activity';
 
@@ -118,7 +119,9 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const companionUnlockSkills = (Object.entries(companionSkillUnlocks) as [Skill, Activity[]][])
             .filter(([, activities]) => activities.includes(activity))
             .map(([skill]) => skill);
-        const activitySkills = getActivitySkills(activity, ranks);
+        const ignoreSkillRequirements = getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements');
+        const skillRankFilters = ignoreSkillRequirements ? undefined : ranks;
+        const activitySkills = getActivitySkills(activity, skillRankFilters);
         const practicalMagic: Skill[] = activitySkills.includes('engineering') && hasFeat(this.kingdom, 'Practical Magic') ? ['magic'] : [];
         return Array.from(new Set([...activitySkills, ...companionUnlockSkills, ...practicalMagic]));
     }

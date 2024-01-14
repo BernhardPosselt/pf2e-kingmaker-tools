@@ -306,6 +306,14 @@ Hooks.on('ready', async () => {
             requiresReload: true,
             type: Boolean,
         } as any);
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomIgnoreSkillRequirements', {
+            name: 'Ignore Skill Proficiency Requirements for Kingdom Activities',
+            scope: 'world',
+            config: false,
+            default: false,
+            requiresReload: true,
+            type: Boolean,
+        } as any);
         gameInstance.settings.register('pf2e-kingmaker-tools', 'autoCalculateArmyConsumption', {
             name: 'Automatically Calculate Army Consumption',
             hint: 'If enabled, gets all visible army tokens on all scenes and sums up their consumption',

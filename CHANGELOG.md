@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Added a setting to disable activity skill proficiency requirements
+
 ### Fixed
 
 * Fame/Infamy points are now correctly reset to 0 at the end of the turn
