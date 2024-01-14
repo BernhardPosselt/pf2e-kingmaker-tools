@@ -70,6 +70,8 @@ import {calculateUnrestPenalty} from './data/unrest';
 import {editSettlementDialog} from './dialogs/edit-settlement-dialog';
 import {showKingdomSettings} from './dialogs/kingdom-settings';
 import {openJournal} from '../foundry-utils';
+import {showStructureBrowser} from './dialogs/structure-browser';
+import {structuresByName} from './data/structures';
 
 interface KingdomOptions {
     game: Game;
@@ -390,6 +392,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => await rollCultEvent(this.game));
         $html.querySelector('#claimed-refuge')
             ?.addEventListener('click', async () => await this.claimedHexFeature('refuge'));
+        $html.querySelector('#km-open-structure-browser')
+            ?.addEventListener('click', async () => await this.showStructureBrowser());
         $html.querySelectorAll('.km-view-settlement-scene')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.viewSettlementScene(ev));
@@ -1073,6 +1077,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         if (scene) {
             await scene.view();
         }
+    }
+
+    private async showStructureBrowser(): Promise<void> {
+        const structures = Array.from(structuresByName.values());
+        await showStructureBrowser(this.game, this.getKingdom().level, structures);
     }
 }
 

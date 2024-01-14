@@ -281,6 +281,11 @@ td.skill-value {
     min-width: 34px;
 }
 
+.activity-help .app-button {
+    flex-basis: 0;
+    min-width: 34px;
+}
+
 #km-kingdom-name {
     width: 250px;
 }
@@ -361,4 +366,43 @@ td.skill-value {
     color: #4b4a44;
     font-size: 12px;
     margin: 0;
+}
+
+/* structure browser */
+#km-structure-browser {
+    display: flex;
+    max-height: 100%;
+    gap: 5px;
+}
+
+#km-structure-browser-sidebar {
+    width: 300px;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+#km-structure-browser-clear {
+    width: calc(100% - 2px);
+}
+
+#km-structure-browser-sidebar > div {
+    margin-top: 5px;
+}
+
+#km-structure-browser-content {
+    overflow-y: auto;
+    max-height: 100%;
+    width: 495px;
+}
+
+.structure-browser-range {
+    display: flex;
+    gap: 15px;
+}
+
+.structure-browser-range input {
+}
+
+.structure-browser-range div {
+    flex-grow: 1;
 }

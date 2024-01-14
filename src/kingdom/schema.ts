@@ -46,4 +46,9 @@ export const ruleSchema = Joi.object({
     unlockActivities: Joi.array().items(Joi.string().valid(...allActivities)).optional(),
     traits: Joi.array().items(Joi.string().valid(...allBuildingTraits)).optional(),
     lots: Joi.number().optional(),
+    level: Joi.number().optional(),
+    affectsEvents: Joi.boolean().optional(),
+    affectsDowntime: Joi.boolean().optional(),
+    reducesUnrest: Joi.boolean().optional(),
+    reducesRuin: Joi.boolean().optional(),
 });

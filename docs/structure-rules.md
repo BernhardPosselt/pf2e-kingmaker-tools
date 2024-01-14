@@ -249,4 +249,9 @@ A full structure rule would look something like this:
     * residential
     * infrastructure
 * **lots**: optional, if provided used to calculate how many lots the building takes up; otherwise the token size is
-  used 
+  used
+* **level**: optional, if not provided, defaults to 0
+* **affectsEvents**: optional, used to filter for structures that affect events
+* **affectsDowntime**: optional, used to filter for structures that have downtime bonuses
+* **reducesUnrest**: optional, used to filter for structures that reduce unrest
+* **reducesRuin**: optional, used to filter for structures that reduce ruin

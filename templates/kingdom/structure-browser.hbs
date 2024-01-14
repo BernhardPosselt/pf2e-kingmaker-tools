@@ -1,0 +1,72 @@
+<div id="km-structure-browser">
+    <div id="km-structure-browser-sidebar">
+        <button type="button" id="km-structure-browser-clear">Clear Filters</button>
+        <div>
+            <label for="km-structure-browser-level">Level</label>
+            <div class="structure-browser-range">
+                <input type="range" min="0" max="20" value="{{level}}" name="level" id="km-structure-browser-level">
+                <div>{{level}}</div>
+            </div>
+        </div>
+        <div>
+            <label for="km-structure-browser-lots">Maximum Lots</label>
+            <div class="structure-browser-range">
+                <input type="range" min="1" max="4" value="{{lots}}" name="lots" id="km-structure-browser-lots">
+                <div>{{lots}}</div>
+            </div>
+        </div>
+        <div>
+            <input type="checkbox" {{checked reducesUnrest}} name="reducesUnrest"
+                   id="km-structure-browser-reduce-unrest">
+            <label for="km-structure-browser-reduce-unrest">Reduces Unrest</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked reducesRuin}} name="reducesRuin" id="km-structure-browser-reduce-ruin">
+            <label for="km-structure-browser-reduce-ruin">Reduces Ruin</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked housing}} name="housing" id="km-structure-browser-housing">
+            <label for="km-structure-browser-housing">Housing</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked affectsDowntime}} name="affectsDowntime"
+                   id="km-structure-browser-downtime">
+            <label for="km-structure-browser-downtime">Downtime</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked affectsEvents}} name="affectsEvents" id="km-structure-browser-events">
+            <label for="km-structure-browser-events">Affects Events</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked items}} name="items" id="km-structure-browser-items">
+            <label for="km-structure-browser-items">Shopping</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked storage}} name="storage" id="km-structure-browser-capacity">
+            <label for="km-structure-browser-capacity">Increases Capacity</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked consumption}} name="consumption" id="km-structure-browser-consumption">
+            <label for="km-structure-browser-consumption">Reduces Consumption</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked infrastructure}} name="infrastructure"
+                   id="km-structure-browser-infrastructure">
+            <label for="km-structure-browser-infrastructure">Infrastructure</label>
+        </div>
+        <h2>Item Bonus Activities</h2>
+        {{#each activities}}
+            <div>
+                <input type="checkbox" {{checked enabled}} name="activity{{id}}" id="km-structure-browser-{{id}}">
+                <label for="km-structure-browser-{{id}}">{{name}}</label>
+            </div>
+        {{/each}}
+    </div>
+    <div id="km-structure-browser-content">
+        <ul>
+            {{#each structures}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
