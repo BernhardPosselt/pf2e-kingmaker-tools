@@ -7,15 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.18.0] - 2024-01-15
+
 ### Added
 
-* Structure Browser that let's you filter structures next to the Build Structure activity
+* Structure Browser which lets you filter structures, roll checks to build and pay costs replaces the **Build Structure** activity popup. Structures are gathered from all imported structures, so you might need to import them from the compendium
 * Separate structures for Watchtowers and Bridges built out of stone
 
 ### Changed
 
-* Use simple NPC sheet
+* Add the following [additional required attributes to structures](docs/structure-rules.md) (you may need to edit your custom structures to make things work again):
+    * **construction**
+* Add the following additional required attributes to structures:
+    * **affectsEvents**
+    * **affectsDowntime**
+    * **reducesUnrest**
+    * **reducesRuin**
+    * **upgradesFrom**
+* Use simple NPC sheet for structures
 * Add more attributes onto the structures; you might need to edit your custom structures to adjust them
+* Move kingdom and camping sheet npc actors to separate compendium
+
+### Fixed
+
+* Allow optional **isBridge** attribute for custom structures as documented
 
 ## [0.17.1] - 2024-01-14
 

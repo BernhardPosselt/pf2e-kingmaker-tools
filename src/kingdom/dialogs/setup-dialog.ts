@@ -10,7 +10,7 @@ export function setupDialog(game: Game, sheet: 'Kingdom' | 'Camping', actorId: s
                 label: 'Import',
                 callback: async (): Promise<void> => {
                     /* eslint-disable @typescript-eslint/no-explicit-any */
-                    const pack = game.packs.get('pf2e-kingmaker-tools.kingmaker-tools-structures') as any;
+                    const pack = game.packs.get('pf2e-kingmaker-tools.kingmaker-tools-sheets') as any;
                     await game?.actors?.importFromCompendium(pack, actorId);
                     onOk();
                 },

@@ -182,6 +182,9 @@ A full structure rule would look something like this:
   "affectsDowntime": false,
   "reducesUnrest": false,
   "reducesRuin": false,
+  "upgradeFrom": [
+    "Pier"
+  ],
   "construction": {
     "skills": [
       {
@@ -271,11 +274,12 @@ A full structure rule would look something like this:
     * infrastructure
 * **lots**: optional, if provided used to calculate how many lots the building takes up; otherwise the token size is
   used
-* **level**: optional, if not provided, defaults to 0
+* **level**: optional, if absent, uses the NPC actor's level
 * **affectsEvents**: optional, used to filter for structures that affect events
 * **affectsDowntime**: optional, used to filter for structures that have downtime bonuses
 * **reducesUnrest**: optional, used to filter for structures that reduce unrest
 * **reducesRuin**: optional, used to filter for structures that reduce ruin
+* **upgradeFrom**: optional, includes a list of structure names that this structure can be upgraded from
 * **construction**:
     * **skills**:
         * **skill**: a skill in lower case

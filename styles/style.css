@@ -281,11 +281,6 @@ td.skill-value {
     min-width: 34px;
 }
 
-.activity-help .app-button {
-    flex-basis: 0;
-    min-width: 34px;
-}
-
 #km-kingdom-name {
     width: 250px;
 }
@@ -401,7 +396,12 @@ td.skill-value {
 #km-structure-browser-content {
     overflow-y: auto;
     max-height: 100%;
-    width: 565px;
+    width: 725px;
+}
+
+#km-structure-browser-content table thead {
+    position: sticky;
+    top: 0;
 }
 
 #km-structure-browser-content .error {

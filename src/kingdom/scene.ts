@@ -4,6 +4,8 @@ import {CommodityStorage, Structure, structuresByName} from './data/structures';
 import {Kingdom, Settlement} from './data/kingdom';
 import {Activity} from './data/activities';
 import {getBooleanSetting} from '../settings';
+import {isNonNullable} from '../utils';
+import {allSkills} from './data/skills';
 
 class StructureError extends Error {
 }
@@ -24,6 +26,7 @@ export function parseStructureData(
     data: unknown,
     tokenWidth: number,
     tokenHeight: number,
+    level: number | null,
 ): Structure | undefined {
     if (data === undefined || data === null) {
         return undefined;
@@ -35,9 +38,18 @@ export function parseStructureData(
             throw new StructureError(`No predefined structure data found for actor with name ${name}, aborting`);
         }
         return calculateLots(lookedUpStructure, tokenWidth, tokenHeight);
-    } else if (name !== null) {
-        const rule = {
+    } else if (isNonNullable(name) && isNonNullable(level)) {
+        const rule: Structure = {
             name,
+            level,
+            // migrate older structures
+            construction: {
+                skills: allSkills.map(s => {
+                    return {skill: s};
+                }),
+                dc: 0,
+                rp: 0,
+            },
             ...data,
         };
         const result = ruleSchema.validate(rule);
@@ -62,7 +74,13 @@ function getSceneStructures(scene: Scene): Structure[] {
                 return result;
             })
             .map(([actor, width, height]) =>
-                parseStructureData(actor!.name, actor!.getFlag('pf2e-kingmaker-tools', 'structureData'), width, height))
+                parseStructureData(
+                    actor!.name,
+                    actor!.getFlag('pf2e-kingmaker-tools', 'structureData'),
+                    width,
+                    height,
+                    actor!.level,
+                ))
             .filter(data => data !== undefined) as Structure[] ?? [];
     } catch (e: unknown) {
         if (e instanceof StructureError) {

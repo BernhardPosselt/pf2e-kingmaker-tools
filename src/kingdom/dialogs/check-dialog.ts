@@ -24,11 +24,13 @@ export type CheckType = 'skill' | 'activity';
 export interface CheckDialogFeatOptions {
     type: CheckType;
     activity?: Activity;
+    dc?: number;
     dcAdjustment?: number;
     skill?: Skill;
     game: Game;
     kingdom: Kingdom;
     actor: Actor;
+    overrideSkills?: Partial<SkillRanks>;
     onRoll: (consumeModifiers: Set<string>) => Promise<void>;
 }
 
@@ -68,6 +70,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private consumeModifiers: Set<string> = new Set();
     private onRoll: (consumeModifiers: Set<string>) => Promise<void>;
     private actor: Actor;
+    private overrideSkills: Partial<SkillRanks> | undefined;
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -90,16 +93,19 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.kingdom = options.kingdom;
         this.actor = options.actor;
         this.onRoll = options.onRoll;
+        this.overrideSkills = options.overrideSkills;
         const controlDC = getControlDC(this.kingdom.level, this.kingdom.size, this.kingdom.leaders.ruler.vacant);
         if (this.type === 'skill') {
             this.selectedSkill = options.skill!;
-            this.dc = controlDC;
+            this.dc = options.dc ?? controlDC;
         } else {
             this.phase = getActivityPhase(this.activity!);
             this.selectedSkill = this.getActivitySkills(options.kingdom.skillRanks)[0];
             const data = activityData[this.activity!];
             const activityDCType = data.dc;
-            if (activityDCType === 'control') {
+            if (options.dc !== undefined) {
+                this.dc = options.dc;
+            } else if (activityDCType === 'control') {
                 this.dc = controlDC;
             } else if (activityDCType === 'custom') {
                 this.dc = 0;
@@ -121,7 +127,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             .map(([skill]) => skill);
         const ignoreSkillRequirements = getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements');
         const skillRankFilters = ignoreSkillRequirements ? undefined : ranks;
-        const activitySkills = getActivitySkills(activity, skillRankFilters);
+        const activitySkills = getActivitySkills(activity, skillRankFilters, this.overrideSkills);
         const practicalMagic: Skill[] = activitySkills.includes('engineering') && hasFeat(this.kingdom, 'Practical Magic') ? ['magic'] : [];
         return Array.from(new Set([...activitySkills, ...companionUnlockSkills, ...practicalMagic]));
     }
@@ -138,6 +144,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             getSettlementsWithoutLandBorders(this.game, this.kingdom),
         );
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
+        console.log(applicableSkills, this.overrideSkills, this.selectedSkill, this.consumeModifiers);
         const skillModifiers = Object.fromEntries(applicableSkills.map(skill => {
             const ability = skillAbilities[skill];
             const modifiers = createSkillModifiers({

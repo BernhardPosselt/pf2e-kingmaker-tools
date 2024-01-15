@@ -818,7 +818,7 @@ export function openCampingSheet(game: Game): void {
     if (sheetActor) {
         new CampingSheet({game, actor: sheetActor}).render(true);
     } else {
-        setupDialog(game, 'Camping', 'yybLhORz4PeZxCp0', async () => {
+        setupDialog(game, 'Camping', 'ggZCKHx8DdqAVVP8', async () => {
             const sheetActor = game?.actors?.find(a => a.name === 'Camping Sheet');
             // migrate old recipes
             const migratedRecipes = game?.actors?.filter(a => a.type === 'character')

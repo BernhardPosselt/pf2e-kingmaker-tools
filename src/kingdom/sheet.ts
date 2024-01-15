@@ -19,7 +19,7 @@ import {
     Settlement,
     WorkSites,
 } from './data/kingdom';
-import {capitalize, clamped, unpackFormArray, unslugify} from '../utils';
+import {capitalize, clamped, isNonNullable, unpackFormArray, unslugify} from '../utils';
 import {
     getActiveSettlementStructureResult,
     getAllMergedSettlements,
@@ -1079,14 +1079,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async showStructureBrowser(): Promise<void> {
-        const compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-structures';
-        const compendium = await this.game.packs.get(compendiumName, {strict: true});
-        const documents = await compendium.getDocuments({});
-        // FIXME: add a way to blacklist or add uuids
-        const structureUuids = documents
-            .filter(d => d.name !== 'Camping Sheet' && d.name !== 'Kingdom Sheet')
-            .map(d => (d as Actor).uuid);
-        await showStructureBrowser(this.game, structureUuids, this.getKingdom());
+        const structureActors = this.game.actors
+                ?.filter(a => a.type === 'npc'
+                    && isNonNullable(a.getFlag('pf2e-kingmaker-tools', 'structureData')))
+            ?? [];
+        await showStructureBrowser(this.game, structureActors, this.getKingdom(), this.sheetActor, this.consumeModifiers.bind(this));
     }
 }
 
@@ -1096,7 +1093,7 @@ export async function showKingdom(game: Game): Promise<void> {
     if (sheetActor) {
         new KingdomApp(null, {game, sheetActor}).render(true);
     } else {
-        setupDialog(game, 'Kingdom', 'rRFZtEjqw2foI0GJ', async () => {
+        setupDialog(game, 'Kingdom', 'dI12fgPwX9il8Fzu', async () => {
             const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
             await sheetActor?.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', getDefaultKingdomData());
             await showKingdom(game);

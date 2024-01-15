@@ -93,8 +93,8 @@ export const allActivities = [
 export type Activity = typeof allActivities[number];
 
 
-export function getActivitySkills(activity: Activity, skillRanks?: SkillRanks): Skill[] {
-    const skills = activityData[activity].skills;
+export function getActivitySkills(activity: Activity, skillRanks?: SkillRanks, overrideSkills?: Partial<SkillRanks>): Skill[] {
+    const skills = overrideSkills ?? activityData[activity].skills;
     if (skillRanks) {
         return (Object.entries(skills) as [Skill, number][])
             .filter(([skill, rank]) => rank <= skillRanks[skill])

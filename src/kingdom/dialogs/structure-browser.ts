@@ -1,14 +1,20 @@
 import {Structure} from '../data/structures';
 import {Activity} from '../data/activities';
-import {createUUIDLink, listenClick, unslugify} from '../../utils';
+import {createUUIDLink, isBlank, listenClick, unslugify} from '../../utils';
 import {rankToLabel} from '../modifiers';
 import {Kingdom} from '../data/kingdom';
 import {parseStructureData} from '../scene';
+import {CheckDialog} from './check-dialog';
+import {getBooleanSetting} from '../../settings';
+import {Costs, formatCosts, payDialog} from './pay-dialog';
+import {getKingdom, saveKingdom} from '../storage';
 
 interface StructureBrowserOptions {
     game: Game;
     kingdom: Kingdom;
-    structureUuids: string[];
+    structureActors: Actor[];
+    sheetActor: Actor;
+    onRoll: (consumeModifiers: Set<string>) => Promise<void>,
 }
 
 interface ActivityFilter {
@@ -17,15 +23,15 @@ interface ActivityFilter {
 }
 
 interface StructureData {
-    lots: number;
+    lots?: number;
     name: string;
     skills: string[];
-    dc: number;
-    rp: number;
-    lumber: number;
-    luxuries: number;
-    ore: number;
-    stone: number;
+    dc?: number;
+    rp?: number;
+    lumber?: number;
+    luxuries?: number;
+    ore?: number;
+    stone?: number;
 }
 
 interface StructureBrowserData {
@@ -43,9 +49,12 @@ interface StructureBrowserData {
     activities: Partial<Record<Activity, ActivityFilter>>;
     level: number;
     lots: number;
+    noStructures: boolean;
+    ignoreStructureCost: boolean;
+    search: string;
 }
 
-type StructureFilters = Omit<StructureBrowserData, 'structures'>;
+type StructureFilters = Omit<StructureBrowserData, 'structures' | 'noStructures'>;
 type ActorStructure = Structure & { actor: Actor };
 
 function checkProficiency(structure: Structure, kingdom: Kingdom): boolean {
@@ -56,23 +65,56 @@ function checkProficiency(structure: Structure, kingdom: Kingdom): boolean {
         });
 }
 
-async function getStructuresByUuid(structureUuids: string[]): Promise<ActorStructure[]> {
-    return (await Promise.all(structureUuids.map(async (uuid) => {
-        const actor = await fromUuid(uuid) as Actor | null;
-        if (actor) {
-            console.log(actor);
+function getStructuresFromActors(actors: Actor[]): ActorStructure[] {
+    return actors
+        .map((actor) => {
             const width = actor.token?.width ?? actor.prototypeToken?.width ?? 0;
             const height = actor.token?.height ?? actor.prototypeToken?.height ?? 0;
-            const data = parseStructureData(actor!.name, actor!.getFlag('pf2e-kingmaker-tools', 'structureData'), width, height);
+            const data = parseStructureData(
+                actor!.name,
+                actor!.getFlag('pf2e-kingmaker-tools', 'structureData'),
+                width,
+                height,
+                actor.level,
+            );
             if (data) {
                 return {
                     ...data,
                     actor,
                 };
             }
-        }
-        return null;
-    }))).filter(actor => actor !== null)! as ActorStructure[];
+            return null;
+        })
+        .filter(actor => actor !== null)! as ActorStructure[];
+}
+
+function checkRpCost(structure: Structure, kingdom: Kingdom): boolean {
+    return (structure.construction?.rp ?? 0) <= kingdom.resourcePoints.now;
+}
+
+function checkLumberCost(structure: Structure, kingdom: Kingdom): boolean {
+    return (structure.construction?.lumber ?? 0) <= kingdom.commodities.now.lumber;
+}
+
+function checkOreCost(structure: Structure, kingdom: Kingdom): boolean {
+    return (structure.construction?.ore ?? 0) <= kingdom.commodities.now.ore;
+}
+
+function checkStoneCost(structure: Structure, kingdom: Kingdom): boolean {
+    return (structure.construction?.stone ?? 0) <= kingdom.commodities.now.stone;
+}
+
+function checkLuxuriesCost(structure: Structure, kingdom: Kingdom): boolean {
+    return (structure.construction?.luxuries ?? 0) <= kingdom.commodities.now.luxuries;
+}
+
+
+function checkBuildingCost(structure: Structure, kingdom: Kingdom): boolean {
+    return checkLumberCost(structure, kingdom)
+        && checkRpCost(structure, kingdom)
+        && checkLuxuriesCost(structure, kingdom)
+        && checkOreCost(structure, kingdom)
+        && checkStoneCost(structure, kingdom);
 }
 
 class StructureBrowserApp extends FormApplication<
@@ -81,7 +123,7 @@ class StructureBrowserApp extends FormApplication<
     null
 > {
     private level: number;
-    private structureUuids: string[];
+    private structureActors: Actor[];
     private kingdom: Kingdom;
 
     static override get defaultOptions(): FormApplicationOptions {
@@ -90,7 +132,7 @@ class StructureBrowserApp extends FormApplication<
         options.title = 'Structure Browser';
         options.template = 'modules/pf2e-kingmaker-tools/templates/kingdom/structure-browser.hbs';
         options.classes = ['kingmaker-tools-app', 'structure-browser-app'];
-        options.width = 800;
+        options.width = 960;
         options.height = 600;
         options.height = 'auto';
         options.submitOnChange = true;
@@ -101,19 +143,24 @@ class StructureBrowserApp extends FormApplication<
 
     private readonly game: Game;
     private filters?: StructureFilters;
+    private sheetActor: Actor;
+    private onRoll: (consumeModifiers: Set<string>) => Promise<void>;
 
     constructor(options: Partial<ApplicationOptions> & StructureBrowserOptions) {
         super(null, options);
         this.game = options.game;
         this.level = options.kingdom.level;
-        this.structureUuids = options.structureUuids;
+        this.structureActors = options.structureActors;
         this.kingdom = options.kingdom;
+        this.sheetActor = options.sheetActor;
+        this.onRoll = options.onRoll;
     }
 
     private async resetFilters(): Promise<StructureFilters> {
-        const structures = await getStructuresByUuid(this.structureUuids);
+        const structures = getStructuresFromActors(this.structureActors);
         const activities = getAllStructureActivities(structures);
         return {
+            search: '',
             reducesUnrest: false,
             housing: false,
             affectsDowntime: false,
@@ -124,6 +171,7 @@ class StructureBrowserApp extends FormApplication<
             reducesRuin: false,
             infrastructure: false,
             ignoreProficiencyRequirements: false,
+            ignoreStructureCost: false,
             lots: 4,
             activities: Object.fromEntries(activities.map(activity => {
                 return [activity, {name: unslugify(activity), enabled: false}];
@@ -133,15 +181,18 @@ class StructureBrowserApp extends FormApplication<
     }
 
     override async getData(): Promise<StructureBrowserData> {
+        this.kingdom = getKingdom(this.sheetActor);
         if (this.filters === undefined) {
             this.filters = await this.resetFilters();
         }
-        const structuresByUuid = await getStructuresByUuid(this.structureUuids);
-        const structures = this.filterStructures(structuresByUuid, this.filters);
+        const structureActors = await getStructuresFromActors(this.structureActors);
+        const structures = this.filterStructures(structureActors, this.filters);
+        const viewStructures = await this.toViewStructures(structures);
         return {
             ...this.filters,
-            structures: await this.toViewStructures(structures),
+            structures: viewStructures,
             activities: this.filters.activities,
+            noStructures: structureActors.length === 0,
         };
     }
 
@@ -152,6 +203,10 @@ class StructureBrowserApp extends FormApplication<
             this.filters = undefined;
             this.render();
         });
+        $html.querySelectorAll('.km-build-structure-dialog')
+            .forEach(el => el.addEventListener('click', (ev) => this.buildStructure(ev)));
+        $html.querySelectorAll('.km-build-structure-pay')
+            .forEach(el => el.addEventListener('click', (ev) => this.payStructure(ev)));
     }
 
     private filterStructures(structures: ActorStructure[], filters: StructureFilters): ActorStructure[] {
@@ -166,6 +221,8 @@ class StructureBrowserApp extends FormApplication<
         if (filters.consumption) enabledFilters.push((x) => x.consumptionReduction !== undefined && x.consumptionReduction > 0);
         if (filters.items) enabledFilters.push((x) => x.availableItemsRules !== undefined && x.availableItemsRules.length > 0);
         if (!filters.ignoreProficiencyRequirements) enabledFilters.push(x => checkProficiency(x, this.kingdom));
+        if (!filters.ignoreStructureCost) enabledFilters.push(x => checkBuildingCost(x, this.kingdom));
+        if (!isBlank(filters.search)) enabledFilters.push(x => x.name.toLowerCase().includes(filters.search.trim().toLowerCase()));
         enabledFilters.push((x) => hasActivities(x, filters.activities));
         enabledFilters.push((x) => (x.level ?? 0) <= filters.level);
         enabledFilters.push((x) => (x.lots ?? 0) <= filters.lots);
@@ -177,21 +234,29 @@ class StructureBrowserApp extends FormApplication<
     private async toViewStructures(structures: ActorStructure[]): Promise<StructureData[]> {
         return await Promise.all(structures.map(async (structure) => {
             const name = await TextEditor.enrichHTML(createUUIDLink(structure.actor.uuid, structure.name));
+            const lacksProficiency = !checkProficiency(structure, this.kingdom);
             return {
                 name: name,
-                dc: structure.construction?.dc ?? 0,
+                dc: structure.construction?.dc,
                 skills: structure.construction?.skills.map(s => {
                     const rank = s.proficiencyRank ? ' (' + rankToLabel(s.proficiencyRank) + ')' : '';
                     const label = unslugify(s.skill);
                     return label + rank;
                 }) ?? [],
-                lacksProficiency: !checkProficiency(structure, this.kingdom),
-                lumber: structure.construction?.lumber ?? 0,
-                ore: structure.construction?.ore ?? 0,
-                stone: structure.construction?.stone ?? 0,
-                luxuries: structure.construction?.luxuries ?? 0,
-                rp: structure.construction?.rp ?? 0,
-                lots: structure.lots ?? 0,
+                lacksProficiency,
+                disableBuild: lacksProficiency && !getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements'),
+                lumber: structure.construction?.lumber,
+                ore: structure.construction?.ore,
+                stone: structure.construction?.stone,
+                luxuries: structure.construction?.luxuries,
+                rp: structure.construction?.rp,
+                insufficientStone: !checkStoneCost(structure, this.kingdom),
+                insufficientLumber: !checkLumberCost(structure, this.kingdom),
+                insufficientRp: !checkRpCost(structure, this.kingdom),
+                insufficientLuxuries: !checkLuxuriesCost(structure, this.kingdom),
+                insufficientOre: !checkOreCost(structure, this.kingdom),
+                lots: structure.lots === 0 ? undefined : structure.lots,
+                id: structure.actor.id,
             };
         }));
     }
@@ -200,6 +265,7 @@ class StructureBrowserApp extends FormApplication<
     protected async _updateObject(event: Event, formData: any): Promise<void> {
         console.log(formData);
         this.filters = {
+            search: formData.search,
             housing: formData.housing,
             affectsDowntime: formData.affectsDowntime,
             affectsEvents: formData.affectsEvents,
@@ -209,6 +275,7 @@ class StructureBrowserApp extends FormApplication<
             reducesRuin: formData.reducesRuin,
             reducesUnrest: formData.reducesUnrest,
             infrastructure: formData.infrastructure,
+            ignoreStructureCost: formData.ignoreStructureCost,
             ignoreProficiencyRequirements: formData.ignoreProficiencyRequirements,
             level: formData.level,
             lots: formData.lots,
@@ -224,9 +291,62 @@ class StructureBrowserApp extends FormApplication<
                     }),
             ),
         };
-
-
         this.render();
+    }
+
+    private async buildStructure(ev: Event): Promise<void> {
+        const button = ev.currentTarget as HTMLElement;
+        const id = button.dataset.id!;
+        const structureActors = getStructuresFromActors(this.structureActors);
+        const structure = structureActors.find(a => a.actor.id === id);
+        if (structure) {
+            console.log(structure);
+            const applicableSkills = structure.construction?.skills?.map(s => {
+                return [s.skill, s.proficiencyRank ?? 0];
+            });
+            new CheckDialog(null, {
+                activity: 'build-structure',
+                kingdom: this.kingdom,
+                dc: structure.construction?.dc,
+                overrideSkills: applicableSkills === undefined ? undefined : Object.fromEntries(applicableSkills),
+                game: this.game,
+                type: 'activity',
+                onRoll: this.onRoll,
+                actor: this.sheetActor,
+            }).render(true);
+        }
+    }
+
+    private async payStructure(ev: Event): Promise<void> {
+        const button = ev.currentTarget as HTMLElement;
+        const id = button.dataset.id!;
+        const structureActors = getStructuresFromActors(this.structureActors);
+        const structure = structureActors.find(a => a.actor.id === id);
+        const pay = async (costs: Costs): Promise<void> => {
+            await saveKingdom(this.sheetActor, {
+                commodities: {
+                    ...this.kingdom.commodities,
+                    now: {
+                        ...this.kingdom.commodities.now,
+                        ore: Math.max(0, this.kingdom.commodities.now.ore - costs.ore),
+                        lumber: Math.max(0, this.kingdom.commodities.now.lumber - costs.lumber),
+                        luxuries: Math.max(0, this.kingdom.commodities.now.luxuries - costs.luxuries),
+                        stone: Math.max(0, this.kingdom.commodities.now.stone - costs.stone),
+                    },
+                },
+                resourcePoints: {
+                    ...this.kingdom.resourcePoints,
+                    now: Math.max(0, this.kingdom.resourcePoints.now - costs.rp),
+                },
+            });
+            await ChatMessage.create({
+                content: `Paying ${formatCosts(costs)}`,
+            });
+            this.render();
+        };
+        if (structure) {
+            payDialog(structure, pay);
+        }
     }
 }
 
@@ -252,6 +372,12 @@ function getAllStructureActivities(structures: Structure[]): Activity[] {
         .sort((a, b) => a.localeCompare(b));
 }
 
-export async function showStructureBrowser(game: Game, structureUuids: string[], kingdom: Kingdom): Promise<void> {
-    new StructureBrowserApp({game, structureUuids, kingdom}).render(true);
+export async function showStructureBrowser(
+    game: Game,
+    structureActors: Actor[],
+    kingdom: Kingdom,
+    sheetActor: Actor,
+    onRoll: (consumeModifiers: Set<string>) => Promise<void>,
+): Promise<void> {
+    new StructureBrowserApp({game, structureActors, kingdom, sheetActor, onRoll}).render(true);
 }

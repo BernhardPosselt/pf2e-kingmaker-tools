@@ -259,3 +259,11 @@ export function isKingmakerInstalled(game: Game): boolean {
 export function sum(values: number[]): number {
     return values.reduce((a, b) => a + b, 0);
 }
+
+export function isNonNullable<T>(value: T | undefined | null): value is T {
+    return value !== undefined && value !== null;
+}
+
+export function isNullable<T>(value: T | undefined | null): boolean {
+    return !isNonNullable(value);
+}

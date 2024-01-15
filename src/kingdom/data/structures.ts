@@ -75,6 +75,7 @@ export interface Structure {
     reducesUnrest?: boolean;
     reducesRuin?: boolean;
     level?: number;
+    upgradeFrom?: string[];
 }
 
 export const allBuildingTraits = ['edifice', 'yard', 'building', 'famous', 'infamous', 'residential', 'infrastructure'];
@@ -130,6 +131,7 @@ const structures: Structure[] = [
         traits: ['building', 'edifice'],
         affectsDowntime: true,
         level: 10,
+        upgradeFrom: ['Library'],
         construction: {
             skills: [{
                 skill: 'scholarship',
@@ -343,6 +345,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 9,
+        upgradeFrom: ['Town Hall'],
         construction: {
             skills: [{
                 skill: 'defense',
@@ -385,6 +388,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 15,
+        upgradeFrom: ['Temple'],
         construction: {
             skills: [{
                 skill: 'folklore',
@@ -471,7 +475,7 @@ const structures: Structure[] = [
             skills: [{
                 skill: 'politics',
             }],
-            dc: 26,
+            dc: 24,
             rp: 26,
             lumber: 10,
             stone: 4,
@@ -535,6 +539,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 5,
+        upgradeFrom: ['Barracks'],
         construction: {
             skills: [{
                 skill: 'warfare',
@@ -598,6 +603,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: false,
         level: 1,
+        upgradeFrom: ['Tenement'],
         construction: {
             rp: 3,
             lumber: 1,
@@ -641,6 +647,7 @@ const structures: Structure[] = [
             }],
             dc: 20,
         },
+        upgradeFrom: ['Trade Shop'],
     },
     {
         name: 'Herbalist',
@@ -675,6 +682,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: false,
         level: 9,
+        upgradeFrom: ['Herbalist'],
         construction: {
             rp: 30,
             lumber: 10,
@@ -840,6 +848,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: false,
         level: 6,
+        upgradeFrom: ['General Store'],
         construction: {
             rp: 28,
             lumber: 10,
@@ -866,6 +875,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: false,
         level: 8,
+        upgradeFrom: ['Luxury Store'],
         construction: {
             rp: 44,
             lumber: 8,
@@ -904,6 +914,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: false,
         level: 5,
+        upgradeFrom: ['Houses'],
         construction: {
             rp: 10,
             lumber: 6,
@@ -927,6 +938,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: false,
         level: 4,
+        upgradeFrom: ['General Store'],
         construction: {
             rp: 48,
             lumber: 4,
@@ -951,6 +963,7 @@ const structures: Structure[] = [
         reducesUnrest: false,
         reducesRuin: true,
         level: 12,
+        upgradeFrom: ['Park'],
         construction: {
             rp: 26,
             lumber: 14,
@@ -978,6 +991,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: false,
         level: 12,
+        upgradeFrom: ['Academy'],
         construction: {
             rp: 36,
             lumber: 12,
@@ -1094,6 +1108,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 9,
+        upgradeFrom: ['Mansion'],
         construction: {
             rp: 24,
             lumber: 10,
@@ -1148,6 +1163,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 15,
+        upgradeFrom: ['Theater'],
         construction: {
             rp: 40,
             lumber: 20,
@@ -1166,6 +1182,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 2,
+        upgradeFrom: ['Houses'],
         construction: {
             rp: 6,
             lumber: 2,
@@ -1204,6 +1221,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 15,
+        upgradeFrom: ['Castle'],
         construction: {
             rp: 108,
             lumber: 20,
@@ -1577,6 +1595,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 9,
+        upgradeFrom: ['Tavern, Popular'],
         construction: {
             rp: 48,
             lumber: 10,
@@ -1605,6 +1624,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 3,
+        upgradeFrom: ['Tavern, Dive'],
         construction: {
             rp: 24,
             lumber: 6,
@@ -1635,6 +1655,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 15,
+        upgradeFrom: ['Tavern, Luxury'],
         construction: {
             rp: 64,
             lumber: 18,
@@ -1665,6 +1686,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 7,
+        upgradeFrom: ['Shrine'],
         construction: {
             rp: 32,
             lumber: 6,
@@ -1702,6 +1724,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 9,
+        upgradeFrom: ['Festival Hall'],
         construction: {
             rp: 24,
             lumber: 8,
@@ -1793,6 +1816,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: false,
         level: 15,
+        upgradeFrom: ['Academy'],
         construction: {
             rp: 78,
             lumber: 18,
@@ -1812,6 +1836,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 5,
+        upgradeFrom: ['Wall, Wooden'],
         construction: {
             rp: 4,
             stone: 8,
@@ -1893,6 +1918,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: false,
         level: 8,
+        upgradeFrom: ['Pier'],
         construction: {
             rp: 90,
             lumber: 10,
@@ -1964,6 +1990,10 @@ Array.from(Object.entries(vkAdjustments))
             throw new Error(`VK Adjustment typo: ${name}`);
         }
         const copy = JSON.parse(JSON.stringify(existing)) as Structure;
+        // hardcode granary proficiency requirement because it's too difficult otherwise
+        if (name === 'Granary') {
+            copy.construction!.skills![0]!.proficiencyRank = 1;
+        }
         adjustment.skillBonusRules?.forEach(rule => {
             if (copy.skillBonusRules === undefined) {
                 copy.skillBonusRules = [];

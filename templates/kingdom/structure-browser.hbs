@@ -3,6 +3,12 @@
         <button type="button" id="km-structure-browser-clear">Clear Filters</button>
         <h2>Filters</h2>
         <div>
+            <label for="km-structure-search">Search Name</label>
+            <div>
+                <input type="search" value="{{search}}" name="search" id="km-structure-search">
+            </div>
+        </div>
+        <div>
             <label for="km-structure-browser-level">Maximum Level</label>
             <div class="structure-browser-range">
                 <input type="range" min="0" max="20" value="{{level}}" name="level" id="km-structure-browser-level">
@@ -20,6 +26,11 @@
             <input type="checkbox" {{checked ignoreProficiencyRequirements}} name="ignoreProficiencyRequirements"
                    id="km-structure-browser-include-missing-proficiency">
             <label for="km-structure-browser-include-missing-proficiency">Ignore Proficiency</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked ignoreStructureCost}} name="ignoreStructureCost"
+                   id="km-structure-browser-ignore-building-cost">
+            <label for="km-structure-browser-ignore-building-cost">Ignore Building Cost</label>
         </div>
         <div>
             <input type="checkbox" {{checked reducesUnrest}} name="reducesUnrest"
@@ -69,19 +80,28 @@
         {{/each}}
     </div>
     <div id="km-structure-browser-content">
-        <table class="km-table">
-            <tr>
-                <th>Name</th>
-                <th>Lots</th>
-                <th>Skills</th>
-                <th>DC</th>
-                <th>RP</th>
-                <th>Lumber</th>
-                <th>Stone</th>
-                <th>Ore</th>
-                <th>Luxuries</th>
-            </tr>
-            {{#each structures}}
+        {{#if noStructures}}
+            <p>No structures imported into world! Please import all actors from the Kingmaker Tools <b>Structures</b>
+                compendium and reopen this window!</p>
+        {{else}}
+            <table class="km-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Lots</th>
+                    <th>Skills</th>
+                    <th>DC</th>
+                    <th>Pay</th>
+                    <th>RP</th>
+                    <th>Lumber</th>
+                    <th>Stone</th>
+                    <th>Ore</th>
+                    <th>Luxuries</th>
+                    <th>Build</th>
+                </tr>
+                </thead>
+                {{#each structures}}
+                <tbody>
                 <tr>
                     <td>{{{name}}}</td>
                     <td>{{lots}}</td>
@@ -93,13 +113,29 @@
                         </ul>
                     </td>
                     <td>{{dc}}</td>
-                    <td>{{rp}}</td>
-                    <td>{{lumber}}</td>
-                    <td>{{stone}}</td>
-                    <td>{{ore}}</td>
-                    <td>{{luxuries}}</td>
+                    <td>
+                        <button type="button" class="km-build-structure-pay" data-id="{{id}}"><i
+                                class="fa-solid fa-sack-dollar"></i></button>
+                    </td>
+                    <td {{#if insufficientRp}}title="Building costs more than currently available"
+                            class="error"{{/if}}>{{rp}}</td>
+                    <td {{#if insufficientLumber}}title="Building costs more than currently available"
+                            class="error"{{/if}}>{{lumber}}</td>
+                    <td {{#if insufficientStone}}title="Building costs more than currently available"
+                            class="error"{{/if}}>{{stone}}</td>
+                    <td {{#if insufficientOre}}title="Building costs more than currently available"
+                            class="error"{{/if}}>{{ore}}</td>
+                    <td {{#if insufficientLuxuries}}title="Building costs more than currently available"
+                            class="error"{{/if}}>{{luxuries}}</td>
+                    <td>
+                        <button type="button" class="km-build-structure-dialog" data-id="{{id}}"
+                                {{#if disableBuild}}disabled{{/if}}><i
+                                class="fa-solid fa-hammer"></i></button>
+                    </td>
                 </tr>
-            {{/each}}
-        </table>
+                {{/each}}
+            </tbody>
+            </table>
+        {{/if}}
     </div>
 </form>
