@@ -376,7 +376,7 @@ td.skill-value {
 }
 
 #km-structure-browser-sidebar {
-    width: 300px;
+    width: 230px;
     overflow-y: auto;
     max-height: 100%;
 }
@@ -385,14 +385,27 @@ td.skill-value {
     width: calc(100% - 2px);
 }
 
+#km-structure-browser-content ul {
+    list-style-type: none;
+}
+
+
 #km-structure-browser-sidebar > div {
     margin-top: 5px;
+}
+
+#km-structure-browser-sidebar > h2 {
+    margin-top: 10px;
 }
 
 #km-structure-browser-content {
     overflow-y: auto;
     max-height: 100%;
-    width: 495px;
+    width: 565px;
+}
+
+#km-structure-browser-content .error {
+    color: red;
 }
 
 .structure-browser-range {
@@ -405,4 +418,5 @@ td.skill-value {
 
 .structure-browser-range div {
     flex-grow: 1;
+    padding-right: 5px;
 }

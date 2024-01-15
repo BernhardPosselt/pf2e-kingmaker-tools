@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Structure Browser that let's you filter structures next to the Build Structure activity
+* Separate structures for Watchtowers and Bridges built out of stone
+
+### Changed
+
+* Use simple NPC sheet
+* Add more attributes onto the structures; you might need to edit your custom structures to adjust them
+
 ## [0.17.1] - 2024-01-14
 
 ### Fixed

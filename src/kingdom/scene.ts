@@ -19,7 +19,7 @@ function calculateLots(structure: Structure, tokenWidth: number, tokenHeight: nu
     }
 }
 
-function parseStructureData(
+export function parseStructureData(
     name: string | null,
     data: unknown,
     tokenWidth: number,

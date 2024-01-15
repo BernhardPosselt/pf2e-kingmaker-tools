@@ -71,7 +71,6 @@ import {editSettlementDialog} from './dialogs/edit-settlement-dialog';
 import {showKingdomSettings} from './dialogs/kingdom-settings';
 import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
-import {structuresByName} from './data/structures';
 
 interface KingdomOptions {
     game: Game;
@@ -1080,8 +1079,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async showStructureBrowser(): Promise<void> {
-        const structures = Array.from(structuresByName.values());
-        await showStructureBrowser(this.game, this.getKingdom().level, structures);
+        const compendiumName = 'pf2e-kingmaker-tools.kingmaker-tools-structures';
+        const compendium = await this.game.packs.get(compendiumName, {strict: true});
+        const documents = await compendium.getDocuments({});
+        // FIXME: add a way to blacklist or add uuids
+        const structureUuids = documents
+            .filter(d => d.name !== 'Camping Sheet' && d.name !== 'Kingdom Sheet')
+            .map(d => (d as Actor).uuid);
+        await showStructureBrowser(this.game, structureUuids, this.getKingdom());
     }
 }
 

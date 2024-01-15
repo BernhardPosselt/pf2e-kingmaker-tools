@@ -77,6 +77,7 @@ declare global {
             equipment: Item[];
             action: Item[];
         };
+        prototypeToken: TokenDocument;
 
         addToInventory(value: object, container?: Item, newStack: false): Promise<Item | null>;
 

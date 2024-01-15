@@ -103,8 +103,10 @@ and reference to built-in rules that get maintained and updated with the module.
 * Trade Shop
 * University
 * Watchtower
+* Watchtower, Stone
 * Waterfront
 * Bridge
+* Bridge, Stone
 * Cemetery
 * Houses
 * Magical Streetlamps
@@ -174,7 +176,26 @@ A full structure rule would look something like this:
   "traits": [
     "edifice"
   ],
-  "lots": 2
+  "lots": 2,
+  "level": 2,
+  "affectsEvents": false,
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "reducesRuin": false,
+  "construction": {
+    "skills": [
+      {
+        "skill": "agriculture",
+        "proficiencyRank": 2
+      }
+    ],
+    "lumber": 2,
+    "luxuries": 2,
+    "ore": 2,
+    "stone": 2,
+    "rp": 2,
+    "dc": 2
+  }
 }
 ```
 
@@ -255,3 +276,13 @@ A full structure rule would look something like this:
 * **affectsDowntime**: optional, used to filter for structures that have downtime bonuses
 * **reducesUnrest**: optional, used to filter for structures that reduce unrest
 * **reducesRuin**: optional, used to filter for structures that reduce ruin
+* **construction**:
+    * **skills**:
+        * **skill**: a skill in lower case
+        * **proficiencyRank**: optional, defaults to 0 (untrained); use 1 (trained), 2 (expert), 3 (master) or 4 (legendary)
+    * **dc**: dc
+    * **rp**: rp cost
+    * **lumber**: optional, cost
+    * **luxuries**: optional, cost
+    * **ore**: optional, cost
+    * **stone**: optional, cost

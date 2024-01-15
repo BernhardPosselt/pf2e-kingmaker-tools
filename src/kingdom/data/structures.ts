@@ -37,8 +37,24 @@ export interface CommodityStorage {
     luxuries: number;
 }
 
+interface ConstructionSkill {
+    skill: Skill;
+    proficiencyRank?: number;
+}
+
+interface Construction {
+    skills: ConstructionSkill[];
+    lumber?: number;
+    luxuries?: number;
+    ore?: number;
+    stone?: number;
+    rp: number;
+    dc: number;
+}
+
 export interface Structure {
     name: string;
+    construction?: Construction;
     notes?: string;
     preventItemLevelPenalty?: boolean;
     enableCapitalInvestment?: boolean,
@@ -112,10 +128,19 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with an Academy, you gain a +2 item bonus to Lore checks made to Recall Knowledge while Investigate, to all checks made while Researching, and to Decipher Writing.',
         traits: ['building', 'edifice'],
-        affectsEvents: false,
         affectsDowntime: true,
-        reducesUnrest: false,
         level: 10,
+        construction: {
+            skills: [{
+                skill: 'scholarship',
+                proficiencyRank: 2,
+            }],
+            dc: 27,
+            rp: 52,
+            lumber: 12,
+            luxuries: 6,
+            stone: 12,
+        },
     },
     {
         name: 'Alchemy Laboratory',
@@ -130,10 +155,18 @@ const structures: Structure[] = [
         }],
         notes: 'Checks attempted to Identify Alchemy in any settlement with at least one alchemy laboratory gain a +1 item bonus.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
-        reducesUnrest: false,
         level: 3,
+        construction: {
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 1,
+            }],
+            rp: 18,
+            ore: 2,
+            stone: 5,
+            dc: 16,
+        },
     },
     {
         name: 'Arcanist\'s Tower',
@@ -149,10 +182,17 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with an arcanist\'s tower, you gain a +1 item bonus to checks made to Borrow an Arcane Spell or Learn a Spell.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
-        reducesUnrest: false,
         level: 5,
+        construction: {
+            skills: [{
+                skill: 'magic',
+                proficiencyRank: 1,
+            }],
+            rp: 30,
+            stone: 6,
+            dc: 20,
+        },
     },
     {
         name: 'Arena',
@@ -167,10 +207,18 @@ const structures: Structure[] = [
         }],
         notes: 'An arena lets you to retrain combat-themed feats more efficiently while in the settlement; doing so takes only 5 days rather than a week of downtime.',
         traits: ['edifice', 'yard'],
-        affectsEvents: false,
         affectsDowntime: true,
-        reducesUnrest: false,
         level: 9,
+        construction: {
+            skills: [{
+                skill: 'warfare',
+                proficiencyRank: 2,
+            }],
+            dc: 26,
+            rp: 40,
+            lumber: 6,
+            stone: 12,
+        },
     },
     {
         name: 'Bank',
@@ -180,10 +228,17 @@ const structures: Structure[] = [
         }],
         enableCapitalInvestment: true,
         traits: ['building'],
-        affectsEvents: false,
-        affectsDowntime: false,
-        reducesUnrest: false,
         level: 5,
+        construction: {
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 1,
+            }],
+            dc: 20,
+            rp: 28,
+            ore: 4,
+            stone: 6,
+        },
     },
     {
         name: 'Barracks',
@@ -198,10 +253,17 @@ const structures: Structure[] = [
             activity: 'recruit-army',
         }],
         traits: ['building', 'residential'],
-        affectsEvents: false,
-        affectsDowntime: false,
         reducesUnrest: true,
         level: 3,
+        construction: {
+            skills: [{
+                skill: 'defense',
+            }],
+            dc: 16,
+            rp: 6,
+            lumber: 2,
+            stone: 1,
+        },
     },
     {
         name: 'Brewery',
@@ -210,20 +272,50 @@ const structures: Structure[] = [
             activity: 'establish-trade-agreement',
         }],
         traits: ['building'],
-        affectsEvents: false,
-        affectsDowntime: false,
         reducesUnrest: true,
         level: 1,
+        construction: {
+            skills: [{
+                skill: 'agriculture',
+            }],
+            dc: 15,
+            rp: 6,
+            lumber: 2,
+        },
     },
     {
         name: 'Bridge',
         isBridge: true,
         traits: ['infrastructure'],
         lots: 0,
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 2,
+        construction: {
+            skills: [{
+                skill: 'engineering',
+            }],
+            dc: 16,
+            rp: 6,
+            lumber: 1,
+        },
+    },
+    {
+        name: 'Bridge, Stone',
+        isBridge: true,
+        traits: ['infrastructure'],
+        lots: 0,
+        affectsDowntime: false,
+        reducesUnrest: false,
+        level: 2,
+        construction: {
+            skills: [{
+                skill: 'engineering',
+            }],
+            dc: 16,
+            rp: 6,
+            stone: 1,
+        },
     },
     {
         name: 'Castle',
@@ -248,10 +340,28 @@ const structures: Structure[] = [
         }],
         increaseLeadershipActivities: true,
         traits: ['building', 'edifice', 'famous', 'infamous'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 9,
+        construction: {
+            skills: [{
+                skill: 'defense',
+                proficiencyRank: 2,
+            }, {
+                skill: 'industry',
+                proficiencyRank: 2,
+            }, {
+                skill: 'magic',
+                proficiencyRank: 2,
+            }, {
+                skill: 'statecraft',
+                proficiencyRank: 2,
+            }],
+            rp: 54,
+            dc: 26,
+            lumber: 12,
+            stone: 12,
+        },
     },
     {
         name: 'Cathedral',
@@ -272,10 +382,19 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with a cathedral, you gain a +3 item bonus to Lore and Religion checks made to Recall Knowledge while Investigating, and to all faith-themed checks made while Researching.',
         traits: ['building', 'edifice', 'famous', 'infamous'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: true,
         level: 15,
+        construction: {
+            skills: [{
+                skill: 'folklore',
+                proficiencyRank: 3,
+            }],
+            rp: 58,
+            dc: 34,
+            lumber: 20,
+            stone: 20,
+        },
     },
     {
         name: 'Cemetery',
@@ -284,6 +403,14 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 1,
+        construction: {
+            skills: [{
+                skill: 'folklore',
+            }],
+            dc: 15,
+            rp: 4,
+            stone: 1,
+        },
     },
     {
         name: 'Construction Yard',
@@ -295,10 +422,18 @@ const structures: Structure[] = [
             activity: 'repair-reputation-decay',
         }],
         traits: ['yard'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 10,
+        construction: {
+            skills: [{
+                skill: 'engineering',
+            }],
+            dc: 27,
+            rp: 40,
+            lumber: 10,
+            stone: 10,
+        },
     },
     {
         name: 'Dump',
@@ -311,6 +446,13 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: false,
         level: 2,
+        construction: {
+            skills: [{
+                skill: 'industry',
+            }],
+            dc: 16,
+            rp: 4,
+        },
     },
     {
         name: 'Embassy',
@@ -322,10 +464,19 @@ const structures: Structure[] = [
             activity: 'request-foreign-aid',
         }],
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 8,
+        construction: {
+            skills: [{
+                skill: 'politics',
+            }],
+            dc: 26,
+            rp: 26,
+            lumber: 10,
+            stone: 4,
+            luxuries: 6,
+        },
     },
     {
         name: 'Festival Hall',
@@ -334,10 +485,17 @@ const structures: Structure[] = [
             activity: 'celebrate-holiday',
         }],
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            skills: [{
+                skill: 'arts',
+            }],
+            dc: 18,
+            rp: 7,
+            lumber: 3,
+        },
     },
     {
         name: 'Foundry',
@@ -349,10 +507,20 @@ const structures: Structure[] = [
             ore: 1,
         },
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+            rp: 16,
+            lumber: 5,
+            stone: 3,
+            ore: 2,
+        },
     },
     {
         name: 'Garrison',
@@ -364,19 +532,35 @@ const structures: Structure[] = [
             activity: 'train-army',
         }],
         traits: ['building', 'residential'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 5,
+        construction: {
+            skills: [{
+                skill: 'warfare',
+                proficiencyRank: 1,
+            }],
+            dc: 20,
+            rp: 28,
+            lumber: 6,
+            stone: 3,
+        },
     },
     {
         name: 'General Store',
         preventItemLevelPenalty: true,
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 1,
+        construction: {
+            skills: [{
+                skill: 'trade',
+            }],
+            dc: 15,
+            rp: 8,
+            lumber: 1,
+        },
     },
     {
         name: 'Gladiatorial Arena',
@@ -394,18 +578,34 @@ const structures: Structure[] = [
         }],
         notes: 'A gladiatorial arena allows a PC in the settlement to retrain combat-themed feats (at the GM\'s discretion) more efficiently; doing so takes only 4 days rather than a week of downtime.',
         traits: ['edifice', 'famous', 'infamous', 'yard'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 15,
+        construction: {
+            rp: 58,
+            lumber: 10,
+            stone: 30,
+            skills: [{
+                skill: 'warfare',
+                proficiencyRank: 3,
+            }],
+            dc: 34,
+        },
     },
     {
         name: 'Houses',
         traits: ['building', 'residential'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 1,
+        construction: {
+            rp: 3,
+            lumber: 1,
+            skills: [{
+                skill: 'industry',
+            }],
+            dc: 15,
+        },
     },
     {
         name: 'Granary',
@@ -413,19 +613,34 @@ const structures: Structure[] = [
             food: 1,
         },
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 1,
+        construction: {
+            rp: 12,
+            lumber: 2,
+            skills: [{
+                skill: 'agriculture',
+            }],
+            dc: 15,
+        },
     },
     {
         name: 'Guildhall',
         notes: 'While in a settlement with a guildhall, you gain a +1 item bonus to all related skill checks to Earn Income or to Repair.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 5,
+        construction: {
+            rp: 34,
+            lumber: 8,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 2,
+            }],
+            dc: 20,
+        },
     },
     {
         name: 'Herbalist',
@@ -434,10 +649,17 @@ const structures: Structure[] = [
             activity: 'provide-care',
         }],
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 1,
+        construction: {
+            rp: 10,
+            lumber: 1,
+            skills: [{
+                skill: 'wilderness',
+            }],
+            dc: 15,
+        },
     },
     {
         name: 'Hospital',
@@ -450,10 +672,19 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with a hospital, you gain a +2 item bonus to Medicine checks to Treat Disease and Treat Wounds.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 9,
+        construction: {
+            rp: 30,
+            lumber: 10,
+            stone: 6,
+            skills: [{
+                skill: 'defense',
+                proficiencyRank: 2,
+            }],
+            dc: 26,
+        },
     },
     {
         name: 'Illicit Market',
@@ -466,10 +697,18 @@ const structures: Structure[] = [
             maximumStacks: 3,
         }],
         traits: ['building', 'infamous'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 6,
+        construction: {
+            rp: 50,
+            lumber: 5,
+            skills: [{
+                skill: 'intrigue',
+                proficiencyRank: 1,
+            }],
+            dc: 22,
+        },
     },
     {
         name: 'Inn',
@@ -478,10 +717,17 @@ const structures: Structure[] = [
             activity: 'hire-adventurers',
         }],
         traits: ['building', 'residential'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 1,
+        construction: {
+            rp: 10,
+            lumber: 2,
+            skills: [{
+                skill: 'trade',
+            }],
+            dc: 15,
+        },
     },
     {
         name: 'Jail',
@@ -491,10 +737,19 @@ const structures: Structure[] = [
             activity: 'quell-unrest',
         }],
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 2,
+        construction: {
+            rp: 14,
+            lumber: 4,
+            stone: 4,
+            ore: 2,
+            skills: [{
+                skill: 'defense',
+            }],
+            dc: 16,
+        },
     },
     {
         name: 'Keep',
@@ -509,10 +764,19 @@ const structures: Structure[] = [
             activity: 'train-army',
         }],
         traits: ['building', 'edifice'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 3,
+        construction: {
+            rp: 32,
+            lumber: 8,
+            stone: 8,
+            skills: [{
+                skill: 'defense',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Library',
@@ -523,10 +787,19 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with a library, you gain a +1 item bonus to Lore checks made to Recall Knowledge while Investigating, as well as to Researching checks, and to Decipher Writing checks.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 2,
+        construction: {
+            rp: 6,
+            lumber: 4,
+            stone: 2,
+            skills: [{
+                skill: 'scholarship',
+                proficiencyRank: 1,
+            }],
+            dc: 16,
+        },
     },
     {
         name: 'Lumberyard',
@@ -538,10 +811,19 @@ const structures: Structure[] = [
             lumber: 1,
         },
         traits: ['yard'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            rp: 16,
+            lumber: 5,
+            ore: 1,
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Luxury Store',
@@ -555,10 +837,19 @@ const structures: Structure[] = [
             maximumStacks: 3,
         }],
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 6,
+        construction: {
+            rp: 28,
+            lumber: 10,
+            luxuries: 6,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 2,
+            }],
+            dc: 22,
+        },
     },
     {
         name: 'Magic Shop',
@@ -572,19 +863,36 @@ const structures: Structure[] = [
             maximumStacks: 3,
         }],
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 8,
+        construction: {
+            rp: 44,
+            lumber: 8,
+            stone: 6,
+            luxuries: 6,
+            skills: [{
+                skill: 'magic',
+                proficiencyRank: 2,
+            }],
+            dc: 24,
+        },
     },
     {
         name: 'Magical Streetlamps',
         traits: ['infrastructure'],
         lots: 0,
-        affectsEvents: false,
         affectsDowntime: false,
         reducesRuin: true,
         level: 5,
+        construction: {
+            rp: 20,
+            skills: [{
+                skill: 'magic',
+                proficiencyRank: 2,
+            }],
+            dc: 20,
+        },
     },
     {
         name: 'Mansion',
@@ -593,10 +901,20 @@ const structures: Structure[] = [
             activity: 'improve-lifestyle',
         }],
         traits: ['building', 'residential'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 5,
+        construction: {
+            rp: 10,
+            lumber: 6,
+            stone: 3,
+            luxuries: 6,
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 1,
+            }],
+            dc: 20,
+        },
     },
     {
         name: 'Marketplace',
@@ -606,10 +924,18 @@ const structures: Structure[] = [
         }],
         preventItemLevelPenalty: true,
         traits: ['building', 'residential'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 4,
+        construction: {
+            rp: 48,
+            lumber: 4,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 1,
+            }],
+            dc: 19,
+        },
     },
     {
         name: 'Menagerie',
@@ -621,11 +947,21 @@ const structures: Structure[] = [
         notes: 'A menagerie typically contains a selection of level 5 or lower animals. If your party captures a living creature of level 6 or higher and can transport the creature back to a settlement with a menagerie, you can add that creature to the menagerie as long as your kingdom level is at least 4 higher than the creature\'s level. Each time such a creature is added to a menagerie, gain 1 Fame or Infamy point (as appropriate) or reduce one Ruin of your choice by 1.\n' +
             'Only creatures with Intelligence modifiers of –4 or –5 are appropriate to place in a menagerie. A kingdom gains 1 Unrest at the start of a Kingdom turn for each sapient creature (anything with an Intelligence modifier of –3 or higher) on display in a menagerie.',
         traits: ['building', 'edifice'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         reducesRuin: true,
         level: 12,
+        construction: {
+            rp: 26,
+            lumber: 14,
+            stone: 10,
+            ore: 10,
+            skills: [{
+                skill: 'wilderness',
+                proficiencyRank: 2,
+            }],
+            dc: 30,
+        },
     },
     {
         name: 'Military Academy',
@@ -639,10 +975,20 @@ const structures: Structure[] = [
             activity: 'pledge-of-fealty',
         }],
         traits: ['building', 'edifice'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 12,
+        construction: {
+            rp: 36,
+            lumber: 12,
+            stone: 10,
+            ore: 6,
+            skills: [{
+                skill: 'warfare',
+                proficiencyRank: 2,
+            }],
+            dc: 30,
+        },
     },
     {
         name: 'Mill',
@@ -652,10 +998,19 @@ const structures: Structure[] = [
         }],
         consumptionReduction: 1,
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 2,
+        construction: {
+            rp: 6,
+            lumber: 2,
+            stone: 1,
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 1,
+            }],
+            dc: 16,
+        },
     },
     {
         name: 'Mint',
@@ -670,18 +1025,36 @@ const structures: Structure[] = [
             activity: 'repair-reputation-crime',
         }],
         traits: ['building', 'edifice'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 15,
+        construction: {
+            rp: 30,
+            lumber: 12,
+            stone: 16,
+            ore: 20,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 3,
+            }],
+            dc: 34,
+        },
     },
     {
         name: 'Monument',
         traits: ['building', 'edifice'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 3,
+        construction: {
+            rp: 6,
+            stone: 1,
+            skills: [{
+                skill: 'arts',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Museum',
@@ -692,10 +1065,19 @@ const structures: Structure[] = [
         }],
         notes: 'A magic item of level 6 or higher that has a particular import or bears significant historical or regional value (at the GM\'s discretion) can be donated to a museum. Each time such an item is donated, reduce Unrest by 1. If that item is later removed from display, increase Unrest by 1.',
         traits: ['building', 'edifice'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 5,
+        construction: {
+            rp: 30,
+            lumber: 6,
+            stone: 2,
+            skills: [{
+                skill: 'exploration',
+                proficiencyRank: 1,
+            }],
+            dc: 20,
+        },
     },
     {
         name: 'Noble Villa',
@@ -709,10 +1091,20 @@ const structures: Structure[] = [
             activity: 'quell-unrest',
         }],
         traits: ['building', 'residential'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 9,
+        construction: {
+            rp: 24,
+            lumber: 10,
+            stone: 8,
+            luxuries: 6,
+            skills: [{
+                skill: 'politics',
+                proficiencyRank: 2,
+            }],
+            dc: 19,
+        },
     },
     {
         name: 'Occult Shop',
@@ -727,10 +1119,20 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with an occult shop, you gain a +2 item bonus to all checks made to Research esoteric subjects or to Recall Knowledge about the same.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 13,
+        construction: {
+            rp: 68,
+            lumber: 12,
+            stone: 6,
+            luxuries: 12,
+            skills: [{
+                skill: 'magic',
+                proficiencyRank: 3,
+            }],
+            dc: 32,
+        },
     },
     {
         name: 'Opera House',
@@ -743,18 +1145,35 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with an opera house, you gain a +3 item bonus to Performance checks made to Earn Income.',
         traits: ['building', 'edifice', 'famous', 'infamous'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: true,
         level: 15,
+        construction: {
+            rp: 40,
+            lumber: 20,
+            stone: 16,
+            luxuries: 18,
+            skills: [{
+                skill: 'arts',
+                proficiencyRank: 3,
+            }],
+            dc: 34,
+        },
     },
     {
         name: 'Orphanage',
         traits: ['building', 'residential'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 2,
+        construction: {
+            rp: 6,
+            lumber: 2,
+            skills: [{
+                skill: 'industry',
+            }],
+            dc: 16,
+        },
     },
     {
         name: 'Palace',
@@ -782,10 +1201,30 @@ const structures: Structure[] = [
         }],
         increaseLeadershipActivities: true,
         traits: ['building', 'edifice', 'famous', 'infamous'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 15,
+        construction: {
+            rp: 108,
+            lumber: 20,
+            stone: 20,
+            ore: 15,
+            luxuries: 12,
+            skills: [{
+                skill: 'defense',
+                proficiencyRank: 3,
+            }, {
+                skill: 'industry',
+                proficiencyRank: 3,
+            }, {
+                skill: 'magic',
+                proficiencyRank: 3,
+            }, {
+                skill: 'statecraft',
+                proficiencyRank: 3,
+            }],
+            dc: 34,
+        },
     },
     {
         name: 'Park',
@@ -795,19 +1234,33 @@ const structures: Structure[] = [
             activity: 'rest-and-relax',
         }],
         traits: ['yard'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 3,
+        construction: {
+            rp: 5,
+            skills: [{
+                skill: 'wilderness',
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Paved Streets',
         traits: ['infrastructure'],
         lots: 0,
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 4,
+        construction: {
+            rp: 12,
+            stone: 6,
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 1,
+            }],
+            dc: 19,
+        },
     },
     {
         name: 'Pier',
@@ -816,15 +1269,21 @@ const structures: Structure[] = [
             activity: 'go-fishing',
         }],
         traits: ['yard'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            rp: 16,
+            lumber: 2,
+            skills: [{
+                skill: 'boating',
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Rubble',
         traits: ['yard'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 0,
@@ -841,10 +1300,19 @@ const structures: Structure[] = [
         notes: 'A PC in a settlement with a printing house gains a +2 item bonus to checks to Gather Information or to Research any topic in a library or similar structure.',
         unlockActivities: ['read-all-about-it'],
         traits: ['building', 'edifice'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 10,
+        construction: {
+            rp: 48,
+            lumber: 14,
+            luxuries: 12,
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 3,
+            }],
+            dc: 27,
+        },
     },
     {
         name: 'Sacred Grove',
@@ -859,10 +1327,17 @@ const structures: Structure[] = [
             maximumStacks: 3,
         }],
         traits: ['yard'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 5,
+        construction: {
+            rp: 36,
+            skills: [{
+                skill: 'wilderness',
+                proficiencyRank: 1,
+            }],
+            dc: 20,
+        },
     },
     {
         name: 'Secure Warehouse',
@@ -874,10 +1349,20 @@ const structures: Structure[] = [
             luxuries: 1,
         },
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 6,
+        construction: {
+            rp: 24,
+            lumber: 6,
+            stone: 6,
+            ore: 4,
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 2,
+            }],
+            dc: 22,
+        },
     },
     {
         name: 'Sewer System',
@@ -892,6 +1377,16 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: false,
         level: 7,
+        construction: {
+            rp: 24,
+            lumber: 8,
+            stone: 8,
+            skills: [{
+                skill: 'engineering',
+                proficiencyRank: 2,
+            }],
+            dc: 23,
+        },
     },
     {
         name: 'Shrine',
@@ -905,10 +1400,19 @@ const structures: Structure[] = [
             maximumStacks: 3,
         }],
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 1,
+        construction: {
+            rp: 8,
+            lumber: 2,
+            stone: 1,
+            skills: [{
+                skill: 'folklore',
+                proficiencyRank: 1,
+            }],
+            dc: 15,
+        },
     },
     {
         name: 'Smithy',
@@ -921,10 +1425,20 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with a smithy, you gain a +1 item bonus to Craft checks made to work with metal.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            rp: 8,
+            lumber: 2,
+            stone: 1,
+            ore: 1,
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Specialized Artisan',
@@ -934,10 +1448,19 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with a specialized artisan, you gain a +1 item bonus to Craft checks made to craft specialized goods like jewelry.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 4,
+        construction: {
+            rp: 10,
+            lumber: 4,
+            luxuries: 1,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 2,
+            }],
+            dc: 19,
+        },
     },
     {
         name: 'Stable',
@@ -946,10 +1469,18 @@ const structures: Structure[] = [
             activity: 'establish-trade-agreement',
         }],
         traits: ['yard'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            rp: 10,
+            lumber: 2,
+            skills: [{
+                skill: 'wilderness',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Stockyard',
@@ -959,10 +1490,17 @@ const structures: Structure[] = [
         }],
         consumptionReduction: 1,
         traits: ['yard'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            rp: 20,
+            lumber: 4,
+            skills: [{
+                skill: 'industry',
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Stonemason',
@@ -974,10 +1512,18 @@ const structures: Structure[] = [
             stone: 1,
         },
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            rp: 16,
+            lumber: 2,
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Tannery',
@@ -986,18 +1532,34 @@ const structures: Structure[] = [
             activity: 'trade-commodities',
         }],
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            rp: 6,
+            lumber: 2,
+            skills: [{
+                skill: 'industry',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Tavern, Dive',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 1,
+        construction: {
+            rp: 12,
+            lumber: 1,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 1,
+            }],
+            dc: 15,
+        },
     },
     {
         name: 'Tavern, Luxury',
@@ -1012,10 +1574,20 @@ const structures: Structure[] = [
         }],
         notes: 'If attempt a Performance check to Earn Income in a settlement with a luxury tavern, you gain a +2 item bonus to the check. All checks made to Gather Information in a settlement with at least one luxury tavern gain a +2 item bonus.',
         traits: ['building', 'famous'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: true,
         level: 9,
+        construction: {
+            rp: 48,
+            lumber: 10,
+            stone: 8,
+            luxuries: 8,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 3,
+            }],
+            dc: 26,
+        },
     },
     {
         name: 'Tavern, Popular',
@@ -1030,10 +1602,19 @@ const structures: Structure[] = [
         }],
         notes: 'If you attempt a Performance check to Earn Income in a settlement with a popular tavern, you gain a +1 item bonus to the check. All checks made to Gather Information in a settlement with at least one popular tavern gain a +1 item bonus.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: true,
         level: 3,
+        construction: {
+            rp: 24,
+            lumber: 6,
+            stone: 2,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 2,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Tavern, World-Class',
@@ -1051,10 +1632,20 @@ const structures: Structure[] = [
         }],
         notes: 'If you attempt a Performance check to Earn Income in a settlement with a world-class tavern, you gain a +3 item bonus to the check. All checks made to Gather Information in a settlement with a world-class tavern gain a +3 item bonus.',
         traits: ['building', 'edifice', 'famous'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: true,
         level: 15,
+        construction: {
+            rp: 64,
+            lumber: 18,
+            stone: 15,
+            luxuries: 15,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 3,
+            }],
+            dc: 34,
+        },
     },
     {
         name: 'Temple',
@@ -1071,18 +1662,34 @@ const structures: Structure[] = [
             maximumStacks: 3,
         }],
         traits: ['building', 'famous', 'infamous'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 7,
+        construction: {
+            rp: 32,
+            lumber: 6,
+            stone: 6,
+            skills: [{
+                skill: 'folklore',
+                proficiencyRank: 1,
+            }],
+            dc: 23,
+        },
     },
     {
         name: 'Tenement',
         traits: ['building', 'residential'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 0,
+        construction: {
+            rp: 1,
+            lumber: 1,
+            skills: [{
+                skill: 'industry',
+            }],
+            dc: 14,
+        },
     },
     {
         name: 'Theater',
@@ -1092,10 +1699,19 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with a theater, you gain a +2 item bonus to Performance checks made to Earn Income.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: true,
         level: 9,
+        construction: {
+            rp: 24,
+            lumber: 8,
+            stone: 3,
+            skills: [{
+                skill: 'arts',
+                proficiencyRank: 2,
+            }],
+            dc: 26,
+        },
     },
     {
         name: 'Thieves\' Guild',
@@ -1105,19 +1721,45 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with a thieves\' guild, you gain a +1 item bonus to Create Forgeries.',
         traits: ['building', 'infamous'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 5,
+        construction: {
+            rp: 25,
+            lumber: 4,
+            skills: [{
+                skill: 'intrigue',
+                proficiencyRank: 1,
+            }],
+            dc: 20,
+        },
     },
     {
         name: 'Town Hall',
         increaseLeadershipActivities: true,
         traits: ['building', 'edifice'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 2,
+        construction: {
+            rp: 22,
+            lumber: 4,
+            stone: 4,
+            skills: [{
+                skill: 'defense',
+                proficiencyRank: 1,
+            }, {
+                skill: 'industry',
+                proficiencyRank: 1,
+            }, {
+                skill: 'magic',
+                proficiencyRank: 1,
+            }, {
+                skill: 'statecraft',
+                proficiencyRank: 1,
+            }],
+            dc: 16,
+        },
     },
     {
         name: 'Trade Shop',
@@ -1127,10 +1769,18 @@ const structures: Structure[] = [
         }],
         notes: 'When you build a trade shop, indicate the kind of shop it is, such as a bakery, carpenter, tailor, and so on. While in a settlement with a trade shop, you gain a +1 item bonus to all associated Crafting checks.',
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 3,
+        construction: {
+            rp: 10,
+            lumber: 2,
+            skills: [{
+                skill: 'trade',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'University',
@@ -1140,28 +1790,53 @@ const structures: Structure[] = [
         }],
         notes: 'While in a settlement with a university, you gain a +3 item bonus to Lore checks made to Recall Knowledge while Investigating, to Research checks (Gamemastery Guide 154), and to Decipher Writing.',
         traits: ['building', 'edifice', 'famous'],
-        affectsEvents: false,
         affectsDowntime: true,
         reducesUnrest: false,
         level: 15,
+        construction: {
+            rp: 78,
+            lumber: 18,
+            stone: 18,
+            luxuries: 18,
+            skills: [{
+                skill: 'scholarship',
+                proficiencyRank: 3,
+            }],
+            dc: 34,
+        },
     },
     {
         name: 'Wall, Stone',
         traits: ['infrastructure'],
         lots: 0,
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 5,
+        construction: {
+            rp: 4,
+            stone: 8,
+            skills: [{
+                skill: 'defense',
+                proficiencyRank: 1,
+            }],
+            dc: 20,
+        },
     },
     {
         name: 'Wall, Wooden',
         traits: ['infrastructure'],
         lots: 0,
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 1,
+        construction: {
+            rp: 2,
+            lumber: 4,
+            skills: [{
+                skill: 'defense',
+            }],
+            dc: 15,
+        },
     },
     {
         name: 'Watchtower',
@@ -1169,10 +1844,37 @@ const structures: Structure[] = [
             value: 1,
         }],
         traits: ['building'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: true,
         level: 3,
+        construction: {
+            rp: 12,
+            lumber: 4,
+            skills: [{
+                skill: 'defense',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
+    },
+    {
+        name: 'Watchtower, Stone',
+        settlementEventRules: [{
+            value: 1,
+        }],
+        traits: ['building'],
+        affectsDowntime: false,
+        reducesUnrest: true,
+        level: 3,
+        construction: {
+            rp: 12,
+            stone: 4,
+            skills: [{
+                skill: 'defense',
+                proficiencyRank: 1,
+            }],
+            dc: 18,
+        },
     },
     {
         name: 'Waterfront',
@@ -1188,10 +1890,18 @@ const structures: Structure[] = [
             maximumStacks: 1,
         }],
         traits: ['yard'],
-        affectsEvents: false,
         affectsDowntime: false,
         reducesUnrest: false,
         level: 8,
+        construction: {
+            rp: 90,
+            lumber: 10,
+            skills: [{
+                skill: 'boating',
+                proficiencyRank: 2,
+            }],
+            dc: 24,
+        },
     },
 ];
 

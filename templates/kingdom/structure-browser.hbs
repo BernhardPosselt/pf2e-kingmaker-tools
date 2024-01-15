@@ -1,8 +1,9 @@
-<div id="km-structure-browser">
+<form id="km-structure-browser">
     <div id="km-structure-browser-sidebar">
         <button type="button" id="km-structure-browser-clear">Clear Filters</button>
+        <h2>Filters</h2>
         <div>
-            <label for="km-structure-browser-level">Level</label>
+            <label for="km-structure-browser-level">Maximum Level</label>
             <div class="structure-browser-range">
                 <input type="range" min="0" max="20" value="{{level}}" name="level" id="km-structure-browser-level">
                 <div>{{level}}</div>
@@ -14,6 +15,11 @@
                 <input type="range" min="1" max="4" value="{{lots}}" name="lots" id="km-structure-browser-lots">
                 <div>{{lots}}</div>
             </div>
+        </div>
+        <div>
+            <input type="checkbox" {{checked ignoreProficiencyRequirements}} name="ignoreProficiencyRequirements"
+                   id="km-structure-browser-include-missing-proficiency">
+            <label for="km-structure-browser-include-missing-proficiency">Ignore Proficiency</label>
         </div>
         <div>
             <input type="checkbox" {{checked reducesUnrest}} name="reducesUnrest"
@@ -54,19 +60,46 @@
                    id="km-structure-browser-infrastructure">
             <label for="km-structure-browser-infrastructure">Infrastructure</label>
         </div>
-        <h2>Item Bonus Activities</h2>
+        <h2>Item Bonus Filters</h2>
         {{#each activities}}
             <div>
-                <input type="checkbox" {{checked enabled}} name="activity{{id}}" id="km-structure-browser-{{id}}">
-                <label for="km-structure-browser-{{id}}">{{name}}</label>
+                <input type="checkbox" {{checked enabled}} name="activity-{{@key}}" id="km-structure-browser-{{@key}}">
+                <label for="km-structure-browser-{{@key}}">{{name}}</label>
             </div>
         {{/each}}
     </div>
     <div id="km-structure-browser-content">
-        <ul>
+        <table class="km-table">
+            <tr>
+                <th>Name</th>
+                <th>Lots</th>
+                <th>Skills</th>
+                <th>DC</th>
+                <th>RP</th>
+                <th>Lumber</th>
+                <th>Stone</th>
+                <th>Ore</th>
+                <th>Luxuries</th>
+            </tr>
             {{#each structures}}
-                <li>{{this}}</li>
+                <tr>
+                    <td>{{{name}}}</td>
+                    <td>{{lots}}</td>
+                    <td {{#if lacksProficiency}}title="Kingdom Lacks Proficiency" class="error"{{/if}}>
+                        <ul>
+                            {{#each skills}}
+                                <li>{{this}}</li>
+                            {{/each}}
+                        </ul>
+                    </td>
+                    <td>{{dc}}</td>
+                    <td>{{rp}}</td>
+                    <td>{{lumber}}</td>
+                    <td>{{stone}}</td>
+                    <td>{{ore}}</td>
+                    <td>{{luxuries}}</td>
+                </tr>
             {{/each}}
-        </ul>
+        </table>
     </div>
-</div>
+</form>

@@ -51,4 +51,16 @@ export const ruleSchema = Joi.object({
     affectsDowntime: Joi.boolean().optional(),
     reducesUnrest: Joi.boolean().optional(),
     reducesRuin: Joi.boolean().optional(),
+    construction: Joi.object({
+        skills: Joi.array().items(Joi.object({
+            skill: Joi.array().valid(...allSkills),
+            proficiencyRank: Joi.number().valid(0, 1, 2, 3, 4).optional(),
+        })),
+        lumber: Joi.number().optional(),
+        luxuries: Joi.number().optional(),
+        ore: Joi.number().optional(),
+        stone: Joi.number().optional(),
+        rp: Joi.number(),
+        dc: Joi.number(),
+    }),
 });
