@@ -90,6 +90,28 @@ Camping should be quick and easy but as written can bog down the game massively.
 * Regongar's activity does not grant XP: there is already enough XP as is, no need to reward PCs for choosing the lazy way out
 * Crafting an item is a camping activity: there's already a lot of downtime in this AP (years), so this gives them a bit more flexibility to craft all those items that they find formulas for (**Note**: this might conflict with the building requirements to craft items)
 
+#### Random Encounters
+
+When a random encounter happens, people that are awake perform a Perception check against the ambusher's Stealth DC. Everyone else is unconscious, sleeping in their tents with their armor removed (unless it has the comfort trait).
+
+*
+* **Critical Success**: As Success but PCs are not prone and have reactions
+* **Success**: As Failure but sleeping PCs wake up, gaining the prone condition
+* **Failure**: As Critical Failure but Enemies start within 60ft distance
+* **Critical** Failure: Enemies start within 15ft distance of PCs. Sleeping PCs are unconscious and do not gain Reactions before their turn starts
+
+PCs can be woken up, gaining the prone condition when:
+
+* They take damage
+* They get shaken awake with a touch interact action
+* They beat a Perception check at the start of their turn. DC:
+    * 10: very loud noises like gun shots
+    * 15: loud noises like swords clashing, spells being cast or shouting using 1 action with the auditory trait
+    * 20: medium noises like PCs getting hit with weapons
+    * Monster's Stealth DC otherwise
+
+If they do not wake up, they skip their turn.
+
 ## Kingdom Management
 
 This might be the most labor-intensive system in this AP. If you run it as written, it will be terrible. Imagine cutting your sessions in half to play a heavy Euro board game without any real impact. You as a GM need to do the heavy lifting to make it feel worth it. You need to provide tangible rewards for players to build structures, you need to make them feel like they are building a kingdom by adding in RP events and story for building structures or performing kingdom activities, and you need to make that solo Euro board game fun by ramping up the difficulty. Kingdom Events should always tie into recent activities/actions: PC chose to Infiltrate an enemy faction? That political scandal is there way of getting back at you. PCs constructed a shrine in their town? They might need to recruit a priest in the Kamelands who abandoned their faith.
