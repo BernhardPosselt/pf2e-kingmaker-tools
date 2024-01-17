@@ -94,7 +94,6 @@ Camping should be quick and easy but as written can bog down the game massively.
 
 When a random encounter happens, people that are awake perform a Perception check against the ambusher's Stealth DC. Everyone else is unconscious, sleeping in their tents with their armor removed (unless it has the comfort trait).
 
-*
 * **Critical Success**: As Success but PCs are not prone and have reactions
 * **Success**: As Failure but sleeping PCs wake up, gaining the prone condition
 * **Failure**: As Critical Failure but Enemies start within 60ft distance
