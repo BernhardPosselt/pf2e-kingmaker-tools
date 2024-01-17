@@ -115,8 +115,8 @@ export async function rollCheck(
         skill: Skill,
         modifier: number,
         actor: Actor,
-    }
-): Promise<void> {
+    },
+): Promise<DegreeOfSuccess> {
     const roll = await new Roll(formula).roll();
     const total = roll.total;
     const dieNumber = total - modifier;
@@ -133,6 +133,7 @@ export async function rollCheck(
         ></div>`;
     await roll.toMessage({flavor: `Rolling Skill Check: ${label}, DC ${dc}${meta}`});
     await postDegreeOfSuccess(actor, activity, degreeOfSuccess);
+    return degreeOfSuccess;
 }
 
 async function postDegreeOfSuccess(actor: Actor, activity: Activity | undefined, degreeOfSuccess: DegreeOfSuccess): Promise<void> {

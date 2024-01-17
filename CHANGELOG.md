@@ -7,8 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.0] - 2024-01-17
+
+### Added
+
+* Added support for calculating building upgrade costs
+
 ### Changed
 
+* Remove pay button from sheet and instead post pay buttons to chat
 * Updated journal to include structure browser changes
 
 ## [0.18.1] - 2024-01-15

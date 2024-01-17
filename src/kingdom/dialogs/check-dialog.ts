@@ -18,6 +18,7 @@ import {activityData} from '../data/activityData';
 import {rollCheck} from '../rolls';
 import {getActiveSettlementStructureResult, getSettlement, getSettlementsWithoutLandBorders} from '../scene';
 import {getBooleanSetting} from '../../settings';
+import {DegreeOfSuccess} from '../../degree-of-success';
 
 export type CheckType = 'skill' | 'activity';
 
@@ -32,6 +33,7 @@ export interface CheckDialogFeatOptions {
     actor: Actor;
     overrideSkills?: Partial<SkillRanks>;
     onRoll: (consumeModifiers: Set<string>) => Promise<void>;
+    afterRoll?: (degree: DegreeOfSuccess) => Promise<void>;
 }
 
 interface CheckFormData {
@@ -71,6 +73,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private onRoll: (consumeModifiers: Set<string>) => Promise<void>;
     private actor: Actor;
     private overrideSkills: Partial<SkillRanks> | undefined;
+    private afterRoll: (degree: DegreeOfSuccess) => Promise<void>;
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -93,6 +96,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.kingdom = options.kingdom;
         this.actor = options.actor;
         this.onRoll = options.onRoll;
+        this.afterRoll = options.afterRoll ?? (async (): Promise<void> => {
+        });
         this.overrideSkills = options.overrideSkills;
         const controlDC = getControlDC(this.kingdom.level, this.kingdom.size, this.kingdom.leaders.ruler.vacant);
         if (this.type === 'skill') {
@@ -213,7 +218,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const skill = target.dataset.skill as Skill;
 
             const formula = `${modifier}`;
-            await rollCheck({
+            const degree = await rollCheck({
                 formula,
                 label,
                 activity,
@@ -223,6 +228,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 actor: this.actor,
             });
             await this.onRoll(this.consumeModifiers);
+            await this.afterRoll(degree);
             await this.close();
         });
 
@@ -235,7 +241,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const skill = target.dataset.skill as Skill;
 
             const formula = `1d20+${modifier}`;
-            await rollCheck({
+            const degree = await rollCheck({
                 formula,
                 label,
                 activity,
@@ -245,6 +251,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 actor: this.actor,
             });
             await this.onRoll(this.consumeModifiers);
+            await this.afterRoll(degree);
             await this.close();
         });
     }

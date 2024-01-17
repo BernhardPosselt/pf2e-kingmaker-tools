@@ -1,13 +1,13 @@
 import {Structure} from '../data/structures';
 import {Activity} from '../data/activities';
-import {createUUIDLink, isBlank, listenClick, unslugify} from '../../utils';
+import {capitalize, createUUIDLink, escapeHtml, isBlank, isNonNullable, listenClick, unslugify} from '../../utils';
 import {rankToLabel} from '../modifiers';
 import {Kingdom} from '../data/kingdom';
 import {parseStructureData} from '../scene';
 import {CheckDialog} from './check-dialog';
 import {getBooleanSetting} from '../../settings';
-import {Costs, formatCosts, payDialog} from './pay-dialog';
 import {getKingdom, saveKingdom} from '../storage';
+import {DegreeOfSuccess} from '../../degree-of-success';
 
 interface StructureBrowserOptions {
     game: Game;
@@ -65,7 +65,7 @@ function checkProficiency(structure: Structure, kingdom: Kingdom): boolean {
         });
 }
 
-function getStructuresFromActors(actors: Actor[]): ActorStructure[] {
+export function getStructuresFromActors(actors: Actor[]): ActorStructure[] {
     return actors
         .map((actor) => {
             const width = actor.token?.width ?? actor.prototypeToken?.width ?? 0;
@@ -205,8 +205,6 @@ class StructureBrowserApp extends FormApplication<
         });
         $html.querySelectorAll('.km-build-structure-dialog')
             .forEach(el => el.addEventListener('click', (ev) => this.buildStructure(ev)));
-        $html.querySelectorAll('.km-build-structure-pay')
-            .forEach(el => el.addEventListener('click', (ev) => this.payStructure(ev)));
     }
 
     private filterStructures(structures: ActorStructure[], filters: StructureFilters): ActorStructure[] {
@@ -300,7 +298,6 @@ class StructureBrowserApp extends FormApplication<
         const structureActors = getStructuresFromActors(this.structureActors);
         const structure = structureActors.find(a => a.actor.id === id);
         if (structure) {
-            console.log(structure);
             const applicableSkills = structure.construction?.skills?.map(s => {
                 return [s.skill, s.proficiencyRank ?? 0];
             });
@@ -313,40 +310,69 @@ class StructureBrowserApp extends FormApplication<
                 type: 'activity',
                 onRoll: this.onRoll,
                 actor: this.sheetActor,
+                afterRoll: async (degree): Promise<void> => {
+                    await this.payStructure(structure, degree);
+                    await this.close();
+                },
             }).render(true);
         }
     }
 
-    private async payStructure(ev: Event): Promise<void> {
-        const button = ev.currentTarget as HTMLElement;
-        const id = button.dataset.id!;
+    private async getPaymentChatData(structure: ActorStructure, degree: DegreeOfSuccess): Promise<{
+        upgradeCosts: { name: string, costs: Costs }[],
+        costs: Costs,
+        structureLink?: string,
+    }> {
         const structureActors = getStructuresFromActors(this.structureActors);
-        const structure = structureActors.find(a => a.actor.id === id);
-        const pay = async (costs: Costs): Promise<void> => {
-            await saveKingdom(this.sheetActor, {
-                commodities: {
-                    ...this.kingdom.commodities,
-                    now: {
-                        ...this.kingdom.commodities.now,
-                        ore: Math.max(0, this.kingdom.commodities.now.ore - costs.ore),
-                        lumber: Math.max(0, this.kingdom.commodities.now.lumber - costs.lumber),
-                        luxuries: Math.max(0, this.kingdom.commodities.now.luxuries - costs.luxuries),
-                        stone: Math.max(0, this.kingdom.commodities.now.stone - costs.stone),
-                    },
-                },
-                resourcePoints: {
-                    ...this.kingdom.resourcePoints,
-                    now: Math.max(0, this.kingdom.resourcePoints.now - costs.rp),
-                },
-            });
-            await ChatMessage.create({
-                content: `Paying ${formatCosts(costs)}`,
-            });
-            this.render();
+        const upgradeFromStructures = (structure.upgradeFrom
+                ?.map(name => structureActors.find(a => a.actor.name === name))
+                ?.filter(structure => isNonNullable(structure))
+            ?? []) as ActorStructure[];
+        const costMode = degree === DegreeOfSuccess.CRITICAL_SUCCESS ? 'half' : 'full';
+        const upgradeCosts: { name: string, costs: Costs }[] = upgradeFromStructures.map(upgradeFrom => {
+            const costs = {
+                rp: Math.max(0, (structure.construction?.rp ?? 0) - (upgradeFrom.construction?.rp ?? 0)),
+                lumber: Math.max(0, (structure.construction?.lumber ?? 0) - (upgradeFrom.construction?.lumber ?? 0)),
+                stone: Math.max(0, (structure.construction?.stone ?? 0) - (upgradeFrom.construction?.stone ?? 0)),
+                ore: Math.max(0, (structure.construction?.ore ?? 0) - (upgradeFrom.construction?.ore ?? 0)),
+                luxuries: Math.max(0, (structure.construction?.luxuries ?? 0) - (upgradeFrom.construction?.luxuries ?? 0)),
+            };
+            return {
+                name: upgradeFrom.name,
+                costs: calculateCosts(costs, costMode),
+            };
+        });
+        const costs = calculateCosts(structure.construction ?? {}, costMode);
+        const structureToLink = degree === DegreeOfSuccess.CRITICAL_FAILURE
+            ? structureActors.find(a => a.actor.name === 'Rubble')?.actor
+            : structure?.actor;
+        const structureLink = structureToLink
+            ? await TextEditor.enrichHTML(createUUIDLink(structureToLink.uuid, structureToLink.name!))
+            : undefined;
+        return {
+            structureLink,
+            costs,
+            upgradeCosts,
         };
-        if (structure) {
-            payDialog(structure, pay);
-        }
+    }
+
+    private async payStructure(structure: ActorStructure, degree: DegreeOfSuccess): Promise<void> {
+        const {
+            structureLink,
+            costs,
+            upgradeCosts,
+        } = await this.getPaymentChatData(structure, degree);
+        const upgradeButtons = upgradeCosts.map(costs => {
+            const title = `<p><b>Upgrade from ${escapeHtml(costs.name)}:</b></p>`;
+            return title + createPayButton(costs.costs);
+        }).join('');
+        const header = `<h3>Constructing ${escapeHtml(structure.name)}</h3>`;
+        const title = '<p><b>Full Costs:</b></p>';
+        const payButton = title + createPayButton(costs);
+        const link = structureLink ? `<p><b>Drag onto scene to build:</b></p><p>${structureLink}</p>` : '';
+        await ChatMessage.create({
+            content: header + upgradeButtons + payButton + link,
+        });
     }
 }
 
@@ -370,6 +396,88 @@ function hasActivities(structure: Structure, activities: Partial<Record<Activity
 function getAllStructureActivities(structures: Structure[]): Activity[] {
     return Array.from(new Set(structures.flatMap(structure => Array.from(getStructureActivities(structure)))))
         .sort((a, b) => a.localeCompare(b));
+}
+
+
+export interface Costs {
+    rp: number;
+    ore: number;
+    stone: number;
+    lumber: number;
+    luxuries: number;
+}
+
+function createPayButton(costs: Costs): string {
+    return `<button type="button" 
+                data-rp="${costs.rp}" 
+                data-lumber="${costs.lumber}"
+                data-luxuries="${costs.luxuries}"
+                data-stone="${costs.stone}"
+                data-ore="${costs.ore}"
+                class="km-pay-structure"><b>Pay</b>: ${formatCosts(costs)}</button>`;
+}
+
+export function parsePayButton(el: HTMLElement): Costs {
+    return {
+        rp: parseInt(el.dataset.rp ?? '0', 10),
+        lumber: parseInt(el.dataset.lumber ?? '0', 10),
+        luxuries: parseInt(el.dataset.luxuries ?? '0', 10),
+        stone: parseInt(el.dataset.stone ?? '0', 10),
+        ore: parseInt(el.dataset.ore ?? '0', 10),
+    };
+}
+
+export async function payStructure(sheetActor: Actor, costs: Costs): Promise<void> {
+    const kingdom = getKingdom(sheetActor);
+    await saveKingdom(sheetActor, {
+        commodities: {
+            ...kingdom.commodities,
+            now: {
+                ...kingdom.commodities.now,
+                ore: Math.max(0, kingdom.commodities.now.ore - costs.ore),
+                lumber: Math.max(0, kingdom.commodities.now.lumber - costs.lumber),
+                luxuries: Math.max(0, kingdom.commodities.now.luxuries - costs.luxuries),
+                stone: Math.max(0, kingdom.commodities.now.stone - costs.stone),
+            },
+        },
+        resourcePoints: {
+            ...kingdom.resourcePoints,
+            now: Math.max(0, kingdom.resourcePoints.now - costs.rp),
+        },
+    });
+    await ChatMessage.create({
+        content: `<b>Paid:</b> ${formatCosts(costs)}`,
+    });
+}
+
+function calculateCosts(costs: Partial<Costs>, mode: 'half' | 'full'): Costs {
+    const zeroedCosts: Costs = {
+        rp: costs.rp ?? 0,
+        ore: costs.ore ?? 0,
+        lumber: costs.lumber ?? 0,
+        luxuries: costs.luxuries ?? 0,
+        stone: costs.stone ?? 0,
+    };
+    if (mode === 'full') {
+        return zeroedCosts;
+    } else {
+        return {
+            rp: zeroedCosts.rp,
+            ore: Math.ceil(zeroedCosts.ore / 2),
+            lumber: Math.ceil(zeroedCosts.lumber / 2),
+            luxuries: Math.ceil(zeroedCosts.luxuries / 2),
+            stone: Math.ceil(zeroedCosts.stone / 2),
+        };
+    }
+}
+
+function formatCosts(costs: Costs): string {
+    return (Object.entries(costs) as [string, number][])
+        .filter(([, value]) => value > 0)
+        .map(([key, value]) => {
+            return `${capitalize(key)}: ${value}`;
+        })
+        .join(', ');
 }
 
 export async function showStructureBrowser(

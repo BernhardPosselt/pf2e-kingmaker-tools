@@ -3,6 +3,7 @@ import {Activity} from './data/activities';
 import {activityData, ActivityResults} from './data/activityData';
 import {updateResources} from './resources';
 import {gainFame} from './kingdom-utils';
+import {parsePayButton, payStructure} from './dialogs/structure-browser';
 
 interface KingdomChatButton {
     selector: string;
@@ -10,6 +11,15 @@ interface KingdomChatButton {
 }
 
 export const kingdomChatButtons: KingdomChatButton[] = [
+    {
+        selector: '.km-pay-structure',
+        callback: async (game: Game, actor: Actor, event: Event): Promise<void> => {
+            event.preventDefault();
+            const target = event.currentTarget as HTMLButtonElement;
+            const costs = parsePayButton(target);
+            await payStructure(actor, costs);
+        },
+    },
     {
         selector: '.km-gain-fame-button',
         callback: async (game: Game, actor: Actor, event: Event): Promise<void> => {
