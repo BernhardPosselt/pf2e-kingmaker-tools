@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* Create Chatmessage when clicking gain 1 fame button to mirror other upkeep activity buttons
 * Replace Full Costs with better naming: Build Directly
 * New Leadership - Critical Success effect now correctly lasts until the end of your next turn
 

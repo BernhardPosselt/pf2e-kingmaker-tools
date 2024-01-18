@@ -372,8 +372,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.km-reduce-ruin')
             .forEach(el => el.addEventListener('click', async (ev) => await this.reduceRuin(ev)));
         $html.querySelector('#km-gain-fame')
-            ?.addEventListener('click', async () =>
-                await this.saveKingdom(gainFame(this.getKingdom(), 1)));
+            ?.addEventListener('click', async () => await this.upkeepGainFame());
         $html.querySelector('#km-adjust-unrest')
             ?.addEventListener('click', async () => await this.adjustUnrest());
         $html.querySelector('#km-collect-resources')
@@ -605,6 +604,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     });
                 });
             });
+    }
+
+    private async upkeepGainFame(): Promise<void> {
+        await ChatMessage.create({content: 'Gaining 1 Fame'});
+        await this.saveKingdom(gainFame(this.getKingdom(), 1));
     }
 
     private async consumeModifiers(consumeIds: Set<string>): Promise<void> {
