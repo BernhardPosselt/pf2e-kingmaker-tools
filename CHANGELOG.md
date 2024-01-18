@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.0] - 2024-01-18
+
+### Added
+
+* Ignore structures with the slowed condition from available structures
+
 ## [0.19.0] - 2024-01-17
 
 ### Added

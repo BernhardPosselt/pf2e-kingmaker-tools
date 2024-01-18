@@ -65,10 +65,21 @@ export function parseStructureData(
     }
 }
 
+export function isStructureActor(actor: Actor): boolean {
+    return isNonNullable(actor.getFlag('pf2e-kingmaker-tools', 'structureData'));
+}
+
+export function isStructureActorActive(actor: Actor): boolean {
+    return actor.itemTypes.condition?.find(c => c.type === 'condition' && c.name.startsWith('Slowed')) === undefined;
+}
+
 function getSceneStructures(scene: Scene): Structure[] {
     try {
         return scene.tokens
-            .filter(t => t.actor !== null && t.actor !== undefined)
+            .filter(t => t.actor !== null
+                && t.actor !== undefined
+                && isStructureActor(t.actor)
+                && isStructureActorActive(t.actor))
             .map(t => {
                 const result: [Actor | null, number, number] = [t.actor, t.width ?? 1, t.height ?? 1];
                 return result;

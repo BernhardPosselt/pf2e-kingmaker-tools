@@ -76,6 +76,7 @@ declare global {
             effect: Item[];
             equipment: Item[];
             action: Item[];
+            condition: Item[];
         };
         prototypeToken: TokenDocument;
 
@@ -125,7 +126,7 @@ declare global {
         name: string;
         sourceId: string;
         sheet: ItemSheet;
-        type: 'effect' | 'consumable' | 'melee' | 'weapon';
+        type: 'effect' | 'consumable' | 'melee' | 'weapon' | 'condition';
         system: {
             traits: {
                 value: string[]
