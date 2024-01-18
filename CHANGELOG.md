@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.1] - 2024-01-19
+
 ### Fixed
 
 * Create Chatmessage when clicking gain 1 fame button to mirror other upkeep activity buttons
