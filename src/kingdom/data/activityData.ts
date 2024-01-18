@@ -1172,7 +1172,7 @@ Rulers are particularly difficult to assign; when you take this activity to assi
         criticalSuccess: {
             msg: 'The people love the new leader. The leader immediately provides the benefits tied to occupying the new role and gains a +1 circumstance bonus to all Kingdom skill checks they attempt before the end of the next Kingdom turn.',
             modifiers: () => [{
-                turns: 1,
+                turns: 2,
                 enabled: false,
                 value: 1,
                 name: 'New Leadership: Critical Success',
