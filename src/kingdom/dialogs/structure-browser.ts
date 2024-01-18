@@ -367,10 +367,10 @@ class StructureBrowserApp extends FormApplication<
             return title + createPayButton(costs.costs);
         }).join('');
         const header = `<h3>Constructing ${escapeHtml(structure.name)}</h3>`;
-        const title = '<p><b>Full Costs:</b></p>';
+        const title = '<p><b>Build Directly:</b></p>';
         const payButton = title + createPayButton(costs);
         const linkNote = degree === DegreeOfSuccess.FAILURE
-            ? ' and apply the @UUID[Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3]{Slowed} condition to signal that the structure is in construction' : '';
+            ? ' and apply the @UUID[Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3]{Slowed} condition to signal that the structure is under construction' : '';
         const link = structureLink ? `<p><b>Drag onto scene to build${linkNote}:</b></p><p>${structureLink}</p>` : '';
         await ChatMessage.create({
             content: header + upgradeButtons + payButton + link,
