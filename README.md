@@ -69,6 +69,8 @@ If you are not running the official module, check out the [Kingmaker Tools Token
 
 ![kingdom-sheet.png](docs%2Fimages%2Fkingdom-sheet.png)
 
+![settlements.png](docs%2Fimages%2Fsettlements.png)
+
 ![camping-sheet-1.png](docs%2Fimages%2Fcamping-sheet-1.png)
 
 ![armies.png](docs%2Fimages%2Farmies.png)
