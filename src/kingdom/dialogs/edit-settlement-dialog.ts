@@ -9,8 +9,8 @@ export function editSettlementDialog(name: string, data: Settlement, onOk: (data
             <div>
                 <label>Type</label>
                 <select name="type">
-                    <option value="capital" ${data.type === 'capital' ? 'selected': ''}>Capital</option>
-                    <option value="settlement" ${data.type === 'settlement' ? 'selected': ''}>Settlement</option>
+                    <option value="capital" ${data.type === 'capital' ? 'selected' : ''}>Capital</option>
+                    <option value="settlement" ${data.type === 'settlement' ? 'selected' : ''}>Settlement</option>
                 </select>
             </div>
             <div>
@@ -18,7 +18,7 @@ export function editSettlementDialog(name: string, data: Settlement, onOk: (data
                 <input name="lots" type="number" value="${data.lots}">
             </div>
             <div>
-                <label>Full Blocks (Level)</label>
+                <label>Level</label>
                 <input name="level" type="number" value="${data.level}">
             </div>
             <div>
@@ -27,7 +27,7 @@ export function editSettlementDialog(name: string, data: Settlement, onOk: (data
             </div>
             <div>
                 <label>Secondary Territory</label>
-                <input name="secondaryTerritory" type="checkbox" ${data.secondaryTerritory ? 'checked': ''}>
+                <input name="secondaryTerritory" type="checkbox" ${data.secondaryTerritory ? 'checked' : ''}>
             </div>
         </form>
         `,
