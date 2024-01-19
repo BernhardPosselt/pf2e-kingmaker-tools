@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+## [0.20.2] - 2024-01-19
+
+### Fixed
 
 * Added inline help in civic activities section describing how to use structures
 
