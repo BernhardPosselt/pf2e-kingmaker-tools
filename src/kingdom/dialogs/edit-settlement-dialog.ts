@@ -27,7 +27,7 @@ export function editSettlementDialog(autoLevel: boolean, name: string, data: Set
                 <input name="waterBorders" type="number" value="${data.waterBorders}">
             </div>
             <div>
-                <label>Secondary Terrirtory</label>
+                <label>Secondary Territory</label>
                 <input name="secondaryTerritory" type="checkbox" ${data.secondaryTerritory ? 'checked' : ''}>
             </div>
             <div>
