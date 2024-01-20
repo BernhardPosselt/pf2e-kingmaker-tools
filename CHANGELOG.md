@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.21.0] - 2024-01-20
+
+### Added
+
+* Ship a Settlement Scenes compendium
+* Add settlement level automation. You will need to manually migrate your settlement scenes to make use of this automation or turn it off in the kingdom sheet settings. Consult the Kingmaker Tools Manual journal (Help button in the title bar of your kingdom sheet) for more information on how to use it.
+
+### Changed
+
+* Order compendium folders by name
+
+### Fixed
+
+* Fix prototype tokens for structures to show no HP bars and display their name for V&K buildings, Waterfront and Monument
+
 ## [0.20.2] - 2024-01-19
 
 ### Fixed

@@ -35,6 +35,7 @@ interface KingdomSettingData {
     kingdomEventsTable: string;
     kingdomCultTable: string;
     ignoreSkillRequirements: boolean;
+    autoCalculateSettlementLevel: boolean;
 }
 
 interface KingdomSettingOptions {
@@ -66,6 +67,7 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
             vkXpRules: getBooleanSetting(this.game, 'vanceAndKerensharaXP'),
             xpPerClaimedHex: getNumberSetting(this.game, 'xpPerClaimedHex'),
             cultOfTheBloomEvents: getBooleanSetting(this.game, 'cultOfTheBloomEvents'),
+            autoCalculateSettlementLevel: getBooleanSetting(this.game, 'autoCalculateSettlementLevel'),
             kingdomEventsTable: getStringSetting(this.game, 'kingdomEventsTable'),
             kingdomCultTable: getStringSetting(this.game, 'kingdomCultTable'),
             kingdomEventRollMode: getStringSetting(this.game, 'kingdomEventRollMode'),
@@ -167,6 +169,7 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
         await setSetting(this.game, 'kingdomCultTable', this.data.kingdomCultTable);
         await setSetting(this.game, 'kingdomEventRollMode', this.data.kingdomEventRollMode);
         await setSetting(this.game, 'kingdomIgnoreSkillRequirements', this.data.ignoreSkillRequirements);
+        await setSetting(this.game, 'autoCalculateSettlementLevel', this.data.autoCalculateSettlementLevel);
         if (this.data.untrainedSkillProficiency === 'level') {
             await setSetting(this.game, 'kingdomAlwaysAddLevel', true);
             await setSetting(this.game, 'kingdomAlwaysAddHalfLevel', false);

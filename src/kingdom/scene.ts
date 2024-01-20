@@ -73,13 +73,88 @@ export function isStructureActorActive(actor: Actor): boolean {
     return actor.itemTypes.condition?.find(c => c.type === 'condition' && c.name.startsWith('Slowed')) === undefined;
 }
 
+function getBlockTiles(scene: Scene): TileDocument[] {
+    return scene.tiles.filter(d => isNonNullable(d.getFlag('pf2e-kingmaker-tools', 'settlementBlockDrawing')));
+}
+
+function tokenIsStructure(token: TokenDocument): boolean {
+    return token.actor !== null
+        && token.actor !== undefined
+        && isStructureActor(token.actor)
+        && isStructureActorActive(token.actor);
+}
+
+interface ShapePosition {
+    xStart: number;
+    yStart: number;
+    xEnd: number;
+    yEnd: number;
+}
+
+function containsStructures(drawingPosition: ShapePosition, tokenPositions: ShapePosition[]): boolean {
+    return tokenPositions.some(pos => {
+        return pos.xStart >= drawingPosition.xStart
+            && pos.xEnd <= drawingPosition.xEnd
+            && pos.yStart >= drawingPosition.yStart
+            && pos.yEnd <= drawingPosition.yEnd;
+    });
+}
+
+/**
+ * Go through all rectangle drawings in a scene and check if any structure token on the scene is fully inside the
+ * rectangle drawing enlarged by a margin of error
+ * @param scene
+ */
+function getFilledBlocks(scene: Scene): number {
+    const gridSize = scene.grid.size;
+    // increase rectangle by this many pixels to account for not placing the structure perfectly inside of it
+    const marginOfErrorPx = Math.floor(0.2 * gridSize);
+    const tokenPositions = scene.tokens
+        .filter(tokenIsStructure)
+        .map(token => {
+            return {
+                xStart: token.x,
+                yStart: token.y,
+                xEnd: token.x + gridSize,
+                yEnd: token.y + gridSize,
+            };
+        });
+    return getBlockTiles(scene)
+        .filter(d => {
+            // (0, 0) is the top left corner and x and y of the drawing is the top left corner of the drawing
+            const drawingPosition = {
+                xStart: d.x - marginOfErrorPx,
+                xEnd: d.x + marginOfErrorPx + (gridSize * d.width),
+                yStart: d.y - marginOfErrorPx,
+                yEnd: d.y + marginOfErrorPx + (gridSize * d.height),
+            };
+            return containsStructures(drawingPosition, tokenPositions);
+        })
+        .length || 1;
+}
+
+export function getSettlementInfo(settlement: SettlementAndScene, autoCalculateSettlementLevel: boolean): {
+    level: number;
+    lots: number
+} {
+    if (autoCalculateSettlementLevel && !settlement.settlement.manualSettlementLevel) {
+        const blocks = getFilledBlocks(settlement.scene);
+        return {
+            level: Math.min(20, blocks),
+            lots: blocks,
+        };
+    } else {
+        return {
+            level: settlement.settlement.level,
+            lots: settlement.settlement.lots,
+        };
+    }
+}
+
 function getSceneStructures(scene: Scene): Structure[] {
     try {
         return scene.tokens
-            .filter(t => t.actor !== null
-                && t.actor !== undefined
-                && isStructureActor(t.actor)
-                && isStructureActorActive(t.actor))
+            .filter(tokenIsStructure)
             .map(t => {
                 const result: [Actor | null, number, number] = [t.actor, t.width ?? 1, t.height ?? 1];
                 return result;
@@ -144,17 +219,18 @@ export function getAllSettlements(game: Game, kingdom: Kingdom): SettlementAndSc
         ?.filter(scene => scene !== undefined) as SettlementAndScene[] ?? [];
 }
 
-function getSettlementStructureResult(settlement: SettlementAndScene, mode: StructureStackRule): StructureResult {
+function getSettlementStructureResult(settlement: SettlementAndScene, mode: StructureStackRule, autoCalculateSettlementLevel: boolean): StructureResult {
     const structures = getSceneStructures(settlement.scene);
-    return evaluateStructures(structures, settlement.settlement.level, mode);
+    const level = getSettlementInfo(settlement, autoCalculateSettlementLevel).level;
+    return evaluateStructures(structures, level, mode);
 }
 
 
-export function getStructureResult(mode: StructureStackRule, active: SettlementAndScene, capital?: SettlementAndScene): StructureResult {
+export function getStructureResult(mode: StructureStackRule, autoCalculateSettlementLevel: boolean, active: SettlementAndScene, capital?: SettlementAndScene): StructureResult {
     if (capital && capital.scene.id !== active.scene.id) {
-        return includeCapital(getSettlementStructureResult(capital, mode), getSettlementStructureResult(active, mode));
+        return includeCapital(getSettlementStructureResult(capital, mode, autoCalculateSettlementLevel), getSettlementStructureResult(active, mode, autoCalculateSettlementLevel));
     } else {
-        return getSettlementStructureResult(active, mode);
+        return getSettlementStructureResult(active, mode, autoCalculateSettlementLevel);
     }
 }
 
@@ -171,9 +247,10 @@ export function getStructureStackMode(game: Game): StructureStackRule {
 
 export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSettlements {
     const mode = getStructureStackMode(game);
+    const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
     return getAllSettlements(game, kingdom)
         .map(settlement => {
-            const structureResult = getSettlementStructureResult(settlement, mode);
+            const structureResult = getSettlementStructureResult(settlement, mode, autoCalculateSettlementLevel);
             return {
                 leadershipActivityNumber: structureResult.increaseLeadershipActivities ? 3 : 2,
                 settlementConsumption: structureResult.consumption,
@@ -210,10 +287,11 @@ export interface ActiveSettlementStructureResult {
 export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom): ActiveSettlementStructureResult | undefined {
     const activeSettlement = getSettlement(game, kingdom, kingdom.activeSettlement);
     const capitalSettlement = getCapitalSettlement(game, kingdom);
+    const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
     if (activeSettlement) {
         const mode = getStructureStackMode(game);
-        const activeSettlementStructures = getStructureResult(mode, activeSettlement);
-        const mergedSettlementStructures = getStructureResult(mode, activeSettlement, capitalSettlement);
+        const activeSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activeSettlement);
+        const mergedSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activeSettlement, capitalSettlement);
         return {
             active: activeSettlementStructures,
             merged: mergedSettlementStructures,
@@ -223,9 +301,10 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
 
 export function getSettlementsWithoutLandBorders(game: Game, kingdom: Kingdom): number {
     const mode = getStructureStackMode(game);
+    const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
     return getAllSettlements(game, kingdom)
         .filter(settlementAndScene => {
-            const structures = getStructureResult(mode, settlementAndScene);
+            const structures = getStructureResult(mode, autoCalculateSettlementLevel, settlementAndScene);
             return (settlementAndScene.settlement?.waterBorders ?? 0) >= 4 && !structures.hasBridge;
         })
         .length;

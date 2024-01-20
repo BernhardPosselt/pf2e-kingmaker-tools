@@ -141,6 +141,13 @@ declare global {
         };
     }
 
+    interface Scene {
+        grid: {
+            type: number;
+            size: number;
+        };
+    }
+
     interface EffectItem {
         isExpired: boolean;
     }
@@ -165,6 +172,15 @@ declare global {
     interface TokenDocument {
         height: number;
         width: number;
+        x: number;
+        y: number;
+    }
+
+    interface TileDocument {
+        width: number;
+        height: number;
+        x: number;
+        y: number;
     }
 
     interface Scene {

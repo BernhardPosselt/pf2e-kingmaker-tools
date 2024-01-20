@@ -1,7 +1,8 @@
 import {Settlement} from '../data/kingdom';
 import {parseCheckbox, parseNumberInput, parseSelect} from '../../utils';
 
-export function editSettlementDialog(name: string, data: Settlement, onOk: (data: Settlement) => void): void {
+export function editSettlementDialog(autoLevel: boolean, name: string, data: Settlement, onOk: (data: Settlement) => void): void {
+    const showLevelConfig = data.manualSettlementLevel === true || !autoLevel;
     new Dialog({
         title: `Edit Settlement: ${name}`,
         content: `
@@ -13,11 +14,11 @@ export function editSettlementDialog(name: string, data: Settlement, onOk: (data
                     <option value="settlement" ${data.type === 'settlement' ? 'selected' : ''}>Settlement</option>
                 </select>
             </div>
-            <div>
+            <div ${showLevelConfig ? '' : 'hidden'}>
                 <label>Occupied Blocks</label>
                 <input name="lots" type="number" value="${data.lots}">
             </div>
-            <div>
+            <div ${showLevelConfig ? '' : 'hidden'}>
                 <label>Level</label>
                 <input name="level" type="number" value="${data.level}">
             </div>
@@ -26,8 +27,12 @@ export function editSettlementDialog(name: string, data: Settlement, onOk: (data
                 <input name="waterBorders" type="number" value="${data.waterBorders}">
             </div>
             <div>
-                <label>Secondary Territory</label>
+                <label>Secondary Terrirtory</label>
                 <input name="secondaryTerritory" type="checkbox" ${data.secondaryTerritory ? 'checked' : ''}>
+            </div>
+            <div>
+                <label>Manual Settlemnt Level (reopen dialog after saving)</label>
+                <input name="manualSettlementLevel" type="checkbox" ${data.manualSettlementLevel === true ? 'checked' : ''}>
             </div>
         </form>
         `,
@@ -44,6 +49,7 @@ export function editSettlementDialog(name: string, data: Settlement, onOk: (data
                         lots: parseNumberInput($html, 'lots'),
                         waterBorders: parseNumberInput($html, 'waterBorders'),
                         sceneId: data.sceneId,
+                        manualSettlementLevel: parseCheckbox($html, 'manualSettlementLevel'),
                     });
                 },
             },
@@ -51,6 +57,6 @@ export function editSettlementDialog(name: string, data: Settlement, onOk: (data
         default: 'save',
     }, {
         jQuery: false,
-        width: 380,
+        width: 580,
     }).render(true);
 }

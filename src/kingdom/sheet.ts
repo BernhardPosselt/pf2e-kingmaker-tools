@@ -27,6 +27,7 @@ import {
     getCurrentScene,
     getScene,
     getSettlement,
+    getSettlementInfo,
     getSettlementsWithoutLandBorders,
     getStructureResult,
     getStructureStackMode,
@@ -131,6 +132,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const isGM = this.game.user?.isGM ?? false;
         const kingdomData = this.getKingdom();
         const sizeData = getSizeData(kingdomData.size);
+        const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
         const {
             leadershipActivityNumber,
             settlementConsumption,
@@ -245,9 +247,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const waterBorders = s.settlement.waterBorders ?? 0;
                     return {
                         ...s.settlement,
+                        ...getSettlementInfo(s, autoCalculateSettlementLevel),
                         waterBorders,
                         overcrowded: this.isOvercrowded(s),
-                        lacksBridge: waterBorders >= 4 && !getStructureResult(structureStackMode, s).hasBridge,
+                        lacksBridge: waterBorders >= 4 && !getStructureResult(structureStackMode, autoCalculateSettlementLevel, s).hasBridge,
                         isCapital: settlement?.settlement.type === 'capital',
                         name: s.scene.name ?? undefined,
                     };
@@ -360,6 +363,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.on('canvasReady', this.sceneChange.bind(this));
         Hooks.on('createToken', this.sceneChange.bind(this));
         Hooks.on('deleteToken', this.sceneChange.bind(this));
+        Hooks.on('sightRefresh', this.sceneChange.bind(this)); // end of drag movement
         Hooks.on('applyTokenStatusEffect', this.sceneChange.bind(this));
         const $html = html[0];
         $html.querySelectorAll('.km-nav a')?.forEach(el => {
@@ -596,7 +600,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const current = this.getKingdom();
                     const data = current.settlements[index];
                     const name = getScene(this.game, data.sceneId)?.name as string;
-                    await editSettlementDialog(name, data, (savedData) => {
+                    const autoLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
+                    editSettlementDialog(autoLevel, name, data, (savedData) => {
                         current.settlements[index] = savedData;
                         this.saveKingdom({
                             settlements: current.settlements,
@@ -716,8 +721,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private isOvercrowded(settlement: SettlementAndScene): boolean {
         const structureStackMode = getStructureStackMode(this.game);
-        const structures = getStructureResult(structureStackMode, settlement);
-        return settlement.settlement.lots > structures.residentialLots;
+        const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
+        const structures = getStructureResult(structureStackMode, autoCalculateSettlementLevel, settlement);
+        return getSettlementInfo(settlement, autoCalculateSettlementLevel).lots > structures.residentialLots;
     }
 
     private async adjustUnrest(): Promise<void> {
@@ -877,8 +883,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     override close(options?: FormApplication.CloseOptions): Promise<void> {
         Hooks.off('canvasReady', this.sceneChange);
         Hooks.off('createToken', this.sceneChange);
+        Hooks.off('sightRefresh', this.sceneChange.bind(this)); // end of drag movement
         Hooks.off('deleteToken', this.sceneChange);
-        Hooks.on('applyTokenStatusEffect', this.sceneChange);
+        Hooks.off('applyTokenStatusEffect', this.sceneChange);
         return super.close(options);
     }
 

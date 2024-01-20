@@ -2,7 +2,14 @@ import {ActivityBonuses, ItemLevelBonuses, SkillItemBonuses} from '../data/struc
 import {capitalize, unslugify} from '../../utils';
 import {calculateAvailableItems, groupAvailableItems, StructureResult} from '../structures';
 import {hasFeat, Kingdom} from '../data/kingdom';
-import {getCapitalSettlement, getSettlement, getStructureResult, getStructureStackMode} from '../scene';
+import {
+    getCapitalSettlement,
+    getSettlement,
+    getSettlementInfo,
+    getStructureResult,
+    getStructureStackMode,
+} from '../scene';
+import {getBooleanSetting} from '../../settings';
 
 interface SettlementOptions {
     game: Game;
@@ -52,18 +59,19 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
         const settlement = getSettlement(this.game, this.kingdom, this.settlementId)!;
         const capital = getCapitalSettlement(this.game, this.kingdom);
         const structureStackMode = getStructureStackMode(this.game);
-        const structures = getStructureResult(structureStackMode, settlement, capital);
+        const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
+        const structures = getStructureResult(structureStackMode, autoCalculateSettlementLevel, settlement, capital);
         const storage = this.getStorage(structures);
+        const settlementInfo = getSettlementInfo(settlement, autoCalculateSettlementLevel);
         return {
             ...super.getData(options),
             name: settlement.scene.name,
             type: capitalize(settlement.settlement.type),
-            level: settlement.settlement.level,
             secondaryTerritory: settlement.settlement.secondaryTerritory,
             hasBridge: structures.hasBridge,
-            lots: settlement.settlement.lots,
+            ...settlementInfo,
             config: structures.config,
-            overcrowded: settlement.settlement.lots > structures.residentialLots,
+            overcrowded: settlementInfo.lots > structures.residentialLots,
             residentialLots: structures.residentialLots,
             consumption: structures.consumption,
             capitalInvestmentPossible: structures.allowCapitalInvestment ? 'yes' : 'no',
@@ -72,7 +80,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
             notes: structures.notes,
             showNotes: structures.notes.length > 0,
             leadershipActivities: structures.increaseLeadershipActivities ? 3 : 2,
-            availableItems: this.getAvailableItems(settlement.settlement.level, structures.itemLevelBonuses),
+            availableItems: this.getAvailableItems(settlementInfo.level, structures.itemLevelBonuses),
             storage,
             showStorage: Object.keys(storage).length > 0,
             skillItemBonuses: this.getSkillBonuses(structures.skillBonuses),
@@ -86,11 +94,13 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
         Hooks.on('createToken', this.sceneChange.bind(this));
+        Hooks.on('sightRefresh', this.sceneChange.bind(this)); // end of drag movement
         Hooks.on('deleteToken', this.sceneChange.bind(this));
     }
 
     override close(options?: FormApplication.CloseOptions): Promise<void> {
         Hooks.off('createToken', this.sceneChange);
+        Hooks.off('sightRefresh', this.sceneChange); // end of drag movement
         Hooks.off('deleteToken', this.sceneChange);
         return super.close(options);
     }

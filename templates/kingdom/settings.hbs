@@ -112,6 +112,17 @@
 
     <div>
         <div class="form-elements">
+            <label for="km-auto-calc-settlement-level">Automatically Calculate Settlement Level</label>
+            <input name="autoCalculateSettlementLevel" type="checkbox" id="km-auto-calc-settlement-level" {{checked
+                    autoCalculateSettlementLevel}}>
+        </div>
+        <div class="help">
+            <p>Placing structures on the shipped settlement scene blocks automatically sets the settlement's level</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
             <label for="km-automatically-calculate-army-consumption">Automatically Calculate Army Consumption</label>
             <input name="automaticallyCalculateArmyConsumption" type="checkbox"
                    id="km-automatically-calculate-army-consumption" {{checked automaticallyCalculateArmyConsumption}}>

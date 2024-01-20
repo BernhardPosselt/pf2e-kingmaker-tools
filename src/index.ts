@@ -207,6 +207,12 @@ Hooks.on('ready', async () => {
             type: Boolean,
             scope: 'world',
         });
+        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'autoCalculateSettlementLevel', {
+            default: true,
+            config: false,
+            type: Boolean,
+            scope: 'world',
+        });
         gameInstance.settings.register('pf2e-kingmaker-tools', 'currentWeatherFx', {
             name: 'Current Weather FX',
             hint: 'Based on the current value of the roll table',
