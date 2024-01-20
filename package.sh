@@ -19,7 +19,7 @@ mkdir -p build/pf2e-kingmaker-tools/
 # create archive
 node ./scripts/update-module-json.mjs "$version"
 cp module.json README.md LICENSE CHANGELOG.md OpenGameLicense.md build/pf2e-kingmaker-tools/
-cp -r packs/ docs/ templates/ styles/ dist/ static/ build/pf2e-kingmaker-tools/ img/
+cp -r img/ packs/ docs/ templates/ styles/ dist/ static/ build/pf2e-kingmaker-tools/
 
 cd build
 zip -r release.zip pf2e-kingmaker-tools
