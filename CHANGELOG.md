@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* Use smaller margin of error for placing structure on a block (10% instead of 20%)
+* Do not add grid size again when calculating block positions preventing structures being counted as inside the block when placing them near the block's edges
+
+## [0.21.4] - 2024-01-20
+
+### Fixed
+
 * Fix settlement name typos
 * Fix settlement level calculation in blocks other than the top left one
 

@@ -108,7 +108,7 @@ function containsStructures(drawingPosition: ShapePosition, tokenPositions: Shap
 function getFilledBlocks(scene: Scene): number {
     const gridSize = scene.grid.size;
     // increase rectangle by this many pixels to account for not placing the structure perfectly inside of it
-    const marginOfErrorPx = Math.floor(0.2 * gridSize);
+    const marginOfErrorPx = Math.floor(0.1 * gridSize);
     const tokenPositions = scene.tokens
         .filter(tokenIsStructure)
         .map(token => {
@@ -124,9 +124,9 @@ function getFilledBlocks(scene: Scene): number {
             // (0, 0) is the top left corner and x and y of the drawing is the top left corner of the drawing
             const drawingPosition = {
                 xStart: d.x - marginOfErrorPx,
-                xEnd: d.x + marginOfErrorPx + gridSize + d.width,
+                xEnd: d.x + marginOfErrorPx + d.width,
                 yStart: d.y - marginOfErrorPx,
-                yEnd: d.y + marginOfErrorPx + gridSize + d.height,
+                yEnd: d.y + marginOfErrorPx + d.height,
             };
             return containsStructures(drawingPosition, tokenPositions);
         })
