@@ -1,7 +1,7 @@
 {
     "title": "Pathfinder - Kingmaker Tools (Unofficial)",
     "description": "A collection of utilities to run Kingmaker",
-    "version": "0.21.5",
+    "version": "0.22.0",
     "scripts": [
         "dist/main.js"
     ],
@@ -233,7 +233,7 @@
         }
     ],
     "manifest": "https://raw.githubusercontent.com/BernhardPosselt/pf2e-kingmaker-tools/master/module.json",
-    "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/0.21.5/release.zip",
+    "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/0.22.0/release.zip",
     "id": "pf2e-kingmaker-tools",
     "socket": true,
     "authors": [
