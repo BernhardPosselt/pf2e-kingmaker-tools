@@ -92,6 +92,7 @@ interface ShapePosition {
 }
 
 function containsStructures(drawingPosition: ShapePosition, tokenPositions: ShapePosition[]): boolean {
+    console.log(drawingPosition, tokenPositions);
     return tokenPositions.some(pos => {
         return pos.xStart >= drawingPosition.xStart
             && pos.xEnd <= drawingPosition.xEnd
@@ -115,8 +116,8 @@ function getFilledBlocks(scene: Scene): number {
             return {
                 xStart: token.x,
                 yStart: token.y,
-                xEnd: token.x + gridSize,
-                yEnd: token.y + gridSize,
+                xEnd: token.x + (token.width * gridSize),
+                yEnd: token.y + (token.height * gridSize),
             };
         });
     return getBlockTiles(scene)
@@ -124,9 +125,9 @@ function getFilledBlocks(scene: Scene): number {
             // (0, 0) is the top left corner and x and y of the drawing is the top left corner of the drawing
             const drawingPosition = {
                 xStart: d.x - marginOfErrorPx,
-                xEnd: d.x + marginOfErrorPx + (gridSize * d.width),
+                xEnd: d.x + marginOfErrorPx + gridSize + d.width,
                 yStart: d.y - marginOfErrorPx,
-                yEnd: d.y + marginOfErrorPx + (gridSize * d.height),
+                yEnd: d.y + marginOfErrorPx + gridSize + d.height,
             };
             return containsStructures(drawingPosition, tokenPositions);
         })
