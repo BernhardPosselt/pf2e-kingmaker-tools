@@ -63,6 +63,14 @@
             <label for="km-structure-browser-capacity">Increases Capacity</label>
         </div>
         <div>
+            <input type="checkbox" {{checked upgradeFrom}} name="upgradeFrom" id="km-structure-browser-upgrade-from">
+            <label for="km-structure-browser-upgrade-from">Cheaper when upgraded</label>
+        </div>
+        <div>
+            <input type="checkbox" {{checked upgradeTo}} name="upgradeTo" id="km-structure-browser-upgrade-to">
+            <label for="km-structure-browser-upgrade-to">Upgradeable</label>
+        </div>
+        <div>
             <input type="checkbox" {{checked consumption}} name="consumption" id="km-structure-browser-consumption">
             <label for="km-structure-browser-consumption">Reduces Consumption</label>
         </div>

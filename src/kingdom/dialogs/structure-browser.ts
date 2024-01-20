@@ -44,6 +44,8 @@ interface StructureBrowserData {
     reducesRuin: boolean;
     reducesUnrest: boolean;
     infrastructure: boolean;
+    upgradeFrom: boolean;
+    upgradeTo: boolean;
     ignoreProficiencyRequirements: boolean;
     structures: StructureData[];
     activities: Partial<Record<Activity, ActivityFilter>>;
@@ -169,6 +171,8 @@ class StructureBrowserApp extends FormApplication<
             storage: false,
             consumption: false,
             reducesRuin: false,
+            upgradeFrom: false,
+            upgradeTo: false,
             infrastructure: false,
             ignoreProficiencyRequirements: false,
             ignoreStructureCost: false,
@@ -218,6 +222,8 @@ class StructureBrowserApp extends FormApplication<
         if (filters.reducesRuin) enabledFilters.push((x) => x.reducesRuin === true);
         if (filters.consumption) enabledFilters.push((x) => x.consumptionReduction !== undefined && x.consumptionReduction > 0);
         if (filters.items) enabledFilters.push((x) => x.availableItemsRules !== undefined && x.availableItemsRules.length > 0);
+        if (filters.upgradeFrom) enabledFilters.push((x) => x.upgradeFrom !== undefined && x.upgradeFrom.length > 0);
+        if (filters.upgradeTo) enabledFilters.push((x) => this.hasUpgradeTo(x, structures));
         if (!filters.ignoreProficiencyRequirements) enabledFilters.push(x => checkProficiency(x, this.kingdom));
         if (!filters.ignoreStructureCost) enabledFilters.push(x => checkBuildingCost(x, this.kingdom));
         if (!isBlank(filters.search)) enabledFilters.push(x => x.name.toLowerCase().includes(filters.search.trim().toLowerCase()));
@@ -273,6 +279,8 @@ class StructureBrowserApp extends FormApplication<
             reducesRuin: formData.reducesRuin,
             reducesUnrest: formData.reducesUnrest,
             infrastructure: formData.infrastructure,
+            upgradeFrom: formData.upgradeFrom,
+            upgradeTo: formData.upgradeTo,
             ignoreStructureCost: formData.ignoreStructureCost,
             ignoreProficiencyRequirements: formData.ignoreProficiencyRequirements,
             level: formData.level,
@@ -375,6 +383,10 @@ class StructureBrowserApp extends FormApplication<
         await ChatMessage.create({
             content: header + upgradeButtons + payButton + link,
         });
+    }
+
+    private hasUpgradeTo(structure: Structure, structures: ActorStructure[]): boolean {
+        return structures.some(s => s.upgradeFrom?.includes(structure.name) ?? false);
     }
 }
 
