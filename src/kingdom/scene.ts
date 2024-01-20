@@ -92,7 +92,6 @@ interface ShapePosition {
 }
 
 function containsStructures(drawingPosition: ShapePosition, tokenPositions: ShapePosition[]): boolean {
-    console.log(drawingPosition, tokenPositions);
     return tokenPositions.some(pos => {
         return pos.xStart >= drawingPosition.xStart
             && pos.xEnd <= drawingPosition.xEnd
