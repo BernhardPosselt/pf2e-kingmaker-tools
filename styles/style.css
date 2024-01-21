@@ -89,6 +89,11 @@
 :root {
     --primary-km: #275125;
     --secondary-km: #789035;
+    --untrained: #424242;
+    --trained: #171f69;
+    --expert: #3c005e;
+    --master: #664400;
+    --legendary: #5e0000;
 }
 
 .km-base-form {
@@ -417,4 +422,29 @@ td.skill-value {
 .structure-browser-range div {
     flex-grow: 1;
     padding-right: 5px;
+}
+
+.proficiency-rank {
+    color: white;
+    font-size: 12px;
+}
+
+.proficiency-rank-0 {
+    background-color: var(--untrained);
+}
+
+.proficiency-rank-1 {
+    background-color: var(--trained);
+}
+
+.proficiency-rank-2 {
+    background-color: var(--expert);
+}
+
+.proficiency-rank-3 {
+    background-color: var(--master);
+}
+
+.proficiency-rank-4 {
+    background-color: var(--legendary);
 }

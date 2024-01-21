@@ -19,10 +19,12 @@
             <td>{{skillLabel}}</td>
             <td>{{abilityLabel}}</td>
             <td>
-                <select name="skillRanks.{{skill}}" data-dtype="Number">
+                <select name="skillRanks.{{skill}}" data-dtype="Number"
+                        class="proficiency-rank proficiency-rank-{{rank}}">
                     {{#select rank}}
                         {{#each ../ranks}}
-                            <option value="{{value}}">{{label}}</option>
+                            <option value="{{value}}"
+                                    class="proficiency-rank proficiency-rank-{{value}}">{{label}}</option>
                         {{/each}}
                     {{/select}}
                 </select>
@@ -36,7 +38,10 @@
             <td class="skill-penalty" title="Circumstance Penalty">{{total.circumstance.penalty}}</td>
             <td class="skill-penalty" title="Ruin Penalty">{{total.item.penalty}}</td>
             <td class="skill-penalty" title="Vacancy Penalty">{{total.vacancyPenalty}}</td>
-            <td class="skill-value"><button type="button" class="kingdom-skill" data-skill="{{skill}}"><span>{{total.value}}</span><i class="fa-solid fa-dice-d20"></i></button></td>
+            <td class="skill-value">
+                <button type="button" class="kingdom-skill" data-skill="{{skill}}"><span>{{total.value}}</span><i
+                        class="fa-solid fa-dice-d20"></i></button>
+            </td>
         </tr>
     {{/each}}
 </table>
