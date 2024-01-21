@@ -120,6 +120,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private readonly game: Game;
     private nav: KingdomTab = 'status';
+    private ctrlKeyPressed = false;
 
     constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
@@ -358,6 +359,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         this.render();
     }
 
+    private ctrlUp(): void {
+        this.ctrlKeyPressed = false;
+    }
+
+    private ctrlDown(): void {
+        this.ctrlKeyPressed = true;
+    }
+
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
         Hooks.on('deleteScene', this.sceneChange.bind(this));
@@ -367,6 +376,16 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.on('sightRefresh', this.sceneChange.bind(this)); // end of drag movement
         Hooks.on('applyTokenStatusEffect', this.sceneChange.bind(this));
         const $html = html[0];
+        document.addEventListener('keydown', (ev) => {
+            if (ev.ctrlKey) {
+                this.ctrlDown();
+            }
+        });
+        document.addEventListener('keyup', (ev) => {
+            if (ev.ctrlKey) {
+                this.ctrlUp();
+            }
+        });
         $html.querySelectorAll('.km-nav a')?.forEach(el => {
             el.addEventListener('click', (event) => {
                 const tab = event.currentTarget as HTMLAnchorElement;
@@ -888,6 +907,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.off('sightRefresh', this.sceneChange.bind(this)); // end of drag movement
         Hooks.off('deleteToken', this.sceneChange);
         Hooks.off('applyTokenStatusEffect', this.sceneChange);
+        document.removeEventListener('keydown', () => this.ctrlDown);
+        document.removeEventListener('keyup', () => this.ctrlUp);
         return super.close(options);
     }
 
@@ -1089,7 +1110,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const id = a.dataset.id;
         const scene = this.game.scenes?.filter(scene => scene.id === id)?.[0];
         if (scene) {
-            await scene.view();
+            if (this.ctrlKeyPressed) {
+                await scene.activate();
+            } else {
+                await scene.view();
+            }
         }
     }
 
