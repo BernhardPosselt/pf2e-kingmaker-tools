@@ -181,6 +181,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
         const sceneActorStructures = getSceneActorStructures(settlement.scene);
         const countedStructures = countStructureOccurrences(sceneActorStructures);
         return await Promise.all(Array.from(countedStructures.entries())
+            .sort(([a], [b]) => a.localeCompare(b))
             .map(([, value]): [ActorStructure, number] => [value.item, value.count])
             .map(async ([structure, occurrences]) => {
                 return {
