@@ -1,33 +1,35 @@
 {{#if groups}}
-<table class="km-table">
-    <tr>
-        <th>Group</th>
-        <th>Negotiation DC</th>
-        <th>At War</th>
-        <th>State</th>
-        <th>Remove</th>
-    </tr>
-    {{#each groups}}
+    <table class="km-table">
         <tr>
-            <td>{{name}}<input type="hidden" name="groups.{{@index}}.name" value="{{name}}"></td>
-            <td>{{negotiationDC}}<input type="hidden" name="groups.{{@index}}.negotiationDC"
-                                        value="{{negotiationDC}}" data-dtype="Number"></td>
-            <td><input type="checkbox" {{checked atWar}} name="groups.{{@index}}.atWar"></td>
-            <td>
-                <select name="groups.{{@index}}.relations">
-                    {{#select relations}}
-                        {{#each ../groupRelationTypes}}
-                            <option value="{{value}}">{{label}}</option>
-                        {{/each}}
-                    {{/select}}
-                </select>
-            </td>
-            <td>
-                <button type="button" class="icon-action km-delete-group" data-delete-index="{{@index}}"><i class="fa-solid fa-trash"></i></button>
-            </td>
+            <th>Group</th>
+            <th>Negotiation DC</th>
+            <th>At War</th>
+            <th>State</th>
+            <th>Remove</th>
         </tr>
-    {{/each}}
-</table>
+        {{#each groups}}
+            <tr>
+                <td><input type="text" name="groups.{{@index}}.name" value="{{name}}"></td>
+                <td class="negotiation-dc-column"><input type="number" name="groups.{{@index}}.negotiationDC"
+                                                         value="{{negotiationDC}}"
+                                                         data-dtype="Number"></td>
+                <td class="at-war-column"><input type="checkbox" {{checked atWar}} name="groups.{{@index}}.atWar"></td>
+                <td>
+                    <select name="groups.{{@index}}.relations">
+                        {{#select relations}}
+                            {{#each ../groupRelationTypes}}
+                                <option value="{{value}}">{{label}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                </td>
+                <td>
+                    <button type="button" class="icon-action km-delete-group" data-delete-index="{{@index}}"><i
+                            class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+        {{/each}}
+    </table>
 {{/if}}
 <button type="button" id="km-add-group">Add Group <i class="fa-solid fa-plus"></i></button>
 

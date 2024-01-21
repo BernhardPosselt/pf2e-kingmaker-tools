@@ -448,3 +448,12 @@ td.skill-value {
 .proficiency-rank-4 {
     background-color: var(--legendary);
 }
+
+/* groups */
+.negotiation-dc-column {
+    width: 104px;
+}
+
+.at-war-column {
+    width: 52px;
+}
