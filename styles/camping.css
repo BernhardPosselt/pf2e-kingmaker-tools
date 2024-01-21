@@ -1,8 +1,8 @@
 :root {
     --actor-image-height: 220px;
-    --actor-image-width: calc((var(--actor-image-height)/4)*3);
+    --actor-image-width: calc((var(--actor-image-height) / 4) * 3);
     --actor-image-sidebar-height: 120px;
-    --actor-image-sidebar-width: calc((var(--actor-image-sidebar-height)/4)*3);
+    --actor-image-sidebar-width: calc((var(--actor-image-sidebar-height) / 4) * 3);
 }
 
 .camping-sheet {
@@ -12,7 +12,7 @@
 }
 
 /* fix for flexbox disregarding html hidden attribute */
-.camping-sheet [hidden]{
+.camping-sheet [hidden] {
     display: none !important;
 }
 
@@ -39,7 +39,7 @@
 .camping-sidebar {
     grid-area: sidebar;
     overflow-y: auto;
-    width: 130px;
+    width: 136px;
     padding: 10px 5px;
 }
 
@@ -88,7 +88,7 @@
     color: white;
     font-weight: bold;
     text-shadow: 0 0 2px black;
-    top: calc((var(--actor-image-sidebar-height)/2) - 9px);
+    top: calc((var(--actor-image-sidebar-height) / 2) - 9px);
     font-size: 12px;
     text-align: center;
     width: var(--actor-image-sidebar-width);
@@ -114,17 +114,7 @@
     position: relative;
     background: linear-gradient(
             to right,
-            rgb(32, 38, 57) 0%, /* 0:00 */
-            rgb(63, 76, 119) 15%, /* 3:00 */
-            rgba(185, 91, 229, 1) 20%, /* 5:00 */
-            #ff8f8f 25%, /* 6:00 */
-            #AFF1DA 33%, /* 8:00 */
-            #F9EA8F 50%, /* 12:00 */
-            #AFF1DA 66%, /* 16:00 */
-            #ff8f8f 75%, /* 18:00 */
-            rgba(185, 91, 229, 1) 79%, /* 19:00 */
-            rgb(63, 76, 119) 85%, /* 21:00 */
-            rgb(32, 38, 57) 100% /* 24:00 */
+            rgb(32, 38, 57) 0%, /* 0:00 */ rgb(63, 76, 119) 15%, /* 3:00 */ rgba(185, 91, 229, 1) 20%, /* 5:00 */ #ff8f8f 25%, /* 6:00 */ #AFF1DA 33%, /* 8:00 */ #F9EA8F 50%, /* 12:00 */ #AFF1DA 66%, /* 16:00 */ #ff8f8f 75%, /* 18:00 */ rgba(185, 91, 229, 1) 79%, /* 19:00 */ rgb(63, 76, 119) 85%, /* 21:00 */ rgb(32, 38, 57) 100% /* 24:00 */
     )
 }
 
@@ -172,7 +162,7 @@
     list-style-type: none;
     display: flex;
     row-gap: 20px;
-    column-gap: 10px;
+    column-gap: 6px;
     flex-wrap: wrap;
     margin-block-start: 0;
     margin-block-end: 0;
