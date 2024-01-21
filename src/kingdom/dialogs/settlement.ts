@@ -1,13 +1,16 @@
 import {ActivityBonuses, ItemLevelBonuses, SkillItemBonuses} from '../data/structures';
-import {capitalize, unslugify} from '../../utils';
-import {calculateAvailableItems, groupAvailableItems, StructureResult} from '../structures';
+import {capitalize, createUUIDLink, unslugify} from '../../utils';
+import {calculateAvailableItems, countStructureOccurrences, groupAvailableItems, StructureResult} from '../structures';
 import {hasFeat, Kingdom} from '../data/kingdom';
 import {
+    ActorStructure,
     getCapitalSettlement,
+    getSceneActorStructures,
     getSettlement,
     getSettlementInfo,
     getStructureResult,
     getStructureStackMode,
+    SettlementAndScene,
 } from '../scene';
 import {getBooleanSetting} from '../../settings';
 
@@ -31,6 +34,13 @@ interface ItemLevelBonusData {
     value: number;
 }
 
+interface StructureList {
+    link: string;
+    occurrences: number;
+}
+
+type SettlementTab = 'status' | 'effects' | 'bonuses' | 'buildings' | 'shopping' | 'storage';
+
 class SettlementApp extends Application<ApplicationOptions & SettlementOptions> {
     private kingdom: Kingdom;
 
@@ -40,13 +50,14 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
         options.title = 'Settlement';
         options.template = 'modules/pf2e-kingmaker-tools/templates/kingdom/settlement.hbs';
         options.classes = ['kingmaker-tools-app', 'settlement-app'];
-        options.width = 800;
+        options.width = 400;
         options.height = 'auto';
         return options;
     }
 
     private readonly game: Game;
     private readonly settlementId: string;
+    private nav: SettlementTab = 'status';
 
     constructor(options: Partial<ApplicationOptions> & SettlementOptions) {
         super(options);
@@ -55,35 +66,49 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
         this.kingdom = options.kingdom;
     }
 
-    override getData(options?: Partial<ApplicationOptions>): object {
+    override async getData(): Promise<object> {
         const settlement = getSettlement(this.game, this.kingdom, this.settlementId)!;
         const capital = getCapitalSettlement(this.game, this.kingdom);
         const structureStackMode = getStructureStackMode(this.game);
         const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
-        const structures = getStructureResult(structureStackMode, autoCalculateSettlementLevel, settlement, capital);
-        const storage = this.getStorage(structures);
+        const structureData = getStructureResult(structureStackMode, autoCalculateSettlementLevel, settlement, capital);
+        const builtStructures = await this.getBuiltStructures(settlement);
+        const storage = this.getStorage(structureData);
         const settlementInfo = getSettlementInfo(settlement, autoCalculateSettlementLevel);
+        const skillItemBonuses = this.getSkillBonuses(structureData.skillBonuses);
+        const hasEffects = structureData.notes.length > 0;
+        const hasStorage = Object.keys(storage).length > 0;
+        const hasBonuses = skillItemBonuses.map(b => b.value > 0 || b.actions.some(a => a.value > 0));
+        const hasBuildings = builtStructures.length > 0;
+        // reset active tab if not active anymore
+        if (this.nav === 'effects' && !hasEffects) this.nav = 'status';
+        if (this.nav === 'storage' && !hasStorage) this.nav = 'status';
+        if (this.nav === 'bonuses' && !hasBonuses) this.nav = 'status';
+        if (this.nav === 'buildings' && !hasBuildings) this.nav = 'status';
         return {
-            ...super.getData(options),
             name: settlement.scene.name,
             type: capitalize(settlement.settlement.type),
             secondaryTerritory: settlement.settlement.secondaryTerritory,
-            hasBridge: structures.hasBridge,
+            hasBridge: structureData.hasBridge,
             ...settlementInfo,
-            config: structures.config,
-            overcrowded: settlementInfo.lots > structures.residentialLots,
-            residentialLots: structures.residentialLots,
-            consumption: structures.consumption,
-            capitalInvestmentPossible: structures.allowCapitalInvestment ? 'yes' : 'no',
-            settlementEventBonus: structures.settlementEventBonus,
-            leadershipActivityBonus: structures.leadershipActivityBonus,
-            notes: structures.notes,
-            showNotes: structures.notes.length > 0,
-            leadershipActivities: structures.increaseLeadershipActivities ? 3 : 2,
-            availableItems: this.getAvailableItems(settlementInfo.level, structures.itemLevelBonuses),
+            ...this.getActiveTabs(),
+            config: structureData.config,
+            builtStructures,
+            hasStorage,
+            hasEffects,
+            hasBonuses,
+            hasBuildings,
+            overcrowded: settlementInfo.lots > structureData.residentialLots,
+            residentialLots: structureData.residentialLots,
+            consumption: structureData.consumption,
+            capitalInvestmentPossible: structureData.allowCapitalInvestment ? 'yes' : 'no',
+            settlementEventBonus: structureData.settlementEventBonus,
+            leadershipActivityBonus: structureData.leadershipActivityBonus,
+            notes: structureData.notes,
+            leadershipActivities: structureData.increaseLeadershipActivities ? 3 : 2,
+            availableItems: this.getAvailableItems(settlementInfo.level, structureData.itemLevelBonuses),
             storage,
-            showStorage: Object.keys(storage).length > 0,
-            skillItemBonuses: this.getSkillBonuses(structures.skillBonuses),
+            skillItemBonuses,
         };
     }
 
@@ -96,6 +121,14 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
         Hooks.on('createToken', this.sceneChange.bind(this));
         Hooks.on('sightRefresh', this.sceneChange.bind(this)); // end of drag movement
         Hooks.on('deleteToken', this.sceneChange.bind(this));
+        const $html = html[0];
+        $html.querySelectorAll('.km-nav a')?.forEach(el => {
+            el.addEventListener('click', (event) => {
+                const tab = event.currentTarget as HTMLAnchorElement;
+                this.nav = tab.dataset.tab as SettlementTab;
+                this.render();
+            });
+        });
     }
 
     override close(options?: FormApplication.CloseOptions): Promise<void> {
@@ -142,6 +175,30 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
                         }),
                 };
             });
+    }
+
+    private async getBuiltStructures(settlement: SettlementAndScene): Promise<StructureList[]> {
+        const sceneActorStructures = getSceneActorStructures(settlement.scene);
+        const countedStructures = countStructureOccurrences(sceneActorStructures);
+        return await Promise.all(Array.from(countedStructures.entries())
+            .map(([, value]): [ActorStructure, number] => [value.item, value.count])
+            .map(async ([structure, occurrences]) => {
+                return {
+                    link: await TextEditor.enrichHTML(createUUIDLink(structure.actor.uuid, structure.name)),
+                    occurrences: occurrences,
+                };
+            }));
+    }
+
+    private getActiveTabs(): Record<string, boolean> {
+        return {
+            statusTab: this.nav === 'status',
+            bonusesTab: this.nav === 'bonuses',
+            effectsTab: this.nav === 'effects',
+            shoppingTab: this.nav === 'shopping',
+            buildingsTab: this.nav === 'buildings',
+            storageTab: this.nav === 'storage',
+        };
     }
 }
 

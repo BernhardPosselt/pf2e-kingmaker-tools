@@ -286,8 +286,6 @@ td.skill-value {
 }
 
 .settlement-content {
-    display: flex;
-    gap: 10px;
 }
 
 .settlement-content td ul {

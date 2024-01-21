@@ -198,7 +198,8 @@ A full structure rule would look something like this:
     "stone": 2,
     "rp": 2,
     "dc": 2
-  }
+  },
+  "stacksWith": "Slightly Different Magic School"
 }
 ```
 
@@ -290,3 +291,4 @@ A full structure rule would look something like this:
     * **luxuries**: optional, cost
     * **ore**: optional, cost
     * **stone**: optional, cost
+* **stacksWith**: optional, name of a structure that this structure should stack item bonuses with; useful when you've got the same building with 2 different construction costs

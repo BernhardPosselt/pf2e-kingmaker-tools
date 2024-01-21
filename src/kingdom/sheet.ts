@@ -360,6 +360,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
+        Hooks.on('deleteScene', this.sceneChange.bind(this));
         Hooks.on('canvasReady', this.sceneChange.bind(this));
         Hooks.on('createToken', this.sceneChange.bind(this));
         Hooks.on('deleteToken', this.sceneChange.bind(this));
@@ -881,6 +882,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     override close(options?: FormApplication.CloseOptions): Promise<void> {
+        Hooks.off('deleteScene', this.sceneChange.bind(this));
         Hooks.off('canvasReady', this.sceneChange);
         Hooks.off('createToken', this.sceneChange);
         Hooks.off('sightRefresh', this.sceneChange.bind(this)); // end of drag movement

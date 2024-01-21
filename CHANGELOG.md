@@ -5,8 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.23.0] - 2024-01-21
+
+### Added
+
+* When inspecting a settlement, show a list of all built structures
+
 ### Fixed
 
+* Wooden Watchtowers stack with Stone Watchtowers again
+* Re-render kingdom sheet when a scene is deleted to fix issues with settlement list getting out of sync
 * Use more precise wording for help in the civic phase section
 
 ### Changed
@@ -14,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Set structure name visibility to Hover by Anyone
 * Improve block tile graphics
 * Ship 1x4 and 4x1 block graphics
+* Settlement dialog now uses tabs for navigation
 
 ## [0.22.0] - 2024-01-20
 

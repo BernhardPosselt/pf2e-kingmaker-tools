@@ -54,6 +54,7 @@ interface Construction {
 
 export interface Structure {
     name: string;
+    stacksWith?: string;
     construction?: Construction;
     notes?: string;
     preventItemLevelPenalty?: boolean;
@@ -1884,6 +1885,7 @@ const structures: Structure[] = [
     },
     {
         name: 'Watchtower, Stone',
+        stacksWith: 'Watchtower',
         settlementEventRules: [{
             value: 1,
         }],

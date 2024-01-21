@@ -38,11 +38,18 @@ function count<T>(items: T[], idFunction: (item: T) => string): Map<string, { co
     }, new Map());
 }
 
+export function countStructureOccurrences<T extends Structure>(structures: T[]): Map<string, {
+    count: number,
+    item: T
+}> {
+    return count(structures, s => s.stacksWith ?? s.name);
+}
+
 /**
  * Add up item bonuses of same structure
  */
 export function groupStructures(structures: Structure[], maxItemBonus: number): Structure[] {
-    const structureOccurrences = count(structures, s => s.name);
+    const structureOccurrences = countStructureOccurrences(structures);
     return Array.from(structureOccurrences.values())
         .map((data) => {
             const structure = data.item;

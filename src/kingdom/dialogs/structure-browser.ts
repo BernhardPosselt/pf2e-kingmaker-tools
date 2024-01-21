@@ -3,11 +3,11 @@ import {Activity} from '../data/activities';
 import {capitalize, createUUIDLink, escapeHtml, isBlank, isNonNullable, listenClick, unslugify} from '../../utils';
 import {rankToLabel} from '../modifiers';
 import {Kingdom} from '../data/kingdom';
-import {parseStructureData} from '../scene';
 import {CheckDialog} from './check-dialog';
 import {getBooleanSetting} from '../../settings';
 import {getKingdom, saveKingdom} from '../storage';
 import {DegreeOfSuccess} from '../../degree-of-success';
+import {ActorStructure, getStructuresFromActors} from '../scene';
 
 interface StructureBrowserOptions {
     game: Game;
@@ -57,7 +57,6 @@ interface StructureBrowserData {
 }
 
 type StructureFilters = Omit<StructureBrowserData, 'structures' | 'noStructures'>;
-type ActorStructure = Structure & { actor: Actor };
 
 function checkProficiency(structure: Structure, kingdom: Kingdom): boolean {
     return structure.construction?.skills === undefined ||
@@ -65,29 +64,6 @@ function checkProficiency(structure: Structure, kingdom: Kingdom): boolean {
         structure.construction.skills.some(requirement => {
             return kingdom.skillRanks[requirement.skill] >= (requirement.proficiencyRank ?? 0);
         });
-}
-
-export function getStructuresFromActors(actors: Actor[]): ActorStructure[] {
-    return actors
-        .map((actor) => {
-            const width = actor.token?.width ?? actor.prototypeToken?.width ?? 0;
-            const height = actor.token?.height ?? actor.prototypeToken?.height ?? 0;
-            const data = parseStructureData(
-                actor!.name,
-                actor!.getFlag('pf2e-kingmaker-tools', 'structureData'),
-                width,
-                height,
-                actor.level,
-            );
-            if (data) {
-                return {
-                    ...data,
-                    actor,
-                };
-            }
-            return null;
-        })
-        .filter(actor => actor !== null)! as ActorStructure[];
 }
 
 function checkRpCost(structure: Structure, kingdom: Kingdom): boolean {
@@ -189,7 +165,7 @@ class StructureBrowserApp extends FormApplication<
         if (this.filters === undefined) {
             this.filters = await this.resetFilters();
         }
-        const structureActors = await getStructuresFromActors(this.structureActors);
+        const structureActors = getStructuresFromActors(this.structureActors);
         const structures = this.filterStructures(structureActors, this.filters);
         const viewStructures = await this.toViewStructures(structures);
         return {

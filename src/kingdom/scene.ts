@@ -21,7 +21,7 @@ function calculateLots(structure: Structure, tokenWidth: number, tokenHeight: nu
     }
 }
 
-export function parseStructureData(
+function parseStructureData(
     name: string | null,
     data: unknown,
     tokenWidth: number,
@@ -63,6 +63,40 @@ export function parseStructureData(
         const result: Structure = data as Structure;
         return calculateLots(result, tokenWidth, tokenHeight);
     }
+}
+
+export interface ActorStructure extends Structure {
+    actor: Actor;
+}
+
+export function getSceneActorStructures(scene: Scene): ActorStructure[] {
+    const actors = scene.tokens
+        .map(t => t.actor)
+        .filter(a => isNonNullable(a)) as Actor[];
+    return getStructuresFromActors(actors);
+}
+
+export function getStructuresFromActors(actors: Actor[]): ActorStructure[] {
+    return actors
+        .map((actor) => {
+            const width = actor.token?.width ?? actor.prototypeToken?.width ?? 0;
+            const height = actor.token?.height ?? actor.prototypeToken?.height ?? 0;
+            const data = parseStructureData(
+                actor!.name,
+                actor!.getFlag('pf2e-kingmaker-tools', 'structureData'),
+                width,
+                height,
+                actor.level,
+            );
+            if (data) {
+                return {
+                    ...data,
+                    actor,
+                };
+            }
+            return null;
+        })
+        .filter(actor => actor !== null)! as ActorStructure[];
 }
 
 export function isStructureActor(actor: Actor): boolean {
@@ -151,7 +185,7 @@ export function getSettlementInfo(settlement: SettlementAndScene, autoCalculateS
     }
 }
 
-function getSceneStructures(scene: Scene): Structure[] {
+export function getSceneStructures(scene: Scene): Structure[] {
     try {
         return scene.tokens
             .filter(tokenIsStructure)
