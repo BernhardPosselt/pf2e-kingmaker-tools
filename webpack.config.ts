@@ -1,7 +1,15 @@
 import {Configuration} from 'webpack';
+import TerserPlugin from 'terser-webpack-plugin';
 
 const config: Configuration = {
     entry: './src/index.ts',
+    optimization: {
+        minimizer: [new TerserPlugin({
+            terserOptions: {
+                keep_classnames: true,
+            },
+        })],
+    },
     module: {
         rules: [
             {
