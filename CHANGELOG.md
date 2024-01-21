@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Fixed
+
+* Use more precise wording for help in the civic phase section
+
+### Changed
+
+* Set structure name visibility to Hover by Anyone
+* Improve block tile graphics
+* Ship 1x4 and 4x1 block graphics
+
 ## [0.22.0] - 2024-01-20
 
 ### Added
