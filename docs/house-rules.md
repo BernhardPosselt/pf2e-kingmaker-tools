@@ -123,16 +123,15 @@ Furthermore, giving your players the ability to reconnoiter a hex using an activ
 
 We've also discovered an additional issue: V&K significantly boosts kingdom XP at lower levels. This makes the subsystem bearable but you will lack enough region activities to grab additional hexes and construct settlements and worksites. To account for that, I'm currently testing the following Leadership Activity:
 
-* **Naval Support**: You use your fleet to ship materials or transport skilled builders and specialists to where they are needed most. Attempt a basic Boating check.
-    * **Critical Success**: You gain 2 additional region activities.
-    * **Succcess**: You gain 1 additional region activity.
-    * **Failure**: You gain 1 additional region activity by investing additional funds. Lose 2d6 RP
-    * **Critical Failure**: You do not gain an additional region activity and lose 2d6 RP
-
 ### House Rules
 
 * PCs can attempt the same Activity multiple times unless it's specifically forbidden: the rules aren't super clear on this, this seems to be the RAI and prevents players from running out of things to do.
-* Increase XP gains and milestones similar to the Vance & Karenshara house rules: the amount of rounds it takes to gain a kingdom level is out of whack at low levels; these rules will level up your kingdom roughly every 5 turns
+* Increase XP gains and milestones similar to the Vance & Karenshara house rules: the amount of rounds it takes to gain a kingdom level is out of whack at low levels; these rules will level up your kingdom roughly every 5 turns. To account for fewer Region Activities, add the following activity:
+    * **Naval Support**: You use your fleet to ship materials or transport skilled builders and specialists to where they are needed most. Attempt a basic Boating check.
+        * **Critical Success**: You gain 2 additional region activities.
+        * **Succcess**: You gain 1 additional region activity.
+        * **Failure**: You gain 1 additional region activity by investing additional funds. Lose 2d6 RP
+        * **Critical Failure**: You do not gain an additional region activity and lose 2d6 RP
 * Use the adjusted buildings from Vance & Kerenshara
 * Additional Skill Increases like in Vance & Kerenshara: many buildings are proficiency gated; having very few increases takes the fun out of that
 * All players, regardless of group size, get a total of 8 Leadership activities or 12 with a Townhall, Castle or Palace: if you give out too many activities, it will be harder to pressure them with Unrest or Ruin during the Season of Bloom
