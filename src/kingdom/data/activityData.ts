@@ -6,9 +6,8 @@ import {Commodities, hasFeat, Kingdom} from './kingdom';
 import {Ruin} from './ruin';
 import {unslugify} from '../../utils';
 import {ResourceMode, ResourceTurn, RolledResources} from '../resources';
-import {armyStatisticsByLevel} from '../../armies/data';
 
-type SkillRanks = Partial<Record<Skill, number>>;
+export type SkillRanks = Partial<Record<Skill, number>>;
 
 function simpleRank(skills: Skill[], rank = 0): SkillRanks {
     return skills
@@ -53,72 +52,6 @@ export interface KingdomActivity extends ActivityContent {
 export type KingdomActivityById = Record<string, KingdomActivity>;
 
 const activityData: Record<string, ActivityContent> = {
-    'naval-support': {
-        title: 'Naval Support',
-        oncePerRound: true,
-        fortune: false,
-        enabled: false,
-        phase: 'leadership',
-        dc: 'control',
-        description: 'You use your fleet to ship materials or transport skilled builders and specialists to where they are needed most. Attempt a basic Boating check.',
-        skills: simpleRank(['boating']),
-        criticalSuccess: {
-            msg: 'You gain 2 additional region activities.',
-        },
-        success: {
-            msg: 'You gain 1 additional region activity.',
-        },
-        failure: {
-            msg: `You gain 1 additional region activity by investing additional funds. ${loseRP('2d6')}`,
-        },
-        criticalFailure: {
-            msg: `You do not gain an additional region activity and ${loseRP('2d6')}.`,
-        },
-    },
-    'dispatch-scouts': {
-        title: 'Dispatch Scouts',
-        oncePerRound: true,
-        fortune: false,
-        enabled: false,
-        phase: 'leadership',
-        dc: 'control',
-        description: 'You dispatch your scouts to discover shortcuts or create makeshift paths. Attempt a basic exploration check.',
-        skills: simpleRank(['exploration']),
-        criticalSuccess: {
-            msg: 'You gain 2 additional region activities.',
-        },
-        success: {
-            msg: 'You gain 1 additional region activity.',
-        },
-        failure: {
-            msg: `You gain 1 additional region activity by investing additional funds. ${loseRP('2d6')}`,
-        },
-        criticalFailure: {
-            msg: 'You do not gain an additional region activity.',
-        },
-    },
-    'inspire-subjects': {
-        title: 'Inspire Subjects',
-        oncePerRound: true,
-        fortune: false,
-        enabled: false,
-        phase: 'leadership',
-        dc: 'control',
-        description: 'You create new policies, settle disputes, or appoint talented individuals as government officials to increase your kingdom\'s efficiency. Attempt a basic politics check.',
-        skills: simpleRank(['politics']),
-        criticalSuccess: {
-            msg: 'You gain 2 additional region activities.',
-        },
-        success: {
-            msg: 'You gain 1 additional region activity.',
-        },
-        failure: {
-            msg: `You gain 1 additional region activity by investing additional funds. ${loseRP('2d6')}`,
-        },
-        criticalFailure: {
-            msg: 'You do not gain an additional region activity.',
-        },
-    },
     'abandon-hex': {
         title: 'Abandon Hex',
         oncePerRound: false,
@@ -2291,11 +2224,6 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
     },
 };
 
-export function findHelp(activity: string): ActivityContent {
-    return activityData[activity];
-}
-
-
 interface CreateResourceButton {
     type: RolledResources,
     mode?: ResourceMode,
@@ -2393,14 +2321,6 @@ export function getKingdomActivities(additionalActivities: KingdomActivity[]): K
                 id,
                 ...activity,
             };
-        });
-}
-
-export function activityHints(activity: KingdomActivity, kingdom: Kingdom): string | undefined {
-    if (activity.id === 'train-army') {
-        const maxTactics = armyStatisticsByLevel.get(kingdom.level)?.maximumTactics ?? 6;
-        return `Max ${maxTactics} per Army`;
-    } else {
-        return activity.hint;
-    }
+        })
+        .concat(additionalActivities);
 }

@@ -1,0 +1,27 @@
+<form>
+    <button type="button" class="add-activity">Add Activity <i class="fa-solid fa-plus"></i></button>
+    <table class="km-table">
+        <tr>
+            <th>Name</th>
+            <th>Enabled</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        {{#each activities}}
+            <tr>
+                <td>{{title}}</td>
+                <td><input type="checkbox" name="{{id}}" {{checked enabled}}></td>
+                <td>
+                    {{#if isHomebrew}}
+                        <button data-id="{{id}}" class="edit-activity" type="button"><i class="fa-solid fa-pencil"></i>
+                        </button>{{/if}}
+                </td>
+                <td>
+                    {{#if isHomebrew}}
+                        <button data-id="{{id}}" class="delete-activity" type="button"><i class="fa-solid fa-trash"></i>
+                        </button>{{/if}}
+                </td>
+            </tr>
+        {{/each}}
+    </table>
+</form>

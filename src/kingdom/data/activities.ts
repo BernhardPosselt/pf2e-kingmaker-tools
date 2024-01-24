@@ -1,7 +1,8 @@
 import {Skill} from './skills';
 import {unslugify} from '../../utils';
 import {Kingdom, SkillRanks} from './kingdom';
-import {activityHints, getKingdomActivitiesById, KingdomActivity, KingdomActivityById} from './activityData';
+import {getKingdomActivitiesById, KingdomActivity, KingdomActivityById} from './activityData';
+import {armyStatisticsByLevel} from '../../armies/data';
 
 export const allKingdomPhases = [
     'army',
@@ -14,82 +15,6 @@ export const allKingdomPhases = [
 ] as const;
 
 export type KingdomPhase = typeof allKingdomPhases[number];
-
-const allActivities = [
-    'abandon-hex',
-    'build-roads',
-    'build-structure',
-    'capital-investment',
-    'celebrate-holiday',
-    'claim-hex',
-    'clandestine-business',
-    'clear-hex',
-    'collect-taxes',
-    'craft-luxuries',
-    'create-a-masterpiece',
-    'creative-solution',
-    'decadent-feasts',
-    'deliberate-planning',
-    'demolish',
-    'deploy-army',
-    'disband-army',
-    'establish-farmland',
-    'establish-settlement',
-    'establish-trade-agreement',
-    'establish-work-site-lumber',
-    'establish-work-site-mine',
-    'establish-work-site-quarry',
-    'evangelize-the-dead',
-    'false-victory',
-    'focused-attention',
-    'fortify-hex',
-    'garrison-army',
-    'gather-livestock',
-    'go-fishing',
-    'harvest-azure-lily-pollen',
-    'harvest-crops',
-    'hire-adventurers',
-    'improve-lifestyle',
-    'infiltration',
-    'irrigation',
-    'manage-trade-agreements',
-    'new-leadership',
-    'offensive-gambit',
-    'outfit-army',
-    'pledge-of-fealty',
-    'preventative-measures',
-    'process-hidden-fees',
-    'prognostication',
-    'provide-care',
-    'purchase-commodities',
-    'quell-unrest',
-    'read-all-about-it',
-    'recover-army',
-    'recruit-army',
-    'recruit-monsters',
-    'relocate-capital',
-    'repair-reputation-corruption',
-    'repair-reputation-crime',
-    'repair-reputation-decay',
-    'repair-reputation-strife',
-    'repair-the-flooded-mine',
-    'request-foreign-aid',
-    'rest-and-relax',
-    'restore-the-temple-of-the-elk',
-    'send-diplomatic-envoy',
-    'show-of-force',
-    'spread-the-legend',
-    'supernatural-solution',
-    'supplementary-hunting',
-    'tap-treasury',
-    'trade-commodities',
-    'train-army',
-    'warfare-exercises',
-    // V&K
-    'reconnoiter-hex',
-    'take-charge',
-] as const;
-
 
 export function getActivitySkills(skills: Partial<SkillRanks>, skillRanks?: SkillRanks): Skill[] {
     if (skillRanks) {
@@ -169,33 +94,36 @@ export function enableCompanionActivities(type: KingdomPhase, unlockedCompanionA
 
 export function createActivityLabel(groupedActivities: GroupedActivityNames, activity: string, kingdom: Kingdom): string {
     const kingdomLevel = kingdom.level;
-    let label = unslugify(activity);
+    const label = unslugify(activity);
+    const hints = [];
     if (activity === 'claim-hex') {
         if (kingdomLevel >= 9) {
-            label += ' (three times per turn)';
+            hints.push('three times per turn');
         } else if (kingdomLevel >= 4) {
-            label += ' (twice per turn)';
+            hints.push('twice per turn');
         } else {
-            label += ' (once per turn)';
+            hints.push('once per turn');
         }
+    } else if (activity === 'train-army') {
+        const maxTactics = armyStatisticsByLevel.get(kingdom.level)?.maximumTactics ?? 6;
+        hints.push(`Max ${maxTactics} per Army`);
     }
-    if (groupedActivities.trained.has(activity) && groupedActivities.oncePerRound.has(activity)) {
-        label += ' (once per turn, trained)';
-    } else if (groupedActivities.trained.has(activity)) {
-        label += ' (trained)';
+    if (groupedActivities.trained.has(activity)) {
+        hints.push('trained');
     } else if (groupedActivities.expert.has(activity)) {
-        label += ' (expert)';
+        hints.push('expert');
     } else if (groupedActivities.master.has(activity)) {
-        label += ' (master)';
-    } else if (groupedActivities.oncePerRound.has(activity)) {
-        label += ' (once per turn)';
+        hints.push('master');
+    }
+    if (groupedActivities.oncePerRound.has(activity)) {
+        hints.push('once per turn');
     }
     const data = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
-    const hint = activityHints(data, kingdom);
-    if (hint) {
-        label += ` (${hint})`;
+    if (data.hint) {
+        hints.push(data.hint);
     }
-    return label;
+    const append = hints.length > 0 ? ` (${hints.join(', ')})` : '';
+    return label + append;
 }
 
 
@@ -205,11 +133,11 @@ export function getPerformableActivities(
     ignoreSkillRequirements: boolean,
     activities: KingdomActivityById,
 ): Record<string, boolean> {
-    return Object.fromEntries(allActivities.map(activity => {
-        const activityRanks = activities[activity].skills;
-        const noBuildingPreventsActivity = activity !== 'capital-investment' || enableCapitalInvestment;
+    return Object.fromEntries(Object.values(activities).map(activity => {
+        const activityRanks = activity.skills;
+        const noBuildingPreventsActivity = activity.id !== 'capital-investment' || enableCapitalInvestment;
         const enabled = ignoreSkillRequirements || (Object.entries(activityRanks) as [Skill, number][])
             .some(([skill, rank]) => ranks[skill] >= rank) && noBuildingPreventsActivity;
-        return [activity, enabled];
+        return [activity.id, enabled];
     })) as Record<string, boolean>;
 }

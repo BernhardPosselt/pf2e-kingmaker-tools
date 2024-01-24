@@ -39,3 +39,5 @@ export const skillAbilities: Record<Skill, Ability> = {
     warfare: 'loyalty',
     wilderness: 'stability',
 };
+
+export const allSkillRanks = ['untrained', 'trained', 'expert', 'master', 'legendary'] as const;

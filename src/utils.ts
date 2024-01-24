@@ -138,8 +138,11 @@ export function mergePartialObjects<A extends Partial<Record<string, V>>, B exte
 }
 
 export function range(start: number, end: number): number[] {
-    return Array.apply(0, Array(end - 1))
-        .map((element, index) => index + start);
+    const result = [];
+    for (let i = start; i < end; i += 1) {
+        result.push(i);
+    }
+    return result;
 }
 
 export function groupBy<T, R>(array: T[], criterion: (value: T) => R): Map<R, T[]> {
@@ -218,6 +221,11 @@ export function parseTextArea($html: HTMLElement, name: string): string {
 export function parseNumberSelect($html: HTMLElement, name: string): number {
     const input = $html.querySelector(`select[name="${name}"]`) as HTMLSelectElement;
     return parseInt(input.value, 10);
+}
+
+export function parseNullableSelect($html: HTMLElement, name: string): string | undefined {
+    const value = parseSelect($html, name);
+    return value === '-' ? undefined : value;
 }
 
 export function parseSelect($html: HTMLElement, name: string): string {

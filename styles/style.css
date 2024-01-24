@@ -252,6 +252,7 @@ td.skill-value {
 
 .simple-dialog-form label {
     text-align: right;
+    vertical-align: middle;
 }
 
 .simple-dialog-form input,

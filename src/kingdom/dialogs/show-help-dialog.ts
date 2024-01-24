@@ -1,7 +1,8 @@
-import {findHelp} from '../data/activityData';
+import {getKingdomActivitiesById} from '../data/activityData';
 import {capitalize} from '../../utils';
 import {rankToLabel} from '../modifiers';
 import {updateResources} from '../resources';
+import {getKingdom} from '../storage';
 
 interface HelpOptions {
     activity: string;
@@ -33,7 +34,8 @@ class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
     }
 
     async getData(): Promise<unknown> {
-        const data = findHelp(this.activity);
+        const kingdom = getKingdom(this.actor);
+        const data = getKingdomActivitiesById(kingdom.homebrewActivities)[this.activity]!;
         const traits = (data.fortune ? [capitalize(data.phase), 'Downtime', 'Fortune'] : [capitalize(data.phase), 'Downtime'])
             .join(', ');
         const skills = Object.entries(data.skills)

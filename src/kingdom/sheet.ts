@@ -58,7 +58,6 @@ import {calculateSkills} from './skills';
 import {calculateInvestedBonus, isInvested} from './data/leaders';
 import {CheckDialog} from './dialogs/check-dialog';
 import {Skill} from './data/skills';
-import {activityBlacklistDialog} from './dialogs/activity-blacklist-dialog';
 import {showHelpDialog} from './dialogs/show-help-dialog';
 import {showSettlement} from './dialogs/settlement';
 import {createActiveSettlementModifiers, getUntrainedProficiencyMode, Modifier, modifierToLabel} from './modifiers';
@@ -71,6 +70,7 @@ import {showKingdomSettings} from './dialogs/kingdom-settings';
 import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
 import {getKingdomActivitiesById} from './data/activityData';
+import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
 
 interface KingdomOptions {
     game: Game;
@@ -489,15 +489,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     }),
                 }).render(true);
             });
-        $html.querySelector('#blacklist-activities')
+        $html.querySelector('#manage-kingdom-activities')
             ?.addEventListener('click', async () => {
-                const current = this.getKingdom();
-                const allActivities = Object.keys(getKingdomActivitiesById(current.homebrewActivities));
-                activityBlacklistDialog(current.activityBlacklist, [...allActivities], (activityBlacklist) => {
-                    this.saveKingdom({
-                        activityBlacklist,
-                    });
-                });
+                manageKingdomActivitiesDialog(this.game, this.sheetActor);
             });
         $html.querySelectorAll('.km-delete-bonus-feat')
             ?.forEach(el => {
