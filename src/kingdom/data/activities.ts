@@ -1,7 +1,7 @@
 import {Skill} from './skills';
-import {mergeObjects, unslugify} from '../../utils';
+import {unslugify} from '../../utils';
 import {Kingdom, SkillRanks} from './kingdom';
-import {ActivityContent, activityData} from './activityData';
+import {activityHints, getKingdomActivitiesById, KingdomActivity, KingdomActivityById} from './activityData';
 
 export const allKingdomPhases = [
     'army',
@@ -15,7 +15,7 @@ export const allKingdomPhases = [
 
 export type KingdomPhase = typeof allKingdomPhases[number];
 
-export const allActivities = [
+const allActivities = [
     'abandon-hex',
     'build-roads',
     'build-structure',
@@ -90,11 +90,8 @@ export const allActivities = [
     'take-charge',
 ] as const;
 
-export type Activity = typeof allActivities[number];
 
-
-export function getActivitySkills(activity: Activity, skillRanks?: SkillRanks, overrideSkills?: Partial<SkillRanks>): Skill[] {
-    const skills = overrideSkills ?? activityData[activity].skills;
+export function getActivitySkills(skills: Partial<SkillRanks>, skillRanks?: SkillRanks): Skill[] {
     if (skillRanks) {
         return (Object.entries(skills) as [Skill, number][])
             .filter(([skill, rank]) => rank <= skillRanks[skill])
@@ -104,61 +101,65 @@ export function getActivitySkills(activity: Activity, skillRanks?: SkillRanks, o
     }
 }
 
-export const oncePerRoundActivities: Set<Activity> = new Set(
-    (Object.entries(activityData) as [Activity, ActivityContent][])
-        .filter(([, data]) => data.oncePerRound)
-        .map(([activity]) => activity),
-);
-export const trainedActivities: Set<Activity> = new Set(
-    (Object.entries(activityData) as [Activity, ActivityContent][])
-        .filter(([, data]) => Object.values(data.skills).every(rank => rank === 1))
-        .map(([activity]) => activity),
-);
-
-export const expertActivities: Set<Activity> = new Set(
-    (Object.entries(activityData) as [Activity, ActivityContent][])
-        .filter(([, data]) => Object.values(data.skills).every(rank => rank === 2))
-        .map(([activity]) => activity),
-);
-
-export const masterActivities: Set<Activity> = new Set(
-    (Object.entries(activityData) as [Activity, ActivityContent][])
-        .filter(([, data]) => Object.values(data.skills).every(rank => rank === 3))
-        .map(([activity]) => activity),
-);
-
-export function getActivityPhase(activity: Activity): KingdomPhase {
-    return activityData[activity].phase;
+interface GroupedActivityNames {
+    untrained: Set<string>;
+    trained: Set<string>;
+    expert: Set<string>;
+    master: Set<string>;
+    legendary: Set<string>;
+    oncePerRound: Set<string>;
+    leadership: Set<string>;
+    region: Set<string>;
+    event: Set<string>;
+    army: Set<string>;
+    commerce: Set<string>;
+    upkeep: Set<string>;
+    civic: Set<string>;
+    companion: Set<string>;
 }
 
-export const companionActivities: Set<Activity> = new Set(
-    (Object.entries(activityData) as [Activity, ActivityContent][])
-        .filter(([, data]) => data.companion)
-        .map(([activity]) => activity),
-);
+export function groupKingdomActivities(activities: KingdomActivityById): GroupedActivityNames {
+    const result: GroupedActivityNames = {
+        untrained: new Set(),
+        trained: new Set(),
+        expert: new Set(),
+        master: new Set(),
+        legendary: new Set(),
+        oncePerRound: new Set(),
+        leadership: new Set(),
+        region: new Set(),
+        event: new Set(),
+        army: new Set(),
+        commerce: new Set(),
+        upkeep: new Set(),
+        civic: new Set(),
+        companion: new Set(),
+    };
+    (Object.entries(activities) as [string, KingdomActivity][])
+        .forEach(([activity, data]) => {
+            result[data.phase].add(activity);
+            if (data.oncePerRound) result.oncePerRound.add(activity);
+            if (data.companion) result.companion.add(activity);
+            if (Object.values(data.skills).every(rank => rank === 0)) {
+                result.untrained.add(activity);
+            } else if (Object.values(data.skills).every(rank => rank === 1)) {
+                result.trained.add(activity);
+            } else if (Object.values(data.skills).every(rank => rank === 2)) {
+                result.expert.add(activity);
+            } else if (Object.values(data.skills).every(rank => rank === 3)) {
+                result.master.add(activity);
+            } else if (Object.values(data.skills).every(rank => rank === 4)) {
+                result.legendary.add(activity);
+                return result;
+            }
+        });
+    return result;
+}
 
-const activitiesByPhase: Record<KingdomPhase, Activity[]> = (Object.entries(activityData) as [Activity, ActivityContent][])
-    .map(([activity, data]) => {
-        const result: Record<KingdomPhase, Activity[]> = {
-            'leadership': [],
-            'region': [],
-            'event': [],
-            'army': [],
-            'commerce': [],
-            'upkeep': [],
-            'civic': [],
-        };
-        result[data.phase].push(activity);
-        return result;
-    })
-    .reduce((prev, curr) => {
-        return mergeObjects(prev, curr, (a, b) => [...a, ...b]);
-    }, {'leadership': [], 'region': [], 'event': [], 'army': [], 'commerce': [], 'upkeep': [], 'civic': []});
-
-export function enableCompanionActivities(type: KingdomPhase, unlockedCompanionActivities: Set<Activity>): Activity[] {
-    return activitiesByPhase[type]
+export function enableCompanionActivities(type: KingdomPhase, unlockedCompanionActivities: Set<string>, names: GroupedActivityNames): string[] {
+    return Array.from(names[type])
         .filter(activity => {
-            if (companionActivities.has(activity)) {
+            if (names.companion.has(activity)) {
                 return unlockedCompanionActivities.has(activity);
             } else {
                 return true;
@@ -166,7 +167,7 @@ export function enableCompanionActivities(type: KingdomPhase, unlockedCompanionA
         });
 }
 
-export function createActivityLabel(activity: Activity, kingdom: Kingdom): string {
+export function createActivityLabel(groupedActivities: GroupedActivityNames, activity: string, kingdom: Kingdom): string {
     const kingdomLevel = kingdom.level;
     let label = unslugify(activity);
     if (activity === 'claim-hex') {
@@ -178,35 +179,37 @@ export function createActivityLabel(activity: Activity, kingdom: Kingdom): strin
             label += ' (once per turn)';
         }
     }
-    if (trainedActivities.has(activity) && oncePerRoundActivities.has(activity)) {
+    if (groupedActivities.trained.has(activity) && groupedActivities.oncePerRound.has(activity)) {
         label += ' (once per turn, trained)';
-    } else if (trainedActivities.has(activity)) {
+    } else if (groupedActivities.trained.has(activity)) {
         label += ' (trained)';
-    } else if (expertActivities.has(activity)) {
+    } else if (groupedActivities.expert.has(activity)) {
         label += ' (expert)';
-    } else if (masterActivities.has(activity)) {
+    } else if (groupedActivities.master.has(activity)) {
         label += ' (master)';
-    } else if (oncePerRoundActivities.has(activity)) {
+    } else if (groupedActivities.oncePerRound.has(activity)) {
         label += ' (once per turn)';
     }
-    const data = activityData[activity];
-    const hint = data.hint;
+    const data = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
+    const hint = activityHints(data, kingdom);
     if (hint) {
-        label += ` (${hint(kingdom)})`;
+        label += ` (${hint})`;
     }
     return label;
 }
+
 
 export function getPerformableActivities(
     ranks: SkillRanks,
     enableCapitalInvestment: boolean,
     ignoreSkillRequirements: boolean,
-): Record<Activity, boolean> {
+    activities: KingdomActivityById,
+): Record<string, boolean> {
     return Object.fromEntries(allActivities.map(activity => {
-        const activityRanks = activityData[activity].skills;
+        const activityRanks = activities[activity].skills;
         const noBuildingPreventsActivity = activity !== 'capital-investment' || enableCapitalInvestment;
         const enabled = ignoreSkillRequirements || (Object.entries(activityRanks) as [Skill, number][])
             .some(([skill, rank]) => ranks[skill] >= rank) && noBuildingPreventsActivity;
         return [activity, enabled];
-    })) as Record<Activity, boolean>;
+    })) as Record<string, boolean>;
 }

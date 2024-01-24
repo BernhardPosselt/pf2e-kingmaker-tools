@@ -13,6 +13,7 @@ import {
     SettlementAndScene,
 } from '../scene';
 import {getBooleanSetting} from '../../settings';
+import {getKingdomActivitiesById} from '../data/activityData';
 
 interface SettlementOptions {
     game: Game;
@@ -71,7 +72,8 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
         const capital = getCapitalSettlement(this.game, this.kingdom);
         const structureStackMode = getStructureStackMode(this.game);
         const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
-        const structureData = getStructureResult(structureStackMode, autoCalculateSettlementLevel, settlement, capital);
+        const activities = getKingdomActivitiesById(this.kingdom.homebrewActivities);
+        const structureData = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, settlement, capital);
         const builtStructures = await this.getBuiltStructures(settlement);
         const storage = this.getStorage(structureData);
         const settlementInfo = getSettlementInfo(settlement, autoCalculateSettlementLevel);

@@ -48,11 +48,10 @@ import {
     getOverrideUnlockCompanionNames,
 } from './data/companions';
 import {
-    Activity,
-    allActivities,
     createActivityLabel,
     enableCompanionActivities,
     getPerformableActivities,
+    groupKingdomActivities,
 } from './data/activities';
 import {AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {calculateSkills} from './skills';
@@ -61,7 +60,6 @@ import {CheckDialog} from './dialogs/check-dialog';
 import {Skill} from './data/skills';
 import {activityBlacklistDialog} from './dialogs/activity-blacklist-dialog';
 import {showHelpDialog} from './dialogs/show-help-dialog';
-import {activityData} from './data/activityData';
 import {showSettlement} from './dialogs/settlement';
 import {createActiveSettlementModifiers, getUntrainedProficiencyMode, Modifier, modifierToLabel} from './modifiers';
 import {addEffectDialog} from './dialogs/add-effect-dialog';
@@ -72,6 +70,7 @@ import {editSettlementDialog} from './dialogs/edit-settlement-dialog';
 import {showKingdomSettings} from './dialogs/kingdom-settings';
 import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
+import {getKingdomActivitiesById} from './data/activityData';
 
 interface KingdomOptions {
     game: Game;
@@ -144,7 +143,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, kingdomData);
         const activeSettlement = getSettlement(this.game, kingdomData, kingdomData.activeSettlement);
 
-        const unlockedActivities = new Set<Activity>([
+        const unlockedActivities = new Set<string>([
             ...unlockedSettlementActivities,
             ...getCompanionUnlockActivities(kingdomData.leaders, getOverrideUnlockCompanionNames(this.game)),
         ]);
@@ -154,11 +153,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             })
             .reduce((a, b) => Object.assign(a, b), {});
         const ignoreSkillRequirements = getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements');
+        const activities = getKingdomActivitiesById(kingdomData.homebrewActivities);
         const enabledActivities = getPerformableActivities(
             kingdomData.skillRanks,
             activeSettlementStructureResult?.active?.allowCapitalInvestment === true,
             ignoreSkillRequirements,
+            activities,
         );
+        const groupedActivities = groupKingdomActivities(activities);
         const currentSceneId = getCurrentScene(this.game)?.id;
         const canAddSettlement = kingdomData.settlements.find(settlement => settlement.sceneId === currentSceneId) === undefined;
         const structureStackMode = getStructureStackMode(this.game);
@@ -215,6 +217,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     activeSettlementStructureResult,
                     getSettlementsWithoutLandBorders(this.game, kingdomData),
                 ),
+                activities,
             }),
             leaders: this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
@@ -250,7 +253,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         ...getSettlementInfo(s, autoCalculateSettlementLevel),
                         waterBorders,
                         overcrowded: this.isOvercrowded(s),
-                        lacksBridge: waterBorders >= 4 && !getStructureResult(structureStackMode, autoCalculateSettlementLevel, s).hasBridge,
+                        lacksBridge: waterBorders >= 4 && !getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, s).hasBridge,
                         isCapital: settlement?.settlement.type === 'capital',
                         name: s.scene.name ?? undefined,
                     };
@@ -265,17 +268,18 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             milestones: kingdomData.milestones.map(m => {
                 return {...m, display: (useXpHomebrew || !m.homebrew) && (isGM || !m.name.startsWith('Cult Event'))};
             }),
-            leadershipActivities: enableCompanionActivities('leadership', unlockedActivities)
+            leadershipActivities: enableCompanionActivities('leadership', unlockedActivities, groupedActivities)
                 .map(activity => {
-                    return {label: createActivityLabel(activity, kingdomData), value: activity};
+                    return {label: createActivityLabel(groupedActivities, activity, kingdomData), value: activity};
+                })
+                .sort((a, b) => a.label.localeCompare(b.label)),
+            regionActivities: enableCompanionActivities('region', unlockedActivities, groupedActivities)
+                .map(activity => {
+                    return {label: createActivityLabel(groupedActivities, activity, kingdomData), value: activity};
                 }),
-            regionActivities: enableCompanionActivities('region', unlockedActivities)
+            armyActivities: enableCompanionActivities('army', unlockedActivities, groupedActivities)
                 .map(activity => {
-                    return {label: createActivityLabel(activity, kingdomData), value: activity};
-                }),
-            armyActivities: enableCompanionActivities('army', unlockedActivities)
-                .map(activity => {
-                    return {label: createActivityLabel(activity, kingdomData), value: activity};
+                    return {label: createActivityLabel(groupedActivities, activity, kingdomData), value: activity};
                 }),
             featuresByLevel: Array.from(featuresByLevel.entries())
                 .map(([level, features]) => {
@@ -488,7 +492,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#blacklist-activities')
             ?.addEventListener('click', async () => {
                 const current = this.getKingdom();
-                await activityBlacklistDialog(current.activityBlacklist, [...allActivities], (activityBlacklist) => {
+                const allActivities = Object.keys(getKingdomActivitiesById(current.homebrewActivities));
+                activityBlacklistDialog(current.activityBlacklist, [...allActivities], (activityBlacklist) => {
                     this.saveKingdom({
                         activityBlacklist,
                     });
@@ -502,13 +507,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (el) => {
                     const target = el.currentTarget as HTMLButtonElement;
-                    const activity = target.dataset.activity as Activity;
+                    const activity = target.dataset.activity!;
+                    const kingdom = this.getKingdom();
+                    const activityData = getKingdomActivitiesById(kingdom.homebrewActivities);
                     if (activityData[activity].dc === 'none') {
                         await showHelpDialog(this.game, this.sheetActor, activity);
                     } else {
                         new CheckDialog(null, {
                             activity,
-                            kingdom: this.getKingdom(),
+                            kingdom: kingdom,
                             game: this.game,
                             type: 'activity',
                             onRoll: this.consumeModifiers.bind(this),
@@ -538,7 +545,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (el) => {
                     const target = el.currentTarget as HTMLButtonElement;
-                    const help = target.dataset.help as Activity;
+                    const help = target.dataset.help!;
                     if (help) {
                         await showHelpDialog(this.game, this.sheetActor, help);
                     }
@@ -578,7 +585,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-add-effect')
             ?.addEventListener('click', async () => {
-                addEffectDialog(async (modifier) => {
+                const allActivities = Object.keys(getKingdomActivitiesById(this.getKingdom().homebrewActivities));
+                addEffectDialog(allActivities, async (modifier) => {
                     const current = this.getKingdom();
                     current.modifiers.push(modifier);
                     await this.saveKingdom(current);
@@ -725,7 +733,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private isOvercrowded(settlement: SettlementAndScene): boolean {
         const structureStackMode = getStructureStackMode(this.game);
         const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
-        const structures = getStructureResult(structureStackMode, autoCalculateSettlementLevel, settlement);
+        const activities = getKingdomActivitiesById(this.getKingdom().homebrewActivities);
+        const structures = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, settlement);
         return getSettlementInfo(settlement, autoCalculateSettlementLevel).lots > structures.residentialLots;
     }
 

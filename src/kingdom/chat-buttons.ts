@@ -1,6 +1,5 @@
 import {getKingdom, saveKingdom} from './storage';
-import {Activity} from './data/activities';
-import {activityData, ActivityResults} from './data/activityData';
+import {ActivityResults, getKingdomActivitiesById} from './data/activityData';
 import {updateResources} from './resources';
 import {gainFame} from './kingdom-utils';
 import {parsePayButton, payStructure} from './dialogs/structure-browser';
@@ -41,10 +40,11 @@ export const kingdomChatButtons: KingdomChatButton[] = [
         callback: async (game: Game, actor: Actor, event: Event): Promise<void> => {
             event.preventDefault();
             const target = event.currentTarget as HTMLButtonElement;
-            const activity = target.dataset.activity! as Activity;
+            const activity = target.dataset.activity!;
             const degree = target.dataset.degree! as keyof ActivityResults;
             const index = parseInt(target.dataset.index ?? '0', 10);
             const kingdom = getKingdom(actor);
+            const activityData = getKingdomActivitiesById(kingdom.homebrewActivities);
             const modifier = activityData[activity]?.[degree]?.modifiers?.(kingdom)?.[index];
             if (modifier !== undefined) {
                 // copy modifier because we alter the consumeId

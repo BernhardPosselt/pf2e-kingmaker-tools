@@ -1,4 +1,4 @@
-import {Activity, KingdomPhase} from './activities';
+import {KingdomPhase} from './activities';
 import {allSkills, Skill} from './skills';
 import {Companion} from './companions';
 import {Modifier} from '../modifiers';
@@ -43,10 +43,82 @@ export interface ActivityContent extends ActivityResults {
     companion?: Companion;
     fortune: boolean;
     oncePerRound: boolean;
-    hint?: (kingdom: Kingdom) => string;
+    hint?: string;
 }
 
-export const activityData: Record<Activity, ActivityContent> = {
+export interface KingdomActivity extends ActivityContent {
+    id: string;
+}
+
+export type KingdomActivityById = Record<string, KingdomActivity>;
+
+const activityData: Record<string, ActivityContent> = {
+    'naval-support': {
+        title: 'Naval Support',
+        oncePerRound: true,
+        fortune: false,
+        enabled: false,
+        phase: 'leadership',
+        dc: 'control',
+        description: 'You use your fleet to ship materials or transport skilled builders and specialists to where they are needed most. Attempt a basic Boating check.',
+        skills: simpleRank(['boating']),
+        criticalSuccess: {
+            msg: 'You gain 2 additional region activities.',
+        },
+        success: {
+            msg: 'You gain 1 additional region activity.',
+        },
+        failure: {
+            msg: `You gain 1 additional region activity by investing additional funds. ${loseRP('2d6')}`,
+        },
+        criticalFailure: {
+            msg: `You do not gain an additional region activity and ${loseRP('2d6')}.`,
+        },
+    },
+    'dispatch-scouts': {
+        title: 'Dispatch Scouts',
+        oncePerRound: true,
+        fortune: false,
+        enabled: false,
+        phase: 'leadership',
+        dc: 'control',
+        description: 'You dispatch your scouts to discover shortcuts or create makeshift paths. Attempt a basic exploration check.',
+        skills: simpleRank(['exploration']),
+        criticalSuccess: {
+            msg: 'You gain 2 additional region activities.',
+        },
+        success: {
+            msg: 'You gain 1 additional region activity.',
+        },
+        failure: {
+            msg: `You gain 1 additional region activity by investing additional funds. ${loseRP('2d6')}`,
+        },
+        criticalFailure: {
+            msg: 'You do not gain an additional region activity.',
+        },
+    },
+    'inspire-subjects': {
+        title: 'Inspire Subjects',
+        oncePerRound: true,
+        fortune: false,
+        enabled: false,
+        phase: 'leadership',
+        dc: 'control',
+        description: 'You create new policies, settle disputes, or appoint talented individuals as government officials to increase your kingdom\'s efficiency. Attempt a basic politics check.',
+        skills: simpleRank(['politics']),
+        criticalSuccess: {
+            msg: 'You gain 2 additional region activities.',
+        },
+        success: {
+            msg: 'You gain 1 additional region activity.',
+        },
+        failure: {
+            msg: `You gain 1 additional region activity by investing additional funds. ${loseRP('2d6')}`,
+        },
+        criticalFailure: {
+            msg: 'You do not gain an additional region activity.',
+        },
+    },
     'abandon-hex': {
         title: 'Abandon Hex',
         oncePerRound: false,
@@ -2093,10 +2165,6 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         phase: 'army',
         dc: 'control',
         title: 'Train Army',
-        hint: (kingdom) => {
-            const maxTactics = armyStatisticsByLevel.get(kingdom.level)?.maximumTactics ?? 6;
-            return `Max ${maxTactics} per Army`;
-        },
         description: 'You train an army in the use of a tactic. Choose one of the tactics from those listed starting on page 68, then attempt a Scholarship or Warfare check against the tactic’s Training DC. If your army has already learned its maximum number of tactics, the newly learned tactic replaces a previously learned tactic of your choice. ',
         skills: simpleRank(['scholarship', 'warfare']),
         criticalSuccess: {
@@ -2223,7 +2291,7 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
     },
 };
 
-export function findHelp(activity: Activity): ActivityContent {
+export function findHelp(activity: string): ActivityContent {
     return activityData[activity];
 }
 
@@ -2309,4 +2377,30 @@ export function createResourceButton({turn = 'now', value, mode = 'gain', type, 
         data-turn="${turn}"
         ${value !== undefined ? `data-value="${value}"` : ''}
         >${label}${hints !== undefined ? `(${hints})` : ''}</button>`;
+}
+
+export function getKingdomActivitiesById(additionalActivities: KingdomActivity[]): KingdomActivityById {
+    return <KingdomActivityById>Object.fromEntries(getKingdomActivities(additionalActivities)
+        .map(activity => [activity.id, activity]));
+}
+
+export function getKingdomActivities(additionalActivities: KingdomActivity[]): KingdomActivity[] {
+    const homebrewIds = new Set(additionalActivities.map(a => a.id));
+    return Array.from(Object.entries(activityData))
+        .filter(([id]) => !homebrewIds.has(id))
+        .map(([id, activity]) => {
+            return {
+                id,
+                ...activity,
+            };
+        });
+}
+
+export function activityHints(activity: KingdomActivity, kingdom: Kingdom): string | undefined {
+    if (activity.id === 'train-army') {
+        const maxTactics = armyStatisticsByLevel.get(kingdom.level)?.maximumTactics ?? 6;
+        return `Max ${maxTactics} per Army`;
+    } else {
+        return activity.hint;
+    }
 }

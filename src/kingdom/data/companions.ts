@@ -1,4 +1,3 @@
-import {Activity} from './activities';
 import {Skill} from './skills';
 import {Leader} from './leaders';
 import {Leaders, LeaderValues} from './kingdom';
@@ -35,10 +34,10 @@ export function isCompanionName(name: string): name is Companion {
     return allCompanions.includes(name as Companion);
 }
 
-export type UnlockSkills = Partial<Record<Skill, Activity[]>>;
+export type UnlockSkills = Partial<Record<Skill, string[]>>;
 
 export interface CompanionUnlock {
-    activities: Activity[];
+    activities: string[];
     actionSkills: UnlockSkills;
     roles: Set<Leader>;
 }
@@ -111,7 +110,7 @@ export function applyLeaderCompanionRules(leaders: Leaders): Leaders {
     };
 }
 
-export function getCompanionUnlockActivities(leaders: Leaders, alwaysEnableCompanionNames: Set<Companion>): Activity[] {
+export function getCompanionUnlockActivities(leaders: Leaders, alwaysEnableCompanionNames: Set<Companion>): string[] {
     return getCompanionUnlocks(leaders, alwaysEnableCompanionNames)
         .flatMap(unlock => unlock.activities);
 }

@@ -1,6 +1,5 @@
 import Joi from 'joi';
 import {allSkills} from './data/skills';
-import {allActivities} from './data/activities';
 import {allBuildingTraits, itemGroups, structuresByName} from './data/structures';
 
 const builtInRefs = structuresByName.keys();
@@ -18,12 +17,12 @@ export const ruleSchema = Joi.object({
     consumptionReduction: Joi.number().optional(),
     activityBonusRules: Joi.array().items(Joi.object({
         value: Joi.number().required(),
-        activity: Joi.string().valid(...allActivities).required(),
+        activity: Joi.string().required(),
     })).optional(),
     skillBonusRules: Joi.array().items(Joi.object({
         value: Joi.number().required(),
         skill: Joi.string().valid(...allSkills).required(),
-        activity: Joi.string().valid(...allActivities).optional(),
+        activity: Joi.string().optional(),
     })).optional(),
     availableItemsRules: Joi.array().items(Joi.object({
         value: Joi.number().required(),
@@ -43,7 +42,7 @@ export const ruleSchema = Joi.object({
         stone: Joi.number().optional(),
         luxuries: Joi.number().optional(),
     }).optional(),
-    unlockActivities: Joi.array().items(Joi.string().valid(...allActivities)).optional(),
+    unlockActivities: Joi.array().items(Joi.string()).optional(),
     traits: Joi.array().items(Joi.string().valid(...allBuildingTraits)).optional(),
     isBridge: Joi.boolean().optional(),
     stacksWith: Joi.string().optional(),

@@ -1,9 +1,8 @@
-import {Activity, getActivityPhase, KingdomPhase} from './data/activities';
+import {KingdomPhase} from './data/activities';
 import {capitalize, groupBy, unslugify} from '../utils';
 import {getLevelData, Kingdom, Leaders, Ruin, Settlement} from './data/kingdom';
 import {allFeatsByName} from './data/feats';
 import {Skill, skillAbilities} from './data/skills';
-import {activityData} from './data/activityData';
 import {Ability, AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {applyLeaderCompanionRules} from './data/companions';
 import {isInvested} from './data/leaders';
@@ -12,6 +11,7 @@ import {abilityRuins} from './data/ruin';
 import {ActivityBonuses, SkillItemBonus} from './data/structures';
 import {ActiveSettlementStructureResult} from './scene';
 import {getBooleanSetting} from '../settings';
+import {KingdomActivityById} from './data/activityData';
 
 export type UntrainedProficiencyMode = 'half' | 'full' | 'none';
 
@@ -42,7 +42,7 @@ export interface Modifier {
     value: number;
     name: string;
     phases?: KingdomPhase[];
-    activities?: Activity[];
+    activities?: string[];
     skills?: Skill[];
     abilities?: Ability[];
     enabled: boolean;
@@ -83,9 +83,10 @@ export function removeUninterestingZeroModifiers(modifiers: ModifierWithId[]): M
 export function removePredicatedModifiers(
     modifiers: ModifierWithId[],
     phase: KingdomPhase | undefined,
-    activity: Activity | undefined,
+    activity: string | undefined,
     skill: Skill,
     rank: number,
+    activities: KingdomActivityById,
 ): ModifierWithId[] {
     return modifiers
         .filter(modifier => {
@@ -111,7 +112,7 @@ export function removePredicatedModifiers(
             if (modifier.activities) {
                 predicates.push((m) => m.activities!
                     .some(activity => {
-                        const data = activityData[activity];
+                        const data = activities[activity];
                         const activitySkillRank = data.skills[skill];
                         if (activitySkillRank === undefined) {
                             return false;
@@ -339,13 +340,15 @@ export function processModifiers(
         phase,
         activity,
         overrides = {},
+        activities,
     }: {
         modifiers: Modifier[];
         skill: Skill;
         rank: number;
         phase?: KingdomPhase;
-        activity?: Activity;
+        activity?: string;
         overrides?: Record<string, boolean>;
+        activities: KingdomActivityById;
     },
 ): ModifierWithId[] {
     const copied = modifiers.map((modifier, index) => {
@@ -358,7 +361,7 @@ export function processModifiers(
         };
     });
     const withoutZeroes = removeUninterestingZeroModifiers(copied);
-    const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, activity, skill, rank);
+    const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, activity, skill, rank, activities);
     // enable/disable overrides
     const withOverrides = withoutMismatchedPhaseOrActivity
         .map(modifier => {
@@ -517,10 +520,10 @@ function createSkillModifier(value: number): Modifier | undefined {
     }
 }
 
-export function createActivityModifiers(activities: ActivityBonuses): Modifier[] {
-    return (Object.entries(activities) as ([Activity, number])[])
+function createActivityModifiers(activities: ActivityBonuses, kingdomActivities: KingdomActivityById): Modifier[] {
+    return (Object.entries(activities) as ([string, number])[])
         .map(([activity, value]) => {
-            const phases = [getActivityPhase(activity)];
+            const phases = [kingdomActivities[activity].phase];
             return {
                 type: 'item',
                 enabled: true,
@@ -532,8 +535,8 @@ export function createActivityModifiers(activities: ActivityBonuses): Modifier[]
         });
 }
 
-export function createStructureModifiers(skillItemBonus: SkillItemBonus): Modifier[] {
-    const result = createActivityModifiers(skillItemBonus.activities);
+export function createStructureModifiers(skillItemBonus: SkillItemBonus, kingdomActivities: KingdomActivityById): Modifier[] {
+    const result = createActivityModifiers(skillItemBonus.activities, kingdomActivities);
     const skillBonus = createSkillModifier(skillItemBonus.value);
     if (skillBonus) {
         result.push(skillBonus);

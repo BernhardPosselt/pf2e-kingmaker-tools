@@ -121,6 +121,14 @@ If you give your players too many proficiencies or boosts, you will prevent Unre
 
 Furthermore, giving your players the ability to reconnoiter a hex using an activity will remove a lot of the fun of exploring the Stolen Lands, so I'd advise against that.
 
+We've also discovered an additional issue: V&K significantly boosts kingdom XP at lower levels. This makes the subsystem bearable but you will lack enough region activities to grab additional hexes and construct settlements and worksites. To account for that, I'm currently testing the following Leadership Activity:
+
+* Naval Support: You use your fleet to ship materials or transport skilled builders and specialists to where they are needed most. Attempt a basic Boating check.
+    * **Critical Success**: You gain 2 additional region activities.
+    * **Succcess**: You gain 1 additional region activity.
+    * **Failure**: You gain 1 additional region activity by investing additional funds. Lose 2d6 RP
+    * **Critical Failure**: You do not gain an additional region activity and lose 2d6 RP
+
 ### House Rules
 
 * PCs can attempt the same Activity multiple times unless it's specifically forbidden: the rules aren't super clear on this, this seems to be the RAI and prevents players from running out of things to do.

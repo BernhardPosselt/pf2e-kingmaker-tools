@@ -1,17 +1,16 @@
-import {Activity} from '../data/activities';
 import {findHelp} from '../data/activityData';
 import {capitalize} from '../../utils';
 import {rankToLabel} from '../modifiers';
 import {updateResources} from '../resources';
 
 interface HelpOptions {
-    activity: Activity;
+    activity: string;
     game: Game;
     actor: Actor;
 }
 
 class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
-    private activity: Activity;
+    private activity: string;
     private game: Game;
     private actor: Actor;
 
@@ -99,6 +98,6 @@ class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
     }
 }
 
-export async function showHelpDialog(game: Game, actor: Actor, activity: Activity): Promise<void> {
+export async function showHelpDialog(game: Game, actor: Actor, activity: string): Promise<void> {
     new HelpApplication({activity, actor, game}).render(true);
 }

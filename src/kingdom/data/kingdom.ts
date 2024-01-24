@@ -1,7 +1,6 @@
-import {Activity} from './activities';
 import {ActorTypes} from './companions';
 import {Leader} from './leaders';
-import {ActivityContent, activityData} from './activityData';
+import {getKingdomActivities, KingdomActivity} from './activityData';
 import {AbilityScores} from './abilities';
 import {Modifier} from '../modifiers';
 
@@ -156,6 +155,7 @@ export interface Kingdom {
         now: number;
         next: number;
     };
+    homebrewActivities: KingdomActivity[];
     supernaturalSolutions: number;
     turnsWithoutCultEvent: number;
     creativeSolutions: number;
@@ -174,7 +174,7 @@ export interface Kingdom {
     milestones: MileStone[];
     ongoingEvents: OngoingEvent[];
     turnsWithoutEvent: number;
-    activityBlacklist: Activity[];
+    activityBlacklist: string[];
     modifiers: Modifier[];
     settlements: Settlement[];
 }
@@ -489,10 +489,11 @@ export function getDefaultKingdomData(): Kingdom {
                 value: 0,
             },
         },
-        activityBlacklist: (Object.entries(activityData) as [Activity, ActivityContent][])
-            .filter(([, data]) => !data.enabled && !data.companion)
-            .map(([key]) => key),
+        activityBlacklist: getKingdomActivities([])
+            .filter((data) => !data.enabled && !data.companion)
+            .map((data) => data.id),
         modifiers: [],
+        homebrewActivities: [],
     };
 }
 

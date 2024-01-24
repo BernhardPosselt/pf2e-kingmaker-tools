@@ -119,6 +119,24 @@ export function mergeObjects<A extends Record<string, V>, B extends Record<strin
     return Object.fromEntries(entries);
 }
 
+export function mergePartialObjects<A extends Partial<Record<string, V>>, B extends Partial<Record<string, V>>, V>(
+    obj1: A,
+    obj2: B,
+    conflictFunction: (a: V | undefined, b: V | undefined) => V,
+): Partial<Record<string, V>> {
+    const entries: [string, V | undefined][] = [];
+    for (const key of [...Object.keys(obj1), ...Object.keys(obj2)]) {
+        if (key in obj1 && key in obj2) {
+            entries.push([key, conflictFunction(obj1[key], obj2[key])]);
+        } else if (key in obj1) {
+            entries.push([key, obj1[key]]);
+        } else if (key in obj2) {
+            entries.push([key, obj2[key]]);
+        }
+    }
+    return Object.fromEntries(entries);
+}
+
 export function range(start: number, end: number): number[] {
     return Array.apply(0, Array(end - 1))
         .map((element, index) => index + start);

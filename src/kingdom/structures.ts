@@ -1,5 +1,5 @@
-import {mergeObjects, sum} from '../utils';
-import {Activity, getActivitySkills} from './data/activities';
+import {mergeObjects, mergePartialObjects, sum} from '../utils';
+import {getActivitySkills} from './data/activities';
 import {
     ActivityBonusRule,
     CommodityStorage,
@@ -11,6 +11,7 @@ import {
     Structure,
 } from './data/structures';
 import {Skill} from './data/skills';
+import {KingdomActivityById} from './data/activityData';
 
 export interface StructureResult {
     allowCapitalInvestment: boolean;
@@ -24,7 +25,7 @@ export interface StructureResult {
     consumptionReduction: number;
     consumption: number;
     config: SettlementConfig;
-    unlockActivities: Activity[];
+    unlockActivities: string[];
     residentialLots: number;
     hasBridge: boolean;
     lots: number;
@@ -176,10 +177,10 @@ function applySettlementEventBonuses(result: StructureResult, structures: Struct
     });
 }
 
-function simplifyRules(rules: ActivityBonusRule[]): SkillBonusRule[] {
+function simplifyRules(rules: ActivityBonusRule[], activities: KingdomActivityById): SkillBonusRule[] {
     return rules.flatMap(rule => {
         const activity = rule.activity;
-        const skills = getActivitySkills(activity);
+        const skills = getActivitySkills(activities[activity].skills);
         return skills.map(skill => {
             return {
                 value: rule.value,
@@ -190,9 +191,9 @@ function simplifyRules(rules: ActivityBonusRule[]): SkillBonusRule[] {
     });
 }
 
-function unionizeStructures(structures: Structure[]): Structure[] {
+function unionizeStructures(structures: Structure[], activities: KingdomActivityById): Structure[] {
     return structures.map(structure => {
-        const simplifiedRules = simplifyRules(structure.activityBonusRules ?? []);
+        const simplifiedRules = simplifyRules(structure.activityBonusRules ?? [], activities);
         return {
             ...structure,
             skillBonusRules: [...(structure.skillBonusRules ?? []), ...simplifiedRules],
@@ -292,10 +293,10 @@ export function getSettlementConfig(settlementLevel: number): SettlementConfig {
 
 function mergeBonuses(capital: SkillItemBonus, settlement: SkillItemBonus): SkillItemBonus {
     const skillValue = capital.value > settlement.value ? capital.value : settlement.value;
-    const activities = mergeObjects(capital.activities, settlement.activities, (a: number, b: number) => Math.max(a, b));
+    const activities = mergePartialObjects(capital.activities, settlement.activities, (a: number | undefined, b: number | undefined) => Math.max(a ?? 0, b ?? 0));
     const filteredActivities = Object.fromEntries(
         Object.entries(activities)
-            .filter(([, value]) => value > skillValue),
+            .filter(([, value]) => (value ?? 0) > skillValue),
     );
     return {
         value: skillValue,
@@ -313,7 +314,7 @@ export function includeCapital(capital: StructureResult, settlement: StructureRe
     };
 }
 
-function applyUnlockedActivities(unlockActivities: Activity[], groupedStructures: Structure[]): void {
+function applyUnlockedActivities(unlockActivities: string[], groupedStructures: Structure[]): void {
     groupedStructures
         .flatMap(structure => structure?.unlockActivities ?? [])
         .forEach(activity => {
@@ -335,7 +336,7 @@ function stackAllStructureBonuses(groupedStructures: Structure[], maxItemBonus: 
         skillOnlyBonuses.set(rule.skill, Math.min(maxItemBonus, existingValue + rule.value));
     });
     // then calculate all modifiers only applicable for an activity
-    const activityBonuses: Map<Skill, Map<Activity, number>> = new Map();
+    const activityBonuses: Map<Skill, Map<string, number>> = new Map();
     activityBonusRules.forEach(rule => {
         const skill = rule.skill;
         activityBonuses.set(skill, activityBonuses.get(skill) ?? new Map());
@@ -374,7 +375,12 @@ function stackAllStructureBonuses(groupedStructures: Structure[], maxItemBonus: 
 /**
  * Calculate all Bonuses of a settlement
  */
-export function evaluateStructures(structures: Structure[], settlementLevel: number, mode: StructureStackRule): StructureResult {
+export function evaluateStructures(
+    structures: Structure[],
+    settlementLevel: number,
+    mode: StructureStackRule,
+    activities: KingdomActivityById,
+): StructureResult {
     const settlementData = getSettlementConfig(settlementLevel);
     const maxItemBonus = settlementData.maxItemBonus;
     const allowCapitalInvestment = structures.some(structure => structure.enableCapitalInvestment === true);
@@ -436,7 +442,7 @@ export function evaluateStructures(structures: Structure[], settlementLevel: num
         lots: structures.map(s => s.lots ?? 1).reduce((a, b) => a + b, 0),
         hasBridge: structures.some(structure => structure.isBridge),
     };
-    const unionizedStructures = unionizeStructures(structures);
+    const unionizedStructures = unionizeStructures(structures, activities);
     applyStorageIncreases(result.storage, structures);
     const groupedStructures = groupStructures(unionizedStructures, maxItemBonus);
     const allGroupedStructures = mode === 'all-structures-stack'

@@ -1,17 +1,16 @@
-import {Activity} from './activities';
 import {Skill} from './skills';
 
 
 export interface ActivityBonusRule {
     value: number;
-    activity: Activity;
+    activity: string;
 }
 
 export interface SkillBonusRule {
     value: number;
     skill: Skill;
     // e.g. 'quell-unrest'
-    activity?: Activity;
+    activity?: string;
 }
 
 export interface AvailableItemsRule {
@@ -68,7 +67,7 @@ export interface Structure {
     increaseLeadershipActivities?: boolean;
     isBridge?: boolean;
     consumptionReduction?: number;
-    unlockActivities?: Activity[];
+    unlockActivities?: string[];
     traits?: BuildingTrait[];
     lots?: number;
     affectsEvents?: boolean;
@@ -83,7 +82,7 @@ export const allBuildingTraits = ['edifice', 'yard', 'building', 'famous', 'infa
 
 export type BuildingTrait = typeof allBuildingTraits[number];
 
-export type ActivityBonuses = Partial<Record<Activity, number>>;
+export type ActivityBonuses = Partial<Record<string, number>>;
 
 export interface SkillItemBonus {
     value: number;

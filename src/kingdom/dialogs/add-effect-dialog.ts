@@ -1,4 +1,4 @@
-import {Activity, allActivities, allKingdomPhases, KingdomPhase} from '../data/activities';
+import {allKingdomPhases, KingdomPhase} from '../data/activities';
 import {allModifierTypes, Modifier, ModifierType} from '../modifiers';
 import {capitalize, createLabels, parseCheckbox, parseNumberInput, parseSelect, parseTextInput} from '../../utils';
 import {allSkills, Skill} from '../data/skills';
@@ -21,11 +21,11 @@ const types = allModifierTypes.flatMap(type => {
     }
 });
 const phases = createLabels(allKingdomPhases);
-const activities = createLabels(allActivities, true);
 const skills = createLabels(allSkills);
 const abilities = createLabels(allAbilities);
 
-function tpl(): string {
+function tpl(allActivities: string[]): string {
+    const activities = createLabels(allActivities, true);
     return `
         <form class="simple-dialog-form">
             <div>
@@ -86,7 +86,7 @@ function tpl(): string {
         `;
 }
 
-function parseModifierType(typeSlug: string, value: number): {type: ModifierType, value: number} {
+function parseModifierType(typeSlug: string, value: number): { type: ModifierType, value: number } {
     const [type, bonusOrPenalty] = typeSlug.split('-');
     if (bonusOrPenalty === 'penalty') {
         return {type: type as ModifierType, value: -Math.abs(value)};
@@ -105,11 +105,12 @@ function parseOptionalSelect<T extends string>($html: HTMLElement, name: string)
 }
 
 export function addEffectDialog(
+    activities: string[],
     onOk: (modifier: Modifier) => void,
 ): void {
     new Dialog({
         title: 'Add Effect',
-        content: tpl(),
+        content: tpl(activities),
         buttons: {
             add: {
                 icon: '<i class="fa-solid fa-plus"></i>',
@@ -122,7 +123,7 @@ export function addEffectDialog(
                         parseNumberInput($html, 'value'),
                     );
                     const phases = parseOptionalSelect($html, 'phase') as KingdomPhase[] | undefined;
-                    const activities = parseOptionalSelect($html, 'activity') as Activity[] | undefined;
+                    const activities = parseOptionalSelect($html, 'activity');
                     const skills = parseOptionalSelect($html, 'skill') as Skill[] | undefined;
                     const abilities = parseOptionalSelect($html, 'ability') as Ability[] | undefined;
                     onOk({

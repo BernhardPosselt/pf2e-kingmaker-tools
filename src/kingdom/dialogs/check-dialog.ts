@@ -8,13 +8,13 @@ import {
     ModifierTotals,
     ModifierWithId,
 } from '../modifiers';
-import {Activity, getActivityPhase, getActivitySkills, KingdomPhase} from '../data/activities';
+import {getActivitySkills, KingdomPhase} from '../data/activities';
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getControlDC, hasFeat, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks, getOverrideUnlockCompanionNames} from '../data/companions';
 import {capitalize, unslugify} from '../../utils';
-import {activityData} from '../data/activityData';
+import {getKingdomActivitiesById, KingdomActivityById} from '../data/activityData';
 import {rollCheck} from '../rolls';
 import {getActiveSettlementStructureResult, getSettlement, getSettlementsWithoutLandBorders} from '../scene';
 import {getBooleanSetting} from '../../settings';
@@ -24,7 +24,7 @@ export type CheckType = 'skill' | 'activity';
 
 export interface CheckDialogFeatOptions {
     type: CheckType;
-    activity?: Activity;
+    activity?: string;
     dc?: number;
     dcAdjustment?: number;
     skill?: Skill;
@@ -55,7 +55,7 @@ type CustomModifiers = Pick<ModifierTotals, TotalFields>;
 
 export class CheckDialog extends FormApplication<FormApplicationOptions & CheckDialogFeatOptions, object, null> {
     private type: CheckType;
-    private activity: Activity | undefined;
+    private activity: string | undefined;
     private skill: Skill | undefined;
     private game: Game;
     private kingdom: Kingdom;
@@ -104,8 +104,9 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             this.selectedSkill = options.skill!;
             this.dc = options.dc ?? controlDC;
         } else {
-            this.phase = getActivityPhase(this.activity!);
-            this.selectedSkill = this.getActivitySkills(options.kingdom.skillRanks)[0];
+            const activityData = getKingdomActivitiesById(this.kingdom.homebrewActivities);
+            this.phase = activityData[this.activity!].phase;
+            this.selectedSkill = this.getActivitySkills(options.kingdom.skillRanks, activityData)[0];
             const data = activityData[this.activity!];
             const activityDCType = data.dc;
             if (options.dc !== undefined) {
@@ -124,15 +125,15 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         }
     }
 
-    private getActivitySkills(ranks: SkillRanks): Skill[] {
+    private getActivitySkills(ranks: SkillRanks, activities: KingdomActivityById): Skill[] {
         const activity = this.activity!;
         const companionSkillUnlocks = getCompanionSkillUnlocks(this.kingdom.leaders, getOverrideUnlockCompanionNames(this.game));
-        const companionUnlockSkills = (Object.entries(companionSkillUnlocks) as [Skill, Activity[]][])
+        const companionUnlockSkills = (Object.entries(companionSkillUnlocks) as [Skill, string[]][])
             .filter(([, activities]) => activities.includes(activity))
             .map(([skill]) => skill);
         const ignoreSkillRequirements = getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements');
         const skillRankFilters = ignoreSkillRequirements ? undefined : ranks;
-        const activitySkills = getActivitySkills(activity, skillRankFilters, this.overrideSkills);
+        const activitySkills = getActivitySkills(this.overrideSkills ?? activities[activity].skills, skillRankFilters);
         const practicalMagic: Skill[] = activitySkills.includes('engineering') && hasFeat(this.kingdom, 'Practical Magic') ? ['magic'] : [];
         return Array.from(new Set([...activitySkills, ...companionUnlockSkills, ...practicalMagic]));
     }
@@ -141,7 +142,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, this.kingdom);
         const activeSettlement = getSettlement(this.game, this.kingdom, this.kingdom.activeSettlement);
         const skillRanks = this.kingdom.skillRanks;
-        const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(skillRanks);
+        const activities = getKingdomActivitiesById(this.kingdom.homebrewActivities);
+        const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(skillRanks, activities);
         const additionalModifiers: Modifier[] = createActiveSettlementModifiers(
             this.kingdom,
             activeSettlement?.settlement,
@@ -167,6 +169,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 phase: this.phase,
                 skill,
                 overrides: this.modifierOverrides,
+                activities,
             });
             const total = calculateModifiers(modifiers);
             return [skill, {total, modifiers}];
@@ -213,7 +216,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const target = event.currentTarget as HTMLButtonElement;
             const dc = parseInt(target.dataset.dc ?? '0', 10);
             const modifier = parseInt(target.dataset.modifier ?? '0', 10);
-            const activity = target.dataset.activity as Activity | undefined;
+            const activity = target.dataset.activity;
             const label = target.dataset.type!;
             const skill = target.dataset.skill as Skill;
 
@@ -221,7 +224,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const degree = await rollCheck({
                 formula,
                 label,
-                activity,
+                activity: activity ? getKingdomActivitiesById(this.kingdom.homebrewActivities)[activity] : undefined,
                 dc,
                 skill,
                 modifier,
@@ -236,7 +239,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const target = event.currentTarget as HTMLButtonElement;
             const dc = parseInt(target.dataset.dc ?? '0', 10);
             const modifier = parseInt(target.dataset.modifier ?? '0', 10);
-            const activity = target.dataset.activity as Activity | undefined;
+            const activity = target.dataset.activity;
             const label = target.dataset.type!;
             const skill = target.dataset.skill as Skill;
 
@@ -244,7 +247,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const degree = await rollCheck({
                 formula,
                 label,
-                activity,
+                activity: activity ? getKingdomActivitiesById(this.kingdom.homebrewActivities)[activity] : undefined,
                 dc,
                 skill,
                 modifier,

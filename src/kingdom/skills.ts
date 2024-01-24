@@ -2,7 +2,7 @@ import {Leaders, Ruin, SkillRanks} from './data/kingdom';
 import {capitalize} from '../utils';
 import {Ability, AbilityScores} from './data/abilities';
 import {allSkills, Skill, skillAbilities} from './data/skills';
-import {Activity, KingdomPhase} from './data/activities';
+import {KingdomPhase} from './data/activities';
 import {
     calculateModifiers,
     createAbilityModifier,
@@ -18,6 +18,7 @@ import {
     UntrainedProficiencyMode,
 } from './modifiers';
 import {SkillItemBonus, SkillItemBonuses} from './data/structures';
+import {KingdomActivityById} from './data/activityData';
 
 
 interface SkillStats {
@@ -45,6 +46,7 @@ export function createSkillModifiers(
         phase,
         additionalModifiers = [],
         overrides = {},
+        activities,
     }: {
         skill: Skill,
         ability: Ability,
@@ -56,10 +58,11 @@ export function createSkillModifiers(
         leaders: Leaders,
         untrainedProficiencyMode: UntrainedProficiencyMode,
         skillItemBonus?: SkillItemBonus,
-        activity?: Activity,
+        activity?: string,
         phase?: KingdomPhase,
         additionalModifiers?: Modifier[],
         overrides?: Record<string, boolean>;
+        activities: KingdomActivityById;
     },
 ): Modifier[] {
     const abilityModifier = createAbilityModifier(ability, abilityScores);
@@ -68,7 +71,7 @@ export function createSkillModifiers(
     // status bonus
     const investedModifier = createInvestedModifier(kingdomLevel, ability, leaders);
     // item bonus
-    const structureModifiers = skillItemBonus ? createStructureModifiers(skillItemBonus) : [];
+    const structureModifiers = skillItemBonus ? createStructureModifiers(skillItemBonus, activities) : [];
     // status penalty
     const unrestModifier = createUnrestModifier(unrest);
     // item penalty
@@ -96,6 +99,7 @@ export function createSkillModifiers(
         phase,
         activity,
         overrides,
+        activities,
     });
 }
 
@@ -110,6 +114,7 @@ export function calculateSkills(
         untrainedProficiencyMode,
         skillItemBonuses,
         additionalModifiers,
+        activities,
     }: {
         ruin: Ruin,
         unrest: number,
@@ -120,6 +125,7 @@ export function calculateSkills(
         untrainedProficiencyMode: UntrainedProficiencyMode,
         skillItemBonuses?: SkillItemBonuses,
         additionalModifiers?: Modifier[],
+        activities: KingdomActivityById,
     },
 ): SkillStats[] {
     return allSkills.map(skill => {
@@ -136,6 +142,7 @@ export function calculateSkills(
             skillItemBonus: skillItemBonuses?.[skill],
             skill,
             additionalModifiers,
+            activities,
         });
         const total = calculateModifiers(modifiers);
         return {

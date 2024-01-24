@@ -1,22 +1,21 @@
-import {Activity} from '../data/activities';
 import {unslugify} from '../../utils';
 
-function tpl(blacklistedActivities: Activity[], activities: Activity[]): string {
+function tpl(blacklistedActivities: string[], activities: string[]): string {
     const blacklisted = new Set(blacklistedActivities);
     return activities
         .sort((a, b) => unslugify(a).localeCompare(unslugify(b)))
         .map(activity => {
-        return `<div>
+            return `<div>
             <label for="activity-${activity}">${unslugify(activity)}</label>
             <input id="activity-${activity}" name="${activity}" type="checkbox" ${blacklisted.has(activity) ? 'checked' : ''}>
         </div>`;
-    }).join('\n');
+        }).join('\n');
 }
 
 export function activityBlacklistDialog(
-    blacklistedActivities: Activity[],
-    activities: Activity[],
-    onOk: (blacklistedActivities: Activity[]) => void,
+    blacklistedActivities: string[],
+    activities: string[],
+    onOk: (blacklistedActivities: string[]) => void,
 ): void {
     new Dialog({
         title: 'Activity Blacklist',
@@ -34,7 +33,7 @@ export function activityBlacklistDialog(
                     const checkboxes = Array.from($html.querySelectorAll('input'));
                     const blacklisted = checkboxes
                         .filter(checkbox => checkbox.checked)
-                        .map(checkbox => checkbox.name) as Activity[];
+                        .map(checkbox => checkbox.name);
                     onOk(blacklisted);
                 },
             },

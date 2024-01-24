@@ -1,15 +1,14 @@
-import {Activity} from './data/activities';
 import {DegreeOfSuccess, degreeToProperty, determineDegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {Skill} from './data/skills';
 import {postDegreeOfSuccessMessage, unslugify} from '../utils';
-import {activityData, ActivityResults} from './data/activityData';
+import {ActivityResults, getKingdomActivitiesById, KingdomActivity} from './data/activityData';
 import {Modifier, modifierToLabel} from './modifiers';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame} from './kingdom-utils';
 
 export interface RollMeta {
     formula: string;
-    activity: Activity | undefined;
+    activity: string | undefined;
     degree: StringDegreeOfSuccess;
     skill: Skill;
     dc: number;
@@ -22,7 +21,7 @@ export function parseMeta(el: HTMLElement): RollMeta {
     return {
         total: parseInt(meta.dataset.total ?? '0', 10),
         dc: parseInt(meta.dataset.dc ?? '0', 10),
-        activity: (meta.dataset.activity ?? undefined) as Activity | undefined,
+        activity: (meta.dataset.activity ?? undefined),
         skill: meta.dataset.skill as Skill,
         degree: meta.dataset.degree as StringDegreeOfSuccess,
         formula: meta.dataset.formula as string,
@@ -31,14 +30,14 @@ export function parseMeta(el: HTMLElement): RollMeta {
 }
 
 export interface ActivityResultMeta {
-    activity: Activity;
+    activity: string;
     degree: StringDegreeOfSuccess;
 }
 
 export function parseUpgradeMeta(el: HTMLElement): ActivityResultMeta {
     const meta = el.querySelector('.km-upgrade-result') as HTMLElement;
     return {
-        activity: meta.dataset.activity as Activity,
+        activity: meta.dataset.activity!,
         degree: meta.dataset.degree as StringDegreeOfSuccess,
     };
 }
@@ -48,9 +47,9 @@ export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-r
     const {total, formula, activity, skill, dc, modifier} = parseMeta(el);
     const label = activity ? unslugify(activity) : unslugify(skill);
     let reRollFormula = formula;
+    const kingdom = getKingdom(actor);
     if (type === 'fame') {
         // deduct points from sheet
-        const kingdom = getKingdom(actor);
         await saveKingdom(actor, gainFame(kingdom, -1));
     } else if (type === 'keep-higher') {
         reRollFormula = `{${formula},${total}}kh`;
@@ -60,7 +59,7 @@ export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-r
     await rollCheck({
         formula: reRollFormula,
         label,
-        activity,
+        activity: activity ? getKingdomActivitiesById(kingdom.homebrewActivities)[activity] : undefined,
         dc,
         skill,
         modifier,
@@ -94,8 +93,10 @@ function downgradeDegree(degree: StringDegreeOfSuccess): StringDegreeOfSuccess {
 
 export async function changeDegree(actor: Actor, el: HTMLElement, type: 'upgrade' | 'downgrade'): Promise<void> {
     const {activity, degree} = parseUpgradeMeta(el);
+    const kingdom = getKingdom(actor);
+    const kingdomActivity = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
     const newDegree = type === 'upgrade' ? upgradeDegree(degree) : downgradeDegree(degree);
-    await postComplexDegreeOfSuccess(actor, getDegreeFromKey(newDegree), activity);
+    await postComplexDegreeOfSuccess(actor, getDegreeFromKey(newDegree), kingdomActivity);
 }
 
 export async function rollCheck(
@@ -110,7 +111,7 @@ export async function rollCheck(
     }: {
         formula: string,
         label: string,
-        activity: Activity | undefined,
+        activity: KingdomActivity | undefined,
         dc: number,
         skill: Skill,
         modifier: number,
@@ -136,7 +137,7 @@ export async function rollCheck(
     return degreeOfSuccess;
 }
 
-async function postDegreeOfSuccess(actor: Actor, activity: Activity | undefined, degreeOfSuccess: DegreeOfSuccess): Promise<void> {
+async function postDegreeOfSuccess(actor: Actor, activity: KingdomActivity | undefined, degreeOfSuccess: DegreeOfSuccess): Promise<void> {
     if (activity) {
         await postComplexDegreeOfSuccess(actor, degreeOfSuccess, activity);
     } else {
@@ -177,7 +178,7 @@ function getDegreeFromKey(degreeOfSuccess: keyof ActivityResults): DegreeOfSucce
     }
 }
 
-function buildChatButtons(modifiers: Modifier[], resultKey: keyof ActivityResults, activity?: Activity): string {
+function buildChatButtons(modifiers: Modifier[], resultKey: keyof ActivityResults, activity?: string): string {
     if (modifiers.length > 0 || resultKey === 'criticalSuccess') {
         return `
         <div class="km-chat-buttons">
@@ -195,16 +196,16 @@ function buildChatButtons(modifiers: Modifier[], resultKey: keyof ActivityResult
     }
 }
 
-async function postComplexDegreeOfSuccess(actor: Actor, degreeOfSuccess: DegreeOfSuccess, activity: Activity): Promise<void> {
+async function postComplexDegreeOfSuccess(actor: Actor, degreeOfSuccess: DegreeOfSuccess, activity: KingdomActivity): Promise<void> {
     const resultKey = getResultKey(degreeOfSuccess);
-    const results = activityData[activity][resultKey];
+    const results = activity[resultKey];
     if (results) {
         const kingdom = getKingdom(actor);
         const modifiers = results.modifiers;
         const message = results.msg;
         const buttons = modifiers === undefined
             ? buildChatButtons([], resultKey)
-            : buildChatButtons(modifiers(kingdom), resultKey, activity);
+            : buildChatButtons(modifiers(kingdom), resultKey, activity.id);
         // div allows to upgrade/downgrade on right click
         const upgrade = `<div class="km-upgrade-result" data-activity="${activity}" data-degree="${resultKey}" hidden></div>`;
         const msg = message + buttons + upgrade;

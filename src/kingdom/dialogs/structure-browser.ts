@@ -1,5 +1,4 @@
 import {Structure} from '../data/structures';
-import {Activity} from '../data/activities';
 import {capitalize, createUUIDLink, escapeHtml, isBlank, isNonNullable, listenClick, unslugify} from '../../utils';
 import {rankToLabel} from '../modifiers';
 import {Kingdom} from '../data/kingdom';
@@ -48,7 +47,7 @@ interface StructureBrowserData {
     upgradeTo: boolean;
     ignoreProficiencyRequirements: boolean;
     structures: StructureData[];
-    activities: Partial<Record<Activity, ActivityFilter>>;
+    activities: Partial<Record<string, ActivityFilter>>;
     level: number;
     lots: number;
     noStructures: boolean;
@@ -266,7 +265,7 @@ class StructureBrowserApp extends FormApplication<
                     .filter(d => d.startsWith('activity-'))
                     .map(d => d.replace('activity-', ''))
                     .map(activity => {
-                        return [activity as Activity, {
+                        return [activity, {
                             name: unslugify(activity),
                             enabled: formData['activity-' + activity],
                         }];
@@ -366,24 +365,24 @@ class StructureBrowserApp extends FormApplication<
     }
 }
 
-function getStructureActivities(structure: Structure): Set<Activity> {
+function getStructureActivities(structure: Structure): Set<string> {
     const activityBonuses = structure.activityBonusRules?.map(r => r.activity) ?? [];
     const skillBonuses = (structure.skillBonusRules
         ?.filter(r => r.activity !== undefined)
-        ?.map(r => r.activity) ?? []) as Activity[];
+        ?.map(r => r.activity) ?? []) as string[];
     return new Set([...activityBonuses, ...skillBonuses]);
 }
 
-function hasActivities(structure: Structure, activities: Partial<Record<Activity, ActivityFilter>>): boolean {
+function hasActivities(structure: Structure, activities: Partial<Record<string, ActivityFilter>>): boolean {
     const allActivityBonuses = getStructureActivities(structure);
     const enabledActivities = Array.from(Object.entries(activities))
-        .filter(([, filter]) => filter.enabled)
-        .map(([activity]) => activity) as Activity[];
+        .filter(([, filter]) => filter?.enabled)
+        .map(([activity]) => activity) as string[];
     return enabledActivities.length === 0 || enabledActivities.every(a => allActivityBonuses.has(a));
 }
 
 
-function getAllStructureActivities(structures: Structure[]): Activity[] {
+function getAllStructureActivities(structures: Structure[]): string[] {
     return Array.from(new Set(structures.flatMap(structure => Array.from(getStructureActivities(structure)))))
         .sort((a, b) => a.localeCompare(b));
 }

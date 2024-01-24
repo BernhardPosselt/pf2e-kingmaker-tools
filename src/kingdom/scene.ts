@@ -2,10 +2,10 @@ import {evaluateStructures, includeCapital, StructureResult, StructureStackRule}
 import {ruleSchema} from './schema';
 import {CommodityStorage, Structure, structuresByName} from './data/structures';
 import {Kingdom, Settlement} from './data/kingdom';
-import {Activity} from './data/activities';
 import {getBooleanSetting} from '../settings';
 import {isNonNullable} from '../utils';
 import {allSkills} from './data/skills';
+import {getKingdomActivitiesById, KingdomActivityById} from './data/activityData';
 
 class StructureError extends Error {
 }
@@ -253,18 +253,31 @@ export function getAllSettlements(game: Game, kingdom: Kingdom): SettlementAndSc
         ?.filter(scene => scene !== undefined) as SettlementAndScene[] ?? [];
 }
 
-function getSettlementStructureResult(settlement: SettlementAndScene, mode: StructureStackRule, autoCalculateSettlementLevel: boolean): StructureResult {
+function getSettlementStructureResult(
+    settlement: SettlementAndScene,
+    mode: StructureStackRule,
+    autoCalculateSettlementLevel: boolean,
+    activities: KingdomActivityById,
+): StructureResult {
     const structures = getSceneStructures(settlement.scene);
     const level = getSettlementInfo(settlement, autoCalculateSettlementLevel).level;
-    return evaluateStructures(structures, level, mode);
+    return evaluateStructures(structures, level, mode, activities);
 }
 
 
-export function getStructureResult(mode: StructureStackRule, autoCalculateSettlementLevel: boolean, active: SettlementAndScene, capital?: SettlementAndScene): StructureResult {
+export function getStructureResult(
+    mode: StructureStackRule,
+    autoCalculateSettlementLevel: boolean,
+    activities: KingdomActivityById,
+    active: SettlementAndScene,
+    capital?: SettlementAndScene,
+): StructureResult {
     if (capital && capital.scene.id !== active.scene.id) {
-        return includeCapital(getSettlementStructureResult(capital, mode, autoCalculateSettlementLevel), getSettlementStructureResult(active, mode, autoCalculateSettlementLevel));
+        return includeCapital(
+            getSettlementStructureResult(capital, mode, autoCalculateSettlementLevel, activities),
+            getSettlementStructureResult(active, mode, autoCalculateSettlementLevel, activities));
     } else {
-        return getSettlementStructureResult(active, mode, autoCalculateSettlementLevel);
+        return getSettlementStructureResult(active, mode, autoCalculateSettlementLevel, activities);
     }
 }
 
@@ -272,7 +285,7 @@ interface MergedSettlements {
     leadershipActivityNumber: number;
     settlementConsumption: number;
     storage: CommodityStorage;
-    unlockedActivities: Set<Activity>;
+    unlockedActivities: Set<string>;
 }
 
 export function getStructureStackMode(game: Game): StructureStackRule {
@@ -281,10 +294,11 @@ export function getStructureStackMode(game: Game): StructureStackRule {
 
 export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSettlements {
     const mode = getStructureStackMode(game);
+    const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
     const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
     return getAllSettlements(game, kingdom)
         .map(settlement => {
-            const structureResult = getSettlementStructureResult(settlement, mode, autoCalculateSettlementLevel);
+            const structureResult = getSettlementStructureResult(settlement, mode, autoCalculateSettlementLevel, activities);
             return {
                 leadershipActivityNumber: structureResult.increaseLeadershipActivities ? 3 : 2,
                 settlementConsumption: structureResult.consumption,
@@ -303,13 +317,13 @@ export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSet
                     lumber: prev.storage.lumber + curr.storage.lumber,
                     food: prev.storage.food + curr.storage.food,
                 },
-                unlockedActivities: new Set<Activity>([...prev.unlockedActivities, ...curr.unlockedActivities]),
+                unlockedActivities: new Set<string>([...prev.unlockedActivities, ...curr.unlockedActivities]),
             };
         }, {
             leadershipActivityNumber: 2,
             settlementConsumption: 0,
             storage: {ore: 0, stone: 0, luxuries: 0, lumber: 0, food: 0},
-            unlockedActivities: new Set<Activity>(),
+            unlockedActivities: new Set<string>(),
         });
 }
 
@@ -321,11 +335,12 @@ export interface ActiveSettlementStructureResult {
 export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom): ActiveSettlementStructureResult | undefined {
     const activeSettlement = getSettlement(game, kingdom, kingdom.activeSettlement);
     const capitalSettlement = getCapitalSettlement(game, kingdom);
+    const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
     const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
     if (activeSettlement) {
         const mode = getStructureStackMode(game);
-        const activeSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activeSettlement);
-        const mergedSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activeSettlement, capitalSettlement);
+        const activeSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, activeSettlement);
+        const mergedSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, activeSettlement, capitalSettlement);
         return {
             active: activeSettlementStructures,
             merged: mergedSettlementStructures,
@@ -336,9 +351,10 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
 export function getSettlementsWithoutLandBorders(game: Game, kingdom: Kingdom): number {
     const mode = getStructureStackMode(game);
     const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
+    const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
     return getAllSettlements(game, kingdom)
         .filter(settlementAndScene => {
-            const structures = getStructureResult(mode, autoCalculateSettlementLevel, settlementAndScene);
+            const structures = getStructureResult(mode, autoCalculateSettlementLevel, activities, settlementAndScene);
             return (settlementAndScene.settlement?.waterBorders ?? 0) >= 4 && !structures.hasBridge;
         })
         .length;
