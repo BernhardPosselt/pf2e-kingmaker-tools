@@ -156,7 +156,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const activities = getKingdomActivitiesById(kingdomData.homebrewActivities);
         const enabledActivities = getPerformableActivities(
             kingdomData.skillRanks,
-            activeSettlementStructureResult?.active?.allowCapitalInvestment === true,
+            activeSettlementStructureResult?.active?.allowCapitalInvestment === true
+            || (activeSettlement?.settlement.type === 'capital' && getBooleanSetting(this.game, 'capitalInvestmentInCapital')),
             ignoreSkillRequirements,
             activities,
         );

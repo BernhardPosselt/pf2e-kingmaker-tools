@@ -89,6 +89,14 @@
 
     <div>
         <div class="form-elements">
+            <label for="km-double-capital-bank">Enable Capital Investment in Capital without Bank</label>
+            <input name="capitalInvestmentInCapital" type="checkbox"
+                   id="km-double-capital-bank" {{checked capitalInvestmentInCapital}}>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
             <label for="km-untrained-skill-proficiency">Always Increase Untrained Skills By</label>
             <select name="untrainedSkillProficiency" id="km-untrained-skill-proficiency">
                 {{#select untrainedSkillProficiency}}

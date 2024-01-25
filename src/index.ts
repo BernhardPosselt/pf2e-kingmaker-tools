@@ -279,6 +279,14 @@ Hooks.on('ready', async () => {
             requiresReload: true,
             type: Boolean,
         } as any);
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'capitalInvestmentInCapital', {
+            name: 'Enable Capital Investment without Bank in Capital',
+            scope: 'world',
+            config: false,
+            default: false,
+            requiresReload: true,
+            type: Boolean,
+        } as any);
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomAlwaysAddHalfLevel', {
             name: 'Always add half Level to Skill',
             hint: 'If enabled, always adds half of the kingdom\'s level to a skill, even if it is untrained',
