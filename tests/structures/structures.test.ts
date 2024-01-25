@@ -1,9 +1,12 @@
 import {evaluateStructures, groupAvailableItems} from '../../src/kingdom/structures';
 import {ItemLevelBonuses} from '../../src/kingdom/data/structures';
+import {getKingdomActivitiesById} from '../../src/kingdom/data/activityData';
 
 describe('structures', () => {
+    const activities = getKingdomActivitiesById([]);
+
     test('evaluate no buildings', () => {
-        const result = evaluateStructures([], 3, 'same-structures-stack');
+        const result = evaluateStructures([], 3, 'same-structures-stack', activities);
         expect(result.notes.length).toBe(0);
         expect(result.allowCapitalInvestment).toBe(false);
     });
@@ -30,7 +33,7 @@ describe('structures', () => {
                 skill: 'defense',
                 activity: 'provide-care',
             }],
-        }], 10, 'same-structures-stack');
+        }], 10, 'same-structures-stack', activities);
         expect(result.skillBonuses.defense.value).toBe(0);
         expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(2);
     });
@@ -57,7 +60,7 @@ describe('structures', () => {
                 skill: 'defense',
                 activity: 'provide-care',
             }],
-        }], 10, 'all-structures-stack');
+        }], 10, 'all-structures-stack', activities);
         expect(result.skillBonuses.defense.value).toBe(0);
         expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(3);
     });
@@ -83,7 +86,7 @@ describe('structures', () => {
                 value: 1,
                 skill: 'defense',
             }],
-        }], 10, 'all-structures-stack');
+        }], 10, 'all-structures-stack', activities);
         expect(result.skillBonuses.defense.value).toBe(1);
         expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(3);
     });
@@ -102,7 +105,7 @@ describe('structures', () => {
                 value: 2,
                 skill: 'defense',
             }],
-        }], 10, 'same-structures-stack');
+        }], 10, 'same-structures-stack', activities);
         expect(result.skillBonuses.defense.value).toBe(2);
         expect(Object.keys(result.skillBonuses.defense?.activities)).toStrictEqual([]);
         expect(result.skillBonuses.defense?.activities?.['provide-care']).toBe(undefined);
@@ -115,7 +118,7 @@ describe('structures', () => {
                 value: 2,
                 skill: 'defense',
             }],
-        }], 1, 'same-structures-stack');
+        }], 1, 'same-structures-stack', activities);
         expect(result.skillBonuses.defense.value).toBe(1);
     });
 
@@ -126,7 +129,7 @@ describe('structures', () => {
                 value: 1,
             }],
             preventItemLevelPenalty: true,
-        }], 15, 'same-structures-stack');
+        }], 15, 'same-structures-stack', activities);
         expect(result.itemLevelBonuses).toEqual({
             divine: 1,
             alchemical: 1,
@@ -149,7 +152,7 @@ describe('structures', () => {
             availableItemsRules: [{
                 value: 1,
             }],
-        }], 15, 'same-structures-stack');
+        }], 15, 'same-structures-stack', activities);
         expect(result.itemLevelBonuses).toEqual({
             divine: -1,
             alchemical: -1,
@@ -182,7 +185,7 @@ describe('structures', () => {
                 value: 1,
                 group: 'divine',
             }],
-        }], 15, 'same-structures-stack');
+        }], 15, 'same-structures-stack', activities);
         expect(result.itemLevelBonuses).toEqual({
             divine: 1,
             alchemical: 0,
@@ -213,7 +216,7 @@ describe('structures', () => {
             availableItemsRules: [{
                 value: 1,
             }],
-        }], 15, 'same-structures-stack');
+        }], 15, 'same-structures-stack', activities);
         expect(result.itemLevelBonuses).toEqual({
             divine: 2,
             alchemical: 2,
@@ -270,7 +273,7 @@ describe('structures', () => {
                 value: 1,
                 group: 'magical',
             }],
-        }], 15, 'same-structures-stack');
+        }], 15, 'same-structures-stack', activities);
         expect(result.itemLevelBonuses).toEqual({
             divine: 6,
             alchemical: 0,
@@ -339,7 +342,7 @@ describe('structures', () => {
                 value: 1,
                 group: 'luxury',
             }],
-        }], 15, 'same-structures-stack');
+        }], 15, 'same-structures-stack', activities);
         expect(result.itemLevelBonuses).toEqual({
             divine: 6,
             alchemical: 3,
@@ -381,7 +384,7 @@ describe('structures', () => {
                 group: 'divine',
                 maximumStacks: 2,
             }],
-        }], 15, 'same-structures-stack');
+        }], 15, 'same-structures-stack', activities);
         expect(result.itemLevelBonuses).toEqual({
             divine: 4,
             alchemical: 0,
@@ -430,7 +433,7 @@ describe('structures', () => {
                 group: 'divine',
                 maximumStacks: 2,
             }],
-        }], 15, 'same-structures-stack');
+        }], 15, 'same-structures-stack', activities);
         expect(result.itemLevelBonuses).toEqual({
             divine: 2,
             alchemical: 0,

@@ -1,4 +1,5 @@
 import {ModifierWithId, removeLowestModifiers, removePredicatedModifiers} from '../../src/kingdom/modifiers';
+import {getKingdomActivitiesById} from '../../src/kingdom/data/activityData';
 
 describe('predicate modifiers', () => {
     test('only keep very specific one', () => {
@@ -53,7 +54,8 @@ describe('predicate modifiers', () => {
             phases: ['leadership'],
             activities: ['spread-the-legend'],
         }];
-        const result = removePredicatedModifiers(modifiers, 'leadership', 'create-a-masterpiece', 'arts', 1);
+        const activities = getKingdomActivitiesById([]);
+        const result = removePredicatedModifiers(modifiers, 'leadership', 'create-a-masterpiece', 'arts', 1, activities);
         expect(result.length).toBe(1);
         expect(result[0].name).toBe('match');
     });
@@ -70,7 +72,8 @@ describe('predicate modifiers', () => {
             phases: ['leadership'],
             activities: ['create-a-masterpiece'],
         }];
-        const result = removePredicatedModifiers(modifiers, 'event', 'create-a-masterpiece', 'arts', 0);
+        const activities = getKingdomActivitiesById([]);
+        const result = removePredicatedModifiers(modifiers, 'event', 'create-a-masterpiece', 'arts', 0, activities);
         expect(result.length).toBe(0);
     });
 
@@ -83,7 +86,8 @@ describe('predicate modifiers', () => {
             type: 'ability',
             activities: ['new-leadership'],
         }];
-        const result = removePredicatedModifiers(modifiers, 'upkeep', 'new-leadership', 'intrigue', 0);
+        const activities = getKingdomActivitiesById([]);
+        const result = removePredicatedModifiers(modifiers, 'upkeep', 'new-leadership', 'intrigue', 0, activities);
         expect(result.length).toBe(1);
     });
 });
