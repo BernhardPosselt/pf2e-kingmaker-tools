@@ -33,6 +33,8 @@ import {migrate} from './migrations';
 import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} from './armies/hooks';
 import {updateKingdomArmyConsumption} from './armies/utils';
 import {openJournal} from './foundry-utils';
+import {structureTokenMappingDialog} from './kingdom/dialogs/structure-token-mapping-dialog';
+
 
 Hooks.on('ready', async () => {
     if (game instanceof Game) {
@@ -42,6 +44,7 @@ Hooks.on('ready', async () => {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
                 toggleShelteredMacro: toggleSheltered.bind(null, game),
                 setCurrentWeatherMacro: setCurrentWeatherDialog.bind(null, game),
+                structureTokenMappingMacro: structureTokenMappingDialog.bind(null, game),
                 sceneWeatherSettingsMacro: (): void => {
                     const scene = gameInstance?.scenes?.current;
                     if (scene) {
@@ -460,6 +463,13 @@ Hooks.on('init', async () => {
         'modules/pf2e-kingmaker-tools/templates/kingdom/settlement.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/effects.hbs',
     ]);
+    // load custom token mappings if kingmaker module isn't installed
+    if (game instanceof Game) {
+        if (!game.modules.get('pf2e-kingmaker')?.active) {
+            game.modules.get('pf2e-kingmaker-tools')
+                ?.updateSource({flags: {'pf2e-kingmaker-tools': {'pf2e-art': 'modules/pf2e-kingmaker-tools/token-map.json'}}});
+        }
+    }
 });
 
 Hooks.on('renderChatLog', () => {

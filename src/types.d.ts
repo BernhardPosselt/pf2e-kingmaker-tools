@@ -15,6 +15,7 @@ declare global {
                 toggleWeatherMacro: () => void,
                 toggleShelteredMacro: () => void,
                 setCurrentWeatherMacro: () => void,
+                structureTokenMappingMacro: () => void,
                 sceneWeatherSettingsMacro: () => void,
                 toTimeOfDayMacro: () => void,
                 kingdomEventsMacro: () => void,
@@ -174,6 +175,9 @@ declare global {
         width: number;
         x: number;
         y: number;
+        texture: {
+            src: string;
+        };
     }
 
     interface TileDocument {
@@ -185,5 +189,13 @@ declare global {
 
     interface Scene {
         weather: WeatherEffectName;
+    }
+
+    namespace Game {
+        class ModuleData {
+            active: boolean;
+
+            async updateSource(data: object): Promise<void>;
+        }
     }
 }

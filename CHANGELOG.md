@@ -5,9 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.24.0] - 2024-01-25
+
+### Changed
+
+* Obsolete the token mappings module and integrate functionality into the core module
+* Configure token mappings if kingmaker module is not activated or installed by default
+* Use the Bridge.webp image for Bridge, Stone structure as well
+
 ### Added
 
 * Added support for homebrew kingdom activities
+* Include macro to change token images of all imported structures
 
 ## [0.23.4] - 2024-01-23
 

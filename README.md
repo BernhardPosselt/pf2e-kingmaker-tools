@@ -55,15 +55,13 @@ You can look up my tips and house rules [here](./docs/house-rules.md)
 
 If you've enabled the official module, the following things are automatically taken care of:
 
-* Token Mappings for all companions and structures except for a few exceptions (see Tokens)
+* Token Mappings for all companions and structures except for a few exceptions (see Manual journal)
 * Weather Sound Effects for rain, rainstorms, blizzard and snow
 * Default and Region combat tracks
 * Rolltable integration for:
     * Kingdom Events
     * Random Encounters
     * Cult Events
-
-If you are not running the official module, check out the [Kingmaker Tools Token Mapping](https://github.com/BernhardPosselt/pf2e-kingmaker-tools-token-mapping) module
 
 ### Screenshots
 
