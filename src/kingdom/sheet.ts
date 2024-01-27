@@ -71,13 +71,15 @@ import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
 import {getKingdomActivitiesById} from './data/activityData';
 import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
+import {kingdomSizeDialog} from './dialogs/kingdom-size-dialog';
+import {settlementSizeDialog} from './dialogs/settlement-size-dialog';
 
 interface KingdomOptions {
     game: Game;
     sheetActor: Actor;
 }
 
-type KingdomTab = 'status' | 'skills' | 'turn' | 'feats' | 'groups' | 'features' | 'settlements' | 'effects';
+type KingdomTab = 'status' | 'skills' | 'turn' | 'feats' | 'groups' | 'notes' | 'settlements' | 'effects';
 
 const levels = [...Array.from(Array(20).keys()).map(k => k + 1)];
 
@@ -166,6 +168,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const canAddSettlement = kingdomData.settlements.find(settlement => settlement.sceneId === currentSceneId) === undefined;
         const structureStackMode = getStructureStackMode(this.game);
         return {
+            notes: {
+                gm: await TextEditor.enrichHTML(kingdomData.notes.gm),
+                public: await TextEditor.enrichHTML(kingdomData.notes.public),
+            },
             hideActivities,
             isGM,
             isUser: !isGM,
@@ -315,7 +321,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             turnTab: this.nav === 'turn',
             groupsTab: this.nav === 'groups',
             featsTab: this.nav === 'feats',
-            featuresTab: this.nav === 'features',
+            notesTab: this.nav === 'notes',
             settlementsTab: this.nav === 'settlements',
             effectsTab: this.nav === 'effects',
         };
@@ -381,6 +387,18 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         });
         $html.querySelectorAll('.km-reduce-ruin')
             .forEach(el => el.addEventListener('click', async (ev) => await this.reduceRuin(ev)));
+        $html.querySelector('#km-kingdom-size-help')
+            ?.addEventListener('click', async (ev) => {
+                ev.stopPropagation();
+                ev.preventDefault();
+                kingdomSizeDialog();
+            });
+        $html.querySelector('#km-settlement-size-help')
+            ?.addEventListener('click', async (ev) => {
+                ev.stopPropagation();
+                ev.preventDefault();
+                settlementSizeDialog();
+            });
         $html.querySelector('#km-gain-fame')
             ?.addEventListener('click', async () => await this.upkeepGainFame());
         $html.querySelector('#km-adjust-unrest')

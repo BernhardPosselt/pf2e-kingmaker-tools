@@ -4,7 +4,7 @@
             <table class="km-table">
                 <tr>
                     <th>Name</th>
-                    <th>Size</th>
+                    <th>Size <a href="#" id="km-kingdom-size-help"><i class="fa-solid fa-question"></i></a></th>
                     <th>Type</th>
                     <th>XP</th>
                     <th>Level</th>
@@ -59,9 +59,9 @@
             <a data-tab="turn" class="{{#if turnTab}}active{{/if}}">Turn</a>
             <a data-tab="groups" class="{{#if groupsTab}}active{{/if}}">Trade Agreements ({{tradeAgreementsSize}})</a>
             <a data-tab="feats" class="{{#if featsTab}}active{{/if}}">Feats</a>
-            <a data-tab="features" class="{{#if featuresTab}}active{{/if}}">Features</a>
             <a data-tab="settlements" class="{{#if settlementsTab}}active{{/if}}">Settlements</a>
             <a data-tab="effects" class="{{#if effectsTab}}active{{/if}}">Effects</a>
+            <a data-tab="notes" class="{{#if notesTab}}active{{/if}}">Notes</a>
         </nav>
         <div class="km-sidebar">
             {{> modules/pf2e-kingmaker-tools/templates/kingdom/sidebar.hbs}}
@@ -83,8 +83,8 @@
             <div {{#unless featsTab}}hidden{{/unless}}>
                 {{> modules/pf2e-kingmaker-tools/templates/kingdom/feats.hbs}}
             </div>
-            <div {{#unless featuresTab}}hidden{{/unless}}>
-                {{> modules/pf2e-kingmaker-tools/templates/kingdom/features.hbs}}
+            <div {{#unless notesTab}}hidden{{/unless}}>
+                {{> modules/pf2e-kingmaker-tools/templates/kingdom/notes.hbs}}
             </div>
             <div {{#unless settlementsTab}}hidden{{/unless}}>
                 {{> modules/pf2e-kingmaker-tools/templates/kingdom/settlements.hbs}}

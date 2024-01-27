@@ -231,64 +231,69 @@ function calculateConsumptionReduction(structures: Structure[]): number {
         .reduce((a, b) => a + b, 0);
 }
 
-export interface SettlementConfig {
+export interface SettlementTypeData {
     type: 'Village' | 'Town' | 'City' | 'Metropolis';
     maximumLots: string;
     requiredKingdomLevel: number;
     population: string;
-    level: number;
     consumption: number;
     maxItemBonus: number;
     influence: number;
+    levelFrom: number;
+    levelTo?: number;
 }
 
+export interface SettlementConfig extends SettlementTypeData {
+    level: number;
+}
+
+export const settlementTypeData: SettlementTypeData[] = [{
+    type: 'Village',
+    consumption: 1,
+    influence: 0,
+    maximumLots: '1',
+    requiredKingdomLevel: 1,
+    levelFrom: 1,
+    levelTo: 1,
+    maxItemBonus: 1,
+    population: '400 or less',
+}, {
+    type: 'Town',
+    consumption: 2,
+    influence: 1,
+    requiredKingdomLevel: 3,
+    maximumLots: '4',
+    levelFrom: 2,
+    levelTo: 4,
+    maxItemBonus: 1,
+    population: '401-2000',
+}, {
+    type: 'City',
+    consumption: 4,
+    influence: 2,
+    requiredKingdomLevel: 9,
+    maximumLots: '9',
+    levelFrom: 5,
+    levelTo: 9,
+    maxItemBonus: 2,
+    population: '2001–25000',
+}, {
+    type: 'Metropolis',
+    consumption: 6,
+    influence: 3,
+    maximumLots: '10+',
+    requiredKingdomLevel: 15,
+    levelFrom: 10,
+    maxItemBonus: 3,
+    population: '25001+',
+}] as const;
+
 export function getSettlementConfig(settlementLevel: number): SettlementConfig {
-    if (settlementLevel < 2) {
-        return {
-            type: 'Village',
-            consumption: 1,
-            influence: 0,
-            maximumLots: '1',
-            requiredKingdomLevel: 1,
-            level: settlementLevel,
-            maxItemBonus: 1,
-            population: '400 or less',
-        };
-    }
-    if (settlementLevel < 5) {
-        return {
-            type: 'Town',
-            consumption: 2,
-            influence: 1,
-            requiredKingdomLevel: 3,
-            maximumLots: '4',
-            level: settlementLevel,
-            maxItemBonus: 1,
-            population: '401-2000',
-        };
-    } else if (settlementLevel < 10) {
-        return {
-            type: 'City',
-            consumption: 4,
-            influence: 2,
-            requiredKingdomLevel: 9,
-            maximumLots: '9',
-            level: settlementLevel,
-            maxItemBonus: 2,
-            population: '2001–25000',
-        };
-    } else {
-        return {
-            type: 'Metropolis',
-            consumption: 6,
-            influence: 3,
-            maximumLots: '10+',
-            requiredKingdomLevel: 15,
-            level: settlementLevel,
-            maxItemBonus: 3,
-            population: '25001+',
-        };
-    }
+    return {
+        ...settlementTypeData.find(d => settlementLevel >= d.levelFrom
+            && settlementLevel <= (d.levelTo ?? Number.MAX_SAFE_INTEGER))!,
+        level: settlementLevel,
+    };
 }
 
 function mergeBonuses(capital: SkillItemBonus, settlement: SkillItemBonus): SkillItemBonus {

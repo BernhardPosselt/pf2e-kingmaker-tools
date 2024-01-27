@@ -1,63 +1,64 @@
-<table class="km-table">
-    <tr>
-        <th>Fame Type</th>
-        <td>
-            <select name="fame.type">
-                {{#select fame.type}}
-                    {{#each fameTypes}}
-                        <option value="{{this}}">{{this}}</option>
-                    {{/each}}
-                {{/select}}
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <th>Charter</th>
-        <td><input name="charter" type="text" value="{{charter}}"></td>
-    </tr>
-    <tr>
-        <th>Heartland</th>
-        <td>
-            <select name="heartland">
-                {{#select heartland}}
-                    {{#each heartlands}}
-                        <option value="{{value}}">{{label}}</option>
-                    {{/each}}
-                {{/select}}
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <th>Government</th>
-        <td><input type="text" value="{{government}}" name="government"></td>
-    </tr>
-</table>
-
-<table class="km-table">
-    <tr>
-        <th>Modifier</th>
-        <th>Ability</th>
-        <th>Score</th>
-        <th>Invested</th>
-        <th>Status Bonus</th>
-    </tr>
-    {{#each abilities}}
+<div class="status-details">
+    <table class="km-table">
         <tr>
-            <td>{{modifier}}</td>
-            <td>{{label}}</td>
-            <td><input type="number" value="{{score}}" name="abilityScores.{{@key}}"></td>
+            <th>Aspiration</th>
             <td>
-                {{#if invested}}
-                    <i class="fa-solid fa-circle-check"></i>
-                {{else}}
-                    <i class="fa-regular fa-circle-xmark"></i>
-                {{/if}}
+                <select name="fame.type">
+                    {{#select fame.type}}
+                        {{#each fameTypes}}
+                            <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
             </td>
-            <td>{{investedBonus}}</td>
         </tr>
-    {{/each}}
-</table>
+        <tr>
+            <th>Charter</th>
+            <td><input name="charter" type="text" value="{{charter}}"></td>
+        </tr>
+        <tr>
+            <th>Heartland</th>
+            <td>
+                <select name="heartland">
+                    {{#select heartland}}
+                        {{#each heartlands}}
+                            <option value="{{value}}">{{label}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Government</th>
+            <td><input type="text" value="{{government}}" name="government"></td>
+        </tr>
+    </table>
 
+    <table class="km-table">
+        <tr>
+            <th>Modifier</th>
+            <th>Ability</th>
+            <th>Score</th>
+            <th>Invested</th>
+            <th>Status Bonus</th>
+        </tr>
+        {{#each abilities}}
+            <tr>
+                <td>{{modifier}}</td>
+                <td>{{label}}</td>
+                <td><input type="number" value="{{score}}" name="abilityScores.{{@key}}"></td>
+                <td>
+                    {{#if invested}}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {{else}}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {{/if}}
+                </td>
+                <td>{{investedBonus}}</td>
+            </tr>
+        {{/each}}
+    </table>
+</div>
 <table class="km-table">
     <tr>
         <th>Role</th>
@@ -97,3 +98,4 @@
         </tr>
     {{/each}}
 </table>
+

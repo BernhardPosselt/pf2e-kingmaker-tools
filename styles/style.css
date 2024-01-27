@@ -458,3 +458,20 @@ td.skill-value {
 .at-war-column {
     width: 52px;
 }
+
+.status-details {
+    display: flex;
+    gap: 1em;
+}
+
+.km-notes .editor {
+    min-height: 200px;
+}
+
+.km-notes .editor-content {
+    min-height: 200px;
+}
+
+#km-kingdom-size-help {
+    color: white;
+}

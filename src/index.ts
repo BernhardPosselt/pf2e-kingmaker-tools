@@ -466,7 +466,7 @@ Hooks.on('init', async () => {
         'modules/pf2e-kingmaker-tools/templates/kingdom/turn.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/groups.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/feats.hbs',
-        'modules/pf2e-kingmaker-tools/templates/kingdom/features.hbs',
+        'modules/pf2e-kingmaker-tools/templates/kingdom/notes.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/settlements.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/settlement.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/effects.hbs',

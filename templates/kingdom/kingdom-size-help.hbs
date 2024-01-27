@@ -1,0 +1,18 @@
+<table class="km-table">
+    <tr>
+        <th>Size</th>
+        <th>Type of Nation</th>
+        <th>Resource Die</th>
+        <th>Control DC Modifier</th>
+        <th>Commodity Storage</th>
+    </tr>
+    {{#each data}}
+        <tr>
+            <td>{{size}}</td>
+            <td>{{type}}</td>
+            <td>{{dice}}</td>
+            <td>{{modifier}}</td>
+            <td>{{storage}}</td>
+        </tr>
+    {{/each}}
+</table>

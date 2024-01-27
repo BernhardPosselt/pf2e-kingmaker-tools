@@ -1,3 +1,4 @@
+<h2>Settlements <a href="#" id="km-settlement-size-help"><i class="fa-solid fa-question"></i></a></h2>
 {{#if settlements}}
     <table class="km-table">
         <tr>
@@ -18,22 +19,16 @@
                 <td>
                     {{#if isCapital}}
                         <i class="fa-solid fa-circle-check"></i>
-                    {{else}}
-                        <i class="fa-regular fa-circle-xmark"></i>
                     {{/if}}
                 </td>
                 <td>
                     {{#if overcrowded}}
-                        <i class="fa-solid fa-circle-check"></i>
-                    {{else}}
-                        <i class="fa-regular fa-circle-xmark"></i>
+                        <i class="fa-solid fa-triangle-exclamation"></i>
                     {{/if}}
                 </td>
                 <td>
                     {{#if lacksBridge}}
-                        <i class="fa-solid fa-circle-check"></i>
-                    {{else}}
-                        <i class="fa-regular fa-circle-xmark"></i>
+                        <i class="fa-solid fa-triangle-exclamation"></i>
                     {{/if}}
                 </td>
                 <td>

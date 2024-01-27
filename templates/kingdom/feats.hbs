@@ -1,3 +1,4 @@
+<h2>Feats</h2>
 {{#if levelFeats}}
     <table class="km-table">
         <tr>
@@ -81,3 +82,22 @@
     </table>
 {{/if}}
 <button type="button" id="km-add-bonus-feat">Add Bonus Feat <i class="fa-solid fa-plus"></i></button>
+
+<h2>Features</h2>
+<table class="km-table">
+    <tr>
+        <th>Level</th>
+        <th>Features</th>
+    </tr>
+    {{#each featuresByLevel}}
+        <tr>
+            <td>{{level}}</td>
+            <td class="left-align">{{features}}</td>
+        </tr>
+    {{/each}}
+</table>
+
+{{#each uniqueFeatures}}
+    <h3>Level {{level}}: {{name}}</h3>
+    <p>{{description}}</p>
+{{/each}}

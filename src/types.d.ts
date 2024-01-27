@@ -198,4 +198,5 @@ declare global {
             async updateSource(data: object): Promise<void>;
         }
     }
+
 }

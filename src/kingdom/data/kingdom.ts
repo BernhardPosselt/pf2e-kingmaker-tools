@@ -7,6 +7,8 @@ import {Modifier} from '../modifiers';
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
 
 export interface KingdomSizeData {
+    sizeFrom: number;
+    sizeTo?: number;
     type: 'territory' | 'province' | 'state' | 'country' | 'dominion';
     resourceDieSize: ResourceDieSize;
     controlDCModifier: number;
@@ -155,6 +157,10 @@ export interface Kingdom {
         now: number;
         next: number;
     };
+    notes: {
+        public: string;
+        gm: string;
+    };
     homebrewActivities: KingdomActivity[];
     supernaturalSolutions: number;
     turnsWithoutCultEvent: number;
@@ -199,43 +205,45 @@ export function getLevelData(kingdomLevel: number): KingdomLevelData {
     };
 }
 
+export const kingdomSizeData: KingdomSizeData[] = [{
+    sizeFrom: 1,
+    sizeTo: 9,
+    type: 'territory',
+    resourceDieSize: 'd4',
+    controlDCModifier: 0,
+    commodityCapacity: 4,
+}, {
+    sizeFrom: 10,
+    sizeTo: 24,
+    type: 'province',
+    resourceDieSize: 'd6',
+    controlDCModifier: 1,
+    commodityCapacity: 8,
+}, {
+    sizeFrom: 25,
+    sizeTo: 49,
+    type: 'state',
+    resourceDieSize: 'd8',
+    controlDCModifier: 2,
+    commodityCapacity: 12,
+}, {
+    sizeFrom: 50,
+    sizeTo: 99,
+    type: 'country',
+    resourceDieSize: 'd10',
+    controlDCModifier: 3,
+    commodityCapacity: 16,
+}, {
+    sizeFrom: 100,
+    type: 'dominion',
+    resourceDieSize: 'd12',
+    controlDCModifier: 4,
+    commodityCapacity: 20,
+}];
+
 export function getSizeData(kingdomSize: number): KingdomSizeData {
-    if (kingdomSize < 10) {
-        return {
-            type: 'territory',
-            resourceDieSize: 'd4',
-            controlDCModifier: 0,
-            commodityCapacity: 4,
-        };
-    } else if (kingdomSize < 25) {
-        return {
-            type: 'province',
-            resourceDieSize: 'd6',
-            controlDCModifier: 1,
-            commodityCapacity: 8,
-        };
-    } else if (kingdomSize < 50) {
-        return {
-            type: 'state',
-            resourceDieSize: 'd8',
-            controlDCModifier: 2,
-            commodityCapacity: 12,
-        };
-    } else if (kingdomSize < 100) {
-        return {
-            type: 'country',
-            resourceDieSize: 'd10',
-            controlDCModifier: 3,
-            commodityCapacity: 16,
-        };
-    } else {
-        return {
-            type: 'dominion',
-            resourceDieSize: 'd12',
-            controlDCModifier: 4,
-            commodityCapacity: 20,
-        };
-    }
+    return kingdomSizeData.find(d => kingdomSize >= d.sizeFrom
+        && kingdomSize <= (d.sizeTo ?? Number.MAX_SAFE_INTEGER))!;
 }
 
 export function getControlDC(level: number, size: number, leaderVacant: boolean): number {
@@ -323,6 +331,10 @@ export function getDefaultKingdomData(): Kingdom {
         charter: '',
         government: '',
         activeSettlement: '',
+        notes: {
+            public: '',
+            gm: '',
+        },
         fame: {
             type: 'famous',
             now: 0,
