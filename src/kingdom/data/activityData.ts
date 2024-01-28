@@ -2190,7 +2190,7 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         enabled: false,
         phase: 'leadership',
         dc: 'control',
-        title: 'Reconnoiter Hex',
+        title: 'Take Charge',
         description: 'You spend some time getting directly involved in helping your kingdom. Choose a skill that your Kingdom is at least Trained in, then attempt a basic check. You can never use the same skill for this activity twice in the same Kingdom turn.',
         skills: simpleRank([...allSkills], 1),
         criticalSuccess: {
