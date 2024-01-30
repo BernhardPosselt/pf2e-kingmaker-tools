@@ -125,7 +125,7 @@ export async function rollCheck(
     const meta = `
         <div class="km-roll-meta" hidden 
             data-formula="${formula}" 
-            ${activity === undefined ? '' : `data-activity="${activity}"`}
+            ${activity === undefined ? '' : `data-activity="${activity.id}"`}
             data-degree="${degreeToProperty(degreeOfSuccess)}"
             data-skill="${skill}"
             data-dc="${dc}"
@@ -207,7 +207,7 @@ async function postComplexDegreeOfSuccess(actor: Actor, degreeOfSuccess: DegreeO
             ? buildChatButtons([], resultKey)
             : buildChatButtons(modifiers(kingdom), resultKey, activity.id);
         // div allows to upgrade/downgrade on right click
-        const upgrade = `<div class="km-upgrade-result" data-activity="${activity}" data-degree="${resultKey}" hidden></div>`;
+        const upgrade = `<div class="km-upgrade-result" data-activity="${activity.id}" data-degree="${resultKey}" hidden></div>`;
         const msg = message + buttons + upgrade;
         await postDegreeOfSuccessMessage(degreeOfSuccess, {
             critSuccess: `<b>Critical Success</b>: ${msg}`,
