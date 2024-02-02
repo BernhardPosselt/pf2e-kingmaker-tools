@@ -207,13 +207,15 @@ async function postComplexDegreeOfSuccess(actor: Actor, degreeOfSuccess: DegreeO
             ? buildChatButtons([], resultKey)
             : buildChatButtons(modifiers(kingdom), resultKey, activity.id);
         // div allows to upgrade/downgrade on right click
-        const upgrade = `<div class="km-upgrade-result" data-activity="${activity.id}" data-degree="${resultKey}" hidden></div>`;
-        const msg = message + buttons + upgrade;
+        const upgrade = `<div class="km-upgrade-result" data-activity="${activity.id}" data-degree="${resultKey}"></div>`;
+        const msg = message;
+        const tail = buttons + upgrade;
+        const description = `<h3>${activity.title}</h3>${activity.description.trimEnd()}<hr>`;
         await postDegreeOfSuccessMessage(degreeOfSuccess, {
-            critSuccess: `<b>Critical Success</b>: ${msg}`,
-            success: `<b>Success</b>: ${msg}`,
-            failure: `<b>Failure</b>: ${msg}`,
-            critFailure: `<b>Critical Failure</b>: ${msg}`,
+            critSuccess: `${description}<b>Critical Success</b>: ${msg}${tail}`,
+            success: `${description}<b>Success</b>: ${msg}${tail}`,
+            failure: `${description}<b>Failure</b>: ${msg}${tail}`,
+            critFailure: `${description}<b>Critical Failure</b>: ${msg}${tail}`,
         });
     } else {
         await postSimpleDegreeOfSuccess(degreeOfSuccess);

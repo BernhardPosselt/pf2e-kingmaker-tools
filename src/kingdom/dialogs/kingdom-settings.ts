@@ -37,6 +37,7 @@ interface KingdomSettingData {
     ignoreSkillRequirements: boolean;
     autoCalculateSettlementLevel: boolean;
     capitalInvestmentInCapital: boolean;
+    reduceDCToBuildLumberStructures: boolean;
 }
 
 interface KingdomSettingOptions {
@@ -73,6 +74,7 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
             kingdomCultTable: getStringSetting(this.game, 'kingdomCultTable'),
             kingdomEventRollMode: getStringSetting(this.game, 'kingdomEventRollMode'),
             capitalInvestmentInCapital: getBooleanSetting(this.game, 'capitalInvestmentInCapital'),
+            reduceDCToBuildLumberStructures: getBooleanSetting(this.game, 'reduceDCToBuildLumberStructures'),
         };
     }
 
@@ -173,6 +175,7 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
         await setSetting(this.game, 'kingdomIgnoreSkillRequirements', this.data.ignoreSkillRequirements);
         await setSetting(this.game, 'autoCalculateSettlementLevel', this.data.autoCalculateSettlementLevel);
         await setSetting(this.game, 'capitalInvestmentInCapital', this.data.capitalInvestmentInCapital);
+        await setSetting(this.game, 'reduceDCToBuildLumberStructures', this.data.reduceDCToBuildLumberStructures);
         if (this.data.untrainedSkillProficiency === 'level') {
             await setSetting(this.game, 'kingdomAlwaysAddLevel', true);
             await setSetting(this.game, 'kingdomAlwaysAddHalfLevel', false);

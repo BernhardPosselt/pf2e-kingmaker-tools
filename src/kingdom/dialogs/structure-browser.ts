@@ -216,7 +216,7 @@ class StructureBrowserApp extends FormApplication<
             const lacksProficiency = !checkProficiency(structure, this.kingdom);
             return {
                 name: name,
-                dc: structure.construction?.dc,
+                dc: this.getStructureDC(structure),
                 skills: structure.construction?.skills.map(s => {
                     const rank = s.proficiencyRank ? ' (' + rankToLabel(s.proficiencyRank) + ')' : '';
                     const label = unslugify(s.skill);
@@ -238,6 +238,13 @@ class StructureBrowserApp extends FormApplication<
                 id: structure.actor.id,
             };
         }));
+    }
+
+    private getStructureDC(structure: Structure): number | undefined {
+        const adjustment = getBooleanSetting(this.game, 'reduceDCToBuildLumberStructures')
+        && (structure.construction?.lumber ?? 0) > 0 ? -2 : 0;
+        const dc = structure.construction?.dc;
+        return dc === undefined ? undefined : dc + adjustment;
     }
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -287,7 +294,7 @@ class StructureBrowserApp extends FormApplication<
             new CheckDialog(null, {
                 activity: 'build-structure',
                 kingdom: this.kingdom,
-                dc: structure.construction?.dc,
+                dc: this.getStructureDC(structure),
                 overrideSkills: applicableSkills === undefined ? undefined : Object.fromEntries(applicableSkills),
                 game: this.game,
                 type: 'activity',

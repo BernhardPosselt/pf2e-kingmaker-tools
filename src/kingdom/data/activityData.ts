@@ -83,14 +83,16 @@ const activityData: Record<string, ActivityContent> = {
         enabled: true,
         phase: 'region',
         dc: 'control',
-        description: `You order your kingdom’s engineers to construct a network of robust roads through the hex. Travel along roads uses a terrain type one step better than the surrounding terrain; for example, roads through forest hexes—normally difficult terrain—allow travel as if it were open terrain.
-Spend RP as determined by the hex’s most inhospitable terrain (if the hex includes any rivers that cross the hex from one hex side to any other, you must spend double the normal RP cost to also build bridges; this adds the Bridge structure to that hex):
+        description: `<p>You order your kingdom’s engineers to construct a network of robust roads through the hex. Travel along roads uses a terrain type one step better than the surrounding terrain; for example, roads through forest hexes—normally difficult terrain—allow travel as if it were open terrain.</p>
+<p>Spend RP as determined by the hex’s most inhospitable terrain (if the hex includes any rivers that cross the hex from one hex side to any other, you must spend double the normal RP cost to also build bridges; this adds the Bridge structure to that hex):</p>
+<ul>
 <li><b>Mountains</b>: ${loseRP(12)}</li>
 <li><b>Swamps</b>: ${loseRP(8)}</li>
 <li><b>Forests</b>: ${loseRP(4)}</li>
 <li><b>Hills</b>: ${loseRP(2)}</li>
 <li><b>Plains</b>: ${loseRP(1)}</li>
-Then attempt a basic check. Work with the GM to determine where your roads appear on the map.`,
+</ul>
+<p>Then attempt a basic check. Work with the GM to determine where your roads appear on the map.</p>`,
         requirement: 'The hex in which you seek to build roads must be claimed by your kingdom.',
         skills: simpleRank(['engineering']),
         criticalSuccess: {
@@ -271,19 +273,18 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         title: 'Clear Hex',
         phase: 'region',
         dc: 'custom',
-        description: `Engineers and mercenaries attempt to prepare a hex to serve as the site for a settlement, or they work to remove an existing improvement, a dangerous hazard, or an encounter.
-
-If you’re trying to prepare a hex for a settlement or demolish an improvement you previously built (or that was already present in the hex), spend RP as determined by the hex’s most inhospitable terrain feature:
-
+        description: `<p>Engineers and mercenaries attempt to prepare a hex to serve as the site for a settlement, or they work to remove an existing improvement, a dangerous hazard, or an encounter.</p>
+<p>If you’re trying to prepare a hex for a settlement or demolish an improvement you previously built (or that was already present in the hex), spend RP as determined by the hex’s most inhospitable terrain feature:</p>
+<ul>
 <li><b>Mountains</b>: ${loseRP(12)}</li>
 <li><b>Swamps</b>: ${loseRP(8)}</li>
 <li><b>Forests</b>: ${loseRP(4)}</li>
 <li><b>Hills</b>: ${loseRP(2)}</li>
 <li><b>Plains</b>: ${loseRP(1)}</li>
+</ul>
+<p>Then attempt a basic Engineering check. If you’re trying to remove a hazard or encounter, instead attempt an Exploration check. The DC of this check is set by the highest level creature or hazard in the hex (as set by Table 10–5: DCs by Level, on page 503 of the Pathfinder Core Rulebook).</p>
 
-Then attempt a basic Engineering check. If you’re trying to remove a hazard or encounter, instead attempt an Exploration check. The DC of this check is set by the highest level creature or hazard in the hex (as set by Table 10–5: DCs by Level, on page 503 of the Pathfinder Core Rulebook).
-
-If the hex you’re attempting to Clear has existing Ruins or an existing Structure, your action doesn’t physically remove the buildings from the area and you can later incorporate these buildings (or repair ruined ones) into a Settlement you build here later (see page 542). Regardless of the skill used, increase the basic DC by 2 if the hex to be cleared is not yet part of your kingdom.`,
+<p>If the hex you’re attempting to Clear has existing Ruins or an existing Structure, your action doesn’t physically remove the buildings from the area and you can later incorporate these buildings (or repair ruined ones) into a Settlement you build here later (see page 542). Regardless of the skill used, increase the basic DC by 2 if the hex to be cleared is not yet part of your kingdom.</p>`,
         skills: simpleRank(['engineering', 'exploration']),
         criticalSuccess: {
             msg: `You successfully clear the hex. If you spent RP to attempt this activity, you’re refunded half of the RP cost. If you were removing dangerous creatures (but not hazards) from the hex, your explorers and mercenaries recover 2 Luxury Commodities as treasure. ${gainCommodities('luxuries', 2)}`,
@@ -656,15 +657,15 @@ The check’s DC is either the group’s Negotiation DC (see sidebar) or your ki
         enabled: true,
         phase: 'region',
         dc: 'control',
-        description: `Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:
-
+        description: `<p>Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:</p>
+<ul>
 <li><b>Mountains</b>: ${loseRP(12)}</li>
 <li><b>Swamps</b>: ${loseRP(8)}</li>
 <li><b>Forests</b>: ${loseRP(4)}</li>
 <li><b>Hills</b>: ${loseRP(2)}</li>
 <li><b>Plains</b>: ${loseRP(1)}</li>
-
-Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.`,
+</ul>
+<p>Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.</p>`,
         skills: simpleRank(['engineering']),
         criticalSuccess: {
             msg: 'You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.',
@@ -687,15 +688,15 @@ Then attempt a basic check. Lumber camps can be established in any hex that cont
         enabled: true,
         phase: 'region',
         dc: 'control',
-        description: `Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:
-
+        description: `<p>Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:</p>
+<ul>
 <li><b>Mountains</b>: ${loseRP(12)}</li>
 <li><b>Swamps</b>: ${loseRP(8)}</li>
 <li><b>Forests</b>: ${loseRP(4)}</li>
 <li><b>Hills</b>: ${loseRP(2)}</li>
 <li><b>Plains</b>: ${loseRP(1)}</li>
-
-Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.`,
+</ul>
+<p>Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.</p>`,
         skills: simpleRank(['engineering']),
         criticalSuccess: {
             msg: 'You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.',
@@ -717,15 +718,15 @@ Then attempt a basic check. Lumber camps can be established in any hex that cont
         enabled: true,
         phase: 'region',
         dc: 'control',
-        description: `Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:
-
+        description: `<p>Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:</p>
+<ul>
 <li><b>Mountains</b>: ${loseRP(12)}</li>
 <li><b>Swamps</b>: ${loseRP(8)}</li>
 <li><b>Forests</b>: ${loseRP(4)}</li>
 <li><b>Hills</b>: ${loseRP(2)}</li>
 <li><b>Plains</b>: ${loseRP(1)}</li>
-
-Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.`,
+</ul>
+<p>Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.</p>`,
         skills: simpleRank(['engineering']),
         criticalSuccess: {
             msg: 'You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.',
@@ -837,15 +838,15 @@ The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of t
         phase: 'region',
         dc: 'control',
         title: 'Fortify Hex',
-        description: `Your command your engineers to construct a protected encampment, such as a fort or barbican, to serve as a defensive post in the hex. Spend RP as determined by the hex’s most inhospitable terrain:
-
+        description: `<p>Your command your engineers to construct a protected encampment, such as a fort or barbican, to serve as a defensive post in the hex. Spend RP as determined by the hex’s most inhospitable terrain:</p>
+<ul>
 <li><b>Mountains</b>: ${loseRP(12)}</li>
 <li><b>Swamps</b>: ${loseRP(8)}</li>
 <li><b>Forests</b>: ${loseRP(4)}</li>
 <li><b>Hills</b>: ${loseRP(2)}</li>
 <li><b>Plains</b>: ${loseRP(1)}</li>
-
-Then attempt a basic check. A fortified hex grants an additional bonus in warfare (see Appendix 3), but also gives traveling PCs a place to rest that prevents wandering monsters from interrupting their rest.`,
+</ul>
+<p>Then attempt a basic check. A fortified hex grants an additional bonus in warfare (see Appendix 3), but also gives traveling PCs a place to rest that prevents wandering monsters from interrupting their rest.</p>`,
         requirement: 'The target hex must be claimed by your kingdom and must not have a settlement in it.',
         skills: simpleRank(['defense']),
         criticalSuccess: {
@@ -1103,15 +1104,15 @@ Then attempt a basic check. A fortified hex grants an additional bonus in warfar
         phase: 'region',
         dc: 'control',
         title: 'Irrigation',
-        description: `You send excavators to build waterways, canals, or drainage systems to convey water from areas that have natural access to a river or lake. Spend RP as determined by the hex’s most inhospitable terrain feature:
-
+        description: `<p>You send excavators to build waterways, canals, or drainage systems to convey water from areas that have natural access to a river or lake. Spend RP as determined by the hex’s most inhospitable terrain feature:</p>
+<ul>
 <li><b>Mountains</b>: ${loseRP(12)}</li>
 <li><b>Swamps</b>: ${loseRP(8)}</li>
 <li><b>Forests</b>: ${loseRP(4)}</li>
 <li><b>Hills</b>: ${loseRP(2)}</li>
 <li><b>Plains</b>: ${loseRP(1)}</li>
-
-Then attempt a basic check.`,
+</ul>
+<p>Then attempt a basic check.</p>`,
         requirement: 'You control a hex adjacent to a river or lake that itself does not contain a river or lake.',
         skills: simpleRank(['engineering'], 1),
         criticalSuccess: {
@@ -1164,7 +1165,7 @@ Then attempt a basic check.`,
         phase: 'upkeep',
         dc: 'control',
         title: 'New Leadership',
-        description: `You announce the promotion of a character into a leadership role, whether they’re a newly appointed leader or just shifting from one leadership role to another. You normally perform this activity at the start of a Kingdom turn, but if unexpected events (such as the death of the character) remove a leader from a leadership role, you may immediately use the New Leadership activity to attempt to assign a new leader to that role, even outside of a Kingdom turn (applying the vacancy penalty for that role as appropriate). Attempt a basic Intrigue, Politics, Statecraft, or Warfare skill check—while any of these skills can be used, each skill is particularly suited to assigning two specific leadership roles.
+        description: `<p>You announce the promotion of a character into a leadership role, whether they’re a newly appointed leader or just shifting from one leadership role to another. You normally perform this activity at the start of a Kingdom turn, but if unexpected events (such as the death of the character) remove a leader from a leadership role, you may immediately use the New Leadership activity to attempt to assign a new leader to that role, even outside of a Kingdom turn (applying the vacancy penalty for that role as appropriate). Attempt a basic Intrigue, Politics, Statecraft, or Warfare skill check—while any of these skills can be used, each skill is particularly suited to assigning two specific leadership roles.</p>
 <ul>
 <li><b>Intrigue</b>: Grants a +2 circumstance bonus to checks to assign Emissaries and Treasurers.</li>
 <li><b>Politics</b>: Grants a +2 circumstance bonus to checks to assign Counselors and Rulers.</li>
@@ -1172,7 +1173,7 @@ Then attempt a basic check.`,
 <li><b>Warfare</b>: Grants a +2 circumstance bonus to checks to assign Generals and Wardens.</li>
 </ul>
 
-Rulers are particularly difficult to assign; when you take this activity to assign a new Ruler, you take a –4 circumstance penalty to the skill check, and unless you achieve a critical success, you ${gainUnrest(1)}. Whether or not you are simultaneously assigning a leader, you may also use this activity to attempt to reselect the four leadership roles that you have invested. Any result other than a critical failure allows this.`,
+<p>Rulers are particularly difficult to assign; when you take this activity to assign a new Ruler, you take a –4 circumstance penalty to the skill check, and unless you achieve a critical success, you ${gainUnrest(1)}. Whether or not you are simultaneously assigning a leader, you may also use this activity to attempt to reselect the four leadership roles that you have invested. Any result other than a critical failure allows this.</p>`,
         skills: simpleRank(['intrigue', 'politics', 'statecraft', 'warfare']),
         criticalSuccess: {
             msg: 'The people love the new leader. The leader immediately provides the benefits tied to occupying the new role and gains a +1 circumstance bonus to all Kingdom skill checks they attempt before the end of the next Kingdom turn.',
@@ -1185,10 +1186,10 @@ Rulers are particularly difficult to assign; when you take this activity to assi
             }],
         },
         success: {
-            msg: 'The people accept the new leader. The leader immediately provides the benefits tied to occupying the new role.',
+            msg: `The people accept the new leader. The leader immediately provides the benefits tied to occupying the new role. ${gainUnrest(1)}`,
         },
         failure: {
-            msg: 'The people are unsure about the new leader. The leader takes a –1 circumstance penalty to all checks they attempt as part of their activities during the Activity phase of each Kingdom turn. At the end of the next Kingdom turn, the leader can attempt any Loyalty-based basic skill check to ingratiate themselves with the populace. The leader may attempt this check at the end of each Kingdom turn until they succeed. Success removes this penalty, but a critical failure results in the development detailed in Critical Failure below.',
+            msg: `The people are unsure about the new leader. The leader takes a –1 circumstance penalty to all checks they attempt as part of their activities during the Activity phase of each Kingdom turn. At the end of the next Kingdom turn, the leader can attempt any Loyalty-based basic skill check to ingratiate themselves with the populace. The leader may attempt this check at the end of each Kingdom turn until they succeed. Success removes this penalty, but a critical failure results in the development detailed in Critical Failure below. ${gainUnrest(1)}`,
             modifiers: () => [{
                 enabled: false,
                 value: -1,
@@ -1428,13 +1429,36 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         description: `You can spend RP to Purchase Commodities, but doing so is more expensive than gathering them or relying upon trade agreements. When you Purchase Commodities, select the Commodity you wish to purchase (Food, Lumber, Luxuries, Ore, or Stone). ${loseRP(8)} if you’re purchasing Luxuries or ${loseRP(4)} if you’re purchasing any other Commodity. Then attempt a basic check.`,
         skills: simpleRank(['trade']),
         criticalSuccess: {
-            msg: 'You immediately gain 4 Commodities of the chosen type and 2 Commodities of any other type (except Luxuries).',
+            msg: `<p>You immediately gain 4 Commodities of the chosen type:</p> <ul>
+<li>${gainCommodities('food', '4')}</li>
+<li>${gainCommodities('ore', '4')}</li>
+<li>${gainCommodities('lumber', '4')}</li>
+<li>${gainCommodities('stone', '4')}</li>
+<li>${gainCommodities('luxuries', '4')}</li>
+</ul><p>and 2 Commodities of any other type (except Luxuries):</p> <ul>
+<li>${gainCommodities('food', '2')}</li>
+<li>${gainCommodities('ore', '2')}</li>
+<li>${gainCommodities('lumber', '2')}</li>
+<li>${gainCommodities('stone', '2')}</li>
+</ul>`,
         },
         success: {
-            msg: 'You gain 2 Commodities of the chosen type.',
+            msg: `<p>You gain 2 Commodities of the chosen type.<p> <ul>
+<li>${gainCommodities('food', '2')}</li>
+<li>${gainCommodities('ore', '2')}</li>
+<li>${gainCommodities('lumber', '2')}</li>
+<li>${gainCommodities('stone', '2')}</li>
+<li>${gainCommodities('luxuries', '2')}</li>
+</ul>`,
         },
         failure: {
-            msg: 'You gain 1 Commodity of the chosen type.',
+            msg: `<p>You gain 1 Commodity of the chosen type.</p> <ul>
+<li>${gainCommodities('food', '1')}</li>
+<li>${gainCommodities('ore', '1')}</li>
+<li>${gainCommodities('lumber', '1')}</li>
+<li>${gainCommodities('stone', '1')}</li>
+<li>${gainCommodities('luxuries', '1')}</li>
+</ul>`,
         },
         criticalFailure: {
             msg: 'Failure You gain no Commodities.',

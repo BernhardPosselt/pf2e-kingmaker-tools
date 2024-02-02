@@ -59,9 +59,10 @@ export async function postDegreeOfSuccessMessage(degreeOfSuccess: DegreeOfSucces
         message = messageConfig.critFailure;
     }
     if (message !== '') {
+        console.debug(message);
         await ChatMessage.create({
             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-            content: message,
+            content: message.trimEnd(),
             rollMode: messageConfig.isPrivate ? 'blindroll' : 'publicroll',
         });
     }

@@ -141,6 +141,17 @@
 
     <div>
         <div class="form-elements">
+            <label for="km-reduce-lumber-structure-dc">Reduce Lumber Structure's DC by 2</label>
+            <input name="reduceDCToBuildLumberStructures" type="checkbox"
+                   id="km-reduce-lumber-structure-dc" {{checked reduceDCToBuildLumberStructures}}>
+        </div>
+        <div class="help"><p>At 8 Influence, as long as Ekundayo remains helpful, this reduces the Construction DC of
+            any structure that has a Lumber cost to construct by 2</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
             <label for="km-ignore-skill-requirements">Disable Activity Skill Proficiency Requirements</label>
             <input name="ignoreSkillRequirements" type="checkbox" id="km-ignore-skill-requirements" {{checked
                     ignoreSkillRequirements}}>

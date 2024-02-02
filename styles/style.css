@@ -475,3 +475,7 @@ td.skill-value {
 #km-kingdom-size-help {
     color: white;
 }
+
+.km-upgrade-result {
+    display: none;
+}
