@@ -9,6 +9,7 @@ import {Migration4} from './migrations/migration4';
 import {Migration5} from './migrations/migration5';
 import {Migration6} from './migrations/migration6';
 import {Migration7} from './migrations/migration7';
+import {Migration8} from './migrations/migration8';
 
 
 const migrations: Migration[] = [
@@ -18,6 +19,7 @@ const migrations: Migration[] = [
     new Migration5(),
     new Migration6(),
     new Migration7(),
+    new Migration8(),
 ];
 
 interface BackupParams {
