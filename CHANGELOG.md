@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * Official Module: Use the official module's hex map
     * Tile/Drawing Based: Use tiles/drawings as worksites, claimed hexes and farmlands
     * Manual: Manage everything manually
+* Remove gain/lose size buttons from chat
 
 ## [0.27.1] - 2024-02-02
 
