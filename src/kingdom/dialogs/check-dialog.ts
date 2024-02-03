@@ -16,8 +16,14 @@ import {getCompanionSkillUnlocks, getOverrideUnlockCompanionNames} from '../data
 import {capitalize, unslugify} from '../../utils';
 import {getKingdomActivitiesById, KingdomActivityById} from '../data/activityData';
 import {rollCheck} from '../rolls';
-import {getActiveSettlementStructureResult, getSettlement, getSettlementsWithoutLandBorders} from '../scene';
-import {getBooleanSetting} from '../../settings';
+import {
+    getActiveSettlementStructureResult,
+    getSettlement,
+    getSettlementsWithoutLandBorders,
+    getStolenLandsData,
+    ResourceAutomationMode,
+} from '../scene';
+import {getBooleanSetting, getStringSetting} from '../../settings';
 import {DegreeOfSuccess} from '../../degree-of-success';
 
 export type CheckType = 'skill' | 'activity';
@@ -99,7 +105,9 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.afterRoll = options.afterRoll ?? (async (): Promise<void> => {
         });
         this.overrideSkills = options.overrideSkills;
-        const controlDC = getControlDC(this.kingdom.level, this.kingdom.size, this.kingdom.leaders.ruler.vacant);
+        const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
+        const {size: kingdomSize} = getStolenLandsData(this.game, automateResourceMode, this.kingdom);
+        const controlDC = getControlDC(this.kingdom.level, kingdomSize, this.kingdom.leaders.ruler.vacant);
         if (this.type === 'skill') {
             this.selectedSkill = options.skill!;
             this.dc = options.dc ?? controlDC;
@@ -151,7 +159,6 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             getSettlementsWithoutLandBorders(this.game, this.kingdom),
         );
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
-        console.log(applicableSkills, this.overrideSkills, this.selectedSkill, this.consumeModifiers);
         const skillModifiers = Object.fromEntries(applicableSkills.map(skill => {
             const ability = skillAbilities[skill];
             const modifiers = createSkillModifiers({

@@ -29,8 +29,10 @@ import {
     getSettlement,
     getSettlementInfo,
     getSettlementsWithoutLandBorders,
+    getStolenLandsData,
     getStructureResult,
     getStructureStackMode,
+    ResourceAutomationMode,
     SettlementAndScene,
 } from './scene';
 import {allFeats, allFeatsByName} from './data/feats';
@@ -120,7 +122,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private sheetActor: Actor;
 
     private readonly game: Game;
-    private nav: KingdomTab = 'status';
+    private nav: KingdomTab = 'turn';
 
     constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
@@ -132,7 +134,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     override async getData(): Promise<object> {
         const isGM = this.game.user?.isGM ?? false;
         const kingdomData = this.getKingdom();
-        const sizeData = getSizeData(kingdomData.size);
+        const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
+        const {size: kingdomSize, workSites} = getStolenLandsData(this.game, automateResourceMode, kingdomData);
+        const sizeData = getSizeData(kingdomSize);
         const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
         const {
             leadershipActivityNumber,
@@ -166,7 +170,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const groupedActivities = groupKingdomActivities(activities);
         const currentSceneId = getCurrentScene(this.game)?.id;
         const canAddSettlement = kingdomData.settlements.find(settlement => settlement.sceneId === currentSceneId) === undefined;
+        const canAddRealm = isNonNullable(currentSceneId) && currentSceneId !== kingdomData.realmSceneId;
         const structureStackMode = getStructureStackMode(this.game);
+        const automateResources = automateResourceMode !== 'manual';
+        const showAddRealmButton = automateResourceMode === 'tileBased';
+        const showRealmData = isGM && (automateResourceMode === 'kingmaker'
+            || automateResourceMode === 'manual'
+            || (isNonNullable(kingdomData.realmSceneId) && this.game.scenes?.find(s => s.id === kingdomData.realmSceneId) !== undefined));
         return {
             notes: {
                 gm: await TextEditor.enrichHTML(kingdomData.notes.gm),
@@ -178,7 +188,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             enabledActivities: enabledActivities,
             leadershipActivityNumber: leadershipActivityNumber,
             name: kingdomData.name,
-            size: kingdomData.size,
+            size: kingdomSize,
             xp: kingdomData.xp,
             xpThreshold: kingdomData.xpThreshold,
             level: kingdomData.level,
@@ -188,7 +198,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             heartlandLabel: unslugify(kingdomData.heartland),
             government: kingdomData.government,
             type: capitalize(sizeData.type),
-            controlDC: getControlDC(kingdomData.level, kingdomData.size, kingdomData.leaders.ruler.vacant),
+            controlDC: getControlDC(kingdomData.level, kingdomSize, kingdomData.leaders.ruler.vacant),
             atWar: kingdomData.atWar,
             unrest: kingdomData.unrest,
             unrestPenalty: calculateUnrestPenalty(kingdomData.unrest),
@@ -206,8 +216,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             totalConsumption,
             ruin: this.getRuin(kingdomData.ruin),
             commodities: this.getCommodities(kingdomData),
-            workSites: this.getWorkSites(kingdomData.workSites),
-            farmlands: kingdomData.workSites.farmlands.quantity,
+            workSites: this.getWorkSites(workSites),
+            farmlands: workSites.farmlands.quantity,
             ...this.getActiveTabs(),
             skills: calculateSkills({
                 ruin: kingdomData.ruin,
@@ -307,6 +317,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             canAddSettlement,
             effects: createEffects(kingdomData.modifiers),
             cultOfTheBloomEvents: getBooleanSetting(this.game, 'cultOfTheBloomEvents') && isGM,
+            automateResources,
+            canAddRealm,
+            showRealmData,
+            showAddRealmButton,
         };
     }
 
@@ -371,12 +385,19 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
+        Hooks.on('closeKingmakerHexEdit', this.sceneChange.bind(this));
         Hooks.on('deleteScene', this.sceneChange.bind(this));
         Hooks.on('canvasReady', this.sceneChange.bind(this));
         Hooks.on('createToken', this.sceneChange.bind(this));
         Hooks.on('deleteToken', this.sceneChange.bind(this));
         Hooks.on('sightRefresh', this.sceneChange.bind(this)); // end of drag movement
         Hooks.on('applyTokenStatusEffect', this.sceneChange.bind(this));
+        Hooks.on('createTile', this.sceneChange.bind(this));
+        Hooks.on('updateTile', this.sceneChange.bind(this));
+        Hooks.on('deleteTile', this.sceneChange.bind(this));
+        Hooks.on('createDrawing', this.sceneChange.bind(this));
+        Hooks.on('updateDrawing', this.sceneChange.bind(this));
+        Hooks.on('deleteDrawing', this.sceneChange.bind(this));
         const $html = html[0];
         $html.querySelectorAll('.km-nav a')?.forEach(el => {
             el.addEventListener('click', (event) => {
@@ -454,10 +475,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const target = ev.currentTarget as HTMLButtonElement;
                     const hexes = parseInt(target.dataset.hexes ?? '0', 10);
                     const current = this.getKingdom();
+                    const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
+                    const {size: kingdomSize} = getStolenLandsData(this.game, automateResourceMode, current);
                     const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
                     await this.increaseXP(calculateHexXP({
                         hexes,
-                        kingdomSize: current.size,
+                        kingdomSize,
                         useVK: useHomeBrew,
                         xpPerClaimedHex: getNumberSetting(this.game, 'xpPerClaimedHex'),
                     }));
@@ -563,6 +586,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         await showHelpDialog(this.game, this.sheetActor, help);
                     }
                 });
+            });
+        $html.querySelector('#make-current-scene-realm')
+            ?.addEventListener('click', async () => {
+                const scene = getCurrentScene(this.game);
+                const realmSceneId = scene?.id;
+                if (realmSceneId) {
+                    await this.saveKingdom({realmSceneId});
+                }
             });
         $html.querySelector('#make-current-scene-settlement')
             ?.addEventListener('click', async () => {
@@ -849,11 +880,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async collectResources(): Promise<void> {
         const current = this.getKingdom();
-        const sizeData = getSizeData(current.size);
+        const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
+        const {size: kingdomSize, workSites} = getStolenLandsData(this.game, automateResourceMode, current);
+        const sizeData = getSizeData(kingdomSize);
         const capacity = getCapacity(this.game, current);
         const dice = this.getResourceDiceNum(current);
         const rolledPoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
-        const commodities = this.calculateCommoditiesThisTurn(current);
+        const commodities = this.calculateCommoditiesThisTurn(workSites);
         await ChatMessage.create({
             content: `
         <h2>Collecting Resources</h2>
@@ -895,8 +928,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
 
-    private calculateCommoditiesThisTurn(kingdom: Kingdom): Omit<Commodities, 'food'> {
-        const sites = kingdom.workSites;
+    private calculateCommoditiesThisTurn(sites: WorkSites): Omit<Commodities, 'food'> {
         return {
             ore: sites.mines.quantity + sites.mines.resources,
             lumber: sites.lumberCamps.quantity + sites.lumberCamps.resources,
@@ -906,12 +938,19 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     override close(options?: FormApplication.CloseOptions): Promise<void> {
-        Hooks.off('deleteScene', this.sceneChange.bind(this));
+        Hooks.off('closeKingmakerHexEdit', this.sceneChange);
+        Hooks.off('deleteScene', this.sceneChange);
         Hooks.off('canvasReady', this.sceneChange);
         Hooks.off('createToken', this.sceneChange);
-        Hooks.off('sightRefresh', this.sceneChange.bind(this)); // end of drag movement
+        Hooks.off('sightRefresh', this.sceneChange); // end of drag movement
         Hooks.off('deleteToken', this.sceneChange);
         Hooks.off('applyTokenStatusEffect', this.sceneChange);
+        Hooks.off('createTile', this.sceneChange);
+        Hooks.off('updateTile', this.sceneChange);
+        Hooks.off('deleteTile', this.sceneChange);
+        Hooks.off('createDrawing', this.sceneChange);
+        Hooks.off('updateDrawing', this.sceneChange);
+        Hooks.off('deleteDrawing', this.sceneChange);
         return super.close(options);
     }
 
@@ -925,27 +964,27 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         );
     }
 
-    private getWorkSites(workSites: WorkSites): object {
+    private getWorkSites(sites: WorkSites): object {
         return {
             lumberCamps: {
                 label: 'Lumber',
-                total: workSites.lumberCamps.quantity + workSites.lumberCamps.resources,
-                ...workSites.lumberCamps,
+                total: sites.lumberCamps.quantity + sites.lumberCamps.resources,
+                ...sites.lumberCamps,
             },
             mines: {
                 label: 'Ore',
-                total: workSites.mines.quantity + workSites.mines.resources,
-                ...workSites.mines,
+                total: sites.mines.quantity + sites.mines.resources,
+                ...sites.mines,
             },
             quarries: {
                 label: 'Stone',
-                total: workSites.quarries.quantity + workSites.quarries.resources,
-                ...workSites.quarries,
+                total: sites.quarries.quantity + sites.quarries.resources,
+                ...sites.quarries,
             },
             luxurySources: {
                 label: 'Luxuries',
-                total: workSites.luxurySources.quantity + workSites.luxurySources.resources,
-                ...workSites.luxurySources,
+                total: sites.luxurySources.quantity + sites.luxurySources.resources,
+                ...sites.luxurySources,
             },
         };
     }

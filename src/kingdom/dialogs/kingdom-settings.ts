@@ -1,6 +1,7 @@
 import {getBooleanSetting, getNumberSetting, getStringArraySetting, getStringSetting, setSetting} from '../../settings';
 import {isCompanionName} from '../data/companions';
 import {updateKingdomArmyConsumption} from '../../armies/utils';
+import {ResourceAutomationMode} from '../scene';
 
 interface CompanionData {
     amiri: boolean,
@@ -38,6 +39,7 @@ interface KingdomSettingData {
     autoCalculateSettlementLevel: boolean;
     capitalInvestmentInCapital: boolean;
     reduceDCToBuildLumberStructures: boolean;
+    automateResources: ResourceAutomationMode;
 }
 
 interface KingdomSettingOptions {
@@ -75,6 +77,7 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
             kingdomEventRollMode: getStringSetting(this.game, 'kingdomEventRollMode'),
             capitalInvestmentInCapital: getBooleanSetting(this.game, 'capitalInvestmentInCapital'),
             reduceDCToBuildLumberStructures: getBooleanSetting(this.game, 'reduceDCToBuildLumberStructures'),
+            automateResources: getStringSetting(this.game, 'automateResources') as ResourceAutomationMode,
         };
     }
 
@@ -176,6 +179,7 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
         await setSetting(this.game, 'autoCalculateSettlementLevel', this.data.autoCalculateSettlementLevel);
         await setSetting(this.game, 'capitalInvestmentInCapital', this.data.capitalInvestmentInCapital);
         await setSetting(this.game, 'reduceDCToBuildLumberStructures', this.data.reduceDCToBuildLumberStructures);
+        await setSetting(this.game, 'automateResources', this.data.automateResources);
         if (this.data.untrainedSkillProficiency === 'level') {
             await setSetting(this.game, 'kingdomAlwaysAddLevel', true);
             await setSetting(this.game, 'kingdomAlwaysAddHalfLevel', false);

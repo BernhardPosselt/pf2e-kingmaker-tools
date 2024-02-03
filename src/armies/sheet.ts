@@ -68,7 +68,6 @@ class ArmySheet extends FormApplication<FormApplicationOptions & ArmyOptions, ob
             ammunition: data.adjustments?.ammunition ?? 0,
             highSave: data.adjustments?.highSave ?? 'maneuver',
         };
-        console.log(update);
         await saveArmyAdjustment(this.actor, update);
     }
 

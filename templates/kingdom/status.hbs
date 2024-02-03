@@ -1,3 +1,9 @@
+<div {{#unless showAddRealmButton}}hidden{{/unless}}>
+    <button type="button" id="make-current-scene-realm" {{#unless canAddRealm}}disabled{{/unless}}>Set Stolen Lands Hex
+        Map to
+        Current Scene <i class="fa-solid fa-save"></i></button>
+</div>
+
 <div class="status-details">
     <table class="km-table">
         <tr>
@@ -5,9 +11,8 @@
             <td>
                 <select name="fame.type">
                     {{#select fame.type}}
-                        {{#each fameTypes}}
-                            <option value="{{this}}">{{this}}</option>
-                        {{/each}}
+                        <option value="famous">Fame</option>
+                        <option value="infamous">Infamy</option>
                     {{/select}}
                 </select>
             </td>
@@ -31,6 +36,15 @@
         <tr>
             <th>Government</th>
             <td><input type="text" value="{{government}}" name="government"></td>
+        </tr>
+        <tr>
+            <th>Size <a href="#" id="km-kingdom-size-help"><i class="fa-solid fa-question"></i></a></th>
+            <td class="km-size">{{#if automateResources}}{{size}}{{else}}
+                <input type="number" value="{{size}}" name="size">{{/if}}</td>
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td>{{type}}</td>
         </tr>
     </table>
 
@@ -99,3 +113,44 @@
     {{/each}}
 </table>
 
+
+{{#if showRealmData}}
+    <table class="km-table">
+        <tr>
+            <th>Consumption</th>
+            <th>Armies</th>
+            <th>Now</th>
+            <th title="Next Turn">Next</th>
+            <th>Farmlands</th>
+        </tr>
+        <tr>
+            <td>{{totalConsumption}}</td>
+            <td><input type="number" value="{{consumption.armies}}" name="consumption.armies"></td>
+            <td><input type="number" value="{{consumption.now}}" name="consumption.now"></td>
+            <td><input type="number" value="{{consumption.next}}" name="consumption.next"></td>
+            <td>{{#if automateResources}}{{farmlands}}{{else}}
+                <input type="number" value="{{farmlands}}" name="workSites.farmlands.quantity">{{/if}}</td>
+        </tr>
+    </table>
+
+    <table class="km-table">
+        <tr>
+            <th>Income</th>
+            <th>Worksites</th>
+            <th>+</th>
+            <th>Extra Resources</th>
+            <th>Total</th>
+        </tr>
+        {{#each workSites}}
+            <tr>
+                <td>{{label}}</td>
+                <td>{{#if ../automateResources}}{{quantity}}{{else}}
+                    <input type="number" value="{{quantity}}" name="workSites.{{@key}}.quantity">{{/if}}</td>
+                <td>+</td>
+                <td>{{#if ../automateResources}}{{resources}}{{else}}
+                    <input type="number" value="{{resources}}" name=workSites.{{@key}}.resources>{{/if}}</td>
+                <td>{{total}}</td>
+            </tr>
+        {{/each}}
+    </table>
+{{/if}}

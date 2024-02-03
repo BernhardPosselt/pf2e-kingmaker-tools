@@ -85,31 +85,12 @@
 </table>
 <table class="km-table">
     <tr>
-        <th>Solutions</th>
-        <th>Amount</th>
+        <th>Supernatural Solutions</th>
+        <th>Creative Solutions</th>
     </tr>
     <tr>
-        <td>Creative</td>
-        <td><input type="number" value="{{creativeSolutions}}" name="creativeSolutions"></td>
-    </tr>
-    <tr>
-        <td>Supernatural</td>
         <td><input type="number" value="{{supernaturalSolutions}}" name="supernaturalSolutions"></td>
-    </tr>
-</table>
-<table class="km-table">
-    <tr>
-        <th>Consumption</th>
-        <th>Armies</th>
-        <th>Now</th>
-        <th title="Next Turn">Next</th>
-    </tr>
-    <tr>
-        <td>{{totalConsumption}}</td>
-        <td><input type="number" value="{{consumption.armies}}" name="consumption.armies"></td>
-        <td><input type="number" value="{{consumption.now}}" name="consumption.now"></td>
-        <td><input type="number" value="{{consumption.next}}" name="consumption.next"></td>
-
+        <td><input type="number" value="{{creativeSolutions}}" name="creativeSolutions"></td>
     </tr>
 </table>
 <table class="km-table">
@@ -125,34 +106,6 @@
             <td><input type="number" value="{{value}}" name="commodities.now.{{@key}}"></td>
             <td>{{capacity}}</td>
             <td><input type="number" value="{{next}}" name="commodities.next.{{@key}}"></td>
-        </tr>
-    {{/each}}
-</table>
-
-<table class="km-table">
-    <tr>
-        <th>Farmlands</th>
-    </tr>
-    <tr>
-        <td><input type="number" value="{{farmlands}}" name="workSites.farmlands.quantity"></td>
-    </tr>
-</table>
-
-<table class="km-table">
-    <tr>
-        <th>Income</th>
-        <th>Worksites</th>
-        <th>+</th>
-        <th>Extra Resources</th>
-        <th>Total</th>
-    </tr>
-    {{#each workSites}}
-        <tr>
-            <td>{{label}}</td>
-            <td><input type="number" value="{{quantity}}" name="workSites.{{@key}}.quantity"></td>
-            <td>+</td>
-            <td><input type="number" value="{{resources}}" name=workSites.{{@key}}.resources></td>
-            <td>{{total}}</td>
         </tr>
     {{/each}}
 </table>

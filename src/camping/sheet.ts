@@ -166,7 +166,6 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             ...getRestHours(watchSecondsDuration, dailyPrepsSeconds, data.watchSecondsRemaining),
             actorsKeepingWatch,
         };
-        console.log('viewData', viewData);
         return viewData;
     }
 

@@ -141,6 +141,23 @@
 
     <div>
         <div class="form-elements">
+            <label for="km-automatically-calculate-resources">Automatically Calculate Kingdom Resources</label>
+            <select name="automateResources" id="km-automatically-calculate-resources">
+                {{#select automateResources}}
+                    <option value="kingmaker">Official Module</option>
+                    <option value="tileBased">Tile/Drawing Based</option>
+                    <option value="manual">Manual</option>
+                {{/select}}
+            </select>
+        </div>
+        <div class="help"><p>Official Module parses the Stolen Lands data, Tile Based sums up worksites, size and
+            farmlands from special Tiles or Drawings, Manual requires you to manage it manually in the <b>Lands</b> tab
+        </p>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
             <label for="km-reduce-lumber-structure-dc">Reduce Lumber Structure's DC by 2</label>
             <input name="reduceDCToBuildLumberStructures" type="checkbox"
                    id="km-reduce-lumber-structure-dc" {{checked reduceDCToBuildLumberStructures}}>

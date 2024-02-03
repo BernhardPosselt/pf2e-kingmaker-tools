@@ -38,7 +38,7 @@ export interface Ruin {
 }
 
 
-interface WorkSite {
+export interface WorkSite {
     quantity: number;
     resources: number;
 }
@@ -152,6 +152,7 @@ export interface Kingdom {
     resourceDice: Resources;
     workSites: WorkSites;
     heartland: Heartland;
+    realmSceneId: string | null;
     consumption: {
         armies: number;
         now: number;
@@ -206,7 +207,7 @@ export function getLevelData(kingdomLevel: number): KingdomLevelData {
 }
 
 export const kingdomSizeData: KingdomSizeData[] = [{
-    sizeFrom: 1,
+    sizeFrom: 0,
     sizeTo: 9,
     type: 'territory',
     resourceDieSize: 'd4',
@@ -353,6 +354,7 @@ export function getDefaultKingdomData(): Kingdom {
         ongoingEvents: [],
         groups: [],
         milestones: getDefaultMilestones(),
+        realmSceneId: null,
         workSites: {
             farmlands: {
                 quantity: 0,

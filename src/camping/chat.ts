@@ -89,7 +89,6 @@ export async function postDiscoverSpecialMealResult(
 ): Promise<void> {
     const basicIngredients = cost.basicIngredients;
     const specialIngredients = cost.specialIngredients;
-    console.log(critFailUuids);
     const content = `
         <p>${recipe ? `Learn ${recipe} and remove` : 'Remove'}${critFailUuids.length > 0 ? ' and suffer the Critical Failure effect' : ''}:</p>
         <ul>${getIngredientList(basicIngredients, specialIngredients)}</ul>

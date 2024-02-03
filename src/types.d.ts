@@ -2,6 +2,7 @@ import {DateTime} from 'luxon';
 import {RollTableDraw} from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/documents/table';
 import {DegreeOfSuccess} from './degree-of-success';
 import {WeatherEffectName} from './weather/data';
+import {ModuleData} from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/packages.mjs';
 
 declare global {
     declare class PF2EModifier {
@@ -12,6 +13,7 @@ declare global {
         pf2eKingmakerTools: {
             macros: {
                 toggleCombatTracksMacro: () => void,
+                realmTileDialogMacro: () => void,
                 toggleWeatherMacro: () => void,
                 toggleShelteredMacro: () => void,
                 setCurrentWeatherMacro: () => void,
@@ -180,9 +182,26 @@ declare global {
         };
     }
 
+    interface Tile {
+        document: TileDocument;
+    }
+
     interface TileDocument {
         width: number;
         height: number;
+        x: number;
+        y: number;
+    }
+
+    interface Drawing {
+        document: DrawingDocument;
+    }
+
+    interface DrawingDocument {
+        shape: {
+            width: number;
+            height: number;
+        };
         x: number;
         y: number;
     }
@@ -198,5 +217,34 @@ declare global {
             async updateSource(data: object): Promise<void>;
         }
     }
+    const kingmaker: Kingmaker;
 
+    interface HexFeature {
+        type: 'landmark' | 'refuge' | 'ruin' | 'structure' | 'farmland' | 'road' | 'bridge' | 'ford' | 'waterfall' | 'hazard' | 'bloom' | 'freehold' | 'village' | 'town' | 'city' | 'metropolis';
+    }
+
+    type CommodityType = 'ore' | 'lumber' | 'stone' | 'food' | 'luxuries';
+
+    type CampType = 'quarry' | 'mine' | 'lumber';
+
+    interface HexState {
+        commodity?: CommodityType;
+        camp?: CampType;
+        features?: HexFeature[];
+        claimed?: boolean;
+    }
+
+    interface KingmakerState {
+        hexes: Record<number, HexState>;
+    }
+
+    interface Kingmaker extends ModuleData {
+        state: KingmakerState;
+    }
+
+    interface Canvas {
+        tiles?: {
+            controlled: Tile[]
+        };
+    }
 }

@@ -1,7 +1,8 @@
 import {CommodityStorage} from './data/structures';
 import {Commodities, getSizeData, Kingdom} from './data/kingdom';
-import {getAllMergedSettlements} from './scene';
+import {getAllMergedSettlements, getStolenLandsData, ResourceAutomationMode} from './scene';
 import {clamped} from '../utils';
+import {getStringSetting} from '../settings';
 
 function calculateStorageCapacity(capacity: number, storage: CommodityStorage): Commodities {
     return {
@@ -14,16 +15,20 @@ function calculateStorageCapacity(capacity: number, storage: CommodityStorage): 
 }
 
 export function getCapacity(game: Game, kingdom: Kingdom): Commodities {
-    const commodityCapacity = getSizeData(kingdom.size).commodityCapacity;
+    const automateResourceMode = getStringSetting(game, 'automateResources') as ResourceAutomationMode;
+    const {size: kingdomSize} = getStolenLandsData(game, automateResourceMode, kingdom);
+    const commodityCapacity = getSizeData(kingdomSize).commodityCapacity;
     const {storage} = getAllMergedSettlements(game, kingdom);
     return calculateStorageCapacity(commodityCapacity, storage);
 }
 
 export function getConsumption(game: Game, kingdom: Kingdom): number {
     const settlementConsumption = getAllMergedSettlements(game, kingdom).settlementConsumption;
-    const farmlands = kingdom.workSites.farmlands.resources + kingdom.workSites.farmlands.quantity;
+    const resourceMode = getStringSetting(game, 'automateResources') as ResourceAutomationMode;
+    const farmlands = getStolenLandsData(game, resourceMode, kingdom).workSites.farmlands;
+    const farmlandsCount = farmlands.resources + farmlands.quantity;
     return Math.max(0, kingdom.consumption.armies + kingdom.consumption.now + settlementConsumption -
-        farmlands);
+        farmlandsCount);
 }
 
 export function gainFame(kingdom: Kingdom, fame: number): Partial<Kingdom> {

@@ -94,6 +94,7 @@
     --expert: #3c005e;
     --master: #664400;
     --legendary: #5e0000;
+    --sidebar-size: 295px;
 }
 
 .km-base-form {
@@ -103,7 +104,7 @@
 .km-container {
     height: 100%;
     display: grid;
-    grid-template-columns: 286px auto;
+    grid-template-columns: var(--sidebar-size) auto;
     grid-template-rows: auto minmax(auto, 40px) auto;
     grid-gap: 0 10px;
 }
@@ -111,6 +112,10 @@
 .km-header {
     grid-column-start: 1;
     grid-column-end: 3;
+}
+
+.km-header .km-name {
+    width: var(--sidebar-size);
 }
 
 .km-header input {
@@ -472,10 +477,10 @@ td.skill-value {
     min-height: 200px;
 }
 
-#km-kingdom-size-help {
-    color: white;
-}
-
 .km-upgrade-result {
     display: none;
+}
+
+#km-kingdom-size-help {
+    color: white;
 }

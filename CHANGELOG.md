@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.28.0] - 2024-02-03
+
+### Changed
+
+* Re-organize kingdom sheet
+* Worksites, farmlands and kingdom size can now be tracked in 3 different ways in the kingdom sheet settings (**READ THE MANUAL JOURNAL!**):
+    * Official Module: Use the official module's hex map
+    * Tile/Drawing Based: Use tiles/drawings as worksites, claimed hexes and farmlands
+    * Manual: Manage everything manually
+
 ## [0.27.1] - 2024-02-02
 
 ### Added

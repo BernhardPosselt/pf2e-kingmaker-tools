@@ -63,16 +63,16 @@ const activityData: Record<string, ActivityContent> = {
         requirement: 'The hex to be abandoned must be controlled.',
         skills: simpleRank(['exploration', 'wilderness']),
         criticalSuccess: {
-            msg: `You abandon the hex or hexes, ${loseSize(1)} per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. ${gainRP(1)} per abandoned hex.`,
+            msg: `You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. ${gainRP(1)} per abandoned hex.`,
         },
         success: {
-            msg: `You abandon the hex or hexes, ${loseSize(1)} per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. ${gainUnrest(1)}`,
+            msg: `You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. ${gainUnrest(1)}`,
         },
         failure: {
-            msg: `You abandon the hex or hexes, ${loseSize(1)} per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. ${gainUnrest(2)} and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, your kingdom experiences a Squatters kingdom event automatically in addition to any other event that might occur.`,
+            msg: `You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. ${gainUnrest(2)} and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, your kingdom experiences a Squatters kingdom event automatically in addition to any other event that might occur.`,
         },
         criticalFailure: {
-            msg: `You abandon the hex or hexes, ${loseSize(1)} per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. ${gainUnrest(3)} and automatically experience a Bandit Activity kingdom event.`,
+            msg: `You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. ${gainUnrest(3)} and automatically experience a Bandit Activity kingdom event.`,
         },
         special: 'The Unrest gained from abandoning a hex doubles if it includes a settlement. A settlement in an abandoned hex becomes a Freehold (page 536).',
     },
@@ -223,10 +223,10 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         description: `Your surveyors fully explore the hex and attempt to add it into your kingdom’s domain. ${loseRP(1)} and then attempt a basic Exploration, Intrigue, Magic, or Wilderness check.`,
         skills: simpleRank(['exploration', 'intrigue', 'magic', 'wilderness']),
         criticalSuccess: {
-            msg: `You claim the hex and immediately add it to your territory, ${gainSize(1)} (this affects all statistics determined by Size; see page 532). Your occupation of the hex goes so smoothly that you can immediately attempt another Region activity.`,
+            msg: 'You claim the hex and immediately add it to your territory, increasing your kingdom\'s Size by 1 (this affects all statistics determined by Size; see page 532). Your occupation of the hex goes so smoothly that you can immediately attempt another Region activity.',
         },
         success: {
-            msg: `You claim the hex and add it to your territory,  ${gainSize(1)} (this affects all statistics determined by Size; see page 532).`,
+            msg: 'You claim the hex and add it to your territory, increasing your kingdom\'s Size by 1 (this affects all statistics determined by Size; see page 532).',
         },
         failure: {
             msg: 'You fail to claim the hex.',
@@ -1262,7 +1262,7 @@ If you’re distributing gear gained from battle, this activity requires a basic
 You can attempt this skill check with Intrigue, Statecraft, or Warfare; however, certain groups will respond better (or worse) to specific skills. The DC is the group’s Negotiation DC (see the sidebar on page 519).`,
         skills: simpleRank(['intrigue', 'statecraft', 'warfare'], 1),
         criticalSuccess: {
-            msg: `The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, gain 10XP and ${gainSize(1)} (this affects all statistics determined by Size; see page 532). If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty.`,
+            msg: 'The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, gain 10XP and increasing your kingdom\'s Size by 1 (this affects all statistics determined by Size; see page 532). If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty.',
         },
         success: {
             msg: `The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty. ${loseRolledRD(1)} to the result to integrate the group into your kingdom.`,
@@ -2306,14 +2306,6 @@ export function gainUnrest(value: number | string): string {
 
 export function loseUnrest(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'unrest', mode: 'lose'});
-}
-
-export function gainSize(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'size'});
-}
-
-export function loseSize(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'size', mode: 'lose'});
 }
 
 export function gainSolution(type: 'creative-solution' | 'supernatural-solution'): string {

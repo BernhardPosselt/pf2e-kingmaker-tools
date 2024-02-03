@@ -99,7 +99,6 @@ class ManageKingdomActivitiesDialog extends FormApplication<FormApplicationOptio
         const blacklist = new Set(kingdom.activityBlacklist);
         const homebrewIds = new Set(kingdom.homebrewActivities.map(a => a.id));
         const kingdomActivities = getKingdomActivities(kingdom.homebrewActivities);
-        console.log();
         return kingdomActivities
             .map(a => {
                 return {

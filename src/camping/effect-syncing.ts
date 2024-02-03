@@ -36,7 +36,6 @@ export interface SyncMealEffectOptions {
 
 export async function syncActorMealEffects(options: SyncMealEffectOptions): Promise<void> {
     const uuids = getAllMealEffectUuids(options.recipes);
-    console.log(options.recipe);
     await removeActorsEffectsByUuid(options.actors, new Set(uuids));
     await Promise.all(options.actors
         .filter(a => options.actorUuidsEatingMeal.has(a.uuid))

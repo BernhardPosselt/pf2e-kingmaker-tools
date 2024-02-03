@@ -2,6 +2,8 @@ import {unslugify} from '../utils';
 import {getSizeData, Kingdom} from './data/kingdom';
 import {getKingdom, saveKingdom} from './storage';
 import {getCapacity} from './kingdom-utils';
+import {getStringSetting} from '../settings';
+import {getStolenLandsData, ResourceAutomationMode} from './scene';
 
 interface ResourceValues {
     value: number;
@@ -55,8 +57,6 @@ export function getCurrentValue(kingdom: Kingdom, type: RolledResources, turn: R
         return kingdom.xp;
     } else if (type === 'fame') {
         return kingdom.fame[turn];
-    } else if (type === 'size') {
-        return kingdom.size;
     } else if (type === 'supernatural-solution') {
         return kingdom.supernaturalSolutions;
     } else if (type === 'creative-solution') {
@@ -77,10 +77,12 @@ export function getLimit(game: Game, kingdom: Kingdom, type: RolledResources, tu
 }
 
 
-export async function evaluateValue(kingdom: Kingdom, resources: RolledResources, value: string): Promise<number> {
+export async function evaluateValue(game: Game, kingdom: Kingdom, resources: RolledResources, value: string): Promise<number> {
     if (resources === 'rolled-resource-dice') {
         const num = value.includes('d') ? `(${value})` : value;
-        const dice = getSizeData(kingdom.size).resourceDieSize;
+        const automateResourceMode = getStringSetting(game, 'automateResources') as ResourceAutomationMode;
+        const {size: kingdomSize} = getStolenLandsData(game, automateResourceMode, kingdom);
+        const dice = getSizeData(kingdomSize).resourceDieSize;
         const roll = await new Roll(`${num}${dice}`).roll();
         await roll.toMessage({flavor: 'Rolling Resource Dice'});
         return roll.total;
@@ -110,8 +112,6 @@ export function createUpdate(kingdom: Kingdom, type: RolledResources, turn: Reso
                 [turn]: value,
             },
         };
-    } else if (type === 'size') {
-        return {size: value};
     } else if (type === 'supernatural-solution') {
         return {supernaturalSolutions: value};
     } else if (type === 'creative-solution') {
@@ -167,7 +167,6 @@ export type RolledResources = 'resource-dice'
     | 'lumber'
     | 'fame'
     | 'stone'
-    | 'size'
     | 'xp'
     | 'supernatural-solution'
     | 'creative-solution'
@@ -199,7 +198,7 @@ export async function updateResources(game: Game, actor: Actor, target: HTMLButt
     const {type, mode, turn, value: parsedValue} = parseResourceButton(target);
     const kingdom = getKingdom(actor);
 
-    const evaluatedValue = await evaluateValue(kingdom, type, parsedValue);
+    const evaluatedValue = await evaluateValue(game, kingdom, type, parsedValue);
     const currentValue = getCurrentValue(kingdom, type, turn);
     const limit = getLimit(game, kingdom, type, turn);
     const {missingMessage, message, value} = calculateNewValue({

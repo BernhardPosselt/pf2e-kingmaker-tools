@@ -41,7 +41,6 @@ async function stopWeatherEffects(game: Game, currentWeather: WeatherEffectName)
 async function playWeatherEffect(game: Game, weather: WeatherEffectName): Promise<void> {
     if (weather !== '') {
         const track = getWeatherSoundFX(game, weather);
-        console.log(weather, track);
         if (track !== undefined && !track.playing) {
             if (track instanceof Playlist) {
                 await track.playAll();

@@ -34,6 +34,7 @@ import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} f
 import {updateKingdomArmyConsumption} from './armies/utils';
 import {openJournal} from './foundry-utils';
 import {structureTokenMappingDialog} from './kingdom/dialogs/structure-token-mapping-dialog';
+import {realmTileDialog} from './kingdom/dialogs/realm-tile-dialog';
 
 
 Hooks.on('ready', async () => {
@@ -42,6 +43,7 @@ Hooks.on('ready', async () => {
         gameInstance.pf2eKingmakerTools = {
             macros: {
                 toggleWeatherMacro: toggleWeather.bind(null, game),
+                realmTileDialogMacro: realmTileDialog.bind(null, game),
                 toggleShelteredMacro: toggleSheltered.bind(null, game),
                 setCurrentWeatherMacro: setCurrentWeatherDialog.bind(null, game),
                 structureTokenMappingMacro: structureTokenMappingDialog.bind(null, game),
@@ -294,6 +296,19 @@ Hooks.on('ready', async () => {
             default: false,
             requiresReload: true,
             type: Boolean,
+        } as any);
+        gameInstance.settings.register('pf2e-kingmaker-tools', 'automateResources', {
+            name: 'Automatically sum worksites and farmlands',
+            scope: 'world',
+            config: false,
+            default: 'kingmaker',
+            requiresReload: true,
+            type: String,
+            choices: {
+                kingmaker: 'Kingmaker',
+                tileBased: 'Tile Based',
+                manual: 'Manual',
+            },
         } as any);
         gameInstance.settings.register('pf2e-kingmaker-tools', 'kingdomAlwaysAddHalfLevel', {
             name: 'Always add half Level to Skill',

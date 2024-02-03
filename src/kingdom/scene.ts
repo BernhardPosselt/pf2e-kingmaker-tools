@@ -1,9 +1,9 @@
 import {evaluateStructures, includeCapital, StructureResult, StructureStackRule} from './structures';
 import {ruleSchema} from './schema';
 import {CommodityStorage, Structure, structuresByName} from './data/structures';
-import {Kingdom, Settlement} from './data/kingdom';
+import {Kingdom, Settlement, WorkSite, WorkSites} from './data/kingdom';
 import {getBooleanSetting} from '../settings';
-import {isNonNullable} from '../utils';
+import {isKingmakerInstalled, isNonNullable} from '../utils';
 import {allSkills} from './data/skills';
 import {getKingdomActivitiesById, KingdomActivityById} from './data/activityData';
 
@@ -125,13 +125,15 @@ interface ShapePosition {
     yEnd: number;
 }
 
-function containsStructures(drawingPosition: ShapePosition, tokenPositions: ShapePosition[]): boolean {
-    return tokenPositions.some(pos => {
-        return pos.xStart >= drawingPosition.xStart
-            && pos.xEnd <= drawingPosition.xEnd
-            && pos.yStart >= drawingPosition.yStart
-            && pos.yEnd <= drawingPosition.yEnd;
-    });
+function shapeContainsOtherShape(a: ShapePosition, b: ShapePosition, marginOfErrorPx: number): boolean {
+    return b.xStart >= (a.xStart - marginOfErrorPx)
+        && b.xEnd <= (a.xEnd + marginOfErrorPx)
+        && b.yStart >= (a.yStart - marginOfErrorPx)
+        && b.yEnd <= (a.yEnd + marginOfErrorPx);
+}
+
+function containsStructures(drawingPosition: ShapePosition, tokenPositions: ShapePosition[], marginOfErrorPx: number): boolean {
+    return tokenPositions.some(token => shapeContainsOtherShape(drawingPosition, token, marginOfErrorPx));
 }
 
 /**
@@ -157,12 +159,12 @@ function getFilledBlocks(scene: Scene): number {
         .filter(d => {
             // (0, 0) is the top left corner and x and y of the drawing is the top left corner of the drawing
             const drawingPosition = {
-                xStart: d.x - marginOfErrorPx,
-                xEnd: d.x + marginOfErrorPx + d.width,
-                yStart: d.y - marginOfErrorPx,
-                yEnd: d.y + marginOfErrorPx + d.height,
+                xStart: d.x,
+                xEnd: d.x + d.width,
+                yStart: d.y,
+                yEnd: d.y + d.height,
             };
-            return containsStructures(drawingPosition, tokenPositions);
+            return containsStructures(drawingPosition, tokenPositions, marginOfErrorPx);
         })
         .length || 1;
 }
@@ -358,4 +360,225 @@ export function getSettlementsWithoutLandBorders(game: Game, kingdom: Kingdom): 
             return (settlementAndScene.settlement?.waterBorders ?? 0) >= 4 && !structures.hasBridge;
         })
         .length;
+}
+
+export interface StolenLandsData {
+    size: number;
+    workSites: WorkSites;
+}
+
+function parseWorksite(claimedHexes: HexState[], type: CampType, commodity: CommodityType): WorkSite {
+    return claimedHexes.filter(h => h.camp === type)
+        .reduce((prev, state) => {
+            const res = state.commodity === commodity ? 1 : 0;
+            // mines on luxuries don't count for ore but a single luxury
+            const quantity = type === 'mine' && state.commodity === 'luxuries' ? 0 : 1;
+            if (commodity === 'luxuries') {
+                return {
+                    quantity: prev.quantity + res,
+                    resources: prev.resources,
+                };
+            } else {
+                return {
+                    quantity: prev.quantity + quantity,
+                    resources: prev.resources + res,
+                };
+            }
+        }, {quantity: 0, resources: 0});
+}
+
+export function parseKingmaker(kingmaker: KingmakerState): StolenLandsData {
+    const claimedHexes = Object.values(kingmaker.hexes)
+        .filter(h => h.claimed);
+    const farmHexes = claimedHexes.filter(h => h.features?.some(f => f.type === 'farmland'));
+    return {
+        size: claimedHexes.length,
+        workSites: {
+            farmlands: {
+                quantity: farmHexes.length,
+                resources: 0,
+            },
+            quarries: parseWorksite(claimedHexes, 'quarry', 'stone'),
+            mines: parseWorksite(claimedHexes, 'mine', 'ore'),
+            lumberCamps: parseWorksite(claimedHexes, 'lumber', 'lumber'),
+            luxurySources: parseWorksite(claimedHexes, 'mine', 'luxuries'),
+        },
+    };
+}
+
+function findStolenLandsScene(game: Game, realmSceneId: string | null): Scene | undefined {
+    if (isNonNullable(realmSceneId)) {
+        return game.scenes?.find(s => s.id === realmSceneId);
+    }
+}
+
+type RealmTileType =
+    'mine'
+    | 'ore'
+    | 'lumber'
+    | 'lumberCamp'
+    | 'quarry'
+    | 'stone'
+    | 'claimed'
+    | 'farmland'
+    | 'luxury'
+    | 'luxuryWorksite';
+
+interface RealmTile {
+    type: RealmTileType;
+}
+
+
+export interface RealmTileData extends RealmTile, ShapePosition {
+}
+
+function parseTileData<T extends TileDocument | DrawingDocument>(
+    tile: T,
+    parseDimensions: (tile: T) => { width: number; height: number },
+): RealmTileData | undefined {
+    const data = tile.getFlag('pf2e-kingmaker-tools', 'realmTile') as RealmTile | null | undefined;
+    if (data) {
+        const {width, height} = parseDimensions(tile);
+        return {
+            ...data,
+            xStart: tile.x,
+            xEnd: tile.x + width,
+            yStart: tile.y,
+            yEnd: tile.y + height,
+        };
+    }
+}
+
+function getWorksitesInTiles(worksiteType: 'lumberCamp' | 'mine' | 'quarry' | 'luxuryWorksite', tilesInPos: RealmTileData[]): WorkSite {
+    const commodityType = {
+        lumberCamp: 'lumber',
+        mine: 'ore',
+        quarry: 'stone',
+        luxuryWorksite: 'luxury',
+    }[worksiteType];
+    const quantity = tilesInPos.filter(t => t.type === worksiteType).length;
+    return {
+        quantity: quantity,
+        resources: quantity > 0 ? tilesInPos.filter(t => t.type === commodityType).length : 0,
+    };
+}
+
+function mergeWorksites(a: WorkSites, b: WorkSites): WorkSites {
+    return {
+        luxurySources: {
+            resources: a.luxurySources.resources + b.luxurySources.resources,
+            quantity: a.luxurySources.quantity + b.luxurySources.quantity,
+        },
+        lumberCamps: {
+            resources: a.lumberCamps.resources + b.lumberCamps.resources,
+            quantity: a.lumberCamps.quantity + b.lumberCamps.quantity,
+        },
+        quarries: {
+            resources: a.quarries.resources + b.quarries.resources,
+            quantity: a.quarries.quantity + b.quarries.quantity,
+        },
+        farmlands: {
+            resources: a.farmlands.resources + b.farmlands.resources,
+            quantity: a.farmlands.quantity + b.farmlands.quantity,
+        },
+        mines: {
+            resources: a.mines.resources + b.mines.resources,
+            quantity: a.mines.quantity + b.mines.quantity,
+        },
+    };
+}
+
+function emptyWorksites(): WorkSites {
+    return {
+        luxurySources: {resources: 0, quantity: 0},
+        lumberCamps: {resources: 0, quantity: 0},
+        quarries: {resources: 0, quantity: 0},
+        farmlands: {resources: 0, quantity: 0},
+        mines: {resources: 0, quantity: 0},
+    };
+}
+
+export function parseSceneTiles(
+    objects: RealmTileData[],
+    marginOfErrorPx: number,
+): StolenLandsData {
+    const claimedPositions = objects.filter(o => o.type === 'claimed');
+    const nonClaimedPositions = objects.filter(o => o.type !== 'claimed');
+    const worksites = claimedPositions
+        .map(claimed => {
+            const tilesInPos = nonClaimedPositions
+                .filter(nonClaimed => shapeContainsOtherShape(claimed, nonClaimed, marginOfErrorPx));
+            return {
+                farmlands: {quantity: tilesInPos.filter(t => t.type === 'farmland').length, resources: 0},
+                lumberCamps: getWorksitesInTiles('lumberCamp', tilesInPos),
+                mines: getWorksitesInTiles('mine', tilesInPos),
+                quarries: getWorksitesInTiles('quarry', tilesInPos),
+                luxurySources: getWorksitesInTiles('luxuryWorksite', tilesInPos),
+            };
+        })
+        .reduce(mergeWorksites, emptyWorksites());
+    return {
+        size: claimedPositions.length,
+        workSites: worksites,
+    };
+}
+
+function parseSceneData(game: Game, realmSceneId: string | null): StolenLandsData {
+    const scene = findStolenLandsScene(game, realmSceneId);
+    if (scene) {
+        // increase rectangle by this many pixels to account for not placing the structure perfectly inside of it
+        const marginOfErrorPx = Math.floor(0.1 * scene.grid.size);
+        const objects = [
+            ...scene.tiles
+                .map(t => parseTileData(t, (tile) => {
+                    return {
+                        width: tile.width,
+                        height: tile.height,
+                    };
+                }))
+                .filter(t => isNonNullable(t)) as RealmTileData[],
+            ...scene.drawings
+                .map(t => parseTileData(t, (tile) => {
+                    return {
+                        width: tile.shape.width,
+                        height: tile.shape.height,
+                    };
+                }))
+                .filter(t => isNonNullable(t)) as RealmTileData[],
+        ];
+        return parseSceneTiles(objects, marginOfErrorPx);
+    } else {
+        return {
+            workSites: emptyWorksites(),
+            size: 0,
+        };
+    }
+}
+
+export type ResourceAutomationMode = 'kingmaker' | 'tileBased' | 'manual';
+
+export function getStolenLandsData(
+    game: Game,
+    mode: ResourceAutomationMode,
+    kingdom: Kingdom,
+): StolenLandsData {
+    if (mode === 'kingmaker' && isKingmakerInstalled(game)) {
+        return parseKingmaker(kingmaker.state);
+    } else if (mode === 'tileBased') {
+        return parseSceneData(game, kingdom.realmSceneId);
+    } else {
+        return {
+            size: kingdom.size,
+            workSites: kingdom.workSites,
+        };
+    }
+}
+
+
+export async function makeResourceTileOrDrawing(tile: TileDocument, type: RealmTileType): Promise<void> {
+    await tile.setFlag('pf2e-kingmaker-tools', 'realmTile', {type});
+}
+
+export async function makeResourceDrawing(tile: DrawingDocument, type: RealmTileType): Promise<void> {
+    await tile.setFlag('pf2e-kingmaker-tools', 'realmTile', {type});
 }
