@@ -4,7 +4,7 @@ import {isNullable} from '../utils';
 
 export class Migration8 extends Migration {
     constructor() {
-        super(7);
+        super(8);
     }
 
     override async migrateKingdom(game: Game, kingdom: Kingdom): Promise<void> {
