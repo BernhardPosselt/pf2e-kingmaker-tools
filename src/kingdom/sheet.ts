@@ -173,10 +173,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const canAddRealm = isNonNullable(currentSceneId) && currentSceneId !== kingdomData.realmSceneId;
         const structureStackMode = getStructureStackMode(this.game);
         const automateResources = automateResourceMode !== 'manual';
-        const showAddRealmButton = automateResourceMode === 'tileBased';
-        const showRealmData = isGM && (automateResourceMode === 'kingmaker'
+        const showAddRealmButton = isGM && automateResourceMode === 'tileBased';
+        const showRealmData = automateResourceMode === 'kingmaker'
             || automateResourceMode === 'manual'
-            || (isNonNullable(kingdomData.realmSceneId) && this.game.scenes?.find(s => s.id === kingdomData.realmSceneId) !== undefined));
+            || (isNonNullable(kingdomData.realmSceneId) && this.game.scenes?.find(s => s.id === kingdomData.realmSceneId) !== undefined);
         return {
             notes: {
                 gm: await TextEditor.enrichHTML(kingdomData.notes.gm),

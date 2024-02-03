@@ -1,9 +1,3 @@
-<div {{#unless showAddRealmButton}}hidden{{/unless}}>
-    <button type="button" id="make-current-scene-realm" {{#unless canAddRealm}}disabled{{/unless}}>Set Stolen Lands Hex
-        Map to
-        Current Scene <i class="fa-solid fa-save"></i></button>
-</div>
-
 <div class="status-details">
     <table class="km-table">
         <tr>
@@ -154,3 +148,9 @@
         {{/each}}
     </table>
 {{/if}}
+
+<div {{#unless showAddRealmButton}}hidden{{/unless}}>
+    <button type="button" id="make-current-scene-realm" {{#unless canAddRealm}}disabled{{/unless}}>Set Stolen Lands Hex
+        Map to
+        Current Scene <i class="fa-solid fa-save"></i></button>
+</div>
