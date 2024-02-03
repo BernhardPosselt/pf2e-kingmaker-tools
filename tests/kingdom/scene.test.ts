@@ -71,7 +71,7 @@ describe('parse kingmaker module data', () => {
         const result = parseSceneTiles(data, 1);
         const expected = {
             size: 1,
-            worksites: {
+            workSites: {
                 luxurySources: {quantity: 0, resources: 0},
                 mines: {quantity: 0, resources: 0},
                 farmlands: {quantity: 0, resources: 0},
@@ -117,7 +117,7 @@ describe('parse kingmaker module data', () => {
         const result = parseSceneTiles(data, 1);
         const expected = {
             size: 1,
-            worksites: {
+            workSites: {
                 luxurySources: {quantity: 0, resources: 0},
                 mines: {quantity: 0, resources: 0},
                 farmlands: {quantity: 0, resources: 0},
@@ -169,7 +169,7 @@ describe('parse kingmaker module data', () => {
         const result = parseSceneTiles(data, 1);
         const expected = {
             size: 1,
-            worksites: {
+            workSites: {
                 luxurySources: {quantity: 0, resources: 0},
                 mines: {quantity: 2, resources: 1},
                 farmlands: {quantity: 0, resources: 0},
@@ -221,7 +221,7 @@ describe('parse kingmaker module data', () => {
         const result = parseSceneTiles(data, 1);
         const expected = {
             size: 1,
-            worksites: {
+            workSites: {
                 luxurySources: {quantity: 0, resources: 0},
                 mines: {quantity: 0, resources: 0},
                 farmlands: {quantity: 2, resources: 0},
