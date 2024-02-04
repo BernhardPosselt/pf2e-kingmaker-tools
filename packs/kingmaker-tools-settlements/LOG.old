@@ -1,8 +1,3 @@
-2024/02/04-00:35:30.345379 75a7aba006c0 Recovering log #114
-2024/02/04-00:35:30.365017 75a7aba006c0 Delete type=3 #111
-2024/02/04-00:35:30.365060 75a7aba006c0 Delete type=0 #114
-2024/02/04-00:36:05.423042 75a8322006c0 Level-0 table #119: started
-2024/02/04-00:36:05.423064 75a8322006c0 Level-0 table #119: 0 bytes OK
-2024/02/04-00:36:05.435753 75a8322006c0 Delete type=0 #117
-2024/02/04-00:36:05.461312 75a8322006c0 Manual compaction at level-0 from '!scenes!0WlsaezZKuXlQUV3' @ 72057594037927935 : 1 .. '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 0 : 0; will stop at (end)
-2024/02/04-00:36:05.461338 75a8322006c0 Manual compaction at level-1 from '!scenes!0WlsaezZKuXlQUV3' @ 72057594037927935 : 1 .. '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 0 : 0; will stop at (end)
+2024/02/04-01:02:12.401271 70404ee006c0 Recovering log #122
+2024/02/04-01:02:12.420457 70404ee006c0 Delete type=3 #120
+2024/02/04-01:02:12.420526 70404ee006c0 Delete type=0 #122

@@ -503,11 +503,13 @@ export function parseSceneTiles(
     marginOfErrorPx: number,
 ): StolenLandsData {
     const claimedPositions = objects.filter(o => o.type === 'claimed');
-    const nonClaimedPositions = objects.filter(o => o.type !== 'claimed');
+    // try to reduce quadratic complexity a bit
+    const nonClaimedPositions = new Set(objects.filter(o => o.type !== 'claimed'));
     const worksites = claimedPositions
         .map(claimed => {
-            const tilesInPos = nonClaimedPositions
+            const tilesInPos = Array.from(nonClaimedPositions)
                 .filter(nonClaimed => shapeContainsOtherShape(claimed, nonClaimed, marginOfErrorPx));
+            tilesInPos.forEach(t => nonClaimedPositions.delete(t));
             return {
                 farmlands: {quantity: tilesInPos.filter(t => t.type === 'farmland').length, resources: 0},
                 lumberCamps: getWorksitesInTiles('lumberCamp', tilesInPos),

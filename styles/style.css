@@ -183,6 +183,7 @@
 
 .km-table td select {
     width: 100%;
+    text-align: center;
 }
 
 .km-table td.left-align {
