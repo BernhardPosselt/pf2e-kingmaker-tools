@@ -103,6 +103,7 @@ Hooks.on('ready', async () => {
                     if (actor === undefined) {
                         ui.notifications?.error('Please select an actor');
                     } else {
+                        console.log(actor);
                         await showStructureEditDialog(gameInstance, actor.token.baseActor);
                     }
                 },
