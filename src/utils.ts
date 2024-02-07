@@ -29,8 +29,12 @@ export function getSelectedCharacter(game: Game): any {
     return game.user?.character as unknown as any;
 }
 
-export function createUUIDLink(uuid: string, label: string): string {
-    return `@UUID[${uuid}]{${label}}`;
+export function createUUIDLink(uuid: string, label?: string): string {
+    if (label === undefined) {
+        return `@UUID[${uuid}]`;
+    } else {
+        return `@UUID[${uuid}]{${label}}`;
+    }
 }
 
 export async function roll(expression: string, flavor?: string): Promise<number> {
@@ -85,6 +89,10 @@ export function unpackFormArray<T>(obj: Record<string, T> | undefined | null): T
     } else {
         return [];
     }
+}
+
+export function isSlug(word: string): boolean {
+    return /^([a-zA-Z0-9]+)(-[a-zA-Z0-9]+)*$/.test(word);
 }
 
 export function slugify(word: string): string {
@@ -292,4 +300,8 @@ export function isNonNullable<T>(value: T | undefined | null): value is T {
 
 export function isNullable<T>(value: T | undefined | null): boolean {
     return !isNonNullable(value);
+}
+
+export function splitByWhitespace(text: string): string[] {
+    return text.split(/\s+/);
 }

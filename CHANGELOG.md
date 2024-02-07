@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Added
+
+* Homebrew Camping activities can now add more than 1 effect
+
+### Fixed
+
+* Fixed Hearty Meal also applying to saving DC values
+
+### Changed
+
+* Split up Relaxed into 2 effects so that modifier can be removed after first use
+
 ## [0.28.4] - 2024-02-06
 
 ### Fixed

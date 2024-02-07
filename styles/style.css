@@ -256,7 +256,12 @@ td.skill-value {
     display: table-row;
 }
 
-.simple-dialog-form label {
+.simple-dialog-form button {
+    width: auto;
+}
+
+.simple-dialog-form label,
+.simple-dialog-form .label {
     text-align: right;
     vertical-align: middle;
 }
@@ -266,10 +271,12 @@ td.skill-value {
     width: 100%;
 }
 
-.simple-dialog-form label,
-.simple-dialog-form input,
-.simple-dialog-form select {
+.simple-dialog-form > div > * {
     display: table-cell;
+}
+
+.simple-dialog-form-error {
+    color: red;
 }
 
 .kingdom-skill i {
@@ -484,4 +491,12 @@ td.skill-value {
 
 #km-kingdom-size-help {
     color: white;
+}
+
+.camping-effect .content-link {
+    vertical-align: middle;
+    display: inline-block;
+    width: 185px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 }

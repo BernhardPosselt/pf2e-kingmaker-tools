@@ -1,4 +1,4 @@
-import {unpackFormArray} from '../src/utils';
+import {splitByWhitespace, unpackFormArray} from '../src/utils';
 
 describe('unpackFormArray', () => {
     test('unpack', () => {
@@ -78,5 +78,9 @@ describe('unpackFormArray', () => {
             {complete: false},
             {complete: false},
         ]);
+    });
+
+    it('should split by whitespace', () => {
+        expect(splitByWhitespace('this  long\ntext')).toEqual(['this', 'long', 'text']);
     });
 });

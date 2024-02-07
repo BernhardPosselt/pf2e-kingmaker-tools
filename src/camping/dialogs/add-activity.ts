@@ -1,14 +1,15 @@
 import {
-    parseCheckbox,
-    parseNumberInput,
+    capitalize,
+    createUUIDLink,
+    escapeHtml,
+    isBlank,
+    isSlug,
+    listenClick,
     parseSelect,
-    parseTextArea,
     parseTextInput,
-    slugify,
-    slugifyable,
     unslugify,
 } from '../../utils';
-import {ActivityOutcome, CampingActivityData, CampingActivityName, EffectTarget} from '../activities';
+import {ActivityEffect, ActivityOutcome, CampingActivityData, CampingActivityName, EffectTarget} from '../activities';
 import {getEffectByUuid} from '../actor';
 import {DcType, Proficiency} from '../data';
 
@@ -17,162 +18,320 @@ export interface AddActivityOptions {
     activities: CampingActivityData[];
 }
 
-export function addActivityDialog({onSubmit, activities}: AddActivityOptions): void {
+interface Effect {
+    target: string;
+    effect: string;
+    key: string;
+}
+
+interface ViewOutcome {
+    id: string;
+    label: string;
+    message: string;
+    effects: Effect[];
+    modifyRandomEncounterDc: {
+        day: number;
+        night: number;
+    };
+    checkRandomEncounter: boolean;
+}
+
+interface ViewData {
+    outcomes: ViewOutcome[];
+    effects: Effect[];
+    name: CampingActivityName;
+    journalUuid: string;
+    skillRequirements: string;
+    skillProficiency: Proficiency | 'none';
+    dc: DcType | '';
+    skills: string;
+    modifyRandomEncounterDc: {
+        day: number;
+        night: number;
+    },
+    isSecret: boolean;
+    errors: string[];
+}
+
+const allOutcomes = ['criticalSuccess', 'success', 'failure', 'criticalFailure'] as const;
+type  ActivityOutcomeType = typeof allOutcomes[number];
+
+type FormData = {
+    'day-encounter-dc': number;
+    'night-encounter-dc': number;
+    dc: string;
+    journal: string;
+    name: string;
+    secret: false;
+    'skill-proficiency': Proficiency;
+    'skill-requirement': string;
+    skills: string;
+    'criticalFailure-day-modifier': number;
+    'criticalFailure-message': string;
+    'criticalFailure-night-modifier': number;
+    'criticalFailure-roll-encounter': boolean;
+    'failure-day-modifier': number;
+    'failure-message': string;
+    'failure-night-modifier': number;
+    'failure-roll-encounter': boolean;
+    'criticalSuccess-day-modifier': number;
+    'criticalSuccess-message': string;
+    'criticalSuccess-night-modifier': number;
+    'criticalSuccess-roll-encounter': boolean;
+    'success-day-modifier': number;
+    'success-message': string;
+    'success-night-modifier': number;
+    'success-roll-encounter': boolean;
+};
+
+function emptyOutcome(): ActivityOutcome {
+    return {
+        checkRandomEncounter: false,
+        effectUuids: [],
+        modifyRandomEncounterDc: {
+            day: 0,
+            night: 0,
+        },
+        message: '',
+    };
+}
+
+class AddCampingActivities extends FormApplication<FormApplicationOptions & AddActivityOptions, object, null> {
+    private onSubmitCallback: (activity: CampingActivityData) => Promise<void>;
+    private activities: CampingActivityData[];
+    private activity: CampingActivityData;
+
+    static override get defaultOptions(): FormApplicationOptions {
+        const options = super.defaultOptions;
+        options.id = 'kingdom-add-camping-activities';
+        options.title = 'Manage Camping Activities';
+        options.template = 'modules/pf2e-kingmaker-tools/templates/camping/add-activities.hbs';
+        options.submitOnChange = true;
+        options.closeOnSubmit = false;
+        options.classes = [];
+        options.height = 'auto';
+        return options;
+    }
+
+    constructor(object: null, options: Partial<FormApplicationOptions> & AddActivityOptions) {
+        super(object, options);
+        this.onSubmitCallback = options.onSubmit;
+        this.activities = options.activities;
+        this.activity = {
+            journalUuid: '',
+            isHomebrew: true,
+            dc: 'zone',
+            effectUuids: [],
+            modifyRandomEncounterDc: {
+                night: 0,
+                day: 0,
+            },
+            isLocked: false,
+            skills: 'any',
+            isSecret: false,
+            name: '' as CampingActivityName,
+            skillRequirements: [],
+            criticalFailure: emptyOutcome(),
+            criticalSuccess: emptyOutcome(),
+            success: emptyOutcome(),
+            failure: emptyOutcome(),
+        };
+    }
+
+    override async getData(): Promise<ViewData> {
+        return {
+            outcomes: await Promise.all(allOutcomes.map(async (s) => {
+                const activity = this.activity[s];
+                return {
+                    id: s,
+                    label: unslugify(s),
+                    checkRandomEncounter: activity?.checkRandomEncounter ?? false,
+                    message: activity?.message ?? '',
+                    modifyRandomEncounterDc: {
+                        day: activity?.modifyRandomEncounterDc?.day ?? 0,
+                        night: activity?.modifyRandomEncounterDc?.night ?? 0,
+                    },
+                    effects: await this.getEffects(activity?.effectUuids ?? [], s),
+                };
+            })),
+            effects: await this.getEffects(this.activity.effectUuids ?? [], 'effect'),
+            dc: this.activity.dc ?? '',
+            isSecret: this.activity.isSecret ?? false,
+            journalUuid: this.activity.journalUuid ?? '',
+            modifyRandomEncounterDc: {
+                day: this.activity.modifyRandomEncounterDc?.day ?? 0,
+                night: this.activity.modifyRandomEncounterDc?.night ?? 0,
+            },
+            name: this.activity.name ?? '',
+            skillRequirements: (this.activity.skillRequirements ?? []).map(s => unslugify(s.skill)).join(', '),
+            skillProficiency: this.activity.skillRequirements?.[0]?.proficiency ?? 'none',
+            skills: this.activity.skills === 'any' ? 'any' : this.activity.skills.map(s => unslugify(s)).join(', '),
+            errors: await this.validate(this.activity),
+        };
+    }
+
+    private async getEffects(effectUuids: ActivityEffect[], key: string): Promise<Effect[]> {
+        return await Promise.all(effectUuids?.map(async (e): Promise<Effect> => {
+            return {
+                key,
+                target: e.target ? capitalize(e.target) : 'All',
+                effect: await TextEditor.enrichHTML(createUUIDLink(e.uuid)),
+            };
+        }));
+    }
+
+    protected async _updateObject(event: Event, formData: FormData): Promise<void> {
+        console.log(formData);
+        this.activity.journalUuid = formData.journal;
+        this.activity.name = formData.name as CampingActivityName;
+        this.activity.skills = parseSkills(formData.skills);
+        const proficiency = formData['skill-proficiency'];
+        this.activity.skillRequirements = parseSkillList(formData['skill-requirement']).map(skill => {
+            return {skill, proficiency};
+        });
+        this.activity.isSecret = formData.secret;
+        this.activity.isLocked = false;
+        this.activity.dc = parseDC(formData.dc);
+        if (formData['night-encounter-dc'] || formData['day-encounter-dc']) {
+            this.activity.modifyRandomEncounterDc = {
+                day: formData['day-encounter-dc'] ?? 0,
+                night: formData['night-encounter-dc'] ?? 0,
+            };
+        } else {
+            this.activity.modifyRandomEncounterDc = undefined;
+        }
+        this.activity.isHomebrew = true;
+        allOutcomes.forEach(outcome => {
+            this.activity[outcome]!.message = formData[`${outcome}-message`];
+            this.activity[outcome]!.checkRandomEncounter = formData[`${outcome}-roll-encounter`];
+            this.activity[outcome]!.modifyRandomEncounterDc!.day = formData[`${outcome}-day-modifier`];
+            this.activity[outcome]!.modifyRandomEncounterDc!.night = formData[`${outcome}-night-modifier`];
+        });
+        this.render();
+    }
+
+    override activateListeners(html: JQuery): void {
+        super.activateListeners(html);
+        const $html = html[0];
+        listenClick($html, '.save', async (): Promise<void> => {
+            await this.onSubmitCallback(this.activity);
+            await this.close();
+        });
+        listenClick($html, '.add-effect', async (ev): Promise<void> => {
+            const button = ev.currentTarget as HTMLButtonElement;
+            const type = button.dataset.type as ActivityOutcomeType | 'effect';
+            const value: ActivityEffect = {
+                target: 'all',
+                uuid: '',
+            };
+            editActivityDialog(value, () => {
+                if (type === 'effect') {
+                    this.activity.effectUuids = (this.activity.effectUuids ?? []);
+                    this.activity.effectUuids.push(value);
+                } else {
+                    this.activity[type]!.effectUuids = (this.activity[type]?.effectUuids ?? []);
+                    this.activity[type]!.effectUuids!.push(value);
+                }
+                this.render();
+            });
+        });
+        listenClick($html, '.edit-effect', async (ev): Promise<void> => {
+            const button = ev.currentTarget as HTMLButtonElement;
+            const type = button.dataset.type as ActivityOutcomeType | 'effect';
+            const index = parseInt(button.dataset.id ?? '0', 10);
+            let value: ActivityEffect;
+            if (type === 'effect') {
+                value = this.activity.effectUuids![index];
+            } else {
+                value = this.activity[type]!.effectUuids![index];
+            }
+            editActivityDialog(value, () => this.render());
+        });
+        listenClick($html, '.delete-effect', async (ev): Promise<void> => {
+            const button = ev.currentTarget as HTMLButtonElement;
+            const type = button.dataset.type as ActivityOutcomeType | 'effect';
+            const index = parseInt(button.dataset.id ?? '0', 10);
+            if (type === 'effect') {
+                this.activity.effectUuids = this.activity.effectUuids
+                    ?.filter((_, i) => i !== index);
+            } else {
+                this.activity[type]!.effectUuids = this.activity[type]?.effectUuids
+                    ?.filter((_, i) => i !== index);
+            }
+            this.render();
+        });
+    }
+
+    private async validate(activity: CampingActivityData): Promise<string[]> {
+        const result = [];
+        if (isBlank(activity.name)) {
+            result.push('Name must not be blank');
+        }
+        if (this.activities.find(a => a.name === activity.name)) {
+            result.push(`Name ${activity.name} already exists`);
+        }
+        if (activity.journalUuid && !(await fromUuid(activity.journalUuid))) {
+            result.push(`Journal with uuid ${activity.journalUuid} does not exist`);
+        }
+        if (activity.skillRequirements.some(r => !isSlug(r.skill))) {
+            result.push('Skill Requirements must only include American letters separated by spaces');
+        }
+        const skills = activity.skills;
+        if (skills !== 'any' && skills.some(s => !isSlug(s))) {
+            result.push('Skills must only include American letters separated by spaces');
+        }
+        return result;
+    }
+}
+
+function editActivityDialog(data: ActivityEffect, onOk: () => void = (): void => {
+}): void {
     new Dialog({
-        title: 'Add Camping Activity',
+        title: 'Add/Edit Effect',
         content: `
-        <div>
-        <p><b>Note</b> Activities will only show up after rolling <b>Prepare Campsite</b></p>
-        <p><b>UUIDs</b> can be found in the item's <b>Rules</b> tab</p>
-        <p><b>Slugifyable</b>: Must contain English letters or numbers only; must be separated by a single space</p>
         <form class="simple-dialog-form">
-            <div>
-                <label for="km-name">Name</label>
-                <input type="text" name="name" id="km-name" placeholder="Unknown Activity">
-            </div>
-            <div>
-                <label for="km-journal">Journal UUID</label>
-                <input type="text" name="journal" id="km-journal">
-            </div>
-            <div>
-                <label for="km-skills">Skills (<b>any</b> or skill name (slugifyable))</label>
-                <input id="km-skills" type="text" placeholder="Survival,Perception" name="skills">
-            </div>
-            <div>
-                <label for="km-dc">DC (number, <b>zone</b>, <b>actorLevel</b> or blank)</label>
-                <input id="km-dc" type="text" placeholder="" name="dc">
-            </div>
-            <div>
-                <label for="km-skill-requirement">Skill Requirement (slugifyable)</label>
-                <input id="km-skill-requirement" type="text" placeholder="Survival,Perception" name="skill-requirement">
-            </div>
-            <div>
-                <label for="km-skill-proficiency">Skill Proficiency Requirement</label>
-                <select name="skill-proficiency" id="km-skill-proficiency">
-                    <option value="none">-</option>
-                    <option value="trained">Trained</option>
-                    <option value="expert">Expert</option>
-                    <option value="master">Master</option>
-                    <option value="legendary">Legendary</option>
-                </select>
-            </div>
-            <div>
-                <label for="km-day-encounter-dc">Day Encounter DC Modifier</label>
-                <input type="number" name="day-encounter-dc" id="km-day-encounter-dc" placeholder="0">
-            </div>
-            <div>
-                <label for="km-night-encounter-dc">Night Encounter DC Modifier</label>
-                <input type="number" name="night-encounter-dc" id="km-night-encounter-dc" placeholder="0">
-            </div>
-            <div>
-                <label for="km-secret">Secret Check</label>
-                <input type="checkbox" name="secret" id="km-secret">
-            </div>
-            ${['critical-success', 'success', 'failure', 'critical-failure'].map(d => {
-            return `
-                  <div>
-                    <label for="km-${d}-effect">${unslugify(d)}: Effect UUID</label>
-                    <input type="text" name="${d}-effect" id="km-${d}-effect">
-                  </div>
-                  <div>
-                    <label for="km-${d}-effect-target">${unslugify(d)}: Effect Target</label>
-                    <select name="${d}-effect-target" id="km-${d}-effect-target">
-                        <option value="all">All</option>
-                        <option value="allies">Allies</option>
-                        <option value="self">Self</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="km-${d}-message">${unslugify(d)}: Message</label>
-                    <textarea name="${d}-message" id="km-${d}-message" placeholder=""></textarea>
-                  </div>
-                  <div>
-                    <label for="km-${d}-day-modifier">${unslugify(d)}: Day Encounter DC Modifier</label>
-                    <input type="number" name="${d}-day-modifier" id="km-${d}-day-modifier" placeholder="0">
-                  </div>
-                  <div>
-                    <label for="km-${d}-night-modifier">${unslugify(d)}: Night Encounter DC Modifier</label>
-                    <input type="number" name="${d}-night-modifier" id="km-${d}-night-modifier" placeholder="0">
-                  </div>
-                  <div>
-                    <label for="km-${d}-roll-encounter">${unslugify(d)}: Random Encounter</label>
-                    <input type="checkbox" name="${d}-roll-encounter" id="km-${d}-roll-encounter">
-                  </div>
-                  `;
-        }).join('')}
-            <div>
+           <div>
                 <label for="km-effect">Effect UUID</label>
-                <input type="text" name="effect" id="km-effect">
+                <input type="text" name="effect" id="km-effect" value="${escapeHtml(data.uuid)}">
             </div>
             <div>
                 <label for="km-effect-target">Effect Target</label>
                 <select name="effect-target" id="km-effect-target">
-                    <option value="all">All</option>
-                    <option value="allies">Allies</option>
-                    <option value="self">Self</option>
+                    <option value="all" ${data.target === 'all' ? 'selected' : ''}>All</option>
+                    <option value="allies" ${data.target === 'allies' ? 'selected' : ''}>Allies</option>
+                    <option value="self" ${data.target === 'self' ? 'selected' : ''}>Self</option>
                 </select>
             </div>
         </form>
-        </div>
         `,
         buttons: {
-            add: {
+            save: {
                 icon: '<i class="fa-solid fa-save"></i>',
-                label: 'Add',
+                label: 'Save',
                 callback: async (html): Promise<void> => {
                     const $html = html as HTMLElement;
-                    const journalUuid = parseTextInput($html, 'journal');
                     const effectUuid = parseTextInput($html, 'effect');
-                    const journal = await fromUuid(journalUuid);
-                    const effectItem = await getEffectByUuid(effectUuid);
-                    const name = (parseTextInput($html, 'name') || 'Unknown Activity') as CampingActivityName;
-                    const skillRequirements = parseSkillList(parseTextInput($html, 'skill-requirement'));
-                    const skills = parseSkills(parseTextInput($html, 'skills'));
-                    if (journalUuid && journal === null) {
-                        ui.notifications?.error(`Can not find journal with uuid ${journalUuid}`);
-                    } else if (effectUuid && effectItem === null) {
+                    const effectTarget = parseSelect($html, 'effect-target') as EffectTarget;
+                    const item = await getEffectByUuid(effectUuid);
+                    if (item === null) {
                         ui.notifications?.error(`Can not find effect item with uuid ${effectUuid}`);
-                    } else if (activities.find(r => r.name === name)) {
-                        ui.notifications?.error(`Activity with name ${name} exists already`);
-                    } else if (!skillRequirements.every(s => slugifyable(s))) {
-                        ui.notifications?.error(`Skill Requirements "${skillRequirements}" can not be slugified`);
-                    } else if (skills !== 'any' && !skills.every(s => slugifyable(s))) {
-                        ui.notifications?.error(`Skills "${skills}" can not be slugified`);
                     } else {
-                        const skillProficiency = parseProficiency(parseSelect($html, 'skill-proficiency'));
-                        await onSubmit({
-                            name,
-                            journalUuid: journalUuid,
-                            skills: skills === 'any' ? 'any' : skills.map(s => slugify(s)),
-                            skillRequirements: skillProficiency ? skillRequirements.map(s => {
-                                return {skill: slugify(s), proficiency: skillProficiency};
-                            }) : [],
-                            modifyRandomEncounterDc: {
-                                day: parseNumberInput($html, 'day-encounter-dc') || 0,
-                                night: parseNumberInput($html, 'night-encounter-dc') || 0,
-                            },
-                            isSecret: parseCheckbox($html, 'secret'),
-                            isLocked: false,
-                            effectUuids: effectUuid ? [{
-                                uuid: effectUuid,
-                                target: parseSelect($html, 'effect-target') as EffectTarget,
-                            }] : undefined,
-                            dc: parseDC(parseTextInput($html, 'dc')),
-                            isHomebrew: true,
-                            criticalSuccess: await parseEffects($html, 'critical-success'),
-                            success: await parseEffects($html, 'success'),
-                            failure: await parseEffects($html, 'failure'),
-                            criticalFailure: await parseEffects($html, 'critical-failure'),
-                        });
+                        data.uuid = effectUuid;
+                        data.target = effectTarget;
+                        onOk();
                     }
                 },
             },
         },
-        default: 'add',
+        default: 'save',
     }, {
         jQuery: false,
-        width: 510,
+        width: 321,
     }).render(true);
+}
+
+export function addActivityDialog(options: AddActivityOptions): void {
+    new AddCampingActivities(null, options).render(true);
 }
 
 function parseSkillList(value: string): string[] {
@@ -208,7 +367,7 @@ function parseProficiency(value: string): Proficiency | undefined {
 }
 
 function parseDC(value: string): DcType | undefined {
-    if (value !== null && value !== undefined) {
+    if (!isBlank(value)) {
         if (value === 'zone') {
             return 'zone';
         } else if (value === 'actorLevel') {
@@ -218,30 +377,6 @@ function parseDC(value: string): DcType | undefined {
             if (!isNaN(number)) {
                 return number;
             }
-        }
-    }
-    return undefined;
-}
-
-async function parseEffects($html: HTMLElement, name: 'critical-success' | 'success' | 'failure' | 'critical-failure'): Promise<ActivityOutcome | undefined> {
-    const effect = parseTextInput($html, `${name}-effect`) || undefined;
-    if (effect) {
-        const item = await getEffectByUuid(effect);
-        if (item === null) {
-            ui.notifications?.error(`Can not find effect item with uuid ${effect}`);
-        } else {
-            return {
-                message: parseTextArea($html, `${name}-message`) || '',
-                checkRandomEncounter: parseCheckbox($html, `${name}-roll-encounter`),
-                modifyRandomEncounterDc: {
-                    day: parseNumberInput($html, `${name}-day-modifier`) || 0,
-                    night: parseNumberInput($html, `${name}-night-modifier`) || 0,
-                },
-                effectUuids: [{
-                    uuid: effect,
-                    target: parseSelect($html, `${name}-effect-target`) as EffectTarget,
-                }],
-            };
         }
     }
     return undefined;

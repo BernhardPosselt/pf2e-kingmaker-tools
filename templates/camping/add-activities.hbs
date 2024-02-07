@@ -1,0 +1,113 @@
+<div>
+    <p><b>Note</b> Activities will only show up after rolling <b>Prepare Campsite</b></p>
+    <p><b>UUIDs</b> can be found in the item's <b>Rules</b> tab</p>
+    <p><b>Slugifyable</b>: Must contain English letters or numbers only; must be separated by a single space</p>
+    <form class="simple-dialog-form">
+        <div>
+            <label for="km-name">Name</label>
+            <input type="text" name="name" id="km-name" placeholder="Unknown Activity" value="{{name}}">
+        </div>
+        <div>
+            <label for="km-journal">Journal UUID</label>
+            <input type="text" name="journal" id="km-journal" value="{{journalUuid}}">
+        </div>
+        <div>
+            <label for="km-skills">Skills (<b>any</b> or skill name (slugifyable))</label>
+            <input id="km-skills" type="text" placeholder="Survival,Perception" name="skills" value="{{skills}}">
+        </div>
+        <div>
+            <label for="km-dc">DC (number, <b>zone</b>, <b>actorLevel</b> or blank)</label>
+            <input id="km-dc" type="text" placeholder="" name="dc" value="{{dc}}">
+        </div>
+        <div>
+            <label for="km-skill-requirement">Skill Requirement (slugifyable)</label>
+            <input id="km-skill-requirement" type="text" placeholder="Survival,Perception" name="skill-requirement"
+                   value="{{skillRequirements}}">
+        </div>
+        <div {{#unless skillRequirements}}hidden{{/unless}}>
+            <label for="km-skill-proficiency">Skill Proficiency Requirement</label>
+            <select name="skill-proficiency" id="km-skill-proficiency">
+                {{#select skillProficiency}}
+                    <option value="trained">Trained</option>
+                    <option value="expert">Expert</option>
+                    <option value="master">Master</option>
+                    <option value="legendary">Legendary</option>
+                {{/select}}
+            </select>
+        </div>
+        <div>
+            <label for="km-day-encounter-dc">Day Encounter DC Modifier</label>
+            <input type="number" name="day-encounter-dc" id="km-day-encounter-dc" placeholder="0"
+                   value="{{modifyRandomEncounterDc.day}}">
+        </div>
+        <div>
+            <label for="km-night-encounter-dc">Night Encounter DC Modifier</label>
+            <input type="number" name="night-encounter-dc" id="km-night-encounter-dc" placeholder="0"
+                   value="{{modifyRandomEncounterDc.night}}">
+        </div>
+        <div>
+            <label for="km-secret">Secret Check</label>
+            <input type="checkbox" name="secret" id="km-secret" {{checked isSecret}}>
+        </div>
+        {{#each outcomes}}
+            {{#each effects}}
+                <div>
+                    <div class="label">Effect targeting: {{target}}</div>
+                    <div class="camping-effect">
+                        {{{effect}}}
+                        <button title="edit" type="button" class="edit-effect" data-type="{{key}}"
+                                data-index="{{@index}}"><i class="fa-solid fa-pencil"></i></button>
+                        <button title="edit" type="button" class="delete-effect" data-type="{{key}}"
+                                data-index="{{@index}}"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            {{/each}}
+            <div>
+                <div></div>
+                <button type="button" title="add" class="add-effect" data-type="{{id}}">Add Effect <i
+                        class="fa-solid fa-plus"></i></button>
+            </div>
+            <div>
+                <label for="km-{{id}}-message">{{label}}: Message</label>
+                <textarea name="{{id}}-message" id="km-{{id}}-message" placeholder="">{{message}}</textarea>
+            </div>
+            <div>
+                <label for="km-{{id}}-day-modifier">{{label}}: Day Encounter DC Modifier</label>
+                <input type="number" name="{{id}}-day-modifier" id="km-{{id}}-day-modifier" placeholder="0"
+                       value="{{modifyRandomEncounterDc.day}}">
+            </div>
+            <div>
+                <label for="km-{{id}}-night-modifier">{{label}}: Night Encounter DC Modifier</label>
+                <input type="number" name="{{id}}-night-modifier" id="km-{{id}}-night-modifier" placeholder="0"
+                       value="{{modifyRandomEncounterDc.night}}">
+            </div>
+            <div>
+                <label for="km-{{id}}-roll-encounter">{{label}}: Random Encounter</label>
+                <input type="checkbox" name="{{id}}-roll-encounter" id="km-{{id}}-roll-encounter" {{checked
+                        checkRandomEncounter}}>
+            </div>
+        {{/each}}
+        {{#each effects}}
+            <div>
+                <div class="label">Effect targeting: {{target}}</div>
+                <div class="camping-effect">
+                    {{{effect}}}
+                    <button title="edit" type="button" class="edit-effect" data-type="{{key}}"
+                            data-index="{{@index}}"><i class="fa-solid fa-pencil"></i></button>
+                    <button title="edit" type="button" class="delete-effect" data-type="{{key}}"
+                            data-index="{{@index}}"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        {{/each}}
+        <div>
+            <div></div>
+            <button type="button" title="add" class="add-effect" data-type="effect">Add Effect <i
+                    class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+    </form>
+    {{#each errors}}
+        <p class="simple-dialog-form-error">{{this}}</p>
+    {{/each}}
+    <button class="save" {{#if errors}}disabled{{/if}}>Save <i class="fa-solid fa-save"></i></button>
+</div>
