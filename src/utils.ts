@@ -291,6 +291,13 @@ export function isBlank(value: string | null | undefined): boolean {
     }
 }
 
+export function blankToUndefined<T extends string>(value: T): T | undefined {
+    if (isBlank(value)) {
+        return undefined;
+    }
+    return value;
+}
+
 export function isKingmakerInstalled(game: Game): boolean {
     return game.modules.get('pf2e-kingmaker')?.active === true;
 }

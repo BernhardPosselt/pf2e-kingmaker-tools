@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.29.0] - 2024-02-08
+
 ### Added
 
 * Show consumption surplus for farms in Status tab and for settlements in settlement detail view
@@ -17,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Split up Relaxed into 2 effects so that modifier can be removed after first use
+* Simplify skill selects in kingdom activity and camping activity dialogs
 
 ## [0.28.4] - 2024-02-06
 

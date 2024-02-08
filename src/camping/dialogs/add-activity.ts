@@ -263,6 +263,7 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
             skillDialog({
                 selectedLores,
                 selectedSkills,
+                atLeastOne: true,
                 all: skills === 'any',
                 onSave: (data) => {
                     if (data.all) {

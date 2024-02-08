@@ -12,6 +12,7 @@ import {ActivityBonuses, SkillItemBonus} from './data/structures';
 import {ActiveSettlementStructureResult} from './scene';
 import {getBooleanSetting} from '../settings';
 import {KingdomActivityById} from './data/activityData';
+import {Proficiency} from '../camping/data';
 
 export type UntrainedProficiencyMode = 'half' | 'full' | 'none';
 
@@ -458,6 +459,32 @@ export function rankToLabel(rank: number): string {
         return 'Master';
     } else {
         return 'Legendary';
+    }
+}
+
+export function rankToProficiency(rank: number): Proficiency | undefined {
+    if (rank === 1) {
+        return 'trained';
+    } else if (rank === 2) {
+        return 'expert';
+    } else if (rank === 3) {
+        return 'master';
+    } else if (rank === 4) {
+        return 'legendary';
+    }
+}
+
+export function proficiencyToRank(proficiency: Proficiency | undefined): number {
+    if (proficiency === 'trained') {
+        return 1;
+    } else if (proficiency === 'expert') {
+        return 2;
+    } else if (proficiency === 'master') {
+        return 3;
+    } else if (proficiency === 'legendary') {
+        return 4;
+    } else {
+        return 0;
     }
 }
 

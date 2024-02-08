@@ -1,27 +1,58 @@
-import {ActivityResult, KingdomActivity, SkillRanks} from '../data/activityData';
-import {
-    capitalize,
-    escapeHtml,
-    isBlank,
-    parseCheckbox,
-    parseNumberInput,
-    parseNumberSelect,
-    parseSelect,
-    parseTextArea,
-    parseTextInput,
-    range,
-} from '../../utils';
+import {ActivityResult, KingdomActivity} from '../data/activityData';
+import {blankToUndefined, capitalize, isBlank, LabelAndValue, listenClick, range} from '../../utils';
 import {KingdomPhase} from '../data/activities';
-import {allSkillRanks, allSkills} from '../data/skills';
+import {allSkills} from '../data/skills';
+import {skillDialog, SkillView} from '../../common/skills-dialog';
+import {proficiencyToRank, rankToProficiency} from '../modifiers';
 
 
-function parseOptionalTextArea(html: HTMLElement, selector: string): string | undefined {
-    const value = parseTextArea(html, selector);
-    return isBlank(value) ? undefined : value;
+interface AddActivityData {
+    id: string;
+    edit: boolean;
+    title: string;
+    description: string;
+    hint: string;
+    special: string;
+    requirement: string;
+    phase: KingdomPhase;
+    phases: LabelAndValue[];
+    skills: SkillView[];
+    dc: 'control' | 'custom' | 'none' | number;
+    dcs: LabelAndValue[];
+    dcAdjustment: number;
+    oncePerRound: boolean;
+    fortune: boolean;
+    criticalSuccess: string;
+    success: string;
+    failure: string;
+    criticalFailure: string;
+    errors: string[];
 }
 
-function parseDc(html: HTMLElement, selector: string): 'control' | 'custom' | 'none' | number {
-    const value = parseSelect(html, selector);
+interface ActivityFormData {
+    id: string;
+    title: string;
+    description: string;
+    hint: string;
+    special: string;
+    requirement: string;
+    phase: KingdomPhase;
+    dc: 'control' | 'custom' | 'none' | string;
+    dcAdjustment: number;
+    oncePerRound: boolean;
+    fortune: boolean;
+    criticalSuccess: string;
+    success: string;
+    failure: string;
+    criticalFailure: string;
+}
+
+interface AddKingdomActivityOptions {
+    onOk: (activity: KingdomActivity) => Promise<void>,
+    activity?: KingdomActivity,
+}
+
+function parseDc(value: string): 'control' | 'custom' | 'none' | number {
     if (value === 'control' || value === 'custom' || value === 'none') {
         return value;
     } else {
@@ -30,8 +61,7 @@ function parseDc(html: HTMLElement, selector: string): 'control' | 'custom' | 'n
 }
 
 
-function parseOutcome(html: HTMLElement, selector: string): ActivityResult | undefined {
-    const value = parseTextArea(html, selector);
+function parseOutcome(value: string): ActivityResult | undefined {
     if (isBlank(value)) {
         return undefined;
     } else {
@@ -41,175 +71,163 @@ function parseOutcome(html: HTMLElement, selector: string): ActivityResult | und
     }
 }
 
-function parseSkills(html: HTMLElement): SkillRanks {
-    const skill = parseSelect(html, 'skill');
-    const rank = parseNumberSelect(html, 'rank');
-    return {
-        [skill]: rank,
-    };
+
+class AddKingdomActivities extends FormApplication<FormApplicationOptions & AddKingdomActivityOptions, object, null> {
+    private onSubmitCallback: (activity: KingdomActivity) => Promise<void>;
+    private activity: KingdomActivity;
+    private edit: boolean;
+
+    static override get defaultOptions(): FormApplicationOptions {
+        const options = super.defaultOptions;
+        options.id = 'kingdom-add-kingdom-activities';
+        options.title = 'Manage Kingdom Activities';
+        options.template = 'modules/pf2e-kingmaker-tools/templates/kingdom/add-activity-dialog.hbs';
+        options.submitOnChange = true;
+        options.closeOnSubmit = false;
+        options.classes = [];
+        options.height = 'auto';
+        options.width = 400;
+        return options;
+    }
+
+    constructor(object: null, options: Partial<FormApplicationOptions> & AddKingdomActivityOptions) {
+        super(object, options);
+        this.onSubmitCallback = options.onOk;
+        this.edit = options.activity !== undefined;
+        this.activity = {
+            special: options.activity?.special ?? '',
+            requirement: options.activity?.requirement ?? '',
+            description: options.activity?.description ?? '',
+            dcAdjustment: options.activity?.dcAdjustment ?? 0,
+            fortune: options.activity?.fortune ?? false,
+            failure: {msg: options.activity?.failure?.msg ?? ''},
+            success: {msg: options.activity?.success?.msg ?? ''},
+            criticalFailure: {msg: options.activity?.criticalFailure?.msg ?? ''},
+            criticalSuccess: {msg: options.activity?.criticalSuccess?.msg ?? ''},
+            dc: options.activity?.dc ?? 'control',
+            title: options.activity?.title ?? '',
+            hint: options.activity?.hint ?? '',
+            id: options.activity?.id ?? '',
+            skills: options.activity?.skills ?? {agriculture: 0},
+            phase: options.activity?.phase ?? 'leadership',
+            oncePerRound: options.activity?.oncePerRound ?? false,
+            enabled: options.activity?.enabled ?? true,
+        };
+    }
+
+    override async getData(): Promise<AddActivityData> {
+        return {
+            phases: ['army', 'leadership', 'region'].map(p => {
+                return {
+                    label: capitalize(p),
+                    value: p,
+                };
+            }),
+            phase: this.activity.phase,
+            dc: this.activity.dc,
+            fortune: this.activity.fortune,
+            edit: this.edit,
+            hint: this.activity.hint ?? '',
+            id: this.activity.id,
+            title: this.activity.title,
+            special: this.activity.special ?? '',
+            requirement: this.activity.requirement ?? '',
+            description: this.activity.description,
+            oncePerRound: this.activity.oncePerRound,
+            dcAdjustment: this.activity.dcAdjustment ?? 0,
+            criticalSuccess: this.activity.criticalSuccess?.msg ?? '',
+            success: this.activity.success?.msg ?? '',
+            failure: this.activity.failure?.msg ?? '',
+            criticalFailure: this.activity.criticalFailure?.msg ?? '',
+            dcs: ['none', 'control', ...range(14, 51).map(i => i.toString())]
+                .map(v => {
+                    return {
+                        value: v,
+                        label: capitalize(v),
+                    };
+                }),
+            skills: Array.from(Object.entries(this.activity.skills))
+                .map(([key, rank]) => {
+                    return {
+                        proficiency: rankToProficiency(rank),
+                        id: key,
+                        label: capitalize(key),
+                    };
+                }),
+            errors: await this.validate(this.activity),
+        };
+    }
+
+    protected async _updateObject(event: Event, formData: ActivityFormData): Promise<void> {
+        console.log(formData);
+        if (!this.edit) {
+            this.activity.id = formData.id;
+        }
+        this.activity.title = formData.title;
+        this.activity.description = formData.description;
+        this.activity.hint = blankToUndefined(formData.hint);
+        this.activity.special = blankToUndefined(formData.special);
+        this.activity.requirement = blankToUndefined(formData.requirement);
+        this.activity.phase = formData.phase;
+        this.activity.dc = parseDc(formData.dc);
+        this.activity.dcAdjustment = formData.dcAdjustment;
+        this.activity.oncePerRound = formData.oncePerRound;
+        this.activity.fortune = formData.fortune;
+        this.activity.criticalSuccess = parseOutcome(formData.criticalSuccess);
+        this.activity.success = parseOutcome(formData.success);
+        this.activity.failure = parseOutcome(formData.failure);
+        this.activity.criticalFailure = parseOutcome(formData.criticalFailure);
+        this.render();
+    }
+
+    override activateListeners(html: JQuery): void {
+        super.activateListeners(html);
+        const $html = html[0];
+        listenClick($html, '.save', async (): Promise<void> => {
+            await this.onSubmitCallback(this.activity);
+            await this.close();
+        });
+        listenClick($html, '.edit-skills', async (): Promise<void> => {
+            const skills = this.activity.skills;
+            const selectedSkills = Object.entries(skills)
+                .map(([s, rank]) => {
+                    return {
+                        id: s,
+                        proficiency: rankToProficiency(rank),
+                    };
+                }) || undefined;
+            skillDialog({
+                selectedSkills,
+                atLeastOne: true,
+                onSave: (data) => {
+                    this.activity.skills = Object.fromEntries(data.selectedSkills.map(skill => {
+                        return [skill.id, proficiencyToRank(skill.proficiency)];
+                    }));
+                    this.render();
+                },
+                availableSkills: [...allSkills],
+            });
+        });
+    }
+
+    private async validate(activity: KingdomActivity): Promise<string[]> {
+        const result = [];
+        if (!/^[a-z\\-]+$/.test(activity.id)) {
+            result.push('ID must only contain lower case English letters and hyphens!');
+        }
+        if (isBlank(activity.title)) {
+            result.push('Title must not be blank');
+        }
+        return result;
+    }
 }
 
 export function addActivityDialog(
     onOk: (activity: KingdomActivity) => Promise<void>,
     activity?: KingdomActivity,
 ): void {
-    const data = activity ?? {
-        special: '',
-        requirement: '',
-        description: '',
-        dcAdjustment: 0,
-        fortune: false,
-        failure: {msg: ''},
-        success: {msg: ''},
-        criticalFailure: {msg: ''},
-        criticalSuccess: {msg: ''},
-        dc: 'control',
-        title: '',
-        hint: '',
-        id: '',
-        skills: {agriculture: 0},
-        phase: 'leadership',
-        oncePerRound: false,
-    };
-    new Dialog({
-        title: 'Add Kingdom Activity',
-        content: `
-        <p>Use the same id as an existing activity to override it. The ID is the name in lowercase separated by hyphens, e.g. "Do Something" becomes "do-something".</p>
-        <form class="simple-dialog-form">
-            <div>
-                <label for="km-add-kingdom-activity-id">Id (lowercase English letters and hyphens)</label>
-                <input type="text" name="id" id="km-add-kingdom-activity-id" value="${escapeHtml(data.id)}" ${activity ? 'disabled' : ''}>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-title">Title</label>
-                <input type="text" name="title" id="km-add-kingdom-activity-title"  value="${escapeHtml(data.title)}">
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-description">Description</label>
-                <textarea name="description" id="km-add-kingdom-activity-description">${escapeHtml(data.description)}</textarea>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-hint">Hint</label>
-                <textarea name="hint" id="km-add-kingdom-activity-hint">${escapeHtml(data.hint ?? '')}</textarea>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-special">Special</label>
-                <textarea name="special" id="km-add-kingdom-activity-special">${escapeHtml(data.special ?? '')}</textarea>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-requirement">Requirement</label>
-                <textarea name="requirement" id="km-add-kingdom-activity-requirement">${escapeHtml(data.requirement ?? '')}</textarea>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-phase">Phase</label>
-                <select id="km-add-kingdom-activity-phase" name="phase">
-                ${
-            ['army', 'leadership', 'region']
-                .map(p => `<option value="${p}" ${data.phase === p ? 'selected' : ''}>${capitalize(p)}</option>`)
-                .join('')
-        }
-                </select>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-skill">Skill</label>
-                <select id="km-add-kingdom-activity-skill" name="skill">
-                ${
-            allSkills
-                .map(p => `<option value="${p}" ${Object.keys(data.skills)[0] === p ? 'selected' : ''}>${capitalize(p)}</option>`)
-                .join('')
-        }
-                </select>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-rank">Proficiency</label>
-                <select id="km-add-kingdom-activity-rank" name="rank">
-                ${
-            allSkillRanks
-                .map((p, index) => `<option value="${index}" ${Object.values(data.skills)[0] === index ? 'selected' : ''}>${capitalize(p)}</option>`)
-                .join('')
-        }
-                </select>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-dc">DC</label>
-                <select id="km-add-kingdom-activity-dc" name="dc">
-                    <option value="none" ${data.dc === 'none' ? 'selected' : ''}>None</option>
-                    <option value="control" ${data.dc === 'control' ? 'selected' : ''}>Control</option>
-                ${
-            range(14, 51)
-                .map((p) => `<option value="${p}" ${data.dc === p ? 'selected' : ''}>${p}</option>`)
-                .join('')
-        }
-                </select>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-dc-adjustment">DC Adjustment</label>
-                <input type="number" name="dcAdjustment" id="km-add-kingdom-activity-dc-adjustment" value="${data.dcAdjustment ?? 0}">
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-once-per-round">Once Per Round</label>
-                <input type="checkbox" name="oncePerRound" id="km-add-kingdom-activity-once-per-round" ${data.oncePerRound ? 'checked' : ''}>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-fortune">Fortune</label>
-                <input type="checkbox" name="fortune" id="km-add-kingdom-activity-fortune" ${data.fortune ? 'checked' : ''}>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-critical-success">Critical Success</label>
-                <textarea name="criticalSuccess" id="km-add-kingdom-activity-critical-success">${escapeHtml(data.criticalSuccess?.msg ?? '')}</textarea>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-success">Success</label>
-                <textarea name="success" id="km-add-kingdom-activity-success">${escapeHtml(data.success?.msg ?? '')}</textarea>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-failure">Failure</label>
-                <textarea name="failure" id="km-add-kingdom-activity-failure">${escapeHtml(data.failure?.msg ?? '')}</textarea>
-            </div>
-            <div>
-                <label for="km-add-kingdom-activity-critical-failure">Critical Failure</label>
-                <textarea name="criticalFailure" id="km-add-kingdom-activity-critical-failure">${escapeHtml(data.criticalFailure?.msg ?? '')}</textarea>
-            </div>
-        </form>
-        `,
-        buttons: {
-            add: {
-                icon: '<i class="fa-solid fa-save"></i>',
-                label: 'Save',
-                callback: async (html): Promise<void> => {
-                    const $html = html as HTMLElement;
-                    const dcAdjustment = parseNumberInput($html, 'dcAdjustment');
-                    const id = parseTextInput($html, 'id');
-                    if (!/^[a-z\\-]+$/.test(id)) {
-                        ui.notifications?.error('ID must only contain lower case English letters and hyphens!');
-                    } else {
-                        await onOk({
-                            id,
-                            title: parseTextInput($html, 'title'),
-                            description: parseTextArea($html, 'description'),
-                            enabled: true,
-                            phase: parseSelect($html, 'phase') as KingdomPhase,
-                            skills: parseSkills($html),
-                            hint: parseOptionalTextArea($html, 'hint'),
-                            requirement: parseOptionalTextArea($html, 'requirement'),
-                            special: parseOptionalTextArea($html, 'requirement'),
-                            dc: parseDc($html, 'dc'),
-                            dcAdjustment,
-                            oncePerRound: parseCheckbox($html, 'oncePerRound'),
-                            fortune: parseCheckbox($html, 'fortune'),
-                            criticalSuccess: parseOutcome($html, 'criticalSuccess'),
-                            success: parseOutcome($html, 'success'),
-                            failure: parseOutcome($html, 'failure'),
-                            criticalFailure: parseOutcome($html, 'criticalFailure'),
-                        });
-                    }
-                },
-            },
-        },
-        default: 'add',
-    }, {
-        jQuery: false,
-        width: 550,
+    new AddKingdomActivities(null, {
+        onOk,
+        activity,
     }).render(true);
-
 }

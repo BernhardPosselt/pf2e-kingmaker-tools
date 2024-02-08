@@ -1,5 +1,5 @@
 <form>
-    <div class="skill-row">
+    <div class="skill-row" {{#unless showAll}}hidden{{/unless}}>
         <div class="skill">
             <input type="checkbox" name="all" id="km-skill-all" {{checked all}}>
             <label for="km-skill-all">All</label>
@@ -17,7 +17,7 @@
             <label for="km-skill-proficiency-all" hidden>Proficiency</label>
         </div>
     </div>
-    <hr {{#if all}}hidden{{/if}}>
+    <hr {{#if all}}hidden{{/if}} {{#unless showAll}}hidden{{/unless}}>
     {{#each skills}}
         <div class="skill-row" {{#if ../all}}hidden{{/if}}>
             <div class="skill">
@@ -62,5 +62,8 @@
             </div>
         {{/each}}
     {{/if}}
-    <button type="button" class="save">Save <i class="fa-solid fa-save"></i></button>
+    {{#each errors}}
+        <p class="error">{{this}}</p>
+    {{/each}}
+    <button type="button" class="save" {{#if errors}}disabled{{/if}}>Save <i class="fa-solid fa-save"></i></button>
 </form>

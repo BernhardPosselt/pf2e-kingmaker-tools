@@ -256,7 +256,7 @@ td.skill-value {
     display: table-row;
 }
 
-.simple-dialog-form button {
+.simple-dialog-form button:not(.full-width) {
     width: auto;
 }
 
@@ -277,6 +277,7 @@ td.skill-value {
 
 .simple-dialog-form-error {
     color: red;
+    text-align: center;
 }
 
 .kingdom-skill i {
@@ -511,6 +512,11 @@ td.skill-value {
         margin-bottom: 10px;
         gap: 5px;
     }
+
+    .error {
+        color: red;
+        text-align: center;
+    }
 }
 
 .skills-picker {
@@ -520,5 +526,12 @@ td.skill-value {
 
     button {
         height: 34px;
+    }
+}
+
+#kingdom-add-kingdom-activities {
+    .error {
+        color: red;
+        text-align: center;
     }
 }

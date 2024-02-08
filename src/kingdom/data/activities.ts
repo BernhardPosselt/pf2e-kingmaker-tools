@@ -1,5 +1,4 @@
 import {Skill} from './skills';
-import {unslugify} from '../../utils';
 import {Kingdom, SkillRanks} from './kingdom';
 import {getKingdomActivitiesById, KingdomActivity, KingdomActivityById} from './activityData';
 import {armyStatisticsByLevel} from '../../armies/data';
@@ -94,7 +93,8 @@ export function enableCompanionActivities(type: KingdomPhase, unlockedCompanionA
 
 export function createActivityLabel(groupedActivities: GroupedActivityNames, activity: string, kingdom: Kingdom): string {
     const kingdomLevel = kingdom.level;
-    const label = unslugify(activity);
+    const data = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
+    const label = data.title;
     const hints = [];
     if (activity === 'claim-hex') {
         if (kingdomLevel >= 9) {
@@ -118,7 +118,6 @@ export function createActivityLabel(groupedActivities: GroupedActivityNames, act
     if (groupedActivities.oncePerRound.has(activity)) {
         hints.push('once per turn');
     }
-    const data = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
     if (data.hint) {
         hints.push(data.hint);
     }

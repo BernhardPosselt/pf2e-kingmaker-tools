@@ -28,7 +28,8 @@ interface SkillDialogOptions {
     availableSkills: string[];
     selectedSkills?: Skill[];
     selectedLores?: Skill[];
-    all: boolean;
+    all?: boolean;
+    atLeastOne?: boolean;
     allProficiency?: Proficiency;
     onSave: (data: SaveSkillData) => void;
 }
@@ -51,7 +52,9 @@ interface SkillsView {
     skills: SelectableSkillView[];
     proficiencies: LabelAndValue[];
     all: boolean;
+    showAll: boolean;
     allProficiency?: Proficiency;
+    errors: string[];
 }
 
 class SkillDialog extends FormApplication<FormApplicationOptions & SkillDialogOptions, object, null> {
@@ -62,6 +65,8 @@ class SkillDialog extends FormApplication<FormApplicationOptions & SkillDialogOp
     private showLores: boolean;
     private all: boolean;
     private allProficiency?: Proficiency;
+    private showAll: boolean;
+    private atLeastOne: boolean;
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -83,8 +88,10 @@ class SkillDialog extends FormApplication<FormApplicationOptions & SkillDialogOp
         this.selectedLores = options.selectedLores ?? [];
         this.showLores = options.selectedLores !== undefined;
         this.onOk = options.onSave;
-        this.all = options.all;
+        this.all = options.all ?? false;
+        this.showAll = options.all !== undefined;
         this.allProficiency = options.allProficiency;
+        this.atLeastOne = options.atLeastOne ?? false;
     }
 
     override getData(): Promise<SkillsView> | SkillsView {
@@ -112,8 +119,10 @@ class SkillDialog extends FormApplication<FormApplicationOptions & SkillDialogOp
                     value: r,
                 };
             }),
+            showAll: this.showAll,
             all: this.all,
             allProficiency: this.allProficiency,
+            errors: this.validate(),
         };
     }
 
@@ -158,6 +167,13 @@ class SkillDialog extends FormApplication<FormApplicationOptions & SkillDialogOp
         });
     }
 
+    private validate(): string[] {
+        const result = [];
+        if (this.atLeastOne && this.selectedSkills.length === 0 && this.selectedLores.length === 0 && !this.all) {
+            result.push('Must select at least one skill');
+        }
+        return result;
+    }
 }
 
 
