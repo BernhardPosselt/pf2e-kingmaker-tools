@@ -1,0 +1,66 @@
+<form>
+    <div class="skill-row">
+        <div class="skill">
+            <input type="checkbox" name="all" id="km-skill-all" {{checked all}}>
+            <label for="km-skill-all">All</label>
+        </div>
+        <div class="proficiency">
+            <select name="all-proficiency" id="km-skill-proficiency-all"
+                    {{#unless all}}disabled{{/unless}}>
+                {{#select allProficiency}}
+                    <option>-</option>
+                    {{#each proficiencies}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/each}}
+                {{/select}}
+            </select>
+            <label for="km-skill-proficiency-all" hidden>Proficiency</label>
+        </div>
+    </div>
+    <hr {{#if all}}hidden{{/if}}>
+    {{#each skills}}
+        <div class="skill-row" {{#if ../all}}hidden{{/if}}>
+            <div class="skill">
+                <input type="checkbox" name="{{id}}" id="km-skill-{{id}}" {{checked selected}}>
+                <label for="km-skill-{{id}}">{{label}}</label>
+            </div>
+            <div class="proficiency">
+                <select name="{{id}}-proficiency" id="km-skill-proficiency-{{id}}"
+                        {{#unless selected}}disabled{{/unless}}>
+                    {{#select proficiency}}
+                        <option>-</option>
+                        {{#each ../proficiencies}}
+                            <option value="{{value}}">{{label}}</option>
+                        {{/each}}
+                    {{/select}}
+                </select>
+                <label for="km-skill-proficiency-{{id}}" hidden>Proficiency</label>
+            </div>
+        </div>
+    {{/each}}
+    {{#if showLores}}
+        <hr {{#if all}}hidden{{/if}}>
+        {{#each lores}}
+            <div class="skill-row" {{#if ../all}}hidden{{/if}}>
+                <div class="skill">
+                    <input type="text" name="{{id}}-lore" id="km-lore-{{id}}" value="{{label}}"
+                           placeholder="New Lore Name">
+                    <label for="km-lore-{{id}}" hidden>Lore Name</label>
+                </div>
+                <div class="proficiency">
+                    <select name="{{id}}-lore-proficiency" id="km-lore-proficiency-{{id}}"
+                            {{#unless id}}disabled{{/unless}}>
+                        {{#select proficiency}}
+                            <option>-</option>
+                            {{#each ../proficiencies}}
+                                <option value="{{value}}">{{label}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                    <label for="km-lore-proficiency-{{id}}" hidden>Proficiency</label>
+                </div>
+            </div>
+        {{/each}}
+    {{/if}}
+    <button type="button" class="save">Save <i class="fa-solid fa-save"></i></button>
+</form>

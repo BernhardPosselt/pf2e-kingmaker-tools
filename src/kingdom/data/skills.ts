@@ -41,3 +41,26 @@ export const skillAbilities: Record<Skill, Ability> = {
 };
 
 export const allSkillRanks = ['untrained', 'trained', 'expert', 'master', 'legendary'] as const;
+export const allTrainedSkillRanks = ['trained', 'expert', 'master', 'legendary'] as const;
+
+export const allActorSkills = [
+    'perception',
+    'acrobatics',
+    'athletics',
+    'arcana',
+    'crafting',
+    'deception',
+    'diplomacy',
+    'intimidation',
+    'medicine',
+    'nature',
+    'occultism',
+    'performance',
+    'religion',
+    'society',
+    'stealth',
+    'survival',
+    'thievery',
+] as const;
+
+export type CharacterSkill = typeof allActorSkills[number];

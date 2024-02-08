@@ -97,8 +97,13 @@ export function isSlug(word: string): boolean {
 
 export function slugify(word: string): string {
     return word
+        .trim()
         .replaceAll(' ', '-')
         .toLowerCase();
+}
+
+export function loreToLoreSkill(value: string): string {
+    return slugify(value.replace(/\s[lL]ore$/, ''));
 }
 
 export function unslugify(word: string): string {

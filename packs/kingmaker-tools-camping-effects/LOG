@@ -1,23 +1,3 @@
-2024/02/07-20:52:57.704231 7b982cc006c0 Recovering log #798
-2024/02/07-20:52:57.704509 7b982cc006c0 Level-0 table #800: started
-2024/02/07-20:52:57.711165 7b982cc006c0 Level-0 table #800: 6029 bytes OK
-2024/02/07-20:52:57.732666 7b982cc006c0 Delete type=0 #798
-2024/02/07-20:52:57.732719 7b982cc006c0 Delete type=3 #797
-2024/02/07-23:01:31.345700 7b9818a006c0 Level-0 table #803: started
-2024/02/07-23:01:31.345722 7b9818a006c0 Level-0 table #803: 0 bytes OK
-2024/02/07-23:01:31.357970 7b9818a006c0 Delete type=0 #801
-2024/02/07-23:01:31.389347 7b9818a006c0 Manual compaction at level-0 from '!items!010XlkzzjX38BHsO' @ 72057594037927935 : 1 .. '!items!zliIP2agG0TVwKV4' @ 0 : 0; will stop at '!items!zliIP2agG0TVwKV4' @ 294 : 1
-2024/02/07-23:01:31.389353 7b9818a006c0 Compacting 1@0 + 0@1 files
-2024/02/07-23:01:31.395645 7b9818a006c0 Generated table #804@0: 4 keys, 2947 bytes
-2024/02/07-23:01:31.395657 7b9818a006c0 Compacted 1@0 + 0@1 files => 2947 bytes
-2024/02/07-23:01:31.407934 7b9818a006c0 compacted to: files[ 0 1 1 0 0 0 0 ]
-2024/02/07-23:01:31.407989 7b9818a006c0 Delete type=2 #800
-2024/02/07-23:01:31.408089 7b9818a006c0 Manual compaction at level-0 from '!items!zliIP2agG0TVwKV4' @ 294 : 1 .. '!items!zliIP2agG0TVwKV4' @ 0 : 0; will stop at (end)
-2024/02/07-23:01:31.428226 7b9818a006c0 Manual compaction at level-1 from '!items!010XlkzzjX38BHsO' @ 72057594037927935 : 1 .. '!items!zliIP2agG0TVwKV4' @ 0 : 0; will stop at '!items!zliIP2agG0TVwKV4' @ 294 : 1
-2024/02/07-23:01:31.428232 7b9818a006c0 Compacting 1@1 + 1@2 files
-2024/02/07-23:01:31.434679 7b9818a006c0 Generated table #805@1: 22 keys, 14280 bytes
-2024/02/07-23:01:31.434691 7b9818a006c0 Compacted 1@1 + 1@2 files => 14280 bytes
-2024/02/07-23:01:31.446924 7b9818a006c0 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/02/07-23:01:31.446963 7b9818a006c0 Delete type=2 #621
-2024/02/07-23:01:31.447051 7b9818a006c0 Delete type=2 #804
-2024/02/07-23:01:31.472001 7b9818a006c0 Manual compaction at level-1 from '!items!zliIP2agG0TVwKV4' @ 294 : 1 .. '!items!zliIP2agG0TVwKV4' @ 0 : 0; will stop at (end)
+2024/02/08-17:45:47.098237 7681e56006c0 Recovering log #802
+2024/02/08-17:45:47.130270 7681e56006c0 Delete type=3 #799
+2024/02/08-17:45:47.130315 7681e56006c0 Delete type=0 #802

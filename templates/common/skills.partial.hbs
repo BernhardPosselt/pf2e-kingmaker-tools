@@ -1,0 +1,8 @@
+<div class="skills-picker">
+    <ul>
+        {{#each skills}}
+            <li>{{label}}{{#if proficiency}} ({{proficiency}}){{/if}}</li>
+        {{/each}}
+    </ul>
+    <button class="edit-skills"><i class="fa-solid fa-pencil"></i></button>
+</div>

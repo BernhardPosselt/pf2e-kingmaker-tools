@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Show consumption surplus for farms in Status tab and for settlements in settlement detail view
 * Homebrew Camping activities can now add more than 1 effect
 
 ### Fixed

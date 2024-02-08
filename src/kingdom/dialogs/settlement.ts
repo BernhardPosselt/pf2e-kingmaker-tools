@@ -103,6 +103,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
             overcrowded: settlementInfo.lots > structureData.residentialLots,
             residentialLots: structureData.residentialLots,
             consumption: structureData.consumption,
+            consumptionSurplus: structureData.consumptionSurplus,
             capitalInvestmentPossible: structureData.allowCapitalInvestment ? 'yes' : 'no',
             settlementEventBonus: structureData.settlementEventBonus,
             leadershipActivityBonus: structureData.leadershipActivityBonus,

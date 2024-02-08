@@ -143,7 +143,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             settlementConsumption,
             unlockedActivities: unlockedSettlementActivities,
         } = getAllMergedSettlements(this.game, kingdomData);
-        const totalConsumption = getConsumption(this.game, kingdomData);
+        const {current: totalConsumption, surplus: farmSurplus} = getConsumption(this.game, kingdomData);
         const useXpHomebrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
         const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, kingdomData);
@@ -214,6 +214,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             levels,
             settlementConsumption,
             totalConsumption,
+            farmSurplus,
             ruin: this.getRuin(kingdomData.ruin),
             commodities: this.getCommodities(kingdomData),
             workSites: this.getWorkSites(workSites),
@@ -1081,7 +1082,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async payConsumption(): Promise<void> {
         const current = this.getKingdom();
-        const totalConsumption = getConsumption(this.game, current);
+        const totalConsumption = getConsumption(this.game, current).current;
         const currentFood = current.commodities.now.food;
         const missingFood = totalConsumption - currentFood;
         const pay = missingFood * 5;

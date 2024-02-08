@@ -24,6 +24,7 @@ export interface StructureResult {
     increaseLeadershipActivities: boolean;
     consumptionReduction: number;
     consumption: number;
+    consumptionSurplus: number;
     config: SettlementConfig;
     unlockActivities: string[];
     residentialLots: number;
@@ -439,6 +440,7 @@ export function evaluateStructures(
         increaseLeadershipActivities: structures.some(structure => structure.increaseLeadershipActivities === true),
         consumptionReduction,
         consumption: Math.max(0, settlementData.consumption - consumptionReduction),
+        consumptionSurplus: Math.max(0, consumptionReduction - settlementData.consumption),
         unlockActivities: [],
         residentialLots: structures
             .filter(structure => structure?.traits?.includes('residential'))

@@ -31,7 +31,7 @@ export function editSettlementDialog(autoLevel: boolean, name: string, data: Set
                 <input name="secondaryTerritory" type="checkbox" ${data.secondaryTerritory ? 'checked' : ''}>
             </div>
             <div>
-                <label>Manual Settlemnt Level (reopen dialog after saving)</label>
+                <label>Manual Settlement Level (reopen dialog after saving)</label>
                 <input name="manualSettlementLevel" type="checkbox" ${data.manualSettlementLevel === true ? 'checked' : ''}>
             </div>
         </form>

@@ -500,3 +500,25 @@ td.skill-value {
     text-overflow: ellipsis;
     overflow-x: hidden;
 }
+
+/**
+ * Skills view
+ */
+#kingdom-skills-dialog {
+    .skill-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        gap: 5px;
+    }
+}
+
+.skills-picker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+        height: 34px;
+    }
+}

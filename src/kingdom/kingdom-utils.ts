@@ -22,13 +22,16 @@ export function getCapacity(game: Game, kingdom: Kingdom): Commodities {
     return calculateStorageCapacity(commodityCapacity, storage);
 }
 
-export function getConsumption(game: Game, kingdom: Kingdom): number {
-    const settlementConsumption = getAllMergedSettlements(game, kingdom).settlementConsumption;
+export function getConsumption(game: Game, kingdom: Kingdom): { current: number, surplus: number } {
+    const allMergedSettlements = getAllMergedSettlements(game, kingdom);
+    const settlementConsumption = allMergedSettlements.settlementConsumption;
     const resourceMode = getStringSetting(game, 'automateResources') as ResourceAutomationMode;
     const farmlands = getStolenLandsData(game, resourceMode, kingdom).workSites.farmlands;
     const farmlandsCount = farmlands.resources + farmlands.quantity;
-    return Math.max(0, kingdom.consumption.armies + kingdom.consumption.now + settlementConsumption -
-        farmlandsCount);
+    const combinedConsumption = kingdom.consumption.armies + kingdom.consumption.now + settlementConsumption;
+    const current = Math.max(0, combinedConsumption - farmlandsCount);
+    const surplus = Math.max(0, farmlandsCount - combinedConsumption);
+    return {current, surplus};
 }
 
 export function gainFame(kingdom: Kingdom, fame: number): Partial<Kingdom> {

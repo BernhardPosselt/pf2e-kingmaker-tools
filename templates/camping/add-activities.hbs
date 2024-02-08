@@ -12,26 +12,17 @@
             <input type="text" name="journal" id="km-journal" value="{{journalUuid}}">
         </div>
         <div>
-            <label for="km-skills">Skills (<b>any</b> or skill name (slugifyable))</label>
-            <input id="km-skills" type="text" placeholder="Survival,Perception" name="skills" value="{{skills}}">
+            <div class="label">Skills</div>
+            <div>{{> modules/pf2e-kingmaker-tools/templates/common/skills.partial.hbs skills=skills}}</div>
         </div>
         <div>
-            <label for="km-dc">DC (number, <b>zone</b>, <b>actorLevel</b> or blank)</label>
-            <input id="km-dc" type="text" placeholder="" name="dc" value="{{dc}}">
-        </div>
-        <div>
-            <label for="km-skill-requirement">Skill Requirement (slugifyable)</label>
-            <input id="km-skill-requirement" type="text" placeholder="Survival,Perception" name="skill-requirement"
-                   value="{{skillRequirements}}">
-        </div>
-        <div {{#unless skillRequirements}}hidden{{/unless}}>
-            <label for="km-skill-proficiency">Skill Proficiency Requirement</label>
-            <select name="skill-proficiency" id="km-skill-proficiency">
-                {{#select skillProficiency}}
-                    <option value="trained">Trained</option>
-                    <option value="expert">Expert</option>
-                    <option value="master">Master</option>
-                    <option value="legendary">Legendary</option>
+            <label for="km-dc">DC</label>
+            <select name="dc" id="km-dc">
+                <option value="">-</option>
+                {{#select dc}}
+                    {{#each dcs}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/each}}
                 {{/select}}
             </select>
         </div>

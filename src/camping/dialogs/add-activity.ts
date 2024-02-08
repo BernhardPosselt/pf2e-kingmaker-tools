@@ -1,17 +1,21 @@
 import {
     capitalize,
     createUUIDLink,
+    deCamelCase,
     escapeHtml,
     isBlank,
-    isSlug,
+    LabelAndValue,
     listenClick,
     parseSelect,
     parseTextInput,
+    range,
     unslugify,
 } from '../../utils';
 import {ActivityEffect, ActivityOutcome, CampingActivityData, CampingActivityName, EffectTarget} from '../activities';
 import {getEffectByUuid} from '../actor';
 import {DcType, Proficiency} from '../data';
+import {skillDialog, SkillView} from '../../common/skills-dialog';
+import {allActorSkills, CharacterSkill} from '../../kingdom/data/skills';
 
 export interface AddActivityOptions {
     onSubmit: (activity: CampingActivityData) => Promise<void>;
@@ -41,16 +45,15 @@ interface ViewData {
     effects: Effect[];
     name: CampingActivityName;
     journalUuid: string;
-    skillRequirements: string;
-    skillProficiency: Proficiency | 'none';
     dc: DcType | '';
-    skills: string;
     modifyRandomEncounterDc: {
         day: number;
         night: number;
     },
     isSecret: boolean;
     errors: string[];
+    dcs: LabelAndValue[];
+    skills: SkillView[];
 }
 
 const allOutcomes = ['criticalSuccess', 'success', 'failure', 'criticalFailure'] as const;
@@ -163,10 +166,19 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
                 night: this.activity.modifyRandomEncounterDc?.night ?? 0,
             },
             name: this.activity.name ?? '',
-            skillRequirements: (this.activity.skillRequirements ?? []).map(s => unslugify(s.skill)).join(', '),
-            skillProficiency: this.activity.skillRequirements?.[0]?.proficiency ?? 'none',
-            skills: this.activity.skills === 'any' ? 'any' : this.activity.skills.map(s => unslugify(s)).join(', '),
             errors: await this.validate(this.activity),
+            dcs: ['actorLevel', 'zone', ...range(0, 60)].map(e => {
+                return {label: deCamelCase(e.toString()), value: e.toString()};
+            }),
+            skills: this.activity.skills === 'any' ? [{id: 'all', label: 'All'}] : this.activity.skills.map(s => {
+                const proficiency = this.activity.skillRequirements
+                    .find(r => r.skill === s)?.proficiency;
+                return {
+                    label: unslugify(s),
+                    id: s,
+                    proficiency,
+                };
+            }),
         };
     }
 
@@ -184,11 +196,6 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
         console.log(formData);
         this.activity.journalUuid = formData.journal;
         this.activity.name = formData.name as CampingActivityName;
-        this.activity.skills = parseSkills(formData.skills);
-        const proficiency = formData['skill-proficiency'];
-        this.activity.skillRequirements = parseSkillList(formData['skill-requirement']).map(skill => {
-            return {skill, proficiency};
-        });
         this.activity.isSecret = formData.secret;
         this.activity.isLocked = false;
         this.activity.dc = parseDC(formData.dc);
@@ -235,6 +242,52 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
                 this.render();
             });
         });
+        listenClick($html, '.edit-skills', async (): Promise<void> => {
+            const skills = this.activity.skills;
+            const selectedLores = skills === 'any' ? [] : skills
+                .filter(s => !allActorSkills.includes(s as CharacterSkill))
+                .map(s => {
+                    return {
+                        id: s,
+                        proficiency: this.activity.skillRequirements.find(req => req.skill === s)?.proficiency,
+                    };
+                });
+            const selectedSkills = skills === 'any' ? [] : skills
+                .filter(s => allActorSkills.includes(s as CharacterSkill))
+                .map(s => {
+                    return {
+                        id: s,
+                        proficiency: this.activity.skillRequirements.find(req => req.skill === s)?.proficiency,
+                    };
+                });
+            skillDialog({
+                selectedLores,
+                selectedSkills,
+                all: skills === 'any',
+                onSave: (data) => {
+                    if (data.all) {
+                        this.activity.skills = 'any';
+                        this.activity.skillRequirements = [];
+                    } else {
+                        const loresAndSkills = [
+                            ...data.selectedSkills,
+                            ...data.selectedLores,
+                        ];
+                        this.activity.skills = loresAndSkills.map(s => s.id);
+                        this.activity.skillRequirements = loresAndSkills
+                            .filter(s => s.proficiency !== undefined)
+                            .map(s => {
+                                return {
+                                    skill: s.id,
+                                    proficiency: s.proficiency!,
+                                };
+                            });
+                    }
+                    this.render();
+                },
+                availableSkills: [...allActorSkills],
+            });
+        });
         listenClick($html, '.edit-effect', async (ev): Promise<void> => {
             const button = ev.currentTarget as HTMLButtonElement;
             const type = button.dataset.type as ActivityOutcomeType | 'effect';
@@ -272,13 +325,6 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
         }
         if (activity.journalUuid && !(await fromUuid(activity.journalUuid))) {
             result.push(`Journal with uuid ${activity.journalUuid} does not exist`);
-        }
-        if (activity.skillRequirements.some(r => !isSlug(r.skill))) {
-            result.push('Skill Requirements must only include American letters separated by spaces');
-        }
-        const skills = activity.skills;
-        if (skills !== 'any' && skills.some(s => !isSlug(s))) {
-            result.push('Skills must only include American letters separated by spaces');
         }
         return result;
     }
@@ -332,38 +378,6 @@ function editActivityDialog(data: ActivityEffect, onOk: () => void = (): void =>
 
 export function addActivityDialog(options: AddActivityOptions): void {
     new AddCampingActivities(null, options).render(true);
-}
-
-function parseSkillList(value: string): string[] {
-    if (value.trim()) {
-        return value.split(',')
-            .map(s => s.toLowerCase()
-                .replace('lore', '')
-                .trim());
-    }
-    return [];
-}
-
-function parseSkills(value: string): string[] | 'any' {
-    if (value === 'any') {
-        return 'any';
-    } else {
-        return parseSkillList(value);
-    }
-}
-
-
-function parseProficiency(value: string): Proficiency | undefined {
-    if (value === 'trained') {
-        return 'trained';
-    } else if (value === 'expert') {
-        return 'expert';
-    } else if (value === 'master') {
-        return 'master';
-    } else if (value === 'legendary') {
-        return 'legendary';
-    }
-    return undefined;
 }
 
 function parseDC(value: string): DcType | undefined {
