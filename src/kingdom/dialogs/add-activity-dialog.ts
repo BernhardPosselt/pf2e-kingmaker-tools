@@ -50,6 +50,7 @@ interface ActivityFormData {
 interface AddKingdomActivityOptions {
     onOk: (activity: KingdomActivity) => Promise<void>,
     activity?: KingdomActivity,
+    homebrewActivities: KingdomActivity[];
 }
 
 function parseDc(value: string): 'control' | 'custom' | 'none' | number {
@@ -76,6 +77,7 @@ class AddKingdomActivities extends FormApplication<FormApplicationOptions & AddK
     private onSubmitCallback: (activity: KingdomActivity) => Promise<void>;
     private activity: KingdomActivity;
     private edit: boolean;
+    private homebrewActivities: KingdomActivity[];
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -113,6 +115,7 @@ class AddKingdomActivities extends FormApplication<FormApplicationOptions & AddK
             oncePerRound: options.activity?.oncePerRound ?? false,
             enabled: options.activity?.enabled ?? true,
         };
+        this.homebrewActivities = options.homebrewActivities;
     }
 
     override async getData(): Promise<AddActivityData> {
@@ -215,6 +218,9 @@ class AddKingdomActivities extends FormApplication<FormApplicationOptions & AddK
         if (!/^[a-z\\-]+$/.test(activity.id)) {
             result.push('ID must only contain lower case English letters and hyphens!');
         }
+        if (this.homebrewActivities.find(a => activity.id === a.id) && !this.edit) {
+            result.push(`Homebrew activity with id ${activity.id} exists already, can not add another one`);
+        }
         if (isBlank(activity.title)) {
             result.push('Title must not be blank');
         }
@@ -223,11 +229,7 @@ class AddKingdomActivities extends FormApplication<FormApplicationOptions & AddK
 }
 
 export function addActivityDialog(
-    onOk: (activity: KingdomActivity) => Promise<void>,
-    activity?: KingdomActivity,
+    options: AddKingdomActivityOptions,
 ): void {
-    new AddKingdomActivities(null, {
-        onOk,
-        activity,
-    }).render(true);
+    new AddKingdomActivities(null, options).render(true);
 }

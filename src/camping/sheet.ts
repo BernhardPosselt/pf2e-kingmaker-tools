@@ -53,7 +53,6 @@ import {
     removeFood,
     subsist,
 } from './eating';
-import {addActivityDialog} from './dialogs/add-activity';
 import {allowedActors} from './data';
 import {openJournal} from '../foundry-utils';
 
@@ -292,34 +291,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                 },
             });
         });
-        listenClick($html, '.unlock-activities', async () => {
-            const current = await this.read();
+        listenClick($html, '.manage-activities', async () => {
             await manageActivitiesDialog({
-                data: getCampingActivityData(current),
-                isGM: this.isGM,
-                lockedActivities: new Set(current.lockedActivities),
-                onSubmit: async (lockedActivities, deletedActivities) => {
-                    await this.update({
-                            lockedActivities: Array.from(lockedActivities)
-                                .filter(a => !deletedActivities.has(a)),
-                            homebrewCampingActivities: current.homebrewCampingActivities
-                                .filter(a => !deletedActivities.has(a.name)),
-                            campingActivities: current.campingActivities
-                                .filter(a => !deletedActivities.has(a.activity)),
-                        },
-                    );
-                },
-            });
-        });
-        listenClick($html, '.add-activity', async () => {
-            const current = await this.read();
-            await addActivityDialog({
-                homebrewActivities: current.homebrewCampingActivities,
-                onSubmit: async (activity) => {
-                    await this.update({
-                        homebrewCampingActivities: [...current.homebrewCampingActivities, activity],
-                    });
-                },
+                game: this.game,
+                actor: this.actor,
             });
         });
         listenClick($html, '.subsist', async (ev) => {

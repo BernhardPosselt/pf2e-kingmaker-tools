@@ -1,68 +1,118 @@
-import {escapeHtml, parseCheckbox} from '../../utils';
-import {CampingActivityData, CampingActivityName} from '../activities';
+import {listenClick} from '../../utils';
+import {CampingActivityName} from '../activities';
+import {getCampingActivityData} from '../camping';
+import {getCamping, saveCamping} from '../storage';
+import {addActivityDialog} from './add-activity';
 
 interface ManageActivitiesOptions {
-    data: CampingActivityData[];
-    lockedActivities: Set<CampingActivityName>;
-    onSubmit: (lockedActivities: Set<CampingActivityName>, deletedActivities: Set<CampingActivityName>) => Promise<void>;
-    isGM: boolean;
+    game: Game;
+    actor: Actor;
 }
 
-function tpl(data: CampingActivityData[], lockedActivities: Set<CampingActivityName>, isGM: boolean): string {
-    return `
-        <form class="camping-dialog">
-            <table class="km-table">
-                <tr>
-                    <th>Name</th>
-                    <th>Enabled</th>
-                    <th>Delete</th>
-                </tr>
-                ${data.map((r, i) => {
-        return `<tr>
-                        <td>${escapeHtml(r.name)}</td>
-                        <td><input type="checkbox" name="lock-${i}" ${!lockedActivities.has(r.name) ? 'checked' : ''}></td>
-                        <td><input type="checkbox" name="delete-${i}" ${!isGM || !r.isHomebrew ? 'disabled' : ''}></td>                      
-                    </tr>`;
-    }).join('\n')}
-            </table>
-        </form>
-        `;
+interface ViewActivity {
+    isHomebrew: boolean;
+    name: string;
+    enabled: boolean;
 }
+
+interface ManageActivityView {
+    activities: ViewActivity[];
+}
+
+type ManageActivitiesFormData = Record<string, boolean>;
+
+class ManageCampingActivities extends FormApplication<FormApplicationOptions & ManageActivitiesOptions, object, null> {
+    private game: Game;
+    private actor: Actor;
+
+    static override get defaultOptions(): FormApplicationOptions {
+        const options = super.defaultOptions;
+        options.id = 'kingdom-manage-camping-activities';
+        options.title = 'Manage Camping Activities';
+        options.template = 'modules/pf2e-kingmaker-tools/templates/camping/manage-activities.hbs';
+        options.submitOnChange = true;
+        options.closeOnSubmit = false;
+        options.classes = [];
+        options.height = 'auto';
+        return options;
+    }
+
+    constructor(object: null, options: Partial<FormApplicationOptions> & ManageActivitiesOptions) {
+        super(object, options);
+        this.game = options.game;
+        this.actor = options.actor;
+    }
+
+    override async getData(): Promise<ManageActivityView> {
+        const camping = getCamping(this.actor);
+        const activities = getCampingActivityData(camping);
+        const lockedActivities = new Set(camping.lockedActivities);
+        return {
+            activities: activities
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(a => {
+                    return {
+                        name: a.name,
+                        isHomebrew: !!a.isHomebrew,
+                        enabled: !lockedActivities.has(a.name),
+                    };
+                }),
+        };
+    }
+
+    protected async _updateObject(event: Event, formData: ManageActivitiesFormData): Promise<void> {
+        console.log(formData);
+        await saveCamping(this.game, this.actor, {
+            lockedActivities: Object.entries(formData)
+                .filter(([, enabled]) => !enabled)
+                .map(([name]) => name) as CampingActivityName[],
+        });
+        this.render();
+    }
+
+    override activateListeners(html: JQuery): void {
+        super.activateListeners(html);
+        const $html = html[0];
+        listenClick($html, '.add-activity', async (): Promise<void> => {
+            const camping = getCamping(this.actor);
+            await addActivityDialog({
+                homebrewActivities: camping.homebrewCampingActivities,
+                onSubmit: async (activity): Promise<void> => {
+                    await saveCamping(this.game, this.actor, {
+                        homebrewCampingActivities: [...camping.homebrewCampingActivities, activity],
+                    });
+                    this.render();
+                },
+            });
+        });
+        listenClick($html, '.edit-activity', async (ev: Event): Promise<void> => {
+            const button = ev.currentTarget as HTMLButtonElement;
+            const name = button.dataset.name!;
+            const camping = getCamping(this.actor);
+            await addActivityDialog({
+                activity: camping.homebrewCampingActivities.find(a => a.name === name),
+                homebrewActivities: camping.homebrewCampingActivities,
+                onSubmit: async (activity): Promise<void> => {
+                    await saveCamping(this.game, this.actor, {
+                        homebrewCampingActivities: [...camping.homebrewCampingActivities.filter(a => a.name !== name), activity],
+                    });
+                    this.render();
+                },
+            });
+        });
+        listenClick($html, '.delete-activity', async (ev: Event): Promise<void> => {
+            const button = ev.currentTarget as HTMLButtonElement;
+            const name = button.dataset.name!;
+            const camping = getCamping(this.actor);
+            await saveCamping(this.game, this.actor, {
+                homebrewCampingActivities: camping.homebrewCampingActivities.filter(a => a.name !== name),
+            });
+            this.render();
+        });
+    }
+}
+
 
 export async function manageActivitiesDialog(options: ManageActivitiesOptions): Promise<void> {
-    const data = [...options.data];
-    data.sort((a, b) => a.name.localeCompare(b.name));
-    new Dialog({
-        title: 'Manage Activities',
-        content: tpl(data, options.lockedActivities, options.isGM),
-        buttons: {
-            save: {
-                icon: '<i class="fa-solid fa-save"></i>',
-                label: 'Save',
-                callback: async (html): Promise<void> => {
-                    const $html = html as HTMLElement;
-                    const lockedActivities = data
-                        .map((r, i) => {
-                            const enabled = parseCheckbox($html, `lock-${i}`);
-                            return {enabled, name: r.name};
-                        })
-                        .filter(r => !r.enabled)
-                        .map(r => r.name);
-                    const deletedActivities = data
-                        .map((r, i) => {
-                            const enabled = parseCheckbox($html, `delete-${i}`);
-                            return {enabled, name: r.name};
-                        })
-                        .filter(r => r.enabled)
-                        .map(r => r.name);
-                    await options.onSubmit(new Set(lockedActivities), new Set(deletedActivities));
-                },
-            },
-        },
-        default: 'save',
-    }, {
-        jQuery: false,
-        width: 420,
-        height: 600,
-    }).render(true);
+    new ManageCampingActivities(null, options).render(true);
 }

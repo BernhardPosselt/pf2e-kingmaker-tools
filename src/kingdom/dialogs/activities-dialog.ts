@@ -63,14 +63,22 @@ class ManageKingdomActivitiesDialog extends FormApplication<FormApplicationOptio
         super.activateListeners(html);
         const $html = html[0];
         listenClick($html, '.add-activity', async (): Promise<void> => {
-            addActivityDialog(this.onSave.bind(this));
+            const kingdom = getKingdom(this.actor);
+            addActivityDialog({
+                onOk: this.onSave.bind(this),
+                homebrewActivities: kingdom.homebrewActivities,
+            });
         });
         listenClick($html, '.edit-activity', async (ev: Event): Promise<void> => {
             const kingdom = getKingdom(this.actor);
             const target = ev.currentTarget as HTMLButtonElement;
             const id = target.dataset.id!;
             const activity = kingdom.homebrewActivities.find(a => a.id === id);
-            addActivityDialog(this.onSave.bind(this), activity);
+            addActivityDialog({
+                onOk: this.onSave.bind(this),
+                activity: activity,
+                homebrewActivities: kingdom.homebrewActivities,
+            });
         });
         listenClick($html, '.delete-activity', async (ev: Event): Promise<void> => {
             const target = ev.currentTarget as HTMLButtonElement;

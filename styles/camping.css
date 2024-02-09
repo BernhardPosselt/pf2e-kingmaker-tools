@@ -317,11 +317,6 @@
     border-radius: 0;
 }
 
-.camping-dialog {
-    max-height: 520px;
-    overflow: scroll;
-}
-
 .region-controls {
     display: flex;
 }

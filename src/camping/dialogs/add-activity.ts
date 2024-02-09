@@ -20,6 +20,7 @@ import {allActorSkills, CharacterSkill} from '../../kingdom/data/skills';
 export interface AddActivityOptions {
     onSubmit: (activity: CampingActivityData) => Promise<void>;
     homebrewActivities: CampingActivityData[];
+    activity?: CampingActivityData;
 }
 
 interface Effect {
@@ -103,6 +104,7 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
     private onSubmitCallback: (activity: CampingActivityData) => Promise<void>;
     private homebrewActivities: CampingActivityData[];
     private activity: CampingActivityData;
+    private originalName: CampingActivityName | undefined;
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -119,8 +121,9 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
     constructor(object: null, options: Partial<FormApplicationOptions> & AddActivityOptions) {
         super(object, options);
         this.onSubmitCallback = options.onSubmit;
-        this.homebrewActivities = options.homebrewActivities;
-        this.activity = {
+        this.homebrewActivities = deepClone(options.homebrewActivities);
+        this.originalName = options.activity?.name;
+        this.activity = deepClone(options.activity) ?? {
             journalUuid: '',
             isHomebrew: true,
             dc: 'zone',
@@ -321,7 +324,7 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
         if (isBlank(activity.name)) {
             result.push('Name must not be blank');
         }
-        if (this.homebrewActivities.find(a => a.name === activity.name)) {
+        if (this.homebrewActivities.find(a => a.name === activity.name && a.name !== this.originalName)) {
             result.push(`Homebrew Activity with name ${activity.name} already exists`);
         }
         if (activity.journalUuid && !(await fromUuid(activity.journalUuid))) {
