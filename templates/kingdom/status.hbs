@@ -113,19 +113,22 @@
         <tr>
             <th>Consumption</th>
             <th>Surplus</th>
+            <th>Farmlands</th>
+            <th>Food</th>
             <th>Armies</th>
             <th>Now</th>
             <th title="Next Turn">Next</th>
-            <th>Farmlands</th>
         </tr>
         <tr>
             <td>{{totalConsumption}}</td>
             <td>{{farmSurplus}}</td>
+            <td>{{#if automateResources}}{{farmlands}}{{else}}
+                <input type="number" value="{{farmlands}}" name="workSites.farmlands.quantity">{{/if}}</td>
+            <td>{{#if automateResources}}{{food}}{{else}}
+                <input type="number" value="{{food}}" name="workSites.farmlands.resources">{{/if}}</td>
             <td><input type="number" value="{{consumption.armies}}" name="consumption.armies"></td>
             <td><input type="number" value="{{consumption.now}}" name="consumption.now"></td>
             <td><input type="number" value="{{consumption.next}}" name="consumption.next"></td>
-            <td>{{#if automateResources}}{{farmlands}}{{else}}
-                <input type="number" value="{{farmlands}}" name="workSites.farmlands.quantity">{{/if}}</td>
         </tr>
     </table>
 

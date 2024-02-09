@@ -26,6 +26,7 @@ export function realmTileDialog(game: Game): void {
                     <option value="luxury" ${data?.type === 'luxury' ? 'selected' : ''}>Luxuries</option>
                     <option value="luxuryWorksite" ${data?.type === 'luxuryWorksite' ? 'selected' : ''}>Luxuries Worksite</option>
                     <option value="farmland" ${data?.type === 'farmland' ? 'selected' : ''}>Farmland</option>
+                    <option value="food" ${data?.type === 'food' ? 'selected' : ''}>Food</option>
                     <option value="claimed" ${data?.type === 'claimed' ? 'selected' : ''}>Claimed Hex</option>
                 </select>
             </div>

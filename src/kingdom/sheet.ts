@@ -219,6 +219,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             commodities: this.getCommodities(kingdomData),
             workSites: this.getWorkSites(workSites),
             farmlands: workSites.farmlands.quantity,
+            food: workSites.farmlands.resources,
             ...this.getActiveTabs(),
             skills: calculateSkills({
                 ruin: kingdomData.ruin,

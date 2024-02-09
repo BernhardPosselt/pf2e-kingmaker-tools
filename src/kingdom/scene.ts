@@ -391,12 +391,13 @@ export function parseKingmaker(kingmaker: KingmakerState): StolenLandsData {
     const claimedHexes = Object.values(kingmaker.hexes)
         .filter(h => h.claimed);
     const farmHexes = claimedHexes.filter(h => h.features?.some(f => f.type === 'farmland'));
+    const food = claimedHexes.filter(h => h.commodity === 'food');
     return {
         size: claimedHexes.length,
         workSites: {
             farmlands: {
                 quantity: farmHexes.length,
-                resources: 0,
+                resources: food.length,
             },
             quarries: parseWorksite(claimedHexes, 'quarry', 'stone'),
             mines: parseWorksite(claimedHexes, 'mine', 'ore'),
@@ -422,7 +423,8 @@ type RealmTileType =
     | 'claimed'
     | 'farmland'
     | 'luxury'
-    | 'luxuryWorksite';
+    | 'luxuryWorksite'
+    | 'food';
 
 interface RealmTile {
     type: RealmTileType;
@@ -510,8 +512,9 @@ export function parseSceneTiles(
             const tilesInPos = Array.from(nonClaimedPositions)
                 .filter(nonClaimed => shapeContainsOtherShape(claimed, nonClaimed, marginOfErrorPx));
             tilesInPos.forEach(t => nonClaimedPositions.delete(t));
+            const farmlands = tilesInPos.filter(t => t.type === 'farmland').length;
             return {
-                farmlands: {quantity: tilesInPos.filter(t => t.type === 'farmland').length, resources: 0},
+                farmlands: {quantity: farmlands, resources: tilesInPos.filter(t => t.type === 'food').length},
                 lumberCamps: getWorksitesInTiles('lumberCamp', tilesInPos),
                 mines: getWorksitesInTiles('mine', tilesInPos),
                 quarries: getWorksitesInTiles('quarry', tilesInPos),
