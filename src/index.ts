@@ -25,7 +25,7 @@ import {openCampingSheet} from './camping/sheet';
 import {bindCampingChatEventListeners} from './camping/chat';
 import {getDiffListeners} from './camping/effect-syncing';
 import {getCamping, getCampingActor} from './camping/storage';
-import {resetHeroPoints, showAwardXPDialog} from './macros';
+import {awardHeroPoints, resetHeroPoints, showAwardXPDialog} from './macros';
 import {addDiscoverSpecialMealResult, addHuntAndGatherResult} from './camping/eating';
 import {getActorByUuid} from './camping/actor';
 import {checkBeginCombat, CombatUpdate, showSetSceneCombatPlaylistDialog, stopCombat} from './camping/combat-tracks';
@@ -72,6 +72,7 @@ Hooks.on('ready', async () => {
                 viewKingdomMacro: showKingdom.bind(null, game),
                 awardXpMacro: showAwardXPDialog.bind(null, game),
                 resetHeroPointsMacro: resetHeroPoints.bind(null, game),
+                awardHeroPointsMacro: awardHeroPoints.bind(null, game),
                 editArmyStatisticsMacro: (actor: Actor): Promise<void> => editArmyStatistics(gameInstance, actor),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 openCampingSheet: (): void => openCampingSheet(gameInstance),

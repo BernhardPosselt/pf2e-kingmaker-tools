@@ -31,6 +31,7 @@ declare global {
                 rollSkillDialog: () => Promise<void>,
                 awardXpMacro: () => Promise<void>,
                 resetHeroPointsMacro: () => Promise<void>,
+                awardHeroPointsMacro: () => Promise<void>,
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 setSceneCombatPlaylistDialogMacro: (actor: Actor | undefined) => Promise<void>,
             };
@@ -110,6 +111,11 @@ declare global {
                 reflex: { value: number },
                 will: { value: number },
             },
+            resources: {
+                heroPoints: {
+                    value: number;
+                }
+            }
         };
     }
 
