@@ -28,7 +28,7 @@ describe('parse kingmaker module data', () => {
             workSites: {
                 luxurySources: {quantity: 1, resources: 0},
                 mines: {quantity: 2, resources: 1},
-                farmlands: {quantity: 1, resources: 0},
+                farmlands: {quantity: 1, resources: 1},
                 quarries: {quantity: 3, resources: 2},
                 lumberCamps: {quantity: 5, resources: 3},
             },
