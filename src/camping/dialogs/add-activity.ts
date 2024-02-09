@@ -19,7 +19,7 @@ import {allActorSkills, CharacterSkill} from '../../kingdom/data/skills';
 
 export interface AddActivityOptions {
     onSubmit: (activity: CampingActivityData) => Promise<void>;
-    activities: CampingActivityData[];
+    homebrewActivities: CampingActivityData[];
 }
 
 interface Effect {
@@ -101,7 +101,7 @@ function emptyOutcome(): ActivityOutcome {
 
 class AddCampingActivities extends FormApplication<FormApplicationOptions & AddActivityOptions, object, null> {
     private onSubmitCallback: (activity: CampingActivityData) => Promise<void>;
-    private activities: CampingActivityData[];
+    private homebrewActivities: CampingActivityData[];
     private activity: CampingActivityData;
 
     static override get defaultOptions(): FormApplicationOptions {
@@ -119,7 +119,7 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
     constructor(object: null, options: Partial<FormApplicationOptions> & AddActivityOptions) {
         super(object, options);
         this.onSubmitCallback = options.onSubmit;
-        this.activities = options.activities;
+        this.homebrewActivities = options.homebrewActivities;
         this.activity = {
             journalUuid: '',
             isHomebrew: true,
@@ -321,8 +321,8 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
         if (isBlank(activity.name)) {
             result.push('Name must not be blank');
         }
-        if (this.activities.find(a => a.name === activity.name)) {
-            result.push(`Name ${activity.name} already exists`);
+        if (this.homebrewActivities.find(a => a.name === activity.name)) {
+            result.push(`Homebrew Activity with name ${activity.name} already exists`);
         }
         if (activity.journalUuid && !(await fromUuid(activity.journalUuid))) {
             result.push(`Journal with uuid ${activity.journalUuid} does not exist`);

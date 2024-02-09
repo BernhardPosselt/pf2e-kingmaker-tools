@@ -163,7 +163,12 @@ export async function rollCampingCheck(
 
 
 export function getCampingActivityData(current: Camping): CampingActivityData[] {
-    return allCampingActivities.concat(current.homebrewCampingActivities);
+    const homebrewActivities = current.homebrewCampingActivities;
+    const homebrewNames = new Set(homebrewActivities.map(i => i.name.toLocaleLowerCase()));
+    return [
+        ...allCampingActivities.filter(a => !homebrewNames.has(a.name.toLocaleLowerCase())),
+        ...homebrewActivities,
+    ];
 }
 
 export interface CombatEffect {

@@ -314,7 +314,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         listenClick($html, '.add-activity', async () => {
             const current = await this.read();
             await addActivityDialog({
-                activities: getCampingActivityData(current),
+                homebrewActivities: current.homebrewCampingActivities,
                 onSubmit: async (activity) => {
                     await this.update({
                         homebrewCampingActivities: [...current.homebrewCampingActivities, activity],

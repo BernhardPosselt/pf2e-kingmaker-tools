@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added a way to track Food in addition to Farmlands; Food reduces consumption by 1 in claimed hexes similar to Farmlands
+* Camping activities can now be overridden by adding a new activity with the same name as an existing one
+
+### Changed
+
+* You can now override existing camping activities by adding a new activity with the same name
 
 ## [0.29.1] - 2024-02-09
 
