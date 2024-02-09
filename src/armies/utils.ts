@@ -3,6 +3,7 @@ import {getArmyAdjustment} from './storage';
 import {Kingdom} from '../kingdom/data/kingdom';
 import {saveKingdom} from '../kingdom/storage';
 import {getBooleanSetting} from '../settings';
+import {sum} from '../utils';
 
 export function getDefaultArmyAdjustment(): ArmyAdjustments {
     return {
@@ -85,7 +86,8 @@ export function calculateArmyAdjustments(actor: Actor, level: number, adjustment
 
 
 function isArmyActor(actor: Actor | null | undefined): boolean {
-    return actor?.type === 'npc' && getArmyAdjustment(actor) !== undefined;
+    return (actor?.type === 'npc' && getArmyAdjustment(actor) !== undefined) ||
+        actor?.type === 'army';
 }
 
 export async function updateKingdomArmyConsumption(
@@ -111,18 +113,22 @@ export async function updateKingdomArmyConsumption(
     }
 }
 
+
 export function calculateTotalArmyConsumption(game: Game): number {
     // fucking foundry collection APIs :/
-    const actors: Actor[] = [];
+    const consumption: number[] = [];
     game?.scenes?.map(s => s.tokens)
         ?.forEach(tokenCollection => {
             tokenCollection.forEach(token => {
                 const actor = token.actor;
-                if (actor && token.hidden === false && getArmyAdjustment(actor) !== undefined) {
-                    actors.push(actor);
+                if (actor && !token.hidden) {
+                    if (actor.type === 'army') {
+                        consumption.push((actor as unknown as ArmyActor).system.consumption);
+                    } else if (getArmyAdjustment(actor) !== undefined) {
+                        consumption.push(actor.abilities.con.mod);
+                    }
                 }
             });
         });
-    return actors.map(a => a.abilities.con.mod)
-        .reduce((a, b) => a + b, 0);
+    return sum(consumption);
 }

@@ -113,6 +113,12 @@ declare global {
         };
     }
 
+    interface ArmyActor {
+        system: {
+            consumption: number;
+        };
+    }
+
     class ItemSheet {
         render: (force: true, args?: Record<string, string>) => void;
     }
