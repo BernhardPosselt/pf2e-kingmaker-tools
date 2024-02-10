@@ -57,8 +57,8 @@ export function addArmyStats(actor: Actor, update: Partial<Actor>, level: number
             },
             attributes: {
                 ac: {value: calculated.ac},
-                perception: {value: calculated.scouting},
             },
+            perception: {mod: calculated.scouting},
         },
     };
     foundry.utils.mergeObject(update, calculatedUpdate);
