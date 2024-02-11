@@ -3,7 +3,7 @@ import {getArmyAdjustment} from './storage';
 import {Kingdom} from '../kingdom/data/kingdom';
 import {saveKingdom} from '../kingdom/storage';
 import {getBooleanSetting} from '../settings';
-import {sum} from '../utils';
+import {distinctBy, sum} from '../utils';
 
 export function getDefaultArmyAdjustment(): ArmyAdjustments {
     return {
@@ -115,20 +115,25 @@ export async function updateKingdomArmyConsumption(
 
 
 export function calculateTotalArmyConsumption(game: Game): number {
-    // fucking foundry collection APIs :/
     const consumption: number[] = [];
+    // fucking foundry collection APIs :/
+    const actors: Actor[] = [];
     game?.scenes?.map(s => s.tokens)
         ?.forEach(tokenCollection => {
             tokenCollection.forEach(token => {
                 const actor = token.actor;
-                if (actor && !token.hidden) {
-                    if (actor.type === 'army') {
-                        consumption.push((actor as unknown as ArmyActor).system.consumption);
-                    } else if (getArmyAdjustment(actor) !== undefined) {
-                        consumption.push(actor.abilities.con.mod);
-                    }
+                if (actor && !token.hidden && actor.hasPlayerOwner) {
+                    actors.push(actor);
                 }
             });
+        });
+    distinctBy(actors, (a) => a.uuid)
+        .forEach(actor => {
+            if (actor.type === 'army') {
+                consumption.push((actor as unknown as ArmyActor).system.consumption);
+            } else if (getArmyAdjustment(actor) !== undefined) {
+                consumption.push(actor.abilities.con.mod);
+            }
         });
     return sum(consumption);
 }
