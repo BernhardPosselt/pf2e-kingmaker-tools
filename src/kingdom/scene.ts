@@ -535,6 +535,7 @@ function parseSceneData(game: Game, realmSceneId: string | null): StolenLandsDat
         const marginOfErrorPx = Math.floor(0.1 * scene.grid.size);
         const objects = [
             ...scene.tiles
+                .filter(t => t.visible)
                 .map(t => parseTileData(t, (tile) => {
                     return {
                         width: tile.width,
@@ -543,6 +544,7 @@ function parseSceneData(game: Game, realmSceneId: string | null): StolenLandsDat
                 }))
                 .filter(t => isNonNullable(t)) as RealmTileData[],
             ...scene.drawings
+                .filter(t => t.visible)
                 .map(t => parseTileData(t, (tile) => {
                     return {
                         width: tile.shape.width,

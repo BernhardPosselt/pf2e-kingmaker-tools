@@ -22,14 +22,23 @@ function getActiveExplorationEffects(actor: Actor): Set<string> {
 }
 
 export async function rollExplorationSkillCheck(
-    actors: Actor[],
+    game: Game,
     skill: string,
     effect: string,
     dc: number | undefined = undefined,
 ): Promise<void> {
-    const actorsWithEffectApplied = actors
-        .filter(actor => getActiveExplorationEffects(actor).has(effect));
-    await rollSkillCheck(actorsWithEffectApplied, skill, dc);
+    const actors = game.actors
+        ?.filter(a =>
+            (a.type === 'character' || a.type === 'familiar')
+            && a.hasPlayerOwner
+            && getActiveExplorationEffects(a).has(effect)) ?? [];
+    if (effect === 'Search' && skill === 'perception') {
+        game.pf2e.actions.get('seek')?.use({actors});
+    } else if (effect === 'Avoid Notice' && skill === 'stealth') {
+        game.pf2e.actions.get('avoid-notice')?.use({actors});
+    } else {
+        await rollSkillCheck(actors, skill, dc);
+    }
 }
 
 function tpl(): string {

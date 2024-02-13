@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.35.0] - 2024-02-13
+
+### Changed
+
+* Do not parse hidden tiles or drawings when using tile/drawing based worksite, size & farmland automation
+* **Roll Perception Exploration** and **Roll Stealth Exploration** now use all characters owned by players in a world except for all characters in the active scene and add the appropriate action roll options
+
 ## [0.34.0] - 2024-02-11
 
 ### Changed

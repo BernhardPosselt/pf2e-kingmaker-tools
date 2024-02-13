@@ -44,9 +44,13 @@ declare global {
             actions: {
                 restForTheNight: (options: { actors: Actor[], skipDialog?: boolean }) => Promise<void>;
                 subsist: (options: { actors: Actor[], skill: string, difficultyClass?: { value: number }; }) => void;
-            }
+            } & Collection<PF2EAction>
             Modifier: typeof PF2EModifier
         };
+    }
+
+    interface PF2EAction {
+        use(options: { actors: Actor[] }): Promise<unknown>;
     }
 
     // fix roll table types

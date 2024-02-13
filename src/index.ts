@@ -77,12 +77,7 @@ Hooks.on('ready', async () => {
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 openCampingSheet: (): void => openCampingSheet(gameInstance),
                 rollExplorationSkillCheck: async (skill: string, effect: string): Promise<void> => {
-                    const actors = canvas?.scene?.tokens
-                        ?.filter(t => t !== null
-                            && t.actor !== null
-                            && (t.actor.type === 'character' || t.actor.type === 'familiar'))
-                        ?.map(t => t.actor!) ?? [];
-                    await rollExplorationSkillCheck(actors, skill, effect);
+                    await rollExplorationSkillCheck(gameInstance, skill, effect);
                 },
                 rollSkillDialog: async (): Promise<void> => {
                     const configuredActors = getStringSetting(gameInstance, 'skillCheckMacroCharacterNames')
