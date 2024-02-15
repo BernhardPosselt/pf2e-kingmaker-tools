@@ -39,9 +39,7 @@ export class Migration2 extends Migration {
             settlement.level = parseInt(`${settlement.level}`, 10);
             settlement.lots = parseInt(`${settlement.lots}`, 10);
             settlement.waterBorders = parseInt(`${settlement.waterBorders}`, 10);
-            console.log(JSON.stringify(settlement));
         });
-        console.log(JSON.stringify(kingdom.settlements));
     }
 
     override async migrateCamping(game: Game, camping: Camping): Promise<void> {
