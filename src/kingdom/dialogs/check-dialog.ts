@@ -17,6 +17,7 @@ import {capitalize, unslugify} from '../../utils';
 import {getKingdomActivitiesById, KingdomActivityById} from '../data/activityData';
 import {cooperativeLeadership, rollCheck} from '../rolls';
 import {
+    ActiveSettlementStructureResult,
     getActiveSettlementStructureResult,
     getSettlement,
     getSettlementsWithoutLandBorders,
@@ -150,9 +151,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     override getData(options?: Partial<FormApplicationOptions & { feats: KingdomFeat[] }>): Promise<object> | object {
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, this.kingdom);
         const activeSettlement = getSettlement(this.game, this.kingdom, this.kingdom.activeSettlement);
-        const skillRanks = this.kingdom.skillRanks;
         const activities = getKingdomActivitiesById(this.kingdom.homebrewActivities);
-        const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(skillRanks, activities);
+        const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(this.kingdom.skillRanks, activities);
         const additionalModifiers: Modifier[] = createActiveSettlementModifiers(
             this.kingdom,
             activeSettlement?.settlement,
@@ -160,28 +160,27 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             getSettlementsWithoutLandBorders(this.game, this.kingdom),
         );
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
-        const skillModifiers = Object.fromEntries(applicableSkills.map(skill => {
-            const ability = skillAbilities[skill];
-            const modifiers = createSkillModifiers({
-                ruin: this.kingdom.ruin,
-                unrest: this.kingdom.unrest,
-                skillRank: skillRanks[skill],
-                abilityScores: this.kingdom.abilityScores,
-                leaders: this.kingdom.leaders,
-                kingdomLevel: this.kingdom.level,
-                untrainedProficiencyMode: getUntrainedProficiencyMode(this.game),
-                ability,
-                skillItemBonus: activeSettlementStructureResult?.merged?.skillBonuses?.[skill],
-                additionalModifiers: [...additionalModifiers, ...convertedCustomModifiers],
-                activity: this.activity,
-                phase: this.phase,
-                skill,
-                overrides: this.modifierOverrides,
-                activities,
-            });
-            const total = calculateModifiers(modifiers);
-            return [skill, {total, modifiers}];
-        })) as Record<Skill, TotalAndModifiers>;
+        const skillModifiers = this.calculateModifiers(
+            applicableSkills,
+            activeSettlementStructureResult,
+            additionalModifiers,
+            convertedCustomModifiers,
+            activities,
+        );
+        const creativeSolutionModifier = this.calculateModifiers(
+            applicableSkills,
+            activeSettlementStructureResult,
+            [...additionalModifiers, {enabled: true, type: 'circumstance', value: 2, name: 'Creative Solution'}],
+            convertedCustomModifiers,
+            activities,
+        )[this.selectedSkill].total.value;
+        const supernaturalSolutionModifier = this.calculateModifiers(
+            ['magic'],
+            activeSettlementStructureResult,
+            additionalModifiers,
+            convertedCustomModifiers,
+            activities,
+        )['magic'].total.value;
         // set all modifiers as consumed that have a consumeId and are enabled
         this.rollOptions = skillModifiers[this.selectedSkill].total.rollOptions;
         this.consumeModifiers = new Set(skillModifiers[this.selectedSkill].modifiers
@@ -198,7 +197,39 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             modifiers: this.createModifiers(skillModifiers[this.selectedSkill]),
             phase: this.phase,
             customModifiers: this.customModifiers,
+            creativeSolutionModifier,
+            supernaturalSolutionModifier,
         };
+    }
+
+    private calculateModifiers(
+        applicableSkills: Skill[],
+        activeSettlementStructureResult: ActiveSettlementStructureResult | undefined,
+        additionalModifiers: Modifier[],
+        convertedCustomModifiers: Modifier[],
+        activities: KingdomActivityById,
+    ): Record<Skill, TotalAndModifiers> {
+        return Object.fromEntries(applicableSkills.map(skill => {
+            const modifiers = createSkillModifiers({
+                ruin: this.kingdom.ruin,
+                unrest: this.kingdom.unrest,
+                skillRank: (this.kingdom.skillRanks)[skill],
+                abilityScores: this.kingdom.abilityScores,
+                leaders: this.kingdom.leaders,
+                kingdomLevel: this.kingdom.level,
+                untrainedProficiencyMode: getUntrainedProficiencyMode(this.game),
+                ability: skillAbilities[skill],
+                skillItemBonus: activeSettlementStructureResult?.merged?.skillBonuses?.[skill],
+                additionalModifiers: [...additionalModifiers, ...convertedCustomModifiers],
+                activity: this.activity,
+                phase: this.phase,
+                skill,
+                overrides: this.modifierOverrides,
+                activities,
+            });
+            const total = calculateModifiers(modifiers);
+            return [skill, {total, modifiers}];
+        })) as Record<Skill, TotalAndModifiers>;
     }
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -225,11 +256,13 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const target = event.currentTarget as HTMLButtonElement;
             const dc = parseInt(target.dataset.dc ?? '0', 10);
             const modifier = parseInt(target.dataset.modifier ?? '0', 10);
+            const creativeSolutionModifier = parseInt(target.dataset.creativeSolutionModifier ?? '0', 10);
+            const supernaturalSolutionModifier = parseInt(target.dataset.supernaturalSolutionModifier ?? '0', 10);
             const activity = target.dataset.activity;
             const label = target.dataset.type!;
             const skill = target.dataset.skill as Skill;
             const formula = `${modifier}`;
-            console.log(this.rollOptions);
+
             const degree = await rollCheck({
                 formula,
                 label,
@@ -245,6 +278,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                     [...this.rollOptions],
                 ),
                 rollOptions: this.rollOptions,
+                creativeSolutionModifier,
+                supernaturalSolutionModifier,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
@@ -258,9 +293,10 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const activity = target.dataset.activity;
             const label = target.dataset.type!;
             const skill = target.dataset.skill as Skill;
+            const creativeSolutionModifier = parseInt(target.dataset.creativeSolutionModifier ?? '0', 10);
+            const supernaturalSolutionModifier = parseInt(target.dataset.supernaturalSolutionModifier ?? '0', 10);
 
             const formula = `1d20+${modifier}`;
-            console.log(this.rollOptions);
             const degree = await rollCheck({
                 formula,
                 label,
@@ -276,6 +312,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                     [...this.rollOptions],
                 ),
                 rollOptions: this.rollOptions,
+                creativeSolutionModifier,
+                supernaturalSolutionModifier,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);

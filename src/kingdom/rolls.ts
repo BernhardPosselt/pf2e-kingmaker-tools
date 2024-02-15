@@ -16,6 +16,8 @@ export interface RollMeta {
     total: number;
     modifier: number;
     rollOptions: string[];
+    creativeSolutionModifier: number;
+    supernaturalSolutionModifier: number;
 }
 
 export function parseMeta(el: HTMLElement): RollMeta {
@@ -30,6 +32,8 @@ export function parseMeta(el: HTMLElement): RollMeta {
         formula: meta.dataset.formula as string,
         modifier: parseInt(meta.dataset.modifier ?? '0', 10),
         rollOptions: isNotBlank(rollOptions) ? JSON.parse(atob(rollOptions)) : [],
+        creativeSolutionModifier: parseInt(meta.dataset.creativeSolutionModifier ?? '0', 10),
+        supernaturalSolutionModifier: parseInt(meta.dataset.supernaturalSolutionModifier ?? '0', 10),
     };
 }
 
@@ -66,7 +70,11 @@ export function cooperativeLeadership(
     };
 }
 
-export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-roll' | 'keep-higher' | 'keep-lower'): Promise<void> {
+export async function reRoll(
+    actor: Actor,
+    el: HTMLElement,
+    type: 'fame' | 're-roll' | 'keep-higher' | 'keep-lower' | 'creative-solution' | 'supernatural-solution',
+): Promise<void> {
     const {
         total,
         formula,
@@ -75,6 +83,8 @@ export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-r
         dc,
         modifier,
         rollOptions,
+        creativeSolutionModifier,
+        supernaturalSolutionModifier,
     } = parseMeta(el);
     const label = activity ? unslugify(activity) : unslugify(skill);
     let reRollFormula = formula;
@@ -82,6 +92,16 @@ export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-r
     if (type === 'fame') {
         // deduct points from sheet
         await saveKingdom(actor, gainFame(kingdom, -1));
+    } else if (type === 'creative-solution') {
+        reRollFormula = `1d20+${creativeSolutionModifier}`;
+        await saveKingdom(actor, {
+            creativeSolutions: kingdom.creativeSolutions - 1,
+        });
+    } else if (type === 'supernatural-solution') {
+        reRollFormula = `1d20+${supernaturalSolutionModifier}`;
+        await saveKingdom(actor, {
+            supernaturalSolutions: kingdom.supernaturalSolutions - 1,
+        });
     } else if (type === 'keep-higher') {
         reRollFormula = `{${formula},${total}}kh`;
     } else if (type === 'keep-lower') {
@@ -103,6 +123,8 @@ export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-r
             rollOptions,
         ),
         rollOptions,
+        supernaturalSolutionModifier,
+        creativeSolutionModifier,
     });
 }
 
@@ -148,6 +170,8 @@ interface RollCheckOptions {
     actor: Actor,
     adjustDegreeOfSuccess?: (degree: DegreeOfSuccess) => DegreeOfSuccess;
     rollOptions: string[];
+    creativeSolutionModifier: number;
+    supernaturalSolutionModifier: number;
 }
 
 export async function rollCheck(
@@ -161,6 +185,8 @@ export async function rollCheck(
         actor,
         adjustDegreeOfSuccess = (degree): DegreeOfSuccess => degree,
         rollOptions,
+        supernaturalSolutionModifier,
+        creativeSolutionModifier,
     }: RollCheckOptions,
 ): Promise<DegreeOfSuccess> {
     const roll = await new Roll(formula).roll();
@@ -177,6 +203,8 @@ export async function rollCheck(
             data-dc="${dc}"
             data-total="${total}"
             data-modifier="${modifier}"
+            data-creative-solution-modifier="${creativeSolutionModifier}"
+            data-supernatural-solution-modifier="${supernaturalSolutionModifier}"
         ></div>`;
     await roll.toMessage({flavor: `Rolling Skill Check: ${label}, DC ${dc}${meta}`});
     await postDegreeOfSuccess(actor, activity, degreeOfSuccess);

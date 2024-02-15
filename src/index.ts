@@ -551,11 +551,29 @@ Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
             const actor = getKingdomSheetActor(gameInstance);
             return actor ? getKingdom(actor).fame.now > 0 && hasMeta(el) : false;
         };
+        const canReRollUsingCreativeSolution = (el: JQuery): boolean => {
+            const actor = getKingdomSheetActor(gameInstance);
+            return actor ? getKingdom(actor).creativeSolutions > 0 && hasMeta(el) : false;
+        };
+        const canReRollUsingSupernaturalSolution = (el: JQuery): boolean => {
+            const actor = getKingdomSheetActor(gameInstance);
+            return actor ? getKingdom(actor).supernaturalSolutions > 0 && hasMeta(el) : false;
+        };
         items.push({
             name: 'Re-Roll Using Fame/Infamy',
             icon: '<i class="fa-solid fa-dice-d20"></i>',
             condition: canReRollUsingFame,
             callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => reRoll(actor, el[0], 'fame')),
+        }, {
+            name: 'Re-Roll Using Creative Solution',
+            icon: '<i class="fa-solid fa-dice-d20"></i>',
+            condition: canReRollUsingCreativeSolution,
+            callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => reRoll(actor, el[0], 'creative-solution')),
+        }, {
+            name: 'Re-Roll Using Supernatural Solution',
+            icon: '<i class="fa-solid fa-dice-d20"></i>',
+            condition: canReRollUsingSupernaturalSolution,
+            callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => reRoll(actor, el[0], 'supernatural-solution')),
         }, {
             name: 'Re-Roll',
             condition: hasMeta,

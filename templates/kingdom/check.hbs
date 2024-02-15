@@ -126,6 +126,8 @@
         <div class="activity-choice">
             <button type="button" id="km-roll-skill-assurance"
                     data-modifier="{{modifiers.assurance}}"
+                    data-modifier-creative-solution="{{creativeSolutionModifier}}"
+                    data-modifier-supernatural-solution="{{supernaturalSolutionModifier}}"
                     data-type="{{title}}"
                     data-skill="{{selectedSkill}}"
                     {{#if activity}}data-activity="{{activity}}"{{/if}}
@@ -136,6 +138,8 @@
                     data-skill="{{selectedSkill}}"
                     data-dc="{{dc}}"
                     data-type="{{title}}"
+                    data-creative-solution-modifier="{{creativeSolutionModifier}}"
+                    data-supernatural-solution-modifier="{{supernaturalSolutionModifier}}"
                     data-modifier="{{modifiers.total}}">Roll
                 {{modifiers.totalLabel}}
                 <i class="fa-solid fa-dice-d20"></i></button>
