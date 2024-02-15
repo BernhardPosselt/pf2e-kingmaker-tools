@@ -283,6 +283,10 @@ export function slugifyable(value: string): boolean {
     return /^([a-zA-Z0-9]*)(\s[a-zA-Z0-9]*)*$/.test(value);
 }
 
+export function isNotBlank(value: string | null | undefined): value is string {
+    return !isBlank(value);
+}
+
 export function isBlank(value: string | null | undefined): boolean {
     if (value === null || value === undefined) {
         return true;

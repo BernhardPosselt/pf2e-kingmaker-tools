@@ -1,10 +1,11 @@
 import {DegreeOfSuccess, degreeToProperty, determineDegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {Skill} from './data/skills';
-import {postDegreeOfSuccessMessage, unslugify} from '../utils';
+import {isNotBlank, postDegreeOfSuccessMessage, unslugify} from '../utils';
 import {ActivityResults, getKingdomActivitiesById, KingdomActivity} from './data/activityData';
 import {Modifier, modifierToLabel} from './modifiers';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame} from './kingdom-utils';
+import {hasFeat} from './data/kingdom';
 
 export interface RollMeta {
     formula: string;
@@ -14,10 +15,12 @@ export interface RollMeta {
     dc: number;
     total: number;
     modifier: number;
+    rollOptions: string[];
 }
 
 export function parseMeta(el: HTMLElement): RollMeta {
     const meta = el.querySelector('.km-roll-meta') as HTMLElement;
+    const rollOptions = meta.dataset.rollOptions;
     return {
         total: parseInt(meta.dataset.total ?? '0', 10),
         dc: parseInt(meta.dataset.dc ?? '0', 10),
@@ -26,6 +29,7 @@ export function parseMeta(el: HTMLElement): RollMeta {
         degree: meta.dataset.degree as StringDegreeOfSuccess,
         formula: meta.dataset.formula as string,
         modifier: parseInt(meta.dataset.modifier ?? '0', 10),
+        rollOptions: isNotBlank(rollOptions) ? JSON.parse(atob(rollOptions)) : [],
     };
 }
 
@@ -42,9 +46,36 @@ export function parseUpgradeMeta(el: HTMLElement): ActivityResultMeta {
     };
 }
 
+export function cooperativeLeadership(
+    hasCooperativeLeadership: boolean,
+    kingdomLevel: number,
+    skillRank: number,
+    rollOptions: string[],
+): (degree: DegreeOfSuccess) => DegreeOfSuccess {
+    return (degree) => {
+        if (hasCooperativeLeadership && rollOptions.includes('focused-attention')) {
+            if (kingdomLevel >= 11) {
+                if (degree === DegreeOfSuccess.CRITICAL_FAILURE) {
+                    degree = DegreeOfSuccess.FAILURE;
+                } else if (degree === DegreeOfSuccess.FAILURE && skillRank >= 2) {
+                    degree = DegreeOfSuccess.SUCCESS;
+                }
+            }
+        }
+        return degree;
+    };
+}
 
 export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-roll' | 'keep-higher' | 'keep-lower'): Promise<void> {
-    const {total, formula, activity, skill, dc, modifier} = parseMeta(el);
+    const {
+        total,
+        formula,
+        activity,
+        skill,
+        dc,
+        modifier,
+        rollOptions,
+    } = parseMeta(el);
     const label = activity ? unslugify(activity) : unslugify(skill);
     let reRollFormula = formula;
     const kingdom = getKingdom(actor);
@@ -56,6 +87,7 @@ export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-r
     } else if (type === 'keep-lower') {
         reRollFormula = `{${formula},${total}}kl`;
     }
+
     await rollCheck({
         formula: reRollFormula,
         label,
@@ -64,6 +96,13 @@ export async function reRoll(actor: Actor, el: HTMLElement, type: 'fame' | 're-r
         skill,
         modifier,
         actor,
+        adjustDegreeOfSuccess: cooperativeLeadership(
+            hasFeat(kingdom, 'Cooperative Leadership'),
+            kingdom.level,
+            kingdom.skillRanks[skill],
+            rollOptions,
+        ),
+        rollOptions,
     });
 }
 
@@ -99,6 +138,18 @@ export async function changeDegree(actor: Actor, el: HTMLElement, type: 'upgrade
     await postComplexDegreeOfSuccess(actor, getDegreeFromKey(newDegree), kingdomActivity);
 }
 
+interface RollCheckOptions {
+    formula: string,
+    label: string,
+    activity: KingdomActivity | undefined,
+    dc: number,
+    skill: Skill,
+    modifier: number,
+    actor: Actor,
+    adjustDegreeOfSuccess?: (degree: DegreeOfSuccess) => DegreeOfSuccess;
+    rollOptions: string[];
+}
+
 export async function rollCheck(
     {
         formula,
@@ -108,26 +159,21 @@ export async function rollCheck(
         skill,
         modifier,
         actor,
-    }: {
-        formula: string,
-        label: string,
-        activity: KingdomActivity | undefined,
-        dc: number,
-        skill: Skill,
-        modifier: number,
-        actor: Actor,
-    },
+        adjustDegreeOfSuccess = (degree): DegreeOfSuccess => degree,
+        rollOptions,
+    }: RollCheckOptions,
 ): Promise<DegreeOfSuccess> {
     const roll = await new Roll(formula).roll();
     const total = roll.total;
     const dieNumber = total - modifier;
-    const degreeOfSuccess = determineDegreeOfSuccess(dieNumber, total, dc);
+    const degreeOfSuccess = adjustDegreeOfSuccess(determineDegreeOfSuccess(dieNumber, total, dc));
     const meta = `
         <div class="km-roll-meta" hidden 
             data-formula="${formula}" 
             ${activity === undefined ? '' : `data-activity="${activity.id}"`}
             data-degree="${degreeToProperty(degreeOfSuccess)}"
             data-skill="${skill}"
+            data-roll-options="${rollOptions ? btoa(JSON.stringify(rollOptions)) : ''}"
             data-dc="${dc}"
             data-total="${total}"
             data-modifier="${modifier}"

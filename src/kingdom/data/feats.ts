@@ -43,7 +43,6 @@ select this feat, choose one leadership role; that role is now supported by your
         }],
     },
     {
-        automationNotes: 'Degree of Success is not increased',
         name: 'Cooperative Leadership',
         level: 1,
         text: `Your leaders are skilled at working with one another. When a leader uses the Focused Attention kingdom

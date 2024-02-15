@@ -49,6 +49,7 @@ export interface Modifier {
     enabled: boolean;
     turns?: number;
     consumeId?: string;
+    rollOptions?: string[];
 }
 
 function createPredicateName(values: string[] | undefined, label: string): string | undefined {
@@ -204,6 +205,7 @@ export interface ModifierTotals {
     vacancyPenalty: number;
     value: number;
     assurance: number;
+    rollOptions: string[];
 }
 
 export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
@@ -235,9 +237,11 @@ export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
         vacancyPenalty: 0,
         value: 0,
         assurance: 10,
+        rollOptions: [],
     };
     const enabledModifiers = modifiers.filter(modifier => modifier.enabled && modifier.value !== 0);
     for (const modifier of enabledModifiers) {
+        modifier.rollOptions?.forEach(option => result.rollOptions.push(option));
         if (modifier.type === 'vacancy') {
             result.vacancyPenalty = modifier.value;
         } else {

@@ -15,7 +15,7 @@ import {getControlDC, hasFeat, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks, getOverrideUnlockCompanionNames} from '../data/companions';
 import {capitalize, unslugify} from '../../utils';
 import {getKingdomActivitiesById, KingdomActivityById} from '../data/activityData';
-import {rollCheck} from '../rolls';
+import {cooperativeLeadership, rollCheck} from '../rolls';
 import {
     getActiveSettlementStructureResult,
     getSettlement,
@@ -80,6 +80,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private actor: Actor;
     private overrideSkills: Partial<SkillRanks> | undefined;
     private afterRoll: (degree: DegreeOfSuccess) => Promise<void>;
+    private rollOptions: string[] = [];
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -182,6 +183,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             return [skill, {total, modifiers}];
         })) as Record<Skill, TotalAndModifiers>;
         // set all modifiers as consumed that have a consumeId and are enabled
+        this.rollOptions = skillModifiers[this.selectedSkill].total.rollOptions;
         this.consumeModifiers = new Set(skillModifiers[this.selectedSkill].modifiers
             .filter(modifier => modifier.enabled && modifier.consumeId !== undefined)
             .map(modifier => modifier.consumeId!));
@@ -226,8 +228,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const activity = target.dataset.activity;
             const label = target.dataset.type!;
             const skill = target.dataset.skill as Skill;
-
             const formula = `${modifier}`;
+            console.log(this.rollOptions);
             const degree = await rollCheck({
                 formula,
                 label,
@@ -236,6 +238,13 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 skill,
                 modifier,
                 actor: this.actor,
+                adjustDegreeOfSuccess: cooperativeLeadership(
+                    hasFeat(this.kingdom, 'Cooperative Leadership'),
+                    this.kingdom.level,
+                    this.kingdom.skillRanks[skill],
+                    [...this.rollOptions],
+                ),
+                rollOptions: this.rollOptions,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
@@ -251,6 +260,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const skill = target.dataset.skill as Skill;
 
             const formula = `1d20+${modifier}`;
+            console.log(this.rollOptions);
             const degree = await rollCheck({
                 formula,
                 label,
@@ -259,6 +269,13 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 skill,
                 modifier,
                 actor: this.actor,
+                adjustDegreeOfSuccess: cooperativeLeadership(
+                    hasFeat(this.kingdom, 'Cooperative Leadership'),
+                    this.kingdom.level,
+                    this.kingdom.skillRanks[skill],
+                    [...this.rollOptions],
+                ),
+                rollOptions: this.rollOptions,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
