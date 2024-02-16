@@ -16,6 +16,7 @@ import {
     CookingSkill,
     getCampingActivityData,
     getDefaultConfiguration,
+    getPartyActors,
     rollCampingCheck,
     SkillCheckOptions,
 } from './camping';
@@ -117,7 +118,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const watchSecondsDuration = await getWatchSecondsDuration(actors, data);
         const actorsKeepingWatch = getActorsKeepingWatch(data, actors);
         const {total: encounterDC, modifier: currentEncounterDCModifier} = getEncounterDC(data, this.game);
-        const actorConsumables = await getActorConsumables(actors);
+        const actorConsumables = await getActorConsumables([...actors, ...getPartyActors(this.game)]);
         const knownRecipes = getKnownRecipes(data);
         const chosenMealData = getChosenMealData(data);
         const chosenMeal = chosenMealData.name;
@@ -370,9 +371,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         listenClick($html, '.camping-settings', async () => {
             const current = await this.read();
             const actors = await getActorsByUuid(new Set(current.actorUuids));
+            const partyActors = getPartyActors(this.game);
             campingSettingsDialog({
                 data: {
-                    actors: actors,
+                    actors: [...actors, ...partyActors],
                     huntAndGatherTargetActorUuid: current.huntAndGatherTargetActorUuid,
                     restRollMode: current.restRollMode,
                     gunsToClean: current.gunsToClean,
@@ -634,7 +636,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
 
     private async consumeFood(): Promise<void> {
         const current = await this.read();
-        const actors = await this.getActors(current);
+        const actors = [...(await this.getActors(current)), ...getPartyActors(this.game)];
         const actorConsumables = await getActorConsumables(actors);
         const chosenMealData = getRecipeData(current)
             .find(a => a.name === current.cooking.chosenMeal);

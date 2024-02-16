@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * You can now play a playlist when clicking the Begin Rest button on the Camping Sheet
+* You can now move gathered ingredients to the party sheet
+* You can now consume ingredients and rations from the party actor as well
 
 ## [0.36.0] - 2024-02-15
 

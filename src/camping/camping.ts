@@ -231,9 +231,13 @@ export async function getCombatEffects(data: Camping): Promise<Partial<Record<Ca
     return result;
 }
 
-export async function getHuntAndGatherActor(data: Camping): Promise<Actor | null> {
+export function getPartyActors(game: Game): Actor[] {
+    return game.actors?.filter(a => a.type === 'party') ?? [];
+}
+
+export async function getHuntAndGatherActor(game: Game, data: Camping): Promise<Actor | null> {
     const uuid = data.huntAndGatherTargetActorUuid;
-    if (uuid && data.actorUuids.includes(uuid)) {
+    if (uuid && (data.actorUuids.includes(uuid) || getPartyActors(game).find(a => a.uuid === uuid))) {
         return await getActorByUuid(uuid);
     }
     return null;

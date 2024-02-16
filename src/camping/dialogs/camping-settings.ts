@@ -57,10 +57,10 @@ export function campingSettingsDialog({onSubmit, data}: CampingSettingOptions): 
                 <select name="hunt-and-gather-actor" id="km-hunt-and-gather-actor">
                     <option value="">Actor performing Hunt and Gather</option>
                     ${data.actors.map(a => {
-                        return `
-                        <option value="${a.uuid}" ${a.uuid === data.huntAndGatherTargetActorUuid ? 'selected': ''}>${a.name}</option>
-                        `;    
-                    }).join('')}
+            return `
+                        <option value="${a.uuid}" ${a.uuid === data.huntAndGatherTargetActorUuid ? 'selected' : ''}>${a.name}</option>
+                        `;
+        }).join('')}
                 </select>
             </div>
             <div>

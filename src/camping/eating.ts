@@ -253,7 +253,7 @@ export async function addHuntAndGatherResult(game: Game, actorAndIngredients: Ac
     const campingActor = getCampingActor(game);
     if (campingActor) {
         const camping = getCamping(campingActor);
-        const actor = (await getHuntAndGatherActor(camping)) || actorAndIngredients.actor;
+        const actor = (await getHuntAndGatherActor(game, camping)) || actorAndIngredients.actor;
         const specialIngredients = actorAndIngredients.specialIngredients;
         const basicIngredients = actorAndIngredients.basicIngredients;
         await addFood([actor], {
