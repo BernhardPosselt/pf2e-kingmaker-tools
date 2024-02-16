@@ -557,4 +557,6 @@ td.skill-value {
 
 .km-skill-check-header {
     font-weight: 600;
+    line-height: 18px;
+    font-size: 12px;
 }

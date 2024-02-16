@@ -211,7 +211,7 @@ function createModifierPills(
         console.log(parsedBreakdown, modifiers);
         const mods = modifiers.map(m => {
             const value = m.value;
-            return `<span class="km-modifier-pill">${unslugify(m.name)} ${value > 0 ? `+${value}` : value}</span>`;
+            return `<span class="km-modifier-pill">${unslugify(m.name)} ${value >= 0 ? `+${value}` : value}</span>`;
         }).join('');
         return `<div class="km-modifier-breakdown">${mods}</div>`;
     }
