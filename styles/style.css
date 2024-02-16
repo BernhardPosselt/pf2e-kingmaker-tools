@@ -542,11 +542,13 @@ td.skill-value {
 
 .km-modifier-pill {
     border: 1px solid #aaa;
-    padding: 0 4px;
+    padding: 0 2px;
     border-radius: 5px;
     margin-right: 3px;
     display: inline-block;
     margin-bottom: 3px;
+    font-size: 11px;
+    line-height: 16px;
 }
 
 .km-modifier-breakdown {
