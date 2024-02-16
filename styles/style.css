@@ -554,3 +554,7 @@ td.skill-value {
 .km-modifier-breakdown {
 
 }
+
+.km-skill-check-header {
+    font-weight: 600;
+}

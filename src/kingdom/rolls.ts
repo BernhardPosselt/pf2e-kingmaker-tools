@@ -209,8 +209,10 @@ function createModifierPills(
         const parsedBreakdown = decodeJson(modifierBreakdown) as ModifierBreakdowns;
         const modifiers = getModifiersByType(parsedBreakdown, type);
         console.log(parsedBreakdown, modifiers);
-        const mods = modifiers.map(m =>
-            `<span class="km-modifier-pill">${unslugify(m.name)}: ${m.value}</span>`).join('');
+        const mods = modifiers.map(m => {
+            const value = m.value;
+            return `<span class="km-modifier-pill">${unslugify(m.name)} ${value > 0 ? `+${value}` : value}</span>`;
+        }).join('');
         return `<div class="km-modifier-breakdown">${mods}</div>`;
     }
     return '';
@@ -254,7 +256,7 @@ export async function rollCheck(
             data-supernatural-solution-modifier="${supernaturalSolutionModifier}"
         ></div>`;
     const modifierPills = createModifierPills(modifierBreakdown, rollType);
-    await roll.toMessage({flavor: `${modifierPills}Rolling Skill Check: ${label}, DC ${dc}${meta}`});
+    await roll.toMessage({flavor: `<span class="km-skill-check-header">Skill Check: ${label}, DC ${dc}</span>${meta}<hr>${modifierPills}`});
     await postDegreeOfSuccess(
         actor,
         activity,
