@@ -6,6 +6,7 @@ import {
     Modifier,
     ModifierTotal,
     ModifierTotals,
+    ModifierType,
     ModifierWithId,
 } from '../modifiers';
 import {getActivitySkills, KingdomPhase} from '../data/activities';
@@ -13,7 +14,7 @@ import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getControlDC, hasFeat, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks, getOverrideUnlockCompanionNames} from '../data/companions';
-import {capitalize, unslugify} from '../../utils';
+import {capitalize, encodeJson, unslugify} from '../../utils';
 import {getKingdomActivitiesById, KingdomActivityById} from '../data/activityData';
 import {cooperativeLeadership, rollCheck} from '../rolls';
 import {
@@ -57,8 +58,32 @@ interface TotalAndModifiers {
     modifiers: ModifierWithId[];
 }
 
+export interface ModifierBreakdown {
+    name: string;
+    type: ModifierType;
+    value: number;
+}
+
+export interface ModifierBreakdowns {
+    creativeSolution: ModifierBreakdown[],
+    supernaturalSolution: ModifierBreakdown[],
+    selected: ModifierBreakdown[],
+}
+
 type TotalFields = 'circumstance' | 'untyped' | 'item' | 'status';
 type CustomModifiers = Pick<ModifierTotals, TotalFields>;
+
+function createModifierList(modifiers: TotalAndModifiers): ModifierBreakdown[] {
+    return modifiers.modifiers
+        .filter(m => m.enabled)
+        .map(m => {
+            return {
+                type: m.type,
+                value: m.value,
+                name: m.name,
+            };
+        });
+}
 
 export class CheckDialog extends FormApplication<FormApplicationOptions & CheckDialogFeatOptions, object, null> {
     private type: CheckType;
@@ -173,19 +198,25 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             [...additionalModifiers, {enabled: true, type: 'circumstance', value: 2, name: 'Creative Solution'}],
             convertedCustomModifiers,
             activities,
-        )[this.selectedSkill].total.value;
+        )[this.selectedSkill];
         const supernaturalSolutionModifier = this.calculateModifiers(
             ['magic'],
             activeSettlementStructureResult,
             additionalModifiers,
             convertedCustomModifiers,
             activities,
-        )['magic'].total.value;
+        )['magic'];
+        const selectedSkillModifier = skillModifiers[this.selectedSkill];
         // set all modifiers as consumed that have a consumeId and are enabled
-        this.rollOptions = skillModifiers[this.selectedSkill].total.rollOptions;
-        this.consumeModifiers = new Set(skillModifiers[this.selectedSkill].modifiers
+        this.rollOptions = selectedSkillModifier.total.rollOptions;
+        this.consumeModifiers = new Set(selectedSkillModifier.modifiers
             .filter(modifier => modifier.enabled && modifier.consumeId !== undefined)
             .map(modifier => modifier.consumeId!));
+        const modifierBreakdown = encodeJson({
+            creativeSolution: createModifierList(creativeSolutionModifier),
+            supernaturalSolution: createModifierList(supernaturalSolutionModifier),
+            selected: createModifierList(selectedSkillModifier),
+        });
         return {
             ...super.getData(options),
             invalid: this.selectedSkill === undefined,
@@ -194,11 +225,12 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             activity: this.activity,
             selectableSkills: this.createSelectableSkills(skillModifiers),
             selectedSkill: this.selectedSkill,
-            modifiers: this.createModifiers(skillModifiers[this.selectedSkill]),
+            modifiers: this.createModifiers(selectedSkillModifier),
             phase: this.phase,
             customModifiers: this.customModifiers,
-            creativeSolutionModifier,
-            supernaturalSolutionModifier,
+            creativeSolutionModifier: creativeSolutionModifier.total.value,
+            supernaturalSolutionModifier: supernaturalSolutionModifier.total.value,
+            modifierBreakdown,
         };
     }
 
@@ -280,6 +312,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 rollOptions: this.rollOptions,
                 creativeSolutionModifier,
                 supernaturalSolutionModifier,
+                rollType: 'selected',
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
@@ -292,6 +325,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const modifier = parseInt(target.dataset.modifier ?? '0', 10);
             const activity = target.dataset.activity;
             const label = target.dataset.type!;
+            const modifierBreakdown = target.dataset.modifierBreakdown as string;
             const skill = target.dataset.skill as Skill;
             const creativeSolutionModifier = parseInt(target.dataset.creativeSolutionModifier ?? '0', 10);
             const supernaturalSolutionModifier = parseInt(target.dataset.supernaturalSolutionModifier ?? '0', 10);
@@ -304,6 +338,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 dc,
                 skill,
                 modifier,
+                modifierBreakdown,
                 actor: this.actor,
                 adjustDegreeOfSuccess: cooperativeLeadership(
                     hasFeat(this.kingdom, 'Cooperative Leadership'),
@@ -314,6 +349,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 rollOptions: this.rollOptions,
                 creativeSolutionModifier,
                 supernaturalSolutionModifier,
+                rollType: 'selected',
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
@@ -336,12 +372,12 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 return [{
                     value: values.bonus,
                     type,
-                    name: 'Custom',
+                    name: capitalize(type) + ' Bonus',
                     enabled: true,
                 }, {
                     value: -values.penalty,
                     type,
-                    name: 'Custom',
+                    name: capitalize(type) + ' Penalty',
                     enabled: true,
                 }];
             });

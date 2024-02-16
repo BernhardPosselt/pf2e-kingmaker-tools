@@ -359,9 +359,7 @@ export function processModifiers(
     const copied = modifiers.map((modifier, index) => {
         // make a copy and assign every modifier an id
         return {
-            ...modifier,
-            phases: modifier.phases ? [...modifier.phases] : undefined,
-            activities: modifier.activities ? [...modifier.activities] : undefined,
+            ...(deepClone(modifier)),
             id: `${index}`,
         };
     });

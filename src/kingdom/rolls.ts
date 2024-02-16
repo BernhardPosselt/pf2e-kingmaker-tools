@@ -1,11 +1,12 @@
 import {DegreeOfSuccess, degreeToProperty, determineDegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {Skill} from './data/skills';
-import {isNotBlank, postDegreeOfSuccessMessage, unslugify} from '../utils';
+import {decodeJson, isNotBlank, postDegreeOfSuccessMessage, unslugify} from '../utils';
 import {ActivityResults, getKingdomActivitiesById, KingdomActivity} from './data/activityData';
 import {Modifier, modifierToLabel} from './modifiers';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame} from './kingdom-utils';
 import {hasFeat} from './data/kingdom';
+import {ModifierBreakdown, ModifierBreakdowns} from './dialogs/check-dialog';
 
 export interface RollMeta {
     formula: string;
@@ -18,6 +19,8 @@ export interface RollMeta {
     rollOptions: string[];
     creativeSolutionModifier: number;
     supernaturalSolutionModifier: number;
+    modifierBreakdown?: string;
+    rollType: RollType;
 }
 
 export function parseMeta(el: HTMLElement): RollMeta {
@@ -31,9 +34,11 @@ export function parseMeta(el: HTMLElement): RollMeta {
         degree: meta.dataset.degree as StringDegreeOfSuccess,
         formula: meta.dataset.formula as string,
         modifier: parseInt(meta.dataset.modifier ?? '0', 10),
+        rollType: meta.dataset.rollType as RollType,
         rollOptions: isNotBlank(rollOptions) ? JSON.parse(atob(rollOptions)) : [],
         creativeSolutionModifier: parseInt(meta.dataset.creativeSolutionModifier ?? '0', 10),
         supernaturalSolutionModifier: parseInt(meta.dataset.supernaturalSolutionModifier ?? '0', 10),
+        modifierBreakdown: isNotBlank(meta.dataset.modifierBreakdown) ? meta.dataset.modifierBreakdown : undefined,
     };
 }
 
@@ -85,19 +90,24 @@ export async function reRoll(
         rollOptions,
         creativeSolutionModifier,
         supernaturalSolutionModifier,
+        modifierBreakdown,
+        rollType,
     } = parseMeta(el);
     const label = activity ? unslugify(activity) : unslugify(skill);
     let reRollFormula = formula;
     const kingdom = getKingdom(actor);
+    let overrideRollType: RollType | undefined;
     if (type === 'fame') {
         // deduct points from sheet
         await saveKingdom(actor, gainFame(kingdom, -1));
     } else if (type === 'creative-solution') {
         reRollFormula = `1d20+${creativeSolutionModifier}`;
+        overrideRollType = 'creative-solution';
         await saveKingdom(actor, {
             creativeSolutions: kingdom.creativeSolutions - 1,
         });
     } else if (type === 'supernatural-solution') {
+        overrideRollType = 'supernatural-solution';
         reRollFormula = `1d20+${supernaturalSolutionModifier}`;
         await saveKingdom(actor, {
             supernaturalSolutions: kingdom.supernaturalSolutions - 1,
@@ -115,6 +125,7 @@ export async function reRoll(
         dc,
         skill,
         modifier,
+        modifierBreakdown,
         actor,
         adjustDegreeOfSuccess: cooperativeLeadership(
             hasFeat(kingdom, 'Cooperative Leadership'),
@@ -123,6 +134,7 @@ export async function reRoll(
             rollOptions,
         ),
         rollOptions,
+        rollType: overrideRollType ?? rollType,
         supernaturalSolutionModifier,
         creativeSolutionModifier,
     });
@@ -157,7 +169,8 @@ export async function changeDegree(actor: Actor, el: HTMLElement, type: 'upgrade
     const kingdom = getKingdom(actor);
     const kingdomActivity = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
     const newDegree = type === 'upgrade' ? upgradeDegree(degree) : downgradeDegree(degree);
-    await postComplexDegreeOfSuccess(actor, getDegreeFromKey(newDegree), kingdomActivity);
+    const degreeEnum = getDegreeFromKey(newDegree);
+    await postComplexDegreeOfSuccess(actor, kingdomActivity, degreeEnum, degreeEnum);
 }
 
 interface RollCheckOptions {
@@ -172,6 +185,35 @@ interface RollCheckOptions {
     rollOptions: string[];
     creativeSolutionModifier: number;
     supernaturalSolutionModifier: number;
+    modifierBreakdown?: string;
+    rollType: RollType;
+}
+
+type RollType = 'creative-solution' | 'supernatural-solution' | 'selected';
+
+function getModifiersByType(parsedBreakdown: ModifierBreakdowns, type: RollType): ModifierBreakdown[] {
+    if (type === 'supernatural-solution') {
+        return parsedBreakdown.supernaturalSolution;
+    } else if (type === 'creative-solution') {
+        return parsedBreakdown.creativeSolution;
+    } else {
+        return parsedBreakdown.selected;
+    }
+}
+
+function createModifierPills(
+    modifierBreakdown: string | undefined,
+    type: RollType,
+): string {
+    if (isNotBlank(modifierBreakdown)) {
+        const parsedBreakdown = decodeJson(modifierBreakdown) as ModifierBreakdowns;
+        const modifiers = getModifiersByType(parsedBreakdown, type);
+        console.log(parsedBreakdown, modifiers);
+        const mods = modifiers.map(m =>
+            `<span class="km-modifier-pill">${unslugify(m.name)}: ${m.value}</span>`).join('');
+        return `<div class="km-modifier-breakdown">${mods}</div>`;
+    }
+    return '';
 }
 
 export async function rollCheck(
@@ -185,14 +227,17 @@ export async function rollCheck(
         actor,
         adjustDegreeOfSuccess = (degree): DegreeOfSuccess => degree,
         rollOptions,
+        modifierBreakdown,
         supernaturalSolutionModifier,
         creativeSolutionModifier,
+        rollType,
     }: RollCheckOptions,
 ): Promise<DegreeOfSuccess> {
     const roll = await new Roll(formula).roll();
     const total = roll.total;
     const dieNumber = total - modifier;
-    const degreeOfSuccess = adjustDegreeOfSuccess(determineDegreeOfSuccess(dieNumber, total, dc));
+    const previousDegree = determineDegreeOfSuccess(dieNumber, total, dc);
+    const degreeOfSuccess = adjustDegreeOfSuccess(previousDegree);
     const meta = `
         <div class="km-roll-meta" hidden 
             data-formula="${formula}" 
@@ -202,29 +247,43 @@ export async function rollCheck(
             data-roll-options="${rollOptions ? btoa(JSON.stringify(rollOptions)) : ''}"
             data-dc="${dc}"
             data-total="${total}"
+            data-modifier-breakdown="${modifierBreakdown ?? ''}"
             data-modifier="${modifier}"
+            data-roll-type="${rollType}"
             data-creative-solution-modifier="${creativeSolutionModifier}"
             data-supernatural-solution-modifier="${supernaturalSolutionModifier}"
         ></div>`;
-    await roll.toMessage({flavor: `Rolling Skill Check: ${label}, DC ${dc}${meta}`});
-    await postDegreeOfSuccess(actor, activity, degreeOfSuccess);
+    const modifierPills = createModifierPills(modifierBreakdown, rollType);
+    await roll.toMessage({flavor: `${modifierPills}Rolling Skill Check: ${label}, DC ${dc}${meta}`});
+    await postDegreeOfSuccess(
+        actor,
+        activity,
+        previousDegree,
+        degreeOfSuccess === previousDegree ? undefined : degreeOfSuccess,
+    );
     return degreeOfSuccess;
 }
 
-async function postDegreeOfSuccess(actor: Actor, activity: KingdomActivity | undefined, degreeOfSuccess: DegreeOfSuccess): Promise<void> {
+async function postDegreeOfSuccess(
+    actor: Actor,
+    activity: KingdomActivity | undefined,
+    degreeOfSuccess: DegreeOfSuccess,
+    upgradedDegreeOfSuccess?: DegreeOfSuccess,
+): Promise<void> {
     if (activity) {
-        await postComplexDegreeOfSuccess(actor, degreeOfSuccess, activity);
+        await postComplexDegreeOfSuccess(actor, activity, degreeOfSuccess, upgradedDegreeOfSuccess);
     } else {
-        await postSimpleDegreeOfSuccess(degreeOfSuccess);
+        await postSimpleDegreeOfSuccess(degreeOfSuccess, upgradedDegreeOfSuccess);
     }
 }
 
-async function postSimpleDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess): Promise<void> {
-    await postDegreeOfSuccessMessage(degreeOfSuccess, {
-        critSuccess: `<b>Critical Success</b>${buildChatButtons([], 'criticalSuccess')}`,
-        success: '<b>Success</b>',
-        failure: '<b>Failure</b>',
-        critFailure: '<b>Critical Failure</b>',
+async function postSimpleDegreeOfSuccess(degreeOfSuccess: DegreeOfSuccess, upgradedDegreeOfSuccess?: DegreeOfSuccess): Promise<void> {
+    await postDegreeOfSuccessMessage({
+        degreeOfSuccess,
+        upgradedDegreeOfSuccess,
+        messageConfig: {
+            critSuccess: `${buildChatButtons([], 'criticalSuccess')}`,
+        },
     });
 }
 
@@ -270,8 +329,13 @@ function buildChatButtons(modifiers: Modifier[], resultKey: keyof ActivityResult
     }
 }
 
-async function postComplexDegreeOfSuccess(actor: Actor, degreeOfSuccess: DegreeOfSuccess, activity: KingdomActivity): Promise<void> {
-    const resultKey = getResultKey(degreeOfSuccess);
+async function postComplexDegreeOfSuccess(
+    actor: Actor,
+    activity: KingdomActivity,
+    degreeOfSuccess: DegreeOfSuccess,
+    upgradedDegreeOfSuccess?: DegreeOfSuccess,
+): Promise<void> {
+    const resultKey = getResultKey(upgradedDegreeOfSuccess ?? degreeOfSuccess);
     const results = activity[resultKey];
     if (results) {
         const kingdom = getKingdom(actor);
@@ -285,14 +349,19 @@ async function postComplexDegreeOfSuccess(actor: Actor, degreeOfSuccess: DegreeO
         const msg = message;
         const tail = buttons + upgrade;
         const description = `<h3>${activity.title}</h3>${activity.description.trimEnd()}<hr>`;
-        await postDegreeOfSuccessMessage(degreeOfSuccess, {
-            critSuccess: `${description}<b>Critical Success</b>: ${msg}${tail}`,
-            success: `${description}<b>Success</b>: ${msg}${tail}`,
-            failure: `${description}<b>Failure</b>: ${msg}${tail}`,
-            critFailure: `${description}<b>Critical Failure</b>: ${msg}${tail}`,
+        await postDegreeOfSuccessMessage({
+            degreeOfSuccess,
+            upgradedDegreeOfSuccess,
+            beforeHeader: description,
+            messageConfig: {
+                critSuccess: `${msg}${tail}`,
+                success: `${msg}${tail}`,
+                failure: `${msg}${tail}`,
+                critFailure: `${msg}${tail}`,
+            },
         });
     } else {
-        await postSimpleDegreeOfSuccess(degreeOfSuccess);
+        await postSimpleDegreeOfSuccess(degreeOfSuccess, upgradedDegreeOfSuccess);
     }
 }
 

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Display roll modifiers in chat
 * You can now play a playlist when clicking the Begin Rest button on the Camping Sheet
 * You can now move gathered ingredients to the party sheet
 * You can now consume ingredients and rations from the party actor as well

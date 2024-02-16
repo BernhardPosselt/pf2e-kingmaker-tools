@@ -535,3 +535,20 @@ td.skill-value {
         text-align: center;
     }
 }
+
+.strike-through {
+    text-decoration: line-through;
+}
+
+.km-modifier-pill {
+    border: 1px solid #aaa;
+    padding: 0 4px;
+    border-radius: 5px;
+    margin-right: 3px;
+    display: inline-block;
+    margin-bottom: 3px;
+}
+
+.km-modifier-breakdown {
+
+}

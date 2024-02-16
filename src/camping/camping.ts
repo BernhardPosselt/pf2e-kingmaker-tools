@@ -147,12 +147,15 @@ export async function rollCampingCheck(
     }
     const degree = result?.degreeOfSuccess ?? null;
     if (degree !== null) {
-        await postDegreeOfSuccessMessage(degree, {
-            isPrivate: secret,
-            critSuccess: activity?.criticalSuccess?.message,
-            success: activity?.success?.message,
-            failure: activity?.failure?.message,
-            critFailure: activity?.criticalFailure?.message,
+        await postDegreeOfSuccessMessage({
+            degreeOfSuccess: degree,
+            messageConfig: {
+                isPrivate: secret,
+                critSuccess: activity?.criticalSuccess?.message,
+                success: activity?.success?.message,
+                failure: activity?.failure?.message,
+                critFailure: activity?.criticalFailure?.message,
+            },
         });
         if (activity !== undefined && activity[degreeToProperty(degree)]?.checkRandomEncounter) {
             await checkRandomEncounterMessage();

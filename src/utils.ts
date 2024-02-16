@@ -51,18 +51,60 @@ export interface DegreeOfSuccessMessageConfig {
     isPrivate?: boolean;
 }
 
-export async function postDegreeOfSuccessMessage(degreeOfSuccess: DegreeOfSuccess, messageConfig: DegreeOfSuccessMessageConfig): Promise<void> {
-    let message = '';
-    if (degreeOfSuccess === DegreeOfSuccess.CRITICAL_SUCCESS && messageConfig.critSuccess !== undefined) {
-        message = messageConfig.critSuccess;
-    } else if (degreeOfSuccess === DegreeOfSuccess.SUCCESS && messageConfig.success !== undefined) {
-        message = messageConfig.success;
-    } else if (degreeOfSuccess === DegreeOfSuccess.FAILURE && messageConfig.failure !== undefined) {
-        message = messageConfig.failure;
-    } else if (degreeOfSuccess === DegreeOfSuccess.CRITICAL_FAILURE && messageConfig.critFailure !== undefined) {
-        message = messageConfig.critFailure;
+function getDegreePart(degreeOfSuccess: DegreeOfSuccess, strikeThrough = false): string {
+    if (degreeOfSuccess === DegreeOfSuccess.CRITICAL_SUCCESS) {
+        return `<span class="${strikeThrough ? 'strike-through' : ''}">Critical Success</span>`;
+    } else if (degreeOfSuccess === DegreeOfSuccess.SUCCESS) {
+        return `<span class="${strikeThrough ? 'strike-through' : ''}">Success</span>`;
+    } else if (degreeOfSuccess === DegreeOfSuccess.FAILURE) {
+        return `<span class="${strikeThrough ? 'strike-through' : ''}">Failure</span>`;
+    } else {
+        return `<span class="${strikeThrough ? 'strike-through' : ''}">Critical Failure</span>`;
     }
-    if (message !== '') {
+}
+
+function getDegreeHeader(
+    degreeOfSuccess: DegreeOfSuccess,
+    upgradedDegreeOfSuccess?: DegreeOfSuccess,
+): string {
+    if (upgradedDegreeOfSuccess === undefined) {
+        return `<b>${getDegreePart(degreeOfSuccess)}</b>`;
+    } else {
+        return `<b>${getDegreePart(degreeOfSuccess, true)} ${getDegreePart(upgradedDegreeOfSuccess)}</b>`;
+    }
+}
+
+interface DegreeOfSuccessConfig {
+    degreeOfSuccess: DegreeOfSuccess,
+    upgradedDegreeOfSuccess?: DegreeOfSuccess,
+    messageConfig: DegreeOfSuccessMessageConfig,
+    beforeHeader?: string;
+}
+
+export async function postDegreeOfSuccessMessage(
+    {
+        degreeOfSuccess,
+        upgradedDegreeOfSuccess,
+        messageConfig,
+        beforeHeader,
+    }: DegreeOfSuccessConfig,
+): Promise<void> {
+    const header = getDegreeHeader(degreeOfSuccess, upgradedDegreeOfSuccess);
+    const degree = upgradedDegreeOfSuccess ?? degreeOfSuccess;
+    let description = '';
+    if (degree === DegreeOfSuccess.CRITICAL_SUCCESS && messageConfig.critSuccess !== undefined) {
+        description = `${messageConfig.critSuccess}`;
+    } else if (degree === DegreeOfSuccess.SUCCESS && messageConfig.success !== undefined) {
+        description = `${messageConfig.success}`;
+    } else if (degree === DegreeOfSuccess.FAILURE && messageConfig.failure !== undefined) {
+        description = `${messageConfig.failure}`;
+    } else if (degree === DegreeOfSuccess.CRITICAL_FAILURE && messageConfig.critFailure !== undefined) {
+        description = `${messageConfig.critFailure}`;
+    }
+    const message = (beforeHeader ?? '') + [header, description]
+        .filter(m => isNotBlank(m))
+        .join(': ');
+    if (isNotBlank(message)) {
         await ChatMessage.create({
             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             content: message.trimEnd(),
@@ -320,4 +362,12 @@ export function isNullable<T>(value: T | undefined | null): boolean {
 
 export function splitByWhitespace(text: string): string[] {
     return text.split(/\s+/);
+}
+
+export function encodeJson(object: object): string {
+    return btoa(JSON.stringify(object));
+}
+
+export function decodeJson(jsonString: string): object {
+    return JSON.parse(atob(jsonString));
 }
