@@ -156,16 +156,20 @@ export interface RestParameters {
     watchDurationSeconds: number;
 }
 
-export async function rest(params: RestParameters): Promise<void> {
-    const {game, camping, watchDurationSeconds, sheetActor} = params;
+async function playRestingPlaylist(game: Game): Promise<void> {
     const restingPlaylist = game.playlists?.getName('Kingmaker.Resting');
     if (restingPlaylist) {
         await Promise.all(restingPlaylist.sounds.map(a => a.update({playing: true})));
     }
+}
+
+export async function rest(params: RestParameters): Promise<void> {
+    const {game, camping, watchDurationSeconds, sheetActor} = params;
     const actors = await getActorsByUuid(new Set(camping.actorUuids));
 
     // if remaining seconds are 0 from the start, we haven't started the watch yet
     if (camping.watchSecondsRemaining === 0) {
+        await playRestingPlaylist(game);
         camping.watchSecondsRemaining = await startWatch(game, camping, watchDurationSeconds, actors);
     } else {
         await game.time.advance(camping.watchSecondsRemaining);
