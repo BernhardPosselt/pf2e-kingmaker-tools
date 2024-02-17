@@ -56,6 +56,7 @@ import {
 } from './eating';
 import {allowedActors} from './data';
 import {openJournal} from '../foundry-utils';
+import {getStringSetting} from '../settings';
 
 interface CampingOptions {
     game: Game;
@@ -380,6 +381,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                     gunsToClean: current.gunsToClean,
                     increaseWatchActorNumber: current.increaseWatchActorNumber,
                     ignoreSkillRequirements: current.ignoreSkillRequirements,
+                    proxyRandomEncounterTable: getStringSetting(this.game, 'proxyEncounterTable'),
+                    randomEncounterRollMode: getStringSetting(this.game, 'randomEncounterRollMode') as RollMode,
                     actorsKeepingWatch: actors
                         .map(a => {
                             return {
@@ -389,6 +392,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                             };
                         }),
                 },
+                game: this.game,
                 onSubmit: async (data) => await this.update(data),
             });
         });

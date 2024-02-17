@@ -371,3 +371,10 @@ export function encodeJson(object: object): string {
 export function decodeJson(jsonString: string): object {
     return JSON.parse(atob(jsonString));
 }
+
+export const rollModeChoices = {
+    publicroll: 'Public Roll',
+    gmroll: 'Private GM Roll',
+    blindroll: 'Blind GM Roll',
+    selfroll: 'Self Roll',
+};

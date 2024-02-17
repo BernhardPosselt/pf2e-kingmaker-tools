@@ -8,7 +8,7 @@ import {
 } from './weather/weather';
 import {sceneWeatherSettingsDialog} from './weather/dialogs/scene-weather-settings';
 import {setCurrentWeatherDialog} from './weather/dialogs/set-current-weather';
-import {isFirstGm} from './utils';
+import {isFirstGm, rollModeChoices} from './utils';
 import {toTimeOfDayMacro} from './time/app';
 import {getBooleanSetting, getStringSetting, setSetting} from './settings';
 import {rollKingmakerWeather} from './weather/roll-weather';
@@ -104,12 +104,6 @@ Hooks.on('ready', async () => {
                     }
                 },
             },
-        };
-        const rollModeChoices = {
-            publicroll: 'Public Roll',
-            gmroll: 'Private GM Roll',
-            blindroll: 'Blind GM Roll',
-            selfroll: 'Self Roll',
         };
         gameInstance.settings.register('pf2e-kingmaker-tools', 'showManual', {
             name: 'Show Manual',
@@ -220,14 +214,14 @@ Hooks.on('ready', async () => {
             name: 'Proxy Random Encounter Table',
             hint: 'Name of the in world roll table that is rolled first to check what kind of encounter is rolled. Use the string "Creature" to roll on the region roll table in the proxy roll table or link another roll table of your choice. Leave blank to always roll on the region random encounter tables.',
             scope: 'world',
-            config: true,
+            config: false,
             default: '',
             type: String,
         });
         gameInstance.settings.register<string, string, string>('pf2e-kingmaker-tools', 'randomEncounterRollMode', {
             name: 'Random Encounter Roll Mode',
             scope: 'world',
-            config: true,
+            config: false,
             default: 'gmroll',
             type: String,
             choices: rollModeChoices,
