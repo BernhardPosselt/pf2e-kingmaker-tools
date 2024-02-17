@@ -49,6 +49,10 @@ declare global {
         };
     }
 
+    interface PartyActor {
+        members: Actor[];
+    }
+
     interface PF2EAction {
         use(options: { actors: Actor[] }): Promise<unknown>;
     }

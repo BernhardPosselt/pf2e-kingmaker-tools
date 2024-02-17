@@ -68,7 +68,11 @@ async function postMessage(message: string, rollMode: RollMode): Promise<void> {
 
 export async function rollKingmakerWeather(game: Game): Promise<void> {
     const rollMode = getRollMode(game, 'weatherRollMode');
-    const averagePartyLevel = getNumberSetting(game, 'averagePartyLevel');
+    const levels = (game?.actors?.find(a => a.type === 'party') as PartyActor | undefined)
+        ?.members
+        ?.filter(a => a.type === 'character')
+        ?.map(a => a.level) ?? [];
+    const averagePartyLevel = Math.max(...levels, 1);
     const weatherHazardRange = getNumberSetting(game, 'weatherHazardRange');
     await rollWeather(game, averagePartyLevel, weatherHazardRange, rollMode);
 }
