@@ -36,7 +36,7 @@ const officialMappings: Mapping[] = [{
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/cathedral.webp',
 }, {
     'name': 'Cemetary',
-    'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/cemetary.webp',
+    'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/cemetery.webp',
 }, {
     'name': 'Construction Yard',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/construction-yard.webp',
@@ -261,7 +261,7 @@ const officialMappings: Mapping[] = [{
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/watchtower.webp',
 }, {
     'name': 'Waterfront (Corner)',
-    'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/waterfront-1.webp',
+    'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/waterfront.webp',
 }, {
     'name': 'Waterfront (Side)',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/waterfront-2.webp',
