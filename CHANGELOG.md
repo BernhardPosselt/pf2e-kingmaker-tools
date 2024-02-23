@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fix Structure Token Mapping macro to use correct cemetery and waterfront images
+* Fix Cemetery token typo
 
 ## [0.39.0] - 2024-02-23
 
