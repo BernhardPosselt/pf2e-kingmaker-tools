@@ -182,6 +182,15 @@ class StructureBrowserApp extends FormApplication<
             this.filters = undefined;
             this.render();
         });
+        $html.querySelectorAll('.km-structure-link')
+            .forEach(el => el.addEventListener('click', async (ev): Promise<void> => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                const target = ev.currentTarget as HTMLElement;
+                const uuid = target.dataset.uuid!;
+                const actor = await fromUuid(uuid) as Actor | null;
+                actor?.sheet?.render(true);
+            }));
         $html.querySelectorAll('.km-build-structure-dialog')
             .forEach(el => el.addEventListener('click', (ev) => this.buildStructure(ev)));
     }
@@ -212,10 +221,12 @@ class StructureBrowserApp extends FormApplication<
 
     private async toViewStructures(structures: ActorStructure[]): Promise<StructureData[]> {
         return await Promise.all(structures.map(async (structure) => {
-            const name = await TextEditor.enrichHTML(createUUIDLink(structure.actor.uuid, structure.name));
+            const link = await TextEditor.enrichHTML(createUUIDLink(structure.actor.uuid, structure.name));
             const lacksProficiency = !checkProficiency(structure, this.kingdom);
             return {
-                name: name,
+                link: link,
+                name: structure.name,
+                uuid: structure.actor.uuid,
                 dc: this.getStructureDC(structure),
                 skills: structure.construction?.skills.map(s => {
                     const rank = s.proficiencyRank ? ' (' + rankToLabel(s.proficiencyRank) + ')' : '';
@@ -236,6 +247,7 @@ class StructureBrowserApp extends FormApplication<
                 insufficientOre: !checkOreCost(structure, this.kingdom),
                 lots: structure.lots === 0 ? undefined : structure.lots,
                 id: structure.actor.id,
+                img: structure.actor.img,
             };
         }));
     }

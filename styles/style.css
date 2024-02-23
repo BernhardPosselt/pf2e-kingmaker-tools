@@ -386,6 +386,19 @@ td.skill-value {
     display: flex;
     max-height: 100%;
     gap: 5px;
+
+    .km-structure-name h2 {
+        border: 0;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        margin-top: 5px;
+    }
+
+    .km-structure-name img {
+        height: 100px;
+        border: 0;
+    }
 }
 
 #km-structure-browser-sidebar {
@@ -560,3 +573,4 @@ td.skill-value {
     line-height: 18px;
     font-size: 12px;
 }
+

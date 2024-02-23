@@ -110,7 +110,10 @@
                 {{#each structures}}
                 <tbody>
                 <tr>
-                    <td>{{{name}}}</td>
+                    <td class="km-structure-name">
+                        <h2>{{name}}</h2>
+                        <a class="km-structure-link" href="#" data-uuid="{{uuid}}"><img src="{{img}}"></a>
+                    </td>
                     <td>{{lots}}</td>
                     <td {{#if lacksProficiency}}title="Kingdom Lacks Proficiency" class="error"{{/if}}>
                         <ul>
