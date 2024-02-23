@@ -164,7 +164,8 @@ class StructureBrowserApp extends FormApplication<
         if (this.filters === undefined) {
             this.filters = await this.resetFilters();
         }
-        const structureActors = getStructuresFromActors(this.structureActors);
+        const structureActors = getStructuresFromActors(this.structureActors)
+            .filter(a => a.name !== 'Rubble');
         const structures = this.filterStructures(structureActors, this.filters);
         const viewStructures = await this.toViewStructures(structures);
         return {
