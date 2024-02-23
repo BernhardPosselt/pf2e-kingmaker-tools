@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.39.0] - 2024-02-23
+
+### Fixed
+
+* Fix Cemetery structure name
+* Fix Cemetary and Waterfront images that were renamed with the latest Kingmaker update. You will have to either fix these manually in your worlds or reimport and replace them on your scenes
+
 ### Changed
 
 * Move random encounter settings into camping sheet
