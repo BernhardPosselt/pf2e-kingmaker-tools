@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Do not show Rubble in structure browser
+* Improve docs on how the module integrates with the official module
 
 ## [0.40.0] - 2024-02-23
 
