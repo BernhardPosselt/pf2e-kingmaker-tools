@@ -137,6 +137,7 @@ We've also discovered an additional issue: V&K significantly boosts kingdom XP a
 * All players, regardless of group size, get a total of 8 Leadership activities or 12 with a Townhall, Castle or Palace: if you give out too many activities, it will be harder to pressure them with Unrest or Ruin during the Season of Bloom
 * Decrease the Ruin Threshold from 10 to 5: Ruin is an absolute joke right now and dealing with Unrest and Ruin actually makes Leadership activities fun
 * Ruins and Structures are incorporated into settlements automatically if they are in the settlement's influence: Many structures are way too close to your settlements to warrant building yet another settlement nearby
+* Similarly, buildings of Freeholds that are in the influence area of a settlement can be incorporated into said settlement during the Pledge of Fealty; this prevents forcing players to gain settlements that are too close to each other
 * Settlements can't grow beyond 36 blocks: this lets you use an existing settlement map for the entire game
 
 ### Additional Milestones
