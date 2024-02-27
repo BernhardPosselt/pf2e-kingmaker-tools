@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Add button to gain unrest or reduce RP when not having enough food during upkeep
 * Add water borders to settlement info popup
 
 ### Changed

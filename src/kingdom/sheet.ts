@@ -71,7 +71,7 @@ import {editSettlementDialog} from './dialogs/edit-settlement-dialog';
 import {showKingdomSettings} from './dialogs/kingdom-settings';
 import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
-import {getKingdomActivitiesById} from './data/activityData';
+import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData';
 import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
 import {kingdomSizeDialog} from './dialogs/kingdom-size-dialog';
 import {settlementSizeDialog} from './dialogs/settlement-size-dialog';
@@ -1092,7 +1092,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 content: `<h2>Paying Consumption</h2>
             <ul>
                 <li>Reducing food commodities by ${Math.min(currentFood, totalConsumption)}</li>
-                ${missingFood > 0 ? `<li>Missing ${missingFood} food commodities. Either pay ${pay} RP or gain [[/r 1d4]] Unrest</li>` : ''}
+                ${missingFood > 0 ? `<li>Missing ${missingFood} food commodities. Either pay ${loseRP(pay)} or gain ${gainUnrest('1d4')}</li>` : ''}
             </ul>
             `,
             });
