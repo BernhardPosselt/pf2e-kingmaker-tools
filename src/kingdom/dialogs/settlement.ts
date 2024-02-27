@@ -92,6 +92,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
             type: capitalize(settlement.settlement.type),
             secondaryTerritory: settlement.settlement.secondaryTerritory,
             hasBridge: structureData.hasBridge,
+            waterBorders: settlement.settlement.waterBorders,
             ...settlementInfo,
             ...this.getActiveTabs(),
             config: structureData.config,
