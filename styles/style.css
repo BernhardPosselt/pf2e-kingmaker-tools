@@ -417,7 +417,13 @@ td.skill-value {
 
 
 #km-structure-browser-sidebar > div {
-    margin-top: 5px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+}
+
+#km-structure-browser-sidebar > div > div {
+    margin-left: auto;
 }
 
 #km-structure-browser-sidebar > h2 {
@@ -441,7 +447,12 @@ td.skill-value {
 
 .structure-browser-range {
     display: flex;
+    width: 155px;
     gap: 15px;
+}
+
+#km-structure-search {
+    width: 155px;
 }
 
 .structure-browser-range input {

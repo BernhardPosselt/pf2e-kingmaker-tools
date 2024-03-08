@@ -1,0 +1,32 @@
+{{#each structures}}
+    <tr>
+        <td class="km-structure-name">
+            <h2>{{name}}</h2>
+            <a class="km-structure-link" href="#" data-uuid="{{uuid}}"><img src="{{img}}"></a>
+        </td>
+        <td>{{lots}}</td>
+        <td {{#if lacksProficiency}}title="Kingdom Lacks Proficiency" class="error"{{/if}}>
+            <ul>
+                {{#each skills}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </td>
+        <td>{{dc}}</td>
+        <td {{#if insufficientRp}}title="Building costs more than currently available"
+                class="error"{{/if}}>{{rp}}</td>
+        <td {{#if insufficientLumber}}title="Building costs more than currently available"
+                class="error"{{/if}}>{{lumber}}</td>
+        <td {{#if insufficientStone}}title="Building costs more than currently available"
+                class="error"{{/if}}>{{stone}}</td>
+        <td {{#if insufficientOre}}title="Building costs more than currently available"
+                class="error"{{/if}}>{{ore}}</td>
+        <td {{#if insufficientLuxuries}}title="Building costs more than currently available"
+                class="error"{{/if}}>{{luxuries}}</td>
+        <td>
+            <button type="button" class="km-build-structure-dialog" data-id="{{id}}"
+                    {{#if disableBuild}}disabled{{/if}}><i
+                    class="fa-solid fa-hammer"></i></button>
+        </td>
+    </tr>
+{{/each}}

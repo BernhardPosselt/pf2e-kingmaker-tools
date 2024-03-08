@@ -1,12 +1,28 @@
 import {Structure} from '../data/structures';
-import {capitalize, createUUIDLink, escapeHtml, isBlank, isNonNullable, listenClick, unslugify} from '../../utils';
+import {
+    capitalize,
+    createUUIDLink,
+    escapeHtml,
+    groupBy,
+    isBlank,
+    isNonNullable,
+    LabelAndValue,
+    listenClick,
+    unslugify,
+} from '../../utils';
 import {rankToLabel} from '../modifiers';
 import {Kingdom} from '../data/kingdom';
 import {CheckDialog} from './check-dialog';
 import {getBooleanSetting} from '../../settings';
 import {getKingdom, saveKingdom} from '../storage';
 import {DegreeOfSuccess} from '../../degree-of-success';
-import {ActorStructure, getStructuresFromActors} from '../scene';
+import {
+    ActorStructure,
+    getScene,
+    getSceneActorStructures,
+    getStructuresFromActors,
+    isStructureActorActive,
+} from '../scene';
 
 interface StructureBrowserOptions {
     game: Game;
@@ -33,7 +49,7 @@ interface StructureData {
     stone?: number;
 }
 
-interface StructureBrowserData {
+interface StructureFilters {
     housing: boolean;
     affectsDowntime: boolean;
     affectsEvents: boolean;
@@ -46,16 +62,27 @@ interface StructureBrowserData {
     upgradeFrom: boolean;
     upgradeTo: boolean;
     ignoreProficiencyRequirements: boolean;
-    structures: StructureData[];
     activities: Partial<Record<string, ActivityFilter>>;
     level: number;
     lots: number;
-    noStructures: boolean;
     ignoreStructureCost: boolean;
     search: string;
 }
 
-type StructureFilters = Omit<StructureBrowserData, 'structures' | 'noStructures'>;
+interface StructureBrowserData extends StructureFilters {
+    structures: StructureData[];
+    noStructures: boolean;
+    buildableTab: boolean;
+    upgradableTab: boolean;
+    freeTab: boolean;
+    activeSettlement?: string;
+    settlements: LabelAndValue[];
+    constructableBuildings: {
+        free: number;
+        upgradable: number;
+        buildable: number;
+    };
+}
 
 function checkProficiency(structure: Structure, kingdom: Kingdom): boolean {
     return structure.construction?.skills === undefined ||
@@ -65,34 +92,70 @@ function checkProficiency(structure: Structure, kingdom: Kingdom): boolean {
         });
 }
 
-function checkRpCost(structure: Structure, kingdom: Kingdom): boolean {
-    return (structure.construction?.rp ?? 0) <= kingdom.resourcePoints.now;
+function checkRpCost(structure: Structure, kingdom: Kingdom, discounts?: BuildDiscounts): boolean {
+    return ((structure.construction?.rp ?? 0) - (discounts?.rp ?? 0)) <= kingdom.resourcePoints.now;
 }
 
-function checkLumberCost(structure: Structure, kingdom: Kingdom): boolean {
-    return (structure.construction?.lumber ?? 0) <= kingdom.commodities.now.lumber;
+function checkLumberCost(structure: Structure, kingdom: Kingdom, discounts?: BuildDiscounts): boolean {
+    return ((structure.construction?.lumber ?? 0) - (discounts?.lumber ?? 0)) <= kingdom.commodities.now.lumber;
 }
 
-function checkOreCost(structure: Structure, kingdom: Kingdom): boolean {
-    return (structure.construction?.ore ?? 0) <= kingdom.commodities.now.ore;
+function checkOreCost(structure: Structure, kingdom: Kingdom, discounts?: BuildDiscounts): boolean {
+    return ((structure.construction?.ore ?? 0) - (discounts?.ore ?? 0)) <= kingdom.commodities.now.ore;
 }
 
-function checkStoneCost(structure: Structure, kingdom: Kingdom): boolean {
-    return (structure.construction?.stone ?? 0) <= kingdom.commodities.now.stone;
+function checkStoneCost(structure: Structure, kingdom: Kingdom, discounts?: BuildDiscounts): boolean {
+    return ((structure.construction?.stone ?? 0) - (discounts?.stone ?? 0)) <= kingdom.commodities.now.stone;
 }
 
-function checkLuxuriesCost(structure: Structure, kingdom: Kingdom): boolean {
-    return (structure.construction?.luxuries ?? 0) <= kingdom.commodities.now.luxuries;
+function checkLuxuriesCost(structure: Structure, kingdom: Kingdom, discounts?: BuildDiscounts): boolean {
+    return ((structure.construction?.luxuries ?? 0) - (discounts?.luxuries ?? 0)) <= kingdom.commodities.now.luxuries;
 }
 
 
-function checkBuildingCost(structure: Structure, kingdom: Kingdom): boolean {
-    return checkLumberCost(structure, kingdom)
-        && checkRpCost(structure, kingdom)
-        && checkLuxuriesCost(structure, kingdom)
-        && checkOreCost(structure, kingdom)
-        && checkStoneCost(structure, kingdom);
+interface BuildDiscounts {
+    rp: number;
+    lumber: number;
+    luxuries: number;
+    ore: number;
+    stone: number;
 }
+
+function checkBuildingCost(
+    structure: Structure,
+    sceneStructures: Map<string, Structure[]>,
+    kingdom: Kingdom,
+    mode: StructureBrowserTab,
+): boolean {
+    if (mode === 'free') {
+        return true;
+    } else if (mode === 'upgradable') {
+        return structure.upgradeFrom
+            ?.flatMap(name => sceneStructures.get(name) ?? [])
+            ?.some(upgradableStructure => {
+                const discount: BuildDiscounts = {
+                    rp: upgradableStructure?.construction?.rp ?? 0,
+                    lumber: upgradableStructure?.construction?.lumber ?? 0,
+                    luxuries: upgradableStructure?.construction?.luxuries ?? 0,
+                    ore: upgradableStructure?.construction?.ore ?? 0,
+                    stone: upgradableStructure?.construction?.stone ?? 0,
+                };
+                return checkLumberCost(structure, kingdom, discount)
+                    && checkRpCost(structure, kingdom, discount)
+                    && checkLuxuriesCost(structure, kingdom, discount)
+                    && checkOreCost(structure, kingdom, discount)
+                    && checkStoneCost(structure, kingdom, discount);
+            }) ?? false;
+    } else {
+        return checkLumberCost(structure, kingdom)
+            && checkRpCost(structure, kingdom)
+            && checkLuxuriesCost(structure, kingdom)
+            && checkOreCost(structure, kingdom)
+            && checkStoneCost(structure, kingdom);
+    }
+}
+
+type StructureBrowserTab = 'free' | 'upgradable' | 'buildable';
 
 class StructureBrowserApp extends FormApplication<
     FormApplicationOptions & StructureBrowserOptions,
@@ -102,6 +165,7 @@ class StructureBrowserApp extends FormApplication<
     private level: number;
     private structureActors: Actor[];
     private kingdom: Kingdom;
+    private currentTab: StructureBrowserTab = 'buildable';
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -164,16 +228,76 @@ class StructureBrowserApp extends FormApplication<
         if (this.filters === undefined) {
             this.filters = await this.resetFilters();
         }
-        const structureActors = getStructuresFromActors(this.structureActors)
-            .filter(a => a.name !== 'Rubble');
-        const structures = this.filterStructures(structureActors, this.filters);
-        const viewStructures = await this.toViewStructures(structures);
+        const {
+            buildableStructures,
+            freeStructures,
+            upgradableStructures,
+            sceneStructures,
+        } = this.getStructureActors();
+        const buildableViewStructures = await this.toViewStructures(this.filterStructures(buildableStructures, sceneStructures, this.filters, 'buildable'));
+        const upgradableViewStructures = await this.toViewStructures(this.filterStructures(upgradableStructures, sceneStructures, this.filters, 'upgradable'));
+        const freeViewStructures = await this.toViewStructures(this.filterStructures(freeStructures, sceneStructures, this.filters, 'free'));
+        let viewStructures: StructureData[];
+        if (this.currentTab === 'buildable') {
+            viewStructures = buildableViewStructures;
+        } else if (this.currentTab === 'upgradable') {
+            viewStructures = upgradableViewStructures;
+        } else {
+            viewStructures = freeViewStructures;
+        }
         return {
             ...this.filters,
+            ...this.getActiveTabs(),
+            constructableBuildings: {
+                buildable: buildableViewStructures.length,
+                free: freeViewStructures.length,
+                upgradable: upgradableViewStructures.length,
+            },
             structures: viewStructures,
             activities: this.filters.activities,
-            noStructures: structureActors.length === 0,
+            noStructures: buildableStructures.length === 0,
+            activeSettlement: getScene(this.game, this.kingdom.activeSettlement)?.id ?? undefined,
+            settlements: this.kingdom.settlements
+                .map(s => getScene(this.game, s.sceneId))
+                .filter(isNonNullable)
+                .map(s => ({label: s.name ?? '', value: s.id ?? ''})),
         };
+    }
+
+    private getStructureActors(): {
+        buildableStructures: ActorStructure[];
+        upgradableStructures: ActorStructure[];
+        freeStructures: ActorStructure[];
+        sceneStructures: ActorStructure[];
+    } {
+        const buildableStructures = getStructuresFromActors(this.structureActors)
+            .filter(a => a.name !== 'Rubble');
+        const activeSettlement = getScene(this.game, this.kingdom.activeSettlement);
+
+        if (activeSettlement) {
+            const sceneStructures = getSceneActorStructures(activeSettlement);
+            const sceneStructuresByName = groupBy(sceneStructures, s => s.name);
+            const freeStructures = buildableStructures
+                .filter(s => sceneStructuresByName.get(s.name)
+                    ?.some(a => !isStructureActorActive(a.actor)));
+            const upgradableStructures = buildableStructures
+                .filter(as => as.upgradeFrom
+                    ?.some(name => sceneStructuresByName.get(name)
+                        ?.some(a => isStructureActorActive(a.actor))));
+            return {
+                buildableStructures,
+                upgradableStructures,
+                freeStructures,
+                sceneStructures,
+            };
+        } else {
+            return {
+                buildableStructures,
+                upgradableStructures: [],
+                freeStructures: [],
+                sceneStructures: [],
+            };
+        }
     }
 
     override activateListeners(html: JQuery): void {
@@ -192,11 +316,24 @@ class StructureBrowserApp extends FormApplication<
                 const actor = await fromUuid(uuid) as Actor | null;
                 actor?.sheet?.render(true);
             }));
+        $html.querySelectorAll('.km-nav a')?.forEach(el => {
+            el.addEventListener('click', (event) => {
+                const tab = event.currentTarget as HTMLAnchorElement;
+                this.currentTab = tab.dataset.tab as StructureBrowserTab;
+                this.render();
+            });
+        });
         $html.querySelectorAll('.km-build-structure-dialog')
             .forEach(el => el.addEventListener('click', (ev) => this.buildStructure(ev)));
     }
 
-    private filterStructures(structures: ActorStructure[], filters: StructureFilters): ActorStructure[] {
+    private filterStructures(
+        structures: ActorStructure[],
+        sceneStructures: ActorStructure[],
+        filters: StructureFilters,
+        mode: StructureBrowserTab,
+    ): ActorStructure[] {
+        const groupedSceneStructures = groupBy(sceneStructures, (s) => s.name);
         const enabledFilters: ((structure: Structure) => boolean)[] = [];
         if (filters.storage) enabledFilters.push((x) => x.storage !== undefined);
         if (filters.affectsEvents) enabledFilters.push((x) => x.affectsEvents === true);
@@ -210,7 +347,7 @@ class StructureBrowserApp extends FormApplication<
         if (filters.upgradeFrom) enabledFilters.push((x) => x.upgradeFrom !== undefined && x.upgradeFrom.length > 0);
         if (filters.upgradeTo) enabledFilters.push((x) => this.hasUpgradeTo(x, structures));
         if (!filters.ignoreProficiencyRequirements) enabledFilters.push(x => checkProficiency(x, this.kingdom));
-        if (!filters.ignoreStructureCost) enabledFilters.push(x => checkBuildingCost(x, this.kingdom));
+        if (!filters.ignoreStructureCost) enabledFilters.push(x => checkBuildingCost(x, groupedSceneStructures, this.kingdom, mode));
         if (!isBlank(filters.search)) enabledFilters.push(x => x.name.toLowerCase().includes(filters.search.trim().toLowerCase()));
         enabledFilters.push((x) => hasActivities(x, filters.activities));
         enabledFilters.push((x) => (x.level ?? 0) <= filters.level);
@@ -230,7 +367,7 @@ class StructureBrowserApp extends FormApplication<
                 uuid: structure.actor.uuid,
                 dc: this.getStructureDC(structure),
                 skills: structure.construction?.skills.map(s => {
-                    const rank = s.proficiencyRank ? ' (' + rankToLabel(s.proficiencyRank) + ')' : '';
+                    const rank = s.proficiencyRank ? ` (${rankToLabel(s.proficiencyRank)})` : '';
                     const label = unslugify(s.skill);
                     return label + rank;
                 }) ?? [],
@@ -258,6 +395,14 @@ class StructureBrowserApp extends FormApplication<
         && (structure.construction?.lumber ?? 0) > 0 ? -2 : 0;
         const dc = structure.construction?.dc;
         return dc === undefined ? undefined : dc + adjustment;
+    }
+
+    private getActiveTabs(): Record<'buildableTab' | 'freeTab' | 'upgradableTab', boolean> {
+        return {
+            buildableTab: this.currentTab === 'buildable',
+            upgradableTab: this.currentTab === 'upgradable',
+            freeTab: this.currentTab === 'free',
+        };
     }
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -292,6 +437,9 @@ class StructureBrowserApp extends FormApplication<
                     }),
             ),
         };
+        await saveKingdom(this.sheetActor, {
+            activeSettlement: formData.activeSettlement,
+        });
         this.render();
     }
 

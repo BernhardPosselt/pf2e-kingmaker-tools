@@ -468,6 +468,7 @@ Hooks.on('init', async () => {
         'modules/pf2e-kingmaker-tools/templates/common/skills.partial.hbs',
         'modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs',
         'modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs',
+        'modules/pf2e-kingmaker-tools/templates/kingdom/structure-browser-item.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/sidebar.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/status.hbs',
         'modules/pf2e-kingmaker-tools/templates/kingdom/skills.hbs',

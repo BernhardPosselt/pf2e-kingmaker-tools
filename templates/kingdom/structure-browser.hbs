@@ -1,22 +1,32 @@
 <form id="km-structure-browser">
     <div id="km-structure-browser-sidebar">
-        <button type="button" id="km-structure-browser-clear">Clear Filters</button>
+        {{#if activeSettlement}}
+            <h2>Active Settlement</h2>
+            <select name="activeSettlement">
+                {{#select activeSettlement}}
+                    {{#each settlements}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/each}}
+                {{/select}}
+            </select>
+        {{/if}}
         <h2>Filters</h2>
+        <button type="button" id="km-structure-browser-clear">Clear Filters</button>
         <div>
-            <label for="km-structure-search">Search Name</label>
+            <label for="km-structure-search">Name</label>
             <div>
                 <input type="search" value="{{search}}" name="search" id="km-structure-search">
             </div>
         </div>
         <div>
-            <label for="km-structure-browser-level">Maximum Level</label>
+            <label for="km-structure-browser-level">Max Level</label>
             <div class="structure-browser-range">
                 <input type="range" min="0" max="20" value="{{level}}" name="level" id="km-structure-browser-level">
                 <div>{{level}}</div>
             </div>
         </div>
         <div>
-            <label for="km-structure-browser-lots">Maximum Lots</label>
+            <label for="km-structure-browser-lots">Max Lots</label>
             <div class="structure-browser-range">
                 <input type="range" min="1" max="4" value="{{lots}}" name="lots" id="km-structure-browser-lots">
                 <div>{{lots}}</div>
@@ -79,7 +89,7 @@
                    id="km-structure-browser-infrastructure">
             <label for="km-structure-browser-infrastructure">Infrastructure</label>
         </div>
-        <h2>Item Bonus Filters</h2>
+        <hr>
         {{#each activities}}
             <div>
                 <input type="checkbox" {{checked enabled}} name="activity-{{@key}}" id="km-structure-browser-{{@key}}">
@@ -92,6 +102,13 @@
             <p>No structures imported into world! Please import all actors from the Kingmaker Tools <b>Structures</b>
                 compendium and reopen this window!</p>
         {{else}}
+            <nav class="km-nav">
+                <a data-tab="buildable" class="{{#if buildableTab}}active{{/if}}">Buildable
+                    ({{constructableBuildings.buildable}})</a>
+                <a data-tab="upgradable" class="{{#if upgradableTab}}active{{/if}}">Upgradable
+                    ({{constructableBuildings.upgradable}})</a>
+                <a data-tab="free" class="{{#if freeTab}}active{{/if}}">Free ({{constructableBuildings.free}})</a>
+            </nav>
             <table class="km-table">
                 <thead>
                 <tr>
@@ -107,40 +124,9 @@
                     <th>Build</th>
                 </tr>
                 </thead>
-                {{#each structures}}
                 <tbody>
-                <tr>
-                    <td class="km-structure-name">
-                        <h2>{{name}}</h2>
-                        <a class="km-structure-link" href="#" data-uuid="{{uuid}}"><img src="{{img}}"></a>
-                    </td>
-                    <td>{{lots}}</td>
-                    <td {{#if lacksProficiency}}title="Kingdom Lacks Proficiency" class="error"{{/if}}>
-                        <ul>
-                            {{#each skills}}
-                                <li>{{this}}</li>
-                            {{/each}}
-                        </ul>
-                    </td>
-                    <td>{{dc}}</td>
-                    <td {{#if insufficientRp}}title="Building costs more than currently available"
-                            class="error"{{/if}}>{{rp}}</td>
-                    <td {{#if insufficientLumber}}title="Building costs more than currently available"
-                            class="error"{{/if}}>{{lumber}}</td>
-                    <td {{#if insufficientStone}}title="Building costs more than currently available"
-                            class="error"{{/if}}>{{stone}}</td>
-                    <td {{#if insufficientOre}}title="Building costs more than currently available"
-                            class="error"{{/if}}>{{ore}}</td>
-                    <td {{#if insufficientLuxuries}}title="Building costs more than currently available"
-                            class="error"{{/if}}>{{luxuries}}</td>
-                    <td>
-                        <button type="button" class="km-build-structure-dialog" data-id="{{id}}"
-                                {{#if disableBuild}}disabled{{/if}}><i
-                                class="fa-solid fa-hammer"></i></button>
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
+                {{> modules/pf2e-kingmaker-tools/templates/kingdom/structure-browser-item.hbs structures=structures}}
+                </tbody>
             </table>
         {{/if}}
     </div>
