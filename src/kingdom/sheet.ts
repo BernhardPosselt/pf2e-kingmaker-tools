@@ -120,7 +120,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private sheetActor: Actor;
-
     private readonly game: Game;
     private nav: KingdomTab = 'turn';
 

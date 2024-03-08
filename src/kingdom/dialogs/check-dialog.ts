@@ -51,6 +51,7 @@ interface CheckFormData {
     customModifiers: CustomModifiers;
     overrideModifiers: Record<string, string>;
     consumeModifiers: Record<string, boolean>;
+    rollMode: RollMode;
 }
 
 interface TotalAndModifiers {
@@ -107,6 +108,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private overrideSkills: Partial<SkillRanks> | undefined;
     private afterRoll: (degree: DegreeOfSuccess) => Promise<void>;
     private rollOptions: string[] = [];
+    private rollMode: RollMode = 'publicroll';
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -231,6 +233,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             creativeSolutionModifier: creativeSolutionModifier.total.value,
             supernaturalSolutionModifier: supernaturalSolutionModifier.total.value,
             modifierBreakdown,
+            rollMode: this.rollMode,
         };
     }
 
@@ -271,6 +274,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.selectedSkill = data.selectedSkill;
         this.dc = data.dc;
         this.phase = data.phase === '-' ? undefined : data.phase;
+        this.rollMode = data.rollMode;
         this.customModifiers = this.homogenize(data.customModifiers);
         this.modifierOverrides = (Object.entries(data.overrideModifiers ?? {}) as [string, string][])
             .filter(([, state]) => state !== '-')
@@ -313,6 +317,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 creativeSolutionModifier,
                 supernaturalSolutionModifier,
                 rollType: 'selected',
+                rollMode: this.rollMode,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
@@ -350,6 +355,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 creativeSolutionModifier,
                 supernaturalSolutionModifier,
                 rollType: 'selected',
+                rollMode: this.rollMode,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);

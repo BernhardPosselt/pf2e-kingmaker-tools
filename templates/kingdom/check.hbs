@@ -7,6 +7,17 @@
         </div>
     {{else}}
         <div class="simple-dialog-form">
+            <div>
+                <label for="km-check-roll-mode">Roll Mode</label>
+                <select name="rollMode" id="km-check-roll-mode">
+                    {{#select rollMode}}
+                        <option value="publicroll">Public Roll</option>
+                        <option value="gmroll">Private GM Roll</option>
+                        <option value="blindroll">Blind GM Roll</option>
+                        <option value="selfroll">Self Roll</option>
+                    {{/select}}
+                </select>
+            </div>
             {{#if activity}}
                 <div>
                     <label for="km-applicable-skills">Applicable Skills:</label>

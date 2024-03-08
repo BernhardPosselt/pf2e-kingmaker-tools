@@ -49,6 +49,7 @@ export interface DegreeOfSuccessMessageConfig {
     failure?: string;
     critFailure?: string;
     isPrivate?: boolean;
+    rollMode?: RollMode,
 }
 
 function getDegreePart(degreeOfSuccess: DegreeOfSuccess, strikeThrough = false): string {
@@ -108,7 +109,7 @@ export async function postDegreeOfSuccessMessage(
         await ChatMessage.create({
             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             content: message.trimEnd(),
-            rollMode: messageConfig.isPrivate ? 'blindroll' : 'publicroll',
+            rollMode: messageConfig.rollMode ?? (messageConfig.isPrivate ? 'blindroll' : 'publicroll'),
         });
     }
 }
