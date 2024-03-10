@@ -248,10 +248,6 @@ Armies right now have 1 glaring issue: they lack restrictions other than consumi
 
 ### House Rules
 
-* The number of armies is limited by your settlements: this rewards creating additional settlements and filling them with structures:
-    * **Town**: 1
-    * **City**: 2
-    * **Metropolis**: 3
 * Armies are grouped together as divisions. Each division can hold up to n armies, where n is equal to the number of players: this will give each player an army to run in combat to keep them engaged
 * No more than 1 division of each faction can be present in any hex at any time: this prevents players from overwhelming an enemy by sheer number of armies. Think of it as preventing the players from running all companions in combats balanced for 4 PCs. If you don't do that, you can't balance battles at all, which makes army combat incredibly boring. Furthermore, it will prevent you from pulling your hair out when stacking tokens on the world map.
 * You can not deploy armies, only Divisions. The same applies to Offensive Gambit and Recovering lost armies. If your armies are affected by conditions, combine their modifiers and use the highest/lowest one: this will move all armies as a unit, preventing players from being left out of the fun if you fail a single Deploy Army check.
