@@ -19,11 +19,11 @@ Kingmaker is huge and uses an incredible amount of subsystems:
 * Camping
 * Weather
 
-In addition to that, it is one of the very few sandbox adventures that Paizo has put out, which allows a much more free form progression and makes it easy to add in homebrew. If you are just starting out with Pathfinder, this AP is probably the wrong one, and you might be better off playing a more linear AP with fewer subsystems.
+In addition to that, it is one of the very few sandbox adventures that Paizo has put out. Sandbox adventures themselves lend themselves to home brew very well. If you are just starting out with Pathfinder, this AP is probably the wrong one, and you might be better off playing a more linear AP with fewer subsystems.
 
 Here's some general advice and things you have to think about:
 
-* XP is heavily recommended over milestone. Reason for that is that XP rewards exploration as opposed to reaching certain goals in game. If you run milestone, your players are encouraged to complete main story encounters first, finishing side content super over-leveled, if at all. The AP is much larger than any other adventure, so if you run it without custom content, using 1200XP to reach a new level is a must. Otherwise, go for 1500XP per level. In general, it is easier to err on the side of too much XP, since it's easier to reward RP with XP than to "steal" XP from encounters. Players won't like that.
+* I highly recommend XP over milestone. Reason for that is that XP rewards exploration as opposed to reaching certain goals in game. If you run milestone, your players are encouraged to complete main story encounters first, finishing side content super over-leveled, if at all. The AP is much larger than any other adventure, so if you run it without custom content (~1 small dungeon per level), using 1200XP to reach a new level is a must. Otherwise, go for 1500XP per level. In general, it is easier to err on the side of a too high XP threshold, since it's easier to reward RP with XP than to "steal" XP from encounters. Players won't like that.
 * Regions have a certain level of difficulty. There are almost no Extreme encounters in this book, so it's generally safe for PCs to explore an area which is +1 above their level. If your players want to venture into higher regions, you should warn them by giving them information their characters might know about creatures and dangers in that area. You can also block off certain parts with armies, e.g. anything east of the Narlmarches.
 * Do not include companions in combat, unless you are playing with 3 or fewer players. In that case, it might be fun to let the remaining players level them up and include them in their load-out for the recommended 4 player party. Keep in mind that you will need to keep them viable on the magic item side.
 * You can skip various subsystems if you don't like them:
@@ -33,8 +33,8 @@ Here's some general advice and things you have to think about:
     * **Warfare**: Combat might be too abstract since a lot of depth is dropped. Plays similar to other narrative RPGs with quick combat. If you skip it, keep the flavor and RP, but let the PCs fight enemy generals. If you run Kingdom Building, I recommend keeping it since it improves its mechanics by a lot
 * Players have access to horses early on to bump their speed to 40ft. You should let players know that they can do that.
 * Random Combat Encounters, as written, are too frequent. I'd recommend a 50/50 split between combat and RP. RP encounters might include meeting travelers that let them know rumors or uncover interesting hexes, merchants that allow them to buy a special magic item, PCs contracting a disease of their level or lower or encounters that let you disclose lore or foreshadow events
-* Be wary of Restov and loot in the early chapters. Loot balance in the early levels in general is way above the recommendations in the CRB. This isn't an issue if you prevent players from buying items above their level, but you don't want to make your structures less useful that bump those levels
-* In general, the Stolen Lands map is densely populated with encounters in the first 4 levels, but after that, it drops off significantly. You want to add more stuff to make exploration feel rewarding. You don't need to add something to every hex, but in general I'd recommend to populate most hexes with interesting encounters. Here are some ideas:
+* Be wary of Restov and loot in the early chapters. Loot balance in the early levels in general is way above the recommendations in the CRB. This isn't an issue if you prevent players from buying items above their level
+* In general, the Stolen Lands map is densely populated with encounters during the first 4 levels, but after that, it drops off significantly. You want to add more stuff to make exploration feel rewarding. You don't need to add something to every hex, but in general I'd recommend to populate most hexes with interesting encounters. Here are some ideas:
     * Formulas for uncommon/rare/unique items in the form of broken items, plans, books or descriptions that can be deciphered using Decipher Writing
     * Additional resources like Rocks, abandoned Worksites, Wood, Ruins, Structures, Precious Materials, Merchants, Trainers, enemy armies
     * Additional Landmarks and Refuges
@@ -57,15 +57,15 @@ Here's some general advice and things you have to think about:
 
 ## Weather
 
-This subsystem has been hugely disappointing. RAW, weather events can happen up to level 5 with a level 1 party, TPKing a party immediately if you roll a nasty event. At higher levels, this just deals damage that can immediately be healed. I recommend using the [core rules for environments](https://2e.aonprd.com/Rules.aspx?ID=590) instead: weather changes terrain cost during encounters and potentially applies visibility penalties like concealed, penalties to ranged attacks, cold weather deals damage without proper equipment, etc.
+This subsystem has been hugely disappointing. RAW, you can roll weather events up to level 5 for a level 1 party, TPKing them immediately. At higher levels, this just deals damage that can immediately be healed. I recommend using the [core rules for environments](https://2e.aonprd.com/Rules.aspx?ID=590) instead: weather changes terrain cost during encounters and potentially applies visibility penalties like concealed, penalties to ranged attacks, cold weather deals damage without proper equipment, etc.
 
 ## Hexploration
 
 There is no point in slowing down exploration any further, so I recommend to not add any more activities on top of Travel and Reconnoiter.
-**Map the Area** is an activity that makes sense in heavily obscured and difficult terrain which does not exist in this AP, **Fortify
+**Map the Area** is an activity that makes sense in heavily obscured and/or difficult terrain which does not exist in this AP, **Fortify
 Camp** is basically replaced by camping, so drop both of these activities.
 
-Furthermore, I recommend not rolling secret checks for hidden encounters. You've prepped content for it. Nothing sucks more than skipping an interesting encounter because your players have failed a Perception check. The only time this makes sense is if you want players to discover and deal with an encounter prior to when it should happen, e.g. they might discover lairs of beasts that might threaten their kingdom before it attacks. Another use case could be as a time sink in time critical parts of the game, but then they need to know that something hidden exists in the hex.
+Furthermore, I recommend to not roll secret checks for hidden encounters. You've prepped content for it. Nothing sucks more than skipping an interesting encounter because your players have failed a Perception check. The only time this makes sense is if you want players to discover and deal with an encounter prior to when it should happen, e.g. they might discover the lair of The Beast before it attacks. Another use case could be as a time sink in time critical parts of the game, but then they need to know that something hidden exists in that hex.
 
 ### House Rules
 
@@ -87,19 +87,19 @@ Camping should be quick and easy but as written can bog down the game massively.
 * Each companion can only be influenced or discovered once per camping sessions: prevents players ganging up on companions and maxing out their influence in the first couple sessions
 * Only 1 encounter is rolled during your watch and camping activities don't increase the DC: too many random encounters can bog down your session; if you don't check for random encounters, many camping activities are obsolete and there's no tension
 * All camping activity buffs apply to everyone at the start of the camping session: simplifies and speeds up the game
-* Regongar's activity does not grant XP: there is already enough XP as is, no need to reward PCs for choosing the lazy way out
-* Crafting an item is a camping activity: there's already a lot of downtime in this AP (years), so this gives them a bit more flexibility to craft all those items that they find formulas for (**Note**: this might conflict with the building requirements to craft items)
+* Regongar's activity does not grant XP: there is already enough XP as is, no need to reward PCs for pressing the auto-win button
+* Crafting an item is a camping activity: there's already a lot of downtime in this AP (years), so this gives them a bit more flexibility to craft all those items that they find formulas for (**Note**: this might conflict with the building requirements to craft items in the Kingdom Management House Rule section)
 
 #### Random Encounters
 
-When a random encounter happens, people that are awake perform a Perception check against the ambusher's Stealth DC. Everyone else is unconscious, sleeping in their tents with their armor removed (unless it has the comfort trait).
+When a random encounter happens, the watcher performs a Perception check against the ambusher's Stealth DC. Everyone else is unconscious, sleeping in their tents with their armor removed (unless it has the comfort trait).
 
 * **Critical Success**: As Success but PCs are not prone and have reactions
 * **Success**: As Failure but sleeping PCs wake up, gaining the prone condition
 * **Failure**: As Critical Failure but Enemies start within 60ft distance
 * **Critical** Failure: Enemies start within 15ft distance of PCs. Sleeping PCs are unconscious and do not gain Reactions before their turn starts
 
-PCs can be woken up, gaining the prone condition when:
+PCs can be woken up, losing unconscious and gaining the prone condition when:
 
 * They take damage
 * They get shaken awake with a touch interact action
@@ -113,7 +113,17 @@ If they do not wake up, they skip their turn.
 
 ## Kingdom Management
 
-This might be the most labor-intensive system in this AP. If you run it as written, it will be terrible. Imagine cutting your sessions in half to play a heavy Euro board game without any real impact. You as a GM need to do the heavy lifting to make it feel worth it. You need to provide tangible rewards for players to build structures, you need to make them feel like they are building a kingdom by adding in RP events and story for building structures or performing kingdom activities, and you need to make that solo Euro board game fun by ramping up the difficulty. Kingdom Events should always tie into recent activities/actions: PC chose to Infiltrate an enemy faction? That political scandal is there way of getting back at you. PCs constructed a shrine in their town? They might need to recruit a priest in the Kamelands who abandoned their faith.
+This might be the most labor-intensive system in this AP. If you run it as written, it will be terrible at low levels. XP won't advance the kingdom's level by much, you don't have enough materials to build interesting stuff and there are no outside pressures. My players often ran out of Leadership activities that they could perform, even with faster levelling. One player left the campaign early because of kingdom management.
+
+At levels 9+ I can happily report that it turned out quite fun. The players became somewhat familiar with the system so turns sped up. Being at war pretty much constantly created unrest each turn. Furthermore, the DCs were at a point where untrained skills needed to be supplemented by supernatural solution. That competed with purchasing goods to prevent famine or build structures to increase item bonuses or storage. In a nutshell: they needed to think about which actions to take.
+
+What you need to do is to bridge the period between levels 1-9 and fix the broken XP curve through levels 1-5:
+
+* Use XP adjustments from [Vance & Kerenshara's](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit?usp=sharing) or just flat out give them 200XP each turn until they hit level 5
+* Roll Kingdom Events frequently (DC 5 Flat Check instead of the default) and associate them with the PCs' actions (PC chose to Infiltrate an enemy faction? That political scandal is there way of getting back at you)
+* Tie their kingdom and buildings to XP, loot and access to feats/items. Maybe you need to recruit a smith for that forge who offers them 1 of 3 possible magic items? Or a noble requests a theater threatening 1d4 unrest if they haven't built one in 3 months.
+
+### A word on Vance & Kerenshara's home brew
 
 Mechanically, [Vance & Kerenshara's](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit?usp=sharing) rules are a good starting point to patch up the rough mechanical parts, but I've found that you don't want to add all recommended changes. Specifically, giving players additional ability boosts and skill proficiencies might be better as a quest rewards that are given out slowly over the course of the adventure, if at all.
 
@@ -121,20 +131,15 @@ If you give your players too many proficiencies or boosts, you will prevent Unre
 
 Furthermore, giving your players the ability to reconnoiter a hex using an activity will remove a lot of the fun of exploring the Stolen Lands, so I'd advise against that.
 
-We've also discovered an additional issue: V&K significantly boosts kingdom XP at lower levels. This makes the subsystem bearable but you will lack enough region activities to grab additional hexes and construct settlements and worksites. To account for that, I'm currently testing the following Leadership Activity:
+We've also discovered an additional issue: while V&K significantly boosts kingdom XP at lower levels, it might lead to PCs having too few worksites or claimed hexes in the long run. To account for that, I've created the **Naval Support** Leadership Activity which PCs can use to convert a Leadership into a Region activity.
 
 ### House Rules
 
 * PCs can attempt the same Activity multiple times unless it's specifically forbidden: the rules aren't super clear on this, this seems to be the RAI and prevents players from running out of things to do.
-* Increase XP gains and milestones similar to the Vance & Karenshara house rules: the amount of rounds it takes to gain a kingdom level is out of whack at low levels; these rules will level up your kingdom roughly every 5 turns. To account for fewer Region Activities, add the following activity:
-    * **Naval Support**: You use your fleet to ship materials or transport skilled builders and specialists to where they are needed most. Attempt a basic Boating check.
-        * **Critical Success**: You gain 2 additional region activities.
-        * **Succcess**: You gain 1 additional region activity.
-        * **Failure**: You gain 1 additional region activity by investing additional funds. Lose 2d6 RP
-        * **Critical Failure**: You do not gain an additional region activity and lose 2d6 RP
+* Increase XP gains and milestones similar to the Vance & Karenshara house rules: the amount of rounds it takes to gain a kingdom level is out of whack at low levels; these rules will level up your kingdom roughly every 5 turns. To account for fewer Region Activities, add the **Naval Support** activity
 * Use the adjusted buildings from Vance & Kerenshara
 * Additional Skill Increases like in Vance & Kerenshara: many buildings are proficiency gated; having very few increases takes the fun out of that
-* All players, regardless of group size, get a total of 8 Leadership activities or 12 with a Townhall, Castle or Palace: if you give out too many activities, it will be harder to pressure them with Unrest or Ruin during the Season of Bloom
+* All players, regardless of group size, get a total of 8 Leadership activities or 12 with a Townhall, Castle or Palace (round down if you give each PC a fixed number of activities): if you give out too many activities, it will be harder to pressure them with Unrest or Ruin
 * Decrease the Ruin Threshold from 10 to 5: Ruin is an absolute joke right now and dealing with Unrest and Ruin actually makes Leadership activities fun
 * Ruins and Structures are incorporated into settlements automatically if they are in the settlement's influence: Many structures are way too close to your settlements to warrant building yet another settlement nearby
 * Similarly, buildings of Freeholds that are in the influence area of a settlement can be incorporated into said settlement during the Pledge of Fealty; this prevents forcing players to gain settlements that are too close to each other
@@ -190,7 +195,8 @@ My players chose to run low skill, low intelligence PCs, so performing the **Res
 
 The system currently punishes you for building structures with item bonuses outside your capital. This building allows players to create specialized settlements and rewards them for continuing to build settlements in strategic points. Rare, so you can give your players access to the blueprints whenever you feel like it. Needless to say, you should not give players access to the **Teleport** spell
 
-* **Lots**: 1 **Cost**: 50 RP, 15 Stone, 4 Lumber, 2 Luxuries
+* **Level**: 10
+* **Lots**: 1 **Cost**: 40 RP, 10 Stone, 4 Lumber, 2 Luxuries
 * **Construction**: Magic (expert) DC 27
 * **Item Bonuses**: +3 to Relocate Capital
 * **Effects**: Settlements with an Aiudara Gate allow you to travel to another settlement without delay. Furthermore, if you are in a city with a gate, you can perform your Kingdom Activities in any town. Armies are too large to move them through gates effectively.
@@ -209,7 +215,7 @@ There are no buildings that provide item bonuses to companion Leadership Activit
 
 **Rooms (level 9)**:
 
-* **Lots**: 2 **Cost** 30 RP, 10 Lumber, 10 Stone
+* **Lots**: 2 **Cost** 30 RP, 5 Lumber, 5 Stone
 * **Construction**: Engineering DC 26
 * **Upgrades to**: Companion Chambers
 * **Upgrades from**: Companion Shacks
@@ -218,12 +224,21 @@ There are no buildings that provide item bonuses to companion Leadership Activit
 
 **Quarters (level 15)**:
 
-* **Lots**: 4 **Cost** 45 RP, 10 Lumber, 20 Stone, 15 Luxuries
+* **Lots**: 4 **Cost** 45 RP, 10 Lumber, 20 Stone, 8 Luxuries
 * **Construction**: Engineering DC 34
 * **Upgrades from**: Companion Lodges
 * **Item Bonuses**: +3 to All Companion Activities
 
 ### Additional Leadership Activities
+
+#### Naval Support
+
+You use your fleet to ship materials or transport skilled builders and specialists to where they are needed most. Attempt a basic Boating check.
+
+* **Critical Success**: You gain 2 additional region activities.
+* **Succcess**: You gain 1 additional region activity.
+* **Failure**: You gain 1 additional region activity by investing additional funds. Lose 2d6 RP
+* **Critical Failure**: You do not gain an additional region activity and lose 2d6 RP
 
 #### Cleanse Item
 
@@ -244,7 +259,13 @@ You can remove curses from an item using a successful Magic counteract check. Yo
 
 ## Armies
 
-Armies right now have 1 glaring issue: they lack restrictions other than consuming food.
+From what I've seen from armies so far, armies have the following issues:
+
+* Without tactics, it's like playing a theater of mind Fighter in 5e (move in, then attack once each round); it's mindlessly boring, you can't even flank an enemy right out the gate
+* I've looked into the 1e rules and oh boy, the 1e rules suck even more
+* You can move an unlimited amount of armies on the hex map (giant ball of death) but each army on its own might get lost which is neither fun nor realistic
+
+I have yet to use them more to figure out a good solution.
 
 ### House Rules
 
