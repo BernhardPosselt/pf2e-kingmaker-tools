@@ -798,8 +798,13 @@ export function openCampingSheet(game: Game): void {
     if (sheetActor) {
         new CampingSheet({game, actor: sheetActor}).render(true);
     } else {
-        setupDialog(game, 'Camping', 'ggZCKHx8DdqAVVP8', async () => {
-            const sheetActor = game?.actors?.find(a => a.name === 'Camping Sheet');
+        setupDialog(game, 'Camping', async () => {
+            // @ts-ignore
+            const sheetActor: Actor = await Actor.create({
+                type: 'npc',
+                name: 'Camping Sheet',
+                img: 'icons/magic/fire/flame-burning-campfire-orange.webp',
+            });
             // migrate old recipes
             const migratedRecipes = game?.actors?.filter(a => a.type === 'character')
                 ?.flatMap(a => {

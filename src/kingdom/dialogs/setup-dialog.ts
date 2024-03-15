@@ -1,4 +1,4 @@
-export function setupDialog(game: Game, sheet: 'Kingdom' | 'Camping', actorId: string, onOk: () => void): void {
+export function setupDialog(game: Game, sheet: 'Kingdom' | 'Camping', onOk: () => void): void {
     new Dialog({
         title: `${sheet} Sheet Setup`,
         content: `
@@ -9,9 +9,6 @@ export function setupDialog(game: Game, sheet: 'Kingdom' | 'Camping', actorId: s
                 icon: '<i class="fa-solid fa-plus"></i>',
                 label: 'Import',
                 callback: async (): Promise<void> => {
-                    /* eslint-disable @typescript-eslint/no-explicit-any */
-                    const pack = game.packs.get('pf2e-kingmaker-tools.kingmaker-tools-sheets') as any;
-                    await game?.actors?.importFromCompendium(pack, actorId);
                     onOk();
                 },
             },

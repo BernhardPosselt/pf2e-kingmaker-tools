@@ -113,16 +113,6 @@
             "flags": {}
         },
         {
-            "name": "kingmaker-tools-sheets",
-            "path": "packs/kingmaker-tools-sheets",
-            "label": "Sheets",
-            "type": "Actor",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
             "name": "kingmaker-tools-settlements",
             "path": "packs/kingmaker-tools-settlements",
             "label": "Settlement Scenes",

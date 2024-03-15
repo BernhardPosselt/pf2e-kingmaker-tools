@@ -1176,8 +1176,13 @@ export async function showKingdom(game: Game): Promise<void> {
     if (sheetActor) {
         new KingdomApp(null, {game, sheetActor}).render(true);
     } else {
-        setupDialog(game, 'Kingdom', 'dI12fgPwX9il8Fzu', async () => {
-            const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
+        setupDialog(game, 'Kingdom', async () => {
+            // @ts-ignore
+            const sheetActor: Actor = await Actor.create({
+                type: 'npc',
+                name: 'Kingdom Sheet',
+                img: 'icons/sundries/documents/document-sealed-red-yellow.webp',
+            });
             await sheetActor?.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', getDefaultKingdomData());
             await showKingdom(game);
         });
