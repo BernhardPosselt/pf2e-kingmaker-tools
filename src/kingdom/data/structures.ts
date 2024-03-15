@@ -131,7 +131,7 @@ const structures: Structure[] = [
         traits: ['building', 'edifice'],
         affectsDowntime: true,
         level: 10,
-        upgradeFrom: ['Library'],
+        upgradeFrom: ['Library', 'Library (V&K)'],
         construction: {
             skills: [{
                 skill: 'scholarship',
@@ -345,7 +345,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 9,
-        upgradeFrom: ['Town Hall'],
+        upgradeFrom: ['Town Hall', 'Town Hall (V&K)'],
         construction: {
             skills: [{
                 skill: 'defense',
@@ -1221,7 +1221,7 @@ const structures: Structure[] = [
         affectsDowntime: false,
         reducesUnrest: true,
         level: 15,
-        upgradeFrom: ['Castle'],
+        upgradeFrom: ['Castle', 'Castle (V&K)'],
         construction: {
             rp: 108,
             lumber: 20,
@@ -1595,7 +1595,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 9,
-        upgradeFrom: ['Tavern, Popular'],
+        upgradeFrom: ['Tavern, Popular', 'Tavern, Popular (V&K)'],
         construction: {
             rp: 48,
             lumber: 10,
@@ -1624,7 +1624,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 3,
-        upgradeFrom: ['Tavern, Dive'],
+        upgradeFrom: ['Tavern, Dive', 'Tavern, Dive (V&K)'],
         construction: {
             rp: 24,
             lumber: 6,
@@ -1655,7 +1655,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 15,
-        upgradeFrom: ['Tavern, Luxury'],
+        upgradeFrom: ['Tavern, Luxury', 'Tavern, Luxury (V&K)'],
         construction: {
             rp: 64,
             lumber: 18,
@@ -1724,7 +1724,7 @@ const structures: Structure[] = [
         affectsDowntime: true,
         reducesUnrest: true,
         level: 9,
-        upgradeFrom: ['Festival Hall'],
+        upgradeFrom: ['Festival Hall', 'Festival Hall (V&K)'],
         construction: {
             rp: 24,
             lumber: 8,

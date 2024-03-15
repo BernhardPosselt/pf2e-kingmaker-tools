@@ -53,15 +53,15 @@
                     </div>
                 {{/if}}
             </div>
-            {{#if watchEnabled}}
-                <div {{#if isUser}}hidden{{/if}} class="region-gm-controls">
-                    <div>
+            <div {{#if isUser}}hidden{{/if}} class="region-gm-controls">
+                <div>
+                    {{#if watchEnabled}}
                         <button type="button" class="rest">{{#if showContinueRest}}
                             Continue Rest{{else}}Begin Rest{{/if}} <i class="fa-solid fa-bed"></i></button>
-                        <button type="button" class="camping-settings"><i class="fa-solid fa-cog"></i></button>
-                    </div>
+                    {{/if}}
+                    <button type="button" class="camping-settings"><i class="fa-solid fa-cog"></i></button>
                 </div>
-            {{/if}}
+            </div>
         </div>
     </div>
 

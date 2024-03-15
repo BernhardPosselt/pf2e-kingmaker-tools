@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Fixed
+
+* Do not hide camping settings button if no actors are on the sheet
+* Correctly link V&K structures in upgrades
+
 ### Changed
 
 * Remove the sheet actor compendium and instead create the actor programmatically when clicking on the camping/kingdom macro
