@@ -1,5 +1,3 @@
-2024/03/15-19:58:57.657340 7f67fa6006c0 Delete type=3 #517
-2024/03/15-20:16:38.546958 7f67e6a006c0 Level-0 table #524: started
-2024/03/15-20:16:38.546971 7f67e6a006c0 Level-0 table #524: 0 bytes OK
-2024/03/15-20:16:38.548119 7f67e6a006c0 Delete type=0 #522
-2024/03/15-20:16:38.549311 7f67e6a006c0 Manual compaction at level-0 from '!items!9Jl0ZrFmEFHXoKte' @ 72057594037927935 : 1 .. '!items!ti4mJ58Wk0N4PdzD' @ 0 : 0; will stop at (end)
+2024/03/15-20:17:21.941265 7f67fa6006c0 Recovering log #523
+2024/03/15-20:17:21.943067 7f67fa6006c0 Delete type=3 #521
+2024/03/15-20:17:21.943093 7f67fa6006c0 Delete type=0 #523
