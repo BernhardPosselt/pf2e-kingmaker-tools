@@ -799,6 +799,7 @@ export function openCampingSheet(game: Game): void {
         new CampingSheet({game, actor: sheetActor}).render(true);
     } else {
         setupDialog(game, 'Camping', async () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const sheetActor: Actor = await Actor.create({
                 type: 'npc',

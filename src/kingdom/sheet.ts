@@ -1177,6 +1177,7 @@ export async function showKingdom(game: Game): Promise<void> {
         new KingdomApp(null, {game, sheetActor}).render(true);
     } else {
         setupDialog(game, 'Kingdom', async () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const sheetActor: Actor = await Actor.create({
                 type: 'npc',
