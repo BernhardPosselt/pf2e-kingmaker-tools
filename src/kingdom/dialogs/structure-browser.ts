@@ -471,6 +471,7 @@ class StructureBrowserApp extends FormApplication<
 
     private async getPaymentChatData(structure: ActorStructure, degree: DegreeOfSuccess): Promise<{
         upgradeCosts: { name: string, costs: Costs }[],
+        ruinCosts: Costs,
         costs: Costs,
         structureLink?: string,
     }> {
@@ -479,7 +480,7 @@ class StructureBrowserApp extends FormApplication<
                 ?.map(name => structureActors.find(a => a.actor.name === name))
                 ?.filter(structure => isNonNullable(structure))
             ?? []) as ActorStructure[];
-        const costMode = degree === DegreeOfSuccess.CRITICAL_SUCCESS ? 'half' : 'full';
+        const costMode = degree === DegreeOfSuccess.CRITICAL_SUCCESS ? 'criticalSuccess' : 'success';
         const upgradeCosts: { name: string, costs: Costs }[] = upgradeFromStructures.map(upgradeFrom => {
             const costs = {
                 rp: Math.max(0, (structure.construction?.rp ?? 0) - (upgradeFrom.construction?.rp ?? 0)),
@@ -494,6 +495,8 @@ class StructureBrowserApp extends FormApplication<
             };
         });
         const costs = calculateCosts(structure.construction ?? {}, costMode);
+        const ruinCostMode = degree === DegreeOfSuccess.CRITICAL_SUCCESS ? 'ruinCriticalSuccess' : 'ruinSuccess';
+        const ruinCosts = calculateCosts(structure.construction ?? {}, ruinCostMode);
         const structureToLink = degree === DegreeOfSuccess.CRITICAL_FAILURE
             ? structureActors.find(a => a.actor.name === 'Rubble')?.actor
             : structure?.actor;
@@ -504,6 +507,7 @@ class StructureBrowserApp extends FormApplication<
             structureLink,
             costs,
             upgradeCosts,
+            ruinCosts,
         };
     }
 
@@ -512,19 +516,22 @@ class StructureBrowserApp extends FormApplication<
             structureLink,
             costs,
             upgradeCosts,
+            ruinCosts,
         } = await this.getPaymentChatData(structure, degree);
         const upgradeButtons = upgradeCosts.map(costs => {
             const title = `<p><b>Upgrade from ${escapeHtml(costs.name)}:</b></p>`;
             return title + createPayButton(costs.costs);
         }).join('');
         const header = `<h3>Constructing ${escapeHtml(structure.name)}</h3>`;
+        const ruinTitle = '<p><b>Build from Ruin:</b></p>';
+        const ruinButton = ruinTitle + createPayButton(ruinCosts);
         const title = '<p><b>Build Directly:</b></p>';
         const payButton = title + createPayButton(costs);
         const linkNote = degree === DegreeOfSuccess.FAILURE
             ? ' and apply the @UUID[Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3]{Slowed} condition to signal that the structure is under construction' : '';
         const link = structureLink ? `<p><b>Drag onto scene to build${linkNote}:</b></p><p>${structureLink}</p>` : '';
         await ChatMessage.create({
-            content: header + upgradeButtons + payButton + link,
+            content: header + upgradeButtons + ruinButton + payButton + link,
         });
     }
 
@@ -607,23 +614,42 @@ export async function payStructure(sheetActor: Actor, costs: Costs): Promise<voi
     });
 }
 
-function calculateCosts(costs: Partial<Costs>, mode: 'half' | 'full'): Costs {
-    const zeroedCosts: Costs = {
+function calculateCosts(costs: Partial<Costs>, mode: 'ruinSuccess' | 'ruinCriticalSuccess' | 'success' | 'criticalSuccess'): Costs {
+    const result: Costs = {
         rp: costs.rp ?? 0,
         ore: costs.ore ?? 0,
         lumber: costs.lumber ?? 0,
         luxuries: costs.luxuries ?? 0,
         stone: costs.stone ?? 0,
     };
-    if (mode === 'full') {
-        return zeroedCosts;
-    } else {
+
+    if (mode === 'success') {
+        return result;
+    } else if (mode === 'criticalSuccess') {
+        // critical successes only halve commodity cost
         return {
-            rp: zeroedCosts.rp,
-            ore: Math.ceil(zeroedCosts.ore / 2),
-            lumber: Math.ceil(zeroedCosts.lumber / 2),
-            luxuries: Math.ceil(zeroedCosts.luxuries / 2),
-            stone: Math.ceil(zeroedCosts.stone / 2),
+            rp: result.rp,
+            ore: Math.ceil(result.ore / 2),
+            lumber: Math.ceil(result.lumber / 2),
+            luxuries: Math.ceil(result.luxuries / 2),
+            stone: Math.ceil(result.stone / 2),
+        };
+    } else if (mode === 'ruinSuccess') {
+        return {
+            rp: Math.ceil(result.rp / 2),
+            ore: Math.ceil(result.ore / 2),
+            lumber: Math.ceil(result.lumber / 2),
+            luxuries: Math.ceil(result.luxuries / 2),
+            stone: Math.ceil(result.stone / 2),
+        };
+    } else {
+        // critical successes only halve commodity cost
+        return {
+            rp: Math.ceil(result.rp / 2),
+            ore: Math.ceil(result.ore / 4),
+            lumber: Math.ceil(result.lumber / 4),
+            luxuries: Math.ceil(result.luxuries / 4),
+            stone: Math.ceil(result.stone / 4),
         };
     }
 }
