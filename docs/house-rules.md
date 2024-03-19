@@ -123,6 +123,8 @@ What you need to do is to bridge the period between levels 1-9 and fix the broke
 * Roll Kingdom Events frequently (DC 5 Flat Check instead of the default) and associate them with the PCs' actions (PC chose to Infiltrate an enemy faction? That political scandal is there way of getting back at you)
 * Tie their kingdom and buildings to XP, loot and access to feats/items. Maybe you need to recruit a smith for that forge who offers them 1 of 3 possible magic items? Or a noble requests a theater threatening 1d4 unrest if they haven't built one in 3 months.
 
+**PS**: It surprised me in my games, but you will notice that PCs start to critically succeed at building lower level structures at higher levels, significantly reducing commodity cost. You should keep that in mind if you are looking into re-balancing structure costs
+
 ### A word on Vance & Kerenshara's home brew
 
 Mechanically, [Vance & Kerenshara's](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit?usp=sharing) rules are a good starting point to patch up the rough mechanical parts, but I've found that you don't want to add all recommended changes. Specifically, giving players additional ability boosts and skill proficiencies might be better as a quest rewards that are given out slowly over the course of the adventure, if at all.
@@ -196,7 +198,7 @@ My players chose to run low skill, low intelligence PCs, so performing the **Res
 The system currently punishes you for building structures with item bonuses outside your capital. This building allows players to create specialized settlements and rewards them for continuing to build settlements in strategic points. Rare, so you can give your players access to the blueprints whenever you feel like it. Needless to say, you should not give players access to the **Teleport** spell
 
 * **Level**: 10
-* **Lots**: 1 **Cost**: 40 RP, 10 Stone, 4 Lumber, 2 Luxuries
+* **Lots**: 1 **Cost**: 30 RP, 10 Stone, 4 Lumber, 2 Luxuries
 * **Construction**: Magic (expert) DC 27
 * **Item Bonuses**: +3 to Relocate Capital
 * **Effects**: Settlements with an Aiudara Gate allow you to travel to another settlement without delay. Furthermore, if you are in a city with a gate, you can perform your Kingdom Activities in any town. Armies are too large to move them through gates effectively.
@@ -273,8 +275,8 @@ I have yet to use them more to figure out a good solution.
 * No more than 1 division of each faction can be present in any hex at any time: this prevents players from overwhelming an enemy by sheer number of armies. Think of it as preventing the players from running all companions in combats balanced for 4 PCs. If you don't do that, you can't balance battles at all, which makes army combat incredibly boring. Furthermore, it will prevent you from pulling your hair out when stacking tokens on the world map.
 * You can not deploy armies, only Divisions. The same applies to Offensive Gambit and Recovering lost armies. If your armies are affected by conditions, combine their modifiers and use the highest/lowest one: this will move all armies as a unit, preventing players from being left out of the fun if you fail a single Deploy Army check.
 * **Routed** & **Engaged** condition: **Routed** says that you must use the **Retreat** action but **Retreat** specifies that you must not be **Engaged**. In a similar fashion, **Rally**'s Critical Success allows you to remove the **Routed** condition of your own army which you can't because you have to **Retreat**:
-  * Change
-    > On its turn, a routed army must use the Retreat war action
-   
-    To:
-    > On its turn, a routed army that is not engaged must use the Retreat war action
+    * Change
+      > On its turn, a routed army must use the Retreat war action
+
+      To:
+      > On its turn, a routed army that is not engaged must use the Retreat war action
