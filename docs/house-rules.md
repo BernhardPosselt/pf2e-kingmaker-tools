@@ -274,6 +274,8 @@ I have yet to use them more to figure out a good solution.
 * Armies are grouped together as divisions. Each division can hold up to n armies, where n is equal to the number of players: this will give each player an army to run in combat to keep them engaged
 * No more than 1 division of each faction can be present in any hex at any time: this prevents players from overwhelming an enemy by sheer number of armies. Think of it as preventing the players from running all companions in combats balanced for 4 PCs. If you don't do that, you can't balance battles at all, which makes army combat incredibly boring. Furthermore, it will prevent you from pulling your hair out when stacking tokens on the world map.
 * You can not deploy armies, only Divisions. The same applies to Offensive Gambit and Recovering lost armies. If your armies are affected by conditions, combine their modifiers and use the highest/lowest one: this will move all armies as a unit, preventing players from being left out of the fun if you fail a single Deploy Army check.
+* Feint does not have the Attack trait
+* Guard acts similar to Raise Shield since it's way too complicated RAW
 * **Routed** & **Engaged** condition: **Routed** says that you must use the **Retreat** action but **Retreat** specifies that you must not be **Engaged**. In a similar fashion, **Rally**'s Critical Success allows you to remove the **Routed** condition of your own army which you can't because you have to **Retreat**:
     * Change
       > On its turn, a routed army must use the Retreat war action
