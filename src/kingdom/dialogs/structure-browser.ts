@@ -461,10 +461,15 @@ class StructureBrowserApp extends FormApplication<
                 type: 'activity',
                 onRoll: this.onRoll,
                 actor: this.sheetActor,
-                afterRoll: async (degree): Promise<void> => {
-                    await this.payStructure(structure, degree);
+                afterRoll: async (): Promise<void> => {
                     await this.close();
                 },
+                additionalChatMessages: [{
+                    [DegreeOfSuccess.CRITICAL_SUCCESS]: await this.payStructure(structure, DegreeOfSuccess.CRITICAL_SUCCESS),
+                    [DegreeOfSuccess.SUCCESS]: await this.payStructure(structure, DegreeOfSuccess.SUCCESS),
+                    [DegreeOfSuccess.FAILURE]: await this.payStructure(structure, DegreeOfSuccess.FAILURE),
+                    [DegreeOfSuccess.CRITICAL_FAILURE]: await this.payStructure(structure, DegreeOfSuccess.CRITICAL_FAILURE),
+                }],
             }).render(true);
         }
     }
@@ -511,7 +516,7 @@ class StructureBrowserApp extends FormApplication<
         };
     }
 
-    private async payStructure(structure: ActorStructure, degree: DegreeOfSuccess): Promise<void> {
+    private async payStructure(structure: ActorStructure, degree: DegreeOfSuccess): Promise<string> {
         const {
             structureLink,
             costs,
@@ -530,9 +535,7 @@ class StructureBrowserApp extends FormApplication<
         const linkNote = degree === DegreeOfSuccess.FAILURE
             ? ' and apply the @UUID[Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3]{Slowed} condition to signal that the structure is under construction' : '';
         const link = structureLink ? `<p><b>Drag onto scene to build${linkNote}:</b></p><p>${structureLink}</p>` : '';
-        await ChatMessage.create({
-            content: header + upgradeButtons + ruinButton + payButton + link,
-        });
+        return header + upgradeButtons + ruinButton + payButton + link;
     }
 
     private hasUpgradeTo(structure: Structure, structures: ActorStructure[]): boolean {

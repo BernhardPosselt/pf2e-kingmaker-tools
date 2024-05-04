@@ -6,7 +6,7 @@ import {Modifier, modifierToLabel} from './modifiers';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame} from './kingdom-utils';
 import {hasFeat} from './data/kingdom';
-import {ModifierBreakdown, ModifierBreakdowns} from './dialogs/check-dialog';
+import {AdditionalChatMessages, ModifierBreakdown, ModifierBreakdowns} from './dialogs/check-dialog';
 
 export interface RollMeta {
     formula: string;
@@ -19,6 +19,7 @@ export interface RollMeta {
     rollOptions: string[];
     creativeSolutionModifier: number;
     supernaturalSolutionModifier: number;
+    additionalChatMessages: AdditionalChatMessages;
     modifierBreakdown?: string;
     rollType: RollType;
     rollMode: RollMode;
@@ -27,6 +28,7 @@ export interface RollMeta {
 export function parseMeta(el: HTMLElement): RollMeta {
     const meta = el.querySelector('.km-roll-meta') as HTMLElement;
     const rollOptions = meta.dataset.rollOptions;
+    const additionalChatMessages = meta.dataset.additionalChatMessages;
     return {
         total: parseInt(meta.dataset.total ?? '0', 10),
         dc: parseInt(meta.dataset.dc ?? '0', 10),
@@ -37,6 +39,7 @@ export function parseMeta(el: HTMLElement): RollMeta {
         modifier: parseInt(meta.dataset.modifier ?? '0', 10),
         rollType: meta.dataset.rollType as RollType,
         rollOptions: isNotBlank(rollOptions) ? JSON.parse(atob(rollOptions)) : [],
+        additionalChatMessages: isNotBlank(additionalChatMessages) ? JSON.parse(atob(additionalChatMessages)) : [],
         creativeSolutionModifier: parseInt(meta.dataset.creativeSolutionModifier ?? '0', 10),
         supernaturalSolutionModifier: parseInt(meta.dataset.supernaturalSolutionModifier ?? '0', 10),
         modifierBreakdown: isNotBlank(meta.dataset.modifierBreakdown) ? meta.dataset.modifierBreakdown : undefined,
@@ -48,14 +51,17 @@ export interface ActivityResultMeta {
     activity: string;
     rollMode: RollMode;
     degree: StringDegreeOfSuccess;
+    additionalChatMessages: AdditionalChatMessages;
 }
 
 export function parseUpgradeMeta(el: HTMLElement): ActivityResultMeta {
     const meta = el.querySelector('.km-upgrade-result') as HTMLElement;
+    const additionalChatMessages = meta.dataset.additionalChatMessages;
     return {
         activity: meta.dataset.activity!,
         rollMode: meta.dataset.rollMode as RollMode,
         degree: meta.dataset.degree as StringDegreeOfSuccess,
+        additionalChatMessages: isNotBlank(additionalChatMessages) ? JSON.parse(atob(additionalChatMessages)) : [],
     };
 }
 
@@ -97,6 +103,7 @@ export async function reRoll(
         modifierBreakdown,
         rollType,
         rollMode,
+        additionalChatMessages,
     } = parseMeta(el);
     const label = activity ? unslugify(activity) : unslugify(skill);
     let reRollFormula = formula;
@@ -143,6 +150,7 @@ export async function reRoll(
         supernaturalSolutionModifier,
         creativeSolutionModifier,
         rollMode,
+        additionalChatMessages,
     });
 }
 
@@ -171,12 +179,13 @@ function downgradeDegree(degree: StringDegreeOfSuccess): StringDegreeOfSuccess {
 }
 
 export async function changeDegree(actor: Actor, el: HTMLElement, type: 'upgrade' | 'downgrade'): Promise<void> {
-    const {activity, degree, rollMode} = parseUpgradeMeta(el);
+    const {activity, degree, rollMode, additionalChatMessages} = parseUpgradeMeta(el);
     const kingdom = getKingdom(actor);
     const kingdomActivity = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
     const newDegree = type === 'upgrade' ? upgradeDegree(degree) : downgradeDegree(degree);
     const degreeEnum = getDegreeFromKey(newDegree);
-    await postComplexDegreeOfSuccess(actor, kingdomActivity, rollMode, degreeEnum, degreeEnum);
+    await postComplexDegreeOfSuccess(actor, kingdomActivity, rollMode, additionalChatMessages, degreeEnum, degreeEnum);
+    await postAdditionalChatMessages(additionalChatMessages, degreeEnum, rollMode);
 }
 
 interface RollCheckOptions {
@@ -194,6 +203,7 @@ interface RollCheckOptions {
     modifierBreakdown?: string;
     rollType: RollType;
     rollMode: RollMode;
+    additionalChatMessages: AdditionalChatMessages;
 }
 
 type RollType = 'creative-solution' | 'supernatural-solution' | 'selected';
@@ -225,6 +235,23 @@ function createModifierPills(
     return '';
 }
 
+async function postAdditionalChatMessages(
+    additionalChatMessages: Partial<Record<DegreeOfSuccess, string>>[],
+    degreeOfSuccess: DegreeOfSuccess,
+    rollMode: RollMode,
+): Promise<void> {
+    const messages = additionalChatMessages
+        .map(message => message[degreeOfSuccess])
+        .filter(message => isNotBlank(message)) as string[];
+    await Promise.all(messages.map((message) => {
+        return ChatMessage.create({
+            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+            content: message.trimEnd(),
+            rollMode,
+        });
+    }));
+}
+
 export async function rollCheck(
     {
         formula,
@@ -241,6 +268,7 @@ export async function rollCheck(
         creativeSolutionModifier,
         rollType,
         rollMode,
+        additionalChatMessages,
     }: RollCheckOptions,
 ): Promise<DegreeOfSuccess> {
     const roll = await new Roll(formula).roll();
@@ -261,6 +289,7 @@ export async function rollCheck(
             data-modifier="${modifier}"
             data-roll-type="${rollType}"
             data-roll-mode="${rollMode}"
+            data-additional-chat-messages="${btoa(JSON.stringify(additionalChatMessages))}"
             data-creative-solution-modifier="${creativeSolutionModifier}"
             data-supernatural-solution-modifier="${supernaturalSolutionModifier}"
         ></div>`;
@@ -272,9 +301,11 @@ export async function rollCheck(
         actor,
         rollMode,
         activity,
+        additionalChatMessages,
         previousDegree,
         degreeOfSuccess === previousDegree ? undefined : degreeOfSuccess,
     );
+    await postAdditionalChatMessages(additionalChatMessages, degreeOfSuccess, rollMode);
     return degreeOfSuccess;
 }
 
@@ -282,11 +313,12 @@ async function postDegreeOfSuccess(
     actor: Actor,
     rollMode: RollMode,
     activity: KingdomActivity | undefined,
+    additionalChatMessages: AdditionalChatMessages,
     degreeOfSuccess: DegreeOfSuccess,
     upgradedDegreeOfSuccess?: DegreeOfSuccess,
 ): Promise<void> {
     if (activity) {
-        await postComplexDegreeOfSuccess(actor, activity, rollMode, degreeOfSuccess, upgradedDegreeOfSuccess);
+        await postComplexDegreeOfSuccess(actor, activity, rollMode, additionalChatMessages, degreeOfSuccess, upgradedDegreeOfSuccess);
     } else {
         await postSimpleDegreeOfSuccess(rollMode, degreeOfSuccess, upgradedDegreeOfSuccess);
     }
@@ -353,6 +385,7 @@ async function postComplexDegreeOfSuccess(
     actor: Actor,
     activity: KingdomActivity,
     rollMode: RollMode,
+    additionalChatMessages: AdditionalChatMessages,
     degreeOfSuccess: DegreeOfSuccess,
     upgradedDegreeOfSuccess?: DegreeOfSuccess,
 ): Promise<void> {
@@ -369,7 +402,8 @@ async function postComplexDegreeOfSuccess(
         const upgrade = `<div class="km-upgrade-result"
                 data-roll-mode="${rollMode}" 
                 data-activity="${activity.id}" 
-                data-degree="${resultKey}"></div>`;
+                data-degree="${resultKey}"
+                data-additional-chat-messages="${btoa(JSON.stringify(additionalChatMessages))}"></div>`;
         const msg = message;
         const tail = buttons + upgrade;
         const description = `<h3>${activity.title}</h3>${activity.description.trimEnd()}<hr>`;

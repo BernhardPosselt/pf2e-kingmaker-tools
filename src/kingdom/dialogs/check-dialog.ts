@@ -30,6 +30,8 @@ import {DegreeOfSuccess} from '../../degree-of-success';
 
 export type CheckType = 'skill' | 'activity';
 
+export type AdditionalChatMessages = Partial<Record<DegreeOfSuccess, string>>[];
+
 export interface CheckDialogFeatOptions {
     type: CheckType;
     activity?: string;
@@ -42,6 +44,7 @@ export interface CheckDialogFeatOptions {
     overrideSkills?: Partial<SkillRanks>;
     onRoll: (consumeModifiers: Set<string>) => Promise<void>;
     afterRoll?: (degree: DegreeOfSuccess) => Promise<void>;
+    additionalChatMessages?: Partial<Record<DegreeOfSuccess, string>>[];
 }
 
 interface CheckFormData {
@@ -109,6 +112,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private afterRoll: (degree: DegreeOfSuccess) => Promise<void>;
     private rollOptions: string[] = [];
     private rollMode: RollMode = 'publicroll';
+    private additionalChatMessages: AdditionalChatMessages;
 
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
@@ -130,6 +134,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.game = options.game;
         this.kingdom = options.kingdom;
         this.actor = options.actor;
+        this.additionalChatMessages = options.additionalChatMessages ?? [];
         this.onRoll = options.onRoll;
         this.afterRoll = options.afterRoll ?? (async (): Promise<void> => {
         });
@@ -318,6 +323,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 supernaturalSolutionModifier,
                 rollType: 'selected',
                 rollMode: this.rollMode,
+                additionalChatMessages: this.additionalChatMessages,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
@@ -356,6 +362,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 supernaturalSolutionModifier,
                 rollType: 'selected',
                 rollMode: this.rollMode,
+                additionalChatMessages: this.additionalChatMessages,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
