@@ -322,6 +322,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             await this.update({encounterModifier: current.encounterModifier + 1});
         });
         listenClick($html, '.reset-zone-dc-modifier', async () => await this.update({encounterModifier: 0}));
+        listenClick($html, '.reset-activities', async () => await this.update({campingActivities: []}));
         listenClick($html, '.cook-food', async () => {
             const current = await this.read();
             const cookingActor = await getCookingActorByUuid(current);
