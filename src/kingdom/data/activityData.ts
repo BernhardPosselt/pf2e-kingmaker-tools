@@ -1836,6 +1836,49 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
             msg: `Your ally is tangled up in its own problems and is unable to assist you, is insulted by your request for aid, or might even have an interest in seeing your kingdom struggle against one of your ongoing events. Whatever the case, your pleas for aid make your kingdom look desperate. You gain no aid, but you do ${gainUnrest('1d4')}.`,
         },
     },
+    'request-foreign-aid-vk': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: false,
+        phase: 'leadership',
+        dc: 'custom',
+        title: 'Request Foreign Aid (V&K)',
+        description: 'When disaster strikes, you send out a call for help to another nation with whom you have diplomatic relations. The DC of this check starts at the other group’s Negotiation DC +2, but every subsequent Kingdom turn you Request Foreign Aid from the same group, the DC increases by 2. Every Kingdom turn that passes without Requesting Foreign Aid from that Group reduces the DC by 1 (until you reach the other group’s Negotiation DC +2). You may only attempt to request Foreign Aid with a given group once per Kingdom turn regardless of the number of leaders pursuing activities.',
+        requirement: 'You have diplomatic relations with the group you are requesting aid from.',
+        skills: simpleRank(['statecraft'], 1),
+        criticalSuccess: {
+            msg: `Your ally’s aid grants a +4 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn. You can choose to apply this bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known. In addition, ${gainRolledRD(2)}; this RP does not accrue into XP at the end of the turn if you don’t spend it.`,
+            modifiers: () => [{
+                turns: 1,
+                consumeId: '',
+                enabled: false,
+                value: 4,
+                name: 'Request Foreign Aid: Critical Success',
+                type: 'circumstance',
+            }],
+        },
+        success: {
+            msg: `Your ally’s aid grants you either a +2 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn or ${gainRolledRD(1)}. This RP does not accrue into XP at the end of the turn if you don’t spend it. You can choose to apply the bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known.`,
+            modifiers: () => [{
+                turns: 1,
+                consumeId: '',
+                enabled: false,
+                value: 2,
+                name: 'Request Foreign Aid: Success',
+                type: 'circumstance',
+            }],
+        },
+        failure: {
+            msg: `Your ally marshals its resources but cannot get aid to you in time to deal with your current situation. ${createResourceButton({
+                turn: 'next',
+                value: '1d4',
+                type: 'resource-points',
+            })}`,
+        },
+        criticalFailure: {
+            msg: `Your ally is tangled up in its own problems and is unable to assist you, is insulted by your request for aid, or might even have an interest in seeing your kingdom struggle against one of your ongoing events. Whatever the case, your pleas for aid make your kingdom look desperate. You gain no aid, but you do ${gainUnrest('1d4')}.`,
+        },
+    },
     'rest-and-relax': {
         oncePerRound: false,
         fortune: false,
@@ -2186,7 +2229,7 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         enabled: false,
         phase: 'leadership',
         dc: 'control',
-        title: 'Reconnoiter Hex',
+        title: 'Reconnoiter Hex (V&K)',
         description: `You send a team to spend time surveying and exploring a specific hex, getting the lay of the land and looking for unusual features and specific sites. ${loseRP(1)} and then attempt a Basic check.`,
         skills: simpleRank(['wilderness']),
         criticalSuccess: {
@@ -2216,7 +2259,7 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         enabled: false,
         phase: 'leadership',
         dc: 'control',
-        title: 'Take Charge',
+        title: 'Take Charge (V&K)',
         description: 'You spend some time getting directly involved in helping your kingdom. Choose a skill that your Kingdom is at least Trained in, then attempt a basic check. You can never use the same skill for this activity twice in the same Kingdom turn.',
         skills: simpleRank([...allSkills], 1),
         criticalSuccess: {
