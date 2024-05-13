@@ -5,8 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.45.0] - 2024-05-13
+
 ### Added
 
+* This release achieves 100% compatibility with V&K rules except for turning a feat's status bonuses into circumstance bonuses instead of letting them stack with other status bonuses
+* Added the V&K version of Practical Magic
 * Added the V&K version of Request Foreign Aid; in either case you need to manually enable/disable either activity in the **Manage Activities** button at the top of the **Turn** section
 
 ## [0.44.0] - 2024-05-04

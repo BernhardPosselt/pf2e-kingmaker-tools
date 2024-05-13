@@ -191,6 +191,23 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             activeSettlementStructureResult,
             getSettlementsWithoutLandBorders(this.game, this.kingdom),
         );
+        if (hasFeat(this.kingdom, 'Practical Magic (V&K)')) {
+            const modifier: Modifier = {
+                skills: ['engineering'],
+                value: 1,
+                type: 'circumstance',
+                name: 'Practical Magic',
+                enabled: true,
+            };
+            if (this.kingdom.skillRanks.magic === 2) {
+                additionalModifiers.push(modifier);
+            } else if (this.kingdom.skillRanks.magic > 2) {
+                additionalModifiers.push({
+                    ...modifier,
+                    value: 2,
+                });
+            }
+        }
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
         const skillModifiers = this.calculateModifiers(
             applicableSkills,
