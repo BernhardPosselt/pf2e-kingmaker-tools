@@ -28,7 +28,7 @@ import {campingSettingsDialog} from './dialogs/camping-settings';
 import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
 import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
-import {LabelAndValue, listenClick} from '../utils';
+import {LabelAndValue, listenClick, toLabelAndValue} from '../utils';
 import {getActorsByUuid, hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
 import {askDcDialog} from './dialogs/ask-dc';
 import {discoverSpecialMeal} from './dialogs/learn-recipe';
@@ -134,7 +134,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             encounterDC,
             watchEnabled: viewActors.length > 0,
             adventuringSince: formatHours(sumElapsedSeconds, data.dailyPrepsAtTime > currentSeconds),
-            regions: Array.from(regions.keys()),
+            regions: toLabelAndValue(Array.from(regions.keys())),
             currentRegion,
             actors: viewActors,
             campingActivities: await toViewCampingActivities(data.campingActivities, activityData, new Set(data.lockedActivities)),
@@ -144,8 +144,13 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             subsistenceAmount: data.cooking.subsistenceAmount,
             magicalSubsistenceAmount: data.cooking.magicalSubsistenceAmount,
             chosenMeal: chosenMeal,
-            knownRecipes: knownRecipes,
-            knownFavoriteRecipes: knownRecipes.filter(r => r !== 'Basic Meal'),
+            knownRecipes: toLabelAndValue(knownRecipes),
+            knownFavoriteRecipes: toLabelAndValue(knownRecipes.filter(r => r !== 'Basic Meal')),
+            mealChoices: [
+                {value: 'meal', label: 'Meal'},
+                {value: 'rationsOrSubsistence', label: 'Rations/Subsistence'},
+                {value: 'nothing', label: 'Nothing'},
+            ],
             degreesOfSuccesses: toViewDegrees(),
             mealDegreeOfSuccess: data.cooking.degreeOfSuccess,
             time: formatWorldTime(getWorldTime(this.game)),

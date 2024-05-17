@@ -1,9 +1,11 @@
 <div class="actor-wrapper">
-    <header class="actor-header" {{#if activity.journalUuid}}data-uuid="{{activity.journalUuid}}"{{/if}}>{{activity.name}}</header>
+    <header class="actor-header"
+            {{#if activity.journalUuid}}data-uuid="{{activity.journalUuid}}"{{/if}}>{{activity.name}}</header>
     <div class="actor-image-container">
         {{#if actor}}
             <img src="{{activity.actor.image}}" class="actor-image" data-uuid="{{activity.actor.uuid}}">
-            <button type="button" class="remove-actor" title="Clear Actor" data-uuid="{{activity.actor.uuid}}" data-type="{{activity.name}}"><i
+            <button type="button" class="remove-actor" title="Clear Actor" data-uuid="{{activity.actor.uuid}}"
+                    data-type="{{activity.name}}"><i
                     class="fa-solid fa-xmark"></i></button>
         {{else}}
             <img src="modules/pf2e-kingmaker-tools/static/img/add-actor.webp" title="Drop Actor Here"
@@ -13,22 +15,15 @@
     {{#if activity.isSkillCheck}}
         <div class="actor-check">
             <select name="selectedSkill.{{activity.slug}}">
-            {{#select activity.selectedSkill}}
-                {{#each activity.skills}}
-                    <option value="{{value}}">{{label}}</option>
-                {{/each}}
-            {{/select}}
+                {{selectOptions activity.skills selected=activity.selectedSkill}}
             </select>
-            <button type="button" class="roll-check" data-activity="{{activity.name}}" data-skill="{{activity.selectedSkill}}"><i class="fa-solid fa-dice-d20"></i></button>
+            <button type="button" class="roll-check" data-activity="{{activity.name}}"
+                    data-skill="{{activity.selectedSkill}}"><i class="fa-solid fa-dice-d20"></i></button>
         </div>
         <div class="actor-subheader">
-            <select name="actorActivityDegreeOfSuccess.{{activity.slug}}" {{#if activity.isSecret}}{{#if isUser}}hidden{{/if}}{{/if}}>
-                {{#select activity.degreeOfSuccess}}
-                    <option>-</option>
-                    {{#each degreesOfSuccesses}}
-                        <option value="{{value}}">{{label}}</option>
-                    {{/each}}
-                {{/select}}
+            <select name="actorActivityDegreeOfSuccess.{{activity.slug}}" {{#if activity.isSecret}}{{#if
+                    isUser}}hidden{{/if}}{{/if}}>
+                {{selectOptions degreesOfSuccesses selected=activity.degreeOfSuccess}}
             </select>
         </div>
     {{/if}}

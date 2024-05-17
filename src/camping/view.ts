@@ -24,7 +24,7 @@ export interface ViewCampingData {
     actors: ViewCampingActor[];
     campingActivities: ViewCampingActivity[];
     currentRegion: string;
-    regions: string[];
+    regions: LabelAndValue[];
     adventuringSince: string;
     encounterDC: number;
     currentEncounterDCModifier: number;
@@ -38,8 +38,9 @@ export interface ViewCampingData {
     dailyPrepsDuration: string;
     subsistenceAmount: number;
     magicalSubsistenceAmount: number;
-    knownRecipes: string[];
-    knownFavoriteRecipes: string[];
+    knownRecipes: LabelAndValue[];
+    knownFavoriteRecipes: LabelAndValue[];
+    mealChoices: LabelAndValue[];
     chosenMeal: string;
     degreesOfSuccesses: ViewDegreeOfSuccess[];
     mealDegreeOfSuccess: StringDegreeOfSuccess | null;
