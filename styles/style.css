@@ -463,29 +463,52 @@ td.skill-value {
     padding-right: 5px;
 }
 
+
 .proficiency-rank {
     color: white;
     font-size: 12px;
-}
 
-.proficiency-rank-0 {
-    background-color: var(--untrained);
-}
+    &:has(option[value="0"]:checked) {
+        background-color: var(--untrained);
+    }
 
-.proficiency-rank-1 {
-    background-color: var(--trained);
-}
+    &:has(option[value="1"]:checked) {
+        background-color: var(--trained);
+    }
 
-.proficiency-rank-2 {
-    background-color: var(--expert);
-}
+    &:has(option[value="2"]:checked) {
+        background-color: var(--expert);
+    }
 
-.proficiency-rank-3 {
-    background-color: var(--master);
-}
+    &:has(option[value="3"]:checked) {
+        background-color: var(--master);
+    }
 
-.proficiency-rank-4 {
-    background-color: var(--legendary);
+    &:has(option[value="4"]:checked) {
+        background-color: var(--legendary);
+    }
+
+    option {
+        &[value="0"] {
+            background-color: var(--untrained);
+        }
+
+        &[value="1"] {
+            background-color: var(--trained);
+        }
+
+        &[value="2"] {
+            background-color: var(--expert);
+        }
+
+        &[value="3"] {
+            background-color: var(--master);
+        }
+
+        &[value="4"] {
+            background-color: var(--legendary);
+        }
+    }
 }
 
 /* groups */

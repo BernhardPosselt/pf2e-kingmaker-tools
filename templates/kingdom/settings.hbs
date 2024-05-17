@@ -15,12 +15,7 @@
         <div class="form-elements">
             <label for="km-kingdom-events-roll-mode">Kingdom Events Roll Mode</label>
             <select name="kingdomEventRollMode" id="km-kingdom-events-roll-mode">
-                {{#select kingdomEventRollMode}}
-                    <option value="publicroll">Public Roll</option>
-                    <option value="gmroll">Private GM Roll</option>
-                    <option value="blindroll">Blind GM Roll</option>
-                    <option value="selfroll">Self Roll</option>
-                {{/select}}
+                {{selectOptions rollModeChoices selected=kingdomEventRollMode}}
             </select>
         </div>
     </div>
@@ -99,11 +94,7 @@
         <div class="form-elements">
             <label for="km-untrained-skill-proficiency">Always Increase Untrained Skills By</label>
             <select name="untrainedSkillProficiency" id="km-untrained-skill-proficiency">
-                {{#select untrainedSkillProficiency}}
-                    <option value="level">Full Level</option>
-                    <option value="halfLevel">Half Level</option>
-                    <option value="none">None</option>
-                {{/select}}
+                {{selectOptions untrainedSkillProficiencies selected=untrainedSkillProficiency}}
             </select>
         </div>
     </div>
@@ -143,11 +134,7 @@
         <div class="form-elements">
             <label for="km-automatically-calculate-resources">Automatically Calculate Kingdom Resources</label>
             <select name="automateResources" id="km-automatically-calculate-resources">
-                {{#select automateResources}}
-                    <option value="kingmaker">Official Module</option>
-                    <option value="tileBased">Tile/Drawing Based</option>
-                    <option value="manual">Manual</option>
-                {{/select}}
+                {{selectOptions automateResourcesChoices selected=automateResources}}
             </select>
         </div>
         <div class="help"><p>Official Module parses the Stolen Lands data, Tile Based sums up worksites, size and

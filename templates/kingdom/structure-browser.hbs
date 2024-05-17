@@ -3,11 +3,7 @@
         {{#if activeSettlement}}
             <h2>Active Settlement</h2>
             <select name="activeSettlement">
-                {{#select activeSettlement}}
-                    {{#each settlements}}
-                        <option value="{{value}}">{{label}}</option>
-                    {{/each}}
-                {{/select}}
+                {{selectOptions settlements selected=activeSettlement}}
             </select>
         {{/if}}
         <h2>Filters</h2>

@@ -16,31 +16,17 @@
                                                                                 name="xpThreshold"></td>
                     <td>
                         <select name="level" data-dtype="Number">
-                            {{#select level}}
-                                {{#each levels}}
-                                    <option value="{{this}}">{{this}}</option>
-                                {{/each}}
-                            {{/select}}
+                            {{selectOptions levels selected=level}}
                         </select>
                     </td>
                     <td>
                         <select name="fame.now" data-dtype="Number">
-                            {{#select fame.now}}
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            {{/select}}
+                            {{selectOptions fameValues selected=fame.now}}
                         </select>
                     </td>
                     <td>
                         <select name="fame.next" data-dtype="Number">
-                            {{#select fame.next}}
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            {{/select}}
+                            {{selectOptions fameValues selected=fame.next}}
                         </select>
                     </td>
                     <td {{#unless isGM}}hidden{{/unless}}>

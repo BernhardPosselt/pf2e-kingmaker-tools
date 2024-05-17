@@ -34,16 +34,3 @@ const allArmyStatistics: ArmyStatistic[] = [
 
 export const armyStatisticsByLevel: Map<number, ArmyStatistic> = new Map<number, ArmyStatistic>();
 allArmyStatistics.forEach(army => armyStatisticsByLevel.set(army.level, army));
-
-export interface ArmyAdjustments {
-    scouting: number;
-    recruitmentDC: number;
-    ac: number;
-    melee: number;
-    ranged: number;
-    morale: number;
-    maneuver: number;
-    highSave: 'maneuver' | 'morale';
-    ammunition: number;
-}
-

@@ -9,11 +9,7 @@
         <tr>
             <td>
                 <select name="selected">
-                    {{#select selected}}
-                        {{#each feats}}
-                            <option value="{{name}}">{{name}}</option>
-                        {{/each}}
-                    {{/select}}
+                    {{selectOptions feats valueAttr="name" labelAttr="name" selected=selected}}
                 </select>
             </td>
             <td>{{feat.level}}</td>

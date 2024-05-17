@@ -37,7 +37,6 @@ This module ships with implementations for all the extra mechanics provided in t
 
 * Camping Sheet
 * Kingdom Sheet
-* Armies as NPC stat blocks with additional automation
 * Weather
 * Level 1 Statblocks for companions not included in the Companion Guide
 
@@ -70,5 +69,3 @@ If you've enabled the official module, the following things are automatically ta
 ![settlements.png](docs%2Fimages%2Fsettlements.png)
 
 ![camping-sheet-1.png](docs%2Fimages%2Fcamping-sheet-1.png)
-
-![armies.png](docs%2Fimages%2Farmies.png)

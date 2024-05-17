@@ -2,6 +2,7 @@ import {getBooleanSetting, getNumberSetting, getStringArraySetting, getStringSet
 import {isCompanionName} from '../data/companions';
 import {updateKingdomArmyConsumption} from '../../armies/utils';
 import {ResourceAutomationMode} from '../scene';
+import {LabelAndValue, RollModeChoices, rollModeChoices} from '../../utils';
 
 interface CompanionData {
     amiri: boolean,
@@ -40,6 +41,9 @@ interface KingdomSettingData {
     capitalInvestmentInCapital: boolean;
     reduceDCToBuildLumberStructures: boolean;
     automateResources: ResourceAutomationMode;
+    rollModeChoices: RollModeChoices;
+    untrainedSkillProficiencies: LabelAndValue[];
+    automateResourcesChoices: LabelAndValue[];
 }
 
 interface KingdomSettingOptions {
@@ -78,6 +82,17 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
             capitalInvestmentInCapital: getBooleanSetting(this.game, 'capitalInvestmentInCapital'),
             reduceDCToBuildLumberStructures: getBooleanSetting(this.game, 'reduceDCToBuildLumberStructures'),
             automateResources: getStringSetting(this.game, 'automateResources') as ResourceAutomationMode,
+            rollModeChoices: rollModeChoices,
+            untrainedSkillProficiencies: [
+                {value: 'level', label: 'Full Level'},
+                {value: 'halfLevel', label: 'Half Level'},
+                {value: 'none', label: 'None'},
+            ],
+            automateResourcesChoices: [
+                {'value': 'kingmaker', label: 'Official Module'},
+                {'value': 'tileBased', label: 'Tile/Drawing Based'},
+                {'value': 'manual', label: 'Manual'},
+            ],
         };
     }
 

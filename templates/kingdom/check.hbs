@@ -10,23 +10,14 @@
             <div>
                 <label for="km-check-roll-mode">Roll Mode</label>
                 <select name="rollMode" id="km-check-roll-mode">
-                    {{#select rollMode}}
-                        <option value="publicroll">Public Roll</option>
-                        <option value="gmroll">Private GM Roll</option>
-                        <option value="blindroll">Blind GM Roll</option>
-                        <option value="selfroll">Self Roll</option>
-                    {{/select}}
+                    {{selectOptions rollModeChoices selected=rollMode}}
                 </select>
             </div>
             {{#if activity}}
                 <div>
                     <label for="km-applicable-skills">Applicable Skills:</label>
                     <select id="km-applicable-skills" name="selectedSkill">
-                        {{#select selectedSkill}}
-                            {{#each selectableSkills}}
-                                <option value="{{value}}">{{label}}</option>
-                            {{/each}}
-                        {{/select}}
+                        {{selectOptions selectableSkills selected=selectedSkill}}
                     </select>
                     <input type="hidden" name="phase" value="{{phase}}">
                 </div>
@@ -35,16 +26,7 @@
                 <div>
                     <label for="km-event-phase-toggle">Phase:</label>
                     <select name="phase">
-                        {{#select phase}}
-                            <option value="-">-</option>
-                            <option value="leadership">Leadership</option>
-                            <option value="region">Region</option>
-                            <option value="event">Event</option>
-                            <option value="army">Army</option>
-                            <option value="commerce">Commerce</option>
-                            <option value="upkeep">Upkeep</option>
-                            <option value="civic">Civic</option>
-                        {{/select}}
+                        {{selectOptions phases selected=phase}}
                     </select>
                 </div>
             {{/if}}
@@ -79,11 +61,7 @@
                         </td>
                         <td>
                             <select name="overrideModifiers.{{id}}">
-                                {{#select override}}
-                                    <option value="-">-</option>
-                                    <option value="enabled">Enable</option>
-                                    <option value="disabled">Disable</option>
-                                {{/select}}
+                                {{selectOptions ../overrides selected=override}}
                             </select>
                         </td>
                         <td title="If enabled, remove modifier after roll">

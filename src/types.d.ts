@@ -24,7 +24,6 @@ declare global {
                 rollKingmakerWeatherMacro: () => void,
                 viewKingdomMacro: () => void,
                 openCampingSheet: () => void,
-                editArmyStatisticsMacro: (actor: Actor) => void,
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 editStructureMacro: (actor: any) => Promise<void>,
                 rollExplorationSkillCheck: (skill: string, effect: string) => Promise<void>,

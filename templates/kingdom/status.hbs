@@ -4,10 +4,7 @@
             <th>Aspiration</th>
             <td>
                 <select name="fame.type">
-                    {{#select fame.type}}
-                        <option value="famous">Fame</option>
-                        <option value="infamous">Infamy</option>
-                    {{/select}}
+                    {{selectOptions aspirations selected=fame.type}}
                 </select>
             </td>
         </tr>
@@ -19,11 +16,7 @@
             <th>Heartland</th>
             <td>
                 <select name="heartland">
-                    {{#select heartland}}
-                        {{#each heartlands}}
-                            <option value="{{value}}">{{label}}</option>
-                        {{/each}}
-                    {{/select}}
+                    {{selectOptions heartlands selected=heartland}}
                 </select>
             </td>
         </tr>
@@ -80,11 +73,7 @@
             <td>{{label}}</td>
             <td>
                 <select name="leaders.{{@key}}.type">
-                    {{#select type}}
-                        {{#each ../actorTypes}}
-                            <option value="{{value}}">{{label}}</option>
-                        {{/each}}
-                    {{/select}}
+                    {{selectOptions ../actorTypes selected=type}}
                 </select>
             </td>
             <td>
@@ -93,11 +82,7 @@
                 {{/unless}}
                 {{#if isCompanion}}
                     <select name="leaders.{{@key}}.name">
-                        {{#select name}}
-                            {{#each ../companions}}
-                                <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        {{/select}}
+                        {{selectOptions ../companions selected=name}}
                     </select>
                 {{/if}}
             </td>

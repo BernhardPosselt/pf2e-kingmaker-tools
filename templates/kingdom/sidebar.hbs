@@ -4,11 +4,7 @@
         <td>
             {{#if settlements}}
                 <select name="activeSettlement">
-                    {{#select activeSettlement}}
-                        {{#each settlements}}
-                            <option value="{{sceneId}}">{{name}}</option>
-                        {{/each}}
-                    {{/select}}
+                    {{selectOptions settlements valueAttr="sceneId" labelAttr="name" selected=activeSettlement}}
                 </select>
             {{else}}
                 No settlements found!

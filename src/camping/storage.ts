@@ -14,7 +14,7 @@ export async function saveCamping(game: Game, sheetActor: Actor, update: Partial
 export function getCamping(sheetActor: Actor): Camping {
     const camping = sheetActor.getFlag('pf2e-kingmaker-tools', 'camping-sheet') as Camping;
     console.log('Reading', camping);
-    return deepClone(camping);
+    return foundry.utils.deepClone(camping);
 }
 
 export function getCampingActor(game: Game): Actor | null {

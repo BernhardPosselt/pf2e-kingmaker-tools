@@ -20,13 +20,8 @@
             <td>{{abilityLabel}}</td>
             <td>
                 <select name="skillRanks.{{skill}}" data-dtype="Number"
-                        class="proficiency-rank proficiency-rank-{{rank}}">
-                    {{#select rank}}
-                        {{#each ../ranks}}
-                            <option value="{{value}}"
-                                    class="proficiency-rank proficiency-rank-{{value}}">{{label}}</option>
-                        {{/each}}
-                    {{/select}}
+                        class="proficiency-rank">
+                    {{selectOptions ../ranks selected=rank}}
                 </select>
             </td>
             <td class="skill-bonus" title="Ability Bonus">{{total.ability.bonus}}</td>
