@@ -121,9 +121,9 @@ class AddCampingActivities extends FormApplication<FormApplicationOptions & AddA
     constructor(object: null, options: Partial<FormApplicationOptions> & AddActivityOptions) {
         super(object, options);
         this.onSubmitCallback = options.onSubmit;
-        this.homebrewActivities = deepClone(options.homebrewActivities);
+        this.homebrewActivities = foundry.utils.deepClone(options.homebrewActivities);
         this.originalName = options.activity?.name;
-        this.activity = deepClone(options.activity) ?? {
+        this.activity = foundry.utils.deepClone(options.activity) ?? {
             journalUuid: '',
             isHomebrew: true,
             dc: 'zone',
