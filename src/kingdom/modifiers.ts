@@ -276,7 +276,7 @@ export function createActiveSettlementModifiers(
     settlementsWithoutLandBorders: number,
 ): Modifier[] {
     const levelData = getLevelData(kingdom.level);
-    const feats = new Set([...kingdom.feats.map(f => f.id), ...kingdom.feats.map(f => f.id)]);
+    const feats = new Set([...kingdom.feats.map(f => f.id), ...kingdom.bonusFeats.map(f => f.id)]);
     const result: Modifier[] = Array.from(feats)
         .flatMap(feat => allFeatsByName[feat]?.modifiers ?? []);
     kingdom.modifiers.forEach(modifier => result.push(modifier));
