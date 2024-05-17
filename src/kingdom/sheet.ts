@@ -266,12 +266,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 .map(settlement => {
                     const s = settlement as SettlementAndScene;
                     const waterBorders = s.settlement.waterBorders ?? 0;
+                    const structureResult = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, s);
                     return {
                         ...s.settlement,
                         ...getSettlementInfo(s, autoCalculateSettlementLevel),
                         waterBorders,
                         overcrowded: this.isOvercrowded(s),
-                        lacksBridge: waterBorders >= 4 && !getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, s).hasBridge,
+                        residentialLots: structureResult.residentialLots,
+                        lacksBridge: waterBorders >= 4 && !structureResult.hasBridge,
                         isCapital: settlement?.settlement.type === 'capital',
                         name: s.scene.name ?? undefined,
                     };

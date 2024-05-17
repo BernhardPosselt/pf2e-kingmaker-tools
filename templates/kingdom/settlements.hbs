@@ -3,10 +3,8 @@
     <table class="km-table">
         <tr>
             <th>Name</th>
-            <th>Level</th>
-            <th>Capital</th>
-            <th>Overcrowded</th>
-            <th>Lacks Bridge</th>
+            <th>Level (Housing)</th>
+            <th>Issues</th>
             <th>Delete</th>
             <th>Edit</th>
             <th>Inspect</th>
@@ -14,21 +12,20 @@
         {{#each settlements}}
             <tr>
                 <td title="Press CTRL and click to activate instead"><a href="#" class="km-view-settlement-scene"
-                                                                        data-id="{{sceneId}}">{{name}}</a></td>
-                <td>{{level}}</td>
-                <td>
-                    {{#if isCapital}}
-                        <i class="fa-solid fa-circle-check"></i>
-                    {{/if}}
+                                                                        data-id="{{sceneId}}">{{name}}</a>{{#if
+                        isCapital}}
+                    <i title="Capital" class="fa-solid fa-star"></i>{{/if}}</td>
+                <td>{{level}} ({{residentialLots}})
                 </td>
                 <td>
-                    {{#if overcrowded}}
-                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    {{#if secondaryTerritory}}
+                        <i title="Secondary Territory" class="fa-solid fa-road-circle-xmark"></i>
                     {{/if}}
-                </td>
-                <td>
                     {{#if lacksBridge}}
-                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <i title="No Bridge" class="fa-solid fa-bridge-circle-xmark"></i>
+                    {{/if}}
+                    {{#if overcrowded}}
+                        <i title="Overcrowded" class="fa-solid fa-people-roof"></i>
                     {{/if}}
                 </td>
                 <td>
