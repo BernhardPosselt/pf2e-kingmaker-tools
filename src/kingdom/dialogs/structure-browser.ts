@@ -386,6 +386,8 @@ class StructureBrowserApp extends FormApplication<
                 lots: structure.lots === 0 ? undefined : structure.lots,
                 id: structure.actor.id,
                 img: structure.actor.img,
+                residential: structure.traits?.includes('residential') ?? false,
+                infrastructure: structure.traits?.includes('infrastructure') ?? false,
             };
         }));
     }
