@@ -27,7 +27,7 @@
                 <li {{#if insufficientStone}}title="Not enough stone" class="error"{{/if}}>
                     <div class="km-resource-cost">{{stone}}</div>
                     <img class="km-structure-resource"
-                         src="icons/commodities/stone/boulder-grey.webp" alt="stone"></li>{{/if}}
+                         src="icons/commodities/stone/boulder-grey-blue.webp" alt="stone"></li>{{/if}}
             {{#if ore}}
                 <li {{#if insufficientOre}}title="Not enough ore" class="error"{{/if}}>
                     <div class="km-resource-cost">{{ore}}</div>
@@ -41,7 +41,7 @@
         </ul>
         <div class="km-structure-build">
             <button type="button" class="km-build-structure-dialog{{#if lacksProficiency}} error{{/if}}"
-                    data-id="{{id}}" {{#if
+                    data-id="{{id}}" {{#if disableBuild}}disabled{{/if}} {{#if
                     lacksProficiency}}title="Kingdom Lacks Proficiency: {{proficiencyRequirements}}" {{/if}}>Build <i
                     class="fa-solid fa-hammer"></i></button>
         </div>

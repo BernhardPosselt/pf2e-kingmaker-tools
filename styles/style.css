@@ -391,6 +391,7 @@ td.skill-value {
         position: sticky;
         top: 0;
         z-index: 3;
+        box-shadow: 0 1px 10px #000;
     }
 }
 
