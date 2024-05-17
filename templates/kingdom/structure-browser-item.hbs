@@ -1,12 +1,10 @@
 {{#each structures}}
     <div class="km-structure-list-item">
         <h2>{{name}} {{#if residential}}
-            <img class="km-structure-type" src="icons/environment/settlement/house-woods.webp" title="housing">
+            <img class="km-structure-type" src="icons/environment/settlement/ldoge.webp" title="housing">
         {{else if infrastructure}}
             <img class="km-structure-type" src="icons/environment/settlement/well.webp"
                  title="infrastructure">
-        {{else}}
-            <img class="km-structure-type" src="icons/environment/settlement/gazebo.webp" title="Building">
         {{/if}}</h2>
         <a class="km-structure-link" href="#" data-uuid="{{uuid}}">
             <img class="km-lots" src="modules/pf2e-kingmaker-tools/img/settlements/block.webp">
@@ -42,13 +40,9 @@
                          src="icons/commodities/gems/gem-cluster-purple.webp" alt="luxuries"></li>{{/if}}
         </ul>
         <div class="km-structure-build">
-            <ul {{#if lacksProficiency}}title="Kingdom Lacks Proficiency" class="error"{{/if}}>
-                {{#each skills}}
-                    <li>{{this}}</li>
-                {{/each}}
-            </ul>
-            <button type="button" class="km-build-structure-dialog" data-id="{{id}}"
-                    {{#if disableBuild}}disabled{{/if}}>DC {{dc}} <i
+            <button type="button" class="km-build-structure-dialog{{#if lacksProficiency}} error{{/if}}"
+                    data-id="{{id}}" {{#if
+                    lacksProficiency}}title="Kingdom Lacks Proficiency: {{proficiencyRequirements}}" {{/if}}>Build <i
                     class="fa-solid fa-hammer"></i></button>
         </div>
     </div>

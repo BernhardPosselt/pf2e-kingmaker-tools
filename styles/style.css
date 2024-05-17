@@ -472,6 +472,7 @@ td.skill-value {
             padding: 5px;
             color: #fff;
             margin: 0;
+            line-height: 25px;
         }
     }
 
@@ -513,7 +514,7 @@ td.skill-value {
 
     .km-structure-cost {
         display: flex;
-        gap: 6px;
+        gap: 8px;
         margin: 0;
         padding: 5px;
         justify-content: center;
@@ -541,15 +542,6 @@ td.skill-value {
         align-items: center;
         justify-content: space-between;
         gap: 5px;
-
-        ul {
-            margin: 0;
-            padding: 5px;
-        }
-
-        button {
-            width: auto;
-        }
     }
 }
 
@@ -670,7 +662,7 @@ td.skill-value {
     }
 
     .error {
-        color: red;
+        color: #a71111;
         text-align: center;
     }
 }

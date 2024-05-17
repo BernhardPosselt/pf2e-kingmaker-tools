@@ -361,16 +361,17 @@ class StructureBrowserApp extends FormApplication<
         return await Promise.all(structures.map(async (structure) => {
             const link = await TextEditor.enrichHTML(createUUIDLink(structure.actor.uuid, structure.name));
             const lacksProficiency = !checkProficiency(structure, this.kingdom);
+            const skills = structure.construction?.skills.map(s => {
+                const rank = s.proficiencyRank ? ` (${rankToLabel(s.proficiencyRank)})` : '';
+                const label = unslugify(s.skill);
+                return label + rank;
+            }) ?? [];
             return {
                 link: link,
                 name: structure.name,
                 uuid: structure.actor.uuid,
                 dc: this.getStructureDC(structure),
-                skills: structure.construction?.skills.map(s => {
-                    const rank = s.proficiencyRank ? ` (${rankToLabel(s.proficiencyRank)})` : '';
-                    const label = unslugify(s.skill);
-                    return label + rank;
-                }) ?? [],
+                skills,
                 lacksProficiency,
                 disableBuild: lacksProficiency && !getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements'),
                 lumber: structure.construction?.lumber,
@@ -388,6 +389,7 @@ class StructureBrowserApp extends FormApplication<
                 img: structure.actor.img,
                 residential: structure.traits?.includes('residential') ?? false,
                 infrastructure: structure.traits?.includes('infrastructure') ?? false,
+                proficiencyRequirements: skills.join(' or '),
             };
         }));
     }
