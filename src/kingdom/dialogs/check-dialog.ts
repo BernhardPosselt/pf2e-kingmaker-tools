@@ -294,7 +294,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
     protected async _updateObject(event: Event, formData: any): Promise<void> {
-        const data = expandObject(formData) as CheckFormData;
+        const data = foundry.utils.expandObject(formData) as CheckFormData;
         console.log(data);
         this.selectedSkill = data.selectedSkill;
         this.dc = data.dc;

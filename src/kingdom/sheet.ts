@@ -373,7 +373,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     override async _updateObject(event: Event, formData: any): Promise<void> {
         console.log(formData);
         const milestones = this.getKingdom().milestones;
-        const kingdom = expandObject(formData);
+        const kingdom = foundry.utils.expandObject(formData);
         kingdom.groups = unpackFormArray(kingdom.groups);
         kingdom.feats = unpackFormArray(kingdom.feats);
         kingdom.bonusFeats = unpackFormArray(kingdom.bonusFeats);

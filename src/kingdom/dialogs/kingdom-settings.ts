@@ -146,7 +146,7 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
     protected async _updateObject(event: Event, formData: object): Promise<void> {
         this.data = {
             ...this.data,
-            ...expandObject(formData) as KingdomSettingData,
+            ...foundry.utils.expandObject(formData) as KingdomSettingData,
         };
         this.render();
         console.log(this.data);
