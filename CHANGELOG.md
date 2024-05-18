@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Support for Foundry V12
 
+### Changed
+
+* Make structure browser prettier
+
 ### Removed
 
 * Remove army implementation
