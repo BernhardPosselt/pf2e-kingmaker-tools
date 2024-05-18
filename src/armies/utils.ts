@@ -45,8 +45,7 @@ export function calculateTotalArmyConsumption(game: Game): number {
             });
         });
     distinctBy(actors, (a) => a.uuid)
-        .forEach(actor => {
-            consumption.push((actor as unknown as ArmyActor).system.consumption);
-        });
+        .map(a => (a as unknown as ArmyActor).system.consumption ?? 0)
+        .forEach(c => consumption.push(c));
     return sum(consumption);
 }

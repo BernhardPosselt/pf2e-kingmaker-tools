@@ -135,6 +135,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const kingdomData = this.getKingdom();
         this.object = kingdomData;
         const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
+        const autoCalculateArmyConsumption = getBooleanSetting(this.game, 'autoCalculateArmyConsumption');
         const {size: kingdomSize, workSites} = getStolenLandsData(this.game, automateResourceMode, kingdomData);
         const sizeData = getSizeData(kingdomSize);
         const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
@@ -212,6 +213,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             activeSettlement: kingdomData.activeSettlement,
             supernaturalSolutions: kingdomData.supernaturalSolutions,
             creativeSolutions: kingdomData.creativeSolutions,
+            autoCalculateArmyConsumption,
             levels: toLabelAndValue(levels),
             settlementConsumption,
             totalConsumption,

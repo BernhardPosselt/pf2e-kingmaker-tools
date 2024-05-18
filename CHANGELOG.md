@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Make structure browser prettier
 
+### Fixed
+
+* Ignore unlinked armies when calculating army consumption
+* disable army consumption input when auto calculating army consumption
+
 ### Removed
 
 * Remove army implementation

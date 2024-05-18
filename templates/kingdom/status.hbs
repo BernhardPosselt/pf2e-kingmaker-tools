@@ -111,7 +111,8 @@
                 <input type="number" value="{{farmlands}}" name="workSites.farmlands.quantity">{{/if}}</td>
             <td>{{#if automateResources}}{{food}}{{else}}
                 <input type="number" value="{{food}}" name="workSites.farmlands.resources">{{/if}}</td>
-            <td><input type="number" value="{{consumption.armies}}" name="consumption.armies"></td>
+            <td><input type="number" value="{{consumption.armies}}" name="consumption.armies"
+                       {{#if autoCalculateArmyConsumption}}disabled{{/if}}></td>
             <td><input type="number" value="{{consumption.now}}" name="consumption.now"></td>
             <td><input type="number" value="{{consumption.next}}" name="consumption.next"></td>
         </tr>

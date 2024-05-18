@@ -3,6 +3,10 @@ import TerserPlugin from 'terser-webpack-plugin';
 
 const config: Configuration = {
     entry: './src/index.ts',
+    performance: {
+        maxEntrypointSize: 2097152,
+        maxAssetSize: 2097152,
+    },
     optimization: {
         minimizer: [new TerserPlugin({
             terserOptions: {
