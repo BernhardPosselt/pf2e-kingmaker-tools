@@ -1,28 +1,22 @@
 <div class="actor-wrapper">
-    <header class="actor-header" {{#if actor.favoriteMealUuid}}data-uuid="{{actor.favoriteMealUuid}}"{{/if}}>Favorite Meal</header>
+    <header class="actor-header" {{#if actor.favoriteMealUuid}}data-uuid="{{actor.favoriteMealUuid}}"{{/if}}>Favorite
+        Meal
+    </header>
     <div class="actor-subheader">
         <select name="actorFavoriteMeal.{{actor.uuid}}">
-            {{#select actor.favoriteMeal}}
-                <option>-</option>
-                {{#each knownRecipes}}
-                    <option value="{{this}}">{{this}}</option>
-                {{/each}}
-            {{/select}}
+            {{selectOptions knownRecipes selected=actor.favoriteMeal blank="-"}}
         </select>
     </div>
     <div class="actor-image-container">
         <img src="{{actor.image}}" class="actor-image" data-uuid="{{actor.uuid}}">
     </div>
     <div class="actor-check">
-        <button type="button" class="subsist" data-uuid="{{actor.uuid}}">Subsist <i class="fa-solid fa-dice-d20"></i></button>
+        <button type="button" class="subsist" data-uuid="{{actor.uuid}}">Subsist <i class="fa-solid fa-dice-d20"></i>
+        </button>
     </div>
     <div class="actor-subheader">
         <select name="actorChosenMeal.{{actor.uuid}}">
-            {{#select actor.chosenMeal}}
-                <option value="meal">Meal</option>
-                <option value="rationsOrSubsistence">Rations/Subsistence</option>
-                <option value="nothing">Nothing</option>
-            {{/select}}
+            {{selectOptions mealChoices selected=actor.chosenMeal}}
         </select>
     </div>
 </div>

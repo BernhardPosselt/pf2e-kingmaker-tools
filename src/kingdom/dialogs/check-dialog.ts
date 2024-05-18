@@ -9,12 +9,12 @@ import {
     ModifierType,
     ModifierWithId,
 } from '../modifiers';
-import {getActivitySkills, KingdomPhase} from '../data/activities';
+import {allKingdomPhases, getActivitySkills, KingdomPhase} from '../data/activities';
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers} from '../skills';
 import {getControlDC, hasFeat, Kingdom, SkillRanks} from '../data/kingdom';
 import {getCompanionSkillUnlocks, getOverrideUnlockCompanionNames} from '../data/companions';
-import {capitalize, encodeJson, unslugify} from '../../utils';
+import {capitalize, encodeJson, LabelAndValue, rollModeChoices, toLabelAndValue, unslugify} from '../../utils';
 import {getKingdomActivitiesById, KingdomActivityById} from '../data/activityData';
 import {cooperativeLeadership, rollCheck} from '../rolls';
 import {
@@ -48,7 +48,7 @@ export interface CheckDialogFeatOptions {
 }
 
 interface CheckFormData {
-    phase: KingdomPhase | '-';
+    phase: KingdomPhase;
     dc: number;
     selectedSkill: Skill;
     customModifiers: CustomModifiers;
@@ -97,7 +97,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private kingdom: Kingdom;
     private selectedSkill: Skill;
     private dc: number;
-    private phase: KingdomPhase | undefined;
+    private phase: KingdomPhase = 'event';
     private customModifiers: CustomModifiers = {
         item: {bonus: 0, penalty: 0},
         circumstance: {bonus: 0, penalty: 0},
@@ -256,6 +256,9 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             supernaturalSolutionModifier: supernaturalSolutionModifier.total.value,
             modifierBreakdown,
             rollMode: this.rollMode,
+            rollModeChoices: rollModeChoices,
+            phases: toLabelAndValue([...allKingdomPhases], {capitalizeLabel: true}),
+            overrides: toLabelAndValue(['enabled', 'disabled'], {emptyChoice: '-', capitalizeLabel: true}),
         };
     }
 
@@ -291,11 +294,11 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
     protected async _updateObject(event: Event, formData: any): Promise<void> {
-        const data = expandObject(formData) as CheckFormData;
+        const data = foundry.utils.expandObject(formData) as CheckFormData;
         console.log(data);
         this.selectedSkill = data.selectedSkill;
         this.dc = data.dc;
-        this.phase = data.phase === '-' ? undefined : data.phase;
+        this.phase = data.phase;
         this.rollMode = data.rollMode;
         this.customModifiers = this.homogenize(data.customModifiers);
         this.modifierOverrides = (Object.entries(data.overrideModifiers ?? {}) as [string, string][])
@@ -388,7 +391,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     }
 
 
-    private createSelectableSkills(skillModifiers: Record<Skill, TotalAndModifiers>): object {
+    private createSelectableSkills(skillModifiers: Record<Skill, TotalAndModifiers>): LabelAndValue[] {
         return Object.entries(skillModifiers).map(([skill, data]) => {
             const value = data.total.value;
             const modifier = value >= 0 ? `+${value}` : value;

@@ -16,11 +16,7 @@
                 <td class="at-war-column"><input type="checkbox" {{checked atWar}} name="groups.{{@index}}.atWar"></td>
                 <td>
                     <select name="groups.{{@index}}.relations">
-                        {{#select relations}}
-                            {{#each ../groupRelationTypes}}
-                                <option value="{{value}}">{{label}}</option>
-                            {{/each}}
-                        {{/select}}
+                        {{selectOptions ../groupRelationTypes selected=relations}}
                     </select>
                 </td>
                 <td>

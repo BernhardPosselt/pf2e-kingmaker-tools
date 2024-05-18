@@ -19,7 +19,7 @@ import {
     Settlement,
     WorkSites,
 } from './data/kingdom';
-import {capitalize, clamped, isNonNullable, unpackFormArray, unslugify} from '../utils';
+import {capitalize, clamped, isNonNullable, range, toLabelAndValue, unpackFormArray, unslugify} from '../utils';
 import {
     getActiveSettlementStructureResult,
     getAllMergedSettlements,
@@ -104,7 +104,7 @@ function createEffects(modifiers: Modifier[]): Effect[] {
 }
 
 
-class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions, object, null> {
+class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions, object, Kingdom> {
     static override get defaultOptions(): FormApplicationOptions {
         const options = super.defaultOptions;
         options.id = 'kingdom-app';
@@ -123,7 +123,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private readonly game: Game;
     private nav: KingdomTab = 'turn';
 
-    constructor(object: null, options: Partial<FormApplicationOptions> & KingdomOptions) {
+    constructor(object: Kingdom, options: Partial<FormApplicationOptions> & KingdomOptions) {
         super(object, options);
         this.game = options.game;
         this.sheetActor = options.sheetActor;
@@ -133,6 +133,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     override async getData(): Promise<object> {
         const isGM = this.game.user?.isGM ?? false;
         const kingdomData = this.getKingdom();
+        this.object = kingdomData;
         const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
         const {size: kingdomSize, workSites} = getStolenLandsData(this.game, automateResourceMode, kingdomData);
         const sizeData = getSizeData(kingdomSize);
@@ -176,6 +177,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const showRealmData = automateResourceMode === 'kingmaker'
             || automateResourceMode === 'manual'
             || (isNonNullable(kingdomData.realmSceneId) && this.game.scenes?.find(s => s.id === kingdomData.realmSceneId) !== undefined);
+        console.log(kingdomData);
         return {
             notes: {
                 gm: await TextEditor.enrichHTML(kingdomData.notes.gm),
@@ -210,7 +212,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             activeSettlement: kingdomData.activeSettlement,
             supernaturalSolutions: kingdomData.supernaturalSolutions,
             creativeSolutions: kingdomData.creativeSolutions,
-            levels,
+            levels: toLabelAndValue(levels),
             settlementConsumption,
             totalConsumption,
             farmSurplus,
@@ -259,7 +261,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 {label: 'NPC', value: 'npc'},
                 {label: 'Companion', value: 'companion'},
             ],
-            companions: allCompanions,
+            companions: toLabelAndValue([...allCompanions]),
+            fameValues: toLabelAndValue(range(0, 4)),
+            aspirations: [{value: 'famous', label: 'Fame'}, {value: 'infamous', label: 'Infamy'}],
             settlements: kingdomData.settlements
                 .map(settlement => getSettlement(this.game, kingdomData, settlement.sceneId))
                 .filter(settlement => settlement !== undefined)
@@ -369,7 +373,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     override async _updateObject(event: Event, formData: any): Promise<void> {
         console.log(formData);
         const milestones = this.getKingdom().milestones;
-        const kingdom = expandObject(formData);
+        const kingdom = foundry.utils.expandObject(formData);
         kingdom.groups = unpackFormArray(kingdom.groups);
         kingdom.feats = unpackFormArray(kingdom.feats);
         kingdom.bonusFeats = unpackFormArray(kingdom.bonusFeats);
@@ -1044,7 +1048,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             }
         }
         return {
-            featIds: Object.keys(allFeatsByName),
+            featIds: toLabelAndValue(Object.keys(allFeatsByName)),
             levelFeats: levelFeats,
             bonusFeats: bonusFeats
                 .filter(feat => feat.id in allFeatsByName)
@@ -1176,7 +1180,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 export async function showKingdom(game: Game): Promise<void> {
     const sheetActor = game?.actors?.find(a => a.name === 'Kingdom Sheet');
     if (sheetActor) {
-        new KingdomApp(null, {game, sheetActor}).render(true);
+        const obj = getKingdom(sheetActor);
+        new KingdomApp(obj, {game, sheetActor}).render(true);
     } else {
         setupDialog(game, 'Kingdom', async () => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment

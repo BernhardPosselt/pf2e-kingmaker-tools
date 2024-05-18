@@ -15,11 +15,7 @@
                 <div>
                     <label for="region-input">Region:</label>
                     <select name="currentRegion" id="region-input" {{#if isUser}}disabled{{/if}}>
-                        {{#select currentRegion}}
-                            {{#each regions}}
-                                <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        {{/select}}
+                        {{selectOptions regions selected=currentRegion}}
                     </select>
                 </div>
                 <div>
@@ -129,7 +125,7 @@
         <ul class="camping-actors">
             {{#each actorMeals}}
                 <li class="eating-actor" data-actor-uuid="{{uuid}}">
-                    {{> modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs actor=this knownRecipes=../knownFavoriteRecipes}}
+                    {{> modules/pf2e-kingmaker-tools/templates/camping/eating.partial.hbs actor=this knownRecipes=../knownFavoriteRecipes mealChoices=../mealChoices}}
                 </li>
             {{/each}}
         </ul>
@@ -171,11 +167,7 @@
                 <div>
                     <label>Recipe
                         <select name="chosenMeal">
-                            {{#select chosenMeal}}
-                                {{#each knownRecipes}}
-                                    <option value="{{this}}">{{this}}</option>
-                                {{/each}}
-                            {{/select}}
+                            {{selectOptions knownRecipes selected=chosenMeal}}
                         </select>
                     </label>
                     <button type="button" class="recipe-info" title="Recipe Info"><i class="fa-solid fa-question"></i>
@@ -184,11 +176,7 @@
                 <div>
                     <label>Skill
                         <select name="cookingSkill">
-                            {{#select cookingSkill}}
-                                {{#each cookingSkills}}
-                                    <option value="{{value}}">{{label}}</option>
-                                {{/each}}
-                            {{/select}}
+                            {{selectOptions cookingSkills selected=cookingSkill}}
                         </select>
                     </label>
                     <span><span class="label">DC</span> {{chosenMealDc}}</span>
@@ -198,12 +186,7 @@
                 <div>
                     <label>Degree
                         <select name="mealDegreeOfSuccess">
-                            {{#select mealDegreeOfSuccess}}
-                                <option>-</option>
-                                {{#each degreesOfSuccesses}}
-                                    <option value="{{value}}">{{label}}</option>
-                                {{/each}}
-                            {{/select}}
+                            {{selectOptions degreesOfSuccesses selected=mealDegreeOfSuccess}}
                         </select>
                     </label>
                     <button type="button" title="Apply Meal Effects" class="eat-food" {{#if isUser}}disabled{{/if}}><i

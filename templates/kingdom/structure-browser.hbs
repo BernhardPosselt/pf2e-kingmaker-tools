@@ -3,11 +3,7 @@
         {{#if activeSettlement}}
             <h2>Active Settlement</h2>
             <select name="activeSettlement">
-                {{#select activeSettlement}}
-                    {{#each settlements}}
-                        <option value="{{value}}">{{label}}</option>
-                    {{/each}}
-                {{/select}}
+                {{selectOptions settlements selected=activeSettlement}}
             </select>
         {{/if}}
         <h2>Filters</h2>
@@ -109,25 +105,9 @@
                     ({{constructableBuildings.upgradable}})</a>
                 <a data-tab="free" class="{{#if freeTab}}active{{/if}}">Free ({{constructableBuildings.free}})</a>
             </nav>
-            <table class="km-table">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Lots</th>
-                    <th>Skills</th>
-                    <th>DC</th>
-                    <th>RP</th>
-                    <th>Lumber</th>
-                    <th>Stone</th>
-                    <th>Ore</th>
-                    <th>Luxuries</th>
-                    <th>Build</th>
-                </tr>
-                </thead>
-                <tbody>
+            <div class="km-structure-list">
                 {{> modules/pf2e-kingmaker-tools/templates/kingdom/structure-browser-item.hbs structures=structures}}
-                </tbody>
-            </table>
+            </div>
         {{/if}}
     </div>
 </form>

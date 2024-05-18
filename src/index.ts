@@ -20,7 +20,6 @@ import {getKingdom} from './kingdom/storage';
 import {addOngoingEvent, changeDegree, parseUpgradeMeta, reRoll} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
 import {StringDegreeOfSuccess} from './degree-of-success';
-import {editArmyStatistics} from './armies/sheet';
 import {openCampingSheet} from './camping/sheet';
 import {bindCampingChatEventListeners} from './camping/chat';
 import {getDiffListeners} from './camping/effect-syncing';
@@ -30,7 +29,6 @@ import {addDiscoverSpecialMealResult, addHuntAndGatherResult} from './camping/ea
 import {getActorByUuid} from './camping/actor';
 import {checkBeginCombat, CombatUpdate, showSetSceneCombatPlaylistDialog, stopCombat} from './camping/combat-tracks';
 import {migrate} from './migrations';
-import {onCreateArmyItem, onPostUpdateArmy, onPreUpdateArmy, updateAmmunition} from './armies/hooks';
 import {updateKingdomArmyConsumption} from './armies/utils';
 import {openJournal} from './foundry-utils';
 import {structureTokenMappingDialog} from './kingdom/dialogs/structure-token-mapping-dialog';
@@ -73,7 +71,6 @@ Hooks.on('ready', async () => {
                 awardXpMacro: showAwardXPDialog.bind(null, game),
                 resetHeroPointsMacro: resetHeroPoints.bind(null, game),
                 awardHeroPointsMacro: awardHeroPoints.bind(null, game),
-                editArmyStatisticsMacro: (actor: Actor): Promise<void> => editArmyStatistics(gameInstance, actor),
                 /* eslint-disable @typescript-eslint/no-explicit-any */
                 openCampingSheet: (): void => openCampingSheet(gameInstance),
                 rollExplorationSkillCheck: async (skill: string, effect: string): Promise<void> => {
@@ -385,11 +382,6 @@ Hooks.on('ready', async () => {
         });
         Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => checkBeginCombat(gameInstance, combat, update));
         Hooks.on('deleteCombat', (combat: StoredDocument<Combat>) => stopCombat(gameInstance, combat));
-        // armies
-        Hooks.on('preUpdateActor', (actor: StoredDocument<Actor>, update: Partial<Actor>) => onPreUpdateArmy(gameInstance, actor, update));
-        Hooks.on('updateActor', (actor: StoredDocument<Actor>, update: Partial<Actor>) => onPostUpdateArmy(gameInstance, actor, update));
-        Hooks.on('createItem', (item: StoredDocument<Item>) => onCreateArmyItem(gameInstance, item));
-        Hooks.on('preUpdateCombat', (combat: StoredDocument<Combat>, update: CombatUpdate) => updateAmmunition(gameInstance, combat, update));
         // army consumption
         const updateConsumption = async (actor: Actor | null): Promise<void> => {
             await updateKingdomArmyConsumption({

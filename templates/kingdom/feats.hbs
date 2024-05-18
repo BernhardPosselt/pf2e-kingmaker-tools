@@ -13,11 +13,7 @@
                 <td>{{takenAt}}<input type="hidden" name="feats.{{@index}}.level" value="{{takenAt}}"></td>
                 <td>
                     <select name="feats.{{@index}}.id">
-                        {{#select name}}
-                            {{#each ../featIds}}
-                                <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        {{/select}}
+                        {{selectOptions ../featIds selected=name}}
                     </select>
                 </td>
                 <td>{{level}}</td>
@@ -52,11 +48,7 @@
             <tr>
                 <td>
                     <select name="bonusFeats.{{@index}}.id">
-                        {{#select name}}
-                            {{#each ../featIds}}
-                                <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        {{/select}}
+                        {{selectOptions ../featIds selected=name}}
                     </select>
                 </td>
                 <td>{{level}}</td>

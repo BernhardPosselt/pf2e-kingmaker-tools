@@ -7,12 +7,7 @@
         <div class="proficiency">
             <select name="all-proficiency" id="km-skill-proficiency-all"
                     {{#unless all}}disabled{{/unless}}>
-                {{#select allProficiency}}
-                    <option>-</option>
-                    {{#each proficiencies}}
-                        <option value="{{value}}">{{label}}</option>
-                    {{/each}}
-                {{/select}}
+                {{selectOptions proficiencies selected=allProficiency blank='-'}}
             </select>
             <label for="km-skill-proficiency-all" hidden>Proficiency</label>
         </div>
@@ -27,12 +22,7 @@
             <div class="proficiency">
                 <select name="{{id}}-proficiency" id="km-skill-proficiency-{{id}}"
                         {{#unless selected}}disabled{{/unless}}>
-                    {{#select proficiency}}
-                        <option>-</option>
-                        {{#each ../proficiencies}}
-                            <option value="{{value}}">{{label}}</option>
-                        {{/each}}
-                    {{/select}}
+                    {{selectOptions ../proficiencies selected=proficiency blank='-'}}
                 </select>
                 <label for="km-skill-proficiency-{{id}}" hidden>Proficiency</label>
             </div>
@@ -50,12 +40,7 @@
                 <div class="proficiency">
                     <select name="{{id}}-lore-proficiency" id="km-lore-proficiency-{{id}}"
                             {{#unless id}}disabled{{/unless}}>
-                        {{#select proficiency}}
-                            <option>-</option>
-                            {{#each ../proficiencies}}
-                                <option value="{{value}}">{{label}}</option>
-                            {{/each}}
-                        {{/select}}
+                        {{selectOptions ../proficiencies selected=proficiency blank='-'}}
                     </select>
                     <label for="km-lore-proficiency-{{id}}" hidden>Proficiency</label>
                 </div>

@@ -19,11 +19,7 @@
             <label for="km-dc">DC</label>
             <select name="dc" id="km-dc">
                 <option value="">-</option>
-                {{#select dc}}
-                    {{#each dcs}}
-                        <option value="{{value}}">{{label}}</option>
-                    {{/each}}
-                {{/select}}
+                {{selectOptions dcs selected=dc}}
             </select>
         </div>
         <div>

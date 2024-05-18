@@ -193,9 +193,9 @@ export function mergePartialObjects<A extends Partial<Record<string, V>>, B exte
     return Object.fromEntries(entries);
 }
 
-export function range(start: number, end: number): number[] {
+export function range(start: number, endExclusive: number): number[] {
     const result = [];
-    for (let i = start; i < end; i += 1) {
+    for (let i = start; i < endExclusive; i += 1) {
         result.push(i);
     }
     return result;
@@ -373,9 +373,28 @@ export function decodeJson(jsonString: string): object {
     return JSON.parse(atob(jsonString));
 }
 
-export const rollModeChoices = {
+export type RollModeChoices = Record<Exclude<RollMode, 'roll'>, string>;
+
+export const rollModeChoices: RollModeChoices = {
     publicroll: 'Public Roll',
     gmroll: 'Private GM Roll',
     blindroll: 'Blind GM Roll',
     selfroll: 'Self Roll',
 };
+
+interface LabelAndValueOptions {
+    capitalizeLabel?: boolean;
+    emptyChoice?: string;
+}
+
+export function toLabelAndValue(values: (string | number)[], {
+    capitalizeLabel = false,
+    emptyChoice,
+}: LabelAndValueOptions = {}): LabelAndValue[] {
+    const empty = emptyChoice === undefined ? [] : [{label: emptyChoice, value: emptyChoice}];
+    const labels = values.map(v => {
+        const label = v.toString();
+        return {label: capitalizeLabel ? label.capitalize() : label, value: v.toString()};
+    });
+    return [...empty, ...labels];
+}

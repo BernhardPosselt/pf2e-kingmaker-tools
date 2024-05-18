@@ -359,7 +359,7 @@ export function processModifiers(
     const copied = modifiers.map((modifier, index) => {
         // make a copy and assign every modifier an id
         return {
-            ...(deepClone(modifier)),
+            ...(foundry.utils.deepClone(modifier)),
             id: `${index}`,
         };
     });

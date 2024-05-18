@@ -1,12 +1,12 @@
 import {Proficiency} from '../camping/data';
 import {
-    capitalize,
     distinctBy,
     isBlank,
     LabelAndValue,
     listenClick,
     loreToLoreSkill,
     slugifyable,
+    toLabelAndValue,
     unslugify,
 } from '../utils';
 import {allTrainedSkillRanks} from '../kingdom/data/skills';
@@ -113,13 +113,7 @@ class SkillDialog extends FormApplication<FormApplicationOptions & SkillDialogOp
                 };
             }), {id: '', label: ''}],
             showLores: this.showLores,
-            proficiencies: allTrainedSkillRanks.map(r => {
-                return {
-                    label: capitalize(r),
-                    value: r,
-                };
-            }),
-            showAll: this.showAll,
+            proficiencies: toLabelAndValue([...allTrainedSkillRanks], {capitalizeLabel: true}), showAll: this.showAll,
             all: this.all,
             allProficiency: this.allProficiency,
             errors: this.validate(),
