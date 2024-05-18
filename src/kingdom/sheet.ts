@@ -535,7 +535,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => {
                 new AddBonusFeatDialog(null, {
                     feats: allFeats,
-                    onOk: (feat) => this.saveKingdom({
+                    onOk: (feat): Promise<void> => this.saveKingdom({
                         bonusFeats: [...this.getKingdom().bonusFeats, feat],
                     }),
                 }).render(true);
