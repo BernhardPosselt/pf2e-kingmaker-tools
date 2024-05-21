@@ -1,12 +1,11 @@
 import {CheckDialog} from './check-dialog';
 import {DegreeOfSuccess} from '../../degree-of-success';
-import {isPlayerArmyActor, isSpecialArmy} from '../../armies/utils';
-import {capitalize, createUUIDLink} from '../../utils';
+import {getPlayerArmies, isPlayerArmyActor, isSpecialArmy} from '../../armies/utils';
+import {capitalize, createUUIDLink, isGm, listenClick} from '../../utils';
 import {Kingdom} from '../data/kingdom';
 
 interface ArmyTacticsBrowserOptions {
     game: Game;
-    armies: (Actor & ArmyActor)[];
     kingdom: Kingdom;
     sheetActor: Actor;
     onRoll: (consumeModifiers: Set<string>) => Promise<void>;
@@ -23,6 +22,7 @@ interface ArmyView {
 
 interface ArmyBrowserData {
     armies: ArmyView[];
+    isGM: boolean;
 }
 
 class ArmyBrowserApp extends FormApplication<
@@ -43,6 +43,7 @@ class ArmyBrowserApp extends FormApplication<
         options.template = 'modules/pf2e-kingmaker-tools/templates/kingdom/army-browser.hbs';
         options.classes = ['kingmaker-tools-app', 'army-browser-app'];
         options.height = 'auto';
+        options.width = 500;
         options.submitOnChange = true;
         options.closeOnSubmit = false;
         return options;
@@ -51,15 +52,20 @@ class ArmyBrowserApp extends FormApplication<
     constructor(options: Partial<ApplicationOptions> & ArmyTacticsBrowserOptions) {
         super(null, options);
         this.game = options.game;
-        this.armies = options.armies;
         this.kingdom = options.kingdom;
         this.sheetActor = options.sheetActor;
         this.onRoll = options.onRoll;
+        this.armies = this.getArmies();
+    }
+
+    private getArmies(): (Actor & ArmyActor)[] {
+        return getPlayerArmies(this.game);
     }
 
     override async getData(): Promise<ArmyBrowserData> {
         return {
             armies: await this.toView(this.armies),
+            isGM: isGm(this.game),
         };
     }
 
@@ -75,6 +81,31 @@ class ArmyBrowserApp extends FormApplication<
                 const item = await fromUuid(uuid) as Item | null;
                 item?.sheet?.render(true);
             }));
+        listenClick($html, '.km-import-basic-armies', async (): Promise<void> => {
+            const parentFolder = await Folder.create({
+                name: 'Player Armies',
+                type: 'Actor',
+                parent: null,
+                color: null,
+            });
+
+            const basicArmies = (await this.game.packs.get('pf2e.kingmaker-bestiary')?.getDocuments() ?? [])
+                .filter(d => (d as Actor).type === 'army' && d.name?.startsWith('Basic')) as Actor[];
+            const importArmies = basicArmies.map(a => {
+                return {
+                    ...a.toObject(),
+                    folder: parentFolder?.id,
+                    permission: 0,
+                    ownership: {
+                        default: 3,
+                    },
+                };
+            });
+            // @ts-ignore
+            await Actor.createDocuments(importArmies);
+            this.armies = this.getArmies();
+            this.render();
+        });
         $html.querySelectorAll('.km-recruit-army')
             .forEach(el => el.addEventListener('click', (ev) => this.trainTactic(ev)));
     }

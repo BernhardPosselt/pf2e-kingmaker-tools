@@ -75,7 +75,7 @@ import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData'
 import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
 import {kingdomSizeDialog} from './dialogs/kingdom-size-dialog';
 import {settlementSizeDialog} from './dialogs/settlement-size-dialog';
-import {getPlayerArmies, getSelectedArmies} from '../armies/utils';
+import {getSelectedArmies} from '../armies/utils';
 import {showArmyTacticsBrowser} from './dialogs/army-tactics-browser';
 import {showArmyBrowser} from './dialogs/army-browser';
 
@@ -1197,10 +1197,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async showArmyBrowser(): Promise<void> {
-        const armies = getPlayerArmies(this.game);
         await showArmyBrowser({
             game: this.game,
-            armies,
             kingdom: this.getKingdom(),
             onRoll: this.consumeModifiers.bind(this),
             sheetActor: this.sheetActor,

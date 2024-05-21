@@ -1,5 +1,7 @@
 <form>
     {{#if armies}}
+        <p><b>Note</b>: only imported and player owned armies will show up in this dialog! For more armies, check out
+            the <b>Armies</b> folder in the <b>Kingmaker</b> Bestiary.</p>
         <table class="km-table">
             <thead>
             <th>Army</th>
@@ -24,6 +26,11 @@
             </tbody>
         </table>
     {{else}}
-        <p>Import armies from the Kingmaker compendium and set the players as owners to make them show up here</p>
+        {{#if isGM}}
+            <button class="km-import-basic-armies">Import Basic Armies</button>
+        {{else}}
+            <p class="km-import-notice">No structures imported, ask your GM to open this window and click on <b>Import
+                Basic Armies</b></p>
+        {{/if}}
     {{/if}}
 </form>
