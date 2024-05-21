@@ -142,7 +142,7 @@ class AddKingdomActivities extends FormApplication<FormApplicationOptions & AddK
             success: this.activity.success?.msg ?? '',
             failure: this.activity.failure?.msg ?? '',
             criticalFailure: this.activity.criticalFailure?.msg ?? '',
-            dcs: ['none', 'control', 'custom', 'enemyScouting', ...range(14, 51).map(i => i.toString())]
+            dcs: ['none', 'control', 'custom', 'scouting', ...range(14, 51).map(i => i.toString())]
                 .map(v => {
                     return {
                         value: v,
