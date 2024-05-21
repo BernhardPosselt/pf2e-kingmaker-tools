@@ -53,8 +53,8 @@ interface AddKingdomActivityOptions {
     homebrewActivities: KingdomActivity[];
 }
 
-function parseDc(value: string): 'control' | 'custom' | 'none' | number {
-    if (value === 'control' || value === 'custom' || value === 'none') {
+function parseDc(value: string): 'control' | 'custom' | 'none' | 'scouting' | number {
+    if (value === 'control' || value === 'custom' || value === 'none' || value === 'scouting') {
         return value;
     } else {
         return parseInt(value, 10) || 0;
