@@ -129,6 +129,10 @@ declare global {
     interface ArmyActor {
         system: {
             consumption: number;
+            scouting: number;
+            traits: {
+                type: 'skirmisher' | 'cavalry' | 'siege' | 'infantry';
+            };
         };
     }
 
@@ -143,24 +147,26 @@ declare global {
         };
     }
 
-    interface Item {
+    interface ItemSystem {
+        traits: {
+            value: string[]
+        };
+        bonus: {
+            value: number
+        };
+        weaponType: {
+            value: string
+        };
+        damageRolls: Record<string, { damage: number }>;
+    }
+
+    interface Item<S = ItemSystem> {
         id: string;
         name: string;
         sourceId: string;
         sheet: ItemSheet;
-        type: 'effect' | 'consumable' | 'melee' | 'weapon' | 'condition';
-        system: {
-            traits: {
-                value: string[]
-            }
-            bonus: {
-                value: number
-            };
-            weaponType: {
-                value: string
-            }
-            damageRolls: Record<string, { damage: number }>
-        };
+        type: 'effect' | 'consumable' | 'melee' | 'weapon' | 'condition' | 'campaignFeature';
+        system: S;
     }
 
     interface Scene {
@@ -172,6 +178,10 @@ declare global {
 
     interface EffectItem {
         isExpired: boolean;
+        slug: string;
+        badge: {
+            value: number;
+        };
     }
 
     interface ConsumableItem {
@@ -265,5 +275,19 @@ declare global {
         tiles?: {
             controlled: Tile[]
         };
+    }
+
+    interface CampaignSystem {
+        campaign: string;
+        category: string;
+        traits: {
+            value: string[];
+        };
+        level: {
+            value: number;
+        };
+    }
+
+    interface CampaignFeaturePF2E extends Item<CampaignSystem> {
     }
 }

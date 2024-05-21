@@ -1,5 +1,5 @@
 import {ActivityResult, KingdomActivity} from '../data/activityData';
-import {blankToUndefined, capitalize, isBlank, LabelAndValue, listenClick, range} from '../../utils';
+import {blankToUndefined, capitalize, deCamelCase, isBlank, LabelAndValue, listenClick, range} from '../../utils';
 import {KingdomPhase} from '../data/activities';
 import {allSkills} from '../data/skills';
 import {skillDialog, SkillView} from '../../common/skills-dialog';
@@ -17,7 +17,7 @@ interface AddActivityData {
     phase: KingdomPhase;
     phases: LabelAndValue[];
     skills: SkillView[];
-    dc: 'control' | 'custom' | 'none' | number;
+    dc: 'control' | 'custom' | 'none' | 'scouting' | number;
     dcs: LabelAndValue[];
     dcAdjustment: number;
     oncePerRound: boolean;
@@ -142,11 +142,11 @@ class AddKingdomActivities extends FormApplication<FormApplicationOptions & AddK
             success: this.activity.success?.msg ?? '',
             failure: this.activity.failure?.msg ?? '',
             criticalFailure: this.activity.criticalFailure?.msg ?? '',
-            dcs: ['none', 'control', 'custom', ...range(14, 51).map(i => i.toString())]
+            dcs: ['none', 'control', 'custom', 'enemyScouting', ...range(14, 51).map(i => i.toString())]
                 .map(v => {
                     return {
                         value: v,
-                        label: capitalize(v),
+                        label: deCamelCase(v),
                     };
                 }),
             skills: Array.from(Object.entries(this.activity.skills))

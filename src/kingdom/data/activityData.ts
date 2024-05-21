@@ -36,7 +36,7 @@ export interface ActivityContent extends ActivityResults {
     special?: string;
     skills: SkillRanks;
     phase: KingdomPhase;
-    dc: 'control' | 'custom' | 'none' | number;
+    dc: 'control' | 'custom' | 'none' | 'scouting' | number;
     dcAdjustment?: number;
     enabled: boolean;
     companion?: Companion;
@@ -1208,7 +1208,7 @@ The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of t
         fortune: false,
         enabled: true,
         phase: 'army',
-        dc: 'custom',
+        dc: 'scouting',
         title: 'Offensive Gambit',
         description: 'You order an attack against an enemy army, causing a war encounter to begin after this Kingdom turn ends. No check is necessary if you wish to engage the enemy without attempting to gain an advantage in initiative. If you want to gain an advantage by surprising the enemy, attempt an Intrigue check. If you want to gain an advantage by intimidating the enemy, attempt a Warfare check. In either case, the DC is equal to the enemy army’s Scouting DC.',
         requirement: 'You have at least one army in the same hex as an enemy army.',
@@ -1538,68 +1538,161 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
             }],
         },
     },
-    'recover-army': {
+    'recover-army-damaged': {
         oncePerRound: false,
         fortune: false,
         enabled: true,
         phase: 'army',
         dc: 'control',
-        title: 'Recover Army',
+        title: 'Recover Army: Damaged',
         description: `
-        When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check (this DC increases by 5 if you are attempting to Recover from the defeated condition); the skill required for the check depends on the affliction:
-        <table>
-        <tr>
-        <th>Condition</th>
-        <th>Skill Check to Recover</th>
-        </tr>
-        <tr>
-            <td>Damaged</td>
-            <td>Defense or Folklore (expert)</td>
-        </tr>
-        <tr>
-            <td>Defeated</td>
-            <td>Politics (master) or Warfare (expert)</td>
-        </tr>
-        <tr>
-            <td>Lost</td>
-            <td>Exploration or Wilderness (expert)</td>
-        </tr>
-        <tr>
-            <td>Mired or Pinned</td>
-            <td>Engineering or Magic (expert)</td>
-        </tr>
-        <tr>
-            <td>Shaken</td>
-            <td>Arts or Warfare (expert)</td>
-        </tr>
-        <tr>
-            <td>Weary</td>
-            <td>Arts (expert) or Defense</td>
-        </tr>                
-        </table>
-        `,
+        When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check.`,
         skills: {
             'defense': 0,
             'folklore': 2,
-            'politics': 3,
-            'warfare': 2,
-            'exploration': 0,
-            'wilderness': 2,
-            'engineering': 0,
-            'magic': 2,
-            'arts': 2,
         },
         criticalSuccess: {
-            msg: 'You reduce the affliction’s value by 2 (or in the case of a damaged army, increase its HP by 2 up to its maximum). If the affliction does not have a value, it is removed.',
+            msg: 'You increase its HP by 2 up to its maximum.',
         },
         success: {
-            msg: 'As critical success but you reduce the affliction’s value by 1 (or in the case of a damaged army, increase its HP by 1 up to its maximum).',
+            msg: 'You increase its HP by 1 up to its maximum.',
         },
         failure: {
             msg: 'You fail to remove the affliction. ',
         },
         criticalFailure: {
-            msg: 'You fail to remove the affliction and your soldier’s lowered morale spreads discontent; ' + gainUnrest(1) + '. If you were attempting to recover a defeated army, the army is destroyed.',
+            msg: `You fail to remove the affliction and your soldier’s lowered morale spreads discontent; ${gainUnrest(1)}.`,
+        },
+    },
+    'recover-army-defeated': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: true,
+        phase: 'army',
+        dc: 'control',
+        dcAdjustment: 5,
+        title: 'Recover Army: Defeated',
+        description: `
+        When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check. The DC is increased by 5.`,
+        skills: {
+            'politics': 3,
+            'warfare': 2,
+        },
+        criticalSuccess: {
+            msg: 'You increase its HP by 2 up to its maximum and remove the affliction.',
+        },
+        success: {
+            msg: 'You increase its HP by 1 up to its maximum and remove the affliction.',
+        },
+        failure: {
+            msg: 'You fail to remove the affliction.',
+        },
+        criticalFailure: {
+            msg: `You fail to remove the affliction and your soldier’s lowered morale spreads discontent; ${gainUnrest(1)}. The army is destroyed.`,
+        },
+    },
+    'recover-army-lost': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: true,
+        phase: 'army',
+        dc: 'control',
+        title: 'Recover Army: Lost',
+        description: `
+        When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check.`,
+        skills: {
+            'exploration': 0,
+            'wilderness': 2,
+        },
+        criticalSuccess: {
+            msg: 'You remove the affliction.',
+        },
+        success: {
+            msg: 'You remove the affliction.',
+        },
+        failure: {
+            msg: 'You fail to remove the affliction.',
+        },
+        criticalFailure: {
+            msg: `You fail to remove the affliction and your soldier’s lowered morale spreads discontent; ${gainUnrest(1)}.`,
+        },
+    },
+    'recover-army-mired-pinned': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: true,
+        phase: 'army',
+        dc: 'control',
+        title: 'Recover Army: Mired or Pinned',
+        description: `
+        When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check.`,
+        skills: {
+            'engineering': 0,
+            'magic': 2,
+        },
+        criticalSuccess: {
+            msg: 'You reduce the affliction’s value by 2. If the affliction does not have a value, it is removed.',
+        },
+        success: {
+            msg: 'As critical success but you reduce the affliction’s value by 1.',
+        },
+        failure: {
+            msg: 'You fail to remove the affliction.',
+        },
+        criticalFailure: {
+            msg: `You fail to remove the affliction and your soldier’s lowered morale spreads discontent; ${gainUnrest(1)}.`,
+        },
+    },
+    'recover-army-shaken': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: true,
+        phase: 'army',
+        dc: 'control',
+        title: 'Recover Army: Shaken',
+        description: `
+        When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check.`,
+        skills: {
+            'arts': 0,
+            'warfare': 2,
+        },
+        criticalSuccess: {
+            msg: 'You reduce the affliction’s value by 2.',
+        },
+        success: {
+            msg: 'You reduce the affliction’s value by 1.',
+        },
+        failure: {
+            msg: 'You fail to remove the affliction.',
+        },
+        criticalFailure: {
+            msg: `You fail to remove the affliction and your soldier’s lowered morale spreads discontent; ${gainUnrest(1)}.`,
+        },
+    },
+    'recover-army-weary': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: true,
+        phase: 'army',
+        dc: 'control',
+        title: 'Recover Army: Weary',
+        description: `
+        When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check.`,
+        skills: {
+            'defense': 0,
+            'arts': 2,
+        },
+        criticalSuccess: {
+            msg: 'You reduce the affliction’s value by 2.',
+        },
+        success: {
+            msg: 'You reduce the affliction’s value by 1.',
+        },
+        failure: {
+            msg: 'You fail to remove the affliction.',
+        },
+        criticalFailure: {
+            msg: `You fail to remove the affliction and your soldier’s lowered morale spreads discontent; ${gainUnrest(1)}.`,
         },
     },
     'recruit-army': {

@@ -75,6 +75,8 @@ import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData'
 import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
 import {kingdomSizeDialog} from './dialogs/kingdom-size-dialog';
 import {settlementSizeDialog} from './dialogs/settlement-size-dialog';
+import {getSelectedArmies} from '../armies/utils';
+import {showArmyTacticsBrowser} from './dialogs/army-tactics-browser';
 
 interface KingdomOptions {
     game: Game;
@@ -451,6 +453,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => await this.claimedHexFeature('refuge'));
         $html.querySelector('#km-open-structure-browser')
             ?.addEventListener('click', async () => await this.showStructureBrowser());
+        $html.querySelector('.kingdom-activity[data-activity=train-army]')
+            ?.addEventListener('click', async () => await this.showTacticsBrowser());
         $html.querySelectorAll('.km-view-settlement-scene')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev: Event): Promise<void> => {
@@ -548,7 +552,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'bonusFeats'));
             });
-        $html.querySelectorAll('.kingdom-activity')
+        $html.querySelectorAll('.kingdom-activity:not([data-activity=train-army])')
             ?.forEach(el => {
                 el.addEventListener('click', async (el) => {
                     const target = el.currentTarget as HTMLButtonElement;
@@ -1175,6 +1179,22 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     && isNonNullable(a.getFlag('pf2e-kingmaker-tools', 'structureData')))
             ?? [];
         await showStructureBrowser(this.game, structureActors, this.getKingdom(), this.sheetActor, this.consumeModifiers.bind(this));
+    }
+
+    private async showTacticsBrowser(): Promise<void> {
+        const armies = getSelectedArmies(this.game);
+        if (armies.length !== 1) {
+            ui.notifications?.error('Please target a single army on the scene (<i class="fa-solid fa-keyboard"></i> <b>t</b>)');
+        } else {
+            const army = armies[0];
+            await showArmyTacticsBrowser({
+                game: this.game,
+                army,
+                kingdom: this.getKingdom(),
+                onRoll: this.consumeModifiers.bind(this),
+                sheetActor: this.sheetActor,
+            });
+        }
     }
 }
 

@@ -23,7 +23,7 @@ export async function getActorItemsByUuid(actor: Actor, type: ItemType, uuids: S
     return getItemsByName(actor, type, names);
 }
 
-export function isEffectItem(item: Item): item is Item & EffectItem {
+export function isEffectItem(item: Item<unknown>): item is Item<ItemSystem> & EffectItem {
     return item.type === 'effect';
 }
 

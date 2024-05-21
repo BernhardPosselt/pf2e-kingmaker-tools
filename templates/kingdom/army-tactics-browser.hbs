@@ -1,0 +1,24 @@
+<form>
+    <table class="km-table">
+        <thead>
+        <th>Tactic</th>
+        <th>Level</th>
+        <th>DC</th>
+        <th>Learn</th>
+        </thead>
+        <tbody>
+        {{#each tactics}}
+            <tr>
+                <td>{{{link}}}</td>
+                <td>{{level}}</td>
+                <td>{{dc}}</td>
+                <td>
+                    <button type="button" class="km-train-tactic" data-id="{{uuid}}"
+                            {{#unless enabled}}disabled{{/unless}}>Learn
+                    </button>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</form>

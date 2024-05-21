@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+* Split Recover Army into separate instances to avoid confusing skill lookups
+
+### Added
+
+* Add Kingdom Sheet automation for Mired, Weary and Scouting DC by selecting tokens
+* Added a Tactics Browser for Train Army
+
 ## [1.0.0-beta1] - 2024-05-18
 
 ### Added

@@ -27,6 +27,7 @@ import {
 } from '../scene';
 import {getBooleanSetting, getStringSetting} from '../../settings';
 import {DegreeOfSuccess} from '../../degree-of-success';
+import {getArmyModifiers, getScoutingDC} from '../../armies/utils';
 
 export type CheckType = 'skill' | 'activity';
 
@@ -157,6 +158,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 this.dc = controlDC;
             } else if (activityDCType === 'custom') {
                 this.dc = 0;
+            } else if (activityDCType === 'scouting') {
+                this.dc = getScoutingDC(this.game);
             } else if (activityDCType === 'none') {
                 throw Error('Can not perform activity with no DC');
             } else {
@@ -190,7 +193,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             activeSettlement?.settlement,
             activeSettlementStructureResult,
             getSettlementsWithoutLandBorders(this.game, this.kingdom),
-        );
+        ).concat(getArmyModifiers(this.game));
         if (hasFeat(this.kingdom, 'Practical Magic (V&K)')) {
             const modifier: Modifier = {
                 skills: ['engineering'],
