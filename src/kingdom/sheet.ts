@@ -75,8 +75,9 @@ import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData'
 import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
 import {kingdomSizeDialog} from './dialogs/kingdom-size-dialog';
 import {settlementSizeDialog} from './dialogs/settlement-size-dialog';
-import {getSelectedArmies} from '../armies/utils';
+import {getPlayerArmies, getSelectedArmies} from '../armies/utils';
 import {showArmyTacticsBrowser} from './dialogs/army-tactics-browser';
+import {showArmyBrowser} from './dialogs/army-browser';
 
 interface KingdomOptions {
     game: Game;
@@ -455,6 +456,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => await this.showStructureBrowser());
         $html.querySelector('.kingdom-activity[data-activity=train-army]')
             ?.addEventListener('click', async () => await this.showTacticsBrowser());
+        $html.querySelector('.kingdom-activity[data-activity=recruit-army]')
+            ?.addEventListener('click', async () => await this.showArmyBrowser());
         $html.querySelectorAll('.km-view-settlement-scene')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev: Event): Promise<void> => {
@@ -552,7 +555,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'bonusFeats'));
             });
-        $html.querySelectorAll('.kingdom-activity:not([data-activity=train-army])')
+        $html.querySelectorAll('.kingdom-activity:not([data-activity=train-army]):not([data-activity=recruit-army])')
             ?.forEach(el => {
                 el.addEventListener('click', async (el) => {
                     const target = el.currentTarget as HTMLButtonElement;
@@ -1195,6 +1198,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 sheetActor: this.sheetActor,
             });
         }
+    }
+
+    private async showArmyBrowser(): Promise<void> {
+        const armies = getPlayerArmies(this.game);
+        await showArmyBrowser({
+            game: this.game,
+            armies,
+            kingdom: this.getKingdom(),
+            onRoll: this.consumeModifiers.bind(this),
+            sheetActor: this.sheetActor,
+        });
     }
 }
 

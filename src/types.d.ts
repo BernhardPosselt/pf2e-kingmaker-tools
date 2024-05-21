@@ -103,6 +103,9 @@ declare global {
             con: { mod: number }
         };
         system: {
+            traits: {
+                rarity: 'common' | 'uncommon' | 'rare' | 'unique';
+            }
             details: {
                 xp: { value: number, max: number },
                 level: { value: number }
@@ -128,6 +131,7 @@ declare global {
 
     interface ArmyActor {
         system: {
+            recruitmentDC: number;
             consumption: number;
             scouting: number;
             traits: {

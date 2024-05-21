@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Add Kingdom Sheet automation for Mired, Weary and Scouting DC by selecting tokens
 * Added a Tactics Browser for Train Army
+* Added Army Browser to Recruit Army
 
 ## [1.0.0-beta1] - 2024-05-18
 

@@ -122,3 +122,15 @@ export async function getArmyTactics(game: Game): Promise<CampaignFeaturePF2E[]>
     const items = (game.items ?? []) as Item[];
     return filterArmyTactics([...documents, ...items]);
 }
+
+export function isSpecialArmy(actor: Actor & ArmyActor): boolean {
+    return actor.system.traits.rarity !== 'common';
+}
+
+export function isPlayerArmyActor(actor: Actor): actor is Actor & ArmyActor {
+    return isArmyActor(actor) && actor.hasPlayerOwner;
+}
+
+export function getPlayerArmies(game: Game): (Actor & ArmyActor)[] {
+    return (game?.actors?.filter(a => isPlayerArmyActor(a)) ?? []) as (Actor & ArmyActor)[];
+}

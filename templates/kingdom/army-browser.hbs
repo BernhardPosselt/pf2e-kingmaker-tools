@@ -1,0 +1,29 @@
+<form>
+    {{#if armies}}
+        <table class="km-table">
+            <thead>
+            <th>Army</th>
+            <th>Type</th>
+            <th>DC</th>
+            <th>Special</th>
+            <th>Recruit</th>
+            </thead>
+            <tbody>
+            {{#each armies}}
+                <tr>
+                    <td>{{{link}}}</td>
+                    <td>{{type}}</td>
+                    <td>{{dc}}</td>
+                    <td>{{#if special}}<i class="fa-solid fa-circle-check"></i>{{/if}}</td>
+                    <td>
+                        <button type="button" class="km-recruit-army" data-id="{{uuid}}">Recruit
+                        </button>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    {{else}}
+        <p>Import armies from the Kingmaker compendium and set the players as owners to make them show up here</p>
+    {{/if}}
+</form>
