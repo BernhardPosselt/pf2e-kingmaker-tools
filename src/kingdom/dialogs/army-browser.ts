@@ -82,6 +82,7 @@ class ArmyBrowserApp extends FormApplication<
                 item?.sheet?.render(true);
             }));
         listenClick($html, '.km-import-basic-armies', async (): Promise<void> => {
+            ui.notifications?.info('Importing Basic Armies into Player Armies folder');
             const parentFolder = await Folder.create({
                 name: 'Player Armies',
                 type: 'Actor',
@@ -103,6 +104,7 @@ class ArmyBrowserApp extends FormApplication<
             });
             // @ts-ignore
             await Actor.createDocuments(importArmies);
+            ui.notifications?.info('Finished Import');
             this.armies = this.getArmies();
             this.render();
         });
