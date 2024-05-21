@@ -1177,11 +1177,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async showStructureBrowser(): Promise<void> {
-        const structureActors = this.game.actors
-                ?.filter(a => a.type === 'npc'
-                    && isNonNullable(a.getFlag('pf2e-kingmaker-tools', 'structureData')))
-            ?? [];
-        await showStructureBrowser(this.game, structureActors, this.getKingdom(), this.sheetActor, this.consumeModifiers.bind(this));
+        await showStructureBrowser(this.game, this.getKingdom(), this.sheetActor, this.consumeModifiers.bind(this));
     }
 
     private async showTacticsBrowser(): Promise<void> {

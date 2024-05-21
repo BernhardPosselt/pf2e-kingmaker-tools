@@ -5,6 +5,7 @@ import {
     escapeHtml,
     groupBy,
     isBlank,
+    isGm,
     isNonNullable,
     LabelAndValue,
     listenClick,
@@ -27,7 +28,6 @@ import {
 interface StructureBrowserOptions {
     game: Game;
     kingdom: Kingdom;
-    structureActors: Actor[];
     sheetActor: Actor;
     onRoll: (consumeModifiers: Set<string>) => Promise<void>,
 }
@@ -72,6 +72,7 @@ interface StructureFilters {
 interface StructureBrowserData extends StructureFilters {
     structures: StructureData[];
     noStructures: boolean;
+    isGM: boolean;
     buildableTab: boolean;
     upgradableTab: boolean;
     freeTab: boolean;
@@ -191,10 +192,17 @@ class StructureBrowserApp extends FormApplication<
         super(null, options);
         this.game = options.game;
         this.level = options.kingdom.level;
-        this.structureActors = options.structureActors;
+        this.structureActors = this.getActors();
         this.kingdom = options.kingdom;
         this.sheetActor = options.sheetActor;
         this.onRoll = options.onRoll;
+    }
+
+    private getActors(): Actor[] {
+        return this.game.actors
+                ?.filter(a => a.type === 'npc'
+                    && isNonNullable(a.getFlag('pf2e-kingmaker-tools', 'structureData')))
+            ?? [];
     }
 
     private async resetFilters(): Promise<StructureFilters> {
@@ -253,6 +261,7 @@ class StructureBrowserApp extends FormApplication<
                 free: freeViewStructures.length,
                 upgradable: upgradableViewStructures.length,
             },
+            isGM: isGm(this.game),
             structures: viewStructures,
             activities: this.filters.activities,
             noStructures: buildableStructures.length === 0,
@@ -305,6 +314,12 @@ class StructureBrowserApp extends FormApplication<
         const $html = html[0];
         listenClick($html, '#km-structure-browser-clear', async (): Promise<void> => {
             this.filters = undefined;
+            this.render();
+        });
+        listenClick($html, '.km-import-structures', async (): Promise<void> => {
+            await this.game.packs.get('pf2e-kingmaker-tools.kingmaker-tools-structures')
+                ?.importAll({folderName: 'Structures'});
+            this.structureActors = this.getActors();
             this.render();
         });
         $html.querySelectorAll('.km-structure-link')
@@ -672,10 +687,9 @@ function formatCosts(costs: Costs): string {
 
 export async function showStructureBrowser(
     game: Game,
-    structureActors: Actor[],
     kingdom: Kingdom,
     sheetActor: Actor,
     onRoll: (consumeModifiers: Set<string>) => Promise<void>,
 ): Promise<void> {
-    new StructureBrowserApp({game, structureActors, kingdom, sheetActor, onRoll}).render(true);
+    new StructureBrowserApp({game, kingdom, sheetActor, onRoll}).render(true);
 }

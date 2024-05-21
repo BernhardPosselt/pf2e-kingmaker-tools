@@ -93,10 +93,14 @@
             </div>
         {{/each}}
     </div>
-    <div id="km-structure-browser-content">
+    <div id="km-structure-browser-content" {{#if noStructures}}class="flex-it"{{/if}}>
         {{#if noStructures}}
-            <p>No structures imported into world! Please import all actors from the Kingmaker Tools <b>Structures</b>
-                compendium and reopen this window!</p>
+            {{#if isGM}}
+                <button class="km-import-structures">Import Structures</button>
+            {{else}}
+                <p class="km-import-notice">No structures imported, ask your GM to open this window and click on <b>Import
+                    Structures</b></p>
+            {{/if}}
         {{else}}
             <nav class="km-nav">
                 <a data-tab="buildable" class="{{#if buildableTab}}active{{/if}}">Buildable

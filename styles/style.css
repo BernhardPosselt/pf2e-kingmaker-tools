@@ -420,11 +420,24 @@ td.skill-value {
     margin-top: 10px;
 }
 
+.flex-it {
+    display: flex;
+}
+
 #km-structure-browser-content {
     --structure-browser-border: #000;
     overflow-y: auto;
     max-height: 100%;
     width: 725px;
+
+    .km-import-structures {
+        margin: auto;
+        width: auto;
+    }
+
+    .km-import-notice {
+        margin: auto;
+    }
 
     .error {
         color: red;

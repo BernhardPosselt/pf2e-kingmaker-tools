@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Split Recover Army into separate instances to avoid confusing skill lookups
+* Add button to import structures in structure browser if none are present
 
 ### Added
 

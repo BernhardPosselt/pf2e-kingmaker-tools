@@ -19,6 +19,10 @@ export function isFirstGm(game: Game): boolean {
     return game?.user?.id === game.users?.find((u) => u.isGM && u.active)?.id;
 }
 
+export function isGm(game: Game): boolean {
+    return game.users?.find((u) => u.isGM && u.active && u.id === game?.user?.id) !== undefined;
+}
+
 export function getLevelBasedDC(level: number): number {
     return 14 + level + Math.floor(level / 3);
 }
