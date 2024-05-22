@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-beta2] - 2024-05-22
+
 ### Changed
 
 * Split Recover Army into separate instances to avoid confusing skill lookups
