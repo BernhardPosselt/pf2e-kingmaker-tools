@@ -84,7 +84,7 @@ class ArmyBrowserApp extends FormApplication<
         listenClick($html, '.km-import-basic-armies', async (): Promise<void> => {
             ui.notifications?.info('Importing Basic Armies into Player Armies folder');
             const parentFolder = await Folder.create({
-                name: 'Player Armies',
+                name: 'Recruitable Armies',
                 type: 'Actor',
                 parent: null,
                 color: null,

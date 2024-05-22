@@ -128,7 +128,7 @@ export function isSpecialArmy(actor: Actor & ArmyActor): boolean {
 }
 
 export function isPlayerArmyActor(actor: Actor): actor is Actor & ArmyActor {
-    return isArmyActor(actor) && actor.hasPlayerOwner;
+    return isArmyActor(actor) && actor.hasPlayerOwner && actor.folder?.name === 'Recruitable Armies';
 }
 
 export function getPlayerArmies(game: Game): (Actor & ArmyActor)[] {
