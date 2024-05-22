@@ -102,6 +102,7 @@ class ArmyBrowserApp extends FormApplication<
                     },
                 };
             });
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             await Actor.createDocuments(importArmies);
             ui.notifications?.info('Finished Import');
