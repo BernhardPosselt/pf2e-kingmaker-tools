@@ -3,6 +3,7 @@ import {buildUuids, rollRollTable} from '../roll-tables';
 import {setWeather} from './weather';
 import {eventLevels, getSeason, GolarionMonth, golarionMonths} from '../camping/regions';
 import {MonthNumbers} from 'luxon';
+import {postChatMessage} from '../utils';
 
 
 async function rollOnWeatherEventTable(
@@ -28,7 +29,7 @@ async function rollOnWeatherEventTable(
     } else {
         await table.toMessage(results, {roll: draw.roll, messageOptions: {rollMode}});
         if (rollTwice) {
-            await postMessage('Choose a second weather event!', rollMode);
+            await postChatMessage('Choose a second weather event!', rollMode);
         }
     }
 }
@@ -58,13 +59,6 @@ async function rollCheck(dc: number, flavor: string, rollMode: RollMode): Promis
     return {isSuccess, total: roll.total};
 }
 
-async function postMessage(message: string, rollMode: RollMode): Promise<void> {
-    await ChatMessage.create({
-        content: message,
-        type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-        rollMode,
-    });
-}
 
 export async function rollKingmakerWeather(game: Game): Promise<void> {
     const rollMode = getRollMode(game, 'weatherRollMode');
@@ -117,5 +111,5 @@ async function rollWeather(game: Game, averagePartyLevel: number, weatherHazardR
         }
     }
     await rollWeatherEvent(game, averagePartyLevel, weatherHazardRange, rollMode);
-    await postMessage(message, rollMode);
+    await postChatMessage(message, rollMode);
 }

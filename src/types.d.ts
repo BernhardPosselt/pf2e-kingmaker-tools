@@ -65,7 +65,7 @@ declare global {
         degreeOfSuccess: DegreeOfSuccess;
     }
 
-    export type RollMode = 'publicroll' | 'roll' | 'gmroll' | 'blindroll' | 'selfroll';
+    export type RollMode = 'publicroll' | 'gmroll' | 'blindroll' | 'selfroll';
 
     interface RollOptions {
         dc?: { value: number };

@@ -1,4 +1,6 @@
 import {DegreeOfSuccess} from './degree-of-success';
+import {decode, encode} from 'js-base64';
+import {RollMode} from './settings';
 
 export function addOf(name: string): string {
     if (name.endsWith('s')) {
@@ -110,11 +112,7 @@ export async function postDegreeOfSuccessMessage(
         .filter(m => isNotBlank(m))
         .join(': ');
     if (isNotBlank(message)) {
-        await ChatMessage.create({
-            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-            content: message.trimEnd(),
-            rollMode: messageConfig.rollMode ?? (messageConfig.isPrivate ? 'blindroll' : 'publicroll'),
-        });
+        await postChatMessage(message.trimEnd(), messageConfig.rollMode ?? (messageConfig.isPrivate ? 'blindroll' : 'publicroll'));
     }
 }
 
@@ -136,6 +134,14 @@ export function unpackFormArray<T>(obj: Record<string, T> | undefined | null): T
     } else {
         return [];
     }
+}
+
+export async function postChatMessage(message: string, rollMode?: RollMode): Promise<void> {
+    const msgData = {content: message};
+    if (rollMode) {
+        ChatMessage.applyRollMode(msgData, rollMode);
+    }
+    await ChatMessage.create(msgData);
 }
 
 export function isSlug(word: string): boolean {
@@ -370,11 +376,11 @@ export function splitByWhitespace(text: string): string[] {
 }
 
 export function encodeJson(object: object): string {
-    return btoa(JSON.stringify(object));
+    return encode(JSON.stringify(object));
 }
 
 export function decodeJson(jsonString: string): object {
-    return JSON.parse(atob(jsonString));
+    return JSON.parse(decode(jsonString));
 }
 
 export type RollModeChoices = Record<Exclude<RollMode, 'roll'>, string>;

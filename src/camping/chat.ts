@@ -1,5 +1,5 @@
 import {getActorByUuid} from './actor';
-import {isFirstGm} from '../utils';
+import {isFirstGm, postChatMessage} from '../utils';
 import {getCamping, getCampingActor} from './storage';
 import {getEncounterDC, rollRandomEncounter} from './random-encounters';
 import {
@@ -106,11 +106,7 @@ export async function postDiscoverSpecialMealResult(
 }
 
 export async function checkRandomEncounterMessage(): Promise<void> {
-    await ChatMessage.create({
-        content: '<button class="km-random-encounter" type="button">Check for Random Encounter</button>',
-        type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-        rollMode: 'blindroll',
-    });
+    await postChatMessage('<button class="km-random-encounter" type="button">Check for Random Encounter</button>', 'blindroll');
 }
 
 async function checkForRandomEncounter(game: Game): Promise<void> {

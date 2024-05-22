@@ -19,7 +19,16 @@ import {
     Settlement,
     WorkSites,
 } from './data/kingdom';
-import {capitalize, clamped, isNonNullable, range, toLabelAndValue, unpackFormArray, unslugify} from '../utils';
+import {
+    capitalize,
+    clamped,
+    isNonNullable,
+    postChatMessage,
+    range,
+    toLabelAndValue,
+    unpackFormArray,
+    unslugify,
+} from '../utils';
 import {
     getActiveSettlementStructureResult,
     getAllMergedSettlements,
@@ -852,11 +861,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const roll = await (new Roll('1d20').roll());
         await roll.toMessage({flavor: `Checking for Event on DC ${dc}`}, {rollMode});
         if (roll.total >= dc) {
-            await ChatMessage.create({
-                type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-                content: 'An event occurs, roll a Kingdom Event!',
-                rollMode,
-            });
+            await postChatMessage('An event occurs, roll a Kingdom Event!', rollMode);
             await this.saveKingdom({turnsWithoutEvent: 0});
         } else {
             await this.saveKingdom({turnsWithoutEvent: turnsWithoutEvent + 1});
@@ -870,11 +875,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const roll = await (new Roll('1d20').roll());
         await roll.toMessage({flavor: `Checking for Cult Event on DC ${dc}`}, {rollMode});
         if (roll.total >= dc) {
-            await ChatMessage.create({
-                type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-                content: 'An event occurs, roll a Cult Event!',
-                rollMode,
-            });
+            await postChatMessage('An event occurs, roll a Cult Event!', rollMode);
             await this.saveKingdom({turnsWithoutCultEvent: 0});
         } else {
             await this.saveKingdom({turnsWithoutCultEvent: turnsWithoutCultEvent + 1});

@@ -1,21 +1,3 @@
-2024/05/22-09:35:50.030180 73ad01e006c0 Recovering log #993
-2024/05/22-09:35:50.048261 73ad01e006c0 Delete type=0 #993
-2024/05/22-09:35:50.048344 73ad01e006c0 Delete type=3 #991
-2024/05/22-09:35:52.324615 73acef0006c0 Compacting 1@1 + 1@2 files
-2024/05/22-09:35:52.336031 73acef0006c0 Generated table #996@1: 185 keys, 203450 bytes
-2024/05/22-09:35:52.336046 73acef0006c0 Compacted 1@1 + 1@2 files => 203450 bytes
-2024/05/22-09:35:52.348264 73acef0006c0 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/05/22-09:35:52.348362 73acef0006c0 Delete type=2 #986
-2024/05/22-09:35:52.348527 73acef0006c0 Delete type=2 #992
-2024/05/22-09:45:44.963510 73acef0006c0 Level-0 table #998: started
-2024/05/22-09:45:44.972934 73acef0006c0 Level-0 table #998: 125611 bytes OK
-2024/05/22-09:45:44.986648 73acef0006c0 Delete type=0 #995
-2024/05/22-09:45:44.986906 73acef0006c0 Manual compaction at level-0 from '!journal!6p7DKWP4RVd4vNt2' @ 72057594037927935 : 1 .. '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 0 : 0; will stop at (end)
-2024/05/22-09:45:44.986961 73acef0006c0 Manual compaction at level-1 from '!journal!6p7DKWP4RVd4vNt2' @ 72057594037927935 : 1 .. '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 0 : 0; will stop at '!journal.pages!iAQCUYEAq4Dy8uCY.ty6BS5eSI7ScfVBk' @ 1704 : 1
-2024/05/22-09:45:44.986971 73acef0006c0 Compacting 1@1 + 1@2 files
-2024/05/22-09:45:44.997974 73acef0006c0 Generated table #999@1: 185 keys, 203856 bytes
-2024/05/22-09:45:44.997995 73acef0006c0 Compacted 1@1 + 1@2 files => 203856 bytes
-2024/05/22-09:45:45.011816 73acef0006c0 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/05/22-09:45:45.011933 73acef0006c0 Delete type=2 #996
-2024/05/22-09:45:45.012121 73acef0006c0 Delete type=2 #998
-2024/05/22-09:45:45.068374 73acef0006c0 Manual compaction at level-1 from '!journal.pages!iAQCUYEAq4Dy8uCY.ty6BS5eSI7ScfVBk' @ 1704 : 1 .. '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 0 : 0; will stop at (end)
+2024/05/22-11:08:33.690463 7d16d44006c0 Recovering log #997
+2024/05/22-11:08:33.710311 7d16d44006c0 Delete type=0 #997
+2024/05/22-11:08:33.710398 7d16d44006c0 Delete type=3 #994

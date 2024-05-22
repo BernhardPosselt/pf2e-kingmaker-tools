@@ -1,4 +1,4 @@
-import {parseNumberInput} from './utils';
+import {parseNumberInput, postChatMessage} from './utils';
 
 async function resetPoints(game: Game, actors: Actor[]): Promise<void> {
     for (const actor of actors) {
@@ -6,12 +6,7 @@ async function resetPoints(game: Game, actors: Actor[]): Promise<void> {
             'system.resources.heroPoints.value': 1,
         });
     }
-    await ChatMessage.create({
-        user: game?.user?.id,
-        speaker: ChatMessage.getSpeaker(),
-        content: 'Reset hero point values to 1',
-        type: CONST.CHAT_MESSAGE_TYPES.OTHER,
-    });
+    await postChatMessage('Reset hero point values to 1');
 }
 
 async function awardPoints(game: Game, points: { actor: Actor, points: number }[]): Promise<void> {
@@ -24,12 +19,7 @@ async function awardPoints(game: Game, points: { actor: Actor, points: number }[
     const content = `<p>Awarded Hero Points:</p><ul>${points.map(p => {
         return `<li><b>${p.actor.name}</b>: ${p.points}</li>`;
     }).join('\n')}</ul>`;
-    await ChatMessage.create({
-        user: game?.user?.id,
-        speaker: ChatMessage.getSpeaker(),
-        content,
-        type: CONST.CHAT_MESSAGE_TYPES.OTHER,
-    });
+    await postChatMessage(content);
 }
 
 export async function awardHeroPoints(game: Game): Promise<void> {
@@ -109,12 +99,7 @@ async function awardXP(game: Game, actors: Actor[], amount: number): Promise<voi
             'system.details.level.value': currentLevel + addLevels,
         });
     }
-    await ChatMessage.create({
-        user: game?.user?.id,
-        speaker: ChatMessage.getSpeaker(),
-        content: `Players gained ${amount} XP!`,
-        type: CONST.CHAT_MESSAGE_TYPES.OTHER,
-    });
+    await postChatMessage(`Players gained ${amount} XP!`);
 }
 
 async function awardXPDialog(game: Game, actors: Actor[]): Promise<void> {

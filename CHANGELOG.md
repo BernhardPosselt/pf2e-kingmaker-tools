@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added a Tactics Browser for Train Army
 * Added Army Browser to Recruit Army
 
+### Fixed
+
+* Do not break roll popup when modifiers have non ASCII names
+
 ## [1.0.0-beta1] - 2024-05-18
 
 ### Added

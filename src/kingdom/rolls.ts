@@ -1,6 +1,6 @@
 import {DegreeOfSuccess, degreeToProperty, determineDegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {Skill} from './data/skills';
-import {decodeJson, isNotBlank, postDegreeOfSuccessMessage, unslugify} from '../utils';
+import {decodeJson, encodeJson, isNotBlank, postChatMessage, postDegreeOfSuccessMessage, unslugify} from '../utils';
 import {ActivityResults, getKingdomActivitiesById, KingdomActivity} from './data/activityData';
 import {Modifier, modifierToLabel} from './modifiers';
 import {getKingdom, saveKingdom} from './storage';
@@ -38,8 +38,8 @@ export function parseMeta(el: HTMLElement): RollMeta {
         formula: meta.dataset.formula as string,
         modifier: parseInt(meta.dataset.modifier ?? '0', 10),
         rollType: meta.dataset.rollType as RollType,
-        rollOptions: isNotBlank(rollOptions) ? JSON.parse(atob(rollOptions)) : [],
-        additionalChatMessages: isNotBlank(additionalChatMessages) ? JSON.parse(atob(additionalChatMessages)) : [],
+        rollOptions: isNotBlank(rollOptions) ? decodeJson(rollOptions) as string[] : [],
+        additionalChatMessages: isNotBlank(additionalChatMessages) ? decodeJson(additionalChatMessages) as AdditionalChatMessages : [],
         creativeSolutionModifier: parseInt(meta.dataset.creativeSolutionModifier ?? '0', 10),
         supernaturalSolutionModifier: parseInt(meta.dataset.supernaturalSolutionModifier ?? '0', 10),
         modifierBreakdown: isNotBlank(meta.dataset.modifierBreakdown) ? meta.dataset.modifierBreakdown : undefined,
@@ -61,7 +61,7 @@ export function parseUpgradeMeta(el: HTMLElement): ActivityResultMeta {
         activity: meta.dataset.activity!,
         rollMode: meta.dataset.rollMode as RollMode,
         degree: meta.dataset.degree as StringDegreeOfSuccess,
-        additionalChatMessages: isNotBlank(additionalChatMessages) ? JSON.parse(atob(additionalChatMessages)) : [],
+        additionalChatMessages: isNotBlank(additionalChatMessages) ? decodeJson(additionalChatMessages) as AdditionalChatMessages : [],
     };
 }
 
@@ -243,12 +243,8 @@ async function postAdditionalChatMessages(
     const messages = additionalChatMessages
         .map(message => message[degreeOfSuccess])
         .filter(message => isNotBlank(message)) as string[];
-    await Promise.all(messages.map((message) => {
-        return ChatMessage.create({
-            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-            content: message.trimEnd(),
-            rollMode,
-        });
+    await Promise.all(messages.map(async (message) => {
+        await postChatMessage(message.trimEnd(), rollMode);
     }));
 }
 
@@ -282,14 +278,14 @@ export async function rollCheck(
             ${activity === undefined ? '' : `data-activity="${activity.id}"`}
             data-degree="${degreeToProperty(degreeOfSuccess)}"
             data-skill="${skill}"
-            data-roll-options="${rollOptions ? btoa(JSON.stringify(rollOptions)) : ''}"
+            data-roll-options="${rollOptions ? encodeJson(rollOptions) : ''}"
             data-dc="${dc}"
             data-total="${total}"
             data-modifier-breakdown="${modifierBreakdown ?? ''}"
             data-modifier="${modifier}"
             data-roll-type="${rollType}"
             data-roll-mode="${rollMode}"
-            data-additional-chat-messages="${btoa(JSON.stringify(additionalChatMessages))}"
+            data-additional-chat-messages="${encodeJson(additionalChatMessages)}"
             data-creative-solution-modifier="${creativeSolutionModifier}"
             data-supernatural-solution-modifier="${supernaturalSolutionModifier}"
         ></div>`;
@@ -403,7 +399,7 @@ async function postComplexDegreeOfSuccess(
                 data-roll-mode="${rollMode}" 
                 data-activity="${activity.id}" 
                 data-degree="${resultKey}"
-                data-additional-chat-messages="${btoa(JSON.stringify(additionalChatMessages))}"></div>`;
+                data-additional-chat-messages="${encodeJson(additionalChatMessages)}"></div>`;
         const msg = message;
         const tail = buttons + upgrade;
         const description = `<h3>${activity.title}</h3>${activity.description.trimEnd()}<hr>`;
