@@ -12,7 +12,7 @@ Uses the [Open Gaming License](./OpenGameLicense.md) and [CUP](https://paizo.com
 
 ## Usage
 
-This module ships a journal named **Kingmaker Tools Manual** which includes all of the instructions on how to use this module. You can find it under the compendium tab in the **Kingmaker Tools** > **Journals** compendium.
+This module ships a journal named **Kingmaker Tools Manual** which includes all of the instructions on how to use this module. It should automatically open once you enable the module for the first time. You can find it under the compendium tab in the **Kingmaker Tools** > **Journals** compendium.
 
 ## Installation
 
