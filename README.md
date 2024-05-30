@@ -10,6 +10,10 @@ Uses the [Open Gaming License](./OpenGameLicense.md) and [CUP](https://paizo.com
 > FoundryVTT module is not published, endorsed, or specifically approved by Paizo. For more information about Paizo Inc.
 > and Paizo products, visit paizo.com.
 
+## Usage
+
+This module ships a journal named **Kingmaker Tools Manual** which includes all of the instructions on how to use this module. You can find it under the compendium tab in the **Kingmaker Tools** > **Journals** compendium.
+
 ## Installation
 
 The package is available through the [module registry](https://foundryvtt.com/packages/pf2e-kingmaker-tools)
