@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-beta4] - 2024-06-02
+
+### Fixed
+
+* Fix recover army structure bonuses; you need to manually migrate **recover-army** rule element targets to:
+    * **recover-army-damaged**
+    * **recover-army-defeated**
+    * **recover-army-lost**
+    * **recover-army-mired-pinned**
+    * **recover-army-shaken**
+    * **recover-army-weary**
+
 ## [1.0.0-beta3] - 2024-06-02
 
 ### Fixed

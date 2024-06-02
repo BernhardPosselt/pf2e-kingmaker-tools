@@ -105,6 +105,19 @@ export const magicalItemGroups: ItemGroup[] = ['magical', 'divine', 'occult', 'p
 export const mundaneItemGroups: ItemGroup[] = ['alchemical', 'luxury', 'other'];
 export const itemGroups: ItemGroup[] = mundaneItemGroups.concat(magicalItemGroups);
 
+const recoverArmyIds = [
+    'recover-army-damaged',
+    'recover-army-defeated',
+    'recover-army-lost',
+    'recover-army-mired-pinned',
+    'recover-army-shaken',
+    'recover-army-weary',
+];
+
+function recoverArmyBonus(value: number): ActivityBonusRule[] {
+    return recoverArmyIds.map(activity => ({value, activity}));
+}
+
 export type ItemLevelBonuses = {
     alchemical: number;
     magical: number;
@@ -247,10 +260,7 @@ const structures: Structure[] = [
         activityBonusRules: [{
             value: 1,
             activity: 'garrison-army',
-        }, {
-            value: 1,
-            activity: 'recover-army',
-        }, {
+        }, ...recoverArmyBonus(1), {
             value: 1,
             activity: 'recruit-army',
         }],
@@ -336,10 +346,7 @@ const structures: Structure[] = [
         }, {
             value: 2,
             activity: 'recruit-army',
-        }, {
-            value: 2,
-            activity: 'recover-army',
-        }],
+        }, ...recoverArmyBonus(2)],
         increaseLeadershipActivities: true,
         traits: ['building', 'edifice', 'famous', 'infamous'],
         affectsDowntime: false,
@@ -1206,10 +1213,7 @@ const structures: Structure[] = [
         }, {
             value: 3,
             activity: 'garrison-army',
-        }, {
-            value: 3,
-            activity: 'recover-army',
-        }, {
+        }, ...recoverArmyBonus(3), {
             value: 3,
             activity: 'recruit-army',
         }],
