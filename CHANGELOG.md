@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Fix camping activities not letting you unselect results
+
 ## [1.0.0-beta4] - 2024-06-02
 
 ### Fixed

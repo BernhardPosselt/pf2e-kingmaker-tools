@@ -25,7 +25,7 @@
         <div class="actor-subheader">
             <select name="actorActivityDegreeOfSuccess.{{activity.slug}}" {{#if activity.isSecret}}{{#if
                     isUser}}hidden{{/if}}{{/if}}>
-                {{selectOptions degreesOfSuccesses selected=activity.degreeOfSuccess}}
+                {{selectOptions degreesOfSuccesses selected=activity.degreeOfSuccess blank="-"}}
             </select>
         </div>
     {{/if}}
