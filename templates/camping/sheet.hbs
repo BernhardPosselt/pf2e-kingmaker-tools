@@ -190,7 +190,7 @@
                 <div>
                     <label>Degree
                         <select name="mealDegreeOfSuccess">
-                            {{selectOptions degreesOfSuccesses selected=mealDegreeOfSuccess}}
+                            {{selectOptions degreesOfSuccesses selected=mealDegreeOfSuccess blank="-"}}
                         </select>
                     </label>
                     <button type="button" title="Apply Meal Effects" class="eat-food" {{#if isUser}}disabled{{/if}}><i
