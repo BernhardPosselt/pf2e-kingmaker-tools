@@ -1,6 +1,7 @@
 import {DegreeOfSuccess} from './degree-of-success';
 import {decode, encode} from 'js-base64';
 import {RollMode} from './settings';
+import {isArmyTactic} from './armies/utils';
 
 export function addOf(name: string): string {
     if (name.endsWith('s')) {
@@ -407,4 +408,8 @@ export function toLabelAndValue(values: (string | number)[], {
         return {label: capitalizeLabel ? label.capitalize() : label, value: v.toString()};
     });
     return [...empty, ...labels];
+}
+
+export function hasArmyTactic(actor: Actor, tactic: CampaignFeaturePF2E): boolean {
+    return actor.items.some(i => isArmyTactic(i) && i.name === tactic.name);
 }

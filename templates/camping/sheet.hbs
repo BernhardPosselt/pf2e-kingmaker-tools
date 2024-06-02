@@ -38,7 +38,8 @@
             </div>
         </div>
         <div class="time">
-            <div style="left: {{timeMarkerPositionPx}}px" class="time-marker"></div>
+            <div style="left: {{timeMarkerPositionPx}}px" class="time-marker">{{#if isDay}}
+            <i class="fa-regular fa-sun">{{else}}<i class="fa-regular fa-moon"></i>{{/if}}</i></div>
         </div>
         <div class="region-controls">
             <div class="region-player-controls">
@@ -109,6 +110,9 @@
                     {{> modules/pf2e-kingmaker-tools/templates/camping/activity.partial.hbs activity=this isUser=../isUser degreesOfSuccesses=../degreesOfSuccesses}}
                 </li>
             {{/each}}
+            {{#if needsPrepareCampsite}}
+                <li class="prepare-campsite-notice">Run <b>Prepare Campsite</b> to show additional activities!</li>
+            {{/if}}
         </ul>
 
         <header class="camping-section-header">

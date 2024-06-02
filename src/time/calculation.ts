@@ -149,12 +149,12 @@ export class TimeOfDay implements TimeDiff {
 }
 
 export function getTimeOfDayPercent(time: DateTime): number {
-    const elapsedSeconds = time.second + time.minute * 30 + time.hour * 3600;
-    return Math.floor(elapsedSeconds/(36*24));
+    const elapsedSeconds = time.second + time.minute * 60 + time.hour * 3600;
+    return elapsedSeconds / (36 * 24);
 }
 
 export function isDayOrNight(time: DateTime): 'day' | 'night' {
-    if (time.hour >= 6 && time.hour <18) {
+    if (time.hour >= 6 && time.hour < 18) {
         return 'day';
     } else {
         return 'night';

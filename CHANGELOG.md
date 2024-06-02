@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Do not list already known tactics in army tactic browser
+* Disable roll buttons for camping activities if no actor is set
+* Improve Camping Sheet UI to be easier to use on first run
+
 ## [1.0.0-beta2] - 2024-05-22
 
 ### Changed

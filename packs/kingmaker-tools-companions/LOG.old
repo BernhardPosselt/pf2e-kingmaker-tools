@@ -1,3 +1,21 @@
-2024/05/22-11:08:33.573943 7d16d58006c0 Recovering log #759
-2024/05/22-11:08:33.594034 7d16d58006c0 Delete type=0 #759
-2024/05/22-11:08:33.594140 7d16d58006c0 Delete type=3 #757
+2024/06/02-00:47:58.826798 71cb0be006c0 Recovering log #775
+2024/06/02-00:47:58.845855 71cb0be006c0 Delete type=0 #775
+2024/06/02-00:47:58.845891 71cb0be006c0 Delete type=3 #774
+2024/06/02-00:49:06.712718 71cb01c006c0 Level-0 table #779: started
+2024/06/02-00:49:06.712745 71cb01c006c0 Level-0 table #779: 0 bytes OK
+2024/06/02-00:49:06.725438 71cb01c006c0 Delete type=0 #777
+2024/06/02-00:49:06.744788 71cb01c006c0 Manual compaction at level-0 from '!actors!6qGc3lSaWFTOQavz' @ 72057594037927935 : 1 .. '!actors.items!qJKVBjn6zRF2Q4tG.zjSz8GnFgBqIyT2v' @ 0 : 0; will stop at '!actors.items!qJKVBjn6zRF2Q4tG.zjSz8GnFgBqIyT2v' @ 3040 : 1
+2024/06/02-00:49:06.744793 71cb01c006c0 Compacting 1@0 + 0@1 files
+2024/06/02-00:49:06.754400 71cb01c006c0 Generated table #780@0: 235 keys, 348210 bytes
+2024/06/02-00:49:06.754411 71cb01c006c0 Compacted 1@0 + 0@1 files => 348210 bytes
+2024/06/02-00:49:06.766591 71cb01c006c0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2024/06/02-00:49:06.766732 71cb01c006c0 Delete type=2 #772
+2024/06/02-00:49:06.824611 71cb01c006c0 Manual compaction at level-0 from '!actors.items!qJKVBjn6zRF2Q4tG.zjSz8GnFgBqIyT2v' @ 3040 : 1 .. '!actors.items!qJKVBjn6zRF2Q4tG.zjSz8GnFgBqIyT2v' @ 0 : 0; will stop at (end)
+2024/06/02-00:49:06.857059 71cb01c006c0 Manual compaction at level-1 from '!actors!6qGc3lSaWFTOQavz' @ 72057594037927935 : 1 .. '!actors.items!qJKVBjn6zRF2Q4tG.zjSz8GnFgBqIyT2v' @ 0 : 0; will stop at '!actors.items!qJKVBjn6zRF2Q4tG.zjSz8GnFgBqIyT2v' @ 3040 : 1
+2024/06/02-00:49:06.857069 71cb01c006c0 Compacting 1@1 + 1@2 files
+2024/06/02-00:49:06.869459 71cb01c006c0 Generated table #781@1: 235 keys, 348210 bytes
+2024/06/02-00:49:06.869482 71cb01c006c0 Compacted 1@1 + 1@2 files => 348210 bytes
+2024/06/02-00:49:06.881972 71cb01c006c0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/06/02-00:49:06.882069 71cb01c006c0 Delete type=2 #750
+2024/06/02-00:49:06.882244 71cb01c006c0 Delete type=2 #780
+2024/06/02-00:49:06.914452 71cb01c006c0 Manual compaction at level-1 from '!actors.items!qJKVBjn6zRF2Q4tG.zjSz8GnFgBqIyT2v' @ 3040 : 1 .. '!actors.items!qJKVBjn6zRF2Q4tG.zjSz8GnFgBqIyT2v' @ 0 : 0; will stop at (end)

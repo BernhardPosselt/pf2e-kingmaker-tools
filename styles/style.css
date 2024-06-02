@@ -723,3 +723,8 @@ td.skill-value {
     font-size: 12px;
 }
 
+.prepare-campsite-notice {
+    text-align: center;
+    flex-grow: 1;
+    align-self: center;
+}

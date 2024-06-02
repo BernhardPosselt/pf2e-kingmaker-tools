@@ -10,6 +10,7 @@
         {{else}}
             <img src="modules/pf2e-kingmaker-tools/static/img/add-actor.webp" title="Drop Actor Here"
                  class="no-actor-image">
+            <div class="new-activity-actor-label">Drop Actor <b>In Camp</b> Here</div>
         {{/if}}
     </div>
     {{#if activity.isSkillCheck}}
@@ -18,7 +19,8 @@
                 {{selectOptions activity.skills selected=activity.selectedSkill}}
             </select>
             <button type="button" class="roll-check" data-activity="{{activity.name}}"
-                    data-skill="{{activity.selectedSkill}}"><i class="fa-solid fa-dice-d20"></i></button>
+                    data-skill="{{activity.selectedSkill}}" {{#unless actor}}disabled{{/unless}}><i
+                    class="fa-solid fa-dice-d20"></i></button>
         </div>
         <div class="actor-subheader">
             <select name="actorActivityDegreeOfSuccess.{{activity.slug}}" {{#if activity.isSecret}}{{#if

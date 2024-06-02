@@ -26,9 +26,9 @@ import {getKnownRecipes, getRecipesKnownInRegion, RecipeData} from './recipes';
 import {addRecipeDialog} from './dialogs/add-recipe';
 import {campingSettingsDialog} from './dialogs/camping-settings';
 import {DegreeOfSuccess, degreeToProperty, StringDegreeOfSuccess} from '../degree-of-success';
-import {getTimeOfDayPercent, getWorldTime} from '../time/calculation';
+import {getTimeOfDayPercent, getWorldTime, isDayOrNight} from '../time/calculation';
 import {formatWorldTime} from '../time/format';
-import {LabelAndValue, listenClick, toLabelAndValue} from '../utils';
+import {LabelAndValue, listenClick, postChatMessage, toLabelAndValue} from '../utils';
 import {getActorsByUuid, hasCookingLore, NotProficientError, validateSkillProficiencies} from './actor';
 import {askDcDialog} from './dialogs/ask-dc';
 import {discoverSpecialMeal} from './dialogs/learn-recipe';
@@ -126,6 +126,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const isUser = !this.isGM;
         const viewActors = await toViewActors(data.actorUuids, data.campingActivities, getCampingActivityData(data), isUser);
         const dailyPrepsSeconds = calculateDailyPreparationsSeconds(data.gunsToClean);
+        const campingActivities = await toViewCampingActivities(data.campingActivities, activityData, new Set(data.lockedActivities));
+        const visibleActivities = campingActivities.filter(c => !c.isHidden);
+        const needsPrepareCampsite = visibleActivities.length === 1 && visibleActivities[0].name === 'Prepare Campsite';
+        const worldTime = getWorldTime(this.game);
         const viewData: ViewCampingData = {
             isGM: this.isGM,
             isUser,
@@ -136,8 +140,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             adventuringSince: formatHours(sumElapsedSeconds, data.dailyPrepsAtTime > currentSeconds),
             regions: toLabelAndValue(Array.from(regions.keys())),
             currentRegion,
+            isDay: isDayOrNight(worldTime) === 'day',
             actors: viewActors,
-            campingActivities: await toViewCampingActivities(data.campingActivities, activityData, new Set(data.lockedActivities)),
+            campingActivities,
+            needsPrepareCampsite,
             watchSecondsDuration,
             dailyPrepsDuration: formatHours(dailyPrepsSeconds),
             watchDuration: formatHours(watchSecondsDuration),
@@ -153,9 +159,9 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             ],
             degreesOfSuccesses: toViewDegrees(),
             mealDegreeOfSuccess: data.cooking.degreeOfSuccess,
-            time: formatWorldTime(getWorldTime(this.game)),
-            // 4px offset is half of the element's width including borders
-            timeMarkerPositionPx: Math.floor(getTimeOfDayPercent(getWorldTime(this.game)) * 8.46) - 4,
+            time: formatWorldTime(worldTime),
+            // subtract maximum image width
+            timeMarkerPositionPx: Math.floor(getTimeOfDayPercent(worldTime) * 8.16),
             hasCookingActor: canCook(data),
             consumedFood: calculateConsumedFood(canCook(data), actorConsumables, {
                 actorsConsumingRations: data.cooking.actorMeals.filter(a => a.chosenMeal === 'rationsOrSubsistence').length,
@@ -227,7 +233,7 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             label: 'Help',
             class: 'pf2e-kingmaker-tools-hb1',
             icon: 'fas fa-question',
-            onclick: () => openJournal('Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY.JournalEntryPage.bmKVD2uzBK6Qu8QS'),
+            onclick: () => openJournal('Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY.JournalEntryPage.7z4cDr3FMuSy22t1'),
         });
         if (this.game.user?.isGM ?? false) {
             buttons.unshift({
@@ -321,7 +327,15 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             await this.update({encounterModifier: current.encounterModifier - 1});
         });
         listenClick($html, '.reset-adventuring-time', async () => await this.resetAdventuringSince());
-        listenClick($html, '.eat-food', async () => await eat(this.game, await this.read()));
+        listenClick($html, '.eat-food', async () => {
+            const camping = await this.read();
+            const recipes = getRecipeData(camping);
+            const recipe = recipes.find(r => r.name === camping.cooking.chosenMeal);
+            if (recipe) {
+                await postChatMessage(`Eating ${recipe.name}`);
+            }
+            await eat(this.game, camping);
+        });
         listenClick($html, '.increase-zone-dc-modifier', async () => {
             const current = await this.read();
             await this.update({encounterModifier: current.encounterModifier + 1});

@@ -94,6 +94,17 @@
     width: var(--actor-image-sidebar-width);
 }
 
+.new-activity-actor-label {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 2px black;
+    top: calc((var(--actor-image-height) / 2) - 9px);
+    font-size: 12px;
+    text-align: center;
+    width: var(--actor-image-width);
+}
+
 .camping-actor {
     display: flex;
     height: var(--actor-image-sidebar-height);
@@ -120,12 +131,11 @@
 
 .camping-header .time-marker {
     position: absolute;
-    top: -5px;
-    height: 40px;
-    width: 6px;
-    background-color: #789035;
-    border: 1px solid #000;
-    border-radius: 2px;
+    border-radius: 100%;
+    background-color: rgba(255, 255, 255, .5);
+    width: 30px;
+    text-align: center;
+    line-height: 30px;
 }
 
 .camping-section-header {

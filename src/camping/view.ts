@@ -22,6 +22,8 @@ interface ViewCampingActor extends ViewActor {
 export interface ViewCampingData {
     actorMeals: ViewActorMeal[];
     actors: ViewCampingActor[];
+    needsPrepareCampsite: boolean;
+    isDay: boolean;
     campingActivities: ViewCampingActivity[];
     currentRegion: string;
     regions: LabelAndValue[];

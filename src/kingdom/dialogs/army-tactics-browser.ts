@@ -1,7 +1,7 @@
 import {CheckDialog} from './check-dialog';
 import {DegreeOfSuccess} from '../../degree-of-success';
 import {getArmyTactics, isArmyTactic} from '../../armies/utils';
-import {createUUIDLink, getLevelBasedDC} from '../../utils';
+import {createUUIDLink, getLevelBasedDC, hasArmyTactic} from '../../utils';
 import {Kingdom} from '../data/kingdom';
 
 interface ArmyTacticsBrowserOptions {
@@ -113,7 +113,7 @@ class ArmyTacticsBrowserApp extends FormApplication<
 
     private async toViewTactics(tactics: CampaignFeaturePF2E[]): Promise<ArmyTacticView[]> {
         return await Promise.all(tactics
-            .filter(t => t.system.traits.value.includes(this.army.system.traits.type))
+            .filter(t => t.system.traits.value.includes(this.army.system.traits.type) && !hasArmyTactic(this.army, t))
             .sort((a, b) => a.system.level.value - b.system.level.value || a.name.localeCompare(b.name))
             .map(async (t) => {
                 const level = t.system.level.value;
