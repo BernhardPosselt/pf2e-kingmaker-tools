@@ -194,7 +194,7 @@ export class CampingActivitiesListener extends DiffListener {
     }
 
     protected shouldFireChange(previous: Camping, update: Partial<Camping>): boolean {
-        const diff = diffObject(previous, update) as Partial<Camping>;
+        const diff = foundry.utils.diffObject(previous, update) as Partial<Camping>;
         return 'campingActivities' in diff
             && update?.campingActivities?.find(a => a.activity === 'Prepare Campsite'
                 && a.result !== null
@@ -231,7 +231,7 @@ export class ClearCampingActivitiesListener extends DiffListener {
     }
 
     protected shouldFireChange(previous: Camping, update: Partial<Camping>): boolean {
-        const diff = diffObject(previous, update) as Partial<Camping>;
+        const diff = foundry.utils.diffObject(previous, update) as Partial<Camping>;
         return 'campingActivities' in diff
             && update?.campingActivities?.find(a => a.activity === 'Prepare Campsite'
                 && (a.result === null || a.result === 'criticalFailure'),

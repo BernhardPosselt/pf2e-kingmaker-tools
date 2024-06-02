@@ -5,7 +5,7 @@ export async function saveCamping(game: Game, sheetActor: Actor, update: Partial
     const current = getCamping(sheetActor);
     console.info('Saving', update);
     await sheetActor.setFlag('pf2e-kingmaker-tools', 'camping-sheet', update);
-    console.log('diff', diffObject(current, update));
+    console.log('diff', foundry.utils.diffObject(current, update));
     for (const l of getDiffListeners(game)) {
         await l.testFireChange(current, update);
     }
