@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-beta3] - 2024-06-02
+
 ### Fixed
 
 * Do not list already known tactics in army tactic browser
