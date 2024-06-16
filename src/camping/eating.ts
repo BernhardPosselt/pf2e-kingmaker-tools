@@ -4,7 +4,7 @@ import {addIngredientsToActor} from './activities';
 import {allRecipes, getKnownRecipes, RecipeData} from './recipes';
 import {Camping, getHuntAndGatherActor} from './camping';
 import {getRegionInfo} from './regions';
-import {addOf} from '../utils';
+import {addOf, sum} from '../utils';
 import {getCamping, getCampingActor, saveCamping} from './storage';
 
 export async function getConsumableFromUuid(uuid: string): Promise<(Item & ConsumableItem) | null> {
@@ -26,15 +26,18 @@ export async function getActorConsumables(actors: Actor[]): Promise<FoodAmount> 
     };
     for (const actor of actors) {
         const consumables = actor.itemTypes.consumable;
-        const ration = consumables
-            .find(c => c.sourceId === rationSourceId && rationSourceId !== undefined) as ConsumableItem | undefined;
-        const specialIngredient = consumables
-            .find(c => c.sourceId === specialIngredientsSourceId && specialIngredientsSourceId !== undefined) as ConsumableItem | undefined;
-        const basicIngredient = consumables
-            .find(c => c.sourceId === basicIngredientsId && basicIngredientsId !== undefined) as ConsumableItem | undefined;
-        result.rations += ration ? ration.system.uses.value + (Math.max(0, ration.quantity - 1) * ration.system.uses.max) : 0;
-        result.basicIngredients += basicIngredient ? basicIngredient.quantity : 0;
-        result.specialIngredients += specialIngredient ? specialIngredient.quantity : 0;
+        const rations = sum((consumables
+            .filter(c => c.sourceId === rationSourceId && rationSourceId !== undefined) as unknown as ConsumableItem[])
+            .map(c => c.system.uses.value + (Math.max(0, c.quantity - 1) * c.system.uses.max)));
+        const specialIngredients = sum((consumables
+            .filter(c => c.sourceId === specialIngredientsSourceId && specialIngredientsSourceId !== undefined) as unknown as ConsumableItem[])
+            .map(c => c.quantity));
+        const basicIngredients = sum((consumables
+            .filter(c => c.sourceId === basicIngredientsId && basicIngredientsId !== undefined) as unknown as ConsumableItem[])
+            .map(c => c.quantity));
+        result.rations += rations;
+        result.basicIngredients += basicIngredients;
+        result.specialIngredients += specialIngredients;
     }
     return result;
 }

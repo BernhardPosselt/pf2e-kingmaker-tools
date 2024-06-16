@@ -130,6 +130,16 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
         const visibleActivities = campingActivities.filter(c => !c.isHidden);
         const needsPrepareCampsite = visibleActivities.length === 1 && visibleActivities[0].name === 'Prepare Campsite';
         const worldTime = getWorldTime(this.game);
+        const actorMeals = data.cooking.actorMeals;
+        const consumedFood = calculateConsumedFood(canCook(data), actorConsumables, {
+            actorsConsumingRations: actorMeals.filter(a => a.chosenMeal === 'rationsOrSubsistence').length,
+            actorsConsumingMeals: actorMeals.filter(a => a.chosenMeal === 'meal').length,
+            availableSubsistence: data.cooking.subsistenceAmount,
+            availableMagicalSubsistence: data.cooking.magicalSubsistenceAmount,
+            recipeBasicIngredientCost: chosenMealData?.basicIngredients ?? 0,
+            recipeSpecialIngredientCost: chosenMealData?.specialIngredients ?? 0,
+        });
+        console.log(consumedFood);
         const viewData: ViewCampingData = {
             isGM: this.isGM,
             isUser,
@@ -163,15 +173,8 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             // subtract maximum image width
             timeMarkerPositionPx: Math.floor(getTimeOfDayPercent(worldTime) * 8.16),
             hasCookingActor: canCook(data),
-            consumedFood: calculateConsumedFood(canCook(data), actorConsumables, {
-                actorsConsumingRations: data.cooking.actorMeals.filter(a => a.chosenMeal === 'rationsOrSubsistence').length,
-                actorsConsumingMeals: data.cooking.actorMeals.filter(a => a.chosenMeal === 'meal').length,
-                availableSubsistence: data.cooking.subsistenceAmount,
-                availableMagicalSubsistence: data.cooking.magicalSubsistenceAmount,
-                recipeBasicIngredientCost: chosenMealData?.basicIngredients ?? 0,
-                recipeSpecialIngredientCost: chosenMealData?.specialIngredients ?? 0,
-            }),
-            actorMeals: await toViewActorMeals(data.actorUuids, data.cooking.actorMeals, getRecipeData(data)),
+            consumedFood,
+            actorMeals: await toViewActorMeals(data.actorUuids, actorMeals, getRecipeData(data)),
             ...(await this.getCookingSkillData(data)),
             chosenMealDc: await this.getMealDc(data, chosenMealData),
             showContinueRest: data.watchSecondsRemaining !== 0,
@@ -505,6 +508,10 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
             await this.update({
                 actorUuids: current.actorUuids.filter(id => id !== uuid),
                 campingActivities: current.campingActivities.filter(a => a.actorUuid !== uuid),
+                cooking: {
+                    ...current.cooking,
+                    actorMeals: current.cooking.actorMeals.filter(a => a.actorUuid !== uuid),
+                },
             });
         } else {
             const campingConfiguration = await this.read();
@@ -552,7 +559,18 @@ export class CampingSheet extends FormApplication<CampingOptions & FormApplicati
                     await this.handleItemDrop(document, target.dataset.actorUuid!);
                 }
             } else if (target.classList.contains('new-camping-actor') && !campingConfiguration.actorUuids.includes(document.uuid)) {
-                await this.update({actorUuids: [...(campingConfiguration.actorUuids), document.uuid]});
+                await this.update({
+                    actorUuids: [
+                        ...(campingConfiguration.actorUuids), document.uuid],
+                    cooking: {
+                        ...campingConfiguration.cooking,
+                        actorMeals: [...campingConfiguration.cooking.actorMeals, {
+                            actorUuid: document.uuid,
+                            chosenMeal: 'meal',
+                            favoriteMeal: null,
+                        }],
+                    },
+                });
             } else if (target.classList.contains('camping-actor') && document instanceof Item) {
                 await this.handleItemDrop(document, target.dataset.actorUuid!);
             } else if (target.classList.contains('eating-actor') && document instanceof Item) {

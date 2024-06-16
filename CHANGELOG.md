@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Fixed
 
 * Automatically remove Tell Campfire Story effects after daily preparations
+* Automatically toggle Tell Campfire Story effects during combat
+* Sum up rations, special ingredients and basic ingredients correctly if more than one item is in the player's inventory
+* Correctly update consumed rations and ingredients on the sheet when an actor is removed or added
 
 ## [1.0.0-beta5] - 2024-06-02
 
