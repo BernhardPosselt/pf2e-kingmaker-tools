@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Fixed
+
+* Automatically remove Tell Campfire Story effects after daily preparations
+
 ## [1.0.0-beta5] - 2024-06-02
 
 ### Fixed

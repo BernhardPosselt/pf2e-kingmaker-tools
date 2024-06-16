@@ -1,21 +1,3 @@
-2024/06/02-00:47:58.943631 71cb0c8006c0 Recovering log #1014
-2024/06/02-00:47:58.962985 71cb0c8006c0 Delete type=0 #1014
-2024/06/02-00:47:58.963051 71cb0c8006c0 Delete type=3 #1013
-2024/06/02-00:49:06.954390 71cb01c006c0 Level-0 table #1018: started
-2024/06/02-00:49:06.954437 71cb01c006c0 Level-0 table #1018: 0 bytes OK
-2024/06/02-00:49:06.967115 71cb01c006c0 Delete type=0 #1016
-2024/06/02-00:49:06.986895 71cb01c006c0 Manual compaction at level-0 from '!journal!6p7DKWP4RVd4vNt2' @ 72057594037927935 : 1 .. '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 0 : 0; will stop at '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 1924 : 1
-2024/06/02-00:49:06.986900 71cb01c006c0 Compacting 1@0 + 0@1 files
-2024/06/02-00:49:06.995148 71cb01c006c0 Generated table #1019@0: 185 keys, 203846 bytes
-2024/06/02-00:49:06.995157 71cb01c006c0 Compacted 1@0 + 0@1 files => 203846 bytes
-2024/06/02-00:49:07.007464 71cb01c006c0 compacted to: files[ 0 1 1 0 0 0 0 ]
-2024/06/02-00:49:07.007535 71cb01c006c0 Delete type=2 #1011
-2024/06/02-00:49:07.040865 71cb01c006c0 Manual compaction at level-0 from '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 1924 : 1 .. '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 0 : 0; will stop at (end)
-2024/06/02-00:49:07.072884 71cb01c006c0 Manual compaction at level-1 from '!journal!6p7DKWP4RVd4vNt2' @ 72057594037927935 : 1 .. '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 0 : 0; will stop at '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 1924 : 1
-2024/06/02-00:49:07.072891 71cb01c006c0 Compacting 1@1 + 1@2 files
-2024/06/02-00:49:07.081701 71cb01c006c0 Generated table #1020@1: 185 keys, 203846 bytes
-2024/06/02-00:49:07.081711 71cb01c006c0 Compacted 1@1 + 1@2 files => 203846 bytes
-2024/06/02-00:49:07.093954 71cb01c006c0 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/06/02-00:49:07.094013 71cb01c006c0 Delete type=2 #999
-2024/06/02-00:49:07.094132 71cb01c006c0 Delete type=2 #1019
-2024/06/02-00:49:07.126233 71cb01c006c0 Manual compaction at level-1 from '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 1924 : 1 .. '!journal.pages!uSTTCqRYCWj7a38F.zUaeA8Ud9dv3hhnc' @ 0 : 0; will stop at (end)
+2024/06/08-23:05:52.214115 774f990006c0 Recovering log #1042
+2024/06/08-23:05:52.233788 774f990006c0 Delete type=0 #1042
+2024/06/08-23:05:52.233858 774f990006c0 Delete type=3 #1041

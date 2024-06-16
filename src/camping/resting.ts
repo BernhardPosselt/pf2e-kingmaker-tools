@@ -225,6 +225,9 @@ async function completeDailyPreparations(
         'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.ZKJlIqyFgbKDACnG', // enhance weapons
         'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.pbhKANmDOvwuuchk', // aided
         'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.tERAC9KHwBjoUt5u', // defended
+        'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.2vdskbqd0VrWKR9Y', // Campfire Story: Critical Success
+        'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.wT2NzrfgmWmCMRtv', // Campfire Story: Success
+        'Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.y5Jqw40SWNOgcxvC', // Campfire Story: Critical Failure
     ]));
     await removeExpiredMealEffects(actors, data);
     await saveCamping(game, sheetActor, data);

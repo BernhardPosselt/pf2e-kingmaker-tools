@@ -1,21 +1,3 @@
-2024/06/02-00:47:58.922025 71cb0d2006c0 Recovering log #988
-2024/06/02-00:47:58.941274 71cb0d2006c0 Delete type=0 #988
-2024/06/02-00:47:58.941340 71cb0d2006c0 Delete type=3 #987
-2024/06/02-00:49:07.220407 71cb01c006c0 Level-0 table #992: started
-2024/06/02-00:49:07.220440 71cb01c006c0 Level-0 table #992: 0 bytes OK
-2024/06/02-00:49:07.233225 71cb01c006c0 Delete type=0 #990
-2024/06/02-00:49:07.258772 71cb01c006c0 Manual compaction at level-0 from '!items!9xvn9jhwSpc7q44Y' @ 72057594037927935 : 1 .. '!items!v99V57FtDeSYqSQJ' @ 0 : 0; will stop at '!items!v99V57FtDeSYqSQJ' @ 42 : 1
-2024/06/02-00:49:07.258779 71cb01c006c0 Compacting 1@0 + 0@1 files
-2024/06/02-00:49:07.265320 71cb01c006c0 Generated table #993@0: 6 keys, 3643 bytes
-2024/06/02-00:49:07.265334 71cb01c006c0 Compacted 1@0 + 0@1 files => 3643 bytes
-2024/06/02-00:49:07.277692 71cb01c006c0 compacted to: files[ 0 1 1 0 0 0 0 ]
-2024/06/02-00:49:07.277736 71cb01c006c0 Delete type=2 #985
-2024/06/02-00:49:07.328589 71cb01c006c0 Manual compaction at level-0 from '!items!v99V57FtDeSYqSQJ' @ 42 : 1 .. '!items!v99V57FtDeSYqSQJ' @ 0 : 0; will stop at (end)
-2024/06/02-00:49:07.348244 71cb01c006c0 Manual compaction at level-1 from '!items!9xvn9jhwSpc7q44Y' @ 72057594037927935 : 1 .. '!items!v99V57FtDeSYqSQJ' @ 0 : 0; will stop at '!items!v99V57FtDeSYqSQJ' @ 42 : 1
-2024/06/02-00:49:07.348249 71cb01c006c0 Compacting 1@1 + 1@2 files
-2024/06/02-00:49:07.355031 71cb01c006c0 Generated table #994@1: 6 keys, 3643 bytes
-2024/06/02-00:49:07.355048 71cb01c006c0 Compacted 1@1 + 1@2 files => 3643 bytes
-2024/06/02-00:49:07.367589 71cb01c006c0 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/06/02-00:49:07.367674 71cb01c006c0 Delete type=2 #963
-2024/06/02-00:49:07.367820 71cb01c006c0 Delete type=2 #993
-2024/06/02-00:49:07.407331 71cb01c006c0 Manual compaction at level-1 from '!items!v99V57FtDeSYqSQJ' @ 42 : 1 .. '!items!v99V57FtDeSYqSQJ' @ 0 : 0; will stop at (end)
+2024/06/08-23:05:52.192614 774f972006c0 Recovering log #1015
+2024/06/08-23:05:52.211603 774f972006c0 Delete type=0 #1015
+2024/06/08-23:05:52.211658 774f972006c0 Delete type=3 #1014
