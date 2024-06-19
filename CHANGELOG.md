@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-beta7] - 2024-06-19
+
 ## Changed
 
 * When no actor selected the cook activity in the camping sheet, show a hint
