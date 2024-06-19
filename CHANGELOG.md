@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Changed
+
+* When no actor selected the cook activity in the camping sheet, show a hint
+
 ## Fixed
 
 * Make chat buttons work without refreshing the browser window when no camping nor kingdom actor is present
+* When no settlements exist, make first added settlement the currently selected one
 
 ## [1.0.0-beta6] - 2024-06-16
 

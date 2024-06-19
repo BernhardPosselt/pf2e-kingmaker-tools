@@ -636,6 +636,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const current = this.getKingdom();
                     await this.saveKingdom({
                         settlements: [...current.settlements, newSettlement],
+                        activeSettlement: current.settlements.length === 0 ? id : current.activeSettlement,
                     });
                 }
             });

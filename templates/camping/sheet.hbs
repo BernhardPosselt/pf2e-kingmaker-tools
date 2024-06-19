@@ -167,7 +167,9 @@
                     </td>
                 </tr>
             </table>
-            <div class="camping-cook">
+            {{#unless hasCookingActor}}
+                <p class="cook-warning">No <b>Cook Meal</b> activity selected, can only consume rations!</p>{{/unless}}
+            <div class="camping-cook" {{#unless hasCookingActor}}hidden{{/unless}}>
                 <div>
                     <label>Recipe
                         <select name="chosenMeal">
@@ -184,8 +186,7 @@
                         </select>
                     </label>
                     <span><span class="label">DC</span> {{chosenMealDc}}</span>
-                    <button type="button" class="cook-food" {{#unless hasCookingActor}}disabled{{/unless}}><i
-                            class="fa-solid fa-dice-d20"></i></button>
+                    <button type="button" class="cook-food"><i class="fa-solid fa-dice-d20"></i></button>
                 </div>
                 <div>
                     <label>Degree

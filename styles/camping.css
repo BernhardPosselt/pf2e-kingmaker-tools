@@ -203,6 +203,10 @@
     justify-content: space-between;
 }
 
+.cook-warning {
+    text-align: center;
+}
+
 .camping-cook > * {
     display: flex;
     column-gap: 5px;
