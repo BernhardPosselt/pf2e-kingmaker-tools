@@ -484,12 +484,14 @@ Hooks.on('init', async () => {
 Hooks.on('renderChatLog', () => {
     if (game instanceof Game) {
         const gameInstance = game;
-        const actor = getKingdomSheetActor(gameInstance);
-        if (actor) {
-            const chatLog = $('#chat-log');
-            for (const button of kingdomChatButtons) {
-                chatLog.on('click', button.selector, (event: Event) => button.callback(gameInstance, actor, event));
-            }
+        const chatLog = $('#chat-log');
+        for (const button of kingdomChatButtons) {
+            chatLog.on('click', button.selector, (event: Event) => {
+                const actor = getKingdomSheetActor(gameInstance);
+                if (actor) {
+                    return button.callback(gameInstance, actor, event);
+                }
+            });
         }
         bindCampingChatEventListeners(gameInstance);
     }

@@ -119,11 +119,23 @@ async function checkForRandomEncounter(game: Game): Promise<void> {
 }
 
 export function bindCampingChatEventListeners(game: Game): void {
-    const actor = getCampingActor(game);
-    if (actor) {
-        const chatLog = $('#chat-log');
-        chatLog.on('click', '.km-add-food', (event) => addIngredients(game, event.currentTarget));
-        chatLog.on('click', '.km-add-recipe', (event) => addRecipe(game, event.currentTarget));
-        chatLog.on('click', '.km-random-encounter', () => checkForRandomEncounter(game));
-    }
+    const chatLog = $('#chat-log');
+    chatLog.on('click', '.km-add-food', (event) => {
+        const actor = getCampingActor(game);
+        if (actor) {
+            return addIngredients(game, event.currentTarget);
+        }
+    });
+    chatLog.on('click', '.km-add-recipe', (event) => {
+        const actor = getCampingActor(game);
+        if (actor) {
+            return addRecipe(game, event.currentTarget);
+        }
+    });
+    chatLog.on('click', '.km-random-encounter', () => {
+        const actor = getCampingActor(game);
+        if (actor) {
+            return checkForRandomEncounter(game);
+        }
+    });
 }

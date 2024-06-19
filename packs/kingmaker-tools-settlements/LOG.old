@@ -1,3 +1,21 @@
-2024/06/16-20:21:45.254553 70b55c2006c0 Recovering log #375
-2024/06/16-20:21:45.291623 70b55c2006c0 Delete type=0 #375
-2024/06/16-20:21:45.291693 70b55c2006c0 Delete type=3 #374
+2024/06/19-14:56:01.459877 7308030006c0 Recovering log #379
+2024/06/19-14:56:01.479639 7308030006c0 Delete type=0 #379
+2024/06/19-14:56:01.479713 7308030006c0 Delete type=3 #378
+2024/06/19-14:58:24.056193 7307f7a006c0 Level-0 table #383: started
+2024/06/19-14:58:24.056223 7307f7a006c0 Level-0 table #383: 0 bytes OK
+2024/06/19-14:58:24.068765 7307f7a006c0 Delete type=0 #381
+2024/06/19-14:58:24.081651 7307f7a006c0 Manual compaction at level-0 from '!scenes!0WlsaezZKuXlQUV3' @ 72057594037927935 : 1 .. '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 0 : 0; will stop at '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 1705 : 1
+2024/06/19-14:58:24.081657 7307f7a006c0 Compacting 1@0 + 0@1 files
+2024/06/19-14:58:24.089226 7307f7a006c0 Generated table #384@0: 190 keys, 32850 bytes
+2024/06/19-14:58:24.089257 7307f7a006c0 Compacted 1@0 + 0@1 files => 32850 bytes
+2024/06/19-14:58:24.101993 7307f7a006c0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2024/06/19-14:58:24.102217 7307f7a006c0 Delete type=2 #368
+2024/06/19-14:58:24.115809 7307f7a006c0 Manual compaction at level-0 from '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 1705 : 1 .. '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 0 : 0; will stop at (end)
+2024/06/19-14:58:24.135748 7307f7a006c0 Manual compaction at level-1 from '!scenes!0WlsaezZKuXlQUV3' @ 72057594037927935 : 1 .. '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 0 : 0; will stop at '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 1705 : 1
+2024/06/19-14:58:24.135762 7307f7a006c0 Compacting 1@1 + 1@2 files
+2024/06/19-14:58:24.143700 7307f7a006c0 Generated table #385@1: 190 keys, 32850 bytes
+2024/06/19-14:58:24.143719 7307f7a006c0 Compacted 1@1 + 1@2 files => 32850 bytes
+2024/06/19-14:58:24.156742 7307f7a006c0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/06/19-14:58:24.156856 7307f7a006c0 Delete type=2 #351
+2024/06/19-14:58:24.156983 7307f7a006c0 Delete type=2 #384
+2024/06/19-14:58:24.182173 7307f7a006c0 Manual compaction at level-1 from '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 1705 : 1 .. '!scenes.tiles!yAsYLvVoONCuyuy6.vm5ll98aSHRoAQ9H' @ 0 : 0; will stop at (end)
