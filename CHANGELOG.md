@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Added
+
+* Add min lots filter to structure browser
+* Manage Trade Agreements and Trade Commodities activities buttons now ask how many times they should be performed
+
 ## [1.0.0-beta7] - 2024-06-19
 
 ## Changed

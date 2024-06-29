@@ -1137,13 +1137,14 @@ The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of t
         phase: 'commerce',
         dc: 'control',
         title: 'Manage Trade Agreements',
-        description: `You send agents out to attend to established trade agreements. ${loseRP(2)} per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.`,
+        description: `You send agents out to attend to established trade agreements. ${loseRP(2, true)} per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.`,
         skills: simpleRank(['trade']),
         criticalSuccess: {
             msg: `${createResourceButton({
                 value: '1',
                 turn: 'next',
                 type: 'resource-dice',
+                multiple: true,
             })} per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
         },
         success: {
@@ -1151,10 +1152,16 @@ The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of t
                 value: '1',
                 turn: 'next',
                 type: 'resource-dice',
+                multiple: true,
             })} per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
         },
         failure: {
-            msg: `${createResourceButton({value: '1', turn: 'next', type: 'resource-points'})} per trade agreement`,
+            msg: `${createResourceButton({
+                value: '1',
+                turn: 'next',
+                type: 'resource-points',
+                multiple: true,
+            })} per trade agreement`,
         },
         criticalFailure: {
             msg: 'You gain no benefit, as your traders and merchants met with bad luck on the road. You can’t Manage Trade Agreements for 1 Kingdom turn.',
@@ -2237,6 +2244,7 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
                 type: 'resource-dice',
                 turn: 'next',
                 value: '2',
+                multiple: true,
             })} per point of stockpile expended from your Commodity now.`,
         },
         success: {
@@ -2244,6 +2252,7 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
                 type: 'resource-dice',
                 turn: 'next',
                 value: '1',
+                multiple: true,
             })} per point of stockpile expended from your Commodity now.`,
         },
         failure: {
@@ -2392,6 +2401,7 @@ interface CreateResourceButton {
     turn?: ResourceTurn,
     value: string,
     hints?: string;
+    multiple?: boolean;
 }
 
 export function gainXp(value: number | string): string {
@@ -2434,8 +2444,8 @@ export function gainRP(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'resource-points'});
 }
 
-export function loseRP(value: number | string): string {
-    return createResourceButton({value: `${value}`, type: 'resource-points', mode: 'lose'});
+export function loseRP(value: number | string, multiple = false): string {
+    return createResourceButton({value: `${value}`, type: 'resource-points', mode: 'lose', multiple});
 }
 
 export function gainUnrest(value: number | string): string {
@@ -2450,13 +2460,21 @@ export function gainSolution(type: 'creative-solution' | 'supernatural-solution'
     return createResourceButton({value: '1', type, mode: 'gain'});
 }
 
-export function createResourceButton({turn = 'now', value, mode = 'gain', type, hints}: CreateResourceButton): string {
+export function createResourceButton({
+                                         turn = 'now',
+                                         value,
+                                         mode = 'gain',
+                                         type,
+                                         hints,
+                                         multiple = false,
+                                     }: CreateResourceButton): string {
     const turnLabel = turn === 'now' ? '' : ' Next Turn';
     const label = `${mode === 'gain' ? 'Gain' : 'Lose'} ${value} ${unslugify(type)}${turnLabel}`;
     return `<button type="button" class="km-gain-lose" 
         data-type="${type}"
         data-mode="${mode}"
         data-turn="${turn}"
+        data-multiple="${multiple}"
         ${value !== undefined ? `data-value="${value}"` : ''}
         >${label}${hints !== undefined ? `(${hints})` : ''}</button>`;
 }

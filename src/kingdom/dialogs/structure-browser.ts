@@ -65,6 +65,7 @@ interface StructureFilters {
     activities: Partial<Record<string, ActivityFilter>>;
     level: number;
     lots: number;
+    minLots: number;
     ignoreStructureCost: boolean;
     search: string;
 }
@@ -223,6 +224,7 @@ class StructureBrowserApp extends FormApplication<
             infrastructure: false,
             ignoreProficiencyRequirements: false,
             ignoreStructureCost: false,
+            minLots: 1,
             lots: 4,
             activities: Object.fromEntries(activities.map(activity => {
                 return [activity, {name: unslugify(activity), enabled: false}];
@@ -367,6 +369,7 @@ class StructureBrowserApp extends FormApplication<
         enabledFilters.push((x) => hasActivities(x, filters.activities));
         enabledFilters.push((x) => (x.level ?? 0) <= filters.level);
         enabledFilters.push((x) => (x.lots ?? 0) <= filters.lots);
+        enabledFilters.push((x) => (x.lots ?? 0) >= filters.minLots);
         return structures
             .filter(structure => enabledFilters.every(filter => filter(structure)))
             .sort((a, b) => a.name.localeCompare(b.name));
@@ -444,6 +447,7 @@ class StructureBrowserApp extends FormApplication<
             ignoreProficiencyRequirements: formData.ignoreProficiencyRequirements,
             level: formData.level,
             lots: formData.lots,
+            minLots: formData.minLots,
             activities: Object.fromEntries(
                 Object.keys(formData)
                     .filter(d => d.startsWith('activity-'))

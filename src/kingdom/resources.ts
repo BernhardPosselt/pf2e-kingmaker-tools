@@ -1,4 +1,4 @@
-import {unslugify} from '../utils';
+import {parseNumberInput, unslugify} from '../utils';
 import {getSizeData, Kingdom} from './data/kingdom';
 import {getKingdom, saveKingdom} from './storage';
 import {getCapacity} from './kingdom-utils';
@@ -11,7 +11,36 @@ interface ResourceValues {
     missingMessage?: string;
 }
 
-export function calculateNewValue(
+async function askFactor(): Promise<number> {
+    return new Promise(resolve => {
+        new Dialog({
+            title: 'Perform How Many Times?',
+            content: `<form class="simple-dialog-form">
+            <div>
+                <label>Perform How Many Times?</label>
+                <input type="number" value="1" name="times">
+            </div>
+        </form>`,
+            buttons: {
+                multiply: {
+                    icon: '<i class="fa-solid fa-check"></i>',
+                    label: 'Apply',
+                    callback: async (html): Promise<void> => {
+                        const $html = html as HTMLElement;
+                        const turns = parseNumberInput($html, 'times');
+                        resolve(turns);
+                    },
+                },
+            },
+            default: 'multiply',
+        }, {
+            jQuery: false,
+            width: 400,
+        }).render(true);
+    });
+}
+
+export async function calculateNewValue(
     {
         currentValue,
         newValue,
@@ -19,21 +48,25 @@ export function calculateNewValue(
         turn,
         mode,
         limit,
+        multiple,
     }: {
         currentValue: number,
         newValue: number,
         type: RolledResources,
         turn: ResourceTurn,
         mode: ResourceMode,
+        multiple: boolean,
         limit?: number,
     },
-): ResourceValues {
-    const value = mode === 'gain' ? currentValue + newValue : currentValue - newValue;
+): Promise<ResourceValues> {
+    const factor = multiple ? await askFactor() : 1;
+    const multipliedValue = newValue * factor;
+    const value = mode === 'gain' ? currentValue + multipliedValue : currentValue - multipliedValue;
     const missing = value < 0 ? Math.abs(value) : 0;
     const limitedValue = limit === undefined ? value : Math.min(limit, value);
     const label = type === 'rolled-resource-dice' ? 'Resource Points' : unslugify(type);
     const turnLabel = turn === 'now' ? 'this turn' : 'next turn';
-    const message = `${mode === 'gain' ? 'Gaining' : 'Losing'} ${Math.abs(newValue)} ${label} ${turnLabel}`;
+    const message = `${mode === 'gain' ? 'Gaining' : 'Losing'} ${Math.abs(multipliedValue)} ${label} ${turnLabel}`;
     const missingMessage = missing > 0 && turn === 'now' ? `Missing ${missing} ${label}` : '';
     return {
         value: turn === 'now' ? Math.max(0, limitedValue) : limitedValue,
@@ -178,36 +211,40 @@ interface ResourceButton {
     mode: ResourceMode,
     turn: ResourceTurn,
     value: string,
+    multiple: boolean;
 }
 
 export function parseResourceButton(element: HTMLButtonElement): ResourceButton {
     const type = element.dataset.type! as RolledResources;
     const mode = element.dataset.mode! as 'gain' | 'lose';
     const turn = element.dataset.turn! as 'now' | 'next';
+    const multiple = element.dataset.multiple === 'true';
     const value = element.dataset.value!;
     return {
         type,
         mode,
         turn,
         value,
+        multiple,
     };
 }
 
 
 export async function updateResources(game: Game, actor: Actor, target: HTMLButtonElement): Promise<void> {
-    const {type, mode, turn, value: parsedValue} = parseResourceButton(target);
+    const {multiple, type, mode, turn, value: parsedValue} = parseResourceButton(target);
     const kingdom = getKingdom(actor);
 
     const evaluatedValue = await evaluateValue(game, kingdom, type, parsedValue);
     const currentValue = getCurrentValue(kingdom, type, turn);
     const limit = getLimit(game, kingdom, type, turn);
-    const {missingMessage, message, value} = calculateNewValue({
+    const {missingMessage, message, value} = await calculateNewValue({
         mode,
         limit,
         turn,
         newValue: evaluatedValue,
         type,
         currentValue,
+        multiple,
     });
 
     await ChatMessage.create({'content': `${message}`});
