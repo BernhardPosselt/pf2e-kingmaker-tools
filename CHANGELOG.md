@@ -7,32 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2024-06-30
+
+### Fixed
+
+* Garrison now prints unrest reduction to chat
+
 ## [1.0.1] - 2024-06-30
 
-## Added
+### Added
 
 * Add min lots filter to structure browser
 * Manage Trade Agreements and Trade Commodities activities buttons now ask how many times they should be performed
 * Show hints and buttons when creating a structure token on a sheet that reduces or increases unrest or ruin
 
-## Fixed
+### Fixed
 
 * Do not show missing message when reducing more ruin or unrest than present
 
 ## [1.0.0-beta7] - 2024-06-19
 
-## Changed
+### Changed
 
 * When no actor selected the cook activity in the camping sheet, show a hint
 
-## Fixed
+### Fixed
 
 * Make chat buttons work without refreshing the browser window when no camping nor kingdom actor is present
 * When no settlements exist, make first added settlement the currently selected one
 
 ## [1.0.0-beta6] - 2024-06-16
 
-## Fixed
+### Fixed
 
 * Automatically remove Tell Campfire Story effects after daily preparations
 * Automatically toggle Tell Campfire Story effects during combat

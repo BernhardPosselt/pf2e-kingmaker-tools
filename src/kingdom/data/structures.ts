@@ -582,6 +582,10 @@ const structures: Structure[] = [
         traits: ['building', 'residential'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            moreThanOncePerTurn: true,
+            value: '1',
+        },
         level: 5,
         upgradeFrom: ['Barracks'],
         construction: {
