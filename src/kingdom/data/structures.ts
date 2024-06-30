@@ -1,4 +1,5 @@
 import {Skill} from './skills';
+import {Ruin} from './ruin';
 
 
 export interface ActivityBonusRule {
@@ -51,6 +52,24 @@ interface Construction {
     dc: number;
 }
 
+interface ReduceUnrestBy {
+    value: string;
+    moreThanOncePerTurn?: boolean;
+    note?: string;
+}
+
+interface ReduceRuinBy {
+    value: string;
+    ruin: Ruin | 'any';
+    moreThanOncePerTurn?: boolean;
+}
+
+interface GainRuin {
+    value: string;
+    ruin: Ruin | 'any';
+    moreThanOncePerTurn?: boolean;
+}
+
 export interface Structure {
     name: string;
     stacksWith?: string;
@@ -76,6 +95,9 @@ export interface Structure {
     reducesRuin?: boolean;
     level?: number;
     upgradeFrom?: string[];
+    reduceUnrestBy?: ReduceUnrestBy;
+    reduceRuinBy?: ReduceRuinBy;
+    gainRuin?: GainRuin;
 }
 
 export const allBuildingTraits = ['edifice', 'yard', 'building', 'famous', 'infamous', 'residential', 'infrastructure'];
@@ -266,6 +288,10 @@ const structures: Structure[] = [
         }],
         traits: ['building', 'residential'],
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+            moreThanOncePerTurn: true,
+        },
         level: 3,
         construction: {
             skills: [{
@@ -285,6 +311,11 @@ const structures: Structure[] = [
         }],
         traits: ['building'],
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+            moreThanOncePerTurn: true,
+            note: 'as long as you have fewer than 4 breweries in the settlement at that time',
+        },
         level: 1,
         construction: {
             skills: [{
@@ -351,6 +382,9 @@ const structures: Structure[] = [
         traits: ['building', 'edifice', 'famous', 'infamous'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1d4',
+        },
         level: 9,
         upgradeFrom: ['Town Hall', 'Town Hall (V&K)'],
         construction: {
@@ -394,6 +428,9 @@ const structures: Structure[] = [
         traits: ['building', 'edifice', 'famous', 'infamous'],
         affectsDowntime: true,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '4',
+        },
         level: 15,
         upgradeFrom: ['Temple'],
         construction: {
@@ -712,6 +749,11 @@ const structures: Structure[] = [
             maximumStacks: 3,
         }],
         traits: ['building', 'infamous'],
+        gainRuin: {
+            value: '1',
+            ruin: 'crime',
+            moreThanOncePerTurn: true,
+        },
         affectsDowntime: false,
         reducesUnrest: false,
         level: 6,
@@ -751,9 +793,13 @@ const structures: Structure[] = [
             skill: 'intrigue',
             activity: 'quell-unrest',
         }],
+        reduceRuinBy: {
+            value: '1',
+            ruin: 'crime',
+        },
         traits: ['building'],
         affectsDowntime: false,
-        reducesUnrest: true,
+        reducesRuin: true,
         level: 2,
         construction: {
             rp: 14,
@@ -781,6 +827,9 @@ const structures: Structure[] = [
         traits: ['building', 'edifice'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
         level: 3,
         construction: {
             rp: 32,
@@ -901,6 +950,10 @@ const structures: Structure[] = [
         lots: 0,
         affectsDowntime: false,
         reducesRuin: true,
+        reduceRuinBy: {
+            value: '1',
+            ruin: 'crime',
+        },
         level: 5,
         construction: {
             rp: 20,
@@ -1066,6 +1119,13 @@ const structures: Structure[] = [
         traits: ['building', 'edifice'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
+        reduceRuinBy: {
+            value: '1',
+            ruin: 'any',
+        },
         level: 3,
         construction: {
             rp: 6,
@@ -1114,6 +1174,9 @@ const structures: Structure[] = [
         traits: ['building', 'residential'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '2',
+        },
         level: 9,
         upgradeFrom: ['Mansion'],
         construction: {
@@ -1169,6 +1232,9 @@ const structures: Structure[] = [
         traits: ['building', 'edifice', 'famous', 'infamous'],
         affectsDowntime: true,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '2',
+        },
         level: 15,
         upgradeFrom: ['Theater'],
         construction: {
@@ -1188,6 +1254,9 @@ const structures: Structure[] = [
         traits: ['building', 'residential'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
         level: 2,
         upgradeFrom: ['Houses'],
         construction: {
@@ -1224,6 +1293,9 @@ const structures: Structure[] = [
         traits: ['building', 'edifice', 'famous', 'infamous'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '10',
+        },
         level: 15,
         upgradeFrom: ['Castle', 'Castle (V&K)'],
         construction: {
@@ -1258,6 +1330,9 @@ const structures: Structure[] = [
         traits: ['yard'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
         level: 3,
         construction: {
             rp: 5,
@@ -1572,6 +1647,9 @@ const structures: Structure[] = [
         traits: ['building'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
         level: 1,
         construction: {
             rp: 12,
@@ -1598,6 +1676,9 @@ const structures: Structure[] = [
         traits: ['building', 'famous'],
         affectsDowntime: true,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1d4+1',
+        },
         level: 9,
         upgradeFrom: ['Tavern, Popular', 'Tavern, Popular (V&K)'],
         construction: {
@@ -1627,6 +1708,9 @@ const structures: Structure[] = [
         traits: ['building'],
         affectsDowntime: true,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '2',
+        },
         level: 3,
         upgradeFrom: ['Tavern, Dive', 'Tavern, Dive (V&K)'],
         construction: {
@@ -1658,6 +1742,9 @@ const structures: Structure[] = [
         traits: ['building', 'edifice', 'famous'],
         affectsDowntime: true,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '2d4',
+        },
         level: 15,
         upgradeFrom: ['Tavern, Luxury', 'Tavern, Luxury (V&K)'],
         construction: {
@@ -1689,6 +1776,9 @@ const structures: Structure[] = [
         traits: ['building', 'famous', 'infamous'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '2',
+        },
         level: 7,
         upgradeFrom: ['Shrine'],
         construction: {
@@ -1707,6 +1797,14 @@ const structures: Structure[] = [
         traits: ['building', 'residential'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
+        gainRuin: {
+            value: '1',
+            ruin: 'any',
+            moreThanOncePerTurn: true,
+        },
         level: 0,
         construction: {
             rp: 1,
@@ -1727,6 +1825,9 @@ const structures: Structure[] = [
         traits: ['building'],
         affectsDowntime: true,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
         level: 9,
         upgradeFrom: ['Festival Hall', 'Festival Hall (V&K)'],
         construction: {
@@ -1750,6 +1851,11 @@ const structures: Structure[] = [
         traits: ['building', 'infamous'],
         affectsDowntime: true,
         reducesUnrest: false,
+        gainRuin: {
+            value: '1',
+            ruin: 'crime',
+            moreThanOncePerTurn: true,
+        },
         level: 5,
         construction: {
             rp: 25,
@@ -1767,6 +1873,9 @@ const structures: Structure[] = [
         traits: ['building', 'edifice'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
         level: 2,
         construction: {
             rp: 22,
@@ -1839,6 +1948,11 @@ const structures: Structure[] = [
         lots: 0,
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+            moreThanOncePerTurn: true,
+            note: 'as long as it\'s the first wall in a settlement',
+        },
         level: 5,
         upgradeFrom: ['Wall, Wooden'],
         construction: {
@@ -1857,6 +1971,11 @@ const structures: Structure[] = [
         lots: 0,
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+            moreThanOncePerTurn: true,
+            note: 'as long as it\'s the first wall in a settlement',
+        },
         level: 1,
         construction: {
             rp: 2,
@@ -1875,6 +1994,9 @@ const structures: Structure[] = [
         traits: ['building'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
         level: 3,
         construction: {
             rp: 12,
@@ -1895,6 +2017,9 @@ const structures: Structure[] = [
         traits: ['building'],
         affectsDowntime: false,
         reducesUnrest: true,
+        reduceUnrestBy: {
+            value: '1',
+        },
         level: 3,
         construction: {
             rp: 12,

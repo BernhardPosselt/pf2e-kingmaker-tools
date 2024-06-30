@@ -76,26 +76,28 @@ export function getSceneActorStructures(scene: Scene): ActorStructure[] {
     return getStructuresFromActors(actors);
 }
 
+export function getStructureFromActor(actor: Actor): ActorStructure | null {
+    const width = actor.token?.width ?? actor.prototypeToken?.width ?? 0;
+    const height = actor.token?.height ?? actor.prototypeToken?.height ?? 0;
+    const data = parseStructureData(
+        actor!.name,
+        actor!.getFlag('pf2e-kingmaker-tools', 'structureData'),
+        width,
+        height,
+        actor.level,
+    );
+    if (data) {
+        return {
+            ...data,
+            actor,
+        };
+    }
+    return null;
+}
+
 export function getStructuresFromActors(actors: Actor[]): ActorStructure[] {
     return actors
-        .map((actor) => {
-            const width = actor.token?.width ?? actor.prototypeToken?.width ?? 0;
-            const height = actor.token?.height ?? actor.prototypeToken?.height ?? 0;
-            const data = parseStructureData(
-                actor!.name,
-                actor!.getFlag('pf2e-kingmaker-tools', 'structureData'),
-                width,
-                height,
-                actor.level,
-            );
-            if (data) {
-                return {
-                    ...data,
-                    actor,
-                };
-            }
-            return null;
-        })
+        .map((actor) => getStructureFromActor(actor))
         .filter(actor => actor !== null)! as ActorStructure[];
 }
 

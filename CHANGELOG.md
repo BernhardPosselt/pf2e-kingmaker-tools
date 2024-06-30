@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Add min lots filter to structure browser
 * Manage Trade Agreements and Trade Commodities activities buttons now ask how many times they should be performed
+* Show hints and buttons when creating a structure token on a sheet that reduces or increases unrest or ruin
+
+## Fixed
+
+* Do not show missing message when reducing more ruin or unrest than present
 
 ## [1.0.0-beta7] - 2024-06-19
 

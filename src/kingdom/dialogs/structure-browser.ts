@@ -224,7 +224,7 @@ class StructureBrowserApp extends FormApplication<
             infrastructure: false,
             ignoreProficiencyRequirements: false,
             ignoreStructureCost: false,
-            minLots: 1,
+            minLots: 0,
             lots: 4,
             activities: Object.fromEntries(activities.map(activity => {
                 return [activity, {name: unslugify(activity), enabled: false}];

@@ -49,6 +49,7 @@ export async function calculateNewValue(
         mode,
         limit,
         multiple,
+        showMissing,
     }: {
         currentValue: number,
         newValue: number,
@@ -57,6 +58,7 @@ export async function calculateNewValue(
         mode: ResourceMode,
         multiple: boolean,
         limit?: number,
+        showMissing: boolean,
     },
 ): Promise<ResourceValues> {
     const factor = multiple ? await askFactor() : 1;
@@ -67,7 +69,7 @@ export async function calculateNewValue(
     const label = type === 'rolled-resource-dice' ? 'Resource Points' : unslugify(type);
     const turnLabel = turn === 'now' ? 'this turn' : 'next turn';
     const message = `${mode === 'gain' ? 'Gaining' : 'Losing'} ${Math.abs(multipliedValue)} ${label} ${turnLabel}`;
-    const missingMessage = missing > 0 && turn === 'now' ? `Missing ${missing} ${label}` : '';
+    const missingMessage = showMissing && missing > 0 && turn === 'now' ? `Missing ${missing} ${label}` : '';
     return {
         value: turn === 'now' ? Math.max(0, limitedValue) : limitedValue,
         message,
@@ -203,8 +205,10 @@ export type RolledResources = 'resource-dice'
     | 'xp'
     | 'supernatural-solution'
     | 'creative-solution'
-    | 'rolled-resource-dice'; // TODO: add ruin, commodities
+    | 'rolled-resource-dice';
 export type ResourceTurn = 'now' | 'next';
+
+const ignoreMissing: Set<RolledResources> = new Set(['crime', 'decay', 'strife', 'corruption', 'unrest']);
 
 interface ResourceButton {
     type: RolledResources,
@@ -229,7 +233,6 @@ export function parseResourceButton(element: HTMLButtonElement): ResourceButton 
     };
 }
 
-
 export async function updateResources(game: Game, actor: Actor, target: HTMLButtonElement): Promise<void> {
     const {multiple, type, mode, turn, value: parsedValue} = parseResourceButton(target);
     const kingdom = getKingdom(actor);
@@ -245,6 +248,7 @@ export async function updateResources(game: Game, actor: Actor, target: HTMLButt
         type,
         currentValue,
         multiple,
+        showMissing: !ignoreMissing.has(type),
     });
 
     await ChatMessage.create({'content': `${message}`});

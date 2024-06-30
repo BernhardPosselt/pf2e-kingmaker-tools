@@ -1,4 +1,4 @@
-import {mergeObjects, mergePartialObjects, sum} from '../utils';
+import {mergeObjects, mergePartialObjects, postChatMessage, sum} from '../utils';
 import {getActivitySkills} from './data/activities';
 import {
     ActivityBonusRule,
@@ -11,7 +11,9 @@ import {
     Structure,
 } from './data/structures';
 import {Skill} from './data/skills';
-import {KingdomActivityById} from './data/activityData';
+import {gainRuin, KingdomActivityById, loseRuin, loseUnrest} from './data/activityData';
+import {getStructureFromActor, isStructureActor} from './scene';
+import {allRuins} from './data/ruin';
 
 export interface StructureResult {
     allowCapitalInvestment: boolean;
@@ -510,4 +512,48 @@ export function groupAvailableItems(itemLevelBonuses: ItemLevelBonuses): Partial
         ...groupByItemType(itemLevelBonuses, 'other',
             ['magical', 'alchemical']),
     };
+}
+
+
+export async function showStructureHints(actor: Actor | null): Promise<void> {
+    if (actor && isStructureActor(actor)) {
+        const data = getStructureFromActor(actor);
+        if (data) {
+            const messages = [];
+            // reduce unrest
+            const reduceUnrestBy = data.reduceUnrestBy;
+            if (reduceUnrestBy) {
+                const prefix = !reduceUnrestBy.moreThanOncePerTurn ? 'The first time you build this structure each turn ' : 'Each time you build this structure ';
+                const postfix = reduceUnrestBy.note === undefined ? '' : ` ${reduceUnrestBy.note}`;
+                messages.push(prefix + loseUnrest(reduceUnrestBy.value) + postfix);
+            }
+            // reduce ruin
+            const reduceRuinBy = data.reduceRuinBy;
+            if (reduceRuinBy) {
+                const prefix = !reduceRuinBy.moreThanOncePerTurn ? 'The first time you build this structure each turn ' : 'Each time you build this structure ';
+                const value = reduceRuinBy.value;
+                if (reduceRuinBy.ruin === 'any') {
+                    messages.push(`${prefix}choose one of: <ul>${allRuins.map(ruin => `<li>${loseRuin(ruin, value)}</li>`).join('')}</ul>`);
+                } else {
+                    messages.push(prefix + loseRuin(reduceRuinBy.ruin, value));
+                }
+            }
+            // gain ruin
+            const gainRuinBy = data.gainRuin;
+            if (gainRuinBy) {
+                const prefix = !gainRuinBy.moreThanOncePerTurn ? 'The first time you build this structure each turn ' : 'Each time you build this structure ';
+                const value = gainRuinBy.value;
+                if (gainRuinBy.ruin === 'any') {
+                    messages.push(`${prefix}choose one of: <ul>${allRuins.map(ruin => `<li>${gainRuin(ruin, value)}</li>`).join('')}</ul>`);
+                } else {
+                    messages.push(prefix + gainRuin(gainRuinBy.ruin, value));
+                }
+            }
+            if (messages.length > 0) {
+                await postChatMessage(messages
+                    .map(m => `<div>${m}</div>`)
+                    .join(''));
+            }
+        }
+    }
 }

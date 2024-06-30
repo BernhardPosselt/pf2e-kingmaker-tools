@@ -33,6 +33,7 @@ import {updateKingdomArmyConsumption} from './armies/utils';
 import {openJournal} from './foundry-utils';
 import {structureTokenMappingDialog} from './kingdom/dialogs/structure-token-mapping-dialog';
 import {realmTileDialog} from './kingdom/dialogs/realm-tile-dialog';
+import {showStructureHints} from './kingdom/structures';
 
 
 Hooks.on('ready', async () => {
@@ -397,7 +398,10 @@ Hooks.on('ready', async () => {
                 game: gameInstance,
             });
         };
-        Hooks.on('createToken', (token: StoredDocument<Token>) => updateConsumption(token.actor));
+        Hooks.on('createToken', (token: StoredDocument<Token>) => {
+            showStructureHints(token.actor);
+            updateConsumption(token.actor);
+        });
         Hooks.on('updateToken', (token: StoredDocument<Token>) => updateConsumption(token.actor));
         Hooks.on('deleteToken', (token: StoredDocument<Token>) => updateConsumption(token.actor));
         Hooks.on('updateActor', (actor: StoredDocument<Actor>) => updateConsumption(actor));
