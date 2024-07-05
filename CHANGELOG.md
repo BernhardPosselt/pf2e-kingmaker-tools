@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 2024-07-05
+
+### Fixed
+
+* Do not show ruin and consumption structure information once per player
+
 ## [1.0.2] - 2024-06-30
 
 ### Fixed

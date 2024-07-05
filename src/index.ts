@@ -399,7 +399,7 @@ Hooks.on('ready', async () => {
             });
         };
         Hooks.on('createToken', (token: StoredDocument<Token>) => {
-            showStructureHints(token.actor);
+            showStructureHints(game, token.actor);
             updateConsumption(token.actor);
         });
         Hooks.on('updateToken', (token: StoredDocument<Token>) => updateConsumption(token.actor));

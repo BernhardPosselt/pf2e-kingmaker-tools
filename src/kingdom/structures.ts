@@ -1,4 +1,4 @@
-import {mergeObjects, mergePartialObjects, postChatMessage, sum} from '../utils';
+import {isFirstGm, mergeObjects, mergePartialObjects, postChatMessage, sum} from '../utils';
 import {getActivitySkills} from './data/activities';
 import {
     ActivityBonusRule,
@@ -515,8 +515,8 @@ export function groupAvailableItems(itemLevelBonuses: ItemLevelBonuses): Partial
 }
 
 
-export async function showStructureHints(actor: Actor | null): Promise<void> {
-    if (actor && isStructureActor(actor)) {
+export async function showStructureHints(game: Game, actor: Actor | null): Promise<void> {
+    if (isFirstGm(game) && actor && isStructureActor(actor)) {
         const data = getStructureFromActor(actor);
         if (data) {
             const messages = [];
