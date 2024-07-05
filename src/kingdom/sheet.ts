@@ -1171,6 +1171,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const scene = this.game.scenes?.filter(scene => scene.id === id)?.[0];
         if (scene) {
             if (ev.ctrlKey) {
+                await saveKingdom(this.sheetActor, {
+                    activeSettlement: scene.id,
+                });
                 await scene.activate();
             } else {
                 await scene.view();

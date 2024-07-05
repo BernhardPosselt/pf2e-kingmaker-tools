@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.3] - 2024-07-05
 
+### Changed
+
+* When activating settlement scenes through the kingdom sheet using ctrl + click, change the active settlement in the sheet to the scene
+
 ### Fixed
 
 * Do not show ruin and consumption structure information once per player
