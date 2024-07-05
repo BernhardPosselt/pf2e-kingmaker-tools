@@ -41,18 +41,22 @@ Here's some general advice and things you have to think about:
     * Commodities like Lumber, Ore, etc
 * You need to give players a time limit to complete chapters, but don't forget to give them plenty time in between chapters to develop their kingdom and perform downtime activities. Without time constraints, travel costs are completely invalidated which in turn also makes roads, bridges and travel speed irrelevant. Some suggestions:
     * 3 months to deal with the Stag Lord, otherwise Brevoy might claim the Rostland Hinterlands, cutting the PCs off of fertile farmland. There is no way that a call for adventurers has gone unnoticed and Surtova wants to prevent Khavortorov from tipping the scales. Foreshadow by letting them meet agents from Brevoy.
-    * Use weekly **Troll Sightings** events until Hargulka is dealt with. This should give PCs enough urgency to deal with him quickly
+    * Use weekly **Troll Sightings** events until Hargulka is dealt with. This should give PCs enough urgency to deal with him quickly; alternatively send a low level troll army against their kingdom if you want to introduce armies earlier
     * Similarly, roll one cult event per day, even if PCs have not researched anything during the **Season of Bloom**
     * During the **Varnhold Vanishing**, acting fast could determine if the PCs save Maegar Varn and other citizens before they are killed. This might net the PCs additional loot and structures.
     * Blood for Blood should threaten the PCs with frequent army attacks until they've dealt with Drelev and the Tiger Lords. You can increase the difficulty of the army combats if required. Armies aren't used too frequently in this chapter, because the original AP needed more time to develop the army rules. You should add in additional ones.
-    * TBD - haven't reached these yet
+    * War of the River Kings pressures the PCs with armies until they take care of them; if they wait too long, the adventure suggests that Pitax should recruit additional armies, so you do not need to add additional time limits
+    * Following the war, your players should level up their kingdom to level 16-17 and explore many parts to the north of Pitax
+    * They Lurk Below should be time boxed to one month; keep in mind that you should let the PCs complete a ton of kingdom turns before starting this quest; if required, give them an additional 1-2 months to explore the remaining parts in the western Stolen Lands
+    * Sound of a thousand screams plays out over a month so no additional limits needed
+    * Curse of the Lantern King plays out entirely in the First World so no time limit is needed here as well
 
 ### House Rules
 
 * Players can not buy items above their level in Restov: the loot in the early game is out of control and potentially allows players to shop in a 9th level settlement with 6000 gold at level 1. If you are going to allow them to buy items in Restov, you are going to imbalance fights for around half of the AP. In addition, giving players access to purchasing all items in a simple way will remove a lot of reasons why they want to build structures that increase purchasable item levels and will also hamper crafting
 * Rations have 1 bulk instead of L bulk or expire after 2 weeks: as mentioned before, the amount of gold your players can get is kinda crazy and rations are cheap. If you do not limit rations in some way, your players will never need to interact with the survival systems at lower levels
 * All Precious Materials are uncommon: this allows PCs to find resources on the world map and gain access to them when they claim the hexes
-* Horses are usually Large, so carrying items of medium bulk will halve their bulk values (L -> negligible, 1 -> L, 2 -> 1, etc). To somewhat limit the insane amount of storage, I'd recommend to max out their bulk capacity at 6 bulk.
+* Horses are usually Large, so carrying items of medium bulk will halve their bulk values (L -> negligible, 1 -> L, 2 -> 1, etc.). To somewhat limit the insane amount of storage, I'd recommend to max out their bulk capacity at 6 bulk.
 * No random combat encounters are rolled in claimed hexes
 
 ## Weather
@@ -266,8 +270,6 @@ From what I've seen from armies so far, armies have the following issues:
 * Without tactics, it's like playing a theater of mind Fighter in 5e (move in, then attack once each round); it's mindlessly boring, you can't even flank an enemy right out the gate
 * I've looked into the 1e rules and oh boy, the 1e rules suck even more
 * You can move an unlimited amount of armies on the hex map (giant ball of death) but each army on its own might get lost which is neither fun nor realistic
-
-I have yet to use them more to figure out a good solution.
 
 ### House Rules
 
