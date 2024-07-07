@@ -49,7 +49,7 @@ Here's some general advice and things you have to think about:
     * Following the war, your players should level up their kingdom to level 16-17 and explore many parts to the north of Pitax
     * They Lurk Below should be time boxed to one month; keep in mind that you should let the PCs complete a ton of kingdom turns before starting this quest; if required, give them an additional 1-2 months to explore the remaining parts in the western Stolen Lands
     * Sound of a thousand screams plays out over a month so no additional limits needed
-    * Curse of the Lantern King plays out entirely in the First World so no time limit is needed here as well
+    * Curse of the Lantern King plays out entirely in the First World so no time limit is needed here as wellts
 
 ### House Rules
 

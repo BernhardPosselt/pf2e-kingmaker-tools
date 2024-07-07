@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2024-07-07
+
+### Fixed
+
+* Only add Inspiring Entertainment bonus if kingdom has at least 1 unrest
+
 ## [1.0.3] - 2024-07-05
 
 ### Changed

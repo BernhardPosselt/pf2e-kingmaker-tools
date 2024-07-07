@@ -171,13 +171,6 @@ multiple times, choosing a new skill each time.`,
         prerequisites: 'Culture 14',
         text: `Your kingdom’s artists and entertainers are talented and prolific, and there’s never a shortage of new plays, operas, novels, music, sculptures, paintings, or other forms of distraction to entertain the citizens, even during
 times of upheaval. Your kingdom gains a +2 circumstance bonus to all Culture-based skill checks whenever your kingdom has at least 1 Unrest.`,
-        modifiers: [{
-            name: 'Inspiring Entertainment',
-            type: 'circumstance',
-            enabled: true,
-            abilities: ['culture'],
-            value: 2,
-        }],
     },
     ...generateForAllSkills({
         name: 'Kingdom Assurance',

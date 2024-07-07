@@ -211,6 +211,15 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 });
             }
         }
+        if (this.kingdom.unrest > 0 && hasFeat(this.kingdom, 'Inspiring Entertainment')) {
+            additionalModifiers.push({
+                name: 'Inspiring Entertainment',
+                type: 'circumstance',
+                enabled: true,
+                abilities: ['culture'],
+                value: 2,
+            });
+        }
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
         const skillModifiers = this.calculateModifiers(
             applicableSkills,
