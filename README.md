@@ -14,7 +14,7 @@ All Pathfinder content uses the [Open Gaming License](./OpenGameLicense.md) and 
 
 The source code is licensed under the AGPLv3 license.
 
-All images in the [static/img/structures](static/img/structures) folder are licensed under CC-BY-SA 4.0 by [Mark Pearce](https://github.com/MarkPearce). They were [generated and retouched using a MidJourney](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/76). According to their [https://docs.midjourney.com/docs/terms-of-service](Terms of Service), subscribers to MidJourney that are not part of a company own all the generated images.
+All images in the [static/img/structures](static/img/structures) folder are licensed under CC-BY-SA 4.0 by [Mark Pearce](https://github.com/MarkPearce). They were [generated and retouched using a MidJourney subscriber account](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/76). According to their [Terms of Service](https://docs.midjourney.com/docs/terms-of-service), subscribers to MidJourney that are not part of a company own all the generated images.
 
 ## Usage
 
