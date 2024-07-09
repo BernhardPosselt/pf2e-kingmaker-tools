@@ -22,9 +22,6 @@ const officialMappings: Mapping[] = [{
 }, {
     'name': 'Brewery',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/brewery.webp',
-}, {'name': 'Bridge', 'img': 'pf2e-kingmaker-tools-tokens/structures/Bridge.webp'}, {
-    'name': 'Bridge, Stone',
-    'img': 'pf2e-kingmaker-tools-tokens/structures/Bridge.webp',
 }, {
     'name': 'Castle',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/castle.webp',
@@ -64,9 +61,6 @@ const officialMappings: Mapping[] = [{
 }, {
     'name': 'General Store',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/general-store.webp',
-}, {
-    'name': 'Gladiatorial Arena',
-    'img': 'pf2e-kingmaker-tools-tokens/structures/Gladiatorial%20Arena.webp',
 }, {
     'name': 'Granary',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/granary.webp',
@@ -112,9 +106,6 @@ const officialMappings: Mapping[] = [{
 }, {
     'name': 'Magic Shop (V&K)',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/magic-shop.webp',
-}, {
-    'name': 'Magical Streetlamps',
-    'img': 'pf2e-kingmaker-tools-tokens/structures/Magical%20Streetlamps.webp',
 }, {
     'name': 'Mansion',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/mansion.webp',
@@ -163,10 +154,10 @@ const officialMappings: Mapping[] = [{
 }, {
     'name': 'Park',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/park.webp',
-}, {'name': 'Paved Streets', 'img': 'pf2e-kingmaker-tools-tokens/structures/Paved%20Streets.webp'}, {
+}, {
     'name': 'Pier',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/pier.webp',
-}, {'name': 'Printing House', 'img': 'pf2e-kingmaker-tools-tokens/structures/Printing%20Press.webp'}, {
+}, {
     'name': 'Rubble',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/rubble.webp',
 }, {
@@ -175,7 +166,7 @@ const officialMappings: Mapping[] = [{
 }, {
     'name': 'Secure Warehouse',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/secure-warehouse.webp',
-}, {'name': 'Sewer System', 'img': 'pf2e-kingmaker-tools-tokens/structures/Sewer%20System.webp'}, {
+}, {
     'name': 'Shrine',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/shrine.webp',
 }, {
@@ -248,12 +239,6 @@ const officialMappings: Mapping[] = [{
     'name': 'University',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/university.webp',
 }, {
-    'name': 'Wall, Stone',
-    'img': 'pf2e-kingmaker-tools-tokens/structures/Wall%2C%20Stone.webp',
-}, {
-    'name': 'Wall, Wooden',
-    'img': 'pf2e-kingmaker-tools-tokens/structures/Wall%2C%20Wooden.webp',
-}, {
     'name': 'Watchtower',
     'img': 'modules/pf2e-kingmaker/assets/maps-settlements/buildings/watchtower.webp',
 }, {
@@ -282,178 +267,157 @@ const customMappings: Mapping[] = [{
 }, {'name': 'Bank (V&K)', 'img': 'structures/Bank.webp'}, {
     'name': 'Barracks',
     'img': 'structures/Barracks.webp',
-}, {'name': 'Brewery', 'img': 'structures/Brewery.webp'}, {
-    'name': 'Bridge',
-    'img': 'structures/Bridge.webp',
-}, {'name': 'Bridge, Stone', 'img': 'structures/Bridge.webp'}, {
-    'name': 'Castle',
-    'img': 'structures/Castle.webp',
-}, {'name': 'Castle (V&K)', 'img': 'structures/Castle.webp'}, {
-    'name': 'Cathedral',
-    'img': 'structures/Cathedral.webp',
-}, {'name': 'Cemetary', 'img': 'structures/Cemetery.webp'}, {
-    'name': 'Construction Yard',
-    'img': 'structures/Construction%20Yard.webp',
-}, {
-    'name': 'Construction Yard (V&K)',
-    'img': 'structures/Construction%20Yard.webp',
-}, {'name': 'Dump', 'img': 'structures/Dump.webp'}, {
-    'name': 'Embassy',
-    'img': 'structures/Embassy.webp',
-}, {
-    'name': 'Festival Hall',
-    'img': 'structures/Festival%20Hall.webp',
-}, {
-    'name': 'Festival Hall (V&K)',
-    'img': 'structures/Festival%20Hall.webp',
-}, {'name': 'Foundry', 'img': 'structures/Foundry.webp'}, {
-    'name': 'Garrison',
-    'img': 'structures/Garrison.webp',
-}, {'name': 'Garrison (V&K)', 'img': 'structures/Garrison.webp'}, {
-    'name': 'General Store',
-    'img': 'structures/General%20Store.webp',
-}, {
-    'name': 'Gladiatorial Arena',
-    'img': 'structures/Gladiatorial%20Arena.webp',
-}, {'name': 'Granary', 'img': 'structures/Granary.webp'}, {
-    'name': 'Granary (V&K)',
-    'img': 'structures/Granary.webp',
-}, {'name': 'Guildhall', 'img': 'structures/Guildhall.webp'}, {
-    'name': 'Herbalist',
-    'img': 'structures/Herbalist.webp',
-}, {'name': 'Hospital', 'img': 'structures/Hospital.webp'}, {
-    'name': 'Houses',
-    'img': 'structures/Houses.webp',
-}, {'name': 'Illicit Market', 'img': 'structures/Illicit%20Market.webp'}, {
-    'name': 'Inn',
-    'img': 'structures/Inn.webp',
-}, {'name': 'Inn (V&K)', 'img': 'structures/Inn.webp'}, {
-    'name': 'Jail',
-    'img': 'structures/Jail.webp',
-}, {'name': 'Keep', 'img': 'structures/Keep.webp'}, {
-    'name': 'Library',
-    'img': 'structures/Library.webp',
-}, {'name': 'Library (V&K)', 'img': 'structures/Library.webp'}, {
-    'name': 'Lumberyard',
-    'img': 'structures/Lumberyard.webp',
-}, {'name': 'Luxury Store', 'img': 'structures/Luxury%20Store.webp'}, {
-    'name': 'Magic Shop',
-    'img': 'structures/Magic%20Shop.webp',
-}, {
-    'name': 'Magic Shop (V&K)',
-    'img': 'structures/Magic%20Shop.webp',
-}, {
-    'name': 'Magical Streetlamps',
-    'img': 'structures/Magical%20Streetlamps.webp',
-}, {'name': 'Mansion', 'img': 'structures/Mansion.webp'}, {
-    'name': 'Marketplace',
-    'img': 'structures/Marketplace.webp',
-}, {'name': 'Menagerie', 'img': 'structures/Menagerie.webp'}, {
-    'name': 'Military Academy',
-    'img': 'structures/Military%20Academy.webp',
-}, {'name': 'Mill', 'img': 'structures/Mill.webp'}, {
-    'name': 'Mint',
-    'img': 'structures/Mint.webp',
-}, {'name': 'Monument', 'img': 'structures/Monument.webp'}, {
-    'name': 'Monument (V&K)',
-    'img': 'structures/Monument.webp',
-}, {'name': 'Museum', 'img': 'structures/Museum.webp'}, {
-    'name': 'Noble Villa',
-    'img': 'structures/Noble%20Villa.webp',
-}, {
-    'name': 'Occult Shop',
-    'img': 'structures/Occult%20Shop.webp',
-}, {
-    'name': 'Occult Shop (V&K)',
-    'img': 'structures/Occult%20Shop.webp',
-}, {'name': 'Opera House', 'img': 'structures/Opera%20House.webp'}, {
-    'name': 'Orphanage',
-    'img': 'structures/Orphanage.webp',
-}, {'name': 'Palace', 'img': 'structures/Palace.webp'}, {
-    'name': 'Palace (V&K)',
-    'img': 'structures/Palace.webp',
-}, {'name': 'Park', 'img': 'structures/Park.webp'}, {
-    'name': 'Paved Streets',
-    'img': 'structures/Paved%20Streets.webp',
-}, {'name': 'Pier', 'img': 'structures/Pier.webp'}, {
-    'name': 'Printing House',
-    'img': 'structures/Printing%20Press.webp',
-}, {'name': 'Rubble', 'img': 'structures/Rubble.webp'}, {
-    'name': 'Sacred Grove',
-    'img': 'structures/Sacred%20Grove.webp',
-}, {
-    'name': 'Secure Warehouse',
-    'img': 'structures/Secure%20Warehouse.webp',
-}, {'name': 'Sewer System', 'img': 'structures/Sewer%20System.webp'}, {
-    'name': 'Shrine',
-    'img': 'structures/Shrine.webp',
-}, {'name': 'Smithy', 'img': 'structures/Smithy.webp'}, {
-    'name': 'Smithy (V&K)',
-    'img': 'structures/Smithy.webp',
-}, {
-    'name': 'Specialized Artisan',
-    'img': 'structures/Special%20Artisan.webp',
-}, {'name': 'Stable', 'img': 'structures/Stable.webp'}, {
-    'name': 'Stockyard',
-    'img': 'structures/Stockyard.webp',
-}, {'name': 'Stonemason', 'img': 'structures/Stonemason.webp'}, {
-    'name': 'Tannery',
-    'img': 'structures/Tannery.webp',
-}, {
-    'name': 'Tavern, Dive',
-    'img': 'structures/Tavern%2C%20Dive.webp',
-}, {
-    'name': 'Tavern, Dive (V&K)',
-    'img': 'structures/Tavern%2C%20Dive.webp',
-}, {
-    'name': 'Tavern, Luxury',
-    'img': 'structures/Tavern%2C%20Luxury.webp',
-}, {
-    'name': 'Tavern, Luxury (V&K)',
-    'img': 'structures/Tavern%2C%20Luxury.webp',
-}, {
-    'name': 'Tavern, Popular',
-    'img': 'structures/Tavern%2C%20Popular.webp',
-}, {
-    'name': 'Tavern, Popular (V&K)',
-    'img': 'structures/Tavern%2C%20Popular.webp',
-}, {
-    'name': 'Tavern, World-Class',
-    'img': 'structures/Tavern%2C%20World%20Class.webp',
-}, {
-    'name': 'Tavern, World-Class (V&K)',
-    'img': 'structures/Tavern%2C%20World%20Class.webp',
-}, {'name': 'Temple', 'img': 'structures/Temple.webp'}, {
-    'name': 'Tenement',
-    'img': 'structures/Tenement.webp',
-}, {'name': 'Theater', 'img': 'structures/Theater.webp'}, {
-    'name': 'Thieves\' Guild',
-    'img': 'structures/Thieves%20Guild.webp',
-}, {'name': 'Town Hall', 'img': 'structures/Town%20Hall.webp'}, {
-    'name': 'Town Hall (V&K)',
-    'img': 'structures/Town%20Hall.webp',
-}, {'name': 'Trade Shop', 'img': 'structures/Trade%20Shop.webp'}, {
-    'name': 'University',
-    'img': 'structures/University.webp',
-}, {
-    'name': 'Wall, Stone',
-    'img': 'structures/Wall%2C%20Stone.webp',
-}, {
-    'name': 'Wall, Wooden',
-    'img': 'structures/Wall%2C%20Wooden.webp',
-}, {
-    'name': 'Watchtower',
-    'img': 'structures/Watchtower.webp',
-}, {
-    'name': 'Watchtower, Stone',
-    'img': 'structures/Watchtower.webp',
-}, {
-    'name': 'Waterfront (Corner)',
-    'img': 'structures/Waterfront%20(Corner).webp',
-}, {
-    'name': 'Waterfront (Side)',
-    'img': 'structures/Waterfront%20(Side).webp',
-}];
+}, {'name': 'Brewery', 'img': 'structures/Brewery.webp'},
+    {'name': 'Castle (V&K)', 'img': 'structures/Castle.webp'}, {
+        'name': 'Cathedral',
+        'img': 'structures/Cathedral.webp',
+    }, {'name': 'Cemetary', 'img': 'structures/Cemetery.webp'}, {
+        'name': 'Construction Yard',
+        'img': 'structures/Construction%20Yard.webp',
+    }, {
+        'name': 'Construction Yard (V&K)',
+        'img': 'structures/Construction%20Yard.webp',
+    }, {'name': 'Dump', 'img': 'structures/Dump.webp'}, {
+        'name': 'Embassy',
+        'img': 'structures/Embassy.webp',
+    }, {
+        'name': 'Festival Hall',
+        'img': 'structures/Festival%20Hall.webp',
+    }, {
+        'name': 'Festival Hall (V&K)',
+        'img': 'structures/Festival%20Hall.webp',
+    }, {'name': 'Foundry', 'img': 'structures/Foundry.webp'}, {
+        'name': 'Garrison',
+        'img': 'structures/Garrison.webp',
+    }, {'name': 'Garrison (V&K)', 'img': 'structures/Garrison.webp'}, {
+        'name': 'General Store',
+        'img': 'structures/General%20Store.webp',
+    }, {'name': 'Granary', 'img': 'structures/Granary.webp'}, {
+        'name': 'Granary (V&K)',
+        'img': 'structures/Granary.webp',
+    }, {'name': 'Guildhall', 'img': 'structures/Guildhall.webp'}, {
+        'name': 'Herbalist',
+        'img': 'structures/Herbalist.webp',
+    }, {'name': 'Hospital', 'img': 'structures/Hospital.webp'}, {
+        'name': 'Houses',
+        'img': 'structures/Houses.webp',
+    }, {'name': 'Illicit Market', 'img': 'structures/Illicit%20Market.webp'}, {
+        'name': 'Inn',
+        'img': 'structures/Inn.webp',
+    }, {'name': 'Inn (V&K)', 'img': 'structures/Inn.webp'}, {
+        'name': 'Jail',
+        'img': 'structures/Jail.webp',
+    }, {'name': 'Keep', 'img': 'structures/Keep.webp'}, {
+        'name': 'Library',
+        'img': 'structures/Library.webp',
+    }, {'name': 'Library (V&K)', 'img': 'structures/Library.webp'}, {
+        'name': 'Lumberyard',
+        'img': 'structures/Lumberyard.webp',
+    }, {'name': 'Luxury Store', 'img': 'structures/Luxury%20Store.webp'}, {
+        'name': 'Magic Shop',
+        'img': 'structures/Magic%20Shop.webp',
+    }, {
+        'name': 'Magic Shop (V&K)',
+        'img': 'structures/Magic%20Shop.webp',
+    }, {'name': 'Mansion', 'img': 'structures/Mansion.webp'}, {
+        'name': 'Marketplace',
+        'img': 'structures/Marketplace.webp',
+    }, {'name': 'Menagerie', 'img': 'structures/Menagerie.webp'}, {
+        'name': 'Military Academy',
+        'img': 'structures/Military%20Academy.webp',
+    }, {'name': 'Mill', 'img': 'structures/Mill.webp'}, {
+        'name': 'Mint',
+        'img': 'structures/Mint.webp',
+    }, {'name': 'Monument', 'img': 'structures/Monument.webp'}, {
+        'name': 'Monument (V&K)',
+        'img': 'structures/Monument.webp',
+    }, {'name': 'Museum', 'img': 'structures/Museum.webp'}, {
+        'name': 'Noble Villa',
+        'img': 'structures/Noble%20Villa.webp',
+    }, {
+        'name': 'Occult Shop',
+        'img': 'structures/Occult%20Shop.webp',
+    }, {
+        'name': 'Occult Shop (V&K)',
+        'img': 'structures/Occult%20Shop.webp',
+    }, {'name': 'Opera House', 'img': 'structures/Opera%20House.webp'}, {
+        'name': 'Orphanage',
+        'img': 'structures/Orphanage.webp',
+    }, {'name': 'Palace', 'img': 'structures/Palace.webp'}, {
+        'name': 'Palace (V&K)',
+        'img': 'structures/Palace.webp',
+    }, {'name': 'Park', 'img': 'structures/Park.webp'},
+    {'name': 'Pier', 'img': 'structures/Pier.webp'},
+    {'name': 'Rubble', 'img': 'structures/Rubble.webp'}, {
+        'name': 'Sacred Grove',
+        'img': 'structures/Sacred%20Grove.webp',
+    }, {
+        'name': 'Secure Warehouse',
+        'img': 'structures/Secure%20Warehouse.webp',
+    }, {
+        'name': 'Shrine',
+        'img': 'structures/Shrine.webp',
+    }, {'name': 'Smithy', 'img': 'structures/Smithy.webp'}, {
+        'name': 'Smithy (V&K)',
+        'img': 'structures/Smithy.webp',
+    }, {
+        'name': 'Specialized Artisan',
+        'img': 'structures/Special%20Artisan.webp',
+    }, {'name': 'Stable', 'img': 'structures/Stable.webp'}, {
+        'name': 'Stockyard',
+        'img': 'structures/Stockyard.webp',
+    }, {'name': 'Stonemason', 'img': 'structures/Stonemason.webp'}, {
+        'name': 'Tannery',
+        'img': 'structures/Tannery.webp',
+    }, {
+        'name': 'Tavern, Dive',
+        'img': 'structures/Tavern%2C%20Dive.webp',
+    }, {
+        'name': 'Tavern, Dive (V&K)',
+        'img': 'structures/Tavern%2C%20Dive.webp',
+    }, {
+        'name': 'Tavern, Luxury',
+        'img': 'structures/Tavern%2C%20Luxury.webp',
+    }, {
+        'name': 'Tavern, Luxury (V&K)',
+        'img': 'structures/Tavern%2C%20Luxury.webp',
+    }, {
+        'name': 'Tavern, Popular',
+        'img': 'structures/Tavern%2C%20Popular.webp',
+    }, {
+        'name': 'Tavern, Popular (V&K)',
+        'img': 'structures/Tavern%2C%20Popular.webp',
+    }, {
+        'name': 'Tavern, World-Class',
+        'img': 'structures/Tavern%2C%20World%20Class.webp',
+    }, {
+        'name': 'Tavern, World-Class (V&K)',
+        'img': 'structures/Tavern%2C%20World%20Class.webp',
+    }, {'name': 'Temple', 'img': 'structures/Temple.webp'}, {
+        'name': 'Tenement',
+        'img': 'structures/Tenement.webp',
+    }, {'name': 'Theater', 'img': 'structures/Theater.webp'}, {
+        'name': 'Thieves\' Guild',
+        'img': 'structures/Thieves%20Guild.webp',
+    }, {'name': 'Town Hall', 'img': 'structures/Town%20Hall.webp'}, {
+        'name': 'Town Hall (V&K)',
+        'img': 'structures/Town%20Hall.webp',
+    }, {'name': 'Trade Shop', 'img': 'structures/Trade%20Shop.webp'}, {
+        'name': 'University',
+        'img': 'structures/University.webp',
+    }, {
+        'name': 'Watchtower',
+        'img': 'structures/Watchtower.webp',
+    }, {
+        'name': 'Watchtower, Stone',
+        'img': 'structures/Watchtower.webp',
+    }, {
+        'name': 'Waterfront (Corner)',
+        'img': 'structures/Waterfront%20(Corner).webp',
+    }, {
+        'name': 'Waterfront (Side)',
+        'img': 'structures/Waterfront%20(Side).webp',
+    }];
 
 interface Mapping {
     name: string;

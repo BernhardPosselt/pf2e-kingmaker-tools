@@ -3,12 +3,18 @@
 This module ships macros, journal entries, roll tables, effect items, additional tooling for OGL/CUP licensed content
 from the Kingmaker Adventure Path for Pathfinder 2nd Edition.
 
-Uses the [Open Gaming License](./OpenGameLicense.md) and [CUP](https://paizo.com/community/communityuse)
+## Licensing
+
+All Pathfinder content uses the [Open Gaming License](./OpenGameLicense.md) and [CUP](https://paizo.com/community/communityuse)
 
 > This FoundryVTT module uses trademarks and/or copyrights owned by Paizo Inc., used under Paizo's Community Use
 > Policy (paizo.com/communityuse). We are expressly prohibited from charging you to use or access this content. This
 > FoundryVTT module is not published, endorsed, or specifically approved by Paizo. For more information about Paizo Inc.
 > and Paizo products, visit paizo.com.
+
+The source code is licensed under the AGPLv3 license.
+
+All images in the [static/img/structures](static/img/structures) folder are licensed under CC-BY-SA 4.0 by [Mark Pearce](https://github.com/MarkPearce). They were [generated and retouched using a MidJourney](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/76). According to their [https://docs.midjourney.com/docs/terms-of-service](Terms of Service), subscribers to MidJourney that are not part of a company own all the generated images.
 
 ## Usage
 
