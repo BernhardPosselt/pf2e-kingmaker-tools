@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2024-07-17
+
+### Fixed
+
+* When upgrading from V11, correctly migrate modifiers to Recover Army to separated activities to not break the kingdom sheet
+
 ## [1.1.0] - 2024-07-09
 
 ### Changed

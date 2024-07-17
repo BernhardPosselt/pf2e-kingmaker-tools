@@ -127,7 +127,7 @@ export const magicalItemGroups: ItemGroup[] = ['magical', 'divine', 'occult', 'p
 export const mundaneItemGroups: ItemGroup[] = ['alchemical', 'luxury', 'other'];
 export const itemGroups: ItemGroup[] = mundaneItemGroups.concat(magicalItemGroups);
 
-const recoverArmyIds = [
+export const recoverArmyIds = [
     'recover-army-damaged',
     'recover-army-defeated',
     'recover-army-lost',
