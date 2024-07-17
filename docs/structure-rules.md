@@ -215,8 +215,7 @@ A full structure rule would look something like this:
   settlement's consumption by the amount
 * **activityBonusRules**: optional, stack up to settlement item bonus and capital item bonuses
     * **value**: mandatory, bonus
-    * **activity**: mandatory, kingdom activity in lowercase with spaces converted to dashes (e.g. **Rest and Relax** ->
-      **rest-and-relax**)
+    * **activity**: mandatory, kingdom activity id; all existing activities can [be found here](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/blob/master/src/kingdom/data/activityData.ts), e.g. "abandon-hex" or "recover-army-damaged"
 * **skillBonusRules**: optional, similar to **activityBonusRules** but allow you to add a flat skill bonus or limit an
   activity bonus to a certain skill
     * **value**: mandatory, bonus
