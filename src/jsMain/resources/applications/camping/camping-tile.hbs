@@ -1,0 +1,54 @@
+<div class="km-camping-activity km-camping-tile"
+    {{#if hidden}}hidden{{/if}}
+    {{#if actor}}data-actor-uuid="{{actor.uuid}}"{{/if}}
+     data-activity-name="{{name}}"
+>
+    <header>
+        {{#if journalUuid}}
+            <a href="#" data-uuid="{{journalUuid}}" data-action="open-journal">{{name}}</a>
+        {{else}}
+            {{name}}
+        {{/if}}
+    </header>
+    <div class="km-camping-tile-portrait {{#unless requiresCheck}}km-no-skill-check{{/unless}}">
+        {{#if actor}}
+            <button class="km-camping-action"
+                    data-action="clear-activity"
+                    type="button"
+                    data-name="{{name}}"><i
+                    class="fa-regular fa-circle-xmark"></i></button>
+            <a href="#"
+               data-uuid="{{actor.uuid}}"
+               data-action="open-actor"><img class="cover" src="{{actor.image}}"></a>
+        {{else}}
+            <div class="empty-activity">
+                <header>Drop Actor from Above</header>
+                <i class="fa-solid fa-plus"></i>
+            </div>
+        {{/if}}
+    </div>
+    {{#if requiresCheck}}
+        <div class="km-camping-tile-check">
+            {{> formElement skills }}
+            <button class="km-camping-action km-tile-check" data-action="roll-camping-check" type="button"
+                    {{#unless actor}}disabled{{/unless}}>
+                <i class="fa-solid fa-dice-d20"></i>
+            </button>
+        </div>
+        <div class="km-camping-tile-result" {{#unless secret}}hidden{{/unless}}>
+            <select disabled>
+                <option>-</option>
+                <option {{#if actor}}{{#if actor.degreeOfSuccess.value}}selected{{/if}}{{/if}}>???</option>
+            </select>
+        </div>
+        <div class="km-camping-tile-result" {{#if secret}}hidden{{/if}}>
+            {{#if actor}}
+                {{> formElement actor.degreeOfSuccess }}
+            {{else}}
+                <select disabled>
+                    <option>-</option>
+                </select>
+            {{/if}}
+        </div>
+    {{/if}}
+</div>

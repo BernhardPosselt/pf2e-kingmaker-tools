@@ -1,0 +1,24 @@
+{
+  "name": "Houses",
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "upgradeFrom": [
+    "Tenement"
+  ],
+  "construction": {
+    "rp": 3,
+    "lumber": 1,
+    "skills": [
+      {
+        "skill": "industry"
+      }
+    ],
+    "dc": 15
+  },
+  "lots": 1
+}

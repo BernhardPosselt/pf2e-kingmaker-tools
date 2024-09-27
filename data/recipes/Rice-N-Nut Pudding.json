@@ -1,0 +1,41 @@
+{
+  "name": "Rice-N-Nut Pudding",
+  "icon": "icons/consumables/food/pot-soup-white.webp",
+  "basicIngredients": 2,
+  "specialIngredients": 1,
+  "cookingLoreDC": 16,
+  "survivalDC": 18,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IrrRh2yttdTDU1A5",
+  "level": 2,
+  "cost": "2 gp",
+  "rarity": "common",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.3Gj0AaUzqwN0CdTi"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.AI1hYVSAMmKgEO9u"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.GzZYeBB1UGMAykXc",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.IRTWUl4HjRa82A1B"
+      }
+    ]
+  }
+}

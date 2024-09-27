@@ -1,0 +1,50 @@
+.skill-picker {
+    .km-picker-error {
+        color: #cc1717;
+        text-align: center;
+        padding: 1em 0;
+    }
+
+    button {
+        i {
+            margin-right: 0;
+        }
+    }
+
+    .km-delete-placeholder {
+        width: 2.1em;
+    }
+
+    .km-any-skill-spacer {
+        width: 19.3em;
+    }
+
+    .km-skill-picker-row {
+        &.row:not(:first-of-type) {
+            margin-top: 0;
+        }
+
+        display: flex;
+        padding: .5em;
+        justify-content: space-between;
+
+        select {
+            width: 8em;
+        }
+
+
+        input[type=text] {
+            width: 8.4em;
+        }
+
+        & > label:first-child {
+            flex-direction: row-reverse;
+            min-width: 10em;
+            margin-right: 2em;
+        }
+
+        &:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    }
+}

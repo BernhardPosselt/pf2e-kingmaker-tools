@@ -1,0 +1,46 @@
+{
+  "name": "Berry Pie",
+  "icon": "icons/consumables/grains/pastry-bread-brown.webp",
+  "basicIngredients": 3,
+  "specialIngredients": 2,
+  "cookingLoreDC": 27,
+  "survivalDC": 29,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.zX4S7wsOxB8CcVWw",
+  "level": 10,
+  "cost": "50 gp",
+  "rarity": "common",
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.elsXArG4GqGin6LB",
+        "removeAfterRest": true,
+        "healFormula": "3d8",
+        "healMode": "afterConsumptionAndRest"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.lWy7BZYGab0uNf9H"
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.n6ykp8NjXDFcvqXM",
+        "removeAfterRest": true,
+        "healFormula": "6d8",
+        "healMode": "afterConsumptionAndRest"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.sQz8ugumjOMSHiYt"
+      }
+    ]
+  }
+}

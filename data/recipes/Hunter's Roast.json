@@ -1,0 +1,44 @@
+{
+  "name": "Hunter's Roast",
+  "icon": "icons/consumables/food/plate-chicken-grilled-mushroom-brown.webp",
+  "basicIngredients": 4,
+  "specialIngredients": 0,
+  "cookingLoreDC": 22,
+  "survivalDC": 24,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.5QyW0eFSJRgmyRzU",
+  "level": 6,
+  "cost": "13 gp",
+  "rarity": "common",
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.0un8LMe7iv59He25",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.LiXnKWPOkDBZRpLE"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.RzOGQxp3VHlpYtWJ",
+        "removeAfterRest": true,
+        "damageFormula": "2d6[poison]",
+        "healMode": "afterConsumption"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.zuPWMtCTzuD96Ykz"
+      }
+    ]
+  }
+}

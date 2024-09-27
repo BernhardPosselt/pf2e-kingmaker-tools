@@ -1,0 +1,44 @@
+{
+  "name": "Cheese Crostata",
+  "icon": "icons/consumables/food/cheese-wheel-round-yellow.webp",
+  "basicIngredients": 4,
+  "specialIngredients": 0,
+  "cookingLoreDC": 22,
+  "survivalDC": 24,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.GAf8W01ppdseIGbq",
+  "level": 5,
+  "cost": "8 gp",
+  "rarity": "uncommon",
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.1VchCdA1LMBhYENe"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.2c2nrlkL2XJXXQIA"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.EBa9BjdANCMLKMEy",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.MI6MF3R5OswdGBUd"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.X7fTfenq4TukJJM4"
+      }
+    ]
+  }
+}

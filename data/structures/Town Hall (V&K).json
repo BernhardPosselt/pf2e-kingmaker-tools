@@ -1,0 +1,45 @@
+{
+  "name": "Town Hall (V&K)",
+  "increaseLeadershipActivities": true,
+  "traits": [
+    "building",
+    "edifice"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "level": 2,
+  "construction": {
+    "rp": 22,
+    "lumber": 4,
+    "stone": 4,
+    "skills": [
+      {
+        "skill": "defense",
+        "proficiencyRank": 1
+      },
+      {
+        "skill": "industry",
+        "proficiencyRank": 1
+      },
+      {
+        "skill": "magic",
+        "proficiencyRank": 1
+      },
+      {
+        "skill": "statecraft",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 16
+  },
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "manage-trade-agreements"
+    }
+  ],
+  "lots": 2
+}

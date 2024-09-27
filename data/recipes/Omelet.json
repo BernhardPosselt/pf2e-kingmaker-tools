@@ -1,0 +1,41 @@
+{
+  "name": "Omelet",
+  "icon": "icons/consumables/eggs/egg-nest-dotted-red.webp",
+  "basicIngredients": 4,
+  "specialIngredients": 1,
+  "cookingLoreDC": 25,
+  "survivalDC": 27,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.3ak0XG0Xf66q2ApV",
+  "level": 7,
+  "cost": "18 gp",
+  "rarity": "uncommon",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.JY3TBLbVAbQHtmtu"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.O4XVtCWn4Hq5QKUP"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.RLJuUa9tzPrC6PqP",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.kyzTn0AUN4Q8G6TH"
+      }
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "Seasoned Wings And Thighs",
+  "icon": "icons/consumables/food/chicken-bird-cooked.webp",
+  "basicIngredients": 4,
+  "specialIngredients": 2,
+  "cookingLoreDC": 30,
+  "survivalDC": 32,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.BTKN1IgANoof0tfB",
+  "level": 12,
+  "cost": "100 gp",
+  "rarity": "common",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.uchgkN3hm1T51zfM",
+        "removeAfterRest": true
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.JqKhpMXiQCEsDSCw"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.JqKhpMXiQCEsDSCw"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.q3vnRHRBn3HmRhkV",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.xF0K40VzyjIbbRMA"
+      }
+    ]
+  }
+}

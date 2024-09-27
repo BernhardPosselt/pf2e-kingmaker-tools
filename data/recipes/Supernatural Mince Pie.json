@@ -1,0 +1,72 @@
+{
+  "name": "Supernatural Mince Pie",
+  "icon": "icons/consumables/food/cheese-round-glowing-yellow.webp",
+  "basicIngredients": 8,
+  "specialIngredients": 4,
+  "cookingLoreDC": 45,
+  "survivalDC": 47,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.RmMZWrzgd8Wh8z5H",
+  "level": 20,
+  "cost": "3500 gp",
+  "rarity": "rare",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.69VWFB5UNLau1Rzt"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.OAxcELiLh04BLVvP"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.WVRQf9SLX0iRh3Ur"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.69MQw1WMMlN4hEzb"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.yLf2n65zVocqsl6r"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.sd45BQ4P7BtsYEuP"
+      }
+    ],
+    "chooseRandomly": true
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.72N0nZAAo2iuCGBd"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.iV22sORhjIhWZMKw"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.CQGJi8WiBq0T8Kc6"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.L8HdDXKrfa3gDakt"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.6CjFExnLSe9qij9z"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Af25wacbdYDnFKwM"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.VhzUKWFVrZ7tgcEQ"
+      }
+    ],
+    "chooseRandomly": true
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Wfmt1NvfIqF3gFav"
+      }
+    ]
+  }
+}

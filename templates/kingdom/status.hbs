@@ -63,7 +63,6 @@
 <table class="km-table">
     <tr>
         <th>Role</th>
-        <th>Type</th>
         <th>Name</th>
         <th>Invested</th>
         <th>Vacant</th>
@@ -72,19 +71,7 @@
         <tr>
             <td>{{label}}</td>
             <td>
-                <select name="leaders.{{@key}}.type">
-                    {{selectOptions ../actorTypes selected=type}}
-                </select>
-            </td>
-            <td>
-                {{#unless isCompanion}}
-                    <input type="text" value="{{name}}" name="leaders.{{@key}}.name">
-                {{/unless}}
-                {{#if isCompanion}}
-                    <select name="leaders.{{@key}}.name">
-                        {{selectOptions ../companions selected=name}}
-                    </select>
-                {{/if}}
+                <input type="text" value="{{name}}" name="leaders.{{@key}}.name">
             </td>
             <td><input type="checkbox" {{checked invested}} name="leaders.{{@key}}.invested"></td>
             <td><input type="checkbox" {{checked vacant}} name="leaders.{{@key}}.vacant"></td>

@@ -1,0 +1,54 @@
+{
+  "name": "Tavern, World-Class (V&K)",
+  "activityBonusRules": [
+    {
+      "value": 3,
+      "activity": "hire-adventurers"
+    },
+    {
+      "value": 3,
+      "activity": "repair-reputation-strife"
+    },
+    {
+      "value": 3,
+      "activity": "reconnoiter-hex"
+    }
+  ],
+  "skillBonusRules": [
+    {
+      "value": 3,
+      "skill": "trade",
+      "activity": "rest-and-relax"
+    }
+  ],
+  "notes": "If you attempt a Performance check to Earn Income in a settlement with a world-class tavern, you gain a +3 item bonus to the check. All checks made to Gather Information in a settlement with a world-class tavern gain a +3 item bonus.",
+  "traits": [
+    "building",
+    "edifice",
+    "famous"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "2d4"
+  },
+  "level": 15,
+  "upgradeFrom": [
+    "Tavern, Luxury",
+    "Tavern, Luxury (V&K)"
+  ],
+  "construction": {
+    "rp": 64,
+    "lumber": 18,
+    "stone": 15,
+    "luxuries": 15,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 3
+      }
+    ],
+    "dc": 34
+  },
+  "lots": 2
+}

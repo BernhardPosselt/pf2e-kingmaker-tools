@@ -1,0 +1,34 @@
+{
+  "name": "Sacred Grove",
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "skill": "folklore",
+      "activity": "quell-unrest"
+    }
+  ],
+  "availableItemsRules": [
+    {
+      "value": 1,
+      "group": "primal",
+      "maximumStacks": 3
+    }
+  ],
+  "traits": [
+    "yard"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 5,
+  "construction": {
+    "rp": 36,
+    "skills": [
+      {
+        "skill": "wilderness",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 20
+  },
+  "lots": 1
+}

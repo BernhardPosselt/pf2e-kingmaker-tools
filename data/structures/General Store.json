@@ -1,0 +1,21 @@
+{
+  "name": "General Store",
+  "preventItemLevelPenalty": true,
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "construction": {
+    "skills": [
+      {
+        "skill": "trade"
+      }
+    ],
+    "dc": 15,
+    "rp": 8,
+    "lumber": 1
+  },
+  "lots": 1
+}

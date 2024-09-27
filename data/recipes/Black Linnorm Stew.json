@@ -1,0 +1,40 @@
+{
+  "name": "Black Linnorm Stew",
+  "icon": "icons/tools/cooking/bowl-steaming-brown.webp",
+  "basicIngredients": 8,
+  "specialIngredients": 3,
+  "cookingLoreDC": 43,
+  "survivalDC": 45,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.V6uIWe6BVFV9Ewo3",
+  "level": 18,
+  "cost": "1200 gp",
+  "rarity": "rare",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.I2LiwNjrowS5u4UG"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.m3FgRCWbVupkaORL"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.s1DfJpXFkJorHsuu"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.sxr0BsJJGeLyNBgq"
+      }
+    ]
+  }
+}

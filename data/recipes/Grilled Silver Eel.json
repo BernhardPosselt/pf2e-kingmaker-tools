@@ -1,0 +1,41 @@
+{
+  "name": "Grilled Silver Eel",
+  "icon": "icons/commodities/biological/tail-rodent-orange.webp",
+  "basicIngredients": 4,
+  "specialIngredients": 1,
+  "cookingLoreDC": 24,
+  "survivalDC": 26,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.UMgvKT6nNTPvp28R",
+  "level": 6,
+  "cost": "13 gp",
+  "rarity": "uncommon",
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Dj9026jn8dI7oP0j"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Vb39DIJ5OfWpN2ig",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Zw8I0G3RqDfNHuCl"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ta81jwzhkNsN88EZ"
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+<p>Consuming food:</p>
+<ul>
+    {{#if rations}}
+        <li><b>Rations</b>: {{rations}}</li>{{/if}}
+    {{#if basicIngredients}}
+        <li><b>Basic Ingredients</b>: {{basicIngredients}}</li>{{/if}}
+    {{#if specialIngredients}}
+        <li><b>Special Ingredients</b>: {{specialIngredients}}</li>{{/if}}
+</ul>
+{{#if missing}}
+    <p>but was missing:</p>
+    <ul>
+        {{#if missingRations}}
+            <li><b>Rations</b>: {{missingRations}}</li>{{/if}}
+        {{#if missingBasicIngredients}}
+            <li><b>Basic Ingredients</b>: {{missingBasicIngredients}}</li>{{/if}}
+        {{#if missingSpecialIngredients}}
+            <li><b>Special Ingredients</b>: {{missingSpecialIngredients}}</li>{{/if}}
+    </ul>
+{{/if}}

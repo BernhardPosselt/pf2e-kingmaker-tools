@@ -1,0 +1,21 @@
+<div>
+    {{#if sections}}
+        {{#each sections}}
+            <fieldset {{#if hidden}}hidden{{/if}}>
+                <legend>{{legend}}</legend>
+                {{#each formRows}}
+                    <div class="row">
+                        {{> formElement this }}
+                    </div>
+                {{/each}}
+            </fieldset>
+        {{/each}}
+    {{else}}
+        {{#each formRows}}
+            <div class="row">
+                {{> formElement this }}
+            </div>
+        {{/each}}
+    {{/if}}
+    <button type="submit" class="full-width" data-action="save" {{#unless isFormValid}}disabled{{/unless}}>Save</button>
+</div>

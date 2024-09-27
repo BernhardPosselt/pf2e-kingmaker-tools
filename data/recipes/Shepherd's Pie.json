@@ -1,0 +1,48 @@
+{
+  "name": "Shepherd's Pie",
+  "icon": "icons/consumables/food/bowl-ribs-meat-rice-mash-brown-white.webp",
+  "basicIngredients": 4,
+  "specialIngredients": 0,
+  "cookingLoreDC": 18,
+  "survivalDC": 20,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.GsPVSA1GNm4tvmcR",
+  "level": 2,
+  "cost": "2 gp",
+  "rarity": "uncommon",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.3a5uIGu77TLQE9ZB",
+        "healFormula": "4d6",
+        "healMode": "afterRest",
+        "reduceConditions": {
+          "drained": 1
+        }
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.84dIJjkOdLeHWkx2",
+        "halvesHealing": true
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.COa19ug1vjTGHy04",
+        "healMode": "afterRest",
+        "healFormula": "2d6"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.RL8zdU7YyoiduDva"
+      }
+    ]
+  }
+}

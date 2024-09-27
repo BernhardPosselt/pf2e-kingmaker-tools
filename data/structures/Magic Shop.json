@@ -1,0 +1,39 @@
+{
+  "name": "Magic Shop",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "supernatural-solution"
+    }
+  ],
+  "availableItemsRules": [
+    {
+      "value": 1,
+      "group": "magical",
+      "maximumStacks": 3
+    }
+  ],
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 8,
+  "upgradeFrom": [
+    "Luxury Store"
+  ],
+  "construction": {
+    "rp": 44,
+    "lumber": 8,
+    "stone": 6,
+    "luxuries": 6,
+    "skills": [
+      {
+        "skill": "magic",
+        "proficiencyRank": 2
+      }
+    ],
+    "dc": 24
+  },
+  "lots": 1
+}

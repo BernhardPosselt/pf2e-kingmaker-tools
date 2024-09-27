@@ -1,0 +1,28 @@
+.theme-dark {
+    .km-missing-ingredients {
+        color: #ff3737;
+        text-shadow: 0 0 1px BLACK;
+    }
+}
+
+.theme-light {
+    .km-missing-ingredients {
+        color: #ff1515;
+    }
+}
+
+.km-food-cost {
+    display: flex;
+
+    span {
+        display: flex;
+        flex-direction: column;
+        padding: 2px;
+
+        img {
+            height: 2em;
+            width: 2em;
+            border-radius: 100%;
+        }
+    }
+}

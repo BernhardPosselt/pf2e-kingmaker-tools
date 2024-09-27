@@ -3,6 +3,8 @@
 All structure rules are JSON and are persisted using actor flags. They can be edited using the **Edit Structure Rules**
 Macro.
 
+If you need inspiration, take a look at [existing structures](../data/structures)
+
 Rules can be one of the following types:
 
 * References to built ins
@@ -199,7 +201,20 @@ A full structure rule would look something like this:
     "rp": 2,
     "dc": 2
   },
-  "stacksWith": "Slightly Different Magic School"
+  "stacksWith": "Slightly Different Magic School",
+  "reduceUnrestBy": {
+    "value": 1,
+    "moreThanOncePerTurn": false,
+    "note": "as long as it's the first wall in a settlement"
+  },
+  "reduceRuinBy": {
+    "value": 2,
+    "ruin": "any"
+  },
+  "gainRuin": {
+    "value": 1,
+    "ruin": "decay"
+  }
 }
 ```
 
@@ -291,3 +306,13 @@ A full structure rule would look something like this:
     * **ore**: optional, cost
     * **stone**: optional, cost
 * **stacksWith**: optional, name of a structure that this structure should stack item bonuses with; useful when you've got the same building with 2 different construction costs
+
+* **reduceUnrestBy**: optional
+  * **value**: how much unrest is reduced
+  * **moreThanOncePerTurn**: optional, default true; if false, shows a message that it can only be reduced once
+  * **note**: extra restriction notes that are written to chat
+* **reduceRuinBy**: optional
+  * **value**: how much ruin is reduced
+  * **ruin**: one of either **decay**, **crime**, **strife**, **corruption** or **any**
+* **gainRuin**: optional, exactly the same as **reduceRuinBy**
+

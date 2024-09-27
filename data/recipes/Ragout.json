@@ -1,0 +1,44 @@
+{
+  "name": "Ragout",
+  "icon": "icons/consumables/food/bowl-stew-tofu-potato-red.webp",
+  "basicIngredients": 4,
+  "specialIngredients": 0,
+  "cookingLoreDC": 20,
+  "survivalDC": 22,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.agI35cH4peI3aIX5",
+  "level": 4,
+  "cost": "5 gp",
+  "rarity": "uncommon",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.MADgm2doEOSlNe7u"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.JqxNxAVZzAdCAoCZ"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Uh9fQWIE0Nc2hwLi"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.bH9QjKt6LybagxcR",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.x1lKNowlbhotDu0q"
+      }
+    ]
+  }
+}

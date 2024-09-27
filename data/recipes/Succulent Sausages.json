@@ -1,0 +1,42 @@
+{
+  "name": "Succulent Sausages",
+  "icon": "icons/consumables/food/sausage-bratwurst-mustard-red-yellow.webp",
+  "basicIngredients": 3,
+  "specialIngredients": 1,
+  "cookingLoreDC": 18,
+  "survivalDC": 20,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IZoPx6QH5NRY1HBi",
+  "level": 3,
+  "cost": "3 gp",
+  "rarity": "common",
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.EULsp9VffKbWpD0b"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.G0qnixpCakGeHTp1",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.WDJQpYYx0N91mkO0",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.jseoPPvbPg4Vr7MI"
+      }
+    ]
+  }
+}

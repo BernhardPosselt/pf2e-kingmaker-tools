@@ -1,0 +1,106 @@
+.km-dialog-form {
+    .window-content {
+        overflow: auto;
+    }
+
+    fieldset {
+        margin-bottom: 15px;
+        padding: 15px;
+        border-color: var(--color-fieldset-border);
+        border-radius: 8px;
+
+        legend {
+            font-size: var(--font-size-15);
+            font-weight: bold;
+        }
+    }
+
+    input:invalid, textarea:invalid, select:invalid {
+        border-color: #a31010;
+    }
+
+    textarea.larger-textarea {
+        min-height: 500px;
+    }
+
+    table {
+        margin: 0;
+
+        th, input[type="text"], input[type="number"], select {
+            text-align: center;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        .number-select-heading {
+            min-width: 85px;
+        }
+
+        button[data-action] {
+            height: 32px;
+            margin: auto
+        }
+    }
+
+    .dialog-content {
+        border-spacing: 10px;
+    }
+
+    .help {
+        color: var(--color-form-hint);
+        font-size: var(--font-size-12);
+        line-height: var(--line-height-16);
+        margin-top: 5px;
+    }
+
+    .row:not(:first-of-type) {
+        margin-top: 1rem;
+    }
+
+    .form-element-inline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        input[type="text"],
+        input[type="time"],
+        input[type="number"],
+        select,
+        div,
+        textarea {
+            margin-left: 0.5em;
+            width: 180px;
+        }
+    }
+
+    button:not(.full-width) {
+        width: auto;
+    }
+
+    button.full-width {
+        margin-top: 10px;
+    }
+
+    button[data-action="save"] {
+        margin: 10px auto auto;
+    }
+
+    .km-select-with-link {
+        display: flex;
+        width: 180px;
+        gap: .25em;
+
+        select {
+            margin-left: 0;
+            width: calc(180px - .25em - var(--input-height));
+        }
+
+        .km-form-document-link {
+            height: var(--input-height);
+            width: var(--input-height);
+        }
+    }
+
+}

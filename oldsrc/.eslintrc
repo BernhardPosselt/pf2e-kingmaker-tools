@@ -1,0 +1,21 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "import"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "import/no-cycle": ["error"],
+    "@typescript-eslint/explicit-function-return-type": 2,
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "quotes": ["error", "single"],
+    "semi": "error",
+    "comma-dangle": ["error", "always-multiline"]
+  }
+}

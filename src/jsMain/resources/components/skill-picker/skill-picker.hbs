@@ -1,0 +1,38 @@
+<div>
+    <ul>
+        <li><b>Validate Only</b>: Will not make the skill available in the skill selection</li>
+        <li><b>Required</b>: Actor must have this skill and proficiency regardless of alternative skills</li>
+    </ul>
+    <div class="row km-skill-picker-row">
+        {{#each anySkill.cells}}
+            {{> formElement this }}
+        {{/each}}
+        <div class="km-any-skill-spacer"></div>
+    </div>
+    <hr {{#if anyEnabled}}hidden{{/if}}>
+    {{#each skills}}
+        <div class="row km-skill-picker-row" {{#if ../anyEnabled}}hidden{{/if}}>
+            {{#each cells}}
+                {{> formElement this }}
+            {{/each}}
+            {{#if isLore}}
+                <button type="button"
+                        data-action="delete-lore"
+                        data-delete-index="{{index}}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>{{else}}
+                <div class="km-delete-placeholder"></div>{{/if}}
+        </div>
+    {{/each}}
+    {{#if allowLores}}
+        <button class="full-width"
+                type="button"
+                data-action="add-lore"
+                {{#if anyEnabled}}hidden{{/if}}>Add Lore
+        </button>
+    {{/if}}
+    {{#if atLeastOneSkillError}}
+        <p class="km-picker-error">Pick at least one skill!</p>
+    {{/if}}
+    <button type="submit" data-action="save" {{#unless isFormValid}}disabled{{/unless}}>Save</button>
+</div>

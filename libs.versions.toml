@@ -1,0 +1,33 @@
+[versions]
+kotlin = "2.0.20"
+coroutines = "1.9.0"
+schema-validator = "0.2.3"
+ktor = "2.3.12"
+
+[libraries]
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.3" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version = "1.7.3" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.1" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-js", version = "0.11.0" }
+kotlin-wrappers = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version = "1.0.0-pre.809" }
+kotlin-plain-objects = { module = "org.jetbrains.kotlin:kotlin-js-plain-objects", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-wrappers-js = { module = "org.jetbrains.kotlin-wrappers:kotlin-js" }
+kotlin-test-js = { module = "org.jetbrains.kotlin:kotlin-test-js-runner", version.ref = "kotlin" }
+kotlinx-coroutines-js = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-js", version.ref = "coroutines" }
+jsonschemavalidator = { module = "io.github.optimumcode:json-schema-validator", version.ref = "schema-validator" }
+jsonschemavalidator-js = { module = "io.github.optimumcode:json-schema-validator-js", version.ref = "schema-validator" }
+jquery = { module = "io.kvision:jquery-kotlin", version = "1.0.0" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
+logback = { module = "ch.qos.logback:logback-classic", version = "1.5.8" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-plain-objects = { id = "org.jetbrains.kotlin.plugin.js-plain-objects", version.ref = "kotlin" }
+versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }

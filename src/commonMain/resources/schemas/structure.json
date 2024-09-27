@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://posselt.at/pf2e-kingmaker-tools/schemas/structure.json",
+  "title": "Structure",
+  "description": "A list of structures",
+  "$ref": "#/$defs/Structure",
+  "$defs": {
+    "Structure": {
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "lots"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "stacksWith": {
+          "type": "string"
+        },
+        "construction": {
+          "$ref": "#/$defs/Construction"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "preventItemLevelPenalty": {
+          "type": "boolean"
+        },
+        "enableCapitalInvestment": {
+          "type": "boolean"
+        },
+        "skillBonusRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SkillBonusRule"
+          }
+        },
+        "activityBonusRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActivityBonusRule"
+          }
+        },
+        "availableItemsRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AvailableItemsRule"
+          }
+        },
+        "settlementEventRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SettlementEventsRule"
+          }
+        },
+        "leadershipActivityRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LeadershipActivityRule"
+          }
+        },
+        "storage": {
+          "$ref": "#/$defs/CommodityStorage"
+        },
+        "increaseLeadershipActivities": {
+          "type": "boolean"
+        },
+        "isBridge": {
+          "type": "boolean"
+        },
+        "consumptionReduction": {
+          "type": "number"
+        },
+        "unlockActivities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "traits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BuildingTrait"
+          }
+        },
+        "lots": {
+          "type": "number"
+        },
+        "affectsEvents": {
+          "type": "boolean"
+        },
+        "affectsDowntime": {
+          "type": "boolean"
+        },
+        "reducesUnrest": {
+          "type": "boolean"
+        },
+        "reducesRuin": {
+          "type": "boolean"
+        },
+        "level": {
+          "type": "number"
+        },
+        "upgradeFrom": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reduceUnrestBy": {
+          "$ref": "#/$defs/ReduceUnrestBy"
+        },
+        "reduceRuinBy": {
+          "$ref": "#/$defs/RuinAmount"
+        },
+        "gainRuin": {
+          "$ref": "#/$defs/RuinAmount"
+        }
+      }
+    },
+    "Construction": {
+      "required": [
+        "rp",
+        "dc",
+        "skills"
+      ],
+      "properties": {
+        "skills": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConstructionSkill"
+          }
+        },
+        "lumber": {
+          "type": "number"
+        },
+        "luxuries": {
+          "type": "number"
+        },
+        "ore": {
+          "type": "number"
+        },
+        "stone": {
+          "type": "number"
+        },
+        "rp": {
+          "type": "number"
+        },
+        "dc": {
+          "type": "number"
+        }
+      }
+    },
+    "ConstructionSkill": {
+      "type": "object",
+      "required": [
+        "skill"
+      ],
+      "properties": {
+        "skill": {
+          "$ref": "#/$defs/Skill"
+        },
+        "proficiencyRank": {
+          "type": "number"
+        }
+      }
+    },
+    "Skill": {
+      "type": "string",
+      "enum": [
+        "agriculture",
+        "arts",
+        "boating",
+        "defense",
+        "engineering",
+        "exploration",
+        "folklore",
+        "industry",
+        "intrigue",
+        "magic",
+        "politics",
+        "scholarship",
+        "statecraft",
+        "trade",
+        "warfare",
+        "wilderness"
+      ]
+    },
+    "SkillBonusRule": {
+      "type": "object",
+      "required": [
+        "value",
+        "skill"
+      ],
+      "properties": {
+        "skill": {
+          "$ref": "#/$defs/Skill"
+        },
+        "value": {
+          "type": "number"
+        },
+        "activity": {
+          "type": "string"
+        }
+      }
+    },
+    "ActivityBonusRule": {
+      "type": "object",
+      "required": [
+        "value",
+        "activity"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "activity": {
+          "type": "string"
+        }
+      }
+    },
+    "AvailableItemsRule": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "group": {
+          "$ref": "#/$defs/ItemGroup"
+        },
+        "maximumStacks": {
+          "type": "number"
+        }
+      }
+    },
+    "ItemGroup": {
+      "type": "string",
+      "enum": [
+        "divine",
+        "alchemical",
+        "primal",
+        "occult",
+        "arcane",
+        "luxury",
+        "magical",
+        "other"
+      ]
+    },
+    "SettlementEventsRule": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        }
+      }
+    },
+    "LeadershipActivityRule": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        }
+      }
+    },
+    "CommodityStorage": {
+      "type": "object",
+      "properties": {
+        "ore": {
+          "type": "number"
+        },
+        "food": {
+          "type": "number"
+        },
+        "lumber": {
+          "type": "number"
+        },
+        "stone": {
+          "type": "number"
+        },
+        "luxuries": {
+          "type": "number"
+        }
+      }
+    },
+    "ReduceUnrestBy": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "moreThanOncePerTurn": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "RuinAmount": {
+      "type": "object",
+      "required": [
+        "value",
+        "ruin"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "ruin": {
+          "type": "string",
+          "enum": [
+            "corruption",
+            "crime",
+            "decay",
+            "strife",
+            "any"
+          ]
+        },
+        "moreThanOncePerTurn": {
+          "type": "boolean"
+        }
+      }
+    },
+    "BuildingTrait": {
+      "type": "string",
+      "enum": [
+        "edifice",
+        "yard",
+        "building",
+        "famous",
+        "infamous",
+        "residential",
+        "infrastructure"
+      ]
+    }
+  }
+}

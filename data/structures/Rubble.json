@@ -1,0 +1,10 @@
+{
+  "name": "Rubble",
+  "traits": [
+    "yard"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 0,
+  "lots": 1
+}

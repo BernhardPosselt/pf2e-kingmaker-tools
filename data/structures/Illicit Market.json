@@ -1,0 +1,39 @@
+{
+  "name": "Illicit Market",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "clandestine-business"
+    }
+  ],
+  "availableItemsRules": [
+    {
+      "value": 1,
+      "maximumStacks": 3
+    }
+  ],
+  "traits": [
+    "building",
+    "infamous"
+  ],
+  "gainRuin": {
+    "value": "1",
+    "ruin": "crime",
+    "moreThanOncePerTurn": true
+  },
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 6,
+  "construction": {
+    "rp": 50,
+    "lumber": 5,
+    "skills": [
+      {
+        "skill": "intrigue",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 22
+  },
+  "lots": 1
+}

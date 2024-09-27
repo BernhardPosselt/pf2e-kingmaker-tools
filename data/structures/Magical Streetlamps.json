@@ -1,0 +1,24 @@
+{
+    "name": "Magical Streetlamps",
+    "traits": [
+        "infrastructure"
+    ],
+    "lots": 0,
+    "affectsDowntime": false,
+    "reducesRuin": true,
+    "reduceRuinBy": {
+        "value": "1",
+        "ruin": "crime"
+    },
+    "level": 5,
+    "construction": {
+        "rp": 20,
+        "skills": [
+            {
+                "skill": "magic",
+                "proficiencyRank": 2
+            }
+        ],
+        "dc": 20
+    }
+}

@@ -1,0 +1,132 @@
+@import "./applications/camping/camping.css";
+@import "./components/forms/form.css";
+@import "./components/tabs/style.css";
+@import "./components/food-cost/food-cost.css";
+@import "./components/skill-picker/skill-picker.css";
+@import "./components/skill-picker/skill-picker-input.css";
+@import "./components/activity-effects/activity-effects-input.css";
+
+:root {
+    --primary-km: #275125;
+    --secondary-km: #789035;
+    --untrained: #424242;
+    --trained: #171f69;
+    --expert: #3c005e;
+    --master: #664400;
+    --legendary: #5e0000;
+    --critical-success: #171f69;
+    --success: #1e4597;
+    --failure: #c52424;
+    --critical-failure: #871b1b;
+    --sidebar-size: 301px;
+    --rarity-common: #323232;
+    --rarity-uncommon: #98513d;
+    --rarity-rare: #002664;
+    --rarity-unique: #54166e;
+}
+
+.km-degree-of-success {
+    option[value="criticalSuccess"],
+    &:has(option[value="criticalSuccess"]:checked) {
+        color: white;
+        background-color: var(--critical-success);
+    }
+
+    option[value="success"],
+    &:has(option[value="success"]:checked) {
+        color: white;
+        background-color: var(--success);
+    }
+
+    option[value="failure"],
+    &:has(option[value="failure"]:checked) {
+        color: white;
+        background-color: var(--failure);
+    }
+
+    option[value="criticalFailure"],
+    &:has(option[value="criticalFailure"]:checked) {
+        color: white;
+        background-color: var(--critical-failure);
+    }
+}
+
+.km-rarity {
+    option[value="common"],
+    option.km-rarity-common,
+    &:has(option[value="common"]:checked),
+    &:has(option.km-rarity-common:checked) {
+        color: white;
+        background-color: var(--rarity-common);
+    }
+
+    option[value="uncommon"],
+    option.km-rarity-uncommon,
+    &:has(option[value="uncommon"]:checked),
+    &:has(option.km-rarity-uncommon:checked) {
+        color: white;
+        background-color: var(--rarity-uncommon);
+    }
+
+    option[value="rare"],
+    option.km-rarity-rare,
+    &:has(option[value="rare"]:checked),
+    &:has(option.km-rarity-rare:checked) {
+        color: white;
+        background-color: var(--rarity-rare);
+    }
+
+    option[value="unique"],
+    option.km-rarity-unique,
+    &:has(option[value="unique"]:checked),
+    &:has(option.km-rarity-unique:checked) {
+        color: white;
+        background-color: var(--rarity-unique);
+    }
+}
+
+.km-proficiency {
+    option[value="untrained"],
+    option.km-proficiency-untrained,
+    &:has(option[value="untrained"]:checked),
+    &:has(option.km-proficiency-untrained:checked) {
+        color: white;
+        background-color: var(--untrained);
+    }
+
+    option[value="trained"],
+    option.km-proficiency-trained,
+    &:has(option[value="trained"]:checked),
+    &:has(option.km-proficiency-trained:checked) {
+        color: white;
+        background-color: var(--trained);
+    }
+
+    option[value="expert"],
+    option.km-proficiency-expert,
+    &:has(option[value="expert"]:checked),
+    &:has(option.km-proficiency-expert:checked) {
+        color: white;
+        background-color: var(--expert);
+    }
+
+    option[value="master"],
+    option.km-proficiency-master,
+    &:has(option[value="master"]:checked),
+    &:has(option.km-proficiency-master:checked) {
+        color: white;
+        background-color: var(--master);
+    }
+
+    option[value="legendary"],
+    option.km-proficiency-legendary,
+    &:has(option[value="legendary"]:checked),
+    &:has(option.km-proficiency-legendary:checked) {
+        color: white;
+        background-color: var(--legendary);
+    }
+}
+
+.km-hidden {
+    display: none;
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Hearty Meal",
+  "icon": "icons/consumables/food/bowl-stew-brown.webp ",
+  "basicIngredients": 4,
+  "specialIngredients": 0,
+  "cookingLoreDC": 14,
+  "survivalDC": 16,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.K5l6QZci2mCofOBg",
+  "level": 0,
+  "cost": "0 gp",
+  "rarity": "common",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.7aBiVefiVDXS2XmV"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.KeiNZDcAiGZjyzhn",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.LbW38wFmd1JSBPK6",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.uI4ZsdIGx7Yoy2rI"
+      }
+    ]
+  }
+}

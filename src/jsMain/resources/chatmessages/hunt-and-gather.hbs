@@ -1,0 +1,17 @@
+<p><b>{{actorName}}</b> gathered:</p>
+<ul>
+    {{#if basicIngredients}}
+        <li><b>Basic Ingredients</b>: {{basicIngredients}}</li>
+    {{/if}}
+    {{#if specialIngredients}}
+        <li><b>Special Ingredients</b>: {{specialIngredients}}</li>
+    {{/if}}
+</ul>
+<button
+        type="button"
+        class="km-add-food"
+        data-actor-uuid="{{actorUuid}}"
+        data-basic-ingredients="{{basicIngredients}}"
+        data-special-ingredients="{{specialIngredients}}"
+>Add
+</button>

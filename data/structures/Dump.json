@@ -1,0 +1,26 @@
+{
+  "name": "Dump",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "demolish"
+    }
+  ],
+  "traits": [
+    "yard"
+  ],
+  "affectsEvents": true,
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 2,
+  "construction": {
+    "skills": [
+      {
+        "skill": "industry"
+      }
+    ],
+    "dc": 16,
+    "rp": 4
+  },
+  "lots": 1
+}

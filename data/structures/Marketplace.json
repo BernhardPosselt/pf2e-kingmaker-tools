@@ -1,0 +1,32 @@
+{
+  "name": "Marketplace",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "establish-trade-agreement"
+    }
+  ],
+  "preventItemLevelPenalty": true,
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 4,
+  "upgradeFrom": [
+    "General Store"
+  ],
+  "construction": {
+    "rp": 48,
+    "lumber": 4,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 19
+  },
+  "lots": 2
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Blend Into The Night",
+  "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.jz1FI7zSoPLR8iBL",
+  "isLocked": true,
+  "isSecret": false,
+  "isHomebrew": false,
+  "skills": [],
+  "modifyRandomEncounterDc": {
+    "day": 0,
+    "night": 2
+  }
+}

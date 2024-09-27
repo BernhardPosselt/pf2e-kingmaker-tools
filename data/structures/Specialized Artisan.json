@@ -1,0 +1,29 @@
+{
+  "name": "Specialized Artisan",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "craft-luxuries"
+    }
+  ],
+  "notes": "While in a settlement with a specialized artisan, you gain a +1 item bonus to Craft checks made to craft specialized goods like jewelry.",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": false,
+  "level": 4,
+  "construction": {
+    "rp": 10,
+    "lumber": 4,
+    "luxuries": 1,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 2
+      }
+    ],
+    "dc": 19
+  },
+  "lots": 1
+}

@@ -1,0 +1,21 @@
+{
+    "name": "Paved Streets",
+    "traits": [
+        "infrastructure"
+    ],
+    "lots": 0,
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 4,
+    "construction": {
+        "rp": 12,
+        "stone": 6,
+        "skills": [
+            {
+                "skill": "industry",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 19
+    }
+}

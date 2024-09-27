@@ -1,0 +1,25 @@
+{
+    "name": "Wall, Wooden",
+    "traits": [
+        "infrastructure"
+    ],
+    "lots": 0,
+    "affectsDowntime": false,
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "value": "1",
+        "moreThanOncePerTurn": true,
+        "note": "as long as it's the first wall in a settlement"
+    },
+    "level": 1,
+    "construction": {
+        "rp": 2,
+        "lumber": 4,
+        "skills": [
+            {
+                "skill": "defense"
+            }
+        ],
+        "dc": 15
+    }
+}

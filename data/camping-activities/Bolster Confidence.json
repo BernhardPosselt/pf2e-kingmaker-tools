@@ -1,0 +1,13 @@
+{
+  "name": "Bolster Confidence",
+  "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.pxHYFLK7VYGppCzS",
+  "isLocked": true,
+  "isSecret": false,
+  "skills": [],
+  "isHomebrew": false,
+  "effectUuids": [
+    {
+      "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.mAEvnTqFuLIASQLB"
+    }
+  ]
+}

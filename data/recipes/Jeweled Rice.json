@@ -1,0 +1,41 @@
+{
+  "name": "Jeweled Rice",
+  "icon": "icons/commodities/materials/bowl-powder-gold.webp",
+  "basicIngredients": 1,
+  "specialIngredients": 0,
+  "cookingLoreDC": 14,
+  "survivalDC": 16,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.N3k7OGUKHn4kTu59",
+  "level": 0,
+  "cost": "5 sp",
+  "rarity": "common",
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.MGFPIxwSgRLvkV71"
+      }
+    ],
+    "message": "The meal was a bit too light; you must eat another meal to stave off starvation."
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.OxEApkXu0hw34Ci5"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Sc5N6l1oCY1oiTfA"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.d8xr0i8GHY4195sa"
+      }
+    ]
+  }
+}

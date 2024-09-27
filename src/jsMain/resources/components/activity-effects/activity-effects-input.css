@@ -1,0 +1,31 @@
+.km-activity-effects-input {
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        list-style-type: none;
+        display: flex;
+        height: 2.15em;
+
+        span {
+            margin-left: 0.5em;
+            line-height: 2.15em;
+        }
+
+        img {
+            height: 100%;
+        }
+
+        button[data-action="edit-effect"] {
+            margin-left: auto;
+        }
+
+        button {
+            i {
+                margin: 0;
+            }
+        }
+    }
+}

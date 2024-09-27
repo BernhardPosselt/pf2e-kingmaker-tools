@@ -1,0 +1,20 @@
+{
+  "name": "Cook Meal",
+  "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.S72BNBTfKfkCjriU",
+  "isLocked": false,
+  "isSecret": false,
+  "isHomebrew": false,
+  "skills": [],
+  "criticalSuccess": {
+    "message": "The character gains the recipe’s listed critical success effect."
+  },
+  "success": {
+    "message": "The character gains the recipe’s listed success effect."
+  },
+  "failure": {
+    "message": "The character gains no special benefit from the meal, though it still prevents starvation."
+  },
+  "criticalFailure": {
+    "message": "The character suffers the recipe’s critical failure effect."
+  }
+}

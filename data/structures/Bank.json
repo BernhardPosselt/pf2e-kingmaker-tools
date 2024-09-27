@@ -1,0 +1,27 @@
+{
+  "name": "Bank",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "tap-treasury"
+    }
+  ],
+  "enableCapitalInvestment": true,
+  "traits": [
+    "building"
+  ],
+  "level": 5,
+  "construction": {
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 20,
+    "rp": 28,
+    "ore": 4,
+    "stone": 6
+  },
+  "lots": 1
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Tannery",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "trade-commodities"
+    }
+  ],
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 3,
+  "construction": {
+    "rp": 6,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "industry",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 18
+  },
+  "lots": 1
+}

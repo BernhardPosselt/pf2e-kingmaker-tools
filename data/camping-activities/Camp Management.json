@@ -1,0 +1,28 @@
+{
+  "name": "Camp Management",
+  "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.JRScwsFTXTpTwWYA",
+  "isLocked": true,
+  "isSecret": false,
+  "isHomebrew": false,
+  "skills": [
+    {
+      "name": "survival",
+      "proficiency": "untrained",
+      "dcType": "zone"
+    }
+  ],
+  "criticalSuccess": {
+    "message": "During the hour immediately following this critical success, each PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt."
+  },
+  "success": {
+    "message": "During the hour immediately following this critical success, one PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt."
+  },
+  "criticalFailure": {
+    "message": "All checks made to resolve Camping activities take a –2 circumstance penalty for the remainder of this camping session.",
+    "effectUuids": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.vpH13xgAqX4zsU6o"
+      }
+    ]
+  }
+}

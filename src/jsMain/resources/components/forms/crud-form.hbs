@@ -1,0 +1,47 @@
+<div>
+    <div class="row">
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                {{#each additionalColumnHeadings}}
+                    <th>{{this}}</th>
+                {{/each}}
+                <th>Enable</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each items}}
+                <tr>
+                    <td>{{#if nameIsHtml}}{{{name}}}{{else}}{{name}}{{/if}}</td>
+                    {{#each additionalColumns}}
+                        <td>{{#if escapeHtml}}{{value}}{{else}}{{{value}}}{{/if}}</td>
+                    {{/each}}
+                    <td>{{> formElement enable }}</td>
+                    <td>
+                        <button
+                                type="button"
+                                data-action="edit"
+                                data-id="{{id}}"
+                                title="Edit"
+                                {{#unless canBeEdited}}hidden{{/unless}}
+                        ><i class="fa-solid fa-pencil"></i></button>
+                    </td>
+                    <td>
+                        <button
+                                type="button"
+                                data-action="delete"
+                                data-id="{{id}}"
+                                title="Delete"
+                                {{#unless canBeDeleted}}hidden{{/unless}}
+                        ><i class="fa-solid fa-minus"></i></button>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <button type="button" data-action="add" class="full-width">Add</button>
+    </div>
+</div>

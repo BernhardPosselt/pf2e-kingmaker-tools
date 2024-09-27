@@ -1,0 +1,40 @@
+{
+  "name": "Giant Scrambled Egg",
+  "icon": "icons/consumables/food/bowl-stew-tofu-potato-brown.webp",
+  "basicIngredients": 6,
+  "specialIngredients": 2,
+  "cookingLoreDC": 33,
+  "survivalDC": 35,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.IiV8wHXKZS1HbLLW",
+  "level": 13,
+  "cost": "150 gp",
+  "rarity": "uncommon",
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Q1Qg8K9G7R9wU4rI"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.TLxckltEWbHKCXDi"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.pTjrRRqxUJnbDRIB"
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.f2yKkelj374SNszb"
+      }
+    ]
+  }
+}

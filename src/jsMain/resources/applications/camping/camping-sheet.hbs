@@ -1,0 +1,171 @@
+<div>
+    <div id="km-camping-time-tracker" class="km-row" style="background-position: {{pxTimeOffset}}px">
+        {{#if isGM}}
+            <button class="km-camping-action {{#if night.retract2}}night-mode{{/if}}"
+                    data-action="advance-hour"
+                    type="button"
+                    data-hours="-2"
+                    title="Retract 2 Hours">
+                -2h
+            </button>
+            <button class="km-camping-action {{#if night.retract1}}night-mode{{/if}}"
+                    data-action="advance-hour"
+                    type="button"
+                    data-hours="-1"
+                    title="Retract 1 Hour">
+                -1h
+            </button>
+            <button class="km-camping-action {{#if night.retractHex}}night-mode{{/if}}"
+                    id="km-camping-minus-hexploration"
+                    type="button"
+                    data-action="advance-hexploration"
+                    data-activities="-1"
+                    title="Retract 1 Hexploration Activity ({{hexplorationActivityDuration}})">-1
+            </button>
+        {{/if}}
+        <div id="km-camping-time" class="{{#if night.time}}night-mode{{/if}}">
+            <div id="km-camping-time-wrapper">
+                {{# isDay}}
+                    <i class="fa-regular fa-sun"></i>
+                {{else}}
+                    <i class="fa-regular fa-moon"></i>
+                {{/isDay}}
+                <div>{{time}}</div>
+            </div>
+        </div>
+        {{#if isGM}}
+            <button class="km-camping-action {{#if night.advanceHex}}night-mode{{/if}}"
+                    id="km-camping-plus-hexploration"
+                    type="button"
+                    data-action="advance-hexploration"
+                    data-activities="1"
+                    title="Advance 1 Hexploration Activity ({{hexplorationActivityDuration}})">+1
+            </button>
+            <button class="km-camping-action {{#if night.advance1}}night-mode{{/if}}"
+                    data-action="advance-hour"
+                    type="button"
+                    data-hours="1"
+                    title="Advance 1 Hour">
+                +1h
+            </button>
+            <button class="km-camping-action {{#if night.advance2}}night-mode{{/if}}"
+                    data-action="advance-hour"
+                    type="button"
+                    data-hours="2"
+                    title="Advance 2 Hours">
+                +2h
+            </button>
+            <button class="km-camping-action {{#if night.rest}}night-mode{{/if}}"
+                    id="km-camping-rest"
+                    type="button"
+                    data-action="rest"
+                    title="{{#if restDurationLeft}}
+                        Continue until fully rested: {{restDurationLeft}}
+                    {{else}}Rest & Daily Preparations: {{restDuration}}{{/if}}h"
+            >
+                {{#if restDurationLeft}}
+                    <span>Continue </span><i class="fa-solid fa-bed"></i>
+                {{else}}
+                    <span>Rest</span><i
+                        class="fa-solid fa-bed"></i>
+                {{/if}}
+            </button>
+        {{/if}}
+    </div>
+    <div id="km-camping-hexploration" class="km-row">
+        <div id="km-adventuring-for"><b>Adventuring: </b> {{adventuringFor}}
+            {{#if isGM}}
+                <button type="button"
+                        data-action="reset-adventuring-for"
+                        title="Reset Adventuring Time Tracker">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </button>
+            {{/if}}
+        </div>
+        <div title="Hexploration Activities"><b>Hex. Activities:</b> {{hexplorationActivitiesAvailable}}
+            /{{hexplorationActivitiesMax}}</div>
+        <div>{{> formElement region}}</div>
+        {{#if isGM}}
+            <div id="km-camping-encounter">
+                <button type="button" data-action="increase-encounter-dc" data-value="-1" title="Decrease Encounter DC">
+                    <i class="fa-solid fa-minus"></i></button>
+                <div><b>Encounter DC:</b> {{encounterDc}}</div>
+                <button type="button" data-action="increase-encounter-dc" data-value="1" title="Increase Encounter DC">
+                    <i class="fa-solid fa-plus"></i></button>
+                <button type="button" data-action="reset-encounter-dc" title="Reset Encounter DC"><i
+                        class="fa-solid fa-rotate-left"></i></button>
+                <button type="button"
+                        {{#unless canRollEncounter}}disabled{{/unless}}
+                        data-action="roll-encounter"
+                        title="Roll Random Encounter"><i
+                        class="fa-solid fa-skull"></i></button>
+                <button type="button"
+                        {{#unless canRollEncounter}}disabled{{/unless}}
+                        data-action="check-encounter"
+                        title="Check for Random Encounter"><i
+                        class="fa-solid fa-dice-d20"></i><i
+                        class="fa-solid fa-skull"></i></button>
+            </div>
+        {{/if}}
+    </div>
+    <ul class="km-camping-actors">
+        {{#each actors}}
+            <li class="km-camping-actor" draggable="true" data-uuid="{{uuid}}" data-type="Actor">
+                <a href="#" data-uuid="{{uuid}}" data-action="open-actor"><img src="{{image}}" alt="{{name}}"></a>
+                {{#if choseActivity}}
+                    <div class="taken-camping-activity"><i class="fa-solid fa-circle-check"></i></div>
+                {{/if}}
+                {{#if chosenMealImg}}
+                    <img class="chosen-meal" src="{{chosenMealImg}}" alt="{{chosenMeal}}" title="{{chosenMeal}}">
+                {{/if}}
+                <button class="km-camping-action"
+                        data-action="clear-actor"
+                        type="button"
+                        data-uuid="{{uuid}}">
+                    <i class="fa-regular fa-circle-xmark"></i>
+                </button>
+            </li>
+        {{/each}}
+        <li class="km-camping-add-actor">
+            <span>Drop Actor from Sidebar</span>
+            <i class="fa-solid fa-plus"></i>
+        </li>
+    </ul>
+    <!-- add km-camping-day class to switch to different bg-->
+    <div id="km-camping-content" data-terrain="{{terrain}}" data-day="{{isDay}}">
+        <button class="km-camping-previous"
+                data-action="previous-section"
+            {{#unless isGM}}hidden{{/unless}}
+            {{#if prepareCampSection}}hidden{{/if}}
+                type="button"><i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button {{#if eatingSection}}hidden{{/if}}
+                class="km-camping-next"
+                {{#unless isGM}}hidden{{/unless}}
+                data-action="next-section"
+                type="button"><i class="fa-solid fa-chevron-right"></i></button>
+        <div {{#unless eatingSection}}hidden{{/unless}} class="km-camping-eating-total">
+            <span title="Available">
+                {{> foodCost availableFood hideEmpty=false}}
+            </span>
+            <hr>
+            <span title="Total Cooking Cost">
+                {{> foodCost totalFoodCost hideEmpty=false}}
+            </span>
+        </div>
+        <div id="km-camping-content-wrapper">
+            <div class="km-camping-activities-wrapper">
+                <h1>{{section}}</h1>
+                <div class="km-camping-activities">
+                    {{> campingTile prepareCamp}}
+                    {{#each activities}}
+                        {{> campingTile this}}
+                    {{/each}}
+                    {{#each recipes}}
+                        {{> recipeTile }}
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

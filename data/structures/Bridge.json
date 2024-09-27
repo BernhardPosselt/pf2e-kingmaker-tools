@@ -1,0 +1,21 @@
+{
+    "name": "Bridge",
+    "isBridge": true,
+    "traits": [
+        "infrastructure"
+    ],
+    "lots": 0,
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 2,
+    "construction": {
+        "skills": [
+            {
+                "skill": "engineering"
+            }
+        ],
+        "dc": 16,
+        "rp": 6,
+        "lumber": 1
+    }
+}

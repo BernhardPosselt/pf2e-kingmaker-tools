@@ -175,10 +175,11 @@
 </div>
 
 <h3>Kingdom Events</h3>
-<button type="button" id="km-check-event">Check for Kingdom Event (DC {{eventDC}})</button>
-<button type="button" id="km-roll-event">Roll Kingdom Event</button>
+<button {{#unless isGM}}hidden{{/unless}} type="button" id="km-check-event">Check for Kingdom Event (DC {{eventDC}})
+</button>
+<button {{#unless isGM}}hidden{{/unless}} type="button" id="km-roll-event">Roll Kingdom Event</button>
 
-<table class="km-table" {{#unless ongoingEvents}}hidden{{/unless}}>
+<table class="km-table">
     <tr>
         <th>Ongoing Events</th>
         <th>Resolve</th>
@@ -193,9 +194,11 @@
         </tr>
     {{/each}}
 </table>
-<button type="button" id="km-add-event">Add Ongoing Event <i class="fa-solid fa-plus"></i></button>
-<p><b>Hint:</b> You can also add an ongoing event by right-clicking on the rolled event in chat and choosing <b>Add to
-    Ongoing Events</b></p>
+<button {{#unless isGM}}hidden{{/unless}}  type="button" id="km-add-event">Add Ongoing Event <i
+        class="fa-solid fa-plus"></i></button>
+<p {{#unless isGM}}hidden{{/unless}} ><b>Hint:</b> You can also add an ongoing event by right-clicking on the rolled
+    event in chat and choosing <b>Add to
+        Ongoing Events</b></p>
 
 <h2>Apply Kingdom XP</h2>
 Resolved Event with Modifier:

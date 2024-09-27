@@ -1,0 +1,45 @@
+{
+  "name": "Oysters",
+  "icon": "icons/environment/creatures/crustacean-oyster.webp",
+  "basicIngredients": 3,
+  "specialIngredients": 2,
+  "cookingLoreDC": 26,
+  "survivalDC": 28,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.p08orFcjqQzA7KdE",
+  "level": 9,
+  "cost": "35 gp",
+  "rarity": "common",
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.E3tZfxCJ5GQoIbei"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.cCKgpxIsFevgENf2",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ZDDZz5ynEOR20LUC"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.uw5M3YfEJs23RmX5",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.yMsjuwLmbF8h1jVt"
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "Hearty Purple Soup",
+  "icon": "icons/tools/laboratory/mortar-liquid-pink.webp",
+  "basicIngredients": 6,
+  "specialIngredients": 3,
+  "cookingLoreDC": 40,
+  "survivalDC": 42,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.yAB0s5JgzCZpf0dT",
+  "level": 16,
+  "cost": "500 gp",
+  "rarity": "rare",
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.6RjaP1s58ITIVn6u"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Zn0CB7bL7vHrMNTU"
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.hLGCjXajAYEcII9J"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.o6F8QZbTvt9os8Ni"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.TQXXVzD1ZZHnouTI"
+      },
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.SJvEGeMryIekwIKk"
+      }
+    ]
+  }
+}

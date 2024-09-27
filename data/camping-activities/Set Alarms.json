@@ -1,0 +1,13 @@
+{
+  "name": "Set Alarms",
+  "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.vWSQmYLKlrk3rLDE",
+  "isLocked": true,
+  "isSecret": false,
+  "isHomebrew": false,
+  "skills": [],
+  "effectUuids": [
+    {
+      "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.ptjs54eoEX8EAQNq"
+    }
+  ]
+}

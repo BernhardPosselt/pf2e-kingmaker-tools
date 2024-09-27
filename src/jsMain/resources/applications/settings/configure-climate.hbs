@@ -1,0 +1,27 @@
+<div>
+    <div class="row">
+        <table>
+            <thead>
+            <tr>
+                {{#each heading}}
+                    <th class="{{#each classes}}{{this}}{{/each}}">{{label}}</th>
+                {{/each}}
+            </tr>
+            </thead>
+            <tbody>
+            {{#each formRows}}
+                <tr>
+                    {{#each this}}
+                        {{#if isFormElement}}
+                            <td>{{> formElement this}}</td>
+                        {{else}}
+                            <td>{{this}}</td>
+                        {{/if}}
+                    {{/each}}
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <button data-action="save" {{#unless isValid}}disabled{{/unless}}>Save</button>
+</div>

@@ -1,0 +1,37 @@
+{
+  "name": "Printing House",
+  "activityBonusRules": [
+    {
+      "value": 2,
+      "activity": "improve-lifestyle"
+    },
+    {
+      "value": 2,
+      "activity": "quell-unrest"
+    }
+  ],
+  "notes": "A PC in a settlement with a printing house gains a +2 item bonus to checks to Gather Information or to Research any topic in a library or similar structure.",
+  "unlockActivities": [
+    "read-all-about-it"
+  ],
+  "traits": [
+    "building",
+    "edifice"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": false,
+  "level": 10,
+  "construction": {
+    "rp": 48,
+    "lumber": 14,
+    "luxuries": 12,
+    "skills": [
+      {
+        "skill": "industry",
+        "proficiencyRank": 3
+      }
+    ],
+    "dc": 27
+  },
+  "lots": 2
+}

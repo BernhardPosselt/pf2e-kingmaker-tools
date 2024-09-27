@@ -1,0 +1,41 @@
+{
+  "name": "Chocolate Ice Cream",
+  "icon": "icons/tools/laboratory/powder-red.webp",
+  "basicIngredients": 2,
+  "specialIngredients": 1,
+  "cookingLoreDC": 19,
+  "survivalDC": 21,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.xfIwKyG1pNFp8JbN",
+  "level": 4,
+  "cost": "5 gp",
+  "rarity": "common",
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.0QmbpFYAoyzUu1gi"
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.9brr5UKBsZcboAOx"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.KqktmooFbYLQQ2S1"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.L85BNpJEFAozA9kW",
+        "removeAfterRest": true
+      }
+    ]
+  }
+}

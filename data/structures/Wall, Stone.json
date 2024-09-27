@@ -1,0 +1,29 @@
+{
+    "name": "Wall, Stone",
+    "traits": [
+        "infrastructure"
+    ],
+    "lots": 0,
+    "affectsDowntime": false,
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "value": "1",
+        "moreThanOncePerTurn": true,
+        "note": "as long as it's the first wall in a settlement"
+    },
+    "level": 5,
+    "upgradeFrom": [
+        "Wall, Wooden"
+    ],
+    "construction": {
+        "rp": 4,
+        "stone": 8,
+        "skills": [
+            {
+                "skill": "defense",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 20
+    }
+}

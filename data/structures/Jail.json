@@ -1,0 +1,33 @@
+{
+  "name": "Jail",
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "skill": "intrigue",
+      "activity": "quell-unrest"
+    }
+  ],
+  "reduceRuinBy": {
+    "value": "1",
+    "ruin": "crime"
+  },
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesRuin": true,
+  "level": 2,
+  "construction": {
+    "rp": 14,
+    "lumber": 4,
+    "stone": 4,
+    "ore": 2,
+    "skills": [
+      {
+        "skill": "defense"
+      }
+    ],
+    "dc": 16
+  },
+  "lots": 1
+}

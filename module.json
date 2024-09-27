@@ -1,31 +1,23 @@
 {
-    "title": "Pathfinder - Kingmaker Tools (Unofficial)",
-    "description": "A collection of utilities to run Kingmaker",
-    "version": "1.1.1",
+    "title": "Kingdom Building, Camping & Weather",
+    "description": "A collection of utilities to run the most popular adventure for PFRPG 2e",
+    "version": "2.0.1",
     "scripts": [
-        "dist/main.js"
+        "dist/api/patches.js",
+        "dist/main.js",
+        "dist/oldmain.js"
     ],
     "url": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools",
     "license": "LICENSE",
     "styles": [
         "styles/style.css",
-        "styles/camping.css"
+        "dist/style.css"
     ],
     "packs": [
         {
             "name": "kingmaker-tools-structures",
             "path": "packs/kingmaker-tools-structures",
             "label": "Structures",
-            "type": "Actor",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-companions",
-            "path": "packs/kingmaker-tools-companions",
-            "label": "Companions",
             "type": "Actor",
             "system": "pf2e",
             "private": false,
@@ -115,7 +107,7 @@
     ],
     "packFolders": [
         {
-            "name": "Kingmaker Tools",
+            "name": "Kingdom Building, Camping & Weather",
             "sorting": "a",
             "packs": [
                 "kingmaker-tools-settlements",
@@ -134,7 +126,7 @@
         }
     ],
     "manifest": "https://raw.githubusercontent.com/BernhardPosselt/pf2e-kingmaker-tools/master/module.json",
-    "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/1.1.1/release.zip",
+    "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/2.0.1/release.zip",
     "id": "pf2e-kingmaker-tools",
     "socket": true,
     "authors": [

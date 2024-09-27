@@ -1,0 +1,71 @@
+{{#unless hideLabel}}
+    <{{labelElement}} class="km-label {{#unless stacked}}form-element-inline{{/unless}}">
+    {{#if escapeLabel}}{{label}}{{else}}{{{label}}}{{/if}}{{/unless}}
+{{#if select}}
+    {{#if link}}
+        <div class="km-select-with-link">
+    {{/if}}
+        <select name="{{name}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
+                required}}required{{/if}} {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}} {{#if
+                elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}}>
+            {{#if required}}
+                {{#each options}}
+                    <option class="{{classes}}" value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+            {{else}}
+                <option value="">-</option>
+                {{#each options}}
+                    <option class="{{classes}}" value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+            {{/if}}
+        </select>
+{{else if number}}
+        <input type="number" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
+                required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
+                disabled}}disabled{{/if}}>
+{{else if radio}}
+        <input type="radio" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
+                required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
+                disabled}}disabled{{/if}} {{checked checked}}>
+{{else if text}}
+        <input type="text" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
+                required}}required{{/if}} {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}} {{#if
+                elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}} {{#if
+                placeholder}}placeholder="{{placeholder}}"{{/if}}>
+{{else if checkbox}}
+        <input type="checkbox" name="{{name}}" {{checked value}}  {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
+                required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
+                disabled}}disabled{{/if}}>
+{{else if time}}
+        <input type="time" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
+                required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
+                disabled}}disabled{{/if}}>
+{{else if hidden}}
+        <input type="hidden" name="{{name}}" value="{{value}}" {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}}>
+{{else if textArea}}
+        <textarea name="{{name}}"  {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
+                required}}required{{/if}} {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}} {{#if
+                elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}}>{{value}}</textarea>
+{{else if menu}}
+        <button type="button" data-action="{{value}}"  {{#if
+                elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}}>{{name}}</button>
+{{else if component}}
+    {{> (lookup . 'templatePartial') value}}
+{{else if image}}
+        <img src="{{value}}" data-name="{{name}}" class="image-upload {{#if elementClasses}}{{elementClasses}}{{/if}}"
+             {{#if disabled}}disabled{{/if}}>
+{{/if}}
+{{#if link}}
+        <!-- This does not work for stacked=true yet -->
+        <div class="km-form-document-link">
+            <a href="#" data-action="openDocumentLink" data-uuid="{{link.uuid}}" title="Open">
+                <img src="{{link.img}}" alt="Open Document">
+            </a>
+        </div>
+    </div>
+{{/if}}
+{{#unless hideLabel}}</{{labelElement}}>{{/unless}}
+
+{{#if help}}
+    <div class="help">{{help}}</div>
+{{/if}}

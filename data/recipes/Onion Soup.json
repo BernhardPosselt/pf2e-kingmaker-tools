@@ -1,0 +1,41 @@
+{
+  "name": "Onion Soup",
+  "icon": "icons/consumables/food/soup-broth-bowl-wooden-yellow.webp",
+  "basicIngredients": 2,
+  "specialIngredients": 1,
+  "cookingLoreDC": 24,
+  "survivalDC": 26,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.laM0IfTV8eviU1vm",
+  "level": 8,
+  "cost": "25 gp",
+  "rarity": "common",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.6Vu7Ts4p79O6JsD2"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.8IzlPm2joulb5r0p",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.hHTMldJIDoqpCF7U"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.pIgoUydEo8wU2Avm"
+      }
+    ]
+  }
+}

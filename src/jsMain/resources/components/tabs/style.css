@@ -1,0 +1,48 @@
+ul.km-tabs {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    /*background-color: var(--secondary-km);*/
+    position: relative;
+    box-shadow: 0 5px 10px 0px #111;
+
+    li {
+        flex: 1;
+        text-align: center;
+        list-style-type: none;
+        margin-bottom: 0;
+        line-height: 40px;
+
+        a {
+            display: block;
+            /*color: rgb(17, 17, 17);*/
+        }
+
+        &.km-tab-active {
+            /*background-color: var(--primary-km);*/
+            background-color: var(--color-warm-2);
+            color: white;
+            box-shadow: 0 0 10px #222;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+
+            a {
+                color: white;
+            }
+        }
+
+        &.km-tab-active:first-child {
+            border-top-left-radius: 0;
+        }
+
+        &.km-tab-active:last-child {
+            border-top-right-radius: 0;
+        }
+
+        &.km-tab-active {
+            z-index: 1;
+        }
+    }
+}

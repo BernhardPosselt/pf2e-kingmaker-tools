@@ -1,0 +1,49 @@
+{{#if hideEmpty}}
+    <div class="km-food-cost">
+        {{#if rations}}
+            <span
+                    class="{{#if missingRations}}km-missing-ingredients{{/if}}"
+                    {{#if totalRations}}title="available: {{totalRations}}"{{/if}}
+            >{{rations}}
+                <img src="{{rationImage}}" alt="rations">
+        </span>
+        {{/if}}
+        {{#if basicIngredients}}
+            <span
+                    class="{{#if missingBasic}}km-missing-ingredients{{/if}}"
+                    {{#if totalBasicIngredients}}title="available: {{totalBasicIngredients}}"{{/if}}
+            >{{basicIngredients}}
+                <img src="{{basicImage}}" alt="basic ingredients">
+        </span>
+        {{/if}}
+        {{#if specialIngredients}}
+            <span
+                    class="{{#if missingSpecial}}km-missing-ingredients{{/if}}"
+                    {{#if totalSpecialIngredients}}title="available: {{totalSpecialIngredients}}"{{/if}}
+            >{{specialIngredients}}
+                <img src="{{specialImage}}" alt="special ingredients">
+        </span>
+        {{/if}}
+    </div>
+{{else}}
+    <div class="km-food-cost">
+            <span
+                    class="{{#if missingRations}}km-missing-ingredients{{/if}}"
+                    {{#if totalRations}}title="available: {{totalRations}}"{{/if}}
+            >{{rations}}
+                <img src="{{rationImage}}" alt="rations">
+        </span>
+        <span
+                class="{{#if missingBasic}}km-missing-ingredients{{/if}}"
+                {{#if totalBasicIngredients}}title="available: {{totalBasicIngredients}}"{{/if}}
+        >{{basicIngredients}}
+            <img src="{{basicImage}}" alt="basic ingredients">
+        </span>
+        <span
+                class="{{#if missingSpecial}}km-missing-ingredients{{/if}}"
+                {{#if totalSpecialIngredients}}title="available: {{totalSpecialIngredients}}"{{/if}}
+        >{{specialIngredients}}
+            <img src="{{specialImage}}" alt="special ingredients">
+        </span>
+    </div>
+{{/if}}

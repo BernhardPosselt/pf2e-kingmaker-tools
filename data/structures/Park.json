@@ -1,0 +1,29 @@
+{
+  "name": "Park",
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "skill": "wilderness",
+      "activity": "rest-and-relax"
+    }
+  ],
+  "traits": [
+    "yard"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "level": 3,
+  "construction": {
+    "rp": 5,
+    "skills": [
+      {
+        "skill": "wilderness"
+      }
+    ],
+    "dc": 18
+  },
+  "lots": 1
+}

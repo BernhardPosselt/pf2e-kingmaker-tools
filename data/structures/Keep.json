@@ -1,0 +1,40 @@
+{
+  "name": "Keep",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "deploy-army"
+    },
+    {
+      "value": 1,
+      "activity": "garrison-army"
+    },
+    {
+      "value": 1,
+      "activity": "train-army"
+    }
+  ],
+  "traits": [
+    "building",
+    "edifice"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "level": 3,
+  "construction": {
+    "rp": 32,
+    "lumber": 8,
+    "stone": 8,
+    "skills": [
+      {
+        "skill": "defense",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 18
+  },
+  "lots": 2
+}

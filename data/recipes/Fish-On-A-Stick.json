@@ -1,0 +1,42 @@
+{
+  "name": "Fish-On-A-Stick",
+  "icon": "icons/consumables/food/cooked-kebab-meat-skewer-orange.webp",
+  "basicIngredients": 2,
+  "specialIngredients": 0,
+  "cookingLoreDC": 17,
+  "survivalDC": 19,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.b59ro2GHvRvBOko8",
+  "level": 1,
+  "cost": "1 gp",
+  "rarity": "common",
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.8eIGJPWFlg4L94wY"
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.L5sACVlUjYP6lJ7q"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "changeRestDurationSeconds": 3600,
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.c9qgXgiAJikyTM0p"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "changeRestDurationSeconds": -3600,
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.dZTQ5rfedrpLUTxE"
+      }
+    ]
+  }
+}

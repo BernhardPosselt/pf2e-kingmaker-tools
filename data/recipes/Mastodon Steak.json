@@ -1,0 +1,59 @@
+{
+  "name": "Mastodon Steak",
+  "icon": "icons/consumables/food/steak-cooked-grilled-brown.webp",
+  "basicIngredients": 4,
+  "specialIngredients": 3,
+  "cookingLoreDC": 34,
+  "survivalDC": 36,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.SfNeVcYxBD4uCfrT",
+  "level": 14,
+  "cost": "225 gp",
+  "rarity": "uncommon",
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.0yH2V9UFRyGwXIRn"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Ln9Q3cH6NzGZAJUs"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.M6jcQsHsPEkigTTG",
+        "removeAfterRest": true,
+        "healFormula": "4d8",
+        "healMode": "afterConsumption",
+        "reduceConditions": {
+          "drained": 2,
+          "stupefied": 2,
+          "enfeebled": 2,
+          "clumsy": 2,
+          "mode": "random"
+        }
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.xq4qNyrsL5wVYkcQ",
+        "removeAfterRest": true,
+        "healFormula": "7d8",
+        "healMode": "afterConsumption",
+        "reduceConditions": {
+          "drained": 2,
+          "stupefied": 2,
+          "enfeebled": 2,
+          "clumsy": 2
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Haggis",
+  "icon": "icons/commodities/biological/organ-brain-red.webp",
+  "basicIngredients": 2,
+  "specialIngredients": 0,
+  "cookingLoreDC": 15,
+  "survivalDC": 17,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.tKcKHaxGW48w5UMj",
+  "level": 1,
+  "cost": "1 gp",
+  "rarity": "common",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.1CIuG1XTo4R8fmeL"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ISeHA2sG6wwJyV6I"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.RttWd7ZJNbsFsQjE"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.k0BWf8aF5plRvhyk",
+        "removeAfterRest": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Monster Casserole",
+  "icon": "icons/consumables/food/soup-broth-bowl-tentacle.webp",
+  "basicIngredients": 7,
+  "specialIngredients": 2,
+  "cookingLoreDC": 28,
+  "survivalDC": 30,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.gqT2VQGYgDQIMYsW",
+  "level": 11,
+  "cost": "70 gp",
+  "rarity": "common",
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.5GT0JeRjYJc8e5ZA",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.af6hFeUUfsF1GiX8"
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.gNGXKMmJdNQJZode"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.qad6gIwEpQQIkZwQ"
+      }
+    ]
+  }
+}

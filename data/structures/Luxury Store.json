@@ -1,0 +1,38 @@
+{
+  "name": "Luxury Store",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "establish-trade-agreement"
+    }
+  ],
+  "availableItemsRules": [
+    {
+      "value": 1,
+      "group": "luxury",
+      "maximumStacks": 3
+    }
+  ],
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 6,
+  "upgradeFrom": [
+    "General Store"
+  ],
+  "construction": {
+    "rp": 28,
+    "lumber": 10,
+    "luxuries": 6,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 2
+      }
+    ],
+    "dc": 22
+  },
+  "lots": 1
+}

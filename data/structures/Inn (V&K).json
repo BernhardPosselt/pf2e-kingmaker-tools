@@ -1,0 +1,34 @@
+{
+  "name": "Inn (V&K)",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "hire-adventurers"
+    }
+  ],
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "construction": {
+    "rp": 10,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "trade"
+      }
+    ],
+    "dc": 15
+  },
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "activity": "clear-hex",
+      "skill": "exploration"
+    }
+  ],
+  "lots": 1
+}

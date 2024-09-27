@@ -1,0 +1,12 @@
+<div class="km-skill-picker-input">
+    {{#if skills}}
+        <ul>
+            {{#each skills}}
+                <li>{{label}} ({{proficiency}})</li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>No check required</p>
+    {{/if}}
+    <button type="button" class="full-width" data-action="edit-skills">Edit</button>
+</div>

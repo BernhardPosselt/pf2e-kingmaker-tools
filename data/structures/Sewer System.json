@@ -1,0 +1,30 @@
+{
+    "name": "Sewer System",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "clandestine-business"
+        }
+    ],
+    "consumptionReduction": 1,
+    "traits": [
+        "infrastructure"
+    ],
+    "lots": 0,
+    "affectsEvents": true,
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 7,
+    "construction": {
+        "rp": 24,
+        "lumber": 8,
+        "stone": 8,
+        "skills": [
+            {
+                "skill": "engineering",
+                "proficiencyRank": 2
+            }
+        ],
+        "dc": 23
+    }
+}

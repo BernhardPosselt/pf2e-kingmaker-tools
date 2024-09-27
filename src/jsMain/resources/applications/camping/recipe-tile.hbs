@@ -1,0 +1,51 @@
+<div class="km-camping-tile km-camping-recipe" {{#if hidden}}hidden{{/if}} data-recipe-name="{{targetRecipe}}">
+    <header>
+        {{#if uuid}}
+            <a href="#" data-uuid="{{uuid}}" data-action="open-item">{{name}}</a>
+        {{else}}
+            {{name}}
+        {{/if}}
+    </header>
+    <div class="km-recipe-content">
+        <section class="km-recipe-data {{#unless requiresCheck}}km-no-skill-check{{/unless}} {{#if
+                cost}}km-with-food-cost{{/if}} {{#if rations}}km-rations-tile{{/if}}">
+            <div class="km-camping-tile-portrait">
+                <ul class="km-recipe-actors">
+                    {{#each actors}}
+                        <li>
+                            <a href="#"
+                               data-uuid="{{uuid}}"
+                               data-action="open-actor">
+                                <img src="{{image}}" alt="{{name}}">
+                            </a></li>
+                    {{/each}}
+                </ul>
+                {{#if uuid}}
+                    <a href="#" data-uuid="{{uuid}}" data-action="open-item">
+                        <img class="cover" src="{{icon}}">
+                    </a>
+                {{else}}
+                    <img class="cover" src="{{icon}}">
+                {{/if}}
+            </div>
+            {{#if rations }}
+                <div class="km-recipe-rations">
+                    <button type="button" data-action="consume-rations"
+                            {{#unless consumeRationsEnabled}}disabled{{/unless}}>Consume Rations
+                    </button>
+                </div>
+            {{/if}}
+            {{#if requiresCheck}}
+                <div class="km-camping-tile-check">
+                    {{> formElement skills }}
+                    <button class="km-camping-action km-tile-check" data-action="roll-recipe-check" type="button">
+                        <i class="fa-solid fa-dice-d20"></i>
+                    </button>
+                </div>
+                <div class="km-camping-tile-result">
+                    {{> formElement degreeOfSuccess }}
+                </div>
+            {{/if}}
+        </section>
+    </div>
+</div>

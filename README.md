@@ -1,68 +1,43 @@
-# Kingmaker Tools (Unofficial)
+# PFRPG 2e: Kingdom Building, Camping & Weather
 
-This module ships macros, journal entries, roll tables, effect items, additional tooling for OGL/CUP licensed content
-from the Kingmaker Adventure Path for Pathfinder 2nd Edition.
+This module ships all OGL licensed rules to run the Kingdom, Camping and Weather rule systems for the most popular
+adventure for PFRPG.
 
 ## Licensing
 
-All Pathfinder content uses the [Open Gaming License](./OpenGameLicense.md) and [CUP](https://paizo.com/community/communityuse)
+All PFRPG 2e content uses the [Open Gaming License](./OpenGameLicense.md). If you find non OGL content, please file an
+issue and I'll get it removed ASAP. I've tried my best to scrub existing content, but there might still be leftovers.
 
-> This FoundryVTT module uses trademarks and/or copyrights owned by Paizo Inc., used under Paizo's Community Use
-> Policy (paizo.com/communityuse). We are expressly prohibited from charging you to use or access this content. This
-> FoundryVTT module is not published, endorsed, or specifically approved by Paizo. For more information about Paizo Inc.
-> and Paizo products, visit paizo.com.
+The source code is licensed under the AGPLv3 license, except for
+the [src/jsMain/kotlin/com/foundryvtt](./src/jsMain/kotlin/com/foundryvtt) folder which is licensed
+under [Apache License 2.0](./src/jsMain/kotlin/com/foundryvtt/LICENSE).
 
-The source code is licensed under the AGPLv3 license.
-
-All images in the [static/img/structures](static/img/structures) folder are licensed under [CC0 - Public Domain](https://creativecommons.org/publicdomain/zero/1.0/) by [Mark Pearce](https://github.com/MarkPearce). They were [generated and retouched using a MidJourney subscriber account](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/76). According to their [Terms of Service](https://docs.midjourney.com/docs/terms-of-service), subscribers to MidJourney that are not part of a company own all the generated images.
-
-## Usage
-
-This module ships a journal named **Kingmaker Tools Manual** which includes all of the instructions on how to use this module. It should automatically open once you enable the module for the first time. You can find it under the compendium tab in the **Kingmaker Tools** > **Journals** compendium.
-
-If you have issues, consider dropping into our [Discord channel](https://discord.com/channels/880968862240239708/1079113556823396352)
+All images in the [img/structures](./img/structures) and [img/camping/backgrounds](./img/camping/backgrounds) are
+licensed under [CC0 - Public Domain](https://creativecommons.org/publicdomain/zero/1.0/)
+by [Mark Pearce](https://github.com/MarkPearce). They
+were [generated and retouched using a MidJourney subscriber account](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/76).
+According to their [Terms of Service](https://docs.midjourney.com/docs/terms-of-service), subscribers to MidJourney that
+are not part of a company own all the generated images.
 
 ## Installation
 
 The package is available through the [module registry](https://foundryvtt.com/packages/pf2e-kingmaker-tools)
 
-### Git
+## Functionality
 
-Clone this repository into your installation's module folder:
-
-    cd ~/.local/share/FoundryVTT/Data/modules
-    git clone https://github.com/BernhardPosselt/pf2e-kingmaker-tools.git 
-    yarn install
-    yarn run build
-
-If your Foundry instance is running, you need to restart it to clear its module cache.
-
-Run the following before packaging once and set your paths:
-
-    ./node_modules/.bin/fvtt configure
-    ./node_modules/.bin/fvtt configure set installPath /home/bernhard/dev/FoundryVTT-11.301
-    ./node_modules/.bin/fvtt configure set dataPath /home/bernhard/.local/share/FoundryVTT/Data
-
-### Functionality
-
-This module ships with implementations for all the extra mechanics provided in the 2e Kingmaker Adventure Path, including optional and popular homebrew from Vance & Kerenshara:
+This module ships with implementations for all the extra mechanics provided in the best sandbox PFRPG 2e adventure,
+including optional and popular homebrew from Vance & Kerenshara:
 
 * Camping Sheet
 * Kingdom Sheet
 * Weather
-* Level 1 Statblocks for companions not included in the Companion Guide
-
-Furthermore, this module provides:
-
-* Various macros that I use in my own game
-* Journals containing various rules and tips
-* Combat Track integration
+* Combat Tracks
 
 ### House Rules & GM Tips
 
 You can look up my tips and house rules [here](./docs/house-rules.md)
 
-### Official Kingmaker Module Integration
+### Official Module Integration
 
 If you've enabled the official module, the following things are automatically taken care of:
 
@@ -76,8 +51,85 @@ If you've enabled the official module, the following things are automatically ta
 
 ### Screenshots
 
-![kingdom-sheet.png](docs%2Fimages%2Fkingdom-sheet.png)
+![kingdom-sheet.png](./docs/images/kingdom-sheet.png)
 
-![settlements.png](docs%2Fimages%2Fsettlements.png)
+![settlements.png](./docs/images/settlements.png)
 
-![camping-sheet-1.png](docs%2Fimages%2Fcamping-sheet-1.png)
+![camping-sheet-1.png](./docs/images/camping-sheet-1.png)
+
+## Development
+
+If you are interested in hacking on the code base, take a look at the [Kotlin JS Primer](./docs/Kotlin%20JS%20Primer.md)
+for a quick intro on how to interact with the js api.
+
+### Setup
+
+Install the following things:
+
+* JDK 21
+* git
+* node
+* yarn
+
+First, clone the repository into a local folder, e.g. **/home/bernhard/dev**:
+
+    cd /home/bernhard/dev
+    git clone https://github.com/BernhardPosselt/pf2e-kingmaker-tools.git 
+
+Then link this directory to your foundry data folder:
+
+    ln -s /home/bernhard/dev/pf2e-kingmaker-tools/ /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools/
+
+Run the package task to build everything from scratch:
+
+    ./gradlew package
+
+Then, you can keep building the project using:
+
+    ./gradlew assemble
+
+or if you want to both build it and run its tests:
+
+    ./gradlew build
+
+To execute tests run:
+
+    ./gradlew jsTest
+
+Finally, start foundry
+
+    cd dev/FoundryVTT-12.330/
+    ./foundryvtt
+
+You can release a new version using:
+
+    GITHUB_TOKEN="token_here" FOUNDRY_TOKEN="token_here" ./gradlew release
+
+### Enable Schema Autocompletion Support in IntelliJ
+
+Some files are in JSON rather than actual code. To get autocompletion for these in IntelliJ, you need to enable custom
+schemas.
+
+In settings, go to **Languages & Frameworks > Schemas and DTDs > JSON Schema Mappings**.
+
+Click on the + to add a new mapping for each schema. Then add the following (see a list of values further down below):
+
+* **Name**: Name of the Schema
+* **Schema file or URL**: Path to the Schema file in [./schemas/](./schemas/)
+* **Schema Version**: Always **JSON Schema version 7**
+* Then click on the **+** below and **Directory**
+
+Schemas:
+
+* Recipes:
+    * **Name**: Recipes
+    * **Schema file or URL**: schemas/recipes.json
+    * **Directory**: data/recipes
+* Structures:
+    * **Name**: Structures
+    * **Schema file or URL**: schemas/structures.json
+    * **Directory**: data/structures
+* Camping Activities:
+    * **Name**: Camping Activities:
+    * **Schema file or URL**: schemas/camping-activities.json
+    * **Directory**: data/camping-activities

@@ -1,0 +1,32 @@
+<div class="km-activity-effects-input">
+    {{#if effects}}
+        <ul>
+            {{#each effects}}
+                <li title="{{label}}">
+                    <a href="#"
+                       data-uuid="{{uuid}}"
+                       data-action="open-item"><img alt="{{label}}" src="{{img}}"></a>
+                    <span>{{target}}</span>
+                    <button type="button"
+                            data-action="edit-effect"
+                            data-section="{{../section}}"
+                            data-index="{{@index}}">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+                    <button type="button"
+                            data-action="delete-effect"
+                            data-section="{{../section}}"
+                            data-index="{{@index}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+    <button type="button"
+            data-action="add-effect"
+            class="full-width"
+            data-section="{{section}}">Add Effect
+    </button>
+</div>
+

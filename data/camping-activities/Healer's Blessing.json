@@ -1,0 +1,14 @@
+{
+  "name": "Healer's Blessing",
+  "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.X4ggcXUe0wPiW4jt",
+  "isLocked": true,
+  "isSecret": false,
+  "isHomebrew": false,
+  "skills": [],
+  "effectUuids": [
+    {
+      "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.eaWmjDOIvUF9aDbq",
+      "doublesHealing": true
+    }
+  ]
+}

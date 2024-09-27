@@ -1,0 +1,27 @@
+{
+  "name": "Inn",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "hire-adventurers"
+    }
+  ],
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "construction": {
+    "rp": 10,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "trade"
+      }
+    ],
+    "dc": 15
+  },
+  "lots": 1
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Construction Yard",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "build-structure"
+    },
+    {
+      "value": 1,
+      "activity": "repair-reputation-decay"
+    }
+  ],
+  "traits": [
+    "yard"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 10,
+  "construction": {
+    "skills": [
+      {
+        "skill": "engineering"
+      }
+    ],
+    "dc": 27,
+    "rp": 40,
+    "lumber": 10,
+    "stone": 10
+  },
+  "lots": 4
+}

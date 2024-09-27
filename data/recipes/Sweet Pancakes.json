@@ -1,0 +1,40 @@
+{
+  "name": "Sweet Pancakes",
+  "icon": "icons/commodities/cloth/cloth-roll-orange.webp",
+  "basicIngredients": 2,
+  "specialIngredients": 2,
+  "cookingLoreDC": 23,
+  "survivalDC": 25,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.WrDLx0FVkaglg1hh",
+  "level": 7,
+  "cost": "18 gp",
+  "rarity": "common",
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.BXTnX9xhnYvolrFk"
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Lpo0XSUVmGDQaXtz"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ovbBMpOBtB1CrLOv"
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.q5JHZeJeAIscA1ky"
+      }
+    ]
+  }
+}

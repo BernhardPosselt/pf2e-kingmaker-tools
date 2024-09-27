@@ -1,0 +1,29 @@
+{
+  "name": "Tenement",
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "gainRuin": {
+    "value": "1",
+    "ruin": "any",
+    "moreThanOncePerTurn": true
+  },
+  "level": 0,
+  "construction": {
+    "rp": 1,
+    "lumber": 1,
+    "skills": [
+      {
+        "skill": "industry"
+      }
+    ],
+    "dc": 14
+  },
+  "lots": 1
+}

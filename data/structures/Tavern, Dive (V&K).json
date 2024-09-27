@@ -1,0 +1,31 @@
+{
+  "name": "Tavern, Dive (V&K)",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "level": 1,
+  "construction": {
+    "rp": 12,
+    "lumber": 1,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 15
+  },
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "activity": "clear-hex",
+      "skill": "exploration"
+    }
+  ],
+  "lots": 1
+}

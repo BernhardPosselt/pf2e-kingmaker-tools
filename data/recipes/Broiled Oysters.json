@@ -1,0 +1,41 @@
+{
+  "name": "Broiled Oysters",
+  "icon": "icons/consumables/meat/oyster-shell-glowing-orange.webp",
+  "basicIngredients": 2,
+  "specialIngredients": 1,
+  "cookingLoreDC": 20,
+  "survivalDC": 22,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.aXmbLuQMQOMAlls3",
+  "level": 3,
+  "cost": "3 gp",
+  "rarity": "uncommon",
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.57461QLkB8M3S0AS"
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.BlKsZq6anCMSEshB",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.X8sGtdz4yfVl2pKJ"
+      }
+    ]
+  },
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ebP1xWOh7vGZmmlz"
+      }
+    ]
+  }
+}

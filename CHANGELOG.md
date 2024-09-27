@@ -7,17 +7,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Regions and Climate can now be configured to use your own settings. This allows you to have custom regions with custom
+  weather, combat tracks and random encounter tables
+* Added a custom Subsist macro that works off the current region and allows you to add Provisions items to your
+  inventory. Provisions are used up before rations and removed after resting. Automation is included for Coyote Cloak
+  and Forager
+* Recipe healing, damaging and condition reducing effects are implemented, automating all remaining recipes
+* There is now a way to increase the number of fame points
+* Campsite Positions are now remembered on each scene so you can reuse their last result if it wasn't a critical failure
+
+### Removed
+
+* Remove token mappings from GMG npcs to not conflict with NPC Core
+* This release marks a departure from Paizo IP to OGL only content due improve licensing compatibility. This primarily
+  means that some names and setting information had to be removed or changed (
+  e.g. the First World has been replaced with "A Supernatural Place" or "Galt Ragout" is now just "Ragout")
+* Removed additional Companion actors: ultimately too difficult to maintain due to Remaster changes and new content
+  releases in addition to Paizo IP
+* Removed various journal entries which are all covered on existing sheets
+* Removed Companion Influence and Discover camping activities. You have to add them on your own now
+* Removed the ability to override combat tracks by region, e.g. by creating a playlist called **Kingmaker.Greenbelt**.
+  Instead, simply configure these on the camping sheet
+
+### Changed
+
+* Meal Effects are now removed right before Prepare Campsite RAW
+* You can have more than one meal effect active at a time which at the same time means that eating a meal won't override
+  the previous meal anymore.
+* Instead of a single meal, players can now choose from the entire array of available recipes RAW
+* If you don't use the official module, you will need to:
+    * Set your combat tracks and random encounters manually in camping sheet
+* All companion names have been removed from camping activities, kingdom events and kingdom activities
+* Companion Kingdom Activities are now handled like all other activities, meaning: you don't have to force override them
+  to enable them without companion leaders. However, they are not migrated and don't automatically enable invested and
+  benefits anymore, when you assign a companion to a leadership position. Enable/Disable them like normally in your turn
+  tab. Regarding Octavia, there's a kingdom sheet setting now to enable that benefit
+* The following camping activities have been renamed:
+    * Dawnflower's Blessing -> Healer's Blessing
+* The following recipes have been renamed
+    * Broiled Tuskwater Oysters -> Broiled Oysters
+    * First World Mince Pie -> Supernatural Mince Pie
+    * Galt Ragout -> Ragout
+    * Giant Scrambled Egg With Shambletus -> Giant Scrambled Egg
+    * Kameberry Pie -> Berry Pie
+    * Whiterose Oysters -> Oysters
+    * Owlbear Omelet -> Omelet
+* The following Kingdom Activities have been renamed:
+    * Restore the Temple of the Elk -> Restore the Temple
+    * Harvest Azure Lily Pollen -> Harvest Lily Pollen
+* Migrations are not run anymore if you've updated from a version prior to 0.12.2 (released in October 2023). If you've
+  upgraded from such a version, download to the latest version for your release that still ships these (1.1.1 for V12 or
+  0.46.2 for V11), then upgrade to this release
+* If you have multiple kingdom sheets, migrations will be run for all of them; you can still only have 1 camping sheet
+* Combat Tracks can now select a track on a playlist in addition to selecting a playlist
+* Camping Sheet and almost all macros are now based on ApplicationV2 which support a dark and light theme out of the box
+* Changing the degree of success dropdown for activities as well as recipes posts all associated messages to chat now
+
+## Fixed
+
+* Lots are not calculated from token size anymore allowing you to use a finer grained grid
+* Private camping rolls are now hidden from players again
+
 ## [1.1.1] - 2024-07-17
 
 ### Fixed
 
-* When upgrading from V11, correctly migrate modifiers to Recover Army to separated activities to not break the kingdom sheet
+* When upgrading from V11, correctly migrate modifiers to Recover Army to separated activities to not break the kingdom
+  sheet
 
 ## [1.1.0] - 2024-07-09
 
 ### Changed
 
-* Mark Pearce [contributed CC licensed](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/76) images for the missing structures. You will need to reimport these structures to make use of the new images. Keep in mind that you also need to replace all existing tokens after deleting their actors.
+* Mark Pearce [contributed CC licensed](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/76) images for
+  the missing structures. You will need to reimport these structures to make use of the new images. Keep in mind that
+  you also need to replace all existing tokens after deleting their actors.
 
 ## [1.0.4] - 2024-07-07
 
@@ -29,7 +95,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* When activating settlement scenes through the kingdom sheet using ctrl + click, change the active settlement in the sheet to the scene
+* When activating settlement scenes through the kingdom sheet using ctrl + click, change the active settlement in the
+  sheet to the scene
 
 ### Fixed
 
@@ -159,9 +226,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* This release achieves 100% compatibility with V&K rules except for turning a feat's status bonuses into circumstance bonuses instead of letting them stack with other status bonuses
+* This release achieves 100% compatibility with V&K rules except for turning a feat's status bonuses into circumstance
+  bonuses instead of letting them stack with other status bonuses
 * Added the V&K version of Practical Magic
-* Added the V&K version of Request Foreign Aid; in either case you need to manually enable/disable either activity in the **Manage Activities** button at the top of the **Turn** section
+* Added the V&K version of Request Foreign Aid; in either case you need to manually enable/disable either activity in
+  the **Manage Activities** button at the top of the **Turn** section
 
 ## [0.44.0] - 2024-05-04
 
@@ -184,7 +253,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Remove the sheet actor compendium and instead create the actor programmatically when clicking on the camping/kingdom macro
+* Remove the sheet actor compendium and instead create the actor programmatically when clicking on the camping/kingdom
+  macro
 
 ## [0.42.0] - 2024-03-08
 
@@ -223,7 +293,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fix Cemetery structure name
-* Fix Cemetery and Waterfront images that were renamed with the latest Kingmaker update. You will have to either fix these manually in your worlds or reimport and replace them on your scenes
+* Fix Cemetery and Waterfront images that were renamed with the latest Kingmaker update. You will have to either fix
+  these manually in your worlds or reimport and replace them on your scenes
 
 ### Changed
 
@@ -256,7 +327,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Do not parse hidden tiles or drawings when using tile/drawing based worksite, size & farmland automation
-* **Roll Perception Exploration** and **Roll Stealth Exploration** now use all characters owned by players in a world except for all characters in the active scene and add the appropriate action roll options
+* **Roll Perception Exploration** and **Roll Stealth Exploration** now use all characters owned by players in a world
+  except for all characters in the active scene and add the appropriate action roll options
 
 ## [0.34.0] - 2024-02-11
 
@@ -299,7 +371,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Added a way to track Food in addition to Farmlands; Food reduces consumption by 1 in claimed hexes similar to Farmlands
+* Added a way to track Food in addition to Farmlands; Food reduces consumption by 1 in claimed hexes similar to
+  Farmlands
 * Camping activities can now be overridden by adding a new activity with the same name as an existing one
 
 ### Changed
@@ -359,7 +432,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Re-organize kingdom sheet
-* Worksites, farmlands and kingdom size can now be tracked in 3 different ways in the kingdom sheet settings (**READ THE MANUAL JOURNAL!**):
+* Worksites, farmlands and kingdom size can now be tracked in 3 different ways in the kingdom sheet settings (**READ THE
+  MANUAL JOURNAL!**):
     * Official Module: Use the official module's hex map
     * Tile/Drawing Based: Use tiles/drawings as worksites, claimed hexes and farmlands
     * Manual: Manage everything manually
@@ -489,7 +563,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Use smaller margin of error for placing structure on a block (10% instead of 20%)
-* Do not add grid size again when calculating block positions preventing structures being counted as inside the block when placing them near the block's edges
+* Do not add grid size again when calculating block positions preventing structures being counted as inside the block
+  when placing them near the block's edges
 
 ## [0.21.4] - 2024-01-20
 
@@ -523,7 +598,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Ship a Settlement Scenes compendium
-* Add settlement level automation. You will need to manually migrate your settlement scenes to make use of this automation or turn it off in the kingdom sheet settings. Consult the Kingmaker Tools Manual journal (Help button in the title bar of your kingdom sheet) for more information on how to use it.
+* Add settlement level automation. You will need to manually migrate your settlement scenes to make use of this
+  automation or turn it off in the kingdom sheet settings. Consult the Kingmaker Tools Manual journal (Help button in
+  the title bar of your kingdom sheet) for more information on how to use it.
 
 ### Changed
 
@@ -531,7 +608,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Fix prototype tokens for structures to show no HP bars and display their name for V&K buildings, Waterfront and Monument
+* Fix prototype tokens for structures to show no HP bars and display their name for V&K buildings, Waterfront and
+  Monument
 
 ## [0.20.2] - 2024-01-19
 
@@ -574,12 +652,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Structure Browser which lets you filter structures, roll checks to build and pay costs replaces the **Build Structure** activity popup. Structures are gathered from all imported structures, so you might need to import them from the compendium
+* Structure Browser which lets you filter structures, roll checks to build and pay costs replaces the **Build Structure
+  ** activity popup. Structures are gathered from all imported structures, so you might need to import them from the
+  compendium
 * Separate structures for Watchtowers and Bridges built out of stone
 
 ### Changed
 
-* Add the following [additional required attributes to structures](docs/structure-rules.md) (you may need to edit your custom structures to make things work again):
+* Add the following [additional required attributes to structures](docs/structure-rules.md) (you may need to edit your
+  custom structures to make things work again):
     * **construction**
 * Add the following additional required attributes to structures:
     * **affectsEvents**

@@ -1,0 +1,11 @@
+.km-skill-picker-input {
+    padding: .5em 0;
+
+    ul {
+        margin: 0;
+    }
+
+    button {
+        margin: .5em 0;
+    }
+}

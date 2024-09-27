@@ -1,0 +1,29 @@
+{
+  "name": "Mill",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "harvest-crops"
+    }
+  ],
+  "consumptionReduction": 1,
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 2,
+  "construction": {
+    "rp": 6,
+    "lumber": 2,
+    "stone": 1,
+    "skills": [
+      {
+        "skill": "industry",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 16
+  },
+  "lots": 1
+}
