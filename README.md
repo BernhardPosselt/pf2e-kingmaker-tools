@@ -55,7 +55,7 @@ If you've enabled the official module, the following things are automatically ta
 
 ![settlements.png](./docs/images/settlements.png)
 
-![camping-sheet-1.png](./docs/images/camping-sheet-1.png)
+![camping sheet](./img/camping/docs/camping-activities.webp)
 
 ## Development
 
