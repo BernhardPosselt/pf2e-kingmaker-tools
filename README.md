@@ -1,7 +1,8 @@
 # PFRPG 2e: Kingdom Building, Camping & Weather
 
-This module ships all OGL licensed rules to run the Kingdom, Camping and Weather rule systems for the most popular
-adventure for PFRPG.
+This module ships all OGL licensed rules to run the Kingdom, Camping and Weather rule systems for the most popular adventure for PFRPG 2e.
+
+**Documentation is included in a journal inside FoundryVTT!**
 
 ## Licensing
 
