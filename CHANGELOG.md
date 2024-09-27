@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2024-09-27
+
 ### Added
 
 * Regions and Climate can now be configured to use your own settings. This allows you to have custom regions with custom
