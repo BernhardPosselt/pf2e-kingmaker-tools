@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "at.posselt"
-version = "2.0.1"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -186,6 +186,6 @@ tasks.register<ReleaseModule>("release") {
     releaseZip = layout.buildDirectory.file("release.zip")
     version = project.version.toString()
     foundryVersion = "12"
-    githubRepo = "BernhardPosselt/foundryvtt-kotlin"
+    githubRepo = "BernhardPosselt/pf2e-kingmaker-tools"
     moduleId = "pf2e-kingmaker-tools"
 }
