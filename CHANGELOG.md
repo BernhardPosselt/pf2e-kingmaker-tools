@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Correctly limit width of wide character portraits to camping activity tiles
+
 ## [2.0.1] - 2024-09-27
 
 ### Added
