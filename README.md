@@ -83,7 +83,7 @@ Then link this directory to your foundry data folder:
 
 Run the package task to build everything from scratch:
 
-    ./gradlew package
+    ./gradlew build
 
 Then, you can keep building the project using:
 

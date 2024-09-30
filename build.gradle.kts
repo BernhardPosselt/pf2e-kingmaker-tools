@@ -83,7 +83,7 @@ tasks {
     getByName("jsProcessResources") {
         dependsOn("packJsonFiles")
     }
-    getByName("assemble") {
+    getByName("jsBrowserDistribution") {
         finalizedBy("copyOldJs")
     }
     getByName("check") {
@@ -107,16 +107,6 @@ tasks.register<JsonSchemaValidator>("validateJsonFiles") {
         layout.projectDirectory.file("src/commonMain/resources/schemas/camping-activity.json"),
         layout.projectDirectory.dir("data/camping-activities"),
     )
-}
-
-/**
- * At build time, copy the old js file back into the dist folder
- */
-tasks.register<Copy>("copyOldJs") {
-    from("oldsrc/dist/main.js") {
-        rename(".*", "oldmain.js")
-    }
-    into("dist/")
 }
 
 /**
@@ -148,22 +138,39 @@ tasks.register<PackJsonFile>("packJsonFiles") {
 }
 
 tasks.register<Exec>("installOldJs") {
+    inputs.files(layout.projectDirectory.file("./oldsrc/package.json"))
+    outputs.dir(layout.projectDirectory.dir("./oldsrc/node_modules"))
     workingDir = layout.projectDirectory.dir("oldsrc/").asFile
     commandLine = listOf("yarn", "install")
 }
 
 tasks.register<Exec>("compileOldJs") {
+    dependsOn("installOldJs")
+    mustRunAfter("installOldJs")
+    inputs.dir(layout.projectDirectory.dir("./oldsrc/src/"))
+    outputs.dir(layout.projectDirectory.dir("./oldsrc/dist/"))
     workingDir = layout.projectDirectory.dir("oldsrc/").asFile
     commandLine = listOf("yarn", "run", "build")
+}
+
+/**
+ * At build time, copy the old js file back into the dist folder
+ */
+tasks.register<Copy>("copyOldJs") {
+    dependsOn("compileOldJs")
+    mustRunAfter("compileOldJs")
+    from("oldsrc/dist/main.js") {
+        rename(".*", "oldmain.js")
+    }
+    into("dist/")
 }
 
 /**
  * Run using ./gradlew package
  */
 tasks.register<Zip>("package") {
-    dependsOn("clean", "build", "installOldJs", "compileOldJs", "copyOldJs", "packJsonFiles", "changeModuleVersion")
-    tasks.named("compileOldJs").get().mustRunAfter("installOldJs")
-    tasks.named("build").get().mustRunAfter("clean", "compileOldJs")
+    dependsOn("clean", "build", "packJsonFiles", "changeModuleVersion", "copyOldJs")
+    tasks.named("build").get().mustRunAfter("clean")
     archiveFileName.set("release.zip")
     destinationDirectory.set(layout.buildDirectory)
     from("dist") { into("pf2e-kingmaker-tools/dist") }
