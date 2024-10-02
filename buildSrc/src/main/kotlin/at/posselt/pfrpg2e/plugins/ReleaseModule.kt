@@ -131,7 +131,10 @@ private data class Manifest(
 
 private fun parseManifest(file: File): Manifest {
     val text = file.readText()
-    return decodeFromString(text)
+    val json = Json {
+        ignoreUnknownKeys = true
+    }
+    return json.decodeFromString(text)
 }
 
 
