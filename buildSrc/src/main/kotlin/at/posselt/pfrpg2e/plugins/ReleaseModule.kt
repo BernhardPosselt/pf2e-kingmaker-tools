@@ -21,6 +21,7 @@ import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.nio.file.Files
+import kotlin.system.exitProcess
 
 @Serializable
 private data class GetReleaseResponse(
@@ -159,12 +160,7 @@ abstract class ReleaseModule : DefaultTask() {
         }
         val manifest = parseManifest(moduleJson)
         val releaseVersion = manifest.version
-        // we ignore return codes since we don't care about errors
-        // returned from these commands (thrown for instance if
-        // build.gradle.kts is already up to date)
-        exec(listOf("git", "add", "build.gradle.kts"))
-        exec(listOf("git", "commit", "-m", "release $releaseVersion"))
-        exec(listOf("git", "push", "origin", "master"))
+
         exec(listOf("git", "tag", releaseVersion))
         exec(listOf("git", "push", "--tags"))
 
@@ -215,12 +211,15 @@ abstract class ReleaseModule : DefaultTask() {
         }
     }
 
-    private fun exec(commands: List<String>): Int {
-        return ProcessBuilder(commands)
+    private fun exec(commands: List<String>) {
+        val exitCode = ProcessBuilder(commands)
             .redirectOutput(ProcessBuilder.Redirect.INHERIT)
             .redirectError(ProcessBuilder.Redirect.INHERIT)
             .directory(project.projectDir)
             .start()
             .waitFor()
+        if (exitCode != 0) {
+            exitProcess(exitCode)
+        }
     }
 }
