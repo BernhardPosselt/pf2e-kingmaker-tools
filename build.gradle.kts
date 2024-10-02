@@ -134,6 +134,7 @@ tasks.register<JsonSchemaValidator>("validateCampingActivities") {
 
 // release tasks
 tasks.register<ChangeModuleVersion>("changeModuleVersion") {
+    outputs.upToDateWhen { false } // always rerun regardless of cache
     moduleVersion = project.version.toString()
     sourceFile = layout.projectDirectory.file("module.json")
     targetFile = layout.buildDirectory.file("module.json")

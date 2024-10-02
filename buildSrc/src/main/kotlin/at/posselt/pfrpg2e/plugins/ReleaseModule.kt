@@ -163,7 +163,7 @@ abstract class ReleaseModule : DefaultTask() {
         val manifest = parseManifest(moduleJson)
         val releaseVersion = project.version.toString()
         exec(listOf("git", "add", "module.json", "build.gradle.kts"), ignoreErrors = true)
-        exec(listOf("git", "commit", "-m", "Sync versions"), ignoreErrors = true)
+        exec(listOf("git", "commit", "-m", "release"), ignoreErrors = true)
         exec(listOf("git", "push"), ignoreErrors = true)
         exec(listOf("git", "tag", releaseVersion))
         exec(listOf("git", "push", "--tags"))
