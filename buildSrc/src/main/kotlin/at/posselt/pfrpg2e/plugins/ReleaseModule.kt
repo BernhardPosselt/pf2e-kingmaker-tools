@@ -126,7 +126,7 @@ private suspend fun HttpClient.createFoundryRelease(
 private data class Manifest(
     val version: String,
     val id: String,
-    val compatibilty: FoundryCompatibility
+    val compatibility: FoundryCompatibility
 )
 
 private fun parseManifest(file: File): Manifest {
