@@ -112,7 +112,7 @@ private suspend fun HttpClient.createFoundryRelease(
                 dryRun = false,
                 release = FoundryReleaseVersion.FoundryRelease(
                     version = releaseVersion,
-                    manifest = "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/latest/download/module.json",
+                    manifest = "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/$releaseVersion/module.json",
                     notes = "https://github.com/$repo/blob/master/CHANGELOG.md",
                     compatibility = compatibility
                 ),
