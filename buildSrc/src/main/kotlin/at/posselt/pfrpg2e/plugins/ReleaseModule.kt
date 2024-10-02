@@ -124,7 +124,6 @@ private suspend fun HttpClient.createFoundryRelease(
 
 @Serializable
 private data class Manifest(
-    val version: String,
     val id: String,
     val compatibility: FoundryCompatibility
 )
@@ -162,8 +161,10 @@ abstract class ReleaseModule : DefaultTask() {
             throw IllegalStateException("Module file not found")
         }
         val manifest = parseManifest(moduleJson)
-        val releaseVersion = manifest.version
-
+        val releaseVersion = project.version.toString()
+        exec(listOf("git", "add", "module.json", "build.gradle.kts"), ignoreErrors = true)
+        exec(listOf("git", "commit", "-m", "Sync versions"), ignoreErrors = true)
+        exec(listOf("git", "push"), ignoreErrors = true)
         exec(listOf("git", "tag", releaseVersion))
         exec(listOf("git", "push", "--tags"))
 
@@ -214,7 +215,7 @@ abstract class ReleaseModule : DefaultTask() {
         }
     }
 
-    private fun exec(commands: List<String>) {
+    private fun exec(commands: List<String>, ignoreErrors: Boolean = false) {
         val exitCode = ProcessBuilder(commands)
             .redirectOutput(ProcessBuilder.Redirect.INHERIT)
             .redirectError(ProcessBuilder.Redirect.INHERIT)
@@ -222,7 +223,10 @@ abstract class ReleaseModule : DefaultTask() {
             .start()
             .waitFor()
         if (exitCode != 0) {
-            exitProcess(exitCode)
+            println("Failed to execute command: ${commands.joinToString(" ")}")
+            if (!ignoreErrors) {
+                exitProcess(exitCode)
+            }
         }
     }
 }

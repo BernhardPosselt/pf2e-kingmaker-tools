@@ -51,6 +51,9 @@ abstract class ChangeModuleVersion : DefaultTask() {
         } else {
             throw IllegalStateException("Invalid module JSON format")
         }
+        FileOutputStream(meta).use {
+            encoder.encodeToStream(new, it)
+        }
         FileOutputStream(targetFile.get().asFile).use {
             encoder.encodeToStream(new, it)
         }
