@@ -208,7 +208,7 @@ abstract class ReleaseModule : DefaultTask() {
                     id = manifest.id,
                     releaseVersion = releaseVersion,
                     repo = repo,
-                    compatibility = manifest.compatibilty,
+                    compatibility = manifest.compatibility,
                 )
             }
         }
