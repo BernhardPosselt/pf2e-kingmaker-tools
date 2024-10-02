@@ -8,14 +8,24 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.encodeToStream
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.property
 import java.io.FileOutputStream
 
+/**
+ * Generate a new module.json file with the proper versioning links
+ */
 abstract class ChangeModuleVersion : DefaultTask() {
+    @get:InputFile
+    abstract val sourceFile: RegularFileProperty
+    @get:OutputFile
+    abstract val targetFile: RegularFileProperty
     @get:Input
     abstract val moduleVersion: Property<String>
 
@@ -27,7 +37,7 @@ abstract class ChangeModuleVersion : DefaultTask() {
     @TaskAction
     fun action() {
         val version = moduleVersion.get()
-        val meta = project.projectDir.resolve("module.json")
+        val meta = sourceFile.get().asFile
         val json = parseToJsonElement(meta.readText())
         val new = if (json is JsonObject) {
             json.toMutableMap().apply {
@@ -39,9 +49,10 @@ abstract class ChangeModuleVersion : DefaultTask() {
                     )
             }
         } else {
-            throw GradleException("Invalid module JSON format")
+            throw IllegalStateException("Invalid module JSON format")
         }
-        val output = project.layout.projectDirectory.file("module.json").asFile
-        encoder.encodeToStream(new, FileOutputStream(output))
+        FileOutputStream(targetFile.get().asFile).use {
+            encoder.encodeToStream(new, it)
+        }
     }
 }

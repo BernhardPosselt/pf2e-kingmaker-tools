@@ -195,5 +195,5 @@ fun CampingActivityData.doesNotRequireACheck(): Boolean =
 fun CampingActivityData.requiresACheck(): Boolean =
     skills.filter { it.validateOnly != true }.isNotEmpty()
 
-@JsModule("./data/camping-activities.json")
+@JsModule("./camping-activities.json")
 external val campingActivityData: Array<CampingActivityData>

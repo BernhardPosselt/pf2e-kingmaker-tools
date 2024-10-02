@@ -3,26 +3,27 @@ package at.posselt.pfrpg2e.plugins
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.java.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.util.cio.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.Json.Default.decodeFromString
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
-import java.lang.IllegalStateException
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.util.cio.*
-import kotlinx.serialization.Serializable
-import io.ktor.client.plugins.logging.*
-import kotlinx.serialization.json.Json
+import java.io.File
 import java.nio.file.Files
 
 @Serializable
-private data class GetRelaseResponse(
+private data class GetReleaseResponse(
     val id: Int,
 )
 
@@ -50,27 +51,95 @@ private data class FoundryReleaseVersion(
         val notes: String,
         val compatibility: FoundryCompatibility,
     )
-
-    @Serializable
-    data class FoundryCompatibility(
-        val minimum: String,
-        val verified: String,
-        val maximum: String,
-    )
 }
+
+@Serializable
+private data class FoundryCompatibility(
+    val minimum: String,
+    val verified: String,
+    val maximum: String,
+)
+
+private suspend fun HttpClient.uploadGithubAsset(
+    repo: String,
+    releaseId: Int,
+    file: File,
+    githubToken: String,
+    name: String,
+    contentType: ContentType,
+) {
+    post("https://uploads.github.com/repos/$repo/releases/$releaseId/assets") {
+        url {
+            parameters.append("name", name)
+        }
+        headers {
+            append(HttpHeaders.ContentLength, Files.size(file.toPath()).toString())
+        }
+        contentType(contentType)
+        accept(ContentType.Application.Json)
+        bearerAuth(githubToken)
+        setBody(file.readChannel())
+    }
+}
+
+private suspend fun HttpClient.createGithubRelease(
+    repo: String,
+    githubToken: String,
+    releaseVersion: String
+) = post("https://api.github.com/repos/$repo/releases") {
+    contentType(ContentType.Application.Json)
+    accept(ContentType.Application.Json)
+    bearerAuth(githubToken)
+    setBody(GetRelase(tag_name = releaseVersion, name = releaseVersion))
+}.body<GetReleaseResponse>()
+
+private suspend fun HttpClient.createFoundryRelease(
+    foundryToken: String,
+    id: String,
+    releaseVersion: String,
+    repo: String,
+    compatibility: FoundryCompatibility,
+) {
+    post("https://api.foundryvtt.com/_api/packages/release_version/") {
+        contentType(ContentType.Application.Json)
+        accept(ContentType.Application.Json)
+        headers {
+            append(HttpHeaders.Authorization, foundryToken)
+        }
+        setBody(
+            FoundryReleaseVersion(
+                id = id,
+                dryRun = false,
+                release = FoundryReleaseVersion.FoundryRelease(
+                    version = releaseVersion,
+                    manifest = "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/latest/download/module.json",
+                    notes = "https://github.com/$repo/blob/master/CHANGELOG.md",
+                    compatibility = compatibility
+                ),
+            )
+        )
+    }
+}
+
+@Serializable
+private data class Manifest(
+    val version: String,
+    val id: String,
+    val compatibilty: FoundryCompatibility
+)
+
+private fun parseManifest(file: File): Manifest {
+    val text = file.readText()
+    return decodeFromString(text)
+}
+
 
 abstract class ReleaseModule : DefaultTask() {
     @get:InputFile
     abstract val releaseZip: RegularFileProperty
 
-    @get:Input
-    abstract val version: Property<String>
-
-    @get:Input
-    abstract val moduleId: Property<String>
-
-    @get:Input
-    abstract val foundryVersion: Property<String>
+    @get:InputFile
+    abstract val releaseModuleJson: RegularFileProperty
 
     @get:Input
     abstract val githubRepo: Property<String>
@@ -79,21 +148,27 @@ abstract class ReleaseModule : DefaultTask() {
     fun action() {
         val githubToken = System.getenv("GITHUB_TOKEN") ?: throw IllegalStateException("GITHUB_TOKEN not set")
         val foundryToken = System.getenv("FOUNDRY_TOKEN") ?: throw IllegalStateException("FOUNDRY_TOKEN not set")
-        val releaseVersion = version.get()
-        val targetFoundryVersion = foundryVersion.get()
         val repo = githubRepo.get()
         val archive = releaseZip.asFile.orNull
-        val id = moduleId.get()
+        val moduleJson = releaseModuleJson.asFile.orNull
         if (archive == null || !archive.exists()) {
-            throw IllegalStateException("Need an archive file")
+            throw IllegalStateException("Archive file not found")
         }
-        exec(listOf("git", "add", "build.gradle.kts", "module.json"))
+        if (moduleJson == null || !moduleJson.exists()) {
+            throw IllegalStateException("Module file not found")
+        }
+        val manifest = parseManifest(moduleJson)
+        val releaseVersion = manifest.version
+        // we ignore return codes since we don't care about errors
+        // returned from these commands (thrown for instance if
+        // build.gradle.kts is already up to date)
+        exec(listOf("git", "add", "build.gradle.kts"))
         exec(listOf("git", "commit", "-m", "release $releaseVersion"))
         exec(listOf("git", "push", "origin", "master"))
-        exec(listOf("git", "tag", "$releaseVersion"))
+        exec(listOf("git", "tag", releaseVersion))
         exec(listOf("git", "push", "--tags"))
 
-        val client = HttpClient(Java) {
+        val httpClient = HttpClient(Java) {
             expectSuccess = true
             install(Logging) {
                 logger = Logger.DEFAULT
@@ -107,53 +182,41 @@ abstract class ReleaseModule : DefaultTask() {
 
         }
         runBlocking {
-            val releaseId = client.post("https://api.github.com/repos/$repo/releases") {
-                contentType(ContentType.Application.Json)
-                accept(ContentType.Application.Json)
-                bearerAuth(githubToken)
-                setBody(GetRelase(tag_name = releaseVersion, name = releaseVersion))
-            }.body<GetRelaseResponse>().id
-            client.post("https://uploads.github.com/repos/$repo/releases/$releaseId/assets") {
-                url {
-                    parameters.append("name", "release.zip")
-                }
-                headers {
-                    append(HttpHeaders.ContentLength, Files.size(archive.toPath()).toString())
-                }
-                contentType(ContentType.Application.Zip)
-                accept(ContentType.Application.Json)
-                bearerAuth(githubToken)
-                setBody(archive.readChannel())
-            }
-            client.post("https://api.foundryvtt.com/_api/packages/release_version/") {
-                contentType(ContentType.Application.Json)
-                accept(ContentType.Application.Json)
-                headers {
-                    append(HttpHeaders.Authorization, foundryToken)
-                }
-                setBody(
-                    FoundryReleaseVersion(
-                        id = id,
-                        dryRun = false,
-                        release = FoundryReleaseVersion.FoundryRelease(
-                            version = releaseVersion,
-                            manifest = "https://raw.githubusercontent.com/$repo/$releaseVersion/module.json",
-                            notes = "https://github.com/$repo/blob/master/CHANGELOG.md",
-                            compatibility = FoundryReleaseVersion.FoundryCompatibility(
-                                minimum = targetFoundryVersion,
-                                verified = targetFoundryVersion,
-                                maximum = targetFoundryVersion,
-                            )
-                        ),
-                    )
+            httpClient.use { client ->
+                val releaseId = client.createGithubRelease(
+                    repo = repo,
+                    githubToken = githubToken,
+                    releaseVersion = releaseVersion,
+                ).id
+                client.uploadGithubAsset(
+                    repo = repo,
+                    releaseId = releaseId,
+                    file = archive,
+                    githubToken = githubToken,
+                    name = "release.zip",
+                    contentType = ContentType.Application.Zip,
+                )
+                client.uploadGithubAsset(
+                    repo = repo,
+                    releaseId = releaseId,
+                    file = moduleJson,
+                    githubToken = githubToken,
+                    name = "module.json",
+                    contentType = ContentType.Application.Json,
+                )
+                client.createFoundryRelease(
+                    foundryToken = foundryToken,
+                    id = manifest.id,
+                    releaseVersion = releaseVersion,
+                    repo = repo,
+                    compatibility = manifest.compatibilty,
                 )
             }
-            client.close()
         }
     }
 
-    private fun exec(commands: List<String>) {
-        ProcessBuilder(commands)
+    private fun exec(commands: List<String>): Int {
+        return ProcessBuilder(commands)
             .redirectOutput(ProcessBuilder.Redirect.INHERIT)
             .redirectError(ProcessBuilder.Redirect.INHERIT)
             .directory(project.projectDir)

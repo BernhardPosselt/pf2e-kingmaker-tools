@@ -1,7 +1,7 @@
 {
   "name": "pf2e-kingmaker-tools",
   "version": "1.0.0",
-  "main": " dist/index.js",
+  "main": " dist/oldmain.js",
   "repository": "git@github.com:BernhardPosselt/pf2e-kingmaker-tools.git",
   "author": "Bernhard Posselt <bernhard@posselt.at>",
   "license": "AGPL3",

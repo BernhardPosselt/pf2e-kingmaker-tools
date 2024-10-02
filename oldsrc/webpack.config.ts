@@ -2,7 +2,9 @@ import {Configuration} from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 
 const config: Configuration = {
-    entry: './src/index.ts',
+    entry: {
+        oldmain: './src/index.ts'
+    },
     performance: {
         maxEntrypointSize: 2097152,
         maxAssetSize: 2097152,
@@ -26,7 +28,6 @@ const config: Configuration = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
-    devtool: 'source-map',
 };
 
 // noinspection JSUnusedGlobalSymbols

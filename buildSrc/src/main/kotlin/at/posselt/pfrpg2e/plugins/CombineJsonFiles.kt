@@ -7,7 +7,9 @@ import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.encodeToStream
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.Directory
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
@@ -19,25 +21,24 @@ import kotlin.io.path.readText
 
 
 /**
- * Given a directory, creates a file in dist/ with the same name as the directory
- * using all files in the JSON folder
+ * Concatenates all json files ending in .json in sourceDirectory into a single
+ * JSON file in targetDirectory. The file name is the name of the sourceDirectory + .json
  */
-abstract class PackJsonFile : DefaultTask() {
+abstract class CombineJsonFiles : DefaultTask() {
     @get:InputDirectory
-    abstract var targetDirectory: Directory
+    abstract val sourceDirectory: DirectoryProperty
 
-    @get:InputDirectory
-    abstract var sourceDirectory: Directory
+    @get:OutputDirectory
+    abstract val targetDirectory: DirectoryProperty
 
     private val encoder = Json {
         prettyPrint = true
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     @TaskAction
     fun action() {
-        val source = sourceDirectory.asFile.toPath()
-        val target = targetDirectory.asFile.toPath()
+        val source = sourceDirectory.asFile.get().toPath()
+        val target = targetDirectory.asFile.get().toPath()
         Files.walk(source, 1)
             .filter { Files.isDirectory(it) }
             .filter { it != source }

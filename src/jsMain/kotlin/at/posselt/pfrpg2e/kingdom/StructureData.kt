@@ -122,7 +122,7 @@ external interface StructureData : Structure {
     val gainRuin: RuinAmount?
 }
 
-@JsModule("./data/structures.json")
+@JsModule("./structures.json")
 external val structures: Array<StructureData>
 
 @JsModule("./schemas/structure.json")

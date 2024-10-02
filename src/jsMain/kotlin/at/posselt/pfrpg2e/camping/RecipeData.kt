@@ -81,5 +81,5 @@ fun RecipeData.discoverCost(): FoodAmount =
     cookingCost() * 2
 
 
-@JsModule("./data/recipes.json")
+@JsModule("./recipes.json")
 external val recipes: Array<RecipeData>
