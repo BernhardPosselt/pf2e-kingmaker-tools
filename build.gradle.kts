@@ -144,7 +144,7 @@ tasks.register<ChangeModuleVersion>("changeModuleVersion") {
  * Run using ./gradlew package
  */
 tasks.register<Zip>("package") {
-    outputs.upToDateWhen { false } // always rerun regardless of cache
+//    outputs.upToDateWhen { false } // always rerun regardless of cache
     dependsOn("clean", "build", "changeModuleVersion")
     tasks.named("build").get().mustRunAfter("clean")
     archiveFileName = "release.zip"
@@ -164,8 +164,8 @@ tasks.register<Zip>("package") {
 }
 
 tasks.register<ReleaseModule>("release") {
-    outputs.upToDateWhen { false } // always rerun regardless of cache
-    mustRunAfter("package")
+//    outputs.upToDateWhen { false } // always rerun regardless of cache
+    dependsOn("package")
     releaseZip = layout.buildDirectory.file("release.zip")
     releaseModuleJson = layout.buildDirectory.file("module.json")
     githubRepo = "BernhardPosselt/pf2e-kingmaker-tools"
