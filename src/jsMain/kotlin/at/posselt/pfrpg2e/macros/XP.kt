@@ -11,6 +11,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.js.JsPlainObject
+import kotlin.math.min
 
 private suspend fun updateXP(players: Array<PF2ECharacter>, amount: Int) = coroutineScope {
     players.map {
@@ -18,11 +19,16 @@ private suspend fun updateXP(players: Array<PF2ECharacter>, amount: Int) = corou
         val xpThreshold = it.system.details.xp.max
         val currentLevel = it.system.details.level.value
         val addLevels = (currentXP + amount) / xpThreshold
-        val xpGain = (currentXP + amount) % xpThreshold
+        val level = currentLevel + addLevels
+        val xpGain = if (level >= 20) {
+            0
+        } else {
+            (currentXP + amount) % xpThreshold
+        }
         async {
             it.typeSafeUpdate {
                 system.details.xp.value = xpGain
-                system.details.level.value = currentLevel + addLevels
+                system.details.level.value = min(20, level)
             }
         }
     }.awaitAll()
