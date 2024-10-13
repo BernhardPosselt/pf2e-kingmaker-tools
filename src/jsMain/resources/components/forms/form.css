@@ -26,14 +26,6 @@
     table {
         margin: 0;
 
-        th, input[type="text"], input[type="number"], select {
-            text-align: center;
-        }
-
-        td {
-            text-align: center;
-        }
-
         .number-select-heading {
             min-width: 85px;
         }
