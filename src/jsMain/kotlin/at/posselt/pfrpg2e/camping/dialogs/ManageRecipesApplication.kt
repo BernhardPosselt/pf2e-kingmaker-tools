@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import at.posselt.pfrpg2e.utils.tpl
+import com.foundryvtt.core.AnyMutableObject
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.ui.TextEditor
@@ -88,7 +89,9 @@ class ManageRecipesApplication(
                     val enabled = learnedRecipes.contains(recipeName)
                     val cook = tpl(
                         "components/food-cost/food-cost.hbs",
-                        buildFoodCost(recipe.cookingCost(), total, foodItems).unsafeCast<AnyObject>(),
+                        buildFoodCost(recipe.cookingCost(), total, foodItems).unsafeCast<AnyMutableObject>().apply {
+                            this["title"] = "Consumed"
+                        },
                     )
                     CrudItem(
                         nameIsHtml = true,

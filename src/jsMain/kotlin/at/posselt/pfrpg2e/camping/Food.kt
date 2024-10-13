@@ -334,9 +334,12 @@ private suspend fun PF2ECharacter.applyMealHealEffects(
 
 @JsPlainObject
 external interface FoodCost {
-    val rations: String
-    val basicIngredients: String
-    val specialIngredients: String
+    val rations: Int
+    val basicIngredients: Int
+    val specialIngredients: Int
+    val rationsLabel: String
+    val basicIngredientsLabel: String
+    val specialIngredientsLabel: String
     val rationImage: String?
     val basicImage: String?
     val specialImage: String?
@@ -346,6 +349,7 @@ external interface FoodCost {
     val missingRations: Boolean
     val missingBasic: Boolean
     val missingSpecial: Boolean
+    val showTotal: Boolean
 }
 
 fun buildFoodCost(
@@ -354,9 +358,13 @@ fun buildFoodCost(
     items: FoodItems,
     capAt: Int? = 99,
 ) = FoodCost(
-    rations = capAt(amount.rations, capAt),
-    basicIngredients = capAt(amount.basicIngredients, capAt),
-    specialIngredients = capAt(amount.specialIngredients, capAt),
+    rations = amount.rations,
+    basicIngredients = amount.basicIngredients,
+    specialIngredients = amount.specialIngredients,
+    showTotal = totalAmount != null,
+    rationsLabel = capAt(amount.rations, capAt),
+    basicIngredientsLabel = capAt(amount.basicIngredients, capAt),
+    specialIngredientsLabel = capAt(amount.specialIngredients, capAt),
     totalRations = totalAmount?.rations,
     totalBasicIngredients = totalAmount?.basicIngredients,
     totalSpecialIngredients = totalAmount?.specialIngredients,

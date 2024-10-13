@@ -955,11 +955,16 @@ class CampingSheet(
         val currentRegion = camping.findCurrentRegion()
         val regions = camping.regionSettings.regions
         val isGM = game.user.isGM
+        val uncookedMeals = parsedCookingChoices.results
+            .filter { it.degreeOfSuccess == null }
+            .map { it.recipe.name }
+            .toSet()
         CampingSheetContext(
             canRollEncounter = currentRegion?.rollTableUuid != null,
             availableFood = availableFood,
             totalFoodCost = calculateTotalFoodCost(
-                actorMeals = parsedCookingChoices.meals,
+                actorMeals = parsedCookingChoices.meals
+                    .filter<MealChoice> { it.name in uncookedMeals },
                 foodItems = foodItems,
                 availableFood = totalFood,
             ),

@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Cap XP gain from XP macro at level 20
+* Do not show total food cost for meals with a cooking result
+* Better hover titles for available ingredients
 
 ## [2.0.2] - 2024-10-02
 

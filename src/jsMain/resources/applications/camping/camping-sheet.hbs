@@ -145,12 +145,12 @@
                 data-action="next-section"
                 type="button"><i class="fa-solid fa-chevron-right"></i></button>
         <div {{#unless eatingSection}}hidden{{/unless}} class="km-camping-eating-total">
-            <span title="Available">
-                {{> foodCost availableFood hideEmpty=false}}
+            <span>
+                {{> foodCost availableFood hideEmpty=false title="Available"}}
             </span>
             <hr>
-            <span title="Total Cooking Cost">
-                {{> foodCost totalFoodCost hideEmpty=false}}
+            <span>
+                {{> foodCost totalFoodCost hideEmpty=false title="Uncooked Cost"}}
             </span>
         </div>
         <div id="km-camping-content-wrapper">

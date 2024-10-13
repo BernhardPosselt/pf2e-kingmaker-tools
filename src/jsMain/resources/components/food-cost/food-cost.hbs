@@ -3,24 +3,24 @@
         {{#if rations}}
             <span
                     class="{{#if missingRations}}km-missing-ingredients{{/if}}"
-                    {{#if totalRations}}title="available: {{totalRations}}"{{/if}}
-            >{{rations}}
+                    title="{{title}}: {{rations}}{{#if showTotal}}/{{totalRations}}{{/if}}"
+            >{{rationsLabel}}
                 <img src="{{rationImage}}" alt="rations">
         </span>
         {{/if}}
         {{#if basicIngredients}}
             <span
                     class="{{#if missingBasic}}km-missing-ingredients{{/if}}"
-                    {{#if totalBasicIngredients}}title="available: {{totalBasicIngredients}}"{{/if}}
-            >{{basicIngredients}}
+                    title="{{title}}: {{basicIngredients}}{{#if showTotal}}/{{totalBasicIngredients}}{{/if}}"
+            >{{basicIngredientsLabel}}
                 <img src="{{basicImage}}" alt="basic ingredients">
         </span>
         {{/if}}
         {{#if specialIngredients}}
             <span
                     class="{{#if missingSpecial}}km-missing-ingredients{{/if}}"
-                    {{#if totalSpecialIngredients}}title="available: {{totalSpecialIngredients}}"{{/if}}
-            >{{specialIngredients}}
+                    title="{{title}}: {{specialIngredients}}{{#if showTotal}}/{{totalSpecialIngredients}}{{/if}}"
+            >{{specialIngredientsLabel}}
                 <img src="{{specialImage}}" alt="special ingredients">
         </span>
         {{/if}}
@@ -29,20 +29,20 @@
     <div class="km-food-cost">
             <span
                     class="{{#if missingRations}}km-missing-ingredients{{/if}}"
-                    {{#if totalRations}}title="available: {{totalRations}}"{{/if}}
-            >{{rations}}
+                    title="{{title}}: {{rations}}{{#if showTotal}}/{{totalRations}}{{/if}}"
+            >{{rationsLabel}}
                 <img src="{{rationImage}}" alt="rations">
         </span>
         <span
                 class="{{#if missingBasic}}km-missing-ingredients{{/if}}"
-                {{#if totalBasicIngredients}}title="available: {{totalBasicIngredients}}"{{/if}}
-        >{{basicIngredients}}
+                title="{{title}}: {{basicIngredients}}{{#if showTotal}}/{{totalBasicIngredients}}{{/if}}"
+        >{{basicIngredientsLabel}}
             <img src="{{basicImage}}" alt="basic ingredients">
         </span>
         <span
                 class="{{#if missingSpecial}}km-missing-ingredients{{/if}}"
-                {{#if totalSpecialIngredients}}title="available: {{totalSpecialIngredients}}"{{/if}}
-        >{{specialIngredients}}
+                title="{{title}}: {{specialIngredients}}{{#if showTotal}}/{{totalSpecialIngredients}}{{/if}}"
+        >{{specialIngredientsLabel}}
             <img src="{{specialImage}}" alt="special ingredients">
         </span>
     </div>
