@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.4] - 2024-10-13
+
+### Fixed
+
+* Show recipes up to region level instead of recipes lower than region level
+
+## [2.0.3] - 2024-10-13
+
 ### Fixed
 
 * Cap XP gain from XP macro at level 20
