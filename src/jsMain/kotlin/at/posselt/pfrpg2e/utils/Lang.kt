@@ -15,7 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asDeferred
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.promise
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.js.Promise
@@ -58,7 +57,6 @@ fun <F : Any, S> Map<F, S>.toRecord(): ReadonlyRecord<F, S> =
     "CANNOT_CHECK_FOR_ERASED",
     "ERROR_IN_CONTRACT_DESCRIPTION"
 )
-@OptIn(ExperimentalContracts::class)
 inline fun isJsObject(x: Any?): Boolean {
     contract {
         returns(true) implies (x is Record<String, Any?>)
@@ -72,7 +70,6 @@ inline fun isJsObject(x: Any?): Boolean {
     "CANNOT_CHECK_FOR_ERASED",
     "ERROR_IN_CONTRACT_DESCRIPTION"
 )
-@OptIn(ExperimentalContracts::class)
 inline fun isInt(x: Any?): Boolean {
     contract {
         returns(true) implies (x is Int)

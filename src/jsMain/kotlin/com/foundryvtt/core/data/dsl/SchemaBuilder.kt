@@ -36,7 +36,6 @@ import js.objects.recordOf
  * class CampingSettingsDataModel(value: AnyObject) : DataModel(value) {
  *     companion object {
  *         @Suppress("unused")
- *         @OptIn(ExperimentalJsStatic::class)
  *         @JsStatic
  *         fun defineSchema() = buildSchema {
  *             int("gunsToClean")

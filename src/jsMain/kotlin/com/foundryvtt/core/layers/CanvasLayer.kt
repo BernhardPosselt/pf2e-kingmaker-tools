@@ -12,7 +12,6 @@ external interface LayerOptions {
 
 open external class CanvasLayer {
     // : PIXI.Container
-    @OptIn(ExperimentalStdlibApi::class)
     @JsExternalInheritorsOnly
     open class CanvasLayerStatic<T> {
         val layerOptions: LayerOptions

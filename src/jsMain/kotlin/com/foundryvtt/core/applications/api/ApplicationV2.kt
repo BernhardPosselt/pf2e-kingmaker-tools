@@ -17,7 +17,6 @@ import kotlin.js.Promise
 open external class ApplicationV2(
     options: ApplicationConfiguration = definedExternally
 ) {
-    @OptIn(ExperimentalStdlibApi::class)
     @JsExternalInheritorsOnly
     open class ApplicationV2Static {
         val RENDER_STATES: RenderStates

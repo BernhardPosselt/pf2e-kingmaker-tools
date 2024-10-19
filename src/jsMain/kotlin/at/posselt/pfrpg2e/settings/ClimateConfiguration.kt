@@ -56,7 +56,6 @@ external interface ClimateSettingsContext : HandlebarsRenderContext {
     var isValid: Boolean
 }
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class ClimateConfigurationDataModel(
     value: AnyObject? = undefined,
@@ -64,7 +63,6 @@ class ClimateConfigurationDataModel(
 ) : DataModel(value, context) {
     companion object {
         @Suppress("unused")
-        @OptIn(ExperimentalJsStatic::class)
         @JsStatic
         fun defineSchema() = buildSchema {
             array("months") {
@@ -82,7 +80,6 @@ class ClimateConfigurationDataModel(
     }
 }
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class ClimateConfiguration : FormApp<ClimateSettingsContext, ClimateSettings>(
     title = "Climate",

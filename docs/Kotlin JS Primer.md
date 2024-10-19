@@ -193,7 +193,6 @@ Kotlin:
 
 ```kt
 open external class Test {
-    @OptIn(ExperimentalStdlibApi::class)
     @JsExternalInheritorsOnly
     open class Factory<T> {
         fun create(): T
@@ -203,7 +202,6 @@ open external class Test {
 }
 
 external class Test2 : Test {
-    @OptIn(ExperimentalStdlibApi::class)
     @JsExternalInheritorsOnly
     open class Factory2<T> : Factory<T> {
         fun update(): T

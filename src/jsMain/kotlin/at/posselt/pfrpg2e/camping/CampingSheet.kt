@@ -205,8 +205,6 @@ private fun calculateNightModes(time: LocalTime): NightModes {
 private const val windowWidth = 970
 
 
-@OptIn(ExperimentalJsExport::class)
-@JsExport
 @JsName("CampingSheet")
 class CampingSheet(
     private val game: Game,

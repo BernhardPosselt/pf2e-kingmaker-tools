@@ -45,8 +45,14 @@ tasks.register<Exec>("compileOldJs") {
 kotlin {
     js {
         useEsModules()
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
+            freeCompilerArgs.addAll(
+                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+                "-opt-in=kotlin.contracts.ExperimentalContracts",
+                "-opt-in=kotlin.ExperimentalStdlibApi",
+                "-opt-in=kotlin.js.ExperimentalJsExport",
+                "-opt-in=kotlin.js.ExperimentalJsStatic",
+            )
             moduleKind = JsModuleKind.MODULE_ES
             useEsClasses = true
         }

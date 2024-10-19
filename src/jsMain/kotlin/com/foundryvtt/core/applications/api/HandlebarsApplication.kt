@@ -28,7 +28,6 @@ external interface HandlebarsRenderOptions {
 open external class HandlebarsApplication<T>(
     options: ApplicationConfiguration = definedExternally
 ) : ApplicationV2 {
-    @OptIn(ExperimentalStdlibApi::class)
     @JsExternalInheritorsOnly
     open class HandlebarsApplicationStatic : ApplicationV2Static {
         open var PARTS: ReadonlyRecord<String, HandlebarsTemplatePart>

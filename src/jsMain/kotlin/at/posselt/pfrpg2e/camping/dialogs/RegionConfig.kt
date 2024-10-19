@@ -69,12 +69,10 @@ external interface RegionSettingsContext : HandlebarsRenderContext {
 }
 
 
-@OptIn(ExperimentalJsStatic::class)
 @JsExport
 class RegionSettingsDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
         @Suppress("unused")
-        @OptIn(ExperimentalJsStatic::class)
         @JsStatic
         fun defineSchema() = buildSchema {
             array("regions") {
@@ -96,7 +94,6 @@ class RegionSettingsDataModel(val value: AnyObject) : DataModel(value) {
 }
 
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 @JsName("RegionConfig")
 class RegionConfig(

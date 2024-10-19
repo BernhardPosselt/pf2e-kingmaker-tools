@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 repositories {
     mavenCentral()
 }
@@ -5,6 +7,14 @@ repositories {
 plugins {
     `kotlin-dsl`
     alias(libs.plugins.kotlin.serialization)
+}
+
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+        )
+    }
 }
 
 dependencies {

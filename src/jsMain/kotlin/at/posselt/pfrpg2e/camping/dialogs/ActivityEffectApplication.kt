@@ -29,12 +29,10 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.String
 import kotlin.js.Promise
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class ActivityEffectDataModel(value: AnyObject) : DataModel(value) {
     companion object {
         @Suppress("unused")
-        @OptIn(ExperimentalJsStatic::class)
         @JsStatic
         fun defineSchema() = buildSchema {
             string("uuid")
@@ -66,7 +64,6 @@ external interface ActivityEffectSubmitData {
 }
 
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class ActivityEffectApplication(
     private val game: Game,

@@ -55,7 +55,6 @@ abstract class CombineJsonFiles : DefaultTask() {
             }
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     private fun writeToFile(target: Path, jsonFiles: List<Path>) {
         val result = buildJsonArray {
             jsonFiles.asSequence()

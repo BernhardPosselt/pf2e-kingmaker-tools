@@ -10,7 +10,6 @@ import kotlin.js.Promise
 
 
 open external class DialogV2(options: DialogV2Options) : ApplicationV2 {
-    @OptIn(ExperimentalStdlibApi::class)
     @JsExternalInheritorsOnly
     open class DialogV2Static : ApplicationV2Static {
         protected fun _onClickButton(event: PointerEvent, target: HTMLButtonElement)

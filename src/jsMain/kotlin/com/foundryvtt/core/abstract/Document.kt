@@ -9,7 +9,6 @@ abstract external class Document(
     data: AnyObject = definedExternally,
     options: DocumentConstructionContext = definedExternally
 ) : DataModel {
-    @OptIn(ExperimentalStdlibApi::class)
     @JsExternalInheritorsOnly
     open class DocumentStatic<D : Document> {
         fun create(data: Any, operation: DatabaseCreateOperation = definedExternally): Promise<D>

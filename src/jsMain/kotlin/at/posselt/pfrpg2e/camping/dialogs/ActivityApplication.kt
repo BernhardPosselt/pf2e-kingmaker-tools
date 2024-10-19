@@ -70,12 +70,10 @@ external interface ActivitySubmitData {
     val criticalFailure: ActivityOutcomeSubmitData
 }
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class ActivityDataModel(value: AnyObject) : DataModel(value) {
     companion object {
         @Suppress("unused")
-        @OptIn(ExperimentalJsStatic::class)
         @JsStatic
         fun defineSchema() = buildSchema {
             string("name")
@@ -128,7 +126,6 @@ private data class Journals(
     val page: JournalEntryPage? = null
 )
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class ActivityApplication(
     private val game: Game,

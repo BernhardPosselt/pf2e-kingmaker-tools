@@ -93,12 +93,10 @@ external interface SkillPickerSubmitData {
     val skills: Array<SkillSubmitData>
 }
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class SkillPickerDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
         @Suppress("unused")
-        @OptIn(ExperimentalJsStatic::class)
         @JsStatic
         fun defineSchema() = buildSchema {
             array("skills") {
@@ -119,7 +117,6 @@ class SkillPickerDataModel(val value: AnyObject) : DataModel(value) {
 }
 
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class SkillPickerApplication(
     skills: Array<PickerSkill>,

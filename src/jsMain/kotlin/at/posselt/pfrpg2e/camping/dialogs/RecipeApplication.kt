@@ -72,12 +72,10 @@ external interface RecipeSubmitData {
     val criticalFailure: OutcomeSubmitData
 }
 
-@OptIn(ExperimentalJsStatic::class, ExperimentalJsExport::class)
 @JsExport
 class RecipeDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
         @Suppress("unused")
-        @OptIn(ExperimentalJsStatic::class)
         @JsStatic
         fun defineSchema() = buildSchema {
             string("name")
@@ -183,7 +181,6 @@ class RecipeDataModel(val value: AnyObject) : DataModel(value) {
     }
 }
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class RecipeApplication(
     private val game: Game,

@@ -11,7 +11,6 @@ abstract external class DataField<T>(
     options: DataFieldOptions/*<T>*/ = definedExternally,
     context: DataFieldContext<T> = definedExternally
 ) {
-    @OptIn(ExperimentalStdlibApi::class)
     @JsExternalInheritorsOnly
     open class DataFieldStatic<T> {
         var hierarchical: Boolean

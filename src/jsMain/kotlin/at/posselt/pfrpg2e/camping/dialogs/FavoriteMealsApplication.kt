@@ -26,12 +26,10 @@ import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
-@OptIn(ExperimentalJsStatic::class, ExperimentalJsExport::class)
 @JsExport
 class FavoriteMealDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
         @Suppress("unused")
-        @OptIn(ExperimentalJsStatic::class)
         @JsStatic
         fun defineSchema() = buildSchema {
             array("meals") {
@@ -62,7 +60,6 @@ external interface FavoriteMealSubmitData {
 }
 
 
-@OptIn(ExperimentalJsExport::class)
 @JsExport
 class FavoriteMealsApplication(
     private val game: Game,

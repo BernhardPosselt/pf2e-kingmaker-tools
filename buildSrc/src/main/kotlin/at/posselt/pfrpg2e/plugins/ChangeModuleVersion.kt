@@ -33,7 +33,6 @@ abstract class ChangeModuleVersion : DefaultTask() {
         prettyPrint = true
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     @TaskAction
     fun action() {
         val version = moduleVersion.get()
