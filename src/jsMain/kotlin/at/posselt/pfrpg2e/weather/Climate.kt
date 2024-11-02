@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.regions.*
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
+import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.*
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.TableMessageOptions
@@ -52,7 +53,7 @@ private suspend fun rollWeatherEvent(
     } else {
         table.toMessage(
             draw.results,
-            TableMessageOptions(roll = draw.roll, messageOptions = recordOf("rollMode" to rollMode))
+            TableMessageOptions(roll = draw.roll, messageOptions = recordOf("rollMode" to rollMode.toCamelCase())),
         )
     }
 }
