@@ -11,14 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Closing the Ask DC popup now defaults to a DC of 0
+* Closing the DC popup now defaults to a DC of 0 for camping activities
+* Closing the DC popup when resting skips the perception check altogether
+* Properly apply roll mode to weather events table draw
 
 ## [2.0.4] - 2024-10-13
 
 ### Fixed
 
 * Show recipes up to region level instead of recipes lower than region level
-* Properly apply roll mode to weather events table draw
 
 ## [2.0.3] - 2024-10-13
 

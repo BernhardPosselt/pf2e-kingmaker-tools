@@ -25,7 +25,7 @@ private external interface AskDcData {
     val dc: Int
 }
 
-suspend fun askDc(activity: String): Int =
+suspend fun askDc(activity: String): Int? =
     try {
         awaitablePrompt<AskDcData, Int>(
             title = "$activity: Select DC",
@@ -37,7 +37,7 @@ suspend fun askDc(activity: String): Int =
             it.dc
         }
     } catch (e: Throwable) {
-        0
+        null
     }
 
 fun PF2ECreature.satisfiesSkillRequirement(
@@ -118,8 +118,8 @@ suspend fun PF2ECreature.campingActivityCheck(
     val dc = overrideDc ?: when (skill.dcType) {
         DcType.ACTOR_LEVEL -> getLevelBasedDC(level)
         DcType.ZONE -> data.region.zoneDc
-        DcType.NONE -> askDc(activityName)
-        DcType.STATIC -> skill.dc ?: askDc(activityName)
+        DcType.NONE -> askDc(activityName) ?: 0
+        DcType.STATIC -> skill.dc ?: (askDc(activityName) ?: 0)
     }
 
     val result = performCampingCheck(

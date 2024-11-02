@@ -251,15 +251,17 @@ private suspend fun beginRest(
         watchDurationSeconds = watchDurationSeconds,
     )
     if (randomEncounterAt != null) {
-        watchers
-            .filterIsInstance<PF2ECharacter>()
-            .randomOrNull()
-            ?.performCampingCheck(
-                isSecret = true,
-                isWatch = true,
-                attribute = Perception,
-                dc = askDc("Enemy Stealth"),
-            )
+        askDc("Enemy Stealth")?.let { dc ->
+            watchers
+                .filterIsInstance<PF2ECharacter>()
+                .randomOrNull()
+                ?.performCampingCheck(
+                    isSecret = true,
+                    isWatch = true,
+                    attribute = Perception,
+                    dc = dc,
+                )
+        }
         game.time.advance(randomEncounterAt).await()
         camping.watchSecondsRemaining = randomEncounterAt
         campingActor.setCamping(camping)
