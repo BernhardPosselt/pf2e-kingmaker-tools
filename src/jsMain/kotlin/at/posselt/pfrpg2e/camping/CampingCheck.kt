@@ -25,17 +25,20 @@ private external interface AskDcData {
     val dc: Int
 }
 
-suspend fun askDc(activity: String): Int {
-    return awaitablePrompt<AskDcData, Int>(
-        title = "$activity: Select DC",
-        templatePath = "components/forms/form.hbs",
-        templateContext = recordOf(
-            "formRows" to formContext(Select.dc())
-        ),
-    ) {
-        it.dc
+suspend fun askDc(activity: String): Int =
+    try {
+        awaitablePrompt<AskDcData, Int>(
+            title = "$activity: Select DC",
+            templatePath = "components/forms/form.hbs",
+            templateContext = recordOf(
+                "formRows" to formContext(Select.dc())
+            ),
+        ) {
+            it.dc
+        }
+    } catch (e: Throwable) {
+        0
     }
-}
 
 fun PF2ECreature.satisfiesSkillRequirement(
     skill: ParsedCampingSkill,
