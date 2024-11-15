@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [2.0.6] - 2024-11-15
+
+* Instead of advancing the random encounter point in time twice during resting, advance the remaining rest period
+
 ## [2.0.5] - 2024-11-02
 
 ### Fixed

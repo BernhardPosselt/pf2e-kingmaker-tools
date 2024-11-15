@@ -263,7 +263,7 @@ private suspend fun beginRest(
                 )
         }
         game.time.advance(randomEncounterAt).await()
-        camping.watchSecondsRemaining = randomEncounterAt
+        camping.watchSecondsRemaining = watchDurationSeconds - randomEncounterAt
         campingActor.setCamping(camping)
     } else {
         camping.watchSecondsRemaining = watchDurationSeconds
@@ -280,7 +280,6 @@ private suspend fun completeDailyPreparations(
     coroutineScope {
         val actors = camping.getActorsInCamp()
         val recipes = camping.getAllRecipes().toList()
-
         game.time.advance(camping.watchSecondsRemaining).await()
         camping.watchSecondsRemaining = 0
         camping.encounterModifier = 0
