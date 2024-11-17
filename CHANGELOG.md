@@ -8,7 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [2.0.7] - 2024-11-17
+
+### Fixed
+
+* Document required scene permission in the manual when using Tile/Drawing based kingdom resources
+* Fix accidental mentions of the Lands tab in kingdom settings (should have been Status)
+
+### Added
+
+* Make it possible to disable the automatic token mapping in settings if the official module isn't installed
+
 ## [2.0.6] - 2024-11-15
+
+### Fixed
 
 * Instead of advancing the random encounter point in time twice during resting, advance the remaining rest period
 

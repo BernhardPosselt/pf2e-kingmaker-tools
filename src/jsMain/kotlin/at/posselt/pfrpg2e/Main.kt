@@ -61,7 +61,8 @@ fun main() {
             game.settings.pfrpg2eKingdomCampingWeather.register()
 
             // load custom token mappings if kingmaker module isn't installed
-            if (game.modules.get("pf2e-kingmaker")?.active != true) {
+            if (game.modules.get("pf2e-kingmaker")?.active != true
+                && game.settings.pfrpg2eKingdomCampingWeather.getEnableTokenMapping()) {
                 val data = recordOf(
                     "flags" to recordOf(
                         Config.moduleId to recordOf(

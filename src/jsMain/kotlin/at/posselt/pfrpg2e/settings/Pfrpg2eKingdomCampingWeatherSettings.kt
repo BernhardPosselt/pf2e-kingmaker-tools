@@ -141,6 +141,12 @@ val Settings.pfrpg2eKingdomCampingWeather: Pfrpg2eKingdomCampingWeatherSettings
     get() = Pfrpg2eKingdomCampingWeatherSettings
 
 object Pfrpg2eKingdomCampingWeatherSettings {
+    suspend fun setEnableTokenMapping(value: Boolean) =
+        game.settings.setBoolean("enableTokenMapping", value)
+
+    fun getEnableTokenMapping(): Boolean =
+        game.settings.getBoolean("enableTokenMapping")
+
     suspend fun setLatestMigrationBackup(value: String) =
         game.settings.setString("latestMigrationBackup", value)
 
@@ -312,7 +318,13 @@ object Pfrpg2eKingdomCampingWeatherSettings {
             hint = "If enabled, starts a combat track depending on the current region, actor or scene.",
             default = true,
         )
-
+        game.settings.registerScalar<Boolean>(
+            key = "enableTokenMapping",
+            name = "Enable Token Mapping",
+            hint = "If enabled, automatically maps token images to your bestiary browser based on the documented file structure in the manual if the official module is not enabled",
+            default = true,
+            requiresReload = true,
+        )
     }
 }
 
