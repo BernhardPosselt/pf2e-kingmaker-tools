@@ -6,7 +6,6 @@ import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.HooksEventListener
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.pf2e.item.*
-import js.array.push
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.html.org.w3c.dom.events.Event
@@ -32,11 +31,11 @@ data class AppEventListener<Event>(
 abstract class App<C : HandlebarsRenderContext>(
     config: HandlebarsFormApplicationOptions
 ) : HandlebarsApp<C>(config) {
-    private val appHooks = arrayOf<AppHook<*>>()
-    private val appEventListeners = arrayOf<AppEventListener<Event>>()
+    private val appHooks = mutableListOf<AppHook<*>>()
+    private val appEventListeners = mutableListOf<AppEventListener<Event>>()
     protected val appHook = object : HooksEventListener {
         override fun <T> on(key: String, callback: Function<T>) {
-            appHooks.push(AppHook(key = key, callback = callback))
+            appHooks.add(AppHook(key = key, callback = callback))
             Hooks.on(key, callback)
         }
     }
@@ -59,7 +58,7 @@ abstract class App<C : HandlebarsRenderContext>(
     }
 
     protected open fun on(selector: String, eventType: String = "click", callback: (Event) -> Unit) {
-        appEventListeners.push(
+        appEventListeners.add(
             AppEventListener(
                 selector = selector,
                 eventType = eventType,
@@ -69,7 +68,7 @@ abstract class App<C : HandlebarsRenderContext>(
     }
 
     protected open fun onDocumentRefDragstart(selector: String) {
-        appEventListeners.push(
+        appEventListeners.add(
             AppEventListener(
                 selector = selector,
                 eventType = "dragstart",
@@ -117,7 +116,7 @@ abstract class App<C : HandlebarsRenderContext>(
         allowDrop: ((GenericRef) -> Boolean)? = null,
         callback: (DragEvent, DocumentRef<*>) -> Unit
     ) {
-        appEventListeners.push(
+        appEventListeners.add(
             AppEventListener(
                 selector = selector,
                 eventType = "drop",

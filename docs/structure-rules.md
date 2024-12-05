@@ -267,7 +267,7 @@ A full structure rule would look something like this:
   following activities are not enabled by default out of the box; most of them however are enabled by putting companions
   into certain leadership rules:
     * read-all-about-it
-    * evangelize-the-dead
+    * evangelize-the-end
     * decadent-feasts
     * deliberate-planning
     * false-victory

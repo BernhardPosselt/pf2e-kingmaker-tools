@@ -737,13 +737,13 @@ The check’s DC is either the group’s Negotiation DC (see sidebar) or your ki
             msg: `Not only do you fail to establish a Work Site, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. ${gainUnrest(1)}`,
         },
     },
-    'evangelize-the-dead': {
+    'evangelize-the-end': {
         oncePerRound: false,
         fortune: false,
         enabled: false,
         phase: 'leadership',
         dc: 'control',
-        title: 'Evangelize the Dead',
+        title: 'Evangelize the End',
         description: 'You spend time preaching the End Times. While your sermons certainly aren’t for everyone, your methods avoid deliberately antagonizing those who see hope in the world while simultaneously providing ease and calm to the more desperate among the kingdom’s citizens. Attempt a basic Folklore check to determine how effective your sermons are.',
         skills: simpleRank(['folklore']),
         criticalSuccess: {

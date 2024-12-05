@@ -24,7 +24,6 @@ import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.documents.Playlist
 import com.foundryvtt.core.documents.PlaylistSound
 import com.foundryvtt.pf2e.actor.PF2ENpc
-import js.array.push
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -248,16 +247,14 @@ class RegionConfig(
     }
 
     private fun addDefaultRegion() {
-        currentSettings.regions.push(
-            RegionSetting(
-                name = "New Region",
-                zoneDc = 15,
-                encounterDc = 12,
-                level = 1,
-                rollTableUuid = null,
-                combatTrack = null,
-                terrain = Terrain.PLAINS.toCamelCase(),
-            )
+        currentSettings.regions = currentSettings.regions + RegionSetting(
+            name = "New Region",
+            zoneDc = 15,
+            encounterDc = 12,
+            level = 1,
+            rollTableUuid = null,
+            combatTrack = null,
+            terrain = Terrain.PLAINS.toCamelCase(),
         )
     }
 

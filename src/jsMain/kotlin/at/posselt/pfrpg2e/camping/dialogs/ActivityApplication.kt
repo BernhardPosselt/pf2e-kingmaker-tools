@@ -33,7 +33,7 @@ import com.foundryvtt.core.documents.JournalEntryPage
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.item.PF2EEffect
-import js.array.push
+import js.array.JsArray
 import js.core.Void
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
@@ -244,8 +244,17 @@ class ActivityApplication(
     }
 
     private fun createEffectAt(section: String, effect: ActivityEffect) {
-        console.log(section, effect)
-        getEffectsSection(section)?.push(effect)
+        if (section == "effects") {
+            currentActivity.effectUuids = currentActivity.effectUuids?.plus(effect)
+        } else if (section == "criticalSuccess") {
+            currentActivity.criticalSuccess?.effectUuids = currentActivity.criticalSuccess?.effectUuids?.plus(effect)
+        } else if (section == "success") {
+            currentActivity.success?.effectUuids = currentActivity.success?.effectUuids?.plus(effect)
+        } else if (section == "failure") {
+            currentActivity.failure?.effectUuids = currentActivity.failure?.effectUuids?.plus(effect)
+        } else if (section == "criticalFailure") {
+            currentActivity.criticalFailure?.effectUuids = currentActivity.criticalFailure?.effectUuids?.plus(effect)
+        }
         console.log(currentActivity)
         render()
     }
@@ -392,7 +401,7 @@ class ActivityApplication(
                     camping.homebrewCampingActivities = camping.homebrewCampingActivities
                         .filter { it.name != data.name }
                         .toTypedArray()
-                    camping.homebrewCampingActivities.push(data)
+                    camping.homebrewCampingActivities = camping.homebrewCampingActivities + data
                     camping.campingActivities = camping.campingActivities
                         .filter { it.activity != data.name }
                         .toTypedArray()

@@ -26,7 +26,6 @@ import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.deepClone
-import js.array.push
 import js.core.Void
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
@@ -154,18 +153,16 @@ class SkillPickerApplication(
                         .dropWhile { index -> currentSkills.any { skill -> skill.name == "new-lore-$index" } }
                         .first()
                 }
-                currentSkills.push(
-                    PickerSkill(
-                        label = label,
-                        name = label.slugify(),
-                        enabled = true,
-                        isLore = true,
-                        proficiency = Proficiency.UNTRAINED,
-                        required = false,
-                        validateOnly = false,
-                        dcType = dcTypes.first(),
-                        dc = null,
-                    )
+                currentSkills = currentSkills + PickerSkill(
+                    label = label,
+                    name = label.slugify(),
+                    enabled = true,
+                    isLore = true,
+                    proficiency = Proficiency.UNTRAINED,
+                    required = false,
+                    validateOnly = false,
+                    dcType = dcTypes.first(),
+                    dc = null,
                 )
                 validateAtLeastOnePresent(currentSkills)
                 render()

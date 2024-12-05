@@ -27,7 +27,6 @@ import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.item.PF2EEffect
-import js.array.push
 import js.core.Void
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
@@ -339,7 +338,7 @@ class RecipeApplication(
                     camping.cooking.homebrewMeals = camping.cooking.homebrewMeals
                         .filter { it.name != data.name }
                         .toTypedArray()
-                    camping.cooking.homebrewMeals.push(data)
+                    camping.cooking.homebrewMeals = camping.cooking.homebrewMeals + data
                     actor.setCamping(camping)
                     close().await()
                     afterSubmit()

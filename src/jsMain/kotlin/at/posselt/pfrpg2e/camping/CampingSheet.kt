@@ -51,7 +51,6 @@ import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.item.itemFromUuid
-import js.array.push
 import js.core.Void
 import js.objects.ReadonlyRecord
 import js.objects.recordOf
@@ -465,12 +464,10 @@ class CampingSheet(
         )
         val existing = camping.cooking.results.find { it.recipeName == recipeName }
         if (existing == null) {
-            camping.cooking.results.push(
-                CookingResult(
-                    recipeName = recipeName,
-                    skill = mealToCook.selectedSkill.value,
-                    result = result?.toCamelCase(),
-                )
+            camping.cooking.results = camping.cooking.results + CookingResult(
+                recipeName = recipeName,
+                skill = mealToCook.selectedSkill.value,
+                result = result?.toCamelCase(),
             )
         } else {
             existing.result = result?.toCamelCase()
@@ -604,11 +601,9 @@ class CampingSheet(
         actor.getCamping()?.let { camping ->
             val existingMeal = camping.cooking.actorMeals.find { it.actorUuid == actorUuid }
             if (existingMeal == null) {
-                camping.cooking.actorMeals.push(
-                    ActorMeal(
-                        actorUuid = actorUuid,
-                        chosenMeal = recipeName,
-                    )
+                camping.cooking.actorMeals = camping.cooking.actorMeals + ActorMeal(
+                    actorUuid = actorUuid,
+                    chosenMeal = recipeName,
                 )
             } else {
                 existingMeal.chosenMeal = recipeName
@@ -636,12 +631,10 @@ class CampingSheet(
                     .findCampingActivitySkills(activity, camping.ignoreSkillRequirements)
                     .filterNot { it.validateOnly }
                     .firstOrNull()
-                camping.campingActivities.push(
-                    CampingActivity(
-                        activity = activityName,
-                        actorUuid = actorUuid,
-                        selectedSkill = skill?.attribute?.value,
-                    )
+                camping.campingActivities = camping.campingActivities + CampingActivity(
+                    activity = activityName,
+                    actorUuid = actorUuid,
+                    selectedSkill = skill?.attribute?.value,
                 )
                 actor.setCamping(camping)
             }
@@ -682,13 +675,11 @@ class CampingSheet(
                 if (campingActor == null) {
                     ui.notifications.error("Only NPCs, Characters, Loot and Vehicles can be added to the camping sheet")
                 } else {
-                    camping.actorUuids.push(uuid)
-                    camping.cooking.actorMeals.push(
-                        ActorMeal(
-                            actorUuid = uuid,
-                            favoriteMeal = null,
-                            chosenMeal = "nothing",
-                        )
+                    camping.actorUuids = camping.actorUuids + uuid
+                    camping.cooking.actorMeals = camping.cooking.actorMeals + ActorMeal(
+                        actorUuid = uuid,
+                        favoriteMeal = null,
+                        chosenMeal = "nothing",
                     )
                     actor.setCamping(camping)
                 }

@@ -10,7 +10,6 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2EParty
-import js.array.push
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -22,7 +21,7 @@ external interface CampsitePosition {
 
 @JsPlainObject
 external interface ExistingCampsites {
-    val positions: Array<CampsitePosition>
+    var positions: Array<CampsitePosition>
 }
 
 fun ExistingCampsites.findExistingCampsite(position: CampingTokenPosition) =
@@ -72,12 +71,10 @@ suspend fun updateCampingPosition(game: Game, sceneId: String, result: DegreeOfS
     val campsites = scene.getCampsites() ?: ExistingCampsites(positions = emptyArray())
     val existingPosition = campsites.findExistingCampsite(tokenPosition)
     if (existingPosition == null) {
-        campsites.positions.push(
-            CampsitePosition(
-                x = tokenPosition.x,
-                y = tokenPosition.y,
-                result = result.toCamelCase(),
-            )
+        campsites.positions = campsites.positions + CampsitePosition(
+            x = tokenPosition.x,
+            y = tokenPosition.y,
+            result = result.toCamelCase(),
         )
     } else {
         existingPosition.result = result.toCamelCase()

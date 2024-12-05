@@ -22,7 +22,6 @@ import com.foundryvtt.pf2e.item.PF2EConsumable
 import com.foundryvtt.pf2e.item.PF2EConsumableData
 import com.foundryvtt.pf2e.item.PF2EEffect
 import com.foundryvtt.pf2e.rolls.DamageRoll
-import js.array.push
 import js.objects.recordOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
@@ -419,8 +418,8 @@ suspend fun PF2EActor.addFoodToInventory(foodAmount: FoodAmount) = coroutineScop
 
 
 suspend fun PF2EActor.removeConsumableFromInventory(name: String, quantity: Int): Int {
-    val updates = arrayOf<AnyObject>()
-    val deleteIds = arrayOf<String>()
+    val updates = mutableListOf<AnyObject>()
+    val deleteIds = mutableListOf<String>()
     var leftOver = quantity
     consumablesByName(name).forEach { consumable ->
         val id = consumable.id
@@ -429,7 +428,7 @@ suspend fun PF2EActor.removeConsumableFromInventory(name: String, quantity: Int)
             val consume = min(leftOver, totalQuantity)
             leftOver -= consume
             if (totalQuantity <= consume) {
-                deleteIds.push(id)
+                deleteIds.add(id)
             } else {
                 val chargeUpdates = calculateCharges(
                     removeQuantity = consume,
@@ -437,7 +436,7 @@ suspend fun PF2EActor.removeConsumableFromInventory(name: String, quantity: Int)
                     itemUses = consumable.system.uses.value,
                     itemMaxUses = consumable.system.uses.max,
                 )
-                updates.push(consumable.buildUpdate<PF2EConsumable> {
+                updates.add(consumable.buildUpdate<PF2EConsumable> {
                     _id = id
                     system.quantity = chargeUpdates.quantity
                     system.uses.value = chargeUpdates.charges
@@ -445,8 +444,8 @@ suspend fun PF2EActor.removeConsumableFromInventory(name: String, quantity: Int)
             }
         }
     }
-    updateEmbeddedDocuments<PF2EConsumable>("Item", updates).await()
-    deleteEmbeddedDocuments<PF2EConsumable>("Item", deleteIds).await()
+    updateEmbeddedDocuments<PF2EConsumable>("Item", updates.toTypedArray()).await()
+    deleteEmbeddedDocuments<PF2EConsumable>("Item", deleteIds.toTypedArray()).await()
     return leftOver
 }
 

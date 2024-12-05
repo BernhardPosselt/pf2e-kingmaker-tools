@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Evangelize the Dead has been corrected to Evangelize the End. You might need to adjust your bonuses in existing structures and modifiers.
+
 
 ## [2.0.7] - 2024-11-17
 

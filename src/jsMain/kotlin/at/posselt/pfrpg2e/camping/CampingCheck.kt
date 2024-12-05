@@ -15,7 +15,6 @@ import at.posselt.pfrpg2e.utils.postDegreeOfSuccess
 import com.foundryvtt.pf2e.actions.CheckDC
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.actor.StatisticRollParameters
-import js.array.push
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
@@ -156,11 +155,10 @@ suspend fun PF2ECreature.performCampingCheck(
     val data = StatisticRollParameters(
         rollMode = if (isSecret) "blindroll" else undefined,
         dc = CheckDC(value = dc),
-        extraRollOptions = arrayOf("camping") + extraRollOptions
+        extraRollOptions = arrayOf("camping")
+                + extraRollOptions
+                + (if (isWatch) arrayOf("watch") else emptyArray())
     )
-    if (isWatch) {
-        data.extraRollOptions?.push("watch")
-    }
     return resolveAttribute(attribute)
         ?.roll(data)
         ?.await()

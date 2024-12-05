@@ -115,7 +115,7 @@ export function removePredicatedModifiers(
                 predicates.push((m) => m.activities!
                     .some(activity => {
                         const data = activities[activity];
-                        const activitySkillRank = data.skills[skill];
+                        const activitySkillRank = data?.skills?.[skill];
                         if (activitySkillRank === undefined) {
                             return false;
                         } else {
