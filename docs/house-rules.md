@@ -46,10 +46,10 @@ Here's some general advice and things you have to think about:
     * During the **Varnhold Vanishing**, acting fast could determine if the PCs save Maegar Varn and other citizens before they are killed. This might net the PCs additional loot and structures.
     * Blood for Blood should threaten the PCs with frequent army attacks until they've dealt with Drelev and the Tiger Lords. You can increase the difficulty of the army combats if required. Armies aren't used too frequently in this chapter, because the original AP needed more time to develop the army rules. You should add in additional ones.
     * War of the River Kings pressures the PCs with armies until they take care of them; if they wait too long, the adventure suggests that Pitax should recruit additional armies, so you do not need to add additional time limits
-    * Following the war, your players should level up their kingdom to level 16-17 and explore many parts to the north of Pitax
+    * Following the war, your players should level up their kingdom to level 16-17 and explore many parts to the north of Pitax. Level 17 will likely be the maximum level that your kingdom reaches. Afterward, cue the start of Chapter 10
     * They Lurk Below should be time boxed to one month; keep in mind that you should let the PCs complete a ton of kingdom turns before starting this quest; if required, give them an additional 1-2 months to explore the remaining parts in the western Stolen Lands
-    * Sound of a thousand screams plays out over a month so no additional limits needed
-    * Curse of the Lantern King plays out entirely in the First World so no time limit is needed here as wellts
+    * Sound of a Thousand Screams plays out over a month so no additional limits needed
+    * Curse of the Lantern King plays out entirely in the First World so no time limit is needed here as well
 
 ### House Rules
 
@@ -126,6 +126,9 @@ What you need to do is to bridge the period between levels 1-9 and fix the broke
 * Use XP adjustments from [Vance & Kerenshara's](https://docs.google.com/document/d/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo/edit?usp=sharing) or just flat out give them 200XP each turn until they hit level 5
 * Roll Kingdom Events frequently (DC 5 Flat Check instead of the default) and associate them with the PCs' actions (PC chose to Infiltrate an enemy faction? That political scandal is there way of getting back at you)
 * Tie their kingdom and buildings to XP, loot and access to feats/items. Maybe you need to recruit a smith for that forge who offers them 1 of 3 possible magic items? Or a noble requests a theater threatening 1d4 unrest if they haven't built one in 3 months.
+* Aim for 1-2 kingdom turns per session. When levelling from 1-5, intersperse small quests that take up 2/3rds to 1/2 of the session and hand out 10-30XP of kingdom XP after completing them.
+* Prepare some Kingdom Events as quests. For instance: the kingdom experiences a terrible Crop Failure. Use the research subsystem to let them figure out that the source was a druid who was unhappy with the PC's destruction of nature. Then let them travel to the target hex, experience a complication during travel and either peacefully resolve or defeat them for 30-80 Kingdom XP.    
+* At earlier levels when unrest and ruin are scarce, maybe cut down on the amount of available Leadership activities per turn (3-6). Also limit the amount of Leadership activities to prevent analysis paralysis.
 
 **PS**: It surprised me in my games, but you will notice that PCs start to critically succeed at building lower level structures at higher levels, significantly reducing commodity cost. You should keep that in mind if you are looking into re-balancing structure costs
 
