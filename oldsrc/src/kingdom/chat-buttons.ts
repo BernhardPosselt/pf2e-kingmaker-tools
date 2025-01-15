@@ -3,6 +3,7 @@ import {ActivityResults, getKingdomActivitiesById} from './data/activityData';
 import {updateResources} from './resources';
 import {gainFame} from './kingdom-utils';
 import {parsePayButton, payStructure} from './dialogs/structure-browser';
+import {uuidv4} from "../utils";
 
 interface KingdomChatButton {
     selector: string;
@@ -53,7 +54,7 @@ export const kingdomChatButtons: KingdomChatButton[] = [
                     ...modifier,
                 };
                 if (modifierCopy.consumeId !== undefined) {
-                    modifierCopy.consumeId = crypto.randomUUID();
+                    modifierCopy.consumeId = uuidv4();
                 }
                 const modifiers = [...kingdom.modifiers, modifierCopy];
                 await saveKingdom(actor, {modifiers});

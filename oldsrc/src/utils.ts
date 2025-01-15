@@ -2,6 +2,7 @@ import {DegreeOfSuccess} from './degree-of-success';
 import {decode, encode} from 'js-base64';
 import {RollMode} from './settings';
 import {isArmyTactic} from './armies/utils';
+import { v4 } from 'uuid';
 
 export function escapeHtml(html: string): string {
     const text = document.createTextNode(html);
@@ -351,4 +352,8 @@ export function toLabelAndValue(values: (string | number)[], {
 
 export function hasArmyTactic(actor: Actor, tactic: CampaignFeaturePF2E): boolean {
     return actor.items.some(i => isArmyTactic(i) && i.name === tactic.name);
+}
+
+export function uuidv4(): string {
+    return v4()
 }

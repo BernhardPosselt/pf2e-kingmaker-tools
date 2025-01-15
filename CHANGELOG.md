@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Evangelize the Dead has been corrected to Evangelize the End. You might need to adjust your bonuses in existing structures and modifiers.
+* UUIDs for consumable modifiers on the kingdom sheet are now generated using a fallback that will work when running foundry over HTTP instead of HTTPS only
 
 
 ## [2.0.7] - 2024-11-17

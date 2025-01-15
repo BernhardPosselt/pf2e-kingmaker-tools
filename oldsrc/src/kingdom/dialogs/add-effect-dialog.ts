@@ -1,6 +1,14 @@
 import {allKingdomPhases, KingdomPhase} from '../data/activities';
 import {allModifierTypes, Modifier, ModifierType} from '../modifiers';
-import {capitalize, createLabels, parseCheckbox, parseNumberInput, parseSelect, parseTextInput} from '../../utils';
+import {
+    capitalize,
+    createLabels,
+    parseCheckbox,
+    parseNumberInput,
+    parseSelect,
+    parseTextInput,
+    uuidv4
+} from '../../utils';
 import {allSkills, Skill} from '../data/skills';
 import {Ability, allAbilities} from '../data/abilities';
 
@@ -131,7 +139,7 @@ export function addEffectDialog(
                         type,
                         value,
                         enabled: parseCheckbox($html, 'enabled'),
-                        consumeId: parseCheckbox($html, 'consumable') ? crypto.randomUUID() : undefined,
+                        consumeId: parseCheckbox($html, 'consumable') ? uuidv4() : undefined,
                         phases,
                         activities,
                         skills,
