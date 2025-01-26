@@ -102,7 +102,7 @@ Finally, start foundry
     cd dev/FoundryVTT-12.330/
     ./foundryvtt
 
-You can release a new version using:
+You can release a new version by changing the version in **build.gradle.kts** and then executing:
 
     GITHUB_TOKEN="token_here" FOUNDRY_TOKEN="token_here" ./gradlew release
 
