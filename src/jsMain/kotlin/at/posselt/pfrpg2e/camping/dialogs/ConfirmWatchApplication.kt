@@ -51,7 +51,7 @@ class ConfirmWatchApplication(
     private val camping: CampingData,
     private val afterSubmit: (Boolean) -> Unit,
 ) : FormApp<ConfirmWatchContext, ConfirmWatchData>(
-    title = "Begin Watch",
+    title = "Begin Rest",
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ConfirmWatchDataModel::class.js,
