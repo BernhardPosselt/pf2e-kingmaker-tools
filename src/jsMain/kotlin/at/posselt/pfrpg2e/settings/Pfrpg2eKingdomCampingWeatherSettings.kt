@@ -6,13 +6,13 @@ import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.migrations.latestMigrationVersion
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.utils.newInstance
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.*
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.ApplicationV2
 import js.core.JsNumber
 import js.objects.ReadonlyRecord
-import js.reflect.newInstance
 import kotlinx.coroutines.await
 
 inline fun <reified T : DataModel> Settings.registerDataModel(
@@ -29,7 +29,7 @@ inline fun <reified T : DataModel> Settings.registerDataModel(
             hint = hint,
             config = false,
             requiresReload = requiresReload,
-            default = T::class.js.newInstance().toObject(),
+            default = T::class.js.newInstance(emptyArray()).toObject(),
             type = T::class.js,
             scope = "world"
         )

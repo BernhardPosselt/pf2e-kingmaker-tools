@@ -1,16 +1,17 @@
 [versions]
 kotlin = "2.1.0"
-coroutines = "1.9.0"
-schema-validator = "0.3.0"
+coroutines = "1.10.1"
+schema-validator = "0.3.1"
 ktor = "2.3.12"
+serialization = "1.8.0"
 
 [libraries]
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.3" }
-kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version = "1.7.3" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.1" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-js", version = "0.11.0" }
-kotlin-wrappers = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version = "1.0.0-pre.840" }
+kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-js", version = "0.12.0" }
+kotlin-wrappers = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version = "2025.1.7" }
 kotlin-plain-objects = { module = "org.jetbrains.kotlin:kotlin-js-plain-objects", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-wrappers-js = { module = "org.jetbrains.kotlin-wrappers:kotlin-js" }
@@ -30,4 +31,4 @@ logback = { module = "ch.qos.logback:logback-classic", version = "1.5.8" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-plain-objects = { id = "org.jetbrains.kotlin.plugin.js-plain-objects", version.ref = "kotlin" }
-versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
+versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
