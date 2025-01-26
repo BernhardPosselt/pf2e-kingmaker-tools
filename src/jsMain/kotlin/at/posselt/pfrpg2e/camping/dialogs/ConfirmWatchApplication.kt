@@ -37,6 +37,8 @@ class ConfirmWatchDataModel(val value: AnyObject) : DataModel(value) {
         @JsStatic
         fun defineSchema() = buildSchema {
             boolean("enableWatch")
+            boolean("checkRandomEncounter")
+            boolean("enableDailyPreparations")
         }
     }
 }
@@ -44,12 +46,18 @@ class ConfirmWatchDataModel(val value: AnyObject) : DataModel(value) {
 @JsPlainObject
 external interface ConfirmWatchData {
     val enableWatch: Boolean
+    val checkRandomEncounter: Boolean
+    val enableDailyPreparations: Boolean
 }
 
 @JsExport
 class ConfirmWatchApplication(
     private val camping: CampingData,
-    private val afterSubmit: (Boolean) -> Unit,
+    private val afterSubmit: (
+        enableWatch: Boolean,
+        enableDailyPreparations: Boolean,
+        checkRandomEncounter: Boolean
+    ) -> Unit,
 ) : FormApp<ConfirmWatchContext, ConfirmWatchData>(
     title = "Begin Rest",
     template = "components/forms/application-form.hbs",
@@ -59,12 +67,14 @@ class ConfirmWatchApplication(
     id = "kmConfirmWatch"
 ) {
     private var enableWatch: Boolean = true
+    private var enableDailyPreparations: Boolean = true
+    private var checkRandomEncounter: Boolean = true
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "save" -> buildPromise {
                 close()
-                afterSubmit(enableWatch)
+                afterSubmit(enableWatch, enableDailyPreparations, checkRandomEncounter)
             }
         }
     }
@@ -78,6 +88,7 @@ class ConfirmWatchApplication(
             increaseActorsKeepingWatch = camping.increaseWatchActorNumber,
             remainingSeconds = camping.watchSecondsRemaining,
             skipWatch = !enableWatch,
+            skipDailyPreparations = !enableDailyPreparations,
         )
         return fullRestDuration.total.label
     }
@@ -101,12 +112,28 @@ class ConfirmWatchApplication(
                     stacked = false,
                     value = enableWatch,
                 ),
+                CheckboxInput(
+                    label = "Enable Daily Preparations",
+                    name = "enableDailyPreparations",
+                    help = "If enabled, advances time spent during daily preparations",
+                    stacked = false,
+                    value = enableDailyPreparations,
+                ),
+                CheckboxInput(
+                    label = "Check for Random Encounter",
+                    name = "checkRandomEncounter",
+                    help = "If enabled, rolls a random encounter from the current region's roll table",
+                    stacked = false,
+                    value = checkRandomEncounter,
+                ),
             )
         )
     }
 
     override fun onParsedSubmit(value: ConfirmWatchData): Promise<Void> = buildPromise {
         enableWatch = value.enableWatch
+        enableDailyPreparations = value.enableDailyPreparations
+        checkRandomEncounter = value.checkRandomEncounter
         undefined
     }
 

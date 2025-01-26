@@ -310,13 +310,36 @@ class CampingSheet(
 
             "settings" -> CampingSettingsApplication(game, actor).launch()
             "rest" -> actor.getCamping()?.let { camping ->
-                ConfirmWatchApplication(
-                    camping = camping,
-                ) { enableWatch ->
+                if (camping.watchSecondsRemaining > 0) {
+                    // continue watch
                     buildPromise {
-                        rest(game, dispatcher, actor, camping, skipWatch = !enableWatch)
+                        rest(
+                            game = game,
+                            dispatcher = dispatcher,
+                            campingActor = actor,
+                            camping = camping,
+                            skipWatch = false,
+                            skipDailyPreparations = false,
+                            disableRandomEncounter = false,
+                        )
                     }
-                }.launch()
+                } else {
+                    ConfirmWatchApplication(
+                        camping = camping,
+                    ) { enableWatch, enableDailyPreparations, checkRandomEncounter ->
+                        buildPromise {
+                            rest(
+                                game = game,
+                                dispatcher = dispatcher,
+                                campingActor = actor,
+                                camping = camping,
+                                skipWatch = !enableWatch,
+                                skipDailyPreparations = !enableDailyPreparations,
+                                disableRandomEncounter = !checkRandomEncounter,
+                            )
+                        }
+                    }.launch()
+                }
             }
 
             "roll-recipe-check" -> buildPromise {
@@ -946,6 +969,7 @@ class CampingSheet(
             increaseActorsKeepingWatch = camping.increaseWatchActorNumber,
             remainingSeconds = camping.watchSecondsRemaining,
             skipWatch = false,
+            skipDailyPreparations = false,
         )
         val currentRegion = camping.findCurrentRegion()
         val regions = camping.regionSettings.regions

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.1] - 2025-01-26
+
+### Fixed
+
+* Also add the possiblity to disable advancing daily preps and checking for random encounters when resting
+* Do not show rest config popup when clicking the "Continue" button
+
 ## [2.1.0] - 2025-01-26
 
 ### Changed

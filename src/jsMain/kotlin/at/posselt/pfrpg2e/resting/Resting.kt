@@ -85,8 +85,15 @@ private suspend fun getFullRestSeconds(
     gunsToClean: Int,
     increaseActorsKeepingWatch: Int,
     skipWatch: Boolean,
-): Int = calculateRestDurationSeconds(getRestSecondsPerPlayer(watchers, recipes, increaseActorsKeepingWatch), skipWatch = skipWatch) +
-        calculateDailyPreparationSeconds(gunsToClean)
+    skipDailyPreparations: Boolean,
+): Int {
+    val dailyPrepSeconds = if (skipDailyPreparations) 0 else calculateDailyPreparationSeconds(gunsToClean)
+    val restSeconds = calculateRestDurationSeconds(
+        getRestSecondsPerPlayer(watchers, recipes, increaseActorsKeepingWatch),
+        skipWatch = skipWatch
+    )
+    return restSeconds + dailyPrepSeconds
+}
 
 data class RestDuration(
     val value: Int,
@@ -106,6 +113,7 @@ suspend fun getTotalRestDuration(
     recipes: List<RecipeData>,
     gunsToClean: Int,
     skipWatch: Boolean,
+    skipDailyPreparations: Boolean,
     increaseActorsKeepingWatch: Int = 0,
     remainingSeconds: Int? = null,
 ): TotalRestDuration {
@@ -115,6 +123,7 @@ suspend fun getTotalRestDuration(
         gunsToClean = gunsToClean,
         increaseActorsKeepingWatch = increaseActorsKeepingWatch,
         skipWatch = skipWatch,
+        skipDailyPreparations = skipDailyPreparations,
     )
     return TotalRestDuration(
         total = RestDuration(total),
@@ -238,6 +247,8 @@ private suspend fun beginRest(
     campingActor: PF2ENpc,
     camping: CampingData,
     skipWatch: Boolean,
+    skipDailyPreparations: Boolean,
+    disableRandomEncounter: Boolean,
 ) {
     val actorsByUuid = getCampingActorsByUuid(camping.actorUuids).associateBy(PF2EActor::uuid)
     val watchers = actorsByUuid.values
@@ -248,6 +259,7 @@ private suspend fun beginRest(
         gunsToClean = camping.gunsToClean,
         increaseActorsKeepingWatch = camping.increaseWatchActorNumber,
         skipWatch = skipWatch,
+        skipDailyPreparations = skipDailyPreparations,
     )
     val randomEncounterAt = findRandomEncounterAt(
         game = game,
@@ -255,7 +267,7 @@ private suspend fun beginRest(
         camping = camping,
         watchDurationSeconds = watchDurationSeconds,
     )
-    if (skipWatch == false && randomEncounterAt != null) {
+    if (skipWatch == false && disableRandomEncounter == false && randomEncounterAt != null) {
         askDc("Enemy Stealth")?.let { dc ->
             watchers
                 .filterIsInstance<PF2ECharacter>()
@@ -329,10 +341,12 @@ suspend fun rest(
     campingActor: PF2ENpc,
     camping: CampingData,
     skipWatch: Boolean,
+    skipDailyPreparations: Boolean,
+    disableRandomEncounter: Boolean,
 ) {
     if (camping.watchSecondsRemaining == 0) {
         camping.restingTrack?.play()
-        beginRest(game, dispatcher, campingActor, camping, skipWatch)
+        beginRest(game, dispatcher, campingActor, camping, skipWatch, skipDailyPreparations, disableRandomEncounter)
     } else {
         completeDailyPreparations(game, dispatcher, campingActor, camping)
     }
