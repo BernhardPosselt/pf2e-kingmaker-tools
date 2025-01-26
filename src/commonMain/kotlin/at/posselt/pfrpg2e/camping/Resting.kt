@@ -15,13 +15,14 @@ fun calculateRestoredHp(
 }
 
 
-fun calculateRestDurationSeconds(restSecondsPerPc: List<Int>): Int {
+fun calculateRestDurationSeconds(restSecondsPerPc: List<Int>, skipWatch: Boolean): Int {
     val partySize = restSecondsPerPc.size
     val restDurationSeconds = restSecondsPerPc.average().toInt()
     return if (partySize < 2) {
         restDurationSeconds
     } else {
-        restDurationSeconds + (restDurationSeconds / (partySize - 1))
+        val secondsTakenUpByWatch = if (skipWatch) 0 else (restDurationSeconds / (partySize - 1))
+        restDurationSeconds + secondsTakenUpByWatch
     }
 }
 

@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2025-01-26
+
+### Changed
+
+* Clicking on the Rest button on the camping sheet now asks you to confirm the rest, shows you the duration, and allows you to skip the watch, reducing time spent resting and disabling the random encounter check
+
 ### Fixed
 
-* Evangelize the Dead has been corrected to Evangelize the End. You might need to adjust your bonuses in existing structures and modifiers.
+* Evangelize the Dead has been corrected to Evangelize the End. You might need to adjust your bonuses in existing structures.
 * UUIDs for consumable modifiers on the kingdom sheet are now generated using a fallback that will work when running foundry over HTTP instead of HTTPS only
 
 

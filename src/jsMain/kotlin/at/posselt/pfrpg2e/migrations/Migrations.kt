@@ -39,6 +39,7 @@ private val migrations = listOf(
     Migration7(),
     Migration9(),
     Migration10(),
+    Migration11(),
 )
 
 val latestMigrationVersion = migrations.maxOfOrNull { it.version }!!

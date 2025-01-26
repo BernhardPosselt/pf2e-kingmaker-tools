@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.calculateHexplorationActivities
 import at.posselt.pfrpg2e.camping.dialogs.CampingSettingsApplication
+import at.posselt.pfrpg2e.camping.dialogs.ConfirmWatchApplication
 import at.posselt.pfrpg2e.camping.dialogs.FavoriteMealsApplication
 import at.posselt.pfrpg2e.camping.dialogs.ManageActivitiesApplication
 import at.posselt.pfrpg2e.camping.dialogs.ManageRecipesApplication
@@ -308,10 +309,14 @@ class CampingSheet(
             }
 
             "settings" -> CampingSettingsApplication(game, actor).launch()
-            "rest" -> actor.getCamping()?.let {
-                buildPromise {
-                    rest(game, dispatcher, actor, it)
-                }
+            "rest" -> actor.getCamping()?.let { camping ->
+                ConfirmWatchApplication(
+                    camping = camping,
+                ) { enableWatch ->
+                    buildPromise {
+                        rest(game, dispatcher, actor, camping, skipWatch = !enableWatch)
+                    }
+                }.launch()
             }
 
             "roll-recipe-check" -> buildPromise {
@@ -940,6 +945,7 @@ class CampingSheet(
             gunsToClean = camping.gunsToClean,
             increaseActorsKeepingWatch = camping.increaseWatchActorNumber,
             remainingSeconds = camping.watchSecondsRemaining,
+            skipWatch = false,
         )
         val currentRegion = camping.findCurrentRegion()
         val regions = camping.regionSettings.regions

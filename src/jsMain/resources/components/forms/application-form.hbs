@@ -17,5 +17,5 @@
             </div>
         {{/each}}
     {{/if}}
-    <button type="submit" class="full-width" data-action="save" {{#unless isFormValid}}disabled{{/unless}}>Save</button>
+<button type="submit" class="full-width" data-action="save" {{#unless isFormValid}}disabled{{/unless}}>{{#if saveLabel}}{{saveLabel}}{{else}}Save{{/if}}</button>
 </div>
