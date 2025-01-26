@@ -108,14 +108,14 @@ class ConfirmWatchApplication(
                 CheckboxInput(
                     label = "Enable Watch",
                     name = "enableWatch",
-                    help = "If enabled, rolls a random encounter check during watch and includes watch in rest duration",
+                    help = "If enabled, includes time spent on watch in rest duration. Disable when resting in a safe area that does not require watches.",
                     stacked = false,
                     value = enableWatch,
                 ),
                 CheckboxInput(
                     label = "Enable Daily Preparations",
                     name = "enableDailyPreparations",
-                    help = "If enabled, advances time spent during daily preparations",
+                    help = "If enabled, includes time spent on daily preparations in rest duration",
                     stacked = false,
                     value = enableDailyPreparations,
                 ),

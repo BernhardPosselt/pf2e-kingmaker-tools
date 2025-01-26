@@ -267,7 +267,7 @@ private suspend fun beginRest(
         camping = camping,
         watchDurationSeconds = watchDurationSeconds,
     )
-    if (skipWatch == false && disableRandomEncounter == false && randomEncounterAt != null) {
+    if (disableRandomEncounter == false && randomEncounterAt != null) {
         askDc("Enemy Stealth")?.let { dc ->
             watchers
                 .filterIsInstance<PF2ECharacter>()
