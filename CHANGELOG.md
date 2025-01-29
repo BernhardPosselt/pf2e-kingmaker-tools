@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.2] - 2025-01-29
+
 ### Fixed
 
 * Do not fail when worldtime returns a fraction
