@@ -52,7 +52,7 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
         }
     }
     bindChatClick(".km-pass-time") { _, el ->
-        el.dataset["seconds"]?.toDouble()?.let {
+        el.dataset["seconds"]?.toInt()?.let {
             buildPromise {
                 game.time.advance(it).await()
             }
