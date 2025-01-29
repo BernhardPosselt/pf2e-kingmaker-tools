@@ -38,6 +38,7 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatSeconds
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
+import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actions.RestForTheNightOptions
@@ -300,7 +301,7 @@ private suspend fun completeDailyPreparations(
         game.time.advance(camping.watchSecondsRemaining).await()
         camping.watchSecondsRemaining = 0
         camping.encounterModifier = 0
-        camping.dailyPrepsAtTime = game.time.worldTime
+        camping.dailyPrepsAtTime = game.time.worldTimeSeconds
         camping.campingActivities.forEach { it.result = null }
         camping.cooking.results.forEach { it.result = null }
         campingActor.setCamping(camping)

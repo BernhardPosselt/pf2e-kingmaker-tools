@@ -40,6 +40,7 @@ import at.posselt.pfrpg2e.utils.openItem
 import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.toDateInputString
+import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.documents.onCreateItem
@@ -691,7 +692,7 @@ class CampingSheet(
 
     private suspend fun resetAdventuringTimeTracker() {
         actor.getCamping()?.let { camping ->
-            camping.dailyPrepsAtTime = game.time.worldTime
+            camping.dailyPrepsAtTime = game.time.worldTimeSeconds
             actor.setCamping(camping)
         }
     }
@@ -760,10 +761,10 @@ class CampingSheet(
         LocalTime.fromSecondOfDay(getHexplorationActivitySeconds()).toDateInputString()
 
     private fun getHexplorationActivitiesAvailable(camping: CampingData): Int =
-        max(0, (8 * 3600 - (game.time.worldTime - camping.dailyPrepsAtTime)) / getHexplorationActivitySeconds())
+        max(0, (8 * 3600 - (game.time.worldTimeSeconds - camping.dailyPrepsAtTime)) / getHexplorationActivitySeconds())
 
     private fun getAdventuringFor(camping: CampingData): String {
-        val elapsedSeconds = game.time.worldTime - camping.dailyPrepsAtTime
+        val elapsedSeconds = game.time.worldTimeSeconds - camping.dailyPrepsAtTime
         val isNegative = camping.dailyPrepsAtTime > game.time.worldTime
         return formatSeconds(elapsedSeconds, isNegative)
     }

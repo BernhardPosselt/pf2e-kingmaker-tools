@@ -15,6 +15,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
+import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2EActor
@@ -174,7 +175,7 @@ fun getDefaultCamping(game: Game): CampingData {
         ),
         watchSecondsRemaining = 0,
         gunsToClean = 0,
-        dailyPrepsAtTime = game.time.worldTime,
+        dailyPrepsAtTime = game.time.worldTimeSeconds,
         encounterModifier = 0,
         restRollMode = "one",
         increaseWatchActorNumber = 0,
