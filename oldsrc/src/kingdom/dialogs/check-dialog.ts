@@ -184,7 +184,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const modifier: Modifier = {
                 skills: ['engineering'],
                 value: 1,
-                type: 'circumstance',
+                type: 'status',
                 name: 'Practical Magic',
                 enabled: true,
             };

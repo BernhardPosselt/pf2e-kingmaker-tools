@@ -43,6 +43,20 @@ select this feat, choose one leadership role; that role is now supported by your
         }],
     },
     {
+        automationNotes: 'Vacancy role penalty removal is not automated',
+        name: 'Civil Service (Status Bonus)',
+        level: 1,
+        text: `Everyone has a place and a role, and as long as those roles are filled, the government functions. When you
+select this feat, choose one leadership role; that role is now supported by your efficient civil servants, so its vacancy penalty is no longer applicable. If you wish to change the leadership role to which Civil Service applies, you can do so using the New Leadership activity at the start of a Kingdom turn. You gain a +2 status bonus to New Leadership checks.`,
+        modifiers: [{
+            name: 'Swapping Civil Service',
+            enabled: false,
+            value: 2,
+            type: 'status',
+            activities: ['new-leadership'],
+        }],
+    },
+    {
         name: 'Cooperative Leadership',
         level: 1,
         text: `Your leaders are skilled at working with one another. When a leader uses the Focused Attention kingdom
@@ -61,6 +75,20 @@ turn when you gain Unrest, you can attempt to crush the dissent by attempting a 
             enabled: false,
             value: 1,
             type: 'circumstance',
+            phases: ['event'],
+        }],
+    },
+    {
+        name: 'Crush Dissent (V&K)',
+        level: 7,
+        prerequisites: 'Trained in Warfare',
+        text: `Your rule brooks no dissent and stamps out traitors, making harsh examples of them. Once per Kingdom
+turn when you gain Unrest, you can attempt to crush the dissent by attempting a basic Warfare check. On a success, the Unrest increase is canceled, but on a critical failure, the Unrest increase is doubled. In addition, you gain a +1 status bonus to checks to resolve dangerous kingdom events that involve internal bickering, such as Feud.`,
+        modifiers: [{
+            name: 'Dangerous Kingdom Event involving internal bickering',
+            enabled: false,
+            value: 1,
+            type: 'status',
             phases: ['event'],
         }],
     },
@@ -92,6 +120,33 @@ your settlements’ defenses.`,
         }],
     },
     {
+        name: 'Fortified Fiefs (V&K)',
+        level: 7,
+        prerequisites: 'Trained in Defense',
+        text: `Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize
+the value of a strong defense when it comes to building settlements and fortifications. You gain a +2 status bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 status bonus to all kingdom checks attempted during dangerous events that directly impact
+your settlements’ defenses.`,
+        modifiers: [{
+            name: 'Fortified Fiefs',
+            type: 'status',
+            activities: ['fortify-hex'],
+            enabled: true,
+            value: 2,
+        }, {
+            name: 'Build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall',
+            type: 'status',
+            activities: ['build-structure'],
+            enabled: false,
+            value: 2,
+        }, {
+            name: 'Dangerous Event impacting settlement defenses',
+            type: 'status',
+            phases: ['event'],
+            enabled: false,
+            value: 1,
+        }],
+    },
+    {
         name: 'Insider Trading',
         level: 1,
         prerequisites: 'Trained in Industry',
@@ -100,6 +155,20 @@ other lands, and they hire one another’s workers to supply the labor they need
         modifiers: [{
             name: 'Insider Trading',
             type: 'circumstance',
+            activities: ['establish-work-site-quarry', 'establish-work-site-lumber', 'establish-work-site-mine', 'establish-trade-agreement', 'trade-commodities'],
+            enabled: true,
+            value: 1,
+        }],
+    },
+    {
+        name: 'Insider Trading (V&K)',
+        level: 7,
+        prerequisites: 'Trained in Industry',
+        text: `Your leading citizens share valuable business information with one another and with associates in
+other lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 status bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn.`,
+        modifiers: [{
+            name: 'Insider Trading',
+            type: 'status',
             activities: ['establish-work-site-quarry', 'establish-work-site-lumber', 'establish-work-site-mine', 'establish-trade-agreement', 'trade-commodities'],
             enabled: true,
             value: 1,
@@ -133,10 +202,10 @@ life easier. You gain a +1 circumstance bonus to Magic checks, and you can use M
         level: 7,
         prerequisites: 'Trained in Magic',
         text: `Magic has an honored place in your society, and your people incorporate it into their everyday work to make
-life easier. You gain a +1 circumstance bonus to Magic checks, and if you have Expert Magic you gain a +1 circumstance bonus to Engineering checks. If you have Master Magic, this bonus increases to +2. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.`,
+life easier. You gain a +1 status bonus to Magic checks, and if you have Expert Magic you gain a +1 status bonus to Engineering checks. If you have Master Magic, this bonus increases to +2. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.`,
         modifiers: [{
             name: 'Practical Magic',
-            type: 'circumstance',
+            type: 'status',
             skills: ['magic'],
             enabled: true,
             value: 1,
@@ -201,6 +270,19 @@ a Kingdom turn in which you are forced to spend RP as the result of a failed ski
         }],
     },
     {
+        name: 'Quick Recovery (Status Bonus)',
+        level: 3,
+        prerequisites: 'Stability 14',
+        text: 'Your kingdom recovers more quickly from danger and disaster. Whenever you attempt a skill check to end an ongoing harmful kingdom event, you gain a +4 status bonus to the check.',
+        modifiers: [{
+            name: 'Ongoing Harmful Event',
+            type: 'status',
+            enabled: false,
+            phases: ['event'],
+            value: 4,
+        }],
+    },
+    {
         automationNotes: 'Re-rolling a failure or crit failure for 2 RP is not automated',
         name: 'Free and Fair',
         level: 7,
@@ -248,14 +330,16 @@ a Kingdom turn in which you are forced to spend RP as the result of a failed ski
 
 // add V&K level upgrades
 allFeats.forEach(f => {
-    const upgradeLevel = new Set(['Crush Dissent', 'Fortified Fiefs', 'Insider Trading', 'Muddle Through', 'Pull Together']);
+    const upgradeLevel = new Set(['Muddle Through', 'Pull Together']);
     if (upgradeLevel.has(f.name)) {
         const copy = JSON.parse(JSON.stringify(f));
         copy.level = 7;
         copy.name = copy.name + ' (V&K)';
         allFeats.push(copy);
     }
-})
+});
+
+allFeats.sort((a, b) => a.name.localeCompare(b.name));
 
 
 export const allFeatsByName = Object.fromEntries((allFeats)
