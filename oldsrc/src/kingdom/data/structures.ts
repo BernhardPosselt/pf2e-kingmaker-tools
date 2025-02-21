@@ -570,7 +570,7 @@ const structures: Structure[] = [
         lots: 1,
     },
     {
-        name: 'Fishing Fleets',
+        name: 'Fishing Fleets (V&K)',
         level: 5,
         traits: ['infrastructure'],
         lots: 0,

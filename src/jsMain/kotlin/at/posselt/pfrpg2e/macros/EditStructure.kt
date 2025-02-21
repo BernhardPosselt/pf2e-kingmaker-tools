@@ -26,6 +26,8 @@ external interface StructureMacroData {
 suspend fun editStructureMacro(actor: Actor?) {
     val npcActor = actor
         ?.takeIfInstance<PF2ENpc>()
+        ?.parent.unsafeCast<PF2ENpc?>()
+        ?.baseActor.unsafeCast<PF2ENpc?>()
     if (npcActor == null) {
         ui.notifications.error("Please select an NPC actor")
         return

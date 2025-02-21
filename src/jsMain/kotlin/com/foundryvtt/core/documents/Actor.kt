@@ -26,6 +26,7 @@ open external class Actor : ClientDocument {
     var folder: Folder?
     var sort: Int
     var ownership: Ownership
+    val baseActor: Actor?
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")

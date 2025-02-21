@@ -5,7 +5,7 @@ import {allBuildingTraits, itemGroups, structuresByName} from './data/structures
 const builtInRefs = structuresByName.keys();
 export const refSchema = Joi.object({
     ref: Joi.string()
-        .valid(...builtInRefs),
+        .valid(...Array.from(builtInRefs)),
 });
 
 export const ruleSchema = Joi.object({
