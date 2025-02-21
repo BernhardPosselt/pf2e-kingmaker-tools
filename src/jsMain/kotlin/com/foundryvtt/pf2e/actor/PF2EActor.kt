@@ -23,9 +23,14 @@ external interface ItemTypes {
 }
 
 
+external class PF2EStatisticsDifficultyClass {
+    val value: Int
+}
+
 external class PF2EAttribute {
     val rank: Int
     val label: String
+    val dc: PF2EStatisticsDifficultyClass
     fun roll(args: StatisticRollParameters = definedExternally): Promise<CheckRoll?>
 }
 

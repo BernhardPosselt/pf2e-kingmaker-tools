@@ -162,7 +162,7 @@ suspend fun PF2ECreature.performCampingCheck(
     return resolveAttribute(attribute)
         ?.roll(data)
         ?.await()
-        ?.let { fromOrdinal<DegreeOfSuccess>(it.degreeOfSuccess) }
+        ?.let { it.degreeOfSuccess?.let { index -> fromOrdinal<DegreeOfSuccess>(index) } }
 }
 
 

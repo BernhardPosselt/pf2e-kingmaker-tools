@@ -28,10 +28,40 @@ Hooks.on('ready', async () => {
             type: Number,
             scope: 'world',
         });
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'resourceDicePerVillage', {
+            default: 0,
+            config: false,
+            type: Number,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'resourceDicePerTown', {
+            default: 0,
+            config: false,
+            type: Number,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'resourceDicePerCity', {
+            default: 0,
+            config: false,
+            type: Number,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'resourceDicePerMetropolis', {
+            default: 0,
+            config: false,
+            type: Number,
+            scope: 'world',
+        });
         gameInstance.settings.register<string, string, number>('pf2e-kingmaker-tools', 'xpPerClaimedHex', {
             default: 10,
             config: false,
             type: Number,
+            scope: 'world',
+        });
+        gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'includeCapitalItemModifier', {
+            default: true,
+            config: false,
+            type: Boolean,
             scope: 'world',
         });
         gameInstance.settings.register<string, string, boolean>('pf2e-kingmaker-tools', 'cultOfTheBloomEvents', {

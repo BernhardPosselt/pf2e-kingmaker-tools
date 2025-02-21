@@ -30,6 +30,11 @@ interface KingdomSettingData {
     untrainedSkillProficiencies: LabelAndValue[];
     automateResourcesChoices: LabelAndValue[];
     maxFamePoints: number;
+    resourceDicePerVillage: number;
+    resourceDicePerTown: number;
+    resourceDicePerCity: number;
+    resourceDicePerMetropolis: number;
+    includeCapitalItemModifier: boolean;
 }
 
 interface KingdomSettingOptions {
@@ -71,6 +76,11 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
             reduceDCToBuildLumberStructures: getBooleanSetting(this.game, 'reduceDCToBuildLumberStructures'),
             automateResources: getStringSetting(this.game, 'automateResources') as ResourceAutomationMode,
             rollModeChoices: rollModeChoices,
+            resourceDicePerVillage: getNumberSetting(this.game, 'resourceDicePerVillage'),
+            resourceDicePerTown: getNumberSetting(this.game, 'resourceDicePerTown'),
+            resourceDicePerCity: getNumberSetting(this.game, 'resourceDicePerCity'),
+            resourceDicePerMetropolis: getNumberSetting(this.game, 'resourceDicePerMetropolis'),
+            includeCapitalItemModifier: getBooleanSetting(this.game, 'includeCapitalItemModifier'),
             untrainedSkillProficiencies: [
                 {value: 'level', label: 'Full Level'},
                 {value: 'halfLevel', label: 'Half Level'},
@@ -149,6 +159,11 @@ class KingdomSettings extends FormApplication<FormApplicationOptions & KingdomSe
         await setSetting(this.game, 'capitalInvestmentInCapital', this.data.capitalInvestmentInCapital);
         await setSetting(this.game, 'reduceDCToBuildLumberStructures', this.data.reduceDCToBuildLumberStructures);
         await setSetting(this.game, 'automateResources', this.data.automateResources);
+        await setSetting(this.game, 'resourceDicePerVillage', this.data.resourceDicePerVillage);
+        await setSetting(this.game, 'resourceDicePerTown', this.data.resourceDicePerTown);
+        await setSetting(this.game, 'resourceDicePerCity', this.data.resourceDicePerCity);
+        await setSetting(this.game, 'resourceDicePerMetropolis', this.data.resourceDicePerMetropolis);
+        await setSetting(this.game, 'includeCapitalItemModifier', this.data.includeCapitalItemModifier);
         await saveKingdom(this.actor, {settings: {expandMagicUse: this.data.expandMagicUse}});
         if (this.data.untrainedSkillProficiency === 'level') {
             await setSetting(this.game, 'kingdomAlwaysAddLevel', true);

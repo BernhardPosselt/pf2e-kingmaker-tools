@@ -117,6 +117,18 @@
         },
         "gainRuin": {
           "$ref": "#/$defs/RuinAmount"
+        },
+        "increaseResourceDice": {
+          "$ref": "#/$defs/IncreaseResourceDice"
+        },
+        "consumptionReductionStacks": {
+          "type": "boolean"
+        },
+        "ignoreConsumptionReductionOf": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -307,6 +319,23 @@
         },
         "note": {
           "type": "string"
+        }
+      }
+    },
+    "IncreaseResourceDice": {
+      "type": "object",
+      "properties": {
+        "village": {
+          "type": "number"
+        },
+        "town": {
+          "type": "number"
+        },
+        "city": {
+          "type": "number"
+        },
+        "metropolis": {
+          "type": "number"
         }
       }
     },

@@ -317,7 +317,7 @@ export function createActiveSettlementModifiers(
             phases: ['event'],
         });
     }
-    const leadershipBonus = activeSettlementStructureResult?.merged.leadershipActivityBonus ?? 0;
+    const leadershipBonus = activeSettlementStructureResult?.leadershipActivityBonus ?? 0;
     if (leadershipBonus > 0) {
         result.push({
             name: 'Ruler performs Leadership Activity',

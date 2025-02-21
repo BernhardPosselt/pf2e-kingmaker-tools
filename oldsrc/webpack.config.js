@@ -1,7 +1,6 @@
-import {Configuration} from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 
-const config: Configuration = {
+const config = {
     entry: {
         oldmain: './src/index.ts'
     },

@@ -39,6 +39,7 @@ and reference to built-in rules that get maintained and updated with the module.
 * Embassy
 * Festival Hall
 * Festival Hall (V&K)
+* Fishing Fleets (V&K)
 * Foundry
 * Garrison
 * Garrison (V&K)
@@ -77,6 +78,7 @@ and reference to built-in rules that get maintained and updated with the module.
 * Palace (V&K)
 * Park
 * Pier
+* Pier (V&K)
 * Printing House
 * Sacred Grove
 * Secure Warehouse
@@ -119,6 +121,7 @@ and reference to built-in rules that get maintained and updated with the module.
 * Tenement
 * Wall, Stone
 * Wall, Wooden
+* Waterfront (V&K)
 
 ## Full Rules
 
@@ -214,7 +217,12 @@ A full structure rule would look something like this:
   "gainRuin": {
     "value": 1,
     "ruin": "decay"
-  }
+  },
+  "increaseResourceDice": {
+    "town": 1,
+    "metropolis": 3
+  },
+  "ignoreConsumptionReductionOf": ["Pier"]
 }
 ```
 
@@ -315,4 +323,6 @@ A full structure rule would look something like this:
   * **value**: how much ruin is reduced
   * **ruin**: one of either **decay**, **crime**, **strife**, **corruption** or **any**
 * **gainRuin**: optional, exactly the same as **reduceRuinBy**
-
+* **increaseResourceDice**: optional, key is either **village**, **town**, **city** or **metropolis** and value is a number that increases resource dice gained each turn
+* **ignoreConsumptionReductionOf**: optional, a structure name that is removed from consumption reduction in a settlement
+* **consumptionReductionStacks**: optional, if true, all structures with the same name in a settlement add up their consumption reduction

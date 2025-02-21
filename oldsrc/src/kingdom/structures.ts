@@ -12,8 +12,10 @@ import {
 } from './data/structures';
 import {Skill} from './data/skills';
 import {gainRuin, KingdomActivityById, loseRuin, loseUnrest} from './data/activityData';
-import {getStructureFromActor, isStructureActor} from './scene';
+import {getAllSettlements, getSceneStructures, getStructureFromActor, isStructureActor} from './scene';
 import {allRuins} from './data/ruin';
+import {getBooleanSetting, getNumberSetting} from "../settings";
+import {getLevelData, hasFeat, Kingdom} from "./data/kingdom";
 
 export interface StructureResult {
     allowCapitalInvestment: boolean;
@@ -220,8 +222,9 @@ function applyStorageIncreases(storage: CommodityStorage, structures: Structure[
 
 function calculateConsumptionReduction(structures: Structure[]): number {
     const consumptionPerUniqueBuilding = new Map<string, number>();
+    const ignoredStructures = new Set(structures.flatMap(structure => structure.ignoreConsumptionReductionOf ?? []))
     structures
-        .filter(structure => structure.consumptionReduction)
+        .filter(structure => structure.consumptionReduction && !ignoredStructures.has(structure.name))
         .forEach(structure => {
             const id = structure.name;
             const existingReduction = consumptionPerUniqueBuilding.get(id);
@@ -229,13 +232,18 @@ function calculateConsumptionReduction(structures: Structure[]): number {
             if (existingReduction === undefined || existingReduction < newReduction) {
                 consumptionPerUniqueBuilding.set(id, newReduction);
             }
+            if (existingReduction !== undefined && structure.consumptionReductionStacks) {
+                consumptionPerUniqueBuilding.set(id, existingReduction + (structure.consumptionReduction ?? 0));
+            }
         });
     return Array.from(consumptionPerUniqueBuilding.values())
         .reduce((a, b) => a + b, 0);
 }
 
+export type SettlementType = 'Village' | 'Town' | 'City' | 'Metropolis';
+
 export interface SettlementTypeData {
-    type: 'Village' | 'Town' | 'City' | 'Metropolis';
+    type: SettlementType;
     maximumLots: string;
     requiredKingdomLevel: number;
     population: string;
@@ -463,6 +471,44 @@ export function evaluateStructures(
     applySkillBonusRules(result.skillBonuses, allGroupedStructures);
     applyItemLevelRules(result.itemLevelBonuses, allGroupedStructures);
     return result;
+}
+
+function calculateSettlementRd(game: Game, type: SettlementType): number {
+    if (type === 'Village') {
+        return getNumberSetting(game, 'resourceDicePerVillage');
+    } else if (type === 'Town') {
+        return getNumberSetting(game, 'resourceDicePerTown');
+    } else if (type === 'City') {
+        return getNumberSetting(game, 'resourceDicePerCity');
+    } else {
+        return getNumberSetting(game, 'resourceDicePerMetropolis');
+    }
+}
+
+function calculateStructureRd(type: SettlementType, structure: Structure): number {
+    const rd = structure.increaseResourceDice;
+    if (type === 'Village') {
+        return Math.max(0, rd?.village ?? 0);
+    } else if (type === 'Town') {
+        return Math.max(0, rd?.village ?? 0, rd?.town ?? 0);
+    } else if (type === 'City') {
+        return Math.max(0, rd?.village ?? 0, rd?.town ?? 0, rd?.city ?? 0);
+    } else {
+        return Math.max(0, rd?.village ?? 0, rd?.town ?? 0, rd?.city ?? 0, rd?.metropolis ?? 0);
+    }
+}
+
+export function calculateResourceDicePerTurn(game: Game, kingdom: Kingdom) {
+    const settlements = getAllSettlements(game, kingdom);
+    const settlementDice = sum(settlements.map(s => {
+        const {type} = getSettlementConfig(s.settlement.level)
+        const structures = getSceneStructures(s.scene);
+        const structureDice = sum(structures.map(s => calculateStructureRd(type, s)))
+        return calculateSettlementRd(game, type) + structureDice;
+    }));
+    const featDice = hasFeat(kingdom, 'Insider Trading') ? 1 : 0;
+    const levelData = getLevelData(kingdom.level);
+    return Math.max(0, levelData.resourceDice + kingdom.resourceDice.now + featDice + settlementDice);
 }
 
 export function calculateAvailableItems(

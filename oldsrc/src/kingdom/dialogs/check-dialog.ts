@@ -388,7 +388,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 kingdomLevel: this.kingdom.level,
                 untrainedProficiencyMode: getUntrainedProficiencyMode(this.game),
                 ability: skillAbilities[skill],
-                skillItemBonus: activeSettlementStructureResult?.merged?.skillBonuses?.[skill],
+                skillItemBonus: activeSettlementStructureResult?.skillBonuses?.[skill],
                 additionalModifiers: [...additionalModifiers, ...convertedCustomModifiers],
                 activity: this.activity,
                 phase: this.phase,

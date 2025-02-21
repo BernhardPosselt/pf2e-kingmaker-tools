@@ -65,4 +65,12 @@ export const ruleSchema = Joi.object({
         rp: Joi.number(),
         dc: Joi.number(),
     }),
+    increaseResourceDice:Joi.object({
+        village: Joi.number().optional(),
+        town: Joi.number().optional(),
+        city: Joi.number().optional(),
+        metropolis: Joi.number().optional(),
+    }).optional(),
+    ignoreConsumptionReductionOf: Joi.array().items(Joi.string()).optional(),
+    consumptionReductionStacks: Joi.boolean().optional(),
 });

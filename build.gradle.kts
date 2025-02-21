@@ -35,7 +35,7 @@ tasks.register<Exec>("installOldJs") {
 tasks.register<Exec>("compileOldJs") {
     dependsOn("installOldJs")
     mustRunAfter("installOldJs")
-    inputs.file(layout.projectDirectory.dir("./oldsrc/webpack.config.ts"))
+    inputs.file(layout.projectDirectory.dir("./oldsrc/webpack.config.js"))
     inputs.dir(layout.projectDirectory.dir("./oldsrc/src/"))
     outputs.dir(layout.projectDirectory.dir("./oldsrc/dist/"))
     workingDir = layout.projectDirectory.dir("oldsrc/").asFile

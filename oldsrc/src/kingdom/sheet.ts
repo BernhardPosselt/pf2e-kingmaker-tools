@@ -80,6 +80,7 @@ import {settlementSizeDialog} from './dialogs/settlement-size-dialog';
 import {getSelectedArmies} from '../armies/utils';
 import {showArmyTacticsBrowser} from './dialogs/army-tactics-browser';
 import {showArmyBrowser} from './dialogs/army-browser';
+import {calculateResourceDicePerTurn} from "./structures";
 
 interface KingdomOptions {
     game: Game;
@@ -154,9 +155,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, kingdomData);
         const activeSettlement = getSettlement(this.game, kingdomData, kingdomData.activeSettlement);
-        const unlockedActivities = new Set<string>([
-            ...unlockedSettlementActivities,
-        ]);
         const hideActivities = kingdomData.activityBlacklist
             .map(activity => {
                 return {[activity]: true};
@@ -209,7 +207,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             unrestPenalty: calculateUnrestPenalty(kingdomData.unrest),
             anarchyAt: this.calculateAnarchy(kingdomData.feats, kingdomData.bonusFeats),
             resourceDieSize: sizeData.resourceDieSize,
-            resourceDiceNum: this.getResourceDiceNum(kingdomData),
+            resourceDiceNum: calculateResourceDicePerTurn(this.game, kingdomData),
             resourceDice: kingdomData.resourceDice,
             resourcePoints: kingdomData.resourcePoints,
             consumption: kingdomData.consumption,
@@ -235,7 +233,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 unrest: kingdomData.unrest,
                 kingdomLevel: kingdomData.level,
                 untrainedProficiencyMode: getUntrainedProficiencyMode(this.game),
-                skillItemBonuses: activeSettlementStructureResult?.merged?.skillBonuses,
+                skillItemBonuses: activeSettlementStructureResult?.skillBonuses,
                 additionalModifiers: createActiveSettlementModifiers(
                     kingdomData,
                     activeSettlement?.settlement,
@@ -904,7 +902,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const {size: kingdomSize, workSites} = getStolenLandsData(this.game, automateResourceMode, current);
         const sizeData = getSizeData(kingdomSize);
         const capacity = getCapacity(this.game, current);
-        const dice = this.getResourceDiceNum(current);
+        const dice = calculateResourceDicePerTurn(this.game, current);
         const rolledPoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
         const commodities = this.calculateCommoditiesThisTurn(workSites);
         await ChatMessage.create({
@@ -939,12 +937,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 next: current.commodities.next,
             },
         });
-    }
-
-    private getResourceDiceNum(kingdom: Kingdom): number {
-        const featDice = hasFeat(kingdom, 'Insider Trading') ? 1 : 0;
-        const levelData = getLevelData(kingdom.level);
-        return Math.max(0, levelData.resourceDice + kingdom.resourceDice.now + featDice);
     }
 
     private calculateCommoditiesThisTurn(sites: WorkSites): Omit<Commodities, 'food'> {

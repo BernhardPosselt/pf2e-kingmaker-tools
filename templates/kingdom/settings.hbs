@@ -83,6 +83,55 @@
 
     <div>
         <div class="form-elements">
+            <label for="km-rd-per-village">Additional Resource Dice Per Village</label>
+            <input name="resourceDicePerVillage"
+                   type="number"
+                   id="km-rd-per-village"
+                   value="{{resourceDicePerVillage}}">
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-rd-per-town">Additional Resource Dice Per Town</label>
+            <input name="resourceDicePerTown"
+                   type="number"
+                   id="km-rd-per-town"
+                   value="{{resourceDicePerTown}}">
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-rd-per-city">Additional Resource Dice Per City</label>
+            <input name="resourceDicePerCity"
+                   type="number"
+                   id="km-rd-per-city"
+                   value="{{resourceDicePerCity}}">
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-rd-per-metropolis">Additional Resource Dice Per Metropolis</label>
+            <input name="resourceDicePerMetropolis"
+                   type="number"
+                   id="km-rd-per-metropolis"
+                   value="{{resourceDicePerMetropolis}}">
+        </div>
+    </div>
+
+    <div>
+        <div class="form-elements">
+            <label for="km-include-capital-modifier">Include Capital Item Modifier</label>
+            <input name="includeCapitalItemModifier" type="checkbox"
+                   id="km-include-capital-modifier" {{checked includeCapitalItemModifier}}>
+        </div>
+        <div class="help"><p>If enabled, falls back to the item bonus of the capital if it is higher than the currently selected settlement</p></div>
+    </div>
+
+    <div>
+        <div class="form-elements">
             <label for="km-double-skill-increases">Double Skill Increases</label>
             <input name="doubleSkillIncreases" type="checkbox"
                    id="km-double-skill-increases" {{checked doubleSkillIncreases}}>

@@ -1,6 +1,6 @@
 import {evaluateStructures, includeCapital, StructureResult, StructureStackRule} from './structures';
 import {ruleSchema} from './schema';
-import {CommodityStorage, Structure, structuresByName} from './data/structures';
+import {CommodityStorage, SkillItemBonuses, Structure, structuresByName} from './data/structures';
 import {Kingdom, Settlement, WorkSite, WorkSites} from './data/kingdom';
 import {getBooleanSetting} from '../settings';
 import {isKingmakerInstalled, isNonNullable} from '../utils';
@@ -334,7 +334,8 @@ export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSet
 
 export interface ActiveSettlementStructureResult {
     active: StructureResult;
-    merged: StructureResult;
+    skillBonuses: SkillItemBonuses;
+    leadershipActivityBonus: number;
 }
 
 export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom): ActiveSettlementStructureResult | undefined {
@@ -342,13 +343,15 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
     const capitalSettlement = getCapitalSettlement(game, kingdom);
     const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
     const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
+    const includeCapitalItemModifier = getBooleanSetting(game, 'includeCapitalItemModifier');
     if (activeSettlement) {
         const mode = getStructureStackMode(game);
         const activeSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, activeSettlement);
         const mergedSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, activeSettlement, capitalSettlement);
         return {
             active: activeSettlementStructures,
-            merged: mergedSettlementStructures,
+            skillBonuses: includeCapitalItemModifier? mergedSettlementStructures.skillBonuses : activeSettlementStructures.skillBonuses,
+            leadershipActivityBonus: mergedSettlementStructures.leadershipActivityBonus,
         };
     }
 }

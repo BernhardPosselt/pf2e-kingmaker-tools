@@ -70,6 +70,13 @@ interface GainRuin {
     moreThanOncePerTurn?: boolean;
 }
 
+interface IncreaseResourceDice {
+    village?: number;
+    town?: number;
+    city?: number;
+    metropolis?: number;
+}
+
 export interface Structure {
     name: string;
     stacksWith?: string;
@@ -86,7 +93,9 @@ export interface Structure {
     increaseLeadershipActivities?: boolean;
     isBridge?: boolean;
     consumptionReduction?: number;
+    consumptionReductionStacks?: boolean;
     unlockActivities?: string[];
+    ignoreConsumptionReductionOf?: string[];
     traits?: BuildingTrait[];
     lots: number;
     affectsEvents?: boolean;
@@ -98,6 +107,7 @@ export interface Structure {
     reduceUnrestBy?: ReduceUnrestBy;
     reduceRuinBy?: ReduceRuinBy;
     gainRuin?: GainRuin;
+    increaseResourceDice?: IncreaseResourceDice
 }
 
 export const allBuildingTraits = ['edifice', 'yard', 'building', 'famous', 'infamous', 'residential', 'infrastructure'];
@@ -558,6 +568,32 @@ const structures: Structure[] = [
             lumber: 3,
         },
         lots: 1,
+    },
+    {
+        name: 'Fishing Fleets',
+        level: 5,
+        traits: ['infrastructure'],
+        lots: 0,
+        construction: {
+            skills: [{
+                skill: "boating",
+                proficiencyRank: 2
+            }],
+            dc: 20,
+            rp: 10,
+            lumber: 2,
+        },
+        activityBonusRules: [{
+            value: 1,
+            activity: 'go-fishing',
+        }],
+        skillBonusRules: [{
+            value: 1,
+            activity: 'rest-and-relax',
+            skill: 'boating',
+        }],
+        consumptionReduction: 1,
+        consumptionReductionStacks: true,
     },
     {
         name: 'Foundry',
@@ -2142,12 +2178,16 @@ structures.forEach(s => structuresByName.set(s.name, s));
 interface VKAdjustment {
     skillBonusRules?: SkillBonusRule[];
     activityBonusRules?: ActivityBonusRule[];
+    increaseResourceDice?: IncreaseResourceDice;
+    consumptionReduction?: number;
+    ignoreConsumptionReductionOf?: string[];
 }
 
 // add v&k adjustments
 const vkAdjustments: Record<string, VKAdjustment> = {
     'Bank': {activityBonusRules: [{value: 1, activity: 'capital-investment'}, {value: 1, activity: 'collect-taxes'}]},
     'Castle': {
+        increaseResourceDice: {town: 1, city: 2, metropolis: 3},
         activityBonusRules: [
             {
                 value: 2,
@@ -2155,6 +2195,9 @@ const vkAdjustments: Record<string, VKAdjustment> = {
             }, {
                 value: 2,
                 activity: 'relocate-capital',
+            }, {
+                value: 2,
+                activity: 'retrain',
             }],
     },
     'Construction Yard': {
@@ -2175,17 +2218,33 @@ const vkAdjustments: Record<string, VKAdjustment> = {
     'Monument': {activityBonusRules: [{value: 1, activity: 'create-a-masterpiece'}]},
     'Occult Shop': {activityBonusRules: [{value: 2, activity: 'supernatural-solution'}]},
     'Palace': {
-        activityBonusRules: [{value: 3, activity: 'manage-trade-agreements'}, {
-            value: 3,
-            activity: 'relocate-capital',
-        }],
+        activityBonusRules: [
+            {value: 3, activity: 'manage-trade-agreements'}, {
+                value: 3,
+                activity: 'relocate-capital',
+            },
+            {value: 3, activity: 'retrain'}
+        ],
+        increaseResourceDice: {town: 1, city: 2, metropolis: 4},
     },
     'Smithy': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'engineering'}]},
     'Tavern, Dive': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'exploration'}]},
     'Tavern, Luxury': {activityBonusRules: [{value: 2, activity: 'reconnoiter-hex'}]},
     'Tavern, Popular': {activityBonusRules: [{value: 1, activity: 'reconnoiter-hex'}]},
     'Tavern, World-Class': {activityBonusRules: [{value: 3, activity: 'reconnoiter-hex'}]},
-    'Town Hall': {activityBonusRules: [{value: 1, activity: 'manage-trade-agreements'}]},
+    'Town Hall': {
+        activityBonusRules: [
+            {value: 1, activity: 'manage-trade-agreements'},
+            {value: 1, activity: 'retrain'},
+        ], increaseResourceDice: {town: 1}
+    },
+    'Pier': {
+        consumptionReduction: 1,
+    },
+    'Waterfront': {
+        consumptionReduction: 2,
+        ignoreConsumptionReductionOf: ['Pier'],
+    },
 };
 
 Array.from(Object.entries(vkAdjustments))
@@ -2212,5 +2271,14 @@ Array.from(Object.entries(vkAdjustments))
             copy.activityBonusRules?.push(rule);
         });
         copy.name = `${copy.name} (V&K)`;
+        if (adjustment.increaseResourceDice) {
+            copy.increaseResourceDice = adjustment.increaseResourceDice;
+        }
+        if (adjustment.consumptionReduction) {
+            copy.consumptionReduction = adjustment.consumptionReduction;
+        }
+        if (adjustment.ignoreConsumptionReductionOf) {
+            copy.ignoreConsumptionReductionOf = adjustment.ignoreConsumptionReductionOf;
+        }
         structuresByName.set(copy.name, copy);
     });
