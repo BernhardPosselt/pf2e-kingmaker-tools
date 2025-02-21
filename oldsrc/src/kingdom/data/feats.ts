@@ -130,7 +130,7 @@ life easier. You gain a +1 circumstance bonus to Magic checks, and you can use M
     {
         automationNotes: 'Hire Adventurers RP reduction is not implemented',
         name: 'Practical Magic (V&K)',
-        level: 1,
+        level: 7,
         prerequisites: 'Trained in Magic',
         text: `Magic has an honored place in your society, and your people incorporate it into their everyday work to make
 life easier. You gain a +1 circumstance bonus to Magic checks, and if you have Expert Magic you gain a +1 circumstance bonus to Engineering checks. If you have Master Magic, this bonus increases to +2. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.`,
@@ -233,7 +233,30 @@ a Kingdom turn in which you are forced to spend RP as the result of a failed ski
         level: 11,
         text: 'Your kingdom’s reputation has spread far and wide, bringing in visitors to behold the spectacle of your greatness and pay their respects. Whenever you achieve a critical success on any Kingdom skill check during the Activity phase of a Kingdom turn, gain 1 bonus Resource Die at the start of your next Kingdom turn.',
     },
+    {
+        name: 'Diverse Leadership (V&K)',
+        level: 3,
+        text: 'Your Kingdom\'s Leaders have branched out from their normal areas of responsibility. Each Leader (both PC and NPC) with a +2 Leadership bonus or higher may select one additional Kingdom Skill to be a Specialized Skill for them.',
+    },
+    {
+        name: 'Expansive Leadership (V&K)',
+        level: 7,
+        prerequisites: 'Diverse Leadership (V&K)',
+        text: 'Your Kingdom\'s Leaders have broadened their Leadership skills even more. Each Leader (both PC and NPC) with a +3 Leadership bonus or higher may select one more Kingdom Skill to be a Specialized Skill for them.'
+    }
 ];
+
+// add V&K level upgrades
+allFeats.forEach(f => {
+    const upgradeLevel = new Set(['Crush Dissent', 'Fortified Fiefs', 'Insider Trading', 'Muddle Through', 'Pull Together']);
+    if (upgradeLevel.has(f.name)) {
+        const copy = JSON.parse(JSON.stringify(f));
+        copy.level = 7;
+        copy.name = copy.name + ' (V&K)';
+        allFeats.push(copy);
+    }
+})
+
 
 export const allFeatsByName = Object.fromEntries((allFeats)
     .map((feat) => [feat.name, feat]));

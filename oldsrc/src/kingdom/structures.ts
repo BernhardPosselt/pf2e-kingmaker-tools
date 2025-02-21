@@ -513,7 +513,7 @@ export function calculateResourceDicePerTurn(game: Game, kingdom: Kingdom) {
         const structureDice = sum(structures.map(s => calculateStructureRd(type, s)))
         return calculateSettlementRd(game, type) + structureDice;
     }));
-    const featDice = hasFeat(kingdom, 'Insider Trading') ? 1 : 0;
+    const featDice = hasFeat(kingdom, 'Insider Trading') || hasFeat(kingdom, 'Insider Trading (V&K)') ? 1 : 0;
     const levelData = getLevelData(kingdom.level);
     return Math.max(0, levelData.resourceDice + kingdom.resourceDice.now + featDice + settlementDice);
 }
