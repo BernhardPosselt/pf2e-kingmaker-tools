@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Added V&K 1.1 homebrew except:
+  * Leadership Modifier Rules
+  * Construction Time
+  * Renown/Fame/Infamy split
+
 ### Fixed
 
 * Edit Structure macro should now edit the base actor and not the unlinked token actor
