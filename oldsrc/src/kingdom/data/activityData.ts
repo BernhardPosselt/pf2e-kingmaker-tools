@@ -210,6 +210,57 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
             }],
         },
     },
+    'celebrate-holiday-vk': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: false,
+        phase: 'leadership',
+        dc: 'control',
+        title: 'Celebrate Holiday (V&K)',
+        description: 'You declare a day of celebration. Holidays may be religious, historical, martial, or simply festive, but all relieve your citizens from their labors and give them a chance to make merry at the kingdom’s expense. Attempt a basic check, but if your kingdom Celebrated a Holiday the previous turn, the DC increases by 4, as your kingdom hasn’t had a chance to recover from the previous gala.',
+        skills: simpleRank(['folklore', 'politics']),
+        criticalSuccess: {
+            msg: 'Your holidays are a delight to your people. The event is expensive, but incidental income from the celebrants covers the cost. You gain a +2 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn.',
+            modifiers: () => [{
+                turns: 2,
+                enabled: true,
+                abilities: ['loyalty'],
+                value: 2,
+                name: 'Celebrate Holiday: Critical Success',
+                type: 'circumstance',
+            }],
+        },
+        success: {
+            msg: `Your holidays are a success, but they’re also expensive. You gain a +1 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn. ${loseRolledRD(1)}. If you can’t afford this cost, treat this result as a Critical Failure instead.`,
+            modifiers: () => [{
+                turns: 2,
+                enabled: true,
+                abilities: ['loyalty'],
+                value: 1,
+                name: 'Celebrate Holiday: Success',
+                type: 'circumstance',
+            }],
+        },
+        failure: {
+            msg: `The holiday passes with little enthusiasm, but is still expensive. ${loseRolledRD(1)}. If you can’t afford this cost, treat this result as a Critical Failure instead.`,
+        },
+        criticalFailure: {
+            msg: `Your festival days are poorly organized, and the citizens actively mock your failed attempt to celebrate. ${createResourceButton({
+                turn: 'next',
+                value: '4',
+                mode: 'lose',
+                type: 'resource-dice',
+            })}. The failure also causes you to take a –1 circumstance penalty to Loyalty-based checks until the end of the next Kingdom turn.`,
+            modifiers: () => [{
+                turns: 2,
+                enabled: true,
+                abilities: ['loyalty'],
+                value: -1,
+                name: 'Celebrate Holiday: Critical Failure',
+                type: 'circumstance',
+            }],
+        },
+    },
     'claim-hex': {
         title: 'Claim Hex',
         oncePerRound: false,
@@ -799,6 +850,42 @@ The check’s DC is either the group’s Negotiation DC (see sidebar) or your ki
         dc: 20,
         title: 'Focused Attention',
         description: `You set aside time to focus attention on aiding another leader in an activity. Choose another leader and a Kingdom skill, then attempt a DC 20 check using the chosen skill. On a success, you grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn.
+
+The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of this activity.`,
+        skills: simpleRank([...allSkills]),
+        criticalSuccess: {
+            msg: 'You grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn',
+            modifiers: (kingdom) => [{
+                turns: 1,
+                enabled: false,
+                consumeId: '',
+                value: hasFeat(kingdom, 'Cooperative Leadership') ? 3 : 2,
+                name: 'Focused Attention: Critical Success',
+                type: 'circumstance',
+                rollOptions: ['focused-attention'],
+            }],
+        },
+        success: {
+            msg: 'You grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn',
+            modifiers: (kingdom) => [{
+                turns: 1,
+                enabled: false,
+                consumeId: '',
+                value: hasFeat(kingdom, 'Cooperative Leadership') ? 3 : 2,
+                name: 'Focused Attention: Success',
+                type: 'circumstance',
+                rollOptions: ['focused-attention'],
+            }],
+        },
+    },
+    'focused-attention-vk': {
+        oncePerRound: false,
+        fortune: false,
+        enabled: false,
+        phase: 'leadership',
+        dc: 15,
+        title: 'Focused Attention (V&K)',
+        description: `You set aside time to focus attention on aiding another leader in an activity. Choose another leader and a Kingdom skill, then attempt a DC 15 check using the chosen skill. On a success, you grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn.
 
 The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of this activity.`,
         skills: simpleRank([...allSkills]),
@@ -2068,6 +2155,34 @@ You take time to relax, and you extend the chance to unwind to your citizens as 
         },
         criticalFailure: {
             msg: `Disaster! Your envoy fails to reach their destination, is turned back at the border, or is taken prisoner or executed, at the GM’s discretion. The repercussions on your kingdom’s morale and reputation are significant. Choose one of the following results: ${gainUnrest('1d4')}, add 1 to a Ruin of your choice, or ${loseRolledRD(2)}. In any event, you cannot attempt to Send a Diplomatic Envoy to this same target for the next 3 Kingdom Turns.`,
+        },
+    },
+    'retrain-vk': {
+        title: 'Retrain (V&K)',
+        phase: 'leadership',
+        enabled: false,
+        dc: 'control',
+        oncePerRound: true,
+        fortune: false,
+        skills: simpleRank([...allSkills]),
+        description: `
+        <p>You spend time to change a previous decision your Kingdom made during leveling up. Retrain may be used to change out a Kingdom Feat, a Skill Increase, or one of a Leader's Specialized Skills. When using Retrain, you generally can’t make choices you couldn’t make when you selected the original option, as with normal Pathfinder 2e Retraining. The Retrain action may only be used once per Kingdom Turn.</p>
+<p>For a Kingdom Feat, if the Retrain activity succeeds, remove the old feat and replace it with another Kingdom feat whose prerequisites the Kingdom meets. Retraining a Kingdom Feat uses Politics.</p>
+<p>For a Skill Increase, if the Retrain activity succeeds, reduce the Kingdom's proficiency rank in the Kingdom skill losing its increase by one step and increase the proficiency rank in another Kingdom skill by one step. Retraining a Skill Increase uses either Politics or the Skill for the Skill Increase the Kingdom is gaining. Retrain may not be used to lower a Kingdom Skill to Untrained. Also, when retraining a Kingdom Skill Increase, a Skill may not be lowered if this would bring the Skill below the minimum proficiency needed to build any already existing Structure in any Settlement. If a Structure can be built with multiple skills, a given skill can be lowered as long as the Kingdom meets the minimum for at least one of the other skills.</p> 
+<p>For a Leader's Specialized Skill, if the Retrain activity succeeds, choose a Specialized Skill you have, this skill is no longer a Specialized Skill for you. Choose another Kingdom Skill that is not already a Specialized Skill for you, this Kingdom Skill is now a Specialized Skill for you. Retraining a Specialized Skill uses the Skill you are choosing as your new Specialized Skill. You may not choose to lose a Specialized Skill that is one of the five Skills that are automatically Specialized Skills for your Leadership Role.
+Critical</p> 
+`,
+        criticalSuccess: {
+            msg: `The Retrain succeeds and goes very smoothly. If the Retrain was for a Feat or Skill Increase, spend one RP. If it was for a Skill Specialization, no RP is spent. If you can’t afford the RP cost, treat this result as a Failure instead.`,
+        },
+        success: {
+            msg: `The Retrain succeeds. If the Retrain was for a Feat or Skill Increase, immediately ${loseRolledRD(1)}. If it was for a Skill Specialization, ${loseRP(1)}. If you can’t afford the RP cost, treat this result as a Failure instead.`,
+        },
+        failure: {
+            msg: `The Retrain fails and the old Feat, Skill Increase, or Skill Specialization remains in place. If the Retrain was for a Feat or Skill Increase, immediately ${loseRolledRD(1)}. If it was for a Skill Specialization, ${loseRP(1)}.`,
+        },
+        criticalFailure: {
+            msg: `The Retrain fails badly with costly results. The Kingdom may not use the Retrain activity next Turn. If the Retrain was for a Feat or Skill Increase, immediately ${loseRolledRD(2)}. If it was for a Skill Specialization, ${loseRolledRD(1)}`,
         },
     },
     'show-of-force': {

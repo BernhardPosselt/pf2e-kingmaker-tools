@@ -2197,7 +2197,7 @@ const vkAdjustments: Record<string, VKAdjustment> = {
                 activity: 'relocate-capital',
             }, {
                 value: 2,
-                activity: 'retrain',
+                activity: 'retrain-vk',
             }],
     },
     'Construction Yard': {
@@ -2223,7 +2223,7 @@ const vkAdjustments: Record<string, VKAdjustment> = {
                 value: 3,
                 activity: 'relocate-capital',
             },
-            {value: 3, activity: 'retrain'}
+            {value: 3, activity: 'retrain-vk'}
         ],
         increaseResourceDice: {town: 1, city: 2, metropolis: 4},
     },
@@ -2235,7 +2235,7 @@ const vkAdjustments: Record<string, VKAdjustment> = {
     'Town Hall': {
         activityBonusRules: [
             {value: 1, activity: 'manage-trade-agreements'},
-            {value: 1, activity: 'retrain'},
+            {value: 1, activity: 'retrain-vk'},
         ], increaseResourceDice: {town: 1}
     },
     'Pier': {
