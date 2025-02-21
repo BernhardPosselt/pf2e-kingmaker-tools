@@ -39,7 +39,7 @@ select this feat, choose one leadership role; that role is now supported by your
             enabled: false,
             value: 2,
             type: 'circumstance',
-            activities: ['new-leadership'],
+            activities: ['new-leadership', 'new-leadership-vk'],
         }],
     },
     {
@@ -53,7 +53,7 @@ select this feat, choose one leadership role; that role is now supported by your
             enabled: false,
             value: 2,
             type: 'status',
-            activities: ['new-leadership'],
+            activities: ['new-leadership', 'new-leadership-vk'],
         }],
     },
     {
@@ -102,7 +102,7 @@ your settlements’ defenses.`,
         modifiers: [{
             name: 'Fortified Fiefs',
             type: 'circumstance',
-            activities: ['fortify-hex'],
+            activities: ['fortify-hex', 'fortify-hex-vk'],
             enabled: true,
             value: 2,
         }, {
@@ -129,7 +129,7 @@ your settlements’ defenses.`,
         modifiers: [{
             name: 'Fortified Fiefs',
             type: 'status',
-            activities: ['fortify-hex'],
+            activities: ['fortify-hex', 'fortify-hex-vk'],
             enabled: true,
             value: 2,
         }, {
@@ -291,7 +291,7 @@ a Kingdom turn in which you are forced to spend RP as the result of a failed ski
             name: 'Loyalty Based Skill',
             type: 'circumstance',
             abilities: ['loyalty'],
-            activities: ['new-leadership'],
+            activities: ['new-leadership', 'new-leadership-vk'],
             enabled: true,
             value: 2,
         }, {

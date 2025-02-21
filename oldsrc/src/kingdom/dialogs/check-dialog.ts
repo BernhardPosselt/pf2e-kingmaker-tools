@@ -361,7 +361,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private getActivitySkills(ranks: SkillRanks, activities: KingdomActivityById): Skill[] {
         const activity = this.activity!;
         const expandMagicActivities = new Set([
-            'celebrate-holiday', 'craft-luxuries', 'create-a-masterpiece', 'rest-and-relax'
+            'celebrate-holiday', 'celebrate-holiday-vk', 'craft-luxuries', 'create-a-masterpiece', 'rest-and-relax'
         ]);
         const ignoreSkillRequirements = getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements');
         const skillRankFilters = ignoreSkillRequirements ? undefined : ranks;

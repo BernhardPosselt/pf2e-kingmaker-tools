@@ -249,6 +249,9 @@ const structures: Structure[] = [
         activityBonusRules: [{
             value: 2,
             activity: 'celebrate-holiday',
+        }, {
+            value: 2,
+            activity: 'celebrate-holiday-vk',
         }],
         skillBonusRules: [{
             value: 1,
@@ -382,6 +385,9 @@ const structures: Structure[] = [
         activityBonusRules: [{
             value: 2,
             activity: 'new-leadership',
+        },{
+            value: 2,
+            activity: 'new-leadership-vk',
         }, {
             value: 2,
             activity: 'pledge-of-fealty',
@@ -430,6 +436,9 @@ const structures: Structure[] = [
         activityBonusRules: [{
             value: 3,
             activity: 'celebrate-holiday',
+        }, {
+            value: 3,
+            activity: 'celebrate-holiday-vk',
         }, {
             value: 3,
             activity: 'provide-care',
@@ -532,6 +541,9 @@ const structures: Structure[] = [
         }, {
             value: 1,
             activity: 'request-foreign-aid',
+        }, {
+            value: 1,
+            activity: 'request-foreign-aid-vk',
         }],
         traits: ['building'],
         affectsDowntime: false,
@@ -554,6 +566,9 @@ const structures: Structure[] = [
         activityBonusRules: [{
             value: 1,
             activity: 'celebrate-holiday',
+        }, {
+            value: 1,
+            activity: 'celebrate-holiday-vk',
         }],
         traits: ['building'],
         affectsDowntime: false,
@@ -673,6 +688,9 @@ const structures: Structure[] = [
         activityBonusRules: [{
             value: 3,
             activity: 'celebrate-holiday',
+        }, {
+            value: 3,
+            activity: 'celebrate-holiday-vk',
         }, {
             value: 3,
             activity: 'hire-adventurers',
@@ -1307,6 +1325,9 @@ const structures: Structure[] = [
             activity: 'celebrate-holiday',
         }, {
             value: 3,
+            activity: 'celebrate-holiday-vk',
+        }, {
+            value: 3,
             activity: 'create-a-masterpiece',
         }],
         notes: 'While in a settlement with an opera house, you gain a +3 item bonus to Performance checks made to Earn Income.',
@@ -1356,6 +1377,9 @@ const structures: Structure[] = [
         activityBonusRules: [{
             value: 3,
             activity: 'new-leadership',
+        },{
+            value: 3,
+            activity: 'new-leadership-vk',
         }, {
             value: 3,
             activity: 'pledge-of-fealty',
@@ -1580,6 +1604,9 @@ const structures: Structure[] = [
         activityBonusRules: [{
             value: 1,
             activity: 'celebrate-holiday',
+        }, {
+            value: 1,
+            activity: 'celebrate-holiday-vk',
         }],
         availableItemsRules: [{
             value: 1,
@@ -1867,6 +1894,9 @@ const structures: Structure[] = [
             activity: 'celebrate-holiday',
         }, {
             value: 1,
+            activity: 'celebrate-holiday-vk',
+        }, {
+            value: 1,
             activity: 'provide-care',
         }],
         availableItemsRules: [{
@@ -1923,6 +1953,9 @@ const structures: Structure[] = [
         activityBonusRules: [{
             value: 2,
             activity: 'celebrate-holiday',
+        }, {
+            value: 2,
+            activity: 'celebrate-holiday-vk',
         }],
         notes: 'While in a settlement with a theater, you gain a +2 item bonus to Performance checks made to Earn Income.',
         traits: ['building'],
@@ -2210,9 +2243,15 @@ const vkAdjustments: Record<string, VKAdjustment> = {
         }],
     },
     'Festival Hall': {skillBonusRules: [{activity: 'quell-unrest', skill: 'arts', value: 1}]},
-    'Garrison': {activityBonusRules: [{value: 1, activity: 'fortify-hex'}]},
+    'Garrison': {activityBonusRules: [{value: 1, activity: 'fortify-hex'}, {value: 1, activity: 'fortify-hex-vk'}]},
     'Granary': {activityBonusRules: [{value: 1, activity: 'establish-farmland'}]},
-    'Inn': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'exploration'}]},
+    'Inn': {
+        skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'exploration'}, {
+            value: 1,
+            activity: 'clear-hex-vk',
+            skill: 'exploration'
+        }]
+    },
     'Library': {activityBonusRules: [{value: 1, activity: 'creative-solution'}]},
     'Magic Shop': {activityBonusRules: [{value: 1, activity: 'prognostication'}]},
     'Monument': {activityBonusRules: [{value: 1, activity: 'create-a-masterpiece'}]},
@@ -2227,8 +2266,8 @@ const vkAdjustments: Record<string, VKAdjustment> = {
         ],
         increaseResourceDice: {town: 1, city: 2, metropolis: 4},
     },
-    'Smithy': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'engineering'}]},
-    'Tavern, Dive': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'exploration'}]},
+    'Smithy': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'engineering'}, {value: 1, activity: 'clear-hex-vk', skill: 'engineering'}]},
+    'Tavern, Dive': {skillBonusRules: [{value: 1, activity: 'clear-hex', skill: 'exploration'}, {value: 1, activity: 'clear-hex-vk', skill: 'exploration'}]},
     'Tavern, Luxury': {activityBonusRules: [{value: 2, activity: 'reconnoiter-hex'}]},
     'Tavern, Popular': {activityBonusRules: [{value: 1, activity: 'reconnoiter-hex'}]},
     'Tavern, World-Class': {activityBonusRules: [{value: 3, activity: 'reconnoiter-hex'}]},
