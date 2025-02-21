@@ -223,6 +223,16 @@ Claimed Hexes this Round:
     <button type="button" class="km-claimed-hexes-xp" data-hexes="3">3 Hexes</button>
 </div>
 <hr>
+{{#if useXpHomebrew}}
+For each constructed Farm or Worksite beyond the first:
+<button type="button" class="km-gain-xp" data-xp="10">Gain 10XP</button>
+<hr>
+For each constructed Road or Bridge beyond the first:
+<button type="button" class="km-gain-xp" data-xp="5">Gain 5XP</button>
+<hr>
+<button type="button" class="km-gain-structure-xp">Gain Structure XP</button>
+<hr>
+{{/if}}
 <button type="button" id="km-rp-to-xp">Convert RP to XP</button>
 <hr>
 <button type="button" id="solutions-to-xp">Convert unused solutions to XP</button>

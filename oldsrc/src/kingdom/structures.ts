@@ -1,4 +1,4 @@
-import {isFirstGm, mergeObjects, mergePartialObjects, postChatMessage, sum} from '../utils';
+import {groupBy, isFirstGm, isNonNullable, mergeObjects, mergePartialObjects, postChatMessage, sum} from '../utils';
 import {getActivitySkills} from './data/activities';
 import {
     ActivityBonusRule,
@@ -12,7 +12,14 @@ import {
 } from './data/structures';
 import {Skill} from './data/skills';
 import {gainRuin, KingdomActivityById, loseRuin, loseUnrest} from './data/activityData';
-import {getAllSettlements, getSceneStructures, getStructureFromActor, isStructureActor} from './scene';
+import {
+    ActorStructure,
+    getAllSettlements, getScene, getSceneActorStructures,
+    getSceneStructures,
+    getStructureFromActor,
+    getStructuresFromActors,
+    isStructureActor, isStructureActorActive
+} from './scene';
 import {allRuins} from './data/ruin';
 import {getBooleanSetting, getNumberSetting} from "../settings";
 import {getLevelData, hasFeat, Kingdom} from "./data/kingdom";
@@ -602,4 +609,11 @@ export async function showStructureHints(game: Game, actor: Actor | null): Promi
             }
         }
     }
+}
+
+export function getAllImportedStructureActors(game: Game): Actor[] {
+    return game.actors
+        ?.filter(a => a.type === 'npc'
+            && isNonNullable(a.getFlag('pf2e-kingmaker-tools', 'structureData')))
+    ?? [];
 }

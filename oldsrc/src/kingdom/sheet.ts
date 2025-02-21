@@ -81,6 +81,7 @@ import {getSelectedArmies} from '../armies/utils';
 import {showArmyTacticsBrowser} from './dialogs/army-tactics-browser';
 import {showArmyBrowser} from './dialogs/army-browser';
 import {calculateResourceDicePerTurn} from "./structures";
+import {structureXpDialog} from "./dialogs/structure-xp-dialog";
 
 interface KingdomOptions {
     game: Game;
@@ -454,6 +455,24 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         useVK: useHomeBrew,
                         xpPerClaimedHex: getNumberSetting(this.game, 'xpPerClaimedHex'),
                     }));
+                });
+            });
+        $html.querySelectorAll('.km-gain-xp')
+            ?.forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    const target = ev.currentTarget as HTMLButtonElement;
+                    const xp = parseInt(target.dataset.xp ?? '0', 10);
+                    if (xp) {
+                        await this.increaseXP(xp);
+                    }
+                });
+            });
+        $html.querySelectorAll('.km-gain-structure-xp')
+            ?.forEach(el => {
+                el.addEventListener('click', async (ev) => {
+                    structureXpDialog(this.game, async (xp) => {
+                        await this.increaseXP(xp);
+                    })
                 });
             });
         $html.querySelector('#km-rp-to-xp')

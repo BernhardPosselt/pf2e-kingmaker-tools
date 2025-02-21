@@ -24,6 +24,7 @@ import {
     getStructuresFromActors,
     isStructureActorActive,
 } from '../scene';
+import {getAllImportedStructureActors} from "../structures";
 
 interface StructureBrowserOptions {
     game: Game;
@@ -193,17 +194,10 @@ class StructureBrowserApp extends FormApplication<
         super(null, options);
         this.game = options.game;
         this.level = options.kingdom.level;
-        this.structureActors = this.getActors();
+        this.structureActors = getAllImportedStructureActors(this.game);
         this.kingdom = options.kingdom;
         this.sheetActor = options.sheetActor;
         this.onRoll = options.onRoll;
-    }
-
-    private getActors(): Actor[] {
-        return this.game.actors
-                ?.filter(a => a.type === 'npc'
-                    && isNonNullable(a.getFlag('pf2e-kingmaker-tools', 'structureData')))
-            ?? [];
     }
 
     private async resetFilters(): Promise<StructureFilters> {
@@ -321,7 +315,7 @@ class StructureBrowserApp extends FormApplication<
         listenClick($html, '.km-import-structures', async (): Promise<void> => {
             await this.game.packs.get('pf2e-kingmaker-tools.kingmaker-tools-structures')
                 ?.importAll({folderName: 'Structures'});
-            this.structureActors = this.getActors();
+            this.structureActors = getAllImportedStructureActors(this.game);
             this.render();
         });
         $html.querySelectorAll('.km-structure-link')
