@@ -356,15 +356,17 @@ export function processModifiers(
         activities: KingdomActivityById;
     },
 ): ModifierWithId[] {
+    const normalizedActivity = activity?.replace(/-vk$/, '');
     const copied = modifiers.map((modifier, index) => {
         // make a copy and assign every modifier an id
         return {
             ...(foundry.utils.deepClone(modifier)),
             id: `${index}`,
+            activities: modifier.activities?.map(a => a.replace(/-vk$/, '')), // make all modifiers work with vk activities
         };
     });
     const withoutZeroes = removeUninterestingZeroModifiers(copied);
-    const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, activity, skill, rank, activities);
+    const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, normalizedActivity, skill, rank, activities);
     // enable/disable overrides
     const withOverrides = withoutMismatchedPhaseOrActivity
         .map(modifier => {
