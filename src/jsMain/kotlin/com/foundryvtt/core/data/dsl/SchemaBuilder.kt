@@ -252,7 +252,7 @@ class Schema {
         )
     }
 
-    fun stringRecord(
+    fun record(
         name: String,
         context: DataFieldContext<AnyObject>? = undefined,
         block: (DataFieldOptions/*<Boolean>*/.() -> Unit)? = null,
