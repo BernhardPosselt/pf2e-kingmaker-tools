@@ -96,3 +96,9 @@
     }
 
 }
+
+.km-xy-table {
+    .km-xy-column-header {
+        writing-mode: vertical-lr;
+    }
+}

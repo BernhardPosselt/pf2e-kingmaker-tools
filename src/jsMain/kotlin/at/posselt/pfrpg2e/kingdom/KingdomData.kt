@@ -1,12 +1,14 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.Leader
 import js.objects.Record
 import kotlinx.js.JsPlainObject
 
 typealias KingdomAbility = String // culture, economy, loyalty or stability
 typealias AbilityScores = Record<KingdomAbility, Int>
-typealias Leader = String // ruler, counselor, general, emissary, magister, treasurer, viceroy,warden
-typealias Leaders = Record<Leader, LeaderValues>
+typealias LeaderValue = String // ruler, counselor, general, emissary, magister, treasurer, viceroy,warden
+typealias Leaders = Record<LeaderValue, LeaderValues>
 typealias ModifierType = String // ability, proficiency, item, status, circumstance, vacancy, untyped
 typealias LeaderType = String // pc, npc or companion
 typealias GroupRelations = String  // none, diplomatic-relations, trade-agreement
@@ -15,8 +17,8 @@ typealias Heartland = String // forest-or-swamp, hill-or-plain, lake-or-river, m
 typealias FameType = String  // famous or infamous
 typealias Companion = String // Amiri Ekundayo Harrim Jaethal Jubilost Kalikke Kanerah Linzi Nok-Nok Octavia Regongar Tristian Valerie
 typealias KingdomDc = Any // number or control, custom, none, scouting
-typealias KingdomSkill = String // agriculture, arts, boating, defense, engineering, exploration, folklore, industry, intrigue, magic, politics, scholarship, statecraft, trade, warfare, wilderness
-typealias SkillRanks = Record<KingdomSkill, Int>
+typealias KingdomSkillValue = String // agriculture, arts, boating, defense, engineering, exploration, folklore, industry, intrigue, magic, politics, scholarship, statecraft, trade, warfare, wilderness
+typealias SkillRanks = Record<KingdomSkillValue, Int>
 typealias SettlementType = String // capital or settlement
 
 @JsPlainObject
@@ -26,7 +28,7 @@ external interface Modifier {
     var name: String
     var phases: Array<KingdomPhase>?
     var activities: Array<String>?
-    var skills: Array<KingdomSkill>?
+    var skills: Array<KingdomSkillValue>?
     var abilities: Array<KingdomAbility>?
     var enabled: Boolean
     var turns: Int?
@@ -199,6 +201,17 @@ external interface KingdomSettings {
     var expandMagicUse: Boolean
 }
 
+@JsPlainObject
+external interface LeaderKingdomSkills {
+    var ruler: Array<KingdomSkillValue>
+    var counselor: Array<KingdomSkillValue>
+    var emissary: Array<KingdomSkillValue>
+    var general: Array<KingdomSkillValue>
+    var magister: Array<KingdomSkillValue>
+    var treasurer: Array<KingdomSkillValue>
+    var viceroy: Array<KingdomSkillValue>
+    var warden: Array<KingdomSkillValue>
+}
 
 @JsPlainObject
 external interface KingdomData {
@@ -239,4 +252,17 @@ external interface KingdomData {
     var activityBlacklist: Array<String>
     var modifiers: Array<Modifier>
     var settlements: Array<Settlement>
+    var leaderKingdomSkills: LeaderKingdomSkills
 }
+
+fun LeaderKingdomSkills.knowsSkill(leader: Leader, skill: KingdomSkill) =
+    when (leader) {
+        Leader.RULER -> ruler.contains(skill.value)
+        Leader.COUNSELOR -> counselor.contains(skill.value)
+        Leader.EMISSARY -> emissary.contains(skill.value)
+        Leader.GENERAL -> general.contains(skill.value)
+        Leader.MAGISTER -> magister.contains(skill.value)
+        Leader.TREASURER -> treasurer.contains(skill.value)
+        Leader.VICEROY -> viceroy.contains(skill.value)
+        Leader.WARDEN -> warden.contains(skill.value)
+    }

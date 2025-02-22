@@ -1,0 +1,20 @@
+<div>
+    <table class="km-xy-table">
+        <tr>
+            <td></td>
+            {{#each headers}}
+                <th class="km-xy-column-header">{{this}}</th>
+            {{/each}}
+        </tr>
+        {{#each formRows}}
+            <tr>
+                <th>{{label}}</th>
+                {{#each cells}}
+                    <td>{{> formElement input }}</td>
+                {{/each}}
+            </tr>
+        {{/each}}
+    </table>
+    <button type="submit" class="full-width" data-action="save" {{#unless isFormValid}}disabled{{/unless}}>{{#if
+            saveLabel}}{{saveLabel}}{{else}}Save{{/if}}</button>
+</div>

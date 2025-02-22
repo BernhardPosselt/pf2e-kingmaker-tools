@@ -90,6 +90,13 @@ external interface StructureRef : Structure {
     val ref: String
 }
 
+@JsPlainObject
+external interface IncreaseResourceDice {
+    val village: Int?
+    val town: Int?
+    val city: Int?
+    val metropolis: Int?
+}
 
 @JsPlainObject
 external interface StructureData : Structure {
@@ -120,6 +127,9 @@ external interface StructureData : Structure {
     val reduceUnrestBy: ReduceUnrestBy?
     val reduceRuinBy: RuinAmount?
     val gainRuin: RuinAmount?
+    val increaseResourceDice: IncreaseResourceDice?
+    val consumptionReductionStacks: Boolean?
+    val ignoreConsumptionReductionOf: Array<String>?
 }
 
 @JsModule("./structures.json")

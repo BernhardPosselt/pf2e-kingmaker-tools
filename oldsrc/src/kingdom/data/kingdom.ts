@@ -2,6 +2,7 @@ import {Leader} from './leaders';
 import {getKingdomActivities, KingdomActivity} from './activityData';
 import {AbilityScores} from './abilities';
 import {Modifier} from '../modifiers';
+import {Skill} from "./skills";
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
 
@@ -135,6 +136,17 @@ export interface KingdomSettings {
     expandMagicUse: boolean;
 }
 
+interface LeaderKingdomSkills {
+    ruler: Skill[];
+    counselor: Skill[];
+    emissary: Skill[];
+    general: Skill[];
+    magister: Skill[];
+    treasurer: Skill[];
+    viceroy: Skill[];
+    warden: Skill[];
+}
+
 export interface Kingdom {
     name: string;
     atWar: boolean;
@@ -188,6 +200,7 @@ export interface Kingdom {
     activityBlacklist: string[];
     modifiers: Modifier[];
     settlements: Settlement[];
+    leaderKingdomSkills: LeaderKingdomSkills;
 }
 
 
@@ -508,6 +521,16 @@ export function getDefaultKingdomData(): Kingdom {
             .map((data) => data.id),
         modifiers: [],
         homebrewActivities: [],
+        leaderKingdomSkills: {
+            ruler: ["industry", "intrigue", "politics", "statecraft", "warfare"],
+            counselor: ["arts", "folklore", "politics", "scholarship", "trade"],
+            emissary: ["intrigue", "magic", "politics", "statecraft", "trade"],
+            general: ["boating", "defense", "engineering", "exploration", "warfare"],
+            magister: ["defense", "folklore", "magic", "scholarship", "wilderness"],
+            treasurer: ["arts", "boating", "industry", "intrigue", "trade"],
+            viceroy: ["agriculture", "engineering", "industry", "scholarship", "wilderness"],
+            warden: ["agriculture", "boating", "defense", "exploration", "wilderness"],
+        }
     };
 }
 
