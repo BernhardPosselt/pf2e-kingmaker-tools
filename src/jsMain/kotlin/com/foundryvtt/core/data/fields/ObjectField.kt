@@ -2,8 +2,10 @@
 
 package com.foundryvtt.core.data.fields
 
+import com.foundryvtt.core.AnyObject
 
-external class ObjectField<T>(
-    options: DataFieldOptions/*<T>*/ = definedExternally,
-    context: DataFieldContext<T> = definedExternally,
-) : DataField<T>
+
+external class ObjectField(
+    options: DataFieldOptions/*<AnyObject>*/ = definedExternally,
+    context: DataFieldContext<AnyObject>? = definedExternally,
+) : DataField<AnyObject>

@@ -1,6 +1,8 @@
 package at.posselt.pfrpg2e.utils
 
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.LeaderKingdomSkills
+import at.posselt.pfrpg2e.kingdom.LeaderSkills
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2EActor
@@ -34,7 +36,8 @@ external interface ToolsMacros {
 
 @JsPlainObject
 external interface KtMigration {
-    val configureLeaderKingdomSkills: (kingdom: KingdomData) -> Promise<Unit>
+    val configureLeaderKingdomSkills: (skills: LeaderKingdomSkills, onSave: (skills: LeaderKingdomSkills) -> Unit) -> Unit
+    val configureLeaderSkills: (skills: LeaderSkills, onSave: (skills: LeaderSkills) -> Unit) -> Unit
 }
 
 @JsPlainObject

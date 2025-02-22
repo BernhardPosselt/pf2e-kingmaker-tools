@@ -147,6 +147,18 @@ interface LeaderKingdomSkills {
     warden: Skill[];
 }
 
+interface LeaderSkills {
+    ruler: string[];
+    counselor: string[];
+    emissary: string[];
+    general: string[];
+    magister: string[];
+    treasurer: string[];
+    viceroy: string[];
+    warden: string[];
+}
+
+
 export interface Kingdom {
     name: string;
     atWar: boolean;
@@ -201,6 +213,7 @@ export interface Kingdom {
     modifiers: Modifier[];
     settlements: Settlement[];
     leaderKingdomSkills: LeaderKingdomSkills;
+    leaderSkills: LeaderSkills;
 }
 
 
@@ -530,7 +543,17 @@ export function getDefaultKingdomData(): Kingdom {
             treasurer: ["arts", "boating", "industry", "intrigue", "trade"],
             viceroy: ["agriculture", "engineering", "industry", "scholarship", "wilderness"],
             warden: ["agriculture", "boating", "defense", "exploration", "wilderness"],
-        }
+        },
+        leaderSkills: {
+            ruler: ["diplomacy", "deception", "intimidation", "performance", "society", "heraldry", "politics", "ruler"],
+            counselor: ["diplomacy", "deception", "performance", "religion", "society", "academia", "art", "counselor"],
+            emissary: ["diplomacy", "deception", "intimidation", "stealth", "thievery", "politics", "underworld", "emissary"],
+            general: ["diplomacy", "athletics", "crafting", "intimidation", "survival", "scouting", "warfare", "general"],
+            magister: ["diplomacy", "arcana", "nature", "occultism", "religion", "academia", "scribing", "magister"],
+            treasurer: ["diplomacy", "crafting", "medicine", "society", "thievery", "labor", "mercantile", "treasurer"],
+            viceroy: ["diplomacy", "crafting", "medicine", "nature", "society", "architecture", "engineering", "viceroy"],
+            warden: ["diplomacy", "athletics", "nature", "stealth", "survival", "farming", "hunting", "warden"],
+        },
     };
 }
 

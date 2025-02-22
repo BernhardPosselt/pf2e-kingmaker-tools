@@ -1,6 +1,7 @@
 package com.foundryvtt.core.data.dsl
 
 import at.posselt.pfrpg2e.utils.toRecord
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.data.fields.*
 import js.objects.Record
 import js.objects.recordOf
@@ -249,6 +250,16 @@ class Schema {
             options = options,
             context = context,
         )
+    }
+
+    fun stringRecord(
+        name: String,
+        context: DataFieldContext<AnyObject>? = undefined,
+        block: (DataFieldOptions/*<Boolean>*/.() -> Unit)? = null,
+    ) {
+        val options = DataFieldOptions/*<AnyObject>*/(required = true)
+        block?.invoke(options)
+        fields[name] = ObjectField(options = options, context = context)
     }
 
     fun <T> build(): DataSchema<T> {

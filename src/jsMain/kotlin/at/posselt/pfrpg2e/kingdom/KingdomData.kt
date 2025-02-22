@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Leader
 import js.objects.Record
@@ -18,6 +19,7 @@ typealias FameType = String  // famous or infamous
 typealias Companion = String // Amiri Ekundayo Harrim Jaethal Jubilost Kalikke Kanerah Linzi Nok-Nok Octavia Regongar Tristian Valerie
 typealias KingdomDc = Any // number or control, custom, none, scouting
 typealias KingdomSkillValue = String // agriculture, arts, boating, defense, engineering, exploration, folklore, industry, intrigue, magic, politics, scholarship, statecraft, trade, warfare, wilderness
+typealias SkillValue = String // acrobatics, athletics, etc
 typealias SkillRanks = Record<KingdomSkillValue, Int>
 typealias SettlementType = String // capital or settlement
 
@@ -214,6 +216,18 @@ external interface LeaderKingdomSkills {
 }
 
 @JsPlainObject
+external interface LeaderSkills {
+    var ruler: Array<SkillValue>
+    var counselor: Array<SkillValue>
+    var emissary: Array<SkillValue>
+    var general: Array<SkillValue>
+    var magister: Array<SkillValue>
+    var treasurer: Array<SkillValue>
+    var viceroy: Array<SkillValue>
+    var warden: Array<SkillValue>
+}
+
+@JsPlainObject
 external interface KingdomData {
     var name: String
     var atWar: Boolean
@@ -253,9 +267,10 @@ external interface KingdomData {
     var modifiers: Array<Modifier>
     var settlements: Array<Settlement>
     var leaderKingdomSkills: LeaderKingdomSkills
+    var leaderSkills: LeaderSkills
 }
 
-fun LeaderKingdomSkills.knowsSkill(leader: Leader, skill: KingdomSkill) =
+fun LeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =
     when (leader) {
         Leader.RULER -> ruler.contains(skill.value)
         Leader.COUNSELOR -> counselor.contains(skill.value)
@@ -265,4 +280,16 @@ fun LeaderKingdomSkills.knowsSkill(leader: Leader, skill: KingdomSkill) =
         Leader.TREASURER -> treasurer.contains(skill.value)
         Leader.VICEROY -> viceroy.contains(skill.value)
         Leader.WARDEN -> warden.contains(skill.value)
+    }
+
+fun LeaderSkills.hasAttribute(leader: Leader, attribute: Attribute) =
+    when (leader) {
+        Leader.RULER -> ruler.contains(attribute.value)
+        Leader.COUNSELOR -> counselor.contains(attribute.value)
+        Leader.EMISSARY -> emissary.contains(attribute.value)
+        Leader.GENERAL -> general.contains(attribute.value)
+        Leader.MAGISTER -> magister.contains(attribute.value)
+        Leader.TREASURER -> treasurer.contains(attribute.value)
+        Leader.VICEROY -> viceroy.contains(attribute.value)
+        Leader.WARDEN -> warden.contains(attribute.value)
     }

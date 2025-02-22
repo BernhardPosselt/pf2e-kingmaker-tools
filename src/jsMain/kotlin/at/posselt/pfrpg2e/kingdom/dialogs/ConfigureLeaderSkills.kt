@@ -4,10 +4,10 @@ import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
-import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.kingdom.Leader
-import at.posselt.pfrpg2e.kingdom.LeaderKingdomSkills
-import at.posselt.pfrpg2e.kingdom.hasSkill
+import at.posselt.pfrpg2e.kingdom.LeaderSkills
+import at.posselt.pfrpg2e.kingdom.hasAttribute
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.AnyObject
@@ -27,64 +27,64 @@ import kotlin.js.Promise
 
 
 @JsPlainObject
-private external interface LeaderKingdomSkillsCell {
+private external interface LeaderSkillsCell {
     val input: FormElementContext
 }
 
 
 @JsPlainObject
-private external interface LeaderKingdomSkillsRow {
+private external interface LeaderSkillsRow {
     val label: String
-    val cells: Array<LeaderKingdomSkillsCell>
+    val cells: Array<LeaderSkillsCell>
 }
 
 @JsPlainObject
-private external interface ConfigureLeaderKingdomSkillsContext : HandlebarsRenderContext {
+private external interface ConfigureLeaderSkillsContext : HandlebarsRenderContext {
     val headers: Array<String>
     val isFormValid: Boolean
-    val formRows: Array<LeaderKingdomSkillsRow>
+    val formRows: Array<LeaderSkillsRow>
 }
 
 @JsPlainObject
-private external interface ToggledKingdomSkills {
-    val agriculture: Boolean
-    val arts: Boolean
-    val boating: Boolean
-    val defense: Boolean
-    val engineering: Boolean
-    val exploration: Boolean
-    val folklore: Boolean
-    val industry: Boolean
-    val intrigue: Boolean
-    val magic: Boolean
-    val politics: Boolean
-    val scholarship: Boolean
-    val statecraft: Boolean
-    val trade: Boolean
-    val warfare: Boolean
-    val wilderness: Boolean
+private external interface ToggledSkills {
+    val acrobatics: Boolean
+    val arcana: Boolean
+    val athletics: Boolean
+    val crafting: Boolean
+    val deception: Boolean
+    val diplomacy: Boolean
+    val intimidation: Boolean
+    val medicine: Boolean
+    val nature: Boolean
+    val occultism: Boolean
+    val performance: Boolean
+    val religion: Boolean
+    val society: Boolean
+    val stealth: Boolean
+    val survival: Boolean
+    val thievery: Boolean
 }
 
-private fun ToggledKingdomSkills.toStringArray(): Array<String> =
+private fun ToggledSkills.toStringArray(): Array<String> =
     Object.entries(this).asSequence()
         .filter { (_, v) -> v == true }
         .map { (k, _) -> k }
         .toTypedArray()
 
 @JsPlainObject
-private external interface LeaderKingdomSkillsData {
-    val ruler: ToggledKingdomSkills
-    val counselor: ToggledKingdomSkills
-    val emissary: ToggledKingdomSkills
-    val general: ToggledKingdomSkills
-    val magister: ToggledKingdomSkills
-    val treasurer: ToggledKingdomSkills
-    val viceroy: ToggledKingdomSkills
-    val warden: ToggledKingdomSkills
+private external interface LeaderSkillsData {
+    val ruler: ToggledSkills
+    val counselor: ToggledSkills
+    val emissary: ToggledSkills
+    val general: ToggledSkills
+    val magister: ToggledSkills
+    val treasurer: ToggledSkills
+    val viceroy: ToggledSkills
+    val warden: ToggledSkills
 }
 
-private fun LeaderKingdomSkillsData.toKingdomSkills(): LeaderKingdomSkills =
-    LeaderKingdomSkills(
+private fun LeaderSkillsData.toSkills(): LeaderSkills =
+    LeaderSkills(
         ruler = ruler.toStringArray(),
         counselor = counselor.toStringArray(),
         emissary = emissary.toStringArray(),
@@ -96,14 +96,14 @@ private fun LeaderKingdomSkillsData.toKingdomSkills(): LeaderKingdomSkills =
     )
 
 @JsExport
-class ConfigureLeaderKingdomSkillsModel(val value: AnyObject) : DataModel(value) {
+class ConfigureLeaderSkillsModel(val value: AnyObject) : DataModel(value) {
     companion object {
         @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             Leader.entries.forEach { leader ->
                 schema(leader.value) {
-                    KingdomSkill.entries.forEach { skill ->
+                    Skill.entries.forEach { skill ->
                         boolean(skill.value)
                     }
                 }
@@ -112,15 +112,15 @@ class ConfigureLeaderKingdomSkillsModel(val value: AnyObject) : DataModel(value)
     }
 }
 
-private class ConfigureLeaderKingdomSkills(
-    skills: LeaderKingdomSkills,
-    private val onSave: (skills: LeaderKingdomSkills) -> Unit,
-) : FormApp<ConfigureLeaderKingdomSkillsContext, LeaderKingdomSkillsData>(
-    title = "Configure Leader Kingdom Skills ",
+private class ConfigureLeaderSkills(
+    skills: LeaderSkills,
+    private val onSave: (skills: LeaderSkills) -> Unit,
+) : FormApp<ConfigureLeaderSkillsContext, LeaderSkillsData>(
+    title = "Configure Leader Skills ",
     template = "components/forms/xy-form.hbs",
     debug = true,
-    dataModel = ConfigureLeaderKingdomSkillsModel::class.js,
-    id = "kmConfigureLeaderKingdomSkills",
+    dataModel = ConfigureLeaderSkillsModel::class.js,
+    id = "kmConfigureLeaderSkills",
 ) {
     var data = deepClone(skills)
 
@@ -137,19 +137,20 @@ private class ConfigureLeaderKingdomSkills(
         partId: String,
         context: HandlebarsRenderContext,
         options: HandlebarsRenderOptions
-    ): Promise<ConfigureLeaderKingdomSkillsContext> = buildPromise {
+    ): Promise<ConfigureLeaderSkillsContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
         val rows = Leader.entries
             .map { leader ->
-                LeaderKingdomSkillsRow(
+                LeaderSkillsRow(
                     label = leader.label,
-                    cells = KingdomSkill.entries
-                        .map { skill ->
-                            val name = leader.value + "." + skill.value
-                            LeaderKingdomSkillsCell(
+                    // TODO: add button to configure lores
+                    cells = Skill.entries
+                        .map { attribute ->
+                            val name = leader.value + "." + attribute.value
+                            LeaderSkillsCell(
                                 input = CheckboxInput(
                                     name = name,
-                                    value = data.hasSkill(leader, skill),
+                                    value = data.hasAttribute(leader, attribute),
                                     label = name,
                                     hideLabel = true,
                                 ).toContext()
@@ -159,23 +160,24 @@ private class ConfigureLeaderKingdomSkills(
                 )
             }
             .toTypedArray()
-        ConfigureLeaderKingdomSkillsContext(
+        ConfigureLeaderSkillsContext(
             partId = parent.partId,
-            headers = KingdomSkill.entries.map { it.label }.toTypedArray(),
+            headers = Skill.entries.map { it.label }.toTypedArray() + "Lores",
             formRows = rows,
             isFormValid = true,
         )
     }
 
-    override fun onParsedSubmit(value: LeaderKingdomSkillsData): Promise<Void> = buildPromise {
-        data = value.toKingdomSkills()
+    override fun onParsedSubmit(value: LeaderSkillsData): Promise<Void> = buildPromise {
+        // TODO: merge with lores
+        data = value.toSkills()
         null
     }
 }
 
-fun configureLeaderKingdomSkills(
-    skills: LeaderKingdomSkills,
-    onSave: (LeaderKingdomSkills) -> Unit,
+fun configureLeaderSkills(
+    skills: LeaderSkills,
+    onSave: (LeaderSkills) -> Unit,
 ) {
-    ConfigureLeaderKingdomSkills(skills, onSave).launch()
+    ConfigureLeaderSkills(skills, onSave).launch()
 }

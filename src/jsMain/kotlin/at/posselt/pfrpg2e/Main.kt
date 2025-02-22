@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderKingdomSkills
+import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderSkills
 import at.posselt.pfrpg2e.macros.*
 import at.posselt.pfrpg2e.migrations.migratePfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
@@ -117,7 +118,8 @@ fun main() {
                 createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
             ),
             migration = KtMigration(
-                configureLeaderKingdomSkills = { kingdomData -> buildPromise { configureLeaderKingdomSkills(kingdomData)  } },
+                configureLeaderKingdomSkills = { skills, onSave -> configureLeaderKingdomSkills(skills, onSave)  },
+                configureLeaderSkills = {skills, onSave -> configureLeaderSkills(skills, onSave)},
             )
         )
 
