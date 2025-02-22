@@ -255,7 +255,7 @@ class Schema {
     fun record(
         name: String,
         context: DataFieldContext<AnyObject>? = undefined,
-        block: (DataFieldOptions/*<Boolean>*/.() -> Unit)? = null,
+        block: (DataFieldOptions/*<AnyObject>*/.() -> Unit)? = null,
     ) {
         val options = DataFieldOptions/*<AnyObject>*/(required = true)
         block?.invoke(options)
