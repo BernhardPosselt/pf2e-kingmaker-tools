@@ -39,6 +39,8 @@ data class NumberInput(
         escapeLabel = escapeLabel,
         component = false,
         labelElement = labelElement,
+        button = false,
+        empty = false,
     )
 }
 

@@ -40,6 +40,8 @@ data class RadioInput(
         component = false,
         labelElement = labelElement,
         checked = checked,
+        button = false,
+        empty = false,
     )
 }
 

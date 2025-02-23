@@ -147,5 +147,9 @@
         td, th:not(.km-th-spacer) {
             border: 1px solid;
         }
+
+        button > i {
+            margin-right: 0;
+        }
     }
 }

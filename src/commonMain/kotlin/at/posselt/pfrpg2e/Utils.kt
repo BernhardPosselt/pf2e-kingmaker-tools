@@ -48,6 +48,9 @@ fun String.toEnumConstant(): String =
     this.split("(?=\\p{Upper})".toRegex())
         .joinToString("_") { it.uppercase() }
 
+fun String.toDataAttributeKey(): String =
+    split("(?=\\p{Upper})".toRegex())
+        .joinToString("-") { it.lowercase()}
 
 inline fun <reified T> Any.takeIfInstance(): T? =
     if (this is T) this else null

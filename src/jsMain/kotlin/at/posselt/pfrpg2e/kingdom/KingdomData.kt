@@ -3,8 +3,10 @@ package at.posselt.pfrpg2e.kingdom
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Leader
+import at.posselt.pfrpg2e.kingdom.SkillValue
 import js.objects.Record
 import kotlinx.js.JsPlainObject
+import kotlin.Array
 
 typealias KingdomAbility = String // culture, economy, loyalty or stability
 typealias AbilityScores = Record<KingdomAbility, Int>
@@ -293,3 +295,14 @@ fun LeaderSkills.hasAttribute(leader: Leader, attribute: Attribute) =
         Leader.VICEROY -> viceroy.contains(attribute.value)
         Leader.WARDEN -> warden.contains(attribute.value)
     }
+
+fun LeaderSkills.deleteLore(attribute: Attribute) = LeaderSkills(
+    ruler = ruler.filter { it != attribute.value }.toTypedArray(),
+    counselor = counselor.filter { it != attribute.value }.toTypedArray(),
+    emissary = emissary.filter { it != attribute.value }.toTypedArray(),
+    general = general.filter { it != attribute.value }.toTypedArray(),
+    magister = magister.filter { it != attribute.value }.toTypedArray(),
+    treasurer = treasurer.filter { it != attribute.value }.toTypedArray(),
+    viceroy = viceroy.filter { it != attribute.value }.toTypedArray(),
+    warden = warden.filter { it != attribute.value }.toTypedArray(),
+)

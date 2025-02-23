@@ -42,6 +42,8 @@ data class TextInput(
         component = false,
         labelElement = labelElement,
         placeholder = placeholder,
+        button = false,
+        empty = false,
     )
 }
 

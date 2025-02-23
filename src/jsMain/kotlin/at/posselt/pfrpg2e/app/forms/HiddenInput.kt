@@ -35,5 +35,7 @@ data class HiddenInput(
         overrideType = overrideType?.value,
         component = false,
         labelElement = "label",
+        button = false,
+        empty = false,
     )
 }

@@ -27,15 +27,9 @@ import kotlin.js.Promise
 
 
 @JsPlainObject
-private external interface LeaderKingdomSkillsCell {
-    val input: FormElementContext
-}
-
-
-@JsPlainObject
 private external interface LeaderKingdomSkillsRow {
     val label: String
-    val cells: Array<LeaderKingdomSkillsCell>
+    val cells: Array<FormElementContext>
 }
 
 @JsPlainObject
@@ -147,14 +141,12 @@ private class ConfigureLeaderKingdomSkills(
                     cells = Leader.entries
                         .map { leader ->
                             val name = leader.value + "." + skill.value
-                            LeaderKingdomSkillsCell(
-                                input = CheckboxInput(
-                                    name = name,
-                                    value = data.hasSkill(leader, skill),
-                                    label = name,
-                                    hideLabel = true,
-                                ).toContext()
-                            )
+                            CheckboxInput(
+                                name = name,
+                                value = data.hasSkill(leader, skill),
+                                label = name,
+                                hideLabel = true,
+                            ).toContext()
                         }
                         .toTypedArray(),
                 )

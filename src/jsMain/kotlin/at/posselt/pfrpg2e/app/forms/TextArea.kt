@@ -40,5 +40,7 @@ data class TextArea(
         escapeLabel = escapeLabel,
         component = false,
         labelElement = labelElement,
+        button = false,
+        empty = false,
     )
 }

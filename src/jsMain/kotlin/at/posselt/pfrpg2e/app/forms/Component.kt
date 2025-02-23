@@ -39,5 +39,7 @@ data class Component(
         templatePartial = templatePartial,
         component = true,
         labelElement = labelElement,
+        button = false,
+        empty = false,
     )
 }

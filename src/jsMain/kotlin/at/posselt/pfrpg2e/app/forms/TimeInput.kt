@@ -47,5 +47,7 @@ data class TimeInput(
         escapeLabel = escapeLabel,
         component = false,
         labelElement = labelElement,
+        button = false,
+        empty = false,
     )
 }

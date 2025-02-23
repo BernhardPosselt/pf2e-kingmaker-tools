@@ -48,7 +48,10 @@
                 elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}}>{{value}}</textarea>
 {{else if menu}}
         <button type="button" data-action="{{value}}"  {{#if
-                elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}}>{{name}}</button>
+                elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}} {{#each data}}data-{{{@key}}}="{{this}}"{{/each}}>{{name}}</button>
+{{else if button}}
+    <button type="button" data-action="{{value}}" {{#if
+            elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}} {{#each data}}data-{{{@key}}}="{{this}}"{{/each}}>{{#if label}}{{label}} {{/if}}{{#if icon}}<i class="{{icon}}"></i>{{/if}}</button>
 {{else if component}}
     {{> (lookup . 'templatePartial') value}}
 {{else if image}}

@@ -1,5 +1,7 @@
 package at.posselt.pfrpg2e.app.forms
 
+import js.objects.ReadonlyRecord
+import js.objects.Record
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -48,6 +50,8 @@ external interface FormElementContext {
     val labelElement: String
     val placeholder: String?
     val checked: Boolean?
+    val data: ReadonlyRecord<String, String>?
+    val icon: String?
 
     // instead of going with an enum, we need to list all values
     // because Handlebars is fucking stupid and can't have == in their template language
@@ -62,6 +66,8 @@ external interface FormElementContext {
     val hidden: Boolean
     val radio: Boolean
     val image: Boolean
+    val button: Boolean
+    val empty: Boolean
 }
 
 

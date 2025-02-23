@@ -2,24 +2,34 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.forms.Button
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
+import at.posselt.pfrpg2e.app.forms.DataAttribute
 import at.posselt.pfrpg2e.app.forms.FormElementContext
+import at.posselt.pfrpg2e.app.forms.Menu
+import at.posselt.pfrpg2e.app.forms.TextInput
+import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.kingdom.Leader
+import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.kingdom.LeaderSkills
+import at.posselt.pfrpg2e.kingdom.deleteLore
 import at.posselt.pfrpg2e.kingdom.hasAttribute
+import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
+import com.foundryvtt.core.ui
 import com.foundryvtt.core.utils.deepClone
 import js.array.toTypedArray
 import js.core.Void
 import js.objects.Object
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -29,15 +39,20 @@ import kotlin.js.Promise
 
 
 @JsPlainObject
-private external interface LeaderSkillsCell {
-    val input: FormElementContext
+private external interface AddEntryContext {
+    val formRows: Array<FormElementContext>
+}
+
+@JsPlainObject
+private external interface AddEntryData {
+    val lore: String
 }
 
 
 @JsPlainObject
 private external interface LeaderSkillsRow {
     val label: String
-    val cells: Array<LeaderSkillsCell>
+    val cells: Array<FormElementContext>
 }
 
 @JsPlainObject
@@ -46,6 +61,7 @@ private external interface ConfigureLeaderSkillsContext : HandlebarsRenderContex
     val isFormValid: Boolean
     val formRows: Array<LeaderSkillsRow>
     val compact: Boolean
+    val addEntry: String
 }
 
 private fun filterLoreValues(values: Array<String>): Array<String> =
@@ -74,13 +90,13 @@ private external interface LeaderSkillsData {
 
 private fun LeaderSkills.allLores(): Array<Attribute> =
     filterLores(ruler) +
-    filterLores(counselor) +
-    filterLores(emissary) +
-    filterLores(general) +
-    filterLores(magister) +
-    filterLores(treasurer) +
-    filterLores(viceroy) +
-    filterLores(warden)
+            filterLores(counselor) +
+            filterLores(emissary) +
+            filterLores(general) +
+            filterLores(magister) +
+            filterLores(treasurer) +
+            filterLores(viceroy) +
+            filterLores(warden)
 
 private fun toAttributeValues(toggles: Array<Boolean>, attributes: Array<Attribute>): Array<String> =
     attributes
@@ -132,6 +148,43 @@ private class ConfigureLeaderSkills(
                 onSave(data)
                 close()
             }
+
+            "delete-lore" -> {
+                target.dataset["lore"]?.let { index ->
+                    lores.find { it.value == index }
+                        ?.let { data = data.deleteLore(it) }
+                    lores = lores.filter { it.value != index }.toTypedArray()
+                    render()
+                }
+            }
+
+            "add-entry" -> {
+                buildPromise {
+                    prompt<AddEntryData, Unit>(
+                        title = "Add Lore",
+                        templatePath = "components/forms/form.hbs",
+                        templateContext = AddEntryContext(
+                            formRows = arrayOf(
+                                TextInput(
+                                    label = "Lore",
+                                    name = "lore",
+                                    value = "",
+                                ).toContext()
+                            )
+                        ).unsafeCast<AnyObject>()
+                    ) { data ->
+                        val lore = Attribute.fromString(data.lore.slugify())
+                        if (data.lore.isBlank() || lore is Skill) {
+                            ui.notifications.error("Not a valid lore")
+                        } else if (lores.contains(lore)) {
+                            ui.notifications.error("Lore exists already")
+                        } else {
+                            lores = lores + lore
+                            render()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -143,31 +196,36 @@ private class ConfigureLeaderSkills(
         val parent = super._preparePartContext(partId, context, options).await()
         val rows = (Skill.entries + lores)
             .mapIndexed { attributeIndex, attribute ->
+                val deleteButton = Button(
+                    value = "delete-lore",
+                    label = "",
+                    icon = "fa-solid fa-trash",
+                    data = listOf(DataAttribute(key = "lore", value = attribute.value)),
+                    disabled = attribute !is Lore,
+                )
                 LeaderSkillsRow(
                     label = attribute.label,
-                    // TODO: add button to configure lores
                     cells = Leader.entries
                         .map { leader ->
                             val name = leader.value + "." + attributeIndex
-                            LeaderSkillsCell(
-                                input = CheckboxInput(
-                                    name = name,
-                                    value = data.hasAttribute(leader, attribute),
-                                    label = name,
-                                    hideLabel = true,
-                                ).toContext()
-                            )
+                            CheckboxInput(
+                                name = name,
+                                value = data.hasAttribute(leader, attribute),
+                                label = name,
+                                hideLabel = true,
+                            ).toContext()
                         }
-                        .toTypedArray(),
+                        .toTypedArray() + deleteButton.toContext(),
                 )
             }
             .toTypedArray()
         ConfigureLeaderSkillsContext(
             partId = parent.partId,
-            headers = Leader.entries.map { it.label }.toTypedArray(),
+            headers = Leader.entries.map { it.label }.toTypedArray() + "Delete",
             formRows = rows,
             isFormValid = true,
             compact = true,
+            addEntry = "Add Lore",
         )
     }
 

@@ -38,6 +38,8 @@ data class CheckboxInput(
         escapeLabel = escapeLabel,
         component = false,
         labelElement = labelElement,
+        button = false,
+        empty = false,
     )
 }
 

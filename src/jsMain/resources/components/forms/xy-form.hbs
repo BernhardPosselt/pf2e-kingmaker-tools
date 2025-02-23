@@ -10,11 +10,14 @@
             <tr>
                 <th>{{label}}</th>
                 {{#each cells}}
-                    <td>{{> formElement input }}</td>
+                    <td>{{> formElement this }}</td>
                 {{/each}}
             </tr>
         {{/each}}
     </table>
+    {{#if addEntry}}
+    <button type="button" class="full-width" data-action="add-entry">{{addEntry}}</button>
+    {{/if}}
     <button type="submit" class="full-width" data-action="save" {{#unless isFormValid}}disabled{{/unless}}>{{#if
             saveLabel}}{{saveLabel}}{{else}}Save{{/if}}</button>
 </div>

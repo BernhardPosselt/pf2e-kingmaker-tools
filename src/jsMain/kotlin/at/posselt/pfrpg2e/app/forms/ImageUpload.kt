@@ -37,6 +37,8 @@ data class ImageUpload(
         escapeLabel = false,
         component = false,
         labelElement = labelElement,
+        button = false,
+        empty = false,
     )
 }
 
