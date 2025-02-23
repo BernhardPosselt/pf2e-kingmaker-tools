@@ -97,8 +97,55 @@
 
 }
 
+.theme-light {
+    .km-xy-table {
+        &.compact {
+            tr:first-child {
+                background-color: #dad8cd;
+            }
+        }
+    }
+}
+
 .km-xy-table {
     .km-xy-column-header {
         writing-mode: vertical-lr;
+    }
+
+    &.compact {
+        border-radius: 0;
+        border: 0;
+        overflow-y: auto;
+        border-collapse: separate;
+
+        tr:first-child {
+            th:not(th:first-child) {
+                border-left: 0;
+            }
+            position: sticky;
+            top: -1rem;
+            z-index: 100;
+            background: var(--background);
+        }
+
+        .km-th-spacer {
+            border: 0;
+            border-bottom: 1px solid;
+            border-right: 1px solid;
+        }
+
+        tr:not(tr:first-child) {
+            th {
+                border-top:0;
+            }
+            td {
+                border-top: 0;
+                border-left: 0;
+            }
+        }
+
+        td, th:not(.km-th-spacer) {
+            border: 1px solid;
+        }
     }
 }

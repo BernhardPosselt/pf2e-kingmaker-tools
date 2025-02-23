@@ -1,7 +1,7 @@
 <div>
-    <table class="km-xy-table">
+    <table class="km-xy-table {{#if compact}}compact{{/if}}">
         <tr>
-            <td></td>
+            <th class="km-th-spacer"></th>
             {{#each headers}}
                 <th class="km-xy-column-header">{{this}}</th>
             {{/each}}

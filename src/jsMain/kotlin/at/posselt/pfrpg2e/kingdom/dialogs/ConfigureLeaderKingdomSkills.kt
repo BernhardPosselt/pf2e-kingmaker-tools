@@ -42,6 +42,7 @@ private external interface LeaderKingdomSkillsRow {
 private external interface ConfigureLeaderKingdomSkillsContext : HandlebarsRenderContext {
     val headers: Array<String>
     val isFormValid: Boolean
+    val compact: Boolean
     val formRows: Array<LeaderKingdomSkillsRow>
 }
 
@@ -139,12 +140,12 @@ private class ConfigureLeaderKingdomSkills(
         options: HandlebarsRenderOptions
     ): Promise<ConfigureLeaderKingdomSkillsContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
-        val rows = Leader.entries
-            .map { leader ->
+        val rows = KingdomSkill.entries
+            .map { skill ->
                 LeaderKingdomSkillsRow(
-                    label = leader.label,
-                    cells = KingdomSkill.entries
-                        .map { skill ->
+                    label = skill.label,
+                    cells = Leader.entries
+                        .map { leader ->
                             val name = leader.value + "." + skill.value
                             LeaderKingdomSkillsCell(
                                 input = CheckboxInput(
@@ -161,9 +162,10 @@ private class ConfigureLeaderKingdomSkills(
             .toTypedArray()
         ConfigureLeaderKingdomSkillsContext(
             partId = parent.partId,
-            headers = KingdomSkill.entries.map { it.label }.toTypedArray(),
+            headers = Leader.entries.map { it.label }.toTypedArray(),
             formRows = rows,
             isFormValid = true,
+            compact = true,
         )
     }
 

@@ -4,6 +4,8 @@ import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
+import at.posselt.pfrpg2e.data.actor.Attribute
+import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.kingdom.Leader
 import at.posselt.pfrpg2e.kingdom.LeaderSkills
@@ -43,56 +45,59 @@ private external interface ConfigureLeaderSkillsContext : HandlebarsRenderContex
     val headers: Array<String>
     val isFormValid: Boolean
     val formRows: Array<LeaderSkillsRow>
+    val compact: Boolean
 }
 
-@JsPlainObject
-private external interface ToggledSkills {
-    val acrobatics: Boolean
-    val arcana: Boolean
-    val athletics: Boolean
-    val crafting: Boolean
-    val deception: Boolean
-    val diplomacy: Boolean
-    val intimidation: Boolean
-    val medicine: Boolean
-    val nature: Boolean
-    val occultism: Boolean
-    val performance: Boolean
-    val religion: Boolean
-    val society: Boolean
-    val stealth: Boolean
-    val survival: Boolean
-    val thievery: Boolean
-}
+private fun filterLoreValues(values: Array<String>): Array<String> =
+    filterLores(values)
+        .map { it.value }
+        .toTypedArray()
 
-private fun ToggledSkills.toStringArray(): Array<String> =
-    Object.entries(this).asSequence()
-        .filter { (_, v) -> v == true }
-        .map { (k, _) -> k }
+private fun filterLores(values: Array<String>): Array<Attribute> =
+    values
+        .asSequence()
+        .map { Attribute.fromString(it) }
+        .filter { it is Lore }
         .toTypedArray()
 
 @JsPlainObject
 private external interface LeaderSkillsData {
-    val ruler: ToggledSkills
-    val counselor: ToggledSkills
-    val emissary: ToggledSkills
-    val general: ToggledSkills
-    val magister: ToggledSkills
-    val treasurer: ToggledSkills
-    val viceroy: ToggledSkills
-    val warden: ToggledSkills
+    val ruler: Array<Boolean>
+    val counselor: Array<Boolean>
+    val emissary: Array<Boolean>
+    val general: Array<Boolean>
+    val magister: Array<Boolean>
+    val treasurer: Array<Boolean>
+    val viceroy: Array<Boolean>
+    val warden: Array<Boolean>
 }
 
-private fun LeaderSkillsData.toSkills(): LeaderSkills =
+private fun LeaderSkills.allLores(): Array<Attribute> =
+    filterLores(ruler) +
+    filterLores(counselor) +
+    filterLores(emissary) +
+    filterLores(general) +
+    filterLores(magister) +
+    filterLores(treasurer) +
+    filterLores(viceroy) +
+    filterLores(warden)
+
+private fun toAttributeValues(toggles: Array<Boolean>, attributes: Array<Attribute>): Array<String> =
+    attributes
+        .mapIndexed { idx, attr -> if (toggles[idx] == true) attr.value else null }
+        .filterNotNull()
+        .toTypedArray()
+
+private fun LeaderSkillsData.toSkills(attributes: Array<Attribute>): LeaderSkills =
     LeaderSkills(
-        ruler = ruler.toStringArray(),
-        counselor = counselor.toStringArray(),
-        emissary = emissary.toStringArray(),
-        general = general.toStringArray(),
-        magister = magister.toStringArray(),
-        treasurer = treasurer.toStringArray(),
-        viceroy = viceroy.toStringArray(),
-        warden = warden.toStringArray(),
+        ruler = toAttributeValues(ruler, attributes),
+        counselor = toAttributeValues(counselor, attributes),
+        emissary = toAttributeValues(emissary, attributes),
+        general = toAttributeValues(general, attributes),
+        magister = toAttributeValues(magister, attributes),
+        treasurer = toAttributeValues(treasurer, attributes),
+        viceroy = toAttributeValues(viceroy, attributes),
+        warden = toAttributeValues(warden, attributes),
     )
 
 @JsExport
@@ -102,11 +107,7 @@ class ConfigureLeaderSkillsModel(val value: AnyObject) : DataModel(value) {
         @JsStatic
         fun defineSchema() = buildSchema {
             Leader.entries.forEach { leader ->
-                schema(leader.value) {
-                    Skill.entries.forEach { skill ->
-                        boolean(skill.value)
-                    }
-                }
+                booleanArray(leader.value)
             }
         }
     }
@@ -123,6 +124,7 @@ private class ConfigureLeaderSkills(
     id = "kmConfigureLeaderSkills",
 ) {
     var data = deepClone(skills)
+    var lores = data.allLores()
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
@@ -139,14 +141,14 @@ private class ConfigureLeaderSkills(
         options: HandlebarsRenderOptions
     ): Promise<ConfigureLeaderSkillsContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
-        val rows = Leader.entries
-            .map { leader ->
+        val rows = (Skill.entries + lores)
+            .mapIndexed { attributeIndex, attribute ->
                 LeaderSkillsRow(
-                    label = leader.label,
+                    label = attribute.label,
                     // TODO: add button to configure lores
-                    cells = Skill.entries
-                        .map { attribute ->
-                            val name = leader.value + "." + attribute.value
+                    cells = Leader.entries
+                        .map { leader ->
+                            val name = leader.value + "." + attributeIndex
                             LeaderSkillsCell(
                                 input = CheckboxInput(
                                     name = name,
@@ -162,15 +164,15 @@ private class ConfigureLeaderSkills(
             .toTypedArray()
         ConfigureLeaderSkillsContext(
             partId = parent.partId,
-            headers = Skill.entries.map { it.label }.toTypedArray() + "Lores",
+            headers = Leader.entries.map { it.label }.toTypedArray(),
             formRows = rows,
             isFormValid = true,
+            compact = true,
         )
     }
 
     override fun onParsedSubmit(value: LeaderSkillsData): Promise<Void> = buildPromise {
-        // TODO: merge with lores
-        data = value.toSkills()
+        data = value.toSkills(Skill.entries.toTypedArray() + lores)
         null
     }
 }
