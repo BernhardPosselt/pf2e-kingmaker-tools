@@ -6,14 +6,12 @@ import at.posselt.pfrpg2e.app.forms.Button
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.DataAttribute
 import at.posselt.pfrpg2e.app.forms.FormElementContext
-import at.posselt.pfrpg2e.app.forms.Menu
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.kingdom.Leader
-import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.kingdom.LeaderSkills
 import at.posselt.pfrpg2e.kingdom.deleteLore
 import at.posselt.pfrpg2e.kingdom.hasAttribute
@@ -28,8 +26,6 @@ import com.foundryvtt.core.ui
 import com.foundryvtt.core.utils.deepClone
 import js.array.toTypedArray
 import js.core.Void
-import js.objects.Object
-import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -63,11 +59,6 @@ private external interface ConfigureLeaderSkillsContext : HandlebarsRenderContex
     val compact: Boolean
     val addEntry: String
 }
-
-private fun filterLoreValues(values: Array<String>): Array<String> =
-    filterLores(values)
-        .map { it.value }
-        .toTypedArray()
 
 private fun filterLores(values: Array<String>): Array<Attribute> =
     values
