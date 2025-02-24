@@ -59,7 +59,13 @@ import {CheckDialog} from './dialogs/check-dialog';
 import {Skill} from './data/skills';
 import {showHelpDialog} from './dialogs/show-help-dialog';
 import {showSettlement} from './dialogs/settlement';
-import {createActiveSettlementModifiers, getUntrainedProficiencyMode, Modifier, modifierToLabel} from './modifiers';
+import {
+    calculateLeadershipModifier,
+    createActiveSettlementModifiers,
+    getUntrainedProficiencyMode,
+    Modifier,
+    modifierToLabel, parseLeaderPerformingCheck
+} from './modifiers';
 import {addEffectDialog} from './dialogs/add-effect-dialog';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
@@ -353,10 +359,17 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         this.render();
     }
 
-    public updateActor(actor: Actor): void {
+    private updateActor(actor: Actor): void {
         const leaderUuids = Object.values(this.getKingdom().leaders).map(a => a.uuid);
         if (leaderUuids.includes(actor.uuid)) {
             this.render();
+        }
+    }
+
+    private updateItem(item: Item): void {
+        const actor = item.actor;
+        if (item.type === 'lore' && actor) {
+            this.updateActor(actor)
         }
     }
 
@@ -376,6 +389,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.on('updateDrawing', this.sceneChange.bind(this));
         Hooks.on('deleteDrawing', this.sceneChange.bind(this));
         Hooks.on('updateActor', this.updateActor.bind(this));
+        Hooks.on('updateItem', this.updateItem.bind(this));
         const $html = html[0];
         $html.querySelectorAll('.km-leader-details')
             .forEach(el => {
@@ -734,7 +748,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.off('createDrawing', this.sceneChange);
         Hooks.off('updateDrawing', this.sceneChange);
         Hooks.off('deleteDrawing', this.sceneChange);
-        Hooks.on('updateActor', this.updateActor);
+        Hooks.off('updateActor', this.updateActor);
+        Hooks.off('updateItem', this.updateItem);
         return super.close(options);
     }
 
@@ -1084,9 +1099,20 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async getLeaders(leaders: Leaders): Promise<object> {
+        const kingdom = this.getKingdom();
         const entries = (Object.entries(leaders) as [keyof Leaders, LeaderValues][])
             .map(async ([leader, values]) => {
                 const actor = values.uuid ? await fromUuid(values.uuid) as Actor | null : undefined;
+                const leaderPerformingCheck = await parseLeaderPerformingCheck(leader, kingdom);
+                let bonus = 0;
+                if (kingdom.settings.enableLeadershipModifiers && leaderPerformingCheck) {
+                    bonus = calculateLeadershipModifier(
+                        leaderPerformingCheck,
+                        'arts',
+                        kingdom.settings.leaderKingdomSkills,
+                        kingdom.settings.leaderSkills,
+                    ).value;
+                }
                 return [leader, {
                     label: capitalize(leader),
                     ...values,
@@ -1094,6 +1120,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     name: actor?.name,
                     level: actor?.level,
                     hasActor: !!actor,
+                    bonus,
                 }];
             });
         return Object.fromEntries(await Promise.all(entries));

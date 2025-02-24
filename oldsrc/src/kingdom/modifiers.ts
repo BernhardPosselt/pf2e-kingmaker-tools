@@ -4,7 +4,7 @@ import {getLevelData, Kingdom, LeaderKingdomSkills, Leaders, LeaderSkills, Ruin,
 import {allFeatsByName} from './data/feats';
 import {allActorSkills, allSkills, CharacterSkill, Skill, skillAbilities} from './data/skills';
 import {Ability, AbilityScores, calculateAbilityModifier} from './data/abilities';
-import {isInvested} from './data/leaders';
+import {isInvested, Leader} from './data/leaders';
 import {calculateUnrestPenalty} from './data/unrest';
 import {abilityRuins} from './data/ruin';
 import {ActivityBonuses, SkillItemBonus} from './data/structures';
@@ -593,14 +593,17 @@ function findHighestSkillProficiencyRanks(
         .filter(([key]) => allActorSkills.includes(key as CharacterSkill) && skills.includes(key as CharacterSkill))
         .map(([, value]) => value);
     const allRelevantRanks = [highestRelevantLoreRank, ...relevantSkillRanks];
-    // grog be caveman, grog write own function
-    return Math.max(0, ...Array.from(groupBy(allRelevantRanks, a => a).values())
-        .filter(values => values.length >= 2)
-        .map(values => values[0] ?? 0));
+    return Math.max(
+        0,
+        allRelevantRanks.filter(a => a >= 1).length >= 2 ? 1 : 0,
+        allRelevantRanks.filter(a => a >= 2).length >= 2 ? 2 : 0,
+        allRelevantRanks.filter(a => a >= 3).length >= 2 ? 3 : 0,
+        allRelevantRanks.filter(a => a >= 4).length >= 2 ? 4 : 0,
+    );
 }
 
 
-function calculateLeadershipModifier(
+export function calculateLeadershipModifier(
     leader: LeaderPerformingCheck,
     skill: Skill,
     leaderKingdomSkills: LeaderKingdomSkills,
@@ -665,6 +668,27 @@ export function createLeadershipModifier(
             value: usesSpecializedSkill ? value : Math.floor(value / 2),
             name: `Leadership: ${capitalize(leader.position)} (${label})`,
             enabled: true,
+        }
+    }
+}
+
+export async function parseLeaderPerformingCheck(
+    leader: Leader,
+    kingdom: Kingdom,
+): Promise<LeaderPerformingCheck | undefined> {
+    const leaderValues = kingdom.leaders[leader];
+    const uuid = leaderValues.uuid;
+    if (uuid) {
+        const actor = await fromUuid(uuid) as Actor | null;
+        if (actor) {
+            return {
+                position: leader,
+                type: leaderValues.type,
+                level: actor.level,
+                skillRanks: Object.fromEntries(Object.entries(actor.skills).map(([key, value]) => {
+                    return [key, value.rank];
+                })),
+            }
         }
     }
 }

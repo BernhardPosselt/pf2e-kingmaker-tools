@@ -8,7 +8,7 @@ import {
     ModifierTotal,
     ModifierTotals,
     ModifierType,
-    ModifierWithId,
+    ModifierWithId, parseLeaderPerformingCheck,
 } from '../modifiers';
 import {allKingdomPhases, getActivitySkills, KingdomPhase} from '../data/activities';
 import {Skill, skillAbilities} from '../data/skills';
@@ -209,7 +209,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             });
         }
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
-        const currentLeader = await this.findLeader();
+        const currentLeader = await parseLeaderPerformingCheck(this.leaderPerformingCheck, this.kingdom);
         const skillModifiers = this.calculateModifiers(
             applicableSkills,
             activeSettlementStructureResult,
@@ -269,24 +269,6 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 return {label: capitalize(l), value: l}
             }),
         };
-    }
-
-    private async findLeader(): Promise<LeaderPerformingCheck | undefined> {
-        const leader = this.kingdom.leaders[this.leaderPerformingCheck];
-        const uuid = leader.uuid;
-        if (uuid) {
-            const actor = await fromUuid(uuid) as Actor | null;
-            if (actor) {
-                return {
-                    position: this.leaderPerformingCheck,
-                    type: leader.type,
-                    level: actor.level,
-                    skillRanks: Object.fromEntries(Object.entries(actor.skills).map(([key, value]) => {
-                        return [key, value.rank];
-                    })),
-                }
-            }
-        }
     }
 
     override activateListeners(html: JQuery): void {

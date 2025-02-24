@@ -82,7 +82,7 @@
                     <a title="Open Actor" href="#" data-action="open-actor" data-uuid="{{uuid}}"><img src="{{img}}"></a>
                     <div>
                         <header>{{name}}</header>
-                        <p><b>Level</b>: {{level}}</p>
+                        <p><i>Level</i>: {{level}} <span {{#unless ../enableLeadershipModifiers}}hidden{{/unless}}><i>Leadership Bonus</i>: {{bonus}}</span></p>
                     </div>
                     <input type="hidden" value="{{uuid}}" name="leaders.{{@key}}.uuid">
                     <button type="button" title="Remove Actor" data-action="remove-actor"><i class="fa-solid fa-trash"></i></button>

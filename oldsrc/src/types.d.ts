@@ -146,7 +146,7 @@ declare global {
         name: string;
         sourceId: string;
         sheet: ItemSheet;
-        type: 'effect' | 'consumable' | 'melee' | 'weapon' | 'condition' | 'campaignFeature';
+        type: 'effect' | 'consumable' | 'melee' | 'weapon' | 'condition' | 'campaignFeature' | 'lore';
         system: S;
     }
 
