@@ -582,7 +582,6 @@ function findHighestSkillProficiencyRanks(
     relevantSkills: string[],
     skillRanks: Record<string, number>,
 ): number {
-    // add trailing "-lore"
     const skills = relevantSkills.filter(s => allActorSkills.includes(s as CharacterSkill)) as CharacterSkill[];
     const lores = relevantSkills
         .filter(s => !allActorSkills.includes(s as CharacterSkill))
