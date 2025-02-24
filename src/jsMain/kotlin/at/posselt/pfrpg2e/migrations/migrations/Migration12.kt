@@ -14,7 +14,6 @@ import at.posselt.pfrpg2e.settings.registerInt
 import at.posselt.pfrpg2e.settings.registerScalar
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.asSequence
-import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ENpc
