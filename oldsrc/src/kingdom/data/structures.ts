@@ -2282,7 +2282,7 @@ const vkAdjustments: Record<string, VKAdjustment> = {
     },
     'Waterfront': {
         consumptionReduction: 2,
-        ignoreConsumptionReductionOf: ['Pier'],
+        ignoreConsumptionReductionOf: ['Pier (V&K)'],
     },
 };
 
