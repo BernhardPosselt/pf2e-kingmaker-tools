@@ -14,7 +14,6 @@ import {
 import {rankToLabel} from '../modifiers';
 import {Kingdom} from '../data/kingdom';
 import {CheckDialog} from './check-dialog';
-import {getBooleanSetting} from '../../settings';
 import {getKingdom, saveKingdom} from '../storage';
 import {DegreeOfSuccess} from '../../degree-of-success';
 import {
@@ -385,7 +384,7 @@ class StructureBrowserApp extends FormApplication<
                 dc: this.getStructureDC(structure),
                 skills,
                 lacksProficiency,
-                disableBuild: lacksProficiency && !getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements'),
+                disableBuild: lacksProficiency && !this.kingdom.settings.kingdomIgnoreSkillRequirements,
                 lumber: structure.construction?.lumber,
                 ore: structure.construction?.ore,
                 stone: structure.construction?.stone,
@@ -407,8 +406,8 @@ class StructureBrowserApp extends FormApplication<
     }
 
     private getStructureDC(structure: Structure): number | undefined {
-        const adjustment = getBooleanSetting(this.game, 'reduceDCToBuildLumberStructures')
-        && (structure.construction?.lumber ?? 0) > 0 ? -2 : 0;
+        const adjustment = this.kingdom.settings.reduceDCToBuildLumberStructures
+            && (structure.construction?.lumber ?? 0) > 0 ? -2 : 0;
         const dc = structure.construction?.dc;
         return dc === undefined ? undefined : dc + adjustment;
     }

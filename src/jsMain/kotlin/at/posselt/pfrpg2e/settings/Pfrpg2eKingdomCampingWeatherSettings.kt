@@ -159,18 +159,6 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     fun getSchemaVersion(): Int =
         game.settings.getInt("schemaVersion")
 
-    suspend fun setKingdomEventsTable(value: String) =
-        game.settings.setString("kingdomEventsTable", value)
-
-    fun getKingdomEventsTable(): String =
-        game.settings.getString("kingdomEventsTable")
-
-    suspend fun setKingdomCultTable(value: String) =
-        game.settings.setString("kingdomCultTable", value)
-
-    fun getKingdomCultTable(): String =
-        game.settings.getString("kingdomCultTable")
-
     suspend fun setWeatherHazardRange(value: Int) =
         game.settings.setInt("weatherHazardRange", value)
 
@@ -246,8 +234,6 @@ object Pfrpg2eKingdomCampingWeatherSettings {
         )
         val strings = mapOf(
             "currentWeatherFx" to "none",
-            "kingdomEventsTable" to "Random Kingdom Events",
-            "kingdomCultTable" to "Random Cult Events",
             "latestMigrationBackup" to "{}"
         )
     }

@@ -7,6 +7,12 @@
         </div>
     {{else}}
         <div class="simple-dialog-form">
+            <div {{#unless useLeadershipModifiers}}hidden{{/unless}}>
+                <label for="km-check-leadership-modifiers">Leader</label>
+                <select name="leaderPerformingCheck" id="km-check-leadership-modifiers">
+                    {{selectOptions leaders selected=leaderPerformingCheck}}
+                </select>
+            </div>
             <div>
                 <label for="km-check-roll-mode">Roll Mode</label>
                 <select name="rollMode" id="km-check-roll-mode">

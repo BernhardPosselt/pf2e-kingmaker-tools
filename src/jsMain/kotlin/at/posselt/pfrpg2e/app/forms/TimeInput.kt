@@ -13,7 +13,7 @@ data class TimeInput(
     override val help: String? = null,
     override val hideLabel: Boolean = false,
     val elementClasses: List<String> = emptyList(),
-    val disabled: Boolean = false,
+    val readonly: Boolean = false,
     val stacked: Boolean = true,
     val escapeLabel: Boolean = true,
     val labelElement: String = "label",
@@ -32,7 +32,7 @@ data class TimeInput(
         time = true,
         required = required,
         number = false,
-        disabled = disabled,
+        disabled = false,
         text = false,
         radio = false,
         image = false,
@@ -49,5 +49,6 @@ data class TimeInput(
         labelElement = labelElement,
         button = false,
         empty = false,
+        readonly = readonly,
     )
 }

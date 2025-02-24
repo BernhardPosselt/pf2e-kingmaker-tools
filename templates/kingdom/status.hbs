@@ -40,22 +40,22 @@
             <th>Modifier</th>
             <th>Ability</th>
             <th>Score</th>
-            <th>Invested</th>
-            <th>Status Bonus</th>
+            <th {{#if enableLeadershipModifiers}}hidden{{/if}}>Invested</th>
+            <th {{#if enableLeadershipModifiers}}hidden{{/if}}>Status Bonus</th>
         </tr>
         {{#each abilities}}
             <tr>
                 <td>{{modifier}}</td>
                 <td>{{label}}</td>
                 <td><input type="number" value="{{score}}" name="abilityScores.{{@key}}"></td>
-                <td>
+                <td {{#if ../enableLeadershipModifiers}}hidden{{/if}}>
                     {{#if invested}}
                         <i class="fa-solid fa-circle-check"></i>
                     {{else}}
                         <i class="fa-regular fa-circle-xmark"></i>
                     {{/if}}
                 </td>
-                <td>{{investedBonus}}</td>
+                <td {{#if ../enableLeadershipModifiers}}hidden{{/if}}>{{investedBonus}}</td>
             </tr>
         {{/each}}
     </table>
@@ -63,17 +63,36 @@
 <table class="km-table">
     <tr>
         <th>Role</th>
-        <th>Name</th>
-        <th>Invested</th>
+        <th {{#unless enableLeadershipModifiers}}hidden{{/unless}} class="km-leader-type-th">Type</th>
+        <th class="km-leader-name-th">Identity</th>
+        <th {{#if enableLeadershipModifiers}}hidden{{/if}}>Invested</th>
         <th>Vacant</th>
     </tr>
     {{#each leaders}}
         <tr>
             <td>{{label}}</td>
-            <td>
-                <input type="text" value="{{name}}" name="leaders.{{@key}}.name">
+            <td {{#unless ../enableLeadershipModifiers}}hidden{{/unless}}>
+                <select name="leaders.{{@key}}.type">
+                    {{selectOptions ../leaderTypes selected=type}}
+                </select>
             </td>
-            <td><input type="checkbox" {{checked invested}} name="leaders.{{@key}}.invested"></td>
+            <td class="km-leader-details" data-leader="{{@key}}" data-uuid="{{uuid}}">
+                {{#if hasActor}}
+                <div>
+                    <a title="Open Actor" href="#" data-action="open-actor" data-uuid="{{uuid}}"><img src="{{img}}"></a>
+                    <div>
+                        <header>{{name}}</header>
+                        <p><b>Level</b>: {{level}}</p>
+                    </div>
+                    <input type="hidden" value="{{uuid}}" name="leaders.{{@key}}.uuid">
+                    <button type="button" title="Remove Actor" data-action="remove-actor"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                {{else}}
+                    <p>Drop Actor Here!</p>
+                {{/if}}
+            </td>
+            <td {{#if ../enableLeadershipModifiers}}hidden{{/if}}><input type="checkbox" {{checked invested}}
+                                                                         name="leaders.{{@key}}.invested"></td>
             <td><input type="checkbox" {{checked vacant}} name="leaders.{{@key}}.vacant"></td>
         </tr>
     {{/each}}

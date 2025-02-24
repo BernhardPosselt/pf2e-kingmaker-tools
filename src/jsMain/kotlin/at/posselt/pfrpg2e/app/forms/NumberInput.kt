@@ -9,7 +9,7 @@ data class NumberInput(
     override val help: String? = null,
     override val hideLabel: Boolean = false,
     val elementClasses: List<String> = emptyList(),
-    val disabled: Boolean = false,
+    val readonly: Boolean = false,
     val stacked: Boolean = true,
     val escapeLabel: Boolean = true,
     val labelElement: String = "label",
@@ -23,7 +23,7 @@ data class NumberInput(
         select = false,
         time = false,
         required = required,
-        disabled = disabled,
+        disabled = false,
         number = true,
         text = false,
         image = false,
@@ -41,6 +41,7 @@ data class NumberInput(
         labelElement = labelElement,
         button = false,
         empty = false,
+        readonly = readonly,
     )
 }
 

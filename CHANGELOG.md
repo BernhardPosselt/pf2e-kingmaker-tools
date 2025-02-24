@@ -7,17 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Overhauled Kingdom Settings and made them local per kingdom sheet
+* Use Roll Table UUIDs for kingdom and cult events; this means that roll table names are not required to be unique anymore 
+* All Kingdom Leaders must now refer to an NPC or PC actor; a migration is in place to link the best possible actor type if possible; to change existing leaders, drag and drop a token onto the leader position in the sheet
+
 ### Added
 
 * Added V&K 1.1 homebrew except:
-  * Leadership Modifier Rules
   * Construction Time
   * Renown/Fame/Infamy split
 
 ### Fixed
 
 * Edit Structure macro should now edit the base actor and not the unlinked token actor
-
+* Fix Economic Surge journal link for built-in kingdom events
 
 ## [2.1.2] - 2025-01-29
 

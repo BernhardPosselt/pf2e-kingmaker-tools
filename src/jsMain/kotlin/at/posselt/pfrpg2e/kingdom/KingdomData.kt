@@ -1,9 +1,13 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Leader
 import at.posselt.pfrpg2e.kingdom.SkillValue
+import com.foundryvtt.core.Game
+import com.foundryvtt.core.Game.actors
+import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.Record
 import kotlinx.js.JsPlainObject
 import kotlin.Array
@@ -13,7 +17,7 @@ typealias AbilityScores = Record<KingdomAbility, Int>
 typealias LeaderValue = String // ruler, counselor, general, emissary, magister, treasurer, viceroy,warden
 typealias Leaders = Record<LeaderValue, LeaderValues>
 typealias ModifierType = String // ability, proficiency, item, status, circumstance, vacancy, untyped
-typealias LeaderType = String // pc, npc or companion
+typealias LeaderType = String // pc, regularNpc, highlyMotivatedNpc, nonPathfinderNpc
 typealias GroupRelations = String  // none, diplomatic-relations, trade-agreement
 typealias KingdomPhase = String  // army, civic, commerce, event, leadership, region, upkeep
 typealias Heartland = String // forest-or-swamp, hill-or-plain, lake-or-river, mountain-or-ruins
@@ -42,7 +46,7 @@ external interface Modifier {
 
 @JsPlainObject
 external interface LeaderValues {
-    var name: String
+    var uuid: String?
     var invested: Boolean
     var type: LeaderType
     var vacant: Boolean
@@ -141,7 +145,6 @@ external interface BonusFeat {
 external interface Fame {
     var now: Int
     var next: Int
-    var max: Int
     var type: FameType
 }
 
@@ -202,7 +205,33 @@ external interface Resources {
 
 @JsPlainObject
 external interface KingdomSettings {
+    var rpToXpConversionRate: Int
+    var rpToXpConversionLimit: Int
+    var resourceDicePerVillage: Int
+    var resourceDicePerTown: Int
+    var resourceDicePerCity: Int
+    var resourceDicePerMetropolis: Int
+    var xpPerClaimedHex: Int
+    var includeCapitalItemModifier: Boolean
+    var cultOfTheBloomEvents: Boolean
+    var autoCalculateSettlementLevel: Boolean
+    var vanceAndKerensharaXP: Boolean
+    var capitalInvestmentInCapital: Boolean
+    var reduceDCToBuildLumberStructures: Boolean
+    var kingdomSkillIncreaseEveryLevel: Boolean
+    var kingdomAllStructureItemBonusesStack: Boolean
+    var kingdomIgnoreSkillRequirements: Boolean
+    var autoCalculateArmyConsumption: Boolean
+    var enableLeadershipModifiers: Boolean
     var expandMagicUse: Boolean
+    var kingdomEventRollMode: String
+    var automateResources: String
+    var proficiencyMode: String
+    var kingdomEventsTable: String?
+    var kingdomCultTable: String?
+    var maximumFamePoints: Int
+    var leaderKingdomSkills: LeaderKingdomSkills
+    var leaderSkills: LeaderSkills
 }
 
 @JsPlainObject
@@ -268,8 +297,6 @@ external interface KingdomData {
     var activityBlacklist: Array<String>
     var modifiers: Array<Modifier>
     var settlements: Array<Settlement>
-    var leaderKingdomSkills: LeaderKingdomSkills
-    var leaderSkills: LeaderSkills
 }
 
 fun LeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =
@@ -306,3 +333,8 @@ fun LeaderSkills.deleteLore(attribute: Attribute) = LeaderSkills(
     viceroy = viceroy.filter { it != attribute.value }.toTypedArray(),
     warden = warden.filter { it != attribute.value }.toTypedArray(),
 )
+
+fun Game.getKingdomActor(): PF2ENpc? =
+    actors.contents
+        .filterIsInstance<PF2ENpc>()
+        .find { it.getKingdom() != null && it.name == "Kingdom Sheet"}

@@ -41,5 +41,6 @@ data class Component(
         labelElement = labelElement,
         button = false,
         empty = false,
+        readonly = false,
     )
 }

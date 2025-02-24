@@ -22,24 +22,24 @@
 {{else if number}}
         <input type="number" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
-                disabled}}disabled{{/if}}>
+                disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}}>
 {{else if radio}}
         <input type="radio" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
-                disabled}}disabled{{/if}} {{checked checked}}>
+                disabled}}disabled{{/if}} {{checked checked}} {{#if readonly}}readonly{{/if}}>
 {{else if text}}
         <input type="text" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}} {{#if
                 elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}} {{#if
-                placeholder}}placeholder="{{placeholder}}"{{/if}}>
+                placeholder}}placeholder="{{placeholder}}"{{/if}} {{#if readonly}}readonly{{/if}}>
 {{else if checkbox}}
         <input type="checkbox" name="{{name}}" {{checked value}}  {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
-                disabled}}disabled{{/if}}>
+                disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}}>
 {{else if time}}
         <input type="time" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
-                disabled}}disabled{{/if}}>
+                disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}}>
 {{else if hidden}}
         <input type="hidden" name="{{name}}" value="{{value}}" {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}}>
 {{else if textArea}}

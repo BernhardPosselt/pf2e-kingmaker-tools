@@ -1,6 +1,5 @@
 import {Kingdom} from '../kingdom/data/kingdom';
-import {saveKingdom} from '../kingdom/storage';
-import {getBooleanSetting} from '../settings';
+import {getKingdom, saveKingdom} from '../kingdom/storage';
 import {distinctBy, sum} from '../utils';
 import {Modifier} from '../kingdom/modifiers';
 
@@ -25,7 +24,7 @@ export async function updateKingdomArmyConsumption(
         forceUpdate?: boolean,
     },
 ): Promise<void> {
-    const autoCalculationEnabled = getBooleanSetting(game, 'autoCalculateArmyConsumption');
+    const autoCalculationEnabled = kingdomActor && getKingdom(kingdomActor).settings.autoCalculateArmyConsumption;
     if (autoCalculationEnabled && kingdomActor && (forceUpdate || isArmyActor(actor))) {
         await saveKingdom(kingdomActor, {
             consumption: {

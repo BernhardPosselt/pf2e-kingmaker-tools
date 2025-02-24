@@ -12,7 +12,6 @@ import {
     getStructureStackMode,
     SettlementAndScene,
 } from '../scene';
-import {getBooleanSetting} from '../../settings';
 import {getKingdomActivitiesById} from '../data/activityData';
 
 interface SettlementOptions {
@@ -70,8 +69,8 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
     override async getData(): Promise<object> {
         const settlement = getSettlement(this.game, this.kingdom, this.settlementId)!;
         const capital = getCapitalSettlement(this.game, this.kingdom);
-        const structureStackMode = getStructureStackMode(this.game);
-        const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
+        const structureStackMode = getStructureStackMode(this.kingdom);
+        const autoCalculateSettlementLevel = this.kingdom.settings.autoCalculateSettlementLevel;
         const activities = getKingdomActivitiesById(this.kingdom.homebrewActivities);
         const structureData = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, settlement, capital);
         const builtStructures = await this.getBuiltStructures(settlement);

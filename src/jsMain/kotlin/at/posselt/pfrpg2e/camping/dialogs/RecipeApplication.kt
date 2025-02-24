@@ -248,7 +248,7 @@ class RecipeApplication(
                             stacked = false,
                             label = "Name",
                             name = "name",
-                            disabled = editRecipeName != null,
+                            readonly = editRecipeName != null,
                             value = currentRecipe?.name ?: "",
                             required = true,
                             help = "To override an existing recipe, use the same name",

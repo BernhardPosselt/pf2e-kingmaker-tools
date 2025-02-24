@@ -3,6 +3,7 @@ import {RollTableDraw} from '@league-of-foundry-developers/foundry-vtt-types/src
 import {DegreeOfSuccess} from './degree-of-success';
 import {WeatherEffectName} from './weather/data';
 import {ModuleData} from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/packages.mjs';
+import {KingdomSettings} from "./kingdom/data/kingdom";
 
 declare global {
     declare class PF2EModifier {
@@ -13,8 +14,13 @@ declare global {
         pf2eKingmakerTools: {
             macros: {
                 structureTokenMappingMacro: () => void,
+                kingdomEventsMacro: () => void,
+                cultEventsMacro: () => void,
                 viewKingdomMacro: () => void,
             };
+            migration: {
+                kingdomSettings: (KingdomSettings, onSave: (settings: KingdomSettings) => void) => void,
+            }
         };
         pf2e: {
             worldClock: {

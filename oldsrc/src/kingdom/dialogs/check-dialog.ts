@@ -1,5 +1,6 @@
 import {KingdomFeat} from '../data/feats';
 import {
+    createLeadershipModifier,
     calculateModifiers,
     createActiveSettlementModifiers,
     getUntrainedProficiencyMode,
@@ -11,7 +12,7 @@ import {
 } from '../modifiers';
 import {allKingdomPhases, getActivitySkills, KingdomPhase} from '../data/activities';
 import {Skill, skillAbilities} from '../data/skills';
-import {createSkillModifiers} from '../skills';
+import {createSkillModifiers, LeaderPerformingCheck} from '../skills';
 import {getControlDC, hasFeat, Kingdom, SkillRanks} from '../data/kingdom';
 import {capitalize, encodeJson, LabelAndValue, rollModeChoices, toLabelAndValue, unslugify} from '../../utils';
 import {getKingdomActivitiesById, KingdomActivityById} from '../data/activityData';
@@ -22,11 +23,10 @@ import {
     getSettlement,
     getSettlementsWithoutLandBorders,
     getStolenLandsData,
-    ResourceAutomationMode,
 } from '../scene';
-import {getBooleanSetting, getStringSetting} from '../../settings';
 import {DegreeOfSuccess} from '../../degree-of-success';
 import {getArmyModifiers, getScoutingDC} from '../../armies/utils';
+import {allLeaders, Leader} from "../data/leaders";
 
 export type CheckType = 'skill' | 'activity';
 
@@ -55,6 +55,7 @@ interface CheckFormData {
     overrideModifiers: Record<string, string>;
     consumeModifiers: Record<string, boolean>;
     rollMode: RollMode;
+    leaderPerformingCheck: Leader;
 }
 
 interface TotalAndModifiers {
@@ -113,6 +114,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     private rollOptions: string[] = [];
     private rollMode: RollMode = 'publicroll';
     private additionalChatMessages: AdditionalChatMessages;
+    private leaderPerformingCheck: Leader = 'ruler';
 
     constructor(object: null, options: Partial<FormApplicationOptions> & CheckDialogFeatOptions) {
         super(object, options);
@@ -127,7 +129,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         this.afterRoll = options.afterRoll ?? (async (): Promise<void> => {
         });
         this.overrideSkills = options.overrideSkills;
-        const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
+        const automateResourceMode = this.kingdom.settings.automateResources;
         const {size: kingdomSize} = getStolenLandsData(this.game, automateResourceMode, this.kingdom);
         const controlDC = getControlDC(this.kingdom.level, kingdomSize, this.kingdom.leaders.ruler.vacant);
         if (this.type === 'skill') {
@@ -169,7 +171,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         return options;
     }
 
-    override getData(options?: Partial<FormApplicationOptions & { feats: KingdomFeat[] }>): Promise<object> | object {
+    override async getData(options?: Partial<FormApplicationOptions & { feats: KingdomFeat[] }>): Promise<object> {
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, this.kingdom);
         const activeSettlement = getSettlement(this.game, this.kingdom, this.kingdom.activeSettlement);
         const activities = getKingdomActivitiesById(this.kingdom.homebrewActivities);
@@ -207,12 +209,14 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             });
         }
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
+        const currentLeader = await this.findLeader();
         const skillModifiers = this.calculateModifiers(
             applicableSkills,
             activeSettlementStructureResult,
             additionalModifiers,
             convertedCustomModifiers,
             activities,
+            currentLeader,
         );
         const creativeSolutionModifier = this.calculateModifiers(
             applicableSkills,
@@ -220,6 +224,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             [...additionalModifiers, {enabled: true, type: 'circumstance', value: 2, name: 'Creative Solution'}],
             convertedCustomModifiers,
             activities,
+            currentLeader,
         )[this.selectedSkill];
         const supernaturalSolutionModifier = this.calculateModifiers(
             ['magic'],
@@ -227,6 +232,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             additionalModifiers,
             convertedCustomModifiers,
             activities,
+            currentLeader,
         )['magic'];
         const selectedSkillModifier = skillModifiers[this.selectedSkill];
         // set all modifiers as consumed that have a consumeId and are enabled
@@ -240,7 +246,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             selected: createModifierList(selectedSkillModifier),
         });
         return {
-            ...super.getData(options),
+            ...(await super.getData(options)),
             invalid: this.selectedSkill === undefined,
             dc: this.dc,
             title: this.activity ? unslugify(this.activity) : capitalize(this.skill!),
@@ -257,7 +263,30 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             rollModeChoices: rollModeChoices,
             phases: toLabelAndValue([...allKingdomPhases], {capitalizeLabel: true}),
             overrides: toLabelAndValue(['enabled', 'disabled'], {emptyChoice: '-', capitalizeLabel: true}),
+            useLeadershipModifiers: this.kingdom.settings.enableLeadershipModifiers,
+            leaderPerformingCheck: this.leaderPerformingCheck,
+            leaders: allLeaders.map(l => {
+                return {label: capitalize(l), value: l}
+            }),
         };
+    }
+
+    private async findLeader(): Promise<LeaderPerformingCheck | undefined> {
+        const leader = this.kingdom.leaders[this.leaderPerformingCheck];
+        const uuid = leader.uuid;
+        if (uuid) {
+            const actor = await fromUuid(uuid) as Actor | null;
+            if (actor) {
+                return {
+                    position: this.leaderPerformingCheck,
+                    type: leader.type,
+                    level: actor.level,
+                    skillRanks: Object.fromEntries(Object.entries(actor.skills).map(([key, value]) => {
+                        return [key, value.rank];
+                    })),
+                }
+            }
+        }
     }
 
     override activateListeners(html: JQuery): void {
@@ -345,6 +374,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const data = foundry.utils.expandObject(formData) as CheckFormData;
         console.log(data);
         this.selectedSkill = data.selectedSkill;
+        this.leaderPerformingCheck = data.leaderPerformingCheck;
         this.dc = data.dc;
         this.phase = data.phase;
         this.rollMode = data.rollMode;
@@ -363,7 +393,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const expandMagicActivities = new Set([
             'celebrate-holiday', 'celebrate-holiday-vk', 'craft-luxuries', 'create-a-masterpiece', 'rest-and-relax'
         ]);
-        const ignoreSkillRequirements = getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements');
+        const ignoreSkillRequirements = this.kingdom.settings.kingdomIgnoreSkillRequirements;
         const skillRankFilters = ignoreSkillRequirements ? undefined : ranks;
         const activitySkills = getActivitySkills(this.overrideSkills ?? activities[activity].skills, skillRankFilters);
         const practicalMagic: Skill[] = activitySkills.includes('engineering') && hasFeat(this.kingdom, 'Practical Magic') ? ['magic'] : [];
@@ -377,6 +407,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         additionalModifiers: Modifier[],
         convertedCustomModifiers: Modifier[],
         activities: KingdomActivityById,
+        currentLeader: LeaderPerformingCheck | undefined,
     ): Record<Skill, TotalAndModifiers> {
         return Object.fromEntries(applicableSkills.map(skill => {
             const modifiers = createSkillModifiers({
@@ -386,7 +417,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 abilityScores: this.kingdom.abilityScores,
                 leaders: this.kingdom.leaders,
                 kingdomLevel: this.kingdom.level,
-                untrainedProficiencyMode: getUntrainedProficiencyMode(this.game),
+                untrainedProficiencyMode: getUntrainedProficiencyMode(this.kingdom),
                 ability: skillAbilities[skill],
                 skillItemBonus: activeSettlementStructureResult?.skillBonuses?.[skill],
                 additionalModifiers: [...additionalModifiers, ...convertedCustomModifiers],
@@ -395,6 +426,10 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 skill,
                 overrides: this.modifierOverrides,
                 activities,
+                useLeadershipModifiers: this.kingdom.settings.enableLeadershipModifiers,
+                leaderSkills: this.kingdom.settings.leaderSkills,
+                leaderKingdomSkills: this.kingdom.settings.leaderKingdomSkills,
+                currentLeader,
             });
             const total = calculateModifiers(modifiers);
             return [skill, {total, modifiers}];

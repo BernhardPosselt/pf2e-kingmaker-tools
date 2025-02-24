@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.utils
 
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.LeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.LeaderSkills
 import com.foundryvtt.core.Actor
@@ -16,6 +17,7 @@ external interface ToolsMacros {
     val setCurrentWeatherMacro: () -> Unit
     val sceneWeatherSettingsMacro: () -> Unit
     val kingdomEventsMacro: () -> Unit
+    val cultEventsMacro: () -> Unit
     val rollKingmakerWeatherMacro: () -> Unit
     val awardXpMacro: () -> Unit
     val resetHeroPointsMacro: () -> Unit
@@ -36,8 +38,7 @@ external interface ToolsMacros {
 
 @JsPlainObject
 external interface KtMigration {
-    val configureLeaderKingdomSkills: (skills: LeaderKingdomSkills, onSave: (skills: LeaderKingdomSkills) -> Unit) -> Unit
-    val configureLeaderSkills: (skills: LeaderSkills, onSave: (skills: LeaderSkills) -> Unit) -> Unit
+    val kingdomSettings: (settings: KingdomSettings, onSave: (settings: KingdomSettings) -> Unit) -> Unit
 }
 
 @JsPlainObject

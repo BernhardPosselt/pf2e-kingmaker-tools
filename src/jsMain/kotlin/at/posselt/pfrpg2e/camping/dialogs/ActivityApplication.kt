@@ -305,7 +305,7 @@ class ActivityApplication(
                             stacked = false,
                             label = "Name",
                             name = "name",
-                            disabled = editActivityName != null,
+                            readonly = editActivityName != null,
                             value = currentActivity.name,
                             required = true,
                             help = "To override an existing activity, use the same name",

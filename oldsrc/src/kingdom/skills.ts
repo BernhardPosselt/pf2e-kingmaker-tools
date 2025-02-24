@@ -1,9 +1,10 @@
-import {Leaders, Ruin, SkillRanks} from './data/kingdom';
+import {LeaderKingdomSkills, Leaders, LeaderSkills, Ruin, SkillRanks} from './data/kingdom';
 import {capitalize} from '../utils';
 import {Ability, AbilityScores} from './data/abilities';
 import {allSkills, Skill, skillAbilities} from './data/skills';
 import {KingdomPhase} from './data/activities';
 import {
+    createLeadershipModifier,
     calculateModifiers,
     createAbilityModifier,
     createInvestedModifier,
@@ -15,10 +16,11 @@ import {
     Modifier,
     ModifierTotals,
     processModifiers,
-    UntrainedProficiencyMode,
+    UntrainedProficiencyMode, Proficiency,
 } from './modifiers';
 import {SkillItemBonus, SkillItemBonuses} from './data/structures';
 import {KingdomActivityById} from './data/activityData';
+import {Leader} from "./data/leaders";
 
 
 interface SkillStats {
@@ -28,6 +30,17 @@ interface SkillStats {
     abilityLabel: string;
     rank: number;
     total: ModifierTotals;
+}
+
+export const allLeaderTypes = ['pc', 'regularNpc', 'highlyMotivatedNpc', 'nonPathfinderNpc'] as const;
+
+export type LeadershipLeaderType = typeof allLeaderTypes[number];
+
+export interface LeaderPerformingCheck {
+    type: LeadershipLeaderType;
+    level: number;
+    position: Leader;
+    skillRanks: Record<string, number>;
 }
 
 export function createSkillModifiers(
@@ -47,6 +60,10 @@ export function createSkillModifiers(
         additionalModifiers = [],
         overrides = {},
         activities,
+        useLeadershipModifiers,
+        leaderKingdomSkills,
+        leaderSkills,
+        currentLeader,
     }: {
         skill: Skill,
         ability: Ability,
@@ -63,13 +80,19 @@ export function createSkillModifiers(
         additionalModifiers?: Modifier[],
         overrides?: Record<string, boolean>;
         activities: KingdomActivityById;
+        useLeadershipModifiers: boolean;
+        currentLeader?: LeaderPerformingCheck;
+        leaderKingdomSkills: LeaderKingdomSkills;
+        leaderSkills: LeaderSkills;
     },
 ): Modifier[] {
     const abilityModifier = createAbilityModifier(ability, abilityScores);
     const proficiencyModifier = createProficiencyModifier(skillRank, untrainedProficiencyMode, kingdomLevel);
     const vacancyModifiers = createVacancyModifiers(ability, leaders);
     // status bonus
-    const investedModifier = createInvestedModifier(kingdomLevel, ability, leaders);
+    const investedModifier = createInvestedModifier(kingdomLevel, ability, leaders, useLeadershipModifiers);
+    // leadership bonus
+    const leadershipModifier = createLeadershipModifier(currentLeader, skill, leaderKingdomSkills, leaderSkills, useLeadershipModifiers);
     // item bonus
     const structureModifiers = skillItemBonus ? createStructureModifiers(skillItemBonus, activities) : [];
     // status penalty
@@ -91,6 +114,9 @@ export function createSkillModifiers(
     }
     if (investedModifier) {
         result.push(investedModifier);
+    }
+    if (leadershipModifier) {
+        result.push(leadershipModifier);
     }
     return processModifiers({
         modifiers: result,
@@ -115,6 +141,10 @@ export function calculateSkills(
         skillItemBonuses,
         additionalModifiers,
         activities,
+        useLeadershipModifiers,
+        leaderKingdomSkills,
+        leaderSkills,
+        currentLeader,
     }: {
         ruin: Ruin,
         unrest: number,
@@ -126,6 +156,10 @@ export function calculateSkills(
         skillItemBonuses?: SkillItemBonuses,
         additionalModifiers?: Modifier[],
         activities: KingdomActivityById,
+        currentLeader?: LeaderPerformingCheck;
+        leaderKingdomSkills: LeaderKingdomSkills;
+        leaderSkills: LeaderSkills;
+        useLeadershipModifiers: boolean;
     },
 ): SkillStats[] {
     return allSkills.map(skill => {
@@ -143,6 +177,10 @@ export function calculateSkills(
             skill,
             additionalModifiers,
             activities,
+            useLeadershipModifiers,
+            leaderKingdomSkills,
+            leaderSkills,
+            currentLeader,
         });
         const total = calculateModifiers(modifiers);
         return {

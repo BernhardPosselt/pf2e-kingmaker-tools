@@ -1,4 +1,3 @@
-import {getBooleanSetting, getNumberSetting, getStringSetting} from '../settings';
 import {
     allFameTypes,
     allHeartlands,
@@ -8,9 +7,7 @@ import {
     Feat,
     getControlDC,
     getDefaultKingdomData,
-    getLevelData,
     getSizeData,
-    hasFeat,
     Kingdom,
     Leaders,
     LeaderValues,
@@ -21,7 +18,7 @@ import {
 } from './data/kingdom';
 import {
     capitalize,
-    clamped,
+    clamped, deCamelCase,
     isNonNullable,
     postChatMessage,
     range,
@@ -41,14 +38,12 @@ import {
     getStolenLandsData,
     getStructureResult,
     getStructureStackMode,
-    ResourceAutomationMode,
     SettlementAndScene,
 } from './scene';
 import {allFeats, allFeatsByName} from './data/feats';
 import {addGroupDialog} from './dialogs/add-group-dialog';
 import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
 import {addOngoingEventDialog} from './dialogs/add-ongoing-event-dialog';
-import {rollCultEvent, rollKingdomEvent} from '../kingdom-events';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
 import {featuresByLevel, uniqueFeatures} from './data/features';
@@ -58,8 +53,8 @@ import {
     groupKingdomActivities,
 } from './data/activities';
 import {AbilityScores, calculateAbilityModifier} from './data/abilities';
-import {calculateSkills} from './skills';
-import {calculateInvestedBonus, isInvested} from './data/leaders';
+import {allLeaderTypes, calculateSkills} from './skills';
+import {calculateInvestedBonus, isInvested, Leader} from './data/leaders';
 import {CheckDialog} from './dialogs/check-dialog';
 import {Skill} from './data/skills';
 import {showHelpDialog} from './dialogs/show-help-dialog';
@@ -70,7 +65,6 @@ import {getKingdom, saveKingdom} from './storage';
 import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
 import {calculateUnrestPenalty} from './data/unrest';
 import {editSettlementDialog} from './dialogs/edit-settlement-dialog';
-import {showKingdomSettings} from './dialogs/kingdom-settings';
 import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
 import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData';
@@ -82,6 +76,7 @@ import {showArmyTacticsBrowser} from './dialogs/army-tactics-browser';
 import {showArmyBrowser} from './dialogs/army-browser';
 import {calculateResourceDicePerTurn} from "./structures";
 import {structureXpDialog} from "./dialogs/structure-xp-dialog";
+import {findWorldTableUuid} from "../roll-tables";
 
 interface KingdomOptions {
     game: Game;
@@ -141,19 +136,19 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const isGM = this.game.user?.isGM ?? false;
         const kingdomData = this.getKingdom();
         this.object = kingdomData;
-        const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
-        const autoCalculateArmyConsumption = getBooleanSetting(this.game, 'autoCalculateArmyConsumption');
+        const automateResourceMode = kingdomData.settings.automateResources;
+        const autoCalculateArmyConsumption = kingdomData.settings.autoCalculateArmyConsumption
         const {size: kingdomSize, workSites} = getStolenLandsData(this.game, automateResourceMode, kingdomData);
         const sizeData = getSizeData(kingdomSize);
-        const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
+        const autoCalculateSettlementLevel = kingdomData.settings.autoCalculateSettlementLevel;
         const {
             leadershipActivityNumber,
             settlementConsumption,
             unlockedActivities: unlockedSettlementActivities,
         } = getAllMergedSettlements(this.game, kingdomData);
         const {current: totalConsumption, surplus: farmSurplus} = getConsumption(this.game, kingdomData);
-        const useXpHomebrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
-        const homebrewSkillIncreases = getBooleanSetting(this.game, 'kingdomSkillIncreaseEveryLevel');
+        const useXpHomebrew = kingdomData.settings.vanceAndKerensharaXP;
+        const homebrewSkillIncreases = kingdomData.settings.kingdomSkillIncreaseEveryLevel;
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, kingdomData);
         const activeSettlement = getSettlement(this.game, kingdomData, kingdomData.activeSettlement);
         const hideActivities = kingdomData.activityBlacklist
@@ -161,12 +156,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 return {[activity]: true};
             })
             .reduce((a, b) => Object.assign(a, b), {});
-        const ignoreSkillRequirements = getBooleanSetting(this.game, 'kingdomIgnoreSkillRequirements');
+        const ignoreSkillRequirements = kingdomData.settings.kingdomIgnoreSkillRequirements;
         const activities = getKingdomActivitiesById(kingdomData.homebrewActivities);
         const enabledActivities = getPerformableActivities(
             kingdomData.skillRanks,
             activeSettlementStructureResult?.active?.allowCapitalInvestment === true
-            || (activeSettlement?.settlement.type === 'capital' && getBooleanSetting(this.game, 'capitalInvestmentInCapital')),
+            || (activeSettlement?.settlement.type === 'capital' && kingdomData.settings.capitalInvestmentInCapital),
             ignoreSkillRequirements,
             activities,
         );
@@ -174,7 +169,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const currentSceneId = getCurrentScene(this.game)?.id;
         const canAddSettlement = kingdomData.settlements.find(settlement => settlement.sceneId === currentSceneId) === undefined;
         const canAddRealm = isNonNullable(currentSceneId) && currentSceneId !== kingdomData.realmSceneId;
-        const structureStackMode = getStructureStackMode(this.game);
+        const structureStackMode = getStructureStackMode(kingdomData);
         const automateResources = automateResourceMode !== 'manual';
         const showAddRealmButton = isGM && automateResourceMode === 'tileBased';
         const showRealmData = automateResourceMode === 'kingmaker'
@@ -233,7 +228,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 abilityScores: kingdomData.abilityScores,
                 unrest: kingdomData.unrest,
                 kingdomLevel: kingdomData.level,
-                untrainedProficiencyMode: getUntrainedProficiencyMode(this.game),
+                untrainedProficiencyMode: getUntrainedProficiencyMode(kingdomData),
                 skillItemBonuses: activeSettlementStructureResult?.skillBonuses,
                 additionalModifiers: createActiveSettlementModifiers(
                     kingdomData,
@@ -242,8 +237,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     getSettlementsWithoutLandBorders(this.game, kingdomData),
                 ),
                 activities,
+                leaderKingdomSkills: kingdomData.settings.leaderKingdomSkills,
+                leaderSkills: kingdomData.settings.leaderSkills,
+                useLeadershipModifiers: kingdomData.settings.enableLeadershipModifiers,
+                currentLeader: undefined,
             }),
-            leaders: this.getLeaders(kingdomData.leaders),
+            leaders: await this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
             fameTypes: allFameTypes,
             fameLabel: this.getFameLabel(kingdomData.fame.type),
@@ -260,7 +259,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             heartlands: allHeartlands.map(heartland => {
                 return {label: unslugify(heartland), value: heartland};
             }),
-            fameValues: toLabelAndValue(range(0, kingdomData.fame.max + 1)),
+            fameValues: toLabelAndValue(range(0, kingdomData.settings.maximumFamePoints + 1)),
             aspirations: [{value: 'famous', label: 'Fame'}, {value: 'infamous', label: 'Infamy'}],
             settlements: kingdomData.settlements
                 .map(settlement => getSettlement(this.game, kingdomData, settlement.sceneId))
@@ -273,7 +272,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         ...s.settlement,
                         ...getSettlementInfo(s, autoCalculateSettlementLevel),
                         waterBorders,
-                        overcrowded: this.isOvercrowded(s),
+                        overcrowded: this.isOvercrowded(kingdomData, s),
                         residentialLots: structureResult.residentialLots,
                         lacksBridge: waterBorders >= 4 && !structureResult.hasBridge,
                         isCapital: settlement?.settlement.type === 'capital',
@@ -321,11 +320,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             useXpHomebrew,
             canAddSettlement,
             effects: createEffects(kingdomData.modifiers),
-            cultOfTheBloomEvents: getBooleanSetting(this.game, 'cultOfTheBloomEvents') && isGM,
+            cultOfTheBloomEvents: kingdomData.settings.cultOfTheBloomEvents && isGM,
             automateResources,
             canAddRealm,
             showRealmData,
             showAddRealmButton,
+            enableLeadershipModifiers: kingdomData.settings.enableLeadershipModifiers,
+            leaderTypes: allLeaderTypes.map(t => {
+                return {label: deCamelCase(t), value: t};
+            }),
         };
     }
 
@@ -350,6 +353,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         this.render();
     }
 
+    public updateActor(actor: Actor): void {
+        const leaderUuids = Object.values(this.getKingdom().leaders).map(a => a.uuid);
+        if (leaderUuids.includes(actor.uuid)) {
+            this.render();
+        }
+    }
+
     override activateListeners(html: JQuery): void {
         super.activateListeners(html);
         Hooks.on('closeKingmakerHexEdit', this.sceneChange.bind(this));
@@ -365,7 +375,53 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.on('createDrawing', this.sceneChange.bind(this));
         Hooks.on('updateDrawing', this.sceneChange.bind(this));
         Hooks.on('deleteDrawing', this.sceneChange.bind(this));
+        Hooks.on('updateActor', this.updateActor.bind(this));
         const $html = html[0];
+        $html.querySelectorAll('.km-leader-details')
+            .forEach(el => {
+                const elem = el as HTMLElement;
+                elem.addEventListener('drop', async (ev) => {
+                    const leader = elem.dataset.leader as Leader;
+                    const data = ev.dataTransfer?.getData("text/plain");
+                    if (data) {
+                        const json = JSON.parse(data);
+                        if ('type' in json && json['type'] === 'Actor') {
+                            const uuid = json['uuid'];
+                            const actor = (await fromUuid(uuid)) as Actor | null;
+                            if (actor && (actor.type === 'character' || actor.type === 'npc')) {
+                                const kingdom = this.getKingdom();
+                                kingdom.leaders[leader].uuid = uuid;
+                                await this.saveKingdom(kingdom)
+                            } else {
+                                ui?.notifications?.error('Can only set Characters or NPCs as leaders');
+                            }
+                        }
+                    }
+                });
+            });
+        $html.querySelectorAll('.km-leader-details [data-action=open-actor]').forEach(el => {
+            el.addEventListener('click', async (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                const elem = ev.currentTarget as HTMLElement;
+                const closest = elem.closest('.km-leader-details') as HTMLElement;
+                const uuid = closest.dataset.uuid as string;
+                const actor = (await fromUuid(uuid)) as Actor | null;
+                if (actor) {
+                    actor.sheet?.render(true);
+                }
+            });
+        });
+        $html.querySelectorAll('.km-leader-details [data-action=remove-actor]').forEach(el => {
+            el.addEventListener('click', async (ev) => {
+                const elem = ev.currentTarget as HTMLElement;
+                const closest = elem.closest('.km-leader-details') as HTMLElement;
+                const leader = closest.dataset.leader as Leader;
+                const kingdom = this.getKingdom();
+                kingdom.leaders[leader].uuid = null;
+                await this.saveKingdom(kingdom)
+            });
+        });
         $html.querySelectorAll('.km-nav a')?.forEach(el => {
             el.addEventListener('click', (event) => {
                 const tab = event.currentTarget as HTMLAnchorElement;
@@ -402,9 +458,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-check-cult-event')
             ?.addEventListener('click', async () => await this.checkForCultEvent());
         $html.querySelector('#km-roll-event')
-            ?.addEventListener('click', async () => await rollKingdomEvent(this.game));
+            ?.addEventListener('click', async () => this.game.pf2eKingmakerTools.macros.kingdomEventsMacro());
         $html.querySelector('#km-roll-cult-event')
-            ?.addEventListener('click', async () => await rollCultEvent(this.game));
+            ?.addEventListener('click', async () => this.game.pf2eKingmakerTools.macros.cultEventsMacro());
         $html.querySelector('#claimed-refuge')
             ?.addEventListener('click', async () => await this.claimedHexFeature('refuge'));
         $html.querySelector('#km-open-structure-browser')
@@ -446,14 +502,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const target = ev.currentTarget as HTMLButtonElement;
                     const hexes = parseInt(target.dataset.hexes ?? '0', 10);
                     const current = this.getKingdom();
-                    const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
+                    const automateResourceMode = current.settings.automateResources;
                     const {size: kingdomSize} = getStolenLandsData(this.game, automateResourceMode, current);
-                    const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
+                    const useHomeBrew = current.settings.vanceAndKerensharaXP;
                     await this.increaseXP(calculateHexXP({
                         hexes,
                         kingdomSize,
                         useVK: useHomeBrew,
-                        xpPerClaimedHex: getNumberSetting(this.game, 'xpPerClaimedHex'),
+                        xpPerClaimedHex: current.settings.xpPerClaimedHex,
                     }));
                 });
             });
@@ -478,12 +534,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-rp-to-xp')
             ?.addEventListener('click', async () => {
                 const current = this.getKingdom();
-                const useHomeBrew = getBooleanSetting(this.game, 'vanceAndKerensharaXP');
+                const useHomeBrew = current.settings.vanceAndKerensharaXP;
                 await this.increaseXP(calculateRpXP({
                     useVK: useHomeBrew,
                     kingdomLevel: current.level,
-                    rpToXpConversionLimit: getNumberSetting(this.game, 'rpToXpConversionLimit'),
-                    rpToXpConversionRate: getNumberSetting(this.game, 'rpToXpConversionRate'),
+                    rpToXpConversionLimit: current.settings.rpToXpConversionLimit,
+                    rpToXpConversionRate: current.settings.rpToXpConversionRate,
                     rp: current.resourcePoints.now,
                 }));
             });
@@ -630,13 +686,21 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => await this.deleteKingdomPropertyAtIndex(ev, 'modifiers'));
             });
-        $html.querySelector('.kingdom-settings')?.addEventListener('click', () => showKingdomSettings({
-            game: this.game,
-            sheetActor: this.sheetActor,
-            onSave: () => {
+        $html.querySelector('.kingdom-settings')?.addEventListener('click', () => this.game.pf2eKingmakerTools.migration.kingdomSettings(
+            this.getKingdom().settings,
+            async (settings) => {
+                const kingdom = this.getKingdom();
+                await saveKingdom(this.sheetActor, {
+                    fame: {
+                        ...kingdom.fame,
+                        now: clamped(kingdom.fame.now, 0, settings.maximumFamePoints),
+                        next: clamped(kingdom.fame.next, 0, settings.maximumFamePoints),
+                    },
+                    settings,
+                })
                 this.render();
-            },
-        }));
+            }
+        ));
         $html.querySelectorAll('.edit-settlement')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => {
@@ -645,7 +709,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const current = this.getKingdom();
                     const data = current.settlements[index];
                     const name = getScene(this.game, data.sceneId)?.name as string;
-                    const autoLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
+                    const autoLevel = current.settings.autoCalculateSettlementLevel;
                     editSettlementDialog(autoLevel, name, data, (savedData) => {
                         current.settlements[index] = savedData;
                         this.saveKingdom({
@@ -670,6 +734,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         Hooks.off('createDrawing', this.sceneChange);
         Hooks.off('updateDrawing', this.sceneChange);
         Hooks.off('deleteDrawing', this.sceneChange);
+        Hooks.on('updateActor', this.updateActor);
         return super.close(options);
     }
 
@@ -782,7 +847,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             modifiers,
             fame: {
                 ...current.fame,
-                now: clamped(current.fame.next, 0, current.fame.max),
+                now: clamped(current.fame.next, 0, current.settings.maximumFamePoints),
                 next: 0,
             },
             resourceDice: {
@@ -819,9 +884,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         });
     }
 
-    private isOvercrowded(settlement: SettlementAndScene): boolean {
-        const structureStackMode = getStructureStackMode(this.game);
-        const autoCalculateSettlementLevel = getBooleanSetting(this.game, 'autoCalculateSettlementLevel');
+    private isOvercrowded(kingdom: Kingdom, settlement: SettlementAndScene): boolean {
+        const structureStackMode = getStructureStackMode(kingdom);
+        const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
         const activities = getKingdomActivitiesById(this.getKingdom().homebrewActivities);
         const structures = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, settlement);
         return getSettlementInfo(settlement, autoCalculateSettlementLevel).lots > structures.residentialLots;
@@ -830,7 +895,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private async adjustUnrest(): Promise<void> {
         const current = this.getKingdom();
         const data = getAllSettlements(this.game, current);
-        const overcrowdedSettlements = data.filter(s => this.isOvercrowded(s)).length;
+        const overcrowdedSettlements = data.filter(s => this.isOvercrowded(current, s)).length;
         const secondaryTerritories = data.some(s => s.settlement.secondaryTerritory) ? 1 : 0;
         const atWar = current.atWar ? 1 : 0;
         let rulerVacancyUnrest = 0;
@@ -875,8 +940,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async checkForEvent(): Promise<void> {
-        const rollMode = getStringSetting(this.game, 'kingdomEventRollMode') as unknown as keyof CONFIG.Dice.RollModes;
-        const turnsWithoutEvent = this.getKingdom().turnsWithoutEvent;
+        const kingdom = this.getKingdom();
+        const rollMode = kingdom.settings.kingdomEventRollMode;
+        const turnsWithoutEvent = kingdom.turnsWithoutEvent;
         const dc = this.calculateEventDC(turnsWithoutEvent);
         const roll = await (new Roll('1d20').roll());
         await roll.toMessage({flavor: `Checking for Event on DC ${dc}`}, {rollMode});
@@ -889,8 +955,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async checkForCultEvent(): Promise<void> {
-        const rollMode = getStringSetting(this.game, 'kingdomEventRollMode') as unknown as keyof CONFIG.Dice.RollModes;
-        const turnsWithoutCultEvent = this.getKingdom().turnsWithoutCultEvent;
+        const kingdom = this.getKingdom();
+        const rollMode = kingdom.settings.kingdomEventRollMode;
+        const turnsWithoutCultEvent = kingdom.turnsWithoutCultEvent;
         const dc = this.calculateCultEventDC(turnsWithoutCultEvent);
         const roll = await (new Roll('1d20').roll());
         await roll.toMessage({flavor: `Checking for Cult Event on DC ${dc}`}, {rollMode});
@@ -917,7 +984,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async collectResources(): Promise<void> {
         const current = this.getKingdom();
-        const automateResourceMode = getStringSetting(this.game, 'automateResources') as ResourceAutomationMode;
+        const automateResourceMode = current.settings.automateResources;
         const {size: kingdomSize, workSites} = getStolenLandsData(this.game, automateResourceMode, current);
         const sizeData = getSizeData(kingdomSize);
         const capacity = getCapacity(this.game, current);
@@ -1016,14 +1083,20 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         );
     }
 
-    private getLeaders(leaders: Leaders): object {
-        return Object.fromEntries((Object.entries(leaders) as [keyof Leaders, LeaderValues][])
-            .map(([leader, values]) => {
+    private async getLeaders(leaders: Leaders): Promise<object> {
+        const entries = (Object.entries(leaders) as [keyof Leaders, LeaderValues][])
+            .map(async ([leader, values]) => {
+                const actor = values.uuid ? await fromUuid(values.uuid) as Actor | null : undefined;
                 return [leader, {
                     label: capitalize(leader),
                     ...values,
+                    img: actor?.img,
+                    name: actor?.name,
+                    level: actor?.level,
+                    hasActor: !!actor,
                 }];
-            }));
+            });
+        return Object.fromEntries(await Promise.all(entries));
     }
 
     private getAbilities(abilityScores: AbilityScores, leaders: Leaders, kingdomLevel: number): object {
