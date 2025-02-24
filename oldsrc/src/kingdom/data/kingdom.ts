@@ -3,6 +3,7 @@ import {getKingdomActivities, KingdomActivity} from './activityData';
 import {AbilityScores} from './abilities';
 import {Modifier} from '../modifiers';
 import {Skill} from "./skills";
+import {LeadershipLeaderType} from "../skills";
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
 
@@ -18,8 +19,9 @@ export interface KingdomSizeData {
 export type Leaders = Record<Leader, LeaderValues>;
 
 export interface LeaderValues {
-    name: string;
+    uuid: string | null | undefined;
     invested: boolean;
+    type: LeadershipLeaderType;
     vacant: boolean;
 }
 
@@ -132,11 +134,39 @@ export interface Settlement {
     waterBorders: number;
 }
 
+export type ResourceAutomationMode = 'kingmaker' | 'tileBased' | 'manual';
+
 export interface KingdomSettings {
     expandMagicUse: boolean;
+    rpToXpConversionRate: number;
+    rpToXpConversionLimit: number;
+    resourceDicePerVillage: number;
+    resourceDicePerTown: number;
+    resourceDicePerCity: number;
+    resourceDicePerMetropolis: number;
+    xpPerClaimedHex: number;
+    includeCapitalItemModifier: boolean;
+    cultOfTheBloomEvents: boolean;
+    autoCalculateSettlementLevel: boolean;
+    vanceAndKerensharaXP: boolean;
+    capitalInvestmentInCapital: boolean;
+    reduceDCToBuildLumberStructures: boolean;
+    kingdomSkillIncreaseEveryLevel: boolean;
+    kingdomAllStructureItemBonusesStack: boolean;
+    kingdomIgnoreSkillRequirements: boolean;
+    autoCalculateArmyConsumption: boolean;
+    enableLeadershipModifiers: boolean;
+    kingdomEventRollMode: keyof CONFIG.Dice.RollModes;
+    automateResources: ResourceAutomationMode;
+    proficiencyMode: string;
+    kingdomEventsTable?: string;
+    kingdomCultTable?: string;
+    maximumFamePoints: number;
+    leaderKingdomSkills: LeaderKingdomSkills;
+    leaderSkills: LeaderSkills;
 }
 
-interface LeaderKingdomSkills {
+export interface LeaderKingdomSkills {
     ruler: Skill[];
     counselor: Skill[];
     emissary: Skill[];
@@ -147,7 +177,7 @@ interface LeaderKingdomSkills {
     warden: Skill[];
 }
 
-interface LeaderSkills {
+export interface LeaderSkills {
     ruler: string[];
     counselor: string[];
     emissary: string[];
@@ -168,7 +198,6 @@ export interface Kingdom {
     fame: {
         now: number;
         next: number;
-        max: number;
         type: FameType;
     };
     level: number;
@@ -212,8 +241,6 @@ export interface Kingdom {
     activityBlacklist: string[];
     modifiers: Modifier[];
     settlements: Settlement[];
-    leaderKingdomSkills: LeaderKingdomSkills;
-    leaderSkills: LeaderSkills;
 }
 
 
@@ -368,7 +395,6 @@ export function getDefaultKingdomData(): Kingdom {
         },
         fame: {
             type: 'famous',
-            max: 3,
             now: 0,
             next: 0,
         },
@@ -388,6 +414,50 @@ export function getDefaultKingdomData(): Kingdom {
         realmSceneId: null,
         settings: {
             expandMagicUse: false,
+            rpToXpConversionRate: 1,
+            rpToXpConversionLimit: 120,
+            resourceDicePerVillage: 0,
+            resourceDicePerTown: 0,
+            resourceDicePerCity: 0,
+            resourceDicePerMetropolis: 0,
+            xpPerClaimedHex: 10,
+            includeCapitalItemModifier: true,
+            cultOfTheBloomEvents: false,
+            autoCalculateSettlementLevel: true,
+            vanceAndKerensharaXP: false,
+            capitalInvestmentInCapital: false,
+            reduceDCToBuildLumberStructures: false,
+            kingdomSkillIncreaseEveryLevel: false,
+            kingdomAllStructureItemBonusesStack: false,
+            kingdomIgnoreSkillRequirements: false,
+            autoCalculateArmyConsumption: true,
+            enableLeadershipModifiers: false,
+            kingdomEventRollMode: "gmroll",
+            automateResources: "kingmaker",
+            proficiencyMode: "none",
+            kingdomEventsTable: undefined,
+            kingdomCultTable: undefined,
+            maximumFamePoints: 3,
+            leaderKingdomSkills: {
+                ruler: ["industry", "intrigue", "politics", "statecraft", "warfare"],
+                counselor: ["arts", "folklore", "politics", "scholarship", "trade"],
+                emissary: ["intrigue", "magic", "politics", "statecraft", "trade"],
+                general: ["boating", "defense", "engineering", "exploration", "warfare"],
+                magister: ["defense", "folklore", "magic", "scholarship", "wilderness"],
+                treasurer: ["arts", "boating", "industry", "intrigue", "trade"],
+                viceroy: ["agriculture", "engineering", "industry", "scholarship", "wilderness"],
+                warden: ["agriculture", "boating", "defense", "exploration", "wilderness"],
+            },
+            leaderSkills: {
+                ruler: ["diplomacy", "deception", "intimidation", "performance", "society", "heraldry", "politics", "ruler"],
+                counselor: ["diplomacy", "deception", "performance", "religion", "society", "academia", "art", "counselor"],
+                emissary: ["diplomacy", "deception", "intimidation", "stealth", "thievery", "politics", "underworld", "emissary"],
+                general: ["diplomacy", "athletics", "crafting", "intimidation", "survival", "scouting", "warfare", "general"],
+                magister: ["diplomacy", "arcana", "nature", "occultism", "religion", "academia", "scribing", "magister"],
+                treasurer: ["diplomacy", "crafting", "medicine", "society", "thievery", "labor", "mercantile", "treasurer"],
+                viceroy: ["diplomacy", "crafting", "medicine", "nature", "society", "architecture", "engineering", "viceroy"],
+                warden: ["diplomacy", "athletics", "nature", "stealth", "survival", "farming", "hunting", "warden"],
+            },
         },
         workSites: {
             farmlands: {
@@ -445,42 +515,50 @@ export function getDefaultKingdomData(): Kingdom {
             ruler: {
                 invested: false,
                 vacant: false,
-                name: '',
+                type: 'pc',
+                uuid: null,
             },
             counselor: {
                 invested: false,
                 vacant: false,
-                name: '',
+                type: 'pc',
+                uuid: null,
             },
             general: {
                 invested: false,
                 vacant: false,
-                name: '',
+                type: 'pc',
+                uuid: null,
             },
             emissary: {
                 invested: false,
                 vacant: false,
-                name: '',
+                type: 'pc',
+                uuid: null,
             },
             magister: {
                 invested: false,
                 vacant: false,
-                name: '',
+                type: 'pc',
+                uuid: null,
             },
             treasurer: {
                 invested: false,
                 vacant: false,
-                name: '',
+                type: 'pc',
+                uuid: null,
             },
             viceroy: {
                 invested: false,
                 vacant: false,
-                name: '',
+                type: 'pc',
+                uuid: null,
             },
             warden: {
                 invested: false,
                 vacant: false,
-                name: '',
+                type: 'pc',
+                uuid: null,
             },
         },
         skillRanks: {
@@ -534,26 +612,6 @@ export function getDefaultKingdomData(): Kingdom {
             .map((data) => data.id),
         modifiers: [],
         homebrewActivities: [],
-        leaderKingdomSkills: {
-            ruler: ["industry", "intrigue", "politics", "statecraft", "warfare"],
-            counselor: ["arts", "folklore", "politics", "scholarship", "trade"],
-            emissary: ["intrigue", "magic", "politics", "statecraft", "trade"],
-            general: ["boating", "defense", "engineering", "exploration", "warfare"],
-            magister: ["defense", "folklore", "magic", "scholarship", "wilderness"],
-            treasurer: ["arts", "boating", "industry", "intrigue", "trade"],
-            viceroy: ["agriculture", "engineering", "industry", "scholarship", "wilderness"],
-            warden: ["agriculture", "boating", "defense", "exploration", "wilderness"],
-        },
-        leaderSkills: {
-            ruler: ["diplomacy", "deception", "intimidation", "performance", "society", "heraldry", "politics", "ruler"],
-            counselor: ["diplomacy", "deception", "performance", "religion", "society", "academia", "art", "counselor"],
-            emissary: ["diplomacy", "deception", "intimidation", "stealth", "thievery", "politics", "underworld", "emissary"],
-            general: ["diplomacy", "athletics", "crafting", "intimidation", "survival", "scouting", "warfare", "general"],
-            magister: ["diplomacy", "arcana", "nature", "occultism", "religion", "academia", "scribing", "magister"],
-            treasurer: ["diplomacy", "crafting", "medicine", "society", "thievery", "labor", "mercantile", "treasurer"],
-            viceroy: ["diplomacy", "crafting", "medicine", "nature", "society", "architecture", "engineering", "viceroy"],
-            warden: ["diplomacy", "athletics", "nature", "stealth", "survival", "farming", "hunting", "warden"],
-        },
     };
 }
 

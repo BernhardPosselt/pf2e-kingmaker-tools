@@ -46,7 +46,7 @@ data class Select(
         checkbox = false,
         radio = false,
         image = false,
-        disabled = disabled,
+        disabled = false,
         stacked = stacked,
         overrideType = overrideType?.value,
         options = options.map { opt ->
@@ -73,6 +73,7 @@ data class Select(
         labelElement = labelElement,
         button = false,
         empty = false,
+        readonly = false,
     )
 
     companion object {
@@ -183,6 +184,35 @@ data class Select(
             help = help,
             hideLabel = hideLabel,
             options = enumToOptions<T>(labelFunction),
+            disabled = disabled,
+            stacked = stacked,
+            elementClasses = elementClasses,
+            escapeLabel = escapeLabel,
+        )
+
+        inline fun range(
+            label: String,
+            name: String,
+            from: Int,
+            to: Int,
+            value: Int,
+            required: Boolean = true,
+            help: String? = null,
+            hideLabel: Boolean = false,
+            disabled: Boolean = false,
+            stacked: Boolean = true,
+            elementClasses: List<String> = emptyList(),
+            escapeLabel: Boolean = true,
+        ) = Select(
+            name = name,
+            label = label,
+            value = value.toString(),
+            required = required,
+            help = help,
+            hideLabel = hideLabel,
+            options = (from..to)
+                .map { SelectOption(it.toString(), it.toString()) }
+                .toList(),
             disabled = disabled,
             stacked = stacked,
             elementClasses = elementClasses,

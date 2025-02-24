@@ -40,6 +40,7 @@ data class CheckboxInput(
         labelElement = labelElement,
         button = false,
         empty = false,
+        readonly = false,
     )
 }
 

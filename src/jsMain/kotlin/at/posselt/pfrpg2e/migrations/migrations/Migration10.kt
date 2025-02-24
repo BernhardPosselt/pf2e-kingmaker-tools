@@ -9,12 +9,12 @@ import at.posselt.pfrpg2e.camping.getDefaultCamping
 import at.posselt.pfrpg2e.combattracks.getCombatTrack
 import at.posselt.pfrpg2e.combattracks.setCombatTrack
 import at.posselt.pfrpg2e.kingdom.KingdomData
-import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.getParsedStructureData
 import at.posselt.pfrpg2e.settings.*
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ENpc
+import js.objects.recordOf
 
 private fun migrateCombatTrack(game: Game, combatTrack: dynamic): Track? {
     val trackName = combatTrack["name"].unsafeCast<String?>()
@@ -143,10 +143,10 @@ class Migration10 : Migration(10) {
             .toTypedArray()
         kingdom.activityBlacklist = kingdom.activityBlacklist
             .filter { !activityBlacklistMappings.contains(it) }.toTypedArray() + replacements
-        kingdom.fame.max = 3
-        kingdom.settings = KingdomSettings(
-            expandMagicUse = false,
-        )
+        kingdom.fame.asDynamic().max = 3
+        kingdom.settings = recordOf(
+            "expandMagicUse" to false,
+        ).asDynamic()
     }
 
     override suspend fun migrateOther(game: Game) {

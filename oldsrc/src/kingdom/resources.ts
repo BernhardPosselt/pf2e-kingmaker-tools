@@ -2,8 +2,7 @@ import {parseNumberInput, unslugify} from '../utils';
 import {getSizeData, Kingdom} from './data/kingdom';
 import {getKingdom, saveKingdom} from './storage';
 import {getCapacity} from './kingdom-utils';
-import {getStringSetting} from '../settings';
-import {getStolenLandsData, ResourceAutomationMode} from './scene';
+import {getStolenLandsData} from './scene';
 
 interface ResourceValues {
     value: number;
@@ -105,7 +104,7 @@ export function getLimit(game: Game, kingdom: Kingdom, type: RolledResources, tu
     if (turn === 'now' && (type === 'food' || type === 'luxuries' || type === 'lumber' || type === 'ore' || type === 'stone')) {
         return (getCapacity(game, kingdom))[type];
     } else if (type === 'fame') {
-        return kingdom.fame.max;
+        return kingdom.settings.maximumFamePoints;
     } else {
         return undefined;
     }
@@ -115,7 +114,7 @@ export function getLimit(game: Game, kingdom: Kingdom, type: RolledResources, tu
 export async function evaluateValue(game: Game, kingdom: Kingdom, resources: RolledResources, value: string): Promise<number> {
     if (resources === 'rolled-resource-dice') {
         const num = value.includes('d') ? `(${value})` : value;
-        const automateResourceMode = getStringSetting(game, 'automateResources') as ResourceAutomationMode;
+        const automateResourceMode = kingdom.settings.automateResources;
         const {size: kingdomSize} = getStolenLandsData(game, automateResourceMode, kingdom);
         const dice = getSizeData(kingdomSize).resourceDieSize;
         const roll = await new Roll(`${num}${dice}`).roll();

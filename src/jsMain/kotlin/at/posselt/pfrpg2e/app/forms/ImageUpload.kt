@@ -39,6 +39,7 @@ data class ImageUpload(
         labelElement = labelElement,
         button = false,
         empty = false,
+        readonly = false,
     )
 }
 

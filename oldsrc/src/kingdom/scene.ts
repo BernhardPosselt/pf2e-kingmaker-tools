@@ -1,8 +1,7 @@
 import {evaluateStructures, includeCapital, StructureResult, StructureStackRule} from './structures';
 import {ruleSchema} from './schema';
 import {CommodityStorage, SkillItemBonuses, Structure, structuresByName} from './data/structures';
-import {Kingdom, Settlement, WorkSite, WorkSites} from './data/kingdom';
-import {getBooleanSetting} from '../settings';
+import {Kingdom, ResourceAutomationMode, Settlement, WorkSite, WorkSites} from './data/kingdom';
 import {isKingmakerInstalled, isNonNullable} from '../utils';
 import {allSkills} from './data/skills';
 import {getKingdomActivitiesById, KingdomActivityById} from './data/activityData';
@@ -293,14 +292,14 @@ interface MergedSettlements {
     unlockedActivities: Set<string>;
 }
 
-export function getStructureStackMode(game: Game): StructureStackRule {
-    return getBooleanSetting(game, 'kingdomAllStructureItemBonusesStack') ? 'all-structures-stack' : 'same-structures-stack';
+export function getStructureStackMode(kingdom: Kingdom): StructureStackRule {
+    return kingdom.settings.kingdomAllStructureItemBonusesStack ? 'all-structures-stack' : 'same-structures-stack';
 }
 
 export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSettlements {
-    const mode = getStructureStackMode(game);
+    const mode = getStructureStackMode(kingdom);
     const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
-    const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
+    const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
     return getAllSettlements(game, kingdom)
         .map(settlement => {
             const structureResult = getSettlementStructureResult(settlement, mode, autoCalculateSettlementLevel, activities);
@@ -342,10 +341,10 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
     const activeSettlement = getSettlement(game, kingdom, kingdom.activeSettlement);
     const capitalSettlement = getCapitalSettlement(game, kingdom);
     const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
-    const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
-    const includeCapitalItemModifier = getBooleanSetting(game, 'includeCapitalItemModifier');
+    const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
+    const includeCapitalItemModifier = kingdom.settings.includeCapitalItemModifier;
     if (activeSettlement) {
-        const mode = getStructureStackMode(game);
+        const mode = getStructureStackMode(kingdom);
         const activeSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, activeSettlement);
         const mergedSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, activeSettlement, capitalSettlement);
         return {
@@ -357,8 +356,8 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
 }
 
 export function getSettlementsWithoutLandBorders(game: Game, kingdom: Kingdom): number {
-    const mode = getStructureStackMode(game);
-    const autoCalculateSettlementLevel = getBooleanSetting(game, 'autoCalculateSettlementLevel');
+    const mode = getStructureStackMode(kingdom);
+    const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
     const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
     return getAllSettlements(game, kingdom)
         .filter(settlementAndScene => {
@@ -568,7 +567,7 @@ function parseSceneData(game: Game, realmSceneId: string | null): StolenLandsDat
     }
 }
 
-export type ResourceAutomationMode = 'kingmaker' | 'tileBased' | 'manual';
+
 
 export function getStolenLandsData(
     game: Game,

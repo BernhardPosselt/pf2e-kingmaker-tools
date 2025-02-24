@@ -43,5 +43,6 @@ data class Menu(
         data = data.map { it.key.toDataAttributeKey() to it.value }.toRecord(),
         button = false,
         empty = false,
+        readonly = false,
     )
 }

@@ -46,5 +46,6 @@ data class Button(
         button = true,
         empty = false,
         icon = icon,
+        readonly = false,
     )
 }

@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
+import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderSkills
 import at.posselt.pfrpg2e.macros.*
@@ -64,7 +65,8 @@ fun main() {
 
             // load custom token mappings if kingmaker module isn't installed
             if (game.modules.get("pf2e-kingmaker")?.active != true
-                && game.settings.pfrpg2eKingdomCampingWeather.getEnableTokenMapping()) {
+                && game.settings.pfrpg2eKingdomCampingWeather.getEnableTokenMapping()
+            ) {
                 val data = recordOf(
                     "flags" to recordOf(
                         Config.moduleId to recordOf(
@@ -94,6 +96,7 @@ fun main() {
                     }
                 },
                 kingdomEventsMacro = { buildPromise { rollKingdomEventMacro(game) } },
+                cultEventsMacro = { buildPromise { rollCultEventMacro(game) } },
                 rollKingmakerWeatherMacro = { buildPromise { rollWeather(game) } },
                 awardXpMacro = { buildPromise { awardXPMacro(game.partyMembers()) } },
                 resetHeroPointsMacro = { buildPromise { resetHeroPointsMacro(game.partyMembers()) } },
@@ -118,8 +121,13 @@ fun main() {
                 createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
             ),
             migration = KtMigration(
-                configureLeaderKingdomSkills = { skills, onSave -> configureLeaderKingdomSkills(skills, onSave)  },
-                configureLeaderSkills = {skills, onSave -> configureLeaderSkills(skills, onSave)},
+                kingdomSettings = { settings, onSave ->
+                    KingdomSettingsApplication(
+                        game,
+                        kingdomSettings = settings,
+                        onSave = onSave
+                    ).launch()
+                },
             )
         )
 

@@ -37,5 +37,6 @@ data class HiddenInput(
         labelElement = "label",
         button = false,
         empty = false,
+        readonly = false,
     )
 }

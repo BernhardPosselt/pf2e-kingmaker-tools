@@ -1,29 +1,23 @@
 import {KingdomPhase} from './data/activities';
 import {capitalize, groupBy, unslugify} from '../utils';
-import {getLevelData, Kingdom, Leaders, Ruin, Settlement} from './data/kingdom';
+import {getLevelData, Kingdom, LeaderKingdomSkills, Leaders, LeaderSkills, Ruin, Settlement} from './data/kingdom';
 import {allFeatsByName} from './data/feats';
-import {Skill, skillAbilities} from './data/skills';
+import {allActorSkills, allSkills, CharacterSkill, Skill, skillAbilities} from './data/skills';
 import {Ability, AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {isInvested} from './data/leaders';
 import {calculateUnrestPenalty} from './data/unrest';
 import {abilityRuins} from './data/ruin';
 import {ActivityBonuses, SkillItemBonus} from './data/structures';
 import {ActiveSettlementStructureResult} from './scene';
-import {getBooleanSetting} from '../settings';
 import {KingdomActivityById} from './data/activityData';
+import {LeaderPerformingCheck} from "./skills";
 
 export type Proficiency = 'trained' | 'expert' | 'master' | 'legendary';
 
 export type UntrainedProficiencyMode = 'half' | 'full' | 'none';
 
-export function getUntrainedProficiencyMode(game: Game): UntrainedProficiencyMode {
-    if (getBooleanSetting(game, 'kingdomAlwaysAddLevel')) {
-        return 'full';
-    } else if (getBooleanSetting(game, 'kingdomAlwaysAddHalfLevel')) {
-        return 'half';
-    } else {
-        return 'none';
-    }
+export function getUntrainedProficiencyMode(kingdom: Kingdom): UntrainedProficiencyMode {
+    return kingdom.settings.proficiencyMode as UntrainedProficiencyMode;
 }
 
 export const allModifierTypes = [
@@ -34,6 +28,7 @@ export const allModifierTypes = [
     'circumstance',
     'vacancy',
     'untyped',
+    'leadership'
 ] as const;
 
 export type ModifierType = typeof allModifierTypes[number];
@@ -202,6 +197,7 @@ export interface ModifierTotals {
     ability: ModifierTotal;
     proficiency: ModifierTotal;
     untyped: ModifierTotal;
+    leadership: ModifierTotal;
     vacancyPenalty: number;
     value: number;
     assurance: number;
@@ -227,6 +223,10 @@ export function calculateModifiers(modifiers: Modifier[]): ModifierTotals {
             penalty: 0,
         },
         proficiency: {
+            bonus: 0,
+            penalty: 0,
+        },
+        leadership: {
             bonus: 0,
             penalty: 0,
         },
@@ -429,8 +429,9 @@ export function createInvestedModifier(
     kingdomLevel: number,
     ability: Ability,
     leaders: Leaders,
+    useLeadershipModifiers: boolean,
 ): Modifier | undefined {
-    if (isInvested(ability, leaders)) {
+    if (isInvested(ability, leaders) && !useLeadershipModifiers) {
         return {
             value: getLevelData(kingdomLevel).investedLeadershipBonus,
             enabled: true,
@@ -570,4 +571,101 @@ export function createStructureModifiers(skillItemBonus: SkillItemBonus, kingdom
         result.push(skillBonus);
     }
     return result;
+}
+
+
+function normalizeLore(key: string) {
+    return key.endsWith('-lore') ? key : key + '-lore';
+}
+
+function findHighestSkillProficiencyRanks(
+    relevantSkills: string[],
+    skillRanks: Record<string, number>,
+): number {
+    // add trailing "-lore"
+    const skills = relevantSkills.filter(s => allActorSkills.includes(s as CharacterSkill)) as CharacterSkill[];
+    const lores = relevantSkills
+        .filter(s => !allActorSkills.includes(s as CharacterSkill))
+        .map(s => normalizeLore(s));
+    const highestRelevantLoreRank = Math.max(0, ...Object.entries(skillRanks)
+        .filter(([key]) => !allActorSkills.includes(key as CharacterSkill) && lores.includes(normalizeLore(key)))
+        .map(([, value]) => value));
+    const relevantSkillRanks = Object.entries(skillRanks)
+        .filter(([key]) => allActorSkills.includes(key as CharacterSkill) && skills.includes(key as CharacterSkill))
+        .map(([, value]) => value);
+    const allRelevantRanks = [highestRelevantLoreRank, ...relevantSkillRanks];
+    // grog be caveman, grog write own function
+    return Math.max(0, ...Array.from(groupBy(allRelevantRanks, a => a).values())
+        .filter(values => values.length >= 2)
+        .map(values => values[0] ?? 0));
+}
+
+
+function calculateLeadershipModifier(
+    leader: LeaderPerformingCheck,
+    skill: Skill,
+    leaderKingdomSkills: LeaderKingdomSkills,
+    leaderSkills: LeaderSkills,
+): { value: number, usesSpecializedSkill: boolean } {
+    const type = leader.type;
+    const level = leader.level;
+    const relevantKingdomSkills = leaderKingdomSkills[leader.position];
+    const usesSpecializedSkill = relevantKingdomSkills.includes(skill);
+    if (type === 'highlyMotivatedNpc') {
+        if (level >= 1 && level < 4) {
+            return {value: 1, usesSpecializedSkill};
+        } else if (level >= 4 && level < 8) {
+            return {value: 2, usesSpecializedSkill};
+        } else if (level >= 8 && level < 16) {
+            return {value: 3, usesSpecializedSkill};
+        } else {
+            return {value: 4, usesSpecializedSkill};
+        }
+    } else if (type === 'regularNpc') {
+        if (level >= 1 && level < 6) {
+            return {value: 1, usesSpecializedSkill};
+        } else if (level >= 6 && level < 10) {
+            return {value: 2, usesSpecializedSkill};
+        } else {
+            return {value: 3, usesSpecializedSkill};
+        }
+    } else if (type === 'nonPathfinderNpc') {
+        if (level >= 1 && level < 5) {
+            return {value: 1, usesSpecializedSkill};
+        } else if (level >= 5 && level < 9) {
+            return {value: 2, usesSpecializedSkill};
+        } else if (level >= 9 && level < 17) {
+            return {value: 3, usesSpecializedSkill};
+        } else {
+            return {value: 4, usesSpecializedSkill};
+        }
+    } else {
+        const relevantSkills = leaderSkills[leader.position];
+        const value = findHighestSkillProficiencyRanks(relevantSkills, leader.skillRanks);
+        return {value, usesSpecializedSkill};
+    }
+}
+
+export function createLeadershipModifier(
+    leader: LeaderPerformingCheck | undefined,
+    skill: Skill,
+    leaderKingdomSkills: LeaderKingdomSkills,
+    leaderSkills: LeaderSkills,
+    useLeadershipModifiers: boolean,
+): Modifier | undefined {
+    if (useLeadershipModifiers && leader) {
+        const {value, usesSpecializedSkill} = calculateLeadershipModifier(
+            leader,
+            skill,
+            leaderKingdomSkills,
+            leaderSkills,
+        )
+        const label = usesSpecializedSkill ? 'specialized' : 'unspecialized';
+        return {
+            type: 'leadership',
+            value: usesSpecializedSkill ? value : Math.floor(value / 2),
+            name: `Leadership: ${capitalize(leader.position)} (${label})`,
+            enabled: true,
+        }
+    }
 }

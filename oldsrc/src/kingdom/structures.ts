@@ -1,4 +1,4 @@
-import {groupBy, isFirstGm, isNonNullable, mergeObjects, mergePartialObjects, postChatMessage, sum} from '../utils';
+import {isFirstGm, isNonNullable, mergeObjects, mergePartialObjects, postChatMessage, sum} from '../utils';
 import {getActivitySkills} from './data/activities';
 import {
     ActivityBonusRule,
@@ -13,15 +13,12 @@ import {
 import {Skill} from './data/skills';
 import {gainRuin, KingdomActivityById, loseRuin, loseUnrest} from './data/activityData';
 import {
-    ActorStructure,
-    getAllSettlements, getScene, getSceneActorStructures,
+    getAllSettlements,
     getSceneStructures,
     getStructureFromActor,
-    getStructuresFromActors,
-    isStructureActor, isStructureActorActive
+    isStructureActor
 } from './scene';
 import {allRuins} from './data/ruin';
-import {getBooleanSetting, getNumberSetting} from "../settings";
 import {getLevelData, hasFeat, Kingdom} from "./data/kingdom";
 
 export interface StructureResult {
@@ -480,15 +477,15 @@ export function evaluateStructures(
     return result;
 }
 
-function calculateSettlementRd(game: Game, type: SettlementType): number {
+function calculateSettlementRd(kingdom: Kingdom, type: SettlementType): number {
     if (type === 'Village') {
-        return getNumberSetting(game, 'resourceDicePerVillage');
+        return kingdom.settings.resourceDicePerVillage;
     } else if (type === 'Town') {
-        return getNumberSetting(game, 'resourceDicePerTown');
+        return kingdom.settings.resourceDicePerTown;
     } else if (type === 'City') {
-        return getNumberSetting(game, 'resourceDicePerCity');
+        return kingdom.settings.resourceDicePerCity;
     } else {
-        return getNumberSetting(game, 'resourceDicePerMetropolis');
+        return kingdom.settings.resourceDicePerMetropolis;
     }
 }
 
@@ -511,7 +508,7 @@ export function calculateResourceDicePerTurn(game: Game, kingdom: Kingdom) {
         const {type} = getSettlementConfig(s.settlement.level)
         const structures = getSceneStructures(s.scene);
         const structureDice = sum(structures.map(s => calculateStructureRd(type, s)))
-        return calculateSettlementRd(game, type) + structureDice;
+        return calculateSettlementRd(kingdom, type) + structureDice;
     }));
     const featDice = hasFeat(kingdom, 'Insider Trading') || hasFeat(kingdom, 'Insider Trading (V&K)') ? 1 : 0;
     const levelData = getLevelData(kingdom.level);

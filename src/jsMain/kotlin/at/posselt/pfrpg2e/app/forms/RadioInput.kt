@@ -9,7 +9,7 @@ data class RadioInput(
     override val help: String? = null,
     override val hideLabel: Boolean = false,
     val elementClasses: List<String> = emptyList(),
-    val disabled: Boolean = false,
+    val readonly: Boolean = false,
     val stacked: Boolean = false,
     val escapeLabel: Boolean = true,
     val labelElement: String = "label",
@@ -29,7 +29,7 @@ data class RadioInput(
         checkbox = false,
         image = false,
         radio = true,
-        disabled = disabled,
+        disabled = false,
         options = emptyArray(),
         hideLabel = hideLabel,
         stacked = stacked,
@@ -42,6 +42,7 @@ data class RadioInput(
         checked = checked,
         button = false,
         empty = false,
+        readonly = readonly,
     )
 }
 

@@ -14,6 +14,7 @@ data class TableAndDraw(val table: RollTable, val draw: RollTableDraw)
 suspend fun Game.rollWithCompendiumFallback(
     tableName: String,
     rollMode: RollMode,
+    uuid: String? = null,
     displayChat: Boolean? = true,
     fallbackName: String? = null,
     compendium: String = Config.rollTables.compendium,
@@ -22,6 +23,7 @@ suspend fun Game.rollWithCompendiumFallback(
         tableName = tableName,
         fallbackName = fallbackName,
         compendium = compendium,
+        uuid = uuid,
     )
     return table?.rollWithDraw(rollMode = rollMode, displayChat = displayChat)
 }
@@ -36,13 +38,22 @@ suspend fun RollTable.rollWithDraw(
 
 suspend fun Game.findRollTableWithCompendiumFallback(
     tableName: String,
+    uuid: String? = null,
     fallbackName: String? = null,
     compendium: String = Config.rollTables.compendium,
-): RollTable? {
-    return tables.getName(tableName)
-        ?: packs.get(compendium)
-            ?.getDocuments()
-            ?.await()
-            ?.filterIsInstance<RollTable>()
-            ?.find { it.name == (fallbackName ?: tableName) }
-}
+) =
+    if (uuid == null) {
+        tables.getName(tableName)
+            ?: packs.get(compendium)
+                ?.getDocuments()
+                ?.await()
+                ?.filterIsInstance<RollTable>()
+                ?.find { it.name == (fallbackName ?: tableName) }
+    } else {
+        tables.contents.find { it.uuid == uuid }
+            ?: packs.get(compendium)
+                ?.getDocuments()
+                ?.await()
+                ?.filterIsInstance<RollTable>()
+                ?.find { it.name == (fallbackName ?: tableName) }
+    }
