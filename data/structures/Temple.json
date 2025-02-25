@@ -1,47 +1,51 @@
 {
-  "name": "Temple",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "celebrate-holiday"
-    },
-    {
-      "value": 1,
-      "activity": "provide-care"
-    }
-  ],
-  "availableItemsRules": [
-    {
-      "value": 1,
-      "group": "divine",
-      "maximumStacks": 3
-    }
-  ],
-  "traits": [
-    "building",
-    "famous",
-    "infamous"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": true,
-  "reduceUnrestBy": {
-    "value": "2"
-  },
-  "level": 7,
-  "upgradeFrom": [
-    "Shrine"
-  ],
-  "construction": {
-    "rp": 32,
-    "lumber": 6,
-    "stone": 6,
-    "skills": [
-      {
-        "skill": "folklore",
-        "proficiencyRank": 1
-      }
+    "name": "Temple",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "celebrate-holiday"
+        },
+        {
+            "value": 1,
+            "activity": "celebrate-holiday-vk"
+        },
+        {
+            "value": 1,
+            "activity": "provide-care"
+        }
     ],
-    "dc": 23
-  },
-  "lots": 2
+    "availableItemsRules": [
+        {
+            "value": 1,
+            "group": "divine",
+            "maximumStacks": 3
+        }
+    ],
+    "traits": [
+        "building",
+        "famous",
+        "infamous"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "value": "2"
+    },
+    "level": 7,
+    "upgradeFrom": [
+        "Shrine"
+    ],
+    "construction": {
+        "rp": 32,
+        "lumber": 6,
+        "stone": 6,
+        "skills": [
+            {
+                "skill": "folklore",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 23
+    },
+    "lots": 2
 }

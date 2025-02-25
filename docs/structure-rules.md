@@ -226,7 +226,7 @@ A full structure rule would look something like this:
 }
 ```
 
-* **name**: optional, if absent taken from the actor name
+* **name**: building name
 * **notes**: optional, is shown at the bottom in the **Building Effects** section
 * **preventItemLevelPenalty**: optional, if not at least one structure in your settlement has this set to true, it will
   reduce purchasable item level by 2 for this settlement
@@ -295,9 +295,8 @@ A full structure rule would look something like this:
     * infamous
     * residential
     * infrastructure
-* **lots**: optional, if provided used to calculate how many lots the building takes up; otherwise the token size is
-  used
-* **level**: optional, if absent, uses the NPC actor's level
+* **lots**: used to calculate how many lots the building takes up
+* **level**: building level
 * **affectsEvents**: optional, used to filter for structures that affect events
 * **affectsDowntime**: optional, used to filter for structures that have downtime bonuses
 * **reducesUnrest**: optional, used to filter for structures that reduce unrest

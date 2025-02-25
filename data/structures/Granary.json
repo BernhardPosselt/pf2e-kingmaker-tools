@@ -1,23 +1,23 @@
 {
-  "name": "Granary",
-  "storage": {
-    "food": 1
-  },
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 1,
-  "construction": {
-    "rp": 12,
-    "lumber": 2,
-    "skills": [
-      {
-        "skill": "agriculture"
-      }
+    "name": "Granary",
+    "storage": {
+        "food": 1
+    },
+    "traits": [
+        "building"
     ],
-    "dc": 15
-  },
-  "lots": 1
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 1,
+    "construction": {
+        "rp": 12,
+        "lumber": 2,
+        "skills": [
+            {
+                "skill": "agriculture"
+            }
+        ],
+        "dc": 15
+    },
+    "lots": 1
 }

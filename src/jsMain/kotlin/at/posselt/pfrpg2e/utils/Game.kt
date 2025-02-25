@@ -39,6 +39,9 @@ external interface ToolsMacros {
 @JsPlainObject
 external interface KtMigration {
     val kingdomSettings: (settings: KingdomSettings, onSave: (settings: KingdomSettings) -> Unit) -> Unit
+    val kingdomSizeHelp: () -> Unit
+    val settlementSizeHelp: () -> Unit
+    val structureXpDialog: (onSave: (xp: Int) -> Unit) -> Unit
 }
 
 @JsPlainObject

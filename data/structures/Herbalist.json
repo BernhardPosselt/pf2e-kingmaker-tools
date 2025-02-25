@@ -1,26 +1,26 @@
 {
-  "name": "Herbalist",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "provide-care"
-    }
-  ],
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 1,
-  "construction": {
-    "rp": 10,
-    "lumber": 1,
-    "skills": [
-      {
-        "skill": "wilderness"
-      }
+    "name": "Herbalist",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "provide-care"
+        }
     ],
-    "dc": 15
-  },
-  "lots": 1
+    "traits": [
+        "building"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 1,
+    "construction": {
+        "rp": 10,
+        "lumber": 1,
+        "skills": [
+            {
+                "skill": "wilderness"
+            }
+        ],
+        "dc": 15
+    },
+    "lots": 1
 }

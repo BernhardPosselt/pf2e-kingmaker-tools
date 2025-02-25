@@ -1,38 +1,38 @@
 {
-  "name": "Mint",
-  "activityBonusRules": [
-    {
-      "value": 3,
-      "activity": "capital-investment"
-    },
-    {
-      "value": 3,
-      "activity": "collect-taxes"
-    },
-    {
-      "value": 3,
-      "activity": "repair-reputation-crime"
-    }
-  ],
-  "traits": [
-    "building",
-    "edifice"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 15,
-  "construction": {
-    "rp": 30,
-    "lumber": 12,
-    "stone": 16,
-    "ore": 20,
-    "skills": [
-      {
-        "skill": "trade",
-        "proficiencyRank": 3
-      }
+    "name": "Mint",
+    "activityBonusRules": [
+        {
+            "value": 3,
+            "activity": "capital-investment"
+        },
+        {
+            "value": 3,
+            "activity": "collect-taxes"
+        },
+        {
+            "value": 3,
+            "activity": "repair-reputation-crime"
+        }
     ],
-    "dc": 34
-  },
-  "lots": 1
+    "traits": [
+        "building",
+        "edifice"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 15,
+    "construction": {
+        "rp": 30,
+        "lumber": 12,
+        "stone": 16,
+        "ore": 20,
+        "skills": [
+            {
+                "skill": "trade",
+                "proficiencyRank": 3
+            }
+        ],
+        "dc": 34
+    },
+    "lots": 1
 }

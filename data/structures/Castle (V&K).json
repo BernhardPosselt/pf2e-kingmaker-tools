@@ -1,99 +1,112 @@
 {
-  "name": "Castle (V&K)",
-  "activityBonusRules": [
-    {
-      "value": 2,
-      "activity": "new-leadership"
-    },
-    {
-      "value": 2,
-      "activity": "pledge-of-fealty"
-    },
-    {
-      "value": 2,
-      "activity": "send-diplomatic-envoy"
-    },
-    {
-      "value": 2,
-      "activity": "garrison-army"
-    },
-    {
-      "value": 2,
-      "activity": "recruit-army"
-    },
-    {
-      "value": 2,
-      "activity": "recover-army-damaged"
-    },
-    {
-      "value": 2,
-      "activity": "recover-army-defeated"
-    },
-    {
-      "value": 2,
-      "activity": "recover-army-lost"
-    },
-    {
-      "value": 2,
-      "activity": "recover-army-mired-pinned"
-    },
-    {
-      "value": 2,
-      "activity": "recover-army-shaken"
-    },
-    {
-      "value": 2,
-      "activity": "recover-army-weary"
-    },
-    {
-      "value": 2,
-      "activity": "manage-trade-agreements"
-    },
-    {
-      "value": 2,
-      "activity": "relocate-capital"
-    }
-  ],
-  "increaseLeadershipActivities": true,
-  "traits": [
-    "building",
-    "edifice",
-    "famous",
-    "infamous"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": true,
-  "reduceUnrestBy": {
-    "value": "1d4"
-  },
-  "level": 9,
-  "upgradeFrom": [
-    "Town Hall",
-    "Town Hall (V&K)"
-  ],
-  "construction": {
-    "skills": [
-      {
-        "skill": "defense",
-        "proficiencyRank": 2
-      },
-      {
-        "skill": "industry",
-        "proficiencyRank": 2
-      },
-      {
-        "skill": "magic",
-        "proficiencyRank": 2
-      },
-      {
-        "skill": "statecraft",
-        "proficiencyRank": 2
-      }
+    "name": "Castle (V&K)",
+    "activityBonusRules": [
+        {
+            "value": 2,
+            "activity": "new-leadership"
+        },
+        {
+            "value": 2,
+            "activity": "new-leadership-vk"
+        },
+        {
+            "value": 2,
+            "activity": "pledge-of-fealty"
+        },
+        {
+            "value": 2,
+            "activity": "send-diplomatic-envoy"
+        },
+        {
+            "value": 2,
+            "activity": "garrison-army"
+        },
+        {
+            "value": 2,
+            "activity": "recruit-army"
+        },
+        {
+            "value": 2,
+            "activity": "recover-army-damaged"
+        },
+        {
+            "value": 2,
+            "activity": "recover-army-defeated"
+        },
+        {
+            "value": 2,
+            "activity": "recover-army-lost"
+        },
+        {
+            "value": 2,
+            "activity": "recover-army-mired-pinned"
+        },
+        {
+            "value": 2,
+            "activity": "recover-army-shaken"
+        },
+        {
+            "value": 2,
+            "activity": "recover-army-weary"
+        },
+        {
+            "value": 2,
+            "activity": "manage-trade-agreements"
+        },
+        {
+            "value": 2,
+            "activity": "relocate-capital"
+        },
+        {
+            "value": 2,
+            "activity": "retrain-vk"
+        }
     ],
-    "rp": 54,
-    "dc": 26,
-    "lumber": 12,
-    "stone": 12
-  },
-  "lots": 4
+    "increaseLeadershipActivities": true,
+    "traits": [
+        "building",
+        "edifice",
+        "famous",
+        "infamous"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "value": "1d4"
+    },
+    "level": 9,
+    "upgradeFrom": [
+        "Town Hall",
+        "Town Hall (V&K)"
+    ],
+    "construction": {
+        "skills": [
+            {
+                "skill": "defense",
+                "proficiencyRank": 2
+            },
+            {
+                "skill": "industry",
+                "proficiencyRank": 2
+            },
+            {
+                "skill": "magic",
+                "proficiencyRank": 2
+            },
+            {
+                "skill": "statecraft",
+                "proficiencyRank": 2
+            }
+        ],
+        "rp": 54,
+        "dc": 26,
+        "lumber": 12,
+        "stone": 12
+    },
+    "lots": 4,
+    "increaseResourceDice": {
+        "town": 1,
+        "city": 2,
+        "metropolis": 3
+    }
 }

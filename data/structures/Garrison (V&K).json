@@ -1,44 +1,48 @@
 {
-  "name": "Garrison (V&K)",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "outfit-army"
-    },
-    {
-      "value": 1,
-      "activity": "train-army"
-    },
-    {
-      "value": 1,
-      "activity": "fortify-hex"
-    }
-  ],
-  "traits": [
-    "building",
-    "residential"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": true,
-  "reduceUnrestBy": {
-    "moreThanOncePerTurn": true,
-    "value": "1"
-  },
-  "level": 5,
-  "upgradeFrom": [
-    "Barracks"
-  ],
-  "construction": {
-    "skills": [
-      {
-        "skill": "warfare",
-        "proficiencyRank": 1
-      }
+    "name": "Garrison (V&K)",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "outfit-army"
+        },
+        {
+            "value": 1,
+            "activity": "train-army"
+        },
+        {
+            "value": 1,
+            "activity": "fortify-hex"
+        },
+        {
+            "value": 1,
+            "activity": "fortify-hex-vk"
+        }
     ],
-    "dc": 20,
-    "rp": 28,
-    "lumber": 6,
-    "stone": 3
-  },
-  "lots": 2
+    "traits": [
+        "building",
+        "residential"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "moreThanOncePerTurn": true,
+        "value": "1"
+    },
+    "level": 5,
+    "upgradeFrom": [
+        "Barracks"
+    ],
+    "construction": {
+        "skills": [
+            {
+                "skill": "warfare",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 20,
+        "rp": 28,
+        "lumber": 6,
+        "stone": 3
+    },
+    "lots": 2
 }

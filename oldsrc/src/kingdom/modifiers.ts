@@ -2,7 +2,7 @@ import {KingdomPhase} from './data/activities';
 import {capitalize, groupBy, unslugify} from '../utils';
 import {getLevelData, Kingdom, LeaderKingdomSkills, Leaders, LeaderSkills, Ruin, Settlement} from './data/kingdom';
 import {allFeatsByName} from './data/feats';
-import {allActorSkills, allSkills, CharacterSkill, Skill, skillAbilities} from './data/skills';
+import {allActorSkills, CharacterSkill, Skill, skillAbilities} from './data/skills';
 import {Ability, AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {isInvested, Leader} from './data/leaders';
 import {calculateUnrestPenalty} from './data/unrest';

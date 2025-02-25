@@ -16,7 +16,7 @@ import {
     Modifier,
     ModifierTotals,
     processModifiers,
-    UntrainedProficiencyMode, Proficiency,
+    UntrainedProficiencyMode,
 } from './modifiers';
 import {SkillItemBonus, SkillItemBonuses} from './data/structures';
 import {KingdomActivityById} from './data/activityData';

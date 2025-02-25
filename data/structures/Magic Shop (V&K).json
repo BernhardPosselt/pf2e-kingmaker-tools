@@ -1,43 +1,43 @@
 {
-  "name": "Magic Shop (V&K)",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "supernatural-solution"
-    },
-    {
-      "value": 1,
-      "activity": "prognostication"
-    }
-  ],
-  "availableItemsRules": [
-    {
-      "value": 1,
-      "group": "magical",
-      "maximumStacks": 3
-    }
-  ],
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 8,
-  "upgradeFrom": [
-    "Luxury Store"
-  ],
-  "construction": {
-    "rp": 44,
-    "lumber": 8,
-    "stone": 6,
-    "luxuries": 6,
-    "skills": [
-      {
-        "skill": "magic",
-        "proficiencyRank": 2
-      }
+    "name": "Magic Shop (V&K)",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "supernatural-solution"
+        },
+        {
+            "value": 1,
+            "activity": "prognostication"
+        }
     ],
-    "dc": 24
-  },
-  "lots": 1
+    "availableItemsRules": [
+        {
+            "value": 1,
+            "group": "magical",
+            "maximumStacks": 3
+        }
+    ],
+    "traits": [
+        "building"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 8,
+    "upgradeFrom": [
+        "Luxury Store"
+    ],
+    "construction": {
+        "rp": 44,
+        "lumber": 8,
+        "stone": 6,
+        "luxuries": 6,
+        "skills": [
+            {
+                "skill": "magic",
+                "proficiencyRank": 2
+            }
+        ],
+        "dc": 24
+    },
+    "lots": 1
 }

@@ -1,36 +1,36 @@
 {
-  "name": "Menagerie",
-  "skillBonusRules": [
-    {
-      "value": 2,
-      "skill": "wilderness",
-      "activity": "rest-and-relax"
-    }
-  ],
-  "notes": "A menagerie typically contains a selection of level 5 or lower animals. If your party captures a living creature of level 6 or higher and can transport the creature back to a settlement with a menagerie, you can add that creature to the menagerie as long as your kingdom level is at least 4 higher than the creature's level. Each time such a creature is added to a menagerie, gain 1 Fame or Infamy point (as appropriate) or reduce one Ruin of your choice by 1.\nOnly creatures with Intelligence modifiers of –4 or –5 are appropriate to place in a menagerie. A kingdom gains 1 Unrest at the start of a Kingdom turn for each sapient creature (anything with an Intelligence modifier of –3 or higher) on display in a menagerie.",
-  "traits": [
-    "building",
-    "edifice"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "reducesRuin": true,
-  "level": 12,
-  "upgradeFrom": [
-    "Park"
-  ],
-  "construction": {
-    "rp": 26,
-    "lumber": 14,
-    "stone": 10,
-    "ore": 10,
-    "skills": [
-      {
-        "skill": "wilderness",
-        "proficiencyRank": 2
-      }
+    "name": "Menagerie",
+    "skillBonusRules": [
+        {
+            "value": 2,
+            "skill": "wilderness",
+            "activity": "rest-and-relax"
+        }
     ],
-    "dc": 30
-  },
-  "lots": 4
+    "notes": "A menagerie typically contains a selection of level 5 or lower animals. If your party captures a living creature of level 6 or higher and can transport the creature back to a settlement with a menagerie, you can add that creature to the menagerie as long as your kingdom level is at least 4 higher than the creature's level. Each time such a creature is added to a menagerie, gain 1 Fame or Infamy point (as appropriate) or reduce one Ruin of your choice by 1.\nOnly creatures with Intelligence modifiers of –4 or –5 are appropriate to place in a menagerie. A kingdom gains 1 Unrest at the start of a Kingdom turn for each sapient creature (anything with an Intelligence modifier of –3 or higher) on display in a menagerie.",
+    "traits": [
+        "building",
+        "edifice"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "reducesRuin": true,
+    "level": 12,
+    "upgradeFrom": [
+        "Park"
+    ],
+    "construction": {
+        "rp": 26,
+        "lumber": 14,
+        "stone": 10,
+        "ore": 10,
+        "skills": [
+            {
+                "skill": "wilderness",
+                "proficiencyRank": 2
+            }
+        ],
+        "dc": 30
+    },
+    "lots": 4
 }

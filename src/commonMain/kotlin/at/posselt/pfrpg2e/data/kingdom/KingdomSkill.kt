@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.data.kingdom
 
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.unslugify
 
 
@@ -31,5 +32,5 @@ enum class KingdomSkill {
         get() = toCamelCase()
 
     val label: String
-        get() = value.unslugify()
+        get() = toLabel()
 }

@@ -1,27 +1,27 @@
 {
-  "name": "Stable",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "establish-trade-agreement"
-    }
-  ],
-  "traits": [
-    "yard"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 3,
-  "construction": {
-    "rp": 10,
-    "lumber": 2,
-    "skills": [
-      {
-        "skill": "wilderness",
-        "proficiencyRank": 1
-      }
+    "name": "Stable",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "establish-trade-agreement"
+        }
     ],
-    "dc": 18
-  },
-  "lots": 1
+    "traits": [
+        "yard"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 3,
+    "construction": {
+        "rp": 10,
+        "lumber": 2,
+        "skills": [
+            {
+                "skill": "wilderness",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 18
+    },
+    "lots": 1
 }

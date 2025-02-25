@@ -2,7 +2,6 @@ import at.posselt.pfrpg2e.plugins.ChangeModuleVersion
 import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
 import at.posselt.pfrpg2e.plugins.CombineJsonFiles
 import at.posselt.pfrpg2e.plugins.ReleaseModule
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 

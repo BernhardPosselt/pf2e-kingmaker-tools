@@ -1,41 +1,41 @@
 {
-  "name": "Occult Shop (V&K)",
-  "activityBonusRules": [
-    {
-      "value": 2,
-      "activity": "prognostication"
-    },
-    {
-      "value": 2,
-      "activity": "supernatural-solution"
-    }
-  ],
-  "availableItemsRules": [
-    {
-      "value": 1,
-      "group": "occult",
-      "maximumStacks": 3
-    }
-  ],
-  "notes": "While in a settlement with an occult shop, you gain a +2 item bonus to all checks made to Research esoteric subjects or to Recall Knowledge about the same.",
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": true,
-  "reducesUnrest": false,
-  "level": 13,
-  "construction": {
-    "rp": 68,
-    "lumber": 12,
-    "stone": 6,
-    "luxuries": 12,
-    "skills": [
-      {
-        "skill": "magic",
-        "proficiencyRank": 3
-      }
+    "name": "Occult Shop (V&K)",
+    "activityBonusRules": [
+        {
+            "value": 2,
+            "activity": "prognostication"
+        },
+        {
+            "value": 2,
+            "activity": "supernatural-solution"
+        }
     ],
-    "dc": 32
-  },
-  "lots": 1
+    "availableItemsRules": [
+        {
+            "value": 1,
+            "group": "occult",
+            "maximumStacks": 3
+        }
+    ],
+    "notes": "While in a settlement with an occult shop, you gain a +2 item bonus to all checks made to Research esoteric subjects or to Recall Knowledge about the same.",
+    "traits": [
+        "building"
+    ],
+    "affectsDowntime": true,
+    "reducesUnrest": false,
+    "level": 13,
+    "construction": {
+        "rp": 68,
+        "lumber": 12,
+        "stone": 6,
+        "luxuries": 12,
+        "skills": [
+            {
+                "skill": "magic",
+                "proficiencyRank": 3
+            }
+        ],
+        "dc": 32
+    },
+    "lots": 1
 }

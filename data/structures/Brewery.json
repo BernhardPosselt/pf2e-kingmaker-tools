@@ -1,30 +1,30 @@
 {
-  "name": "Brewery",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "establish-trade-agreement"
-    }
-  ],
-  "traits": [
-    "building"
-  ],
-  "reducesUnrest": true,
-  "reduceUnrestBy": {
-    "value": "1",
-    "moreThanOncePerTurn": true,
-    "note": "as long as you have fewer than 4 breweries in the settlement at that time"
-  },
-  "level": 1,
-  "construction": {
-    "skills": [
-      {
-        "skill": "agriculture"
-      }
+    "name": "Brewery",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "establish-trade-agreement"
+        }
     ],
-    "dc": 15,
-    "rp": 6,
-    "lumber": 2
-  },
-  "lots": 1
+    "traits": [
+        "building"
+    ],
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "value": "1",
+        "moreThanOncePerTurn": true,
+        "note": "as long as you have fewer than 4 breweries in the settlement at that time"
+    },
+    "level": 1,
+    "construction": {
+        "skills": [
+            {
+                "skill": "agriculture"
+            }
+        ],
+        "dc": 15,
+        "rp": 6,
+        "lumber": 2
+    },
+    "lots": 1
 }

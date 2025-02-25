@@ -1,31 +1,31 @@
 {
-  "name": "Lumberyard",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "establish-work-site-lumber"
-    }
-  ],
-  "storage": {
-    "lumber": 1
-  },
-  "traits": [
-    "yard"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 3,
-  "construction": {
-    "rp": 16,
-    "lumber": 5,
-    "ore": 1,
-    "skills": [
-      {
-        "skill": "industry",
-        "proficiencyRank": 1
-      }
+    "name": "Lumberyard",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "establish-work-site-lumber"
+        }
     ],
-    "dc": 18
-  },
-  "lots": 2
+    "storage": {
+        "lumber": 1
+    },
+    "traits": [
+        "yard"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 3,
+    "construction": {
+        "rp": 16,
+        "lumber": 5,
+        "ore": 1,
+        "skills": [
+            {
+                "skill": "industry",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 18
+    },
+    "lots": 2
 }

@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.data.kingdom
 
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.unslugify
 
 
@@ -16,12 +17,12 @@ enum class Leader {
     WARDEN;
 
     companion object {
-        fun fromString(value: String) = fromCamelCase<KingdomSkill>(value)
+        fun fromString(value: String) = fromCamelCase<Leader>(value)
     }
 
     val value: String
         get() = toCamelCase()
 
     val label: String
-        get() = value.unslugify()
+        get() = toLabel()
 }

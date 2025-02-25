@@ -20,6 +20,9 @@ declare global {
             };
             migration: {
                 kingdomSettings: (KingdomSettings, onSave: (settings: KingdomSettings) => void) => void,
+                kingdomSizeHelp: () => void,
+                settlementSizeHelp: () => void,
+                structureXpDialog: (onSave: (xp: number) => void) => void,
             }
         };
         pf2e: {

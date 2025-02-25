@@ -1,33 +1,37 @@
 {
-  "name": "Festival Hall (V&K)",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "celebrate-holiday"
-    }
-  ],
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 3,
-  "construction": {
-    "skills": [
-      {
-        "skill": "arts"
-      }
+    "name": "Festival Hall (V&K)",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "celebrate-holiday"
+        },
+        {
+            "value": 1,
+            "activity": "celebrate-holiday-vk"
+        }
     ],
-    "dc": 18,
-    "rp": 7,
-    "lumber": 3
-  },
-  "skillBonusRules": [
-    {
-      "activity": "quell-unrest",
-      "skill": "arts",
-      "value": 1
-    }
-  ],
-  "lots": 1
+    "traits": [
+        "building"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 3,
+    "construction": {
+        "skills": [
+            {
+                "skill": "arts"
+            }
+        ],
+        "dc": 18,
+        "rp": 7,
+        "lumber": 3
+    },
+    "lots": 1,
+    "skillBonusRules": [
+        {
+            "activity": "quell-unrest",
+            "skill": "arts",
+            "value": 1
+        }
+    ]
 }

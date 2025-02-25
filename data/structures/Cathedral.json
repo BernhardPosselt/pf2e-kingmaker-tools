@@ -1,53 +1,57 @@
 {
-  "name": "Cathedral",
-  "activityBonusRules": [
-    {
-      "value": 3,
-      "activity": "celebrate-holiday"
-    },
-    {
-      "value": 3,
-      "activity": "provide-care"
-    },
-    {
-      "value": 3,
-      "activity": "repair-reputation-corruption"
-    }
-  ],
-  "availableItemsRules": [
-    {
-      "value": 3,
-      "group": "divine",
-      "maximumStacks": 3
-    }
-  ],
-  "notes": "While in a settlement with a cathedral, you gain a +3 item bonus to Lore and Religion checks made to Recall Knowledge while Investigating, and to all faith-themed checks made while Researching.",
-  "traits": [
-    "building",
-    "edifice",
-    "famous",
-    "infamous"
-  ],
-  "affectsDowntime": true,
-  "reducesUnrest": true,
-  "reduceUnrestBy": {
-    "value": "4"
-  },
-  "level": 15,
-  "upgradeFrom": [
-    "Temple"
-  ],
-  "construction": {
-    "skills": [
-      {
-        "skill": "folklore",
-        "proficiencyRank": 3
-      }
+    "name": "Cathedral",
+    "activityBonusRules": [
+        {
+            "value": 3,
+            "activity": "celebrate-holiday"
+        },
+        {
+            "value": 3,
+            "activity": "celebrate-holiday-vk"
+        },
+        {
+            "value": 3,
+            "activity": "provide-care"
+        },
+        {
+            "value": 3,
+            "activity": "repair-reputation-corruption"
+        }
     ],
-    "rp": 58,
-    "dc": 34,
-    "lumber": 20,
-    "stone": 20
-  },
-  "lots": 4
+    "availableItemsRules": [
+        {
+            "value": 3,
+            "group": "divine",
+            "maximumStacks": 3
+        }
+    ],
+    "notes": "While in a settlement with a cathedral, you gain a +3 item bonus to Lore and Religion checks made to Recall Knowledge while Investigating, and to all faith-themed checks made while Researching.",
+    "traits": [
+        "building",
+        "edifice",
+        "famous",
+        "infamous"
+    ],
+    "affectsDowntime": true,
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "value": "4"
+    },
+    "level": 15,
+    "upgradeFrom": [
+        "Temple"
+    ],
+    "construction": {
+        "skills": [
+            {
+                "skill": "folklore",
+                "proficiencyRank": 3
+            }
+        ],
+        "rp": 58,
+        "dc": 34,
+        "lumber": 20,
+        "stone": 20
+    },
+    "lots": 4
 }

@@ -1,47 +1,47 @@
 {
-  "name": "Tavern, Popular (V&K)",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "hire-adventurers"
-    },
-    {
-      "value": 1,
-      "activity": "reconnoiter-hex"
-    }
-  ],
-  "skillBonusRules": [
-    {
-      "value": 1,
-      "skill": "trade",
-      "activity": "rest-and-relax"
-    }
-  ],
-  "notes": "If you attempt a Performance check to Earn Income in a settlement with a popular tavern, you gain a +1 item bonus to the check. All checks made to Gather Information in a settlement with at least one popular tavern gain a +1 item bonus.",
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": true,
-  "reducesUnrest": true,
-  "reduceUnrestBy": {
-    "value": "2"
-  },
-  "level": 3,
-  "upgradeFrom": [
-    "Tavern, Dive",
-    "Tavern, Dive (V&K)"
-  ],
-  "construction": {
-    "rp": 24,
-    "lumber": 6,
-    "stone": 2,
-    "skills": [
-      {
-        "skill": "trade",
-        "proficiencyRank": 2
-      }
+    "name": "Tavern, Popular (V&K)",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "hire-adventurers"
+        },
+        {
+            "value": 1,
+            "activity": "reconnoiter-hex"
+        }
     ],
-    "dc": 18
-  },
-  "lots": 1
+    "skillBonusRules": [
+        {
+            "value": 1,
+            "skill": "trade",
+            "activity": "rest-and-relax"
+        }
+    ],
+    "notes": "If you attempt a Performance check to Earn Income in a settlement with a popular tavern, you gain a +1 item bonus to the check. All checks made to Gather Information in a settlement with at least one popular tavern gain a +1 item bonus.",
+    "traits": [
+        "building"
+    ],
+    "affectsDowntime": true,
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "value": "2"
+    },
+    "level": 3,
+    "upgradeFrom": [
+        "Tavern, Dive",
+        "Tavern, Dive (V&K)"
+    ],
+    "construction": {
+        "rp": 24,
+        "lumber": 6,
+        "stone": 2,
+        "skills": [
+            {
+                "skill": "trade",
+                "proficiencyRank": 2
+            }
+        ],
+        "dc": 18
+    },
+    "lots": 1
 }

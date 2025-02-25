@@ -19,6 +19,10 @@ import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderSkills
+import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
+import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
+import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
+import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.*
 import at.posselt.pfrpg2e.migrations.migratePfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
@@ -128,6 +132,9 @@ fun main() {
                         onSave = onSave
                     ).launch()
                 },
+                kingdomSizeHelp = { buildPromise { kingdomSizeHelp() } },
+                settlementSizeHelp = { buildPromise { settlementSizeHelp() } },
+                structureXpDialog = { onOk -> buildPromise { structureXpDialog(game, onOk) } }
             )
         )
 
@@ -135,6 +142,7 @@ fun main() {
             buildPromise {
                 game.migratePfrpg2eKingdomCampingWeather()
                 showFirstRunMessage(game)
+                validateStructures(game)
             }
         }
 

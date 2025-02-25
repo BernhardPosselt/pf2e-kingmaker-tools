@@ -1,32 +1,32 @@
 {
-  "name": "Foundry",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "establish-work-site-mine"
-    }
-  ],
-  "storage": {
-    "ore": 1
-  },
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 3,
-  "construction": {
-    "skills": [
-      {
-        "skill": "industry",
-        "proficiencyRank": 1
-      }
+    "name": "Foundry",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "establish-work-site-mine"
+        }
     ],
-    "dc": 18,
-    "rp": 16,
-    "lumber": 5,
-    "stone": 3,
-    "ore": 2
-  },
-  "lots": 2
+    "storage": {
+        "ore": 1
+    },
+    "traits": [
+        "building"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 3,
+    "construction": {
+        "skills": [
+            {
+                "skill": "industry",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 18,
+        "rp": 16,
+        "lumber": 5,
+        "stone": 3,
+        "ore": 2
+    },
+    "lots": 2
 }

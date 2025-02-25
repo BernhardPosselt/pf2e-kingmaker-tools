@@ -10,7 +10,8 @@
       "type": "object",
       "required": [
         "name",
-        "lots"
+        "lots",
+        "level"
       ],
       "properties": {
         "name": {

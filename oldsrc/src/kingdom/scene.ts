@@ -9,7 +9,7 @@ import {getKingdomActivitiesById, KingdomActivityById} from './data/activityData
 class StructureError extends Error {
 }
 
-function calculateLots(structure: Structure, tokenWidth: number, tokenHeight: number): Structure {
+function calculateLots(structure: Structure): Structure {
     if (structure.lots !== undefined) {
         return structure;
     } else {
@@ -36,7 +36,7 @@ function parseStructureData(
             console.log(refData, structuresByName);
             throw new StructureError(`No predefined structure data found for actor with name ${name}, aborting`);
         }
-        return calculateLots(lookedUpStructure, tokenWidth, tokenHeight);
+        return calculateLots(lookedUpStructure);
     } else if (isNonNullable(name) && isNonNullable(level)) {
         const rule: Structure = {
             name,
@@ -58,10 +58,10 @@ function parseStructureData(
             console.error('Validation Error', result.error);
             throw new StructureError(`Structure with name ${name} failed to validate, aborting. See console log (F12) for more details`);
         }
-        return calculateLots(rule, tokenWidth, tokenHeight);
+        return calculateLots(rule);
     } else {
         const result: Structure = data as Structure;
-        return calculateLots(result, tokenWidth, tokenHeight);
+        return calculateLots(result);
     }
 }
 

@@ -1,33 +1,33 @@
 {
-  "name": "Mansion",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "improve-lifestyle"
-    }
-  ],
-  "traits": [
-    "building",
-    "residential"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 5,
-  "upgradeFrom": [
-    "Houses"
-  ],
-  "construction": {
-    "rp": 10,
-    "lumber": 6,
-    "stone": 3,
-    "luxuries": 6,
-    "skills": [
-      {
-        "skill": "industry",
-        "proficiencyRank": 1
-      }
+    "name": "Mansion",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "improve-lifestyle"
+        }
     ],
-    "dc": 20
-  },
-  "lots": 1
+    "traits": [
+        "building",
+        "residential"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 5,
+    "upgradeFrom": [
+        "Houses"
+    ],
+    "construction": {
+        "rp": 10,
+        "lumber": 6,
+        "stone": 3,
+        "luxuries": 6,
+        "skills": [
+            {
+                "skill": "industry",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 20
+    },
+    "lots": 1
 }

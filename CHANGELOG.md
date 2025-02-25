@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Migrated various dialogs to app v2
+* On startup, all custom structures are validated against the current schema instead of each time when querying them
+* **API BREAK**: Require name, lots and level for custom structures and no longer fall back to actor data
+
 ## [3.0.0] - 2025-02-25
 
 ### Changed

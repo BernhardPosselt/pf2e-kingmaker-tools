@@ -1,35 +1,35 @@
 {
-  "name": "Alchemy Laboratory",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "demolish"
-    }
-  ],
-  "availableItemsRules": [
-    {
-      "value": 1,
-      "group": "alchemical",
-      "maximumStacks": 3
-    }
-  ],
-  "notes": "Checks attempted to Identify Alchemy in any settlement with at least one alchemy laboratory gain a +1 item bonus.",
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": true,
-  "level": 3,
-  "construction": {
-    "skills": [
-      {
-        "skill": "industry",
-        "proficiencyRank": 1
-      }
+    "name": "Alchemy Laboratory",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "demolish"
+        }
     ],
-    "rp": 18,
-    "ore": 2,
-    "stone": 5,
-    "dc": 16
-  },
-  "lots": 1
+    "availableItemsRules": [
+        {
+            "value": 1,
+            "group": "alchemical",
+            "maximumStacks": 3
+        }
+    ],
+    "notes": "Checks attempted to Identify Alchemy in any settlement with at least one alchemy laboratory gain a +1 item bonus.",
+    "traits": [
+        "building"
+    ],
+    "affectsDowntime": true,
+    "level": 3,
+    "construction": {
+        "skills": [
+            {
+                "skill": "industry",
+                "proficiencyRank": 1
+            }
+        ],
+        "rp": 18,
+        "ore": 2,
+        "stone": 5,
+        "dc": 16
+    },
+    "lots": 1
 }

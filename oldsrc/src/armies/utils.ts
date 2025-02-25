@@ -3,7 +3,7 @@ import {getKingdom, saveKingdom} from '../kingdom/storage';
 import {distinctBy, sum} from '../utils';
 import {Modifier} from '../kingdom/modifiers';
 
-export function isEffectItem(item: Item<unknown>): item is Item<ItemSystem> & EffectItem {
+export function isEffectItem(item: Item<unknown>): item is Item & EffectItem {
     return item.type === 'effect';
 }
 

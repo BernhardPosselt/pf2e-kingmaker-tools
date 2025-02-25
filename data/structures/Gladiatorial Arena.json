@@ -1,43 +1,47 @@
 {
-  "name": "Gladiatorial Arena",
-  "activityBonusRules": [
-    {
-      "value": 3,
-      "activity": "celebrate-holiday"
-    },
-    {
-      "value": 3,
-      "activity": "hire-adventurers"
-    }
-  ],
-  "skillBonusRules": [
-    {
-      "value": 3,
-      "skill": "warfare",
-      "activity": "quell-unrest"
-    }
-  ],
-  "notes": "A gladiatorial arena allows a PC in the settlement to retrain combat-themed feats (at the GM's discretion) more efficiently; doing so takes only 4 days rather than a week of downtime.",
-  "traits": [
-    "edifice",
-    "famous",
-    "infamous",
-    "yard"
-  ],
-  "affectsDowntime": true,
-  "reducesUnrest": false,
-  "level": 15,
-  "construction": {
-    "rp": 58,
-    "lumber": 10,
-    "stone": 30,
-    "skills": [
-      {
-        "skill": "warfare",
-        "proficiencyRank": 3
-      }
+    "name": "Gladiatorial Arena",
+    "activityBonusRules": [
+        {
+            "value": 3,
+            "activity": "celebrate-holiday"
+        },
+        {
+            "value": 3,
+            "activity": "celebrate-holiday-vk"
+        },
+        {
+            "value": 3,
+            "activity": "hire-adventurers"
+        }
     ],
-    "dc": 34
-  },
-  "lots": 4
+    "skillBonusRules": [
+        {
+            "value": 3,
+            "skill": "warfare",
+            "activity": "quell-unrest"
+        }
+    ],
+    "notes": "A gladiatorial arena allows a PC in the settlement to retrain combat-themed feats (at the GM's discretion) more efficiently; doing so takes only 4 days rather than a week of downtime.",
+    "traits": [
+        "edifice",
+        "famous",
+        "infamous",
+        "yard"
+    ],
+    "affectsDowntime": true,
+    "reducesUnrest": false,
+    "level": 15,
+    "construction": {
+        "rp": 58,
+        "lumber": 10,
+        "stone": 30,
+        "skills": [
+            {
+                "skill": "warfare",
+                "proficiencyRank": 3
+            }
+        ],
+        "dc": 34
+    },
+    "lots": 4
 }

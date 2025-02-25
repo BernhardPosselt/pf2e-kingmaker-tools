@@ -1,43 +1,43 @@
 {
-  "name": "Noble Villa",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "improve-lifestyle"
-    }
-  ],
-  "skillBonusRules": [
-    {
-      "value": 1,
-      "skill": "politics",
-      "activity": "quell-unrest"
-    }
-  ],
-  "traits": [
-    "building",
-    "residential"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": true,
-  "reduceUnrestBy": {
-    "value": "2"
-  },
-  "level": 9,
-  "upgradeFrom": [
-    "Mansion"
-  ],
-  "construction": {
-    "rp": 24,
-    "lumber": 10,
-    "stone": 8,
-    "luxuries": 6,
-    "skills": [
-      {
-        "skill": "politics",
-        "proficiencyRank": 2
-      }
+    "name": "Noble Villa",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "improve-lifestyle"
+        }
     ],
-    "dc": 19
-  },
-  "lots": 2
+    "skillBonusRules": [
+        {
+            "value": 1,
+            "skill": "politics",
+            "activity": "quell-unrest"
+        }
+    ],
+    "traits": [
+        "building",
+        "residential"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "value": "2"
+    },
+    "level": 9,
+    "upgradeFrom": [
+        "Mansion"
+    ],
+    "construction": {
+        "rp": 24,
+        "lumber": 10,
+        "stone": 8,
+        "luxuries": 6,
+        "skills": [
+            {
+                "skill": "politics",
+                "proficiencyRank": 2
+            }
+        ],
+        "dc": 19
+    },
+    "lots": 2
 }

@@ -1,31 +1,31 @@
 {
-  "name": "Museum",
-  "skillBonusRules": [
-    {
-      "value": 1,
-      "skill": "arts",
-      "activity": "rest-and-relax"
-    }
-  ],
-  "notes": "A magic item of level 6 or higher that has a particular import or bears significant historical or regional value (at the GM's discretion) can be donated to a museum. Each time such an item is donated, reduce Unrest by 1. If that item is later removed from display, increase Unrest by 1.",
-  "traits": [
-    "building",
-    "edifice"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": true,
-  "level": 5,
-  "construction": {
-    "rp": 30,
-    "lumber": 6,
-    "stone": 2,
-    "skills": [
-      {
-        "skill": "exploration",
-        "proficiencyRank": 1
-      }
+    "name": "Museum",
+    "skillBonusRules": [
+        {
+            "value": 1,
+            "skill": "arts",
+            "activity": "rest-and-relax"
+        }
     ],
-    "dc": 20
-  },
-  "lots": 2
+    "notes": "A magic item of level 6 or higher that has a particular import or bears significant historical or regional value (at the GM's discretion) can be donated to a museum. Each time such an item is donated, reduce Unrest by 1. If that item is later removed from display, increase Unrest by 1.",
+    "traits": [
+        "building",
+        "edifice"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": true,
+    "level": 5,
+    "construction": {
+        "rp": 30,
+        "lumber": 6,
+        "stone": 2,
+        "skills": [
+            {
+                "skill": "exploration",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 20
+    },
+    "lots": 2
 }

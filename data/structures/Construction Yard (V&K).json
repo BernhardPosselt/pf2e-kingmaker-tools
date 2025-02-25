@@ -1,39 +1,39 @@
 {
-  "name": "Construction Yard (V&K)",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "build-structure"
-    },
-    {
-      "value": 1,
-      "activity": "repair-reputation-decay"
-    },
-    {
-      "value": 1,
-      "activity": "build-roads"
-    },
-    {
-      "value": 1,
-      "activity": "irrigation"
-    }
-  ],
-  "traits": [
-    "yard"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 10,
-  "construction": {
-    "skills": [
-      {
-        "skill": "engineering"
-      }
+    "name": "Construction Yard (V&K)",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "build-structure"
+        },
+        {
+            "value": 1,
+            "activity": "repair-reputation-decay"
+        },
+        {
+            "value": 1,
+            "activity": "build-roads"
+        },
+        {
+            "value": 1,
+            "activity": "irrigation"
+        }
     ],
-    "dc": 27,
-    "rp": 40,
-    "lumber": 10,
-    "stone": 10
-  },
-  "lots": 4
+    "traits": [
+        "yard"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 10,
+    "construction": {
+        "skills": [
+            {
+                "skill": "engineering"
+            }
+        ],
+        "dc": 27,
+        "rp": 40,
+        "lumber": 10,
+        "stone": 10
+    },
+    "lots": 4
 }

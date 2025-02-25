@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.migrations.migrations
 
 import at.posselt.pfrpg2e.kingdom.KingdomData
-import at.posselt.pfrpg2e.kingdom.recoverArmyIds
+import at.posselt.pfrpg2e.kingdom.structures.recoverArmyIds
 import com.foundryvtt.core.Game
 
 class Migration9 : Migration(9) {

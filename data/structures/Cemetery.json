@@ -1,21 +1,21 @@
 {
-  "name": "Cemetery",
-  "traits": [
-    "yard"
-  ],
-  "affectsEvents": true,
-  "affectsDowntime": false,
-  "reducesUnrest": true,
-  "level": 1,
-  "construction": {
-    "skills": [
-      {
-        "skill": "folklore"
-      }
+    "name": "Cemetery",
+    "traits": [
+        "yard"
     ],
-    "dc": 15,
-    "rp": 4,
-    "stone": 1
-  },
-  "lots": 1
+    "affectsEvents": true,
+    "affectsDowntime": false,
+    "reducesUnrest": true,
+    "level": 1,
+    "construction": {
+        "skills": [
+            {
+                "skill": "folklore"
+            }
+        ],
+        "dc": 15,
+        "rp": 4,
+        "stone": 1
+    },
+    "lots": 1
 }

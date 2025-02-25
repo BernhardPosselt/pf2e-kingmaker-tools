@@ -1,4 +1,4 @@
-package at.posselt.pfrpg2e.kingdom
+package at.posselt.pfrpg2e.kingdom.structures
 
 import kotlinx.js.JsPlainObject
 import kotlinx.serialization.json.JsonElement
@@ -117,12 +117,12 @@ external interface StructureData : Structure {
     val consumptionReduction: Int?
     val unlockActivities: Array<String>?
     val traits: Array<String>?
-    val lots: Int?
+    val lots: Int
     val affectsEvents: Boolean?
     val affectsDowntime: Boolean?
     val reducesUnrest: Boolean?
     val reducesRuin: Boolean?
-    val level: Int?
+    val level: Int
     val upgradeFrom: Array<String>?
     val reduceUnrestBy: ReduceUnrestBy?
     val reduceRuinBy: RuinAmount?

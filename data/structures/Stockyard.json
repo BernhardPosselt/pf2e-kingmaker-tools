@@ -1,27 +1,27 @@
 {
-  "name": "Stockyard",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "gather-livestock"
-    }
-  ],
-  "consumptionReduction": 1,
-  "traits": [
-    "yard"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 3,
-  "construction": {
-    "rp": 20,
-    "lumber": 4,
-    "skills": [
-      {
-        "skill": "industry"
-      }
+    "name": "Stockyard",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "gather-livestock"
+        }
     ],
-    "dc": 18
-  },
-  "lots": 4
+    "consumptionReduction": 1,
+    "traits": [
+        "yard"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 3,
+    "construction": {
+        "rp": 20,
+        "lumber": 4,
+        "skills": [
+            {
+                "skill": "industry"
+            }
+        ],
+        "dc": 18
+    },
+    "lots": 4
 }

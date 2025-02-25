@@ -1,35 +1,35 @@
 {
-  "name": "Bank (V&K)",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "tap-treasury"
-    },
-    {
-      "value": 1,
-      "activity": "capital-investment"
-    },
-    {
-      "value": 1,
-      "activity": "collect-taxes"
-    }
-  ],
-  "enableCapitalInvestment": true,
-  "traits": [
-    "building"
-  ],
-  "level": 5,
-  "construction": {
-    "skills": [
-      {
-        "skill": "trade",
-        "proficiencyRank": 1
-      }
+    "name": "Bank (V&K)",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "tap-treasury"
+        },
+        {
+            "value": 1,
+            "activity": "capital-investment"
+        },
+        {
+            "value": 1,
+            "activity": "collect-taxes"
+        }
     ],
-    "dc": 20,
-    "rp": 28,
-    "ore": 4,
-    "stone": 6
-  },
-  "lots": 1
+    "enableCapitalInvestment": true,
+    "traits": [
+        "building"
+    ],
+    "level": 5,
+    "construction": {
+        "skills": [
+            {
+                "skill": "trade",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 20,
+        "rp": 28,
+        "ore": 4,
+        "stone": 6
+    },
+    "lots": 1
 }

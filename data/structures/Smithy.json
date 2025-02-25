@@ -1,34 +1,34 @@
 {
-  "name": "Smithy",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "trade-commodities"
-    },
-    {
-      "value": 1,
-      "activity": "outfit-army"
-    }
-  ],
-  "notes": "While in a settlement with a smithy, you gain a +1 item bonus to Craft checks made to work with metal.",
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": true,
-  "reducesUnrest": false,
-  "level": 3,
-  "construction": {
-    "rp": 8,
-    "lumber": 2,
-    "stone": 1,
-    "ore": 1,
-    "skills": [
-      {
-        "skill": "industry",
-        "proficiencyRank": 1
-      }
+    "name": "Smithy",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "trade-commodities"
+        },
+        {
+            "value": 1,
+            "activity": "outfit-army"
+        }
     ],
-    "dc": 18
-  },
-  "lots": 1
+    "notes": "While in a settlement with a smithy, you gain a +1 item bonus to Craft checks made to work with metal.",
+    "traits": [
+        "building"
+    ],
+    "affectsDowntime": true,
+    "reducesUnrest": false,
+    "level": 3,
+    "construction": {
+        "rp": 8,
+        "lumber": 2,
+        "stone": 1,
+        "ore": 1,
+        "skills": [
+            {
+                "skill": "industry",
+                "proficiencyRank": 1
+            }
+        ],
+        "dc": 18
+    },
+    "lots": 1
 }

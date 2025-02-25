@@ -1,32 +1,32 @@
 {
-  "name": "Secure Warehouse",
-  "activityBonusRules": [
-    {
-      "value": 1,
-      "activity": "craft-luxuries"
-    }
-  ],
-  "storage": {
-    "luxuries": 1
-  },
-  "traits": [
-    "building"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": false,
-  "level": 6,
-  "construction": {
-    "rp": 24,
-    "lumber": 6,
-    "stone": 6,
-    "ore": 4,
-    "skills": [
-      {
-        "skill": "industry",
-        "proficiencyRank": 2
-      }
+    "name": "Secure Warehouse",
+    "activityBonusRules": [
+        {
+            "value": 1,
+            "activity": "craft-luxuries"
+        }
     ],
-    "dc": 22
-  },
-  "lots": 2
+    "storage": {
+        "luxuries": 1
+    },
+    "traits": [
+        "building"
+    ],
+    "affectsDowntime": false,
+    "reducesUnrest": false,
+    "level": 6,
+    "construction": {
+        "rp": 24,
+        "lumber": 6,
+        "stone": 6,
+        "ore": 4,
+        "skills": [
+            {
+                "skill": "industry",
+                "proficiencyRank": 2
+            }
+        ],
+        "dc": 22
+    },
+    "lots": 2
 }

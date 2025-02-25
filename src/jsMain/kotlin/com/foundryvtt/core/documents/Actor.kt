@@ -27,6 +27,7 @@ open external class Actor : ClientDocument {
     var sort: Int
     var ownership: Ownership
     val baseActor: Actor?
+    val token: TokenDocument?
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")

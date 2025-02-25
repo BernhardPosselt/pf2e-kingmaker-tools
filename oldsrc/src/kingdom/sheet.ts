@@ -75,14 +75,10 @@ import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
 import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData';
 import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
-import {kingdomSizeDialog} from './dialogs/kingdom-size-dialog';
-import {settlementSizeDialog} from './dialogs/settlement-size-dialog';
 import {getSelectedArmies} from '../armies/utils';
 import {showArmyTacticsBrowser} from './dialogs/army-tactics-browser';
 import {showArmyBrowser} from './dialogs/army-browser';
 import {calculateResourceDicePerTurn} from "./structures";
-import {structureXpDialog} from "./dialogs/structure-xp-dialog";
-import {findWorldTableUuid} from "../roll-tables";
 
 interface KingdomOptions {
     game: Game;
@@ -449,13 +445,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async (ev) => {
                 ev.stopPropagation();
                 ev.preventDefault();
-                kingdomSizeDialog();
+                this.game.pf2eKingmakerTools.migration.kingdomSizeHelp();
             });
         $html.querySelector('#km-settlement-size-help')
             ?.addEventListener('click', async (ev) => {
                 ev.stopPropagation();
                 ev.preventDefault();
-                settlementSizeDialog();
+                this.game.pf2eKingmakerTools.migration.settlementSizeHelp();
             });
         $html.querySelector('#km-gain-fame')
             ?.addEventListener('click', async () => await this.upkeepGainFame());
@@ -540,7 +536,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelectorAll('.km-gain-structure-xp')
             ?.forEach(el => {
                 el.addEventListener('click', async (ev) => {
-                    structureXpDialog(this.game, async (xp) => {
+                    this.game.pf2eKingmakerTools.migration.structureXpDialog(async (xp) => {
                         await this.increaseXP(xp);
                     })
                 });

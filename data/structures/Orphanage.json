@@ -1,27 +1,27 @@
 {
-  "name": "Orphanage",
-  "traits": [
-    "building",
-    "residential"
-  ],
-  "affectsDowntime": false,
-  "reducesUnrest": true,
-  "reduceUnrestBy": {
-    "value": "1"
-  },
-  "level": 2,
-  "upgradeFrom": [
-    "Houses"
-  ],
-  "construction": {
-    "rp": 6,
-    "lumber": 2,
-    "skills": [
-      {
-        "skill": "industry"
-      }
+    "name": "Orphanage",
+    "traits": [
+        "building",
+        "residential"
     ],
-    "dc": 16
-  },
-  "lots": 1
+    "affectsDowntime": false,
+    "reducesUnrest": true,
+    "reduceUnrestBy": {
+        "value": "1"
+    },
+    "level": 2,
+    "upgradeFrom": [
+        "Houses"
+    ],
+    "construction": {
+        "rp": 6,
+        "lumber": 2,
+        "skills": [
+            {
+                "skill": "industry"
+            }
+        ],
+        "dc": 16
+    },
+    "lots": 1
 }

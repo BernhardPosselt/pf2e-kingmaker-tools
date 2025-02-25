@@ -1,6 +1,5 @@
 import {KingdomFeat} from '../data/feats';
 import {
-    createLeadershipModifier,
     calculateModifiers,
     createActiveSettlementModifiers,
     getUntrainedProficiencyMode,
