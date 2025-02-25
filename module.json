@@ -1,7 +1,7 @@
 {
     "title": "Kingdom Building, Camping & Weather",
     "description": "A collection of utilities to run the most popular adventure for PFRPG 2e",
-    "version": "2.1.2",
+    "version": "3.0.0",
     "scripts": [
         "dist/api/patches.js",
         "dist/main.js",
@@ -126,7 +126,7 @@
         }
     ],
     "manifest": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/latest/download/module.json",
-    "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/2.1.2/release.zip",
+    "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/3.0.0/release.zip",
     "id": "pf2e-kingmaker-tools",
     "socket": true,
     "authors": [
