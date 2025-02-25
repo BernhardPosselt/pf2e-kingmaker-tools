@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.migrations.migrations.*
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.isFirstGM
+import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.ui
@@ -62,7 +63,9 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
         val campingActor = getCampingActor()
         createBackups(this, kingdomActors, campingActor, currentVersion)
 
-        migrations.filter { it.version > currentVersion }
+        val migrationsToRun = migrations.filter { it.version > currentVersion }
+
+        migrationsToRun
             .forEach { migration ->
                 campingActor?.let { actor ->
                     actor.getCamping()?.let { camping ->
@@ -83,5 +86,9 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
 
         settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(latestMigrationVersion)
         ui.notifications.info("Kingdom Building, Camping & Weather: Migration successful")
+
+        if (migrationsToRun.any { it.showUpgradingNotices }) {
+            openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.wz1mIWMxDJVsMIUd")
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.foundryvtt.core.Game
 
 abstract class Migration(
     val version: Int,
+    val showUpgradingNotices: Boolean = false,
 ) {
     open suspend fun migrateCamping(game: Game, camping: dynamic) {
 

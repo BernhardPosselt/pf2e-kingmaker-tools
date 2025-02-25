@@ -12,8 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Overhauled Kingdom Settings and made them local per kingdom sheet
-* Use Roll Table UUIDs for kingdom and cult events; this means that roll table names are not required to be unique anymore 
-* All Kingdom Leaders must now refer to an NPC or PC actor; a migration is in place to link the best possible actor type if possible; to change existing leaders, drag and drop a token onto the leader position in the sheet
+* All Kingdom Leaders must now refer to an NPC or Character actor; a best effort migration is in place which tries to find an NPC or Character actor by the previously set name. This might not work if your leaders don't have actors or if the names don't line up; to change existing leaders, simply drag and drop an actor from the sideebar onto the leader position in the sheet
+* Kingdom settings are now local to your kingdom sheet. This means that if you are running multiple instances, changes won't propagate anymore to other sheets anymore
+* Roll Table UUIDs are now used for kingdom and cult events. This means that roll table names are not required to be unique anymore
 
 ### Added
 

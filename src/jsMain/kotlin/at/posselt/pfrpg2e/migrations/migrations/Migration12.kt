@@ -18,7 +18,7 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ENpc
 
-class Migration12 : Migration(12) {
+class Migration12 : Migration(12, true) {
     override suspend fun migrateKingdom(game: Game, kingdom: KingdomData) {
         kingdom.activityBlacklist = (kingdom.activityBlacklist + arrayOf(
             "focused-attention-vk",

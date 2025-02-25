@@ -1,5 +1,1 @@
-2025/02/24-21:05:02.764621 7997055ed6c0 Log #1528: 0 ops saved to Table #1531 OK
-2025/02/24-21:05:02.764654 7997055ed6c0 Archiving /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools/packs/kingmaker-tools-journals/001528.log: OK
-2025/02/24-21:05:02.764861 7997055ed6c0 Table #1530: 118 entries OK
-2025/02/24-21:05:02.764888 7997055ed6c0 Archiving /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools/packs/kingmaker-tools-journals/MANIFEST-001525: OK
-2025/02/24-21:05:02.771038 7997055ed6c0 **** Repaired leveldb /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools/packs/kingmaker-tools-journals; recovered 1 files; 154856 bytes. Some data may have been lost. ****
+2025/02/24-21:05:02.789672 7997055ed6c0 Delete type=3 #1
