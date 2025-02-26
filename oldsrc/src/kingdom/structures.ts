@@ -14,7 +14,7 @@ import {Skill} from './data/skills';
 import {gainRuin, KingdomActivityById, loseRuin, loseUnrest} from './data/activityData';
 import {
     getAllSettlements,
-    getSceneStructures,
+    getSceneStructures, getSettlementInfo,
     getStructureFromActor,
     isStructureActor
 } from './scene';
@@ -505,7 +505,8 @@ function calculateStructureRd(type: SettlementType, structure: Structure): numbe
 export function calculateResourceDicePerTurn(game: Game, kingdom: Kingdom) {
     const settlements = getAllSettlements(game, kingdom);
     const settlementDice = sum(settlements.map(s => {
-        const {type} = getSettlementConfig(s.settlement.level)
+        const {level} = getSettlementInfo(s, kingdom.settings.autoCalculateSettlementLevel);
+        const {type} = getSettlementConfig(level)
         const structures = getSceneStructures(s.scene);
         const structureDice = sum(structures.map(s => calculateStructureRd(type, s)))
         return calculateSettlementRd(kingdom, type) + structureDice;

@@ -240,7 +240,7 @@ Kotlin supports 2 ways of dealing with unions:
 Overloading can be used if a function or method can take more than 1 type, e.g.
 
 ```ts
-function x(param: Record<String, String> | Boolean)
+function x(param: Record<string, string> | boolean){}
 ```
 
 would become

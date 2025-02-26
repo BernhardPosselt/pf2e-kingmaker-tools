@@ -60,8 +60,10 @@ suspend fun editStructureMacro(actor: Actor?) {
                     val value = JSON.parse<StructureData>(data.data)
                     npcActor.setStructureData(value)
                 } catch (e: StructureValidationError) {
-                    ui.notifications.error(e.message ?: "Failed to validate structure")
-                    console.error(e.message, e.errors)
+                    ui.notifications.error("Failed to validate structure ${e.message}")
+                    ui.notifications.error("Check console log for exact errors")
+                    console.error(e.message)
+                    e.errors.forEach { console.log(it.message, it) }
                 }
             }
         } catch (e: SerializationException) {
