@@ -454,7 +454,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         description: 'You encourage your kingdom’s artists to create and display a masterful work of art to bolster your kingdom’s reputation. Attempt a basic check; the result affects either Fame or Infamy (depending on the type of kingdom you’re running). Create a Masterpiece may be attempted only once per Kingdom turn regardless of the number of leaders pursuing activities.',
         skills: simpleRank(['arts'], 1),
         criticalSuccess: {
-            msg: `${gainFame(1)}, and ${loseFameNextTurn(1)}. ${gainRolledRD(2)}`,
+            msg: `${gainFame(1)}, and ${gainFameNextTurn(1)}. ${gainRolledRD(2)}`,
         },
         success: {
             msg: gainFame(1),
