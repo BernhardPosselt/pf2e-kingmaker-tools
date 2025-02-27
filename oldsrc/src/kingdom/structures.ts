@@ -20,7 +20,7 @@ import {
 } from './scene';
 import {allRuins} from './data/ruin';
 import {getLevelData, Kingdom} from "./data/kingdom";
-import {getAllFeats} from "./data/feats";
+import {getAllSelectedFeats} from "./data/feats";
 
 export interface StructureResult {
     allowCapitalInvestment: boolean;
@@ -512,7 +512,7 @@ export function calculateResourceDicePerTurn(game: Game, kingdom: Kingdom) {
         const structureDice = sum(structures.map(s => calculateStructureRd(type, s)))
         return calculateSettlementRd(kingdom, type) + structureDice;
     }));
-    const featDice = sum(getAllFeats(kingdom).map(f => f.resourceDice ?? 0));
+    const featDice = sum(getAllSelectedFeats(kingdom).map(f => f.resourceDice ?? 0));
     const levelData = getLevelData(kingdom.level);
     return Math.max(0, levelData.resourceDice + kingdom.resourceDice.now + featDice + settlementDice);
 }

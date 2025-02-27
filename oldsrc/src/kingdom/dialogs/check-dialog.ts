@@ -1,4 +1,4 @@
-import {getAllFeats, KingdomFeat} from '../data/feats';
+import {getAllSelectedFeats, KingdomFeat} from '../data/feats';
 import {
     calculateModifiers,
     createActiveSettlementModifiers,
@@ -351,7 +351,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const ignoreSkillRequirements = this.kingdom.settings.kingdomIgnoreSkillRequirements;
         const skillRankFilters = ignoreSkillRequirements ? undefined : ranks;
         const activitySkills = getActivitySkills(this.overrideSkills ?? activities[activity].skills, skillRankFilters);
-        const additionalSkills: Skill[] = getAllFeats(this.kingdom)
+        const additionalSkills: Skill[] = getAllSelectedFeats(this.kingdom)
             .flatMap(f => {
                 return activitySkills.flatMap(s => f.increaseUsableSkills?.[s] ?? [])
             });

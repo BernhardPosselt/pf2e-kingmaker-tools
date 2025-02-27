@@ -1,7 +1,7 @@
 import {KingdomPhase} from './data/activities';
 import {capitalize, groupBy, unslugify} from '../utils';
 import {getLevelData, Kingdom, LeaderKingdomSkills, Leaders, LeaderSkills, Ruin, Settlement} from './data/kingdom';
-import {getAllFeats} from './data/feats';
+import {getAllSelectedFeats} from './data/feats';
 import {allActorSkills, CharacterSkill, Skill, skillAbilities} from './data/skills';
 import {Ability, AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {isInvested, Leader} from './data/leaders';
@@ -329,7 +329,7 @@ export function createActiveSettlementModifiers(
     settlementsWithoutLandBorders: number,
 ): Modifier[] {
     const levelData = getLevelData(kingdom.level);
-    const result = getAllFeats(kingdom).flatMap(f => f.modifiers ?? [])
+    const result = getAllSelectedFeats(kingdom).flatMap(f => f.modifiers ?? [])
     kingdom.modifiers.forEach(modifier => result.push(modifier));
     const isSecondaryTerritory = activeSettlement?.secondaryTerritory;
     features.filter(f => f.level <= kingdom.level)

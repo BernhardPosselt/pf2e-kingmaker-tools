@@ -35,12 +35,7 @@ function generateForAllSkills(feat: KingdomFeat, adjustment: (s: Skill, f: Kingd
     });
 }
 
-export const allFeats: KingdomFeat[] = [
-    {
-        name: '-',
-        level: 0,
-        text: '',
-    },
+const allFeats: KingdomFeat[] = [
     {
         automationNotes: 'Vacancy role penalty removal is not automated',
         name: 'Civil Service',
@@ -403,10 +398,14 @@ allFeats.forEach(f => {
 allFeats.sort((a, b) => a.name.localeCompare(b.name));
 
 
-export const allFeatsByName = Object.fromEntries((allFeats)
+const allFeatsByName = Object.fromEntries((allFeats)
     .map((feat) => [feat.name, feat]));
 
 export function getAllFeats(kingdom: Kingdom): KingdomFeat[] {
+    return allFeats;
+}
+
+export function getAllSelectedFeats(kingdom: Kingdom): KingdomFeat[] {
     const featIds = new Set([...kingdom.feats.map(f => f.id), ...kingdom.bonusFeats.map(f => f.id)])
     return Array.from(featIds)
         .map(id => allFeatsByName[id])

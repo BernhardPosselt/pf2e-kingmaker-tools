@@ -4,7 +4,7 @@ import {AbilityScores} from './abilities';
 import {Modifier, UntrainedProficiencyMode} from '../modifiers';
 import {Skill} from "./skills";
 import {LeadershipLeaderType} from "../skills";
-import {getAllFeats, UpgradeResult} from "./feats";
+import {getAllSelectedFeats, UpgradeResult} from "./feats";
 import {features} from "./features";
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
@@ -618,12 +618,12 @@ export function getDefaultKingdomData(): Kingdom {
 }
 
 export function getFlags(kingdom: Kingdom): string[] {
-    const feats = getAllFeats(kingdom);
+    const feats = getAllSelectedFeats(kingdom);
     return feats.flatMap(f => f.flags ?? [])
         .concat(features.flatMap(f => f.flags ?? []));
 }
 
 export function getUpgradeResults(kingdom: Kingdom): UpgradeResult[] {
-    return getAllFeats(kingdom)
+    return getAllSelectedFeats(kingdom)
         .flatMap(f => f.upgradeResults ?? []);
 }

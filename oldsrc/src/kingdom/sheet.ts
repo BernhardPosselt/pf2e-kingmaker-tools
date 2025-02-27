@@ -41,7 +41,7 @@ import {
     getStructureStackMode,
     SettlementAndScene,
 } from './scene';
-import {allFeats, allFeatsByName} from './data/feats';
+import {getAllFeats, KingdomFeat} from './data/feats';
 import {addGroupDialog} from './dialogs/add-group-dialog';
 import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
 import {addOngoingEventDialog} from './dialogs/add-ongoing-event-dialog';
@@ -573,7 +573,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-add-bonus-feat')
             ?.addEventListener('click', async () => {
                 new AddBonusFeatDialog(null, {
-                    feats: allFeats,
+                    feats: getAllFeats(this.getKingdom()),
                     onOk: (feat): Promise<void> => this.saveKingdom({
                         bonusFeats: [...this.getKingdom().bonusFeats, feat],
                     }),
@@ -1129,23 +1129,30 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private getFeats(feats: Feat[], bonusFeats: BonusFeat[], kingdomLevel: number): object {
+        const allFeatsByName = new Map<string, KingdomFeat>();
+        getAllFeats(this.getKingdom()).forEach(f => allFeatsByName.set(f.name, f));
         const levelFeats = [];
         const takenFeatsByLevel = Object.fromEntries(feats.map(feat => [feat.level, feat]));
-        const noFeat = allFeatsByName['-'];
+        const noFeat = {
+            name: '-',
+            level: 0,
+            text: '',
+        };
         for (let featLevel = 2; featLevel <= kingdomLevel; featLevel += 2) {
             const existingFeat = takenFeatsByLevel[featLevel];
-            if (existingFeat && existingFeat.id in allFeatsByName) {
-                levelFeats.push({...allFeatsByName[existingFeat.id], takenAt: featLevel});
+            if (existingFeat && allFeatsByName.has(existingFeat.id)) {
+                levelFeats.push({...(allFeatsByName.get(existingFeat.id) ?? noFeat), takenAt: featLevel});
             } else {
                 levelFeats.push({...noFeat, takenAt: featLevel});
             }
         }
+        console.log(levelFeats)
         return {
-            featIds: toLabelAndValue(Object.keys(allFeatsByName)),
+            featIds: toLabelAndValue([...allFeatsByName.keys(), '-']),
             levelFeats: levelFeats,
             bonusFeats: bonusFeats
-                .filter(feat => feat.id in allFeatsByName)
-                .map(feat => allFeatsByName[feat.id]),
+                .filter(feat => allFeatsByName.has(feat.id))
+                .map(feat => allFeatsByName.get(feat.id)),
         };
     }
 
