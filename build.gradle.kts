@@ -32,7 +32,7 @@ tasks.register<Exec>("installOldJs") {
     commandLine = listOf("yarn", "install")
 }
 tasks.register<Exec>("compileOldJs") {
-    dependsOn("installOldJs")
+    dependsOn("installOldJs", "combineJsonFiles")
     mustRunAfter("installOldJs")
     inputs.file(layout.projectDirectory.dir("./oldsrc/webpack.config.js"))
     inputs.dir(layout.projectDirectory.dir("./oldsrc/src/"))

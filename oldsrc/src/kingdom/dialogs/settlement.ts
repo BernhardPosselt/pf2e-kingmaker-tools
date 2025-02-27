@@ -8,7 +8,7 @@ import {
     getSceneActorStructures,
     getSettlement,
     getSettlementInfo,
-    getStructureResult,
+    getStructureResult, getStructuresByName,
     getStructureStackMode,
     SettlementAndScene,
 } from '../scene';
@@ -73,7 +73,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
         const structureStackMode = getStructureStackMode(this.kingdom);
         const autoCalculateSettlementLevel = this.kingdom.settings.autoCalculateSettlementLevel;
         const activities = getKingdomActivitiesById(this.kingdom.homebrewActivities);
-        const structureData = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, settlement, capital);
+        const structureData = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, getStructuresByName(this.game), settlement, capital);
         const builtStructures = await this.getBuiltStructures(settlement);
         const storage = this.getStorage(structureData);
         const settlementInfo = getSettlementInfo(settlement, autoCalculateSettlementLevel);
@@ -182,7 +182,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
     }
 
     private async getBuiltStructures(settlement: SettlementAndScene): Promise<StructureList[]> {
-        const sceneActorStructures = getSceneActorStructures(settlement.scene);
+        const sceneActorStructures = getSceneActorStructures(settlement.scene, getStructuresByName(this.game));
         const countedStructures = countStructureOccurrences(sceneActorStructures);
         return await Promise.all(Array.from(countedStructures.entries())
             .sort(([a], [b]) => a.localeCompare(b))

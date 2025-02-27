@@ -4,6 +4,7 @@ import {DegreeOfSuccess} from './degree-of-success';
 import {WeatherEffectName} from './weather/data';
 import {ModuleData} from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/packages.mjs';
 import {KingdomSettings} from "./kingdom/data/kingdom";
+import {Structure} from "./kingdom/data/structures";
 
 declare global {
     declare class PF2EModifier {
@@ -23,6 +24,9 @@ declare global {
                 kingdomSizeHelp: () => void,
                 settlementSizeHelp: () => void,
                 structureXpDialog: (onSave: (xp: number) => void) => void,
+                data: {
+                    structures: Structure[];
+                }
             }
         };
         pf2e: {

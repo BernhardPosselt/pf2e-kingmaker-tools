@@ -37,7 +37,7 @@ import {
     getSettlementInfo,
     getSettlementsWithoutLandBorders,
     getStolenLandsData,
-    getStructureResult,
+    getStructureResult, getStructuresByName,
     getStructureStackMode,
     SettlementAndScene,
 } from './scene';
@@ -262,7 +262,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 .map(settlement => {
                     const s = settlement as SettlementAndScene;
                     const waterBorders = s.settlement.waterBorders ?? 0;
-                    const structureResult = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, s);
+                    const structureResult = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, getStructuresByName(this.game), s);
                     return {
                         ...s.settlement,
                         ...getSettlementInfo(s, autoCalculateSettlementLevel),
@@ -892,7 +892,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const structureStackMode = getStructureStackMode(kingdom);
         const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
         const activities = getKingdomActivitiesById(this.getKingdom().homebrewActivities);
-        const structures = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, settlement);
+        const structures = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, getStructuresByName(this.game), settlement);
         return getSettlementInfo(settlement, autoCalculateSettlementLevel).lots > structures.residentialLots;
     }
 

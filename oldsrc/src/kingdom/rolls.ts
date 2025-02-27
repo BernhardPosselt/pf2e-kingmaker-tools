@@ -213,7 +213,6 @@ function createModifierPills(
     if (isNotBlank(modifierBreakdown)) {
         const parsedBreakdown = decodeJson(modifierBreakdown) as ModifierBreakdowns;
         const modifiers = getModifiersByType(parsedBreakdown, type);
-        console.log(parsedBreakdown, modifiers);
         const mods = modifiers.map(m => {
             const value = m.value;
             return `<span class="km-modifier-pill">${unslugify(m.name)} ${value >= 0 ? `+${value}` : value}</span>`;
@@ -252,8 +251,6 @@ function adjustDegreeOfSuccess(
         skill,
         (u) => u.predicate,
     )
-    console.log('bluuuuuuuuuuuuuuuuuuuuuub');
-    console.log(relevantUpgrades)
     if (current === DegreeOfSuccess.CRITICAL_FAILURE
         && relevantUpgrades.some(a => a.upgrade === "criticalFailure")) {
         return DegreeOfSuccess.FAILURE;

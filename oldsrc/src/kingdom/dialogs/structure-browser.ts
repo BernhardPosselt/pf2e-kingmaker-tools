@@ -19,7 +19,7 @@ import {DegreeOfSuccess} from '../../degree-of-success';
 import {
     ActorStructure,
     getScene,
-    getSceneActorStructures,
+    getSceneActorStructures, getStructuresByName,
     getStructuresFromActors,
     isStructureActorActive,
 } from '../scene';
@@ -200,7 +200,7 @@ class StructureBrowserApp extends FormApplication<
     }
 
     private async resetFilters(): Promise<StructureFilters> {
-        const structures = getStructuresFromActors(this.structureActors);
+        const structures = getStructuresFromActors(this.structureActors, getStructuresByName(this.game));
         const activities = getAllStructureActivities(structures);
         return {
             search: '',
@@ -274,12 +274,12 @@ class StructureBrowserApp extends FormApplication<
         freeStructures: ActorStructure[];
         sceneStructures: ActorStructure[];
     } {
-        const buildableStructures = getStructuresFromActors(this.structureActors)
+        const buildableStructures = getStructuresFromActors(this.structureActors, getStructuresByName(this.game))
             .filter(a => a.name !== 'Rubble');
         const activeSettlement = getScene(this.game, this.kingdom.activeSettlement);
 
         if (activeSettlement) {
-            const sceneStructures = getSceneActorStructures(activeSettlement);
+            const sceneStructures = getSceneActorStructures(activeSettlement, getStructuresByName(this.game));
             const sceneStructuresByName = groupBy(sceneStructures, s => s.name);
             const freeStructures = buildableStructures
                 .filter(s => sceneStructuresByName.get(s.name)
@@ -462,7 +462,7 @@ class StructureBrowserApp extends FormApplication<
     private async buildStructure(ev: Event): Promise<void> {
         const button = ev.currentTarget as HTMLElement;
         const id = button.dataset.id!;
-        const structureActors = getStructuresFromActors(this.structureActors);
+        const structureActors = getStructuresFromActors(this.structureActors, getStructuresByName(this.game));
         const structure = structureActors.find(a => a.actor.id === id);
         if (structure) {
             const applicableSkills = structure.construction?.skills?.map(s => {
@@ -496,7 +496,7 @@ class StructureBrowserApp extends FormApplication<
         costs: Costs,
         structureLink?: string,
     }> {
-        const structureActors = getStructuresFromActors(this.structureActors);
+        const structureActors = getStructuresFromActors(this.structureActors, getStructuresByName(this.game));
         const upgradeFromStructures = (structure.upgradeFrom
                 ?.map(name => structureActors.find(a => a.actor.name === name))
                 ?.filter(structure => isNonNullable(structure))

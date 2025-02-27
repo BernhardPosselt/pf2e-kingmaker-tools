@@ -1,12 +1,6 @@
 import Joi from 'joi';
 import {allSkills} from './data/skills';
-import {allBuildingTraits, itemGroups, structuresByName} from './data/structures';
-
-const builtInRefs = structuresByName.keys();
-export const refSchema = Joi.object({
-    ref: Joi.string()
-        .valid(...Array.from(builtInRefs)),
-});
+import {allBuildingTraits, itemGroups} from './data/structures';
 
 export const ruleSchema = Joi.object({
     name: Joi.string().required(),

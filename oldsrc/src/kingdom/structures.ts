@@ -15,7 +15,7 @@ import {gainRuin, KingdomActivityById, loseRuin, loseUnrest} from './data/activi
 import {
     getAllSettlements,
     getSceneStructures, getSettlementInfo,
-    getStructureFromActor,
+    getStructureFromActor, getStructuresByName,
     isStructureActor
 } from './scene';
 import {allRuins} from './data/ruin';
@@ -508,7 +508,7 @@ export function calculateResourceDicePerTurn(game: Game, kingdom: Kingdom) {
     const settlementDice = sum(settlements.map(s => {
         const {level} = getSettlementInfo(s, kingdom.settings.autoCalculateSettlementLevel);
         const {type} = getSettlementConfig(level)
-        const structures = getSceneStructures(s.scene);
+        const structures = getSceneStructures(s.scene, getStructuresByName(game));
         const structureDice = sum(structures.map(s => calculateStructureRd(type, s)))
         return calculateSettlementRd(kingdom, type) + structureDice;
     }));
@@ -569,7 +569,7 @@ export function groupAvailableItems(itemLevelBonuses: ItemLevelBonuses): Partial
 
 export async function showStructureHints(game: Game, actor: Actor | null): Promise<void> {
     if (isFirstGm(game) && actor && isStructureActor(actor)) {
-        const data = getStructureFromActor(actor);
+        const data = getStructureFromActor(actor, getStructuresByName(game));
         if (data) {
             const messages = [];
             // reduce unrest

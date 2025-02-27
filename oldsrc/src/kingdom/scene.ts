@@ -1,6 +1,6 @@
 import {evaluateStructures, includeCapital, StructureResult, StructureStackRule} from './structures';
 import {ruleSchema} from './schema';
-import {CommodityStorage, SkillItemBonuses, Structure, structuresByName} from './data/structures';
+import {CommodityStorage, SkillItemBonuses, Structure} from './data/structures';
 import {Kingdom, ResourceAutomationMode, Settlement, WorkSite, WorkSites} from './data/kingdom';
 import {isKingmakerInstalled, isNonNullable} from '../utils';
 import {allSkills} from './data/skills';
@@ -26,6 +26,7 @@ function parseStructureData(
     tokenWidth: number,
     tokenHeight: number,
     level: number | null,
+    structuresByName: Map<string, Structure>
 ): Structure | undefined {
     if (data === undefined || data === null) {
         return undefined;
@@ -69,14 +70,14 @@ export interface ActorStructure extends Structure {
     actor: Actor;
 }
 
-export function getSceneActorStructures(scene: Scene): ActorStructure[] {
+export function getSceneActorStructures(scene: Scene, structures: Map<string, Structure>): ActorStructure[] {
     const actors = scene.tokens
         .map(t => t.actor)
         .filter(a => isNonNullable(a)) as Actor[];
-    return getStructuresFromActors(actors);
+    return getStructuresFromActors(actors, structures);
 }
 
-export function getStructureFromActor(actor: Actor): ActorStructure | null {
+export function getStructureFromActor(actor: Actor, structuresByName: Map<string, Structure>): ActorStructure | null {
     const width = actor.token?.width ?? actor.prototypeToken?.width ?? 0;
     const height = actor.token?.height ?? actor.prototypeToken?.height ?? 0;
     const data = parseStructureData(
@@ -85,6 +86,7 @@ export function getStructureFromActor(actor: Actor): ActorStructure | null {
         width,
         height,
         actor.level,
+        structuresByName,
     );
     if (data) {
         return {
@@ -95,9 +97,9 @@ export function getStructureFromActor(actor: Actor): ActorStructure | null {
     return null;
 }
 
-export function getStructuresFromActors(actors: Actor[]): ActorStructure[] {
+export function getStructuresFromActors(actors: Actor[], structures: Map<string, Structure>): ActorStructure[] {
     return actors
-        .map((actor) => getStructureFromActor(actor))
+        .map((actor) => getStructureFromActor(actor, structures))
         .filter(actor => actor !== null)! as ActorStructure[];
 }
 
@@ -189,7 +191,7 @@ export function getSettlementInfo(settlement: SettlementAndScene, autoCalculateS
     }
 }
 
-export function getSceneStructures(scene: Scene): Structure[] {
+export function getSceneStructures(scene: Scene, structures: Map<string, Structure>): Structure[] {
     try {
         return scene.tokens
             .filter(tokenIsStructure)
@@ -204,6 +206,7 @@ export function getSceneStructures(scene: Scene): Structure[] {
                     width,
                     height,
                     actor!.level,
+                    structures,
                 ))
             .filter(data => data !== undefined) as Structure[] ?? [];
     } catch (e: unknown) {
@@ -262,8 +265,9 @@ function getSettlementStructureResult(
     mode: StructureStackRule,
     autoCalculateSettlementLevel: boolean,
     activities: KingdomActivityById,
+    structuresByName: Map<string, Structure>,
 ): StructureResult {
-    const structures = getSceneStructures(settlement.scene);
+    const structures = getSceneStructures(settlement.scene, structuresByName);
     const level = getSettlementInfo(settlement, autoCalculateSettlementLevel).level;
     return evaluateStructures(structures, level, mode, activities);
 }
@@ -273,15 +277,16 @@ export function getStructureResult(
     mode: StructureStackRule,
     autoCalculateSettlementLevel: boolean,
     activities: KingdomActivityById,
+    structures: Map<string, Structure>,
     active: SettlementAndScene,
     capital?: SettlementAndScene,
 ): StructureResult {
     if (capital && capital.scene.id !== active.scene.id) {
         return includeCapital(
-            getSettlementStructureResult(capital, mode, autoCalculateSettlementLevel, activities),
-            getSettlementStructureResult(active, mode, autoCalculateSettlementLevel, activities));
+            getSettlementStructureResult(capital, mode, autoCalculateSettlementLevel, activities, structures),
+            getSettlementStructureResult(active, mode, autoCalculateSettlementLevel, activities, structures));
     } else {
-        return getSettlementStructureResult(active, mode, autoCalculateSettlementLevel, activities);
+        return getSettlementStructureResult(active, mode, autoCalculateSettlementLevel, activities, structures);
     }
 }
 
@@ -296,13 +301,20 @@ export function getStructureStackMode(kingdom: Kingdom): StructureStackRule {
     return kingdom.settings.kingdomAllStructureItemBonusesStack ? 'all-structures-stack' : 'same-structures-stack';
 }
 
+export function getStructuresByName(game: Game): Map<string, Structure> {
+    const result = new Map();
+    game.pf2eKingmakerTools.migration.data.structures.forEach(s => result.set(s.name, s));
+    return result;
+}
+
 export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSettlements {
     const mode = getStructureStackMode(kingdom);
     const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
     const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
+    const structures = getStructuresByName(game);
     return getAllSettlements(game, kingdom)
         .map(settlement => {
-            const structureResult = getSettlementStructureResult(settlement, mode, autoCalculateSettlementLevel, activities);
+            const structureResult = getSettlementStructureResult(settlement, mode, autoCalculateSettlementLevel, activities, structures);
             return {
                 leadershipActivityNumber: structureResult.increaseLeadershipActivities ? 3 : 2,
                 settlementConsumption: structureResult.consumption,
@@ -343,10 +355,11 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
     const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
     const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
     const includeCapitalItemModifier = kingdom.settings.includeCapitalItemModifier;
+    const structures = getStructuresByName(game);
     if (activeSettlement) {
         const mode = getStructureStackMode(kingdom);
-        const activeSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, activeSettlement);
-        const mergedSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, activeSettlement, capitalSettlement);
+        const activeSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, structures, activeSettlement);
+        const mergedSettlementStructures = getStructureResult(mode, autoCalculateSettlementLevel, activities, structures, activeSettlement, capitalSettlement);
         return {
             active: activeSettlementStructures,
             skillBonuses: includeCapitalItemModifier? mergedSettlementStructures.skillBonuses : activeSettlementStructures.skillBonuses,
@@ -359,9 +372,10 @@ export function getSettlementsWithoutLandBorders(game: Game, kingdom: Kingdom): 
     const mode = getStructureStackMode(kingdom);
     const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
     const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
+    const structuresByName = getStructuresByName(game);
     return getAllSettlements(game, kingdom)
         .filter(settlementAndScene => {
-            const structures = getStructureResult(mode, autoCalculateSettlementLevel, activities, settlementAndScene);
+            const structures = getStructureResult(mode, autoCalculateSettlementLevel, activities, structuresByName, settlementAndScene);
             return (settlementAndScene.settlement?.waterBorders ?? 0) >= 4 && !structures.hasBridge;
         })
         .length;
