@@ -1,7 +1,6 @@
 import {KingdomPhase} from './activities';
 import {allSkills, Skill} from './skills';
 import {Modifier, Predicate} from '../modifiers';
-import {Commodities} from './kingdom';
 import {Ruin} from './ruin';
 import {unslugify} from '../../utils';
 import {ResourceMode, ResourceTurn, RolledResources} from '../resources';
@@ -307,10 +306,10 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         description: 'You know there are criminals in your kingdom, and they know you know. You encourage them to send kickbacks in the form of resources and Commodities to the government, but the common citizens will be more than upset if they find out! This starts as a basic check against your Control DC, but every subsequent Kingdom turn you pursue Clandestine Business, the DC increases by 2. Every Kingdom turn that passes without Clandestine Business reduces the DC by 1 (until you reach your Control DC).',
         skills: simpleRank(['intrigue'], 1),
         criticalSuccess: {
-            msg: `${gainRolledRD(2)}. In addition, you ${gainCommodities('luxuries', '1d4')}. The public is none the wiser.`,
+            msg: `${gainRolledRD(2)}. In addition, you ${gainLuxuries('1d4')}. The public is none the wiser.`,
         },
         success: {
-            msg: `Either ${gainRolledRD(2)}, or gain ${gainCommodities('luxuries', '1d4')}. Regardless of your choice, rumors spread about where the government is getting these “gifts.” ${gainUnrest(1)}.`,
+            msg: `Either ${gainRolledRD(2)}, or gain ${gainLuxuries('1d4')}. Regardless of your choice, rumors spread about where the government is getting these “gifts.” ${gainUnrest(1)}.`,
         },
         failure: {
             msg: `${gainRolledRD(1)}. Rumors are backed up with eyewitness accounts. ${gainUnrest(1)} and ${gainRuin('corruption', 1)}.`,
@@ -340,7 +339,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
 <p>If the hex you’re attempting to Clear has existing Ruins or an existing Structure, your action doesn’t physically remove the buildings from the area and you can later incorporate these buildings (or repair ruined ones) into a Settlement you build here later (see page 542). Regardless of the skill used, increase the basic DC by 2 if the hex to be cleared is not yet part of your kingdom.</p>`,
         skills: simpleRank(['engineering', 'exploration']),
         criticalSuccess: {
-            msg: `You successfully clear the hex. If you spent RP to attempt this activity, you’re refunded half of the RP cost. If you were removing dangerous creatures (but not hazards) from the hex, your explorers and mercenaries recover 2 Luxury Commodities as treasure. ${gainCommodities('luxuries', 2)}`,
+            msg: `You successfully clear the hex. If you spent RP to attempt this activity, you’re refunded half of the RP cost. If you were removing dangerous creatures (but not hazards) from the hex, your explorers and mercenaries recover 2 Luxury Commodities as treasure. ${gainLuxuries(2)}`,
         },
         success: {
             msg: 'You successfully clear the hex.',
@@ -374,7 +373,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
 <p>You cannot Use the Establish Settlement and Clear Hex activities on the same hex in the same Turn.</p>`,
         skills: simpleRank(['engineering', 'exploration']),
         criticalSuccess: {
-            msg: `You successfully clear the hex. If you spent RP to attempt this activity, you’re refunded half of the RP cost. If you were removing dangerous creatures (but not hazards) from the hex, your explorers and mercenaries recover 2 Luxury Commodities as treasure. ${gainCommodities('luxuries', 2)}`,
+            msg: `You successfully clear the hex. If you spent RP to attempt this activity, you’re refunded half of the RP cost. If you were removing dangerous creatures (but not hazards) from the hex, your explorers and mercenaries recover 2 Luxury Commodities as treasure. ${gainLuxuries(2)}`,
         },
         success: {
             msg: 'You successfully clear the hex.',
@@ -442,10 +441,10 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         description: `You encourage your artisans to craft luxury goods and may even aid them in this pursuit. ${loseRolledRD(1)}. Then attempt a basic check.`,
         skills: simpleRank(['arts']),
         criticalSuccess: {
-            msg: `Your artisans exceed expectations and craft extravagant goods. ${gainCommodities('luxuries', '1d4')}`,
+            msg: `Your artisans exceed expectations and craft extravagant goods. ${gainLuxuries('1d4')}`,
         },
         success: {
-            msg: `Your artisans produce some delightful goods. ${gainCommodities('luxuries', 1)}`,
+            msg: `Your artisans produce some delightful goods. ${gainLuxuries(1)}`,
         },
         failure: {
             msg: 'Your artisans fail to produce anything noteworthy.',
@@ -491,7 +490,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         description: 'You work with your kingdom’s scholars, thinkers, and practitioners of magical and mundane experimentation to come up with new ways to resolve issues when business as usual is just not working. Attempt a basic check.',
         skills: simpleRank(['scholarship']),
         criticalSuccess: {
-            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('creative-solution')}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead.`,
+            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainCreativeSolution(1)}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead.`,
             modifiers: [{
                 turns: 1,
                 enabled: false,
@@ -502,7 +501,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
             }],
         },
         success: {
-            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('creative-solution')}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead. In addition, ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your Creative Solution.`,
+            msg: `You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainCreativeSolution(1)}. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead. In addition, ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your Creative Solution.`,
             modifiers: [{
                 turns: 1,
                 enabled: false,
@@ -535,7 +534,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         phase: 'leadership',
         dc: 'control',
         title: 'Decadent Feasts',
-        description: `Your goddess is more than just the goddess of undeath— she’s also the goddess of gluttony. And you are no fool; you understand the fear your goddess inspires in the living and knows that focusing on other aspects of her worship are more likely to result in positive growth for the nation. In order to distract the populace, you arrange for decadent feasts for the people, simultaneously feeding the hungry while camouflaging some of your faith’s more sinister aspects. ${loseCommodities('food', '1d8')} and ${loseCommodities('luxuries', 1)}, then attempt a basic Agriculture or Trade check to determine how effective the feasts are.`,
+        description: `Your goddess is more than just the goddess of undeath— she’s also the goddess of gluttony. And you are no fool; you understand the fear your goddess inspires in the living and knows that focusing on other aspects of her worship are more likely to result in positive growth for the nation. In order to distract the populace, you arrange for decadent feasts for the people, simultaneously feeding the hungry while camouflaging some of your faith’s more sinister aspects. ${loseFood('1d8')} and ${loseLuxuries(1)}, then attempt a basic Agriculture or Trade check to determine how effective the feasts are.`,
         skills: simpleRank(['agriculture']),
         criticalSuccess: {
             msg: `The people rejoice and glut themselves on the repast! ${loseUnrest('1d6')}, and the next time this Kingdom turn you suffer an effect that increases Unrest, do not increase your Unrest.`,
@@ -836,7 +835,7 @@ The check’s DC is either the group’s Negotiation DC (see sidebar) or your ki
         description: 'You spend time preaching the End Times. While your sermons certainly aren’t for everyone, your methods avoid deliberately antagonizing those who see hope in the world while simultaneously providing ease and calm to the more desperate among the kingdom’s citizens. Attempt a basic Folklore check to determine how effective your sermons are.',
         skills: simpleRank(['folklore']),
         criticalSuccess: {
-            msg: `Your prayers soothe and calm the more criminal-minded citizens for the time being. ${loseUnrest('1d4')}, and either ${loseRuin('crime', 2)} or ${loseRuin('corruption', 1)} or ${loseRuin('strife', 1)}.`,
+            msg: `Your prayers soothe and calm the more criminal-minded citizens for the time being. ${loseUnrest('1d4')}, and either ${loseCrime(2)} or ${loseCorruption(1)} or ${loseStrife(1)}.`,
         },
         success: {
             msg: `Your prayers serve to redirect and calm discord. ${loseUnrest('1d3')}`,
@@ -1096,16 +1095,16 @@ Focused Attention does not require spending the additional action normally requi
         description: 'Attempt a basic check to gather excess livestock from local wildlife, ranches, and farms. This generates a number of Food commodities.',
         skills: simpleRank(['wilderness']),
         criticalSuccess: {
-            msg: gainCommodities('food', '1d4'),
+            msg: gainFood('1d4'),
         },
         success: {
-            msg: gainCommodities('food', 1),
+            msg: gainFood(1),
         },
         failure: {
             msg: 'Gain no Food commodities.',
         },
         criticalFailure: {
-            msg: `${loseCommodities('food', '1d4')} to spoilage. If you have no Food to lose, you instead ${gainUnrest(1)}`,
+            msg: `${loseFood('1d4')} to spoilage. If you have no Food to lose, you instead ${gainUnrest(1)}`,
         },
     },
     'go-fishing': {
@@ -1119,10 +1118,10 @@ Focused Attention does not require spending the additional action normally requi
         requirement: 'Must have at least one claimed hex that includes river or lake terrain.',
         skills: simpleRank(['boating']),
         criticalSuccess: {
-            msg: gainCommodities('food', '1d4'),
+            msg: gainFood('1d4'),
         },
         success: {
-            msg: gainCommodities('food', 1),
+            msg: gainFood(1),
         },
         failure: {
             msg: 'Gain no Food commodities.',
@@ -1164,16 +1163,16 @@ Focused Attention does not require spending the additional action normally requi
         description: 'Attempt a basic check to forage for wild edibles or gather excess crops from farms.',
         skills: simpleRank(['agriculture']),
         criticalSuccess: {
-            msg: gainCommodities('food', '1d4'),
+            msg: gainFood('1d4'),
         },
         success: {
-            msg: gainCommodities('food', 1),
+            msg: gainFood(1),
         },
         failure: {
             msg: 'Gain no Food commodities.',
         },
         criticalFailure: {
-            msg: `${loseCommodities('food', '1d4')} to spoilage; if you have no Food to lose, you instead ${gainUnrest(1)}`,
+            msg: `${loseFood('1d4')} to spoilage; if you have no Food to lose, you instead ${gainUnrest(1)}`,
         },
     },
     'hire-adventurers': {
@@ -1679,34 +1678,34 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         skills: simpleRank(['trade']),
         criticalSuccess: {
             msg: `<p>You immediately gain 4 Commodities of the chosen type:</p> <ul>
-<li>${gainCommodities('food', '4')}</li>
-<li>${gainCommodities('ore', '4')}</li>
-<li>${gainCommodities('lumber', '4')}</li>
-<li>${gainCommodities('stone', '4')}</li>
-<li>${gainCommodities('luxuries', '4')}</li>
+<li>${gainFood('4')}</li>
+<li>${gainOre('4')}</li>
+<li>${gainLumber('4')}</li>
+<li>${gainStone('4')}</li>
+<li>${gainLuxuries('4')}</li>
 </ul><p>and 2 Commodities of any other type (except Luxuries):</p> <ul>
-<li>${gainCommodities('food', '2')}</li>
-<li>${gainCommodities('ore', '2')}</li>
-<li>${gainCommodities('lumber', '2')}</li>
-<li>${gainCommodities('stone', '2')}</li>
+<li>${gainFood('2')}</li>
+<li>${gainOre('2')}</li>
+<li>${gainLumber('2')}</li>
+<li>${gainStone('2')}</li>
 </ul>`,
         },
         success: {
             msg: `<p>You gain 2 Commodities of the chosen type.<p> <ul>
-<li>${gainCommodities('food', '2')}</li>
-<li>${gainCommodities('ore', '2')}</li>
-<li>${gainCommodities('lumber', '2')}</li>
-<li>${gainCommodities('stone', '2')}</li>
-<li>${gainCommodities('luxuries', '2')}</li>
+<li>${gainFood('2')}</li>
+<li>${gainOre('2')}</li>
+<li>${gainLumber('2')}</li>
+<li>${gainStone('2')}</li>
+<li>${gainLuxuries('2')}</li>
 </ul>`,
         },
         failure: {
             msg: `<p>You gain 1 Commodity of the chosen type.</p> <ul>
-<li>${gainCommodities('food', '1')}</li>
-<li>${gainCommodities('ore', '1')}</li>
-<li>${gainCommodities('lumber', '1')}</li>
-<li>${gainCommodities('stone', '1')}</li>
-<li>${gainCommodities('luxuries', '1')}</li>
+<li>${gainFood('1')}</li>
+<li>${gainOre('1')}</li>
+<li>${gainLumber('1')}</li>
+<li>${gainStone('1')}</li>
+<li>${gainLuxuries('1')}</li>
 </ul>`,
         },
         criticalFailure: {
@@ -2022,10 +2021,10 @@ Your kingdom can support 1 Recruited Monster at a time. If your kingdom is maste
 The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.`,
         skills: simpleRank(['arts'], 1),
         criticalSuccess: {
-            msg: `${loseRuin('corruption', 2)} and reduce its current ruin penalty by 1 to a minimum of 0.`,
+            msg: `${loseCorruption(2)} and reduce its current ruin penalty by 1 to a minimum of 0.`,
         },
         success: {
-            msg: loseRuin('corruption', 1),
+            msg: loseCorruption(1),
         },
         failure: {
             msg: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
@@ -2047,10 +2046,10 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
 The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.`,
         skills: simpleRank(['trade'], 1),
         criticalSuccess: {
-            msg: `${loseRuin('crime', 2)} and reduce its current ruin penalty by 1 to a minimum of 0.`,
+            msg: `${loseCrime(2)} and reduce its current ruin penalty by 1 to a minimum of 0.`,
         },
         success: {
-            msg: loseRuin('crime', 1),
+            msg: loseCrime(1),
         },
         failure: {
             msg: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
@@ -2072,10 +2071,10 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
 The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.`,
         skills: simpleRank(['engineering'], 1),
         criticalSuccess: {
-            msg: `${loseRuin('decay', 2)} and reduce its current ruin penalty by 1 to a minimum of 0.`,
+            msg: `${loseDecay(2)} and reduce its current ruin penalty by 1 to a minimum of 0.`,
         },
         success: {
-            msg: loseRuin('decay', 1),
+            msg: loseDecay(1),
         },
         failure: {
             msg: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
@@ -2097,10 +2096,10 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
 The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.`,
         skills: simpleRank(['intrigue'], 1),
         criticalSuccess: {
-            msg: `${loseRuin('strife', 2)} and reduce its current ruin penalty by 1 to a minimum of 0.`,
+            msg: `${loseStrife(2)} and reduce its current ruin penalty by 1 to a minimum of 0.`,
         },
         success: {
-            msg: loseRuin('strife', 1),
+            msg: loseStrife(1),
         },
         failure: {
             msg: 'You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn.',
@@ -2356,10 +2355,10 @@ Critical</p>
         description: 'Using your advice, a public show of force is performed in an attempt to curtail criminal activity or subversive activity in the kingdom. Attempt a basic Warfare check to determine how effective the Show of Force is.',
         skills: simpleRank(['warfare']),
         criticalSuccess: {
-            msg: `The kingdom’s criminals are cowed by the show of force. ${loseRuin('crime', 2)} and reduce one other Ruin of your choice by 1.`,
+            msg: `The kingdom’s criminals are cowed by the show of force. ${loseCrime(2)} and reduce one other Ruin of your choice by 1.`,
         },
         success: {
-            msg: `The kingdom’s criminals take note of the show of force. ${loseRuin('crime', 1)}`,
+            msg: `The kingdom’s criminals take note of the show of force. ${loseCrime(1)}`,
         },
         failure: {
             msg: `The show of force fails to impress criminals but unsettles the rest of the citizens. ${gainUnrest(1)}.`,
@@ -2404,10 +2403,10 @@ Critical</p>
         fortune: true,
         skills: simpleRank(['magic']),
         criticalSuccess: {
-            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('supernatural-solution')}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10XP instead.`,
+            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSupernaturalSolution(1)}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10XP instead.`,
         },
         success: {
-            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSolution('supernatural-solution')}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10XP instead. However, you ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your supernatural solution.`,
+            msg: `You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn ${gainSupernaturalSolution(1)}. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10XP instead. However, you ${loseRP('1d4')} to research the solution. This cost is paid now, whether or not you use your supernatural solution.`,
         },
         failure: {
             msg: `Your attempt at researching a supernatural solution costs additional RP to research, but is ultimately a failure, providing no advantage. ${loseRP('2d6')}`,
@@ -2427,14 +2426,14 @@ Critical</p>
         description: 'Following your advice, rural-dwelling citizens work to supplement stores of food and resources through hunting and trapping. Attempt a basic Wilderness check to gather excess livestock from the local wildlife, ranches, and farms to generate food commodities.',
         skills: simpleRank(['wilderness']),
         criticalSuccess: {
-            msg: `${gainCommodities('food', '1d4')}, ${gainCommodities('luxuries', 1)}, and ${createResourceButton({
+            msg: `${gainFood('1d4')}, ${gainLuxuries(1)}, and ${createResourceButton({
                 type: 'resource-dice',
                 turn: 'next',
                 value: '1',
             })}`,
         },
         success: {
-            msg: `Choose one: ${gainCommodities('food', '1d4')}, ${gainCommodities('luxuries', 1)}, or ${createResourceButton({
+            msg: `Choose one: ${gainFood('1d4')}, ${gainLuxuries(1)}, or ${createResourceButton({
                 type: 'resource-dice',
                 turn: 'next',
                 value: '1',
@@ -2519,7 +2518,11 @@ Critical</p>
             })} per point of stockpile expended from your Commodity now.`,
         },
         failure: {
-            msg: createResourceButton({type: 'resource-dice', turn: 'next', value: '1'}),
+            msg: createResourceButton({
+                type: 'resource-dice',
+                turn: 'next',
+                value: '1',
+            }),
         },
         criticalFailure: {
             msg: `You gain no bonus Resource Dice (though the Commodity remains depleted). If you Traded Commodities the previous turn, ${gainUnrest(1)}`,
@@ -2722,20 +2725,69 @@ export function loseFame(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'fame', mode: 'lose'});
 }
 
-export function gainCommodities(type: keyof Commodities, value: number | string): string {
-    return createResourceButton({value: `${value}`, type});
+export function gainLumber(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'lumber'});
 }
 
-export function loseCommodities(type: keyof Commodities, value: number | string): string {
-    return createResourceButton({value: `${value}`, type, mode: 'lose'});
+export function gainStone(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'stone'});
 }
+
+export function gainOre(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'ore'});
+}
+
+export function gainLuxuries(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'luxuries'});
+}
+
+export function gainFood(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'food'});
+}
+
+export function loseLumber(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'lumber', mode: 'lose'});
+}
+
+export function loseStone(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'stone', mode: 'lose'});
+}
+
+export function loseOre(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'ore', mode: 'lose'});
+}
+
+export function loseLuxuries(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'luxuries', mode: 'lose'});
+}
+
+export function loseFood(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'food', mode: 'lose'});
+}
+
 
 export function gainRuin(type: Ruin, value: number | string): string {
     return createResourceButton({value: `${value}`, type});
 }
 
+export function loseCrime(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'crime', mode: 'lose'});
+}
+
+export function loseStrife(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'strife', mode: 'lose'});
+}
+
 export function loseRuin(type: Ruin, value: number | string): string {
     return createResourceButton({value: `${value}`, type, mode: 'lose'});
+}
+
+export function loseDecay(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'decay', mode: 'lose'});
+}
+
+export function loseCorruption(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'corruption', mode: 'lose'});
 }
 
 export function gainRolledRD(value: number | string): string {
@@ -2762,8 +2814,12 @@ export function loseUnrest(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'unrest', mode: 'lose'});
 }
 
-export function gainSolution(type: 'creative-solution' | 'supernatural-solution'): string {
-    return createResourceButton({value: '1', type, mode: 'gain'});
+export function gainCreativeSolution(value: number): string {
+    return createResourceButton({value: `${value}`, type: "creative-solution", mode: 'gain'});
+}
+
+export function gainSupernaturalSolution(value: number): string {
+    return createResourceButton({value: `${value}`, type: 'supernatural-solution', mode: 'gain'});
 }
 
 export function createResourceButton({
