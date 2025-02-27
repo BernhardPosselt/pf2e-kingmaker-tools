@@ -197,12 +197,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
             msg: `The holiday passes with little enthusiasm, but is still expensive. ${loseRolledRD(1)}. If you can’t afford this cost, treat this result as a Critical Failure instead.`,
         },
         criticalFailure: {
-            msg: `Your festival days are poorly organized, and the citizens actively mock your failed attempt to celebrate. ${createResourceButton({
-                turn: 'next',
-                value: '4',
-                mode: 'lose',
-                type: 'resource-dice',
-            })}. The failure also causes you to take a –1 circumstance penalty to Loyalty-based checks until the end of the next Kingdom turn.`,
+            msg: `Your festival days are poorly organized, and the citizens actively mock your failed attempt to celebrate. ${loseResourceDiceNextTurn(4)}. The failure also causes you to take a –1 circumstance penalty to Loyalty-based checks until the end of the next Kingdom turn.`,
             modifiers: [{
                 turns: 2,
                 enabled: true,
@@ -248,12 +243,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
             msg: `The holiday passes with little enthusiasm, but is still expensive. ${loseRolledRD(1)}. If you can’t afford this cost, treat this result as a Critical Failure instead.`,
         },
         criticalFailure: {
-            msg: `Your festival days are poorly organized, and the citizens actively mock your failed attempt to celebrate. ${createResourceButton({
-                turn: 'next',
-                value: '4',
-                mode: 'lose',
-                type: 'resource-dice',
-            })}. The failure also causes you to take a –1 circumstance penalty to Loyalty-based checks until the end of the next Kingdom turn.`,
+            msg: `Your festival days are poorly organized, and the citizens actively mock your failed attempt to celebrate. ${loseResourceDiceNextTurn(4)}. The failure also causes you to take a –1 circumstance penalty to Loyalty-based checks until the end of the next Kingdom turn.`,
             modifiers: [{
                 turns: 2,
                 enabled: true,
@@ -464,11 +454,7 @@ You can use Capital Investment to repay funds from Tap Treasury (page 528). In t
         description: 'You encourage your kingdom’s artists to create and display a masterful work of art to bolster your kingdom’s reputation. Attempt a basic check; the result affects either Fame or Infamy (depending on the type of kingdom you’re running). Create a Masterpiece may be attempted only once per Kingdom turn regardless of the number of leaders pursuing activities.',
         skills: simpleRank(['arts'], 1),
         criticalSuccess: {
-            msg: `${gainFame(1)}, and ${createResourceButton({
-                turn: 'next',
-                type: 'fame',
-                value: '1',
-            })}. ${gainRolledRD(2)}`,
+            msg: `${gainFame(1)}, and ${loseFameNextTurn(1)}. ${gainRolledRD(2)}`,
         },
         success: {
             msg: gainFame(1),
@@ -1337,28 +1323,13 @@ Focused Attention does not require spending the additional action normally requi
         description: `You send agents out to attend to established trade agreements. ${loseRP(2, true)} per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.`,
         skills: simpleRank(['trade']),
         criticalSuccess: {
-            msg: `${createResourceButton({
-                value: '1',
-                turn: 'next',
-                type: 'resource-dice',
-                multiple: true,
-            })} per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
+            msg: `${gainMultipleResourceDiceNextTurn(1)} per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
         },
         success: {
-            msg: `${createResourceButton({
-                value: '1',
-                turn: 'next',
-                type: 'resource-dice',
-                multiple: true,
-            })} per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
+            msg: `${gainMultipleResourceDiceNextTurn(1)} per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries).`,
         },
         failure: {
-            msg: `${createResourceButton({
-                value: '1',
-                turn: 'next',
-                type: 'resource-points',
-                multiple: true,
-            })} per trade agreement`,
+            msg: `${gainMultipleResourceDiceNextTurn(1)} per trade agreement`,
         },
         criticalFailure: {
             msg: 'You gain no benefit, as your traders and merchants met with bad luck on the road. You can’t Manage Trade Agreements for 1 Kingdom turn.',
@@ -1559,12 +1530,7 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
             }],
         },
         criticalFailure: {
-            msg: `The attempt to put preventative measures in place has resulted in significant waste of resources. You can’t use Preventative Measures again on your next Kingdom turn, and ${createResourceButton({
-                turn: 'next',
-                value: '2',
-                type: 'resource-dice',
-                mode: 'lose',
-            })}`,
+            msg: `The attempt to put preventative measures in place has resulted in significant waste of resources. You can’t use Preventative Measures again on your next Kingdom turn, and ${loseResourceDiceNextTurn(2)}`,
         },
     },
     'process-hidden-fees': {
@@ -1577,32 +1543,16 @@ You can attempt this skill check with Intrigue, Statecraft, or Warfare; however,
         description: 'With your aid, you can process additional taxes, fees, and payments. Attempt a basic Trade check to determine what sorts of additional resources you gather.',
         skills: simpleRank(['trade']),
         criticalSuccess: {
-            msg: createResourceButton({
-                turn: 'next',
-                value: '2',
-                type: 'resource-dice',
-            }),
+            msg: gainResourceDiceNextTurn(2),
         },
         success: {
-            msg: `${createResourceButton({
-                turn: 'next',
-                value: '1',
-                type: 'resource-dice',
-            })}, but the citizens suspect something is going on: if you attempt to Process Hidden Fees on the next Kingdom turn, the result is worsened one degree.`,
+            msg: `${gainResourceDiceNextTurn(1)}, but the citizens suspect something is going on: if you attempt to Process Hidden Fees on the next Kingdom turn, the result is worsened one degree.`,
         },
         failure: {
-            msg: `${createResourceButton({
-                turn: 'next',
-                value: '1',
-                type: 'resource-dice',
-            })}, but the citizens catch wind of the fees and grow unhappy. ${gainUnrest(1)}, and you cannot Process Hidden Fees on your next Kingdom turn.`,
+            msg: `${gainResourceDiceNextTurn(1)}, but the citizens catch wind of the fees and grow unhappy. ${gainUnrest(1)}, and you cannot Process Hidden Fees on your next Kingdom turn.`,
         },
         criticalFailure: {
-            msg: `${createResourceButton({
-                turn: 'next',
-                value: '1',
-                type: 'resource-dice',
-            })}, but the citizens catch wind of the fees and grow unhappy. ${gainUnrest('1d6')}, and you cannot Process Hidden Fees on your next Kingdom turn.`,
+            msg: `${gainResourceDiceNextTurn(1)}, but the citizens catch wind of the fees and grow unhappy. ${gainUnrest('1d6')}, and you cannot Process Hidden Fees on your next Kingdom turn.`,
         },
     },
     'prognostication': {
@@ -2163,11 +2113,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
             }],
         },
         failure: {
-            msg: `Your ally marshals its resources but cannot get aid to you in time to deal with your current situation. ${createResourceButton({
-                turn: 'next',
-                value: '1d4',
-                type: 'resource-points',
-            })}`,
+            msg: `Your ally marshals its resources but cannot get aid to you in time to deal with your current situation. ${gainResourcePointsNextTurn('1d4')}`,
         },
         criticalFailure: {
             msg: `Your ally is tangled up in its own problems and is unable to assist you, is insulted by your request for aid, or might even have an interest in seeing your kingdom struggle against one of your ongoing events. Whatever the case, your pleas for aid make your kingdom look desperate. You gain no aid, but you do ${gainUnrest('1d4')}.`,
@@ -2206,11 +2152,7 @@ The skill used to Repair Reputation depends on which Ruin total you wish to redu
             }],
         },
         failure: {
-            msg: `Your ally marshals its resources but cannot get aid to you in time to deal with your current situation. ${createResourceButton({
-                turn: 'next',
-                value: '1d4',
-                type: 'resource-points',
-            })}`,
+            msg: `Your ally marshals its resources but cannot get aid to you in time to deal with your current situation. ${gainResourcePointsNextTurn('1d4')}`,
         },
         criticalFailure: {
             msg: `Your ally is tangled up in its own problems and is unable to assist you, is insulted by your request for aid, or might even have an interest in seeing your kingdom struggle against one of your ongoing events. Whatever the case, your pleas for aid make your kingdom look desperate. You gain no aid, but you do ${gainUnrest('1d4')}.`,
@@ -2377,11 +2319,7 @@ Critical</p>
         description: 'You work to spread the word of the party’s heroics and achievements, both through word of mouth and by distributing chapbooks or one-sheets detailing their exploits. Attempt a basic Arts check to determine the success of your efforts. If you have secured a printing press for the kingdom, the Arts check gains a +2 item bonus.',
         skills: simpleRank(['arts']),
         criticalSuccess: {
-            msg: `Not only do your stories bring pride and patriotism to the nation, but they also help increase its glory. ${loseUnrest('1d6')}, and ${createResourceButton({
-                type: 'fame',
-                turn: 'next',
-                value: '1',
-            })}. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.`,
+            msg: `Not only do your stories bring pride and patriotism to the nation, but they also help increase its glory. ${loseUnrest('1d6')}, and ${gainFameNextTurn(1)}. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.`,
         },
         success: {
             msg: `The rousing and inspiring stories you spread about the PCs helps to bring the nation together. ${loseUnrest('1d6')}`,
@@ -2426,18 +2364,10 @@ Critical</p>
         description: 'Following your advice, rural-dwelling citizens work to supplement stores of food and resources through hunting and trapping. Attempt a basic Wilderness check to gather excess livestock from the local wildlife, ranches, and farms to generate food commodities.',
         skills: simpleRank(['wilderness']),
         criticalSuccess: {
-            msg: `${gainFood('1d4')}, ${gainLuxuries(1)}, and ${createResourceButton({
-                type: 'resource-dice',
-                turn: 'next',
-                value: '1',
-            })}`,
+            msg: `${gainFood('1d4')}, ${gainLuxuries(1)}, and ${gainResourceDiceNextTurn(1)}`,
         },
         success: {
-            msg: `Choose one: ${gainFood('1d4')}, ${gainLuxuries(1)}, or ${createResourceButton({
-                type: 'resource-dice',
-                turn: 'next',
-                value: '1',
-            })}`,
+            msg: `Choose one: ${gainFood('1d4')}, ${gainLuxuries(1)}, or ${gainResourceDiceNextTurn(1)}`,
         },
         failure: {
             msg: 'Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn.',
@@ -2502,27 +2432,13 @@ Critical</p>
         description: 'There are five different categories of Commodities: Food, Lumber, Luxuries, Ore, and Stone. When you Trade Commodities, select one Commodity that your kingdom currently stockpiles and reduce that Commodity’s stockpile by up to 4. Then attempt a basic check. If you trade with a group that you’ve established diplomatic relations with, you gain a +1 circumstance bonus to the check.',
         skills: simpleRank(['industry']),
         criticalSuccess: {
-            msg: `${createResourceButton({
-                type: 'resource-dice',
-                turn: 'next',
-                value: '2',
-                multiple: true,
-            })} per point of stockpile expended from your Commodity now.`,
+            msg: `${gainMultipleResourceDiceNextTurn(2)} per point of stockpile expended from your Commodity now.`,
         },
         success: {
-            msg: `${createResourceButton({
-                type: 'resource-dice',
-                turn: 'next',
-                value: '1',
-                multiple: true,
-            })} per point of stockpile expended from your Commodity now.`,
+            msg: `${gainMultipleResourceDiceNextTurn(1)} per point of stockpile expended from your Commodity now.`,
         },
         failure: {
-            msg: createResourceButton({
-                type: 'resource-dice',
-                turn: 'next',
-                value: '1',
-            }),
+            msg: gainResourceDiceNextTurn(1),
         },
         criticalFailure: {
             msg: `You gain no bonus Resource Dice (though the Commodity remains depleted). If you Traded Commodities the previous turn, ${gainUnrest(1)}`,
@@ -2721,6 +2637,10 @@ export function gainFame(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'fame'});
 }
 
+export function gainFameNextTurn(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'fame', turn: "next"});
+}
+
 export function loseFame(value: number | string): string {
     return createResourceButton({value: `${value}`, type: 'fame', mode: 'lose'});
 }
@@ -2820,6 +2740,26 @@ export function gainCreativeSolution(value: number): string {
 
 export function gainSupernaturalSolution(value: number): string {
     return createResourceButton({value: `${value}`, type: 'supernatural-solution', mode: 'gain'});
+}
+
+export function loseResourceDice(value: number): string {
+    return createResourceButton({value: `${value}`, type: 'resource-dice', mode: 'lose'});
+}
+
+export function loseResourceDiceNextTurn(value: number): string {
+    return createResourceButton({value: `${value}`, type: 'resource-dice', mode: 'lose', turn: "next"});
+}
+
+export function gainResourceDiceNextTurn(value: number): string {
+    return createResourceButton({value: `${value}`, type: 'resource-dice', mode: 'gain', turn: 'next'});
+}
+
+export function gainResourcePointsNextTurn(value: number | string): string {
+    return createResourceButton({value: `${value}`, type: 'resource-points', mode: 'gain', turn: 'next'});
+}
+
+export function gainMultipleResourceDiceNextTurn(value: number): string {
+    return createResourceButton({value: `${value}`, type: 'resource-dice', mode: 'gain', multiple: true, turn: 'next'});
 }
 
 export function createResourceButton({
