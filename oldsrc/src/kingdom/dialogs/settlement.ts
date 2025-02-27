@@ -1,7 +1,7 @@
 import {ActivityBonuses, ItemLevelBonuses, SkillItemBonuses} from '../data/structures';
-import {capitalize, createUUIDLink, unslugify} from '../../utils';
+import {capitalize, createUUIDLink, sum, unslugify} from '../../utils';
 import {calculateAvailableItems, countStructureOccurrences, groupAvailableItems, StructureResult} from '../structures';
-import {hasFeat, Kingdom} from '../data/kingdom';
+import {Kingdom} from '../data/kingdom';
 import {
     ActorStructure,
     getCapitalSettlement,
@@ -13,6 +13,7 @@ import {
     SettlementAndScene,
 } from '../scene';
 import {getKingdomActivitiesById} from '../data/activityData';
+import {getAllFeats} from "../data/feats";
 
 interface SettlementOptions {
     game: Game;
@@ -142,7 +143,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
     }
 
     private getAvailableItems(settlementLevel: number, itemLevelBonuses: ItemLevelBonuses): ItemLevelBonusData[] {
-        const qualityOfLifeBonus = hasFeat(this.kingdom, 'Quality of Life') ? 1 : 0;
+        const qualityOfLifeBonus = sum(getAllFeats(this.kingdom).map(f => f.settlementItemLevelIncrease ?? 0));
         const bonuses = calculateAvailableItems(itemLevelBonuses, settlementLevel, qualityOfLifeBonus);
         const groupedBonuses = groupAvailableItems(bonuses);
         return (Array.from(Object.entries(groupedBonuses)) as [keyof ItemLevelBonuses, number][])

@@ -1,6 +1,6 @@
-import {LeaderKingdomSkills, Leaders, LeaderSkills, Ruin, SkillRanks} from './data/kingdom';
+import {Kingdom} from './data/kingdom';
 import {capitalize} from '../utils';
-import {Ability, AbilityScores} from './data/abilities';
+import {Ability} from './data/abilities';
 import {allSkills, Skill, skillAbilities} from './data/skills';
 import {KingdomPhase} from './data/activities';
 import {
@@ -16,7 +16,6 @@ import {
     Modifier,
     ModifierTotals,
     processModifiers,
-    UntrainedProficiencyMode,
 } from './modifiers';
 import {SkillItemBonus, SkillItemBonuses} from './data/structures';
 import {KingdomActivityById} from './data/activityData';
@@ -45,14 +44,8 @@ export interface LeaderPerformingCheck {
 
 export function createSkillModifiers(
     {
+        kingdom,
         skill,
-        ruin,
-        unrest,
-        skillRank,
-        abilityScores,
-        leaders,
-        kingdomLevel,
-        untrainedProficiencyMode,
         skillItemBonus,
         ability,
         activity,
@@ -60,34 +53,34 @@ export function createSkillModifiers(
         additionalModifiers = [],
         overrides = {},
         activities,
-        useLeadershipModifiers,
-        leaderKingdomSkills,
-        leaderSkills,
         currentLeader,
+        flags,
     }: {
         skill: Skill,
         ability: Ability,
-        ruin: Ruin,
-        unrest: number,
-        skillRank: number,
-        abilityScores: AbilityScores,
-        kingdomLevel: number,
-        leaders: Leaders,
-        untrainedProficiencyMode: UntrainedProficiencyMode,
         skillItemBonus?: SkillItemBonus,
         activity?: string,
         phase?: KingdomPhase,
         additionalModifiers?: Modifier[],
         overrides?: Record<string, boolean>;
         activities: KingdomActivityById;
-        useLeadershipModifiers: boolean;
         currentLeader?: LeaderPerformingCheck;
-        leaderKingdomSkills: LeaderKingdomSkills;
-        leaderSkills: LeaderSkills;
+        kingdom: Kingdom;
+        flags: string[];
     },
 ): Modifier[] {
+    const abilityScores = kingdom.abilityScores;
+    const leaders = kingdom.leaders;
+    const kingdomLevel = kingdom.level;
+    const ruin = kingdom.ruin;
+    const unrest = kingdom.unrest;
+    const skillRank = kingdom.skillRanks[skill];
+    const untrainedProficiencyMode = kingdom.settings.proficiencyMode;
     const abilityModifier = createAbilityModifier(ability, abilityScores);
     const proficiencyModifier = createProficiencyModifier(skillRank, untrainedProficiencyMode, kingdomLevel);
+    const leaderSkills = kingdom.settings.leaderSkills;
+    const leaderKingdomSkills = kingdom.settings.leaderKingdomSkills;
+    const useLeadershipModifiers = kingdom.settings.enableLeadershipModifiers;
     const vacancyModifiers = createVacancyModifiers(ability, leaders);
     // status bonus
     const investedModifier = createInvestedModifier(kingdomLevel, ability, leaders, useLeadershipModifiers);
@@ -126,66 +119,44 @@ export function createSkillModifiers(
         activity,
         overrides,
         activities,
+        kingdom,
+        flags,
     });
 }
 
 export function calculateSkills(
     {
-        ruin,
-        unrest,
-        skillRanks,
-        abilityScores,
-        leaders,
-        kingdomLevel,
-        untrainedProficiencyMode,
         skillItemBonuses,
         additionalModifiers,
         activities,
-        useLeadershipModifiers,
-        leaderKingdomSkills,
-        leaderSkills,
         currentLeader,
+        kingdom,
+        flags,
     }: {
-        ruin: Ruin,
-        unrest: number,
-        skillRanks: SkillRanks,
-        abilityScores: AbilityScores,
-        kingdomLevel: number,
-        leaders: Leaders,
-        untrainedProficiencyMode: UntrainedProficiencyMode,
         skillItemBonuses?: SkillItemBonuses,
         additionalModifiers?: Modifier[],
         activities: KingdomActivityById,
         currentLeader?: LeaderPerformingCheck;
-        leaderKingdomSkills: LeaderKingdomSkills;
-        leaderSkills: LeaderSkills;
-        useLeadershipModifiers: boolean;
+        kingdom: Kingdom;
+        flags: string[];
     },
 ): SkillStats[] {
     return allSkills.map(skill => {
         const ability = skillAbilities[skill];
         const modifiers = createSkillModifiers({
-            ruin,
-            unrest,
-            skillRank: skillRanks[skill],
-            abilityScores,
-            leaders,
-            kingdomLevel,
-            untrainedProficiencyMode,
+            kingdom,
             ability,
             skillItemBonus: skillItemBonuses?.[skill],
             skill,
             additionalModifiers,
             activities,
-            useLeadershipModifiers,
-            leaderKingdomSkills,
-            leaderSkills,
             currentLeader,
+            flags,
         });
         const total = calculateModifiers(modifiers);
         return {
             skill,
-            rank: skillRanks[skill],
+            rank: kingdom.skillRanks[skill],
             ability,
             skillLabel: capitalize(skill),
             abilityLabel: capitalize(ability),

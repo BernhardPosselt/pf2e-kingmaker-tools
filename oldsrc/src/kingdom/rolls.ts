@@ -1,12 +1,13 @@
 import {DegreeOfSuccess, degreeToProperty, determineDegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {Skill} from './data/skills';
 import {decodeJson, encodeJson, isNotBlank, postChatMessage, postDegreeOfSuccessMessage, unslugify} from '../utils';
-import {ActivityResults, getKingdomActivitiesById, KingdomActivity} from './data/activityData';
-import {Modifier, modifierToLabel} from './modifiers';
+import {ActivityResults, ChatModifier, getKingdomActivitiesById, KingdomActivity} from './data/activityData';
+import {filterPredicates, modifierToLabel} from './modifiers';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame} from './kingdom-utils';
-import {hasFeat} from './data/kingdom';
+import {getFlags, getUpgradeResults, Kingdom} from './data/kingdom';
 import {AdditionalChatMessages, ModifierBreakdown, ModifierBreakdowns} from './dialogs/check-dialog';
+import {UpgradeResult} from "./data/feats";
 
 export interface RollMeta {
     formula: string;
@@ -52,36 +53,21 @@ export interface ActivityResultMeta {
     rollMode: RollMode;
     degree: StringDegreeOfSuccess;
     additionalChatMessages: AdditionalChatMessages;
+    skill: Skill;
+    rollOptions: string[];
 }
 
 export function parseUpgradeMeta(el: HTMLElement): ActivityResultMeta {
     const meta = el.querySelector('.km-upgrade-result') as HTMLElement;
     const additionalChatMessages = meta.dataset.additionalChatMessages;
+    const rollOptions = meta.dataset.rollOptions;
     return {
         activity: meta.dataset.activity!,
         rollMode: meta.dataset.rollMode as RollMode,
         degree: meta.dataset.degree as StringDegreeOfSuccess,
+        skill: (meta.dataset.skill ?? 'athletics') as Skill,
+        rollOptions: rollOptions ? decodeJson(rollOptions) as string[] : [],
         additionalChatMessages: isNotBlank(additionalChatMessages) ? decodeJson(additionalChatMessages) as AdditionalChatMessages : [],
-    };
-}
-
-export function cooperativeLeadership(
-    hasCooperativeLeadership: boolean,
-    kingdomLevel: number,
-    skillRank: number,
-    rollOptions: string[],
-): (degree: DegreeOfSuccess) => DegreeOfSuccess {
-    return (degree) => {
-        if (hasCooperativeLeadership && rollOptions.includes('focused-attention')) {
-            if (kingdomLevel >= 11) {
-                if (degree === DegreeOfSuccess.CRITICAL_FAILURE) {
-                    degree = DegreeOfSuccess.FAILURE;
-                } else if (degree === DegreeOfSuccess.FAILURE && skillRank >= 2) {
-                    degree = DegreeOfSuccess.SUCCESS;
-                }
-            }
-        }
-        return degree;
     };
 }
 
@@ -130,6 +116,8 @@ export async function reRoll(
         reRollFormula = `{${formula},${total}}kl`;
     }
 
+    const upgrades = getUpgradeResults(kingdom);
+    const flags = getFlags(kingdom);
     await rollCheck({
         formula: reRollFormula,
         label,
@@ -139,13 +127,10 @@ export async function reRoll(
         modifier,
         modifierBreakdown,
         actor,
-        adjustDegreeOfSuccess: cooperativeLeadership(
-            hasFeat(kingdom, 'Cooperative Leadership'),
-            kingdom.level,
-            kingdom.skillRanks[skill],
-            rollOptions,
-        ),
+        upgrades,
         rollOptions,
+        flags,
+        kingdom,
         rollType: overrideRollType ?? rollType,
         supernaturalSolutionModifier,
         creativeSolutionModifier,
@@ -179,12 +164,13 @@ function downgradeDegree(degree: StringDegreeOfSuccess): StringDegreeOfSuccess {
 }
 
 export async function changeDegree(actor: Actor, el: HTMLElement, type: 'upgrade' | 'downgrade'): Promise<void> {
-    const {activity, degree, rollMode, additionalChatMessages} = parseUpgradeMeta(el);
+    const {activity, degree, rollMode, rollOptions, skill, additionalChatMessages} = parseUpgradeMeta(el);
     const kingdom = getKingdom(actor);
     const kingdomActivity = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
     const newDegree = type === 'upgrade' ? upgradeDegree(degree) : downgradeDegree(degree);
     const degreeEnum = getDegreeFromKey(newDegree);
-    await postComplexDegreeOfSuccess(actor, kingdomActivity, rollMode, additionalChatMessages, degreeEnum, degreeEnum);
+    const oldDegree = getDegreeFromKey(degree);
+    await postComplexDegreeOfSuccess(actor, kingdomActivity, rollMode, additionalChatMessages, oldDegree, rollOptions, skill, degreeEnum);
     await postAdditionalChatMessages(additionalChatMessages, degreeEnum, rollMode);
 }
 
@@ -196,7 +182,6 @@ interface RollCheckOptions {
     skill: Skill,
     modifier: number,
     actor: Actor,
-    adjustDegreeOfSuccess?: (degree: DegreeOfSuccess) => DegreeOfSuccess;
     rollOptions: string[];
     creativeSolutionModifier: number;
     supernaturalSolutionModifier: number;
@@ -204,6 +189,9 @@ interface RollCheckOptions {
     rollType: RollType;
     rollMode: RollMode;
     additionalChatMessages: AdditionalChatMessages;
+    upgrades: UpgradeResult[];
+    kingdom: Kingdom;
+    flags: string[];
 }
 
 type RollType = 'creative-solution' | 'supernatural-solution' | 'selected';
@@ -248,6 +236,38 @@ async function postAdditionalChatMessages(
     }));
 }
 
+function adjustDegreeOfSuccess(
+    upgrades: UpgradeResult[],
+    current: DegreeOfSuccess,
+    skill: Skill,
+    kingdom: Kingdom,
+    rollOptions: string[],
+    flags: string[],
+): DegreeOfSuccess {
+    const relevantUpgrades = filterPredicates(
+        kingdom,
+        upgrades,
+        flags,
+        rollOptions,
+        skill,
+        (u) => u.predicate,
+    )
+    console.log('bluuuuuuuuuuuuuuuuuuuuuub');
+    console.log(relevantUpgrades)
+    if (current === DegreeOfSuccess.CRITICAL_FAILURE
+        && relevantUpgrades.some(a => a.upgrade === "criticalFailure")) {
+        return DegreeOfSuccess.FAILURE;
+    } else if (current === DegreeOfSuccess.FAILURE
+        && relevantUpgrades.some(a => a.upgrade === "failure")) {
+        return DegreeOfSuccess.SUCCESS;
+    } else if (current === DegreeOfSuccess.SUCCESS
+        && relevantUpgrades.some(a => a.upgrade === "success")) {
+        return DegreeOfSuccess.CRITICAL_SUCCESS;
+    } else {
+        return current;
+    }
+}
+
 export async function rollCheck(
     {
         formula,
@@ -257,7 +277,7 @@ export async function rollCheck(
         skill,
         modifier,
         actor,
-        adjustDegreeOfSuccess = (degree): DegreeOfSuccess => degree,
+        upgrades,
         rollOptions,
         modifierBreakdown,
         supernaturalSolutionModifier,
@@ -265,13 +285,15 @@ export async function rollCheck(
         rollType,
         rollMode,
         additionalChatMessages,
+        kingdom,
+        flags,
     }: RollCheckOptions,
 ): Promise<DegreeOfSuccess> {
     const roll = await new Roll(formula).roll();
     const total = roll.total;
     const dieNumber = total - modifier;
     const previousDegree = determineDegreeOfSuccess(dieNumber, total, dc);
-    const degreeOfSuccess = adjustDegreeOfSuccess(previousDegree);
+    const degreeOfSuccess = adjustDegreeOfSuccess(upgrades, previousDegree, skill, kingdom, rollOptions, flags);
     const meta = `
         <div class="km-roll-meta" hidden 
             data-formula="${formula}" 
@@ -299,6 +321,8 @@ export async function rollCheck(
         activity,
         additionalChatMessages,
         previousDegree,
+        rollOptions,
+        skill,
         degreeOfSuccess === previousDegree ? undefined : degreeOfSuccess,
     );
     await postAdditionalChatMessages(additionalChatMessages, degreeOfSuccess, rollMode);
@@ -311,10 +335,12 @@ async function postDegreeOfSuccess(
     activity: KingdomActivity | undefined,
     additionalChatMessages: AdditionalChatMessages,
     degreeOfSuccess: DegreeOfSuccess,
+    rollOptions: string[],
+    skill: Skill,
     upgradedDegreeOfSuccess?: DegreeOfSuccess,
 ): Promise<void> {
     if (activity) {
-        await postComplexDegreeOfSuccess(actor, activity, rollMode, additionalChatMessages, degreeOfSuccess, upgradedDegreeOfSuccess);
+        await postComplexDegreeOfSuccess(actor, activity, rollMode, additionalChatMessages, degreeOfSuccess, rollOptions, skill, upgradedDegreeOfSuccess);
     } else {
         await postSimpleDegreeOfSuccess(rollMode, degreeOfSuccess, upgradedDegreeOfSuccess);
     }
@@ -359,17 +385,18 @@ function getDegreeFromKey(degreeOfSuccess: keyof ActivityResults): DegreeOfSucce
     }
 }
 
-function buildChatButtons(modifiers: Modifier[], resultKey: keyof ActivityResults, activity?: string): string {
+function buildChatButtons(modifiers: ChatModifier[], resultKey: keyof ActivityResults): string {
     if (modifiers.length > 0 || resultKey === 'criticalSuccess') {
         return `
         <div class="km-chat-buttons">
             ${resultKey === 'criticalSuccess' ? '<button type="button" class="km-gain-fame-button">Gain 1 Fame</button>' : ''}
             ${modifiers.map((modifier, index) => {
-            const label = modifierToLabel(modifier);
+            const copy = {...modifier};
+            delete copy['renderPredicate'];
+            const label = modifierToLabel(copy);
+            const data = encodeJson(copy);
             return `<button class="km-apply-modifier-effect" 
-                        data-activity="${activity}" 
-                        data-degree="${resultKey}" 
-                        data-index="${index}">Apply Effect: ${label}</button>`;
+                        data-data="${data}">Apply Effect: ${label}</button>`;
         }).join('')}    
         </div>`;
     } else {
@@ -383,6 +410,8 @@ async function postComplexDegreeOfSuccess(
     rollMode: RollMode,
     additionalChatMessages: AdditionalChatMessages,
     degreeOfSuccess: DegreeOfSuccess,
+    rollOptions: string[],
+    skill: Skill,
     upgradedDegreeOfSuccess?: DegreeOfSuccess,
 ): Promise<void> {
     const resultKey = getResultKey(upgradedDegreeOfSuccess ?? degreeOfSuccess);
@@ -391,14 +420,17 @@ async function postComplexDegreeOfSuccess(
         const kingdom = getKingdom(actor);
         const modifiers = results.modifiers;
         const message = results.msg;
+        const flags = getFlags(kingdom);
         const buttons = modifiers === undefined
             ? buildChatButtons([], resultKey)
-            : buildChatButtons(modifiers(kingdom), resultKey, activity.id);
+            : buildChatButtons(filterPredicates(kingdom, modifiers, flags, rollOptions, skill, (m) => m.renderPredicate), resultKey);
         // div allows to upgrade/downgrade on right click
         const upgrade = `<div class="km-upgrade-result"
                 data-roll-mode="${rollMode}" 
                 data-activity="${activity.id}" 
                 data-degree="${resultKey}"
+                data-roll-options="${encodeJson(rollOptions)}"
+                data-skill="${skill}"
                 data-additional-chat-messages="${encodeJson(additionalChatMessages)}"></div>`;
         const msg = message;
         const tail = buttons + upgrade;

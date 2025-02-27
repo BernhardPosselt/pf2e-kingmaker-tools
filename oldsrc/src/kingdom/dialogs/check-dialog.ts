@@ -1,8 +1,7 @@
-import {KingdomFeat} from '../data/feats';
+import {getAllFeats, KingdomFeat} from '../data/feats';
 import {
     calculateModifiers,
     createActiveSettlementModifiers,
-    getUntrainedProficiencyMode,
     Modifier,
     ModifierTotal,
     ModifierTotals,
@@ -12,10 +11,17 @@ import {
 import {allKingdomPhases, getActivitySkills, KingdomPhase} from '../data/activities';
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers, LeaderPerformingCheck} from '../skills';
-import {getControlDC, hasFeat, Kingdom, SkillRanks} from '../data/kingdom';
-import {capitalize, encodeJson, LabelAndValue, rollModeChoices, toLabelAndValue, unslugify} from '../../utils';
+import {getControlDC, getFlags, getUpgradeResults, Kingdom, SkillRanks} from '../data/kingdom';
+import {
+    capitalize,
+    encodeJson,
+    LabelAndValue,
+    rollModeChoices,
+    toLabelAndValue,
+    unslugify
+} from '../../utils';
 import {getKingdomActivitiesById, KingdomActivityById} from '../data/activityData';
-import {cooperativeLeadership, rollCheck} from '../rolls';
+import {rollCheck} from '../rolls';
 import {
     ActiveSettlementStructureResult,
     getActiveSettlementStructureResult,
@@ -181,32 +187,6 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             activeSettlementStructureResult,
             getSettlementsWithoutLandBorders(this.game, this.kingdom),
         ).concat(getArmyModifiers(this.game));
-        if (hasFeat(this.kingdom, 'Practical Magic (V&K)')) {
-            const modifier: Modifier = {
-                skills: ['engineering'],
-                value: 1,
-                type: 'status',
-                name: 'Practical Magic',
-                enabled: true,
-            };
-            if (this.kingdom.skillRanks.magic === 2) {
-                additionalModifiers.push(modifier);
-            } else if (this.kingdom.skillRanks.magic > 2) {
-                additionalModifiers.push({
-                    ...modifier,
-                    value: 2,
-                });
-            }
-        }
-        if (this.kingdom.unrest > 0 && hasFeat(this.kingdom, 'Inspiring Entertainment')) {
-            additionalModifiers.push({
-                name: 'Inspiring Entertainment',
-                type: 'circumstance',
-                enabled: true,
-                abilities: ['culture'],
-                value: 2,
-            });
-        }
         const convertedCustomModifiers: Modifier[] = this.createCustomModifiers(this.customModifiers);
         const currentLeader = await parseLeaderPerformingCheck(this.leaderPerformingCheck, this.kingdom);
         const skillModifiers = this.calculateModifiers(
@@ -292,12 +272,9 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 skill,
                 modifier,
                 actor: this.actor,
-                adjustDegreeOfSuccess: cooperativeLeadership(
-                    hasFeat(this.kingdom, 'Cooperative Leadership'),
-                    this.kingdom.level,
-                    this.kingdom.skillRanks[skill],
-                    [...this.rollOptions],
-                ),
+                kingdom: this.kingdom,
+                flags: getFlags(this.kingdom),
+                upgrades: getUpgradeResults(this.kingdom),
                 rollOptions: this.rollOptions,
                 creativeSolutionModifier,
                 supernaturalSolutionModifier,
@@ -331,18 +308,15 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 modifier,
                 modifierBreakdown,
                 actor: this.actor,
-                adjustDegreeOfSuccess: cooperativeLeadership(
-                    hasFeat(this.kingdom, 'Cooperative Leadership'),
-                    this.kingdom.level,
-                    this.kingdom.skillRanks[skill],
-                    [...this.rollOptions],
-                ),
                 rollOptions: this.rollOptions,
                 creativeSolutionModifier,
                 supernaturalSolutionModifier,
                 rollType: 'selected',
                 rollMode: this.rollMode,
                 additionalChatMessages: this.additionalChatMessages,
+                kingdom: this.kingdom,
+                flags: getFlags(this.kingdom),
+                upgrades: getUpgradeResults(this.kingdom),
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
@@ -377,9 +351,12 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const ignoreSkillRequirements = this.kingdom.settings.kingdomIgnoreSkillRequirements;
         const skillRankFilters = ignoreSkillRequirements ? undefined : ranks;
         const activitySkills = getActivitySkills(this.overrideSkills ?? activities[activity].skills, skillRankFilters);
-        const practicalMagic: Skill[] = activitySkills.includes('engineering') && hasFeat(this.kingdom, 'Practical Magic') ? ['magic'] : [];
+        const additionalSkills: Skill[] = getAllFeats(this.kingdom)
+            .flatMap(f => {
+                return activitySkills.flatMap(s => f.increaseUsableSkills?.[s] ?? [])
+            });
         const expandMagicSkills: Skill[] = this.kingdom.settings.expandMagicUse && expandMagicActivities.has(activity) ? ['magic'] : [];
-        return Array.from(new Set([...activitySkills, ...expandMagicSkills, ...practicalMagic]));
+        return Array.from(new Set([...activitySkills, ...expandMagicSkills, ...additionalSkills]));
     }
 
     private calculateModifiers(
@@ -390,15 +367,9 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         activities: KingdomActivityById,
         currentLeader: LeaderPerformingCheck | undefined,
     ): Record<Skill, TotalAndModifiers> {
+        const flags = getFlags(this.kingdom);
         return Object.fromEntries(applicableSkills.map(skill => {
             const modifiers = createSkillModifiers({
-                ruin: this.kingdom.ruin,
-                unrest: this.kingdom.unrest,
-                skillRank: (this.kingdom.skillRanks)[skill],
-                abilityScores: this.kingdom.abilityScores,
-                leaders: this.kingdom.leaders,
-                kingdomLevel: this.kingdom.level,
-                untrainedProficiencyMode: getUntrainedProficiencyMode(this.kingdom),
                 ability: skillAbilities[skill],
                 skillItemBonus: activeSettlementStructureResult?.skillBonuses?.[skill],
                 additionalModifiers: [...additionalModifiers, ...convertedCustomModifiers],
@@ -407,10 +378,9 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 skill,
                 overrides: this.modifierOverrides,
                 activities,
-                useLeadershipModifiers: this.kingdom.settings.enableLeadershipModifiers,
-                leaderSkills: this.kingdom.settings.leaderSkills,
-                leaderKingdomSkills: this.kingdom.settings.leaderKingdomSkills,
                 currentLeader,
+                kingdom: this.kingdom,
+                flags,
             });
             const total = calculateModifiers(modifiers);
             return [skill, {total, modifiers}];

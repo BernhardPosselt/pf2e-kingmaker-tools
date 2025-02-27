@@ -1,9 +1,9 @@
 import {getKingdom, saveKingdom} from './storage';
-import {ActivityResults, getKingdomActivitiesById} from './data/activityData';
-import {updateResources} from './resources';
 import {gainFame} from './kingdom-utils';
 import {parsePayButton, payStructure} from './dialogs/structure-browser';
-import {uuidv4} from "../utils";
+import {decodeJson, isNonNullable, uuidv4} from "../utils";
+import {Modifier} from "./modifiers";
+import {updateResources} from "./resources";
 
 interface KingdomChatButton {
     selector: string;
@@ -42,13 +42,10 @@ export const kingdomChatButtons: KingdomChatButton[] = [
         callback: async (game: Game, actor: Actor, event: Event): Promise<void> => {
             event.preventDefault();
             const target = event.currentTarget as HTMLButtonElement;
-            const activity = target.dataset.activity!;
-            const degree = target.dataset.degree! as keyof ActivityResults;
-            const index = parseInt(target.dataset.index ?? '0', 10);
+            const data = target.dataset.data as string | undefined | null;
             const kingdom = getKingdom(actor);
-            const activityData = getKingdomActivitiesById(kingdom.homebrewActivities);
-            const modifier = activityData[activity]?.[degree]?.modifiers?.(kingdom)?.[index];
-            if (modifier !== undefined) {
+            if (isNonNullable(data)) {
+                const modifier = decodeJson(data) as Modifier;
                 // copy modifier because we alter the consumeId
                 const modifierCopy = {
                     ...modifier,
@@ -58,8 +55,6 @@ export const kingdomChatButtons: KingdomChatButton[] = [
                 }
                 const modifiers = [...kingdom.modifiers, modifierCopy];
                 await saveKingdom(actor, {modifiers});
-            } else {
-                console.error(`Can not find modifier ${activity}.${degree}.modifiers.${index}`);
             }
         },
     },

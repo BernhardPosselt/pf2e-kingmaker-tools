@@ -1,9 +1,12 @@
 import {distinctBy, groupBy} from '../../utils';
+import {Modifier} from "../modifiers";
 
 interface KingdomFeature {
     level: number;
     name: string;
     description: string;
+    flags?: string[];
+    modifiers?: Modifier[];
 }
 
 function kingdomFeat(level: number): KingdomFeature {
@@ -46,11 +49,12 @@ function ruinResistance(level: number): KingdomFeature {
     };
 }
 
-function expansionExpert(level: number, hexes: number): KingdomFeature {
+function expansionExpert(level: number, hexes: number, modifiers: Modifier[]): KingdomFeature {
     return {
         level,
         name: `Expansion Expert (+${hexes})`,
         description: 'Your kingdom is better at expanding its territory. You gain a +2 circumstance bonus to skill checks made to Claim Hex and can attempt to Claim Hex up to twice during a Kingdom turn. At 9th level, you can attempt to Claim Hex up to three times during a Kingdom turn.',
+        modifiers,
     };
 }
 
@@ -97,7 +101,13 @@ export const features: KingdomFeature[] = [
     settlementConstruction(3, 'Town'),
     skillIncrease(3),
     // 4
-    expansionExpert(4, 2),
+    expansionExpert(4, 2, [{
+        name: 'Expansion Expert',
+        type: 'circumstance',
+        activities: ['claim-hex'],
+        value: 2,
+        enabled: true,
+    }]),
     {
         level: 4,
         name: 'Fine Living',
@@ -117,7 +127,7 @@ export const features: KingdomFeature[] = [
     kingdomFeat(8),
     ruinResistance(8),
     // 9
-    expansionExpert(9, 3),
+    expansionExpert(9, 3, []),
     settlementConstruction(9, 'City'),
     skillIncrease(9),
     // 10

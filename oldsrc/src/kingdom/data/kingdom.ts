@@ -1,9 +1,11 @@
 import {Leader} from './leaders';
 import {getKingdomActivities, KingdomActivity} from './activityData';
 import {AbilityScores} from './abilities';
-import {Modifier} from '../modifiers';
+import {Modifier, UntrainedProficiencyMode} from '../modifiers';
 import {Skill} from "./skills";
 import {LeadershipLeaderType} from "../skills";
+import {getAllFeats, UpgradeResult} from "./feats";
+import {features} from "./features";
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
 
@@ -158,7 +160,7 @@ export interface KingdomSettings {
     enableLeadershipModifiers: boolean;
     kingdomEventRollMode: keyof CONFIG.Dice.RollModes;
     automateResources: ResourceAutomationMode;
-    proficiencyMode: string;
+    proficiencyMode: UntrainedProficiencyMode;
     kingdomEventsTable?: string;
     kingdomCultTable?: string;
     maximumFamePoints: number;
@@ -615,6 +617,13 @@ export function getDefaultKingdomData(): Kingdom {
     };
 }
 
-export function hasFeat(kingdom: Kingdom, id: string): boolean {
-    return [...kingdom.feats, ...kingdom.bonusFeats].map(f => f.id).includes(id);
+export function getFlags(kingdom: Kingdom): string[] {
+    const feats = getAllFeats(kingdom);
+    return feats.flatMap(f => f.flags ?? [])
+        .concat(features.flatMap(f => f.flags ?? []));
+}
+
+export function getUpgradeResults(kingdom: Kingdom): UpgradeResult[] {
+    return getAllFeats(kingdom)
+        .flatMap(f => f.upgradeResults ?? []);
 }

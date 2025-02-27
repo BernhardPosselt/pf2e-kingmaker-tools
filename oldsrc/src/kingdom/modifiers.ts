@@ -1,7 +1,7 @@
 import {KingdomPhase} from './data/activities';
 import {capitalize, groupBy, unslugify} from '../utils';
 import {getLevelData, Kingdom, LeaderKingdomSkills, Leaders, LeaderSkills, Ruin, Settlement} from './data/kingdom';
-import {allFeatsByName} from './data/feats';
+import {getAllFeats} from './data/feats';
 import {allActorSkills, CharacterSkill, Skill, skillAbilities} from './data/skills';
 import {Ability, AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {isInvested, Leader} from './data/leaders';
@@ -11,6 +11,7 @@ import {ActivityBonuses, SkillItemBonus} from './data/structures';
 import {ActiveSettlementStructureResult} from './scene';
 import {KingdomActivityById} from './data/activityData';
 import {LeaderPerformingCheck} from "./skills";
+import {features} from "./data/features";
 
 export type Proficiency = 'trained' | 'expert' | 'master' | 'legendary';
 
@@ -33,6 +34,57 @@ export const allModifierTypes = [
 
 export type ModifierType = typeof allModifierTypes[number];
 
+interface GtePredicate {
+    gte: [string, string];
+}
+
+interface GtPredicate {
+    gt: [string, string];
+}
+
+interface LtePredicate {
+    lte: [string, string];
+}
+
+interface LtPredicate {
+    lt: [string, string];
+}
+
+interface EqPredicate {
+    eq: [string, string];
+}
+
+interface OrPredicate {
+    or: Predicate[];
+}
+
+interface AndPredicate {
+    and: Predicate[];
+}
+
+interface NotPredicate {
+    not: Predicate;
+}
+
+interface HasFlagPredicate {
+    hasFlag: string;
+}
+
+interface HasRollOptionPredicate {
+    hasRollOption: string;
+}
+
+export type Predicate = GtePredicate
+    | GtPredicate
+    | LtPredicate
+    | LtePredicate
+    | EqPredicate
+    | OrPredicate
+    | HasFlagPredicate
+    | AndPredicate
+    | NotPredicate
+    | HasRollOptionPredicate;
+
 export interface Modifier {
     type: ModifierType;
     value: number;
@@ -45,6 +97,7 @@ export interface Modifier {
     turns?: number;
     consumeId?: string;
     rollOptions?: string[];
+    predicate?: Predicate[];
 }
 
 function createPredicateName(values: string[] | undefined, label: string): string | undefined {
@@ -276,11 +329,12 @@ export function createActiveSettlementModifiers(
     settlementsWithoutLandBorders: number,
 ): Modifier[] {
     const levelData = getLevelData(kingdom.level);
-    const feats = new Set([...kingdom.feats.map(f => f.id), ...kingdom.bonusFeats.map(f => f.id)]);
-    const result: Modifier[] = Array.from(feats)
-        .flatMap(feat => allFeatsByName[feat]?.modifiers ?? []);
+    const result = getAllFeats(kingdom).flatMap(f => f.modifiers ?? [])
     kingdom.modifiers.forEach(modifier => result.push(modifier));
     const isSecondaryTerritory = activeSettlement?.secondaryTerritory;
+    features.filter(f => f.level <= kingdom.level)
+        .flatMap(f => f.modifiers ?? [])
+        .forEach(f => result.push(f));
     if (settlementsWithoutLandBorders > 0) {
         result.push({
             name: 'Settlements Without Land Borders',
@@ -295,15 +349,6 @@ export function createActiveSettlementModifiers(
             name: 'Check in Secondary Territory',
             type: 'circumstance',
             value: -4,
-            enabled: true,
-        });
-    }
-    if (kingdom.level >= 4) {
-        result.push({
-            name: 'Expansion Expert',
-            type: 'circumstance',
-            activities: ['claim-hex'],
-            value: 2,
             enabled: true,
         });
     }
@@ -337,6 +382,69 @@ export function createActiveSettlementModifiers(
     return result;
 }
 
+function resolveValue(kingdom: Kingdom, value: string, skill: Skill): string {
+    if (value.startsWith("@kingdom.")) {
+        return getProperty(kingdom, value.replace(/^@kingdom\./, ''));
+    } else if (value === "@skillRank") {
+        return `${kingdom.skillRanks[skill]}`;
+    } else if (value === "@skill") {
+        return skill;
+    } else {
+        return value;
+    }
+}
+
+function processPredicate(
+    kingdom: Kingdom,
+    p: Predicate,
+    flags: string[],
+    rollOptions: string[],
+    skill: Skill,
+): boolean {
+    if ('gte' in p) {
+        return resolveValue(kingdom, p.gte[0], skill) >= resolveValue(kingdom, p.gte[1], skill);
+    } else if ('gt' in p) {
+        return resolveValue(kingdom, p.gt[0], skill) > resolveValue(kingdom, p.gt[1], skill);
+    } else if ('lte' in p) {
+        return resolveValue(kingdom, p.lte[0], skill) <= resolveValue(kingdom, p.lte[1], skill);
+    } else if ('lt' in p) {
+        return resolveValue(kingdom, p.lt[0], skill) < resolveValue(kingdom, p.lt[1], skill);
+    } else if ('eq' in p) {
+        return resolveValue(kingdom, p.eq[0], skill) == resolveValue(kingdom, p.eq[1], skill);
+    } else if ('or' in p) {
+        return p.or.some(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill));
+    } else if ('and' in p) {
+        return p.and.every(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill));
+    } else if ('hasRollOption' in p) {
+        return rollOptions.includes(p.hasRollOption);
+    } else if ('hasFlag' in p) {
+        return flags.includes(p.hasFlag);
+    } else if ('not' in p) {
+        return !processPredicate(kingdom, p.not, flags, rollOptions, skill);
+    } else {
+        return true;
+    }
+}
+
+
+export function filterPredicates<T>(
+    kingdom: Kingdom,
+    elements: T[],
+    flags: string[],
+    rollOptions: string[],
+    skill: Skill,
+    predicatesGetter: (modifier: T) => Predicate[] | undefined,
+) {
+    return elements.filter(m => {
+        const predicate = predicatesGetter(m);
+        if (predicate) {
+            return predicate.every(p => processPredicate(kingdom, p, flags, rollOptions, skill));
+        } else {
+            return true;
+        }
+    })
+}
+
 export function processModifiers(
     {
         modifiers,
@@ -346,6 +454,8 @@ export function processModifiers(
         activity,
         overrides = {},
         activities,
+        kingdom,
+        flags,
     }: {
         modifiers: Modifier[];
         skill: Skill;
@@ -354,15 +464,21 @@ export function processModifiers(
         activity?: string;
         overrides?: Record<string, boolean>;
         activities: KingdomActivityById;
+        kingdom: Kingdom;
+        flags: string[];
     },
 ): ModifierWithId[] {
-    const copied = modifiers.map((modifier, index) => {
-        // make a copy and assign every modifier an id
-        return {
-            ...(foundry.utils.deepClone(modifier)),
-            id: `${index}`,
-        };
-    });
+    const rollOptions = filterPredicates(kingdom, modifiers, flags, [], skill, m => m.predicate)
+        .filter(m => m.enabled)
+        .flatMap(m => m.rollOptions ?? []);
+    const copied = filterPredicates(kingdom, modifiers, flags, rollOptions, skill, m => m.predicate)
+        .map((modifier, index) => {
+            // make a copy and assign every modifier an id
+            return {
+                ...(foundry.utils.deepClone(modifier)),
+                id: `${index}`,
+            };
+        });
     const withoutZeroes = removeUninterestingZeroModifiers(copied);
     const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, activity, skill, rank, activities);
     // enable/disable overrides

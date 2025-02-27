@@ -1,6 +1,13 @@
-import {capitalize} from '../../utils';
-import {allSkills} from './skills';
-import {Modifier} from '../modifiers';
+import {capitalize, isNonNullable} from '../../utils';
+import {allSkills, Skill} from './skills';
+import {Modifier, Predicate} from '../modifiers';
+import {Kingdom} from "./kingdom";
+import {StringDegreeOfSuccess} from "../../degree-of-success";
+
+export interface UpgradeResult {
+    upgrade: StringDegreeOfSuccess
+    predicate?: Predicate[];
+}
 
 export interface KingdomFeat {
     name: string;
@@ -9,16 +16,22 @@ export interface KingdomFeat {
     prerequisites?: string;
     automationNotes?: string;
     modifiers?: Modifier[];
+    resourceDice?: number;
+    settlementItemLevelIncrease?: number;
+    trainSkill?: Skill;
+    assuranceForSkill?: Skill;
+    increaseUsableSkills?: Partial<Record<Skill, Skill[]>>;
+    flags?: string[];
+    upgradeResults?: UpgradeResult[];
 }
 
 
-function generateForAllSkills(feat: KingdomFeat): KingdomFeat[] {
+function generateForAllSkills(feat: KingdomFeat, adjustment: (s: Skill, f: KingdomFeat) => KingdomFeat): KingdomFeat[] {
     return allSkills.map(skill => {
-
-        return {
+        return adjustment(skill, {
             ...feat,
             name: `${feat.name} (${capitalize(skill)})`,
-        };
+        });
     });
 }
 
@@ -63,6 +76,22 @@ select this feat, choose one leadership role; that role is now supported by your
 activity to aid another leader’s kingdom check, the circumstance bonus granted by a success is increased to +3.
 At 11th level, your leaders’ collaborative style leads them to ever greater successes when they work together. When a leader uses the Focused Attention kingdom activity to aid another leader’s check, treat a critical failure on the aided check as a failure. If your kingdom has at least the expert rank in the skill used in the aided check, treat a failure on the check as a success. (This
 does not allow you to ever improve a critical failure to a success.)`,
+        flags: ['cooperative-leadership'],
+        upgradeResults: [{
+            upgrade: "criticalFailure",
+            predicate: [
+                {"hasFlag": "cooperative-leadership"},
+                {"hasRollOption": "focused-attention"},
+                {"gte": ["@kingdom.level", "11"]}],
+        }, {
+            upgrade: "failure",
+            predicate: [
+                {"hasFlag": "cooperative-leadership"},
+                {"hasRollOption": "focused-attention"},
+                {"gte": ["@kingdom.level", "11"]},
+                {"gte": ["@skillRank", "2"]}
+            ],
+        }]
     },
     {
         name: 'Crush Dissent',
@@ -159,6 +188,7 @@ other lands, and they hire one another’s workers to supply the labor they need
             enabled: true,
             value: 1,
         }],
+        resourceDice: 1,
     },
     {
         name: 'Insider Trading (V&K)',
@@ -173,6 +203,7 @@ other lands, and they hire one another’s workers to supply the labor they need
             enabled: true,
             value: 1,
         }],
+        resourceDice: 1,
     },
     {
         automationNotes: 'You need to manually increase the ruin thresholds',
@@ -195,6 +226,9 @@ life easier. You gain a +1 circumstance bonus to Magic checks, and you can use M
             enabled: true,
             value: 1,
         }],
+        increaseUsableSkills: {
+            engineering: ['magic'],
+        }
     },
     {
         automationNotes: 'Hire Adventurers RP reduction is not implemented',
@@ -209,6 +243,20 @@ life easier. You gain a +1 status bonus to Magic checks, and if you have Expert 
             skills: ['magic'],
             enabled: true,
             value: 1,
+        }, {
+            name: 'Practical Magic',
+            type: 'status',
+            skills: ['engineering'],
+            enabled: true,
+            value: 1,
+            predicate: [{"eq": ["@kingdom.skillRanks.magic", "2"]}],
+        }, {
+            name: 'Practical Magic',
+            type: 'status',
+            skills: ['engineering'],
+            enabled: true,
+            value: 2,
+            predicate: [{"gte": ["@kingdom.skillRanks.magic", "3"]}],
         }],
     },
     {
@@ -226,6 +274,8 @@ far off track. Once per Kingdom turn when you roll a critical failure on a Kingd
         level: 1,
         text: `Your kingdom receives the trained proficiency rank in a Kingdom skill of your choice. You can select this feat
 multiple times, choosing a new skill each time.`,
+    }, (skill, data) => {
+        return {...data, trainSkill: skill}
     }),
     {
         automationNotes: 'If your kingdom’s Unrest is 6 or higher and you use a kingdom activity that decreases Unrest, decrease the Unrest by an additional 1 is not automated.',
@@ -240,6 +290,14 @@ multiple times, choosing a new skill each time.`,
         prerequisites: 'Culture 14',
         text: `Your kingdom’s artists and entertainers are talented and prolific, and there’s never a shortage of new plays, operas, novels, music, sculptures, paintings, or other forms of distraction to entertain the citizens, even during
 times of upheaval. Your kingdom gains a +2 circumstance bonus to all Culture-based skill checks whenever your kingdom has at least 1 Unrest.`,
+        modifiers: [{
+            name: 'Inspiring Entertainment',
+            type: 'circumstance',
+            enabled: true,
+            abilities: ['culture'],
+            value: 2,
+            predicate: [{"gte": ["@kingdom.unrest", "1"]}]
+        }]
     },
     ...generateForAllSkills({
         name: 'Kingdom Assurance',
@@ -247,6 +305,8 @@ times of upheaval. Your kingdom gains a +2 circumstance bonus to all Culture-bas
         level: 1,
         text: `Even when things go poorly in other areas, you can count on consistency in carrying out kingdom activities
 with a chosen skill. Choose one Kingdom skill in which your kingdom is trained. Once per Kingdom turn, when you would attempt a skill check for that skill, you can forgo rolling and instead take a result equal to 10 + your proficiency bonus; do not apply any other bonuses, penalties, or modifiers to this result. Special You can select this feat multiple times. Each time, choose a different skill and gain the benefits of this feat for that skill.`,
+    }, (skill, data) => {
+        return {...data, assuranceForSkill: skill}
     }),
     {
         automationNotes: 'Not automated',
@@ -308,6 +368,7 @@ a Kingdom turn in which you are forced to spend RP as the result of a failed ski
         name: 'Quality of Life',
         level: 7,
         text: 'Your kingdom’s robust economy makes the creature comforts of civilization more readily available to all, and even finer luxuries are more easily had. The first time you gain Luxury Commodities in a Kingdom turn, increase the total gained by 1. All of your settlements are treated as 1 level higher than their actual level for the purposes of determining what sorts of magic items might be offered for sale at their markets and shops.',
+        settlementItemLevelIncrease: 1,
     },
     {
         automationNotes: 'You do not get 1 extra RP at the start of your next turn on a critical success',
@@ -345,3 +406,9 @@ allFeats.sort((a, b) => a.name.localeCompare(b.name));
 export const allFeatsByName = Object.fromEntries((allFeats)
     .map((feat) => [feat.name, feat]));
 
+export function getAllFeats(kingdom: Kingdom): KingdomFeat[] {
+    const featIds = new Set([...kingdom.feats.map(f => f.id), ...kingdom.bonusFeats.map(f => f.id)])
+    return Array.from(featIds)
+        .map(id => allFeatsByName[id])
+        .filter(feat => isNonNullable(feat));
+}
