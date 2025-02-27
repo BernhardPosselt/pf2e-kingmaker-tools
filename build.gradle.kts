@@ -116,7 +116,13 @@ tasks {
         delete.add(layout.projectDirectory.dir("oldsrc/dist"))
     }
     getByName("check") {
-        dependsOn("validateRecipes", "validateStructures", "validateCampingActivities", "validateFeats")
+        dependsOn(
+            "validateRecipes",
+            "validateStructures",
+            "validateCampingActivities",
+            "validateFeats",
+            "validateFeatures",
+        )
     }
 }
 
@@ -144,6 +150,13 @@ tasks.register<JsonSchemaValidator>("validateFeats") {
     schema = layout.projectDirectory.file("src/commonMain/resources/schemas/feat.json")
     files = layout.projectDirectory.dir("data/feats")
 }
+
+tasks.register<JsonSchemaValidator>("validateFeatures") {
+    outputs.upToDateWhen { true } // no outputs, only depend on input files
+    schema = layout.projectDirectory.file("src/commonMain/resources/schemas/feature.json")
+    files = layout.projectDirectory.dir("data/features")
+}
+
 
 // release tasks
 tasks.register<ChangeModuleVersion>("changeModuleVersion") {
@@ -184,6 +197,6 @@ tasks.register<ReleaseModule>("release") {
 
 tasks.register<UnpackJsonFiles>("unpackJson") {
     fileNameProperty = "name"
-    file = layout.projectDirectory.file("data/feats/feats.json")
-    targetDirectory = layout.projectDirectory.dir("data/feats")
+    file = layout.projectDirectory.file("data/features/features.json")
+    targetDirectory = layout.projectDirectory.dir("data/features")
 }

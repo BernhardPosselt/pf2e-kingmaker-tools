@@ -6,6 +6,7 @@ import {ModuleData} from '@league-of-foundry-developers/foundry-vtt-types/src/fo
 import {KingdomSettings} from "./kingdom/data/kingdom";
 import {Structure} from "./kingdom/data/structures";
 import {KingdomFeat} from "./kingdom/data/feats";
+import {CombinedKingdomFeature, KingdomFeature} from "./kingdom/data/features";
 
 declare global {
     declare class PF2EModifier {
@@ -28,6 +29,7 @@ declare global {
                 data: {
                     structures: Structure[];
                     feats: KingdomFeat[];
+                    features: CombinedKingdomFeature[];
                 }
             }
         };

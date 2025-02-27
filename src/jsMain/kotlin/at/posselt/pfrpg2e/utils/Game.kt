@@ -1,17 +1,13 @@
 package at.posselt.pfrpg2e.utils
 
-import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.KingdomFeat
+import at.posselt.pfrpg2e.kingdom.KingdomFeature
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
-import at.posselt.pfrpg2e.kingdom.LeaderKingdomSkills
-import at.posselt.pfrpg2e.kingdom.LeaderSkills
-import at.posselt.pfrpg2e.kingdom.structures.Structure
 import at.posselt.pfrpg2e.kingdom.structures.StructureData
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2EActor
 import kotlinx.js.JsPlainObject
-import kotlin.js.Promise
 
 @JsPlainObject
 external interface ToolsMacros {
@@ -43,6 +39,7 @@ external interface ToolsMacros {
 external interface KtMigrationData {
     val structures: Array<StructureData>
     val feats: Array<KingdomFeat>
+    val features: Array<KingdomFeature>
 }
 
 

@@ -1,0 +1,348 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://posselt.at/pf2e-kingmaker-tools/schemas/feature.json",
+  "title": "Kingdom Feature",
+  "description": "A Kingdom Feature",
+  "$ref": "#/$defs/Feature",
+  "$defs": {
+    "Feature": {
+      "type": "object",
+      "required": [
+        "name",
+        "levels",
+        "description"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "levels": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Modifier"
+          }
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Modifier": {
+      "type": "object",
+      "required": [
+        "type",
+        "value",
+        "name",
+        "enabled"
+      ],
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "ability",
+            "proficiency",
+            "item",
+            "status",
+            "circumstance",
+            "vacancy",
+            "untyped",
+            "leadership"
+          ]
+        },
+        "value": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "phases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "army",
+              "civic",
+              "commerce",
+              "event",
+              "leadership",
+              "region",
+              "upkeep"
+            ]
+          }
+        },
+        "activities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "abilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skills": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/KingdomSkill"
+          }
+        },
+        "turns": {
+          "type": "number"
+        },
+        "consumeId": {
+          "type": "string"
+        },
+        "rollOptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "predicate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "Predicate": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/GtePredicate"
+        },
+        {
+          "$ref": "#/$defs/GtPredicate"
+        },
+        {
+          "$ref": "#/$defs/LtePredicate"
+        },
+        {
+          "$ref": "#/$defs/LtPredicate"
+        },
+        {
+          "$ref": "#/$defs/EqPredicate"
+        },
+        {
+          "$ref": "#/$defs/OrPredicate"
+        },
+        {
+          "$ref": "#/$defs/AndPredicate"
+        },
+        {
+          "$ref": "#/$defs/NotPredicate"
+        },
+        {
+          "$ref": "#/$defs/HasFlagPredicate"
+        },
+        {
+          "$ref": "#/$defs/HasRollOptionPredicate"
+        }
+      ]
+    },
+    "GtePredicate": {
+      "type": "object",
+      "required": [
+        "gte"
+      ],
+      "properties": {
+        "gte": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "GtPredicate": {
+      "type": "object",
+      "required": [
+        "gt"
+      ],
+      "properties": {
+        "gt": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "LtePredicate": {
+      "type": "object",
+      "required": [
+        "lte"
+      ],
+      "properties": {
+        "lte": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "LtPredicate": {
+      "type": "object",
+      "required": [
+        "lt"
+      ],
+      "properties": {
+        "lt": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "EqPredicate": {
+      "type": "object",
+      "required": [
+        "eq"
+      ],
+      "properties": {
+        "eq": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "OrPredicate": {
+      "type": "object",
+      "required": [
+        "or"
+      ],
+      "properties": {
+        "or": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "AndPredicate": {
+      "type": "object",
+      "required": [
+        "and"
+      ],
+      "properties": {
+        "and": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "NotPredicate": {
+      "type": "object",
+      "required": [
+        "not"
+      ],
+      "properties": {
+        "not": {
+          "$ref": "#/$defs/Predicate"
+        }
+      }
+    },
+    "HasFlagPredicate": {
+      "type": "object",
+      "required": [
+        "hasFlag"
+      ],
+      "properties": {
+        "hasFlag": {
+          "type": "string"
+        }
+      }
+    },
+    "HasRollOptionPredicate": {
+      "type": "object",
+      "required": [
+        "hasRollOption"
+      ],
+      "properties": {
+        "hasRollOption": {
+          "type": "string"
+        }
+      }
+    },
+    "KingdomSkill": {
+      "type": "string",
+      "enum": [
+        "agriculture",
+        "arts",
+        "boating",
+        "defense",
+        "engineering",
+        "exploration",
+        "folklore",
+        "industry",
+        "intrigue",
+        "magic",
+        "politics",
+        "scholarship",
+        "statecraft",
+        "trade",
+        "warfare",
+        "wilderness"
+      ]
+    }
+  }
+}

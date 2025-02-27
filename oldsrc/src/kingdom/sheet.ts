@@ -19,7 +19,7 @@ import {
 } from './data/kingdom';
 import {
     capitalize,
-    clamped, deCamelCase,
+    clamped, deCamelCase, distinctBy, groupBy,
     isNonNullable,
     postChatMessage,
     range,
@@ -47,7 +47,7 @@ import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
 import {addOngoingEventDialog} from './dialogs/add-ongoing-event-dialog';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
-import {featuresByLevel, uniqueFeatures} from './data/features';
+import {getAllFeatures} from './data/features';
 import {
     createActivityLabel,
     getPerformableActivities,
@@ -151,7 +151,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         } = getAllMergedSettlements(this.game, kingdomData);
         const {current: totalConsumption, surplus: farmSurplus} = getConsumption(this.game, kingdomData);
         const useXpHomebrew = kingdomData.settings.vanceAndKerensharaXP;
-        const homebrewSkillIncreases = kingdomData.settings.kingdomSkillIncreaseEveryLevel;
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, kingdomData);
         const activeSettlement = getSettlement(this.game, kingdomData, kingdomData.activeSettlement);
         const hideActivities = kingdomData.activityBlacklist
@@ -178,7 +177,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const showRealmData = automateResourceMode === 'kingmaker'
             || automateResourceMode === 'manual'
             || (isNonNullable(kingdomData.realmSceneId) && this.game.scenes?.find(s => s.id === kingdomData.realmSceneId) !== undefined);
-        console.log(kingdomData);
+        const featuresByLevel = groupBy(getAllFeatures(this.game, kingdomData), f => f.level);
         return {
             notes: {
                 gm: await TextEditor.enrichHTML(kingdomData.notes.gm),
@@ -299,14 +298,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     return {label: createActivityLabel(groupedActivities, activity, kingdomData), value: activity};
                 }),
             featuresByLevel: Array.from(featuresByLevel.entries())
+                .sort(([a], [b]) => a - b)
                 .map(([level, features]) => {
                     const featureNames = features.map(f => f.name);
-                    if (homebrewSkillIncreases && level % 2 == 0) {
-                        featureNames.push('Skill Increase');
-                    }
                     return {level, features: featureNames.join(', ')};
                 }),
-            uniqueFeatures: uniqueFeatures,
+            uniqueFeatures: distinctBy(getAllFeatures(this.game, kingdomData), (a) => a.name),
             canLevelUp: kingdomData.xp >= kingdomData.xpThreshold && kingdomData.level < 20,
             turnsWithoutEvent: kingdomData.turnsWithoutEvent,
             eventDC: this.calculateEventDC(kingdomData.turnsWithoutEvent),
@@ -702,7 +699,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     },
                     settings,
                 })
-                this.render();
             }
         ));
         $html.querySelectorAll('.edit-settlement')

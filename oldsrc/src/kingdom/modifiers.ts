@@ -11,7 +11,7 @@ import {ActivityBonuses, SkillItemBonus} from './data/structures';
 import {ActiveSettlementStructureResult} from './scene';
 import {KingdomActivityById} from './data/activityData';
 import {LeaderPerformingCheck} from "./skills";
-import {features} from "./data/features";
+import {getAllFeatures} from "./data/features";
 
 export type Proficiency = 'trained' | 'expert' | 'master' | 'legendary';
 
@@ -333,7 +333,7 @@ export function createActiveSettlementModifiers(
     const result = getAllSelectedFeats(game, kingdom).flatMap(f => f.modifiers ?? [])
     kingdom.modifiers.forEach(modifier => result.push(modifier));
     const isSecondaryTerritory = activeSettlement?.secondaryTerritory;
-    features.filter(f => f.level <= kingdom.level)
+    getAllFeatures(game, kingdom).filter(f => f.level <= kingdom.level)
         .flatMap(f => f.modifiers ?? [])
         .forEach(f => result.push(f));
     if (settlementsWithoutLandBorders > 0) {
