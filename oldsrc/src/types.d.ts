@@ -5,6 +5,7 @@ import {WeatherEffectName} from './weather/data';
 import {ModuleData} from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/packages.mjs';
 import {KingdomSettings} from "./kingdom/data/kingdom";
 import {Structure} from "./kingdom/data/structures";
+import {KingdomFeat} from "./kingdom/data/feats";
 
 declare global {
     declare class PF2EModifier {
@@ -26,6 +27,7 @@ declare global {
                 structureXpDialog: (onSave: (xp: number) => void) => void,
                 data: {
                     structures: Structure[];
+                    feats: KingdomFeat[];
                 }
             }
         };

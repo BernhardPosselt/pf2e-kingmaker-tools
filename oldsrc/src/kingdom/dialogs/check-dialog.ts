@@ -182,6 +182,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const activities = getKingdomActivitiesById(this.kingdom.homebrewActivities);
         const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(this.kingdom.skillRanks, activities);
         const additionalModifiers: Modifier[] = createActiveSettlementModifiers(
+            this.game,
             this.kingdom,
             activeSettlement?.settlement,
             activeSettlementStructureResult,
@@ -265,6 +266,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             const formula = `${modifier}`;
 
             const degree = await rollCheck({
+                game: this.game,
                 formula,
                 label,
                 activity: activity ? getKingdomActivitiesById(this.kingdom.homebrewActivities)[activity] : undefined,
@@ -273,8 +275,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 modifier,
                 actor: this.actor,
                 kingdom: this.kingdom,
-                flags: getFlags(this.kingdom),
-                upgrades: getUpgradeResults(this.kingdom),
+                flags: getFlags(this.game, this.kingdom),
+                upgrades: getUpgradeResults(this.game, this.kingdom),
                 rollOptions: this.rollOptions,
                 creativeSolutionModifier,
                 supernaturalSolutionModifier,
@@ -300,6 +302,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
 
             const formula = `1d20+${modifier}`;
             const degree = await rollCheck({
+                game: this.game,
                 formula,
                 label,
                 activity: activity ? getKingdomActivitiesById(this.kingdom.homebrewActivities)[activity] : undefined,
@@ -315,8 +318,8 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 rollMode: this.rollMode,
                 additionalChatMessages: this.additionalChatMessages,
                 kingdom: this.kingdom,
-                flags: getFlags(this.kingdom),
-                upgrades: getUpgradeResults(this.kingdom),
+                flags: getFlags(this.game, this.kingdom),
+                upgrades: getUpgradeResults(this.game, this.kingdom),
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
@@ -351,7 +354,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         const ignoreSkillRequirements = this.kingdom.settings.kingdomIgnoreSkillRequirements;
         const skillRankFilters = ignoreSkillRequirements ? undefined : ranks;
         const activitySkills = getActivitySkills(this.overrideSkills ?? activities[activity].skills, skillRankFilters);
-        const additionalSkills: Skill[] = getAllSelectedFeats(this.kingdom)
+        const additionalSkills: Skill[] = getAllSelectedFeats(this.game, this.kingdom)
             .flatMap(f => {
                 return activitySkills.flatMap(s => f.increaseUsableSkills?.[s] ?? [])
             });
@@ -367,7 +370,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
         activities: KingdomActivityById,
         currentLeader: LeaderPerformingCheck | undefined,
     ): Record<Skill, TotalAndModifiers> {
-        const flags = getFlags(this.kingdom);
+        const flags = getFlags(this.game, this.kingdom);
         return Object.fromEntries(applicableSkills.map(skill => {
             const modifiers = createSkillModifiers({
                 ability: skillAbilities[skill],

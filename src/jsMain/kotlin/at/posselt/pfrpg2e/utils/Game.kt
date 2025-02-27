@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.utils
 
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.KingdomFeat
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.LeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.LeaderSkills
@@ -41,6 +42,7 @@ external interface ToolsMacros {
 @JsPlainObject
 external interface KtMigrationData {
     val structures: Array<StructureData>
+    val feats: Array<KingdomFeat>
 }
 
 

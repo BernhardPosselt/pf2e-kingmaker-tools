@@ -1,0 +1,36 @@
+{
+    "name": "Fortified Fiefs",
+    "level": 1,
+    "prerequisites": "Trained in Defense",
+    "text": "Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize\nthe value of a strong defense when it comes to building settlements and fortifications. You gain a +2 circumstance bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 circumstance bonus to all kingdom checks attempted during dangerous events that directly impact\nyour settlements’ defenses.",
+    "modifiers": [
+        {
+            "name": "Fortified Fiefs",
+            "type": "circumstance",
+            "activities": [
+                "fortify-hex",
+                "fortify-hex-vk"
+            ],
+            "enabled": true,
+            "value": 2
+        },
+        {
+            "name": "Build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall",
+            "type": "circumstance",
+            "activities": [
+                "build-structure"
+            ],
+            "enabled": false,
+            "value": 2
+        },
+        {
+            "name": "Dangerous Event impacting settlement defenses",
+            "type": "circumstance",
+            "phases": [
+                "event"
+            ],
+            "enabled": false,
+            "value": 1
+        }
+    ]
+}

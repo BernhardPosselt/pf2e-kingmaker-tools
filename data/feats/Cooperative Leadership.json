@@ -1,0 +1,50 @@
+{
+    "name": "Cooperative Leadership",
+    "level": 1,
+    "text": "Your leaders are skilled at working with one another. When a leader uses the Focused Attention kingdom\nactivity to aid another leader’s kingdom check, the circumstance bonus granted by a success is increased to +3.\nAt 11th level, your leaders’ collaborative style leads them to ever greater successes when they work together. When a leader uses the Focused Attention kingdom activity to aid another leader’s check, treat a critical failure on the aided check as a failure. If your kingdom has at least the expert rank in the skill used in the aided check, treat a failure on the check as a success. (This\ndoes not allow you to ever improve a critical failure to a success.)",
+    "flags": [
+        "cooperative-leadership"
+    ],
+    "upgradeResults": [
+        {
+            "upgrade": "criticalFailure",
+            "predicate": [
+                {
+                    "hasFlag": "cooperative-leadership"
+                },
+                {
+                    "hasRollOption": "focused-attention"
+                },
+                {
+                    "gte": [
+                        "@kingdom.level",
+                        "11"
+                    ]
+                }
+            ]
+        },
+        {
+            "upgrade": "failure",
+            "predicate": [
+                {
+                    "hasFlag": "cooperative-leadership"
+                },
+                {
+                    "hasRollOption": "focused-attention"
+                },
+                {
+                    "gte": [
+                        "@kingdom.level",
+                        "11"
+                    ]
+                },
+                {
+                    "gte": [
+                        "@skillRank",
+                        "2"
+                    ]
+                }
+            ]
+        }
+    ]
+}

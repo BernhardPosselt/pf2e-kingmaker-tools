@@ -72,6 +72,7 @@ export function parseUpgradeMeta(el: HTMLElement): ActivityResultMeta {
 }
 
 export async function reRoll(
+    game: Game,
     actor: Actor,
     el: HTMLElement,
     type: 'fame' | 're-roll' | 'keep-higher' | 'keep-lower' | 'creative-solution' | 'supernatural-solution',
@@ -116,9 +117,10 @@ export async function reRoll(
         reRollFormula = `{${formula},${total}}kl`;
     }
 
-    const upgrades = getUpgradeResults(kingdom);
-    const flags = getFlags(kingdom);
+    const upgrades = getUpgradeResults(game, kingdom);
+    const flags = getFlags(game, kingdom);
     await rollCheck({
+        game,
         formula: reRollFormula,
         label,
         activity: activity ? getKingdomActivitiesById(kingdom.homebrewActivities)[activity] : undefined,
@@ -163,18 +165,19 @@ function downgradeDegree(degree: StringDegreeOfSuccess): StringDegreeOfSuccess {
     }
 }
 
-export async function changeDegree(actor: Actor, el: HTMLElement, type: 'upgrade' | 'downgrade'): Promise<void> {
+export async function changeDegree(game: Game, actor: Actor, el: HTMLElement, type: 'upgrade' | 'downgrade'): Promise<void> {
     const {activity, degree, rollMode, rollOptions, skill, additionalChatMessages} = parseUpgradeMeta(el);
     const kingdom = getKingdom(actor);
     const kingdomActivity = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
     const newDegree = type === 'upgrade' ? upgradeDegree(degree) : downgradeDegree(degree);
     const degreeEnum = getDegreeFromKey(newDegree);
     const oldDegree = getDegreeFromKey(degree);
-    await postComplexDegreeOfSuccess(actor, kingdomActivity, rollMode, additionalChatMessages, oldDegree, rollOptions, skill, degreeEnum);
+    await postComplexDegreeOfSuccess(game, actor, kingdomActivity, rollMode, additionalChatMessages, oldDegree, rollOptions, skill, degreeEnum);
     await postAdditionalChatMessages(additionalChatMessages, degreeEnum, rollMode);
 }
 
 interface RollCheckOptions {
+    game: Game,
     formula: string,
     label: string,
     activity: KingdomActivity | undefined,
@@ -267,6 +270,7 @@ function adjustDegreeOfSuccess(
 
 export async function rollCheck(
     {
+        game,
         formula,
         label,
         activity,
@@ -313,6 +317,7 @@ export async function rollCheck(
         flavor: `<span class="km-skill-check-header">Skill Check: ${label}, DC ${dc}</span>${meta}<hr>${modifierPills}`,
     }, {rollMode});
     await postDegreeOfSuccess(
+        game,
         actor,
         rollMode,
         activity,
@@ -327,6 +332,7 @@ export async function rollCheck(
 }
 
 async function postDegreeOfSuccess(
+    game: Game,
     actor: Actor,
     rollMode: RollMode,
     activity: KingdomActivity | undefined,
@@ -337,7 +343,7 @@ async function postDegreeOfSuccess(
     upgradedDegreeOfSuccess?: DegreeOfSuccess,
 ): Promise<void> {
     if (activity) {
-        await postComplexDegreeOfSuccess(actor, activity, rollMode, additionalChatMessages, degreeOfSuccess, rollOptions, skill, upgradedDegreeOfSuccess);
+        await postComplexDegreeOfSuccess(game, actor, activity, rollMode, additionalChatMessages, degreeOfSuccess, rollOptions, skill, upgradedDegreeOfSuccess);
     } else {
         await postSimpleDegreeOfSuccess(rollMode, degreeOfSuccess, upgradedDegreeOfSuccess);
     }
@@ -402,6 +408,7 @@ function buildChatButtons(modifiers: ChatModifier[], resultKey: keyof ActivityRe
 }
 
 async function postComplexDegreeOfSuccess(
+    game: Game,
     actor: Actor,
     activity: KingdomActivity,
     rollMode: RollMode,
@@ -417,7 +424,7 @@ async function postComplexDegreeOfSuccess(
         const kingdom = getKingdom(actor);
         const modifiers = results.modifiers;
         const message = results.msg;
-        const flags = getFlags(kingdom);
+        const flags = getFlags(game, kingdom);
         const buttons = modifiers === undefined
             ? buildChatButtons([], resultKey)
             : buildChatButtons(filterPredicates(kingdom, modifiers, flags, rollOptions, skill, (m) => m.renderPredicate), resultKey);

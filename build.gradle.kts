@@ -2,6 +2,7 @@ import at.posselt.pfrpg2e.plugins.ChangeModuleVersion
 import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
 import at.posselt.pfrpg2e.plugins.CombineJsonFiles
 import at.posselt.pfrpg2e.plugins.ReleaseModule
+import at.posselt.pfrpg2e.plugins.UnpackJsonFiles
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 
@@ -115,7 +116,7 @@ tasks {
         delete.add(layout.projectDirectory.dir("oldsrc/dist"))
     }
     getByName("check") {
-        dependsOn("validateRecipes", "validateStructures", "validateCampingActivities")
+        dependsOn("validateRecipes", "validateStructures", "validateCampingActivities", "validateFeats")
     }
 }
 
@@ -136,6 +137,12 @@ tasks.register<JsonSchemaValidator>("validateCampingActivities") {
     outputs.upToDateWhen { true } // no outputs, only depend on input files
     schema = layout.projectDirectory.file("src/commonMain/resources/schemas/camping-activity.json")
     files = layout.projectDirectory.dir("data/camping-activities")
+}
+
+tasks.register<JsonSchemaValidator>("validateFeats") {
+    outputs.upToDateWhen { true } // no outputs, only depend on input files
+    schema = layout.projectDirectory.file("src/commonMain/resources/schemas/feat.json")
+    files = layout.projectDirectory.dir("data/feats")
 }
 
 // release tasks
@@ -173,4 +180,10 @@ tasks.register<ReleaseModule>("release") {
     releaseZip = layout.buildDirectory.file("release.zip")
     releaseModuleJson = layout.buildDirectory.file("module.json")
     githubRepo = "BernhardPosselt/pf2e-kingmaker-tools"
+}
+
+tasks.register<UnpackJsonFiles>("unpackJson") {
+    fileNameProperty = "name"
+    file = layout.projectDirectory.file("data/feats/feats.json")
+    targetDirectory = layout.projectDirectory.dir("data/feats")
 }

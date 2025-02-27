@@ -22,6 +22,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
+import at.posselt.pfrpg2e.kingdom.feats
 import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.*
@@ -138,6 +139,7 @@ fun main() {
                 structureXpDialog = { onOk -> buildPromise { structureXpDialog(game, onOk) } },
                 data = KtMigrationData(
                     structures = structures,
+                    feats = feats,
                 ),
             )
         )

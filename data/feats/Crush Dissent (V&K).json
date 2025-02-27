@@ -1,0 +1,17 @@
+{
+    "name": "Crush Dissent (V&K)",
+    "level": 7,
+    "prerequisites": "Trained in Warfare",
+    "text": "Your rule brooks no dissent and stamps out traitors, making harsh examples of them. Once per Kingdom\nturn when you gain Unrest, you can attempt to crush the dissent by attempting a basic Warfare check. On a success, the Unrest increase is canceled, but on a critical failure, the Unrest increase is doubled. In addition, you gain a +1 status bonus to checks to resolve dangerous kingdom events that involve internal bickering, such as Feud.",
+    "modifiers": [
+        {
+            "name": "Dangerous Kingdom Event involving internal bickering",
+            "enabled": false,
+            "value": 1,
+            "type": "status",
+            "phases": [
+                "event"
+            ]
+        }
+    ]
+}

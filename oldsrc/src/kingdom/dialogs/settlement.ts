@@ -143,7 +143,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
     }
 
     private getAvailableItems(settlementLevel: number, itemLevelBonuses: ItemLevelBonuses): ItemLevelBonusData[] {
-        const qualityOfLifeBonus = sum(getAllSelectedFeats(this.kingdom).map(f => f.settlementItemLevelIncrease ?? 0));
+        const qualityOfLifeBonus = sum(getAllSelectedFeats(this.game, this.kingdom).map(f => f.settlementItemLevelIncrease ?? 0));
         const bonuses = calculateAvailableItems(itemLevelBonuses, settlementLevel, qualityOfLifeBonus);
         const groupedBonuses = groupAvailableItems(bonuses);
         return (Array.from(Object.entries(groupedBonuses)) as [keyof ItemLevelBonuses, number][])

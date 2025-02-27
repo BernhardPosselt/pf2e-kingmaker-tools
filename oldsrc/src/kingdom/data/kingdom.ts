@@ -617,13 +617,13 @@ export function getDefaultKingdomData(): Kingdom {
     };
 }
 
-export function getFlags(kingdom: Kingdom): string[] {
-    const feats = getAllSelectedFeats(kingdom);
+export function getFlags(game: Game, kingdom: Kingdom): string[] {
+    const feats = getAllSelectedFeats(game, kingdom);
     return feats.flatMap(f => f.flags ?? [])
         .concat(features.flatMap(f => f.flags ?? []));
 }
 
-export function getUpgradeResults(kingdom: Kingdom): UpgradeResult[] {
-    return getAllSelectedFeats(kingdom)
+export function getUpgradeResults(game: Game, kingdom: Kingdom): UpgradeResult[] {
+    return getAllSelectedFeats(game, kingdom)
         .flatMap(f => f.upgradeResults ?? []);
 }

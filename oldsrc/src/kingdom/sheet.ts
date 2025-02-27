@@ -228,6 +228,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 kingdom: kingdomData,
                 skillItemBonuses: activeSettlementStructureResult?.skillBonuses,
                 additionalModifiers: createActiveSettlementModifiers(
+                    this.game,
                     kingdomData,
                     activeSettlement?.settlement,
                     activeSettlementStructureResult,
@@ -235,7 +236,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 ),
                 activities,
                 currentLeader: undefined,
-                flags: getFlags(kingdomData),
+                flags: getFlags(this.game, kingdomData),
             }),
             leaders: await this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
@@ -573,7 +574,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-add-bonus-feat')
             ?.addEventListener('click', async () => {
                 new AddBonusFeatDialog(null, {
-                    feats: getAllFeats(this.getKingdom()),
+                    feats: getAllFeats(this.game, this.getKingdom()),
                     onOk: (feat): Promise<void> => this.saveKingdom({
                         bonusFeats: [...this.getKingdom().bonusFeats, feat],
                     }),
@@ -1130,7 +1131,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private getFeats(feats: Feat[], bonusFeats: BonusFeat[], kingdomLevel: number): object {
         const allFeatsByName = new Map<string, KingdomFeat>();
-        getAllFeats(this.getKingdom()).forEach(f => allFeatsByName.set(f.name, f));
+        getAllFeats(this.game, this.getKingdom()).forEach(f => allFeatsByName.set(f.name, f));
         const levelFeats = [];
         const takenFeatsByLevel = Object.fromEntries(feats.map(feat => [feat.level, feat]));
         const noFeat = {

@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.kingdom.SkillValue
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Game.actors
 import com.foundryvtt.pf2e.actor.PF2ENpc
+import js.array.JsTuple2
 import js.objects.Record
 import kotlinx.js.JsPlainObject
 import kotlin.Array
@@ -29,6 +30,58 @@ typealias SkillValue = String // acrobatics, athletics, etc
 typealias SkillRanks = Record<KingdomSkillValue, Int>
 typealias SettlementType = String // capital or settlement
 
+sealed interface Predicate
+
+@JsPlainObject
+external interface GtePredicate {
+    val gte: Array<String>
+}
+
+@JsPlainObject
+external interface GtPredicate {
+    val gt: Array<String>
+}
+
+@JsPlainObject
+external interface LtePredicate {
+    val lte: Array<String>
+}
+
+@JsPlainObject
+external interface LtPredicate {
+    val lt: Array<String>
+}
+
+@JsPlainObject
+external interface EqPredicate {
+    val eq: Array<String>
+}
+
+@JsPlainObject
+external interface OrPredicate {
+    val or: Array<Predicate>
+}
+
+@JsPlainObject
+external interface AndPredicate {
+    val and: Array<Predicate>
+}
+
+@JsPlainObject
+external interface NotPredicate {
+    val not: Predicate
+}
+
+@JsPlainObject
+external interface HasFlagPredicate {
+    val hasFlag: String
+}
+
+@JsPlainObject
+external interface HasRollOptionPredicate {
+    val hasRollOption: String
+}
+
 @JsPlainObject
 external interface Modifier {
     var type: ModifierType
@@ -42,6 +95,7 @@ external interface Modifier {
     var turns: Int?
     var consumeId: String?
     var rollOptions: Array<String>?
+    val predicate: Array<Predicate>?;
 }
 
 @JsPlainObject

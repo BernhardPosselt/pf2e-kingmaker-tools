@@ -1,0 +1,493 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://posselt.at/pf2e-kingmaker-tools/schemas/feat.json",
+  "title": "Kingdom Feat",
+  "description": "A Kingdom Feat",
+  "$ref": "#/$defs/Feat",
+  "$defs": {
+    "Feat": {
+      "type": "object",
+      "required": [
+        "name",
+        "level",
+        "text"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "level": {
+          "type": "number"
+        },
+        "text": {
+          "type": "string"
+        },
+        "prerequisites": {
+          "type": "string"
+        },
+        "automationNotes": {
+          "type": "string"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Modifier"
+          }
+        },
+        "resourceDice": {
+          "type": "number"
+        },
+        "settlementItemLevelIncrease": {
+          "type": "number"
+        },
+        "trainSkill": {
+          "$ref": "#/$defs/KingdomSkill"
+        },
+        "assuranceForSkill": {
+          "$ref": "#/$defs/KingdomSkill"
+        },
+        "increaseUsableSkills": {
+          "type": "object",
+          "properties": {
+            "agriculture": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "arts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "boating": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "defense": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "engineering": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "exploration": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "folklore": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "industry": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "intrigue": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "magic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "politics": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "scholarship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "statecraft": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "trade": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "warfare": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            },
+            "wilderness": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KingdomSkill"
+              }
+            }
+          }
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "upgradeResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UpgradeResult"
+          }
+        }
+      }
+    },
+    "Modifier": {
+      "type": "object",
+      "required": [
+        "type",
+        "value",
+        "name",
+        "enabled"
+      ],
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "ability",
+            "proficiency",
+            "item",
+            "status",
+            "circumstance",
+            "vacancy",
+            "untyped",
+            "leadership"
+          ]
+        },
+        "value": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "phases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "army",
+              "civic",
+              "commerce",
+              "event",
+              "leadership",
+              "region",
+              "upkeep"
+            ]
+          }
+        },
+        "activities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "abilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skills": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/KingdomSkill"
+          }
+        },
+        "turns": {
+          "type": "number"
+        },
+        "consumeId": {
+          "type": "string"
+        },
+        "rollOptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "predicate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "UpgradeResult": {
+      "type": "object",
+      "required": [
+        "upgrade"
+      ],
+      "properties": {
+        "upgrade": {
+          "type": "string",
+          "enum": [
+            "criticalSuccess",
+            "success",
+            "failure",
+            "criticalFailure"
+          ]
+        },
+        "predicate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "Predicate": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/GtePredicate"
+        },
+        {
+          "$ref": "#/$defs/GtPredicate"
+        },
+        {
+          "$ref": "#/$defs/LtePredicate"
+        },
+        {
+          "$ref": "#/$defs/LtPredicate"
+        },
+        {
+          "$ref": "#/$defs/EqPredicate"
+        },
+        {
+          "$ref": "#/$defs/OrPredicate"
+        },
+        {
+          "$ref": "#/$defs/AndPredicate"
+        },
+        {
+          "$ref": "#/$defs/NotPredicate"
+        },
+        {
+          "$ref": "#/$defs/HasFlagPredicate"
+        },
+        {
+          "$ref": "#/$defs/HasRollOptionPredicate"
+        }
+      ]
+    },
+    "GtePredicate": {
+      "type": "object",
+      "required": [
+        "gte"
+      ],
+      "properties": {
+        "gte": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "GtPredicate": {
+      "type": "object",
+      "required": [
+        "gt"
+      ],
+      "properties": {
+        "gt": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "LtePredicate": {
+      "type": "object",
+      "required": [
+        "lte"
+      ],
+      "properties": {
+        "lte": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "LtPredicate": {
+      "type": "object",
+      "required": [
+        "lt"
+      ],
+      "properties": {
+        "lt": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "EqPredicate": {
+      "type": "object",
+      "required": [
+        "eq"
+      ],
+      "properties": {
+        "eq": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
+    },
+    "OrPredicate": {
+      "type": "object",
+      "required": [
+        "or"
+      ],
+      "properties": {
+        "or": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "AndPredicate": {
+      "type": "object",
+      "required": [
+        "and"
+      ],
+      "properties": {
+        "and": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "NotPredicate": {
+      "type": "object",
+      "required": [
+        "not"
+      ],
+      "properties": {
+        "not": {
+          "$ref": "#/$defs/Predicate"
+        }
+      }
+    },
+    "HasFlagPredicate": {
+      "type": "object",
+      "required": [
+        "hasFlag"
+      ],
+      "properties": {
+        "hasFlag": {
+          "type": "string"
+        }
+      }
+    },
+    "HasRollOptionPredicate": {
+      "type": "object",
+      "required": [
+        "hasRollOption"
+      ],
+      "properties": {
+        "hasRollOption": {
+          "type": "string"
+        }
+      }
+    },
+    "KingdomSkill": {
+      "type": "string",
+      "enum": [
+        "agriculture",
+        "arts",
+        "boating",
+        "defense",
+        "engineering",
+        "exploration",
+        "folklore",
+        "industry",
+        "intrigue",
+        "magic",
+        "politics",
+        "scholarship",
+        "statecraft",
+        "trade",
+        "warfare",
+        "wilderness"
+      ]
+    }
+  }
+}
