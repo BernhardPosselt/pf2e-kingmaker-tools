@@ -64,6 +64,12 @@
         "value": {
           "type": "number"
         },
+        "predicatedValue": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WhenPredicate"
+          }
+        },
         "name": {
           "type": "string"
         },
@@ -320,6 +326,27 @@
       "properties": {
         "hasRollOption": {
           "type": "string"
+        }
+      }
+    },
+    "WhenPredicate": {
+      "type": "object",
+      "required": [
+        "when"
+      ],
+      "properties": {
+        "when": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/Predicate"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "items": false,
+          "minItems": 2
         }
       }
     },

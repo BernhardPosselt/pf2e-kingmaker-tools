@@ -1,18 +1,13 @@
 package at.posselt.pfrpg2e.kingdom
 
-import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Leader
-import at.posselt.pfrpg2e.kingdom.Companion
-import at.posselt.pfrpg2e.kingdom.SkillValue
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Game.actors
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.array.JsTuple2
 import js.objects.Record
 import kotlinx.js.JsPlainObject
-import kotlin.Array
 
 typealias KingdomAbility = String // culture, economy, loyalty or stability
 typealias AbilityScores = Record<KingdomAbility, Int>
@@ -34,37 +29,37 @@ sealed interface Predicate
 
 @JsPlainObject
 external interface GtePredicate {
-    val gte: Array<String>
+    val gte: JsTuple2<String, String>
 }
 
 @JsPlainObject
 external interface GtPredicate {
-    val gt: Array<String>
+    val gt: JsTuple2<String, String>
 }
 
 @JsPlainObject
 external interface LtePredicate {
-    val lte: Array<String>
+    val lte: JsTuple2<String, String>
 }
 
 @JsPlainObject
 external interface LtPredicate {
-    val lt: Array<String>
+    val lt: JsTuple2<String, String>
 }
 
 @JsPlainObject
 external interface EqPredicate {
-    val eq: Array<String>
+    val eq: JsTuple2<String, String>
 }
 
 @JsPlainObject
 external interface OrPredicate {
-    val or: Array<Predicate>
+    val or: JsTuple2<Predicate, Predicate>
 }
 
 @JsPlainObject
 external interface AndPredicate {
-    val and: Array<Predicate>
+    val and: JsTuple2<Predicate, Predicate>
 }
 
 @JsPlainObject
@@ -83,9 +78,15 @@ external interface HasRollOptionPredicate {
 }
 
 @JsPlainObject
+external interface WhenPredicate {
+    val `when`: JsTuple2<Predicate, String>
+}
+
+@JsPlainObject
 external interface Modifier {
     var type: ModifierType
     var value: Int
+    var predicatedValue: WhenPredicate?
     var name: String
     var phases: Array<KingdomPhase>?
     var activities: Array<String>?

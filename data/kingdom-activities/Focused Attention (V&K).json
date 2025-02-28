@@ -32,39 +32,15 @@
                 "turns": 1,
                 "enabled": false,
                 "consumeId": "",
-                "value": 2,
-                "name": "Focused Attention: Critical Success",
+                "value": 0,
+                "predicatedValue": [
+                    {"when": [{"not": {"hasFlag": "cooperative-leadership"}}, "2"]},
+                    {"when": [{"hasFlag": "cooperative-leadership"}, "3"]}
+                ],
+                "name": "Focused Attention",
                 "type": "circumstance",
                 "rollOptions": [
                     "focused-attention"
-                ],
-                "renderPredicate": [
-                    {
-                        "not": {
-                            "hasFlag": "cooperative-leadership"
-                        }
-                    }
-                ]
-            },
-            {
-                "turns": 1,
-                "enabled": false,
-                "consumeId": "",
-                "value": 3,
-                "name": "Focused Attention: Critical Success",
-                "type": "circumstance",
-                "rollOptions": [
-                    "focused-attention"
-                ],
-                "renderPredicate": [
-                    {
-                        "hasFlag": "cooperative-leadership"
-                    }
-                ],
-                "predicate": [
-                    {
-                        "hasFlag": "cooperative-leadership"
-                    }
                 ]
             }
         ]
@@ -76,39 +52,15 @@
                 "turns": 1,
                 "enabled": false,
                 "consumeId": "",
-                "value": 2,
-                "name": "Focused Attention: Success",
+                "value": 0,
+                "predicatedValue": [
+                    {"when": [{"not": {"hasFlag": "cooperative-leadership"}}, "2"]},
+                    {"when": [{"hasFlag": "cooperative-leadership"}, "3"]}
+                ],
+                "name": "Focused Attention",
                 "type": "circumstance",
                 "rollOptions": [
                     "focused-attention"
-                ],
-                "renderPredicate": [
-                    {
-                        "not": {
-                            "hasFlag": "cooperative-leadership"
-                        }
-                    }
-                ]
-            },
-            {
-                "turns": 1,
-                "enabled": false,
-                "consumeId": "",
-                "value": 3,
-                "name": "Focused Attention: Success",
-                "type": "circumstance",
-                "rollOptions": [
-                    "focused-attention"
-                ],
-                "renderPredicate": [
-                    {
-                        "hasFlag": "cooperative-leadership"
-                    }
-                ],
-                "predicate": [
-                    {
-                        "hasFlag": "cooperative-leadership"
-                    }
                 ]
             }
         ]

@@ -17,10 +17,6 @@ export type Proficiency = 'trained' | 'expert' | 'master' | 'legendary';
 
 export type UntrainedProficiencyMode = 'half' | 'full' | 'none';
 
-export function getUntrainedProficiencyMode(kingdom: Kingdom): UntrainedProficiencyMode {
-    return kingdom.settings.proficiencyMode as UntrainedProficiencyMode;
-}
-
 export const allModifierTypes = [
     'ability',
     'proficiency',
@@ -85,9 +81,14 @@ export type Predicate = GtePredicate
     | NotPredicate
     | HasRollOptionPredicate;
 
+interface WhenPredicate {
+    when: [Predicate, string];
+}
+
 export interface Modifier {
     type: ModifierType;
     value: number;
+    predicatedValue?: WhenPredicate[];
     name: string;
     phases?: KingdomPhase[];
     activities?: string[];
@@ -105,7 +106,10 @@ function createPredicateName(values: string[] | undefined, label: string): strin
 }
 
 export function modifierToLabel(modifier: Modifier): string {
-    const value = modifier.value >= 0 ? `+${modifier.value}` : `${modifier.value}`;
+    let value = ''
+    if (modifier.predicatedValue !== undefined) {
+        value = modifier.value >= 0 ? `+${modifier.value}` : `${modifier.value}`;
+    }
     const type = modifier.value >= 0 ? capitalize(modifier.type) + ' Bonus' : capitalize(modifier.type) + ' Penalty';
     const to = modifier.skills || modifier.abilities || modifier.activities || modifier.phases ? ' to: ' : '';
     const predicates = [
@@ -427,6 +431,26 @@ function processPredicate(
     }
 }
 
+export function evaluateModifierValue(
+    modifier: Modifier,
+    kingdom: Kingdom,
+    flags: string[],
+    rollOptions: string[],
+    skill: Skill,
+): Modifier {
+    const predicatedValue = modifier.predicatedValue;
+    if (predicatedValue !== undefined) {
+        const result = predicatedValue.find(p => processPredicate(kingdom, p.when[0], flags, rollOptions, skill));
+        if (result) {
+            const value = parseInt(resolveValue(kingdom, result.when[1], skill), 10);
+            return {
+                ...modifier,
+                value,
+            }
+        }
+    }
+    return modifier;
+}
 
 export function filterPredicates<T>(
     kingdom: Kingdom,
@@ -475,11 +499,14 @@ export function processModifiers(
     const copied = filterPredicates(kingdom, modifiers, flags, rollOptions, skill, m => m.predicate)
         .map((modifier, index) => {
             // make a copy and assign every modifier an id
+            const cloned = foundry.utils.deepClone(modifier);
             return {
-                ...(foundry.utils.deepClone(modifier)),
+                ...(evaluateModifierValue(cloned, kingdom, flags, rollOptions, skill)),
                 id: `${index}`,
             };
         });
+    console.log("COPIED!")
+    console.log(copied)
     const withoutZeroes = removeUninterestingZeroModifiers(copied);
     const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, activity, skill, rank, activities);
     // enable/disable overrides

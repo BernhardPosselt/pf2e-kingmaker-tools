@@ -1,19 +1,15 @@
 import {KingdomPhase} from './activities';
 import {Skill} from './skills';
-import {Modifier, Predicate} from '../modifiers';
 import {Ruin} from './ruin';
 import {unslugify} from '../../utils';
 import {ResourceMode, ResourceTurn, RolledResources} from '../resources';
+import {Modifier} from "../modifiers";
 
 export type SkillRanks = Partial<Record<Skill, number>>;
 
-export interface ChatModifier extends Modifier {
-    renderPredicate?: Predicate[];
-}
-
 export interface ActivityResult {
     msg: string;
-    modifiers?: ChatModifier[];
+    modifiers?: Modifier[];
 }
 
 export interface ActivityResults {

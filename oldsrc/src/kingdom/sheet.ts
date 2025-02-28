@@ -1142,7 +1142,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 levelFeats.push({...noFeat, takenAt: featLevel});
             }
         }
-        console.log(levelFeats)
         return {
             featIds: toLabelAndValue([...allFeatsByName.keys(), '-']),
             levelFeats: levelFeats,

@@ -1,8 +1,8 @@
 import {DegreeOfSuccess, degreeToProperty, determineDegreeOfSuccess, StringDegreeOfSuccess} from '../degree-of-success';
 import {Skill} from './data/skills';
 import {decodeJson, encodeJson, isNotBlank, postChatMessage, postDegreeOfSuccessMessage, unslugify} from '../utils';
-import {ActivityResults, ChatModifier, getKingdomActivitiesById, KingdomActivity} from './data/activityData';
-import {filterPredicates, modifierToLabel} from './modifiers';
+import {ActivityResults, getKingdomActivitiesById, KingdomActivity} from './data/activityData';
+import {filterPredicates, Modifier, modifierToLabel} from './modifiers';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame} from './kingdom-utils';
 import {getFlags, getUpgradeResults, Kingdom} from './data/kingdom';
@@ -388,16 +388,14 @@ function getDegreeFromKey(degreeOfSuccess: keyof ActivityResults): DegreeOfSucce
     }
 }
 
-function buildChatButtons(modifiers: ChatModifier[], resultKey: keyof ActivityResults): string {
+function buildChatButtons(modifiers: Modifier[], resultKey: keyof ActivityResults): string {
     if (modifiers.length > 0 || resultKey === 'criticalSuccess') {
         return `
         <div class="km-chat-buttons">
             ${resultKey === 'criticalSuccess' ? '<button type="button" class="km-gain-fame-button">Gain 1 Fame</button>' : ''}
-            ${modifiers.map((modifier, index) => {
-            const copy = {...modifier};
-            delete copy['renderPredicate'];
-            const label = modifierToLabel(copy);
-            const data = encodeJson(copy);
+            ${modifiers.map((modifier) => {
+            const label = modifierToLabel(modifier);
+            const data = encodeJson(modifier);
             return `<button class="km-apply-modifier-effect" 
                         data-data="${data}">Apply Effect: ${label}</button>`;
         }).join('')}    
@@ -427,7 +425,7 @@ async function postComplexDegreeOfSuccess(
         const flags = getFlags(game, kingdom);
         const buttons = modifiers === undefined
             ? buildChatButtons([], resultKey)
-            : buildChatButtons(filterPredicates(kingdom, modifiers, flags, rollOptions, skill, (m) => m.renderPredicate), resultKey);
+            : buildChatButtons(modifiers, resultKey);
         // div allows to upgrade/downgrade on right click
         const upgrade = `<div class="km-upgrade-result"
                 data-roll-mode="${rollMode}" 

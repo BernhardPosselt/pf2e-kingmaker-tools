@@ -15,35 +15,34 @@
             "value": 1
         },
         {
-            "name": "Practical Magic",
+            "name": "Practical Magic: Engineering",
             "type": "status",
             "skills": [
                 "engineering"
             ],
             "enabled": true,
-            "value": 1,
-            "predicate": [
+            "value": 0,
+            "predicatedValue": [
                 {
-                    "eq": [
-                        "@kingdom.skillRanks.magic",
-                        "2"
+                    "when": [
+                        {
+                            "eq": [
+                                "@kingdom.skillRanks.magic",
+                                "2"
+                            ]
+                        },
+                        "1"
                     ]
-                }
-            ]
-        },
-        {
-            "name": "Practical Magic",
-            "type": "status",
-            "skills": [
-                "engineering"
-            ],
-            "enabled": true,
-            "value": 2,
-            "predicate": [
+                },
                 {
-                    "gte": [
-                        "@kingdom.skillRanks.magic",
-                        "3"
+                    "when": [
+                        {
+                            "gte": [
+                                "@kingdom.skillRanks.magic",
+                                "3"
+                            ]
+                        },
+                        "2"
                     ]
                 }
             ]
