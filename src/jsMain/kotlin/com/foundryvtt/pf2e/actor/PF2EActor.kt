@@ -20,6 +20,7 @@ external interface ItemTypes {
     val condition: Array<PF2ECondition>
     val feat: Array<PF2EFeat>
     val armor: Array<PF2EArmor>
+    val campaignFeature: Array<PF2ECampaignFeature>
 }
 
 
