@@ -58,7 +58,7 @@ export function getScoutingDC(game: Game): number {
         .map(a => a.system.scouting ?? 0), 0);
 }
 
-export function isCampaignFeature(item: Item<unknown>): item is CampaignFeaturePF2E {
+function isCampaignFeature(item: Item<unknown>): item is CampaignFeaturePF2E {
     return item.type === 'campaignFeature';
 }
 
