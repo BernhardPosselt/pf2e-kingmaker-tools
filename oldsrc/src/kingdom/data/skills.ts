@@ -40,7 +40,6 @@ export const skillAbilities: Record<Skill, Ability> = {
     wilderness: 'stability',
 };
 
-export const allSkillRanks = ['untrained', 'trained', 'expert', 'master', 'legendary'] as const;
 export const allTrainedSkillRanks = ['trained', 'expert', 'master', 'legendary'] as const;
 
 export const allActorSkills = [

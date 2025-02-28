@@ -63,7 +63,6 @@ import {showSettlement} from './dialogs/settlement';
 import {
     calculateLeadershipModifier,
     createActiveSettlementModifiers,
-    getUntrainedProficiencyMode,
     Modifier,
     modifierToLabel, parseLeaderPerformingCheck
 } from './modifiers';

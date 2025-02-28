@@ -1,5 +1,5 @@
-import {capitalize, isNonNullable} from '../../utils';
-import {allSkills, Skill} from './skills';
+import {isNonNullable} from '../../utils';
+import {Skill} from './skills';
 import {Modifier, Predicate} from '../modifiers';
 import {Kingdom} from "./kingdom";
 import {StringDegreeOfSuccess} from "../../degree-of-success";
