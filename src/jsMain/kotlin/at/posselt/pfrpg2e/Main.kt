@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
+import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderSkills
@@ -89,6 +90,7 @@ fun main() {
             registerCombatTrackHooks(game)
             registerActivityDiffingHooks(game, actionDispatcher)
             registerMealDiffingHooks()
+            registerArmyConsumptionHooks(game)
         }
 
         game.pf2eKingmakerTools = Pfrpg2eKingdomCampingWeather(

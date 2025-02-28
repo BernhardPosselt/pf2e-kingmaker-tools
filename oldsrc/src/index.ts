@@ -3,7 +3,6 @@ import {getKingdom} from './kingdom/storage';
 import {addOngoingEvent, changeDegree, parseUpgradeMeta, reRoll} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
 import {StringDegreeOfSuccess} from './degree-of-success';
-import {updateKingdomArmyConsumption} from './armies/utils';
 import {structureTokenMappingDialog} from './kingdom/dialogs/structure-token-mapping-dialog';
 import {showStructureHints} from './kingdom/structures';
 
@@ -14,32 +13,9 @@ Hooks.on('ready', async () => {
         gameInstance.pf2eKingmakerTools.macros.structureTokenMappingMacro = structureTokenMappingDialog.bind(null, game);
         gameInstance.pf2eKingmakerTools.macros.viewKingdomMacro = showKingdom.bind(null, game);
         // hooks
-        // army consumption
-        const updateConsumption = async (actor: Actor | null): Promise<void> => {
-            await updateKingdomArmyConsumption({
-                actor,
-                kingdomActor: getKingdomSheetActor(gameInstance),
-                game: gameInstance,
-            });
-        };
-        const forceUpdateConsumption = async (): Promise<void> => {
-            await updateKingdomArmyConsumption({
-                forceUpdate: true,
-                kingdomActor: getKingdomSheetActor(gameInstance),
-                game: gameInstance,
-            });
-        };
         Hooks.on('createToken', (token: StoredDocument<Token>) => {
             showStructureHints(game, token.actor);
-            updateConsumption(token.actor);
         });
-        Hooks.on('updateToken', (token: StoredDocument<Token>) => updateConsumption(token.actor));
-        Hooks.on('deleteToken', (token: StoredDocument<Token>) => updateConsumption(token.actor));
-        Hooks.on('updateActor', (actor: StoredDocument<Actor>) => updateConsumption(actor));
-        Hooks.on('updateItem', (item: StoredDocument<Item>) => updateConsumption(item.actor));
-        Hooks.on('createItem', (item: StoredDocument<Item>) => updateConsumption(item.actor));
-        Hooks.on('deleteItem', (item: StoredDocument<Item>) => updateConsumption(item.actor));
-        Hooks.on('deleteScene', () => forceUpdateConsumption());
         checkKingdomErrors(gameInstance);
 
         // listen for camping sheet open
