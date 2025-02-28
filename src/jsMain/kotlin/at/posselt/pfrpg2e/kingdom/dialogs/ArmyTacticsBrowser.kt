@@ -130,8 +130,8 @@ private class ArmyTacticsBrowser(
 //                await this.close();
 //            },
 //                additionalChatMessages: [{
-//                [DegreeOfSuccess.CRITICAL_SUCCESS]: tacticLink,
-//                [DegreeOfSuccess.SUCCESS]: tacticLink,
+//                [DegreeOfSuccess.CRITICAL_SUCCESS]: link,
+//                [DegreeOfSuccess.SUCCESS]: link,
 //            }],
 //            }).render(true);
         }
