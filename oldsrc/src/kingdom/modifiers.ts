@@ -1,5 +1,5 @@
 import {KingdomPhase} from './data/activities';
-import {capitalize, groupBy, unslugify} from '../utils';
+import {capitalize, groupBy, isNonNullable, unslugify} from '../utils';
 import {getLevelData, Kingdom, LeaderKingdomSkills, Leaders, LeaderSkills, Ruin, Settlement} from './data/kingdom';
 import {getAllSelectedFeats} from './data/feats';
 import {allActorSkills, CharacterSkill, Skill, skillAbilities} from './data/skills';
@@ -107,8 +107,8 @@ function createPredicateName(values: string[] | undefined, label: string): strin
 
 export function modifierToLabel(modifier: Modifier): string {
     let value = ''
-    if (modifier.predicatedValue !== undefined) {
-        value = modifier.value >= 0 ? `+${modifier.value}` : `${modifier.value}`;
+    if (!isNonNullable(modifier.predicatedValue)) {
+        value = modifier.value >= 0 ? `+${modifier.value} ` : `${modifier.value} `;
     }
     const type = modifier.value >= 0 ? capitalize(modifier.type) + ' Bonus' : capitalize(modifier.type) + ' Penalty';
     const to = modifier.skills || modifier.abilities || modifier.activities || modifier.phases ? ' to: ' : '';
@@ -120,7 +120,7 @@ export function modifierToLabel(modifier: Modifier): string {
     ]
         .filter(v => v !== undefined)
         .join('; ');
-    return `${value} ${type}${to}${predicates}`;
+    return `${value}${type}${to}${predicates}`;
 }
 
 export interface ModifierWithId extends Modifier {
@@ -505,8 +505,6 @@ export function processModifiers(
                 id: `${index}`,
             };
         });
-    console.log("COPIED!")
-    console.log(copied)
     const withoutZeroes = removeUninterestingZeroModifiers(copied);
     const withoutMismatchedPhaseOrActivity = removePredicatedModifiers(withoutZeroes, phase, activity, skill, rank, activities);
     // enable/disable overrides
