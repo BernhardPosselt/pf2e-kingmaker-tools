@@ -123,7 +123,7 @@ export async function reRoll(
         game,
         formula: reRollFormula,
         label,
-        activity: activity ? getKingdomActivitiesById(kingdom.homebrewActivities)[activity] : undefined,
+        activity: activity ? getKingdomActivitiesById(game, kingdom.homebrewActivities)[activity] : undefined,
         dc,
         skill,
         modifier,
@@ -168,7 +168,7 @@ function downgradeDegree(degree: StringDegreeOfSuccess): StringDegreeOfSuccess {
 export async function changeDegree(game: Game, actor: Actor, el: HTMLElement, type: 'upgrade' | 'downgrade'): Promise<void> {
     const {activity, degree, rollMode, rollOptions, skill, additionalChatMessages} = parseUpgradeMeta(el);
     const kingdom = getKingdom(actor);
-    const kingdomActivity = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
+    const kingdomActivity = getKingdomActivitiesById(game, kingdom.homebrewActivities)[activity];
     const newDegree = type === 'upgrade' ? upgradeDegree(degree) : downgradeDegree(degree);
     const degreeEnum = getDegreeFromKey(newDegree);
     const oldDegree = getDegreeFromKey(degree);

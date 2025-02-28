@@ -72,7 +72,7 @@ class SettlementApp extends Application<ApplicationOptions & SettlementOptions> 
         const capital = getCapitalSettlement(this.game, this.kingdom);
         const structureStackMode = getStructureStackMode(this.kingdom);
         const autoCalculateSettlementLevel = this.kingdom.settings.autoCalculateSettlementLevel;
-        const activities = getKingdomActivitiesById(this.kingdom.homebrewActivities);
+        const activities = getKingdomActivitiesById(this.game, this.kingdom.homebrewActivities);
         const structureData = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, getStructuresByName(this.game), settlement, capital);
         const builtStructures = await this.getBuiltStructures(settlement);
         const storage = this.getStorage(structureData);

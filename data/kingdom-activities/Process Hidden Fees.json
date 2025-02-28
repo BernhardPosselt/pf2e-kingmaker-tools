@@ -1,0 +1,25 @@
+{
+    "id": "process-hidden-fees",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": false,
+    "phase": "leadership",
+    "dc": "control",
+    "title": "Process Hidden Fees",
+    "description": "With your aid, you can process additional taxes, fees, and payments. Attempt a basic Trade check to determine what sorts of additional resources you gather.",
+    "skills": {
+        "trade": 0
+    },
+    "criticalSuccess": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Gain 2 Resource Dice Next Turn</button>"
+    },
+    "success": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>, but the citizens suspect something is going on: if you attempt to Process Hidden Fees on the next Kingdom turn, the result is worsened one degree."
+    },
+    "failure": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>, but the citizens catch wind of the fees and grow unhappy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, and you cannot Process Hidden Fees on your next Kingdom turn."
+    },
+    "criticalFailure": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>, but the citizens catch wind of the fees and grow unhappy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button>, and you cannot Process Hidden Fees on your next Kingdom turn."
+    }
+}

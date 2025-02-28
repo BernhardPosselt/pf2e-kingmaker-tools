@@ -35,7 +35,7 @@ class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
 
     async getData(): Promise<unknown> {
         const kingdom = getKingdom(this.actor);
-        const data = getKingdomActivitiesById(kingdom.homebrewActivities)[this.activity]!;
+        const data = getKingdomActivitiesById(this.game, kingdom.homebrewActivities)[this.activity]!;
         const traits = (data.fortune ? [capitalize(data.phase), 'Downtime', 'Fortune'] : [capitalize(data.phase), 'Downtime'])
             .join(', ');
         const skills = Object.entries(data.skills)

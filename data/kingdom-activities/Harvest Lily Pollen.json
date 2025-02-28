@@ -1,0 +1,25 @@
+{
+    "id": "harvest-lily-pollen",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": false,
+    "phase": "region",
+    "dc": "control",
+    "title": "Harvest Lily Pollen",
+    "description": "You or a small group of trained herbalists or naturalists work to harvest and process @UUID[Compendium.pf2e.equipment-srd.Item.MvMa010Je10GN5dx]{Azure Lily Pollen} in hopes of creating a few doses of the poison (detailed on page 584). Attempt a DC 30 Agriculture check. You must then wait 1 Kingdom turn before attempting this activity again, to give the lilies time to recover.",
+    "skills": {
+        "agriculture": 3
+    },
+    "criticalSuccess": {
+        "msg": "You create 2 doses of @UUID[Compendium.pf2e.equipment-srd.Item.MvMa010Je10GN5dx]{Azure Lily Pollen}."
+    },
+    "success": {
+        "msg": "You create 1 dose of @UUID[Compendium.pf2e.equipment-srd.Item.MvMa010Je10GN5dx]{Azure Lily Pollen} but must also attempt a @Check[type:basic|dc:11|showDC:all]. On a failure, some of the poison makes its way into criminal hands; <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>"
+    },
+    "failure": {
+        "msg": "You fail to harvest any @UUID[Compendium.pf2e.equipment-srd.Item.MvMa010Je10GN5dx]{Azure Lily Pollen}, in part because many of the resources make their way into the kingdom’s criminal underworld. <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>"
+    },
+    "criticalFailure": {
+        "msg": "Not only do you fail to harvest any pollen, and not only do resources make their way into the hands of criminals, but whispers and rumors that you allowed this to happen on purpose spread through the kingdom. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button>, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Crime</button>"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "id": "train-army",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "army",
+    "dc": "control",
+    "title": "Train Army",
+    "description": "You train an army in the use of a tactic. Choose one of the tactics from those listed starting on page 68, then attempt a Scholarship or Warfare check against the tactic’s Training DC. If your army has already learned its maximum number of tactics, the newly learned tactic replaces a previously learned tactic of your choice. ",
+    "skills": {
+        "scholarship": 0,
+        "warfare": 0
+    },
+    "criticalSuccess": {
+        "msg": "The army learns the tactic and then becomes efficient."
+    },
+    "success": {
+        "msg": "The army learns the tactic."
+    },
+    "failure": {
+        "msg": "The army fails to learn the tactic."
+    },
+    "criticalFailure": {
+        "msg": "The army not only fails to learn the tactic but becomes frustrated and exhausted from the training; increase the army’s weary condition by 1."
+    }
+}

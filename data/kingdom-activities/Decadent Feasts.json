@@ -1,0 +1,25 @@
+{
+    "id": "decadent-feasts",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": false,
+    "phase": "leadership",
+    "dc": "control",
+    "title": "Decadent Feasts",
+    "description": "Your goddess is more than just the goddess of undeath— she’s also the goddess of gluttony. And you are no fool; you understand the fear your goddess inspires in the living and knows that focusing on other aspects of her worship are more likely to result in positive growth for the nation. In order to distract the populace, you arrange for decadent feasts for the people, simultaneously feeding the hungry while camouflaging some of your faith’s more sinister aspects. <button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d8\">Lose 1d8 Food</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Luxuries</button>, then attempt a basic Agriculture or Trade check to determine how effective the feasts are.",
+    "skills": {
+        "agriculture": 0
+    },
+    "criticalSuccess": {
+        "msg": "The people rejoice and glut themselves on the repast! <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>, and the next time this Kingdom turn you suffer an effect that increases Unrest, do not increase your Unrest."
+    },
+    "success": {
+        "msg": "The people enjoy the meal, but no longer than it takes to gulp it down. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d3\">Lose 1d3 Unrest</button>"
+    },
+    "failure": {
+        "msg": "The meal is appreciated, but the people remain suspicious. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>."
+    },
+    "criticalFailure": {
+        "msg": "The people are too suspicious of the feast to enjoy it. Worse, rumors that Jaethal is trying to distract the citizens from an evil ritual spread. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button>"
+    }
+}

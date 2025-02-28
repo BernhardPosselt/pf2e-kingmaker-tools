@@ -1,0 +1,28 @@
+{
+    "id": "abandon-hex",
+    "title": "Abandon Hex",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "region",
+    "dc": "control",
+    "description": "After careful consideration, you decide that you would rather not hold onto a particular hex as part of your claimed territory. You renounce your claim to it and pull back any settlers or explorers. Attempt a basic Exploration or Wilderness check. You can abandon more than one hex at a time, but each additional hex you abandon increases the DC of this check by 1.",
+    "requirement": "The hex to be abandoned must be controlled.",
+    "skills": {
+        "exploration": 0,
+        "wilderness": 0
+    },
+    "criticalSuccess": {
+        "msg": "You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Points</button> per abandoned hex."
+    },
+    "success": {
+        "msg": "You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+    },
+    "failure": {
+        "msg": "You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button> and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, your kingdom experiences a Squatters kingdom event automatically in addition to any other event that might occur."
+    },
+    "criticalFailure": {
+        "msg": "You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned (this affects all statistics determined by Size; see page 532). Some citizens become disgruntled refugees who refuse to leave the hex. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"3\">Gain 3 Unrest</button> and automatically experience a Bandit Activity kingdom event."
+    },
+    "special": "The Unrest gained from abandoning a hex doubles if it includes a settlement. A settlement in an abandoned hex becomes a Freehold (page 536)."
+}

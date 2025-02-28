@@ -1,0 +1,25 @@
+{
+    "id": "harvest-crops",
+    "title": "Harvest Crops",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "region",
+    "dc": "control",
+    "description": "Attempt a basic check to forage for wild edibles or gather excess crops from farms.",
+    "skills": {
+        "agriculture": 0
+    },
+    "criticalSuccess": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Food</button>"
+    },
+    "success": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Food</button>"
+    },
+    "failure": {
+        "msg": "Gain no Food commodities."
+    },
+    "criticalFailure": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Food</button> to spoilage; if you have no Food to lose, you instead <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+    }
+}

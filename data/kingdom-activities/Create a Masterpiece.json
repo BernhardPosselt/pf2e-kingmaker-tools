@@ -1,0 +1,25 @@
+{
+    "id": "create-a-masterpiece",
+    "oncePerRound": true,
+    "fortune": false,
+    "enabled": true,
+    "phase": "leadership",
+    "dc": "control",
+    "title": "Create a Masterpiece",
+    "description": "You encourage your kingdom’s artists to create and display a masterful work of art to bolster your kingdom’s reputation. Attempt a basic check; the result affects either Fame or Infamy (depending on the type of kingdom you’re running). Create a Masterpiece may be attempted only once per Kingdom turn regardless of the number of leaders pursuing activities.",
+    "skills": {
+        "arts": 1
+    },
+    "criticalSuccess": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame</button>, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button>. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Rolled Resource Dice</button>"
+    },
+    "success": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame</button>"
+    },
+    "failure": {
+        "msg": "Your attempt to create a masterpiece fails."
+    },
+    "criticalFailure": {
+        "msg": "Not only does your attempt to create a masterpiece fail, it does so in a dramatic and humiliating way. <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Fame</button>; if you have no Fame or Infamy points to lose, instead <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>"
+    }
+}

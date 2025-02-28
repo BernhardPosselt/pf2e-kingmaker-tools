@@ -1,0 +1,26 @@
+{
+    "id": "recruit-army",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "leadership",
+    "dc": "custom",
+    "title": "Recruit Army",
+    "description": "Either you recruit an army from your kingdom’s citizens, or you secure the allegiance of a specialized army you encountered. If you’re recruiting an army from your kingdom’s citizens, choose one of the basic armies listed at the start of page 570 and attempt a Warfare check against the army’s Recruitment DC. If you’re securing a specialized army, you must attempt a Statecraft check against the Recruitment DC;",
+    "skills": {
+        "warfare": 0,
+        "statecraft": 0
+    },
+    "criticalSuccess": {
+        "msg": "You recruit the army; it becomes efficient."
+    },
+    "success": {
+        "msg": "You recruit the army."
+    },
+    "failure": {
+        "msg": "You fail to recruit the army."
+    },
+    "criticalFailure": {
+        "msg": "Many of the individuals in the army you attempted to recruit took offense at the attempt. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, and you cannot attempt to recruit an army again until the next Kingdom turn."
+    }
+}

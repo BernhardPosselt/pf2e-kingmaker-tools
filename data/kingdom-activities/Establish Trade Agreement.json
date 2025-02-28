@@ -1,0 +1,40 @@
+{
+    "id": "establish-trade-agreement",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "leadership",
+    "dc": "custom",
+    "title": "Establish Trade Agreement",
+    "description": "You send a band of merchants out to establish a trade agreement between your kingdom and a group with whom you’ve established diplomatic relations. If a navigable river connects your kingdom with the other group’s territory, you can attempt a Boating check to Establish the Trade Agreement. If your kingdom’s proficiency rank in Magic is Master or higher, you can attempt a Magic check. Otherwise, attempt a Trade check.The check’s DC is either the group’s Negotiation DC (see sidebar) or your kingdom’s Control DC, whichever is higher.",
+    "requirement": "You have diplomatic relations with the group you wish to establish an agreement with.",
+    "skills": {
+        "boating": 0,
+        "trade": 0,
+        "magic": 3
+    },
+    "criticalSuccess": {
+        "msg": "You successfully establish a trade agreement with your target, and your merchants return with gifts! <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Rolled Resource Dice</button>"
+    },
+    "success": {
+        "msg": "You successfully establish a trade agreement."
+    },
+    "failure": {
+        "msg": "Your traders reach their destination but need to sweeten the deal to secure the trade agreement. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Rolled Resource Dice</button>. If you do so, you successfully establish a trade agreement, otherwise the attempt fails."
+    },
+    "criticalFailure": {
+        "msg": "Your trade agreement is a total loss and your traders do not return. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, and until the end of the next Kingdom turn, take a –1 circumstance penalty to all Economy-related checks.",
+        "modifiers": [
+            {
+                "turns": 2,
+                "enabled": false,
+                "value": -1,
+                "name": "Establish Trade Agreement: Critical Failure",
+                "type": "circumstance",
+                "abilities": [
+                    "economy"
+                ]
+            }
+        ]
+    }
+}

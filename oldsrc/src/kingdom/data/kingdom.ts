@@ -382,7 +382,7 @@ export function getCultEventMilestones(): MileStone[] {
     ];
 }
 
-export function getDefaultKingdomData(): Kingdom {
+export function getDefaultKingdomData(game: Game): Kingdom {
     return {
         turnsWithoutEvent: 0,
         turnsWithoutCultEvent: 0,
@@ -609,7 +609,7 @@ export function getDefaultKingdomData(): Kingdom {
                 value: 0,
             },
         },
-        activityBlacklist: getKingdomActivities([])
+        activityBlacklist: getKingdomActivities(game, [])
             .filter((data) => !data.enabled)
             .map((data) => data.id),
         modifiers: [],

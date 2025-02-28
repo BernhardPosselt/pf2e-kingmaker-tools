@@ -159,7 +159,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             })
             .reduce((a, b) => Object.assign(a, b), {});
         const ignoreSkillRequirements = kingdomData.settings.kingdomIgnoreSkillRequirements;
-        const activities = getKingdomActivitiesById(kingdomData.homebrewActivities);
+        const activities = getKingdomActivitiesById(this.game, kingdomData.homebrewActivities);
         const enabledActivities = getPerformableActivities(
             kingdomData.skillRanks,
             activeSettlementStructureResult?.active?.allowCapitalInvestment === true
@@ -286,16 +286,16 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             }),
             leadershipActivities: Array.from(groupedActivities['leadership'])
                 .map(activity => {
-                    return {label: createActivityLabel(groupedActivities, activity, kingdomData), value: activity};
+                    return {label: createActivityLabel(this.game, groupedActivities, activity, kingdomData), value: activity};
                 })
                 .sort((a, b) => a.label.localeCompare(b.label)),
             regionActivities: Array.from(groupedActivities['region'])
                 .map(activity => {
-                    return {label: createActivityLabel(groupedActivities, activity, kingdomData), value: activity};
+                    return {label: createActivityLabel(this.game, groupedActivities, activity, kingdomData), value: activity};
                 }),
             armyActivities: Array.from(groupedActivities['army'])
                 .map(activity => {
-                    return {label: createActivityLabel(groupedActivities, activity, kingdomData), value: activity};
+                    return {label: createActivityLabel(this.game, groupedActivities, activity, kingdomData), value: activity};
                 }),
             featuresByLevel: Array.from(featuresByLevel.entries())
                 .sort(([a], [b]) => a - b)
@@ -591,7 +591,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const target = el.currentTarget as HTMLButtonElement;
                     const activity = target.dataset.activity!;
                     const kingdom = this.getKingdom();
-                    const activityData = getKingdomActivitiesById(kingdom.homebrewActivities);
+                    const activityData = getKingdomActivitiesById(this.game, kingdom.homebrewActivities);
                     if (activityData[activity].dc === 'none') {
                         await showHelpDialog(this.game, this.sheetActor, activity);
                     } else {
@@ -676,7 +676,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-add-effect')
             ?.addEventListener('click', async () => {
-                const allActivities = Object.keys(getKingdomActivitiesById(this.getKingdom().homebrewActivities));
+                const allActivities = Object.keys(getKingdomActivitiesById(this.game, this.getKingdom().homebrewActivities));
                 addEffectDialog(allActivities, async (modifier) => {
                     const current = this.getKingdom();
                     current.modifiers.push(modifier);
@@ -888,7 +888,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private isOvercrowded(kingdom: Kingdom, settlement: SettlementAndScene): boolean {
         const structureStackMode = getStructureStackMode(kingdom);
         const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
-        const activities = getKingdomActivitiesById(this.getKingdom().homebrewActivities);
+        const activities = getKingdomActivitiesById(this.game, this.getKingdom().homebrewActivities);
         const structures = getStructureResult(structureStackMode, autoCalculateSettlementLevel, activities, getStructuresByName(this.game), settlement);
         return getSettlementInfo(settlement, autoCalculateSettlementLevel).lots > structures.residentialLots;
     }
@@ -1312,7 +1312,7 @@ export async function showKingdom(game: Game): Promise<void> {
                 name: 'Kingdom Sheet',
                 img: 'icons/sundries/documents/document-sealed-red-yellow.webp',
             });
-            await sheetActor?.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', getDefaultKingdomData());
+            await sheetActor?.setFlag('pf2e-kingmaker-tools', 'kingdom-sheet', getDefaultKingdomData(game));
             await showKingdom(game);
         });
     }

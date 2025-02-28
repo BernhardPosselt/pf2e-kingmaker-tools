@@ -1,0 +1,25 @@
+{
+    "id": "provide-care",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "leadership",
+    "dc": "control",
+    "title": "Provide Care",
+    "description": "Attempt a basic check to organize and encourage your settlements’ healers, apothecaries, medics, and other caregivers to provide care and support for citizens in need.",
+    "skills": {
+        "defense": 0
+    },
+    "criticalSuccess": {
+        "msg": "You provide unexpectedly compassionate support for the people. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button> and reduce one Ruin of your choice by 1."
+    },
+    "success": {
+        "msg": "Your care soothes the worries and fears of the populace; <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>."
+    },
+    "failure": {
+        "msg": "You don’t provide any notable care for the citizens, but at least you don’t make things worse."
+    },
+    "criticalFailure": {
+        "msg": "Your attempt to provide care backfires. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> or a Ruin of your choice by 1."
+    }
+}

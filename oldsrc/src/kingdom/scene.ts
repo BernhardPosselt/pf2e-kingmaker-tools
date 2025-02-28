@@ -309,7 +309,7 @@ export function getStructuresByName(game: Game): Map<string, Structure> {
 
 export function getAllMergedSettlements(game: Game, kingdom: Kingdom): MergedSettlements {
     const mode = getStructureStackMode(kingdom);
-    const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
+    const activities = getKingdomActivitiesById(game, kingdom.homebrewActivities);
     const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
     const structures = getStructuresByName(game);
     return getAllSettlements(game, kingdom)
@@ -352,7 +352,7 @@ export interface ActiveSettlementStructureResult {
 export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom): ActiveSettlementStructureResult | undefined {
     const activeSettlement = getSettlement(game, kingdom, kingdom.activeSettlement);
     const capitalSettlement = getCapitalSettlement(game, kingdom);
-    const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
+    const activities = getKingdomActivitiesById(game, kingdom.homebrewActivities);
     const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
     const includeCapitalItemModifier = kingdom.settings.includeCapitalItemModifier;
     const structures = getStructuresByName(game);
@@ -371,7 +371,7 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
 export function getSettlementsWithoutLandBorders(game: Game, kingdom: Kingdom): number {
     const mode = getStructureStackMode(kingdom);
     const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
-    const activities = getKingdomActivitiesById(kingdom.homebrewActivities);
+    const activities = getKingdomActivitiesById(game, kingdom.homebrewActivities);
     const structuresByName = getStructuresByName(game);
     return getAllSettlements(game, kingdom)
         .filter(settlementAndScene => {

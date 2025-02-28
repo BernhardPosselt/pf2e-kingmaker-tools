@@ -1,0 +1,42 @@
+{
+    "id": "claim-hex",
+    "title": "Claim Hex",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "region",
+    "dc": "control",
+    "requirement": "You have Reconnoitered the hex to be claimed during hexploration. This hex must be adjacent to at least one hex that’s already part of your kingdom. If the hex to be claimed contains dangerous hazards or monsters, they must first be cleared out—either via standard adventuring or the Clear Hex activity.",
+    "description": "Your surveyors fully explore the hex and attempt to add it into your kingdom’s domain. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button> and then attempt a basic Exploration, Intrigue, Magic, or Wilderness check.",
+    "skills": {
+        "exploration": 0,
+        "intrigue": 0,
+        "magic": 0,
+        "wilderness": 0
+    },
+    "criticalSuccess": {
+        "msg": "You claim the hex and immediately add it to your territory, increasing your kingdom's Size by 1 (this affects all statistics determined by Size; see page 532). Your occupation of the hex goes so smoothly that you can immediately attempt another Region activity."
+    },
+    "success": {
+        "msg": "You claim the hex and add it to your territory, increasing your kingdom's Size by 1 (this affects all statistics determined by Size; see page 532)."
+    },
+    "failure": {
+        "msg": "You fail to claim the hex."
+    },
+    "criticalFailure": {
+        "msg": "You fail to claim the hex, and a number of early settlers and explorers are lost, causing you to take a –1 circumstance penalty to Stability-based checks until the end of your next Kingdom turn.",
+        "modifiers": [
+            {
+                "turns": 2,
+                "enabled": true,
+                "abilities": [
+                    "stability"
+                ],
+                "value": -1,
+                "name": "Claim Hex: Critical Failure",
+                "type": "circumstance"
+            }
+        ]
+    },
+    "special": "At 1st level, when selecting the three activities you take during the Region Activities step of the Activity phase of the Kingdom turn, you may select this activity no more than once. Once your kingdom reaches 4th level, you may select it up to twice per turn, and after reaching 9th level you may select it up to three times per turn. When you successfully claim a hex, gain kingdom XP (see page 540). Many hexes have terrain features that grant benefits to your kingdom when claimed; see Terrain Features on page 535."
+}

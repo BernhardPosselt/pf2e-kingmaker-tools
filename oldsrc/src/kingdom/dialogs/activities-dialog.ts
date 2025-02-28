@@ -46,7 +46,7 @@ class ManageKingdomActivitiesDialog extends FormApplication<FormApplicationOptio
     override getData(): Promise<ActivityData> | ActivityData {
         const kingdom = getKingdom(this.actor);
         return {
-            activities: this.buildActivities(kingdom),
+            activities: this.buildActivities(this.game, kingdom),
         };
     }
 
@@ -103,10 +103,10 @@ class ManageKingdomActivitiesDialog extends FormApplication<FormApplicationOptio
         this.render();
     }
 
-    private buildActivities(kingdom: Kingdom): ViewActivity[] {
+    private buildActivities(game: Game, kingdom: Kingdom): ViewActivity[] {
         const blacklist = new Set(kingdom.activityBlacklist);
         const homebrewIds = new Set(kingdom.homebrewActivities.map(a => a.id));
-        const kingdomActivities = getKingdomActivities(kingdom.homebrewActivities);
+        const kingdomActivities = getKingdomActivities(game, kingdom.homebrewActivities);
         return kingdomActivities
             .map(a => {
                 return {

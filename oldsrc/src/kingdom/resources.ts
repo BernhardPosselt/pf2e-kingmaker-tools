@@ -188,23 +188,28 @@ export function createUpdate(kingdom: Kingdom, type: RolledResources, turn: Reso
 
 
 export type ResourceMode = 'gain' | 'lose';
-export type RolledResources = 'resource-dice'
-    | 'crime'
-    | 'decay'
-    | 'corruption'
-    | 'strife'
-    | 'resource-points'
-    | 'food'
-    | 'luxuries'
-    | 'unrest'
-    | 'ore'
-    | 'lumber'
-    | 'fame'
-    | 'stone'
-    | 'xp'
-    | 'supernatural-solution'
-    | 'creative-solution'
-    | 'rolled-resource-dice';
+
+export const allRolledResources = [
+    'resource-dice',
+    'crime',
+    'decay',
+    'corruption',
+    'strife',
+    'resource-points',
+    'food',
+    'luxuries',
+    'unrest',
+    'ore',
+    'lumber',
+    'fame',
+    'stone',
+    'xp',
+    'supernatural-solution',
+    'creative-solution',
+    'rolled-resource-dice'
+] as const;
+
+export type RolledResources = typeof allRolledResources[number];
 export type ResourceTurn = 'now' | 'next';
 
 const ignoreMissing: Set<RolledResources> = new Set(['crime', 'decay', 'strife', 'corruption', 'unrest']);

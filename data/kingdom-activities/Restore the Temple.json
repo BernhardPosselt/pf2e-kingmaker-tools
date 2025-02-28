@@ -1,0 +1,25 @@
+{
+    "id": "restore-the-temple",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": false,
+    "phase": "leadership",
+    "dc": 25,
+    "title": "Restore the Temple",
+    "description": "You work with several worshippers of the temple's faith, gifted masons, and skilled laborers to restore the temple and once more consecrate it as a sacred place devoted to the worship of their god. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Resource Points</button>, then attempt a DC 25 Folklore check.",
+    "skills": {
+        "folklore": 0
+    },
+    "criticalSuccess": {
+        "msg": "The temple is restored and can now serve as a Refuge terrain feature. If you later build a settlement here, the temple instead functions as a free Shrine in the settlement. In addition, your work was so excellent that you’ve attracted their god’s attention! The PC who rolled the Folklore check is granted @UUID[Compendium.pf2e.boons-and-curses.Item.hrTl9kfSNrOQeNze]: whenever that PC critically fails a check to Subsist in the wild, they gain a failure instead."
+    },
+    "success": {
+        "msg": "The temple is restored and can now serve as a Refuge terrain feature. If you later build a settlement here, the temple instead functions as a free Shrine in the settlement."
+    },
+    "failure": {
+        "msg": "Work proceeds but is not yet complete; you can attempt to restore the temple again on the next Kingdom turn."
+    },
+    "criticalFailure": {
+        "msg": "Disaster strikes as the temple’s cavern collapses and rubble spills out to bury and destroy much of the temple’s plaza. <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>. You can still attempt to Restore the Temple, but the DC for success increases by 4. This increase is cumulative with successive critical failures."
+    }
+}

@@ -1,0 +1,63 @@
+{
+    "id": "tap-treasury",
+    "oncePerRound": true,
+    "fortune": false,
+    "enabled": true,
+    "phase": "commerce",
+    "dc": "control",
+    "title": "Tap Treasury",
+    "description": "You tap into the cash reserves of your kingdom for the PCs’ personal use or to provide emergency funding for an event. This is a basic check, but after you succeed or critically succeed at this activity, all future attempts to Tap Treasury have their results worsened two degrees. This penalty persists until funds equal to those taken from the treasury are repaid via Capital Investment",
+    "skills": {
+        "statecraft": 0
+    },
+    "criticalSuccess": {
+        "msg": "You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.S55aqwWIzpQRFhcq.JournalEntryPage.Ly8l2GT6dbvuY3A2]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury."
+    },
+    "success": {
+        "msg": "You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.S55aqwWIzpQRFhcq.JournalEntryPage.Ly8l2GT6dbvuY3A2]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury. In addition, you overdraw your treasury in the attempt. You take a –1 circumstance penalty to all Economy-based checks until the end of your next Kingdom turn.",
+        "modifiers": [
+            {
+                "value": -1,
+                "name": "Tap Treasury: Success",
+                "abilities": [
+                    "economy"
+                ],
+                "turns": 2,
+                "enabled": true,
+                "type": "circumstance"
+            }
+        ]
+    },
+    "failure": {
+        "msg": "You fail to secure the funds you need, and rumors about the kingdom’s potential shortfall of cash cause you to take a –1 circumstance penalty to all Loyalty- and Economy-based checks until the end of your next Kingdom turn.",
+        "modifiers": [
+            {
+                "value": -1,
+                "name": "Tap Treasury: Success",
+                "abilities": [
+                    "economy",
+                    "loyalty"
+                ],
+                "turns": 2,
+                "enabled": true,
+                "type": "circumstance"
+            }
+        ]
+    },
+    "criticalFailure": {
+        "msg": "You fail to secure the funds you need, and rumors about the kingdom’s potential shortfall of cash cause you to take a –1 circumstance penalty to all Loyalty- and Economy-based checks until the end of your next Kingdom turn. In addition, rumors spiral out of control. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and add 1 to a Ruin of your choice.",
+        "modifiers": [
+            {
+                "value": -1,
+                "name": "Tap Treasury: Success",
+                "abilities": [
+                    "economy",
+                    "loyalty"
+                ],
+                "turns": 2,
+                "enabled": true,
+                "type": "circumstance"
+            }
+        ]
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "id": "recover-army-defeated",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "army",
+    "dc": "control",
+    "dcAdjustment": 5,
+    "title": "Recover Army: Defeated",
+    "description": "When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check. The DC is increased by 5.",
+    "skills": {
+        "politics": 3,
+        "warfare": 2
+    },
+    "criticalSuccess": {
+        "msg": "You increase its HP by 2 up to its maximum and remove the affliction."
+    },
+    "success": {
+        "msg": "You increase its HP by 1 up to its maximum and remove the affliction."
+    },
+    "failure": {
+        "msg": "You fail to remove the affliction."
+    },
+    "criticalFailure": {
+        "msg": "You fail to remove the affliction and your soldier’s lowered morale spreads discontent; <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>. The army is destroyed."
+    }
+}

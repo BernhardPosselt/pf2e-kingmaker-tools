@@ -7,6 +7,7 @@ import {KingdomSettings} from "./kingdom/data/kingdom";
 import {Structure} from "./kingdom/data/structures";
 import {KingdomFeat} from "./kingdom/data/feats";
 import {CombinedKingdomFeature, KingdomFeature} from "./kingdom/data/features";
+import {KingdomActivity} from "./kingdom/data/activityData";
 
 declare global {
     declare class PF2EModifier {
@@ -30,6 +31,7 @@ declare global {
                     structures: Structure[];
                     feats: KingdomFeat[];
                     features: CombinedKingdomFeature[];
+                    activities: KingdomActivity[];
                 }
             }
         };

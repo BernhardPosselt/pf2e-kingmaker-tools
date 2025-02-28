@@ -1,0 +1,116 @@
+{
+    "id": "focused-attention-vk",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": false,
+    "phase": "leadership",
+    "dc": 15,
+    "title": "Focused Attention (V&K)",
+    "description": "You set aside time to focus attention on aiding another leader in an activity. Choose another leader and a Kingdom skill, then attempt a DC 15 check using the chosen skill. On a success, you grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn.The Cooperative Leadership Kingdom feat (page 531) increases the efficiency of this activity.Focused Attention does not require spending the additional action normally required when making a check for a skill that is not one of a Leader’s Specialized Skills. Focused Attention also does not generate Ruin or Unrest on a Critical Failure",
+    "skills": {
+        "agriculture": 0,
+        "arts": 0,
+        "boating": 0,
+        "defense": 0,
+        "engineering": 0,
+        "exploration": 0,
+        "folklore": 0,
+        "industry": 0,
+        "intrigue": 0,
+        "magic": 0,
+        "politics": 0,
+        "scholarship": 0,
+        "statecraft": 0,
+        "trade": 0,
+        "warfare": 0,
+        "wilderness": 0
+    },
+    "criticalSuccess": {
+        "msg": "You grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn",
+        "modifiers": [
+            {
+                "turns": 1,
+                "enabled": false,
+                "consumeId": "",
+                "value": 2,
+                "name": "Focused Attention: Critical Success",
+                "type": "circumstance",
+                "rollOptions": [
+                    "focused-attention"
+                ],
+                "renderPredicate": [
+                    {
+                        "not": {
+                            "hasFlag": "cooperative-leadership"
+                        }
+                    }
+                ]
+            },
+            {
+                "turns": 1,
+                "enabled": false,
+                "consumeId": "",
+                "value": 3,
+                "name": "Focused Attention: Critical Success",
+                "type": "circumstance",
+                "rollOptions": [
+                    "focused-attention"
+                ],
+                "renderPredicate": [
+                    {
+                        "hasFlag": "cooperative-leadership"
+                    }
+                ],
+                "predicate": [
+                    {
+                        "hasFlag": "cooperative-leadership"
+                    }
+                ]
+            }
+        ]
+    },
+    "success": {
+        "msg": "You grant that leader a +2 circumstance bonus to one kingdom check using that skill, provided that leader attempts the skill check during the same Kingdom turn",
+        "modifiers": [
+            {
+                "turns": 1,
+                "enabled": false,
+                "consumeId": "",
+                "value": 2,
+                "name": "Focused Attention: Success",
+                "type": "circumstance",
+                "rollOptions": [
+                    "focused-attention"
+                ],
+                "renderPredicate": [
+                    {
+                        "not": {
+                            "hasFlag": "cooperative-leadership"
+                        }
+                    }
+                ]
+            },
+            {
+                "turns": 1,
+                "enabled": false,
+                "consumeId": "",
+                "value": 3,
+                "name": "Focused Attention: Success",
+                "type": "circumstance",
+                "rollOptions": [
+                    "focused-attention"
+                ],
+                "renderPredicate": [
+                    {
+                        "hasFlag": "cooperative-leadership"
+                    }
+                ],
+                "predicate": [
+                    {
+                        "hasFlag": "cooperative-leadership"
+                    }
+                ]
+            }
+        ]
+    }
+}

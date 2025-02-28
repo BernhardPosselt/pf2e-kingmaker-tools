@@ -1,0 +1,25 @@
+{
+    "id": "show-of-force",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": false,
+    "phase": "leadership",
+    "dc": "control",
+    "title": "Show of Force",
+    "description": "Using your advice, a public show of force is performed in an attempt to curtail criminal activity or subversive activity in the kingdom. Attempt a basic Warfare check to determine how effective the Show of Force is.",
+    "skills": {
+        "warfare": 0
+    },
+    "criticalSuccess": {
+        "msg": "The kingdom’s criminals are cowed by the show of force. <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Crime</button> and reduce one other Ruin of your choice by 1."
+    },
+    "success": {
+        "msg": "The kingdom’s criminals take note of the show of force. <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Crime</button>"
+    },
+    "failure": {
+        "msg": "The show of force fails to impress criminals but unsettles the rest of the citizens. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>."
+    },
+    "criticalFailure": {
+        "msg": "The criminals are emboldened by the failed show of force. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>."
+    }
+}

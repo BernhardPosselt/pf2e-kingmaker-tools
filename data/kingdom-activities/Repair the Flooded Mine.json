@@ -1,0 +1,25 @@
+{
+    "id": "repair-the-flooded-mine",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": false,
+    "phase": "leadership",
+    "dc": 32,
+    "title": "Repair the Flooded Mine",
+    "description": "A group of engineers work to drain the flooded mine, shore up its damaged section, and establish the mine as a functional Work Site. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"20\">Lose 20 Resource Points</button>, then attempt a DC 32 Engineering check.",
+    "skills": {
+        "engineering": 3
+    },
+    "criticalSuccess": {
+        "msg": "The mine is repaired, and as a bonus, your workers Establish a Work Site at the mine immediately. This mine produces 2 Ore Commodities per Kingdom turn."
+    },
+    "success": {
+        "msg": "The mine is repaired. This mine produces 2 Ore Commodities per Kingdom turn."
+    },
+    "failure": {
+        "msg": "Work on repairing the mine proceeds, but at a much slower (and more expensive) pace than you’d hoped. The mine remains flooded, but you can attempt this check again on the next Kingdom turn."
+    },
+    "criticalFailure": {
+        "msg": "Work on repairing the mine proceeds, but at a much slower (and more expensive) pace than you’d hoped. The mine remains flooded, but you can attempt this check again on the next Kingdom turn. In addition, a catastrophic failure costs the lives of several workers. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>. The next time you attempt to Repair the Flooded Mine, it costs 40 RP."
+    }
+}

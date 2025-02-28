@@ -1,0 +1,29 @@
+{
+    "id": "establish-settlement",
+    "title": "Establish Settlement",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "region",
+    "dc": "control",
+    "description": "You draw up plans, gather resources, entice citizens, and establish boundaries to found a brand new settlement in the hex. Attempt a basic Engineering, Industry, Politics, or Scholarship check. If you cannot pay the RP required by the result of this check, treat your result as a critical failure. A settlement always starts as a village. See page 540 for further details about building settlements.",
+    "requirement": "The hex in which you’re establishing the settlement has been Cleared and doesn’t currently have a settlement (including a Freehold) in it.",
+    "skills": {
+        "engineering": 0,
+        "industry": 0,
+        "politics": 0,
+        "scholarship": 0
+    },
+    "criticalSuccess": {
+        "msg": "You establish the settlement largely with the aid of enthusiastic volunteers. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Resource Points</button>"
+    },
+    "success": {
+        "msg": "You establish the settlement. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"3d6\">Lose 3d6 Resource Points</button>"
+    },
+    "failure": {
+        "msg": "You establish the settlement, but inefficiently and at great expense. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"6d6\">Lose 6d6 Resource Points</button>"
+    },
+    "criticalFailure": {
+        "msg": "You fail to establish the settlement."
+    }
+}

@@ -24,6 +24,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.feats
 import at.posselt.pfrpg2e.kingdom.features
+import at.posselt.pfrpg2e.kingdom.kingdomActivities
 import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.*
@@ -142,6 +143,7 @@ fun main() {
                     structures = structures,
                     feats = feats,
                     features = features,
+                    activities = kingdomActivities,
                 ),
             )
         )

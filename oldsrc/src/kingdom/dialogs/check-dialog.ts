@@ -141,7 +141,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
             this.selectedSkill = options.skill!;
             this.dc = options.dc ?? controlDC;
         } else {
-            const activityData = getKingdomActivitiesById(this.kingdom.homebrewActivities);
+            const activityData = getKingdomActivitiesById(this.game, this.kingdom.homebrewActivities);
             this.phase = activityData[this.activity!].phase;
             this.selectedSkill = this.getActivitySkills(options.kingdom.skillRanks, activityData)[0];
             const data = activityData[this.activity!];
@@ -179,7 +179,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
     override async getData(options?: Partial<FormApplicationOptions & { feats: KingdomFeat[] }>): Promise<object> {
         const activeSettlementStructureResult = getActiveSettlementStructureResult(this.game, this.kingdom);
         const activeSettlement = getSettlement(this.game, this.kingdom, this.kingdom.activeSettlement);
-        const activities = getKingdomActivitiesById(this.kingdom.homebrewActivities);
+        const activities = getKingdomActivitiesById(this.game, this.kingdom.homebrewActivities);
         const applicableSkills = this.type === 'skill' ? [this.skill!] : this.getActivitySkills(this.kingdom.skillRanks, activities);
         const additionalModifiers: Modifier[] = createActiveSettlementModifiers(
             this.game,
@@ -269,7 +269,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 game: this.game,
                 formula,
                 label,
-                activity: activity ? getKingdomActivitiesById(this.kingdom.homebrewActivities)[activity] : undefined,
+                activity: activity ? getKingdomActivitiesById(this.game, this.kingdom.homebrewActivities)[activity] : undefined,
                 dc,
                 skill,
                 modifier,
@@ -305,7 +305,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 game: this.game,
                 formula,
                 label,
-                activity: activity ? getKingdomActivitiesById(this.kingdom.homebrewActivities)[activity] : undefined,
+                activity: activity ? getKingdomActivitiesById(this.game, this.kingdom.homebrewActivities)[activity] : undefined,
                 dc,
                 skill,
                 modifier,

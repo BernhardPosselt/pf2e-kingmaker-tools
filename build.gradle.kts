@@ -122,6 +122,7 @@ tasks {
             "validateCampingActivities",
             "validateFeats",
             "validateFeatures",
+            "validateKingdomActivities",
         )
     }
 }
@@ -157,6 +158,11 @@ tasks.register<JsonSchemaValidator>("validateFeatures") {
     files = layout.projectDirectory.dir("data/features")
 }
 
+tasks.register<JsonSchemaValidator>("validateKingdomActivities") {
+    outputs.upToDateWhen { true } // no outputs, only depend on input files
+    schema = layout.projectDirectory.file("src/commonMain/resources/schemas/kingdom-activity.json")
+    files = layout.projectDirectory.dir("data/kingdom-activities")
+}
 
 // release tasks
 tasks.register<ChangeModuleVersion>("changeModuleVersion") {
@@ -196,7 +202,7 @@ tasks.register<ReleaseModule>("release") {
 }
 
 tasks.register<UnpackJsonFiles>("unpackJson") {
-    fileNameProperty = "name"
-    file = layout.projectDirectory.file("data/features/features.json")
-    targetDirectory = layout.projectDirectory.dir("data/features")
+    fileNameProperty = "title"
+    file = layout.projectDirectory.file("data/kingdom-activities/kingdom-activities.json")
+    targetDirectory = layout.projectDirectory.dir("data/kingdom-activities")
 }

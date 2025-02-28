@@ -1,0 +1,25 @@
+{
+    "id": "trade-commodities",
+    "oncePerRound": true,
+    "fortune": false,
+    "enabled": true,
+    "phase": "commerce",
+    "dc": "control",
+    "title": "Trade Commodities",
+    "description": "There are five different categories of Commodities: Food, Lumber, Luxuries, Ore, and Stone. When you Trade Commodities, select one Commodity that your kingdom currently stockpiles and reduce that Commodity’s stockpile by up to 4. Then attempt a basic check. If you trade with a group that you’ve established diplomatic relations with, you gain a +1 circumstance bonus to the check.",
+    "skills": {
+        "industry": 0
+    },
+    "criticalSuccess": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"true\" data-value=\"2\">Gain 2 Resource Dice Next Turn</button> per point of stockpile expended from your Commodity now."
+    },
+    "success": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"true\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button> per point of stockpile expended from your Commodity now."
+    },
+    "failure": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>"
+    },
+    "criticalFailure": {
+        "msg": "You gain no bonus Resource Dice (though the Commodity remains depleted). If you Traded Commodities the previous turn, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+    }
+}

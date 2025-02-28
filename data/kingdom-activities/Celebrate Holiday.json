@@ -1,0 +1,61 @@
+{
+    "id": "celebrate-holiday",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": true,
+    "phase": "leadership",
+    "dc": "control",
+    "title": "Celebrate Holiday",
+    "description": "You declare a day of celebration. Holidays may be religious, historical, martial, or simply festive, but all relieve your citizens from their labors and give them a chance to make merry at the kingdom’s expense. Attempt a basic check, but if your kingdom Celebrated a Holiday the previous turn, the DC increases by 4, as your kingdom hasn’t had a chance to recover from the previous gala.",
+    "skills": {
+        "folklore": 0
+    },
+    "criticalSuccess": {
+        "msg": "Your holidays are a delight to your people. The event is expensive, but incidental income from the celebrants covers the cost. You gain a +2 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn.",
+        "modifiers": [
+            {
+                "turns": 2,
+                "enabled": true,
+                "abilities": [
+                    "loyalty"
+                ],
+                "value": 2,
+                "name": "Celebrate Holiday: Critical Success",
+                "type": "circumstance"
+            }
+        ]
+    },
+    "success": {
+        "msg": "Your holidays are a success, but they’re also expensive. You gain a +1 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button>. If you can’t afford this cost, treat this result as a Critical Failure instead.",
+        "modifiers": [
+            {
+                "turns": 2,
+                "enabled": true,
+                "abilities": [
+                    "loyalty"
+                ],
+                "value": 1,
+                "name": "Celebrate Holiday: Success",
+                "type": "circumstance"
+            }
+        ]
+    },
+    "failure": {
+        "msg": "The holiday passes with little enthusiasm, but is still expensive. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button>. If you can’t afford this cost, treat this result as a Critical Failure instead."
+    },
+    "criticalFailure": {
+        "msg": "Your festival days are poorly organized, and the citizens actively mock your failed attempt to celebrate. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Lose 4 Resource Dice Next Turn</button>. The failure also causes you to take a –1 circumstance penalty to Loyalty-based checks until the end of the next Kingdom turn.",
+        "modifiers": [
+            {
+                "turns": 2,
+                "enabled": true,
+                "abilities": [
+                    "loyalty"
+                ],
+                "value": -1,
+                "name": "Celebrate Holiday: Critical Failure",
+                "type": "circumstance"
+            }
+        ]
+    }
+}

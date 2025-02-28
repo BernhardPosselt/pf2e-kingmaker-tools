@@ -1,0 +1,40 @@
+{
+    "id": "false-victory",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": false,
+    "phase": "leadership",
+    "dc": "control",
+    "title": "False Victory",
+    "description": "Your contacts with the criminal underworld and your knack for dodging punishment and claiming responsibility for victories you had no direct role in can be harnessed to engineer false victories to trick the kingdom’s citizens into thinking their leaders are doing more than they actually are to create a safe place to live. Such attempts are not without risks, though, for if things backfire, you can cause problems where none existed in the first place. When setting up a false victory, attempt a basic Intrigue check.",
+    "skills": {
+        "intrigue": 0
+    },
+    "criticalSuccess": {
+        "msg": "At the end of this Kingdom turn’s Event Phase, roll again on the random kingdom events table. Rumors of this event being resolved spread throughout your kingdom. You don’t gain any of the benefits of resolving this false victory, but instead <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button> and one Ruin of your choice by 1. If you randomly roll that same random kingdom event at any time during the next four kingdom turns, you can attempt an Intrigue check with a +1 circumstance bonus to resolve it rather than the normal check to resolve it.",
+        "modifiers": [
+            {
+                "turns": 5,
+                "enabled": false,
+                "value": 1,
+                "name": "False Victory: Critical Success",
+                "type": "circumstance",
+                "phases": [
+                    "event"
+                ],
+                "skills": [
+                    "intrigue"
+                ]
+            }
+        ]
+    },
+    "success": {
+        "msg": "Vague rumors of the kingdom’s leaders attaining victories over vague threats spread through the kingdom. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d3\">Lose 1d3 Unrest</button>"
+    },
+    "failure": {
+        "msg": "The false event fails to manifest, and rumors of the truth spread throughout the kingdom. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>. You cannot attempt False Victory on your next Kingdom turn."
+    },
+    "criticalFailure": {
+        "msg": "The truth comes out, and the citizens revolt against this attempt to manipulate them. A Public Scandal event takes place during this kingdom’s event phase, in addition to any other events that would normally take place. Attempt a DC @Check[type:flat|dc:11|showDC:all] check. On a success, the Public Scandal involves a randomly determined leader, but on a failure, the blame falls on Kanerah. Regardless of how the Public Scandal plays out, you cannot attempt False Victory again for 6 Kingdom turns."
+    }
+}

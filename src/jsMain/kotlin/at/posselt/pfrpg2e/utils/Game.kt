@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.utils
 
+import at.posselt.pfrpg2e.kingdom.KingdomActivity
 import at.posselt.pfrpg2e.kingdom.KingdomFeat
 import at.posselt.pfrpg2e.kingdom.KingdomFeature
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
@@ -40,6 +41,7 @@ external interface KtMigrationData {
     val structures: Array<StructureData>
     val feats: Array<KingdomFeat>
     val features: Array<KingdomFeature>
+    val activities: Array<KingdomActivity>
 }
 
 

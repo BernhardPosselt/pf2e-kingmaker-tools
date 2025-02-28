@@ -1,0 +1,83 @@
+{
+    "id": "improve-lifestyle",
+    "oncePerRound": true,
+    "fortune": false,
+    "enabled": true,
+    "phase": "commerce",
+    "dc": "control",
+    "title": "Improve Lifestyle",
+    "description": "Attempt a basic check to draw upon your kingdom’s treasury to enhance the quality of life for your citizens. This activity can be taken only during the Commerce phase of a Kingdom turn",
+    "skills": {
+        "politics": 0
+    },
+    "criticalSuccess": {
+        "msg": "Your push to Improve Lifestyles affords your citizens significant free time to pursue recreational activities. For the remainder of the Kingdom turn, you gain a +2 circumstance bonus to Culture-based checks.",
+        "modifiers": [
+            {
+                "turns": 1,
+                "enabled": true,
+                "abilities": [
+                    "culture"
+                ],
+                "value": 2,
+                "name": "Improve Lifestyle: Critical Success",
+                "type": "circumstance"
+            }
+        ]
+    },
+    "success": {
+        "msg": "Your push to Improve Lifestyles helps your citizens enjoy life. For the remainder of the Kingdom turn, you gain a +1 circumstance bonus to Culture-based checks.",
+        "modifiers": [
+            {
+                "turns": 1,
+                "enabled": true,
+                "abilities": [
+                    "culture"
+                ],
+                "value": 1,
+                "name": "Improve Lifestyle: Success",
+                "type": "circumstance"
+            }
+        ]
+    },
+    "failure": {
+        "msg": "Your push to Improve Lifestyles helps your citizens enjoy life. For the remainder of the Kingdom turn, you gain a +1 circumstance bonus to Culture-based checks. In addition, you’ve strained your treasury. Take a –1 circumstance penalty to Economy-based checks for the remainder of this Kingdom turn.",
+        "modifiers": [
+            {
+                "turns": 1,
+                "enabled": true,
+                "abilities": [
+                    "economy"
+                ],
+                "value": -1,
+                "name": "Improve Lifestyle: Failure",
+                "type": "circumstance"
+            },
+            {
+                "turns": 1,
+                "enabled": true,
+                "abilities": [
+                    "culture"
+                ],
+                "value": 1,
+                "name": "Improve Lifestyle: Failure",
+                "type": "circumstance"
+            }
+        ]
+    },
+    "criticalFailure": {
+        "msg": "Your attempt to Improve Lifestyles backfires horribly as criminal elements in your kingdom abuse your generosity. You take a –1 circumstance penalty to Economy-based checks for the remainder of the Kingdom turn, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, and add 1 to a Ruin of your choice.",
+        "modifiers": [
+            {
+                "turns": 1,
+                "enabled": true,
+                "abilities": [
+                    "economy"
+                ],
+                "value": -1,
+                "name": "Improve Lifestyle: Critical Failure",
+                "type": "circumstance"
+            }
+        ]
+    }
+}

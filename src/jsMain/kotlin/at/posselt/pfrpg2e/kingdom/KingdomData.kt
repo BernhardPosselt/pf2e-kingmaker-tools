@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Leader
+import at.posselt.pfrpg2e.kingdom.Companion
 import at.posselt.pfrpg2e.kingdom.SkillValue
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Game.actors
@@ -24,7 +25,6 @@ typealias KingdomPhase = String  // army, civic, commerce, event, leadership, re
 typealias Heartland = String // forest-or-swamp, hill-or-plain, lake-or-river, mountain-or-ruins
 typealias FameType = String  // famous or infamous
 typealias Companion = String // Amiri Ekundayo Harrim Jaethal Jubilost Kalikke Kanerah Linzi Nok-Nok Octavia Regongar Tristian Valerie
-typealias KingdomDc = Any // number or control, custom, none, scouting
 typealias KingdomSkillValue = String // agriculture, arts, boating, defense, engineering, exploration, folklore, industry, intrigue, magic, politics, scholarship, statecraft, trade, warfare, wilderness
 typealias SkillValue = String // acrobatics, athletics, etc
 typealias SkillRanks = Record<KingdomSkillValue, Int>
@@ -216,39 +216,8 @@ external interface Notes {
 }
 
 @JsPlainObject
-external interface ActivityResult {
-    var msg: String
-//    modifiers?: (kingdom: Kingdom) => Modifier[];
-}
-
-@JsPlainObject
-external interface ActivityResults {
-    var criticalSuccess: ActivityResult?
-    var success: ActivityResult?
-    var failure: ActivityResult?
-    var criticalFailure: ActivityResult?
-}
-
-@JsPlainObject
-external interface ActivityContent : ActivityResults {
-    var title: String
-    var description: String
-    var requirement: String?
-    var special: String?
-    var skills: SkillRanks
-    var phase: KingdomPhase
-    var dc: KingdomDc
-    var dcAdjustment: Int?
-    var enabled: Boolean
-    var companion: Companion?
-    var fortune: Boolean
-    var oncePerRound: Boolean
-    var hint: String?
-}
-
-@JsPlainObject
-external interface KingdomActivity : ActivityContent {
-    val id: String
+external interface ChatModifier: Modifier {
+    val renderPredicate: Array<Predicate>?
 }
 
 @JsPlainObject

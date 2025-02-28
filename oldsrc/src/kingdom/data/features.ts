@@ -19,7 +19,7 @@ export interface CombinedKingdomFeature {
 }
 
 export function getAllFeatures(game: Game, kingdom: Kingdom): KingdomFeature[] {
-    const features = deepClone(game.pf2eKingmakerTools.migration.data.features);
+    const features = foundry.utils.deepClone(game.pf2eKingmakerTools.migration.data.features);
     if (kingdom.settings.kingdomSkillIncreaseEveryLevel) {
         const increase = features.find(f => f.name === 'Skill Increase');
         if (increase) {

@@ -1,0 +1,60 @@
+{
+    "id": "take-charge",
+    "oncePerRound": false,
+    "fortune": false,
+    "enabled": false,
+    "phase": "leadership",
+    "dc": "control",
+    "title": "Take Charge (V&K)",
+    "description": "You spend some time getting directly involved in helping your kingdom. Choose a skill that your Kingdom is at least Trained in, then attempt a basic check. You can never use the same skill for this activity twice in the same Kingdom turn.",
+    "skills": {
+        "agriculture": 1,
+        "arts": 1,
+        "boating": 1,
+        "defense": 1,
+        "engineering": 1,
+        "exploration": 1,
+        "folklore": 1,
+        "industry": 1,
+        "intrigue": 1,
+        "magic": 1,
+        "politics": 1,
+        "scholarship": 1,
+        "statecraft": 1,
+        "trade": 1,
+        "warfare": 1,
+        "wilderness": 1
+    },
+    "criticalSuccess": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Points</button>. In addition you get a +1 Circumstance Bonus to the next Check you make this turn with the chosen skill. ",
+        "modifiers": [
+            {
+                "turns": 1,
+                "consumeId": "",
+                "enabled": false,
+                "value": 1,
+                "name": "Take Charge: Critical Success",
+                "type": "circumstance"
+            }
+        ]
+    },
+    "success": {
+        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Points</button>"
+    },
+    "failure": {
+        "msg": "You fail to generate RP."
+    },
+    "criticalFailure": {
+        "msg": "You take a -1 Circumstance Penalty to the next Check you make this turn with the chosen skill.",
+        "modifiers": [
+            {
+                "turns": 1,
+                "consumeId": "",
+                "enabled": false,
+                "value": -1,
+                "name": "Take Charge: Critical Failure",
+                "type": "circumstance"
+            }
+        ]
+    }
+}

@@ -77,9 +77,9 @@ export function groupKingdomActivities(activities: KingdomActivityById): Grouped
     return result;
 }
 
-export function createActivityLabel(groupedActivities: GroupedActivityNames, activity: string, kingdom: Kingdom): string {
+export function createActivityLabel(game: Game, groupedActivities: GroupedActivityNames, activity: string, kingdom: Kingdom): string {
     const kingdomLevel = kingdom.level;
-    const data = getKingdomActivitiesById(kingdom.homebrewActivities)[activity];
+    const data = getKingdomActivitiesById(game, kingdom.homebrewActivities)[activity];
     const label = data.title;
     const hints = [];
     if (activity === 'claim-hex') {

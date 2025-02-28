@@ -140,12 +140,12 @@ export function loreToLoreSkill(value: string): string {
     return slugify(value.replace(/\s[lL]ore$/, ''));
 }
 
-export function unslugify(word: string): string {
+export function unslugify(word: string, joiner: string = ' '): string {
     return word
         .replaceAll('action:', '')
         .split('-')
         .map(part => capitalize(part))
-        .join(' ');
+        .join(joiner);
 }
 
 export function mergeObjects<A extends Record<string, V>, B extends Record<string, V>, V>(

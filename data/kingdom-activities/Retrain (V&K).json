@@ -1,0 +1,40 @@
+{
+    "id": "retrain-vk",
+    "title": "Retrain (V&K)",
+    "phase": "leadership",
+    "enabled": false,
+    "dc": "control",
+    "oncePerRound": true,
+    "fortune": false,
+    "skills": {
+        "agriculture": 0,
+        "arts": 0,
+        "boating": 0,
+        "defense": 0,
+        "engineering": 0,
+        "exploration": 0,
+        "folklore": 0,
+        "industry": 0,
+        "intrigue": 0,
+        "magic": 0,
+        "politics": 0,
+        "scholarship": 0,
+        "statecraft": 0,
+        "trade": 0,
+        "warfare": 0,
+        "wilderness": 0
+    },
+    "description": "<p>You spend time to change a previous decision your Kingdom made during leveling up. Retrain may be used to change out a Kingdom Feat, a Skill Increase, or one of a Leader's Specialized Skills. When using Retrain, you generally can’t make choices you couldn’t make when you selected the original option, as with normal Pathfinder 2e Retraining. The Retrain action may only be used once per Kingdom Turn.</p>\n<p>For a Kingdom Feat, if the Retrain activity succeeds, remove the old feat and replace it with another Kingdom feat whose prerequisites the Kingdom meets. Retraining a Kingdom Feat uses Politics.</p>\n<p>For a Skill Increase, if the Retrain activity succeeds, reduce the Kingdom's proficiency rank in the Kingdom skill losing its increase by one step and increase the proficiency rank in another Kingdom skill by one step. Retraining a Skill Increase uses either Politics or the Skill for the Skill Increase the Kingdom is gaining. Retrain may not be used to lower a Kingdom Skill to Untrained. Also, when retraining a Kingdom Skill Increase, a Skill may not be lowered if this would bring the Skill below the minimum proficiency needed to build any already existing Structure in any Settlement. If a Structure can be built with multiple skills, a given skill can be lowered as long as the Kingdom meets the minimum for at least one of the other skills.</p> \n<p>For a Leader's Specialized Skill, if the Retrain activity succeeds, choose a Specialized Skill you have, this skill is no longer a Specialized Skill for you. Choose another Kingdom Skill that is not already a Specialized Skill for you, this Kingdom Skill is now a Specialized Skill for you. Retraining a Specialized Skill uses the Skill you are choosing as your new Specialized Skill. You may not choose to lose a Specialized Skill that is one of the five Skills that are automatically Specialized Skills for your Leadership Role.\nCritical</p>",
+    "criticalSuccess": {
+        "msg": "The Retrain succeeds and goes very smoothly. If the Retrain was for a Feat or Skill Increase, spend one RP. If it was for a Skill Specialization, no RP is spent. If you can’t afford the RP cost, treat this result as a Failure instead."
+    },
+    "success": {
+        "msg": "The Retrain succeeds. If the Retrain was for a Feat or Skill Increase, immediately <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button>. If it was for a Skill Specialization, <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button>. If you can’t afford the RP cost, treat this result as a Failure instead."
+    },
+    "failure": {
+        "msg": "The Retrain fails and the old Feat, Skill Increase, or Skill Specialization remains in place. If the Retrain was for a Feat or Skill Increase, immediately <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button>. If it was for a Skill Specialization, <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button>."
+    },
+    "criticalFailure": {
+        "msg": "The Retrain fails badly with costly results. The Kingdom may not use the Retrain activity next Turn. If the Retrain was for a Feat or Skill Increase, immediately <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Rolled Resource Dice</button>. If it was for a Skill Specialization, <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button>"
+    }
+}
