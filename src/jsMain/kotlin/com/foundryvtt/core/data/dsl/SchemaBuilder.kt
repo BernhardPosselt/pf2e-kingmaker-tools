@@ -1,10 +1,12 @@
 package com.foundryvtt.core.data.dsl
 
+import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.data.fields.*
 import js.objects.Record
 import js.objects.recordOf
+import kotlin.enums.enumEntries
 
 /**
  * DSL that abstracts Foundry's Schema settings. Each type allows you to configure
@@ -144,6 +146,22 @@ class Schema {
             StringFieldOptions(required = true)
         }
         block?.invoke(options)
+        fields[name] = StringField(options = options, context = context)
+    }
+
+    inline fun <reified T : Enum<T>> enum(
+        name: String,
+        nullable: Boolean = false,
+        context: DataFieldContext<String>? = undefined,
+        block: (StringFieldOptions.() -> Unit) = {  },
+    ) {
+        val choices = enumEntries<T>().map { it.toCamelCase() }.toTypedArray()
+        val options = if (nullable) {
+            StringFieldOptions(nullable = true, initial = null, blank = false, choices = choices)
+        } else {
+            StringFieldOptions(required = true, choices = choices)
+        }
+        block.invoke(options)
         fields[name] = StringField(options = options, context = context)
     }
 

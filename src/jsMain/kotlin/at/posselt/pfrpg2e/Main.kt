@@ -18,8 +18,7 @@ import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
-import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderKingdomSkills
-import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderSkills
+import at.posselt.pfrpg2e.kingdom.dialogs.editSettlement
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
@@ -141,6 +140,7 @@ fun main() {
                 kingdomSizeHelp = { buildPromise { kingdomSizeHelp() } },
                 settlementSizeHelp = { buildPromise { settlementSizeHelp() } },
                 structureXpDialog = { onOk -> buildPromise { structureXpDialog(game, onOk) } },
+                editSettlementDialog = ::editSettlement,
                 data = KtMigrationData(
                     structures = structures,
                     feats = feats,

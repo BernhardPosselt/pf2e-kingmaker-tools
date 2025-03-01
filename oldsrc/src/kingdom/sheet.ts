@@ -42,7 +42,6 @@ import {
     SettlementAndScene,
 } from './scene';
 import {getAllFeats, KingdomFeat} from './data/feats';
-import {addGroupDialog} from './dialogs/add-group-dialog';
 import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
 import {addOngoingEventDialog} from './dialogs/add-ongoing-event-dialog';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
@@ -70,7 +69,6 @@ import {addEffectDialog} from './dialogs/add-effect-dialog';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
 import {calculateUnrestPenalty} from './data/unrest';
-import {editSettlementDialog} from './dialogs/edit-settlement-dialog';
 import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
 import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData';
@@ -559,9 +557,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-add-group')
             ?.addEventListener('click', async () => {
-                addGroupDialog((group) => this.saveKingdom({
-                    groups: [...this.getKingdom().groups, group],
-                }));
+                await this.saveKingdom({
+                    groups: [...this.getKingdom().groups, {name: "New Group", negotiationDC: 0, atWar: false, relations: "none"}],
+                });
             });
         $html.querySelectorAll('.km-delete-group')
             ?.forEach(el => {
@@ -709,7 +707,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const data = current.settlements[index];
                     const name = getScene(this.game, data.sceneId)?.name as string;
                     const autoLevel = current.settings.autoCalculateSettlementLevel;
-                    editSettlementDialog(autoLevel, name, data, (savedData) => {
+                    this.game.pf2eKingmakerTools.migration.editSettlementDialog(
+                        autoLevel,
+                        name,
+                        data,
+                        (savedData) => {
                         current.settlements[index] = savedData;
                         this.saveKingdom({
                             settlements: current.settlements,

@@ -23,7 +23,6 @@ typealias Companion = String // Amiri Ekundayo Harrim Jaethal Jubilost Kalikke K
 typealias KingdomSkillValue = String // agriculture, arts, boating, defense, engineering, exploration, folklore, industry, intrigue, magic, politics, scholarship, statecraft, trade, warfare, wilderness
 typealias SkillValue = String // acrobatics, athletics, etc
 typealias SkillRanks = Record<KingdomSkillValue, Int>
-typealias SettlementType = String // capital or settlement
 
 sealed interface Predicate
 
@@ -185,7 +184,7 @@ external interface Settlement {
     var sceneId: String
     var lots: Int
     var level: Int
-    var type: SettlementType
+    var type: String
     var secondaryTerritory: Boolean
     var manualSettlementLevel: Boolean?
     var waterBorders: Int

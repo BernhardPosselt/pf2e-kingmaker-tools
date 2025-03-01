@@ -27,6 +27,10 @@ declare global {
                 kingdomSizeHelp: () => void,
                 settlementSizeHelp: () => void,
                 structureXpDialog: (onSave: (xp: number) => void) => void,
+                editSettlementDialog: (autoLevel: boolean,
+                                 settlementName: string,
+                                 settlement: Settlement,
+                                 onOk: (Settlement) => void) => void,
                 data: {
                     structures: Structure[];
                     feats: KingdomFeat[];

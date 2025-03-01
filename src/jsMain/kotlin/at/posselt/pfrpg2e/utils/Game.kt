@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomActivity
 import at.posselt.pfrpg2e.kingdom.KingdomFeat
 import at.posselt.pfrpg2e.kingdom.KingdomFeature
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
+import at.posselt.pfrpg2e.kingdom.Settlement
 import at.posselt.pfrpg2e.kingdom.structures.StructureData
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
@@ -51,6 +52,10 @@ external interface KtMigration {
     val kingdomSizeHelp: () -> Unit
     val settlementSizeHelp: () -> Unit
     val structureXpDialog: (onSave: (xp: Int) -> Unit) -> Unit
+    val editSettlementDialog: (autoLevel: Boolean,
+                               settlementName: String,
+                               settlement: Settlement,
+                               onOk: (Settlement) -> Unit) -> Unit
     val data: KtMigrationData
 }
 
