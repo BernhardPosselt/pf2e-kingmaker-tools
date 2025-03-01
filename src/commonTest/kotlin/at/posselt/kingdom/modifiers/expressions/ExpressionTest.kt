@@ -2,7 +2,7 @@ package at.posselt.kingdom.modifiers.expressions
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
-import at.posselt.pfrpg2e.data.kingdom.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.AndPredicate
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext

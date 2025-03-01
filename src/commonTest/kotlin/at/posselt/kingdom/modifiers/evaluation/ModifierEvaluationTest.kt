@@ -4,11 +4,12 @@ import at.posselt.pfrpg2e.data.actor.Proficiency.*
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill.*
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
-import at.posselt.pfrpg2e.data.kingdom.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.ABILITY
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.PROFICIENCY
-import at.posselt.pfrpg2e.kingdom.modifiers.constructors.createAbilityModifiers
-import at.posselt.pfrpg2e.kingdom.modifiers.constructors.createProficiencyModifier
+import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createAbilityModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createProficiencyModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.GtePredicate
@@ -175,5 +176,29 @@ class ModifierEvaluationTest {
             modifiers = modifiers,
         )
         assertEquals(2, result.total)
+    }
+
+    @Test
+    fun untypedPenaltiesStack() {
+        val first = createProficiencyModifier(BOATING, proficiency = LEGENDARY, level = 3)
+            .copy(type = ModifierType.UNTYPED, value = 3)
+        val second = createProficiencyModifier(AGRICULTURE, proficiency = LEGENDARY, level = 3)
+            .copy(type = ModifierType.UNTYPED, value = 11)
+        val third = createProficiencyModifier(FOLKLORE, proficiency = LEGENDARY, level = 3)
+            .copy(type = ModifierType.UNTYPED, value = -5)
+        val fourth = createProficiencyModifier(MAGIC, proficiency = LEGENDARY, level = 3)
+            .copy(type = ModifierType.UNTYPED, value = -7)
+        val modifiers = listOf(
+            first,
+            second,
+            third,
+            fourth
+        )
+        val result = evaluateModifiers(
+            context = defaultContext,
+            modifiers = modifiers,
+        )
+        assertEquals(2, result.total)
+        assertEquals(modifiers, result.modifiers)
     }
 }

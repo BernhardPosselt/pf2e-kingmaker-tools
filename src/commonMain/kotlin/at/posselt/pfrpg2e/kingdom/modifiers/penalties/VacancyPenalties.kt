@@ -1,9 +1,9 @@
-package at.posselt.pfrpg2e.kingdom.modifiers.constructors
+package at.posselt.pfrpg2e.kingdom.modifiers.penalties
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
-import at.posselt.pfrpg2e.data.kingdom.Leader
-import at.posselt.pfrpg2e.data.kingdom.Vacancies
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate

@@ -1,5 +1,6 @@
 {
     "levels": [1],
     "name": "Initial Proficiencies",
-    "description": "At 1st level, a kingdom receives the trained proficiency rank in two Kingdom skills gained from your initial choice of government and in up to four additional Kingdom skills determined by your invested leaders, giving you a proficiency bonus to checks using these skills equal to your kingdom level plus 2. Proficiencies cannot be changed, even if the kingdom’s government or leaders later change."
+    "description": "At 1st level, a kingdom receives the trained proficiency rank in two Kingdom skills gained from your initial choice of government and in up to four additional Kingdom skills determined by your invested leaders, giving you a proficiency bonus to checks using these skills equal to your kingdom level plus 2. Proficiencies cannot be changed, even if the kingdom’s government or leaders later change.",
+    "claimHexAttempts": 1
 }

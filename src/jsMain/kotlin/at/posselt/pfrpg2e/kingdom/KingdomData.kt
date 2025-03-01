@@ -2,7 +2,7 @@ package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.data.kingdom.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.array.JsTuple2

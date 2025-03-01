@@ -1,4 +1,4 @@
-package at.posselt.pfrpg2e.kingdom.modifiers.constructors
+package at.posselt.pfrpg2e.kingdom.modifiers.penalties
 
 import at.posselt.pfrpg2e.data.kingdom.Ruin
 import at.posselt.pfrpg2e.data.kingdom.Ruins
@@ -9,7 +9,9 @@ import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 fun createRuinModifiers(values: Ruins): List<Modifier> {
     return Ruin.entries.mapNotNull {
         val value = values.resolvePenalty(it)
-        if (value != 0) {
+        if (value == 0) {
+            null
+        } else {
             Modifier(
                 id = "ruin-${it.value}",
                 name = "Ruin (${it.label})",
@@ -19,8 +21,6 @@ fun createRuinModifiers(values: Ruins): List<Modifier> {
                     EqPredicate("@ability", it.ability.value)
                 )
             )
-        } else {
-            null
         }
     }
 }

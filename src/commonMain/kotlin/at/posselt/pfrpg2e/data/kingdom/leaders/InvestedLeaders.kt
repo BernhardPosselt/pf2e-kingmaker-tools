@@ -1,6 +1,6 @@
-package at.posselt.pfrpg2e.data.kingdom
+package at.posselt.pfrpg2e.data.kingdom.leaders
 
-data class Vacancies(
+data class InvestedLeaders(
     val ruler: Boolean = false,
     val counselor: Boolean = false,
     val emissary: Boolean = false,
@@ -10,8 +10,8 @@ data class Vacancies(
     val viceroy: Boolean = false,
     val warden: Boolean = false,
 ) {
-    fun resolveVacancy(leader: Leader) =
-        when(leader) {
+    fun isInvested(leader: Leader) =
+        when (leader) {
             Leader.RULER -> ruler
             Leader.COUNSELOR -> counselor
             Leader.EMISSARY -> emissary

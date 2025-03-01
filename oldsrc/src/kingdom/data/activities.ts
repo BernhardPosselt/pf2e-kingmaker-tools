@@ -2,6 +2,8 @@ import {Skill} from './skills';
 import {Kingdom, SkillRanks} from './kingdom';
 import {getKingdomActivitiesById, KingdomActivity, KingdomActivityById} from './activityData';
 import {armyStatisticsByLevel} from '../../armies/data';
+import {getAllFeatures} from "./features";
+import {isNonNullable} from "../../utils";
 
 export const allKingdomPhases = [
     'army',
@@ -83,9 +85,13 @@ export function createActivityLabel(game: Game, groupedActivities: GroupedActivi
     const label = data.title;
     const hints = [];
     if (activity === 'claim-hex') {
-        if (kingdomLevel >= 9) {
+        const claimHexAttempts= Math.max(...getAllFeatures(game, kingdom)
+            .filter(f => f.level <= kingdom.level)
+            .map(f => f.claimHexAttempts)
+            .filter(a => isNonNullable(a)) as number[]);
+        if (claimHexAttempts === 1) {
             hints.push('three times per turn');
-        } else if (kingdomLevel >= 4) {
+        } else if (claimHexAttempts === 2) {
             hints.push('twice per turn');
         } else {
             hints.push('once per turn');

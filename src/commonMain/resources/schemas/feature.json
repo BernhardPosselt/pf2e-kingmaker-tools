@@ -25,6 +25,9 @@
         "description": {
           "type": "string"
         },
+        "claimHexAttempts": {
+          "type": "number"
+        },
         "modifiers": {
           "type": "array",
           "items": {

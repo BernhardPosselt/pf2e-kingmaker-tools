@@ -247,19 +247,13 @@ export interface Kingdom {
 
 
 interface KingdomLevelData {
-    claimHexAttempts: number;
-    claimHexCircumstanceBonus: number;
     investedLeadershipBonus: number;
     resourceDice: number;
 }
 
 export function getLevelData(kingdomLevel: number): KingdomLevelData {
-    const claimHexAttempts = kingdomLevel < 4 ? 1 : (kingdomLevel < 9 ? 2 : 3);
-    const claimHexCircumstanceBonus = kingdomLevel < 4 ? 0 : 2;
     const investedLeadershipBonus = kingdomLevel < 8 ? 1 : (kingdomLevel < 16 ? 2 : 3);
     return {
-        claimHexAttempts,
-        claimHexCircumstanceBonus,
         investedLeadershipBonus,
         resourceDice: kingdomLevel + 4,
     };

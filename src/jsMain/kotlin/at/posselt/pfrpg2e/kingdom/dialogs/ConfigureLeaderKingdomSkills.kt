@@ -5,7 +5,7 @@ import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.data.kingdom.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.RawLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.hasSkill
 import at.posselt.pfrpg2e.utils.buildPromise

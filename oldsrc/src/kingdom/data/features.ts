@@ -8,6 +8,7 @@ export interface KingdomFeature {
     description: string;
     flags?: string[];
     modifiers?: Modifier[];
+    claimHexAttempts?: number;
 }
 
 export interface CombinedKingdomFeature {

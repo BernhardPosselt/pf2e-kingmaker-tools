@@ -1,4 +1,4 @@
-package at.posselt.pfrpg2e.data.kingdom
+package at.posselt.pfrpg2e.data.kingdom.settlements
 
 data class SettlementSize(
     val type: SettlementType,

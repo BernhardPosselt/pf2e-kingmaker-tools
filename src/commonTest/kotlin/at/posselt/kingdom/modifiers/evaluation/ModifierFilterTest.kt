@@ -3,7 +3,7 @@ package at.posselt.kingdom.modifiers.evaluation
 import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.kingdom.modifiers.constructors.createProficiencyModifier
+import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createProficiencyModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.InPredicate

@@ -3,10 +3,12 @@ package at.posselt.kingdom.modifiers.evaluation
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.actor.SkillRanks
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.data.kingdom.LeaderSkillRanks
-import at.posselt.pfrpg2e.kingdom.modifiers.constructors.LeaderKingdomSkills
-import at.posselt.pfrpg2e.kingdom.modifiers.constructors.LeaderSkills
-import at.posselt.pfrpg2e.kingdom.modifiers.constructors.createLeadershipModifiers
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActorTypes
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderKingdomSkills
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderLevels
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkills
+import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createLeadershipModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
 import kotlin.test.Test
@@ -24,6 +26,8 @@ class LeadershipModifierTest {
             leaderKingdomSkills = LeaderKingdomSkills(
                 counselor = listOf(KingdomSkill.AGRICULTURE)
             ),
+            leaderLevels = LeaderLevels(),
+            leaderActorTypes = LeaderActorTypes(),
         )
         val filteredModifiers = filterModifiersAndUpdateContext(modifiers, defaultContext)
         console.log(filteredModifiers)

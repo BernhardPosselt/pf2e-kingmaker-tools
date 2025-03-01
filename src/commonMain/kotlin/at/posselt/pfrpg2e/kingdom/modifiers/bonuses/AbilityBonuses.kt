@@ -1,4 +1,4 @@
-package at.posselt.pfrpg2e.kingdom.modifiers.constructors
+package at.posselt.pfrpg2e.kingdom.modifiers.bonuses
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill

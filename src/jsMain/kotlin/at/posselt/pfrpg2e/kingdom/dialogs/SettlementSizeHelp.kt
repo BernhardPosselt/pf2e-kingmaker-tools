@@ -1,8 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.prompt
-import at.posselt.pfrpg2e.data.kingdom.kingdomSizeData
-import at.posselt.pfrpg2e.data.kingdom.settlementSizeData
+import at.posselt.pfrpg2e.data.kingdom.settlements.settlementSizeData
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.asAnyObject
 import js.objects.JsPlainObject

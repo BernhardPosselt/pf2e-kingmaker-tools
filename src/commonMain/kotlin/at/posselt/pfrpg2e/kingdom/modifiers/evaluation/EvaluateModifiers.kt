@@ -1,33 +1,31 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 
-// TODO
-// filter by activities
-// filter by skills
-// filter by phase
-// filter by roll options
-// filter by flags
 
 private fun evaluatePredicatedValue(modifier: Modifier, context: ExpressionContext): Modifier {
     val predicatedValue = modifier.predicatedValue
     return if (predicatedValue == null) {
         modifier.copy()
     } else {
-        modifier.copy(value = predicatedValue.evaluate(context)?.toInt() ?: 0)
+        modifier.copy(value = predicatedValue.evaluate(context).toInt())
     }
 }
 
 private fun applyStackingRules(modifiers: List<Modifier>): List<Modifier> {
     val modifiersByType = modifiers.groupBy { it.type }
-    return modifiersByType.flatMap {
-        val highestPositive = it.value.filter { it.value >= 0 }.maxByOrNull { it.value }
-        val lowestNegative = it.value.filter { it.value < 0 }.minByOrNull { it.value }
-        it.value.map {
-            it.copy(enabled = it == highestPositive || it == lowestNegative)
-        }
-    }
+    val untypedModifiers = modifiersByType[ModifierType.UNTYPED] ?: emptyList()
+    return modifiersByType
+        .filter { it.key != ModifierType.UNTYPED }
+        .flatMap {
+            val highestPositive = it.value.filter { it.value >= 0 }.maxByOrNull { it.value }
+            val lowestNegative = it.value.filter { it.value < 0 }.minByOrNull { it.value }
+            it.value.map {
+                it.copy(enabled = it == highestPositive || it == lowestNegative)
+            }
+        } + untypedModifiers
 }
 
 

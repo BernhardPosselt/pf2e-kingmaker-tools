@@ -1,4 +1,4 @@
-package at.posselt.pfrpg2e.data.kingdom
+package at.posselt.pfrpg2e.data.kingdom.leaders
 
 import at.posselt.pfrpg2e.data.actor.SkillRanks
 

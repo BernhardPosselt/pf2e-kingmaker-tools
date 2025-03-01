@@ -1,7 +1,6 @@
-package at.posselt.pfrpg2e.kingdom.modifiers.constructors
+package at.posselt.pfrpg2e.data.kingdom.leaders
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.data.kingdom.Leader
 
 data class LeaderKingdomSkills(
     val ruler: List<KingdomSkill> = emptyList(),

@@ -11,7 +11,7 @@ import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.Skill
-import at.posselt.pfrpg2e.data.kingdom.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.RawLeaderSkills
 import at.posselt.pfrpg2e.kingdom.deleteLore
 import at.posselt.pfrpg2e.kingdom.hasAttribute
