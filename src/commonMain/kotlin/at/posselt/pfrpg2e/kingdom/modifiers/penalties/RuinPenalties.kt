@@ -6,8 +6,8 @@ import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 
-fun createRuinModifiers(values: Ruins): List<Modifier> {
-    return Ruin.entries.mapNotNull {
+fun createRuinModifiers(values: Ruins): List<Modifier> =
+    Ruin.entries.mapNotNull {
         val value = values.resolvePenalty(it)
         if (value == 0) {
             null
@@ -23,4 +23,3 @@ fun createRuinModifiers(values: Ruins): List<Modifier> {
             )
         }
     }
-}
