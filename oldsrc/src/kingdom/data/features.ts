@@ -17,6 +17,7 @@ export interface CombinedKingdomFeature {
     description: string;
     flags?: string[];
     modifiers?: Modifier[];
+    claimHexAttempts?: number;
 }
 
 export function getAllFeatures(game: Game, kingdom: Kingdom): KingdomFeature[] {
@@ -34,6 +35,7 @@ export function getAllFeatures(game: Game, kingdom: Kingdom): KingdomFeature[] {
                 modifiers: feature.modifiers,
                 flags: feature.flags,
                 description: feature.description,
+                claimHexAttempts: feature.claimHexAttempts,
                 level,
             };
             return explodedFeature
