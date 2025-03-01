@@ -1,12 +1,12 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.expressions
 
-import at.posselt.pfrpg2e.data.kingdom.KingdomRanks
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.toCamelCase
 
 data class ExpressionContext(
     val usedSkill: KingdomSkill,
-    val ranks: KingdomRanks,
+    val ranks: KingdomSkillRanks,
     val level: Int,
     val unrest: Int,
     val flags: Set<String>,

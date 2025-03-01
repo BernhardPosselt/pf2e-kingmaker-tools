@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.LeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.LeaderSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.AutomateResources
-import at.posselt.pfrpg2e.kingdom.dialogs.ProficiencyMode
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.ProficiencyMode
 import at.posselt.pfrpg2e.settings.getBoolean
 import at.posselt.pfrpg2e.settings.getInt
 import at.posselt.pfrpg2e.settings.getString

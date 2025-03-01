@@ -1,5 +1,9 @@
 # Kotlin JS Primer
 
+## Testing
+
+To run tests out of your IDE, enable [experimental multiplatform in advanced settings](https://youtrack.jetbrains.com/issue/KTIJ-27820/Common-test-is-unavailable-to-run-in-JS-target.-Kotlin-multiplatform-project#focus=Comments-27-8737255.0-0)
+
 ## Async
 
 Instead of marking a function async, using await and returning promises, Kotlin has **suspend**ing function that are

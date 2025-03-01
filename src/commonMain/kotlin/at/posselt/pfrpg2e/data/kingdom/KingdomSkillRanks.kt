@@ -1,6 +1,6 @@
 package at.posselt.pfrpg2e.data.kingdom
 
-data class KingdomRanks(
+data class KingdomSkillRanks(
     val agriculture: Int = 0,
     val arts: Int = 0,
     val boating: Int = 0,
@@ -18,7 +18,7 @@ data class KingdomRanks(
     val warfare: Int = 0,
     val wilderness: Int = 0,
 ) {
-    fun resolve(skill: KingdomSkill) {
+    fun resolve(skill: KingdomSkill) =
         when (skill) {
             KingdomSkill.AGRICULTURE -> agriculture
             KingdomSkill.ARTS -> arts
@@ -37,5 +37,4 @@ data class KingdomRanks(
             KingdomSkill.WARFARE -> warfare
             KingdomSkill.WILDERNESS -> wilderness
         }
-    }
 }

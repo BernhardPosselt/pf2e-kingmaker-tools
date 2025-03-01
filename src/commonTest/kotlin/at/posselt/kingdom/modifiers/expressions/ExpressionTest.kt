@@ -1,7 +1,7 @@
 package at.posselt.kingdom.modifiers.expressions
 
-import at.posselt.pfrpg2e.data.kingdom.KingdomRanks
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.AndPredicate
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
@@ -19,7 +19,7 @@ class ExpressionTest {
     fun predicate() {
         val context = ExpressionContext(
             usedSkill = KingdomSkill.AGRICULTURE,
-            ranks = KingdomRanks(
+            ranks = KingdomSkillRanks(
                 agriculture = 1,
             ),
             level = 2,

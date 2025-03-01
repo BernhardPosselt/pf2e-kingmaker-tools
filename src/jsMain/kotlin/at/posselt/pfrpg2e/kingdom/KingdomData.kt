@@ -3,7 +3,6 @@ package at.posselt.pfrpg2e.kingdom
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Leader
-import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.array.JsTuple2
@@ -14,7 +13,6 @@ typealias KingdomAbility = String // culture, economy, loyalty or stability
 typealias AbilityScores = Record<KingdomAbility, Int>
 typealias LeaderValue = String // ruler, counselor, general, emissary, magister, treasurer, viceroy,warden
 typealias Leaders = Record<LeaderValue, LeaderValues>
-typealias ModifierType = String // ability, proficiency, item, status, circumstance, vacancy, untyped
 typealias LeaderType = String // pc, regularNpc, highlyMotivatedNpc, nonPathfinderNpc
 typealias GroupRelations = String  // none, diplomatic-relations, trade-agreement
 typealias KingdomPhase = String  // army, civic, commerce, event, leadership, region, upkeep
@@ -84,7 +82,7 @@ external interface RawWhenPredicate {
 
 @JsPlainObject
 external interface RawModifier {
-    var type: ModifierType
+    var type: String
     var value: Int
     var predicatedValue: RawWhenPredicate?
     var name: String

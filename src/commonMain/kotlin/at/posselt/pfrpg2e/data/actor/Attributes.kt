@@ -60,10 +60,3 @@ class Lore(value: String) : Attribute {
     }
 }
 
-enum class Proficiency {
-    UNTRAINED,
-    TRAINED,
-    EXPERT,
-    MASTER,
-    LEGENDARY;
-}

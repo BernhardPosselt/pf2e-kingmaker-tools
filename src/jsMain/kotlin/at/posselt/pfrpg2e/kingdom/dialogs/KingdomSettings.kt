@@ -13,6 +13,7 @@ import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.ProficiencyMode
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -35,12 +36,6 @@ enum class AutomateResources {
     KINGMAKER,
     TILE_BASED,
     MANUAL,
-}
-
-enum class ProficiencyMode {
-    NONE,
-    HALF,
-    FULL,
 }
 
 @JsExport
