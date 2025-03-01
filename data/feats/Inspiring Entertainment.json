@@ -15,7 +15,7 @@
             "predicate": [
                 {
                     "gte": [
-                        "@kingdom.unrest",
+                        "@unrest",
                         "1"
                     ]
                 }

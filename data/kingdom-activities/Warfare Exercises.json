@@ -22,9 +22,9 @@
         ],
         "value": 0,
         "predicatedValue": [
-          {"when": [{"lt": ["@kingdom.level","9"]}, "1"]},
-          {"when": [{"and": [{"gte": ["@kingdom.level","9"]},{"lt": ["@kingdom.level","15"]}]},"2"]},
-          {"when": [{"gte": ["@kingdom.level","15"]},"3"]}
+          {"when": [{"lt": ["@kingdomLevel","9"]}, "1"]},
+          {"when": [{"and": [{"gte": ["@kingdomLevel","9"]},{"lt": ["@kingdomLevel","15"]}]},"2"]},
+          {"when": [{"gte": ["@kingdomLevel","15"]},"3"]}
         ],
         "name": "Warfare Exercises",
         "type": "circumstance"
@@ -43,9 +43,9 @@
         ],
         "value": 0,
         "predicatedValue": [
-          {"when": [{"lt": ["@kingdom.level","9"]}, "1"]},
-          {"when": [{"and": [{"gte": ["@kingdom.level","9"]},{"lt": ["@kingdom.level","15"]}]},"2"]},
-          {"when": [{"gte": ["@kingdom.level","15"]},"3"]}
+          {"when": [{"lt": ["@kingdomLevel","9"]}, "1"]},
+          {"when": [{"and": [{"gte": ["@kingdomLevel","9"]},{"lt": ["@kingdomLevel","15"]}]},"2"]},
+          {"when": [{"gte": ["@kingdomLevel","15"]},"3"]}
         ],
         "name": "Warfare Exercises",
         "type": "circumstance"

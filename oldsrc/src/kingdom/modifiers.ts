@@ -388,8 +388,12 @@ export function createActiveSettlementModifiers(
 }
 
 function resolveValue(kingdom: Kingdom, value: string, skill: Skill): string {
-    if (value.startsWith("@kingdom.")) {
-        return getProperty(kingdom, value.replace(/^@kingdom\./, ''));
+    if (value === "@unrest") {
+        return `${kingdom.unrest}`;
+    } else if (value === "@magicRank") {
+        return `${kingdom.skillRanks.magic}`;
+    } else if (value === "@kingdomLevel") {
+        return `${kingdom.level}`;
     } else if (value === "@skillRank") {
         return `${kingdom.skillRanks[skill]}`;
     } else if (value === "@skill") {

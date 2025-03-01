@@ -27,7 +27,7 @@
                     "when": [
                         {
                             "eq": [
-                                "@kingdom.skillRanks.magic",
+                                "@magicRank",
                                 "2"
                             ]
                         },
@@ -38,7 +38,7 @@
                     "when": [
                         {
                             "gte": [
-                                "@kingdom.skillRanks.magic",
+                                "@magicRank",
                                 "3"
                             ]
                         },
