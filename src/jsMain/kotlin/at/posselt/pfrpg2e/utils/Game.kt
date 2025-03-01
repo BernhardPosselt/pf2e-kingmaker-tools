@@ -56,6 +56,7 @@ external interface KtMigration {
                                settlementName: String,
                                settlement: Settlement,
                                onOk: (Settlement) -> Unit) -> Unit
+    val addOngoingEventDialog: (onSave: (String) -> Unit) -> Unit
     val data: KtMigrationData
 }
 

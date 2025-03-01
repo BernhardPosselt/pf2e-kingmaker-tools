@@ -31,6 +31,7 @@ declare global {
                                  settlementName: string,
                                  settlement: Settlement,
                                  onOk: (Settlement) => void) => void,
+                addOngoingEventDialog: (onSave: (event: string) => void) => void,
                 data: {
                     structures: Structure[];
                     feats: KingdomFeat[];

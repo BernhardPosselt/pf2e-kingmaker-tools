@@ -43,7 +43,6 @@ import {
 } from './scene';
 import {getAllFeats, KingdomFeat} from './data/feats';
 import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
-import {addOngoingEventDialog} from './dialogs/add-ongoing-event-dialog';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
 import {getAllFeatures} from './data/features';
@@ -476,10 +475,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#claimed-landmark')
             ?.addEventListener('click', async () => await this.claimedHexFeature('landmark'));
         $html.querySelector('#km-add-event')
-            ?.addEventListener('click', async () => addOngoingEventDialog((name) => {
+            ?.addEventListener('click', async () => this.game.pf2eKingmakerTools.migration.addOngoingEventDialog(async (event) => {
                 const current = this.getKingdom();
-                this.saveKingdom({
-                    ongoingEvents: [...current.ongoingEvents, {name}],
+                await this.saveKingdom({
+                    ongoingEvents: [...current.ongoingEvents, {name: event}],
                 });
             }));
         $html.querySelectorAll('.km-remove-event')
