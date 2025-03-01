@@ -8,7 +8,7 @@ typealias KingdomDc = Any // number or control, custom, none, scouting
 @JsPlainObject
 external interface ActivityResult {
     var msg: String
-    val modifiers: Array<ChatModifier>
+    val modifiers: Array<RawModifier>
 }
 
 @JsPlainObject

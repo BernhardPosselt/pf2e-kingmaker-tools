@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Leader
+import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.array.JsTuple2
@@ -27,65 +28,65 @@ typealias SkillRanks = Record<KingdomSkillValue, Int>
 sealed interface Predicate
 
 @JsPlainObject
-external interface GtePredicate {
+external interface RawGtePredicate {
     val gte: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface GtPredicate {
+external interface RawGtPredicate {
     val gt: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface LtePredicate {
+external interface RawLtePredicate {
     val lte: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface LtPredicate {
+external interface RawLtPredicate {
     val lt: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface EqPredicate {
+external interface RawEqPredicate {
     val eq: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface OrPredicate {
+external interface RawOrPredicate {
     val or: JsTuple2<Predicate, Predicate>
 }
 
 @JsPlainObject
-external interface AndPredicate {
+external interface RawAndPredicate {
     val and: JsTuple2<Predicate, Predicate>
 }
 
 @JsPlainObject
-external interface NotPredicate {
+external interface RawNotPredicate {
     val not: Predicate
 }
 
 @JsPlainObject
-external interface HasFlagPredicate {
+external interface RawHasFlagPredicate {
     val hasFlag: String
 }
 
 @JsPlainObject
-external interface HasRollOptionPredicate {
+external interface RawHasRollOptionPredicate {
     val hasRollOption: String
 }
 
 @JsPlainObject
-external interface WhenPredicate {
+external interface RawWhenPredicate {
     val `when`: JsTuple2<Predicate, String>
 }
 
 @JsPlainObject
-external interface Modifier {
+external interface RawModifier {
     var type: ModifierType
     var value: Int
-    var predicatedValue: WhenPredicate?
+    var predicatedValue: RawWhenPredicate?
     var name: String
     var phases: Array<KingdomPhase>?
     var activities: Array<String>?
@@ -216,11 +217,6 @@ external interface Notes {
 }
 
 @JsPlainObject
-external interface ChatModifier: Modifier {
-    val renderPredicate: Array<Predicate>?
-}
-
-@JsPlainObject
 external interface Resources {
     var now: Int
     var next: Int
@@ -318,7 +314,7 @@ external interface KingdomData {
     var ongoingEvents: Array<OngoingEvent>
     var turnsWithoutEvent: Int
     var activityBlacklist: Array<String>
-    var modifiers: Array<Modifier>
+    var modifiers: Array<RawModifier>
     var settlements: Array<Settlement>
 }
 

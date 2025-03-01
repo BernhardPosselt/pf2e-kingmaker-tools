@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import js.objects.JsPlainObject
 import kotlinx.serialization.json.JsonElement
 
