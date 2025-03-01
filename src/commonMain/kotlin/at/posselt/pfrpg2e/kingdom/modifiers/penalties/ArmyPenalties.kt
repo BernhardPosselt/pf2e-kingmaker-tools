@@ -11,9 +11,9 @@ fun armyPenalties(
     miredValue: Int,
     wearyValue: Int
 ): List<Modifier> {
-    val modifiers = mutableListOf()
+    val modifiers = mutableListOf<Modifier>()
     if (miredValue > 0) {
-        Modifier(
+        modifiers.add(Modifier(
             name = "$armyName (Mired $miredValue)",
             type = ModifierType.CIRCUMSTANCE,
             value = -miredValue,
@@ -21,10 +21,10 @@ fun armyPenalties(
             predicates = listOf(
                 EqPredicate("@activity", "deploy-army"),
             )
-        )
+        ))
     }
     if (wearyValue > 0) {
-        Modifier(
+        modifiers.add(Modifier(
             name = "$armyName (Weary $wearyValue)",
             type = ModifierType.CIRCUMSTANCE,
             value = -wearyValue,
@@ -32,7 +32,7 @@ fun armyPenalties(
             predicates = listOf(
                 EqPredicate("@phase", KingdomPhase.ARMY.value),
             )
-        )
+        ))
     }
     return modifiers
 }
