@@ -1,0 +1,22 @@
+<table>
+    <thead>
+    <th>Army</th>
+    <th>Type</th>
+    <th>DC</th>
+    <th>Special</th>
+    <th>Recruit</th>
+    </thead>
+    <tbody>
+    {{#each armies}}
+        <tr>
+            <td>{{{link}}}</td>
+            <td>{{type}}</td>
+            <td>{{dc}}</td>
+            <td>{{#if special}}<i class="fa-solid fa-circle-check"></i>{{/if}}</td>
+            <td>
+                <button type="button" data-action="recruit-army" data-id="{{uuid}}">Recruit</button>
+            </td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

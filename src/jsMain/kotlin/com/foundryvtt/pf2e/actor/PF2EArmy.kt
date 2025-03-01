@@ -3,6 +3,7 @@ package com.foundryvtt.pf2e.actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
+import com.foundryvtt.pf2e.system.IntValue
 import js.objects.jso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
@@ -10,6 +11,13 @@ import kotlin.js.Promise
 @JsPlainObject
 external interface PF2EArmyTraits {
     val type: String // 'skirmisher' | 'cavalry' | 'siege' | 'infantry'
+    val rarity: String // 'common' | 'uncommon' | 'rare' | 'unique'
+}
+
+@JsPlainObject
+external interface PF2EArmyDetails {
+    var level: IntValue
+    var alliance: String // party or ...
 }
 
 @JsPlainObject
@@ -18,6 +26,7 @@ external interface PF2EArmyData {
     val consumption: Int
     val scouting: Int
     val traits: PF2EArmyTraits
+    val details: PF2EArmyDetails
 }
 
 // required to make instance of work, but since the classes are not registered here
