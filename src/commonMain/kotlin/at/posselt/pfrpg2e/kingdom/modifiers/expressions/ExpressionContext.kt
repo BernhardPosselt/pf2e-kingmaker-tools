@@ -1,19 +1,27 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.expressions
 
+import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.Leader
 import at.posselt.pfrpg2e.toCamelCase
 
 data class ExpressionContext(
     val usedSkill: KingdomSkill,
     val ranks: KingdomSkillRanks,
+    val leader: Leader,
+    val activity: String?,
+    val phase: KingdomPhase?,
     val level: Int,
     val unrest: Int,
     val flags: Set<String>,
     val rollOptions: Set<String>,
 ) {
-    fun evaluateExpression(expression: String): String {
+    fun evaluateExpression(expression: String): String? {
         return when (expression) {
+            "@leader" -> leader.value
+            "@phase" -> phase?.value
+            "@activity" -> activity
             "@unrest" -> unrest.toString()
             "@agricultureRank" -> ranks.agriculture.toString()
             "@artsRank" -> ranks.arts.toString()

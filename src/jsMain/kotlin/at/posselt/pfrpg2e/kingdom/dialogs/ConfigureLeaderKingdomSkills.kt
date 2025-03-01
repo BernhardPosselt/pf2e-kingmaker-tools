@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Leader
-import at.posselt.pfrpg2e.kingdom.LeaderKingdomSkills
+import at.posselt.pfrpg2e.kingdom.RawLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.hasSkill
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
@@ -78,8 +78,8 @@ private external interface LeaderKingdomSkillsData {
     val warden: ToggledKingdomSkills
 }
 
-private fun LeaderKingdomSkillsData.toKingdomSkills(): LeaderKingdomSkills =
-    LeaderKingdomSkills(
+private fun LeaderKingdomSkillsData.toKingdomSkills(): RawLeaderKingdomSkills =
+    RawLeaderKingdomSkills(
         ruler = ruler.toStringArray(),
         counselor = counselor.toStringArray(),
         emissary = emissary.toStringArray(),
@@ -108,8 +108,8 @@ class ConfigureLeaderKingdomSkillsModel(val value: AnyObject) : DataModel(value)
 }
 
 private class ConfigureLeaderKingdomSkills(
-    skills: LeaderKingdomSkills,
-    private val onSave: (skills: LeaderKingdomSkills) -> Unit,
+    skills: RawLeaderKingdomSkills,
+    private val onSave: (skills: RawLeaderKingdomSkills) -> Unit,
 ) : FormApp<ConfigureLeaderKingdomSkillsContext, LeaderKingdomSkillsData>(
     title = "Configure Leader Kingdom Skills ",
     template = "components/forms/xy-form.hbs",
@@ -168,8 +168,8 @@ private class ConfigureLeaderKingdomSkills(
 }
 
 fun configureLeaderKingdomSkills(
-    skills: LeaderKingdomSkills,
-    onSave: (LeaderKingdomSkills) -> Unit,
+    skills: RawLeaderKingdomSkills,
+    onSave: (RawLeaderKingdomSkills) -> Unit,
 ) {
     ConfigureLeaderKingdomSkills(skills, onSave).launch()
 }

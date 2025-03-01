@@ -12,7 +12,7 @@ import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.kingdom.Leader
-import at.posselt.pfrpg2e.kingdom.LeaderSkills
+import at.posselt.pfrpg2e.kingdom.RawLeaderSkills
 import at.posselt.pfrpg2e.kingdom.deleteLore
 import at.posselt.pfrpg2e.kingdom.hasAttribute
 import at.posselt.pfrpg2e.slugify
@@ -79,7 +79,7 @@ private external interface LeaderSkillsData {
     val warden: Array<Boolean>
 }
 
-private fun LeaderSkills.allLores(): Array<Attribute> =
+private fun RawLeaderSkills.allLores(): Array<Attribute> =
     filterLores(ruler) +
             filterLores(counselor) +
             filterLores(emissary) +
@@ -95,8 +95,8 @@ private fun toAttributeValues(toggles: Array<Boolean>, attributes: Array<Attribu
         .filterNotNull()
         .toTypedArray()
 
-private fun LeaderSkillsData.toSkills(attributes: Array<Attribute>): LeaderSkills =
-    LeaderSkills(
+private fun LeaderSkillsData.toSkills(attributes: Array<Attribute>): RawLeaderSkills =
+    RawLeaderSkills(
         ruler = toAttributeValues(ruler, attributes),
         counselor = toAttributeValues(counselor, attributes),
         emissary = toAttributeValues(emissary, attributes),
@@ -121,8 +121,8 @@ class ConfigureLeaderSkillsModel(val value: AnyObject) : DataModel(value) {
 }
 
 private class ConfigureLeaderSkills(
-    skills: LeaderSkills,
-    private val onSave: (skills: LeaderSkills) -> Unit,
+    skills: RawLeaderSkills,
+    private val onSave: (skills: RawLeaderSkills) -> Unit,
 ) : FormApp<ConfigureLeaderSkillsContext, LeaderSkillsData>(
     title = "Configure Leader Skills ",
     template = "components/forms/xy-form.hbs",
@@ -227,8 +227,8 @@ private class ConfigureLeaderSkills(
 }
 
 fun configureLeaderSkills(
-    skills: LeaderSkills,
-    onSave: (LeaderSkills) -> Unit,
+    skills: RawLeaderSkills,
+    onSave: (RawLeaderSkills) -> Unit,
 ) {
     ConfigureLeaderSkills(skills, onSave).launch()
 }

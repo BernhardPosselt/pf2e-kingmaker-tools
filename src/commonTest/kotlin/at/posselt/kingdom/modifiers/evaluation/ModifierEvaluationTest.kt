@@ -4,10 +4,11 @@ import at.posselt.pfrpg2e.data.actor.Proficiency.*
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill.*
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.Leader
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.ABILITY
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.PROFICIENCY
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.createAbilityModifiers
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.createProficiencyModifier
+import at.posselt.pfrpg2e.kingdom.modifiers.constructors.createAbilityModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.constructors.createProficiencyModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.GtePredicate
@@ -25,6 +26,9 @@ val defaultContext = ExpressionContext(
     unrest = 0,
     flags = setOf("flag"),
     rollOptions = setOf("option"),
+    phase = null,
+    activity = null,
+    leader = Leader.COUNSELOR,
 )
 
 class ModifierEvaluationTest {

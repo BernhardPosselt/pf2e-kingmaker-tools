@@ -3,8 +3,8 @@ package at.posselt.pfrpg2e.migrations.migrations
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill.*
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
-import at.posselt.pfrpg2e.kingdom.LeaderKingdomSkills
-import at.posselt.pfrpg2e.kingdom.LeaderSkills
+import at.posselt.pfrpg2e.kingdom.RawLeaderKingdomSkills
+import at.posselt.pfrpg2e.kingdom.RawLeaderSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.AutomateResources
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.ProficiencyMode
 import at.posselt.pfrpg2e.settings.getBoolean
@@ -121,7 +121,7 @@ class Migration12 : Migration(12, true) {
             proficiencyMode = proficiencyMode,
             kingdomEventsTable = kingdomEventsTableUuid,
             kingdomCultTable = kingdomCultTable,
-            leaderKingdomSkills = LeaderKingdomSkills(
+            leaderKingdomSkills = RawLeaderKingdomSkills(
                 ruler = arrayOf(INDUSTRY, INTRIGUE, POLITICS, STATECRAFT, WARFARE).map { it.value }.toTypedArray(),
                 counselor = arrayOf(ARTS, FOLKLORE, POLITICS, SCHOLARSHIP, TRADE).map { it.value }.toTypedArray(),
                 emissary = arrayOf(INTRIGUE, MAGIC, POLITICS, STATECRAFT, TRADE).map { it.value }.toTypedArray(),
@@ -133,7 +133,7 @@ class Migration12 : Migration(12, true) {
                 warden = arrayOf(AGRICULTURE, BOATING, DEFENSE, EXPLORATION, WILDERNESS).map { it.value }
                     .toTypedArray(),
             ),
-            leaderSkills = LeaderSkills(
+            leaderSkills = RawLeaderSkills(
                 ruler = arrayOf(
                     "diplomacy",
                     "deception",

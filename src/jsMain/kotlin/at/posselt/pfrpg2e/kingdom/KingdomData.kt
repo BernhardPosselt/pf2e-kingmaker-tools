@@ -23,55 +23,60 @@ typealias KingdomSkillValue = String // agriculture, arts, boating, defense, eng
 typealias SkillValue = String // acrobatics, athletics, etc
 typealias SkillRanks = Record<KingdomSkillValue, Int>
 
-sealed interface Predicate
+sealed external interface Predicate
 
 @JsPlainObject
-external interface RawGtePredicate {
+external interface RawGtePredicate: Predicate {
     val gte: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawGtPredicate {
+external interface RawGtPredicate: Predicate {
     val gt: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawLtePredicate {
+external interface RawLtePredicate: Predicate {
     val lte: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawLtPredicate {
+external interface RawInPredicate: Predicate {
+    val `in`: JsTuple2<String, Array<String>>
+}
+
+@JsPlainObject
+external interface RawLtPredicate: Predicate {
     val lt: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawEqPredicate {
+external interface RawEqPredicate: Predicate {
     val eq: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawOrPredicate {
+external interface RawOrPredicate: Predicate {
     val or: JsTuple2<Predicate, Predicate>
 }
 
 @JsPlainObject
-external interface RawAndPredicate {
+external interface RawAndPredicate: Predicate {
     val and: JsTuple2<Predicate, Predicate>
 }
 
 @JsPlainObject
-external interface RawNotPredicate {
+external interface RawNotPredicate: Predicate {
     val not: Predicate
 }
 
 @JsPlainObject
-external interface RawHasFlagPredicate {
+external interface RawHasFlagPredicate: Predicate {
     val hasFlag: String
 }
 
 @JsPlainObject
-external interface RawHasRollOptionPredicate {
+external interface RawHasRollOptionPredicate: Predicate {
     val hasRollOption: String
 }
 
@@ -247,12 +252,12 @@ external interface KingdomSettings {
     var kingdomEventsTable: String?
     var kingdomCultTable: String?
     var maximumFamePoints: Int
-    var leaderKingdomSkills: LeaderKingdomSkills
-    var leaderSkills: LeaderSkills
+    var leaderKingdomSkills: RawLeaderKingdomSkills
+    var leaderSkills: RawLeaderSkills
 }
 
 @JsPlainObject
-external interface LeaderKingdomSkills {
+external interface RawLeaderKingdomSkills {
     var ruler: Array<KingdomSkillValue>
     var counselor: Array<KingdomSkillValue>
     var emissary: Array<KingdomSkillValue>
@@ -264,7 +269,7 @@ external interface LeaderKingdomSkills {
 }
 
 @JsPlainObject
-external interface LeaderSkills {
+external interface RawLeaderSkills {
     var ruler: Array<SkillValue>
     var counselor: Array<SkillValue>
     var emissary: Array<SkillValue>
@@ -316,7 +321,7 @@ external interface KingdomData {
     var settlements: Array<Settlement>
 }
 
-fun LeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =
+fun RawLeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =
     when (leader) {
         Leader.RULER -> ruler.contains(skill.value)
         Leader.COUNSELOR -> counselor.contains(skill.value)
@@ -328,7 +333,7 @@ fun LeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =
         Leader.WARDEN -> warden.contains(skill.value)
     }
 
-fun LeaderSkills.hasAttribute(leader: Leader, attribute: Attribute) =
+fun RawLeaderSkills.hasAttribute(leader: Leader, attribute: Attribute) =
     when (leader) {
         Leader.RULER -> ruler.contains(attribute.value)
         Leader.COUNSELOR -> counselor.contains(attribute.value)
@@ -340,7 +345,7 @@ fun LeaderSkills.hasAttribute(leader: Leader, attribute: Attribute) =
         Leader.WARDEN -> warden.contains(attribute.value)
     }
 
-fun LeaderSkills.deleteLore(attribute: Attribute) = LeaderSkills(
+fun RawLeaderSkills.deleteLore(attribute: Attribute) = RawLeaderSkills(
     ruler = ruler.filter { it != attribute.value }.toTypedArray(),
     counselor = counselor.filter { it != attribute.value }.toTypedArray(),
     emissary = emissary.filter { it != attribute.value }.toTypedArray(),

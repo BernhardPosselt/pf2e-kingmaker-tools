@@ -232,8 +232,35 @@
         },
         {
           "$ref": "#/$defs/HasRollOptionPredicate"
+        },
+        {
+          "$ref": "#/$defs/InPredicate"
         }
       ]
+    },
+    "InPredicate": {
+      "type": "object",
+      "required": [
+        "in"
+      ],
+      "properties": {
+        "in": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        }
+      }
     },
     "GtePredicate": {
       "type": "object",

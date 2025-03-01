@@ -9,4 +9,8 @@ data class ModifierResult(
     val bonuses: Map<ModifierType, Int>,
     val penalties: Map<ModifierType, Int>,
     val rollOptions: Set<String>,
-)
+) {
+    val assurance = 10 +
+            (bonuses[ModifierType.PROFICIENCY] ?: 0) +
+            (penalties[ModifierType.PROFICIENCY] ?: 0)
+}
