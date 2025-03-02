@@ -33,7 +33,7 @@ val defaultContext = ExpressionContext(
     isVacant = false,
 )
 
-class ModifierEvaluationTest {
+class EvaluateModifiersTest {
     @Test
     fun testBasic() {
         val modifiers = listOf(
@@ -198,5 +198,37 @@ class ModifierEvaluationTest {
         )
         assertEquals(2, result.total)
         assertEquals(modifiers, result.modifiers)
+    }
+
+    @Test
+    fun keepsDisabledModifiersThatAreHigherThanEnabled() {
+        val first = createProficiencyModifier(AGRICULTURE, proficiency = MASTER, level = 3)
+        val second = createProficiencyModifier(BOATING, proficiency = TRAINED, level = 3)
+        val third = createProficiencyModifier(POLITICS, proficiency = LEGENDARY, level = 3).copy(enabled = false)
+        val fourth = createProficiencyModifier(STATECRAFT, proficiency = MASTER, level = 3).copy(value = -2)
+        val fifth = createProficiencyModifier(WARFARE, proficiency = TRAINED, level = 3).copy(value = -3)
+        val sixth = createProficiencyModifier(MAGIC, proficiency = LEGENDARY, level = 3).copy(enabled = false, value = -4)
+        val modifiers = listOf(
+            first,
+            second,
+            third,
+            fourth,
+            fifth,
+            sixth,
+        )
+        val result = evaluateModifiers(
+            context = defaultContext,
+            modifiers = modifiers,
+        )
+        console.log(result)
+        assertEquals(6, result.total)
+        assertEquals(9, result.bonuses[PROFICIENCY])
+        assertEquals(-3, result.penalties[PROFICIENCY])
+        assertEquals(listOf(
+            first,
+            third,
+            fifth,
+            sixth,
+        ), result.modifiers)
     }
 }

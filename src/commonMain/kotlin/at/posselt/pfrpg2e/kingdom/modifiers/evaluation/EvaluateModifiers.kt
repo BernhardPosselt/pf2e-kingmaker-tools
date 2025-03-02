@@ -20,9 +20,14 @@ private fun applyStackingRules(modifiers: List<Modifier>): List<Modifier> {
     return modifiersByType
         .filter { it.key != ModifierType.UNTYPED }
         .flatMap {
-            val highestPositive = it.value.filter { it.value > 0 }.maxByOrNull { it.value }
-            val lowestNegative = it.value.filter { it.value < 0 }.minByOrNull { it.value }
-            it.value.filter { it == highestPositive || it == lowestNegative }
+            val highest = it.value.filter { it.enabled && it.value > 0 }.maxByOrNull { it.value }
+            val lowest = it.value.filter { it.enabled && it.value < 0 }.minByOrNull { it.value }
+            val highestDisabled = it.value.filter { !it.enabled && it.value > (highest?.value ?: 0) }
+                .toSet()
+            val lowestDisabled = it.value.filter { !it.enabled && it.value < (lowest?.value ?: 0) }
+                .toSet()
+            it.value
+                .filter { it == highest || it == lowest || it in highestDisabled || it in lowestDisabled }
         } + untypedModifiers
 }
 
