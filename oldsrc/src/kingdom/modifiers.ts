@@ -107,8 +107,8 @@ function createPredicateName(values: string[] | undefined, label: string): strin
     return values ? `${label}: ${values.map(v => unslugify(v)).join(', ')}` : undefined;
 }
 
-function extractPredicateTargets(modifier: Modifier, selector: '@phase' | '@skill' | '@ability' | '@activity'): string[] {
-    return modifier.predicates
+function extractPredicateTargets(label: string, modifier: Modifier, selector: '@phase' | '@skill' | '@ability' | '@activity'): string | undefined {
+    const mods =  modifier.predicates
         ?.flatMap(p => {
             if ('in' in p && p.in[0] === selector) {
                 return p.in[1];
@@ -118,6 +118,8 @@ function extractPredicateTargets(modifier: Modifier, selector: '@phase' | '@skil
                 return [];
             }
         }) ?? [];
+    if (mods.length === 0) return undefined
+    else return label + ': ' + mods.map(a => unslugify(a)).join(', ')
 }
 
 export function modifierToLabel(modifier: Modifier): string {
@@ -127,10 +129,10 @@ export function modifierToLabel(modifier: Modifier): string {
     }
     const type = modifier.value >= 0 ? capitalize(modifier.type) + ' Bonus' : capitalize(modifier.type) + ' Penalty';
     const predicates = [
-        extractPredicateTargets(modifier, '@phase'),
-        extractPredicateTargets(modifier, '@skill'),
-        extractPredicateTargets(modifier, '@ability'),
-        extractPredicateTargets(modifier, '@activity'),
+        extractPredicateTargets("Phases", modifier, '@phase'),
+        extractPredicateTargets("Skills", modifier, '@skill'),
+        extractPredicateTargets("Abilities", modifier, '@ability'),
+        extractPredicateTargets("Activities", modifier, '@activity'),
     ]
         .filter(v => v !== undefined)
         .join('; ');
