@@ -34,8 +34,13 @@
                 "value": 1,
                 "name": "Deliberate Planning: Critical Success",
                 "type": "circumstance",
-                "phases": [
-                    "event"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@phase",
+                            "event"
+                        ]
+                    }
                 ]
             }
         ]
@@ -49,8 +54,13 @@
                 "value": 1,
                 "name": "Deliberate Planning: Success",
                 "type": "circumstance",
-                "phases": [
-                    "event"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@phase",
+                            "event"
+                        ]
+                    }
                 ]
             }
         ]

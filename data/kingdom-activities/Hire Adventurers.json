@@ -19,8 +19,13 @@
             {
                 "turns": 2,
                 "enabled": false,
-                "phases": [
-                    "event"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@phase",
+                            "event"
+                        ]
+                    }
                 ],
                 "value": 2,
                 "name": "Hire Adventurers: Success",

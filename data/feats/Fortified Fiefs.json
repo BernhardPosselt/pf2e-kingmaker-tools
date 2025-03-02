@@ -7,9 +7,16 @@
         {
             "name": "Fortified Fiefs",
             "type": "circumstance",
-            "activities": [
-                "fortify-hex",
-                "fortify-hex-vk"
+            "predicates": [
+                {
+                    "in": [
+                        "@activity",
+                        [
+                            "fortify-hex",
+                            "fortify-hex-vk"
+                        ]
+                    ]
+                }
             ],
             "enabled": true,
             "value": 2
@@ -17,8 +24,13 @@
         {
             "name": "Build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall",
             "type": "circumstance",
-            "activities": [
-                "build-structure"
+            "predicates": [
+                {
+                    "eq": [
+                        "@activity",
+                        "build-structure"
+                    ]
+                }
             ],
             "enabled": false,
             "value": 2
@@ -26,8 +38,13 @@
         {
             "name": "Dangerous Event impacting settlement defenses",
             "type": "circumstance",
-            "phases": [
-                "event"
+            "predicates": [
+                {
+                    "eq": [
+                        "@phase",
+                        "event"
+                    ]
+                }
             ],
             "enabled": false,
             "value": 1

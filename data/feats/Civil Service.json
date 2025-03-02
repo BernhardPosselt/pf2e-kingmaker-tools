@@ -9,9 +9,16 @@
             "enabled": false,
             "value": 2,
             "type": "circumstance",
-            "activities": [
-                "new-leadership",
-                "new-leadership-vk"
+            "predicates": [
+                {
+                    "in": [
+                        "@activity",
+                        [
+                            "new-leadership",
+                            "new-leadership-vk"
+                        ]
+                    ]
+                }
             ]
         }
     ]

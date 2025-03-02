@@ -16,9 +16,14 @@
         "modifiers": [
             {
                 "turns": 1,
-                "consumeId": "",
-                "phases": [
-                    "event"
+                "isConsumedAfterRoll": true,
+                "predicates": [
+                    {
+                        "eq": [
+                            "@phase",
+                            "event"
+                        ]
+                    }
                 ],
                 "enabled": true,
                 "value": 4,
@@ -32,9 +37,14 @@
         "modifiers": [
             {
                 "turns": 1,
-                "consumeId": "",
-                "phases": [
-                    "event"
+                "isConsumedAfterRoll": true,
+                "predicates": [
+                    {
+                        "eq": [
+                            "@phase",
+                            "event"
+                        ]
+                    }
                 ],
                 "enabled": false,
                 "value": 2,
@@ -51,8 +61,13 @@
         "modifiers": [
             {
                 "turns": 1,
-                "phases": [
-                    "event"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@phase",
+                            "event"
+                        ]
+                    }
                 ],
                 "enabled": true,
                 "value": -2,

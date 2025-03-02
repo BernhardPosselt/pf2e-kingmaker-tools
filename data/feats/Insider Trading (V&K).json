@@ -7,12 +7,19 @@
         {
             "name": "Insider Trading",
             "type": "status",
-            "activities": [
-                "establish-work-site-quarry",
-                "establish-work-site-lumber",
-                "establish-work-site-mine",
-                "establish-trade-agreement",
-                "trade-commodities"
+            "predicates": [
+                {
+                    "in": [
+                        "@activity",
+                        [
+                            "establish-work-site-quarry",
+                            "establish-work-site-lumber",
+                            "establish-work-site-mine",
+                            "establish-trade-agreement",
+                            "trade-commodities"
+                        ]
+                    ]
+                }
             ],
             "enabled": true,
             "value": 1

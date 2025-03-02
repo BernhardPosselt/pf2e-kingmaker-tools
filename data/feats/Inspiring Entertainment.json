@@ -8,16 +8,16 @@
             "name": "Inspiring Entertainment",
             "type": "circumstance",
             "enabled": true,
-            "abilities": [
-                "culture"
-            ],
             "value": 2,
-            "predicate": [
+            "predicates": [
                 {
                     "gte": [
                         "@unrest",
                         "1"
                     ]
+                },
+                {
+                    "eq": ["@ability", "culture"]
                 }
             ]
         }

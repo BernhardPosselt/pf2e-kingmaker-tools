@@ -7,6 +7,7 @@
   "$defs": {
     "Feature": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "name",
         "levels",
@@ -44,6 +45,7 @@
     },
     "Modifier": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "type",
         "value",
@@ -51,7 +53,7 @@
         "enabled"
       ],
       "properties": {
-        "$type": {
+        "type": {
           "type": "string",
           "enum": [
             "ability",
@@ -79,44 +81,11 @@
         "enabled": {
           "type": "boolean"
         },
-        "phases": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "army",
-              "civic",
-              "commerce",
-              "event",
-              "leadership",
-              "region",
-              "upkeep"
-            ]
-          }
-        },
-        "activities": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "abilities": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "skills": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/KingdomSkill"
-          }
-        },
         "turns": {
           "type": "number"
         },
-        "consumeId": {
-          "type": "string"
+        "isConsumedAfterRoll": {
+          "type": "boolean"
         },
         "rollOptions": {
           "type": "array",
@@ -124,7 +93,7 @@
             "type": "string"
           }
         },
-        "predicate": {
+        "predicates": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/Predicate"
@@ -171,6 +140,7 @@
     },
     "InPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "in"
       ],
@@ -195,6 +165,7 @@
     },
     "GtePredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "gte"
       ],
@@ -216,6 +187,7 @@
     },
     "GtPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "gt"
       ],
@@ -237,6 +209,7 @@
     },
     "LtePredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "lte"
       ],
@@ -258,6 +231,7 @@
     },
     "LtPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "lt"
       ],
@@ -279,6 +253,7 @@
     },
     "EqPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "eq"
       ],
@@ -300,6 +275,7 @@
     },
     "OrPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "or"
       ],
@@ -314,6 +290,7 @@
     },
     "AndPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "and"
       ],
@@ -328,6 +305,7 @@
     },
     "NotPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "not"
       ],
@@ -339,6 +317,7 @@
     },
     "HasFlagPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "hasFlag"
       ],
@@ -350,6 +329,7 @@
     },
     "HasRollOptionPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "hasRollOption"
       ],
@@ -361,6 +341,7 @@
     },
     "WhenPredicate": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "when"
       ],
@@ -379,27 +360,6 @@
           "minItems": 2
         }
       }
-    },
-    "KingdomSkill": {
-      "type": "string",
-      "enum": [
-        "agriculture",
-        "arts",
-        "boating",
-        "defense",
-        "engineering",
-        "exploration",
-        "folklore",
-        "industry",
-        "intrigue",
-        "magic",
-        "politics",
-        "scholarship",
-        "statecraft",
-        "trade",
-        "warfare",
-        "wilderness"
-      ]
     }
   }
 }

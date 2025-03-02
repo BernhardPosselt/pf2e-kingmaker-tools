@@ -8,8 +8,13 @@
             "name": "Ongoing Harmful Event",
             "type": "status",
             "enabled": false,
-            "phases": [
-                "event"
+            "predicates": [
+                {
+                    "eq": [
+                        "@phase",
+                        "event"
+                    ]
+                }
             ],
             "value": 4
         }

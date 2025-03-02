@@ -9,8 +9,13 @@
             "enabled": false,
             "value": 1,
             "type": "circumstance",
-            "phases": [
-                "event"
+            "predicates": [
+                {
+                    "eq": [
+                        "@phase",
+                        "event"
+                    ]
+                }
             ]
         }
     ]

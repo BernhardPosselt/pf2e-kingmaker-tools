@@ -19,8 +19,13 @@
             {
                 "value": -1,
                 "name": "Tap Treasury: Success",
-                "abilities": [
-                    "economy"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "economy"
+                        ]
+                    }
                 ],
                 "turns": 2,
                 "enabled": true,
@@ -34,9 +39,13 @@
             {
                 "value": -1,
                 "name": "Tap Treasury: Success",
-                "abilities": [
-                    "economy",
-                    "loyalty"
+                "predicates": [
+                    {
+                        "in": [
+                            "@ability",
+                            ["loyalty", "economy"]
+                        ]
+                    }
                 ],
                 "turns": 2,
                 "enabled": true,
@@ -50,9 +59,13 @@
             {
                 "value": -1,
                 "name": "Tap Treasury: Success",
-                "abilities": [
-                    "economy",
-                    "loyalty"
+                "predicates": [
+                    {
+                        "in": [
+                            "@ability",
+                            ["loyalty", "economy"]
+                        ]
+                    }
                 ],
                 "turns": 2,
                 "enabled": true,
