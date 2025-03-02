@@ -7,7 +7,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 
 fun noBridgePenalty(settlements: List<Settlement>): Modifier? {
-    val settlementsLackingBridge = settlements.filter { it.waterBorders == 4 && !it.hasBridge }
+    val settlementsLackingBridge = settlements.filter { it.lacksBridge }
     return if (settlementsLackingBridge.isNotEmpty()) {
         Modifier(
             id = "lacking-bridge",

@@ -3,11 +3,13 @@ package at.posselt.pfrpg2e.macros
 import at.posselt.pfrpg2e.app.forms.TextArea
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
-import at.posselt.pfrpg2e.kingdom.*
-import at.posselt.pfrpg2e.kingdom.structures.StructureData
+import at.posselt.pfrpg2e.kingdom.getStructure
+import at.posselt.pfrpg2e.kingdom.setStructureData
+import at.posselt.pfrpg2e.kingdom.structures.RawStructureData
 import at.posselt.pfrpg2e.kingdom.structures.StructureValidationError
 import at.posselt.pfrpg2e.kingdom.structures.structureRefSchema
 import at.posselt.pfrpg2e.kingdom.structures.validateStructure
+import at.posselt.pfrpg2e.kingdom.unsetStructureData
 import at.posselt.pfrpg2e.takeIfInstance
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.ui
@@ -57,7 +59,7 @@ suspend fun editStructureMacro(actor: Actor?) {
             } else {
                 try {
                     validateStructure(data.data, parseToJsonElement(JSON.stringify(structureRefSchema)))
-                    val value = JSON.parse<StructureData>(data.data)
+                    val value = JSON.parse<RawStructureData>(data.data)
                     npcActor.setStructureData(value)
                 } catch (e: StructureValidationError) {
                     ui.notifications.error("Failed to validate structure ${e.message}")

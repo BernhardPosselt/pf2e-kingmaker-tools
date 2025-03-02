@@ -4,13 +4,12 @@ import at.posselt.pfrpg2e.kingdom.getStructure
 import at.posselt.pfrpg2e.utils.asAnyObject
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.pf2e.actor.PF2ENpc
-import kotlin.collections.find
 import kotlin.contracts.contract
 
 
 data class ActorAndStructure(
     val actor: PF2ENpc,
-    val structure: StructureData,
+    val structure: RawStructureData,
 )
 
 @Suppress(
@@ -28,7 +27,7 @@ private fun isStructureRef(obj: AnyObject): Boolean {
 
 class StructureParsingException(message: String) : Exception(message)
 
-fun PF2ENpc.getParsedStructureData(): StructureData? {
+fun PF2ENpc.getParsedStructureData(): RawStructureData? {
     val data = getStructure()
     if (data == null) return null
     val record = data.asAnyObject()
@@ -36,7 +35,7 @@ fun PF2ENpc.getParsedStructureData(): StructureData? {
         structures.find { it.name == record.ref }
             ?: throw StructureParsingException("Could not find existing structure with ref ${record.ref}")
     } else {
-        data.unsafeCast<StructureData>()
+        data.unsafeCast<RawStructureData>()
     }
     return null
 }

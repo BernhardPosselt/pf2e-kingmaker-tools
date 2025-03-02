@@ -2,7 +2,7 @@ package at.posselt.pfrpg2e.data.kingdom.settlements
 
 data class SettlementSize(
     val type: SettlementType,
-    val maximumLots: String,
+    val maximumBlocks: String,
     val requiredKingdomLevel: Int,
     val population: String,
     val consumption: Int,
@@ -17,7 +17,7 @@ val settlementSizeData = listOf(
         type = SettlementType.VILLAGE,
         consumption = 1,
         influence = 0,
-        maximumLots = "1",
+        maximumBlocks = "1",
         requiredKingdomLevel = 1,
         levelFrom = 1,
         levelTo = 1,
@@ -28,7 +28,7 @@ val settlementSizeData = listOf(
         consumption = 2,
         influence = 1,
         requiredKingdomLevel = 3,
-        maximumLots = "4",
+        maximumBlocks = "4",
         levelFrom = 2,
         levelTo = 4,
         maxItemBonus = 1,
@@ -38,7 +38,7 @@ val settlementSizeData = listOf(
         consumption = 4,
         influence = 2,
         requiredKingdomLevel = 9,
-        maximumLots = "9",
+        maximumBlocks = "9",
         levelFrom = 5,
         levelTo = 9,
         maxItemBonus = 2,
@@ -47,10 +47,13 @@ val settlementSizeData = listOf(
         type = SettlementType.METROPOLIS,
         consumption = 6,
         influence = 3,
-        maximumLots = "10+",
+        maximumBlocks = "10+",
         requiredKingdomLevel = 15,
         levelFrom = 10,
         maxItemBonus = 3,
         population = "25001+",
     )
 )
+
+fun findSettlementSize(level: Int) =
+    settlementSizeData.find { it.levelFrom >= level && (it.levelTo ?: 0) <= level }!!

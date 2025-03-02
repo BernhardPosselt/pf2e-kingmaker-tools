@@ -30,6 +30,7 @@ class ExpressionTest {
             leader = Leader.COUNSELOR,
             activity = null,
             phase = null,
+            isVacant = false,
         )
         val result = NotPredicate(
             AndPredicate(

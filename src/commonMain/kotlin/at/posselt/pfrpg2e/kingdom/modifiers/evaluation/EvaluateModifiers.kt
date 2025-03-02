@@ -31,7 +31,9 @@ fun evaluateModifiers(
     modifiers: List<Modifier>,
     context: ExpressionContext,
 ): ModifierResult {
-    val evaluatedModifiers = modifiers.map { evaluatePredicatedValue(it, context) }
+    val evaluatedModifiers = modifiers
+        .distinctBy { it.id }
+        .map { evaluatePredicatedValue(it, context) }
     val filteredModifiers = applyStackingRules(evaluatedModifiers)
     val enabledModifiers = filteredModifiers.filter { it.enabled }
     return ModifierResult(

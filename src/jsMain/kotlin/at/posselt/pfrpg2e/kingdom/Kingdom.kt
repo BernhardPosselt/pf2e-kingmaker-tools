@@ -1,6 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
-import at.posselt.pfrpg2e.kingdom.structures.Structure
+import at.posselt.pfrpg2e.kingdom.structures.RawStructure
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.unsetAppFlag
@@ -15,10 +15,10 @@ suspend fun PF2ENpc.setKingdom(data: KingdomData) {
     setAppFlag("kingdom-sheet", data)
 }
 
-fun PF2ENpc.getStructure(): Structure? =
+fun PF2ENpc.getStructure(): RawStructure? =
     getAppFlag("structureData")
 
-suspend fun PF2ENpc.setStructureData(data: Structure) {
+suspend fun PF2ENpc.setStructureData(data: RawStructure) {
     setAppFlag("structureData", data)
 }
 

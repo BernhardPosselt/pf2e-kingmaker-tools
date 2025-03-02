@@ -46,7 +46,7 @@ suspend fun settlementSizeHelp() {
                     }
                     SSizeContext(
                         type = it.type.toLabel(),
-                        blocks = it.maximumLots,
+                        blocks = it.maximumBlocks,
                         population = it.population,
                         level = level,
                         consumption = it.consumption.toString(),

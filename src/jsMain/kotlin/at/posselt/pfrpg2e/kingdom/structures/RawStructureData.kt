@@ -13,51 +13,51 @@ val recoverArmyIds = arrayOf(
 )
 
 @JsPlainObject
-external interface RuinAmount {
+external interface RawRuinAmount {
     val value: Int
     val ruin: String
     val moreThanOncePerTurn: Boolean?
 }
 
 @JsPlainObject
-external interface ReduceUnrestBy {
+external interface RawReduceUnrestBy {
     val value: String
     val moreThanOncePerTurn: Boolean?
     val note: String
 }
 
 @JsPlainObject
-external interface LeadershipActivityRule {
+external interface RawLeadershipActivityRule {
     val value: Int
 }
 
 @JsPlainObject
-external interface SettlementEventsRule {
+external interface RawSettlementEventsRule {
     val value: Int
 }
 
 @JsPlainObject
-external interface ActivityBonusRule {
+external interface RawActivityBonusRule {
     val value: Int
     val activity: String
 }
 
 @JsPlainObject
-external interface AvailableItemsRule {
+external interface RawAvailableItemsRule {
     val value: Int
     val group: String?
     val maximumStacks: Int?
 }
 
 @JsPlainObject
-external interface SkillBonusRule {
+external interface RawSkillBonusRule {
     val value: Int
     val skill: String
     val activity: String?
 }
 
 @JsPlainObject
-external interface CommodityStorage {
+external interface RawCommodityStorage {
     val ore: Int?
     val food: Int?
     val lumber: Int?
@@ -73,7 +73,7 @@ external interface ConstructionSkill {
 }
 
 @JsPlainObject
-external interface Construction {
+external interface RawConstruction {
     val skills: Array<ConstructionSkill>
     val lumber: Int?
     val luxuries: Int?
@@ -83,15 +83,15 @@ external interface Construction {
     val dc: Int
 }
 
-sealed external interface Structure
+sealed external interface RawStructure
 
 @JsPlainObject
-external interface StructureRef : Structure {
+external interface StructureRef : RawStructure {
     val ref: String
 }
 
 @JsPlainObject
-external interface IncreaseResourceDice {
+external interface RawIncreaseResourceDice {
     val village: Int?
     val town: Int?
     val city: Int?
@@ -99,19 +99,19 @@ external interface IncreaseResourceDice {
 }
 
 @JsPlainObject
-external interface StructureData : Structure {
+external interface RawStructureData : RawStructure {
     val name: String
     val stacksWith: String?
-    val construction: Construction?
+    val construction: RawConstruction?
     val notes: String?
     val preventItemLevelPenalty: Boolean?
     val enableCapitalInvestment: Boolean
-    val skillBonusRules: Array<SkillBonusRule>?
-    val activityBonusRules: Array<ActivityBonusRule>?
-    val availableItemsRules: Array<AvailableItemsRule>?
-    val settlementEventRules: Array<SettlementEventsRule>?
-    val leadershipActivityRules: Array<LeadershipActivityRule>?
-    val storage: CommodityStorage?
+    val skillBonusRules: Array<RawSkillBonusRule>?
+    val activityBonusRules: Array<RawActivityBonusRule>?
+    val availableItemsRules: Array<RawAvailableItemsRule>?
+    val settlementEventRules: Array<RawSettlementEventsRule>?
+    val leadershipActivityRules: Array<RawLeadershipActivityRule>?
+    val storage: RawCommodityStorage?
     val increaseLeadershipActivities: Boolean?
     val isBridge: Boolean?
     val consumptionReduction: Int?
@@ -124,16 +124,16 @@ external interface StructureData : Structure {
     val reducesRuin: Boolean?
     val level: Int
     val upgradeFrom: Array<String>?
-    val reduceUnrestBy: ReduceUnrestBy?
-    val reduceRuinBy: RuinAmount?
-    val gainRuin: RuinAmount?
-    val increaseResourceDice: IncreaseResourceDice?
+    val reduceUnrestBy: RawReduceUnrestBy?
+    val reduceRuinBy: RawRuinAmount?
+    val gainRuin: RawRuinAmount?
+    val increaseResourceDice: RawIncreaseResourceDice?
     val consumptionReductionStacks: Boolean?
     val ignoreConsumptionReductionOf: Array<String>?
 }
 
 @JsModule("./structures.json")
-external val structures: Array<StructureData>
+external val structures: Array<RawStructureData>
 
 @JsModule("./schemas/structure.json")
 external val structureSchema: JsonElement
