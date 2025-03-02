@@ -56,4 +56,5 @@ val settlementSizeData = listOf(
 )
 
 fun findSettlementSize(level: Int) =
-    settlementSizeData.find { it.levelFrom >= level && (it.levelTo ?: 0) <= level }!!
+    settlementSizeData.find { it.levelFrom <= level
+            && (it.levelTo?.let { to -> to >= level } != false) }!!

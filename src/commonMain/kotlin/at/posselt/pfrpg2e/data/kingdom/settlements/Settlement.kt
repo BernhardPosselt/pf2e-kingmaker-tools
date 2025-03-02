@@ -9,7 +9,7 @@ data class Settlement(
     val isSecondaryTerritory: Boolean,
     val settlementEventBonus: Int, // added by watchtowers
     val leaderLeadershipActivityBonus: Int, // added by Palace & co
-    val bonuses: List<GroupedStructureBonus>,
+    val bonuses: Set<GroupedStructureBonus>,
     val allowCapitalInvestment: Boolean,
     val notes: Set<String>,
     val storage: CommodityStorage,

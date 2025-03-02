@@ -1,12 +1,15 @@
-package at.posselt.pfrpg2e.data.kingdom.structures
+package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.findSettlementSize
+import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
+import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
+import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import kotlin.math.abs
 import kotlin.math.max
 
 private data class CombinedBonuses(
-    val bonuses: List<GroupedStructureBonus>,
+    val bonuses: Set<GroupedStructureBonus>,
     val eventBonus: Int,
     val leaderBonus: Int,
 )
@@ -33,20 +36,20 @@ private fun combineBonuses(
     val eventBonus = structures.sumOf { it.settlementEventBonus }.coerceIn(0, maxItemBonus)
     val grouped = structures.groupBy { if (allStructuresStack) "" else (it.stacksWith ?: it.name) }
     val bonuses = grouped.flatMap { groupedStructures ->
-        val names = groupedStructures.value.map { it.name }
-        groupedStructures.value.flatMap { bonus ->
-            val groupedBonuses = bonus.bonuses.groupBy { it }
-            groupedBonuses.values.map {
-                val bonus = it.first().copy(value = it.size.coerceIn(0, maxItemBonus))
-                GroupedStructureBonus(
-                    structureNames = names,
-                    skill = bonus.skill,
-                    activity = bonus.activity,
-                    value = bonus.value
-                )
-            }
+        val structures = groupedStructures.value
+        val groupedBonuses = structures.flatMap { it.bonuses }.groupBy { it }
+        val names = structures.map { it.name }.toSet()
+        groupedBonuses.values.map { bonuses ->
+            val value = bonuses.sumOf { it.value }.coerceIn(0, maxItemBonus)
+            val bonus = bonuses.first()
+            GroupedStructureBonus(
+                structureNames = names,
+                skill = bonus.skill,
+                activity = bonus.activity,
+                value = value
+            )
         }
-    }
+    }.toSet()
     return CombinedBonuses(
         eventBonus = eventBonus,
         leaderBonus = leaderBonus,
@@ -95,7 +98,7 @@ fun evaluateStructures(
             .flatMap { it.unlockActivities }
             .toSet(),
         residentialLots = structures
-            .filter { it.traits.contains(StructureTrait.RESIDENTIAL) }
+            .filter { it.isResidential }
             .sumOf { it.lots },
         hasBridge = structures.any { it.isBridge },
         occupiedBlocks = occupiedBlocks,
