@@ -29,8 +29,13 @@
             {
                 "turns": 2,
                 "enabled": true,
-                "abilities": [
-                    "stability"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "stability"
+                        ]
+                    }
                 ],
                 "value": -1,
                 "name": "Claim Hex: Critical Failure",

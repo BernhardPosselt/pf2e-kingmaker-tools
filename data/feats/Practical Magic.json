@@ -8,8 +8,13 @@
         {
             "name": "Practical Magic",
             "type": "circumstance",
-            "skills": [
-                "magic"
+            "predicates": [
+                {
+                    "eq": [
+                        "@skill",
+                        "magic"
+                    ]
+                }
             ],
             "enabled": true,
             "value": 1

@@ -6,20 +6,14 @@ import {
     ModifierTotal,
     ModifierTotals,
     ModifierType,
-    ModifierWithId, parseLeaderPerformingCheck,
+    ModifierWithId,
+    parseLeaderPerformingCheck,
 } from '../modifiers';
 import {allKingdomPhases, getActivitySkills, KingdomPhase} from '../data/activities';
 import {Skill, skillAbilities} from '../data/skills';
 import {createSkillModifiers, LeaderPerformingCheck} from '../skills';
 import {getControlDC, getFlags, getUpgradeResults, Kingdom, SkillRanks} from '../data/kingdom';
-import {
-    capitalize,
-    encodeJson,
-    LabelAndValue,
-    rollModeChoices,
-    toLabelAndValue,
-    unslugify
-} from '../../utils';
+import {capitalize, encodeJson, LabelAndValue, rollModeChoices, toLabelAndValue, unslugify} from '../../utils';
 import {getKingdomActivitiesById, KingdomActivityById} from '../data/activityData';
 import {rollCheck} from '../rolls';
 import {
@@ -283,6 +277,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 rollType: 'selected',
                 rollMode: this.rollMode,
                 additionalChatMessages: this.additionalChatMessages,
+                phase: this.phase,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);
@@ -320,6 +315,7 @@ export class CheckDialog extends FormApplication<FormApplicationOptions & CheckD
                 kingdom: this.kingdom,
                 flags: getFlags(this.game, this.kingdom),
                 upgrades: getUpgradeResults(this.game, this.kingdom),
+                phase: this.phase,
             });
             await this.onRoll(this.consumeModifiers);
             await this.afterRoll(degree);

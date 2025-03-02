@@ -32,8 +32,13 @@
                 "turns": 2,
                 "enabled": false,
                 "value": 2,
-                "activities": [
-                    "send-diplomatic-envoy"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@activity",
+                            "send-diplomatic-envoy"
+                        ]
+                    }
                 ],
                 "name": "Send Diplomatic Envoy: Success",
                 "type": "circumstance"

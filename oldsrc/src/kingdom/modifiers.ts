@@ -62,6 +62,10 @@ interface NotPredicate {
     not: Predicate;
 }
 
+interface InPredicate {
+    in: [string, string[]];
+}
+
 interface HasFlagPredicate {
     hasFlag: string;
 }
@@ -71,6 +75,7 @@ interface HasRollOptionPredicate {
 }
 
 export type Predicate = GtePredicate
+    | InPredicate
     | GtPredicate
     | LtPredicate
     | LtePredicate
@@ -90,19 +95,29 @@ export interface Modifier {
     value: number;
     predicatedValue?: WhenPredicate[];
     name: string;
-    phases?: KingdomPhase[];
-    activities?: string[];
-    skills?: Skill[];
-    abilities?: Ability[];
     enabled: boolean;
     turns?: number;
     consumeId?: string;
+    isConsumedAfterRoll?: boolean;
     rollOptions?: string[];
-    predicate?: Predicate[];
+    predicates?: Predicate[];
 }
 
 function createPredicateName(values: string[] | undefined, label: string): string | undefined {
     return values ? `${label}: ${values.map(v => unslugify(v)).join(', ')}` : undefined;
+}
+
+function extractPredicateTargets(modifier: Modifier, selector: '@phase' | '@skill' | '@ability' | '@activity'): string[] {
+    return modifier.predicates
+        ?.flatMap(p => {
+            if ('in' in p && p.in[0] === selector) {
+                return p.in[1];
+            } else if ('eq' in p && p.eq[0] === selector) {
+                return [p.eq[1]];
+            } else {
+                return [];
+            }
+        }) ?? [];
 }
 
 export function modifierToLabel(modifier: Modifier): string {
@@ -111,15 +126,15 @@ export function modifierToLabel(modifier: Modifier): string {
         value = modifier.value >= 0 ? `+${modifier.value} ` : `${modifier.value} `;
     }
     const type = modifier.value >= 0 ? capitalize(modifier.type) + ' Bonus' : capitalize(modifier.type) + ' Penalty';
-    const to = modifier.skills || modifier.abilities || modifier.activities || modifier.phases ? ' to: ' : '';
     const predicates = [
-        createPredicateName(modifier.phases, 'Phases'),
-        createPredicateName(modifier.activities, 'Activities'),
-        createPredicateName(modifier.abilities, 'Abilities'),
-        createPredicateName(modifier.skills, 'Skills'),
+        extractPredicateTargets(modifier, '@phase'),
+        extractPredicateTargets(modifier, '@skill'),
+        extractPredicateTargets(modifier, '@ability'),
+        extractPredicateTargets(modifier, '@activity'),
     ]
         .filter(v => v !== undefined)
         .join('; ');
+    const to = predicates.length > 0 ? ' to: ' : '';
     return `${value}${type}${to}${predicates}`;
 }
 
@@ -145,37 +160,6 @@ export function removePredicatedModifiers(
     return modifiers
         .filter(modifier => {
             const predicates: ((modifier: Modifier) => boolean)[] = [];
-            if (modifier.abilities) {
-                predicates.push((m) => m.abilities?.includes(skillAbilities[skill]) === true);
-            }
-            if (modifier.skills) {
-                predicates.push((m) => m.skills?.includes(skill) === true);
-            }
-
-            // if we aren't running in a phase, remove all modifiers relevant to a phase
-            if (phase && modifier.phases) {
-                predicates.push((m) => m.phases?.includes(phase) === true);
-            }
-            // if we aren't running in an activity, remove all modifiers not matching the activity
-            if (activity && modifier.activities) {
-                predicates.push((m) => m.activities?.includes(activity) === true);
-            }
-
-            // regardless of if we are running in an activity, we need to check
-            // if it is actually possible to skill check for the given skill and rank
-            if (modifier.activities) {
-                predicates.push((m) => m.activities!
-                    .some(activity => {
-                        const data = activities[activity];
-                        const activitySkillRank = data?.skills?.[skill];
-                        if (activitySkillRank === undefined) {
-                            return false;
-                        } else {
-                            return activitySkillRank <= rank;
-                        }
-                    }),
-                );
-            }
             let keepModifier = true;
             for (const predicate of predicates) {
                 keepModifier = keepModifier && predicate(modifier);
@@ -183,14 +167,6 @@ export function removePredicatedModifiers(
             return keepModifier;
         }).map(modifier => {
             let enabled = modifier.enabled;
-            // modifiers that are running outside a phase or activity should be
-            // disabled by default if they belong to one
-            if (!phase && modifier.phases) {
-                enabled = false;
-            }
-            if (!activity && modifier.activities) {
-                enabled = false;
-            }
             return {
                 ...modifier,
                 enabled,
@@ -345,7 +321,7 @@ export function createActiveSettlementModifiers(
             name: 'Settlements Without Land Borders',
             value: settlementsWithoutLandBorders * -1,
             type: 'item',
-            skills: ['trade'],
+            predicates: [{"eq": ["@skill", "trade"]}],
             enabled: true,
         });
     }
@@ -364,7 +340,7 @@ export function createActiveSettlementModifiers(
             type: 'circumstance',
             value: settlementEventBonus,
             enabled: true,
-            phases: ['event'],
+            predicates: [{"eq": ["@phase", "event"]}],
         });
     }
     const leadershipBonus = activeSettlementStructureResult?.leadershipActivityBonus ?? 0;
@@ -374,7 +350,7 @@ export function createActiveSettlementModifiers(
             type: 'item',
             value: leadershipBonus,
             enabled: false,
-            phases: ['leadership'],
+            predicates: [{"eq": ["@phase", "leadership"]}],
         });
     }
     result.push({
@@ -382,12 +358,12 @@ export function createActiveSettlementModifiers(
         type: 'circumstance',
         value: levelData.investedLeadershipBonus,
         enabled: false,
-        phases: ['event'],
+        predicates: [{"eq": ["@phase", "event"]}],
     });
     return result;
 }
 
-function resolveValue(kingdom: Kingdom, value: string, skill: Skill): string {
+function resolveValue(kingdom: Kingdom, value: string, skill: Skill, phase: KingdomPhase | null, activity: string | null): string | null {
     if (value === "@unrest") {
         return `${kingdom.unrest}`;
     } else if (value === "@magicRank") {
@@ -398,6 +374,12 @@ function resolveValue(kingdom: Kingdom, value: string, skill: Skill): string {
         return `${kingdom.skillRanks[skill]}`;
     } else if (value === "@skill") {
         return skill;
+    } else if (value === "@phase") {
+        return phase;
+    } else if (value === "@activity") {
+        return activity;
+    } else if (value === "@ability") {
+        return skillAbilities[skill];
     } else {
         return value;
     }
@@ -409,27 +391,33 @@ function processPredicate(
     flags: string[],
     rollOptions: string[],
     skill: Skill,
+    phase: KingdomPhase | null,
+    activity: string | null,
 ): boolean {
     if ('gte' in p) {
-        return resolveValue(kingdom, p.gte[0], skill) >= resolveValue(kingdom, p.gte[1], skill);
+        return (resolveValue(kingdom, p.gte[0], skill, phase, activity) ?? 0) >= (resolveValue(kingdom, p.gte[1], skill, phase, activity) ?? 0);
     } else if ('gt' in p) {
-        return resolveValue(kingdom, p.gt[0], skill) > resolveValue(kingdom, p.gt[1], skill);
+        return (resolveValue(kingdom, p.gt[0], skill, phase, activity) ?? 0) > (resolveValue(kingdom, p.gt[1], skill, phase, activity) ?? 0);
     } else if ('lte' in p) {
-        return resolveValue(kingdom, p.lte[0], skill) <= resolveValue(kingdom, p.lte[1], skill);
+        return (resolveValue(kingdom, p.lte[0], skill, phase, activity) ?? 0) <= (resolveValue(kingdom, p.lte[1], skill, phase, activity) ?? 0);
     } else if ('lt' in p) {
-        return resolveValue(kingdom, p.lt[0], skill) < resolveValue(kingdom, p.lt[1], skill);
+        return (resolveValue(kingdom, p.lt[0], skill, phase, activity) ?? 0) < (resolveValue(kingdom, p.lt[1], skill, phase, activity) ?? 0);
     } else if ('eq' in p) {
-        return resolveValue(kingdom, p.eq[0], skill) == resolveValue(kingdom, p.eq[1], skill);
+        return resolveValue(kingdom, p.eq[0], skill, phase, activity) == resolveValue(kingdom, p.eq[1], skill, phase, activity);
     } else if ('or' in p) {
-        return p.or.some(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill));
+        return p.or.some(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill, phase, activity));
     } else if ('and' in p) {
-        return p.and.every(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill));
+        return p.and.every(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill, phase, activity));
     } else if ('hasRollOption' in p) {
         return rollOptions.includes(p.hasRollOption);
     } else if ('hasFlag' in p) {
         return flags.includes(p.hasFlag);
+    } else if ('in' in p) {
+        const value = resolveValue(kingdom, p.in[0], skill, phase, activity);
+        const values = p.in[1].map(v => resolveValue(kingdom, v, skill, phase, activity))
+        return values.includes(value);
     } else if ('not' in p) {
-        return !processPredicate(kingdom, p.not, flags, rollOptions, skill);
+        return !processPredicate(kingdom, p.not, flags, rollOptions, skill, phase, activity);
     } else {
         return true;
     }
@@ -441,12 +429,15 @@ export function evaluateModifierValue(
     flags: string[],
     rollOptions: string[],
     skill: Skill,
+    ability: Ability,
+    phase: KingdomPhase | null,
+    activity: string | null,
 ): Modifier {
     const predicatedValue = modifier.predicatedValue;
     if (predicatedValue !== undefined) {
-        const result = predicatedValue.find(p => processPredicate(kingdom, p.when[0], flags, rollOptions, skill));
+        const result = predicatedValue.find(p => processPredicate(kingdom, p.when[0], flags, rollOptions, skill, phase, activity));
         if (result) {
-            const value = parseInt(resolveValue(kingdom, result.when[1], skill), 10);
+            const value = parseInt((resolveValue(kingdom, result.when[1], skill, phase, activity) ?? '0'), 10);
             return {
                 ...modifier,
                 value,
@@ -463,11 +454,13 @@ export function filterPredicates<T>(
     rollOptions: string[],
     skill: Skill,
     predicatesGetter: (modifier: T) => Predicate[] | undefined,
+    phase: KingdomPhase | null,
+    activity: string | null,
 ) {
     return elements.filter(m => {
         const predicate = predicatesGetter(m);
         if (predicate) {
-            return predicate.every(p => processPredicate(kingdom, p, flags, rollOptions, skill));
+            return predicate.every(p => processPredicate(kingdom, p, flags, rollOptions, skill, phase, activity));
         } else {
             return true;
         }
@@ -497,15 +490,16 @@ export function processModifiers(
         flags: string[];
     },
 ): ModifierWithId[] {
-    const rollOptions = filterPredicates(kingdom, modifiers, flags, [], skill, m => m.predicate)
+    const ability = skillAbilities[skill];
+    const rollOptions = filterPredicates(kingdom, modifiers, flags, [], skill, m => m.predicates, phase ?? null, activity ?? null)
         .filter(m => m.enabled)
         .flatMap(m => m.rollOptions ?? []);
-    const copied = filterPredicates(kingdom, modifiers, flags, rollOptions, skill, m => m.predicate)
+    const copied = filterPredicates(kingdom, modifiers, flags, rollOptions, skill, m => m.predicates, phase ?? null, activity ?? null)
         .map((modifier, index) => {
             // make a copy and assign every modifier an id
             const cloned = foundry.utils.deepClone(modifier);
             return {
-                ...(evaluateModifierValue(cloned, kingdom, flags, rollOptions, skill)),
+                ...(evaluateModifierValue(cloned, kingdom, flags, rollOptions, skill, ability, phase ?? null, activity ?? null)),
                 id: `${index}`,
             };
         });
@@ -532,7 +526,7 @@ function createVacancyModifier(value: number, name: string, rulerVacant: boolean
     return {
         name,
         value: -(rulerVacant ? value + 1 : value),
-        phases: phase ? [phase] : undefined,
+        predicates: phase ? [{"eq": ["@phase", phase]}] : [],
         type: 'vacancy',
         enabled: true,
     };

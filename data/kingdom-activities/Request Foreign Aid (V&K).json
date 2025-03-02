@@ -16,7 +16,7 @@
         "modifiers": [
             {
                 "turns": 1,
-                "consumeId": "",
+                "isConsumedAfterRoll": true,
                 "enabled": false,
                 "value": 4,
                 "name": "Request Foreign Aid: Critical Success",
@@ -29,7 +29,7 @@
         "modifiers": [
             {
                 "turns": 1,
-                "consumeId": "",
+                "isConsumedAfterRoll": true,
                 "enabled": false,
                 "value": 2,
                 "name": "Request Foreign Aid: Success",

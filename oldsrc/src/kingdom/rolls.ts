@@ -8,10 +8,12 @@ import {gainFame} from './kingdom-utils';
 import {getFlags, getUpgradeResults, Kingdom} from './data/kingdom';
 import {AdditionalChatMessages, ModifierBreakdown, ModifierBreakdowns} from './dialogs/check-dialog';
 import {UpgradeResult} from "./data/feats";
+import {KingdomPhase} from "./data/activities";
 
 export interface RollMeta {
     formula: string;
     activity: string | undefined;
+    phase: KingdomPhase | undefined;
     degree: StringDegreeOfSuccess;
     skill: Skill;
     dc: number;
@@ -45,6 +47,7 @@ export function parseMeta(el: HTMLElement): RollMeta {
         supernaturalSolutionModifier: parseInt(meta.dataset.supernaturalSolutionModifier ?? '0', 10),
         modifierBreakdown: isNotBlank(meta.dataset.modifierBreakdown) ? meta.dataset.modifierBreakdown : undefined,
         rollMode: meta.dataset.rollMode as RollMode,
+        phase: meta.dataset.phase as (KingdomPhase | null | undefined) ?? undefined
     };
 }
 
@@ -91,6 +94,7 @@ export async function reRoll(
         rollType,
         rollMode,
         additionalChatMessages,
+        phase,
     } = parseMeta(el);
     const label = activity ? unslugify(activity) : unslugify(skill);
     let reRollFormula = formula;
@@ -119,11 +123,12 @@ export async function reRoll(
 
     const upgrades = getUpgradeResults(game, kingdom);
     const flags = getFlags(game, kingdom);
+    const kingdomActivity = activity ? getKingdomActivitiesById(game, kingdom.homebrewActivities)[activity] : undefined;
     await rollCheck({
         game,
         formula: reRollFormula,
         label,
-        activity: activity ? getKingdomActivitiesById(game, kingdom.homebrewActivities)[activity] : undefined,
+        activity: kingdomActivity,
         dc,
         skill,
         modifier,
@@ -138,6 +143,7 @@ export async function reRoll(
         creativeSolutionModifier,
         rollMode,
         additionalChatMessages,
+        phase: phase ?? null,
     });
 }
 
@@ -195,6 +201,7 @@ interface RollCheckOptions {
     upgrades: UpgradeResult[];
     kingdom: Kingdom;
     flags: string[];
+    phase: KingdomPhase | null;
 }
 
 type RollType = 'creative-solution' | 'supernatural-solution' | 'selected';
@@ -245,6 +252,8 @@ function adjustDegreeOfSuccess(
     kingdom: Kingdom,
     rollOptions: string[],
     flags: string[],
+    phase: KingdomPhase | null,
+    activity: string | null,
 ): DegreeOfSuccess {
     const relevantUpgrades = filterPredicates(
         kingdom,
@@ -253,6 +262,8 @@ function adjustDegreeOfSuccess(
         rollOptions,
         skill,
         (u) => u.predicate,
+        phase,
+        activity,
     )
     if (current === DegreeOfSuccess.CRITICAL_FAILURE
         && relevantUpgrades.some(a => a.upgrade === "criticalFailure")) {
@@ -288,13 +299,14 @@ export async function rollCheck(
         additionalChatMessages,
         kingdom,
         flags,
+        phase,
     }: RollCheckOptions,
 ): Promise<DegreeOfSuccess> {
     const roll = await new Roll(formula).roll();
     const total = roll.total;
     const dieNumber = total - modifier;
     const previousDegree = determineDegreeOfSuccess(dieNumber, total, dc);
-    const degreeOfSuccess = adjustDegreeOfSuccess(upgrades, previousDegree, skill, kingdom, rollOptions, flags);
+    const degreeOfSuccess = adjustDegreeOfSuccess(upgrades, previousDegree, skill, kingdom, rollOptions, flags, phase, activity?.id ?? null);
     const meta = `
         <div class="km-roll-meta" hidden 
             data-formula="${formula}" 
@@ -303,6 +315,7 @@ export async function rollCheck(
             data-skill="${skill}"
             data-roll-options="${rollOptions ? encodeJson(rollOptions) : ''}"
             data-dc="${dc}"
+            ${phase === undefined ? '' : `data-phase="${phase}"`}
             data-total="${total}"
             data-modifier-breakdown="${modifierBreakdown ?? ''}"
             data-modifier="${modifier}"

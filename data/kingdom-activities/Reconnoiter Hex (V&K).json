@@ -25,8 +25,13 @@
             {
                 "turns": 2,
                 "enabled": true,
-                "abilities": [
-                    "loyalty"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "loyalty"
+                        ]
+                    }
                 ],
                 "value": -1,
                 "name": "Reconnoiter Hex: Critical Failure",

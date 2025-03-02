@@ -7,12 +7,19 @@
         {
             "name": "Loyalty Based Skill",
             "type": "circumstance",
-            "abilities": [
-                "loyalty"
-            ],
-            "activities": [
-                "new-leadership",
-                "new-leadership-vk"
+            "predicates": [
+                {
+                    "eq": [
+                        "@ability",
+                        "loyalty"
+                    ]
+                },
+                {
+                    "in": [
+                        "@activity",
+                        ["new-leadership", "new-leadership-vk"]
+                    ]
+                }
             ],
             "enabled": true,
             "value": 2
@@ -20,11 +27,19 @@
         {
             "name": "Loyalty Based Skill",
             "type": "circumstance",
-            "abilities": [
-                "loyalty"
-            ],
-            "activities": [
-                "pledge-of-fealty"
+            "predicates": [
+                {
+                    "eq": [
+                        "@ability",
+                        "loyalty"
+                    ]
+                },
+                {
+                    "eq": [
+                        "@activity",
+                        "pledge-of-fealty"
+                    ]
+                }
             ],
             "enabled": true,
             "value": 2

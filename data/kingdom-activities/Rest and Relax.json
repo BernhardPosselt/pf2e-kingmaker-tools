@@ -19,9 +19,14 @@
         "modifiers": [
             {
                 "turns": 1,
-                "consumeId": "",
-                "phases": [
-                    "leadership"
+                "isConsumedAfterRoll": true,
+                "predicates": [
+                    {
+                        "eq": [
+                            "@phase",
+                            "leadership"
+                        ]
+                    }
                 ],
                 "enabled": true,
                 "value": 2,
@@ -41,9 +46,14 @@
         "modifiers": [
             {
                 "turns": 1,
-                "consumeId": "",
-                "phases": [
-                    "leadership"
+                "isConsumedAfterRoll": true,
+                "predicates": [
+                    {
+                        "eq": [
+                            "@phase",
+                            "leadership"
+                        ]
+                    }
                 ],
                 "enabled": true,
                 "value": -2,

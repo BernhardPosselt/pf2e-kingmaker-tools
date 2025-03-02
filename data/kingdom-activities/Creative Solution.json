@@ -19,7 +19,7 @@
                 "value": 2,
                 "name": "Creative Solution: Critical Success",
                 "type": "circumstance",
-                "consumeId": ""
+                "isConsumedAfterRoll": true
             }
         ]
     },
@@ -32,7 +32,7 @@
                 "value": 2,
                 "name": "Creative Solution: Success",
                 "type": "circumstance",
-                "consumeId": ""
+                "isConsumedAfterRoll": true
             }
         ]
     },
@@ -48,8 +48,13 @@
                 "value": -1,
                 "name": "Creative Solution: Critical Failure",
                 "type": "circumstance",
-                "abilities": [
-                    "culture"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "culture"
+                        ]
+                    }
                 ]
             }
         ]

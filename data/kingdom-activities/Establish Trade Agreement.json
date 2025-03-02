@@ -31,8 +31,13 @@
                 "value": -1,
                 "name": "Establish Trade Agreement: Critical Failure",
                 "type": "circumstance",
-                "abilities": [
-                    "economy"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "economy"
+                        ]
+                    }
                 ]
             }
         ]

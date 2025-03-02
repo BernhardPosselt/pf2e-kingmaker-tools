@@ -8,8 +8,13 @@
         {
             "name": "Practical Magic",
             "type": "status",
-            "skills": [
-                "magic"
+            "predicates": [
+                {
+                    "eq": [
+                        "@skill",
+                        "magic"
+                    ]
+                }
             ],
             "enabled": true,
             "value": 1
@@ -17,8 +22,13 @@
         {
             "name": "Practical Magic: Engineering",
             "type": "status",
-            "skills": [
-                "engineering"
+            "predicates": [
+                {
+                    "eq": [
+                        "@skill",
+                        "engineering"
+                    ]
+                }
             ],
             "enabled": true,
             "value": 0,

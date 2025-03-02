@@ -30,7 +30,7 @@
         "modifiers": [
             {
                 "turns": 1,
-                "consumeId": "",
+                "isConsumedAfterRoll": true,
                 "enabled": false,
                 "value": 1,
                 "name": "Take Charge: Critical Success",
@@ -49,7 +49,7 @@
         "modifiers": [
             {
                 "turns": 1,
-                "consumeId": "",
+                "isConsumedAfterRoll": true,
                 "enabled": false,
                 "value": -1,
                 "name": "Take Charge: Critical Failure",

@@ -16,8 +16,13 @@
             {
                 "turns": 2,
                 "enabled": true,
-                "abilities": [
-                    "loyalty"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "loyalty"
+                        ]
+                    }
                 ],
                 "value": 2,
                 "name": "Celebrate Holiday: Critical Success",
@@ -31,8 +36,13 @@
             {
                 "turns": 2,
                 "enabled": true,
-                "abilities": [
-                    "loyalty"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "loyalty"
+                        ]
+                    }
                 ],
                 "value": 1,
                 "name": "Celebrate Holiday: Success",
@@ -49,8 +59,13 @@
             {
                 "turns": 2,
                 "enabled": true,
-                "abilities": [
-                    "loyalty"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "loyalty"
+                        ]
+                    }
                 ],
                 "value": -1,
                 "name": "Celebrate Holiday: Critical Failure",

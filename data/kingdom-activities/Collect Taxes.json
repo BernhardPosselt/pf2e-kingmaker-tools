@@ -16,8 +16,13 @@
             {
                 "turns": 1,
                 "enabled": true,
-                "abilities": [
-                    "economy"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "economy"
+                        ]
+                    }
                 ],
                 "value": 2,
                 "name": "Collect Taxes: Critical Success",
@@ -31,8 +36,13 @@
             {
                 "turns": 1,
                 "enabled": true,
-                "abilities": [
-                    "economy"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "economy"
+                        ]
+                    }
                 ],
                 "value": 1,
                 "name": "Collect Taxes: Success",
@@ -46,8 +56,13 @@
             {
                 "turns": 1,
                 "enabled": true,
-                "abilities": [
-                    "economy"
+                "predicates": [
+                    {
+                        "eq": [
+                            "@ability",
+                            "economy"
+                        ]
+                    }
                 ],
                 "value": 1,
                 "name": "Collect Taxes: Failure",

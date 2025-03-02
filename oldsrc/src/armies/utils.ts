@@ -29,24 +29,22 @@ export function getArmyModifiers(game: Game): Modifier[] {
         const first = selectedArmies[0];
         const miredCount = getEffectCount(first, 'mired');
         const wearyCount = getEffectCount(first, 'weary');
-        const baseModifier: Pick<Modifier, 'type' | 'phases' | 'enabled'> = {
-            type: 'circumstance',
-            phases: ['army'],
-            enabled: true,
-        };
         if (wearyCount > 0) {
             result.push({
-                ...baseModifier,
+                type: 'circumstance',
+                predicates: [{"eq": ["@phase", "army"]}],
+                enabled: true,
                 value: -wearyCount,
                 name: 'Weary',
             });
         }
         if (miredCount > 0) {
             result.push({
-                ...baseModifier,
+                type: 'circumstance',
+                predicates: [{"eq": ["@phase", "army"]}, {"eq":["@activity", "deploy-army"]}],
+                enabled: true,
                 value: -miredCount,
                 name: 'Mired',
-                activities: ['deploy-army'],
             });
         }
     }
