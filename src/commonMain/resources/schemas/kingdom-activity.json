@@ -409,27 +409,6 @@
         }
       }
     },
-    "KingdomSkill": {
-      "type": "string",
-      "enum": [
-        "agriculture",
-        "arts",
-        "boating",
-        "defense",
-        "engineering",
-        "exploration",
-        "folklore",
-        "industry",
-        "intrigue",
-        "magic",
-        "politics",
-        "scholarship",
-        "statecraft",
-        "trade",
-        "warfare",
-        "wilderness"
-      ]
-    },
     "WhenPredicate": {
       "type": "object",
       "additionalProperties": false,
