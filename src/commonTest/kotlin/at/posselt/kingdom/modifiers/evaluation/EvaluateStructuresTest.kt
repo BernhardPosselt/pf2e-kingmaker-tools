@@ -1,6 +1,7 @@
 package at.posselt.kingdom.modifiers.evaluation
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementSizeType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.settlements.settlementSizeData
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
@@ -87,6 +88,7 @@ class EvaluateStructuresTest {
         val result = evaluateStructures(
             settlementName = "name",
             settlementLevel = 20,
+            settlementType = SettlementType.CAPITAL,
             waterBorders = 4,
             occupiedBlocks = 4,
             isSecondaryTerritory = true,
@@ -104,7 +106,7 @@ class EvaluateStructuresTest {
         assertFalse(result.hasBridge)
         assertEquals(4, result.occupiedBlocks)
         assertTrue(result.increaseLeadershipActivities)
-        assertEquals(settlementSizeData.find { it.type == SettlementType.METROPOLIS }, result.settlementSize)
+        assertEquals(settlementSizeData.find { it.type == SettlementSizeType.METROPOLIS }, result.settlementSize)
         assertEquals(3, result.residentialLots)
         assertEquals(setOf("note1", "note2"), result.notes)
         assertEquals(setOf("something"), result.unlockActivities)
@@ -119,18 +121,21 @@ class EvaluateStructuresTest {
                     skill = KingdomSkill.AGRICULTURE,
                     structureNames = setOf("residential"),
                     activity = null,
+                    locatedIn = "name",
                 ),
                 GroupedStructureBonus(
                     value = 1,
                     skill = KingdomSkill.AGRICULTURE,
                     structureNames = setOf("residential"),
                     activity = "establish-farmland",
+                    locatedIn = "name",
                 ),
                 GroupedStructureBonus(
                     value = 3,
                     skill = KingdomSkill.AGRICULTURE,
                     structureNames = setOf("residential"),
                     activity = "establish-something-else",
+                    locatedIn = "name",
                 ),
             ), result.bonuses
         )
@@ -146,6 +151,7 @@ class EvaluateStructuresTest {
             isSecondaryTerritory = true,
             structures = emptyList(),
             allStructuresStack = false,
+            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(4, result.waterBorders)
     }
@@ -181,6 +187,7 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = true,
+            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(
             setOf(
@@ -189,6 +196,7 @@ class EvaluateStructuresTest {
                     skill = KingdomSkill.AGRICULTURE,
                     structureNames = setOf("residential", "other"),
                     activity = null,
+                    locatedIn = "name",
                 ),
             ), result.bonuses
         )
@@ -215,6 +223,7 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = false,
+            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(2, result.consumptionReduction)
     }
@@ -240,6 +249,7 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = false,
+            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(3, result.consumptionReduction)
     }
@@ -264,6 +274,7 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = false,
+            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(1, result.consumptionReduction)
     }

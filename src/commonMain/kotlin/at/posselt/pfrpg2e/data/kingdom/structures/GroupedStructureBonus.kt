@@ -7,4 +7,5 @@ data class GroupedStructureBonus(
     val skill: KingdomSkill?,
     val activity: String?,
     val value: Int,
+    val locatedIn: String,
 )

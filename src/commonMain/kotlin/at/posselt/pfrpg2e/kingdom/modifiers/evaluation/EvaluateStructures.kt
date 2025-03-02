@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.settlements.findSettlementSize
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
@@ -31,6 +32,7 @@ private fun combineBonuses(
     structures: List<Structure>,
     allStructuresStack: Boolean,
     maxItemBonus: Int,
+    settlementName: String,
 ): CombinedBonuses {
     val leaderBonus = structures.maxOfOrNull { it.leadershipActivityBonus } ?: 0
     val eventBonus = structures.sumOf { it.settlementEventBonus }.coerceIn(0, maxItemBonus)
@@ -46,7 +48,8 @@ private fun combineBonuses(
                 structureNames = names,
                 skill = bonus.skill,
                 activity = bonus.activity,
-                value = value
+                value = value,
+                locatedIn = settlementName,
             )
         }
     }.toSet()
@@ -57,9 +60,36 @@ private fun combineBonuses(
     )
 }
 
+fun includeCapital(
+    settlement: Settlement,
+    capital: Settlement,
+    capitalModifierFallbackEnabled: Boolean,
+): Settlement =
+    settlement.copy(
+        bonuses = if (capitalModifierFallbackEnabled) (settlement.bonuses + capital.bonuses) else settlement.bonuses,
+    )
+
+// TODO: unlock activities is global
+// TODO: leaderLeadershipActivityBonus is global
+// TODO: increaseLeadershipActivities only applies if in capital
+data class GlobalStructureBonuses(
+    val unlockedActivities: Set<String>,
+    val leaderLeadershipActivityBonus: Int,
+    val increaseLeadershipActivities: Boolean,
+)
+
+fun evaluateGlobalBonuses(settlements: List<Settlement>) =
+    GlobalStructureBonuses(
+        unlockedActivities = settlements.flatMap { it.unlockActivities }.toSet(),
+        leaderLeadershipActivityBonus = settlements
+            .maxOfOrNull { it.leaderLeadershipActivityBonus } ?: 0,
+        increaseLeadershipActivities = settlements.any { it.increaseLeadershipActivities },
+    )
+
 
 fun evaluateStructures(
     settlementName: String,
+    settlementType: SettlementType,
     settlementLevel: Int,
     waterBorders: Int,
     occupiedBlocks: Int,
@@ -71,7 +101,12 @@ fun evaluateStructures(
     val consumptionReduction = calculateConsumptionReduction(structures)
     val settlementConsumption = settlementSize.consumption - consumptionReduction
     val maxItemBonus = settlementSize.maxItemBonus
-    val (bonuses, eventBonus, leaderBonus) = combineBonuses(structures, allStructuresStack, maxItemBonus)
+    val (bonuses, eventBonus, leaderBonus) = combineBonuses(
+        structures,
+        allStructuresStack,
+        maxItemBonus,
+        settlementName
+    )
     return Settlement(
         name = settlementName,
         waterBorders = waterBorders,
@@ -86,7 +121,8 @@ fun evaluateStructures(
         storage = structures
             .map { it.storage }
             .fold(CommodityStorage()) { acc, el -> acc + el },
-        increaseLeadershipActivities = structures.any { it.increaseLeadershipActivities },
+        increaseLeadershipActivities = settlementType == SettlementType.CAPITAL
+                && structures.any { it.increaseLeadershipActivities },
         settlementConsumption = max(0, settlementConsumption),
         consumptionReduction = consumptionReduction,
         consumptionSurplus = settlementConsumption

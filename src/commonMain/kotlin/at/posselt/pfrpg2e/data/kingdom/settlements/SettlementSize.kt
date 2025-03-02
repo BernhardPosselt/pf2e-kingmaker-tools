@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.data.kingdom.settlements
 
 data class SettlementSize(
-    val type: SettlementType,
+    val type: SettlementSizeType,
     val maximumBlocks: String,
     val requiredKingdomLevel: Int,
     val population: String,
@@ -14,7 +14,7 @@ data class SettlementSize(
 
 val settlementSizeData = listOf(
     SettlementSize(
-        type = SettlementType.VILLAGE,
+        type = SettlementSizeType.VILLAGE,
         consumption = 1,
         influence = 0,
         maximumBlocks = "1",
@@ -24,7 +24,7 @@ val settlementSizeData = listOf(
         maxItemBonus = 1,
         population = "400 or less",
     ), SettlementSize(
-        type = SettlementType.TOWN,
+        type = SettlementSizeType.TOWN,
         consumption = 2,
         influence = 1,
         requiredKingdomLevel = 3,
@@ -34,7 +34,7 @@ val settlementSizeData = listOf(
         maxItemBonus = 1,
         population = "401-2000",
     ), SettlementSize(
-        type = SettlementType.CITY,
+        type = SettlementSizeType.CITY,
         consumption = 4,
         influence = 2,
         requiredKingdomLevel = 9,
@@ -44,7 +44,7 @@ val settlementSizeData = listOf(
         maxItemBonus = 2,
         population = "2001–25000",
     ), SettlementSize(
-        type = SettlementType.METROPOLIS,
+        type = SettlementSizeType.METROPOLIS,
         consumption = 6,
         influence = 3,
         maximumBlocks = "10+",
