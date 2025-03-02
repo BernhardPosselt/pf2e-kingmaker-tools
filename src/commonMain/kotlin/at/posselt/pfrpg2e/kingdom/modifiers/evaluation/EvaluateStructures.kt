@@ -20,7 +20,7 @@ private fun calculateConsumptionReduction(structures: List<Structure>): Int {
     val structuresToSum = structures.filter { allowedNames.contains(it.name) }
     val nonStacking = structuresToSum
         .filterNot { it.consumptionReductionStacks }
-        .distinctBy { it.name }
+        .distinctBy { it.stacksWith ?: it.name }
     val stacking = structuresToSum
         .filter { it.consumptionReductionStacks }
     return (nonStacking + stacking)
@@ -38,7 +38,7 @@ private fun combineBonuses(
     val bonuses = grouped.flatMap { groupedStructures ->
         val structures = groupedStructures.value
         val groupedBonuses = structures.flatMap { it.bonuses }.groupBy { it }
-        val names = structures.map { it.name }.toSet()
+        val names = structures.map { it.stacksWith ?: it.name }.toSet()
         groupedBonuses.values.map { bonuses ->
             val value = bonuses.sumOf { it.value }.coerceIn(0, maxItemBonus)
             val bonus = bonuses.first()

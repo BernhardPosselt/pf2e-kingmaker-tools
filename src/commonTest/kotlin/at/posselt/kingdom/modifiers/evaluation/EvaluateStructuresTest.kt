@@ -16,8 +16,20 @@ import kotlin.test.assertTrue
 
 class EvaluateStructuresTest {
     @Test
-    fun basic() {
+    fun full() {
         val structures = listOf(
+            Structure(
+                name = "stackwith",
+                stacksWith = "residential",
+                consumptionReduction = 1,
+                bonuses = listOf(
+                    StructureBonus(
+                        skill = KingdomSkill.AGRICULTURE,
+                        activity = null,
+                        value = 1
+                    ),
+                )
+            ),
             Structure(
                 name = "residential",
                 lots = 2,
@@ -35,7 +47,17 @@ class EvaluateStructuresTest {
                         skill = KingdomSkill.AGRICULTURE,
                         activity = null,
                         value = 1
-                    )
+                    ),
+                    StructureBonus(
+                        skill = KingdomSkill.AGRICULTURE,
+                        activity = "establish-farmland",
+                        value = 1
+                    ),
+                    StructureBonus(
+                        skill = KingdomSkill.AGRICULTURE,
+                        activity = "establish-something-else",
+                        value = 2
+                    ),
                 )
             ),
             Structure(
@@ -52,10 +74,16 @@ class EvaluateStructuresTest {
                         skill = KingdomSkill.AGRICULTURE,
                         activity = null,
                         value = 1
-                    )
+                    ),
+                    StructureBonus(
+                        skill = KingdomSkill.AGRICULTURE,
+                        activity = "establish-something-else",
+                        value = 2
+                    ),
                 )
             ),
-        )
+
+            )
         val result = evaluateStructures(
             settlementName = "name",
             settlementLevel = 20,
@@ -87,12 +115,157 @@ class EvaluateStructuresTest {
         assertEquals(
             setOf(
                 GroupedStructureBonus(
-                    value = 2,
+                    value = 3,
                     skill = KingdomSkill.AGRICULTURE,
                     structureNames = setOf("residential"),
                     activity = null,
-                )
+                ),
+                GroupedStructureBonus(
+                    value = 1,
+                    skill = KingdomSkill.AGRICULTURE,
+                    structureNames = setOf("residential"),
+                    activity = "establish-farmland",
+                ),
+                GroupedStructureBonus(
+                    value = 3,
+                    skill = KingdomSkill.AGRICULTURE,
+                    structureNames = setOf("residential"),
+                    activity = "establish-something-else",
+                ),
             ), result.bonuses
         )
     }
+
+    @Test
+    fun shouldNotFailIfNoStructures() {
+        val result = evaluateStructures(
+            settlementName = "name",
+            settlementLevel = 20,
+            waterBorders = 4,
+            occupiedBlocks = 4,
+            isSecondaryTerritory = true,
+            structures = emptyList(),
+            allStructuresStack = false,
+        )
+        assertEquals(4, result.waterBorders)
+    }
+
+    @Test
+    fun allStructuresStack() {
+        val result = evaluateStructures(
+            settlementName = "name",
+            settlementLevel = 14,
+            waterBorders = 3,
+            occupiedBlocks = 4,
+            isSecondaryTerritory = true,
+            structures = listOf(
+                Structure(
+                    name = "residential",
+                    bonuses = listOf(
+                        StructureBonus(
+                            skill = KingdomSkill.AGRICULTURE,
+                            activity = null,
+                            value = 1
+                        ),
+                    )
+                ),
+                Structure(
+                    name = "other",
+                    bonuses = listOf(
+                        StructureBonus(
+                            skill = KingdomSkill.AGRICULTURE,
+                            activity = null,
+                            value = 1
+                        ),
+                    )
+                ),
+            ),
+            allStructuresStack = true,
+        )
+        assertEquals(
+            setOf(
+                GroupedStructureBonus(
+                    value = 2,
+                    skill = KingdomSkill.AGRICULTURE,
+                    structureNames = setOf("residential", "other"),
+                    activity = null,
+                ),
+            ), result.bonuses
+        )
+    }
+
+    @Test
+    fun consumptionStacking() {
+        val result = evaluateStructures(
+            settlementName = "name",
+            settlementLevel = 14,
+            waterBorders = 3,
+            occupiedBlocks = 4,
+            isSecondaryTerritory = true,
+            structures = listOf(
+                Structure(
+                    name = "residential",
+                    consumptionReduction = 1,
+                    consumptionReductionStacks = true,
+                ),
+                Structure(
+                    name = "residential",
+                    consumptionReduction = 1,
+                    consumptionReductionStacks = true,
+                ),
+            ),
+            allStructuresStack = false,
+        )
+        assertEquals(2, result.consumptionReduction)
+    }
+
+    @Test
+    fun consumptionStackDisabling() {
+        val result = evaluateStructures(
+            settlementName = "name",
+            settlementLevel = 14,
+            waterBorders = 3,
+            occupiedBlocks = 4,
+            isSecondaryTerritory = true,
+            structures = listOf(
+                Structure(
+                    name = "residential",
+                    consumptionReduction = 1,
+                    consumptionReductionStacks = true,
+                ),
+                Structure(
+                    name = "other",
+                    consumptionReduction = 3,
+                    ignoreConsumptionReductionOf = setOf("residential")
+                ),
+            ),
+            allStructuresStack = false,
+        )
+        assertEquals(3, result.consumptionReduction)
+    }
+
+    @Test
+    fun consumptionStackWith() {
+        val result = evaluateStructures(
+            settlementName = "name",
+            settlementLevel = 14,
+            waterBorders = 3,
+            occupiedBlocks = 4,
+            isSecondaryTerritory = true,
+            structures = listOf(
+                Structure(
+                    name = "residential",
+                    consumptionReduction = 1,
+                ),
+                Structure(
+                    stacksWith = "residential",
+                    name = "other",
+                    consumptionReduction = 1,
+                ),
+            ),
+            allStructuresStack = false,
+        )
+        assertEquals(1, result.consumptionReduction)
+    }
+
 }
