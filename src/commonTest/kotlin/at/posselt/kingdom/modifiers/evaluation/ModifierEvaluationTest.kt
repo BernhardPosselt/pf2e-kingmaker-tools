@@ -30,6 +30,7 @@ val defaultContext = ExpressionContext(
     phase = null,
     activity = null,
     leader = Leader.COUNSELOR,
+    isVacant = false,
 )
 
 class ModifierEvaluationTest {
@@ -68,7 +69,6 @@ class ModifierEvaluationTest {
         assertEquals(
             listOf(
                 createProficiencyModifier(BOATING, proficiency = LEGENDARY, level = 3),
-                createProficiencyModifier(AGRICULTURE, proficiency = TRAINED, level = 3).copy(enabled = false),
             ), result.modifiers
         )
     }
@@ -91,7 +91,6 @@ class ModifierEvaluationTest {
         assertEquals(
             listOf(
                 first,
-                second.copy(enabled = false),
             ), result.modifiers
         )
     }
@@ -117,7 +116,6 @@ class ModifierEvaluationTest {
             listOf(
                 first,
                 second,
-                third.copy(enabled = false),
             ), result.modifiers
         )
     }

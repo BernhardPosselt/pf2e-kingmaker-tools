@@ -16,6 +16,7 @@ data class ExpressionContext(
     val unrest: Int,
     val flags: Set<String>,
     val rollOptions: Set<String>,
+    val isVacant: Boolean,
 ) {
     fun evaluateExpression(expression: String): String? {
         return when (expression) {
@@ -23,6 +24,7 @@ data class ExpressionContext(
             "@phase" -> phase?.value
             "@activity" -> activity
             "@unrest" -> unrest.toString()
+            "@vacant" -> isVacant.toString()
             "@agricultureRank" -> ranks.agriculture.toString()
             "@artsRank" -> ranks.arts.toString()
             "@boatingRank" -> ranks.boating.toString()

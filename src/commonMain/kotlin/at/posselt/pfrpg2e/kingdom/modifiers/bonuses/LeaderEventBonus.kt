@@ -20,9 +20,9 @@ fun leaderEventBonus(
         name = "Listed, Non-Vacant Leader Handles Event",
         value = value,
         predicates = listOf(
-            EqPredicate("@phase", KingdomPhase.EVENT.value)
+            EqPredicate("@phase", KingdomPhase.EVENT.value),
+            EqPredicate("@vacant", "false"),
         ),
-        enabled = false,
         type = ModifierType.CIRCUMSTANCE,
     )
 }
