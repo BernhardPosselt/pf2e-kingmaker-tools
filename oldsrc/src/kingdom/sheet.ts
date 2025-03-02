@@ -19,7 +19,10 @@ import {
 } from './data/kingdom';
 import {
     capitalize,
-    clamped, deCamelCase, distinctBy, groupBy,
+    clamped,
+    deCamelCase,
+    distinctBy,
+    groupBy,
     isNonNullable,
     postChatMessage,
     range,
@@ -37,7 +40,8 @@ import {
     getSettlementInfo,
     getSettlementsWithoutLandBorders,
     getStolenLandsData,
-    getStructureResult, getStructuresByName,
+    getStructureResult,
+    getStructuresByName,
     getStructureStackMode,
     SettlementAndScene,
 } from './scene';
@@ -46,11 +50,7 @@ import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
 import {getAllFeatures} from './data/features';
-import {
-    createActivityLabel,
-    getPerformableActivities,
-    groupKingdomActivities,
-} from './data/activities';
+import {createActivityLabel, getPerformableActivities, groupKingdomActivities,} from './data/activities';
 import {AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {allLeaderTypes, calculateSkills} from './skills';
 import {calculateInvestedBonus, isInvested, Leader} from './data/leaders';
@@ -62,7 +62,8 @@ import {
     calculateLeadershipModifier,
     createActiveSettlementModifiers,
     Modifier,
-    modifierToLabel, parseLeaderPerformingCheck
+    modifierToLabel,
+    parseLeaderPerformingCheck
 } from './modifiers';
 import {addEffectDialog} from './dialogs/add-effect-dialog';
 import {getKingdom, saveKingdom} from './storage';
@@ -1227,7 +1228,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     enabled: true,
                     value: 2,
                     type: 'circumstance',
-                    abilities: ['loyalty', 'stability'],
+                    predicates: [{"in": ["@ability", ['loyalty', 'stability']]}],
                     turns: 2,
                 }],
             });
@@ -1241,7 +1242,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     enabled: true,
                     value: 2,
                     type: 'circumstance',
-                    abilities: ['culture', 'economy'],
+                    predicates: [{"in": ["@ability", ['culture', 'economy']]}],
                     turns: 2,
                 }],
             });

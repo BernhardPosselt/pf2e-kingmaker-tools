@@ -1,5 +1,5 @@
 import {allKingdomPhases, KingdomPhase} from '../data/activities';
-import {allModifierTypes, Modifier, ModifierType} from '../modifiers';
+import {allModifierTypes, Modifier, ModifierType, Predicate} from '../modifiers';
 import {
     capitalize,
     createLabels,
@@ -134,16 +134,27 @@ export function addEffectDialog(
                     const activities = parseOptionalSelect($html, 'activity');
                     const skills = parseOptionalSelect($html, 'skill') as Skill[] | undefined;
                     const abilities = parseOptionalSelect($html, 'ability') as Ability[] | undefined;
+                    const predicates: Predicate[] = [];
+                    if (activities) {
+                        predicates.push({"in": ["@activity", activities]});
+                    }
+                    if (phases) {
+                        predicates.push({"in": ["@phase", phases]});
+                    }
+                    if (skills) {
+                        predicates.push({"in": ["@skill", skills]});
+                    }
+                    if (abilities) {
+                        predicates.push({"in": ["@ability", abilities]});
+                    }
                     onOk({
                         name: parseTextInput($html, 'name'),
                         type,
                         value,
                         enabled: parseCheckbox($html, 'enabled'),
                         consumeId: parseCheckbox($html, 'consumable') ? uuidv4() : undefined,
-                        phases,
-                        activities,
-                        skills,
-                        abilities,
+                        isConsumedAfterRoll: parseCheckbox($html, 'consumable'),
+                        predicates,
                         turns: turns === 0 ? undefined : turns,
                     });
                 },

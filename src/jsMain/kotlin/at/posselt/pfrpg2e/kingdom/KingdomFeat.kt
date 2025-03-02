@@ -9,7 +9,7 @@ import kotlinx.serialization.json.JsonElement
 @JsPlainObject
 external interface UpgradeResult {
     val upgrade: String
-    val predicate: Array<Predicate>?
+    val predicate: Array<RawPredicate>?
 }
 
 @JsPlainObject

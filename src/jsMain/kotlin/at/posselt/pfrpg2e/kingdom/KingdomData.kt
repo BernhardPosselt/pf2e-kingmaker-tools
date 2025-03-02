@@ -23,66 +23,66 @@ typealias KingdomSkillValue = String // agriculture, arts, boating, defense, eng
 typealias SkillValue = String // acrobatics, athletics, etc
 typealias SkillRanks = Record<KingdomSkillValue, Int>
 
-sealed external interface Predicate
+sealed external interface RawPredicate
 
 @JsPlainObject
-external interface RawGtePredicate: Predicate {
+external interface RawGtePredicate: RawPredicate {
     val gte: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawGtPredicate: Predicate {
+external interface RawGtPredicate: RawPredicate {
     val gt: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawLtePredicate: Predicate {
+external interface RawLtePredicate: RawPredicate {
     val lte: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawInPredicate: Predicate {
+external interface RawInPredicate: RawPredicate {
     val `in`: JsTuple2<String, Array<String>>
 }
 
 @JsPlainObject
-external interface RawLtPredicate: Predicate {
+external interface RawLtPredicate: RawPredicate {
     val lt: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawEqPredicate: Predicate {
+external interface RawEqPredicate: RawPredicate {
     val eq: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawOrPredicate: Predicate {
-    val or: JsTuple2<Predicate, Predicate>
+external interface RawOrPredicate: RawPredicate {
+    val or: JsTuple2<RawPredicate, RawPredicate>
 }
 
 @JsPlainObject
-external interface RawAndPredicate: Predicate {
-    val and: JsTuple2<Predicate, Predicate>
+external interface RawAndPredicate: RawPredicate {
+    val and: JsTuple2<RawPredicate, RawPredicate>
 }
 
 @JsPlainObject
-external interface RawNotPredicate: Predicate {
-    val not: Predicate
+external interface RawNotPredicate: RawPredicate {
+    val not: RawPredicate
 }
 
 @JsPlainObject
-external interface RawHasFlagPredicate: Predicate {
+external interface RawHasFlagPredicate: RawPredicate {
     val hasFlag: String
 }
 
 @JsPlainObject
-external interface RawHasRollOptionPredicate: Predicate {
+external interface RawHasRollOptionPredicate: RawPredicate {
     val hasRollOption: String
 }
 
 @JsPlainObject
 external interface RawWhenPredicate {
-    val `when`: JsTuple2<Predicate, String>
+    val `when`: JsTuple2<RawPredicate, String>
 }
 
 @JsPlainObject
@@ -91,15 +91,11 @@ external interface RawModifier {
     var value: Int
     var predicatedValue: RawWhenPredicate?
     var name: String
-    var phases: Array<KingdomPhase>?
-    var activities: Array<String>?
-    var skills: Array<KingdomSkillValue>?
-    var abilities: Array<KingdomAbility>?
     var enabled: Boolean
     var turns: Int?
-    var consumeId: String?
+    var isConsumedAfterRoll: Boolean?
     var rollOptions: Array<String>?
-    val predicate: Array<Predicate>?;
+    var predicates: Array<RawPredicate>?
 }
 
 @JsPlainObject

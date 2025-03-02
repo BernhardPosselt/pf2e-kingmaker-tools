@@ -6,9 +6,9 @@ import com.foundryvtt.core.Game
 class Migration11 : Migration(11) {
     override suspend fun migrateKingdom(game: Game, kingdom: KingdomData) {
         kingdom.modifiers.forEach { m ->
-            val activities = m.activities
+            val activities = m.asDynamic().activities
             if (activities != null && activities.contains("evangelize-the-dead")) {
-                m.activities = activities.filter { it != "evangelize-the-dead" }.toTypedArray() + "evangelize-the-end"
+                m.asDynamic().activities = activities.unsafeCast<Array<String>>().filter { it != "evangelize-the-dead" }.toTypedArray() + "evangelize-the-end"
             }
         }
     }
