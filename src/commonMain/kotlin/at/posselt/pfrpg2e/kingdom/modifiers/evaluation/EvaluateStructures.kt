@@ -69,9 +69,6 @@ fun includeCapital(
         bonuses = if (capitalModifierFallbackEnabled) (settlement.bonuses + capital.bonuses) else settlement.bonuses,
     )
 
-// TODO: unlock activities is global
-// TODO: leaderLeadershipActivityBonus is global
-// TODO: increaseLeadershipActivities only applies if in capital
 data class GlobalStructureBonuses(
     val unlockedActivities: Set<String>,
     val leaderLeadershipActivityBonus: Int,
@@ -87,7 +84,7 @@ fun evaluateGlobalBonuses(settlements: List<Settlement>) =
     )
 
 
-fun evaluateStructures(
+fun evaluateSettlement(
     settlementName: String,
     settlementType: SettlementType,
     settlementLevel: Int,
@@ -138,5 +135,6 @@ fun evaluateStructures(
             .sumOf { it.lots },
         hasBridge = structures.any { it.isBridge },
         occupiedBlocks = occupiedBlocks,
+        settlementType = settlementType,
     )
 }

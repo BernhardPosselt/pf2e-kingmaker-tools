@@ -9,7 +9,7 @@ import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateStructures
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateSettlement
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -85,7 +85,7 @@ class EvaluateStructuresTest {
             ),
 
             )
-        val result = evaluateStructures(
+        val result = evaluateSettlement(
             settlementName = "name",
             settlementLevel = 20,
             settlementType = SettlementType.CAPITAL,
@@ -143,7 +143,7 @@ class EvaluateStructuresTest {
 
     @Test
     fun shouldNotFailIfNoStructures() {
-        val result = evaluateStructures(
+        val result = evaluateSettlement(
             settlementName = "name",
             settlementLevel = 20,
             waterBorders = 4,
@@ -158,7 +158,7 @@ class EvaluateStructuresTest {
 
     @Test
     fun allStructuresStack() {
-        val result = evaluateStructures(
+        val result = evaluateSettlement(
             settlementName = "name",
             settlementLevel = 14,
             waterBorders = 3,
@@ -204,7 +204,7 @@ class EvaluateStructuresTest {
 
     @Test
     fun consumptionStacking() {
-        val result = evaluateStructures(
+        val result = evaluateSettlement(
             settlementName = "name",
             settlementLevel = 14,
             waterBorders = 3,
@@ -230,7 +230,7 @@ class EvaluateStructuresTest {
 
     @Test
     fun consumptionStackDisabling() {
-        val result = evaluateStructures(
+        val result = evaluateSettlement(
             settlementName = "name",
             settlementLevel = 14,
             waterBorders = 3,
@@ -256,7 +256,7 @@ class EvaluateStructuresTest {
 
     @Test
     fun consumptionStackWith() {
-        val result = evaluateStructures(
+        val result = evaluateSettlement(
             settlementName = "name",
             settlementLevel = 14,
             waterBorders = 3,

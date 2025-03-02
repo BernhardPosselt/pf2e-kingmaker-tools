@@ -4,14 +4,14 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 
-enum class SettlementType {
+enum class SettlementSizeType {
     VILLAGE,
     TOWN,
     CITY,
     METROPOLIS;
 
     companion object {
-        fun fromString(value: String) = fromCamelCase<SettlementType>(value)
+        fun fromString(value: String) = fromCamelCase<SettlementSizeType>(value)
     }
 
     val value: String

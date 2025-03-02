@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
 
 data class Settlement(
     val name: String,
+    val settlementType: SettlementType,
     val waterBorders: Int,
     val isSecondaryTerritory: Boolean,
     val settlementEventBonus: Int, // added by watchtowers
