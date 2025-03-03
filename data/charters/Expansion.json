@@ -1,0 +1,7 @@
+{
+    "name": "Expansion",
+    "description": "Your patron places you in charge of a domain adjacent to already settled lands with the expectation that your nation will remain a strong ally. The greater support from your patron’s nation helps to bolster your own kingdom’s society, but this increased reliance means that fluctuations in your ally’s fortunes can impede your own kingdom’s security.",
+    "boost": "culture",
+    "freeBoosts": 1,
+    "flaw": "stability"
+}

@@ -3,15 +3,6 @@ package at.posselt.pfrpg2e.kingdom.structures
 import kotlinx.js.JsPlainObject
 import kotlinx.serialization.json.JsonElement
 
-val recoverArmyIds = arrayOf(
-    "recover-army-damaged",
-    "recover-army-defeated",
-    "recover-army-lost",
-    "recover-army-mired-pinned",
-    "recover-army-shaken",
-    "recover-army-weary",
-)
-
 @JsPlainObject
 external interface RawRuinAmount {
     val value: Int
@@ -67,14 +58,14 @@ external interface RawCommodityStorage {
 
 
 @JsPlainObject
-external interface ConstructionSkill {
+external interface RawConstructionSkill {
     val skill: String
     val proficiencyRank: Int?
 }
 
 @JsPlainObject
 external interface RawConstruction {
-    val skills: Array<ConstructionSkill>
+    val skills: Array<RawConstructionSkill>
     val lumber: Int?
     val luxuries: Int?
     val ore: Int?
@@ -105,7 +96,7 @@ external interface RawStructureData : RawStructure {
     val construction: RawConstruction?
     val notes: String?
     val preventItemLevelPenalty: Boolean?
-    val enableCapitalInvestment: Boolean
+    val enableCapitalInvestment: Boolean?
     val skillBonusRules: Array<RawSkillBonusRule>?
     val activityBonusRules: Array<RawActivityBonusRule>?
     val availableItemsRules: Array<RawAvailableItemsRule>?

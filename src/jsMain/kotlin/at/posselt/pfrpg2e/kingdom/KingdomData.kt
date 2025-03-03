@@ -2,7 +2,10 @@ package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
+import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.array.JsTuple2
@@ -21,62 +24,62 @@ typealias FameType = String  // famous or infamous
 typealias Companion = String // Amiri Ekundayo Harrim Jaethal Jubilost Kalikke Kanerah Linzi Nok-Nok Octavia Regongar Tristian Valerie
 typealias KingdomSkillValue = String // agriculture, arts, boating, defense, engineering, exploration, folklore, industry, intrigue, magic, politics, scholarship, statecraft, trade, warfare, wilderness
 typealias SkillValue = String // acrobatics, athletics, etc
-typealias SkillRanks = Record<KingdomSkillValue, Int>
+typealias RawSkillRanks = Record<KingdomSkillValue, Int>
 
 sealed external interface RawPredicate
 
 @JsPlainObject
-external interface RawGtePredicate: RawPredicate {
+external interface RawGtePredicate : RawPredicate {
     val gte: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawGtPredicate: RawPredicate {
+external interface RawGtPredicate : RawPredicate {
     val gt: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawLtePredicate: RawPredicate {
+external interface RawLtePredicate : RawPredicate {
     val lte: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawInPredicate: RawPredicate {
+external interface RawInPredicate : RawPredicate {
     val `in`: JsTuple2<String, Array<String>>
 }
 
 @JsPlainObject
-external interface RawLtPredicate: RawPredicate {
+external interface RawLtPredicate : RawPredicate {
     val lt: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawEqPredicate: RawPredicate {
+external interface RawEqPredicate : RawPredicate {
     val eq: JsTuple2<String, String>
 }
 
 @JsPlainObject
-external interface RawOrPredicate: RawPredicate {
+external interface RawOrPredicate : RawPredicate {
     val or: JsTuple2<RawPredicate, RawPredicate>
 }
 
 @JsPlainObject
-external interface RawAndPredicate: RawPredicate {
+external interface RawAndPredicate : RawPredicate {
     val and: JsTuple2<RawPredicate, RawPredicate>
 }
 
 @JsPlainObject
-external interface RawNotPredicate: RawPredicate {
+external interface RawNotPredicate : RawPredicate {
     val not: RawPredicate
 }
 
 @JsPlainObject
-external interface RawHasFlagPredicate: RawPredicate {
+external interface RawHasFlagPredicate : RawPredicate {
     val hasFlag: String
 }
 
 @JsPlainObject
-external interface RawHasRollOptionPredicate: RawPredicate {
+external interface RawHasRollOptionPredicate : RawPredicate {
     val hasRollOption: String
 }
 
@@ -177,17 +180,6 @@ external interface MileStone {
 @JsPlainObject
 external interface OngoingEvent {
     var name: String
-}
-
-@JsPlainObject
-external interface Settlement {
-    var sceneId: String
-    var lots: Int
-    var level: Int
-    var type: String
-    var secondaryTerritory: Boolean
-    var manualSettlementLevel: Boolean?
-    var waterBorders: Int
 }
 
 @JsPlainObject
@@ -305,7 +297,7 @@ external interface KingdomData {
     var groups: Array<Group>
     var feats: Array<Feat>
     var bonusFeats: Array<BonusFeat>
-    var skillRanks: SkillRanks
+    var skillRanks: RawSkillRanks
     var abilityScores: AbilityScores
     var ruin: Ruin
     var activeSettlement: String
@@ -314,7 +306,7 @@ external interface KingdomData {
     var turnsWithoutEvent: Int
     var activityBlacklist: Array<String>
     var modifiers: Array<RawModifier>
-    var settlements: Array<Settlement>
+    var settlements: Array<RawSettlement>
 }
 
 fun RawLeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =
@@ -352,7 +344,60 @@ fun RawLeaderSkills.deleteLore(attribute: Attribute) = RawLeaderSkills(
     warden = warden.filter { it != attribute.value }.toTypedArray(),
 )
 
+fun KingdomData.vacancies() =
+    Vacancies(
+        ruler = leaders[Leader.RULER.value]?.vacant == true,
+        counselor = leaders[Leader.COUNSELOR.value]?.vacant == true,
+        emissary = leaders[Leader.EMISSARY.value]?.vacant == true,
+        general = leaders[Leader.GENERAL.value]?.vacant == true,
+        magister = leaders[Leader.MAGISTER.value]?.vacant == true,
+        treasurer = leaders[Leader.TREASURER.value]?.vacant == true,
+        viceroy = leaders[Leader.VICEROY.value]?.vacant == true,
+        warden = leaders[Leader.WARDEN.value]?.vacant == true,
+    )
+
+fun KingdomData.parsedSkillRanks() =
+    KingdomSkillRanks(
+        agriculture = skillRanks["agriculture"] ?: 0,
+        arts = skillRanks["arts"] ?: 0,
+        boating = skillRanks["boating"] ?: 0,
+        defense = skillRanks["defense"] ?: 0,
+        engineering = skillRanks["engineering"] ?: 0,
+        exploration = skillRanks["exploration"] ?: 0,
+        folklore = skillRanks["folklore"] ?: 0,
+        industry = skillRanks["industry"] ?: 0,
+        intrigue = skillRanks["intrigue"] ?: 0,
+        magic = skillRanks["magic"] ?: 0,
+        politics = skillRanks["politics"] ?: 0,
+        scholarship = skillRanks["scholarship"] ?: 0,
+        statecraft = skillRanks["statecraft"] ?: 0,
+        trade = skillRanks["trade"] ?: 0,
+        warfare = skillRanks["warfare"] ?: 0,
+        wilderness = skillRanks["wilderness"] ?: 0,
+    )
+
+fun KingdomData.getAllActivities(): List<KingdomActivity> {
+    val homebrew = homebrewActivities.map { it.id }.toSet()
+    return kingdomActivities.filter { it.id !in homebrew } + homebrewActivities
+}
+
+fun KingdomData.getActivity(id: String): KingdomActivity? =
+    getAllActivities().associateBy { it.id }[id]
+
+fun KingdomData.getAllFeats(): List<KingdomActivity> {
+    val homebrew = homebrewActivities.map { it.id }.toSet()
+    return kingdomActivities.filter { it.id !in homebrew } + homebrewActivities
+}
+
+fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
+    return kingdomFeatures
+        .flatMap { it.explodeLevels() }
+        .sortedWith(compareBy<ExplodedKingdomFeature> { it.level }.thenBy { it.name })
+}
+
+
+@Deprecated("Do not use this, this should work with more than one sheet")
 fun Game.getKingdomActor(): PF2ENpc? =
     actors.contents
         .filterIsInstance<PF2ENpc>()
-        .find { it.getKingdom() != null && it.name == "Kingdom Sheet"}
+        .find { it.getKingdom() != null && it.name == "Kingdom Sheet" }

@@ -1,0 +1,14 @@
+{
+    "name": "Despotism",
+    "description": "Your nation’s rule is centered around a single individual who seized or inherited command and whose authority is absolute. The ruler of this kingdom still retains advisors and assistants, but only when they obey the ruler’s whims.",
+    "boosts": [
+        "stability",
+        "economy"
+    ],
+    "freeBoosts": 1,
+    "bonusFeat": "Crush Dissent",
+    "skillProficiencies": [
+        "intrigue",
+        "warfare"
+    ]
+}

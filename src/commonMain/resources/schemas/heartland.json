@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://posselt.at/pf2e-kingmaker-tools/schemas/heartland.json",
+  "title": "Kingdom Heartland",
+  "description": "A Kingdom Heartland",
+  "$ref": "#/$defs/Heartland",
+  "$defs": {
+    "Heartland": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "name",
+        "boost"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "boost": {
+          "$ref": "#/$defs/Ability"
+        }
+      }
+    },
+    "Ability": {
+      "type": "string",
+      "enum": [
+        "stability",
+        "culture",
+        "economy",
+        "loyalty"
+      ]
+    }
+  }
+}

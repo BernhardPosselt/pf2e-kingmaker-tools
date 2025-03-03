@@ -14,8 +14,8 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface CampsitePosition {
-    val x: Int
-    val y: Int
+    val x: Double
+    val y: Double
     var result: String
 }
 
@@ -41,8 +41,8 @@ suspend fun Scene.resetCampsites() {
 
 
 data class CampingTokenPosition(
-    val x: Int,
-    val y: Int,
+    val x: Double,
+    val y: Double,
 )
 
 fun PF2EParty.getTokenPosition(scene: Scene): CampingTokenPosition? =

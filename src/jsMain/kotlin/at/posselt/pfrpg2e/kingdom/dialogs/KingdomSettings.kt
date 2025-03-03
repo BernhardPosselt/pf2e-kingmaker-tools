@@ -13,7 +13,7 @@ import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.ProficiencyMode
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -77,7 +77,7 @@ class KingdomSettingsDataModel(value: AnyObject) : DataModel(value) {
                     .toRecord()
             }
             string("proficiencyMode") {
-                choices = ProficiencyMode.entries
+                choices = UntrainedProficiencyMode.entries
                     .map { it.toCamelCase() to it.toLabel() }
                     .toRecord()
             }
@@ -310,16 +310,16 @@ class KingdomSettingsApplication(
                             value = settings.resourceDicePerMetropolis,
                             stacked = false,
                         ),
-                        Select.fromEnum<ProficiencyMode>(
+                        Select.fromEnum<UntrainedProficiencyMode>(
                             name = "proficiencyMode",
                             label = "Always Increase Untrained Skills By",
-                            value = fromCamelCase<ProficiencyMode>(settings.proficiencyMode),
+                            value = fromCamelCase<UntrainedProficiencyMode>(settings.proficiencyMode),
                             stacked = false,
                             labelFunction = {
                                 when (it) {
-                                    ProficiencyMode.NONE -> "Nothing"
-                                    ProficiencyMode.HALF -> "Half Level"
-                                    ProficiencyMode.FULL -> "Full Level"
+                                    UntrainedProficiencyMode.NONE -> "Nothing"
+                                    UntrainedProficiencyMode.HALF -> "Half Level"
+                                    UntrainedProficiencyMode.FULL -> "Full Level"
                                 }
                             },
                         ),

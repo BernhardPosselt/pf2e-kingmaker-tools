@@ -3,7 +3,7 @@ package at.posselt.pfrpg2e.macros
 import at.posselt.pfrpg2e.app.forms.TextArea
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
-import at.posselt.pfrpg2e.kingdom.getStructure
+import at.posselt.pfrpg2e.kingdom.getRawStructureData
 import at.posselt.pfrpg2e.kingdom.setStructureData
 import at.posselt.pfrpg2e.kingdom.structures.RawStructureData
 import at.posselt.pfrpg2e.kingdom.structures.StructureValidationError
@@ -34,7 +34,7 @@ suspend fun editStructureMacro(actor: Actor?) {
         ui.notifications.error("Please select an NPC actor")
         return
     }
-    val existing = npcActor.getStructure() ?: jso()
+    val existing = npcActor.getRawStructureData() ?: jso()
     prompt<StructureMacroData, Unit>(
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(

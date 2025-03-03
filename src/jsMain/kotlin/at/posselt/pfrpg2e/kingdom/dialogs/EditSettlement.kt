@@ -9,8 +9,9 @@ import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.formContext
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.fromCamelCase
-import at.posselt.pfrpg2e.kingdom.Settlement
+import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.AnyObject
@@ -24,7 +25,12 @@ import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
+import kotlin.Array
+import kotlin.Boolean
 import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
 import kotlin.js.Promise
 
 @JsPlainObject
@@ -64,8 +70,8 @@ class EditSettlementModel(val value: AnyObject) : DataModel(value) {
 private class ConfigureEditSettlement(
     private val autoLevel: Boolean,
     settlementName: String,
-    settlement: Settlement,
-    private val onSave: (Settlement) -> Unit,
+    settlement: RawSettlement,
+    private val onSave: (RawSettlement) -> Unit,
 ) : FormApp<EditSettlementContext, EditSettlementData>(
     title = "Edit Settlement: $settlementName",
     template = "components/forms/application-form.hbs",
@@ -177,8 +183,8 @@ private class ConfigureEditSettlement(
 fun editSettlement(
     autoLevel: Boolean,
     settlementName: String,
-    settlement: Settlement,
-    onOk: (Settlement) -> Unit,
+    settlement: RawSettlement,
+    onOk: (RawSettlement) -> Unit,
 ) {
     ConfigureEditSettlement(
         autoLevel,

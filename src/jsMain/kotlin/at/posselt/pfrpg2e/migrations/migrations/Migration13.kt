@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.RawPredicate
 import at.posselt.pfrpg2e.utils.asAnyObject
 import com.foundryvtt.core.Game
 import js.array.tupleOf
+import js.reflect.Reflect
 
 class Migration13 : Migration(13) {
     override suspend fun migrateKingdom(game: Game, kingdom: KingdomData) {
@@ -30,6 +31,10 @@ class Migration13 : Migration(13) {
             if (phases != null) {
                 predicates.add(RawInPredicate(`in` = tupleOf("@phase", phases)))
             }
+            Reflect.deleteProperty(it, "skills")
+            Reflect.deleteProperty(it, "activities")
+            Reflect.deleteProperty(it, "abilities")
+            Reflect.deleteProperty(it, "phases")
             it.predicates = predicates.toTypedArray()
         }
     }

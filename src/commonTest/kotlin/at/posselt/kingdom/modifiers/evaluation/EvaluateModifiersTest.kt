@@ -8,8 +8,8 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.ABILITY
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.PROFICIENCY
-import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createAbilityModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createProficiencyModifier
+import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createSkillAbilityModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.GtePredicate
@@ -37,7 +37,7 @@ class EvaluateModifiersTest {
     @Test
     fun testBasic() {
         val modifiers = listOf(
-            createAbilityModifiers(
+            createSkillAbilityModifiers(
                 AGRICULTURE,
                 KingdomAbilityScores(11, 13, 15, 16)
             ).copy(rollOptions = setOf("option")),

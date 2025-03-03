@@ -1,0 +1,14 @@
+{
+    "name": "Feudalism",
+    "description": "Your nation’s rule is vested in a dynastic royal family, though much of the real power is distributed among their vassals and fiefdoms.",
+    "boosts": [
+        "stability",
+        "culture"
+    ],
+    "freeBoosts": 1,
+    "bonusFeat": "Fortified Fiefs",
+    "skillProficiencies": [
+        "defense",
+        "trade"
+    ]
+}

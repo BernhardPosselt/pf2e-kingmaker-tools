@@ -46,3 +46,7 @@ val kingdomSizeData = listOf(
         commodityCapacity = 20,
     )
 )
+
+fun findKingdomSize(size: Int) =
+    kingdomSizeData.find { it.sizeFrom <= size
+            && (it.sizeTo?.let { to -> to >= size } != false) }!!

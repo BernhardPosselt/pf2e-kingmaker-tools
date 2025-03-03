@@ -3,32 +3,6 @@ package at.posselt.pfrpg2e.kingdom
 import js.objects.JsPlainObject
 import kotlinx.serialization.json.JsonElement
 
-@JsPlainObject
-external interface RawCharter {
-    val name: String
-    val description: String
-    val flaw: String
-    val freeBoosts: Int
-    val boost: String
-}
-
-@JsPlainObject
-external interface RawGovernment {
-    val name: String
-    val description: String
-    val boosts: Array<String>
-    val freeBoosts: Int
-    val bonusFeat: String
-    val skillProficiencies: Array<String>
-}
-
-@JsPlainObject
-external interface RawHeartland {
-    val name: String
-    val description: String
-    val boost: String
-}
-
 
 @JsPlainObject
 external interface KingdomFeature {
@@ -39,14 +13,30 @@ external interface KingdomFeature {
     val modifiers: Array<RawModifier>?
     val freeBoosts: Int?
     val skillProficiencies: Int?
-    val charters: Array<RawCharter>
-    val heartlands: Array<RawHeartland>
-    val governments: Array<RawGovernment>
+}
+
+fun KingdomFeature.explodeLevels(): List<ExplodedKingdomFeature> =
+    levels.map {
+        ExplodedKingdomFeature(
+            level = it,
+            levels = levels,
+            name = name,
+            description = description,
+            flags = flags,
+            modifiers = modifiers,
+            freeBoosts = freeBoosts,
+            skillProficiencies = skillProficiencies,
+        )
+    }
+
+@JsPlainObject
+external interface ExplodedKingdomFeature : KingdomFeature {
+    val level: Int
 }
 
 
 @JsModule("./features.json")
-external val features: Array<KingdomFeature>
+external val kingdomFeatures: Array<KingdomFeature>
 
 @JsModule("./schemas/feature.json")
-external val featureSchema: JsonElement
+external val kingdomFeatureSchema: JsonElement

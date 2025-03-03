@@ -1,6 +1,13 @@
 package com.foundryvtt.core.documents
 
-import com.foundryvtt.core.*
+import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.CreateDocumentCallback
+import com.foundryvtt.core.DeleteDocumentCallback
+import com.foundryvtt.core.HooksEventListener
+import com.foundryvtt.core.PreCreateDocumentCallback
+import com.foundryvtt.core.PreDeleteDocumentCallback
+import com.foundryvtt.core.PreUpdateDocumentCallback
+import com.foundryvtt.core.UpdateDocumentCallback
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import js.objects.jso
@@ -38,8 +45,8 @@ external class TileDocument : ClientDocument {
     var texture: TextureData
     var width: Int
     var height: Int
-    var x: Int
-    var y: Int
+    var x: Double
+    var y: Double
     var elevation: Int
     var sort: Int
     var rotation: Int

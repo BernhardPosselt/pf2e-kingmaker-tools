@@ -1,48 +1,7 @@
 {
-    "levels": [1],
-    "name": "Government",
-    "description": "Your kingdom gains the benefits of your selected heartland",
-    "governments": [{
-        "name": "Despotism",
-        "description": "Your nation’s rule is centered around a single individual who seized or inherited command and whose authority is absolute. The ruler of this kingdom still retains advisors and assistants, but only when they obey the ruler’s whims.",
-        "boosts": ["stability", "economy"],
-        "freeBoosts": 1,
-        "bonusFeat": "Crush Dissent",
-        "skillProficiencies": ["intrigue", "warfare"]
-    }, {
-        "name": "Feudalism",
-        "description": "Your nation’s rule is vested in a dynastic royal family,\nthough much of the real power is distributed among their\nvassals and fiefdoms.",
-        "boosts": ["stability", "culture"],
-        "freeBoosts": 1,
-        "bonusFeat": "Fortified Fiefs",
-        "skillProficiencies": ["defense", "trade"]
-    }, {
-        "name": "Oligarchy",
-        "description": "Your nation’s rule is determined by a council of influential\nleaders who make decisions for all others.",
-        "boosts": ["loyalty", "economy"],
-        "freeBoosts": 1,
-        "bonusFeat": "Insider Trading",
-        "skillProficiencies": ["arts", "industry"]
-    }, {
-        "name": "Republic",
-        "description": "Your nation draws its leadership from its own citizens.\nElected representatives meet in parliamentary bodies to\nguide the nation.",
-        "boosts": ["stability", "loyalty"],
-        "freeBoosts": 1,
-        "bonusFeat": "Pull Together",
-        "skillProficiencies": ["engineering", "politics"]
-    }, {
-        "name": "Thaumocracy",
-        "description": "Your nation is governed by those most skilled in magic,\nusing their knowledge and power to determine the\nbest ways to rule. While the type of magic wielded by\nthe nation’s rulers can adjust its themes (or even its\nname—a thaumocracy run by divine spellcasters would\nbe a theocracy, for example), the details below remain the\nsame whether it’s arcane, divine, occult, primal, or any\ncombination of the four.",
-        "boosts": ["economy", "culture"],
-        "freeBoosts": 1,
-        "bonusFeat": "Practical Magic",
-        "skillProficiencies": ["folklore", "magic"]
-    }, {
-        "name": "Yeomanry",
-        "description": "Your nation is decentralized and relies on local leaders\nand citizens to handle government issues, sending\nrepresentatives to each other as needed to deal with\nissues that concern more than one locality.",
-        "boosts": ["loyalty", "culture"],
-        "freeBoosts": 1,
-        "bonusFeat": "Muddle Through",
-        "skillProficiencies": ["agriculture", "wilderness"]
-    }]
+  "levels": [
+    1
+  ],
+  "name": "Government",
+  "description": "Your kingdom gains the benefits of your selected heartland"
 }

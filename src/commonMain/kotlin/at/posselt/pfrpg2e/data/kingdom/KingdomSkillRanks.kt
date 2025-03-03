@@ -1,5 +1,7 @@
 package at.posselt.pfrpg2e.data.kingdom
 
+import at.posselt.pfrpg2e.data.actor.Proficiency
+
 data class KingdomSkillRanks(
     val agriculture: Int = 0,
     val arts: Int = 0,
@@ -18,6 +20,9 @@ data class KingdomSkillRanks(
     val warfare: Int = 0,
     val wilderness: Int = 0,
 ) {
+    fun resolveProficiency(skill: KingdomSkill) =
+        Proficiency.fromRank(resolve(skill))
+
     fun resolve(skill: KingdomSkill) =
         when (skill) {
             KingdomSkill.AGRICULTURE -> agriculture

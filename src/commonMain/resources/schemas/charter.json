@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://posselt.at/pf2e-kingmaker-tools/schemas/charter.json",
+  "title": "Kingdom Charter",
+  "description": "A Kingdom Charter",
+  "$ref": "#/$defs/Charter",
+  "$defs": {
+    "Charter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "description",
+        "freeBoosts"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "freeBoosts": {
+          "type": "number"
+        },
+        "flaw": {
+          "$ref": "#/$defs/Ability"
+        },
+        "boost": {
+          "$ref": "#/$defs/Ability"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Ability": {
+      "type": "string",
+      "enum": [
+        "stability",
+        "culture",
+        "economy",
+        "loyalty"
+      ]
+    },
+    "KingdomSkill": {
+      "type": "string",
+      "enum": [
+        "agriculture",
+        "arts",
+        "boating",
+        "defense",
+        "engineering",
+        "exploration",
+        "folklore",
+        "industry",
+        "intrigue",
+        "magic",
+        "politics",
+        "scholarship",
+        "statecraft",
+        "trade",
+        "warfare",
+        "wilderness"
+      ]
+    }
+  }
+}

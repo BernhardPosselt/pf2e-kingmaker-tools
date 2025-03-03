@@ -60,13 +60,17 @@ private fun combineBonuses(
     )
 }
 
+value class MergedSettlement(val settlement: Settlement)
+
 fun includeCapital(
     settlement: Settlement,
     capital: Settlement,
     capitalModifierFallbackEnabled: Boolean,
-): Settlement =
-    settlement.copy(
-        bonuses = if (capitalModifierFallbackEnabled) (settlement.bonuses + capital.bonuses) else settlement.bonuses,
+): MergedSettlement =
+    MergedSettlement(
+        settlement.copy(
+            bonuses = if (capitalModifierFallbackEnabled) (settlement.bonuses + capital.bonuses) else settlement.bonuses,
+        )
     )
 
 data class GlobalStructureBonuses(

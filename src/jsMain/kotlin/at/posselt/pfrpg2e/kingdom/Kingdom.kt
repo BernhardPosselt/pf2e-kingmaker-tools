@@ -15,7 +15,7 @@ suspend fun PF2ENpc.setKingdom(data: KingdomData) {
     setAppFlag("kingdom-sheet", data)
 }
 
-fun PF2ENpc.getStructure(): RawStructure? =
+fun PF2ENpc.getRawStructureData(): RawStructure? =
     getAppFlag("structureData")
 
 suspend fun PF2ENpc.setStructureData(data: RawStructure) {

@@ -9,7 +9,7 @@ import at.posselt.pfrpg2e.camping.getDefaultCamping
 import at.posselt.pfrpg2e.combattracks.getCombatTrack
 import at.posselt.pfrpg2e.combattracks.setCombatTrack
 import at.posselt.pfrpg2e.kingdom.KingdomData
-import at.posselt.pfrpg2e.kingdom.structures.getParsedStructureData
+import at.posselt.pfrpg2e.kingdom.structures.getRawResolvedStructureData
 import at.posselt.pfrpg2e.settings.*
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
@@ -172,7 +172,7 @@ class Migration10 : Migration(10) {
         }
         // migrate token images
         for (actor in game.npcs()) {
-            val data = actor.getParsedStructureData()
+            val data = actor.getRawResolvedStructureData()
             val name = data?.name
             if (name != null && name in structureNamesToMigrate) {
                 val path = "modules/pf2e-kingmaker-tools/img/structures/${name}.webp"
@@ -187,7 +187,7 @@ class Migration10 : Migration(10) {
             .filter { it.actor is PF2ENpc }
         for (token in tokensToMigrate) {
             val actor = token.actor as PF2ENpc
-            val data = actor.getParsedStructureData()
+            val data = actor.getRawResolvedStructureData()
             val name = data?.name
             if (name != null && name in structureNamesToMigrate) {
                 token.typeSafeUpdate {

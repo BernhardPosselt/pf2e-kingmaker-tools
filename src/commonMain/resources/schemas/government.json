@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://posselt.at/pf2e-kingmaker-tools/schemas/government.json",
+  "title": "Kingdom Government",
+  "description": "A Kingdom Government",
+  "$ref": "#/$defs/Government",
+  "$defs": {
+    "Government": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "description",
+        "bonusFeat",
+        "boosts",
+        "freeBoosts",
+        "skillProficiencies"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "boosts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Ability"
+          }
+        },
+        "freeBoosts": {
+          "type": "number"
+        },
+        "skillProficiencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/KingdomSkill"
+          }
+        },
+        "bonusFeat": {
+          "type": "string"
+        }
+      }
+    },
+    "Ability": {
+      "type": "string",
+      "enum": [
+        "stability",
+        "culture",
+        "economy",
+        "loyalty"
+      ]
+    },
+    "KingdomSkill": {
+      "type": "string",
+      "enum": [
+        "agriculture",
+        "arts",
+        "boating",
+        "defense",
+        "engineering",
+        "exploration",
+        "folklore",
+        "industry",
+        "intrigue",
+        "magic",
+        "politics",
+        "scholarship",
+        "statecraft",
+        "trade",
+        "warfare",
+        "wilderness"
+      ]
+    }
+  }
+}

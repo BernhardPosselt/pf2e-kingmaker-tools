@@ -23,7 +23,7 @@ class EvaluateStructuresTest {
                 name = "stackwith",
                 stacksWith = "residential",
                 consumptionReduction = 1,
-                bonuses = listOf(
+                bonuses = setOf(
                     StructureBonus(
                         skill = KingdomSkill.AGRICULTURE,
                         activity = null,
@@ -43,7 +43,7 @@ class EvaluateStructuresTest {
                 unlockActivities = setOf("something"),
                 storage = CommodityStorage(ore = 1, lumber = 1),
                 consumptionReduction = 1,
-                bonuses = listOf(
+                bonuses = setOf(
                     StructureBonus(
                         skill = KingdomSkill.AGRICULTURE,
                         activity = null,
@@ -70,7 +70,7 @@ class EvaluateStructuresTest {
                 notes = "note2",
                 storage = CommodityStorage(stone = 1, lumber = 1),
                 consumptionReduction = 1,
-                bonuses = listOf(
+                bonuses = setOf(
                     StructureBonus(
                         skill = KingdomSkill.AGRICULTURE,
                         activity = null,
@@ -167,7 +167,7 @@ class EvaluateStructuresTest {
             structures = listOf(
                 Structure(
                     name = "residential",
-                    bonuses = listOf(
+                    bonuses = setOf(
                         StructureBonus(
                             skill = KingdomSkill.AGRICULTURE,
                             activity = null,
@@ -177,7 +177,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
-                    bonuses = listOf(
+                    bonuses = setOf(
                         StructureBonus(
                             skill = KingdomSkill.AGRICULTURE,
                             activity = null,

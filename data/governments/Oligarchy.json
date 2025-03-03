@@ -1,0 +1,14 @@
+{
+    "name": "Oligarchy",
+    "description": "Your nation’s rule is determined by a council of influential leaders who make decisions for all others.",
+    "boosts": [
+        "loyalty",
+        "economy"
+    ],
+    "freeBoosts": 1,
+    "bonusFeat": "Insider Trading",
+    "skillProficiencies": [
+        "arts",
+        "industry"
+    ]
+}

@@ -24,17 +24,47 @@ import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.feats
-import at.posselt.pfrpg2e.kingdom.features
 import at.posselt.pfrpg2e.kingdom.kingdomActivities
+import at.posselt.pfrpg2e.kingdom.kingdomFeatures
 import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
-import at.posselt.pfrpg2e.macros.*
+import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
+import at.posselt.pfrpg2e.macros.awardXPMacro
+import at.posselt.pfrpg2e.macros.combatTrackMacro
+import at.posselt.pfrpg2e.macros.createFoodMacro
+import at.posselt.pfrpg2e.macros.editRealmTileMacro
+import at.posselt.pfrpg2e.macros.editStructureMacro
+import at.posselt.pfrpg2e.macros.resetHeroPointsMacro
+import at.posselt.pfrpg2e.macros.rollCultEventMacro
+import at.posselt.pfrpg2e.macros.rollExplorationSkillCheckMacro
+import at.posselt.pfrpg2e.macros.rollKingdomEventMacro
+import at.posselt.pfrpg2e.macros.rollPartyCheckMacro
+import at.posselt.pfrpg2e.macros.sceneWeatherSettingsMacro
+import at.posselt.pfrpg2e.macros.setTimeOfDayMacro
+import at.posselt.pfrpg2e.macros.setWeatherMacro
+import at.posselt.pfrpg2e.macros.subsistMacro
+import at.posselt.pfrpg2e.macros.toggleCombatTracksMacro
+import at.posselt.pfrpg2e.macros.toggleShelteredMacro
+import at.posselt.pfrpg2e.macros.toggleWeatherMacro
 import at.posselt.pfrpg2e.migrations.migratePfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
-import at.posselt.pfrpg2e.utils.*
+import at.posselt.pfrpg2e.utils.KtMigration
+import at.posselt.pfrpg2e.utils.KtMigrationData
+import at.posselt.pfrpg2e.utils.Pfrpg2eKingdomCampingWeather
+import at.posselt.pfrpg2e.utils.ToolsMacros
+import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.fixVisibility
+import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.loadTpls
+import at.posselt.pfrpg2e.utils.pf2eKingmakerTools
 import at.posselt.pfrpg2e.weather.registerWeatherHooks
 import at.posselt.pfrpg2e.weather.rollWeather
-import com.foundryvtt.core.*
+import com.foundryvtt.core.Hooks
+import com.foundryvtt.core.game
+import com.foundryvtt.core.onInit
+import com.foundryvtt.core.onReady
+import com.foundryvtt.core.onRenderChatLog
+import com.foundryvtt.core.onRenderChatMessage
 import io.kvision.jquery.get
 import js.objects.recordOf
 import org.w3c.dom.HTMLElement
@@ -146,7 +176,7 @@ fun main() {
                 data = KtMigrationData(
                     structures = structures,
                     feats = feats,
-                    features = features,
+                    features = kingdomFeatures,
                     activities = kingdomActivities,
                 ),
             )

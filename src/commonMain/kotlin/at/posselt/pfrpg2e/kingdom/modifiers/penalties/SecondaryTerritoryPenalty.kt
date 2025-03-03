@@ -4,8 +4,8 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 
-fun secondaryTerritoryPenalty(activeSettlement: Settlement): Modifier? =
-    if(activeSettlement.isSecondaryTerritory) {
+fun createSecondaryTerritoryPenalty(currentSettlement: Settlement): Modifier? =
+    if(currentSettlement.isSecondaryTerritory) {
         Modifier(
             type = ModifierType.CIRCUMSTANCE,
             value = -4,

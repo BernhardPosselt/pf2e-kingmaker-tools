@@ -1,6 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.structures
 
-import at.posselt.pfrpg2e.kingdom.getStructure
+import at.posselt.pfrpg2e.kingdom.getRawStructureData
 import at.posselt.pfrpg2e.utils.isFirstGM
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.ui
@@ -14,7 +14,7 @@ fun validateStructures(game: Game) {
             .filterIsInstance<PF2ENpc>()
             .mapNotNull {
                 try {
-                    it.getStructure()?.let { structure ->
+                    it.getRawStructureData()?.let { structure ->
                         validateStructure(JSON.stringify(structure), schema)
                         null
                     }

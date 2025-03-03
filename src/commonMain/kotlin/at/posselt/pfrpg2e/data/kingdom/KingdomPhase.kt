@@ -13,7 +13,6 @@ enum class KingdomPhase {
     REGION,
     UPKEEP;
 
-
     companion object {
         fun fromString(value: String) = fromCamelCase<KingdomPhase>(value)
     }

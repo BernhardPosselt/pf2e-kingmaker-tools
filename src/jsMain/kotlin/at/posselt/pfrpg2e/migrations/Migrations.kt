@@ -55,6 +55,7 @@ val latestMigrationVersion = migrations.maxOfOrNull { it.version }!!
 
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     val currentVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
+    console.log("${Config.moduleName}: Upgrading from $currentVersion to $latestMigrationVersion")
     if (currentVersion < 6) {
         ui.notifications.error(
             "${Config.moduleName}: Upgrades from versions prior to 0.12.2 are not supported anymore. " +
@@ -74,6 +75,7 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
 
         migrationsToRun
             .forEach { migration ->
+                ui.notifications.info("Running migration ${Config.moduleName} version ${migration.version}")
                 campingActor?.let { actor ->
                     actor.getCamping()?.let { camping ->
                         migration.migrateCamping(this, camping)

@@ -5,7 +5,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 
-fun leaderEventBonus(
+fun createLeaderEventBonus(
     kingdomLevel: Int,
 ): Modifier {
     val value = if (kingdomLevel >= 15) {

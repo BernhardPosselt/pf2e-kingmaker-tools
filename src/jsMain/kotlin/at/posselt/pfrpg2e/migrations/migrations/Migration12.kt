@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.RawLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.RawLeaderSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.AutomateResources
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.ProficiencyMode
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
 import at.posselt.pfrpg2e.settings.getBoolean
 import at.posselt.pfrpg2e.settings.getInt
 import at.posselt.pfrpg2e.settings.getString
@@ -76,11 +76,11 @@ class Migration12 : Migration(12, true) {
             else -> AutomateResources.KINGMAKER.toCamelCase()
         }
         val proficiencyMode = if (game.settings.getBoolean("kingdomAlwaysAddLevel")) {
-            ProficiencyMode.FULL.toCamelCase()
+            UntrainedProficiencyMode.FULL.toCamelCase()
         } else if (game.settings.getBoolean("kingdomAlwaysAddHalfLevel")) {
-            ProficiencyMode.HALF.toCamelCase()
+            UntrainedProficiencyMode.HALF.toCamelCase()
         } else {
-            ProficiencyMode.NONE.toCamelCase()
+            UntrainedProficiencyMode.NONE.toCamelCase()
         }
         val kingdomEventsTableUuid = game.settings.getString("kingdomEventsTable")
             .takeIf { it.isNotBlank() }

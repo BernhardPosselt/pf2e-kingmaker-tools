@@ -23,24 +23,6 @@
         "skillProficiencies": {
           "type": "number"
         },
-        "charters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Charter"
-          }
-        },
-        "heartlands": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/HeartLand"
-          }
-        },
-        "governments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Government"
-          }
-        },
         "levels": {
           "type": "array",
           "items": {
@@ -66,99 +48,6 @@
           }
         }
       }
-    },
-    "Charter": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "name",
-        "description",
-        "freeBoosts"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "freeBoosts": {
-          "type": "number"
-        },
-        "flaw": {
-          "$ref": "#/$defs/Ability"
-        },
-        "boost": {
-          "$ref": "#/$defs/Ability"
-        },
-        "description": {
-          "type": "string"
-        }
-      }
-    },
-    "Government": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "name",
-        "description",
-        "bonusFeat",
-        "boosts",
-        "freeBoosts",
-        "skillProficiencies"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "boosts": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Ability"
-          }
-        },
-        "freeBoosts": {
-          "type": "number"
-        },
-        "skillProficiencies": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/KingdomSkill"
-          }
-        },
-        "bonusFeat": {
-          "type": "string"
-        }
-      }
-    },
-    "HeartLand": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "description",
-        "name",
-        "boost"
-      ],
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "boost": {
-          "$ref": "#/$defs/Ability"
-        }
-      }
-    },
-    "Ability": {
-      "type": "string",
-      "enum": [
-        "stability",
-        "culture",
-        "economy",
-        "loyalty"
-      ]
     },
     "Modifier": {
       "type": "object",
@@ -477,27 +366,6 @@
           "minItems": 2
         }
       }
-    },
-    "KingdomSkill": {
-      "type": "string",
-      "enum": [
-        "agriculture",
-        "arts",
-        "boating",
-        "defense",
-        "engineering",
-        "exploration",
-        "folklore",
-        "industry",
-        "intrigue",
-        "magic",
-        "politics",
-        "scholarship",
-        "statecraft",
-        "trade",
-        "warfare",
-        "wilderness"
-      ]
     }
   }
 }

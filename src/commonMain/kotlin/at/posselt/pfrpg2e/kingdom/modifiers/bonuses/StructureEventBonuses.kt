@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 
-fun structureEventBonuses(currentSettlement: Settlement): Modifier? =
+fun createStructureEventBonuses(currentSettlement: Settlement): Modifier? =
     if (currentSettlement.settlementEventBonus > 0) {
         Modifier(
             type = ModifierType.ITEM,

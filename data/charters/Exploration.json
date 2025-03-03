@@ -1,0 +1,7 @@
+{
+    "name": "Exploration",
+    "description": "Your sponsor wants you to explore, clear, and settle a wilderness area along the border of the sponsor’s own territory. Your charter helps to secure initial structures (or supplies to create them), at the cost of incurring financial debt.",
+    "boost": "stability",
+    "freeBoosts": 1,
+    "flaw": "economy"
+}

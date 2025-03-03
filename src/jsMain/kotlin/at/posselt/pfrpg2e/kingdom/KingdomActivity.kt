@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import js.objects.JsPlainObject
 import kotlinx.serialization.json.JsonElement
 
@@ -26,7 +27,7 @@ external interface KingdomActivity {
     var description: String
     var requirement: String?
     var special: String?
-    var skills: SkillRanks
+    var skills: RawSkillRanks
     var phase: KingdomPhase
     var dc: KingdomDc
     var dcAdjustment: Int?
@@ -42,3 +43,21 @@ external val kingdomActivities: Array<KingdomActivity>
 
 @JsModule("./schemas/kingdom-activity.json")
 external val kingdomActivitySchema: JsonElement
+
+fun KingdomActivity.resolveDc(
+    enemyArmyScoutingDcs: List<Int>,
+    kingdomLevel: Int,
+    kingdomSize: Int,
+    rulerVacant: Boolean,
+): Int? =
+    when (dc) {
+        "control" -> calculateControlDC(
+            kingdomLevel = kingdomLevel,
+            kingdomSize = kingdomSize,
+            rulerVacant = rulerVacant,
+        )
+        "custom" -> 0
+        "none" -> null
+        "scouting" -> enemyArmyScoutingDcs.maxOrNull() ?: 0
+        else -> dc as Int
+    }

@@ -13,7 +13,11 @@ enum class Proficiency {
 
     companion object {
         fun fromString(value: String) = fromCamelCase<Proficiency>(value)
+        fun fromRank(value: Int) = entries[value]
     }
+
+    val rank: Int
+        get() = ordinal
 
     val value: String
         get() = toCamelCase()

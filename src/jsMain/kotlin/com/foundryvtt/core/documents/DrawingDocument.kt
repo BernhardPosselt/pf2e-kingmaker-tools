@@ -1,6 +1,13 @@
 package com.foundryvtt.core.documents
 
-import com.foundryvtt.core.*
+import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.CreateDocumentCallback
+import com.foundryvtt.core.DeleteDocumentCallback
+import com.foundryvtt.core.HooksEventListener
+import com.foundryvtt.core.PreCreateDocumentCallback
+import com.foundryvtt.core.PreDeleteDocumentCallback
+import com.foundryvtt.core.PreUpdateDocumentCallback
+import com.foundryvtt.core.UpdateDocumentCallback
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import js.objects.jso
@@ -8,7 +15,17 @@ import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
 @JsPlainObject
-external interface ShapeData
+external interface ShapeData {
+    val type: String
+    val width: Int
+    val height: Int
+}
+
+@JsPlainObject
+external interface PolygonData: ShapeData {
+    val points: Array<Double>
+}
+
 
 @JsName("CONFIG.Drawing.documentClass")
 @Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
@@ -23,8 +40,8 @@ external class DrawingDocument : ClientDocument {
     var _id: String
     var author: User?
     var shape: ShapeData
-    var x: Int
-    var y: Int
+    var x: Double
+    var y: Double
     var elevation: Int
     var sort: Int
     var rotation: Int

@@ -1,6 +1,6 @@
 import at.posselt.pfrpg2e.plugins.ChangeModuleVersion
-import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
 import at.posselt.pfrpg2e.plugins.CombineJsonFiles
+import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
 import at.posselt.pfrpg2e.plugins.ReleaseModule
 import at.posselt.pfrpg2e.plugins.UnpackJsonFiles
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
@@ -123,6 +123,9 @@ tasks {
             "validateFeats",
             "validateFeatures",
             "validateKingdomActivities",
+            "validateCharters",
+            "validateGovernments",
+            "validateHeartlands",
         )
     }
 }
@@ -164,6 +167,24 @@ tasks.register<JsonSchemaValidator>("validateKingdomActivities") {
     files = layout.projectDirectory.dir("data/kingdom-activities")
 }
 
+tasks.register<JsonSchemaValidator>("validateCharters") {
+    outputs.upToDateWhen { true } // no outputs, only depend on input files
+    schema = layout.projectDirectory.file("src/commonMain/resources/schemas/charter.json")
+    files = layout.projectDirectory.dir("data/charters")
+}
+
+tasks.register<JsonSchemaValidator>("validateGovernments") {
+    outputs.upToDateWhen { true } // no outputs, only depend on input files
+    schema = layout.projectDirectory.file("src/commonMain/resources/schemas/government.json")
+    files = layout.projectDirectory.dir("data/governments")
+}
+
+tasks.register<JsonSchemaValidator>("validateHeartlands") {
+    outputs.upToDateWhen { true } // no outputs, only depend on input files
+    schema = layout.projectDirectory.file("src/commonMain/resources/schemas/heartland.json")
+    files = layout.projectDirectory.dir("data/heartlands")
+}
+
 // release tasks
 tasks.register<ChangeModuleVersion>("changeModuleVersion") {
     inputs.property("version", project.version)
@@ -202,7 +223,7 @@ tasks.register<ReleaseModule>("release") {
 }
 
 tasks.register<UnpackJsonFiles>("unpackJson") {
-    fileNameProperty = "title"
-    file = layout.projectDirectory.file("data/kingdom-activities/kingdom-activities.json")
-    targetDirectory = layout.projectDirectory.dir("data/kingdom-activities")
+    fileNameProperty = "name"
+    file = layout.projectDirectory.file("data/governments/governments.json")
+    targetDirectory = layout.projectDirectory.dir("data/governments")
 }

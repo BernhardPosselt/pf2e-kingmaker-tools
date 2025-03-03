@@ -5,34 +5,43 @@ import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 
-fun armyConditionPenalties(
-    armyName: String,
-    armyUuid: String,
-    miredValue: Int,
-    wearyValue: Int
+
+data class ArmyConditionInfo(
+    val armyName: String,
+    val armyUuid: String,
+    val miredValue: Int,
+    val wearyValue: Int
+)
+
+fun createArmyConditionPenalties(
+    info: ArmyConditionInfo,
 ): List<Modifier> {
     val modifiers = mutableListOf<Modifier>()
-    if (miredValue > 0) {
-        modifiers.add(Modifier(
-            name = "$armyName (Mired $miredValue)",
-            type = ModifierType.CIRCUMSTANCE,
-            value = -miredValue,
-            id = "mired-$armyUuid",
-            predicates = listOf(
-                EqPredicate("@activity", "deploy-army"),
+    if (info.miredValue > 0) {
+        modifiers.add(
+            Modifier(
+                name = "$info.armyName (Mired $info.miredValue)",
+                type = ModifierType.CIRCUMSTANCE,
+                value = -info.miredValue,
+                id = "mired-$info.armyUuid",
+                predicates = listOf(
+                    EqPredicate("@activity", "deploy-army"),
+                )
             )
-        ))
+        )
     }
-    if (wearyValue > 0) {
-        modifiers.add(Modifier(
-            name = "$armyName (Weary $wearyValue)",
-            type = ModifierType.CIRCUMSTANCE,
-            value = -wearyValue,
-            id = "weary-$armyUuid",
-            predicates = listOf(
-                EqPredicate("@phase", KingdomPhase.ARMY.value),
+    if (info.wearyValue > 0) {
+        modifiers.add(
+            Modifier(
+                name = "$info.armyName (Weary $info.wearyValue)",
+                type = ModifierType.CIRCUMSTANCE,
+                value = -info.wearyValue,
+                id = "weary-$info.armyUuid",
+                predicates = listOf(
+                    EqPredicate("@phase", KingdomPhase.ARMY.value),
+                )
             )
-        ))
+        )
     }
     return modifiers
 }
