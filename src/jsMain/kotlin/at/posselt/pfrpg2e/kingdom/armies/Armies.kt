@@ -11,7 +11,7 @@ import js.iterable.asSequence
 import js.objects.recordOf
 import kotlinx.coroutines.await
 
-fun Game.getPlayerSelectedArmies(): Array<PF2EArmy> =
+fun Game.getTargetedArmies(): Array<PF2EArmy> =
     user.targets.values()
         .asSequence()
         .filterIsInstance<PF2EArmy>()

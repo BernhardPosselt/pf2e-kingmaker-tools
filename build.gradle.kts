@@ -99,6 +99,7 @@ kotlin {
                 implementation(libs.kotlinx.html)
                 implementation(libs.kotlinx.coroutines.js)
                 implementation(libs.jsonschemavalidator.js)
+                implementation(npm("uuid", "11.1.0"))
                 api(libs.jquery)
             }
         }

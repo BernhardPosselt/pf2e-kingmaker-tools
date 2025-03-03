@@ -3,11 +3,8 @@ package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.Ruins
-import at.posselt.pfrpg2e.data.kingdom.leaders.InvestedLeaders
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActorTypes
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderKingdomSkills
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderLevels
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkills
 import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
@@ -42,13 +39,10 @@ fun createAssuranceModifiers(
 fun createAllModifiers(
     kingdomLevel: Int,
     globalBonuses: GlobalStructureBonuses,
-    activeSettlement: MergedSettlement,
-    investedLeaders: InvestedLeaders,
+    currentSettlement: MergedSettlement?,
     abilityScores: KingdomAbilityScores,
-    leaderLevels: LeaderLevels,
-    leaderActorTypes: LeaderActorTypes,
+    leaderActors: LeaderActors,
     leaderSkills: LeaderSkills,
-    leaderSkillRanks: LeaderSkillRanks,
     leaderKingdomSkills: LeaderKingdomSkills,
     kingdomSkillRanks: KingdomSkillRanks,
     allSettlements: List<Settlement>,
@@ -60,30 +54,35 @@ fun createAllModifiers(
     enableLeadershipBonuses: Boolean,
     featModifiers: List<Modifier>,
     featureModifiers: List<Modifier>,
-    customModifiers: List<Modifier>,
 ): List<Modifier> =
     listOfNotNull(
         createRulerBonus(global = globalBonuses)
-    ) + createStructureBonuses(
-        mergedSettlement = activeSettlement,
-    ) + if (enableLeadershipBonuses) {
+    ) + if (currentSettlement == null) {
+        emptyList()
+    } else {
+        createStructureBonuses(
+            mergedSettlement = currentSettlement,
+        )
+    } + if (enableLeadershipBonuses) {
         createLeadershipModifiers(
-            leaderLevels = leaderLevels,
-            leaderActorTypes = leaderActorTypes,
+            leaderActors = leaderActors,
             leaderSkills = leaderSkills,
-            leaderSkillRanks = leaderSkillRanks,
             leaderKingdomSkills = leaderKingdomSkills,
         )
     } else {
         createInvestedBonuses(
             kingdomLevel = kingdomLevel,
-            investedLeaders = investedLeaders,
+            leaderActors = leaderActors,
         )
     } + listOfNotNull(
         createLeaderEventBonus(kingdomLevel = kingdomLevel)
-    ) + listOfNotNull(
-        createStructureEventBonuses(currentSettlement = activeSettlement.settlement)
-    ) + createAbilityModifiers(
+    ) + if (currentSettlement == null) {
+        emptyList()
+    } else {
+        listOfNotNull(
+            createStructureEventBonuses(currentSettlement = currentSettlement.settlement)
+        )
+    } + createAbilityModifiers(
         abilities = abilityScores
     ) + createAllProficiencyModifiers(
         ranks = kingdomSkillRanks,
@@ -95,9 +94,13 @@ fun createAllModifiers(
         noBridgePenalty(settlements = allSettlements)
     ) + createRuinModifiers(
         values = ruins,
-    ) + listOfNotNull(
-        createSecondaryTerritoryPenalty(currentSettlement = activeSettlement.settlement)
-    ) + listOfNotNull(
+    ) + if (currentSettlement == null) {
+        emptyList()
+    } else {
+        listOfNotNull(
+            createSecondaryTerritoryPenalty(currentSettlement = currentSettlement.settlement)
+        )
+    } + listOfNotNull(
         createUnrestModifier(unrest = unrest)
     ) + createVacancyModifiers(
         vacancies = vacancies
@@ -105,4 +108,4 @@ fun createAllModifiers(
         emptyList()
     } else {
         createArmyConditionPenalties(info = targetedArmy)
-    } + featModifiers + featureModifiers + customModifiers
+    } + featModifiers + featureModifiers

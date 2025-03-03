@@ -1,9 +1,9 @@
 package at.posselt.pfrpg2e.utils
 
 import at.posselt.pfrpg2e.kingdom.KingdomActivity
-import at.posselt.pfrpg2e.kingdom.KingdomFeat
 import at.posselt.pfrpg2e.kingdom.KingdomFeature
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
+import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.RawStructureData
 import com.foundryvtt.core.Actor
@@ -40,7 +40,7 @@ external interface ToolsMacros {
 @JsPlainObject
 external interface KtMigrationData {
     val structures: Array<RawStructureData>
-    val feats: Array<KingdomFeat>
+    val feats: Array<RawKingdomFeat>
     val features: Array<KingdomFeature>
     val activities: Array<KingdomActivity>
 }

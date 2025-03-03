@@ -80,6 +80,9 @@ inline fun isInt(x: Any?): Boolean {
 fun <T> ReadonlyRecord<String, T>.asSequence(): Sequence<JsTuple2<String, T>> =
     Object.entries(this).asSequence()
 
+fun <T> ReadonlyRecord<String, T>.toList(): List<JsTuple2<String, T>> =
+    Object.entries(this).toList()
+
 fun <T> Sequence<Pair<String, T>>.toRecord(): ReadonlyRecord<String, T> =
     Object.fromEntries(map { tupleOf(it.first, it.second) }.toTypedArray())
 
@@ -105,3 +108,11 @@ fun Any.asAnyObject() = unsafeCast<AnyObject>()
 fun <T> Array<T>.asAnyObjectArray() = unsafeCast<Array<AnyObject>>()
 
 fun <T> List<T>.asAnyObjectList() = unsafeCast<List<AnyObject>>()
+
+fun Int.formatAsModifier() = if (this > 0) {
+    "+$this"
+} else if (this < 0) {
+    "-$this"
+} else {
+    this
+}

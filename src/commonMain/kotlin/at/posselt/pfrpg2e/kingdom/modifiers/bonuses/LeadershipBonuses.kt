@@ -5,10 +5,8 @@ import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.actor.SkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActorTypes
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderKingdomSkills
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderLevels
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkills
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
@@ -88,18 +86,20 @@ private fun calculatePcBonus(
 }
 
 fun createLeadershipModifiers(
-    leaderLevels: LeaderLevels,
-    leaderActorTypes: LeaderActorTypes,
+    leaderActors: LeaderActors,
     leaderSkills: LeaderSkills,
-    leaderSkillRanks: LeaderSkillRanks,
     leaderKingdomSkills: LeaderKingdomSkills,
 ): List<Modifier> {
     return Leader.entries.flatMap { leader ->
+        val actor = leaderActors.resolve(leader)
+        if (actor == null) {
+            emptyList()
+        } else {
         val value = calculateLeadershipBonus(
-            leaderLevels.resolveLevel(leader),
-            leaderActorTypes.resolveType(leader),
+            actor.level,
+            actor.type,
             leaderSkills.resolveAttributes(leader),
-            leaderSkillRanks.resolveRanks(leader),
+            actor.ranks,
         )
         val fullModifier = Modifier(
             id = leader.value,
@@ -122,5 +122,6 @@ fun createLeadershipModifiers(
                 predicates = listOf(EqPredicate("@leader", leader.value)),
             )
         )
+        }
     }
 }

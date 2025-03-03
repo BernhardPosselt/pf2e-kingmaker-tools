@@ -27,6 +27,7 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 logback = { module = "ch.qos.logback:logback-classic", version = "1.5.8" }
 
+
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

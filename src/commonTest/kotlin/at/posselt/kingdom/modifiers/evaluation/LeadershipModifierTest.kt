@@ -3,11 +3,11 @@ package at.posselt.kingdom.modifiers.evaluation
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.actor.SkillRanks
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkillRanks
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActorTypes
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActor
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderKingdomSkills
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderLevels
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkills
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createLeadershipModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
@@ -19,15 +19,20 @@ class LeadershipModifierTest {
     fun testAppliesFull() {
         val modifiers = createLeadershipModifiers(
             leaderSkills = LeaderSkills(counselor = listOf(Skill.STEALTH, Skill.ACROBATICS)),
-            leaderSkillRanks = LeaderSkillRanks(counselor = SkillRanks(
-                stealth = 2,
-                acrobatics = 3,
-            )),
             leaderKingdomSkills = LeaderKingdomSkills(
                 counselor = listOf(KingdomSkill.AGRICULTURE)
             ),
-            leaderLevels = LeaderLevels(),
-            leaderActorTypes = LeaderActorTypes(),
+            leaderActors = LeaderActors(
+                counselor = LeaderActor(
+                    level = 0,
+                    type = LeaderType.PC,
+                    ranks = SkillRanks(
+                        stealth = 2,
+                        acrobatics = 3,
+                    ),
+                    invested = false
+                )
+            ),
         )
         val filteredModifiers = filterModifiersAndUpdateContext(modifiers, defaultContext)
         console.log(filteredModifiers)

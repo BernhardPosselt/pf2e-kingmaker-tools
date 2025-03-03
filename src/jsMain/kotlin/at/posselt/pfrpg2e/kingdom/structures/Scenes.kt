@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.MergedSettlement
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.SettlementData
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateSettlement
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
 import at.posselt.pfrpg2e.kingdom.scenes.toRectangle
@@ -12,6 +13,7 @@ import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.documents.TileDocument
 import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.pf2e.actor.PF2ENpc
+import kotlin.math.max
 import kotlin.math.min
 
 private fun Scene.structureTokens(): List<TokenDocument> =
@@ -47,22 +49,24 @@ private fun Scene.calculateOccupiedBlocks(): Int {
         .count()
 }
 
-private fun Scene.parseSettlement(
+fun Scene.parseSettlement(
     rawSettlement: RawSettlement,
     autoCalculateSettlementLevel: Boolean,
     allStructuresStack: Boolean,
 ): Settlement {
-    val occupiedBlocks = if (autoCalculateSettlementLevel) calculateOccupiedBlocks() else rawSettlement.lots
+    val occupiedBlocks = if (autoCalculateSettlementLevel) max(1, calculateOccupiedBlocks()) else rawSettlement.lots
     val settlementLevel = if (autoCalculateSettlementLevel) min(20, occupiedBlocks) else rawSettlement.level
     return evaluateSettlement(
+        data = SettlementData(
+            name = name,
+            occupiedBlocks = occupiedBlocks,
+            level = settlementLevel,
+            type = SettlementType.fromString(rawSettlement.type)
+                ?: SettlementType.SETTLEMENT,
+            isSecondaryTerritory = rawSettlement.secondaryTerritory,
+            waterBorders = rawSettlement.waterBorders,
+        ),
         structures = getStructures(),
-        settlementName = name,
-        settlementType = SettlementType.fromString(rawSettlement.type)
-            ?: SettlementType.SETTLEMENT,
-        settlementLevel = settlementLevel,
-        waterBorders = rawSettlement.waterBorders,
-        occupiedBlocks = occupiedBlocks,
-        isSecondaryTerritory = rawSettlement.secondaryTerritory,
         allStructuresStack = allStructuresStack,
     )
 }

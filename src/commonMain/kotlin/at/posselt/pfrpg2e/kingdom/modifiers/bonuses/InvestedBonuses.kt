@@ -1,14 +1,14 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.bonuses
 
-import at.posselt.pfrpg2e.data.kingdom.leaders.InvestedLeaders
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
 
 fun createInvestedBonuses(
     kingdomLevel: Int,
-    investedLeaders: InvestedLeaders,
+    leaderActors: LeaderActors,
 ): List<Modifier> {
     val value = if (kingdomLevel < 8) {
         1
@@ -19,7 +19,7 @@ fun createInvestedBonuses(
     }
     return Leader.entries
         .mapNotNull {
-            if (investedLeaders.isInvested(it)) {
+            if (leaderActors.resolve(it)?.invested == true) {
                 val ability = it.keyAbility.value
                 Modifier(
                     type = ModifierType.STATUS,

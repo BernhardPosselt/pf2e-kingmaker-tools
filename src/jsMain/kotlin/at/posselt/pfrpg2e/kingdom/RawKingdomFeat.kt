@@ -1,6 +1,5 @@
 package at.posselt.pfrpg2e.kingdom
 
-import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import js.objects.JsPlainObject
 import js.objects.Record
 import kotlinx.serialization.json.JsonElement
@@ -13,13 +12,13 @@ external interface UpgradeResult {
 }
 
 @JsPlainObject
-external interface KingdomFeat {
+external interface RawKingdomFeat {
     val name: String
     val level: Int
     val text: String
     val prerequisites: String?
     val automationNotes: String?
-    val modifiers: Array<Modifier>?
+    val modifiers: Array<RawModifier>?
     val resourceDice: Int?
     val settlementItemLevelIncrease: Int?
     val trainSkill: String?
@@ -30,7 +29,7 @@ external interface KingdomFeat {
 }
 
 @JsModule("./feats.json")
-external val feats: Array<KingdomFeat>
+external val kingdomFeats: Array<RawKingdomFeat>
 
 @JsModule("./schemas/feat.json")
-external val featSchema: JsonElement
+external val kingdomFeatSchema: JsonElement

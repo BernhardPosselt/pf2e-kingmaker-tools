@@ -6,7 +6,15 @@ import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.collections.EmbeddedCollection
 import com.foundryvtt.pf2e.actions.CheckRoll
-import com.foundryvtt.pf2e.item.*
+import com.foundryvtt.pf2e.item.PF2EAction
+import com.foundryvtt.pf2e.item.PF2EArmor
+import com.foundryvtt.pf2e.item.PF2ECampaignFeature
+import com.foundryvtt.pf2e.item.PF2ECondition
+import com.foundryvtt.pf2e.item.PF2EConsumable
+import com.foundryvtt.pf2e.item.PF2EEffect
+import com.foundryvtt.pf2e.item.PF2EEquipment
+import com.foundryvtt.pf2e.item.PF2EFeat
+import com.foundryvtt.pf2e.item.PF2EItem
 import js.objects.jso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
@@ -30,6 +38,7 @@ external class PF2EStatisticsDifficultyClass {
 
 external class PF2EAttribute {
     val rank: Int
+    val lore: Boolean
     val label: String
     val dc: PF2EStatisticsDifficultyClass
     fun roll(args: StatisticRollParameters = definedExternally): Promise<CheckRoll?>

@@ -23,8 +23,8 @@ import at.posselt.pfrpg2e.kingdom.dialogs.editSettlement
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
-import at.posselt.pfrpg2e.kingdom.feats
 import at.posselt.pfrpg2e.kingdom.kingdomActivities
+import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.kingdom.kingdomFeatures
 import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
@@ -175,7 +175,7 @@ fun main() {
                 addOngoingEventDialog = {onOk -> buildPromise { addOngoingEvent(onOk) }},
                 data = KtMigrationData(
                     structures = structures,
-                    feats = feats,
+                    feats = kingdomFeats,
                     features = kingdomFeatures,
                     activities = kingdomActivities,
                 ),
@@ -187,6 +187,12 @@ fun main() {
                 game.migratePfrpg2eKingdomCampingWeather()
                 showFirstRunMessage(game)
                 validateStructures(game)
+//                kingdomCheckDialog(
+//                    game,
+//                    game.getKingdomActor()!!,
+//                    null,
+//                    KingdomSkill.ARTS
+//                )
             }
         }
 

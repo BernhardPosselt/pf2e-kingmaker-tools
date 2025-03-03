@@ -13,15 +13,28 @@ import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActivity
-import at.posselt.pfrpg2e.kingdom.armies.getPlayerSelectedArmies
+import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
+import at.posselt.pfrpg2e.kingdom.armies.miredValue
+import at.posselt.pfrpg2e.kingdom.armies.wearyValue
+import at.posselt.pfrpg2e.kingdom.assuranceModifiers
+import at.posselt.pfrpg2e.kingdom.checkModifiers
+import at.posselt.pfrpg2e.kingdom.createExpressionContext
 import at.posselt.pfrpg2e.kingdom.getActivity
+import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getKingdom
-import at.posselt.pfrpg2e.kingdom.parsedSkillRanks
+import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
+import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
+import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resolveDc
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.formatAsModifier
+import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -105,14 +118,17 @@ private fun getValidActivitySkills(
         .map { it.first }
         .toSet()
 
-private class ConfigureCheck(
+private class KingdomCheckDialog(
     private val game: Game,
     private val kingdomActor: PF2ENpc,
-    private val activityId: String?,
+    private val activity: KingdomActivity?,
     private val skill: KingdomSkill?,
+    private val baseModifiers: List<Modifier>,
+    private val assuranceModifiers: List<Modifier>,
+    private val validSkills: Set<KingdomSkill>,
 ) : FormApp<CheckContext, CheckData>(
     title = "Roll Check",
-    template = "components/forms/application-form.hbs",
+    template = "applications/kingdom/check.hbs",
     debug = true,
     dataModel = CheckModel::class.js,
     id = "kmCheck",
@@ -121,31 +137,27 @@ private class ConfigureCheck(
 
     init {
         val kingdom = kingdomActor.getKingdom()!!
-        val isRulerVacant = kingdom.vacancies().ruler
-        val activity = activityId?.let { kingdom.getActivity(it) }
-        val skill = if (skill != null) {
+        val vacancies = kingdom.vacancies()
+        val kingdomLevel = kingdom.level
+        val selectedSkill = if (skill != null) {
             skill
         } else if (activity != null) {
-            getValidActivitySkills(
-                kingdom.parsedSkillRanks(),
-                activity,
-                kingdom.settings.kingdomIgnoreSkillRequirements,
-            ).firstOrNull() ?: throw IllegalStateException("Activity without valid skills")
+            validSkills.firstOrNull() ?: throw IllegalStateException("Activity without valid skills")
         } else {
             KingdomSkill.AGRICULTURE
         }
         val dc = if (activity == null) {
             calculateControlDC(
-                kingdomLevel = kingdom.level,
+                kingdomLevel = kingdomLevel,
                 kingdomSize = kingdom.size,
-                rulerVacant = isRulerVacant,
+                rulerVacant = vacancies.ruler,
             )
         } else {
             activity.resolveDc(
-                kingdomLevel = kingdom.level,
+                kingdomLevel = kingdomLevel,
                 kingdomSize = kingdom.size,
-                rulerVacant = isRulerVacant,
-                enemyArmyScoutingDcs = game.getPlayerSelectedArmies().map { it.system.scouting }
+                rulerVacant = vacancies.ruler,
+                enemyArmyScoutingDcs = game.getTargetedArmies().map { it.system.scouting }
             )
         }
         val phase = if (activity == null) {
@@ -157,10 +169,11 @@ private class ConfigureCheck(
             settlement = kingdom.activeSettlement,
             leader = Leader.RULER.value,
             rollMode = RollMode.PUBLICROLL.value,
-            skill = skill.value,
+            skill = selectedSkill.value,
             phase = phase.value,
             dc = dc ?: throw IllegalStateException("Check window opened for activity without check"),
         )
+
     }
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -182,12 +195,21 @@ private class ConfigureCheck(
     ): Promise<CheckContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
         val kingdom = kingdomActor.getKingdom()!!
-//        val modifiers = createAllModifiers(
-//
-//        )
-//        val assuranceModifier = createAssuranceModifiers(
-//
-//        )
+        val selectedSkill = KingdomSkill.fromString(data.skill)!!
+        val leader = Leader.fromString(data.leader)!!
+        val phase = fromCamelCase<KingdomPhase>(data.phase)
+        val rollOptions = baseModifiers.flatMap { it.rollOptions }.toSet()
+        val context = kingdom.createExpressionContext(
+            phase = phase,
+            activity = activity,
+            leader = leader,
+            usedSkill = selectedSkill,
+            rollOptions = rollOptions,
+        )
+        val evaluatedModifiers = evaluateModifiers(baseModifiers, context)
+        val evaluatedAssurance = evaluateModifiers(assuranceModifiers, context)
+        console.log("evaluated modifiers", evaluatedModifiers)
+        console.log("evaluated assurance", evaluatedAssurance)
         CheckContext(
             partId = parent.partId,
             settlementInput = Select(
@@ -211,12 +233,17 @@ private class ConfigureCheck(
             phaseInput = Select.fromEnum(
                 label = "Phase",
                 name = "phase",
-                value = fromCamelCase<RollMode>(data.phase),
+                value = phase,
             ).toContext(),
-            skillInput = Select.fromEnum<KingdomSkill>(
-                label = "Skill", // TODO: add modifier
+            skillInput = Select(
+                label = "Skill",
                 name = "skill",
-                value = fromCamelCase<KingdomSkill>(data.skill),
+                value = selectedSkill.value,
+                options = validSkills.map {
+                    val mod = evaluateModifiers(baseModifiers, context.copy(usedSkill = it)).total
+                    val label = "${it.label} (${mod.formatAsModifier()})"
+                    SelectOption(label, it.value)
+                },
             ).toContext(),
             dc = Select.dc(
                 name = "dc",
@@ -231,4 +258,59 @@ private class ConfigureCheck(
         data = value
         null
     }
+}
+
+
+suspend fun kingdomCheckDialog(
+    game: Game,
+    kingdomActor: PF2ENpc,
+    activityId: String?,
+    skill: KingdomSkill?,
+) {
+    // do as much work as possible before launching check dialog
+    val kingdom = kingdomActor.getKingdom() ?: return
+    val targetedArmy = game.getTargetedArmies()
+        .firstOrNull()
+        ?.let {
+            ArmyConditionInfo(
+                armyName = it.name,
+                armyUuid = it.uuid,
+                miredValue = it.miredValue() ?: 0,
+                wearyValue = it.wearyValue() ?: 0,
+            )
+        }
+    val (allSettlements, capital, current) = kingdom.getAllSettlements(game)
+    val globalBonuses = evaluateGlobalBonuses(allSettlements)
+    val currentSettlement = current?.let {
+        includeCapital(
+            settlement = it,
+            capital = capital,
+            capitalModifierFallbackEnabled = kingdom.settings.includeCapitalItemModifier
+        )
+    }
+
+    val activity = activityId?.let { kingdom.getActivity(it) }
+    val validSkills = if (activity != null) {
+        getValidActivitySkills(
+            kingdom.parseSkillRanks(),
+            activity,
+            kingdom.settings.kingdomIgnoreSkillRequirements,
+        )
+    } else {
+        KingdomSkill.entries.toSet()
+    }
+    KingdomCheckDialog(
+        game = game,
+        kingdomActor = kingdomActor,
+        activity = activity,
+        skill = skill,
+        validSkills = validSkills,
+        baseModifiers = kingdom.checkModifiers(
+            globalBonuses = globalBonuses,
+            currentSettlement = currentSettlement,
+            allSettlements = allSettlements,
+            targetedArmy = targetedArmy,
+        ),
+        assuranceModifiers = kingdom.assuranceModifiers(),
+    ).launch()
 }

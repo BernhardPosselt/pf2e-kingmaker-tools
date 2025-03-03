@@ -64,12 +64,16 @@ value class MergedSettlement(val settlement: Settlement)
 
 fun includeCapital(
     settlement: Settlement,
-    capital: Settlement,
+    capital: Settlement?,
     capitalModifierFallbackEnabled: Boolean,
 ): MergedSettlement =
     MergedSettlement(
         settlement.copy(
-            bonuses = if (capitalModifierFallbackEnabled) (settlement.bonuses + capital.bonuses) else settlement.bonuses,
+            bonuses = if (capitalModifierFallbackEnabled && capital != null) {
+                (settlement.bonuses + capital.bonuses)
+            } else {
+                settlement.bonuses
+            },
         )
     )
 
@@ -87,18 +91,21 @@ fun evaluateGlobalBonuses(settlements: List<Settlement>) =
         increaseLeadershipActivities = settlements.any { it.increaseLeadershipActivities },
     )
 
+data class SettlementData(
+    val name: String,
+    val occupiedBlocks: Int,
+    val level: Int,
+    val type: SettlementType,
+    val isSecondaryTerritory: Boolean,
+    val waterBorders: Int,
+)
 
 fun evaluateSettlement(
-    settlementName: String,
-    settlementType: SettlementType,
-    settlementLevel: Int,
-    waterBorders: Int,
-    occupiedBlocks: Int,
-    isSecondaryTerritory: Boolean,
+    data: SettlementData,
     structures: List<Structure>,
     allStructuresStack: Boolean,
 ): Settlement {
-    val settlementSize = findSettlementSize(settlementLevel)
+    val settlementSize = findSettlementSize(data.level)
     val consumptionReduction = calculateConsumptionReduction(structures)
     val settlementConsumption = settlementSize.consumption - consumptionReduction
     val maxItemBonus = settlementSize.maxItemBonus
@@ -106,39 +113,49 @@ fun evaluateSettlement(
         structures,
         allStructuresStack,
         maxItemBonus,
-        settlementName
+        data.name,
     )
+    val storage = structures
+        .map { it.storage }
+        .fold(CommodityStorage()) { acc, el -> acc + el }
+    val allowCapitalInvestment = structures.any { it.enableCapitalInvestment }
+    val notes = structures
+        .mapNotNull { it.notes }
+        .toSet()
+    val increaseLeadershipActivities = (data.type == SettlementType.CAPITAL
+            && structures.any { it.increaseLeadershipActivities })
+    val consumptionSurplus = (settlementConsumption
+        .takeIf { it < 0 }
+        ?.let { abs(it) }
+        ?: 0)
+    val residentialLots = structures
+        .filter { it.isResidential }
+        .sumOf { it.lots }
+    val unlockActivities = structures
+        .flatMap { it.unlockActivities }
+        .toSet()
+    val settlementConsumption1 = max(0, settlementConsumption)
+    val hasBridge = structures.any { it.isBridge }
+    console.log("-------------------------hereeeeeeeeeeeeeeeeeeeee-------------------")
     return Settlement(
-        name = settlementName,
-        waterBorders = waterBorders,
-        isSecondaryTerritory = isSecondaryTerritory,
+        name = data.name,
+        waterBorders = data.waterBorders,
+        isSecondaryTerritory = data.isSecondaryTerritory,
         settlementEventBonus = eventBonus,
         leaderLeadershipActivityBonus = leaderBonus,
         bonuses = bonuses,
-        allowCapitalInvestment = structures.any { it.enableCapitalInvestment },
-        notes = structures
-            .mapNotNull { it.notes }
-            .toSet(),
-        storage = structures
-            .map { it.storage }
-            .fold(CommodityStorage()) { acc, el -> acc + el },
-        increaseLeadershipActivities = settlementType == SettlementType.CAPITAL
-                && structures.any { it.increaseLeadershipActivities },
-        settlementConsumption = max(0, settlementConsumption),
+        allowCapitalInvestment = allowCapitalInvestment,
+        notes = notes,
+        storage = storage,
+        increaseLeadershipActivities = increaseLeadershipActivities,
+        settlementConsumption = settlementConsumption1,
         consumptionReduction = consumptionReduction,
-        consumptionSurplus = settlementConsumption
-            .takeIf { it < 0 }
-            ?.let { abs(it) }
-            ?: 0,
+        consumptionSurplus = consumptionSurplus,
         settlementSize = settlementSize,
-        unlockActivities = structures
-            .flatMap { it.unlockActivities }
-            .toSet(),
-        residentialLots = structures
-            .filter { it.isResidential }
-            .sumOf { it.lots },
-        hasBridge = structures.any { it.isBridge },
-        occupiedBlocks = occupiedBlocks,
-        settlementType = settlementType,
+        unlockActivities = unlockActivities,
+        residentialLots = residentialLots,
+        hasBridge = hasBridge,
+        occupiedBlocks = data.occupiedBlocks,
+        settlementType = data.type,
     )
 }

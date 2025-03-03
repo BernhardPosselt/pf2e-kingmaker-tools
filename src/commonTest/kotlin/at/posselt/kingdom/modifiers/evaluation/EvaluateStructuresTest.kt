@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.SettlementData
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateSettlement
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -86,12 +87,14 @@ class EvaluateStructuresTest {
 
             )
         val result = evaluateSettlement(
-            settlementName = "name",
-            settlementLevel = 20,
-            settlementType = SettlementType.CAPITAL,
-            waterBorders = 4,
-            occupiedBlocks = 4,
-            isSecondaryTerritory = true,
+            data = SettlementData(
+                name = "name",
+                level = 20,
+                type = SettlementType.CAPITAL,
+                waterBorders = 4,
+                occupiedBlocks = 4,
+                isSecondaryTerritory = true,
+            ),
             structures = structures,
             allStructuresStack = false,
         )
@@ -144,14 +147,16 @@ class EvaluateStructuresTest {
     @Test
     fun shouldNotFailIfNoStructures() {
         val result = evaluateSettlement(
-            settlementName = "name",
-            settlementLevel = 20,
-            waterBorders = 4,
-            occupiedBlocks = 4,
-            isSecondaryTerritory = true,
+            data = SettlementData(
+                name = "name",
+                level = 20,
+                type = SettlementType.CAPITAL,
+                waterBorders = 4,
+                occupiedBlocks = 4,
+                isSecondaryTerritory = true,
+            ),
             structures = emptyList(),
             allStructuresStack = false,
-            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(4, result.waterBorders)
     }
@@ -159,11 +164,14 @@ class EvaluateStructuresTest {
     @Test
     fun allStructuresStack() {
         val result = evaluateSettlement(
-            settlementName = "name",
-            settlementLevel = 14,
-            waterBorders = 3,
-            occupiedBlocks = 4,
-            isSecondaryTerritory = true,
+            data = SettlementData(
+                name = "name",
+                level = 14,
+                type = SettlementType.CAPITAL,
+                waterBorders = 3,
+                occupiedBlocks = 4,
+                isSecondaryTerritory = true,
+            ),
             structures = listOf(
                 Structure(
                     name = "residential",
@@ -187,7 +195,6 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = true,
-            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(
             setOf(
@@ -205,11 +212,14 @@ class EvaluateStructuresTest {
     @Test
     fun consumptionStacking() {
         val result = evaluateSettlement(
-            settlementName = "name",
-            settlementLevel = 14,
-            waterBorders = 3,
-            occupiedBlocks = 4,
-            isSecondaryTerritory = true,
+            data = SettlementData(
+                name = "name",
+                level = 14,
+                type = SettlementType.CAPITAL,
+                waterBorders = 3,
+                occupiedBlocks = 4,
+                isSecondaryTerritory = true,
+            ),
             structures = listOf(
                 Structure(
                     name = "residential",
@@ -223,7 +233,6 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = false,
-            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(2, result.consumptionReduction)
     }
@@ -231,11 +240,14 @@ class EvaluateStructuresTest {
     @Test
     fun consumptionStackDisabling() {
         val result = evaluateSettlement(
-            settlementName = "name",
-            settlementLevel = 14,
-            waterBorders = 3,
-            occupiedBlocks = 4,
-            isSecondaryTerritory = true,
+            data = SettlementData(
+                name = "name",
+                level = 14,
+                type = SettlementType.CAPITAL,
+                waterBorders = 3,
+                occupiedBlocks = 4,
+                isSecondaryTerritory = true,
+            ),
             structures = listOf(
                 Structure(
                     name = "residential",
@@ -249,7 +261,6 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = false,
-            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(3, result.consumptionReduction)
     }
@@ -257,11 +268,14 @@ class EvaluateStructuresTest {
     @Test
     fun consumptionStackWith() {
         val result = evaluateSettlement(
-            settlementName = "name",
-            settlementLevel = 14,
-            waterBorders = 3,
-            occupiedBlocks = 4,
-            isSecondaryTerritory = true,
+            data = SettlementData(
+                name = "name",
+                level = 14,
+                type = SettlementType.CAPITAL,
+                waterBorders = 3,
+                occupiedBlocks = 4,
+                isSecondaryTerritory = true,
+            ),
             structures = listOf(
                 Structure(
                     name = "residential",
@@ -274,7 +288,6 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = false,
-            settlementType = SettlementType.CAPITAL,
         )
         assertEquals(1, result.consumptionReduction)
     }
