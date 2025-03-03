@@ -279,12 +279,13 @@ suspend fun kingdomCheckDialog(
                 wearyValue = it.wearyValue() ?: 0,
             )
         }
-    val (allSettlements, capital, current) = kingdom.getAllSettlements(game)
+    val settlementResult = kingdom.getAllSettlements(game)
+    val allSettlements = settlementResult.allSettlements
     val globalBonuses = evaluateGlobalBonuses(allSettlements)
-    val currentSettlement = current?.let {
+    val currentSettlement = settlementResult.current?.let {
         includeCapital(
             settlement = it,
-            capital = capital,
+            capital = settlementResult.capital,
             capitalModifierFallbackEnabled = kingdom.settings.includeCapitalItemModifier
         )
     }
