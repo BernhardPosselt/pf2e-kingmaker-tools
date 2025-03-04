@@ -13,7 +13,7 @@ fun filterModifiersAndUpdateContext(
     context: ExpressionContext,
 ): FilterResult {
     val filteredModifiers = modifiers.asSequence()
-        .filter { it.predicates.all { it.evaluate(context) } }
+        .filter { it.applyIf.all { it.evaluate(context) } }
         .toList()
     val enabledRollOptions = filteredModifiers.flatMap { it.rollOptions }.toSet()
     return FilterResult(

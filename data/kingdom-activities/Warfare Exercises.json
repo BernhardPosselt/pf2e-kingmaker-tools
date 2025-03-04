@@ -17,7 +17,7 @@
         "turns": 1,
         "isConsumedAfterRoll": true,
         "enabled": true,
-        "predicates": [
+        "applyIf": [
           {
             "eq": [
               "@phase",
@@ -26,11 +26,11 @@
           }
         ],
         "value": 0,
-        "predicatedValue": [
-          {"when": [{"lt": ["@kingdomLevel","9"]}, "1"]},
-          {"when": [{"and": [{"gte": ["@kingdomLevel","9"]},{"lt": ["@kingdomLevel","15"]}]},"2"]},
-          {"when": [{"gte": ["@kingdomLevel","15"]},"3"]}
-        ],
+        "valueExpression": {"when": {"cases":[
+          {"case": [{"all": [{"gte": ["@kingdomLevel",9]},{"lt": ["@kingdomLevel",15]}]},2]},
+          {"case": [{"gte": ["@kingdomLevel",15]},3]}
+        ], "default": 1}
+        },
         "name": "Warfare Exercises",
         "type": "circumstance"
       }
@@ -43,7 +43,7 @@
         "turns": 1,
         "isConsumedAfterRoll": true,
         "enabled": true,
-        "predicates": [
+        "applyIf": [
           {
             "eq": [
               "@phase",
@@ -52,11 +52,11 @@
           }
         ],
         "value": 0,
-        "predicatedValue": [
-          {"when": [{"lt": ["@kingdomLevel","9"]}, "1"]},
-          {"when": [{"and": [{"gte": ["@kingdomLevel","9"]},{"lt": ["@kingdomLevel","15"]}]},"2"]},
-          {"when": [{"gte": ["@kingdomLevel","15"]},"3"]}
-        ],
+        "valueExpression": {"when": {"cases":[
+            {"case": [{"all": [{"gte": ["@kingdomLevel",9]},{"lt": ["@kingdomLevel",15]}]},2]},
+            {"case": [{"gte": ["@kingdomLevel",15]},3]}
+          ], "default": 1}
+        },
         "name": "Warfare Exercises",
         "type": "circumstance"
       }

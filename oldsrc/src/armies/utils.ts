@@ -32,7 +32,7 @@ export function getArmyModifiers(game: Game): Modifier[] {
         if (wearyCount > 0) {
             result.push({
                 type: 'circumstance',
-                predicates: [{"eq": ["@phase", "army"]}],
+                applyIf: [{"eq": ["@phase", "army"]}],
                 enabled: true,
                 value: -wearyCount,
                 name: 'Weary',
@@ -41,7 +41,7 @@ export function getArmyModifiers(game: Game): Modifier[] {
         if (miredCount > 0) {
             result.push({
                 type: 'circumstance',
-                predicates: [{"eq": ["@phase", "army"]}, {"eq":["@activity", "deploy-army"]}],
+                applyIf: [{"eq": ["@phase", "army"]}, {"eq":["@activity", "deploy-army"]}],
                 enabled: true,
                 value: -miredCount,
                 name: 'Mired',

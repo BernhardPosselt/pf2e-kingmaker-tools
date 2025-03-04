@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 
 fun createStructureEventBonuses(currentSettlement: Settlement): Modifier? =
     if (currentSettlement.settlementEventBonus > 0) {
@@ -12,8 +12,8 @@ fun createStructureEventBonuses(currentSettlement: Settlement): Modifier? =
             type = ModifierType.ITEM,
             name = "Structure Event Bonus",
             value = currentSettlement.settlementEventBonus,
-            predicates = listOf(
-                EqPredicate("@phase", KingdomPhase.EVENT.value)
+            applyIf = listOf(
+                Eq("@phase", KingdomPhase.EVENT.value)
             ),
             id = "structure-event-bonus"
         )

@@ -5,8 +5,8 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createProficiencyModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.InPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.In
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -20,19 +20,19 @@ class ModifierFilterTest {
             context = defaultContext,
         ).modifiers.size)
         assertEquals(0, filterModifiersAndUpdateContext(
-            modifiers = listOf(filterMod.copy(predicates = listOf(InPredicate("@activity", setOf("test"))))),
+            modifiers = listOf(filterMod.copy(applyIf = listOf(In("@activity", listOf("test"))))),
             context = defaultContext,
         ).modifiers.size)
         assertEquals(1, filterModifiersAndUpdateContext(
-            modifiers = listOf(filterMod.copy(predicates = listOf(InPredicate("@activity", setOf("test"))))),
+            modifiers = listOf(filterMod.copy(applyIf = listOf(In("@activity", listOf("test"))))),
             context = defaultContext.copy(activity = "test"),
         ).modifiers.size)
         assertEquals(0, filterModifiersAndUpdateContext(
-            modifiers = listOf(filterMod.copy(predicates = listOf(InPredicate("@phase", setOf("army"))))),
+            modifiers = listOf(filterMod.copy(applyIf = listOf(In("@phase", listOf("army"))))),
             context = defaultContext,
         ).modifiers.size)
         assertEquals(1, filterModifiersAndUpdateContext(
-            modifiers = listOf(filterMod.copy(predicates = listOf(InPredicate("@phase", setOf("army"))))),
+            modifiers = listOf(filterMod.copy(applyIf = listOf(In("@phase", listOf("army"))))),
             context = defaultContext.copy(phase = KingdomPhase.ARMY),
         ).modifiers.size)
     }
@@ -40,14 +40,14 @@ class ModifierFilterTest {
     @Test
     fun testPredicates() {
         assertEquals(1, filterModifiersAndUpdateContext(
-            modifiers = listOf(filterMod.copy(predicates = listOf(
-                EqPredicate(left = "@kingdomLevel", "2")
+            modifiers = listOf(filterMod.copy(applyIf = listOf(
+                Eq(left = "@kingdomLevel", 2)
             ))),
             context = defaultContext,
         ).modifiers.size)
         assertEquals(0, filterModifiersAndUpdateContext(
-            modifiers = listOf(filterMod.copy(predicates = listOf(
-                EqPredicate(left = "@kingdomLevel", "3")
+            modifiers = listOf(filterMod.copy(applyIf = listOf(
+                Eq(left = "@kingdomLevel", 3)
             ))),
             context = defaultContext,
         ).modifiers.size)
@@ -58,8 +58,8 @@ class ModifierFilterTest {
         val result = filterModifiersAndUpdateContext(
             modifiers = listOf(
                 filterMod.copy(
-                    predicates = listOf(
-                        EqPredicate(left = "@kingdomLevel", "2")
+                    applyIf = listOf(
+                        Eq(left = "@kingdomLevel", 2)
                     ),
                     rollOptions = setOf("mod")
                 )

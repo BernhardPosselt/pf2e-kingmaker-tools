@@ -32,7 +32,7 @@
                 "turns": 2,
                 "enabled": false,
                 "value": 2,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@activity",

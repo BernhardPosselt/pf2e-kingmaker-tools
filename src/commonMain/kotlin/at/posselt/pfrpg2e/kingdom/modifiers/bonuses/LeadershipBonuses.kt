@@ -11,8 +11,8 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkills
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.LEADERSHIP
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.InPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.In
 
 
 private fun calculateLeadershipBonus(
@@ -106,12 +106,12 @@ fun createLeadershipModifiers(
             type = LEADERSHIP,
             value = value,
             name = "Leadership (Specialized)",
-            predicates = listOf(
-                EqPredicate("@leader", leader.value),
-                InPredicate(
+            applyIf = listOf(
+                Eq("@leader", leader.value),
+                In(
                     "@skill", leaderKingdomSkills.resolveAttributes(leader)
                         .map { it.value }
-                        .toSet())
+                        .toList())
             ),
         )
         listOf(
@@ -119,7 +119,7 @@ fun createLeadershipModifiers(
             fullModifier.copy(
                 value = fullModifier.value / 2,
                 name = "Leadership (Unspecialized)",
-                predicates = listOf(EqPredicate("@leader", leader.value)),
+                applyIf = listOf(Eq("@leader", leader.value)),
             )
         )
         }

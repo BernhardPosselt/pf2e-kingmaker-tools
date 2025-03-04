@@ -33,10 +33,11 @@
                 "enabled": false,
                 "isConsumedAfterRoll": true,
                 "value": 0,
-                "predicatedValue": [
-                    {"when": [{"not": {"hasFlag": "cooperative-leadership"}}, "2"]},
-                    {"when": [{"hasFlag": "cooperative-leadership"}, "3"]}
-                ],
+                "valueExpression": {"when":{"cases":[
+                    {"case": [{"not": {"hasFlag": "cooperative-leadership"}}, 2]},
+                    {"case": [{"hasFlag": "cooperative-leadership"}, 3]}
+                ], "default":2
+                }},
                 "name": "Focused Attention",
                 "type": "circumstance",
                 "rollOptions": [
@@ -53,10 +54,11 @@
                 "enabled": false,
                 "isConsumedAfterRoll": true,
                 "value": 0,
-                "predicatedValue": [
-                    {"when": [{"not": {"hasFlag": "cooperative-leadership"}}, "2"]},
-                    {"when": [{"hasFlag": "cooperative-leadership"}, "3"]}
-                ],
+                "valueExpression":{"when":{"cases":[
+                    {"case": [{"not": {"hasFlag": "cooperative-leadership"}}, 2]},
+                    {"case": [{"hasFlag": "cooperative-leadership"}, 3]}
+                ], "default":2
+                }},
                 "name": "Focused Attention",
                 "type": "circumstance",
                 "rollOptions": [

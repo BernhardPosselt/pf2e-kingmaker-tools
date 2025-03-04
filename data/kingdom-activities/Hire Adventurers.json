@@ -19,7 +19,7 @@
             {
                 "turns": 2,
                 "enabled": false,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@phase",

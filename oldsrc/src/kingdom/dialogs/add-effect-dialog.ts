@@ -134,18 +134,18 @@ export function addEffectDialog(
                     const activities = parseOptionalSelect($html, 'activity');
                     const skills = parseOptionalSelect($html, 'skill') as Skill[] | undefined;
                     const abilities = parseOptionalSelect($html, 'ability') as Ability[] | undefined;
-                    const predicates: Predicate[] = [];
+                    const applyIf: Predicate[] = [];
                     if (activities) {
-                        predicates.push({"in": ["@activity", activities]});
+                        applyIf.push({"in": ["@activity", activities]});
                     }
                     if (phases) {
-                        predicates.push({"in": ["@phase", phases]});
+                        applyIf.push({"in": ["@phase", phases]});
                     }
                     if (skills) {
-                        predicates.push({"in": ["@skill", skills]});
+                        applyIf.push({"in": ["@skill", skills]});
                     }
                     if (abilities) {
-                        predicates.push({"in": ["@ability", abilities]});
+                        applyIf.push({"in": ["@ability", abilities]});
                     }
                     onOk({
                         name: parseTextInput($html, 'name'),
@@ -154,7 +154,7 @@ export function addEffectDialog(
                         enabled: parseCheckbox($html, 'enabled'),
                         consumeId: parseCheckbox($html, 'consumable') ? uuidv4() : undefined,
                         isConsumedAfterRoll: parseCheckbox($html, 'consumable'),
-                        predicates,
+                        applyIf,
                         turns: turns === 0 ? undefined : turns,
                     });
                 },

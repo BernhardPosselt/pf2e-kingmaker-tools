@@ -16,7 +16,7 @@
             {
                 "turns": 1,
                 "enabled": true,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@ability",
@@ -36,7 +36,7 @@
             {
                 "turns": 1,
                 "enabled": true,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@ability",
@@ -56,7 +56,7 @@
             {
                 "turns": 1,
                 "enabled": true,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@ability",
@@ -71,7 +71,7 @@
             {
                 "turns": 1,
                 "enabled": true,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@ability",
@@ -91,7 +91,7 @@
             {
                 "turns": 1,
                 "enabled": true,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@ability",

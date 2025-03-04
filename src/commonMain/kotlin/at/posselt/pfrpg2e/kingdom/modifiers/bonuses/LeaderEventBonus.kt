@@ -3,7 +3,7 @@ package at.posselt.pfrpg2e.kingdom.modifiers.bonuses
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 
 fun createLeaderEventBonus(
     kingdomLevel: Int,
@@ -19,9 +19,9 @@ fun createLeaderEventBonus(
         id = "leader-event-bonus",
         name = "Listed, Non-Vacant Leader Handles Event",
         value = value,
-        predicates = listOf(
-            EqPredicate("@phase", KingdomPhase.EVENT.value),
-            EqPredicate("@vacant", "false"),
+        applyIf = listOf(
+            Eq("@phase", KingdomPhase.EVENT.value),
+            Eq("@vacant", "false"),
         ),
         type = ModifierType.CIRCUMSTANCE,
     )

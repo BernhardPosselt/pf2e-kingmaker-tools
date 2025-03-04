@@ -9,7 +9,7 @@
             "enabled": false,
             "value": 1,
             "type": "status",
-            "predicates": [
+            "applyIf": [
                 {
                     "eq": [
                         "@phase",

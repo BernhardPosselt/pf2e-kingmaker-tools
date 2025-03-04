@@ -9,7 +9,7 @@
       "enabled": false,
       "value": 2,
       "type": "status",
-      "predicates": [
+      "applyIf": [
         {
           "in": [
             "@activity",

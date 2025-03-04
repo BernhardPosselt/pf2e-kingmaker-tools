@@ -7,7 +7,7 @@
         {
             "name": "Fortified Fiefs",
             "type": "circumstance",
-            "predicates": [
+            "applyIf": [
                 {
                     "in": [
                         "@activity",
@@ -24,7 +24,7 @@
         {
             "name": "Build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall",
             "type": "circumstance",
-            "predicates": [
+            "applyIf": [
                 {
                     "eq": [
                         "@activity",
@@ -38,7 +38,7 @@
         {
             "name": "Dangerous Event impacting settlement defenses",
             "type": "circumstance",
-            "predicates": [
+            "applyIf": [
                 {
                     "eq": [
                         "@phase",

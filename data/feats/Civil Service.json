@@ -9,7 +9,7 @@
             "enabled": false,
             "value": 2,
             "type": "circumstance",
-            "predicates": [
+            "applyIf": [
                 {
                     "in": [
                         "@activity",

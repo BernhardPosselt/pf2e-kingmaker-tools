@@ -8,7 +8,7 @@
     {
       "name": "Expansion Expert",
       "type": "circumstance",
-      "predicates": [
+      "applyIf": [
         {
           "eq": [
             "@activity",

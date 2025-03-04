@@ -1,61 +1,66 @@
 {
-    "automationNotes": "Hire Adventurers RP reduction is not implemented",
-    "name": "Practical Magic (V&K)",
-    "level": 7,
-    "prerequisites": "Trained in Magic",
-    "text": "Magic has an honored place in your society, and your people incorporate it into their everyday work to make\nlife easier. You gain a +1 status bonus to Magic checks, and if you have Expert Magic you gain a +1 status bonus to Engineering checks. If you have Master Magic, this bonus increases to +2. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.",
-    "modifiers": [
+  "automationNotes": "Hire Adventurers RP reduction is not implemented",
+  "name": "Practical Magic (V&K)",
+  "level": 7,
+  "prerequisites": "Trained in Magic",
+  "text": "Magic has an honored place in your society, and your people incorporate it into their everyday work to make\nlife easier. You gain a +1 status bonus to Magic checks, and if you have Expert Magic you gain a +1 status bonus to Engineering checks. If you have Master Magic, this bonus increases to +2. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.",
+  "modifiers": [
+    {
+      "name": "Practical Magic",
+      "type": "status",
+      "applyIf": [
         {
-            "name": "Practical Magic",
-            "type": "status",
-            "predicates": [
-                {
-                    "eq": [
-                        "@skill",
-                        "magic"
-                    ]
-                }
-            ],
-            "enabled": true,
-            "value": 1
-        },
-        {
-            "name": "Practical Magic: Engineering",
-            "type": "status",
-            "predicates": [
-                {
-                    "eq": [
-                        "@skill",
-                        "engineering"
-                    ]
-                }
-            ],
-            "enabled": true,
-            "value": 0,
-            "predicatedValue": [
-                {
-                    "when": [
-                        {
-                            "eq": [
-                                "@magicRank",
-                                "2"
-                            ]
-                        },
-                        "1"
-                    ]
-                },
-                {
-                    "when": [
-                        {
-                            "gte": [
-                                "@magicRank",
-                                "3"
-                            ]
-                        },
-                        "2"
-                    ]
-                }
-            ]
+          "eq": [
+            "@skill",
+            "magic"
+          ]
         }
-    ]
+      ],
+      "enabled": true,
+      "value": 1
+    },
+    {
+      "name": "Practical Magic: Engineering",
+      "type": "status",
+      "applyIf": [
+        {
+          "eq": [
+            "@skill",
+            "engineering"
+          ]
+        }
+      ],
+      "enabled": true,
+      "value": 0,
+      "valueExpression": {
+        "when": {
+          "default": 0,
+          "cases": [
+            {
+              "case": [
+                {
+                  "eq": [
+                    "@magicRank",
+                    2
+                  ]
+                },
+                1
+              ]
+            },
+            {
+              "case": [
+                {
+                  "gte": [
+                    "@magicRank",
+                    3
+                  ]
+                },
+                2
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

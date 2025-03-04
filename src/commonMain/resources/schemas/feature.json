@@ -75,11 +75,8 @@
         "value": {
           "type": "number"
         },
-        "predicatedValue": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/WhenPredicate"
-          }
+        "valueExpression": {
+          "$ref": "#/$defs/When"
         },
         "name": {
           "type": "string"
@@ -99,7 +96,7 @@
             "type": "string"
           }
         },
-        "predicates": {
+        "applyIf": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/Predicate"
@@ -125,10 +122,10 @@
           "$ref": "#/$defs/EqPredicate"
         },
         {
-          "$ref": "#/$defs/OrPredicate"
+          "$ref": "#/$defs/SomePredicate"
         },
         {
-          "$ref": "#/$defs/AndPredicate"
+          "$ref": "#/$defs/AllPredicate"
         },
         {
           "$ref": "#/$defs/NotPredicate"
@@ -155,12 +152,12 @@
           "type": "array",
           "prefixItems": [
             {
-              "type": "string"
+              "$ref": "#/$defs/AnyScalar"
             },
             {
               "type": "array",
               "items": {
-                "type": "string"
+                "$ref": "#/$defs/AnyScalar"
               }
             }
           ],
@@ -178,16 +175,11 @@
       "properties": {
         "gte": {
           "type": "array",
-          "prefixItems": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "items": false,
-          "minItems": 2
+          "items": {
+            "$ref": "#/$defs/AnyNumeric"
+          },
+          "minItems": 2,
+          "maxItems": 2
         }
       }
     },
@@ -200,16 +192,11 @@
       "properties": {
         "gt": {
           "type": "array",
-          "prefixItems": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "items": false,
-          "minItems": 2
+          "items": {
+            "$ref": "#/$defs/AnyNumeric"
+          },
+          "minItems": 2,
+          "maxItems": 2
         }
       }
     },
@@ -222,16 +209,11 @@
       "properties": {
         "lte": {
           "type": "array",
-          "prefixItems": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "items": false,
-          "minItems": 2
+          "items": {
+            "$ref": "#/$defs/AnyNumeric"
+          },
+          "minItems": 2,
+          "maxItems": 2
         }
       }
     },
@@ -244,16 +226,11 @@
       "properties": {
         "lt": {
           "type": "array",
-          "prefixItems": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "items": false,
-          "minItems": 2
+          "items": {
+            "$ref": "#/$defs/AnyNumeric"
+          },
+          "minItems": 2,
+          "maxItems": 2
         }
       }
     },
@@ -268,10 +245,10 @@
           "type": "array",
           "prefixItems": [
             {
-              "type": "string"
+              "$ref": "#/$defs/AnyScalar"
             },
             {
-              "type": "string"
+              "$ref": "#/$defs/AnyScalar"
             }
           ],
           "items": false,
@@ -279,33 +256,35 @@
         }
       }
     },
-    "OrPredicate": {
+    "SomePredicate": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "or"
+        "some"
       ],
       "properties": {
-        "or": {
+        "some": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/Predicate"
-          }
+          },
+          "minItems": 1
         }
       }
     },
-    "AndPredicate": {
+    "AllPredicate": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "and"
+        "all"
       ],
       "properties": {
-        "and": {
+        "all": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/Predicate"
-          }
+          },
+          "minItems": 1
         }
       }
     },
@@ -345,27 +324,77 @@
         }
       }
     },
-    "WhenPredicate": {
+    "When": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["when"],
+      "properties": {
+        "when": {
+          "type": "object",
+          "required": ["cases"],
+          "additionalProperties": false,
+          "properties": {
+            "cases": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/Case"
+              }
+            },
+            "default": {
+              "$ref": "#/$defs/AnyScalar"
+            }
+          }
+        }
+      }
+    },
+    "Case": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "when"
+        "case"
       ],
       "properties": {
-        "when": {
+        "case": {
           "type": "array",
           "prefixItems": [
             {
               "$ref": "#/$defs/Predicate"
             },
             {
-              "type": "string"
+              "$ref": "#/$defs/AnyScalar"
             }
           ],
           "items": false,
           "minItems": 2
         }
       }
+    },
+    "AnyNumeric": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ]
+    },
+    "AnyScalar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        }
+      ]
     }
   }
 }

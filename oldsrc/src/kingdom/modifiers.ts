@@ -51,11 +51,11 @@ interface EqPredicate {
 }
 
 interface OrPredicate {
-    or: Predicate[];
+    some: Predicate[];
 }
 
 interface AndPredicate {
-    and: Predicate[];
+    all: Predicate[];
 }
 
 interface NotPredicate {
@@ -86,21 +86,30 @@ export type Predicate = GtePredicate
     | NotPredicate
     | HasRollOptionPredicate;
 
-interface WhenPredicate {
-    when: [Predicate, string];
+export type Expression = When;
+
+interface Case {
+    case: [Predicate, number | string | boolean | null];
+}
+
+interface When {
+    when: {
+        cases: Case[];
+        default: number | string | boolean | null;
+    }
 }
 
 export interface Modifier {
     type: ModifierType;
     value: number;
-    predicatedValue?: WhenPredicate[];
+    valueExpression?: When;
     name: string;
     enabled: boolean;
     turns?: number;
     consumeId?: string;
     isConsumedAfterRoll?: boolean;
     rollOptions?: string[];
-    predicates?: Predicate[];
+    applyIf?: Predicate[];
 }
 
 function createPredicateName(values: string[] | undefined, label: string): string | undefined {
@@ -108,7 +117,7 @@ function createPredicateName(values: string[] | undefined, label: string): strin
 }
 
 function extractPredicateTargets(label: string, modifier: Modifier, selector: '@phase' | '@skill' | '@ability' | '@activity'): string | undefined {
-    const mods =  modifier.predicates
+    const mods = modifier.applyIf
         ?.flatMap(p => {
             if ('in' in p && p.in[0] === selector) {
                 return p.in[1];
@@ -124,7 +133,7 @@ function extractPredicateTargets(label: string, modifier: Modifier, selector: '@
 
 export function modifierToLabel(modifier: Modifier): string {
     let value = ''
-    if (!isNonNullable(modifier.predicatedValue)) {
+    if (!isNonNullable(modifier.valueExpression)) {
         value = modifier.value >= 0 ? `+${modifier.value} ` : `${modifier.value} `;
     }
     const type = modifier.value >= 0 ? capitalize(modifier.type) + ' Bonus' : capitalize(modifier.type) + ' Penalty';
@@ -323,7 +332,7 @@ export function createActiveSettlementModifiers(
             name: 'Settlements Without Land Borders',
             value: settlementsWithoutLandBorders * -1,
             type: 'item',
-            predicates: [{"eq": ["@skill", "trade"]}],
+            applyIf: [{"eq": ["@skill", "trade"]}],
             enabled: true,
         });
     }
@@ -342,7 +351,7 @@ export function createActiveSettlementModifiers(
             type: 'circumstance',
             value: settlementEventBonus,
             enabled: true,
-            predicates: [{"eq": ["@phase", "event"]}],
+            applyIf: [{"eq": ["@phase", "event"]}],
         });
     }
     const leadershipBonus = activeSettlementStructureResult?.leadershipActivityBonus ?? 0;
@@ -352,7 +361,7 @@ export function createActiveSettlementModifiers(
             type: 'item',
             value: leadershipBonus,
             enabled: false,
-            predicates: [{"eq": ["@phase", "leadership"]}],
+            applyIf: [{"eq": ["@phase", "leadership"]}],
         });
     }
     result.push({
@@ -360,20 +369,26 @@ export function createActiveSettlementModifiers(
         type: 'circumstance',
         value: levelData.investedLeadershipBonus,
         enabled: false,
-        predicates: [{"eq": ["@phase", "event"]}],
+        applyIf: [{"eq": ["@phase", "event"]}],
     });
     return result;
 }
 
-function resolveValue(kingdom: Kingdom, value: string, skill: Skill, phase: KingdomPhase | null, activity: string | null): string | null {
+function resolveValue(
+    kingdom: Kingdom,
+    value: string | number | boolean | null,
+    skill: Skill,
+    phase: KingdomPhase | null,
+    activity: string | null
+): string | number | boolean | null {
     if (value === "@unrest") {
-        return `${kingdom.unrest}`;
+        return kingdom.unrest;
     } else if (value === "@magicRank") {
-        return `${kingdom.skillRanks.magic}`;
+        return kingdom.skillRanks.magic;
     } else if (value === "@kingdomLevel") {
-        return `${kingdom.level}`;
+        return kingdom.level;
     } else if (value === "@skillRank") {
-        return `${kingdom.skillRanks[skill]}`;
+        return kingdom.skillRanks[skill];
     } else if (value === "@skill") {
         return skill;
     } else if (value === "@phase") {
@@ -384,6 +399,28 @@ function resolveValue(kingdom: Kingdom, value: string, skill: Skill, phase: King
         return skillAbilities[skill];
     } else {
         return value;
+    }
+}
+
+function processExpression(
+    kingdom: Kingdom,
+    p: Expression,
+    flags: string[],
+    rollOptions: string[],
+    skill: Skill,
+    phase: KingdomPhase | null,
+    activity: string | null,
+): boolean | string | number | null {
+    if ('when' in p) {
+        const when = p.when;
+        const value = when.cases.find(c => processPredicate(kingdom, c.case[0], flags, rollOptions, skill, phase, activity));
+        if (isNonNullable(value)) {
+            return resolveValue(kingdom, value.case[1], skill, phase, activity)
+        } else {
+            return when.default;
+        }
+    } else {
+        return null;
     }
 }
 
@@ -406,10 +443,10 @@ function processPredicate(
         return (resolveValue(kingdom, p.lt[0], skill, phase, activity) ?? 0) < (resolveValue(kingdom, p.lt[1], skill, phase, activity) ?? 0);
     } else if ('eq' in p) {
         return resolveValue(kingdom, p.eq[0], skill, phase, activity) == resolveValue(kingdom, p.eq[1], skill, phase, activity);
-    } else if ('or' in p) {
-        return p.or.some(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill, phase, activity));
-    } else if ('and' in p) {
-        return p.and.every(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill, phase, activity));
+    } else if ('some' in p) {
+        return p.some.some(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill, phase, activity));
+    } else if ('all' in p) {
+        return p.all.every(predicate => processPredicate(kingdom, predicate, flags, rollOptions, skill, phase, activity));
     } else if ('hasRollOption' in p) {
         return rollOptions.includes(p.hasRollOption);
     } else if ('hasFlag' in p) {
@@ -435,14 +472,13 @@ export function evaluateModifierValue(
     phase: KingdomPhase | null,
     activity: string | null,
 ): Modifier {
-    const predicatedValue = modifier.predicatedValue;
-    if (predicatedValue !== undefined) {
-        const result = predicatedValue.find(p => processPredicate(kingdom, p.when[0], flags, rollOptions, skill, phase, activity));
-        if (result) {
-            const value = parseInt((resolveValue(kingdom, result.when[1], skill, phase, activity) ?? '0'), 10);
+    const valueExpression = modifier.valueExpression;
+    if (valueExpression !== undefined) {
+        const result = processExpression(kingdom, valueExpression, flags, rollOptions, skill, phase, activity);
+        if (typeof result === "number") {
             return {
                 ...modifier,
-                value,
+                value: result,
             }
         }
     }
@@ -493,10 +529,10 @@ export function processModifiers(
     },
 ): ModifierWithId[] {
     const ability = skillAbilities[skill];
-    const rollOptions = filterPredicates(kingdom, modifiers, flags, [], skill, m => m.predicates, phase ?? null, activity ?? null)
+    const rollOptions = filterPredicates(kingdom, modifiers, flags, [], skill, m => m.applyIf, phase ?? null, activity ?? null)
         .filter(m => m.enabled)
         .flatMap(m => m.rollOptions ?? []);
-    const copied = filterPredicates(kingdom, modifiers, flags, rollOptions, skill, m => m.predicates, phase ?? null, activity ?? null)
+    const copied = filterPredicates(kingdom, modifiers, flags, rollOptions, skill, m => m.applyIf, phase ?? null, activity ?? null)
         .map((modifier, index) => {
             // make a copy and assign every modifier an id
             const cloned = foundry.utils.deepClone(modifier);
@@ -528,7 +564,7 @@ function createVacancyModifier(value: number, name: string, rulerVacant: boolean
     return {
         name,
         value: -(rulerVacant ? value + 1 : value),
-        predicates: phase ? [{"eq": ["@phase", phase]}] : [],
+        applyIf: phase ? [{"eq": ["@phase", phase]}] : [],
         type: 'vacancy',
         enabled: true,
     };

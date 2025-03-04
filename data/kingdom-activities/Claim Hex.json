@@ -29,7 +29,7 @@
             {
                 "turns": 2,
                 "enabled": true,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@ability",

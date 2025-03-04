@@ -11,11 +11,11 @@ import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.PROFICIENCY
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createProficiencyModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createSkillAbilityModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Case
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.GtePredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.LtPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Gte
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Lt
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.When
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.WhenBranch
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -121,17 +121,17 @@ class EvaluateModifiersTest {
     }
 
     @Test
-    fun evaluatePredicatedValue() {
+    fun evaluatevalueExpression() {
         val first = createProficiencyModifier(BOATING, proficiency = LEGENDARY, level = 3)
             .copy(
-                predicatedValue = When(
-                    branches = listOf(
-                        WhenBranch(
-                            condition = LtPredicate("@kingdomLevel", "2"),
+                valueExpression = When(
+                    cases = listOf(
+                        Case(
+                            condition = Lt("@kingdomLevel", "2"),
                             value = "4",
                         ),
-                        WhenBranch(
-                            condition = GtePredicate("@kingdomLevel", "2"),
+                        Case(
+                            condition = Gte("@kingdomLevel", "2"),
                             value = "3",
                         ),
                     ),
@@ -149,21 +149,21 @@ class EvaluateModifiersTest {
     }
 
     @Test
-    fun evaluatePredicatedValueFallback() {
+    fun evaluateValueExpressionFallback() {
         val first = createProficiencyModifier(BOATING, proficiency = LEGENDARY, level = 3)
             .copy(
-                predicatedValue = When(
-                    branches = listOf(
-                        WhenBranch(
-                            condition = LtPredicate("@kingdomLevel", "2"),
-                            value = "4",
+                valueExpression = When(
+                    cases = listOf(
+                        Case(
+                            condition = Lt("@kingdomLevel", 2),
+                            value = 4,
                         ),
-                        WhenBranch(
-                            condition = GtePredicate("@kingdomLevel", "3"),
-                            value = "3",
+                        Case(
+                            condition = Gte("@kingdomLevel", 3),
+                            value = 3,
                         ),
                     ),
-                    default = "2",
+                    default = 2,
                 )
             )
         val modifiers = listOf(

@@ -34,7 +34,7 @@
                 "value": 1,
                 "name": "Deliberate Planning: Critical Success",
                 "type": "circumstance",
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@phase",
@@ -54,7 +54,7 @@
                 "value": 1,
                 "name": "Deliberate Planning: Success",
                 "type": "circumstance",
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@phase",

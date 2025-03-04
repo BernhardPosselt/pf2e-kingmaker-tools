@@ -5,12 +5,12 @@ import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 
 
-private fun evaluatePredicatedValue(modifier: Modifier, context: ExpressionContext): Modifier {
-    val predicatedValue = modifier.predicatedValue
-    return if (predicatedValue == null) {
+private fun evaluateValueExpression(modifier: Modifier, context: ExpressionContext): Modifier {
+    val valueExpression = modifier.valueExpression
+    return if (valueExpression == null) {
         modifier.copy()
     } else {
-        modifier.copy(value = predicatedValue.evaluate(context).toInt())
+        modifier.copy(value = valueExpression.evaluateInt(context))
     }
 }
 
@@ -38,7 +38,7 @@ fun evaluateModifiers(
 ): ModifierResult {
     val evaluatedModifiers = modifiers
         .distinctBy { it.id }
-        .map { evaluatePredicatedValue(it, context) }
+        .map { evaluateValueExpression(it, context) }
     val filteredModifiers = applyStackingRules(evaluatedModifiers)
     val enabledModifiers = filteredModifiers.filter { it.enabled }
     return ModifierResult(

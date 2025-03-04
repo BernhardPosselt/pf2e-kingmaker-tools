@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 
 fun createInvestedBonuses(
     kingdomLevel: Int,
@@ -26,8 +26,8 @@ fun createInvestedBonuses(
                     value = value,
                     id = "invested-$ability",
                     name = "Invested (${ability})",
-                    predicates = listOf(
-                        EqPredicate("@ability", ability)
+                    applyIf = listOf(
+                        Eq("@ability", ability)
                     )
                 )
             } else {

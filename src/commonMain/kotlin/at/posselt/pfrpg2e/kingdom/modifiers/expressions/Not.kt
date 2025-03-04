@@ -1,6 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.expressions
 
-data class HasFlagPredicate(val flag: String) : Predicate {
+data class Not(val expression: Expression<Boolean>) : Expression<Boolean> {
     override fun evaluate(context: ExpressionContext): Boolean =
-        context.flags.contains(flag)
+        !expression.evaluate(context)
 }

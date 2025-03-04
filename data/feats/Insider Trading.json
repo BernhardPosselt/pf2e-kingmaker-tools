@@ -7,7 +7,7 @@
         {
             "name": "Insider Trading",
             "type": "circumstance",
-            "predicates": [
+            "applyIf": [
                 {
                     "in": [
                         "@activity",

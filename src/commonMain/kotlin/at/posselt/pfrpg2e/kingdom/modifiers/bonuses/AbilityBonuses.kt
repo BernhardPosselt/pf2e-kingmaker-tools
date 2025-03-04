@@ -5,7 +5,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 
 fun createAbilityModifiers(abilities: KingdomAbilityScores) = listOf(
     Modifier(
@@ -13,8 +13,8 @@ fun createAbilityModifiers(abilities: KingdomAbilityScores) = listOf(
         name = KingdomAbility.CULTURE.label,
         type = ModifierType.ABILITY,
         value = abilities.resolveModifier(KingdomAbility.CULTURE),
-        predicates = listOf(
-            EqPredicate(
+        applyIf = listOf(
+            Eq(
                 left = "@ability",
                 right = KingdomAbility.CULTURE.value,
             )
@@ -25,8 +25,8 @@ fun createAbilityModifiers(abilities: KingdomAbilityScores) = listOf(
         name = KingdomAbility.ECONOMY.label,
         type = ModifierType.ABILITY,
         value = abilities.resolveModifier(KingdomAbility.ECONOMY),
-        predicates = listOf(
-            EqPredicate(
+        applyIf = listOf(
+            Eq(
                 left = "@ability",
                 right = KingdomAbility.ECONOMY.value,
             )
@@ -37,8 +37,8 @@ fun createAbilityModifiers(abilities: KingdomAbilityScores) = listOf(
         name = KingdomAbility.LOYALTY.label,
         type = ModifierType.ABILITY,
         value = abilities.resolveModifier(KingdomAbility.LOYALTY),
-        predicates = listOf(
-            EqPredicate(
+        applyIf = listOf(
+            Eq(
                 left = "@ability",
                 right = KingdomAbility.LOYALTY.value,
             )
@@ -49,8 +49,8 @@ fun createAbilityModifiers(abilities: KingdomAbilityScores) = listOf(
         name = KingdomAbility.STABILITY.label,
         type = ModifierType.ABILITY,
         value = abilities.resolveModifier(KingdomAbility.STABILITY),
-        predicates = listOf(
-            EqPredicate(
+        applyIf = listOf(
+            Eq(
                 left = "@ability",
                 right = KingdomAbility.STABILITY.value,
             )

@@ -11,159 +11,172 @@ import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.MergedSettlement
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.createAllModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.createAssuranceModifiers
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.AndPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.All
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Case
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Expression
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.GtPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.GtePredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasFlagPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasRollOptionPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.InPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.LtPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.LtePredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.NotPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.OrPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Predicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Gt
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Gte
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasFlag
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasRollOption
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.In
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Lt
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Lte
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Not
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Some
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.When
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.WhenBranch
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
 import io.github.uuidjs.uuid.v4
 import js.array.JsTuple2
 import js.objects.Object
 import kotlinx.js.JsPlainObject
 
-sealed external interface RawPredicate
+sealed external interface RawExpression<T>
 
 @JsPlainObject
-external interface RawGtePredicate : RawPredicate {
-    val gte: JsTuple2<String, String>
+external interface RawGte : RawExpression<Boolean> {
+    val gte: JsTuple2<Any?, Any?>  // String, null or number
 }
 
 @JsPlainObject
-external interface RawGtPredicate : RawPredicate {
-    val gt: JsTuple2<String, String>
+external interface RawGt : RawExpression<Boolean> {
+    val gt: JsTuple2<Any?, Any?>  // String, null or number
 }
 
 @JsPlainObject
-external interface RawLtePredicate : RawPredicate {
-    val lte: JsTuple2<String, String>
+external interface RawLte : RawExpression<Boolean> {
+    val lte: JsTuple2<Any?, Any?>  // String, null or number
 }
 
 @JsPlainObject
-external interface RawInPredicate : RawPredicate {
-    val `in`: JsTuple2<String, Array<String>>
+external interface RawIn : RawExpression<Boolean> {
+    val `in`: JsTuple2<Any?, Array<out Any?>>  // String, null or number
 }
 
 @JsPlainObject
-external interface RawLtPredicate : RawPredicate {
-    val lt: JsTuple2<String, String>
+external interface RawLt : RawExpression<Boolean> {
+    val lt: JsTuple2<Any?, Any?>
 }
 
 @JsPlainObject
-external interface RawEqPredicate : RawPredicate {
-    val eq: JsTuple2<String, String>
+external interface RawEq : RawExpression<Boolean> {
+    val eq: JsTuple2<Any?, Any?>
 }
 
 @JsPlainObject
-external interface RawOrPredicate : RawPredicate {
-    val or: JsTuple2<RawPredicate, RawPredicate>
+external interface RawSome : RawExpression<Boolean> {
+    val some: Array<RawExpression<Boolean>>
 }
 
 @JsPlainObject
-external interface RawAndPredicate : RawPredicate {
-    val and: JsTuple2<RawPredicate, RawPredicate>
+external interface RawAll : RawExpression<Boolean> {
+    val all: Array<RawExpression<Boolean>>
 }
 
 @JsPlainObject
-external interface RawNotPredicate : RawPredicate {
-    val not: RawPredicate
+external interface RawNot : RawExpression<Boolean> {
+    val not: RawExpression<Boolean>
 }
 
 @JsPlainObject
-external interface RawHasFlagPredicate : RawPredicate {
+external interface RawHasFlag : RawExpression<Boolean> {
     val hasFlag: String
 }
 
 @JsPlainObject
-external interface RawHasRollOptionPredicate : RawPredicate {
+external interface RawHasRollOption : RawExpression<Boolean> {
     val hasRollOption: String
 }
 
 @JsPlainObject
-external interface RawWhenPredicate {
-    val `when`: JsTuple2<RawPredicate, String>
+external interface RawCases {
+    val cases: Array<RawCase>
+    val default: Any
+}
+
+@JsPlainObject
+external interface RawWhen: RawExpression<Any?> {
+    val `when`: RawCases
+}
+
+@JsPlainObject
+external interface RawCase {
+    val case: JsTuple2<RawExpression<Boolean>, Any?>
 }
 
 @JsPlainObject
 external interface RawModifier {
     var type: String
     var value: Int
-    var predicatedValue: Array<RawWhenPredicate>?
+    var valueExpression: RawExpression<Any?>?
     var name: String
     var enabled: Boolean
     var turns: Int?
     var isConsumedAfterRoll: Boolean?
     var rollOptions: Array<String>?
-    var predicates: Array<RawPredicate>?
+    var applyIf: Array<RawExpression<Boolean>>?
 }
 
 
-fun RawPredicate.parse(): Predicate {
+fun RawExpression<Boolean>.parse(): Expression<Boolean> {
     return if (Object.hasOwn(this, "and")) {
-        val p = this.unsafeCast<RawAndPredicate>()
-        AndPredicate(
-            left = p.and.component1().parse(),
-            right = p.and.component2().parse(),
-        )
+        val p = this.unsafeCast<RawAll>()
+        All(p.all.map { it.parse() })
     } else if (Object.hasOwn(this, "or")) {
-        val p = this.unsafeCast<RawOrPredicate>()
-        OrPredicate(
-            left = p.or.component1().parse(),
-            right = p.or.component2().parse(),
-        )
+        val p = this.unsafeCast<RawSome>()
+        Some(p.some.map { it.parse() })
     } else if (Object.hasOwn(this, "lt")) {
-        val p = this.unsafeCast<RawLtPredicate>()
-        LtPredicate(p.lt.component1(), p.lt.component2())
+        val p = this.unsafeCast<RawLt>()
+        Lt(p.lt.component1(), p.lt.component2())
     } else if (Object.hasOwn(this, "lte")) {
-        val p = this.unsafeCast<RawLtePredicate>()
-        LtePredicate(p.lte.component1(), p.lte.component2())
+        val p = this.unsafeCast<RawLte>()
+        Lte(p.lte.component1(), p.lte.component2())
     } else if (Object.hasOwn(this, "gt")) {
-        val p = this.unsafeCast<RawGtPredicate>()
-        GtPredicate(p.gt.component1(), p.gt.component2())
+        val p = this.unsafeCast<RawGt>()
+        Gt(p.gt.component1(), p.gt.component2())
     } else if (Object.hasOwn(this, "gte")) {
-        val p = this.unsafeCast<RawGtePredicate>()
-        GtePredicate(p.gte.component1(), p.gte.component2())
+        val p = this.unsafeCast<RawGte>()
+        Gte(p.gte.component1(), p.gte.component2())
     } else if (Object.hasOwn(this, "eq")) {
-        val p = this.unsafeCast<RawEqPredicate>()
-        EqPredicate(p.eq.component1(), p.eq.component2())
+        val p = this.unsafeCast<RawEq>()
+        Eq(p.eq.component1(), p.eq.component2())
     } else if (Object.hasOwn(this, "hasFlag")) {
-        val p = this.unsafeCast<RawHasFlagPredicate>()
-        HasFlagPredicate(
+        val p = this.unsafeCast<RawHasFlag>()
+        HasFlag(
             flag = p.hasFlag
         )
     } else if (Object.hasOwn(this, "hasRollOption")) {
-        val p = this.unsafeCast<RawHasRollOptionPredicate>()
-        HasRollOptionPredicate(
+        val p = this.unsafeCast<RawHasRollOption>()
+        HasRollOption(
             option = p.hasRollOption
         )
     } else if (Object.hasOwn(this, "in")) {
-        val p = this.unsafeCast<RawInPredicate>()
-        InPredicate(
+        val p = this.unsafeCast<RawIn>()
+        In(
             needle = p.`in`.component1(),
-            haystack = p.`in`.component2().toSet(),
+            haystack = p.`in`.component2().toList(),
         )
     } else if (Object.hasOwn(this, "not")) {
-        val p = this.unsafeCast<RawNotPredicate>()
-        NotPredicate(predicate = p.not.parse())
+        val p = this.unsafeCast<RawNot>()
+        Not(expression = p.not.parse())
     } else {
         throw IllegalArgumentException("Unknown Predicate Type " + JSON.stringify(this))
     }
 }
 
-fun Array<RawWhenPredicate>.parse(): When =
-    When(map {
-        WhenBranch(it.`when`.component1().parse(), it.`when`.component2())
-    }, "")
+fun RawExpression<Any?>.parse(): When {
+    return if (Object.hasOwn(this, "when")) {
+        val p = this.unsafeCast<RawWhen>()
+        val w = p.`when`
+        When(
+            cases = w.cases.map { Case(it.case.component1().parse(), it.case.component2()) },
+            default = w.default
+        )
+    } else {
+        throw IllegalArgumentException("Unknown Predicate Type " + JSON.stringify(this))
+    }
+}
 
 fun RawModifier.parse(id: String): Modifier =
     Modifier(
@@ -171,12 +184,12 @@ fun RawModifier.parse(id: String): Modifier =
         type = ModifierType.fromString(type) ?: ModifierType.UNTYPED,
         value = value,
         name = name,
-        predicatedValue = predicatedValue?.parse(),
+        valueExpression = valueExpression?.parse(),
         enabled = enabled,
         isConsumedAfterRoll = isConsumedAfterRoll == true,
         turns = turns,
         rollOptions = rollOptions?.toSet() ?: emptySet(),
-        predicates = predicates?.map { it.parse() } ?: emptyList()
+        applyIf = this@parse.applyIf?.map { it.parse() } ?: emptyList()
     )
 
 

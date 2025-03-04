@@ -3,7 +3,7 @@ package at.posselt.pfrpg2e.kingdom.modifiers.penalties
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 
 
 data class ArmyConditionInfo(
@@ -24,8 +24,8 @@ fun createArmyConditionPenalties(
                 type = ModifierType.CIRCUMSTANCE,
                 value = -info.miredValue,
                 id = "mired-$info.armyUuid",
-                predicates = listOf(
-                    EqPredicate("@activity", "deploy-army"),
+                applyIf = listOf(
+                    Eq("@activity", "deploy-army"),
                 )
             )
         )
@@ -37,8 +37,8 @@ fun createArmyConditionPenalties(
                 type = ModifierType.CIRCUMSTANCE,
                 value = -info.wearyValue,
                 id = "weary-$info.armyUuid",
-                predicates = listOf(
-                    EqPredicate("@phase", KingdomPhase.ARMY.value),
+                applyIf = listOf(
+                    Eq("@phase", KingdomPhase.ARMY.value),
                 )
             )
         )

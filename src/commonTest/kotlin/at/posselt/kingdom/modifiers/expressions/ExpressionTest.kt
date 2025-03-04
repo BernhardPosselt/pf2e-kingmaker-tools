@@ -3,15 +3,15 @@ package at.posselt.kingdom.modifiers.expressions
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.AndPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.EqPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.All
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.GtePredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasFlagPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasRollOptionPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.LtPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.NotPredicate
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.OrPredicate
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Gte
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasFlag
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasRollOption
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Lt
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Not
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Some
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -32,15 +32,20 @@ class ExpressionTest {
             phase = null,
             isVacant = false,
         )
-        val result = NotPredicate(
-            AndPredicate(
-                left = AndPredicate(left = HasFlagPredicate("flag"), right = HasRollOptionPredicate("option")),
-                right = AndPredicate(
-                    right = GtePredicate("@kingdomLevel", "@unrest"),
-                    left = OrPredicate(EqPredicate(left = "2", right = "1"), LtPredicate("@agricultureRank", "2")),
-                )
+        val result = Not(
+            All(listOf(
+                All(listOf(HasFlag("flag"),  HasRollOption("option"))),
+                All(listOf(
+                    Gte("@kingdomLevel", "@unrest"),
+                    Some(
+                        listOf(
+                            Eq(left = "2", right = "1"),
+                            Lt("@agricultureRank", "2"),
+                        )
+                    ),
+                ))
             )
-        ).evaluate(context)
+        )).evaluate(context)
         assertEquals(false, result)
     }
 }

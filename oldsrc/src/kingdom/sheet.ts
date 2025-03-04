@@ -1228,7 +1228,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     enabled: true,
                     value: 2,
                     type: 'circumstance',
-                    predicates: [{"in": ["@ability", ['loyalty', 'stability']]}],
+                    applyIf: [{"in": ["@ability", ['loyalty', 'stability']]}],
                     turns: 2,
                 }],
             });
@@ -1242,7 +1242,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     enabled: true,
                     value: 2,
                     type: 'circumstance',
-                    predicates: [{"in": ["@ability", ['culture', 'economy']]}],
+                    applyIf: [{"in": ["@ability", ['culture', 'economy']]}],
                     turns: 2,
                 }],
             });

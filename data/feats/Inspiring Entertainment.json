@@ -9,7 +9,7 @@
             "type": "circumstance",
             "enabled": true,
             "value": 2,
-            "predicates": [
+            "applyIf": [
                 {
                     "gte": [
                         "@unrest",

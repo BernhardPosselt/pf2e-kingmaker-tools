@@ -19,7 +19,7 @@
         "value": 1,
         "name": "False Victory: Critical Success",
         "type": "circumstance",
-        "predicates": [
+        "applyIf": [
           {
             "eq": [
               "@phase",

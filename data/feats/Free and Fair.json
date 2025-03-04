@@ -7,7 +7,7 @@
         {
             "name": "Loyalty Based Skill",
             "type": "circumstance",
-            "predicates": [
+            "applyIf": [
                 {
                     "eq": [
                         "@ability",
@@ -27,7 +27,7 @@
         {
             "name": "Loyalty Based Skill",
             "type": "circumstance",
-            "predicates": [
+            "applyIf": [
                 {
                     "eq": [
                         "@ability",

@@ -20,7 +20,7 @@
             {
                 "turns": 1,
                 "isConsumedAfterRoll": true,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@phase",
@@ -47,7 +47,7 @@
             {
                 "turns": 1,
                 "isConsumedAfterRoll": true,
-                "predicates": [
+                "applyIf": [
                     {
                         "eq": [
                             "@phase",

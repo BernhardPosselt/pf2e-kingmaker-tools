@@ -8,7 +8,7 @@
             "name": "Ongoing Harmful Event",
             "type": "status",
             "enabled": false,
-            "predicates": [
+            "applyIf": [
                 {
                     "eq": [
                         "@phase",

@@ -18,33 +18,67 @@ data class ExpressionContext(
     val rollOptions: Set<String>,
     val isVacant: Boolean,
 ) {
-    fun evaluateExpression(expression: String): String? {
+    fun evaluateBool(expression: Any?): Boolean {
+        val result = evaluateExpression(expression)
+        return parseBooleanOrFalse(result, expression)
+    }
+
+    fun evaluateInt(expression: Any?): Int {
+        val result = evaluateExpression(expression)
+        return parseIntOr0(result)
+    }
+
+    fun evaluateExpression(expression: Any?): Any? {
         return when (expression) {
             "@leader" -> leader.value
             "@phase" -> phase?.value
             "@activity" -> activity
-            "@unrest" -> unrest.toString()
-            "@vacant" -> isVacant.toString()
-            "@agricultureRank" -> ranks.agriculture.toString()
-            "@artsRank" -> ranks.arts.toString()
-            "@boatingRank" -> ranks.boating.toString()
-            "@defenseRank" -> ranks.defense.toString()
-            "@engineeringRank" -> ranks.engineering.toString()
-            "@explorationRank" -> ranks.exploration.toString()
-            "@folkloreRank" -> ranks.folklore.toString()
-            "@industryRank" -> ranks.industry.toString()
-            "@intrigueRank" -> ranks.intrigue.toString()
-            "@magicRank" -> ranks.magic.toString()
-            "@politicsRank" -> ranks.politics.toString()
-            "@scholarshipRank" -> ranks.scholarship.toString()
-            "@statecraftRank" -> ranks.statecraft.toString()
-            "@tradeRank" -> ranks.trade.toString()
-            "@warfareRank" -> ranks.warfare.toString()
-            "@wildernessRank" -> ranks.wilderness.toString()
-            "@kingdomLevel" -> level.toString()
-            "@skillRank" -> ranks.resolve(usedSkill).toString()
+            "@unrest" -> unrest
+            "@vacant" -> isVacant
+            "@agricultureRank" -> ranks.agriculture
+            "@artsRank" -> ranks.arts
+            "@boatingRank" -> ranks.boating
+            "@defenseRank" -> ranks.defense
+            "@engineeringRank" -> ranks.engineering
+            "@explorationRank" -> ranks.exploration
+            "@folkloreRank" -> ranks.folklore
+            "@industryRank" -> ranks.industry
+            "@intrigueRank" -> ranks.intrigue
+            "@magicRank" -> ranks.magic
+            "@politicsRank" -> ranks.politics
+            "@scholarshipRank" -> ranks.scholarship
+            "@statecraftRank" -> ranks.statecraft
+            "@tradeRank" -> ranks.trade
+            "@warfareRank" -> ranks.warfare
+            "@wildernessRank" -> ranks.wilderness
+            "@kingdomLevel" -> level
+            "@skillRank" -> ranks.resolve(usedSkill)
             "@skill" -> usedSkill.toCamelCase()
             else -> expression
         }
+    }
+}
+
+fun parseIntOr0(result: Any?): Int {
+    return when (result) {
+        is Int -> result
+        is Boolean -> if (result) 1 else 0
+        is String -> try {
+            result.toInt()
+        } catch (_: NumberFormatException) {
+            console.error("Predicate Evaluation: Could not turn $result to int")
+            0
+        }
+
+        else -> 0
+    }
+}
+
+fun parseBooleanOrFalse(result: Any?, expression: Any?): Boolean {
+    return when (result) {
+        is Int -> expression != 0
+        is Boolean -> result
+        is String -> result == "true"
+        else -> false
     }
 }
