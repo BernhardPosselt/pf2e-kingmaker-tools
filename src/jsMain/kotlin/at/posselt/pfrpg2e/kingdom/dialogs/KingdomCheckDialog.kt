@@ -224,7 +224,8 @@ private class KingdomCheckDialog(
         val leader = Leader.fromString(data.leader)!!
         val phase = fromCamelCase<KingdomPhase>(data.phase)
         val hasAssurance = kingdom.hasAssurance(selectedSkill)
-        val rollOptions = baseModifiers.flatMap { it.rollOptions }.toSet()
+        val mods = baseModifiers.map { it.copy(enabled = data.modifiers[it.id] == true) }
+        val rollOptions = mods.flatMap { it.rollOptions }.toSet()
         val context = kingdom.createExpressionContext(
             phase = phase,
             activity = activity,
@@ -232,7 +233,7 @@ private class KingdomCheckDialog(
             usedSkill = selectedSkill,
             rollOptions = rollOptions,
         )
-        val evaluatedModifiers = evaluateModifiers(baseModifiers, context)
+        val evaluatedModifiers = evaluateModifiers(mods, context)
         val evaluatedModifiersById = evaluatedModifiers.modifiers.associateBy { it.id }
         console.log("evaluated modifiers", evaluatedModifiers)
         CheckContext(
@@ -265,7 +266,7 @@ private class KingdomCheckDialog(
                 name = "skill",
                 value = selectedSkill.value,
                 options = validSkills.map {
-                    val mod = evaluateModifiers(baseModifiers, context.copy(usedSkill = it)).total
+                    val mod = evaluateModifiers(mods, context.copy(usedSkill = it)).total
                     val label = "${it.label} (${mod.formatAsModifier()})"
                     SelectOption(label, it.value)
                 },
@@ -294,7 +295,7 @@ private class KingdomCheckDialog(
                 evaluatedModifiers.total
             },
             hasAssurance = hasAssurance,
-            modifiers = baseModifiers
+            modifiers = mods
                 .sortedBy { it.type }
                 .mapIndexed { index, mod -> toModifierContext(mod, evaluatedModifiersById, index) }
                 .toTypedArray(),
@@ -307,11 +308,11 @@ private class KingdomCheckDialog(
         evaluatedModifiersById: Map<String, Modifier>,
         index: Int,
     ): ModifierContext {
-        val hidden = modifier.id !in evaluatedModifiersById
-        val evaluatedModifier = evaluatedModifiersById[modifier.id]
+        val id = modifier.id
+        val hidden = id !in evaluatedModifiersById
+        val evaluatedModifier = evaluatedModifiersById[id]
         val value = evaluatedModifier?.value ?: 0
         val enabled = evaluatedModifier?.enabled ?: modifier.enabled
-        // TODO: figure out enabled
         return ModifierContext(
             label = modifier.name,
             type = modifier.type.label,
@@ -319,7 +320,7 @@ private class KingdomCheckDialog(
             hidden = hidden,
             id = HiddenInput(
                 name = "modifier.$index.id",
-                value = modifier.id,
+                value = id,
             ).toContext(),
             enabled = if (hidden) {
                 HiddenInput(
