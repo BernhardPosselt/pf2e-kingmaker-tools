@@ -104,7 +104,12 @@ class CheckModel(val value: AnyObject) : DataModel(value) {
             enum<RollMode>("rollMode")
             enum<KingdomPhase>("phase")
             boolean("assurance")
-            record("modifiers")
+            array("modifiers") {
+                schema {
+                    string("id")
+                    boolean("enabled")
+                }
+            }
         }
     }
 }
