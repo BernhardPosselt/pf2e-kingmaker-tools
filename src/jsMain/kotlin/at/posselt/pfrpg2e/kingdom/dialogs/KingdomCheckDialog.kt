@@ -382,6 +382,7 @@ suspend fun kingdomCheckDialog(
 
     val activity = activityId?.let { kingdom.getActivity(it) }
     val validSkills = if (activity != null) {
+        // TODO: branch on structure and select the appropriate skill
         getValidActivitySkills(
             kingdom.parseSkillRanks(),
             activity,
