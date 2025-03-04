@@ -114,5 +114,5 @@ fun Int.formatAsModifier() = if (this > 0) {
 } else if (this < 0) {
     "-$this"
 } else {
-    this
+    "$this"
 }

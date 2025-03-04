@@ -10,7 +10,6 @@ import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.GlobalStructureBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.MergedSettlement
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.createAllModifiers
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.createAssuranceModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.All
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Case
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
@@ -191,14 +190,6 @@ fun RawModifier.parse(id: String): Modifier =
         rollOptions = rollOptions?.toSet() ?: emptySet(),
         applyIf = this@parse.applyIf?.map { it.parse() } ?: emptyList()
     )
-
-
-fun KingdomData.assuranceModifiers() = createAssuranceModifiers(
-    kingdomSkillRanks = parseSkillRanks(),
-    kingdomLevel = level,
-    untrainedProficiencyMode = UntrainedProficiencyMode
-        .fromString(settings.proficiencyMode) ?: UntrainedProficiencyMode.NONE,
-)
 
 suspend fun KingdomData.checkModifiers(
     globalBonuses: GlobalStructureBonuses,

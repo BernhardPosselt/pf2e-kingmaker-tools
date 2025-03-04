@@ -5,6 +5,7 @@
 @import "./components/skill-picker/skill-picker.css";
 @import "./components/skill-picker/skill-picker-input.css";
 @import "./components/activity-effects/activity-effects-input.css";
+@import "./applications/kingdom/check.css";
 
 :root {
     --primary-km: #275125;

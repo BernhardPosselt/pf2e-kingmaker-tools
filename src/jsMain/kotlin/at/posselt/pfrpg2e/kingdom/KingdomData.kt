@@ -351,6 +351,9 @@ fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
         .sortedWith(compareBy<ExplodedKingdomFeature> { it.level }.thenBy { it.name })
 }
 
+fun KingdomData.hasAssurance(skill: KingdomSkill) =
+    getAllFeats().any { it.assuranceForSkill == skill.value }
+
 fun Ruin.parse() = Ruins(
     decayPenalty = decay.penalty,
     strifePenalty = strife.penalty,

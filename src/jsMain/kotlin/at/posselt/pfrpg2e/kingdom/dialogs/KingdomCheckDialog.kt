@@ -2,7 +2,10 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
+import at.posselt.pfrpg2e.app.forms.HiddenInput
+import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.data.checks.RollMode
@@ -16,12 +19,12 @@ import at.posselt.pfrpg2e.kingdom.KingdomActivity
 import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
 import at.posselt.pfrpg2e.kingdom.armies.miredValue
 import at.posselt.pfrpg2e.kingdom.armies.wearyValue
-import at.posselt.pfrpg2e.kingdom.assuranceModifiers
 import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getKingdom
+import at.posselt.pfrpg2e.kingdom.hasAssurance
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
@@ -31,10 +34,12 @@ import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resolveDc
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.vacancies
+import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -42,12 +47,23 @@ import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
+import js.objects.ReadonlyRecord
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
+
+@JsPlainObject
+private external interface ModifierContext {
+    val label: String
+    val type: String
+    val modifier: String
+    val enabled: FormElementContext
+    val id: FormElementContext
+    val hidden: Boolean
+}
 
 @JsPlainObject
 private external interface CheckContext : HandlebarsRenderContext {
@@ -58,16 +74,21 @@ private external interface CheckContext : HandlebarsRenderContext {
     val phaseInput: FormElementContext
     val skillInput: FormElementContext
     val dc: FormElementContext
+    val assurance: FormElementContext
+    val modifiers: Array<ModifierContext>
+    val hasAssurance: Boolean
+    val checkModifier: Int
 }
 
 @JsPlainObject
 private external interface CheckData {
-    var settlement: String
     var leader: String
     var rollMode: String
     var phase: String
     var skill: String
     var dc: Int
+    var assurance: Boolean
+    var modifiers: ReadonlyRecord<String, Boolean>
 }
 
 @JsExport
@@ -82,6 +103,8 @@ class CheckModel(val value: AnyObject) : DataModel(value) {
             enum<Leader>("leader")
             enum<RollMode>("rollMode")
             enum<KingdomPhase>("phase")
+            boolean("assurance")
+            record("modifiers")
         }
     }
 }
@@ -119,21 +142,22 @@ private fun getValidActivitySkills(
         .toSet()
 
 private class KingdomCheckDialog(
+    title: String,
     private val game: Game,
     private val kingdomActor: PF2ENpc,
     private val activity: KingdomActivity?,
     private val skill: KingdomSkill?,
     private val baseModifiers: List<Modifier>,
-    private val assuranceModifiers: List<Modifier>,
     private val validSkills: Set<KingdomSkill>,
 ) : FormApp<CheckContext, CheckData>(
-    title = "Roll Check",
+    title = title,
     template = "applications/kingdom/check.hbs",
     debug = true,
     dataModel = CheckModel::class.js,
     id = "kmCheck",
 ) {
     var data: CheckData
+    val modifiersById = baseModifiers.associateBy { it.id }
 
     init {
         val kingdom = kingdomActor.getKingdom()!!
@@ -166,11 +190,12 @@ private class KingdomCheckDialog(
             KingdomPhase.fromString(activity.phase) ?: KingdomPhase.EVENT
         }
         data = CheckData(
-            settlement = kingdom.activeSettlement,
+            modifiers = baseModifiers.map { it.id to it.enabled }.toRecord(),
             leader = Leader.RULER.value,
             rollMode = RollMode.PUBLICROLL.value,
             skill = selectedSkill.value,
             phase = phase.value,
+            assurance = false,
             dc = dc ?: throw IllegalStateException("Check window opened for activity without check"),
         )
 
@@ -198,6 +223,7 @@ private class KingdomCheckDialog(
         val selectedSkill = KingdomSkill.fromString(data.skill)!!
         val leader = Leader.fromString(data.leader)!!
         val phase = fromCamelCase<KingdomPhase>(data.phase)
+        val hasAssurance = kingdom.hasAssurance(selectedSkill)
         val rollOptions = baseModifiers.flatMap { it.rollOptions }.toSet()
         val context = kingdom.createExpressionContext(
             phase = phase,
@@ -207,9 +233,8 @@ private class KingdomCheckDialog(
             rollOptions = rollOptions,
         )
         val evaluatedModifiers = evaluateModifiers(baseModifiers, context)
-        val evaluatedAssurance = evaluateModifiers(assuranceModifiers, context)
+        val evaluatedModifiersById = evaluatedModifiers.modifiers.associateBy { it.id }
         console.log("evaluated modifiers", evaluatedModifiers)
-        console.log("evaluated assurance", evaluatedAssurance)
         CheckContext(
             partId = parent.partId,
             settlementInput = Select(
@@ -250,7 +275,66 @@ private class KingdomCheckDialog(
                 label = "DC",
                 value = data.dc,
             ).toContext(),
+            assurance = if (hasAssurance) {
+                CheckboxInput(
+                    name = "assurance",
+                    label = "Assurance",
+                    value = data.assurance,
+                ).toContext()
+            } else {
+                HiddenInput(
+                    name = "assurance",
+                    value = data.assurance.toString(),
+                    overrideType = OverrideType.BOOLEAN,
+                ).toContext()
+            },
+            checkModifier = if (data.assurance) {
+                evaluatedModifiers.assurance
+            } else {
+                evaluatedModifiers.total
+            },
+            hasAssurance = hasAssurance,
+            modifiers = baseModifiers
+                .sortedBy { it.type }
+                .mapIndexed { index, mod -> toModifierContext(mod, evaluatedModifiersById, index) }
+                .toTypedArray(),
             isFormValid = true,
+        )
+    }
+
+    fun toModifierContext(
+        modifier: Modifier,
+        evaluatedModifiersById: Map<String, Modifier>,
+        index: Int,
+    ): ModifierContext {
+        val hidden = modifier.id !in evaluatedModifiersById
+        val evaluatedModifier = evaluatedModifiersById[modifier.id]
+        val value = evaluatedModifier?.value ?: 0
+        val enabled = evaluatedModifier?.enabled ?: modifier.enabled
+        // TODO: figure out enabled
+        return ModifierContext(
+            label = modifier.name,
+            type = modifier.type.label,
+            modifier = value.formatAsModifier(),
+            hidden = hidden,
+            id = HiddenInput(
+                name = "modifier.$index.id",
+                value = modifier.id,
+            ).toContext(),
+            enabled = if (hidden) {
+                HiddenInput(
+                    name = "modifier.$index.enabled",
+                    value = enabled.toString(),
+                    overrideType = OverrideType.BOOLEAN,
+                ).toContext()
+            } else {
+                CheckboxInput(
+                    label = modifier.name,
+                    name = "modifier.$index.enabled",
+                    value = enabled,
+                    hideLabel = true,
+                ).toContext()
+            }
         )
     }
 
@@ -301,6 +385,7 @@ suspend fun kingdomCheckDialog(
         KingdomSkill.entries.toSet()
     }
     KingdomCheckDialog(
+        title = activity?.title ?: skill?.toLabel() ?: "Check",
         game = game,
         kingdomActor = kingdomActor,
         activity = activity,
@@ -312,6 +397,5 @@ suspend fun kingdomCheckDialog(
             allSettlements = allSettlements,
             targetedArmy = targetedArmy,
         ),
-        assuranceModifiers = kingdom.assuranceModifiers(),
     ).launch()
 }
