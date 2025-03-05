@@ -21,29 +21,38 @@ data class DieValue(val value: Int) {
 data class D20CheckResult(
     val degreeOfSuccess: DegreeOfSuccess,
     val dieValue: DieValue,
-)
-
-suspend fun d20Check(
-    dc: Int,
-    modifier: Int = 0,
-    flavor: String? = undefined,
-    rollMode: RollMode = RollMode.PUBLICROLL,
-    toChat: Boolean = true,
-): D20CheckResult {
-    val d20 = "1d20"
-    val formula = if (modifier > 0) "$d20+$modifier" else d20
-    val roll = Roll(formula).evaluate().await()
-    if (toChat) {
+    val roll: Roll,
+    val rollMode: RollMode,
+) {
+    suspend fun toChat(flavor: String? = undefined) {
         roll.toMessage(
             recordOf("flavor" to flavor),
             RollMessageOptions(rollMode = rollMode.toCamelCase())
         ).await()
     }
+}
+
+suspend fun d20Check(
+    dc: Int,
+    modifier: Int = 0,
+    flavor: String? = undefined,
+    rollMode: RollMode? = null,
+    toChat: Boolean = true,
+): D20CheckResult {
+    val d20 = "1d20"
+    val formula = if (modifier > 0) "$d20+$modifier" else d20
+    val roll = Roll(formula).evaluate().await()
     val dieValue = roll.total - modifier
-    return D20CheckResult(
+    val result = D20CheckResult(
         degreeOfSuccess = determineDegreeOfSuccess(dc, roll.total, dieValue),
         dieValue = DieValue(dieValue),
+        roll = roll,
+        rollMode = rollMode ?: RollMode.PUBLICROLL,
     )
+    if (toChat) {
+        result.toChat(flavor)
+    }
+    return result
 }
 
 suspend fun roll(

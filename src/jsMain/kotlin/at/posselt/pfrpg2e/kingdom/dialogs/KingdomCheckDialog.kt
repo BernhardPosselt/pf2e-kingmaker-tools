@@ -25,16 +25,19 @@ import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmyConditions
 import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
 import at.posselt.pfrpg2e.kingdom.getAllActivities
-import at.posselt.pfrpg2e.kingdom.getAllFeats
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
+import at.posselt.pfrpg2e.kingdom.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.hasAssurance
 import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
+import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resolveDc
 import at.posselt.pfrpg2e.kingdom.setKingdom
@@ -45,6 +48,7 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.serializeB64Json
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.AnyObject
@@ -66,6 +70,7 @@ import kotlin.IllegalArgumentException
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
+import kotlin.Triple
 import kotlin.arrayOf
 import kotlin.js.Promise
 import kotlin.let
@@ -99,6 +104,7 @@ private external interface CheckContext : HandlebarsRenderContext {
     val creativeSolution: FormElementContext
     val encodedAssurancePills: String
     val encodedPills: String
+    val encodedUpgrades: String
 }
 
 @JsPlainObject
@@ -238,41 +244,56 @@ private class KingdomCheckDialog(
         when (target.dataset["action"]) {
             "roll" -> {
                 buildPromise {
-                    val modifier = target.dataset["modifier"]?.toInt() ?: 0
-                    val pills = deserializeB64Json<Array<ModifierPill>>(target.dataset["pills"]!!)
-                    roll(modifier, pills)
+                    val (modifier, pills, upgrades) = parseTarget(target)
+                    roll(modifier, pills, upgrades)
                     close()
                 }
             }
 
             "rollWithAssurance" -> {
                 buildPromise {
-                    val modifier = target.dataset["modifier"]?.toInt() ?: 0
-                    val pills = deserializeB64Json<Array<ModifierPill>>(target.dataset["pills"]!!)
-                    roll(modifier, pills)
+                    val (modifier, pills, upgrades) = parseTarget(target)
+                    roll(modifier, pills, upgrades)
                     close()
                 }
             }
         }
     }
 
-    private suspend fun roll(modifier: Int, pills: Array<ModifierPill>) {
+    private fun parseTarget(target: HTMLElement): Triple<Int, Array<ModifierPill>, Set<DegreeOfSuccess>> {
+        val modifier = target.dataset["modifier"]?.toInt() ?: 0
+        val pills = deserializeB64Json<Array<ModifierPill>>(target.dataset["pills"]!!)
+        val upgrades = deserializeB64Json<Array<String>>(target.dataset["upgrades"]!!)
+            .mapNotNull { DegreeOfSuccess.fromString(it) }
+            .toSet()
+        return Triple(modifier, pills, upgrades)
+    }
+
+    private suspend fun roll(
+        modifier: Int,
+        pills: Array<ModifierPill>,
+        upgrades: Set<DegreeOfSuccess>
+    ) {
         rollCheck(
             dc = data.dc,
             afterRollMessage = afterRollMessage,
             rollMode = RollMode.fromString(data.rollMode),
             activity = activity,
-            game = game,
             kingdomActor = kingdomActor,
             modifier = modifier,
             modifierPills = pills,
+            upgrades = upgrades,
+            skill = KingdomSkill.fromString(data.skill)!!,
         )
         if (data.supernaturalSolution) {
+            postChatMessage("Reduced Supernatural Solutions by 1")
             kingdom.supernaturalSolutions = max(0, kingdom.supernaturalSolutions -1)
         }
         if (data.creativeSolution) {
+            postChatMessage("Reduced Creative Solutions by 1")
             kingdom.creativeSolutions = max(0, kingdom.creativeSolutions -1)
         }
+        // TODO: consume modifiers
         kingdomActor.setKingdom(kingdom)
     }
 
@@ -286,24 +307,25 @@ private class KingdomCheckDialog(
         // evaluate modifiers
         val enabledModifiers = baseModifiers.map { it.copy(enabled = data.modifiers[it.id] == true) }
         val phase = data.phase?.let { fromCamelCase<KingdomPhase>(it) }
-        val rollOptions = enabledModifiers.flatMap { it.rollOptions }.toSet()
         val usedSkill = KingdomSkill.fromString(data.skill)!!
         val context = kingdom.createExpressionContext(
             phase = phase,
             activity = activity,
             leader = Leader.fromString(data.leader)!!,
             usedSkill = if (data.supernaturalSolution) KingdomSkill.MAGIC else usedSkill,
-            rollOptions = if (data.creativeSolution) rollOptions + "creative-solution" else rollOptions,
+            rollOptions = if (data.creativeSolution) setOf("creative-solution") else emptySet(),
         )
+        val upgradeDegrees = getUpgrades(context)
+        val filtered = filterModifiersAndUpdateContext(enabledModifiers, context)
+        val evaluatedModifiers = evaluateModifiers(filtered)
         val selectedSkill = context.usedSkill
-        val evaluatedModifiers = evaluateModifiers(enabledModifiers, context)
         val hasAssurance = kingdom.hasAssurance(selectedSkill)
         val evaluatedModifiersById = evaluatedModifiers.modifiers.associateBy { it.id }
         val encodedAssurancePills = serializeB64Json(arrayOf(
-            ModifierPill(label = "Assurance", value = evaluatedModifiers.total)
+            ModifierPill(label = "Assurance", value = evaluatedModifiers.total.formatAsModifier())
         ))
         val encodedPills = serializeB64Json(evaluatedModifiers.modifiers.map {
-            ModifierPill(label = it.name, value = it.value)
+            ModifierPill(label = it.name, value = it.value.formatAsModifier())
         }.toTypedArray())
 
         CheckContext(
@@ -336,7 +358,8 @@ private class KingdomCheckDialog(
                 name = "skill",
                 value = selectedSkill.value,
                 options = validSkills.map {
-                    val mod = evaluateModifiers(enabledModifiers, context.copy(usedSkill = it)).total
+                    val cx = filtered.context.copy(usedSkill = it)
+                    val mod = evaluateModifiers(filtered.copy(context = cx)).total
                     val label = "${it.label} (${mod.formatAsModifier()})"
                     SelectOption(label, it.value)
                 },
@@ -383,9 +406,17 @@ private class KingdomCheckDialog(
                 .toTypedArray(),
             encodedAssurancePills = encodedAssurancePills,
             encodedPills = encodedPills,
+            encodedUpgrades = serializeB64Json(upgradeDegrees.map { it.value }.toTypedArray()),
             isFormValid = true,
         )
     }
+
+    private fun getUpgrades(context: ExpressionContext): Set<DegreeOfSuccess> = kingdom.getChosenFeats().asSequence()
+        .flatMap { it.feat.upgradeResults?.toList().orEmpty() }
+        .map { it.parse() }
+        .filter { it?.applyIf?.all { exp -> exp.evaluate(context) } != false }
+        .mapNotNull { it?.upgrade }
+        .toSet()
 
     fun toModifierContext(
         modifier: Modifier,
@@ -459,7 +490,7 @@ suspend fun kingdomCheckDialog(
                 ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
                 expandMagicUse = kingdom.settings.expandMagicUse,
                 activityId = activity.id,
-                increaseSkills = kingdom.getAllFeats().map { it.increasedSkills() }
+                increaseSkills = kingdom.getChosenFeats().map { it.feat.increasedSkills() }
             )
             CheckDialogParams(
                 title = activity.title,
@@ -492,7 +523,7 @@ suspend fun kingdomCheckDialog(
                 ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
                 expandMagicUse = kingdom.settings.expandMagicUse,
                 activityId = activity.id,
-                increaseSkills = kingdom.getAllFeats().map { it.increasedSkills() }
+                increaseSkills = kingdom.getChosenFeats().map { it.feat.increasedSkills() }
             )
             CheckDialogParams(
                 title = activity.title,

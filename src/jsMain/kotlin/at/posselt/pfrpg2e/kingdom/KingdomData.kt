@@ -352,7 +352,7 @@ fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
 }
 
 fun KingdomData.hasAssurance(skill: KingdomSkill) =
-    getAllFeats().any { it.assuranceForSkill == skill.value }
+    getChosenFeats().any { it.feat.assuranceForSkill == skill.value }
 
 fun Ruin.parse() = Ruins(
     decayPenalty = decay.penalty,

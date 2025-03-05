@@ -35,11 +35,7 @@ class LeadershipModifierTest {
             ),
         )
         val filteredModifiers = filterModifiersAndUpdateContext(modifiers, defaultContext)
-        console.log(filteredModifiers)
-        val result = evaluateModifiers(
-            context = filteredModifiers.context,
-            modifiers = filteredModifiers.modifiers,
-        )
+        val result = evaluateModifiers(filteredModifiers)
         assertEquals(2, result.total)
     }
 }

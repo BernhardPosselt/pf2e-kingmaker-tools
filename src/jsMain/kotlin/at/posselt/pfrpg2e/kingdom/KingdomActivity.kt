@@ -17,14 +17,6 @@ external interface ActivityResult {
 }
 
 @JsPlainObject
-external interface ActivityResults {
-    var criticalSuccess: ActivityResult?
-    var success: ActivityResult?
-    var failure: ActivityResult?
-    var criticalFailure: ActivityResult?
-}
-
-@JsPlainObject
 external interface KingdomActivity {
     var id: String
     var title: String
@@ -40,6 +32,10 @@ external interface KingdomActivity {
     var fortune: Boolean
     var oncePerRound: Boolean
     var hint: String?
+    var criticalSuccess: ActivityResult?
+    var success: ActivityResult?
+    var failure: ActivityResult?
+    var criticalFailure: ActivityResult?
 }
 
 @JsModule("./kingdom-activities.json")

@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.ABILITY
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.PROFICIENCY
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createProficiencyModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createSkillAbilityModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.FilterResult
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Case
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
@@ -44,8 +45,10 @@ class EvaluateModifiersTest {
             createProficiencyModifier(AGRICULTURE, proficiency = LEGENDARY, level = 3)
         )
         val result = evaluateModifiers(
-            context = defaultContext,
-            modifiers = modifiers,
+            FilterResult(
+                context = defaultContext,
+                modifiers = modifiers,
+            )
         )
         assertEquals(12, result.total)
         assertEquals(11, result.bonuses[PROFICIENCY])
@@ -61,8 +64,10 @@ class EvaluateModifiersTest {
             createProficiencyModifier(AGRICULTURE, proficiency = TRAINED, level = 3)
         )
         val result = evaluateModifiers(
-            context = defaultContext,
-            modifiers = modifiers,
+            FilterResult(
+                context = defaultContext,
+                modifiers = modifiers,
+            )
         )
         assertEquals(11, result.total)
         assertEquals(11, result.bonuses[PROFICIENCY])
@@ -82,8 +87,10 @@ class EvaluateModifiersTest {
             second
         )
         val result = evaluateModifiers(
-            context = defaultContext,
-            modifiers = modifiers,
+            FilterResult(
+                context = defaultContext,
+                modifiers = modifiers,
+            )
         )
         assertEquals(-4, result.total)
         assertNull(result.bonuses[PROFICIENCY])
@@ -106,8 +113,10 @@ class EvaluateModifiersTest {
             third
         )
         val result = evaluateModifiers(
-            context = defaultContext,
-            modifiers = modifiers,
+            FilterResult(
+                context = defaultContext,
+                modifiers = modifiers,
+            )
         )
         assertEquals(8, result.total)
         assertEquals(11, result.bonuses[PROFICIENCY])
@@ -142,8 +151,10 @@ class EvaluateModifiersTest {
             first
         )
         val result = evaluateModifiers(
-            context = defaultContext,
-            modifiers = modifiers,
+            FilterResult(
+                context = defaultContext,
+                modifiers = modifiers,
+            )
         )
         assertEquals(3, result.total)
     }
@@ -170,8 +181,10 @@ class EvaluateModifiersTest {
             first
         )
         val result = evaluateModifiers(
-            context = defaultContext,
-            modifiers = modifiers,
+            FilterResult(
+                context = defaultContext,
+                modifiers = modifiers,
+            )
         )
         assertEquals(2, result.total)
     }
@@ -193,8 +206,10 @@ class EvaluateModifiersTest {
             fourth
         )
         val result = evaluateModifiers(
-            context = defaultContext,
-            modifiers = modifiers,
+            FilterResult(
+                context = defaultContext,
+                modifiers = modifiers,
+            )
         )
         assertEquals(2, result.total)
         assertEquals(modifiers, result.modifiers)
@@ -207,7 +222,8 @@ class EvaluateModifiersTest {
         val third = createProficiencyModifier(POLITICS, proficiency = LEGENDARY, level = 3).copy(enabled = false)
         val fourth = createProficiencyModifier(STATECRAFT, proficiency = MASTER, level = 3).copy(value = -2)
         val fifth = createProficiencyModifier(WARFARE, proficiency = TRAINED, level = 3).copy(value = -3)
-        val sixth = createProficiencyModifier(MAGIC, proficiency = LEGENDARY, level = 3).copy(enabled = false, value = -4)
+        val sixth =
+            createProficiencyModifier(MAGIC, proficiency = LEGENDARY, level = 3).copy(enabled = false, value = -4)
         val modifiers = listOf(
             first,
             second,
@@ -217,18 +233,22 @@ class EvaluateModifiersTest {
             sixth,
         )
         val result = evaluateModifiers(
-            context = defaultContext,
-            modifiers = modifiers,
+            FilterResult(
+                context = defaultContext,
+                modifiers = modifiers,
+            )
         )
         console.log(result)
         assertEquals(6, result.total)
         assertEquals(9, result.bonuses[PROFICIENCY])
         assertEquals(-3, result.penalties[PROFICIENCY])
-        assertEquals(listOf(
-            first,
-            third,
-            fifth,
-            sixth,
-        ), result.modifiers)
+        assertEquals(
+            listOf(
+                first,
+                third,
+                fifth,
+                sixth,
+            ), result.modifiers
+        )
     }
 }

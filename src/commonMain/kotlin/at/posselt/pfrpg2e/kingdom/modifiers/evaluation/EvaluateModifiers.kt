@@ -33,9 +33,10 @@ private fun applyStackingRules(modifiers: List<Modifier>): List<Modifier> {
 
 
 fun evaluateModifiers(
-    modifiers: List<Modifier>,
-    context: ExpressionContext,
+    filterResult: FilterResult,
 ): ModifierResult {
+    val modifiers = filterResult.modifiers
+    val context = filterResult.context
     val evaluatedModifiers = modifiers
         .distinctBy { it.id }
         .map { evaluateValueExpression(it, context) }

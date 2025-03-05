@@ -188,7 +188,7 @@ fun RawModifier.parse(id: String): Modifier =
         isConsumedAfterRoll = isConsumedAfterRoll == true,
         turns = turns,
         rollOptions = rollOptions?.toSet() ?: emptySet(),
-        applyIf = this@parse.applyIf?.map { it.parse() } ?: emptyList()
+        applyIf = applyIf?.map { it.parse() } ?: emptyList()
     )
 
 suspend fun KingdomData.checkModifiers(
@@ -233,8 +233,8 @@ fun KingdomData.createExpressionContext(
     phase = phase,
     level = level,
     unrest = unrest,
-    flags = getAllFeats()
-        .flatMap { it.flags?.toSet() ?: emptySet() }
+    flags = getChosenFeats()
+        .flatMap { it.feat.flags?.toSet().orEmpty() }
         .toSet(),
     rollOptions = rollOptions,
     isVacant = vacancies().resolveVacancy(leader)

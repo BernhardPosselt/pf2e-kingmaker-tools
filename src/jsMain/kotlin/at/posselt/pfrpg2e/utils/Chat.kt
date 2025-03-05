@@ -7,11 +7,8 @@ import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.documents.ChatMessage
 import com.foundryvtt.core.documents.GetSpeakerOptions
-import com.foundryvtt.core.onRenderChatMessage
-import io.kvision.jquery.get
 import js.objects.ReadonlyRecord
 import js.objects.jso
 import js.objects.recordOf
@@ -22,10 +19,19 @@ import org.w3c.dom.events.Event
 
 suspend fun postDegreeOfSuccess(
     degreeOfSuccess: DegreeOfSuccess,
+    originalDegreeOfSuccess: DegreeOfSuccess? = null,
     message: String? = null,
     rollMode: RollMode? = null,
     metaHtml: String = "",
+    preHtml: String = "",
+    postHtml: String = "",
+    title: String = ""
 ) {
+    val original = if (originalDegreeOfSuccess != null && originalDegreeOfSuccess != degreeOfSuccess) {
+        originalDegreeOfSuccess.label
+    } else {
+        null
+    }
     postChatMessage(
         message = tpl(
             "chatmessages/degree-of-success.hbs", recordOf(
@@ -33,9 +39,13 @@ suspend fun postDegreeOfSuccess(
                 "isFailure" to (DegreeOfSuccess.FAILURE == degreeOfSuccess),
                 "isSuccess" to (DegreeOfSuccess.SUCCESS == degreeOfSuccess),
                 "isCriticalSuccess" to (DegreeOfSuccess.CRITICAL_SUCCESS == degreeOfSuccess),
-                "degreeLabel" to degreeOfSuccess.toLabel(),
+                "degree" to degreeOfSuccess.toLabel(),
                 "meta" to metaHtml,
                 "message" to message,
+                "original" to original,
+                "postHtml" to postHtml,
+                "preHtml" to preHtml,
+                "title" to title,
             )
         ),
         rollMode = rollMode,

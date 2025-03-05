@@ -1,5 +1,8 @@
 package at.posselt.pfrpg2e.data.checks
 
+import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.toLabel
 import kotlin.math.abs
 
 enum class DegreeOfSuccess {
@@ -24,6 +27,16 @@ enum class DegreeOfSuccess {
         SUCCESS -> CRITICAL_SUCCESS
         CRITICAL_SUCCESS -> CRITICAL_SUCCESS
     }
+
+    companion object {
+        fun fromString(value: String) = fromCamelCase<DegreeOfSuccess>(value)
+    }
+
+    val value: String
+        get() = toCamelCase()
+
+    val label: String
+        get() = toLabel()
 }
 
 fun <T> Int.repeat(initial: T, block: (T) -> T): T {
