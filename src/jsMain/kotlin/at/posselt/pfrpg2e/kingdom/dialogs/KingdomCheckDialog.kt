@@ -37,6 +37,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
 import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resolveDc
+import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.skillRanks
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.vacancies
@@ -68,6 +69,7 @@ import kotlin.Suppress
 import kotlin.arrayOf
 import kotlin.js.Promise
 import kotlin.let
+import kotlin.math.max
 import kotlin.to
 
 @JsPlainObject
@@ -120,8 +122,12 @@ class CheckModel(val value: AnyObject) : DataModel(value) {
         fun defineSchema() = buildSchema {
             int("dc")
             string("settlement")
-            boolean("supernaturalSolution")
-            boolean("creativeSolution")
+            boolean("supernaturalSolution") {
+                initial = false
+            }
+            boolean("creativeSolution") {
+                initial = false
+            }
             enum<KingdomSkill>("skill")
             enum<Leader>("leader")
             enum<RollMode>("rollMode")
@@ -261,7 +267,13 @@ private class KingdomCheckDialog(
             modifier = modifier,
             modifierPills = pills,
         )
-        // TODO: count down supernatural/creative solutions
+        if (data.supernaturalSolution) {
+            kingdom.supernaturalSolutions = max(0, kingdom.supernaturalSolutions -1)
+        }
+        if (data.creativeSolution) {
+            kingdom.creativeSolutions = max(0, kingdom.creativeSolutions -1)
+        }
+        kingdomActor.setKingdom(kingdom)
     }
 
     override fun _preparePartContext(
@@ -334,17 +346,17 @@ private class KingdomCheckDialog(
                 label = "DC",
                 value = data.dc,
             ).toContext(),
-            // TODO: disable if not enough solutions
             supernaturalSolution = CheckboxInput(
                 name = "supernaturalSolution",
                 label = "Supernatural Solution",
                 value = data.supernaturalSolution,
+                disabled = kingdom.supernaturalSolutions == 0
             ).toContext(),
-            // TODO: disable if not enough solutions
             creativeSolution = CheckboxInput(
                 name = "creativeSolution",
                 label = "Creative Solution",
                 value = data.creativeSolution,
+                disabled = kingdom.creativeSolutions == 0
             ).toContext(),
             assurance = if (hasAssurance) {
                 CheckboxInput(
