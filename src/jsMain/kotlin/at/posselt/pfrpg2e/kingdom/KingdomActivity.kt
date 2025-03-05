@@ -1,6 +1,10 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
+import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
+import at.posselt.pfrpg2e.utils.asSequence
 import js.objects.JsPlainObject
 import kotlinx.serialization.json.JsonElement
 
@@ -47,13 +51,13 @@ external val kingdomActivitySchema: JsonElement
 fun KingdomActivity.resolveDc(
     enemyArmyScoutingDcs: List<Int>,
     kingdomLevel: Int,
-    kingdomSize: Int,
+    realm: RealmData,
     rulerVacant: Boolean,
 ): Int? =
     when (dc) {
         "control" -> calculateControlDC(
             kingdomLevel = kingdomLevel,
-            kingdomSize = kingdomSize,
+            realm = realm,
             rulerVacant = rulerVacant,
         )
         "custom" -> 0
@@ -61,3 +65,12 @@ fun KingdomActivity.resolveDc(
         "scouting" -> enemyArmyScoutingDcs.maxOrNull() ?: 0
         else -> dc as Int
     }
+
+fun KingdomActivity.skillRanks(): Set<KingdomSkillRank> =
+    skills.asSequence()
+        .mapNotNull { (name, rank) ->
+            KingdomSkill.fromString(name)?.let {
+                KingdomSkillRank(skill = it, rank = rank)
+            }
+        }
+        .toSet()

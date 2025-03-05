@@ -2,10 +2,12 @@ package at.posselt.pfrpg2e.data.kingdom.settlements
 
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
+import kotlin.math.abs
+import kotlin.math.max
 
 data class Settlement(
     val name: String,
-    val settlementType: SettlementType,
+    val type: SettlementType,
     val waterBorders: Int,
     val isSecondaryTerritory: Boolean,
     val settlementEventBonus: Int, // added by watchtowers
@@ -15,15 +17,19 @@ data class Settlement(
     val notes: Set<String>,
     val storage: CommodityStorage,
     val increaseLeadershipActivities: Boolean,
-    val settlementConsumption: Int,
     val consumptionReduction: Int,
-    val consumptionSurplus: Int,
-    val settlementSize: SettlementSize,
+    val size: SettlementSize,
     val unlockActivities: Set<String>,
     val residentialLots: Int,
     val hasBridge: Boolean,
     val occupiedBlocks: Int,
 ) {
+    private val totalConsumption = size.consumption - consumptionReduction
     val isOvercrowded = occupiedBlocks > residentialLots
     val lacksBridge = waterBorders >= 4 && !hasBridge
+    val consumption = max(0, totalConsumption)
+    val consumptionSurplus = totalConsumption
+        .takeIf { it < 0 }
+        ?.let { abs(it) }
+        ?: 0
 }

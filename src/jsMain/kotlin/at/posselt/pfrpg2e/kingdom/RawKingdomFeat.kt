@@ -1,5 +1,7 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.utils.asSequence
 import js.objects.JsPlainObject
 import js.objects.Record
 import kotlinx.serialization.json.JsonElement
@@ -27,6 +29,16 @@ external interface RawKingdomFeat {
     val flags: Array<String>?
     val upgradeResults: Array<UpgradeResult>?
 }
+
+fun RawKingdomFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =
+    increaseUsableSkills?.asSequence()
+        ?.mapNotNull { (skill, skills) ->
+            KingdomSkill.fromString(skill)?.let { kingdomSkill ->
+                kingdomSkill to skills.mapNotNull { s -> KingdomSkill.fromString(s) }.toSet()
+            }
+        }
+        ?.toMap()
+        ?: emptyMap()
 
 @JsModule("./feats.json")
 external val kingdomFeats: Array<RawKingdomFeat>

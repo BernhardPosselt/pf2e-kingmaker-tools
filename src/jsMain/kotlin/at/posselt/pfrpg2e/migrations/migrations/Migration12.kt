@@ -1,11 +1,11 @@
 package at.posselt.pfrpg2e.migrations.migrations
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill.*
+import at.posselt.pfrpg2e.kingdom.AutomateResources
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.RawLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.RawLeaderSkills
-import at.posselt.pfrpg2e.kingdom.dialogs.AutomateResources
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
 import at.posselt.pfrpg2e.settings.getBoolean
 import at.posselt.pfrpg2e.settings.getInt

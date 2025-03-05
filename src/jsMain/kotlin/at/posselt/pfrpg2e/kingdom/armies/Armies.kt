@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.armies
 
+import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Folder
@@ -10,6 +11,18 @@ import js.array.toTypedArray
 import js.iterable.asSequence
 import js.objects.recordOf
 import kotlinx.coroutines.await
+
+fun Game.getTargetedArmyConditions() =
+    getTargetedArmies()
+        .firstOrNull()
+        ?.let {
+            ArmyConditionInfo(
+                armyName = it.name,
+                armyUuid = it.uuid,
+                miredValue = it.miredValue() ?: 0,
+                wearyValue = it.wearyValue() ?: 0,
+            )
+        }
 
 fun Game.getTargetedArmies(): Array<PF2EArmy> =
     user.targets.values()

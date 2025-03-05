@@ -17,6 +17,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.promise
 import kotlin.contracts.contract
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.io.encoding.Base64
 import kotlin.js.Promise
 
 /**
@@ -76,6 +77,13 @@ inline fun isInt(x: Any?): Boolean {
     }
     return jsTypeOf(x) == "Number" && JsNumber.isInteger(x)
 }
+
+fun serializeB64Json(value: Any?): String =
+    Base64.encode(JSON.stringify(value).encodeToByteArray())
+
+fun <T> deserializeB64Json(value: String): T =
+    JSON.parse(Base64.decode(value).decodeToString())
+
 
 fun <T> ReadonlyRecord<String, T>.asSequence(): Sequence<JsTuple2<String, T>> =
     Object.entries(this).asSequence()

@@ -49,4 +49,5 @@ val kingdomSizeData = listOf(
 
 fun findKingdomSize(size: Int) =
     kingdomSizeData.find { it.sizeFrom <= size
-            && (it.sizeTo?.let { to -> to >= size } != false) }!!
+            && (it.sizeTo?.let { to -> to >= size } != false) }
+        ?: kingdomSizeData.first()

@@ -6,8 +6,6 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.findSettlementSize
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
-import kotlin.math.abs
-import kotlin.math.max
 
 private data class CombinedBonuses(
     val bonuses: Set<GroupedStructureBonus>,
@@ -107,7 +105,6 @@ fun evaluateSettlement(
 ): Settlement {
     val settlementSize = findSettlementSize(data.level)
     val consumptionReduction = calculateConsumptionReduction(structures)
-    val settlementConsumption = settlementSize.consumption - consumptionReduction
     val maxItemBonus = settlementSize.maxItemBonus
     val (bonuses, eventBonus, leaderBonus) = combineBonuses(
         structures,
@@ -124,19 +121,14 @@ fun evaluateSettlement(
         .toSet()
     val increaseLeadershipActivities = (data.type == SettlementType.CAPITAL
             && structures.any { it.increaseLeadershipActivities })
-    val consumptionSurplus = (settlementConsumption
-        .takeIf { it < 0 }
-        ?.let { abs(it) }
-        ?: 0)
+
     val residentialLots = structures
         .filter { it.isResidential }
         .sumOf { it.lots }
     val unlockActivities = structures
         .flatMap { it.unlockActivities }
         .toSet()
-    val settlementConsumption1 = max(0, settlementConsumption)
     val hasBridge = structures.any { it.isBridge }
-    console.log("-------------------------hereeeeeeeeeeeeeeeeeeeee-------------------")
     return Settlement(
         name = data.name,
         waterBorders = data.waterBorders,
@@ -148,14 +140,12 @@ fun evaluateSettlement(
         notes = notes,
         storage = storage,
         increaseLeadershipActivities = increaseLeadershipActivities,
-        settlementConsumption = settlementConsumption1,
         consumptionReduction = consumptionReduction,
-        consumptionSurplus = consumptionSurplus,
-        settlementSize = settlementSize,
+        size = settlementSize,
         unlockActivities = unlockActivities,
         residentialLots = residentialLots,
         hasBridge = hasBridge,
         occupiedBlocks = data.occupiedBlocks,
-        settlementType = data.type,
+        type = data.type,
     )
 }

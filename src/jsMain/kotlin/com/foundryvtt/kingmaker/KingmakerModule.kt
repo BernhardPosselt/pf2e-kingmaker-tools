@@ -6,8 +6,8 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface HexState {
-    val commodity: Array<String>?
-    val camp: Array<String>?
+    val commodity: String?
+    val camp: String?
     val features: Array<String>?
     val claimed: Boolean?
 }
@@ -15,7 +15,7 @@ external interface HexState {
 
 @JsPlainObject
 external interface KingmakerState {
-    val hexes: ReadonlyRecord<Int, HexState>
+    val hexes: ReadonlyRecord<String, HexState>
 }
 
 external class KingmakerModule : Module {

@@ -47,11 +47,13 @@ kotlin {
         useEsModules()
         compilerOptions {
             freeCompilerArgs.addAll(
+                "-opt-in=kotlin.io.encoding.ExperimentalEncodingApi",
                 "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
                 "-opt-in=kotlin.contracts.ExperimentalContracts",
                 "-opt-in=kotlin.ExperimentalStdlibApi",
                 "-opt-in=kotlin.js.ExperimentalJsExport",
                 "-opt-in=kotlin.js.ExperimentalJsStatic",
+                "-Xwhen-guards",
             )
             moduleKind = JsModuleKind.MODULE_ES
             useEsClasses = true

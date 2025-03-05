@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.kingdom.AutomateResources
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
 import at.posselt.pfrpg2e.toCamelCase
@@ -31,12 +32,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
-
-enum class AutomateResources {
-    KINGMAKER,
-    TILE_BASED,
-    MANUAL,
-}
 
 @JsExport
 class KingdomSettingsDataModel(value: AnyObject) : DataModel(value) {

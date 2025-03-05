@@ -76,18 +76,18 @@ external interface Group {
 }
 
 @JsPlainObject
-external interface WorkSite {
+external interface RawWorkSite {
     var quantity: Int
     var resources: Int
 }
 
 @JsPlainObject
-external interface WorkSites {
-    var farmlands: WorkSite
-    var lumberCamps: WorkSite
-    var mines: WorkSite
-    var quarries: WorkSite
-    var luxurySources: WorkSite
+external interface RawWorkSites {
+    var farmlands: RawWorkSite
+    var lumberCamps: RawWorkSite
+    var mines: RawWorkSite
+    var quarries: RawWorkSite
+    var luxurySources: RawWorkSite
 }
 
 @JsPlainObject
@@ -137,7 +137,7 @@ external interface Fame {
 }
 
 @JsPlainObject
-external interface Consumption {
+external interface RawConsumption {
     var armies: Int
     var now: Int
     var next: Int
@@ -224,10 +224,10 @@ external interface KingdomData {
     var unrest: Int
     var resourcePoints: Resources
     var resourceDice: Resources
-    var workSites: WorkSites
+    var workSites: RawWorkSites
     var heartland: Heartland
     var realmSceneId: String?
-    var consumption: Consumption
+    var consumption: RawConsumption
     var notes: Notes
     var homebrewActivities: Array<KingdomActivity>
     var supernaturalSolutions: Int
@@ -479,10 +479,12 @@ fun KingdomData.getAllSettlements(game: Game): SettlementResult {
     val allSettlements = settlementAndActive.map { it.component1() }
     return SettlementResult(
         allSettlements = allSettlements,
-        capital = allSettlements.find { it.settlementType == SettlementType.CAPITAL },
+        capital = allSettlements.find { it.type == SettlementType.CAPITAL },
         current = settlementAndActive.find { it.component2() }?.first,
     )
 }
+
+
 
 @Deprecated("Do not use this, this should work with more than one sheet")
 fun Game.getKingdomActor(): PF2ENpc? =

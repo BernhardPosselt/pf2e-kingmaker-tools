@@ -1,11 +1,11 @@
 package at.posselt.pfrpg2e.kingdom.structures
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
 import at.posselt.pfrpg2e.data.kingdom.Ruin
 import at.posselt.pfrpg2e.data.kingdom.structures.AvailableItemsRule
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.Construction
-import at.posselt.pfrpg2e.data.kingdom.structures.ConstructionSkill
 import at.posselt.pfrpg2e.data.kingdom.structures.IncreaseResourceDice
 import at.posselt.pfrpg2e.data.kingdom.structures.ItemGroup
 import at.posselt.pfrpg2e.data.kingdom.structures.ReduceUnrestBy
@@ -63,9 +63,9 @@ fun PF2ENpc.getStructure(): Structure? {
             construction = Construction(
                 skills = it.construction?.skills?.mapNotNull {
                     KingdomSkill.fromString(it.skill)?.let { skill ->
-                        ConstructionSkill(
+                        KingdomSkillRank(
                             skill = skill,
-                            minRank = it.proficiencyRank ?: 0,
+                            rank = it.proficiencyRank ?: 0,
                         )
                     }
                 }?.toSet() ?: emptySet(),

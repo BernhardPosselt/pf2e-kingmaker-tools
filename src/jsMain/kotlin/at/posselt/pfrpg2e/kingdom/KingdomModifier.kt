@@ -195,7 +195,7 @@ suspend fun KingdomData.checkModifiers(
     globalBonuses: GlobalStructureBonuses,
     currentSettlement: MergedSettlement?,
     allSettlements: List<Settlement>,
-    targetedArmy: ArmyConditionInfo?,
+    armyConditions: ArmyConditionInfo?,
 ): List<Modifier> = createAllModifiers(
     kingdomLevel = level,
     globalBonuses = globalBonuses,
@@ -209,7 +209,7 @@ suspend fun KingdomData.checkModifiers(
     ruins = ruin.parse(),
     unrest = unrest,
     vacancies = vacancies(),
-    targetedArmy = targetedArmy,
+    targetedArmy = armyConditions,
     untrainedProficiencyMode = UntrainedProficiencyMode
         .fromString(settings.proficiencyMode) ?: UntrainedProficiencyMode.NONE,
     enableLeadershipBonuses = settings.enableLeadershipModifiers,

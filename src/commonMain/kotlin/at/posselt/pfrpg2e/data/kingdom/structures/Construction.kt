@@ -1,7 +1,9 @@
 package at.posselt.pfrpg2e.data.kingdom.structures
 
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
+
 data class Construction(
-    val skills: Set<ConstructionSkill> = emptySet(),
+    val skills: Set<KingdomSkillRank> = emptySet(),
     val lumber: Int = 0,
     val luxuries: Int = 0,
     val ore: Int = 0,

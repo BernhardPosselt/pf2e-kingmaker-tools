@@ -109,14 +109,14 @@ class EvaluateStructuresTest {
         assertFalse(result.hasBridge)
         assertEquals(4, result.occupiedBlocks)
         assertTrue(result.increaseLeadershipActivities)
-        assertEquals(settlementSizeData.find { it.type == SettlementSizeType.METROPOLIS }, result.settlementSize)
+        assertEquals(settlementSizeData.find { it.type == SettlementSizeType.METROPOLIS }, result.size)
         assertEquals(3, result.residentialLots)
         assertEquals(setOf("note1", "note2"), result.notes)
         assertEquals(setOf("something"), result.unlockActivities)
         assertEquals(CommodityStorage(stone = 1, lumber = 2, ore = 1), result.storage)
         assertEquals(1, result.consumptionReduction)
         assertEquals(0, result.consumptionSurplus)
-        assertEquals(5, result.settlementConsumption)
+        assertEquals(5, result.consumption)
         assertEquals(
             setOf(
                 GroupedStructureBonus(
