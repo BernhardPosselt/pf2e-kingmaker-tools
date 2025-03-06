@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawExpression
 import at.posselt.pfrpg2e.kingdom.RawIn
 import at.posselt.pfrpg2e.utils.asAnyObject
+import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
 import js.array.tupleOf
 import js.reflect.Reflect
@@ -37,5 +38,10 @@ class Migration13 : Migration(13) {
             Reflect.deleteProperty(it, "phases")
             it.applyIf = predicates.toTypedArray()
         }
+    }
+
+    override suspend fun migrateOther(game: Game) {
+        game.folders.find { it.name == "Recruitable Armies" }
+            ?.typeSafeUpdate { name = "Recruitable Armies (Kingdom Sheet)"}
     }
 }
