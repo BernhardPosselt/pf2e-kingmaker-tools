@@ -5,6 +5,7 @@
     "enabled": true,
     "phase": "leadership",
     "dc": "control",
+    "dcAdjustment": 5,
     "title": "Relocate Capital",
     "description": "One of your settlements that is not your current capital must contain a Castle, Palace, or Town Hall. All leaders must spend all of their leadership activities during the Activity phase of a Kingdom turn on this activity. The kingdom leaders announce that they are uprooting the seat of government from its current home and reestablishing it in another settlement. Attempt a check with a DC equal to the kingdom’s Control DC + 5. You cannot Relocate your Capital again for at least 3 Kingdom turns.",
     "skills": {

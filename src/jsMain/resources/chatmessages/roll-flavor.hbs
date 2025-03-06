@@ -5,11 +5,18 @@
      data-degree="{{degree}}"
      data-roll-mode="{{rollMode}}"
      data-modifier="{{modifier}}"
+     data-modifier-with-creative-solution="{{modifierWithCreativeSolution}}"
+     data-fortune="{{fortune}}"
+     data-is-creative-solution="{{isCreativeSolution}}"
 >
 </div>
 <hr>
 <div class="km-modifier-breakdown">
-    {{#each pill}}
-        <span class="km-modifier-pill">{{this}}</span>
+    {{#each creativeSolutionPills}}
+        <span {{#unless isCreativeSolution}}hidden{{/unless}}
+              class="km-modifier-pill km-creative-solution-pills">{{this}}</span>
+    {{/each}}
+    {{#each pills}}
+        <span {{#if isCreativeSolution}}hidden{{/if}} class="km-modifier-pill">{{this}}</span>
     {{/each}}
 </div>

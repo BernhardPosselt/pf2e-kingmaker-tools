@@ -23,6 +23,7 @@ export interface KingdomFeat {
     increaseUsableSkills?: Partial<Record<Skill, Skill[]>>;
     flags?: string[];
     upgradeResults?: UpgradeResult[];
+    increaseAnarchyLimit?: number
 }
 
 export function getAllFeats(game: Game, kingdom: Kingdom): KingdomFeat[] {

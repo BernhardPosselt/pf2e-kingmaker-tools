@@ -15,6 +15,7 @@
         "modifiers": [
             {
                 "turns": 2,
+                "buttonLabel": "+2 Circumstance to Loyalty",
                 "enabled": true,
                 "applyIf": [
                     {
@@ -36,6 +37,7 @@
             {
                 "turns": 2,
                 "enabled": true,
+                "buttonLabel": "+1 Circumstance to Loyalty",
                 "applyIf": [
                     {
                         "eq": [
@@ -59,6 +61,7 @@
             {
                 "turns": 2,
                 "enabled": true,
+                "buttonLabel": "-1 Circumstance to Loyalty",
                 "applyIf": [
                     {
                         "eq": [

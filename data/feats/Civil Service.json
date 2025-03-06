@@ -9,6 +9,7 @@
             "enabled": false,
             "value": 2,
             "type": "circumstance",
+            "buttonLabel": "+2 Circumstance to New Leadership",
             "applyIf": [
                 {
                     "in": [

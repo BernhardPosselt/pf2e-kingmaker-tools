@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 
 fun createAllProficiencyModifiers(
     ranks: KingdomSkillRanks,
@@ -41,4 +42,5 @@ fun createProficiencyModifier(
         Proficiency.MASTER -> 6 + level
         Proficiency.LEGENDARY -> 8 + level
     },
+    applyIf = listOf(Eq("@skill", skill.value)),
 )

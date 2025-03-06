@@ -6,7 +6,7 @@
     "phase": "leadership",
     "dc": "custom",
     "title": "Deliberate Planning",
-    "description": "Yout take time and weigh all options when faced with decisions, regardless of their importance. While this can sometimes lead you to taking too long to make choices, your theoretical analysis can be quite helpful in navigating continuous events. Choose a single continuous event that will affect your kingdom on this turn’s Event Phase, then attempt a Scholarship check against that event’s DC.",
+    "description": "You take time and weigh all options when faced with decisions, regardless of their importance. While this can sometimes lead you to taking too long to make choices, your theoretical analysis can be quite helpful in navigating continuous events. Choose a single continuous event that will affect your kingdom on this turn’s Event Phase, then attempt a Scholarship check against that event’s DC.",
     "skills": {
         "agriculture": 0,
         "arts": 0,
@@ -32,8 +32,11 @@
                 "turns": 1,
                 "enabled": false,
                 "value": 1,
+                "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
                 "name": "Deliberate Planning: Critical Success",
                 "type": "circumstance",
+                "fortune": true,
+                "rollTwice": true,
                 "applyIf": [
                     {
                         "eq": [
@@ -52,6 +55,7 @@
                 "turns": 1,
                 "enabled": false,
                 "value": 1,
+                "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
                 "name": "Deliberate Planning: Success",
                 "type": "circumstance",
                 "applyIf": [

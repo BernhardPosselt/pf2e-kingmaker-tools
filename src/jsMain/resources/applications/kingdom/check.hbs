@@ -1,3 +1,75 @@
-<form class="km-check-dialog">
-
-</form>
+<div class="km-check-dialog">
+    <div class="km-check-header">
+        <div>{{> formElement leaderInput }}</div>
+        <div>{{> formElement skillInput }}</div>
+        <div {{#if isActivity}}hidden{{/if}}>{{> formElement phaseInput }}</div>
+        <div>{{> formElement dcInput }}</div>
+    </div>
+    <div class="km-check-adjustments">
+        <div {{#unless hasAssurance}}hidden{{/unless}}>{{> formElement assuranceInput }}</div>
+        <div {{#if useAssurance}}hidden{{/if}}>{{> formElement supernaturalSolutionInput }}</div>
+    </div>
+    <hr>
+    <table {{#if useAssurance}}hidden{{/if}}>
+        <tbody>
+        {{#each modifiers}}
+            <tr class="km-check-modifier-entry" {{#if hidden}}hidden{{/if}}>
+                <td>{{label}}{{#if fortune}}<i class="fa-solid fa-clover"></i>{{/if}}</td>
+                <td>{{type}}: {{modifier}}</td>
+                <td>{{> formElement enabledInput }}</td>
+                <td>
+                    <button type="button"
+                            class="km-no-button-margin"
+                            data-id="{{id}}"
+                            data-action="delete-modifier"
+                            {{#unless removable}}disabled{{/unless}}
+                            title="Delete Modifier"
+                    ><i class="fa-solid fa-trash"></i></button>
+                </td>
+                {{> formElement idInput }}
+            </tr>
+        {{/each}}
+        <tr class="km-check-modifier-entry">
+            <td>{{> formElement newModifierNameInput }}</td>
+            <td>{{> formElement newModifierTypeInput }}</td>
+            <td>{{> formElement newModifierModifierInput }}</td>
+            <td>
+                <button type="button"
+                        class="km-no-button-margin"
+                        data-action="add-modifier"
+                        title="Add Modifier"
+                ><i class="fa-solid fa-plus"></i></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <hr {{#if useAssurance}}hidden{{/if}}>
+    <div class="km-check-roll">
+        <div>{{> formElement rollModeInput }}</div>
+        <button
+                {{#if useAssurance}}hidden{{/if}}
+                data-action="roll"
+                data-modifier="{{checkModifier}}"
+                data-pills="{{pills}}"
+                data-creative-solution-pills="{{creativeSolutionPills}}"
+                data-upgrades="{{upgrades}}"
+                data-downgrades="{{downgrades}}"
+                data-fortune="{{fortune}}"
+                data-creative-solution-modifier="{{creativeSolutionModifier}}"
+                {{#if fortune}}title="Roll With Fortune"{{/if}}
+        >Roll ({{checkModifierLabel}}) <i
+                class="fa-solid fa-dice-d20"></i>{{#if fortune}}<i class="fa-solid fa-clover"></i>{{/if}}
+        </button>
+        <button
+                {{#unless useAssurance}}hidden{{/unless}}
+                data-action="roll"
+                data-modifier="{{checkModifier}}"
+                data-pills="{{pills}}"
+                data-creative-solution-pills="{{creativeSolutionPills}}"
+                data-upgrades="{{upgrades}}"
+                data-downgrades="{{downgrades}}"
+                data-fortune="{{fortune}}"
+                data-creative-solution-modifier="{{creativeSolutionModifier}}"
+        >Assurance ({{assuranceModifier}}: {{assuranceDegree}})</button>
+    </div>
+</div>

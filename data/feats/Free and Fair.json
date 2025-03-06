@@ -6,6 +6,7 @@
     "modifiers": [
         {
             "name": "Loyalty Based Skill",
+            "buttonLabel": "+2 Circumstance to Loyalty During New Leadership/Pledge of Fealty",
             "type": "circumstance",
             "applyIf": [
                 {
@@ -17,27 +18,7 @@
                 {
                     "in": [
                         "@activity",
-                        ["new-leadership", "new-leadership-vk"]
-                    ]
-                }
-            ],
-            "enabled": true,
-            "value": 2
-        },
-        {
-            "name": "Loyalty Based Skill",
-            "type": "circumstance",
-            "applyIf": [
-                {
-                    "eq": [
-                        "@ability",
-                        "loyalty"
-                    ]
-                },
-                {
-                    "eq": [
-                        "@activity",
-                        "pledge-of-fealty"
+                        ["new-leadership", "new-leadership-vk", "pledge-of-fealty"]
                     ]
                 }
             ],

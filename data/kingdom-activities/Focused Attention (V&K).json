@@ -32,6 +32,7 @@
                 "turns": 1,
                 "enabled": false,
                 "isConsumedAfterRoll": true,
+                "buttonLabel": "+2 Circumstance to Aided Check",
                 "value": 0,
                 "valueExpression": {"when":{"cases":[
                     {"case": [{"not": {"hasFlag": "cooperative-leadership"}}, 2]},
@@ -53,6 +54,7 @@
                 "turns": 1,
                 "enabled": false,
                 "isConsumedAfterRoll": true,
+                "buttonLabel": "+2 Circumstance to Aided Check",
                 "value": 0,
                 "valueExpression":{"when":{"cases":[
                     {"case": [{"not": {"hasFlag": "cooperative-leadership"}}, 2]},

@@ -30,7 +30,7 @@ private fun Scene.getStructures(): List<Structure> =
         .asSequence()
         .mapNotNull { it.actor }
         .filterIsInstance<PF2ENpc>()
-        .mapNotNull { it.getStructure() }
+        .mapNotNull { it.parseStructure() }
         .toList()
 
 private val TileDocument.isBlock: Boolean

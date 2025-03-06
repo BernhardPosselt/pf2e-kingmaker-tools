@@ -16,6 +16,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+4 Circumstance to Resolve Event",
                 "isConsumedAfterRoll": true,
                 "applyIf": [
                     {
@@ -37,6 +38,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+2 Circumstance to Ongoing Event",
                 "isConsumedAfterRoll": true,
                 "applyIf": [
                     {
@@ -60,6 +62,7 @@
         "msg": "Critical parts of the information you published are false. You take a –2 circumstance penalty to all skill checks made to resolve Kingdom events for the remainder of this Kingdom turn",
         "modifiers": [
             {
+                "buttonLabel": "-2 Circumstance Events",
                 "turns": 1,
                 "applyIf": [
                     {

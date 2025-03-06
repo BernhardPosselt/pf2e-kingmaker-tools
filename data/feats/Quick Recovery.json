@@ -6,6 +6,7 @@
     "modifiers": [
         {
             "name": "Ongoing Harmful Event",
+            "buttonLabel": "+4 Circumstance to Harmful Event",
             "type": "circumstance",
             "enabled": false,
             "applyIf": [

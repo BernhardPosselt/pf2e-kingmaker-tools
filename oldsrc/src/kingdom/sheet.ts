@@ -45,7 +45,7 @@ import {
     getStructureStackMode,
     SettlementAndScene,
 } from './scene';
-import {getAllFeats, KingdomFeat} from './data/feats';
+import {getAllFeats, getAllSelectedFeats, KingdomFeat} from './data/feats';
 import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
 import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
@@ -54,8 +54,6 @@ import {createActivityLabel, getPerformableActivities, groupKingdomActivities,} 
 import {AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {allLeaderTypes, calculateSkills} from './skills';
 import {calculateInvestedBonus, isInvested, Leader} from './data/leaders';
-import {CheckDialog} from './dialogs/check-dialog';
-import {Skill} from './data/skills';
 import {showHelpDialog} from './dialogs/show-help-dialog';
 import {showSettlement} from './dialogs/settlement';
 import {
@@ -74,8 +72,6 @@ import {showStructureBrowser} from './dialogs/structure-browser';
 import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData';
 import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
 import {getSelectedArmies} from '../armies/utils';
-import {showArmyTacticsBrowser} from './dialogs/army-tactics-browser';
-import {showArmyBrowser} from './dialogs/army-browser';
 import {calculateResourceDicePerTurn} from "./structures";
 
 interface KingdomOptions {
@@ -283,16 +279,25 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             }),
             leadershipActivities: Array.from(groupedActivities['leadership'])
                 .map(activity => {
-                    return {label: createActivityLabel(this.game, groupedActivities, activity, kingdomData), value: activity};
+                    return {
+                        label: createActivityLabel(this.game, groupedActivities, activity, kingdomData),
+                        value: activity
+                    };
                 })
                 .sort((a, b) => a.label.localeCompare(b.label)),
             regionActivities: Array.from(groupedActivities['region'])
                 .map(activity => {
-                    return {label: createActivityLabel(this.game, groupedActivities, activity, kingdomData), value: activity};
+                    return {
+                        label: createActivityLabel(this.game, groupedActivities, activity, kingdomData),
+                        value: activity
+                    };
                 }),
             armyActivities: Array.from(groupedActivities['army'])
                 .map(activity => {
-                    return {label: createActivityLabel(this.game, groupedActivities, activity, kingdomData), value: activity};
+                    return {
+                        label: createActivityLabel(this.game, groupedActivities, activity, kingdomData),
+                        value: activity
+                    };
                 }),
             featuresByLevel: Array.from(featuresByLevel.entries())
                 .sort(([a], [b]) => a - b)
@@ -558,7 +563,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         $html.querySelector('#km-add-group')
             ?.addEventListener('click', async () => {
                 await this.saveKingdom({
-                    groups: [...this.getKingdom().groups, {name: "New Group", negotiationDC: 0, atWar: false, relations: "none"}],
+                    groups: [...this.getKingdom().groups, {
+                        name: "New Group",
+                        negotiationDC: 0,
+                        atWar: false,
+                        relations: "none"
+                    }],
                 });
             });
         $html.querySelectorAll('.km-delete-group')
@@ -592,14 +602,15 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     if (activityData[activity].dc === 'none') {
                         await showHelpDialog(this.game, this.sheetActor, activity);
                     } else {
-                        new CheckDialog(null, {
-                            activity,
-                            kingdom: kingdom,
-                            game: this.game,
-                            type: 'activity',
-                            onRoll: this.consumeModifiers.bind(this),
-                            actor: this.sheetActor,
-                        }).render(true);
+                        this.game.pf2eKingmakerTools.migration.checkDialog(
+                            this.game,
+                            kingdom,
+                            this.sheetActor,
+                            getKingdomActivitiesById(this.game, kingdom.homebrewActivities)[activity],
+                            undefined,
+                            undefined,
+                            undefined,
+                        )
                     }
                 });
             });
@@ -608,14 +619,16 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 el.addEventListener('click', async (el) => {
                     const target = el.currentTarget as HTMLButtonElement;
                     const skill = target.dataset.skill;
-                    new CheckDialog(null, {
-                        kingdom: this.getKingdom(),
-                        game: this.game,
-                        skill: skill as Skill,
-                        type: 'skill',
-                        onRoll: this.consumeModifiers.bind(this),
-                        actor: this.sheetActor,
-                    }).render(true);
+                    const kingdom = this.getKingdom();
+                    this.game.pf2eKingmakerTools.migration.checkDialog(
+                        this.game,
+                        kingdom,
+                        this.sheetActor,
+                        undefined,
+                        undefined,
+                        skill,
+                        undefined,
+                    )
                 });
             });
         $html.querySelector('#km-end-turn')
@@ -712,11 +725,11 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                         name,
                         data,
                         (savedData) => {
-                        current.settlements[index] = savedData;
-                        this.saveKingdom({
-                            settlements: current.settlements,
+                            current.settlements[index] = savedData;
+                            this.saveKingdom({
+                                settlements: current.settlements,
+                            });
                         });
-                    });
                 });
             });
     }
@@ -1178,9 +1191,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private calculateAnarchy(feats: Feat[], bonusFeats: BonusFeat[]): number {
-        const hasEndureAnarchy = feats.some(f => f.id === 'Endure Anarchy') ||
-            bonusFeats.some(f => f.id === 'Endure Anarchy');
-        return hasEndureAnarchy ? 24 : 20;
+        const increase = Math.max(0, ...getAllSelectedFeats(this.game, this.getKingdom()).map(f => f.increaseAnarchyLimit ?? 0));
+        return increase + 20;
     }
 
     private async payConsumption(): Promise<void> {
@@ -1277,23 +1289,16 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ui.notifications?.error('Please target a single army on the scene (<i class="fa-solid fa-keyboard"></i> <b>t</b>)');
         } else {
             const army = armies[0];
-            await showArmyTacticsBrowser({
-                game: this.game,
-                army,
-                kingdom: this.getKingdom(),
-                onRoll: this.consumeModifiers.bind(this),
-                sheetActor: this.sheetActor,
-            });
+            this.game.pf2eKingmakerTools.migration.tacticsBrowser(
+                this.game, this.sheetActor, this.getKingdom(), army
+            )
         }
     }
 
     private async showArmyBrowser(): Promise<void> {
-        await showArmyBrowser({
-            game: this.game,
-            kingdom: this.getKingdom(),
-            onRoll: this.consumeModifiers.bind(this),
-            sheetActor: this.sheetActor,
-        });
+        this.game.pf2eKingmakerTools.migration.armyBrowser(
+            this.game, this.sheetActor, this.getKingdom()
+        )
     }
 }
 

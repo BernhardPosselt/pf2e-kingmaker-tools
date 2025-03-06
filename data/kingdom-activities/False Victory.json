@@ -18,6 +18,7 @@
         "enabled": false,
         "value": 1,
         "name": "False Victory: Critical Success",
+        "buttonLabel": "+1 Circumstance to Check to Forgoe Event",
         "type": "circumstance",
         "applyIf": [
           {

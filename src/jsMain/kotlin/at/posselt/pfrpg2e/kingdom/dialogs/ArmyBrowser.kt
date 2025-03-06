@@ -3,9 +3,13 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 import at.posselt.pfrpg2e.app.App
 import at.posselt.pfrpg2e.app.HandlebarsFormApplicationOptions
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
-import at.posselt.pfrpg2e.kingdom.armies.getAllPlayerArmies
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
+import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.armies.getRecruitableArmies
 import at.posselt.pfrpg2e.kingdom.armies.importBasicArmies
 import at.posselt.pfrpg2e.kingdom.armies.isSpecial
+import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.awaitAll
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -21,6 +25,7 @@ import com.foundryvtt.core.applications.api.Window
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EArmy
+import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.JsPlainObject
 import js.objects.recordOf
 import kotlinx.coroutines.await
@@ -30,7 +35,7 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
 @JsPlainObject
-private external interface ArmyContext {
+external interface ArmyContext {
     val link: String
     val type: String
     val dc: Int
@@ -40,24 +45,26 @@ private external interface ArmyContext {
 
 
 @JsPlainObject
-private external interface ArmiesContext : HandlebarsRenderContext {
+external interface ArmiesContext : HandlebarsRenderContext {
     val armies: Array<ArmyContext>
 }
 
-@JsExport
 private class ArmyBrowser(
     private val game: Game,
+    private val kingdomActor: PF2ENpc,
+    private val kingdom: KingdomData,
+    private val folderName: String,
 ) : App<ArmiesContext>(
     HandlebarsFormApplicationOptions(
         window = Window(
-            title = "Recruitable, Player Owned Armies in 'Recruitable Armies' Folder",
+            title = "Armies in 'Recruitable Armies (${kingdomActor.name})' Folder",
         ),
         parts = recordOf(
             "form" to HandlebarsTemplatePart(
                 template = resolveTemplatePath("applications/kingdom/army-browser.hbs"),
             )
         ),
-        id = "kmArmys",
+        id = "kmArmies",
         position = ApplicationPosition(
             width = 600,
         )
@@ -65,7 +72,7 @@ private class ArmyBrowser(
 ) {
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
-            "recruit-tactic" -> {
+            "recruit-army" -> {
                 buildPromise {
                     val uuid = target.dataset["uuid"] as String
                     recruit(uuid)
@@ -80,11 +87,20 @@ private class ArmyBrowser(
         options: HandlebarsRenderOptions
     ): Promise<ArmiesContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
-        val armies = game.getAllPlayerArmies()
+        val armies = game.getRecruitableArmies(folderName)
             .asSequence()
             .sortedWith(compareBy<PF2EArmy> { it.system.details.level.value }.thenBy { it.name })
             .map {
-                buildPromise { toView(it) }
+                buildPromise {
+                    val link = TextEditor.enrichHTML(buildUuid(it.uuid, it.name)).await()
+                    ArmyContext(
+                        link = link,
+                        type = it.system.traits.type.toLabel(),
+                        dc = it.system.recruitmentDC,
+                        special = it.isSpecial,
+                        uuid = it.uuid,
+                    )
+                }
             }
             .toList()
             .awaitAll()
@@ -95,51 +111,48 @@ private class ArmyBrowser(
         )
     }
 
-    private suspend fun toView(army: PF2EArmy) =
-        ArmyContext(
-            link = TextEditor.enrichHTML(buildUuid(army.uuid, army.name)).await(),
-            type = army.system.traits.type.toLabel(),
-            dc = army.system.recruitmentDC,
-            special = army.isSpecial,
-            uuid = army.uuid,
-        )
-
     private suspend fun recruit(uuid: String) {
         val army = fromUuidTypeSafe<PF2EArmy>(uuid)
         if (army != null) {
-            val link = buildUuid(army.uuid, army.name)
-            // TODO
-//            new CheckDialog(null, {
-//                activity: 'recruit-army',
-//                kingdom: this.kingdom,
-//                overrideSkills: army.isSpecial ? {statecraft: 0} : {warfare: 0},
-//                dc: actor.system.recruitmentDC,
-//                game: this.game,
-//                type: 'activity',
-//                onRoll: this.onRoll,
-//                actor: this.sheetActor,
-//                afterRoll: async (): Promise<void> => {
-//                await this.close();
-//            },
-//                additionalChatMessages: [{
-//                [DegreeOfSuccess.CRITICAL_SUCCESS]: link,
-//                [DegreeOfSuccess.SUCCESS]: link,
-//            }],
-//            }).render(true);
+            val activity = this.kingdom.getActivity("recruit-army")
+            checkNotNull(activity) {
+                "Could not find recruit-army activity"
+            }
+            kingdomCheckDialog(
+                game = this.game,
+                kingdom = this.kingdom,
+                kingdomActor = this.kingdomActor,
+                check = CheckType.PerformActivity(activity),
+                afterRoll = {
+                    close()
+                    if (it.succeeded()) {
+                        buildUuid(army.uuid, army.name)
+                    } else {
+                        ""
+                    }
+                },
+                overrideSkills = if(army.isSpecial) {
+                    setOf(KingdomSkillRank(KingdomSkill.STATECRAFT, 0))
+                } else {
+                    setOf(KingdomSkillRank(KingdomSkill.WARFARE, 0))
+                },
+                overrideDc = army.system.recruitmentDC,
+            )
         }
     }
 }
 
-suspend fun armyBrowser(game: Game) {
-    val allPlayerArmies = game.getAllPlayerArmies()
+suspend fun armyBrowser(game: Game, kingdomActor: PF2ENpc, kingdom: KingdomData) {
+    val folderName = "Recruitable Armies (${kingdomActor.name})"
+    val allPlayerArmies = game.getRecruitableArmies(folderName)
     if (allPlayerArmies.isNotEmpty()) {
-        ArmyBrowser(game).launch()
+        ArmyBrowser(game, kingdomActor, kingdom, folderName).launch()
     } else if (allPlayerArmies.isEmpty() && game.user.isGM) {
-        ui.notifications.info("Importing Basic Armies into 'Recruitable Armies' folder")
-        game.importBasicArmies()
+        ui.notifications.info("Importing Basic Armies into '$folderName' folder")
+        game.importBasicArmies(folderName)
         ui.notifications.info("Import finished")
-        ArmyBrowser(game).launch()
+        ArmyBrowser(game, kingdomActor, kingdom, folderName).launch()
     } else {
-        ui.notifications.error("No armies found in the 'Recruitable Armies' folder. Let your GM open this dialog to import basic armies")
+        ui.notifications.error("No armies found in the '$folderName' folder. Let your GM open this dialog to import basic armies")
     }
 }

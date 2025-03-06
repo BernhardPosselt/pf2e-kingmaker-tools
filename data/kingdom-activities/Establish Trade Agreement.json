@@ -29,6 +29,7 @@
                 "turns": 2,
                 "enabled": false,
                 "value": -1,
+                "buttonLabel": "-1 Circumstance to Economy",
                 "name": "Establish Trade Agreement: Critical Failure",
                 "type": "circumstance",
                 "applyIf": [

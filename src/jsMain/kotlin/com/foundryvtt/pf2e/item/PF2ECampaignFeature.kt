@@ -26,7 +26,7 @@ external class PF2ECampaignFeature : PF2EItem {
 
     override fun delete(operation: DatabaseDeleteOperation): Promise<PF2ECampaignFeature>
     override fun update(data: AnyObject, operation: DatabaseUpdateOperation): Promise<PF2ECampaignFeature?>
-
+    val level: Int
     val system: PF2ECampaignFeatureData
 }
 

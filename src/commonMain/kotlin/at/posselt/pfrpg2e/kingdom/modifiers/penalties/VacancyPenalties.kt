@@ -26,7 +26,7 @@ fun createVacancyModifiers(
             value = value + rulerVacancyPenalty,
             id = "vacancy-${it.value}",
             name = "Vacancy (${it.label})",
-            applyIf = listOfNotNull(predicate),
+            applyIf = listOfNotNull(predicate) + Eq("@vacant", true),
             type = ModifierType.VACANCY,
         )
     }

@@ -26,6 +26,9 @@
         "prerequisites": {
           "type": "string"
         },
+        "increaseAnarchyLimit": {
+          "type": "number"
+        },
         "automationNotes": {
           "type": "string"
         },
@@ -155,6 +158,12 @@
             "type": "string"
           }
         },
+        "downgradeResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DowngradeResult"
+          }
+        },
         "upgradeResults": {
           "type": "array",
           "items": {
@@ -170,7 +179,8 @@
         "type",
         "value",
         "name",
-        "enabled"
+        "enabled",
+        "buttonLabel"
       ],
       "properties": {
         "type": {
@@ -185,6 +195,21 @@
             "untyped",
             "leadership"
           ]
+        },
+        "upgradeResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UpgradeResult"
+          }
+        },
+        "fortune": {
+          "type": "boolean"
+        },
+        "rollTwice": {
+          "type": "boolean"
+        },
+        "buttonLabel": {
+          "type": "string"
         },
         "value": {
           "type": "number"
@@ -211,6 +236,30 @@
           }
         },
         "applyIf": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "DowngradeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "downgrade"
+      ],
+      "properties": {
+        "downgrade": {
+          "type": "string",
+          "enum": [
+            "criticalSuccess",
+            "success",
+            "failure",
+            "criticalFailure"
+          ]
+        },
+        "predicate": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/Predicate"

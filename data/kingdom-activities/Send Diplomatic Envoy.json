@@ -10,11 +10,27 @@
     "skills": {
         "statecraft": 1
     },
+    "modifiers": [{
+        "enabled": false,
+        "name": "At War with Group",
+        "value": -4,
+        "type": "circumstance",
+        "buttonLabel": "At War with Group",
+        "downgradeResults": [{
+            "downgrade": "criticalSuccess"
+        }, {
+            "downgrade": "success"
+        },{
+            "downgrade": "failure"
+        }]
+    }
+    ],
     "criticalSuccess": {
         "msg": "Your envoys are received quite warmly and make a good first impression. You establish diplomatic relations with the group (see page 534 for more information) and gain a +2 circumstance bonus to all checks made with that group until the next Kingdom turn.",
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+2 Circumstance to Checks Made With Group",
                 "enabled": false,
                 "value": 2,
                 "name": "Send Diplomatic Envoy: Critical Success",
@@ -30,6 +46,7 @@
         "modifiers": [
             {
                 "turns": 2,
+                "buttonLabel": "+2 Circumstance to Checks Made With Group",
                 "enabled": false,
                 "value": 2,
                 "applyIf": [

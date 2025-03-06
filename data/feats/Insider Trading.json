@@ -2,11 +2,12 @@
     "name": "Insider Trading",
     "level": 1,
     "prerequisites": "Trained in Industry",
-    "text": "Your leading citizens share valuable business information with one another and with associates in\nother lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 circumstance bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn.",
+    "text": "Your leading citizens share valuable business information with one another and with associates in other lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 circumstance bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn.",
     "modifiers": [
         {
             "name": "Insider Trading",
             "type": "circumstance",
+            "buttonLabel": "+1 Circumstance to Establish Worksite, Establish Trade Agreement and Trade Commodities",
             "applyIf": [
                 {
                     "in": [

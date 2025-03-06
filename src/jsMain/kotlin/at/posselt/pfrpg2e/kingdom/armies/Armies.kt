@@ -30,20 +30,19 @@ fun Game.getTargetedArmies(): Array<PF2EArmy> =
         .filterIsInstance<PF2EArmy>()
         .toTypedArray()
 
-fun Game.getAllPlayerArmies(): Array<PF2EArmy> =
+fun Game.getRecruitableArmies(folderName: String): Array<PF2EArmy> =
     actors.contents.asSequence()
         .filterIsInstance<PF2EArmy>()
-        .filter(PF2EArmy::hasPlayerOwner)
-        .filter { it.folder?.name == "Recruitable Armies" }
+        .filter { it.folder?.name == folderName }
         .toTypedArray()
 
 fun highestScoutingDc(armies: List<PF2EArmy>): Int =
     armies.maxOfOrNull { it.system.scouting } ?: 0
 
-suspend fun Game.importBasicArmies() {
+suspend fun Game.importBasicArmies(folderName: String) {
     val folder = Folder.create(
         recordOf(
-            "name" to "Recruitable Armies",
+            "name" to folderName,
             "type" to "Actor",
             "parent" to null,
             "color" to null,

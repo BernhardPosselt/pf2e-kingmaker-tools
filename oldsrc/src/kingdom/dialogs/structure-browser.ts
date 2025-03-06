@@ -13,13 +13,13 @@ import {
 } from '../../utils';
 import {rankToLabel} from '../modifiers';
 import {Kingdom} from '../data/kingdom';
-import {CheckDialog} from './check-dialog';
 import {getKingdom, saveKingdom} from '../storage';
 import {DegreeOfSuccess} from '../../degree-of-success';
 import {
     ActorStructure,
     getScene,
-    getSceneActorStructures, getStructuresByName,
+    getSceneActorStructures,
+    getStructuresByName,
     getStructuresFromActors,
     isStructureActorActive,
 } from '../scene';
@@ -407,7 +407,7 @@ class StructureBrowserApp extends FormApplication<
 
     private getStructureDC(structure: Structure): number | undefined {
         const adjustment = this.kingdom.settings.reduceDCToBuildLumberStructures
-            && (structure.construction?.lumber ?? 0) > 0 ? -2 : 0;
+        && (structure.construction?.lumber ?? 0) > 0 ? -2 : 0;
         const dc = structure.construction?.dc;
         return dc === undefined ? undefined : dc + adjustment;
     }
@@ -468,25 +468,37 @@ class StructureBrowserApp extends FormApplication<
             const applicableSkills = structure.construction?.skills?.map(s => {
                 return [s.skill, s.proficiencyRank ?? 0];
             });
-            new CheckDialog(null, {
-                activity: 'build-structure',
-                kingdom: this.kingdom,
-                dc: this.getStructureDC(structure),
-                overrideSkills: applicableSkills === undefined ? undefined : Object.fromEntries(applicableSkills),
-                game: this.game,
-                type: 'activity',
-                onRoll: this.onRoll,
-                actor: this.sheetActor,
-                afterRoll: async (): Promise<void> => {
+            this.game.pf2eKingmakerTools.migration.checkDialog(
+                this.game,
+                this.kingdom,
+                this.sheetActor,
+                undefined,
+                structure,
+                undefined,
+                async (): Promise<string> => {
                     await this.close();
-                },
-                additionalChatMessages: [{
-                    [DegreeOfSuccess.CRITICAL_SUCCESS]: await this.payStructure(structure, DegreeOfSuccess.CRITICAL_SUCCESS),
-                    [DegreeOfSuccess.SUCCESS]: await this.payStructure(structure, DegreeOfSuccess.SUCCESS),
-                    [DegreeOfSuccess.FAILURE]: await this.payStructure(structure, DegreeOfSuccess.FAILURE),
-                    [DegreeOfSuccess.CRITICAL_FAILURE]: await this.payStructure(structure, DegreeOfSuccess.CRITICAL_FAILURE),
-                }],
-            }).render(true);
+                    return "";
+                }
+            )
+            // new CheckDialog(null, {
+            //     activity: 'build-structure',
+            //     kingdom: this.kingdom,
+            //     dc: this.getStructureDC(structure),
+            //     overrideSkills: applicableSkills === undefined ? undefined : Object.fromEntries(applicableSkills),
+            //     game: this.game,
+            //     type: 'activity',
+            //     onRoll: this.onRoll,
+            //     actor: this.sheetActor,
+            //     afterRoll: async (): Promise<void> => {
+            //         await this.close();
+            //     },
+            //     additionalChatMessages: [{
+            //         [DegreeOfSuccess.CRITICAL_SUCCESS]: await this.payStructure(structure, DegreeOfSuccess.CRITICAL_SUCCESS),
+            //         [DegreeOfSuccess.SUCCESS]: await this.payStructure(structure, DegreeOfSuccess.SUCCESS),
+            //         [DegreeOfSuccess.FAILURE]: await this.payStructure(structure, DegreeOfSuccess.FAILURE),
+            //         [DegreeOfSuccess.CRITICAL_FAILURE]: await this.payStructure(structure, DegreeOfSuccess.CRITICAL_FAILURE),
+            //     }],
+            // }).render(true);
         }
     }
 

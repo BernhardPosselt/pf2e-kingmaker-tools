@@ -15,6 +15,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+2 Circumstance To Resolve Dangerous Event",
                 "isConsumedAfterRoll": true,
                 "applyIf": [
                     {
@@ -27,7 +28,14 @@
                 "enabled": false,
                 "value": 2,
                 "name": "Preventative Measures: Critical Success",
-                "type": "circumstance"
+                "type": "circumstance",
+                "upgradeResults": [{
+                    "upgrade": "failure"
+                }, {
+                    "upgrade": "success"
+                }, {
+                    "upgrade": "criticalSuccess"
+                }]
             }
         ]
     },
@@ -36,6 +44,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+2 Circumstance to Resolve Dangerous Event",
                 "isConsumedAfterRoll": true,
                 "applyIf": [
                     {

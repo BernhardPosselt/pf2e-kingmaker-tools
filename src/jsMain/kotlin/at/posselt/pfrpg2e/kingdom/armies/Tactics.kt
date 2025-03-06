@@ -21,6 +21,5 @@ suspend fun Game.getAllAvailableArmyTactics(): Array<PF2ECampaignFeature> {
         ?.filterIsInstance<PF2ECampaignFeature>() ?: emptyList()
     val worldTactics = items.contents.asSequence()
         .filterIsInstance<PF2ECampaignFeature>()
-        .filter { it.isArmyTactic }
-    return (packTactics + worldTactics).toTypedArray()
+    return (packTactics + worldTactics).filter { it.isArmyTactic }.toTypedArray()
 }

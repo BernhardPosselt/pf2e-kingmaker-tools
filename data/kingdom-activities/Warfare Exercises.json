@@ -15,8 +15,8 @@
     "modifiers": [
       {
         "turns": 1,
-        "isConsumedAfterRoll": true,
         "enabled": true,
+        "buttonLabel": "+1/+2/+3 Circumstance to Army Activities",
         "applyIf": [
           {
             "eq": [
@@ -26,13 +26,68 @@
           }
         ],
         "value": 0,
-        "valueExpression": {"when": {"cases":[
-          {"case": [{"all": [{"gte": ["@kingdomLevel",9]},{"lt": ["@kingdomLevel",15]}]},2]},
-          {"case": [{"gte": ["@kingdomLevel",15]},3]}
-        ], "default": 1}
+        "valueExpression": {
+          "when": {
+            "cases": [
+              {
+                "case": [
+                  {
+                    "all": [
+                      {
+                        "gte": [
+                          "@kingdomLevel",
+                          9
+                        ]
+                      },
+                      {
+                        "lt": [
+                          "@kingdomLevel",
+                          15
+                        ]
+                      }
+                    ]
+                  },
+                  2
+                ]
+              },
+              {
+                "case": [
+                  {
+                    "gte": [
+                      "@kingdomLevel",
+                      15
+                    ]
+                  },
+                  3
+                ]
+              }
+            ],
+            "default": 1
+          }
         },
         "name": "Warfare Exercises",
         "type": "circumstance"
+      },
+      {
+        "turns": 1,
+        "enabled": true,
+        "buttonLabel": "Prevent Critical Failure on Army Activity Once",
+        "applyIf": [
+          {
+            "eq": [
+              "@phase",
+              "army"
+            ]
+          }
+        ],
+        "value": 0,
+        "upgradeResults": [
+          {
+            "upgrade": "criticalFailure"
+          }
+        ],
+        "name": "Prevent Critical Failure on Army Activity Once",
+        "type": "untyped"
       }
     ]
   },
@@ -43,6 +98,7 @@
         "turns": 1,
         "isConsumedAfterRoll": true,
         "enabled": true,
+        "buttonLabel": "+1/+2/+3 Circumstance to Army Activities",
         "applyIf": [
           {
             "eq": [
@@ -52,10 +108,44 @@
           }
         ],
         "value": 0,
-        "valueExpression": {"when": {"cases":[
-            {"case": [{"all": [{"gte": ["@kingdomLevel",9]},{"lt": ["@kingdomLevel",15]}]},2]},
-            {"case": [{"gte": ["@kingdomLevel",15]},3]}
-          ], "default": 1}
+        "valueExpression": {
+          "when": {
+            "cases": [
+              {
+                "case": [
+                  {
+                    "all": [
+                      {
+                        "gte": [
+                          "@kingdomLevel",
+                          9
+                        ]
+                      },
+                      {
+                        "lt": [
+                          "@kingdomLevel",
+                          15
+                        ]
+                      }
+                    ]
+                  },
+                  2
+                ]
+              },
+              {
+                "case": [
+                  {
+                    "gte": [
+                      "@kingdomLevel",
+                      15
+                    ]
+                  },
+                  3
+                ]
+              }
+            ],
+            "default": 1
+          }
         },
         "name": "Warfare Exercises",
         "type": "circumstance"

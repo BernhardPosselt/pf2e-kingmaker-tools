@@ -9,6 +9,7 @@
             "enabled": false,
             "value": 1,
             "type": "circumstance",
+            "buttonLabel": "+1 Circumstance to Dangerous Bickering Event",
             "applyIf": [
                 {
                     "eq": [

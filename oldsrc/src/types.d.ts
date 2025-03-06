@@ -6,7 +6,7 @@ import {ModuleData} from '@league-of-foundry-developers/foundry-vtt-types/src/fo
 import {KingdomSettings} from "./kingdom/data/kingdom";
 import {Structure} from "./kingdom/data/structures";
 import {KingdomFeat} from "./kingdom/data/feats";
-import {CombinedKingdomFeature, KingdomFeature} from "./kingdom/data/features";
+import {CombinedKingdomFeature} from "./kingdom/data/features";
 import {KingdomActivity} from "./kingdom/data/activityData";
 
 declare global {
@@ -38,6 +38,26 @@ declare global {
                     features: CombinedKingdomFeature[];
                     activities: KingdomActivity[];
                 }
+                checkDialog: (
+                    game: Game,
+                    kingdom: KingdomData,
+                    kingdomActor: PF2ENpc,
+                    activity?: KingdomActivity,
+                    structure?: StructureData,
+                    skill?: string,
+                    afterRoll?: (DegreeOfSuccess) => Promise<string>
+                ) => void
+                armyBrowser: (
+                    game: Game,
+                    kingdom: KingdomData,
+                    kingdomActor: PF2ENpc,
+                ) => void
+                tacticsBrowser: (
+                    game: Game,
+                    kingdom: KingdomData,
+                    kingdomActor: PF2ENpc,
+                    army: Actor,
+                ) => void
             }
         };
         pf2e: {

@@ -15,17 +15,24 @@ import at.posselt.pfrpg2e.camping.openCampingSheet
 import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
+import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
+import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.addOngoingEvent
+import at.posselt.pfrpg2e.kingdom.dialogs.armyBrowser
+import at.posselt.pfrpg2e.kingdom.dialogs.armyTacticsBrowser
 import at.posselt.pfrpg2e.kingdom.dialogs.editSettlement
+import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.kingdomActivities
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.kingdom.kingdomFeatures
+import at.posselt.pfrpg2e.kingdom.structures.parseStructure
 import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
@@ -67,6 +74,7 @@ import com.foundryvtt.core.onRenderChatLog
 import com.foundryvtt.core.onRenderChatMessage
 import io.kvision.jquery.get
 import js.objects.recordOf
+import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 
 fun main() {
@@ -172,13 +180,51 @@ fun main() {
                 settlementSizeHelp = { buildPromise { settlementSizeHelp() } },
                 structureXpDialog = { onOk -> buildPromise { structureXpDialog(game, onOk) } },
                 editSettlementDialog = ::editSettlement,
-                addOngoingEventDialog = {onOk -> buildPromise { addOngoingEvent(onOk) }},
+                addOngoingEventDialog = { onOk -> buildPromise { addOngoingEvent(onOk) } },
                 data = KtMigrationData(
                     structures = structures,
                     feats = kingdomFeats,
                     features = kingdomFeatures,
                     activities = kingdomActivities,
                 ),
+                armyBrowser = { game, actor, kingdom ->
+                    buildPromise {
+                        armyBrowser(game, actor, kingdom)
+                    }
+                },
+                tacticsBrowser = { game, actor, kingdom, army ->
+                    buildPromise {
+                        armyTacticsBrowser(game, actor, kingdom, army)
+                    }
+                },
+                checkDialog = { game, kingdom, kingdomActor, activity, structure, skill, afterRoll ->
+                    buildPromise {
+                        val wrapper: suspend (degree: DegreeOfSuccess) -> String = { degree ->
+                            afterRoll(degree).await()
+                        }
+                        val structure = structure?.parseStructure()
+                        kingdomCheckDialog(
+                            game = game,
+                            kingdom = kingdom,
+                            kingdomActor = kingdomActor,
+                            check = if (structure != null) {
+                                CheckType.BuildStructure(structure)
+                            } else if (activity != null) {
+                                CheckType.PerformActivity(activity)
+                            } else {
+                                checkNotNull(skill) {
+                                    "Skill must be provided"
+                                }
+                                val kingdomSkill = KingdomSkill.fromString(skill)
+                                checkNotNull(kingdomSkill) {
+                                    "Invalid skill $skill"
+                                }
+                                CheckType.RollSkill(kingdomSkill)
+                            },
+                            afterRoll = wrapper
+                        )
+                    }
+                }
             )
         )
 
@@ -187,12 +233,6 @@ fun main() {
                 game.migratePfrpg2eKingdomCampingWeather()
                 showFirstRunMessage(game)
                 validateStructures(game)
-//                kingdomCheckDialog(
-//                    game,
-//                    game.getKingdomActor()!!,
-//                    null,
-//                    KingdomSkill.ARTS
-//                )
             }
         }
 

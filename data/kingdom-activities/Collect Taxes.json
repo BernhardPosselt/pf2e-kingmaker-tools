@@ -15,6 +15,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+2 Circumstance to Economy",
                 "enabled": true,
                 "applyIf": [
                     {
@@ -34,6 +35,7 @@
         "msg": "Your tax collectors gather enough to grant you a +1 circumstance bonus to Economy-based checks for the remainder of the Kingdom turn. If you attempted to Collect Taxes during the previous turn, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>",
         "modifiers": [
             {
+                "buttonLabel": "+1 Circumstance to Economy",
                 "turns": 1,
                 "enabled": true,
                 "applyIf": [
@@ -56,6 +58,7 @@
             {
                 "turns": 1,
                 "enabled": true,
+                "buttonLabel": "+1 Circumstance to Economy",
                 "applyIf": [
                     {
                         "eq": [

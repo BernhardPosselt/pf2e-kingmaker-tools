@@ -13,12 +13,29 @@
         "statecraft": 0,
         "warfare": 0
     },
+    "modifiers": [
+        {
+            "type": "circumstance",
+            "value": 2,
+            "enabled": false,
+            "buttonLabel": "+2 Circumstance When Using Correct Skill",
+            "name": "+2 Circumstance When Using Correct Skill"
+        },
+        {
+            "type": "circumstance",
+            "value": -4,
+            "enabled": false,
+            "buttonLabel": "-4 Circumstance When Appointing Ruler",
+            "name": "-4 Circumstance When Appointing Ruler"
+        }
+    ],
     "criticalSuccess": {
         "msg": "The people love the new leader. The leader immediately provides the benefits tied to occupying the new role and gains a +1 circumstance bonus to all Kingdom skill checks they attempt before the end of the next Kingdom turn.",
         "modifiers": [
             {
                 "turns": 2,
                 "enabled": false,
+                "buttonLabel": "+1 Circumstance to All Checks",
                 "value": 1,
                 "name": "New Leadership: Critical Success",
                 "type": "circumstance"
@@ -34,6 +51,7 @@
             {
                 "enabled": false,
                 "value": -1,
+                "buttonLabel": "-1 Circumstance to All Checks",
                 "name": "New Leadership: Failure",
                 "type": "circumstance"
             }

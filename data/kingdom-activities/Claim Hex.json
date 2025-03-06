@@ -29,6 +29,7 @@
             {
                 "turns": 2,
                 "enabled": true,
+                "buttonLabel": "-1 Circumstance to Stability",
                 "applyIf": [
                     {
                         "eq": [

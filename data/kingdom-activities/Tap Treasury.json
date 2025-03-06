@@ -18,6 +18,7 @@
         "modifiers": [
             {
                 "value": -1,
+                "buttonLabel": "-1 Circumstance to Economy",
                 "name": "Tap Treasury: Success",
                 "applyIf": [
                     {
@@ -38,6 +39,7 @@
         "modifiers": [
             {
                 "value": -1,
+                "buttonLabel": "-1 Circumstance to Economy and Loyalty",
                 "name": "Tap Treasury: Success",
                 "applyIf": [
                     {
@@ -58,6 +60,7 @@
         "modifiers": [
             {
                 "value": -1,
+                "buttonLabel": "-1 Circumstance to Economy and Loyalty",
                 "name": "Tap Treasury: Success",
                 "applyIf": [
                     {

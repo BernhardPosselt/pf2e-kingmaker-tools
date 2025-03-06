@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.toCamelCase
 
 data class ExpressionContext(
@@ -17,6 +18,7 @@ data class ExpressionContext(
     val flags: Set<String>,
     val rollOptions: Set<String>,
     val isVacant: Boolean,
+    val structure: Structure?
 ) {
     fun evaluateBool(expression: Any?): Boolean {
         val result = evaluateExpression(expression)
@@ -30,8 +32,10 @@ data class ExpressionContext(
 
     fun evaluateExpression(expression: Any?): Any? {
         return when (expression) {
+            "@ability" -> usedSkill.ability.value
             "@leader" -> leader.value
             "@phase" -> phase?.value
+            "@structure" -> structure?.name
             "@activity" -> activity
             "@unrest" -> unrest
             "@vacant" -> isVacant

@@ -5,11 +5,14 @@ import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.HiddenInput
+import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
+import at.posselt.pfrpg2e.data.checks.determineDegreeOfSuccess
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
@@ -31,6 +34,7 @@ import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.hasAssurance
 import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
@@ -38,6 +42,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
 import at.posselt.pfrpg2e.kingdom.parse
+import at.posselt.pfrpg2e.kingdom.parseModifiers
 import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resolveDc
 import at.posselt.pfrpg2e.kingdom.setKingdom
@@ -50,15 +55,14 @@ import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.serializeB64Json
-import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.pf2e.actor.PF2ENpc
+import io.github.uuidjs.uuid.v4
 import js.core.Void
-import js.objects.ReadonlyRecord
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -70,42 +74,70 @@ import kotlin.IllegalArgumentException
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Triple
 import kotlin.arrayOf
+import kotlin.collections.filter
+import kotlin.collections.map
+import kotlin.collections.plus
+import kotlin.collections.toSet
+import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 import kotlin.let
 import kotlin.math.max
-import kotlin.to
+import kotlin.sequences.filter
+import kotlin.sequences.flatMap
+import kotlin.sequences.map
+import kotlin.sequences.mapNotNull
+import kotlin.sequences.toSet
+import kotlin.text.toInt
 
 @JsPlainObject
 private external interface ModifierContext {
     val label: String
     val type: String
     val modifier: String
-    val enabled: FormElementContext
-    val id: FormElementContext
+    val enabledInput: FormElementContext
+    val idInput: FormElementContext
     val hidden: Boolean
+    val id: String
+    val removable: Boolean
+    val fortune: Boolean
 }
 
 @JsPlainObject
 private external interface CheckContext : HandlebarsRenderContext {
     val isFormValid: Boolean
-    val settlementInput: FormElementContext
     val leaderInput: FormElementContext
     val rollModeInput: FormElementContext
     val phaseInput: FormElementContext
     val skillInput: FormElementContext
-    val dc: FormElementContext
-    val assurance: FormElementContext
+    val dcInput: FormElementContext
+    val assuranceInput: FormElementContext
     val modifiers: Array<ModifierContext>
     val hasAssurance: Boolean
+    val useAssurance: Boolean
     val checkModifier: Int
-    val supernaturalSolution: FormElementContext
-    val creativeSolution: FormElementContext
-    val encodedAssurancePills: String
-    val encodedPills: String
-    val encodedUpgrades: String
+    val checkModifierLabel: String
+    val supernaturalSolutionInput: FormElementContext
+    val newModifierNameInput: FormElementContext
+    val newModifierTypeInput: FormElementContext
+    val newModifierModifierInput: FormElementContext
+    val pills: String
+    val upgrades: String
+    val isActivity: Boolean
+    val assuranceModifier: Int
+    val assuranceDegree: String
+    val creativeSolutionModifier: Int
+    val creativeSolutionPills: String
+    val fortune: Boolean
+    val downgrades: String
 }
+
+@JsPlainObject
+private external interface ModifierIdEnabled {
+    var id: String
+    var enabled: Boolean
+}
+
 
 @JsPlainObject
 private external interface CheckData {
@@ -115,9 +147,11 @@ private external interface CheckData {
     var skill: String
     var dc: Int
     var assurance: Boolean
-    var modifiers: ReadonlyRecord<String, Boolean>
+    var modifiers: Array<ModifierIdEnabled>
     var supernaturalSolution: Boolean
-    var creativeSolution: Boolean
+    var newModifierName: String
+    var newModifierType: String
+    var newModifierModifier: Int
 }
 
 @JsExport
@@ -131,13 +165,13 @@ class CheckModel(val value: AnyObject) : DataModel(value) {
             boolean("supernaturalSolution") {
                 initial = false
             }
-            boolean("creativeSolution") {
-                initial = false
-            }
             enum<KingdomSkill>("skill")
             enum<Leader>("leader")
             enum<RollMode>("rollMode")
             enum<KingdomPhase>("phase", nullable = true)
+            string("newModifierName")
+            enum<ModifierType>("newModifierType")
+            int("newModifierModifier")
             boolean("assurance")
             array("modifiers") {
                 schema {
@@ -202,20 +236,19 @@ private data class CheckDialogParams(
     val title: String,
     val dc: Int,
     val validSkills: Set<KingdomSkill>,
-    val phase: KingdomPhase? = null,
-    val structure: Structure? = null,
-    val activity: KingdomActivity? = null,
-    val armyConditions: ArmyConditionInfo? = null,
+    val phase: KingdomPhase?,
+    val structure: Structure?,
+    val activity: KingdomActivity?,
+    val armyConditions: ArmyConditionInfo?,
 )
 
 typealias AfterRollMessage = suspend (degree: DegreeOfSuccess) -> String?
 
 private class KingdomCheckDialog(
-    private val game: Game,
     private val kingdomActor: PF2ENpc,
     private val kingdom: KingdomData,
-    private val baseModifiers: List<Modifier>,
-    private val afterRollMessage: AfterRollMessage,
+    private var baseModifiers: List<Modifier>,
+    private val afterRoll: AfterRollMessage,
     params: CheckDialogParams,
 ) : FormApp<CheckContext, CheckData>(
     title = params.title,
@@ -223,76 +256,118 @@ private class KingdomCheckDialog(
     debug = true,
     dataModel = CheckModel::class.js,
     id = "kmCheck",
+    width = 600,
 ) {
     val activity = params.activity
     val validSkills = params.validSkills
-    val armyConditions = params.armyConditions
+    val structure = params.structure
+    val removableIds = mutableSetOf<String>()
 
     var data = CheckData(
-        modifiers = baseModifiers.map { it.id to it.enabled }.toRecord(),
+        modifiers = baseModifiers.map { ModifierIdEnabled(it.id, it.enabled) }.toTypedArray(),
         leader = Leader.RULER.value,
         rollMode = RollMode.PUBLICROLL.value,
-        skill = params.validSkills.first().name,
+        skill = params.validSkills.first().value,
         phase = params.phase?.value,
         assurance = false,
         dc = params.dc,
         supernaturalSolution = false,
-        creativeSolution = false,
+        newModifierName = "",
+        newModifierType = "untyped",
+        newModifierModifier = 0,
     )
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "roll" -> {
                 buildPromise {
-                    val (modifier, pills, upgrades) = parseTarget(target)
-                    roll(modifier, pills, upgrades)
+                    val rollTwice = target.dataset["rollTwice"] == "true"
+                    val fortune = target.dataset["fortune"] == "true"
+                    val modifier = target.dataset["modifier"]?.toInt() ?: 0
+                    val creativeSolutionModifier = target.dataset["creativeSolutionModifier"]?.toInt() ?: 0
+                    val pills = deserializeB64Json<Array<ModifierPill>>(target.dataset["pills"]!!)
+                    val creativeSolutionPills =
+                        deserializeB64Json<Array<ModifierPill>>(target.dataset["creativeSolutionPills"]!!)
+                    val upgrades = deserializeB64Json<Array<String>>(target.dataset["upgrades"]!!)
+                        .mapNotNull { DegreeOfSuccess.fromString(it) }
+                        .toSet()
+                    val downgrades = deserializeB64Json<Array<String>>(target.dataset["downgrades"]!!)
+                        .mapNotNull { DegreeOfSuccess.fromString(it) }
+                        .toSet()
+                    roll(
+                        modifier = modifier,
+                        pills = pills,
+                        upgrades = upgrades,
+                        downgrades = downgrades,
+                        fortune = fortune,
+                        rollTwice = rollTwice,
+                        creativeSolutionModifier = creativeSolutionModifier,
+                        creativeSolutionPills = creativeSolutionPills,
+                    )
                     close()
                 }
             }
 
-            "rollWithAssurance" -> {
-                buildPromise {
-                    val (modifier, pills, upgrades) = parseTarget(target)
-                    roll(modifier, pills, upgrades)
-                    close()
+            "add-modifier" -> {
+                val id = v4()
+                data.modifiers = data.modifiers + ModifierIdEnabled(id, true)
+                removableIds.add(id)
+                baseModifiers = baseModifiers + Modifier(
+                    id = id,
+                    type = ModifierType.fromString(data.newModifierType) ?: ModifierType.UNTYPED,
+                    value = data.newModifierModifier,
+                    name = data.newModifierName,
+                )
+                data.newModifierName = ""
+                data.newModifierType = ModifierType.UNTYPED.value
+                data.newModifierModifier = 0
+                render()
+            }
+
+            "delete-modifier" -> {
+                val id = target.dataset["id"]
+                if (id != null) {
+                    baseModifiers = baseModifiers.filter { it.id != id }
+                    removableIds.remove(id)
+                    data.modifiers = data.modifiers.filter { it.id != id }.toTypedArray()
+                    render()
                 }
             }
         }
-    }
-
-    private fun parseTarget(target: HTMLElement): Triple<Int, Array<ModifierPill>, Set<DegreeOfSuccess>> {
-        val modifier = target.dataset["modifier"]?.toInt() ?: 0
-        val pills = deserializeB64Json<Array<ModifierPill>>(target.dataset["pills"]!!)
-        val upgrades = deserializeB64Json<Array<String>>(target.dataset["upgrades"]!!)
-            .mapNotNull { DegreeOfSuccess.fromString(it) }
-            .toSet()
-        return Triple(modifier, pills, upgrades)
     }
 
     private suspend fun roll(
         modifier: Int,
+        creativeSolutionModifier: Int,
+        creativeSolutionPills: Array<ModifierPill>,
         pills: Array<ModifierPill>,
-        upgrades: Set<DegreeOfSuccess>
+        upgrades: Set<DegreeOfSuccess>,
+        fortune: Boolean,
+        rollTwice: Boolean,
+        downgrades: Set<DegreeOfSuccess>,
     ) {
         rollCheck(
-            dc = data.dc,
-            afterRollMessage = afterRollMessage,
+            afterRoll = afterRoll,
             rollMode = RollMode.fromString(data.rollMode),
             activity = activity,
-            kingdomActor = kingdomActor,
-            modifier = modifier,
-            modifierPills = pills,
-            upgrades = upgrades,
             skill = KingdomSkill.fromString(data.skill)!!,
+            modifier = modifier,
+            modifierWithCreativeSolution = creativeSolutionModifier,
+            fortune = fortune,
+            modifierPills = pills,
+            dc = data.dc,
+            kingdomActor = kingdomActor,
+            upgrades = upgrades,
+            rollTwice = rollTwice,
+            creativeSolutionPills = creativeSolutionPills,
+            downgrades = downgrades,
         )
-        if (data.supernaturalSolution) {
+        if (data.supernaturalSolution && !data.assurance) {
+            // TODO launch another check dialog with magic as the only skill and disable supernatural solution input
             postChatMessage("Reduced Supernatural Solutions by 1")
-            kingdom.supernaturalSolutions = max(0, kingdom.supernaturalSolutions -1)
+            kingdom.supernaturalSolutions = max(0, kingdom.supernaturalSolutions - 1)
         }
-        if (data.creativeSolution) {
-            postChatMessage("Reduced Creative Solutions by 1")
-            kingdom.creativeSolutions = max(0, kingdom.creativeSolutions -1)
-        }
+
         // TODO: consume modifiers
         kingdomActor.setKingdom(kingdom)
     }
@@ -303,9 +378,8 @@ private class KingdomCheckDialog(
         options: HandlebarsRenderOptions
     ): Promise<CheckContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
-
-        // evaluate modifiers
-        val enabledModifiers = baseModifiers.map { it.copy(enabled = data.modifiers[it.id] == true) }
+        val currentlyEnabledModIds = data.modifiers.filter { it.enabled }.map { it.id }.toSet()
+        val enabledModifiers = baseModifiers.map { it.copy(enabled = it.id in currentlyEnabledModIds) }
         val phase = data.phase?.let { fromCamelCase<KingdomPhase>(it) }
         val usedSkill = KingdomSkill.fromString(data.skill)!!
         val context = kingdom.createExpressionContext(
@@ -313,33 +387,49 @@ private class KingdomCheckDialog(
             activity = activity,
             leader = Leader.fromString(data.leader)!!,
             usedSkill = if (data.supernaturalSolution) KingdomSkill.MAGIC else usedSkill,
-            rollOptions = if (data.creativeSolution) setOf("creative-solution") else emptySet(),
+            rollOptions = emptySet(),
+            structure = structure,
         )
-        val upgradeDegrees = getUpgrades(context)
         val filtered = filterModifiersAndUpdateContext(enabledModifiers, context)
         val evaluatedModifiers = evaluateModifiers(filtered)
+        val creativeSolutionModifiers = evaluateModifiers(
+            filtered.copy(
+                context = filtered.context.copy(rollOptions = filtered.context.rollOptions + "creative-solution")
+            )
+        )
+        val upgradeDegrees = getUpgrades(context, evaluatedModifiers.upgradeResults)
+        val downgradeDegrees = evaluatedModifiers.downgradeResults
         val selectedSkill = context.usedSkill
         val hasAssurance = kingdom.hasAssurance(selectedSkill)
         val evaluatedModifiersById = evaluatedModifiers.modifiers.associateBy { it.id }
-        val encodedAssurancePills = serializeB64Json(arrayOf(
-            ModifierPill(label = "Assurance", value = evaluatedModifiers.total.formatAsModifier())
-        ))
-        val encodedPills = serializeB64Json(evaluatedModifiers.modifiers.map {
+        val pills = if (data.assurance) {
+            serializeB64Json(
+                arrayOf(
+                    ModifierPill(label = "Assurance", value = evaluatedModifiers.total.formatAsModifier())
+                )
+            )
+        } else {
+            serializeB64Json(evaluatedModifiers.modifiers.map {
+                ModifierPill(label = it.name, value = it.value.formatAsModifier())
+            }.toTypedArray())
+        }
+        val creativeSolutionPills = serializeB64Json(creativeSolutionModifiers.modifiers.map {
             ModifierPill(label = it.name, value = it.value.formatAsModifier())
         }.toTypedArray())
-
+        val checkModifier = if (data.assurance) {
+            evaluatedModifiers.assurance
+        } else {
+            evaluatedModifiers.total
+        }
+        if (evaluatedModifiers.fortune) {
+            data.supernaturalSolution = false
+        }
         CheckContext(
             partId = parent.partId,
-            settlementInput = Select(
-                name = "settlement",
-                label = "Active Settlement",
-                options = createSettlementOptions(game, kingdom.settlements),
-                value = kingdom.activeSettlement,
-            ).toContext(),
-            leaderInput = Select.fromEnum(
+            leaderInput = Select.fromEnum<Leader>(
                 name = "leader",
                 label = "Leader",
-                value = fromCamelCase<RollMode>(data.leader),
+                value = fromCamelCase<Leader>(data.leader),
             ).toContext(),
             rollModeInput = Select.fromEnum<RollMode>(
                 name = "rollMode",
@@ -364,24 +454,18 @@ private class KingdomCheckDialog(
                     SelectOption(label, it.value)
                 },
             ).toContext(),
-            dc = Select.dc(
+            dcInput = Select.dc(
                 name = "dc",
                 label = "DC",
                 value = data.dc,
             ).toContext(),
-            supernaturalSolution = CheckboxInput(
+            supernaturalSolutionInput = CheckboxInput(
                 name = "supernaturalSolution",
                 label = "Supernatural Solution",
                 value = data.supernaturalSolution,
-                disabled = kingdom.supernaturalSolutions == 0
+                disabled = kingdom.supernaturalSolutions == 0 || evaluatedModifiers.fortune
             ).toContext(),
-            creativeSolution = CheckboxInput(
-                name = "creativeSolution",
-                label = "Creative Solution",
-                value = data.creativeSolution,
-                disabled = kingdom.creativeSolutions == 0
-            ).toContext(),
-            assurance = if (hasAssurance) {
+            assuranceInput = if (hasAssurance) {
                 CheckboxInput(
                     name = "assurance",
                     label = "Assurance",
@@ -394,29 +478,61 @@ private class KingdomCheckDialog(
                     overrideType = OverrideType.BOOLEAN,
                 ).toContext()
             },
-            checkModifier = if (data.assurance) {
-                evaluatedModifiers.assurance
-            } else {
-                evaluatedModifiers.total
-            },
+            checkModifier = checkModifier,
             hasAssurance = hasAssurance,
             modifiers = enabledModifiers
-                .sortedBy { it.type }
                 .mapIndexed { index, mod -> toModifierContext(mod, evaluatedModifiersById, index) }
+                .sortedWith(compareBy<ModifierContext> { !it.hidden }.thenBy { it.type })
                 .toTypedArray(),
-            encodedAssurancePills = encodedAssurancePills,
-            encodedPills = encodedPills,
-            encodedUpgrades = serializeB64Json(upgradeDegrees.map { it.value }.toTypedArray()),
+            pills = pills,
+            upgrades = serializeB64Json(upgradeDegrees.map { it.value }.toTypedArray()),
+            downgrades = serializeB64Json(downgradeDegrees.map { it.value }.toTypedArray()),
+            useAssurance = data.assurance,
             isFormValid = true,
+            isActivity = activity != null,
+            checkModifierLabel = checkModifier.formatAsModifier(),
+            newModifierNameInput = TextInput(
+                label = "Name",
+                value = data.newModifierName,
+                name = "newModifierName",
+                required = false,
+            ).toContext(),
+            newModifierTypeInput = Select.fromEnum<ModifierType>(
+                name = "newModifierType",
+                label = "Type",
+                value = ModifierType.fromString(data.newModifierType) ?: ModifierType.UNTYPED,
+            ).toContext(),
+            newModifierModifierInput = NumberInput(
+                label = "Modifier",
+                value = data.newModifierModifier,
+                name = "newModifierModifier",
+            ).toContext(),
+            assuranceModifier = checkModifier,
+            assuranceDegree = determineAssuranceDegree(checkModifier, upgradeDegrees, downgradeDegrees),
+            creativeSolutionModifier = creativeSolutionModifiers.total,
+            creativeSolutionPills = creativeSolutionPills,
+            fortune = evaluatedModifiers.fortune || data.supernaturalSolution,
         )
     }
 
-    private fun getUpgrades(context: ExpressionContext): Set<DegreeOfSuccess> = kingdom.getChosenFeats().asSequence()
-        .flatMap { it.feat.upgradeResults?.toList().orEmpty() }
-        .map { it.parse() }
-        .filter { it?.applyIf?.all { exp -> exp.evaluate(context) } != false }
-        .mapNotNull { it?.upgrade }
-        .toSet()
+    private fun determineAssuranceDegree(
+        modifier: Int,
+        upgradeDegrees: Set<DegreeOfSuccess>,
+        downgradeDegrees: Set<DegreeOfSuccess>
+    ): String {
+        val degree = determineDegreeOfSuccess(data.dc, modifier, 10)
+        val resultUpgrade = if (degree in upgradeDegrees) degree.upgrade() else degree
+        val result = if (degree in downgradeDegrees) resultUpgrade.downgrade() else resultUpgrade
+        return result.label
+    }
+
+    private fun getUpgrades(context: ExpressionContext, modifierUpgrades: Set<DegreeOfSuccess>): Set<DegreeOfSuccess> =
+        kingdom.getChosenFeats().asSequence()
+            .flatMap { it.feat.upgradeResults?.toList().orEmpty() }
+            .map { it.parse() }
+            .filter { it?.applyIf?.all { exp -> exp.evaluate(context) } != false }
+            .mapNotNull { it?.upgrade }
+            .toSet() + modifierUpgrades
 
     fun toModifierContext(
         modifier: Modifier,
@@ -424,31 +540,33 @@ private class KingdomCheckDialog(
         index: Int,
     ): ModifierContext {
         val id = modifier.id
-        val hidden = id !in evaluatedModifiersById
         val evaluatedModifier = evaluatedModifiersById[id]
         val value = evaluatedModifier?.value ?: 0
+        val hidden = id !in evaluatedModifiersById || data.assurance && modifier.type != ModifierType.PROFICIENCY
         val enabled = evaluatedModifier?.enabled ?: modifier.enabled
         return ModifierContext(
             label = modifier.name,
             type = modifier.type.label,
             modifier = value.formatAsModifier(),
+            id = modifier.id,
+            removable = modifier.id in removableIds,
+            fortune = modifier.fortune,
             hidden = hidden,
-            id = HiddenInput(
-                name = "modifier.$index.id",
+            idInput = HiddenInput(
+                name = "modifiers.$index.id",
                 value = id,
             ).toContext(),
-            enabled = if (hidden) {
+            enabledInput = if (hidden) {
                 HiddenInput(
-                    name = "modifier.$index.enabled",
+                    name = "modifiers.$index.enabled",
                     value = enabled.toString(),
                     overrideType = OverrideType.BOOLEAN,
                 ).toContext()
             } else {
                 CheckboxInput(
-                    label = modifier.name,
-                    name = "modifier.$index.enabled",
+                    label = "Enable",
+                    name = "modifiers.$index.enabled",
                     value = enabled,
-                    hideLabel = true,
                 ).toContext()
             }
         )
@@ -471,14 +589,17 @@ suspend fun kingdomCheckDialog(
     kingdom: KingdomData,
     kingdomActor: PF2ENpc,
     check: CheckType,
-    afterRollMessage: AfterRollMessage,
+    afterRoll: AfterRollMessage = { "" },
+    overrideSkills: Set<KingdomSkillRank>? = null,
+    overrideDc: Int? = null,
 ) {
+    // TODO: create chat data for constructing structures
     val params = when (check) {
         is CheckType.PerformActivity -> {
             val activity = check.activity
             val realm = game.getRealmData(kingdom)
             val vacancies = kingdom.vacancies()
-            val dc = activity.resolveDc(
+            val dc = overrideDc ?: activity.resolveDc(
                 kingdomLevel = kingdom.level,
                 realm = realm,
                 rulerVacant = vacancies.ruler,
@@ -486,7 +607,7 @@ suspend fun kingdomCheckDialog(
             )
             val skills = getValidActivitySkills(
                 ranks = kingdom.parseSkillRanks(),
-                activityRanks = activity.skillRanks(),
+                activityRanks = overrideSkills ?: activity.skillRanks(),
                 ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
                 expandMagicUse = kingdom.settings.expandMagicUse,
                 activityId = activity.id,
@@ -494,22 +615,30 @@ suspend fun kingdomCheckDialog(
             )
             CheckDialogParams(
                 title = activity.title,
-                dc = dc ?: 0,
+                dc = overrideDc ?: dc ?: 0,
                 validSkills = skills,
                 phase = KingdomPhase.fromString(activity.phase),
-                armyConditions = game.getTargetedArmyConditions()
+                armyConditions = game.getTargetedArmyConditions(),
+                structure = null,
+                activity = activity,
             )
         }
 
         is CheckType.RollSkill -> {
             val realm = game.getRealmData(kingdom)
             val vacancies = kingdom.vacancies()
-            val dc = calculateControlDC(
+            val dc = overrideDc ?: calculateControlDC(
                 kingdomLevel = kingdom.level,
                 realm = realm,
                 rulerVacant = vacancies.ruler,
             )
-            CheckDialogParams(title = check.skill.label, dc = dc, validSkills = setOf(check.skill))
+            CheckDialogParams(
+                title = check.skill.label, dc = dc, validSkills = setOf(check.skill),
+                phase = KingdomPhase.EVENT,
+                structure = null,
+                activity = null,
+                armyConditions = null,
+            )
         }
 
         is CheckType.BuildStructure -> {
@@ -519,7 +648,7 @@ suspend fun kingdomCheckDialog(
             val dc = structure.construction.dc
             val skills = getValidActivitySkills(
                 ranks = kingdom.parseSkillRanks(),
-                activityRanks = structure.construction.skills,
+                activityRanks = overrideSkills ?: structure.construction.skills,
                 ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
                 expandMagicUse = kingdom.settings.expandMagicUse,
                 activityId = activity.id,
@@ -529,7 +658,10 @@ suspend fun kingdomCheckDialog(
                 title = activity.title,
                 dc = dc,
                 validSkills = skills,
-                phase = KingdomPhase.fromString(activity.phase)
+                phase = KingdomPhase.fromString(activity.phase),
+                structure = structure,
+                activity = activity,
+                armyConditions = null,
             )
         }
     }
@@ -549,11 +681,10 @@ suspend fun kingdomCheckDialog(
         currentSettlement = currentSettlement,
         allSettlements = allSettlements,
         armyConditions = params.armyConditions,
-    )
+    ) + params.activity?.parseModifiers().orEmpty()
     KingdomCheckDialog(
         params = params,
-        game = game,
-        afterRollMessage = afterRollMessage,
+        afterRoll = afterRoll,
         kingdomActor = kingdomActor,
         kingdom = kingdom,
         baseModifiers = baseModifiers,

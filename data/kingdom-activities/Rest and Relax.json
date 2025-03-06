@@ -20,6 +20,7 @@
             {
                 "turns": 1,
                 "isConsumedAfterRoll": true,
+                "buttonLabel": "+2 Circumstance to Next Leadership Activity",
                 "applyIf": [
                     {
                         "eq": [
@@ -46,6 +47,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "-2 Circumstance to Next Leadership Skill Check",
                 "isConsumedAfterRoll": true,
                 "applyIf": [
                     {

@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
+import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.GlobalStructureBonuses
@@ -107,6 +108,7 @@ external interface RawCase {
 @JsPlainObject
 external interface RawModifier {
     var type: String
+    var buttonLabel: String?
     var value: Int
     var valueExpression: RawExpression<Any?>?
     var name: String
@@ -115,6 +117,10 @@ external interface RawModifier {
     var isConsumedAfterRoll: Boolean?
     var rollOptions: Array<String>?
     var applyIf: Array<RawExpression<Boolean>>?
+    var fortune: Boolean?
+    var rollTwice: Boolean?
+    var upgradeResults: Array<RawUpgradeResult>?
+    var downgradeResults: Array<RawDowngradeResult>?
 }
 
 
@@ -188,7 +194,11 @@ fun RawModifier.parse(id: String): Modifier =
         isConsumedAfterRoll = isConsumedAfterRoll == true,
         turns = turns,
         rollOptions = rollOptions?.toSet() ?: emptySet(),
-        applyIf = applyIf?.map { it.parse() } ?: emptyList()
+        applyIf = applyIf?.map { it.parse() } ?: emptyList(),
+        rollTwice = rollTwice == true,
+        fortune = fortune == true,
+        upgradeResults = upgradeResults?.mapNotNull { it.parse() }.orEmpty(),
+        downgradeResults = downgradeResults?.mapNotNull { it.parse() }.orEmpty(),
     )
 
 suspend fun KingdomData.checkModifiers(
@@ -225,6 +235,7 @@ fun KingdomData.createExpressionContext(
     leader: Leader,
     usedSkill: KingdomSkill,
     rollOptions: Set<String>,
+    structure: Structure?,
 ) = ExpressionContext(
     usedSkill = usedSkill,
     ranks = parseSkillRanks(),
@@ -237,5 +248,6 @@ fun KingdomData.createExpressionContext(
         .flatMap { it.feat.flags?.toSet().orEmpty() }
         .toSet(),
     rollOptions = rollOptions,
-    isVacant = vacancies().resolveVacancy(leader)
+    isVacant = vacancies().resolveVacancy(leader),
+    structure = structure
 )

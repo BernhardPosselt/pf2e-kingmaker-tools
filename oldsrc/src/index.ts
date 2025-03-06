@@ -1,8 +1,7 @@
 import {showKingdom} from './kingdom/sheet';
 import {getKingdom} from './kingdom/storage';
-import {addOngoingEvent, changeDegree, parseUpgradeMeta, reRoll} from './kingdom/rolls';
+import {addOngoingEvent} from './kingdom/rolls';
 import {kingdomChatButtons} from './kingdom/chat-buttons';
-import {StringDegreeOfSuccess} from './degree-of-success';
 import {structureTokenMappingDialog} from './kingdom/dialogs/structure-token-mapping-dialog';
 import {showStructureHints} from './kingdom/structures';
 
@@ -86,11 +85,11 @@ Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
         const hasActor = (): boolean => getKingdomSheetActor(gameInstance) !== undefined;
         const hasContentLink = (el: JQuery): boolean => hasActor() && el[0].querySelector('.content-link') !== null;
         const hasMeta = (el: JQuery): boolean => hasActor() && el[0].querySelector('.km-roll-meta') !== null;
-        const canChangeDegree = (chatMessage: HTMLElement, direction: 'upgrade' | 'downgrade'): boolean => {
-            const cantChangeDegreeUnless: StringDegreeOfSuccess = direction === 'upgrade' ? 'criticalSuccess' : 'criticalFailure';
-            const meta = chatMessage.querySelector('.km-upgrade-result');
-            return hasActor() && meta !== null && parseUpgradeMeta(chatMessage).degree !== cantChangeDegreeUnless;
-        };
+        // const canChangeDegree = (chatMessage: HTMLElement, direction: 'upgrade' | 'downgrade'): boolean => {
+        //     const cantChangeDegreeUnless: StringDegreeOfSuccess = direction === 'upgrade' ? 'criticalSuccess' : 'criticalFailure';
+        //     const meta = chatMessage.querySelector('.km-upgrade-result');
+        //     return hasActor() && meta !== null && parseUpgradeMeta(chatMessage).degree !== cantChangeDegreeUnless;
+        // };
         const canReRollUsingFame = (el: JQuery): boolean => {
             const actor = getKingdomSheetActor(gameInstance);
             return actor ? getKingdom(actor).fame.now > 0 && hasMeta(el) : false;
@@ -103,7 +102,7 @@ Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
             const actor = getKingdomSheetActor(gameInstance);
             return actor ? getKingdom(actor).supernaturalSolutions > 0 && hasMeta(el) : false;
         };
-        items.push({
+        /*{
             name: 'Re-Roll Using Fame/Infamy',
             icon: '<i class="fa-solid fa-dice-d20"></i>',
             condition: canReRollUsingFame,
@@ -143,7 +142,9 @@ Hooks.on('getChatLogEntryContext', (html: HTMLElement, items: LogEntry[]) => {
             condition: (el: JQuery) => canChangeDegree(el[0], 'downgrade'),
             icon: '<i class="fa-solid fa-arrow-down"></i>',
             callback: el => ifKingdomActorExists(gameInstance, el[0], (actor) => changeDegree(gameInstance, actor, el[0], 'downgrade')),
-        }, {
+        }*/
+        items.push(
+             {
             name: 'Add to Ongoing Events',
             icon: '<i class="fa-solid fa-plus"></i>',
             condition: hasContentLink,

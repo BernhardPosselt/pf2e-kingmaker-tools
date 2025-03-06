@@ -11,30 +11,10 @@
         "scholarship": 0
     },
     "criticalSuccess": {
-        "msg": "You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn <button type=\"button\" class=\"km-gain-lose\" data-type=\"creative-solution\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Creative Solution</button>. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "enabled": false,
-                "value": 2,
-                "name": "Creative Solution: Critical Success",
-                "type": "circumstance",
-                "isConsumedAfterRoll": true
-            }
-        ]
+        "msg": "You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn <button type=\"button\" class=\"km-gain-lose\" data-type=\"creative-solution\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Creative Solution</button>. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead."
     },
     "success": {
-        "msg": "You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn <button type=\"button\" class=\"km-gain-lose\" data-type=\"creative-solution\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Creative Solution</button>. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead. In addition, <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Resource Points</button> to research the solution. This cost is paid now, whether or not you use your Creative Solution.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "enabled": false,
-                "value": 2,
-                "name": "Creative Solution: Success",
-                "type": "circumstance",
-                "isConsumedAfterRoll": true
-            }
-        ]
+        "msg": "You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn <button type=\"button\" class=\"km-gain-lose\" data-type=\"creative-solution\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Creative Solution</button>. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead. In addition, <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Resource Points</button> to research the solution. This cost is paid now, whether or not you use your Creative Solution."
     },
     "failure": {
         "msg": "Your attempt at researching is a failure and you <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2d6\">Lose 2d6 Resource Points</button>. It provides no advantage."
@@ -46,6 +26,7 @@
                 "turns": 2,
                 "enabled": true,
                 "value": -1,
+                "buttonLabel": "-1 Circumstance to Culture",
                 "name": "Creative Solution: Critical Failure",
                 "type": "circumstance",
                 "applyIf": [

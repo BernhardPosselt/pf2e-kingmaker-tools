@@ -2,6 +2,6 @@
     "automationNotes": "You need to manually increase the skill proficiency",
     "name": "Skill Training (Magic)",
     "level": 1,
-    "text": "Your kingdom receives the trained proficiency rank in a Kingdom skill of your choice. You can select this feat\nmultiple times, choosing a new skill each time.",
+    "text": "Your kingdom receives the trained proficiency rank in a Kingdom skill of your choice. You can select this feat multiple times, choosing a new skill each time.",
     "trainSkill": "magic"
 }

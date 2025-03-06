@@ -32,6 +32,7 @@ val defaultContext = ExpressionContext(
     activity = null,
     leader = Leader.COUNSELOR,
     isVacant = false,
+    structure = null,
 )
 
 class EvaluateModifiersTest {

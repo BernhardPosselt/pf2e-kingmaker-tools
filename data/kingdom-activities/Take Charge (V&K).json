@@ -30,6 +30,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+1 Circumstance to Next Check with Chosen Skill",
                 "isConsumedAfterRoll": true,
                 "enabled": false,
                 "value": 1,
@@ -50,6 +51,7 @@
             {
                 "turns": 1,
                 "isConsumedAfterRoll": true,
+                "buttonLabel": "-1 Circumstance to Next Check with Chosen Skill",
                 "enabled": false,
                 "value": -1,
                 "name": "Take Charge: Critical Failure",

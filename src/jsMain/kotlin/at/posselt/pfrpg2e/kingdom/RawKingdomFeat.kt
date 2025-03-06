@@ -2,7 +2,8 @@ package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Expression
+import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
+import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.utils.asSequence
 import js.objects.JsPlainObject
 import js.objects.Record
@@ -16,15 +17,25 @@ external interface RawUpgradeResult {
 }
 
 
-data class UpgradeResult(
-    val upgrade: DegreeOfSuccess,
-    val applyIf: List<Expression<Boolean>> = emptyList(),
-)
-
 fun RawUpgradeResult.parse() =
     DegreeOfSuccess.fromString(upgrade)?.let { degree ->
         UpgradeResult(
             upgrade = degree,
+            applyIf = applyIf?.map { it.parse() } ?: emptyList()
+        )
+    }
+
+@JsPlainObject
+external interface RawDowngradeResult {
+    val downgrade: String
+    val applyIf: Array<RawExpression<Boolean>>?
+}
+
+
+fun RawDowngradeResult.parse() =
+    DegreeOfSuccess.fromString(downgrade)?.let { degree ->
+        DowngradeResult(
+            downgrade = degree,
             applyIf = applyIf?.map { it.parse() } ?: emptyList()
         )
     }
@@ -44,6 +55,7 @@ external interface RawKingdomFeat {
     val increaseUsableSkills: Record<String, Array<String>>?
     val flags: Array<String>?
     val upgradeResults: Array<RawUpgradeResult>?
+    val increaseAnarchyLimit: Int?
 }
 
 fun RawKingdomFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =

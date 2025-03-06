@@ -4,7 +4,9 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
+import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.utils.asSequence
+import io.github.uuidjs.uuid.v4
 import js.objects.JsPlainObject
 import kotlinx.serialization.json.JsonElement
 
@@ -36,6 +38,7 @@ external interface KingdomActivity {
     var success: ActivityResult?
     var failure: ActivityResult?
     var criticalFailure: ActivityResult?
+    var modifiers: Array<RawModifier>?
 }
 
 @JsModule("./kingdom-activities.json")
@@ -49,18 +52,24 @@ fun KingdomActivity.resolveDc(
     kingdomLevel: Int,
     realm: RealmData,
     rulerVacant: Boolean,
-): Int? =
-    when (dc) {
+): Int? {
+    val dc = when (dc) {
         "control" -> calculateControlDC(
             kingdomLevel = kingdomLevel,
             realm = realm,
             rulerVacant = rulerVacant,
         )
+
         "custom" -> 0
         "none" -> null
         "scouting" -> enemyArmyScoutingDcs.maxOrNull() ?: 0
         else -> dc as Int
     }
+    return dc?.let { it + (dcAdjustment ?: 0) }
+}
+
+fun KingdomActivity.parseModifiers(): List<Modifier> =
+    modifiers?.map { it.parse(v4()) }.orEmpty()
 
 fun KingdomActivity.skillRanks(): Set<KingdomSkillRank> =
     skills.asSequence()

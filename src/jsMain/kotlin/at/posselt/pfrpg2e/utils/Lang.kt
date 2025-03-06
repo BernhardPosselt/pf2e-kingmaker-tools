@@ -49,6 +49,9 @@ fun <F : Any, S> Array<Pair<F, S>>.toRecord(): ReadonlyRecord<F, S> =
 fun <F : Any, S> Iterable<Pair<F, S>>.toRecord(): ReadonlyRecord<F, S> =
     recordOf(*toList().toTypedArray())
 
+fun <F : Any, S> Iterable<Pair<F, S>>.toMutableRecord(): Record<F, S> =
+    recordOf(*toList().toTypedArray())
+
 fun <F : Any, S> Map<F, S>.toRecord(): ReadonlyRecord<F, S> =
     recordOf(*map { it.key to it.value }.toTypedArray())
 
@@ -119,8 +122,6 @@ fun <T> List<T>.asAnyObjectList() = unsafeCast<List<AnyObject>>()
 
 fun Int.formatAsModifier() = if (this > 0) {
     "+$this"
-} else if (this < 0) {
-    "-$this"
 } else {
     "$this"
 }

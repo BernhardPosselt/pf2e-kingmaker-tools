@@ -16,6 +16,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+4 Circumstance to Any Check",
                 "isConsumedAfterRoll": true,
                 "enabled": false,
                 "value": 4,
@@ -30,6 +31,7 @@
             {
                 "turns": 1,
                 "isConsumedAfterRoll": true,
+                "buttonLabel": "+2 Circumstance to Any Check",
                 "enabled": false,
                 "value": 2,
                 "name": "Request Foreign Aid: Success",

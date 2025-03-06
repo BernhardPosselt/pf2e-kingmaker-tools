@@ -4,7 +4,7 @@ import js.objects.ReadonlyRecord
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
-external fun renderTemplate(path: String, data: ReadonlyRecord<String, Any?>): Promise<String>
+external fun renderTemplate(path: String, data: Any? = definedExternally): Promise<String>
 
 @JsPlainObject
 external interface HandlebarOptions {

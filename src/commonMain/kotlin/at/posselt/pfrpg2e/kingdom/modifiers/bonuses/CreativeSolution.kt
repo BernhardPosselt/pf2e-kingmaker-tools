@@ -11,10 +11,10 @@ fun createSupernaturalSolutionModifier() =
         type = ModifierType.CIRCUMSTANCE,
         value = 2,
         name = "Creative Solution",
-        enabled = false,
+        enabled = true,
         applyIf = listOf(
             All(expressions = listOf(HasRollOption(
-                option = "supernatural-solution"
+                option = "creative-solution"
             )))
         )
     )

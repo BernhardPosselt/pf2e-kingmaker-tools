@@ -15,6 +15,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+2 Circumstance to Resolve Event",
                 "isConsumedAfterRoll": true,
                 "applyIf": [
                     {
@@ -36,6 +37,7 @@
         "modifiers": [
             {
                 "turns": 1,
+                "buttonLabel": "+1 Circumstance to Resolve Event",
                 "isConsumedAfterRoll": true,
                 "applyIf": [
                     {

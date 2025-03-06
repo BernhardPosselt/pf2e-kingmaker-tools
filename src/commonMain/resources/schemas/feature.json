@@ -56,7 +56,8 @@
         "type",
         "value",
         "name",
-        "enabled"
+        "enabled",
+        "buttonLabel"
       ],
       "properties": {
         "type": {
@@ -72,6 +73,24 @@
             "leadership"
           ]
         },
+        "downgradeResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DowngradeResult"
+          }
+        },
+        "upgradeResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UpgradeResult"
+          }
+        },
+        "fortune": {
+          "type": "boolean"
+        },
+        "rollTwice": {
+          "type": "boolean"
+        },
         "value": {
           "type": "number"
         },
@@ -79,6 +98,9 @@
           "$ref": "#/$defs/When"
         },
         "name": {
+          "type": "string"
+        },
+        "buttonLabel": {
           "type": "string"
         },
         "enabled": {
@@ -97,6 +119,54 @@
           }
         },
         "applyIf": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "DowngradeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "downgrade"
+      ],
+      "properties": {
+        "downgrade": {
+          "type": "string",
+          "enum": [
+            "criticalSuccess",
+            "success",
+            "failure",
+            "criticalFailure"
+          ]
+        },
+        "predicate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          }
+        }
+      }
+    },
+    "UpgradeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "upgrade"
+      ],
+      "properties": {
+        "upgrade": {
+          "type": "string",
+          "enum": [
+            "criticalSuccess",
+            "success",
+            "failure",
+            "criticalFailure"
+          ]
+        },
+        "predicate": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/Predicate"

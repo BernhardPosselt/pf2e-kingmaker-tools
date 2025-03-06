@@ -2,19 +2,40 @@
   "name": "Fortified Fiefs (V&K)",
   "level": 7,
   "prerequisites": "Trained in Defense",
-  "text": "Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize\nthe value of a strong defense when it comes to building settlements and fortifications. You gain a +2 status bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 status bonus to all kingdom checks attempted during dangerous events that directly impact\nyour settlements’ defenses.",
+  "text": "Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize the value of a strong defense when it comes to building settlements and fortifications. You gain a +2 status bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 status bonus to all kingdom checks attempted during dangerous events that directly impact your settlements’ defenses.",
   "modifiers": [
     {
       "name": "Fortified Fiefs",
       "type": "status",
+      "buttonLabel": "+2 status to Fortify Hex or Build/Repair Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall",
       "applyIf": [
         {
-          "in": [
-            "@activity",
-            [
-              "fortify-hex",
-              "fortify-hex-vk"
-            ]
+          "some": [
+            {
+              "in": [
+                "@activity",
+                [
+                  "fortify-hex",
+                  "fortify-hex-vk"
+                ]
+              ]
+            },
+            {
+              "in": [
+                "@structure",
+                [
+                  "Barracks",
+                  "Castle",
+                  "Castle (V&K)",
+                  "Garrison",
+                  "Garrison (V&K)",
+                  "Keep",
+                  "Keep (V&K)",
+                  "Wall, Stone",
+                  "Wall, Wooden"
+                ]
+              ]
+            }
           ]
         }
       ],
@@ -22,22 +43,9 @@
       "value": 2
     },
     {
-      "name": "Build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall",
-      "type": "status",
-      "applyIf": [
-        {
-          "eq": [
-            "@activity",
-            "build-structure"
-          ]
-        }
-      ],
-      "enabled": false,
-      "value": 2
-    },
-    {
       "name": "Dangerous Event impacting settlement defenses",
       "type": "status",
+      "buttonLabel": "+1 Status to Dangerous Event Impacting Defenses",
       "applyIf": [
         {
           "eq": [

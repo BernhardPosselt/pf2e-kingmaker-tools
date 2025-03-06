@@ -6,6 +6,7 @@
     "modifiers": [
         {
             "name": "Ongoing Harmful Event",
+            "buttonLabel": "+4 Status to End Harmful Event",
             "type": "status",
             "enabled": false,
             "applyIf": [

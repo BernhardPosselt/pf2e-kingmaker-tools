@@ -3,8 +3,6 @@ package at.posselt.pfrpg2e.utils
 import at.posselt.pfrpg2e.Config
 import com.foundryvtt.core.loadTemplates
 import com.foundryvtt.core.renderTemplate
-import js.objects.ReadonlyRecord
-import js.objects.jso
 import kotlinx.coroutines.await
 
 private const val DIST_PATH = "modules/${Config.moduleId}/dist"
@@ -18,6 +16,6 @@ suspend fun loadTpls(paths: Array<Pair<String, String>>) {
     loadTemplates(resolvedPaths).await()
 }
 
-suspend fun tpl(path: String, ctx: ReadonlyRecord<String, Any?> = jso()): String {
+suspend fun tpl(path: String, ctx: Any? = null): String {
     return renderTemplate("$DIST_PATH/$path", ctx).await()
 }

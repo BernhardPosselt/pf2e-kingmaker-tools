@@ -18,6 +18,7 @@
         "modifiers": [
             {
                 "turns": 2,
+                "buttonLabel": "+2 Circumstance to Resolve Event",
                 "enabled": false,
                 "applyIf": [
                     {
