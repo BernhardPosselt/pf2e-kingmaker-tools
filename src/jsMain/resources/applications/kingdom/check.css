@@ -13,6 +13,10 @@
     margin-top: 15px;
 }
 
+.km-check-adjustments.km-check-adjustments-centered {
+    justify-content: center;
+}
+
 .km-check-modifier-entry {
 
 }

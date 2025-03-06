@@ -33,7 +33,6 @@ import {
 import {
     getActiveSettlementStructureResult,
     getAllMergedSettlements,
-    getAllSettlements,
     getCurrentScene,
     getScene,
     getSettlement,
@@ -140,7 +139,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         const {
             leadershipActivityNumber,
             settlementConsumption,
-            unlockedActivities: unlockedSettlementActivities,
         } = getAllMergedSettlements(this.game, kingdomData);
         const {current: totalConsumption, surplus: farmSurplus} = getConsumption(this.game, kingdomData);
         const useXpHomebrew = kingdomData.settings.vanceAndKerensharaXP;
@@ -909,46 +907,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async adjustUnrest(): Promise<void> {
         const current = this.getKingdom();
-        const data = getAllSettlements(this.game, current);
-        const overcrowdedSettlements = data.filter(s => this.isOvercrowded(current, s)).length;
-        const secondaryTerritories = data.some(s => s.settlement.secondaryTerritory) ? 1 : 0;
-        const atWar = current.atWar ? 1 : 0;
-        let rulerVacancyUnrest = 0;
-        if (current.leaders.ruler.vacant) {
-            const roll = await (new Roll('1d4').roll());
-            await roll.toMessage({flavor: 'Gaining Unrest because Leader is vacant'});
-            rulerVacancyUnrest = roll.total;
-        }
-        const newUnrest = atWar + overcrowdedSettlements + secondaryTerritories + rulerVacancyUnrest;
-        let unrest = newUnrest + current.unrest;
-        if (current.level >= 20 && unrest > 0) {
-            unrest = 0;
-            await ChatMessage.create({content: 'Ignoring any Unrest increase due to "Envy of the World" Kingdom Feature'});
-        } else {
-            await ChatMessage.create({
-                content: `<h2>Gaining Unrest</h2> 
-                <ul>
-                    <li><b>Overcrowded Settlements</b>: ${overcrowdedSettlements}</li>
-                    <li><b>Secondary Territories</b>: ${secondaryTerritories}</li>
-                    <li><b>Kingdom At War</b>: ${atWar}</li>
-                    <li><b>Ruler Vacancy Penalty</b>: ${rulerVacancyUnrest}</li>
-                    <li><b>Total</b>: ${newUnrest}</li>
-                </ul>
-                `,
-            });
-        }
-        if (unrest >= 10) {
-            const ruinRoll = await (new Roll('1d10').roll());
-            await ruinRoll.toMessage({flavor: 'Gaining points to Ruin (distribute as you wish)'});
-            const roll = await (new Roll('1d20').roll());
-            await roll.toMessage({flavor: 'Check if losing a hex on DC 11'});
-            if (roll.total >= 11) {
-                await ChatMessage.create({content: 'You lose one hex of your choice'});
-            }
-        }
-        if (unrest >= this.calculateAnarchy(current.feats, current.bonusFeats)) {
-            await ChatMessage.create({content: 'Kingdom falls into anarchy, unless you spend all fame/infamy points. Only Quell Unrest leadership activities can be performed and all checks are worsened by a degree'});
-        }
+        const unrest = await this.game.pf2eKingmakerTools.migration.adjustUnrest(current);
         await this.saveKingdom({
             unrest,
         });
@@ -999,54 +958,27 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async collectResources(): Promise<void> {
         const current = this.getKingdom();
-        const automateResourceMode = current.settings.automateResources;
-        const {size: kingdomSize, workSites} = getStolenLandsData(this.game, automateResourceMode, current);
-        const sizeData = getSizeData(kingdomSize);
-        const capacity = getCapacity(this.game, current);
-        const dice = calculateResourceDicePerTurn(this.game, current);
-        const rolledPoints = await this.rollResourceDice(sizeData.resourceDieSize, dice);
-        const commodities = this.calculateCommoditiesThisTurn(workSites);
-        await ChatMessage.create({
-            content: `
-        <h2>Collecting Resources</h2>
-        <ul>
-            <li><b>Resource Points</b>: ${rolledPoints}</li>
-            <li><b>Ore</b>: ${commodities.ore}</li>
-            <li><b>Lumber</b>: ${commodities.lumber}</li>
-            <li><b>Stone</b>: ${commodities.stone}</li>
-            <li><b>Luxuries</b>: ${commodities.luxuries}</li>
-        </ul>
-        `,
-        });
+        const resources = await this.game.pf2eKingmakerTools.migration.collectResources(current);
         await this.saveKingdom({
             resourcePoints: {
-                now: current.resourcePoints.now + rolledPoints,
+                now: resources.rp,
                 next: current.resourcePoints.next,
             },
             resourceDice: {
-                now: 0,
+                now: resources.rd,
                 next: current.resourceDice.next,
             },
             commodities: {
                 now: {
-                    ore: Math.min(capacity.ore, current.commodities.now.ore + commodities.ore),
-                    lumber: Math.min(capacity.lumber, current.commodities.now.lumber + commodities.lumber),
-                    luxuries: Math.min(capacity.luxuries, current.commodities.now.luxuries + commodities.luxuries),
-                    stone: Math.min(capacity.stone, current.commodities.now.stone + commodities.stone),
+                    ore: resources.ore,
+                    lumber: resources.lumber,
+                    luxuries: resources.luxuries,
+                    stone: resources.stone,
                     food: current.commodities.now.food,
                 },
                 next: current.commodities.next,
             },
         });
-    }
-
-    private calculateCommoditiesThisTurn(sites: WorkSites): Omit<Commodities, 'food'> {
-        return {
-            ore: sites.mines.quantity + sites.mines.resources,
-            lumber: sites.lumberCamps.quantity + sites.lumberCamps.resources,
-            luxuries: sites.luxurySources.quantity + sites.luxurySources.resources,
-            stone: sites.quarries.quantity + sites.quarries.resources,
-        };
     }
 
     private getRuin(ruin: Ruin): object {

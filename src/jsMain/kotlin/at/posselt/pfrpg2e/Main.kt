@@ -29,9 +29,14 @@ import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
+import at.posselt.pfrpg2e.kingdom.getAllSettlements
+import at.posselt.pfrpg2e.kingdom.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.kingdomActivities
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.kingdom.kingdomFeatures
+import at.posselt.pfrpg2e.kingdom.resource.adjustUnrest
+import at.posselt.pfrpg2e.kingdom.resource.collectResources
 import at.posselt.pfrpg2e.kingdom.structures.parseStructure
 import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
@@ -190,6 +195,31 @@ fun main() {
                 armyBrowser = { game, actor, kingdom ->
                     buildPromise {
                         armyBrowser(game, actor, kingdom)
+                    }
+                },
+                adjustUnrest = { kingdom ->
+                    buildPromise {
+                        val settlements = kingdom.getAllSettlements(game)
+                        val chosenFeats = kingdom.getChosenFeats()
+                        adjustUnrest(kingdom, settlements.allSettlements, chosenFeats)
+                    }
+                },
+                collectResources = { kingdom ->
+                    buildPromise {
+                        val result = collectResources(
+                            kingdomData = kingdom,
+                            realmData = game.getRealmData(kingdom),
+                            allFeats = kingdom.getChosenFeats(),
+                            settlements = kingdom.getAllSettlements(game).allSettlements
+                        )
+                        recordOf(
+                            "ore" to result.ore,
+                            "lumber" to result.lumber,
+                            "luxuries" to result.luxuries,
+                            "stone" to result.stone,
+                            "rp" to result.resourcePoints,
+                            "rd" to result.resourceDice,
+                        )
                     }
                 },
                 tacticsBrowser = { game, actor, kingdom, army ->

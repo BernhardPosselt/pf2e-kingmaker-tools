@@ -9,7 +9,6 @@ import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.ChatMessage
 import com.foundryvtt.core.documents.GetSpeakerOptions
-import js.objects.ReadonlyRecord
 import js.objects.jso
 import js.objects.recordOf
 import kotlinx.browser.document
@@ -55,7 +54,7 @@ suspend fun postDegreeOfSuccess(
 
 suspend fun postChatTemplate(
     templatePath: String,
-    templateContext: ReadonlyRecord<String, Any?> = jso(),
+    templateContext: Any? = jso(),
     rollMode: RollMode? = null,
     speaker: Actor? = null,
 ) {

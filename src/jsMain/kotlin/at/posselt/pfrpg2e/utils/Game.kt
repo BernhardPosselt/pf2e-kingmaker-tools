@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.RawStructureData
 import com.foundryvtt.core.Actor
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2EArmy
@@ -50,7 +51,6 @@ external interface KtMigrationData {
     val activities: Array<KingdomActivity>
 }
 
-
 @JsPlainObject
 external interface KtMigration {
     val kingdomSettings: (settings: KingdomSettings, onSave: (settings: KingdomSettings) -> Unit) -> Unit
@@ -76,6 +76,8 @@ external interface KtMigration {
     val data: KtMigrationData
     val armyBrowser: (game: Game, actor: PF2ENpc, kingdom: KingdomData) -> Unit
     val tacticsBrowser: (game: Game, actor: PF2ENpc, kingdom: KingdomData, army: PF2EArmy) -> Unit
+    val adjustUnrest: (kingdom: KingdomData) -> Promise<Int>
+    val collectResources: (kingdom: KingdomData) -> Promise<AnyObject>
 }
 
 @JsPlainObject

@@ -27,6 +27,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Not
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Some
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.When
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
+import at.posselt.pfrpg2e.kingdom.resource.calculateAnarchy
 import io.github.uuidjs.uuid.v4
 import js.array.JsTuple2
 import js.objects.Object
@@ -206,28 +207,32 @@ suspend fun KingdomData.checkModifiers(
     currentSettlement: MergedSettlement?,
     allSettlements: List<Settlement>,
     armyConditions: ArmyConditionInfo?,
-): List<Modifier> = createAllModifiers(
-    kingdomLevel = level,
-    globalBonuses = globalBonuses,
-    currentSettlement = currentSettlement,
-    abilityScores = parseAbilityScores(),
-    leaderActors = parseLeaderActors(),
-    leaderSkills = settings.leaderSkills.parse(),
-    leaderKingdomSkills = settings.leaderKingdomSkills.parse(),
-    kingdomSkillRanks = parseSkillRanks(),
-    allSettlements = allSettlements,
-    ruins = ruin.parse(),
-    unrest = unrest,
-    vacancies = vacancies(),
-    targetedArmy = armyConditions,
-    untrainedProficiencyMode = UntrainedProficiencyMode
-        .fromString(settings.proficiencyMode) ?: UntrainedProficiencyMode.NONE,
-    enableLeadershipBonuses = settings.enableLeadershipModifiers,
-    featModifiers = getChosenFeats()
-        .flatMap { it.feat.modifiers?.map { it.parse(v4()) } ?: emptyList() },
-    featureModifiers = getEnabledFeatures()
-        .flatMap { it.modifiers?.map { it.parse(v4()) } ?: emptyList() },
-)
+): List<Modifier> {
+    val chosenFeats = getChosenFeats()
+    return createAllModifiers(
+        kingdomLevel = level,
+        globalBonuses = globalBonuses,
+        currentSettlement = currentSettlement,
+        abilityScores = parseAbilityScores(),
+        leaderActors = parseLeaderActors(),
+        leaderSkills = settings.leaderSkills.parse(),
+        leaderKingdomSkills = settings.leaderKingdomSkills.parse(),
+        kingdomSkillRanks = parseSkillRanks(),
+        allSettlements = allSettlements,
+        ruins = ruin.parse(),
+        unrest = unrest,
+        vacancies = vacancies(),
+        targetedArmy = armyConditions,
+        untrainedProficiencyMode = UntrainedProficiencyMode
+            .fromString(settings.proficiencyMode) ?: UntrainedProficiencyMode.NONE,
+        enableLeadershipBonuses = settings.enableLeadershipModifiers,
+        featModifiers = chosenFeats
+            .flatMap { it.feat.modifiers?.map { it.parse(v4()) } ?: emptyList() },
+        featureModifiers = getEnabledFeatures()
+            .flatMap { it.modifiers?.map { it.parse(v4()) } ?: emptyList() },
+        anarchyLimit = calculateAnarchy(chosenFeats)
+    )
+}
 
 fun KingdomData.createExpressionContext(
     phase: KingdomPhase?,

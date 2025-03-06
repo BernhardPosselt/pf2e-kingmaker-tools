@@ -90,6 +90,7 @@ private fun toRealmWorksite(
     }
     .fold(WorkSite()) { prev, curr -> prev + curr }
 
+// TODO: fix this
 private fun Scene.parseRealmData(): RealmData {
     val tiles = tiles.contents
         .mapNotNull {
@@ -132,9 +133,10 @@ private fun Scene.parseRealmData(): RealmData {
             lumberCamps = toRealmWorksite(
                 resources = resources,
                 commoditiesInClaimedTile = commoditiesInClaimedTile,
-                type = RealmTileType.LUMBERCAMP,
+                type = RealmTileType.LUMBER_CAMP,
                 commodityType = RealmTileType.LUMBER
             ),
+            // FIXME: this does not work
             mines = toRealmWorksite(
                 resources = resources,
                 commoditiesInClaimedTile = commoditiesInClaimedTile,
@@ -150,7 +152,7 @@ private fun Scene.parseRealmData(): RealmData {
             luxurySources = toRealmWorksite(
                 resources = resources,
                 commoditiesInClaimedTile = commoditiesInClaimedTile,
-                type = RealmTileType.LUXURYWORKSITE,
+                type = RealmTileType.LUXURY_WORKSITE,
                 commodityType = RealmTileType.LUXURY
             ),
         )

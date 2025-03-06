@@ -5,7 +5,7 @@
         <div {{#if isActivity}}hidden{{/if}}>{{> formElement phaseInput }}</div>
         <div>{{> formElement dcInput }}</div>
     </div>
-    <div class="km-check-adjustments">
+    <div class="km-check-adjustments {{#unless hasAssurance}}km-check-adjustments-centered{{/unless}}">
         <div {{#unless hasAssurance}}hidden{{/unless}}>{{> formElement assuranceInput }}</div>
         <div {{#if useAssurance}}hidden{{/if}}>{{> formElement supernaturalSolutionInput }}</div>
     </div>

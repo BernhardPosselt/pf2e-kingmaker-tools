@@ -19,6 +19,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createStructureBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createStructureEventBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createSupernaturalSolutionModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
+import at.posselt.pfrpg2e.kingdom.modifiers.penalties.createAnarchyPenalty
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.createArmyConditionPenalties
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.createFavoredLandPenalty
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.createRuinModifiers
@@ -55,6 +56,7 @@ fun createAllModifiers(
     enableLeadershipBonuses: Boolean,
     featModifiers: List<Modifier>,
     featureModifiers: List<Modifier>,
+    anarchyLimit: Int,
 ): List<Modifier> =
     listOfNotNull(
         createRulerBonus(global = globalBonuses)
@@ -109,4 +111,6 @@ fun createAllModifiers(
         emptyList()
     } else {
         createArmyConditionPenalties(info = targetedArmy)
-    } + listOf(createSupernaturalSolutionModifier()) + featModifiers + featureModifiers
+    } + listOf(createSupernaturalSolutionModifier()) + featModifiers + featureModifiers + createAnarchyPenalty(
+        anarchyLimit
+    )

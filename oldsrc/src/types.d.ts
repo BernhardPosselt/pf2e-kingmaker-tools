@@ -38,6 +38,8 @@ declare global {
                     features: CombinedKingdomFeature[];
                     activities: KingdomActivity[];
                 }
+                adjustUnrest: (kingdom: KingdomData) => Promise<number>
+                collectResources: (kingdom: KingdomData) => Promise<{ rp: number, ore: number, lumber:number, luxuries: number, rd: number, stone: number }>
                 checkDialog: (
                     game: Game,
                     kingdom: KingdomData,

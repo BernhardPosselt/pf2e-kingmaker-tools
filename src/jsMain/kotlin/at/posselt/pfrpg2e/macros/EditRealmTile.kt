@@ -40,11 +40,11 @@ enum class RealmTileType(val category: RealmTileCategory) {
     MINE(RealmTileCategory.WORKSITE),
     ORE(RealmTileCategory.COMMODITY),
     LUMBER(RealmTileCategory.COMMODITY),
-    LUMBERCAMP(RealmTileCategory.WORKSITE),
+    LUMBER_CAMP(RealmTileCategory.WORKSITE),
     QUARRY(RealmTileCategory.WORKSITE),
     STONE(RealmTileCategory.COMMODITY),
     LUXURY(RealmTileCategory.COMMODITY),
-    LUXURYWORKSITE(RealmTileCategory.WORKSITE),
+    LUXURY_WORKSITE(RealmTileCategory.WORKSITE),
     FARMLAND(RealmTileCategory.WORKSITE),
     FOOD(RealmTileCategory.COMMODITY),
     CLAIMED(RealmTileCategory.CLAIMED);
