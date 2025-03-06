@@ -252,4 +252,27 @@ class EvaluateModifiersTest {
             ), result.modifiers
         )
     }
+
+    @Test
+    fun keepsOnlyOneIfBothHaveTheSameValue() {
+        val first = createProficiencyModifier(AGRICULTURE, proficiency = MASTER, level = 3)
+        val second = createProficiencyModifier(AGRICULTURE, proficiency = MASTER, level = 3).copy(id="blubb")
+        val modifiers = listOf(
+            first,
+            second,
+        )
+        val result = evaluateModifiers(
+            FilterResult(
+                context = defaultContext,
+                modifiers = modifiers,
+            )
+        )
+        assertEquals(9, result.total)
+        assertEquals(9, result.bonuses[PROFICIENCY])
+        assertEquals(
+            listOf(
+                first,
+            ), result.modifiers
+        )
+    }
 }

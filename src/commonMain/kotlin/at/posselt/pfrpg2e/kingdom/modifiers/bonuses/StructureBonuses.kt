@@ -4,12 +4,15 @@ import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.MergedSettlement
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
+import at.posselt.pfrpg2e.slugify
 
 fun createStructureBonuses(mergedSettlement: MergedSettlement) =
     mergedSettlement.settlement.bonuses.map {
+        val ids = listOfNotNull(it.skill, it.activity, it.locatedIn) +
+                it.structureNames.map { it.slugify() }
         Modifier(
             value = it.value,
-            id = "structure-${listOfNotNull(it.skill, it.activity).joinToString("-")}",
+            id = "structure-${ids.joinToString("-")}",
             name = "${it.locatedIn} (${it.structureNames.joinToString(", ")})",
             applyIf = listOfNotNull(
                 it.skill?.let { skill -> Eq("@skill", skill.value) },
