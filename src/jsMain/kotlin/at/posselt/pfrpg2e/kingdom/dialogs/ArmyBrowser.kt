@@ -1,8 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.dialogs
 
-import at.posselt.pfrpg2e.app.App
-import at.posselt.pfrpg2e.app.HandlebarsFormApplicationOptions
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.forms.SimpleApp
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
 import at.posselt.pfrpg2e.kingdom.KingdomData
@@ -16,18 +15,13 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
-import at.posselt.pfrpg2e.utils.resolveTemplatePath
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.applications.api.ApplicationPosition
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
-import com.foundryvtt.core.applications.api.HandlebarsTemplatePart
-import com.foundryvtt.core.applications.api.Window
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.JsPlainObject
-import js.objects.recordOf
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -54,21 +48,11 @@ private class ArmyBrowser(
     private val kingdomActor: PF2ENpc,
     private val kingdom: KingdomData,
     private val folderName: String,
-) : App<ArmiesContext>(
-    HandlebarsFormApplicationOptions(
-        window = Window(
-            title = "Armies in 'Recruitable Armies (${kingdomActor.name})' Folder",
-        ),
-        parts = recordOf(
-            "form" to HandlebarsTemplatePart(
-                template = resolveTemplatePath("applications/kingdom/army-browser.hbs"),
-            )
-        ),
-        id = "kmArmies",
-        position = ApplicationPosition(
-            width = 600,
-        )
-    )
+) : SimpleApp<ArmiesContext>(
+    title = "Armies in 'Recruitable Armies (${kingdomActor.name})' Folder",
+    template = "applications/kingdom/army-browser.hbs",
+    width = 600,
+    id = "kmArmies",
 ) {
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {

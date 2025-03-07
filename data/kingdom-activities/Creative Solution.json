@@ -6,7 +6,7 @@
     "phase": "leadership",
     "dc": "control",
     "title": "Creative Solution",
-    "description": "You work with your kingdom’s scholars, thinkers, and practitioners of magical and mundane experimentation to come up with new ways to resolve issues when business as usual is just not working. Attempt a basic check.",
+    "description": "You work with your kingdom’s scholars, thinkers, and practitioners of magical and mundane experimentation to come up with new ways to resolve issues when business as usual is just not working. Attempt a basic check. (Clarification: This was clarified to act as a reroll with +2 Circumstance Bonus and fortune. The PCs might know the degree of success before they attempt the reroll, but the GM must not tell them the consequence of that degree before they reroll. This will mostly come up when handling kingdom events)",
     "skills": {
         "scholarship": 0
     },

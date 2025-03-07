@@ -14,8 +14,6 @@ globalThis.foundryvttKotlinPatches = {};
         }
 
         // remove parts from super parameters and store them in a tmp variable instead
-        const parts = {};
-
         function copyParts(config, parts) {
             if (config.parts) {
                 copy(config.parts, parts)
@@ -27,6 +25,7 @@ globalThis.foundryvttKotlinPatches = {};
         return class Hack extends foundry.applications.api.HandlebarsApplicationMixin(clazz) {
 
             constructor(config) {
+                const parts = {};
                 super(
                     copyParts({
                         ...config,

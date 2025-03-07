@@ -1,8 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.dialogs
 
-import at.posselt.pfrpg2e.app.App
-import at.posselt.pfrpg2e.app.HandlebarsFormApplicationOptions
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.forms.SimpleApp
 import at.posselt.pfrpg2e.data.checks.getLevelBasedDC
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.armies.getAllAvailableArmyTactics
@@ -14,19 +13,14 @@ import at.posselt.pfrpg2e.utils.awaitAll
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.launch
-import at.posselt.pfrpg2e.utils.resolveTemplatePath
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.applications.api.ApplicationPosition
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
-import com.foundryvtt.core.applications.api.HandlebarsTemplatePart
-import com.foundryvtt.core.applications.api.Window
 import com.foundryvtt.core.ui.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.item.PF2ECampaignFeature
 import com.foundryvtt.pf2e.item.itemFromUuid
 import js.objects.JsPlainObject
-import js.objects.recordOf
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -53,21 +47,11 @@ private class ArmyTacticsBrowser(
     private val kingdomActor: PF2ENpc,
     private val kingdom: KingdomData,
     private val army: PF2EArmy,
-) : App<ArmyTacticsContext>(
-    HandlebarsFormApplicationOptions(
-        window = Window(
-            title = "Learnable Tactics: ${army.name}",
-        ),
-        parts = recordOf(
-            "form" to HandlebarsTemplatePart(
-                template = resolveTemplatePath("applications/kingdom/army-tactics-browser.hbs"),
-            )
-        ),
-        id = "kmArmyTactics",
-        position = ApplicationPosition(
-            width = 600,
-        )
-    )
+) : SimpleApp<ArmyTacticsContext>(
+    title = "Learnable Tactics: ${army.name}",
+    template = "applications/kingdom/army-tactics-browser.hbs",
+    id = "kmArmyTactics",
+    width = 600,
 ) {
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {

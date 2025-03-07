@@ -39,7 +39,7 @@ data class ExpressionContext(
             "@structure" -> structure?.name
             "@activity" -> activity
             "@unrest" -> unrest
-            "@anarchy" -> anarchyAt
+            "@anarchyAt" -> anarchyAt
             "@vacant" -> isVacant
             "@agricultureRank" -> ranks.agriculture
             "@artsRank" -> ranks.arts

@@ -31,7 +31,6 @@ private fun parseKingmakerWorksite(
         } else {
             0 to 0
         }
-        console.log(it.camp, it.commodity, type, commodity, quantity, resources)
         WorkSite(
             quantity = quantity,
             resources = resources
@@ -46,7 +45,6 @@ private fun parseKingmaker(): RealmData {
         .filter { (_, value) -> value.claimed == true }
         .map { it.component2() }
         .toList()
-    console.log(claimed)
     val farms = claimed.filter { it.features?.any { f -> f == "farmland" } == true }.size
     val food = claimed.filter { it.commodity == "food" }.size
     return RealmData(

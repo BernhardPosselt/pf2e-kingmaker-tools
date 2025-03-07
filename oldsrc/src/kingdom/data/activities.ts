@@ -89,7 +89,6 @@ export function createActivityLabel(game: Game, groupedActivities: GroupedActivi
             .filter(f => f.level <= kingdom.level)
             .map(f => f.claimHexAttempts)
             .filter(a => isNonNullable(a)) as number[]);
-        console.log("attempts", claimHexAttempts)
         if (claimHexAttempts === 3) {
             hints.push('three times per turn');
         } else if (claimHexAttempts === 2) {
