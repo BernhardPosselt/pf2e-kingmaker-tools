@@ -444,6 +444,7 @@ private class KingdomCheckDialog(
                 label = "Roll Mode",
                 value = fromCamelCase<RollMode>(data.rollMode),
                 labelFunction = { it.label },
+                hideLabel = true,
                 stacked = false,
             ).toContext(),
             phaseInput = Select.fromEnum(

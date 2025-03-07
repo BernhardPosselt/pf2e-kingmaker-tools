@@ -6,25 +6,27 @@
     }
 }
 
-.km-check-header, .km-check-adjustments {
+.km-check-modifier-entry td:nth-child(3){
+    width: 130px;
+}
+
+.km-check-roll-mode {
+    margin-left: auto;
+}
+
+.km-check-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 15px;
 }
 
-.km-check-adjustments.km-check-adjustments-centered {
-    justify-content: center;
-}
-
-.km-check-modifier-entry {
-
-}
 .km-check-roll {
     button i {
         margin-left: .5em;
         margin-right: 0;
     }
     display: flex;
+    gap: 15px;
     justify-content: space-between;
 }

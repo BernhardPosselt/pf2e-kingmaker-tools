@@ -1,5 +1,4 @@
 import {decode} from 'js-base64';
-import {RollMode} from './settings';
 import {v4} from 'uuid';
 
 export function escapeHtml(html: string): string {
@@ -84,6 +83,8 @@ export function unpackFormArray<T>(obj: Record<string, T> | undefined | null): T
         return [];
     }
 }
+
+type RollMode = keyof CONFIG.Dice.RollModes
 
 export async function postChatMessage(message: string, rollMode?: RollMode): Promise<void> {
     const msgData = {content: message};

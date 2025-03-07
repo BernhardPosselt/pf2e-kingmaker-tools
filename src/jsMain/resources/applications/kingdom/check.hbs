@@ -5,10 +5,6 @@
         <div {{#if isActivity}}hidden{{/if}}>{{> formElement phaseInput }}</div>
         <div>{{> formElement dcInput }}</div>
     </div>
-    <div class="km-check-adjustments {{#unless hasAssurance}}km-check-adjustments-centered{{/unless}}">
-        <div {{#unless hasAssurance}}hidden{{/unless}}>{{> formElement assuranceInput }}</div>
-        <div {{#if useAssurance}}hidden{{/if}}>{{> formElement supernaturalSolutionInput }}</div>
-    </div>
     <hr>
     <table {{#if useAssurance}}hidden{{/if}}>
         <tbody>
@@ -45,7 +41,9 @@
     </table>
     <hr {{#if useAssurance}}hidden{{/if}}>
     <div class="km-check-roll">
-        <div>{{> formElement rollModeInput }}</div>
+        <div {{#unless hasAssurance}}hidden{{/unless}}>{{> formElement assuranceInput }}</div>
+        <div {{#if useAssurance}}hidden{{/if}}>{{> formElement supernaturalSolutionInput }}</div>
+        <div class="km-check-roll-mode">{{> formElement rollModeInput }}</div>
         <button
                 {{#if useAssurance}}hidden{{/if}}
                 data-action="roll"
