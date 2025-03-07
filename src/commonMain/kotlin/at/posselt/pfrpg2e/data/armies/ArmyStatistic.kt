@@ -213,3 +213,8 @@ val armyStatistics = listOf(
         maximumTactics = 6
     ),
 )
+
+private val maximumTacticsByLevel = armyStatistics.associate { it.level to it.maximumTactics }
+
+fun findMaximumArmyTactics(kingdomLevel: Int) =
+    maximumTacticsByLevel[kingdomLevel] ?: 6

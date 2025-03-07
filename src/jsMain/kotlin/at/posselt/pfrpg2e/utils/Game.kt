@@ -13,7 +13,6 @@ import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2EActor
-import com.foundryvtt.pf2e.actor.PF2EArmy
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.collections.JsMap
 import kotlinx.js.JsPlainObject
@@ -77,11 +76,12 @@ external interface KtMigration {
     ) -> Unit
     val data: KtMigrationData
     val armyBrowser: (game: Game, actor: PF2ENpc, kingdom: KingdomData) -> Unit
-    val tacticsBrowser: (game: Game, actor: PF2ENpc, kingdom: KingdomData, army: PF2EArmy) -> Unit
+    val tacticsBrowser: (game: Game, actor: PF2ENpc, kingdom: KingdomData) -> Unit
     val adjustUnrest: (kingdom: KingdomData) -> Promise<Int>
     val collectResources: (kingdom: KingdomData) -> Promise<AnyObject>
     val addModifier: () -> Unit
     val tickDownModifiers: () -> Promise<Unit>
+    val findMaximumArmyTactics: (kingdomLevel: Int) -> Int
     val calculateLeadershipBonuses: (kingdom: KingdomData) -> Promise<JsMap<String, Int>>
     val calculateSkillModifiers: (
         game: Game,

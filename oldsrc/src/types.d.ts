@@ -59,7 +59,6 @@ declare global {
                     game: Game,
                     kingdom: KingdomData,
                     kingdomActor: PF2ENpc,
-                    army: Actor,
                 ) => void
                 addModifier: () => void
                 tickDownModifiers: () => Promise<void>
@@ -84,7 +83,8 @@ declare global {
                     rpToXpConversionLimit: number,
                     useVK: boolean,
                 ) => number
-                calculateEventXP: (modifier: Int) => number
+                calculateEventXP: (modifier: Int) => number,
+                findMaximumArmyTactics: (kingdomLevel) => number,
             }
         };
         pf2e: {

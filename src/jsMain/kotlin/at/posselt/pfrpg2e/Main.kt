@@ -15,6 +15,7 @@ import at.posselt.pfrpg2e.camping.openCampingSheet
 import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
+import at.posselt.pfrpg2e.data.armies.findMaximumArmyTactics
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.calculateEventXP
@@ -237,11 +238,12 @@ fun main() {
                         )
                     }
                 },
-                tacticsBrowser = { game, actor, kingdom, army ->
+                tacticsBrowser = { game, actor, kingdom ->
                     buildPromise {
-                        armyTacticsBrowser(game, actor, kingdom, army)
+                        armyTacticsBrowser(game, actor, kingdom)
                     }
                 },
+                findMaximumArmyTactics = ::findMaximumArmyTactics,
                 addModifier = {
                     buildPromise {
                         val kingdomActor = game.getKingdomActor()

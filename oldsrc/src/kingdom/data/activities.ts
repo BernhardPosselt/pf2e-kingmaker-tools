@@ -1,7 +1,6 @@
 import {Skill} from './skills';
 import {Kingdom, SkillRanks} from './kingdom';
 import {getKingdomActivitiesById, KingdomActivity, KingdomActivityById} from './activityData';
-import {armyStatisticsByLevel} from '../../armies/data';
 import {getAllFeatures} from "./features";
 import {isNonNullable} from "../../utils";
 
@@ -97,7 +96,7 @@ export function createActivityLabel(game: Game, groupedActivities: GroupedActivi
             hints.push('once per turn');
         }
     } else if (activity === 'train-army') {
-        const maxTactics = armyStatisticsByLevel.get(kingdom.level)?.maximumTactics ?? 6;
+        const maxTactics = game.pf2eKingmakerTools.migration.findMaximumArmyTactics(kingdomLevel)
         hints.push(`Max ${maxTactics} per Army`);
     }
     if (groupedActivities.trained.has(activity)) {

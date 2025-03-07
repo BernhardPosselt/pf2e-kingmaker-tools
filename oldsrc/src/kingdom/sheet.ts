@@ -56,7 +56,6 @@ import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
 import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData';
 import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
-import {getSelectedArmies} from '../armies/utils';
 import {calculateResourceDicePerTurn} from "./structures";
 import {Skill} from "./data/skills";
 
@@ -1177,15 +1176,9 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async showTacticsBrowser(): Promise<void> {
-        const armies = getSelectedArmies(this.game);
-        if (armies.length !== 1) {
-            ui.notifications?.error('Please target a single army on the scene (<i class="fa-solid fa-keyboard"></i> <b>t</b>)');
-        } else {
-            const army = armies[0];
-            this.game.pf2eKingmakerTools.migration.tacticsBrowser(
-                this.game, this.sheetActor, this.getKingdom(), army
-            )
-        }
+        this.game.pf2eKingmakerTools.migration.tacticsBrowser(
+            this.game, this.sheetActor, this.getKingdom()
+        )
     }
 
     private async showArmyBrowser(): Promise<void> {

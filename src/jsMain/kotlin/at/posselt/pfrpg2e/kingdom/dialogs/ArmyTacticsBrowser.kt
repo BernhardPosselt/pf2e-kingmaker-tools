@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.app.forms.SimpleApp
 import at.posselt.pfrpg2e.data.checks.getLevelBasedDC
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.armies.getAllAvailableArmyTactics
+import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
 import at.posselt.pfrpg2e.kingdom.armies.hasTactic
 import at.posselt.pfrpg2e.kingdom.armies.isArmyTactic
 import at.posselt.pfrpg2e.kingdom.getActivity
@@ -15,6 +16,7 @@ import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import com.foundryvtt.pf2e.actor.PF2ENpc
@@ -125,6 +127,11 @@ private class ArmyTacticsBrowser(
     }
 }
 
-fun armyTacticsBrowser(game: Game, kingdomActor: PF2ENpc, kingdom: KingdomData, army: PF2EArmy) {
-    ArmyTacticsBrowser(game, kingdomActor, kingdom, army).launch()
+fun armyTacticsBrowser(game: Game, kingdomActor: PF2ENpc, kingdom: KingdomData) {
+    val army = game.getTargetedArmies().firstOrNull()
+    if (army == null) {
+        ui.notifications.error("Please target a single army on the scene (<i class=\"fa-solid fa-keyboard\"></i> <b>t</b>)")
+    } else {
+        ArmyTacticsBrowser(game, kingdomActor, kingdom, army).launch()
+    }
 }
