@@ -71,6 +71,20 @@ declare global {
                     kingdom: KingdomData
                 ) => Promise<Map<string, number>>
                 calculateUnrestPenalty: (unrest: number) => number
+                calculateHexXP: (
+                    hexes: number,
+                    xpPerClaimedHex: number,
+                    kingdomSize: number,
+                    useVK: boolean
+                ) => number
+                calculateRpXP: (
+                    rp: number,
+                    kingdomLevel: number,
+                    rpToXpConversionRate: number,
+                    rpToXpConversionLimit: number,
+                    useVK: boolean,
+                ) => number
+                calculateEventXP: (modifier: Int) => number
             }
         };
         pf2e: {

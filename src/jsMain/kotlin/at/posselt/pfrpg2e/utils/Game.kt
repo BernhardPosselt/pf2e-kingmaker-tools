@@ -88,6 +88,20 @@ external interface KtMigration {
         kingdom: KingdomData,
     ) -> Promise<Array<RawSkillStats>>
     val calculateUnrestPenalty: (unrest: Int) -> Int
+    val calculateHexXP: (
+        hexes: Int,
+        xpPerClaimedHex: Int,
+        kingdomSize: Int,
+        useVK: Boolean
+    ) -> Int
+    val calculateRpXP: (
+        rp: Int,
+        kingdomLevel: Int,
+        rpToXpConversionRate: Int,
+        rpToXpConversionLimit: Int,
+        useVK: Boolean,
+    ) -> Int
+    val calculateEventXP: (modifier: Int) -> Int
 }
 
 @JsPlainObject

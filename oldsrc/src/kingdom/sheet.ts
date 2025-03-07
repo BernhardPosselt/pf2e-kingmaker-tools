@@ -43,7 +43,6 @@ import {
 } from './scene';
 import {getAllFeats, getAllSelectedFeats, KingdomFeat} from './data/feats';
 import {AddBonusFeatDialog} from './dialogs/add-bonus-feat-dialog';
-import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
 import {getAllFeatures} from './data/features';
 import {createActivityLabel, getPerformableActivities, groupKingdomActivities,} from './data/activities';
@@ -497,7 +496,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 el.addEventListener('click', async (ev) => {
                     const target = ev.currentTarget as HTMLButtonElement;
                     const modifier = parseInt(target.dataset.modifier ?? '0', 10);
-                    await this.increaseXP(calculateEventXP(modifier));
+                    await this.increaseXP(this.game.pf2eKingmakerTools.migration.calculateEventXP(modifier));
                 });
             });
         $html.querySelectorAll('.km-claimed-hexes-xp')
@@ -509,12 +508,12 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                     const automateResourceMode = current.settings.automateResources;
                     const {size: kingdomSize} = getStolenLandsData(this.game, automateResourceMode, current);
                     const useHomeBrew = current.settings.vanceAndKerensharaXP;
-                    await this.increaseXP(calculateHexXP({
+                    await this.increaseXP(this.game.pf2eKingmakerTools.migration.calculateHexXP(
                         hexes,
+                        current.settings.xpPerClaimedHex,
                         kingdomSize,
-                        useVK: useHomeBrew,
-                        xpPerClaimedHex: current.settings.xpPerClaimedHex,
-                    }));
+                        useHomeBrew,
+                    ));
                 });
             });
         $html.querySelectorAll('.km-gain-xp')
@@ -539,13 +538,13 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             ?.addEventListener('click', async () => {
                 const current = this.getKingdom();
                 const useHomeBrew = current.settings.vanceAndKerensharaXP;
-                await this.increaseXP(calculateRpXP({
-                    useVK: useHomeBrew,
-                    kingdomLevel: current.level,
-                    rpToXpConversionLimit: current.settings.rpToXpConversionLimit,
-                    rpToXpConversionRate: current.settings.rpToXpConversionRate,
-                    rp: current.resourcePoints.now,
-                }));
+                await this.increaseXP(this.game.pf2eKingmakerTools.migration.calculateRpXP(
+                    current.resourcePoints.now,
+                    current.level,
+                    current.settings.rpToXpConversionRate,
+                    current.settings.rpToXpConversionLimit,
+                    useHomeBrew,
+                ));
             });
         $html.querySelector('#solutions-to-xp')
             ?.addEventListener('click', async () => {
@@ -1006,7 +1005,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     private async getLeaders(leaders: Leaders): Promise<object> {
         const kingdom = this.getKingdom();
         const leadershipBonuses = await this.game.pf2eKingmakerTools.migration.calculateLeadershipBonuses(kingdom);
-        console.log(leadershipBonuses)
         const entries = (Object.entries(leaders) as [keyof Leaders, LeaderValues][])
             .map(async ([leader, values]) => {
                 const actor = values.uuid ? await fromUuid(values.uuid) as Actor | null : undefined;

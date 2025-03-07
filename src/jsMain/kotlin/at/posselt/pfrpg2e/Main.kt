@@ -17,6 +17,9 @@ import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.calculateEventXP
+import at.posselt.pfrpg2e.data.kingdom.calculateHexXP
+import at.posselt.pfrpg2e.data.kingdom.calculateRpXP
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
@@ -277,6 +280,9 @@ fun main() {
                         }
                     }
                 },
+                calculateHexXP = ::calculateHexXP,
+                calculateRpXP = ::calculateRpXP,
+                calculateEventXP = ::calculateEventXP,
                 checkDialog = { game, kingdom, kingdomActor, activity, structure, skill, afterRoll ->
                     buildPromise {
                         val wrapper: suspend (degree: DegreeOfSuccess) -> String = { degree ->
