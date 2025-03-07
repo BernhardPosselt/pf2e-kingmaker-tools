@@ -21,7 +21,7 @@ declare global {
                 structureTokenMappingMacro: () => void,
                 kingdomEventsMacro: () => void,
                 cultEventsMacro: () => void,
-                viewKingdomMacro: () => void,
+                viewKingdomMacro2: () => void,
             };
             migration: {
                 kingdomSettings: (KingdomSettings, onSave: (settings: KingdomSettings) => void) => void,

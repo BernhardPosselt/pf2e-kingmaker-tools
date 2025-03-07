@@ -86,10 +86,9 @@ external interface KingdomSettingsContext : HandlebarsRenderContext, SectionsCon
 }
 
 
-@JsExport
 class KingdomSettingsApplication(
     private val game: Game,
-    private val onSave: (settings: KingdomSettings) -> Unit,
+    private val onSave: suspend (settings: KingdomSettings) -> Unit,
     val kingdomSettings: KingdomSettings,
 ) : FormApp<KingdomSettingsContext, KingdomSettings>(
     title = "Kingdom Settings",
@@ -340,7 +339,9 @@ class KingdomSettingsApplication(
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "save" -> {
-                onSave(settings)
+                buildPromise {
+                    onSave(settings)
+                }
                 close()
             }
 

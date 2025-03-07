@@ -41,7 +41,7 @@ external interface ToolsMacros {
     val createFoodMacro: () -> Unit
     val subsistMacro: (Actor?) -> Unit
 //    val structureTokenMappingMacro: () -> Unit
-//    val viewKingdomMacro: () -> Unit
+    val viewKingdomMacro: () -> Unit
 }
 
 @JsPlainObject

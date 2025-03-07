@@ -1,13 +1,11 @@
 package at.posselt.pfrpg2e.actions
 
-import com.foundryvtt.core.AnyObject
-import js.objects.recordOf
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface ActionMessage {
     val action: String
-    val data: AnyObject
+    val data: Any?
 }
 
-fun emptyActionMessage(action: String) = ActionMessage(action = action, data = recordOf())
+fun emptyActionMessage(action: String) = ActionMessage(action = action, data = null)

@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.actions.handlers.ClearMealEffectsHandler
 import at.posselt.pfrpg2e.actions.handlers.GainProvisionsHandler
 import at.posselt.pfrpg2e.actions.handlers.LearnSpecialRecipeHandler
 import at.posselt.pfrpg2e.actions.handlers.OpenCampingSheetHandler
+import at.posselt.pfrpg2e.actions.handlers.OpenKingdomSheetHandler
 import at.posselt.pfrpg2e.actions.handlers.SyncActivitiesHandler
 import at.posselt.pfrpg2e.actor.partyMembers
 import at.posselt.pfrpg2e.camping.bindCampingChatEventListeners
@@ -51,6 +52,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.adjustUnrest
 import at.posselt.pfrpg2e.kingdom.sheet.calculateSkillModifierBreakdown
 import at.posselt.pfrpg2e.kingdom.sheet.collectResources
 import at.posselt.pfrpg2e.kingdom.sheet.getHighestLeadershipModifiers
+import at.posselt.pfrpg2e.kingdom.sheet.openKingdomSheet
 import at.posselt.pfrpg2e.kingdom.sheet.tickDownModifiers
 import at.posselt.pfrpg2e.kingdom.structures.parseStructure
 import at.posselt.pfrpg2e.kingdom.structures.structures
@@ -111,6 +113,7 @@ fun main() {
                 LearnSpecialRecipeHandler(game = game),
                 ApplyMealEffectsHandler(game = game),
                 GainProvisionsHandler(game = game),
+                OpenKingdomSheetHandler(game = game),
             )
         ).apply {
             listen()
@@ -188,6 +191,11 @@ fun main() {
                 openCampingSheet = { buildPromise { openCampingSheet(game, actionDispatcher) } },
                 subsistMacro = { actor -> buildPromise { subsistMacro(game, actor) } },
                 createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
+                viewKingdomMacro = { buildPromise {
+                    // TODO: let player choose which kingdom to open
+                    val actor = game.getKingdomActor()
+                    openKingdomSheet(game, actionDispatcher, actor)
+                }}
             ),
             migration = KtMigration(
                 kingdomSettings = { settings, onSave ->

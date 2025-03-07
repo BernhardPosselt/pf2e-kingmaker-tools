@@ -31,7 +31,6 @@ import kotlinx.js.JsPlainObject
 
 typealias AbilityScores = Record<String, Int>
 typealias LeaderValue = String // ruler, counselor, general, emissary, magister, treasurer, viceroy,warden
-typealias Leaders = Record<LeaderValue, LeaderValues>
 typealias RawLeaderType = String // pc, regularNpc, highlyMotivatedNpc, nonPathfinderNpc
 typealias GroupRelations = String  // none, diplomatic-relations, trade-agreement
 typealias Heartland = String // forest-or-swamp, hill-or-plain, lake-or-river, mountain-or-ruins
@@ -231,7 +230,7 @@ external interface KingdomData {
     var supernaturalSolutions: Int
     var turnsWithoutCultEvent: Int
     var creativeSolutions: Int
-    var leaders: Leaders
+    var leaders: Record<LeaderValue, LeaderValues>
     var settings: KingdomSettings
     var commodities: CurrentCommodities
     var groups: Array<Group>
@@ -365,6 +364,9 @@ fun KingdomData.parseAbilityScores() = KingdomAbilityScores(
     loyalty = abilityScores["loyalty"] ?: 10,
     culture = abilityScores["culture"] ?: 10
 )
+
+fun KingdomData.hasLeaderUuid(uuid: String) =
+    leaders.asSequence().any { (_, value) -> value.uuid == uuid }
 
 private fun PF2ECreature.parseSkillRanks(): SkillRanks =
     SkillRanks(

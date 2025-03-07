@@ -8,9 +8,9 @@ import at.posselt.pfrpg2e.app.ActorRef
 import at.posselt.pfrpg2e.app.DocumentRef
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
-import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.MenuControl
 import at.posselt.pfrpg2e.app.confirm
+import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.toOption
@@ -62,7 +62,6 @@ import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.String
 import kotlin.js.Promise
 import kotlin.math.max
 
