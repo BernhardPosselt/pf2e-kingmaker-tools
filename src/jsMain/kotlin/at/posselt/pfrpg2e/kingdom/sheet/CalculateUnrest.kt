@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
 import js.objects.JsPlainObject
+import kotlin.math.min
 
 @JsPlainObject
 private external interface ChatUnrestContext {
@@ -51,9 +52,10 @@ suspend fun adjustUnrest(
                 postChatMessage("You lose one hex of your choice")
             }
         }
-        if (totalUnrest >= calculateAnarchy(chosenFeats)) {
+        val anarchyAt = calculateAnarchy(chosenFeats)
+        if (totalUnrest >= anarchyAt) {
             postChatMessage("Kingdom falls into anarchy, unless you spend all fame/infamy points. Only Quell Unrest leadership activities can be performed and all checks are worsened by a degree")
         }
-        totalUnrest
+        min(anarchyAt, totalUnrest)
     }
 }
