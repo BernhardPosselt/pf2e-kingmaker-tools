@@ -1,5 +1,4 @@
 import {evaluateStructures, includeCapital, StructureResult, StructureStackRule} from './structures';
-import {ruleSchema} from './schema';
 import {CommodityStorage, SkillItemBonuses, Structure} from './data/structures';
 import {Kingdom, ResourceAutomationMode, Settlement, WorkSite, WorkSites} from './data/kingdom';
 import {isKingmakerInstalled, isNonNullable} from '../utils';
@@ -53,12 +52,6 @@ function parseStructureData(
             lots: 0,
             ...data,
         };
-        const result = ruleSchema.validate(rule);
-        if (result.error) {
-            console.error(`Failed to validate structure with name ${name}`, data);
-            console.error('Validation Error', result.error);
-            throw new StructureError(`Structure with name ${name} failed to validate, aborting. See console log (F12) for more details`);
-        }
         return calculateLots(rule);
     } else {
         const result: Structure = data as Structure;
@@ -368,19 +361,6 @@ export function getActiveSettlementStructureResult(game: Game, kingdom: Kingdom)
     }
 }
 
-export function getSettlementsWithoutLandBorders(game: Game, kingdom: Kingdom): number {
-    const mode = getStructureStackMode(kingdom);
-    const autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel;
-    const activities = getKingdomActivitiesById(game, kingdom.homebrewActivities);
-    const structuresByName = getStructuresByName(game);
-    return getAllSettlements(game, kingdom)
-        .filter(settlementAndScene => {
-            const structures = getStructureResult(mode, autoCalculateSettlementLevel, activities, structuresByName, settlementAndScene);
-            return (settlementAndScene.settlement?.waterBorders ?? 0) >= 4 && !structures.hasBridge;
-        })
-        .length;
-}
-
 export interface StolenLandsData {
     size: number;
     workSites: WorkSites;
@@ -598,13 +578,4 @@ export function getStolenLandsData(
             workSites: kingdom.workSites,
         };
     }
-}
-
-
-export async function makeResourceTileOrDrawing(tile: TileDocument, type: RealmTileType): Promise<void> {
-    await tile.setFlag('pf2e-kingmaker-tools', 'realmTile', {type});
-}
-
-export async function makeResourceDrawing(tile: DrawingDocument, type: RealmTileType): Promise<void> {
-    await tile.setFlag('pf2e-kingmaker-tools', 'realmTile', {type});
 }

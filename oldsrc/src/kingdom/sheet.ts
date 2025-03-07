@@ -53,7 +53,6 @@ import {showHelpDialog} from './dialogs/show-help-dialog';
 import {showSettlement} from './dialogs/settlement';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
-import {calculateUnrestPenalty} from './data/unrest';
 import {openJournal} from '../foundry-utils';
 import {showStructureBrowser} from './dialogs/structure-browser';
 import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData';
@@ -207,7 +206,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             controlDC: getControlDC(kingdomData.level, kingdomSize, kingdomData.leaders.ruler.vacant),
             atWar: kingdomData.atWar,
             unrest: kingdomData.unrest,
-            unrestPenalty: calculateUnrestPenalty(kingdomData.unrest),
+            unrestPenalty: this.game.pf2eKingmakerTools.migration.calculateUnrestPenalty(kingdomData.unrest),
             anarchyAt: this.calculateAnarchy(kingdomData.feats, kingdomData.bonusFeats),
             resourceDieSize: sizeData.resourceDieSize,
             resourceDiceNum: calculateResourceDicePerTurn(this.game, kingdomData),

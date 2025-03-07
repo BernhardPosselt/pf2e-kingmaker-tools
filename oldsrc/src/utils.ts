@@ -1,7 +1,5 @@
-import {DegreeOfSuccess} from './degree-of-success';
-import {decode, encode} from 'js-base64';
+import {decode} from 'js-base64';
 import {RollMode} from './settings';
-import {isArmyTactic} from './armies/utils';
 import {v4} from 'uuid';
 
 export function escapeHtml(html: string): string {
@@ -63,88 +61,11 @@ export function isGm(game: Game): boolean {
     return game.users?.find((u) => u.isGM && u.active && u.id === game?.user?.id) !== undefined;
 }
 
-export function getLevelBasedDC(level: number): number {
-    return 14 + level + Math.floor(level / 3);
-}
-
 export function createUUIDLink(uuid: string, label?: string): string {
     if (label === undefined) {
         return `@UUID[${uuid}]`;
     } else {
         return `@UUID[${uuid}]{${label}}`;
-    }
-}
-
-export async function roll(expression: string, flavor?: string): Promise<number> {
-    const roll = await (new Roll(expression).evaluate());
-    await roll.toMessage({flavor});
-    return roll.total;
-}
-
-export interface DegreeOfSuccessMessageConfig {
-    critSuccess?: string;
-    success?: string;
-    failure?: string;
-    critFailure?: string;
-    isPrivate?: boolean;
-    rollMode?: RollMode,
-}
-
-function getDegreePart(degreeOfSuccess: DegreeOfSuccess, strikeThrough = false): string {
-    if (degreeOfSuccess === DegreeOfSuccess.CRITICAL_SUCCESS) {
-        return `<span class="${strikeThrough ? 'strike-through' : ''}">Critical Success</span>`;
-    } else if (degreeOfSuccess === DegreeOfSuccess.SUCCESS) {
-        return `<span class="${strikeThrough ? 'strike-through' : ''}">Success</span>`;
-    } else if (degreeOfSuccess === DegreeOfSuccess.FAILURE) {
-        return `<span class="${strikeThrough ? 'strike-through' : ''}">Failure</span>`;
-    } else {
-        return `<span class="${strikeThrough ? 'strike-through' : ''}">Critical Failure</span>`;
-    }
-}
-
-function getDegreeHeader(
-    degreeOfSuccess: DegreeOfSuccess,
-    upgradedDegreeOfSuccess?: DegreeOfSuccess,
-): string {
-    if (upgradedDegreeOfSuccess === undefined) {
-        return `<b>${getDegreePart(degreeOfSuccess)}</b>`;
-    } else {
-        return `<b>${getDegreePart(degreeOfSuccess, true)} ${getDegreePart(upgradedDegreeOfSuccess)}</b>`;
-    }
-}
-
-interface DegreeOfSuccessConfig {
-    degreeOfSuccess: DegreeOfSuccess,
-    upgradedDegreeOfSuccess?: DegreeOfSuccess,
-    messageConfig: DegreeOfSuccessMessageConfig,
-    beforeHeader?: string;
-}
-
-export async function postDegreeOfSuccessMessage(
-    {
-        degreeOfSuccess,
-        upgradedDegreeOfSuccess,
-        messageConfig,
-        beforeHeader,
-    }: DegreeOfSuccessConfig,
-): Promise<void> {
-    const header = getDegreeHeader(degreeOfSuccess, upgradedDegreeOfSuccess);
-    const degree = upgradedDegreeOfSuccess ?? degreeOfSuccess;
-    let description = '';
-    if (degree === DegreeOfSuccess.CRITICAL_SUCCESS && messageConfig.critSuccess !== undefined) {
-        description = `${messageConfig.critSuccess}`;
-    } else if (degree === DegreeOfSuccess.SUCCESS && messageConfig.success !== undefined) {
-        description = `${messageConfig.success}`;
-    } else if (degree === DegreeOfSuccess.FAILURE && messageConfig.failure !== undefined) {
-        description = `${messageConfig.failure}`;
-    } else if (degree === DegreeOfSuccess.CRITICAL_FAILURE && messageConfig.critFailure !== undefined) {
-        description = `${messageConfig.critFailure}`;
-    }
-    const message = (beforeHeader ?? '') + [header, description]
-        .filter(m => isNotBlank(m))
-        .join(': ');
-    if (isNotBlank(message)) {
-        await postChatMessage(message.trimEnd(), messageConfig.rollMode ?? (messageConfig.isPrivate ? 'blindroll' : 'publicroll'));
     }
 }
 
@@ -269,13 +190,6 @@ export interface LabelAndValue {
     value: string;
 }
 
-export function createLabel(value: string, slug = false): LabelAndValue {
-    return {
-        label: slug ? unslugify(value) : capitalize(value),
-        value: value,
-    };
-}
-
 export function listenClick(html: HTMLElement, selector: string, callback: (ev: Event) => Promise<void>): void {
     html.querySelectorAll(selector)
         .forEach(el => {
@@ -283,9 +197,6 @@ export function listenClick(html: HTMLElement, selector: string, callback: (ev: 
         });
 }
 
-export function createLabels(values: readonly string[], slug = false): LabelAndValue[] {
-    return values.map(value => createLabel(value, slug));
-}
 
 export function parseNumberInput($html: HTMLElement, name: string): number {
     const input = $html.querySelector(`input[name="${name}"]`) as HTMLInputElement;
@@ -297,20 +208,11 @@ export function parseTextInput($html: HTMLElement, name: string): string {
     return input.value?.trim();
 }
 
-export function parseSelect($html: HTMLElement, name: string): string {
-    const input = $html.querySelector(`select[name="${name}"]`) as HTMLSelectElement;
-    return input.value;
-}
-
 export function parseRadio($html: HTMLElement, name: string): string | null {
     const input = Array.from($html.querySelectorAll(`input[name="${name}"]`)) as HTMLInputElement[];
     return input.find(i => i.checked)?.value ?? null;
 }
 
-export function parseCheckbox($html: HTMLElement, name: string): boolean {
-    const input = $html.querySelector(`input[name="${name}"]`) as HTMLInputElement;
-    return input.checked;
-}
 
 export function clamped(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
@@ -327,10 +229,6 @@ export function deCamelCase(value: string): string {
 
 export function slugifyable(value: string): boolean {
     return /^([a-zA-Z0-9]*)(\s[a-zA-Z0-9]*)*$/.test(value);
-}
-
-export function isNotBlank(value: string | null | undefined): value is string {
-    return !isBlank(value);
 }
 
 export function isBlank(value: string | null | undefined): boolean {
@@ -360,22 +258,10 @@ export function isNonNullable<T>(value: T | undefined | null): value is T {
     return value !== undefined && value !== null;
 }
 
-export function encodeJson(object: object): string {
-    return encode(JSON.stringify(object));
-}
-
 export function decodeJson(jsonString: string): object {
     return JSON.parse(decode(jsonString));
 }
 
-export type RollModeChoices = Record<Exclude<RollMode, 'roll'>, string>;
-
-export const rollModeChoices: RollModeChoices = {
-    publicroll: 'Public Roll',
-    gmroll: 'Private GM Roll',
-    blindroll: 'Blind GM Roll',
-    selfroll: 'Self Roll',
-};
 
 interface LabelAndValueOptions {
     capitalizeLabel?: boolean;
@@ -392,10 +278,6 @@ export function toLabelAndValue(values: (string | number)[], {
         return {label: capitalizeLabel ? label.capitalize() : label, value: v.toString()};
     });
     return [...empty, ...labels];
-}
-
-export function hasArmyTactic(actor: Actor, tactic: CampaignFeaturePF2E): boolean {
-    return actor.items.some(i => isArmyTactic(i) && i.name === tactic.name);
 }
 
 export function uuidv4(): string {

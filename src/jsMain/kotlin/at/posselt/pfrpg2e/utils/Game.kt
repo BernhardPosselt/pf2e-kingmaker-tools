@@ -87,6 +87,7 @@ external interface KtMigration {
         game: Game,
         kingdom: KingdomData,
     ) -> Promise<Array<RawSkillStats>>
+    val calculateUnrestPenalty: (unrest: Int) -> Int
 }
 
 @JsPlainObject

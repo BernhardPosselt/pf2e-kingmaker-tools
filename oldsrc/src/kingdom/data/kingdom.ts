@@ -3,8 +3,6 @@ import {getKingdomActivities, KingdomActivity} from './activityData';
 import {AbilityScores} from './abilities';
 import {Skill} from "./skills";
 import {LeadershipLeaderType} from "../skills";
-import {getAllSelectedFeats, UpgradeResult} from "./feats";
-import {getAllFeatures} from "./features";
 import {UntrainedProficiencyMode} from "../../utils";
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
@@ -609,15 +607,4 @@ export function getDefaultKingdomData(game: Game): Kingdom {
         modifiers: [],
         homebrewActivities: [],
     };
-}
-
-export function getFlags(game: Game, kingdom: Kingdom): string[] {
-    const feats = getAllSelectedFeats(game, kingdom);
-    return feats.flatMap(f => f.flags ?? [])
-        .concat(getAllFeatures(game, kingdom).flatMap(f => f.flags ?? []));
-}
-
-export function getUpgradeResults(game: Game, kingdom: Kingdom): UpgradeResult[] {
-    return getAllSelectedFeats(game, kingdom)
-        .flatMap(f => f.upgradeResults ?? []);
 }

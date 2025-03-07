@@ -39,6 +39,7 @@ import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.kingdomActivities
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.kingdom.kingdomFeatures
+import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseLeaderActors
 import at.posselt.pfrpg2e.kingdom.setKingdom
@@ -261,6 +262,7 @@ fun main() {
                         map
                     }
                 },
+                calculateUnrestPenalty = {unrest -> calculateUnrestPenalty(unrest) },
                 calculateSkillModifiers = { game, kingdom ->
                     val settlementResult = kingdom.getAllSettlements(game)
                     buildPromise {

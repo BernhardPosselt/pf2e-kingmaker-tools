@@ -70,6 +70,7 @@ declare global {
                 calculateLeadershipBonuses: (
                     kingdom: KingdomData
                 ) => Promise<Map<string, number>>
+                calculateUnrestPenalty: (unrest: number) => number
             }
         };
         pf2e: {
