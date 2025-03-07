@@ -9,7 +9,7 @@ data class Rectangle(val x: Double, val y: Double, val width: Double, val height
             x = x - toleranceInPx,
             y = y - toleranceInPx,
             height = height + 2 * toleranceInPx,
-            width = yEnd + 2 * toleranceInPx
+            width = width + 2 * toleranceInPx
         )
 
     operator fun contains(other: Rectangle) =

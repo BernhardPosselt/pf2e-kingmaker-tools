@@ -56,7 +56,6 @@ fun createAllModifiers(
     enableLeadershipBonuses: Boolean,
     featModifiers: List<Modifier>,
     featureModifiers: List<Modifier>,
-    anarchyLimit: Int,
 ): List<Modifier> =
     listOfNotNull(
         createRulerBonus(global = globalBonuses)
@@ -111,6 +110,4 @@ fun createAllModifiers(
         emptyList()
     } else {
         createArmyConditionPenalties(info = targetedArmy)
-    } + listOf(createSupernaturalSolutionModifier()) + featModifiers + featureModifiers + createAnarchyPenalty(
-        anarchyLimit
-    )
+    } + listOf(createSupernaturalSolutionModifier()) + featModifiers + featureModifiers + createAnarchyPenalty()

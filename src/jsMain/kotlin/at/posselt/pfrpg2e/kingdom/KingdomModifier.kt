@@ -230,7 +230,6 @@ suspend fun KingdomData.checkModifiers(
             .flatMap { it.feat.modifiers?.map { it.parse(v4()) } ?: emptyList() },
         featureModifiers = getEnabledFeatures()
             .flatMap { it.modifiers?.map { it.parse(v4()) } ?: emptyList() },
-        anarchyLimit = calculateAnarchy(chosenFeats)
     )
 }
 
@@ -241,18 +240,22 @@ fun KingdomData.createExpressionContext(
     usedSkill: KingdomSkill,
     rollOptions: Set<String>,
     structure: Structure?,
-) = ExpressionContext(
-    usedSkill = usedSkill,
-    ranks = parseSkillRanks(),
-    leader = leader,
-    activity = activity?.id,
-    phase = phase,
-    level = level,
-    unrest = unrest,
-    flags = getChosenFeats()
-        .flatMap { it.feat.flags?.toSet().orEmpty() }
-        .toSet(),
-    rollOptions = rollOptions,
-    isVacant = vacancies().resolveVacancy(leader),
-    structure = structure
-)
+): ExpressionContext {
+    val chosenFeats = getChosenFeats()
+    return ExpressionContext(
+        usedSkill = usedSkill,
+        ranks = parseSkillRanks(),
+        leader = leader,
+        activity = activity?.id,
+        phase = phase,
+        level = level,
+        unrest = unrest,
+        flags = chosenFeats
+            .flatMap { it.feat.flags?.toSet().orEmpty() }
+            .toSet(),
+        rollOptions = rollOptions,
+        isVacant = vacancies().resolveVacancy(leader),
+        structure = structure,
+        anarchyAt = calculateAnarchy(chosenFeats)
+    )
+}

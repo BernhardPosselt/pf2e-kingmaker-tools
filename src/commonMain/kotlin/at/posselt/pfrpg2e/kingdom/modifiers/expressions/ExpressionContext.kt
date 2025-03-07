@@ -18,7 +18,8 @@ data class ExpressionContext(
     val flags: Set<String>,
     val rollOptions: Set<String>,
     val isVacant: Boolean,
-    val structure: Structure?
+    val structure: Structure?,
+    val anarchyAt: Int,
 ) {
     fun evaluateBool(expression: Any?): Boolean {
         val result = evaluateExpression(expression)
@@ -38,6 +39,7 @@ data class ExpressionContext(
             "@structure" -> structure?.name
             "@activity" -> activity
             "@unrest" -> unrest
+            "@anarchy" -> anarchyAt
             "@vacant" -> isVacant
             "@agricultureRank" -> ranks.agriculture
             "@artsRank" -> ranks.arts

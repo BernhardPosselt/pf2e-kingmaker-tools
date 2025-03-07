@@ -24,16 +24,14 @@ private fun parseKingmakerWorksite(
     .map {
         // there is no luxuries camp so we assume that a mine on a luxury commodity
         // adds 1 luxury worksite (as described in the adventure)
-        val quantity = if (it.commodity == "luxuries") {
-            if (type == "mine") {
-                1
-            } else {
-                0
-            }
+        val (quantity, resources) = if (type == "mine" && commodity == "luxuries") {
+            (if (commodity == it.commodity) 1 else 0) to 0
+        } else if (it.commodity != "luxuries") {
+            1 to if (commodity == it.commodity) 1 else 0
         } else {
-            1
+            0 to 0
         }
-        val resources = if (it.commodity == commodity && it.commodity != "luxuries") 1 else 0
+        console.log(it.camp, it.commodity, type, commodity, quantity, resources)
         WorkSite(
             quantity = quantity,
             resources = resources
@@ -48,6 +46,7 @@ private fun parseKingmaker(): RealmData {
         .filter { (_, value) -> value.claimed == true }
         .map { it.component2() }
         .toList()
+    console.log(claimed)
     val farms = claimed.filter { it.features?.any { f -> f == "farmland" } == true }.size
     val food = claimed.filter { it.commodity == "food" }.size
     return RealmData(
@@ -90,7 +89,6 @@ private fun toRealmWorksite(
     }
     .fold(WorkSite()) { prev, curr -> prev + curr }
 
-// TODO: fix this
 private fun Scene.parseRealmData(): RealmData {
     val tiles = tiles.contents
         .mapNotNull {
@@ -136,7 +134,6 @@ private fun Scene.parseRealmData(): RealmData {
                 type = RealmTileType.LUMBER_CAMP,
                 commodityType = RealmTileType.LUMBER
             ),
-            // FIXME: this does not work
             mines = toRealmWorksite(
                 resources = resources,
                 commoditiesInClaimedTile = commoditiesInClaimedTile,

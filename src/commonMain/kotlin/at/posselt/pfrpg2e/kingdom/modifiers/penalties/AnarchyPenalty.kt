@@ -6,14 +6,14 @@ import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Gte
 
-fun createAnarchyPenalty(anarchyLimit: Int) =
+fun createAnarchyPenalty() =
     Modifier(
         id = "anarchy",
         type = ModifierType.UNTYPED,
         value = 0,
         name = "Anarch worsens all checks by 1 degree",
         applyIf = listOf(
-            Gte("@unrest", anarchyLimit)
+            Gte("@unrest", "@anarchy")
         ),
         downgradeResults = listOf(
             DowngradeResult(

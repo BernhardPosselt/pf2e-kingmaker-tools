@@ -32,6 +32,7 @@ class ExpressionTest {
             phase = null,
             isVacant = false,
             structure = null,
+            anarchyAt = 20,
         )
         val result = Not(
             All(listOf(
