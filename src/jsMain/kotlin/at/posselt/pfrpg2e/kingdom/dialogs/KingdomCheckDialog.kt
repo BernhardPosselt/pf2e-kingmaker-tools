@@ -27,9 +27,9 @@ import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
 import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmyConditions
 import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
-import at.posselt.pfrpg2e.kingdom.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.hasAssurance
 import at.posselt.pfrpg2e.kingdom.increasedSkills

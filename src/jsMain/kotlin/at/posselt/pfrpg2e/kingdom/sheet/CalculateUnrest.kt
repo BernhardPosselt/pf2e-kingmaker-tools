@@ -1,8 +1,8 @@
 package at.posselt.pfrpg2e.kingdom.sheet
 
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
-import at.posselt.pfrpg2e.kingdom.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.unrest.calculateUnrest
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.utils.postChatMessage

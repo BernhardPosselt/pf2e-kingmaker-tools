@@ -2,8 +2,8 @@ package at.posselt.pfrpg2e.kingdom.sheet
 
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
-import at.posselt.pfrpg2e.kingdom.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.resources.Income
 import at.posselt.pfrpg2e.kingdom.resources.calculateIncome
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage

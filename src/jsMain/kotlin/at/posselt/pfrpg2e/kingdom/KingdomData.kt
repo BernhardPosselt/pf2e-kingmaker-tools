@@ -6,7 +6,6 @@ import at.posselt.pfrpg2e.data.actor.SkillRanks
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
-import at.posselt.pfrpg2e.data.kingdom.Ruins
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActor
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
@@ -19,12 +18,15 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
 import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
 import at.posselt.pfrpg2e.kingdom.data.RawFame
+import at.posselt.pfrpg2e.kingdom.data.RawFeat
+import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.RawLeaderValues
 import at.posselt.pfrpg2e.kingdom.data.RawLeaders
 import at.posselt.pfrpg2e.kingdom.data.RawNotes
 import at.posselt.pfrpg2e.kingdom.data.RawResources
 import at.posselt.pfrpg2e.kingdom.data.RawRuin
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import at.posselt.pfrpg2e.utils.asSequence
@@ -38,22 +40,7 @@ import kotlinx.js.JsPlainObject
 
 
 @JsPlainObject
-external interface RawGroup {
-    var name: String
-    var negotiationDC: Int
-    var atWar: Boolean
-    var relations: String  // none, diplomatic-relations, trade-agreement
-}
-
-
-@JsPlainObject
-external interface RawFeat {
-    var id: String
-    var level: Int
-}
-
-@JsPlainObject
-external interface MileStone {
+external interface RawMileStone {
     var name: String
     var xp: Int
     var completed: Boolean
@@ -153,14 +140,14 @@ external interface KingdomData {
     var turnsWithoutCultEvent: Int
     var turnsWithoutEvent: Int
     var notes: RawNotes
-    var homebrewActivities: Array<KingdomActivity>  // TODO dialog
-    var leaders: RawLeaders  // TODO drag and drops
+    var homebrewActivities: Array<KingdomActivity>
+    var leaders: RawLeaders
     var groups: Array<RawGroup>  // TODO
     var feats: Array<RawFeat>  // TODO
     var bonusFeats: Array<BonusFeat>  // TODO
     var skillRanks: Record<String, Int>  // TODO
     var abilityScores: Record<String, Int>  // TODO
-    var milestones: Array<MileStone>  // TODO
+    var milestones: Array<RawMileStone>  // TODO
     var ongoingEvents: Array<OngoingEvent>  // TODO
     var activityBlacklist: Array<String>  // TODO
     var modifiers: Array<RawModifier>  // TODO
@@ -242,25 +229,6 @@ fun KingdomData.getAllActivities(): List<KingdomActivity> {
 fun KingdomData.getActivity(id: String): KingdomActivity? =
     getAllActivities().associateBy { it.id }[id]
 
-fun KingdomData.getAllFeats(): List<RawKingdomFeat> {
-    val homebrewFeats = emptySet<String>().toSet()
-    return kingdomFeats.filter { it.name !in homebrewFeats } + emptySet()
-}
-
-data class ChosenFeat(
-    val takenAtLevel: Int,
-    val feat: RawKingdomFeat,
-)
-
-fun KingdomData.getChosenFeats(): List<ChosenFeat> {
-    val featsByName = getAllFeats().associateBy { it.name }
-    return feats.mapNotNull { feat ->
-        featsByName[feat.id]?.let {
-            ChosenFeat(takenAtLevel = feat.level, it)
-        }
-    }
-}
-
 fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
     return kingdomFeatures
         .flatMap { it.explodeLevels() }
@@ -269,13 +237,6 @@ fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
 
 fun KingdomData.hasAssurance(skill: KingdomSkill) =
     getChosenFeats().any { it.feat.assuranceForSkill == skill.value }
-
-fun RawRuin.parse() = Ruins(
-    decayPenalty = decay.penalty,
-    strifePenalty = strife.penalty,
-    corruptionPenalty = corruption.penalty,
-    crimePenalty = crime.penalty,
-)
 
 fun KingdomData.parseAbilityScores() = KingdomAbilityScores(
     economy = abilityScores["economy"] ?: 10,

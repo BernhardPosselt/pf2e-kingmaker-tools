@@ -5,6 +5,8 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.parse
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.GlobalStructureBonuses

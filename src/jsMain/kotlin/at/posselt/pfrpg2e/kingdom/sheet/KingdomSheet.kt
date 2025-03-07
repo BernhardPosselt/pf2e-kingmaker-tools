@@ -23,9 +23,9 @@ import at.posselt.pfrpg2e.kingdom.data.RawNotes
 import at.posselt.pfrpg2e.kingdom.data.RawResources
 import at.posselt.pfrpg2e.kingdom.data.RawRuin
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
-import at.posselt.pfrpg2e.kingdom.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.hasLeaderUuid

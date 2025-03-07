@@ -25,6 +25,7 @@ import at.posselt.pfrpg2e.data.kingdom.calculateRpXP
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.addModifier
@@ -38,7 +39,6 @@ import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
-import at.posselt.pfrpg2e.kingdom.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getKingdomActor
 import at.posselt.pfrpg2e.kingdom.getRealmData
