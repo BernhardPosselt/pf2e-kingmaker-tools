@@ -62,7 +62,6 @@ import {
     modifierToLabel,
     parseLeaderPerformingCheck
 } from './modifiers';
-import {addEffectDialog} from './dialogs/add-effect-dialog';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
 import {calculateUnrestPenalty} from './data/unrest';
@@ -684,12 +683,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             });
         $html.querySelector('#km-add-effect')
             ?.addEventListener('click', async () => {
-                const allActivities = Object.keys(getKingdomActivitiesById(this.game, this.getKingdom().homebrewActivities));
-                addEffectDialog(allActivities, async (modifier) => {
-                    const current = this.getKingdom();
-                    current.modifiers.push(modifier);
-                    await this.saveKingdom(current);
-                });
+                this.game.pf2eKingmakerTools.migration.addModifier()
             });
         $html.querySelectorAll('.km-delete-effect')
             ?.forEach(el => {

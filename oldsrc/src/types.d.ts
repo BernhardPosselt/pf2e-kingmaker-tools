@@ -60,6 +60,7 @@ declare global {
                     kingdomActor: PF2ENpc,
                     army: Actor,
                 ) => void
+                addModifier: () => void
             }
         };
         pf2e: {

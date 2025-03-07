@@ -78,6 +78,7 @@ external interface KtMigration {
     val tacticsBrowser: (game: Game, actor: PF2ENpc, kingdom: KingdomData, army: PF2EArmy) -> Unit
     val adjustUnrest: (kingdom: KingdomData) -> Promise<Int>
     val collectResources: (kingdom: KingdomData) -> Promise<AnyObject>
+    val addModifier: () -> Unit
 }
 
 @JsPlainObject

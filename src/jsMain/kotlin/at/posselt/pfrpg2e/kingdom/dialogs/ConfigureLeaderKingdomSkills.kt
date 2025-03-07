@@ -90,7 +90,7 @@ private fun LeaderKingdomSkillsData.toKingdomSkills(): RawLeaderKingdomSkills =
         warden = warden.toStringArray(),
     )
 
-@JsExport
+//@JsExport
 class ConfigureLeaderKingdomSkillsModel(val value: AnyObject) : DataModel(value) {
     companion object {
         @Suppress("unused")

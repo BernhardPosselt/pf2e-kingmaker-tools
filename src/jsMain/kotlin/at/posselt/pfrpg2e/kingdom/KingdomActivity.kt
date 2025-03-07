@@ -26,7 +26,7 @@ external interface KingdomActivity {
     var requirement: String?
     var special: String?
     var skills: RawSkillRanks
-    var phase: KingdomPhase
+    var phase: String
     var dc: KingdomDc
     var dcAdjustment: Int?
     var enabled: Boolean

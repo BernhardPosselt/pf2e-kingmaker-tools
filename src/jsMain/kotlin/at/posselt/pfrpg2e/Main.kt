@@ -21,6 +21,7 @@ import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
+import at.posselt.pfrpg2e.kingdom.dialogs.addModifier
 import at.posselt.pfrpg2e.kingdom.dialogs.addOngoingEvent
 import at.posselt.pfrpg2e.kingdom.dialogs.armyBrowser
 import at.posselt.pfrpg2e.kingdom.dialogs.armyTacticsBrowser
@@ -29,14 +30,18 @@ import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
+import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.getKingdom
+import at.posselt.pfrpg2e.kingdom.getKingdomActor
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.kingdomActivities
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.kingdom.kingdomFeatures
 import at.posselt.pfrpg2e.kingdom.resource.adjustUnrest
 import at.posselt.pfrpg2e.kingdom.resource.collectResources
+import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.structures.parseStructure
 import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
@@ -225,6 +230,18 @@ fun main() {
                 tacticsBrowser = { game, actor, kingdom, army ->
                     buildPromise {
                         armyTacticsBrowser(game, actor, kingdom, army)
+                    }
+                },
+                addModifier = {
+                    buildPromise {
+                        val kingdomActor = game.getKingdomActor()
+                        val kingdom = kingdomActor?.getKingdom()
+                        kingdom?.getAllActivities()?.let {
+                            addModifier(it) { mod ->
+                                kingdom.modifiers = kingdom.modifiers + mod
+                                kingdomActor.setKingdom(kingdom)
+                            }
+                        }
                     }
                 },
                 checkDialog = { game, kingdom, kingdomActor, activity, structure, skill, afterRoll ->

@@ -29,13 +29,11 @@ import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.Record
 import kotlinx.js.JsPlainObject
 
-typealias KingdomAbility = String // culture, economy, loyalty or stability
-typealias AbilityScores = Record<KingdomAbility, Int>
+typealias AbilityScores = Record<String, Int>
 typealias LeaderValue = String // ruler, counselor, general, emissary, magister, treasurer, viceroy,warden
 typealias Leaders = Record<LeaderValue, LeaderValues>
 typealias RawLeaderType = String // pc, regularNpc, highlyMotivatedNpc, nonPathfinderNpc
 typealias GroupRelations = String  // none, diplomatic-relations, trade-agreement
-typealias KingdomPhase = String  // army, civic, commerce, event, leadership, region, upkeep
 typealias Heartland = String // forest-or-swamp, hill-or-plain, lake-or-river, mountain-or-ruins
 typealias FameType = String  // famous or infamous
 typealias Companion = String // Amiri Ekundayo Harrim Jaethal Jubilost Kalikke Kanerah Linzi Nok-Nok Octavia Regongar Tristian Valerie
