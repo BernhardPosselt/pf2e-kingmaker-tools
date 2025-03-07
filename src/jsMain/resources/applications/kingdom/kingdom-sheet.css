@@ -1,0 +1,70 @@
+#kmKingdomSheet {
+    .window-content {
+        padding: 0;
+    }
+
+    .km-kingdom-sheet-content-wrapper {
+        background-image: url("../../../img/camping/backgrounds/urban-day.webp");
+        display: flex;
+        background-size: cover;
+        height: calc(100vh - 310px);
+
+    }
+
+    .km-kingdom-sheet-sidebar {
+        width: 300px;
+        background-color: var(--background);
+        border-radius: 10px;
+        margin: 10px 0 10px 10px;
+        overflow: auto;
+    }
+
+    .km-kingdom-sheet-content {
+        height: 600px;
+        overflow: auto;
+        background-color: var(--background);
+        border-radius: 10px;
+        margin: 10px;
+    }
+
+    .km-kingdom-sheet-header {
+        display: flex;
+
+        .km-kingdom-sheet-name {
+        }
+
+        .km-kingdom-sheet-active-settlement {
+        }
+
+        .km-kingdom-sheet-active-xp {
+        }
+
+        .km-kingdom-sheet-active-xp-threshold {
+        }
+
+        .km-kingdom-sheet-active-level {
+        }
+
+        .km-kingdom-sheet-active-fame {
+        }
+
+        .km-kingdom-sheet-active-fame-next {
+        }
+    }
+
+    nav {
+        ul {
+            list-style-type: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+
+            a {
+                padding: .5em 1em;
+                /*text-decoration: none;*/
+                /*color: white;*/
+                /*background-color: var(--primary-km);*/
+            }
+        }
+    }
+}

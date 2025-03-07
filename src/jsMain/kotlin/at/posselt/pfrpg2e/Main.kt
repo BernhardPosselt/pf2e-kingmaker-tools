@@ -22,6 +22,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.calculateEventXP
 import at.posselt.pfrpg2e.data.kingdom.calculateHexXP
 import at.posselt.pfrpg2e.data.kingdom.calculateRpXP
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
@@ -44,6 +45,7 @@ import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.kingdomActivities
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.kingdom.kingdomFeatures
+import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.getHighestLeadershipModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseLeaderActors
@@ -51,7 +53,6 @@ import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.adjustUnrest
 import at.posselt.pfrpg2e.kingdom.sheet.calculateSkillModifierBreakdown
 import at.posselt.pfrpg2e.kingdom.sheet.collectResources
-import at.posselt.pfrpg2e.kingdom.sheet.getHighestLeadershipModifiers
 import at.posselt.pfrpg2e.kingdom.sheet.openKingdomSheet
 import at.posselt.pfrpg2e.kingdom.sheet.tickDownModifiers
 import at.posselt.pfrpg2e.kingdom.structures.parseStructure
@@ -271,7 +272,7 @@ fun main() {
                             leaderSkills = kingdom.settings.leaderSkills.parse(),
                         )
                         val map = JsMap<String, Int>()
-                        mods.forEach { (leader, bonus) -> map[leader.value] = bonus }
+                        Leader.entries.forEach { leader -> map[leader.value] = mods.resolve(leader) }
                         map
                     }
                 },
@@ -329,6 +330,7 @@ fun main() {
                 game.migratePfrpg2eKingdomCampingWeather()
                 showFirstRunMessage(game)
                 validateStructures(game)
+                openKingdomSheet(game, actionDispatcher, game.getKingdomActor())
             }
         }
 

@@ -16,11 +16,18 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
+import at.posselt.pfrpg2e.kingdom.data.RawConsumption
+import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
+import at.posselt.pfrpg2e.kingdom.data.RawFame
+import at.posselt.pfrpg2e.kingdom.data.RawLeaderValues
+import at.posselt.pfrpg2e.kingdom.data.RawLeaders
+import at.posselt.pfrpg2e.kingdom.data.RawNotes
+import at.posselt.pfrpg2e.kingdom.data.RawResources
+import at.posselt.pfrpg2e.kingdom.data.RawRuin
+import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import at.posselt.pfrpg2e.utils.asSequence
-import at.posselt.pfrpg2e.utils.awaitAll
-import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidOfTypes
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ECharacter
@@ -29,78 +36,15 @@ import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.Record
 import kotlinx.js.JsPlainObject
 
-typealias AbilityScores = Record<String, Int>
-typealias LeaderValue = String // ruler, counselor, general, emissary, magister, treasurer, viceroy,warden
-typealias RawLeaderType = String // pc, regularNpc, highlyMotivatedNpc, nonPathfinderNpc
-typealias GroupRelations = String  // none, diplomatic-relations, trade-agreement
-typealias Heartland = String // forest-or-swamp, hill-or-plain, lake-or-river, mountain-or-ruins
-typealias FameType = String  // famous or infamous
-typealias Companion = String // Amiri Ekundayo Harrim Jaethal Jubilost Kalikke Kanerah Linzi Nok-Nok Octavia Regongar Tristian Valerie
-typealias KingdomSkillValue = String // agriculture, arts, boating, defense, engineering, exploration, folklore, industry, intrigue, magic, politics, scholarship, statecraft, trade, warfare, wilderness
-typealias SkillValue = String // acrobatics, athletics, etc
-typealias RawSkillRanks = Record<KingdomSkillValue, Int>
 
 @JsPlainObject
-external interface LeaderValues {
-    var uuid: String?
-    var invested: Boolean
-    var type: RawLeaderType
-    var vacant: Boolean
-}
-
-
-@JsPlainObject
-external interface RuinValues {
-    var value: Int
-    var penalty: Int
-    var threshold: Int
-}
-
-@JsPlainObject
-external interface Ruin {
-    var corruption: RuinValues
-    var crime: RuinValues
-    var decay: RuinValues
-    var strife: RuinValues
-}
-
-@JsPlainObject
-external interface Group {
+external interface RawGroup {
     var name: String
     var negotiationDC: Int
     var atWar: Boolean
-    var relations: GroupRelations
+    var relations: String  // none, diplomatic-relations, trade-agreement
 }
 
-@JsPlainObject
-external interface RawWorkSite {
-    var quantity: Int
-    var resources: Int
-}
-
-@JsPlainObject
-external interface RawWorkSites {
-    var farmlands: RawWorkSite
-    var lumberCamps: RawWorkSite
-    var mines: RawWorkSite
-    var quarries: RawWorkSite
-    var luxurySources: RawWorkSite
-}
-
-@JsPlainObject
-external interface Commodities {
-    var food: Int
-    var lumber: Int
-    var luxuries: Int
-    var ore: Int
-    var stone: Int
-}
-
-@JsPlainObject
-external interface CurrentCommodities {
-    var now: Commodities
-    var next: Commodities
-}
 
 @JsPlainObject
 external interface RawFeat {
@@ -126,31 +70,6 @@ external interface BonusFeat {
     var id: String
 }
 
-@JsPlainObject
-external interface Fame {
-    var now: Int
-    var next: Int
-    var type: FameType
-}
-
-@JsPlainObject
-external interface RawConsumption {
-    var armies: Int
-    var now: Int
-    var next: Int
-}
-
-@JsPlainObject
-external interface Notes {
-    var public: String
-    var gm: String
-}
-
-@JsPlainObject
-external interface Resources {
-    var now: Int
-    var next: Int
-}
 
 @JsPlainObject
 external interface KingdomSettings {
@@ -185,67 +104,67 @@ external interface KingdomSettings {
 
 @JsPlainObject
 external interface RawLeaderKingdomSkills {
-    var ruler: Array<KingdomSkillValue>
-    var counselor: Array<KingdomSkillValue>
-    var emissary: Array<KingdomSkillValue>
-    var general: Array<KingdomSkillValue>
-    var magister: Array<KingdomSkillValue>
-    var treasurer: Array<KingdomSkillValue>
-    var viceroy: Array<KingdomSkillValue>
-    var warden: Array<KingdomSkillValue>
+    var ruler: Array<String>
+    var counselor: Array<String>
+    var emissary: Array<String>
+    var general: Array<String>
+    var magister: Array<String>
+    var treasurer: Array<String>
+    var viceroy: Array<String>
+    var warden: Array<String>
 }
 
 @JsPlainObject
 external interface RawLeaderSkills {
-    var ruler: Array<SkillValue>
-    var counselor: Array<SkillValue>
-    var emissary: Array<SkillValue>
-    var general: Array<SkillValue>
-    var magister: Array<SkillValue>
-    var treasurer: Array<SkillValue>
-    var viceroy: Array<SkillValue>
-    var warden: Array<SkillValue>
+    var ruler: Array<String>
+    var counselor: Array<String>
+    var emissary: Array<String>
+    var general: Array<String>
+    var magister: Array<String>
+    var treasurer: Array<String>
+    var viceroy: Array<String>
+    var warden: Array<String>
 }
 
 @JsPlainObject
 external interface KingdomData {
     var name: String
     var atWar: Boolean
-    var charter: String
-    var government: String
-    var fame: Fame
+    var charter: String // TODO
+    var government: String // TODO
+    var fame: RawFame
     var level: Int
     var xpThreshold: Int
     var xp: Int
     var size: Int
     var unrest: Int
-    var resourcePoints: Resources
-    var resourceDice: Resources
+    var resourcePoints: RawResources
+    var resourceDice: RawResources
     var workSites: RawWorkSites
-    var heartland: Heartland
+    var heartland: String // forest-or-swamp, hill-or-plain, lake-or-river, mountain-or-ruins  // TODO
     var realmSceneId: String?
     var consumption: RawConsumption
-    var notes: Notes
-    var homebrewActivities: Array<KingdomActivity>
     var supernaturalSolutions: Int
-    var turnsWithoutCultEvent: Int
     var creativeSolutions: Int
-    var leaders: Record<LeaderValue, LeaderValues>
     var settings: KingdomSettings
-    var commodities: CurrentCommodities
-    var groups: Array<Group>
-    var feats: Array<RawFeat>
-    var bonusFeats: Array<BonusFeat>
-    var skillRanks: RawSkillRanks
-    var abilityScores: AbilityScores
-    var ruin: Ruin
-    var activeSettlement: String
-    var milestones: Array<MileStone>
-    var ongoingEvents: Array<OngoingEvent>
+    var commodities: RawCurrentCommodities
+    var ruin: RawRuin
+    var activeSettlement: String?
+    var turnsWithoutCultEvent: Int
     var turnsWithoutEvent: Int
-    var activityBlacklist: Array<String>
-    var modifiers: Array<RawModifier>
-    var settlements: Array<RawSettlement>
+    var notes: RawNotes
+    var homebrewActivities: Array<KingdomActivity>  // TODO dialog
+    var leaders: RawLeaders  // TODO drag and drops
+    var groups: Array<RawGroup>  // TODO
+    var feats: Array<RawFeat>  // TODO
+    var bonusFeats: Array<BonusFeat>  // TODO
+    var skillRanks: Record<String, Int>  // TODO
+    var abilityScores: Record<String, Int>  // TODO
+    var milestones: Array<MileStone>  // TODO
+    var ongoingEvents: Array<OngoingEvent>  // TODO
+    var activityBlacklist: Array<String>  // TODO
+    var modifiers: Array<RawModifier>  // TODO
+    var settlements: Array<RawSettlement>  // TODO
 }
 
 fun RawLeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =
@@ -285,14 +204,14 @@ fun RawLeaderSkills.deleteLore(attribute: Attribute) = RawLeaderSkills(
 
 fun KingdomData.vacancies() =
     Vacancies(
-        ruler = leaders[Leader.RULER.value]?.vacant == true,
-        counselor = leaders[Leader.COUNSELOR.value]?.vacant == true,
-        emissary = leaders[Leader.EMISSARY.value]?.vacant == true,
-        general = leaders[Leader.GENERAL.value]?.vacant == true,
-        magister = leaders[Leader.MAGISTER.value]?.vacant == true,
-        treasurer = leaders[Leader.TREASURER.value]?.vacant == true,
-        viceroy = leaders[Leader.VICEROY.value]?.vacant == true,
-        warden = leaders[Leader.WARDEN.value]?.vacant == true,
+        ruler = leaders.ruler.vacant == true,
+        counselor = leaders.counselor.vacant == true,
+        emissary = leaders.emissary.vacant == true,
+        general = leaders.general.vacant == true,
+        magister = leaders.magister.vacant == true,
+        treasurer = leaders.treasurer.vacant == true,
+        viceroy = leaders.viceroy.vacant == true,
+        warden = leaders.warden.vacant == true,
     )
 
 fun KingdomData.parseSkillRanks() =
@@ -351,7 +270,7 @@ fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
 fun KingdomData.hasAssurance(skill: KingdomSkill) =
     getChosenFeats().any { it.feat.assuranceForSkill == skill.value }
 
-fun Ruin.parse() = Ruins(
+fun RawRuin.parse() = Ruins(
     decayPenalty = decay.penalty,
     strifePenalty = strife.penalty,
     corruptionPenalty = corruption.penalty,
@@ -366,7 +285,14 @@ fun KingdomData.parseAbilityScores() = KingdomAbilityScores(
 )
 
 fun KingdomData.hasLeaderUuid(uuid: String) =
-    leaders.asSequence().any { (_, value) -> value.uuid == uuid }
+    leaders.ruler.uuid == uuid ||
+            leaders.counselor.uuid == uuid ||
+            leaders.emissary.uuid == uuid ||
+            leaders.general.uuid == uuid ||
+            leaders.magister.uuid == uuid ||
+            leaders.treasurer.uuid == uuid ||
+            leaders.viceroy.uuid == uuid ||
+            leaders.warden.uuid == uuid
 
 private fun PF2ECreature.parseSkillRanks(): SkillRanks =
     SkillRanks(
@@ -399,40 +325,33 @@ private fun PF2ECreature.parseSkillRanks(): SkillRanks =
             .toList()
     )
 
-suspend fun KingdomData.parseLeaderActors(): LeaderActors {
-    val actorsByType = leaders.asSequence()
-        .mapNotNull { (name, values) ->
-            Leader.fromString(name)?.let {
-                it to values
+private suspend fun RawLeaderValues.parseActor(): LeaderActor? =
+    uuid?.let { fromUuidOfTypes(it, PF2ECharacter::class, PF2ENpc::class) }
+        ?.let { actor ->
+            val skillRanks = actor.parseSkillRanks()
+            LeaderType.fromString(type)?.let { type ->
+                LeaderActor(
+                    level = actor.level,
+                    type = type,
+                    ranks = skillRanks,
+                    invested = invested,
+                    uuid = actor.uuid,
+                    img = actor.img,
+                    name = actor.name,
+                )
             }
         }
-        .map { (leader, values) ->
-            buildPromise {
-                values.uuid
-                    ?.let { fromUuidOfTypes(it, PF2ECharacter::class, PF2ENpc::class) }
-                    ?.let { actor ->
-                        val skillRanks = actor.parseSkillRanks()
-                        LeaderType.fromString(values.type)?.let { type ->
-                            leader to LeaderActor(actor.level, type, skillRanks, values.invested)
-                        }
-                    }
-            }
-        }
-        .toList()
-        .awaitAll()
-        .filterNotNull()
-        .toMap()
-    return LeaderActors(
-        ruler = actorsByType[Leader.RULER],
-        counselor = actorsByType[Leader.COUNSELOR],
-        emissary = actorsByType[Leader.EMISSARY],
-        general = actorsByType[Leader.GENERAL],
-        magister = actorsByType[Leader.MAGISTER],
-        treasurer = actorsByType[Leader.TREASURER],
-        viceroy = actorsByType[Leader.VICEROY],
-        warden = actorsByType[Leader.WARDEN]
-    )
-}
+
+suspend fun KingdomData.parseLeaderActors() = LeaderActors(
+    ruler = leaders.ruler.parseActor(),
+    counselor = leaders.counselor.parseActor(),
+    emissary = leaders.emissary.parseActor(),
+    general = leaders.general.parseActor(),
+    magister = leaders.magister.parseActor(),
+    treasurer = leaders.treasurer.parseActor(),
+    viceroy = leaders.viceroy.parseActor(),
+    warden = leaders.warden.parseActor(),
+)
 
 fun RawLeaderSkills.parse() = LeaderSkills(
     ruler = ruler.map { Attribute.fromString(it) },
@@ -483,7 +402,6 @@ fun KingdomData.getAllSettlements(game: Game): SettlementResult {
         current = settlementAndActive.find { it.component2() }?.first,
     )
 }
-
 
 
 @Deprecated("Do not use this, this should work with more than one sheet")

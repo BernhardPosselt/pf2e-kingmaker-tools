@@ -96,6 +96,7 @@ data class SettlementData(
     val type: SettlementType,
     val isSecondaryTerritory: Boolean,
     val waterBorders: Int,
+    val id: String,
 )
 
 fun evaluateSettlement(
@@ -130,6 +131,7 @@ fun evaluateSettlement(
         .toSet()
     val hasBridge = structures.any { it.isBridge }
     return Settlement(
+        id = data.id,
         name = data.name,
         waterBorders = data.waterBorders,
         isSecondaryTerritory = data.isSecondaryTerritory,

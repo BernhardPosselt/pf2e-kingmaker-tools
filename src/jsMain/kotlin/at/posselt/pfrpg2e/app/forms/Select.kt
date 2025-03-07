@@ -1,7 +1,6 @@
 package at.posselt.pfrpg2e.app.forms
 
 import at.posselt.pfrpg2e.data.actor.Attribute
-import at.posselt.pfrpg2e.data.actor.Perception
 import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
@@ -232,7 +231,7 @@ fun RollTable.toOption(useUuid: Boolean = false) =
     if (useUuid) {
         SelectOption(label = name, value = uuid)
     } else {
-        id?.let {
+        this@toOption.id?.let {
             SelectOption(label = name, value = it)
         }
     }

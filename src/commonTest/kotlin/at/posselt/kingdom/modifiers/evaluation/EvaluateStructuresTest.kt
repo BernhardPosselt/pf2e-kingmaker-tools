@@ -94,6 +94,7 @@ class EvaluateStructuresTest {
                 waterBorders = 4,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                id = "hi",
             ),
             structures = structures,
             allStructuresStack = false,
@@ -154,6 +155,7 @@ class EvaluateStructuresTest {
                 waterBorders = 4,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                id = "hi",
             ),
             structures = emptyList(),
             allStructuresStack = false,
@@ -171,6 +173,7 @@ class EvaluateStructuresTest {
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                id = "hi",
             ),
             structures = listOf(
                 Structure(
@@ -219,6 +222,7 @@ class EvaluateStructuresTest {
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                id = "hi",
             ),
             structures = listOf(
                 Structure(
@@ -247,6 +251,7 @@ class EvaluateStructuresTest {
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                id = "hi",
             ),
             structures = listOf(
                 Structure(
@@ -275,6 +280,7 @@ class EvaluateStructuresTest {
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                id = "hi",
             ),
             structures = listOf(
                 Structure(

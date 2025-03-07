@@ -6,6 +6,7 @@ import kotlin.math.abs
 import kotlin.math.max
 
 data class Settlement(
+    val id: String,
     val name: String,
     val type: SettlementType,
     val waterBorders: Int,

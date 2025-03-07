@@ -58,6 +58,7 @@ fun Scene.parseSettlement(
     val settlementLevel = if (autoCalculateSettlementLevel) min(20, occupiedBlocks) else rawSettlement.level
     return evaluateSettlement(
         data = SettlementData(
+            id = rawSettlement.sceneId,
             name = name,
             occupiedBlocks = occupiedBlocks,
             level = settlementLevel,

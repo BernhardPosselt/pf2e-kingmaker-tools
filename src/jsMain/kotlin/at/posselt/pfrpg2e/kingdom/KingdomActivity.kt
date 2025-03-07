@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.utils.asSequence
 import js.objects.JsPlainObject
+import js.objects.Record
 import kotlinx.serialization.json.JsonElement
 
 typealias KingdomDc = Any // number or control, custom, none, scouting
@@ -24,7 +25,7 @@ external interface KingdomActivity {
     var description: String
     var requirement: String?
     var special: String?
-    var skills: RawSkillRanks
+    var skills: Record<String, Int>
     var phase: String
     var dc: KingdomDc
     var dcAdjustment: Int?

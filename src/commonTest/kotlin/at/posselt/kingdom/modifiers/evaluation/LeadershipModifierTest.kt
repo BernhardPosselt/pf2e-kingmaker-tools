@@ -30,7 +30,10 @@ class LeadershipModifierTest {
                         stealth = 2,
                         acrobatics = 3,
                     ),
-                    invested = false
+                    invested = false,
+                    uuid = "",
+                    img = null,
+                    name = "name",
                 )
             ),
         )

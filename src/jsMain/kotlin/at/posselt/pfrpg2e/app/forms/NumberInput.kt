@@ -13,6 +13,7 @@ data class NumberInput(
     val stacked: Boolean = true,
     val escapeLabel: Boolean = true,
     val labelElement: String = "label",
+    val disabled: Boolean = false,
 ) : IntoFormElementContext {
     override fun toContext() = FormElementContext(
         isFormElement = true,
@@ -23,7 +24,7 @@ data class NumberInput(
         select = false,
         time = false,
         required = required,
-        disabled = false,
+        disabled = disabled,
         number = true,
         text = false,
         image = false,

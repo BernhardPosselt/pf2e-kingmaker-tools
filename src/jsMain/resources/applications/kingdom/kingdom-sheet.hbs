@@ -1,3 +1,152 @@
 <div>
-    hi
+    <header class="km-kingdom-sheet-header">
+        <div class="km-kingdom-sheet-name">{{> formElement kingdomNameInput }}</div>
+        <div class="km-kingdom-sheet-active-settlement">{{> formElement settlementInput }}</div>
+        <div class="km-kingdom-sheet-active-xp">{{> formElement xpInput }}</div>
+        <div class="km-kingdom-sheet-active-xp-threshold">{{> formElement xpThresholdInput }}</div>
+        <div class="km-kingdom-sheet-active-level">{{> formElement levelInput }}</div>
+        <div class="km-kingdom-sheet-active-fame">{{> formElement fameContext.now }}</div>
+        <div class="km-kingdom-sheet-active-fame-next">{{> formElement fameContext.next }}</div>
+    </header>
+
+    <div class="km-kingdom-sheet-content-wrapper">
+        <div class="km-kingdom-sheet-sidebar">
+            {{controlDc}}
+            {{> formElement atWarInput }}
+            {{> formElement unrestInput }}
+            {{unrestPenalty}}
+            {{anarchyAt}}
+            ruin
+            {{> formElement ruinContext.corruption.value }}
+            {{> formElement ruinContext.corruption.penalty }}
+            {{> formElement ruinContext.corruption.threshold }}
+            {{> formElement ruinContext.crime.value }}
+            {{> formElement ruinContext.crime.penalty }}
+            {{> formElement ruinContext.crime.threshold }}
+            {{> formElement ruinContext.decay.value }}
+            {{> formElement ruinContext.decay.penalty }}
+            {{> formElement ruinContext.decay.threshold }}
+            {{> formElement ruinContext.strife.value }}
+            {{> formElement ruinContext.strife.penalty }}
+            {{> formElement ruinContext.strife.threshold }}
+            commodities
+            {{> formElement commoditiesContext.now.food }}
+            {{> formElement commoditiesContext.now.lumber }}
+            {{> formElement commoditiesContext.now.luxuries }}
+            {{> formElement commoditiesContext.now.ore }}
+            {{> formElement commoditiesContext.now.stone }}
+
+            {{> formElement commoditiesContext.next.food }}
+            {{> formElement commoditiesContext.next.lumber }}
+            {{> formElement commoditiesContext.next.luxuries }}
+            {{> formElement commoditiesContext.next.ore }}
+            {{> formElement commoditiesContext.next.stone }}
+            storage
+            {{ commoditiesContext.capacity.food }}
+            {{ commoditiesContext.capacity.lumber }}
+            {{ commoditiesContext.capacity.luxuries }}
+            {{ commoditiesContext.capacity.ore }}
+            {{ commoditiesContext.capacity.stone }}
+            {{> formElement resourcePointsContext.now }}
+            {{> formElement resourcePointsContext.next }}
+            {{> formElement resourceDiceContext.now }}
+            {{> formElement resourceDiceContext.next }}
+            {{> formElement supernaturalSolutionsInput }}
+            {{> formElement creativeSolutionsInput }}
+        </div>
+        <div class="km-kingdom-sheet-content">
+            <nav>
+                <ul>
+                    <li><a data-action="change-nav" href="#">Turn</a></li>
+                    <li><a data-action="change-nav" href="#">Status</a></li>
+                    <li><a data-action="change-nav" href="#">Skills</a></li>
+                    <li><a data-action="change-nav" href="#">Feats</a></li>
+                    <li><a data-action="change-nav" href="#">Settlements</a></li>
+                    <li><a data-action="change-nav" href="#">Trade Agreements (1)</a></li>
+                    <li><a data-action="change-nav" href="#">Effects</a></li>
+                    <li><a data-action="change-nav" href="#">Notes</a></li>
+                </ul>
+            </nav>
+            {{> formElement worksitesContext.farmlands.resources }}
+            {{> formElement worksitesContext.farmlands.quantity }}
+            {{ worksitesContext.farmlands.quantityValue }}
+            {{ worksitesContext.farmlands.resourcesValue }}
+            {{> formElement  worksitesContext.lumberCamps.resources }}
+            {{> formElement  worksitesContext.lumberCamps.quantity }}
+            {{ worksitesContext.lumberCamps.quantityValue }}
+            {{ worksitesContext.lumberCamps.resourcesValue }}
+            {{> formElement  worksitesContext.mines.resources }}
+            {{> formElement  worksitesContext.mines.quantity }}
+            {{ worksitesContext.mines.quantityValue }}
+            {{ worksitesContext.mines.resourcesValue }}
+            {{> formElement  worksitesContext.quarries.resources }}
+            {{> formElement  worksitesContext.quarries.quantity }}
+            {{ worksitesContext.quarries.quantityValue }}
+            {{ worksitesContext.quarries.resourcesValue }}
+            {{> formElement  worksitesContext.luxurySources.resources }}
+            {{> formElement  worksitesContext.luxurySources.quantity }}
+            {{ worksitesContext.luxurySources.quantityValue }}
+            {{ worksitesContext.luxurySources.resourcesValue }}
+
+            {{> formElement fameContext.type }}
+            {{> formElement sizeInput }}
+            {{> formElement consumptionContext.now }}
+            {{> formElement consumptionContext.next }}
+            {{> formElement consumptionContext.armies }}
+
+            {{editor notesContext.public target="notes.public" button=true editable=true engine="prosemirror"}}
+            {{editor notesContext.gm target="notes.gm" button=true editable=true engine="prosemirror"}}
+
+            leaders
+
+            {{> formElement leadersContext.ruler.invested }}
+            {{> formElement leadersContext.ruler.vacant }}
+            {{> formElement leadersContext.ruler.type }}
+            {{#if leadersContext.ruler.actor }}
+                {{> formElement leadersContext.ruler.actor.uuidInput }}
+            {{/if}}
+            {{> formElement leadersContext.counselor.invested }}
+            {{> formElement leadersContext.counselor.vacant }}
+            {{> formElement leadersContext.counselor.type }}
+            {{#if leadersContext.counselor.actor }}
+                {{> formElement leadersContext.counselor.actor.uuidInput }}
+            {{/if}}
+            {{> formElement leadersContext.emissary.invested }}
+            {{> formElement leadersContext.emissary.vacant }}
+            {{> formElement leadersContext.emissary.type }}
+            {{#if leadersContext.emissary.actor }}
+                {{> formElement leadersContext.emissary.actor.uuidInput }}
+            {{/if}}
+            {{> formElement leadersContext.general.invested }}
+            {{> formElement leadersContext.general.vacant }}
+            {{> formElement leadersContext.general.type }}
+            {{#if leadersContext.general.actor }}
+                {{> formElement leadersContext.general.actor.uuidInput }}
+            {{/if}}
+            {{> formElement leadersContext.magister.invested }}
+            {{> formElement leadersContext.magister.vacant }}
+            {{> formElement leadersContext.magister.type }}
+            {{#if leadersContext.magister.actor }}
+                {{> formElement leadersContext.magister.actor.uuidInput }}
+            {{/if}}
+            {{> formElement leadersContext.treasurer.invested }}
+            {{> formElement leadersContext.treasurer.vacant }}
+            {{> formElement leadersContext.treasurer.type }}
+            {{#if leadersContext.treasurer.actor }}
+                {{> formElement leadersContext.treasurer.actor.uuidInput }}
+            {{/if}}
+            {{> formElement leadersContext.viceroy.invested }}
+            {{> formElement leadersContext.viceroy.vacant }}
+            {{> formElement leadersContext.viceroy.type }}
+            {{#if leadersContext.viceroy.actor }}
+                {{> formElement leadersContext.viceroy.actor.uuidInput }}
+            {{/if}}
+            {{> formElement leadersContext.warden.invested }}
+            {{> formElement leadersContext.warden.vacant }}
+            {{> formElement leadersContext.warden.type }}
+            {{#if leadersContext.warden.actor }}
+                {{> formElement leadersContext.warden.actor.uuidInput }}
+            {{/if}}
+        </div>
+    </div>
 </div>

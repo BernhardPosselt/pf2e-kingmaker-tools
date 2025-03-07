@@ -7,6 +7,9 @@ data class LeaderActor(
     val type: LeaderType,
     val ranks: SkillRanks,
     val invested: Boolean,
+    val uuid: String,
+    val img: String?,
+    val name: String,
 )
 
 data class LeaderActors (

@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.RawLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.RawLeaderSkills
+import at.posselt.pfrpg2e.kingdom.data.RawLeaderValues
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
 import at.posselt.pfrpg2e.settings.getBoolean
 import at.posselt.pfrpg2e.settings.getInt
@@ -13,10 +14,16 @@ import at.posselt.pfrpg2e.settings.getString
 import at.posselt.pfrpg2e.settings.registerInt
 import at.posselt.pfrpg2e.settings.registerScalar
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.utils.asSequence
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ENpc
+
+private fun migrateLeaders(game: Game, values: RawLeaderValues) {
+    val name = values.asDynamic().name.unsafeCast<String?>()
+    values.type = "pc"
+    values.uuid = name
+        ?.let { n -> game.actors.find { it.name == n && (it is PF2ECharacter || it is PF2ENpc) }?.uuid }
+}
 
 class Migration12 : Migration(12, true) {
     override suspend fun migrateKingdom(game: Game, kingdom: KingdomData) {
@@ -88,13 +95,14 @@ class Migration12 : Migration(12, true) {
         val kingdomCultTable = game.settings.getString("kingdomCultTable")
             .takeIf { it.isNotBlank() }
             ?.let { game.tables.getName(it)?.uuid }
-        kingdom.leaders.asSequence().forEach {
-            val values = kingdom.leaders[it.component1()]
-            val name = values.asDynamic().name.unsafeCast<String?>()
-            values?.type = "pc"
-            values?.uuid = name
-                ?.let { n -> game.actors.find { it.name == n && (it is PF2ECharacter || it is PF2ENpc) }?.uuid }
-        }
+        migrateLeaders(game, kingdom.leaders.ruler)
+        migrateLeaders(game, kingdom.leaders.counselor)
+        migrateLeaders(game, kingdom.leaders.emissary)
+        migrateLeaders(game, kingdom.leaders.general)
+        migrateLeaders(game, kingdom.leaders.magister)
+        migrateLeaders(game, kingdom.leaders.treasurer)
+        migrateLeaders(game, kingdom.leaders.viceroy)
+        migrateLeaders(game, kingdom.leaders.warden)
         kingdom.settings = KingdomSettings(
             maximumFamePoints = kingdom.fame.asDynamic().max,
             rpToXpConversionRate = game.settings.getInt("rpToXpConversionRate"),
