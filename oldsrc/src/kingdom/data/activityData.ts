@@ -3,13 +3,12 @@ import {Skill} from './skills';
 import {Ruin} from './ruin';
 import {unslugify} from '../../utils';
 import {ResourceMode, ResourceTurn, RolledResources} from '../resources';
-import {Modifier} from "../modifiers";
 
 export type SkillRanks = Partial<Record<Skill, number>>;
 
 export interface ActivityResult {
     msg: string;
-    modifiers?: Modifier[];
+    modifiers?: unknown[];
 }
 
 export interface ActivityResults {

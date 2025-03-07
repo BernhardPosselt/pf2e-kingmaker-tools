@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.RawIn
 import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
+import io.github.uuidjs.uuid.v4
 import js.array.tupleOf
 import js.reflect.Reflect
 
@@ -20,6 +21,10 @@ class Migration13 : Migration(13) {
             val activities = it.asDynamic().activities as Array<String>?
             val abilities = it.asDynamic().abilities as Array<String>?
             val phases = it.asDynamic().phases as Array<String>?
+            if (it.asDynamic().consumeId == "") {
+                it.isConsumedAfterRoll = true
+            }
+            it.id = v4()
             if (skills != null) {
                 predicates.add(RawIn(`in` = tupleOf("@skill", skills)))
             }

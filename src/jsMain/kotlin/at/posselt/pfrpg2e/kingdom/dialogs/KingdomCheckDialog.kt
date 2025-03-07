@@ -130,6 +130,7 @@ private external interface CheckContext : HandlebarsRenderContext {
     val creativeSolutionPills: String
     val fortune: Boolean
     val downgrades: String
+    val consumeModifiers: String
 }
 
 @JsPlainObject
@@ -294,6 +295,7 @@ private class KingdomCheckDialog(
                     val downgrades = deserializeB64Json<Array<String>>(target.dataset["downgrades"]!!)
                         .mapNotNull { DegreeOfSuccess.fromString(it) }
                         .toSet()
+                    val consumedModifiers = deserializeB64Json<Array<String>>(target.dataset["consumeModifiers"]!!).toSet()
                     roll(
                         modifier = modifier,
                         pills = pills,
@@ -303,6 +305,7 @@ private class KingdomCheckDialog(
                         rollTwice = rollTwice,
                         creativeSolutionModifier = creativeSolutionModifier,
                         creativeSolutionPills = creativeSolutionPills,
+                        consumedModifiers = consumedModifiers,
                     )
                     close()
                 }
@@ -345,6 +348,7 @@ private class KingdomCheckDialog(
         fortune: Boolean,
         rollTwice: Boolean,
         downgrades: Set<DegreeOfSuccess>,
+        consumedModifiers: Set<String>,
     ) {
         rollCheck(
             afterRoll = afterRoll,
@@ -368,7 +372,7 @@ private class KingdomCheckDialog(
             kingdom.supernaturalSolutions = max(0, kingdom.supernaturalSolutions - 1)
         }
 
-        // TODO: consume modifiers
+        kingdom.modifiers = kingdom.modifiers.filter { it.id !in consumedModifiers }.toTypedArray()
         kingdomActor.setKingdom(kingdom)
     }
 
@@ -402,6 +406,10 @@ private class KingdomCheckDialog(
         val selectedSkill = context.usedSkill
         val hasAssurance = kingdom.hasAssurance(selectedSkill)
         val evaluatedModifiersById = evaluatedModifiers.modifiers.associateBy { it.id }
+        val consumeModifierIds = evaluatedModifiers.modifiers
+            .filter { it.isConsumedAfterRoll }
+            .map { it.id }
+            .toTypedArray()
         val pills = if (data.assurance) {
             serializeB64Json(
                 arrayOf(
@@ -512,6 +520,7 @@ private class KingdomCheckDialog(
             creativeSolutionModifier = creativeSolutionModifiers.total,
             creativeSolutionPills = creativeSolutionPills,
             fortune = evaluatedModifiers.fortune || data.supernaturalSolution,
+            consumeModifiers = serializeB64Json(consumeModifierIds)
         )
     }
 

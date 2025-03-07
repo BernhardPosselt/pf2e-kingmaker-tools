@@ -410,7 +410,7 @@ suspend fun KingdomData.parseLeaderActors(): LeaderActors {
                     ?.let { fromUuidOfTypes(it, PF2ECharacter::class, PF2ENpc::class) }
                     ?.let { actor ->
                         val skillRanks = actor.parseSkillRanks()
-                        LeaderType.fromString(actor.type)?.let { type ->
+                        LeaderType.fromString(values.type)?.let { type ->
                             leader to LeaderActor(actor.level, type, skillRanks, values.invested)
                         }
                     }

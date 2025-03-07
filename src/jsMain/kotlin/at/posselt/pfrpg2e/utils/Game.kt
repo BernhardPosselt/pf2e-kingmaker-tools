@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.KingdomFeature
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
+import at.posselt.pfrpg2e.kingdom.sheet.RawSkillStats
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.RawStructureData
 import com.foundryvtt.core.Actor
@@ -14,6 +15,7 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import com.foundryvtt.pf2e.actor.PF2ENpc
+import js.collections.JsMap
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -79,6 +81,12 @@ external interface KtMigration {
     val adjustUnrest: (kingdom: KingdomData) -> Promise<Int>
     val collectResources: (kingdom: KingdomData) -> Promise<AnyObject>
     val addModifier: () -> Unit
+    val tickDownModifiers: () -> Promise<Unit>
+    val calculateLeadershipBonuses: (kingdom: KingdomData) -> Promise<JsMap<String, Int>>
+    val calculateSkillModifiers: (
+        game: Game,
+        kingdom: KingdomData,
+    ) -> Promise<Array<RawSkillStats>>
 }
 
 @JsPlainObject

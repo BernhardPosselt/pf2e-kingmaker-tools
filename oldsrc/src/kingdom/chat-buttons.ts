@@ -2,7 +2,6 @@ import {getKingdom, saveKingdom} from './storage';
 import {gainFame} from './kingdom-utils';
 import {parsePayButton, payStructure} from './dialogs/structure-browser';
 import {decodeJson, isNonNullable, uuidv4} from "../utils";
-import {Modifier} from "./modifiers";
 import {updateResources} from "./resources";
 
 interface KingdomChatButton {
@@ -45,7 +44,7 @@ export const kingdomChatButtons: KingdomChatButton[] = [
             const data = target.dataset.data as string | undefined | null;
             const kingdom = getKingdom(actor);
             if (isNonNullable(data)) {
-                const modifier = decodeJson(data) as Modifier;
+                const modifier = decodeJson(data) as any;
                 // copy modifier because we alter the consumeId
                 const modifierCopy = {
                     ...modifier,

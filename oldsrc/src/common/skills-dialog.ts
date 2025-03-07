@@ -4,12 +4,12 @@ import {
     LabelAndValue,
     listenClick,
     loreToLoreSkill,
+    Proficiency,
     slugifyable,
     toLabelAndValue,
     unslugify,
 } from '../utils';
 import {allTrainedSkillRanks} from '../kingdom/data/skills';
-import {Proficiency} from "../kingdom/modifiers";
 
 
 interface Skill {

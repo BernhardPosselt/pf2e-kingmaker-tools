@@ -10,7 +10,7 @@ import at.posselt.pfrpg2e.toCamelCase
 data class ExpressionContext(
     val usedSkill: KingdomSkill,
     val ranks: KingdomSkillRanks,
-    val leader: Leader,
+    val leader: Leader?,
     val activity: String?,
     val phase: KingdomPhase?,
     val level: Int,
@@ -34,7 +34,7 @@ data class ExpressionContext(
     fun evaluateExpression(expression: Any?): Any? {
         return when (expression) {
             "@ability" -> usedSkill.ability.value
-            "@leader" -> leader.value
+            "@leader" -> leader?.value
             "@phase" -> phase?.value
             "@structure" -> structure?.name
             "@activity" -> activity

@@ -6,7 +6,6 @@ import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.utils.asSequence
-import io.github.uuidjs.uuid.v4
 import js.objects.JsPlainObject
 import kotlinx.serialization.json.JsonElement
 
@@ -69,7 +68,7 @@ fun KingdomActivity.resolveDc(
 }
 
 fun KingdomActivity.parseModifiers(): List<Modifier> =
-    modifiers?.map { it.parse(v4()) }.orEmpty()
+    modifiers?.map { it.parse() }.orEmpty()
 
 fun KingdomActivity.skillRanks(): Set<KingdomSkillRank> =
     skills.asSequence()

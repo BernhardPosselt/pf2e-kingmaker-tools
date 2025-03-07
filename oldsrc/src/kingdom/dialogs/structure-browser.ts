@@ -9,9 +9,9 @@ import {
     isNonNullable,
     LabelAndValue,
     listenClick,
+    rankToLabel,
     unslugify,
 } from '../../utils';
-import {rankToLabel} from '../modifiers';
 import {Kingdom} from '../data/kingdom';
 import {getKingdom, saveKingdom} from '../storage';
 import {DegreeOfSuccess} from '../../degree-of-success';
@@ -29,7 +29,6 @@ interface StructureBrowserOptions {
     game: Game;
     kingdom: Kingdom;
     sheetActor: Actor;
-    onRoll: (consumeModifiers: Set<string>) => Promise<void>,
 }
 
 interface ActivityFilter {
@@ -187,7 +186,6 @@ class StructureBrowserApp extends FormApplication<
     private readonly game: Game;
     private filters?: StructureFilters;
     private sheetActor: Actor;
-    private onRoll: (consumeModifiers: Set<string>) => Promise<void>;
 
     constructor(options: Partial<ApplicationOptions> & StructureBrowserOptions) {
         super(null, options);
@@ -196,7 +194,6 @@ class StructureBrowserApp extends FormApplication<
         this.structureActors = getAllImportedStructureActors(this.game);
         this.kingdom = options.kingdom;
         this.sheetActor = options.sheetActor;
-        this.onRoll = options.onRoll;
     }
 
     private async resetFilters(): Promise<StructureFilters> {
@@ -698,7 +695,6 @@ export async function showStructureBrowser(
     game: Game,
     kingdom: Kingdom,
     sheetActor: Actor,
-    onRoll: (consumeModifiers: Set<string>) => Promise<void>,
 ): Promise<void> {
-    new StructureBrowserApp({game, kingdom, sheetActor, onRoll}).render(true);
+    new StructureBrowserApp({game, kingdom, sheetActor}).render(true);
 }

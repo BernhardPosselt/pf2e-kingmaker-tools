@@ -27,7 +27,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Not
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Some
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.When
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
-import at.posselt.pfrpg2e.kingdom.resource.calculateAnarchy
+import at.posselt.pfrpg2e.kingdom.sheet.calculateAnarchy
 import io.github.uuidjs.uuid.v4
 import js.array.JsTuple2
 import js.objects.Object
@@ -108,6 +108,7 @@ external interface RawCase {
 
 @JsPlainObject
 external interface RawModifier {
+    var id: String?
     var type: String
     var buttonLabel: String?
     var value: Int
@@ -184,9 +185,9 @@ fun RawExpression<Any?>.parse(): When {
     }
 }
 
-fun RawModifier.parse(id: String): Modifier =
+fun RawModifier.parse(): Modifier =
     Modifier(
-        id = id,
+        id = id ?: v4(),
         type = ModifierType.fromString(type) ?: ModifierType.UNTYPED,
         value = value,
         name = name,
@@ -227,16 +228,16 @@ suspend fun KingdomData.checkModifiers(
             .fromString(settings.proficiencyMode) ?: UntrainedProficiencyMode.NONE,
         enableLeadershipBonuses = settings.enableLeadershipModifiers,
         featModifiers = chosenFeats
-            .flatMap { it.feat.modifiers?.map { it.parse(v4()) } ?: emptyList() },
+            .flatMap { it.feat.modifiers?.map { it.parse() } ?: emptyList() },
         featureModifiers = getEnabledFeatures()
-            .flatMap { it.modifiers?.map { it.parse(v4()) } ?: emptyList() },
+            .flatMap { it.modifiers?.map { it.parse() } ?: emptyList() },
     )
 }
 
 fun KingdomData.createExpressionContext(
     phase: KingdomPhase?,
     activity: KingdomActivity?,
-    leader: Leader,
+    leader: Leader?,
     usedSkill: KingdomSkill,
     rollOptions: Set<String>,
     structure: Structure?,
@@ -254,7 +255,7 @@ fun KingdomData.createExpressionContext(
             .flatMap { it.feat.flags?.toSet().orEmpty() }
             .toSet(),
         rollOptions = rollOptions,
-        isVacant = vacancies().resolveVacancy(leader),
+        isVacant = leader?.let { vacancies().resolveVacancy(it) } == true,
         structure = structure,
         anarchyAt = calculateAnarchy(chosenFeats)
     )

@@ -8,6 +8,7 @@ import {Structure} from "./kingdom/data/structures";
 import {KingdomFeat} from "./kingdom/data/feats";
 import {CombinedKingdomFeature} from "./kingdom/data/features";
 import {KingdomActivity} from "./kingdom/data/activityData";
+import {SkillStats} from "./kingdom/sheet";
 
 declare global {
     declare class PF2EModifier {
@@ -61,6 +62,14 @@ declare global {
                     army: Actor,
                 ) => void
                 addModifier: () => void
+                tickDownModifiers: () => Promise<void>
+                calculateSkillModifiers: (
+                    game: Game,
+                    kingdom: KingdomData,
+                ) => Promise<SkillStats[]>
+                calculateLeadershipBonuses: (
+                    kingdom: KingdomData
+                ) => Promise<Map<string, number>>
             }
         };
         pf2e: {

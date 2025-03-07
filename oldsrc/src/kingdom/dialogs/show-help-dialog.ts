@@ -1,6 +1,5 @@
 import {getKingdomActivitiesById} from '../data/activityData';
-import {capitalize} from '../../utils';
-import {rankToLabel} from '../modifiers';
+import {capitalize, rankToLabel} from '../../utils';
 import {updateResources} from '../resources';
 import {getKingdom} from '../storage';
 
@@ -9,6 +8,8 @@ interface HelpOptions {
     game: Game;
     actor: Actor;
 }
+
+
 
 class HelpApplication extends Application<ApplicationOptions & HelpOptions> {
     private activity: string;

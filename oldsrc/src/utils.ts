@@ -2,13 +2,57 @@ import {DegreeOfSuccess} from './degree-of-success';
 import {decode, encode} from 'js-base64';
 import {RollMode} from './settings';
 import {isArmyTactic} from './armies/utils';
-import { v4 } from 'uuid';
+import {v4} from 'uuid';
 
 export function escapeHtml(html: string): string {
     const text = document.createTextNode(html);
     const p = document.createElement('p');
     p.appendChild(text);
     return p.innerHTML;
+}
+
+export function proficiencyToRank(proficiency: Proficiency | undefined): number {
+    if (proficiency === 'trained') {
+        return 1;
+    } else if (proficiency === 'expert') {
+        return 2;
+    } else if (proficiency === 'master') {
+        return 3;
+    } else if (proficiency === 'legendary') {
+        return 4;
+    } else {
+        return 0;
+    }
+}
+
+export type Proficiency = 'trained' | 'expert' | 'master' | 'legendary';
+
+export type UntrainedProficiencyMode = 'half' | 'full' | 'none';
+
+export function rankToProficiency(rank: number): Proficiency | undefined {
+    if (rank === 1) {
+        return 'trained';
+    } else if (rank === 2) {
+        return 'expert';
+    } else if (rank === 3) {
+        return 'master';
+    } else if (rank === 4) {
+        return 'legendary';
+    }
+}
+
+export function rankToLabel(rank: number): string {
+    if (rank === 0) {
+        return 'Untrained';
+    } else if (rank === 1) {
+        return 'Trained';
+    } else if (rank === 2) {
+        return 'Expert';
+    } else if (rank === 3) {
+        return 'Master';
+    } else {
+        return 'Legendary';
+    }
 }
 
 export function isFirstGm(game: Game): boolean {

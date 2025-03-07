@@ -1,4 +1,3 @@
-import {Modifier} from "../modifiers";
 import {Kingdom} from "./kingdom";
 import {range} from "../../utils";
 
@@ -7,7 +6,7 @@ export interface KingdomFeature {
     name: string;
     description: string;
     flags?: string[];
-    modifiers?: Modifier[];
+    modifiers?: unknown[];
     claimHexAttempts?: number;
 }
 
@@ -16,7 +15,7 @@ export interface CombinedKingdomFeature {
     name: string;
     description: string;
     flags?: string[];
-    modifiers?: Modifier[];
+    modifiers?: unknown[];
     claimHexAttempts?: number;
 }
 

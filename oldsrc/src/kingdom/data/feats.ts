@@ -1,12 +1,11 @@
 import {isNonNullable} from '../../utils';
 import {Skill} from './skills';
-import {Modifier, Predicate} from '../modifiers';
 import {Kingdom} from "./kingdom";
 import {StringDegreeOfSuccess} from "../../degree-of-success";
 
 export interface UpgradeResult {
     upgrade: StringDegreeOfSuccess
-    predicate?: Predicate[];
+    predicate?: unknown[];
 }
 
 export interface KingdomFeat {
@@ -15,7 +14,7 @@ export interface KingdomFeat {
     text: string;
     prerequisites?: string;
     automationNotes?: string;
-    modifiers?: Modifier[];
+    modifiers?: unknown[];
     resourceDice?: number;
     settlementItemLevelIncrease?: number;
     trainSkill?: Skill;

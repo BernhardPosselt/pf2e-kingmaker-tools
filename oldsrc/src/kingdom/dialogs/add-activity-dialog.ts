@@ -1,9 +1,18 @@
 import {ActivityResult, KingdomActivity} from '../data/activityData';
-import {blankToUndefined, capitalize, deCamelCase, isBlank, LabelAndValue, listenClick, range} from '../../utils';
+import {
+    blankToUndefined,
+    capitalize,
+    deCamelCase,
+    isBlank,
+    LabelAndValue,
+    listenClick,
+    proficiencyToRank,
+    range,
+    rankToProficiency
+} from '../../utils';
 import {KingdomPhase} from '../data/activities';
 import {allSkills} from '../data/skills';
 import {skillDialog, SkillView} from '../../common/skills-dialog';
-import {proficiencyToRank, rankToProficiency} from '../modifiers';
 
 
 interface AddActivityData {

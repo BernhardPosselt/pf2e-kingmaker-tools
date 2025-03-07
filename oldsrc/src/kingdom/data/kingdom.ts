@@ -1,11 +1,11 @@
 import {Leader} from './leaders';
 import {getKingdomActivities, KingdomActivity} from './activityData';
 import {AbilityScores} from './abilities';
-import {Modifier, UntrainedProficiencyMode} from '../modifiers';
 import {Skill} from "./skills";
 import {LeadershipLeaderType} from "../skills";
 import {getAllSelectedFeats, UpgradeResult} from "./feats";
 import {getAllFeatures} from "./features";
+import {UntrainedProficiencyMode} from "../../utils";
 
 export type ResourceDieSize = 'd4' | 'd6' | 'd8' | 'd10' | 'd12';
 
@@ -241,7 +241,7 @@ export interface Kingdom {
     ongoingEvents: OngoingEvent[];
     turnsWithoutEvent: number;
     activityBlacklist: string[];
-    modifiers: Modifier[];
+    modifiers: unknown[];
     settlements: Settlement[];
 }
 

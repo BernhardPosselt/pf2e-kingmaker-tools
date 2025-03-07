@@ -39,9 +39,14 @@ import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.kingdomActivities
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.kingdom.kingdomFeatures
-import at.posselt.pfrpg2e.kingdom.resource.adjustUnrest
-import at.posselt.pfrpg2e.kingdom.resource.collectResources
+import at.posselt.pfrpg2e.kingdom.parse
+import at.posselt.pfrpg2e.kingdom.parseLeaderActors
 import at.posselt.pfrpg2e.kingdom.setKingdom
+import at.posselt.pfrpg2e.kingdom.sheet.adjustUnrest
+import at.posselt.pfrpg2e.kingdom.sheet.calculateSkillModifierBreakdown
+import at.posselt.pfrpg2e.kingdom.sheet.collectResources
+import at.posselt.pfrpg2e.kingdom.sheet.getHighestLeadershipModifiers
+import at.posselt.pfrpg2e.kingdom.sheet.tickDownModifiers
 import at.posselt.pfrpg2e.kingdom.structures.parseStructure
 import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
@@ -83,6 +88,7 @@ import com.foundryvtt.core.onReady
 import com.foundryvtt.core.onRenderChatLog
 import com.foundryvtt.core.onRenderChatMessage
 import io.kvision.jquery.get
+import js.collections.JsMap
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
@@ -241,6 +247,31 @@ fun main() {
                                 kingdom.modifiers = kingdom.modifiers + mod
                                 kingdomActor.setKingdom(kingdom)
                             }
+                        }
+                    }
+                },
+                calculateLeadershipBonuses = { kingdom ->
+                    buildPromise {
+                        val mods = getHighestLeadershipModifiers(
+                            leaderActors = kingdom.parseLeaderActors(),
+                            leaderSkills = kingdom.settings.leaderSkills.parse(),
+                        )
+                        val map = JsMap<String, Int>()
+                        mods.forEach { (leader, bonus) -> map[leader.value] = bonus }
+                        map
+                    }
+                },
+                calculateSkillModifiers = { game, kingdom ->
+                    val settlementResult = kingdom.getAllSettlements(game)
+                    buildPromise {
+                        calculateSkillModifierBreakdown(kingdom, settlementResult)
+                    }
+                },
+                tickDownModifiers = {
+                    buildPromise {
+                        val kingdomActor = game.getKingdomActor()
+                        kingdomActor?.getKingdom()?.let {
+                            tickDownModifiers(kingdomActor, it)
                         }
                     }
                 },

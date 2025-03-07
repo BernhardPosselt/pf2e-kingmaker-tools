@@ -7,12 +7,10 @@ import {
     Feat,
     getControlDC,
     getDefaultKingdomData,
-    getFlags,
     getSizeData,
     Kingdom,
     Leaders,
     LeaderValues,
-    ResourceDieSize,
     Ruin,
     Settlement,
     WorkSites,
@@ -37,7 +35,6 @@ import {
     getScene,
     getSettlement,
     getSettlementInfo,
-    getSettlementsWithoutLandBorders,
     getStolenLandsData,
     getStructureResult,
     getStructuresByName,
@@ -50,18 +47,10 @@ import {calculateEventXP, calculateHexXP, calculateRpXP} from './xp';
 import {setupDialog} from './dialogs/setup-dialog';
 import {getAllFeatures} from './data/features';
 import {createActivityLabel, getPerformableActivities, groupKingdomActivities,} from './data/activities';
-import {AbilityScores, calculateAbilityModifier} from './data/abilities';
-import {allLeaderTypes, calculateSkills} from './skills';
+import {Ability, AbilityScores, calculateAbilityModifier} from './data/abilities';
 import {calculateInvestedBonus, isInvested, Leader} from './data/leaders';
 import {showHelpDialog} from './dialogs/show-help-dialog';
 import {showSettlement} from './dialogs/settlement';
-import {
-    calculateLeadershipModifier,
-    createActiveSettlementModifiers,
-    Modifier,
-    modifierToLabel,
-    parseLeaderPerformingCheck
-} from './modifiers';
 import {getKingdom, saveKingdom} from './storage';
 import {gainFame, getCapacity, getConsumption} from './kingdom-utils';
 import {calculateUnrestPenalty} from './data/unrest';
@@ -71,6 +60,7 @@ import {gainUnrest, getKingdomActivitiesById, loseRP} from './data/activityData'
 import {manageKingdomActivitiesDialog} from './dialogs/activities-dialog';
 import {getSelectedArmies} from '../armies/utils';
 import {calculateResourceDicePerTurn} from "./structures";
+import {Skill} from "./data/skills";
 
 interface KingdomOptions {
     game: Game;
@@ -88,17 +78,42 @@ interface Effect {
     consumable: boolean;
 }
 
-function createEffects(modifiers: Modifier[]): Effect[] {
+function createEffects(modifiers: any[]): Effect[] {
     return modifiers.map(modifier => {
         return {
             name: modifier.name,
-            effect: modifierToLabel(modifier),
+            effect: modifier.buttonLabel ?? modifier.name,
             turns: modifier.turns === undefined ? 'indefinite' : `${modifier.turns}`,
-            consumable: modifier.consumeId !== undefined,
+            consumable: modifier.isConsumedAfterRoll === true,
         };
     });
 }
 
+export interface ModifierTotal {
+    bonus: number;
+    penalty: number;
+}
+
+export interface ModifierTotals {
+    item: ModifierTotal;
+    circumstance: ModifierTotal;
+    status: ModifierTotal;
+    ability: ModifierTotal;
+    proficiency: ModifierTotal;
+    untyped: ModifierTotal;
+    leadership: ModifierTotal;
+    vacancyPenalty: number;
+    value: number;
+}
+
+export interface SkillStats {
+    skill: Skill;
+    skillLabel: string;
+    ability: Ability;
+    abilityLabel: string;
+    rank: number;
+    total: ModifierTotals;
+}
 
 class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions, object, Kingdom> {
     private sheetActor: Actor;
@@ -213,20 +228,10 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             farmlands: workSites.farmlands.quantity,
             food: workSites.farmlands.resources,
             ...this.getActiveTabs(),
-            skills: calculateSkills({
-                kingdom: kingdomData,
-                skillItemBonuses: activeSettlementStructureResult?.skillBonuses,
-                additionalModifiers: createActiveSettlementModifiers(
-                    this.game,
-                    kingdomData,
-                    activeSettlement?.settlement,
-                    activeSettlementStructureResult,
-                    getSettlementsWithoutLandBorders(this.game, kingdomData),
-                ),
-                activities,
-                currentLeader: undefined,
-                flags: getFlags(this.game, kingdomData),
-            }),
+            skills: await this.game.pf2eKingmakerTools.migration.calculateSkillModifiers(
+                this.game,
+                kingdomData,
+            ),
             leaders: await this.getLeaders(kingdomData.leaders),
             abilities: this.getAbilities(kingdomData.abilityScores, kingdomData.leaders, kingdomData.level),
             fameTypes: allFameTypes,
@@ -788,21 +793,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
         await this.saveKingdom(gainFame(this.getKingdom(), 1));
     }
 
-    private async consumeModifiers(consumeIds: Set<string>): Promise<void> {
-        const current = this.getKingdom();
-        await this.saveKingdom({
-            modifiers: current.modifiers
-                .filter(modifier => {
-                    const id = modifier.consumeId;
-                    if (id === undefined || id === null) {
-                        return true;
-                    } else {
-                        return !consumeIds.has(id);
-                    }
-                }),
-        });
-    }
-
     private async reduceRuin(event: Event): Promise<void> {
         const button = event.currentTarget as HTMLButtonElement;
         const ruin = button.dataset.ruin as keyof Ruin;
@@ -840,18 +830,8 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
             </ul>
             `,
         });
-        // tick down modifiers
-        const modifiers = current.modifiers
-            .map(modifier => {
-                const turns = modifier.turns === undefined ? undefined : modifier.turns - 1;
-                return {
-                    ...modifier,
-                    turns: turns,
-                };
-            })
-            .filter(modifier => (modifier?.turns ?? 1) > 0);
+        await this.game.pf2eKingmakerTools.migration.tickDownModifiers()
         await this.saveKingdom({
-            modifiers,
             fame: {
                 ...current.fame,
                 now: clamped(current.fame.next, 0, current.settings.maximumFamePoints),
@@ -1026,18 +1006,14 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
 
     private async getLeaders(leaders: Leaders): Promise<object> {
         const kingdom = this.getKingdom();
+        const leadershipBonuses = await this.game.pf2eKingmakerTools.migration.calculateLeadershipBonuses(kingdom);
+        console.log(leadershipBonuses)
         const entries = (Object.entries(leaders) as [keyof Leaders, LeaderValues][])
             .map(async ([leader, values]) => {
                 const actor = values.uuid ? await fromUuid(values.uuid) as Actor | null : undefined;
-                const leaderPerformingCheck = await parseLeaderPerformingCheck(leader, kingdom);
                 let bonus = 0;
-                if (kingdom.settings.enableLeadershipModifiers && leaderPerformingCheck) {
-                    bonus = calculateLeadershipModifier(
-                        leaderPerformingCheck,
-                        'arts',
-                        kingdom.settings.leaderKingdomSkills,
-                        kingdom.settings.leaderSkills,
-                    ).value;
+                if (kingdom.settings.enableLeadershipModifiers) {
+                    bonus = leadershipBonuses.get(leader as string) ?? 0
                 }
                 return [leader, {
                     label: capitalize(leader),
@@ -1090,12 +1066,6 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
                 .filter(feat => allFeatsByName.has(feat.id))
                 .map(feat => allFeatsByName.get(feat.id)),
         };
-    }
-
-    private async rollResourceDice(resourceDieSize: ResourceDieSize, dice: number): Promise<number> {
-        const roll = await (new Roll(dice + resourceDieSize).roll());
-        await roll.toMessage({flavor: 'Rolling Resource Dice'});
-        return roll.total;
     }
 
     private async reduceUnrest(): Promise<void> {
@@ -1206,7 +1176,7 @@ class KingdomApp extends FormApplication<FormApplicationOptions & KingdomOptions
     }
 
     private async showStructureBrowser(): Promise<void> {
-        await showStructureBrowser(this.game, this.getKingdom(), this.sheetActor, this.consumeModifiers.bind(this));
+        await showStructureBrowser(this.game, this.getKingdom(), this.sheetActor);
     }
 
     private async showTacticsBrowser(): Promise<void> {
@@ -1248,3 +1218,5 @@ export async function showKingdom(game: Game): Promise<void> {
         });
     }
 }
+
+export const allLeaderTypes = ['pc', 'regularNpc', 'highlyMotivatedNpc', 'nonPathfinderNpc'] as const;

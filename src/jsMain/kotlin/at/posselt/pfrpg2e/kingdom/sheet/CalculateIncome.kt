@@ -1,4 +1,4 @@
-package at.posselt.pfrpg2e.kingdom.resource
+package at.posselt.pfrpg2e.kingdom.sheet
 
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement

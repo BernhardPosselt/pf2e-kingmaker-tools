@@ -15,7 +15,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.In
 
 
-private fun calculateLeadershipBonus(
+fun calculateLeadershipBonus(
     leaderLevel: Int,
     leaderType: LeaderType,
     leaderSkills: List<Attribute>,
