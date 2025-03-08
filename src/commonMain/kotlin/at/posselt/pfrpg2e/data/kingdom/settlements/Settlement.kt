@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.data.kingdom.settlements
 
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
+import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -24,6 +25,8 @@ data class Settlement(
     val residentialLots: Int,
     val hasBridge: Boolean,
     val occupiedBlocks: Int,
+    val structuresInConstruction: List<Structure>,
+    val constructedStructures: List<Structure>,
 ) {
     private val totalConsumption = size.consumption - consumptionReduction
     val isOvercrowded = occupiedBlocks > residentialLots

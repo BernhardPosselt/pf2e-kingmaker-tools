@@ -55,9 +55,12 @@ fun PF2ENpc.getRawResolvedStructureData(): RawStructureData? {
 
 fun PF2ENpc.isStructure() = getRawStructureData() != null
 
-fun PF2ENpc.parseStructure(): Structure? = getRawResolvedStructureData()?.parseStructure()
+fun PF2ENpc.isSlowed() = itemTypes.condition.any { it.slug == "slowed" }
 
-fun RawStructureData.parseStructure() =
+fun PF2ENpc.parseStructure(): Structure? = getRawResolvedStructureData()
+    ?.parseStructure(isSlowed())
+
+fun RawStructureData.parseStructure(inConstruction: Boolean) =
     Structure(
         name = name,
         stacksWith = stacksWith,
@@ -153,6 +156,7 @@ fun RawStructureData.parseStructure() =
         ),
         consumptionReductionStacks = consumptionReductionStacks == true,
         ignoreConsumptionReductionOf = ignoreConsumptionReductionOf?.toSet() ?: emptySet(),
+        inConstruction = inConstruction
     )
 
 fun PF2ENpc.getActorAndStructure(): ActorAndStructure? {

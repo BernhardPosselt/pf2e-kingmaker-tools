@@ -299,7 +299,7 @@ fun main() {
                         val wrapper: suspend (degree: DegreeOfSuccess) -> String = { degree ->
                             afterRoll(degree).await()
                         }
-                        val structure = structure?.parseStructure()
+                        val structure = structure?.parseStructure(false)
                         kingdomCheckDialog(
                             game = game,
                             kingdom = kingdom,

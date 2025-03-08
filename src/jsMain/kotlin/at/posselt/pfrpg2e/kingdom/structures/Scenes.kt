@@ -42,7 +42,12 @@ private fun Scene.getBlockTiles() =
         .filterNot { it.isBlock }
 
 private fun Scene.calculateOccupiedBlocks(): Int {
-    val structures = structureTokens().map { it.toRectangle() }
+    val structures = structureTokens()
+        .filterNot {
+            val actor = it.actor
+            actor is PF2ENpc && actor.isSlowed()
+        }
+        .map { it.toRectangle() }
     val blocks = getBlockTiles().map { it.toRectangle().applyTolerance(50.0) }
     return blocks
         .filter { block -> structures.any { it in block } }

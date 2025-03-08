@@ -105,31 +105,33 @@ fun evaluateSettlement(
     allStructuresStack: Boolean,
 ): Settlement {
     val settlementSize = findSettlementSize(data.level)
-    val consumptionReduction = calculateConsumptionReduction(structures)
     val maxItemBonus = settlementSize.maxItemBonus
+    val constructedStructures = structures.filterNot { it.inConstruction }
+    val structuresInConstruction = structures.filter { it.inConstruction }
+    val consumptionReduction = calculateConsumptionReduction(constructedStructures)
     val (bonuses, eventBonus, leaderBonus) = combineBonuses(
-        structures,
+        constructedStructures,
         allStructuresStack,
         maxItemBonus,
         data.name,
     )
-    val storage = structures
+    val storage = constructedStructures
         .map { it.storage }
         .fold(CommodityStorage()) { acc, el -> acc + el }
-    val allowCapitalInvestment = structures.any { it.enableCapitalInvestment }
-    val notes = structures
+    val allowCapitalInvestment = constructedStructures.any { it.enableCapitalInvestment }
+    val notes = constructedStructures
         .mapNotNull { it.notes }
         .toSet()
     val increaseLeadershipActivities = (data.type == SettlementType.CAPITAL
-            && structures.any { it.increaseLeadershipActivities })
+            && constructedStructures.any { it.increaseLeadershipActivities })
 
-    val residentialLots = structures
+    val residentialLots = constructedStructures
         .filter { it.isResidential }
         .sumOf { it.lots }
-    val unlockActivities = structures
+    val unlockActivities = constructedStructures
         .flatMap { it.unlockActivities }
         .toSet()
-    val hasBridge = structures.any { it.isBridge }
+    val hasBridge = constructedStructures.any { it.isBridge }
     return Settlement(
         id = data.id,
         name = data.name,
@@ -149,5 +151,7 @@ fun evaluateSettlement(
         hasBridge = hasBridge,
         occupiedBlocks = data.occupiedBlocks,
         type = data.type,
+        structuresInConstruction = structuresInConstruction,
+        constructedStructures = constructedStructures
     )
 }
