@@ -12,7 +12,8 @@ external interface CharterContext {
     val type: FormElementContext
     val description: String
     val abilityBoosts: AbilityBoostContext
-    val flaw: String
+    val boost: String?
+    val flaw: String?
 }
 
 fun RawCharterChoices.toContext(charters: Array<RawCharter>): CharterContext {
@@ -27,6 +28,7 @@ fun RawCharterChoices.toContext(charters: Array<RawCharter>): CharterContext {
         ).toContext(),
         abilityBoosts = abilityBoosts.toContext("charter", charter?.freeBoosts ?: 0),
         description =  charter?.description ?: "",
-        flaw = charter?.flaw ?: "",
+        flaw = charter?.flaw,
+        boost = charter?.boost,
     )
 }

@@ -7,7 +7,7 @@
         "culture"
     ],
     "freeBoosts": 1,
-    "bonusFeat": "Fortified Fiefs",
+    "bonusFeat": "fortified-fiefs",
     "skillProficiencies": [
         "defense",
         "trade"

@@ -14,8 +14,9 @@ external interface GovernmentContext {
     val type: FormElementContext
     val description: String?
     val abilityBoosts: AbilityBoostContext
-    val skills: Array<String>
+    val skills: String
     val feat: String
+    val boosts: String
     val featDescription: String
 }
 
@@ -34,8 +35,9 @@ fun RawGovernmentChoices.toContext(
             label = "Government",
             required = false,
         ).toContext(),
+        boosts = government?.boosts?.joinToString(", ") { it.toLabel() } ?: "",
         description = government?.description,
-        skills = government?.skillProficiencies?.map { it.toLabel() }?.toTypedArray() ?: emptyArray(),
+        skills = government?.skillProficiencies?.joinToString(", ") { it.toLabel() } ?: "",
         feat = feat?.name ?: "",
         featDescription = feat?.text ?: "",
         abilityBoosts = abilityBoosts.toContext("government", government?.freeBoosts ?: 0)

@@ -408,13 +408,15 @@ class KingdomSheet(
             heartland = kingdom.heartland.toContext(kingdom.getHeartlands()),
             government = kingdom.government.toContext(kingdom.getGovernments(), feats),
             abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2),
-            features = kingdom.features.toContext(
+            featuresByLevel = kingdom.features.toContext(
                 kingdomLevel = kingdom.level,
                 features = kingdom.getFeatures().flatMap { it.explodeLevels() }.toTypedArray(),
                 choices = kingdom.features,
                 feats = feats,
                 increaseBoostsBy = 2,
-            ),
+            )
+                .sortedBy { it.level }
+                .toTypedArray(),
         )
     }
 

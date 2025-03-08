@@ -16,10 +16,22 @@ external interface KingdomFeature {
     val skillProficiencies: Int?
     val abilityBoosts: Int?
     val ruinThresholdIncreases: RawRuinThresholdIncreases?
+    val skillIncrease: Boolean?
+    val kingdomFeat: Boolean?
 }
 
 fun KingdomData.getFeatures(): Array<KingdomFeature> {
-    return kingdomFeatures
+    if (settings.kingdomSkillIncreaseEveryLevel) {
+        return kingdomFeatures.map {
+            if (it.id == "skill-increase") {
+                it.copy(levels = (2..20).toList().toTypedArray())
+            } else {
+                it
+            }
+        }.toTypedArray()
+    } else {
+        return kingdomFeatures
+    }
 }
 
 fun KingdomData.getExplodedFeatures() =
@@ -39,6 +51,8 @@ fun KingdomFeature.explodeLevels(): List<RawExplodedKingdomFeature> =
             skillProficiencies = skillProficiencies,
             abilityBoosts = abilityBoosts,
             ruinThresholdIncreases = ruinThresholdIncreases,
+            skillIncrease = skillIncrease,
+            kingdomFeat = kingdomFeat,
         )
     }
 

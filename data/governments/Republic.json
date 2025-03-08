@@ -7,7 +7,7 @@
         "loyalty"
     ],
     "freeBoosts": 1,
-    "bonusFeat": "Pull Together",
+    "bonusFeat": "pull-together",
     "skillProficiencies": [
         "engineering",
         "politics"

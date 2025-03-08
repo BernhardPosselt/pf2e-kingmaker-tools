@@ -2,5 +2,6 @@
     "id": "kingdom-feat",
     "levels": [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
     "name": "Kingdom Feat",
-    "description": "The kingdom gains a Kingdom feat."
+    "description": "The kingdom gains a Kingdom feat.",
+    "kingdomFeat": true
 }

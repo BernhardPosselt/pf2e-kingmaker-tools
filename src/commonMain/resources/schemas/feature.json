@@ -21,7 +21,10 @@
         "name": {
           "type": "string"
         },
-        "skillTraining": {
+        "skillIncrease": {
+          "type": "boolean"
+        },
+        "kingdomFeat": {
           "type": "boolean"
         },
         "abilityBoosts": {

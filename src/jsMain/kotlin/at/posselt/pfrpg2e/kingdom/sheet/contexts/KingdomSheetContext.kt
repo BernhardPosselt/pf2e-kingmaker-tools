@@ -33,5 +33,5 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val heartland: HeartlandContext
     val government: GovernmentContext
     val abilityBoosts: AbilityBoostContext
-    val features: Array<FeatureContext>
+    val featuresByLevel: Array<FeatureByLevelContext>
 }
