@@ -128,7 +128,7 @@ external interface KingdomData {
     var resourcePoints: RawResources
     var resourceDice: RawResources
     var workSites: RawWorkSites
-    var heartland: String // forest-or-swamp, hill-or-plain, lake-or-river, mountain-or-ruins  // TODO
+    var heartland: String // TODO
     var realmSceneId: String?
     var consumption: RawConsumption
     var supernaturalSolutions: Int
@@ -141,6 +141,9 @@ external interface KingdomData {
     var turnsWithoutEvent: Int
     var notes: RawNotes
     var homebrewActivities: Array<KingdomActivity>
+    var homebrewCharters: Array<RawCharter>
+    var homebrewGovernments: Array<RawGovernment>
+    var homebrewHeartlands: Array<RawHeartland>
     var leaders: RawLeaders
     var groups: Array<RawGroup>  // TODO
     var feats: Array<RawFeat>  // TODO

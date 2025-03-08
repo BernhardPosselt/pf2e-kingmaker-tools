@@ -11,9 +11,13 @@
       "required": [
         "description",
         "name",
-        "boost"
+        "boost",
+        "id"
       ],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "description": {
           "type": "string"
         },

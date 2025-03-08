@@ -11,9 +11,13 @@
       "required": [
         "name",
         "description",
-        "freeBoosts"
+        "freeBoosts",
+        "id"
       ],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },

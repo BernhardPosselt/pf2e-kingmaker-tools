@@ -9,6 +9,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "id",
         "name",
         "description",
         "bonusFeat",
@@ -17,6 +18,9 @@
         "skillProficiencies"
       ],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },

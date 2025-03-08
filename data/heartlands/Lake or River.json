@@ -1,4 +1,5 @@
 {
+    "id": "lake-or-river",
     "name": "Lake or River",
     "description": "By establishing your nation on the shores of a lake or river, you ensure a built-in mechanism for trade. Even before a road is built, merchants and travelers can reach your settlement with relative ease via boat.",
     "boost": "economy"
