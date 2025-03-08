@@ -27,13 +27,13 @@ import kotlin.js.Promise
 
 
 @JsPlainObject
-private external interface LeaderKingdomSkillsRow {
+external interface LeaderKingdomSkillsRow {
     val label: String
     val cells: Array<FormElementContext>
 }
 
 @JsPlainObject
-private external interface ConfigureLeaderKingdomSkillsContext : HandlebarsRenderContext {
+external interface ConfigureLeaderKingdomSkillsContext : HandlebarsRenderContext {
     val headers: Array<String>
     val isFormValid: Boolean
     val compact: Boolean
@@ -41,7 +41,7 @@ private external interface ConfigureLeaderKingdomSkillsContext : HandlebarsRende
 }
 
 @JsPlainObject
-private external interface ToggledKingdomSkills {
+external interface ToggledKingdomSkills {
     val agriculture: Boolean
     val arts: Boolean
     val boating: Boolean
@@ -67,7 +67,7 @@ private fun ToggledKingdomSkills.toStringArray(): Array<String> =
         .toTypedArray()
 
 @JsPlainObject
-private external interface LeaderKingdomSkillsData {
+external interface LeaderKingdomSkillsData {
     val ruler: ToggledKingdomSkills
     val counselor: ToggledKingdomSkills
     val emissary: ToggledKingdomSkills
@@ -90,7 +90,7 @@ private fun LeaderKingdomSkillsData.toKingdomSkills(): RawLeaderKingdomSkills =
         warden = warden.toStringArray(),
     )
 
-//@JsExport
+@JsExport
 class ConfigureLeaderKingdomSkillsModel(val value: AnyObject) : DataModel(value) {
     companion object {
         @Suppress("unused")
@@ -107,7 +107,7 @@ class ConfigureLeaderKingdomSkillsModel(val value: AnyObject) : DataModel(value)
     }
 }
 
-private class ConfigureLeaderKingdomSkills(
+class ConfigureLeaderKingdomSkills(
     skills: RawLeaderKingdomSkills,
     private val onSave: (skills: RawLeaderKingdomSkills) -> Unit,
 ) : FormApp<ConfigureLeaderKingdomSkillsContext, LeaderKingdomSkillsData>(

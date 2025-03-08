@@ -11,17 +11,36 @@
       "required": [
         "name",
         "levels",
-        "description"
+        "description",
+        "id"
       ],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
-        "freeBoosts": {
+        "skillTraining": {
+          "type": "boolean"
+        },
+        "abilityBoosts": {
           "type": "number"
         },
-        "skillProficiencies": {
-          "type": "number"
+        "ruinThresholdIncreases": {
+          "type": "object",
+          "required": [
+            "amount",
+            "increase"
+          ],
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "increase": {
+              "type": "number"
+            }
+          }
         },
         "levels": {
           "type": "array",

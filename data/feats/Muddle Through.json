@@ -1,7 +1,14 @@
 {
-    "automationNotes": "You need to manually increase the ruin thresholds",
+    "id": "muddle-through",
     "name": "Muddle Through",
     "level": 1,
     "prerequisites": "Trained in Wilderness",
-    "text": "Your people are independent-minded and take care of the small things around the kingdom, not letting them pile up into bigger problems. Increase two of your Ruin thresholds by 1 and one of them by 2."
+    "text": "Your people are independent-minded and take care of the small things around the kingdom, not letting them pile up into bigger problems. Increase two of your Ruin thresholds by 1 and one of them by 2.",
+    "ruinThresholdIncreases": [{
+        "amount": 1,
+        "increase": 2
+    }, {
+        "amount": 2,
+        "increase": 1
+    }]
 }

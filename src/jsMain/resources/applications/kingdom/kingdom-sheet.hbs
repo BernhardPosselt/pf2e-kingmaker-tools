@@ -9,8 +9,20 @@
         <div class="km-kingdom-sheet-active-fame-next">{{> formElement fameContext.next }}</div>
     </header>
 
-    <div class="km-kingdom-sheet-content-wrapper">
-        <div class="km-kingdom-sheet-sidebar">
+    <nav>
+        <ul>
+            <li><a data-action="change-nav" href="#">Turn</a></li>
+            <li><a data-action="change-nav" href="#">Kingdom</a></li>
+            <li><a data-action="change-nav" href="#">Settlements</a></li>
+            <li><a data-action="change-nav" href="#">Trade Agreements (1)</a></li>
+            <li><a data-action="change-nav" href="#">Effects</a></li>
+            <li><a data-action="change-nav" href="#">Notes</a></li>
+        </ul>
+    </nav>
+
+    <main class="km-kingdom-sheet-content-wrapper">
+        <aside class="km-kingdom-sheet-sidebar">
+            <div hidden>
             {{controlDc}}
             {{> formElement atWarInput }}
             {{> formElement unrestInput }}
@@ -53,20 +65,11 @@
             {{> formElement resourceDiceContext.next }}
             {{> formElement supernaturalSolutionsInput }}
             {{> formElement creativeSolutionsInput }}
-        </div>
+            </div>
+        </aside>
         <div class="km-kingdom-sheet-content">
-            <nav>
-                <ul>
-                    <li><a data-action="change-nav" href="#">Turn</a></li>
-                    <li><a data-action="change-nav" href="#">Status</a></li>
-                    <li><a data-action="change-nav" href="#">Skills</a></li>
-                    <li><a data-action="change-nav" href="#">Feats</a></li>
-                    <li><a data-action="change-nav" href="#">Settlements</a></li>
-                    <li><a data-action="change-nav" href="#">Trade Agreements (1)</a></li>
-                    <li><a data-action="change-nav" href="#">Effects</a></li>
-                    <li><a data-action="change-nav" href="#">Notes</a></li>
-                </ul>
-            </nav>
+
+            <div hidden>
             {{> formElement worksitesContext.farmlands.resources }}
             {{> formElement worksitesContext.farmlands.quantity }}
             {{ worksitesContext.farmlands.quantityValue }}
@@ -147,6 +150,7 @@
             {{#if leadersContext.warden.actor }}
                 {{> formElement leadersContext.warden.actor.uuidInput }}
             {{/if}}
+            </div>
         </div>
-    </div>
+    </main>
 </div>

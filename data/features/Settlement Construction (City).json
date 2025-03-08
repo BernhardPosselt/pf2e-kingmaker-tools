@@ -1,5 +1,6 @@
 {
+    "id": "settlement-construction-city",
     "levels": [9],
     "name": "Settlement Construction (City)",
-    "description": "You can establish villages in your kingdom immediately. At 3rd level, you can expand villages into towns. At 9th level, you can expand towns into cities. expand towns into cities. And at 15th level, you can expand cities into metropolises. As villages grow into larger settlements, you not only gain more room to build, but the maximum item bonus you can gain from that settlement’s structures increases as well"
+    "description": "You can expand towns into cities."
 }

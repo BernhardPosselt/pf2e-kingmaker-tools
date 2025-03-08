@@ -25,7 +25,13 @@ import at.posselt.pfrpg2e.kingdom.data.RawRuin
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
+import at.posselt.pfrpg2e.kingdom.explodeLevels
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
+import at.posselt.pfrpg2e.kingdom.getCharters
+import at.posselt.pfrpg2e.kingdom.getFeats
+import at.posselt.pfrpg2e.kingdom.getFeatures
+import at.posselt.pfrpg2e.kingdom.getGovernments
+import at.posselt.pfrpg2e.kingdom.getHeartlands
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.hasLeaderUuid
@@ -372,6 +378,7 @@ class KingdomSheet(
             label = "Creative Solutions"
         )
         val unrestPenalty = calculateUnrestPenalty(kingdom.unrest)
+        val feats = kingdom.getFeats()
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -396,7 +403,18 @@ class KingdomSheet(
             supernaturalSolutionsInput = supernaturalSolutionsInput.toContext(),
             creativeSolutionsInput = creativeSolutionsInput.toContext(),
             notesContext = kingdom.notes.toContext(),
-            leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeadershipBonuses)
+            leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeadershipBonuses),
+            charter = kingdom.charter.toContext(kingdom.getCharters()),
+            heartland = kingdom.heartland.toContext(kingdom.getHeartlands()),
+            government = kingdom.government.toContext(kingdom.getGovernments(), feats),
+            abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2),
+            features = kingdom.features.toContext(
+                kingdomLevel = kingdom.level,
+                features = kingdom.getFeatures().flatMap { it.explodeLevels() }.toTypedArray(),
+                choices = kingdom.features,
+                feats = feats,
+                increaseBoostsBy = 2,
+            ),
         )
     }
 

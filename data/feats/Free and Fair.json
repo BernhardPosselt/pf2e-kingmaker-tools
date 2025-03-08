@@ -1,4 +1,5 @@
 {
+    "id": "free-and-fair",
     "automationNotes": "Re-rolling a failure or crit failure for 2 RP is not automated",
     "name": "Free and Fair",
     "level": 7,

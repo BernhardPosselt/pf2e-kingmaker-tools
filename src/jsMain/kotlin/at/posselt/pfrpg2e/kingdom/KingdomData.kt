@@ -15,11 +15,15 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
+import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
+import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
 import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
 import at.posselt.pfrpg2e.kingdom.data.RawFame
-import at.posselt.pfrpg2e.kingdom.data.RawFeat
+import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
+import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
+import at.posselt.pfrpg2e.kingdom.data.RawHeartlandChoices
 import at.posselt.pfrpg2e.kingdom.data.RawLeaderValues
 import at.posselt.pfrpg2e.kingdom.data.RawLeaders
 import at.posselt.pfrpg2e.kingdom.data.RawNotes
@@ -87,6 +91,7 @@ external interface KingdomSettings {
     var maximumFamePoints: Int
     var leaderKingdomSkills: RawLeaderKingdomSkills
     var leaderSkills: RawLeaderSkills
+    var automateStats: Boolean
 }
 
 @JsPlainObject
@@ -117,8 +122,6 @@ external interface RawLeaderSkills {
 external interface KingdomData {
     var name: String
     var atWar: Boolean
-    var charter: String // TODO
-    var government: String // TODO
     var fame: RawFame
     var level: Int
     var xpThreshold: Int
@@ -128,7 +131,6 @@ external interface KingdomData {
     var resourcePoints: RawResources
     var resourceDice: RawResources
     var workSites: RawWorkSites
-    var heartland: String // TODO
     var realmSceneId: String?
     var consumption: RawConsumption
     var supernaturalSolutions: Int
@@ -145,8 +147,12 @@ external interface KingdomData {
     var homebrewGovernments: Array<RawGovernment>
     var homebrewHeartlands: Array<RawHeartland>
     var leaders: RawLeaders
+    var charter: RawCharterChoices
+    var heartland: RawHeartlandChoices
+    var government: RawGovernmentChoices
+    var abilityBoosts: RawAbilityBoostChoices
+    var features: Array<RawFeatureChoices>
     var groups: Array<RawGroup>  // TODO
-    var feats: Array<RawFeat>  // TODO
     var bonusFeats: Array<BonusFeat>  // TODO
     var skillRanks: Record<String, Int>  // TODO
     var abilityScores: Record<String, Int>  // TODO
@@ -235,7 +241,7 @@ fun KingdomData.getActivity(id: String): KingdomActivity? =
 fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
     return kingdomFeatures
         .flatMap { it.explodeLevels() }
-        .sortedWith(compareBy<ExplodedKingdomFeature> { it.level }.thenBy { it.name })
+        .sortedWith(compareBy<RawExplodedKingdomFeature> { it.level }.thenBy { it.name })
 }
 
 fun KingdomData.hasAssurance(skill: KingdomSkill) =

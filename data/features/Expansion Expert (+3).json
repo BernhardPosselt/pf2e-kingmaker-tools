@@ -1,7 +1,7 @@
 {
+    "id": "expansion-expert-2",
     "levels": [9],
     "name": "Expansion Expert (+3)",
-    "description": "At 9th level, you can attempt to Claim Hex up to three times during a Kingdom turn.",
-    "modifiers": [],
+    "description": "You can attempt to Claim Hex up to three times during a Kingdom turn.",
     "claimHexAttempts": 3
 }

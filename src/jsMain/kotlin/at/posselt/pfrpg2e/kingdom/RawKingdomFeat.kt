@@ -41,7 +41,15 @@ fun RawDowngradeResult.parse() =
     }
 
 @JsPlainObject
+external interface RawRuinThresholdIncreases {
+    val amount: Int
+    val increase: Int
+}
+
+
+@JsPlainObject
 external interface RawKingdomFeat {
+    val id: String
     val name: String
     val level: Int
     val text: String
@@ -56,6 +64,7 @@ external interface RawKingdomFeat {
     val flags: Array<String>?
     val upgradeResults: Array<RawUpgradeResult>?
     val increaseAnarchyLimit: Int?
+    val ruinThresholdIncreases: Array<RawRuinThresholdIncreases>?
 }
 
 fun RawKingdomFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =
@@ -67,6 +76,10 @@ fun RawKingdomFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =
         }
         ?.toMap()
         ?: emptyMap()
+
+fun KingdomData.getFeats(): Array<RawKingdomFeat> {
+    return kingdomFeats
+}
 
 @JsModule("./feats.json")
 external val kingdomFeats: Array<RawKingdomFeat>

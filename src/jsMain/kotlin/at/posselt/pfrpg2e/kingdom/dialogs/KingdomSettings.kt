@@ -49,6 +49,7 @@ class KingdomSettingsDataModel(value: AnyObject) : DataModel(value) {
             int("maximumFamePoints")
             boolean("expandMagicUse")
             boolean("includeCapitalItemModifier")
+            boolean("automateStats")
             boolean("cultOfTheBloomEvents")
             boolean("autoCalculateSettlementLevel")
             boolean("vanceAndKerensharaXP")
@@ -126,6 +127,12 @@ class KingdomSettingsApplication(
                             from = 1,
                             to = 10,
                             stacked = false,
+                        ),
+                        CheckboxInput(
+                            name = "automateStats",
+                            label = "Automate Kingdom Stats",
+                            value = settings.automateStats,
+                            help = "If enabled, automatically calculates skill proficiencies, ability scores and ruin thresholds from select choices"
                         ),
                         Select.fromEnum<AutomateResources>(
                             name = "automateResources",

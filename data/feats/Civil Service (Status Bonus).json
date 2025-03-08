@@ -1,4 +1,5 @@
 {
+  "id": "civil-service-status-bonus",
   "automationNotes": "Vacancy role penalty removal is not automated",
   "name": "Civil Service (Status Bonus)",
   "level": 1,

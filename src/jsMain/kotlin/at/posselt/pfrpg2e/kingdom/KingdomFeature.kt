@@ -6,6 +6,7 @@ import kotlinx.serialization.json.JsonElement
 
 @JsPlainObject
 external interface KingdomFeature {
+    val id: String
     val levels: Array<Int>
     val name: String
     val description: String
@@ -13,11 +14,21 @@ external interface KingdomFeature {
     val modifiers: Array<RawModifier>?
     val freeBoosts: Int?
     val skillProficiencies: Int?
+    val abilityBoosts: Int?
+    val ruinThresholdIncreases: RawRuinThresholdIncreases?
 }
 
-fun KingdomFeature.explodeLevels(): List<ExplodedKingdomFeature> =
+fun KingdomData.getFeatures(): Array<KingdomFeature> {
+    return kingdomFeatures
+}
+
+fun KingdomData.getExplodedFeatures() =
+    getFeatures().flatMap { it.explodeLevels() }
+
+fun KingdomFeature.explodeLevels(): List<RawExplodedKingdomFeature> =
     levels.map {
-        ExplodedKingdomFeature(
+        RawExplodedKingdomFeature(
+            id = "$id-level-$it",
             level = it,
             levels = levels,
             name = name,
@@ -26,11 +37,13 @@ fun KingdomFeature.explodeLevels(): List<ExplodedKingdomFeature> =
             modifiers = modifiers,
             freeBoosts = freeBoosts,
             skillProficiencies = skillProficiencies,
+            abilityBoosts = abilityBoosts,
+            ruinThresholdIncreases = ruinThresholdIncreases,
         )
     }
 
 @JsPlainObject
-external interface ExplodedKingdomFeature : KingdomFeature {
+external interface RawExplodedKingdomFeature : KingdomFeature {
     val level: Int
 }
 

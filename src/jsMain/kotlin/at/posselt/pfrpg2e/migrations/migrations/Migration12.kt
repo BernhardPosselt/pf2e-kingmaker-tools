@@ -108,6 +108,7 @@ class Migration12 : Migration(12, true) {
             rpToXpConversionRate = game.settings.getInt("rpToXpConversionRate"),
             rpToXpConversionLimit = game.settings.getInt("rpToXpConversionLimit"),
             resourceDicePerVillage = 0,
+            automateStats = false,
             resourceDicePerTown = 0,
             resourceDicePerCity = 0,
             resourceDicePerMetropolis = 0,

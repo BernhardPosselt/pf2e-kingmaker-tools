@@ -1,0 +1,171 @@
+<div>
+    <section>
+        <h2>Kingdom Creation</h2>
+        <section>
+            <h3>Select Charter</h3>
+            <p>{{> formElement charter.type}}</p>
+            {{#if charter.description}}<p>{{charter.description}}</p>{{/if}}
+            {{#if charter.description}}<p>Pick {{charter.abilityBoosts.free}} Boosts:</p>{{/if}}
+            <ul class="km-choose-boosts" {{#unless charter.description}}hidden{{/unless}}>
+                <li>{{> formElement charter.abilityBoosts.culture}}</li>
+                <li>{{> formElement charter.abilityBoosts.economy}}</li>
+                <li>{{> formElement charter.abilityBoosts.loyalty}}</li>
+                <li>{{> formElement charter.abilityBoosts.stability}}</li>
+            </ul>
+            {{#if charter.description}}<p><b>Ability Flaw</b>: {{charter.flaw}}</p>{{/if}}
+        </section>
+        <section>
+            <h3>Choose a Heartland</h3>
+            <p>{{> formElement heartland.type}}</p>
+            {{#if heartland.description}}<p>{{heartland.type}}</p>{{/if}}
+            {{#if heartland.description}}<p><b>Ability Boost</b>: {{heartland.boost}}</p>{{/if}}
+        </section>
+        <section>
+            <h3>Choose a Government</h3>
+            <p>{{> formElement government.type}}</p>
+            {{#if government.description}}<p>{{government.description}}</p>{{/if}}
+            {{#if government.description}}<p>Pick {{government.abilityBoosts.free}} Boosts:</p>{{/if}}
+            <ul {{#unless government.description}}hidden{{/unless}}>
+                <li>{{> formElement government.abilityBoosts.culture}}</li>
+                <li>{{> formElement government.abilityBoosts.economy}}</li>
+                <li>{{> formElement government.abilityBoosts.loyalty}}</li>
+                <li>{{> formElement government.abilityBoosts.stability}}</li>
+            </ul>
+            {{#if government.skills}}
+                <ul>
+                    {{#each government.skills}}
+                        <li><b>Skill Proficiency</b>: {{this}}</li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+            {{#if government.description}}
+                <p><b>Bonus Feat</b>: {{government.feat}}</p>
+                <p>{{government.featDescription}}</p>
+            {{/if}}
+        </section>
+        <section>
+            <h3>Finalize Ability Scores</h3>
+            <p>Pick {{abilityBoosts.freeBoosts}} Boosts:</p>
+            <ul>
+                <li>{{> formElement abilityBoosts.culture}}</li>
+                <li>{{> formElement abilityBoosts.economy}}</li>
+                <li>{{> formElement abilityBoosts.loyalty}}</li>
+                <li>{{> formElement abilityBoosts.stability}}</li>
+            </ul>
+        </section>
+        <section>
+            <h3>Choose Leaders</h3>
+            <p>Assign your leaders in the sidebar</p>
+        </section>
+        <section>
+            <h3>First Village</h3>
+            <p>Manually create a <b>Scene</b>, navigate to it and
+                <button type="button" data-action="settlement-add-current-scene">Add it to your <b>Settlements</b>
+                </button>
+                or import a settlement:
+            </p>
+            <ul>
+                <li>
+                    <button type="button" data-action="settlement-import" data-water-borders="0">Import Settlement (0
+                        Water Borders)
+                    </button>
+                </li>
+                <li>
+                    <button type="button" data-action="settlement-import" data-water-borders="1">Import Settlement (1
+                        Water Borders)
+                    </button>
+                </li>
+                <li>
+                    <button type="button" data-action="settlement-import" data-water-borders="2">Import Settlement (2
+                        Water Borders)
+                    </button>
+                </li>
+                <li>
+                    <button type="button" data-action="settlement-import" data-water-borders="3">Import Settlement (3
+                        Water Borders)
+                    </button>
+                </li>
+                <li>
+                    <button type="button" data-action="settlement-import" data-water-borders="4">Import Settlement (4
+                        Water Borders)
+                    </button>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h3>Fame or Infamy?</h3>
+            <p>{{> formElement fame.type}}</p>
+        </section>
+    </section>
+    {{#each features}}
+        <section {{#if hidden}}hidden{{/if}}>
+            {{> formElement id}}
+            <h2>Level {{level}}</h2>
+            <section>
+                <h3>{{name}}</h3>
+                <p>{{description}}</p>
+                {{#if skillProficiency}}
+                    <p>Increase a skill up to {{highestProficiency}} proficiency</p>
+                    <p>{{> formElement skillProficiency}}</p>
+                {{/if}}
+                {{#if abilityBoosts}}
+                    <p>Boost {{abilityBoosts.free}} ability scores:</p>
+                    <ul class="km-choose-boosts">
+                        <li>{{> formElement abilityBoosts.culture}}</li>
+                        <li>{{> formElement abilityBoosts.economy}}</li>
+                        <li>{{> formElement abilityBoosts.loyalty}}</li>
+                        <li>{{> formElement abilityBoosts.stability}}</li>
+                    </ul>
+                {{/if}}
+                {{#if feat}}
+                    <p>Pick a Kingdom Feat</p>
+                    <p>{{> formElement feat}}</p>
+                    {{#each featRuinThresholdIncreases}}
+                        <p>Choose {{amount}} Ruins to increase by {{value}} and reset their
+                            penalty to 0</p>
+                        <ul class="km-choose-boosts">
+                            <li>
+                                {{> formElement crime.input}}
+                                {{> formElement crime.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement corruption.input}}
+                                {{> formElement corruption.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement strife.input}}
+                                {{> formElement strife.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement stability.input}}
+                                {{> formElement stability.valueInput}}
+                            </li>
+                        </ul>
+                    {{/each}}
+                {{/if}}
+                {{#if ruinThresholdIncreases}}
+                    <p>Choose {{ruinThresholdIncreases.amount}} Ruins to increase by {{ruinThresholdIncreases.value}} and reset their
+                        penalty to 0</p>
+                    <ul class="km-choose-boosts">
+                        <li>
+                            {{> formElement ruinThresholdIncreases.crime.input}}
+                            {{> formElement ruinThresholdIncreases.crime.valueInput}}
+                        </li>
+                        <li>
+                            {{> formElement ruinThresholdIncreases.corruption.input}}
+                            {{> formElement ruinThresholdIncreases.corruption.valueInput}}
+                        </li>
+                        <li>
+                            {{> formElement ruinThresholdIncreases.strife.input}}
+                            {{> formElement ruinThresholdIncreases.strife.valueInput}}
+                        </li>
+                        <li>
+                            {{> formElement ruinThresholdIncreases.stability.input}}
+                            {{> formElement ruinThresholdIncreases.stability.valueInput}}
+                        </li>
+                    </ul>
+                {{/if}}
+            </section>
+        </section>
+    {{/each}}
+</div>

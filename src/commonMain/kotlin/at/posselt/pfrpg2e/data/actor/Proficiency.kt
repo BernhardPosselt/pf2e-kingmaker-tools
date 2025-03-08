@@ -4,12 +4,12 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 
-enum class Proficiency {
+enum class Proficiency(val increaseLockedUntil: Int = 0) {
     UNTRAINED,
     TRAINED,
     EXPERT,
-    MASTER,
-    LEGENDARY;
+    MASTER(7),
+    LEGENDARY(15);
 
     companion object {
         fun fromString(value: String) = fromCamelCase<Proficiency>(value)
@@ -25,3 +25,8 @@ enum class Proficiency {
     val label: String
         get() = toLabel()
 }
+
+fun findHighestProficiency(level: Int) : Proficiency? =
+    Proficiency.entries
+        .filter { it.increaseLockedUntil <= level }
+        .maxByOrNull { it.rank }

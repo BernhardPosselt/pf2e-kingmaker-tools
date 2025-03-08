@@ -1,5 +1,5 @@
 {
-    "automationNotes": "You need to manually increase the skill proficiency",
+    "id": "skill-training-exploration",
     "name": "Skill Training (Exploration)",
     "level": 1,
     "text": "Your kingdom receives the trained proficiency rank in a Kingdom skill of your choice. You can select this feat multiple times, choosing a new skill each time.",

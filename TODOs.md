@@ -21,3 +21,4 @@
 * remove kingdom event macro
 * allow to select multiple kingdoms
 * settings to increase ability scores and initial skill trainings
+* implement automatic ruin threshold settings

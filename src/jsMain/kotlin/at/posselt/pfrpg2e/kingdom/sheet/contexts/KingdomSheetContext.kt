@@ -29,4 +29,9 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val creativeSolutionsInput: FormElementContext
     val notesContext: NotesContext
     val leadersContext: LeadersContext
+    val charter: CharterContext
+    val heartland: HeartlandContext
+    val government: GovernmentContext
+    val abilityBoosts: AbilityBoostContext
+    val features: Array<FeatureContext>
 }

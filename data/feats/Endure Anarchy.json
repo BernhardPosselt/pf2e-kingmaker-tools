@@ -1,4 +1,5 @@
 {
+    "id": "endure-anarchy",
     "automationNotes": "If your kingdom’s Unrest is 6 or higher and you use a kingdom activity that decreases Unrest, decrease the Unrest by an additional 1 is not automated.",
     "name": "Endure Anarchy",
     "level": 3,

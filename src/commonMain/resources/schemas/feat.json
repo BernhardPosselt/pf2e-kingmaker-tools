@@ -11,10 +11,14 @@
       "required": [
         "name",
         "level",
-        "text"
+        "text",
+        "id"
       ],
       "properties": {
         "name": {
+          "type": "string"
+        },
+        "id": {
           "type": "string"
         },
         "level": {
@@ -22,6 +26,24 @@
         },
         "text": {
           "type": "string"
+        },
+        "ruinThresholdIncreases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "amount",
+              "increase"
+            ],
+            "properties": {
+              "amount": {
+                "type": "number"
+              },
+              "increase": {
+                "type": "number"
+              }
+            }
+          }
         },
         "prerequisites": {
           "type": "string"
@@ -514,11 +536,15 @@
     "When": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["when"],
+      "required": [
+        "when"
+      ],
       "properties": {
         "when": {
           "type": "object",
-          "required": ["cases"],
+          "required": [
+            "cases"
+          ],
           "additionalProperties": false,
           "properties": {
             "cases": {
