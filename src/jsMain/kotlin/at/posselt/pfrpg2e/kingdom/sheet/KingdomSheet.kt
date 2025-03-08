@@ -379,6 +379,7 @@ class KingdomSheet(
         )
         val unrestPenalty = calculateUnrestPenalty(kingdom.unrest)
         val feats = kingdom.getFeats()
+        val increaseScorePicksBy = kingdom.settings.increaseScorePicksBy
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -407,13 +408,13 @@ class KingdomSheet(
             charter = kingdom.charter.toContext(kingdom.getCharters()),
             heartland = kingdom.heartland.toContext(kingdom.getHeartlands()),
             government = kingdom.government.toContext(kingdom.getGovernments(), feats),
-            abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2),
+            abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", increaseScorePicksBy),
             featuresByLevel = kingdom.features.toContext(
                 kingdomLevel = kingdom.level,
                 features = kingdom.getFeatures().flatMap { it.explodeLevels() }.toTypedArray(),
                 choices = kingdom.features,
                 feats = feats,
-                increaseBoostsBy = 2,
+                increaseBoostsBy = increaseScorePicksBy,
             )
                 .sortedBy { it.level }
                 .toTypedArray(),

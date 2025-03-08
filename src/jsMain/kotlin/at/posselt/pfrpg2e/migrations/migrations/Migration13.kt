@@ -53,6 +53,8 @@ class Migration13 : Migration(13) {
         kingdom.homebrewGovernments = emptyArray()
         kingdom.homebrewHeartlands = emptyArray()
         kingdom.settings.automateStats = false
+        kingdom.settings.ruinTreshold = 10
+        kingdom.settings.increaseScorePicksBy = 0
         kingdom.charter = RawCharterChoices(
             type = chartersByName[charter?.lowercase() ?: ""]?.id,
             abilityBoosts = RawAbilityBoostChoices(

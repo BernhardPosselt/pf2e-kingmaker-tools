@@ -69,6 +69,8 @@ external interface KingdomSettings {
     var resourceDicePerVillage: Int
     var resourceDicePerTown: Int
     var resourceDicePerCity: Int
+    var ruinTreshold: Int
+    var increaseScorePicksBy: Int
     var resourceDicePerMetropolis: Int
     var xpPerClaimedHex: Int
     var includeCapitalItemModifier: Boolean

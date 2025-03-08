@@ -47,6 +47,10 @@ class KingdomSettingsDataModel(value: AnyObject) : DataModel(value) {
             int("resourceDicePerMetropolis")
             int("xpPerClaimedHex")
             int("maximumFamePoints")
+            int("ruinThreshold") {
+                min = 0
+            }
+            int("increaseScorePicksBy")
             boolean("expandMagicUse")
             boolean("includeCapitalItemModifier")
             boolean("automateStats")
@@ -133,6 +137,11 @@ class KingdomSettingsApplication(
                             label = "Automate Kingdom Stats",
                             value = settings.automateStats,
                             help = "If enabled, automatically calculates skill proficiencies, ability scores and ruin thresholds from select choices"
+                        ),
+                        NumberInput(
+                            name = "ruinThreshold",
+                            label = "Starting Ruin Threshold",
+                            value = settings.ruinTreshold,
                         ),
                         Select.fromEnum<AutomateResources>(
                             name = "automateResources",
@@ -228,6 +237,14 @@ class KingdomSettingsApplication(
                             label = "All Structure Item Bonuses Stack",
                             value = settings.kingdomAllStructureItemBonusesStack,
                             help = "If enabled, stacks item bonuses from all structures in a settlement, regardless of building type"
+                        ),
+                        Select.range(
+                            from = 0,
+                            to = 2,
+                            label = "Increase Ability Score Picks By",
+                            value = settings.increaseScorePicksBy,
+                            name = "increaseScorePicksBy",
+                            help = "Whenever you gain an Ability Score increase, gain this value in addition to the default 2"
                         ),
                         CheckboxInput(
                             name = "capitalInvestmentInCapital",
