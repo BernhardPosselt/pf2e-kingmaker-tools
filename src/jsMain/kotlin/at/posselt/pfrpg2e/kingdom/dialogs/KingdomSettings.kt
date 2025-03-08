@@ -138,11 +138,6 @@ class KingdomSettingsApplication(
                             value = settings.automateStats,
                             help = "If enabled, automatically calculates skill proficiencies, ability scores and ruin thresholds from select choices"
                         ),
-                        NumberInput(
-                            name = "ruinThreshold",
-                            label = "Starting Ruin Threshold",
-                            value = settings.ruinTreshold,
-                        ),
                         Select.fromEnum<AutomateResources>(
                             name = "automateResources",
                             label = "Automatically Calculate Kingdom Resources",
@@ -244,7 +239,14 @@ class KingdomSettingsApplication(
                             label = "Increase Ability Score Picks By",
                             value = settings.increaseScorePicksBy,
                             name = "increaseScorePicksBy",
-                            help = "Whenever you gain an Ability Score increase, gain this value in addition to the default 2"
+                            help = "Whenever you gain an Ability Score increase, gain this value in addition to the default 2",
+                            stacked = false,
+                        ),
+                        NumberInput(
+                            name = "ruinThreshold",
+                            label = "Starting Ruin Threshold",
+                            value = settings.ruinTreshold,
+                            stacked = false,
                         ),
                         CheckboxInput(
                             name = "capitalInvestmentInCapital",

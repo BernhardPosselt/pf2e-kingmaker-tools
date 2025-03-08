@@ -1,0 +1,85 @@
+<div class="km-kingdom-sheet-kingdom">
+    <nav>
+        <ul>
+            {{#each kingdomSectionNav}}
+            <li><a title="{{title}}" data-action="change-kingdom-section-nav" {{#if active}}class="active"{{/if}} href="#" data-link="{{link}}">{{label}}</a></li>
+            {{/each}}
+        </ul>
+    </nav>
+    {{> kingdom-creation}}
+    {{#each featuresByLevel}}
+        <section {{#if hidden}}hidden{{/if}}>
+            {{#each features}}
+                {{> formElement id}}
+                <section class="km-kingdom-sheet-kingdom-section">
+                    <h2>{{name}}</h2>
+                    <p>{{description}}</p>
+                    {{#if skillProficiency}}
+                        <p>{{> formElement skillProficiency}}</p>
+                        <hr>
+                    {{/if}}
+                    {{#if abilityBoosts}}
+                        <p>Boost {{abilityBoosts.free}} ability scores:</p>
+                        <ul class="km-choose-boosts">
+                            <li>{{> formElement abilityBoosts.culture}}</li>
+                            <li>{{> formElement abilityBoosts.economy}}</li>
+                            <li>{{> formElement abilityBoosts.loyalty}}</li>
+                            <li>{{> formElement abilityBoosts.stability}}</li>
+                        </ul>
+                        <hr>
+                    {{/if}}
+                    {{#if feat}}
+                        <p>{{> formElement feat}}</p>
+                        {{#each featRuinThresholdIncreases}}
+                            <p>Choose {{amount}} Ruins to increase by {{value}} and reset their
+                                penalty to 0</p>
+                            <ul class="km-choose-ruins">
+                                <li>
+                                    {{> formElement crime.input}}
+                                    {{> formElement crime.valueInput}}
+                                </li>
+                                <li>
+                                    {{> formElement corruption.input}}
+                                    {{> formElement corruption.valueInput}}
+                                </li>
+                                <li>
+                                    {{> formElement strife.input}}
+                                    {{> formElement strife.valueInput}}
+                                </li>
+                                <li>
+                                    {{> formElement stability.input}}
+                                    {{> formElement stability.valueInput}}
+                                </li>
+                            </ul>
+                            <hr>
+                        {{/each}}
+                    {{/if}}
+                    {{#if ruinThresholdIncreases}}
+                        <p>Choose {{ruinThresholdIncreases.amount}} Ruins to increase
+                            by {{ruinThresholdIncreases.value}} and reset their
+                            penalty to 0</p>
+                        <ul class="km-choose-ruins">
+                            <li>
+                                {{> formElement ruinThresholdIncreases.crime.input}}
+                                {{> formElement ruinThresholdIncreases.crime.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement ruinThresholdIncreases.corruption.input}}
+                                {{> formElement ruinThresholdIncreases.corruption.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement ruinThresholdIncreases.strife.input}}
+                                {{> formElement ruinThresholdIncreases.strife.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement ruinThresholdIncreases.stability.input}}
+                                {{> formElement ruinThresholdIncreases.stability.valueInput}}
+                            </li>
+                        </ul>
+                        <hr>
+                    {{/if}}
+                </section>
+            {{/each}}
+        </section>
+    {{/each}}
+</div>

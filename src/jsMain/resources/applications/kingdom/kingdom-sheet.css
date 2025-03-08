@@ -12,10 +12,11 @@
     }
 
     .km-kingdom-sheet-sidebar {
-        width: 300px;
+        min-width: 300px;
         background-color: var(--background);
         border-radius: 10px;
         margin: 10px 0 10px 10px;
+        padding: 1em;
         overflow: auto;
     }
 
@@ -25,6 +26,7 @@
         background-color: var(--background);
         border-radius: 10px;
         margin: 10px;
+        padding: 1em;
     }
 
     .km-kingdom-sheet-header {
@@ -52,12 +54,13 @@
         }
     }
 
-    nav {
+    nav.km-main-nav {
         ul {
             list-style-type: none;
             display: flex;
             margin: 0;
             padding: 0;
+
 
             a {
                 padding: .5em 1em;
@@ -67,4 +70,66 @@
             }
         }
     }
+
+    /* kingdom */
+
+
+    .km-kingdom-sheet-kingdom {
+        nav {
+            ul {
+                display: flex;
+                gap: .5em;
+                margin: 0 0 2em 0;
+                padding: 0;
+                list-style-type: none;
+                font-size: .8em;
+
+                li:nth-child(2) {
+                    margin-left: auto;
+                }
+
+                a {
+                    border: 1px solid;
+                    border-radius: .5em;
+                    padding: .5em;
+                    text-decoration: none;
+
+                    &:hover, &.active {
+                        border: 1px solid;
+                        color: var(--color-dark-1);
+                        background-color: var(--color-warm-1);
+                    }
+                }
+            }
+        }
+
+        h2 {
+            display: flex;
+            font-size: 2em;
+        }
+
+        .km-kingdom-sheet-kingdom-section {
+            margin-bottom: 3.5em;
+        }
+
+        .km-choose-boosts,
+        .km-choose-ruins {
+            display: flex;
+            justify-content: space-between;
+
+            ul {
+                display: flex;
+                margin: 0;
+                padding: 0;
+                list-style-type: none;
+                gap: 2em;
+            }
+        }
+
+        .km-header-right-align {
+            margin-left: auto;
+        }
+    }
+
+
 }

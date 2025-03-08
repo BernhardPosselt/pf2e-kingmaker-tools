@@ -18,6 +18,7 @@ external interface CharterContext {
 
 fun RawCharterChoices.toContext(charters: Array<RawCharter>): CharterContext {
     val charter = charters.find { it.id == type }
+    val charterBoost = charter?.boost
     return CharterContext(
         type = Select(
             name = "charter.type",
@@ -25,10 +26,19 @@ fun RawCharterChoices.toContext(charters: Array<RawCharter>): CharterContext {
             options = charters.map { SelectOption(it.name, it.id) },
             label = "Charter",
             required = false,
+            stacked = false,
+            hideLabel = true,
         ).toContext(),
-        abilityBoosts = abilityBoosts.toContext("charter", charter?.freeBoosts ?: 0),
-        description =  charter?.description ?: "",
+        abilityBoosts = abilityBoosts.toContext(
+            prefix = "charter",
+            free = charter?.freeBoosts ?: 0,
+            overrideCulture = charterBoost?.let { it == "culture" }?.takeIf { it == true },
+            overrideEconomy = charterBoost?.let { it == "economy" }?.takeIf { it == true },
+            overrideLoyalty = charterBoost?.let { it == "loyalty" }?.takeIf { it == true },
+            overrideStability = charterBoost?.let { it == "stability" }?.takeIf { it == true },
+        ),
+        description = charter?.description ?: "",
         flaw = charter?.flaw,
-        boost = charter?.boost,
+        boost = charterBoost,
     )
 }

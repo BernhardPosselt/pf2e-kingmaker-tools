@@ -27,6 +27,7 @@ fun RawGovernmentChoices.toContext(
     val featsById = feats.associateBy { it.id }
     val government = governments.find { it.id == type }
     val feat = government?.bonusFeat?.let { featsById[it] }
+    val governmentBoosts = government?.boosts
     return GovernmentContext(
         type = Select(
             name = "government.type",
@@ -34,12 +35,21 @@ fun RawGovernmentChoices.toContext(
             options = governments.map { SelectOption(it.name, it.id) },
             label = "Government",
             required = false,
+            stacked = false,
+            hideLabel = true,
         ).toContext(),
-        boosts = government?.boosts?.joinToString(", ") { it.toLabel() } ?: "",
+        boosts = governmentBoosts?.joinToString(", ") { it.toLabel() } ?: "",
         description = government?.description,
         skills = government?.skillProficiencies?.joinToString(", ") { it.toLabel() } ?: "",
         feat = feat?.name ?: "",
         featDescription = feat?.text ?: "",
-        abilityBoosts = abilityBoosts.toContext("government", government?.freeBoosts ?: 0)
+        abilityBoosts = abilityBoosts.toContext(
+            prefix = "government",
+            free = government?.freeBoosts ?: 0,
+            overrideCulture = governmentBoosts?.any { it == "culture" }?.takeIf { it == true },
+            overrideEconomy = governmentBoosts?.any { it == "economy" }?.takeIf { it == true },
+            overrideLoyalty = governmentBoosts?.any { it == "loyalty" }?.takeIf { it == true },
+            overrideStability = governmentBoosts?.any { it == "stability" }?.takeIf { it == true },
+        )
     )
 }

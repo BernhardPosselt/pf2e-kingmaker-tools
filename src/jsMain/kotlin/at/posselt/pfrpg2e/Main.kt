@@ -124,7 +124,8 @@ fun main() {
             // register partials
             loadTpls(
                 arrayOf(
-                    "kingdom-sheet-kingdom" to "applications/kingdom/kingdom-sheet-kingdom.hbs",
+                    "kingdom-section-kingdom" to "applications/kingdom/sections/kingdom.hbs",
+                    "kingdom-creation" to "applications/kingdom/sections/kingdom-creation.hbs",
                     "campingTile" to "applications/camping/camping-tile.hbs",
                     "recipeTile" to "applications/camping/recipe-tile.hbs",
                     "formElement" to "components/forms/form-element.hbs",

@@ -32,7 +32,6 @@ fun calculateIncome(
 ): Income {
     val worksites = realmData.worksites
     val size = findKingdomSize(realmData.size)
-    console.log(realmData.toString())
     return Income(
         stone = worksites.quarries.income,
         ore = worksites.mines.income,

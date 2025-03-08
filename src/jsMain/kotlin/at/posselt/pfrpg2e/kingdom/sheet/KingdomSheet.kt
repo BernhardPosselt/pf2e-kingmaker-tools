@@ -42,6 +42,7 @@ import at.posselt.pfrpg2e.kingdom.parseLeaderActors
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -229,6 +230,8 @@ class KingdomSheet(
     ),
     scrollable = arrayOf(".km-kingdom-sheet-sidebar", ".km-kingdom-sheet-content"),
 ) {
+    private var currentKingdomNavEntry: String = "Creation"
+
     init {
         actor.apps[id] = this
         appHook.onDeleteScene { _, _, _ -> render() }
@@ -276,6 +279,13 @@ class KingdomSheet(
                     data = OpenKingdomSheetAction(actorUuid = actor.uuid)
                 )
                 dispatcher.dispatch(action)
+            }
+
+            "change-kingdom-section-nav" -> {
+                event.preventDefault()
+                event.stopPropagation()
+                currentKingdomNavEntry = target.dataset["link"] ?: "Creation"
+                render()
             }
 
             "configure-activities" -> TODO()
@@ -380,9 +390,11 @@ class KingdomSheet(
         val unrestPenalty = calculateUnrestPenalty(kingdom.unrest)
         val feats = kingdom.getFeats()
         val increaseScorePicksBy = kingdom.settings.increaseScorePicksBy
+        val kingdomSectionNav = createKingdomSectionNav(kingdom)
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
+            kingdomSectionNav = kingdomSectionNav,
             kingdomNameInput = kingdomNameInput.toContext(),
             settlementInput = settlementInput.toContext(),
             xpInput = xpInput.toContext(),
@@ -408,7 +420,7 @@ class KingdomSheet(
             charter = kingdom.charter.toContext(kingdom.getCharters()),
             heartland = kingdom.heartland.toContext(kingdom.getHeartlands()),
             government = kingdom.government.toContext(kingdom.getGovernments(), feats),
-            abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", increaseScorePicksBy),
+            abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2 + increaseScorePicksBy),
             featuresByLevel = kingdom.features.toContext(
                 kingdomLevel = kingdom.level,
                 features = kingdom.getFeatures().flatMap { it.explodeLevels() }.toTypedArray(),
@@ -419,6 +431,21 @@ class KingdomSheet(
                 .sortedBy { it.level }
                 .toTypedArray(),
         )
+    }
+
+    private fun createKingdomSectionNav(kingdom: KingdomData): Array<NavEntryContext> {
+        val selectLv1 = currentKingdomNavEntry != "Creation"
+                && currentKingdomNavEntry.toInt() > kingdom.level
+        return (listOf("Creation") + (1..kingdom.level).takeWhile { it <= kingdom.level }.map { it.toString() })
+            .map {
+                NavEntryContext(
+                    label = it,
+                    active = (selectLv1 && it == "1") || currentKingdomNavEntry == it,
+                    link = it,
+                    title = if (it == "Creation") it else "Level: $it",
+                )
+            }
+            .toTypedArray()
     }
 
     override fun onParsedSubmit(value: KingdomSheetData): Promise<Void> = buildPromise {

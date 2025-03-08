@@ -9,7 +9,7 @@
         <div class="km-kingdom-sheet-active-fame-next">{{> formElement fameContext.next }}</div>
     </header>
 
-    <nav>
+    <nav class="km-main-nav">
         <ul>
             <li><a data-action="change-nav" href="#">Turn</a></li>
             <li><a data-action="change-nav" href="#">Kingdom</a></li>
@@ -68,7 +68,7 @@
             </div>
         </aside>
         <div class="km-kingdom-sheet-content">
-            {{> kingdom-sheet-kingdom this }}
+            {{> kingdom-section-kingdom this }}
             <div hidden>
             {{> formElement worksitesContext.farmlands.resources }}
             {{> formElement worksitesContext.farmlands.quantity }}

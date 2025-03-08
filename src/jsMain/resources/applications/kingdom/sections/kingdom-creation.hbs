@@ -1,0 +1,99 @@
+
+<section>
+    <section class="km-kingdom-sheet-kingdom-section">
+        <h2>Select Charter <span class="km-header-right-align">{{> formElement charter.type}}</span></h2>
+        {{#if charter.description}}<p>{{charter.description}}</p>
+            <hr>{{/if}}
+        {{#if charter.boost}}<p><b>Ability Boost</b>: {{charter.boost}}</p>{{/if}}
+        {{#if charter.flaw}}<p><b>Ability Flaw</b>: {{charter.flaw}}</p>{{/if}}
+        <div class="km-choose-boosts" {{#unless charter.description}}hidden{{/unless}}>
+            <p><b>Pick {{charter.abilityBoosts.free}} Boost:</b></p>
+            <ul>
+                <li {{#if charter.abilityBoosts.cultureHidden}}hidden{{/if}}>{{> formElement charter.abilityBoosts.culture}}</li>
+                <li {{#if charter.abilityBoosts.economyHidden}}hidden{{/if}}>{{> formElement charter.abilityBoosts.economy}}</li>
+                <li {{#if charter.abilityBoosts.loyaltyHidden}}hidden{{/if}}>{{> formElement charter.abilityBoosts.loyalty}}</li>
+                <li {{#if charter.abilityBoosts.stabilityHidden}}hidden{{/if}}>{{> formElement charter.abilityBoosts.stability}}</li>
+            </ul>
+        </div>
+    </section>
+    <section class="km-kingdom-sheet-kingdom-section">
+        <h2>Choose a Heartland <span class="km-header-right-align">{{> formElement heartland.type}}</span></h2>
+        {{#if heartland.description}}<p>{{heartland.description}}</p>
+            <hr>{{/if}}
+        {{#if heartland.description}}<p><b>Ability Boost</b>: {{heartland.boost}}</p>{{/if}}
+    </section>
+    <section class="km-kingdom-sheet-kingdom-section">
+        <h2>Choose a Government <span class="km-header-right-align">{{> formElement government.type}}</span></h2>
+        {{#if government.description}}<p>{{government.description}}</p>
+            <hr>{{/if}}
+        {{#if government.description}}<p><b>Ability Boosts</b>: {{government.boosts}}</p>{{/if}}
+
+        <div class="km-choose-boosts" {{#unless government.description}}hidden{{/unless}}>
+            <p><b>Pick {{government.abilityBoosts.free}} Boost:</b></p>
+            <ul>
+                <li {{#if government.abilityBoosts.cultureHidden}}hidden{{/if}}>{{> formElement government.abilityBoosts.culture}}</li>
+                <li {{#if government.abilityBoosts.economyHidden}}hidden{{/if}}>{{> formElement government.abilityBoosts.economy}}</li>
+                <li {{#if government.abilityBoosts.loyaltyHidden}}hidden{{/if}}>{{> formElement government.abilityBoosts.loyalty}}</li>
+                <li {{#if government.abilityBoosts.stabilityHidden}}hidden{{/if}}>{{> formElement government.abilityBoosts.stability}}</li>
+            </ul>
+        </div>
+        {{#if government.skills}}
+            <p><b>Skill Proficiencies</b>: {{government.skills}}</p>
+        {{/if}}
+        {{#if government.description}}
+            <details>
+                <summary><b>Bonus Feat</b>: {{government.feat}}</summary>
+                <p>{{government.featDescription}}</p>
+            </details>
+        {{/if}}
+    </section>
+    <section class="km-kingdom-sheet-kingdom-section">
+        <h2>Finalize Ability Scores <span class="km-header-right-align">{{> formElement charter.type}}</span></h2>
+        <p>Pick {{abilityBoosts.free}} Free Boosts:</p>
+        <ul class="km-choose-boosts">
+            <li>{{> formElement abilityBoosts.culture}}</li>
+            <li>{{> formElement abilityBoosts.economy}}</li>
+            <li>{{> formElement abilityBoosts.loyalty}}</li>
+            <li>{{> formElement abilityBoosts.stability}}</li>
+        </ul>
+    </section>
+    <section class="km-kingdom-sheet-kingdom-section">
+        <h2>Choose Leaders</h2>
+        <p>Assign your leaders in the sidebar</p>
+    </section>
+    <section class="km-kingdom-sheet-kingdom-section">
+        <h2>First Village</h2>
+        <p>You can either set a scene in the <b>Settlements</b> tab or import a Settlement from the <b>Settlement
+            Scenes</b> compendium:</p>
+        <ul>
+            <li>
+                <button type="button" data-action="settlement-import" data-water-borders="0">Import Settlement (0
+                    Water Borders)
+                </button>
+            </li>
+            <li>
+                <button type="button" data-action="settlement-import" data-water-borders="1">Import Settlement (1
+                    Water Borders)
+                </button>
+            </li>
+            <li>
+                <button type="button" data-action="settlement-import" data-water-borders="2">Import Settlement (2
+                    Water Borders)
+                </button>
+            </li>
+            <li>
+                <button type="button" data-action="settlement-import" data-water-borders="3">Import Settlement (3
+                    Water Borders)
+                </button>
+            </li>
+            <li>
+                <button type="button" data-action="settlement-import" data-water-borders="4">Import Settlement (4
+                    Water Borders)
+                </button>
+            </li>
+        </ul>
+    </section>
+    <section class="km-kingdom-sheet-kingdom-section">
+        <h2>Fame or Infamy? <span class="km-header-right-align">{{> formElement fameContext.type}}</span></h2>
+    </section>
+</section>

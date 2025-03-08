@@ -24,6 +24,8 @@ fun RawHeartlandChoices.toContext(heartlands: Array<RawHeartland>): HeartlandCon
             options = heartlands.map { SelectOption(it.name, it.id) },
             label = "Heartland",
             required = false,
+            stacked = false,
+            hideLabel = true,
         ).toContext(),
         description = heartland?.description,
         boost = heartland?.boost?.toLabel() ?: "",

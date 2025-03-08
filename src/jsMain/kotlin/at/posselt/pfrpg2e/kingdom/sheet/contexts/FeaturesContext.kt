@@ -107,7 +107,6 @@ fun Array<RawFeatureChoices>.toContext(
     feats: Array<RawKingdomFeat>,
     increaseBoostsBy: Int,
 ): Array<FeatureByLevelContext> {
-    console.log(features)
     val featsById = feats.associateBy { it.id }
     val choicesById = choices.associateBy { it.id }
     val skillIncreaseOptions = KingdomSkill.entries.map { SelectOption(it.label, it.value) }
@@ -147,6 +146,7 @@ fun Array<RawFeatureChoices>.toContext(
                                 value = feat?.id,
                                 options = featSelectOptions,
                                 required = false,
+                                stacked = false,
                             ).toContext()
                         } else {
                             null
@@ -159,6 +159,7 @@ fun Array<RawFeatureChoices>.toContext(
                                 value = choice?.skillIncrease,
                                 options = skillIncreaseOptions,
                                 required = false,
+                                stacked = false,
                             ).toContext()
                         } else {
                             null
