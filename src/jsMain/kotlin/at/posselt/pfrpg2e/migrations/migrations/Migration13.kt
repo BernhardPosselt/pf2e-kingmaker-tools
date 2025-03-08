@@ -43,6 +43,15 @@ class Migration13 : Migration(13) {
                 )
             }
         }.toTypedArray()
+        kingdom.abilityBoosts = RawAbilityBoostChoices(
+            culture = false,
+            economy = false,
+            loyalty = false,
+            stability = false,
+        )
+        kingdom.homebrewCharters = emptyArray()
+        kingdom.homebrewGovernments = emptyArray()
+        kingdom.homebrewHeartlands = emptyArray()
         kingdom.settings.automateStats = false
         kingdom.charter = RawCharterChoices(
             type = chartersByName[charter?.lowercase() ?: ""]?.id,
@@ -96,6 +105,7 @@ class Migration13 : Migration(13) {
             Reflect.deleteProperty(it, "phases")
             it.applyIf = predicates.toTypedArray()
         }
+        Reflect.deleteProperty(kingdom, "feats")
     }
 
     override suspend fun migrateOther(game: Game) {
