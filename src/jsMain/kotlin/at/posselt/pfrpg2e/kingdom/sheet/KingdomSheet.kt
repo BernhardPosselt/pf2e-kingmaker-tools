@@ -334,6 +334,7 @@ class KingdomSheet(
             bonusFeats= kingdom.bonusFeats.toContext(
                 kingdom.getFeats(),
             ),
+            groups = kingdom.groups.toContext()
         )
     }
 

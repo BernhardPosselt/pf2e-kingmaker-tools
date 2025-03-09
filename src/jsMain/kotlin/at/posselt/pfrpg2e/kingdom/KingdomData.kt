@@ -161,12 +161,13 @@ external interface KingdomData {
     var ongoingEvents: Array<OngoingEvent>  // set via dialog
     var activityBlacklist: Array<String>  // set via dialog
     var modifiers: Array<RawModifier>  // set via dialog
+    var settlements: Array<RawSettlement>  // set via dialog
+    var groups: Array<RawGroup>
 
-    var groups: Array<RawGroup>  // TODO
     var skillRanks: Record<String, Int>  // TODO
     var abilityScores: Record<String, Int>  // TODO
     var milestones: Array<RawMileStone>  // TODO
-    var settlements: Array<RawSettlement>  // TODO
+
 }
 
 fun RawLeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =

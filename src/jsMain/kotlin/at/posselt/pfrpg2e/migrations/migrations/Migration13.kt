@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.migrations.migrations
 
+import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawExpression
 import at.posselt.pfrpg2e.kingdom.RawIn
@@ -76,11 +77,20 @@ class Migration13 : Migration(13) {
                 stability = false,
             )
         )
+        kingdom.groups = kingdom.groups.map {
+            it.copy(
+                relations = when (it.relations) {
+                    "diplomatic-relations" -> Relations.DIPLOMATIC_RELATIONS.value
+                    "trade-agreement" -> Relations.TRADE_AGREEMENT.value
+                    else -> Relations.NONE.value
+                }
+            )
+        }.toTypedArray()
         val governmentFeat = kingdom.government.type?.let { governmentsById[it]?.bonusFeat }
         kingdom.bonusFeats = kingdom.bonusFeats
             .mapNotNull {
                 featsByName[it.id]?.let { f ->
-                    RawBonusFeat(id=f.id, ruinThresholdIncreases=emptyArray())
+                    RawBonusFeat(id = f.id, ruinThresholdIncreases = emptyArray())
                 }
             }
             .filter { it.id != governmentFeat }

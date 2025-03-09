@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.sheet
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import com.foundryvtt.core.AnyObject
@@ -215,6 +216,14 @@ class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
                             }
                         }
                     }
+                }
+            }
+            array("groups") {
+                schema {
+                    string("name")
+                    int("negotiationDC")
+                    boolean("atWar")
+                    enum<Relations>("relations")
                 }
             }
         }

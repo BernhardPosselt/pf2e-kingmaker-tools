@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
 import at.posselt.pfrpg2e.kingdom.data.RawFame
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
 import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
+import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.RawHeartlandChoices
 import at.posselt.pfrpg2e.kingdom.data.RawLeaders
 import at.posselt.pfrpg2e.kingdom.data.RawNotes
@@ -43,4 +44,5 @@ external interface KingdomSheetData {
     var abilityBoosts: RawAbilityBoostChoices
     var features: Array<RawFeatureChoices>
     var bonusFeats: Array<RawBonusFeat>
+    var groups: Array<RawGroup>
 }

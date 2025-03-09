@@ -53,6 +53,15 @@
             {{editor notesContext.public target="notes.public" button=true editable=true engine="prosemirror"}}
             {{editor notesContext.gm target="notes.gm" button=true editable=true engine="prosemirror"}}
 
+            groups
+
+            {{#each groups}}
+                {{> formElement name}}
+                {{> formElement negotiationDC}}
+                {{> formElement atWar}}
+                {{> formElement relations}}
+            {{/each}}
+
             leaders
 
             {{> formElement leadersContext.ruler.invested }}
