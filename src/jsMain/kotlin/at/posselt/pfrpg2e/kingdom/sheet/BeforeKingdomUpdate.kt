@@ -14,11 +14,15 @@ fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
         val government = previous.getGovernments().find { it.id == governmentType }
         resetAbilityBoosts(current.government.abilityBoosts)
         if (government != null) {
+            val governmentFeats = government.skillProficiencies
+                .map { "skill-training-$it" }
+                .toSet() + government.bonusFeat
             current.features
-                .find { it.featId == government.bonusFeat }
-                ?.let { it.featId = null }
-            // TODO: filter skill training based off government skill proficiencies
-            current.bonusFeats = current.bonusFeats.filter { it.id != government.bonusFeat }.toTypedArray()
+                .filter { it.featId in governmentFeats }
+                .forEach { it.featId = null }
+            current.bonusFeats = current.bonusFeats
+                .filterNot { it.id in governmentFeats }
+                .toTypedArray()
         }
     }
 }
