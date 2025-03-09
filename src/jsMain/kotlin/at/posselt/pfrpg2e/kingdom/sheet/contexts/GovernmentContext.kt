@@ -46,10 +46,10 @@ fun RawGovernmentChoices.toContext(
         abilityBoosts = abilityBoosts.toContext(
             prefix = "government",
             free = government?.freeBoosts ?: 0,
-            overrideCulture = governmentBoosts?.any { it == "culture" }?.takeIf { it == true },
-            overrideEconomy = governmentBoosts?.any { it == "economy" }?.takeIf { it == true },
-            overrideLoyalty = governmentBoosts?.any { it == "loyalty" }?.takeIf { it == true },
-            overrideStability = governmentBoosts?.any { it == "stability" }?.takeIf { it == true },
+            disableCulture = governmentBoosts?.any { it == "culture" } == true,
+            disableEconomy = governmentBoosts?.any { it == "economy" } == true,
+            disableLoyalty = governmentBoosts?.any { it == "loyalty" } == true,
+            disableStability = governmentBoosts?.any { it == "stability" } == true,
         )
     )
 }

@@ -68,6 +68,7 @@ import com.foundryvtt.core.onApplyTokenStatusEffect
 import com.foundryvtt.core.onCanvasReady
 import com.foundryvtt.core.onSightRefresh
 import com.foundryvtt.core.onUpdateActor
+import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
@@ -393,6 +394,7 @@ class KingdomSheet(
         val feats = kingdom.getFeats()
         val increaseScorePicksBy = kingdom.settings.increaseScorePicksBy
         val kingdomSectionNav = createKingdomSectionNav(kingdom)
+        val governments = kingdom.getGovernments()
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -421,11 +423,11 @@ class KingdomSheet(
             leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeadershipBonuses),
             charter = kingdom.charter.toContext(kingdom.getCharters()),
             heartland = kingdom.heartland.toContext(kingdom.getHeartlands()),
-            government = kingdom.government.toContext(kingdom.getGovernments(), feats),
+            government = kingdom.government.toContext(governments, feats),
             abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2 + increaseScorePicksBy),
             hideCreation = currentKingdomNavEntry != "Creation",
             featuresByLevel = kingdom.features.toContext(
-                kingdomLevel = kingdom.level,
+                government = governments.find { it.id == kingdom.government.type },
                 features = kingdom.getFeatures().flatMap { it.explodeLevels() }.toTypedArray(),
                 choices = kingdom.features,
                 feats = feats,
@@ -453,7 +455,8 @@ class KingdomSheet(
     }
 
     override fun onParsedSubmit(value: KingdomSheetData): Promise<Void> = buildPromise {
-        val kingdom = getKingdom()
+        val previousKingdom = getKingdom()
+        val kingdom = deepClone(previousKingdom)
         kingdom.fame = value.fame
         kingdom.level = value.level
         kingdom.name = value.name
@@ -475,6 +478,7 @@ class KingdomSheet(
             value.consumption
         }
         kingdom.leaders = value.leaders
+        beforeKingdomUpdate(previousKingdom, kingdom)
         actor.setKingdom(kingdom)
         null
     }

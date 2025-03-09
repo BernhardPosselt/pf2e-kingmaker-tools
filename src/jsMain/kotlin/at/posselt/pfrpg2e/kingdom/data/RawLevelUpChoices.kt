@@ -21,10 +21,10 @@ external interface RawGovernmentChoices {
 
 @JsPlainObject
 external interface RawAbilityBoostChoices {
-    val culture: Boolean
-    val economy: Boolean
-    val loyalty: Boolean
-    val stability: Boolean
+    var culture: Boolean
+    var economy: Boolean
+    var loyalty: Boolean
+    var stability: Boolean
 }
 
 @JsPlainObject
@@ -43,12 +43,12 @@ external interface RawRuinThresholdIncreases {
 
 @JsPlainObject
 external interface RawFeatureChoices {
-    val id: String
-    val skillIncrease: String?
-    val abilityBoosts: RawAbilityBoostChoices?
-    val featId: String?
-    val ruinThresholdIncreases: RawRuinThresholdIncreases?
-    val featRuinThresholdIncreases: Array<RawRuinThresholdIncrease>
+    var id: String
+    var skillIncrease: String?
+    var abilityBoosts: RawAbilityBoostChoices?
+    var featId: String?
+    var ruinThresholdIncreases: RawRuinThresholdIncreases?
+    var featRuinThresholdIncreases: Array<RawRuinThresholdIncrease>
 }
 
 

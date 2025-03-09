@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.migrations.migrations
 
+import at.posselt.pfrpg2e.kingdom.BonusFeat
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawExpression
 import at.posselt.pfrpg2e.kingdom.RawIn
@@ -29,6 +30,7 @@ class Migration13 : Migration(13) {
     override suspend fun migrateKingdom(game: Game, kingdom: KingdomData) {
         val featsByName = kingdomFeats.associateBy { it.name }
         val governmentsByName = governments.associateBy { it.name.lowercase() }
+        val governmentsById = governments.associateBy { it.id }
         val chartersByName = charters.associateBy { it.name.lowercase() }
         val heartland = kingdom.heartland.unsafeCast<String?>()
         val government = kingdom.government.unsafeCast<String?>()
@@ -73,8 +75,17 @@ class Migration13 : Migration(13) {
                 stability = false,
             )
         )
+        val governmentFeat = kingdom.government.type?.let { governmentsById[it]?.bonusFeat }
+        kingdom.bonusFeats = kingdom.bonusFeats
+            .mapNotNull {
+                featsByName[it.id]?.let { f ->
+                    BonusFeat(id=f.id)
+                }
+            }
+            .filter { it.id != governmentFeat }
+            .toTypedArray()
         kingdom.heartland = RawHeartlandChoices(
-            type=heartland
+            type = heartland
         )
         kingdom.modifiers.forEach {
             val predicates = it.applyIf?.toMutableList() ?: mutableListOf<RawExpression<Boolean>>()

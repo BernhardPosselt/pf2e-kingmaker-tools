@@ -23,70 +23,70 @@ external interface AbilityBoostContext {
 fun RawAbilityBoostChoices.toContext(
     prefix: String,
     free: Int,
-    overrideCulture: Boolean? = null,
-    overrideEconomy: Boolean? = null,
-    overrideLoyalty: Boolean? = null,
-    overrideStability: Boolean? = null,
+    disableCulture: Boolean = false,
+    disableEconomy: Boolean = false,
+    disableLoyalty: Boolean = false,
+    disableStability: Boolean = false,
 ) = AbilityBoostContext(
     free = free,
-    cultureHidden = overrideCulture != null,
-    economyHidden = overrideEconomy != null,
-    loyaltyHidden = overrideLoyalty != null,
-    stabilityHidden = overrideStability != null,
-    culture = if (overrideCulture == null) {
+    cultureHidden = disableCulture,
+    economyHidden = disableEconomy,
+    loyaltyHidden = disableLoyalty,
+    stabilityHidden = disableStability,
+    culture = if (disableCulture) {
+        HiddenInput(
+            value = "false",
+            overrideType = OverrideType.BOOLEAN,
+            name = "$prefix.abilityBoosts.culture"
+        )
+    } else {
         CheckboxInput(
             name = "$prefix.abilityBoosts.culture",
             value = culture,
             label = "Culture",
             stacked = true
         )
-    } else {
-        HiddenInput(
-            value = overrideCulture.toString(),
-            overrideType = OverrideType.BOOLEAN,
-            name = "$prefix.abilityBoosts.culture"
-        )
     }.toContext(),
-    economy = if (overrideEconomy == null) {
+    economy = if (disableEconomy) {
+        HiddenInput(
+            value = "false",
+            overrideType = OverrideType.BOOLEAN,
+            name = "$prefix.abilityBoosts.economy"
+        )
+    } else {
         CheckboxInput(
             name = "$prefix.abilityBoosts.economy",
             value = economy,
             label = "Economy",
             stacked = true
         )
-    } else {
-        HiddenInput(
-            value = overrideEconomy.toString(),
-            overrideType = OverrideType.BOOLEAN,
-            name = "$prefix.abilityBoosts.economy"
-        )
     }.toContext(),
-    loyalty = if (overrideLoyalty == null) {
+    loyalty = if (disableLoyalty) {
+        HiddenInput(
+            value = "false",
+            overrideType = OverrideType.BOOLEAN,
+            name = "$prefix.abilityBoosts.loyalty"
+        )
+    } else {
         CheckboxInput(
             name = "$prefix.abilityBoosts.loyalty",
             value = loyalty,
             label = "Loyalty",
             stacked = true
         )
-    } else {
-        HiddenInput(
-            value = overrideLoyalty.toString(),
-            overrideType = OverrideType.BOOLEAN,
-            name = "$prefix.abilityBoosts.loyalty"
-        )
     }.toContext(),
-    stability = if (overrideStability == null) {
+    stability = if (disableStability) {
+        HiddenInput(
+            value = "false",
+            overrideType = OverrideType.BOOLEAN,
+            name = "$prefix.abilityBoosts.stability"
+        )
+    } else {
         CheckboxInput(
             name = "$prefix.abilityBoosts.stability",
             value = stability,
             label = "Stability",
             stacked = true
-        )
-    } else {
-        HiddenInput(
-            value = overrideStability.toString(),
-            overrideType = OverrideType.BOOLEAN,
-            name = "$prefix.abilityBoosts.stability"
         )
     }.toContext(),
 )

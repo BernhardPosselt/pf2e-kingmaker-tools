@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.data.actor.findHighestProficiency
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
+import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
@@ -101,7 +102,7 @@ private fun defaultRuinThresholdIncrease(value: Int) =
     )
 
 fun Array<RawFeatureChoices>.toContext(
-    kingdomLevel: Int,
+    government: RawGovernment?,
     features: Array<RawExplodedKingdomFeature>,
     choices: Array<RawFeatureChoices>,
     feats: Array<RawKingdomFeat>,
@@ -111,6 +112,9 @@ fun Array<RawFeatureChoices>.toContext(
     val featsById = feats.associateBy { it.id }
     val choicesById = choices.associateBy { it.id }
     val skillIncreaseOptions = KingdomSkill.entries.map { SelectOption(it.label, it.value) }
+    val takenFeats = choices.mapNotNull { it.featId }.toSet() + (government?.let {
+        setOf(it.bonusFeat) + it.skillProficiencies.map { "skill-training-$it" }
+    } ?: emptySet())
     return features
         .groupBy { it.level }
         .map { (level, f) ->
@@ -121,13 +125,16 @@ fun Array<RawFeatureChoices>.toContext(
                 features = f.mapIndexed { index, feature ->
                     val choice = choicesById[feature.id]
                     val feat = choice?.featId?.let { featsById[it] }
-                    val featSelectOptions = feats.map { SelectOption("${it.name} (${it.level})", it.id) }
                     val ruinThresholdIncreases = feature.ruinThresholdIncreases
                     val abilityBoosts = feature.abilityBoosts
                     FeatureContext(
                         id = HiddenInput(name = "features.$index.id", value = feature.id).toContext(),
                         name = feature.name,
-                        description = feature.description,
+                        description = if (feature.skillIncrease == true) {
+                            feature.description + ". You can increase a skill up to $highestProficiency."
+                        } else {
+                            feature.description
+                        },
                         abilityBoosts = if (abilityBoosts != null) {
                             val free = abilityBoosts + increaseBoostsBy
                             val boosts = choice?.abilityBoosts ?: RawAbilityBoostChoices(
@@ -141,6 +148,9 @@ fun Array<RawFeatureChoices>.toContext(
                             null
                         },
                         feat = if (feature.kingdomFeat == true) {
+                            val featSelectOptions = feats
+                                .filter { it.level <= level && (it.id == feat?.id || it.id !in takenFeats) }
+                                .map { SelectOption(it.name, it.id) }
                             Select(
                                 label = "Kingdom Feat",
                                 name = "features.$index.featId",
@@ -156,7 +166,7 @@ fun Array<RawFeatureChoices>.toContext(
                         featDescription = feat?.text ?: "",
                         skillProficiency = if (feature.skillIncrease == true) {
                             Select(
-                                label = "Skill Increase (up to $highestProficiency)",
+                                label = "Skill Increase",
                                 name = "features.$index.skillIncrease",
                                 value = choice?.skillIncrease,
                                 options = skillIncreaseOptions,
