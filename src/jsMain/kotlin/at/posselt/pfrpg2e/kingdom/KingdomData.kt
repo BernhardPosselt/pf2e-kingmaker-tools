@@ -135,22 +135,22 @@ external interface KingdomData {
     var resourcePoints: RawResources
     var resourceDice: RawResources
     var workSites: RawWorkSites
-    var realmSceneId: String?
+    var realmSceneId: String? // set via button
     var consumption: RawConsumption
     var supernaturalSolutions: Int
     var creativeSolutions: Int
-    var settings: KingdomSettings
+    var settings: KingdomSettings // set via dialog
     var commodities: RawCurrentCommodities
     var ruin: RawRuin
     var activeSettlement: String?
-    var turnsWithoutCultEvent: Int
-    var turnsWithoutEvent: Int
+    var turnsWithoutCultEvent: Int // set via button
+    var turnsWithoutEvent: Int // set via button
     var notes: RawNotes
-    var homebrewActivities: Array<KingdomActivity>
-    var homebrewCharters: Array<RawCharter>
-    var homebrewGovernments: Array<RawGovernment>
-    var homebrewHeartlands: Array<RawHeartland>
-    var homebrewFeats: Array<RawKingdomFeat>
+    var homebrewActivities: Array<KingdomActivity> // set via dialog
+    var homebrewCharters: Array<RawCharter> // set via dialog
+    var homebrewGovernments: Array<RawGovernment> // set via dialog
+    var homebrewHeartlands: Array<RawHeartland> // set via dialog
+    var homebrewFeats: Array<RawKingdomFeat> // set via dialog
     var leaders: RawLeaders
     var charter: RawCharterChoices
     var heartland: RawHeartlandChoices
@@ -158,13 +158,14 @@ external interface KingdomData {
     var abilityBoosts: RawAbilityBoostChoices
     var features: Array<RawFeatureChoices>
     var bonusFeats: Array<RawBonusFeat>
+    var ongoingEvents: Array<OngoingEvent>  // set via dialog
+    var activityBlacklist: Array<String>  // set via dialog
+    var modifiers: Array<RawModifier>  // set via dialog
+
     var groups: Array<RawGroup>  // TODO
     var skillRanks: Record<String, Int>  // TODO
     var abilityScores: Record<String, Int>  // TODO
     var milestones: Array<RawMileStone>  // TODO
-    var ongoingEvents: Array<OngoingEvent>  // TODO
-    var activityBlacklist: Array<String>  // TODO
-    var modifiers: Array<RawModifier>  // TODO
     var settlements: Array<RawSettlement>  // TODO
 }
 

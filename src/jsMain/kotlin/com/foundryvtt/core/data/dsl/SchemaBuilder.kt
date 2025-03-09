@@ -153,7 +153,7 @@ class Schema {
         name: String,
         nullable: Boolean = false,
         context: DataFieldContext<String>? = undefined,
-        block: (StringFieldOptions.() -> Unit) = {  },
+        block: (StringFieldOptions.() -> Unit) = { },
     ) {
         val choices = enumEntries<T>().map { it.toCamelCase() }.toTypedArray()
         val options = if (nullable) {
@@ -259,13 +259,20 @@ class Schema {
         name: String,
         options: DataFieldOptions? = undefined,
         context: DataFieldContext<Record<String, Any>>? = undefined,
+        nullable: Boolean = false,
         block: (Schema.() -> Unit)? = null,
     ) {
         val schema = Schema()
         block?.invoke(schema)
+        val opts = if (nullable) {
+            options?.copy(nullable = true, initial = null)
+                ?: DataFieldOptions(nullable = true, initial = null)
+        } else {
+            options?.copy(required = true) ?: DataFieldOptions(required = true)
+        }
         fields[name] = SchemaField(
             fields = schema.build(),
-            options = options,
+            options = opts,
             context = context,
         )
     }

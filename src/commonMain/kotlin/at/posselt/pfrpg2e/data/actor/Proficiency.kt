@@ -30,3 +30,7 @@ fun findHighestProficiency(level: Int) : Proficiency? =
     Proficiency.entries
         .filter { it.increaseLockedUntil <= level }
         .maxByOrNull { it.rank }
+
+val highestProficiencyByLevel = (1..20)
+    .mapNotNull { it to findHighestProficiency(it)?.label }
+    .toMap()

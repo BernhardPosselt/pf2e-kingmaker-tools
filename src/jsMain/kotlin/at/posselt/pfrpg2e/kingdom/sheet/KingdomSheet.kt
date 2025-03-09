@@ -12,18 +12,8 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
-import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
-import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomData
-import at.posselt.pfrpg2e.kingdom.data.RawConsumption
-import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
-import at.posselt.pfrpg2e.kingdom.data.RawFame
-import at.posselt.pfrpg2e.kingdom.data.RawLeaders
-import at.posselt.pfrpg2e.kingdom.data.RawNotes
-import at.posselt.pfrpg2e.kingdom.data.RawResources
-import at.posselt.pfrpg2e.kingdom.data.RawRuin
-import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
@@ -54,11 +44,8 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.openJournal
 import com.foundryvtt.core.Actor
-import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
-import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.documents.onCreateDrawing
 import com.foundryvtt.core.documents.onCreateTile
 import com.foundryvtt.core.documents.onCreateToken
@@ -77,145 +64,12 @@ import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
-import js.objects.JsPlainObject
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
-
-@JsPlainObject
-external interface KingdomSheetData {
-    val name: String
-    val activeSettlement: String?
-    val xp: Int
-    val xpThreshold: Int
-    val level: Int
-    val fame: RawFame
-    val unrest: Int
-    val size: Int
-    val atWar: Boolean
-    val ruin: RawRuin
-    val commodities: RawCurrentCommodities
-    val workSites: RawWorkSites
-    val resourcePoints: RawResources
-    val resourceDice: RawResources
-    val consumption: RawConsumption
-    val supernaturalSolutions: Int
-    val creativeSolutions: Int
-    val notes: RawNotes
-    val leaders: RawLeaders
-}
-
-@JsExport
-class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
-    companion object {
-        @Suppress("unused")
-        @JsStatic
-        fun defineSchema() = buildSchema {
-            string("name")
-            string("activeSettlement", nullable = true)
-            int("xp")
-            int("xpThreshold")
-            int("level")
-            int("size")
-            boolean("atWar")
-            int("unrest")
-            int("supernaturalSolutions")
-            int("creativeSolutions")
-            schema("consumption") {
-                int("now")
-                int("next")
-                int("armies")
-            }
-            schema("fame") {
-                int("now")
-                int("next")
-            }
-            schema("leaders") {
-                Leader.entries.forEach {
-                    boolean("invested")
-                    boolean("vacant")
-                    enum<LeaderType>("type")
-                    string("uuid", nullable = true)
-                }
-            }
-            schema("commodities") {
-                schema("now") {
-                    int("food")
-                    int("lumber")
-                    int("luxuries")
-                    int("ore")
-                    int("stone")
-                }
-                schema("next") {
-                    int("food")
-                    int("lumber")
-                    int("luxuries")
-                    int("ore")
-                    int("stone")
-                }
-            }
-            schema("ruin") {
-                schema("corruption") {
-                    int("value")
-                    int("threshold")
-                    int("penalty")
-                }
-                schema("crime") {
-                    int("value")
-                    int("threshold")
-                    int("penalty")
-                }
-                schema("decay") {
-                    int("value")
-                    int("threshold")
-                    int("penalty")
-                }
-                schema("strife") {
-                    int("value")
-                    int("threshold")
-                    int("penalty")
-                }
-            }
-            schema("resourcePoints") {
-                int("now")
-                int("next")
-            }
-            schema("resourceDice") {
-                int("now")
-                int("next")
-            }
-            schema("notes") {
-                string("gm")
-                string("public")
-            }
-            schema("workSites") {
-                schema("farmlands") {
-                    int("resources")
-                    int("quantity")
-                }
-                schema("lumberCamps") {
-                    int("resources")
-                    int("quantity")
-                }
-                schema("mines") {
-                    int("resources")
-                    int("quantity")
-                }
-                schema("quarries") {
-                    int("resources")
-                    int("quantity")
-                }
-                schema("luxurySources") {
-                    int("resources")
-                    int("quantity")
-                }
-            }
-        }
-    }
-}
 
 private enum class NavEntry {
     TURN, CHARACTER_SHEET, SETTLEMENTS, TRADE_AGREEMENTS, EFFECTS, NOTES;
@@ -455,7 +309,7 @@ class KingdomSheet(
             charter = kingdom.charter.toContext(kingdom.getCharters()),
             heartland = kingdom.heartland.toContext(kingdom.getHeartlands()),
             government = kingdom.government.toContext(governments, feats),
-            abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2 + increaseScorePicksBy),
+            abilityBoosts = kingdom.abilityBoosts.toContext("", 2 + increaseScorePicksBy),
             currentNavEntry = currentNavEntry.value,
             hideCreation = currentCharacterSheetNavEntry != "Creation",
             hideBonus = currentCharacterSheetNavEntry != "Bonus",
@@ -503,12 +357,12 @@ class KingdomSheet(
     override fun onParsedSubmit(value: KingdomSheetData): Promise<Void> = buildPromise {
         val previousKingdom = getKingdom()
         val kingdom = deepClone(previousKingdom)
+        kingdom.name = value.name
+        kingdom.atWar = value.atWar
         kingdom.fame = value.fame
         kingdom.level = value.level
-        kingdom.name = value.name
         kingdom.xp = value.xp
         kingdom.xpThreshold = value.xpThreshold
-        kingdom.atWar = value.atWar
         kingdom.unrest = value.unrest
         kingdom.ruin = value.ruin
         kingdom.commodities = value.commodities
@@ -516,6 +370,7 @@ class KingdomSheet(
         kingdom.size = value.size
         kingdom.resourcePoints = value.resourcePoints
         kingdom.resourceDice = value.resourceDice
+        kingdom.activeSettlement = value.activeSettlement
         kingdom.supernaturalSolutions = value.supernaturalSolutions
         kingdom.creativeSolutions = value.creativeSolutions
         kingdom.consumption = if (kingdom.settings.autoCalculateArmyConsumption) {
@@ -523,6 +378,12 @@ class KingdomSheet(
         } else {
             value.consumption
         }
+        kingdom.charter = value.charter
+        kingdom.heartland = value.heartland
+        kingdom.government = value.government
+        kingdom.abilityBoosts = value.abilityBoosts
+        kingdom.features = value.features
+        kingdom.bonusFeats = value.bonusFeats
         kingdom.leaders = value.leaders
         beforeKingdomUpdate(previousKingdom, kingdom)
         actor.setKingdom(kingdom)

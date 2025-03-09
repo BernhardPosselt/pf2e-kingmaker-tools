@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
-import at.posselt.pfrpg2e.data.actor.findHighestProficiency
+import at.posselt.pfrpg2e.data.actor.highestProficiencyByLevel
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
 import at.posselt.pfrpg2e.kingdom.RawGovernment
@@ -128,14 +128,17 @@ fun Array<RawFeatureChoices>.toContext(
     val choicesById = choices.associateBy { it.id }
     val skillIncreaseOptions = KingdomSkill.entries.map { SelectOption(it.label, it.value) }
     val takenFeats = getTakenFeats(choices, government, bonusFeats)
+
     return features
-        .groupBy { it.level }
+        .asSequence()
+        .mapIndexed { index, feature -> index to feature }
+        .groupBy { (_, feature) -> feature.level }
         .map { (level, f) ->
-            val highestProficiency = findHighestProficiency(level)?.label ?: "Untrained"
+            val highestProficiency = highestProficiencyByLevel[level] ?: "Untrained"
             FeatureByLevelContext(
                 level = level,
                 hidden = navigationEntry != "$level",
-                features = f.mapIndexed { index, feature ->
+                features = f.map { (index, feature) ->
                     val choice = choicesById[feature.id]
                     val feat = choice?.featId?.let { featsById[it] }
                     val ruinThresholdIncreases = feature.ruinThresholdIncreases
@@ -156,7 +159,7 @@ fun Array<RawFeatureChoices>.toContext(
                                 loyalty = false,
                                 stability = false,
                             )
-                            boosts.toContext("features.$index", free)
+                            boosts.toContext("features.$index.", free)
                         } else {
                             null
                         },

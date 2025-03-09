@@ -216,6 +216,7 @@ data class Select(
             stacked = stacked,
             elementClasses = elementClasses,
             escapeLabel = escapeLabel,
+            overrideType = OverrideType.NUMBER,
         )
     }
 }

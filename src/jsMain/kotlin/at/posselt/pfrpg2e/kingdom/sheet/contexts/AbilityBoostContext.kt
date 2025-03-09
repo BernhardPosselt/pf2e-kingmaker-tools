@@ -37,11 +37,11 @@ fun RawAbilityBoostChoices.toContext(
         HiddenInput(
             value = "false",
             overrideType = OverrideType.BOOLEAN,
-            name = "$prefix.abilityBoosts.culture"
+            name = "${prefix}abilityBoosts.culture"
         )
     } else {
         CheckboxInput(
-            name = "$prefix.abilityBoosts.culture",
+            name = "${prefix}abilityBoosts.culture",
             value = culture,
             label = "Culture",
             stacked = true
@@ -51,11 +51,11 @@ fun RawAbilityBoostChoices.toContext(
         HiddenInput(
             value = "false",
             overrideType = OverrideType.BOOLEAN,
-            name = "$prefix.abilityBoosts.economy"
+            name = "${prefix}abilityBoosts.economy"
         )
     } else {
         CheckboxInput(
-            name = "$prefix.abilityBoosts.economy",
+            name = "${prefix}abilityBoosts.economy",
             value = economy,
             label = "Economy",
             stacked = true
@@ -65,11 +65,11 @@ fun RawAbilityBoostChoices.toContext(
         HiddenInput(
             value = "false",
             overrideType = OverrideType.BOOLEAN,
-            name = "$prefix.abilityBoosts.loyalty"
+            name = "${prefix}abilityBoosts.loyalty"
         )
     } else {
         CheckboxInput(
-            name = "$prefix.abilityBoosts.loyalty",
+            name = "${prefix}abilityBoosts.loyalty",
             value = loyalty,
             label = "Loyalty",
             stacked = true
@@ -79,11 +79,11 @@ fun RawAbilityBoostChoices.toContext(
         HiddenInput(
             value = "false",
             overrideType = OverrideType.BOOLEAN,
-            name = "$prefix.abilityBoosts.stability"
+            name = "${prefix}abilityBoosts.stability"
         )
     } else {
         CheckboxInput(
-            name = "$prefix.abilityBoosts.stability",
+            name = "${prefix}abilityBoosts.stability",
             value = stability,
             label = "Stability",
             stacked = true

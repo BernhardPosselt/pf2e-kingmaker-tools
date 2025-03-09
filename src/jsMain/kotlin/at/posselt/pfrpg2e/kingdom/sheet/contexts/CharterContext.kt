@@ -30,7 +30,7 @@ fun RawCharterChoices.toContext(charters: Array<RawCharter>): CharterContext {
             hideLabel = true,
         ).toContext(),
         abilityBoosts = abilityBoosts.toContext(
-            prefix = "charter",
+            prefix = "charter.",
             free = charter?.freeBoosts ?: 0,
             disableCulture = charterBoost == "culture",
             disableEconomy = charterBoost == "economy",

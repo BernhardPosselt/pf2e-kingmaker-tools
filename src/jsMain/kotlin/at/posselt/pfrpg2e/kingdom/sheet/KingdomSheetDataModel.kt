@@ -1,0 +1,222 @@
+package at.posselt.pfrpg2e.kingdom.sheet
+
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
+import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.data.dsl.buildSchema
+
+@JsExport
+class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
+    companion object {
+        @Suppress("unused")
+        @JsStatic
+        fun defineSchema() = buildSchema {
+            string("name")
+            boolean("atWar")
+            schema("fame") {
+                int("now")
+                int("next")
+            }
+            int("level")
+            int("xpThreshold")
+            int("xp")
+            int("size")
+            int("unrest")
+            schema("resourcePoints") {
+                int("now")
+                int("next")
+            }
+            schema("resourceDice") {
+                int("now")
+                int("next")
+            }
+            schema("workSites") {
+                schema("farmlands") {
+                    int("resources")
+                    int("quantity")
+                }
+                schema("lumberCamps") {
+                    int("resources")
+                    int("quantity")
+                }
+                schema("mines") {
+                    int("resources")
+                    int("quantity")
+                }
+                schema("quarries") {
+                    int("resources")
+                    int("quantity")
+                }
+                schema("luxurySources") {
+                    int("resources")
+                    int("quantity")
+                }
+            }
+            schema("consumption") {
+                int("now")
+                int("next")
+                int("armies")
+            }
+            int("supernaturalSolutions")
+            int("creativeSolutions")
+            schema("commodities") {
+                schema("now") {
+                    int("food")
+                    int("lumber")
+                    int("luxuries")
+                    int("ore")
+                    int("stone")
+                }
+                schema("next") {
+                    int("food")
+                    int("lumber")
+                    int("luxuries")
+                    int("ore")
+                    int("stone")
+                }
+            }
+            schema("ruin") {
+                schema("corruption") {
+                    int("value")
+                    int("threshold")
+                    int("penalty")
+                }
+                schema("crime") {
+                    int("value")
+                    int("threshold")
+                    int("penalty")
+                }
+                schema("decay") {
+                    int("value")
+                    int("threshold")
+                    int("penalty")
+                }
+                schema("strife") {
+                    int("value")
+                    int("threshold")
+                    int("penalty")
+                }
+            }
+            string("activeSettlement", nullable = true)
+            schema("notes") {
+                string("gm")
+                string("public")
+            }
+            schema("leaders") {
+                Leader.entries.forEach {
+                    schema(it.value) {
+                        boolean("invested")
+                        boolean("vacant")
+                        enum<LeaderType>("type")
+                        string("uuid", nullable = true)
+                    }
+                }
+            }
+            schema("charter") {
+                string("type", nullable = true)
+                schema("abilityBoosts") {
+                    boolean("culture")
+                    boolean("economy")
+                    boolean("loyalty")
+                    boolean("stability")
+                }
+            }
+            schema("heartland") {
+                string("type", nullable = true)
+            }
+            schema("government") {
+                string("type", nullable = true)
+                schema("abilityBoosts") {
+                    boolean("culture")
+                    boolean("economy")
+                    boolean("loyalty")
+                    boolean("stability")
+                }
+            }
+            schema("abilityBoosts") {
+                boolean("culture")
+                boolean("economy")
+                boolean("loyalty")
+                boolean("stability")
+            }
+            array("features") {
+                schema {
+                    string("id")
+                    enum<KingdomSkill>("skillIncrease", nullable = true)
+                    schema("abilityBoosts", nullable = true) {
+                        boolean("culture")
+                        boolean("economy")
+                        boolean("loyalty")
+                        boolean("stability")
+                    }
+                    string("featId", nullable = true)
+                    schema("ruinThresholdIncreases", nullable = true) {
+                        schema("crime") {
+                            int("value")
+                            boolean("increase")
+                        }
+                        schema("corruption") {
+                            int("value")
+                            boolean("increase")
+                        }
+                        schema("strife") {
+                            int("value")
+                            boolean("increase")
+                        }
+                        schema("decay") {
+                            int("value")
+                            boolean("increase")
+                        }
+                    }
+                    array("featRuinThresholdIncreases") {
+                        schema {
+                            schema("crime") {
+                                int("value")
+                                boolean("increase")
+                            }
+                            schema("corruption") {
+                                int("value")
+                                boolean("increase")
+                            }
+                            schema("strife") {
+                                int("value")
+                                boolean("increase")
+                            }
+                            schema("decay") {
+                                int("value")
+                                boolean("increase")
+                            }
+                        }
+                    }
+                }
+            }
+            array("bonusFeats") {
+                schema {
+                    string("id")
+                    array("ruinThresholdIncreases") {
+                        schema {
+                            schema("crime") {
+                                int("value")
+                                boolean("increase")
+                            }
+                            schema("corruption") {
+                                int("value")
+                                boolean("increase")
+                            }
+                            schema("strife") {
+                                int("value")
+                                boolean("increase")
+                            }
+                            schema("decay") {
+                                int("value")
+                                boolean("increase")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

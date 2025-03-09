@@ -44,7 +44,7 @@ fun RawGovernmentChoices.toContext(
         feat = feat?.name ?: "",
         featDescription = feat?.text ?: "",
         abilityBoosts = abilityBoosts.toContext(
-            prefix = "government",
+            prefix = "government.",
             free = government?.freeBoosts ?: 0,
             disableCulture = governmentBoosts?.any { it == "culture" } == true,
             disableEconomy = governmentBoosts?.any { it == "economy" } == true,
