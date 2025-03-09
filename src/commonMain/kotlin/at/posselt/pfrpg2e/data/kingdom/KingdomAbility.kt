@@ -20,3 +20,12 @@ enum class KingdomAbility(val ruin: Ruin) {
     val label: String
         get() = toLabel()
 }
+
+fun calculateScore(boosts: Int, flaws: Int): Int {
+    val total = boosts - flaws
+    return if (total < 4) {
+        10 + total * 2
+    } else {
+        18 + (total - 4)
+    }
+}

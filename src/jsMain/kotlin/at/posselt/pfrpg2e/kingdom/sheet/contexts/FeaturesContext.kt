@@ -77,7 +77,7 @@ fun RawRuinThresholdIncreases.toContext(prefix: String, amount: Int): RuinThresh
         crime = crime.toContext("$prefix.crime", "Crime"),
         corruption = corruption.toContext("$prefix.corruption", "Corruption"),
         strife = strife.toContext("$prefix.strife", "Strife"),
-        stability = stability.toContext("$prefix.stability", "Stability"),
+        stability = decay.toContext("$prefix.decay", "Decay"),
     )
 
 
@@ -95,7 +95,7 @@ private fun defaultRuinThresholdIncrease(value: Int) =
             value = value,
             increase = false,
         ),
-        stability = RawRuinThresholdIncrease(
+        decay = RawRuinThresholdIncrease(
             value = value,
             increase = false,
         ),

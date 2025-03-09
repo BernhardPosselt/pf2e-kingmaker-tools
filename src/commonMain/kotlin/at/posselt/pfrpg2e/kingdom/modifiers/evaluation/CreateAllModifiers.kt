@@ -2,7 +2,7 @@ package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
-import at.posselt.pfrpg2e.data.kingdom.Ruins
+import at.posselt.pfrpg2e.data.kingdom.RuinValues
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderKingdomSkills
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkills
@@ -48,7 +48,7 @@ fun createAllModifiers(
     leaderKingdomSkills: LeaderKingdomSkills,
     kingdomSkillRanks: KingdomSkillRanks,
     allSettlements: List<Settlement>,
-    ruins: Ruins,
+    ruins: RuinValues,
     unrest: Int,
     vacancies: Vacancies,
     targetedArmy: ArmyConditionInfo?,

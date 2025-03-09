@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.data
 
-import at.posselt.pfrpg2e.data.kingdom.Ruins
+import at.posselt.pfrpg2e.data.kingdom.RuinValue
+import at.posselt.pfrpg2e.data.kingdom.RuinValues
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -18,9 +19,16 @@ external interface RawRuin {
     var strife: RawRuinValues
 }
 
-fun RawRuin.parse() = Ruins(
-    decayPenalty = decay.penalty,
-    strifePenalty = strife.penalty,
-    corruptionPenalty = corruption.penalty,
-    crimePenalty = crime.penalty,
+fun RawRuinValues.parse() =
+    RuinValue(
+        value = value,
+        threshold = threshold,
+        penalty = penalty,
+    )
+
+fun RawRuin.parse() = RuinValues(
+    decay = decay.parse(),
+    strife = strife.parse(),
+    corruption = corruption.parse(),
+    crime = crime.parse(),
 )

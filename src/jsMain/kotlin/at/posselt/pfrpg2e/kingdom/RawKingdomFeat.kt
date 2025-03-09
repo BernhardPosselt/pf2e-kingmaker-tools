@@ -78,7 +78,8 @@ fun RawKingdomFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =
         ?: emptyMap()
 
 fun KingdomData.getFeats(): Array<RawKingdomFeat> {
-    return kingdomFeats
+    val overrides = homebrewFeats.map { it.id }.toSet()
+    return homebrewFeats + kingdomFeats.filter { it.id !in overrides }
 }
 
 @JsModule("./feats.json")

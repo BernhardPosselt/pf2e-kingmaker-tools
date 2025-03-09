@@ -24,6 +24,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawResources
 import at.posselt.pfrpg2e.kingdom.data.RawRuin
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.explodeLevels
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
@@ -427,7 +428,7 @@ class KingdomSheet(
             abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2 + increaseScorePicksBy),
             hideCreation = currentKingdomNavEntry != "Creation",
             featuresByLevel = kingdom.features.toContext(
-                government = governments.find { it.id == kingdom.government.type },
+                government = kingdom.getChosenGovernment(),
                 features = kingdom.getFeatures().flatMap { it.explodeLevels() }.toTypedArray(),
                 choices = kingdom.features,
                 feats = feats,

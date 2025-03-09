@@ -1,14 +1,14 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.penalties
 
 import at.posselt.pfrpg2e.data.kingdom.Ruin
-import at.posselt.pfrpg2e.data.kingdom.Ruins
+import at.posselt.pfrpg2e.data.kingdom.RuinValues
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 
-fun createRuinModifiers(values: Ruins): List<Modifier> =
+fun createRuinModifiers(values: RuinValues): List<Modifier> =
     Ruin.entries.mapNotNull {
-        val value = values.resolvePenalty(it)
+        val value = values.resolve(it).penalty
         if (value == 0) {
             null
         } else {

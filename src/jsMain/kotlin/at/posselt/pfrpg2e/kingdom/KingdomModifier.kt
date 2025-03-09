@@ -5,7 +5,10 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
+import at.posselt.pfrpg2e.kingdom.data.getChosenCharter
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
+import at.posselt.pfrpg2e.kingdom.data.getChosenHeartland
 import at.posselt.pfrpg2e.kingdom.data.parse
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
@@ -212,15 +215,20 @@ suspend fun KingdomData.checkModifiers(
     armyConditions: ArmyConditionInfo?,
 ): List<Modifier> {
     val chosenFeats = getChosenFeats()
+    val government = getChosenGovernment()
     return createAllModifiers(
         kingdomLevel = level,
         globalBonuses = globalBonuses,
         currentSettlement = currentSettlement,
-        abilityScores = parseAbilityScores(),
+        abilityScores = parseAbilityScores(
+            getChosenCharter(),
+            getChosenHeartland(),
+            government,
+        ),
         leaderActors = parseLeaderActors(),
         leaderSkills = settings.leaderSkills.parse(),
         leaderKingdomSkills = settings.leaderKingdomSkills.parse(),
-        kingdomSkillRanks = parseSkillRanks(),
+        kingdomSkillRanks = parseSkillRanks(chosenFeats.map { it.feat }, government),
         allSettlements = allSettlements,
         ruins = ruin.parse(),
         unrest = unrest,
@@ -247,7 +255,7 @@ fun KingdomData.createExpressionContext(
     val chosenFeats = getChosenFeats()
     return ExpressionContext(
         usedSkill = usedSkill,
-        ranks = parseSkillRanks(),
+        ranks = parseSkillRanks(chosenFeats.map { it.feat }, getChosenGovernment()),
         leader = leader,
         activity = activity?.id,
         phase = phase,

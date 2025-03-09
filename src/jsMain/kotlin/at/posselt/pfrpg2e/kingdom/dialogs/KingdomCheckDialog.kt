@@ -28,6 +28,7 @@ import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmyConditions
 import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getRealmData
@@ -616,7 +617,7 @@ suspend fun kingdomCheckDialog(
                 enemyArmyScoutingDcs = game.getTargetedArmies().map { it.system.scouting }
             )
             val skills = getValidActivitySkills(
-                ranks = kingdom.parseSkillRanks(),
+                ranks = kingdom.parseSkillRanks(kingdom.getChosenFeats().map { it.feat }, kingdom.getChosenGovernment()),
                 activityRanks = overrideSkills ?: activity.skillRanks(),
                 ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
                 expandMagicUse = kingdom.settings.expandMagicUse,
@@ -657,7 +658,7 @@ suspend fun kingdomCheckDialog(
                 ?: throw IllegalArgumentException("No Build Structure Activity present")
             val dc = structure.construction.dc
             val skills = getValidActivitySkills(
-                ranks = kingdom.parseSkillRanks(),
+                ranks = kingdom.parseSkillRanks(kingdom.getChosenFeats().map { it.feat }, kingdom.getChosenGovernment()),
                 activityRanks = overrideSkills ?: structure.construction.skills,
                 ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
                 expandMagicUse = kingdom.settings.expandMagicUse,

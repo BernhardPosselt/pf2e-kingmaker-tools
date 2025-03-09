@@ -3,9 +3,12 @@ package at.posselt.pfrpg2e.kingdom
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.SkillRanks
+import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.RuinValues
+import at.posselt.pfrpg2e.data.kingdom.calculateScore
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActor
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
@@ -30,7 +33,10 @@ import at.posselt.pfrpg2e.kingdom.data.RawNotes
 import at.posselt.pfrpg2e.kingdom.data.RawResources
 import at.posselt.pfrpg2e.kingdom.data.RawRuin
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
+import at.posselt.pfrpg2e.kingdom.data.RuinThresholdIncreases
+import at.posselt.pfrpg2e.kingdom.data.getBoosts
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.parse
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import at.posselt.pfrpg2e.utils.asSequence
@@ -148,14 +154,15 @@ external interface KingdomData {
     var homebrewCharters: Array<RawCharter>
     var homebrewGovernments: Array<RawGovernment>
     var homebrewHeartlands: Array<RawHeartland>
+    var homebrewFeats: Array<RawKingdomFeat>
     var leaders: RawLeaders
     var charter: RawCharterChoices
     var heartland: RawHeartlandChoices
     var government: RawGovernmentChoices
     var abilityBoosts: RawAbilityBoostChoices
     var features: Array<RawFeatureChoices>
+    var bonusFeats: Array<BonusFeat>
     var groups: Array<RawGroup>  // TODO
-    var bonusFeats: Array<BonusFeat>  // TODO
     var skillRanks: Record<String, Int>  // TODO
     var abilityScores: Record<String, Int>  // TODO
     var milestones: Array<RawMileStone>  // TODO
@@ -212,25 +219,60 @@ fun KingdomData.vacancies() =
         warden = leaders.warden.vacant == true,
     )
 
-fun KingdomData.parseSkillRanks() =
-    KingdomSkillRanks(
-        agriculture = skillRanks["agriculture"] ?: 0,
-        arts = skillRanks["arts"] ?: 0,
-        boating = skillRanks["boating"] ?: 0,
-        defense = skillRanks["defense"] ?: 0,
-        engineering = skillRanks["engineering"] ?: 0,
-        exploration = skillRanks["exploration"] ?: 0,
-        folklore = skillRanks["folklore"] ?: 0,
-        industry = skillRanks["industry"] ?: 0,
-        intrigue = skillRanks["intrigue"] ?: 0,
-        magic = skillRanks["magic"] ?: 0,
-        politics = skillRanks["politics"] ?: 0,
-        scholarship = skillRanks["scholarship"] ?: 0,
-        statecraft = skillRanks["statecraft"] ?: 0,
-        trade = skillRanks["trade"] ?: 0,
-        warfare = skillRanks["warfare"] ?: 0,
-        wilderness = skillRanks["wilderness"] ?: 0,
-    )
+fun KingdomData.parseSkillRanks(
+    feats: List<RawKingdomFeat>,
+    government: RawGovernment?,
+) =
+    if (settings.automateStats) {
+        val skillIncreases = features
+            .mapNotNull {
+                it.skillIncrease?.let { KingdomSkill.fromString(it) }
+            }.groupBy { it }
+        val skillTrainings = government?.skillProficiencies?.toSet().orEmpty() +
+                feats.mapNotNull { it.trainSkill?.let { KingdomSkill.fromString(it) } }
+        val ranks = KingdomSkill.entries.associate {
+            val base = if (it in skillTrainings) 1 else 0
+            val increase = skillIncreases[it]?.size ?: 0
+            it to (base + increase)
+        }
+        KingdomSkillRanks(
+            agriculture = ranks[KingdomSkill.AGRICULTURE] ?: 0,
+            arts = ranks[KingdomSkill.ARTS] ?: 0,
+            boating = ranks[KingdomSkill.BOATING] ?: 0,
+            defense = ranks[KingdomSkill.DEFENSE] ?: 0,
+            engineering = ranks[KingdomSkill.ENGINEERING] ?: 0,
+            exploration = ranks[KingdomSkill.EXPLORATION] ?: 0,
+            folklore = ranks[KingdomSkill.FOLKLORE] ?: 0,
+            industry = ranks[KingdomSkill.INDUSTRY] ?: 0,
+            intrigue = ranks[KingdomSkill.INTRIGUE] ?: 0,
+            magic = ranks[KingdomSkill.MAGIC] ?: 0,
+            politics = ranks[KingdomSkill.POLITICS] ?: 0,
+            scholarship = ranks[KingdomSkill.SCHOLARSHIP] ?: 0,
+            statecraft = ranks[KingdomSkill.STATECRAFT] ?: 0,
+            trade = ranks[KingdomSkill.TRADE] ?: 0,
+            warfare = ranks[KingdomSkill.WARFARE] ?: 0,
+            wilderness = ranks[KingdomSkill.WILDERNESS] ?: 0,
+        )
+    } else {
+        KingdomSkillRanks(
+            agriculture = skillRanks["agriculture"] ?: 0,
+            arts = skillRanks["arts"] ?: 0,
+            boating = skillRanks["boating"] ?: 0,
+            defense = skillRanks["defense"] ?: 0,
+            engineering = skillRanks["engineering"] ?: 0,
+            exploration = skillRanks["exploration"] ?: 0,
+            folklore = skillRanks["folklore"] ?: 0,
+            industry = skillRanks["industry"] ?: 0,
+            intrigue = skillRanks["intrigue"] ?: 0,
+            magic = skillRanks["magic"] ?: 0,
+            politics = skillRanks["politics"] ?: 0,
+            scholarship = skillRanks["scholarship"] ?: 0,
+            statecraft = skillRanks["statecraft"] ?: 0,
+            trade = skillRanks["trade"] ?: 0,
+            warfare = skillRanks["warfare"] ?: 0,
+            wilderness = skillRanks["wilderness"] ?: 0,
+        )
+    }
 
 fun KingdomData.getAllActivities(): List<KingdomActivity> {
     val homebrew = homebrewActivities.map { it.id }.toSet()
@@ -249,12 +291,62 @@ fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
 fun KingdomData.hasAssurance(skill: KingdomSkill) =
     getChosenFeats().any { it.feat.assuranceForSkill == skill.value }
 
-fun KingdomData.parseAbilityScores() = KingdomAbilityScores(
-    economy = abilityScores["economy"] ?: 10,
-    stability = abilityScores["stability"] ?: 10,
-    loyalty = abilityScores["loyalty"] ?: 10,
-    culture = abilityScores["culture"] ?: 10
-)
+
+
+fun KingdomData.parseRuins(
+    choices: List<RawFeatureChoices>,
+): RuinValues {
+    val defaults = ruin.parse()
+    return if (settings.automateStats) {
+        val increases = choices
+            .flatMap { listOfNotNull(it.ruinThresholdIncreases) + it.featRuinThresholdIncreases }
+            .map { it.parse() }
+            .fold(RuinThresholdIncreases()) { prev, curr -> prev + curr }
+        defaults.copy(
+            decay =defaults.decay.copy(threshold = increases.decay),
+            strife =defaults.strife.copy(threshold = increases.strife),
+            corruption =defaults.corruption.copy(threshold = increases.corruption),
+            crime =defaults.crime.copy(threshold = increases.crime),
+        )
+    } else {
+        defaults
+    }
+}
+
+fun KingdomData.parseAbilityScores(
+    chosenCharter: RawCharter?,
+    chosenHeartland: RawHeartland?,
+    chosenGovernment: RawGovernment?,
+) = if (settings.automateStats) {
+    val charterBoosts: List<String> = charter.abilityBoosts.getBoosts()
+    val charterBoost: List<String> = listOfNotNull(chosenCharter?.boost)
+    val charterFlaw = chosenCharter?.flaw?.let { KingdomAbility.fromString(it) }
+    val heartlandBoost: List<String> = listOfNotNull(chosenHeartland?.boost)
+    val governmentBoosts: List<String> = chosenGovernment?.boosts?.toList().orEmpty()
+    val governmentBoostChoices: List<String> = government.abilityBoosts.getBoosts()
+    val featureBoosts: List<String> = features.mapNotNull { it.abilityBoosts?.getBoosts() }
+        .flatMap { it }
+
+    val boosts =
+        (charterBoosts + charterBoost + heartlandBoost + governmentBoosts + governmentBoostChoices + featureBoosts)
+            .mapNotNull { KingdomAbility.fromString(it) }
+            .groupBy { it }
+            .mapValues { (key, value) -> calculateScore(value.size, if (key == charterFlaw) 1 else 0) }
+
+    KingdomAbilityScores(
+        economy = boosts[KingdomAbility.CULTURE] ?: 10,
+        stability = boosts[KingdomAbility.ECONOMY] ?: 10,
+        loyalty = boosts[KingdomAbility.LOYALTY] ?: 10,
+        culture = boosts[KingdomAbility.STABILITY] ?: 10
+    )
+} else {
+    KingdomAbilityScores(
+        economy = abilityScores["economy"] ?: 10,
+        stability = abilityScores["stability"] ?: 10,
+        loyalty = abilityScores["loyalty"] ?: 10,
+        culture = abilityScores["culture"] ?: 10
+    )
+}
 
 fun KingdomData.hasLeaderUuid(uuid: String) =
     leaders.ruler.uuid == uuid ||
