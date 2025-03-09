@@ -35,4 +35,5 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val abilityBoosts: AbilityBoostContext
     val featuresByLevel: Array<FeatureByLevelContext>
     val kingdomSectionNav: Array<NavEntryContext>
+    val hideCreation: Boolean
 }

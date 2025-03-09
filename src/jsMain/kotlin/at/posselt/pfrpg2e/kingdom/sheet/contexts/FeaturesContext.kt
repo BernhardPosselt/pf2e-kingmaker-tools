@@ -106,6 +106,7 @@ fun Array<RawFeatureChoices>.toContext(
     choices: Array<RawFeatureChoices>,
     feats: Array<RawKingdomFeat>,
     increaseBoostsBy: Int,
+    navigationEntry: String,
 ): Array<FeatureByLevelContext> {
     val featsById = feats.associateBy { it.id }
     val choicesById = choices.associateBy { it.id }
@@ -116,7 +117,7 @@ fun Array<RawFeatureChoices>.toContext(
             val highestProficiency = findHighestProficiency(level)?.label ?: "Untrained"
             FeatureByLevelContext(
                 level = level,
-                hidden = level > kingdomLevel,
+                hidden = navigationEntry != "$level",
                 features = f.mapIndexed { index, feature ->
                     val choice = choicesById[feature.id]
                     val feat = choice?.featId?.let { featsById[it] }
@@ -147,6 +148,7 @@ fun Array<RawFeatureChoices>.toContext(
                                 options = featSelectOptions,
                                 required = false,
                                 stacked = false,
+                                hideLabel = true,
                             ).toContext()
                         } else {
                             null
@@ -160,6 +162,7 @@ fun Array<RawFeatureChoices>.toContext(
                                 options = skillIncreaseOptions,
                                 required = false,
                                 stacked = false,
+                                hideLabel = true,
                             ).toContext()
                         } else {
                             null

@@ -20,8 +20,8 @@
         </ul>
     </nav>
 
-    <main class="km-kingdom-sheet-content-wrapper">
-        <aside class="km-kingdom-sheet-sidebar">
+    <div class="km-kingdom-sheet-content-wrapper">
+        <aside>
             <div hidden>
             {{controlDc}}
             {{> formElement atWarInput }}
@@ -67,7 +67,7 @@
             {{> formElement creativeSolutionsInput }}
             </div>
         </aside>
-        <div class="km-kingdom-sheet-content">
+        <main>
             {{> kingdom-section-kingdom this }}
             <div hidden>
             {{> formElement worksitesContext.farmlands.resources }}
@@ -151,6 +151,6 @@
                 {{> formElement leadersContext.warden.actor.uuidInput }}
             {{/if}}
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 </div>

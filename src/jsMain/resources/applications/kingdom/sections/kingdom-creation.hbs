@@ -1,5 +1,4 @@
-
-<section>
+<section {{#if hideCreation}}hidden{{/if}}>
     <section class="km-kingdom-sheet-kingdom-section">
         <h2>Select Charter <span class="km-header-right-align">{{> formElement charter.type}}</span></h2>
         {{#if charter.description}}<p>{{charter.description}}</p>
@@ -26,10 +25,10 @@
         <h2>Choose a Government <span class="km-header-right-align">{{> formElement government.type}}</span></h2>
         {{#if government.description}}<p>{{government.description}}</p>
             <hr>{{/if}}
-        {{#if government.description}}<p><b>Ability Boosts</b>: {{government.boosts}}</p>{{/if}}
 
         <div class="km-choose-boosts" {{#unless government.description}}hidden{{/unless}}>
-            <p><b>Pick {{government.abilityBoosts.free}} Boost:</b></p>
+            <p><b>Ability Boosts</b>: {{government.boosts}}</p>
+            <p class="km-government-pick-label"><b>Pick {{government.abilityBoosts.free}} Boost:</b></p>
             <ul>
                 <li {{#if government.abilityBoosts.cultureHidden}}hidden{{/if}}>{{> formElement government.abilityBoosts.culture}}</li>
                 <li {{#if government.abilityBoosts.economyHidden}}hidden{{/if}}>{{> formElement government.abilityBoosts.economy}}</li>
@@ -48,14 +47,16 @@
         {{/if}}
     </section>
     <section class="km-kingdom-sheet-kingdom-section">
-        <h2>Finalize Ability Scores <span class="km-header-right-align">{{> formElement charter.type}}</span></h2>
-        <p>Pick {{abilityBoosts.free}} Free Boosts:</p>
-        <ul class="km-choose-boosts">
-            <li>{{> formElement abilityBoosts.culture}}</li>
-            <li>{{> formElement abilityBoosts.economy}}</li>
-            <li>{{> formElement abilityBoosts.loyalty}}</li>
-            <li>{{> formElement abilityBoosts.stability}}</li>
-        </ul>
+        <h2>Finalize Ability Scores</h2>
+        <div class="km-choose-boosts">
+            <p>Pick {{abilityBoosts.free}} Boosts:</p>
+            <ul class="km-choose-boosts">
+                <li>{{> formElement abilityBoosts.culture}}</li>
+                <li>{{> formElement abilityBoosts.economy}}</li>
+                <li>{{> formElement abilityBoosts.loyalty}}</li>
+                <li>{{> formElement abilityBoosts.stability}}</li>
+            </ul>
+        </div>
     </section>
     <section class="km-kingdom-sheet-kingdom-section">
         <h2>Choose Leaders</h2>
@@ -95,5 +96,7 @@
     </section>
     <section class="km-kingdom-sheet-kingdom-section">
         <h2>Fame or Infamy? <span class="km-header-right-align">{{> formElement fameContext.type}}</span></h2>
+        <p>The choice here solely determines whether the kingdom uses Fame or Infamy points and the influence certain
+            structures might have on the kingdom.</p>
     </section>
 </section>

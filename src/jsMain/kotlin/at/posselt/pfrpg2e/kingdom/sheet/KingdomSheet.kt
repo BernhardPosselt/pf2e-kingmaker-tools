@@ -230,7 +230,9 @@ class KingdomSheet(
     ),
     scrollable = arrayOf(".km-kingdom-sheet-sidebar", ".km-kingdom-sheet-content"),
 ) {
-    private var currentKingdomNavEntry: String = "Creation"
+    private var initialKingdomLevel = getKingdom().level
+    private var noCharter = getKingdom().charter.type == null
+    private var currentKingdomNavEntry: String = if (noCharter) "Creation" else "$initialKingdomLevel"
 
     init {
         actor.apps[id] = this
@@ -421,12 +423,14 @@ class KingdomSheet(
             heartland = kingdom.heartland.toContext(kingdom.getHeartlands()),
             government = kingdom.government.toContext(kingdom.getGovernments(), feats),
             abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2 + increaseScorePicksBy),
+            hideCreation = currentKingdomNavEntry != "Creation",
             featuresByLevel = kingdom.features.toContext(
                 kingdomLevel = kingdom.level,
                 features = kingdom.getFeatures().flatMap { it.explodeLevels() }.toTypedArray(),
                 choices = kingdom.features,
                 feats = feats,
                 increaseBoostsBy = increaseScorePicksBy,
+                navigationEntry = currentKingdomNavEntry,
             )
                 .sortedBy { it.level }
                 .toTypedArray(),

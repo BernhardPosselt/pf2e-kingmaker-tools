@@ -1,3 +1,19 @@
+.theme-light {
+    #kmKingdomSheet {
+        aside, main {
+            background-color: var(--background);
+        }
+    }
+}
+
+.theme-dark {
+    #kmKingdomSheet {
+        aside, main {
+            background-color: rgba(11, 10, 19, .95);
+        }
+    }
+}
+
 #kmKingdomSheet {
     .window-content {
         padding: 0;
@@ -11,19 +27,17 @@
 
     }
 
-    .km-kingdom-sheet-sidebar {
+    aside {
         min-width: 300px;
-        background-color: var(--background);
         border-radius: 10px;
         margin: 10px 0 10px 10px;
         padding: 1em;
         overflow: auto;
     }
 
-    .km-kingdom-sheet-content {
+    main {
         height: 600px;
         overflow: auto;
-        background-color: var(--background);
         border-radius: 10px;
         margin: 10px;
         padding: 1em;
@@ -108,8 +122,24 @@
             font-size: 2em;
         }
 
+        details {
+            margin: 1em 0;
+            border: 1px solid;
+            border-radius: 1em;
+            padding: 1em;
+
+            p {
+                border-top: 1px solid;
+                padding-top: 1em;
+            }
+        }
+
         .km-kingdom-sheet-kingdom-section {
-            margin-bottom: 3.5em;
+            margin-top: 3em;
+        }
+
+        .km-government-pick-label {
+            margin-left: 5em;
         }
 
         .km-choose-boosts,
@@ -122,7 +152,7 @@
                 margin: 0;
                 padding: 0;
                 list-style-type: none;
-                gap: 2em;
+                gap: 1.5em;
             }
         }
 
