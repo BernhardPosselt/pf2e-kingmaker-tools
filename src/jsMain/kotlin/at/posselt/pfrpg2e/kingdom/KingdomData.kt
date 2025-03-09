@@ -294,7 +294,7 @@ fun KingdomData.hasAssurance(skill: KingdomSkill) =
 
 
 fun KingdomData.parseRuins(
-    choices: List<RawFeatureChoices>,
+    choices: Array<RawFeatureChoices>,
 ): RuinValues {
     val defaults = ruin.parse()
     return if (settings.automateStats) {

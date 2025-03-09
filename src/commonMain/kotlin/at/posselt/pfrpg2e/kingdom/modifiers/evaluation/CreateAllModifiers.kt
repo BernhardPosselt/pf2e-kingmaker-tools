@@ -28,15 +28,6 @@ import at.posselt.pfrpg2e.kingdom.modifiers.penalties.createUnrestModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.createVacancyModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.noBridgePenalty
 
-fun createAssuranceModifiers(
-    kingdomSkillRanks: KingdomSkillRanks,
-    kingdomLevel: Int,
-    untrainedProficiencyMode: UntrainedProficiencyMode,
-) = createAllProficiencyModifiers(
-    ranks = kingdomSkillRanks,
-    level = kingdomLevel,
-    mode = untrainedProficiencyMode,
-)
 
 fun createAllModifiers(
     kingdomLevel: Int,

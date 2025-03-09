@@ -9,7 +9,6 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenCharter
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.data.getChosenHeartland
-import at.posselt.pfrpg2e.kingdom.data.parse
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.GlobalStructureBonuses
@@ -230,7 +229,7 @@ suspend fun KingdomData.checkModifiers(
         leaderKingdomSkills = settings.leaderKingdomSkills.parse(),
         kingdomSkillRanks = parseSkillRanks(chosenFeats.map { it.feat }, government),
         allSettlements = allSettlements,
-        ruins = ruin.parse(),
+        ruins = parseRuins(features),
         unrest = unrest,
         vacancies = vacancies(),
         targetedArmy = armyConditions,
