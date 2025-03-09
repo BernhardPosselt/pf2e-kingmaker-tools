@@ -1,16 +1,18 @@
 <section {{#if hideBonus}}hidden{{/if}}>
-    <h2>Bonus Feats</h2>
-    {{> formElement bonusFeat.feat}}
-    {{#if bonusFeat.Description}}<p>{{bonusFeat.Description}}</p>
-        <p>
-            <button type="button"
-                    class="km-no-button-margin"
-                    data-action="add-bonus-feat"
-                    title="Add Bonus Feat"
-            >Add Bonus Feat<i class="fa-solid fa-plus"></i></button>
-        </p>
-    {{/if}}
-    <hr>
+    <section class="km-kingdom-sheet-kingdom-section">
+        <h2>Add Bonus Feat</h2>
+        <p>Select an extra feat that is not granted by your Kingdom and click <b>Add Bonus Feat</b></p>
+        {{> formElement bonusFeat.feat}}
+        {{#if bonusFeat.Description}}<p>{{bonusFeat.Description}}</p>
+            <p>
+                <button type="button"
+                        class="km-no-button-margin"
+                        data-action="add-bonus-feat"
+                        title="Add Bonus Feat"
+                >Add<i class="fa-solid fa-plus"></i></button>
+            </p>
+        {{/if}}
+    </section>
     {{#each bonusFeats}}
         {{> formElement id}}
         <section class="km-kingdom-sheet-kingdom-section">

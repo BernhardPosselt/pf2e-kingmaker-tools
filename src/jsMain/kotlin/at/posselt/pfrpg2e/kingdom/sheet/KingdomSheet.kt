@@ -45,6 +45,7 @@ import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.createBonusFeatContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.toCamelCase
@@ -253,6 +254,7 @@ class KingdomSheet(
     private var noCharter = getKingdom().charter.type == null
     private var currentCharacterSheetNavEntry: String = if (noCharter) "Creation" else "$initialKingdomLevel"
     private var currentNavEntry: NavEntry = if (noCharter) NavEntry.CHARACTER_SHEET else NavEntry.TURN
+    private var bonusFeatSelection: String? = null
 
     init {
         actor.apps[id] = this
@@ -464,9 +466,20 @@ class KingdomSheet(
                 feats = feats,
                 increaseBoostsBy = increaseScorePicksBy,
                 navigationEntry = currentCharacterSheetNavEntry,
+                bonusFeats = kingdom.bonusFeats,
             )
                 .sortedBy { it.level }
                 .toTypedArray(),
+            bonusFeat= createBonusFeatContext(
+                government = kingdom.getChosenGovernment(),
+                feats = feats,
+                choices = kingdom.features,
+                bonusFeats = kingdom.bonusFeats,
+                value = bonusFeatSelection,
+            ),
+            bonusFeats= kingdom.bonusFeats.toContext(
+                kingdom.getFeats(),
+            ),
         )
     }
 

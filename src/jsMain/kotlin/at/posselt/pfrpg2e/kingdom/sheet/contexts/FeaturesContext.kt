@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
 import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
+import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
 import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncrease
 import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreases
@@ -83,7 +84,7 @@ fun RawRuinThresholdIncreases.toContext(prefix: String, amount: Int): RuinThresh
     )
 
 
-private fun defaultRuinThresholdIncrease(value: Int) =
+fun defaultRuinThresholdIncrease(value: Int) =
     RawRuinThresholdIncreases(
         crime = RawRuinThresholdIncrease(
             value = value,
@@ -103,20 +104,30 @@ private fun defaultRuinThresholdIncrease(value: Int) =
         ),
     )
 
+private fun RawGovernment.getFeatIds() =
+    setOf(bonusFeat) + skillProficiencies.map { "skill-training-$it" }
+
+fun getTakenFeats(
+    choices: Array<RawFeatureChoices>,
+    government: RawGovernment?,
+    bonusFeats: Array<RawBonusFeat>,
+) = choices.mapNotNull { it.featId }.toSet() +
+        government?.getFeatIds().orEmpty() +
+        bonusFeats.map { it.id }
+
 fun Array<RawFeatureChoices>.toContext(
     government: RawGovernment?,
     features: Array<RawExplodedKingdomFeature>,
     feats: Array<RawKingdomFeat>,
     increaseBoostsBy: Int,
     navigationEntry: String,
+    bonusFeats: Array<RawBonusFeat>,
 ): Array<FeatureByLevelContext> {
     val choices = this
     val featsById = feats.associateBy { it.id }
     val choicesById = choices.associateBy { it.id }
     val skillIncreaseOptions = KingdomSkill.entries.map { SelectOption(it.label, it.value) }
-    val takenFeats = choices.mapNotNull { it.featId }.toSet() + (government?.let {
-        setOf(it.bonusFeat) + it.skillProficiencies.map { "skill-training-$it" }
-    } ?: emptySet())
+    val takenFeats = getTakenFeats(choices, government, bonusFeats)
     return features
         .groupBy { it.level }
         .map { (level, f) ->

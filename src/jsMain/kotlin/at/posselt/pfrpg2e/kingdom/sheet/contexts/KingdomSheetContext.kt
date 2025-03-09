@@ -40,4 +40,6 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val hideBonus: Boolean
     val currentNavEntry: String
     val settings: KingdomSettings
+    val bonusFeat: AddBonusFeatContext
+    val bonusFeats: Array<BonusFeatContext>
 }

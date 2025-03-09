@@ -141,6 +141,13 @@
         h2 {
             display: flex;
             font-size: 2em;
+
+            button {
+                height: 30px;
+                i {
+                    margin-right: 0;
+                }
+            }
         }
 
         details {
