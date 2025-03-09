@@ -1,4 +1,8 @@
 <aside class="km-kingdom-sheet-sidebar">
+    {{currentNavEntry}}
+    <div {{#if (ne currentNavEntry 'characterSheet')}}hidden{{/if}}>
+
+    </div>
     <div hidden>
         {{controlDc}}
         {{> formElement atWarInput }}

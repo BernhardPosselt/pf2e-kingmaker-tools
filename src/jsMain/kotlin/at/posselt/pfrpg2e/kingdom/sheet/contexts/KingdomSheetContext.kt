@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.FormElementContext
+import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -37,4 +38,6 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val kingdomSectionNav: Array<NavEntryContext>
     val hideCreation: Boolean
     val hideBonus: Boolean
+    val currentNavEntry: String
+    val settings: KingdomSettings
 }

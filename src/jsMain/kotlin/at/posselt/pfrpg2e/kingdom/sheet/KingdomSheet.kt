@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
+import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
 import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
@@ -46,6 +47,8 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.vacancies
+import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.openJournal
@@ -213,6 +216,20 @@ class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
     }
 }
 
+private enum class NavEntry {
+    TURN, CHARACTER_SHEET, SETTLEMENTS, TRADE_AGREEMENTS, EFFECTS, NOTES;
+
+    companion object {
+        fun fromString(value: String) = fromCamelCase<NavEntry>(value)
+    }
+
+    val value: String
+        get() = toCamelCase()
+
+    val label: String
+        get() = toLabel()
+}
+
 class KingdomSheet(
     private val game: Game,
     private val actor: PF2ENpc,
@@ -234,7 +251,8 @@ class KingdomSheet(
 ) {
     private var initialKingdomLevel = getKingdom().level
     private var noCharter = getKingdom().charter.type == null
-    private var currentKingdomNavEntry: String = if (noCharter) "Creation" else "$initialKingdomLevel"
+    private var currentCharacterSheetNavEntry: String = if (noCharter) "Creation" else "$initialKingdomLevel"
+    private var currentNavEntry: NavEntry = if (noCharter) NavEntry.CHARACTER_SHEET else NavEntry.TURN
 
     init {
         actor.apps[id] = this
@@ -288,7 +306,15 @@ class KingdomSheet(
             "change-kingdom-section-nav" -> {
                 event.preventDefault()
                 event.stopPropagation()
-                currentKingdomNavEntry = target.dataset["link"] ?: "Creation"
+                currentCharacterSheetNavEntry = target.dataset["link"] ?: "Creation"
+                render()
+            }
+
+            "change-nav" -> {
+                event.preventDefault()
+                event.stopPropagation()
+                console.log(target.dataset["link"])
+                currentNavEntry = target.dataset["link"]?.let { NavEntry.fromString(it) } ?: NavEntry.TURN
                 render()
             }
 
@@ -428,14 +454,16 @@ class KingdomSheet(
             heartland = kingdom.heartland.toContext(kingdom.getHeartlands()),
             government = kingdom.government.toContext(governments, feats),
             abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2 + increaseScorePicksBy),
-            hideCreation = currentKingdomNavEntry != "Creation",
-            hideBonus = currentKingdomNavEntry != "Bonus",
+            currentNavEntry = currentNavEntry.value,
+            hideCreation = currentCharacterSheetNavEntry != "Creation",
+            hideBonus = currentCharacterSheetNavEntry != "Bonus",
+            settings = kingdom.settings,
             featuresByLevel = kingdom.features.toContext(
                 government = kingdom.getChosenGovernment(),
                 features = allFeatures.toTypedArray(),
                 feats = feats,
                 increaseBoostsBy = increaseScorePicksBy,
-                navigationEntry = currentKingdomNavEntry,
+                navigationEntry = currentCharacterSheetNavEntry,
             )
                 .sortedBy { it.level }
                 .toTypedArray(),
@@ -443,14 +471,14 @@ class KingdomSheet(
     }
 
     private fun createKingdomSectionNav(kingdom: KingdomData): Array<NavEntryContext> {
-        val selectLv1 = currentKingdomNavEntry != "Creation"
-                && currentKingdomNavEntry != "Bonus"
-                && currentKingdomNavEntry.toInt() > kingdom.level
+        val selectLv1 = currentCharacterSheetNavEntry != "Creation"
+                && currentCharacterSheetNavEntry != "Bonus"
+                && currentCharacterSheetNavEntry.toInt() > kingdom.level
         return (1..20).map { it.toString() }
             .map {
                 NavEntryContext(
                     label = it,
-                    active = (selectLv1 && it == "1") || currentKingdomNavEntry == it,
+                    active = (selectLv1 && it == "1") || currentCharacterSheetNavEntry == it,
                     link = it,
                     title = "Level: $it",
                 )
