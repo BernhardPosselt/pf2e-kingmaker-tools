@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.data
 
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
 import at.posselt.pfrpg2e.kingdom.getCharters
 import at.posselt.pfrpg2e.kingdom.getGovernments
 import at.posselt.pfrpg2e.kingdom.getHeartlands
@@ -96,3 +97,24 @@ fun KingdomData.getChosenCharter() =
 fun KingdomData.getChosenHeartland() =
     getHeartlands()
         .find { it.id == heartland.type }
+
+data class ChosenFeature(
+    val feature: RawExplodedKingdomFeature,
+    val choice: RawFeatureChoices
+)
+
+fun KingdomData.getChosenFeatures(
+    allFeatures: List<RawExplodedKingdomFeature>
+): List<ChosenFeature> {
+    val choicesById = features.associateBy { it.id }
+    return allFeatures
+        .filter { it.level <= level }
+        .mapNotNull { feature ->
+            choicesById[feature.id]?.let { choice ->
+                ChosenFeature(
+                    choice = choice,
+                    feature = feature
+                )
+            }
+        }
+}

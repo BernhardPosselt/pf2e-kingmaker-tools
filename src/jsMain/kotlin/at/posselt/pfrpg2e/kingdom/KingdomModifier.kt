@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.kingdom.data.getChosenCharter
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.data.getChosenHeartland
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
@@ -101,7 +102,7 @@ external interface RawCases {
 }
 
 @JsPlainObject
-external interface RawWhen: RawExpression<Any?> {
+external interface RawWhen : RawExpression<Any?> {
     val `when`: RawCases
 }
 
@@ -213,7 +214,8 @@ suspend fun KingdomData.checkModifiers(
     allSettlements: List<Settlement>,
     armyConditions: ArmyConditionInfo?,
 ): List<Modifier> {
-    val chosenFeats = getChosenFeats()
+    val chosenFeatures = getChosenFeatures(getExplodedFeatures())
+    val chosenFeats = getChosenFeats(chosenFeatures)
     val government = getChosenGovernment()
     return createAllModifiers(
         kingdomLevel = level,
@@ -223,13 +225,18 @@ suspend fun KingdomData.checkModifiers(
             getChosenCharter(),
             getChosenHeartland(),
             government,
+            chosenFeatures,
         ),
         leaderActors = parseLeaderActors(),
         leaderSkills = settings.leaderSkills.parse(),
         leaderKingdomSkills = settings.leaderKingdomSkills.parse(),
-        kingdomSkillRanks = parseSkillRanks(chosenFeats.map { it.feat }, government),
+        kingdomSkillRanks = parseSkillRanks(
+            chosenFeats = chosenFeats,
+            government = government,
+            chosenFeatures = chosenFeatures,
+        ),
         allSettlements = allSettlements,
-        ruins = parseRuins(features),
+        ruins = parseRuins(chosenFeatures.map { it.choice }),
         unrest = unrest,
         vacancies = vacancies(),
         targetedArmy = armyConditions,
@@ -251,10 +258,15 @@ fun KingdomData.createExpressionContext(
     rollOptions: Set<String>,
     structure: Structure?,
 ): ExpressionContext {
-    val chosenFeats = getChosenFeats()
+    val chosenFeatures = getChosenFeatures(getExplodedFeatures())
+    val chosenFeats = getChosenFeats(chosenFeatures)
     return ExpressionContext(
         usedSkill = usedSkill,
-        ranks = parseSkillRanks(chosenFeats.map { it.feat }, getChosenGovernment()),
+        ranks = parseSkillRanks(
+            chosenFeatures = chosenFeatures,
+            chosenFeats = chosenFeats,
+            government = getChosenGovernment()
+        ),
         leader = leader,
         activity = activity?.id,
         phase = phase,

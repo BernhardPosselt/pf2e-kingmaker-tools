@@ -18,6 +18,8 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
@@ -35,7 +37,6 @@ import at.posselt.pfrpg2e.kingdom.data.RawRuin
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.data.RuinThresholdIncreases
 import at.posselt.pfrpg2e.kingdom.data.getBoosts
-import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.parse
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
@@ -220,16 +221,17 @@ fun KingdomData.vacancies() =
     )
 
 fun KingdomData.parseSkillRanks(
-    feats: List<RawKingdomFeat>,
+    chosenFeatures: List<ChosenFeature>,
+    chosenFeats: List<ChosenFeat>,
     government: RawGovernment?,
 ) =
     if (settings.automateStats) {
-        val skillIncreases = features
+        val skillIncreases = chosenFeatures
             .mapNotNull {
-                it.skillIncrease?.let { KingdomSkill.fromString(it) }
+                it.choice.skillIncrease?.let { KingdomSkill.fromString(it) }
             }.groupBy { it }
         val skillTrainings = government?.skillProficiencies?.toSet().orEmpty() +
-                feats.mapNotNull { it.trainSkill?.let { KingdomSkill.fromString(it) } }
+                chosenFeats.mapNotNull { it.feat.trainSkill?.let { KingdomSkill.fromString(it) } }
         val ranks = KingdomSkill.entries.associate {
             val base = if (it in skillTrainings) 1 else 0
             val increase = skillIncreases[it]?.size ?: 0
@@ -288,13 +290,15 @@ fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
         .sortedWith(compareBy<RawExplodedKingdomFeature> { it.level }.thenBy { it.name })
 }
 
-fun KingdomData.hasAssurance(skill: KingdomSkill) =
-    getChosenFeats().any { it.feat.assuranceForSkill == skill.value }
+fun KingdomData.hasAssurance(
+    chosenFeats: List<ChosenFeat>,
+    skill: KingdomSkill
+) = chosenFeats.any { it.feat.assuranceForSkill == skill.value }
 
 
 
 fun KingdomData.parseRuins(
-    choices: Array<RawFeatureChoices>,
+    choices: List<RawFeatureChoices>,
 ): RuinValues {
     val defaults = ruin.parse()
     return if (settings.automateStats) {
@@ -317,6 +321,7 @@ fun KingdomData.parseAbilityScores(
     chosenCharter: RawCharter?,
     chosenHeartland: RawHeartland?,
     chosenGovernment: RawGovernment?,
+    chosenFeatures: List<ChosenFeature>,
 ) = if (settings.automateStats) {
     val charterBoosts: List<String> = charter.abilityBoosts.getBoosts()
     val charterBoost: List<String> = listOfNotNull(chosenCharter?.boost)
@@ -324,7 +329,7 @@ fun KingdomData.parseAbilityScores(
     val heartlandBoost: List<String> = listOfNotNull(chosenHeartland?.boost)
     val governmentBoosts: List<String> = chosenGovernment?.boosts?.toList().orEmpty()
     val governmentBoostChoices: List<String> = government.abilityBoosts.getBoosts()
-    val featureBoosts: List<String> = features.mapNotNull { it.abilityBoosts?.getBoosts() }
+    val featureBoosts: List<String> = chosenFeatures.mapNotNull { it.choice.abilityBoosts?.getBoosts() }
         .flatMap { it }
 
     val boosts =

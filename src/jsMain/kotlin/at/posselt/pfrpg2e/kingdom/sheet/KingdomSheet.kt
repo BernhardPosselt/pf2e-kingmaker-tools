@@ -24,13 +24,13 @@ import at.posselt.pfrpg2e.kingdom.data.RawResources
 import at.posselt.pfrpg2e.kingdom.data.RawRuin
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
-import at.posselt.pfrpg2e.kingdom.explodeLevels
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
+import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getFeats
-import at.posselt.pfrpg2e.kingdom.getFeatures
 import at.posselt.pfrpg2e.kingdom.getGovernments
 import at.posselt.pfrpg2e.kingdom.getHeartlands
 import at.posselt.pfrpg2e.kingdom.getKingdom
@@ -324,7 +324,9 @@ class KingdomSheet(
         val realm = game.getRealmData(kingdom)
         val controlDc = calculateControlDC(kingdom.level, realm, vacancies.ruler)
         val settlements = kingdom.getAllSettlements(game)
-        val chosenFeats = kingdom.getChosenFeats()
+        val allFeatures = kingdom.getExplodedFeatures()
+        val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
+        val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
         val leaderActors = kingdom.parseLeaderActors()
         val storage = calculateStorage(realm, settlements.allSettlements)
         val leaderSkills = kingdom.settings.leaderSkills.parse()
@@ -429,8 +431,7 @@ class KingdomSheet(
             hideCreation = currentKingdomNavEntry != "Creation",
             featuresByLevel = kingdom.features.toContext(
                 government = kingdom.getChosenGovernment(),
-                features = kingdom.getFeatures().flatMap { it.explodeLevels() }.toTypedArray(),
-                choices = kingdom.features,
+                features = allFeatures.toTypedArray(),
                 feats = feats,
                 increaseBoostsBy = increaseScorePicksBy,
                 navigationEntry = currentKingdomNavEntry,

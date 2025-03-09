@@ -26,6 +26,7 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.addModifier
@@ -39,6 +40,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
+import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getKingdomActor
 import at.posselt.pfrpg2e.kingdom.getRealmData
@@ -227,16 +229,19 @@ fun main() {
                 adjustUnrest = { kingdom ->
                     buildPromise {
                         val settlements = kingdom.getAllSettlements(game)
-                        val chosenFeats = kingdom.getChosenFeats()
+                        val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+                        val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
                         adjustUnrest(kingdom, settlements.allSettlements, chosenFeats)
                     }
                 },
                 collectResources = { kingdom ->
                     buildPromise {
+                        val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+                        val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
                         val result = collectResources(
                             kingdomData = kingdom,
                             realmData = game.getRealmData(kingdom),
-                            allFeats = kingdom.getChosenFeats(),
+                            allFeats = chosenFeats,
                             settlements = kingdom.getAllSettlements(game).allSettlements
                         )
                         recordOf(

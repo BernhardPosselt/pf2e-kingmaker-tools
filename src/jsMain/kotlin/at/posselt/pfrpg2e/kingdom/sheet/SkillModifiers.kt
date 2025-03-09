@@ -6,7 +6,9 @@ import at.posselt.pfrpg2e.kingdom.SettlementResult
 import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
+import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
@@ -68,7 +70,13 @@ suspend fun calculateSkillModifierBreakdown(kingdom: KingdomData, settlements: S
         allSettlements = allSettlements,
         armyConditions = null,
     )
-    val skillRanks = kingdom.parseSkillRanks(kingdom.getChosenFeats().map { it.feat }, kingdom.getChosenGovernment())
+    val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+    val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
+    val skillRanks = kingdom.parseSkillRanks(
+        chosenFeatures,
+        chosenFeats,
+        kingdom.getChosenGovernment()
+    )
     return KingdomSkill.entries.map {
         val filtered = filterModifiersAndUpdateContext(baseModifiers, context.copy(usedSkill = it))
         val evaluatedModifiers = evaluateModifiers(filtered)

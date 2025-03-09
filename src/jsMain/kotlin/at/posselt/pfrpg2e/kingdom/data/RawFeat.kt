@@ -10,18 +10,22 @@ data class ChosenFeat(
     val feat: RawKingdomFeat,
 )
 
-fun KingdomData.getChosenFeats(): List<ChosenFeat> {
+fun KingdomData.getChosenFeats(
+    chosenFeatures: List<ChosenFeature>
+): List<ChosenFeat> {
     val featsById = getFeats().associateBy { it.id }
     val bonusFeatId = getChosenGovernment()?.bonusFeat
     val bonusFeat = featsById[bonusFeatId]?.let { ChosenFeat(takenAtLevel = 0, it) }
     val explodedFeatureById = getExplodedFeatures().associateBy { it.id }
-    return features.mapNotNull { feature ->
-        feature.featId?.let { featId ->
-            featsById[featId]?.let { feat ->
-                explodedFeatureById[feature.id]?.let {
-                    ChosenFeat(takenAtLevel = it.level, feat)
+    return chosenFeatures
+        .map { it.choice }
+        .mapNotNull { feature ->
+            feature.featId?.let { featId ->
+                featsById[featId]?.let { feat ->
+                    explodedFeatureById[feature.id]?.let {
+                        ChosenFeat(takenAtLevel = it.level, feat)
+                    }
                 }
             }
-        }
-    } + listOfNotNull(bonusFeat)
+        } + listOfNotNull(bonusFeat)
 }

@@ -104,11 +104,11 @@ private fun defaultRuinThresholdIncrease(value: Int) =
 fun Array<RawFeatureChoices>.toContext(
     government: RawGovernment?,
     features: Array<RawExplodedKingdomFeature>,
-    choices: Array<RawFeatureChoices>,
     feats: Array<RawKingdomFeat>,
     increaseBoostsBy: Int,
     navigationEntry: String,
 ): Array<FeatureByLevelContext> {
+    val choices = this
     val featsById = feats.associateBy { it.id }
     val choicesById = choices.associateBy { it.id }
     val skillIncreaseOptions = KingdomSkill.entries.map { SelectOption(it.label, it.value) }

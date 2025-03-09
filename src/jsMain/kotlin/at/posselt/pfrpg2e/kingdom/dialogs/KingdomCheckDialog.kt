@@ -27,10 +27,13 @@ import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
 import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmyConditions
 import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
+import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.hasAssurance
 import at.posselt.pfrpg2e.kingdom.increasedSkills
@@ -296,7 +299,8 @@ private class KingdomCheckDialog(
                     val downgrades = deserializeB64Json<Array<String>>(target.dataset["downgrades"]!!)
                         .mapNotNull { DegreeOfSuccess.fromString(it) }
                         .toSet()
-                    val consumedModifiers = deserializeB64Json<Array<String>>(target.dataset["consumeModifiers"]!!).toSet()
+                    val consumedModifiers =
+                        deserializeB64Json<Array<String>>(target.dataset["consumeModifiers"]!!).toSet()
                     roll(
                         modifier = modifier,
                         pills = pills,
@@ -402,10 +406,12 @@ private class KingdomCheckDialog(
                 context = filtered.context.copy(rollOptions = filtered.context.rollOptions + "creative-solution")
             )
         )
-        val upgradeDegrees = getUpgrades(context, evaluatedModifiers.upgradeResults)
+        val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+        val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
+        val upgradeDegrees = getUpgrades(chosenFeats, context, evaluatedModifiers.upgradeResults)
         val downgradeDegrees = evaluatedModifiers.downgradeResults
         val selectedSkill = context.usedSkill
-        val hasAssurance = kingdom.hasAssurance(selectedSkill)
+        val hasAssurance = kingdom.hasAssurance(chosenFeats, selectedSkill)
         val evaluatedModifiersById = evaluatedModifiers.modifiers.associateBy { it.id }
         val consumeModifierIds = evaluatedModifiers.modifiers
             .filter { it.isConsumedAfterRoll }
@@ -537,8 +543,12 @@ private class KingdomCheckDialog(
         return result.label
     }
 
-    private fun getUpgrades(context: ExpressionContext, modifierUpgrades: Set<DegreeOfSuccess>): Set<DegreeOfSuccess> =
-        kingdom.getChosenFeats().asSequence()
+    private fun getUpgrades(
+        chosenFeats: List<ChosenFeat>,
+        context: ExpressionContext,
+        modifierUpgrades: Set<DegreeOfSuccess>
+    ): Set<DegreeOfSuccess> =
+        chosenFeats.asSequence()
             .flatMap { it.feat.upgradeResults?.toList().orEmpty() }
             .map { it.parse() }
             .filter { it?.applyIf?.all { exp -> exp.evaluate(context) } != false }
@@ -616,13 +626,19 @@ suspend fun kingdomCheckDialog(
                 rulerVacant = vacancies.ruler,
                 enemyArmyScoutingDcs = game.getTargetedArmies().map { it.system.scouting }
             )
+            val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+            val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
             val skills = getValidActivitySkills(
-                ranks = kingdom.parseSkillRanks(kingdom.getChosenFeats().map { it.feat }, kingdom.getChosenGovernment()),
+                ranks = kingdom.parseSkillRanks(
+                    chosenFeatures,
+                    chosenFeats,
+                    kingdom.getChosenGovernment()
+                ),
                 activityRanks = overrideSkills ?: activity.skillRanks(),
                 ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
                 expandMagicUse = kingdom.settings.expandMagicUse,
                 activityId = activity.id,
-                increaseSkills = kingdom.getChosenFeats().map { it.feat.increasedSkills() }
+                increaseSkills = chosenFeats.map { it.feat.increasedSkills() }
             )
             CheckDialogParams(
                 title = activity.title,
@@ -657,13 +673,19 @@ suspend fun kingdomCheckDialog(
             val activity = kingdom.getAllActivities().find { it.id == "build-structure" }
                 ?: throw IllegalArgumentException("No Build Structure Activity present")
             val dc = structure.construction.dc
+            val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+            val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
             val skills = getValidActivitySkills(
-                ranks = kingdom.parseSkillRanks(kingdom.getChosenFeats().map { it.feat }, kingdom.getChosenGovernment()),
+                ranks = kingdom.parseSkillRanks(
+                    chosenFeatures,
+                    chosenFeats,
+                    kingdom.getChosenGovernment()
+                ),
                 activityRanks = overrideSkills ?: structure.construction.skills,
                 ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
                 expandMagicUse = kingdom.settings.expandMagicUse,
                 activityId = activity.id,
-                increaseSkills = kingdom.getChosenFeats().map { it.feat.increasedSkills() }
+                increaseSkills = chosenFeats.map { it.feat.increasedSkills() }
             )
             CheckDialogParams(
                 title = activity.title,
