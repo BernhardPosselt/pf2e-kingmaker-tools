@@ -45,9 +45,11 @@ external interface FeatureContext {
     val id: FormElementContext
     val name: String
     val description: String
+    val automationNotes: String?
     val abilityBoosts: AbilityBoostContext?
     val feat: FormElementContext?
     val featDescription: String?
+    val featAutomationNotes: String?
     val skillProficiency: FormElementContext?
     val ruinThresholdIncreases: RuinThresholdIncreases?
     val featRuinThresholdIncreases: Array<RuinThresholdIncreases>

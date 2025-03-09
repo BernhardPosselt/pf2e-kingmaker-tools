@@ -126,8 +126,10 @@ fun main() {
             // register partials
             loadTpls(
                 arrayOf(
-                    "kingdom-section-kingdom" to "applications/kingdom/sections/kingdom.hbs",
-                    "kingdom-creation" to "applications/kingdom/sections/kingdom-creation.hbs",
+                    "kingdom-character-sheet" to "applications/kingdom/sections/character-sheet/page.hbs",
+                    "kingdom-character-sheet-creation" to "applications/kingdom/sections/character-sheet/creation.hbs",
+                    "kingdom-character-sheet-bonus" to "applications/kingdom/sections/character-sheet/bonus.hbs",
+                    "kingdom-character-sheet-levels" to "applications/kingdom/sections/character-sheet/levels.hbs",
                     "campingTile" to "applications/camping/camping-tile.hbs",
                     "recipeTile" to "applications/camping/recipe-tile.hbs",
                     "formElement" to "components/forms/form-element.hbs",

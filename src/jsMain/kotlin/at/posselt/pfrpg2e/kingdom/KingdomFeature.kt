@@ -9,6 +9,7 @@ external interface KingdomFeature {
     val id: String
     val levels: Array<Int>
     val name: String
+    val automationNotes: String?
     val description: String
     val flags: Array<String>?
     val modifiers: Array<RawModifier>?

@@ -1,14 +1,14 @@
 .theme-light {
     #kmKingdomSheet {
-        aside, main {
-            background-color: var(--background);
+        .km-kingdom-sheet-content, .km-sub-nav, .km-kingdom-sheet-sidebar {
+            /* TODO */
         }
     }
 }
 
 .theme-dark {
     #kmKingdomSheet {
-        aside, main {
+        .km-kingdom-sheet-sub-nav, .km-kingdom-sheet-sub-content, .km-kingdom-sheet-sidebar {
             background-color: rgba(11, 10, 19, .95);
         }
     }
@@ -17,30 +17,6 @@
 #kmKingdomSheet {
     .window-content {
         padding: 0;
-    }
-
-    .km-kingdom-sheet-content-wrapper {
-        background-image: url("../../../img/camping/backgrounds/urban-day.webp");
-        display: flex;
-        background-size: cover;
-        height: calc(100vh - 310px);
-
-    }
-
-    aside {
-        min-width: 300px;
-        border-radius: 10px;
-        margin: 10px 0 10px 10px;
-        padding: 1em;
-        overflow: auto;
-    }
-
-    main {
-        height: 600px;
-        overflow: auto;
-        border-radius: 10px;
-        margin: 10px;
-        padding: 1em;
     }
 
     .km-kingdom-sheet-header {
@@ -68,7 +44,7 @@
         }
     }
 
-    nav.km-main-nav {
+    .km-kingdom-sheet-main-nav {
         ul {
             list-style-type: none;
             display: flex;
@@ -85,38 +61,83 @@
         }
     }
 
-    /* kingdom */
+    .km-kingdom-sheet-main {
+        background-image: url("../../../img/camping/backgrounds/urban-day.webp");
+        display: flex;
+        gap: 2em;
+        background-size: cover;
+        height: calc(100vh - 310px);
+    }
 
+    .km-kingdom-sheet-sidebar {
+        width: 300px;
+        border-radius: 10px;
+        margin: 10px 0 10px 10px;
+        padding: 1em;
+        overflow: auto;
+    }
 
-    .km-kingdom-sheet-kingdom {
-        nav {
-            ul {
-                display: flex;
-                gap: .5em;
-                margin: 0 0 2em 0;
-                padding: 0;
-                list-style-type: none;
-                font-size: .8em;
+    .km-kingdom-sheet-content {
+        flex-grow: 1;
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+    }
 
-                li:nth-child(2) {
-                    margin-left: auto;
-                }
+    .km-kingdom-sheet-sub-nav {
+        margin-bottom: 10px;
+        padding: 0;
 
+        ul {
+            display: flex;
+            gap: .5em;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            font-size: .7em;
+
+            li:first-child,
+            li:last-child {
+                flex-grow: 2;
+            }
+
+            li:last-child {
                 a {
-                    border: 1px solid;
-                    border-radius: .5em;
-                    padding: .5em;
-                    text-decoration: none;
+                   margin-left: auto;
+                }
+            }
 
-                    &:hover, &.active {
-                        border: 1px solid;
-                        color: var(--color-dark-1);
-                        background-color: var(--color-warm-1);
-                    }
+            li {
+                display: flex;
+                margin: 0;
+            }
+
+            a {
+                border: 1px solid;
+                border-radius: .5em;
+                padding: .5em;
+                text-decoration: none;
+
+                &:hover, &.active {
+                    border: 1px solid;
+                    color: var(--color-dark-1);
+                    background-color: var(--color-warm-1);
                 }
             }
         }
+    }
 
+    .km-kingdom-sheet-sub-content,
+    .km-kingdom-sheet-sub-nav {
+        border-radius: 10px;
+        padding: 1em;
+    }
+
+    .km-kingdom-sheet-sub-content {
+        overflow: auto;
+    }
+
+    .km-kingdom-sheet-kingdom {
         h2 {
             display: flex;
             font-size: 2em;
@@ -134,7 +155,7 @@
             }
         }
 
-        .km-kingdom-sheet-kingdom-section {
+        .km-kingdom-sheet-kingdom-section:not(:nth-of-type(1)) {
             margin-top: 3em;
         }
 

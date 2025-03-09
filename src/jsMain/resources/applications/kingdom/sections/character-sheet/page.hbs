@@ -1,0 +1,65 @@
+<aside class="km-kingdom-sheet-sidebar">
+    <div hidden>
+        {{controlDc}}
+        {{> formElement atWarInput }}
+        {{> formElement unrestInput }}
+        {{unrestPenalty}}
+        {{anarchyAt}}
+        ruin
+        {{> formElement ruinContext.corruption.value }}
+        {{> formElement ruinContext.corruption.penalty }}
+        {{> formElement ruinContext.corruption.threshold }}
+        {{> formElement ruinContext.crime.value }}
+        {{> formElement ruinContext.crime.penalty }}
+        {{> formElement ruinContext.crime.threshold }}
+        {{> formElement ruinContext.decay.value }}
+        {{> formElement ruinContext.decay.penalty }}
+        {{> formElement ruinContext.decay.threshold }}
+        {{> formElement ruinContext.strife.value }}
+        {{> formElement ruinContext.strife.penalty }}
+        {{> formElement ruinContext.strife.threshold }}
+        commodities
+        {{> formElement commoditiesContext.now.food }}
+        {{> formElement commoditiesContext.now.lumber }}
+        {{> formElement commoditiesContext.now.luxuries }}
+        {{> formElement commoditiesContext.now.ore }}
+        {{> formElement commoditiesContext.now.stone }}
+
+        {{> formElement commoditiesContext.next.food }}
+        {{> formElement commoditiesContext.next.lumber }}
+        {{> formElement commoditiesContext.next.luxuries }}
+        {{> formElement commoditiesContext.next.ore }}
+        {{> formElement commoditiesContext.next.stone }}
+        storage
+        {{ commoditiesContext.capacity.food }}
+        {{ commoditiesContext.capacity.lumber }}
+        {{ commoditiesContext.capacity.luxuries }}
+        {{ commoditiesContext.capacity.ore }}
+        {{ commoditiesContext.capacity.stone }}
+        {{> formElement resourcePointsContext.now }}
+        {{> formElement resourcePointsContext.next }}
+        {{> formElement resourceDiceContext.now }}
+        {{> formElement resourceDiceContext.next }}
+        {{> formElement supernaturalSolutionsInput }}
+        {{> formElement creativeSolutionsInput }}
+    </div>
+</aside>
+<div class="km-kingdom-sheet-content">
+    <nav class="km-kingdom-sheet-sub-nav">
+        <ul>
+            <li><a title="Creation" data-action="change-kingdom-section-nav"
+                   {{#unless hideCreation}}class="active"{{/unless}} href="#" data-link="Creation">Creation</a></li>
+            {{#each kingdomSectionNav}}
+                <li><a title="{{title}}" data-action="change-kingdom-section-nav"
+                       {{#if active}}class="active"{{/if}} href="#" data-link="{{link}}">{{label}}</a></li>
+            {{/each}}
+            <li><a title="Bonus" data-action="change-kingdom-section-nav"
+                   {{#unless hideBonus}}class="active"{{/unless}} href="#" data-link="Bonus">Bonus</a></li>
+        </ul>
+    </nav>
+    <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-kingdom">
+        {{> kingdom-character-sheet-creation this}}
+        {{> kingdom-character-sheet-bonus this}}
+        {{> kingdom-character-sheet-levels this}}
+    </div>
+</div>

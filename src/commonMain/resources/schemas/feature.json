@@ -21,6 +21,9 @@
         "name": {
           "type": "string"
         },
+        "automationNotes": {
+          "type": "string"
+        },
         "skillIncrease": {
           "type": "boolean"
         },

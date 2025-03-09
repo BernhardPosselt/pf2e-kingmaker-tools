@@ -1,0 +1,79 @@
+{{#each featuresByLevel}}
+    <section {{#if hidden}}hidden{{/if}}>
+        {{#each features}}
+            {{> formElement id}}
+            <section class="km-kingdom-sheet-kingdom-section">
+                <h2>{{name}} <span class="km-header-right-align">
+                        {{#if feat}}{{> formElement feat}}{{/if}}
+                    {{#if skillProficiency}}{{> formElement skillProficiency}}{{/if}}
+                    </span></h2>
+                {{#unless feat}}
+                    <p>{{description}}</p>
+                    {{#if automationNotes}}<p><b>Automation Notes:</b> {{automationNotes}}</p>{{/if}}
+                {{/unless}}
+                {{#if abilityBoosts}}
+                    <div class="km-choose-boosts">
+                        <p>Pick {{abilityBoosts.free}} boosts:</p>
+                        <ul>
+                            <li>{{> formElement abilityBoosts.culture}}</li>
+                            <li>{{> formElement abilityBoosts.economy}}</li>
+                            <li>{{> formElement abilityBoosts.loyalty}}</li>
+                            <li>{{> formElement abilityBoosts.stability}}</li>
+                        </ul>
+                    </div>
+                {{/if}}
+                {{#if feat}}
+                    <p>{{featDescription}}</p>
+                    {{#if featAutomationNotes}}<p><b>Automation Notes:</b> {{featAutomationNotes}}</p>{{/if}}
+                    {{#each featRuinThresholdIncreases}}
+                        <div class="km-choose-boosts">
+                            <p>Choose {{amount}} Ruins to increase by {{value}}</p>
+                            <ul class="km-choose-ruins">
+                                <li>
+                                    {{> formElement crime.input}}
+                                    {{> formElement crime.valueInput}}
+                                </li>
+                                <li>
+                                    {{> formElement corruption.input}}
+                                    {{> formElement corruption.valueInput}}
+                                </li>
+                                <li>
+                                    {{> formElement strife.input}}
+                                    {{> formElement strife.valueInput}}
+                                </li>
+                                <li>
+                                    {{> formElement stability.input}}
+                                    {{> formElement stability.valueInput}}
+                                </li>
+                            </ul>
+                        </div>
+                    {{/each}}
+                {{/if}}
+                {{#if ruinThresholdIncreases}}
+                    <div class="km-choose-ruins">
+                        <p>Choose {{ruinThresholdIncreases.amount}} Ruins to increase
+                            by {{ruinThresholdIncreases.value}}:</p>
+                        <ul>
+                            <li>
+                                {{> formElement ruinThresholdIncreases.crime.input}}
+                                {{> formElement ruinThresholdIncreases.crime.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement ruinThresholdIncreases.corruption.input}}
+                                {{> formElement ruinThresholdIncreases.corruption.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement ruinThresholdIncreases.strife.input}}
+                                {{> formElement ruinThresholdIncreases.strife.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement ruinThresholdIncreases.stability.input}}
+                                {{> formElement ruinThresholdIncreases.stability.valueInput}}
+                            </li>
+                        </ul>
+                    </div>
+                {{/if}}
+            </section>
+        {{/each}}
+    </section>
+{{/each}}

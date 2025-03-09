@@ -9,10 +9,10 @@
         <div class="km-kingdom-sheet-active-fame-next">{{> formElement fameContext.next }}</div>
     </header>
 
-    <nav class="km-main-nav">
+    <nav class="km-kingdom-sheet-main-nav">
         <ul>
             <li><a data-action="change-nav" href="#">Turn</a></li>
-            <li><a data-action="change-nav" href="#">Kingdom</a></li>
+            <li><a data-action="change-nav" href="#">Character Sheet</a></li>
             <li><a data-action="change-nav" href="#">Settlements</a></li>
             <li><a data-action="change-nav" href="#">Trade Agreements (1)</a></li>
             <li><a data-action="change-nav" href="#">Effects</a></li>
@@ -20,56 +20,10 @@
         </ul>
     </nav>
 
-    <div class="km-kingdom-sheet-content-wrapper">
-        <aside>
-            <div hidden>
-            {{controlDc}}
-            {{> formElement atWarInput }}
-            {{> formElement unrestInput }}
-            {{unrestPenalty}}
-            {{anarchyAt}}
-            ruin
-            {{> formElement ruinContext.corruption.value }}
-            {{> formElement ruinContext.corruption.penalty }}
-            {{> formElement ruinContext.corruption.threshold }}
-            {{> formElement ruinContext.crime.value }}
-            {{> formElement ruinContext.crime.penalty }}
-            {{> formElement ruinContext.crime.threshold }}
-            {{> formElement ruinContext.decay.value }}
-            {{> formElement ruinContext.decay.penalty }}
-            {{> formElement ruinContext.decay.threshold }}
-            {{> formElement ruinContext.strife.value }}
-            {{> formElement ruinContext.strife.penalty }}
-            {{> formElement ruinContext.strife.threshold }}
-            commodities
-            {{> formElement commoditiesContext.now.food }}
-            {{> formElement commoditiesContext.now.lumber }}
-            {{> formElement commoditiesContext.now.luxuries }}
-            {{> formElement commoditiesContext.now.ore }}
-            {{> formElement commoditiesContext.now.stone }}
+    <main class="km-kingdom-sheet-main">
+        {{> kingdom-character-sheet this}}
 
-            {{> formElement commoditiesContext.next.food }}
-            {{> formElement commoditiesContext.next.lumber }}
-            {{> formElement commoditiesContext.next.luxuries }}
-            {{> formElement commoditiesContext.next.ore }}
-            {{> formElement commoditiesContext.next.stone }}
-            storage
-            {{ commoditiesContext.capacity.food }}
-            {{ commoditiesContext.capacity.lumber }}
-            {{ commoditiesContext.capacity.luxuries }}
-            {{ commoditiesContext.capacity.ore }}
-            {{ commoditiesContext.capacity.stone }}
-            {{> formElement resourcePointsContext.now }}
-            {{> formElement resourcePointsContext.next }}
-            {{> formElement resourceDiceContext.now }}
-            {{> formElement resourceDiceContext.next }}
-            {{> formElement supernaturalSolutionsInput }}
-            {{> formElement creativeSolutionsInput }}
-            </div>
-        </aside>
-        <main>
-            {{> kingdom-section-kingdom this }}
-            <div hidden>
+        <div hidden>
             {{> formElement worksitesContext.farmlands.resources }}
             {{> formElement worksitesContext.farmlands.quantity }}
             {{ worksitesContext.farmlands.quantityValue }}
@@ -150,7 +104,6 @@
             {{#if leadersContext.warden.actor }}
                 {{> formElement leadersContext.warden.actor.uuidInput }}
             {{/if}}
-            </div>
-        </main>
-    </div>
+        </div>
+    </main>
 </div>

@@ -230,7 +230,7 @@ class KingdomSheet(
         MenuControl(label = "Settings", action = "settings", gmOnly = true),
         MenuControl(label = "Help", action = "help"),
     ),
-    scrollable = arrayOf(".km-kingdom-sheet-sidebar", ".km-kingdom-sheet-content"),
+    scrollable = arrayOf(".km-kingdom-sheet-sidebar", ".km-kingdom-sheet-sub-content"),
 ) {
     private var initialKingdomLevel = getKingdom().level
     private var noCharter = getKingdom().charter.type == null
@@ -429,6 +429,7 @@ class KingdomSheet(
             government = kingdom.government.toContext(governments, feats),
             abilityBoosts = kingdom.abilityBoosts.toContext("abilityBoosts", 2 + increaseScorePicksBy),
             hideCreation = currentKingdomNavEntry != "Creation",
+            hideBonus = currentKingdomNavEntry != "Bonus",
             featuresByLevel = kingdom.features.toContext(
                 government = kingdom.getChosenGovernment(),
                 features = allFeatures.toTypedArray(),
@@ -443,14 +444,15 @@ class KingdomSheet(
 
     private fun createKingdomSectionNav(kingdom: KingdomData): Array<NavEntryContext> {
         val selectLv1 = currentKingdomNavEntry != "Creation"
+                && currentKingdomNavEntry != "Bonus"
                 && currentKingdomNavEntry.toInt() > kingdom.level
-        return (listOf("Creation") + (1..kingdom.level).takeWhile { it <= kingdom.level }.map { it.toString() })
+        return (1..20).map { it.toString() }
             .map {
                 NavEntryContext(
                     label = it,
                     active = (selectLv1 && it == "1") || currentKingdomNavEntry == it,
                     link = it,
-                    title = if (it == "Creation") it else "Level: $it",
+                    title = "Level: $it",
                 )
             }
             .toTypedArray()
