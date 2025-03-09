@@ -67,9 +67,7 @@ import at.posselt.pfrpg2e.macros.createFoodMacro
 import at.posselt.pfrpg2e.macros.editRealmTileMacro
 import at.posselt.pfrpg2e.macros.editStructureMacro
 import at.posselt.pfrpg2e.macros.resetHeroPointsMacro
-import at.posselt.pfrpg2e.macros.rollCultEventMacro
 import at.posselt.pfrpg2e.macros.rollExplorationSkillCheckMacro
-import at.posselt.pfrpg2e.macros.rollKingdomEventMacro
 import at.posselt.pfrpg2e.macros.rollPartyCheckMacro
 import at.posselt.pfrpg2e.macros.sceneWeatherSettingsMacro
 import at.posselt.pfrpg2e.macros.setTimeOfDayMacro
@@ -174,8 +172,6 @@ fun main() {
                         }
                     }
                 },
-                kingdomEventsMacro = { buildPromise { rollKingdomEventMacro(game) } },
-                cultEventsMacro = { buildPromise { rollCultEventMacro(game) } },
                 rollKingmakerWeatherMacro = { buildPromise { rollWeather(game) } },
                 awardXpMacro = { buildPromise { awardXPMacro(game.partyMembers()) } },
                 resetHeroPointsMacro = { buildPromise { resetHeroPointsMacro(game.partyMembers()) } },

@@ -24,8 +24,6 @@ external interface ToolsMacros {
     val toggleShelteredMacro: () -> Unit
     val setCurrentWeatherMacro: () -> Unit
     val sceneWeatherSettingsMacro: () -> Unit
-    val kingdomEventsMacro: () -> Unit
-    val cultEventsMacro: () -> Unit
     val rollKingmakerWeatherMacro: () -> Unit
     val awardXpMacro: () -> Unit
     val resetHeroPointsMacro: () -> Unit

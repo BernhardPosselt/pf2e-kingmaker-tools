@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Many Feats, Activities and Features have received increased automation, especially ones that upgrade or downgrade degrees of successes 
+* Kingdom Character Sheet builder with automated ability scores, skill trainings, skill increases and ruin thresholds
+
+### Changed
+
+* Removed Roll Kingdom Event macro since those depend on the actual kingdom sheet now
+* For developers only: all code has now been ported from TypeScript to Kotlin
+
 ## [3.1.0] - 2025-02-26
 
 ### Fixed
