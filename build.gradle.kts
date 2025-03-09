@@ -26,21 +26,6 @@ tasks.register<CombineJsonFiles>("combineJsonFiles") {
     sourceDirectory = layout.projectDirectory.dir("data/")
     targetDirectory = layout.buildDirectory.dir("generated/resources")
 }
-tasks.register<Exec>("installOldJs") {
-    inputs.files(layout.projectDirectory.file("./oldsrc/package.json"))
-    outputs.dir(layout.projectDirectory.dir("./oldsrc/node_modules"))
-    workingDir = layout.projectDirectory.dir("oldsrc/").asFile
-    commandLine = listOf("yarn", "install")
-}
-tasks.register<Exec>("compileOldJs") {
-    dependsOn("installOldJs", "combineJsonFiles")
-    mustRunAfter("installOldJs")
-    inputs.file(layout.projectDirectory.dir("./oldsrc/webpack.config.js"))
-    inputs.dir(layout.projectDirectory.dir("./oldsrc/src/"))
-    outputs.dir(layout.projectDirectory.dir("./oldsrc/dist/"))
-    workingDir = layout.projectDirectory.dir("oldsrc/").asFile
-    commandLine = listOf("yarn", "run", "build")
-}
 
 kotlin {
     js {
@@ -93,7 +78,6 @@ kotlin {
         }
         // define a jsMain module
         val jsMain by getting {
-            resources.srcDirs(tasks.named("compileOldJs"))
             dependencies {
                 implementation(project.dependencies.enforcedPlatform(libs.kotlin.wrappers))
                 implementation(libs.kotlin.wrappers.js)

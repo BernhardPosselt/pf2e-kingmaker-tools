@@ -4,13 +4,11 @@
     "version": "3.1.0",
     "scripts": [
         "dist/api/patches.js",
-        "dist/main.js",
-        "dist/oldmain.js"
+        "dist/main.js"
     ],
     "url": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools",
     "license": "LICENSE",
     "styles": [
-        "styles/style.css",
         "dist/style.css"
     ],
     "packs": [

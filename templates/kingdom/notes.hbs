@@ -1,8 +1,0 @@
-<h2>Public Notes</h2>
-<div class="km-notes">
-    {{editor notes.public target="notes.public" button=true editable=true engine="prosemirror"}}
-</div>
-<h2 {{#unless isGM}}hidden{{/unless}}>GM Notes</h2>
-<div {{#unless isGM}}hidden{{/unless}} class="km-notes">
-    {{editor notes.gm target="notes.gm" button=true editable=true engine="prosemirror"}}
-</div>
