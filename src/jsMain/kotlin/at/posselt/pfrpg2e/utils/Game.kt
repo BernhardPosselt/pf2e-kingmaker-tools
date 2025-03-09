@@ -1,22 +1,9 @@
 package at.posselt.pfrpg2e.utils
 
-import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
-import at.posselt.pfrpg2e.kingdom.KingdomActivity
-import at.posselt.pfrpg2e.kingdom.KingdomData
-import at.posselt.pfrpg2e.kingdom.KingdomFeature
-import at.posselt.pfrpg2e.kingdom.KingdomSettings
-import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
-import at.posselt.pfrpg2e.kingdom.sheet.RawSkillStats
-import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
-import at.posselt.pfrpg2e.kingdom.structures.RawStructureData
 import com.foundryvtt.core.Actor
-import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2EActor
-import com.foundryvtt.pf2e.actor.PF2ENpc
-import js.collections.JsMap
 import kotlinx.js.JsPlainObject
-import kotlin.js.Promise
 
 @JsPlainObject
 external interface ToolsMacros {
@@ -43,69 +30,8 @@ external interface ToolsMacros {
 }
 
 @JsPlainObject
-external interface KtMigrationData {
-    val structures: Array<RawStructureData>
-    val feats: Array<RawKingdomFeat>
-    val features: Array<KingdomFeature>
-    val activities: Array<KingdomActivity>
-}
-
-@JsPlainObject
-external interface KtMigration {
-    val kingdomSettings: (settings: KingdomSettings, onSave: (settings: KingdomSettings) -> Unit) -> Unit
-    val kingdomSizeHelp: () -> Unit
-    val settlementSizeHelp: () -> Unit
-    val structureXpDialog: (onSave: (xp: Int) -> Unit) -> Unit
-    val editSettlementDialog: (
-        autoLevel: Boolean,
-        settlementName: String,
-        settlement: RawSettlement,
-        onOk: (RawSettlement) -> Unit
-    ) -> Unit
-    val addOngoingEventDialog: (onSave: (String) -> Unit) -> Unit
-    val checkDialog: (
-        game: Game,
-        kingdom: KingdomData,
-        kingdomActor: PF2ENpc,
-        activity: KingdomActivity?,
-        structure: RawStructureData?,
-        skill: String?,
-        afterRoll: (degree: DegreeOfSuccess) -> Promise<String>
-    ) -> Unit
-    val data: KtMigrationData
-    val armyBrowser: (game: Game, actor: PF2ENpc, kingdom: KingdomData) -> Unit
-    val tacticsBrowser: (game: Game, actor: PF2ENpc, kingdom: KingdomData) -> Unit
-    val adjustUnrest: (kingdom: KingdomData) -> Promise<Int>
-    val collectResources: (kingdom: KingdomData) -> Promise<AnyObject>
-    val addModifier: () -> Unit
-    val tickDownModifiers: () -> Promise<Unit>
-    val findMaximumArmyTactics: (kingdomLevel: Int) -> Int
-    val calculateLeadershipBonuses: (kingdom: KingdomData) -> Promise<JsMap<String, Int>>
-    val calculateSkillModifiers: (
-        game: Game,
-        kingdom: KingdomData,
-    ) -> Promise<Array<RawSkillStats>>
-    val calculateUnrestPenalty: (unrest: Int) -> Int
-    val calculateHexXP: (
-        hexes: Int,
-        xpPerClaimedHex: Int,
-        kingdomSize: Int,
-        useVK: Boolean
-    ) -> Int
-    val calculateRpXP: (
-        rp: Int,
-        kingdomLevel: Int,
-        rpToXpConversionRate: Int,
-        rpToXpConversionLimit: Int,
-        useVK: Boolean,
-    ) -> Int
-    val calculateEventXP: (modifier: Int) -> Int
-}
-
-@JsPlainObject
 external interface Pfrpg2eKingdomCampingWeather {
     val macros: ToolsMacros
-    val migration: KtMigration
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")

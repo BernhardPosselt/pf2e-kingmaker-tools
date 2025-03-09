@@ -16,49 +16,10 @@ import at.posselt.pfrpg2e.camping.openCampingSheet
 import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
-import at.posselt.pfrpg2e.data.armies.findMaximumArmyTactics
-import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
-import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.data.kingdom.calculateEventXP
-import at.posselt.pfrpg2e.data.kingdom.calculateHexXP
-import at.posselt.pfrpg2e.data.kingdom.calculateRpXP
-import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
-import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
-import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
-import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
-import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
-import at.posselt.pfrpg2e.kingdom.dialogs.addModifier
-import at.posselt.pfrpg2e.kingdom.dialogs.addOngoingEvent
-import at.posselt.pfrpg2e.kingdom.dialogs.armyBrowser
-import at.posselt.pfrpg2e.kingdom.dialogs.armyTacticsBrowser
-import at.posselt.pfrpg2e.kingdom.dialogs.editSettlement
-import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
-import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
-import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
-import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
-import at.posselt.pfrpg2e.kingdom.getAllActivities
-import at.posselt.pfrpg2e.kingdom.getAllSettlements
-import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
-import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getKingdomActor
-import at.posselt.pfrpg2e.kingdom.getRealmData
-import at.posselt.pfrpg2e.kingdom.kingdomActivities
-import at.posselt.pfrpg2e.kingdom.kingdomFeats
-import at.posselt.pfrpg2e.kingdom.kingdomFeatures
-import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.getHighestLeadershipModifiers
-import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
-import at.posselt.pfrpg2e.kingdom.parse
-import at.posselt.pfrpg2e.kingdom.parseLeaderActors
-import at.posselt.pfrpg2e.kingdom.setKingdom
-import at.posselt.pfrpg2e.kingdom.sheet.adjustUnrest
-import at.posselt.pfrpg2e.kingdom.sheet.calculateSkillModifierBreakdown
-import at.posselt.pfrpg2e.kingdom.sheet.collectResources
 import at.posselt.pfrpg2e.kingdom.sheet.openKingdomSheet
-import at.posselt.pfrpg2e.kingdom.sheet.tickDownModifiers
-import at.posselt.pfrpg2e.kingdom.structures.parseStructure
-import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
 import at.posselt.pfrpg2e.macros.awardXPMacro
@@ -78,13 +39,10 @@ import at.posselt.pfrpg2e.macros.toggleShelteredMacro
 import at.posselt.pfrpg2e.macros.toggleWeatherMacro
 import at.posselt.pfrpg2e.migrations.migratePfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
-import at.posselt.pfrpg2e.utils.KtMigration
-import at.posselt.pfrpg2e.utils.KtMigrationData
 import at.posselt.pfrpg2e.utils.Pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.ToolsMacros
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fixVisibility
-import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.loadTpls
 import at.posselt.pfrpg2e.utils.pf2eKingmakerTools
 import at.posselt.pfrpg2e.weather.registerWeatherHooks
@@ -96,9 +54,7 @@ import com.foundryvtt.core.onReady
 import com.foundryvtt.core.onRenderChatLog
 import com.foundryvtt.core.onRenderChatMessage
 import io.kvision.jquery.get
-import js.collections.JsMap
 import js.objects.recordOf
-import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 
 fun main() {
@@ -200,134 +156,6 @@ fun main() {
                     openKingdomSheet(game, actionDispatcher, actor)
                 }}
             ),
-            migration = KtMigration(
-                kingdomSettings = { settings, onSave ->
-                    KingdomSettingsApplication(
-                        game,
-                        kingdomSettings = settings,
-                        onSave = onSave
-                    ).launch()
-                },
-                kingdomSizeHelp = { buildPromise { kingdomSizeHelp() } },
-                settlementSizeHelp = { buildPromise { settlementSizeHelp() } },
-                structureXpDialog = { onOk -> buildPromise { structureXpDialog(game, onOk) } },
-                editSettlementDialog = ::editSettlement,
-                addOngoingEventDialog = { onOk -> buildPromise { addOngoingEvent(onOk) } },
-                data = KtMigrationData(
-                    structures = structures,
-                    feats = kingdomFeats,
-                    features = kingdomFeatures,
-                    activities = kingdomActivities,
-                ),
-                armyBrowser = { game, actor, kingdom ->
-                    buildPromise {
-                        armyBrowser(game, actor, kingdom)
-                    }
-                },
-                adjustUnrest = { kingdom ->
-                    buildPromise {
-                        val settlements = kingdom.getAllSettlements(game)
-                        val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
-                        val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
-                        adjustUnrest(kingdom, settlements.allSettlements, chosenFeats)
-                    }
-                },
-                collectResources = { kingdom ->
-                    buildPromise {
-                        val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
-                        val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
-                        val result = collectResources(
-                            kingdomData = kingdom,
-                            realmData = game.getRealmData(kingdom),
-                            allFeats = chosenFeats,
-                            settlements = kingdom.getAllSettlements(game).allSettlements
-                        )
-                        recordOf(
-                            "ore" to result.ore,
-                            "lumber" to result.lumber,
-                            "luxuries" to result.luxuries,
-                            "stone" to result.stone,
-                            "rp" to result.resourcePoints,
-                            "rd" to result.resourceDice,
-                        )
-                    }
-                },
-                tacticsBrowser = { game, actor, kingdom ->
-                    buildPromise {
-                        armyTacticsBrowser(game, actor, kingdom)
-                    }
-                },
-                findMaximumArmyTactics = ::findMaximumArmyTactics,
-                addModifier = {
-                    buildPromise {
-                        val kingdomActor = game.getKingdomActor()
-                        val kingdom = kingdomActor?.getKingdom()
-                        kingdom?.getAllActivities()?.let {
-                            addModifier(it) { mod ->
-                                kingdom.modifiers = kingdom.modifiers + mod
-                                kingdomActor.setKingdom(kingdom)
-                            }
-                        }
-                    }
-                },
-                calculateLeadershipBonuses = { kingdom ->
-                    buildPromise {
-                        val mods = getHighestLeadershipModifiers(
-                            leaderActors = kingdom.parseLeaderActors(),
-                            leaderSkills = kingdom.settings.leaderSkills.parse(),
-                        )
-                        val map = JsMap<String, Int>()
-                        Leader.entries.forEach { leader -> map[leader.value] = mods.resolve(leader) }
-                        map
-                    }
-                },
-                calculateUnrestPenalty = {unrest -> calculateUnrestPenalty(unrest) },
-                calculateSkillModifiers = { game, kingdom ->
-                    val settlementResult = kingdom.getAllSettlements(game)
-                    buildPromise {
-                        calculateSkillModifierBreakdown(kingdom, settlementResult)
-                    }
-                },
-                tickDownModifiers = {
-                    buildPromise {
-                        val kingdomActor = game.getKingdomActor()
-                        kingdomActor?.getKingdom()?.let {
-                            tickDownModifiers(kingdomActor, it)
-                        }
-                    }
-                },
-                calculateHexXP = ::calculateHexXP,
-                calculateRpXP = ::calculateRpXP,
-                calculateEventXP = ::calculateEventXP,
-                checkDialog = { game, kingdom, kingdomActor, activity, structure, skill, afterRoll ->
-                    buildPromise {
-                        val wrapper: suspend (degree: DegreeOfSuccess) -> String = { degree ->
-                            afterRoll(degree).await()
-                        }
-                        val structure = structure?.parseStructure(false)
-                        kingdomCheckDialog(
-                            game = game,
-                            kingdom = kingdom,
-                            kingdomActor = kingdomActor,
-                            check = if (structure != null) {
-                                CheckType.BuildStructure(structure)
-                            } else if (activity != null) {
-                                CheckType.PerformActivity(activity)
-                            } else {
-                                checkNotNull(skill) {
-                                    "Skill must be provided"
-                                }
-                                val kingdomSkill = KingdomSkill.fromString(skill)
-                                checkNotNull(kingdomSkill) {
-                                    "Invalid skill $skill"
-                                }
-                                CheckType.RollSkill(kingdomSkill)
-                            },
-                            afterRoll = wrapper
-                        )
-                    }
-                }
-            )
         )
 
         Hooks.onReady {
