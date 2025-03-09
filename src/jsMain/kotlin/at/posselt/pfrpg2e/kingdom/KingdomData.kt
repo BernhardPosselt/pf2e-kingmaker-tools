@@ -194,7 +194,6 @@ external interface KingdomData {
     var abilityScores: RawAbilityScores
 
     var milestones: Array<RawMileStone>  // TODO
-
 }
 
 fun RawLeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =
