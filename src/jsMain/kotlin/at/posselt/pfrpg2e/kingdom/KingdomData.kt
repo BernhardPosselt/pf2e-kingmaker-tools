@@ -21,6 +21,7 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
+import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
 import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
@@ -62,12 +63,6 @@ external interface RawMileStone {
 external interface OngoingEvent {
     var name: String
 }
-
-@JsPlainObject
-external interface BonusFeat {
-    var id: String
-}
-
 
 @JsPlainObject
 external interface KingdomSettings {
@@ -162,7 +157,7 @@ external interface KingdomData {
     var government: RawGovernmentChoices
     var abilityBoosts: RawAbilityBoostChoices
     var features: Array<RawFeatureChoices>
-    var bonusFeats: Array<BonusFeat>
+    var bonusFeats: Array<RawBonusFeat>
     var groups: Array<RawGroup>  // TODO
     var skillRanks: Record<String, Int>  // TODO
     var abilityScores: Record<String, Int>  // TODO
@@ -302,8 +297,10 @@ fun KingdomData.parseRuins(
 ): RuinValues {
     val defaults = ruin.parse()
     return if (settings.automateStats) {
-        val increases = choices
+        val choiceIncreases = choices
             .flatMap { listOfNotNull(it.ruinThresholdIncreases) + it.featRuinThresholdIncreases }
+        val bonusFeatIncreases = bonusFeats.flatMap { it.ruinThresholdIncreases.toList() }
+        val increases = (choiceIncreases + bonusFeatIncreases)
             .map { it.parse() }
             .fold(RuinThresholdIncreases()) { prev, curr -> prev + curr }
         defaults.copy(

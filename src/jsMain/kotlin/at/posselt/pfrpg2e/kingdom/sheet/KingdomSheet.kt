@@ -471,10 +471,11 @@ class KingdomSheet(
     }
 
     private fun createKingdomSectionNav(kingdom: KingdomData): Array<NavEntryContext> {
+        val maxLevel = kingdom.level
         val selectLv1 = currentCharacterSheetNavEntry != "Creation"
                 && currentCharacterSheetNavEntry != "Bonus"
                 && currentCharacterSheetNavEntry.toInt() > kingdom.level
-        return (1..20).map { it.toString() }
+        return (1..maxLevel).map { it.toString() }
             .map {
                 NavEntryContext(
                     label = it,

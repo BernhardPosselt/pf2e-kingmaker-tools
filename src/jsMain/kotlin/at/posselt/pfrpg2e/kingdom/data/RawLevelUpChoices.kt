@@ -86,6 +86,13 @@ external interface RawFeatureChoices {
     var featRuinThresholdIncreases: Array<RawRuinThresholdIncreases>
 }
 
+@JsPlainObject
+external interface RawBonusFeat {
+    var id: String
+    var ruinThresholdIncreases: Array<RawRuinThresholdIncreases>
+}
+
+
 fun KingdomData.getChosenGovernment() =
     getGovernments()
         .find { it.id == government.type }

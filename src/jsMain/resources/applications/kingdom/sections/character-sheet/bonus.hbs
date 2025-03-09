@@ -1,3 +1,52 @@
 <section {{#if hideBonus}}hidden{{/if}}>
-    hi
+    <h2>Bonus Feats</h2>
+    {{> formElement bonusFeat.feat}}
+    {{#if bonusFeat.Description}}<p>{{bonusFeat.Description}}</p>
+        <p>
+            <button type="button"
+                    class="km-no-button-margin"
+                    data-action="add-bonus-feat"
+                    title="Add Bonus Feat"
+            >Add Bonus Feat<i class="fa-solid fa-plus"></i></button>
+        </p>
+    {{/if}}
+    <hr>
+    {{#each bonusFeats}}
+        {{> formElement id}}
+        <section class="km-kingdom-sheet-kingdom-section">
+            <h2>{{name}} <span class="km-header-right-align">
+                <button type="button"
+                        class="km-no-button-margin"
+                        data-id="{{id}}"
+                        data-action="delete-bonus-feat"
+                        title="Delete Bonus Feat"
+                ><i class="fa-solid fa-trash"></i></button>
+            </span></h2>
+            <p>{{description}}</p>
+            {{#if automationNotes}}<p><b>Automation Notes:</b> {{automationNotes}}</p>{{/if}}
+            {{#each ruinThresholdIncreases}}
+                <div class="km-choose-boosts">
+                    <p>Choose {{amount}} Ruins to increase by {{value}}</p>
+                    <ul class="km-choose-ruins">
+                        <li>
+                            {{> formElement crime.input}}
+                            {{> formElement crime.valueInput}}
+                        </li>
+                        <li>
+                            {{> formElement corruption.input}}
+                            {{> formElement corruption.valueInput}}
+                        </li>
+                        <li>
+                            {{> formElement strife.input}}
+                            {{> formElement strife.valueInput}}
+                        </li>
+                        <li>
+                            {{> formElement stability.input}}
+                            {{> formElement stability.valueInput}}
+                        </li>
+                    </ul>
+                </div>
+            {{/each}}
+        </section>
+    {{/each}}
 </section>

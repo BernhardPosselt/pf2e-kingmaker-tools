@@ -1,11 +1,11 @@
 package at.posselt.pfrpg2e.migrations.migrations
 
-import at.posselt.pfrpg2e.kingdom.BonusFeat
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawExpression
 import at.posselt.pfrpg2e.kingdom.RawIn
 import at.posselt.pfrpg2e.kingdom.charters
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
+import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
 import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
@@ -80,7 +80,7 @@ class Migration13 : Migration(13) {
         kingdom.bonusFeats = kingdom.bonusFeats
             .mapNotNull {
                 featsByName[it.id]?.let { f ->
-                    BonusFeat(id=f.id)
+                    RawBonusFeat(id=f.id, ruinThresholdIncreases=emptyArray())
                 }
             }
             .filter { it.id != governmentFeat }
