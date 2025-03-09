@@ -1,5 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.sheet
 
+import at.posselt.pfrpg2e.kingdom.RawAbilityScores
+import at.posselt.pfrpg2e.kingdom.RawSkillRanks
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
@@ -45,4 +47,6 @@ external interface KingdomSheetData {
     var features: Array<RawFeatureChoices>
     var bonusFeats: Array<RawBonusFeat>
     var groups: Array<RawGroup>
+    val skillRanks: RawSkillRanks
+    val abilityScores: RawAbilityScores
 }

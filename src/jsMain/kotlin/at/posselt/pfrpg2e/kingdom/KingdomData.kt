@@ -47,7 +47,6 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.actor.PF2ENpc
-import js.objects.Record
 import kotlinx.js.JsPlainObject
 
 
@@ -123,6 +122,34 @@ external interface RawLeaderSkills {
 }
 
 @JsPlainObject
+external interface RawAbilityScores {
+    val economy: Int
+    val stability: Int
+    val loyalty: Int
+    val culture: Int
+}
+
+@JsPlainObject
+external interface RawSkillRanks {
+    val agriculture: Int
+    val arts: Int
+    val boating: Int
+    val defense: Int
+    val engineering: Int
+    val exploration: Int
+    val folklore: Int
+    val industry: Int
+    val intrigue: Int
+    val magic: Int
+    val politics: Int
+    val scholarship: Int
+    val statecraft: Int
+    val trade: Int
+    val warfare: Int
+    val wilderness: Int
+}
+
+@JsPlainObject
 external interface KingdomData {
     var name: String
     var atWar: Boolean
@@ -163,9 +190,9 @@ external interface KingdomData {
     var modifiers: Array<RawModifier>  // set via dialog
     var settlements: Array<RawSettlement>  // set via dialog
     var groups: Array<RawGroup>
+    var skillRanks: RawSkillRanks
+    var abilityScores: RawAbilityScores
 
-    var skillRanks: Record<String, Int>  // TODO
-    var abilityScores: Record<String, Int>  // TODO
     var milestones: Array<RawMileStone>  // TODO
 
 }
@@ -254,22 +281,22 @@ fun KingdomData.parseSkillRanks(
         )
     } else {
         KingdomSkillRanks(
-            agriculture = skillRanks["agriculture"] ?: 0,
-            arts = skillRanks["arts"] ?: 0,
-            boating = skillRanks["boating"] ?: 0,
-            defense = skillRanks["defense"] ?: 0,
-            engineering = skillRanks["engineering"] ?: 0,
-            exploration = skillRanks["exploration"] ?: 0,
-            folklore = skillRanks["folklore"] ?: 0,
-            industry = skillRanks["industry"] ?: 0,
-            intrigue = skillRanks["intrigue"] ?: 0,
-            magic = skillRanks["magic"] ?: 0,
-            politics = skillRanks["politics"] ?: 0,
-            scholarship = skillRanks["scholarship"] ?: 0,
-            statecraft = skillRanks["statecraft"] ?: 0,
-            trade = skillRanks["trade"] ?: 0,
-            warfare = skillRanks["warfare"] ?: 0,
-            wilderness = skillRanks["wilderness"] ?: 0,
+            agriculture = skillRanks.agriculture,
+            arts = skillRanks.arts,
+            boating = skillRanks.boating,
+            defense = skillRanks.defense,
+            engineering = skillRanks.engineering,
+            exploration = skillRanks.exploration,
+            folklore = skillRanks.folklore,
+            industry = skillRanks.industry,
+            intrigue = skillRanks.intrigue,
+            magic = skillRanks.magic,
+            politics = skillRanks.politics,
+            scholarship = skillRanks.scholarship,
+            statecraft = skillRanks.statecraft,
+            trade = skillRanks.trade,
+            warfare = skillRanks.warfare,
+            wilderness = skillRanks.wilderness,
         )
     }
 
@@ -345,10 +372,10 @@ fun KingdomData.parseAbilityScores(
     )
 } else {
     KingdomAbilityScores(
-        economy = abilityScores["economy"] ?: 10,
-        stability = abilityScores["stability"] ?: 10,
-        loyalty = abilityScores["loyalty"] ?: 10,
-        culture = abilityScores["culture"] ?: 10
+        economy = abilityScores.economy,
+        stability = abilityScores.stability,
+        loyalty = abilityScores.loyalty,
+        culture = abilityScores.culture,
     )
 }
 

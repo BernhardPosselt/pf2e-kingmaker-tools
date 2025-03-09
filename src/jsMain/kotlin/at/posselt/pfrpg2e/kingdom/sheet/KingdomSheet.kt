@@ -334,7 +334,9 @@ class KingdomSheet(
             bonusFeats= kingdom.bonusFeats.toContext(
                 kingdom.getFeats(),
             ),
-            groups = kingdom.groups.toContext()
+            groups = kingdom.groups.toContext(),
+            abilityScores = kingdom.abilityScores.toContext(),
+            skillRanks = kingdom.skillRanks.toContext(),
         )
     }
 
@@ -386,6 +388,9 @@ class KingdomSheet(
         kingdom.features = value.features
         kingdom.bonusFeats = value.bonusFeats
         kingdom.leaders = value.leaders
+        kingdom.groups = value.groups
+        kingdom.skillRanks = value.skillRanks
+        kingdom.abilityScores = value.abilityScores
         beforeKingdomUpdate(previousKingdom, kingdom)
         actor.setKingdom(kingdom)
         null

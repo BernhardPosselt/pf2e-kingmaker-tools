@@ -226,6 +226,30 @@ class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
                     enum<Relations>("relations")
                 }
             }
+            schema("skillRanks") {
+                int("agriculture")
+                int("arts")
+                int("boating")
+                int("defense")
+                int("engineering")
+                int("exploration")
+                int("folklore")
+                int("industry")
+                int("intrigue")
+                int("magic")
+                int("politics")
+                int("scholarship")
+                int("statecraft")
+                int("trade")
+                int("warfare")
+                int("wilderness")
+            }
+            schema("abilityScores") {
+                int("economy")
+                int("stability")
+                int("loyalty")
+                int("culture")
+            }
         }
     }
 }

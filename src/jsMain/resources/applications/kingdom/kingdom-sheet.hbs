@@ -53,6 +53,31 @@
             {{editor notesContext.public target="notes.public" button=true editable=true engine="prosemirror"}}
             {{editor notesContext.gm target="notes.gm" button=true editable=true engine="prosemirror"}}
 
+            scores
+            {{> formElement abilityScores.economy }}
+            {{> formElement abilityScores.stability }}
+            {{> formElement abilityScores.loyalty }}
+            {{> formElement abilityScores.culture }}
+
+            ranks
+
+            {{> formElement skillRanks.agriculture }}
+            {{> formElement skillRanks.arts }}
+            {{> formElement skillRanks.boating }}
+            {{> formElement skillRanks.defense }}
+            {{> formElement skillRanks.engineering }}
+            {{> formElement skillRanks.exploration }}
+            {{> formElement skillRanks.folklore }}
+            {{> formElement skillRanks.industry }}
+            {{> formElement skillRanks.intrigue }}
+            {{> formElement skillRanks.magic }}
+            {{> formElement skillRanks.politics }}
+            {{> formElement skillRanks.scholarship }}
+            {{> formElement skillRanks.statecraft }}
+            {{> formElement skillRanks.trade }}
+            {{> formElement skillRanks.warfare }}
+            {{> formElement skillRanks.wilderness }}
+
             groups
 
             {{#each groups}}

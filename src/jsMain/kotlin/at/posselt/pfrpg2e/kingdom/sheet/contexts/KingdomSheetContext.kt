@@ -43,4 +43,6 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val bonusFeat: AddBonusFeatContext
     val bonusFeats: Array<BonusFeatContext>
     val groups: Array<GroupContext>
+    val skillRanks: SkillRanksContext
+    val abilityScores: AbilityScoresContext
 }
