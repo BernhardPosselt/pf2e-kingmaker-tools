@@ -1,18 +1,22 @@
 package at.posselt.pfrpg2e.kingdom.structures
 
+import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.MergedSettlement
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.SettlementData
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateSettlement
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
 import at.posselt.pfrpg2e.kingdom.scenes.toRectangle
 import at.posselt.pfrpg2e.utils.getAppFlag
+import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.documents.TileDocument
 import com.foundryvtt.core.documents.TokenDocument
+import com.foundryvtt.core.utils.deepClone
+import com.foundryvtt.core.utils.mergeObject
 import com.foundryvtt.pf2e.actor.PF2ENpc
+import js.objects.recordOf
+import kotlinx.coroutines.await
 import kotlin.math.max
 import kotlin.math.min
 
@@ -77,31 +81,22 @@ fun Scene.parseSettlement(
     )
 }
 
-fun Scene.getMergedStructures(
-    rawSettlement: RawSettlement,
-    rawCapital: RawSettlement,
-    capitalScene: Scene?,
-    // settings
-    capitalModifierFallbackEnabled: Boolean,
-    autoCalculateSettlementLevel: Boolean,
-    allStructuresStack: Boolean,
-): MergedSettlement {
-    val settlement = parseSettlement(
-        rawSettlement,
-        allStructuresStack = allStructuresStack,
-        autoCalculateSettlementLevel = autoCalculateSettlementLevel
-    )
-    return if (capitalScene == this || capitalScene == null) {
-        MergedSettlement(settlement)
-    } else {
-        includeCapital(
-            settlement = settlement,
-            capital = parseSettlement(
-                rawCapital,
-                allStructuresStack = allStructuresStack,
-                autoCalculateSettlementLevel = autoCalculateSettlementLevel,
-            ),
-            capitalModifierFallbackEnabled = capitalModifierFallbackEnabled,
-        )
-    }
+suspend fun Game.importSettlementScene(sceneName: String, waterBorders: Int): Scene? {
+    val data = packs.get("${Config.moduleId}.kingmaker-tools-settlements")
+        ?.getDocuments()
+        ?.await()
+        ?.asSequence()
+        ?.filterIsInstance<Scene>()
+        ?.find { it.name == sceneName }
+        ?.let {
+            val obj = deepClone(it.toObject())
+            val update = recordOf(
+                "name" to "Capital",
+                "permission" to 0,
+                "navigation" to true,
+                "ownership" to recordOf("default" to 2),
+            )
+            mergeObject(obj, update)
+        }
+    return data?.let { Scene.create(data).await() }
 }

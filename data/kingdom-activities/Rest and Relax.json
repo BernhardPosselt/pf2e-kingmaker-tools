@@ -33,14 +33,62 @@
                 "value": 2,
                 "name": "Rest and Relax: Success",
                 "type": "circumstance"
+            },
+            {
+                "name": "Rest and Relax performed last turn",
+                "buttonLabel": "+4 DC increase if Rest and Relax performed next turn",
+                "turns": 2,
+                "applyIf": [
+                    {
+                        "eq": [
+                            "@activity",
+                            "rest-and-relax"
+                        ]
+                    }
+                ],
+                "value": -4,
+                "type": "untyped",
+                "enabled": true
             }
         ]
     },
     "success": {
-        "msg": "The time spent relaxing has calmed nerves; <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>."
+        "msg": "The time spent relaxing has calmed nerves; <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>.",
+        "modifiers": [{
+            "name": "Rest and Relax performed last turn",
+            "buttonLabel": "+4 DC increase if Rest and Relax performed next turn",
+            "turns": 2,
+            "applyIf": [
+                {
+                    "eq": [
+                        "@activity",
+                        "rest-and-relax"
+                    ]
+                }
+            ],
+            "value": -4,
+            "type": "untyped",
+            "enabled": true
+        }]
     },
     "failure": {
-        "msg": "The rest is welcome, but not particularly beneficial in the long term."
+        "msg": "The rest is welcome, but not particularly beneficial in the long term.",
+        "modifiers": [{
+            "name": "Rest and Relax performed last turn",
+            "buttonLabel": "+4 DC increase if Rest and Relax performed next turn",
+            "turns": 2,
+            "applyIf": [
+                {
+                    "eq": [
+                        "@activity",
+                        "rest-and-relax"
+                    ]
+                }
+            ],
+            "value": -4,
+            "type": "untyped",
+            "enabled": true
+        }]
     },
     "criticalFailure": {
         "msg": "The time is wasted, and when you get back to work, you have to spend extra time catching up. Take a –2 circumstance penalty to your next skill check made as a Leadership activity.",
@@ -61,6 +109,21 @@
                 "value": -2,
                 "name": "Rest and Relax: Critical Failure",
                 "type": "circumstance"
+            }, {
+                "name": "Rest and Relax performed last turn",
+                "buttonLabel": "+4 DC increase if Rest and Relax performed next turn",
+                "turns": 2,
+                "applyIf": [
+                    {
+                        "eq": [
+                            "@activity",
+                            "rest-and-relax"
+                        ]
+                    }
+                ],
+                "value": -4,
+                "type": "untyped",
+                "enabled": true
             }
         ]
     }

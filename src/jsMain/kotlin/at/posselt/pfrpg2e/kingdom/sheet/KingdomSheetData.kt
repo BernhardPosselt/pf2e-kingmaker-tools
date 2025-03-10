@@ -1,8 +1,8 @@
 package at.posselt.pfrpg2e.kingdom.sheet
 
-import at.posselt.pfrpg2e.kingdom.RawAbilityScores
-import at.posselt.pfrpg2e.kingdom.RawSkillRanks
+import at.posselt.pfrpg2e.kingdom.data.MilestoneChoice
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
+import at.posselt.pfrpg2e.kingdom.data.RawAbilityScores
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawLeaders
 import at.posselt.pfrpg2e.kingdom.data.RawNotes
 import at.posselt.pfrpg2e.kingdom.data.RawResources
 import at.posselt.pfrpg2e.kingdom.data.RawRuin
+import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import kotlinx.js.JsPlainObject
 
@@ -49,4 +50,7 @@ external interface KingdomSheetData {
     var groups: Array<RawGroup>
     val skillRanks: RawSkillRanks
     val abilityScores: RawAbilityScores
+    val milestones: Array<MilestoneChoice>
+    val ongoingEvent: String?
+    val bonusFeat: String?
 }

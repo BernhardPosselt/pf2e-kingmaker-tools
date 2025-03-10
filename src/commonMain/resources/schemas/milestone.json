@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://posselt.at/pf2e-kingmaker-tools/schemas/milestone.json",
+  "title": "Milestone",
+  "description": "A Kingdom Milestone",
+  "$ref": "#/$defs/Milestone",
+  "$defs": {
+    "Milestone": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "xp",
+        "enabledOnFirstRun",
+        "isCultMilestone"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "xp": {
+          "type": "number"
+        },
+        "enabledOnFirstRun": {
+          "type": "boolean"
+        },
+        "isCultMilestone": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

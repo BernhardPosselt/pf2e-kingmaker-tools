@@ -15,7 +15,7 @@ external interface HeartlandContext {
     val boost: String
 }
 
-fun RawHeartlandChoices.toContext(heartlands: Array<RawHeartland>): HeartlandContext {
+fun RawHeartlandChoices.toContext(heartlands: List<RawHeartland>): HeartlandContext {
     val heartland = heartlands.find { it.id == type }
     return HeartlandContext(
         type = Select(

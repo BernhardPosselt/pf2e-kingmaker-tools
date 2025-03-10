@@ -16,9 +16,20 @@
 * setup dialog with kingdom creation
 * manage governments, heartlands and charter
 * manage level ups
-* automate skill training and skill increases
 * structure token mappings macro
 * remove kingdom event macro
 * allow to select multiple kingdoms
-* settings to increase ability scores and initial skill trainings
-* implement automatic ruin threshold settings
+* in the structure browser, add a repair tab that halves construction cost and adds a +2 item mod
+```json
+[
+    {
+      "name": "Repair Structure",
+      "type": "item",
+      "enabledOnFirstRun": false,
+      "value": 2,
+      "buttonLabel": "+2 Item to Repair Structure"
+    }
+]
+```
+* Establish Trade Agreement should let you select the group (Negiation DC or Control DC, whichever is higher) 
+* 

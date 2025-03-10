@@ -38,6 +38,9 @@
         "oncePerRound"
       ],
       "properties": {
+        "automationNotes": {
+          "type": "string"
+        },
         "skills": {
           "$ref": "#/$defs/Skills"
         },
@@ -161,7 +164,10 @@
         "fortune": {
           "type": "boolean"
         },
-        "rollTwice": {
+        "rollTwiceKeepHighest": {
+          "type": "boolean"
+        },
+        "rollTwiceKeepLowest": {
           "type": "boolean"
         },
         "value": {
@@ -212,6 +218,9 @@
             "criticalFailure"
           ]
         },
+        "times": {
+          "type": "number"
+        },
         "predicate": {
           "type": "array",
           "items": {
@@ -227,6 +236,9 @@
         "upgrade"
       ],
       "properties": {
+        "times": {
+          "type": "number"
+        },
         "upgrade": {
           "type": "string",
           "enum": [

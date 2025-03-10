@@ -9,19 +9,19 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface RawCharterChoices {
-    val type: String?
-    val abilityBoosts: RawAbilityBoostChoices
+    var type: String?
+    var abilityBoosts: RawAbilityBoostChoices
 }
 
 @JsPlainObject
 external interface RawHeartlandChoices {
-    val type: String?
+    var type: String?
 }
 
 @JsPlainObject
 external interface RawGovernmentChoices {
-    val type: String?
-    val abilityBoosts: RawAbilityBoostChoices
+    var type: String?
+    var abilityBoosts: RawAbilityBoostChoices
 }
 
 @JsPlainObject

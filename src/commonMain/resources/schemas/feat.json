@@ -179,18 +179,6 @@
           "items": {
             "type": "string"
           }
-        },
-        "downgradeResults": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/DowngradeResult"
-          }
-        },
-        "upgradeResults": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/UpgradeResult"
-          }
         }
       }
     },
@@ -227,7 +215,10 @@
         "fortune": {
           "type": "boolean"
         },
-        "rollTwice": {
+        "rollTwiceKeepHighest": {
+          "type": "boolean"
+        },
+        "rollTwiceKeepLowest": {
           "type": "boolean"
         },
         "buttonLabel": {
@@ -281,6 +272,9 @@
             "criticalFailure"
           ]
         },
+        "times": {
+          "type": "number"
+        },
         "predicate": {
           "type": "array",
           "items": {
@@ -296,6 +290,9 @@
         "upgrade"
       ],
       "properties": {
+        "times": {
+          "type": "number"
+        },
         "upgrade": {
           "type": "string",
           "enum": [

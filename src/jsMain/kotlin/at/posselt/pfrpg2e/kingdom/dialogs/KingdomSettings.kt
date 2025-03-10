@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.Section
 import at.posselt.pfrpg2e.app.forms.SectionsContext
 import at.posselt.pfrpg2e.app.forms.Select
+import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.data.checks.RollMode
@@ -81,6 +82,7 @@ class KingdomSettingsDataModel(value: AnyObject) : DataModel(value) {
                     .map { it.toCamelCase() to it.toLabel() }
                     .toRecord()
             }
+            string("realmSceneId", nullable = true)
         }
     }
 }
@@ -117,6 +119,9 @@ class KingdomSettingsApplication(
         val kingdomEventsTableOptions = game.tables.contents
             .mapNotNull { it.toOption(useUuid = true) }
             .sortedBy { it.label }
+        val realmSceneOptions = game.scenes.contents
+            .mapNotNull { it.id?.let { id -> SelectOption(it.name, id)}}
+            .sortedBy { it.label }
         KingdomSettingsContext(
             partId = parent.partId,
             isFormValid = isFormValid,
@@ -151,6 +156,16 @@ class KingdomSettingsApplication(
                                     AutomateResources.MANUAL -> "Manual"
                                 }
                             }
+                        ),
+                        Select(
+                            name = "realmSceneId",
+                            label = "Realm Scene",
+                            value = settings.realmSceneId,
+                            disabled = this@KingdomSettingsApplication.settings.automateResources != AutomateResources.TILE_BASED.value,
+                            options = realmSceneOptions,
+                            help = "Automatically Calculate Kingdom Resources is set to tile based, use this scene to calculate it based off drawings/tiles",
+                            required = false,
+                            stacked = false,
                         ),
                         CheckboxInput(
                             name = "autoCalculateSettlementLevel",
@@ -245,7 +260,7 @@ class KingdomSettingsApplication(
                         NumberInput(
                             name = "ruinThreshold",
                             label = "Starting Ruin Threshold",
-                            value = settings.ruinTreshold,
+                            value = settings.ruinThreshold,
                             stacked = false,
                         ),
                         CheckboxInput(
@@ -359,6 +374,9 @@ class KingdomSettingsApplication(
             leaderKingdomSkills = settings.leaderKingdomSkills,
             leaderSkills = settings.leaderSkills,
         )
+        if(settings.automateResources != AutomateResources.TILE_BASED.value) {
+            settings.realmSceneId = null
+        }
         undefined
     }
 

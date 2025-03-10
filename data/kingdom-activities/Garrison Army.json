@@ -6,8 +6,23 @@
     "phase": "army",
     "dc": "control",
     "title": "Garrison Army",
+    "automationNotes": "Critical Failure timeout is not implemented",
     "description": "You move an army into a fortification and assign them to guard it. In order to garrison, the army must be located in a hex that contains a Refuge, Settlement, or Work Site. If you’re garrisoning the army in a Refuge hex, attempt a basic Defense check. If you’re garrisoning the army in a settlement, attempt a basic Politics check. If you’re garrisoning the army in a Work Site hex, attempt a basic Engineering check. This check’s DC increases by 5 if the hex is not part of your kingdom, or by 10 if the location is part of an enemy kingdom.",
     "requirement": "The army is in the same hex as a Refuge, Settlement, or Work Site.",
+    "modifiers": [{
+        "enabled": false,
+        "value": -5,
+        "buttonLabel": "+5 DC Increase if outside of your kingdom",
+        "name": "Outside of your kingdom",
+        "type": "untyped"
+    },
+        {
+            "enabled": false,
+            "value": -10,
+            "buttonLabel": "+10 DC Increase if in enemy territory",
+            "name": "In enemy territory",
+            "type": "untyped"
+        }],
     "skills": {
         "defense": 0,
         "politics": 0,

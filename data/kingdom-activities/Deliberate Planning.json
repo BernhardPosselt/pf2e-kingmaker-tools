@@ -36,7 +36,7 @@
                 "name": "Deliberate Planning: Critical Success",
                 "type": "circumstance",
                 "fortune": true,
-                "rollTwice": true,
+                "rollTwiceKeepHighest": true,
                 "applyIf": [
                     {
                         "eq": [
@@ -73,6 +73,26 @@
         "msg": "Your advice isn’t helpful, but neither does it hinder your ability to handle the event."
     },
     "criticalFailure": {
-        "msg": "You got too caught up in your theoretical analysis and spent too much time preparing. When you roll to resolve the continuous event you tried to plan for, roll twice and take the worse result."
+        "msg": "You got too caught up in your theoretical analysis and spent too much time preparing. When you roll to resolve the continuous event you tried to plan for, roll twice and take the worse result.",
+        "modifiers": [
+            {
+                "turns": 1,
+                "enabled": false,
+                "value": 1,
+                "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
+                "name": "Deliberate Planning: Critical Success",
+                "type": "circumstance",
+                "fortune": true,
+                "rollTwiceKeepLowest": true,
+                "applyIf": [
+                    {
+                        "eq": [
+                            "@phase",
+                            "event"
+                        ]
+                    }
+                ]
+            }
+        ]
     }
 }

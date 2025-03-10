@@ -6,6 +6,7 @@
   "phase": "leadership",
   "dc": "control",
   "title": "False Victory",
+  "automationNotes": "Critical Failure timeout is not implemented",
   "description": "Your contacts with the criminal underworld and your knack for dodging punishment and claiming responsibility for victories you had no direct role in can be harnessed to engineer false victories to trick the kingdom’s citizens into thinking their leaders are doing more than they actually are to create a safe place to live. Such attempts are not without risks, though, for if things backfire, you can cause problems where none existed in the first place. When setting up a false victory, attempt a basic Intrigue check.",
   "skills": {
     "intrigue": 0
@@ -18,7 +19,7 @@
         "enabled": false,
         "value": 1,
         "name": "False Victory: Critical Success",
-        "buttonLabel": "+1 Circumstance to Check to Forgoe Event",
+        "buttonLabel": "+1 Circumstance to Check to skip the Same Event",
         "type": "circumstance",
         "applyIf": [
           {

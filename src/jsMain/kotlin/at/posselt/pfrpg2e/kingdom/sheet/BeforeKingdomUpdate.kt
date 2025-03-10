@@ -6,11 +6,11 @@ import at.posselt.pfrpg2e.kingdom.getGovernments
 
 fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
     val charterType = current.charter.type
-    if (charterType != null && previous.charter.type != charterType) {
+    if (previous.charter.type != charterType) {
         resetAbilityBoosts(current.charter.abilityBoosts)
     }
     val governmentType = current.government.type
-    if (governmentType != null && previous.government.type != governmentType) {
+    if (previous.government.type != governmentType) {
         val government = previous.getGovernments().find { it.id == governmentType }
         resetAbilityBoosts(current.government.abilityBoosts)
         if (government != null) {
@@ -27,7 +27,7 @@ fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
     }
 }
 
-private fun resetAbilityBoosts(abilityBoosts: RawAbilityBoostChoices) {
+fun resetAbilityBoosts(abilityBoosts: RawAbilityBoostChoices) {
     abilityBoosts.economy = false
     abilityBoosts.loyalty = false
     abilityBoosts.culture = false

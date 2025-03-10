@@ -27,7 +27,6 @@ import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
 import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmyConditions
 import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
-import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
@@ -37,15 +36,16 @@ import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.hasAssurance
 import at.posselt.pfrpg2e.kingdom.increasedSkills
+import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
+import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
+import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
-import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseModifiers
 import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resolveDc
@@ -67,6 +67,7 @@ import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import io.github.uuidjs.uuid.v4
 import js.core.Void
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -88,11 +89,10 @@ import kotlin.js.Promise
 import kotlin.let
 import kotlin.math.max
 import kotlin.sequences.filter
-import kotlin.sequences.flatMap
 import kotlin.sequences.map
-import kotlin.sequences.mapNotNull
 import kotlin.sequences.toSet
 import kotlin.text.toInt
+import kotlin.to
 
 @JsPlainObject
 private external interface ModifierContext {
@@ -135,6 +135,8 @@ private external interface CheckContext : HandlebarsRenderContext {
     val fortune: Boolean
     val downgrades: String
     val consumeModifiers: String
+    val rollTwiceKeepHighest: Boolean
+    val rollTwiceKeepLowest: Boolean
 }
 
 @JsPlainObject
@@ -249,6 +251,12 @@ private data class CheckDialogParams(
 
 typealias AfterRollMessage = suspend (degree: DegreeOfSuccess) -> String?
 
+@JsPlainObject
+external interface SerializedDegree {
+    val degree: String
+    val times: Int
+}
+
 private class KingdomCheckDialog(
     private val kingdomActor: PF2ENpc,
     private val kingdom: KingdomData,
@@ -286,18 +294,25 @@ private class KingdomCheckDialog(
         when (target.dataset["action"]) {
             "roll" -> {
                 buildPromise {
-                    val rollTwice = target.dataset["rollTwice"] == "true"
+                    val rollTwiceKeepHighest = target.dataset["rollTwiceKeepHighest"] == "true"
+                    val rollTwiceKeepLowest = target.dataset["rollTwiceKeepLowest"] == "true"
                     val fortune = target.dataset["fortune"] == "true"
                     val modifier = target.dataset["modifier"]?.toInt() ?: 0
                     val creativeSolutionModifier = target.dataset["creativeSolutionModifier"]?.toInt() ?: 0
                     val pills = deserializeB64Json<Array<ModifierPill>>(target.dataset["pills"]!!)
                     val creativeSolutionPills =
                         deserializeB64Json<Array<ModifierPill>>(target.dataset["creativeSolutionPills"]!!)
-                    val upgrades = deserializeB64Json<Array<String>>(target.dataset["upgrades"]!!)
-                        .mapNotNull { DegreeOfSuccess.fromString(it) }
+                    val upgrades = deserializeB64Json<Array<SerializedDegree>>(target.dataset["upgrades"]!!)
+                        .mapNotNull { el ->
+                            DegreeOfSuccess.fromString(el.degree)
+                                ?.let { UpgradeResult(upgrade = it, times = el.times) }
+                        }
                         .toSet()
-                    val downgrades = deserializeB64Json<Array<String>>(target.dataset["downgrades"]!!)
-                        .mapNotNull { DegreeOfSuccess.fromString(it) }
+                    val downgrades = deserializeB64Json<Array<SerializedDegree>>(target.dataset["downgrades"]!!)
+                        .mapNotNull { el ->
+                            DegreeOfSuccess.fromString(el.degree)
+                                ?.let { DowngradeResult(downgrade = it, times = el.times) }
+                        }
                         .toSet()
                     val consumedModifiers =
                         deserializeB64Json<Array<String>>(target.dataset["consumeModifiers"]!!).toSet()
@@ -307,7 +322,8 @@ private class KingdomCheckDialog(
                         upgrades = upgrades,
                         downgrades = downgrades,
                         fortune = fortune,
-                        rollTwice = rollTwice,
+                        rollTwiceKeepHighest = rollTwiceKeepHighest,
+                        rollTwiceKeepLowest = rollTwiceKeepLowest,
                         creativeSolutionModifier = creativeSolutionModifier,
                         creativeSolutionPills = creativeSolutionPills,
                         consumedModifiers = consumedModifiers,
@@ -349,11 +365,12 @@ private class KingdomCheckDialog(
         creativeSolutionModifier: Int,
         creativeSolutionPills: Array<ModifierPill>,
         pills: Array<ModifierPill>,
-        upgrades: Set<DegreeOfSuccess>,
+        upgrades: Set<UpgradeResult>,
         fortune: Boolean,
-        rollTwice: Boolean,
-        downgrades: Set<DegreeOfSuccess>,
+        downgrades: Set<DowngradeResult>,
         consumedModifiers: Set<String>,
+        rollTwiceKeepHighest: Boolean,
+        rollTwiceKeepLowest: Boolean,
     ) {
         rollCheck(
             afterRoll = afterRoll,
@@ -367,7 +384,8 @@ private class KingdomCheckDialog(
             dc = data.dc,
             kingdomActor = kingdomActor,
             upgrades = upgrades,
-            rollTwice = rollTwice,
+            rollTwiceKeepHighest = rollTwiceKeepHighest,
+            rollTwiceKeepLowest = rollTwiceKeepLowest,
             creativeSolutionPills = creativeSolutionPills,
             downgrades = downgrades,
         )
@@ -408,8 +426,8 @@ private class KingdomCheckDialog(
         )
         val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
         val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
-        val upgradeDegrees = getUpgrades(chosenFeats, context, evaluatedModifiers.upgradeResults)
-        val downgradeDegrees = evaluatedModifiers.downgradeResults
+        val upgrades = evaluatedModifiers.upgradeResults
+        val downgrades = evaluatedModifiers.downgradeResults
         val selectedSkill = context.usedSkill
         val hasAssurance = kingdom.hasAssurance(chosenFeats, selectedSkill)
         val evaluatedModifiersById = evaluatedModifiers.modifiers.associateBy { it.id }
@@ -501,8 +519,18 @@ private class KingdomCheckDialog(
                 .sortedWith(compareBy<ModifierContext> { !it.hidden }.thenBy { it.type })
                 .toTypedArray(),
             pills = pills,
-            upgrades = serializeB64Json(upgradeDegrees.map { it.value }.toTypedArray()),
-            downgrades = serializeB64Json(downgradeDegrees.map { it.value }.toTypedArray()),
+            upgrades = serializeB64Json(upgrades.map {
+                recordOf(
+                    "degree" to it.upgrade.value,
+                    "times" to it.times
+                )
+            }.toTypedArray()),
+            downgrades = serializeB64Json(downgrades.map {
+                recordOf(
+                    "degree" to it.downgrade.value,
+                    "times" to it.times
+                )
+            }.toTypedArray()),
             useAssurance = data.assurance,
             isFormValid = true,
             isActivity = activity != null,
@@ -524,36 +552,24 @@ private class KingdomCheckDialog(
                 name = "newModifierModifier",
             ).toContext(),
             assuranceModifier = checkModifier,
-            assuranceDegree = determineAssuranceDegree(checkModifier, upgradeDegrees, downgradeDegrees),
+            assuranceDegree = determineAssuranceDegree(checkModifier, upgrades, downgrades),
             creativeSolutionModifier = creativeSolutionModifiers.total,
             creativeSolutionPills = creativeSolutionPills,
             fortune = evaluatedModifiers.fortune || data.supernaturalSolution,
-            consumeModifiers = serializeB64Json(consumeModifierIds)
+            consumeModifiers = serializeB64Json(consumeModifierIds),
+            rollTwiceKeepHighest = evaluatedModifiers.rollTwiceKeepHighest,
+            rollTwiceKeepLowest = evaluatedModifiers.rollTwiceKeepHighest,
         )
     }
 
     private fun determineAssuranceDegree(
         modifier: Int,
-        upgradeDegrees: Set<DegreeOfSuccess>,
-        downgradeDegrees: Set<DegreeOfSuccess>
+        upgradeDegrees: Set<UpgradeResult>,
+        downgradeDegrees: Set<DowngradeResult>
     ): String {
-        val degree = determineDegreeOfSuccess(data.dc, modifier, 10)
-        val resultUpgrade = if (degree in upgradeDegrees) degree.upgrade() else degree
-        val result = if (degree in downgradeDegrees) resultUpgrade.downgrade() else resultUpgrade
-        return result.label
+        var degree = determineDegreeOfSuccess(data.dc, modifier, 10)
+        return determineDegree(degree, upgradeDegrees, downgradeDegrees).changedDegree.label
     }
-
-    private fun getUpgrades(
-        chosenFeats: List<ChosenFeat>,
-        context: ExpressionContext,
-        modifierUpgrades: Set<DegreeOfSuccess>
-    ): Set<DegreeOfSuccess> =
-        chosenFeats.asSequence()
-            .flatMap { it.feat.upgradeResults?.toList().orEmpty() }
-            .map { it.parse() }
-            .filter { it?.applyIf?.all { exp -> exp.evaluate(context) } != false }
-            .mapNotNull { it?.upgrade }
-            .toSet() + modifierUpgrades
 
     fun toModifierContext(
         modifier: Modifier,

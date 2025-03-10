@@ -8,9 +8,9 @@ external interface RawCharter {
     val id: String
     val name: String
     val description: String
-    val flaw: String
+    val flaw: String?
     val freeBoosts: Int
-    val boost: String
+    val boost: String?
 }
 
 @JsModule("./charters.json")

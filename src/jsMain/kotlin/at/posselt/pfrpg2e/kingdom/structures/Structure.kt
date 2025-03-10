@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.structures
 
+import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
 import at.posselt.pfrpg2e.data.kingdom.Ruin
@@ -15,8 +16,16 @@ import at.posselt.pfrpg2e.data.kingdom.structures.StructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
 import at.posselt.pfrpg2e.kingdom.getRawStructureData
 import at.posselt.pfrpg2e.utils.asAnyObject
+import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.Game
+import com.foundryvtt.core.documents.Folder
+import com.foundryvtt.core.utils.deepClone
+import com.foundryvtt.core.utils.mergeObject
 import com.foundryvtt.pf2e.actor.PF2ENpc
+import js.array.toTypedArray
+import js.objects.recordOf
+import kotlinx.coroutines.await
 import kotlin.contracts.contract
 
 
@@ -169,3 +178,30 @@ fun PF2ENpc.getActorAndStructure(): ActorAndStructure? {
     }
 }
 
+suspend fun Game.importStructures(): Array<Actor> {
+    val folder = Folder.create(
+        recordOf(
+            "name" to "Structures",
+            "type" to "Actor",
+            "parent" to null,
+            "color" to null,
+        )
+    ).await()
+    val data = packs.get("${Config.moduleId}.kingmaker-tools-structures")
+        ?.getDocuments()
+        ?.await()
+        ?.asSequence()
+        ?.filterIsInstance<PF2ENpc>()
+        ?.map {
+            val obj = deepClone(it.toObject())
+            val update = recordOf(
+                "folder" to folder.id,
+                "permission" to 0,
+                "ownership" to recordOf("default" to 3),
+            )
+            mergeObject(obj, update)
+        }
+        ?.toTypedArray()
+        ?: emptyArray()
+    return Actor.createDocuments(data).await()
+}

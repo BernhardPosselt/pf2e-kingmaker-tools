@@ -33,8 +33,6 @@
                     "upgrade": "failure"
                 }, {
                     "upgrade": "success"
-                }, {
-                    "upgrade": "criticalSuccess"
                 }]
             }
         ]

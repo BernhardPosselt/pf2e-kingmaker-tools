@@ -20,7 +20,9 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
+import at.posselt.pfrpg2e.kingdom.data.MilestoneChoice
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
+import at.posselt.pfrpg2e.kingdom.data.RawAbilityScores
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
@@ -35,6 +37,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawLeaders
 import at.posselt.pfrpg2e.kingdom.data.RawNotes
 import at.posselt.pfrpg2e.kingdom.data.RawResources
 import at.posselt.pfrpg2e.kingdom.data.RawRuin
+import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.data.RuinThresholdIncreases
 import at.posselt.pfrpg2e.kingdom.data.getBoosts
@@ -51,14 +54,6 @@ import kotlinx.js.JsPlainObject
 
 
 @JsPlainObject
-external interface RawMileStone {
-    var name: String
-    var xp: Int
-    var completed: Boolean
-    var homebrew: Boolean
-}
-
-@JsPlainObject
 external interface OngoingEvent {
     var name: String
 }
@@ -70,8 +65,9 @@ external interface KingdomSettings {
     var resourceDicePerVillage: Int
     var resourceDicePerTown: Int
     var resourceDicePerCity: Int
-    var ruinTreshold: Int
+    var ruinThreshold: Int
     var increaseScorePicksBy: Int
+    var realmSceneId: String?
     var resourceDicePerMetropolis: Int
     var xpPerClaimedHex: Int
     var includeCapitalItemModifier: Boolean
@@ -122,34 +118,6 @@ external interface RawLeaderSkills {
 }
 
 @JsPlainObject
-external interface RawAbilityScores {
-    val economy: Int
-    val stability: Int
-    val loyalty: Int
-    val culture: Int
-}
-
-@JsPlainObject
-external interface RawSkillRanks {
-    val agriculture: Int
-    val arts: Int
-    val boating: Int
-    val defense: Int
-    val engineering: Int
-    val exploration: Int
-    val folklore: Int
-    val industry: Int
-    val intrigue: Int
-    val magic: Int
-    val politics: Int
-    val scholarship: Int
-    val statecraft: Int
-    val trade: Int
-    val warfare: Int
-    val wilderness: Int
-}
-
-@JsPlainObject
 external interface KingdomData {
     var name: String
     var atWar: Boolean
@@ -162,22 +130,28 @@ external interface KingdomData {
     var resourcePoints: RawResources
     var resourceDice: RawResources
     var workSites: RawWorkSites
-    var realmSceneId: String? // set via button
     var consumption: RawConsumption
     var supernaturalSolutions: Int
     var creativeSolutions: Int
-    var settings: KingdomSettings // set via dialog
+    var settings: KingdomSettings
     var commodities: RawCurrentCommodities
     var ruin: RawRuin
     var activeSettlement: String?
     var turnsWithoutCultEvent: Int // set via button
     var turnsWithoutEvent: Int // set via button
     var notes: RawNotes
+    var homebrewMilestones: Array<RawMilestone>
     var homebrewActivities: Array<KingdomActivity> // set via dialog
-    var homebrewCharters: Array<RawCharter> // set via dialog
-    var homebrewGovernments: Array<RawGovernment> // set via dialog
-    var homebrewHeartlands: Array<RawHeartland> // set via dialog
+    var homebrewCharters: Array<RawCharter>
+    var homebrewGovernments: Array<RawGovernment>
+    var homebrewHeartlands: Array<RawHeartland>
     var homebrewFeats: Array<RawKingdomFeat> // set via dialog
+    var activityBlacklist: Array<String>  // set via dialog
+    var heartlandBlacklist: Array<String>
+    var charterBlacklist: Array<String>
+    var governmentBlacklist: Array<String>
+    var modifiers: Array<RawModifier>  // set via dialog
+    var settlements: Array<RawSettlement>  // set via dialog
     var leaders: RawLeaders
     var charter: RawCharterChoices
     var heartland: RawHeartlandChoices
@@ -185,15 +159,11 @@ external interface KingdomData {
     var abilityBoosts: RawAbilityBoostChoices
     var features: Array<RawFeatureChoices>
     var bonusFeats: Array<RawBonusFeat>
-    var ongoingEvents: Array<OngoingEvent>  // set via dialog
-    var activityBlacklist: Array<String>  // set via dialog
-    var modifiers: Array<RawModifier>  // set via dialog
-    var settlements: Array<RawSettlement>  // set via dialog
+    var ongoingEvents: Array<OngoingEvent>
     var groups: Array<RawGroup>
     var skillRanks: RawSkillRanks
     var abilityScores: RawAbilityScores
-
-    var milestones: Array<RawMileStone>  // TODO
+    var milestones: Array<MilestoneChoice>
 }
 
 fun RawLeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =

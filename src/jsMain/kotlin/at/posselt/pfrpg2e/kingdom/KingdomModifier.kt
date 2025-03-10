@@ -125,7 +125,8 @@ external interface RawModifier {
     var rollOptions: Array<String>?
     var applyIf: Array<RawExpression<Boolean>>?
     var fortune: Boolean?
-    var rollTwice: Boolean?
+    var rollTwiceKeepLowest: Boolean?
+    var rollTwiceKeepHighest: Boolean?
     var upgradeResults: Array<RawUpgradeResult>?
     var downgradeResults: Array<RawDowngradeResult>?
 }
@@ -202,7 +203,8 @@ fun RawModifier.parse(): Modifier =
         turns = turns,
         rollOptions = rollOptions?.toSet() ?: emptySet(),
         applyIf = applyIf?.map { it.parse() } ?: emptyList(),
-        rollTwice = rollTwice == true,
+        rollTwiceKeepHighest = rollTwiceKeepHighest == true,
+        rollTwiceKeepLowest = rollTwiceKeepLowest == true,
         fortune = fortune == true,
         upgradeResults = upgradeResults?.mapNotNull { it.parse() }.orEmpty(),
         downgradeResults = downgradeResults?.mapNotNull { it.parse() }.orEmpty(),

@@ -36,7 +36,7 @@ fun createBonusFeatContext(
     val takenFeats = getTakenFeats(choices, government, bonusFeats)
     return AddBonusFeatContext(
         feat = Select(
-            name = "bonusFeat.feat",
+            name = "bonusFeat",
             label = "Feat",
             value = value,
             options = feats

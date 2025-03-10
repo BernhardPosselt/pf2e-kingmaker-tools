@@ -20,6 +20,21 @@
         "msg": "Work proceeds but is not yet complete; you can attempt to restore the temple again on the next Kingdom turn."
     },
     "criticalFailure": {
-        "msg": "Disaster strikes as the temple’s cavern collapses and rubble spills out to bury and destroy much of the temple’s plaza. <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>. You can still attempt to Restore the Temple, but the DC for success increases by 4. This increase is cumulative with successive critical failures."
+        "msg": "Disaster strikes as the temple’s cavern collapses and rubble spills out to bury and destroy much of the temple’s plaza. <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>. You can still attempt to Restore the Temple, but the DC for success increases by 4. This increase is cumulative with successive critical failures.",
+        "modifiers": [{
+            "name": "Previously failed critically",
+            "buttonLabel": "+4 DC increase if previously failed critically",
+            "applyIf": [
+                {
+                    "eq": [
+                        "@activity",
+                        "restore-the-temple"
+                    ]
+                }
+            ],
+            "value": -4,
+            "type": "untyped",
+            "enabled": true
+        }]
     }
 }

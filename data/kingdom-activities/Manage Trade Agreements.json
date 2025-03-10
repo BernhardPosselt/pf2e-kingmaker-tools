@@ -6,6 +6,13 @@
     "phase": "commerce",
     "dc": "control",
     "title": "Manage Trade Agreements",
+    "modifiers": [{
+        "enabled": false,
+        "value": -5,
+        "buttonLabel": "+5 DC Increase managed on previous turn",
+        "name": "Managed Trade Agreements last turn",
+        "type": "untyped"
+    }],
     "description": "You send agents out to attend to established trade agreements. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"true\" data-value=\"2\">Lose 2 Resource Points</button> per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.",
     "skills": {
         "trade": 0

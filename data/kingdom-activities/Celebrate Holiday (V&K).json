@@ -11,6 +11,15 @@
         "folklore": 0,
         "politics": 0
     },
+    "modifiers": [
+        {
+            "name": "Celebrated holiday on the previous turn",
+            "type": "untyped",
+            "enabled": false,
+            "value": -4,
+            "buttonLabel": "+4 DC increase if celebrated holiday on the previous turn"
+        }
+    ],
     "criticalSuccess": {
         "msg": "Your holidays are a delight to your people. The event is expensive, but incidental income from the celebrants covers the cost. You gain a +2 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn.",
         "modifiers": [

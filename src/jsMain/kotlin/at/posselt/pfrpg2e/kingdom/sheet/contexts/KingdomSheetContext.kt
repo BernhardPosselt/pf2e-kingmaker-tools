@@ -45,4 +45,6 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val groups: Array<GroupContext>
     val skillRanks: SkillRanksContext
     val abilityScores: AbilityScoresContext
+    val milestones: Array<MilestoneContext>
+    val ongoingEvent: FormElementContext
 }

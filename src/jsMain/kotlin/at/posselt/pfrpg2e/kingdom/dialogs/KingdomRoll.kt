@@ -6,6 +6,9 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.KingdomActivity
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.getKingdom
+import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
+import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
+import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.deserializeB64Json
@@ -179,17 +182,19 @@ suspend fun rollCheck(
     modifierPills: Array<ModifierPill>,
     dc: Int,
     kingdomActor: PF2ENpc,
-    upgrades: Set<DegreeOfSuccess>,
-    rollTwice: Boolean,
+    upgrades: Set<UpgradeResult>,
+    rollTwiceKeepHighest: Boolean,
+    rollTwiceKeepLowest: Boolean,
     creativeSolutionPills: Array<ModifierPill>,
     isCreativeSolution: Boolean = false,
-    downgrades: Set<DegreeOfSuccess>,
+    downgrades: Set<DowngradeResult>,
 ): DegreeOfSuccess {
     val result = d20Check(
         dc = dc,
         modifier = if (isCreativeSolution) modifierWithCreativeSolution else modifier,
         rollMode = rollMode,
-        rollTwice = rollTwice,
+        rollTwiceKeepHighest=rollTwiceKeepHighest,
+        rollTwiceKeepLowest=rollTwiceKeepLowest,
     )
 
     if (isCreativeSolution) {
@@ -200,25 +205,18 @@ suspend fun rollCheck(
         }
     }
 
-    val originalDegree = result.degreeOfSuccess
-    val upgradedDegree = if (originalDegree in upgrades) {
-        originalDegree.upgrade()
-    } else {
-        originalDegree
-    }
-    val degree = if (upgradedDegree in downgrades) {
-        upgradedDegree.downgrade()
-    } else {
-        upgradedDegree
-    }
+    val degreeResult = determineDegree(result.degreeOfSuccess, upgrades, downgrades)
+    val originalDegree = degreeResult.originalDegree
+    val changed = degreeResult.changedDegree
     val nonNullRollMode = rollMode ?: RollMode.PUBLICROLL
+    // TODO: needs to add upgrades/downgrades
     val rollMeta = generateRollMeta(
         activity = activity,
         modifier = modifier,
         modifierPills = modifierPills,
         actor = kingdomActor,
         rollMode = nonNullRollMode,
-        degree = degree,
+        degree = changed,
         skill = skill,
         dc = dc,
         fortune = fortune || isCreativeSolution,
@@ -229,27 +227,27 @@ suspend fun rollCheck(
     result.toChat(rollMeta)
     if (activity == null) {
         postDegreeOfSuccess(
-            degreeOfSuccess = degree,
+            degreeOfSuccess = changed,
             originalDegreeOfSuccess = originalDegree,
         )
     } else {
-        val additionalMessages = afterRoll(degree)
+        val additionalMessages = afterRoll(changed)
         val metaHtml = buildUpgradeMeta(
             rollMode = nonNullRollMode,
             activity = activity,
-            degree = degree,
+            degree = changed,
             additionalMessages = additionalMessages
         )
-        val modifiers = when (degree) {
+        val modifiers = when (changed) {
             DegreeOfSuccess.CRITICAL_FAILURE -> activity.criticalFailure
             DegreeOfSuccess.FAILURE -> activity.failure
             DegreeOfSuccess.SUCCESS -> activity.success
             DegreeOfSuccess.CRITICAL_SUCCESS -> activity.criticalSuccess
         }
         val chatModifiers = modifiers?.modifiers ?: emptyArray()
-        val postHtml = buildChatButtons(degree, chatModifiers)
+        val postHtml = buildChatButtons(changed, chatModifiers)
         postDegreeOfSuccess(
-            degreeOfSuccess = degree,
+            degreeOfSuccess = changed,
             originalDegreeOfSuccess = originalDegree,
             title = activity.title,
             rollMode = nonNullRollMode,
@@ -258,5 +256,5 @@ suspend fun rollCheck(
             postHtml = postHtml + additionalMessages
         )
     }
-    return degree
+    return changed
 }

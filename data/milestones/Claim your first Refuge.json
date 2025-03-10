@@ -1,0 +1,7 @@
+{
+    "id": "claim-your-first-refuge",
+    "name": "Claim your first Refuge",
+    "xp": 40,
+    "enabledOnFirstRun": true,
+    "isCultMilestone": false
+}

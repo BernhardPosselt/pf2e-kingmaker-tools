@@ -59,6 +59,16 @@
             {{> formElement abilityScores.loyalty }}
             {{> formElement abilityScores.culture }}
 
+            milestones
+            {{> formElement ongoingEvent }}
+
+            {{#each milestones}}
+                {{> formElement id }}
+                {{> formElement enabled }}
+                {{> formElement completed }}
+                {{xp}} {{homebrew}}  {{hidden}}
+            {{/each}}
+
             ranks
 
             {{> formElement skillRanks.agriculture }}

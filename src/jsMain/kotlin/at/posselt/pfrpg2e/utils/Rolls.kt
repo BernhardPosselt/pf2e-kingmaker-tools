@@ -38,9 +38,16 @@ suspend fun d20Check(
     flavor: String? = undefined,
     rollMode: RollMode? = null,
     toChat: Boolean = true,
-    rollTwice: Boolean = false,
+    rollTwiceKeepHighest: Boolean = false,
+    rollTwiceKeepLowest: Boolean = false,
 ): D20CheckResult {
-    val d20 = if (rollTwice) "2d20kh" else "1d20"
+    val d20 = if (rollTwiceKeepHighest) {
+        "2d20kh"
+    } else if (rollTwiceKeepLowest) {
+        "2d20kl"
+    } else {
+        "1d20"
+    }
     val formula = if (modifier > 0) "$d20+$modifier" else d20
     val roll = Roll(formula).evaluate().await()
     val dieValue = roll.total - modifier

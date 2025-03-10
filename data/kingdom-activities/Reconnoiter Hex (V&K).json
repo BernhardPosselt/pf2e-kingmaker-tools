@@ -1,5 +1,5 @@
 {
-    "id": "reconnoiter-hex",
+    "id": "reconnoiter-hex-vk",
     "oncePerRound": false,
     "fortune": false,
     "enabled": false,
@@ -11,7 +11,21 @@
         "wilderness": 0
     },
     "criticalSuccess": {
-        "msg": "Your team successfully explores the hex and it is now Reconnoitered for the purpose of Claim Hex. Your team automatically finds one Special or Hidden feature if the hex contains one. If the hex contains multiple Special or Hidden Features the GM chooses one. If the hex contains an Encounter or Hazard, the team avoids it and reports back useful and detailed information on it. In addition, your team's reconnaissance of the hex goes so smoothly you may immediately attempt an additional Reconnoiter Hex activity on an adjacent hex. Treat a Critical Success on this additional check as a Success instead."
+        "msg": "Your team successfully explores the hex and it is now Reconnoitered for the purpose of Claim Hex. Your team automatically finds one Special or Hidden feature if the hex contains one. If the hex contains multiple Special or Hidden Features the GM chooses one. If the hex contains an Encounter or Hazard, the team avoids it and reports back useful and detailed information on it. In addition, your team's reconnaissance of the hex goes so smoothly you may immediately attempt an additional Reconnoiter Hex activity on an adjacent hex. Treat a Critical Success on this additional check as a Success instead.",
+        "modifiers": [{
+            "name": "Reconnoitering a second time",
+            "buttonLabel": "Worsen Degree of Success when reconnoitering a second time",
+            "downgradeResults": [{
+                "downgrade": "criticalSuccess"
+            }],
+            "turns": 1,
+            "applyIf": [{
+                "eq": ["@activity", "reconnoiter-hex-vk"]
+            }],
+            "value": 0,
+            "type": "untyped",
+            "enabled": true
+        }]
     },
     "success": {
         "msg": "Your team successfully explores the hex and it is now Reconnoitered for the purpose of Claim Hex. If the hex contains a Special feature your team may find it if your GM wishes. If the hex contains an Encounter or Hazard, the team avoids it and reports basic information on it."

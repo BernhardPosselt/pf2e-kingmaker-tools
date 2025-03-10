@@ -180,7 +180,7 @@ private fun KingdomData.parseWorksites() =
 
 fun Game.getRealmData(kingdom: KingdomData): RealmData {
     val mode = AutomateResources.fromString(kingdom.settings.automateResources)
-    val realmScene = kingdom.realmSceneId?.let { scenes.get(it) }
+    val realmScene = kingdom.settings.realmSceneId?.let { scenes.get(it) }
     return when (mode) {
         AutomateResources.KINGMAKER if isKingmakerInstalled -> parseKingmaker()
         AutomateResources.TILE_BASED if realmScene != null -> realmScene.parseRealmData()

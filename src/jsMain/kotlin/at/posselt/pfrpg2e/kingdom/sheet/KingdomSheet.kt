@@ -14,10 +14,14 @@ import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
+import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
+import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
 import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
@@ -25,6 +29,7 @@ import at.posselt.pfrpg2e.kingdom.getFeats
 import at.posselt.pfrpg2e.kingdom.getGovernments
 import at.posselt.pfrpg2e.kingdom.getHeartlands
 import at.posselt.pfrpg2e.kingdom.getKingdom
+import at.posselt.pfrpg2e.kingdom.getMilestones
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.hasLeaderUuid
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.getHighestLeadershipModifiers
@@ -37,6 +42,9 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createBonusFeatContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
+import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
+import at.posselt.pfrpg2e.kingdom.structures.importSettlementScene
+import at.posselt.pfrpg2e.kingdom.structures.importStructures
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
@@ -60,6 +68,7 @@ import com.foundryvtt.core.onApplyTokenStatusEffect
 import com.foundryvtt.core.onCanvasReady
 import com.foundryvtt.core.onSightRefresh
 import com.foundryvtt.core.onUpdateActor
+import com.foundryvtt.core.ui
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
 import com.foundryvtt.pf2e.actor.PF2ENpc
@@ -99,6 +108,11 @@ class KingdomSheet(
     controls = arrayOf(
         MenuControl(label = "Show Players", action = "show-players", gmOnly = true),
         MenuControl(label = "Activities", action = "configure-activities", gmOnly = true),
+        MenuControl(label = "Charters", action = "configure-charters", gmOnly = true),
+        MenuControl(label = "Governments", action = "configure-governments", gmOnly = true),
+        MenuControl(label = "Feats", action = "configure-feats", gmOnly = true),
+        MenuControl(label = "Heartlands", action = "configure-heartlands", gmOnly = true),
+        MenuControl(label = "Milestones", action = "configure-milestones", gmOnly = true),
         MenuControl(label = "Settings", action = "settings", gmOnly = true),
         MenuControl(label = "Help", action = "help"),
     ),
@@ -108,7 +122,8 @@ class KingdomSheet(
     private var noCharter = getKingdom().charter.type == null
     private var currentCharacterSheetNavEntry: String = if (noCharter) "Creation" else "$initialKingdomLevel"
     private var currentNavEntry: NavEntry = if (noCharter) NavEntry.CHARACTER_SHEET else NavEntry.TURN
-    private var bonusFeatSelection: String? = null
+    private var bonusFeat: String? = null
+    private var ongoingEvent: String? = null
 
     init {
         actor.apps[id] = this
@@ -174,7 +189,40 @@ class KingdomSheet(
                 render()
             }
 
+            "add-ongoing-event" -> {
+                val kingdom = getKingdom()
+                buildPromise {
+                    val event = ongoingEvent
+                    if (event != null) {
+                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
+                        ongoingEvent = null
+                        actor.setKingdom(kingdom)
+                    }
+                }
+            }
+
             "configure-activities" -> TODO()
+            "configure-milestones" -> MilestoneManagement(kingdomActor = actor).launch()
+            "configure-charters" -> CharterManagement(kingdomActor = actor).launch()
+            "configure-governments" -> TODO()
+            "configure-heartlands" -> HeartlandManagement(kingdomActor = actor).launch()
+            "configure-feats" -> TODO()
+            "structures-import" -> buildPromise {
+                importStructures()
+            }
+
+            "settlement-import" -> {
+                buildPromise {
+                    when (target.dataset["waterBorders"]) {
+                        "1" -> importSettlement("Settlement - 1 Water Border", 1)
+                        "2" -> importSettlement("Settlement - 2 Water Borders", 2)
+                        "3" -> importSettlement("Settlement - 3 Water Borders", 3)
+                        "4" -> importSettlement("Settlement - 4 Water Borders", 4)
+                        else -> importSettlement("Settlement - No Water Borders", 0)
+                    }
+                }
+            }
+
             "settings" -> {
                 val kingdom = getKingdom()
                 buildPromise {
@@ -192,6 +240,29 @@ class KingdomSheet(
             "help" -> buildPromise {
                 openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY")
             }
+        }
+    }
+
+    suspend fun importStructures() {
+        if(game.importStructures().isNotEmpty()) {
+            ui.notifications.info("Imported Structures into Structures folder")
+        }
+    }
+
+    suspend fun importSettlement(sceneName: String, waterBorders: Int) {
+        game.importSettlementScene(sceneName, waterBorders)?.id?.let {
+            val kingdom = getKingdom()
+            kingdom.settlements = kingdom.settlements + RawSettlement(
+                sceneId = it,
+                lots = 1,
+                level = 1,
+                type = "capital",
+                secondaryTerritory = false,
+                manualSettlementLevel = false,
+                waterBorders = waterBorders,
+            )
+            actor.setKingdom(kingdom)
+            ui.notifications.info("Imported a predefined scene as Capital")
         }
     }
 
@@ -275,11 +346,21 @@ class KingdomSheet(
             value = kingdom.creativeSolutions,
             label = "Creative Solutions"
         )
+        val ongoingEvent = TextInput(
+            name = "ongoingEvent",
+            label = "Ongoing Event",
+            value = ongoingEvent ?: "",
+            required = false,
+        )
         val unrestPenalty = calculateUnrestPenalty(kingdom.unrest)
         val feats = kingdom.getFeats()
         val increaseScorePicksBy = kingdom.settings.increaseScorePicksBy
         val kingdomSectionNav = createKingdomSectionNav(kingdom)
         val governments = kingdom.getGovernments()
+        val heartlandBlacklist = kingdom.heartlandBlacklist.toSet()
+        val charterBlacklist = kingdom.charterBlacklist.toSet()
+        val enabledHeartlands = kingdom.getHeartlands().filter { it.id !in heartlandBlacklist }
+        val enabledCharters = kingdom.getCharters().filter { it.id !in charterBlacklist }
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -306,8 +387,8 @@ class KingdomSheet(
             creativeSolutionsInput = creativeSolutionsInput.toContext(),
             notesContext = kingdom.notes.toContext(),
             leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeadershipBonuses),
-            charter = kingdom.charter.toContext(kingdom.getCharters()),
-            heartland = kingdom.heartland.toContext(kingdom.getHeartlands()),
+            charter = kingdom.charter.toContext(enabledCharters),
+            heartland = kingdom.heartland.toContext(enabledHeartlands),
             government = kingdom.government.toContext(governments, feats),
             abilityBoosts = kingdom.abilityBoosts.toContext("", 2 + increaseScorePicksBy),
             currentNavEntry = currentNavEntry.value,
@@ -324,28 +405,29 @@ class KingdomSheet(
             )
                 .sortedBy { it.level }
                 .toTypedArray(),
-            bonusFeat= createBonusFeatContext(
+            bonusFeat = createBonusFeatContext(
                 government = kingdom.getChosenGovernment(),
                 feats = feats,
                 choices = kingdom.features,
                 bonusFeats = kingdom.bonusFeats,
-                value = bonusFeatSelection,
+                value = bonusFeat,
             ),
-            bonusFeats= kingdom.bonusFeats.toContext(
+            bonusFeats = kingdom.bonusFeats.toContext(
                 kingdom.getFeats(),
             ),
             groups = kingdom.groups.toContext(),
             abilityScores = kingdom.abilityScores.toContext(),
             skillRanks = kingdom.skillRanks.toContext(),
+            milestones = kingdom.milestones.toContext(kingdom.getMilestones()),
+            ongoingEvent = ongoingEvent.toContext(),
         )
     }
 
     private fun createKingdomSectionNav(kingdom: KingdomData): Array<NavEntryContext> {
-        val maxLevel = kingdom.level
         val selectLv1 = currentCharacterSheetNavEntry != "Creation"
                 && currentCharacterSheetNavEntry != "Bonus"
                 && currentCharacterSheetNavEntry.toInt() > kingdom.level
-        return (1..maxLevel).map { it.toString() }
+        return (1..20).map { it.toString() }
             .map {
                 NavEntryContext(
                     label = it,
@@ -391,8 +473,11 @@ class KingdomSheet(
         kingdom.groups = value.groups
         kingdom.skillRanks = value.skillRanks
         kingdom.abilityScores = value.abilityScores
+        kingdom.milestones = value.milestones
         beforeKingdomUpdate(previousKingdom, kingdom)
         actor.setKingdom(kingdom)
+        bonusFeat = value.bonusFeat
+        ongoingEvent = value.ongoingEvent
         null
     }
 }

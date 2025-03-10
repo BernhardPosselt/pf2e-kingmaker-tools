@@ -64,8 +64,9 @@
     </section>
     <section class="km-kingdom-sheet-kingdom-section">
         <h2>First Village</h2>
-        <p>You can either set a scene in the <b>Settlements</b> tab or import a Settlement from the <b>Settlement
-            Scenes</b> compendium:</p>
+        <p>First, import all Structures from the <b>Structures</b> compendium into your world:</p>
+        <button type="button" data-action="structures-import">Import Structures</button>
+        <p>Then, import a Settlement from the <b>Settlement Scenes</b> compendium. The Scene includes blocks, onto which you can place your structures. That way, settlement level is automatically calculated for you. </p>
         <ul>
             <li>
                 <button type="button" data-action="settlement-import" data-water-borders="0">Import Settlement (0
@@ -93,6 +94,8 @@
                 </button>
             </li>
         </ul>
+        <p>Finally, place any existing structures onto the scene's blocks from the <b>Structures</b> folder in your actors directory.</p>
+        <p>If you want to use a different settlement scene, simply add it under the sheet's <b>Settlements</b> tab and copy the block tiles onto it.</p>
     </section>
     <section class="km-kingdom-sheet-kingdom-section">
         <h2>Fame or Infamy? <span class="km-header-right-align">{{> formElement fameContext.type}}</span></h2>

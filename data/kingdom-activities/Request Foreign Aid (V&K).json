@@ -6,6 +6,7 @@
     "phase": "leadership",
     "dc": "custom",
     "title": "Request Foreign Aid (V&K)",
+    "automationNotes": "DC increases are not tracked",
     "description": "When disaster strikes, you send out a call for help to another nation with whom you have diplomatic relations. The DC of this check starts at the other group’s Negotiation DC +2, but every subsequent Kingdom turn you Request Foreign Aid from the same group, the DC increases by 2. Every Kingdom turn that passes without Requesting Foreign Aid from that Group reduces the DC by 1 (until you reach the other group’s Negotiation DC +2). You may only attempt to request Foreign Aid with a given group once per Kingdom turn regardless of the number of leaders pursuing activities.",
     "requirement": "You have diplomatic relations with the group you are requesting aid from.",
     "skills": {

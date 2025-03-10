@@ -100,7 +100,6 @@ kotlin {
 tasks {
     getByName<Delete>("clean") {
         delete.add(layout.projectDirectory.dir("dist"))
-        delete.add(layout.projectDirectory.dir("oldsrc/dist"))
     }
     getByName("check") {
         dependsOn(
@@ -113,6 +112,7 @@ tasks {
             "validateCharters",
             "validateGovernments",
             "validateHeartlands",
+            "validateMilestones",
         )
     }
 }
@@ -172,6 +172,12 @@ tasks.register<JsonSchemaValidator>("validateHeartlands") {
     files = layout.projectDirectory.dir("data/heartlands")
 }
 
+tasks.register<JsonSchemaValidator>("validateMilestones") {
+    outputs.upToDateWhen { true } // no outputs, only depend on input files
+    schema = layout.projectDirectory.file("src/commonMain/resources/schemas/milestone.json")
+    files = layout.projectDirectory.dir("data/milestones")
+}
+
 // release tasks
 tasks.register<ChangeModuleVersion>("changeModuleVersion") {
     inputs.property("version", project.version)
@@ -211,6 +217,6 @@ tasks.register<ReleaseModule>("release") {
 
 tasks.register<UnpackJsonFiles>("unpackJson") {
     fileNameProperty = "name"
-    file = layout.projectDirectory.file("data/governments/governments.json")
-    targetDirectory = layout.projectDirectory.dir("data/governments")
+    file = layout.projectDirectory.file("data/milestones/milestones.json")
+    targetDirectory = layout.projectDirectory.dir("data/milestones")
 }

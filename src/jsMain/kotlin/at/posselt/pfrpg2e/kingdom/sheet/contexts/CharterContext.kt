@@ -16,7 +16,7 @@ external interface CharterContext {
     val flaw: String?
 }
 
-fun RawCharterChoices.toContext(charters: Array<RawCharter>): CharterContext {
+fun RawCharterChoices.toContext(charters: List<RawCharter>): CharterContext {
     val charter = charters.find { it.id == type }
     val charterBoost = charter?.boost
     return CharterContext(

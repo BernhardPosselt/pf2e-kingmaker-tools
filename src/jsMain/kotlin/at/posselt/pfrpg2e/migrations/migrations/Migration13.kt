@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawExpression
 import at.posselt.pfrpg2e.kingdom.RawIn
 import at.posselt.pfrpg2e.kingdom.charters
+import at.posselt.pfrpg2e.kingdom.data.MilestoneChoice
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
@@ -13,6 +14,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
 import at.posselt.pfrpg2e.kingdom.data.RawHeartlandChoices
 import at.posselt.pfrpg2e.kingdom.governments
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
+import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
@@ -57,8 +59,9 @@ class Migration13 : Migration(13) {
         kingdom.homebrewHeartlands = emptyArray()
         kingdom.homebrewFeats = emptyArray()
         kingdom.settings.automateStats = false
-        kingdom.settings.ruinTreshold = 10
+        kingdom.settings.ruinThreshold = 10
         kingdom.settings.increaseScorePicksBy = 0
+        kingdom.settings.realmSceneId = kingdom.asDynamic().realmSceneId
         kingdom.charter = RawCharterChoices(
             type = chartersByName[charter?.lowercase() ?: ""]?.id,
             abilityBoosts = RawAbilityBoostChoices(
@@ -98,6 +101,17 @@ class Migration13 : Migration(13) {
         kingdom.heartland = RawHeartlandChoices(
             type = heartland
         )
+        kingdom.heartlandBlacklist = emptyArray()
+        kingdom.charterBlacklist = emptyArray()
+        kingdom.governmentBlacklist = emptyArray()
+        kingdom.homebrewMilestones = emptyArray()
+        kingdom.milestones = kingdom.milestones.map {
+            MilestoneChoice(
+                id = it.asDynamic().name.unsafeCast<String>().slugify(),
+                completed = it.completed,
+                enabled = if (kingdom.settings.vanceAndKerensharaXP) true else it.asDynamic().homebrew == true
+            )
+        }.toTypedArray()
         kingdom.modifiers.forEach {
             val predicates = it.applyIf?.toMutableList() ?: mutableListOf<RawExpression<Boolean>>()
             if (it.asAnyObject()["consumeId"] == "") {
@@ -130,6 +144,7 @@ class Migration13 : Migration(13) {
             it.applyIf = predicates.toTypedArray()
         }
         Reflect.deleteProperty(kingdom, "feats")
+        Reflect.deleteProperty(kingdom, "realmSceneId")
     }
 
     override suspend fun migrateOther(game: Game) {

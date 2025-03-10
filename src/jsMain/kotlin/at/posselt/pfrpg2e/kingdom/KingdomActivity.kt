@@ -30,7 +30,7 @@ external interface KingdomActivity {
     var dc: KingdomDc
     var dcAdjustment: Int?
     var enabled: Boolean
-    var companion: Companion?
+    var automationNotes: String?
     var fortune: Boolean
     var oncePerRound: Boolean
     var hint: String?

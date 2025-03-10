@@ -110,7 +110,7 @@ class Migration12 : Migration(12, true) {
             resourceDicePerVillage = 0,
             automateStats = false,
             resourceDicePerTown = 0,
-            ruinTreshold = 10,
+            ruinThreshold = 10,
             increaseScorePicksBy = 0,
             resourceDicePerCity = 0,
             resourceDicePerMetropolis = 0,

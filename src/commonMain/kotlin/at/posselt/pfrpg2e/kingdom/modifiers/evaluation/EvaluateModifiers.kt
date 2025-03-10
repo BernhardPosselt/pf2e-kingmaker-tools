@@ -45,16 +45,13 @@ fun evaluateModifiers(
     return ModifierResult(
         upgradeResults = enabledModifiers
             .flatMap { it.upgradeResults }
-            .filter { it.applyIf.all { it.evaluate(filterResult.context) } }
-            .map { it.upgrade }
             .toSet(),
         downgradeResults = enabledModifiers
             .flatMap { it.downgradeResults }
-            .filter { it.applyIf.all { it.evaluate(filterResult.context) } }
-            .map { it.downgrade }
             .toSet(),
-        rollTwice =  enabledModifiers.any { it.rollTwice },
-        fortune =  enabledModifiers.any { it.fortune },
+        rollTwiceKeepHighest = enabledModifiers.any { it.rollTwiceKeepHighest },
+        rollTwiceKeepLowest = enabledModifiers.any { it.rollTwiceKeepLowest },
+        fortune = enabledModifiers.any { it.fortune },
         modifiers = filteredModifiers,
         total = enabledModifiers.sumOf { it.value },
         bonuses = enabledModifiers

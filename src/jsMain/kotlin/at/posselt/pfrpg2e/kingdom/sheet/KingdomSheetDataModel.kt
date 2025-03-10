@@ -14,6 +14,8 @@ class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
         @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
+            string("bonusFeat", nullable = true)
+            string("ongoingEvent", nullable = true)
             string("name")
             boolean("atWar")
             schema("fame") {
@@ -249,6 +251,13 @@ class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
                 int("stability")
                 int("loyalty")
                 int("culture")
+            }
+            array("milestones") {
+                schema {
+                    string("id")
+                    boolean("completed")
+                    boolean("enabled")
+                }
             }
         }
     }

@@ -15,7 +15,8 @@ data class Modifier(
     val rollOptions: Set<String> = emptySet(),
     val applyIf: List<Expression<Boolean>> = emptyList(),
     val fortune: Boolean = false,
-    val rollTwice: Boolean = false,
+    val rollTwiceKeepHighest: Boolean = false,
+    val rollTwiceKeepLowest: Boolean = false,
     val upgradeResults: List<UpgradeResult> = emptyList(),
     val downgradeResults: List<DowngradeResult> = emptyList(),
 )

@@ -2,7 +2,7 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.NumberInput
-import at.posselt.pfrpg2e.kingdom.RawSkillRanks
+import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
 import js.objects.JsPlainObject
 
 @JsPlainObject

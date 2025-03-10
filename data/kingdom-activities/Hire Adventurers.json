@@ -6,6 +6,7 @@
     "phase": "leadership",
     "dc": "custom",
     "title": "Hire Adventurers",
+    "automationNotes": "Cost increase from Critical Failure is not implemented",
     "description": "While the PCs can strike out themselves to deal with ongoing events, it’s often more efficient to Hire Adventurers. When you Hire Adventurers to help end an ongoing event, the DC is equal to your Control DC adjusted by the event’s level modifier. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button> each time you attempt this activity.",
     "skills": {
         "exploration": 0

@@ -1,0 +1,7 @@
+{
+    "id": "spend-100-rp-during-a-kingdom-turn",
+    "name": "Spend 100 RP during a Kingdom turn",
+    "xp": 80,
+    "enabledOnFirstRun": true,
+    "isCultMilestone": false
+}

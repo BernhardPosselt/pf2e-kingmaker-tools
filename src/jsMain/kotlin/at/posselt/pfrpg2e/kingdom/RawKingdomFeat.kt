@@ -13,7 +13,7 @@ import kotlinx.serialization.json.JsonElement
 @JsPlainObject
 external interface RawUpgradeResult {
     val upgrade: String
-    val applyIf: Array<RawExpression<Boolean>>?
+    val times: Int?
 }
 
 
@@ -21,14 +21,14 @@ fun RawUpgradeResult.parse() =
     DegreeOfSuccess.fromString(upgrade)?.let { degree ->
         UpgradeResult(
             upgrade = degree,
-            applyIf = applyIf?.map { it.parse() } ?: emptyList()
+            times = times ?: 1
         )
     }
 
 @JsPlainObject
 external interface RawDowngradeResult {
     val downgrade: String
-    val applyIf: Array<RawExpression<Boolean>>?
+    val times: Int?
 }
 
 
@@ -36,7 +36,7 @@ fun RawDowngradeResult.parse() =
     DegreeOfSuccess.fromString(downgrade)?.let { degree ->
         DowngradeResult(
             downgrade = degree,
-            applyIf = applyIf?.map { it.parse() } ?: emptyList()
+            times = times ?: 1,
         )
     }
 
@@ -62,7 +62,6 @@ external interface RawKingdomFeat {
     val assuranceForSkill: String?
     val increaseUsableSkills: Record<String, Array<String>>?
     val flags: Array<String>?
-    val upgradeResults: Array<RawUpgradeResult>?
     val increaseAnarchyLimit: Int?
     val ruinThresholdIncreases: Array<RawRuinThresholdIncreases>?
 }

@@ -50,7 +50,7 @@ abstract class UnpackJsonFiles : DefaultTask() {
                 if (elem is JsonObject && field in elem.keys) {
                     val value = elem[field]
                     if (value is JsonPrimitive && value.isString) {
-                        val targetPath = target.resolve("${value.content}.json")
+                        val targetPath = target.resolve("${value.content.replace("/", "")}.json")
                         writeToFile(
                             targetPath,
                             elem,

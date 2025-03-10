@@ -2,7 +2,7 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.NumberInput
-import at.posselt.pfrpg2e.kingdom.RawAbilityScores
+import at.posselt.pfrpg2e.kingdom.data.RawAbilityScores
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject

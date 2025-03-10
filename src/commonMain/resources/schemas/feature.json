@@ -113,7 +113,10 @@
         "fortune": {
           "type": "boolean"
         },
-        "rollTwice": {
+        "rollTwiceKeepHighest": {
+          "type": "boolean"
+        },
+        "rollTwiceKeepLowest": {
           "type": "boolean"
         },
         "value": {
@@ -158,6 +161,9 @@
         "downgrade"
       ],
       "properties": {
+        "times": {
+          "type": "number"
+        },
         "downgrade": {
           "type": "string",
           "enum": [
@@ -166,12 +172,6 @@
             "failure",
             "criticalFailure"
           ]
-        },
-        "predicate": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Predicate"
-          }
         }
       }
     },
@@ -182,6 +182,9 @@
         "upgrade"
       ],
       "properties": {
+        "times": {
+          "type": "number"
+        },
         "upgrade": {
           "type": "string",
           "enum": [
@@ -190,12 +193,6 @@
             "failure",
             "criticalFailure"
           ]
-        },
-        "predicate": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Predicate"
-          }
         }
       }
     },

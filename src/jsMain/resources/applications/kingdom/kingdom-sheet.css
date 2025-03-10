@@ -10,6 +10,9 @@
     #kmKingdomSheet {
         .km-kingdom-sheet-sub-nav, .km-kingdom-sheet-sub-content, .km-kingdom-sheet-sidebar {
             background-color: rgba(11, 10, 19, .95);
+            border: 1px solid;
+            border-radius: 5px;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, .5);
         }
     }
 }

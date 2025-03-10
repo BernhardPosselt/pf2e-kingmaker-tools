@@ -1,26 +1,35 @@
 {
-    "id": "establish-farmland",
-    "title": "Establish Farmland",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "region",
-    "dc": "control",
-    "description": "You plant crops and establish livestock in permanent farms, ranches, and other growing operations to create Farmland (page 535). If you’re attempting to Establish Farmland in a hex that is predominantly plains, you must <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button> and the check is against your Control DC. If you’re targeting a hex that is predominantly hills, you must spend <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Points</button> and the check is against your Control DC + 5.",
-    "requirement": "Plains or hills are the predominant terrain feature in the hex; the hex is in the influence of one of your settlements.",
-    "skills": {
-        "agriculture": 0
-    },
-    "criticalSuccess": {
-        "msg": "You establish two adjacent Farmland hexes instead of one. If your target hex was a hills hex, the additional hex may be a hills hex or a plains hex; otherwise, the additional hex must be a plains hex. If no appropriate hex is available, treat this result as a regular success instead."
-    },
-    "success": {
-        "msg": "You establish one Farmland hex."
-    },
-    "failure": {
-        "msg": "You fail to establish a Farmland hex."
-    },
-    "criticalFailure": {
-        "msg": "You fail to establish a Farmland hex, and your attempt potentially causes the spread of a blight. At the start of each of the next two Event phases, attempt a @Check[type:flat|dc:6|showDC:all]; on a failure, your kingdom experiences a Crop Failure event in this and all adjacent hexes."
+  "id": "establish-farmland",
+  "title": "Establish Farmland",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "region",
+  "dc": "control",
+  "description": "You plant crops and establish livestock in permanent farms, ranches, and other growing operations to create Farmland. If you’re attempting to Establish Farmland in a hex that is predominantly plains, you must <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button> and the check is against your Control DC. If you’re targeting a hex that is predominantly hills, you must spend <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Points</button> and the check is against your Control DC + 5.",
+  "requirement": "Plains or hills are the predominant terrain feature in the hex; the hex is in the influence of one of your settlements.",
+  "skills": {
+    "agriculture": 0
+  },
+  "modifiers": [
+    {
+      "enabled": false,
+      "value": -5,
+      "buttonLabel": "+5 DC Increase if predominantly hills",
+      "name": "predominantly hills",
+      "type": "untyped"
     }
+  ],
+  "criticalSuccess": {
+    "msg": "You establish two adjacent Farmland hexes instead of one. If your target hex was a hills hex, the additional hex may be a hills hex or a plains hex; otherwise, the additional hex must be a plains hex. If no appropriate hex is available, treat this result as a regular success instead."
+  },
+  "success": {
+    "msg": "You establish one Farmland hex."
+  },
+  "failure": {
+    "msg": "You fail to establish a Farmland hex."
+  },
+  "criticalFailure": {
+    "msg": "You fail to establish a Farmland hex, and your attempt potentially causes the spread of a blight. At the start of each of the next two Event phases, attempt a @Check[type:flat|dc:6|showDC:all]; on a failure, your kingdom experiences a Crop Failure event in this and all adjacent hexes."
+  }
 }

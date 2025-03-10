@@ -6,6 +6,7 @@
     "phase": "leadership",
     "dc": "control",
     "title": "Decadent Feasts",
+    "automationNotes": "Preventing Unrest from the Critical Success result has to be done manually.",
     "description": "Your goddess is more than just the goddess of undeath— she’s also the goddess of gluttony. And you are no fool; you understand the fear your goddess inspires in the living and knows that focusing on other aspects of her worship are more likely to result in positive growth for the nation. In order to distract the populace, you arrange for decadent feasts for the people, simultaneously feeding the hungry while camouflaging some of your faith’s more sinister aspects. <button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d8\">Lose 1d8 Food</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Luxuries</button>, then attempt a basic Agriculture or Trade check to determine how effective the feasts are.",
     "skills": {
         "agriculture": 0

@@ -1,7 +1,7 @@
 {
   "id": "recruit-monsters",
   "oncePerRound": false,
-  "fortune": false,
+  "fortune": true,
   "enabled": false,
   "phase": "region",
   "dc": "control",
@@ -19,7 +19,7 @@
         "buttonLabel": "Gain A Monster",
         "isConsumedAfterRoll": true,
         "enabled": false,
-        "rollTwice": true,
+        "rollTwiceKeepHighest": true,
         "fortune": true,
         "applyIf": [
           {

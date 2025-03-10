@@ -6,10 +6,17 @@
     "flags": [
         "cooperative-leadership"
     ],
-    "upgradeResults": [
+    "modifiers": [
         {
-            "upgrade": "criticalFailure",
-            "predicate": [
+            "name": "Cooperative Leadership",
+            "buttonLabel": "Cooperative Leadership",
+            "type": "untyped",
+            "value": 0,
+            "enabled": true,
+            "upgradeResults": [{
+                "upgrade": "criticalFailure"
+            }],
+            "applyIf": [
                 {
                     "hasFlag": "cooperative-leadership"
                 },
@@ -25,8 +32,15 @@
             ]
         },
         {
-            "upgrade": "failure",
-            "predicate": [
+            "name": "Cooperative Leadership",
+            "buttonLabel": "Cooperative Leadership",
+            "type": "untyped",
+            "value": 0,
+            "enabled": true,
+            "upgradeResults": [{
+                "upgrade": "failure"
+            }],
+            "applyIf": [
                 {
                     "hasFlag": "cooperative-leadership"
                 },

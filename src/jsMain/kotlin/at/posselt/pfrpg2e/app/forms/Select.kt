@@ -45,7 +45,7 @@ data class Select(
         checkbox = false,
         radio = false,
         image = false,
-        disabled = false,
+        disabled = disabled,
         stacked = stacked,
         overrideType = overrideType?.value,
         options = options.map { opt ->
