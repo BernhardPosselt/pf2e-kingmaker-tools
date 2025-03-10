@@ -1,24 +1,17 @@
-* think about where to place 
-  * at war
-  * control dc
+* kingdom quickstart journal on first launch + first launch code
+* upgrading from earlier versions changelog
 * turn tab
-* status tab
-* skills
-* feats
-* settlements
-* trade agreements
-* effects
-* notes
-* all chat stuff
+* kingdom tab
+* trade agreements tab
+* notes tab
+* effects tab
+* settlements tab
+* all chat stuff including rerolling and upgrading results
 * messages for placing structures onto scenes
 * structure browser
-* manage activities
-* setup dialog with kingdom creation
-* manage governments, heartlands and charter
-* manage level ups
 * structure token mappings macro
-* remove kingdom event macro
-* allow to select multiple kingdoms
+* allow to select multiple kingdoms?
+* update docs
 * in the structure browser, add a repair tab that halves construction cost and adds a +2 item mod
 ```json
 [
@@ -31,5 +24,3 @@
     }
 ]
 ```
-* Establish Trade Agreement should let you select the group (Negiation DC or Control DC, whichever is higher) 
-* 
