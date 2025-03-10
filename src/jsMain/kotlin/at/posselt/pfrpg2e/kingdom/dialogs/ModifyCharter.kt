@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.kingdom.RawCharter
+import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
@@ -142,7 +143,7 @@ class ModifyCharter(
     override fun onParsedSubmit(value: ModifyCharterData): Promise<Void> = buildPromise {
         current = RawCharter(
             name = value.name,
-            id = value.id,
+            id = value.id.slugify(),
             boost = value.boost,
             description = value.description,
             flaw = value.flaw,

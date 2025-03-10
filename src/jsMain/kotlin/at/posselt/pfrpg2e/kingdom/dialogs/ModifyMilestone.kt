@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.kingdom.RawMilestone
+import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
@@ -116,7 +117,7 @@ class ModifyMilestone(
     override fun onParsedSubmit(value: ModifyMilestoneData): Promise<Void> = buildPromise {
         current = RawMilestone(
             name = value.name,
-            id = value.id,
+            id = value.id.slugify(),
             xp = value.xp,
             completed = current.completed,
             enabledOnFirstRun = current.enabledOnFirstRun,

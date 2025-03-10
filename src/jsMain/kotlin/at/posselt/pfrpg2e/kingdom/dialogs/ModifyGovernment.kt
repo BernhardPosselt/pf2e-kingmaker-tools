@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
+import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
@@ -162,7 +163,7 @@ class ModifyGovernment(
     override fun onParsedSubmit(value: ModifyGovernmentData): Promise<Void> = buildPromise {
         current = RawGovernment(
             name = value.name,
-            id = value.id,
+            id = value.id.slugify(),
             freeBoosts = value.freeBoosts,
             description = value.description,
             boosts = KingdomAbility.entries.zip(value.boosts)
