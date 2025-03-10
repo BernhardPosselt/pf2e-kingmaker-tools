@@ -108,7 +108,7 @@ class KingdomSkillPicker(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
-            "save" -> {
+            "km-save" -> {
                 val ranks = data.skills.filter { it.enabled }
                     .map { it.skill to (Proficiency.fromString(it.proficiency)?.rank ?: 0) }
                     .toMutableRecord()

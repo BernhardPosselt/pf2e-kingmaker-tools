@@ -337,7 +337,7 @@ class CampingSettingsApplication(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (val action = target.dataset["action"]) {
-            "save" -> {
+            "km-save" -> {
                 buildPromise {
                     campingActor.getCamping()?.let { camping ->
                         val alwaysPerformNames = settings.alwaysPerformActivities.toSet()

@@ -3,7 +3,6 @@
 * turn tab
 * kingdom tab
 * trade agreements tab
-* notes tab
 * effects tab
 * settlements tab
 * all chat stuff including rerolling and upgrading results

@@ -72,7 +72,7 @@ class ConfirmWatchApplication(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
-            "save" -> buildPromise {
+            "km-save" -> buildPromise {
                 close()
                 afterSubmit(enableWatch, enableDailyPreparations, checkRandomEncounter)
             }

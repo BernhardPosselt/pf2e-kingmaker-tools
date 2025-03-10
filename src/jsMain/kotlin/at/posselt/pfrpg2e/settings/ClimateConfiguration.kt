@@ -93,7 +93,7 @@ class ClimateConfiguration : FormApp<ClimateSettingsContext, ClimateSettings>(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (val action = target.dataset["action"]) {
-            "save" -> {
+            "km-save" -> {
                 buildPromise {
                     game.settings.pfrpg2eKingdomCampingWeather.setClimateSettings(currentSettings)
                     close()

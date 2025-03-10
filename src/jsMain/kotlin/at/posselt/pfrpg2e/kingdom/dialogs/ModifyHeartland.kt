@@ -73,7 +73,7 @@ class ModifyHeartland(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
-            "save" -> save()
+            "km-save" -> save()
         }
     }
 

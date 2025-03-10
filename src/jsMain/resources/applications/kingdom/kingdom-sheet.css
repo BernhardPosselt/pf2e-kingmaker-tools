@@ -106,7 +106,7 @@
 
             li:last-child {
                 a {
-                   margin-left: auto;
+                    margin-left: auto;
                 }
             }
 
@@ -138,15 +138,40 @@
 
     .km-kingdom-sheet-sub-content {
         overflow: auto;
+
+        h2 {
+            font-size: 2em;
+        }
+    }
+
+    .km-kingdom-sheet-notes {
+        height: 100%;
+
+        section:last-child {
+            margin-top: 3em;
+        }
+
+        .editor {
+            border-radius: 10px;
+            border: 1px solid;
+            min-height: 250px;
+        }
+
+        .editor-content {
+            border-radius: 10px;
+            min-height: 220px;
+            padding: 1em;
+            overflow-y: scroll;
+        }
     }
 
     .km-kingdom-sheet-kingdom {
         h2 {
             display: flex;
-            font-size: 2em;
 
             button {
                 height: 30px;
+
                 i {
                     margin-right: 0;
                 }

@@ -135,7 +135,7 @@ private class ConfigureLeaderSkills(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
-            "save" -> {
+            "km-save" -> {
                 onSave(data)
                 close()
             }

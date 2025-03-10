@@ -1,4 +1,4 @@
-<aside class="km-kingdom-sheet-sidebar">
+<aside class="km-kingdom-sheet-sidebar" {{#if (ne currentNavEntry 'characterSheet')}}hidden{{/if}}>
     {{currentNavEntry}}
     <div {{#if (ne currentNavEntry 'characterSheet')}}hidden{{/if}}>
 
@@ -48,7 +48,7 @@
         {{> formElement creativeSolutionsInput }}
     </div>
 </aside>
-<div class="km-kingdom-sheet-content">
+<div class="km-kingdom-sheet-content" {{#if (ne currentNavEntry 'characterSheet')}}hidden{{/if}}>
     <nav class="km-kingdom-sheet-sub-nav">
         <ul>
             <li><a title="Creation" data-action="change-kingdom-section-nav"

@@ -365,6 +365,7 @@ class KingdomSheet(
         val enabledHeartlands = kingdom.getHeartlands().filter { it.id !in heartlandBlacklist }
         val enabledCharters = kingdom.getCharters().filter { it.id !in charterBlacklist }
         val enabledGovernments = kingdom.getGovernments().filter { it.id !in governmentBlacklist }
+        val notesContext = kingdom.notes.toContext()
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -389,7 +390,7 @@ class KingdomSheet(
             consumptionContext = kingdom.consumption.toContext(kingdom.settings.autoCalculateArmyConsumption),
             supernaturalSolutionsInput = supernaturalSolutionsInput.toContext(),
             creativeSolutionsInput = creativeSolutionsInput.toContext(),
-            notesContext = kingdom.notes.toContext(),
+            notesContext = notesContext,
             leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeadershipBonuses),
             charter = kingdom.charter.toContext(enabledCharters),
             heartland = kingdom.heartland.toContext(enabledHeartlands),
@@ -424,6 +425,8 @@ class KingdomSheet(
             skillRanks = kingdom.skillRanks.toContext(),
             milestones = kingdom.milestones.toContext(kingdom.getMilestones()),
             ongoingEvent = ongoingEvent.toContext(),
+            isGM = game.user.isGM,
+            actor = actor,
         )
     }
 
@@ -478,6 +481,8 @@ class KingdomSheet(
         kingdom.skillRanks = value.skillRanks
         kingdom.abilityScores = value.abilityScores
         kingdom.milestones = value.milestones
+        kingdom.notes = value.notes
+        console.log(value.notes)
         beforeKingdomUpdate(previousKingdom, kingdom)
         actor.setKingdom(kingdom)
         bonusFeat = value.bonusFeat

@@ -136,7 +136,7 @@ class SkillPickerApplication(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
-            "save" -> buildPromise {
+            "km-save" -> buildPromise {
                 if (isFormValid) {
                     val skills = currentSkills.find { it.name == "any" && it.enabled }?.let { arrayOf(it) }
                         ?: currentSkills.filter { it.enabled }.toTypedArray()

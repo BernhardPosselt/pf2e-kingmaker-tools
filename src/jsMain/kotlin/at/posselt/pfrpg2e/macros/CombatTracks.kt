@@ -91,7 +91,7 @@ private class CombatTrackApplication(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (val action = target.dataset["action"]) {
-            "save" -> {
+            "km-save" -> {
                 buildPromise {
                     if (actor == null) {
                         scene.setCombatTrack(combatTrack)

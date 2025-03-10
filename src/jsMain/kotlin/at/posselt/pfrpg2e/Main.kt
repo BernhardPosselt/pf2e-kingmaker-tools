@@ -80,6 +80,7 @@ fun main() {
             // register partials
             loadTpls(
                 arrayOf(
+                    "kingdom-notes" to "applications/kingdom/sections/notes/page.hbs",
                     "kingdom-character-sheet" to "applications/kingdom/sections/character-sheet/page.hbs",
                     "kingdom-character-sheet-creation" to "applications/kingdom/sections/character-sheet/creation.hbs",
                     "kingdom-character-sheet-bonus" to "applications/kingdom/sections/character-sheet/bonus.hbs",

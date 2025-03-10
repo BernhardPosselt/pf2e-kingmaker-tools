@@ -22,6 +22,7 @@
 
     <main class="km-kingdom-sheet-main">
         {{> kingdom-character-sheet this}}
+        {{> kingdom-notes this}}
 
         <div hidden>
             {{> formElement worksitesContext.farmlands.resources }}
@@ -50,8 +51,7 @@
             {{> formElement consumptionContext.next }}
             {{> formElement consumptionContext.armies }}
 
-            {{editor notesContext.public target="notes.public" button=true editable=true engine="prosemirror"}}
-            {{editor notesContext.gm target="notes.gm" button=true editable=true engine="prosemirror"}}
+
 
             scores
             {{> formElement abilityScores.economy }}

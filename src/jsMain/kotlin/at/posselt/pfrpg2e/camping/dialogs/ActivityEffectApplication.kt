@@ -87,7 +87,7 @@ class ActivityEffectApplication(
                 target.dataset["uuid"]?.let { fromUuidTypeSafe<PF2EEffect>(it)?.sheet?.launch() }
             }
 
-            "save" -> save()
+            "km-save" -> save()
         }
     }
 

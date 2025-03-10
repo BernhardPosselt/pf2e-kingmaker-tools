@@ -382,7 +382,7 @@ class KingdomSettingsApplication(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
-            "save" -> {
+            "km-save" -> {
                 buildPromise {
                     onSave(settings)
                 }

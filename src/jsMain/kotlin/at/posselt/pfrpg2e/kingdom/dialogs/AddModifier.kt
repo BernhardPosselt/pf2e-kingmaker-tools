@@ -100,7 +100,7 @@ class AddModifier(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
-            "save" -> {
+            "km-save" -> {
                 val predicates = mutableListOf<RawExpression<Boolean>>()
                 if (data.phase != null) {
                     predicates.add(RawIn(`in` = tupleOf("@phase", arrayOf(data.phase))))

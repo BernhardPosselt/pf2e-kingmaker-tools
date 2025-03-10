@@ -118,7 +118,7 @@ class RegionConfig(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (val action = target.dataset["action"]) {
-            "save" -> {
+            "km-save" -> {
                 buildPromise {
                     actor.getCamping()?.let { camping ->
                         camping.regionSettings = currentSettings

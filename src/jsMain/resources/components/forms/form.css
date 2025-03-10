@@ -75,7 +75,7 @@
         margin-top: 10px;
     }
 
-    button[data-action="save"] {
+    button[data-action="km-save"] {
         margin: 10px auto auto;
     }
 

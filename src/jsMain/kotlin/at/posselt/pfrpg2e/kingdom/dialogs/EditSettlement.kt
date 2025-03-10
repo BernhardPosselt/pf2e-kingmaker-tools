@@ -91,7 +91,7 @@ private class ConfigureEditSettlement(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
-            "save" -> {
+            "km-save" -> {
                 settlementCopy.lots = data.lots
                 settlementCopy.level = data.level
                 settlementCopy.type = data.type
