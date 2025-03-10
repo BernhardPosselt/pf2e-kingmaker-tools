@@ -21,7 +21,7 @@ external interface GovernmentContext {
 }
 
 fun RawGovernmentChoices.toContext(
-    governments: Array<RawGovernment>,
+    governments: List<RawGovernment>,
     feats: Array<RawKingdomFeat>,
 ): GovernmentContext {
     val featsById = feats.associateBy { it.id }

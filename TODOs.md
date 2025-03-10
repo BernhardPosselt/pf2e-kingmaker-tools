@@ -25,7 +25,7 @@
     {
       "name": "Repair Structure",
       "type": "item",
-      "enabledOnFirstRun": false,
+      "enabled": false,
       "value": 2,
       "buttonLabel": "+2 Item to Repair Structure"
     }

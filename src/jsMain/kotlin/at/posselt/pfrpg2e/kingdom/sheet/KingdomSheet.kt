@@ -19,6 +19,7 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.GovernmentManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
@@ -204,7 +205,7 @@ class KingdomSheet(
             "configure-activities" -> TODO()
             "configure-milestones" -> MilestoneManagement(kingdomActor = actor).launch()
             "configure-charters" -> CharterManagement(kingdomActor = actor).launch()
-            "configure-governments" -> TODO()
+            "configure-governments" -> GovernmentManagement(kingdomActor = actor).launch()
             "configure-heartlands" -> HeartlandManagement(kingdomActor = actor).launch()
             "configure-feats" -> TODO()
             "structures-import" -> buildPromise {
@@ -356,11 +357,12 @@ class KingdomSheet(
         val feats = kingdom.getFeats()
         val increaseScorePicksBy = kingdom.settings.increaseScorePicksBy
         val kingdomSectionNav = createKingdomSectionNav(kingdom)
-        val governments = kingdom.getGovernments()
         val heartlandBlacklist = kingdom.heartlandBlacklist.toSet()
         val charterBlacklist = kingdom.charterBlacklist.toSet()
+        val governmentBlacklist = kingdom.governmentBlacklist.toSet()
         val enabledHeartlands = kingdom.getHeartlands().filter { it.id !in heartlandBlacklist }
         val enabledCharters = kingdom.getCharters().filter { it.id !in charterBlacklist }
+        val enabledGovernments = kingdom.getGovernments().filter { it.id !in governmentBlacklist }
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -389,7 +391,7 @@ class KingdomSheet(
             leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeadershipBonuses),
             charter = kingdom.charter.toContext(enabledCharters),
             heartland = kingdom.heartland.toContext(enabledHeartlands),
-            government = kingdom.government.toContext(governments, feats),
+            government = kingdom.government.toContext(enabledGovernments, feats),
             abilityBoosts = kingdom.abilityBoosts.toContext("", 2 + increaseScorePicksBy),
             currentNavEntry = currentNavEntry.value,
             hideCreation = currentCharacterSheetNavEntry != "Creation",
