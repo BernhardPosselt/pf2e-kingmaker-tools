@@ -12,7 +12,7 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.kingdom.KingdomActivity
+import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.RawExpression
 import at.posselt.pfrpg2e.kingdom.RawIn
 import at.posselt.pfrpg2e.kingdom.RawModifier
@@ -76,7 +76,7 @@ external interface AddModifierContext : HandlebarsRenderContext {
 
 @JsExport
 class AddModifier(
-    private val activities: Array<KingdomActivity>,
+    private val activities: Array<RawActivity>,
     private val onSave: suspend (modifier: RawModifier) -> Unit,
 ) : FormApp<AddModifierContext, AddModifierData>(
     title = "Add Modifier",
@@ -218,6 +218,6 @@ class AddModifier(
     }
 }
 
-suspend fun addModifier(activities: List<KingdomActivity>, onSave: suspend (RawModifier) -> Unit) {
+suspend fun addModifier(activities: List<RawActivity>, onSave: suspend (RawModifier) -> Unit) {
     AddModifier(activities = activities.toTypedArray(), onSave = onSave).launch()
 }

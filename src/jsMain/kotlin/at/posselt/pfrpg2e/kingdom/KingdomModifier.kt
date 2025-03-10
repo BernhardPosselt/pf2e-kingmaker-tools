@@ -254,7 +254,7 @@ suspend fun KingdomData.checkModifiers(
 
 fun KingdomData.createExpressionContext(
     phase: KingdomPhase?,
-    activity: KingdomActivity?,
+    activity: RawActivity?,
     leader: Leader?,
     usedSkill: KingdomSkill,
     rollOptions: Set<String>,

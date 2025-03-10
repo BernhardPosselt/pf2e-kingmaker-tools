@@ -141,7 +141,7 @@ external interface KingdomData {
     var turnsWithoutEvent: Int // set via button
     var notes: RawNotes
     var homebrewMilestones: Array<RawMilestone>
-    var homebrewActivities: Array<KingdomActivity> // set via dialog
+    var homebrewActivities: Array<RawActivity> // set via dialog
     var homebrewCharters: Array<RawCharter>
     var homebrewGovernments: Array<RawGovernment>
     var homebrewHeartlands: Array<RawHeartland>
@@ -269,12 +269,12 @@ fun KingdomData.parseSkillRanks(
         )
     }
 
-fun KingdomData.getAllActivities(): List<KingdomActivity> {
+fun KingdomData.getAllActivities(): List<RawActivity> {
     val homebrew = homebrewActivities.map { it.id }.toSet()
     return kingdomActivities.filter { it.id !in homebrew } + homebrewActivities
 }
 
-fun KingdomData.getActivity(id: String): KingdomActivity? =
+fun KingdomData.getActivity(id: String): RawActivity? =
     getAllActivities().associateBy { it.id }[id]
 
 fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {

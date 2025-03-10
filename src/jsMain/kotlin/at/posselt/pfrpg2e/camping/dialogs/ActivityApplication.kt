@@ -163,7 +163,6 @@ class ActivityApplication(
             "save" -> save()
             "edit-skills" -> launchCampingSkillPicker(currentActivity.getCampingSkills(expandAny = false)) {
                 currentActivity.skills = it
-
                 render()
             }
 

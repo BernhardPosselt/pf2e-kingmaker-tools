@@ -19,7 +19,7 @@ external interface ActivityResult {
 }
 
 @JsPlainObject
-external interface KingdomActivity {
+external interface RawActivity {
     var id: String
     var title: String
     var description: String
@@ -42,12 +42,12 @@ external interface KingdomActivity {
 }
 
 @JsModule("./kingdom-activities.json")
-external val kingdomActivities: Array<KingdomActivity>
+external val kingdomActivities: Array<RawActivity>
 
 @JsModule("./schemas/kingdom-activity.json")
 external val kingdomActivitySchema: JsonElement
 
-fun KingdomActivity.resolveDc(
+fun RawActivity.resolveDc(
     enemyArmyScoutingDcs: List<Int>,
     kingdomLevel: Int,
     realm: RealmData,
@@ -68,10 +68,10 @@ fun KingdomActivity.resolveDc(
     return dc?.let { it + (dcAdjustment ?: 0) }
 }
 
-fun KingdomActivity.parseModifiers(): List<Modifier> =
+fun RawActivity.parseModifiers(): List<Modifier> =
     modifiers?.map { it.parse() }.orEmpty()
 
-fun KingdomActivity.skillRanks(): Set<KingdomSkillRank> =
+fun RawActivity.skillRanks(): Set<KingdomSkillRank> =
     skills.asSequence()
         .mapNotNull { (name, rank) ->
             KingdomSkill.fromString(name)?.let {

@@ -1,16 +1,18 @@
 <div>
     <table class="km-xy-table {{#if compact}}compact{{/if}}">
+        {{#if headers}}
         <tr>
             <th class="km-th-spacer"></th>
             {{#each headers}}
                 <th class="km-xy-column-header">{{this}}</th>
             {{/each}}
         </tr>
+        {{/if}}
         {{#each formRows}}
             <tr>
-                <th>{{label}}</th>
+                {{#if label}}<th>{{label}}</th>{{/if}}
                 {{#each cells}}
-                    <td>{{> formElement this }}</td>
+                    <td {{#if hidden}}hidden{{/if}}>{{> formElement this }}</td>
                 {{/each}}
             </tr>
         {{/each}}

@@ -21,3 +21,12 @@ enum class ActivityDcType {
     val label: String
         get() = toLabel()
 }
+
+fun getDcType(value: Any): ActivityDcType =
+    when(value) {
+        ActivityDcType.CONTROL.value -> ActivityDcType.CONTROL
+        ActivityDcType.CUSTOM.value -> ActivityDcType.CUSTOM
+        ActivityDcType.NONE.value -> ActivityDcType.NONE
+        ActivityDcType.SCOUTING.value -> ActivityDcType.SCOUTING
+        else -> ActivityDcType.VALUE
+    }

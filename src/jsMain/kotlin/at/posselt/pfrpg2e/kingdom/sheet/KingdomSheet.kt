@@ -18,6 +18,7 @@ import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
+import at.posselt.pfrpg2e.kingdom.dialogs.ActivityManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.GovernmentManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
@@ -202,7 +203,7 @@ class KingdomSheet(
                 }
             }
 
-            "configure-activities" -> TODO()
+            "configure-activities" -> ActivityManagement(kingdomActor = actor).launch()
             "configure-milestones" -> MilestoneManagement(kingdomActor = actor).launch()
             "configure-charters" -> CharterManagement(kingdomActor = actor).launch()
             "configure-governments" -> GovernmentManagement(kingdomActor = actor).launch()
@@ -239,7 +240,7 @@ class KingdomSheet(
             }
 
             "help" -> buildPromise {
-                openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY")
+                openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY.JournalEntryPage.ty6BS5eSI7ScfVBk")
             }
         }
     }

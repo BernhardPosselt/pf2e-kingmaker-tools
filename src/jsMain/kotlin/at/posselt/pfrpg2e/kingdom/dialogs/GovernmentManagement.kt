@@ -32,6 +32,7 @@ class GovernmentManagement(
                 kingdom.government.type = null
                 resetAbilityBoosts(kingdom.government.abilityBoosts)
             }
+            kingdom.governmentBlacklist = kingdom.governmentBlacklist.filter { it == id }.toTypedArray()
             kingdomActor.setKingdom(kingdom)
             render()
         }

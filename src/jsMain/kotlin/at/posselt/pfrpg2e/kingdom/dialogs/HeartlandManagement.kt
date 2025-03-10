@@ -29,6 +29,7 @@ class HeartlandManagement(
             if (kingdom.heartland.type == id) {
                 kingdom.heartland.type = null;
             }
+            kingdom.heartlandBlacklist = kingdom.heartlandBlacklist.filter { it == id }.toTypedArray()
             kingdomActor.setKingdom(kingdom)
             render()
         }

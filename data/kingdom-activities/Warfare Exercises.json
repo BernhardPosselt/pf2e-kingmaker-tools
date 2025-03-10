@@ -72,6 +72,7 @@
         "turns": 1,
         "enabled": true,
         "buttonLabel": "Prevent Critical Failure on Army Activity Once",
+        "isConsumedAfterRoll": true,
         "applyIf": [
           {
             "eq": [

@@ -2,8 +2,11 @@ package at.posselt.pfrpg2e.app.forms
 
 import at.posselt.pfrpg2e.app.SkillInputArrayContext
 import at.posselt.pfrpg2e.camping.CampingSkill
+import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.toLabel
+import at.posselt.pfrpg2e.utils.asSequence
 import com.foundryvtt.core.AnyObject
+import js.objects.Record
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -28,6 +31,20 @@ class SkillPicker(
             hideLabel = hideLabel,
             help = help,
         ).toContext()
+}
+
+fun toSkillContext(skills: Record<String, Int>): SkillInputContext {
+    return SkillInputContext(
+        skills = skills.asSequence()
+            .map { (skill, rank) ->
+                SkillInputArrayContext(
+                    label = skill.toLabel(),
+                    proficiency = Proficiency.fromRank(rank).value,
+                )
+            }
+            .toList()
+            .toTypedArray()
+    )
 }
 
 fun toSkillContext(skills: Array<CampingSkill>): SkillInputContext {

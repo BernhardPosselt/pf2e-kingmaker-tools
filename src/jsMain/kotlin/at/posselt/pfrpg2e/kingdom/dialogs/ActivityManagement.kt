@@ -1,37 +1,30 @@
 package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.CrudApplication
-import at.posselt.pfrpg2e.app.CrudColumn
 import at.posselt.pfrpg2e.app.CrudData
 import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
-import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
-import at.posselt.pfrpg2e.kingdom.RawCharter
-import at.posselt.pfrpg2e.kingdom.getCharters
+import at.posselt.pfrpg2e.kingdom.RawActivity
+import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
-import at.posselt.pfrpg2e.kingdom.sheet.resetAbilityBoosts
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
 import kotlin.js.Promise
 
-class CharterManagement(
+class ActivityManagement(
     private val kingdomActor: PF2ENpc,
 ) : CrudApplication(
-    title = "Manage Charters",
+    title = "Manage Activities",
     debug = true,
-    id = "kmManageCharters"
+    id = "kmManageActivities"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->
-            kingdom.homebrewCharters = kingdom.homebrewCharters.filter { it.id != id }.toTypedArray()
-            if (kingdom.charter.type == id) {
-                kingdom.charter.type = null
-                resetAbilityBoosts(kingdom.charter.abilityBoosts)
-            }
-            kingdom.charterBlacklist = kingdom.charterBlacklist.filter { it == id }.toTypedArray()
+            kingdom.homebrewActivities = kingdom.homebrewActivities.filter { it.id != id }.toTypedArray()
+            kingdom.activityBlacklist = kingdom.activityBlacklist.filter { it == id }.toTypedArray()
             kingdomActor.setKingdom(kingdom)
             render()
         }
@@ -39,10 +32,10 @@ class CharterManagement(
     }
 
     override fun addEntry(): Promise<Void> = buildPromise {
-        ModifyCharter(
+        ModifyActivity(
             afterSubmit = {
                 kingdomActor.getKingdom()?.let { kingdom ->
-                    kingdom.homebrewCharters = kingdom.homebrewCharters + it
+                    kingdom.homebrewActivities = kingdom.homebrewActivities + it
                     kingdomActor.setKingdom(kingdom)
                 }
                 render()
@@ -52,16 +45,13 @@ class CharterManagement(
     }
 
     override fun editEntry(id: String) = buildPromise {
-        ModifyCharter(
-            data = kingdomActor.getKingdom()?.homebrewCharters?.find { it.id == id },
-            afterSubmit = { charter ->
+        ModifyActivity(
+            data = kingdomActor.getKingdom()?.homebrewActivities?.find { it.id == id },
+            afterSubmit = { activity ->
                 kingdomActor.getKingdom()?.let { kingdom ->
-                    kingdom.homebrewCharters = kingdom.homebrewCharters
-                        .filter { m -> m.id != charter.id }
-                        .toTypedArray() + charter
-                    if (kingdom.charter.type == charter.id) {
-                        resetAbilityBoosts(kingdom.charter.abilityBoosts)
-                    }
+                    kingdom.homebrewActivities = kingdom.homebrewActivities
+                        .filter { m -> m.id != activity.id }
+                        .toTypedArray() + activity
                     kingdomActor.setKingdom(kingdom)
                 }
                 render()
@@ -72,26 +62,17 @@ class CharterManagement(
 
     override fun getItems(): Promise<Array<CrudItem>> = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->
-            val disabledIds = kingdom.charterBlacklist.toSet()
-            val homebrewIds = kingdom.homebrewCharters.map { it.id }.toSet()
-            kingdom.getCharters()
-                .sortedWith(compareBy(RawCharter::name))
+            val disabledIds = kingdom.activityBlacklist.toSet()
+            val homebrewIds = kingdom.homebrewActivities.map { it.id }.toSet()
+            kingdom.getAllActivities()
+                .sortedWith(compareBy(RawActivity::title))
                 .map { item ->
                     val canBeEdited = item.id in homebrewIds
                     CrudItem(
                         id = item.id,
-                        name = item.name,
+                        name = item.title,
                         nameIsHtml = false,
-                        additionalColumns = arrayOf(
-                            CrudColumn(
-                                escapeHtml = true,
-                                value = item.boost?.let { KingdomAbility.fromString(it) }?.label ?: "",
-                            ),
-                            CrudColumn(
-                                escapeHtml = true,
-                                value = item.flaw?.let { KingdomAbility.fromString(it) }?.label ?: "",
-                            )
-                        ),
+                        additionalColumns = arrayOf(),
                         enable = CheckboxInput(
                             value = item.id !in disabledIds,
                             label = "Enable",
@@ -106,19 +87,16 @@ class CharterManagement(
     }
 
     override fun getHeadings(): Promise<Array<String>> = buildPromise {
-        arrayOf("Boost", "Flaw")
+        arrayOf()
     }
 
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->
             val enabled = value.enabledIds.toSet()
-            kingdom.charterBlacklist = kingdom.getCharters()
+            kingdom.activityBlacklist = kingdom.getAllActivities()
                 .filter { it.id !in enabled }
                 .map { it.id }
                 .toTypedArray()
-            if (kingdom.charter.type !in enabled) {
-                kingdom.charter.type = null
-            }
             kingdomActor.setKingdom(kingdom)
         }
         undefined

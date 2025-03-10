@@ -21,8 +21,8 @@ import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.fromCamelCase
-import at.posselt.pfrpg2e.kingdom.KingdomActivity
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
 import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmyConditions
 import at.posselt.pfrpg2e.kingdom.checkModifiers
@@ -245,7 +245,7 @@ private data class CheckDialogParams(
     val validSkills: Set<KingdomSkill>,
     val phase: KingdomPhase?,
     val structure: Structure?,
-    val activity: KingdomActivity?,
+    val activity: RawActivity?,
     val armyConditions: ArmyConditionInfo?,
 )
 
@@ -617,7 +617,7 @@ private class KingdomCheckDialog(
 
 sealed interface CheckType {
     value class RollSkill(val skill: KingdomSkill) : CheckType
-    value class PerformActivity(val activity: KingdomActivity) : CheckType
+    value class PerformActivity(val activity: RawActivity) : CheckType
     value class BuildStructure(val structure: Structure) : CheckType
 }
 

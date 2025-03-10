@@ -3,7 +3,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
-import at.posselt.pfrpg2e.kingdom.KingdomActivity
+import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
@@ -71,7 +71,7 @@ private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
 }
 
 private suspend fun generateRollMeta(
-    activity: KingdomActivity?,
+    activity: RawActivity?,
     modifier: Int,
     modifierPills: Array<ModifierPill>,
     actor: PF2ENpc,
@@ -143,7 +143,7 @@ private external interface UpgradeMetaContext {
 private suspend fun buildUpgradeMeta(
     additionalMessages: String?,
     degree: DegreeOfSuccess,
-    activity: KingdomActivity,
+    activity: RawActivity,
     rollMode: RollMode,
 ): String {
     return tpl(
@@ -174,7 +174,7 @@ private fun parseUpgradeMeta(elem: HTMLElement) =
 suspend fun rollCheck(
     afterRoll: AfterRollMessage,
     rollMode: RollMode?,
-    activity: KingdomActivity?,
+    activity: RawActivity?,
     skill: KingdomSkill,
     modifier: Int,
     modifierWithCreativeSolution: Int,
