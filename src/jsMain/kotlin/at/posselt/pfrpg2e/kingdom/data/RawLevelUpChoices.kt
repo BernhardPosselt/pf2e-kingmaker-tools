@@ -41,17 +41,17 @@ fun RawAbilityBoostChoices.getBoosts() =
     )
 
 @JsPlainObject
-external interface RawRuinThresholdIncrease {
+external interface RawRuinThresholdIncreaseContext {
     val value: Int
     val increase: Boolean
 }
 
 @JsPlainObject
-external interface RawRuinThresholdIncreases {
-    val crime: RawRuinThresholdIncrease
-    val corruption: RawRuinThresholdIncrease
-    val strife: RawRuinThresholdIncrease
-    val decay: RawRuinThresholdIncrease
+external interface RawRuinThresholdIncreasesContext {
+    val crime: RawRuinThresholdIncreaseContext
+    val corruption: RawRuinThresholdIncreaseContext
+    val strife: RawRuinThresholdIncreaseContext
+    val decay: RawRuinThresholdIncreaseContext
 }
 
 data class RuinThresholdIncreases(
@@ -69,7 +69,7 @@ data class RuinThresholdIncreases(
         )
 }
 
-fun RawRuinThresholdIncreases.parse() = RuinThresholdIncreases(
+fun RawRuinThresholdIncreasesContext.parse() = RuinThresholdIncreases(
     crime = if (crime.increase) crime.value else 0,
     corruption = if (corruption.increase) corruption.value else 0,
     strife = if (strife.increase) strife.value else 0,
@@ -82,14 +82,14 @@ external interface RawFeatureChoices {
     var skillIncrease: String?
     var abilityBoosts: RawAbilityBoostChoices?
     var featId: String?
-    var ruinThresholdIncreases: RawRuinThresholdIncreases?
-    var featRuinThresholdIncreases: Array<RawRuinThresholdIncreases>
+    var ruinThresholdIncreases: RawRuinThresholdIncreasesContext?
+    var featRuinThresholdIncreases: Array<RawRuinThresholdIncreasesContext>
 }
 
 @JsPlainObject
 external interface RawBonusFeat {
     var id: String
-    var ruinThresholdIncreases: Array<RawRuinThresholdIncreases>
+    var ruinThresholdIncreases: Array<RawRuinThresholdIncreasesContext>
 }
 
 

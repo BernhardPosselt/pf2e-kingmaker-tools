@@ -12,8 +12,8 @@ import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
-import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.AnyObject
@@ -67,7 +67,7 @@ class ModifyGovernmentDataModel(value: AnyObject) : DataModel(value) {
 
 class ModifyGovernment(
     data: RawGovernment? = null,
-    private val feats: Array<RawKingdomFeat>,
+    private val feats: Array<RawFeat>,
     private val afterSubmit: suspend (data: RawGovernment) -> Unit,
 ) : FormApp<ModifyGovernmentContext, ModifyGovernmentData>(
     title = if (data == null) "Add Government" else "Edit Government",

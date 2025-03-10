@@ -58,6 +58,7 @@ class Migration13 : Migration(13) {
         kingdom.homebrewGovernments = emptyArray()
         kingdom.homebrewHeartlands = emptyArray()
         kingdom.homebrewFeats = emptyArray()
+        kingdom.featBlacklist = emptyArray()
         kingdom.settings.automateStats = false
         kingdom.settings.ruinThreshold = 10
         kingdom.settings.increaseScorePicksBy = 0

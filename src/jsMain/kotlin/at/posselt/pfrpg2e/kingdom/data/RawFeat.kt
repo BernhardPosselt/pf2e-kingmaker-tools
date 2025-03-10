@@ -1,13 +1,13 @@
 package at.posselt.pfrpg2e.kingdom.data
 
 import at.posselt.pfrpg2e.kingdom.KingdomData
-import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
+import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getFeats
 
 data class ChosenFeat(
     val takenAtLevel: Int,
-    val feat: RawKingdomFeat,
+    val feat: RawFeat,
 )
 
 fun KingdomData.getChosenFeats(

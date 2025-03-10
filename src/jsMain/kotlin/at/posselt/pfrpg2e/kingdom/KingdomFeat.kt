@@ -48,7 +48,7 @@ external interface RawRuinThresholdIncreases {
 
 
 @JsPlainObject
-external interface RawKingdomFeat {
+external interface RawFeat {
     val id: String
     val name: String
     val level: Int
@@ -66,7 +66,7 @@ external interface RawKingdomFeat {
     val ruinThresholdIncreases: Array<RawRuinThresholdIncreases>?
 }
 
-fun RawKingdomFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =
+fun RawFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =
     increaseUsableSkills?.asSequence()
         ?.mapNotNull { (skill, skills) ->
             KingdomSkill.fromString(skill)?.let { kingdomSkill ->
@@ -76,13 +76,13 @@ fun RawKingdomFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =
         ?.toMap()
         ?: emptyMap()
 
-fun KingdomData.getFeats(): Array<RawKingdomFeat> {
+fun KingdomData.getFeats(): Array<RawFeat> {
     val overrides = homebrewFeats.map { it.id }.toSet()
     return homebrewFeats + kingdomFeats.filter { it.id !in overrides }
 }
 
 @JsModule("./feats.json")
-external val kingdomFeats: Array<RawKingdomFeat>
+external val kingdomFeats: Array<RawFeat>
 
 @JsModule("./schemas/feat.json")
 external val kingdomFeatSchema: JsonElement

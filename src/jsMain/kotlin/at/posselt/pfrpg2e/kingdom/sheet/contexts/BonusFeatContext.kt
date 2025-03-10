@@ -4,8 +4,8 @@ import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
-import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
 import at.posselt.pfrpg2e.kingdom.RawRuinThresholdIncreases
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
@@ -28,7 +28,7 @@ external interface BonusFeatContext {
 
 fun createBonusFeatContext(
     government: RawGovernment?,
-    feats: Array<RawKingdomFeat>,
+    feats: Array<RawFeat>,
     choices: Array<RawFeatureChoices>,
     bonusFeats: Array<RawBonusFeat>,
     value: String?,
@@ -50,7 +50,7 @@ fun createBonusFeatContext(
 }
 
 fun Array<RawBonusFeat>.toContext(
-    feats: Array<RawKingdomFeat>,
+    feats: Array<RawFeat>,
 ): Array<BonusFeatContext> {
     val featsById = feats.associateBy { it.id }
     return mapIndexedNotNull { index, rawFeat ->

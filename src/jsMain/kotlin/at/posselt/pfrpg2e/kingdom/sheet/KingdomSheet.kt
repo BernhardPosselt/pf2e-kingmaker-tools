@@ -20,6 +20,7 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.dialogs.ActivityManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.FeatManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.GovernmentManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
@@ -208,7 +209,7 @@ class KingdomSheet(
             "configure-charters" -> CharterManagement(kingdomActor = actor).launch()
             "configure-governments" -> GovernmentManagement(kingdomActor = actor).launch()
             "configure-heartlands" -> HeartlandManagement(kingdomActor = actor).launch()
-            "configure-feats" -> TODO()
+            "configure-feats" -> FeatManagement(kingdomActor = actor).launch()
             "structures-import" -> buildPromise {
                 importStructures()
             }

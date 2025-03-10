@@ -141,12 +141,13 @@ external interface KingdomData {
     var turnsWithoutEvent: Int // set via button
     var notes: RawNotes
     var homebrewMilestones: Array<RawMilestone>
-    var homebrewActivities: Array<RawActivity> // set via dialog
+    var homebrewActivities: Array<RawActivity>
     var homebrewCharters: Array<RawCharter>
     var homebrewGovernments: Array<RawGovernment>
     var homebrewHeartlands: Array<RawHeartland>
-    var homebrewFeats: Array<RawKingdomFeat> // set via dialog
-    var activityBlacklist: Array<String>  // set via dialog
+    var homebrewFeats: Array<RawFeat>
+    var activityBlacklist: Array<String>
+    var featBlacklist: Array<String>
     var heartlandBlacklist: Array<String>
     var charterBlacklist: Array<String>
     var governmentBlacklist: Array<String>

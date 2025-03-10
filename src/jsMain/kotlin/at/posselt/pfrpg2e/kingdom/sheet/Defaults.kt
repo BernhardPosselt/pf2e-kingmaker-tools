@@ -245,6 +245,7 @@ fun createKingdomDefaults() =
         homebrewGovernments = emptyArray(),
         homebrewHeartlands = emptyArray(),
         homebrewFeats = emptyArray(),
+        featBlacklist = emptyArray(),
         activityBlacklist = kingdomActivities
             .filterNot { it.enabled }
             .map { it.id }

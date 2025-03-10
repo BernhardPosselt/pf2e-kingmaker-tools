@@ -9,13 +9,13 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.data.actor.highestProficiencyByLevel
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
+import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
-import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
-import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncrease
-import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreases
+import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreaseContext
+import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreasesContext
 import js.objects.JsPlainObject
 
 @JsPlainObject
@@ -56,7 +56,7 @@ external interface FeatureContext {
     val featRuinThresholdIncreases: Array<RuinThresholdIncreases>
 }
 
-fun RawRuinThresholdIncrease.toContext(
+fun RawRuinThresholdIncreaseContext.toContext(
     prefix: String,
     label: String,
 ) = RuinThresholdIncrease(
@@ -73,7 +73,7 @@ fun RawRuinThresholdIncrease.toContext(
     ).toContext(),
 )
 
-fun RawRuinThresholdIncreases.toContext(prefix: String, amount: Int): RuinThresholdIncreases =
+fun RawRuinThresholdIncreasesContext.toContext(prefix: String, amount: Int): RuinThresholdIncreases =
     RuinThresholdIncreases(
         value = crime.value,
         amount = amount,
@@ -85,20 +85,20 @@ fun RawRuinThresholdIncreases.toContext(prefix: String, amount: Int): RuinThresh
 
 
 fun defaultRuinThresholdIncrease(value: Int) =
-    RawRuinThresholdIncreases(
-        crime = RawRuinThresholdIncrease(
+    RawRuinThresholdIncreasesContext(
+        crime = RawRuinThresholdIncreaseContext(
             value = value,
             increase = false,
         ),
-        corruption = RawRuinThresholdIncrease(
+        corruption = RawRuinThresholdIncreaseContext(
             value = value,
             increase = false,
         ),
-        strife = RawRuinThresholdIncrease(
+        strife = RawRuinThresholdIncreaseContext(
             value = value,
             increase = false,
         ),
-        decay = RawRuinThresholdIncrease(
+        decay = RawRuinThresholdIncreaseContext(
             value = value,
             increase = false,
         ),
@@ -118,7 +118,7 @@ fun getTakenFeats(
 fun Array<RawFeatureChoices>.toContext(
     government: RawGovernment?,
     features: Array<RawExplodedKingdomFeature>,
-    feats: Array<RawKingdomFeat>,
+    feats: Array<RawFeat>,
     increaseBoostsBy: Int,
     navigationEntry: String,
     bonusFeats: Array<RawBonusFeat>,

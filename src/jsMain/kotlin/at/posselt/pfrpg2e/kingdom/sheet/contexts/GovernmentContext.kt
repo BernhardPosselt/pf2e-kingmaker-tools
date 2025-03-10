@@ -3,8 +3,8 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
-import at.posselt.pfrpg2e.kingdom.RawKingdomFeat
 import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
 import at.posselt.pfrpg2e.toLabel
 import js.objects.JsPlainObject
@@ -22,7 +22,7 @@ external interface GovernmentContext {
 
 fun RawGovernmentChoices.toContext(
     governments: List<RawGovernment>,
-    feats: Array<RawKingdomFeat>,
+    feats: Array<RawFeat>,
 ): GovernmentContext {
     val featsById = feats.associateBy { it.id }
     val government = governments.find { it.id == type }
