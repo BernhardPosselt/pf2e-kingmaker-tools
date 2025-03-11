@@ -361,7 +361,7 @@ class KingdomSheet(
         )
         val settlementInput = Select(
             name = "activeSettlement",
-            label = "Settlement",
+            label = "Active Settlement",
             value = kingdom.activeSettlement,
             options = settlements.allSettlements.map { SelectOption(it.name, it.id) },
             required = false

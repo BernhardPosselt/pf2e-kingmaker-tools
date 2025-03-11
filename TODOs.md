@@ -2,8 +2,6 @@
 * upgrading from earlier versions changelog
 * turn tab
 * kingdom tab
-* trade agreements tab
-* effects tab
 * settlements tab
 * all chat stuff including rerolling and upgrading results
 * messages for placing structures onto scenes

@@ -57,7 +57,7 @@
     }
 
     .km-kingdom-sheet-sidebar {
-        width: 350px;
+        min-width: 240px;
         border-radius: 10px;
         margin: 10px 0 10px 10px;
         padding: 1em;
