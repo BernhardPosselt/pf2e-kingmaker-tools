@@ -100,7 +100,7 @@ import kotlin.js.Promise
 
 
 private enum class NavEntry {
-    TURN, CHARACTER_SHEET, SETTLEMENTS, TRADE_AGREEMENTS, MODIFIERS, NOTES;
+    TURN, KINGDOM, SETTLEMENTS, TRADE_AGREEMENTS, MODIFIERS, NOTES;
 
     companion object {
         fun fromString(value: String) = fromCamelCase<NavEntry>(value)
@@ -142,7 +142,7 @@ class KingdomSheet(
     private var initialKingdomLevel = getKingdom().level
     private var noCharter = getKingdom().charter.type == null
     private var currentCharacterSheetNavEntry: String = if (noCharter) "Creation" else "$initialKingdomLevel"
-    private var currentNavEntry: NavEntry = if (noCharter) NavEntry.CHARACTER_SHEET else NavEntry.TURN
+    private var currentNavEntry: NavEntry = if (noCharter) NavEntry.KINGDOM else NavEntry.TURN
     private var bonusFeat: String? = null
     private var ongoingEvent: String? = null
 
