@@ -13,11 +13,14 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
+import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
+import at.posselt.pfrpg2e.data.kingdom.findKingdomSize
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.OngoingEvent
+import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
@@ -213,6 +216,25 @@ class KingdomSheet(
                 val index = target.dataset["index"]?.toInt() ?: 0
                 val kingdom = getKingdom()
                 kingdom.modifiers = kingdom.modifiers.filterIndexed { idx, _ -> idx != index }.toTypedArray()
+                actor.setKingdom(kingdom)
+            }
+
+            "add-group" -> buildPromise {
+                val kingdom = getKingdom()
+                val realm = game.getRealmData(kingdom)
+                kingdom.groups = kingdom.groups + RawGroup(
+                    name = "Group Name",
+                    negotiationDC = 10 + findKingdomSize(realm.size).controlDCModifier,
+                    atWar = false,
+                    relations = "none",
+                )
+                actor.setKingdom(kingdom)
+            }
+
+            "delete-group" -> buildPromise {
+                val index = target.dataset["index"]?.toInt() ?: 0
+                val kingdom = getKingdom()
+                kingdom.groups = kingdom.groups.filterIndexed { idx, _ -> idx != index }.toTypedArray()
                 actor.setKingdom(kingdom)
             }
 
@@ -470,7 +492,21 @@ class KingdomSheet(
             isGM = game.user.isGM,
             actor = actor,
             modifiers = kingdom.modifiers.toContext(),
+            mainNav = createMainNav(kingdom),
         )
+    }
+
+    private fun createMainNav(kingdom: KingdomData): Array<NavEntryContext> {
+        val tradeAgreements = kingdom.groups.count { it.relations == Relations.TRADE_AGREEMENT.value }
+        return NavEntry.entries.map {
+            NavEntryContext(
+                label = if (it == NavEntry.TRADE_AGREEMENTS) "${it.label} ($tradeAgreements)" else it.label,
+                active = currentNavEntry == it,
+                link = it.value,
+                title = it.label,
+            )
+        }
+            .toTypedArray()
     }
 
     private fun createKingdomSectionNav(kingdom: KingdomData): Array<NavEntryContext> {

@@ -11,6 +11,7 @@
         .km-kingdom-sheet-sub-nav, .km-kingdom-sheet-sub-content, .km-kingdom-sheet-sidebar {
             background-color: rgba(11, 10, 19, .95);
             border-radius: 5px;
+            border: 1px solid;
             box-shadow: 0 0 5px 1px rgba(0, 0, 0, .5);
         }
     }
@@ -46,33 +47,17 @@
         }
     }
 
-    .km-kingdom-sheet-main-nav {
-        ul {
-            list-style-type: none;
-            display: flex;
-            margin: 0;
-            padding: 0;
-
-
-            a {
-                padding: .5em 1em;
-                /*text-decoration: none;*/
-                /*color: white;*/
-                /*background-color: var(--primary-km);*/
-            }
-        }
-    }
-
     .km-kingdom-sheet-main {
-        background-image: url("../../../img/camping/backgrounds/urban-day.webp");
+        background-image: url("../../../img/camping/backgrounds/hills-day.webp");
         display: flex;
-        gap: 2em;
         background-size: cover;
         height: calc(100vh - 310px);
+        position: relative;
+        z-index: 0;
     }
 
     .km-kingdom-sheet-sidebar {
-        width: 300px;
+        width: 350px;
         border-radius: 10px;
         margin: 10px 0 10px 10px;
         padding: 1em;
@@ -88,14 +73,8 @@
 
     .km-kingdom-sheet-sub-nav {
         margin-bottom: 10px;
-        padding: .5em;
 
         ul {
-            display: flex;
-            gap: .5em;
-            padding: 0;
-            margin: 0;
-            list-style-type: none;
             font-size: .8em;
 
             li:first-child,
@@ -108,6 +87,29 @@
                     margin-left: auto;
                 }
             }
+        }
+    }
+
+    .km-kingdom-sheet-main-nav {
+        ul {
+            justify-content: center;
+        }
+        border-bottom: 1px solid;
+        box-shadow: 0 4px 4px 0 #00000082;
+        z-index: 1;
+        position: relative;
+    }
+
+    .km-kingdom-sheet-sub-nav,
+    .km-kingdom-sheet-main-nav {
+        padding: .5em;
+
+        ul {
+            display: flex;
+            gap: .5em;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
 
             li {
                 display: flex;
