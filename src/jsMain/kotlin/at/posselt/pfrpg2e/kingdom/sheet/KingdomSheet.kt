@@ -22,12 +22,14 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.dialogs.ActivityManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.AddModifier
 import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.FeatManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.GovernmentManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
+import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
 import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
@@ -85,18 +87,11 @@ import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.collections.filter
-import kotlin.collections.isNotEmpty
-import kotlin.collections.map
-import kotlin.collections.plus
-import kotlin.collections.sortedBy
-import kotlin.collections.toSet
-import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 
 
 private enum class NavEntry {
-    TURN, CHARACTER_SHEET, SETTLEMENTS, TRADE_AGREEMENTS, EFFECTS, NOTES;
+    TURN, CHARACTER_SHEET, SETTLEMENTS, TRADE_AGREEMENTS, MODIFIERS, NOTES;
 
     companion object {
         fun fromString(value: String) = fromCamelCase<NavEntry>(value)
@@ -201,9 +196,24 @@ class KingdomSheet(
             "change-nav" -> {
                 event.preventDefault()
                 event.stopPropagation()
-                console.log(target.dataset["link"])
                 currentNavEntry = target.dataset["link"]?.let { NavEntry.fromString(it) } ?: NavEntry.TURN
                 render()
+            }
+
+            "add-modifier" -> buildPromise {
+                val kingdom = getKingdom()
+                AddModifier(activities = kingdom.getAllActivities().toTypedArray()) {
+                    val current = getKingdom()
+                    current.modifiers = current.modifiers + it
+                    actor.setKingdom(current)
+                }.launch()
+            }
+
+            "delete-modifier" -> buildPromise {
+                val index = target.dataset["index"]?.toInt() ?: 0
+                val kingdom = getKingdom()
+                kingdom.modifiers = kingdom.modifiers.filterIndexed { idx, _ -> idx != index }.toTypedArray()
+                actor.setKingdom(kingdom)
             }
 
             "add-ongoing-event" -> {
@@ -279,7 +289,7 @@ class KingdomSheet(
     }
 
     suspend fun importStructures() {
-        if(game.importStructures().isNotEmpty()) {
+        if (game.importStructures().isNotEmpty()) {
             ui.notifications.info("Imported Structures into Structures folder")
         }
     }
@@ -459,6 +469,7 @@ class KingdomSheet(
             ongoingEvent = ongoingEvent.toContext(),
             isGM = game.user.isGM,
             actor = actor,
+            modifiers = kingdom.modifiers.toContext(),
         )
     }
 

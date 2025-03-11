@@ -97,6 +97,10 @@ fun main() {
                 // register partials
                 loadTpls(
                     arrayOf(
+                        "kingdom-trade-agreements" to "applications/kingdom/sections/trade-agreements/page.hbs",
+                        "kingdom-settlements" to "applications/kingdom/sections/settlements/page.hbs",
+                        "kingdom-turn" to "applications/kingdom/sections/turn/page.hbs",
+                        "kingdom-modifiers" to "applications/kingdom/sections/modifiers/page.hbs",
                         "kingdom-notes" to "applications/kingdom/sections/notes/page.hbs",
                         "kingdom-character-sheet" to "applications/kingdom/sections/character-sheet/page.hbs",
                         "kingdom-character-sheet-creation" to "applications/kingdom/sections/character-sheet/creation.hbs",

@@ -15,7 +15,7 @@
             <li><a data-action="change-nav" href="#" data-link="characterSheet">Kingdom</a></li>
             <li><a data-action="change-nav" href="#" data-link="settlements">Settlements</a></li>
             <li><a data-action="change-nav" href="#" data-link="tradeAgreements">Trade Agreements (1)</a></li>
-            <li><a data-action="change-nav" href="#" data-link="effects">Effects</a></li>
+            <li><a data-action="change-nav" href="#" data-link="modifiers">Modifiers</a></li>
             <li><a data-action="change-nav" href="#" data-link="notes">Notes</a></li>
         </ul>
     </nav>
@@ -23,6 +23,10 @@
     <main class="km-kingdom-sheet-main">
         {{> kingdom-character-sheet this}}
         {{> kingdom-notes this}}
+        {{> kingdom-turn this}}
+        {{> kingdom-trade-agreements this}}
+        {{> kingdom-settlements this}}
+        {{> kingdom-modifiers this}}
 
         <div hidden>
             {{> formElement worksitesContext.farmlands.resources }}

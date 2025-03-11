@@ -17,7 +17,9 @@ import at.posselt.pfrpg2e.kingdom.RawExpression
 import at.posselt.pfrpg2e.kingdom.RawIn
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
+import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
@@ -74,7 +76,6 @@ external interface AddModifierContext : HandlebarsRenderContext {
     val formRows: Array<FormElementContext>
 }
 
-@JsExport
 class AddModifier(
     private val activities: Array<RawActivity>,
     private val onSave: suspend (modifier: RawModifier) -> Unit,
@@ -114,10 +115,19 @@ class AddModifier(
                 if (data.activityId != null) {
                     predicates.add(RawIn(`in` = tupleOf("@activity", arrayOf(data.activityId))))
                 }
+                val activity = activities.find { it.id == data.activityId }
+                val buttonLabel = listOfNotNull(
+                    data.value.formatAsModifier() + " ${data.type.toLabel()}",
+                    data.phase?.let { "Phase: ${it.toLabel()}" },
+                    data.ability?.let { "Ability: ${it.toLabel()}" },
+                    data.skill?.let { "Skill: ${it.toLabel()}" },
+                    activity?.let { "Activity: ${it.title}" },
+                ).joinToString(", ")
                 val modifier = RawModifier(
                     type = data.type,
                     value = data.value,
                     name = data.name,
+                    buttonLabel = buttonLabel,
                     enabled = data.enabled,
                     turns = data.turns,
                     isConsumedAfterRoll = data.isConsumedAfterRoll,

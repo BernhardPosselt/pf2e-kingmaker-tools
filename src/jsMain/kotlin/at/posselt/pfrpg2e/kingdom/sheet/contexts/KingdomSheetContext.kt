@@ -2,8 +2,8 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.FormElementContext
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
-import com.foundryvtt.pf2e.actor.PF2EActor
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -49,5 +49,6 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val milestones: Array<MilestoneContext>
     val ongoingEvent: FormElementContext
     val isGM: Boolean
-    val actor: PF2EActor
+    val actor: KingdomActor
+    val modifiers: Array<ModifierContext>
 }

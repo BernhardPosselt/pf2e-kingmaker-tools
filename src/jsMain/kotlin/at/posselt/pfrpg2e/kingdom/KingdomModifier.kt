@@ -131,7 +131,6 @@ external interface RawModifier {
     var downgradeResults: Array<RawDowngradeResult>?
 }
 
-
 fun RawExpression<Boolean>.parse(): Expression<Boolean> {
     return if (Object.hasOwn(this, "and")) {
         val p = this.unsafeCast<RawAll>()
