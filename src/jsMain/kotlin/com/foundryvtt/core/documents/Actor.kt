@@ -3,7 +3,12 @@ package com.foundryvtt.core
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.collections.EmbeddedCollection
-import com.foundryvtt.core.documents.*
+import com.foundryvtt.core.documents.ClientDocument
+import com.foundryvtt.core.documents.Folder
+import com.foundryvtt.core.documents.Item
+import com.foundryvtt.core.documents.Ownership
+import com.foundryvtt.core.documents.PrototypeToken
+import com.foundryvtt.core.documents.TokenDocument
 import js.objects.jso
 import kotlin.js.Promise
 
@@ -19,7 +24,7 @@ open external class Actor : ClientDocument {
     var name: String
     var img: String?
     var type: String
-    var prototypeToken: TokenDocument
+    var prototypeToken: PrototypeToken
     var items: EmbeddedCollection<Item>
 
     // var effects: EmbeddedCollection<Effect>

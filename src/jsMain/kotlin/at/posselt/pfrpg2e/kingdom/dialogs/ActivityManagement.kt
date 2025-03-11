@@ -19,7 +19,7 @@ class ActivityManagement(
 ) : CrudApplication(
     title = "Manage Activities",
     debug = true,
-    id = "kmManageActivities"
+    id = "kmManageActivities-${kingdomActor.uuid}"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->

@@ -23,7 +23,7 @@ class GovernmentManagement(
 ) : CrudApplication(
     title = "Manage Governments",
     debug = true,
-    id = "kmManageGovernments"
+    id = "kmManageGovernments-${kingdomActor.uuid}"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->

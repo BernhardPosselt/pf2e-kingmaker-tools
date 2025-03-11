@@ -27,9 +27,9 @@ import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.kingdomActivities
 import at.posselt.pfrpg2e.kingdom.kingdomMilestones
 
-fun createKingdomDefaults() =
+fun createKingdomDefaults(name: String) =
     KingdomData(
-        name = "Kingdom",
+        name = name,
         atWar = false,
         fame = RawFame(type = "famous", now = 0, next = 0),
         level = 1,

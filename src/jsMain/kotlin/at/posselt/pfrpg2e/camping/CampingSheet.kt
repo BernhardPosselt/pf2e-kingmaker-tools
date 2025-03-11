@@ -1,7 +1,9 @@
 package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
+import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.actions.emptyActionMessage
+import at.posselt.pfrpg2e.actions.handlers.OpenCampingSheetAction
 import at.posselt.pfrpg2e.actor.openActor
 import at.posselt.pfrpg2e.actor.party
 import at.posselt.pfrpg2e.app.ActorRef
@@ -391,7 +393,10 @@ class CampingSheet(
             }
 
             "show-players" -> buildPromise {
-                dispatcher.dispatch(emptyActionMessage("openCampingSheet"))
+                dispatcher.dispatch(ActionMessage(
+                    action="openCampingSheet",
+                    data=OpenCampingSheetAction(actorUuid=actor.uuid)
+                ))
             }
 
             "open-journal" -> {

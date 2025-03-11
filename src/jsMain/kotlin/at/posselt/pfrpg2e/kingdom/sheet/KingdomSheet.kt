@@ -11,6 +11,8 @@ import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
+import at.posselt.pfrpg2e.app.forms.formContext
+import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomData
@@ -43,6 +45,7 @@ import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.NewKingdomContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createBonusFeatContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
@@ -54,6 +57,7 @@ import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.openJournal
+import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
@@ -76,6 +80,7 @@ import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -106,7 +111,8 @@ class KingdomSheet(
     template = "applications/kingdom/kingdom-sheet.hbs",
     debug = true,
     dataModel = KingdomSheetDataModel::class.js,
-    id = "kmKingdomSheet",
+    classes = arrayOf("km-kingdom-sheet"),
+    id = "kmKingdomSheet-${actor.uuid}",
     width = 970,
     controls = arrayOf(
         MenuControl(label = "Show Players", action = "show-players", gmOnly = true),
@@ -116,6 +122,7 @@ class KingdomSheet(
         MenuControl(label = "Feats", action = "configure-feats", gmOnly = true),
         MenuControl(label = "Heartlands", action = "configure-heartlands", gmOnly = true),
         MenuControl(label = "Milestones", action = "configure-milestones", gmOnly = true),
+        MenuControl(label = "New Kingdom", action = "new-kingdom", gmOnly = true),
         MenuControl(label = "Settings", action = "settings", gmOnly = true),
         MenuControl(label = "Help", action = "help"),
     ),
@@ -237,6 +244,24 @@ class KingdomSheet(
                         },
                         kingdomSettings = kingdom.settings
                     ).launch()
+                }
+            }
+
+            "new-kingdom" -> buildPromise {
+                prompt<NewKingdomContext, Unit>(
+                    title = "Create a New Kingdom",
+                    templatePath = "components/forms/form.hbs",
+                    templateContext = recordOf(
+                        "formRows" to formContext(
+                            TextInput(
+                                name = "name",
+                                label = "Kingdom Name",
+                                value = ""
+                            )
+                        )
+                    ),
+                ) {
+                    KingdomSheet(game, newKingdom(it.name), dispatcher).launch()
                 }
             }
 
@@ -491,9 +516,29 @@ class KingdomSheet(
     }
 }
 
-suspend fun openKingdomSheet(game: Game, dispatcher: ActionDispatcher, actor: PF2ENpc?) {
+suspend fun newKingdom(name: String): PF2ENpc {
+    val actor = PF2ENpc.create(
+        recordOf(
+            "type" to "npc",
+            "name" to name,
+            "img" to "icons/environment/settlement/castle.webp",
+            "ownership" to recordOf(
+                "default" to 3
+            )
+        )
+    ).await()
+    actor.typeSafeUpdate {
+        prototypeToken.actorLink = true
+    }
+    actor.setKingdom(createKingdomDefaults(name))
+    return actor
+}
+
+suspend fun openOrCreateKingdomSheet(game: Game, dispatcher: ActionDispatcher, actor: PF2ENpc?) {
     if (actor == null) {
-        // TODO: launch kingdom creation
+        val actor = newKingdom("Kingdom")
+        KingdomSheet(game, actor, dispatcher).launch()
+        openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.FwcyYZARAnOHlKkE")
     } else {
         KingdomSheet(game, actor, dispatcher).launch()
     }

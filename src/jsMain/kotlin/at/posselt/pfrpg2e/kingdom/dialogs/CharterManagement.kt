@@ -22,7 +22,7 @@ class CharterManagement(
 ) : CrudApplication(
     title = "Manage Charters",
     debug = true,
-    id = "kmManageCharters"
+    id = "kmManageCharters-${kingdomActor.uuid}"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->

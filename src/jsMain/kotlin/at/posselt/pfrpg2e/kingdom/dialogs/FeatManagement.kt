@@ -19,7 +19,7 @@ class FeatManagement(
 ) : CrudApplication(
     title = "Manage Feats",
     debug = true,
-    id = "kmManageFeats"
+    id = "kmManageFeats-${kingdomActor.uuid}"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->

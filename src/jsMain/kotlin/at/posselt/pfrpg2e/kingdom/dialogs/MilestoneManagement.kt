@@ -21,7 +21,7 @@ class MilestoneManagement(
 ) : CrudApplication(
     title = "Manage Milestones",
     debug = true,
-    id = "kmManageMilestones"
+    id = "kmManageMilestones-${kingdomActor.uuid}"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->

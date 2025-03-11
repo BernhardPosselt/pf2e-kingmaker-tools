@@ -21,7 +21,7 @@ class HeartlandManagement(
 ) : CrudApplication(
     title = "Manage Heartlands",
     debug = true,
-    id = "kmManageHeartlands"
+    id = "kmManageHeartlands-${kingdomActor.uuid}"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->

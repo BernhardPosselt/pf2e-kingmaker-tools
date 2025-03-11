@@ -1,5 +1,5 @@
 .theme-light {
-    #kmKingdomSheet {
+    .km-kingdom-sheet {
         .km-kingdom-sheet-content, .km-sub-nav, .km-kingdom-sheet-sidebar {
             /* TODO */
         }
@@ -7,7 +7,7 @@
 }
 
 .theme-dark {
-    #kmKingdomSheet {
+    .km-kingdom-sheet {
         .km-kingdom-sheet-sub-nav, .km-kingdom-sheet-sub-content, .km-kingdom-sheet-sidebar {
             background-color: rgba(11, 10, 19, .95);
             border: 1px solid;
@@ -17,7 +17,7 @@
     }
 }
 
-#kmKingdomSheet {
+.km-kingdom-sheet {
     .window-content {
         padding: 0;
     }
