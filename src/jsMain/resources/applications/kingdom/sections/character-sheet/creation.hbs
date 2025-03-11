@@ -50,7 +50,7 @@
         <h2>Finalize Ability Scores</h2>
         <div class="km-choose-boosts">
             <p>Pick {{abilityBoosts.free}} Boosts:</p>
-            <ul class="km-choose-boosts">
+            <ul>
                 <li>{{> formElement abilityBoosts.culture}}</li>
                 <li>{{> formElement abilityBoosts.economy}}</li>
                 <li>{{> formElement abilityBoosts.loyalty}}</li>
@@ -60,7 +60,14 @@
     </section>
     <section class="km-kingdom-sheet-kingdom-section">
         <h2>Choose Leaders</h2>
-        <p>Assign your leaders in the sidebar</p>
+        <p>Assign your leaders in the sidebar, then pick 4 Skills to train:</p>
+        <div class="km-choose-skills">
+            <ul>
+            {{#each initialProficiencies}}
+                <li>{{> formElement this}}</li>
+            {{/each}}
+            </ul>
+        </div>
     </section>
     <section class="km-kingdom-sheet-kingdom-section">
         <h2>First Village</h2>

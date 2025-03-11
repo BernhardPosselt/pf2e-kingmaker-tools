@@ -81,6 +81,7 @@ class Migration13 : Migration(13) {
                 stability = false,
             )
         )
+        kingdom.initialProficiencies = emptyArray()
         kingdom.groups = kingdom.groups.map {
             it.copy(
                 relations = when (it.relations) {

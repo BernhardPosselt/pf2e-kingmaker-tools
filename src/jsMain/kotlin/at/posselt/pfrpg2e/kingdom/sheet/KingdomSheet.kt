@@ -13,6 +13,7 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.data.kingdom.findKingdomSize
@@ -42,6 +43,7 @@ import at.posselt.pfrpg2e.kingdom.getHeartlands
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getMilestones
 import at.posselt.pfrpg2e.kingdom.getRealmData
+import at.posselt.pfrpg2e.kingdom.getTrainedSkills
 import at.posselt.pfrpg2e.kingdom.hasLeaderUuid
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.getHighestLeadershipModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
@@ -430,6 +432,22 @@ class KingdomSheet(
         val enabledCharters = kingdom.getCharters().filter { it.id !in charterBlacklist }
         val enabledGovernments = kingdom.getGovernments().filter { it.id !in governmentBlacklist }
         val notesContext = kingdom.notes.toContext()
+        val government = kingdom.getChosenGovernment()
+        val trainedSkills = kingdom.getTrainedSkills(chosenFeats, government)
+        val initialProficiencies = (0..3).map { index ->
+            val proficiency = kingdom.initialProficiencies.getOrNull(index)
+                ?.let { KingdomSkill.fromString(it) }
+            val result = Select(
+                name = "initialProficiencies.$index",
+                label = "Skill Training",
+                value = proficiency?.value,
+                options = KingdomSkill.entries.filter { it == proficiency || it !in trainedSkills }
+                    .map { SelectOption(value = it.value, label = it.label) },
+                required = false,
+                hideLabel = true,
+            ).toContext()
+            result
+        }.toTypedArray()
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -465,21 +483,23 @@ class KingdomSheet(
             hideBonus = currentCharacterSheetNavEntry != "Bonus",
             settings = kingdom.settings,
             featuresByLevel = kingdom.features.toContext(
-                government = kingdom.getChosenGovernment(),
+                government = government,
                 features = allFeatures.toTypedArray(),
                 feats = feats,
                 increaseBoostsBy = increaseScorePicksBy,
                 navigationEntry = currentCharacterSheetNavEntry,
                 bonusFeats = kingdom.bonusFeats,
+                trainedSkills = trainedSkills,
             )
                 .sortedBy { it.level }
                 .toTypedArray(),
             bonusFeat = createBonusFeatContext(
-                government = kingdom.getChosenGovernment(),
+                government = government,
                 feats = feats,
                 choices = kingdom.features,
                 bonusFeats = kingdom.bonusFeats,
                 value = bonusFeat,
+                trainedSkills = trainedSkills,
             ),
             bonusFeats = kingdom.bonusFeats.toContext(
                 kingdom.getFeats(),
@@ -493,6 +513,7 @@ class KingdomSheet(
             actor = actor,
             modifiers = kingdom.modifiers.toContext(),
             mainNav = createMainNav(kingdom),
+            initialProficiencies = initialProficiencies,
         )
     }
 
@@ -561,6 +582,7 @@ class KingdomSheet(
         kingdom.abilityScores = value.abilityScores
         kingdom.milestones = value.milestones
         kingdom.notes = value.notes
+        kingdom.initialProficiencies = value.initialProficiencies
         console.log(value.notes)
         beforeKingdomUpdate(previousKingdom, kingdom)
         actor.setKingdom(kingdom)

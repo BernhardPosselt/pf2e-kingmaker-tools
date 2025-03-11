@@ -95,6 +95,7 @@
             justify-content: center;
         }
         border-bottom: 1px solid;
+        border-top: 1px solid;
         box-shadow: 0 4px 4px 0 #00000082;
         z-index: 1;
         position: relative;
@@ -203,7 +204,16 @@
             margin-left: 5em;
         }
 
+        .km-choose-skills {
+            margin-top: 1em;
+            ul {
+                width: 100%;
+                justify-content: space-around;
+            }
+        }
+
         .km-choose-boosts,
+        .km-choose-skills,
         .km-choose-ruins {
             display: flex;
             justify-content: space-between;

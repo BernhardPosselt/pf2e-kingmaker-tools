@@ -35,6 +35,7 @@ class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
                 int("now")
                 int("next")
             }
+            stringArray("initialProficiencies")
             schema("workSites") {
                 schema("farmlands") {
                     int("resources")

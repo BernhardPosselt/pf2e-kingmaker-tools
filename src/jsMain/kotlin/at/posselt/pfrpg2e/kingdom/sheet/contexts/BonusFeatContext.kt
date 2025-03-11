@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.RawRuinThresholdIncreases
@@ -32,8 +33,9 @@ fun createBonusFeatContext(
     choices: Array<RawFeatureChoices>,
     bonusFeats: Array<RawBonusFeat>,
     value: String?,
+    trainedSkills: Set<KingdomSkill>,
 ): AddBonusFeatContext {
-    val takenFeats = getTakenFeats(choices, government, bonusFeats)
+    val takenFeats = getTakenFeats(choices, government, bonusFeats, trainedSkills)
     return AddBonusFeatContext(
         feat = Select(
             name = "bonusFeat",

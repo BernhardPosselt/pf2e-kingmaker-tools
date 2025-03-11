@@ -111,9 +111,12 @@ fun getTakenFeats(
     choices: Array<RawFeatureChoices>,
     government: RawGovernment?,
     bonusFeats: Array<RawBonusFeat>,
-) = choices.mapNotNull { it.featId }.toSet() +
-        government?.getFeatIds().orEmpty() +
-        bonusFeats.map { it.id }
+    trainedSkills: Set<KingdomSkill>,
+): Set<String> =
+    choices.mapNotNull { it.featId }.toSet() +
+            government?.getFeatIds().orEmpty() +
+            bonusFeats.map { it.id } +
+            trainedSkills.map { "skill-training-${it.value}" }.toSet()
 
 fun Array<RawFeatureChoices>.toContext(
     government: RawGovernment?,
@@ -122,13 +125,13 @@ fun Array<RawFeatureChoices>.toContext(
     increaseBoostsBy: Int,
     navigationEntry: String,
     bonusFeats: Array<RawBonusFeat>,
+    trainedSkills: Set<KingdomSkill>,
 ): Array<FeatureByLevelContext> {
     val choices = this
     val featsById = feats.associateBy { it.id }
     val choicesById = choices.associateBy { it.id }
     val skillIncreaseOptions = KingdomSkill.entries.map { SelectOption(it.label, it.value) }
-    val takenFeats = getTakenFeats(choices, government, bonusFeats)
-
+    val takenFeats = getTakenFeats(choices, government, bonusFeats, trainedSkills)
     return features
         .asSequence()
         .mapIndexed { index, feature -> index to feature }

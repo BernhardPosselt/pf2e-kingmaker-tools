@@ -164,6 +164,7 @@ external interface KingdomData {
     var groups: Array<RawGroup>
     var skillRanks: RawSkillRanks
     var abilityScores: RawAbilityScores
+    var initialProficiencies: Array<String>
     var milestones: Array<MilestoneChoice>
 }
 
@@ -214,61 +215,71 @@ fun KingdomData.vacancies() =
         warden = leaders.warden.vacant == true,
     )
 
+fun KingdomData.getTrainedSkills(
+    chosenFeats: List<ChosenFeat>,
+    government: RawGovernment?,
+): Set<KingdomSkill> {
+    val government = government?.skillProficiencies ?: emptyArray()
+    val initial = initialProficiencies
+    val feats = chosenFeats.mapNotNull { it.feat.trainSkill }
+    return (government + feats + initial)
+        .mapNotNull { KingdomSkill.fromString(it) }
+        .toSet()
+}
+
 fun KingdomData.parseSkillRanks(
     chosenFeatures: List<ChosenFeature>,
     chosenFeats: List<ChosenFeat>,
     government: RawGovernment?,
-) =
-    if (settings.automateStats) {
-        val skillIncreases = chosenFeatures
-            .mapNotNull {
-                it.choice.skillIncrease?.let { KingdomSkill.fromString(it) }
-            }.groupBy { it }
-        val skillTrainings = government?.skillProficiencies?.toSet().orEmpty() +
-                chosenFeats.mapNotNull { it.feat.trainSkill?.let { KingdomSkill.fromString(it) } }
-        val ranks = KingdomSkill.entries.associate {
-            val base = if (it in skillTrainings) 1 else 0
-            val increase = skillIncreases[it]?.size ?: 0
-            it to (base + increase)
-        }
-        KingdomSkillRanks(
-            agriculture = ranks[KingdomSkill.AGRICULTURE] ?: 0,
-            arts = ranks[KingdomSkill.ARTS] ?: 0,
-            boating = ranks[KingdomSkill.BOATING] ?: 0,
-            defense = ranks[KingdomSkill.DEFENSE] ?: 0,
-            engineering = ranks[KingdomSkill.ENGINEERING] ?: 0,
-            exploration = ranks[KingdomSkill.EXPLORATION] ?: 0,
-            folklore = ranks[KingdomSkill.FOLKLORE] ?: 0,
-            industry = ranks[KingdomSkill.INDUSTRY] ?: 0,
-            intrigue = ranks[KingdomSkill.INTRIGUE] ?: 0,
-            magic = ranks[KingdomSkill.MAGIC] ?: 0,
-            politics = ranks[KingdomSkill.POLITICS] ?: 0,
-            scholarship = ranks[KingdomSkill.SCHOLARSHIP] ?: 0,
-            statecraft = ranks[KingdomSkill.STATECRAFT] ?: 0,
-            trade = ranks[KingdomSkill.TRADE] ?: 0,
-            warfare = ranks[KingdomSkill.WARFARE] ?: 0,
-            wilderness = ranks[KingdomSkill.WILDERNESS] ?: 0,
-        )
-    } else {
-        KingdomSkillRanks(
-            agriculture = skillRanks.agriculture,
-            arts = skillRanks.arts,
-            boating = skillRanks.boating,
-            defense = skillRanks.defense,
-            engineering = skillRanks.engineering,
-            exploration = skillRanks.exploration,
-            folklore = skillRanks.folklore,
-            industry = skillRanks.industry,
-            intrigue = skillRanks.intrigue,
-            magic = skillRanks.magic,
-            politics = skillRanks.politics,
-            scholarship = skillRanks.scholarship,
-            statecraft = skillRanks.statecraft,
-            trade = skillRanks.trade,
-            warfare = skillRanks.warfare,
-            wilderness = skillRanks.wilderness,
-        )
+) = if (settings.automateStats) {
+    val skillIncreases = chosenFeatures
+        .mapNotNull {
+            it.choice.skillIncrease?.let { KingdomSkill.fromString(it) }
+        }.groupBy { it }
+    val skillTrainings = getTrainedSkills(chosenFeats, government)
+    val ranks = KingdomSkill.entries.associate {
+        val base = if (it in skillTrainings) 1 else 0
+        val increase = skillIncreases[it]?.size ?: 0
+        it to (base + increase)
     }
+    KingdomSkillRanks(
+        agriculture = ranks[KingdomSkill.AGRICULTURE] ?: 0,
+        arts = ranks[KingdomSkill.ARTS] ?: 0,
+        boating = ranks[KingdomSkill.BOATING] ?: 0,
+        defense = ranks[KingdomSkill.DEFENSE] ?: 0,
+        engineering = ranks[KingdomSkill.ENGINEERING] ?: 0,
+        exploration = ranks[KingdomSkill.EXPLORATION] ?: 0,
+        folklore = ranks[KingdomSkill.FOLKLORE] ?: 0,
+        industry = ranks[KingdomSkill.INDUSTRY] ?: 0,
+        intrigue = ranks[KingdomSkill.INTRIGUE] ?: 0,
+        magic = ranks[KingdomSkill.MAGIC] ?: 0,
+        politics = ranks[KingdomSkill.POLITICS] ?: 0,
+        scholarship = ranks[KingdomSkill.SCHOLARSHIP] ?: 0,
+        statecraft = ranks[KingdomSkill.STATECRAFT] ?: 0,
+        trade = ranks[KingdomSkill.TRADE] ?: 0,
+        warfare = ranks[KingdomSkill.WARFARE] ?: 0,
+        wilderness = ranks[KingdomSkill.WILDERNESS] ?: 0,
+    )
+} else {
+    KingdomSkillRanks(
+        agriculture = skillRanks.agriculture,
+        arts = skillRanks.arts,
+        boating = skillRanks.boating,
+        defense = skillRanks.defense,
+        engineering = skillRanks.engineering,
+        exploration = skillRanks.exploration,
+        folklore = skillRanks.folklore,
+        industry = skillRanks.industry,
+        intrigue = skillRanks.intrigue,
+        magic = skillRanks.magic,
+        politics = skillRanks.politics,
+        scholarship = skillRanks.scholarship,
+        statecraft = skillRanks.statecraft,
+        trade = skillRanks.trade,
+        warfare = skillRanks.warfare,
+        wilderness = skillRanks.wilderness,
+    )
+}
 
 fun KingdomData.getAllActivities(): List<RawActivity> {
     val homebrew = homebrewActivities.map { it.id }.toSet()
@@ -290,7 +301,6 @@ fun KingdomData.hasAssurance(
 ) = chosenFeats.any { it.feat.assuranceForSkill == skill.value }
 
 
-
 fun KingdomData.parseRuins(
     choices: List<RawFeatureChoices>,
 ): RuinValues {
@@ -303,10 +313,10 @@ fun KingdomData.parseRuins(
             .map { it.parse() }
             .fold(RuinThresholdIncreases()) { prev, curr -> prev + curr }
         defaults.copy(
-            decay =defaults.decay.copy(threshold = increases.decay),
-            strife =defaults.strife.copy(threshold = increases.strife),
-            corruption =defaults.corruption.copy(threshold = increases.corruption),
-            crime =defaults.crime.copy(threshold = increases.crime),
+            decay = defaults.decay.copy(threshold = increases.decay),
+            strife = defaults.strife.copy(threshold = increases.strife),
+            corruption = defaults.corruption.copy(threshold = increases.corruption),
+            crime = defaults.crime.copy(threshold = increases.crime),
         )
     } else {
         defaults

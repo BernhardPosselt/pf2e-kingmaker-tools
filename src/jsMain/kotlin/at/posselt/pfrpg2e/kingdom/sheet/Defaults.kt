@@ -358,4 +358,5 @@ fun createKingdomDefaults(name: String) =
         }.toTypedArray(),
         charterBlacklist = emptyArray(),
         governmentBlacklist = emptyArray(),
+        initialProficiencies = emptyArray(),
     )
