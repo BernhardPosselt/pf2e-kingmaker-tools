@@ -10,7 +10,8 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import at.posselt.pfrpg2e.kingdom.data.RawLeaderValues
 import at.posselt.pfrpg2e.kingdom.data.RawLeaders
-import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.DefaultLeadershipBonuses
+import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.LeaderBonuses
+import at.posselt.pfrpg2e.utils.formatAsModifier
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -20,7 +21,7 @@ external interface ActorLeaderContext {
     val uuidInput: FormElementContext
     val img: String?
     val level: Int
-    val leadershipBonus: Int
+    val bonus: String
 }
 
 @JsPlainObject
@@ -56,7 +57,7 @@ fun RawLeaderValues.toContext(
                 uuid = actor.uuid,
                 img = actor.img,
                 level = actor.level,
-                leadershipBonus = bonus,
+                bonus = bonus.formatAsModifier(),
                 name = actor.name,
                 uuidInput = HiddenInput(
                     value = actor.uuid,
@@ -84,7 +85,7 @@ fun RawLeaderValues.toContext(
 
 fun RawLeaders.toContext(
     leaderActors: LeaderActors,
-    bonuses: DefaultLeadershipBonuses,
+    bonuses: LeaderBonuses,
 ) = LeadersContext(
     ruler = ruler.toContext(
         leaderActors.resolve(Leader.RULER),

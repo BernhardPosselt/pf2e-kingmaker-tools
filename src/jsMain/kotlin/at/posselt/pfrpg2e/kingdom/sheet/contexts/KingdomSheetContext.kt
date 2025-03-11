@@ -53,4 +53,5 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val actor: KingdomActor
     val modifiers: Array<ModifierContext>
     val initialProficiencies: Array<FormElementContext>
+    val enableLeadershipModifiers: Boolean
 }

@@ -48,6 +48,7 @@ import at.posselt.pfrpg2e.kingdom.getMilestones
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.getTrainedSkills
 import at.posselt.pfrpg2e.kingdom.hasLeaderUuid
+import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.calculateInvestedBonus
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.getHighestLeadershipModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
 import at.posselt.pfrpg2e.kingdom.parse
@@ -176,7 +177,7 @@ class KingdomSheet(
                 val leader = target.dataset["leader"]?.let { Leader.fromString(it) }
                 if (leader != null && documentRef is ActorRef) {
                     val kingdom = getKingdom()
-                    when(leader) {
+                    when (leader) {
                         Leader.RULER -> kingdom.leaders.ruler.uuid = documentRef.uuid
                         Leader.COUNSELOR -> kingdom.leaders.counselor.uuid = documentRef.uuid
                         Leader.EMISSARY -> kingdom.leaders.emissary.uuid = documentRef.uuid
@@ -217,12 +218,13 @@ class KingdomSheet(
                 )
                 dispatcher.dispatch(action)
             }
+
             "clear-leader" -> buildPromise {
                 val target = event.target as HTMLElement
                 val leader = target.dataset["leader"]?.let { Leader.fromString(it) }
                 if (leader != null) {
                     val kingdom = getKingdom()
-                    when(leader) {
+                    when (leader) {
                         Leader.RULER -> kingdom.leaders.ruler.uuid = null
                         Leader.COUNSELOR -> kingdom.leaders.counselor.uuid = null
                         Leader.EMISSARY -> kingdom.leaders.emissary.uuid = null
@@ -235,12 +237,13 @@ class KingdomSheet(
                     actor.setKingdom(kingdom)
                 }
             }
+
             "open-leader" -> buildPromise {
                 val target = event.target as HTMLElement
                 val leader = target.dataset["leader"]?.let { Leader.fromString(it) }
                 if (leader != null) {
                     val kingdom = getKingdom()
-                    when(leader) {
+                    when (leader) {
                         Leader.RULER -> kingdom.leaders.ruler.uuid?.let { openActor(it) }
                         Leader.COUNSELOR -> kingdom.leaders.counselor.uuid?.let { openActor(it) }
                         Leader.EMISSARY -> kingdom.leaders.emissary.uuid?.let { openActor(it) }
@@ -253,6 +256,7 @@ class KingdomSheet(
                     actor.setKingdom(kingdom)
                 }
             }
+
             "change-kingdom-section-nav" -> {
                 event.preventDefault()
                 event.stopPropagation()
@@ -414,10 +418,14 @@ class KingdomSheet(
         val leaderActors = kingdom.parseLeaderActors()
         val storage = calculateStorage(realm, settlements.allSettlements)
         val leaderSkills = kingdom.settings.leaderSkills.parse()
-        val defaultLeadershipBonuses = getHighestLeadershipModifiers(
-            leaderActors = leaderActors,
-            leaderSkills = leaderSkills,
-        )
+        val defaultLeaderBonuses = if (kingdom.settings.enableLeadershipModifiers) {
+            getHighestLeadershipModifiers(
+                leaderActors = leaderActors,
+                leaderSkills = leaderSkills,
+            )
+        } else {
+            calculateInvestedBonus(kingdom.level, leaderActors)
+        }
         val kingdomNameInput = TextInput(
             name = "name",
             label = "Name",
@@ -535,7 +543,7 @@ class KingdomSheet(
             supernaturalSolutionsInput = supernaturalSolutionsInput.toContext(),
             creativeSolutionsInput = creativeSolutionsInput.toContext(),
             notesContext = notesContext,
-            leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeadershipBonuses),
+            leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeaderBonuses),
             charter = kingdom.charter.toContext(enabledCharters),
             heartland = kingdom.heartland.toContext(enabledHeartlands),
             government = kingdom.government.toContext(enabledGovernments, feats),
@@ -576,6 +584,7 @@ class KingdomSheet(
             modifiers = kingdom.modifiers.toContext(),
             mainNav = createMainNav(kingdom),
             initialProficiencies = initialProficiencies,
+            enableLeadershipModifiers = kingdom.settings.enableLeadershipModifiers,
         )
     }
 

@@ -202,6 +202,11 @@
                     font-weight: bold;
                     padding: .5em;
                     border-bottom: 1px solid;
+                    display: flex;
+
+                    .km-leader-bonus {
+                        margin-left: auto;
+                    }
                 }
 
                 .km-leader-portrait {

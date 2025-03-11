@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkills
 
-data class DefaultLeadershipBonuses (
+data class LeaderBonuses (
     val ruler: Int = 0,
     val counselor: Int = 0,
     val emissary: Int = 0,
@@ -30,7 +30,7 @@ data class DefaultLeadershipBonuses (
 fun getHighestLeadershipModifiers(
     leaderActors: LeaderActors,
     leaderSkills: LeaderSkills,
-): DefaultLeadershipBonuses {
+): LeaderBonuses {
     val bonuses = Leader.entries.associate { leader ->
         val bonus = leaderActors.resolve(leader)?.let { actor ->
             calculateLeadershipBonus(
@@ -42,7 +42,7 @@ fun getHighestLeadershipModifiers(
         } ?: 0
         leader to bonus
     }
-    return DefaultLeadershipBonuses(
+    return LeaderBonuses(
         ruler = bonuses[Leader.RULER] ?: 0,
         counselor = bonuses[Leader.COUNSELOR] ?: 0,
         emissary = bonuses[Leader.EMISSARY] ?: 0,

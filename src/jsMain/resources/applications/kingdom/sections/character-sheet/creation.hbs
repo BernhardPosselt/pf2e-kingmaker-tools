@@ -64,7 +64,7 @@
         <ul class="km-choose-leaders">
             {{#each leadersContext}}
                 <li data-leader="{{@key}}">
-                    <header>{{label}}</header>
+                    <header><span>{{label}}</span>{{#if actor}} <span class="km-leader-bonus"><i class="fa-solid fa-dice-d20"></i> {{actor.bonus}}</span>{{/if}}</header>
                     {{#if actor }}
                         {{> formElement actor.uuidInput }}
                         <div class="km-leader-portrait">
@@ -79,7 +79,7 @@
                         </div>
                     {{/if}}
                     {{> formElement type }}
-                    {{> formElement invested }}
+                    <span {{#if ../enableLeadershipModifiers}}hidden{{/if}}>{{> formElement invested }}</span>
                 </li>
             {{/each}}
         </ul>
