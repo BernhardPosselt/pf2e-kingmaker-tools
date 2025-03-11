@@ -8,7 +8,10 @@
 
 .theme-dark {
     .km-kingdom-sheet {
-        .km-kingdom-sheet-sub-nav, .km-kingdom-sheet-sub-content, .km-kingdom-sheet-sidebar {
+        .km-kingdom-sheet-sub-nav,
+        .km-kingdom-sheet-sub-content,
+        .km-kingdom-sheet-sidebar,
+        .km-choose-leaders li {
             background-color: rgba(11, 10, 19, .95);
             border-radius: 5px;
             border: 1px solid;
@@ -51,7 +54,7 @@
         background-image: url("../../../img/camping/backgrounds/hills-day.webp");
         display: flex;
         background-size: cover;
-        height: calc(100vh - 310px);
+        height: calc(100vh - 220px);
         position: relative;
         z-index: 0;
     }
@@ -94,6 +97,7 @@
         ul {
             justify-content: center;
         }
+
         border-bottom: 1px solid;
         border-top: 1px solid;
         box-shadow: 0 4px 4px 0 #00000082;
@@ -182,7 +186,97 @@
     }
 
     .km-kingdom-sheet-kingdom {
+        .km-choose-leaders {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            width: 100%;
+            list-style-type: none;
+            padding: 0;
+            gap: 1em;
 
+            li {
+                margin: 0;
+
+                header {
+                    font-weight: bold;
+                    padding: .5em;
+                    border-bottom: 1px solid;
+                }
+
+                .km-leader-portrait {
+                    position: relative;
+
+                    &:hover button {
+                        display: flex;
+                    }
+
+                    button {
+                        display: none;
+                        position: absolute;
+                        width: 1em;
+                        height: 1em;
+                        font-size: 1.5em;
+                        top: .3em;
+                        right: .3em;
+                        background-color: black;
+                        border: 0;
+                        border-radius: 100%;
+                    }
+                }
+
+                img {
+                    height: 11em;
+                    width: 11em;
+                    object-fit: cover;
+                    object-position: top center;
+                    border-radius: 0;
+                    display: block;
+                    cursor: pointer;
+                }
+
+                select {
+                    border-top: 1px solid;
+                    border-top-right-radius: 0;
+                    border-top-left-radius: 0;
+                }
+
+                label {
+                    padding: 3px 13px;
+                    border-top: 1px solid;
+
+                    input {
+                        margin-right: 0;
+                    }
+                }
+
+                .km-choose-leader-placeholder {
+                    position: relative;
+                    height: 11em;
+                    width: 11em;
+                    box-shadow: inset 0 0 5px 2px #5c5c5c;
+                    display: flex;
+
+                    &:hover span {
+                        display: block;
+                    }
+
+                    span {
+                        display: none;
+                        position: absolute;
+                        font-size: 1.2em;
+                        text-align: center;
+                        margin: 0 4px;
+                        top: .4em;
+                    }
+
+                    i {
+                        margin: auto;
+                        font-size: 3em;
+                    }
+                }
+            }
+        }
 
         details {
             margin: 1em 0;
@@ -206,6 +300,7 @@
 
         .km-choose-skills {
             margin-top: 1em;
+
             ul {
                 width: 100%;
                 justify-content: space-around;

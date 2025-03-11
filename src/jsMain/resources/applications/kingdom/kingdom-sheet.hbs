@@ -90,55 +90,9 @@
             {{> formElement skillRanks.wilderness }}
 
             leaders
-
-            {{> formElement leadersContext.ruler.invested }}
-            {{> formElement leadersContext.ruler.vacant }}
-            {{> formElement leadersContext.ruler.type }}
-            {{#if leadersContext.ruler.actor }}
-                {{> formElement leadersContext.ruler.actor.uuidInput }}
-            {{/if}}
-            {{> formElement leadersContext.counselor.invested }}
-            {{> formElement leadersContext.counselor.vacant }}
-            {{> formElement leadersContext.counselor.type }}
-            {{#if leadersContext.counselor.actor }}
-                {{> formElement leadersContext.counselor.actor.uuidInput }}
-            {{/if}}
-            {{> formElement leadersContext.emissary.invested }}
-            {{> formElement leadersContext.emissary.vacant }}
-            {{> formElement leadersContext.emissary.type }}
-            {{#if leadersContext.emissary.actor }}
-                {{> formElement leadersContext.emissary.actor.uuidInput }}
-            {{/if}}
-            {{> formElement leadersContext.general.invested }}
-            {{> formElement leadersContext.general.vacant }}
-            {{> formElement leadersContext.general.type }}
-            {{#if leadersContext.general.actor }}
-                {{> formElement leadersContext.general.actor.uuidInput }}
-            {{/if}}
-            {{> formElement leadersContext.magister.invested }}
-            {{> formElement leadersContext.magister.vacant }}
-            {{> formElement leadersContext.magister.type }}
-            {{#if leadersContext.magister.actor }}
-                {{> formElement leadersContext.magister.actor.uuidInput }}
-            {{/if}}
-            {{> formElement leadersContext.treasurer.invested }}
-            {{> formElement leadersContext.treasurer.vacant }}
-            {{> formElement leadersContext.treasurer.type }}
-            {{#if leadersContext.treasurer.actor }}
-                {{> formElement leadersContext.treasurer.actor.uuidInput }}
-            {{/if}}
-            {{> formElement leadersContext.viceroy.invested }}
-            {{> formElement leadersContext.viceroy.vacant }}
-            {{> formElement leadersContext.viceroy.type }}
-            {{#if leadersContext.viceroy.actor }}
-                {{> formElement leadersContext.viceroy.actor.uuidInput }}
-            {{/if}}
-            {{> formElement leadersContext.warden.invested }}
-            {{> formElement leadersContext.warden.vacant }}
-            {{> formElement leadersContext.warden.type }}
-            {{#if leadersContext.warden.actor }}
-                {{> formElement leadersContext.warden.actor.uuidInput }}
-            {{/if}}
+            {{#each leadersContext}}
+                {{> formElement vacant }}
+            {{/each}}
         </div>
     </main>
 </div>

@@ -60,12 +60,35 @@
     </section>
     <section class="km-kingdom-sheet-kingdom-section">
         <h2>Choose Leaders</h2>
-        <p>Assign your leaders in the sidebar, then pick 4 Skills to train:</p>
+        <p>Assign your leaders:</p>
+        <ul class="km-choose-leaders">
+            {{#each leadersContext}}
+                <li data-leader="{{@key}}">
+                    <header>{{label}}</header>
+                    {{#if actor }}
+                        {{> formElement actor.uuidInput }}
+                        <div class="km-leader-portrait">
+                            <button data-leader="{{@key}}" data-action="clear-leader" type="button"><i class="fa-regular fa-circle-xmark"></i>
+                            </button>
+                            <img src="{{actor.img}}" alt="{{actor.name}}" data-action="open-leader" data-leader="{{@key}}">
+                        </div>
+                    {{else}}
+                        <div class="km-choose-leader-placeholder">
+                            <span>Drop Actor from Sidebar</span>
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                    {{/if}}
+                    {{> formElement type }}
+                    {{> formElement invested }}
+                </li>
+            {{/each}}
+        </ul>
+        <p>Then pick 4 Skills to train:</p>
         <div class="km-choose-skills">
             <ul>
-            {{#each initialProficiencies}}
-                <li>{{> formElement this}}</li>
-            {{/each}}
+                {{#each initialProficiencies}}
+                    <li>{{> formElement this}}</li>
+                {{/each}}
             </ul>
         </div>
     </section>
@@ -73,7 +96,8 @@
         <h2>First Village</h2>
         <p>First, import all Structures from the <b>Structures</b> compendium into your world:</p>
         <button type="button" data-action="structures-import">Import Structures</button>
-        <p>Then, import a Settlement from the <b>Settlement Scenes</b> compendium. The Scene includes blocks, onto which you can place your structures. That way, settlement level is automatically calculated for you. </p>
+        <p>Then, import a Settlement from the <b>Settlement Scenes</b> compendium. The Scene includes blocks, onto which
+            you can place your structures. That way, settlement level is automatically calculated for you. </p>
         <ul>
             <li>
                 <button type="button" data-action="settlement-import" data-water-borders="0">Import Settlement (0
@@ -101,8 +125,10 @@
                 </button>
             </li>
         </ul>
-        <p>Finally, place any existing structures onto the scene's blocks from the <b>Structures</b> folder in your actors directory.</p>
-        <p>If you want to use a different settlement scene, simply add it under the sheet's <b>Settlements</b> tab and copy the block tiles onto it.</p>
+        <p>Finally, place any existing structures onto the scene's blocks from the <b>Structures</b> folder in your
+            actors directory.</p>
+        <p>If you want to use a different settlement scene, simply add it under the sheet's <b>Settlements</b> tab and
+            copy the block tiles onto it.</p>
     </section>
     <section class="km-kingdom-sheet-kingdom-section">
         <h2>Fame or Infamy? <span class="km-header-right-align">{{> formElement fameContext.type}}</span></h2>

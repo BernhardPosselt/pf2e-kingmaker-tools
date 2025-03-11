@@ -25,6 +25,7 @@ external interface ActorLeaderContext {
 
 @JsPlainObject
 external interface LeaderValuesContext {
+    val label: String
     val actor: ActorLeaderContext?
     val invested: FormElementContext
     val type: FormElementContext
@@ -49,6 +50,7 @@ fun RawLeaderValues.toContext(
     bonus: Int,
 ) =
     LeaderValuesContext(
+        label = leader.label,
         actor = leaderActor?.let { actor ->
             ActorLeaderContext(
                 uuid = actor.uuid,
@@ -75,6 +77,7 @@ fun RawLeaderValues.toContext(
         type = Select.fromEnum<LeaderType>(
             name = "leaders.${leader.value}.type",
             label = "Type",
+            hideLabel = true,
             value = LeaderType.fromString(type) ?: LeaderType.PC,
         ).toContext(),
     )

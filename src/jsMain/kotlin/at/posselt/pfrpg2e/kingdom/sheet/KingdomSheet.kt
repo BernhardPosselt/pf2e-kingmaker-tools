@@ -3,6 +3,8 @@ package at.posselt.pfrpg2e.kingdom.sheet
 import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.actions.handlers.OpenKingdomSheetAction
+import at.posselt.pfrpg2e.actor.openActor
+import at.posselt.pfrpg2e.app.ActorRef
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.MenuControl
@@ -17,6 +19,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.data.kingdom.findKingdomSize
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
@@ -164,7 +167,31 @@ class KingdomSheet(
                 checkUpdateActorReRenders(actor)
             }
         }
+        onDocumentRefDrop(
+            ".km-choose-leaders li",
+            { it.type == "Actor" }
+        ) { event, documentRef ->
+            buildPromise {
+                val target = event.currentTarget as HTMLElement
+                val leader = target.dataset["leader"]?.let { Leader.fromString(it) }
+                if (leader != null && documentRef is ActorRef) {
+                    val kingdom = getKingdom()
+                    when(leader) {
+                        Leader.RULER -> kingdom.leaders.ruler.uuid = documentRef.uuid
+                        Leader.COUNSELOR -> kingdom.leaders.counselor.uuid = documentRef.uuid
+                        Leader.EMISSARY -> kingdom.leaders.emissary.uuid = documentRef.uuid
+                        Leader.GENERAL -> kingdom.leaders.general.uuid = documentRef.uuid
+                        Leader.MAGISTER -> kingdom.leaders.magister.uuid = documentRef.uuid
+                        Leader.TREASURER -> kingdom.leaders.treasurer.uuid = documentRef.uuid
+                        Leader.VICEROY -> kingdom.leaders.viceroy.uuid = documentRef.uuid
+                        Leader.WARDEN -> kingdom.leaders.warden.uuid = documentRef.uuid
+                    }
+                    actor.setKingdom(kingdom)
+                }
+            }
+        }
     }
+
 
     private fun checkUpdateActorReRenders(actor: Actor) {
         val kingdom = getKingdom()
@@ -190,7 +217,42 @@ class KingdomSheet(
                 )
                 dispatcher.dispatch(action)
             }
-
+            "clear-leader" -> buildPromise {
+                val target = event.target as HTMLElement
+                val leader = target.dataset["leader"]?.let { Leader.fromString(it) }
+                if (leader != null) {
+                    val kingdom = getKingdom()
+                    when(leader) {
+                        Leader.RULER -> kingdom.leaders.ruler.uuid = null
+                        Leader.COUNSELOR -> kingdom.leaders.counselor.uuid = null
+                        Leader.EMISSARY -> kingdom.leaders.emissary.uuid = null
+                        Leader.GENERAL -> kingdom.leaders.general.uuid = null
+                        Leader.MAGISTER -> kingdom.leaders.magister.uuid = null
+                        Leader.TREASURER -> kingdom.leaders.treasurer.uuid = null
+                        Leader.VICEROY -> kingdom.leaders.viceroy.uuid = null
+                        Leader.WARDEN -> kingdom.leaders.warden.uuid = null
+                    }
+                    actor.setKingdom(kingdom)
+                }
+            }
+            "open-leader" -> buildPromise {
+                val target = event.target as HTMLElement
+                val leader = target.dataset["leader"]?.let { Leader.fromString(it) }
+                if (leader != null) {
+                    val kingdom = getKingdom()
+                    when(leader) {
+                        Leader.RULER -> kingdom.leaders.ruler.uuid?.let { openActor(it) }
+                        Leader.COUNSELOR -> kingdom.leaders.counselor.uuid?.let { openActor(it) }
+                        Leader.EMISSARY -> kingdom.leaders.emissary.uuid?.let { openActor(it) }
+                        Leader.GENERAL -> kingdom.leaders.general.uuid?.let { openActor(it) }
+                        Leader.MAGISTER -> kingdom.leaders.magister.uuid?.let { openActor(it) }
+                        Leader.TREASURER -> kingdom.leaders.treasurer.uuid?.let { openActor(it) }
+                        Leader.VICEROY -> kingdom.leaders.viceroy.uuid?.let { openActor(it) }
+                        Leader.WARDEN -> kingdom.leaders.warden.uuid?.let { openActor(it) }
+                    }
+                    actor.setKingdom(kingdom)
+                }
+            }
             "change-kingdom-section-nav" -> {
                 event.preventDefault()
                 event.stopPropagation()
