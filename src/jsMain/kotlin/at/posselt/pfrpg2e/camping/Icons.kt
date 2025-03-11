@@ -5,7 +5,6 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.game
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import kotlinx.browser.document
 import kotlinx.html.a
 import kotlinx.html.classes
@@ -29,7 +28,7 @@ fun createCampingIcon(
             it.stopPropagation()
             buildPromise {
                 if (uuid != null) {
-                    fromUuidTypeSafe<PF2ENpc>(uuid)?.let { actor ->
+                    fromUuidTypeSafe<CampingActor>(uuid)?.let { actor ->
                         CampingSheet(game, actor, actionDispatcher).launch()
                     }
                 }

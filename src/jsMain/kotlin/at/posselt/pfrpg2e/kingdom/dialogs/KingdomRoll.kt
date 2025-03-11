@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.getKingdom
@@ -16,7 +17,6 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postDegreeOfSuccess
 import at.posselt.pfrpg2e.utils.serializeB64Json
 import at.posselt.pfrpg2e.utils.tpl
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
@@ -74,7 +74,7 @@ private suspend fun generateRollMeta(
     activity: RawActivity?,
     modifier: Int,
     modifierPills: Array<ModifierPill>,
-    actor: PF2ENpc,
+    actor: KingdomActor,
     rollMode: RollMode,
     degree: DegreeOfSuccess,
     skill: KingdomSkill,
@@ -181,7 +181,7 @@ suspend fun rollCheck(
     fortune: Boolean,
     modifierPills: Array<ModifierPill>,
     dc: Int,
-    kingdomActor: PF2ENpc,
+    kingdomActor: KingdomActor,
     upgrades: Set<UpgradeResult>,
     rollTwiceKeepHighest: Boolean,
     rollTwiceKeepLowest: Boolean,

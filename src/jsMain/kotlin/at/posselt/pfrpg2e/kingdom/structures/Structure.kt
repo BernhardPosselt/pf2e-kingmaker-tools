@@ -14,8 +14,10 @@ import at.posselt.pfrpg2e.data.kingdom.structures.RuinAmount
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
-import at.posselt.pfrpg2e.kingdom.getRawStructureData
 import at.posselt.pfrpg2e.utils.asAnyObject
+import at.posselt.pfrpg2e.utils.getAppFlag
+import at.posselt.pfrpg2e.utils.setAppFlag
+import at.posselt.pfrpg2e.utils.unsetAppFlag
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
@@ -28,9 +30,10 @@ import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlin.contracts.contract
 
+typealias StructureActor = PF2ENpc
 
 data class ActorAndStructure(
-    val actor: PF2ENpc,
+    val actor: StructureActor,
     val structure: RawStructureData,
 )
 
@@ -49,7 +52,7 @@ private fun isStructureRef(obj: AnyObject): Boolean {
 
 class StructureParsingException(message: String) : Exception(message)
 
-fun PF2ENpc.getRawResolvedStructureData(): RawStructureData? {
+fun StructureActor.getRawResolvedStructureData(): RawStructureData? {
     val data = getRawStructureData()
     if (data == null) return null
     val record = data.asAnyObject()
@@ -62,11 +65,11 @@ fun PF2ENpc.getRawResolvedStructureData(): RawStructureData? {
     return null
 }
 
-fun PF2ENpc.isStructure() = getRawStructureData() != null
+fun StructureActor.isStructure() = getRawStructureData() != null
 
-fun PF2ENpc.isSlowed() = itemTypes.condition.any { it.slug == "slowed" }
+fun StructureActor.isSlowed() = itemTypes.condition.any { it.slug == "slowed" }
 
-fun PF2ENpc.parseStructure(): Structure? = getRawResolvedStructureData()
+fun StructureActor.parseStructure(): Structure? = getRawResolvedStructureData()
     ?.parseStructure(isSlowed())
 
 fun RawStructureData.parseStructure(inConstruction: Boolean) =
@@ -168,7 +171,7 @@ fun RawStructureData.parseStructure(inConstruction: Boolean) =
         inConstruction = inConstruction
     )
 
-fun PF2ENpc.getActorAndStructure(): ActorAndStructure? {
+fun StructureActor.getActorAndStructure(): ActorAndStructure? {
     val data = getRawResolvedStructureData()
     return data?.let {
         ActorAndStructure(
@@ -191,7 +194,7 @@ suspend fun Game.importStructures(): Array<Actor> {
         ?.getDocuments()
         ?.await()
         ?.asSequence()
-        ?.filterIsInstance<PF2ENpc>()
+        ?.filterIsInstance<StructureActor>()
         ?.map {
             val obj = deepClone(it.toObject())
             val update = recordOf(
@@ -204,4 +207,15 @@ suspend fun Game.importStructures(): Array<Actor> {
         ?.toTypedArray()
         ?: emptyArray()
     return Actor.createDocuments(data).await()
+}
+
+fun StructureActor.getRawStructureData(): RawStructure? =
+    getAppFlag("structureData")
+
+suspend fun StructureActor.setStructureData(data: RawStructure) {
+    setAppFlag("structureData", data)
+}
+
+suspend fun StructureActor.unsetStructureData() {
+    unsetAppFlag("structureData")
 }

@@ -77,7 +77,7 @@ private class ConfigureEditSettlement(
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = EditSettlementModel::class.js,
-    id = "kmEditSettlement",
+    id = "kmEditSettlement-${settlement.sceneId}",
 ) {
     val settlementCopy = deepClone(settlement)
     var data = EditSettlementData(

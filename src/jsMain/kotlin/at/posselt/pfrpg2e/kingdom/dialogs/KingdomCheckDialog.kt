@@ -21,6 +21,7 @@ import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
@@ -64,7 +65,6 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import io.github.uuidjs.uuid.v4
 import js.core.Void
 import js.objects.recordOf
@@ -258,7 +258,7 @@ external interface SerializedDegree {
 }
 
 private class KingdomCheckDialog(
-    private val kingdomActor: PF2ENpc,
+    private val kingdomActor: KingdomActor,
     private val kingdom: KingdomData,
     private var baseModifiers: List<Modifier>,
     private val afterRoll: AfterRollMessage,
@@ -268,7 +268,7 @@ private class KingdomCheckDialog(
     template = "applications/kingdom/check.hbs",
     debug = true,
     dataModel = CheckModel::class.js,
-    id = "kmCheck",
+    id = "kmCheck-${kingdomActor.uuid}",
     width = 600,
 ) {
     val activity = params.activity
@@ -624,7 +624,7 @@ sealed interface CheckType {
 suspend fun kingdomCheckDialog(
     game: Game,
     kingdom: KingdomData,
-    kingdomActor: PF2ENpc,
+    kingdomActor: KingdomActor,
     check: CheckType,
     afterRoll: AfterRollMessage = { "" },
     overrideSkills: Set<KingdomSkillRank>? = null,

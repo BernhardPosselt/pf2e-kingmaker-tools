@@ -29,7 +29,6 @@ import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.documents.JournalEntry
 import com.foundryvtt.core.documents.JournalEntryPage
 import com.foundryvtt.core.utils.deepClone
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.item.PF2EEffect
 import js.core.Void
 import kotlinx.coroutines.await
@@ -125,7 +124,7 @@ private data class Journals(
 @JsExport
 class ActivityApplication(
     private val game: Game,
-    private val actor: PF2ENpc,
+    private val actor: CampingActor,
     data: CampingActivityData? = null,
     private val afterSubmit: () -> Unit,
 ) : FormApp<ActivityContext, ActivitySubmitData>(
@@ -133,7 +132,7 @@ class ActivityApplication(
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ActivityDataModel::class.js,
-    id = "kmActivity"
+    id = "kmActivity-${actor.uuid}"
 ) {
     private val editActivityName = data?.name
     private val editActivityLocked = data?.isLocked

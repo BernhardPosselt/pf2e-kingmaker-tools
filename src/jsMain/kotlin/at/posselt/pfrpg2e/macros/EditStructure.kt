@@ -3,17 +3,17 @@ package at.posselt.pfrpg2e.macros
 import at.posselt.pfrpg2e.app.forms.TextArea
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
-import at.posselt.pfrpg2e.kingdom.getRawStructureData
-import at.posselt.pfrpg2e.kingdom.setStructureData
 import at.posselt.pfrpg2e.kingdom.structures.RawStructureData
+import at.posselt.pfrpg2e.kingdom.structures.StructureActor
 import at.posselt.pfrpg2e.kingdom.structures.StructureValidationError
+import at.posselt.pfrpg2e.kingdom.structures.getRawStructureData
+import at.posselt.pfrpg2e.kingdom.structures.setStructureData
 import at.posselt.pfrpg2e.kingdom.structures.structureRefSchema
+import at.posselt.pfrpg2e.kingdom.structures.unsetStructureData
 import at.posselt.pfrpg2e.kingdom.structures.validateStructure
-import at.posselt.pfrpg2e.kingdom.unsetStructureData
 import at.posselt.pfrpg2e.takeIfInstance
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.ui
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.jso
 import js.objects.recordOf
 import kotlinx.js.JsPlainObject
@@ -27,9 +27,9 @@ external interface StructureMacroData {
 
 suspend fun editStructureMacro(actor: Actor?) {
     val npcActor = actor
-        ?.takeIfInstance<PF2ENpc>()
-        ?.parent.unsafeCast<PF2ENpc?>()
-        ?.baseActor.unsafeCast<PF2ENpc?>()
+        ?.takeIfInstance<StructureActor>()
+        ?.parent.unsafeCast<StructureActor?>()
+        ?.baseActor.unsafeCast<StructureActor?>()
     if (npcActor == null) {
         ui.notifications.error("Please select an NPC actor")
         return

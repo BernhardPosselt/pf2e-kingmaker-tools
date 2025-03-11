@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.camping.dialogs
 import at.posselt.pfrpg2e.actor.party
 import at.posselt.pfrpg2e.app.*
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
+import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.RecipeData
 import at.posselt.pfrpg2e.camping.buildFoodCost
 import at.posselt.pfrpg2e.camping.cookingCost
@@ -14,13 +15,10 @@ import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.launch
-import at.posselt.pfrpg2e.utils.toMutableRecord
 import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.AnyMutableObject
-import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.ui.TextEditor
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.array.toTypedArray
 import js.core.Void
 import kotlinx.coroutines.await
@@ -29,9 +27,9 @@ import kotlin.js.Promise
 @JsExport
 class ManageRecipesApplication(
     private val game: Game,
-    private val actor: PF2ENpc,
+    private val actor: CampingActor,
 ) : CrudApplication(
-    id = "kmManageRecipes",
+    id = "kmManageRecipes-${actor.uuid}",
     title = "Manage Recipes",
     debug = true,
 ) {

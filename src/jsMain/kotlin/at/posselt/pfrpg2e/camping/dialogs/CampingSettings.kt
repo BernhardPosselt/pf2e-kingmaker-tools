@@ -1,8 +1,9 @@
 package at.posselt.pfrpg2e.camping.dialogs
 
 import at.posselt.pfrpg2e.actor.party
-import at.posselt.pfrpg2e.app.*
 import at.posselt.pfrpg2e.app.FormApp
+import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.confirm
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.Menu
 import at.posselt.pfrpg2e.app.forms.NumberInput
@@ -12,7 +13,10 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
-import at.posselt.pfrpg2e.camping.*
+import at.posselt.pfrpg2e.camping.CampingActor
+import at.posselt.pfrpg2e.camping.getCamping
+import at.posselt.pfrpg2e.camping.resetCampsites
+import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
@@ -117,13 +121,13 @@ private val companionActivities = setOf(
 @JsExport
 class CampingSettingsApplication(
     private val game: Game,
-    private val campingActor: PF2ENpc,
+    private val campingActor: CampingActor,
 ) : FormApp<CampingSettingsContext, CampingSettings>(
     title = "Camping Settings",
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = CampingSettingsDataModel::class.js,
-    id = "kmCampingSettings",
+    id = "kmCampingSettings-${campingActor.uuid}",
     width = 600,
 ) {
     var settings: CampingSettings

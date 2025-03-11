@@ -4,11 +4,11 @@ import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.prompt
+import at.posselt.pfrpg2e.kingdom.structures.StructureActor
 import at.posselt.pfrpg2e.kingdom.structures.getActorAndStructure
+import at.posselt.pfrpg2e.utils.asAnyObject
 import com.foundryvtt.core.Game
 import js.objects.JsPlainObject
-import at.posselt.pfrpg2e.utils.asAnyObject
-import com.foundryvtt.pf2e.actor.PF2ENpc
 
 
 @JsPlainObject
@@ -26,7 +26,7 @@ suspend fun structureXpDialog(
     onOk: (Int) -> Unit,
 ) {
     val importedStructures = game.actors.contents
-        .filterIsInstance<PF2ENpc>()
+        .filterIsInstance<StructureActor>()
         .mapNotNull { it.getActorAndStructure() }
     val options = importedStructures
         .map { SelectOption(label = it.structure.name, value =it.structure.name) }

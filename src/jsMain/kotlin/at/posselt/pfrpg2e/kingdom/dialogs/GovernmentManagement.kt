@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.app.CrudColumn
 import at.posselt.pfrpg2e.app.CrudData
 import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.getFeats
 import at.posselt.pfrpg2e.kingdom.getGovernments
@@ -14,12 +15,11 @@ import at.posselt.pfrpg2e.kingdom.sheet.resetAbilityBoosts
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
 import kotlin.js.Promise
 
 class GovernmentManagement(
-    private val kingdomActor: PF2ENpc,
+    private val kingdomActor: KingdomActor,
 ) : CrudApplication(
     title = "Manage Governments",
     debug = true,

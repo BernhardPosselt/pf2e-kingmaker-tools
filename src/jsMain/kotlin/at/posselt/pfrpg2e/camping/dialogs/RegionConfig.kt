@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.toOption
+import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.data.regions.Terrain
@@ -21,23 +22,12 @@ import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.documents.Playlist
 import com.foundryvtt.core.documents.PlaylistSound
 import com.foundryvtt.core.game
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.collections.any
-import kotlin.collections.emptyList
-import kotlin.collections.filterIndexed
-import kotlin.collections.first
-import kotlin.collections.forEach
-import kotlin.collections.isEmpty
-import kotlin.collections.mapIndexed
-import kotlin.collections.mapNotNull
 import kotlin.collections.plus
-import kotlin.collections.sortedBy
-import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 
 @JsPlainObject
@@ -105,14 +95,14 @@ class RegionSettingsDataModel(val value: AnyObject) : DataModel(value) {
 @JsExport
 @JsName("RegionConfig")
 class RegionConfig(
-    private val actor: PF2ENpc,
+    private val actor: CampingActor,
 ) : FormApp<RegionSettingsContext, RegionSettings>(
     title = "Regions",
     width = 1200,
     template = "applications/settings/configure-regions.hbs",
     dataModel = RegionSettingsDataModel::class.js,
     debug = true,
-    id = "kmRegions"
+    id = "kmRegions-${actor.uuid}"
 ) {
     private var currentSettings = actor.getCamping()!!.regionSettings
 

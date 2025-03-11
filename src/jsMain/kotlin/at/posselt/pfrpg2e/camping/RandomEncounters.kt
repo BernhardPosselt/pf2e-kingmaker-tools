@@ -5,15 +5,18 @@ import at.posselt.pfrpg2e.camping.dialogs.RegionSetting
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
-import at.posselt.pfrpg2e.utils.*
+import at.posselt.pfrpg2e.utils.d20Check
+import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
+import at.posselt.pfrpg2e.utils.getPF2EWorldTime
+import at.posselt.pfrpg2e.utils.isDay
+import at.posselt.pfrpg2e.utils.rollWithDraw
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.RollTable
 import com.foundryvtt.core.ui
-import com.foundryvtt.pf2e.actor.PF2ENpc
 
 suspend fun rollRandomEncounter(
     game: Game,
-    actor: PF2ENpc,
+    actor: CampingActor,
     includeFlatCheck: Boolean
 ): Boolean {
     actor.getCamping()?.let { camping ->

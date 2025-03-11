@@ -17,7 +17,6 @@ import com.foundryvtt.core.onPreUpdateActor
 import com.foundryvtt.core.utils.diffObject
 import com.foundryvtt.core.utils.getProperty
 import com.foundryvtt.core.utils.setProperty
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.Object
 
 
@@ -92,7 +91,7 @@ private fun relevantUpdate(camping: CampingData, update: AnyObject): Set<String>
 }
 
 fun checkPreActorUpdate(game: Game, actor: Actor, update: AnyObject): SyncActivities? {
-    val camping = actor.takeIfInstance<PF2ENpc>()?.getCamping() ?: return null
+    val camping = actor.takeIfInstance<CampingActor>()?.getCamping() ?: return null
     console.log("Received camping update", update)
     val updates = relevantUpdate(camping, update)
     if (updates.isEmpty()) return null

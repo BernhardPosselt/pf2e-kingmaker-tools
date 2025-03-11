@@ -2,9 +2,11 @@ package at.posselt.pfrpg2e.migrations
 
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.actor.npcs
+import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCampingActor
 import at.posselt.pfrpg2e.camping.setCamping
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.migrations.migrations.Migration10
@@ -20,13 +22,12 @@ import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.ui
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.recordOf
 
 private suspend fun createBackups(
     game: Game,
-    kingdomActors: List<PF2ENpc>,
-    campingActor: PF2ENpc?,
+    kingdomActors: List<KingdomActor>,
+    campingActor: CampingActor?,
     currentVersion: Int
 ) {
     val backup = recordOf(

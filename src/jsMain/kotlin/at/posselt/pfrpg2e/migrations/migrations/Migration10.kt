@@ -9,11 +9,11 @@ import at.posselt.pfrpg2e.camping.getDefaultCamping
 import at.posselt.pfrpg2e.combattracks.getCombatTrack
 import at.posselt.pfrpg2e.combattracks.setCombatTrack
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.structures.StructureActor
 import at.posselt.pfrpg2e.kingdom.structures.getRawResolvedStructureData
 import at.posselt.pfrpg2e.settings.*
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.recordOf
 
 private fun migrateCombatTrack(game: Game, combatTrack: dynamic): Track? {
@@ -184,9 +184,9 @@ class Migration10 : Migration(10) {
         }
         val tokensToMigrate = game.scenes.contents
             .flatMap { it.tokens.contents.toList() }
-            .filter { it.actor is PF2ENpc }
+            .filter { it.actor is StructureActor }
         for (token in tokensToMigrate) {
-            val actor = token.actor as PF2ENpc
+            val actor = token.actor as StructureActor
             val data = actor.getRawResolvedStructureData()
             val name = data?.name
             if (name != null && name in structureNamesToMigrate) {

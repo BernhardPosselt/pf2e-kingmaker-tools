@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.SimpleApp
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.armies.getRecruitableArmies
 import at.posselt.pfrpg2e.kingdom.armies.importBasicArmies
@@ -20,7 +21,6 @@ import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EArmy
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.JsPlainObject
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
@@ -45,14 +45,14 @@ external interface ArmiesContext : HandlebarsRenderContext {
 
 private class ArmyBrowser(
     private val game: Game,
-    private val kingdomActor: PF2ENpc,
+    private val kingdomActor: KingdomActor,
     private val kingdom: KingdomData,
     private val folderName: String,
 ) : SimpleApp<ArmiesContext>(
     title = "Armies in 'Recruitable Armies (${kingdomActor.name})' Folder",
     template = "applications/kingdom/army-browser.hbs",
     width = 600,
-    id = "kmArmies",
+    id = "kmArmies-${kingdomActor.uuid}",
 ) {
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
@@ -126,7 +126,7 @@ private class ArmyBrowser(
     }
 }
 
-suspend fun armyBrowser(game: Game, kingdomActor: PF2ENpc, kingdom: KingdomData) {
+suspend fun armyBrowser(game: Game, kingdomActor: KingdomActor, kingdom: KingdomData) {
     val folderName = "Recruitable Armies (${kingdomActor.name})"
     val allPlayerArmies = game.getRecruitableArmies(folderName)
     if (allPlayerArmies.isNotEmpty()) {

@@ -1,25 +1,24 @@
 package at.posselt.pfrpg2e.camping.dialogs
 
-import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.CrudApplication
 import at.posselt.pfrpg2e.app.CrudData
 import at.posselt.pfrpg2e.app.CrudItem
+import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.camping.*
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.Game
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
 import kotlin.js.Promise
 
 @JsExport
 class ManageActivitiesApplication(
     private val game: Game,
-    private val actor: PF2ENpc,
+    private val actor: CampingActor,
 ) : CrudApplication(
     title = "Manage Activities",
     debug = true,
-    id = "kmManageActivities"
+    id = "kmManageActivities-${actor.uuid}"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
         actor.getCamping()?.let { camping ->

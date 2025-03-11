@@ -15,6 +15,7 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
@@ -78,13 +79,19 @@ import com.foundryvtt.core.onUpdateActor
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
+import kotlin.collections.filter
+import kotlin.collections.isNotEmpty
+import kotlin.collections.map
+import kotlin.collections.plus
+import kotlin.collections.sortedBy
+import kotlin.collections.toSet
+import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 
 
@@ -104,7 +111,7 @@ private enum class NavEntry {
 
 class KingdomSheet(
     private val game: Game,
-    private val actor: PF2ENpc,
+    private val actor: KingdomActor,
     private val dispatcher: ActionDispatcher,
 ) : FormApp<KingdomSheetContext, KingdomSheetData>(
     title = "Manage Kingdom",
@@ -516,8 +523,8 @@ class KingdomSheet(
     }
 }
 
-suspend fun newKingdom(name: String): PF2ENpc {
-    val actor = PF2ENpc.create(
+suspend fun newKingdom(name: String): KingdomActor {
+    val actor = KingdomActor.create(
         recordOf(
             "type" to "npc",
             "name" to name,
@@ -534,7 +541,7 @@ suspend fun newKingdom(name: String): PF2ENpc {
     return actor
 }
 
-suspend fun openOrCreateKingdomSheet(game: Game, dispatcher: ActionDispatcher, actor: PF2ENpc?) {
+suspend fun openOrCreateKingdomSheet(game: Game, dispatcher: ActionDispatcher, actor: KingdomActor?) {
     if (actor == null) {
         val actor = newKingdom("Kingdom")
         KingdomSheet(game, actor, dispatcher).launch()

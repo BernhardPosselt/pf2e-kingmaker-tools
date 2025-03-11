@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.canBeFavoriteMeal
 import at.posselt.pfrpg2e.camping.getActorsInCamp
 import at.posselt.pfrpg2e.camping.getAllRecipes
@@ -17,7 +18,6 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
@@ -63,13 +63,13 @@ external interface FavoriteMealSubmitData {
 @JsExport
 class FavoriteMealsApplication(
     private val game: Game,
-    private val actor: PF2ENpc,
+    private val actor: CampingActor,
 ) : FormApp<FavoriteMealContext, FavoriteMealSubmitData>(
     title = "Favorite Meals",
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = FavoriteMealDataModel::class.js,
-    id = "kmFavoriteMeals"
+    id = "kmFavoriteMeals-${actor.uuid}"
 ) {
     private var meals: List<FavoriteMealChoice> = actor.getCamping()?.let {
         it.cooking.actorMeals.map { actorMeal ->

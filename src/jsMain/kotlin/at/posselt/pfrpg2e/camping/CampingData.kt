@@ -3,9 +3,9 @@ package at.posselt.pfrpg2e.camping
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.actor.hasAttribute
 import at.posselt.pfrpg2e.actor.party
-import at.posselt.pfrpg2e.camping.dialogs.Track
 import at.posselt.pfrpg2e.camping.dialogs.RegionSetting
 import at.posselt.pfrpg2e.camping.dialogs.RegionSettings
+import at.posselt.pfrpg2e.camping.dialogs.Track
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.Skill
@@ -371,17 +371,19 @@ fun getDefaultCamping(game: Game): CampingData {
     )
 }
 
-fun PF2ENpc.getCamping(): CampingData? =
-    getAppFlag<PF2ENpc, CampingData?>("camping-sheet")
+typealias CampingActor = PF2ENpc
+
+fun CampingActor.getCamping(): CampingData? =
+    getAppFlag<CampingActor, CampingData?>("camping-sheet")
         ?.let(::deepClone)
 
-suspend fun PF2ENpc.setCamping(data: CampingData) {
+suspend fun CampingActor.setCamping(data: CampingData) {
     setAppFlag("camping-sheet", data)
 }
 
-fun Game.getCampingActor(): PF2ENpc? =
+fun Game.getCampingActor(): CampingActor? =
     actors.contents
-        .filterIsInstance<PF2ENpc>()
+        .filterIsInstance<CampingActor>()
         .find { it.getCamping() != null }
 
 fun CampingData.getAllActivities(): Array<CampingActivityData> {
@@ -635,7 +637,7 @@ class ParsedCamping(
     }
 }
 
-suspend fun PF2ENpc.getParsedCamping(game: Game): ParsedCamping? {
+suspend fun CampingActor.getParsedCamping(game: Game): ParsedCamping? {
     val camping = getCamping() ?: return null
     val actorsInCamp = camping.getActorsInCamp()
     val charactersInCamp = actorsInCamp.filterIsInstance<PF2ECharacter>().associateBy { it.uuid }
@@ -688,7 +690,7 @@ suspend fun PF2ENpc.getParsedCamping(game: Game): ParsedCamping? {
     )
 }
 
-suspend fun PF2ENpc.setParsedCamping(data: ParsedCamping) {
+suspend fun CampingActor.setParsedCamping(data: ParsedCamping) {
     val camping = getCamping() ?: return
     camping.section = data.section.toCamelCase()
     camping.campingActivities = data.activities.map {

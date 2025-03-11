@@ -14,7 +14,6 @@ import com.foundryvtt.core.documents.TileDocument
 import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.core.utils.mergeObject
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlin.math.max
@@ -25,7 +24,7 @@ private fun Scene.structureTokens(): List<TokenDocument> =
         .asSequence()
         .filter {
             val actor = it.actor
-            actor is PF2ENpc && actor.isStructure()
+            actor is StructureActor && actor.isStructure()
         }
         .toList()
 
@@ -33,7 +32,7 @@ private fun Scene.getStructures(): List<Structure> =
     tokens.contents
         .asSequence()
         .mapNotNull { it.actor }
-        .filterIsInstance<PF2ENpc>()
+        .filterIsInstance<StructureActor>()
         .mapNotNull { it.parseStructure() }
         .toList()
 
@@ -49,7 +48,7 @@ private fun Scene.calculateOccupiedBlocks(): Int {
     val structures = structureTokens()
         .filterNot {
             val actor = it.actor
-            actor is PF2ENpc && actor.isSlowed()
+            actor is StructureActor && actor.isSlowed()
         }
         .map { it.toRectangle() }
     val blocks = getBlockTiles().map { it.toRectangle().applyTolerance(50.0) }

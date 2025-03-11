@@ -4,18 +4,18 @@ import at.posselt.pfrpg2e.app.CrudApplication
 import at.posselt.pfrpg2e.app.CrudData
 import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.getFeats
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
 import kotlin.js.Promise
 
 class FeatManagement(
-    private val kingdomActor: PF2ENpc,
+    private val kingdomActor: KingdomActor,
 ) : CrudApplication(
     title = "Manage Feats",
     debug = true,

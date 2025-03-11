@@ -12,7 +12,15 @@ import at.posselt.pfrpg2e.app.forms.TextArea
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
-import at.posselt.pfrpg2e.camping.*
+import at.posselt.pfrpg2e.camping.CampingActor
+import at.posselt.pfrpg2e.camping.CookingOutcome
+import at.posselt.pfrpg2e.camping.HealMode
+import at.posselt.pfrpg2e.camping.MealEffect
+import at.posselt.pfrpg2e.camping.RecipeData
+import at.posselt.pfrpg2e.camping.ReduceConditionMode
+import at.posselt.pfrpg2e.camping.ReduceConditions
+import at.posselt.pfrpg2e.camping.getCamping
+import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.data.general.Rarity
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
@@ -25,7 +33,6 @@ import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.deepClone
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.item.PF2EEffect
 import js.core.Void
 import kotlinx.coroutines.await
@@ -183,7 +190,7 @@ class RecipeDataModel(val value: AnyObject) : DataModel(value) {
 @JsExport
 class RecipeApplication(
     private val game: Game,
-    private val actor: PF2ENpc,
+    private val actor: CampingActor,
     recipe: RecipeData? = null,
     private val afterSubmit: () -> Unit,
 ) : FormApp<RecipeContext, RecipeSubmitData>(
@@ -191,7 +198,7 @@ class RecipeApplication(
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = RecipeDataModel::class.js,
-    id = "kmRecipe"
+    id = "kmRecipe-${actor.uuid}"
 ) {
     private val editRecipeName = recipe?.name
     private var currentRecipe: RecipeData? = recipe?.let(::deepClone)

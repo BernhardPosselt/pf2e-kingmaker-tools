@@ -470,7 +470,7 @@ fun KingdomData.getAllSettlements(game: Game): SettlementResult {
 
 
 @Deprecated("Do not use this, this should work with more than one sheet")
-fun Game.getKingdomActor(): PF2ENpc? =
+fun Game.getKingdomActor(): KingdomActor? =
     actors.contents
-        .filterIsInstance<PF2ENpc>()
+        .filterIsInstance<KingdomActor>()
         .find { it.getKingdom() != null && it.name == "Kingdom Sheet" }

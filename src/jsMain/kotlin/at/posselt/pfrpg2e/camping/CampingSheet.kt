@@ -53,7 +53,6 @@ import com.foundryvtt.core.ui
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ECreature
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.item.itemFromUuid
 import js.core.Void
 import js.objects.ReadonlyRecord
@@ -210,12 +209,12 @@ private const val windowWidth = 970
 @JsName("CampingSheet")
 class CampingSheet(
     private val game: Game,
-    private val actor: PF2ENpc,
+    private val actor: CampingActor,
     private val dispatcher: ActionDispatcher,
 ) : FormApp<CampingSheetContext, CampingSheetFormData>(
     title = "Camping",
     template = "applications/camping/camping-sheet.hbs",
-    id = "kmCamping",
+    id = "kmCamping-${actor.uuid}",
     width = windowWidth,
     classes = arrayOf("km-camping-sheet"),
     controls = arrayOf(
@@ -1117,7 +1116,7 @@ private fun getActivitySkills(
 suspend fun openCampingSheet(game: Game, dispatcher: ActionDispatcher) {
     val campingActor = game.getCampingActor()
     if (campingActor == null) {
-        val actor = PF2ENpc.create(
+        val actor = CampingActor.create(
             recordOf(
                 "type" to "npc",
                 "name" to "Camping Sheet",

@@ -6,18 +6,18 @@ import at.posselt.pfrpg2e.app.CrudData
 import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawHeartland
 import at.posselt.pfrpg2e.kingdom.getHeartlands
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.core.Void
 import kotlin.js.Promise
 
 class HeartlandManagement(
-    private val kingdomActor: PF2ENpc,
+    private val kingdomActor: KingdomActor,
 ) : CrudApplication(
     title = "Manage Heartlands",
     debug = true,

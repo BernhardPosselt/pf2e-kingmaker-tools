@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.SimpleApp
 import at.posselt.pfrpg2e.data.checks.getLevelBasedDC
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.armies.getAllAvailableArmyTactics
 import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
@@ -19,7 +20,6 @@ import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EArmy
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.item.PF2ECampaignFeature
 import com.foundryvtt.pf2e.item.itemFromUuid
 import js.objects.JsPlainObject
@@ -46,13 +46,13 @@ private external interface ArmyTacticsContext : HandlebarsRenderContext {
 
 private class ArmyTacticsBrowser(
     private val game: Game,
-    private val kingdomActor: PF2ENpc,
+    private val kingdomActor: KingdomActor,
     private val kingdom: KingdomData,
     private val army: PF2EArmy,
 ) : SimpleApp<ArmyTacticsContext>(
     title = "Learnable Tactics: ${army.name}",
     template = "applications/kingdom/army-tactics-browser.hbs",
-    id = "kmArmyTactics",
+    id = "kmArmyTactics-${kingdomActor.uuid}",
     width = 600,
 ) {
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -127,7 +127,7 @@ private class ArmyTacticsBrowser(
     }
 }
 
-fun armyTacticsBrowser(game: Game, kingdomActor: PF2ENpc, kingdom: KingdomData) {
+fun armyTacticsBrowser(game: Game, kingdomActor: KingdomActor, kingdom: KingdomData) {
     val army = game.getTargetedArmies().firstOrNull()
     if (army == null) {
         ui.notifications.error("Please target a single army on the scene (<i class=\"fa-solid fa-keyboard\"></i> <b>t</b>)")

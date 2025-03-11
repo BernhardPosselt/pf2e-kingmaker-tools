@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.actions.handlers.GainProvisions
 import at.posselt.pfrpg2e.actor.party
 import at.posselt.pfrpg2e.camping.ActivityEffect
+import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.CampingData
 import at.posselt.pfrpg2e.camping.MealEffect
 import at.posselt.pfrpg2e.camping.RecipeData
@@ -44,7 +45,6 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actions.RestForTheNightOptions
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.pf2e
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
@@ -220,7 +220,7 @@ private suspend fun applyAdditionalHealing(healingAfterRest: List<Pair<PF2EChara
 
 private suspend fun findRandomEncounterAt(
     game: Game,
-    campingActor: PF2ENpc,
+    campingActor: CampingActor,
     camping: CampingData,
     watchDurationSeconds: Int,
 ): Int? {
@@ -245,7 +245,7 @@ private suspend fun findRandomEncounterAt(
 private suspend fun beginRest(
     game: Game,
     dispatcher: ActionDispatcher,
-    campingActor: PF2ENpc,
+    campingActor: CampingActor,
     camping: CampingData,
     skipWatch: Boolean,
     skipDailyPreparations: Boolean,
@@ -292,7 +292,7 @@ private suspend fun beginRest(
 private suspend fun completeDailyPreparations(
     game: Game,
     dispatcher: ActionDispatcher,
-    campingActor: PF2ENpc,
+    campingActor: CampingActor,
     camping: CampingData,
 ) =
     coroutineScope {
@@ -339,7 +339,7 @@ private suspend fun gainMinimumSubsistence(
 suspend fun rest(
     game: Game,
     dispatcher: ActionDispatcher,
-    campingActor: PF2ENpc,
+    campingActor: CampingActor,
     camping: CampingData,
     skipWatch: Boolean,
     skipDailyPreparations: Boolean,

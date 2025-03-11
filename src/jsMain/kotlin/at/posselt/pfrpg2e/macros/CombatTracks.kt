@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.macros
 
-import at.posselt.pfrpg2e.app.*
 import at.posselt.pfrpg2e.app.FormApp
+import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.formContext
@@ -46,7 +46,7 @@ private class CombatTrackApplication(
 ) : FormApp<CombatTrackContext, CombatTrackData>(
     title = "Set Combat Track: ${actor?.name ?: scene.name}",
     template = "components/forms/application-form.hbs",
-    id = "kmCombatTrack",
+    id = "kmCombatTrack-${actor?.uuid ?: scene.uuid}",
 ) {
     var combatTrack: Track? = if (actor == null) {
         scene.getCombatTrack()

@@ -4,7 +4,6 @@ import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.takeIfInstance
-import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.asAnyObjectList
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -14,7 +13,6 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.onPreUpdateActor
 import com.foundryvtt.core.utils.getProperty
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import js.objects.recordOf
 
 private const val mealResultPath = "flags.${Config.moduleId}.camping-sheet.cooking.results"
@@ -30,7 +28,7 @@ private fun relevantUpdate(camping: CampingData, update: AnyObject): Boolean {
 }
 
 private suspend fun checkPreActorMealUpdate(actor: Actor, update: AnyObject) {
-    val camping = actor.takeIfInstance<PF2ENpc>()?.getCamping() ?: return
+    val camping = actor.takeIfInstance<CampingActor>()?.getCamping() ?: return
     console.log("Received camping update", update)
     if (!relevantUpdate(camping, update)) return
     val recipesByName = camping.getAllRecipes().associateBy { it.name }
