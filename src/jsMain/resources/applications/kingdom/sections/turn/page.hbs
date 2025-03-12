@@ -63,114 +63,157 @@
         </ul>
     </nav>
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-turn">
-        <h2 id="km-turn-upkeep">Upkeep</h2>
-        <h2 id="km-turn-commerce" {{#if phase.commerceEmpty}}hidden{{/if}}>Commerce</h2>
-        <h2 id="km-turn-leadership" {{#if phase.leadershipEmpty}}hidden{{/if}}>Leadership</h2>
-        <h2 id="km-turn-region" {{#if phase.regionEmpty}}hidden{{/if}}>Region</h2>
-        <h2 id="km-turn-civic" {{#if phase.civicEmpty}}hidden{{/if}}>Civic</h2>
-        <h2 id="km-turn-army" {{#if phase.armyEmpty}}hidden{{/if}}>Army</h2>
-        <h2 id="km-turn-event">Event</h2>
+        <section class="km-kingdom-sheet-section">
+            <h2 id="km-turn-upkeep">Upkeep</h2>
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h2 id="km-turn-commerce" {{#if phase.commerceEmpty}}hidden{{/if}}>Commerce</h2>
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h2 id="km-turn-leadership" {{#if phase.leadershipEmpty}}hidden{{/if}}>Leadership</h2>
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h2 id="km-turn-region" {{#if phase.regionEmpty}}hidden{{/if}}>Region</h2>
 
-        <div {{#unless cultOfTheBloomEvents}}hidden{{/unless}}>
-            <h3>Cult of the Bloom Events</h3>
-            <p>These events happen after completing a day of downtime researching the Cult of the Bloom in Chapter 5.
-                The first
-                time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the
-                kingdom was in
-                dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet tracks
-                them as
-                milestones.</p>
+            {{#if heartlandLabel}}
+            <p>You can attempt 2 Region activities simultaneously as long as both activities take place in the same hex and the hex is either a {{heartlandLabel}}. You take a –2 penalty to Kingdom skill checks made during these two activities.</p>
+            {{/if}}
+
+            <p>A hex can have at most one of these: Farmland, Freehold, Ruins, Settlement, Structure, or Work Site. A Settlement can be built in a hex that contains Ruins or a Structure. A Free Hold can be brought into your kingdom in which case it becomes a Settlement instead.</p>
+            <p>Click these buttons after successfully claiming a hex containing a refuge or landmark:</p>
+
+            <div class="km-turn-buttons">
+                <button type="button" action="claimed-refuge">Claimed Refuge</button>
+                <button type="button" action="claimed-landmark">Claimed Landmark</button>
+            </div>
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h2 id="km-turn-civic" {{#if phase.civicEmpty}}hidden{{/if}}>Civic</h2>
+            {{#if civicPlanning}}
+                <p>During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs after all other settlements have taken their individual Civic activities.</p>
+            {{/if}}
+            <p>First, import all structures from the <b>Structures</b> compendium in the <b>Kingmaker Tools</b> folder, then add the relevant scene in the <b>Settlements</b> tab. Then hit <b>Build Structure</b> and choose a building. After rolling the check, and drag the building link from chat onto the settlement scene.</p>
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h2 id="km-turn-army" {{#if phase.armyEmpty}}hidden{{/if}}>Army</h2>
+            <p>Target (<i class="fa-solid fa-keyboard"></i> <b>t</b>) an army on the scene before performing the activity to
+                correctly apply conditions and DCs. For <b>Offensive Gambit</b>, target all enemy units (<i class="fa-solid fa-keyboard"></i> <b>shift + t</b>)</p>
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h2 id="km-turn-event">Event</h2>
+            <div {{#unless cultOfTheBloomEvents}}hidden{{/unless}}>
+                <h3>Cult of the Bloom Events</h3>
+                <p>These events happen after completing a day of downtime researching the Cult of the Bloom in Chapter
+                    5.
+                    The first
+                    time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the
+                    kingdom was in
+                    dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet
+                    tracks
+                    them as
+                    milestones.</p>
+                <p class="km-turn-buttons">
+                    <button type="button" data-action="check-cult-event">Check for Cult Event (DC {{cultEventDC}})
+                    </button>
+                    <button type="button" data-action="roll-cult-event">Roll Cult Event</button>
+                </p>
+            </div>
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h3>Kingdom Events</h3>
             <p class="km-turn-buttons">
-                <button type="button" data-action="check-cult-event">Check for Cult Event (DC {{cultEventDC}})</button>
-                <button type="button" data-action="roll-cult-event">Roll Cult Event</button>
+                <button {{#unless isGM}}hidden{{/unless}} type="button" data-action="check-event">Check for Kingdom
+                    Event
+                    (DC {{eventDC}})
+                </button>
+                <button {{#unless isGM}}hidden{{/unless}} type="button" data-action="roll-event">Roll Kingdom Event
+                </button>
             </p>
-        </div>
-        <h3>Kingdom Events</h3>
-        <p class="km-turn-buttons">
-            <button {{#unless isGM}}hidden{{/unless}} type="button" data-action="check-event">Check for Kingdom Event
-                (DC {{eventDC}})
-            </button>
-            <button {{#unless isGM}}hidden{{/unless}} type="button" data-action="roll-event">Roll Kingdom Event</button>
-        </p>
-        <h2>Ongoing Events</h2>
-        <table {{#unless ongoingEvents}}hidden{{/unless}}>
-            <tr>
-                <th>Ongoing Events</th>
-                <th>Resolve</th>
-            </tr>
-            {{#each ongoingEvents}}
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h2>Ongoing Events</h2>
+            <table {{#unless ongoingEvents}}hidden{{/unless}}>
                 <tr>
-                    <td>{{{this}}}</td>
-                    <td>
-                        <button type="button" data-action="remove-ongoing-event" data-delete-index="{{@index}}"><i
-                                class="fa fa-trash"></i></button>
-                    </td>
+                    <th>Ongoing Events</th>
+                    <th>Resolve</th>
                 </tr>
-            {{/each}}
-        </table>
-        <p {{#unless isGM}}hidden{{/unless}} >You can add an ongoing event by right-clicking on the
-            rolled event in chat and choosing <b>Add to Ongoing Events</b> or add it manually:</p>
-        <p {{#unless isGM}}hidden{{/unless}} class="km-turn-buttons">
-            {{> formElement ongoingEvent }}
-            <button type="button" data-action="add-ongoing-event">Add Event</button>
-        </p>
-
-        <h2 id="km-turn-xp">XP</h2>
-        <p>Resolved Event with Modidifer:</p>
-        <p class="km-turn-buttons">
-            <button type="button" data-action="gain-xp" data-xp="10">-4</button>
-            <button type="button" data-action="gain-xp" data-xp="15">-3</button>
-            <button type="button" data-action="gain-xp" data-xp="20">-2</button>
-            <button type="button" data-action="gain-xp" data-xp="30">-1</button>
-            <button type="button" data-action="gain-xp" data-xp="40">0</button>
-            <button type="button" data-action="gain-xp" data-xp="60">+1</button>
-            <button type="button" data-action="gain-xp" data-xp="80">+2</button>
-            <button type="button" data-action="gain-xp" data-xp="120">+3</button>
-            <button type="button" data-action="gain-xp" data-xp="160">+4</button>
-        </p>
-        <hr>
-        <p>Claimed Hexes:</p>
-        <p class="km-turn-buttons">
-            <button type="button" data-action="hex-xp" data-hexes="1">1 Hex</button>
-            <button type="button" data-action="hex-xp" data-hexes="2">2 Hexes</button>
-            <button type="button" data-action="hex-xp" data-hexes="3">3 Hexes</button>
-        </p>
-        <hr>
-        {{#if vkXp}}
-            <p>Constructed a Terrain Feature or Structure:</p>
+                {{#each ongoingEvents}}
+                    <tr>
+                        <td>{{{this}}}</td>
+                        <td>
+                            <button type="button" data-action="remove-ongoing-event" data-delete-index="{{@index}}"><i
+                                    class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                {{/each}}
+            </table>
+            <p {{#unless isGM}}hidden{{/unless}} >You can add an ongoing event by right-clicking on the
+                rolled event in chat and choosing <b>Add to Ongoing Events</b> or add it manually:</p>
+            <p {{#unless isGM}}hidden{{/unless}} class="km-turn-buttons">
+                {{> formElement ongoingEvent }}
+                <button type="button" data-action="add-ongoing-event">Add Event</button>
+            </p>
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h2 id="km-turn-xp">XP</h2>
+            <p>Resolved Event with Modidifer:</p>
             <p class="km-turn-buttons">
-                <button type="button" data-action="gain-xp" data-xp="10">Farm or Worksite</button>
-                <button type="button" data-action="gain-xp" data-xp="5">Bridge or Road</button>
-                <button type="button" data-action="structure-xp">Structure</button>
+                <button type="button" data-action="gain-xp" data-xp="10">-4</button>
+                <button type="button" data-action="gain-xp" data-xp="15">-3</button>
+                <button type="button" data-action="gain-xp" data-xp="20">-2</button>
+                <button type="button" data-action="gain-xp" data-xp="30">-1</button>
+                <button type="button" data-action="gain-xp" data-xp="40">0</button>
+                <button type="button" data-action="gain-xp" data-xp="60">+1</button>
+                <button type="button" data-action="gain-xp" data-xp="80">+2</button>
+                <button type="button" data-action="gain-xp" data-xp="120">+3</button>
+                <button type="button" data-action="gain-xp" data-xp="160">+4</button>
             </p>
             <hr>
-        {{/if}}
-        <p>Unused resources:</p>
-        <p class="km-turn-buttons">
-            <button type="button" data-action="solution-xp">Supernatural/Creative Solutions</button>
-            <button type="button" data-action="rp-xp">Resource Points</button>
-        </p>
-        <hr>
-        <table>
-            <tr>
-                <thead>
-                <th>Milestone</th>
-                <th>XP</th>
-                <th>Completed</th>
-                </thead>
-            </tr>
-            {{#each milestones}}
-                <tr {{#if hidden}}hidden{{/if}}>
-                    <td>{{ name }}{{> formElement id }}{{> formElement enabled }}</td>
-                    <td>{{xp}}</td>
-                    <td>{{> formElement completed }}</td>
+            <p>Claimed Hexes:</p>
+            <p class="km-turn-buttons">
+                <button type="button" data-action="hex-xp" data-hexes="1">1 Hex</button>
+                <button type="button" data-action="hex-xp" data-hexes="2">2 Hexes</button>
+                <button type="button" data-action="hex-xp" data-hexes="3">3 Hexes</button>
+            </p>
+            <hr>
+            {{#if vkXp}}
+                <p>Constructed a Terrain Feature or Structure:</p>
+                <p class="km-turn-buttons">
+                    <button type="button" data-action="gain-xp" data-xp="10">Farm or Worksite</button>
+                    <button type="button" data-action="gain-xp" data-xp="5">Bridge or Road</button>
+                    <button type="button" data-action="structure-xp">Structure</button>
+                </p>
+                <hr>
+            {{/if}}
+            <p>Unused resources:</p>
+            <p class="km-turn-buttons">
+                <button type="button" data-action="solution-xp">Supernatural/Creative Solutions</button>
+                <button type="button" data-action="rp-xp">Resource Points</button>
+            </p>
+            <hr>
+            <table>
+                <tr>
+                    <thead>
+                    <th>Milestone</th>
+                    <th>XP</th>
+                    <th>Completed</th>
+                    </thead>
                 </tr>
-            {{/each}}
-        </table>
-        <h2 id="km-turn-end">End Turn</h2>
-        <p class="km-turn-buttons">
-            <button type="button" {{#unless canLevelUp}}disabled{{/unless}} data-action="level-up">Level Up</button>
-            <button type="button" data-action="end-turn">End Turn</button>
-        </p>
+                {{#each milestones}}
+                    <tr {{#if hidden}}hidden{{/if}}>
+                        <td>{{ name }}{{> formElement id }}{{> formElement enabled }}</td>
+                        <td>{{xp}}</td>
+                        <td>{{> formElement completed }}</td>
+                    </tr>
+                {{/each}}
+            </table>
+        </section>
+        <section class="km-kingdom-sheet-section">
+            <h2 id="km-turn-end">End Turn</h2>
+            <p class="km-turn-buttons">
+                <button type="button" {{#unless canLevelUp}}disabled{{/unless}} data-action="level-up">Level Up</button>
+                <button type="button" data-action="end-turn">End Turn</button>
+            </p>
+        </section>
     </div>
 </div>

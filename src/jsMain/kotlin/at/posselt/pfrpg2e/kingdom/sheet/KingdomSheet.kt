@@ -28,6 +28,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
+import at.posselt.pfrpg2e.kingdom.data.getChosenHeartland
 import at.posselt.pfrpg2e.kingdom.dialogs.ActivityManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.AddModifier
 import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
@@ -508,6 +509,14 @@ class KingdomSheet(
 
             }
 
+            "claimed-refuge" -> buildPromise {
+
+            }
+
+            "claimed-landmark" -> buildPromise {
+
+            }
+
             "scroll-to" -> {
                 event.stopPropagation()
                 event.preventDefault()
@@ -643,6 +652,7 @@ class KingdomSheet(
         val enabledGovernments = kingdom.getGovernments().filter { it.id !in governmentBlacklist }
         val notesContext = kingdom.notes.toContext()
         val government = kingdom.getChosenGovernment()
+        val heartland = kingdom.getChosenHeartland()
         val trainedSkills = kingdom.getTrainedSkills(chosenFeats, government)
         val initialProficiencies = (0..3).map { index ->
             val proficiency = kingdom.initialProficiencies.getOrNull(index)
@@ -749,6 +759,8 @@ class KingdomSheet(
             ongoingEvents = kingdom.ongoingEvents.map { it.name }.toTypedArray(),
             eventDC = getEventDC(kingdom),
             cultEventDC = getCultEventDC(kingdom),
+            civicPlanning = kingdom.level >= 12,
+            heartlandLabel = heartland?.name,
         )
     }
 

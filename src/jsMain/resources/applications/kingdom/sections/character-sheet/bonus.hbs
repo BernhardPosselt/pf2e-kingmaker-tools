@@ -1,5 +1,5 @@
 <section {{#if hideBonus}}hidden{{/if}}>
-    <section class="km-kingdom-sheet-kingdom-section">
+    <section class="km-kingdom-sheet-section">
         <h2>Add Bonus Feat <span class="km-header-right-align">{{> formElement bonusFeat.feat}}</span></h2>
         {{#if bonusFeat.description}}
             <details>
@@ -17,7 +17,7 @@
     </section>
     {{#each bonusFeats}}
         {{> formElement id}}
-        <section class="km-kingdom-sheet-kingdom-section">
+        <section class="km-kingdom-sheet-section">
             <h2>{{name}} <span class="km-header-right-align">
                 <button type="button"
                         class="km-no-button-margin"

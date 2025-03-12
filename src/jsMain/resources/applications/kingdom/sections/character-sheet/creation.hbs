@@ -1,5 +1,5 @@
 <section {{#if hideCreation}}hidden{{/if}}>
-    <section class="km-kingdom-sheet-kingdom-section">
+    <section class="km-kingdom-sheet-section">
         <h2>Select Charter <span class="km-header-right-align">{{> formElement charter.type}}</span></h2>
         {{#if charter.description}}<p>{{charter.description}}</p>
             <hr>{{/if}}
@@ -15,13 +15,13 @@
             </ul>
         </div>
     </section>
-    <section class="km-kingdom-sheet-kingdom-section">
+    <section class="km-kingdom-sheet-section">
         <h2>Choose a Heartland <span class="km-header-right-align">{{> formElement heartland.type}}</span></h2>
         {{#if heartland.description}}<p>{{heartland.description}}</p>
             <hr>{{/if}}
         {{#if heartland.description}}<p><b>Ability Boost</b>: {{heartland.boost}}</p>{{/if}}
     </section>
-    <section class="km-kingdom-sheet-kingdom-section">
+    <section class="km-kingdom-sheet-section">
         <h2>Choose a Government <span class="km-header-right-align">{{> formElement government.type}}</span></h2>
         {{#if government.description}}<p>{{government.description}}</p>
             <hr>{{/if}}
@@ -46,7 +46,7 @@
             </details>
         {{/if}}
     </section>
-    <section class="km-kingdom-sheet-kingdom-section">
+    <section class="km-kingdom-sheet-section">
         <h2>Finalize Ability Scores</h2>
         <div class="km-choose-boosts">
             <p>Pick {{abilityBoosts.free}} Boosts:</p>
@@ -58,7 +58,7 @@
             </ul>
         </div>
     </section>
-    <section class="km-kingdom-sheet-kingdom-section">
+    <section class="km-kingdom-sheet-section">
         <h2>Choose Leaders</h2>
         <p>Assign your leaders:</p>
         <ul class="km-choose-leaders">
@@ -92,7 +92,7 @@
             </ul>
         </div>
     </section>
-    <section class="km-kingdom-sheet-kingdom-section">
+    <section class="km-kingdom-sheet-section">
         <h2>First Village</h2>
         <p>First, import all Structures from the <b>Structures</b> compendium into your world:</p>
         <button type="button" data-action="structures-import">Import Structures</button>
@@ -130,7 +130,7 @@
         <p>If you want to use a different settlement scene, simply add it under the sheet's <b>Settlements</b> tab and
             copy the block tiles onto it.</p>
     </section>
-    <section class="km-kingdom-sheet-kingdom-section">
+    <section class="km-kingdom-sheet-section">
         <h2>Fame or Infamy? <span class="km-header-right-align">{{> formElement fameContext.type}}</span></h2>
         <p>The choice here solely determines whether the kingdom uses Fame or Infamy points and the influence certain
             structures might have on the kingdom.</p>

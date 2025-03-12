@@ -157,6 +157,10 @@
         overflow: auto;
         padding: 1em;
 
+        .km-kingdom-sheet-section:not(:nth-of-type(1)) {
+            margin-top: 3em;
+        }
+
         .km-header-right-align {
             margin-left: auto;
             margin-top: -4px;
@@ -316,10 +320,6 @@
                 border-top: 1px solid;
                 padding-top: 1em;
             }
-        }
-
-        .km-kingdom-sheet-kingdom-section:not(:nth-of-type(1)) {
-            margin-top: 3em;
         }
 
         .km-government-pick-label {

@@ -64,4 +64,6 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val eventDC: Int
     val cultEventDC: Int
     val cultOfTheBloomEvents: Boolean
+    val civicPlanning: Boolean
+    val heartlandLabel: String?
 }
