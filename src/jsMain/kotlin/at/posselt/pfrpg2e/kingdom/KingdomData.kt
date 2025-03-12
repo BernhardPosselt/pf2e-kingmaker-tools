@@ -91,6 +91,7 @@ external interface KingdomSettings {
     var leaderKingdomSkills: RawLeaderKingdomSkills
     var leaderSkills: RawLeaderSkills
     var automateStats: Boolean
+    var recruitableArmiesFolderId: String?
 }
 
 @JsPlainObject
@@ -479,8 +480,7 @@ fun KingdomData.getAllSettlements(game: Game): SettlementResult {
 }
 
 
-@Deprecated("Do not use this, this should work with more than one sheet")
-fun Game.getKingdomActor(): KingdomActor? =
+fun Game.getKingdomActors(): List<KingdomActor> =
     actors.contents
         .filterIsInstance<KingdomActor>()
-        .find { it.getKingdom() != null && it.name == "Kingdom Sheet" }
+        .filter { it.getKingdom() != null && it.name == "Kingdom Sheet" }

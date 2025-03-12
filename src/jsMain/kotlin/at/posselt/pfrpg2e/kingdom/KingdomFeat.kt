@@ -57,7 +57,7 @@ external interface RawFeat {
     val automationNotes: String?
     val modifiers: Array<RawModifier>?
     val resourceDice: Int?
-    val settlementItemLevelIncrease: Int?
+    val settlementMagicItemLevelIncrease: Int?
     val trainSkill: String?
     val assuranceForSkill: String?
     val increaseUsableSkills: Record<String, Array<String>>?

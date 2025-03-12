@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.data.kingdom.structures.RuinAmount
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
+import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
@@ -22,6 +23,7 @@ import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Folder
+import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.core.utils.mergeObject
 import com.foundryvtt.pf2e.actor.PF2ENpc
@@ -65,111 +67,118 @@ fun StructureActor.getRawResolvedStructureData(): RawStructureData? {
     return null
 }
 
+fun TokenDocument.isStructure() =
+    actor?.takeIfInstance<StructureActor>()
+        ?.isStructure() == true
+
 fun StructureActor.isStructure() = getRawStructureData() != null
 
 fun StructureActor.isSlowed() = itemTypes.condition.any { it.slug == "slowed" }
 
 fun StructureActor.parseStructure(): Structure? = getRawResolvedStructureData()
-    ?.parseStructure(isSlowed())
+    ?.parseStructure(isSlowed(), uuid)
 
-fun RawStructureData.parseStructure(inConstruction: Boolean) =
-    Structure(
-        name = name,
-        stacksWith = stacksWith,
-        construction = Construction(
-            skills = construction?.skills?.mapNotNull {
-                KingdomSkill.fromString(it.skill)?.let { skill ->
-                    KingdomSkillRank(
-                        skill = skill,
-                        rank = it.proficiencyRank ?: 0,
-                    )
-                }
-            }?.toSet() ?: emptySet(),
-            lumber = construction?.lumber ?: 0,
-            luxuries = construction?.luxuries ?: 0,
-            ore = construction?.ore ?: 0,
-            stone = construction?.stone ?: 0,
-            rp = construction?.rp ?: 0,
-            dc = construction?.dc ?: 0,
-        ),
-        notes = notes,
-        preventItemLevelPenalty = preventItemLevelPenalty == true,
-        enableCapitalInvestment = enableCapitalInvestment == true,
-        bonuses = (skillBonusRules?.mapNotNull { rule ->
-            KingdomSkill.fromString(rule.skill)?.let { skill ->
-                StructureBonus(
+fun RawStructureData.parseStructure(
+    inConstruction: Boolean,
+    uuid: String,
+) = Structure(
+    name = name,
+    stacksWith = stacksWith,
+    construction = Construction(
+        skills = construction?.skills?.mapNotNull {
+            KingdomSkill.fromString(it.skill)?.let { skill ->
+                KingdomSkillRank(
                     skill = skill,
-                    activity = rule.activity,
-                    value = rule.value,
+                    rank = it.proficiencyRank ?: 0,
                 )
             }
-        }?.toSet() ?: emptySet()) + (activityBonusRules?.mapNotNull { rule ->
+        }?.toSet() ?: emptySet(),
+        lumber = construction?.lumber ?: 0,
+        luxuries = construction?.luxuries ?: 0,
+        ore = construction?.ore ?: 0,
+        stone = construction?.stone ?: 0,
+        rp = construction?.rp ?: 0,
+        dc = construction?.dc ?: 0,
+    ),
+    notes = notes,
+    preventItemLevelPenalty = preventItemLevelPenalty == true,
+    enableCapitalInvestment = enableCapitalInvestment == true,
+    bonuses = (skillBonusRules?.mapNotNull { rule ->
+        KingdomSkill.fromString(rule.skill)?.let { skill ->
             StructureBonus(
+                skill = skill,
                 activity = rule.activity,
                 value = rule.value,
-                skill = null,
             )
-        }?.toSet() ?: emptySet()),
-        availableItemsRules = availableItemsRules?.mapNotNull { rule ->
-            val group = rule.group?.let { group -> ItemGroup.fromString(group) }
-            AvailableItemsRule(
-                value = rule.value,
-                group = group,
-                maximumStacks = rule.maximumStacks,
-            )
-        }?.toSet() ?: emptySet(),
-        settlementEventBonus = settlementEventRules?.firstOrNull()?.value ?: 0,
-        leadershipActivityBonus = leadershipActivityRules?.firstOrNull()?.value ?: 0,
-        storage = CommodityStorage(
-            ore = storage?.ore ?: 0,
-            food = storage?.food ?: 0,
-            lumber = storage?.lumber ?: 0,
-            stone = storage?.stone ?: 0,
-            luxuries = storage?.luxuries ?: 0,
-        ),
-        increaseLeadershipActivities = increaseLeadershipActivities == true,
-        isBridge = isBridge == true,
-        consumptionReduction = consumptionReduction ?: 0,
-        unlockActivities = unlockActivities?.toSet() ?: emptySet(),
-        traits = traits?.mapNotNull { StructureTrait.fromString(it) }?.toSet() ?: emptySet(),
-        lots = lots,
-        affectsEvents = affectsEvents == true,
-        affectsDowntime = affectsDowntime == true,
-        reducesUnrest = reducesUnrest == true,
-        reducesRuin = reducesRuin == true,
-        level = level,
-        upgradeFrom = upgradeFrom?.toSet() ?: emptySet(),
-        reduceUnrestBy = reduceUnrestBy?.let { unrest ->
-            ReduceUnrestBy(
-                value = unrest.value,
-                moreThanOncePerTurn = unrest.moreThanOncePerTurn == true,
-                note = unrest.note,
-            )
-        },
-        reduceRuinBy = reduceRuinBy?.let { ruin ->
-            RuinAmount(
-                value = ruin.value,
-                ruin = Ruin.fromString(ruin.ruin) ?: Ruin.CRIME,
-                moreThanOncePerTurn = ruin.moreThanOncePerTurn == true,
-            )
-        },
-        gainRuin = gainRuin?.let { ruin ->
-            RuinAmount(
-                value = ruin.value,
-                ruin = Ruin.fromString(ruin.ruin) ?: Ruin.CRIME,
-                moreThanOncePerTurn = ruin.moreThanOncePerTurn == true,
-            )
-        },
-        increaseResourceDice = IncreaseResourceDice(
-            village = increaseResourceDice?.village ?: 0,
-            town = increaseResourceDice?.town ?: 0,
-            city = increaseResourceDice?.city ?: 0,
-            metropolis = increaseResourceDice?.metropolis ?: 0,
-        ),
-        consumptionReductionStacks = consumptionReductionStacks == true,
-        ignoreConsumptionReductionOf = ignoreConsumptionReductionOf?.toSet() ?: emptySet(),
-        inConstruction = inConstruction
-    )
+        }
+    }?.toSet() ?: emptySet()) + (activityBonusRules?.mapNotNull { rule ->
+        StructureBonus(
+            activity = rule.activity,
+            value = rule.value,
+            skill = null,
+        )
+    }?.toSet() ?: emptySet()),
+    availableItemsRules = availableItemsRules?.mapNotNull { rule ->
+        val group = rule.group?.let { group -> ItemGroup.fromString(group) }
+        AvailableItemsRule(
+            value = rule.value,
+            group = group,
+            maximumStacks = rule.maximumStacks,
+        )
+    }?.toSet() ?: emptySet(),
+    settlementEventBonus = settlementEventRules?.firstOrNull()?.value ?: 0,
+    leadershipActivityBonus = leadershipActivityRules?.firstOrNull()?.value ?: 0,
+    storage = CommodityStorage(
+        ore = storage?.ore ?: 0,
+        food = storage?.food ?: 0,
+        lumber = storage?.lumber ?: 0,
+        stone = storage?.stone ?: 0,
+        luxuries = storage?.luxuries ?: 0,
+    ),
+    increaseLeadershipActivities = increaseLeadershipActivities == true,
+    isBridge = isBridge == true,
+    consumptionReduction = consumptionReduction ?: 0,
+    unlockActivities = unlockActivities?.toSet() ?: emptySet(),
+    traits = traits?.mapNotNull { StructureTrait.fromString(it) }?.toSet() ?: emptySet(),
+    lots = lots,
+    affectsEvents = affectsEvents == true,
+    affectsDowntime = affectsDowntime == true,
+    reducesUnrest = reducesUnrest == true,
+    reducesRuin = reducesRuin == true,
+    level = level,
+    upgradeFrom = upgradeFrom?.toSet() ?: emptySet(),
+    reduceUnrestBy = reduceUnrestBy?.let { unrest ->
+        ReduceUnrestBy(
+            value = unrest.value,
+            moreThanOncePerTurn = unrest.moreThanOncePerTurn == true,
+            note = unrest.note,
+        )
+    },
+    reduceRuinBy = reduceRuinBy?.let { ruin ->
+        RuinAmount(
+            value = ruin.value,
+            ruin = Ruin.fromString(ruin.ruin) ?: Ruin.CRIME,
+            moreThanOncePerTurn = ruin.moreThanOncePerTurn == true,
+        )
+    },
+    gainRuin = gainRuin?.let { ruin ->
+        RuinAmount(
+            value = ruin.value,
+            ruin = Ruin.fromString(ruin.ruin) ?: Ruin.CRIME,
+            moreThanOncePerTurn = ruin.moreThanOncePerTurn == true,
+        )
+    },
+    increaseResourceDice = IncreaseResourceDice(
+        village = increaseResourceDice?.village ?: 0,
+        town = increaseResourceDice?.town ?: 0,
+        city = increaseResourceDice?.city ?: 0,
+        metropolis = increaseResourceDice?.metropolis ?: 0,
+    ),
+    consumptionReductionStacks = consumptionReductionStacks == true,
+    ignoreConsumptionReductionOf = ignoreConsumptionReductionOf?.toSet() ?: emptySet(),
+    inConstruction = inConstruction,
+    uuid = uuid,
+)
 
 fun StructureActor.getActorAndStructure(): ActorAndStructure? {
     val data = getRawResolvedStructureData()

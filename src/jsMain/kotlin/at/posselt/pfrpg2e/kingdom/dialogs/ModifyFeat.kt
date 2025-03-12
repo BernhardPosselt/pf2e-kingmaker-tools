@@ -39,7 +39,7 @@ external interface ModifyFeatData {
     val level: Int
     val prerequisites: String?
     val resourceDice: Int
-    val settlementItemLevelIncrease: Int
+    val settlementMagicItemLevelIncrease: Int
     val flag: String?
     val increaseAnarchyLimit: Int
     val ruinThresholdIncreasesAmount: Int
@@ -58,7 +58,7 @@ class ModifyFeatDataModel(value: AnyObject) : DataModel(value) {
             int("level")
             string("prerequisites", nullable = true)
             int("resourceDice")
-            int("settlementItemLevelIncrease")
+            int("settlementMagicItemLevelIncrease")
             string("flag", nullable = true)
             int("increaseAnarchyLimit")
             int("ruinThresholdIncreasesAmount")
@@ -88,7 +88,7 @@ class ModifyFeat(
         automationNotes = data?.automationNotes,
         modifiers = data?.modifiers,
         resourceDice = data?.resourceDice,
-        settlementItemLevelIncrease = data?.settlementItemLevelIncrease,
+        settlementMagicItemLevelIncrease = data?.settlementMagicItemLevelIncrease,
         trainSkill = data?.trainSkill,
         assuranceForSkill = data?.assuranceForSkill,
         increaseUsableSkills = data?.increaseUsableSkills,
@@ -155,8 +155,8 @@ class ModifyFeat(
                     stacked = false
                 ),
                 NumberInput(
-                    name = "settlementItemLevelIncrease",
-                    value = current.settlementItemLevelIncrease ?: 0,
+                    name = "settlementMagicItemLevelIncrease",
+                    value = current.settlementMagicItemLevelIncrease ?: 0,
                     label = "Increase Level of Magic Items in Settlements",
                     stacked = false
                 ),
@@ -211,7 +211,7 @@ class ModifyFeat(
             automationNotes = current.automationNotes,
             modifiers = current.modifiers,
             resourceDice = value.resourceDice,
-            settlementItemLevelIncrease = value.settlementItemLevelIncrease,
+            settlementMagicItemLevelIncrease = value.settlementMagicItemLevelIncrease,
             trainSkill = current.trainSkill,
             assuranceForSkill = current.assuranceForSkill,
             increaseUsableSkills = current.increaseUsableSkills,

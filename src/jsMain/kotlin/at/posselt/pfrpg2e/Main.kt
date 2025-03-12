@@ -20,7 +20,7 @@ import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
-import at.posselt.pfrpg2e.kingdom.getKingdomActor
+import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
@@ -175,7 +175,7 @@ fun main() {
                     viewKingdomMacro = {
                         buildPromise {
                             // TODO: let player choose which kingdom to open
-                            val actor = game.getKingdomActor()
+                            val actor = game.getKingdomActors().first()
                             openOrCreateKingdomSheet(game, actionDispatcher, actor)
                         }
                     }
@@ -187,7 +187,7 @@ fun main() {
                     game.migratePfrpg2eKingdomCampingWeather()
                     showFirstRunMessage(game)
                     validateStructures(game)
-                    openOrCreateKingdomSheet(game, actionDispatcher, game.getKingdomActor())
+                    openOrCreateKingdomSheet(game, actionDispatcher, game.getKingdomActors().first())
                 }
             }
 

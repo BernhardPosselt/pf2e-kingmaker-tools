@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.data.kingdom.structures
 
 data class Structure(
+    val uuid: String,
     val name: String,
     val stacksWith: String? = null,
     val construction: Construction = Construction(),
@@ -34,3 +35,6 @@ data class Structure(
 ) {
     val isResidential = traits.contains(StructureTrait.RESIDENTIAL)
 }
+
+
+

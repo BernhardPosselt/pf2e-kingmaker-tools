@@ -1,0 +1,49 @@
+.km-inspect-settlement {
+    .window-content {
+        padding: 0;
+    }
+
+    .km-settlement-status th {
+        text-align: right;
+    }
+
+    .km-settlement-nav {
+        padding: .5em;
+        border-bottom: 1px solid;
+        box-shadow: 0 4px 4px 0 #00000082;
+        z-index: 1;
+        position: relative;
+
+        ul {
+            justify-content: center;
+            display: flex;
+            gap: .5em;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+
+            li {
+                display: flex;
+                margin: 0;
+            }
+
+            a {
+                border: 1px solid;
+                border-radius: .5em;
+                padding: .5em;
+                text-decoration: none;
+
+                &:hover, &.active {
+                    border: 1px solid;
+                    color: var(--color-dark-1);
+                    background-color: var(--color-warm-1);
+                }
+            }
+        }
+    }
+
+    .km-settlement-content {
+        padding: 1em;
+        position: relative;
+    }
+}

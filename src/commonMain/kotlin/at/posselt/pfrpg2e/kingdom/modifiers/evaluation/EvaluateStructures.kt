@@ -3,8 +3,10 @@ package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.settlements.findSettlementSize
+import at.posselt.pfrpg2e.data.kingdom.structures.AvailableItemBonuses
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
+import at.posselt.pfrpg2e.data.kingdom.structures.ItemGroup
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 
 private data class CombinedBonuses(
@@ -56,6 +58,41 @@ private fun combineBonuses(
         leaderBonus = leaderBonus,
         bonuses = bonuses,
     )
+}
+
+fun parseAvailableItems(structures: List<Structure>): AvailableItemBonuses {
+    val bonusesPerGroup = structures
+        .groupBy { it.stacksWith ?: it.name }
+        .map { (_, structure) -> calculateItemsFromSameStructures(structure) }
+        // for each structure, we only want the maximum bonus per category
+        .fold(mapOf<ItemGroup, Int>()) { prev, curr ->
+            ItemGroup.entries.associate {
+                val previousBonus = prev[it] ?: 0
+                val currentBonus = curr[it] ?: 0
+                it to if (currentBonus > previousBonus) currentBonus else previousBonus
+            }
+        }
+    return AvailableItemBonuses(
+        other = bonusesPerGroup[ItemGroup.OTHER] ?: 0,
+        magical = bonusesPerGroup[ItemGroup.MAGICAL] ?: 0,
+        luxury = bonusesPerGroup[ItemGroup.LUXURY] ?: 0,
+        divine = bonusesPerGroup[ItemGroup.DIVINE] ?: 0,
+        primal = bonusesPerGroup[ItemGroup.PRIMAL] ?: 0,
+        arcane = bonusesPerGroup[ItemGroup.ARCANE] ?: 0,
+        occult = bonusesPerGroup[ItemGroup.OCCULT] ?: 0,
+        alchemical = bonusesPerGroup[ItemGroup.ALCHEMICAL] ?: 0
+    )
+}
+
+/**
+ * Item Group increases stack, but only if they are from the same structure up to a maximum Stacks limit
+ */
+private fun calculateItemsFromSameStructures(sameStructureInstances: List<Structure>): Map<ItemGroup, Int> {
+    val rulesByType = sameStructureInstances.flatMap { it.availableItemsRules }
+        .groupBy { it.group ?: ItemGroup.OTHER }
+    return rulesByType.mapValues { (group, rules) -> rules
+        .filter { it.maximumStacks == null || it.maximumStacks >= (rulesByType[group]?.size ?: 0) } }
+        .mapValues { (_, rules) -> rules.sumOf { it.value } }
 }
 
 value class MergedSettlement(val settlement: Settlement)
@@ -124,7 +161,7 @@ fun evaluateSettlement(
         .toSet()
     val increaseLeadershipActivities = (data.type == SettlementType.CAPITAL
             && constructedStructures.any { it.increaseLeadershipActivities })
-
+    val availableItems = parseAvailableItems(constructedStructures)
     val residentialLots = constructedStructures
         .filter { it.isResidential }
         .sumOf { it.lots }
@@ -152,6 +189,8 @@ fun evaluateSettlement(
         occupiedBlocks = data.occupiedBlocks,
         type = data.type,
         structuresInConstruction = structuresInConstruction,
-        constructedStructures = constructedStructures
+        constructedStructures = constructedStructures,
+        availableItems = availableItems,
+        preventItemLevelPenalty = constructedStructures.any { it.preventItemLevelPenalty }
     )
 }

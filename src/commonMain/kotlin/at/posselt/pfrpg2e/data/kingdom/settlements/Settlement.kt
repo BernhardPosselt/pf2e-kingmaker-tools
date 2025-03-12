@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.data.kingdom.settlements
 
+import at.posselt.pfrpg2e.data.kingdom.structures.AvailableItemBonuses
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
@@ -20,11 +21,13 @@ data class Settlement(
     val storage: CommodityStorage,
     val increaseLeadershipActivities: Boolean,
     val consumptionReduction: Int,
+    val availableItems: AvailableItemBonuses,
     val size: SettlementSize,
     val unlockActivities: Set<String>,
     val residentialLots: Int,
     val hasBridge: Boolean,
     val occupiedBlocks: Int,
+    val preventItemLevelPenalty: Boolean,
     val structuresInConstruction: List<Structure>,
     val constructedStructures: List<Structure>,
 ) {

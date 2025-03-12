@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.armies
 
 import at.posselt.pfrpg2e.kingdom.getKingdom
-import at.posselt.pfrpg2e.kingdom.getKingdomActor
+import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.Actor
@@ -20,24 +20,29 @@ import com.foundryvtt.core.onUpdateActor
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import kotlin.math.max
 
-private fun calculateTotalArmyConsumption(game: Game) =
+private fun calculateTotalArmyConsumption(game: Game, folderId: String) =
     game.scenes.contents
         .asSequence()
         .flatMap { it.tokens.contents.toList() }
         .filterNot(TokenDocument::hidden)
-        .map(TokenDocument::actor)
+        .mapNotNull(TokenDocument::actor)
+        .mapNotNull(Actor::baseActor)
         .filterIsInstance<PF2EArmy>()
+        .filter { it.folder?.id == folderId }
         .filter(PF2EArmy::hasPlayerOwner)
         .distinctBy(PF2EArmy::uuid)
         .sumOf { it.system.consumption }
 
 private suspend fun updateArmyConsumption(game: Game) {
-    val kingdomActor = game.getKingdomActor()
-    val kingdom = kingdomActor?.getKingdom()
-    if (kingdom != null && kingdom.settings.autoCalculateArmyConsumption) {
-        kingdom.consumption.armies = max(calculateTotalArmyConsumption(game), 0)
-        kingdomActor.setKingdom(kingdom)
-    }
+    game.getKingdomActors()
+        .forEach {
+            val kingdom = it.getKingdom()
+            val folderId = kingdom?.settings?.recruitableArmiesFolderId
+            if (kingdom != null && kingdom.settings.autoCalculateArmyConsumption && folderId != null) {
+                kingdom.consumption.armies = max(calculateTotalArmyConsumption(game, folderId), 0)
+                it.setKingdom(kingdom)
+            }
+        }
 }
 
 private suspend fun checkedUpdate(game: Game, hookActor: Actor) {

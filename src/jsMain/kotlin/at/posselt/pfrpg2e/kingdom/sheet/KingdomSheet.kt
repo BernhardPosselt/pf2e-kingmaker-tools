@@ -34,6 +34,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.FeatManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.GovernmentManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.InspectSettlement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
 import at.posselt.pfrpg2e.kingdom.getAllActivities
@@ -63,6 +64,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.importSettlementScene
 import at.posselt.pfrpg2e.kingdom.structures.importStructures
+import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
@@ -83,6 +85,7 @@ import com.foundryvtt.core.documents.onDeleteToken
 import com.foundryvtt.core.documents.onUpdateDrawing
 import com.foundryvtt.core.documents.onUpdateItem
 import com.foundryvtt.core.documents.onUpdateTile
+import com.foundryvtt.core.documents.onUpdateToken
 import com.foundryvtt.core.onApplyTokenStatusEffect
 import com.foundryvtt.core.onCanvasReady
 import com.foundryvtt.core.onSightRefresh
@@ -155,8 +158,9 @@ class KingdomSheet(
         appHook.onCreateDrawing { _, _, _, _ -> render() }
         appHook.onUpdateDrawing { _, _, _, _ -> render() }
         appHook.onDeleteDrawing { _, _, _ -> render() }
-        appHook.onDeleteToken { _, _, _ -> render() }
-        appHook.onCreateToken { _, _, _, _ -> render() }
+        appHook.onDeleteToken { token, _, _ -> if(token.isStructure()) {render() } }
+        appHook.onUpdateToken { token, _, _, _ -> if(token.isStructure()) {render() } }
+        appHook.onCreateToken { token, _, _, _ -> if(token.isStructure()) {render() } }
         appHook.onCanvasReady { _ -> render() }
         appHook.onSightRefresh { _ -> render() } // end of drag movement
         appHook.onApplyTokenStatusEffect { _, _, _ -> render() }
@@ -340,6 +344,72 @@ class KingdomSheet(
                 }
             }
 
+            "add-settlement" -> buildPromise {
+                game.scenes.current?.id?.let { id ->
+                    val kingdom = getKingdom()
+                    kingdom.settlements = kingdom.settlements + RawSettlement(
+                        sceneId = id,
+                        lots = 1,
+                        level = 1,
+                        type = "settlement",
+                        secondaryTerritory = false,
+                        manualSettlementLevel = false,
+                        waterBorders = 0,
+                    )
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "delete-settlement" -> buildPromise {
+                target.dataset["id"]?.let { id ->
+                    val kingdom = getKingdom()
+                    kingdom.settlements = kingdom.settlements.filter { it.sceneId != id }.toTypedArray()
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "view-settlement" -> buildPromise {
+                target.dataset["id"]?.let { id ->
+                    game.scenes.get(id)?.view()?.await()
+                }
+            }
+
+            "activate-settlement" -> buildPromise {
+                target.dataset["id"]?.let { id ->
+                    game.scenes.get(id)?.activate()?.await()
+                }
+            }
+
+            "inspect-settlement" -> buildPromise {
+                target.dataset["id"]?.let { id ->
+                    val kingdom = getKingdom()
+                    val settlement = kingdom.settlements.find { it.sceneId == id }
+                    checkNotNull(settlement) {
+                        "Could not find raw settlement with id $id"
+                    }
+                    val autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel
+                    val allStructuresStack = kingdom.settings.kingdomAllStructureItemBonusesStack
+                    val title = game.scenes.get(id)?.name
+                    checkNotNull(title) {
+                        "Scene with id $id not found"
+                    }
+                    InspectSettlement(
+                        game = game,
+                        title = title,
+                        autoCalculateSettlementLevel = autoCalculateSettlementLevel,
+                        allStructuresStack = allStructuresStack,
+                        settlement = settlement,
+                        feats = kingdom.getChosenFeats(kingdom.getChosenFeatures(kingdom.getExplodedFeatures()))
+                    ) { data ->
+                        val kingdom = getKingdom()
+                        kingdom.settlements = kingdom.settlements
+                            .filter { it.sceneId != data.sceneId }
+                            .toTypedArray() + data
+                        actor.setKingdom(kingdom)
+                    }.launch()
+                }
+            }
+
             "settings" -> {
                 val kingdom = getKingdom()
                 buildPromise {
@@ -518,6 +588,9 @@ class KingdomSheet(
             ).toContext()
             result
         }.toTypedArray()
+        val currentSceneId = game.scenes.current?.id
+        val allSettlementSceneIds = kingdom.settlements.map { it.sceneId }.toSet()
+        val canAddCurrentScene = currentSceneId != null && currentSceneId !in allSettlementSceneIds
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -585,6 +658,12 @@ class KingdomSheet(
             mainNav = createMainNav(kingdom),
             initialProficiencies = initialProficiencies,
             enableLeadershipModifiers = kingdom.settings.enableLeadershipModifiers,
+            settlements = kingdom.settlements.toContext(
+                game,
+                kingdom.settings.autoCalculateSettlementLevel,
+                kingdom.settings.kingdomAllStructureItemBonusesStack
+            ),
+            canAddCurrentSceneAsSettlement = canAddCurrentScene
         )
     }
 

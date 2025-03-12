@@ -24,7 +24,7 @@ private fun Scene.structureTokens(): List<TokenDocument> =
         .asSequence()
         .filter {
             val actor = it.actor
-            actor is StructureActor && actor.isStructure()
+            actor is StructureActor && actor.isStructure() && !it.hidden
         }
         .toList()
 
@@ -42,7 +42,7 @@ private val TileDocument.isBlock: Boolean
 private fun Scene.getBlockTiles() =
     tiles.contents
         .asSequence()
-        .filterNot { it.isBlock }
+        .filter { it.isBlock && !it.hidden }
 
 private fun Scene.calculateOccupiedBlocks(): Int {
     val structures = structureTokens()

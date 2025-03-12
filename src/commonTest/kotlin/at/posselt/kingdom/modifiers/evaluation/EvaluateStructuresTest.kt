@@ -4,13 +4,16 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementSizeType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.settlements.settlementSizeData
+import at.posselt.pfrpg2e.data.kingdom.structures.AvailableItemsRule
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
+import at.posselt.pfrpg2e.data.kingdom.structures.ItemGroup
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.SettlementData
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateSettlement
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.parseAvailableItems
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -24,6 +27,7 @@ class EvaluateStructuresTest {
                 name = "stackwith",
                 stacksWith = "residential",
                 consumptionReduction = 1,
+                uuid = "",
                 bonuses = setOf(
                     StructureBonus(
                         skill = KingdomSkill.AGRICULTURE,
@@ -44,6 +48,7 @@ class EvaluateStructuresTest {
                 unlockActivities = setOf("something"),
                 storage = CommodityStorage(ore = 1, lumber = 1),
                 consumptionReduction = 1,
+                uuid = "",
                 bonuses = setOf(
                     StructureBonus(
                         skill = KingdomSkill.AGRICULTURE,
@@ -71,6 +76,7 @@ class EvaluateStructuresTest {
                 notes = "note2",
                 storage = CommodityStorage(stone = 1, lumber = 1),
                 consumptionReduction = 1,
+                uuid = "",
                 bonuses = setOf(
                     StructureBonus(
                         skill = KingdomSkill.AGRICULTURE,
@@ -178,6 +184,7 @@ class EvaluateStructuresTest {
             structures = listOf(
                 Structure(
                     name = "residential",
+                    uuid = "",
                     bonuses = setOf(
                         StructureBonus(
                             skill = KingdomSkill.AGRICULTURE,
@@ -188,6 +195,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    uuid = "",
                     bonuses = setOf(
                         StructureBonus(
                             skill = KingdomSkill.AGRICULTURE,
@@ -229,11 +237,13 @@ class EvaluateStructuresTest {
                     name = "residential",
                     consumptionReduction = 1,
                     consumptionReductionStacks = true,
+                    uuid = "",
                 ),
                 Structure(
                     name = "residential",
                     consumptionReduction = 1,
                     consumptionReductionStacks = true,
+                    uuid = "",
                 ),
             ),
             allStructuresStack = false,
@@ -258,11 +268,13 @@ class EvaluateStructuresTest {
                     name = "residential",
                     consumptionReduction = 1,
                     consumptionReductionStacks = true,
+                    uuid = "",
                 ),
                 Structure(
                     name = "other",
                     consumptionReduction = 3,
-                    ignoreConsumptionReductionOf = setOf("residential")
+                    ignoreConsumptionReductionOf = setOf("residential"),
+                    uuid = "",
                 ),
             ),
             allStructuresStack = false,
@@ -286,11 +298,13 @@ class EvaluateStructuresTest {
                 Structure(
                     name = "residential",
                     consumptionReduction = 1,
+                    uuid = "",
                 ),
                 Structure(
                     stacksWith = "residential",
                     name = "other",
                     consumptionReduction = 1,
+                    uuid = "",
                 ),
             ),
             allStructuresStack = false,
@@ -298,4 +312,21 @@ class EvaluateStructuresTest {
         assertEquals(1, result.consumptionReduction)
     }
 
+    @Test
+    fun shouldSumItemBonuses() {
+        val result = parseAvailableItems(
+            listOf(
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 3
+                    ))
+                ),
+            )
+        )
+        assertEquals(1, result.divine)
+    }
 }

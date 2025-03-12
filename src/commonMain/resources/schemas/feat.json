@@ -63,7 +63,7 @@
         "resourceDice": {
           "type": "number"
         },
-        "settlementItemLevelIncrease": {
+        "settlementMagicItemLevelIncrease": {
           "type": "number"
         },
         "trainSkill": {

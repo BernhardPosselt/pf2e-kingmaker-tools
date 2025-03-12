@@ -1,0 +1,122 @@
+<div>
+    <nav class="km-settlement-nav">
+        <ul>
+            {{#each tabs}}
+                <li><a class="{{#if active}}active{{/if}}" data-action="change-nav" href="#"
+                       data-link="{{link}}">{{label}}</a></li>
+            {{/each}}
+        </ul>
+    </nav>
+    <div class="km-settlement-content">
+        <div {{#unless (eq currentTab 'status')}}hidden{{/unless}}>
+            <table class="km-settlement-status">
+                <tbody>
+                <tr>
+                    <th>Manual Management</th>
+                    <td>{{> formElement manualSettlementLevelInput}}</td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{> formElement typeInput}}</td>
+                </tr>
+                <tr>
+                    <th>Blocks (Maximum: {{maximumBlocks}})</th>
+                    <td>
+                        {{> formElement blocksInput}}
+                        {{#unless manualSettlementLevel}}
+                            {{blocks}}
+                        {{/unless}}</td>
+                </tr>
+                <tr>
+                    <th>Population</th>
+                    <td>{{population}}</td>
+                </tr>
+                <tr>
+                    <th>Residential Lots</th>
+                    <td>{{residentialLots}}</td>
+                </tr>
+                <tr>
+                    <th>Level</th>
+                    <td>
+                        {{#unless manualSettlementLevel}}
+                            {{level}}
+                        {{/unless}}
+                        {{> formElement levelInput}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Consumption</th>
+                    <td>{{consumption}} {{#if consumptionSurplus}}(Surplus: {{consumptionSurplus}}){{/if}}</td>
+                </tr>
+                <tr>
+                    <th>Maximum Item Bonus</th>
+                    <td>{{maxItemBonus}}</td>
+                </tr>
+                <tr>
+                    <th>Influence</th>
+                    <td>{{influence}}</td>
+                </tr>
+                <tr>
+                    <th>Capital Investment</th>
+                    <td>{{#if allowCapitalInvestment}}<i class="fa-solid fa-circle-check"></i>{{/if}}</td>
+                </tr>
+                <tr>
+                    <th>Secondary Territory</th>
+                    <td>{{> formElement secondaryTerritoryInput}}</td>
+                </tr>
+                <tr>
+                    <th>Water Borders</th>
+                    <td>{{> formElement waterBordersInput}}</td>
+                </tr>
+                <tr>
+                    <th>Lacks Bridge</th>
+                    <td>{{#if lacksBridge}}<i class="fa-solid fa-circle-check"></i>{{/if}}</td>
+                </tr>
+                <tr>
+                    <th>Overcrowded</th>
+                    <td>{{#if isOvercrowded}}<i class="fa-solid fa-circle-check"></i>{{/if}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit" class="full-width" data-action="km-save" {{#unless isFormValid}}disabled{{/unless}}>{{#if
+                    saveLabel}}{{saveLabel}}{{else}}Save{{/if}}</button>
+        </div>
+        <div {{#unless (eq currentTab 'shopping')}}hidden{{/unless}}>
+            <table>
+                <thead>
+                <th>Type</th>
+                <th>Maximum Item Level</th>
+                </thead>
+                <tbody>
+                {{#each availableItems}}
+                    <tr>
+                        <td>{{@key}}</td>
+                        <td>{{this}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div {{#unless (eq currentTab 'bonuses')}}hidden{{/unless}}>
+            <ul>
+                {{#each bonuses}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div {{#unless (eq currentTab 'structures')}}hidden{{/unless}}>
+            <ul>
+                {{#each structures}}
+                    <li>{{this}}x {{{@key}}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div {{#unless (eq currentTab 'notes')}}hidden{{/unless}}>
+            <ul>
+                {{#each notes}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>

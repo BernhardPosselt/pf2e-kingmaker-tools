@@ -1,0 +1,43 @@
+<div {{#if (ne currentNavEntry 'settlements')}}hidden{{/if}} class="km-kingdom-sheet-content">
+    <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-settlements">
+        <section>
+            <h2>Settlements  <span class="km-header-right-align"><button type="button" data-action="add-settlement" {{#unless canAddCurrentSceneAsSettlement}}disabled{{/unless}}>Add Current Scene</button></span></h2>
+            <table>
+                <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>View</td>
+                    <td>Activate</td>
+                    <td>Size</td>
+                    <td>Level</td>
+                    <td>Issues</td>
+                    <td>Details</td>
+                    <td>Delete</td>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each settlements}}
+                    <tr>
+                        <td>{{name}} {{#if isCapital}}<i class="fa-solid fa-star"></i>{{/if}}</td>
+                        <td><button type="button" data-action="view-settlement" data-id="{{id}}">
+                            <i class="fa-solid fa-eye"></i></button></td>
+                        <td><button type="button" data-action="activate-settlement" data-id="{{id}}">
+                            <i class="fa-solid fa-bullseye"></i></button></td>
+                        <td>{{size}}</td>
+                        <td>{{level}} ({{residentialLots}})</td>
+                        <td>{{#if isOvercrowded}}<i class="fa-solid fa-people-roof" title="Overcrowded"></i>{{/if}}
+                        {{#if isSecondaryTerritory}}<i class="fa-solid fa-road-circle-xmark" title="Secondary Territory"></i>{{/if}}
+                        {{#if lacksBridge}}<i class="fa-solid fa-bridge-circle-xmark" title="Lacks Bridge"></i>{{/if}}</td>
+                        <td><button type="button" data-action="inspect-settlement" data-id="{{id}}">
+                            <i class="fa-solid fa-magnifying-glass"></i></button></td>
+                        <td><button type="button" data-action="delete-settlement" data-id="{{id}}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button></td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+
+        </section>
+    </div>
+</div>

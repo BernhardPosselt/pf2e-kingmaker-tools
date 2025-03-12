@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.kingdom.armies.getRecruitableArmies
 import at.posselt.pfrpg2e.kingdom.armies.importBasicArmies
 import at.posselt.pfrpg2e.kingdom.armies.isSpecial
 import at.posselt.pfrpg2e.kingdom.getActivity
+import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.awaitAll
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -49,7 +50,7 @@ private class ArmyBrowser(
     private val kingdom: KingdomData,
     private val folderName: String,
 ) : SimpleApp<ArmiesContext>(
-    title = "Armies in 'Recruitable Armies (${kingdomActor.name})' Folder",
+    title = "Armies in 'Recruitable Armies' Folder",
     template = "applications/kingdom/army-browser.hbs",
     width = 600,
     id = "kmArmies-${kingdomActor.uuid}",
@@ -127,13 +128,15 @@ private class ArmyBrowser(
 }
 
 suspend fun armyBrowser(game: Game, kingdomActor: KingdomActor, kingdom: KingdomData) {
-    val folderName = "Recruitable Armies (${kingdomActor.name})"
+    val folderName = "Recruitable Armies"
     val allPlayerArmies = game.getRecruitableArmies(folderName)
     if (allPlayerArmies.isNotEmpty()) {
         ArmyBrowser(game, kingdomActor, kingdom, folderName).launch()
     } else if (allPlayerArmies.isEmpty() && game.user.isGM) {
         ui.notifications.info("Importing Basic Armies into '$folderName' folder")
-        game.importBasicArmies(folderName)
+        val folder = game.importBasicArmies(folderName)
+        kingdom.settings.recruitableArmiesFolderId = folder.id
+        kingdomActor.setKingdom(kingdom)
         ui.notifications.info("Import finished")
         ArmyBrowser(game, kingdomActor, kingdom, folderName).launch()
     } else {

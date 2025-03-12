@@ -154,6 +154,12 @@
             font-size: 2em;
         }
 
+        table {
+            button {
+                margin: inherit;
+            }
+        }
+
         button {
             height: 30px;
             margin-left: 5px;

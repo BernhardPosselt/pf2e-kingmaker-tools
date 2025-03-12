@@ -65,6 +65,7 @@ class KingdomSettingsDataModel(value: AnyObject) : DataModel(value) {
             boolean("kingdomIgnoreSkillRequirements")
             boolean("autoCalculateArmyConsumption")
             boolean("enableLeadershipModifiers")
+            string("recruitableArmiesFolderId", nullable = true)
             string("kingdomCultTable", nullable = true)
             string("kingdomEventsTable", nullable = true)
             string("kingdomEventRollMode") {
@@ -121,6 +122,9 @@ class KingdomSettingsApplication(
             .sortedBy { it.label }
         val realmSceneOptions = game.scenes.contents
             .mapNotNull { it.id?.let { id -> SelectOption(it.name, id)}}
+            .sortedBy { it.label }
+        val folders = game.folders.contents
+            .mapNotNull { it.id?.let { value -> SelectOption(it.name, value) } }
             .sortedBy { it.label }
         KingdomSettingsContext(
             partId = parent.partId,
@@ -185,6 +189,14 @@ class KingdomSettingsApplication(
                             value = settings.kingdomIgnoreSkillRequirements,
                             help = "If disabled, all activities can be performed regardless of skill proficiencies",
                         ),
+                        Select(
+                            name = "recruitableArmiesFolderId",
+                            label = "Recruitable Armies Folder",
+                            options = folders,
+                            value = settings.recruitableArmiesFolderId,
+                            help = "This folder will be used to look up armies for the Recruit Army activity and to calculate army consumption",
+                            stacked = false,
+                        )
                     ),
                 ),
                 Section(

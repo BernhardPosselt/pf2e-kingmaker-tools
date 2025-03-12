@@ -39,7 +39,7 @@ fun Game.getRecruitableArmies(folderName: String): Array<PF2EArmy> =
 fun highestScoutingDc(armies: List<PF2EArmy>): Int =
     armies.maxOfOrNull { it.system.scouting } ?: 0
 
-suspend fun Game.importBasicArmies(folderName: String) {
+suspend fun Game.importBasicArmies(folderName: String): Folder {
     val folder = Folder.create(
         recordOf(
             "name" to folderName,
@@ -66,6 +66,7 @@ suspend fun Game.importBasicArmies(folderName: String) {
         ?.toTypedArray()
         ?: emptyArray()
     Actor.createDocuments(data).await()
+    return folder
 }
 
 val PF2EArmy.isSpecial: Boolean

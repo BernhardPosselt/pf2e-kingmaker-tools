@@ -16,7 +16,6 @@ import at.posselt.pfrpg2e.kingdom.governments
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.asAnyObject
-import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
 import io.github.uuidjs.uuid.v4
 import js.array.tupleOf
@@ -114,6 +113,7 @@ class Migration13 : Migration(13) {
                 enabled = if (kingdom.settings.vanceAndKerensharaXP) true else it.asDynamic().homebrew == true
             )
         }.toTypedArray()
+        kingdom.settings.recruitableArmiesFolderId = game.folders.find { it.name == "Recruitable Armies" }?.id
         kingdom.modifiers.forEach {
             val predicates = it.applyIf?.toMutableList() ?: mutableListOf<RawExpression<Boolean>>()
             if (it.asAnyObject()["consumeId"] == "") {
@@ -150,7 +150,6 @@ class Migration13 : Migration(13) {
     }
 
     override suspend fun migrateOther(game: Game) {
-        game.folders.find { it.name == "Recruitable Armies" }
-            ?.typeSafeUpdate { name = "Recruitable Armies (Kingdom Sheet)" }
+
     }
 }
