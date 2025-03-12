@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.Select
+import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.SkillPicker
 import at.posselt.pfrpg2e.app.forms.TextArea
 import at.posselt.pfrpg2e.app.forms.TextInput
@@ -163,12 +164,15 @@ class ModifyActivity(
                     label = "Description",
                     stacked = false,
                 ),
-                Select.fromEnum<KingdomPhase>(
+                Select(
                     name = "phase",
-                    value = current.phase.let { KingdomPhase.fromString(it) } ?: KingdomPhase.LEADERSHIP,
+                    value = current.phase,
                     label = "Phase",
                     required = false,
                     stacked = false,
+                    options = KingdomPhase.entries
+                        .filter { it != KingdomPhase.UPKEEP && it != KingdomPhase.EVENT }
+                        .map { SelectOption(label = it.label, value = it.value) },
                 ),
                 TextInput(
                     name = "requirement",
