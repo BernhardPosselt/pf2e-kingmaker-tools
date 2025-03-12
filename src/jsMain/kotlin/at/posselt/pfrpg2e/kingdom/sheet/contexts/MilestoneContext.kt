@@ -18,7 +18,10 @@ external interface MilestoneContext {
     val id: FormElementContext
 }
 
-fun Array<MilestoneChoice>.toContext(milestones: Array<RawMilestone>): Array<MilestoneContext> {
+fun Array<MilestoneChoice>.toContext(
+    milestones: Array<RawMilestone>,
+    isGm: Boolean,
+): Array<MilestoneContext> {
     val choicesById = associateBy { it.id }
     return milestones.mapIndexed { index, milestone ->
         val id = milestone.id
@@ -41,7 +44,7 @@ fun Array<MilestoneChoice>.toContext(milestones: Array<RawMilestone>): Array<Mil
                 label = "Enabled",
                 overrideType = OverrideType.BOOLEAN,
             ).toContext(),
-            hidden = choicesById[id]?.enabled != true,
+            hidden = choicesById[id]?.enabled != true || (milestone.isCultEvent && isGm),
         )
     }.toTypedArray()
 }

@@ -13,7 +13,7 @@ external interface NavEntryContext {
     val title: String
 }
 
-inline fun <reified T : Enum<T>> createNavEntries(active: T) =
+inline fun <reified T : Enum<T>> createNavEntries(active: T? = null) =
     enumEntries<T>().map {
         NavEntryContext(
             label = it.toLabel(),

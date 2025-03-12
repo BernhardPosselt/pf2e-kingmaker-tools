@@ -35,5 +35,10 @@ fun RawFame.toContext(maximumFamePoints: Int) =
             value = FameType.fromString(type),
             stacked = false,
             hideLabel = true,
+            labelFunction = { when(it) {
+                FameType.FAMOUS -> "Fame"
+                FameType.INFAMOUS -> "Infamy"
+            }
+            }
         ).toContext(),
     )

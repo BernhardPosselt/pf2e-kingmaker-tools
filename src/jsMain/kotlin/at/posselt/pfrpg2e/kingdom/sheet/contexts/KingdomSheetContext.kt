@@ -56,4 +56,12 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val enableLeadershipModifiers: Boolean
     val settlements: Array<SettlementsContext>
     val canAddCurrentSceneAsSettlement: Boolean
+    val turnSectionNav: Array<NavEntryContext>
+    val vkXp: Boolean
+    val phases: PhasesContext
+    val canLevelUp: Boolean
+    val ongoingEvents: Array<String>
+    val eventDC: Int
+    val cultEventDC: Int
+    val cultOfTheBloomEvents: Boolean
 }

@@ -80,14 +80,26 @@
         ul {
             font-size: .8em;
 
-            li:first-child,
-            li:last-child {
-                flex-grow: 2;
+            &.km-grow-subnav {
+                li {
+                    flex-grow: 1;
+                    a {
+                        width: 100%;
+                        text-align: center;
+                    }
+                }
             }
 
-            li:last-child {
-                a {
-                    margin-left: auto;
+            &.km-center-middle {
+                li:first-child,
+                li:last-child {
+                    flex-grow: 2;
+                }
+
+                li:last-child {
+                    a {
+                        margin-left: auto;
+                    }
                 }
             }
         }
@@ -148,6 +160,7 @@
         .km-header-right-align {
             margin-left: auto;
             margin-top: -4px;
+
             select {
                 margin-top: -4px;
             }
@@ -338,5 +351,13 @@
         }
     }
 
-
+    .km-kingdom-sheet-turn {
+        .km-turn-buttons {
+            display: flex;
+            align-items: flex-end;
+            button {
+                flex-grow: 1;
+            }
+        }
+    }
 }

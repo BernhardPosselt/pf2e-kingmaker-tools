@@ -15,12 +15,12 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
+import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.data.kingdom.findKingdomSize
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
-import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.OngoingEvent
@@ -59,15 +59,17 @@ import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NewKingdomContext
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.PhasesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createBonusFeatContext
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.createNavEntries
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
+import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
+import at.posselt.pfrpg2e.kingdom.sheet.navigation.TurnNavEntry
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.importSettlementScene
 import at.posselt.pfrpg2e.kingdom.structures.importStructures
 import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.vacancies
-import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.openJournal
@@ -95,26 +97,14 @@ import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
 import js.core.Void
 import js.objects.recordOf
+import kotlinx.browser.document
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
+import kotlin.math.max
 
-
-private enum class NavEntry {
-    TURN, KINGDOM, SETTLEMENTS, TRADE_AGREEMENTS, MODIFIERS, NOTES;
-
-    companion object {
-        fun fromString(value: String) = fromCamelCase<NavEntry>(value)
-    }
-
-    val value: String
-        get() = toCamelCase()
-
-    val label: String
-        get() = toLabel()
-}
 
 class KingdomSheet(
     private val game: Game,
@@ -145,7 +135,7 @@ class KingdomSheet(
     private var initialKingdomLevel = getKingdom().level
     private var noCharter = getKingdom().charter.type == null
     private var currentCharacterSheetNavEntry: String = if (noCharter) "Creation" else "$initialKingdomLevel"
-    private var currentNavEntry: NavEntry = if (noCharter) NavEntry.KINGDOM else NavEntry.TURN
+    private var currentNavEntry: MainNavEntry = if (noCharter) MainNavEntry.KINGDOM else MainNavEntry.TURN
     private var bonusFeat: String? = null
     private var ongoingEvent: String? = null
 
@@ -158,9 +148,21 @@ class KingdomSheet(
         appHook.onCreateDrawing { _, _, _, _ -> render() }
         appHook.onUpdateDrawing { _, _, _, _ -> render() }
         appHook.onDeleteDrawing { _, _, _ -> render() }
-        appHook.onDeleteToken { token, _, _ -> if(token.isStructure()) {render() } }
-        appHook.onUpdateToken { token, _, _, _ -> if(token.isStructure()) {render() } }
-        appHook.onCreateToken { token, _, _, _ -> if(token.isStructure()) {render() } }
+        appHook.onDeleteToken { token, _, _ ->
+            if (token.isStructure()) {
+                render()
+            }
+        }
+        appHook.onUpdateToken { token, _, _, _ ->
+            if (token.isStructure()) {
+                render()
+            }
+        }
+        appHook.onCreateToken { token, _, _, _ ->
+            if (token.isStructure()) {
+                render()
+            }
+        }
         appHook.onCanvasReady { _ -> render() }
         appHook.onSightRefresh { _ -> render() } // end of drag movement
         appHook.onApplyTokenStatusEffect { _, _, _ -> render() }
@@ -271,7 +273,7 @@ class KingdomSheet(
             "change-nav" -> {
                 event.preventDefault()
                 event.stopPropagation()
-                currentNavEntry = target.dataset["link"]?.let { NavEntry.fromString(it) } ?: NavEntry.TURN
+                currentNavEntry = target.dataset["link"]?.let { MainNavEntry.fromString(it) } ?: MainNavEntry.TURN
                 render()
             }
 
@@ -445,6 +447,74 @@ class KingdomSheet(
             "help" -> buildPromise {
                 openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY.JournalEntryPage.ty6BS5eSI7ScfVBk")
             }
+
+            "gain-xp" -> buildPromise {
+
+            }
+
+            "hex-xp" -> buildPromise {
+
+            }
+
+            "structure-xp" -> buildPromise {
+
+            }
+
+            "rp-xp" -> buildPromise {
+
+            }
+
+            "solution-xp" -> buildPromise {
+
+            }
+
+            "end-turn" -> buildPromise {
+
+            }
+
+            "level-up" -> buildPromise {
+
+            }
+
+            "add-ongoing-event" -> buildPromise {
+
+            }
+
+            "remove-ongoing-event" -> buildPromise {
+
+            }
+
+            "remove-ongoing-event" -> buildPromise {
+
+            }
+
+            "remove-ongoing-event" -> buildPromise {
+
+            }
+
+            "check-cult-event" -> buildPromise {
+
+            }
+
+            "roll-cult-event" -> buildPromise {
+
+            }
+
+            "check-event" -> buildPromise {
+
+            }
+
+            "roll-event" -> buildPromise {
+
+            }
+
+            "scroll-to" -> {
+                event.stopPropagation()
+                event.preventDefault()
+                target.dataset["id"]?.let {
+                    document.getElementById(it)?.scrollIntoView()
+                }
+            }
         }
     }
 
@@ -591,6 +661,7 @@ class KingdomSheet(
         val currentSceneId = game.scenes.current?.id
         val allSettlementSceneIds = kingdom.settlements.map { it.sceneId }.toSet()
         val canAddCurrentScene = currentSceneId != null && currentSceneId !in allSettlementSceneIds
+        val activitiesByPhase = kingdom.getAllActivities().groupBy { it.phase }
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -650,7 +721,7 @@ class KingdomSheet(
             groups = kingdom.groups.toContext(),
             abilityScores = kingdom.abilityScores.toContext(),
             skillRanks = kingdom.skillRanks.toContext(),
-            milestones = kingdom.milestones.toContext(kingdom.getMilestones()),
+            milestones = kingdom.milestones.toContext(kingdom.getMilestones(), game.user.isGM),
             ongoingEvent = ongoingEvent.toContext(),
             isGM = game.user.isGM,
             actor = actor,
@@ -663,15 +734,33 @@ class KingdomSheet(
                 kingdom.settings.autoCalculateSettlementLevel,
                 kingdom.settings.kingdomAllStructureItemBonusesStack
             ),
-            canAddCurrentSceneAsSettlement = canAddCurrentScene
+            canAddCurrentSceneAsSettlement = canAddCurrentScene,
+            turnSectionNav = createNavEntries<TurnNavEntry>(),
+            canLevelUp = kingdom.xp >= kingdom.xpThreshold,
+            vkXp = kingdom.settings.vanceAndKerensharaXP,
+            phases = PhasesContext(
+                commerceEmpty = activitiesByPhase[KingdomPhase.COMMERCE.value].isNullOrEmpty(),
+                leadershipEmpty = activitiesByPhase[KingdomPhase.LEADERSHIP.value].isNullOrEmpty(),
+                regionEmpty = activitiesByPhase[KingdomPhase.REGION.value].isNullOrEmpty(),
+                civicEmpty = activitiesByPhase[KingdomPhase.CIVIC.value].isNullOrEmpty(),
+                armyEmpty = activitiesByPhase[KingdomPhase.ARMY.value].isNullOrEmpty(),
+            ),
+            cultOfTheBloomEvents = kingdom.settings.cultOfTheBloomEvents,
+            ongoingEvents = kingdom.ongoingEvents.map { it.name }.toTypedArray(),
+            eventDC = getEventDC(kingdom),
+            cultEventDC = getCultEventDC(kingdom),
         )
     }
 
+    private fun getCultEventDC(kingdom: KingdomData): Int = max(1, 20 - kingdom.turnsWithoutCultEvent * 2)
+
+    private fun getEventDC(kingdom: KingdomData): Int = max(1, 16 - kingdom.turnsWithoutEvent * 5)
+
     private fun createMainNav(kingdom: KingdomData): Array<NavEntryContext> {
         val tradeAgreements = kingdom.groups.count { it.relations == Relations.TRADE_AGREEMENT.value }
-        return NavEntry.entries.map {
+        return MainNavEntry.entries.map {
             NavEntryContext(
-                label = if (it == NavEntry.TRADE_AGREEMENTS) "${it.label} ($tradeAgreements)" else it.label,
+                label = if (it == MainNavEntry.TRADE_AGREEMENTS) "${it.label} ($tradeAgreements)" else it.label,
                 active = currentNavEntry == it,
                 link = it.value,
                 title = it.label,
