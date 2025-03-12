@@ -53,5 +53,6 @@ external interface KingdomSheetData {
     val milestones: Array<MilestoneChoice>
     val ongoingEvent: String?
     val bonusFeat: String?
+
     val initialProficiencies: Array<String>
 }

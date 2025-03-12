@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* All check dialogs now support selecting a leader by default; this automatically enables the +3 bonus from the Palace to Leadership activities for the Ruler
+* Recruitable Armies are now looked up in a folder that is configured in the settings
 * Removed Roll Kingdom Event macro since those depend on the actual kingdom sheet now
 * For developers only: all code has now been ported from TypeScript to Kotlin
 

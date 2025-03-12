@@ -16,6 +16,7 @@ import js.objects.JsPlainObject
 external interface AddBonusFeatContext {
     val feat: FormElementContext
     val description: String
+    val name: String
 }
 
 @JsPlainObject
@@ -36,6 +37,7 @@ fun createBonusFeatContext(
     trainedSkills: Set<KingdomSkill>,
 ): AddBonusFeatContext {
     val takenFeats = getTakenFeats(choices, government, bonusFeats, trainedSkills)
+    val feat = feats.find { it.id == value }
     return AddBonusFeatContext(
         feat = Select(
             name = "bonusFeat",
@@ -46,8 +48,10 @@ fun createBonusFeatContext(
                 .map { SelectOption(it.name, it.id) },
             required = false,
             stacked = false,
+            hideLabel = true,
         ).toContext(),
-        description = feats.find { it.id == value }?.text ?: "",
+        description = feat?.text ?: "",
+        name = feat?.name ?: "",
     )
 }
 

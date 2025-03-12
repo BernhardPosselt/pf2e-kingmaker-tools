@@ -147,6 +147,10 @@
 
         .km-header-right-align {
             margin-left: auto;
+            margin-top: -4px;
+            select {
+                margin-top: -4px;
+            }
         }
 
         h2 {
