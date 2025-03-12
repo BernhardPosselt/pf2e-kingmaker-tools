@@ -19,6 +19,7 @@ external interface KingdomFeature {
     val ruinThresholdIncreases: RawRuinThresholdIncreases?
     val skillIncrease: Boolean?
     val kingdomFeat: Boolean?
+    val claimHexAttempts: Int?
 }
 
 fun KingdomData.getFeatures(): Array<KingdomFeature> {
@@ -54,6 +55,7 @@ fun KingdomFeature.explodeLevels(): List<RawExplodedKingdomFeature> =
             ruinThresholdIncreases = ruinThresholdIncreases,
             skillIncrease = skillIncrease,
             kingdomFeat = kingdomFeat,
+            claimHexAttempts = claimHexAttempts,
         )
     }
 

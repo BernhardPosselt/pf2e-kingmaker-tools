@@ -124,6 +124,7 @@ class InspectSettlement(
     title: String,
     private val autoCalculateSettlementLevel: Boolean,
     private val allStructuresStack: Boolean,
+    private val allowCapitalInvestmentInCapitalWithoutBank: Boolean,
     settlement: RawSettlement,
     feats: List<ChosenFeat>,
     private val afterSubmit: suspend (settlement: RawSettlement) -> Unit
@@ -179,6 +180,7 @@ class InspectSettlement(
             rawSettlement = current,
             autoCalculateSettlementLevel = autoCalculateSettlementLevel,
             allStructuresStack = allStructuresStack,
+            allowCapitalInvestmentInCapitalWithoutBank = allowCapitalInvestmentInCapitalWithoutBank,
         )
         checkNotNull(parsed) {
             val msg = "Settlement Scene deleted, closing Dialog"

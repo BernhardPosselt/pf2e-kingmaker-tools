@@ -52,6 +52,7 @@ import at.posselt.pfrpg2e.kingdom.getTrainedSkills
 import at.posselt.pfrpg2e.kingdom.hasLeaderUuid
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.calculateInvestedBonus
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.getHighestLeadershipModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseLeaderActors
@@ -401,6 +402,7 @@ class KingdomSheet(
                         title = title,
                         autoCalculateSettlementLevel = autoCalculateSettlementLevel,
                         allStructuresStack = allStructuresStack,
+                        allowCapitalInvestmentInCapitalWithoutBank = kingdom.settings.capitalInvestmentInCapital,
                         settlement = settlement,
                         feats = kingdom.getChosenFeats(kingdom.getChosenFeatures(kingdom.getExplodedFeatures()))
                     ) { data ->
@@ -561,6 +563,7 @@ class KingdomSheet(
         val realm = game.getRealmData(kingdom)
         val controlDc = calculateControlDC(kingdom.level, realm, vacancies.ruler)
         val settlements = kingdom.getAllSettlements(game)
+        val globalBonuses = evaluateGlobalBonuses(settlements.allSettlements)
         val allFeatures = kingdom.getExplodedFeatures()
         val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
         val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
@@ -671,7 +674,13 @@ class KingdomSheet(
         val currentSceneId = game.scenes.current?.id
         val allSettlementSceneIds = kingdom.settlements.map { it.sceneId }.toSet()
         val canAddCurrentScene = currentSceneId != null && currentSceneId !in allSettlementSceneIds
-        val activitiesByPhase = kingdom.getAllActivities().groupBy { it.phase }
+        val activityBlacklist = kingdom.activityBlacklist.toSet()
+        val activitiesByPhase = kingdom.getAllActivities()
+            .asSequence()
+            .filter { it.id !in activityBlacklist || it.id in globalBonuses.unlockedActivities }
+            .groupBy { it.phase }
+        // TODO: adjust labels of activities based on features: activity.label()
+        // TODO: disable rolls because of lacking proficiencies RawActivity.canBePerformed()
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -742,7 +751,8 @@ class KingdomSheet(
             settlements = kingdom.settlements.toContext(
                 game,
                 kingdom.settings.autoCalculateSettlementLevel,
-                kingdom.settings.kingdomAllStructureItemBonusesStack
+                kingdom.settings.kingdomAllStructureItemBonusesStack,
+                kingdom.settings.capitalInvestmentInCapital,
             ),
             canAddCurrentSceneAsSettlement = canAddCurrentScene,
             turnSectionNav = createNavEntries<TurnNavEntry>(),
@@ -761,6 +771,7 @@ class KingdomSheet(
             cultEventDC = getCultEventDC(kingdom),
             civicPlanning = kingdom.level >= 12,
             heartlandLabel = heartland?.name,
+            leadershipActivities = if(globalBonuses.increaseLeadershipActivities) 3 else 2
         )
     }
 

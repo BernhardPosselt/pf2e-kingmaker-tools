@@ -1,7 +1,10 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.data.actor.Proficiency
+import at.posselt.pfrpg2e.data.armies.findMaximumArmyTactics
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
@@ -39,6 +42,52 @@ external interface RawActivity {
     var failure: ActivityResult?
     var criticalFailure: ActivityResult?
     var modifiers: Array<RawModifier>?
+}
+
+fun RawActivity.canBePerformed(
+    allowCapitalInvestment: Boolean,
+    kingdomSkillRanks: KingdomSkillRanks,
+    ignoreSkillRequirements: Boolean,
+): Boolean = (allowCapitalInvestment || id != "capital-investment")
+        && (ignoreSkillRequirements || skillRanks().any { kingdomSkillRanks.allowsFor(it) })
+
+fun RawActivity.label(
+    kingdomLevel: Int,
+    activity: RawActivity,
+    enabledFeatures: List<RawExplodedKingdomFeature>,
+): String {
+    val claimHexAttempts = enabledFeatures.maxOfOrNull { it.claimHexAttempts ?: 1 } ?: 1
+    val id = activity.id
+    val activityHints = if (id == "claim-hex") {
+        when (claimHexAttempts) {
+            1 -> "once per turn"
+            2 -> "twice per turn"
+            else -> "three times per turn"
+        }
+    } else if (id == "train-army") {
+        "max ${findMaximumArmyTactics(kingdomLevel)} per army"
+    } else {
+        null
+    }
+    val skillRanks = activity.skillRanks()
+    val proficiency = if (skillRanks.all { it.proficiency >= Proficiency.LEGENDARY }) {
+        "legendary"
+    } else if (skillRanks.all { it.proficiency >= Proficiency.MASTER }) {
+        "master"
+    } else if (skillRanks.all { it.proficiency >= Proficiency.EXPERT }) {
+        "expert"
+    } else if (skillRanks.all { it.proficiency >= Proficiency.TRAINED }) {
+        "trained"
+    } else {
+        null
+    }
+    val oncePerRound = if (activity.oncePerRound) "once per turn" else null
+    val hints = listOfNotNull(activityHints, oncePerRound, activity.hint, proficiency).joinToString(", ")
+    return if (hints.isEmpty()) {
+        activity.title
+    } else {
+        "${activity.title} ($hints)"
+    }
 }
 
 @JsModule("./kingdom-activities.json")

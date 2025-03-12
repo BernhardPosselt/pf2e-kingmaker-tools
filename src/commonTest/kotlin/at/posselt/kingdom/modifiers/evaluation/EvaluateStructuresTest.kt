@@ -104,6 +104,7 @@ class EvaluateStructuresTest {
             ),
             structures = structures,
             allStructuresStack = false,
+            allowCapitalInvestmentInCapitalWithoutBank = false,
         )
         assertEquals("name", result.name)
         assertEquals(4, result.waterBorders)
@@ -165,6 +166,7 @@ class EvaluateStructuresTest {
             ),
             structures = emptyList(),
             allStructuresStack = false,
+            allowCapitalInvestmentInCapitalWithoutBank = false,
         )
         assertEquals(4, result.waterBorders)
     }
@@ -206,6 +208,7 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = true,
+            allowCapitalInvestmentInCapitalWithoutBank = false,
         )
         assertEquals(
             setOf(
@@ -247,6 +250,7 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = false,
+            allowCapitalInvestmentInCapitalWithoutBank = false,
         )
         assertEquals(2, result.consumptionReduction)
     }
@@ -278,6 +282,7 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = false,
+            allowCapitalInvestmentInCapitalWithoutBank = false,
         )
         assertEquals(3, result.consumptionReduction)
     }
@@ -308,6 +313,7 @@ class EvaluateStructuresTest {
                 ),
             ),
             allStructuresStack = false,
+            allowCapitalInvestmentInCapitalWithoutBank = false,
         )
         assertEquals(1, result.consumptionReduction)
     }

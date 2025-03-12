@@ -140,6 +140,7 @@ fun evaluateSettlement(
     data: SettlementData,
     structures: List<Structure>,
     allStructuresStack: Boolean,
+    allowCapitalInvestmentInCapitalWithoutBank: Boolean,
 ): Settlement {
     val settlementSize = findSettlementSize(data.level)
     val maxItemBonus = settlementSize.maxItemBonus
@@ -155,7 +156,8 @@ fun evaluateSettlement(
     val storage = constructedStructures
         .map { it.storage }
         .fold(CommodityStorage()) { acc, el -> acc + el }
-    val allowCapitalInvestment = constructedStructures.any { it.enableCapitalInvestment }
+    val allowCapitalInvestment = constructedStructures.any { it.enableCapitalInvestment } ||
+            (data.type == SettlementType.CAPITAL && allowCapitalInvestmentInCapitalWithoutBank)
     val notes = constructedStructures
         .mapNotNull { it.notes }
         .toSet()

@@ -23,6 +23,7 @@ fun Array<RawSettlement>.toContext(
     game: Game,
     autoCalculateSettlementLevel: Boolean,
     allStructuresStack: Boolean,
+    allowCapitalInvestmentInCapitalWithoutBank: Boolean,
 ): Array<SettlementsContext> {
     val scenesById = game.scenes.contents
         .filter { it.id != null }
@@ -33,6 +34,7 @@ fun Array<RawSettlement>.toContext(
                 rawSettlement = settlement,
                 autoCalculateSettlementLevel = autoCalculateSettlementLevel,
                 allStructuresStack = allStructuresStack,
+                allowCapitalInvestmentInCapitalWithoutBank = allowCapitalInvestmentInCapitalWithoutBank,
             )
             SettlementsContext(
                 id = parsed.id,

@@ -467,7 +467,8 @@ fun KingdomData.getAllSettlements(game: Game): SettlementResult {
             scene.parseSettlement(
                 raw,
                 settings.autoCalculateSettlementLevel,
-                settings.kingdomAllStructureItemBonusesStack
+                settings.kingdomAllStructureItemBonusesStack,
+                settings.capitalInvestmentInCapital,
             ) to active
         }
     }

@@ -106,7 +106,7 @@
           "type": "string"
         },
         "hint": {
-          "type": "object"
+          "type": "string"
         },
         "criticalSuccess": {
           "$ref": "#/$defs/ActivityResult"
