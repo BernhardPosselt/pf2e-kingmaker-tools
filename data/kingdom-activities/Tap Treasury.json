@@ -12,7 +12,7 @@
     "statecraft": 0
   },
   "criticalSuccess": {
-    "msg": "You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.S55aqwWIzpQRFhcq.JournalEntryPage.Ly8l2GT6dbvuY3A2]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury.",
+    "msg": "You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.JournalEntry.S55aqwWIzpQRFhcq.JournalEntryPage.Dae8LHdXZuBv06Jk]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury.",
     "modifiers": [
       {
         "name": "Tapped Treasury",
@@ -45,7 +45,7 @@
     ]
   },
   "success": {
-    "msg": "You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.S55aqwWIzpQRFhcq.JournalEntryPage.Ly8l2GT6dbvuY3A2]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury. In addition, you overdraw your treasury in the attempt. You take a –1 circumstance penalty to all Economy-based checks until the end of your next Kingdom turn.",
+    "msg": "You withdraw funds equal to the Currency per Additional PC column on Table 10–9: Party Treasure By Level @UUID[Compendium.pf2e.journals.JournalEntry.S55aqwWIzpQRFhcq.JournalEntryPage.Dae8LHdXZuBv06Jk]{Treasure}, or you successfully fund the unexpected event that required you to Tap your Treasury. In addition, you overdraw your treasury in the attempt. You take a –1 circumstance penalty to all Economy-based checks until the end of your next Kingdom turn.",
     "modifiers": [
       {
         "value": -1,

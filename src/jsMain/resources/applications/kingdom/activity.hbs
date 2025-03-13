@@ -2,7 +2,7 @@
     {{#each this}}
         <li class="km-kingdom-activity">
             <details>
-                <summary><span class="action-glyph">{{actions}}</span>{{label}}{{#if fortune}}
+                <summary><span class="action-glyph">{{actions}}</span><span class="km-activity-label">{{label}}</span>{{#if fortune}}
                     <i title="Fortune" class="fa-solid fa-clover"></i>{{/if}}
                     <div class="km-activity-controls">
                         {{#if isCollectTaxes}}

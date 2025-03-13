@@ -185,7 +185,7 @@
             }
         }
 
-        td {
+        td, th {
             text-align: left
         }
 
@@ -245,6 +245,26 @@
     }
 
     .km-kingdom-sheet-turn {
+        .km-activity-label {
+            cursor: pointer;
+        }
+        .km-upkeep-button {
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: .5em;
+            margin: 1em 0 0 0;
+            border: 1px solid;
+            border-radius: .5em;
+            padding: .6em 1em;
+
+            button {
+                margin-left: auto;
+                i {
+                    margin-left: .25em;
+                }
+            }
+        }
         .km-kingdom-activities {
             margin: 0;
             padding: 0;

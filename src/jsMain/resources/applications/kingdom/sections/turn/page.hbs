@@ -65,7 +65,11 @@
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-turn">
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-upkeep">Upkeep</h2>
+            <div class="km-upkeep-button">Gain 1 Fame <button type="button" data-action="gain-fame">Perform</button></div>
             {{> kingdom-activity activities.upkeep}}
+            <div class="km-upkeep-button">Adjust Unrest <button type="button" data-action="adjust-unrest">Perform</button></div>
+            <div class="km-upkeep-button">Collect Resources <button type="button" data-action="collect-resources">Perform</button></div>
+            <div class="km-upkeep-button">Pay Consumption <button type="button" data-action="pay-consumption">Perform</button></div>
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-commerce" {{#unless activities.commerce}}hidden{{/unless}}>Commerce</h2>

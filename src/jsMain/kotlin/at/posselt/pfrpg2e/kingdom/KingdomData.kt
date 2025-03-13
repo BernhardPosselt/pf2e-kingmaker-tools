@@ -296,6 +296,7 @@ fun KingdomData.getEnabledFeatures(): List<RawExplodedKingdomFeature> {
         .sortedWith(compareBy<RawExplodedKingdomFeature> { it.level }.thenBy { it.name })
 }
 
+
 fun KingdomData.hasAssurance(
     chosenFeats: List<ChosenFeat>,
     skill: KingdomSkill

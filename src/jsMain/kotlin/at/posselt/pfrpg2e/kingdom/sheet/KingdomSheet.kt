@@ -639,6 +639,68 @@ class KingdomSheet(
                 }
             }
 
+            "gain-fame" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    kingdom.fame.now = (kingdom.fame.now + 1).coerceIn(0, kingdom.settings.maximumFamePoints)
+                    postChatMessage("Gaining 1 Fame")
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "adjust-unrest" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val settlements = kingdom.getAllSettlements(game)
+                    val allFeatures = kingdom.getExplodedFeatures()
+                    val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
+                    val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
+                    kingdom.unrest = adjustUnrest(
+                        kingdom = kingdom,
+                        settlements = settlements.allSettlements,
+                        chosenFeats = chosenFeats,
+                    )
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "collect-resources" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val realm = game.getRealmData(kingdom)
+                    val settlements = kingdom.getAllSettlements(game)
+                    val allFeatures = kingdom.getExplodedFeatures()
+                    val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
+                    val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
+                    val resources = collectResources(
+                        kingdomData = kingdom,
+                        realmData = realm,
+                        allFeats = chosenFeats,
+                        settlements = settlements.allSettlements,
+                    )
+                    kingdom.resourcePoints.now = resources.resourcePoints
+                    kingdom.resourceDice.now = resources.resourceDice
+                    kingdom.commodities.now.lumber = resources.lumber
+                    kingdom.commodities.now.luxuries = resources.luxuries
+                    kingdom.commodities.now.stone = resources.stone
+                    kingdom.commodities.now.ore = resources.ore
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "pay-consumption" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val realm = game.getRealmData(kingdom)
+                    val settlements = kingdom.getAllSettlements(game)
+                    kingdom.commodities.now.food = payConsumption(
+                        availableFood = kingdom.commodities.now.food,
+                        farmlands = kingdom.workSites.farmlands.resources +
+                                kingdom.workSites.farmlands.quantity,
+                        settlements = settlements.allSettlements,
+                        realmData = realm,
+                        armyConsumption = kingdom.consumption.armies,
+                    )
+                    actor.setKingdom(kingdom)
+                }
+            }
+
             "end-turn" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     val realm = game.getRealmData(kingdom)
@@ -666,6 +728,10 @@ class KingdomSheet(
                     actor.setKingdom(kingdom)
                 }
                 postChatTemplate(templatePath = "chatmessages/end-turn.hbs")
+            }
+            "noop" -> {
+                event.stopPropagation()
+                event.preventDefault()
             }
         }
     }
