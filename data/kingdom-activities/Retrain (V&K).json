@@ -2,6 +2,7 @@
     "id": "retrain-vk",
     "title": "Retrain (V&K)",
     "phase": "leadership",
+    "actions": 2,
     "enabled": false,
     "dc": "control",
     "oncePerRound": true,

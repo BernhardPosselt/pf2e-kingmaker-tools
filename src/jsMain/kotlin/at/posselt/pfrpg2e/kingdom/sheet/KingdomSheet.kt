@@ -14,7 +14,6 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.checks.RollMode
-import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
@@ -47,6 +46,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
+import at.posselt.pfrpg2e.kingdom.getEnabledFeatures
 import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getFeats
 import at.posselt.pfrpg2e.kingdom.getGovernments
@@ -63,13 +63,14 @@ import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseLeaderActors
+import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
-import at.posselt.pfrpg2e.kingdom.sheet.contexts.PhasesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createBonusFeatContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createNavEntries
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.toActivitiesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.TurnNavEntry
@@ -814,13 +815,20 @@ class KingdomSheet(
         val currentSceneId = game.scenes.current?.id
         val allSettlementSceneIds = kingdom.settlements.map { it.sceneId }.toSet()
         val canAddCurrentScene = currentSceneId != null && currentSceneId !in allSettlementSceneIds
-        val activityBlacklist = kingdom.activityBlacklist.toSet()
-        val activitiesByPhase = kingdom.getAllActivities()
-            .asSequence()
-            .filter { it.id !in activityBlacklist || it.id in globalBonuses.unlockedActivities }
-            .groupBy { it.phase }
-        // TODO: adjust labels of activities based on features: activity.label()
-        // TODO: disable rolls because of lacking proficiencies RawActivity.canBePerformed()
+        val activities = toActivitiesContext(
+            activities = kingdom.getAllActivities(),
+            activityBlacklist = kingdom.activityBlacklist.toSet(),
+            unlockedActivities = globalBonuses.unlockedActivities,
+            kingdomLevel = kingdom.level,
+            allowCapitalInvestment = settlements.current?.allowCapitalInvestment == true,
+            kingdomSkillRanks = kingdom.parseSkillRanks(
+                chosenFeatures = chosenFeatures,
+                chosenFeats = chosenFeats,
+                government = government,
+            ),
+            ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
+            enabledFeatures = kingdom.getEnabledFeatures(),
+        )
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -898,13 +906,7 @@ class KingdomSheet(
             turnSectionNav = createNavEntries<TurnNavEntry>(),
             canLevelUp = kingdom.canLevelUp(),
             vkXp = kingdom.settings.vanceAndKerensharaXP,
-            phases = PhasesContext(
-                commerceEmpty = activitiesByPhase[KingdomPhase.COMMERCE.value].isNullOrEmpty(),
-                leadershipEmpty = activitiesByPhase[KingdomPhase.LEADERSHIP.value].isNullOrEmpty(),
-                regionEmpty = activitiesByPhase[KingdomPhase.REGION.value].isNullOrEmpty(),
-                civicEmpty = activitiesByPhase[KingdomPhase.CIVIC.value].isNullOrEmpty(),
-                armyEmpty = activitiesByPhase[KingdomPhase.ARMY.value].isNullOrEmpty(),
-            ),
+            activities = activities,
             cultOfTheBloomEvents = kingdom.settings.cultOfTheBloomEvents,
             ongoingEvents = kingdom.ongoingEvents.map { it.name }.toTypedArray(),
             eventDC = getEventDC(kingdom),

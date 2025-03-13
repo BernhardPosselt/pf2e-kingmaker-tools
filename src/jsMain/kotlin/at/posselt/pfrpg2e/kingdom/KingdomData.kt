@@ -290,7 +290,7 @@ fun KingdomData.getAllActivities(): List<RawActivity> {
 fun KingdomData.getActivity(id: String): RawActivity? =
     getAllActivities().associateBy { it.id }[id]
 
-fun KingdomData.getEnabledFeatures(): List<KingdomFeature> {
+fun KingdomData.getEnabledFeatures(): List<RawExplodedKingdomFeature> {
     return kingdomFeatures
         .flatMap { it.explodeLevels() }
         .sortedWith(compareBy<RawExplodedKingdomFeature> { it.level }.thenBy { it.name })

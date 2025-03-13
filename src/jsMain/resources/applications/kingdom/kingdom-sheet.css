@@ -158,6 +158,33 @@
         overflow: auto;
         padding: 1em;
 
+        .km-gain-lose {
+            display: inline-block;
+            margin: 2px 0;
+        }
+
+        .km-activity-degrees {
+            li {
+                margin: .5em 0;
+            }
+        }
+
+        p {
+            line-height: 1.5;
+        }
+
+        details {
+            margin: 1em 0 0 0;
+            border: 1px solid;
+            border-radius: .5em;
+            padding: .6em 1em;
+
+            .km-detail-description {
+                border-top: 1px solid;
+                padding-top: 1em;
+            }
+        }
+
         td {
             text-align: left
         }
@@ -214,6 +241,31 @@
             min-height: 220px;
             padding: 1em;
             overflow-y: scroll;
+        }
+    }
+
+    .km-kingdom-sheet-turn {
+        .km-kingdom-activities {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        .km-kingdom-activity {
+            details {
+                summary {
+                    font-size: 1.2em;
+                    display: flex;
+                    align-items: center;
+                    gap: .5em;
+                    button {
+                        margin-left: auto;
+                        i {
+                            margin-left: .25em;
+                        }
+                    }
+                }
+            }
+
         }
     }
 
@@ -312,18 +364,6 @@
                         font-size: 3em;
                     }
                 }
-            }
-        }
-
-        details {
-            margin: 1em 0;
-            border: 1px solid;
-            border-radius: 1em;
-            padding: 1em;
-
-            p {
-                border-top: 1px solid;
-                padding-top: 1em;
             }
         }
 

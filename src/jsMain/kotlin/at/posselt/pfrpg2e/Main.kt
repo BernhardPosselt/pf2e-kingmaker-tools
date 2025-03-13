@@ -99,6 +99,7 @@ fun main() {
                 // register partials
                 loadTpls(
                     arrayOf(
+                        "kingdom-activity" to "applications/kingdom/activity.hbs",
                         "kingdom-trade-agreements" to "applications/kingdom/sections/trade-agreements/page.hbs",
                         "kingdom-settlements" to "applications/kingdom/sections/settlements/page.hbs",
                         "kingdom-turn" to "applications/kingdom/sections/turn/page.hbs",

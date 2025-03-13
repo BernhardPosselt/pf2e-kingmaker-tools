@@ -2,6 +2,7 @@ package com.foundryvtt.core.ui
 
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.documents.ClientDocument
+import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import kotlin.js.Promise
@@ -33,9 +34,12 @@ external class TextEditor {
         ): Promise<Any> // PromiseMirror or TinyMCE instance
 
         fun decodeHTML(html: String): Promise<String>
-        fun enrichHTML(content: String, options: EnrichmentOptions = definedExternally): Promise<String>
+        fun enrichHTML(content: String, options: EnrichmentOptions? = definedExternally): Promise<String>
         fun previewHTML(content: String, length: Int = definedExternally): String
         fun truncateHTML(html: HTMLElement): HTMLElement
         fun truncateText(text: String, options: TruncateOptions = definedExternally): String
     }
 }
+
+suspend fun enrichHtml(content: String, options: EnrichmentOptions? = undefined) =
+    TextEditor.enrichHTML(content, options).await()

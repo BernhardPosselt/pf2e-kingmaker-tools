@@ -1,0 +1,26 @@
+<ul class="km-kingdom-activities">
+    {{#each this}}
+        <li class="km-kingdom-activity">
+            <details>
+                <summary><span class="action-glyph">{{actions}}</span>{{label}}{{#if fortune}}<i title="Fortune" class="fa-solid fa-clover"></i>{{/if}}
+                    <button {{#if disabled}}disabled{{/if}}
+                            data-activity="{{id}}"
+                            type="button"
+                            class="km-kingdom-activity-check"
+                            data-action="perform-activity">
+                        Perform <i class="fa-solid fa-dice-d20"></i>
+                    </button>
+                </summary>
+                {{#if requirement}}<p><b>Requirement:</b> {{requirement}}</p>{{/if}}
+                <p class="km-kingdom-activity-description km-detail-description">{{{description}}}</p>
+                <ul class="km-activity-degrees">
+                {{#if criticalSuccess}}<li><b>Critical Success:</b> {{{criticalSuccess}}}</li>{{/if}}
+                {{#if success}}<li><b>Success:</b> {{{success}}}</li>{{/if}}
+                {{#if failure}}<li><b>Failure:</b> {{{failure}}}</li>{{/if}}
+                {{#if criticalFailure}}<li><b>Critical Failure:</b> {{{criticalFailure}}}</li>{{/if}}
+                </ul>
+                {{#if special}}<hr><p><b>Special:</b> {{special}}</p>{{/if}}
+            </details>
+        </li>
+    {{/each}}
+</ul>

@@ -38,6 +38,9 @@
         "oncePerRound"
       ],
       "properties": {
+        "actions": {
+          "type": "number"
+        },
         "automationNotes": {
           "type": "string"
         },

@@ -67,19 +67,30 @@
             <h2 id="km-turn-upkeep">Upkeep</h2>
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-commerce" {{#if phase.commerceEmpty}}hidden{{/if}}>Commerce</h2>
+            <h2 id="km-turn-commerce" {{#unless activities.commerce}}hidden{{/unless}}>Commerce</h2>
+            {{> kingdom-activity activities.commerce}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-leadership" {{#if phase.leadershipEmpty}}hidden{{/if}}>Leadership ({{leadershipActivities}} per player)</h2>
+            <h2 id="km-turn-leadership" {{#unless activities.leadership}}hidden{{/unless}}>Leadership
+                ({{leadershipActivities}}
+                per player)</h2>
+            {{> kingdom-activity activities.leadership}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-region" {{#if phase.regionEmpty}}hidden{{/if}}>Region</h2>
+            <h2 id="km-turn-region" {{#unless activities.region}}hidden{{/unless}}>Region</h2>
 
             {{#if heartlandLabel}}
-            <p>You can attempt 2 Region activities simultaneously as long as both activities take place in the same hex and the hex is either a {{heartlandLabel}}. You take a –2 penalty to Kingdom skill checks made during these two activities.</p>
+                <p>You can attempt 2 Region activities simultaneously as long as both activities take place in the same
+                    hex and the hex is either a {{heartlandLabel}}. You take a –2 penalty to Kingdom skill checks made
+                    during these two activities.</p>
             {{/if}}
 
-            <p>A hex can have at most one of these: Farmland, Freehold, Ruins, Settlement, Structure, or Work Site. A Settlement can be built in a hex that contains Ruins or a Structure. A Free Hold can be brought into your kingdom in which case it becomes a Settlement instead.</p>
+            <p>A hex can have at most one of these: Farmland, Freehold, Ruins, Settlement, Structure, or Work Site. A
+                Settlement can be built in a hex that contains Ruins or a Structure. A Free Hold can be brought into
+                your kingdom in which case it becomes a Settlement instead.</p>
+
+            {{> kingdom-activity activities.region}}
+
             <p>Click these buttons after successfully claiming a hex containing a refuge or landmark:</p>
 
             <div class="km-turn-buttons">
@@ -88,16 +99,24 @@
             </div>
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-civic" {{#if phase.civicEmpty}}hidden{{/if}}>Civic</h2>
+            <h2 id="km-turn-civic" {{#unless activities.civic}}hidden{{/unless}}>Civic</h2>
             {{#if civicPlanning}}
-                <p>During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs after all other settlements have taken their individual Civic activities.</p>
+                <p>During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the
+                    party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs
+                    after all other settlements have taken their individual Civic activities.</p>
             {{/if}}
-            <p>First, import all structures from the <b>Structures</b> compendium in the <b>Kingmaker Tools</b> folder, then add the relevant scene in the <b>Settlements</b> tab. Then hit <b>Build Structure</b> and choose a building. After rolling the check, and drag the building link from chat onto the settlement scene.</p>
+            <p>First, import all structures from the <b>Structures</b> compendium in the <b>Kingmaker Tools</b> folder,
+                then add the relevant scene in the <b>Settlements</b> tab. Then hit <b>Build Structure</b> and choose a
+                building. After rolling the check, and drag the building link from chat onto the settlement scene.</p>
+            {{> kingdom-activity activities.civic}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-army" {{#if phase.armyEmpty}}hidden{{/if}}>Army</h2>
-            <p>Target (<i class="fa-solid fa-keyboard"></i> <b>t</b>) an army on the scene before performing the activity to
-                correctly apply conditions and DCs. For <b>Offensive Gambit</b>, target all enemy units (<i class="fa-solid fa-keyboard"></i> <b>shift + t</b>)</p>
+            <h2 id="km-turn-army" {{#unless activities.army}}hidden{{/unless}}>Army</h2>
+            <p>Target (<i class="fa-solid fa-keyboard"></i> <b>t</b>) an army on the scene before performing the
+                activity to
+                correctly apply conditions and DCs. For <b>Offensive Gambit</b>, target all enemy units (<i
+                        class="fa-solid fa-keyboard"></i> <b>shift + t</b>)</p>
+            {{> kingdom-activity activities.army}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-event">Event</h2>
@@ -151,7 +170,9 @@
                 rolled event in chat and choosing <b>Add to Ongoing Events</b> or add it manually:</p>
             <p {{#unless isGM}}hidden{{/unless}} class="km-turn-buttons">
                 {{> formElement ongoingEvent }}
-                <button type="button" data-action="add-ongoing-event" {{#if ongoingEventButtonDisabled}}disabled{{/if}}>Add Event</button>
+                <button type="button" data-action="add-ongoing-event" {{#if ongoingEventButtonDisabled}}disabled{{/if}}>
+                    Add Event
+                </button>
             </p>
         </section>
         <section class="km-kingdom-sheet-section">

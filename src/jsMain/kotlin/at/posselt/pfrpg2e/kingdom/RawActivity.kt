@@ -24,6 +24,7 @@ external interface ActivityResult {
 @JsPlainObject
 external interface RawActivity {
     var id: String
+    var actions: Int?
     var title: String
     var description: String
     var requirement: String?

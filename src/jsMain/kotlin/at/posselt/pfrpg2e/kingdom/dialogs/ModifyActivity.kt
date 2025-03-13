@@ -58,6 +58,7 @@ external interface ModifyActivityData {
     val success: String?
     val failure: String?
     val criticalFailure: String?
+    val actions: Int
 }
 
 @JsExport
@@ -76,6 +77,7 @@ class ModifyActivityDataModel(value: AnyObject) : DataModel(value) {
             string("success", nullable = true)
             string("failure", nullable = true)
             string("criticalFailure", nullable = true)
+            int("actions")
             enum<ActivityDcType>("dcType")
             int("numericDc")
             boolean("fortune")
@@ -119,6 +121,7 @@ class ModifyActivity(
         failure = data?.failure,
         criticalFailure = data?.criticalFailure,
         modifiers = data?.modifiers ?: emptyArray(),
+        actions = data?.actions ?: 1,
     )
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -156,6 +159,14 @@ class ModifyActivity(
                     name = "title",
                     value = current.title,
                     label = "Title",
+                    stacked = false,
+                ),
+                Select.range(
+                    from = 1,
+                    to = 3,
+                    name = "actions",
+                    label = "Actions",
+                    value = current.actions ?: 1,
                     stacked = false,
                 ),
                 TextArea(
@@ -289,6 +300,7 @@ class ModifyActivity(
             },
             dcAdjustment = value.dcAdjustment,
             phase = value.phase,
+            actions = value.actions,
             fortune = value.fortune,
             oncePerRound = value.oncePerRound,
             criticalSuccess = value.criticalSuccess?.let {
