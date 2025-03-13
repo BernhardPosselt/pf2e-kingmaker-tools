@@ -64,6 +64,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseLeaderActors
 import at.posselt.pfrpg2e.kingdom.parseSkillRanks
+import at.posselt.pfrpg2e.kingdom.resources.calculateConsumption
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
@@ -691,8 +692,6 @@ class KingdomSheet(
                     val settlements = kingdom.getAllSettlements(game)
                     kingdom.commodities.now.food = payConsumption(
                         availableFood = kingdom.commodities.now.food,
-                        farmlands = kingdom.workSites.farmlands.resources +
-                                kingdom.workSites.farmlands.quantity,
                         settlements = settlements.allSettlements,
                         realmData = realm,
                         armyConsumption = kingdom.consumption.armies,
@@ -729,9 +728,19 @@ class KingdomSheet(
                 }
                 postChatTemplate(templatePath = "chatmessages/end-turn.hbs")
             }
-            "noop" -> {
-                event.stopPropagation()
-                event.preventDefault()
+
+            "skip-collect-taxes" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val succeeded = d20Check(
+                        dc = 11,
+                        flavor = "Trying to reduce unrest on a Flat Check 11",
+                    ).degreeOfSuccess.succeeded()
+                    if (succeeded && kingdom.unrest > 0) {
+                        postChatMessage("Reducing Unrest by 1")
+                        kingdom.unrest = (kingdom.unrest - 1).coerceIn(0, Int.MAX_VALUE)
+                    }
+                    actor.setKingdom(kingdom)
+                }
             }
         }
     }
@@ -785,6 +794,11 @@ class KingdomSheet(
         } else {
             calculateInvestedBonus(kingdom.level, leaderActors)
         }
+        val consumption = calculateConsumption(
+            settlements = settlements.allSettlements,
+            realmData = realm,
+            armyConsumption = kingdom.consumption.armies,
+        ).total
         val kingdomNameInput = TextInput(
             name = "name",
             label = "Name",
@@ -981,6 +995,8 @@ class KingdomSheet(
             heartlandLabel = heartland?.name,
             leadershipActivities = if (globalBonuses.increaseLeadershipActivities) 3 else 2,
             ongoingEventButtonDisabled = ongoingEvent.isNullOrEmpty(),
+            collectTaxesReduceUnrestDisabled = kingdom.unrest <= 0,
+            consumption = consumption,
         )
     }
 

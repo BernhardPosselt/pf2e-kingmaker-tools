@@ -6,7 +6,7 @@
                     <i title="Fortune" class="fa-solid fa-clover"></i>{{/if}}
                     <div class="km-activity-controls">
                         {{#if isCollectTaxes}}
-                            <button
+                            <button {{#if ../collectTaxesReduceUnrestDisabled}}disabled{{/if}}
                                     type="button"
                                     class="km-kingdom-activity-check"
                                     data-action="skip-collect-taxes">
