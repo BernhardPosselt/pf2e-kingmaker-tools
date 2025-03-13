@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.actions.handlers
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.actions.ActionMessage
+import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.MealChoice
 import at.posselt.pfrpg2e.camping.applyConsumptionMealEffects
 import at.posselt.pfrpg2e.camping.findCookingChoices
@@ -9,12 +10,13 @@ import at.posselt.pfrpg2e.camping.getActorsCarryingFood
 import at.posselt.pfrpg2e.camping.getActorsInCamp
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
-import at.posselt.pfrpg2e.camping.getCampingActor
 import at.posselt.pfrpg2e.camping.getCompendiumFoodItems
+import at.posselt.pfrpg2e.camping.getPartyActor
 import at.posselt.pfrpg2e.camping.reduceFoodBy
 import at.posselt.pfrpg2e.camping.sum
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import kotlinx.js.JsPlainObject
@@ -23,18 +25,23 @@ import kotlinx.js.JsPlainObject
 external interface ApplyMealEffects {
     val recipe: String
     val degree: String
+    val campingActorUuid: String
 }
 
 class ApplyMealEffectsHandler(val game: Game) : ActionHandler("applyMealEffects") {
     override suspend fun execute(action: ActionMessage, dispatcher: ActionDispatcher) {
-        val camping = game.getCampingActor()?.getCamping() ?: return
-        val recipesByName = camping.getAllRecipes().associateBy { it.name }
         val data = action.data.unsafeCast<ApplyMealEffects>()
+        val campingActor = fromUuidTypeSafe<CampingActor>(data.campingActorUuid)
+        val camping = campingActor?.getCamping() ?: return
+        val recipesByName = camping.getAllRecipes().associateBy { it.name }
         val degree = fromCamelCase<DegreeOfSuccess>(data.degree) ?: return
         val recipe = recipesByName[data.recipe] ?: return
 
         // reduce meal cost
-        val charactersInCampByUuid = camping.getActorsInCamp().filterIsInstance<PF2ECharacter>().associateBy { it.uuid }
+        val charactersInCampByUuid = camping.getActorsInCamp()
+            .filterIsInstance<PF2ECharacter>()
+            .associateBy { it.uuid }
+        val party = camping.getPartyActor()
         val parsed = camping.findCookingChoices(
             charactersInCampByUuid = charactersInCampByUuid,
             recipesByName = recipesByName
@@ -45,7 +52,7 @@ class ApplyMealEffectsHandler(val game: Game) : ActionHandler("applyMealEffects"
             .filter { it.name == data.recipe }
         val totalCost = chosenMeals.map { it.cookingCost }.sum()
         reduceFoodBy(
-            actors = camping.getActorsCarryingFood(game),
+            actors = camping.getActorsCarryingFood(party),
             foodItems = getCompendiumFoodItems(),
             foodAmount = totalCost,
         )

@@ -3,8 +3,9 @@ package at.posselt.pfrpg2e.kingdom.sheet
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.getGovernments
+import at.posselt.pfrpg2e.kingdom.getMilestones
 
-fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
+suspend fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
     val charterType = current.charter.type
     if (previous.charter.type != charterType) {
         resetAbilityBoosts(current.charter.abilityBoosts)
@@ -25,6 +26,11 @@ fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
                 .toTypedArray()
         }
     }
+    val xp = calculateMilestoneXp(current.getMilestones(), previous.milestones, current.milestones)
+    val change = current.calculateXpChange(xp)
+    change.toChat()
+    current.xp += change.addXp
+    current.level += change.addLevel
 }
 
 fun resetAbilityBoosts(abilityBoosts: RawAbilityBoostChoices) {

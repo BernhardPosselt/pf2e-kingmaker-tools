@@ -2,7 +2,6 @@ package at.posselt.pfrpg2e.macros
 
 import at.posselt.pfrpg2e.actor.hasFeat
 import at.posselt.pfrpg2e.actor.investedArmor
-import at.posselt.pfrpg2e.actor.partyMembers
 import at.posselt.pfrpg2e.actor.proficiency
 import at.posselt.pfrpg2e.app.awaitablePrompt
 import at.posselt.pfrpg2e.app.forms.FormElementContext
@@ -13,11 +12,12 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.camping.findCurrentRegion
 import at.posselt.pfrpg2e.camping.getCamping
-import at.posselt.pfrpg2e.camping.getCampingActor
+import at.posselt.pfrpg2e.camping.getCampingActors
 import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.regions.Terrain
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import com.foundryvtt.core.Actor
@@ -70,24 +70,14 @@ private suspend fun selectActor(choices: List<PF2ECharacter>): PF2ECharacter? {
 }
 
 suspend fun subsistMacro(game: Game, actor: Actor?) {
-    val chosenActor = if (actor is PF2ECharacter) {
-        actor
-    } else {
-        val ownedActors = game.partyMembers()
-            .filter { it.isOwner }
-        if (ownedActors.size == 1) {
-            ownedActors.first()
-        } else if (ownedActors.size > 1) {
-            selectActor(ownedActors)
-        } else {
-            null
-        }
-    }
+    val chosenActor = actor?.takeIfInstance<PF2ECharacter>()
     if (chosenActor == null) {
         ui.notifications.error("Please select a Character")
         return
     }
-    val camping = game.getCampingActor()?.getCamping()
+    val campingActor = game.getCampingActors()
+        .find { chosenActor.uuid in it.getCamping()?.actorUuids.orEmpty() }
+    val camping = campingActor?.getCamping()
     val skills = chosenActor.skills.asSequence()
         .map { SelectOption(label = it.component2().label, value = it.component1()) }
         .toList()

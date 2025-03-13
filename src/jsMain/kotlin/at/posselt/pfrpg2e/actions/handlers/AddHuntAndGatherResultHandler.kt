@@ -1,13 +1,15 @@
 package at.posselt.pfrpg2e.actions.handlers
 
-import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.actions.ActionDispatcher
+import at.posselt.pfrpg2e.actions.ActionMessage
+import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.FoodAmount
 import at.posselt.pfrpg2e.camping.HuntAndGatherData
 import at.posselt.pfrpg2e.camping.addFoodToInventory
 import at.posselt.pfrpg2e.camping.findHuntAndGatherTargetActor
 import at.posselt.pfrpg2e.camping.getCamping
-import at.posselt.pfrpg2e.camping.getCampingActor
+import at.posselt.pfrpg2e.camping.getPartyActor
+import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import com.foundryvtt.core.Game
 import js.objects.recordOf
@@ -19,8 +21,9 @@ class AddHuntAndGatherResultHandler(
 ) {
     override suspend fun execute(action: ActionMessage, dispatcher: ActionDispatcher) {
         val result = action.data.unsafeCast<HuntAndGatherData>()
-        game.getCampingActor()?.getCamping()?.let { camping ->
-            findHuntAndGatherTargetActor(game, result.actorUuid, camping)
+        val campingActor = fromUuidTypeSafe<CampingActor>(result.campingActorUuid)
+        campingActor?.getCamping()?.let { camping ->
+            findHuntAndGatherTargetActor(result.actorUuid, camping, camping.getPartyActor())
                 ?.let {
                     it.addFoodToInventory(
                         FoodAmount(

@@ -57,6 +57,7 @@ private suspend fun checkPreActorMealUpdate(actor: Actor, update: AnyObject) {
                     "label" to degree?.toLabel(),
                     "message" to message,
                     "failure" to (degree == DegreeOfSuccess.FAILURE),
+                    "campingActorUuid" to actor.uuid,
                 ),
             )
         }

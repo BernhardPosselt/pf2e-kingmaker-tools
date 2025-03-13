@@ -2,10 +2,9 @@ package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.actions.ActionMessage
-import at.posselt.pfrpg2e.actions.emptyActionMessage
+import at.posselt.pfrpg2e.actions.handlers.ClearMealEffectsMessage
 import at.posselt.pfrpg2e.actions.handlers.OpenCampingSheetAction
 import at.posselt.pfrpg2e.actor.openActor
-import at.posselt.pfrpg2e.actor.party
 import at.posselt.pfrpg2e.app.ActorRef
 import at.posselt.pfrpg2e.app.DocumentRef
 import at.posselt.pfrpg2e.app.FormApp
@@ -219,6 +218,7 @@ class CampingSheet(
     classes = arrayOf("km-camping-sheet"),
     controls = arrayOf(
         MenuControl(label = "Show Players", action = "show-players", gmOnly = true),
+        MenuControl(label = "Activate", action = "activate", gmOnly = true),
         MenuControl(label = "Reset Activities", action = "reset-activities", gmOnly = true),
         MenuControl(label = "Reset Meals", action = "reset-meals", gmOnly = true),
         MenuControl(label = "Favorite Meals", action = "favorite-meals", gmOnly = false),
@@ -310,36 +310,41 @@ class CampingSheet(
             }
 
             "settings" -> CampingSettingsApplication(game, actor).launch()
-            "rest" -> actor.getCamping()?.let { camping ->
-                if (camping.watchSecondsRemaining > 0) {
-                    // continue watch
-                    buildPromise {
-                        rest(
-                            game = game,
-                            dispatcher = dispatcher,
-                            campingActor = actor,
-                            camping = camping,
-                            skipWatch = false,
-                            skipDailyPreparations = false,
-                            disableRandomEncounter = false,
-                        )
-                    }
-                } else {
-                    ConfirmWatchApplication(
-                        camping = camping,
-                    ) { enableWatch, enableDailyPreparations, checkRandomEncounter ->
+            "rest" -> buildPromise {
+                actor.getCamping()?.let { camping ->
+                    val party = camping.getPartyActor()
+                    if (camping.watchSecondsRemaining > 0) {
+                        // continue watch
                         buildPromise {
                             rest(
                                 game = game,
                                 dispatcher = dispatcher,
                                 campingActor = actor,
                                 camping = camping,
-                                skipWatch = !enableWatch,
-                                skipDailyPreparations = !enableDailyPreparations,
-                                disableRandomEncounter = !checkRandomEncounter,
+                                skipWatch = false,
+                                skipDailyPreparations = false,
+                                disableRandomEncounter = false,
+                                party = party,
                             )
                         }
-                    }.launch()
+                    } else {
+                        ConfirmWatchApplication(
+                            camping = camping,
+                        ) { enableWatch, enableDailyPreparations, checkRandomEncounter ->
+                            buildPromise {
+                                rest(
+                                    game = game,
+                                    dispatcher = dispatcher,
+                                    campingActor = actor,
+                                    camping = camping,
+                                    skipWatch = !enableWatch,
+                                    skipDailyPreparations = !enableDailyPreparations,
+                                    disableRandomEncounter = !checkRandomEncounter,
+                                    party = party,
+                                )
+                            }
+                        }.launch()
+                    }
                 }
             }
 
@@ -392,10 +397,12 @@ class CampingSheet(
             }
 
             "show-players" -> buildPromise {
-                dispatcher.dispatch(ActionMessage(
-                    action="openCampingSheet",
-                    data=OpenCampingSheetAction(actorUuid=actor.uuid)
-                ))
+                dispatcher.dispatch(
+                    ActionMessage(
+                        action = "openCampingSheet",
+                        data = OpenCampingSheetAction(actorUuid = actor.uuid)
+                    )
+                )
             }
 
             "open-journal" -> {
@@ -437,6 +444,15 @@ class CampingSheet(
             "reset-adventuring-for" -> buildPromise {
                 resetAdventuringTimeTracker()
             }
+
+            "activate" -> buildPromise {
+                game.getCampingActors().forEach {
+                    it.getCamping()?.let { camping ->
+                        camping.isActive = actor.uuid == it.uuid
+                        it.setCamping(camping)
+                    }
+                }
+            }
         }
     }
 
@@ -456,7 +472,7 @@ class CampingSheet(
             .map { it.cookingCost }
             .sum()
         reduceFoodBy(
-            actors = camping.getActorsCarryingFood(game),
+            actors = camping.getActorsCarryingFood(camping.getPartyActor()),
             foodAmount = rations,
             foodItems = getCompendiumFoodItems(),
         )
@@ -522,9 +538,14 @@ class CampingSheet(
         // preparing check removes all meal effects; note that this is prone to races
         // when prepare camp would receive meal bonuses which technically shouldn't happen
         if (activity.isPrepareCampsite()) {
-            dispatcher.dispatch(emptyActionMessage("clearMealEffects"))
+            val message = ActionMessage(
+                action = "clearMealEffects",
+                data = ClearMealEffectsMessage(campingActorUuid = actor.uuid)
+            )
+            dispatcher.dispatch(message)
             postChatMessage("Preparing Campsite, removing all existing Meal Effects")
-            val existingCampingResult = camping.worldSceneId?.let { findExistingCampsiteResult(game, it) }
+            val party = camping.getPartyActor()
+            val existingCampingResult = camping.worldSceneId?.let { findExistingCampsiteResult(game, it, party) }
             if (existingCampingResult != null
                 && confirm("Reuse existing camp (${existingCampingResult.toLabel()})?")
             ) {
@@ -552,12 +573,14 @@ class CampingSheet(
                     degreeOfSuccess = result,
                     zoneDc = campingCheckData.region.zoneDc,
                     regionLevel = campingCheckData.region.level,
+                    campingActor = actor,
                 )
             } else if (activity.isDiscoverSpecialMeal() && recipe != null) {
                 postDiscoverSpecialMeal(
                     actorUuid = checkActor.uuid,
                     recipe = recipe,
                     degreeOfSuccess = result,
+                    campingActorUuid = actor.uuid,
                 )
             } else if (activity.isPrepareCampsite()) {
                 postPassTimeMessage("Preparing a new campsite", 2)
@@ -569,7 +592,7 @@ class CampingSheet(
         camping: CampingData
     ): RecipeData? =
         try {
-            pickSpecialRecipe(camping = camping, partyActor = game.party())
+            pickSpecialRecipe(camping = camping, partyActor = camping.getPartyActor())
         } catch (_: Exception) {
             ui.notifications.error("Discover Special Meal: No recipe chosen!")
             null
@@ -751,19 +774,20 @@ class CampingSheet(
         game.time.advance(seconds * (target.dataset["activities"]?.toInt() ?: 0)).await()
     }
 
-    private fun getHexplorationActivitySeconds(): Int =
+    private suspend fun getHexplorationActivitySeconds(): Int =
         ((8 * 3600).toDouble() / getHexplorationActivities()).toInt()
 
-    private fun getHexplorationActivities(): Double {
-        val travelSpeed = game.party()?.system?.attributes?.speed?.total ?: 25
-        val override = max(actor.getCamping()?.minimumTravelSpeed ?: 0, travelSpeed)
+    private suspend fun getHexplorationActivities(): Double {
+        val camping = actor.getCamping()
+        val travelSpeed = camping?.getPartyActor()?.system?.attributes?.speed?.total ?: 25
+        val override = max(camping?.minimumTravelSpeed ?: 0, travelSpeed)
         return calculateHexplorationActivities(override)
     }
 
-    private fun getHexplorationActivitiesDuration(): String =
+    private suspend fun getHexplorationActivitiesDuration(): String =
         LocalTime.fromSecondOfDay(getHexplorationActivitySeconds()).toDateInputString()
 
-    private fun getHexplorationActivitiesAvailable(camping: CampingData): Int =
+    private suspend fun getHexplorationActivitiesAvailable(camping: CampingData): Int =
         max(0, (8 * 3600 - (game.time.worldTimeSeconds - camping.dailyPrepsAtTime)) / getHexplorationActivitySeconds())
 
     private fun getAdventuringFor(camping: CampingData): String {
@@ -905,7 +929,7 @@ class CampingSheet(
         val campingActivitiesSection = section == CampingSheetSection.CAMPING_ACTIVITIES
         val eatingSection = section == CampingSheetSection.EATING
         val foodItems = getCompendiumFoodItems()
-        val totalFood = camping.getTotalCarriedFood(game.party(), foodItems)
+        val totalFood = camping.getTotalCarriedFood(camping.getPartyActor(), foodItems)
         val availableFood = buildFoodCost(totalFood, items = foodItems)
         val parsedCookingChoices = camping.findCookingChoices(
             charactersInCampByUuid = charactersByUuid,
@@ -982,6 +1006,9 @@ class CampingSheet(
             .filter { it.degreeOfSuccess == null }
             .map { it.recipe.name }
             .toSet()
+        val hexplorationActivityDuration = getHexplorationActivitiesDuration()
+        val hexplorationActivitiesAvailable = getHexplorationActivitiesAvailable(camping)
+        val hexplorationActivitiesMax = "${getHexplorationActivities()}"
         CampingSheetContext(
             canRollEncounter = currentRegion?.rollTableUuid != null,
             availableFood = availableFood,
@@ -1034,9 +1061,9 @@ class CampingSheet(
                 }
             }.toTypedArray(),
             night = calculateNightModes(time),
-            hexplorationActivityDuration = getHexplorationActivitiesDuration(),
-            hexplorationActivitiesAvailable = getHexplorationActivitiesAvailable(camping),
-            hexplorationActivitiesMax = "${getHexplorationActivities()}",
+            hexplorationActivityDuration = hexplorationActivityDuration,
+            hexplorationActivitiesAvailable = hexplorationActivitiesAvailable,
+            hexplorationActivitiesMax = hexplorationActivitiesMax,
             adventuringFor = getAdventuringFor(camping),
             restDuration = fullRestDuration.total.label,
             restDurationLeft = fullRestDuration.left?.label,
@@ -1113,23 +1140,22 @@ private fun getActivitySkills(
     }
 }
 
-suspend fun openCampingSheet(game: Game, dispatcher: ActionDispatcher) {
-    val campingActor = game.getCampingActor()
-    if (campingActor == null) {
-        val actor = CampingActor.create(
-            recordOf(
-                "type" to "npc",
-                "name" to "Camping Sheet",
-                "img" to "icons/magic/fire/flame-burning-campfire-orange.webp",
-                "ownership" to recordOf(
-                    "default" to 3
-                )
+suspend fun newCampingActor() =
+    CampingActor.create(
+        recordOf(
+            "type" to "npc",
+            "name" to "Camping Sheet",
+            "img" to "icons/magic/fire/flame-burning-campfire-orange.webp",
+            "ownership" to recordOf(
+                "default" to 3
             )
-        ).await()
+        )
+    ).await()
+
+suspend fun openCampingSheet(game: Game, dispatcher: ActionDispatcher, actor: CampingActor) {
+    if (actor.getCamping() == null) {
         actor.setCamping(getDefaultCamping(game))
-        openCampingSheet(game, dispatcher)
         openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.kd8cT1Uv9hZOrpgS")
-    } else {
-        CampingSheet(game, campingActor, dispatcher).launch()
     }
+    CampingSheet(game, actor, dispatcher).launch()
 }

@@ -90,7 +90,7 @@ private fun relevantUpdate(camping: CampingData, update: AnyObject): Set<String>
         }.toSet()
 }
 
-fun checkPreActorUpdate(game: Game, actor: Actor, update: AnyObject): SyncActivities? {
+fun checkPreActorUpdate(actor: Actor, update: AnyObject): SyncActivities? {
     val camping = actor.takeIfInstance<CampingActor>()?.getCamping() ?: return null
     console.log("Received camping update", update)
     val updates = relevantUpdate(camping, update)
@@ -211,7 +211,7 @@ private fun prepareCampsiteChanged(activityStateChanged: List<ActivityChange>) =
 
 fun registerActivityDiffingHooks(game: Game, dispatcher: ActionDispatcher) {
     Hooks.onPreUpdateActor { actor, update, _, _ ->
-        checkPreActorUpdate(game, actor, update)?.let {
+        checkPreActorUpdate(actor, update)?.let {
             buildPromise {
                 dispatcher.dispatch(
                     ActionMessage(
@@ -220,7 +220,8 @@ fun registerActivityDiffingHooks(game: Game, dispatcher: ActionDispatcher) {
                             rollRandomEncounter = it.rollRandomEncounter,
                             activities = it.activities,
                             clearMealEffects = it.clearMealEffects,
-                            prepareCampsiteResult = it.prepareCampsiteResult
+                            prepareCampsiteResult = it.prepareCampsiteResult,
+                            campingActorUuid = actor.uuid,
                         ).unsafeCast<AnyObject>()
                     )
                 )

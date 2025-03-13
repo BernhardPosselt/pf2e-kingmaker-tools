@@ -83,6 +83,7 @@
             &.km-grow-subnav {
                 li {
                     flex-grow: 1;
+
                     a {
                         width: 100%;
                         text-align: center;
@@ -156,6 +157,10 @@
     .km-kingdom-sheet-sub-content {
         overflow: auto;
         padding: 1em;
+
+        td {
+            text-align: left
+        }
 
         .km-kingdom-sheet-section:not(:nth-of-type(1)) {
             margin-top: 3em;
@@ -355,6 +360,7 @@
         .km-turn-buttons {
             display: flex;
             align-items: flex-end;
+
             button {
                 flex-grow: 1;
             }

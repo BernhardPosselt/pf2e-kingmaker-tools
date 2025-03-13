@@ -1,4 +1,4 @@
-<aside class="km-kingdom-sheet-sidebar" {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
+<aside class="km-kingdom-sheet-sidebar km-kingdom-sheet-sidebar-kingdom" {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
     {{currentNavEntry}}
     <div {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
         {{> formElement abilityScores.economy }}

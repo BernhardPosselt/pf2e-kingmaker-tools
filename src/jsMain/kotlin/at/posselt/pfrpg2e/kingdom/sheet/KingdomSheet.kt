@@ -13,18 +13,23 @@ import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
-import at.posselt.pfrpg2e.app.forms.formContext
-import at.posselt.pfrpg2e.app.prompt
+import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
+import at.posselt.pfrpg2e.data.kingdom.calculateHexXP
+import at.posselt.pfrpg2e.data.kingdom.calculateRpXP
 import at.posselt.pfrpg2e.data.kingdom.findKingdomSize
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.OngoingEvent
+import at.posselt.pfrpg2e.kingdom.RawEq
+import at.posselt.pfrpg2e.kingdom.RawModifier
+import at.posselt.pfrpg2e.kingdom.RawSome
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
+import at.posselt.pfrpg2e.kingdom.data.endTurn
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
@@ -38,6 +43,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.InspectSettlement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
@@ -50,6 +56,7 @@ import at.posselt.pfrpg2e.kingdom.getMilestones
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.getTrainedSkills
 import at.posselt.pfrpg2e.kingdom.hasLeaderUuid
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.calculateInvestedBonus
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.getHighestLeadershipModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
@@ -60,7 +67,6 @@ import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
-import at.posselt.pfrpg2e.kingdom.sheet.contexts.NewKingdomContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.PhasesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createBonusFeatContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createNavEntries
@@ -72,10 +78,15 @@ import at.posselt.pfrpg2e.kingdom.structures.importSettlementScene
 import at.posselt.pfrpg2e.kingdom.structures.importStructures
 import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.vacancies
+import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.openJournal
-import at.posselt.pfrpg2e.utils.typeSafeUpdate
+import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.postChatTemplate
+import at.posselt.pfrpg2e.utils.roll
+import at.posselt.pfrpg2e.utils.rollWithCompendiumFallback
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
@@ -97,6 +108,9 @@ import com.foundryvtt.core.onUpdateActor
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
+import io.github.uuidjs.uuid.v4
+import js.array.toTypedArray
+import js.array.tupleOf
 import js.core.Void
 import js.objects.recordOf
 import kotlinx.browser.document
@@ -128,11 +142,19 @@ class KingdomSheet(
         MenuControl(label = "Feats", action = "configure-feats", gmOnly = true),
         MenuControl(label = "Heartlands", action = "configure-heartlands", gmOnly = true),
         MenuControl(label = "Milestones", action = "configure-milestones", gmOnly = true),
-        MenuControl(label = "New Kingdom", action = "new-kingdom", gmOnly = true),
         MenuControl(label = "Settings", action = "settings", gmOnly = true),
         MenuControl(label = "Help", action = "help"),
     ),
-    scrollable = arrayOf(".km-kingdom-sheet-sidebar", ".km-kingdom-sheet-sub-content"),
+    scrollable = arrayOf(
+        ".km-kingdom-sheet-sidebar-kingdom",
+        ".km-kingdom-sheet-turn",
+        ".km-kingdom-sheet-kingdom",
+        ".km-kingdom-sheet-modifiers",
+        ".km-kingdom-sheet-notes",
+        ".km-kingdom-sheet-settlements",
+        ".km-kingdom-sheet-trade-agreements",
+        ".km-kingdom-sheet-sidebar-turn"
+    ),
 ) {
     private var initialKingdomLevel = getKingdom().level
     private var noCharter = getKingdom().charter.type == null
@@ -332,9 +354,7 @@ class KingdomSheet(
             "configure-governments" -> GovernmentManagement(kingdomActor = actor).launch()
             "configure-heartlands" -> HeartlandManagement(kingdomActor = actor).launch()
             "configure-feats" -> FeatManagement(kingdomActor = actor).launch()
-            "structures-import" -> buildPromise {
-                importStructures()
-            }
+            "structures-import" -> buildPromise { importStructures() }
 
             "settlement-import" -> {
                 buildPromise {
@@ -429,94 +449,58 @@ class KingdomSheet(
                 }
             }
 
-            "new-kingdom" -> buildPromise {
-                prompt<NewKingdomContext, Unit>(
-                    title = "Create a New Kingdom",
-                    templatePath = "components/forms/form.hbs",
-                    templateContext = recordOf(
-                        "formRows" to formContext(
-                            TextInput(
-                                name = "name",
-                                label = "Kingdom Name",
-                                value = ""
-                            )
-                        )
-                    ),
-                ) {
-                    KingdomSheet(game, newKingdom(it.name), dispatcher).launch()
-                }
-            }
-
             "help" -> buildPromise {
                 openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY.JournalEntryPage.ty6BS5eSI7ScfVBk")
             }
 
             "gain-xp" -> buildPromise {
-
+                target.dataset["xp"]?.toInt()?.let {
+                    actor.gainXp(it)
+                }
             }
 
             "hex-xp" -> buildPromise {
-
+                target.dataset["hexes"]?.toInt()?.let { hexes ->
+                    actor.getKingdom()?.let { kingdom ->
+                        val xp = calculateHexXP(
+                            hexes = hexes,
+                            xpPerClaimedHex = kingdom.settings.xpPerClaimedHex,
+                            kingdomSize = game.getRealmData(kingdom).size,
+                            useVK = kingdom.settings.vanceAndKerensharaXP,
+                        )
+                        actor.gainXp(xp)
+                    }
+                }
             }
 
             "structure-xp" -> buildPromise {
-
+                structureXpDialog(game) {
+                    actor.gainXp(it)
+                }
             }
 
             "rp-xp" -> buildPromise {
-
+                actor.getKingdom()?.let { kingdom ->
+                    val xp = calculateRpXP(
+                        rp = kingdom.resourcePoints.now,
+                        kingdomLevel = kingdom.level,
+                        rpToXpConversionRate = kingdom.settings.rpToXpConversionRate,
+                        rpToXpConversionLimit = kingdom.settings.rpToXpConversionLimit,
+                        useVK = kingdom.settings.vanceAndKerensharaXP,
+                    )
+                    actor.gainXp(xp)
+                }
             }
 
             "solution-xp" -> buildPromise {
-
-            }
-
-            "end-turn" -> buildPromise {
-
+                actor.getKingdom()?.let { kingdom ->
+                    val xp = (kingdom.supernaturalSolutions + kingdom.creativeSolutions) * 10
+                    actor.gainXp(xp)
+                }
             }
 
             "level-up" -> buildPromise {
-
-            }
-
-            "add-ongoing-event" -> buildPromise {
-
-            }
-
-            "remove-ongoing-event" -> buildPromise {
-
-            }
-
-            "remove-ongoing-event" -> buildPromise {
-
-            }
-
-            "remove-ongoing-event" -> buildPromise {
-
-            }
-
-            "check-cult-event" -> buildPromise {
-
-            }
-
-            "roll-cult-event" -> buildPromise {
-
-            }
-
-            "check-event" -> buildPromise {
-
-            }
-
-            "roll-event" -> buildPromise {
-
-            }
-
-            "claimed-refuge" -> buildPromise {
-
-            }
-
-            "claimed-landmark" -> buildPromise {
-
+                actor.levelUp()
             }
 
             "scroll-to" -> {
@@ -525,6 +509,160 @@ class KingdomSheet(
                 target.dataset["id"]?.let {
                     document.getElementById(it)?.scrollIntoView()
                 }
+            }
+
+            "remove-ongoing-event" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    target.dataset["index"]?.toInt()?.let { index ->
+                        kingdom.ongoingEvents = kingdom.ongoingEvents
+                            .filterIndexed { index, _ -> index != index }
+                            .toTypedArray()
+                        actor.setKingdom(kingdom)
+                    }
+                }
+            }
+
+            "check-cult-event" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val dc = getCultEventDC(kingdom)
+                    val succeeded = d20Check(
+                        dc = dc,
+                        flavor = "Checking for Cult Event with Flat DC $dc",
+                        rollMode = RollMode.fromString(kingdom.settings.kingdomEventRollMode),
+                    ).degreeOfSuccess.succeeded()
+                    if (succeeded) {
+                        kingdom.turnsWithoutCultEvent = 0
+                        postChatMessage("Cult Event occurs, roll a Cult Event")
+                    } else {
+                        kingdom.turnsWithoutCultEvent += 1
+                    }
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "check-event" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val dc = getEventDC(kingdom)
+                    val succeeded = d20Check(
+                        dc = dc,
+                        flavor = "Checking for Kingdom Event with Flat DC $dc",
+                        rollMode = RollMode.fromString(kingdom.settings.kingdomEventRollMode),
+                    ).degreeOfSuccess.succeeded()
+                    if (succeeded) {
+                        kingdom.turnsWithoutEvent = 0
+                        postChatMessage("Kingdom Event occurs, roll a Kingdom Event")
+                    } else {
+                        kingdom.turnsWithoutEvent += 1
+                    }
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "roll-cult-event" -> buildPromise {
+                val uuid = actor.getKingdom()
+                    ?.settings
+                    ?.kingdomCultTable
+                val rollMode = game.settings.pfrpg2eKingdomCampingWeather.getKingdomEventRollMode()
+                game.rollWithCompendiumFallback(
+                    tableName = "Random Cult Events",
+                    rollMode = rollMode,
+                    uuid = uuid,
+                )
+            }
+
+            "roll-event" -> buildPromise {
+                val uuid = actor.getKingdom()
+                    ?.settings
+                    ?.kingdomEventsTable
+                val rollMode = game.settings.pfrpg2eKingdomCampingWeather.getKingdomEventRollMode()
+                game.rollWithCompendiumFallback(
+                    tableName = "Random Kingdom Events",
+                    rollMode = rollMode,
+                    uuid = uuid,
+                )
+            }
+
+            "claimed-refuge" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    kingdom.modifiers = kingdom.modifiers + RawModifier(
+                        id = v4(),
+                        turns = 2,
+                        name = "Claimed Refuge",
+                        type = ModifierType.CIRCUMSTANCE.value,
+                        value = 2,
+                        enabled = true,
+                        applyIf = arrayOf(
+                            RawSome(
+                                some = arrayOf(
+                                    RawEq(eq = tupleOf("@ability", "culture")),
+                                    RawEq(eq = tupleOf("@ability", "economy")),
+                                )
+                            )
+                        )
+                    )
+                    val unrest = roll("1d4", flavor = "Losing Unrest")
+                    val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+                    kingdom.unrest = kingdom.addUnrest(-unrest, kingdom.getChosenFeats(chosenFeatures))
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "claimed-landmark" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    kingdom.modifiers = kingdom.modifiers + RawModifier(
+                        id = v4(),
+                        turns = 2,
+                        name = "Claimed Landmark",
+                        type = ModifierType.CIRCUMSTANCE.value,
+                        value = 2,
+                        enabled = true,
+                        applyIf = arrayOf(
+                            RawSome(
+                                some = arrayOf(
+                                    RawEq(eq = tupleOf("@ability", "loyalty")),
+                                    RawEq(eq = tupleOf("@ability", "stability")),
+                                )
+                            )
+                        )
+                    )
+                    val ruinButtons = sequenceOf(Resource.CRIME, Resource.DECAY, Resource.CORRUPTION, Resource.STRIFE)
+                        .map { createResourceButton(value = "1", resource = it, mode = ResourceMode.LOSE) }
+                        .toTypedArray()
+                    postChatTemplate(
+                        templatePath = "chatmessages/landmark.hbs",
+                        templateContext = recordOf("buttons" to ruinButtons)
+                    )
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "end-turn" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val realm = game.getRealmData(kingdom)
+                    val settlements = kingdom.getAllSettlements(game)
+                    val storage = calculateStorage(realm=realm, settlements = settlements.allSettlements)
+                    kingdom.supernaturalSolutions = 0
+                    kingdom.creativeSolutions = 0
+                    kingdom.fame.now = kingdom.fame.next
+                    kingdom.fame.next = 0
+                    kingdom.resourcePoints = kingdom.resourcePoints.endTurn()
+                    kingdom.resourceDice = kingdom.resourceDice.endTurn()
+                    kingdom.consumption = kingdom.consumption.endTurn()
+                    kingdom.commodities = kingdom.commodities.endTurn(storage)
+                    // tick down modifiers
+                    kingdom.modifiers = kingdom.modifiers.mapNotNull {
+                        val turns = it.turns
+                        if (turns == 0 || turns == null) {
+                            it
+                        } else if (turns == 1) {
+                            null
+                        } else {
+                            it.copy(turns = turns - 1)
+                        }
+                    }.toTypedArray()
+                    actor.setKingdom(kingdom)
+                }
+                postChatTemplate(templatePath = "chatmessages/end-turn.hbs")
             }
         }
     }
@@ -637,7 +775,7 @@ class KingdomSheet(
             value = kingdom.creativeSolutions,
             label = "Creative Solutions"
         )
-        val ongoingEvent = TextInput(
+        val ongoingEventInput = TextInput(
             name = "ongoingEvent",
             label = "Ongoing Event",
             value = ongoingEvent ?: "",
@@ -741,7 +879,7 @@ class KingdomSheet(
             abilityScores = kingdom.abilityScores.toContext(),
             skillRanks = kingdom.skillRanks.toContext(),
             milestones = kingdom.milestones.toContext(kingdom.getMilestones(), game.user.isGM),
-            ongoingEvent = ongoingEvent.toContext(),
+            ongoingEvent = ongoingEventInput.toContext(),
             isGM = game.user.isGM,
             actor = actor,
             modifiers = kingdom.modifiers.toContext(),
@@ -756,7 +894,7 @@ class KingdomSheet(
             ),
             canAddCurrentSceneAsSettlement = canAddCurrentScene,
             turnSectionNav = createNavEntries<TurnNavEntry>(),
-            canLevelUp = kingdom.xp >= kingdom.xpThreshold,
+            canLevelUp = kingdom.canLevelUp(),
             vkXp = kingdom.settings.vanceAndKerensharaXP,
             phases = PhasesContext(
                 commerceEmpty = activitiesByPhase[KingdomPhase.COMMERCE.value].isNullOrEmpty(),
@@ -771,7 +909,8 @@ class KingdomSheet(
             cultEventDC = getCultEventDC(kingdom),
             civicPlanning = kingdom.level >= 12,
             heartlandLabel = heartland?.name,
-            leadershipActivities = if(globalBonuses.increaseLeadershipActivities) 3 else 2
+            leadershipActivities = if (globalBonuses.increaseLeadershipActivities) 3 else 2,
+            ongoingEventButtonDisabled = ongoingEvent.isNullOrEmpty(),
         )
     }
 
@@ -854,30 +993,22 @@ class KingdomSheet(
     }
 }
 
-suspend fun newKingdom(name: String): KingdomActor {
-    val actor = KingdomActor.create(
+suspend fun newKingdomActor() =
+    KingdomActor.create(
         recordOf(
             "type" to "npc",
-            "name" to name,
+            "name" to "Kingdom Sheet",
             "img" to "icons/environment/settlement/castle.webp",
             "ownership" to recordOf(
                 "default" to 3
             )
         )
     ).await()
-    actor.typeSafeUpdate {
-        prototypeToken.actorLink = true
-    }
-    actor.setKingdom(createKingdomDefaults(name))
-    return actor
-}
 
-suspend fun openOrCreateKingdomSheet(game: Game, dispatcher: ActionDispatcher, actor: KingdomActor?) {
-    if (actor == null) {
-        val actor = newKingdom("Kingdom")
-        KingdomSheet(game, actor, dispatcher).launch()
+suspend fun openOrCreateKingdomSheet(game: Game, dispatcher: ActionDispatcher, actor: KingdomActor) {
+    if (actor.getKingdom() == null) {
+        actor.setKingdom(createKingdomDefaults("New Kingdom"))
         openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.FwcyYZARAnOHlKkE")
-    } else {
-        KingdomSheet(game, actor, dispatcher).launch()
     }
+    KingdomSheet(game, actor, dispatcher).launch()
 }

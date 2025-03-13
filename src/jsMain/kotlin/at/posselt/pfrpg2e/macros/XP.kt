@@ -1,11 +1,17 @@
 package at.posselt.pfrpg2e.macros
 
 import at.posselt.pfrpg2e.app.forms.NumberInput
+import at.posselt.pfrpg2e.app.forms.Select
+import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
+import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
+import com.foundryvtt.core.Game
+import com.foundryvtt.core.ui
 import com.foundryvtt.pf2e.actor.PF2ECharacter
+import com.foundryvtt.pf2e.actor.PF2EParty
 import js.objects.recordOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -38,23 +44,42 @@ private suspend fun updateXP(players: Array<PF2ECharacter>, amount: Int) = corou
 @JsPlainObject
 external interface XpFormData {
     val amount: Int
+    val partyUuid: String
 }
 
-suspend fun awardXPMacro(players: Array<PF2ECharacter>) {
+suspend fun awardXPMacro(game: Game) {
+    val parties = game.actors.contents
+        .filterIsInstance<PF2EParty>()
+    if (parties.isEmpty()) {
+        ui.notifications.error("Can not grant xp since no party is configured")
+        return
+    }
     prompt<XpFormData, Unit>(
         title = "Award Party XP",
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(
             "formRows" to formContext(
+                Select(
+                    name = "partyUuid",
+                    label = "Party",
+                    value = parties.first().uuid,
+                    options = parties
+                        .map { SelectOption(value = it.uuid, label = it.name) }
+                ),
                 NumberInput(
                     name = "amount",
                     label = "Amount",
-                )
+                ),
             )
         )
     ) {
         if (it.amount > 0) {
-            updateXP(players, it.amount)
+            fromUuidTypeSafe<PF2EParty>(it.partyUuid)
+                ?.members
+                ?.filterIsInstance<PF2ECharacter>()
+                ?.toTypedArray()
+                ?.let { players -> updateXP(players, it.amount) }
+
         }
     }
 }

@@ -2,7 +2,6 @@ package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.actor.hasAttribute
-import at.posselt.pfrpg2e.actor.party
 import at.posselt.pfrpg2e.camping.dialogs.RegionSetting
 import at.posselt.pfrpg2e.camping.dialogs.RegionSettings
 import at.posselt.pfrpg2e.camping.dialogs.Track
@@ -23,6 +22,7 @@ import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.actor.PF2EParty
 import js.array.toTypedArray
+import js.iterable.toList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -85,11 +85,27 @@ external interface CampingData {
     var section: String
     var restingTrack: Track?
     var worldSceneId: String?
+    var isActive: Boolean?
 }
 
-suspend fun CampingData.getActorsCarryingFood(game: Game): List<PF2EActor> =
-    getActorsInCamp() + listOfNotNull(game.party())
+suspend fun CampingData.getPartyActor(): PF2EParty? =
+    getActorsInCamp()
+        .filterIsInstance<PF2ECharacter>()
+        .flatMap { it.parties.values().toList() }
+        .firstOrNull()
 
+suspend fun CampingData.getActorsCarryingFood(party: PF2EParty?): List<PF2EActor> =
+    getActorsInCamp() + listOfNotNull(party)
+
+
+suspend fun CampingData.getAveragePartyLevel(): Int =
+    getActorsInCamp()
+        .filterIsInstance<PF2ECharacter>()
+        .map { it.level }
+        .takeIf { it.isNotEmpty() }
+        ?.average()
+        ?.toInt()
+        ?: 1
 
 suspend fun CampingData.getActorsInCamp(
     campingActivityOnly: Boolean = false,
@@ -381,10 +397,18 @@ suspend fun CampingActor.setCamping(data: CampingData) {
     setAppFlag("camping-sheet", data)
 }
 
-fun Game.getCampingActor(): CampingActor? =
+fun Game.getCampingActors(): List<CampingActor> =
     actors.contents
         .filterIsInstance<CampingActor>()
-        .find { it.getCamping() != null }
+        .filter { it.getCamping() != null }
+
+fun Game.getActiveCamping(): CampingData? {
+    val campingActors = getCampingActors()
+    return campingActors.firstOrNull()?.getCamping() ?: campingActors
+        .mapNotNull { it.getCamping() }
+        .firstOrNull { it.isActive == true }
+}
+
 
 fun CampingData.getAllActivities(): Array<CampingActivityData> {
     val homebrewNames = homebrewCampingActivities.map { it.name }.toSet()

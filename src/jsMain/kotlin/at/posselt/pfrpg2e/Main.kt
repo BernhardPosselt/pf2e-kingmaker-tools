@@ -3,7 +3,6 @@ package at.posselt.pfrpg2e
 import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.actions.handlers.AddHuntAndGatherResultHandler
 import at.posselt.pfrpg2e.actions.handlers.ApplyMealEffectsHandler
-import at.posselt.pfrpg2e.actions.handlers.ClearActivitiesHandler
 import at.posselt.pfrpg2e.actions.handlers.ClearMealEffectsHandler
 import at.posselt.pfrpg2e.actions.handlers.GainProvisionsHandler
 import at.posselt.pfrpg2e.actions.handlers.LearnSpecialRecipeHandler
@@ -13,6 +12,8 @@ import at.posselt.pfrpg2e.actions.handlers.SyncActivitiesHandler
 import at.posselt.pfrpg2e.actor.partyMembers
 import at.posselt.pfrpg2e.camping.bindCampingChatEventListeners
 import at.posselt.pfrpg2e.camping.createCampingIcon
+import at.posselt.pfrpg2e.camping.getCampingActors
+import at.posselt.pfrpg2e.camping.newCampingActor
 import at.posselt.pfrpg2e.camping.openCampingSheet
 import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
@@ -21,10 +22,12 @@ import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
 import at.posselt.pfrpg2e.kingdom.getKingdomActors
+import at.posselt.pfrpg2e.kingdom.sheet.newKingdomActor
 import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
 import at.posselt.pfrpg2e.macros.awardXPMacro
+import at.posselt.pfrpg2e.macros.chooseParty
 import at.posselt.pfrpg2e.macros.combatTrackMacro
 import at.posselt.pfrpg2e.macros.createFoodMacro
 import at.posselt.pfrpg2e.macros.editRealmTileMacro
@@ -69,7 +72,6 @@ fun main() {
             handlers = listOf(
                 AddHuntAndGatherResultHandler(game = game),
                 OpenCampingSheetHandler(game = game),
-                ClearActivitiesHandler(game = game),
                 SyncActivitiesHandler(game = game),
                 ClearMealEffectsHandler(game = game),
                 LearnSpecialRecipeHandler(game = game),
@@ -151,9 +153,19 @@ fun main() {
                         }
                     },
                     rollKingmakerWeatherMacro = { buildPromise { rollWeather(game) } },
-                    awardXpMacro = { buildPromise { awardXPMacro(game.partyMembers()) } },
-                    resetHeroPointsMacro = { buildPromise { resetHeroPointsMacro(game.partyMembers()) } },
-                    awardHeroPointsMacro = { buildPromise { awardHeroPointsMacro(game.partyMembers()) } },
+                    awardXpMacro = { buildPromise { awardXPMacro(game) } },
+                    resetHeroPointsMacro = {
+                        buildPromise {
+                            val players = chooseParty(game).partyMembers()
+                            resetHeroPointsMacro(players)
+                        }
+                    },
+                    awardHeroPointsMacro = {
+                        buildPromise {
+                            val players = chooseParty(game).partyMembers()
+                            awardHeroPointsMacro(players)
+                        }
+                    },
                     rollExplorationSkillCheck = { skill, effect ->
                         buildPromise {
                             rollExplorationSkillCheckMacro(
@@ -163,19 +175,29 @@ fun main() {
                             )
                         }
                     },
-                    rollSkillDialog = { buildPromise { rollPartyCheckMacro(game.partyMembers()) } },
+                    rollSkillDialog = {
+                        buildPromise {
+                            rollPartyCheckMacro(chooseParty(game).partyMembers())
+                        }
+                    },
                     setSceneCombatPlaylistDialogMacro = { actor -> buildPromise { combatTrackMacro(game, actor) } },
                     toTimeOfDayMacro = { buildPromise { setTimeOfDayMacro(game) } },
                     toggleCombatTracksMacro = { buildPromise { toggleCombatTracksMacro(game) } },
                     realmTileDialogMacro = { buildPromise { editRealmTileMacro(game) } },
                     editStructureMacro = { actor -> buildPromise { editStructureMacro(actor) } },
-                    openCampingSheet = { buildPromise { openCampingSheet(game, actionDispatcher) } },
+                    openCampingSheet = {
+                        buildPromise {
+                            // TODO: let player choose which camping sheet to open
+                            val actor = game.getCampingActors().firstOrNull() ?: newCampingActor()
+                            openCampingSheet(game, actionDispatcher, actor)
+                        }
+                    },
                     subsistMacro = { actor -> buildPromise { subsistMacro(game, actor) } },
                     createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
                     viewKingdomMacro = {
                         buildPromise {
                             // TODO: let player choose which kingdom to open
-                            val actor = game.getKingdomActors().first()
+                            val actor = game.getKingdomActors().firstOrNull() ?: newKingdomActor()
                             openOrCreateKingdomSheet(game, actionDispatcher, actor)
                         }
                     }

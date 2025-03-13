@@ -23,7 +23,7 @@ private external interface StructureXpDialogData {
 
 suspend fun structureXpDialog(
     game: Game,
-    onOk: (Int) -> Unit,
+    onOk: suspend (Int) -> Unit,
 ) {
     val importedStructures = game.actors.contents
         .filterIsInstance<StructureActor>()

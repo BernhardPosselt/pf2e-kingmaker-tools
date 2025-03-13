@@ -1,6 +1,5 @@
 package at.posselt.pfrpg2e.camping
 
-import at.posselt.pfrpg2e.actor.party
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
@@ -50,10 +49,10 @@ fun PF2EParty.getTokenPosition(scene: Scene): CampingTokenPosition? =
         .find { it.actor is PF2EParty }
         ?.let { CampingTokenPosition(it.x, it.y) }
 
-fun findExistingCampsiteResult(game: Game, sceneId: String): DegreeOfSuccess? =
+fun findExistingCampsiteResult(game: Game, sceneId: String, party: PF2EParty?): DegreeOfSuccess? =
     game.scenes.get(sceneId)
         ?.let { scene ->
-            game.party()
+            party
                 ?.getTokenPosition(scene)
                 ?.let { tokenPosition ->
                     scene.getCampsites()
@@ -63,10 +62,10 @@ fun findExistingCampsiteResult(game: Game, sceneId: String): DegreeOfSuccess? =
                 }
         }
 
-suspend fun updateCampingPosition(game: Game, sceneId: String, result: DegreeOfSuccess) {
+suspend fun updateCampingPosition(game: Game, sceneId: String, result: DegreeOfSuccess, party: PF2EParty?) {
     val scene = game.scenes.get(sceneId)
     if (scene == null) return
-    val tokenPosition = game.party()?.getTokenPosition(scene)
+    val tokenPosition = party?.getTokenPosition(scene)
     if (tokenPosition == null) return
     val campsites = scene.getCampsites() ?: ExistingCampsites(positions = emptyArray())
     val existingPosition = campsites.findExistingCampsite(tokenPosition)

@@ -67,4 +67,5 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val civicPlanning: Boolean
     val heartlandLabel: String?
     val leadershipActivities: Int
+    val ongoingEventButtonDisabled: Boolean
 }

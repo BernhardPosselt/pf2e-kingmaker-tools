@@ -39,7 +39,9 @@ suspend fun rollExplorationSkillCheckMacro(
     attributeName: String,
     dc: Int? = null,
 ) {
-    val actors = game.partyMembers()
+    val actors = chooseParty(game)
+        .members
+        .filterIsInstance<PF2ECharacter>()
         .filter { it.runsExplorationActivity(explorationEffectName) }
         .toTypedArray()
     rollExplorationSkillCheck(

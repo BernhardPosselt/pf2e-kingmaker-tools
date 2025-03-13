@@ -1,4 +1,4 @@
-<aside class="km-kingdom-sheet-sidebar" {{#if (ne currentNavEntry 'turn')}}hidden{{/if}}>
+<aside class="km-kingdom-sheet-sidebar km-kingdom-sheet-sidebar-turn" {{#if (ne currentNavEntry 'turn')}}hidden{{/if}}>
     {{currentNavEntry}}
     <div {{#if (ne currentNavEntry 'turn')}}hidden{{/if}}>
 
@@ -83,8 +83,8 @@
             <p>Click these buttons after successfully claiming a hex containing a refuge or landmark:</p>
 
             <div class="km-turn-buttons">
-                <button type="button" action="claimed-refuge">Claimed Refuge</button>
-                <button type="button" action="claimed-landmark">Claimed Landmark</button>
+                <button type="button" data-action="claimed-refuge">Claimed Refuge</button>
+                <button type="button" data-action="claimed-landmark">Claimed Landmark</button>
             </div>
         </section>
         <section class="km-kingdom-sheet-section">
@@ -141,7 +141,7 @@
                     <tr>
                         <td>{{{this}}}</td>
                         <td>
-                            <button type="button" data-action="remove-ongoing-event" data-delete-index="{{@index}}"><i
+                            <button type="button" data-action="remove-ongoing-event" data-index="{{@index}}"><i
                                     class="fa fa-trash"></i></button>
                         </td>
                     </tr>
@@ -151,7 +151,7 @@
                 rolled event in chat and choosing <b>Add to Ongoing Events</b> or add it manually:</p>
             <p {{#unless isGM}}hidden{{/unless}} class="km-turn-buttons">
                 {{> formElement ongoingEvent }}
-                <button type="button" data-action="add-ongoing-event">Add Event</button>
+                <button type="button" data-action="add-ongoing-event" {{#if ongoingEventButtonDisabled}}disabled{{/if}}>Add Event</button>
             </p>
         </section>
         <section class="km-kingdom-sheet-section">

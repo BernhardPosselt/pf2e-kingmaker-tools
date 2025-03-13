@@ -4,14 +4,19 @@ import at.posselt.pfrpg2e.camping.dialogs.Track
 import at.posselt.pfrpg2e.camping.dialogs.play
 import at.posselt.pfrpg2e.camping.dialogs.stop
 import at.posselt.pfrpg2e.camping.findCurrentRegion
-import at.posselt.pfrpg2e.camping.getCamping
-import at.posselt.pfrpg2e.camping.getCampingActor
+import at.posselt.pfrpg2e.camping.getActiveCamping
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
-import at.posselt.pfrpg2e.utils.*
+import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.getAppFlag
+import at.posselt.pfrpg2e.utils.setAppFlag
+import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
-import com.foundryvtt.core.documents.*
+import com.foundryvtt.core.documents.Combatant
+import com.foundryvtt.core.documents.Scene
+import com.foundryvtt.core.documents.onDeleteCombat
+import com.foundryvtt.core.documents.onPreUpdateCombat
 import com.foundryvtt.pf2e.actor.PF2EActor
 import kotlinx.coroutines.await
 
@@ -42,7 +47,7 @@ suspend fun Scene.startMusic() {
         ?: playlist?.playAll()?.await()
 }
 
-fun Game.findCombatTrack(combatants: Array<Combatant>, active: Scene): Track? =
+suspend fun Game.findCombatTrack(combatants: Array<Combatant>, active: Scene): Track? =
     // check for actor overrides
     combatants.asSequence()
         .mapNotNull(Combatant::actor)
@@ -50,7 +55,7 @@ fun Game.findCombatTrack(combatants: Array<Combatant>, active: Scene): Track? =
         .mapNotNull(PF2EActor::getCombatTrack)
         .firstOrNull()
         ?: active.getCombatTrack()  // or scene overrides
-        ?: getCampingActor()?.getCamping()?.findCurrentRegion()?.combatTrack // otherwise fall back to region
+        ?: getActiveCamping()?.findCurrentRegion()?.combatTrack // otherwise fall back to region
 
 suspend fun Game.startCombatTrack(combatants: Array<Combatant>, active: Scene) {
     findCombatTrack(combatants, active)?.let {

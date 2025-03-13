@@ -1,6 +1,5 @@
 package at.posselt.pfrpg2e.camping.dialogs
 
-import at.posselt.pfrpg2e.actor.party
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.confirm
@@ -15,6 +14,7 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getCamping
+import at.posselt.pfrpg2e.camping.getPartyActor
 import at.posselt.pfrpg2e.camping.resetCampsites
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.data.checks.RollMode
@@ -166,7 +166,7 @@ class CampingSettingsApplication(
             PF2EVehicle::class,
             PF2ELoot::class,
         )
-        val huntAndGatherUuids = (actors + listOfNotNull(game.party()))
+        val huntAndGatherUuids = (actors + listOfNotNull(camping.getPartyActor()))
             .mapNotNull { it.toOption(useUuid = true) }
         val uuidsNotKeepingWatch = setOf(*settings.actorUuidsNotKeepingWatch)
         val playlist = settings.restingPlaylistUuid?.let { fromUuidTypeSafe<Playlist>(it) }

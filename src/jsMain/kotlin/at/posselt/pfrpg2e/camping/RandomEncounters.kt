@@ -1,6 +1,5 @@
 package at.posselt.pfrpg2e.camping
 
-import at.posselt.pfrpg2e.actor.party
 import at.posselt.pfrpg2e.camping.dialogs.RegionSetting
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
@@ -22,7 +21,7 @@ suspend fun rollRandomEncounter(
     actor.getCamping()?.let { camping ->
         val currentRegion = camping.findCurrentRegion() ?: camping.regionSettings.regions.firstOrNull()
         currentRegion?.let { region ->
-            val partyLevel = game.party()?.level ?: 1
+            val partyLevel = camping.getAveragePartyLevel()
             return rollRandomEncounter(
                 camping = camping,
                 includeFlatCheck = includeFlatCheck,

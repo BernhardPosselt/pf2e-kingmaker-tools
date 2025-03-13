@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
 import js.objects.JsPlainObject
+import kotlin.math.abs
 import kotlin.math.min
 
 @JsPlainObject
@@ -58,4 +59,18 @@ suspend fun adjustUnrest(
         }
         min(anarchyAt, totalUnrest)
     }
+}
+
+suspend fun KingdomData.addUnrest(amount: Int, chosenFeats: List<ChosenFeat>): Int {
+    val anarchyAt = calculateAnarchy(chosenFeats)
+    val result = (unrest + amount).coerceIn(0, anarchyAt)
+    val difference = result - unrest
+    if (difference > 0) {
+        postChatMessage("Gaining $difference unrest")
+    } else if (difference < 0) {
+        postChatMessage("Losing ${abs(difference)} unrest")
+    } else {
+        postChatMessage("Already at 0 unrest")
+    }
+    return result
 }

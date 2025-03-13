@@ -1,8 +1,7 @@
 package at.posselt.pfrpg2e.camping
 
-import at.posselt.pfrpg2e.Config
-import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.actions.ActionDispatcher
+import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.actions.handlers.ApplyMealEffects
 import at.posselt.pfrpg2e.actions.handlers.GainProvisions
 import at.posselt.pfrpg2e.actions.handlers.LearnSpecialRecipeData
@@ -10,11 +9,9 @@ import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.utils.bindChatClick
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
-import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
-import com.foundryvtt.pf2e.actor.PF2ECharacter
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import org.w3c.dom.get
@@ -36,7 +33,8 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
         val actorUuid = el.dataset["actorUuid"]
         val name = el.dataset["name"]
         val degree = el.dataset["degree"]
-        if (actorUuid != null && degree != null && name != null) {
+        val campingActorUuid = el.dataset["campingActorUuid"]
+        if (actorUuid != null && degree != null && name != null && campingActorUuid != null) {
             buildPromise {
                 dispatcher.dispatch(
                     ActionMessage(
@@ -45,6 +43,7 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
                             actorUuid = actorUuid,
                             name = name,
                             degree = degree,
+                            campingActorUuid = campingActorUuid,
                         ).unsafeCast<AnyObject>()
                     )
                 )
@@ -58,10 +57,14 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
             }
         }
     }
-    bindChatClick(".km-random-encounter") { _, _ ->
-        game.getCampingActor()?.let { actor ->
+    bindChatClick(".km-random-encounter") { _, el ->
+        el.dataset["campingActorUuid"]?.let {
             buildPromise {
-                rollRandomEncounter(game, actor, true)
+                fromUuidTypeSafe<CampingActor>(it)?.let { actor ->
+                    buildPromise {
+                        rollRandomEncounter(game, actor, true)
+                    }
+                }
             }
         }
     }
@@ -83,22 +86,26 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
         }
     }
     bindChatClick(".km-add-food") { _, el ->
-        val action = ActionMessage(
-            action = "addHuntAndGatherResult",
-            data = HuntAndGatherData(
-                actorUuid = el.dataset["actorUuid"] as String,
-                basicIngredients = el.dataset["basicIngredients"]?.toInt() ?: 0,
-                specialIngredients = el.dataset["specialIngredients"]?.toInt() ?: 0,
-            ).unsafeCast<AnyObject>()
-        )
-        buildPromise {
-            dispatcher.dispatch(action)
+        el.dataset["campingActorUuid"]?.let {
+            val action = ActionMessage(
+                action = "addHuntAndGatherResult",
+                data = HuntAndGatherData(
+                    actorUuid = el.dataset["actorUuid"] as String,
+                    basicIngredients = el.dataset["basicIngredients"]?.toInt() ?: 0,
+                    specialIngredients = el.dataset["specialIngredients"]?.toInt() ?: 0,
+                    campingActorUuid = it,
+                ).unsafeCast<AnyObject>()
+            )
+            buildPromise {
+                dispatcher.dispatch(action)
+            }
         }
     }
     bindChatClick(".km-apply-meal-effect") { _, el ->
         val degree = el.dataset["degree"]
         val recipe = el.dataset["recipe"]
-        if (degree != null && recipe != null) {
+        val campingActorUuid = el.dataset["campingActorUuid"]
+        if (degree != null && recipe != null && campingActorUuid != null) {
             buildPromise {
                 dispatcher.dispatch(
                     ActionMessage(
@@ -106,6 +113,7 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
                         data = ApplyMealEffects(
                             degree = degree,
                             recipe = recipe,
+                            campingActorUuid = campingActorUuid,
                         ).unsafeCast<AnyObject>()
                     )
                 )

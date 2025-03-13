@@ -3,16 +3,18 @@ package at.posselt.pfrpg2e.actions.handlers
 import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.camping.CampingActivity
-import at.posselt.pfrpg2e.camping.removeMealEffects
+import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getActorsInCamp
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
-import at.posselt.pfrpg2e.camping.getCampingActor
+import at.posselt.pfrpg2e.camping.getPartyActor
+import at.posselt.pfrpg2e.camping.removeMealEffects
 import at.posselt.pfrpg2e.camping.syncCampingEffects
 import at.posselt.pfrpg2e.camping.updateCampingPosition
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import com.foundryvtt.core.Game
 import kotlinx.js.JsPlainObject
@@ -23,6 +25,12 @@ external interface SyncActivitiesAction {
     val rollRandomEncounter: Boolean
     val clearMealEffects: Boolean
     val prepareCampsiteResult: String?
+    val campingActorUuid: String
+}
+
+@JsPlainObject
+external interface RandomEncounterContext {
+    val campingActorUuid: String
 }
 
 class SyncActivitiesHandler(
@@ -30,15 +38,16 @@ class SyncActivitiesHandler(
 ) : ActionHandler("syncActivities") {
     override suspend fun execute(action: ActionMessage, dispatcher: ActionDispatcher) {
         val data = action.data.unsafeCast<SyncActivitiesAction>()
-        val campingActor = game.getCampingActor()
+        val campingActor = fromUuidTypeSafe<CampingActor>(data.campingActorUuid)
         val camping = campingActor?.getCamping()
         if (camping != null) {
+            val party = camping.getPartyActor()
             data.prepareCampsiteResult
                 ?.let { fromCamelCase<DegreeOfSuccess>(it) }
                 ?.let { result ->
                     if (result != DegreeOfSuccess.CRITICAL_FAILURE) {
                         camping.worldSceneId?.let {
-                            updateCampingPosition(game, it, result)
+                            updateCampingPosition(game, it, result, party)
                         }
                     }
                 }
@@ -46,12 +55,15 @@ class SyncActivitiesHandler(
                 removeMealEffects(camping.getAllRecipes().toList(), camping.getActorsInCamp())
             }
             camping.syncCampingEffects(data.activities)
-        }
-        if (data.rollRandomEncounter) {
-            postChatTemplate(
-                "chatmessages/random-camping-encounter.hbs",
-                rollMode = RollMode.BLINDROLL
-            );
+            if (data.rollRandomEncounter) {
+                postChatTemplate(
+                    "chatmessages/random-camping-encounter.hbs",
+                    templateContext = RandomEncounterContext(
+                        campingActorUuid = campingActor.uuid,
+                    ),
+                    rollMode = RollMode.BLINDROLL
+                );
+            }
         }
     }
 }

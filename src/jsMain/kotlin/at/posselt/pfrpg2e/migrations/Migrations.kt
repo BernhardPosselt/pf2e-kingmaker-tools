@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.actor.npcs
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getCamping
-import at.posselt.pfrpg2e.camping.getCampingActor
+import at.posselt.pfrpg2e.camping.getCampingActors
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.getKingdom
@@ -27,12 +27,14 @@ import js.objects.recordOf
 private suspend fun createBackups(
     game: Game,
     kingdomActors: List<KingdomActor>,
-    campingActor: CampingActor?,
+    campingActors: List<CampingActor>,
     currentVersion: Int
 ) {
     val backup = recordOf(
         "version" to currentVersion,
-        "camping" to campingActor?.getCamping(),
+        "camping" to campingActors.map {
+            it.id!! to it.getCamping()
+        }.toRecord(),
         "kingdoms" to kingdomActors.map {
             it.id!! to it.getKingdom()
         }.toRecord()
@@ -69,15 +71,15 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
 
         // create backups
         val kingdomActors = npcs().filter { it.getKingdom() != null }
-        val campingActor = getCampingActor()
-        createBackups(this, kingdomActors, campingActor, currentVersion)
+        val campingActors = getCampingActors()
+        createBackups(this, kingdomActors, campingActors, currentVersion)
 
         val migrationsToRun = migrations.filter { it.version > currentVersion }
 
         migrationsToRun
             .forEach { migration ->
                 ui.notifications.info("Running migration ${Config.moduleName} version ${migration.version}")
-                campingActor?.let { actor ->
+                campingActors.forEach { actor ->
                     actor.getCamping()?.let { camping ->
                         migration.migrateCamping(this, camping)
                         actor.setCamping(camping)

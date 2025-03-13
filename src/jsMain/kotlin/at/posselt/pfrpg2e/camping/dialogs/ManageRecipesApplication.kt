@@ -1,7 +1,9 @@
 package at.posselt.pfrpg2e.camping.dialogs
 
-import at.posselt.pfrpg2e.actor.party
-import at.posselt.pfrpg2e.app.*
+import at.posselt.pfrpg2e.app.CrudApplication
+import at.posselt.pfrpg2e.app.CrudColumn
+import at.posselt.pfrpg2e.app.CrudData
+import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.RecipeData
@@ -10,6 +12,7 @@ import at.posselt.pfrpg2e.camping.cookingCost
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCompendiumFoodItems
+import at.posselt.pfrpg2e.camping.getPartyActor
 import at.posselt.pfrpg2e.camping.getTotalCarriedFood
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -76,7 +79,8 @@ class ManageRecipesApplication(
     override fun getItems(): Promise<Array<CrudItem>> = buildPromise {
         actor.getCamping()?.let { camping ->
             val foodItems = getCompendiumFoodItems()
-            val total = camping.getTotalCarriedFood(game.party(), foodItems)
+            val party = camping.getPartyActor()
+            val total = camping.getTotalCarriedFood(party, foodItems)
             val learnedRecipes = camping.cooking.knownRecipes.toSet()
             camping.getAllRecipes()
                 .sortedWith(compareBy(RecipeData::level, RecipeData::name))

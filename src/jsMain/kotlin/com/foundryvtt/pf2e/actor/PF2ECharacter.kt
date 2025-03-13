@@ -7,6 +7,7 @@ import com.foundryvtt.pf2e.system.IntValue
 import com.foundryvtt.pf2e.system.MaxValue
 import com.foundryvtt.pf2e.system.MinMaxValue
 import com.foundryvtt.pf2e.system.StringValue
+import js.collections.JsSet
 import js.objects.ReadonlyRecord
 import js.objects.jso
 import kotlinx.js.JsPlainObject
@@ -126,6 +127,7 @@ external class PF2ECharacter : PF2EActor, PF2ECreature {
     val hitPoints: HitPoints
     override val skills: ReadonlyRecord<String, PF2EAttribute>
     val system: PF2ECharacterSystem
+    val parties: JsSet<PF2EParty>
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")

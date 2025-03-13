@@ -13,12 +13,14 @@ private external interface DiscoverSpecialMealChatContext {
     val actorUuid: String
     val learnRecipe: Boolean
     val criticalFailure: Boolean
+    val campingActorUuid: String
 }
 
 suspend fun postDiscoverSpecialMeal(
     actorUuid: String,
     recipe: RecipeData,
-    degreeOfSuccess: DegreeOfSuccess
+    degreeOfSuccess: DegreeOfSuccess,
+    campingActorUuid: String,
 ) {
     postChatTemplate(
         templatePath = "chatmessages/discover-special-meal.hbs",
@@ -28,6 +30,7 @@ suspend fun postDiscoverSpecialMeal(
             degree = degreeOfSuccess.toCamelCase(),
             learnRecipe = degreeOfSuccess.succeeded(),
             criticalFailure = degreeOfSuccess == DegreeOfSuccess.CRITICAL_FAILURE,
+            campingActorUuid = campingActorUuid,
         ).unsafeCast<AnyObject>(),
     )
 }

@@ -1,12 +1,11 @@
 package at.posselt.pfrpg2e.camping
 
-import at.posselt.pfrpg2e.actor.party
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
-import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECreature
+import com.foundryvtt.pf2e.actor.PF2EParty
 import js.objects.recordOf
 import kotlinx.js.JsPlainObject
 import kotlin.math.min
@@ -65,6 +64,7 @@ suspend fun postHuntAndGather(
     degreeOfSuccess: DegreeOfSuccess,
     zoneDc: Int,
     regionLevel: Int,
+    campingActor: CampingActor,
 ) {
     val amount = getHuntAndGatherQuantities(
         degreeOfSuccess = degreeOfSuccess,
@@ -76,6 +76,7 @@ suspend fun postHuntAndGather(
         templateContext = recordOf(
             "actorName" to actor.name,
             "actorUuid" to actor.uuid,
+            "campingActorUuid" to campingActor.uuid,
             "basicIngredients" to amount.basicIngredients,
             "specialIngredients" to amount.specialIngredients,
         )
@@ -84,17 +85,17 @@ suspend fun postHuntAndGather(
 
 @JsPlainObject
 external interface HuntAndGatherData {
+    val campingActorUuid: String
     val actorUuid: String
     val basicIngredients: Int
     val specialIngredients: Int
 }
 
 suspend fun findHuntAndGatherTargetActor(
-    game: Game,
     defaultActorUuid: String,
     data: CampingData,
+    party: PF2EParty?,
 ): PF2EActor? {
-    val party = game.party()
     return data.huntAndGatherTargetActorUuid?.let {
         if (party != null && party.uuid == it) {
             party
