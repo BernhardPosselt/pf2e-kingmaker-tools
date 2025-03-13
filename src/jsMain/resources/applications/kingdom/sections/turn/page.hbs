@@ -65,6 +65,7 @@
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-turn">
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-upkeep">Upkeep</h2>
+            {{> kingdom-activity activities.upkeep}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-commerce" {{#unless activities.commerce}}hidden{{/unless}}>Commerce</h2>

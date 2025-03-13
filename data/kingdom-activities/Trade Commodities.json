@@ -1,5 +1,6 @@
 {
     "id": "trade-commodities",
+    "order": 4,
     "oncePerRound": true,
     "fortune": false,
     "enabled": true,

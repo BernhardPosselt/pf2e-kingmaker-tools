@@ -122,6 +122,7 @@ class ModifyActivity(
         criticalFailure = data?.criticalFailure,
         modifiers = data?.modifiers ?: emptyArray(),
         actions = data?.actions ?: 1,
+        order = data?.order
     )
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -330,6 +331,7 @@ class ModifyActivity(
             skills = current.skills,
             modifiers = current.modifiers,
             enabled = true,
+            order = current.order,
         )
         undefined
     }

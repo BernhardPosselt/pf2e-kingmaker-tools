@@ -27,6 +27,8 @@ external interface ActivityContext {
     val success: String?
     val failure: String?
     val criticalFailure: String?
+    val isCollectTaxes: Boolean
+    val order: Int?
 }
 
 @JsPlainObject
@@ -36,6 +38,7 @@ external interface ActivitiesContext {
     val region: Array<ActivityContext>
     val civic: Array<ActivityContext>
     val army: Array<ActivityContext>
+    val upkeep: Array<ActivityContext>
 }
 
 private suspend fun toActivityContext(
@@ -78,6 +81,8 @@ private suspend fun toActivityContext(
         success = success,
         failure = failure,
         criticalFailure = criticalFailure,
+        isCollectTaxes = activity.id == "collect-taxes",
+        order = activity.order,
     )
 }
 
@@ -103,7 +108,7 @@ suspend fun activitiesToActivityContext(
             }
         }
         .awaitAll()
-        .sortedBy { it.label }
+        .sortedWith(compareBy<ActivityContext> { it.order ?: Int.MAX_VALUE }.thenBy { it.label })
         .toTypedArray()
 }
 
@@ -161,7 +166,16 @@ suspend fun toActivitiesContext(
         ignoreSkillRequirements,
         enabledFeatures
     )
+    val upkeep = activitiesToActivityContext(
+        activitiesByPhase[KingdomPhase.UPKEEP.value].orEmpty(),
+        kingdomLevel,
+        allowCapitalInvestment,
+        kingdomSkillRanks,
+        ignoreSkillRequirements,
+        enabledFeatures
+    )
     ActivitiesContext(
+        upkeep = upkeep,
         commerce = commerce,
         leadership = leadership,
         region = region,

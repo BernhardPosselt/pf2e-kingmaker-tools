@@ -257,8 +257,11 @@
                     display: flex;
                     align-items: center;
                     gap: .5em;
-                    button {
+                    .km-activity-controls {
+                        display: flex;
                         margin-left: auto;
+                    }
+                    button {
                         i {
                             margin-left: .25em;
                         }

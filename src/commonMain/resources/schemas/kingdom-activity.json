@@ -44,6 +44,9 @@
         "automationNotes": {
           "type": "string"
         },
+        "order": {
+          "type": "number"
+        },
         "skills": {
           "$ref": "#/$defs/Skills"
         },

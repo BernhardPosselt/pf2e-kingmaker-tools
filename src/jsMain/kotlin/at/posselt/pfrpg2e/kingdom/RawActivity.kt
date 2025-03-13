@@ -43,6 +43,7 @@ external interface RawActivity {
     var failure: ActivityResult?
     var criticalFailure: ActivityResult?
     var modifiers: Array<RawModifier>?
+    val order: Int?
 }
 
 fun RawActivity.canBePerformed(
