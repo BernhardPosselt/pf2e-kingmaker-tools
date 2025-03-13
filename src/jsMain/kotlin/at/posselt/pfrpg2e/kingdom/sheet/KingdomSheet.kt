@@ -525,14 +525,15 @@ class KingdomSheet(
             "check-cult-event" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     val dc = getCultEventDC(kingdom)
+                    val rollMode = RollMode.fromString(kingdom.settings.kingdomEventRollMode)
                     val succeeded = d20Check(
                         dc = dc,
                         flavor = "Checking for Cult Event with Flat DC $dc",
-                        rollMode = RollMode.fromString(kingdom.settings.kingdomEventRollMode),
+                        rollMode = rollMode,
                     ).degreeOfSuccess.succeeded()
                     if (succeeded) {
                         kingdom.turnsWithoutCultEvent = 0
-                        postChatMessage("Cult Event occurs, roll a Cult Event")
+                        postChatMessage("Cult Event occurs, roll a Cult Event", rollMode = rollMode)
                     } else {
                         kingdom.turnsWithoutCultEvent += 1
                     }
@@ -543,14 +544,15 @@ class KingdomSheet(
             "check-event" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     val dc = getEventDC(kingdom)
+                    val rollMode = RollMode.fromString(kingdom.settings.kingdomEventRollMode)
                     val succeeded = d20Check(
                         dc = dc,
                         flavor = "Checking for Kingdom Event with Flat DC $dc",
-                        rollMode = RollMode.fromString(kingdom.settings.kingdomEventRollMode),
+                        rollMode = rollMode,
                     ).degreeOfSuccess.succeeded()
                     if (succeeded) {
                         kingdom.turnsWithoutEvent = 0
-                        postChatMessage("Kingdom Event occurs, roll a Kingdom Event")
+                        postChatMessage("Kingdom Event occurs, roll a Kingdom Event", rollMode = rollMode)
                     } else {
                         kingdom.turnsWithoutEvent += 1
                     }
@@ -640,7 +642,7 @@ class KingdomSheet(
                 actor.getKingdom()?.let { kingdom ->
                     val realm = game.getRealmData(kingdom)
                     val settlements = kingdom.getAllSettlements(game)
-                    val storage = calculateStorage(realm=realm, settlements = settlements.allSettlements)
+                    val storage = calculateStorage(realm = realm, settlements = settlements.allSettlements)
                     kingdom.supernaturalSolutions = 0
                     kingdom.creativeSolutions = 0
                     kingdom.fame.now = kingdom.fame.next
@@ -984,7 +986,6 @@ class KingdomSheet(
         kingdom.milestones = value.milestones
         kingdom.notes = value.notes
         kingdom.initialProficiencies = value.initialProficiencies
-        console.log(value.notes)
         beforeKingdomUpdate(previousKingdom, kingdom)
         actor.setKingdom(kingdom)
         bonusFeat = value.bonusFeat
