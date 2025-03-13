@@ -93,15 +93,13 @@
             <p>A hex can have at most one of these: Farmland, Freehold, Ruins, Settlement, Structure, or Work Site. A
                 Settlement can be built in a hex that contains Ruins or a Structure. A Free Hold can be brought into
                 your kingdom in which case it becomes a Settlement instead.</p>
-
-            {{> kingdom-activity activities.region}}
-
             <p>Click these buttons after successfully claiming a hex containing a refuge or landmark:</p>
 
             <div class="km-turn-buttons">
                 <button type="button" data-action="claimed-refuge">Claimed Refuge</button>
                 <button type="button" data-action="claimed-landmark">Claimed Landmark</button>
             </div>
+            {{> kingdom-activity activities.region}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-civic" {{#unless activities.civic}}hidden{{/unless}}>Civic</h2>

@@ -36,13 +36,16 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenHeartland
 import at.posselt.pfrpg2e.kingdom.dialogs.ActivityManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.AddModifier
 import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
 import at.posselt.pfrpg2e.kingdom.dialogs.FeatManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.GovernmentManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.InspectSettlement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
+import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
@@ -741,6 +744,26 @@ class KingdomSheet(
                     }
                     actor.setKingdom(kingdom)
                 }
+            }
+
+            "perform-activity" -> buildPromise {
+                val activityId = target.dataset["activity"]
+                checkNotNull(activityId)
+                val kingdom = actor.getKingdom()
+                checkNotNull(kingdom)
+                val activity = kingdom.getActivity(activityId)
+                checkNotNull(activity)
+                // TODO: special handling for the following activities
+                // train army
+                // recruit army
+                // build structure
+                val check = CheckType.PerformActivity(activity)
+                kingdomCheckDialog(
+                    game = game,
+                    kingdom = kingdom,
+                    kingdomActor = actor,
+                    check = check,
+                )
             }
         }
     }

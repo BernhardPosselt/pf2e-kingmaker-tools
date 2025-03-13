@@ -1,7 +1,13 @@
 .theme-light {
     .km-kingdom-sheet {
-        .km-kingdom-sheet-content, .km-sub-nav, .km-kingdom-sheet-sidebar {
-            /* TODO */
+        .km-kingdom-sheet-sub-nav,
+        .km-kingdom-sheet-sub-content,
+        .km-kingdom-sheet-sidebar,
+        .km-choose-leaders li {
+            background-image: url('../../../../../ui/parchment.jpg');
+            border-radius: 5px;
+            border: 1px solid;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, .5);
         }
     }
 }
