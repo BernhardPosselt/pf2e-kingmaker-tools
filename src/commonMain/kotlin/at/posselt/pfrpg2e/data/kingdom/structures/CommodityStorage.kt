@@ -21,4 +21,5 @@ data class CommodityStorage(
     fun limitLumber(value: Int) = value.coerceIn(0, lumber)
     fun limitStone(value: Int) = value.coerceIn(0, stone)
     fun limitFood(value: Int) = value.coerceIn(0, food)
+    fun isNotEmpty() = ore != 0 || food != 0 || lumber != 0 || stone != 0 || food != 0
 }

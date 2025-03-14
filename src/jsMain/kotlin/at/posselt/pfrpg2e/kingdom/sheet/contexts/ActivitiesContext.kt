@@ -2,9 +2,11 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
 import at.posselt.pfrpg2e.kingdom.canBePerformed
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.label
 import com.foundryvtt.core.ui.enrichHtml
 import js.objects.JsPlainObject
@@ -47,7 +49,8 @@ private suspend fun toActivityContext(
     kingdomLevel: Int,
     allowCapitalInvestment: Boolean,
     kingdomSkillRanks: KingdomSkillRanks,
-    ignoreSkillRequirements: Boolean,
+    kingdom: KingdomData,
+    chosenFeats: List<ChosenFeat>,
     enabledFeatures: List<RawExplodedKingdomFeature>,
     openedActivityDetails: MutableSet<String>,
 ): ActivityContext = coroutineScope {
@@ -75,7 +78,8 @@ private suspend fun toActivityContext(
         disabled = !activity.canBePerformed(
             allowCapitalInvestment = allowCapitalInvestment,
             kingdomSkillRanks = kingdomSkillRanks,
-            ignoreSkillRequirements = ignoreSkillRequirements,
+            kingdom = kingdom,
+            chosenFeats = chosenFeats,
         ),
         fortune = activity.fortune,
         requirement = activity.requirement,
@@ -91,24 +95,25 @@ private suspend fun toActivityContext(
 
 suspend fun activitiesToActivityContext(
     activities: List<RawActivity>,
-    kingdomLevel: Int,
     allowCapitalInvestment: Boolean,
     kingdomSkillRanks: KingdomSkillRanks,
-    ignoreSkillRequirements: Boolean,
     enabledFeatures: List<RawExplodedKingdomFeature>,
     openedActivityDetails: MutableSet<String>,
+    kingdom: KingdomData,
+    chosenFeats: List<ChosenFeat>,
 ) = coroutineScope {
     activities
         .map {
             async {
                 toActivityContext(
                     activity = it,
-                    kingdomLevel = kingdomLevel,
+                    kingdomLevel = kingdom.level,
                     allowCapitalInvestment = allowCapitalInvestment,
                     kingdomSkillRanks = kingdomSkillRanks,
-                    ignoreSkillRequirements = ignoreSkillRequirements,
                     enabledFeatures = enabledFeatures,
                     openedActivityDetails = openedActivityDetails,
+                    kingdom = kingdom,
+                    chosenFeats = chosenFeats,
                 )
             }
         }
@@ -121,7 +126,8 @@ suspend fun toActivitiesContext(
     activities: List<RawActivity>,
     activityBlacklist: Set<String>,
     unlockedActivities: Set<String>,
-    kingdomLevel: Int,
+    kingdom: KingdomData,
+    chosenFeats: List<ChosenFeat>,
     allowCapitalInvestment: Boolean,
     kingdomSkillRanks: KingdomSkillRanks,
     ignoreSkillRequirements: Boolean,
@@ -134,57 +140,57 @@ suspend fun toActivitiesContext(
         .groupBy { it.phase }
     val commerce = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.COMMERCE.value].orEmpty(),
-        kingdomLevel,
         allowCapitalInvestment,
         kingdomSkillRanks,
-        ignoreSkillRequirements,
         enabledFeatures,
         openedActivityDetails,
+        kingdom,
+        chosenFeats,
     )
     val leadership = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.LEADERSHIP.value].orEmpty(),
-        kingdomLevel,
         allowCapitalInvestment,
         kingdomSkillRanks,
-        ignoreSkillRequirements,
         enabledFeatures,
         openedActivityDetails,
+        kingdom,
+        chosenFeats,
     )
     val civic = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.CIVIC.value].orEmpty(),
-        kingdomLevel,
         allowCapitalInvestment,
         kingdomSkillRanks,
-        ignoreSkillRequirements,
         enabledFeatures,
         openedActivityDetails,
+        kingdom,
+        chosenFeats,
     )
     val region = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.REGION.value].orEmpty(),
-        kingdomLevel,
         allowCapitalInvestment,
         kingdomSkillRanks,
-        ignoreSkillRequirements,
         enabledFeatures,
         openedActivityDetails,
+        kingdom,
+        chosenFeats,
     )
     val army = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.ARMY.value].orEmpty(),
-        kingdomLevel,
         allowCapitalInvestment,
         kingdomSkillRanks,
-        ignoreSkillRequirements,
         enabledFeatures,
         openedActivityDetails,
+        kingdom,
+        chosenFeats,
     )
     val upkeep = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.UPKEEP.value].orEmpty(),
-        kingdomLevel,
         allowCapitalInvestment,
         kingdomSkillRanks,
-        ignoreSkillRequirements,
         enabledFeatures,
         openedActivityDetails,
+        kingdom,
+        chosenFeats,
     )
     ActivitiesContext(
         upkeep = upkeep,

@@ -209,7 +209,7 @@ private val expandMagicActivities = setOf(
     "rest-and-relax",
 )
 
-private fun getValidActivitySkills(
+fun getValidActivitySkills(
     ranks: KingdomSkillRanks,
     activityRanks: Set<KingdomSkillRank>,
     ignoreSkillRequirements: Boolean,

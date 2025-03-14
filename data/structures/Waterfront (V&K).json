@@ -23,7 +23,8 @@
     "reducesUnrest": false,
     "level": 8,
     "upgradeFrom": [
-        "Pier"
+        "Pier",
+        "Pier (V&K)"
     ],
     "construction": {
         "rp": 90,

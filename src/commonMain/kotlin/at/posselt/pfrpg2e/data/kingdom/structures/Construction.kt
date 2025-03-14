@@ -10,4 +10,40 @@ data class Construction(
     val stone: Int = 0,
     val rp: Int = 0,
     val dc: Int = 0,
-)
+) {
+    fun free() = copy(
+        lumber = 0,
+        luxuries = 0,
+        ore = 0,
+        stone = 0,
+        rp = 0,
+    )
+
+    fun halveCost() = copy(
+        lumber = lumber / 2,
+        luxuries = luxuries / 2,
+        ore = ore / 2,
+        stone = stone / 2,
+        rp = rp / 2,
+    )
+
+    fun upgradeFrom(other: Construction) = copy(
+        lumber = lumber - other.lumber,
+        luxuries = luxuries - other.luxuries,
+        ore = ore - other.ore,
+        stone = stone - other.stone,
+        rp = rp - other.rp,
+    )
+
+    fun hasFunds(
+        existingLumber: Int,
+        existingLuxuries: Int,
+        existingOre: Int,
+        existingStone: Int,
+        existingRp: Int,
+    ) = lumber <= existingLumber &&
+            luxuries <= existingLuxuries &&
+            ore <= existingOre &&
+            stone <= existingStone &&
+            rp <= existingRp
+}

@@ -7,6 +7,8 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.dialogs.getValidActivitySkills
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.utils.asSequence
 import js.objects.JsPlainObject
@@ -49,9 +51,17 @@ external interface RawActivity {
 fun RawActivity.canBePerformed(
     allowCapitalInvestment: Boolean,
     kingdomSkillRanks: KingdomSkillRanks,
-    ignoreSkillRequirements: Boolean,
+    kingdom: KingdomData,
+    chosenFeats: List<ChosenFeat>,
 ): Boolean = (allowCapitalInvestment || id != "capital-investment")
-        && (ignoreSkillRequirements || skillRanks().any { kingdomSkillRanks.allowsFor(it) })
+        && (kingdom.settings.kingdomIgnoreSkillRequirements || getValidActivitySkills(
+    ranks = kingdomSkillRanks,
+    activityRanks = skillRanks(),
+    ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
+    expandMagicUse = kingdom.settings.expandMagicUse,
+    activityId = id,
+    increaseSkills = chosenFeats.map { it.feat.increasedSkills() }
+).isNotEmpty())
 
 fun RawActivity.label(
     kingdomLevel: Int,

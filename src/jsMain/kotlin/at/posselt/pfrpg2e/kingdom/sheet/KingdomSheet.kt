@@ -761,13 +761,24 @@ class KingdomSheet(
                 val activity = kingdom.getActivity(activityId)
                 checkNotNull(activity)
                 actor.getKingdom()?.let { kingdom ->
+                    val allFeatures = kingdom.getExplodedFeatures()
+                    val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
+                    val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
+                    val government = kingdom.getChosenGovernment()
+                    val kingdomRanks = kingdom.parseSkillRanks(
+                        chosenFeatures = chosenFeatures,
+                        chosenFeats = chosenFeats,
+                        government = government,
+                    )
                     when (activityId) {
                         "build-structure" -> {
                             StructureBrowser(
                                 actor = actor,
                                 kingdom = kingdom,
-                                structures = game.getImportedStructures(),
+                                worldStructures = game.getImportedStructures(),
                                 game = game,
+                                kingdomRanks = kingdomRanks,
+                                chosenFeats = chosenFeats,
                             ).launch()
                         }
 
@@ -948,7 +959,6 @@ class KingdomSheet(
             activities = kingdom.getAllActivities(),
             activityBlacklist = kingdom.activityBlacklist.toSet(),
             unlockedActivities = globalBonuses.unlockedActivities,
-            kingdomLevel = kingdom.level,
             allowCapitalInvestment = settlements.current?.allowCapitalInvestment == true,
             kingdomSkillRanks = kingdom.parseSkillRanks(
                 chosenFeatures = chosenFeatures,
@@ -958,6 +968,8 @@ class KingdomSheet(
             ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
             enabledFeatures = kingdom.getEnabledFeatures(),
             openedActivityDetails = openedActivityDetails,
+            kingdom = kingdom,
+            chosenFeats = chosenFeats,
         )
         KingdomSheetContext(
             partId = parent.partId,

@@ -20,9 +20,6 @@ data class KingdomSkillRanks(
     val warfare: Int = 0,
     val wilderness: Int = 0,
 ) {
-    fun allowsFor(skillRank: KingdomSkillRank) =
-        resolve(skillRank.skill) >= skillRank.rank
-
     fun resolveProficiency(skill: KingdomSkill) =
         Proficiency.fromRank(resolve(skill))
 
