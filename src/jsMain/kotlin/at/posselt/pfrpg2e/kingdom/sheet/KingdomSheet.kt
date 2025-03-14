@@ -78,6 +78,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createBonusFeatContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.skillChecks
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toActivitiesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
@@ -927,12 +928,18 @@ class KingdomSheet(
         val supernaturalSolutionsInput = NumberInput(
             name = "supernaturalSolutions",
             value = kingdom.supernaturalSolutions,
-            label = "Supernatural Solutions"
+            label = "Supernatural Solutions",
+            stacked = false,
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
         )
         val creativeSolutionsInput = NumberInput(
             name = "creativeSolutions",
             value = kingdom.creativeSolutions,
-            label = "Creative Solutions"
+            label = "Creative Solutions",
+            stacked = false,
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
         )
         val ongoingEventInput = TextInput(
             name = "ongoingEvent",
@@ -972,16 +979,17 @@ class KingdomSheet(
         val currentSceneId = game.scenes.current?.id
         val allSettlementSceneIds = kingdom.settlements.map { it.sceneId }.toSet()
         val canAddCurrentScene = currentSceneId != null && currentSceneId !in allSettlementSceneIds
+        val kingdomSkillRanks = kingdom.parseSkillRanks(
+            chosenFeatures = chosenFeatures,
+            chosenFeats = chosenFeats,
+            government = government,
+        )
         val activities = toActivitiesContext(
             activities = kingdom.getAllActivities(),
             activityBlacklist = kingdom.activityBlacklist.toSet(),
             unlockedActivities = globalBonuses.unlockedActivities,
             allowCapitalInvestment = settlements.current?.allowCapitalInvestment == true,
-            kingdomSkillRanks = kingdom.parseSkillRanks(
-                chosenFeatures = chosenFeatures,
-                chosenFeats = chosenFeats,
-                government = government,
-            ),
+            kingdomSkillRanks = kingdomSkillRanks,
             ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
             enabledFeatures = kingdom.getEnabledFeatures(),
             openedActivityDetails = openedActivityDetails,
@@ -989,6 +997,11 @@ class KingdomSheet(
             chosenFeats = chosenFeats,
         )
         val automateStats = kingdom.settings.automateStats
+        val checks = skillChecks(
+            kingdom = kingdom,
+            settlements = settlements,
+            skillRanks = kingdomSkillRanks,
+        )
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -1081,7 +1094,8 @@ class KingdomSheet(
             collectTaxesReduceUnrestDisabled = kingdom.unrest <= 0,
             consumption = consumption,
             automateStats = automateStats,
-            resourceDiceIncome = "$resourceDiceNum${realm.sizeInfo.resourceDieSize.value}"
+            resourceDiceIncome = "$resourceDiceNum${realm.sizeInfo.resourceDieSize.value}",
+            skillChecks = checks,
         )
     }
 

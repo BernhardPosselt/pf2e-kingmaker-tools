@@ -1,13 +1,13 @@
 <aside class="km-kingdom-sheet-sidebar km-kingdom-sheet-sidebar-turn" {{#if (ne currentNavEntry 'turn')}}hidden{{/if}}>
     <div {{#if (ne currentNavEntry 'turn')}}hidden{{/if}}>
         {{> formElement settlementInput }}
-        <hr>
+        <div class="km-sidebar-spacer"></div>
         {{> formElement atWarInput }}
-        <hr>
+        <div class="km-sidebar-spacer"></div>
         {{#each leadersContext}}
             {{> formElement vacant }}
         {{/each}}
-        <hr>
+        <div class="km-sidebar-spacer"></div>
         <table class="km-unrest-ruin">
             <tr>
                 <td>{{> formElement unrestInput }}</td>
@@ -20,13 +20,35 @@
                 <tr class="km-unrest-ruin">
                     <td>{{> formElement value }}</td>
                     <td>/</td>
-                    <td title="Threshold">{{> formElement threshold }}{{#if ../automateStats}}<div class="km-threshold-value">{{thresholdValue}}</div>{{/if}}</td>
+                    <td title="Threshold">{{> formElement threshold }}{{#if ../automateStats}}
+                        <div class="km-threshold-value">{{thresholdValue}}</div>{{/if}}</td>
                     <td>=</td>
                     <td title="Penalty">{{> formElement penalty }}</td>
                 </tr>
             {{/each}}
         </table>
-        <hr>
+        <div class="km-sidebar-spacer"></div>
+        <div><b>Control DC</b>: {{controlDc}}</div>
+        <table class="km-unrest-ruin">
+        {{#each skillChecks}}
+            <tr>
+                <td>{{label}}</td>
+                <td><button type="button">{{modifier}} <i class="fa-solid fa-dice-d20"></i></button></td>
+            </tr>
+        {{/each}}
+        </table>
+        <div class="km-sidebar-spacer"></div>
+        <table class="km-unrest-ruin">
+            <tr>
+                <td>{{> formElement resourceDiceContext.now }}</td>
+                <td>{{> formElement resourceDiceContext.next }}</td>
+            </tr>
+            <tr>
+                <td>{{> formElement resourcePointsContext.now }}</td>
+                <td>{{> formElement resourcePointsContext.next }}</td>
+            </tr>
+        </table>
+        <div class="km-sidebar-spacer"></div>
         <table class="km-unrest-ruin">
             <tr>
                 <td>{{> formElement commoditiesContext.now.food }}</td>
@@ -59,16 +81,7 @@
                 <td>{{> formElement commoditiesContext.next.luxuries }}</td>
             </tr>
         </table>
-    </div>
-    <div hidden>
-        TODO: skill checks
-        {{controlDc}}
-
-        {{ resourceDiceIncome }}
-        {{> formElement resourcePointsContext.now }}
-        {{> formElement resourcePointsContext.next }}
-        {{> formElement resourceDiceContext.now }}
-        {{> formElement resourceDiceContext.next }}
+        <div class="km-sidebar-spacer"></div>
         {{> formElement supernaturalSolutionsInput }}
         {{> formElement creativeSolutionsInput }}
     </div>
@@ -92,7 +105,7 @@
             <div class="km-upkeep-button">Adjust Unrest
                 <button type="button" data-action="adjust-unrest">Perform</button>
             </div>
-            <div class="km-upkeep-button">Collect Resources
+            <div class="km-upkeep-button">Collect Resources ({{ resourceDiceIncome }} Resource Dice)
                 <button type="button" data-action="collect-resources">Perform</button>
             </div>
             <div class="km-upkeep-button">Pay Consumption ({{consumption}})

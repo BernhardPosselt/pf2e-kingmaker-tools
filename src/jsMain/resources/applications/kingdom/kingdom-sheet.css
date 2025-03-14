@@ -108,7 +108,12 @@
         padding: .5em;
         overflow: auto;
 
+        .km-sidebar-spacer {
+            height: 1em;
+        }
+
         .km-unrest-ruin {
+            border-radius: 0;
             td {
                 text-align: center;
                 padding: 3px;
