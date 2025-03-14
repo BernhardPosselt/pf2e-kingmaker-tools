@@ -1001,7 +1001,7 @@ class KingdomSheet(
             atWarInput = atWarInput.toContext(),
             unrestInput = unrestInput.toContext(),
             controlDc = controlDc,
-            unrestPenalty = unrestPenalty * -1,
+            unrestPenalty = unrestPenalty,
             anarchyAt = anarchyAt,
             ruinContext = kingdom.ruin.toContext(
                 automateStats,

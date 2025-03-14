@@ -10,17 +10,17 @@
             <tr>
                 <td>{{> formElement unrestInput }}</td>
                 <td>/</td>
-                <td>{{anarchyAt}}</td>
+                <td title="Threshold">{{anarchyAt}}</td>
                 <td>=</td>
-                <td>{{ unrestPenalty}}</td>
+                <td title="Penalty">{{ unrestPenalty}}</td>
             </tr>
             {{#each ruinContext}}
                 <tr class="km-unrest-ruin">
                     <td>{{> formElement value }}</td>
                     <td>/</td>
-                    <td>{{> formElement threshold }}{{#if ../automateStats}}<div class="km-threshold-value">{{thresholdValue}}</div>{{/if}}</td>
+                    <td title="Threshold">{{> formElement threshold }}{{#if ../automateStats}}<div class="km-threshold-value">{{thresholdValue}}</div>{{/if}}</td>
                     <td>=</td>
-                    <td>{{> formElement penalty }}</td>
+                    <td title="Penalty">{{> formElement penalty }}</td>
                 </tr>
             {{/each}}
         </table>
@@ -227,16 +227,14 @@
             <table>
                 <tr>
                     <thead>
-                    <th>Milestone</th>
                     <th>XP</th>
-                    <th>Completed</th>
+                    <th>Milestone</th>
                     </thead>
                 </tr>
                 {{#each milestones}}
                     <tr {{#if hidden}}hidden{{/if}}>
-                        <td>{{ name }}{{> formElement id }}{{> formElement enabled }}</td>
                         <td>{{xp}}</td>
-                        <td>{{> formElement completed }}</td>
+                        <td>{{> formElement completed }}{{> formElement id }}{{> formElement enabled }}</td>
                     </tr>
                 {{/each}}
             </table>
