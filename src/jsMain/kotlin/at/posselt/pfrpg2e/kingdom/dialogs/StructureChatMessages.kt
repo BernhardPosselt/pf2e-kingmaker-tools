@@ -149,6 +149,7 @@ suspend fun buildDegreeMessages(
             .joinToString(", ") { (label, amount) -> "$label: $amount" },
     )
     val messages = buildStructureHints(structure)
+    console.log("here")
     val criticalSuccess = tpl(
         path = "chatmessages/structure-cost.hbs",
         ctx = ChatStructure(

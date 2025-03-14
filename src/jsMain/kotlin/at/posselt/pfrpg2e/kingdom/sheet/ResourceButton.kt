@@ -117,6 +117,7 @@ data class ResourceButton(
         val turnLabel = if (turn == Turn.NEXT) " Next Turn" else ""
         val hints = hints?.let { " ($it)" } ?: ""
         val label = "${mode.label} $value ${resource.label}$turnLabel$hints"
+        val value2 = value
         return document.create.button {
             type = ButtonType.button
             classes = setOf("km-gain-lose")
@@ -124,7 +125,7 @@ data class ResourceButton(
             attributes["data-mode"] = mode.value
             attributes["data-turn"] = turn.value
             attributes["data-multiple"] = multiple.toString()
-            attributes["data-value"] = value
+            attributes["data-value"] = value2
             +label
         }.outerHTML
     }
