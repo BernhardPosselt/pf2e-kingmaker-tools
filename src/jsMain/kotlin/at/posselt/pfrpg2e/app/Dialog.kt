@@ -36,7 +36,7 @@ suspend fun <I, O> awaitablePrompt(
     title: String,
     buttonLabel: String? = null,
     templatePath: String,
-    templateContext: AnyObject = jso(),
+    templateContext: Any = jso(),
     promptType: PromptType = PromptType.OK,
     width: Int? = undefined,
     submit: suspend (I) -> O,

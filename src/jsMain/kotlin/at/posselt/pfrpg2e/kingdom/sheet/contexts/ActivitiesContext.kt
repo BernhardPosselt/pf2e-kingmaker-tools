@@ -29,6 +29,7 @@ external interface ActivityContext {
     val criticalFailure: String?
     val isCollectTaxes: Boolean
     val order: Int?
+    val open: Boolean
 }
 
 @JsPlainObject
@@ -48,6 +49,7 @@ private suspend fun toActivityContext(
     kingdomSkillRanks: KingdomSkillRanks,
     ignoreSkillRequirements: Boolean,
     enabledFeatures: List<RawExplodedKingdomFeature>,
+    openedActivityDetails: MutableSet<String>,
 ): ActivityContext = coroutineScope {
     val descriptionP = async { enrichHtml(activity.description) }
     val criticalSuccessP = async { activity.criticalSuccess?.msg?.let { enrichHtml(it) } }
@@ -83,6 +85,7 @@ private suspend fun toActivityContext(
         criticalFailure = criticalFailure,
         isCollectTaxes = activity.id == "collect-taxes",
         order = activity.order,
+        open = activity.id in openedActivityDetails,
     )
 }
 
@@ -93,6 +96,7 @@ suspend fun activitiesToActivityContext(
     kingdomSkillRanks: KingdomSkillRanks,
     ignoreSkillRequirements: Boolean,
     enabledFeatures: List<RawExplodedKingdomFeature>,
+    openedActivityDetails: MutableSet<String>,
 ) = coroutineScope {
     activities
         .map {
@@ -103,7 +107,8 @@ suspend fun activitiesToActivityContext(
                     allowCapitalInvestment = allowCapitalInvestment,
                     kingdomSkillRanks = kingdomSkillRanks,
                     ignoreSkillRequirements = ignoreSkillRequirements,
-                    enabledFeatures = enabledFeatures
+                    enabledFeatures = enabledFeatures,
+                    openedActivityDetails = openedActivityDetails,
                 )
             }
         }
@@ -121,6 +126,7 @@ suspend fun toActivitiesContext(
     kingdomSkillRanks: KingdomSkillRanks,
     ignoreSkillRequirements: Boolean,
     enabledFeatures: List<RawExplodedKingdomFeature>,
+    openedActivityDetails: MutableSet<String>,
 ): ActivitiesContext = coroutineScope {
     val activitiesByPhase = activities
         .asSequence()
@@ -132,7 +138,8 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         ignoreSkillRequirements,
-        enabledFeatures
+        enabledFeatures,
+        openedActivityDetails,
     )
     val leadership = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.LEADERSHIP.value].orEmpty(),
@@ -140,7 +147,8 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         ignoreSkillRequirements,
-        enabledFeatures
+        enabledFeatures,
+        openedActivityDetails,
     )
     val civic = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.CIVIC.value].orEmpty(),
@@ -148,7 +156,8 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         ignoreSkillRequirements,
-        enabledFeatures
+        enabledFeatures,
+        openedActivityDetails,
     )
     val region = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.REGION.value].orEmpty(),
@@ -156,7 +165,8 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         ignoreSkillRequirements,
-        enabledFeatures
+        enabledFeatures,
+        openedActivityDetails,
     )
     val army = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.ARMY.value].orEmpty(),
@@ -164,7 +174,8 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         ignoreSkillRequirements,
-        enabledFeatures
+        enabledFeatures,
+        openedActivityDetails,
     )
     val upkeep = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.UPKEEP.value].orEmpty(),
@@ -172,7 +183,8 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         ignoreSkillRequirements,
-        enabledFeatures
+        enabledFeatures,
+        openedActivityDetails,
     )
     ActivitiesContext(
         upkeep = upkeep,

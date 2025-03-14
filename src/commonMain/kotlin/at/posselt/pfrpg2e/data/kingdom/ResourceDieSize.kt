@@ -20,4 +20,6 @@ enum class ResourceDieSize {
 
     val label: String
         get() = toLabel()
+
+    fun formula(amount: Int) = "$amount$value"
 }

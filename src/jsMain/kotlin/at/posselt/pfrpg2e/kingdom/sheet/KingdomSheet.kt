@@ -94,6 +94,7 @@ import at.posselt.pfrpg2e.utils.roll
 import at.posselt.pfrpg2e.utils.rollWithCompendiumFallback
 import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.documents.onCreateDrawing
 import com.foundryvtt.core.documents.onCreateTile
@@ -121,6 +122,7 @@ import js.objects.recordOf
 import kotlinx.browser.document
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
@@ -167,6 +169,7 @@ class KingdomSheet(
     private var currentNavEntry: MainNavEntry = if (noCharter) MainNavEntry.KINGDOM else MainNavEntry.TURN
     private var bonusFeat: String? = null
     private var ongoingEvent: String? = null
+    private val openedActivityDetails = mutableSetOf<String>()
 
     init {
         actor.apps[id] = this
@@ -633,7 +636,7 @@ class KingdomSheet(
                         )
                     )
                     val ruinButtons = sequenceOf(Resource.CRIME, Resource.DECAY, Resource.CORRUPTION, Resource.STRIFE)
-                        .map { createResourceButton(value = "1", resource = it, mode = ResourceMode.LOSE) }
+                        .map { ResourceButton(value = "1", resource = it, mode = ResourceMode.LOSE).toHtml() }
                         .toTypedArray()
                     postChatTemplate(
                         templatePath = "chatmessages/landmark.hbs",
@@ -931,6 +934,7 @@ class KingdomSheet(
             ),
             ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
             enabledFeatures = kingdom.getEnabledFeatures(),
+            openedActivityDetails = openedActivityDetails,
         )
         KingdomSheetContext(
             partId = parent.partId,
@@ -1054,6 +1058,44 @@ class KingdomSheet(
                 )
             }
             .toTypedArray()
+    }
+
+    override fun _attachPartListeners(partId: String, htmlElement: HTMLElement, options: ApplicationRenderOptions) {
+        super._attachPartListeners(partId, htmlElement, options)
+        htmlElement.querySelectorAll(".km-gain-lose").asList()
+            .filterIsInstance<HTMLElement>()
+            .forEach { elem ->
+                elem.addEventListener("click", {
+                    actor.getKingdom()?.let { kingdom ->
+                        buildPromise {
+                            executeResourceButton(
+                                game = game,
+                                actor = actor,
+                                kingdom = kingdom,
+                                elem = elem,
+                            )
+                        }
+                    }
+                })
+            }
+        // need to manually keep track of opened details because fucking foundry
+        // re-renders the entire dom when you change anything, thereby closing all details
+        htmlElement.querySelectorAll(".km-kingdom-activity > details > summary").asList()
+            .filterIsInstance<HTMLElement>()
+            .forEach { elem ->
+                elem.addEventListener("click", {
+                    it.preventDefault()
+                    it.stopPropagation()
+                    val activityId = (it.currentTarget as HTMLElement).dataset["activity"] ?: ""
+                    console.log(activityId)
+                    if (activityId in openedActivityDetails) {
+                        openedActivityDetails.remove(activityId)
+                    } else {
+                        openedActivityDetails.add(activityId)
+                    }
+                    render()
+                })
+            }
     }
 
     override fun onParsedSubmit(value: KingdomSheetData): Promise<Void> = buildPromise {

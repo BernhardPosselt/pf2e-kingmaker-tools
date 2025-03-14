@@ -18,10 +18,10 @@ data class Income(
 
     fun limitBy(storage: CommodityStorage): Income =
         copy(
-            ore = ore.coerceIn(0, storage.ore),
-            lumber = lumber.coerceIn(0, storage.lumber),
-            stone = stone.coerceIn(0, storage.stone),
-            luxuries = luxuries.coerceIn(0, storage.luxuries),
+            ore = storage.limitOre(ore),
+            lumber = storage.limitLumber(lumber),
+            stone = storage.limitStone(stone),
+            luxuries = storage.limitLuxuries(luxuries),
         )
 }
 

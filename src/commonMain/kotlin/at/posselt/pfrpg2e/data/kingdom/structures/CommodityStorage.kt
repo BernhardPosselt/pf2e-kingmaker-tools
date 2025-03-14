@@ -15,4 +15,10 @@ data class CommodityStorage(
             stone = stone + other.stone,
             luxuries = luxuries + other.luxuries,
         )
+
+    fun limitOre(value: Int) = value.coerceIn(0, ore)
+    fun limitLuxuries(value: Int) = value.coerceIn(0, luxuries)
+    fun limitLumber(value: Int) = value.coerceIn(0, lumber)
+    fun limitStone(value: Int) = value.coerceIn(0, stone)
+    fun limitFood(value: Int) = value.coerceIn(0, food)
 }

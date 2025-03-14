@@ -66,20 +66,20 @@
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-upkeep">Upkeep</h2>
             <div class="km-upkeep-button">Gain 1 Fame <button type="button" data-action="gain-fame">Perform</button></div>
-            {{> kingdom-activity activities.upkeep}}
+            {{> kingdom-activities activities=activities.upkeep}}
             <div class="km-upkeep-button">Adjust Unrest <button type="button" data-action="adjust-unrest">Perform</button></div>
             <div class="km-upkeep-button">Collect Resources <button type="button" data-action="collect-resources">Perform</button></div>
             <div class="km-upkeep-button">Pay Consumption ({{consumption}}) <button type="button" data-action="pay-consumption">Perform</button></div>
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-commerce" {{#unless activities.commerce}}hidden{{/unless}}>Commerce</h2>
-            {{> kingdom-activity activities.commerce collectTaxesReduceUnrestDisabled=collectTaxesReduceUnrestDisabled}}
+            {{> kingdom-activities activities=activities.commerce collectTaxesReduceUnrestDisabled=collectTaxesReduceUnrestDisabled}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-leadership" {{#unless activities.leadership}}hidden{{/unless}}>Leadership
                 ({{leadershipActivities}}
                 per player)</h2>
-            {{> kingdom-activity activities.leadership}}
+            {{> kingdom-activities activities=activities.leadership}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-region" {{#unless activities.region}}hidden{{/unless}}>Region</h2>
@@ -99,7 +99,7 @@
                 <button type="button" data-action="claimed-refuge">Claimed Refuge</button>
                 <button type="button" data-action="claimed-landmark">Claimed Landmark</button>
             </div>
-            {{> kingdom-activity activities.region}}
+            {{> kingdom-activities activities=activities.region}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-civic" {{#unless activities.civic}}hidden{{/unless}}>Civic</h2>
@@ -111,7 +111,7 @@
             <p>First, import all structures from the <b>Structures</b> compendium in the <b>Kingmaker Tools</b> folder,
                 then add the relevant scene in the <b>Settlements</b> tab. Then hit <b>Build Structure</b> and choose a
                 building. After rolling the check, and drag the building link from chat onto the settlement scene.</p>
-            {{> kingdom-activity activities.civic}}
+            {{> kingdom-activities activities=activities.civic}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-army" {{#unless activities.army}}hidden{{/unless}}>Army</h2>
@@ -119,7 +119,7 @@
                 activity to
                 correctly apply conditions and DCs. For <b>Offensive Gambit</b>, target all enemy units (<i
                         class="fa-solid fa-keyboard"></i> <b>shift + t</b>)</p>
-            {{> kingdom-activity activities.army}}
+            {{> kingdom-activities activities=activities.army}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-event">Event</h2>
