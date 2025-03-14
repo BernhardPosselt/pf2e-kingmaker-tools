@@ -221,7 +221,8 @@ class StructureBrowser(
             "build-structure" -> buildPromise {
                 val structuresByUuid = worldStructures.associateBy { it.uuid }
                 val structuresByName = worldStructures.associateBy { it.name }
-                val structure = target.dataset["uuid"]?.let { structuresByUuid[it] }
+                val uuid = target.dataset["uuid"]
+                val structure = uuid?.let { structuresByUuid[it] }
                 val rubble = structuresByName["Rubble"]
                 val ore = target.dataset["ore"]?.toInt() ?: 0
                 val lumber = target.dataset["lumber"]?.toInt() ?: 0
@@ -229,8 +230,12 @@ class StructureBrowser(
                 val luxuries = target.dataset["luxuries"]?.toInt() ?: 0
                 val rp = target.dataset["rp"]?.toInt() ?: 0
                 val repair = target.dataset["repair"] == "true"
-                checkNotNull(structure)
-                checkNotNull(rubble)
+                checkNotNull(structure) {
+                    "Structure with $uuid was null"
+                }
+                checkNotNull(rubble) {
+                    "Rubble was null"
+                }
                 val degreeMessages = buildDegreeMessages(
                     ore = ore,
                     lumber = lumber,

@@ -70,8 +70,15 @@ fun StructureActor.isStructure() = getRawStructureData() != null
 
 fun StructureActor.isSlowed() = itemTypes.condition.any { it.slug == "slowed" }
 
-fun StructureActor.parseStructure(): Structure? = getRawResolvedStructureData()
-    ?.parseStructure(isSlowed(), uuid, img)
+fun StructureActor.parseStructure(): Structure? {
+    val uuid = parent
+        ?.takeIfInstance<TokenDocument>()
+        ?.baseActor
+        ?.uuid
+        ?: uuid
+    return getRawResolvedStructureData()
+        ?.parseStructure(isSlowed(), uuid, img)
+}
 
 fun RawStructureData.parseStructure(
     inConstruction: Boolean,
