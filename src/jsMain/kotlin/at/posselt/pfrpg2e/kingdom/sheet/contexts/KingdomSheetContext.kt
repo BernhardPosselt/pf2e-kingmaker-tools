@@ -71,4 +71,5 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val collectTaxesReduceUnrestDisabled: Boolean
     val consumption: Int
     val automateStats: Boolean
+    val resourceDiceIncome: String
 }

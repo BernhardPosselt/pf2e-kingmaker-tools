@@ -115,6 +115,9 @@
                 .km-threshold-value {
                     width: 54px;
                 }
+                &.km-capacity {
+                    padding-right: 34px;
+                }
             }
         }
     }

@@ -27,29 +27,44 @@
             {{/each}}
         </table>
         <hr>
+        <table class="km-unrest-ruin">
+            <tr>
+                <td>{{> formElement commoditiesContext.now.food }}</td>
+                <td>/</td>
+                <td class="km-capacity">{{ commoditiesContext.capacity.food }}</td>
+                <td>{{> formElement commoditiesContext.next.food }}</td>
+            </tr>
+            <tr>
+                <td>{{> formElement commoditiesContext.now.lumber }}</td>
+                <td>/</td>
+                <td class="km-capacity">{{ commoditiesContext.capacity.lumber }}</td>
+                <td>{{> formElement commoditiesContext.next.lumber }}</td>
+            </tr>
+            <tr>
+                <td>{{> formElement commoditiesContext.now.stone }}</td>
+                <td>/</td>
+                <td class="km-capacity">{{ commoditiesContext.capacity.stone }}</td>
+                <td>{{> formElement commoditiesContext.next.stone }}</td>
+            </tr>
+            <tr>
+                <td>{{> formElement commoditiesContext.now.ore }}</td>
+                <td>/</td>
+                <td class="km-capacity">{{ commoditiesContext.capacity.ore }}</td>
+                <td>{{> formElement commoditiesContext.next.ore }}</td>
+            </tr>
+            <tr>
+                <td>{{> formElement commoditiesContext.now.luxuries }}</td>
+                <td>/</td>
+                <td class="km-capacity">{{ commoditiesContext.capacity.luxuries }}</td>
+                <td>{{> formElement commoditiesContext.next.luxuries }}</td>
+            </tr>
+        </table>
     </div>
     <div hidden>
         TODO: skill checks
-
         {{controlDc}}
-        commodities
-        {{> formElement commoditiesContext.now.food }}
-        {{> formElement commoditiesContext.now.lumber }}
-        {{> formElement commoditiesContext.now.luxuries }}
-        {{> formElement commoditiesContext.now.ore }}
-        {{> formElement commoditiesContext.now.stone }}
 
-        {{> formElement commoditiesContext.next.food }}
-        {{> formElement commoditiesContext.next.lumber }}
-        {{> formElement commoditiesContext.next.luxuries }}
-        {{> formElement commoditiesContext.next.ore }}
-        {{> formElement commoditiesContext.next.stone }}
-        storage
-        {{ commoditiesContext.capacity.food }}
-        {{ commoditiesContext.capacity.lumber }}
-        {{ commoditiesContext.capacity.luxuries }}
-        {{ commoditiesContext.capacity.ore }}
-        {{ commoditiesContext.capacity.stone }}
+        {{ resourceDiceIncome }}
         {{> formElement resourcePointsContext.now }}
         {{> formElement resourcePointsContext.next }}
         {{> formElement resourceDiceContext.now }}

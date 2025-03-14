@@ -40,35 +40,50 @@ fun RawCommodities.toContext(round: String, capacity: CommodityStorage) =
             to = capacity.food,
             value = food,
             name = "commodities.$round.food",
-            label = round.toLabel()
+            label = if (round == "now") "Food" else round.toLabel(),
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
+            stacked = false,
         ).toContext(),
         lumber = Select.range(
             from = 0,
             to = capacity.lumber,
             value = lumber,
             name = "commodities.$round.lumber",
-            label = round.toLabel()
+            label = if (round == "now") "Lumber" else round.toLabel(),
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
+            stacked = false,
         ).toContext(),
         luxuries = Select.range(
             from = 0,
             to = capacity.luxuries,
             value = luxuries,
             name = "commodities.$round.luxuries",
-            label = round.toLabel()
+            label = if (round == "now") "Luxuries" else round.toLabel(),
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
+            stacked = false,
         ).toContext(),
         ore = Select.range(
             from = 0,
             to = capacity.ore,
             value = ore,
             name = "commodities.$round.ore",
-            label = round.toLabel()
+            label = if (round == "now") "Ore" else round.toLabel(),
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
+            stacked = false,
         ).toContext(),
         stone = Select.range(
             from = 0,
             to = capacity.stone,
             value = stone,
             name = "commodities.$round.stone",
-            label = round.toLabel()
+            label = if (round == "now") "Stone" else round.toLabel(),
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
+            stacked = false,
         ).toContext(),
     )
 

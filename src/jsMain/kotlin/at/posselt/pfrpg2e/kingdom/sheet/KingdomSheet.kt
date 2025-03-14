@@ -684,7 +684,7 @@ class KingdomSheet(
                     val resources = collectResources(
                         kingdomData = kingdom,
                         realmData = realm,
-                        allFeats = chosenFeats,
+                        resourceDice = kingdom.getResourceDiceAmount(chosenFeats, settlements.allSettlements),
                         settlements = settlements.allSettlements,
                     )
                     kingdom.resourcePoints.now = resources.resourcePoints
@@ -863,7 +863,7 @@ class KingdomSheet(
         ).total
         val kingdomNameInput = TextInput(
             name = "name",
-            label = "Name",
+            label = "Kingdom",
             value = kingdom.name,
             elementClasses = listOf("km-width-medium"),
             labelClasses = listOf("km-slim-inputs"),
@@ -954,6 +954,7 @@ class KingdomSheet(
         val government = kingdom.getChosenGovernment()
         val heartland = kingdom.getChosenHeartland()
         val trainedSkills = kingdom.getTrainedSkills(chosenFeats, government)
+        val resourceDiceNum = kingdom.getResourceDiceAmount(chosenFeats, settlements.allSettlements)
         val initialProficiencies = (0..3).map { index ->
             val proficiency = kingdom.initialProficiencies.getOrNull(index)
                 ?.let { KingdomSkill.fromString(it) }
@@ -1080,6 +1081,7 @@ class KingdomSheet(
             collectTaxesReduceUnrestDisabled = kingdom.unrest <= 0,
             consumption = consumption,
             automateStats = automateStats,
+            resourceDiceIncome = "$resourceDiceNum${realm.sizeInfo.resourceDieSize.value}"
         )
     }
 

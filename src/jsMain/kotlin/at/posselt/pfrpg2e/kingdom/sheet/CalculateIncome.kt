@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.sheet
 
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementSizeType
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.resources.Income
@@ -23,13 +24,13 @@ private external interface CollectResources {
 suspend fun collectResources(
     kingdomData: KingdomData,
     realmData: RealmData,
-    allFeats: List<ChosenFeat>,
+    resourceDice: Int,
     settlements: List<Settlement>,
 ): Income {
     val income = calculateIncome(
         kingdomLevel = kingdomData.level,
         realmData = realmData,
-        additionalResourceDice = allFeats.sumOf { it.feat.resourceDice ?: 0 } + kingdomData.resourceDice.now,
+        additionalResourceDice = resourceDice,
     )
     val rolledRp = roll(income.resourcePointsFormula, flavor = "Gaining Resource Points")
     postChatTemplate(
@@ -53,3 +54,17 @@ suspend fun collectResources(
         )
         .limitBy(calculateStorage(realmData, settlements))
 }
+
+fun KingdomData.getResourceDiceAmount(
+    allFeats: List<ChosenFeat>,
+    settlements: List<Settlement>,
+) = allFeats.sumOf { it.feat.resourceDice ?: 0 } +
+        resourceDice.now +
+        settlements.sumOf {
+            when (it.size.type) {
+                SettlementSizeType.VILLAGE -> settings.resourceDicePerVillage
+                SettlementSizeType.TOWN -> settings.resourceDicePerTown
+                SettlementSizeType.CITY -> settings.resourceDicePerCity
+                SettlementSizeType.METROPOLIS -> settings.resourceDicePerMetropolis
+            }
+        }
