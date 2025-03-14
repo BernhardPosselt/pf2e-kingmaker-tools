@@ -4,20 +4,9 @@
 * kingdom tab
 * all chat stuff including rerolling and upgrading results
 * messages for placing structures onto scenes
-* structure browser
+* supernatural solution
 * structure token mappings macro
 * allow to select multiple kingdoms?
 * update docs
 * migrate to party actor
-* in the structure browser, add a repair tab that halves construction cost and adds a +2 item mod
-```json
-[
-    {
-      "name": "Repair Structure",
-      "type": "item",
-      "enabled": false,
-      "value": 2,
-      "buttonLabel": "+2 Item to Repair Structure"
-    }
-]
 ```

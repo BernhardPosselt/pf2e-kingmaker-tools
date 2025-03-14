@@ -141,10 +141,10 @@ private external interface UpgradeMetaContext {
 }
 
 private suspend fun buildUpgradeMeta(
-    additionalMessages: String?,
     degree: DegreeOfSuccess,
     activity: RawActivity,
     rollMode: RollMode,
+    degreeMessages: DegreeMessages,
 ): String {
     return tpl(
         path = "chatmessages/upgrade-roll-meta.hbs",
@@ -152,7 +152,7 @@ private suspend fun buildUpgradeMeta(
             rollMode = rollMode.value,
             activityId = activity.id,
             degree = degree.value,
-            additionalMessages = serializeB64Json(additionalMessages ?: ""),
+            additionalMessages = serializeB64Json(degreeMessages),
         ),
     )
 }
@@ -172,7 +172,7 @@ private fun parseUpgradeMeta(elem: HTMLElement) =
     )
 
 suspend fun rollCheck(
-    afterRoll: AfterRollMessage,
+    afterRoll: AfterRoll,
     rollMode: RollMode?,
     activity: RawActivity?,
     skill: KingdomSkill,
@@ -188,6 +188,7 @@ suspend fun rollCheck(
     creativeSolutionPills: Array<ModifierPill>,
     isCreativeSolution: Boolean = false,
     downgrades: Set<DowngradeResult>,
+    degreeMessages: DegreeMessages,
 ): DegreeOfSuccess {
     val result = d20Check(
         dc = dc,
@@ -231,18 +232,24 @@ suspend fun rollCheck(
             originalDegreeOfSuccess = originalDegree,
         )
     } else {
-        val additionalMessages = afterRoll(changed)
+        afterRoll(changed)
         val metaHtml = buildUpgradeMeta(
             rollMode = nonNullRollMode,
             activity = activity,
             degree = changed,
-            additionalMessages = additionalMessages
+            degreeMessages = degreeMessages
         )
         val modifiers = when (changed) {
             DegreeOfSuccess.CRITICAL_FAILURE -> activity.criticalFailure
             DegreeOfSuccess.FAILURE -> activity.failure
             DegreeOfSuccess.SUCCESS -> activity.success
             DegreeOfSuccess.CRITICAL_SUCCESS -> activity.criticalSuccess
+        }
+        val messages = when (changed) {
+            DegreeOfSuccess.CRITICAL_FAILURE -> degreeMessages.criticalFailure ?: ""
+            DegreeOfSuccess.FAILURE -> degreeMessages.failure ?: ""
+            DegreeOfSuccess.SUCCESS -> degreeMessages.success ?: ""
+            DegreeOfSuccess.CRITICAL_SUCCESS -> degreeMessages.criticalSuccess ?: ""
         }
         val chatModifiers = modifiers?.modifiers ?: emptyArray()
         val postHtml = buildChatButtons(changed, chatModifiers)
@@ -253,7 +260,7 @@ suspend fun rollCheck(
             rollMode = nonNullRollMode,
             metaHtml = metaHtml,
             preHtml = "<p>${activity.description}</p>",
-            postHtml = postHtml + additionalMessages
+            postHtml = postHtml + messages
         )
     }
     return changed

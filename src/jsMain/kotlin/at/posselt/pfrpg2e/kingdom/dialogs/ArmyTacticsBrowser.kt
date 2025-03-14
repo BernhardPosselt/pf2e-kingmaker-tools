@@ -108,19 +108,17 @@ private class ArmyTacticsBrowser(
             checkNotNull(activity) {
                 "Could not find train-army activity"
             }
+            val degreeMessage = buildUuid(item.uuid, item.name)
             kingdomCheckDialog(
                 game = this.game,
                 kingdom = this.kingdom,
                 kingdomActor = this.kingdomActor,
                 check = CheckType.PerformActivity(activity),
-                afterRoll = {
-                    close()
-                    if (it.succeeded()) {
-                        buildUuid(item.uuid, item.name)
-                    } else {
-                        ""
-                    }
-                },
+                afterRoll = {close()},
+                degreeMessages = DegreeMessages(
+                    criticalSuccess = degreeMessage,
+                    success = degreeMessage,
+                ),
                 overrideDc = getLevelBasedDC(item.level),
             )
         }

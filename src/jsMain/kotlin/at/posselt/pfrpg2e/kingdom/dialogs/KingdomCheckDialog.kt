@@ -79,6 +79,7 @@ import kotlin.IllegalArgumentException
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
+import kotlin.Unit
 import kotlin.arrayOf
 import kotlin.collections.filter
 import kotlin.collections.map
@@ -249,7 +250,7 @@ private data class CheckDialogParams(
     val armyConditions: ArmyConditionInfo?,
 )
 
-typealias AfterRollMessage = suspend (degree: DegreeOfSuccess) -> String?
+typealias AfterRoll = suspend (degree: DegreeOfSuccess) -> Unit
 
 @JsPlainObject
 external interface SerializedDegree {
@@ -261,8 +262,10 @@ private class KingdomCheckDialog(
     private val kingdomActor: KingdomActor,
     private val kingdom: KingdomData,
     private var baseModifiers: List<Modifier>,
-    private val afterRoll: AfterRollMessage,
+    private val afterRoll: AfterRoll,
     params: CheckDialogParams,
+    private val degreeMessages: DegreeMessages,
+    private val flags: Set<String>,
 ) : FormApp<CheckContext, CheckData>(
     title = params.title,
     template = "applications/kingdom/check.hbs",
@@ -388,6 +391,7 @@ private class KingdomCheckDialog(
             rollTwiceKeepLowest = rollTwiceKeepLowest,
             creativeSolutionPills = creativeSolutionPills,
             downgrades = downgrades,
+            degreeMessages = degreeMessages,
         )
         if (data.supernaturalSolution && !data.assurance) {
             // TODO launch another check dialog with magic as the only skill and disable supernatural solution input
@@ -416,6 +420,7 @@ private class KingdomCheckDialog(
             usedSkill = if (data.supernaturalSolution) KingdomSkill.MAGIC else usedSkill,
             rollOptions = emptySet(),
             structure = structure,
+            flags = flags,
         )
         val filtered = filterModifiersAndUpdateContext(enabledModifiers, context)
         val evaluatedModifiers = evaluateModifiers(filtered)
@@ -621,16 +626,25 @@ sealed interface CheckType {
     value class BuildStructure(val structure: Structure) : CheckType
 }
 
+@JsPlainObject
+external interface DegreeMessages {
+    val criticalSuccess: String?
+    val success: String?
+    val failure: String?
+    val criticalFailure: String?
+}
+
 suspend fun kingdomCheckDialog(
     game: Game,
     kingdom: KingdomData,
     kingdomActor: KingdomActor,
     check: CheckType,
-    afterRoll: AfterRollMessage = { "" },
+    afterRoll: AfterRoll = { },
+    degreeMessages: DegreeMessages = DegreeMessages(),
     overrideSkills: Set<KingdomSkillRank>? = null,
     overrideDc: Int? = null,
+    flags: Set<String> = emptySet(),
 ) {
-    // TODO: create chat data for constructing structures
     val params = when (check) {
         is CheckType.PerformActivity -> {
             val activity = check.activity
@@ -737,5 +751,7 @@ suspend fun kingdomCheckDialog(
         kingdomActor = kingdomActor,
         kingdom = kingdom,
         baseModifiers = baseModifiers,
+        degreeMessages = degreeMessages,
+        flags = flags,
     ).launch()
 }

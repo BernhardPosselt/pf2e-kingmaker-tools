@@ -27,6 +27,7 @@ import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.unslugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
+import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -174,6 +175,25 @@ private enum class Cost {
 
 private typealias StructureFilter = (structure: Structure) -> Boolean
 
+@JsPlainObject
+external interface ChatStructure {
+    val free: Boolean
+    val name: String
+    val link: String
+    val slowedLink: String?
+    val cost: ChatCost
+}
+
+@JsPlainObject
+external interface ChatCost {
+    val rp: Int
+    val ore: Int
+    val lumber: Int
+    val stone: Int
+    val luxuries: Int
+    val label: String
+}
+
 class StructureBrowser(
     private val game: Game,
     private val actor: KingdomActor,
@@ -204,16 +224,102 @@ class StructureBrowser(
                 maxLevel = kingdom.level
             }
 
-            "build-structure" -> {
-
-            }
-
-            "upgrade-structure" -> {
-
-            }
-
-            "repair-structure" -> {
-
+            "build-structure" -> buildPromise {
+                val structuresByName = worldStructures.associateBy { it.name }
+                val structure = target.dataset["structureName"]?.let { structuresByName[it] }
+                val rubble = structuresByName["Rubble"]
+                val ore = target.dataset["ore"]?.toInt() ?: 0
+                val lumber = target.dataset["lumber"]?.toInt() ?: 0
+                val stone = target.dataset["stone"]?.toInt() ?: 0
+                val luxuries = target.dataset["luxuries"]?.toInt() ?: 0
+                val rp = target.dataset["rp"]?.toInt() ?: 0
+                val repair = target.dataset["repair"] == "true"
+                checkNotNull(structure)
+                checkNotNull(rubble)
+                val rubbleLink = enrichHtml(buildUuid(rubble.uuid, "Rubble"))
+                val buildingLink = enrichHtml(buildUuid(structure.uuid, structure.name))
+                val slowedLink = enrichHtml(buildUuid("Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3", "Slowed"))
+                val isFree = ore == 0 && stone == 0 && rp == 0 && lumber == 0 && luxuries == 0
+                val cost = ChatCost(
+                    ore = ore,
+                    stone = stone,
+                    rp = rp,
+                    lumber = lumber,
+                    luxuries = luxuries,
+                    label = listOf(
+                        "RP" to rp / 2,
+                        "Ore" to ore / 2,
+                        "Stone" to stone / 2,
+                        "Lumber" to lumber / 2,
+                        "Luxuries" to luxuries / 2,
+                    )
+                        .filter { (_, value) -> value > 0 }
+                        .joinToString(", ") { (label, amount) -> "$label: $amount" }
+                )
+                val halvedCost = ChatCost(
+                    ore = ore / 2,
+                    stone = stone / 2,
+                    rp = rp / 2,
+                    lumber = lumber / 2,
+                    luxuries = luxuries / 2,
+                    label = listOf(
+                        "RP" to rp,
+                        "Ore" to ore,
+                        "Stone" to stone,
+                        "Lumber" to lumber,
+                        "Luxuries" to luxuries,
+                    )
+                        .filter { (_, value) -> value > 0 }
+                        .joinToString(", ") { (label, amount) -> "$label: $amount" },
+                )
+                val degreeMessages = DegreeMessages(
+                    criticalSuccess = tpl(
+                        path = "chatmessages/structure-cost.hbs",
+                        ctx = ChatStructure(
+                            free = isFree,
+                            name = structure.name,
+                            link = buildingLink,
+                            cost = halvedCost,
+                        ),
+                    ),
+                    success = tpl(
+                        path = "chatmessages/structure-cost.hbs",
+                        ctx = ChatStructure(
+                            free = isFree,
+                            name = structure.name,
+                            link = buildingLink,
+                            cost = cost,
+                        ),
+                    ),
+                    failure = tpl(
+                        path = "chatmessages/structure-cost.hbs",
+                        ctx = ChatStructure(
+                            free = isFree,
+                            name = structure.name,
+                            link = buildingLink,
+                            slowedLink = slowedLink,
+                            cost = cost,
+                        ),
+                    ),
+                    criticalFailure = tpl(
+                        path = "chatmessages/structure-cost.hbs",
+                        ctx = ChatStructure(
+                            free = isFree,
+                            name = structure.name,
+                            link = rubbleLink,
+                            cost = cost,
+                        ),
+                    ),
+                )
+                kingdomCheckDialog(
+                    game = game,
+                    kingdom = kingdom,
+                    kingdomActor = actor,
+                    check = CheckType.BuildStructure(structure),
+                    afterRoll = { close() },
+                    degreeMessages = degreeMessages,
+                    flags = if (repair) setOf("repair-structure") else emptySet()
+                )
             }
 
             "change-nav" -> {

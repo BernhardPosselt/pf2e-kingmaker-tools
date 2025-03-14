@@ -1,0 +1,14 @@
+<h3>Constructing {{name}}</h3>
+{{#unless free}}
+    <button type="button"
+            data-rp="{{cost.rp}}"
+            data-lumber="{{cost.lumber}}"
+            data-luxuries="{{cost.luxuries}}"
+            data-stone="{{cost.stone}}"
+            data-ore="{{cost.ore}}"
+            class="km-pay-structure">
+        <b>Pay</b>: {{cost.label}}
+    </button>
+{{/unless}}
+<p><b>Drag onto scene to build{{#if slowedLink}} and apply {{slowedLink}}{{/if}}:</b></p>
+<p>{{{link}}}</p>

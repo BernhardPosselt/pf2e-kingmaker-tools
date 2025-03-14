@@ -103,24 +103,22 @@ private class ArmyBrowser(
             checkNotNull(activity) {
                 "Could not find recruit-army activity"
             }
+            val degreeMessage = buildUuid(army.uuid, army.name)
             kingdomCheckDialog(
                 game = this.game,
                 kingdom = this.kingdom,
                 kingdomActor = this.kingdomActor,
                 check = CheckType.PerformActivity(activity),
-                afterRoll = {
-                    close()
-                    if (it.succeeded()) {
-                        buildUuid(army.uuid, army.name)
-                    } else {
-                        ""
-                    }
-                },
-                overrideSkills = if(army.isSpecial) {
+                afterRoll = { close() },
+                overrideSkills = if (army.isSpecial) {
                     setOf(KingdomSkillRank(KingdomSkill.STATECRAFT, 0))
                 } else {
                     setOf(KingdomSkillRank(KingdomSkill.WARFARE, 0))
                 },
+                degreeMessages = DegreeMessages(
+                    criticalSuccess = degreeMessage,
+                    success = degreeMessage,
+                ),
                 overrideDc = army.system.recruitmentDC,
             )
         }

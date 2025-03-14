@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createAllProficiencyModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createInvestedBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createLeaderEventBonus
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createLeadershipModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createRepairBonus
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createRulerBonus
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createStructureBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createStructureEventBonuses
@@ -101,4 +102,4 @@ fun createAllModifiers(
         emptyList()
     } else {
         createArmyConditionPenalties(info = targetedArmy)
-    } + listOf(createSupernaturalSolutionModifier()) + featModifiers + featureModifiers + createAnarchyPenalty()
+    } + listOf(createSupernaturalSolutionModifier()) + featModifiers + featureModifiers + createAnarchyPenalty() + createRepairBonus()

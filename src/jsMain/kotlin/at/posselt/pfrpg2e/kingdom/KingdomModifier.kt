@@ -258,6 +258,7 @@ fun KingdomData.createExpressionContext(
     usedSkill: KingdomSkill,
     rollOptions: Set<String>,
     structure: Structure?,
+    flags: Set<String> = emptySet()
 ): ExpressionContext {
     val chosenFeatures = getChosenFeatures(getExplodedFeatures())
     val chosenFeats = getChosenFeats(chosenFeatures)
@@ -275,7 +276,7 @@ fun KingdomData.createExpressionContext(
         unrest = unrest,
         flags = chosenFeats
             .flatMap { it.feat.flags?.toSet().orEmpty() }
-            .toSet(),
+            .toSet() + flags,
         rollOptions = rollOptions,
         isVacant = leader?.let { vacancies().resolveVacancy(it) } == true,
         structure = structure,
