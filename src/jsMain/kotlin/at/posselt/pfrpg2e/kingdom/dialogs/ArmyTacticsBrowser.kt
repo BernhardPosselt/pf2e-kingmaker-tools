@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.data.checks.getLevelBasedDC
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.armies.getAllAvailableArmyTactics
-import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
+import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmies
 import at.posselt.pfrpg2e.kingdom.armies.hasTactic
 import at.posselt.pfrpg2e.kingdom.armies.isArmyTactic
 import at.posselt.pfrpg2e.kingdom.getActivity
@@ -128,9 +128,10 @@ private class ArmyTacticsBrowser(
 }
 
 fun armyTacticsBrowser(game: Game, kingdomActor: KingdomActor, kingdom: KingdomData) {
-    val army = game.getTargetedArmies().firstOrNull()
-    if (army == null) {
-        ui.notifications.error("Please target a single army on the scene (<i class=\"fa-solid fa-keyboard\"></i> <b>t</b>)")
+    val selectedArmies = game.getSelectedArmies()
+    val army = selectedArmies.firstOrNull()
+    if (army == null || selectedArmies.size > 1) {
+        ui.notifications.error("Please select a single army on the scene")
     } else {
         ArmyTacticsBrowser(game, kingdomActor, kingdom, army).launch()
     }

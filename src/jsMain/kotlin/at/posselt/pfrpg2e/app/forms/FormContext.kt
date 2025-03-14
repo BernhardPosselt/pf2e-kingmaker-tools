@@ -51,23 +51,11 @@ external interface FormElementContext {
     val checked: Boolean?
     val data: ReadonlyRecord<String, String>?
     val icon: String?
+    val min: Int?
+    val max: Int?
+    val step: Int?
     val readonly: Boolean
-
-    // instead of going with an enum, we need to list all values
-    // because Handlebars is fucking stupid and can't have == in their template language
-    val select: Boolean
-    val number: Boolean
-    val time: Boolean
-    val text: Boolean
-    val component: Boolean
-    val textArea: Boolean
-    val checkbox: Boolean
-    val menu: Boolean
-    val hidden: Boolean
-    val radio: Boolean
-    val image: Boolean
-    val button: Boolean
-    val empty: Boolean
+    val type: String
 }
 
 

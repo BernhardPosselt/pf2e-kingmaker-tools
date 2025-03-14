@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.data.kingdom.structures
 data class Structure(
     val uuid: String,
     val name: String,
+    val img: String? = null,
     val stacksWith: String? = null,
     val construction: Construction = Construction(),
     val notes: String? = null,

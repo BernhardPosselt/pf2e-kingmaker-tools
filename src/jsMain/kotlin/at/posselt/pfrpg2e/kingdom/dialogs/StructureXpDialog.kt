@@ -4,8 +4,8 @@ import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.prompt
-import at.posselt.pfrpg2e.kingdom.structures.StructureActor
-import at.posselt.pfrpg2e.kingdom.structures.getActorAndStructure
+import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
+import at.posselt.pfrpg2e.kingdom.structures.getImportedStructures
 import at.posselt.pfrpg2e.utils.asAnyObject
 import com.foundryvtt.core.Game
 import js.objects.JsPlainObject
@@ -25,11 +25,9 @@ suspend fun structureXpDialog(
     game: Game,
     onOk: suspend (Int) -> Unit,
 ) {
-    val importedStructures = game.actors.contents
-        .filterIsInstance<StructureActor>()
-        .mapNotNull { it.getActorAndStructure() }
+    val importedStructures = game.getImportedStructures()
     val options = importedStructures
-        .map { SelectOption(label = it.structure.name, value =it.structure.name) }
+        .map { SelectOption(label = it.name, value =it.name) }
     prompt<StructureXpDialogData, Unit>(
         title = "Gain XP From Built Structure",
         templateContext = StructureXpDialogContext(
@@ -44,12 +42,10 @@ suspend fun structureXpDialog(
         templatePath = "components/forms/form.hbs",
     ) { data ->
         val structure = importedStructures
-            .find { it.structure.name == data.structure }
-            ?.structure
+            .find { it.name == data.structure }
         if (structure != null) {
-            val traits = structure.traits
-            val isEdifice = traits != null && "edifice" in traits
-            val rp = structure.construction?.rp ?: 0
+            val isEdifice = StructureTrait.EDIFICE in structure.traits
+            val rp = structure.construction.rp
             val baseXp = 5 + (rp / 10) * 5
             val xp = if (isEdifice) {
                 baseXp * 2

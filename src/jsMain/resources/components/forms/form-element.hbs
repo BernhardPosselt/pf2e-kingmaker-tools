@@ -1,7 +1,7 @@
 {{#unless hideLabel}}
     <{{labelElement}} class="km-label {{#unless stacked}}form-element-inline{{/unless}}">
     {{#if escapeLabel}}{{label}}{{else}}{{{label}}}{{/if}}{{/unless}}
-{{#if select}}
+{{#if (eq type 'select')}}
     {{#if link}}
         <div class="km-select-with-link">
     {{/if}}
@@ -19,42 +19,49 @@
                 {{/each}}
             {{/if}}
         </select>
-{{else if number}}
+{{else if (eq type 'number')}}
         <input type="number" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
                 disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}}>
-{{else if radio}}
+{{else if  (eq type 'range')}}
+        <div>
+            <input type="range" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
+                    required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
+                    disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}} min="{{min}}" max="{{max}}" step="{{step}}">
+            <div>{{value}}</div>
+        </div>
+{{else if  (eq type 'radio')}}
         <input type="radio" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
                 disabled}}disabled{{/if}} {{checked checked}} {{#if readonly}}readonly{{/if}}>
-{{else if text}}
+{{else if  (eq type 'text')}}
         <input type="text" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}} {{#if
                 elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}} {{#if
                 placeholder}}placeholder="{{placeholder}}"{{/if}} {{#if readonly}}readonly{{/if}}>
-{{else if checkbox}}
+{{else if  (eq type 'checkbox')}}
         <input type="checkbox" name="{{name}}" {{checked value}}  {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
                 disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}}>
-{{else if time}}
+{{else if  (eq type 'time')}}
         <input type="time" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
                 disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}}>
-{{else if hidden}}
+{{else if  (eq type 'hidden')}}
         <input type="hidden" name="{{name}}" value="{{value}}" {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}}>
-{{else if textArea}}
+{{else if  (eq type 'textarea')}}
         <textarea name="{{name}}"  {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}} {{#if
                 elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}}>{{value}}</textarea>
-{{else if menu}}
+{{else if  (eq type 'menu')}}
         <button type="button" data-action="{{value}}"  {{#if
                 elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}} {{#each data}}data-{{{@key}}}="{{this}}"{{/each}}>{{name}}</button>
-{{else if button}}
+{{else if  (eq type 'button')}}
     <button type="button" data-action="{{value}}" {{#if
             elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}} {{#each data}}data-{{{@key}}}="{{this}}"{{/each}}>{{#if label}}{{label}} {{/if}}{{#if icon}}<i class="{{icon}}"></i>{{/if}}</button>
-{{else if component}}
+{{else if  (eq type 'component')}}
     {{> (lookup . 'templatePartial') value}}
-{{else if image}}
+{{else if  (eq type 'image')}}
         <img src="{{value}}" data-name="{{name}}" class="image-upload {{#if elementClasses}}{{elementClasses}}{{/if}}"
              {{#if disabled}}disabled{{/if}}>
 {{/if}}

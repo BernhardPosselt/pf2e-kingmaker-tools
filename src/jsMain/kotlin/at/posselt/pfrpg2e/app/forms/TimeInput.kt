@@ -28,27 +28,15 @@ data class TimeInput(
             char(':')
             minute(padding = Padding.ZERO)
         }),
-        select = false,
-        time = true,
+        type ="time",
         required = required,
-        number = false,
         disabled = false,
-        text = false,
-        radio = false,
-        image = false,
-        textArea = false,
-        checkbox = false,
         options = emptyArray(),
         hideLabel = hideLabel,
         stacked = stacked,
         elementClasses = elementClasses.joinToString(" "),
-        menu = false,
-        hidden = false,
         escapeLabel = escapeLabel,
-        component = false,
         labelElement = labelElement,
-        button = false,
-        empty = false,
         readonly = readonly,
     )
 }

@@ -24,8 +24,8 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawActivity
-import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmies
-import at.posselt.pfrpg2e.kingdom.armies.getTargetedArmyConditions
+import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmies
+import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmyConditions
 import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
@@ -640,7 +640,7 @@ suspend fun kingdomCheckDialog(
                 kingdomLevel = kingdom.level,
                 realm = realm,
                 rulerVacant = vacancies.ruler,
-                enemyArmyScoutingDcs = game.getTargetedArmies().map { it.system.scouting }
+                enemyArmyScoutingDcs = game.getSelectedArmies().map { it.system.scouting }
             )
             val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
             val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
@@ -661,7 +661,7 @@ suspend fun kingdomCheckDialog(
                 dc = overrideDc ?: dc ?: 0,
                 validSkills = skills,
                 phase = KingdomPhase.fromString(activity.phase),
-                armyConditions = game.getTargetedArmyConditions(),
+                armyConditions = game.getSelectedArmyConditions(),
                 structure = null,
                 activity = activity,
             )

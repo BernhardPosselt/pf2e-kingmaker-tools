@@ -36,15 +36,8 @@ data class Select(
         name = name,
         help = help,
         value = value,
-        select = true,
         required = required,
-        number = false,
-        text = false,
-        time = false,
-        textArea = false,
-        checkbox = false,
-        radio = false,
-        image = false,
+        type = "select",
         disabled = disabled,
         stacked = stacked,
         overrideType = overrideType?.value,
@@ -58,8 +51,6 @@ data class Select(
         }.toTypedArray(),
         hideLabel = hideLabel,
         elementClasses = elementClasses.joinToString(" "),
-        menu = false,
-        hidden = false,
         link = if (actor != null) {
             DocumentLinkContext(uuid = actor.uuid, img = actor.img)
         } else if (item != null) {
@@ -68,10 +59,7 @@ data class Select(
             null
         },
         escapeLabel = escapeLabel,
-        component = false,
         labelElement = labelElement,
-        button = false,
-        empty = false,
         readonly = false,
     )
 

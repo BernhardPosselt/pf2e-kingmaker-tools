@@ -169,13 +169,7 @@
             margin: 2px 0;
         }
 
-        .km-activity-degrees {
-            li {
-                margin: .5em 0;
-            }
-        }
-
-        p {
+        p, .km-kingdom-activity-description li {
             line-height: 1.5;
         }
 

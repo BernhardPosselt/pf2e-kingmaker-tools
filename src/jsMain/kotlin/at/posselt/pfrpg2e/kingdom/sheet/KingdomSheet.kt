@@ -43,6 +43,9 @@ import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.InspectSettlement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.StructureBrowser
+import at.posselt.pfrpg2e.kingdom.dialogs.armyBrowser
+import at.posselt.pfrpg2e.kingdom.dialogs.armyTacticsBrowser
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.getActivity
@@ -79,6 +82,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.TurnNavEntry
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
+import at.posselt.pfrpg2e.kingdom.structures.getImportedStructures
 import at.posselt.pfrpg2e.kingdom.structures.importSettlementScene
 import at.posselt.pfrpg2e.kingdom.structures.importStructures
 import at.posselt.pfrpg2e.kingdom.structures.isStructure
@@ -756,17 +760,36 @@ class KingdomSheet(
                 checkNotNull(kingdom)
                 val activity = kingdom.getActivity(activityId)
                 checkNotNull(activity)
-                // TODO: special handling for the following activities
-                // train army
-                // recruit army
-                // build structure
-                val check = CheckType.PerformActivity(activity)
-                kingdomCheckDialog(
-                    game = game,
-                    kingdom = kingdom,
-                    kingdomActor = actor,
-                    check = check,
-                )
+                actor.getKingdom()?.let { kingdom ->
+                    when (activityId) {
+                        "build-structure" -> {
+                            StructureBrowser(
+                                actor = actor,
+                                kingdom = kingdom,
+                                structures = game.getImportedStructures(),
+                                game = game,
+                            ).launch()
+                        }
+
+                        "recruit-army" -> armyBrowser(
+                            game = game,
+                            kingdomActor = actor,
+                            kingdom = kingdom
+                        )
+
+                        "train-army" -> armyTacticsBrowser(
+                            game = game,
+                            kingdomActor = actor,
+                            kingdom = kingdom
+                        )
+                        else -> kingdomCheckDialog(
+                            game = game,
+                            kingdom = kingdom,
+                            kingdomActor = actor,
+                            check = CheckType.PerformActivity(activity),
+                        )
+                    }
+                }
             }
         }
     }

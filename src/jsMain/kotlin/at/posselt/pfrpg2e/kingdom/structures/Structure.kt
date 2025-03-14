@@ -34,11 +34,6 @@ import kotlin.contracts.contract
 
 typealias StructureActor = PF2ENpc
 
-data class ActorAndStructure(
-    val actor: StructureActor,
-    val structure: RawStructureData,
-)
-
 @Suppress(
     "NOTHING_TO_INLINE",
     "CANNOT_CHECK_FOR_EXTERNAL_INTERFACE",
@@ -76,13 +71,15 @@ fun StructureActor.isStructure() = getRawStructureData() != null
 fun StructureActor.isSlowed() = itemTypes.condition.any { it.slug == "slowed" }
 
 fun StructureActor.parseStructure(): Structure? = getRawResolvedStructureData()
-    ?.parseStructure(isSlowed(), uuid)
+    ?.parseStructure(isSlowed(), uuid, img)
 
 fun RawStructureData.parseStructure(
     inConstruction: Boolean,
     uuid: String,
+    img: String?,
 ) = Structure(
     name = name,
+    img = img,
     stacksWith = stacksWith,
     construction = Construction(
         skills = construction?.skills?.mapNotNull {
@@ -180,15 +177,10 @@ fun RawStructureData.parseStructure(
     uuid = uuid,
 )
 
-fun StructureActor.getActorAndStructure(): ActorAndStructure? {
-    val data = getRawResolvedStructureData()
-    return data?.let {
-        ActorAndStructure(
-            actor = this,
-            structure = it,
-        )
-    }
-}
+fun Game.getImportedStructures() =
+    actors.contents
+        .filterIsInstance<StructureActor>()
+        .mapNotNull { it.parseStructure() }
 
 suspend fun Game.importStructures(): Array<Actor> {
     val folder = Folder.create(
