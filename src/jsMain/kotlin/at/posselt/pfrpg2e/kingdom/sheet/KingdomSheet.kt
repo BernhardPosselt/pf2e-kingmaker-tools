@@ -1119,16 +1119,18 @@ class KingdomSheet(
             .filterIsInstance<HTMLElement>()
             .forEach { elem ->
                 elem.addEventListener("click", {
-                    it.preventDefault()
-                    it.stopPropagation()
-                    val activityId = (it.currentTarget as HTMLElement).dataset["activity"] ?: ""
-                    console.log(activityId)
-                    if (activityId in openedActivityDetails) {
-                        openedActivityDetails.remove(activityId)
-                    } else {
-                        openedActivityDetails.add(activityId)
+                    if (it.target.unsafeCast<HTMLElement>().classList.contains("km-activity-label")) {
+                        it.preventDefault()
+                        it.stopPropagation()
+                        val activityId = (it.currentTarget as HTMLElement).dataset["activity"] ?: ""
+                        console.log(activityId)
+                        if (activityId in openedActivityDetails) {
+                            openedActivityDetails.remove(activityId)
+                        } else {
+                            openedActivityDetails.add(activityId)
+                        }
+                        render()
                     }
-                    render()
                 })
             }
     }
