@@ -755,6 +755,19 @@ class KingdomSheet(
                 }
             }
 
+            "roll-skill-check" -> buildPromise {
+                val skill = target.dataset["skill"]?.let { KingdomSkill.fromString(it) }
+                checkNotNull(skill)
+                val kingdom = actor.getKingdom()
+                checkNotNull(kingdom)
+                kingdomCheckDialog(
+                    game = game,
+                    kingdom = kingdom,
+                    kingdomActor = actor,
+                    check = CheckType.RollSkill(skill),
+                )
+            }
+
             "perform-activity" -> buildPromise {
                 val activityId = target.dataset["activity"]
                 checkNotNull(activityId)

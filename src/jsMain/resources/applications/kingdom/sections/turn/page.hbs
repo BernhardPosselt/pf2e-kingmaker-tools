@@ -33,7 +33,7 @@
         {{#each skillChecks}}
             <tr>
                 <td>{{label}}</td>
-                <td><button type="button">{{modifier}} <i class="fa-solid fa-dice-d20"></i></button></td>
+                <td><button type="button" data-action="roll-skill-check" data-skill="{{skill}}">{{modifier}} <i class="fa-solid fa-dice-d20"></i></button></td>
             </tr>
         {{/each}}
         </table>

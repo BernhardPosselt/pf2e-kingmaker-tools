@@ -19,6 +19,7 @@ external interface SkillChecksContext {
     val modifier: String
     val rank: Int
     val proficiency: String
+    val skill: String
 }
 
 suspend fun skillChecks(
@@ -55,6 +56,7 @@ suspend fun skillChecks(
         val rank = skillRanks.resolve(it)
         val proficiency = skillRanks.resolveProficiency(it)
         SkillChecksContext(
+            skill = it.value,
             label = it.label,
             rank = rank,
             proficiency = proficiency.value,
