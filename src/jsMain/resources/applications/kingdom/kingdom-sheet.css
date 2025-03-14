@@ -31,28 +31,63 @@
         padding: 0;
     }
 
+    .km-width-small {
+        width: 60px !important;;
+    }
+
+    .km-width-medium {
+        width: 120px !important;
+    }
+
+    input.km-slim-inputs,
+    select.km-slim-inputs {
+        option {
+            background-color: var(--background);
+        }
+
+        background: transparent;
+        border-bottom: 1px solid;
+        border-radius: 0;
+
+        &:focus {
+            outline: none;
+            box-shadow: none;
+            border: none;
+            border-bottom: 1px solid
+        }
+    }
+
     .km-kingdom-sheet-header {
         display: flex;
+        border-bottom: 1px solid;
+        justify-content: space-between;
+        padding: 1em;
+
+        .km-xp-level-section {
+            display: flex;
+        }
 
         .km-kingdom-sheet-name {
+            display: flex;
+            align-items: center;
+            i {
+                margin-right: .5em;
+                font-size: 24px;
+            }
         }
 
         .km-kingdom-sheet-active-settlement {
         }
 
         .km-kingdom-sheet-active-xp {
+            display: flex;
+            align-items: center;
+            margin-right: 3em;
         }
 
-        .km-kingdom-sheet-active-xp-threshold {
-        }
-
-        .km-kingdom-sheet-active-level {
-        }
-
-        .km-kingdom-sheet-active-fame {
-        }
-
-        .km-kingdom-sheet-active-fame-next {
+        .km-fame {
+            display: flex;
+            gap: 1em
         }
     }
 
@@ -247,6 +282,7 @@
         .km-activity-label {
             cursor: pointer;
         }
+
         .km-upkeep-button {
             font-size: 1.2em;
             display: flex;
@@ -259,16 +295,19 @@
 
             button {
                 margin-left: auto;
+
                 i {
                     margin-left: .25em;
                 }
             }
         }
+
         .km-kingdom-activities {
             margin: 0;
             padding: 0;
             list-style-type: none;
         }
+
         .km-kingdom-activity {
             details {
                 summary {
@@ -276,10 +315,12 @@
                     display: flex;
                     align-items: center;
                     gap: .5em;
+
                     .km-activity-controls {
                         display: flex;
                         margin-left: auto;
                     }
+
                     button {
                         i {
                             margin-left: .25em;

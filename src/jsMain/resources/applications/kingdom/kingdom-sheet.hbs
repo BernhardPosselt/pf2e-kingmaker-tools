@@ -1,21 +1,17 @@
 <div>
     <header class="km-kingdom-sheet-header">
-        <div class="km-kingdom-sheet-name">{{> formElement kingdomNameInput }}</div>
-        <div class="km-kingdom-sheet-active-settlement">{{> formElement settlementInput }}</div>
-        <div class="km-kingdom-sheet-active-xp">{{> formElement xpInput }}</div>
-        <div class="km-kingdom-sheet-active-xp-threshold">{{> formElement xpThresholdInput }}</div>
-        <div class="km-kingdom-sheet-active-level">{{> formElement levelInput }}</div>
-        <div class="km-kingdom-sheet-active-fame">{{> formElement fameContext.now }}</div>
-        <div class="km-kingdom-sheet-active-fame-next">{{> formElement fameContext.next }}</div>
+        <div class="km-kingdom-sheet-name"><i class="fa-solid fa-crown"></i> {{> formElement kingdomNameInput }}</div>
+        <div class="km-fame">{{> formElement fameContext.now }}
+            {{> formElement fameContext.next }}</div>
+        <div class="km-xp-level-section">
+            <div class="km-kingdom-sheet-active-xp">{{> formElement xpInput }}/{{> formElement xpThresholdInput }}XP
+            </div>
+            <div class="km-kingdom-sheet-active-level">{{> formElement levelInput }}</div>
+        </div>
     </header>
 
-    <nav class="km-kingdom-sheet-main-nav">
-        <ul>
-            {{#each mainNav}}
-                <li><a class="{{#if active}}active{{/if}}" data-action="{{action}}" href="#" data-link="{{link}}">{{label}}</a></li>
-            {{/each}}
-        </ul>
-    </nav>
+    {{> tabs mainNav}}
+
 
     <main class="km-kingdom-sheet-main">
         {{> kingdom-character-sheet this}}

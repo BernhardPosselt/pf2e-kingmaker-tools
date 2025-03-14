@@ -864,32 +864,39 @@ class KingdomSheet(
             name = "name",
             label = "Name",
             value = kingdom.name,
+            elementClasses = listOf("km-slim-inputs", "km-width-medium"),
+            stacked = false,
         )
         val settlementInput = Select(
             name = "activeSettlement",
-            label = "Active Settlement",
+            label = "Settlement",
             value = kingdom.activeSettlement,
             options = settlements.allSettlements.map { SelectOption(it.name, it.id) },
-            required = false
+            required = false,
+            stacked = false,
         )
         val xpInput = NumberInput(
             name = "xp",
             label = "XP",
             hideLabel = true,
+            elementClasses = listOf("km-slim-inputs", "km-width-small"),
             value = kingdom.xp,
         )
         val xpThresholdInput = NumberInput(
             name = "xpThreshold",
             label = "XP Threshold",
             hideLabel = true,
+            elementClasses = listOf("km-slim-inputs", "km-width-small"),
             value = kingdom.xpThreshold,
         )
         val levelInput = Select.range(
             name = "level",
             label = "Level",
             value = kingdom.level,
+            elementClasses = listOf("km-slim-inputs", "km-width-small"),
             from = 1,
             to = 20,
+            stacked = false,
         )
         val atWarInput = CheckboxInput(
             name = "atWar",

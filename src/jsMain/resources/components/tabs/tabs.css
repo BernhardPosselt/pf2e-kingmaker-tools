@@ -1,4 +1,7 @@
 .km-tabs {
+    position: relative;
+    z-index: 1;
+
     ul {
         width: 100%;
         margin: 0;
@@ -7,6 +10,7 @@
         justify-content: space-between;
         position: relative;
         box-shadow: 0 5px 10px 0 #111;
+        border-bottom: 1px solid;
 
         li {
             flex: 1;
