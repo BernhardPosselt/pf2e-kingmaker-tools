@@ -27,7 +27,6 @@ import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.unslugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
-import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -175,25 +174,6 @@ private enum class Cost {
 
 private typealias StructureFilter = (structure: Structure) -> Boolean
 
-@JsPlainObject
-external interface ChatStructure {
-    val free: Boolean
-    val name: String
-    val link: String
-    val slowedLink: String?
-    val cost: ChatCost
-}
-
-@JsPlainObject
-external interface ChatCost {
-    val rp: Int
-    val ore: Int
-    val lumber: Int
-    val stone: Int
-    val luxuries: Int
-    val label: String
-}
-
 class StructureBrowser(
     private val game: Game,
     private val actor: KingdomActor,
@@ -236,80 +216,14 @@ class StructureBrowser(
                 val repair = target.dataset["repair"] == "true"
                 checkNotNull(structure)
                 checkNotNull(rubble)
-                val rubbleLink = enrichHtml(buildUuid(rubble.uuid, "Rubble"))
-                val buildingLink = enrichHtml(buildUuid(structure.uuid, structure.name))
-                val slowedLink = enrichHtml(buildUuid("Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3", "Slowed"))
-                val isFree = ore == 0 && stone == 0 && rp == 0 && lumber == 0 && luxuries == 0
-                val cost = ChatCost(
-                    ore = ore,
-                    stone = stone,
-                    rp = rp,
-                    lumber = lumber,
-                    luxuries = luxuries,
-                    label = listOf(
-                        "RP" to rp / 2,
-                        "Ore" to ore / 2,
-                        "Stone" to stone / 2,
-                        "Lumber" to lumber / 2,
-                        "Luxuries" to luxuries / 2,
-                    )
-                        .filter { (_, value) -> value > 0 }
-                        .joinToString(", ") { (label, amount) -> "$label: $amount" }
-                )
-                val halvedCost = ChatCost(
-                    ore = ore / 2,
-                    stone = stone / 2,
-                    rp = rp / 2,
-                    lumber = lumber / 2,
-                    luxuries = luxuries / 2,
-                    label = listOf(
-                        "RP" to rp,
-                        "Ore" to ore,
-                        "Stone" to stone,
-                        "Lumber" to lumber,
-                        "Luxuries" to luxuries,
-                    )
-                        .filter { (_, value) -> value > 0 }
-                        .joinToString(", ") { (label, amount) -> "$label: $amount" },
-                )
-                val degreeMessages = DegreeMessages(
-                    criticalSuccess = tpl(
-                        path = "chatmessages/structure-cost.hbs",
-                        ctx = ChatStructure(
-                            free = isFree,
-                            name = structure.name,
-                            link = buildingLink,
-                            cost = halvedCost,
-                        ),
-                    ),
-                    success = tpl(
-                        path = "chatmessages/structure-cost.hbs",
-                        ctx = ChatStructure(
-                            free = isFree,
-                            name = structure.name,
-                            link = buildingLink,
-                            cost = cost,
-                        ),
-                    ),
-                    failure = tpl(
-                        path = "chatmessages/structure-cost.hbs",
-                        ctx = ChatStructure(
-                            free = isFree,
-                            name = structure.name,
-                            link = buildingLink,
-                            slowedLink = slowedLink,
-                            cost = cost,
-                        ),
-                    ),
-                    criticalFailure = tpl(
-                        path = "chatmessages/structure-cost.hbs",
-                        ctx = ChatStructure(
-                            free = isFree,
-                            name = structure.name,
-                            link = rubbleLink,
-                            cost = cost,
-                        ),
-                    ),
+                val degreeMessages = buildDegreeMessages(
+                    ore=ore,
+                    lumber=lumber,
+                    stone=stone,
+                    luxuries=luxuries,
+                    rp=rp,
+                    structure=structure,
+                    rubble = rubble,
                 )
                 kingdomCheckDialog(
                     game = game,

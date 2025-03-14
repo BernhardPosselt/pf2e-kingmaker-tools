@@ -154,14 +154,14 @@ fun RawStructureData.parseStructure(
     reduceRuinBy = reduceRuinBy?.let { ruin ->
         RuinAmount(
             value = ruin.value,
-            ruin = Ruin.fromString(ruin.ruin) ?: Ruin.CRIME,
+            ruin = Ruin.fromString(ruin.ruin),
             moreThanOncePerTurn = ruin.moreThanOncePerTurn == true,
         )
     },
     gainRuin = gainRuin?.let { ruin ->
         RuinAmount(
             value = ruin.value,
-            ruin = Ruin.fromString(ruin.ruin) ?: Ruin.CRIME,
+            ruin = Ruin.fromString(ruin.ruin),
             moreThanOncePerTurn = ruin.moreThanOncePerTurn == true,
         )
     },
