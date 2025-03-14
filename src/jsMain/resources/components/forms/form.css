@@ -153,3 +153,8 @@
         }
     }
 }
+
+.km-range-group {
+    display: flex;
+    gap: 15px;
+}

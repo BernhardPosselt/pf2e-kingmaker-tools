@@ -1,12 +1,13 @@
 @import "./applications/camping/camping.css";
 @import "./components/forms/form.css";
-@import "./components/tabs/style.css";
+@import "./components/tabs/tabs.css";
 @import "./components/food-cost/food-cost.css";
 @import "./components/skill-picker/skill-picker.css";
 @import "./components/skill-picker/skill-picker-input.css";
 @import "./components/activity-effects/activity-effects-input.css";
 @import "./applications/kingdom/check.css";
 @import "./applications/kingdom/kingdom-sheet.css";
+@import "./applications/kingdom/structure-browser.css";
 @import "./applications/kingdom/settlement.css";
 
 :root {

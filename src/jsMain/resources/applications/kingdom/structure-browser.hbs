@@ -1,3 +1,57 @@
-<div>
-    hello world
+<div class="km-browser">
+    <div class="km-structure-filters">
+        <div class="km-space-form-elements">{{> formElement activeSettlement}}</div>
+        <button type="button" data-action="clear-filters">Clear Filters</button>
+        <div class="km-space-form-elements">{{> formElement search}}</div>
+        <div class="km-space-form-elements">{{> formElement maxLevel}}</div>
+        <div class="km-space-form-elements">{{> formElement minLots}}</div>
+        <div class="km-space-form-elements">{{> formElement maxLots}}</div>
+        {{#each mainFilters}}
+            {{> formElement this}}
+        {{/each}}
+        <hr>
+        {{#each activityFilters}}
+            {{> formElement this}}
+        {{/each}}
+    </div>
+    <div class="km-structure-list">
+        {{> tabs nav}}
+        <ul class="km-structures">
+            {{#each structures}}
+                <li class="km-structure"
+                    {{#if notes}}title="{{notes}}"{{/if}}>
+                    <header><a href="#" data-action="open-structure" data-uuid="{{uuid}}">{{name}}</a>
+                    </header>
+                    <div class="km-image km-lots-{{lots}}">
+                        <img src="{{img}}" alt="{{name}}">
+                    </div>
+                    <ul class="km-resources">
+                        {{#if rp.value}}
+                            <li class="km-rp {{#if rp.lacksFunds}}km-lacks-funds{{/if}}">{{rp.value}}</li>{{/if}}
+                        {{#if lumber.value}}
+                            <li class="km-lumber {{#if lumber.lacksFunds}}km-lacks-funds{{/if}}">{{lumber.value}}</li>{{/if}}
+                        {{#if stone.value}}
+                            <li class="km-stone {{#if stone.lacksFunds}}km-lacks-funds{{/if}}">{{stone.value}}</li>{{/if}}
+                        {{#if ore.value}}
+                            <li class="km-ore {{#if ore.lacksFunds}}km-lacks-funds{{/if}}">{{ore.value}}</li>{{/if}}
+                        {{#if luxuries.value}}
+                            <li class="km-luxuries {{#if
+                                    luxuries.lacksFunds}}km-lacks-funds{{/if}}">{{luxuries.value}}</li>{{/if}}
+                    </ul>
+                    <button {{#unless canBuild}}disabled{{/unless}}
+                            type="button"
+                            data-uuid="{{uuid}}"
+                            data-ore="{{ore.value}}"
+                            data-lumber="{{lumber.value}}"
+                            data-stone="{{stone.value}}"
+                            data-luxuries="{{luxuries.value}}"
+                            data-rp="{{rp.value}}"
+                            data-repair="{{#if ../repairActive}}true{{else}}false{{/if}}"
+                            data-action="build-structure">
+                        Build
+                    </button>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
 </div>

@@ -1,5 +1,9 @@
-<ul class="km-tabs">
-    {{#each tabs }}
-        <li {{#if active }}class="km-tab-active"{{/if}} data-action="{{action}}"><a href="#">{{label}}</a></li>
-    {{/each}}
-</ul>
+<nav class="km-tabs">
+    <ul>
+        {{#each this}}
+            <li class="{{#if active}}km-tab-active{{/if}}">
+                <a data-action="{{action}}" href="#"
+                   data-link="{{link}}">{{label}}</a></li>
+        {{/each}}
+    </ul>
+</nav>

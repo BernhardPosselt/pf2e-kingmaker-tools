@@ -13,7 +13,7 @@ import at.posselt.pfrpg2e.data.kingdom.structures.calculateAvailableItems
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
-import at.posselt.pfrpg2e.kingdom.sheet.contexts.createNavEntries
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import at.posselt.pfrpg2e.toCamelCase
@@ -313,7 +313,7 @@ class InspectSettlement(
             notes = notes,
             availableItems = availableItems,
             currentTab = currentNav.value,
-            tabs = createNavEntries<SettlementNav>(currentNav),
+            tabs = createTabs<SettlementNav>("change-nav", currentNav),
         )
     }
 

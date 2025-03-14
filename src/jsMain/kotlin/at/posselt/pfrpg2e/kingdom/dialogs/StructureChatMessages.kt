@@ -149,45 +149,49 @@ suspend fun buildDegreeMessages(
             .joinToString(", ") { (label, amount) -> "$label: $amount" },
     )
     val messages = buildStructureHints(structure)
+    val criticalSuccess = tpl(
+        path = "chatmessages/structure-cost.hbs",
+        ctx = ChatStructure(
+            free = isFree,
+            name = structure.name,
+            link = buildingLink,
+            cost = halvedCost,
+            messages = messages.toTypedArray(),
+        ),
+    )
+    val success = tpl(
+        path = "chatmessages/structure-cost.hbs",
+        ctx = ChatStructure(
+            free = isFree,
+            name = structure.name,
+            link = buildingLink,
+            cost = cost,
+            messages = messages.toTypedArray(),
+        ),
+    )
+    val failure = tpl(
+        path = "chatmessages/structure-cost.hbs",
+        ctx = ChatStructure(
+            free = isFree,
+            name = structure.name,
+            link = buildingLink,
+            slowedLink = slowedLink,
+            cost = cost,
+        ),
+    )
+    val criticalFailure = tpl(
+        path = "chatmessages/structure-cost.hbs",
+        ctx = ChatStructure(
+            free = isFree,
+            name = structure.name,
+            link = rubbleLink,
+            cost = cost,
+        ),
+    )
     return DegreeMessages(
-        criticalSuccess = tpl(
-            path = "chatmessages/structure-cost.hbs",
-            ctx = ChatStructure(
-                free = isFree,
-                name = structure.name,
-                link = buildingLink,
-                cost = halvedCost,
-                messages = messages.toTypedArray(),
-            ),
-        ),
-        success = tpl(
-            path = "chatmessages/structure-cost.hbs",
-            ctx = ChatStructure(
-                free = isFree,
-                name = structure.name,
-                link = buildingLink,
-                cost = cost,
-                messages = messages.toTypedArray(),
-            ),
-        ),
-        failure = tpl(
-            path = "chatmessages/structure-cost.hbs",
-            ctx = ChatStructure(
-                free = isFree,
-                name = structure.name,
-                link = buildingLink,
-                slowedLink = slowedLink,
-                cost = cost,
-            ),
-        ),
-        criticalFailure = tpl(
-            path = "chatmessages/structure-cost.hbs",
-            ctx = ChatStructure(
-                free = isFree,
-                name = structure.name,
-                link = rubbleLink,
-                cost = cost,
-            ),
-        ),
+        criticalSuccess = criticalSuccess,
+        success = success,
+        failure = failure,
+        criticalFailure = criticalFailure,
     )
 }

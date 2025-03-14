@@ -57,7 +57,7 @@
             <li><a title="Creation" data-action="change-kingdom-section-nav"
                    {{#unless hideCreation}}class="active"{{/unless}} href="#" data-link="Creation">Creation</a></li>
             {{#each kingdomSectionNav}}
-                <li><a title="{{title}}" data-action="change-kingdom-section-nav"
+                <li><a title="{{title}}" data-action="{{action}}"
                        {{#if active}}class="active"{{/if}} href="#" data-link="{{link}}">{{label}}</a></li>
             {{/each}}
             <li><a title="Bonus" data-action="change-kingdom-section-nav"

@@ -1,12 +1,5 @@
 <div>
-    <nav class="km-settlement-nav">
-        <ul>
-            {{#each tabs}}
-                <li><a class="{{#if active}}active{{/if}}" data-action="change-nav" href="#"
-                       data-link="{{link}}">{{label}}</a></li>
-            {{/each}}
-        </ul>
-    </nav>
+    {{> tabs tabs}}
     <div class="km-settlement-content">
         <div {{#unless (eq currentTab 'status')}}hidden{{/unless}}>
             <table class="km-settlement-status">

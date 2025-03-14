@@ -24,7 +24,7 @@
                 required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
                 disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}}>
 {{else if  (eq type 'range')}}
-        <div>
+        <div class="km-range-group">
             <input type="range" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                     required}}required{{/if}} {{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if
                     disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}} min="{{min}}" max="{{max}}" step="{{step}}">

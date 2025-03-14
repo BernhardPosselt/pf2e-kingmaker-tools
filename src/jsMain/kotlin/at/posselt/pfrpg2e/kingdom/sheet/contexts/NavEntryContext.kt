@@ -11,14 +11,18 @@ external interface NavEntryContext {
     val active: Boolean
     val link: String
     val title: String
+    val action: String
 }
 
-inline fun <reified T : Enum<T>> createNavEntries(active: T? = null) =
-    enumEntries<T>().map {
-        NavEntryContext(
-            label = it.toLabel(),
-            active = it == active,
-            link = it.toCamelCase(),
-            title = it.toLabel(),
-        )
-    }.toTypedArray()
+inline fun <reified T : Enum<T>> createTabs(
+    action: String,
+    active: T? = null,
+) = enumEntries<T>().map {
+    NavEntryContext(
+        label = it.toLabel(),
+        active = it == active,
+        link = it.toCamelCase(),
+        action = action,
+        title = it.toLabel(),
+    )
+}.toTypedArray()

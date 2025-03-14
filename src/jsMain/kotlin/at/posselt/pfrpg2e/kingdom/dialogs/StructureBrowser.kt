@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.dialogs
 
+import at.posselt.pfrpg2e.actor.openActor
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
@@ -21,22 +22,18 @@ import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
-import at.posselt.pfrpg2e.kingdom.sheet.contexts.createNavEntries
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.unslugify
 import at.posselt.pfrpg2e.utils.buildPromise
-import at.posselt.pfrpg2e.utils.buildUuid
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
-import com.foundryvtt.core.ui.enrichHtml
 import js.core.Void
-import kotlinx.coroutines.async
 import kotlinx.coroutines.await
-import kotlinx.coroutines.awaitAll
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -70,7 +67,8 @@ external interface CostContext {
 external interface StructureContext {
     val lots: Int
     val name: String
-    val link: String
+    val uuid: String
+    val img: String?
     val canBuild: Boolean
     val infrastructure: Boolean
     val residential: Boolean
@@ -79,6 +77,7 @@ external interface StructureContext {
     val ore: CostContext
     val stone: CostContext
     val luxuries: CostContext
+    val notes: String?
 }
 
 @JsPlainObject
@@ -94,6 +93,7 @@ external interface StructureBrowserContext : HandlebarsRenderContext {
     val nav: Array<NavEntryContext>
     val currentNav: String
     val structures: Array<StructureContext>
+    val repairActive: Boolean
 }
 
 @JsPlainObject
@@ -185,6 +185,9 @@ class StructureBrowser(
     title = "Structure Browser",
     template = "applications/kingdom/structure-browser.hbs",
     debug = true,
+    width = 1100,
+    scrollable = arrayOf(".km-structures", ".km-structure-filters"),
+    classes = arrayOf("km-structure-browser"),
     dataModel = StructureBrowserDataModel::class.js,
     id = "kmStructureBrowser-${actor.uuid}"
 ) {
@@ -202,11 +205,23 @@ class StructureBrowser(
                 minLots = 0
                 maxLots = 4
                 maxLevel = kingdom.level
+                mainFilters = emptySet()
+                activityFilters = emptySet()
+                render()
+            }
+
+            "open-structure" -> buildPromise {
+                event.preventDefault()
+                event.stopPropagation()
+                target.dataset["uuid"]?.let {
+                    openActor(it)
+                }
             }
 
             "build-structure" -> buildPromise {
+                val structuresByUuid = worldStructures.associateBy { it.uuid }
                 val structuresByName = worldStructures.associateBy { it.name }
-                val structure = target.dataset["structureName"]?.let { structuresByName[it] }
+                val structure = target.dataset["uuid"]?.let { structuresByUuid[it] }
                 val rubble = structuresByName["Rubble"]
                 val ore = target.dataset["ore"]?.toInt() ?: 0
                 val lumber = target.dataset["lumber"]?.toInt() ?: 0
@@ -217,12 +232,12 @@ class StructureBrowser(
                 checkNotNull(structure)
                 checkNotNull(rubble)
                 val degreeMessages = buildDegreeMessages(
-                    ore=ore,
-                    lumber=lumber,
-                    stone=stone,
-                    luxuries=luxuries,
-                    rp=rp,
-                    structure=structure,
+                    ore = ore,
+                    lumber = lumber,
+                    stone = stone,
+                    luxuries = luxuries,
+                    rp = rp,
+                    structure = structure,
                     rubble = rubble,
                 )
                 kingdomCheckDialog(
@@ -237,6 +252,8 @@ class StructureBrowser(
             }
 
             "change-nav" -> {
+                event.preventDefault()
+                event.stopPropagation()
                 currentNav = target.dataset["link"]
                     ?.let { StructureBrowserNav.fromString(it) }
                     ?: StructureBrowserNav.BUILDABLE
@@ -267,10 +284,10 @@ class StructureBrowser(
                     }
             }
 
-            Cost.HALF -> structures.map { it.copy(construction = it.construction.halveCost()) }
-            Cost.FULL -> structures
-            Cost.FREE -> structures.map { it.copy(construction = it.construction.free()) }
-        }.filter { s -> filters.all { it(s) } }
+            Cost.HALF -> structures.map { it.copy(notes = null, construction = it.construction.halveCost()) }
+            Cost.FULL -> structures.map { it.copy(notes = null) }
+            Cost.FREE -> structures.map { it.copy(notes = null, construction = it.construction.free()) }
+        }.filter { s -> filters.all { it(s) } && s.name != "Rubble"}
     }
 
     override fun _preparePartContext(
@@ -345,12 +362,14 @@ class StructureBrowser(
             StructureBrowserNav.REPAIRABLE -> filterStructures(worldStructures, filters, Cost.HALF)
             StructureBrowserNav.UPGRADEABLE -> upgradeableStructures
             StructureBrowserNav.FREE -> freeStructures
-        }.map {
-            async {
+        }
+            .map {
                 StructureContext(
                     lots = it.lots,
                     name = it.name,
-                    link = enrichHtml(buildUuid(it.uuid, it.name)),
+                    notes = it.notes,
+                    uuid = it.uuid,
+                    img = it.img,
                     canBuild = canBuild(it, increaseSkills),
                     infrastructure = it.traits.contains(StructureTrait.INFRASTRUCTURE),
                     residential = it.traits.contains(StructureTrait.RESIDENTIAL),
@@ -375,8 +394,7 @@ class StructureBrowser(
                         lacksFunds = it.construction.luxuries >= kingdom.commodities.now.luxuries,
                     ),
                 )
-            }
-        }.awaitAll().toTypedArray()
+            }.toTypedArray()
         val activeSettlement = Select(
             label = "Active Settlement",
             value = kingdom.activeSettlement,
@@ -421,7 +439,7 @@ class StructureBrowser(
                     value = it.value,
                 ).toContext(),
                 CheckboxInput(
-                    name = "mainFilters.$index.checked",
+                    name = "mainFilters.$index.enabled",
                     label = it.label,
                     value = it in mainFilters,
                 ).toContext()
@@ -429,6 +447,7 @@ class StructureBrowser(
         }.toTypedArray()
         val activityFilters = worldStructures
             .flatMap { it.bonuses.mapNotNull { b -> b.activity } }
+            .distinct()
             .flatMapIndexed { index, it ->
                 listOf(
                     HiddenInput(
@@ -436,7 +455,7 @@ class StructureBrowser(
                         value = it,
                     ).toContext(),
                     CheckboxInput(
-                        name = "activityFilters.$index.checked",
+                        name = "activityFilters.$index.enabled",
                         label = it.unslugify(),
                         value = it in activityFilters,
                     ).toContext()
@@ -444,7 +463,7 @@ class StructureBrowser(
             }
             .sortedBy { it.label }
             .toTypedArray()
-        val nav = createNavEntries<StructureBrowserNav>(currentNav)
+        val nav = createTabs<StructureBrowserNav>("change-nav", currentNav)
             .map {
                 when (it.link) {
                     StructureBrowserNav.BUILDABLE.value -> it.copy(label = "${it.label} ($buildable)")
@@ -467,6 +486,7 @@ class StructureBrowser(
             mainFilters = mainFilters,
             nav = nav,
             structures = structures,
+            repairActive = currentNav == StructureBrowserNav.REPAIRABLE,
         )
     }
 
@@ -488,7 +508,7 @@ class StructureBrowser(
         minLots = value.minLots
         maxLevel = value.maxLevel
         search = value.search
-        mainFilters = value.activityFilters
+        mainFilters = value.mainFilters
             .filter { it.enabled }
             .mapNotNull { MainFilters.fromString(it.id) }
             .toSet()

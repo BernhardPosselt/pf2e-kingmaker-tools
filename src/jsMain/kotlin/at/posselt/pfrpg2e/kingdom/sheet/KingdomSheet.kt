@@ -76,7 +76,7 @@ import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.KingdomSheetContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createBonusFeatContext
-import at.posselt.pfrpg2e.kingdom.sheet.contexts.createNavEntries
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toActivitiesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
@@ -793,6 +793,7 @@ class KingdomSheet(
                             kingdomActor = actor,
                             kingdom = kingdom
                         )
+
                         else -> kingdomCheckDialog(
                             game = game,
                             kingdom = kingdom,
@@ -1045,7 +1046,7 @@ class KingdomSheet(
                 kingdom.settings.capitalInvestmentInCapital,
             ),
             canAddCurrentSceneAsSettlement = canAddCurrentScene,
-            turnSectionNav = createNavEntries<TurnNavEntry>(),
+            turnSectionNav = createTabs<TurnNavEntry>("scroll-to"),
             canLevelUp = kingdom.canLevelUp(),
             vkXp = kingdom.settings.vanceAndKerensharaXP,
             activities = activities,
@@ -1074,6 +1075,7 @@ class KingdomSheet(
                 active = currentNavEntry == it,
                 link = it.value,
                 title = it.label,
+                action = "change-nav",
             )
         }
             .toTypedArray()
@@ -1090,6 +1092,7 @@ class KingdomSheet(
                     active = (selectLv1 && it == "1") || currentCharacterSheetNavEntry == it,
                     link = it,
                     title = "Level: $it",
+                    action = "change-kingdom-section-nav",
                 )
             }
             .toTypedArray()

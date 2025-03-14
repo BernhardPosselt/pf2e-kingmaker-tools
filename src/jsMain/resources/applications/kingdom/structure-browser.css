@@ -1,0 +1,112 @@
+.km-structure-browser {
+    .window-content {
+        padding: 0;
+    }
+
+    .km-browser {
+        display: flex;
+        height: calc(100vh - 150px);
+
+        .km-space-form-elements {
+            margin-bottom: .5em;
+        }
+
+        button[data-action="clear-filters"] {
+            margin-bottom: 1em;
+            width: 100%;
+        }
+    }
+
+    .km-structure-filters {
+        padding: 1em;
+        width: 240px;
+        min-width: 240px;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .km-structure-list {
+        flex-grow: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .km-structures {
+        height: 100%;
+        display: grid;
+        margin: 0;
+        padding: 1em;
+        grid-auto-rows: max-content;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        list-style-type: none;
+        gap: .5em;
+        overflow: auto;
+
+        .km-structure {
+            display: flex;
+            border-radius: .5em;
+            padding: .5em;
+            border: 1px solid;
+            flex-direction: column;
+
+            header {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .km-image {
+                background-image: url('../../../img/settlements/block.webp');
+                background-size: 100%;
+                background-repeat: no-repeat;
+                flex-basis: 0;
+                aspect-ratio: 1;
+            }
+
+            .km-lots-1 img {
+                height: 50%;
+            }
+
+            .km-resources {
+                display: flex;
+                padding: 0;
+                list-style-type: none;
+                margin-bottom: 8px;
+                gap: 5px;
+                justify-content: space-evenly;
+                flex-wrap: wrap;
+                align-self: center;
+
+                li {
+                    background-repeat: no-repeat;
+                    background-size: 20px;
+                    padding-left: 25px;
+
+                    &.km-lacks-funds {
+                        color: red;
+                    }
+                }
+                .km-ore {
+                    background-image: url('../../../../../icons/commodities/metal/ingot-stack-steel.webp');
+                }
+                .km-rp {
+                    background-image: url('../../../../../icons/commodities/currency/coin-embossed-crown-gold.webp');
+                }
+                .km-stone {
+                    background-image: url('../../../../../icons/commodities/stone/boulder-grey-blue.webp');
+                }
+                .km-luxuries {
+                    background-image: url('../../../../../icons/commodities/gems/gem-cluster-purple.webp');
+                }
+                .km-lumber {
+                    background-image: url('../../../../../icons/commodities/wood/lumber-stack.webp');
+                }
+            }
+
+            button {
+                margin-top: auto;
+            }
+        }
+    }
+}
