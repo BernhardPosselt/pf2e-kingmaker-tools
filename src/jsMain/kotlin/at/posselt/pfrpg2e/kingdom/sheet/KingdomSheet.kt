@@ -69,6 +69,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseLeaderActors
+import at.posselt.pfrpg2e.kingdom.parseRuins
 import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resources.calculateConsumption
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
@@ -986,6 +987,7 @@ class KingdomSheet(
             kingdom = kingdom,
             chosenFeats = chosenFeats,
         )
+        val automateStats = kingdom.settings.automateStats
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -1001,7 +1003,10 @@ class KingdomSheet(
             controlDc = controlDc,
             unrestPenalty = unrestPenalty * -1,
             anarchyAt = anarchyAt,
-            ruinContext = kingdom.ruin.toContext(),
+            ruinContext = kingdom.ruin.toContext(
+                automateStats,
+                kingdom.parseRuins(chosenFeatures, kingdom.settings.ruinThreshold)
+            ),
             commoditiesContext = kingdom.commodities.toContext(storage),
             worksitesContext = kingdom.workSites.toContext(realm.worksites),
             sizeInput = sizeInput.toContext(),
@@ -1074,6 +1079,7 @@ class KingdomSheet(
             ongoingEventButtonDisabled = ongoingEvent.isNullOrEmpty(),
             collectTaxesReduceUnrestDisabled = kingdom.unrest <= 0,
             consumption = consumption,
+            automateStats = automateStats,
         )
     }
 

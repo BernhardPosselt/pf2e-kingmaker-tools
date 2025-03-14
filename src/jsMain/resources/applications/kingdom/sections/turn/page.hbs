@@ -6,31 +6,30 @@
             {{> formElement vacant }}
         {{/each}}
         <hr>
-        <div class="km-unrest">
-            <div>{{> formElement unrestInput }} / {{anarchyAt}}</div>
-            <div>=</div>
-            <div> {{ unrestPenalty}}</div>
-        </div>
+        <table class="km-unrest-ruin">
+            <tr>
+                <td>{{> formElement unrestInput }}</td>
+                <td>/</td>
+                <td>{{anarchyAt}}</td>
+                <td>=</td>
+                <td>{{ unrestPenalty}}</td>
+            </tr>
+            {{#each ruinContext}}
+                <tr class="km-unrest-ruin">
+                    <td>{{> formElement value }}</td>
+                    <td>/</td>
+                    <td>{{> formElement threshold }}{{#if ../automateStats}}<div class="km-threshold-value">{{thresholdValue}}</div>{{/if}}</td>
+                    <td>=</td>
+                    <td>{{> formElement penalty }}</td>
+                </tr>
+            {{/each}}
+        </table>
     </div>
     <div hidden>
 
         {{> formElement atWarInput }}
 
         {{controlDc}}
-
-        ruin
-        {{> formElement ruinContext.corruption.value }}
-        {{> formElement ruinContext.corruption.penalty }}
-        {{> formElement ruinContext.corruption.threshold }}
-        {{> formElement ruinContext.crime.value }}
-        {{> formElement ruinContext.crime.penalty }}
-        {{> formElement ruinContext.crime.threshold }}
-        {{> formElement ruinContext.decay.value }}
-        {{> formElement ruinContext.decay.penalty }}
-        {{> formElement ruinContext.decay.threshold }}
-        {{> formElement ruinContext.strife.value }}
-        {{> formElement ruinContext.strife.penalty }}
-        {{> formElement ruinContext.strife.threshold }}
         commodities
         {{> formElement commoditiesContext.now.food }}
         {{> formElement commoditiesContext.now.lumber }}
@@ -69,11 +68,19 @@
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-turn">
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-upkeep">Upkeep</h2>
-            <div class="km-upkeep-button">Gain 1 Fame <button type="button" data-action="gain-fame">Perform</button></div>
+            <div class="km-upkeep-button">Gain 1 Fame
+                <button type="button" data-action="gain-fame">Perform</button>
+            </div>
             {{> kingdom-activities activities=activities.upkeep}}
-            <div class="km-upkeep-button">Adjust Unrest <button type="button" data-action="adjust-unrest">Perform</button></div>
-            <div class="km-upkeep-button">Collect Resources <button type="button" data-action="collect-resources">Perform</button></div>
-            <div class="km-upkeep-button">Pay Consumption ({{consumption}}) <button type="button" data-action="pay-consumption">Perform</button></div>
+            <div class="km-upkeep-button">Adjust Unrest
+                <button type="button" data-action="adjust-unrest">Perform</button>
+            </div>
+            <div class="km-upkeep-button">Collect Resources
+                <button type="button" data-action="collect-resources">Perform</button>
+            </div>
+            <div class="km-upkeep-button">Pay Consumption ({{consumption}})
+                <button type="button" data-action="pay-consumption">Perform</button>
+            </div>
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="km-turn-commerce" {{#unless activities.commerce}}hidden{{/unless}}>Commerce</h2>

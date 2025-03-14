@@ -103,20 +103,19 @@
     }
 
     .km-kingdom-sheet-sidebar {
-        min-width: 236px;
+        min-width: 300px;
         border-radius: 10px;
         margin: 10px 0 10px 10px;
-        padding: 1em;
+        padding: .5em;
         overflow: auto;
 
-        .km-unrest {
-            display: flex;
-            justify-content: space-between;
-
-            div {
-                display: flex;
-                align-items: center;
-                gap: 10px;
+        .km-unrest-ruin {
+            td {
+                text-align: center;
+                padding: 3px;
+                .km-threshold-value {
+                    width: 54px;
+                }
             }
         }
     }

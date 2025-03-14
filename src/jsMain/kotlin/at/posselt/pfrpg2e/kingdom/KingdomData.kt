@@ -304,21 +304,22 @@ fun KingdomData.hasAssurance(
 
 
 fun KingdomData.parseRuins(
-    choices: List<RawFeatureChoices>,
+    choices: List<ChosenFeature>,
+    baseThreshold: Int,
 ): RuinValues {
     val defaults = ruin.parse()
     return if (settings.automateStats) {
-        val choiceIncreases = choices
+        val choiceIncreases = choices.map { it.choice }
             .flatMap { listOfNotNull(it.ruinThresholdIncreases) + it.featRuinThresholdIncreases }
         val bonusFeatIncreases = bonusFeats.flatMap { it.ruinThresholdIncreases.toList() }
         val increases = (choiceIncreases + bonusFeatIncreases)
             .map { it.parse() }
             .fold(RuinThresholdIncreases()) { prev, curr -> prev + curr }
         defaults.copy(
-            decay = defaults.decay.copy(threshold = increases.decay),
-            strife = defaults.strife.copy(threshold = increases.strife),
-            corruption = defaults.corruption.copy(threshold = increases.corruption),
-            crime = defaults.crime.copy(threshold = increases.crime),
+            decay = defaults.decay.copy(threshold = increases.decay + baseThreshold),
+            strife = defaults.strife.copy(threshold = increases.strife + baseThreshold),
+            corruption = defaults.corruption.copy(threshold = increases.corruption + baseThreshold),
+            crime = defaults.crime.copy(threshold = increases.crime + baseThreshold),
         )
     } else {
         defaults

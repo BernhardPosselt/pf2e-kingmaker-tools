@@ -237,7 +237,7 @@ suspend fun KingdomData.checkModifiers(
             chosenFeatures = chosenFeatures,
         ),
         allSettlements = allSettlements,
-        ruins = parseRuins(chosenFeatures.map { it.choice }),
+        ruins = parseRuins(chosenFeatures, settings.ruinThreshold),
         unrest = unrest,
         vacancies = vacancies(),
         targetedArmy = armyConditions,
