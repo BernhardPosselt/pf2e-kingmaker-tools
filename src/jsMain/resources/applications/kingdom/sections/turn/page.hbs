@@ -1,20 +1,22 @@
 <aside class="km-kingdom-sheet-sidebar km-kingdom-sheet-sidebar-turn" {{#if (ne currentNavEntry 'turn')}}hidden{{/if}}>
-    {{currentNavEntry}}
     <div {{#if (ne currentNavEntry 'turn')}}hidden{{/if}}>
-
-    </div>
-    <div hidden>
         {{> formElement settlementInput }}
-
-        {{controlDc}}
-        {{> formElement atWarInput }}
-        {{> formElement unrestInput }}
-        {{unrestPenalty}}
-        {{anarchyAt}}
-
+        <hr>
         {{#each leadersContext}}
             {{> formElement vacant }}
         {{/each}}
+        <hr>
+        <div class="km-unrest">
+            <div>{{> formElement unrestInput }} / {{anarchyAt}}</div>
+            <div>=</div>
+            <div> {{ unrestPenalty}}</div>
+        </div>
+    </div>
+    <div hidden>
+
+        {{> formElement atWarInput }}
+
+        {{controlDc}}
 
         ruin
         {{> formElement ruinContext.corruption.value }}

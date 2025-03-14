@@ -864,7 +864,8 @@ class KingdomSheet(
             name = "name",
             label = "Name",
             value = kingdom.name,
-            elementClasses = listOf("km-slim-inputs", "km-width-medium"),
+            elementClasses = listOf("km-width-medium"),
+            labelClasses = listOf("km-slim-inputs"),
             stacked = false,
         )
         val settlementInput = Select(
@@ -873,27 +874,30 @@ class KingdomSheet(
             value = kingdom.activeSettlement,
             options = settlements.allSettlements.map { SelectOption(it.name, it.id) },
             required = false,
-            stacked = false,
+            labelClasses = listOf("km-slim-inputs"),
         )
         val xpInput = NumberInput(
             name = "xp",
             label = "XP",
             hideLabel = true,
-            elementClasses = listOf("km-slim-inputs", "km-width-small"),
+            elementClasses = listOf("km-width-small", "km-slim-inputs"),
             value = kingdom.xp,
+            stacked = false,
         )
         val xpThresholdInput = NumberInput(
             name = "xpThreshold",
             label = "XP Threshold",
             hideLabel = true,
-            elementClasses = listOf("km-slim-inputs", "km-width-small"),
+            elementClasses = listOf("km-width-small", "km-slim-inputs"),
             value = kingdom.xpThreshold,
+            stacked = false,
         )
         val levelInput = Select.range(
             name = "level",
             label = "Level",
             value = kingdom.level,
-            elementClasses = listOf("km-slim-inputs", "km-width-small"),
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
             from = 1,
             to = 20,
             stacked = false,
@@ -909,7 +913,10 @@ class KingdomSheet(
             label = "Unrest",
             value = kingdom.unrest,
             from = 0,
-            to = anarchyAt
+            to = anarchyAt,
+            stacked = false,
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
         )
         val sizeInput = NumberInput(
             name = "size",
@@ -992,7 +999,7 @@ class KingdomSheet(
             atWarInput = atWarInput.toContext(),
             unrestInput = unrestInput.toContext(),
             controlDc = controlDc,
-            unrestPenalty = unrestPenalty,
+            unrestPenalty = unrestPenalty * -1,
             anarchyAt = anarchyAt,
             ruinContext = kingdom.ruin.toContext(),
             commoditiesContext = kingdom.commodities.toContext(storage),

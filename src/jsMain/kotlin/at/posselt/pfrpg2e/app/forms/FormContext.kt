@@ -41,6 +41,7 @@ external interface FormElementContext {
     val overrideType: String?
     val isFormElement: Boolean
     val elementClasses: String
+    val labelClasses: String
     val disabled: Boolean
     val stacked: Boolean
     val link: DocumentLinkContext?

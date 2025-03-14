@@ -8,6 +8,7 @@ data class CheckboxInput(
     override val help: String? = null,
     override val hideLabel: Boolean = false,
     val elementClasses: List<String> = emptyList(),
+    val labelClasses: List<String> = emptyList(),
     val disabled: Boolean = false,
     val stacked: Boolean = false,
     val escapeLabel: Boolean = true,
@@ -29,6 +30,7 @@ data class CheckboxInput(
         escapeLabel = escapeLabel,
         labelElement = labelElement,
         readonly = false,
+        labelClasses = labelClasses.joinToString(" "),
     )
 }
 

@@ -32,15 +32,17 @@
     }
 
     .km-width-small {
-        width: 60px !important;;
+        width: 54px !important;;
     }
 
     .km-width-medium {
         width: 120px !important;
     }
 
-    input.km-slim-inputs,
-    select.km-slim-inputs {
+    .km-slim-inputs input,
+    .km-slim-inputs select,
+    select.km-slim-inputs,
+    input.km-slim-inputs {
         option {
             background-color: var(--background);
         }
@@ -101,11 +103,22 @@
     }
 
     .km-kingdom-sheet-sidebar {
-        min-width: 240px;
+        min-width: 236px;
         border-radius: 10px;
         margin: 10px 0 10px 10px;
         padding: 1em;
         overflow: auto;
+
+        .km-unrest {
+            display: flex;
+            justify-content: space-between;
+
+            div {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+        }
     }
 
     .km-kingdom-sheet-content {

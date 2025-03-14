@@ -22,7 +22,8 @@ fun RawFame.toContext(maximumFamePoints: Int) =
             from = 0,
             to = maximumFamePoints,
             stacked = false,
-            elementClasses = listOf("km-slim-inputs", "km-width-small"),
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
         ).toContext(),
         next = Select.range(
             name = "fame.next",
@@ -31,7 +32,8 @@ fun RawFame.toContext(maximumFamePoints: Int) =
             from = 0,
             to = maximumFamePoints,
             stacked = false,
-            elementClasses = listOf("km-slim-inputs", "km-width-small"),
+            elementClasses = listOf("km-width-small"),
+            labelClasses = listOf("km-slim-inputs"),
         ).toContext(),
         type = Select.fromEnum<FameType>(
             name = "fame.type",

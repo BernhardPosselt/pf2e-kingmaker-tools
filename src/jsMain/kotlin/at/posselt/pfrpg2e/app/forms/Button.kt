@@ -30,6 +30,7 @@ data class Button(
         hideLabel = hideLabel,
         stacked = stacked,
         elementClasses = "",
+        labelClasses = "",
         escapeLabel = escapeLabel,
         labelElement = labelElement,
         data = data.map { it.key.toDataAttributeKey() to it.value }.toRecord(),

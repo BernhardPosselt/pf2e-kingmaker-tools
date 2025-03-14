@@ -9,6 +9,7 @@ data class TextArea(
     override val hideLabel: Boolean = false,
     val overrideType: OverrideType? = null,
     val elementClasses: List<String> = emptyList(),
+    val labelClasses: List<String> = emptyList(),
     val disabled: Boolean = false,
     val stacked: Boolean = true,
     val escapeLabel: Boolean = true,
@@ -29,6 +30,7 @@ data class TextArea(
         stacked = stacked,
         elementClasses = elementClasses.joinToString(" "),
         escapeLabel = escapeLabel,
+        labelClasses = labelClasses.joinToString(" "),
         labelElement = labelElement,
         readonly = false,
     )

@@ -23,6 +23,7 @@ data class Select(
     override val help: String? = null,
     override val hideLabel: Boolean = false,
     val elementClasses: List<String> = emptyList(),
+    val labelClasses: List<String> = emptyList(),
     val disabled: Boolean = false,
     val stacked: Boolean = true,
     val actor: Actor? = null,
@@ -51,6 +52,7 @@ data class Select(
         }.toTypedArray(),
         hideLabel = hideLabel,
         elementClasses = elementClasses.joinToString(" "),
+        labelClasses = labelClasses.joinToString(" "),
         link = if (actor != null) {
             DocumentLinkContext(uuid = actor.uuid, img = actor.img)
         } else if (item != null) {
@@ -189,6 +191,7 @@ data class Select(
             disabled: Boolean = false,
             stacked: Boolean = true,
             elementClasses: List<String> = emptyList(),
+            labelClasses: List<String> = emptyList(),
             escapeLabel: Boolean = true,
         ) = Select(
             name = name,
@@ -205,6 +208,7 @@ data class Select(
             elementClasses = elementClasses,
             escapeLabel = escapeLabel,
             overrideType = OverrideType.NUMBER,
+            labelClasses = labelClasses,
         )
     }
 }

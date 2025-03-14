@@ -22,6 +22,7 @@ data class HiddenInput(
         hideLabel = hideLabel,
         stacked = true,
         elementClasses = "",
+        labelClasses = "",
         escapeLabel = escapeLabel,
         overrideType = overrideType?.value,
         labelElement = "label",

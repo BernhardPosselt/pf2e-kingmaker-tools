@@ -73,7 +73,7 @@ fun RawLeaderValues.toContext(
         vacant = CheckboxInput(
             value = vacant,
             name = "leaders.${leader.value}.vacant",
-            label = "Vacant",
+            label = "${leader.label} Vacant",
         ).toContext(),
         type = Select.fromEnum<LeaderType>(
             name = "leaders.${leader.value}.type",

@@ -9,6 +9,7 @@ data class RadioInput(
     override val help: String? = null,
     override val hideLabel: Boolean = false,
     val elementClasses: List<String> = emptyList(),
+    val labelClasses: List<String> = emptyList(),
     val readonly: Boolean = false,
     val stacked: Boolean = false,
     val escapeLabel: Boolean = true,
@@ -31,6 +32,7 @@ data class RadioInput(
         labelElement = labelElement,
         checked = checked,
         readonly = readonly,
+        labelClasses = labelClasses.joinToString(" "),
     )
 }
 

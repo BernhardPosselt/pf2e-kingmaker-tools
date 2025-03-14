@@ -26,6 +26,7 @@ data class Component(
         hideLabel = hideLabel,
         stacked = stacked,
         elementClasses = "",
+        labelClasses = "",
         escapeLabel = escapeLabel,
         templatePartial = templatePartial,
         labelElement = labelElement,
