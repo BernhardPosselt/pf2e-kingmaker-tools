@@ -103,7 +103,6 @@
     }
 
     .km-kingdom-sheet-sidebar {
-        min-width: 300px;
         border-radius: 10px;
         margin: 10px 0 10px 10px;
         padding: .5em;
@@ -118,6 +117,14 @@
                 }
             }
         }
+    }
+
+    .km-kingdom-sheet-sidebar-kingdom {
+        min-width: 256px;
+    }
+
+    .km-kingdom-sheet-sidebar-turn {
+        min-width: 300px;
     }
 
     .km-kingdom-sheet-content {
