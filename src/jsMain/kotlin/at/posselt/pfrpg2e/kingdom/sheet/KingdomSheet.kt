@@ -50,7 +50,10 @@ import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.StructureBrowser
 import at.posselt.pfrpg2e.kingdom.dialogs.armyBrowser
 import at.posselt.pfrpg2e.kingdom.dialogs.armyTacticsBrowser
+import at.posselt.pfrpg2e.kingdom.dialogs.consumptionBreakdown
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
+import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
+import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getAllActivities
@@ -712,6 +715,7 @@ class KingdomSheet(
                         settlements = settlements.allSettlements,
                         realmData = realm,
                         armyConsumption = kingdom.consumption.armies,
+                        now = kingdom.consumption.now,
                     )
                     actor.setKingdom(kingdom)
                 }
@@ -744,6 +748,28 @@ class KingdomSheet(
                     actor.setKingdom(kingdom)
                 }
                 postChatTemplate(templatePath = "chatmessages/end-turn.hbs")
+            }
+
+            "settlement-size-info" -> buildPromise {
+                settlementSizeHelp()
+            }
+
+            "kingdom-size-info" -> buildPromise {
+                kingdomSizeHelp()
+            }
+
+            "consumption-breakdown" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val realm = game.getRealmData(kingdom)
+                    val settlements = kingdom.getAllSettlements(game)
+                    val consumption = calculateConsumption(
+                        settlements = settlements.allSettlements,
+                        realmData = realm,
+                        armyConsumption = kingdom.consumption.armies,
+                        now = kingdom.consumption.now,
+                    )
+                    consumptionBreakdown(consumption.toContext())
+                }
             }
 
             "skip-collect-taxes" -> buildPromise {
@@ -858,8 +884,8 @@ class KingdomSheet(
         val kingdom = getKingdom()
         val vacancies = kingdom.vacancies()
         val realm = game.getRealmData(kingdom)
-        val controlDc = calculateControlDC(kingdom.level, realm, vacancies.ruler)
         val settlements = kingdom.getAllSettlements(game)
+        val controlDc = calculateControlDC(kingdom.level, realm, vacancies.ruler)
         val globalBonuses = evaluateGlobalBonuses(settlements.allSettlements)
         val allFeatures = kingdom.getExplodedFeatures()
         val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
@@ -879,7 +905,8 @@ class KingdomSheet(
             settlements = settlements.allSettlements,
             realmData = realm,
             armyConsumption = kingdom.consumption.armies,
-        ).total
+            now = kingdom.consumption.now,
+        )
         val kingdomNameInput = TextInput(
             name = "name",
             label = "Kingdom",
@@ -1130,11 +1157,12 @@ class KingdomSheet(
             leadershipActivities = if (globalBonuses.increaseLeadershipActivities) 3 else 2,
             ongoingEventButtonDisabled = ongoingEvent.isNullOrEmpty(),
             collectTaxesReduceUnrestDisabled = kingdom.unrest <= 0,
-            consumption = consumption,
+            consumption = consumption.total,
             automateStats = automateStats,
             resourceDiceIncome = "$resourceDiceNum${realm.sizeInfo.resourceDieSize.value}",
             skillChecks = checks,
-            automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value
+            automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value,
+            consumptionBreakdown = consumption.toContext(),
         )
     }
 

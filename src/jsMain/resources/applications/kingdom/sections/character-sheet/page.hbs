@@ -1,16 +1,41 @@
 <aside class="km-kingdom-sheet-sidebar km-kingdom-sheet-sidebar-kingdom"
        {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
     <div {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
-        <h3>General</h3>
+        <h3>General <span class="km-header-right-align"><button type="button" data-action="kingdom-size-info" title="Kingdom Size"><i class="fa-solid fa-circle-info"></i></button></span></h3>
         {{#if automateResources}}{{size}}{{/if}}
         {{kingdomSize}}
         {{> formElement sizeInput }}
+        <h3>Consumption ({{consumption}}) <span class="km-header-right-align"><button type="button" data-action="consumption-breakdown" title="Consumption Breakdown"><i class="fa-solid fa-circle-info"></i></button></span></h3>
+        <table class="km-unrest-ruin">
+            <tr>
+                <td>{{> formElement consumptionContext.armies }}</td>
+                <td>{{> formElement consumptionContext.now }}</td>
+                <td>{{> formElement consumptionContext.next }}</td>
+            </tr>
+        </table>
+<!--        <table class="km-unrest-ruin">-->
+<!--            <tr>-->
+<!--                <td title="now">{{consumptionBreakdown.now }}</td>-->
+<!--                <td>+</td>-->
+<!--                <td title="armies">{{consumptionBreakdown.armies }}</td>-->
+<!--                <td>+</td>-->
+<!--                <td>{{consumptionBreakdown.settlements}}</td>-->
+<!--                <td>-</td>-->
+<!--                <td>{{consumptionBreakdown.farmlands}}</td>-->
+<!--                <td>-</td>-->
+<!--                <td>{{consumptionBreakdown.food}}</td>-->
+<!--                <td>=</td>-->
+<!--                <td>{{consumption}}</td>-->
+<!--            </tr>-->
+<!--        </table>-->
+
         <h3>Ability Scores</h3>
         <table class="km-unrest-ruin">
             {{#each abilityScores}}
                 <tr>
                     <td>{{ label }}</td>
-                    <td>{{> formElement input }}{{#if ../automateStats}}<span class="km-ability-stat">{{value}}</span>{{/if}}</td>
+                    <td>{{> formElement input }}{{#if ../automateStats}}
+                        <span class="km-ability-stat">{{value}}</span>{{/if}}</td>
                     <td>=</td>
                     <td title="modifier">{{mod}}</td>
                 </tr>
@@ -51,10 +76,7 @@
         {{ worksitesContext.luxurySources.quantityValue }}
         {{ worksitesContext.luxurySources.resourcesValue }}
 
-        <h3>Consumption</h3>
-        {{> formElement consumptionContext.now }}
-        {{> formElement consumptionContext.next }}
-        {{> formElement consumptionContext.armies }}
+
     </div>
 </aside>
 <div class="km-kingdom-sheet-content" {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>

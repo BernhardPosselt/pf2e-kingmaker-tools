@@ -76,4 +76,5 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val resourceDiceIncome: String
     val skillChecks: Array<SkillChecksContext>
     val automateResources: Boolean
+    val consumptionBreakdown: ConsumptionBreakdownContext
 }

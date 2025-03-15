@@ -13,11 +13,13 @@ suspend fun payConsumption(
     realmData: RealmData,
     armyConsumption: Int,
     availableFood: Int,
+    now: Int,
 ): Int {
     val consumption = calculateConsumption(
         settlements = settlements,
         realmData = realmData,
-        armyConsumption = armyConsumption
+        armyConsumption = armyConsumption,
+        now = now,
     ).total
     return if (consumption > 0) {
         val consumedFood = availableFood - consumption

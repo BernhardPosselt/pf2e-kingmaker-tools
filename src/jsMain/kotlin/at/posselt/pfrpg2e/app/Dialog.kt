@@ -70,7 +70,7 @@ suspend fun <I, O> prompt(
     title: String,
     buttonLabel: String? = null,
     templatePath: String,
-    templateContext: AnyObject = jso(),
+    templateContext: Any = jso(),
     promptType: PromptType = PromptType.OK,
     width: Int? = undefined,
     submit: suspend (I) -> O,

@@ -72,6 +72,7 @@
         .km-kingdom-sheet-name {
             display: flex;
             align-items: center;
+
             i {
                 margin-right: .5em;
                 font-size: 24px;
@@ -100,6 +101,16 @@
         height: calc(100vh - 220px);
         position: relative;
         z-index: 0;
+
+        .km-header-right-align {
+            display: flex;
+            margin-left: auto;
+            margin-top: -4px;
+
+            select {
+                margin-top: -4px;
+            }
+        }
     }
 
     .km-kingdom-sheet-sidebar {
@@ -110,6 +121,10 @@
 
         .km-sidebar-spacer {
             height: 1em;
+        }
+
+        h3 {
+            display: flex;
         }
 
         .km-ability-stat {
@@ -123,10 +138,12 @@
 
         .km-skill-checks {
             border-radius: 0;
+
             .km-proficiency-value,
             select {
                 border: 1px solid var(--color-light-5);
             }
+
             .km-proficiency-value {
                 border-radius: 4px;
                 display: block;
@@ -137,34 +154,42 @@
                 margin-left: auto;
                 text-align: left;
             }
+
             select {
                 width: 101px;
             }
+
             td {
                 padding: 3px;
             }
+
             td:last-child {
                 text-align: right;
             }
+
             td {
-              button {
-                  width: 60px;
-                  i {
-                      margin-left: .25em;
-                  }
-              }
+                button {
+                    width: 60px;
+
+                    i {
+                        margin-left: .25em;
+                    }
+                }
             }
         }
 
         .km-unrest-ruin {
             border-radius: 0;
             border: 0;
+
             td {
                 text-align: center;
                 padding: 3px;
+
                 .km-threshold-value {
                     width: 54px;
                 }
+
                 &.km-capacity {
                     padding-right: 34px;
                 }
@@ -267,6 +292,19 @@
         border-radius: 10px;
     }
 
+    .km-kingdom-sheet-sub-content,
+    .km-kingdom-sheet-sub-nav,
+    .km-kingdom-sheet-sidebar {
+        button {
+            height: 30px;
+            margin-left: 5px;
+
+            i {
+                margin-right: 0;
+            }
+        }
+    }
+
     .km-kingdom-sheet-sub-content {
         overflow: auto;
         padding: 1em;
@@ -300,15 +338,6 @@
             margin-top: 3em;
         }
 
-        .km-header-right-align {
-            margin-left: auto;
-            margin-top: -4px;
-
-            select {
-                margin-top: -4px;
-            }
-        }
-
         h2 {
             display: flex;
             font-size: 2em;
@@ -317,15 +346,6 @@
         table {
             button {
                 margin: inherit;
-            }
-        }
-
-        button {
-            height: 30px;
-            margin-left: 5px;
-
-            i {
-                margin-right: 0;
             }
         }
     }
@@ -450,8 +470,8 @@
                 }
 
                 img {
-                    height: 11em;
-                    width: 11em;
+                    height: 10.5em;
+                    width: 10.5em;
                     object-fit: cover;
                     object-position: top center;
                     border-radius: 0;
@@ -476,8 +496,8 @@
 
                 .km-choose-leader-placeholder {
                     position: relative;
-                    height: 11em;
-                    width: 11em;
+                    height: 10.5em;
+                    width: 10.5em;
                     box-shadow: inset 0 0 5px 2px #5c5c5c;
                     display: flex;
 

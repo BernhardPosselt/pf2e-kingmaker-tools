@@ -18,16 +18,19 @@ fun RawConsumption.toContext(automateArmyConsumption: Boolean) =
             name = "consumption.armies",
             value = armies,
             label = "Armies",
-            readonly = automateArmyConsumption
+            readonly = automateArmyConsumption,
+            elementClasses = listOf("km-slim-inputs", "km-width-small"),
         ).toContext(),
         now = NumberInput(
             name = "consumption.now",
             value = now,
-            label = "Now"
+            label = "Consumption",
+            elementClasses = listOf("km-slim-inputs", "km-width-small"),
         ).toContext(),
         next = NumberInput(
             name = "consumption.next",
             value = next,
-            label = "Next"
+            label = "Next",
+            elementClasses = listOf("km-slim-inputs", "km-width-small"),
         ).toContext(),
     )
