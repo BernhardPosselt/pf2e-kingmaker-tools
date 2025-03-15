@@ -23,6 +23,7 @@ import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.bindChatButtons
 import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
 import at.posselt.pfrpg2e.kingdom.getKingdomActors
+import at.posselt.pfrpg2e.kingdom.registerContextMenus
 import at.posselt.pfrpg2e.kingdom.sheet.newKingdomActor
 import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
@@ -85,6 +86,7 @@ fun main() {
         }
 
         bindChatButtons(game)
+        registerContextMenus(game)
 
         Hooks.onRenderActorDirectory { _, html, _ ->
             html[0]?.querySelectorAll(".party-header")

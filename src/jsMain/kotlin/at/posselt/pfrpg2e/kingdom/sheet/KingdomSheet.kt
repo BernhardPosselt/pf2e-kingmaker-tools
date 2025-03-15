@@ -126,6 +126,7 @@ import com.foundryvtt.core.onCanvasReady
 import com.foundryvtt.core.onSightRefresh
 import com.foundryvtt.core.onUpdateActor
 import com.foundryvtt.core.ui
+import com.foundryvtt.core.ui.enrichHtml
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
 import io.github.uuidjs.uuid.v4
@@ -134,7 +135,9 @@ import js.array.tupleOf
 import js.core.Void
 import js.objects.recordOf
 import kotlinx.browser.document
+import kotlinx.coroutines.async
 import kotlinx.coroutines.await
+import kotlinx.coroutines.awaitAll
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
@@ -1153,7 +1156,10 @@ class KingdomSheet(
             vkXp = kingdom.settings.vanceAndKerensharaXP,
             activities = activities,
             cultOfTheBloomEvents = kingdom.settings.cultOfTheBloomEvents,
-            ongoingEvents = kingdom.ongoingEvents.map { it.name }.toTypedArray(),
+            ongoingEvents = kingdom.ongoingEvents
+                .map { async { enrichHtml(it.name) } }
+                .awaitAll()
+                .toTypedArray(),
             eventDC = getEventDC(kingdom),
             cultEventDC = getCultEventDC(kingdom),
             civicPlanning = kingdom.level >= 12,

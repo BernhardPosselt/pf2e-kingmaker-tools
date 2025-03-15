@@ -3,10 +3,8 @@ package at.posselt.pfrpg2e.kingdom
 import at.posselt.pfrpg2e.kingdom.dialogs.pickLeader
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.sheet.ResourceButton
-import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.deserializeB64Json
-import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import com.foundryvtt.core.Game
@@ -18,7 +16,6 @@ import js.objects.JsPlainObject
 import kotlinx.browser.document
 import kotlinx.html.org.w3c.dom.events.Event
 import org.w3c.dom.HTMLButtonElement
-import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.collections.plus
 
@@ -110,10 +107,7 @@ fun bindChatButtons(game: Game) {
                 if (target is HTMLButtonElement && target.classList.contains(data.buttonClass)) {
                     buildPromise {
                         target.closest(".chat-message")
-                            ?.querySelector("[data-actor-uuid]")
-                            ?.takeIfInstance<HTMLElement>()
-                            ?.dataset["actorUuid"]
-                            ?.let { fromUuidTypeSafe<KingdomActor>(it) }
+                            ?.findKingdomActor(game)
                             ?.let { data.callback(game, it, ev, target) }
                     }
                 }

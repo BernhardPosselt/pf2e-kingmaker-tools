@@ -58,7 +58,7 @@ private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
         label = meta?.dataset["label"] ?: "",
         dc = meta?.dataset["dc"]?.toInt() ?: 0,
         activityId = meta?.dataset["activityId"] ?: "",
-        actorUuid = meta?.dataset["actorUuid"] ?: "",
+        actorUuid = meta?.dataset["kingdomActorUuid"] ?: "",
         degree = meta?.dataset["degree"] ?: "",
         rollMode = meta?.dataset["rollMode"] ?: "",
         modifier = meta?.dataset["modifier"]?.toInt() ?: 0,
@@ -175,7 +175,7 @@ private fun parseUpgradeMeta(elem: HTMLElement) =
         activityId = elem.dataset["activityId"] ?: "",
         degree = elem.dataset["degree"] ?: "",
         additionalMessages = deserializeB64Json<String>(elem.dataset["additionalMessages"] ?: ""),
-        actorUuid = elem.dataset["actorUuid"] ?: "",
+        actorUuid = elem.dataset["kingdomActorUuid"] ?: "",
     )
 
 suspend fun rollCheck(
@@ -278,7 +278,7 @@ suspend fun rollCheck(
         )
         if (messages != null) {
             postChatMessage(
-                "$messages<span hidden=\"hidden\" data-actor-uuid=\"${kingdomActor.uuid}\"></span>",
+                "$messages<span hidden=\"hidden\" data-kingdom-actor-uuid=\"${kingdomActor.uuid}\"></span>",
                 rollMode = nonNullRollMode
             )
         }
