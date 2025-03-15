@@ -248,7 +248,7 @@ suspend fun KingdomData.checkModifiers(
             .flatMap { it.feat.modifiers?.map { it.parse() } ?: emptyList() },
         featureModifiers = getEnabledFeatures()
             .flatMap { it.modifiers?.map { it.parse() } ?: emptyList() },
-    )
+    ) + modifiers.map { it.parse() }
 }
 
 fun KingdomData.createExpressionContext(

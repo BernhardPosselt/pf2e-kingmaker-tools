@@ -89,7 +89,7 @@ private val buttons = listOf(
         val mod = deserializeB64Json<RawModifier>(button.dataset["data"] ?: "")
         val parsedMod = if (mod.name == "Focused Attention") {
             val leader = pickLeader()
-            mod.copy(applyIf = mod.applyIf.orEmpty() + RawEq(eq = tupleOf("@leader", leader)))
+            mod.copy(applyIf = mod.applyIf.orEmpty() + RawEq(eq = tupleOf("@leader", leader.value)))
         } else {
             mod
         }.copy(id = v4())

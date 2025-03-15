@@ -25,7 +25,6 @@ external interface ToolsMacros {
     val openCampingSheet: () -> Unit
     val createFoodMacro: () -> Unit
     val subsistMacro: (Actor?) -> Unit
-//    val structureTokenMappingMacro: () -> Unit
     val viewKingdomMacro: () -> Unit
 }
 
