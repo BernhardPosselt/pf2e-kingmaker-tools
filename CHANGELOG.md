@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Removed Roll Kingdom Event macro since those depend on the actual kingdom sheet now
 
 ### Changed
+* Armies don't need to be targeted anymore but simply selected
 * Many Feats, Activities and Features have received increased automation, especially ones that upgrade or downgrade degrees of successes
 * Supernatural Solution now correctly rolls before knowing the result
 * Reset/Award Hero Points, Award XP and Roll Stealth/Perception Exploration macros are now party aware. If more than one party exists, you will need to choose the current party in a popup

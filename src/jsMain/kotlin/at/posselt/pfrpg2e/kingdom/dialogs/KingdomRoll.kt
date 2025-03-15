@@ -248,10 +248,10 @@ suspend fun rollCheck(
             DegreeOfSuccess.CRITICAL_SUCCESS -> activity.criticalSuccess
         }
         val messages = when (changed) {
-            DegreeOfSuccess.CRITICAL_FAILURE -> degreeMessages.criticalFailure ?: ""
-            DegreeOfSuccess.FAILURE -> degreeMessages.failure ?: ""
-            DegreeOfSuccess.SUCCESS -> degreeMessages.success ?: ""
-            DegreeOfSuccess.CRITICAL_SUCCESS -> degreeMessages.criticalSuccess ?: ""
+            DegreeOfSuccess.CRITICAL_FAILURE -> degreeMessages.criticalFailure
+            DegreeOfSuccess.FAILURE -> degreeMessages.failure
+            DegreeOfSuccess.SUCCESS -> degreeMessages.success
+            DegreeOfSuccess.CRITICAL_SUCCESS -> degreeMessages.criticalSuccess
         }
         val chatModifiers = modifiers?.modifiers ?: emptyArray()
         val postHtml = if (chatModifiers.isNotEmpty() || changed == DegreeOfSuccess.CRITICAL_SUCCESS) {
@@ -266,7 +266,7 @@ suspend fun rollCheck(
             rollMode = nonNullRollMode,
             metaHtml = metaHtml,
             preHtml = "<p>${activity.description}</p>",
-            postHtml = postHtml + messages,
+            postHtml = postHtml + (messages?.let { "<hr>$it" } ?: ""),
             message = modifiers?.msg,
         )
     }

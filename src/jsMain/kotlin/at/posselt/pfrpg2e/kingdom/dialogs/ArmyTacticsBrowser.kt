@@ -108,7 +108,7 @@ private class ArmyTacticsBrowser(
             checkNotNull(activity) {
                 "Could not find train-army activity"
             }
-            val degreeMessage = buildUuid(item.uuid, item.name)
+            val degreeMessage = "<b>Learned Tactic</b>: ${buildUuid(item.uuid, item.name)}"
             kingdomCheckDialog(
                 game = this.game,
                 kingdom = this.kingdom,
