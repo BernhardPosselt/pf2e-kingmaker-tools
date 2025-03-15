@@ -445,8 +445,9 @@ private class KingdomCheckDialog(
         val filtered = filterModifiersAndUpdateContext(enabledModifiers, context)
         val evaluatedModifiers = evaluateModifiers(filtered)
         val creativeSolutionModifiers = evaluateModifiers(
-            filtered.copy(
-                context = filtered.context.copy(rollOptions = filtered.context.rollOptions + "creative-solution")
+            filterModifiersAndUpdateContext(
+                enabledModifiers,
+                context.copy(rollOptions = setOf("creative-solution"))
             )
         )
         val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
