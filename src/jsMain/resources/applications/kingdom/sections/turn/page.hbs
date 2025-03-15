@@ -18,7 +18,7 @@
                 <td title="Penalty">{{ unrestPenalty}}</td>
             </tr>
             {{#each ruinContext}}
-                <tr class="km-unrest-ruin">
+                <tr>
                     <td>{{> formElement value }}</td>
                     <td>/</td>
                     <td title="Threshold">{{> formElement threshold }}{{#if ../automateStats}}
@@ -29,6 +29,7 @@
             {{/each}}
         </table>
         <h3>Skills (Control DC: {{controlDc}})</h3>
+        {{#if (eq currentNavEntry 'turn')}}
         <table class="km-skill-checks">
         {{#each skillChecks}}
             <tr>
@@ -38,6 +39,7 @@
             </tr>
         {{/each}}
         </table>
+        {{/if}}
         <h3>Resources</h3>
         <table class="km-unrest-ruin">
             <tr>

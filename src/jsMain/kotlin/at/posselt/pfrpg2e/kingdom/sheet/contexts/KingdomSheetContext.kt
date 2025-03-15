@@ -17,6 +17,8 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val fameContext: FameContext
     val atWarInput: FormElementContext
     val sizeInput: FormElementContext
+    val size: Int
+    val kingdomSize: String
     val unrestInput: FormElementContext
     val commoditiesContext: CommoditiesContext
     val resourcePointsContext: ResourceContext
@@ -46,7 +48,7 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val bonusFeats: Array<BonusFeatContext>
     val groups: Array<GroupContext>
     val skillRanks: SkillRanksContext
-    val abilityScores: AbilityScoresContext
+    val abilityScores: Array<AbilityScoreContext>
     val milestones: Array<MilestoneContext>
     val ongoingEvent: FormElementContext
     val isGM: Boolean
@@ -73,4 +75,5 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val automateStats: Boolean
     val resourceDiceIncome: String
     val skillChecks: Array<SkillChecksContext>
+    val automateResources: Boolean
 }

@@ -112,7 +112,21 @@
             height: 1em;
         }
 
+        .km-ability-stat {
+            display: block;
+            padding: 0 0.3rem 0 0.8rem;
+            height: 32px;
+            line-height: 32px;
+            width: 54px;
+            text-align: right;
+        }
+
         .km-skill-checks {
+            border-radius: 0;
+            .km-proficiency-value,
+            select {
+                border: 1px solid var(--color-light-5);
+            }
             .km-proficiency-value {
                 border-radius: 4px;
                 display: block;
@@ -120,10 +134,10 @@
                 height: 32px;
                 line-height: 32px;
                 width: 101px;
-                border: 1px solid;
+                margin-left: auto;
+                text-align: left;
             }
             select {
-                border: 1px solid;
                 width: 101px;
             }
             td {

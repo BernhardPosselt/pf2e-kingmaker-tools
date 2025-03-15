@@ -9,7 +9,9 @@ import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.MenuControl
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
+import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.NumberInput
+import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
@@ -21,6 +23,7 @@ import at.posselt.pfrpg2e.data.kingdom.calculateHexXP
 import at.posselt.pfrpg2e.data.kingdom.calculateRpXP
 import at.posselt.pfrpg2e.data.kingdom.findKingdomSize
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.kingdom.AutomateResources
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.OngoingEvent
@@ -29,6 +32,7 @@ import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.RawSome
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.endTurn
+import at.posselt.pfrpg2e.kingdom.data.getChosenCharter
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
@@ -68,6 +72,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.getHighestLeadershipModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.calculateUnrestPenalty
 import at.posselt.pfrpg2e.kingdom.parse
+import at.posselt.pfrpg2e.kingdom.parseAbilityScores
 import at.posselt.pfrpg2e.kingdom.parseLeaderActors
 import at.posselt.pfrpg2e.kingdom.parseRuins
 import at.posselt.pfrpg2e.kingdom.parseSkillRanks
@@ -933,11 +938,20 @@ class KingdomSheet(
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
         )
-        val sizeInput = NumberInput(
-            name = "size",
-            label = "Size",
-            value = kingdom.size,
-        )
+        val sizeInput = if (kingdom.settings.automateResources == AutomateResources.MANUAL.value) {
+            NumberInput(
+                name = "size",
+                label = "Size",
+                value = kingdom.size,
+            )
+        } else {
+            HiddenInput(
+                name = "size",
+                label = "Size",
+                value = kingdom.size.toString(),
+                overrideType = OverrideType.NUMBER,
+            )
+        }
         val supernaturalSolutionsInput = NumberInput(
             name = "supernaturalSolutions",
             value = kingdom.supernaturalSolutions,
@@ -973,6 +987,7 @@ class KingdomSheet(
         val notesContext = kingdom.notes.toContext()
         val government = kingdom.getChosenGovernment()
         val heartland = kingdom.getChosenHeartland()
+        val charter = kingdom.getChosenCharter()
         val trainedSkills = kingdom.getTrainedSkills(chosenFeats, government)
         val resourceDiceNum = kingdom.getResourceDiceAmount(chosenFeats, settlements.allSettlements)
         val initialProficiencies = (0..3).map { index ->
@@ -1016,6 +1031,13 @@ class KingdomSheet(
             settlements = settlements,
             skillRanks = kingdomSkillRanks,
         )
+
+        val abilityScores = kingdom.parseAbilityScores(
+            chosenCharter = charter,
+            chosenHeartland = heartland,
+            chosenGovernment = government,
+            chosenFeatures = chosenFeatures,
+        )
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -1038,6 +1060,8 @@ class KingdomSheet(
             commoditiesContext = kingdom.commodities.toContext(storage),
             worksitesContext = kingdom.workSites.toContext(realm.worksites),
             sizeInput = sizeInput.toContext(),
+            size = realm.size,
+            kingdomSize = realm.sizeInfo.type.label,
             resourcePointsContext = kingdom.resourcePoints.toContext("resourcePoints"),
             resourceDiceContext = kingdom.resourceDice.toContext("resourceDice"),
             consumptionContext = kingdom.consumption.toContext(kingdom.settings.autoCalculateArmyConsumption),
@@ -1076,7 +1100,7 @@ class KingdomSheet(
                 kingdom.getFeats(),
             ),
             groups = kingdom.groups.toContext(),
-            abilityScores = kingdom.abilityScores.toContext(),
+            abilityScores = kingdom.abilityScores.toContext(abilityScores, automateStats),
             skillRanks = kingdom.skillRanks.toContext(),
             milestones = kingdom.milestones.toContext(kingdom.getMilestones(), game.user.isGM),
             ongoingEvent = ongoingEventInput.toContext(),
@@ -1110,6 +1134,7 @@ class KingdomSheet(
             automateStats = automateStats,
             resourceDiceIncome = "$resourceDiceNum${realm.sizeInfo.resourceDieSize.value}",
             skillChecks = checks,
+            automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value
         )
     }
 
