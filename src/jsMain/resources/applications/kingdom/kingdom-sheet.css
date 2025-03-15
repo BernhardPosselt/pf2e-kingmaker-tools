@@ -127,19 +127,6 @@
             display: flex;
         }
 
-        .km-ability-stat {
-            display: block;
-            padding: 0 0.3rem 0 0.8rem;
-            height: 32px;
-            line-height: 32px;
-            width: 54px;
-            text-align: right;
-        }
-
-        td.km-ability-score-label {
-            text-align: left;
-        }
-
         .km-skill-checks {
             border-radius: 0;
 
@@ -204,6 +191,19 @@
         .km-unrest-ruin {
             border-radius: 0;
             border: 0;
+
+            .km-ability-stat {
+                display: block;
+                padding: 0 0.3rem 0 0.8rem;
+                height: 32px;
+                line-height: 32px;
+            }
+
+            td.km-ability-score-label {
+                text-align: left;
+                width: 1%;
+                white-space: nowrap;
+            }
 
             td {
                 text-align: center;
