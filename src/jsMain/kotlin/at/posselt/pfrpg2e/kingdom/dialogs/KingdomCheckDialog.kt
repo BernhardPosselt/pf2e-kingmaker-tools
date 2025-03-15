@@ -139,6 +139,7 @@ private external interface CheckContext : HandlebarsRenderContext {
     val consumeModifiers: String
     val rollTwiceKeepHighest: Boolean
     val rollTwiceKeepLowest: Boolean
+    val supernaturalSolutionDisabled: Boolean
 }
 
 @JsPlainObject
@@ -407,15 +408,18 @@ private class KingdomCheckDialog(
                         kingdomActor.setKingdom(it)
                     }
                 },
-                params = params.copy(validSkills = setOf(KingdomSkill.MAGIC)),
+                params = params.copy(validSkills = setOf(KingdomSkill.MAGIC), title = "Supernatural Solution: ${params.title}"),
                 degreeMessages = degreeMessages,
                 flags = flags,
                 isSupernaturalSolution = true,
             ).launch()
         }
 
-        kingdom.modifiers = kingdom.modifiers.filter { it.id !in consumedModifiers }.toTypedArray()
-        kingdomActor.setKingdom(kingdom)
+        kingdomActor.getKingdom()?.let {k ->
+            k.modifiers = kingdom.modifiers.filter { it.id !in consumedModifiers }.toTypedArray()
+            kingdomActor.setKingdom(k)
+        }
+
         close()
     }
 
@@ -433,7 +437,7 @@ private class KingdomCheckDialog(
             phase = phase,
             activity = activity,
             leader = Leader.fromString(data.leader)!!,
-            usedSkill = if (data.supernaturalSolution) KingdomSkill.MAGIC else usedSkill,
+            usedSkill = usedSkill,
             rollOptions = emptySet(),
             structure = structure,
             flags = flags,
@@ -577,6 +581,7 @@ private class KingdomCheckDialog(
             creativeSolutionModifier = creativeSolutionModifiers.total,
             creativeSolutionPills = creativeSolutionPills,
             fortune = evaluatedModifiers.fortune || data.supernaturalSolution || isSupernaturalSolution,
+            supernaturalSolutionDisabled = evaluatedModifiers.fortune || isSupernaturalSolution,
             consumeModifiers = serializeB64Json(consumeModifierIds),
             rollTwiceKeepHighest = evaluatedModifiers.rollTwiceKeepHighest,
             rollTwiceKeepLowest = evaluatedModifiers.rollTwiceKeepHighest,
