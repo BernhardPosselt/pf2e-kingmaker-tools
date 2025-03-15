@@ -1,7 +1,8 @@
 <div class="km-chat-buttons">
-    {{#if criticalSuccess}}<button type="button" class="km-gain-fame-button">Gain 1 Fame</button>{{/if}}
+    {{#if criticalSuccess}}<button type="button" data-actor-uuid="{{actorUuid}}" class="km-gain-fame-button">Gain 1 Fame</button>{{/if}}
     {{#each modifiers}}
         <button class="km-apply-modifier-effect"
+                data-actor-uuid="{{actorUuid}}"
                 data-data="{{data}}">Apply Effect: {{label}}</button>
     {{/each}}
 </div>

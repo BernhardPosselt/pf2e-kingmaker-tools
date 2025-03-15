@@ -23,6 +23,7 @@ external interface ChatStructure {
     val slowedLink: String?
     val cost: ChatCost
     val messages: Array<String>?
+    val actorUuid: String
 }
 
 @JsPlainObject
@@ -111,6 +112,7 @@ suspend fun buildDegreeMessages(
     rp: Int,
     structure: Structure,
     rubble: Structure,
+    actorUuid: String,
 ): DegreeMessages {
     val rubbleLink = enrichHtml(buildUuid(rubble.uuid, "Rubble"))
     val buildingLink = enrichHtml(buildUuid(structure.uuid, structure.name))
@@ -123,11 +125,11 @@ suspend fun buildDegreeMessages(
         lumber = lumber,
         luxuries = luxuries,
         label = listOf(
-            "RP" to rp / 2,
-            "Ore" to ore / 2,
-            "Stone" to stone / 2,
-            "Lumber" to lumber / 2,
-            "Luxuries" to luxuries / 2,
+            "RP" to rp,
+            "Ore" to ore,
+            "Stone" to stone,
+            "Lumber" to lumber,
+            "Luxuries" to luxuries,
         )
             .filter { (_, value) -> value > 0 }
             .joinToString(", ") { (label, amount) -> "$label: $amount" }
@@ -135,15 +137,15 @@ suspend fun buildDegreeMessages(
     val halvedCost = ChatCost(
         ore = ore / 2,
         stone = stone / 2,
-        rp = rp / 2,
+        rp = rp,
         lumber = lumber / 2,
         luxuries = luxuries / 2,
         label = listOf(
             "RP" to rp,
-            "Ore" to ore,
-            "Stone" to stone,
-            "Lumber" to lumber,
-            "Luxuries" to luxuries,
+            "Ore" to ore / 2,
+            "Stone" to stone / 2,
+            "Lumber" to lumber / 2,
+            "Luxuries" to luxuries / 2,
         )
             .filter { (_, value) -> value > 0 }
             .joinToString(", ") { (label, amount) -> "$label: $amount" },
@@ -156,6 +158,7 @@ suspend fun buildDegreeMessages(
             name = structure.name,
             link = buildingLink,
             cost = halvedCost,
+            actorUuid = actorUuid,
             messages = messages.toTypedArray(),
         ),
     )
@@ -166,6 +169,7 @@ suspend fun buildDegreeMessages(
             name = structure.name,
             link = buildingLink,
             cost = cost,
+            actorUuid = actorUuid,
             messages = messages.toTypedArray(),
         ),
     )
@@ -176,6 +180,7 @@ suspend fun buildDegreeMessages(
             name = structure.name,
             link = buildingLink,
             slowedLink = slowedLink,
+            actorUuid = actorUuid,
             cost = cost,
         ),
     )
@@ -185,6 +190,7 @@ suspend fun buildDegreeMessages(
             free = isFree,
             name = structure.name,
             link = rubbleLink,
+            actorUuid = actorUuid,
             cost = cost,
         ),
     )

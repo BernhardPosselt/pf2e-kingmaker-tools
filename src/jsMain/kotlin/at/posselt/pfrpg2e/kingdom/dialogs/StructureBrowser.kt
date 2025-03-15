@@ -244,6 +244,7 @@ class StructureBrowser(
                     rp = rp,
                     structure = structure,
                     rubble = rubble,
+                    actorUuid = actor.uuid,
                 )
                 kingdomCheckDialog(
                     game = game,

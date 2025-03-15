@@ -23,6 +23,7 @@ import kotlinx.html.dom.create
 import kotlinx.html.js.button
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
+import kotlin.math.abs
 
 enum class Turn {
     NOW,
@@ -156,7 +157,7 @@ data class ResourceButton(
         val turnLabel = if (turn == Turn.NEXT) " Next Turn" else ""
         val hints = hints?.let { " ($it)" } ?: ""
         val mode = if (mode == ResourceMode.GAIN) "Gaining" else "Losing"
-        val message = "$mode $value ${resource.label}$turnLabel$hints"
+        val message = "$mode ${abs(value)} ${resource.label}$turnLabel$hints"
         postChatMessage(message)
         val setter = when (resource) {
             Resource.RESOURCE_DICE -> when (turn) {

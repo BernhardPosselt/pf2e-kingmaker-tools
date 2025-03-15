@@ -105,6 +105,7 @@ private suspend fun generateRollMeta(
 private external interface ChatModifier {
     val label: String
     val data: String
+    val actorUuid: String
 }
 
 @JsPlainObject
@@ -116,6 +117,7 @@ private external interface ChatButtonContext {
 suspend fun buildChatButtons(
     degree: DegreeOfSuccess,
     modifiers: Array<RawModifier>,
+    actorUuid: String,
 ): String {
     return tpl(
         path = "chatmessages/roll-chat-buttons.hbs",
@@ -124,7 +126,8 @@ suspend fun buildChatButtons(
             modifiers = modifiers.map {
                 ChatModifier(
                     label = it.buttonLabel ?: it.name,
-                    data = serializeB64Json(it)
+                    data = serializeB64Json(it),
+                    actorUuid = actorUuid,
                 )
             }.toTypedArray()
         ),
@@ -138,6 +141,7 @@ private external interface UpgradeMetaContext {
     val activityId: String
     val degree: String
     val additionalMessages: String
+    val actorUuid: String
 }
 
 private suspend fun buildUpgradeMeta(
@@ -145,6 +149,7 @@ private suspend fun buildUpgradeMeta(
     activity: RawActivity,
     rollMode: RollMode,
     degreeMessages: DegreeMessages,
+    actorUuid: String
 ): String {
     return tpl(
         path = "chatmessages/upgrade-roll-meta.hbs",
@@ -153,6 +158,7 @@ private suspend fun buildUpgradeMeta(
             activityId = activity.id,
             degree = degree.value,
             additionalMessages = serializeB64Json(degreeMessages),
+            actorUuid = actorUuid,
         ),
     )
 }
@@ -169,6 +175,7 @@ private fun parseUpgradeMeta(elem: HTMLElement) =
         activityId = elem.dataset["activityId"] ?: "",
         degree = elem.dataset["degree"] ?: "",
         additionalMessages = deserializeB64Json<String>(elem.dataset["additionalMessages"] ?: ""),
+        actorUuid = elem.dataset["actorUuid"] ?: "",
     )
 
 suspend fun rollCheck(
@@ -238,7 +245,8 @@ suspend fun rollCheck(
             rollMode = nonNullRollMode,
             activity = activity,
             degree = changed,
-            degreeMessages = degreeMessages
+            degreeMessages = degreeMessages,
+            actorUuid = kingdomActor.uuid,
         )
         val modifiers = when (changed) {
             DegreeOfSuccess.CRITICAL_FAILURE -> activity.criticalFailure
@@ -254,7 +262,7 @@ suspend fun rollCheck(
         }
         val chatModifiers = modifiers?.modifiers ?: emptyArray()
         val postHtml = if (chatModifiers.isNotEmpty() || changed == DegreeOfSuccess.CRITICAL_SUCCESS) {
-            buildChatButtons(changed, chatModifiers)
+            buildChatButtons(changed, chatModifiers, kingdomActor.uuid)
         } else {
             ""
         }
@@ -269,7 +277,10 @@ suspend fun rollCheck(
             message = modifiers?.msg,
         )
         if (messages != null) {
-            postChatMessage(messages, rollMode=nonNullRollMode)
+            postChatMessage(
+                "$messages<span hidden=\"hidden\" data-actor-uuid=\"${kingdomActor.uuid}\"></span>",
+                rollMode = nonNullRollMode
+            )
         }
     }
     return changed

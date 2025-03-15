@@ -20,6 +20,7 @@ import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
+import at.posselt.pfrpg2e.kingdom.bindChatButtons
 import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
 import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.kingdom.sheet.newKingdomActor
@@ -82,6 +83,8 @@ fun main() {
         ).apply {
             listen()
         }
+
+        bindChatButtons(game)
 
         Hooks.onRenderActorDirectory { _, html, _ ->
             html[0]?.querySelectorAll(".party-header")
