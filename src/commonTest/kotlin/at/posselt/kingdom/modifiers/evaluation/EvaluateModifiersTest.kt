@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill.*
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.ABILITY
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.PROFICIENCY
@@ -31,7 +32,7 @@ val defaultContext = ExpressionContext(
     phase = null,
     activity = null,
     leader = Leader.COUNSELOR,
-    isVacant = false,
+    vacancies = Vacancies(),
     structure = null,
     anarchyAt = 20,
 )

@@ -278,7 +278,7 @@ fun KingdomData.createExpressionContext(
             .flatMap { it.feat.flags?.toSet().orEmpty() }
             .toSet() + flags,
         rollOptions = rollOptions,
-        isVacant = leader?.let { vacancies().resolveVacancy(it) } == true,
+        vacancies = vacancies(),
         structure = structure,
         anarchyAt = calculateAnarchy(chosenFeats)
     )

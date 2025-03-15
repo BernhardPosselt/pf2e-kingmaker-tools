@@ -21,7 +21,7 @@ fun createLeaderEventBonus(
         value = value,
         applyIf = listOf(
             Eq("@phase", KingdomPhase.EVENT.value),
-            Eq("@vacant", "false"),
+            Eq("@leaderVacant", "false"),
         ),
         type = ModifierType.CIRCUMSTANCE,
     )

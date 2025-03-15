@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.toCamelCase
 
@@ -17,7 +18,7 @@ data class ExpressionContext(
     val unrest: Int,
     val flags: Set<String>,
     val rollOptions: Set<String>,
-    val isVacant: Boolean,
+    val vacancies: Vacancies,
     val structure: Structure?,
     val anarchyAt: Int,
 ) {
@@ -40,7 +41,15 @@ data class ExpressionContext(
             "@activity" -> activity
             "@unrest" -> unrest
             "@anarchyAt" -> anarchyAt
-            "@vacant" -> isVacant
+            "@leaderVacant" -> leader?.let { vacancies.resolveVacancy(it) } == true
+            "@rulerVacant" -> vacancies.resolveVacancy(Leader.RULER)
+            "@counselorVacant" -> vacancies.resolveVacancy(Leader.COUNSELOR)
+            "@emissaryVacant" -> vacancies.resolveVacancy(Leader.EMISSARY)
+            "@generalVacant" -> vacancies.resolveVacancy(Leader.GENERAL)
+            "@magisterVacant" -> vacancies.resolveVacancy(Leader.MAGISTER)
+            "@treasurerVacant" -> vacancies.resolveVacancy(Leader.TREASURER)
+            "@viceroyVacant" -> vacancies.resolveVacancy(Leader.VICEROY)
+            "@wardenVacant" -> vacancies.resolveVacancy(Leader.WARDEN)
             "@agricultureRank" -> ranks.agriculture
             "@artsRank" -> ranks.arts
             "@boatingRank" -> ranks.boating
