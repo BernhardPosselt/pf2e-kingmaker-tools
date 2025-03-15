@@ -8,8 +8,8 @@
         {{#each leadersContext}}
             {{> formElement vacant }}
         {{/each}}
-        <h3>Unrest & Ruin</h3>
-        <table class="km-unrest-ruin">
+        <h3>Unrest</h3>
+        <table class="km-unrest">
             <tr>
                 <td>{{> formElement unrestInput }}</td>
                 <td>/</td>
@@ -17,6 +17,9 @@
                 <td>=</td>
                 <td title="Penalty">{{ unrestPenalty}}</td>
             </tr>
+        </table>
+        <h3>Ruin</h3>
+        <table class="km-unrest-ruin">
             {{#each ruinContext}}
                 <tr>
                     <td>{{> formElement value }}</td>
