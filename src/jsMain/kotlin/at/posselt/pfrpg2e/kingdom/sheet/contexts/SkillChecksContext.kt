@@ -1,5 +1,11 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
+import at.posselt.pfrpg2e.app.forms.FormElementContext
+import at.posselt.pfrpg2e.app.forms.HiddenInput
+import at.posselt.pfrpg2e.app.forms.OverrideType
+import at.posselt.pfrpg2e.app.forms.Select
+import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.kingdom.KingdomData
@@ -18,8 +24,10 @@ external interface SkillChecksContext {
     val label: String
     val modifier: String
     val rank: Int
+    val input: FormElementContext
     val proficiency: String
     val skill: String
+    val valueClass: String
 }
 
 suspend fun skillChecks(
@@ -59,7 +67,32 @@ suspend fun skillChecks(
             skill = it.value,
             label = it.label,
             rank = rank,
-            proficiency = proficiency.value,
+            valueClass = when(proficiency) {
+                Proficiency.UNTRAINED -> "km-proficiency-untrained"
+                Proficiency.TRAINED -> "km-proficiency-trained"
+                Proficiency.EXPERT -> "km-proficiency-expert"
+                Proficiency.MASTER -> "km-proficiency-master"
+                Proficiency.LEGENDARY -> "km-proficiency-legendary"
+            },
+                    input = if (kingdom.settings.automateStats) {
+                HiddenInput(
+                    value = rank.toString(),
+                    name = "skillRanks.${it.value}",
+                    overrideType = OverrideType.NUMBER,
+                ).toContext()
+            } else {
+                Select(
+                    label = it.label,
+                    hideLabel = true,
+                    value = rank.toString(),
+                    options = Proficiency.entries.map { SelectOption(label = it.label, value = it.rank.toString()) },
+                    name = "skillRanks.${it.value}",
+                    overrideType = OverrideType.NUMBER,
+                    elementClasses = listOf("km-proficiency"),
+                    labelClasses = listOf("km-slim-inputs"),
+                ).toContext()
+            },
+            proficiency = proficiency.label,
             modifier = evaluatedModifiers.total.formatAsModifier(),
         )
     }.toTypedArray()

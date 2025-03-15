@@ -164,6 +164,7 @@ data class Select(
             disabled: Boolean = false,
             stacked: Boolean = true,
             elementClasses: List<String> = emptyList(),
+            labelClasses: List<String> = emptyList(),
             escapeLabel: Boolean = true,
         ) = Select(
             name = name,
@@ -176,6 +177,7 @@ data class Select(
             disabled = disabled,
             stacked = stacked,
             elementClasses = elementClasses,
+            labelClasses = labelClasses,
             escapeLabel = escapeLabel,
         )
 

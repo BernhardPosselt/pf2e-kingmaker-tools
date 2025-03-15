@@ -113,6 +113,22 @@
         }
 
         .km-skill-checks {
+            .km-proficiency-value {
+                border-radius: 4px;
+                display: block;
+                padding: 0 0.8rem;
+                height: 32px;
+                line-height: 32px;
+                width: 101px;
+                border: 1px solid;
+            }
+            select {
+                border: 1px solid;
+                width: 101px;
+            }
+            td {
+                padding: 3px;
+            }
             td:last-child {
                 text-align: right;
             }

@@ -90,41 +90,56 @@
 }
 
 .km-proficiency {
+    &.km-proficiency-untrained,
     option[value="untrained"],
+    option[value="0"],
     option.km-proficiency-untrained,
     &:has(option[value="untrained"]:checked),
+    &:has(option[value="0"]:checked),
     &:has(option.km-proficiency-untrained:checked) {
         color: white;
         background-color: var(--untrained);
     }
 
+    &.km-proficiency-trained,
     option[value="trained"],
+    option[value="1"],
     option.km-proficiency-trained,
     &:has(option[value="trained"]:checked),
+    &:has(option[value="1"]:checked),
     &:has(option.km-proficiency-trained:checked) {
         color: white;
         background-color: var(--trained);
     }
 
+    &.km-proficiency-expert,
     option[value="expert"],
+    option[value="2"],
     option.km-proficiency-expert,
     &:has(option[value="expert"]:checked),
+    &:has(option[value="2"]:checked),
     &:has(option.km-proficiency-expert:checked) {
         color: white;
         background-color: var(--expert);
     }
 
+    &.km-proficiency-master,
     option[value="master"],
+    option[value="3"],
     option.km-proficiency-master,
     &:has(option[value="master"]:checked),
+    &:has(option[value="3"]:checked),
     &:has(option.km-proficiency-master:checked) {
         color: white;
         background-color: var(--master);
     }
 
+    &.km-proficiency-legendary,
     option[value="legendary"],
+    option[value="4"],
     option.km-proficiency-legendary,
     &:has(option[value="legendary"]:checked),
+    &:has(option[value="4"]:checked),
     &:has(option.km-proficiency-legendary:checked) {
         color: white;
         background-color: var(--legendary);
