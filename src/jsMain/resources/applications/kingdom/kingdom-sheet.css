@@ -136,6 +136,10 @@
             text-align: right;
         }
 
+        td.km-ability-score-label {
+            text-align: left;
+        }
+
         .km-skill-checks {
             border-radius: 0;
 
@@ -174,6 +178,25 @@
                     i {
                         margin-left: .25em;
                     }
+                }
+            }
+        }
+
+
+
+        .km-worksites {
+            border-radius: 0;
+            border: 0;
+
+            td {
+                padding: 3px;
+
+                .km-worksite-value {
+                    display: block;
+                    padding: 0 0.3rem 0 0.8rem;
+                    height: 32px;
+                    line-height: 32px;
+                    width: 54px;
                 }
             }
         }

@@ -23,7 +23,7 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val commoditiesContext: CommoditiesContext
     val resourcePointsContext: ResourceContext
     val resourceDiceContext: ResourceContext
-    val worksitesContext: WorkSitesContext
+    val worksitesContext: Array<WorkSiteContext>
     val ruinContext: RuinsContext
     val controlDc: Int
     val unrestPenalty: Int
@@ -76,5 +76,4 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val resourceDiceIncome: String
     val skillChecks: Array<SkillChecksContext>
     val automateResources: Boolean
-    val consumptionBreakdown: ConsumptionBreakdownContext
 }

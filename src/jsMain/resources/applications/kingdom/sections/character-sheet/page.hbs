@@ -1,10 +1,14 @@
 <aside class="km-kingdom-sheet-sidebar km-kingdom-sheet-sidebar-kingdom"
        {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
     <div {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
-        <h3>General <span class="km-header-right-align"><button type="button" data-action="kingdom-size-info" title="Kingdom Size"><i class="fa-solid fa-circle-info"></i></button></span></h3>
-        {{#if automateResources}}{{size}}{{/if}}
-        {{kingdomSize}}
-        {{> formElement sizeInput }}
+        <h3>Size <span class="km-header-right-align"><button type="button" data-action="kingdom-size-info" title="Kingdom Size"><i class="fa-solid fa-circle-info"></i></button></span></h3>
+        <table class="km-unrest-ruin">
+            <tr>
+                <td>{{#if automateResources}}<span class="km-ability-stat">{{size}}</span>{{/if}}
+                    {{> formElement sizeInput }}</td>
+                <td>{{kingdomSize}}</td>
+            </tr>
+        </table>
         <h3>Consumption ({{consumption}}) <span class="km-header-right-align"><button type="button" data-action="consumption-breakdown" title="Consumption Breakdown"><i class="fa-solid fa-circle-info"></i></button></span></h3>
         <table class="km-unrest-ruin">
             <tr>
@@ -13,27 +17,11 @@
                 <td>{{> formElement consumptionContext.next }}</td>
             </tr>
         </table>
-<!--        <table class="km-unrest-ruin">-->
-<!--            <tr>-->
-<!--                <td title="now">{{consumptionBreakdown.now }}</td>-->
-<!--                <td>+</td>-->
-<!--                <td title="armies">{{consumptionBreakdown.armies }}</td>-->
-<!--                <td>+</td>-->
-<!--                <td>{{consumptionBreakdown.settlements}}</td>-->
-<!--                <td>-</td>-->
-<!--                <td>{{consumptionBreakdown.farmlands}}</td>-->
-<!--                <td>-</td>-->
-<!--                <td>{{consumptionBreakdown.food}}</td>-->
-<!--                <td>=</td>-->
-<!--                <td>{{consumption}}</td>-->
-<!--            </tr>-->
-<!--        </table>-->
-
         <h3>Ability Scores</h3>
         <table class="km-unrest-ruin">
             {{#each abilityScores}}
                 <tr>
-                    <td>{{ label }}</td>
+                    <td class="km-ability-score-label">{{ label }}</td>
                     <td>{{> formElement input }}{{#if ../automateStats}}
                         <span class="km-ability-stat">{{value}}</span>{{/if}}</td>
                     <td>=</td>
@@ -55,28 +43,25 @@
             </table>
         {{/if}}
         <h3>Worksites (+ Resource)</h3>
-        {{> formElement worksitesContext.farmlands.resources }}
-        {{> formElement worksitesContext.farmlands.quantity }}
-        {{ worksitesContext.farmlands.quantityValue }}
-        {{ worksitesContext.farmlands.resourcesValue }}
-        {{> formElement  worksitesContext.lumberCamps.resources }}
-        {{> formElement  worksitesContext.lumberCamps.quantity }}
-        {{ worksitesContext.lumberCamps.quantityValue }}
-        {{ worksitesContext.lumberCamps.resourcesValue }}
-        {{> formElement  worksitesContext.mines.resources }}
-        {{> formElement  worksitesContext.mines.quantity }}
-        {{ worksitesContext.mines.quantityValue }}
-        {{ worksitesContext.mines.resourcesValue }}
-        {{> formElement  worksitesContext.quarries.resources }}
-        {{> formElement  worksitesContext.quarries.quantity }}
-        {{ worksitesContext.quarries.quantityValue }}
-        {{ worksitesContext.quarries.resourcesValue }}
-        {{> formElement  worksitesContext.luxurySources.resources }}
-        {{> formElement  worksitesContext.luxurySources.quantity }}
-        {{ worksitesContext.luxurySources.quantityValue }}
-        {{ worksitesContext.luxurySources.resourcesValue }}
-
-
+        <table class="km-worksites">
+            {{#each worksitesContext}}
+            <tr>
+                <td>{{label}}</td>
+                <td>
+                    {{> formElement quantity }}
+                    {{#if ../automateResources}}
+                        <span class="km-worksite-value">{{ quantityValue }}</span>
+                    {{/if}}
+                </td>
+                <td>
+                    {{> formElement resources }}
+                    {{#if ../automateResources}}
+                        <span class="km-worksite-value">{{ resourcesValue }}</span>
+                    {{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </table>
     </div>
 </aside>
 <div class="km-kingdom-sheet-content" {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>

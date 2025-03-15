@@ -970,6 +970,9 @@ class KingdomSheet(
                 name = "size",
                 label = "Size",
                 value = kingdom.size,
+                elementClasses = listOf("km-slim-inputs", "km-width-small"),
+                hideLabel = true,
+                stacked = false,
             )
         } else {
             HiddenInput(
@@ -1065,6 +1068,7 @@ class KingdomSheet(
             chosenGovernment = government,
             chosenFeatures = chosenFeatures,
         )
+        val automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -1085,7 +1089,7 @@ class KingdomSheet(
                 kingdom.parseRuins(chosenFeatures, kingdom.settings.ruinThreshold)
             ),
             commoditiesContext = kingdom.commodities.toContext(storage),
-            worksitesContext = kingdom.workSites.toContext(realm.worksites),
+            worksitesContext = kingdom.workSites.toContext(realm.worksites, automateResources),
             sizeInput = sizeInput.toContext(),
             size = realm.size,
             kingdomSize = realm.sizeInfo.type.label,
@@ -1161,8 +1165,7 @@ class KingdomSheet(
             automateStats = automateStats,
             resourceDiceIncome = "$resourceDiceNum${realm.sizeInfo.resourceDieSize.value}",
             skillChecks = checks,
-            automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value,
-            consumptionBreakdown = consumption.toContext(),
+            automateResources = automateResources,
         )
     }
 
