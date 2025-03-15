@@ -123,7 +123,7 @@ suspend fun buildChatButtons(
             criticalSuccess = degree == DegreeOfSuccess.CRITICAL_SUCCESS,
             modifiers = modifiers.map {
                 ChatModifier(
-                    label = it.name,
+                    label = it.buttonLabel ?: it.name,
                     data = serializeB64Json(it)
                 )
             }.toTypedArray()
