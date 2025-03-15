@@ -15,6 +15,7 @@ import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.roll
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.utils.deepClone
 import kotlinx.browser.document
 import kotlinx.html.ButtonType
 import kotlinx.html.classes
@@ -250,6 +251,7 @@ suspend fun executeResourceButton(
     kingdom: KingdomData,
     elem: HTMLElement
 ) {
+    val previous = deepClone(kingdom)
     val button = ResourceButton.fromHtml(elem)
     val realm = game.getRealmData(kingdom)
     val settlements = kingdom.getAllSettlements(game)
@@ -260,5 +262,6 @@ suspend fun executeResourceButton(
         maximumFame = kingdom.settings.maximumFamePoints,
         storage = storage,
     )
+    beforeKingdomUpdate(previous, kingdom)
     actor.setKingdom(kingdom)
 }

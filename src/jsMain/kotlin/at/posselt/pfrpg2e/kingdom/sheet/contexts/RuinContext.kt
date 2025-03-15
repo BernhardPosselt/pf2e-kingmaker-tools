@@ -37,7 +37,7 @@ private fun RawRuinValues.toInput(key: String, automateStats: Boolean, calculate
             to = threshold,
             name = "ruin.$key.value",
             label = key.toLabel(),
-            value = threshold,
+            value = value,
             stacked = false,
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
