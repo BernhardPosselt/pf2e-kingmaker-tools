@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 
 data class ModifierResult(
     val modifiers: List<Modifier>,
+    val filteredModifiers: List<Modifier>,
     val total: Int,
     val bonuses: Map<ModifierType, Int>,
     val penalties: Map<ModifierType, Int>,

@@ -108,6 +108,7 @@ external val kingdomActivities: Array<RawActivity>
 @JsModule("./schemas/kingdom-activity.json")
 external val kingdomActivitySchema: JsonElement
 
+
 fun RawActivity.resolveDc(
     enemyArmyScoutingDcs: List<Int>,
     kingdomLevel: Int,

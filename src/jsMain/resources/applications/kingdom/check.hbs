@@ -42,7 +42,7 @@
     <hr {{#if useAssurance}}hidden{{/if}}>
     <div class="km-check-roll">
         <div {{#unless hasAssurance}}hidden{{/unless}}>{{> formElement assuranceInput }}</div>
-        <div {{#if useAssurance}}hidden{{/if}}>{{> formElement supernaturalSolutionInput }}</div>
+        <div {{#if useAssurance}}hidden{{/if}} {{#if fortune}}hidden{{/if}}>{{> formElement supernaturalSolutionInput }}</div>
         <div class="km-check-roll-mode">{{> formElement rollModeInput }}</div>
         <button
                 {{#if useAssurance}}hidden{{/if}}

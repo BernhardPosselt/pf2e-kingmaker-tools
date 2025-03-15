@@ -43,7 +43,7 @@ fun createInvestedBonuses(
                     type = ModifierType.STATUS,
                     value = value,
                     id = "invested-$ability",
-                    name = "Invested (${ability})",
+                    name = "Invested (${it.keyAbility.label})",
                     applyIf = listOf(
                         Eq("@ability", ability)
                     )

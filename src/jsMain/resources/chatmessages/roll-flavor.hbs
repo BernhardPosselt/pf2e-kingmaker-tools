@@ -13,10 +13,10 @@
 <hr>
 <div class="km-modifier-breakdown">
     {{#each creativeSolutionPills}}
-        <span {{#unless isCreativeSolution}}hidden{{/unless}}
+        <span {{#unless ../isCreativeSolution}}hidden{{/unless}}
               class="km-modifier-pill km-creative-solution-pills">{{this}}</span>
     {{/each}}
     {{#each pills}}
-        <span {{#if isCreativeSolution}}hidden{{/if}} class="km-modifier-pill">{{this}}</span>
+        <span {{#if ../isCreativeSolution}}hidden{{/if}} class="km-modifier-pill">{{this}}</span>
     {{/each}}
 </div>

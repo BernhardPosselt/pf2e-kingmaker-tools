@@ -41,9 +41,9 @@ suspend fun d20Check(
     rollTwiceKeepHighest: Boolean = false,
     rollTwiceKeepLowest: Boolean = false,
 ): D20CheckResult {
-    val d20 = if (rollTwiceKeepHighest) {
+    val d20 = if (rollTwiceKeepHighest && !rollTwiceKeepLowest) {
         "2d20kh"
-    } else if (rollTwiceKeepLowest) {
+    } else if (rollTwiceKeepLowest && !rollTwiceKeepHighest) {
         "2d20kl"
     } else {
         "1d20"

@@ -2,7 +2,6 @@
 * upgrading from earlier versions changelog
 * all chat stuff including rerolling and upgrading results
 * supernatural solution
-* structure token mappings macro
 * allow to select multiple kingdoms?
 * update docs
 * migrate to party actor

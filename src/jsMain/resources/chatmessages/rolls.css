@@ -1,0 +1,24 @@
+.km-modifier-pill {
+    border: 1px solid #aaa;
+    padding: 0 2px;
+    border-radius: 5px;
+    margin-right: 3px;
+    display: inline-block;
+    margin-bottom: 3px;
+    font-size: 11px;
+    line-height: 16px;
+}
+
+.km-chat-buttons {
+    border-top: 1px solid grey;
+    padding: 10px 5px 5px 5px;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.km-gain-lose {
+    width: auto;
+}

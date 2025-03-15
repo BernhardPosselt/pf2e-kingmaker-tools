@@ -84,7 +84,7 @@ private suspend fun generateRollMeta(
     modifierWithCreativeSolution: Int,
     isCreativeSolution: Boolean,
 ) = tpl(
-    path = "chatmessages/roll-flavor",
+    path = "chatmessages/roll-flavor.hbs",
     ctx = RollMetaContext(
         label = activity?.title ?: skill.label,
         dc = dc,
@@ -190,12 +190,14 @@ suspend fun rollCheck(
     downgrades: Set<DowngradeResult>,
     degreeMessages: DegreeMessages,
 ): DegreeOfSuccess {
+    console.log(activity)
     val result = d20Check(
         dc = dc,
         modifier = if (isCreativeSolution) modifierWithCreativeSolution else modifier,
         rollMode = rollMode,
-        rollTwiceKeepHighest=rollTwiceKeepHighest,
-        rollTwiceKeepLowest=rollTwiceKeepLowest,
+        rollTwiceKeepHighest = rollTwiceKeepHighest,
+        rollTwiceKeepLowest = rollTwiceKeepLowest,
+        toChat = false,
     )
 
     if (isCreativeSolution) {
@@ -252,7 +254,11 @@ suspend fun rollCheck(
             DegreeOfSuccess.CRITICAL_SUCCESS -> degreeMessages.criticalSuccess ?: ""
         }
         val chatModifiers = modifiers?.modifiers ?: emptyArray()
-        val postHtml = buildChatButtons(changed, chatModifiers)
+        val postHtml = if (chatModifiers.isNotEmpty() || changed == DegreeOfSuccess.CRITICAL_SUCCESS) {
+            buildChatButtons(changed, chatModifiers)
+        } else {
+            ""
+        }
         postDegreeOfSuccess(
             degreeOfSuccess = changed,
             originalDegreeOfSuccess = originalDegree,
@@ -260,7 +266,8 @@ suspend fun rollCheck(
             rollMode = nonNullRollMode,
             metaHtml = metaHtml,
             preHtml = "<p>${activity.description}</p>",
-            postHtml = postHtml + messages
+            postHtml = postHtml + messages,
+            message = modifiers?.msg,
         )
     }
     return changed

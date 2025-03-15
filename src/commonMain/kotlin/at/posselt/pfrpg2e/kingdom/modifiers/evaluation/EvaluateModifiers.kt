@@ -52,7 +52,8 @@ fun evaluateModifiers(
         rollTwiceKeepHighest = enabledModifiers.any { it.rollTwiceKeepHighest },
         rollTwiceKeepLowest = enabledModifiers.any { it.rollTwiceKeepLowest },
         fortune = enabledModifiers.any { it.fortune },
-        modifiers = filteredModifiers,
+        modifiers = enabledModifiers,
+        filteredModifiers = filteredModifiers,
         total = enabledModifiers.sumOf { it.value },
         bonuses = enabledModifiers
             .filter { it.value >= 0 }

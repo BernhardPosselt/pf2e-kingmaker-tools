@@ -56,7 +56,7 @@ class EvaluateModifiersTest {
         assertEquals(12, result.total)
         assertEquals(11, result.bonuses[PROFICIENCY])
         assertEquals(1, result.bonuses[ABILITY])
-        assertEquals(modifiers, result.modifiers)
+        assertEquals(modifiers, result.filteredModifiers)
         assertEquals(setOf("option"), result.rollOptions)
     }
 
@@ -215,7 +215,7 @@ class EvaluateModifiersTest {
             )
         )
         assertEquals(2, result.total)
-        assertEquals(modifiers, result.modifiers)
+        assertEquals(modifiers, result.filteredModifiers)
     }
 
     @Test
@@ -251,7 +251,7 @@ class EvaluateModifiersTest {
                 third,
                 fifth,
                 sixth,
-            ), result.modifiers
+            ), result.filteredModifiers
         )
     }
 

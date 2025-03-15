@@ -34,6 +34,7 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
+import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.hasAssurance
 import at.posselt.pfrpg2e.kingdom.increasedSkills
@@ -263,9 +264,10 @@ private class KingdomCheckDialog(
     private val kingdom: KingdomData,
     private var baseModifiers: List<Modifier>,
     private val afterRoll: AfterRoll,
-    params: CheckDialogParams,
+    private val params: CheckDialogParams,
     private val degreeMessages: DegreeMessages,
     private val flags: Set<String>,
+    private val isSupernaturalSolution: Boolean = false,
 ) : FormApp<CheckContext, CheckData>(
     title = params.title,
     template = "applications/kingdom/check.hbs",
@@ -394,13 +396,27 @@ private class KingdomCheckDialog(
             degreeMessages = degreeMessages,
         )
         if (data.supernaturalSolution && !data.assurance) {
-            // TODO launch another check dialog with magic as the only skill and disable supernatural solution input
-            postChatMessage("Reduced Supernatural Solutions by 1")
-            kingdom.supernaturalSolutions = max(0, kingdom.supernaturalSolutions - 1)
+            KingdomCheckDialog(
+                kingdomActor = kingdomActor,
+                kingdom = kingdom,
+                baseModifiers = baseModifiers,
+                afterRoll = {
+                    kingdomActor.getKingdom()?.let {
+                        postChatMessage("Reduced Supernatural Solutions by 1")
+                        it.supernaturalSolutions = max(0, it.supernaturalSolutions - 1)
+                        kingdomActor.setKingdom(it)
+                    }
+                },
+                params = params.copy(validSkills = setOf(KingdomSkill.MAGIC)),
+                degreeMessages = degreeMessages,
+                flags = flags,
+                isSupernaturalSolution = true,
+            ).launch()
         }
 
         kingdom.modifiers = kingdom.modifiers.filter { it.id !in consumedModifiers }.toTypedArray()
         kingdomActor.setKingdom(kingdom)
+        close()
     }
 
     override fun _preparePartContext(
@@ -435,7 +451,7 @@ private class KingdomCheckDialog(
         val downgrades = evaluatedModifiers.downgradeResults
         val selectedSkill = context.usedSkill
         val hasAssurance = kingdom.hasAssurance(chosenFeats, selectedSkill)
-        val evaluatedModifiersById = evaluatedModifiers.modifiers.associateBy { it.id }
+        val evaluatedModifiersById = evaluatedModifiers.filteredModifiers.associateBy { it.id }
         val consumeModifierIds = evaluatedModifiers.modifiers
             .filter { it.isConsumedAfterRoll }
             .map { it.id }
@@ -560,7 +576,7 @@ private class KingdomCheckDialog(
             assuranceDegree = determineAssuranceDegree(checkModifier, upgrades, downgrades),
             creativeSolutionModifier = creativeSolutionModifiers.total,
             creativeSolutionPills = creativeSolutionPills,
-            fortune = evaluatedModifiers.fortune || data.supernaturalSolution,
+            fortune = evaluatedModifiers.fortune || data.supernaturalSolution || isSupernaturalSolution,
             consumeModifiers = serializeB64Json(consumeModifierIds),
             rollTwiceKeepHighest = evaluatedModifiers.rollTwiceKeepHighest,
             rollTwiceKeepLowest = evaluatedModifiers.rollTwiceKeepHighest,
