@@ -1009,6 +1009,7 @@ class KingdomSheet(
             kingdom = kingdom,
             chosenFeats = chosenFeats,
         )
+        val leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeaderBonuses)
         val automateStats = kingdom.settings.automateStats
         val checks = skillChecks(
             kingdom = kingdom,
@@ -1043,7 +1044,7 @@ class KingdomSheet(
             supernaturalSolutionsInput = supernaturalSolutionsInput.toContext(),
             creativeSolutionsInput = creativeSolutionsInput.toContext(),
             notesContext = notesContext,
-            leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeaderBonuses),
+            leadersContext = leadersContext,
             charter = kingdom.charter.toContext(enabledCharters),
             heartland = kingdom.heartland.toContext(enabledHeartlands),
             government = kingdom.government.toContext(enabledGovernments, feats),
@@ -1175,7 +1176,6 @@ class KingdomSheet(
                         it.preventDefault()
                         it.stopPropagation()
                         val activityId = (it.currentTarget as HTMLElement).dataset["activity"] ?: ""
-                        console.log(activityId)
                         if (activityId in openedActivityDetails) {
                             openedActivityDetails.remove(activityId)
                         } else {

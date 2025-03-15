@@ -112,8 +112,23 @@
             height: 1em;
         }
 
+        .km-skill-checks {
+            td:last-child {
+                text-align: right;
+            }
+            td {
+              button {
+                  width: 60px;
+                  i {
+                      margin-left: .25em;
+                  }
+              }
+            }
+        }
+
         .km-unrest-ruin {
             border-radius: 0;
+            border: 0;
             td {
                 text-align: center;
                 padding: 3px;

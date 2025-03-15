@@ -30,7 +30,7 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val supernaturalSolutionsInput: FormElementContext
     val creativeSolutionsInput: FormElementContext
     val notesContext: NotesContext
-    val leadersContext: LeadersContext
+    val leadersContext: Array<LeaderValuesContext>
     val charter: CharterContext
     val heartland: HeartlandContext
     val government: GovernmentContext
