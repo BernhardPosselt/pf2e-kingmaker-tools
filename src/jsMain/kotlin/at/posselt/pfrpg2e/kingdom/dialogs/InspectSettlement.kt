@@ -278,12 +278,6 @@ class InspectSettlement(
                 "Not Available"
             }
         }.toRecord()
-        console.log(calculateAvailableItems(
-            settlementLevel = parsed.occupiedBlocks,
-            preventItemLevelPenalty = parsed.preventItemLevelPenalty,
-            magicalItemLevelIncrease = magicItemLevelIncreases,
-            bonuses = parsed.availableItems,
-        ))
         val notes = parsed.notes.toTypedArray()
         InspectSettlementContext(
             partId = parent.partId,
@@ -313,7 +307,19 @@ class InspectSettlement(
             notes = notes,
             availableItems = availableItems,
             currentTab = currentNav.value,
-            tabs = createTabs<SettlementNav>("change-nav", currentNav),
+            tabs = createTabs<SettlementNav>("change-nav", currentNav)
+                .filter {
+                    if (it.link == SettlementNav.BONUSES.value) {
+                        bonuses.isNotEmpty()
+                    } else if (it.link == SettlementNav.STRUCTURES.value) {
+                        parsed.constructedStructures.isNotEmpty()
+                    } else if (it.link == SettlementNav.NOTES.value) {
+                        parsed.notes.isNotEmpty()
+                    } else {
+                        true
+                    }
+                }
+                .toTypedArray(),
         )
     }
 

@@ -58,7 +58,7 @@ suspend fun collectResources(
 fun KingdomData.getResourceDiceAmount(
     allFeats: List<ChosenFeat>,
     settlements: List<Settlement>,
-) = allFeats.sumOf { it.feat.resourceDice ?: 0 } +
+) = 4 + allFeats.sumOf { it.feat.resourceDice ?: 0 } +
         resourceDice.now +
         settlements.sumOf {
             when (it.size.type) {

@@ -190,7 +190,6 @@ suspend fun rollCheck(
     downgrades: Set<DowngradeResult>,
     degreeMessages: DegreeMessages,
 ): DegreeOfSuccess {
-    console.log(activity)
     val result = d20Check(
         dc = dc,
         modifier = if (isCreativeSolution) modifierWithCreativeSolution else modifier,
@@ -266,9 +265,12 @@ suspend fun rollCheck(
             rollMode = nonNullRollMode,
             metaHtml = metaHtml,
             preHtml = "<p>${activity.description}</p>",
-            postHtml = postHtml + (messages?.let { "<hr>$it" } ?: ""),
+            postHtml = postHtml,
             message = modifiers?.msg,
         )
+        if (messages != null) {
+            postChatMessage(messages, rollMode=nonNullRollMode)
+        }
     }
     return changed
 }

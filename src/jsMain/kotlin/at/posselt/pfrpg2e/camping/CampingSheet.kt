@@ -559,7 +559,6 @@ class CampingSheet(
 
         // if it's a recipe we need to know the dc
         val recipe = if (activity.isDiscoverSpecialMeal()) askRecipe(camping) else null
-        console.log(recipe)
         checkActor.campingActivityCheck(
             data = campingCheckData,
             overrideDc = recipe?.cookingLoreDC,
@@ -1076,7 +1075,6 @@ class CampingSheet(
     }
 
     override fun onParsedSubmit(value: CampingSheetFormData): Promise<Void> = buildPromise {
-        console.log(value)
         actor.getCamping()?.let { camping ->
             camping.currentRegion = value.region
             camping.campingActivities = camping.campingActivities.map {

@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.camping.dialogs
 
-import at.posselt.pfrpg2e.app.*
+import at.posselt.pfrpg2e.app.FormApp
+import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.ActivityEffects
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
@@ -15,7 +16,17 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toActivityEffectContext
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.app.forms.toSkillContext
-import at.posselt.pfrpg2e.camping.*
+import at.posselt.pfrpg2e.app.launchCampingSkillPicker
+import at.posselt.pfrpg2e.camping.ActivityEffect
+import at.posselt.pfrpg2e.camping.ActivityOutcome
+import at.posselt.pfrpg2e.camping.CampingActivityData
+import at.posselt.pfrpg2e.camping.CampingActor
+import at.posselt.pfrpg2e.camping.CampingSkill
+import at.posselt.pfrpg2e.camping.ModifyEncounterDc
+import at.posselt.pfrpg2e.camping.getCamping
+import at.posselt.pfrpg2e.camping.getCampingSkills
+import at.posselt.pfrpg2e.camping.requiresACheck
+import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
@@ -249,7 +260,6 @@ class ActivityApplication(
         } else if (section == "criticalFailure") {
             currentActivity.criticalFailure?.effectUuids = currentActivity.criticalFailure?.effectUuids?.plus(effect)
         }
-        console.log(currentActivity)
         render()
     }
 

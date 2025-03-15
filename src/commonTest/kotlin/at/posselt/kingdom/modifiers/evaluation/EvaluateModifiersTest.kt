@@ -241,7 +241,6 @@ class EvaluateModifiersTest {
                 modifiers = modifiers,
             )
         )
-        console.log(result)
         assertEquals(6, result.total)
         assertEquals(9, result.bonuses[PROFICIENCY])
         assertEquals(-3, result.penalties[PROFICIENCY])
