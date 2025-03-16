@@ -18,21 +18,21 @@ fun determineDegree(
     var degree = originalDegree
     var resultUpgrade = if (degree in upgradesByDegree) {
         val times = upgradesByDegree[degree]?.maxBy { it.times }?.times ?: 1
-        (0..times).forEach {
+        (1..times).forEach {
             degree = degree.upgrade()
         }
         degree
     } else {
         degree
     }
-    val result = if (degree in downgradesByDegree) {
-        val times = downgradesByDegree[degree]?.maxBy { it.times }?.times ?: 1
-        (0..times).forEach {
+    val result = if (resultUpgrade in downgradesByDegree) {
+        val times = downgradesByDegree[resultUpgrade]?.maxBy { it.times }?.times ?: 1
+        (1..times).forEach {
             resultUpgrade = resultUpgrade.downgrade()
         }
         resultUpgrade
     } else {
-        degree
+        resultUpgrade
     }
     return DegreeChange(
         originalDegree = originalDegree,

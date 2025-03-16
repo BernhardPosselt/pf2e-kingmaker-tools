@@ -494,7 +494,7 @@ private class KingdomCheckDialog(
             )
         } else {
             serializeB64Json(evaluatedModifiers.modifiers.map {
-                "${it.name} ${it.value.formatAsModifier()}"
+                if (it.value == 0) it.name else "${it.name} ${it.value.formatAsModifier()}"
             }.toTypedArray())
         }
         val creativeSolutionPills = serializeB64Json(creativeSolutionModifiers.modifiers.map {
