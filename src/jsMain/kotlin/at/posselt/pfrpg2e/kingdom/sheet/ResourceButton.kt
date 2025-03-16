@@ -254,7 +254,7 @@ suspend fun executeResourceButton(
 ) {
     val previous = deepClone(kingdom)
     val button = ResourceButton.fromHtml(elem)
-    val realm = game.getRealmData(kingdom)
+    val realm = game.getRealmData(actor, kingdom)
     val settlements = kingdom.getAllSettlements(game)
     val storage = calculateStorage(realm = realm, settlements = settlements.allSettlements)
     button.evaluate(

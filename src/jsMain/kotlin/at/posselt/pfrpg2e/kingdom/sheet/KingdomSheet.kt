@@ -345,7 +345,7 @@ class KingdomSheet(
 
             "add-group" -> buildPromise {
                 val kingdom = getKingdom()
-                val realm = game.getRealmData(kingdom)
+                val realm = game.getRealmData(actor, kingdom)
                 kingdom.groups = kingdom.groups + RawGroup(
                     name = "Group Name",
                     negotiationDC = 10 + findKingdomSize(realm.size).controlDCModifier,
@@ -491,7 +491,7 @@ class KingdomSheet(
                         val xp = calculateHexXP(
                             hexes = hexes,
                             xpPerClaimedHex = kingdom.settings.xpPerClaimedHex,
-                            kingdomSize = game.getRealmData(kingdom).size,
+                            kingdomSize = game.getRealmData(actor, kingdom).size,
                             useVK = kingdom.settings.vanceAndKerensharaXP,
                         )
                         actor.gainXp(xp)
@@ -691,7 +691,7 @@ class KingdomSheet(
 
             "collect-resources" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
-                    val realm = game.getRealmData(kingdom)
+                    val realm = game.getRealmData(actor, kingdom)
                     val settlements = kingdom.getAllSettlements(game)
                     val allFeatures = kingdom.getExplodedFeatures()
                     val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
@@ -714,7 +714,7 @@ class KingdomSheet(
 
             "pay-consumption" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
-                    val realm = game.getRealmData(kingdom)
+                    val realm = game.getRealmData(actor, kingdom)
                     val settlements = kingdom.getAllSettlements(game)
                     kingdom.commodities.now.food = payConsumption(
                         availableFood = kingdom.commodities.now.food,
@@ -729,7 +729,7 @@ class KingdomSheet(
 
             "end-turn" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
-                    val realm = game.getRealmData(kingdom)
+                    val realm = game.getRealmData(actor, kingdom)
                     val settlements = kingdom.getAllSettlements(game)
                     val storage = calculateStorage(realm = realm, settlements = settlements.allSettlements)
                     kingdom.supernaturalSolutions = 0
@@ -766,7 +766,7 @@ class KingdomSheet(
 
             "consumption-breakdown" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
-                    val realm = game.getRealmData(kingdom)
+                    val realm = game.getRealmData(actor, kingdom)
                     val settlements = kingdom.getAllSettlements(game)
                     val consumption = calculateConsumption(
                         settlements = settlements.allSettlements,
@@ -905,7 +905,7 @@ class KingdomSheet(
         val parent = super._preparePartContext(partId, context, options).await()
         val kingdom = getKingdom()
         val vacancies = kingdom.vacancies()
-        val realm = game.getRealmData(kingdom)
+        val realm = game.getRealmData(actor, kingdom)
         val settlements = kingdom.getAllSettlements(game)
         val controlDc = calculateControlDC(kingdom.level, realm, vacancies.ruler)
         val globalBonuses = evaluateGlobalBonuses(settlements.allSettlements)

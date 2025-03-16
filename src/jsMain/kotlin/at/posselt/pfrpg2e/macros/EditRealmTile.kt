@@ -1,9 +1,11 @@
 package at.posselt.pfrpg2e.macros
 
 import at.posselt.pfrpg2e.app.forms.Select
+import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.RealmTileData
@@ -18,6 +20,7 @@ import kotlinx.js.JsPlainObject
 @JsPlainObject
 external interface EditRealmTileData {
     val type: String?
+    val kingdomActorUuid: String
 }
 
 enum class RealmTileCategory {
@@ -69,6 +72,8 @@ suspend fun editRealmTileMacro(game: Game) {
     }
     val data = drawings.firstOrNull()?.getRealmTileData()
         ?: tiles.firstOrNull()?.getRealmTileData()
+    val kingdoms = game.getKingdomActors()
+        .map { SelectOption(label = it.name, value = it.uuid) }
     prompt<EditRealmTileData, Unit>(
         title = "Edit Selected Realm Tiles/Drawings",
         templatePath = "components/forms/form.hbs",
@@ -79,7 +84,14 @@ suspend fun editRealmTileMacro(game: Game) {
                     label = "Realm Tile/Drawing Type",
                     value = data?.type?.let { RealmTileType.fromString(it) },
                     required = false,
-                )
+                ),
+                Select(
+                    name = "kingdomActorUuid",
+                    label = "Kingdom",
+                    value = data?.kingdomActorUuid,
+                    options = kingdoms,
+                    required = false,
+                ),
             )
         )
     ) {
@@ -88,8 +100,22 @@ suspend fun editRealmTileMacro(game: Game) {
             drawings.forEach { drawing -> drawing.unsetRealmTileData() }
             tiles.forEach { drawing -> drawing.unsetRealmTileData() }
         } else {
-            drawings.forEach { drawing -> drawing.setRealmTileData(RealmTileData(type = type)) }
-            tiles.forEach { drawing -> drawing.setRealmTileData(RealmTileData(type = type)) }
+            drawings.forEach { drawing ->
+                drawing.setRealmTileData(
+                    RealmTileData(
+                        type = type,
+                        kingdomActorUuid = it.kingdomActorUuid,
+                    )
+                )
+            }
+            tiles.forEach { tile ->
+                tile.setRealmTileData(
+                    RealmTileData(
+                        type = type,
+                        kingdomActorUuid = it.kingdomActorUuid,
+                    )
+                )
+            }
         }
     }
 }

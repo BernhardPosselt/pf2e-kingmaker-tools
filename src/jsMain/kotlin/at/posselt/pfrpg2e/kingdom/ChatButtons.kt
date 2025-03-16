@@ -63,7 +63,7 @@ private val buttons = listOf(
     ChatButton("km-gain-lose") { game, actor, event, button ->
         val resourceButton = ResourceButton.fromHtml(button)
         actor.getKingdom()?.let { kingdom ->
-            val realm = game.getRealmData(kingdom)
+            val realm = game.getRealmData(actor, kingdom)
             val settlements = kingdom.getAllSettlements(game)
             val storage = calculateStorage(realm = realm, settlements = settlements.allSettlements)
             resourceButton.evaluate(

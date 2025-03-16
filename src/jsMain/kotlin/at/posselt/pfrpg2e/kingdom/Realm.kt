@@ -87,15 +87,17 @@ private fun toRealmWorksite(
     }
     .fold(WorkSite()) { prev, curr -> prev + curr }
 
-private fun Scene.parseRealmData(): RealmData {
+private fun Scene.parseRealmData(actor: KingdomActor): RealmData {
     val tiles = tiles.contents
         .mapNotNull {
             it.getRealmTileData()
+                ?.takeIf { it.kingdomActorUuid == null || it.kingdomActorUuid == actor.uuid }
                 ?.let { RealmTileType.fromString(it.type) }
                 ?.let { type -> TileAndPlacement(type = type, it.toRectangle()) }
         } + drawings.contents
         .mapNotNull {
             it.getRealmTileData()
+                ?.takeIf { it.kingdomActorUuid == null || it.kingdomActorUuid == actor.uuid }
                 ?.let { RealmTileType.fromString(it.type) }
                 ?.let { type -> TileAndPlacement(type = type, it.toRectangle()) }
         }
@@ -178,12 +180,15 @@ private fun KingdomData.parseWorksites() =
         ),
     )
 
-fun Game.getRealmData(kingdom: KingdomData): RealmData {
+fun Game.getRealmData(
+    kingdomActor: KingdomActor,
+    kingdom: KingdomData,
+): RealmData {
     val mode = AutomateResources.fromString(kingdom.settings.automateResources)
     val realmScene = kingdom.settings.realmSceneId?.let { scenes.get(it) }
     return when (mode) {
         AutomateResources.KINGMAKER if isKingmakerInstalled -> parseKingmaker()
-        AutomateResources.TILE_BASED if realmScene != null -> realmScene.parseRealmData()
+        AutomateResources.TILE_BASED if realmScene != null -> realmScene.parseRealmData(kingdomActor)
         else -> RealmData(size = kingdom.size, worksites = kingdom.parseWorksites())
     }
 }

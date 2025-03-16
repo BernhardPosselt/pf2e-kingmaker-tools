@@ -695,7 +695,7 @@ suspend fun kingdomCheckDialog(
     val params = when (check) {
         is CheckType.PerformActivity -> {
             val activity = check.activity
-            val realm = game.getRealmData(kingdom)
+            val realm = game.getRealmData(kingdomActor, kingdom)
             val vacancies = kingdom.vacancies()
             val dc = overrideDc ?: activity.resolveDc(
                 kingdomLevel = kingdom.level,
@@ -729,7 +729,7 @@ suspend fun kingdomCheckDialog(
         }
 
         is CheckType.RollSkill -> {
-            val realm = game.getRealmData(kingdom)
+            val realm = game.getRealmData(kingdomActor, kingdom)
             val vacancies = kingdom.vacancies()
             val dc = overrideDc ?: calculateControlDC(
                 kingdomLevel = kingdom.level,
