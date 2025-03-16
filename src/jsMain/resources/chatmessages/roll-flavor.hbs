@@ -3,11 +3,15 @@
      data-activity-id="{{activityId}}"
      data-degree="{{degree}}"
      data-roll-mode="{{rollMode}}"
-     data-modifier="{{modifier}}"
      data-kingdom-actor-uuid="{{actorUuid}}"
+     data-skill="{{skill}}"
+     data-modifier="{{modifier}}"
      data-modifier-with-creative-solution="{{modifierWithCreativeSolution}}"
      data-fortune="{{fortune}}"
-     data-is-creative-solution="{{isCreativeSolution}}"
+     data-dc="{{dc}}"
+     {{#if upgrades}}data-upgrades="{{upgrades}}"{{/if}}
+    {{#if downgrades}}data-downgrades="{{downgrades}}"{{/if}}
+    {{#if additionalChatMessages}}data-additional-chat-messages="{{additionalChatMessages}}"{{/if}}
 >
 </div>
 <hr>

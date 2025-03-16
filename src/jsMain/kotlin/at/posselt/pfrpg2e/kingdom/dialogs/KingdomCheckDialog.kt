@@ -305,9 +305,9 @@ private class KingdomCheckDialog(
                     val fortune = target.dataset["fortune"] == "true"
                     val modifier = target.dataset["modifier"]?.toInt() ?: 0
                     val creativeSolutionModifier = target.dataset["creativeSolutionModifier"]?.toInt() ?: 0
-                    val pills = deserializeB64Json<Array<ModifierPill>>(target.dataset["pills"]!!)
+                    val pills = deserializeB64Json<Array<String>>(target.dataset["pills"]!!)
                     val creativeSolutionPills =
-                        deserializeB64Json<Array<ModifierPill>>(target.dataset["creativeSolutionPills"]!!)
+                        deserializeB64Json<Array<String>>(target.dataset["creativeSolutionPills"]!!)
                     val upgrades = deserializeB64Json<Array<SerializedDegree>>(target.dataset["upgrades"]!!)
                         .mapNotNull { el ->
                             DegreeOfSuccess.fromString(el.degree)
@@ -369,8 +369,8 @@ private class KingdomCheckDialog(
     private suspend fun roll(
         modifier: Int,
         creativeSolutionModifier: Int,
-        creativeSolutionPills: Array<ModifierPill>,
-        pills: Array<ModifierPill>,
+        creativeSolutionPills: Array<String>,
+        pills: Array<String>,
         upgrades: Set<UpgradeResult>,
         fortune: Boolean,
         downgrades: Set<DowngradeResult>,
@@ -395,6 +395,7 @@ private class KingdomCheckDialog(
             creativeSolutionPills = creativeSolutionPills,
             downgrades = downgrades,
             degreeMessages = degreeMessages,
+            useFameInfamy = false,
         )
         if (data.supernaturalSolution && !data.assurance) {
             KingdomCheckDialog(
@@ -463,17 +464,15 @@ private class KingdomCheckDialog(
             .toTypedArray()
         val pills = if (data.assurance) {
             serializeB64Json(
-                arrayOf(
-                    ModifierPill(label = "Assurance", value = evaluatedModifiers.total.formatAsModifier())
-                )
+                arrayOf("Assurance ${evaluatedModifiers.total.formatAsModifier()}")
             )
         } else {
             serializeB64Json(evaluatedModifiers.modifiers.map {
-                ModifierPill(label = it.name, value = it.value.formatAsModifier())
+                "${it.name} ${it.value.formatAsModifier()}"
             }.toTypedArray())
         }
         val creativeSolutionPills = serializeB64Json(creativeSolutionModifiers.modifiers.map {
-            ModifierPill(label = it.name, value = it.value.formatAsModifier())
+            "${it.name} ${it.value.formatAsModifier()}"
         }.toTypedArray())
         val checkModifier = if (data.assurance) {
             evaluatedModifiers.assurance

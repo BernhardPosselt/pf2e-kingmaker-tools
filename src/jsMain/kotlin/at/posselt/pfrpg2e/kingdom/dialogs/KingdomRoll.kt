@@ -6,12 +6,15 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.RawModifier
+import at.posselt.pfrpg2e.kingdom.UpgradeMetaContext
+import at.posselt.pfrpg2e.kingdom.generateRollMeta
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
 import at.posselt.pfrpg2e.kingdom.setKingdom
+import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
@@ -20,88 +23,8 @@ import at.posselt.pfrpg2e.utils.postDegreeOfSuccess
 import at.posselt.pfrpg2e.utils.serializeB64Json
 import at.posselt.pfrpg2e.utils.tpl
 import js.objects.JsPlainObject
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.asList
-import org.w3c.dom.get
 import kotlin.math.max
 
-@JsPlainObject
-external interface ModifierPill {
-    val value: String
-    val label: String
-}
-
-
-@JsPlainObject
-private external interface RollMetaContext {
-    val label: String
-    val dc: Int
-    val activityId: String?
-    val actorUuid: String
-    val degree: String
-    val rollMode: String
-    val modifier: Int
-    val pills: Array<String>
-    val creativeSolutionPills: Array<String>
-    val fortune: Boolean
-    val isCreativeSolution: Boolean
-    val modifierWithCreativeSolution: Int
-}
-
-private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
-    val meta = rollElement.querySelector(".km-roll-meta") as HTMLElement?
-    val pills = rollElement.querySelectorAll(".km-modifier-pill.km-creative-solution-pills").asList()
-        .map { it.textContent ?: "" }
-        .toTypedArray()
-    val creativePills = rollElement.querySelectorAll(".km-modifier-pill:not(.km-creative-solution-pills)").asList()
-        .map { it.textContent ?: "" }
-        .toTypedArray()
-    return RollMetaContext(
-        label = meta?.dataset["label"] ?: "",
-        dc = meta?.dataset["dc"]?.toInt() ?: 0,
-        activityId = meta?.dataset["activityId"] ?: "",
-        actorUuid = meta?.dataset["kingdomActorUuid"] ?: "",
-        degree = meta?.dataset["degree"] ?: "",
-        rollMode = meta?.dataset["rollMode"] ?: "",
-        modifier = meta?.dataset["modifier"]?.toInt() ?: 0,
-        pills = pills,
-        creativeSolutionPills = creativePills,
-        fortune = meta?.dataset["fortune"] == "true",
-        isCreativeSolution = meta?.dataset["isCreativeSolution"] == "true",
-        modifierWithCreativeSolution = meta?.dataset["modifierWithCreativeSolution"]?.toInt() ?: 0,
-    )
-}
-
-private suspend fun generateRollMeta(
-    activity: RawActivity?,
-    modifier: Int,
-    modifierPills: Array<ModifierPill>,
-    actor: KingdomActor,
-    rollMode: RollMode,
-    degree: DegreeOfSuccess,
-    skill: KingdomSkill,
-    dc: Int,
-    fortune: Boolean,
-    creativeSolutionPills: Array<ModifierPill>,
-    modifierWithCreativeSolution: Int,
-    isCreativeSolution: Boolean,
-) = tpl(
-    path = "chatmessages/roll-flavor.hbs",
-    ctx = RollMetaContext(
-        label = activity?.title ?: skill.label,
-        dc = dc,
-        activityId = activity?.id,
-        actorUuid = actor.uuid,
-        degree = degree.value,
-        rollMode = rollMode.value,
-        modifier = modifier,
-        fortune = fortune,
-        modifierWithCreativeSolution = modifierWithCreativeSolution,
-        pills = modifierPills.map { "${it.label} ${it.value}" }.toTypedArray(),
-        creativeSolutionPills = creativeSolutionPills.map { "${it.label} ${it.value}" }.toTypedArray(),
-        isCreativeSolution = isCreativeSolution,
-    ),
-)
 
 @JsPlainObject
 private external interface ChatModifier {
@@ -137,61 +60,7 @@ suspend fun buildChatButtons(
 }
 
 
-@JsPlainObject
-private external interface UpgradeMetaContext {
-    val rollMode: String
-    val activityId: String
-    val degree: String
-    val additionalMessages: String?
-    val actorUuid: String
-}
 
-
-// TODO: re-roll with creative solution
-//if (data.creativeSolution && !data.assurance) {
-//    postChatMessage("Reduced Creative Solutions by 1")
-//    kingdom.creativeSolutions = max(0, kingdom.creativeSolutions - 1)
-//}
-
-private fun parseUpgradeMeta(elem: HTMLElement) =
-    UpgradeMetaContext(
-        rollMode = elem.dataset["rollMode"] ?: "",
-        activityId = elem.dataset["activityId"] ?: "",
-        degree = elem.dataset["degree"] ?: "",
-        additionalMessages = elem.dataset["additionalMessages"],
-        actorUuid = elem.dataset["kingdomActorUuid"] ?: "",
-    )
-
-enum class ChangeDegree {
-    UPGRADE,
-    DOWNGRADE;
-}
-
-suspend fun changeDegree(rollMeta: HTMLElement, mode: ChangeDegree) {
-    val meta = parseUpgradeMeta(rollMeta)
-    console.log(meta)
-    val degree = DegreeOfSuccess.fromString(meta.degree)
-    val changed = if (mode == ChangeDegree.UPGRADE) {
-        when (degree) {
-            DegreeOfSuccess.CRITICAL_FAILURE -> DegreeOfSuccess.FAILURE
-            DegreeOfSuccess.FAILURE -> DegreeOfSuccess.SUCCESS
-            DegreeOfSuccess.SUCCESS -> DegreeOfSuccess.CRITICAL_SUCCESS
-            else -> null
-        }
-    } else {
-        when (degree) {
-            DegreeOfSuccess.FAILURE -> DegreeOfSuccess.CRITICAL_FAILURE
-            DegreeOfSuccess.SUCCESS -> DegreeOfSuccess.FAILURE
-            DegreeOfSuccess.CRITICAL_SUCCESS -> DegreeOfSuccess.SUCCESS
-            else -> null
-        }
-    }
-    if (changed == null) {
-        console.error("Can not upgrade degree $degree")
-    } else {
-        postActivityDegreeOfSuccess(meta, changed)
-    }
-}
 
 suspend fun rollCheck(
     afterRoll: AfterRoll,
@@ -201,16 +70,17 @@ suspend fun rollCheck(
     modifier: Int,
     modifierWithCreativeSolution: Int,
     fortune: Boolean,
-    modifierPills: Array<ModifierPill>,
+    modifierPills: Array<String>,
     dc: Int,
     kingdomActor: KingdomActor,
     upgrades: Set<UpgradeResult>,
     rollTwiceKeepHighest: Boolean,
     rollTwiceKeepLowest: Boolean,
-    creativeSolutionPills: Array<ModifierPill>,
+    creativeSolutionPills: Array<String>,
     isCreativeSolution: Boolean = false,
     downgrades: Set<DowngradeResult>,
-    degreeMessages: DegreeMessages,
+    degreeMessages: DegreeMessages?,
+    useFameInfamy: Boolean,
 ): DegreeOfSuccess {
     val result = d20Check(
         dc = dc,
@@ -229,11 +99,19 @@ suspend fun rollCheck(
         }
     }
 
+    if (useFameInfamy) {
+        kingdomActor.getKingdom()?.let {
+            val fameType = it.fame.type.toLabel()
+            postChatMessage("Reducing $fameType by 1")
+            it.fame.now = max(0, it.fame.now - 1)
+            kingdomActor.setKingdom(it)
+        }
+    }
+
     val degreeResult = determineDegree(result.degreeOfSuccess, upgrades, downgrades)
     val originalDegree = degreeResult.originalDegree
     val changed = degreeResult.changedDegree
     val nonNullRollMode = rollMode ?: RollMode.PUBLICROLL
-    // TODO: needs to add upgrades/downgrades from modifiers
     val rollMeta = generateRollMeta(
         activity = activity,
         modifier = modifier,
@@ -247,6 +125,9 @@ suspend fun rollCheck(
         creativeSolutionPills = creativeSolutionPills,
         modifierWithCreativeSolution = modifierWithCreativeSolution,
         isCreativeSolution = isCreativeSolution,
+        additionalChatMessages = degreeMessages,
+        upgrades = upgrades,
+        downgrades = downgrades,
     )
     result.toChat(rollMeta)
     if (activity == null) {
@@ -268,7 +149,7 @@ suspend fun rollCheck(
     return changed
 }
 
-private suspend fun postActivityDegreeOfSuccess(
+suspend fun postActivityDegreeOfSuccess(
     metaContext: UpgradeMetaContext,
     changedDegreeOfSuccess: DegreeOfSuccess,
 ) {

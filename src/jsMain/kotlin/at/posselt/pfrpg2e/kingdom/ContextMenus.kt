@@ -1,8 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
-import at.posselt.pfrpg2e.kingdom.dialogs.ChangeDegree
-import at.posselt.pfrpg2e.kingdom.dialogs.changeDegree
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.push
@@ -27,10 +25,6 @@ fun Element.findKingdomActor(game: Game) =
 
 private fun Element.rollMeta() =
     querySelector(".km-roll-meta")
-        ?.takeIfInstance<HTMLElement>()
-
-private fun Element.contentLink() =
-    querySelector(".content-link")
         ?.takeIfInstance<HTMLElement>()
 
 private fun Element.upgradeMeta() =
@@ -69,7 +63,7 @@ private val entries = listOf<ContextEntry>(
                 ?: 0
             fame > 0 && elem.isKingdomRoll()
         },
-        callback = { game, elem -> console.log(elem) } // TODO: re-roll
+        callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.FAME_OR_INFAMY) } }
     ),
     ContextEntry(
         name = "Re-Roll Using Creative Solution",
@@ -79,17 +73,22 @@ private val entries = listOf<ContextEntry>(
                 ?: 0
             creativeSolution > 0 && elem.isKingdomRoll()
         },
-        callback = { game, elem -> console.log(elem) } // TODO: re-roll using creative solution
+        callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.CREATIVE_SOLUTION) } }
+    ),
+    ContextEntry(
+        name = "Re-Roll",
+        condition = { game, elem -> elem.findKingdomActor(game) != null && elem.isKingdomRoll() },
+        callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.DEFAULT) } }
     ),
     ContextEntry(
         name = "Re-Roll Keep Higher",
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.isKingdomRoll() },
-        callback = { game, elem -> console.log(elem) } // TODO: re-roll keep higher
+        callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.ROLL_TWICE_KEEP_HIGHEST) } }
     ),
     ContextEntry(
         name = "Re-Roll Keep Lower",
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.isKingdomRoll() },
-        callback = { game, elem -> console.log(elem) } // TODO: re-roll keep lower
+        callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.ROLL_TWICE_KEEP_LOWEST) } }
     ),
     ContextEntry(
         name = "Upgrade Degree of Success",
@@ -98,7 +97,7 @@ private val entries = listOf<ContextEntry>(
         callback = { game, elem ->
             buildPromise {
                 elem.upgradeMeta()?.let {
-                    changeDegree(it, mode= ChangeDegree.UPGRADE)
+                    changeDegree(it, mode = ChangeDegree.UPGRADE)
                 }
             }
         }
@@ -110,7 +109,7 @@ private val entries = listOf<ContextEntry>(
         callback = { game, elem ->
             buildPromise {
                 elem.upgradeMeta()?.let {
-                    changeDegree(it, mode= ChangeDegree.DOWNGRADE)
+                    changeDegree(it, mode = ChangeDegree.DOWNGRADE)
                 }
             }
         }
