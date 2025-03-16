@@ -98,6 +98,7 @@ import at.posselt.pfrpg2e.kingdom.structures.importStructures
 import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
+import at.posselt.pfrpg2e.utils.TableAndDraw
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.launch
@@ -590,11 +591,12 @@ class KingdomSheet(
                     ?.settings
                     ?.kingdomCultTable
                 val rollMode = game.settings.pfrpg2eKingdomCampingWeather.getKingdomEventRollMode()
-                game.rollWithCompendiumFallback(
+                val result = game.rollWithCompendiumFallback(
                     tableName = "Random Cult Events",
                     rollMode = rollMode,
                     uuid = uuid,
                 )
+                postAddToOngoingEvents(result, rollMode)
             }
 
             "roll-event" -> buildPromise {
@@ -602,11 +604,12 @@ class KingdomSheet(
                     ?.settings
                     ?.kingdomEventsTable
                 val rollMode = game.settings.pfrpg2eKingdomCampingWeather.getKingdomEventRollMode()
-                game.rollWithCompendiumFallback(
+                val result = game.rollWithCompendiumFallback(
                     tableName = "Random Kingdom Events",
                     rollMode = rollMode,
                     uuid = uuid,
                 )
+                postAddToOngoingEvents(result, rollMode)
             }
 
             "claimed-refuge" -> buildPromise {
@@ -854,6 +857,22 @@ class KingdomSheet(
             }
         }
     }
+
+    private suspend fun postAddToOngoingEvents(
+        result: TableAndDraw?,
+        rollMode: RollMode
+    ): Unit? = result
+        ?.draw
+        ?.results
+        ?.mapNotNull { console.log(it.getChatText());it.getChatText() }
+        ?.firstNotNullOfOrNull { Regex("@UUID\\[(.+)\\]").find(it)?.destructured?.component1() }
+        ?.let {
+            postChatTemplate(
+                templatePath = "chatmessages/event.hbs",
+                templateContext = recordOf("actorUuid" to actor.uuid, "link" to it),
+                rollMode = rollMode,
+            )
+        }
 
     suspend fun importStructures() {
         if (game.importStructures().isNotEmpty()) {

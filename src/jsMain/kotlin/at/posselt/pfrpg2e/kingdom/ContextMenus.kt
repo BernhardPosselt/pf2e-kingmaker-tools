@@ -2,8 +2,6 @@ package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.takeIfInstance
-import at.posselt.pfrpg2e.utils.buildPromise
-import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.push
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
@@ -15,7 +13,6 @@ import js.objects.recordOf
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
-import kotlin.collections.plus
 
 fun Element.findKingdomActor(game: Game) =
     querySelector("[data-kingdom-actor-uuid]")
@@ -99,26 +96,6 @@ private val entries = listOf<ContextEntry>(
         icon = "<i class=\"fa-solid fa-arrow-down\"></i>",
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.canDowngrade() },
         callback = { game, elem -> console.log(elem) } // TODO: downgrade
-    ),
-    ContextEntry(
-        name = "Add to Ongoing Events",
-        icon = "<i class=\"fa-solid fa-plus\"></i>",
-        condition = { game, elem -> elem.findKingdomActor(game) != null && elem.contentLink() != null },
-        callback = { game, elem ->
-            val actor = elem.findKingdomActor(game)
-            actor?.getKingdom()?.let { kingdom ->
-                buildPromise {
-                    val link = elem.contentLink()
-                    val uuid = link?.dataset["uuid"]
-                    val text = link?.innerText
-                    if (uuid != null && text != null) {
-                        val event = buildUuid(uuid, text)
-                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
-                        actor.setKingdom(kingdom)
-                    }
-                }
-            }
-        }
     ),
 )
 

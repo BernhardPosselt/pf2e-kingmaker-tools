@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.pickLeader
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.sheet.ResourceButton
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
@@ -82,6 +83,16 @@ private val buttons = listOf(
             actor.setKingdom(kingdom)
         }
     },
+    ChatButton("km-add-ongoing-event") { game, actor, event, button ->
+            val uuid = button.dataset["link"]
+            if (uuid != null) {
+                actor.getKingdom()?.let { kingdom ->
+                    val event = buildUuid(uuid)
+                    kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
+                    actor.setKingdom(kingdom)
+                }
+            }
+    },
     ChatButton("km-apply-modifier-effect") { game, actor, event, button ->
         val mod = deserializeB64Json<RawModifier>(button.dataset["data"] ?: "")
         val parsedMod = if (mod.name == "Focused Attention") {
@@ -90,7 +101,6 @@ private val buttons = listOf(
         } else {
             mod
         }.copy(id = v4())
-        console.log(mod)
         actor.getKingdom()?.let { kingdom ->
             kingdom.modifiers = kingdom.modifiers + parsedMod
             actor.setKingdom(kingdom)
