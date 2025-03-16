@@ -68,6 +68,7 @@ import org.w3c.dom.asList
 import org.w3c.dom.get
 
 fun main() {
+    registerContextMenus()
     Hooks.onInit {
         val actionDispatcher = ActionDispatcher(
             game = game,
@@ -86,7 +87,6 @@ fun main() {
         }
 
         bindChatButtons(game)
-        registerContextMenus(game)
 
         Hooks.onRenderActorDirectory { _, html, _ ->
             html[0]?.querySelectorAll(".party-header")

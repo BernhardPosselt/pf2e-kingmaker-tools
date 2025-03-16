@@ -1072,6 +1072,10 @@ class KingdomSheet(
             chosenFeatures = chosenFeatures,
         )
         val automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value
+        val ongoingEvents = kingdom.ongoingEvents
+            .map { async { enrichHtml(it.name) } }
+            .awaitAll()
+            .toTypedArray()
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -1156,10 +1160,7 @@ class KingdomSheet(
             vkXp = kingdom.settings.vanceAndKerensharaXP,
             activities = activities,
             cultOfTheBloomEvents = kingdom.settings.cultOfTheBloomEvents,
-            ongoingEvents = kingdom.ongoingEvents
-                .map { async { enrichHtml(it.name) } }
-                .awaitAll()
-                .toTypedArray(),
+            ongoingEvents = ongoingEvents,
             eventDC = getEventDC(kingdom),
             cultEventDC = getCultEventDC(kingdom),
             civicPlanning = kingdom.level >= 12,

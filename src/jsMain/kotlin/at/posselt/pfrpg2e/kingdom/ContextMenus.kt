@@ -7,12 +7,15 @@ import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.push
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
-import com.foundryvtt.core.applications.api.ContextMenuEntry
+import com.foundryvtt.core.game
 import com.foundryvtt.core.onGetChatLogEntryContext
+import io.kvision.jquery.JQuery
 import io.kvision.jquery.get
+import js.objects.recordOf
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
+import kotlin.collections.plus
 
 fun Element.findKingdomActor(game: Game) =
     querySelector("[data-kingdom-actor-uuid]")
@@ -36,8 +39,6 @@ private fun Element.upgradeDegree() =
         ?.dataset["degree"]
 
 private fun Element.isKingdomRoll() = rollMeta() != null
-
-private fun Element.isKingdomRollResult() = upgradeDegree() != null
 
 private fun Element.canUpgrade(): Boolean {
     val degree = upgradeDegree()
@@ -112,7 +113,7 @@ private val entries = listOf<ContextEntry>(
                     val text = link?.innerText
                     if (uuid != null && text != null) {
                         val event = buildUuid(uuid, text)
-                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name=event)
+                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
                         actor.setKingdom(kingdom)
                     }
                 }
@@ -121,17 +122,22 @@ private val entries = listOf<ContextEntry>(
     ),
 )
 
-fun registerContextMenus(game: Game) {
+
+fun registerContextMenus() {
     Hooks.onGetChatLogEntryContext { elem, items ->
-        entries.forEach {
+        entries.forEach { but ->
             items.push(
-                ContextMenuEntry(
-                    name = it.name,
-                    condition = { elem -> elem[0]?.let { html -> it.condition(game, html) } ?: false },
-                    icon = it.icon,
-                    callback = { elem -> elem[0]?.let { html -> it.callback(game, html) } },
-                )
+                recordOf(
+                    "name" to but.name,
+                    "condition" to { elem: JQuery ->
+                        elem[0]?.let { html -> but.condition(game, html) } == true
+                    },
+                    "icon" to but.icon,
+                    "callback" to { elem -> elem[0]?.let { html -> but.callback(game, html) } },
+                ).asDynamic()
             )
+            console.log(items)
         }
+        undefined
     }
 }
