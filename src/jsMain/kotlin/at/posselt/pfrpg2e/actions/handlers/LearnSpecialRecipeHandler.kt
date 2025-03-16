@@ -11,7 +11,6 @@ import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCampingActorByUuid
 import at.posselt.pfrpg2e.camping.getCompendiumFoodItems
-import at.posselt.pfrpg2e.camping.getPartyActor
 import at.posselt.pfrpg2e.camping.reduceFoodBy
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
@@ -51,7 +50,7 @@ class LearnSpecialRecipeHandler(
                 actor.applyConsumptionMealEffects(recipe.criticalFailure)
             }
             reduceFoodBy(
-                actors = camping.getActorsCarryingFood(camping.getPartyActor()),
+                actors = camping.getActorsCarryingFood(campingActor),
                 foodAmount = cost,
                 foodItems = getCompendiumFoodItems(),
             )

@@ -8,7 +8,6 @@ import at.posselt.pfrpg2e.camping.HuntAndGatherData
 import at.posselt.pfrpg2e.camping.addFoodToInventory
 import at.posselt.pfrpg2e.camping.findHuntAndGatherTargetActor
 import at.posselt.pfrpg2e.camping.getCamping
-import at.posselt.pfrpg2e.camping.getPartyActor
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import com.foundryvtt.core.Game
@@ -23,7 +22,7 @@ class AddHuntAndGatherResultHandler(
         val result = action.data.unsafeCast<HuntAndGatherData>()
         val campingActor = fromUuidTypeSafe<CampingActor>(result.campingActorUuid)
         campingActor?.getCamping()?.let { camping ->
-            findHuntAndGatherTargetActor(result.actorUuid, camping, camping.getPartyActor())
+            findHuntAndGatherTargetActor(result.actorUuid, camping, campingActor)
                 ?.let {
                     it.addFoodToInventory(
                         FoodAmount(

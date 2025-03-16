@@ -312,7 +312,6 @@ class CampingSheet(
             "settings" -> CampingSettingsApplication(game, actor).launch()
             "rest" -> buildPromise {
                 actor.getCamping()?.let { camping ->
-                    val party = camping.getPartyActor()
                     if (camping.watchSecondsRemaining > 0) {
                         // continue watch
                         buildPromise {
@@ -324,7 +323,7 @@ class CampingSheet(
                                 skipWatch = false,
                                 skipDailyPreparations = false,
                                 disableRandomEncounter = false,
-                                party = party,
+                                party = actor,
                             )
                         }
                     } else {
@@ -340,7 +339,7 @@ class CampingSheet(
                                     skipWatch = !enableWatch,
                                     skipDailyPreparations = !enableDailyPreparations,
                                     disableRandomEncounter = !checkRandomEncounter,
-                                    party = party,
+                                    party = actor,
                                 )
                             }
                         }.launch()
@@ -472,7 +471,7 @@ class CampingSheet(
             .map { it.cookingCost }
             .sum()
         reduceFoodBy(
-            actors = camping.getActorsCarryingFood(camping.getPartyActor()),
+            actors = camping.getActorsCarryingFood(actor),
             foodAmount = rations,
             foodItems = getCompendiumFoodItems(),
         )
@@ -544,8 +543,7 @@ class CampingSheet(
             )
             dispatcher.dispatch(message)
             postChatMessage("Preparing Campsite, removing all existing Meal Effects")
-            val party = camping.getPartyActor()
-            val existingCampingResult = camping.worldSceneId?.let { findExistingCampsiteResult(game, it, party) }
+            val existingCampingResult = camping.worldSceneId?.let { findExistingCampsiteResult(game, it, actor) }
             if (existingCampingResult != null
                 && confirm("Reuse existing camp (${existingCampingResult.toLabel()})?")
             ) {
@@ -591,7 +589,7 @@ class CampingSheet(
         camping: CampingData
     ): RecipeData? =
         try {
-            pickSpecialRecipe(camping = camping, partyActor = camping.getPartyActor())
+            pickSpecialRecipe(camping = camping, partyActor = actor)
         } catch (_: Exception) {
             ui.notifications.error("Discover Special Meal: No recipe chosen!")
             null
@@ -778,7 +776,7 @@ class CampingSheet(
 
     private suspend fun getHexplorationActivities(): Double {
         val camping = actor.getCamping()
-        val travelSpeed = camping?.getPartyActor()?.system?.attributes?.speed?.total ?: 25
+        val travelSpeed = actor.system.attributes.speed.total
         val override = max(camping?.minimumTravelSpeed ?: 0, travelSpeed)
         return calculateHexplorationActivities(override)
     }
@@ -928,7 +926,7 @@ class CampingSheet(
         val campingActivitiesSection = section == CampingSheetSection.CAMPING_ACTIVITIES
         val eatingSection = section == CampingSheetSection.EATING
         val foodItems = getCompendiumFoodItems()
-        val totalFood = camping.getTotalCarriedFood(camping.getPartyActor(), foodItems)
+        val totalFood = camping.getTotalCarriedFood(actor, foodItems)
         val availableFood = buildFoodCost(totalFood, items = foodItems)
         val parsedCookingChoices = camping.findCookingChoices(
             charactersInCampByUuid = charactersByUuid,

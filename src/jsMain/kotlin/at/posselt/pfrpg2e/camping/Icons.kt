@@ -1,8 +1,8 @@
 package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
+import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
-import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.game
 import kotlinx.browser.document
@@ -14,7 +14,7 @@ import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLElement
 
 fun createCampingIcon(
-    uuid: String?,
+    id: String?,
     actionDispatcher: ActionDispatcher
 ): HTMLElement {
     val kingdomLink = document.create.a {
@@ -27,8 +27,8 @@ fun createCampingIcon(
             it.preventDefault()
             it.stopPropagation()
             buildPromise {
-                if (uuid != null) {
-                    fromUuidTypeSafe<CampingActor>(uuid)?.let { actor ->
+                if (id != null) {
+                    game.actors.get(id)?.takeIfInstance<CampingActor>()?.let { actor ->
                         CampingSheet(game, actor, actionDispatcher).launch()
                     }
                 }

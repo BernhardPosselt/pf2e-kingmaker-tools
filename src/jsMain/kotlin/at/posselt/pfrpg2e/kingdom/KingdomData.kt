@@ -486,4 +486,4 @@ fun KingdomData.getAllSettlements(game: Game): SettlementResult {
 fun Game.getKingdomActors(): List<KingdomActor> =
     actors.contents
         .filterIsInstance<KingdomActor>()
-        .filter { it.getKingdom() != null && it.name == "Kingdom Sheet" }
+        .filter { it.getKingdom() != null }

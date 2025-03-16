@@ -28,7 +28,7 @@ private external interface RawFeat {
     var level: Int
 }
 
-class Migration13 : Migration(13) {
+class Migration13 : Migration(13, true) {
     override suspend fun migrateKingdom(game: Game, kingdom: KingdomData) {
         val featsByName = kingdomFeats.associateBy { it.name }
         val governmentsByName = governments.associateBy { it.name.lowercase() }

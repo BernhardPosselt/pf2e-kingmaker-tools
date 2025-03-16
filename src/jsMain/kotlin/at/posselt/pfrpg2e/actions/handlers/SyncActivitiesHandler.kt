@@ -7,7 +7,6 @@ import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getActorsInCamp
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
-import at.posselt.pfrpg2e.camping.getPartyActor
 import at.posselt.pfrpg2e.camping.removeMealEffects
 import at.posselt.pfrpg2e.camping.syncCampingEffects
 import at.posselt.pfrpg2e.camping.updateCampingPosition
@@ -41,13 +40,12 @@ class SyncActivitiesHandler(
         val campingActor = fromUuidTypeSafe<CampingActor>(data.campingActorUuid)
         val camping = campingActor?.getCamping()
         if (camping != null) {
-            val party = camping.getPartyActor()
             data.prepareCampsiteResult
                 ?.let { fromCamelCase<DegreeOfSuccess>(it) }
                 ?.let { result ->
                     if (result != DegreeOfSuccess.CRITICAL_FAILURE) {
                         camping.worldSceneId?.let {
-                            updateCampingPosition(game, it, result, party)
+                            updateCampingPosition(game, it, result, campingActor)
                         }
                     }
                 }

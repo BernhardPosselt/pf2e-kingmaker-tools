@@ -2,8 +2,8 @@ package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
+import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
-import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import com.foundryvtt.core.game
 import kotlinx.browser.document
 import kotlinx.html.a
@@ -14,7 +14,7 @@ import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLElement
 
 fun createKingmakerIcon(
-    uuid: String?,
+    id: String?,
     actionDispatcher: ActionDispatcher
 ): HTMLElement {
     val kingdomLink = document.create.a {
@@ -26,9 +26,10 @@ fun createKingmakerIcon(
         onClickFunction = {
             it.preventDefault()
             it.stopPropagation()
+            console.log(id)
             buildPromise {
-                if (uuid != null) {
-                    fromUuidTypeSafe<KingdomActor>(uuid)?.let { actor ->
+                if (id != null) {
+                    game.actors.get(id)?.takeIfInstance<KingdomActor>()?.let { actor ->
                         openOrCreateKingdomSheet(game, actionDispatcher, actor)
                     }
                 }

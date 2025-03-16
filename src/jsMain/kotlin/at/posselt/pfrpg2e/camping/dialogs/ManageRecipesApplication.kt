@@ -12,7 +12,6 @@ import at.posselt.pfrpg2e.camping.cookingCost
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCompendiumFoodItems
-import at.posselt.pfrpg2e.camping.getPartyActor
 import at.posselt.pfrpg2e.camping.getTotalCarriedFood
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -79,8 +78,7 @@ class ManageRecipesApplication(
     override fun getItems(): Promise<Array<CrudItem>> = buildPromise {
         actor.getCamping()?.let { camping ->
             val foodItems = getCompendiumFoodItems()
-            val party = camping.getPartyActor()
-            val total = camping.getTotalCarriedFood(party, foodItems)
+            val total = camping.getTotalCarriedFood(actor, foodItems)
             val learnedRecipes = camping.cooking.knownRecipes.toSet()
             camping.getAllRecipes()
                 .sortedWith(compareBy(RecipeData::level, RecipeData::name))

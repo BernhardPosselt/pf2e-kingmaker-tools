@@ -215,7 +215,6 @@ fun main() {
                     game.migratePfrpg2eKingdomCampingWeather()
                     showFirstRunMessage(game)
                     validateStructures(game)
-                    openOrCreateKingdomSheet(game, actionDispatcher, game.getKingdomActors().first())
                 }
             }
 

@@ -11,7 +11,6 @@ import at.posselt.pfrpg2e.camping.getActorsInCamp
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCompendiumFoodItems
-import at.posselt.pfrpg2e.camping.getPartyActor
 import at.posselt.pfrpg2e.camping.reduceFoodBy
 import at.posselt.pfrpg2e.camping.sum
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
@@ -41,7 +40,7 @@ class ApplyMealEffectsHandler(val game: Game) : ActionHandler("applyMealEffects"
         val charactersInCampByUuid = camping.getActorsInCamp()
             .filterIsInstance<PF2ECharacter>()
             .associateBy { it.uuid }
-        val party = camping.getPartyActor()
+        val party = campingActor
         val parsed = camping.findCookingChoices(
             charactersInCampByUuid = charactersInCampByUuid,
             recipesByName = recipesByName

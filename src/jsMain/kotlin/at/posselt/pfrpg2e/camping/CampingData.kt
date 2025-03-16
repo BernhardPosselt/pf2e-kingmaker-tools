@@ -19,10 +19,8 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
-import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.actor.PF2EParty
 import js.array.toTypedArray
-import js.iterable.toList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -87,12 +85,6 @@ external interface CampingData {
     var worldSceneId: String?
     var isActive: Boolean?
 }
-
-suspend fun CampingData.getPartyActor(): PF2EParty? =
-    getActorsInCamp()
-        .filterIsInstance<PF2ECharacter>()
-        .flatMap { it.parties.values().toList() }
-        .firstOrNull()
 
 suspend fun CampingData.getActorsCarryingFood(party: PF2EParty?): List<PF2EActor> =
     getActorsInCamp() + listOfNotNull(party)
@@ -387,7 +379,7 @@ fun getDefaultCamping(game: Game): CampingData {
     )
 }
 
-typealias CampingActor = PF2ENpc
+typealias CampingActor = PF2EParty
 
 fun CampingActor.getCamping(): CampingData? =
     getAppFlag<CampingActor, CampingData?>("camping-sheet")

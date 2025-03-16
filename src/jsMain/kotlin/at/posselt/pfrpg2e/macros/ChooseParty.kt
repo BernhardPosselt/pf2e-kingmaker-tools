@@ -19,12 +19,12 @@ external interface PartyFormData {
 
 suspend fun chooseParty(game: Game): PF2EParty {
     val parties = game.actors.contents.filterIsInstance<PF2EParty>()
-    if (parties.isEmpty()) {
+    val first = parties.firstOrNull()
+    if (first == null) {
         ui.notifications.error("No parties found")
         throw IllegalStateException("No parties found")
     }
-    val first = parties.firstOrNull()
-    if (first == null) {
+    if (parties.size > 1) {
         return awaitablePrompt<PartyFormData, PF2EParty>(
             title = "Choose Party",
             templatePath = "components/forms/form.hbs",

@@ -910,6 +910,7 @@ class KingdomSheet(
         val controlDc = calculateControlDC(kingdom.level, realm, vacancies.ruler)
         val globalBonuses = evaluateGlobalBonuses(settlements.allSettlements)
         val allFeatures = kingdom.getExplodedFeatures()
+        console.log(kingdom, allFeatures)
         val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
         val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
         val leaderActors = kingdom.parseLeaderActors()

@@ -7,22 +7,29 @@ import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCampingActors
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.kingdom.KingdomActor
+import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.getKingdom
+import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.migrations.migrations.Migration10
 import at.posselt.pfrpg2e.migrations.migrations.Migration11
 import at.posselt.pfrpg2e.migrations.migrations.Migration12
 import at.posselt.pfrpg2e.migrations.migrations.Migration13
-import at.posselt.pfrpg2e.migrations.migrations.Migration6
-import at.posselt.pfrpg2e.migrations.migrations.Migration7
 import at.posselt.pfrpg2e.migrations.migrations.Migration9
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
+import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.isFirstGM
 import at.posselt.pfrpg2e.utils.openJournal
+import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.ui
+import com.foundryvtt.core.utils.deepClone
+import com.foundryvtt.pf2e.actor.PF2ENpc
+import com.foundryvtt.pf2e.actor.PF2EParty
 import js.objects.recordOf
+import kotlinx.coroutines.await
+import kotlin.math.max
 
 private suspend fun createBackups(
     game: Game,
@@ -45,8 +52,6 @@ private suspend fun createBackups(
 }
 
 private val migrations = listOf(
-    Migration6(),
-    Migration7(),
     Migration9(),
     Migration10(),
     Migration11(),
@@ -55,6 +60,18 @@ private val migrations = listOf(
 )
 
 val latestMigrationVersion = migrations.maxOfOrNull { it.version }!!
+
+suspend fun createPartyActor(index: Int): PF2EParty {
+    return PF2EParty.create(
+        recordOf(
+            "type" to "party",
+            "name" to "Party $index",
+            "ownership" to recordOf(
+                "default" to 3
+            )
+        )
+    ).await()
+}
 
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     val currentVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
@@ -69,8 +86,30 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     if (isFirstGM() && currentVersion < latestMigrationVersion) {
         ui.notifications.info("${Config.moduleName}: Running migrations, please do not close the window")
 
+        // special handling needed to copy actors onto party actor
+        // this can be removed in Foundry 14
+        if (currentVersion < 13) {
+            val parties = actors.contents.filterIsInstance<PF2EParty>()
+            val kingdoms = npcs().mapNotNull { it.getAppFlag<PF2ENpc, KingdomData?>("kingdom-sheet") }
+            val campings = npcs().mapNotNull { it.getAppFlag<PF2ENpc, KingdomData?>("camping-sheet") }
+            val sheets = max(kingdoms.size, campings.size)
+            if (sheets > 0) {
+                for (i in 0..(sheets - 1)) {
+                    val party = parties.getOrNull(i)
+                    val kingdom = kingdoms.getOrNull(i)
+                    val camping = campings.getOrNull(i)
+                    val target = party ?: createPartyActor(i)
+                    if (kingdom != null) {
+                        target.setAppFlag("kingdom-sheet", deepClone(kingdom))
+                    }
+                    if (camping != null) {
+                        target.setAppFlag("camping-sheet", deepClone(camping))
+                    }
+                }
+            }
+        }
         // create backups
-        val kingdomActors = npcs().filter { it.getKingdom() != null }
+        val kingdomActors = getKingdomActors()
         val campingActors = getCampingActors()
         createBackups(this, kingdomActors, campingActors, currentVersion)
 
