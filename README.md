@@ -42,7 +42,7 @@ You can look up my tips and house rules [here](./docs/house-rules.md)
 
 If you've enabled the official module, the following things are automatically taken care of:
 
-* Token Mappings for all companions and structures except for a few exceptions (see Manual journal)
+* Token Mappings for all companions and structures
 * Weather Sound Effects for rain, rainstorms, blizzard and snow
 * Default and Region combat tracks
 * Rolltable integration for:
@@ -52,9 +52,9 @@ If you've enabled the official module, the following things are automatically ta
 
 ### Screenshots
 
-![kingdom-sheet.png](./docs/images/kingdom-sheet.png)
+![Kingdom Sheet](./img/kingdom/docs/kingdom-sheet.webp)
 
-![settlements.png](./docs/images/settlements.png)
+![Settlements](./img/kingdom/docs/settlement.webp)
 
 ![camping sheet](./img/camping/docs/camping-activities.webp)
 
@@ -120,17 +120,9 @@ Click on the + to add a new mapping for each schema. Then add the following (see
 * **Schema Version**: Always **JSON Schema version 7**
 * Then click on the **+** below and **Directory**
 
-Schemas:
+Example:
 
-* Recipes:
+* : Recipes:
     * **Name**: Recipes
     * **Schema file or URL**: schemas/recipes.json
     * **Directory**: data/recipes
-* Structures:
-    * **Name**: Structures
-    * **Schema file or URL**: schemas/structures.json
-    * **Directory**: data/structures
-* Camping Activities:
-    * **Name**: Camping Activities:
-    * **Schema file or URL**: schemas/camping-activities.json
-    * **Directory**: data/camping-activities

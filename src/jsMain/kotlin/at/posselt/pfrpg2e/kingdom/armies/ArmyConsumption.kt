@@ -23,13 +23,15 @@ import kotlin.math.max
 private fun calculateTotalArmyConsumption(game: Game, folderId: String) =
     game.scenes.contents
         .asSequence()
+        .filter { it.hasPlayerOwner }
         .flatMap { it.tokens.contents.toList() }
         .filterNot(TokenDocument::hidden)
         .mapNotNull(TokenDocument::actor)
-        .mapNotNull(Actor::baseActor)
         .filterIsInstance<PF2EArmy>()
-        .filter { it.folder?.id == folderId }
-        .filter(PF2EArmy::hasPlayerOwner)
+        .filter {
+            val baseActor = it.baseActor
+            baseActor is PF2EArmy && baseActor.folder?.id == folderId
+        }
         .distinctBy(PF2EArmy::uuid)
         .sumOf { it.system.consumption }
 
@@ -52,16 +54,16 @@ private suspend fun checkedUpdate(game: Game, hookActor: Actor) {
 }
 
 fun registerArmyConsumptionHooks(game: Game) {
-    Hooks.onCreateToken { document, _, _, _ -> document.actor?.let { buildPromise {  checkedUpdate(game, it) } } }
-    Hooks.onDeleteToken { document, _, _ -> document.actor?.let { buildPromise {  checkedUpdate(game, it) } } }
-    Hooks.onUpdateToken { document, _, _, _ -> document.actor?.let { buildPromise {  checkedUpdate(game, it) } } }
+    Hooks.onCreateToken { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    Hooks.onDeleteToken { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    Hooks.onUpdateToken { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
 
-    Hooks.onCreateItem { document, _, _, _ -> document.actor?.let { buildPromise {  checkedUpdate(game, it) } } }
-    Hooks.onDeleteItem { document, _, _ -> document.actor?.let { buildPromise {  checkedUpdate(game, it) } } }
-    Hooks.onUpdateItem { document, _, _, _ -> document.actor?.let { buildPromise {  checkedUpdate(game, it) } } }
+    Hooks.onCreateItem { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    Hooks.onDeleteItem { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    Hooks.onUpdateItem { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
 
-    Hooks.onDeleteActor { document, _, _ -> buildPromise {  checkedUpdate(game, document) } }
-    Hooks.onUpdateActor { document, _, _, _ -> buildPromise {  checkedUpdate(game, document) } }
+    Hooks.onDeleteActor { document, _, _ -> buildPromise { checkedUpdate(game, document) } }
+    Hooks.onUpdateActor { document, _, _, _ -> buildPromise { checkedUpdate(game, document) } }
 
-    Hooks.onDeleteScene { document, _, _ -> buildPromise { updateArmyConsumption(game) }}
+    Hooks.onDeleteScene { document, _, _ -> buildPromise { updateArmyConsumption(game) } }
 }
