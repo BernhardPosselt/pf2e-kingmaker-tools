@@ -22,10 +22,8 @@ external interface ToolsMacros {
     val toggleCombatTracksMacro: () -> Unit
     val realmTileDialogMacro: () -> Unit
     val editStructureMacro: (Actor?) -> Unit
-    val openCampingSheet: () -> Unit
     val createFoodMacro: () -> Unit
     val subsistMacro: (Actor?) -> Unit
-    val viewKingdomMacro: () -> Unit
 }
 
 @JsPlainObject

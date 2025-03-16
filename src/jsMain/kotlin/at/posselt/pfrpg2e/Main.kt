@@ -12,9 +12,6 @@ import at.posselt.pfrpg2e.actions.handlers.SyncActivitiesHandler
 import at.posselt.pfrpg2e.actor.partyMembers
 import at.posselt.pfrpg2e.camping.bindCampingChatEventListeners
 import at.posselt.pfrpg2e.camping.createCampingIcon
-import at.posselt.pfrpg2e.camping.getCampingActors
-import at.posselt.pfrpg2e.camping.newCampingActor
-import at.posselt.pfrpg2e.camping.openCampingSheet
 import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
@@ -22,10 +19,7 @@ import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.bindChatButtons
 import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
-import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.kingdom.registerContextMenus
-import at.posselt.pfrpg2e.kingdom.sheet.newKingdomActor
-import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
 import at.posselt.pfrpg2e.macros.awardXPMacro
@@ -191,22 +185,8 @@ fun main() {
                     toggleCombatTracksMacro = { buildPromise { toggleCombatTracksMacro(game) } },
                     realmTileDialogMacro = { buildPromise { editRealmTileMacro(game) } },
                     editStructureMacro = { actor -> buildPromise { editStructureMacro(actor) } },
-                    openCampingSheet = {
-                        buildPromise {
-                            // TODO: let player choose which camping sheet to open
-                            val actor = game.getCampingActors().firstOrNull() ?: newCampingActor()
-                            openCampingSheet(game, actionDispatcher, actor)
-                        }
-                    },
                     subsistMacro = { actor -> buildPromise { subsistMacro(game, actor) } },
                     createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
-                    viewKingdomMacro = {
-                        buildPromise {
-                            // TODO: let player choose which kingdom to open
-                            val actor = game.getKingdomActors().firstOrNull() ?: newKingdomActor()
-                            openOrCreateKingdomSheet(game, actionDispatcher, actor)
-                        }
-                    }
                 ),
             )
 
