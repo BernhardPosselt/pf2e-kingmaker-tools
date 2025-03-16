@@ -17,10 +17,9 @@
 <hr>
 <div class="km-modifier-breakdown">
     {{#each creativeSolutionPills}}
-        <span {{#unless ../isCreativeSolution}}hidden="hidden"{{/unless}}
-              class="km-modifier-pill km-creative-solution-pills">{{this}}</span>
+        <div class="km-modifier-pill km-creative-solution-pills {{#unless ../isCreativeSolution}}km-chat-hidden{{/unless}}">{{this}}</div>
     {{/each}}
     {{#each pills}}
-        <span {{#if ../isCreativeSolution}}hidden="hidden"{{/if}} class="km-modifier-pill">{{this}}</span>
+        <div class="km-modifier-pill {{#if ../isCreativeSolution}}km-chat-hidden{{/if}}">{{this}}</div>
     {{/each}}
 </div>

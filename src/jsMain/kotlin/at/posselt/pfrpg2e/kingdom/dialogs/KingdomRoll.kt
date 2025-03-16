@@ -14,7 +14,6 @@ import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
 import at.posselt.pfrpg2e.kingdom.setKingdom
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
@@ -101,7 +100,7 @@ suspend fun rollCheck(
 
     if (useFameInfamy) {
         kingdomActor.getKingdom()?.let {
-            val fameType = it.fame.type.toLabel()
+            val fameType = if(it.fame.type == "famous") "Fame" else "Infamy"
             postChatMessage("Reducing $fameType by 1")
             it.fame.now = max(0, it.fame.now - 1)
             kingdomActor.setKingdom(it)
@@ -141,7 +140,7 @@ suspend fun rollCheck(
             rollMode = rollMode?.value ?: RollMode.PUBLICROLL.value,
             activityId = activity.id,
             degree = originalDegree.value,
-            additionalMessages = serializeB64Json(degreeMessages),
+            additionalChatMessages = serializeB64Json(degreeMessages),
             actorUuid = kingdomActor.uuid,
         )
         postActivityDegreeOfSuccess(context, changed)
@@ -158,7 +157,7 @@ suspend fun postActivityDegreeOfSuccess(
     val activity = kingdom.getActivity(metaContext.activityId) ?: return
     val rollMode = RollMode.fromString(metaContext.rollMode) ?: return
     val degree = DegreeOfSuccess.fromString(metaContext.degree) ?: return
-    val degreeMessages = metaContext.additionalMessages
+    val degreeMessages = metaContext.additionalChatMessages
         ?.let { deserializeB64Json<DegreeMessages>(it) }
     val metaHtml = tpl(
         path = "chatmessages/upgrade-roll-meta.hbs",

@@ -132,10 +132,10 @@ external interface RawModifier {
 }
 
 fun RawExpression<Boolean>.parse(): Expression<Boolean> {
-    return if (Object.hasOwn(this, "and")) {
+    return if (Object.hasOwn(this, "all")) {
         val p = this.unsafeCast<RawAll>()
         All(p.all.map { it.parse() })
-    } else if (Object.hasOwn(this, "or")) {
+    } else if (Object.hasOwn(this, "some")) {
         val p = this.unsafeCast<RawSome>()
         Some(p.some.map { it.parse() })
     } else if (Object.hasOwn(this, "lt")) {

@@ -1202,8 +1202,14 @@ class KingdomSheet(
     private fun createMainNav(kingdom: KingdomData): Array<NavEntryContext> {
         val tradeAgreements = kingdom.groups.count { it.relations == Relations.TRADE_AGREEMENT.value }
         return MainNavEntry.entries.map {
+            val postfix = when (it) {
+                MainNavEntry.TRADE_AGREEMENTS -> " ($tradeAgreements)"
+                MainNavEntry.SETTLEMENTS -> " (${kingdom.settlements.size})"
+                MainNavEntry.MODIFIERS -> " (${kingdom.modifiers.size})"
+                else -> ""
+            }
             NavEntryContext(
-                label = if (it == MainNavEntry.TRADE_AGREEMENTS) "${it.label} ($tradeAgreements)" else it.label,
+                label = "${it.label}$postfix",
                 active = currentNavEntry == it,
                 link = it.value,
                 title = it.label,

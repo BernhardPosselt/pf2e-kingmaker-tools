@@ -1,9 +1,8 @@
 * kingdom quickstart journal on first launch + first launch code
 * upgrading from earlier versions changelog
-* rerolling and upgrading results
+* test upgrade/downgrade rolls (also in re-rolls)
 * update docs
 * migrate to party actor
-* right click add to ongoing events
 * port to v13
 
 jQuery use:

@@ -26,3 +26,7 @@
 .strike-through  {
     text-decoration: line-through;
 }
+
+.km-chat-hidden {
+    display: none;
+}

@@ -11,7 +11,7 @@ external interface UpgradeMetaContext {
     val rollMode: String
     val activityId: String
     val degree: String
-    val additionalMessages: String?
+    val additionalChatMessages: String?
     val actorUuid: String
 }
 
@@ -20,7 +20,7 @@ private fun parseUpgradeMeta(elem: HTMLElement) =
         rollMode = elem.dataset["rollMode"] ?: "",
         activityId = elem.dataset["activityId"] ?: "",
         degree = elem.dataset["degree"] ?: "",
-        additionalMessages = elem.dataset["additionalMessages"],
+        additionalChatMessages = elem.dataset["additionalChatMessages"],
         actorUuid = elem.dataset["kingdomActorUuid"] ?: "",
     )
 
@@ -31,7 +31,6 @@ enum class ChangeDegree {
 
 suspend fun changeDegree(rollMeta: HTMLElement, mode: ChangeDegree) {
     val meta = parseUpgradeMeta(rollMeta)
-    console.log(meta)
     val degree = DegreeOfSuccess.fromString(meta.degree)
     val changed = if (mode == ChangeDegree.UPGRADE) {
         when (degree) {

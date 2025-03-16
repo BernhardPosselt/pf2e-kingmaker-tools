@@ -48,10 +48,10 @@ private external interface RollMetaContext {
 
 private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
     val meta = rollElement.querySelector(".km-roll-meta") as HTMLElement?
-    val pills = rollElement.querySelectorAll(".km-modifier-pill.km-creative-solution-pills").asList()
+    val creativePills = rollElement.querySelectorAll(".km-modifier-pill.km-creative-solution-pills").asList()
         .map { it.textContent ?: "" }
         .toTypedArray()
-    val creativePills = rollElement.querySelectorAll(".km-modifier-pill:not(.km-creative-solution-pills)").asList()
+    val pills = rollElement.querySelectorAll(".km-modifier-pill:not(.km-creative-solution-pills)").asList()
         .map { it.textContent ?: "" }
         .toTypedArray()
     return RollMetaContext(
@@ -139,7 +139,7 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
     val upgrades = meta.upgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val downgrades = meta.downgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val degreeMessages = meta.additionalChatMessages?.let { deserializeB64Json<DegreeMessages>(it) }
-    console.log(upgrades, downgrades, degreeMessages)
+    console.log(upgrades, downgrades)
     rollCheck(
         afterRoll = {},
         rollMode = rollMode,
