@@ -11,18 +11,6 @@ import js.array.toTypedArray
 import js.objects.recordOf
 import kotlinx.coroutines.await
 
-//fun Game.getTargetedArmyConditions() =
-//    getTargetedArmies()
-//        .firstOrNull()
-//        ?.let {
-//            ArmyConditionInfo(
-//                armyName = it.name,
-//                armyUuid = it.uuid,
-//                miredValue = it.miredValue() ?: 0,
-//                wearyValue = it.wearyValue() ?: 0,
-//            )
-//        }
-
 fun Game.getSelectedArmyConditions() =
     getSelectedArmies()
         .firstOrNull()
@@ -34,13 +22,6 @@ fun Game.getSelectedArmyConditions() =
                 wearyValue = it.wearyValue() ?: 0,
             )
         }
-
-
-//fun Game.getTargetedArmies(): Array<PF2EArmy> =
-//    user.targets.values()
-//        .asSequence()
-//        .filterIsInstance<PF2EArmy>()
-//        .toTypedArray()
 
 fun Game.getSelectedArmies(): Array<PF2EArmy> =
     canvas.tokens.controlled
@@ -54,9 +35,6 @@ fun Game.getRecruitableArmies(folderName: String): Array<PF2EArmy> =
         .filterIsInstance<PF2EArmy>()
         .filter { it.folder?.name == folderName }
         .toTypedArray()
-
-fun highestScoutingDc(armies: List<PF2EArmy>): Int =
-    armies.maxOfOrNull { it.system.scouting } ?: 0
 
 suspend fun Game.importBasicArmies(folderName: String): Folder {
     val folder = Folder.create(

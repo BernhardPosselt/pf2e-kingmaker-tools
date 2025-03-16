@@ -1,15 +1,18 @@
 package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
+import at.posselt.pfrpg2e.kingdom.dialogs.ChangeDegree
+import at.posselt.pfrpg2e.kingdom.dialogs.changeDegree
 import at.posselt.pfrpg2e.takeIfInstance
+import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.push
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
+import com.foundryvtt.core.applications.api.ContextMenuEntry
 import com.foundryvtt.core.game
 import com.foundryvtt.core.onGetChatLogEntryContext
 import io.kvision.jquery.JQuery
 import io.kvision.jquery.get
-import js.objects.recordOf
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -30,9 +33,12 @@ private fun Element.contentLink() =
     querySelector(".content-link")
         ?.takeIfInstance<HTMLElement>()
 
-private fun Element.upgradeDegree() =
+private fun Element.upgradeMeta() =
     querySelector(".km-upgrade-result")
         ?.takeIfInstance<HTMLElement>()
+
+private fun Element.upgradeDegree() =
+    upgradeMeta()
         ?.dataset["degree"]
 
 private fun Element.isKingdomRoll() = rollMeta() != null
@@ -89,13 +95,25 @@ private val entries = listOf<ContextEntry>(
         name = "Upgrade Degree of Success",
         icon = "<i class=\"fa-solid fa-arrow-up\"></i>",
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.canUpgrade() },
-        callback = { game, elem -> console.log(elem) } // TODO: upgrade
+        callback = { game, elem ->
+            buildPromise {
+                elem.upgradeMeta()?.let {
+                    changeDegree(it, mode= ChangeDegree.UPGRADE)
+                }
+            }
+        }
     ),
     ContextEntry(
         name = "Downgrade Degree of Success",
         icon = "<i class=\"fa-solid fa-arrow-down\"></i>",
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.canDowngrade() },
-        callback = { game, elem -> console.log(elem) } // TODO: downgrade
+        callback = { game, elem ->
+            buildPromise {
+                elem.upgradeMeta()?.let {
+                    changeDegree(it, mode= ChangeDegree.DOWNGRADE)
+                }
+            }
+        }
     ),
 )
 
@@ -104,13 +122,13 @@ fun registerContextMenus() {
     Hooks.onGetChatLogEntryContext { elem, items ->
         entries.forEach { but ->
             items.push(
-                recordOf(
-                    "name" to but.name,
-                    "condition" to { elem: JQuery ->
+                ContextMenuEntry(
+                    name = but.name,
+                    condition = { elem: JQuery ->
                         elem[0]?.let { html -> but.condition(game, html) } == true
                     },
-                    "icon" to but.icon,
-                    "callback" to { elem -> elem[0]?.let { html -> but.callback(game, html) } },
+                    icon = but.icon,
+                    callback = { elem -> elem[0]?.let { html -> but.callback(game, html) } },
                 ).asDynamic()
             )
             console.log(items)

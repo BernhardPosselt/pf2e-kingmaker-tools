@@ -10,5 +10,5 @@ external interface ContextMenuEntry {
     val classes: Array<String>?
     val group: String?
     val callback: (JQuery) -> Unit
-    val condition: (JQuery) -> Unit // Boolean or ContextMenuCondition
+    val condition: (JQuery) -> Boolean // Boolean or ContextMenuCondition
 }

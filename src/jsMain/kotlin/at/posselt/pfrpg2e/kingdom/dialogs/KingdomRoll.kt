@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.RawModifier
+import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
@@ -13,6 +14,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.deserializeB64Json
+import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postDegreeOfSuccess
 import at.posselt.pfrpg2e.utils.serializeB64Json
@@ -140,28 +142,10 @@ private external interface UpgradeMetaContext {
     val rollMode: String
     val activityId: String
     val degree: String
-    val additionalMessages: String
+    val additionalMessages: String?
     val actorUuid: String
 }
 
-private suspend fun buildUpgradeMeta(
-    degree: DegreeOfSuccess,
-    activity: RawActivity,
-    rollMode: RollMode,
-    degreeMessages: DegreeMessages,
-    actorUuid: String
-): String {
-    return tpl(
-        path = "chatmessages/upgrade-roll-meta.hbs",
-        ctx = UpgradeMetaContext(
-            rollMode = rollMode.value,
-            activityId = activity.id,
-            degree = degree.value,
-            additionalMessages = serializeB64Json(degreeMessages),
-            actorUuid = actorUuid,
-        ),
-    )
-}
 
 // TODO: re-roll with creative solution
 //if (data.creativeSolution && !data.assurance) {
@@ -174,9 +158,40 @@ private fun parseUpgradeMeta(elem: HTMLElement) =
         rollMode = elem.dataset["rollMode"] ?: "",
         activityId = elem.dataset["activityId"] ?: "",
         degree = elem.dataset["degree"] ?: "",
-        additionalMessages = deserializeB64Json<String>(elem.dataset["additionalMessages"] ?: ""),
+        additionalMessages = elem.dataset["additionalMessages"],
         actorUuid = elem.dataset["kingdomActorUuid"] ?: "",
     )
+
+enum class ChangeDegree {
+    UPGRADE,
+    DOWNGRADE;
+}
+
+suspend fun changeDegree(rollMeta: HTMLElement, mode: ChangeDegree) {
+    val meta = parseUpgradeMeta(rollMeta)
+    console.log(meta)
+    val degree = DegreeOfSuccess.fromString(meta.degree)
+    val changed = if (mode == ChangeDegree.UPGRADE) {
+        when (degree) {
+            DegreeOfSuccess.CRITICAL_FAILURE -> DegreeOfSuccess.FAILURE
+            DegreeOfSuccess.FAILURE -> DegreeOfSuccess.SUCCESS
+            DegreeOfSuccess.SUCCESS -> DegreeOfSuccess.CRITICAL_SUCCESS
+            else -> null
+        }
+    } else {
+        when (degree) {
+            DegreeOfSuccess.FAILURE -> DegreeOfSuccess.CRITICAL_FAILURE
+            DegreeOfSuccess.SUCCESS -> DegreeOfSuccess.FAILURE
+            DegreeOfSuccess.CRITICAL_SUCCESS -> DegreeOfSuccess.SUCCESS
+            else -> null
+        }
+    }
+    if (changed == null) {
+        console.error("Can not upgrade degree $degree")
+    } else {
+        postActivityDegreeOfSuccess(meta, changed)
+    }
+}
 
 suspend fun rollCheck(
     afterRoll: AfterRoll,
@@ -218,7 +233,7 @@ suspend fun rollCheck(
     val originalDegree = degreeResult.originalDegree
     val changed = degreeResult.changedDegree
     val nonNullRollMode = rollMode ?: RollMode.PUBLICROLL
-    // TODO: needs to add upgrades/downgrades
+    // TODO: needs to add upgrades/downgrades from modifiers
     val rollMeta = generateRollMeta(
         activity = activity,
         modifier = modifier,
@@ -241,47 +256,65 @@ suspend fun rollCheck(
         )
     } else {
         afterRoll(changed)
-        val metaHtml = buildUpgradeMeta(
-            rollMode = nonNullRollMode,
-            activity = activity,
-            degree = changed,
-            degreeMessages = degreeMessages,
+        val context = UpgradeMetaContext(
+            rollMode = rollMode?.value ?: RollMode.PUBLICROLL.value,
+            activityId = activity.id,
+            degree = originalDegree.value,
+            additionalMessages = serializeB64Json(degreeMessages),
             actorUuid = kingdomActor.uuid,
         )
-        val modifiers = when (changed) {
-            DegreeOfSuccess.CRITICAL_FAILURE -> activity.criticalFailure
-            DegreeOfSuccess.FAILURE -> activity.failure
-            DegreeOfSuccess.SUCCESS -> activity.success
-            DegreeOfSuccess.CRITICAL_SUCCESS -> activity.criticalSuccess
-        }
-        val messages = when (changed) {
-            DegreeOfSuccess.CRITICAL_FAILURE -> degreeMessages.criticalFailure
-            DegreeOfSuccess.FAILURE -> degreeMessages.failure
-            DegreeOfSuccess.SUCCESS -> degreeMessages.success
-            DegreeOfSuccess.CRITICAL_SUCCESS -> degreeMessages.criticalSuccess
-        }
-        val chatModifiers = modifiers?.modifiers ?: emptyArray()
-        val postHtml = if (chatModifiers.isNotEmpty() || changed == DegreeOfSuccess.CRITICAL_SUCCESS) {
-            buildChatButtons(changed, chatModifiers, kingdomActor.uuid)
-        } else {
-            ""
-        }
-        postDegreeOfSuccess(
-            degreeOfSuccess = changed,
-            originalDegreeOfSuccess = originalDegree,
-            title = activity.title,
-            rollMode = nonNullRollMode,
-            metaHtml = metaHtml,
-            preHtml = "<p>${activity.description}</p>",
-            postHtml = postHtml,
-            message = modifiers?.msg,
-        )
-        if (messages != null) {
-            postChatMessage(
-                "$messages<span hidden=\"hidden\" data-kingdom-actor-uuid=\"${kingdomActor.uuid}\"></span>",
-                rollMode = nonNullRollMode
-            )
-        }
+        postActivityDegreeOfSuccess(context, changed)
     }
     return changed
+}
+
+private suspend fun postActivityDegreeOfSuccess(
+    metaContext: UpgradeMetaContext,
+    changedDegreeOfSuccess: DegreeOfSuccess,
+) {
+    val kingdomActor = fromUuidTypeSafe<KingdomActor>(metaContext.actorUuid) ?: return
+    val kingdom = kingdomActor.getKingdom() ?: return
+    val activity = kingdom.getActivity(metaContext.activityId) ?: return
+    val rollMode = RollMode.fromString(metaContext.rollMode) ?: return
+    val degree = DegreeOfSuccess.fromString(metaContext.degree) ?: return
+    val degreeMessages = metaContext.additionalMessages
+        ?.let { deserializeB64Json<DegreeMessages>(it) }
+    val metaHtml = tpl(
+        path = "chatmessages/upgrade-roll-meta.hbs",
+        ctx = metaContext.copy(degree = changedDegreeOfSuccess.value),
+    )
+    val modifiers = when (changedDegreeOfSuccess) {
+        DegreeOfSuccess.CRITICAL_FAILURE -> activity.criticalFailure
+        DegreeOfSuccess.FAILURE -> activity.failure
+        DegreeOfSuccess.SUCCESS -> activity.success
+        DegreeOfSuccess.CRITICAL_SUCCESS -> activity.criticalSuccess
+    }
+    val messages = when (changedDegreeOfSuccess) {
+        DegreeOfSuccess.CRITICAL_FAILURE -> degreeMessages?.criticalFailure
+        DegreeOfSuccess.FAILURE -> degreeMessages?.failure
+        DegreeOfSuccess.SUCCESS -> degreeMessages?.success
+        DegreeOfSuccess.CRITICAL_SUCCESS -> degreeMessages?.criticalSuccess
+    }
+    val chatModifiers = modifiers?.modifiers ?: emptyArray()
+    val postHtml = if (chatModifiers.isNotEmpty() || changedDegreeOfSuccess == DegreeOfSuccess.CRITICAL_SUCCESS) {
+        buildChatButtons(changedDegreeOfSuccess, chatModifiers, kingdomActor.uuid)
+    } else {
+        ""
+    }
+    postDegreeOfSuccess(
+        degreeOfSuccess = changedDegreeOfSuccess,
+        originalDegreeOfSuccess = degree,
+        title = activity.title,
+        rollMode = rollMode,
+        metaHtml = metaHtml,
+        preHtml = "<p>${activity.description}</p>",
+        postHtml = postHtml,
+        message = modifiers?.msg,
+    )
+    if (messages != null) {
+        postChatMessage(
+            "$messages<span hidden=\"hidden\" data-kingdom-actor-uuid=\"${kingdomActor.uuid}\"></span>",
+            rollMode = rollMode
+        )
+    }
 }

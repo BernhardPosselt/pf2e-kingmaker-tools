@@ -1,6 +1,6 @@
 <div hidden class="km-upgrade-result"
      data-roll-mode="{{rollMode}}"
-     data-activity="{{activityId}}"
+     data-activity-id="{{activityId}}"
      data-degree="{{degree}}"
      data-kingdom-actor-uuid="{{actorUuid}}"
-     data-additional-chat-messages="{{additionalChatMessages}}"></div>
+     {{#if additionalChatMessages}}data-additional-chat-messages="{{additionalChatMessages}}"{{/if}}></div>
