@@ -19,5 +19,5 @@ data class ModifierResult(
     val upgradeResults: Set<UpgradeResult>,
     val downgradeResults: Set<DowngradeResult>,
 ) {
-    val assurance = 10 + (bonuses[ModifierType.PROFICIENCY] ?: 0)
+    val assurance = bonuses[ModifierType.PROFICIENCY] ?: 0
 }

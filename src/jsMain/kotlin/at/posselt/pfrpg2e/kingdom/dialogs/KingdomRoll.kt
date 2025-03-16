@@ -80,6 +80,7 @@ suspend fun rollCheck(
     downgrades: Set<DowngradeResult>,
     degreeMessages: DegreeMessages?,
     useFameInfamy: Boolean,
+    assurance: Boolean,
 ): DegreeOfSuccess {
     val result = d20Check(
         dc = dc,
@@ -88,6 +89,7 @@ suspend fun rollCheck(
         rollTwiceKeepHighest = rollTwiceKeepHighest,
         rollTwiceKeepLowest = rollTwiceKeepLowest,
         toChat = false,
+        assurance = assurance,
     )
 
     if (isCreativeSolution) {

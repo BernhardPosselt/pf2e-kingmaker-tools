@@ -167,5 +167,6 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
         rollTwiceKeepHighest = mode == ReRollMode.ROLL_TWICE_KEEP_HIGHEST,
         rollTwiceKeepLowest = mode == ReRollMode.ROLL_TWICE_KEEP_LOWEST,
         useFameInfamy = mode == ReRollMode.FAME_OR_INFAMY,
+        assurance = false,
     )
 }

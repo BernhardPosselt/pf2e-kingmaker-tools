@@ -87,6 +87,7 @@ import kotlin.collections.map
 import kotlin.collections.plus
 import kotlin.collections.toSet
 import kotlin.collections.toTypedArray
+import kotlin.emptyArray
 import kotlin.js.Promise
 import kotlin.let
 import kotlin.math.max
@@ -298,6 +299,26 @@ private class KingdomCheckDialog(
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
+            "assurance" -> {
+                val modifier = target.dataset["modifier"]?.toInt() ?: 0
+                val pills = arrayOf("Assurance $modifier" )
+                buildPromise {
+                    roll(
+                        modifier = modifier,
+                        pills = pills,
+                        upgrades = emptySet(),
+                        downgrades = emptySet(),
+                        fortune = false,
+                        rollTwiceKeepHighest = false,
+                        rollTwiceKeepLowest = false,
+                        creativeSolutionModifier = 0,
+                        creativeSolutionPills = emptyArray(),
+                        consumedModifiers = emptySet(),
+                        assurance = true,
+                    )
+                }
+            }
+
             "roll" -> {
                 buildPromise {
                     val rollTwiceKeepHighest = target.dataset["rollTwiceKeepHighest"] == "true"
@@ -333,8 +354,8 @@ private class KingdomCheckDialog(
                         creativeSolutionModifier = creativeSolutionModifier,
                         creativeSolutionPills = creativeSolutionPills,
                         consumedModifiers = consumedModifiers,
+                        assurance = false,
                     )
-                    close()
                 }
             }
 
@@ -377,6 +398,7 @@ private class KingdomCheckDialog(
         consumedModifiers: Set<String>,
         rollTwiceKeepHighest: Boolean,
         rollTwiceKeepLowest: Boolean,
+        assurance: Boolean,
     ) {
         rollCheck(
             afterRoll = afterRoll,
@@ -396,6 +418,7 @@ private class KingdomCheckDialog(
             downgrades = downgrades,
             degreeMessages = degreeMessages,
             useFameInfamy = false,
+            assurance = assurance,
         )
         if (data.supernaturalSolution && !data.assurance) {
             KingdomCheckDialog(
@@ -409,14 +432,17 @@ private class KingdomCheckDialog(
                         kingdomActor.setKingdom(it)
                     }
                 },
-                params = params.copy(validSkills = setOf(KingdomSkill.MAGIC), title = "Supernatural Solution: ${params.title}"),
+                params = params.copy(
+                    validSkills = setOf(KingdomSkill.MAGIC),
+                    title = "Supernatural Solution: ${params.title}"
+                ),
                 degreeMessages = degreeMessages,
                 flags = flags,
                 isSupernaturalSolution = true,
             ).launch()
         }
 
-        kingdomActor.getKingdom()?.let {k ->
+        kingdomActor.getKingdom()?.let { k ->
             k.modifiers = kingdom.modifiers.filter { it.id !in consumedModifiers }.toTypedArray()
             kingdomActor.setKingdom(k)
         }
@@ -576,7 +602,7 @@ private class KingdomCheckDialog(
                 value = data.newModifierModifier,
                 name = "newModifierModifier",
             ).toContext(),
-            assuranceModifier = checkModifier,
+            assuranceModifier = checkModifier + 10,
             assuranceDegree = determineAssuranceDegree(checkModifier, upgrades, downgrades),
             creativeSolutionModifier = creativeSolutionModifiers.total,
             creativeSolutionPills = creativeSolutionPills,
@@ -584,7 +610,7 @@ private class KingdomCheckDialog(
             supernaturalSolutionDisabled = evaluatedModifiers.fortune || isSupernaturalSolution,
             consumeModifiers = serializeB64Json(consumeModifierIds),
             rollTwiceKeepHighest = evaluatedModifiers.rollTwiceKeepHighest,
-            rollTwiceKeepLowest = evaluatedModifiers.rollTwiceKeepHighest,
+            rollTwiceKeepLowest = evaluatedModifiers.rollTwiceKeepLowest,
         )
     }
 
@@ -593,7 +619,7 @@ private class KingdomCheckDialog(
         upgradeDegrees: Set<UpgradeResult>,
         downgradeDegrees: Set<DowngradeResult>
     ): String {
-        var degree = determineDegreeOfSuccess(data.dc, modifier, 10)
+        var degree = determineDegreeOfSuccess(data.dc, modifier + 10, 10)
         return determineDegree(degree, upgradeDegrees, downgradeDegrees).changedDegree.label
     }
 

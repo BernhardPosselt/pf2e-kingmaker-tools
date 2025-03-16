@@ -40,8 +40,11 @@ suspend fun d20Check(
     toChat: Boolean = true,
     rollTwiceKeepHighest: Boolean = false,
     rollTwiceKeepLowest: Boolean = false,
+    assurance: Boolean = false,
 ): D20CheckResult {
-    val d20 = if (rollTwiceKeepHighest && !rollTwiceKeepLowest) {
+    val d20 = if (assurance) {
+        "10"
+    } else if (rollTwiceKeepHighest && !rollTwiceKeepLowest) {
         "2d20kh"
     } else if (rollTwiceKeepLowest && !rollTwiceKeepHighest) {
         "2d20kl"

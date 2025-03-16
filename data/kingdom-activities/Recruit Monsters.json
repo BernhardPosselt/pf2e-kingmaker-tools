@@ -15,7 +15,7 @@
     "modifiers": [
       {
         "type": "untyped",
-        "name": "Use Recruited Monster",
+        "name": "Use Recruited Monster to resolve Bandit Activity, Monster Activity, Sacrifices, or Undead Uprising",
         "buttonLabel": "Gain A Monster",
         "isConsumedAfterRoll": true,
         "enabled": false,
@@ -38,7 +38,7 @@
     "modifiers": [
       {
         "type": "untyped",
-        "name": "Recruit Recruited Next Turn",
+        "name": "Recruit befriended monster",
         "buttonLabel": "Upgrade Degree to Recruit Monster Next Turn",
         "isConsumedAfterRoll": true,
         "enabled": false,

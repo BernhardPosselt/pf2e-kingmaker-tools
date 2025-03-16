@@ -32,11 +32,11 @@
                 "turns": 1,
                 "enabled": false,
                 "value": 1,
+                "isConsumedAfterRoll": true,
                 "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
                 "name": "Deliberate Planning: Critical Success",
                 "type": "circumstance",
                 "fortune": true,
-                "rollTwiceKeepHighest": true,
                 "applyIf": [
                     {
                         "eq": [
@@ -55,6 +55,7 @@
                 "turns": 1,
                 "enabled": false,
                 "value": 1,
+                "isConsumedAfterRoll": true,
                 "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
                 "name": "Deliberate Planning: Success",
                 "type": "circumstance",
@@ -78,11 +79,11 @@
             {
                 "turns": 1,
                 "enabled": false,
-                "value": 1,
-                "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
-                "name": "Deliberate Planning: Critical Success",
-                "type": "circumstance",
-                "fortune": true,
+                "value": 0,
+                "buttonLabel": "Roll twice and take the worse result when resolving continuous event",
+                "name": "Resolving continuous event",
+                "type": "untyped",
+                "isConsumedAfterRoll": true,
                 "rollTwiceKeepLowest": true,
                 "applyIf": [
                     {
