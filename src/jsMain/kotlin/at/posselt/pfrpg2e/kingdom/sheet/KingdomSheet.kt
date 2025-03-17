@@ -128,7 +128,6 @@ import com.foundryvtt.core.documents.onUpdateTile
 import com.foundryvtt.core.documents.onUpdateToken
 import com.foundryvtt.core.onApplyTokenStatusEffect
 import com.foundryvtt.core.onCanvasReady
-import com.foundryvtt.core.onSightRefresh
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.enrichHtml
 import com.foundryvtt.core.utils.deepClone
@@ -146,6 +145,23 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
+import kotlin.collections.count
+import kotlin.collections.filter
+import kotlin.collections.filterIndexed
+import kotlin.collections.filterIsInstance
+import kotlin.collections.find
+import kotlin.collections.firstNotNullOfOrNull
+import kotlin.collections.forEach
+import kotlin.collections.getOrNull
+import kotlin.collections.isNotEmpty
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.mapNotNull
+import kotlin.collections.mutableSetOf
+import kotlin.collections.plus
+import kotlin.collections.sortedBy
+import kotlin.collections.toSet
+import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -217,7 +233,6 @@ class KingdomSheet(
             }
         }
         appHook.onCanvasReady { _ -> render() }
-        appHook.onSightRefresh { _ -> render() } // end of drag movement
         appHook.onApplyTokenStatusEffect { _, _, _ -> render() }
         appHook.onCloseKingmakerHexEdit { _, _ -> render() }
         appHook.onUpdateActor { actor, _, _, _ -> checkUpdateActorReRenders(actor) }
