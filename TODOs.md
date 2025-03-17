@@ -8,3 +8,4 @@ Testing TODOs:
 * macros
 * cooperative leadership
 * vacancies
+* ruin + unrest penalties in roll  popup

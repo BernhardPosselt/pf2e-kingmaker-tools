@@ -26,12 +26,19 @@ private fun calculateTotalArmyConsumption(game: Game, folderId: String) =
         .asSequence()
         .flatMap { it.tokens.contents.toList() }
         .filterNot(TokenDocument::hidden)
-        .mapNotNull(TokenDocument::actor)
-        .filterIsInstance<PF2EArmy>()//nG2H6TnFlrAXwVsL
-        .filter {
-            val baseActor = it.parent?.takeIfInstance<TokenDocument>()?.baseActor
-            baseActor is PF2EArmy && baseActor.folder?.id == folderId
+        .filter { token ->
+            val actor = token.actor
+            if (actor is PF2EArmy && token.actorLink) {
+                actor.folder?.id == folderId
+            } else if (actor is PF2EArmy) {
+                val baseActor = actor.parent?.takeIfInstance<TokenDocument>()?.baseActor
+                baseActor is PF2EArmy && baseActor.folder?.id == folderId
+            } else {
+                false
+            }
         }
+        .map { it.actor }
+        .filterIsInstance<PF2EArmy>()
         .distinctBy(PF2EArmy::uuid)
         .sumOf { it.system.consumption }
 
