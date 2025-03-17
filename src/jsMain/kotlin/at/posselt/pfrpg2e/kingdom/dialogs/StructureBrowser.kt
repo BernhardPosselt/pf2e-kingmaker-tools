@@ -278,7 +278,7 @@ class StructureBrowser(
         return when (mode) {
             Cost.UPGRADE -> {
                 val settlementStructuresByName = structures.associateBy { it.name }
-                structures
+                worldStructures
                     .flatMap { structure ->
                         structure.upgradeFrom.mapNotNull { name ->
                             settlementStructuresByName[name]?.let { upgradeFrom ->
@@ -353,10 +353,10 @@ class StructureBrowser(
                 add { it.storage.isNotEmpty() }
             }
             if (MainFilters.CHEAPER_WHEN_UPGRADED in mainFilters) {
-                add { it.name in structuresUpgradedFrom }
+                add { it.upgradeFrom.isNotEmpty() }
             }
             if (MainFilters.UPGRADEABLE in mainFilters) {
-                add { it.upgradeFrom.isNotEmpty() }
+                add { it.name in structuresUpgradedFrom }
             }
             addAll(activityStructureFilters)
         }
@@ -383,23 +383,23 @@ class StructureBrowser(
                     residential = it.traits.contains(StructureTrait.RESIDENTIAL),
                     rp = CostContext(
                         value = it.construction.rp,
-                        lacksFunds = it.construction.rp >= kingdom.resourcePoints.now,
+                        lacksFunds = it.construction.rp > kingdom.resourcePoints.now,
                     ),
                     lumber = CostContext(
                         value = it.construction.lumber,
-                        lacksFunds = it.construction.lumber >= kingdom.commodities.now.lumber,
+                        lacksFunds = it.construction.lumber > kingdom.commodities.now.lumber,
                     ),
                     ore = CostContext(
                         value = it.construction.ore,
-                        lacksFunds = it.construction.ore >= kingdom.commodities.now.ore,
+                        lacksFunds = it.construction.ore > kingdom.commodities.now.ore,
                     ),
                     stone = CostContext(
                         value = it.construction.stone,
-                        lacksFunds = it.construction.stone >= kingdom.commodities.now.stone,
+                        lacksFunds = it.construction.stone > kingdom.commodities.now.stone,
                     ),
                     luxuries = CostContext(
                         value = it.construction.luxuries,
-                        lacksFunds = it.construction.luxuries >= kingdom.commodities.now.luxuries,
+                        lacksFunds = it.construction.luxuries > kingdom.commodities.now.luxuries,
                     ),
                 )
             }.toTypedArray()

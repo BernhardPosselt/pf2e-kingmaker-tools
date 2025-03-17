@@ -28,6 +28,7 @@ external interface ActorLeaderContext {
 @JsPlainObject
 external interface LeaderValuesContext {
     val label: String
+    val leader: String
     val actor: ActorLeaderContext?
     val invested: FormElementContext
     val type: FormElementContext
@@ -69,6 +70,7 @@ fun RawLeaderValues.toContext(
         hideLabel = true,
         value = LeaderType.fromString(type) ?: LeaderType.PC,
     ).toContext(),
+    leader= leader.value,
 )
 
 fun RawLeaders.toContext(

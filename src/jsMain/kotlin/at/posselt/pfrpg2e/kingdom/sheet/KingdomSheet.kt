@@ -935,6 +935,7 @@ class KingdomSheet(
                 manualSettlementLevel = false,
                 waterBorders = waterBorders,
             )
+            kingdom.activeSettlement = it
             actor.setKingdom(kingdom)
             ui.notifications.info("Imported a predefined scene as Capital")
         }

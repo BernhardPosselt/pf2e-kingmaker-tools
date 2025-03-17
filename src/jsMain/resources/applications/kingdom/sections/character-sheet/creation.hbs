@@ -63,14 +63,14 @@
         <p>Assign your leaders:</p>
         <ul class="km-choose-leaders">
             {{#each leadersContext}}
-                <li data-leader="{{@key}}">
+                <li data-leader="{{leader}}">
                     <header><span>{{label}}</span>{{#if actor}} <span class="km-leader-bonus"><i class="fa-solid fa-dice-d20"></i> {{actor.bonus}}</span>{{/if}}</header>
                     {{#if actor }}
                         {{> formElement actor.uuidInput }}
                         <div class="km-leader-portrait">
-                            <button data-leader="{{@key}}" data-action="clear-leader" type="button"><i class="fa-regular fa-circle-xmark"></i>
+                            <button data-leader="{{leader}}" data-action="clear-leader" type="button"><i class="fa-regular fa-circle-xmark"></i>
                             </button>
-                            <img src="{{actor.img}}" alt="{{actor.name}}" data-action="open-leader" data-leader="{{@key}}">
+                            <img src="{{actor.img}}" alt="{{actor.name}}" data-action="open-leader" data-leader="{{leader}}">
                         </div>
                     {{else}}
                         <div class="km-choose-leader-placeholder">

@@ -6,4 +6,3 @@ jQuery use:
 Testing TODOs:
 
 * macros
-* vacancies
