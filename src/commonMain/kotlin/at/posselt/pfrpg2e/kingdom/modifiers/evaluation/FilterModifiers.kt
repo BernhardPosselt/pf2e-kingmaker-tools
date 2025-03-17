@@ -12,8 +12,13 @@ fun filterModifiersAndUpdateContext(
     modifiers: List<Modifier>,
     context: ExpressionContext,
 ): FilterResult {
+    // first filter applicable modifiers and get their roll options
+    val rollOptions = modifiers.asSequence()
+        .filter { it.applyIf.all { it.evaluate(context) } && it.enabled }
+        .flatMap { it.rollOptions }
+        .toSet()
     val filteredModifiers = modifiers.asSequence()
-        .filter { it.applyIf.all { it.evaluate(context) } }
+        .filter { it.applyIf.all { it.evaluate(context.copy(rollOptions = context.rollOptions + rollOptions)) } }
         .toList()
     val enabledRollOptions = filteredModifiers.flatMap { it.rollOptions }.toSet()
     return FilterResult(
