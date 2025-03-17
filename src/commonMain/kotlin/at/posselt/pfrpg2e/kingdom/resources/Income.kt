@@ -26,9 +26,8 @@ data class Income(
 }
 
 fun calculateIncome(
-    kingdomLevel: Int,
     realmData: RealmData,
-    additionalResourceDice: Int,
+    resourceDice: Int,
 ): Income {
     val worksites = realmData.worksites
     val size = findKingdomSize(realmData.size)
@@ -37,7 +36,7 @@ fun calculateIncome(
         ore = worksites.mines.income,
         lumber = worksites.lumberCamps.income,
         luxuries = worksites.luxurySources.income,
-        resourceDice = 4 + kingdomLevel + additionalResourceDice,
+        resourceDice = resourceDice,
         resourceDiceSize = size.resourceDieSize,
         resourcePoints = 0,
     )

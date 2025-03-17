@@ -17,6 +17,7 @@ external interface RawGovernment {
 @JsModule("./governments.json")
 external val governments: Array<RawGovernment>
 
+@Suppress("unused")
 @JsModule("./schemas/government.json")
 external val governmentSchema: JsonElement
 

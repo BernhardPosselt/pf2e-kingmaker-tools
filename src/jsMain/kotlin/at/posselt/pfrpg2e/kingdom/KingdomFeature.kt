@@ -22,9 +22,9 @@ external interface KingdomFeature {
     val claimHexAttempts: Int?
 }
 
-fun KingdomData.getFeatures(): Array<KingdomFeature> {
+fun KingdomData.getFeatures(): Array<KingdomFeature> =
     if (settings.kingdomSkillIncreaseEveryLevel) {
-        return kingdomFeatures.map {
+        kingdomFeatures.map {
             if (it.id == "skill-increase") {
                 it.copy(levels = (2..20).toList().toTypedArray())
             } else {
@@ -32,9 +32,8 @@ fun KingdomData.getFeatures(): Array<KingdomFeature> {
             }
         }.toTypedArray()
     } else {
-        return kingdomFeatures
+        kingdomFeatures
     }
-}
 
 fun KingdomData.getExplodedFeatures() =
     getFeatures().flatMap { it.explodeLevels() }
@@ -68,5 +67,6 @@ external interface RawExplodedKingdomFeature : KingdomFeature {
 @JsModule("./features.json")
 external val kingdomFeatures: Array<KingdomFeature>
 
+@Suppress("unused")
 @JsModule("./schemas/feature.json")
 external val kingdomFeatureSchema: JsonElement

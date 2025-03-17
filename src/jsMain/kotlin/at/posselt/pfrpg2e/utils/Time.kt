@@ -8,15 +8,15 @@ import com.foundryvtt.core.GameTime
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.format.Padding
-import kotlinx.datetime.format.char
-import kotlin.js.Date
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
+import kotlinx.datetime.format.Padding
+import kotlinx.datetime.format.char
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import kotlin.js.Date
 
 fun Game.getPF2EWorldTime(): LocalDateTime {
     val createdOn = settings.get<String>("pf2e", "worldClock.worldCreatedOn")
@@ -31,9 +31,11 @@ fun Game.getCurrentMonth(): Month =
 fun Date.toInstant() =
     Instant.fromEpochSeconds(getSeconds().toLong())
 
+@Suppress("unused")
 fun Date.toLocalUtcDateTime() =
     toInstant().toLocalDateTime(TimeZone.UTC)
 
+@Suppress("unused")
 fun LocalDateTime.toJsUtcDate() =
     Date(toUtcInstant().epochSeconds)
 

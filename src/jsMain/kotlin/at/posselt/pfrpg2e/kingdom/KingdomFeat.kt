@@ -84,5 +84,6 @@ fun KingdomData.getFeats(): Array<RawFeat> {
 @JsModule("./feats.json")
 external val kingdomFeats: Array<RawFeat>
 
+@Suppress("unused")
 @JsModule("./schemas/feat.json")
 external val kingdomFeatSchema: JsonElement

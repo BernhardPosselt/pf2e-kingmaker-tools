@@ -23,6 +23,7 @@ import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
+@Suppress("unused")
 @JsPlainObject
 external interface ConfirmWatchContext: HandlebarsRenderContext {
     val formRows: Array<FormElementContext>
@@ -33,7 +34,6 @@ external interface ConfirmWatchContext: HandlebarsRenderContext {
 @JsExport
 class ConfirmWatchDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             boolean("enableWatch")

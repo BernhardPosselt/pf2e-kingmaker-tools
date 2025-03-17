@@ -14,6 +14,7 @@ external interface RawHeartland {
 @JsModule("./heartlands.json")
 external val heartlands: Array<RawHeartland>
 
+@Suppress("unused")
 @JsModule("./schemas/heartland.json")
 external val heartlandSchema: JsonElement
 

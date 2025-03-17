@@ -1,9 +1,9 @@
 package at.posselt.pfrpg2e.camping.dialogs
 
-import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.FormApp
-import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.forms.CheckboxInput
+import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
@@ -26,13 +26,11 @@ import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.String
 import kotlin.js.Promise
 
 @JsExport
 class ActivityEffectDataModel(value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             string("uuid")

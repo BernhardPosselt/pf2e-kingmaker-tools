@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import com.foundryvtt.core.Game
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface SettlementsContext {
     val id: String

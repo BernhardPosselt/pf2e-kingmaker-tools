@@ -34,6 +34,7 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
 
+@Suppress("unused")
 @JsPlainObject
 private external interface AddEntryContext {
     val formRows: Array<FormElementContext>
@@ -45,12 +46,14 @@ private external interface AddEntryData {
 }
 
 
+@Suppress("unused")
 @JsPlainObject
 private external interface LeaderSkillsRow {
     val label: String
     val cells: Array<FormElementContext>
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface ConfigureLeaderSkillsContext : HandlebarsRenderContext {
     val headers: Array<String>
@@ -58,6 +61,7 @@ private external interface ConfigureLeaderSkillsContext : HandlebarsRenderContex
     val formRows: Array<LeaderSkillsRow>
     val compact: Boolean
     val addEntry: String
+    val saveLabel: String
 }
 
 private fun filterLores(values: Array<String>): Array<Attribute> =
@@ -110,7 +114,6 @@ private fun LeaderSkillsData.toSkills(attributes: Array<Attribute>): RawLeaderSk
 @JsExport
 class ConfigureLeaderSkillsModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             Leader.entries.forEach { leader ->
@@ -122,9 +125,10 @@ class ConfigureLeaderSkillsModel(val value: AnyObject) : DataModel(value) {
 
 private class ConfigureLeaderSkills(
     skills: RawLeaderSkills,
+    private val readonly: Boolean = false,
     private val onSave: (skills: RawLeaderSkills) -> Unit,
 ) : FormApp<ConfigureLeaderSkillsContext, LeaderSkillsData>(
-    title = "Configure Leader Skills ",
+    title = "Character Skills ",
     template = "components/forms/xy-form.hbs",
     debug = true,
     dataModel = ConfigureLeaderSkillsModel::class.js,
@@ -204,31 +208,37 @@ private class ConfigureLeaderSkills(
                                 value = data.hasAttribute(leader, attribute),
                                 label = name,
                                 hideLabel = true,
+                                disabled = readonly,
                             ).toContext()
                         }
-                        .toTypedArray() + deleteButton.toContext(),
+                        .toTypedArray() + if (readonly) emptyArray() else arrayOf(deleteButton.toContext()),
                 )
             }
             .toTypedArray()
         ConfigureLeaderSkillsContext(
             partId = parent.partId,
-            headers = Leader.entries.map { it.label }.toTypedArray() + "Delete",
+            headers = Leader.entries.map { it.label }
+                .toTypedArray() + if (readonly) emptyArray() else arrayOf("Delete"),
             formRows = rows,
             isFormValid = true,
             compact = true,
-            addEntry = "Add Lore",
+            addEntry = if (readonly) "" else "Add Lore",
+            saveLabel = if (readonly) "Close" else "Save",
         )
     }
 
     override fun onParsedSubmit(value: LeaderSkillsData): Promise<Void> = buildPromise {
-        data = value.toSkills(Skill.entries.toTypedArray() + lores)
+        if (readonly == false) {
+            data = value.toSkills(Skill.entries.toTypedArray() + lores)
+        }
         null
     }
 }
 
 fun configureLeaderSkills(
     skills: RawLeaderSkills,
+    readonly: Boolean = false,
     onSave: (RawLeaderSkills) -> Unit,
 ) {
-    ConfigureLeaderSkills(skills, onSave).launch()
+    ConfigureLeaderSkills(skills, readonly, onSave).launch()
 }

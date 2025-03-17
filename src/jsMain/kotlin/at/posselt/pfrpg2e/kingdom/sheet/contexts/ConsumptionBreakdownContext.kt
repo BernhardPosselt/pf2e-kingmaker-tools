@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.kingdom.resources.Consumption
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface ConsumptionBreakdownContext {
     val total: Int

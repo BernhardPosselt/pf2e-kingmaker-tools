@@ -1,3 +1,7 @@
+@file:Suppress(
+    "SpellCheckingInspection"
+)
+
 package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
@@ -55,7 +59,6 @@ import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.item.itemFromUuid
 import js.core.Void
 import js.objects.ReadonlyRecord
-import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.datetime.LocalTime
 import kotlinx.js.JsPlainObject
@@ -73,6 +76,7 @@ external interface BaseActorContext {
     val image: String?
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface CampingSheetActor : BaseActorContext {
     val choseActivity: Boolean
@@ -81,6 +85,7 @@ external interface CampingSheetActor : BaseActorContext {
     val chosenMeal: String?
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface CampingSheetActivity {
     val journalUuid: String?
@@ -92,6 +97,7 @@ external interface CampingSheetActivity {
     val skills: FormElementContext?
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface NightModes {
     val retract2: Boolean
@@ -104,12 +110,14 @@ external interface NightModes {
     val rest: Boolean
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface RecipeActorContext : BaseActorContext {
     val chosenMeal: String
     val favoriteMeal: String?
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface RecipeContext {
     val name: String
@@ -126,6 +134,7 @@ external interface RecipeContext {
     val degreeOfSuccess: FormElementContext?
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface CampingSheetContext : HandlebarsRenderContext {
     var actors: Array<CampingSheetActor>
@@ -771,20 +780,20 @@ class CampingSheet(
         game.time.advance(seconds * (target.dataset["activities"]?.toInt() ?: 0)).await()
     }
 
-    private suspend fun getHexplorationActivitySeconds(): Int =
+    private fun getHexplorationActivitySeconds(): Int =
         ((8 * 3600).toDouble() / getHexplorationActivities()).toInt()
 
-    private suspend fun getHexplorationActivities(): Double {
+    private fun getHexplorationActivities(): Double {
         val camping = actor.getCamping()
         val travelSpeed = actor.system.attributes.speed.total
         val override = max(camping?.minimumTravelSpeed ?: 0, travelSpeed)
         return calculateHexplorationActivities(override)
     }
 
-    private suspend fun getHexplorationActivitiesDuration(): String =
+    private fun getHexplorationActivitiesDuration(): String =
         LocalTime.fromSecondOfDay(getHexplorationActivitySeconds()).toDateInputString()
 
-    private suspend fun getHexplorationActivitiesAvailable(camping: CampingData): Int =
+    private fun getHexplorationActivitiesAvailable(camping: CampingData): Int =
         max(0, (8 * 3600 - (game.time.worldTimeSeconds - camping.dailyPrepsAtTime)) / getHexplorationActivitySeconds())
 
     private fun getAdventuringFor(camping: CampingData): String {
@@ -1134,24 +1143,4 @@ private fun getActivitySkills(
             value = groupedActivity.result.selectedSkill,
         ).toContext()
     }
-}
-
-suspend fun newCampingActor() =
-    CampingActor.create(
-        recordOf(
-            "type" to "npc",
-            "name" to "Camping Sheet",
-            "img" to "icons/magic/fire/flame-burning-campfire-orange.webp",
-            "ownership" to recordOf(
-                "default" to 3
-            )
-        )
-    ).await()
-
-suspend fun openCampingSheet(game: Game, dispatcher: ActionDispatcher, actor: CampingActor) {
-    if (actor.getCamping() == null) {
-        actor.setCamping(getDefaultCamping(game))
-        openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.kd8cT1Uv9hZOrpgS")
-    }
-    CampingSheet(game, actor, dispatcher).launch()
 }

@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e
 
+@Suppress("ClassName", "ConstPropertyName")
 object Config {
     const val moduleId = "pf2e-kingmaker-tools"
     const val moduleName = "Kingdom Building, Camping & Weather"

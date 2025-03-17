@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 private external interface CollectResources {
     val rp: Int
@@ -28,9 +29,8 @@ suspend fun collectResources(
     settlements: List<Settlement>,
 ): Income {
     val income = calculateIncome(
-        kingdomLevel = kingdomData.level,
         realmData = realmData,
-        additionalResourceDice = resourceDice,
+        resourceDice = resourceDice,
     )
     val rolledRp = roll(income.resourcePointsFormula, flavor = "Gaining Resource Points")
     postChatTemplate(
@@ -58,7 +58,8 @@ suspend fun collectResources(
 fun KingdomData.getResourceDiceAmount(
     allFeats: List<ChosenFeat>,
     settlements: List<Settlement>,
-) = 4 + allFeats.sumOf { it.feat.resourceDice ?: 0 } +
+    kingdomLevel: Int,
+) = 4 + kingdomLevel + allFeats.sumOf { it.feat.resourceDice ?: 0 } +
         resourceDice.now +
         settlements.sumOf {
             when (it.size.type) {

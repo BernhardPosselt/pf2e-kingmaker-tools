@@ -10,12 +10,13 @@ external interface RawMilestone {
     var xp: Int
     var completed: Boolean
     var enabledOnFirstRun: Boolean
-    var isCultEvent: Boolean
+    var isCultMilestone: Boolean
 }
 
 @JsModule("./milestones.json")
 external val kingdomMilestones: Array<RawMilestone>
 
+@Suppress("unused")
 @JsModule("./schemas/milestone.json")
 external val milestoneSchema: JsonElement
 

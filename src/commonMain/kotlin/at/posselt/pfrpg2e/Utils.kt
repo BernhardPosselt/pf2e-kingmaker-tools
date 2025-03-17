@@ -53,7 +53,7 @@ fun String.toDataAttributeKey(): String =
         .joinToString("-") { it.lowercase()}
 
 inline fun <reified T> Any.takeIfInstance(): T? =
-    if (this is T) this else null
+    this as? T
 
 fun Int.divideRoundingUp(divisor: Int): Int =
     ceil(this.toDouble() / divisor).toInt()

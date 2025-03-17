@@ -140,6 +140,7 @@ suspend fun Settings.setObject(key: String, value: Any) {
 val Settings.pfrpg2eKingdomCampingWeather: Pfrpg2eKingdomCampingWeatherSettings
     get() = Pfrpg2eKingdomCampingWeatherSettings
 
+@Suppress("unused", "ClassName")
 object Pfrpg2eKingdomCampingWeatherSettings {
     suspend fun setEnableTokenMapping(value: Boolean) =
         game.settings.setBoolean("enableTokenMapping", value)

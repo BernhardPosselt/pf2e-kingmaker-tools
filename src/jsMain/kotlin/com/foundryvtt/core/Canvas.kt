@@ -61,7 +61,7 @@ external class Canvas {
     var sceneTextures: SceneTextures
     val fps: FPS
 
-    // I give up, someone else continue
+    // I give up, someone else can continue
     val tokens: TokenLayer
     val drawings: DrawingsLayer
     val tiles: TilesLayer

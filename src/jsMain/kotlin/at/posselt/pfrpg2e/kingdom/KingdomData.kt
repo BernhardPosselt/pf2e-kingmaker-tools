@@ -241,7 +241,7 @@ fun KingdomData.parseSkillRanks(
     val ranks = KingdomSkill.entries.associate {
         val base = if (it in skillTrainings) 1 else 0
         val increase = skillIncreases[it]?.size ?: 0
-        it to (base + increase)
+        it to (base + increase).coerceIn(0, 4)
     }
     KingdomSkillRanks(
         agriculture = ranks[KingdomSkill.AGRICULTURE] ?: 0,
@@ -334,24 +334,35 @@ fun KingdomData.parseAbilityScores(
 ) = if (settings.automateStats) {
     val charterBoosts: List<String> = charter.abilityBoosts.getBoosts()
     val charterBoost: List<String> = listOfNotNull(chosenCharter?.boost)
-    val charterFlaw = chosenCharter?.flaw?.let { KingdomAbility.fromString(it) }
+    val charterFlaw = chosenCharter?.flaw
     val heartlandBoost: List<String> = listOfNotNull(chosenHeartland?.boost)
     val governmentBoosts: List<String> = chosenGovernment?.boosts?.toList().orEmpty()
     val governmentBoostChoices: List<String> = government.abilityBoosts.getBoosts()
     val featureBoosts: List<String> = chosenFeatures.mapNotNull { it.choice.abilityBoosts?.getBoosts() }
         .flatMap { it }
-
-    val boosts =
-        (charterBoosts + charterBoost + heartlandBoost + governmentBoosts + governmentBoostChoices + featureBoosts)
+    val additionalBoosts = abilityBoosts.getBoosts()
+    val boostsByAbility =
+        (charterBoosts +
+                charterBoost +
+                heartlandBoost +
+                governmentBoosts +
+                governmentBoostChoices +
+                featureBoosts +
+                additionalBoosts)
             .mapNotNull { KingdomAbility.fromString(it) }
             .groupBy { it }
-            .mapValues { (key, value) -> calculateScore(value.size, if (key == charterFlaw) 1 else 0) }
+    val flawsByAbility = listOfNotNull(charterFlaw)
+        .mapNotNull { KingdomAbility.fromString(it) }
+        .groupBy { it }
+    val boosts = KingdomAbility.entries.associate {
+        it to calculateScore(boostsByAbility[it]?.size ?: 0, flawsByAbility[it]?.size ?: 0)
+    }
 
     KingdomAbilityScores(
-        economy = boosts[KingdomAbility.CULTURE] ?: 10,
-        stability = boosts[KingdomAbility.ECONOMY] ?: 10,
+        economy = boosts[KingdomAbility.ECONOMY] ?: 10,
+        stability = boosts[KingdomAbility.STABILITY] ?: 10,
         loyalty = boosts[KingdomAbility.LOYALTY] ?: 10,
-        culture = boosts[KingdomAbility.STABILITY] ?: 10
+        culture = boosts[KingdomAbility.CULTURE] ?: 10
     )
 } else {
     KingdomAbilityScores(

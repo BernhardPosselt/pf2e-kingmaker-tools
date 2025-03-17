@@ -6,7 +6,18 @@ import com.foundryvtt.core.abstract.Document
 import com.foundryvtt.core.documents.JournalEntry
 import com.foundryvtt.core.fromUuid
 import com.foundryvtt.pf2e.actor.PF2EActor
-import com.foundryvtt.pf2e.item.*
+import com.foundryvtt.pf2e.item.PF2EAction
+import com.foundryvtt.pf2e.item.PF2EAffliction
+import com.foundryvtt.pf2e.item.PF2EArmor
+import com.foundryvtt.pf2e.item.PF2EBackpack
+import com.foundryvtt.pf2e.item.PF2ECampaignFeature
+import com.foundryvtt.pf2e.item.PF2ECondition
+import com.foundryvtt.pf2e.item.PF2EConsumable
+import com.foundryvtt.pf2e.item.PF2EEffect
+import com.foundryvtt.pf2e.item.PF2EEquipment
+import com.foundryvtt.pf2e.item.PF2EShield
+import com.foundryvtt.pf2e.item.PF2ETreasure
+import com.foundryvtt.pf2e.item.PF2EWeapon
 import kotlinx.coroutines.await
 
 
@@ -29,7 +40,7 @@ fun toGenericRef(dropData: String): GenericRef? {
     val itemType = data["itemType"]
     val selector = data["selector"]
     return if (uuid is String && type is String) {
-        val src = if (selector is String) selector else null
+        val src = selector as? String
         if (itemType is String) {
             GenericRef(data = data, type = type, uuid = uuid, itemType = itemType, dragstartSelector = src)
         } else {

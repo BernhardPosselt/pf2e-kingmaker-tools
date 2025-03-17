@@ -105,6 +105,7 @@ fun RawActivity.label(
 @JsModule("./kingdom-activities.json")
 external val kingdomActivities: Array<RawActivity>
 
+@Suppress("unused")
 @JsModule("./schemas/kingdom-activity.json")
 external val kingdomActivitySchema: JsonElement
 

@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.utils
 
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.pf2e.actor.PF2EActor
 import kotlinx.js.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface ToolsMacros {
     val toggleWeatherMacro: () -> Unit

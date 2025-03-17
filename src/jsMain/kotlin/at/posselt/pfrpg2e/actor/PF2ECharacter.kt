@@ -8,7 +8,7 @@ import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
-import com.foundryvtt.core.Actor
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2EAttribute
 import com.foundryvtt.pf2e.actor.PF2ECharacter

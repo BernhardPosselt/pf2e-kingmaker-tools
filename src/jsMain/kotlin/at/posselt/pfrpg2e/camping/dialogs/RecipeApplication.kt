@@ -81,7 +81,6 @@ external interface RecipeSubmitData {
 @JsExport
 class RecipeDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             string("name")
@@ -407,19 +406,19 @@ private suspend fun createMealInputs(
             label = "Remove after Rest",
             name = "$namePrefix.removeAfterRest",
             stacked = false,
-            value = firstEffect?.removeAfterRest ?: false,
+            value = firstEffect?.removeAfterRest == true,
         ),
         CheckboxInput(
             label = "Doubles Healing",
             help = "Double HP regained from resting, does not stack with other effects that double healing",
             name = "$namePrefix.doublesHealing",
-            value = firstEffect?.doublesHealing ?: false,
+            value = firstEffect?.doublesHealing == true,
         ),
         CheckboxInput(
             label = "Halves Healing",
             help = "Halves HP regained from resting, does not stack with other effects that halve healing",
             name = "$namePrefix.halvesHealing",
-            value = firstEffect?.halvesHealing ?: false,
+            value = firstEffect?.halvesHealing == true,
         ),
         TextInput(
             label = "Healing Formula",

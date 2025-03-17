@@ -58,6 +58,7 @@ external interface TableHead {
     var classes: Array<String>?
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface RegionSettingsContext : HandlebarsRenderContext {
     var heading: Array<TableHead>
@@ -70,7 +71,6 @@ external interface RegionSettingsContext : HandlebarsRenderContext {
 @JsExport
 class RegionSettingsDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             array("regions") {
@@ -148,7 +148,7 @@ class RegionConfig(
         val playlistOptions = game.playlists.contents
             .mapNotNull { it.toOption(useUuid = true) }
             .sortedBy { it.label }
-        val rolltableOptions = game.tables.contents
+        val rollTableOptions = game.tables.contents
             .mapNotNull { it.toOption(useUuid = true) }
             .sortedBy { it.label }
         RegionSettingsContext(
@@ -208,7 +208,7 @@ class RegionConfig(
                         value = row.rollTableUuid,
                         required = false,
                         hideLabel = true,
-                        options = rolltableOptions,
+                        options = rollTableOptions,
                     ).toContext(),
                     Select(
                         name = "regions.$index.combatTrack.playlistUuid",

@@ -8,6 +8,12 @@
         {{#each leadersContext}}
             {{> formElement vacant }}
         {{/each}}
+        {{#useLeadershipModifiers}}
+            <div class="km-leadership-modifier-info">
+                <button type="button" data-action="inspect-leader-skills">Character Skills</button>
+                <button type="button" data-action="inspect-kingdom-skills">Kingdom Skills</button>
+            </div>
+        {{/useLeadershipModifiers}}
         <h3>Unrest</h3>
         <table class="km-unrest">
             <tr>
@@ -96,14 +102,14 @@
     <nav class="km-kingdom-sheet-sub-nav">
         <ul class="km-grow-subnav">
             {{#each turnSectionNav}}
-                <li><a title="{{title}}"{{#if active}}class="active"{{/if}} href="#" data-id="km-turn-{{link}}"
+                <li><a title="{{title}}"{{#if active}}class="active"{{/if}} href="#" data-id="{{../actorUuid}}-km-turn-{{link}}"
                        data-action="{{action}}">{{label}}</a></li>
             {{/each}}
         </ul>
     </nav>
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-turn">
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-upkeep">Upkeep</h2>
+            <h2 id="{{actorUuid}}-km-turn-upkeep">Upkeep</h2>
             <div class="km-upkeep-button">Gain 1 Fame
                 <button type="button" data-action="gain-fame">Perform</button>
             </div>
@@ -119,17 +125,17 @@
             </div>
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-commerce" {{#unless activities.commerce}}hidden{{/unless}}>Commerce</h2>
+            <h2 id="{{actorUuid}}-km-turn-commerce" {{#unless activities.commerce}}hidden{{/unless}}>Commerce</h2>
             {{> kingdom-activities activities=activities.commerce collectTaxesReduceUnrestDisabled=collectTaxesReduceUnrestDisabled}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-leadership" {{#unless activities.leadership}}hidden{{/unless}}>Leadership
+            <h2 id="{{actorUuid}}-km-turn-leadership" {{#unless activities.leadership}}hidden{{/unless}}>Leadership
                 ({{leadershipActivities}}
                 per player)</h2>
             {{> kingdom-activities activities=activities.leadership}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-region" {{#unless activities.region}}hidden{{/unless}}>Region</h2>
+            <h2 id="{{actorUuid}}-km-turn-region" {{#unless activities.region}}hidden{{/unless}}>Region</h2>
 
             {{#if heartlandLabel}}
                 <p>You can attempt 2 Region activities simultaneously as long as both activities take place in the same
@@ -149,7 +155,7 @@
             {{> kingdom-activities activities=activities.region}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-civic" {{#unless activities.civic}}hidden{{/unless}}>Civic</h2>
+            <h2 id="{{actorUuid}}-km-turn-civic" {{#unless activities.civic}}hidden{{/unless}}>Civic</h2>
             {{#if civicPlanning}}
                 <p>During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the
                     party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs
@@ -161,13 +167,13 @@
             {{> kingdom-activities activities=activities.civic}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-army" {{#unless activities.army}}hidden{{/unless}}>Army</h2>
+            <h2 id="{{actorUuid}}-km-turn-army" {{#unless activities.army}}hidden{{/unless}}>Army</h2>
             <p>Select an army on the scene before performing the activity to
                 correctly apply conditions and DCs. For <b>Offensive Gambit</b>, select all enemy units)</p>
             {{> kingdom-activities activities=activities.army}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-event">Event</h2>
+            <h2 id="{{actorUuid}}-km-turn-event">Event</h2>
             <div {{#unless cultOfTheBloomEvents}}hidden{{/unless}}>
                 <h3>Cult of the Bloom Events</h3>
                 <p>These events happen after completing a day of downtime researching the Cult of the Bloom in Chapter
@@ -224,7 +230,7 @@
             </p>
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-xp">XP</h2>
+            <h2 id="{{actorUuid}}-km-turn-xp">XP</h2>
             <p>Resolved Event with Modidifer:</p>
             <p class="km-turn-buttons">
                 <button type="button" data-action="gain-xp" data-xp="10">-4</button>
@@ -276,7 +282,7 @@
             </table>
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="km-turn-end">End Turn</h2>
+            <h2 id="{{actorUuid}}-km-turn-end">End Turn</h2>
             <p class="km-turn-buttons">
                 <button type="button" {{#unless canLevelUp}}disabled{{/unless}} data-action="level-up">Level Up</button>
                 <button type="button" data-action="end-turn">End Turn</button>

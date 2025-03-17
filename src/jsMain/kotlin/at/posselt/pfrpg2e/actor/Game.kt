@@ -7,7 +7,7 @@ import com.foundryvtt.pf2e.actor.PF2EParty
 import js.array.toTypedArray
 
 val Game.isKingmakerInstalled: Boolean
-    get() = modules.get("pf2e-kingmaker")?.active ?: false
+    get() = modules.get("pf2e-kingmaker")?.active == true
 
 
 fun PF2EParty.partyMembers(): Array<PF2ECharacter> =

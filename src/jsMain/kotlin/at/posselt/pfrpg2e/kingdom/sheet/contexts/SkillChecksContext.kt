@@ -19,6 +19,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
 import at.posselt.pfrpg2e.utils.formatAsModifier
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface SkillChecksContext {
     val label: String

@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import kotlinx.js.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface KingdomSheetContext : HandlebarsRenderContext {
     val isFormValid: Boolean
@@ -76,4 +77,7 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val resourceDiceIncome: String
     val skillChecks: Array<SkillChecksContext>
     val automateResources: Boolean
+    val useLeadershipModifiers: Boolean
+    val activeSettlementType: String
+    val actorUuid: String
 }

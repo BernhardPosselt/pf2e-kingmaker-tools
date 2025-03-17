@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
-import com.foundryvtt.core.Actor
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Item
 import com.foundryvtt.core.documents.JournalEntry
 import com.foundryvtt.core.documents.JournalEntryPage

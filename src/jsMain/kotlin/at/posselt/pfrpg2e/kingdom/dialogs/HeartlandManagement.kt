@@ -27,7 +27,7 @@ class HeartlandManagement(
         kingdomActor.getKingdom()?.let { kingdom ->
             kingdom.homebrewHeartlands = kingdom.homebrewHeartlands.filter { it.id != id }.toTypedArray()
             if (kingdom.heartland.type == id) {
-                kingdom.heartland.type = null;
+                kingdom.heartland.type = null
             }
             kingdom.heartlandBlacklist = kingdom.heartlandBlacklist.filter { it == id }.toTypedArray()
             kingdomActor.setKingdom(kingdom)

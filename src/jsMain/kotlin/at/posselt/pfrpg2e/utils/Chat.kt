@@ -5,8 +5,8 @@ import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.ChatMessage
 import com.foundryvtt.core.documents.GetSpeakerOptions
 import js.objects.jso

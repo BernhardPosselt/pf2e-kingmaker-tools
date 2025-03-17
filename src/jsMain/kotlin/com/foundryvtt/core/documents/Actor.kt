@@ -1,14 +1,16 @@
-package com.foundryvtt.core
+package com.foundryvtt.core.documents
 
+import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.CreateDocumentCallback
+import com.foundryvtt.core.DeleteDocumentCallback
+import com.foundryvtt.core.HooksEventListener
+import com.foundryvtt.core.PreCreateDocumentCallback
+import com.foundryvtt.core.PreDeleteDocumentCallback
+import com.foundryvtt.core.PreUpdateDocumentCallback
+import com.foundryvtt.core.UpdateDocumentCallback
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.collections.EmbeddedCollection
-import com.foundryvtt.core.documents.ClientDocument
-import com.foundryvtt.core.documents.Folder
-import com.foundryvtt.core.documents.Item
-import com.foundryvtt.core.documents.Ownership
-import com.foundryvtt.core.documents.PrototypeToken
-import com.foundryvtt.core.documents.TokenDocument
 import js.objects.jso
 import kotlin.js.Promise
 
@@ -39,15 +41,18 @@ open external class Actor : ClientDocument {
 fun Actor.update(data: Actor, operation: DatabaseUpdateOperation = jso()): Promise<Actor?> =
     update(data as AnyObject, operation)
 
+@Suppress("unused")
 fun <O> HooksEventListener.onPreCreateActor(callback: PreCreateDocumentCallback<Actor, O>) =
     on("preCreateActor", callback)
 
 fun <O> HooksEventListener.onPreUpdateActor(callback: PreUpdateDocumentCallback<Actor, O>): Unit =
     on("preUpdateActor", callback)
 
+@Suppress("unused")
 fun <O> HooksEventListener.onPreDeleteActor(callback: PreDeleteDocumentCallback<Actor, O>) =
     on("preDeleteActor", callback)
 
+@Suppress("unused")
 fun <O> HooksEventListener.onCreateActor(callback: CreateDocumentCallback<Actor, O>) =
     on("createActor", callback)
 

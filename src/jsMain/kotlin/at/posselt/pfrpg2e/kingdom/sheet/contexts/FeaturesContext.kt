@@ -18,6 +18,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreaseContext
 import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreasesContext
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface RuinThresholdIncrease {
     val valueInput: FormElementContext
@@ -41,6 +42,7 @@ external interface FeatureByLevelContext {
     val features: Array<FeatureContext>
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface FeatureContext {
     val id: FormElementContext
@@ -206,8 +208,12 @@ fun Array<RawFeatureChoices>.toContext(
                             )
                         },
                         featRuinThresholdIncreases = feat?.ruinThresholdIncreases?.mapIndexed { ruinIndex, value ->
-                            defaultRuinThresholdIncrease(value.increase)
+                            val choice: RuinThresholdIncreases? =
+                                choice.featRuinThresholdIncreases.getOrNull(ruinIndex)
+                                    ?.toContext("features.$index.featRuinThresholdIncreases.$ruinIndex", value.amount)
+                            val increase: RuinThresholdIncreases = defaultRuinThresholdIncrease(value.increase)
                                 .toContext("features.$index.featRuinThresholdIncreases.$ruinIndex", value.amount)
+                            choice ?: increase
                         }?.toTypedArray() ?: emptyArray(),
                     )
                 }

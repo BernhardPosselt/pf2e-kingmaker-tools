@@ -1,5 +1,6 @@
 package com.foundryvtt.core
 
+import com.foundryvtt.core.documents.Actor
 import js.objects.ReadonlyRecord
 
 external interface PF2EActorConfig {

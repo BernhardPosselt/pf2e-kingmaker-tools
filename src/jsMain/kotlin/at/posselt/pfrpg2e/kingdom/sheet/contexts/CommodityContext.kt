@@ -26,6 +26,7 @@ external interface CapacityContext {
     val luxuries: Int
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface CommoditiesContext {
     val now: CommodityContext

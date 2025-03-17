@@ -15,6 +15,7 @@ import org.w3c.dom.HTMLFormElement
 import kotlin.js.Promise
 
 
+@Suppress("FunctionName")
 @JsName("SaneHandlebarsApplicationV2")
 open external class HandlebarsApp<T : HandlebarsRenderContext>(
     options: HandlebarsFormApplicationOptions,
@@ -25,6 +26,7 @@ open external class HandlebarsApp<T : HandlebarsRenderContext>(
         options: HandlebarsRenderOptions
     ): Promise<T>
 
+    @Suppress("unused")
     protected open fun _preSyncPartState(
         partId: String,
         newElement: HTMLElement,
@@ -32,6 +34,7 @@ open external class HandlebarsApp<T : HandlebarsRenderContext>(
         state: Record<String, Any>
     )
 
+    @Suppress("unused")
     protected open fun _syncPartState(
         partId: String,
         newElement: HTMLElement,

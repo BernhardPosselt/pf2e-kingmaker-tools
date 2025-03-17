@@ -5,11 +5,13 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.HooksEventListener
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
-import com.foundryvtt.pf2e.item.*
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.html.org.w3c.dom.events.Event
-import org.w3c.dom.*
+import org.w3c.dom.DragEvent
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.asList
+import org.w3c.dom.get
 import kotlin.js.Promise
 
 data class AppHook<T>(
@@ -109,7 +111,7 @@ abstract class App<C : HandlebarsRenderContext>(
     }
 
     /**
-     * @param allowedDragSelectors if provided, will only allow dropping from drag selectors
+     * @param selector if provided, will only allow dropping from drag selectors
      */
     protected open fun onDocumentRefDrop(
         selector: String,
@@ -124,7 +126,7 @@ abstract class App<C : HandlebarsRenderContext>(
                     if (event !is DragEvent) throw IllegalStateException("should never receive no DragEvent")
                     event.dataTransfer?.getData("text/plain")
                         ?.let(::toGenericRef)
-                        ?.takeIf { allowDrop?.let { f -> f(it) } ?: true }
+                        ?.takeIf { allowDrop?.let { f -> f(it) } != false }
                         ?.let {
                             val ref = when (it.type) {
                                 "Actor" -> ActorRef(it.uuid)

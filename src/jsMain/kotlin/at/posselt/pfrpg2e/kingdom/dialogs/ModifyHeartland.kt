@@ -41,7 +41,6 @@ external interface ModifyHeartlandData {
 @JsExport
 class ModifyHeartlandDataModel(value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             string("id")

@@ -33,6 +33,7 @@ private external interface CombatTrackData {
     val trackUuid: String?
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface CombatTrackContext : HandlebarsRenderContext {
     val isFormValid: Boolean

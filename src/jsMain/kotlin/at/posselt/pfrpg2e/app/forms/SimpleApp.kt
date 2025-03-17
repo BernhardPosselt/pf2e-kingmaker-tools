@@ -58,5 +58,4 @@ abstract class SimpleApp<T : HandlebarsRenderContext>(
     ).apply {
         id?.let { this.unsafeCast<Record<String, Any>>()["id"] = it }
     }
-) {
-}
+)

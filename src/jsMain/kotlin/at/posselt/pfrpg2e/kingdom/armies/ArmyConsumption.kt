@@ -3,33 +3,33 @@ package at.posselt.pfrpg2e.kingdom.armies
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.kingdom.setKingdom
+import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.documents.onCreateItem
 import com.foundryvtt.core.documents.onCreateToken
+import com.foundryvtt.core.documents.onDeleteActor
 import com.foundryvtt.core.documents.onDeleteItem
 import com.foundryvtt.core.documents.onDeleteScene
 import com.foundryvtt.core.documents.onDeleteToken
+import com.foundryvtt.core.documents.onUpdateActor
 import com.foundryvtt.core.documents.onUpdateItem
 import com.foundryvtt.core.documents.onUpdateToken
-import com.foundryvtt.core.onDeleteActor
-import com.foundryvtt.core.onUpdateActor
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import kotlin.math.max
 
 private fun calculateTotalArmyConsumption(game: Game, folderId: String) =
     game.scenes.contents
         .asSequence()
-        .filter { it.hasPlayerOwner }
         .flatMap { it.tokens.contents.toList() }
         .filterNot(TokenDocument::hidden)
         .mapNotNull(TokenDocument::actor)
-        .filterIsInstance<PF2EArmy>()
+        .filterIsInstance<PF2EArmy>()//nG2H6TnFlrAXwVsL
         .filter {
-            val baseActor = it.baseActor
+            val baseActor = it.parent?.takeIfInstance<TokenDocument>()?.baseActor
             baseActor is PF2EArmy && baseActor.folder?.id == folderId
         }
         .distinctBy(PF2EArmy::uuid)

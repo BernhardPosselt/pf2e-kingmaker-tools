@@ -68,7 +68,6 @@ external interface CampingSettings {
 @JsExport
 class CampingSettingsDataModel(value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             int("gunsToClean")

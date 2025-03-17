@@ -1,6 +1,6 @@
 package com.foundryvtt.core.collections
 
-import com.foundryvtt.core.Actor
+import com.foundryvtt.core.documents.Actor
 import js.objects.ReadonlyRecord
 
 external class Actors : WorldCollection<Actor> {

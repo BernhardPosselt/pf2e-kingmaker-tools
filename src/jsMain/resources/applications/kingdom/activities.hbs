@@ -13,6 +13,7 @@
                                 Skip & Reduce Unrest <i class="fa-solid fa-dice-d20"></i>
                             </button>
                         {{/if}}
+                        {{#if hasCheck}}
                         <button {{#if disabled}}disabled{{/if}}
                                 data-activity="{{id}}"
                                 type="button"
@@ -20,6 +21,7 @@
                                 data-action="perform-activity">
                             Perform <i class="fa-solid fa-dice-d20"></i>
                         </button>
+                        {{/if}}
                     </div>
                 </summary>
                 {{#if requirement}}<p><b>Requirement:</b> {{requirement}}</p>{{/if}}

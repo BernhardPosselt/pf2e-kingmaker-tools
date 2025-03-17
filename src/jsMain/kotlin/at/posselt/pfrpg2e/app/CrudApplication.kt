@@ -16,6 +16,7 @@ import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
+@Suppress("unused")
 @JsPlainObject
 external interface CrudColumn {
     val value: String
@@ -34,6 +35,7 @@ external interface CrudItem {
     val canBeDeleted: Boolean
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface CrudTemplateContext : HandlebarsRenderContext {
     val items: Array<CrudItem>

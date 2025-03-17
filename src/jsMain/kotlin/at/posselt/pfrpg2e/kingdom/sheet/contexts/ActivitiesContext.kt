@@ -10,10 +10,12 @@ import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.label
 import com.foundryvtt.core.ui.enrichHtml
 import js.objects.JsPlainObject
+import js.objects.Object
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
+@Suppress("unused")
 @JsPlainObject
 external interface ActivityContext {
     val label: String
@@ -32,8 +34,10 @@ external interface ActivityContext {
     val isCollectTaxes: Boolean
     val order: Int?
     val open: Boolean
+    val hasCheck: Boolean
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface ActivitiesContext {
     val commerce: Array<ActivityContext>
@@ -90,6 +94,7 @@ private suspend fun toActivityContext(
         isCollectTaxes = activity.id == "collect-taxes",
         order = activity.order,
         open = activity.id in openedActivityDetails,
+        hasCheck = Object.keys(activity.skills).isNotEmpty(),
     )
 }
 

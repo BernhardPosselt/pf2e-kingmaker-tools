@@ -12,7 +12,7 @@ import at.posselt.pfrpg2e.kingdom.structures.structureRefSchema
 import at.posselt.pfrpg2e.kingdom.structures.unsetStructureData
 import at.posselt.pfrpg2e.kingdom.structures.validateStructure
 import at.posselt.pfrpg2e.takeIfInstance
-import com.foundryvtt.core.Actor
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.ui
 import js.objects.jso
 import js.objects.recordOf

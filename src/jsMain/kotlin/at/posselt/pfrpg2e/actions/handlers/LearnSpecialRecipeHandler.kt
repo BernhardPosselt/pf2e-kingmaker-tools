@@ -17,7 +17,6 @@ import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatMessage
-import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import kotlinx.js.JsPlainObject
 
@@ -29,9 +28,7 @@ external interface LearnSpecialRecipeData {
     val degree: String
 }
 
-class LearnSpecialRecipeHandler(
-    private val game: Game,
-) : ActionHandler("learnSpecialRecipe") {
+class LearnSpecialRecipeHandler() : ActionHandler("learnSpecialRecipe") {
     override suspend fun execute(action: ActionMessage, dispatcher: ActionDispatcher) {
         val data = action.data.unsafeCast<LearnSpecialRecipeData>()
         val campingActor = fromUuidTypeSafe<CampingActor>(data.campingActorUuid) ?: return

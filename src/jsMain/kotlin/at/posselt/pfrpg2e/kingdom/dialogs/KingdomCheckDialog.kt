@@ -53,7 +53,6 @@ import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resolveDc
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.skillRanks
-import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.deserializeB64Json
@@ -97,6 +96,7 @@ import kotlin.sequences.toSet
 import kotlin.text.toInt
 import kotlin.to
 
+@Suppress("unused")
 @JsPlainObject
 private external interface ModifierContext {
     val label: String
@@ -110,6 +110,7 @@ private external interface ModifierContext {
     val fortune: Boolean
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface CheckContext : HandlebarsRenderContext {
     val isFormValid: Boolean
@@ -168,7 +169,6 @@ private external interface CheckData {
 @JsExport
 class CheckModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             int("dc")
@@ -190,17 +190,6 @@ class CheckModel(val value: AnyObject) : DataModel(value) {
                     boolean("enabled")
                 }
             }
-        }
-    }
-}
-
-private fun createSettlementOptions(
-    game: Game,
-    settlements: Array<RawSettlement>
-): List<SelectOption> {
-    return settlements.mapNotNull { settlement ->
-        game.scenes.get(settlement.sceneId)?.name?.let {
-            SelectOption(settlement.sceneId, it)
         }
     }
 }

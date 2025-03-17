@@ -11,7 +11,6 @@ import com.foundryvtt.core.data.dsl.buildSchema
 @JsExport
 class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             string("bonusFeat", nullable = true)
@@ -21,6 +20,7 @@ class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
             schema("fame") {
                 int("now")
                 int("next")
+                string("type")
             }
             int("level")
             int("xpThreshold")

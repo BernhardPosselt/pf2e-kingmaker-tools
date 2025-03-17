@@ -331,6 +331,7 @@ private suspend fun PF2ECharacter.applyMealHealEffects(
 }
 
 
+@Suppress("unused")
 @JsPlainObject
 external interface FoodCost {
     val rations: Int

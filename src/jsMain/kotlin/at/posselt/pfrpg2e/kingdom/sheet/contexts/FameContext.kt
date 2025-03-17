@@ -13,11 +13,17 @@ external interface FameContext {
     val type: FormElementContext
 }
 
-fun RawFame.toContext(maximumFamePoints: Int) =
-    FameContext(
+fun RawFame.toContext(maximumFamePoints: Int): FameContext {
+    val fameType = FameType.fromString(type)
+    val label = when (fameType) {
+        FameType.FAMOUS -> "Fame"
+        FameType.INFAMOUS -> "Infamy"
+        else -> "Fame"
+    }
+    return FameContext(
         now = Select.range(
             name = "fame.now",
-            label = "Fame",
+            label = label,
             value = now,
             from = 0,
             to = maximumFamePoints,
@@ -38,7 +44,7 @@ fun RawFame.toContext(maximumFamePoints: Int) =
         type = Select.fromEnum<FameType>(
             name = "fame.type",
             label = "Fame Type",
-            value = FameType.fromString(type),
+            value = fameType,
             stacked = false,
             hideLabel = true,
             labelFunction = { when(it) {
@@ -48,3 +54,4 @@ fun RawFame.toContext(maximumFamePoints: Int) =
             }
         ).toContext(),
     )
+}

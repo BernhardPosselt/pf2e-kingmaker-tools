@@ -91,13 +91,13 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
         if (currentVersion < 13) {
             val parties = actors.contents.filterIsInstance<PF2EParty>()
             val kingdoms = npcs().mapNotNull { it.getAppFlag<PF2ENpc, KingdomData?>("kingdom-sheet") }
-            val campings = npcs().mapNotNull { it.getAppFlag<PF2ENpc, KingdomData?>("camping-sheet") }
-            val sheets = max(kingdoms.size, campings.size)
+            val camps = npcs().mapNotNull { it.getAppFlag<PF2ENpc, KingdomData?>("camping-sheet") }
+            val sheets = max(kingdoms.size, camps.size)
             if (sheets > 0) {
                 for (i in 0..(sheets - 1)) {
                     val party = parties.getOrNull(i)
                     val kingdom = kingdoms.getOrNull(i)
-                    val camping = campings.getOrNull(i)
+                    val camping = camps.getOrNull(i)
                     val target = party ?: createPartyActor(i)
                     if (kingdom != null) {
                         target.setAppFlag("kingdom-sheet", deepClone(kingdom))

@@ -1,6 +1,5 @@
 package com.foundryvtt.core.documents
 
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.CreateDocumentCallback
 import com.foundryvtt.core.DeleteDocumentCallback

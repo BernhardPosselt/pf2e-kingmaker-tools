@@ -20,7 +20,6 @@ import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatAsModifier
-import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
@@ -37,7 +36,6 @@ import kotlin.js.Promise
 @JsExport
 class ModifierModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             string("name")
@@ -56,6 +54,7 @@ class ModifierModel(val value: AnyObject) : DataModel(value) {
     }
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface AddModifierData {
     val name: String
@@ -226,8 +225,4 @@ class AddModifier(
         data = value
         null
     }
-}
-
-suspend fun addModifier(activities: List<RawActivity>, onSave: suspend (RawModifier) -> Unit) {
-    AddModifier(activities = activities.toTypedArray(), onSave = onSave).launch()
 }

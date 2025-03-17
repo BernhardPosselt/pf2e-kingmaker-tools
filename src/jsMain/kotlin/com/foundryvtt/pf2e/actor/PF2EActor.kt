@@ -1,10 +1,10 @@
 package com.foundryvtt.pf2e.actor
 
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.collections.EmbeddedCollection
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.pf2e.actions.CheckRoll
 import com.foundryvtt.pf2e.item.PF2EAction
 import com.foundryvtt.pf2e.item.PF2EArmor

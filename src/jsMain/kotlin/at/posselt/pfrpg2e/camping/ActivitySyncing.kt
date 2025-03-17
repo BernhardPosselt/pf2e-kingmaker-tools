@@ -134,22 +134,6 @@ private fun actorTargetedByActivityEffect(
         || (target == ActivityEffectTarget.SELF && activityActorUuid == actorUuid)
         || (target == ActivityEffectTarget.ALLIES && activityActorUuid != actorUuid)
 
-suspend fun CampingData.clearCampingEffects() = coroutineScope {
-    val actors = getActorsInCamp()
-    val campingEffectNames = getCampingEffectItems().map { it.effect.name }.toSet()
-    actors
-        .map { actor ->
-            async {
-                actor.deleteEmbeddedDocuments<PF2EEffect>("Item", actor.itemTypes.effect
-                    .filter { it.name in campingEffectNames }
-                    .mapNotNull { it.id }
-                    .toTypedArray())
-                    .await()
-            }
-        }
-        .awaitAll()
-}
-
 suspend fun PF2EActor.getAppliedCampingEffects(campingData: List<ActivityEffect>): List<ActivityEffect> {
     val effectNames = getEffectNames()
     return campingData

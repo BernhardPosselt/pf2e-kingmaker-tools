@@ -9,11 +9,11 @@ import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.asAnyObjectList
 import at.posselt.pfrpg2e.utils.buildPromise
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
-import com.foundryvtt.core.onPreUpdateActor
+import com.foundryvtt.core.documents.Actor
+import com.foundryvtt.core.documents.onPreUpdateActor
 import com.foundryvtt.core.utils.diffObject
 import com.foundryvtt.core.utils.getProperty
 import com.foundryvtt.core.utils.setProperty

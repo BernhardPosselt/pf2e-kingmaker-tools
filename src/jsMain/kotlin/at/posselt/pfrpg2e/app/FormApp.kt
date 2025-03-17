@@ -111,7 +111,7 @@ abstract class FormApp<T : HandlebarsRenderContext, O>(
                 ?.unsafeCast<O>()
                 ?: parsedData
             if (debug) {
-                console.log("Datamodel object ${JSON.stringify(dataModelData)}")
+                console.log("Data model object ${JSON.stringify(dataModelData)}")
             }
             onParsedSubmit(dataModelData).await()
             if (renderOnSubmit) {

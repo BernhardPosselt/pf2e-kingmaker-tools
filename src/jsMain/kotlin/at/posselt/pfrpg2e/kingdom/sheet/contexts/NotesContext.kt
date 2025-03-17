@@ -5,6 +5,7 @@ import com.foundryvtt.core.ui.TextEditor
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface NotesContext {
     var rawPublic: String
@@ -15,11 +16,11 @@ external interface NotesContext {
 
 suspend fun RawNotes.toContext(): NotesContext {
     val pub = TextEditor.enrichHTML(public).await()
-    val priv = TextEditor.enrichHTML(gm).await()
+    val private = TextEditor.enrichHTML(gm).await()
     return NotesContext(
         rawPublic = public,
         rawGm = gm,
         public = pub,
-        gm = priv,
+        gm = private,
     )
 }

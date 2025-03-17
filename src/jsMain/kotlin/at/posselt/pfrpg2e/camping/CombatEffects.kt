@@ -2,7 +2,6 @@ package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.postChatTemplate
-import com.foundryvtt.core.ui.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EActor
 import js.objects.recordOf
 import kotlinx.coroutines.async
@@ -55,6 +54,7 @@ private fun getCombatEffects(partyLevel: Int, activeActivities: Set<String>): Li
     }
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface CombatEffectContext {
     val label: String

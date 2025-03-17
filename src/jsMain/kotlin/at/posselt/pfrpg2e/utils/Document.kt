@@ -5,7 +5,6 @@ import at.posselt.pfrpg2e.takeIfInstance
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.Document
 import com.foundryvtt.core.fromUuid
-import com.foundryvtt.pf2e.item.PF2EItem
 import js.objects.PropertyKey
 import js.objects.jso
 import js.objects.recordOf

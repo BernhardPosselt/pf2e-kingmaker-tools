@@ -19,9 +19,9 @@ import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.unsetAppFlag
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Folder
 import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.utils.deepClone

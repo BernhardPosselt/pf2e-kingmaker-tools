@@ -10,6 +10,7 @@ external class Action {
 }
 
 @JsPlainObject
+@Suppress("unused")
 external interface RestForTheNightOptions : ActionUseOptions {
     val skipDialog: Boolean?
 }

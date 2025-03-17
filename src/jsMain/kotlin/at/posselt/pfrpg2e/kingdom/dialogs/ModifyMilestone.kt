@@ -38,7 +38,6 @@ external interface ModifyMilestoneData {
 @JsExport
 class ModifyMilestoneDataModel(value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             string("id")
@@ -66,7 +65,7 @@ class ModifyMilestone(
         xp = data?.xp ?: 0,
         completed = data?.completed == true,
         enabledOnFirstRun = data?.enabledOnFirstRun == true,
-        isCultEvent = data?.isCultEvent == true,
+        isCultMilestone = data?.isCultMilestone == true,
     )
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -121,7 +120,7 @@ class ModifyMilestone(
             xp = value.xp,
             completed = current.completed,
             enabledOnFirstRun = current.enabledOnFirstRun,
-            isCultEvent = current.isCultEvent,
+            isCultMilestone = current.isCultMilestone,
         )
         undefined
     }

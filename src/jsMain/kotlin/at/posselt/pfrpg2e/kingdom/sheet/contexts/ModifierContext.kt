@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface ModifierContext {
     val name: String

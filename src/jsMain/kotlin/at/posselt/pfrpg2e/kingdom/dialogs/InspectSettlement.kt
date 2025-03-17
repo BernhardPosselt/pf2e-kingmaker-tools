@@ -42,6 +42,7 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
 
+@Suppress("unused")
 @JsPlainObject
 external interface InspectSettlementContext : HandlebarsRenderContext {
     val isFormValid: Boolean
@@ -86,7 +87,6 @@ external interface InspectSettlementData {
 @JsExport
 class InspectSettlementDataModel(value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             int("blocks")
@@ -99,7 +99,7 @@ class InspectSettlementDataModel(value: AnyObject) : DataModel(value) {
     }
 }
 
-
+@Suppress("unused")
 enum class SettlementNav {
     STATUS,
     SHOPPING,

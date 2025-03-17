@@ -30,6 +30,7 @@ import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.RawEq
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.RawSome
+import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.endTurn
 import at.posselt.pfrpg2e.kingdom.data.getChosenCharter
@@ -50,6 +51,8 @@ import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.StructureBrowser
 import at.posselt.pfrpg2e.kingdom.dialogs.armyBrowser
 import at.posselt.pfrpg2e.kingdom.dialogs.armyTacticsBrowser
+import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderKingdomSkills
+import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.consumptionBreakdown
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
@@ -107,10 +110,10 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
 import at.posselt.pfrpg2e.utils.rollWithCompendiumFallback
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.onCreateDrawing
 import com.foundryvtt.core.documents.onCreateTile
 import com.foundryvtt.core.documents.onCreateToken
@@ -118,6 +121,7 @@ import com.foundryvtt.core.documents.onDeleteDrawing
 import com.foundryvtt.core.documents.onDeleteScene
 import com.foundryvtt.core.documents.onDeleteTile
 import com.foundryvtt.core.documents.onDeleteToken
+import com.foundryvtt.core.documents.onUpdateActor
 import com.foundryvtt.core.documents.onUpdateDrawing
 import com.foundryvtt.core.documents.onUpdateItem
 import com.foundryvtt.core.documents.onUpdateTile
@@ -125,7 +129,6 @@ import com.foundryvtt.core.documents.onUpdateToken
 import com.foundryvtt.core.onApplyTokenStatusEffect
 import com.foundryvtt.core.onCanvasReady
 import com.foundryvtt.core.onSightRefresh
-import com.foundryvtt.core.onUpdateActor
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.enrichHtml
 import com.foundryvtt.core.utils.deepClone
@@ -327,6 +330,27 @@ class KingdomSheet(
                 render()
             }
 
+            "add-bonus-feat" -> buildPromise {
+                val featId = bonusFeat
+                if (featId != null) {
+                    val kingdom = getKingdom()
+                    kingdom.bonusFeats = kingdom.bonusFeats + RawBonusFeat(
+                        id = featId,
+                        ruinThresholdIncreases = emptyArray(),
+                    )
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "delete-bonus-feat" -> buildPromise {
+                val featId = target.dataset["id"]
+                if (featId != null) {
+                    val kingdom = getKingdom()
+                    kingdom.bonusFeats = kingdom.bonusFeats.filter { it.id != featId }.toTypedArray()
+                    actor.setKingdom(kingdom)
+                }
+            }
+
             "add-modifier" -> buildPromise {
                 val kingdom = getKingdom()
                 AddModifier(activities = kingdom.getAllActivities().toTypedArray()) {
@@ -468,6 +492,7 @@ class KingdomSheet(
                         game = game,
                         onSave = {
                             kingdom.settings = it
+                            kingdom.fame.now = kingdom.fame.now.coerceIn(0, kingdom.settings.maximumFamePoints)
                             actor.setKingdom(kingdom)
                         },
                         kingdomSettings = kingdom.settings
@@ -660,7 +685,10 @@ class KingdomSheet(
                         .toTypedArray()
                     postChatTemplate(
                         templatePath = "chatmessages/landmark.hbs",
-                        templateContext = recordOf("buttons" to ruinButtons)
+                        templateContext = recordOf(
+                            "buttons" to ruinButtons,
+                            "actorUuid" to actor.uuid
+                        )
                     )
                     actor.setKingdom(kingdom)
                 }
@@ -699,7 +727,11 @@ class KingdomSheet(
                     val resources = collectResources(
                         kingdomData = kingdom,
                         realmData = realm,
-                        resourceDice = kingdom.getResourceDiceAmount(chosenFeats, settlements.allSettlements),
+                        resourceDice = kingdom.getResourceDiceAmount(
+                            chosenFeats,
+                            settlements.allSettlements,
+                            kingdomLevel = kingdom.level,
+                        ),
                         settlements = settlements.allSettlements,
                     )
                     kingdom.resourcePoints.now = resources.resourcePoints
@@ -717,6 +749,7 @@ class KingdomSheet(
                     val realm = game.getRealmData(actor, kingdom)
                     val settlements = kingdom.getAllSettlements(game)
                     kingdom.commodities.now.food = payConsumption(
+                        kingdomActor = actor,
                         availableFood = kingdom.commodities.now.food,
                         settlements = settlements.allSettlements,
                         realmData = realm,
@@ -803,6 +836,16 @@ class KingdomSheet(
                     kingdomActor = actor,
                     check = CheckType.RollSkill(skill),
                 )
+            }
+
+            "inspect-leader-skills" -> {
+                val kingdom = actor.getKingdom() ?: return
+                configureLeaderSkills(kingdom.settings.leaderSkills, true) {}
+            }
+
+            "inspect-kingdom-skills" -> {
+                val kingdom = actor.getKingdom() ?: return
+                configureLeaderKingdomSkills(kingdom.settings.leaderKingdomSkills, true) {}
             }
 
             "perform-activity" -> buildPromise {
@@ -910,7 +953,6 @@ class KingdomSheet(
         val controlDc = calculateControlDC(kingdom.level, realm, vacancies.ruler)
         val globalBonuses = evaluateGlobalBonuses(settlements.allSettlements)
         val allFeatures = kingdom.getExplodedFeatures()
-        console.log(kingdom, allFeatures)
         val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
         val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
         val leaderActors = kingdom.parseLeaderActors()
@@ -1042,7 +1084,11 @@ class KingdomSheet(
         val heartland = kingdom.getChosenHeartland()
         val charter = kingdom.getChosenCharter()
         val trainedSkills = kingdom.getTrainedSkills(chosenFeats, government)
-        val resourceDiceNum = kingdom.getResourceDiceAmount(chosenFeats, settlements.allSettlements)
+        val resourceDiceNum = kingdom.getResourceDiceAmount(
+            chosenFeats,
+            settlements.allSettlements,
+            kingdomLevel = kingdom.level,
+        )
         val initialProficiencies = (0..3).map { index ->
             val proficiency = kingdom.initialProficiencies.getOrNull(index)
                 ?.let { KingdomSkill.fromString(it) }
@@ -1160,7 +1206,11 @@ class KingdomSheet(
             groups = kingdom.groups.toContext(),
             abilityScores = kingdom.abilityScores.toContext(abilityScores, automateStats),
             skillRanks = kingdom.skillRanks.toContext(),
-            milestones = kingdom.milestones.toContext(kingdom.getMilestones(), game.user.isGM),
+            milestones = kingdom.milestones.toContext(
+                kingdom.getMilestones(),
+                game.user.isGM,
+                kingdom.settings.cultOfTheBloomEvents
+            ),
             ongoingEvent = ongoingEventInput.toContext(),
             isGM = game.user.isGM,
             actor = actor,
@@ -1193,6 +1243,9 @@ class KingdomSheet(
             resourceDiceIncome = "$resourceDiceNum${realm.sizeInfo.resourceDieSize.value}",
             skillChecks = checks,
             automateResources = automateResources,
+            useLeadershipModifiers = kingdom.settings.enableLeadershipModifiers,
+            activeSettlementType = settlements.current?.size?.type?.value ?: "village",
+            actorUuid = actor.uuid,
         )
     }
 
@@ -1320,18 +1373,6 @@ class KingdomSheet(
         null
     }
 }
-
-suspend fun newKingdomActor() =
-    KingdomActor.create(
-        recordOf(
-            "type" to "npc",
-            "name" to "Kingdom Sheet",
-            "img" to "icons/environment/settlement/castle.webp",
-            "ownership" to recordOf(
-                "default" to 3
-            )
-        )
-    ).await()
 
 suspend fun openOrCreateKingdomSheet(game: Game, dispatcher: ActionDispatcher, actor: KingdomActor) {
     if (actor.getKingdom() == null) {

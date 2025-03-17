@@ -1,8 +1,8 @@
 package at.posselt.pfrpg2e.camping.dialogs
 
+import at.posselt.pfrpg2e.app.awaitablePrompt
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.RadioInput
-import at.posselt.pfrpg2e.app.awaitablePrompt
 import at.posselt.pfrpg2e.camping.CampingData
 import at.posselt.pfrpg2e.camping.FoodCost
 import at.posselt.pfrpg2e.camping.RecipeData
@@ -27,6 +27,7 @@ private external interface LearnSpecialRecipeData {
     val recipe: String
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface RecipeContextRow {
     val label: String
@@ -35,6 +36,7 @@ private external interface RecipeContextRow {
     val input: FormElementContext
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface LearnSpecialRecipeContext {
     val formRows: Array<RecipeContextRow>

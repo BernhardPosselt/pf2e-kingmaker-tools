@@ -37,7 +37,6 @@ import kotlin.js.Promise
 @JsExport
 class KingdomSettingsDataModel(value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             int("rpToXpConversionRate")
@@ -215,7 +214,7 @@ class KingdomSettingsApplication(
                             value = settings.kingdomCultTable,
                             stacked = false,
                             required = false,
-                            help = "If none selected, falls back to the Random Cult Events table in this module's Rolltables compendium",
+                            help = "If none selected, falls back to the Random Cult Events table in this module's Roll Tables compendium",
                         ),
                         Select.fromEnum<RollMode>(
                             name = "kingdomEventRollMode",
@@ -231,7 +230,7 @@ class KingdomSettingsApplication(
                             value = settings.kingdomEventsTable,
                             stacked = false,
                             required = false,
-                            help = "If none selected, falls back to the Random Kingdom Events table in this module's Rolltables compendium",
+                            help = "If none selected, falls back to the Random Kingdom Events table in this module's Roll Tables compendium",
                         ),
                     ),
                 ),

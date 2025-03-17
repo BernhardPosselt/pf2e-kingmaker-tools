@@ -19,6 +19,7 @@ external interface AddBonusFeatContext {
     val name: String
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface BonusFeatContext {
     val id: FormElementContext
@@ -62,16 +63,19 @@ fun Array<RawBonusFeat>.toContext(
     val featsById = feats.associateBy { it.id }
     return mapIndexedNotNull { index, rawFeat ->
         featsById[rawFeat.id]?.let { feat ->
-            val ruinThresholdIncreases: Array<RawRuinThresholdIncreases> = feat.ruinThresholdIncreases ?: emptyArray()
+            val increases: Array<RawRuinThresholdIncreases> = feat.ruinThresholdIncreases ?: emptyArray()
             BonusFeatContext(
                 id = HiddenInput(name = "bonusFeats.$index.id", value = feat.id).toContext(),
                 idValue = feat.id,
                 name = feat.name,
                 description = feat.text,
                 automationNotes = feat.automationNotes,
-                ruinThresholdIncreases = ruinThresholdIncreases.mapIndexed { ruinIndex, value ->
-                    defaultRuinThresholdIncrease(value.increase)
-                        .toContext("features.$index.featRuinThresholdIncreases.$ruinIndex", value.amount)
+                ruinThresholdIncreases = increases.mapIndexed { ruinIndex, value ->
+                    val choice = rawFeat.ruinThresholdIncreases.getOrNull(ruinIndex)
+                        ?.toContext("bonusFeats.$index.ruinThresholdIncreases.$ruinIndex", value.amount)
+                    val default = defaultRuinThresholdIncrease(value.increase)
+                        .toContext("bonusFeats.$index.ruinThresholdIncreases.$ruinIndex", value.amount)
+                    choice ?: default
                 }.toTypedArray(),
             )
         }

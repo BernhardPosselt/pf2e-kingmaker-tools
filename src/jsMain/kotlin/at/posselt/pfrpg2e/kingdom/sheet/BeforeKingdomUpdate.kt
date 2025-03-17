@@ -10,6 +10,20 @@ import com.foundryvtt.core.ui.enrichHtml
 import js.objects.recordOf
 
 suspend fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
+    // when choosing a new kingdom feat when the previous one had threshold increases,
+    // the old checkbox are still in the dom once the new feat choice is being submitted
+    // causing the new feature choice to gain the old boosts so we need to clear those on
+    // each feat change
+    val previousChosenKingdomFeatsById = previous.features
+        .filter { it.id.startsWith("kingdom-feat") }
+        .associateBy { it.id }
+    val chosenKingdomFeatsById = current.features.filter { it.id.startsWith("kingdom-feat") }
+    chosenKingdomFeatsById.forEach { feat ->
+        if (previousChosenKingdomFeatsById[feat.id]?.featId != feat.featId) {
+            feat.featRuinThresholdIncreases = emptyArray()
+        }
+    }
+
     val charterType = current.charter.type
     if (previous.charter.type != charterType) {
         resetAbilityBoosts(current.charter.abilityBoosts)

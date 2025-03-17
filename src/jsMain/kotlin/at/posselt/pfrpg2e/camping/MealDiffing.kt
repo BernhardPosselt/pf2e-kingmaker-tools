@@ -8,10 +8,10 @@ import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.asAnyObjectList
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.postChatTemplate
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Hooks
-import com.foundryvtt.core.onPreUpdateActor
+import com.foundryvtt.core.documents.Actor
+import com.foundryvtt.core.documents.onPreUpdateActor
 import com.foundryvtt.core.utils.getProperty
 import js.objects.recordOf
 

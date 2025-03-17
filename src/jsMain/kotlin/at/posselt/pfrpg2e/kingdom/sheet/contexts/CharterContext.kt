@@ -5,8 +5,10 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.kingdom.RawCharter
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
+import at.posselt.pfrpg2e.toLabel
 import kotlinx.js.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface CharterContext {
     val type: FormElementContext
@@ -38,7 +40,7 @@ fun RawCharterChoices.toContext(charters: List<RawCharter>): CharterContext {
             disableStability = charterBoost == "stability",
         ),
         description = charter?.description ?: "",
-        flaw = charter?.flaw,
-        boost = charterBoost,
+        flaw = charter?.flaw?.toLabel(),
+        boost = charterBoost?.toLabel(),
     )
 }

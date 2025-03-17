@@ -9,7 +9,7 @@ private const val DIST_PATH = "modules/${Config.moduleId}/dist"
 
 fun resolveTemplatePath(path: String) = "$DIST_PATH/$path"
 
-suspend fun loadTpls(paths: Array<Pair<String, String>>) {
+suspend fun loadTemplatePartials(paths: Array<Pair<String, String>>) {
     val resolvedPaths = paths.map {
         it.first to resolveTemplatePath(it.second)
     }.toRecord()

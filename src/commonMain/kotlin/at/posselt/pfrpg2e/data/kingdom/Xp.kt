@@ -16,7 +16,7 @@ fun calculateHexXP(
         else -> hexes * 5
     }
 } else {
-    hexes * xpPerClaimedHex;
+    hexes * xpPerClaimedHex
 }
 
 fun calculateRpXP(

@@ -4,9 +4,9 @@ import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.checks.determineDegreeOfSuccess
 import at.posselt.pfrpg2e.toCamelCase
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Roll
 import com.foundryvtt.core.RollMessageOptions
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.ChatMessage
 import com.foundryvtt.core.documents.GetSpeakerOptions
 import js.objects.Record
@@ -14,6 +14,7 @@ import js.objects.recordOf
 import kotlinx.coroutines.await
 
 data class DieValue(val value: Int) {
+    @Suppress("unused")
     fun isNat1() = value == 1
     fun isNat20() = value == 20
 }

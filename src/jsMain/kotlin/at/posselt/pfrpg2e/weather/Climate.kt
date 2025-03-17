@@ -73,7 +73,7 @@ private suspend fun rollWeather(
             val checkPrecipitation = it.precipitationDc?.let { precipitationDc ->
                 d20Check(
                     precipitationDc,
-                    flavor = "Checking for Precipitation with DC ${precipitationDc}",
+                    flavor = "Checking for Precipitation with DC $precipitationDc",
                     rollMode = rollMode,
                 )
             }
@@ -88,7 +88,7 @@ private suspend fun rollWeather(
                 // 2. check if weather events happen
                 val checkEvent = d20Check(
                     weatherEventDc,
-                    flavor = "Checking for Weather Event with DC ${weatherEventDc}",
+                    flavor = "Checking for Weather Event with DC $weatherEventDc",
                     rollMode = rollMode,
                 )
                 val checkSecondEvent = checkEvent.dieValue
@@ -96,7 +96,7 @@ private suspend fun rollWeather(
                     ?.run {
                         d20Check(
                             weatherEventDc,
-                            flavor = "Checking for Second Weather Event with DC ${weatherEventDc}",
+                            flavor = "Checking for Second Weather Event with DC $weatherEventDc",
                             rollMode = rollMode,
                         )
                     }

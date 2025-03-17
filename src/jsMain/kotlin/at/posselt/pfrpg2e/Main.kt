@@ -44,7 +44,7 @@ import at.posselt.pfrpg2e.utils.Pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.ToolsMacros
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fixVisibility
-import at.posselt.pfrpg2e.utils.loadTpls
+import at.posselt.pfrpg2e.utils.loadTemplatePartials
 import at.posselt.pfrpg2e.utils.pf2eKingmakerTools
 import at.posselt.pfrpg2e.weather.registerWeatherHooks
 import at.posselt.pfrpg2e.weather.rollWeather
@@ -67,13 +67,13 @@ fun main() {
         val actionDispatcher = ActionDispatcher(
             game = game,
             handlers = listOf(
-                AddHuntAndGatherResultHandler(game = game),
+                AddHuntAndGatherResultHandler(),
                 OpenCampingSheetHandler(game = game),
                 SyncActivitiesHandler(game = game),
-                ClearMealEffectsHandler(game = game),
-                LearnSpecialRecipeHandler(game = game),
+                ClearMealEffectsHandler(),
+                LearnSpecialRecipeHandler(),
                 ApplyMealEffectsHandler(game = game),
-                GainProvisionsHandler(game = game),
+                GainProvisionsHandler(),
                 OpenKingdomSheetHandler(game = game),
             )
         ).apply {
@@ -96,7 +96,7 @@ fun main() {
 
             buildPromise {
                 // register partials
-                loadTpls(
+                loadTemplatePartials(
                     arrayOf(
                         "kingdom-activities" to "applications/kingdom/activities.hbs",
                         "kingdom-trade-agreements" to "applications/kingdom/sections/trade-agreements/page.hbs",

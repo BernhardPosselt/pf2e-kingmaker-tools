@@ -26,7 +26,6 @@ fun createKingmakerIcon(
         onClickFunction = {
             it.preventDefault()
             it.stopPropagation()
-            console.log(id)
             buildPromise {
                 if (id != null) {
                     game.actors.get(id)?.takeIfInstance<KingdomActor>()?.let { actor ->

@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
 import at.posselt.pfrpg2e.toLabel
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface GovernmentContext {
     val type: FormElementContext

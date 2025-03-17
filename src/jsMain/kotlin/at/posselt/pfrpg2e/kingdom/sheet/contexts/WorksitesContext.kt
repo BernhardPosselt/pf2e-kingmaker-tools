@@ -5,11 +5,12 @@ import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.data.kingdom.RealmData
+import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSite
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
-import at.posselt.pfrpg2e.toLabel
 import kotlinx.js.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface WorkSiteContext {
     val label: String
@@ -21,7 +22,7 @@ external interface WorkSiteContext {
 
 fun RawWorkSite.toContext(worksites: RealmData.WorkSite, key: String, automate: Boolean) =
     WorkSiteContext(
-        label = key.toLabel(),
+        label = key.deCamelCase(),
         quantity = if (automate) {
             HiddenInput(
                 value = quantity.toString(),

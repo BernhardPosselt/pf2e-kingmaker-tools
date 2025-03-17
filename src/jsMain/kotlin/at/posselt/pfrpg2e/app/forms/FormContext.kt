@@ -16,6 +16,7 @@ external interface SectionsContext {
     val sections: Array<SectionContext>
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface SectionContext {
     val hidden: Boolean?
@@ -29,6 +30,7 @@ external interface DocumentLinkContext {
     val img: String?
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface FormElementContext {
     val label: String

@@ -26,18 +26,21 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
 
+@Suppress("unused")
 @JsPlainObject
 external interface LeaderKingdomSkillsRow {
     val label: String
     val cells: Array<FormElementContext>
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface ConfigureLeaderKingdomSkillsContext : HandlebarsRenderContext {
     val headers: Array<String>
     val isFormValid: Boolean
     val compact: Boolean
     val formRows: Array<LeaderKingdomSkillsRow>
+    val saveLabel: String
 }
 
 @JsPlainObject
@@ -93,7 +96,6 @@ private fun LeaderKingdomSkillsData.toKingdomSkills(): RawLeaderKingdomSkills =
 @JsExport
 class ConfigureLeaderKingdomSkillsModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             Leader.entries.forEach { leader ->
@@ -109,9 +111,10 @@ class ConfigureLeaderKingdomSkillsModel(val value: AnyObject) : DataModel(value)
 
 class ConfigureLeaderKingdomSkills(
     skills: RawLeaderKingdomSkills,
+    private val readonly: Boolean,
     private val onSave: (skills: RawLeaderKingdomSkills) -> Unit,
 ) : FormApp<ConfigureLeaderKingdomSkillsContext, LeaderKingdomSkillsData>(
-    title = "Configure Leader Kingdom Skills ",
+    title = "Kingdom Skills ",
     template = "components/forms/xy-form.hbs",
     debug = true,
     dataModel = ConfigureLeaderKingdomSkillsModel::class.js,
@@ -146,6 +149,7 @@ class ConfigureLeaderKingdomSkills(
                                 value = data.hasSkill(leader, skill),
                                 label = name,
                                 hideLabel = true,
+                                disabled = readonly,
                             ).toContext()
                         }
                         .toTypedArray(),
@@ -158,18 +162,22 @@ class ConfigureLeaderKingdomSkills(
             formRows = rows,
             isFormValid = true,
             compact = true,
+            saveLabel = if(readonly) "Close" else "Save",
         )
     }
 
     override fun onParsedSubmit(value: LeaderKingdomSkillsData): Promise<Void> = buildPromise {
-        data = value.toKingdomSkills()
+        if (readonly == false) {
+            data = value.toKingdomSkills()
+        }
         null
     }
 }
 
 fun configureLeaderKingdomSkills(
     skills: RawLeaderKingdomSkills,
+    readonly: Boolean = false,
     onSave: (RawLeaderKingdomSkills) -> Unit,
 ) {
-    ConfigureLeaderKingdomSkills(skills, onSave).launch()
+    ConfigureLeaderKingdomSkills(skills, readonly, onSave).launch()
 }

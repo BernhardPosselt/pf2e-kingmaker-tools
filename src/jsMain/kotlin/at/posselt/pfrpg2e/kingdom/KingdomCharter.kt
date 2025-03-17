@@ -16,6 +16,7 @@ external interface RawCharter {
 @JsModule("./charters.json")
 external val charters: Array<RawCharter>
 
+@Suppress("unused")
 @JsModule("./schemas/charter.json")
 external val charterSchema: JsonElement
 

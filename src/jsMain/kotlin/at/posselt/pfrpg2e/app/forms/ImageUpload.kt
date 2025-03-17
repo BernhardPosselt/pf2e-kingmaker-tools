@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.app.forms
 
+@Suppress("unused")
 data class ImageUpload(
     override val label: String,
     override val name: String,

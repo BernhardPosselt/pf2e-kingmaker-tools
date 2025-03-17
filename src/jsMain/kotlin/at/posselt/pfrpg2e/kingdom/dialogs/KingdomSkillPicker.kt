@@ -40,12 +40,14 @@ import kotlin.let
 import kotlin.to
 
 
+@Suppress("unused")
 @JsPlainObject
 external interface KingdomSkillPickerRow {
     val label: String
     val cells: Array<FormElementContext>
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface KingdomSkillPickerContext : HandlebarsRenderContext {
     val isFormValid: Boolean
@@ -68,7 +70,6 @@ external interface KingdomSkillPickerData {
 @JsExport
 class KingdomSkillPickerModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             array("skills") {

@@ -11,6 +11,7 @@ import com.foundryvtt.core.Game
 import js.objects.JsPlainObject
 
 
+@Suppress("unused")
 @JsPlainObject
 private external interface StructureXpDialogContext {
     val formRows: Array<FormElementContext>

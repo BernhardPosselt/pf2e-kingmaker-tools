@@ -27,21 +27,18 @@ import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.deepClone
 import js.core.Void
+import js.objects.JsPlainObject
 import kotlinx.coroutines.await
-import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
-import kotlin.text.toInt
-
 
 @JsPlainObject
 external interface SkillInputArrayContext {
     val label: String
     val proficiency: String
 }
-
 
 @JsPlainObject
 external interface PickerSkill {
@@ -56,6 +53,7 @@ external interface PickerSkill {
     val dc: Int?
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface SkillContext {
     val cells: Array<FormElementContext>
@@ -63,7 +61,7 @@ external interface SkillContext {
     val index: Int
 }
 
-
+@Suppress("unused")
 @JsPlainObject
 external interface SkillPickerContext : HandlebarsRenderContext {
     val allowLores: Boolean
@@ -87,7 +85,6 @@ external interface SkillSubmitData {
     val validateOnly: Boolean
 }
 
-@JsPlainObject
 external interface SkillPickerSubmitData {
     val skills: Array<SkillSubmitData>
 }
@@ -95,7 +92,6 @@ external interface SkillPickerSubmitData {
 @JsExport
 class SkillPickerDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             array("skills") {
@@ -363,7 +359,7 @@ fun launchCampingSkillPicker(
         dcType = "zone",
         dc = null,
     )
-    val skills = (Skill.entries + Perception + loreAttributes).mapNotNull { attribute ->
+    val skills = (Skill.entries + Perception + loreAttributes).map { attribute ->
         val existingValue = skillsByAttribute[attribute]
         if (existingValue == null) {
             PickerSkill(

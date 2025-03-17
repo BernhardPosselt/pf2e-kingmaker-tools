@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.utils.postChatTemplate
 import com.foundryvtt.core.AnyObject
 import kotlinx.js.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 private external interface DiscoverSpecialMealChatContext {
     val degree: String

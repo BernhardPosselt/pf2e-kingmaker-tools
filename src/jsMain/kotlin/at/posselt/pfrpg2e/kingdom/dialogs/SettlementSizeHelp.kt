@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.asAnyObject
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 private external interface SSizeContext {
     val type: String
@@ -17,6 +18,7 @@ private external interface SSizeContext {
     val influence: String
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface SettlementSizeContext {
     val data: Array<SSizeContext>

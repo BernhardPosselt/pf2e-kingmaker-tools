@@ -3,9 +3,7 @@ package at.posselt.pfrpg2e.macros
 import at.posselt.pfrpg2e.actor.hasFeat
 import at.posselt.pfrpg2e.actor.investedArmor
 import at.posselt.pfrpg2e.actor.proficiency
-import at.posselt.pfrpg2e.app.awaitablePrompt
 import at.posselt.pfrpg2e.app.forms.FormElementContext
-import at.posselt.pfrpg2e.app.forms.RadioInput
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
@@ -20,9 +18,8 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.postChatTemplate
-import com.foundryvtt.core.Actor
-import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.ui
 import com.foundryvtt.pf2e.actions.CheckDC
 import com.foundryvtt.pf2e.actions.SingleCheckActionUseOptions
@@ -38,35 +35,16 @@ private external interface SubsistData {
     val dc: Int
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface AskActorSubmitData {
     val name: String
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface AskActorContext {
     val formRows: Array<FormElementContext>
-}
-
-private suspend fun selectActor(choices: List<PF2ECharacter>): PF2ECharacter? {
-    return awaitablePrompt<AskActorSubmitData, PF2ECharacter?>(
-        title = "Select Character",
-        templatePath = "components/forms/form.hbs",
-        templateContext = AskActorContext(
-            formRows = choices
-                .sortedBy { it.name }
-                .mapIndexed { index, actor ->
-                    RadioInput(
-                        name = "name",
-                        label = actor.name,
-                        value = actor.name,
-                        checked = index == 0,
-                    ).toContext()
-                }.toTypedArray()
-        ).unsafeCast<AnyObject>(),
-    ) { data ->
-        choices.find { actor -> actor.name == data.name }
-    }
 }
 
 suspend fun subsistMacro(game: Game, actor: Actor?) {

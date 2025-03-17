@@ -5,7 +5,6 @@ jQuery use:
 
 Testing TODOs:
 
-* Kingdom Building
-* Stat automation
 * macros
-* end turn
+* cooperative leadership
+* vacancies

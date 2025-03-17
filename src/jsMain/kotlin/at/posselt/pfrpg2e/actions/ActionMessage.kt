@@ -7,5 +7,3 @@ external interface ActionMessage {
     val action: String
     val data: Any?
 }
-
-fun emptyActionMessage(action: String) = ActionMessage(action = action, data = null)

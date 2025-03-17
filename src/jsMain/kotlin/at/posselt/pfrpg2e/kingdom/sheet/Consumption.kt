@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.sheet
 
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.resources.calculateConsumption
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
@@ -9,6 +10,7 @@ import js.objects.recordOf
 import kotlin.math.abs
 
 suspend fun payConsumption(
+    kingdomActor: KingdomActor,
     settlements: List<Settlement>,
     realmData: RealmData,
     armyConsumption: Int,
@@ -28,7 +30,10 @@ suspend fun payConsumption(
         if (consumedFood < 0) {
             postChatTemplate(
                 templatePath = "chatmessages/not-enough-food.hbs",
-                templateContext = recordOf("food" to abs(consumedFood))
+                templateContext = recordOf(
+                    "food" to abs(consumedFood),
+                    "actorUuid" to kingdomActor.uuid
+                )
             )
         }
         paidFood

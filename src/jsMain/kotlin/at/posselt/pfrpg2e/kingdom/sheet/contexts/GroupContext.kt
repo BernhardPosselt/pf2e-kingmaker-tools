@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface GroupContext  {
     val name: FormElementContext

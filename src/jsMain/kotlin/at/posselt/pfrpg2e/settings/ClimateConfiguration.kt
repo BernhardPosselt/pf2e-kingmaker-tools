@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.settings
 
-import at.posselt.pfrpg2e.app.*
 import at.posselt.pfrpg2e.app.FormApp
+import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.camping.dialogs.TableHead
 import at.posselt.pfrpg2e.data.regions.Month
@@ -9,11 +9,12 @@ import at.posselt.pfrpg2e.data.regions.Season
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
-import com.foundryvtt.core.*
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
-import com.foundryvtt.core.applications.api.*
+import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
+import com.foundryvtt.core.game
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -49,6 +50,7 @@ external interface ClimateSettings {
     var months: Array<ClimateSetting>
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface ClimateSettingsContext : HandlebarsRenderContext {
     var heading: Array<TableHead>
@@ -62,7 +64,6 @@ class ClimateConfigurationDataModel(
     context: DocumentConstructionContext? = undefined,
 ) : DataModel(value, context) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             array("months") {

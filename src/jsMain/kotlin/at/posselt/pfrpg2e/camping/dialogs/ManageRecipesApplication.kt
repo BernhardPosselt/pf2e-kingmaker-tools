@@ -85,7 +85,7 @@ class ManageRecipesApplication(
                 .map { recipe ->
                     val recipeName = recipe.name
                     val link = TextEditor.enrichHTML(buildUuid(recipe.uuid, recipeName)).await()
-                    val editable = recipe.isHomebrew ?: false
+                    val editable = recipe.isHomebrew == true
                     val enabled = learnedRecipes.contains(recipeName)
                     val cook = tpl(
                         "components/food-cost/food-cost.hbs",

@@ -57,12 +57,14 @@ enum class StructureBrowserNav {
         get() = toLabel()
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface CostContext {
     val value: Int
     val lacksFunds: Boolean
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface StructureContext {
     val lots: Int
@@ -80,6 +82,7 @@ external interface StructureContext {
     val notes: String?
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface StructureBrowserContext : HandlebarsRenderContext {
     val isFormValid: Boolean
@@ -116,7 +119,6 @@ external interface StructureBrowserData {
 @JsExport
 class StructureBrowserDataModel(value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             string("activeSettlement", nullable = true)

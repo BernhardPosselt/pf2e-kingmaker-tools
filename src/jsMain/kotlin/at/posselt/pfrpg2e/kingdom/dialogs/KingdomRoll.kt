@@ -25,6 +25,7 @@ import js.objects.JsPlainObject
 import kotlin.math.max
 
 
+@Suppress("unused")
 @JsPlainObject
 private external interface ChatModifier {
     val label: String
@@ -32,6 +33,7 @@ private external interface ChatModifier {
     val actorUuid: String
 }
 
+@Suppress("unused")
 @JsPlainObject
 private external interface ChatButtonContext {
     val criticalSuccess: Boolean

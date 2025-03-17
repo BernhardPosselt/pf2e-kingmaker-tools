@@ -27,6 +27,7 @@ external interface SyncActivitiesAction {
     val campingActorUuid: String
 }
 
+@Suppress("unused")
 @JsPlainObject
 external interface RandomEncounterContext {
     val campingActorUuid: String
@@ -60,7 +61,7 @@ class SyncActivitiesHandler(
                         campingActorUuid = campingActor.uuid,
                     ),
                     rollMode = RollMode.BLINDROLL
-                );
+                )
             }
         }
     }

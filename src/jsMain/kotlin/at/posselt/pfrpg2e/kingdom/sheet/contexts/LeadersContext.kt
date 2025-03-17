@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.LeaderBonuses
 import at.posselt.pfrpg2e.utils.formatAsModifier
 import kotlinx.js.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface ActorLeaderContext {
     val name: String

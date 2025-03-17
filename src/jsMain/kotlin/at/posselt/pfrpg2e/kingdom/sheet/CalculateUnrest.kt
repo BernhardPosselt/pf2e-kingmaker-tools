@@ -12,6 +12,7 @@ import js.objects.JsPlainObject
 import kotlin.math.abs
 import kotlin.math.min
 
+@Suppress("unused")
 @JsPlainObject
 private external interface ChatUnrestContext {
     val overcrowded: Int

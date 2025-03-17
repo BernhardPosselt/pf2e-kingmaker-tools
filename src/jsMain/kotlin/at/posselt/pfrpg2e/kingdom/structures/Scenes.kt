@@ -63,8 +63,8 @@ fun Scene.parseSettlement(
     allStructuresStack: Boolean,
     allowCapitalInvestmentInCapitalWithoutBank: Boolean,
 ): Settlement {
-    val occupiedBlocks = if (autoCalculateSettlementLevel) max(1, calculateOccupiedBlocks()) else rawSettlement.lots
-    val settlementLevel = if (autoCalculateSettlementLevel) min(20, occupiedBlocks) else rawSettlement.level
+    val occupiedBlocks = if (autoCalculateSettlementLevel && rawSettlement.manualSettlementLevel != true) max(1, calculateOccupiedBlocks()) else rawSettlement.lots
+    val settlementLevel = if (autoCalculateSettlementLevel && rawSettlement.manualSettlementLevel != true) min(20, occupiedBlocks) else rawSettlement.level
     return evaluateSettlement(
         data = SettlementData(
             id = rawSettlement.sceneId,

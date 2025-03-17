@@ -9,7 +9,7 @@
 @import "./applications/kingdom/kingdom-sheet.css";
 @import "./applications/kingdom/structure-browser.css";
 @import "./applications/kingdom/settlement.css";
-@import "./chatmessages/rolls.css";
+@import "./chatmessages/chat.css";
 
 :root {
     --primary-km: #275125;

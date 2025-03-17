@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.Config
@@ -20,7 +22,6 @@ import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2EParty
-import js.array.toTypedArray
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -134,13 +135,13 @@ enum class CampingSheetSection {
     EATING,
 }
 
-private val playlistUuid = "Playlist.7CiwVus60FiuKFhK"
-private val capital = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.vGP8BFAN2DaZcpri"
-private val firstWorld = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.3iH2HLuQaSIlm0F7"
-private val glenebon = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.O656E1AtGDTH3EU1"
-private val narlmarches = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.b5LKh5J7ZTrfBXVz"
-private val shrikeHills = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.mKDBa58aNaiJA1Fp"
-private val dunsward = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.CrIyaBio4BycqrwO"
+private const val playlistUuid = "Playlist.7CiwVus60FiuKFhK"
+private const val capital = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.vGP8BFAN2DaZcpri"
+private const val firstWorld = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.3iH2HLuQaSIlm0F7"
+private const val glenebon = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.O656E1AtGDTH3EU1"
+private const val narlmarches = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.b5LKh5J7ZTrfBXVz"
+private const val shrikeHills = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.mKDBa58aNaiJA1Fp"
+private const val dunsward = "Playlist.7CiwVus60FiuKFhK.PlaylistSound.CrIyaBio4BycqrwO"
 
 private val rolltableUuids = arrayOf(
     "RollTable.44cfq5QJS2O5tn0K",
@@ -427,12 +428,6 @@ fun CampingData.canPerformActivities(): Boolean {
 fun CampingData.findCurrentRegion(): RegionSetting? =
     regionSettings.regions.find { it.name == currentRegion }
 
-fun Cooking.findCookingResult(recipeName: String): CookingResult =
-    results.find { it.recipeName == recipeName } ?: CookingResult(
-        recipeName = recipeName,
-        result = null,
-        skill = "survival",
-    )
 
 sealed interface MealChoice {
     val actor: PF2ECharacter
@@ -560,185 +555,4 @@ fun CampingData.findCookingChoices(
             )
         }
     )
-}
-
-// -------------------------------------------------------------------------------------------
-// unused but begin of refactoring the current state
-data class ParsedCampingActivity(
-    val name: String,
-    val result: DegreeOfSuccess?,
-    val actor: PF2ECharacter?,
-    val selectedSkill: ParsedCampingSkill?,
-    val skills: List<ParsedCampingSkill>,
-    val enabled: Boolean,
-    val alwaysEnabled: Boolean,
-) {
-    val requiresACheck
-        get() = skills.any { !it.validateOnly }
-    val isPrepareCampsite
-        get() = name == "Prepare Campsite"
-}
-
-class ParsedCamping(
-    actorsInCamp: List<PF2EActor>,
-    activities: List<ParsedCampingActivity>,
-    var section: CampingSheetSection,
-    chosenMeals: List<MealChoice>,
-    val recipes: List<RecipeData>,
-    var gunsToClean: Int,
-    var increaseWatchActorNumber: Int,
-    var watchSecondsRemaining: Int,
-    actorsNotKeepingWatch: Set<String>,
-    knownRecipes: Set<String>,
-    val regions: List<RegionSetting>,
-    currentRegion: String,
-    val ignoreSkillRequirements: Boolean,
-) {
-    private var _knownRecipes = knownRecipes.toMutableSet()
-    private var _actorsNotKeepingWatch = actorsNotKeepingWatch.toMutableSet()
-    private var _actorsInCamp = actorsInCamp.toMutableList()
-    private var _chosenMeals = chosenMeals.toMutableList()
-    private var _activities = activities.associateBy { it.name }.toMutableMap()
-    private var _currentRegion = currentRegion
-
-    val activities
-        get() = _activities.values.toList()
-    val actorsKeepingWatch
-        get() = _actorsInCamp.filterIsInstance<PF2ECharacter>()
-            .filter { it.uuid !in _actorsNotKeepingWatch }
-            .toList()
-    val prepareCampsite: ParsedCampingActivity
-        get() = _activities["Prepare Campsite"]!!
-    val cookMeal: ParsedCampingActivity
-        get() = _activities["Cook Meal"]!!
-    val actorsInCamp
-        get() = _actorsInCamp.toList()
-    val chosenMeals
-        get() = _chosenMeals.toList()
-    val knownRecipes
-        get() = _knownRecipes.toSet()
-    val currentRegion
-        get() = regions.find { it.name == _currentRegion }!!
-
-    fun removeRecipe(name: String) {
-        val affected = _chosenMeals
-            .filterIsInstance<MealChoice.ParsedMeal>()
-            .filter { it.recipe.name == name }
-        _chosenMeals.removeAll(affected)
-        _chosenMeals.addAll(affected.map { MealChoice.Nothing(actor = it.actor, favoriteMeal = it.favoriteMeal) })
-        _knownRecipes.remove(name)
-    }
-
-    fun removeActorByUuid(actorUuid: String) {
-        _actorsInCamp.removeAll { it.uuid == actorUuid }
-        _chosenMeals.removeAll { it.actor.uuid == actorUuid }
-        _actorsNotKeepingWatch.remove(actorUuid)
-        _activities
-            .filter { it.value.actor?.uuid == actorUuid }
-            .forEach { _activities.remove(it.key) }
-    }
-
-    fun addActor(actor: PF2EActor) {
-        _actorsInCamp.add(actor)
-    }
-
-    suspend fun getTotalCarriedFood(
-        party: PF2EParty?,
-        foodItems: FoodItems,
-    ): FoodAmount = coroutineScope {
-        val actors = _actorsInCamp + (party?.let { listOf(it) } ?: emptyList())
-        actors.map {
-            it.getTotalCarriedFood(foodItems = foodItems)
-        }.sum()
-    }
-}
-
-suspend fun CampingActor.getParsedCamping(game: Game): ParsedCamping? {
-    val camping = getCamping() ?: return null
-    val actorsInCamp = camping.getActorsInCamp()
-    val charactersInCamp = actorsInCamp.filterIsInstance<PF2ECharacter>().associateBy { it.uuid }
-    val activitiesByName = camping.campingActivities.associateBy { it.activity }
-    val recipes = camping.getAllRecipes().associateBy { it.name }
-    val lockedActivities = camping.lockedActivities.toSet()
-    val alwaysPerformActivities = camping.alwaysPerformActivities.toSet()
-    val activities = camping.getAllActivities()
-        .asSequence()
-        .sortedBy { it.name }
-        .map { data ->
-            val activity: CampingActivity? = activitiesByName[data.name] ?: CampingActivity(
-                activity = data.name,
-                actorUuid = null,
-                result = null,
-                selectedSkill = null,
-            )
-            val actor = activity?.let { charactersInCamp[it.actorUuid] }
-            val skills = data.getCampingSkills(actor)
-            val selectedSkill = activity?.selectedSkill?.let { skillName ->
-                val attribute = Attribute.fromString(skillName)
-                skills.find { it.attribute == attribute }
-            }
-            ParsedCampingActivity(
-                name = data.name,
-                actor = actor,
-                result = activity?.let { it.result?.let { degree -> fromCamelCase<DegreeOfSuccess>(degree) } },
-                selectedSkill = selectedSkill,
-                enabled = data.name !in lockedActivities,
-                alwaysEnabled = data.name in alwaysPerformActivities,
-                skills = skills,
-            )
-        }
-        .toList()
-    val chosenMeals = parseMealChoices(camping, charactersInCamp, recipes)
-    return ParsedCamping(
-        actorsInCamp = actorsInCamp,
-        activities = activities,
-        section = fromCamelCase<CampingSheetSection>(camping.section) ?: CampingSheetSection.PREPARE_CAMPSITE,
-        chosenMeals = chosenMeals,
-        recipes = camping.getAllRecipes().toList(),
-        gunsToClean = camping.gunsToClean,
-        increaseWatchActorNumber = camping.increaseWatchActorNumber,
-        watchSecondsRemaining = camping.watchSecondsRemaining,
-        actorsNotKeepingWatch = camping.actorUuidsNotKeepingWatch.toMutableSet(),
-        knownRecipes = camping.cooking.knownRecipes.toMutableSet(),
-        regions = camping.regionSettings.regions.toList(),
-        currentRegion = camping.currentRegion,
-        ignoreSkillRequirements = camping.ignoreSkillRequirements
-    )
-}
-
-suspend fun CampingActor.setParsedCamping(data: ParsedCamping) {
-    val camping = getCamping() ?: return
-    camping.section = data.section.toCamelCase()
-    camping.campingActivities = data.activities.map {
-        CampingActivity(
-            activity = it.name,
-            actorUuid = it.actor?.uuid,
-            result = it.result?.toCamelCase(),
-            selectedSkill = it.selectedSkill?.attribute?.value,
-        )
-    }.toTypedArray()
-    camping.actorUuids = data.actorsInCamp.map { it.uuid }.toTypedArray()
-    camping.cooking.actorMeals = data.chosenMeals.map {
-        ActorMeal(
-            actorUuid = it.actor.uuid,
-            favoriteMeal = it.favoriteMeal?.name,
-            chosenMeal = it.name,
-        )
-    }.toTypedArray()
-    val charactersKeepingWatch = data.actorsKeepingWatch.map { it.uuid }.toSet()
-    camping.actorUuidsNotKeepingWatch = data.actorsInCamp
-        .asSequence()
-        .filterIsInstance<PF2ECharacter>()
-        .filter { it.uuid !in charactersKeepingWatch }
-        .map { it.uuid }
-        .toTypedArray()
-    camping.increaseWatchActorNumber = data.increaseWatchActorNumber
-    camping.gunsToClean = data.gunsToClean
-    camping.watchSecondsRemaining = data.watchSecondsRemaining
-    camping.cooking.knownRecipes = data.knownRecipes.toTypedArray()
-    camping.currentRegion = data.currentRegion.name
-    camping.ignoreSkillRequirements = data.ignoreSkillRequirements
-    camping.lockedActivities = data.activities.filter { !it.enabled }.map { it.name }.toTypedArray()
-    camping.alwaysPerformActivities = data.activities.filter { it.alwaysEnabled }.map { it.name }.toTypedArray()
-    setCamping(camping)
 }

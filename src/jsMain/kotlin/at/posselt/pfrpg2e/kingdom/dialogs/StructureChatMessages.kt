@@ -15,6 +15,7 @@ import kotlinx.html.li
 import kotlinx.html.unsafe
 import kotlinx.js.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface ChatStructure {
     val free: Boolean

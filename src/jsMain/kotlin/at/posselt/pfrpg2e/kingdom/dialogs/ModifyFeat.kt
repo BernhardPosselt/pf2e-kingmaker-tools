@@ -49,7 +49,6 @@ external interface ModifyFeatData {
 @JsExport
 class ModifyFeatDataModel(value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             string("id")

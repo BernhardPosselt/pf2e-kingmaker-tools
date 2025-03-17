@@ -10,9 +10,9 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Combatant
 import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.documents.onDeleteCombat
@@ -47,7 +47,7 @@ suspend fun Scene.startMusic() {
         ?: playlist?.playAll()?.await()
 }
 
-suspend fun Game.findCombatTrack(combatants: Array<Combatant>, active: Scene): Track? =
+fun Game.findCombatTrack(combatants: Array<Combatant>, active: Scene): Track? =
     // check for actor overrides
     combatants.asSequence()
         .mapNotNull(Combatant::actor)

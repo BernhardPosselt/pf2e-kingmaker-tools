@@ -29,7 +29,6 @@ import kotlin.js.Promise
 @JsExport
 class FavoriteMealDataModel(val value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             array("meals") {

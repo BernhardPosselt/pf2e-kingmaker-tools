@@ -50,7 +50,6 @@ external interface ModifyGovernmentData {
 @JsExport
 class ModifyGovernmentDataModel(value: AnyObject) : DataModel(value) {
     companion object {
-        @Suppress("unused")
         @JsStatic
         fun defineSchema() = buildSchema {
             string("id")

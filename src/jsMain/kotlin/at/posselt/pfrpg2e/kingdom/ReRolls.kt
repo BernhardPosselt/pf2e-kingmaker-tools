@@ -26,6 +26,7 @@ external interface UpOrDowngrade {
 }
 
 
+@Suppress("unused")
 @JsPlainObject
 private external interface RollMetaContext {
     val label: String

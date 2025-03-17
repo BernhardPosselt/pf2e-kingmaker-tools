@@ -18,13 +18,13 @@ import kotlinx.browser.document
 import kotlinx.html.org.w3c.dom.events.Event
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.get
-import kotlin.collections.plus
 
 private data class ChatButton(
     val buttonClass: String,
     val callback: suspend (game: Game, actor: KingdomActor, event: Event, button: HTMLButtonElement) -> Unit,
 )
 
+@Suppress("unused")
 @JsPlainObject
 private external interface PayStructureContext {
     val rp: Int
@@ -110,8 +110,8 @@ private val buttons = listOf(
 
 fun bindChatButtons(game: Game) {
     Hooks.onRenderChatLog { application, html, data ->
-        val chatlog = document.getElementById("chat-log")
-        chatlog?.addEventListener("click", { ev ->
+        val chatLog = document.getElementById("chat-log")
+        chatLog?.addEventListener("click", { ev ->
             buttons.forEach { data ->
                 val target = ev.target
                 if (target is HTMLButtonElement && target.classList.contains(data.buttonClass)) {

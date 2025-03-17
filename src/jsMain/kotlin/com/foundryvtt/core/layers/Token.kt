@@ -1,7 +1,7 @@
 package com.foundryvtt.core.layers
 
-import com.foundryvtt.core.Actor
 import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Combatant
 import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.documents.User

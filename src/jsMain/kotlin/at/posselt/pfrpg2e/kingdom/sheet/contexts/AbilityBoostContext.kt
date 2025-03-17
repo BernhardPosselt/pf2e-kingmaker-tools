@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import js.objects.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface AbilityBoostContext {
     val free: Int

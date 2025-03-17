@@ -5,6 +5,7 @@ import com.foundryvtt.core.documents.JournalEntry
 import com.foundryvtt.core.documents.JournalEntryPage
 import kotlinx.js.JsPlainObject
 
+@Suppress("unused")
 @JsPlainObject
 external interface JournalRenderOptions : ApplicationRenderOptions {
     val pageId: String?
