@@ -335,4 +335,182 @@ class EvaluateStructuresTest {
         )
         assertEquals(1, result.divine)
     }
+
+    @Test
+    fun itemBonusesFromTheSameBuildingStackUpToMaximumStacks() {
+        val result = parseAvailableItems(
+            listOf(
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 2
+                    ))
+                ),
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 2
+                    ))
+                ),
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 2
+                    ))
+                ),
+            )
+        )
+        assertEquals(2, result.divine)
+    }
+
+    @Test
+    fun onlyHighestItemBonusPerTypeStacks() {
+        val result = parseAvailableItems(
+            listOf(
+                Structure(
+                    name = "other1",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 3,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 2
+                    ))
+                ),
+                Structure(
+                    name = "other1",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 3,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 2
+                    ))
+                ),
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 2
+                    ))
+                ),
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 2
+                    ))
+                ),
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 2
+                    ))
+                ),
+            )
+        )
+        assertEquals(6, result.divine)
+    }
+
+    @Test
+    fun nullMaximumStacksDefaultsTo3() {
+        val result = parseAvailableItems(
+            listOf(
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                    ))
+                ),
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                    ))
+                ),
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                    ))
+                ),
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                    ))
+                ),
+            )
+        )
+        assertEquals(3, result.divine)
+    }
+
+    @Test
+    fun alwaysStacksStacks() {
+        val result = parseAvailableItems(
+            listOf(
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        alwaysStacks = true,
+                        maximumStacks = 1,
+                    ))
+                ),
+                Structure(
+                    name = "other",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        alwaysStacks = true,
+                        maximumStacks = 1,
+                    ))
+                ),
+                Structure(
+                    name = "other1",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 1,
+                    ))
+                ),
+                Structure(
+                    name = "other1",
+                    uuid = "",
+                    availableItemsRules = setOf(AvailableItemsRule(
+                        value = 1,
+                        group = ItemGroup.DIVINE,
+                        maximumStacks = 1,
+                    ))
+                ),
+            )
+        )
+        assertEquals(2, result.divine)
+    }
 }

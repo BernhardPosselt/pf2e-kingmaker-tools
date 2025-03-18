@@ -45,12 +45,13 @@ private fun Scene.getBlockTiles() =
         .filter { it.isBlock && !it.hidden }
 
 private fun Scene.calculateOccupiedBlocks(): Int {
+    val sceneGridSize = grid.size.toDouble()
     val structures = structureTokens()
         .filterNot {
             val actor = it.actor
             actor is StructureActor && actor.isSlowed()
         }
-        .map { it.toRectangle() }
+        .map { it.toRectangle(sceneGridSize, sceneGridSize) }
     val blocks = getBlockTiles().map { it.toRectangle().applyTolerance(50.0) }
     return blocks
         .filter { block -> structures.any { it in block } }

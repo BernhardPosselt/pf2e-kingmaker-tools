@@ -104,6 +104,7 @@ private val buttons = listOf(
         actor.getKingdom()?.let { kingdom ->
             kingdom.modifiers = kingdom.modifiers + parsedMod
             actor.setKingdom(kingdom)
+            postChatMessage("Added modifier ${parsedMod.buttonLabel}")
         }
     }
 )

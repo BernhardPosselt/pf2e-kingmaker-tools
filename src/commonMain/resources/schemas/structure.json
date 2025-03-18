@@ -248,6 +248,9 @@
         },
         "maximumStacks": {
           "type": "number"
+        },
+        "alwaysStacks": {
+          "type": "boolean"
         }
       }
     },

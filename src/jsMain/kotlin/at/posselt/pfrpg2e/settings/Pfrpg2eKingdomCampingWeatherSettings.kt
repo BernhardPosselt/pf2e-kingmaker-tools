@@ -216,6 +216,12 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     fun getEnableWeather(): Boolean =
         game.settings.getBoolean("enableWeather")
 
+    fun getHideBuiltinKingdomSheet(): Boolean =
+        game.settings.getBoolean("hideBuiltinKingdomSheet")
+
+    suspend fun setHideBuiltinKingdomSheet(value: Boolean) =
+        game.settings.setBoolean("hideBuiltinKingdomSheet", value)
+
     suspend fun setClimateSettings(settings: ClimateSettings) =
         game.settings.setObject("climate", settings)
 
@@ -243,6 +249,13 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     fun register() {
         registerSimple(game.settings, nonUserVisibleSettings.strings, hidden = true)
         registerSimple(game.settings, nonUserVisibleSettings.booleans, hidden = true)
+        game.settings.registerScalar(
+            key = "hideBuiltinKingdomSheet",
+            name = "Hide PF2 System Kingdom Sheet Icon",
+            hint = "If enabled, hides the built in kingdom sheet icon on the party actor",
+            default = false,
+            requiresReload = true,
+        )
         game.settings.registerInt(
             key = "schemaVersion",
             name = "Schema Version",

@@ -145,26 +145,8 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.collections.count
-import kotlin.collections.filter
-import kotlin.collections.filterIndexed
-import kotlin.collections.filterIsInstance
-import kotlin.collections.find
-import kotlin.collections.firstNotNullOfOrNull
-import kotlin.collections.forEach
-import kotlin.collections.getOrNull
-import kotlin.collections.isNotEmpty
-import kotlin.collections.listOf
-import kotlin.collections.map
-import kotlin.collections.mapNotNull
-import kotlin.collections.mutableSetOf
-import kotlin.collections.plus
-import kotlin.collections.sortedBy
-import kotlin.collections.toSet
-import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 import kotlin.math.max
-
 
 class KingdomSheet(
     private val game: Game,
@@ -207,6 +189,7 @@ class KingdomSheet(
     private var bonusFeat: String? = null
     private var ongoingEvent: String? = null
     private val openedActivityDetails = mutableSetOf<String>()
+    private var rerenderTimeoutId: Int? = null
 
     init {
         actor.apps[id] = this
@@ -266,7 +249,6 @@ class KingdomSheet(
             }
         }
     }
-
 
     private fun checkUpdateActorReRenders(actor: Actor) {
         val kingdom = getKingdom()
@@ -506,8 +488,10 @@ class KingdomSheet(
                     KingdomSettingsApplication(
                         game = game,
                         onSave = {
+                            val previous = deepClone(kingdom)
                             kingdom.settings = it
                             kingdom.fame.now = kingdom.fame.now.coerceIn(0, kingdom.settings.maximumFamePoints)
+                            beforeKingdomUpdate(previous, kingdom)
                             actor.setKingdom(kingdom)
                         },
                         kingdomSettings = kingdom.settings

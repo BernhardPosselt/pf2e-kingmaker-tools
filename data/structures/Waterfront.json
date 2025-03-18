@@ -13,7 +13,8 @@
     "availableItemsRules": [
         {
             "value": 1,
-            "maximumStacks": 1
+            "maximumStacks": 1,
+            "alwaysStacks": true
         }
     ],
     "traits": [

@@ -38,6 +38,7 @@ external interface RawAvailableItemsRule {
     val value: Int
     val group: String?
     val maximumStacks: Int?
+    val alwaysStacks: Boolean
 }
 
 @JsPlainObject

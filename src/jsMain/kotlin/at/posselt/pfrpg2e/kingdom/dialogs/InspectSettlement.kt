@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
+import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.calculateAvailableItems
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
@@ -41,6 +42,13 @@ import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
+@Suppress("unused")
+@JsPlainObject
+external interface LabelValueContext {
+    val label: String
+    val value: Int
+}
+
 
 @Suppress("unused")
 @JsPlainObject
@@ -66,12 +74,13 @@ external interface InspectSettlementContext : HandlebarsRenderContext {
     val maxItemBonus: Int
     val population: String
     val allowCapitalInvestment: Boolean
-    val structures: ReadonlyRecord<String, Int>
+    val structures: Array<LabelValueContext>
     val bonuses: Array<String>
     val notes: Array<String>
     val availableItems: ReadonlyRecord<String, String>
     val currentTab: String
     val tabs: Array<NavEntryContext>
+    val storage: Array<LabelValueContext>
 }
 
 @JsPlainObject
@@ -104,6 +113,7 @@ enum class SettlementNav {
     STATUS,
     SHOPPING,
     STRUCTURES,
+    STORAGE,
     NOTES,
     BONUSES;
 
@@ -242,14 +252,17 @@ class InspectSettlement(
         )
         val settlementStructures = parsed.constructedStructures
             .groupBy { it.name }
-            .map { (_, instances) ->
+            .values
+            .sortedBy { it.first().name }
+            .map { instances ->
                 async {
                     val instance = instances.first()
                     TextEditor.enrichHTML(buildUuid(instance.uuid, instance.name)).await() to instances.size
                 }
             }
             .awaitAll()
-            .toRecord()
+            .map { LabelValueContext(label=it.first, value=it.second) }
+            .toTypedArray()
         val bonuses = parsed.bonuses
             .mapNotNull { bonus ->
                 val activity = bonus.activity
@@ -265,6 +278,18 @@ class InspectSettlement(
                     null
                 }
             }
+            .toTypedArray()
+        val parsedStorage = parsed.constructedStructures.map { it.storage }
+            .fold(CommodityStorage()) { prev, curr -> prev + curr }
+        val storage = listOf(
+            "Food" to parsedStorage.food,
+            "Lumber" to parsedStorage.lumber,
+            "Luxuries" to parsedStorage.luxuries,
+            "Ore" to parsedStorage.ore,
+            "Stone" to parsedStorage.stone,
+        )
+            .filter { it.second > 0 }
+            .map { LabelValueContext(label = it.first, value = it.second) }
             .toTypedArray()
         val availableItems = calculateAvailableItems(
             settlementLevel = parsed.occupiedBlocks,
@@ -307,6 +332,7 @@ class InspectSettlement(
             notes = notes,
             availableItems = availableItems,
             currentTab = currentNav.value,
+            storage = storage,
             tabs = createTabs<SettlementNav>("change-nav", currentNav)
                 .filter {
                     if (it.link == SettlementNav.BONUSES.value) {

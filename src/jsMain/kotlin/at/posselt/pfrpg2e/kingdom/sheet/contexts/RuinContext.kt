@@ -23,14 +23,6 @@ external interface RuinContext {
 }
 
 
-@JsPlainObject
-external interface RuinsContext {
-    val corruption: RuinContext
-    val crime: RuinContext
-    val strife: RuinContext
-    val decay: RuinContext
-}
-
 private fun RawRuinValues.toInput(key: String, automateStats: Boolean, calculated: RuinValue) =
     RuinContext(
         value = Select.range(
@@ -75,9 +67,9 @@ private fun RawRuinValues.toInput(key: String, automateStats: Boolean, calculate
     )
 
 fun RawRuin.toContext(automateStats: Boolean, parseRuins: RuinValues) =
-    RuinsContext(
-        corruption = corruption.toInput("corruption", automateStats, parseRuins.corruption),
-        strife = strife.toInput("strife", automateStats, parseRuins.strife),
-        crime = crime.toInput("crime", automateStats, parseRuins.crime),
-        decay = decay.toInput("decay", automateStats, parseRuins.decay),
+    arrayOf(
+        corruption.toInput("corruption", automateStats, parseRuins.corruption),
+        crime.toInput("crime", automateStats, parseRuins.crime),
+        decay.toInput("decay", automateStats, parseRuins.decay),
+        strife.toInput("strife", automateStats, parseRuins.strife),
     )

@@ -16,6 +16,9 @@ data class AvailableItems(
 ) {
     fun toEntries() = buildMap {
         put(ExtendedItemGroup.OTHER, other)
+        if (alchemical != other) {
+            put(ExtendedItemGroup.ALCHEMICAL, alchemical)
+        }
         if (magical != other) {
             put(ExtendedItemGroup.MAGICAL, magical)
         }
@@ -56,7 +59,7 @@ fun calculateAvailableItems(
     bonuses: AvailableItemBonuses,
 ): AvailableItems {
     val noShopPenalty = if (preventItemLevelPenalty) 0 else -2
-    val other = settlementLevel + noShopPenalty
+    val other = settlementLevel + noShopPenalty + bonuses.other
     val magical = other + bonuses.magical + magicalItemLevelIncrease
     val divine = magical + bonuses.divine
     val arcane = magical + bonuses.arcane

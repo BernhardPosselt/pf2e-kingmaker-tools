@@ -82,6 +82,8 @@ fun main() {
 
         bindChatButtons(game)
 
+        game.settings.pfrpg2eKingdomCampingWeather.register()
+
         Hooks.onRenderActorDirectory { _, html, _ ->
             html[0]?.querySelectorAll(".party-header")
                 ?.asList()
@@ -92,121 +94,127 @@ fun main() {
                     val campingSheetLink = createCampingIcon(uuid, actionDispatcher)
                     it.querySelector("&> a")?.insertAdjacentElement("beforeBegin", campingSheetLink)
                     it.querySelector("&> a")?.insertAdjacentElement("beforeBegin", kingdomLink)
-                }
-
-            buildPromise {
-                // register partials
-                loadTemplatePartials(
-                    arrayOf(
-                        "kingdom-activities" to "applications/kingdom/activities.hbs",
-                        "kingdom-trade-agreements" to "applications/kingdom/sections/trade-agreements/page.hbs",
-                        "kingdom-settlements" to "applications/kingdom/sections/settlements/page.hbs",
-                        "kingdom-turn" to "applications/kingdom/sections/turn/page.hbs",
-                        "kingdom-modifiers" to "applications/kingdom/sections/modifiers/page.hbs",
-                        "kingdom-notes" to "applications/kingdom/sections/notes/page.hbs",
-                        "kingdom-character-sheet" to "applications/kingdom/sections/character-sheet/page.hbs",
-                        "kingdom-character-sheet-creation" to "applications/kingdom/sections/character-sheet/creation.hbs",
-                        "kingdom-character-sheet-bonus" to "applications/kingdom/sections/character-sheet/bonus.hbs",
-                        "kingdom-character-sheet-levels" to "applications/kingdom/sections/character-sheet/levels.hbs",
-                        "campingTile" to "applications/camping/camping-tile.hbs",
-                        "recipeTile" to "applications/camping/recipe-tile.hbs",
-                        "formElement" to "components/forms/form-element.hbs",
-                        "tabs" to "components/tabs/tabs.hbs",
-                        "foodCost" to "components/food-cost/food-cost.hbs",
-                        "skillPickerInput" to "components/skill-picker/skill-picker-input.hbs",
-                        "activityEffectsInput" to "components/activity-effects/activity-effects-input.hbs",
-                    )
-                )
-                game.settings.pfrpg2eKingdomCampingWeather.register()
-
-                // load custom token mappings if kingmaker module isn't installed
-                if (game.modules.get("pf2e-kingmaker")?.active != true
-                    && game.settings.pfrpg2eKingdomCampingWeather.getEnableTokenMapping()
-                ) {
-                    val data = recordOf(
-                        "flags" to recordOf(
-                            Config.moduleId to recordOf(
-                                "pf2e-art" to "modules/${Config.moduleId}/token-map.json"
-                            )
-                        )
-                    )
-                    game.modules.get(Config.moduleId)
-                        ?.updateSource(data)
-                }
-                registerWeatherHooks(game)
-                registerCombatTrackHooks(game)
-                registerActivityDiffingHooks(game, actionDispatcher)
-                registerMealDiffingHooks()
-                registerArmyConsumptionHooks(game)
-            }
-
-            game.pf2eKingmakerTools = Pfrpg2eKingdomCampingWeather(
-                macros = ToolsMacros(
-                    toggleWeatherMacro = { buildPromise { toggleWeatherMacro(game) } },
-                    toggleShelteredMacro = { buildPromise { toggleShelteredMacro(game) } },
-                    setCurrentWeatherMacro = { buildPromise { setWeatherMacro(game) } },
-                    sceneWeatherSettingsMacro = {
-                        buildPromise<Unit> {
-                            game.scenes.active?.let {
-                                sceneWeatherSettingsMacro(it)
+                    if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
+                        it.querySelectorAll(".create-button:nth-last-child(1 of :not([data-action=create-member]))")
+                            .asList()
+                            .filterIsInstance<HTMLElement>()
+                            .forEach {
+                                it.hidden = true
                             }
-                        }
-                    },
-                    rollKingmakerWeatherMacro = { buildPromise { rollWeather(game) } },
-                    awardXpMacro = { buildPromise { awardXPMacro(game) } },
-                    resetHeroPointsMacro = {
-                        buildPromise {
-                            val players = chooseParty(game).partyMembers()
-                            resetHeroPointsMacro(players)
-                        }
-                    },
-                    awardHeroPointsMacro = {
-                        buildPromise {
-                            val players = chooseParty(game).partyMembers()
-                            awardHeroPointsMacro(players)
-                        }
-                    },
-                    rollExplorationSkillCheck = { skill, effect ->
-                        buildPromise {
-                            rollExplorationSkillCheckMacro(
-                                game,
-                                attributeName = skill,
-                                explorationEffectName = effect,
-                            )
-                        }
-                    },
-                    rollSkillDialog = {
-                        buildPromise {
-                            rollPartyCheckMacro(chooseParty(game).partyMembers())
-                        }
-                    },
-                    setSceneCombatPlaylistDialogMacro = { actor -> buildPromise { combatTrackMacro(game, actor) } },
-                    toTimeOfDayMacro = { buildPromise { setTimeOfDayMacro(game) } },
-                    toggleCombatTracksMacro = { buildPromise { toggleCombatTracksMacro(game) } },
-                    realmTileDialogMacro = { buildPromise { editRealmTileMacro(game) } },
-                    editStructureMacro = { actor -> buildPromise { editStructureMacro(actor) } },
-                    subsistMacro = { actor -> buildPromise { subsistMacro(game, actor) } },
-                    createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
-                ),
+                    }
+                }
+        }
+
+        buildPromise {
+            // register partials
+            loadTemplatePartials(
+                arrayOf(
+                    "kingdom-activities" to "applications/kingdom/activities.hbs",
+                    "kingdom-trade-agreements" to "applications/kingdom/sections/trade-agreements/page.hbs",
+                    "kingdom-settlements" to "applications/kingdom/sections/settlements/page.hbs",
+                    "kingdom-turn" to "applications/kingdom/sections/turn/page.hbs",
+                    "kingdom-modifiers" to "applications/kingdom/sections/modifiers/page.hbs",
+                    "kingdom-notes" to "applications/kingdom/sections/notes/page.hbs",
+                    "kingdom-character-sheet" to "applications/kingdom/sections/character-sheet/page.hbs",
+                    "kingdom-character-sheet-creation" to "applications/kingdom/sections/character-sheet/creation.hbs",
+                    "kingdom-character-sheet-bonus" to "applications/kingdom/sections/character-sheet/bonus.hbs",
+                    "kingdom-character-sheet-levels" to "applications/kingdom/sections/character-sheet/levels.hbs",
+                    "campingTile" to "applications/camping/camping-tile.hbs",
+                    "recipeTile" to "applications/camping/recipe-tile.hbs",
+                    "formElement" to "components/forms/form-element.hbs",
+                    "tabs" to "components/tabs/tabs.hbs",
+                    "foodCost" to "components/food-cost/food-cost.hbs",
+                    "skillPickerInput" to "components/skill-picker/skill-picker-input.hbs",
+                    "activityEffectsInput" to "components/activity-effects/activity-effects-input.hbs",
+                )
             )
 
-            Hooks.onReady {
-                buildPromise {
-                    game.migratePfrpg2eKingdomCampingWeather()
-                    showFirstRunMessage(game)
-                    validateStructures(game)
-                }
+            // load custom token mappings if kingmaker module isn't installed
+            if (game.modules.get("pf2e-kingmaker")?.active != true
+                && game.settings.pfrpg2eKingdomCampingWeather.getEnableTokenMapping()
+            ) {
+                val data = recordOf(
+                    "flags" to recordOf(
+                        Config.moduleId to recordOf(
+                            "pf2e-art" to "modules/${Config.moduleId}/token-map.json"
+                        )
+                    )
+                )
+                game.modules.get(Config.moduleId)
+                    ?.updateSource(data)
             }
+            registerWeatherHooks(game)
+            registerCombatTrackHooks(game)
+            registerActivityDiffingHooks(game, actionDispatcher)
+            registerMealDiffingHooks()
+            registerArmyConsumptionHooks(game)
+        }
 
-            Hooks.onRenderChatMessage { message, html, _ ->
-                val elem = html[0] as HTMLElement
-                fixVisibility(game, elem, message)
-            }
+        game.pf2eKingmakerTools = Pfrpg2eKingdomCampingWeather(
+            macros = ToolsMacros(
+                toggleWeatherMacro = { buildPromise { toggleWeatherMacro(game) } },
+                toggleShelteredMacro = { buildPromise { toggleShelteredMacro(game) } },
+                setCurrentWeatherMacro = { buildPromise { setWeatherMacro(game) } },
+                sceneWeatherSettingsMacro = {
+                    buildPromise<Unit> {
+                        game.scenes.active?.let {
+                            sceneWeatherSettingsMacro(it)
+                        }
+                    }
+                },
+                rollKingmakerWeatherMacro = { buildPromise { rollWeather(game) } },
+                awardXpMacro = { buildPromise { awardXPMacro(game) } },
+                resetHeroPointsMacro = {
+                    buildPromise {
+                        val players = chooseParty(game).partyMembers()
+                        resetHeroPointsMacro(players)
+                    }
+                },
+                awardHeroPointsMacro = {
+                    buildPromise {
+                        val players = chooseParty(game).partyMembers()
+                        awardHeroPointsMacro(players)
+                    }
+                },
+                rollExplorationSkillCheck = { skill, effect ->
+                    buildPromise {
+                        rollExplorationSkillCheckMacro(
+                            game,
+                            attributeName = skill,
+                            explorationEffectName = effect,
+                        )
+                    }
+                },
+                rollSkillDialog = {
+                    buildPromise {
+                        rollPartyCheckMacro(chooseParty(game).partyMembers())
+                    }
+                },
+                setSceneCombatPlaylistDialogMacro = { actor -> buildPromise { combatTrackMacro(game, actor) } },
+                toTimeOfDayMacro = { buildPromise { setTimeOfDayMacro(game) } },
+                toggleCombatTracksMacro = { buildPromise { toggleCombatTracksMacro(game) } },
+                realmTileDialogMacro = { buildPromise { editRealmTileMacro(game) } },
+                editStructureMacro = { actor -> buildPromise { editStructureMacro(actor) } },
+                subsistMacro = { actor -> buildPromise { subsistMacro(game, actor) } },
+                createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
+            ),
+        )
 
-            Hooks.onRenderChatLog { _, _, _ ->
-                bindCampingChatEventListeners(game, actionDispatcher)
+        Hooks.onReady {
+            buildPromise {
+                game.migratePfrpg2eKingdomCampingWeather()
+                showFirstRunMessage(game)
+                validateStructures(game)
             }
         }
-    }
 
+        Hooks.onRenderChatMessage { message, html, _ ->
+            val elem = html[0] as HTMLElement
+            fixVisibility(game, elem, message)
+        }
+
+        Hooks.onRenderChatLog { _, _, _ ->
+            bindCampingChatEventListeners(game, actionDispatcher)
+        }
+    }
 }

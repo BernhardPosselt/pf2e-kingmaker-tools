@@ -1,5 +1,6 @@
 .theme-light {
-    .km-kingdom-sheet {
+    .application.km-kingdom-sheet,
+    .application.km-inspect-settlement {
         .km-kingdom-sheet-sub-nav,
         .km-kingdom-sheet-sub-content,
         .km-kingdom-sheet-sidebar,
@@ -9,6 +10,16 @@
             border: 1px solid;
             box-shadow: 0 0 5px 1px rgba(0, 0, 0, .5);
         }
+
+        h2,
+        h3,
+        .km-grow-subnav a[href],
+        .km-tabs a[href],
+        .km-kingdom-sheet-sub-nav a[href] {
+            color: black;
+            text-shadow: none;
+        }
+
     }
 }
 
@@ -97,12 +108,15 @@
     .km-kingdom-sheet-main[data-settlement-type="village"] {
         background-image: url("../../../img/camping/backgrounds/hills-day.webp");
     }
+
     .km-kingdom-sheet-main[data-settlement-type="town"] {
         background-image: url("../../../img/camping/backgrounds/hills-night.webp");
     }
+
     .km-kingdom-sheet-main[data-settlement-type="city"] {
         background-image: url("../../../img/camping/backgrounds/forest-day.webp");
     }
+
     .km-kingdom-sheet-main[data-settlement-type="metropolis"] {
         background-image: url("../../../img/camping/backgrounds/forest-night.webp");
     }
@@ -182,7 +196,6 @@
         }
 
 
-
         .km-worksites {
             border-radius: 0;
             border: 0;
@@ -204,13 +217,16 @@
             td {
                 padding: 3px;
             }
+
             td:nth-of-type(1) {
                 width: 131px;
             }
+
             td:nth-of-type(3) {
                 width: 54px;
                 text-align: center;
             }
+
             td:nth-of-type(5) {
                 width: 61px;
                 text-align: center;
@@ -267,6 +283,7 @@
     .km-leadership-modifier-info {
         display: flex;
         margin-top: 1em;
+
         button {
             flex-grow: 1;
         }

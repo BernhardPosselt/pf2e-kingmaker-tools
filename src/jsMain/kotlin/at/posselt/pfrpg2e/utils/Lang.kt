@@ -10,6 +10,7 @@ import js.objects.ReadonlyRecord
 import js.objects.Record
 import js.objects.recordOf
 import js.reflect.Reflect
+import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asDeferred
 import kotlinx.coroutines.awaitAll
@@ -114,4 +115,14 @@ fun Int.formatAsModifier() = if (this > 0) {
     "+$this"
 } else {
     "$this"
+}
+
+fun debounce(timeout: Int = 300, callback: dynamic): Function<Unit> {
+    var timeoutId: Int? = null
+    return {
+        timeoutId?.let { window.clearTimeout(it) }
+        timeoutId = window.setTimeout({
+            callback()
+        }, timeout)
+    }
 }

@@ -71,7 +71,8 @@
                 </tr>
                 </tbody>
             </table>
-            <button type="submit" class="full-width" data-action="km-save" {{#unless isFormValid}}disabled{{/unless}}>{{#if
+            <button type="submit" class="full-width" data-action="km-save"
+                    {{#unless isFormValid}}disabled{{/unless}}>{{#if
                     saveLabel}}{{saveLabel}}{{else}}Save{{/if}}</button>
         </div>
         <div {{#unless (eq currentTab 'shopping')}}hidden{{/unless}}>
@@ -97,10 +98,20 @@
                 {{/each}}
             </ul>
         </div>
+        <div {{#unless (eq currentTab 'storage')}}hidden{{/unless}}>
+            <table>
+                {{#each storage}}
+                    <tr>
+                        <td>{{label}}</td>
+                        <td>{{value}}</td>
+                    </tr>
+                {{/each}}
+            </table>
+        </div>
         <div {{#unless (eq currentTab 'structures')}}hidden{{/unless}}>
             <ul>
                 {{#each structures}}
-                    <li>{{this}}x {{{@key}}}</li>
+                    <li>{{value}}x {{{label}}}</li>
                 {{/each}}
             </ul>
         </div>

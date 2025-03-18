@@ -24,6 +24,13 @@ suspend fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
         }
     }
 
+    if (previous.settings.kingdomSkillIncreaseEveryLevel != current.settings.kingdomSkillIncreaseEveryLevel) {
+        val additionalSkillIncreases = (2..20 step 2)
+            .map { "skill-increase-level-$it" }
+            .toSet()
+        current.features = current.features.filter { it.id !in additionalSkillIncreases }.toTypedArray()
+    }
+
     val charterType = current.charter.type
     if (previous.charter.type != charterType) {
         resetAbilityBoosts(current.charter.abilityBoosts)

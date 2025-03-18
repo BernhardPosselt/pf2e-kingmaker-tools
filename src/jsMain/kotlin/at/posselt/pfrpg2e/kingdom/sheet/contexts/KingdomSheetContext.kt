@@ -25,7 +25,7 @@ external interface KingdomSheetContext : HandlebarsRenderContext {
     val resourcePointsContext: ResourceContext
     val resourceDiceContext: ResourceContext
     val worksitesContext: Array<WorkSiteContext>
-    val ruinContext: RuinsContext
+    val ruinContext: Array<RuinContext>
     val controlDc: Int
     val unrestPenalty: Int
     val anarchyAt: Int

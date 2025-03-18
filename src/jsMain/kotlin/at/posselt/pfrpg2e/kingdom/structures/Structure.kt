@@ -127,7 +127,8 @@ fun RawStructureData.parseStructure(
         AvailableItemsRule(
             value = rule.value,
             group = group,
-            maximumStacks = rule.maximumStacks,
+            maximumStacks = rule.maximumStacks ?: 3,
+            alwaysStacks = rule.alwaysStacks == true,
         )
     }?.toSet() ?: emptySet(),
     settlementEventBonus = settlementEventRules?.firstOrNull()?.value ?: 0,

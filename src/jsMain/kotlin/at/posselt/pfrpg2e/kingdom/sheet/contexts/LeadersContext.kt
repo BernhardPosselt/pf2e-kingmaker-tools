@@ -55,12 +55,12 @@ fun RawLeaderValues.toContext(
         )
     },
     invested = CheckboxInput(
-        value = invested,
+        value = invested && uuid != null,
         name = "leaders.${leader.value}.invested",
         label = "Invested",
     ).toContext(),
     vacant = CheckboxInput(
-        value = vacant,
+        value = vacant || uuid == null,
         name = "leaders.${leader.value}.vacant",
         label = "${leader.label} Vacant",
     ).toContext(),

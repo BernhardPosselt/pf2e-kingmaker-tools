@@ -206,14 +206,14 @@ fun RawLeaderSkills.deleteLore(attribute: Attribute) = RawLeaderSkills(
 
 fun KingdomData.vacancies() =
     Vacancies(
-        ruler = leaders.ruler.vacant == true,
-        counselor = leaders.counselor.vacant == true,
-        emissary = leaders.emissary.vacant == true,
-        general = leaders.general.vacant == true,
-        magister = leaders.magister.vacant == true,
-        treasurer = leaders.treasurer.vacant == true,
-        viceroy = leaders.viceroy.vacant == true,
-        warden = leaders.warden.vacant == true,
+        ruler = leaders.ruler.vacant == true || leaders.ruler.uuid == null,
+        counselor = leaders.counselor.vacant == true || leaders.counselor.uuid == null,
+        emissary = leaders.emissary.vacant == true || leaders.emissary.uuid == null,
+        general = leaders.general.vacant == true || leaders.general.uuid == null,
+        magister = leaders.magister.vacant == true || leaders.magister.uuid == null,
+        treasurer = leaders.treasurer.vacant == true || leaders.treasurer.uuid == null,
+        viceroy = leaders.viceroy.vacant == true || leaders.viceroy.uuid == null,
+        warden = leaders.warden.vacant == true || leaders.warden.uuid == null,
     )
 
 fun KingdomData.getTrainedSkills(

@@ -61,9 +61,10 @@ private fun combineBonuses(
 }
 
 fun parseAvailableItems(structures: List<Structure>): AvailableItemBonuses {
-    val bonusesPerGroup = structures
+    val structuresByName = structures
         .groupBy { it.stacksWith ?: it.name }
-        .map { (_, structure) -> calculateItemsFromSameStructures(structure) }
+    val bonusesPerGroup = structuresByName
+        .map { (_, structure) -> calculateItemsFromSameStructures(structure, alwaysStacks = false) }
         // for each structure, we only want the maximum bonus per category
         .fold(mapOf<ItemGroup, Int>()) { prev, curr ->
             ItemGroup.entries.associate {
@@ -72,27 +73,59 @@ fun parseAvailableItems(structures: List<Structure>): AvailableItemBonuses {
                 it to if (currentBonus > previousBonus) currentBonus else previousBonus
             }
         }
+    val bonusesPerGroupThatAlwaysStack = structuresByName
+        .map { (_, structure) -> calculateItemsFromSameStructures(structure, alwaysStacks = true) }
+        // for each structure, we only want the maximum bonus per category
+        .fold(mapOf<ItemGroup, Int>()) { prev, curr ->
+            ItemGroup.entries.associate {
+                val previousBonus = prev[it] ?: 0
+                val currentBonus = curr[it] ?: 0
+                it to previousBonus + currentBonus
+            }
+        }
     return AvailableItemBonuses(
-        other = bonusesPerGroup[ItemGroup.OTHER] ?: 0,
-        magical = bonusesPerGroup[ItemGroup.MAGICAL] ?: 0,
-        luxury = bonusesPerGroup[ItemGroup.LUXURY] ?: 0,
-        divine = bonusesPerGroup[ItemGroup.DIVINE] ?: 0,
-        primal = bonusesPerGroup[ItemGroup.PRIMAL] ?: 0,
-        arcane = bonusesPerGroup[ItemGroup.ARCANE] ?: 0,
-        occult = bonusesPerGroup[ItemGroup.OCCULT] ?: 0,
-        alchemical = bonusesPerGroup[ItemGroup.ALCHEMICAL] ?: 0
+        other = (bonusesPerGroup[ItemGroup.OTHER] ?: 0) +
+                (bonusesPerGroupThatAlwaysStack[ItemGroup.OTHER] ?: 0),
+        magical = (bonusesPerGroup[ItemGroup.MAGICAL] ?: 0) +
+                (bonusesPerGroupThatAlwaysStack[ItemGroup.MAGICAL] ?: 0),
+        luxury = (bonusesPerGroup[ItemGroup.LUXURY] ?: 0) +
+                (bonusesPerGroupThatAlwaysStack[ItemGroup.LUXURY] ?: 0),
+        divine = (bonusesPerGroup[ItemGroup.DIVINE] ?: 0) +
+                (bonusesPerGroupThatAlwaysStack[ItemGroup.DIVINE] ?: 0),
+        primal = (bonusesPerGroup[ItemGroup.PRIMAL] ?: 0) +
+                (bonusesPerGroupThatAlwaysStack[ItemGroup.PRIMAL] ?: 0),
+        arcane = (bonusesPerGroup[ItemGroup.ARCANE] ?: 0) +
+                (bonusesPerGroupThatAlwaysStack[ItemGroup.ARCANE] ?: 0),
+        occult = (bonusesPerGroup[ItemGroup.OCCULT] ?: 0) +
+                (bonusesPerGroupThatAlwaysStack[ItemGroup.OCCULT] ?: 0),
+        alchemical = (bonusesPerGroup[ItemGroup.ALCHEMICAL] ?: 0) +
+                (bonusesPerGroupThatAlwaysStack[ItemGroup.ALCHEMICAL] ?: 0),
     )
 }
 
 /**
  * Item Group increases stack, but only if they are from the same structure up to a maximum Stacks limit
  */
-private fun calculateItemsFromSameStructures(sameStructureInstances: List<Structure>): Map<ItemGroup, Int> {
-    val rulesByType = sameStructureInstances.flatMap { it.availableItemsRules }
+private fun calculateItemsFromSameStructures(
+    sameStructureInstances: List<Structure>,
+    alwaysStacks: Boolean,
+): Map<ItemGroup, Int> {
+    val rulesByType = sameStructureInstances
+        .flatMap { it.availableItemsRules }
         .groupBy { it.group ?: ItemGroup.OTHER }
-    return rulesByType.mapValues { (group, rules) -> rules
-        .filter { it.maximumStacks == null || it.maximumStacks >= (rulesByType[group]?.size ?: 0) } }
-        .mapValues { (_, rules) -> rules.sumOf { it.value } }
+    val result = rulesByType
+        .mapValues { (_, rules) ->
+            rules.filter { it.alwaysStacks == alwaysStacks }
+                .groupBy { it.maximumStacks }
+                .mapValues { (maximum, rules) ->
+                    rules.sortedByDescending { it.value }.take(maximum)
+                }
+                .values
+                .flatMap { it }
+                .sumOf { it.value }
+        }
+    console.log(sameStructureInstances.first().name, result.toString())
+    return result
 }
 
 value class MergedSettlement(val settlement: Settlement)
