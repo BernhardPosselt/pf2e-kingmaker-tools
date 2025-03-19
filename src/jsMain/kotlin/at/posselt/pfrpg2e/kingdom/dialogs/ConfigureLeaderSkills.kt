@@ -128,7 +128,7 @@ private class ConfigureLeaderSkills(
     private val readonly: Boolean = false,
     private val onSave: (skills: RawLeaderSkills) -> Unit,
 ) : FormApp<ConfigureLeaderSkillsContext, LeaderSkillsData>(
-    title = "Character Skills ",
+    title = "Character Skills${if (readonly) " (readonly, change in the settings)" else ""}",
     template = "components/forms/xy-form.hbs",
     debug = true,
     dataModel = ConfigureLeaderSkillsModel::class.js,

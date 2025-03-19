@@ -130,7 +130,6 @@ fun registerContextMenus() {
                     callback = { elem -> elem[0]?.let { html -> but.callback(game, html) } },
                 ).asDynamic()
             )
-            console.log(items)
         }
         undefined
     }

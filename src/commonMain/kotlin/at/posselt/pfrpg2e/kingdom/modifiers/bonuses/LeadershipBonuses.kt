@@ -95,33 +95,35 @@ fun createLeadershipModifiers(
         if (actor == null) {
             emptyList()
         } else {
-        val value = calculateLeadershipBonus(
-            actor.level,
-            actor.type,
-            leaderSkills.resolveAttributes(leader),
-            actor.ranks,
-        )
-        val fullModifier = Modifier(
-            id = leader.value,
-            type = LEADERSHIP,
-            value = value,
-            name = "Leadership (Specialized)",
-            applyIf = listOf(
-                Eq("@leader", leader.value),
-                In(
-                    "@skill", leaderKingdomSkills.resolveAttributes(leader)
-                        .map { it.value }
-                        .toList())
-            ),
-        )
-        listOf(
-            fullModifier,
-            fullModifier.copy(
+            val value = calculateLeadershipBonus(
+                actor.level,
+                actor.type,
+                leaderSkills.resolveAttributes(leader),
+                actor.ranks,
+            )
+            val fullModifier = Modifier(
+                id = "leadership-specialized-" + leader.value,
+                type = LEADERSHIP,
+                value = value,
+                name = "Leadership (Specialized)",
+                applyIf = listOf(
+                    Eq("@leader", leader.value),
+                    In(
+                        "@skill", leaderKingdomSkills.resolveAttributes(leader)
+                            .map { it.value }
+                            .toList())
+                ),
+            )
+            val halfModifier = fullModifier.copy(
+                id = "leadership-unspecialized-" + leader.value,
                 value = fullModifier.value / 2,
                 name = "Leadership (Unspecialized)",
                 applyIf = listOf(Eq("@leader", leader.value)),
             )
-        )
+            listOf(
+                fullModifier,
+                halfModifier
+            )
         }
     }
 }

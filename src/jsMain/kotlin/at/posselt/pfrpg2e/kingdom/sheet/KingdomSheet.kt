@@ -406,11 +406,11 @@ class KingdomSheet(
             "settlement-import" -> {
                 buildPromise {
                     when (target.dataset["waterBorders"]) {
-                        "1" -> importSettlement("Settlement - 1 Water Border", 1)
-                        "2" -> importSettlement("Settlement - 2 Water Borders", 2)
-                        "3" -> importSettlement("Settlement - 3 Water Borders", 3)
-                        "4" -> importSettlement("Settlement - 4 Water Borders", 4)
-                        else -> importSettlement("Settlement - No Water Borders", 0)
+                        "1" -> importSettlement("Settlement", 1)
+                        "2" -> importSettlement("Settlement", 2)
+                        "3" -> importSettlement("Settlement", 3)
+                        "4" -> importSettlement("Settlement", 4)
+                        else -> importSettlement("Settlement", 0)
                     }
                 }
             }
@@ -923,7 +923,7 @@ class KingdomSheet(
     }
 
     suspend fun importSettlement(sceneName: String, waterBorders: Int) {
-        game.importSettlementScene(sceneName, waterBorders)?.id?.let {
+        game.importSettlementScene(sceneName)?.id?.let {
             val kingdom = getKingdom()
             kingdom.settlements = kingdom.settlements + RawSettlement(
                 sceneId = it,
@@ -1258,7 +1258,10 @@ class KingdomSheet(
         return MainNavEntry.entries.map {
             val postfix = when (it) {
                 MainNavEntry.TRADE_AGREEMENTS -> " ($tradeAgreements)"
-                MainNavEntry.SETTLEMENTS -> " (${kingdom.settlements.size})"
+                MainNavEntry.SETTLEMENTS -> {
+                    val size = kingdom.settlements.mapNotNull { game.scenes.get(it.sceneId) }.size
+                    " ($size)"
+                }
                 MainNavEntry.MODIFIERS -> " (${kingdom.modifiers.size})"
                 else -> ""
             }

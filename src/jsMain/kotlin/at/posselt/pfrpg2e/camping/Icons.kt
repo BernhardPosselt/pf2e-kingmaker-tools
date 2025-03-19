@@ -2,38 +2,24 @@ package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.takeIfInstance
-import at.posselt.pfrpg2e.utils.buildPromise
-import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.SheetType
+import at.posselt.pfrpg2e.utils.createPartyActorIcon
 import com.foundryvtt.core.game
-import kotlinx.browser.document
-import kotlinx.html.a
-import kotlinx.html.classes
-import kotlinx.html.dom.create
-import kotlinx.html.i
-import kotlinx.html.js.onClickFunction
-import org.w3c.dom.HTMLElement
+
 
 fun createCampingIcon(
-    id: String?,
+    id: String,
     actionDispatcher: ActionDispatcher
-): HTMLElement {
-    val kingdomLink = document.create.a {
-        classes = setOf("create-button")
-        i {
-            classes = setOf("fa-solid", "fa-tent")
+) = createPartyActorIcon(
+    id = id,
+    icon = setOf("fa-solid", "fa-tent"),
+    toolTip = "PFRPG2E Camping Sheet",
+    macroName = "Open Camping Sheet",
+    macroImg = "icons/magic/fire/flame-burning-campfire-orange.webp",
+    sheetType = SheetType.CAMPING,
+    onClick = {
+        game.actors.get(it)?.takeIfInstance<CampingActor>()?.let { actor ->
+            openOrCreateCampingSheet(game, actionDispatcher, actor)
         }
-        attributes["data-tooltip"] = "PFRPG2E Camping Sheet"
-        onClickFunction = {
-            it.preventDefault()
-            it.stopPropagation()
-            buildPromise {
-                if (id != null) {
-                    game.actors.get(id)?.takeIfInstance<CampingActor>()?.let { actor ->
-                        CampingSheet(game, actor, actionDispatcher).launch()
-                    }
-                }
-            }
-        }
-    }
-    return kingdomLink
-}
+    },
+)

@@ -83,7 +83,7 @@ fun Scene.parseSettlement(
     )
 }
 
-suspend fun Game.importSettlementScene(sceneName: String, waterBorders: Int): Scene? {
+suspend fun Game.importSettlementScene(sceneName: String): Scene? {
     val data = packs.get("${Config.moduleId}.kingmaker-tools-settlements")
         ?.getDocuments()
         ?.await()

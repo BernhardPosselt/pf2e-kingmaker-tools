@@ -10,16 +10,20 @@ import at.posselt.pfrpg2e.actions.handlers.OpenCampingSheetHandler
 import at.posselt.pfrpg2e.actions.handlers.OpenKingdomSheetHandler
 import at.posselt.pfrpg2e.actions.handlers.SyncActivitiesHandler
 import at.posselt.pfrpg2e.actor.partyMembers
+import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.bindCampingChatEventListeners
 import at.posselt.pfrpg2e.camping.createCampingIcon
+import at.posselt.pfrpg2e.camping.openOrCreateCampingSheet
 import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combattracks.registerCombatTrackHooks
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
+import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.bindChatButtons
 import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
 import at.posselt.pfrpg2e.kingdom.registerContextMenus
+import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
 import at.posselt.pfrpg2e.macros.awardXPMacro
@@ -46,6 +50,7 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fixVisibility
 import at.posselt.pfrpg2e.utils.loadTemplatePartials
 import at.posselt.pfrpg2e.utils.pf2eKingmakerTools
+import at.posselt.pfrpg2e.utils.registerMacroDropHooks
 import at.posselt.pfrpg2e.weather.registerWeatherHooks
 import at.posselt.pfrpg2e.weather.rollWeather
 import com.foundryvtt.core.Hooks
@@ -84,23 +89,27 @@ fun main() {
 
         game.settings.pfrpg2eKingdomCampingWeather.register()
 
+        registerMacroDropHooks(game)
+
         Hooks.onRenderActorDirectory { _, html, _ ->
             html[0]?.querySelectorAll(".party-header")
                 ?.asList()
                 ?.filterIsInstance<HTMLElement>()
                 ?.forEach {
                     val uuid = it.dataset["documentId"]
-                    val kingdomLink = createKingmakerIcon(uuid, actionDispatcher)
-                    val campingSheetLink = createCampingIcon(uuid, actionDispatcher)
-                    it.querySelector("&> a")?.insertAdjacentElement("beforeBegin", campingSheetLink)
-                    it.querySelector("&> a")?.insertAdjacentElement("beforeBegin", kingdomLink)
-                    if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
-                        it.querySelectorAll(".create-button:nth-last-child(1 of :not([data-action=create-member]))")
-                            .asList()
-                            .filterIsInstance<HTMLElement>()
-                            .forEach {
-                                it.hidden = true
-                            }
+                    if (uuid != null) {
+                        val kingdomLink = createKingmakerIcon(uuid, actionDispatcher)
+                        val campingSheetLink = createCampingIcon(uuid, actionDispatcher)
+                        it.querySelector("&> a")?.insertAdjacentElement("beforeBegin", campingSheetLink)
+                        it.querySelector("&> a")?.insertAdjacentElement("beforeBegin", kingdomLink)
+                        if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
+                            it.querySelectorAll(".create-button:nth-last-child(1 of :not([data-action=create-member]))")
+                                .asList()
+                                .filterIsInstance<HTMLElement>()
+                                .forEach {
+                                    it.hidden = true
+                                }
+                        }
                     }
                 }
         }
@@ -159,6 +168,23 @@ fun main() {
                     buildPromise<Unit> {
                         game.scenes.active?.let {
                             sceneWeatherSettingsMacro(it)
+                        }
+                    }
+                },
+                openSheet = { type, id ->
+                    buildPromise {
+                        when (type) {
+                            "camping" -> {
+                                game.actors.get(id)
+                                    ?.takeIfInstance<CampingActor>()
+                                    ?.let { actor -> openOrCreateCampingSheet(game, actionDispatcher, actor) }
+                            }
+
+                            "kingdom" -> {
+                                game.actors.get(id)
+                                    ?.takeIfInstance<KingdomActor>()
+                                    ?.let { actor -> openOrCreateKingdomSheet(game, actionDispatcher, actor) }
+                            }
                         }
                     }
                 },

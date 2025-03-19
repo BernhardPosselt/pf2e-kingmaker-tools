@@ -25,6 +25,7 @@ external interface ToolsMacros {
     val editStructureMacro: (Actor?) -> Unit
     val createFoodMacro: () -> Unit
     val subsistMacro: (Actor?) -> Unit
+    val openSheet: (type: String, id: String) -> Unit
 }
 
 @JsPlainObject

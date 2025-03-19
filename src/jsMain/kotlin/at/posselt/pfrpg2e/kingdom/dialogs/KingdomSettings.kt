@@ -193,7 +193,7 @@ class KingdomSettingsApplication(
                             label = "Recruitable Armies Folder",
                             options = folders,
                             value = settings.recruitableArmiesFolderId,
-                            help = "This folder will be used to look up armies for the Recruit Army activity and to calculate army consumption",
+                            help = "This folder will be used to look up armies for the Recruit Army activity and to calculate army consumption. When you first perform the Recruit Army activity, this folder will be created automatically and set if this setting is empty",
                             stacked = false,
                         )
                     ),

@@ -1144,3 +1144,11 @@ private fun getActivitySkills(
         ).toContext()
     }
 }
+
+suspend fun openOrCreateCampingSheet(game: Game, dispatcher: ActionDispatcher, actor: CampingActor) {
+    if (actor.getCamping() == null) {
+        actor.setCamping(getDefaultCamping(game))
+        openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.kd8cT1Uv9hZOrpgS")
+    }
+    CampingSheet(game, actor, dispatcher).launch()
+}
