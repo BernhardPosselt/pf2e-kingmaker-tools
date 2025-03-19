@@ -39,13 +39,21 @@ private fun combineBonuses(
     val grouped = structures.groupBy { if (allStructuresStack) "" else (it.stacksWith ?: it.name) }
     val bonuses = grouped.flatMap { groupedStructures ->
         val structures = groupedStructures.value
+        val names = structures.map { it.stacksWith ?: it.name }
+        val structuresByBonus = structures
+            .flatMap { structure -> structure.bonuses.map { it to structure } }
+            .groupBy { it.first.skill to it.first.activity }
+            .mapValues { (_, structures) -> structures.map { it.second.stacksWith ?: it.second.name } }
         val groupedBonuses = structures.flatMap { it.bonuses }.groupBy { it }
-        val names = structures.map { it.stacksWith ?: it.name }.toSet()
         groupedBonuses.values.map { bonuses ->
             val value = bonuses.sumOf { it.value }.coerceIn(0, maxItemBonus)
             val bonus = bonuses.first()
+            val namesIndex = bonus.skill to bonus.activity
             GroupedStructureBonus(
-                structureNames = names,
+                structureNames = names
+                    .mapNotNull { structuresByBonus[namesIndex] }
+                    .flatMap { it }
+                    .toSet(),
                 skill = bonus.skill,
                 activity = bonus.activity,
                 value = value,

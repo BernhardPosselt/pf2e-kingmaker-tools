@@ -4,9 +4,9 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawActivity
-import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
 import at.posselt.pfrpg2e.kingdom.canBePerformed
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
 import at.posselt.pfrpg2e.kingdom.label
 import com.foundryvtt.core.ui.enrichHtml
 import js.objects.JsPlainObject
@@ -55,7 +55,7 @@ private suspend fun toActivityContext(
     kingdomSkillRanks: KingdomSkillRanks,
     kingdom: KingdomData,
     chosenFeats: List<ChosenFeat>,
-    enabledFeatures: List<RawExplodedKingdomFeature>,
+    chosenFeatures: List<ChosenFeature>,
     openedActivityDetails: MutableSet<String>,
 ): ActivityContext = coroutineScope {
     val descriptionP = async { enrichHtml(activity.description) }
@@ -73,7 +73,7 @@ private suspend fun toActivityContext(
         label = activity.label(
             kingdomLevel = kingdomLevel,
             activity = activity,
-            enabledFeatures = enabledFeatures,
+            chosenFeatures = chosenFeatures,
         ),
         actions = activity.actions ?: 1,
         description = description,
@@ -102,7 +102,7 @@ suspend fun activitiesToActivityContext(
     activities: List<RawActivity>,
     allowCapitalInvestment: Boolean,
     kingdomSkillRanks: KingdomSkillRanks,
-    enabledFeatures: List<RawExplodedKingdomFeature>,
+    chosenFeatures: List<ChosenFeature>,
     openedActivityDetails: MutableSet<String>,
     kingdom: KingdomData,
     chosenFeats: List<ChosenFeat>,
@@ -115,7 +115,7 @@ suspend fun activitiesToActivityContext(
                     kingdomLevel = kingdom.level,
                     allowCapitalInvestment = allowCapitalInvestment,
                     kingdomSkillRanks = kingdomSkillRanks,
-                    enabledFeatures = enabledFeatures,
+                    chosenFeatures = chosenFeatures,
                     openedActivityDetails = openedActivityDetails,
                     kingdom = kingdom,
                     chosenFeats = chosenFeats,
@@ -135,8 +135,7 @@ suspend fun toActivitiesContext(
     chosenFeats: List<ChosenFeat>,
     allowCapitalInvestment: Boolean,
     kingdomSkillRanks: KingdomSkillRanks,
-    ignoreSkillRequirements: Boolean,
-    enabledFeatures: List<RawExplodedKingdomFeature>,
+    chosenFeatures: List<ChosenFeature>,
     openedActivityDetails: MutableSet<String>,
 ): ActivitiesContext = coroutineScope {
     val activitiesByPhase = activities
@@ -147,7 +146,7 @@ suspend fun toActivitiesContext(
         activitiesByPhase[KingdomPhase.COMMERCE.value].orEmpty(),
         allowCapitalInvestment,
         kingdomSkillRanks,
-        enabledFeatures,
+        chosenFeatures,
         openedActivityDetails,
         kingdom,
         chosenFeats,
@@ -156,7 +155,7 @@ suspend fun toActivitiesContext(
         activitiesByPhase[KingdomPhase.LEADERSHIP.value].orEmpty(),
         allowCapitalInvestment,
         kingdomSkillRanks,
-        enabledFeatures,
+        chosenFeatures,
         openedActivityDetails,
         kingdom,
         chosenFeats,
@@ -165,7 +164,7 @@ suspend fun toActivitiesContext(
         activitiesByPhase[KingdomPhase.CIVIC.value].orEmpty(),
         allowCapitalInvestment,
         kingdomSkillRanks,
-        enabledFeatures,
+        chosenFeatures,
         openedActivityDetails,
         kingdom,
         chosenFeats,
@@ -174,7 +173,7 @@ suspend fun toActivitiesContext(
         activitiesByPhase[KingdomPhase.REGION.value].orEmpty(),
         allowCapitalInvestment,
         kingdomSkillRanks,
-        enabledFeatures,
+        chosenFeatures,
         openedActivityDetails,
         kingdom,
         chosenFeats,
@@ -183,7 +182,7 @@ suspend fun toActivitiesContext(
         activitiesByPhase[KingdomPhase.ARMY.value].orEmpty(),
         allowCapitalInvestment,
         kingdomSkillRanks,
-        enabledFeatures,
+        chosenFeatures,
         openedActivityDetails,
         kingdom,
         chosenFeats,
@@ -192,7 +191,7 @@ suspend fun toActivitiesContext(
         activitiesByPhase[KingdomPhase.UPKEEP.value].orEmpty(),
         allowCapitalInvestment,
         kingdomSkillRanks,
-        enabledFeatures,
+        chosenFeatures,
         openedActivityDetails,
         kingdom,
         chosenFeats,

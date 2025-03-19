@@ -62,7 +62,6 @@ import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
-import at.posselt.pfrpg2e.kingdom.getEnabledFeatures
 import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getFeats
 import at.posselt.pfrpg2e.kingdom.getGovernments
@@ -1117,8 +1116,7 @@ class KingdomSheet(
             unlockedActivities = globalBonuses.unlockedActivities,
             allowCapitalInvestment = settlements.current?.allowCapitalInvestment == true,
             kingdomSkillRanks = kingdomSkillRanks,
-            ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
-            enabledFeatures = kingdom.getEnabledFeatures(),
+            chosenFeatures = chosenFeatures,
             openedActivityDetails = openedActivityDetails,
             kingdom = kingdom,
             chosenFeats = chosenFeats,

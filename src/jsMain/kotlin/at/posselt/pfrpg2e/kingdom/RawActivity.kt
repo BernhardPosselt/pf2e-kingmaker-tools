@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
 import at.posselt.pfrpg2e.kingdom.dialogs.getValidActivitySkills
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.utils.asSequence
@@ -66,9 +67,9 @@ fun RawActivity.canBePerformed(
 fun RawActivity.label(
     kingdomLevel: Int,
     activity: RawActivity,
-    enabledFeatures: List<RawExplodedKingdomFeature>,
+    chosenFeatures: List<ChosenFeature>,
 ): String {
-    val claimHexAttempts = enabledFeatures.maxOfOrNull { it.claimHexAttempts ?: 1 } ?: 1
+    val claimHexAttempts = chosenFeatures.maxOfOrNull { it.feature.claimHexAttempts ?: 1 } ?: 1
     val id = activity.id
     val activityHints = if (id == "claim-hex") {
         when (claimHexAttempts) {

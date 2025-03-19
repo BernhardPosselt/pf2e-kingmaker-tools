@@ -246,8 +246,8 @@ suspend fun KingdomData.checkModifiers(
         enableLeadershipBonuses = settings.enableLeadershipModifiers,
         featModifiers = chosenFeats
             .flatMap { it.feat.modifiers?.map { it.parse() } ?: emptyList() },
-        featureModifiers = getEnabledFeatures()
-            .flatMap { it.modifiers?.map { it.parse() } ?: emptyList() },
+        featureModifiers = chosenFeatures
+            .flatMap { it.feature.modifiers?.map { it.parse() } ?: emptyList() },
     ) + modifiers.map { it.parse() }
 }
 
