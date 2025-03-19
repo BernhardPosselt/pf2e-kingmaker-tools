@@ -522,8 +522,12 @@ private class KingdomCheckDialog(
                 name = "skill",
                 value = selectedSkill.value,
                 options = validSkills.map {
-                    val cx = filtered.context.copy(usedSkill = it)
-                    val mod = evaluateModifiers(filtered.copy(context = cx)).total
+                    val skillContext = context.copy(usedSkill = it)
+                    val skillFiltered = filterModifiersAndUpdateContext(
+                        modifiers = enabledModifiers,
+                        context = skillContext
+                    )
+                    val mod = evaluateModifiers(skillFiltered).total
                     val label = "${it.label} (${mod.formatAsModifier()})"
                     SelectOption(label, it.value)
                 },
