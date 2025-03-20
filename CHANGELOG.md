@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Structure Token Mapping Macro
 * Removed Roll Kingdom Event macro since those depend on the actual kingdom sheet now
 * Removed Camping and Kingdom macros; those are now accessed through the party actor and can be drag and dropped onto your macro bar
+* Removed background for settlement scenes due to unclear commercial licensing
 
 ### Changed
 * Armies don't need to be targeted anymore but simply selected
