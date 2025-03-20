@@ -7,27 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.0.0] - 2025-03-xx
+## [4.0.0] - 2025-03-20
 
 ### Added
 
-
 * Kingdom Character Sheet builder with automated ability scores, skill trainings, skill increases and ruin thresholds
+* You can now have more than one kingdom/camping sheet
+* Kingdom Sheet homebrew options for charters, heartlands, governments and milestones
 
 ### Removed
 
 * Structure Token Mapping Macro
 * Removed Roll Kingdom Event macro since those depend on the actual kingdom sheet now
-* Removed Camping and Kingdom macros; those are now accessed through the party actor
+* Removed Camping and Kingdom macros; those are now accessed through the party actor and can be drag and dropped onto your macro bar
 
 ### Changed
 * Armies don't need to be targeted anymore but simply selected
 * Many Feats, Activities and Features have received increased automation, especially ones that upgrade or downgrade degrees of successes
 * Supernatural Solution now correctly rolls before knowing the result
 * Reset/Award Hero Points, Award XP and Roll Stealth/Perception Exploration macros are now party aware. If more than one party exists, you will need to choose the current party in a popup
-* Multiple Camping Actors are now supported. This requires the following changes:
-  * Each character must be a member of at most one camping sheet
-  * Climate and Weather use the first camping sheet if only one exists or the first one marked as active. To activate a camping sheet, choose the **Activate** camping sheet menu action
 * All check dialogs now support selecting a leader by default; this automatically enables the +3 bonus from the Palace to Leadership activities for the Ruler
 * Recruitable Armies are now looked up in a folder that is configured in the kingdom sheet settings
 * For developers only: all code has now been ported from TypeScript to Kotlin so oldsrc/TypeScript setup is not necessary anymore
