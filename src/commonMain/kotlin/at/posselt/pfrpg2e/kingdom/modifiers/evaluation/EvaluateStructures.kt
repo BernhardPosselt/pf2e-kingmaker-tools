@@ -132,7 +132,6 @@ private fun calculateItemsFromSameStructures(
                 .flatMap { it }
                 .sumOf { it.value }
         }
-    console.log(sameStructureInstances.first().name, result.toString())
     return result
 }
 

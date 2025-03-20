@@ -140,7 +140,6 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
     val upgrades = meta.upgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val downgrades = meta.downgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val degreeMessages = meta.additionalChatMessages?.let { deserializeB64Json<DegreeMessages>(it) }
-    console.log(upgrades, downgrades)
     rollCheck(
         afterRoll = {},
         rollMode = rollMode,

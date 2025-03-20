@@ -905,7 +905,7 @@ class KingdomSheet(
     ): Unit? = result
         ?.draw
         ?.results
-        ?.mapNotNull { console.log(it.getChatText());it.getChatText() }
+        ?.mapNotNull { it.getChatText() }
         ?.firstNotNullOfOrNull { Regex("@UUID\\[(.+)\\]").find(it)?.destructured?.component1() }
         ?.let {
             postChatTemplate(
