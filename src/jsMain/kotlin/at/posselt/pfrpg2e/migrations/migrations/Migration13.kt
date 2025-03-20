@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
 import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
 import at.posselt.pfrpg2e.kingdom.data.RawHeartlandChoices
+import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
 import at.posselt.pfrpg2e.kingdom.governments
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.slugify
@@ -101,6 +102,24 @@ class Migration13 : Migration(13, true) {
             .toTypedArray()
         kingdom.heartland = RawHeartlandChoices(
             type = heartland
+        )
+        kingdom.skillRanks = RawSkillRanks(
+            agriculture = kingdom.skillRanks.agriculture ?: 0,
+            arts = kingdom.skillRanks.arts ?: 0,
+            boating = kingdom.skillRanks.boating ?: 0,
+            defense = kingdom.skillRanks.defense ?: 0,
+            engineering = kingdom.skillRanks.engineering ?: 0,
+            exploration = kingdom.skillRanks.exploration ?: 0,
+            folklore = kingdom.skillRanks.folklore ?: 0,
+            industry = kingdom.skillRanks.industry ?: 0,
+            intrigue = kingdom.skillRanks.intrigue ?: 0,
+            magic = kingdom.skillRanks.magic ?: 0,
+            politics = kingdom.skillRanks.politics ?: 0,
+            scholarship = kingdom.skillRanks.scholarship ?: 0,
+            statecraft = kingdom.skillRanks.statecraft ?: 0,
+            trade = kingdom.skillRanks.trade ?: 0,
+            warfare = kingdom.skillRanks.warfare ?: 0,
+            wilderness = kingdom.skillRanks.wilderness ?: 0,
         )
         kingdom.heartlandBlacklist = emptyArray()
         kingdom.charterBlacklist = emptyArray()

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2025-03-20
+
+### Fixed
+
+* Fixed Kingdom Sheet not opening after migration when one of the kingdom's skills was not set to at least trained
+
 ## [4.0.0] - 2025-03-20
 
 ### Added

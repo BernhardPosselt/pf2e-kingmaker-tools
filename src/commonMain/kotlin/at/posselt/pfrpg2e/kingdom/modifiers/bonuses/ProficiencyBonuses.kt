@@ -26,21 +26,24 @@ fun createProficiencyModifier(
     proficiency: Proficiency,
     level: Int,
     mode: UntrainedProficiencyMode = UntrainedProficiencyMode.NONE,
-) = Modifier(
-    id = skill.value,
-    name = "${skill.label} (${proficiency.label})",
-    type = ModifierType.PROFICIENCY,
-    value = when (proficiency) {
-        Proficiency.UNTRAINED -> when (mode) {
-            UntrainedProficiencyMode.NONE -> 0
-            UntrainedProficiencyMode.HALF -> level / 2
-            UntrainedProficiencyMode.FULL -> level
-        }
+): Modifier {
+    console.log(skill, proficiency)
+    return Modifier(
+        id = skill.value,
+        name = "${skill.label} (${proficiency.label})",
+        type = ModifierType.PROFICIENCY,
+        value = when (proficiency) {
+            Proficiency.UNTRAINED -> when (mode) {
+                UntrainedProficiencyMode.NONE -> 0
+                UntrainedProficiencyMode.HALF -> level / 2
+                UntrainedProficiencyMode.FULL -> level
+            }
 
-        Proficiency.TRAINED -> 2 + level
-        Proficiency.EXPERT -> 4 + level
-        Proficiency.MASTER -> 6 + level
-        Proficiency.LEGENDARY -> 8 + level
-    },
-    applyIf = listOf(Eq("@skill", skill.value)),
-)
+            Proficiency.TRAINED -> 2 + level
+            Proficiency.EXPERT -> 4 + level
+            Proficiency.MASTER -> 6 + level
+            Proficiency.LEGENDARY -> 8 + level
+        },
+        applyIf = listOf(Eq("@skill", skill.value)),
+    )
+}
