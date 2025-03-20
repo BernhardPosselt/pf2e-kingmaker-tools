@@ -1,9 +1,7 @@
 <aside class="km-kingdom-sheet-sidebar km-kingdom-sheet-sidebar-kingdom"
        {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
     <div {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
-        <h3>Size <span class="km-header-right-align"><button type="button" data-action="kingdom-size-info"
-                                                             title="Kingdom Size"><i
-                class="fa-solid fa-circle-info"></i></button></span></h3>
+        <h3>Size <span class="km-header-right-align"><button type="button" data-action="kingdom-size-info" title="Kingdom Size"><i class="fa-solid fa-circle-info"></i></button></span></h3>
         <table class="km-unrest-ruin">
             <tr>
                 <td class="km-ability-score-label">Claimed Hexes</td>
@@ -12,10 +10,7 @@
                 <td>{{kingdomSize}}</td>
             </tr>
         </table>
-        <h3>Consumption ({{consumption}}) <span class="km-header-right-align"><button type="button"
-                                                                                      data-action="consumption-breakdown"
-                                                                                      title="Consumption Breakdown"><i
-                class="fa-solid fa-circle-info"></i></button></span></h3>
+        <h3>Consumption ({{consumption}}) <span class="km-header-right-align"><button type="button" data-action="consumption-breakdown" title="Consumption Breakdown"><i class="fa-solid fa-circle-info"></i></button></span></h3>
         <table class="km-unrest-ruin">
             <tr>
                 <td>{{> formElement consumptionContext.armies }}</td>
@@ -36,34 +31,36 @@
             {{/each}}
         </table>
         <h3>Skills</h3>
-        <table class="km-skill-checks">
-            {{#each skillChecks}}
-                <tr>
-                    <td>{{label}}</td>
-                    <td>{{> formElement input }}{{#if ../automateStats}}
-                        <span class="km-proficiency km-proficiency-value {{valueClass}}">{{proficiency}}</span>{{/if}}
-                    </td>
-                </tr>
-            {{/each}}
-        </table>
+        {{#if (ne currentNavEntry 'turn')}}
+            <table class="km-skill-checks">
+                {{#each skillChecks}}
+                    <tr>
+                        <td>{{label}}</td>
+                        <td>{{> formElement input }}{{#if ../automateStats}}
+                            <span class="km-proficiency km-proficiency-value {{valueClass}}">{{proficiency}}</span>{{/if}}
+                        </td>
+                    </tr>
+                {{/each}}
+            </table>
+        {{/if}}
         <h3>Worksites (+ Resource)</h3>
         <table class="km-worksites">
             {{#each worksitesContext}}
-                <tr>
-                    <td>{{label}}</td>
-                    <td>
-                        {{> formElement quantity }}
-                        {{#if ../automateResources}}
-                            <span class="km-worksite-value">{{ quantityValue }}</span>
-                        {{/if}}
-                    </td>
-                    <td>
-                        {{> formElement resources }}
-                        {{#if ../automateResources}}
-                            <span class="km-worksite-value">{{ resourcesValue }}</span>
-                        {{/if}}
-                    </td>
-                </tr>
+            <tr>
+                <td>{{label}}</td>
+                <td>
+                    {{> formElement quantity }}
+                    {{#if ../automateResources}}
+                        <span class="km-worksite-value">{{ quantityValue }}</span>
+                    {{/if}}
+                </td>
+                <td>
+                    {{> formElement resources }}
+                    {{#if ../automateResources}}
+                        <span class="km-worksite-value">{{ resourcesValue }}</span>
+                    {{/if}}
+                </td>
+            </tr>
             {{/each}}
         </table>
     </div>
