@@ -27,7 +27,6 @@ fun createProficiencyModifier(
     level: Int,
     mode: UntrainedProficiencyMode = UntrainedProficiencyMode.NONE,
 ): Modifier {
-    console.log(skill, proficiency)
     return Modifier(
         id = skill.value,
         name = "${skill.label} (${proficiency.label})",

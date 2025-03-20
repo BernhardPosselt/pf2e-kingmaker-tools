@@ -45,7 +45,7 @@ private fun parseKingmaker(): RealmData {
         .filter { (_, value) -> value.claimed == true }
         .map { it.component2() }
         .toList()
-    val farms = claimed.filter { it.features?.any { f -> f == "farmland" } == true }.size
+    val farms = claimed.filter { it.features?.any { f -> f.type == "farmland" } == true }.size
     val food = claimed.filter { it.commodity == "food" }.size
     return RealmData(
         size = claimed.size,

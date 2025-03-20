@@ -5,10 +5,15 @@ import js.objects.ReadonlyRecord
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
+external interface HexFeature {
+    val type: String?
+}
+
+@JsPlainObject
 external interface HexState {
     val commodity: String?
     val camp: String?
-    val features: Array<String>?
+    val features: Array<HexFeature>?
     val claimed: Boolean?
 }
 
