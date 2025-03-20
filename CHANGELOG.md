@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.3] - 2025-03-20
+
+### Fixed
+
+* Always include skill proficiency drop downs to prevent setting them to null
+
+
 ## [4.0.2] - 2025-03-20
 
 ### Fixed
