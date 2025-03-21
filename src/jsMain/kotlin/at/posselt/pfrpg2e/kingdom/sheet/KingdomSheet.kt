@@ -562,9 +562,9 @@ class KingdomSheet(
 
             "remove-ongoing-event" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
-                    target.dataset["index"]?.toInt()?.let { index ->
+                    target.dataset["index"]?.toInt()?.let { eventIndex ->
                         kingdom.ongoingEvents = kingdom.ongoingEvents
-                            .filterIndexed { index, _ -> index != index }
+                            .filterIndexed { index, _ -> index != eventIndex }
                             .toTypedArray()
                         actor.setKingdom(kingdom)
                     }

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.6] - 2025-03-21
+
+### Fixed
+
+* Do not clear all events when remove one ongoing event
+
+
 ## [4.0.5] - 2025-03-21
 
 ### Fixed
