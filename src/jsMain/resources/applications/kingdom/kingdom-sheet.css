@@ -110,19 +110,19 @@
     }
 
     .km-kingdom-sheet-main[data-settlement-type="village"] {
-        background-image: url("../../../img/camping/backgrounds/hills-day.webp");
+        background-image: url("../../../img/kingdom/backgrounds/village.webp");
     }
 
     .km-kingdom-sheet-main[data-settlement-type="town"] {
-        background-image: url("../../../img/camping/backgrounds/hills-day.webp");
+        background-image: url("../../../img/kingdom/backgrounds/town.webp");
     }
 
     .km-kingdom-sheet-main[data-settlement-type="city"] {
-        background-image: url("../../../img/camping/backgrounds/hills-day.webp");
+        background-image: url("../../../img/kingdom/backgrounds/city.webp");
     }
 
     .km-kingdom-sheet-main[data-settlement-type="metropolis"] {
-        background-image: url("../../../img/camping/backgrounds/hills-day.webp");
+        background-image: url("../../../img/kingdom/backgrounds/metropolis.webp");
     }
 
     .km-kingdom-sheet-main {
