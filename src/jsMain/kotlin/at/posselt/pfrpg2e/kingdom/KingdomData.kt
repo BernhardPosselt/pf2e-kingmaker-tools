@@ -165,7 +165,7 @@ external interface KingdomData {
     var groups: Array<RawGroup>
     var skillRanks: RawSkillRanks
     var abilityScores: RawAbilityScores
-    var initialProficiencies: Array<String>
+    var initialProficiencies: Array<String?>
     var milestones: Array<MilestoneChoice>
 }
 
@@ -224,7 +224,7 @@ fun KingdomData.getTrainedSkills(
     val initial = initialProficiencies
     val feats = chosenFeats.mapNotNull { it.feat.trainSkill }
     return (government + feats + initial)
-        .mapNotNull { KingdomSkill.fromString(it) }
+        .mapNotNull { it?.let { value -> KingdomSkill.fromString(value) } }
         .toSet()
 }
 

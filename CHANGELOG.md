@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.5] - 2025-03-21
+
+### Fixed
+
+* Fixed trained skills chocking on null values
+
+### Added 
+
+* Change kingdom sheet backgrounds based on active settlement types
+
 ## [4.0.4] - 2025-03-20
 
 ### Fixed
