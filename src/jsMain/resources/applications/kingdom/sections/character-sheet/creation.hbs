@@ -40,7 +40,7 @@
             <p><b>Skill Proficiencies</b>: {{government.skills}}</p>
         {{/if}}
         {{#if government.description}}
-            <details>
+            {{#unless government.feat}}<p><b>Feat disabled in Feat management!</b></p>{{/unless}}            <details {{# unless government.feat}}hidden{{/unless}}>
                 <summary><b>Bonus Feat</b>: {{government.feat}}</summary>
                 <p class="km-detail-description">{{government.featDescription}}</p>
             </details>

@@ -1070,6 +1070,8 @@ class KingdomSheet(
         )
         val unrestPenalty = calculateUnrestPenalty(kingdom.unrest)
         val feats = kingdom.getFeats()
+            .filter { it.id !in kingdom.featBlacklist }
+            .toTypedArray()
         val increaseScorePicksBy = kingdom.settings.increaseScorePicksBy
         val kingdomSectionNav = createKingdomSectionNav(kingdom)
         val heartlandBlacklist = kingdom.heartlandBlacklist.toSet()

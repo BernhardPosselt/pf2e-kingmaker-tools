@@ -24,12 +24,14 @@ fun KingdomData.getChosenFeats(
     return chosenFeatures
         .map { it.choice }
         .mapNotNull { feature ->
-            feature.featId?.let { featId ->
-                featsById[featId]?.let { feat ->
-                    explodedFeatureById[feature.id]?.let {
-                        ChosenFeat(takenAtLevel = it.level, feat)
+            feature.featId
+                ?.takeIf { it !in featBlacklist }
+                ?.let { featId ->
+                    featsById[featId]?.let { feat ->
+                        explodedFeatureById[feature.id]?.let {
+                            ChosenFeat(takenAtLevel = it.level, feat)
+                        }
                     }
                 }
-            }
         } + listOfNotNull(chosenGovernmentFeat) + bonusFeats
 }
