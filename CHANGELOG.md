@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+### Fixed
+
+* Fix kingdom leader delete button background color using light theme
+
+
 ## [4.0.7] - 2025-03-21
 
 ### Fixed

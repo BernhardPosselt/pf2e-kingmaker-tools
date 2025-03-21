@@ -24,6 +24,13 @@
             text-shadow: none;
         }
 
+        .km-leader-portrait {
+            &:hover button {
+                color: black;
+                background-color: white;
+            }
+        }
+
     }
 }
 
