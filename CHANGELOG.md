@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.8] - 2025-03-21
 
 ### Fixed
 
 * Fix kingdom leader delete button background color using light theme
+* Improve Dorako UI compatibility
 
 
 ## [4.0.7] - 2025-03-21

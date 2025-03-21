@@ -11,10 +11,6 @@
             box-shadow: 0 0 5px 1px rgba(0, 0, 0, .5);
         }
 
-        .controls-dropdown {
-            z-index: 2;
-        }
-
         h2,
         h3,
         .km-grow-subnav a[href],
@@ -49,6 +45,10 @@
 }
 
 .km-kingdom-sheet {
+    .controls-dropdown {
+        z-index: 2;
+    }
+
     .window-content {
         padding: 0;
     }
