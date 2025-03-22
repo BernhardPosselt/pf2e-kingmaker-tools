@@ -104,10 +104,10 @@ fun main() {
                         insertAfter?.insertAdjacentElement("afterend", campingSheetLink)
                         insertAfter?.insertAdjacentElement("afterend", kingdomLink)
                         if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
-                            it.querySelectorAll(".create-button:nth-last-child(1 of :not([data-action=create-member]))")
-                                .asList()
-                                .filterIsInstance<HTMLElement>()
-                                .forEach {
+                            it.querySelector(".fa-crown")
+                                ?.parentElement
+                                ?.takeIfInstance<HTMLElement>()
+                                ?.let {
                                     it.hidden = true
                                 }
                         }

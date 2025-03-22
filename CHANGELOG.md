@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.10] - 2025-03-22
+
+### Fixed
+
+* Do not hide camping icon anymore if setting to hide built in sheet is set to on and no built-in kingdom sheet was created
+
+
 ## [4.0.9] - 2025-03-22
 
 ### Fixed
