@@ -100,8 +100,9 @@ fun main() {
                     if (uuid != null) {
                         val kingdomLink = createKingmakerIcon(uuid, actionDispatcher)
                         val campingSheetLink = createCampingIcon(uuid, actionDispatcher)
-                        it.querySelector("&> a")?.insertAdjacentElement("beforeBegin", campingSheetLink)
-                        it.querySelector("&> a")?.insertAdjacentElement("beforeBegin", kingdomLink)
+                        val insertAfter = it.querySelector("h3")
+                        insertAfter?.insertAdjacentElement("afterend", campingSheetLink)
+                        insertAfter?.insertAdjacentElement("afterend", kingdomLink)
                         if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
                             it.querySelectorAll(".create-button:nth-last-child(1 of :not([data-action=create-member]))")
                                 .asList()

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.9] - 2025-03-22
+
+### Fixed
+
+* Make camping icons on party actor visible for players even if you haven't created a built-in kingdom sheet 
+
+
 ## [4.0.8] - 2025-03-21
 
 ### Fixed

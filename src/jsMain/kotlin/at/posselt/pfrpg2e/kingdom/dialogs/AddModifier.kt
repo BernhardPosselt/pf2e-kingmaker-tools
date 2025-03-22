@@ -85,7 +85,7 @@ class AddModifier(
     dataModel = ModifierModel::class.js,
     id = "kmAddModifier",
 ) {
-    var data = AddModifierData(
+    var data: AddModifierData = AddModifierData(
         name = "",
         type = ModifierType.UNTYPED.value,
         value = 1,
