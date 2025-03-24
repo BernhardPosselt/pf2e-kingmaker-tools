@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.Button
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.DataAttribute
@@ -55,9 +56,8 @@ private external interface LeaderSkillsRow {
 
 @Suppress("unused")
 @JsPlainObject
-private external interface ConfigureLeaderSkillsContext : HandlebarsRenderContext {
+private external interface ConfigureLeaderSkillsContext : ValidatedHandlebarsContext {
     val headers: Array<String>
-    val isFormValid: Boolean
     val formRows: Array<LeaderSkillsRow>
     val compact: Boolean
     val addEntry: String

@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.settings
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.camping.dialogs.TableHead
 import at.posselt.pfrpg2e.data.regions.Month
@@ -52,10 +53,9 @@ external interface ClimateSettings {
 
 @Suppress("unused")
 @JsPlainObject
-external interface ClimateSettingsContext : HandlebarsRenderContext {
+external interface ClimateSettingsContext : ValidatedHandlebarsContext {
     var heading: Array<TableHead>
     var formRows: Array<Array<Any>>
-    var isValid: Boolean
 }
 
 @JsExport
@@ -113,7 +113,7 @@ class ClimateConfiguration : FormApp<ClimateSettingsContext, ClimateSettings>(
         val parent = super._preparePartContext(partId, context, options).await()
         ClimateSettingsContext(
             partId = parent.partId,
-            isValid = isFormValid,
+            isFormValid = isFormValid,
             heading = arrayOf(
                 TableHead("Month"),
                 TableHead("Season"),

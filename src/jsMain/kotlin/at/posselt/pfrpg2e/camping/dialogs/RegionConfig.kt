@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.camping.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.TextInput
@@ -60,10 +61,9 @@ external interface TableHead {
 
 @Suppress("unused")
 @JsPlainObject
-external interface RegionSettingsContext : HandlebarsRenderContext {
+external interface RegionSettingsContext : ValidatedHandlebarsContext {
     var heading: Array<TableHead>
     var formRows: Array<Array<FormElementContext>>
-    var isValid: Boolean
     var allowDelete: Boolean
 }
 
@@ -153,7 +153,7 @@ class RegionConfig(
             .sortedBy { it.label }
         RegionSettingsContext(
             partId = parent.partId,
-            isValid = isFormValid,
+            isFormValid = isFormValid,
             heading = arrayOf(
                 TableHead("Name"),
                 TableHead("Level", arrayOf("number-select-heading")),

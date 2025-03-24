@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.camping.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.ActivityEffects
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
@@ -51,9 +52,7 @@ import kotlin.js.Promise
 
 
 @JsPlainObject
-external interface ActivityContext : SectionsContext, HandlebarsRenderContext {
-    val isFormValid: Boolean
-}
+external interface ActivityContext : SectionsContext, ValidatedHandlebarsContext
 
 @JsPlainObject
 external interface ActivityOutcomeSubmitData {

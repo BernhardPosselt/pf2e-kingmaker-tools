@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.app.DocumentRef
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.MenuControl
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.confirm
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
@@ -136,7 +137,7 @@ external interface RecipeContext {
 
 @Suppress("unused")
 @JsPlainObject
-external interface CampingSheetContext : HandlebarsRenderContext {
+external interface CampingSheetContext : ValidatedHandlebarsContext {
     var actors: Array<CampingSheetActor>
     var prepareCamp: CampingSheetActivity?
     var activities: Array<CampingSheetActivity>
@@ -182,7 +183,6 @@ external interface CampingSheetFormData {
     val activities: CampingSheetActivitiesFormData
     val recipes: RecipeFormData?
 }
-
 
 private fun isNightMode(
     now: LocalTime,
@@ -1078,6 +1078,7 @@ class CampingSheet(
             prepareCampSection = prepareCampSection,
             campingActivitiesSection = campingActivitiesSection,
             eatingSection = eatingSection,
+            isFormValid = isFormValid,
         )
     }
 

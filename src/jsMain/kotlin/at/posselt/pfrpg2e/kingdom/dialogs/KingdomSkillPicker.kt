@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.HiddenInput
@@ -49,8 +50,7 @@ external interface KingdomSkillPickerRow {
 
 @Suppress("unused")
 @JsPlainObject
-external interface KingdomSkillPickerContext : HandlebarsRenderContext {
-    val isFormValid: Boolean
+external interface KingdomSkillPickerContext : ValidatedHandlebarsContext {
     val headers: Array<String>
     val formRows: Array<KingdomSkillPickerRow>
 }

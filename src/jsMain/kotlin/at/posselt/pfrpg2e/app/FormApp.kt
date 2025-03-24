@@ -14,6 +14,7 @@ import com.foundryvtt.core.applications.api.HandlebarsTemplatePart
 import com.foundryvtt.core.applications.api.Window
 import com.foundryvtt.core.game
 import js.core.Void
+import js.objects.JsPlainObject
 import js.objects.Record
 import js.objects.recordOf
 import kotlinx.coroutines.await
@@ -28,7 +29,12 @@ data class MenuControl(
     val gmOnly: Boolean = false,
 )
 
-abstract class FormApp<T : HandlebarsRenderContext, O>(
+@JsPlainObject
+external interface ValidatedHandlebarsContext : HandlebarsRenderContext {
+    val isFormValid: Boolean
+}
+
+abstract class FormApp<T : ValidatedHandlebarsContext, O>(
     title: String,
     template: String,
     isDialogForm: Boolean = true,
@@ -44,6 +50,7 @@ abstract class FormApp<T : HandlebarsRenderContext, O>(
     protected val debug: Boolean = false,
     protected val renderOnSubmit: Boolean = true,
     protected val dataModel: JsClass<out DataModel>? = null,
+//    protected val initial: O
 ) : App<T>(
     HandlebarsFormApplicationOptions(
         window = Window(
@@ -96,17 +103,18 @@ abstract class FormApp<T : HandlebarsRenderContext, O>(
     override fun onSubmit(event: Event, form: HTMLFormElement, formData: FormDataExtended<AnyObject>): Promise<Void> =
         buildPromise {
             val value = formData.`object`
-            isFormValid = form.reportValidity()
+            val htmlFormValid = form.reportValidity()
             if (debug) {
                 console.log("Received ${JSON.stringify(value)}")
-                console.log("Form is ${if (isFormValid) "valid" else "invalid"}")
+                console.log("Form is ${if (htmlFormValid) "valid" else "invalid"}")
             }
             val parsedData = parseFormData<O>(value, ::fixObject)
             if (debug) {
                 console.log("Parsed object ${JSON.stringify(parsedData)}")
             }
-            val dataModelData = dataModel
-                ?.newInstance(arrayOf(parsedData))
+            val model = dataModel?.newInstance(arrayOf(parsedData))
+            isFormValid = (model?.invalid != true) && htmlFormValid
+            val dataModelData = model
                 ?.toObject()
                 ?.unsafeCast<O>()
                 ?: parsedData

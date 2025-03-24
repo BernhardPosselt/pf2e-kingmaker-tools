@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.camping.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.confirm
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.Menu
@@ -91,9 +92,7 @@ class CampingSettingsDataModel(value: AnyObject) : DataModel(value) {
 }
 
 @JsPlainObject
-external interface CampingSettingsContext : HandlebarsRenderContext, SectionsContext {
-    val isFormValid: Boolean
-}
+external interface CampingSettingsContext : ValidatedHandlebarsContext, SectionsContext
 
 enum class RestRollMode {
     NONE,

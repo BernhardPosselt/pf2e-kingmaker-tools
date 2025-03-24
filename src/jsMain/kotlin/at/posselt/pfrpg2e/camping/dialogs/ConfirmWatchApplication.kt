@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.camping.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.formContext
@@ -25,9 +26,8 @@ import kotlin.js.Promise
 
 @Suppress("unused")
 @JsPlainObject
-external interface ConfirmWatchContext: HandlebarsRenderContext {
+external interface ConfirmWatchContext: ValidatedHandlebarsContext {
     val formRows: Array<FormElementContext>
-    val isFormValid: Boolean
     val saveLabel: String
 }
 

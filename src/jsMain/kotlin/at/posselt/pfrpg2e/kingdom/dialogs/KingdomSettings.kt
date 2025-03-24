@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.Menu
 import at.posselt.pfrpg2e.app.forms.NumberInput
@@ -88,10 +89,7 @@ class KingdomSettingsDataModel(value: AnyObject) : DataModel(value) {
 }
 
 @JsPlainObject
-external interface KingdomSettingsContext : HandlebarsRenderContext, SectionsContext {
-    val isFormValid: Boolean
-}
-
+external interface KingdomSettingsContext : ValidatedHandlebarsContext, SectionsContext
 
 class KingdomSettingsApplication(
     private val game: Game,

@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.camping.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
@@ -43,9 +44,8 @@ class ActivityEffectDataModel(value: AnyObject) : DataModel(value) {
 }
 
 @JsPlainObject
-external interface ActivityEffectContext : HandlebarsRenderContext {
+external interface ActivityEffectContext : ValidatedHandlebarsContext {
     val formRows: Array<FormElementContext>
-    val isFormValid: Boolean
 }
 
 enum class ActivityEffectTarget {

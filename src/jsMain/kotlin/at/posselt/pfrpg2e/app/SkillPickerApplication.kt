@@ -63,12 +63,11 @@ external interface SkillContext {
 
 @Suppress("unused")
 @JsPlainObject
-external interface SkillPickerContext : HandlebarsRenderContext {
+external interface SkillPickerContext : ValidatedHandlebarsContext {
     val allowLores: Boolean
     val skills: Array<SkillContext>
     val anySkill: SkillContext?
     val atLeastOneSkillError: Boolean
-    val isFormValid: Boolean
     val anyEnabled: Boolean
 }
 

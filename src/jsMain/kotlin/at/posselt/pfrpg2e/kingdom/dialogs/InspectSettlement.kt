@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.HiddenInput
@@ -52,8 +53,7 @@ external interface LabelValueContext {
 
 @Suppress("unused")
 @JsPlainObject
-external interface InspectSettlementContext : HandlebarsRenderContext {
-    val isFormValid: Boolean
+external interface InspectSettlementContext : ValidatedHandlebarsContext {
     val blocksInput: FormElementContext
     val levelInput: FormElementContext
     val typeInput: FormElementContext

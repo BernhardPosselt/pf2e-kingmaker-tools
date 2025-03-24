@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.NumberInput
@@ -35,8 +36,7 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
 @JsPlainObject
-external interface ModifyActivityContext : HandlebarsRenderContext {
-    val isFormValid: Boolean
+external interface ModifyActivityContext : ValidatedHandlebarsContext {
     val formRows: Array<FormElementContext>
 }
 

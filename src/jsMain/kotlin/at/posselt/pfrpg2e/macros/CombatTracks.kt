@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.macros
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.formContext
@@ -12,9 +13,12 @@ import at.posselt.pfrpg2e.combattracks.setCombatTrack
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Ui
+import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.documents.Playlist
 import com.foundryvtt.core.documents.PlaylistSound
 import com.foundryvtt.core.documents.Scene
@@ -29,15 +33,25 @@ import kotlin.js.Promise
 
 @JsPlainObject
 private external interface CombatTrackData {
-    val playlistUuid: String
+    val playlistUuid: String?
     val trackUuid: String?
 }
 
 @Suppress("unused")
 @JsPlainObject
-private external interface CombatTrackContext : HandlebarsRenderContext {
-    val isFormValid: Boolean
+private external interface CombatTrackContext : ValidatedHandlebarsContext {
     val formRows: Array<FormElementContext>
+}
+
+@JsExport
+class CombatTrackDataModel(value: AnyObject) : DataModel(value) {
+    companion object {
+        @JsStatic
+        fun defineSchema() = buildSchema {
+            string("playlistUuid", nullable = true)
+            string("trackUuid", nullable = true)
+        }
+    }
 }
 
 private class CombatTrackApplication(
@@ -48,6 +62,7 @@ private class CombatTrackApplication(
     title = "Set Combat Track: ${actor?.name ?: scene.name}",
     template = "components/forms/application-form.hbs",
     id = "kmCombatTrack-${actor?.uuid ?: scene.uuid}",
+    dataModel = CombatTrackDataModel::class.js,
 ) {
     var combatTrack: Track? = if (actor == null) {
         scene.getCombatTrack()
@@ -86,7 +101,12 @@ private class CombatTrackApplication(
     }
 
     override fun onParsedSubmit(value: CombatTrackData): Promise<Void> = buildPromise {
-        combatTrack = Track(playlistUuid = value.playlistUuid, trackUuid = value.trackUuid)
+        val playlist = value.playlistUuid
+        if (playlist == null) {
+            combatTrack = null
+        } else {
+            combatTrack = Track(playlistUuid = playlist, trackUuid = value.trackUuid)
+        }
         undefined
     }
 

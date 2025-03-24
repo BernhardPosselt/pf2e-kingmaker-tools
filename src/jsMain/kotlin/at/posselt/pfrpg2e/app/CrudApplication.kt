@@ -3,7 +3,10 @@ package at.posselt.pfrpg2e.app
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
+import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.flattenObject
 import js.array.toTypedArray
 import js.core.Void
@@ -37,7 +40,7 @@ external interface CrudItem {
 
 @Suppress("unused")
 @JsPlainObject
-external interface CrudTemplateContext : HandlebarsRenderContext {
+external interface CrudTemplateContext : ValidatedHandlebarsContext {
     val items: Array<CrudItem>
     val additionalColumnHeadings: Array<String>
 }
@@ -46,6 +49,17 @@ external interface CrudTemplateContext : HandlebarsRenderContext {
 external interface CrudData {
     val enabledIds: Array<String>
 }
+
+@JsExport
+class CrudApplicationDataModel(value: AnyObject) : DataModel(value) {
+    companion object {
+        @JsStatic
+        fun defineSchema() = buildSchema {
+            stringArray("enabledIds")
+        }
+    }
+}
+
 
 abstract class CrudApplication(
     title: String,
@@ -59,6 +73,7 @@ abstract class CrudApplication(
     scrollable = arrayOf(".window-content"),
     debug = debug,
     id = id,
+    dataModel = CrudApplicationDataModel::class.js,
 ) {
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
@@ -110,7 +125,8 @@ abstract class CrudApplication(
         CrudTemplateContext(
             partId = parent.partId,
             additionalColumnHeadings = headings,
-            items = items
+            items = items,
+            isFormValid = isFormValid,
         )
     }
 

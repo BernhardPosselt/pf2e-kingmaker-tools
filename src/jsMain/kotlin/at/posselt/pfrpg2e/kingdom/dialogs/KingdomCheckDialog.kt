@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.HiddenInput
@@ -112,7 +113,7 @@ private external interface ModifierContext {
 
 @Suppress("unused")
 @JsPlainObject
-private external interface CheckContext : HandlebarsRenderContext {
+private external interface CheckContext : ValidatedHandlebarsContext {
     val leaderInput: FormElementContext
     val rollModeInput: FormElementContext
     val phaseInput: FormElementContext
@@ -141,7 +142,6 @@ private external interface CheckContext : HandlebarsRenderContext {
     val rollTwiceKeepHighest: Boolean
     val rollTwiceKeepLowest: Boolean
     val supernaturalSolutionDisabled: Boolean
-    val isFormValid: Boolean
 }
 
 @JsPlainObject

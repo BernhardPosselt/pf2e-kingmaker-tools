@@ -1,6 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
-import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
@@ -8,8 +8,7 @@ import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject
-external interface KingdomSheetContext : HandlebarsRenderContext {
-    val isFormValid: Boolean
+external interface KingdomSheetContext : ValidatedHandlebarsContext {
     val kingdomNameInput: FormElementContext
     val settlementInput: FormElementContext
     val xpInput: FormElementContext
