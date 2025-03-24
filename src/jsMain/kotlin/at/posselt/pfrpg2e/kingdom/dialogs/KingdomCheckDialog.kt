@@ -113,7 +113,6 @@ private external interface ModifierContext {
 @Suppress("unused")
 @JsPlainObject
 private external interface CheckContext : HandlebarsRenderContext {
-    val isFormValid: Boolean
     val leaderInput: FormElementContext
     val rollModeInput: FormElementContext
     val phaseInput: FormElementContext
@@ -142,6 +141,7 @@ private external interface CheckContext : HandlebarsRenderContext {
     val rollTwiceKeepHighest: Boolean
     val rollTwiceKeepLowest: Boolean
     val supernaturalSolutionDisabled: Boolean
+    val isFormValid: Boolean
 }
 
 @JsPlainObject
@@ -499,6 +499,7 @@ private class KingdomCheckDialog(
         }
         CheckContext(
             partId = parent.partId,
+            isFormValid = isFormValid,
             leaderInput = Select.fromEnum<Leader>(
                 name = "leader",
                 label = "Leader",
@@ -576,7 +577,6 @@ private class KingdomCheckDialog(
                 )
             }.toTypedArray()),
             useAssurance = data.assurance,
-            isFormValid = true,
             isActivity = activity != null,
             checkModifierLabel = checkModifier.formatAsModifier(),
             newModifierNameInput = TextInput(

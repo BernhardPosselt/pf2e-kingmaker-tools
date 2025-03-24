@@ -77,6 +77,10 @@ class ModifyCharter(
         freeBoosts = data?.freeBoosts ?: 1,
     )
 
+    init {
+        isFormValid = data != null
+    }
+
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "km-save" -> save()

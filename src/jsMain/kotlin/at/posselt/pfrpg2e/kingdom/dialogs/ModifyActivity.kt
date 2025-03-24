@@ -124,6 +124,10 @@ class ModifyActivity(
         order = data?.order
     )
 
+    init {
+        isFormValid = data != null
+    }
+
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "km-save" -> save()

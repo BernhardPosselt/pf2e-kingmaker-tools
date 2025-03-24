@@ -68,6 +68,10 @@ class ModifyMilestone(
         isCultMilestone = data?.isCultMilestone == true,
     )
 
+    init {
+        isFormValid = data != null
+    }
+
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "km-save" -> save()

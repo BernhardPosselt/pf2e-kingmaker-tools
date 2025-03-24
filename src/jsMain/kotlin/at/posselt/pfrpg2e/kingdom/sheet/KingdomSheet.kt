@@ -1369,46 +1369,48 @@ class KingdomSheet(
     }
 
     override fun onParsedSubmit(value: KingdomSheetData): Promise<Void> = buildPromise {
-        val previousKingdom = getKingdom()
-        val kingdom = deepClone(previousKingdom)
-        kingdom.name = value.name
-        kingdom.atWar = value.atWar
-        kingdom.fame = value.fame
-        kingdom.level = value.level
-        kingdom.xp = value.xp
-        kingdom.xpThreshold = value.xpThreshold
-        kingdom.unrest = value.unrest
-        kingdom.ruin = value.ruin
-        kingdom.commodities = value.commodities
-        kingdom.workSites = value.workSites
-        kingdom.size = value.size
-        kingdom.resourcePoints = value.resourcePoints
-        kingdom.resourceDice = value.resourceDice
-        kingdom.activeSettlement = value.activeSettlement
-        kingdom.supernaturalSolutions = value.supernaturalSolutions
-        kingdom.creativeSolutions = value.creativeSolutions
-        kingdom.consumption = if (kingdom.settings.autoCalculateArmyConsumption) {
-            value.consumption.copy(armies = kingdom.consumption.armies)
-        } else {
-            value.consumption
+        if (isFormValid) {
+            val previousKingdom = getKingdom()
+            val kingdom = deepClone(previousKingdom)
+            kingdom.name = value.name
+            kingdom.atWar = value.atWar
+            kingdom.fame = value.fame
+            kingdom.level = value.level
+            kingdom.xp = value.xp
+            kingdom.xpThreshold = value.xpThreshold
+            kingdom.unrest = value.unrest
+            kingdom.ruin = value.ruin
+            kingdom.commodities = value.commodities
+            kingdom.workSites = value.workSites
+            kingdom.size = value.size
+            kingdom.resourcePoints = value.resourcePoints
+            kingdom.resourceDice = value.resourceDice
+            kingdom.activeSettlement = value.activeSettlement
+            kingdom.supernaturalSolutions = value.supernaturalSolutions
+            kingdom.creativeSolutions = value.creativeSolutions
+            kingdom.consumption = if (kingdom.settings.autoCalculateArmyConsumption) {
+                value.consumption.copy(armies = kingdom.consumption.armies)
+            } else {
+                value.consumption
+            }
+            kingdom.charter = value.charter
+            kingdom.heartland = value.heartland
+            kingdom.government = value.government
+            kingdom.abilityBoosts = value.abilityBoosts
+            kingdom.features = value.features
+            kingdom.bonusFeats = value.bonusFeats
+            kingdom.leaders = value.leaders
+            kingdom.groups = value.groups
+            kingdom.skillRanks = value.skillRanks
+            kingdom.abilityScores = value.abilityScores
+            kingdom.milestones = value.milestones
+            kingdom.notes = value.notes
+            kingdom.initialProficiencies = value.initialProficiencies
+            beforeKingdomUpdate(previousKingdom, kingdom)
+            actor.setKingdom(kingdom)
+            bonusFeat = value.bonusFeat
+            ongoingEvent = value.ongoingEvent
         }
-        kingdom.charter = value.charter
-        kingdom.heartland = value.heartland
-        kingdom.government = value.government
-        kingdom.abilityBoosts = value.abilityBoosts
-        kingdom.features = value.features
-        kingdom.bonusFeats = value.bonusFeats
-        kingdom.leaders = value.leaders
-        kingdom.groups = value.groups
-        kingdom.skillRanks = value.skillRanks
-        kingdom.abilityScores = value.abilityScores
-        kingdom.milestones = value.milestones
-        kingdom.notes = value.notes
-        kingdom.initialProficiencies = value.initialProficiencies
-        beforeKingdomUpdate(previousKingdom, kingdom)
-        actor.setKingdom(kingdom)
-        bonusFeat = value.bonusFeat
-        ongoingEvent = value.ongoingEvent
         null
     }
 }

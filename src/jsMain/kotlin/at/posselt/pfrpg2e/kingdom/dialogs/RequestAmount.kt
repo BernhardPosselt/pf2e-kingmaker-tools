@@ -13,7 +13,7 @@ external interface RequestAmountContext {
 
 @JsPlainObject
 external interface RequestAmountData {
-    val amount: Int
+    val amount: Int?
 }
 
 suspend fun requestAmount(): Int {
@@ -29,5 +29,5 @@ suspend fun requestAmount(): Int {
             )
         ),
         templatePath = "components/forms/form.hbs",
-    ) { data -> data.amount }
+    ) { data -> data.amount ?: 1}
 }

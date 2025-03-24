@@ -31,6 +31,7 @@
             <td>{{> formElement newModifierModifierInput }}</td>
             <td>
                 <button type="button"
+                        {{#unless isFormValid}}disabled{{/unless}}
                         class="km-no-button-margin"
                         data-action="add-modifier"
                         title="Add Modifier"

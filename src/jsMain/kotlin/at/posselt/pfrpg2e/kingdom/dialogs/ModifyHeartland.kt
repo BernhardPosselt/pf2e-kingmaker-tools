@@ -70,6 +70,10 @@ class ModifyHeartland(
         boost = data?.boost ?:"culture",
     )
 
+    init {
+        isFormValid = data != null
+    }
+
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "km-save" -> save()

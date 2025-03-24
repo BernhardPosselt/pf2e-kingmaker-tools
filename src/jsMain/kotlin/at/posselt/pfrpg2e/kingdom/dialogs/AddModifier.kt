@@ -98,6 +98,10 @@ class AddModifier(
         isConsumedAfterRoll = false,
     )
 
+    init {
+        isFormValid = false
+    }
+
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "km-save" -> {
@@ -217,7 +221,7 @@ class AddModifier(
         AddModifierContext(
             partId = parent.partId,
             formRows = rows,
-            isFormValid = true,
+            isFormValid = isFormValid,
         )
     }
 
