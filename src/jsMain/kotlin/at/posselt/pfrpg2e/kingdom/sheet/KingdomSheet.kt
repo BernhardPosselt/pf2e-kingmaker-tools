@@ -23,6 +23,7 @@ import at.posselt.pfrpg2e.data.kingdom.calculateHexXP
 import at.posselt.pfrpg2e.data.kingdom.calculateRpXP
 import at.posselt.pfrpg2e.data.kingdom.findKingdomSize
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.AutomateResources
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
@@ -30,6 +31,7 @@ import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.RawEq
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.RawSome
+import at.posselt.pfrpg2e.kingdom.SettlementTerrain
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.endTurn
@@ -56,6 +58,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.consumptionBreakdown
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
+import at.posselt.pfrpg2e.kingdom.dialogs.newSettlementChoices
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
 import at.posselt.pfrpg2e.kingdom.getActivity
@@ -402,15 +405,35 @@ class KingdomSheet(
             "configure-feats" -> FeatManagement(kingdomActor = actor).launch()
             "structures-import" -> buildPromise { importStructures() }
 
-            "settlement-import" -> {
+            "create-settlement" -> {
                 buildPromise {
-                    when (target.dataset["waterBorders"]) {
-                        "1" -> importSettlement("Settlement", 1)
-                        "2" -> importSettlement("Settlement", 2)
-                        "3" -> importSettlement("Settlement", 3)
-                        "4" -> importSettlement("Settlement", 4)
-                        else -> importSettlement("Settlement", 0)
+                    val result = newSettlementChoices()
+                    importSettlement(
+                        sceneName = result.name,
+                        terrain = result.terrain,
+                        waterBorders = result.waterBorders,
+                        type = SettlementType.SETTLEMENT,
+                    )
+                }
+            }
+
+            "create-capital" -> {
+                buildPromise {
+                    val heartland = getKingdom().getChosenHeartland()
+                    val terrain = when (heartland?.id) {
+                        "forest-or-swamp" -> SettlementTerrain.FOREST
+                        "hill-or-plain" -> SettlementTerrain.PLAINS
+                        "lake-or-river" -> SettlementTerrain.SWAMP
+                        "mountain-or-ruins" -> SettlementTerrain.MOUNTAINS
+                        else -> null
                     }
+                    val result = newSettlementChoices(terrain)
+                    importSettlement(
+                        sceneName = result.name,
+                        terrain = result.terrain,
+                        waterBorders = result.waterBorders,
+                        type = SettlementType.CAPITAL,
+                    )
                 }
             }
 
@@ -921,21 +944,33 @@ class KingdomSheet(
         }
     }
 
-    suspend fun importSettlement(sceneName: String, waterBorders: Int) {
-        game.importSettlementScene(sceneName)?.id?.let {
+    suspend fun importSettlement(
+        sceneName: String,
+        terrain: SettlementTerrain,
+        waterBorders: Int,
+        type: SettlementType,
+    ) {
+        val scene = game.importSettlementScene(
+            compendiumSceneName = "Settlement",
+            sceneName = sceneName,
+            terrain = terrain,
+            waterBorders = waterBorders,
+        )
+        scene?.id?.let {
             val kingdom = getKingdom()
             kingdom.settlements = kingdom.settlements + RawSettlement(
                 sceneId = it,
                 lots = 1,
                 level = 1,
-                type = "capital",
+                type = type.value,
                 secondaryTerritory = false,
                 manualSettlementLevel = false,
                 waterBorders = waterBorders,
             )
             kingdom.activeSettlement = it
             actor.setKingdom(kingdom)
-            ui.notifications.info("Imported a predefined scene as Capital")
+            ui.notifications.info("Imported and added ${type.label}")
+            scene.activate().await()
         }
     }
 
@@ -1262,6 +1297,7 @@ class KingdomSheet(
                     val size = kingdom.settlements.mapNotNull { game.scenes.get(it.sceneId) }.size
                     " ($size)"
                 }
+
                 MainNavEntry.MODIFIERS -> " (${kingdom.modifiers.size})"
                 else -> ""
             }

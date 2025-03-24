@@ -13,12 +13,16 @@ The source code is licensed under the AGPLv3 license, except for
 the [src/jsMain/kotlin/com/foundryvtt](./src/jsMain/kotlin/com/foundryvtt) folder which is licensed
 under [Apache License 2.0](./src/jsMain/kotlin/com/foundryvtt/LICENSE).
 
-All images in the [img/structures](./img/structures), [img/kingdom/backgrounds](./img/kingdom/backgrounds) and [img/camping/backgrounds](./img/camping/backgrounds) are
+All images in the [img/structures](./img/structures),  [img/kingdom/backgrounds](./img/kingdom/backgrounds) and [img/camping/backgrounds](./img/camping/backgrounds) are
 licensed under [CC0 - Public Domain](https://creativecommons.org/publicdomain/zero/1.0/)
 by [Mark Pearce](https://github.com/MarkPearce). They
 were [generated and retouched using a MidJourney subscriber account](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/76).
 According to their [Terms of Service](https://docs.midjourney.com/docs/terms-of-service), subscribers to MidJourney that
 are not part of a company own all the generated images.
+
+All images in [img/settlements/backgrounds](./img/settlements/backgrounds) are
+licensed under [CC0 - Public Domain](https://creativecommons.org/publicdomain/zero/1.0/)
+by dbavirt on Discord.
 
 ## Installation
 

@@ -154,7 +154,9 @@ A full structure rule would look something like this:
   "availableItemsRules": [
     {
       "value": 1,
-      "group": "luxury"
+      "group": "luxury",
+      "alwaysStacks": false,
+      "maximumStacks": 3
     }
   ],
   "settlementEventRules": [
@@ -247,7 +249,8 @@ A full structure rule would look something like this:
       *activityBonusRules**
 * **availableItemsRules**: optional, if given increase the item level for purchasing items in this settlement
     * **value**: mandatory, level increase
-    * **maximumStacks**: optional, up to how what maximum value buildings should stack
+    * **maximumStacks**: optional, defaults to 3; maximum number of allowed buildings to consider
+    * **alwaysStacks**: optional, false by default; if true, is not subjected to maximum stack rules and will always be added to existing value of its group
     * **group**: optional, if absent **stacks with everything else** up to 3 times, otherwise one of:
         * other
         * alchemical

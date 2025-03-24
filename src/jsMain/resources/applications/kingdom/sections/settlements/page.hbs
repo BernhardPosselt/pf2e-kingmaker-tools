@@ -1,7 +1,13 @@
 <div {{#if (ne currentNavEntry 'settlements')}}hidden{{/if}} class="km-kingdom-sheet-content">
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-settlements">
         <section>
-            <h2>Settlements  <span class="km-header-right-align"><button type="button" data-action="add-settlement" {{#unless canAddCurrentSceneAsSettlement}}disabled{{/unless}}>Add Current Scene</button> <button type="button" data-action="settlement-size-info" title="Settlement Size"><i class="fa-solid fa-circle-info"></i></button></span></h2>
+            <h2>Settlements  <span class="km-header-right-align">
+
+                <button type="button" data-action="create-settlement">New Settlement</button>
+
+                <button type="button" data-action="add-settlement" {{#unless canAddCurrentSceneAsSettlement}}disabled{{/unless}}>Add Current Scene</button>
+
+                <button type="button" data-action="settlement-size-info" title="Settlement Size"><i class="fa-solid fa-circle-info"></i></button></span></h2>
             <table>
                 <thead>
                 <tr>

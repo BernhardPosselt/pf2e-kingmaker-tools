@@ -96,41 +96,11 @@
     </section>
     <section class="km-kingdom-sheet-section">
         <h2>First Village</h2>
-        <p>First, import all Structures from the <b>Structures</b> compendium into your world:</p>
-        <button type="button" data-action="structures-import">Import Structures</button>
-        <p>Then, import a Settlement from the <b>Settlement Scenes</b> compendium. The Scene includes blocks, onto which
-            you can place your structures. That way, settlement level is automatically calculated for you. </p>
-        <ul>
-            <li>
-                <button type="button" data-action="settlement-import" data-water-borders="0">Import Settlement (0
-                    Water Borders)
-                </button>
-            </li>
-            <li>
-                <button type="button" data-action="settlement-import" data-water-borders="1">Import Settlement (1
-                    Water Borders)
-                </button>
-            </li>
-            <li>
-                <button type="button" data-action="settlement-import" data-water-borders="2">Import Settlement (2
-                    Water Borders)
-                </button>
-            </li>
-            <li>
-                <button type="button" data-action="settlement-import" data-water-borders="3">Import Settlement (3
-                    Water Borders)
-                </button>
-            </li>
-            <li>
-                <button type="button" data-action="settlement-import" data-water-borders="4">Import Settlement (4
-                    Water Borders)
-                </button>
-            </li>
-        </ul>
+        <p>First, <button class="km-inline-button" type="button" data-action="structures-import">Import All Structures</button> into your world.</p>
+        <p>Next, <button class="km-inline-button" type="button" data-action="create-capital">Create a Capital</button>. The Scene includes blocks, onto which you can place your structures to automatically calculate settlement level. Only visible blocks are included in the calculation. If you own the official module, a background image is automatically set based on the settlement's terrain. Feel free to contribute <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL</a> compatible settlement scenes for a better out-of-the-box experience for users who don't own the official module.</p>
         <p>Finally, place any existing structures onto the scene's blocks from the <b>Structures</b> folder in your
             actors directory.</p>
-        <p>If you want to use a different settlement scene, simply add it under the sheet's <b>Settlements</b> tab and
-            copy the block tiles onto it.</p>
+        <p>Further settlements can be added in the <b>Settlements</b> tab.</p>
     </section>
     <section class="km-kingdom-sheet-section">
         <h2>Fame or Infamy? <span class="km-header-right-align">{{> formElement fameContext.type}}</span></h2>

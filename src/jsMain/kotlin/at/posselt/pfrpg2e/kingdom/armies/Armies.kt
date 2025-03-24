@@ -9,6 +9,7 @@ import com.foundryvtt.core.utils.mergeObject
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import js.array.toTypedArray
 import js.objects.recordOf
+import js.reflect.Reflect
 import kotlinx.coroutines.await
 
 fun Game.getSelectedArmyConditions() =
@@ -58,7 +59,9 @@ suspend fun Game.importBasicArmies(folderName: String): Folder {
                 "permission" to 0,
                 "ownership" to recordOf("default" to 3),
             )
-            mergeObject(obj, update)
+            val merged = mergeObject(obj, update)
+            Reflect.deleteProperty(merged, "_id")
+            merged
         }
         ?.toTypedArray()
         ?: emptyArray()

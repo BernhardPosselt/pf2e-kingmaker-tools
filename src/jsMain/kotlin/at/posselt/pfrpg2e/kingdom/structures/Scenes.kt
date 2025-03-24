@@ -1,13 +1,16 @@
 package at.posselt.pfrpg2e.kingdom.structures
 
 import at.posselt.pfrpg2e.Config
+import at.posselt.pfrpg2e.actor.isKingmakerInstalled
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
+import at.posselt.pfrpg2e.kingdom.SettlementTerrain
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.SettlementData
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateSettlement
 import at.posselt.pfrpg2e.kingdom.scenes.toRectangle
 import at.posselt.pfrpg2e.utils.getAppFlag
+import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.documents.TileDocument
@@ -15,6 +18,7 @@ import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.core.utils.mergeObject
 import js.objects.recordOf
+import js.reflect.Reflect
 import kotlinx.coroutines.await
 import kotlin.math.max
 import kotlin.math.min
@@ -64,8 +68,14 @@ fun Scene.parseSettlement(
     allStructuresStack: Boolean,
     allowCapitalInvestmentInCapitalWithoutBank: Boolean,
 ): Settlement {
-    val occupiedBlocks = if (autoCalculateSettlementLevel && rawSettlement.manualSettlementLevel != true) max(0, calculateOccupiedBlocks()) else rawSettlement.lots
-    val settlementLevel = if (autoCalculateSettlementLevel && rawSettlement.manualSettlementLevel != true) min(20, occupiedBlocks) else rawSettlement.level
+    val occupiedBlocks = if (autoCalculateSettlementLevel && rawSettlement.manualSettlementLevel != true) max(
+        0,
+        calculateOccupiedBlocks()
+    ) else rawSettlement.lots
+    val settlementLevel = if (autoCalculateSettlementLevel && rawSettlement.manualSettlementLevel != true) min(
+        20,
+        occupiedBlocks
+    ) else rawSettlement.level
     return evaluateSettlement(
         data = SettlementData(
             id = rawSettlement.sceneId,
@@ -83,22 +93,42 @@ fun Scene.parseSettlement(
     )
 }
 
-suspend fun Game.importSettlementScene(sceneName: String): Scene? {
+suspend fun Game.importSettlementScene(
+    compendiumSceneName: String,
+    sceneName: String,
+    terrain: SettlementTerrain,
+    waterBorders: Int,
+): Scene? {
     val data = packs.get("${Config.moduleId}.kingmaker-tools-settlements")
         ?.getDocuments()
         ?.await()
         ?.asSequence()
         ?.filterIsInstance<Scene>()
-        ?.find { it.name == sceneName }
+        ?.find { it.name == compendiumSceneName }
         ?.let {
             val obj = deepClone(it.toObject())
+            Reflect.deleteProperty(obj, "_id")
             val update = recordOf(
-                "name" to "Capital",
+                "name" to sceneName,
                 "permission" to 0,
                 "navigation" to true,
                 "ownership" to recordOf("default" to 2),
             )
+            if (isKingmakerInstalled) {
+                update["background"] = recordOf(
+                    "src" to "modules/pf2e-kingmaker/assets/maps-settlements/maps/${terrain.value}-${waterBorders}a.webp",
+                )
+            } else {
+                update["background"] = recordOf(
+                    "src" to "modules/pf2e-kingmaker-tools/img/settlements/backgrounds/${terrain.value}-${waterBorders}.webp",
+                )
+            }
             mergeObject(obj, update)
         }
-    return data?.let { Scene.create(data).await() }
+    return data?.let {
+        val scene = Scene.create(data).await()
+        val thumbnail = scene.createThumbnail().await()
+        scene.typeSafeUpdate { thumb = thumbnail.thumb }
+        scene
+    }
 }

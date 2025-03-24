@@ -1,6 +1,13 @@
 package com.foundryvtt.core.documents
 
-import com.foundryvtt.core.*
+import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.CreateDocumentCallback
+import com.foundryvtt.core.DeleteDocumentCallback
+import com.foundryvtt.core.HooksEventListener
+import com.foundryvtt.core.PreCreateDocumentCallback
+import com.foundryvtt.core.PreDeleteDocumentCallback
+import com.foundryvtt.core.PreUpdateDocumentCallback
+import com.foundryvtt.core.UpdateDocumentCallback
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.collections.EmbeddedCollection
@@ -49,6 +56,14 @@ external interface SceneInitial {
     val x: Int?
     val y: Int?
     val scale: Double?
+}
+
+@JsPlainObject
+external interface Thumbnail {
+    val thumb: String
+    val width: Int
+    val height: Int
+    // TODO: src, texture
 }
 
 @JsPlainObject
@@ -129,7 +144,7 @@ external class Scene : ClientDocument {
     fun activate(): Promise<Unit>
     fun view(): Promise<Unit>
     fun getDimensions(): SceneDimensions
-    fun createThumbnail(options: CreateThumbnailOptions = definedExternally): Promise<AnyObject>
+    fun createThumbnail(options: CreateThumbnailOptions = definedExternally): Promise<Thumbnail>
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")

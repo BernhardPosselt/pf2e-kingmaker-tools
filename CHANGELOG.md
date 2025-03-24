@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2025-03-24
+
+### Added
+
+* You can now create new settlement scenes in the Settlements tab. Those will pull in backgrounds kindly provided by dbavirt from Discord if you don't have the official module installed; otherwise, the official module's settlement scenes will be used
+
+
 ## [4.0.10] - 2025-03-22
 
 ### Fixed
