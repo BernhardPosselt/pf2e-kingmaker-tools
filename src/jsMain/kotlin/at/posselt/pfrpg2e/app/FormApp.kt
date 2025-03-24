@@ -103,17 +103,24 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
     override fun onSubmit(event: Event, form: HTMLFormElement, formData: FormDataExtended<AnyObject>): Promise<Void> =
         buildPromise {
             val value = formData.`object`
-            val htmlFormValid = form.reportValidity()
+            isFormValid = form.reportValidity()
             if (debug) {
                 console.log("Received ${JSON.stringify(value)}")
-                console.log("Form is ${if (htmlFormValid) "valid" else "invalid"}")
+                console.log("Form is ${if (isFormValid) "valid" else "invalid"}")
             }
             val parsedData = parseFormData<O>(value, ::fixObject)
             if (debug) {
                 console.log("Parsed object ${JSON.stringify(parsedData)}")
             }
-            val model = dataModel?.newInstance(arrayOf(parsedData))
-            isFormValid = (model?.invalid != true) && htmlFormValid
+            val model = try {
+                dataModel?.newInstance(arrayOf(parsedData))
+            } catch (e: Throwable) {
+                if (debug) {
+                    console.log(e)
+                }
+                isFormValid = false
+                null
+            }
             val dataModelData = model
                 ?.toObject()
                 ?.unsafeCast<O>()

@@ -13,7 +13,7 @@ external interface DataValidationOptions {
 
 @JsPlainObject
 external interface DocumentConstructionContext {
-    val parent: Document
+    val parent: Document?
     val strict: Boolean?
     val options: DataValidationOptions?
 }

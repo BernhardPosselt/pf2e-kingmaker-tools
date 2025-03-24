@@ -143,7 +143,7 @@ class Schema {
         val options = if (nullable) {
             StringFieldOptions(nullable = true, initial = null, blank = false)
         } else {
-            StringFieldOptions(required = true)
+            StringFieldOptions(required = true, nullable=false)
         }
         block?.invoke(options)
         fields[name] = StringField(options = options, context = context)
@@ -159,7 +159,7 @@ class Schema {
         val options = if (nullable) {
             StringFieldOptions(nullable = true, initial = null, blank = false, choices = choices)
         } else {
-            StringFieldOptions(required = true, choices = choices)
+            StringFieldOptions(required = true, nullable=false, choices = choices)
         }
         block.invoke(options)
         fields[name] = StringField(options = options, context = context)
@@ -174,7 +174,7 @@ class Schema {
         val options = if (nullable) {
             NumberFieldOptions(nullable = true, initial = null, integer = true)
         } else {
-            NumberFieldOptions(required = true, integer = true)
+            NumberFieldOptions(required = true, nullable=false, integer = true)
         }
         block?.invoke(options)
         fields[name] = NumberField(options = options, context = context)
@@ -189,7 +189,7 @@ class Schema {
         val options = if (nullable) {
             NumberFieldOptions(nullable = true, initial = null)
         } else {
-            NumberFieldOptions(required = true)
+            NumberFieldOptions(required = true, nullable=false)
         }
         block?.invoke(options)
         fields[name] = NumberField(options = options, context = context)
@@ -200,7 +200,7 @@ class Schema {
         context: DataFieldContext<Boolean>? = undefined,
         block: (DataFieldOptions/*<Boolean>*/.() -> Unit)? = null,
     ) {
-        val options = DataFieldOptions/*<Boolean>*/(required = true)
+        val options = DataFieldOptions/*<Boolean>*/(required = true, nullable=false)
         block?.invoke(options)
         fields[name] = BooleanField(options = options, context = context)
     }
@@ -268,7 +268,7 @@ class Schema {
             options?.copy(nullable = true, initial = null)
                 ?: DataFieldOptions(nullable = true, initial = null)
         } else {
-            options?.copy(required = true) ?: DataFieldOptions(required = true)
+            options?.copy(required = true, nullable=false) ?: DataFieldOptions(required = true, nullable=false)
         }
         fields[name] = SchemaField(
             fields = schema.build(),
@@ -282,7 +282,7 @@ class Schema {
         context: DataFieldContext<AnyObject>? = undefined,
         block: (DataFieldOptions/*<AnyObject>*/.() -> Unit)? = null,
     ) {
-        val options = DataFieldOptions/*<AnyObject>*/(required = true)
+        val options = DataFieldOptions/*<AnyObject>*/(required = true, nullable=false)
         block?.invoke(options)
         fields[name] = ObjectField(options = options, context = context)
     }
