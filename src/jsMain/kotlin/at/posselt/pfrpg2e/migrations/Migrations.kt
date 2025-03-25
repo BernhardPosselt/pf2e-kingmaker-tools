@@ -76,9 +76,9 @@ suspend fun createPartyActor(index: Int): PF2EParty {
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     val currentVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
     console.log("${Config.moduleName}: Upgrading from $currentVersion to $latestMigrationVersion")
-    if (currentVersion < 6) {
+    if (currentVersion < 9) {
         ui.notifications.error(
-            "${Config.moduleName}: Upgrades from versions prior to 0.12.2 are not supported anymore. " +
+            "${Config.moduleName}: Upgrades from versions prior to 1.1.1 are not supported anymore. " +
                     "Please upgrade to 1.1.1 first"
         )
         return
