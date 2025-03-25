@@ -31,6 +31,7 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import js.core.Void
@@ -117,7 +118,10 @@ external interface StructureBrowserData {
 }
 
 @JsExport
-class StructureBrowserDataModel(value: AnyObject) : DataModel(value) {
+class StructureBrowserDataModel(
+    value: AnyObject,
+    options: DocumentConstructionContext?
+) : DataModel(value, options) {
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {

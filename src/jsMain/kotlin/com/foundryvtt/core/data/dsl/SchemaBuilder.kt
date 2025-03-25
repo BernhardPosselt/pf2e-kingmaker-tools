@@ -36,7 +36,10 @@ import kotlin.enums.enumEntries
  *     proxyRandomEncounterTableUuid: StringField({required: false, blank: false, initial: null, nullable: true})
  *
  * Usage:
- * class CampingSettingsDataModel(value: AnyObject) : DataModel(value) {
+ * class CampingSettingsDataModel(
+ *     value: AnyObject,
+ *     options: DocumentConstructionContext
+ * ) : DataModel(value, options) {
  *     companion object {
  *         @Suppress("unused")
  *         @JsStatic

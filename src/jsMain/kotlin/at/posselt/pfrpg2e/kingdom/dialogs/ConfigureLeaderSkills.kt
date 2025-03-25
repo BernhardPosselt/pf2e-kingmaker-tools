@@ -21,6 +21,7 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.ui
@@ -112,7 +113,10 @@ private fun LeaderSkillsData.toSkills(attributes: Array<Attribute>): RawLeaderSk
     )
 
 @JsExport
-class ConfigureLeaderSkillsModel(val value: AnyObject) : DataModel(value) {
+class ConfigureLeaderSkillsModel(
+    value: AnyObject,
+    options: DocumentConstructionContext?
+) : DataModel(value, options) {
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {

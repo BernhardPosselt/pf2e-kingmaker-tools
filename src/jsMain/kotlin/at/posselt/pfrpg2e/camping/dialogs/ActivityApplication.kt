@@ -36,6 +36,7 @@ import at.posselt.pfrpg2e.utils.without
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.documents.JournalEntry
@@ -76,7 +77,10 @@ external interface ActivitySubmitData {
 }
 
 @JsExport
-class ActivityDataModel(value: AnyObject) : DataModel(value) {
+class ActivityDataModel(
+    value: AnyObject,
+    options: DocumentConstructionContext?
+) : DataModel(value, options) {
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {

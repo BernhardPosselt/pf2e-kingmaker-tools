@@ -27,6 +27,7 @@ import at.posselt.pfrpg2e.utils.fromUuidsOfTypes
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.documents.Playlist
@@ -67,7 +68,10 @@ external interface CampingSettings {
 }
 
 @JsExport
-class CampingSettingsDataModel(value: AnyObject) : DataModel(value) {
+class CampingSettingsDataModel(
+    value: AnyObject,
+    options: DocumentConstructionContext?
+) : DataModel(value, options) {
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {

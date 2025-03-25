@@ -6,10 +6,14 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.data.dsl.buildSchema
 
 @JsExport
-class KingdomSheetDataModel(val value: AnyObject) : DataModel(value) {
+class KingdomSheetDataModel(
+    value: AnyObject,
+    options: DocumentConstructionContext?
+) : DataModel(value, options) {
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {

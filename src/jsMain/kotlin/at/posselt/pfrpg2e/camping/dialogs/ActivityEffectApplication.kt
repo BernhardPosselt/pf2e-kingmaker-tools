@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.deepClone
@@ -30,7 +31,10 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
 @JsExport
-class ActivityEffectDataModel(value: AnyObject) : DataModel(value) {
+class ActivityEffectDataModel(
+    value: AnyObject,
+    options: DocumentConstructionContext?
+) : DataModel(value, options) {
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {

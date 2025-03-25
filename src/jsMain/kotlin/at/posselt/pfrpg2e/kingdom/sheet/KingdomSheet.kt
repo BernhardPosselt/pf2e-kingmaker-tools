@@ -1012,6 +1012,7 @@ class KingdomSheet(
             value = kingdom.name,
             elementClasses = listOf("km-width-medium"),
             labelClasses = listOf("km-slim-inputs"),
+            required = false,
             stacked = false,
         )
         val settlementInput = Select(

@@ -23,6 +23,7 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatAsModifier
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import js.array.tupleOf
@@ -35,7 +36,10 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
 @JsExport
-class ModifierModel(val value: AnyObject) : DataModel(value) {
+class ModifierModel(
+    value: AnyObject,
+    options: DocumentConstructionContext?
+) : DataModel(value, options) {
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {

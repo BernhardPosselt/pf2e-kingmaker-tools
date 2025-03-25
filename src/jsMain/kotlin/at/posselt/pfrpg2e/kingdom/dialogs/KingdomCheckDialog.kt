@@ -64,6 +64,7 @@ import at.posselt.pfrpg2e.utils.serializeB64Json
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import io.github.uuidjs.uuid.v4
@@ -167,7 +168,10 @@ private external interface CheckData {
 }
 
 @JsExport
-class CheckModel(val value: AnyObject) : DataModel(value) {
+class CheckModel(
+    value: AnyObject,
+    options: DocumentConstructionContext?
+) : DataModel(value, options) {
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {
