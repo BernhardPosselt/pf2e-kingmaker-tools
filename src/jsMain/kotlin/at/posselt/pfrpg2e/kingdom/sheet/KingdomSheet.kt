@@ -1280,7 +1280,7 @@ class KingdomSheet(
             skillChecks = checks,
             automateResources = automateResources,
             useLeadershipModifiers = kingdom.settings.enableLeadershipModifiers,
-            activeSettlementType = settlements.current?.size?.type?.value ?: "village",
+            activeSettlementType = settlements.current?.size?.type?.value ?: "none",
             actorUuid = actor.uuid,
         )
     }

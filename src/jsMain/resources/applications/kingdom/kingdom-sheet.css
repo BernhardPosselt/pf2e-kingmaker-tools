@@ -120,6 +120,10 @@
         }
     }
 
+    .km-kingdom-sheet-main[data-settlement-type="none"] {
+        background-image: url("../../../img/camping/backgrounds/hills-day.webp");
+    }
+
     .km-kingdom-sheet-main[data-settlement-type="village"] {
         background-image: url("../../../img/kingdom/backgrounds/village.webp");
     }
