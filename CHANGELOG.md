@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Do not render leader types when leadership modifiers are disabled
 * Remove wink to contribute settlement scenes since those have been contributed
 * If no settlement is selected, swap in a non settlement bg image
+* Improve usage documentation in the creation tab
 
 
 ## [4.1.2] - 2025-03-24
