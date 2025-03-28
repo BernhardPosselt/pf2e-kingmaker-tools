@@ -12,6 +12,11 @@ import at.posselt.pfrpg2e.kingdom.data.RawLeaderValues
 import at.posselt.pfrpg2e.kingdom.data.RawLeaders
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.LeaderBonuses
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import kotlinx.browser.document
+import kotlinx.html.b
+import kotlinx.html.classes
+import kotlinx.html.dom.create
+import kotlinx.html.js.span
 import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
@@ -41,6 +46,13 @@ fun RawLeaderValues.toContext(
     bonus: Int,
 ): LeaderValuesContext {
     val leaderActorName = leaderActor?.name
+    val label = document.create.span {
+        classes = setOf("km-leader-vacant-label")
+        b {
+            +leader.label
+        }
+        +(leaderActorName?.let { ": $it" } ?: "")
+    }
     return LeaderValuesContext(
         label = leader.label,
         actor = leaderActor?.let { actor ->
@@ -65,7 +77,7 @@ fun RawLeaderValues.toContext(
             escapeLabel = false,
             value = vacant || uuid == null,
             name = "leaders.${leader.value}.vacant",
-            label = "<span class=\"km-leader-vacant-label\"><b>${leader.label}</b>${(leaderActorName?.let { ": $it" } ?: "")}</span>",
+            label = label.outerHTML,
         ).toContext(),
         type = Select.fromEnum<LeaderType>(
             name = "leaders.${leader.value}.type",
