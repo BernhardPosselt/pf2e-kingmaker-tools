@@ -17,10 +17,10 @@
     </section>
     <section class="km-kingdom-sheet-section">
         <h2>Choose a Heartland <span class="km-header-right-align">{{> formElement heartland.type}}</span></h2>
-        <p>The PCs can choose any hex that they have Reconnoitered. Note that terrain features
+        {{#unless heartland.description}}<p>The PCs can choose any hex that they have Reconnoitered. Note that terrain features
             can grant other benefits to the kingdom when claimed. The choice of terrain made here influences how the
-            Favored Land kingdom ability functions.</p>
-        {{#if heartland.description}}<hr><p>{{heartland.description}}</p>
+            Favored Land kingdom ability functions (see section <b>1</b> next to the <b>Creation</b> section).</p>{{/unless}}
+        {{#if heartland.description}}<p>{{heartland.description}}</p>
             <hr>{{/if}}
         {{#if heartland.description}}<p><b>Ability Boost</b>: {{heartland.boost}}</p>{{/if}}
     </section>

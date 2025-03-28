@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.4] - 2025-03-28
+
+### Fixed
+
+* Improve heartland guidance
+
+
 ## [4.2.3] - 2025-03-28
 
 ### Fixed
