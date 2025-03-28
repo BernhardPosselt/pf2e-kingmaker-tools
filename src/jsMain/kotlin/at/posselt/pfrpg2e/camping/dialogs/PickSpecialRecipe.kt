@@ -70,7 +70,6 @@ suspend fun pickSpecialRecipe(
                         checked = index == 0,
                         value = recipe.name,
                         label = recipe.name,
-                        escapeLabel = false,
                         hideLabel = true,
                     ).toContext(),
                 )
