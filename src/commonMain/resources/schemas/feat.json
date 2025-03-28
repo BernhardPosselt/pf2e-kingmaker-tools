@@ -24,6 +24,9 @@
         "level": {
           "type": "number"
         },
+        "increaseGainedLuxuriesOncePerTurnBy": {
+          "type": "number"
+        },
         "text": {
           "type": "string"
         },
@@ -206,6 +209,21 @@
             "leadership"
           ]
         },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["note"],
+            "properties": {
+              "note": {
+                "type": "string"
+              },
+              "degree": {
+                "$ref": "#/$defs/DegreeOfSuccess"
+              }
+            }
+          }
+        },
         "upgradeResults": {
           "type": "array",
           "items": {
@@ -264,13 +282,7 @@
       ],
       "properties": {
         "downgrade": {
-          "type": "string",
-          "enum": [
-            "criticalSuccess",
-            "success",
-            "failure",
-            "criticalFailure"
-          ]
+          "$ref": "#/$defs/DegreeOfSuccess"
         },
         "times": {
           "type": "number"
@@ -294,13 +306,7 @@
           "type": "number"
         },
         "upgrade": {
-          "type": "string",
-          "enum": [
-            "criticalSuccess",
-            "success",
-            "failure",
-            "criticalFailure"
-          ]
+          "$ref": "#/$defs/DegreeOfSuccess"
         },
         "predicate": {
           "type": "array",
@@ -625,6 +631,15 @@
         "trade",
         "warfare",
         "wilderness"
+      ]
+    },
+    "DegreeOfSuccess": {
+      "type": "string",
+      "enum": [
+        "criticalSuccess",
+        "success",
+        "failure",
+        "criticalFailure"
       ]
     }
   }

@@ -2,9 +2,10 @@
     <section class="km-kingdom-sheet-section">
         <h2>Add Bonus Feat <span class="km-header-right-align">{{> formElement bonusFeat.feat}}</span></h2>
         {{#if bonusFeat.description}}
-            <details>
+            <details open>
                 <summary>{{bonusFeat.name}}</summary>
                 <p class="km-detail-description">{{bonusFeat.description}}</p>
+                {{#if bonusFeat.automationNotes}}<p><b>Automation Notes:</b> {{bonusFeat.automationNotes}}</p>{{/if}}
             </details>
             <p>
                 <button type="button"

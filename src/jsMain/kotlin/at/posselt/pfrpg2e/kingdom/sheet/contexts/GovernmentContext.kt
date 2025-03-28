@@ -19,6 +19,7 @@ external interface GovernmentContext {
     val feat: String
     val boosts: String
     val featDescription: String
+    val featAutomationNotes: String?
 }
 
 fun RawGovernmentChoices.toContext(
@@ -44,6 +45,7 @@ fun RawGovernmentChoices.toContext(
         skills = government?.skillProficiencies?.joinToString(", ") { it.toLabel() } ?: "",
         feat = feat?.name ?: "",
         featDescription = feat?.text ?: "",
+        featAutomationNotes = feat?.automationNotes,
         abilityBoosts = abilityBoosts.toContext(
             prefix = "government.",
             free = government?.freeBoosts ?: 0,

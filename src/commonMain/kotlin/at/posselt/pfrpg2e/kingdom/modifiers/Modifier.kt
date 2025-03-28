@@ -19,4 +19,5 @@ data class Modifier(
     val rollTwiceKeepLowest: Boolean = false,
     val upgradeResults: List<UpgradeResult> = emptyList(),
     val downgradeResults: List<DowngradeResult> = emptyList(),
+    val notes: Set<Note> = emptySet(),
 )

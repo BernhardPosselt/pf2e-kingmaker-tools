@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
@@ -12,6 +13,7 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.data.getChosenHeartland
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
+import at.posselt.pfrpg2e.kingdom.modifiers.Note
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.GlobalStructureBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.MergedSettlement
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
@@ -112,6 +114,13 @@ external interface RawCase {
 }
 
 @JsPlainObject
+external interface RawNote {
+    var degree: String?
+    var note: String
+}
+
+
+@JsPlainObject
 external interface RawModifier {
     var id: String?
     var type: String
@@ -129,6 +138,7 @@ external interface RawModifier {
     var rollTwiceKeepHighest: Boolean?
     var upgradeResults: Array<RawUpgradeResult>?
     var downgradeResults: Array<RawDowngradeResult>?
+    var notes: Array<RawNote>?
 }
 
 fun RawExpression<Boolean>.parse(): Expression<Boolean> {
@@ -190,6 +200,12 @@ fun RawExpression<Any?>.parse(): When {
     }
 }
 
+fun RawNote.parse(): Note =
+    Note(degree = degree?.let(DegreeOfSuccess::fromString), note = note)
+
+fun Note.serialize(): RawNote =
+    RawNote(degree = degree?.value, note = note)
+
 fun RawModifier.parse(): Modifier =
     Modifier(
         id = id ?: v4(),
@@ -207,6 +223,7 @@ fun RawModifier.parse(): Modifier =
         fortune = fortune == true,
         upgradeResults = upgradeResults?.mapNotNull { it.parse() }.orEmpty(),
         downgradeResults = downgradeResults?.mapNotNull { it.parse() }.orEmpty(),
+        notes = notes?.map { it.parse() }?.toSet().orEmpty()
     )
 
 suspend fun KingdomData.checkModifiers(

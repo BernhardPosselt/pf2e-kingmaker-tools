@@ -25,6 +25,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawActivity
+import at.posselt.pfrpg2e.kingdom.RawNote
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmies
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmyConditions
 import at.posselt.pfrpg2e.kingdom.checkModifiers
@@ -42,6 +43,7 @@ import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
+import at.posselt.pfrpg2e.kingdom.modifiers.Note
 import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
@@ -49,9 +51,11 @@ import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
+import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseModifiers
 import at.posselt.pfrpg2e.kingdom.parseSkillRanks
 import at.posselt.pfrpg2e.kingdom.resolveDc
+import at.posselt.pfrpg2e.kingdom.serialize
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.skillRanks
 import at.posselt.pfrpg2e.kingdom.vacancies
@@ -143,6 +147,7 @@ private external interface CheckContext : ValidatedHandlebarsContext {
     val rollTwiceKeepHighest: Boolean
     val rollTwiceKeepLowest: Boolean
     val supernaturalSolutionDisabled: Boolean
+    val notes: String
 }
 
 @JsPlainObject
@@ -308,6 +313,7 @@ private class KingdomCheckDialog(
                         creativeSolutionPills = emptyArray(),
                         consumedModifiers = emptySet(),
                         assurance = true,
+                        notes = emptySet(),
                     )
                 }
             }
@@ -328,6 +334,7 @@ private class KingdomCheckDialog(
                                 ?.let { UpgradeResult(upgrade = it, times = el.times) }
                         }
                         .toSet()
+                    val notes = deserializeB64Json<Array<RawNote>>(target.dataset["notes"]!!).map { it.parse() }.toSet()
                     val downgrades = deserializeB64Json<Array<SerializedDegree>>(target.dataset["downgrades"]!!)
                         .mapNotNull { el ->
                             DegreeOfSuccess.fromString(el.degree)
@@ -348,6 +355,7 @@ private class KingdomCheckDialog(
                         creativeSolutionPills = creativeSolutionPills,
                         consumedModifiers = consumedModifiers,
                         assurance = false,
+                        notes = notes,
                     )
                 }
             }
@@ -392,6 +400,7 @@ private class KingdomCheckDialog(
         rollTwiceKeepHighest: Boolean,
         rollTwiceKeepLowest: Boolean,
         assurance: Boolean,
+        notes: Set<Note>,
     ) {
         rollCheck(
             afterRoll = afterRoll,
@@ -412,6 +421,7 @@ private class KingdomCheckDialog(
             degreeMessages = degreeMessages,
             useFameInfamy = false,
             assurance = assurance,
+            notes = notes,
         )
         if (data.supernaturalSolution && !data.assurance) {
             KingdomCheckDialog(
@@ -493,6 +503,8 @@ private class KingdomCheckDialog(
         val creativeSolutionPills = serializeB64Json(creativeSolutionModifiers.modifiers.map {
             "${it.name} ${it.value.formatAsModifier()}"
         }.toTypedArray())
+        val notes = serializeB64Json(enabledModifiers.flatMap { it.notes.map { it.serialize() } }.toTypedArray())
+        console.log(enabledModifiers.flatMap { it.notes.map { it.serialize() } }.toTypedArray())
         val checkModifier = if (data.assurance) {
             evaluatedModifiers.assurance
         } else {
@@ -608,6 +620,7 @@ private class KingdomCheckDialog(
             consumeModifiers = serializeB64Json(consumeModifierIds),
             rollTwiceKeepHighest = evaluatedModifiers.rollTwiceKeepHighest,
             rollTwiceKeepLowest = evaluatedModifiers.rollTwiceKeepLowest,
+            notes = notes,
         )
     }
 

@@ -47,6 +47,7 @@
         <div class="km-check-roll-mode">{{> formElement rollModeInput }}</div>
         <button
                 {{#if useAssurance}}hidden{{/if}}
+                data-notes="{{notes}}"
                 data-action="roll"
                 data-modifier="{{checkModifier}}"
                 data-pills="{{pills}}"

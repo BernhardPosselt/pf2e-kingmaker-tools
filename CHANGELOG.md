@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2025-03-28
+
+### Changed
+
+* Always expand Bonus Feat description
+* Display automation notes for feats during selection
+* Add note about Hire Adventurers about Practical Magical price reduction
+* Increase luxuries gained during collect resources activity by 1 if Quality of Life is taken
+* Display Gain 1 Resource Dice Next Turn button when Fame and Fortune feat is taken
+
 ## [4.1.3] - 2025-03-28
 
 ### Fixed

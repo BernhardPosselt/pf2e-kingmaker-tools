@@ -26,11 +26,13 @@ suspend fun collectResources(
     kingdomData: KingdomData,
     realmData: RealmData,
     resourceDice: Int,
+    increaseGainedLuxuries: Int,
     settlements: List<Settlement>,
 ): Income {
     val income = calculateIncome(
         realmData = realmData,
         resourceDice = resourceDice,
+        increaseGainedLuxuries = increaseGainedLuxuries,
     )
     val rolledRp = roll(income.resourcePointsFormula, flavor = "Gaining Resource Points")
     postChatTemplate(

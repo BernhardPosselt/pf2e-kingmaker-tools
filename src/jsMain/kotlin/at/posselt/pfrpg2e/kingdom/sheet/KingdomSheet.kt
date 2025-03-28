@@ -753,6 +753,7 @@ class KingdomSheet(
                             settlements.allSettlements,
                             kingdomLevel = kingdom.level,
                         ),
+                        increaseGainedLuxuries = chosenFeats.sumOf { it.feat.increaseGainedLuxuriesOncePerTurnBy ?: 0 },
                         settlements = settlements.allSettlements,
                     )
                     kingdom.resourcePoints.now = resources.resourcePoints

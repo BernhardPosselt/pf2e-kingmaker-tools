@@ -98,6 +98,21 @@
             "leadership"
           ]
         },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["note"],
+            "properties": {
+              "note": {
+                "type": "string"
+              },
+              "degree": {
+                "$ref": "#/$defs/DegreeOfSuccess"
+              }
+            }
+          }
+        },
         "downgradeResults": {
           "type": "array",
           "items": {
@@ -165,13 +180,7 @@
           "type": "number"
         },
         "downgrade": {
-          "type": "string",
-          "enum": [
-            "criticalSuccess",
-            "success",
-            "failure",
-            "criticalFailure"
-          ]
+          "$ref": "#/$defs/DegreeOfSuccess"
         }
       }
     },
@@ -186,13 +195,7 @@
           "type": "number"
         },
         "upgrade": {
-          "type": "string",
-          "enum": [
-            "criticalSuccess",
-            "success",
-            "failure",
-            "criticalFailure"
-          ]
+          "$ref": "#/$defs/DegreeOfSuccess"
         }
       }
     },
@@ -486,6 +489,15 @@
         {
           "type": "boolean"
         }
+      ]
+    },
+    "DegreeOfSuccess": {
+      "type": "string",
+      "enum": [
+        "criticalSuccess",
+        "success",
+        "failure",
+        "criticalFailure"
       ]
     }
   }

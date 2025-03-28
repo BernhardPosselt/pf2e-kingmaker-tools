@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.dialogs.DegreeMessages
 import at.posselt.pfrpg2e.kingdom.dialogs.rollCheck
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
+import at.posselt.pfrpg2e.kingdom.modifiers.Note
 import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
@@ -45,6 +46,7 @@ private external interface RollMetaContext {
     val downgrades: String?
     val additionalChatMessages: String?
     val isCreativeSolution: Boolean
+    val notes: String?
 }
 
 private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
@@ -72,6 +74,7 @@ private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
         fortune = meta?.dataset["fortune"] == "true",
         modifierWithCreativeSolution = meta?.dataset["modifierWithCreativeSolution"]?.toInt() ?: 0,
         isCreativeSolution = false,
+        notes = meta?.dataset["notes"],
     )
 }
 
@@ -91,6 +94,7 @@ suspend fun generateRollMeta(
     additionalChatMessages: DegreeMessages?,
     upgrades: Set<UpgradeResult>,
     downgrades: Set<DowngradeResult>,
+    notes: Set<Note>,
 ): String {
     val upgradeData = upgrades
         .map { UpOrDowngrade(degree = it.upgrade.value, times = it.times) }
@@ -118,6 +122,7 @@ suspend fun generateRollMeta(
             pills = modifierPills,
             creativeSolutionPills = creativeSolutionPills,
             isCreativeSolution = isCreativeSolution,
+            notes = serializeB64Json(notes.map { it.serialize() }.toTypedArray()),
         ),
     )
 }
@@ -140,6 +145,7 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
     val upgrades = meta.upgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val downgrades = meta.downgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val degreeMessages = meta.additionalChatMessages?.let { deserializeB64Json<DegreeMessages>(it) }
+    val notes = meta.notes?.let { deserializeB64Json<Array<RawNote>>(it).map { it.parse() }.toSet() } ?: emptySet()
     rollCheck(
         afterRoll = {},
         rollMode = rollMode,
@@ -168,5 +174,6 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
         rollTwiceKeepLowest = mode == ReRollMode.ROLL_TWICE_KEEP_LOWEST,
         useFameInfamy = mode == ReRollMode.FAME_OR_INFAMY,
         assurance = false,
+        notes = notes,
     )
 }

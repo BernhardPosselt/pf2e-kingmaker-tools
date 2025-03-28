@@ -1,7 +1,18 @@
 {
     "id": "fame-and-fortune",
-    "automationNotes": "You do not get 1 extra RP at the start of your next turn on a critical success",
     "name": "Fame and Fortune",
     "level": 11,
-    "text": "Your kingdom’s reputation has spread far and wide, bringing in visitors to behold the spectacle of your greatness and pay their respects. Whenever you achieve a critical success on any Kingdom skill check during the Activity phase of a Kingdom turn, gain 1 bonus Resource Die at the start of your next Kingdom turn."
+    "text": "Your kingdom’s reputation has spread far and wide, bringing in visitors to behold the spectacle of your greatness and pay their respects. Whenever you achieve a critical success on any Kingdom skill check during the Activity phase of a Kingdom turn, gain 1 bonus Resource Die at the start of your next Kingdom turn.",
+    "modifiers": [{
+        "type": "untyped",
+        "name": "Fame & Fortune",
+        "applyIf": [{"in": ["@phase", ["leadership", "army", "region", "civic"]]}],
+        "value": 0,
+        "buttonLabel": "Gain additional RD when crit succeeding",
+        "enabled": true,
+        "notes":  [{
+          "degree": "criticalSuccess",
+          "note": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>"
+        }]
+    }]
 }

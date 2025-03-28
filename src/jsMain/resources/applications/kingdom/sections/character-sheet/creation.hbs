@@ -40,9 +40,11 @@
             <p><b>Skill Proficiencies</b>: {{government.skills}}</p>
         {{/if}}
         {{#if government.description}}
-            {{#unless government.feat}}<p><b>Feat disabled in Feat management!</b></p>{{/unless}}            <details {{# unless government.feat}}hidden{{/unless}}>
+            {{#unless government.feat}}<p><b>Feat disabled in Feat management!</b></p>{{/unless}}
+            <details {{# unless government.feat}}hidden{{/unless}} open>
                 <summary><b>Bonus Feat</b>: {{government.feat}}</summary>
                 <p class="km-detail-description">{{government.featDescription}}</p>
+                {{#if government.featAutomationNotes}}<p><b>Automation Notes:</b> {{government.featAutomationNotes}}</p>{{/if}}
             </details>
         {{/if}}
     </section>

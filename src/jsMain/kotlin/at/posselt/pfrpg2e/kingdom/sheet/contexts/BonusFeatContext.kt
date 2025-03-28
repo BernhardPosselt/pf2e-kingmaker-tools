@@ -17,6 +17,7 @@ external interface AddBonusFeatContext {
     val feat: FormElementContext
     val description: String
     val name: String
+    val automationNotes: String?
 }
 
 @Suppress("unused")
@@ -53,6 +54,7 @@ fun createBonusFeatContext(
             hideLabel = true,
         ).toContext(),
         description = feat?.text ?: "",
+        automationNotes = feat?.automationNotes,
         name = feat?.name ?: "",
     )
 }

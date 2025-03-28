@@ -64,6 +64,7 @@ external interface RawFeat {
     val flags: Array<String>?
     val increaseAnarchyLimit: Int?
     val ruinThresholdIncreases: Array<RawRuinThresholdIncreases>?
+    val increaseGainedLuxuriesOncePerTurnBy: Int?
 }
 
 fun RawFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =

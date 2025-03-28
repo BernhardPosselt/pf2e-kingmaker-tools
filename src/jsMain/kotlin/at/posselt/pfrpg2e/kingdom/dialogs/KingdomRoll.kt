@@ -6,13 +6,16 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.RawModifier
+import at.posselt.pfrpg2e.kingdom.RawNote
 import at.posselt.pfrpg2e.kingdom.UpgradeMetaContext
 import at.posselt.pfrpg2e.kingdom.generateRollMeta
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
+import at.posselt.pfrpg2e.kingdom.modifiers.Note
 import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
+import at.posselt.pfrpg2e.kingdom.serialize
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.deserializeB64Json
@@ -22,6 +25,7 @@ import at.posselt.pfrpg2e.utils.postDegreeOfSuccess
 import at.posselt.pfrpg2e.utils.serializeB64Json
 import at.posselt.pfrpg2e.utils.tpl
 import js.objects.JsPlainObject
+import js.objects.recordOf
 import kotlin.math.max
 
 
@@ -61,8 +65,6 @@ suspend fun buildChatButtons(
 }
 
 
-
-
 suspend fun rollCheck(
     afterRoll: AfterRoll,
     rollMode: RollMode?,
@@ -83,6 +85,7 @@ suspend fun rollCheck(
     degreeMessages: DegreeMessages?,
     useFameInfamy: Boolean,
     assurance: Boolean,
+    notes: Set<Note>,
 ): DegreeOfSuccess {
     val result = d20Check(
         dc = dc,
@@ -104,7 +107,7 @@ suspend fun rollCheck(
 
     if (useFameInfamy) {
         kingdomActor.getKingdom()?.let {
-            val fameType = if(it.fame.type == "famous") "Fame" else "Infamy"
+            val fameType = if (it.fame.type == "famous") "Fame" else "Infamy"
             postChatMessage("Reducing $fameType by 1")
             it.fame.now = max(0, it.fame.now - 1)
             kingdomActor.setKingdom(it)
@@ -131,6 +134,7 @@ suspend fun rollCheck(
         additionalChatMessages = degreeMessages,
         upgrades = upgrades,
         downgrades = downgrades,
+        notes = notes,
     )
     result.toChat(rollMeta)
     if (activity == null) {
@@ -146,6 +150,7 @@ suspend fun rollCheck(
             degree = originalDegree.value,
             additionalChatMessages = serializeB64Json(degreeMessages),
             actorUuid = kingdomActor.uuid,
+            notes = serializeB64Json(notes.map { it.serialize() }.toTypedArray()),
         )
         postActivityDegreeOfSuccess(context, changed)
     }
@@ -185,6 +190,15 @@ suspend fun postActivityDegreeOfSuccess(
     } else {
         ""
     }
+    val notesContext = metaContext.notes
+        ?.let { deserializeB64Json<Array<RawNote>>(it) }
+        ?.filter { it.degree == null || it.degree == changedDegreeOfSuccess.value }
+        ?.toTypedArray()
+        ?: emptyArray()
+    val notesHtml = tpl(
+        path = "chatmessages/roll-notes.hbs",
+        ctx = recordOf("notes" to notesContext)
+    )
     postDegreeOfSuccess(
         degreeOfSuccess = changedDegreeOfSuccess,
         originalDegreeOfSuccess = degree,
@@ -192,7 +206,7 @@ suspend fun postActivityDegreeOfSuccess(
         rollMode = rollMode,
         metaHtml = metaHtml,
         preHtml = "<p>${activity.description}</p>",
-        postHtml = postHtml,
+        postHtml = notesHtml + postHtml,
         message = modifiers?.msg,
     )
     if (messages != null) {

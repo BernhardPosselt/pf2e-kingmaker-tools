@@ -98,6 +98,7 @@ class ModifyFeat(
         flags = data?.flags,
         increaseAnarchyLimit = data?.increaseAnarchyLimit,
         ruinThresholdIncreases = data?.ruinThresholdIncreases,
+        increaseGainedLuxuriesOncePerTurnBy = data?.increaseGainedLuxuriesOncePerTurnBy,
     )
 
     init {
@@ -222,6 +223,7 @@ class ModifyFeat(
             trainSkill = current.trainSkill,
             assuranceForSkill = current.assuranceForSkill,
             increaseUsableSkills = current.increaseUsableSkills,
+            increaseGainedLuxuriesOncePerTurnBy = current.increaseGainedLuxuriesOncePerTurnBy,
             flags = value.flag?.takeIf { it.isNotEmpty() }?.let { arrayOf(it) } ?: emptyArray(),
             increaseAnarchyLimit = value.increaseAnarchyLimit,
             ruinThresholdIncreases = if (value.ruinThresholdIncreasesAmount > 0 || value.ruinThresholdIncreasesValue > 0) {

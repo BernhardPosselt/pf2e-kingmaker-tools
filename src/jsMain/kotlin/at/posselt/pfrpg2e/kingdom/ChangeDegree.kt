@@ -12,6 +12,7 @@ external interface UpgradeMetaContext {
     val activityId: String
     val degree: String
     val additionalChatMessages: String?
+    val notes: String?
     val actorUuid: String
 }
 
@@ -21,6 +22,7 @@ private fun parseUpgradeMeta(elem: HTMLElement) =
         activityId = elem.dataset["activityId"] ?: "",
         degree = elem.dataset["degree"] ?: "",
         additionalChatMessages = elem.dataset["additionalChatMessages"],
+        notes = elem.dataset["notes"],
         actorUuid = elem.dataset["kingdomActorUuid"] ?: "",
     )
 
