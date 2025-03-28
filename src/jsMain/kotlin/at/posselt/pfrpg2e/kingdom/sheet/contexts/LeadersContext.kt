@@ -38,6 +38,7 @@ external interface LeaderValuesContext {
     val invested: FormElementContext
     val type: FormElementContext
     val vacant: FormElementContext
+    val keyAbility: String
 }
 
 fun RawLeaderValues.toContext(
@@ -53,8 +54,10 @@ fun RawLeaderValues.toContext(
         }
         +(leaderActorName?.let { ": $it" } ?: "")
     }
+
     return LeaderValuesContext(
         label = leader.label,
+        keyAbility = leader.keyAbility.label,
         actor = leaderActor?.let { actor ->
             ActorLeaderContext(
                 uuid = actor.uuid,
@@ -71,7 +74,7 @@ fun RawLeaderValues.toContext(
         invested = CheckboxInput(
             value = invested && uuid != null,
             name = "leaders.${leader.value}.invested",
-            label = "Invested",
+            label = "Invest ${leader.keyAbility.label}",
         ).toContext(),
         vacant = CheckboxInput(
             escapeLabel = false,

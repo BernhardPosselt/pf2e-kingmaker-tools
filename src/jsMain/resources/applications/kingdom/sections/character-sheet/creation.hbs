@@ -17,7 +17,10 @@
     </section>
     <section class="km-kingdom-sheet-section">
         <h2>Choose a Heartland <span class="km-header-right-align">{{> formElement heartland.type}}</span></h2>
-        {{#if heartland.description}}<p>{{heartland.description}}</p>
+        <p>The PCs can choose any hex that they have Reconnoitered. Note that terrain features
+            can grant other benefits to the kingdom when claimed. The choice of terrain made here influences how the
+            Favored Land kingdom ability functions.</p>
+        {{#if heartland.description}}<hr><p>{{heartland.description}}</p>
             <hr>{{/if}}
         {{#if heartland.description}}<p><b>Ability Boost</b>: {{heartland.boost}}</p>{{/if}}
     </section>
@@ -51,7 +54,7 @@
     <section class="km-kingdom-sheet-section">
         <h2>Finalize Ability Scores</h2>
         <div class="km-choose-boosts">
-            <p>Pick {{abilityBoosts.free}} Boosts:</p>
+            <p><b>Pick {{abilityBoosts.free}} Boosts:</b></p>
             <ul>
                 <li>{{> formElement abilityBoosts.culture}}</li>
                 <li>{{> formElement abilityBoosts.economy}}</li>
@@ -62,7 +65,8 @@
     </section>
     <section class="km-kingdom-sheet-section">
         <h2>Choose Leaders</h2>
-        <p>Assign your leaders by drag and dropping <b>Character</b> or <b>NPC</b> actors from the sidebar onto each tile:</p>
+        <p>Assign your leaders by drag and dropping <b>Character</b> or <b>NPC</b> actors from the sidebar onto each tile.{{#if enableLeadershipModifiers}} Next, choose four leadership roles to invest. Investing a role provides a status bonus to Kingdom
+            skill checks based on that role's key ability.{{/if}}</p>
         <ul class="km-choose-leaders">
             {{#each leadersContext}}
                 <li data-leader="{{leader}}">
@@ -85,7 +89,7 @@
                 </li>
             {{/each}}
         </ul>
-        <p>Then pick 4 Skills to train:</p>
+        <p>Then, each of the four invested leaders chooses to apply the trained proficiency rank to a different Kingdom to a different skill. These proficiency ranks cannot be reassigned later.</p>
         <div class="km-choose-skills">
             <ul>
                 {{#each initialProficiencies}}
@@ -99,9 +103,10 @@
     <section class="km-kingdom-sheet-section">
         <h2>First Village</h2>
         <p>First, <button class="km-inline-button" type="button" data-action="structures-import">Import All Structures</button> into your world.</p>
-        <p>Next, <button class="km-inline-button" type="button" data-action="create-capital">Create a Capital</button>. The Scene includes blocks, onto which you can place your structures to automatically calculate settlement level. Only visible blocks are included in the calculation. If you own the official module, a background image is automatically set based on the settlement's terrain.</p>
+        <p>Next, <button class="km-inline-button" type="button" data-action="create-capital">Create a Capital</button> within your Heartland's terrain. The Scene includes blocks, onto which you can place your structures to automatically calculate settlement level. Only visible blocks are included in the calculation.</p>
         <img src="modules/pf2e-kingmaker-tools/img/kingdom/docs/settlement.webp" alt="structures on blocks">
-        <p>Finally, place any existing structures onto the scene's blocks from the <b>Structures</b> folder in your
+        <p>Since this is their first village, the PCs gain 40 kingdom XP as a milestone award. Check off the <b>Establish your first village</b> milestone in the <b>XP</b> section in the <b>Turn</b> tab.</p>
+        <p>Finally, place any existing structures on the chosen hex onto the scene's blocks from the <b>Structures</b> folder in your
             actors directory.</p>
         <img src="modules/pf2e-kingmaker-tools/img/kingdom/docs/structures.webp" alt="structures entry in the sidebar">
         <p>Further settlements can be added in the <b>Settlements</b> tab.</p>

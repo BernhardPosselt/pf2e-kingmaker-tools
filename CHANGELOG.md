@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.3] - 2025-03-28
+
+### Fixed
+
+* Improve kingdom creation experience by including relevant notes and guidance
+
+
 ## [4.2.2] - 2025-03-28
 
 ### Fixed
