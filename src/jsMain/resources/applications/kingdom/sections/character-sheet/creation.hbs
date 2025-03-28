@@ -65,8 +65,8 @@
     </section>
     <section class="km-kingdom-sheet-section">
         <h2>Choose Leaders</h2>
-        <p>Assign your leaders by drag and dropping <b>Character</b> or <b>NPC</b> actors from the sidebar onto each tile.{{#if enableLeadershipModifiers}} Next, choose four leadership roles to invest. Investing a role provides a status bonus to Kingdom
-            skill checks based on that role's key ability.{{/if}}</p>
+        <p>Assign your leaders by drag and dropping <b>Character</b> or <b>NPC</b> actors from the sidebar onto each tile.{{#unless enableLeadershipModifiers}} Next, choose four leadership roles to invest. Investing a role provides a status bonus to Kingdom
+            skill checks based on that role's key ability.{{/unless}}</p>
         <ul class="km-choose-leaders">
             {{#each leadersContext}}
                 <li data-leader="{{leader}}">
@@ -89,7 +89,7 @@
                 </li>
             {{/each}}
         </ul>
-        <p>Then, each of the four invested leaders chooses to apply the trained proficiency rank to a different Kingdom to a different skill. These proficiency ranks cannot be reassigned later.</p>
+        <p>Then, {{#if enableLeadershipModifiers}}choose four skills to apply the trained proficiency rank to{{else}}each of the four invested leaders chooses to apply the trained proficiency rank to a different skill{{/if}}. These proficiency ranks cannot be reassigned later.</p>
         <div class="km-choose-skills">
             <ul>
                 {{#each initialProficiencies}}
