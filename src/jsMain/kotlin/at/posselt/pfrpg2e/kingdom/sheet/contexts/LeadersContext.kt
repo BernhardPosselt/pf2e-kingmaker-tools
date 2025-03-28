@@ -39,39 +39,43 @@ fun RawLeaderValues.toContext(
     leaderActor: LeaderActor?,
     leader: Leader,
     bonus: Int,
-) = LeaderValuesContext(
-    label = leader.label,
-    actor = leaderActor?.let { actor ->
-        ActorLeaderContext(
-            uuid = actor.uuid,
-            img = actor.img,
-            level = actor.level,
-            bonus = bonus.formatAsModifier(),
-            name = actor.name,
-            uuidInput = HiddenInput(
-                value = actor.uuid,
-                name = "leaders.${leader.value}.uuid"
-            ).toContext()
-        )
-    },
-    invested = CheckboxInput(
-        value = invested && uuid != null,
-        name = "leaders.${leader.value}.invested",
-        label = "Invested",
-    ).toContext(),
-    vacant = CheckboxInput(
-        value = vacant || uuid == null,
-        name = "leaders.${leader.value}.vacant",
-        label = "${leader.label} Vacant",
-    ).toContext(),
-    type = Select.fromEnum<LeaderType>(
-        name = "leaders.${leader.value}.type",
-        label = "Type",
-        hideLabel = true,
-        value = LeaderType.fromString(type) ?: LeaderType.PC,
-    ).toContext(),
-    leader= leader.value,
-)
+): LeaderValuesContext {
+    val leaderActorName = leaderActor?.name
+    return LeaderValuesContext(
+        label = leader.label,
+        actor = leaderActor?.let { actor ->
+            ActorLeaderContext(
+                uuid = actor.uuid,
+                img = actor.img,
+                level = actor.level,
+                bonus = bonus.formatAsModifier(),
+                name = actor.name,
+                uuidInput = HiddenInput(
+                    value = actor.uuid,
+                    name = "leaders.${leader.value}.uuid"
+                ).toContext()
+            )
+        },
+        invested = CheckboxInput(
+            value = invested && uuid != null,
+            name = "leaders.${leader.value}.invested",
+            label = "Invested",
+        ).toContext(),
+        vacant = CheckboxInput(
+            escapeLabel = false,
+            value = vacant || uuid == null,
+            name = "leaders.${leader.value}.vacant",
+            label = "<span class=\"km-leader-vacant-label\"><b>${leader.label}</b>${(leaderActorName?.let { ": $it" } ?: "")}</span>",
+        ).toContext(),
+        type = Select.fromEnum<LeaderType>(
+            name = "leaders.${leader.value}.type",
+            label = "Type",
+            hideLabel = true,
+            value = LeaderType.fromString(type) ?: LeaderType.PC,
+        ).toContext(),
+        leader= leader.value,
+    )
+}
 
 fun RawLeaders.toContext(
     leaderActors: LeaderActors,

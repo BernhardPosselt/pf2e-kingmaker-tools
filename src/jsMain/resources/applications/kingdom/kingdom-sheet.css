@@ -120,6 +120,12 @@
         }
     }
 
+    .km-leader-vacant-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .km-kingdom-sheet-main[data-settlement-type="none"] {
         background-image: url("../../../img/camping/backgrounds/hills-day.webp");
     }
