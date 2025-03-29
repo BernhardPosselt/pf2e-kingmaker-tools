@@ -486,6 +486,7 @@ private class KingdomCheckDialog(
             event = event,
             eventStage = event?.stages[eventStageIndex],
             structureNames = settlementResult.current?.constructedStructures?.map { it.name }?.toSet().orEmpty(),
+            waterBorders = settlementResult.current?.waterBorders ?: 0,
         )
         val filtered = filterModifiersAndUpdateContext(enabledModifiers, context)
         val evaluatedModifiers = evaluateModifiers(filtered)

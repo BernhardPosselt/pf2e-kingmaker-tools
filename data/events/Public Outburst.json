@@ -1,12 +1,31 @@
 {
   "id": "public-outburst",
   "name": "Public Outburst",
-  "traits": ["dangerous"],
+  "traits": [
+    "dangerous"
+  ],
   "description": "The citizens of the kingdom grow particularly nervous and fearful about the spread of monster attacks, with more reports of monsters bursting out of random victims. Each time this event occurs, increase the event’s level modifier by 1 to a maximum of +2, at which point the curse has become the populace’s greatest fear. The PCs must work to calm the nation and convince the people that they are doing everything they can to stop this supernatural affliction.",
+  "modifiers": [
+    {
+      "type": "untyped",
+      "value": -1,
+      "name": "Event Occurred Once",
+      "buttonLabel": "Event Occurred Once",
+      "enabled": false
+    }, {
+      "type": "untyped",
+      "value": -2,
+      "name": "Event Occurred More Than Once",
+      "buttonLabel": "Event Occurred More Than Once",
+      "enabled": false
+    }
+  ],
   "stages": [
     {
       "leader": "ruler",
-      "skills": ["politics"],
+      "skills": [
+        "politics"
+      ],
       "criticalSuccess": {
         "msg": "The citizens are comforted by promises. This occurrence of Public Outburst does not increase the level modifier of the next occurrence."
       },

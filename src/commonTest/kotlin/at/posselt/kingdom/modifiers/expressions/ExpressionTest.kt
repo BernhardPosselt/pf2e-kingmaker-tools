@@ -43,6 +43,7 @@ class ExpressionTest {
             eventLeader = null,
             event = null,
             structures = emptySet(),
+            waterBorders = 0,
         )
         val result = Not(
             All(listOf(

@@ -47,6 +47,7 @@ suspend fun skillChecks(
         eventStage = null,
         flags = emptySet(),
         structureNames = emptySet(),
+        waterBorders = 0,
     )
     val allSettlements = settlements.allSettlements
     val globalBonuses = evaluateGlobalBonuses(allSettlements)
@@ -72,14 +73,14 @@ suspend fun skillChecks(
             skill = it.value,
             label = it.label,
             rank = rank,
-            valueClass = when(proficiency) {
+            valueClass = when (proficiency) {
                 Proficiency.UNTRAINED -> "km-proficiency-untrained"
                 Proficiency.TRAINED -> "km-proficiency-trained"
                 Proficiency.EXPERT -> "km-proficiency-expert"
                 Proficiency.MASTER -> "km-proficiency-master"
                 Proficiency.LEGENDARY -> "km-proficiency-legendary"
             },
-                    input = if (kingdom.settings.automateStats) {
+            input = if (kingdom.settings.automateStats) {
                 HiddenInput(
                     value = rank.toString(),
                     name = "skillRanks.${it.value}",

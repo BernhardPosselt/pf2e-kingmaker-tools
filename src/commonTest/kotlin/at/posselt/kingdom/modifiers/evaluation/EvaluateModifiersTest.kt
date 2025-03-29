@@ -44,6 +44,7 @@ val defaultContext = ExpressionContext(
     eventLeader = null,
     event = null,
     structures = emptySet(),
+    waterBorders = 0,
 )
 
 class EvaluateModifiersTest {
