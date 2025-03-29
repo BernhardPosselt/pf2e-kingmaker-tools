@@ -1,6 +1,6 @@
 {
-  "id": "Assassination Attempt",
-  "name":"assassination-attempt",
+  "id":"assassination-attempt",
+  "name": "Assassination Attempt",
   "traits": ["dangerous"],
   "modifier": 1,
   "description": "One of your leaders or prominent citizens is targeted by assassins. The GM determines who hired these assassins, then attempts a @Check[type:flat|dc:11]. On a success, the target is an NPC assigned to a leadership role. On a failure (or if the PCs have no NPC leaders), the target is a notable NPC in the kingdom, preferably one with whom the PCs have established a friendly relationship.",

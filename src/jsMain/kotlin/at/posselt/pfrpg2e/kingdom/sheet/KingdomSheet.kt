@@ -48,6 +48,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.FeatManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.GovernmentManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.HeartlandManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.InspectSettlement
+import at.posselt.pfrpg2e.kingdom.dialogs.KingdomEventManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.StructureBrowser
@@ -166,8 +167,9 @@ class KingdomSheet(
         MenuControl(label = "Show Players", action = "show-players", gmOnly = true),
         MenuControl(label = "Activities", action = "configure-activities", gmOnly = true),
         MenuControl(label = "Charters", action = "configure-charters", gmOnly = true),
-        MenuControl(label = "Governments", action = "configure-governments", gmOnly = true),
+        MenuControl(label = "Events", action = "configure-events", gmOnly = true),
         MenuControl(label = "Feats", action = "configure-feats", gmOnly = true),
+        MenuControl(label = "Governments", action = "configure-governments", gmOnly = true),
         MenuControl(label = "Heartlands", action = "configure-heartlands", gmOnly = true),
         MenuControl(label = "Milestones", action = "configure-milestones", gmOnly = true),
         MenuControl(label = "Settings", action = "settings", gmOnly = true),
@@ -398,6 +400,7 @@ class KingdomSheet(
             }
 
             "configure-activities" -> ActivityManagement(kingdomActor = actor).launch()
+            "configure-events" -> KingdomEventManagement(kingdomActor = actor).launch()
             "configure-milestones" -> MilestoneManagement(kingdomActor = actor).launch()
             "configure-charters" -> CharterManagement(kingdomActor = actor).launch()
             "configure-governments" -> GovernmentManagement(kingdomActor = actor).launch()

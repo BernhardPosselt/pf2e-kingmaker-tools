@@ -15,5 +15,4 @@ data class KingdomEvent(
     val traits: Set<KingdomEventTrait>,
     val location: String?,
     val stages: List<KingdomEventStage>,
-    val kingmakerJournalUuid: String?,
 )

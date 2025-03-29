@@ -90,6 +90,8 @@ class KingdomSkillPickerModel(
 class KingdomSkillPicker(
     private val skillRanks: Record<String, Int>,
     private val onSave: (ranks: Record<String, Int>) -> Unit,
+    private val includeProficiency: Boolean = true,
+    private val requireAtLeastOneSkill: Boolean = false,
 ) : FormApp<KingdomSkillPickerContext, KingdomSkillPickerData>(
     title = "Pick Skills",
     template = "components/forms/xy-form.hbs",
@@ -145,24 +147,38 @@ class KingdomSkillPicker(
                         hideLabel = true,
                         value = skill.enabled,
                     ),
-                    Select.fromEnum<Proficiency>(
-                        name = "skills.$index.proficiency",
-                        value = fromCamelCase<Proficiency>(skill.proficiency) ?: Proficiency.UNTRAINED,
-                        label = "Proficiency",
-                        hideLabel = true,
-                    ),
+                    if (includeProficiency) {
+                        Select.fromEnum<Proficiency>(
+                            name = "skills.$index.proficiency",
+                            value = fromCamelCase<Proficiency>(skill.proficiency) ?: Proficiency.UNTRAINED,
+                            label = "Proficiency",
+                            hideLabel = true,
+                        )
+                    } else {
+                        HiddenInput(
+                            name = "skills.$index.proficiency",
+                            value = Proficiency.UNTRAINED.value,
+                            label = "Proficiency",
+                        )
+                    },
                 )
             )
         }.toTypedArray()
         KingdomSkillPickerContext(
             partId = parent.partId,
             formRows = rows,
-            isFormValid = true,
-            headers=arrayOf("Allow Skill", "Minimum Proficiency")
+            isFormValid = isFormValid,
+            headers = if (includeProficiency) arrayOf("", "Allow Skill", "Minimum Proficiency") else arrayOf(
+                "",
+                "Allow Skill"
+            )
         )
     }
 
     override fun onParsedSubmit(value: KingdomSkillPickerData): Promise<Void> = buildPromise {
+        if (requireAtLeastOneSkill && value.skills.none { it.enabled }) {
+            isFormValid = false
+        }
         data = value
         null
     }

@@ -2,7 +2,7 @@
     {{#if skills}}
         <ul>
             {{#each skills}}
-                <li>{{label}} ({{proficiency}})</li>
+                <li>{{label}}{{#unless ../hideProficiency}} ({{proficiency}}){{/unless}}</li>
             {{/each}}
         </ul>
     {{else}}

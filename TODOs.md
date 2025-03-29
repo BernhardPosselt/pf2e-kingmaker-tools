@@ -4,8 +4,6 @@ jQuery use:
 
 TODOs:
 
-* Add setting to add, delete and modify custom events
-* Store events on kingdom data; this needs the current stage and event
 * Hide event description and outcomes for players
 * Migrate current ongoing events
 * Overhaul Event List to add known events

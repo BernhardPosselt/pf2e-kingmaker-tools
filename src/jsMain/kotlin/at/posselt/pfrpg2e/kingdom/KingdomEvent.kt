@@ -12,35 +12,34 @@ import kotlinx.serialization.json.JsonElement
 
 @JsPlainObject
 external interface RawKingdomEventStage {
-    val skills: Array<String>
-    val leader: String
-    val criticalSuccess: RawKingdomEventOutcome?
-    val success: RawKingdomEventOutcome?
-    val failure: RawKingdomEventOutcome?
-    val criticalFailure: RawKingdomEventOutcome?
+    var skills: Array<String>
+    var leader: String
+    var criticalSuccess: RawKingdomEventOutcome?
+    var success: RawKingdomEventOutcome?
+    var failure: RawKingdomEventOutcome?
+    var criticalFailure: RawKingdomEventOutcome?
 }
 
 
 @JsPlainObject
 external interface RawKingdomEventOutcome {
-    val msg: String
-    val modifiers: Array<RawModifier>?
+    var msg: String
+    var modifiers: Array<RawModifier>?
 }
 
 @JsPlainObject
 external interface RawKingdomEvent {
-    val id: String
-    val name: String
-    val description: String
-    val special: String?
-    val modifiers: Array<RawModifier>?
-    val resolution: String?
-    val resolvedOn: Array<String>?
-    val modifier: Int?
-    val traits: Array<String>
-    val location: String?
-    val stages: Array<RawKingdomEventStage>
-    val kingmakerJournalUuid: String?
+    var id: String
+    var name: String
+    var description: String
+    var special: String?
+    var modifiers: Array<RawModifier>?
+    var resolution: String?
+    var resolvedOn: Array<String>?
+    var modifier: Int?
+    var traits: Array<String>
+    var location: String?
+    var stages: Array<RawKingdomEventStage>
 }
 
 
@@ -80,7 +79,6 @@ fun RawKingdomEvent.parse() =
         traits = resolvedOn?.mapNotNull { KingdomEventTrait.fromString(it) }?.toSet().orEmpty(),
         location = location,
         stages = stages.map { it.parse() },
-        kingmakerJournalUuid = kingmakerJournalUuid,
     )
 
 @JsPlainObject

@@ -11,6 +11,7 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface SkillInputContext {
+    val hideProficiency: Boolean
     val skills: Array<SkillInputArrayContext>
 }
 
@@ -33,8 +34,9 @@ class SkillPicker(
         ).toContext()
 }
 
-fun toSkillContext(skills: Record<String, Int>): SkillInputContext {
+fun toSkillContext(skills: Record<String, Int>, hideProficiency: Boolean = false): SkillInputContext {
     return SkillInputContext(
+        hideProficiency = hideProficiency,
         skills = skills.asSequence()
             .map { (skill, rank) ->
                 SkillInputArrayContext(
@@ -51,6 +53,7 @@ fun toSkillContext(skills: Array<CampingSkill>): SkillInputContext {
     val anySkill = skills.find { it.name == "any" }
     return if (anySkill == null) {
         SkillInputContext(
+            hideProficiency = false,
             skills = skills
                 .filter { it.validateOnly != true }
                 .map {
@@ -63,6 +66,7 @@ fun toSkillContext(skills: Array<CampingSkill>): SkillInputContext {
         )
     } else {
         SkillInputContext(
+            hideProficiency = false,
             skills = arrayOf(
                 SkillInputArrayContext(
                     label = "Any",
