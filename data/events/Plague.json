@@ -2,5 +2,89 @@
   "id": "plague",
   "name": "Plague",
   "modifier": 1,
-  "traits": ["continuous", "dangerous", "settlement"]
+  "traits": [
+    "continuous",
+    "dangerous",
+    "settlement"
+  ],
+  "location": "The largest settlement in the kingdom",
+  "description": "A deadly sickness strikes one of your settlements. You take a –2 status penalty to all Civic activities made in a settlement suffering from a plague unless the settlement has a sewer system.",
+  "modifiers": [
+    {
+      "type": "item",
+      "name": "No Dump in Settlement",
+      "buttonLabel": "No Dump in Settlement",
+      "value": -4,
+      "enabled": true,
+      "applyIf": [
+        {
+          "eq": [
+            "@hasDump",
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "type": "status",
+      "name": "Settlement suffering from Plague",
+      "buttonLabel": "Settlement suffering from Plague",
+      "value": -2,
+      "enabled": false,
+      "applyIf": [
+        {
+          "eq": [
+            "@phase",
+            "civic"
+          ]
+        },
+        {
+          "eq": [
+            "@hasSewerSystem",
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "name": "Has Sewer System in Settlement",
+      "buttonLabel": "Has Sewer System in Settlement",
+      "value": 2,
+      "enabled": true,
+      "applyIf": [
+        {
+          "eq": [
+            "@hasSewerSystem",
+            true
+          ]
+        }
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "leader": "ruler",
+      "skills": [
+        "defense"
+      ],
+      "criticalSuccess": {
+        "msg": "You halt the spread of the plague and are able to cure it, but even so, the plague’s effects cause you to <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
+      },
+      "success": {
+        "msg": "The plague continues! <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and increase a Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>"
+      },
+      "failure": {
+        "msg": "The plague spreads and claims more victims. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button> and increase all Ruins by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>"
+      },
+      "criticalFailure": {
+        "msg": "As failure, but the plague spreads to the nearest unaffected settlement in your kingdom. Treat additional plagues in different settlements as separate continuous Plague events."
+      }
+    }
+  ],
+  "resolvedOn": [
+    "criticalSuccess"
+  ],
+  "resolution": "This Plague event ends if you achieve a critical success on the check or after you achieve a total of 4 successes with the Provide Care activity (a critical success with Provide Care counts as 2 successes in this case).",
+  "special": "If the plague strikes a settlement that has no dumps, filth in the streets allows the disease to spread more easily. You take a –4 item penalty to checks to resolve this event. On the other hand, if a plague-stricken settlement has a sewer system, the increased sanitation provides a +2 item bonus to checks to resolve this event."
 }

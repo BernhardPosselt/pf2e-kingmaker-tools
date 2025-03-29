@@ -2,5 +2,46 @@
   "id": "political-calm",
   "name": "Political Calm",
   "modifier": -1,
-  "traits": ["beneficial"]
+  "traits": [
+    "beneficial"
+  ],
+  "description": "A sudden absence of political machinations and distracting intrigue coincides with a rise in public approval for its leaders.",
+  "stages": [
+    {
+      "leader": "ruler",
+      "skills": [
+        "politics"
+      ],
+      "criticalSuccess": {
+        "msg": "You capitalize upon the public approval with efficiency and speed. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button> or reduce one Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Strife</button></li></ul>. Gain a +2 status bonus to all checks made to resolve events during your next Kingdom turn.",
+        "modifiers": [
+          {
+            "value": 2,
+            "type": "status",
+            "name": "Political Calm: Critical Success",
+            "buttonLabel": "+2 Status to Events",
+            "turns": 2,
+            "enabled": true,
+            "applyIf": [
+              {
+                "eq": [
+                  "@phase",
+                  "event"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "success": {
+        "msg": "Loyalty is up across the board. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The calm is a refreshing change, but people sense it cannot last. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>"
+      },
+      "criticalFailure": {
+        "msg": "The calm simply hides deeper plotting simmering in the shadows. Increase a Ruin of your choice by 2 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Strife</button></li></ul>"
+      }
+    }
+  ]
 }

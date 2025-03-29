@@ -2,5 +2,37 @@
   "id": "remarkable-treasure",
   "name": "Remarkable Treasure",
   "traits": ["beneficial", "fortune"],
-  "modifier": 2
+  "modifier": 2,
+  "description": "Adventurers from outside of your kingdom discover a cache of rare and unusual treasures while exploring wilderness claimed by your nation.",
+  "stages": [
+    {
+      "leader": "emissary",
+      "skills": ["exploration"],
+      "criticalSuccess": {
+        "msg": "The adventurers are only too eager to share their discoveries with the kingdom. The treasures buoy the local economy and spawn a rush of prospectors out looking for their own treasures. <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Luxuries</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>. <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button>. If you Hire Adventurers during your next Kingdom turn, roll twice for the skill check and take the better result.",
+        "modifiers": [{
+          "name": "Remarkable Treasure: Critical Success",
+          "buttonLabel": "Roll Twice and Take Better Result if Hiring Adventurers",
+          "turns": 2,
+          "rollTwiceKeepHighest": true,
+          "type": "untyped",
+          "enabled": true,
+          "value": 0,
+          "applyIf": [{
+            "eq": ["@action", "hire-adventurers"]
+          }
+          ]
+        }]
+      },
+      "success": {
+        "msg": "The adventurers agree to share their discoveries with the kingdom. <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The adventurers aren’t particularly eager to share their discoveries, but the excitement of the news still helps delight the populace. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>"
+      },
+      "criticalFailure": {
+        "msg": "The adventurers are particularly hostile or even disrespectful toward your kingdom and its citizens. Your citizens see them less as heroes and more as bandits plundering the nation’s resources, or even outright villains. Whether this perception is right or not, the damage is done. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>. The GM should consider building up these adventurers as recurring antagonists in future events."
+      }
+    }
+  ]
 }
