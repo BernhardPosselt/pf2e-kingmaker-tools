@@ -28,6 +28,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.RawKingdomEvent
 import at.posselt.pfrpg2e.kingdom.RawNote
+import at.posselt.pfrpg2e.kingdom.SettlementResult
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmies
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmyConditions
 import at.posselt.pfrpg2e.kingdom.checkModifiers
@@ -273,6 +274,7 @@ private class KingdomCheckDialog(
     private val degreeMessages: DegreeMessages,
     private val flags: Set<String>,
     private val isSupernaturalSolution: Boolean = false,
+    private val settlementResult: SettlementResult,
 ) : FormApp<CheckContext, CheckData>(
     title = params.title,
     template = "applications/kingdom/check.hbs",
@@ -451,6 +453,7 @@ private class KingdomCheckDialog(
                 degreeMessages = degreeMessages,
                 flags = flags,
                 isSupernaturalSolution = true,
+                settlementResult = settlementResult,
             ).launch()
         }
 
@@ -482,6 +485,7 @@ private class KingdomCheckDialog(
             flags = flags,
             event = event,
             eventStage = event?.stages[eventStageIndex],
+            structureNames = settlementResult.current?.constructedStructures?.map { it.name }?.toSet().orEmpty(),
         )
         val filtered = filterModifiersAndUpdateContext(enabledModifiers, context)
         val evaluatedModifiers = evaluateModifiers(filtered)
@@ -840,5 +844,6 @@ suspend fun kingdomCheckDialog(
         baseModifiers = baseModifiers,
         degreeMessages = degreeMessages,
         flags = flags,
+        settlementResult = settlementResult,
     ).launch()
 }

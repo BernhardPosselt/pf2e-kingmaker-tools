@@ -2,5 +2,27 @@
   "id": "sensational-crime",
   "name": "Sensational Crime",
   "modifier": 1,
-  "traits": ["continuous", "dangerous", "settlement"]
+  "traits": ["continuous", "dangerous", "settlement"],
+  "location": "A randomly determined settlement in the kingdom",
+  "description": "A notorious serial killer, deadly arsonist, flamboyant jewel thief, or otherwise sensational criminal plagues your kingdom.",
+  "stages": [
+    {
+      "leader": "warden",
+      "skills": ["intrigue"],
+      "criticalSuccess": {
+        "msg": "The criminal has been caught and the one-person crime wave ends. <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Crime</button>, and reduce one Ruin of your choice by 2 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Strife</button></li></ul>. In addition, if you achieve this level of success on the turn this event begins, the criminal was caught in the act of perpetrating their first crime but prevented from completing it; in this case, you discourage future criminals — <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Crime</button>."
+      },
+      "success": {
+        "msg": "You foil the criminal’s current plans and perhaps arrest some accomplices, but the mastermind gets away to plot future crimes. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The criminal succeeds in their crime and escapes justice. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>."
+      },
+      "criticalFailure": {
+        "msg": "The criminal succeeds in their crime and escapes justice. In addition, the criminal also makes fools out of law enforcement, frames an innocent for the crime, or taunts the authorities for their failure. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Crime</button>, and increase a Ruin of your choice by 2 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Strife</button></li></ul>"
+      }
+    }
+  ],
+  "resolvedOn": ["criticalSuccess"],
+  "resolution": "This continuous event ends when you achieve a critical success on the check. Alternately, the GM could create a short adventure to allow the PCs to step in, track down, and confront the criminal to end the event."
 }

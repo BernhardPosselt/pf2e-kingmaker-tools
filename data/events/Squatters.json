@@ -2,5 +2,50 @@
   "id": "squatters",
   "name": "Squatters",
   "modifier": -1,
-  "traits": ["continuous", "dangerous", "settlement"]
+  "traits": [
+    "continuous",
+    "dangerous",
+    "settlement"
+  ],
+  "location": "The settlement with the highest Consumption in the kingdom or the largest settlement in the kingdom (as chosen by the GM)",
+  "description": "An empty lot in your settlement is taken over by desperate people unable to find adequate work or housing. They set up camp with tents, wagons, and shanties. You cannot use the lot for anything until the squatters are given places to live.",
+  "stages": [
+    {
+      "leader": "viceroy",
+      "skills": [
+        "politics"
+      ],
+      "criticalSuccess": {
+        "msg": "You find opportunities for the squatters to improve their lot in life."
+      },
+      "success": {
+        "msg": "The squatters are removed from their lot, and they try to relocate and reintegrate with other citizens, but there is some strife. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>"
+      },
+      "criticalFailure": {
+        "msg": "The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>. In addition, on your next Kingdom turn attempt a @Check[type:flat|dc:6]; on failure, the squatters spread to the nearest empty lot in the settlement, creating a separate continuous Squatters event starting with your next Kingdom turn. In addition, the squatters increase the settlement’s Consumption by 1 each month until the event is resolved."
+      }
+    }
+  ],
+  "modifiers": [
+    {
+      "name": "Sewer System in Settlement",
+      "buttonLabel": "Sewer System in Settlement",
+      "value": 2,
+      "type": "item",
+      "enabled": true,
+      "applyIf": [
+        {
+          "eq": ["@hasSewerSystem", true]
+        }
+      ]
+    }
+  ],
+  "special": "If the settlement has a Sewer System, most of the squatters opt to live there instead; gain a +2 item bonus to checks to resolve this event.",
+  "resolution": "This continuous event ends when you achieve a critical success on the check or when you build a Residential structure in the lot the Squatters have chosen to live in.",
+  "resolvedOn": [
+    "criticalSuccess"
+  ]
 }

@@ -2,4 +2,24 @@
   "id": "undead-uprising",
   "name": "Undead Uprising",
   "traits": ["continuous", "dangerous", "settlement"],
+  "location": "The settlement with the most cemeteries or (if no settlements have cemeteries) the largest settlement",
+  "description": "A malign force, be it a sinister curse, a nefarious necromancer, or an invasion of ghouls, vampires, or other undead-creating monsters, causes the dead to rise from their graves and threaten the settlement.",
+  "stages": [
+    {
+      "leader": "magister",
+      "skills": ["folklore"],
+      "criticalSuccess": {
+        "msg": "The undead are defeated."
+      },
+      "success": {
+        "msg": "The undead are temporarily contained with little physical damage to your settlement, but the populace still grow fearful each night. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The undead prey upon your citizens! <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and increase a Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>"
+      },
+      "criticalFailure": {
+        "msg": "The undead gain the advantage and bring disaster. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2d4\">Gain 2d4 Unrest</button>, increase all Ruins by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>, and one non-cemetery lot in your settlement (chosen by the players) is reduced to rubble."
+      }
+    }
+  ]
 }

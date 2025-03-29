@@ -1,5 +1,25 @@
 {
   "id": "unexpected-find",
   "name": "Unexpected Find",
-  "traits": ["beneficial", "settlement"]
+  "traits": ["beneficial", "settlement"],
+  "location": "The kingdom’s newest settlement",
+  "description": "Local citizens discover a forgotten magic item while working on a construction site or while clearing out an old storage area.",
+  "stages": [
+    {
+      "leader": "ruler",
+      "skills": ["trade"],
+      "criticalSuccess": {
+        "msg": "The citizens donate the magic item to the PCs as thanks. The item is either a permanent item or four consumable items (equal chance of each) of a level equal to your kingdom. The exact item discovered is determined by the GM. If the PCs decide to donate the discovery to the community, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2d4\">Lose 2d4 Unrest</button>."
+      },
+      "success": {
+        "msg": "The magic treasure is donated to the community; <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The found item is grudgingly donated to the community; <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>"
+      },
+      "criticalFailure": {
+        "msg": "The recovered item is stolen before it can be donated, found to be cursed, or turns out to be worthless junk. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      }
+    }
+  ]
 }

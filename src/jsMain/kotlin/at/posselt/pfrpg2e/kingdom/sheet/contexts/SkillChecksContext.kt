@@ -46,6 +46,7 @@ suspend fun skillChecks(
         event = null,
         eventStage = null,
         flags = emptySet(),
+        structureNames = emptySet(),
     )
     val allSettlements = settlements.allSettlements
     val globalBonuses = evaluateGlobalBonuses(allSettlements)

@@ -29,6 +29,7 @@ data class ExpressionContext(
     val hexEvent: Boolean,
     val eventLeader: Leader?,
     val event: String?,
+    val structures: Set<String>,
 ) {
     fun evaluateBool(expression: Any?): Boolean {
         val result = evaluateExpression(expression)
@@ -85,6 +86,7 @@ data class ExpressionContext(
             "@settlementEvent" -> settlementEvent
             "@eventLeader" -> eventLeader
             "@skill" -> usedSkill.toCamelCase()
+            "@hasSewerSystem" -> "Sewer System" in structures
             else -> expression
         }
     }

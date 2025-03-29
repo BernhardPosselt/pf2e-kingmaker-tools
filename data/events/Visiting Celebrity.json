@@ -2,5 +2,36 @@
   "id": "visiting-celebrity",
   "name": "Visiting Celebrity",
   "traits": ["beneficial", "settlement"],
-  "modifier": 1
+  "modifier": 1,
+  "location": "A randomly determined settlement",
+  "description": "A celebrity from another nation or even a distant land visits one of your settlements, causing a sudden influx of notoriety, visitors, and lavish spending. The GM determines the nature of the visiting celebrity.",
+  "stages": [
+    {
+      "leader": "emissary",
+      "skills": ["arts"],
+      "criticalSuccess": {
+        "msg": "The visit is a rousing success. Not only are your citizens delighted by the visitor, but the visitor is quite taken with your kingdom and leaves you with a parting gift. Choose two of the following: <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Gain 4 Resource Dice Next Turn</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Luxuries</button>, or <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>"
+      },
+      "success": {
+        "msg": "The visit is a success. Not only are your citizens delighted by the visitor, but the visitor is quite taken with your kingdom and leaves you with a parting gift. Choose one of the following: <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Gain 4 Resource Dice Next Turn</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Luxuries</button>, or <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The visitor has an agreeable if pedestrian visit. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>"
+      },
+      "criticalFailure": {
+        "msg": "The visitor leaves unimpressed and spreads reports of their unpleasant visit abroad. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>. The next time your kingdom has a Visiting Celebrity, increase that event’s level modifier by 2.",
+        "modifiers": [{
+          "name": "Visiting Celebrity: Critical Failure",
+          "buttonLabel": "Next Time Encountering Event, Increase Modifier by 2",
+          "isConsumedAfterRoll": true,
+          "enabled": true,
+          "value": -2,
+          "type": "untyped",
+          "applyIf": [{
+            "eq": ["@event", "visiting-celebrity"]
+          }]
+        }]
+      }
+    }
+  ]
 }

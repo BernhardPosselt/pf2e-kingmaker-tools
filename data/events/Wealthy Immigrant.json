@@ -1,6 +1,49 @@
 {
   "id": "wealthy-immigrant",
+  "location": "The kingdom’s capital",
   "name": "Wealthy Immigrant",
-  "traits": ["beneficial", "continuous", "settlement"],
-  "modifier": 2
+  "traits": [
+    "beneficial",
+    "continuous",
+    "settlement"
+  ],
+  "modifier": 2,
+  "description": "A rich merchant or prominent noble from another land is impressed with your kingdom and asks to construct an estate in your kingdom’s capital. If you give permission, proceed with this event. If you deny the request, this event doesn’t occur; the next time you have a Wealthy Immigrant event, increase the event’s level modifier by 1.",
+  "modifiers": [
+    {
+      "name": "Denied Wealthy Immigrant Permission Previously",
+      "buttonLabel": "Denied Wealthy Immigrant Permission Previously",
+      "value": -1,
+      "type": "untyped",
+      "enabled": true,
+      "applyIf": [
+        {
+          "eq": [
+            "@event",
+            "wealthy-immigrant"
+          ]
+        }
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "leader": "emissary",
+      "skills": ["industry"],
+      "criticalSuccess": {
+        "msg": "The immigrant constructs a noble villa, free of charge and without you having to Build the Structure in an available spot in the capital. If there isn’t enough room in the capital, the immigrant builds in the largest settlement that has enough room."
+      },
+      "success": {
+        "msg": "The immigrant constructs a mansion, free of charge and without you having to Build the Structure in an available spot in the capital. If there isn’t enough room in the capital, the immigrant builds in the largest settlement that has enough room."
+      },
+      "failure": {
+        "msg": "The immigrant isn’t quite sure where they want to build, but they continue looking."
+      },
+      "criticalFailure": {
+        "msg": "After sending representatives, the immigrant decides not to build a home in your settlement after all, disappointing the local aristocracy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      }
+    }
+  ],
+  "resolvedOn": ["criticalSuccess", "success", "criticalFailure"],
+  "resolution": "Achieve a success, critical success, or critical failure against this event"
 }

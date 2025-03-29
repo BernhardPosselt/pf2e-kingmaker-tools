@@ -2,5 +2,27 @@
   "id": "vandals",
   "name": "Vandals",
   "modifier": 1,
-  "traits": ["continuous", "dangerous", "settlement"]
+  "traits": ["continuous", "dangerous", "settlement"],
+  "resolvedOn": ["criticalSuccess", "success"],
+  "resolution": "This event ends when you succeed at the check.",
+  "location": "A randomly determined settlement",
+  "description": "Vandals, troublemakers, and dissidents destroy property in your settlement",
+  "stages": [
+    {
+      "leader": "warden",
+      "skills": ["industry"],
+      "criticalSuccess": {
+        "msg": "You root out the vandals and stop them from causing any damage."
+      },
+      "success": {
+        "msg": "The vandals are caught in the act of damaging an area in your settlement. The event ends, but <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
+      },
+      "failure": {
+        "msg": "The vandals damage and deface several minor structures in the settlement and remain uncaught for now. Fortunately, the damage done can be easily repaired, but <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Lose 4 Resource Dice Next Turn</button>"
+      },
+      "criticalFailure": {
+        "msg": "The vandals also manage to reduce one structure (chosen by the players) to rubble. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Lose 4 Resource Dice Next Turn</button>"
+      }
+    }
+  ]
 }
