@@ -27,9 +27,6 @@
             "$ref": "#/$defs/Modifier"
           }
         },
-        "kingmakerJournalUuid": {
-          "type": "string"
-        },
         "resolution": {
           "type": "string"
         },

@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
+import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
@@ -31,6 +32,14 @@ import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
+import com.foundryvtt.core.documents.onCreateTile
+import com.foundryvtt.core.documents.onCreateToken
+import com.foundryvtt.core.documents.onDeleteScene
+import com.foundryvtt.core.documents.onDeleteTile
+import com.foundryvtt.core.documents.onDeleteToken
+import com.foundryvtt.core.documents.onUpdateTile
+import com.foundryvtt.core.documents.onUpdateToken
+import com.foundryvtt.core.onApplyTokenStatusEffect
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.TextEditor
 import js.core.Void
@@ -151,6 +160,29 @@ class InspectSettlement(
     id = "kmInspectSettlement-${settlement.sceneId}",
     width = 500,
 ) {
+    init {
+        appHook.onDeleteScene { _, _, _ -> render() }
+        appHook.onCreateTile { _, _, _, _ -> render() }
+        appHook.onUpdateTile { _, _, _, _ -> render() }
+        appHook.onDeleteTile { _, _, _ -> render() }
+        appHook.onDeleteToken { token, _, _ ->
+            if (token.isStructure()) {
+                render()
+            }
+        }
+        appHook.onUpdateToken { token, _, _, _ ->
+            if (token.isStructure()) {
+                render()
+            }
+        }
+        appHook.onCreateToken { token, _, _, _ ->
+            if (token.isStructure()) {
+                render()
+            }
+        }
+        appHook.onApplyTokenStatusEffect { _, _, _ -> render() }
+    }
+
     val magicItemLevelIncreases = feats.sumOf { it.feat.settlementMagicItemLevelIncrease ?: 0 }
     var currentNav = SettlementNav.STATUS
     var current = RawSettlement(

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Inspect Settlement dialog now picks up changes on the canvas allowing you to see added and deleted structures without reopening the dialog
+
+### Fixed
+
+* Fix copy-paste mistake that caused all primal, occult and arcane shopping bonuses to register under divine
+
+
 ## [4.2.5] - 2025-03-28
 
 ### Fixed

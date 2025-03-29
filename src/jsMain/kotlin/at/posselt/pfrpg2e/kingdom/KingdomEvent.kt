@@ -89,9 +89,25 @@ external interface RawActiveKingdomEvent {
     val event: RawKingdomEvent
 }
 
-fun KingdomData.getEvents(): Array<RawKingdomEvent> {
+
+fun KingdomData.getEvents(applyBlacklist: Boolean = false): Array<RawKingdomEvent> {
     val overrides = homebrewKingdomEvents.map { it.id }.toSet()
-    return homebrewKingdomEvents + kingdomEvents.filter { it.id !in overrides }
+    val result = homebrewKingdomEvents + kingdomEvents.filter { it.id !in overrides }
+    return if (applyBlacklist) {
+        result.filter { it.id !in kingdomEventBlacklist }.toTypedArray()
+    } else {
+        result
+    }
+}
+
+fun KingdomData.getParsedEvents(applyBlacklist: Boolean = false): List<KingdomEvent> {
+    val overrides = homebrewKingdomEvents.map { it.id }.toSet()
+    val result = (homebrewKingdomEvents + kingdomEvents.filter { it.id !in overrides }).map { it.parse() }
+    return if (applyBlacklist) {
+        result.filter { it.id !in kingdomEventBlacklist }
+    } else {
+        result
+    }
 }
 
 fun KingdomData.getEvent(id: String): RawKingdomEvent? =

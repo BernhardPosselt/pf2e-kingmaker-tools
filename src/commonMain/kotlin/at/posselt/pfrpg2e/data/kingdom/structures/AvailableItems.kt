@@ -29,13 +29,13 @@ data class AvailableItems(
             put(ExtendedItemGroup.DIVINE, divine)
         }
         if (occult != magical) {
-            put(ExtendedItemGroup.DIVINE, occult)
+            put(ExtendedItemGroup.OCCULT, occult)
         }
         if (primal != magical) {
-            put(ExtendedItemGroup.DIVINE, primal)
+            put(ExtendedItemGroup.PRIMAL, primal)
         }
         if (arcane != magical) {
-            put(ExtendedItemGroup.DIVINE, arcane)
+            put(ExtendedItemGroup.ARCANE, arcane)
         }
         if (luxuryPrimal != primal) {
             put(ExtendedItemGroup.PRIMAL_LUXURY, luxuryPrimal)
