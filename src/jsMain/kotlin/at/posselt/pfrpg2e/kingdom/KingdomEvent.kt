@@ -76,7 +76,7 @@ fun RawKingdomEvent.parse() =
         resolution = resolution,
         resolvedOn = resolvedOn?.mapNotNull { DegreeOfSuccess.fromString(it) }?.toSet().orEmpty(),
         modifier = modifier ?: 0,
-        traits = traits.mapNotNull { console.log(it);KingdomEventTrait.fromString(it) }.toSet(),
+        traits = traits.mapNotNull { KingdomEventTrait.fromString(it) }.toSet(),
         location = location,
         stages = stages.map { it.parse() },
     )

@@ -85,7 +85,7 @@ data class ExpressionContext(
             "@beneficialEvent" -> beneficialEvent
             "@hexEvent" -> hexEvent
             "@settlementEvent" -> settlementEvent
-            "@eventLeader" -> eventLeader
+            "@eventLeader" -> eventLeader?.value
             "@skill" -> usedSkill.toCamelCase()
             "@hasSewerSystem" -> "Sewer System" in structures
             "@hasDump" -> "Dump" in structures
