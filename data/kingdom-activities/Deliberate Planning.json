@@ -40,8 +40,8 @@
                 "applyIf": [
                     {
                         "eq": [
-                            "@phase",
-                            "event"
+                            "@continuousEvent",
+                            true
                         ]
                     }
                 ]
@@ -62,8 +62,8 @@
                 "applyIf": [
                     {
                         "eq": [
-                            "@phase",
-                            "event"
+                            "@continuousEvent",
+                            true
                         ]
                     }
                 ]
@@ -88,8 +88,8 @@
                 "applyIf": [
                     {
                         "eq": [
-                            "@phase",
-                            "event"
+                            "@continuousEvent",
+                            true
                         ]
                     }
                 ]

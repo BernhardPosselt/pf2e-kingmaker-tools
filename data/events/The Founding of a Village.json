@@ -1,0 +1,23 @@
+{
+  "id": "the-founding-of-a-village",
+  "name": "The Founding of a Village",
+  "traits": ["beneficial", "hex"],
+  "location": "Hex Encounter GB16",
+  "description": "The PCs are approached by a ruddy, friendly, and energetic couple. They have plans to establish a village deep in the marches at a ford on the river where, until recently, a pair of tatzlwyrms dwelled. The couple asks the PCs for support getting their village started.",
+  "stages": [{
+    "skills": ["exploration"],
+    "leader": "warden",
+    "criticalSuccess": {
+      "msg": "The village is founded at GB16 on the river. If this hex isn’t part of the PCs’ kingdom, it’s automatically claimed and added to the kingdom (remember that if this hex isn’t adjacent to other hexes claimed by the kingdom it counts as a secondary territory). The village is automatically integrated into the kingdom as a village that has 1 Water border. It occupies one block on the Urban Grid, and all 4 of its lots have structures built. These consist of the following: houses, inn, and town hall."
+    },
+    "success": {
+      "msg": "The village is founded at GB16 on the river. If this hex isn’t part of the PCs’ kingdom, it’s not automatically claimed and added to the kingdom and becomes a Freehold (remember that if this hex isn’t adjacent to other hexes claimed by the kingdom it counts as a secondary territory). The village has 1 Water border. It occupies one block on the Urban Grid, and all 4 of its lots have structures built. These consist of the following: houses, inn, and town hall."
+    },
+    "failure": {
+      "msg": "The village is founded at GB16 on the river. If this hex isn’t part of the PCs’ kingdom, it’s not automatically claimed and added to the kingdom and becomes a Freehold (remember that if this hex isn’t adjacent to other hexes claimed by the kingdom it counts as a secondary territory). The village has 1 Water border. It occupies one block on the Urban Grid, and all 4 of its lots have structures built. These consist of the following: houses, inn, and town hall. In addition, the clashes with additional tatzlwyrms and other dangerous local monsters cause the PCs to expend additional resources to help the couple found their village <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
+    },
+    "criticalFailure": {
+      "msg": "The couple and any assistants provided by the PCs are slaughtered by monsters before they can get started. If the PCs haven’t finished Part 2 of this chapter yet, then the couple are captured by troll king's trolls, and they could potentially be rescued during Part 2 (after which the couple thankfully return to the task of founding the village, and the PCs automatically gain a success as above). In the short term, the bad news causes the kingdom to <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Lose 4 Resource Dice Next Turn</button>"
+    }
+  }]
+}

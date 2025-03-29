@@ -24,8 +24,14 @@
         "applyIf": [
           {
             "eq": [
-              "@phase",
-              "event"
+              "@dangerousEvent",
+              true
+            ]
+          },
+          {
+            "eq": [
+              "@hexEvent",
+              true
             ]
           }
         ],

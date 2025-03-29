@@ -1,0 +1,48 @@
+{
+  "id": "the-rampage-of-the-owlbear",
+  "name": "The Rampage of the Owlbear",
+  "modifier": 4,
+  "traits": [
+    "dangerous",
+    "settlement"
+  ],
+  "location": "A settlement of the GM’s choice (preferably the PCs’ capital city)",
+  "description": "The city was attacked by a terrifying owlbear of immense size that crashed into the town and potentially killed dozens before it had its fill of destruction and lumbered off into the hills. If the settlement has only Water borders, then the owlbear has a more difficult time reaching the settlement; increase the rolled result by one degree of success)",
+  "modifiers": [
+    {
+      "name": "Settlement has only Water Borders",
+      "buttonLabel": "Settlement has only Water Borders",
+      "value": 0,
+      "enabled": false,
+      "type": "untyped",
+      "upgradeResults": [
+        {
+          "upgrade": "criticalFailure"
+        },
+        {
+          "upgrade": "failure"
+        },
+        {
+          "upgrade": "success"
+        }
+      ]
+    }
+  ],
+  "stages": [{
+    "leader": "warden",
+    "skills": ["defense"],
+    "criticalSuccess": {
+      "msg": "The enormous owlbear inflicted only relatively minor damage, and while it wounded dozens, miraculously no one was killed. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>."
+    },
+    "success": {
+      "msg": "The owlbear managed to destroy a portion of the city, killed a few citizens, and wounded dozens. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>. Choose one Walled border or one lot with a structure in it; that structure or improvement is destroyed."
+    },
+    "failure": {
+      "msg": "The owlbear rampaged through the settlement, killing dozens and laying waste to structures. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Decay</button>. Choose one Walled border and two lots with structures in it; those structures and improvements are destroyed."
+    },
+    "criticalFailure": {
+      "msg": "The owlbear rampaged through the settlement, killing dozens and laying waste to structures. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2d4\">Gain 2d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Decay</button>. Choose one Walled border and four lots with structures in it; those structures or improvements are destroyed."
+    }
+  }],
+  "resolution": "If the PCs don’t defeat the owlbear by the next Kingdom turn, it becomes a Monster Activity event."
+}

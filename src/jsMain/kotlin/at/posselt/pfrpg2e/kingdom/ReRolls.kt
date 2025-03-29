@@ -34,6 +34,8 @@ private external interface RollMetaContext {
     val dc: Int
     val skill: String
     val activityId: String?
+    val eventId: String?
+    val eventStageIndex: Int
     val actorUuid: String
     val degree: String
     val rollMode: String
@@ -75,6 +77,8 @@ private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
         modifierWithCreativeSolution = meta?.dataset["modifierWithCreativeSolution"]?.toInt() ?: 0,
         isCreativeSolution = false,
         notes = meta?.dataset["notes"],
+        eventStageIndex = meta?.dataset["eventStageIndex"]?.toInt() ?: 0,
+        eventId = meta?.dataset["eventId"],
     )
 }
 
@@ -95,6 +99,8 @@ suspend fun generateRollMeta(
     upgrades: Set<UpgradeResult>,
     downgrades: Set<DowngradeResult>,
     notes: Set<Note>,
+    eventId: String?,
+    eventStageIndex: Int,
 ): String {
     val upgradeData = upgrades
         .map { UpOrDowngrade(degree = it.upgrade.value, times = it.times) }
@@ -123,6 +129,8 @@ suspend fun generateRollMeta(
             creativeSolutionPills = creativeSolutionPills,
             isCreativeSolution = isCreativeSolution,
             notes = serializeB64Json(notes.map { it.serialize() }.toTypedArray()),
+            eventId = eventId,
+            eventStageIndex = eventStageIndex,
         ),
     )
 }
@@ -142,6 +150,8 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
     val kingdom = actor.getKingdom() ?: return
     val skill = KingdomSkill.fromString(meta.skill) ?: return
     val activity = meta.activityId?.let { kingdom.getActivity(it) }
+    val event = meta.eventId?.let { kingdom.getEvent(it) }
+    val eventStageIndex = meta.eventStageIndex
     val upgrades = meta.upgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val downgrades = meta.downgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val degreeMessages = meta.additionalChatMessages?.let { deserializeB64Json<DegreeMessages>(it) }
@@ -155,25 +165,27 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
         modifierWithCreativeSolution = meta.modifierWithCreativeSolution,
         fortune = meta.fortune,
         modifierPills = meta.pills,
-        creativeSolutionPills = meta.creativeSolutionPills,
         dc = meta.dc,
         kingdomActor = actor,
-        isCreativeSolution = mode == ReRollMode.CREATIVE_SOLUTION,
         upgrades = upgrades.mapNotNull { result ->
             DegreeOfSuccess.fromString(result.degree)?.let { degree ->
                 UpgradeResult(upgrade = degree, times = result.times)
             }
         }.toSet(),
+        rollTwiceKeepHighest = mode == ReRollMode.ROLL_TWICE_KEEP_HIGHEST,
+        rollTwiceKeepLowest = mode == ReRollMode.ROLL_TWICE_KEEP_LOWEST,
+        creativeSolutionPills = meta.creativeSolutionPills,
+        isCreativeSolution = mode == ReRollMode.CREATIVE_SOLUTION,
         downgrades = downgrades.mapNotNull { result ->
             DegreeOfSuccess.fromString(result.degree)?.let { degree ->
                 DowngradeResult(downgrade = degree, times = result.times)
             }
         }.toSet(),
         degreeMessages = degreeMessages,
-        rollTwiceKeepHighest = mode == ReRollMode.ROLL_TWICE_KEEP_HIGHEST,
-        rollTwiceKeepLowest = mode == ReRollMode.ROLL_TWICE_KEEP_LOWEST,
         useFameInfamy = mode == ReRollMode.FAME_OR_INFAMY,
         assurance = false,
         notes = notes,
+        event = event?.parse(),
+        eventStageIndex = eventStageIndex,
     )
 }

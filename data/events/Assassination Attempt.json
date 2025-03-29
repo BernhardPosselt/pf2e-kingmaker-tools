@@ -1,0 +1,37 @@
+{
+  "id": "Assassination Attempt",
+  "name":"assassination-attempt",
+  "traits": ["dangerous"],
+  "modifier": 1,
+  "description": "One of your leaders or prominent citizens is targeted by assassins. The GM determines who hired these assassins, then attempts a @Check[type:flat|dc:11]. On a success, the target is an NPC assigned to a leadership role. On a failure (or if the PCs have no NPC leaders), the target is a notable NPC in the kingdom, preferably one with whom the PCs have established a friendly relationship.",
+  "special": "If this event occurs while the kingdom is at war, increase the event's level modifier to +3.",
+  "modifiers": [{
+    "type": "untyped",
+    "value": -3,
+    "name": "Assassination during War",
+    "buttonLabel": "Assassination during War",
+    "applyIf": [{
+      "eq": ["@atWar", true]
+    }],
+    "enabled": true
+  }
+  ],
+  "stages": [
+    {
+      "leader": "warden",
+      "skill": "intrigue",
+      "criticalSuccess": {
+        "msg": "The assassins are caught, driven off, or otherwise thwarted without ever endangering their targets. The targeted NPC may not even realize they were in danger, but criminal elements in your nation take notice. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button> and reduce one Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Strife</button></li></ul>"
+      },
+      "success": {
+        "msg": "The assassins reach their target but are driven off or defeated before the NPC is harmed."
+      },
+      "failure": {
+        "msg": "The assassins reach their target and manage to harm but not kill the target before they are driven off or defeated. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>, and if the NPC was a leader, they are removed from that leadership role until the end of the next Kingdom turn."
+      },
+      "criticalFailure": {
+        "msg": "The assassins slay the NPC and escape. If the NPC was a leader, that leadership role is now vacant. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2d4\">Gain 2d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Decay</button>."
+      }
+    }
+  ]
+}

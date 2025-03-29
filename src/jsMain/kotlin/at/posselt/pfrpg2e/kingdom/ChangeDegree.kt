@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
-import at.posselt.pfrpg2e.kingdom.dialogs.postActivityDegreeOfSuccess
+import at.posselt.pfrpg2e.kingdom.dialogs.postComplexDegreeOfSuccess
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -9,7 +9,9 @@ import org.w3c.dom.get
 @JsPlainObject
 external interface UpgradeMetaContext {
     val rollMode: String
-    val activityId: String
+    val activityId: String?
+    val eventId: String?
+    val eventStageIndex: Int
     val degree: String
     val additionalChatMessages: String?
     val notes: String?
@@ -19,11 +21,13 @@ external interface UpgradeMetaContext {
 private fun parseUpgradeMeta(elem: HTMLElement) =
     UpgradeMetaContext(
         rollMode = elem.dataset["rollMode"] ?: "",
-        activityId = elem.dataset["activityId"] ?: "",
+        activityId = elem.dataset["activityId"],
         degree = elem.dataset["degree"] ?: "",
         additionalChatMessages = elem.dataset["additionalChatMessages"],
         notes = elem.dataset["notes"],
         actorUuid = elem.dataset["kingdomActorUuid"] ?: "",
+        eventId = elem.dataset["eventId"],
+        eventStageIndex = elem.dataset["eventStageIndex"]?.toInt() ?: 0,
     )
 
 enum class ChangeDegree {
@@ -52,6 +56,6 @@ suspend fun changeDegree(rollMeta: HTMLElement, mode: ChangeDegree) {
     if (changed == null) {
         console.error("Can not upgrade degree $degree")
     } else {
-        postActivityDegreeOfSuccess(meta, changed)
+        postComplexDegreeOfSuccess(meta, changed)
     }
 }

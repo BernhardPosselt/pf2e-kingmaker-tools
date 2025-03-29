@@ -83,15 +83,27 @@ private val buttons = listOf(
             actor.setKingdom(kingdom)
         }
     },
-    ChatButton("km-add-ongoing-event") { game, actor, event, button ->
-            val uuid = button.dataset["link"]
-            if (uuid != null) {
-                actor.getKingdom()?.let { kingdom ->
-                    val event = buildUuid(uuid)
-                    kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
-                    actor.setKingdom(kingdom)
-                }
+    ChatButton("km-resolve-event") { game, actor, event, button ->
+        actor.getKingdom()?.let { kingdom ->
+            val eventId = button.dataset["eventId"]!!
+            val event = kingdom.getEvent(eventId)
+            checkNotNull(event) {
+                "Could not find event with id $eventId"
             }
+            postChatMessage("Resolved event ${event.name}")
+            // TODO
+            actor.setKingdom(kingdom)
+        }
+    },
+    ChatButton("km-add-ongoing-event") { game, actor, event, button ->
+        val uuid = button.dataset["link"]
+        if (uuid != null) {
+            actor.getKingdom()?.let { kingdom ->
+                val event = buildUuid(uuid)
+                kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
+                actor.setKingdom(kingdom)
+            }
+        }
     },
     ChatButton("km-apply-modifier-effect") { game, actor, event, button ->
         val mod = deserializeB64Json<RawModifier>(button.dataset["data"] ?: "")

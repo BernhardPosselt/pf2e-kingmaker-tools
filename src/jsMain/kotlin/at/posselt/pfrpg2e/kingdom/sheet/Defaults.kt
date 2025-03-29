@@ -359,4 +359,7 @@ fun createKingdomDefaults(name: String) =
         charterBlacklist = emptyArray(),
         governmentBlacklist = emptyArray(),
         initialProficiencies = emptyArray(),
+        homebrewKingdomEvents = emptyArray(),
+        kingdomEventBlacklist = emptyArray(),
+        activeKingdomEvents = emptyArray(),
     )

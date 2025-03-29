@@ -21,6 +21,14 @@ data class ExpressionContext(
     val vacancies: Vacancies,
     val structure: Structure?,
     val anarchyAt: Int,
+    val atWar: Boolean,
+    val dangerousEvent: Boolean,
+    val continuousEvent: Boolean,
+    val beneficialEvent: Boolean,
+    val settlementEvent: Boolean,
+    val hexEvent: Boolean,
+    val eventLeader: Leader?,
+    val event: String?,
 ) {
     fun evaluateBool(expression: Any?): Boolean {
         val result = evaluateExpression(expression)
@@ -39,6 +47,7 @@ data class ExpressionContext(
             "@phase" -> phase?.value
             "@structure" -> structure?.name
             "@activity" -> activity
+            "@event" -> event
             "@unrest" -> unrest
             "@anarchyAt" -> anarchyAt
             "@leaderVacant" -> leader?.let { vacancies.resolveVacancy(it) } == true
@@ -68,6 +77,13 @@ data class ExpressionContext(
             "@wildernessRank" -> ranks.wilderness
             "@kingdomLevel" -> level
             "@skillRank" -> ranks.resolve(usedSkill)
+            "@atWar" -> atWar
+            "@dangerousEvent" -> dangerousEvent
+            "@continuousEvent" -> continuousEvent
+            "@beneficialEvent" -> beneficialEvent
+            "@hexEvent" -> hexEvent
+            "@settlementEvent" -> settlementEvent
+            "@eventLeader" -> eventLeader
             "@skill" -> usedSkill.toCamelCase()
             else -> expression
         }

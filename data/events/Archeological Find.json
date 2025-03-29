@@ -1,0 +1,65 @@
+{
+  "id": "archeological-find",
+  "name": "Archeological Find",
+  "traits": [
+    "beneficial",
+    "hex"
+  ],
+  "location": "A claimed hex of the GM’s choosing but not in the influence of a settlement",
+  "description": "You hear that a well-preserved ruin in a remote reach of your kingdom may contain historical artifacts connected to people who lived in your land long ago. You can send a team of archaeologists to investigate.",
+  "stages": [
+    {
+      "leader": "viceroy",
+      "skill": "exploration",
+      "criticalSuccess": {
+        "msg": "The site proves to be an ancient settlement that greatly predates the expansion into the region. Your people are delighted by the discovery. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>, and until the end of your next Kingdom turn, all Culture- and Economy-based skill checks gain a +2 circumstance bonus. If any of your settlements has a Museum, you put archaeological findings from this hex on display to the further delight of your citizens. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>",
+        "modifiers": [
+          {
+            "name": "Archeological Find",
+            "buttonLabel": "+2 circumstance to Culture and Economy",
+            "turns": 2,
+            "enabled": true,
+            "type": "circumstance",
+            "value": 2,
+            "applyIf": [
+              {
+                "some": [
+                  {
+                    "eq": [
+                      "@ability",
+                      "culture"
+                    ]
+                  },
+                  {
+                    "eq": [
+                      "@ability",
+                      "economy"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "success": {
+        "msg": "The site proves to be remains of an old camp. The discovery is interesting but not particularly surprising. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The site proves to be the remains of a relatively recent village abandoned during a previous attempt to settle the lands. Nothing particularly interesting is discovered."
+      },
+      "criticalFailure": {
+        "msg": "You never hear from your archaeologists again. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>. You can try to investigate this site again as a Region activity during the Activity phase of any Kingdom turn by attempting another Exploration check, but as the investigation has proven dangerous, the DC increases by 2.",
+        "modifiers": [
+          {
+            "name": "Reattempt Archeological Find",
+            "buttonLabel": "Reattempt Archeological Find",
+            "enabled": true,
+            "type": "untyped",
+            "value": -2
+          }
+        ]
+      }
+    }
+  ]
+}

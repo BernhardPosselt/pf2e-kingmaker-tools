@@ -35,6 +35,13 @@ val defaultContext = ExpressionContext(
     vacancies = Vacancies(),
     structure = null,
     anarchyAt = 20,
+    atWar = false,
+    dangerousEvent = false,
+    continuousEvent = false,
+    beneficialEvent = false,
+    settlementEvent = false,
+    hexEvent = false,
+    eventLeader = null,
 )
 
 class EvaluateModifiersTest {

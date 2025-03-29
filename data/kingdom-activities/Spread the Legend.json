@@ -11,7 +11,17 @@
         "arts": 0
     },
     "criticalSuccess": {
-        "msg": "Not only do your stories bring pride and patriotism to the nation, but they also help increase its glory. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button>. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1."
+        "msg": "Not only do your stories bring pride and patriotism to the nation, but they also help increase its glory. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button>. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.",
+        "modifiers": [{
+          "name": "Spread the Legend: Critical Success",
+          "buttonLabel": "Reduce Dangerous Event Modifier by 1",
+          "enabled": true,
+          "value": 1,
+          "type": "untyped",
+          "applyIf": [{
+                "eq": ["@dangerousEvent", true]
+            }]
+        }]
     },
     "success": {
         "msg": "The rousing and inspiring stories you spread about the PCs helps to bring the nation together. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>"

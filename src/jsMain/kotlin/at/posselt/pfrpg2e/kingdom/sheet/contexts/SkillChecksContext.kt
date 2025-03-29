@@ -43,6 +43,9 @@ suspend fun skillChecks(
         usedSkill = KingdomSkill.MAGIC,
         rollOptions = emptySet(),
         structure = null,
+        event = null,
+        eventStage = null,
+        flags = emptySet(),
     )
     val allSettlements = settlements.allSettlements
     val globalBonuses = evaluateGlobalBonuses(allSettlements)

@@ -1,0 +1,59 @@
+{
+  "id": "goblin-backlash",
+  "name": "Goblin Backlash",
+  "modifier": -2,
+  "traits": [
+    "continuous",
+    "dangerous"
+  ],
+  "description": "Your citizens doubt your wisdom in appointing your goblin companion and worry that his unsavory personality traits might cause issues for the kingdom overall. If your goblin companion is still chaotic evil, you take a –2 circumstance penalty in resolving this event.",
+  "modifiers": [
+    {
+      "name": "Goblin Companion is Chaotic Evil",
+      "buttonLabel": "Goblin Companion is Chaotic Evil",
+      "value": -2,
+      "type": "circumstance",
+      "enabled": false
+    }
+  ],
+  "resolvedOn": ["criticalSuccess"],
+  "resolution": "You can end this continuous event with a critical success on the check. Alternately, if the PCs remove their goblin companion from his leadership position (including if he’s killed), the event ends. If the PCs do this though, and then attempt to install their goblin companion as a leader at a later date, this event occurs again but its level is increased by 1.",
+  "stages": [
+    {
+      "leader": "ruler",
+      "skills": ["politics"],
+      "criticalSuccess": {
+        "msg": "You convince the citizens that your goblin companion will do well, and use his appointment to prove that you are seeking to build a diverse kingdom where anyone can find a role in shaping its destiny. The event ends, and your citizens grow more accepting of all people. Word of your kingdom’s acceptance of normally shunned elements of society spreads, and from this point on, you gain a +1 circumstance bonus to all New Leadership, Quell Unrest, and Pledge of Fealty checks.",
+        "modifiers": [
+          {
+            "name": "Goblin Backlash: Critical Success",
+            "buttonLabel": "+1 Circumstance to New Leadership, Quell Unrest, and Pledge of Fealty",
+            "value": 2,
+            "type": "circumstance",
+            "enabled": true,
+            "applyIf": [{
+              "in": [
+                "@activity",
+                [
+                  "new-leadership",
+                  "new-leadership-vk",
+                  "quell-unrest",
+                  "pledge-of-fealty"
+                ]
+              ]
+            }]
+          }
+        ]
+      },
+      "success": {
+        "msg": "You prevent the unrest from growing, but the citizens continue to grumble and grouse about your goblin companion into the next kingdom turn."
+      },
+      "failure": {
+        "msg": "The people rise up, with protests and even a few riots taking place as concerned citizens fan the flames of dissent in the kingdom. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      },
+      "criticalFailure": {
+        "msg": "The people rise up, with protests and even a few riots taking place as concerned citizens fan the flames of dissent in the kingdom. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>. In addition, an Assassination Attempt event takes place immediately after resolving this event, with your goblin companion as the target. The assassin itself should be a non-good, previously unnamed NPC citizen in the PC’s kingdom. They weren’t hired by anyone, instead acting on their own to remove a perceived threat (your goblin companion) to the kingdom’s well-being."
+      }
+    }
+  ]
+}

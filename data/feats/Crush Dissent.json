@@ -14,8 +14,8 @@
             "applyIf": [
                 {
                     "eq": [
-                        "@phase",
-                        "event"
+                        "@dangerousEvent",
+                        true
                     ]
                 }
             ]

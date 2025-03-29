@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
+import at.posselt.pfrpg2e.data.events.KingdomEvent
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawActivity
@@ -10,6 +11,7 @@ import at.posselt.pfrpg2e.kingdom.RawNote
 import at.posselt.pfrpg2e.kingdom.UpgradeMetaContext
 import at.posselt.pfrpg2e.kingdom.generateRollMeta
 import at.posselt.pfrpg2e.kingdom.getActivity
+import at.posselt.pfrpg2e.kingdom.getEvent
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.Note
@@ -41,6 +43,7 @@ private external interface ChatModifier {
 @JsPlainObject
 private external interface ChatButtonContext {
     val criticalSuccess: Boolean
+    val eventId: String?
     val modifiers: Array<ChatModifier>
 }
 
@@ -48,11 +51,13 @@ suspend fun buildChatButtons(
     degree: DegreeOfSuccess,
     modifiers: Array<RawModifier>,
     actorUuid: String,
+    eventId: String?,
 ): String {
     return tpl(
         path = "chatmessages/roll-chat-buttons.hbs",
         ctx = ChatButtonContext(
             criticalSuccess = degree == DegreeOfSuccess.CRITICAL_SUCCESS,
+            eventId = eventId,
             modifiers = modifiers.map {
                 ChatModifier(
                     label = it.buttonLabel ?: it.name,
@@ -86,6 +91,8 @@ suspend fun rollCheck(
     useFameInfamy: Boolean,
     assurance: Boolean,
     notes: Set<Note>,
+    eventStageIndex: Int,
+    event: KingdomEvent?,
 ): DegreeOfSuccess {
     val result = d20Check(
         dc = dc,
@@ -135,9 +142,11 @@ suspend fun rollCheck(
         upgrades = upgrades,
         downgrades = downgrades,
         notes = notes,
+        eventId = event?.id,
+        eventStageIndex = eventStageIndex,
     )
     result.toChat(rollMeta)
-    if (activity == null) {
+    if (activity == null && event == null) {
         postDegreeOfSuccess(
             degreeOfSuccess = changed,
             originalDegreeOfSuccess = originalDegree,
@@ -146,47 +155,63 @@ suspend fun rollCheck(
         afterRoll(changed)
         val context = UpgradeMetaContext(
             rollMode = rollMode?.value ?: RollMode.PUBLICROLL.value,
-            activityId = activity.id,
+            activityId = activity?.id,
             degree = originalDegree.value,
             additionalChatMessages = serializeB64Json(degreeMessages),
             actorUuid = kingdomActor.uuid,
+            eventId = event?.id,
+            eventStageIndex = eventStageIndex,
             notes = serializeB64Json(notes.map { it.serialize() }.toTypedArray()),
         )
-        postActivityDegreeOfSuccess(context, changed)
+        postComplexDegreeOfSuccess(context, changed)
     }
     return changed
 }
 
-suspend fun postActivityDegreeOfSuccess(
+suspend fun postComplexDegreeOfSuccess(
     metaContext: UpgradeMetaContext,
     changedDegreeOfSuccess: DegreeOfSuccess,
 ) {
     val kingdomActor = fromUuidTypeSafe<KingdomActor>(metaContext.actorUuid) ?: return
     val kingdom = kingdomActor.getKingdom() ?: return
-    val activity = kingdom.getActivity(metaContext.activityId) ?: return
     val rollMode = RollMode.fromString(metaContext.rollMode) ?: return
     val degree = DegreeOfSuccess.fromString(metaContext.degree) ?: return
+    val activity = metaContext.activityId?.let { kingdom.getActivity(it) }
+    val event = metaContext.eventId?.let { kingdom.getEvent(it) }
+    val eventStageIndex = metaContext.eventStageIndex
+    val stage = event?.stages[eventStageIndex]
+    val resolveEventOn = event?.resolvedOn?.mapNotNull { DegreeOfSuccess.fromString(it) }?.toSet().orEmpty()
     val degreeMessages = metaContext.additionalChatMessages
         ?.let { deserializeB64Json<DegreeMessages>(it) }
     val metaHtml = tpl(
         path = "chatmessages/upgrade-roll-meta.hbs",
         ctx = metaContext.copy(degree = changedDegreeOfSuccess.value),
     )
-    val modifiers = when (changedDegreeOfSuccess) {
-        DegreeOfSuccess.CRITICAL_FAILURE -> activity.criticalFailure
-        DegreeOfSuccess.FAILURE -> activity.failure
-        DegreeOfSuccess.SUCCESS -> activity.success
-        DegreeOfSuccess.CRITICAL_SUCCESS -> activity.criticalSuccess
+    val chatModifiers = when (changedDegreeOfSuccess) {
+        DegreeOfSuccess.CRITICAL_FAILURE -> activity?.criticalFailure?.modifiers ?: stage?.criticalFailure?.modifiers
+        DegreeOfSuccess.FAILURE -> activity?.failure?.modifiers ?: stage?.failure?.modifiers
+        DegreeOfSuccess.SUCCESS -> activity?.success?.modifiers ?: stage?.success?.modifiers
+        DegreeOfSuccess.CRITICAL_SUCCESS -> activity?.criticalSuccess?.modifiers ?: stage?.criticalSuccess?.modifiers
+    } ?: emptyArray()
+    val message = when (changedDegreeOfSuccess) {
+        DegreeOfSuccess.CRITICAL_FAILURE -> activity?.criticalFailure?.msg ?: stage?.criticalFailure?.msg
+        DegreeOfSuccess.FAILURE -> activity?.failure?.msg ?: stage?.failure?.msg
+        DegreeOfSuccess.SUCCESS -> activity?.success?.msg ?: stage?.success?.msg
+        DegreeOfSuccess.CRITICAL_SUCCESS -> activity?.criticalSuccess?.msg ?: stage?.criticalSuccess?.msg
     }
-    val messages = when (changedDegreeOfSuccess) {
+    val additionalMessages = when (changedDegreeOfSuccess) {
         DegreeOfSuccess.CRITICAL_FAILURE -> degreeMessages?.criticalFailure
         DegreeOfSuccess.FAILURE -> degreeMessages?.failure
         DegreeOfSuccess.SUCCESS -> degreeMessages?.success
         DegreeOfSuccess.CRITICAL_SUCCESS -> degreeMessages?.criticalSuccess
     }
-    val chatModifiers = modifiers?.modifiers ?: emptyArray()
+    val eventButtonId = event?.id?.takeIf {
+        val isLastStage = event.stages.size == eventStageIndex + 1
+        val resolvedOnDegree = changedDegreeOfSuccess in resolveEventOn
+        resolvedOnDegree && isLastStage
+    }
     val postHtml = if (chatModifiers.isNotEmpty() || changedDegreeOfSuccess == DegreeOfSuccess.CRITICAL_SUCCESS) {
-        buildChatButtons(changedDegreeOfSuccess, chatModifiers, kingdomActor.uuid)
+        buildChatButtons(changedDegreeOfSuccess, chatModifiers, kingdomActor.uuid, eventButtonId)
     } else {
         ""
     }
@@ -202,16 +227,16 @@ suspend fun postActivityDegreeOfSuccess(
     postDegreeOfSuccess(
         degreeOfSuccess = changedDegreeOfSuccess,
         originalDegreeOfSuccess = degree,
-        title = activity.title,
+        title = activity?.title ?: event?.name ?: "",
         rollMode = rollMode,
         metaHtml = metaHtml,
-        preHtml = "<p>${activity.description}</p>",
+        preHtml = "<p>${activity?.description ?: event?.description}</p>",
         postHtml = notesHtml + postHtml,
-        message = modifiers?.msg,
+        message = message,
     )
-    if (messages != null) {
+    if (additionalMessages != null) {
         postChatMessage(
-            "$messages<span hidden=\"hidden\" data-kingdom-actor-uuid=\"${kingdomActor.uuid}\"></span>",
+            "$additionalMessages<span hidden=\"hidden\" data-kingdom-actor-uuid=\"${kingdomActor.uuid}\"></span>",
             rollMode = rollMode
         )
     }

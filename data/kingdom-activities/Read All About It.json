@@ -43,8 +43,8 @@
                 "applyIf": [
                     {
                         "eq": [
-                            "@phase",
-                            "event"
+                            "@continuousEvent",
+                            true
                         ]
                     }
                 ],

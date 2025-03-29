@@ -1,0 +1,24 @@
+{
+  "id": "monster-hunt",
+  "name": "Monster Hunt",
+  "description": "<p>After the PCs defeat the owlbear, citizens in the kingdom who emulate your barbarian companion revel in the triumph. Unless the PCs intervene, these eager citizens turn the owlbear’s hide into a massive rug and put it on display in the kingdom’s largest tavern. From there, the hunger for monstrous trophies unfortunately continues to grow.</p><p>This event takes place at the end of the next Kingdom turn, as numerous eager adventurers who are fans of your barbarian companion join together and scour the wilderness for another monster trophy to add to the tavern’s growing collection.</p>",
+  "traits": ["beneficial"],
+  "stages": [
+    {
+      "leader": "warden",
+      "skills": ["wilderness"],
+      "criticalSuccess": {
+        "msg": "The eager monster hunters confront and defeat a Huge (or larger) monster in the wilderness. The GM can determine the exact type of monster hunted down (but it shouldn’t be a specific creature still awaiting discovery by the PCs in a hex encounter). Trophies from the monster are put on display in a tavern or other public building in the capital city. <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>"
+      },
+      "success": {
+        "msg": "As critical success, but the monster hunters track down and slay a Large monster in the wilderness. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The monster hunters fail in their attempt to hunt a creature, but the kingdom was, if only for a short while, distracted by the attempt. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>"
+      },
+      "criticalFailure": {
+        "msg": "The monster hunters confront a Huge (or larger) monster but fail to defeat it. Worse, the monster follows the surviving hunters back home and attacks the kingdom’s capital city! <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and increase a Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>. The monster then retreats to the wilderness, but it continues to be a danger. A Monster Activity event automatically takes place during the next Kingdom turn as this creature continues to threaten the region."
+      }
+    }
+  ]
+}

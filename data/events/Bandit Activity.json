@@ -1,0 +1,50 @@
+{
+  "id": "bandit-activity",
+  "name": "Bandit Activity",
+  "traits": [
+    "continuous",
+    "dangerous"
+  ],
+  "modifier": 1,
+  "description": "Bandits have begun to prey upon your kingdom!",
+  "resolution": "You can end this continuous event with a critical success on the check. Alternately, if the PCs are eager to seek out the bandits, the GM could build a short side quest to play out their attempt to defeat them.",
+  "resolvedOn": [
+    "criticalSuccess"
+  ],
+  "stages": [
+    {
+      "leader": "warden",
+      "skill": "defense",
+      "criticalSuccess": {
+        "msg": "The bandits are captured, run off, or defeated, and merchants can confidently ply their wares. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>, and during the next Kingdom turn, you gain a +1 circumstance bonus to Economy-based checks.",
+        "modifiers": [
+          {
+            "name": "Bandit Activity: Critical Success",
+            "buttonLabel": "+1 Circumstance to Economy",
+            "turns": 2,
+            "enabled": true,
+            "value": 1,
+            "type": "circumstance",
+            "applyIf": [
+              {
+                "eq": [
+                  "@ability",
+                  "economy"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "success": {
+        "msg": "The bandits are prevented from preying upon your people, but they continue to be active. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Dice Next Turn</button>"
+      },
+      "failure": {
+        "msg": "The bandits plunder caravans and remote storehouses, and merchants grow cautious and afraid. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Lose 4 Resource Dice Next Turn</button>"
+      },
+      "criticalFailure": {
+        "msg": "Bandits rampage the land, and even start to encroach into your settlements. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>, increase a Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>, and at the start of your next Kingdom turn your Resource Dice are halved or <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Lose 4 Resource Dice Next Turn</button>, whichever results in a lower total."
+      }
+    }
+  ]
+}

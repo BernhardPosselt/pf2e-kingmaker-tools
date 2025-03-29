@@ -1,6 +1,9 @@
 package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
+import at.posselt.pfrpg2e.data.events.KingdomEvent
+import at.posselt.pfrpg2e.data.events.KingdomEventStage
+import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
@@ -275,6 +278,8 @@ fun KingdomData.createExpressionContext(
     usedSkill: KingdomSkill,
     rollOptions: Set<String>,
     structure: Structure?,
+    event: KingdomEvent?,
+    eventStage: KingdomEventStage?,
     flags: Set<String> = emptySet()
 ): ExpressionContext {
     val chosenFeatures = getChosenFeatures(getExplodedFeatures())
@@ -297,6 +302,13 @@ fun KingdomData.createExpressionContext(
         rollOptions = rollOptions,
         vacancies = vacancies(),
         structure = structure,
-        anarchyAt = calculateAnarchy(chosenFeats)
+        anarchyAt = calculateAnarchy(chosenFeats),
+        atWar = atWar,
+        dangerousEvent = event?.traits?.contains(KingdomEventTrait.DANGEROUS) == true,
+        continuousEvent = event?.traits?.contains(KingdomEventTrait.CONTINUOUS) == true,
+        beneficialEvent = event?.traits?.contains(KingdomEventTrait.BENEFICIAL) == true,
+        settlementEvent = event?.traits?.contains(KingdomEventTrait.SETTLEMENT) == true,
+        hexEvent = event?.traits?.contains(KingdomEventTrait.HEX) == true,
+        eventLeader = eventStage?.leader,
     )
 }

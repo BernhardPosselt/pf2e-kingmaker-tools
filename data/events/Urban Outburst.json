@@ -1,0 +1,26 @@
+{
+  "id": "urban-outburst",
+  "name": "Urban Outburst",
+  "traits": ["dangerous", "settlement"],
+  "modifier": 2,
+  "location": "The settlement the PCs are currently located in, or the closest settlement to the PCs’ location if they’re not in a settlement.",
+  "description": "A monster blooms from a citizen in the city itself and runs rampage through the streets! The type of monster should be chosen by the GM; its level should equal the party’s level + 2 (a Moderate threat encounter). The PCs can choose to resolve this event with a Kingdom skill check, or they can travel to the settlement the monster is rampaging in to challenge it in encounter mode. If they don’t defeat the monster by the end of the next day, treat this event as having a Critical Failure result.",
+  "stages": [
+    {
+      "leader": "warden",
+      "skills": ["defense"],
+      "criticalSuccess": {
+        "msg": "The monster is defeated before any more lives are lost"
+      },
+      "success": {
+        "msg": "The monster is defeated but slew a citizen. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The monster slays several citizens before it is defeated. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>"
+      },
+      "criticalFailure": {
+        "msg": "The monster continues to rampage unopposed. This event becomes Continuous and occurs every day until the monster is defeated; additional Cult events still occur as normal. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Decay</button>"
+      }
+    }
+  ]
+}

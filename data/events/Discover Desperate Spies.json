@@ -1,0 +1,32 @@
+{
+  "id": "discover-desperate-spies",
+  "name": "Discover Desperate Spies",
+  "modifier": 3,
+  "location": "The kingdom’s capital city",
+  "traits": [
+    "continuous",
+    "dangerous",
+    "settlement"
+  ],
+  "description": "The kobold spies slink and skulk around the city, looking for weaknesses to report back to the Troll King and taking advantage of opportunities to perform minor acts of vandalism and sabotage. Once this story event begins, it continues daily for a week. Each day, the kingdom attempts a skill check to resolve the event. The Intrigue check gains the Secret trait.",
+  "stages": [
+    {
+      "skills": ["intrigue", "defense"],
+      "leader": "warden",
+      "criticalSuccess": {
+        "msg": "The two kobold spies are captured and kept imprisoned until the PCs have a chance to speak to them."
+      },
+      "success": {
+        "msg": "Rumors of kobold spies in town begin to spread. Attempt a @Check[type:flat|dc:11]; on a failure, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>."
+      },
+      "failure": {
+        "msg": "Someone or something in town is causing trouble. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      },
+      "criticalFailure": {
+        "msg": "Not only do the kobolds continue to cause trouble <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, but they also perform acts of vandalism and sabotage. <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>"
+      }
+    }
+  ],
+  "resolvedOn": ["criticalSuccess"],
+  "resolution": "This daily event ends on a Critical Success or after 7 days have passed."
+}

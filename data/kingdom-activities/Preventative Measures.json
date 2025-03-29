@@ -20,8 +20,8 @@
                 "applyIf": [
                     {
                         "eq": [
-                            "@phase",
-                            "event"
+                            "@dangerousEvent",
+                            true
                         ]
                     }
                 ],
@@ -47,8 +47,8 @@
                 "applyIf": [
                     {
                         "eq": [
-                            "@phase",
-                            "event"
+                            "@dangerousEvent",
+                            true
                         ]
                     }
                 ],

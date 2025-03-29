@@ -1,7 +1,9 @@
 <div hidden class="km-upgrade-result"
      data-roll-mode="{{rollMode}}"
-     data-activity-id="{{activityId}}"
+     {{#if activityId}}data-activity-id="{{activityId}}"{{/if}}
      data-degree="{{degree}}"
+     {{#if eventId}}data-event-id="{{eventId}}"{{/if}}
+     data-event-stage-index="{{eventStageIndex}}"
      data-kingdom-actor-uuid="{{actorUuid}}"
      {{#if notes}}data-notes="{{notes}}"{{/if}}
      {{#if additionalChatMessages}}data-additional-chat-messages="{{additionalChatMessages}}"{{/if}}></div>

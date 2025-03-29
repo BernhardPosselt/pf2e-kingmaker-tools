@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.checks.determineDegreeOfSuccess
+import at.posselt.pfrpg2e.data.events.KingdomEvent
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
@@ -25,6 +26,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawActivity
+import at.posselt.pfrpg2e.kingdom.RawKingdomEvent
 import at.posselt.pfrpg2e.kingdom.RawNote
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmies
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmyConditions
@@ -87,6 +89,7 @@ import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 import kotlin.arrayOf
+import kotlin.checkNotNull
 import kotlin.collections.filter
 import kotlin.collections.map
 import kotlin.collections.plus
@@ -136,7 +139,7 @@ private external interface CheckContext : ValidatedHandlebarsContext {
     val newModifierModifierInput: FormElementContext
     val pills: String
     val upgrades: String
-    val isActivity: Boolean
+    val hidePhase: Boolean
     val assuranceModifier: Int
     val assuranceDegree: String
     val creativeSolutionModifier: Int
@@ -245,10 +248,12 @@ private data class CheckDialogParams(
     val title: String,
     val dc: Int,
     val validSkills: Set<KingdomSkill>,
-    val phase: KingdomPhase?,
-    val structure: Structure?,
-    val activity: RawActivity?,
-    val armyConditions: ArmyConditionInfo?,
+    val phase: KingdomPhase? = null,
+    val structure: Structure? = null,
+    val activity: RawActivity? = null,
+    val armyConditions: ArmyConditionInfo? = null,
+    val event: KingdomEvent? = null,
+    val eventStageIndex: Int = 0,
 )
 
 typealias AfterRoll = suspend (degree: DegreeOfSuccess) -> Unit
@@ -277,6 +282,8 @@ private class KingdomCheckDialog(
     width = 600,
 ) {
     val activity = params.activity
+    val event = params.event
+    val eventStageIndex = params.eventStageIndex
     val validSkills = params.validSkills
     val structure = params.structure
     val removableIds = mutableSetOf<String>()
@@ -299,7 +306,7 @@ private class KingdomCheckDialog(
         when (target.dataset["action"]) {
             "assurance" -> {
                 val modifier = target.dataset["modifier"]?.toInt() ?: 0
-                val pills = arrayOf("Assurance $modifier" )
+                val pills = arrayOf("Assurance $modifier")
                 buildPromise {
                     roll(
                         modifier = modifier,
@@ -422,6 +429,8 @@ private class KingdomCheckDialog(
             useFameInfamy = false,
             assurance = assurance,
             notes = notes,
+            eventStageIndex = eventStageIndex,
+            event = event,
         )
         if (data.supernaturalSolution && !data.assurance) {
             KingdomCheckDialog(
@@ -471,6 +480,8 @@ private class KingdomCheckDialog(
             rollOptions = emptySet(),
             structure = structure,
             flags = flags,
+            event = event,
+            eventStage = event?.stages[eventStageIndex],
         )
         val filtered = filterModifiersAndUpdateContext(enabledModifiers, context)
         val evaluatedModifiers = evaluateModifiers(filtered)
@@ -593,7 +604,7 @@ private class KingdomCheckDialog(
                 )
             }.toTypedArray()),
             useAssurance = data.assurance,
-            isActivity = activity != null,
+            hidePhase = activity != null || event != null,
             checkModifierLabel = checkModifier.formatAsModifier(),
             newModifierNameInput = TextInput(
                 label = "Name",
@@ -681,6 +692,7 @@ sealed interface CheckType {
     value class RollSkill(val skill: KingdomSkill) : CheckType
     value class PerformActivity(val activity: RawActivity) : CheckType
     value class BuildStructure(val structure: Structure) : CheckType
+    data class EventCheck(val event: RawKingdomEvent, val stageIndex: Int) : CheckType
 }
 
 @JsPlainObject
@@ -707,12 +719,12 @@ suspend fun kingdomCheckDialog(
             val activity = check.activity
             val realm = game.getRealmData(kingdomActor, kingdom)
             val vacancies = kingdom.vacancies()
-            val dc = overrideDc ?: activity.resolveDc(
+            val dc = overrideDc ?: (activity.resolveDc(
                 kingdomLevel = kingdom.level,
                 realm = realm,
                 rulerVacant = vacancies.ruler,
                 enemyArmyScoutingDcs = game.getSelectedArmies().map { it.system.scouting }
-            )
+            ) ?: 0)
             val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
             val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
             val skills = getValidActivitySkills(
@@ -729,12 +741,11 @@ suspend fun kingdomCheckDialog(
             )
             CheckDialogParams(
                 title = activity.title,
-                dc = overrideDc ?: dc ?: 0,
+                dc = dc,
                 validSkills = skills,
                 phase = KingdomPhase.fromString(activity.phase),
-                armyConditions = game.getSelectedArmyConditions(),
-                structure = null,
                 activity = activity,
+                armyConditions = game.getSelectedArmyConditions(),
             )
         }
 
@@ -749,9 +760,6 @@ suspend fun kingdomCheckDialog(
             CheckDialogParams(
                 title = check.skill.label, dc = dc, validSkills = setOf(check.skill),
                 phase = KingdomPhase.EVENT,
-                structure = null,
-                activity = null,
-                armyConditions = null,
             )
         }
 
@@ -781,7 +789,29 @@ suspend fun kingdomCheckDialog(
                 phase = KingdomPhase.fromString(activity.phase),
                 structure = structure,
                 activity = activity,
-                armyConditions = null,
+            )
+        }
+
+        is CheckType.EventCheck -> {
+            val event = check.event.parse()
+            val stage = event.stages[check.stageIndex]
+            checkNotNull(stage) {
+                "Stage index ${check.stageIndex} for event with id ${event.id} does not exist"
+            }
+            val realm = game.getRealmData(kingdomActor, kingdom)
+            val vacancies = kingdom.vacancies()
+            val dc = overrideDc ?: (calculateControlDC(
+                kingdomLevel = kingdom.level,
+                realm = realm,
+                rulerVacant = vacancies.ruler,
+            ) + event.modifier)
+            CheckDialogParams(
+                title = event.name,
+                dc = dc,
+                validSkills = stage.skills,
+                phase = KingdomPhase.EVENT,
+                event = event,
+                eventStageIndex = check.stageIndex,
             )
         }
     }
@@ -801,7 +831,7 @@ suspend fun kingdomCheckDialog(
         currentSettlement = currentSettlement,
         allSettlements = allSettlements,
         armyConditions = params.armyConditions,
-    ) + params.activity?.parseModifiers().orEmpty()
+    ) + params.activity?.parseModifiers().orEmpty() + params.event?.modifiers.orEmpty()
     KingdomCheckDialog(
         params = params,
         afterRoll = afterRoll,

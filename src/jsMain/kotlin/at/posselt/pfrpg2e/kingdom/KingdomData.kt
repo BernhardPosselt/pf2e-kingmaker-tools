@@ -146,14 +146,17 @@ external interface KingdomData {
     var homebrewCharters: Array<RawCharter>
     var homebrewGovernments: Array<RawGovernment>
     var homebrewHeartlands: Array<RawHeartland>
+    var homebrewKingdomEvents: Array<RawKingdomEvent>
     var homebrewFeats: Array<RawFeat>
     var activityBlacklist: Array<String>
     var featBlacklist: Array<String>
     var heartlandBlacklist: Array<String>
     var charterBlacklist: Array<String>
     var governmentBlacklist: Array<String>
-    var modifiers: Array<RawModifier>  // set via dialog
-    var settlements: Array<RawSettlement>  // set via dialog
+    var kingdomEventBlacklist: Array<String>
+    var activeKingdomEvents: Array<RawActiveKingdomEvent>
+    var modifiers: Array<RawModifier>
+    var settlements: Array<RawSettlement>
     var leaders: RawLeaders
     var charter: RawCharterChoices
     var heartland: RawHeartlandChoices

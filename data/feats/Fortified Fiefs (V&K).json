@@ -50,8 +50,14 @@
       "applyIf": [
         {
           "eq": [
-            "@phase",
-            "event"
+            "@settlementEvent",
+            true
+          ]
+        },
+        {
+          "eq": [
+            "@dangerousEvent",
+            true
           ]
         }
       ],

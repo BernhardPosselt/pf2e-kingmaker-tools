@@ -1,0 +1,24 @@
+{
+  "id": "public-outburst",
+  "name": "Public Outburst",
+  "traits": ["dangerous"],
+  "description": "The citizens of the kingdom grow particularly nervous and fearful about the spread of monster attacks, with more reports of monsters bursting out of random victims. Each time this event occurs, increase the event’s level modifier by 1 to a maximum of +2, at which point the curse has become the populace’s greatest fear. The PCs must work to calm the nation and convince the people that they are doing everything they can to stop this supernatural affliction.",
+  "stages": [
+    {
+      "leader": "ruler",
+      "skills": ["politics"],
+      "criticalSuccess": {
+        "msg": "The citizens are comforted by promises. This occurrence of Public Outburst does not increase the level modifier of the next occurrence."
+      },
+      "success": {
+        "msg": "The citizens are somewhat comforted, and you prevent Unrest from rising."
+      },
+      "failure": {
+        "msg": "Rumors that the affliction might be beyond the party’s capability to stop make it difficult to quell fear. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      },
+      "criticalFailure": {
+        "msg": "As failure, but the rumors spread more quickly and have kernels of truth to them. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>, and at the end of the next day, a Cult event automatically happens."
+      }
+    }
+  ]
+}
