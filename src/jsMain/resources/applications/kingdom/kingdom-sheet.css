@@ -514,6 +514,11 @@
         }
 
         .km-kingdom-event {
+            .km-event-stage-active {
+                color: black;
+                background-color: var(--color-warm-1);
+            }
+
             .km-detail-description {
                 margin-top: 0.5rem;
             }

@@ -382,17 +382,6 @@ class KingdomSheet(
                 actor.setKingdom(kingdom)
             }
 
-            "add-event" -> {
-                val kingdom = getKingdom()
-                buildPromise {
-                    if (event != null) {
-                        // TODO
-//                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
-                        actor.setKingdom(kingdom)
-                    }
-                }
-            }
-
             "configure-activities" -> ActivityManagement(kingdomActor = actor).launch()
             "configure-events" -> KingdomEventManagement(kingdomActor = actor).launch()
             "configure-milestones" -> MilestoneManagement(kingdomActor = actor).launch()
@@ -580,17 +569,6 @@ class KingdomSheet(
                 }
             }
 
-            "delete-event" -> buildPromise {
-                actor.getKingdom()?.let { kingdom ->
-                    target.dataset["index"]?.toInt()?.let { eventIndex ->
-                        kingdom.ongoingEvents = kingdom.ongoingEvents
-                            .filterIndexed { index, _ -> index != eventIndex }
-                            .toTypedArray()
-                        actor.setKingdom(kingdom)
-                    }
-                }
-            }
-
             "check-cult-event" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     val dc = getCultEventDC(kingdom)
@@ -653,6 +631,63 @@ class KingdomSheet(
                     uuid = uuid,
                 )
                 postAddToOngoingEvents(result, rollMode)
+            }
+
+            "delete-event" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    target.dataset["index"]?.toInt()?.let { eventIndex ->
+                        kingdom.ongoingEvents = kingdom.ongoingEvents
+                            .filterIndexed { index, _ -> index != eventIndex }
+                            .toTypedArray()
+                        actor.setKingdom(kingdom)
+                    }
+                }
+            }
+
+            "add-event" -> {
+                val kingdom = getKingdom()
+                buildPromise {
+                    if (event != null) {
+                        // TODO
+//                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
+                        actor.setKingdom(kingdom)
+                    }
+                }
+            }
+
+            "change-event-stage" -> buildPromise {
+                val stage = target.dataset["stage"]?.toInt()
+                val eventIndex = target.dataset["eventIndex"]?.toInt()
+                checkNotNull(stage) { "index is null" }
+                checkNotNull(eventIndex) { "event index is null" }
+                actor.getKingdom()?.let { kingdom ->
+                    kingdom.ongoingEvents = kingdom.ongoingEvents
+                        .mapIndexed { index, event ->
+                            if (index == eventIndex) {
+                                event.copy(stage = stage)
+                            } else {
+                                event
+                            }
+                        }
+                        .toTypedArray()
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "handle-event" -> buildPromise {
+                val index = target.dataset["index"]?.toInt()
+                checkNotNull(index)
+                val kingdom = getKingdom()
+                val event = kingdom.getOngoingEvents().getOrNull(index)
+                checkNotNull(event)
+                actor.getKingdom()?.let { kingdom ->
+                    kingdomCheckDialog(
+                        game = game,
+                        kingdom = kingdom,
+                        kingdomActor = actor,
+                        check = CheckType.HandleEvent(event),
+                    )
+                }
             }
 
             "claimed-refuge" -> buildPromise {
@@ -866,23 +901,6 @@ class KingdomSheet(
                 val kingdom = actor.getKingdom() ?: return
                 configureLeaderKingdomSkills(kingdom.settings.leaderKingdomSkills, true) {}
             }
-
-            "handle-event" -> buildPromise {
-                val index = target.dataset["index"]?.toInt()
-                checkNotNull(index)
-                val kingdom = getKingdom()
-                val event = kingdom.getOngoingEvents().getOrNull(index)
-                checkNotNull(event)
-                actor.getKingdom()?.let { kingdom ->
-                    kingdomCheckDialog(
-                        game = game,
-                        kingdom = kingdom,
-                        kingdomActor = actor,
-                        check = CheckType.HandleEvent(event),
-                    )
-                }
-            }
-
 
             "perform-activity" -> buildPromise {
                 val activityId = target.dataset["activity"]
@@ -1183,7 +1201,11 @@ class KingdomSheet(
             chosenFeatures = chosenFeatures,
         )
         val automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value
-        val ongoingEvents = kingdom.getOngoingEvents().toContext(openedDetails = openedDetails)
+        val isGM = game.user.isGM
+        val ongoingEvents = kingdom.getOngoingEvents().toContext(
+            openedDetails = openedDetails,
+            isGM = isGM,
+        )
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -1250,10 +1272,10 @@ class KingdomSheet(
             skillRanks = kingdom.skillRanks.toContext(),
             milestones = kingdom.milestones.toContext(
                 kingdom.getMilestones(),
-                game.user.isGM,
+                isGM,
                 kingdom.settings.cultOfTheBloomEvents
             ),
-            isGM = game.user.isGM,
+            isGM = isGM,
             actor = actor,
             modifiers = kingdom.modifiers.toContext(),
             mainNav = createMainNav(kingdom),

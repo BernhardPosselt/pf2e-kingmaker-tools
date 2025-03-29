@@ -4,9 +4,22 @@
             <details {{#if open}}open{{/if}}>
                 <summary data-id="event-{{id}}"><span
                         class="km-detail-label">{{label}}{{#if modifier}} ({{modifier}}){{/if}}</span>
-                    <!-- TODO: add stage {{currentStage}} {{stages}}-->
-                    <!-- TODO: GM visibility -->
                     <div class="km-detail-controls">
+                        {{#each stages}}
+                        <button data-stage="{{index}}"
+                                data-event-index="{{@../index}}"
+                                {{#if ../hideStageButton}}hidden="hidden"{{/if}}
+                                type="button"
+                                class="{{#if active}}km-event-stage-active{{/if}}"
+                                data-action="change-event-stage">
+                            {{label}}
+                        </button>
+                        {{/each}}
+                        <button data-index="{{@index}}"
+                                type="button"
+                                data-action="handle-event">
+                            Handle <i class="fa-solid fa-dice-d20"></i>
+                        </button>
                         <button data-index="{{@index}}"
                                 {{#unless ../isGM}}hidden{{/unless}}
                                 type="button"
@@ -14,24 +27,18 @@
                                 data-action="delete-event">
                             <i class="fa-solid fa-trash"></i>
                         </button>
-                        <button data-index="{{@index}}"
-                                type="button"
-                                data-action="handle-event">
-                            Handle <i class="fa-solid fa-dice-d20"></i>
-                        </button>
                     </div>
                 </summary>
-                <div class="km-detail-description">
-                    <ul class="km-event-traits">
-                        {{#each traits}}
-                            <li>{{this}}</li>
-                        {{/each}}
-                    </ul>
-                    {{#if location}}<p><b>Location:</b> {{location}}</p>{{/if}}
-                    <p>{{{description}}}</p>
-                </div>
-                {{#each stages}}
-                    {{#unless @first}}<hr>{{/unless}}
+                <div {{#unless ../isGM}}hidden{{/unless}}>
+                    <div class="km-detail-description">
+                        <ul class="km-event-traits">
+                            {{#each traits}}
+                                <li>{{this}}</li>
+                            {{/each}}
+                        </ul>
+                        {{#if location}}<p><b>Location:</b> {{location}}</p>{{/if}}
+                        <p>{{{description}}}</p>
+                    </div>
                     <p><b>Leader</b>: {{leader}}</p>
                     <p><b>Skills</b>: {{#each skills}}{{this}}{{/each}}</p>
                     <ul class="km-summary-degrees">
@@ -44,14 +51,14 @@
                         {{#if criticalFailure}}
                             <li><b>Critical Failure:</b> {{{criticalFailure}}}</li>{{/if}}
                     </ul>
-                {{/each}}
-                {{#if resolution}}
-                    <hr>
-                    <p><b>Resolution:</b> {{resolution}}</p>
-                {{/if}}
-                {{#if special}}
-                    <hr>
-                    <p><b>Special:</b> {{special}}</p>{{/if}}
+                    {{#if resolution}}
+                        <hr>
+                        <p><b>Resolution:</b> {{resolution}}</p>
+                    {{/if}}
+                    {{#if special}}
+                        <hr>
+                        <p><b>Special:</b> {{special}}</p>{{/if}}
+                </div>
             </details>
         </li>
     {{/each}}

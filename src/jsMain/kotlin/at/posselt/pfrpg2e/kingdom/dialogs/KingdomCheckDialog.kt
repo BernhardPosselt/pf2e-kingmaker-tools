@@ -608,7 +608,7 @@ private class KingdomCheckDialog(
                 )
             }.toTypedArray()),
             useAssurance = data.assurance,
-            hidePhase = activity != null || event != null,
+            hidePhase = event != null,
             checkModifierLabel = checkModifier.formatAsModifier(),
             newModifierNameInput = TextInput(
                 label = "Name",
