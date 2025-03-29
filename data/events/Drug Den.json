@@ -13,13 +13,13 @@
         "msg": "You uncover and stop the drug ring before it causes a lot of damage, bringing counseling to those who may need it."
       },
       "success": {
-        "msg": "You work to minimize the damage done by the illicit drug trade, but the activity continues. Gain 1 Unrest."
+        "msg": "You work to minimize the damage done by the illicit drug trade, but the activity continues. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
       },
       "failure": {
-        "msg": "Drug dealers continue to spread their influence. Addiction increases and harms productivity, and drug- related crime grows. Increase Unrest, Crime, and Decay by 1 each."
+        "msg": "Drug dealers continue to spread their influence. Addiction increases and harms productivity, and drug- related crime grows. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>"
       },
       "criticalFailure": {
-        "msg": "Your attempt is a total failure. Increase Unrest by 1d4 and increase Crime and Decay (one score by 1, the other score by 2). In addition, the Residential lot that the drug den was located in is reduced to Rubble. The drug den then moves to another lot chosen by the GM (see Location, above)."
+        "msg": "Your attempt is a total failure. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button> (one score by 1, the other score by 2). In addition, the Residential lot that the drug den was located in is reduced to Rubble. The drug den then moves to another lot chosen by the GM (see Location, above)."
       }
     }
   ],

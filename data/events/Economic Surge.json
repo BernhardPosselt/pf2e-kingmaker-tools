@@ -8,13 +8,13 @@
       "leader": "treasurer",
       "skills": ["trade"],
       "criticalSuccess": {
-        "msg": "A trade bonanza brings unexpected\nprofits. Gain 2 bonus Resource Dice at the start of your\nnext Kingdom turn."
+        "msg": "A trade bonanza brings unexpected profits. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Gain 2 Resource Dice Next Turn</button>"
       },
       "success": {
-        "msg": "As critical success but you gain only 1 bonus\nResource Die at the start of your next Kingdom turn."
+        "msg": "As critical success but you gain only <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>"
       },
       "failure": {
-        "msg": "The economic surge slows for a bit; if you failed\nat this check on your previous Kingdom turn, the\nEconomic Surge event ends."
+        "msg": "The economic surge slows for a bit; if you failed at this check on your previous Kingdom turn, the Economic Surge event ends."
       },
       "criticalFailure": {
         "msg": "The economic surge comes to an end."
@@ -22,5 +22,5 @@
     }
   ],
   "resolvedOn": ["criticalFailure"],
-  "resolution": "This continuous event ends following either a\ncritical failure or two consecutive failures on the check."
+  "resolution": "This continuous event ends following either a critical failure or two consecutive failures on the check."
 }
