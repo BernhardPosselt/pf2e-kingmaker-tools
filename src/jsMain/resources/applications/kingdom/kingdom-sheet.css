@@ -416,8 +416,16 @@
             margin: 2px 0;
         }
 
-        p, .km-kingdom-activity-description li {
+        p,
+        .km-detail-description li,
+        .km-summary-degrees li {
             line-height: 1.5;
+        }
+
+        .km-kingdom-activity {
+            .km-detail-description {
+                padding-top: 1em;
+            }
         }
 
         details {
@@ -428,7 +436,6 @@
 
             .km-detail-description {
                 border-top: 1px solid;
-                padding-top: 1em;
             }
         }
 
@@ -473,7 +480,7 @@
     }
 
     .km-kingdom-sheet-turn {
-        .km-activity-label {
+        .km-detail-label {
             cursor: pointer;
         }
 
@@ -496,13 +503,32 @@
             }
         }
 
-        .km-kingdom-activities {
+        .km-kingdom-activities,
+        .km-kingdom-events {
             margin: 0;
             padding: 0;
             list-style-type: none;
         }
 
-        .km-kingdom-activity {
+        .km-kingdom-event {
+            .km-detail-description {
+                margin-top: 0.5rem;
+            }
+        }
+
+        .km-event-traits {
+            display: flex;
+            padding: 0;
+            list-style-type: none;
+            li {
+                padding: .5em;
+                border: 1px solid;
+            }
+
+            margin: .5em 0 1em;
+        }
+
+        .km-kingdom-details {
             details {
                 summary {
                     font-size: 1.2em;
@@ -510,12 +536,12 @@
                     align-items: center;
                     gap: .5em;
 
-                    .km-activity-controls {
+                    .km-detail-controls {
                         display: flex;
                         margin-left: auto;
                     }
 
-                    button {
+                    button:not(.km-icon-only) {
                         i {
                             margin-left: .25em;
                         }

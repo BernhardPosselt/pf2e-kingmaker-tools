@@ -204,30 +204,8 @@
             </p>
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2>Ongoing Events</h2>
-            <table {{#unless ongoingEvents}}hidden{{/unless}}>
-                <tr>
-                    <th>Ongoing Events</th>
-                    <th>Resolve</th>
-                </tr>
-                {{#each ongoingEvents}}
-                    <tr>
-                        <td>{{{this}}}</td>
-                        <td>
-                            <button type="button" data-action="remove-ongoing-event" data-index="{{@index}}"><i
-                                    class="fa fa-trash"></i></button>
-                        </td>
-                    </tr>
-                {{/each}}
-            </table>
-            <p {{#unless isGM}}hidden{{/unless}} >You can add an ongoing event by right-clicking on the
-                rolled event in chat and choosing <b>Add to Ongoing Events</b> or add it manually:</p>
-            <p {{#unless isGM}}hidden{{/unless}} class="km-turn-buttons">
-                {{> formElement ongoingEvent }}
-                <button type="button" data-action="add-ongoing-event" {{#if ongoingEventButtonDisabled}}disabled{{/if}}>
-                    Add Event
-                </button>
-            </p>
+            <h3>Active Events <span class="km-header-right-align" {{#unless isGM}}hidden{{/unless}}><button type="button" data-action="add-event">Add Event</button></span></h3>
+            {{> kingdom-events ongoingEvents=ongoingEvents isGM=isGM}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="{{actorUuid}}-km-turn-xp">XP</h2>

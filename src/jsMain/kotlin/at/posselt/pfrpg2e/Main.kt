@@ -120,6 +120,7 @@ fun main() {
             loadTemplatePartials(
                 arrayOf(
                     "kingdom-activities" to "applications/kingdom/activities.hbs",
+                    "kingdom-events" to "applications/kingdom/events.hbs",
                     "kingdom-trade-agreements" to "applications/kingdom/sections/trade-agreements/page.hbs",
                     "kingdom-settlements" to "applications/kingdom/sections/settlements/page.hbs",
                     "kingdom-turn" to "applications/kingdom/sections/turn/page.hbs",

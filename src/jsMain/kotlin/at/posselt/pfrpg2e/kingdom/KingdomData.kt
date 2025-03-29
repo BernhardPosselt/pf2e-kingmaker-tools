@@ -150,7 +150,7 @@ external interface KingdomData {
     var charterBlacklist: Array<String>
     var governmentBlacklist: Array<String>
     var kingdomEventBlacklist: Array<String>
-    var ongoingEvents: Array<RawActiveKingdomEvent>
+    var ongoingEvents: Array<RawOngoingKingdomEvent>
     var modifiers: Array<RawModifier>
     var settlements: Array<RawSettlement>
     var leaders: RawLeaders

@@ -56,7 +56,7 @@ private suspend fun toActivityContext(
     kingdom: KingdomData,
     chosenFeats: List<ChosenFeat>,
     chosenFeatures: List<ChosenFeature>,
-    openedActivityDetails: MutableSet<String>,
+    openedDetails: Set<String>,
 ): ActivityContext = coroutineScope {
     val descriptionP = async { enrichHtml(activity.description) }
     val criticalSuccessP = async { activity.criticalSuccess?.msg?.let { enrichHtml(it) } }
@@ -93,7 +93,7 @@ private suspend fun toActivityContext(
         criticalFailure = criticalFailure,
         isCollectTaxes = activity.id == "collect-taxes",
         order = activity.order,
-        open = activity.id in openedActivityDetails,
+        open = ("activity-" + activity.id) in openedDetails,
         hasCheck = Object.keys(activity.skills).isNotEmpty(),
     )
 }
@@ -103,7 +103,7 @@ suspend fun activitiesToActivityContext(
     allowCapitalInvestment: Boolean,
     kingdomSkillRanks: KingdomSkillRanks,
     chosenFeatures: List<ChosenFeature>,
-    openedActivityDetails: MutableSet<String>,
+    openedDetails: Set<String>,
     kingdom: KingdomData,
     chosenFeats: List<ChosenFeat>,
 ) = coroutineScope {
@@ -116,7 +116,7 @@ suspend fun activitiesToActivityContext(
                     allowCapitalInvestment = allowCapitalInvestment,
                     kingdomSkillRanks = kingdomSkillRanks,
                     chosenFeatures = chosenFeatures,
-                    openedActivityDetails = openedActivityDetails,
+                    openedDetails = openedDetails,
                     kingdom = kingdom,
                     chosenFeats = chosenFeats,
                 )
@@ -136,7 +136,7 @@ suspend fun toActivitiesContext(
     allowCapitalInvestment: Boolean,
     kingdomSkillRanks: KingdomSkillRanks,
     chosenFeatures: List<ChosenFeature>,
-    openedActivityDetails: MutableSet<String>,
+    openedDetails: Set<String>,
 ): ActivitiesContext = coroutineScope {
     val activitiesByPhase = activities
         .asSequence()
@@ -147,7 +147,7 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         chosenFeatures,
-        openedActivityDetails,
+        openedDetails,
         kingdom,
         chosenFeats,
     )
@@ -156,7 +156,7 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         chosenFeatures,
-        openedActivityDetails,
+        openedDetails,
         kingdom,
         chosenFeats,
     )
@@ -165,7 +165,7 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         chosenFeatures,
-        openedActivityDetails,
+        openedDetails,
         kingdom,
         chosenFeats,
     )
@@ -174,7 +174,7 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         chosenFeatures,
-        openedActivityDetails,
+        openedDetails,
         kingdom,
         chosenFeats,
     )
@@ -183,7 +183,7 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         chosenFeatures,
-        openedActivityDetails,
+        openedDetails,
         kingdom,
         chosenFeats,
     )
@@ -192,7 +192,7 @@ suspend fun toActivitiesContext(
         allowCapitalInvestment,
         kingdomSkillRanks,
         chosenFeatures,
-        openedActivityDetails,
+        openedDetails,
         kingdom,
         chosenFeats,
     )

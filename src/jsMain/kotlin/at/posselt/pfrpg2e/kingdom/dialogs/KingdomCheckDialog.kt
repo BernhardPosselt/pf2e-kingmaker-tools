@@ -25,8 +25,8 @@ import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.RawActivity
-import at.posselt.pfrpg2e.kingdom.RawKingdomEvent
 import at.posselt.pfrpg2e.kingdom.RawNote
 import at.posselt.pfrpg2e.kingdom.SettlementResult
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmies
@@ -293,7 +293,7 @@ private class KingdomCheckDialog(
     var data = CheckData(
         modifiers = baseModifiers.map { ModifierIdEnabled(it.id, it.enabled) }.toTypedArray(),
         leader = Leader.RULER.value,
-        rollMode = RollMode.PUBLICROLL.value,
+        rollMode = if (event == null) RollMode.PUBLICROLL.value else kingdom.settings.kingdomEventRollMode,
         skill = params.validSkills.first().value,
         phase = params.phase?.value,
         assurance = false,
@@ -520,7 +520,6 @@ private class KingdomCheckDialog(
             "${it.name} ${it.value.formatAsModifier()}"
         }.toTypedArray())
         val notes = serializeB64Json(enabledModifiers.flatMap { it.notes.map { it.serialize() } }.toTypedArray())
-        console.log(enabledModifiers.flatMap { it.notes.map { it.serialize() } }.toTypedArray())
         val checkModifier = if (data.assurance) {
             evaluatedModifiers.assurance
         } else {
@@ -697,7 +696,7 @@ sealed interface CheckType {
     value class RollSkill(val skill: KingdomSkill) : CheckType
     value class PerformActivity(val activity: RawActivity) : CheckType
     value class BuildStructure(val structure: Structure) : CheckType
-    data class EventCheck(val event: RawKingdomEvent, val stageIndex: Int) : CheckType
+    value class HandleEvent(val ongoingEvent: OngoingEvent) : CheckType
 }
 
 @JsPlainObject
@@ -797,11 +796,12 @@ suspend fun kingdomCheckDialog(
             )
         }
 
-        is CheckType.EventCheck -> {
-            val event = check.event.parse()
-            val stage = event.stages[check.stageIndex]
+        is CheckType.HandleEvent -> {
+            val event = check.ongoingEvent.event
+            val stageIndex = check.ongoingEvent.stageIndex
+            val stage = event.stages[stageIndex]
             checkNotNull(stage) {
-                "Stage index ${check.stageIndex} for event with id ${event.id} does not exist"
+                "Stage index $stageIndex for event with id ${event.id} does not exist"
             }
             val realm = game.getRealmData(kingdomActor, kingdom)
             val vacancies = kingdom.vacancies()
@@ -816,7 +816,7 @@ suspend fun kingdomCheckDialog(
                 validSkills = stage.skills,
                 phase = KingdomPhase.EVENT,
                 event = event,
-                eventStageIndex = check.stageIndex,
+                eventStageIndex = stageIndex,
             )
         }
     }

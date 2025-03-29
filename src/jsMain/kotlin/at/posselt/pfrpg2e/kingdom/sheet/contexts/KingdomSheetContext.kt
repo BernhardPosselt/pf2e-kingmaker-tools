@@ -50,7 +50,6 @@ external interface KingdomSheetContext : ValidatedHandlebarsContext {
     val skillRanks: SkillRanksContext
     val abilityScores: Array<AbilityScoreContext>
     val milestones: Array<MilestoneContext>
-    val ongoingEvent: FormElementContext
     val isGM: Boolean
     val actor: KingdomActor
     val modifiers: Array<ModifierContext>
@@ -62,14 +61,13 @@ external interface KingdomSheetContext : ValidatedHandlebarsContext {
     val vkXp: Boolean
     val activities: ActivitiesContext
     val canLevelUp: Boolean
-    val ongoingEvents: Array<String>
+    val ongoingEvents: Array<OngoingEventContext>
     val eventDC: Int
     val cultEventDC: Int
     val cultOfTheBloomEvents: Boolean
     val civicPlanning: Boolean
     val heartlandLabel: String?
     val leadershipActivities: Int
-    val ongoingEventButtonDisabled: Boolean
     val collectTaxesReduceUnrestDisabled: Boolean
     val consumption: Int
     val automateStats: Boolean

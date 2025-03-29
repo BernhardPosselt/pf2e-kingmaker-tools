@@ -76,17 +76,36 @@ fun RawKingdomEvent.parse() =
         resolution = resolution,
         resolvedOn = resolvedOn?.mapNotNull { DegreeOfSuccess.fromString(it) }?.toSet().orEmpty(),
         modifier = modifier ?: 0,
-        traits = resolvedOn?.mapNotNull { KingdomEventTrait.fromString(it) }?.toSet().orEmpty(),
+        traits = traits.mapNotNull { console.log(it);KingdomEventTrait.fromString(it) }.toSet(),
         location = location,
         stages = stages.map { it.parse() },
     )
 
 @JsPlainObject
-external interface RawActiveKingdomEvent {
+external interface RawOngoingKingdomEvent {
     val stage: Int
     val id: String
 }
 
+data class OngoingEvent(
+    val stageIndex: Int,
+    val event: KingdomEvent,
+) {
+    val stageCount = event.stages.size
+    val currentStage = event.stages[stageIndex]
+}
+
+fun KingdomData.getOngoingEvents(applyBlacklist: Boolean = false): List<OngoingEvent> {
+    val eventsById = getEvents(applyBlacklist).associateBy { it.id }
+    return ongoingEvents.mapNotNull {ongoing ->
+        eventsById[ongoing.id]?.let { event ->
+            OngoingEvent(
+                stageIndex = ongoing.stage,
+                event = event.parse(),
+            )
+        }
+    }
+}
 
 fun KingdomData.getEvents(applyBlacklist: Boolean = false): Array<RawKingdomEvent> {
     val overrides = homebrewKingdomEvents.map { it.id }.toSet()

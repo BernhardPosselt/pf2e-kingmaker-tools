@@ -24,7 +24,7 @@ suspend fun postDegreeOfSuccess(
     metaHtml: String = "",
     preHtml: String = "",
     postHtml: String = "",
-    title: String = ""
+    title: String = "",
 ) {
     val original = if (originalDegreeOfSuccess != null && originalDegreeOfSuccess != degreeOfSuccess) {
         originalDegreeOfSuccess.label

@@ -71,6 +71,7 @@ import at.posselt.pfrpg2e.kingdom.getGovernments
 import at.posselt.pfrpg2e.kingdom.getHeartlands
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getMilestones
+import at.posselt.pfrpg2e.kingdom.getOngoingEvents
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.getTrainedSkills
 import at.posselt.pfrpg2e.kingdom.hasLeaderUuid
@@ -144,25 +145,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.collections.contains
-import kotlin.collections.count
-import kotlin.collections.filter
-import kotlin.collections.filterIndexed
-import kotlin.collections.filterIsInstance
-import kotlin.collections.find
-import kotlin.collections.firstNotNullOfOrNull
-import kotlin.collections.forEach
-import kotlin.collections.getOrNull
-import kotlin.collections.isNotEmpty
-import kotlin.collections.listOf
-import kotlin.collections.map
-import kotlin.collections.mapNotNull
-import kotlin.collections.mutableSetOf
-import kotlin.collections.plus
-import kotlin.collections.sortedBy
-import kotlin.collections.sumOf
-import kotlin.collections.toSet
-import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -206,9 +188,7 @@ class KingdomSheet(
     private var currentCharacterSheetNavEntry: String = if (noCharter) "Creation" else "$initialKingdomLevel"
     private var currentNavEntry: MainNavEntry = if (noCharter) MainNavEntry.KINGDOM else MainNavEntry.TURN
     private var bonusFeat: String? = null
-    private var ongoingEvent: String? = null
-    private val openedActivityDetails = mutableSetOf<String>()
-    private var rerenderTimeoutId: Int? = null
+    private val openedDetails = mutableSetOf<String>()
 
     init {
         actor.apps[id] = this
@@ -402,14 +382,12 @@ class KingdomSheet(
                 actor.setKingdom(kingdom)
             }
 
-            "add-ongoing-event" -> {
+            "add-event" -> {
                 val kingdom = getKingdom()
                 buildPromise {
-                    val event = ongoingEvent
                     if (event != null) {
                         // TODO
 //                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
-                        ongoingEvent = null
                         actor.setKingdom(kingdom)
                     }
                 }
@@ -602,13 +580,12 @@ class KingdomSheet(
                 }
             }
 
-            "remove-ongoing-event" -> buildPromise {
+            "delete-event" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     target.dataset["index"]?.toInt()?.let { eventIndex ->
-                        // TODO
-//                        kingdom.ongoingEvents = kingdom.ongoingEvents
-//                            .filterIndexed { index, _ -> index != eventIndex }
-//                            .toTypedArray()
+                        kingdom.ongoingEvents = kingdom.ongoingEvents
+                            .filterIndexed { index, _ -> index != eventIndex }
+                            .toTypedArray()
                         actor.setKingdom(kingdom)
                     }
                 }
@@ -890,6 +867,23 @@ class KingdomSheet(
                 configureLeaderKingdomSkills(kingdom.settings.leaderKingdomSkills, true) {}
             }
 
+            "handle-event" -> buildPromise {
+                val index = target.dataset["index"]?.toInt()
+                checkNotNull(index)
+                val kingdom = getKingdom()
+                val event = kingdom.getOngoingEvents().getOrNull(index)
+                checkNotNull(event)
+                actor.getKingdom()?.let { kingdom ->
+                    kingdomCheckDialog(
+                        game = game,
+                        kingdom = kingdom,
+                        kingdomActor = actor,
+                        check = CheckType.HandleEvent(event),
+                    )
+                }
+            }
+
+
             "perform-activity" -> buildPromise {
                 val activityId = target.dataset["activity"]
                 checkNotNull(activityId)
@@ -1119,12 +1113,6 @@ class KingdomSheet(
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
         )
-        val ongoingEventInput = TextInput(
-            name = "ongoingEvent",
-            label = "Ongoing Event",
-            value = ongoingEvent ?: "",
-            required = false,
-        )
         val unrestPenalty = calculateUnrestPenalty(kingdom.unrest)
         val feats = kingdom.getFeats()
             .filter { it.id !in kingdom.featBlacklist }
@@ -1176,7 +1164,7 @@ class KingdomSheet(
             allowCapitalInvestment = settlements.current?.allowCapitalInvestment == true,
             kingdomSkillRanks = kingdomSkillRanks,
             chosenFeatures = chosenFeatures,
-            openedActivityDetails = openedActivityDetails,
+            openedDetails = openedDetails,
             kingdom = kingdom,
             chosenFeats = chosenFeats,
         )
@@ -1195,8 +1183,7 @@ class KingdomSheet(
             chosenFeatures = chosenFeatures,
         )
         val automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value
-        // TODO
-        val ongoingEvents = emptyArray<String>()
+        val ongoingEvents = kingdom.getOngoingEvents().toContext(openedDetails = openedDetails)
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -1266,7 +1253,6 @@ class KingdomSheet(
                 game.user.isGM,
                 kingdom.settings.cultOfTheBloomEvents
             ),
-            ongoingEvent = ongoingEventInput.toContext(),
             isGM = game.user.isGM,
             actor = actor,
             modifiers = kingdom.modifiers.toContext(),
@@ -1291,7 +1277,6 @@ class KingdomSheet(
             civicPlanning = kingdom.level >= 12,
             heartlandLabel = heartland?.name,
             leadershipActivities = if (globalBonuses.increaseLeadershipActivities) 3 else 2,
-            ongoingEventButtonDisabled = ongoingEvent.isNullOrEmpty(),
             collectTaxesReduceUnrestDisabled = kingdom.unrest <= 0,
             consumption = consumption.total,
             automateStats = automateStats,
@@ -1369,18 +1354,18 @@ class KingdomSheet(
             }
         // need to manually keep track of opened details because fucking foundry
         // re-renders the entire dom when you change anything, thereby closing all details
-        htmlElement.querySelectorAll(".km-kingdom-activity > details > summary").asList()
+        htmlElement.querySelectorAll(".km-kingdom-details > details > summary").asList()
             .filterIsInstance<HTMLElement>()
             .forEach { elem ->
                 elem.addEventListener("click", {
-                    if (it.target.unsafeCast<HTMLElement>().classList.contains("km-activity-label")) {
+                    if (it.target.unsafeCast<HTMLElement>().classList.contains("km-detail-label")) {
                         it.preventDefault()
                         it.stopPropagation()
-                        val activityId = (it.currentTarget as HTMLElement).dataset["activity"] ?: ""
-                        if (activityId in openedActivityDetails) {
-                            openedActivityDetails.remove(activityId)
+                        val id = (it.currentTarget as HTMLElement).dataset["id"] ?: ""
+                        if (id in openedDetails) {
+                            openedDetails.remove(id)
                         } else {
-                            openedActivityDetails.add(activityId)
+                            openedDetails.add(id)
                         }
                         render()
                     }
@@ -1429,7 +1414,6 @@ class KingdomSheet(
             beforeKingdomUpdate(previousKingdom, kingdom)
             actor.setKingdom(kingdom)
             bonusFeat = value.bonusFeat
-            ongoingEvent = value.ongoingEvent
         }
         null
     }

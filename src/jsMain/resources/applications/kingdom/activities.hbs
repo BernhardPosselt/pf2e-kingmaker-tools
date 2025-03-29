@@ -1,10 +1,10 @@
 <ul class="km-kingdom-activities">
     {{#each activities}}
-        <li class="km-kingdom-activity">
+        <li class="km-kingdom-activity km-kingdom-details">
             <details {{#if open}}open{{/if}}>
-                <summary data-activity="{{id}}"><span class="action-glyph">{{actions}}</span><span class="km-activity-label">{{label}}</span>{{#if fortune}}
+                <summary data-id="activity-{{id}}"><span class="action-glyph">{{actions}}</span><span class="km-detail-label">{{label}}</span>{{#if fortune}}
                     <i title="Fortune" class="fa-solid fa-clover"></i>{{/if}}
-                    <div class="km-activity-controls">
+                    <div class="km-detail-controls">
                         {{#if isCollectTaxes}}
                             <button {{#if ../collectTaxesReduceUnrestDisabled}}disabled{{/if}}
                                     type="button"
@@ -25,8 +25,8 @@
                     </div>
                 </summary>
                 {{#if requirement}}<p><b>Requirement:</b> {{requirement}}</p>{{/if}}
-                <p class="km-kingdom-activity-description km-detail-description">{{{description}}}</p>
-                <ul class="km-activity-degrees">
+                <p class="km-detail-description">{{{description}}}</p>
+                <ul class="km-summary-degrees">
                     {{#if criticalSuccess}}
                         <li><b>Critical Success:</b> {{{criticalSuccess}}}</li>{{/if}}
                     {{#if success}}

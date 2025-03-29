@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.migrations.migrations
 
 import at.posselt.pfrpg2e.kingdom.KingdomData
-import at.posselt.pfrpg2e.kingdom.RawActiveKingdomEvent
+import at.posselt.pfrpg2e.kingdom.RawOngoingKingdomEvent
 import at.posselt.pfrpg2e.utils.postChatMessage
 import com.foundryvtt.core.Game
 import kotlinx.js.JsPlainObject
@@ -65,7 +65,7 @@ class Migration14 : Migration(14) {
         kingdom.ongoingEvents = ongoingEvents
             .mapNotNull { kingdomEventIdMapping[it.name] }
             .map {
-                RawActiveKingdomEvent(
+                RawOngoingKingdomEvent(
                     stage = 0,
                     id = it
                 )
