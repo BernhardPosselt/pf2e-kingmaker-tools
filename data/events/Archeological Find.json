@@ -10,7 +10,7 @@
   "stages": [
     {
       "leader": "viceroy",
-      "skill": "exploration",
+      "skills": ["exploration"],
       "criticalSuccess": {
         "msg": "The site proves to be an ancient settlement that greatly predates the expansion into the region. Your people are delighted by the discovery. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>, and until the end of your next Kingdom turn, all Culture- and Economy-based skill checks gain a +2 circumstance bonus. If any of your settlements has a Museum, you put archaeological findings from this hex on display to the further delight of your citizens. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>",
         "modifiers": [

@@ -14,7 +14,7 @@
   "stages": [
     {
       "leader": "warden",
-      "skill": "defense",
+      "skills": ["defense"],
       "criticalSuccess": {
         "msg": "The bandits are captured, run off, or defeated, and merchants can confidently ply their wares. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>, and during the next Kingdom turn, you gain a +1 circumstance bonus to Economy-based checks.",
         "modifiers": [

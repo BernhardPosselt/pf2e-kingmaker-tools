@@ -280,7 +280,7 @@ fun KingdomData.createExpressionContext(
     structure: Structure?,
     event: KingdomEvent?,
     eventStage: KingdomEventStage?,
-    flags: Set<String> = emptySet()
+    flags: Set<String> = emptySet(),
 ): ExpressionContext {
     val chosenFeatures = getChosenFeatures(getExplodedFeatures())
     val chosenFeats = getChosenFeats(chosenFeatures)
@@ -310,5 +310,6 @@ fun KingdomData.createExpressionContext(
         settlementEvent = event?.traits?.contains(KingdomEventTrait.SETTLEMENT) == true,
         hexEvent = event?.traits?.contains(KingdomEventTrait.HEX) == true,
         eventLeader = eventStage?.leader,
+        event = event?.id,
     )
 }
