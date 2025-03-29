@@ -9,16 +9,16 @@
       "leader": "magister",
       "skills": ["folklore"],
       "criticalSuccess": {
-        "msg": "Pilgrims visit all of your settlements to engage in acts of worship. Not only do they provide their own food and supplies, but they also bring gifts to your shrines, temples, and cathedrals. Gain 1d6 Luxuries, reduce Unrest by 1d6, and reduce one Ruin of your choice by 1."
+        "msg": "Pilgrims visit all of your settlements to engage in acts of worship. Not only do they provide their own food and supplies, but they also bring gifts to your shrines, temples, and cathedrals. <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Luxuries</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>, and reduce one Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Strife</button></li></ul>"
       },
       "success": {
-        "msg": "The pilgrims celebrate their holy days at your settlements, and their good cheer and attitudes prove infectious. Reduce Unrest by 1d4."
+        "msg": "The pilgrims celebrate their holy days at your settlements, and their good cheer and attitudes prove infectious. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>"
       },
       "failure": {
-        "msg": "As success, but the pilgrims put a strain on your kingdom’s resources. Increase Consumption by 1d4 on the next turn."
+        "msg": "The pilgrims celebrate their holy days at your settlements, and their good cheer and attitudes prove infectious. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>. In addition, the pilgrims put a strain on your kingdom’s resources. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Consumption Next Turn</button>"
       },
       "criticalFailure": {
-        "msg": "The pilgrims hold their festivals, but their devout displays by a few strident zealots who stay behind stir up controversy with locals of other faiths. Increase Corruption by 1 and increase Consumption by 1d4 on the next turn."
+        "msg": "The pilgrims hold their festivals, but their devout displays by a few strident zealots who stay behind stir up controversy with locals of other faiths. <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Consumption Next Turn</button>"
       }
     }
   ]

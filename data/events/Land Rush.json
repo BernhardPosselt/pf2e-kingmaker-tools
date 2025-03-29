@@ -10,16 +10,16 @@
       "leader": "viceroy",
       "skills": ["politics"],
       "criticalSuccess": {
-        "msg": "You mediate the conflict among the settlers, and in thanks, they agree to join your kingdom. You automatically claim the Hex, gaining 10 kingdom XP (page 540) and increasing your kingdom’s Size by 1 (this affects all statistics determined by Size; see page 532). You immediately gain the benefits of the Farmland or Work Site the settlers built. Decrease Unrest by 1."
+        "msg": "You mediate the conflict among the settlers, and in thanks, they agree to join your kingdom. You automatically claim the Hex, gain XP for the claimed hex and increasing your kingdom’s Size by 1. You immediately gain the benefits of the Farmland or Work Site the settlers built. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>"
       },
       "success": {
-        "msg": "You mediate the conflict among the settlers, and they agree to join your kingdom if you pay them 4 Resource Dice of RP. If you do so, treat this as a critical success. If you refuse, treat this as a Failure."
+        "msg": "You mediate the conflict among the settlers, and they agree to join your kingdom if you <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"4\">Lose 4 Rolled Resource Dice</button>. If you do so, treat this as a critical success. If you refuse, treat this as a Failure."
       },
       "failure": {
-        "msg": "The settlers refuse any overture to join your kingdom and their bickering continues, ultimately resulting in the destruction of their hard work and many deaths. Your kingdom isn’t significantly impacted, but your failure to handle the situation generates unease. Increase Unrest by 1."
+        "msg": "The settlers refuse any overture to join your kingdom and their bickering continues, ultimately resulting in the destruction of their hard work and many deaths. Your kingdom isn’t significantly impacted, but your failure to handle the situation generates unease. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
       },
       "criticalFailure": {
-        "msg": "As failure, but the fighting spills over into your kingdom before it resolves itself. Increase Unrest by 1d4 and two Ruins of your choice by 1."
+        "msg": "As failure, but the fighting spills over into your kingdom before it resolves itself. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and increase two Ruins of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>"
       }
     }
   ]

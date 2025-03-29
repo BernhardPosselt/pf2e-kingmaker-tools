@@ -9,13 +9,26 @@
       "leader": "magister",
       "skills": ["wilderness"],
       "criticalSuccess": {
-        "msg": "The glorious climate puts everyone in an excellent mood. Reduce Unrest by 1d6, and once during your next Kingdom turn when you attempt an Agriculture, Boating, Exploration, or Wilderness check, you can roll twice and take the better result."
+        "msg": "The glorious climate puts everyone in an excellent mood. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>, and once during your next Kingdom turn when you attempt an Agriculture, Boating, Exploration, or Wilderness check, you can roll twice and take the better result.",
+        "modifiers": [{
+          "name": "Good Weather: Critical Success",
+          "buttonLabel": "Roll twice when attempting a Agriculture, Boating, Exploration, or Wilderness check",
+          "value": 0,
+          "enabled": false,
+          "type": "untyped",
+          "turns": 2,
+          "isConsumedAfterRoll": true,
+          "rollTwiceKeepHighest": true,
+          "applyIf": [{
+            "in": ["@skill", ["agriculture", "boating", "exploration", "wilderness"]]
+          }]
+        }]
       },
       "success": {
-        "msg": "Extended good weather makes life pleasant and easy. Reduce Unrest by 1d4."
+        "msg": "Extended good weather makes life pleasant and easy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>"
       },
       "failure": {
-        "msg": "Good weather produces a short but pleasant respite. Reduce Unrest by 1."
+        "msg": "Good weather produces a short but pleasant respite. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>"
       },
       "criticalFailure": {
         "msg": "The good weather doesn’t last long enough to help."

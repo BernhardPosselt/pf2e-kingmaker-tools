@@ -8,16 +8,45 @@
       "leader": "magister",
       "skills": ["arts"],
       "criticalSuccess": {
-        "msg": "The glow of the blessing brings lasting delight. During your next turn, the results of checks to Craft Luxuries or Create a Masterpiece are improved one degree. Decrease Unrest by 1d6."
+        "msg": "The glow of the blessing brings lasting delight. During your next turn, the results of checks to Craft Luxuries or Create a Masterpiece are improved one degree. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>",
+        "modifiers": [{
+          "type": "untyped",
+          "name": "Nature's Blessing: Critical Success",
+          "buttonLabel": "Increase Results of Craft Luxuries and Create a Masterpiece by One Degree",
+          "value": 0,
+          "turns": 2,
+          "enabled": true,
+          "applyIf": [{
+            "in": ["@activity", ["create-a-masterpiece", "craft-luxuries"]]
+          }],
+          "upgradeResults": [{
+            "upgrade": "success"
+          }, {
+            "upgrade": "failure"
+          }, {
+            "upgrade": "criticalFailure"
+          }]
+        }]
       },
       "success": {
-        "msg": "Your blessing touches the hearts of all. You gain a +1 status bonus to Culture- and Stability-based checks on your next Kingdom turn."
+        "msg": "Your blessing touches the hearts of all. You gain a +1 status bonus to Culture- and Stability-based checks on your next Kingdom turn.",
+        "modifiers": [{
+          "name": "Nature's Blessing: Success",
+          "buttonLabel": "+1 Status to Culture and Stability",
+          "enabled": true,
+          "value": 1,
+          "turns": 2,
+          "type": "status",
+          "applyIf": [{
+            "in": ["@ability", ["culture", "stability"]]
+          }]
+        }]
       },
       "failure": {
         "msg": "The blessing inspires some of your people but not all of them."
       },
       "criticalFailure": {
-        "msg": "Arguments over the meaning of the blessing taint people’s goodwill. Increase Unrest by 1."
+        "msg": "Arguments over the meaning of the blessing taint people’s goodwill. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
       }
     }
   ]

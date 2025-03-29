@@ -18,7 +18,7 @@
         "msg": "Although the nobles had good intentions, bickering among individual aristocrats ultimately prevents the project from ever taking place."
       },
       "criticalFailure": {
-        "msg": "As failure, but the bickering persists. Gain 1 Unrest and attempt a DC 11 flat check. On a failure, your kingdom suffers a Feud event on the next turn’s Event phase (in addition to any other event)."
+        "msg": "Although the nobles had good intentions, bickering among individual aristocrats ultimately prevents the project from ever taking place. In addition, the bickering persists. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and attempt a @Check[type:flat|dc:11] On a failure, your kingdom suffers a Feud event on the next turn’s Event phase (in addition to any other event)."
       }
     }
   ]
