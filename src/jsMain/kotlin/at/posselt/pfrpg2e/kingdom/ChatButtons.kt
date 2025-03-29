@@ -100,7 +100,8 @@ private val buttons = listOf(
         if (uuid != null) {
             actor.getKingdom()?.let { kingdom ->
                 val event = buildUuid(uuid)
-                kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
+                // TODO
+//                kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
                 actor.setKingdom(kingdom)
             }
         }

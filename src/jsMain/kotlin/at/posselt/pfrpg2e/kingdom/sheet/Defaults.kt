@@ -323,7 +323,6 @@ fun createKingdomDefaults(name: String) =
         ),
         features = emptyArray(),
         bonusFeats = emptyArray(),
-        ongoingEvents = emptyArray(),
         groups = emptyArray(),
         skillRanks = RawSkillRanks(
             agriculture = 0,
@@ -361,5 +360,5 @@ fun createKingdomDefaults(name: String) =
         initialProficiencies = emptyArray(),
         homebrewKingdomEvents = emptyArray(),
         kingdomEventBlacklist = emptyArray(),
-        activeKingdomEvents = emptyArray(),
+        ongoingEvents = emptyArray(),
     )

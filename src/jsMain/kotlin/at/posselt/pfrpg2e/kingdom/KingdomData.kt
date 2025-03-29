@@ -53,10 +53,6 @@ import com.foundryvtt.pf2e.actor.PF2ENpc
 import kotlinx.js.JsPlainObject
 
 
-@JsPlainObject
-external interface OngoingEvent {
-    var name: String
-}
 
 @JsPlainObject
 external interface KingdomSettings {
@@ -154,7 +150,7 @@ external interface KingdomData {
     var charterBlacklist: Array<String>
     var governmentBlacklist: Array<String>
     var kingdomEventBlacklist: Array<String>
-    var activeKingdomEvents: Array<RawActiveKingdomEvent>
+    var ongoingEvents: Array<RawActiveKingdomEvent>
     var modifiers: Array<RawModifier>
     var settlements: Array<RawSettlement>
     var leaders: RawLeaders
@@ -164,7 +160,6 @@ external interface KingdomData {
     var abilityBoosts: RawAbilityBoostChoices
     var features: Array<RawFeatureChoices>
     var bonusFeats: Array<RawBonusFeat>
-    var ongoingEvents: Array<OngoingEvent>
     var groups: Array<RawGroup>
     var skillRanks: RawSkillRanks
     var abilityScores: RawAbilityScores

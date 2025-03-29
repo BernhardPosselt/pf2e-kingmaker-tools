@@ -24,6 +24,7 @@ class KingdomEventManagement(
     override fun deleteEntry(id: String) = buildPromise {
         kingdomActor.getKingdom()?.let { kingdom ->
             kingdom.homebrewKingdomEvents = kingdom.homebrewKingdomEvents.filter { it.id != id }.toTypedArray()
+            kingdom.ongoingEvents = kingdom.ongoingEvents.filter { it.id != id }.toTypedArray()
             kingdom.kingdomEventBlacklist = kingdom.kingdomEventBlacklist.filter { it == id }.toTypedArray()
             kingdomActor.setKingdom(kingdom)
             render()

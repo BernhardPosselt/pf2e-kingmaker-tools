@@ -27,7 +27,6 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.AutomateResources
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
-import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.RawEq
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.RawSome
@@ -132,7 +131,6 @@ import com.foundryvtt.core.documents.onUpdateToken
 import com.foundryvtt.core.onApplyTokenStatusEffect
 import com.foundryvtt.core.onCanvasReady
 import com.foundryvtt.core.ui
-import com.foundryvtt.core.ui.enrichHtml
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
 import io.github.uuidjs.uuid.v4
@@ -141,13 +139,30 @@ import js.array.tupleOf
 import js.core.Void
 import js.objects.recordOf
 import kotlinx.browser.document
-import kotlinx.coroutines.async
 import kotlinx.coroutines.await
-import kotlinx.coroutines.awaitAll
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
+import kotlin.collections.contains
+import kotlin.collections.count
+import kotlin.collections.filter
+import kotlin.collections.filterIndexed
+import kotlin.collections.filterIsInstance
+import kotlin.collections.find
+import kotlin.collections.firstNotNullOfOrNull
+import kotlin.collections.forEach
+import kotlin.collections.getOrNull
+import kotlin.collections.isNotEmpty
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.mapNotNull
+import kotlin.collections.mutableSetOf
+import kotlin.collections.plus
+import kotlin.collections.sortedBy
+import kotlin.collections.sumOf
+import kotlin.collections.toSet
+import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -392,7 +407,8 @@ class KingdomSheet(
                 buildPromise {
                     val event = ongoingEvent
                     if (event != null) {
-                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
+                        // TODO
+//                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
                         ongoingEvent = null
                         actor.setKingdom(kingdom)
                     }
@@ -589,9 +605,10 @@ class KingdomSheet(
             "remove-ongoing-event" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     target.dataset["index"]?.toInt()?.let { eventIndex ->
-                        kingdom.ongoingEvents = kingdom.ongoingEvents
-                            .filterIndexed { index, _ -> index != eventIndex }
-                            .toTypedArray()
+                        // TODO
+//                        kingdom.ongoingEvents = kingdom.ongoingEvents
+//                            .filterIndexed { index, _ -> index != eventIndex }
+//                            .toTypedArray()
                         actor.setKingdom(kingdom)
                     }
                 }
@@ -1178,10 +1195,8 @@ class KingdomSheet(
             chosenFeatures = chosenFeatures,
         )
         val automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value
-        val ongoingEvents = kingdom.ongoingEvents
-            .map { async { enrichHtml(it.name) } }
-            .awaitAll()
-            .toTypedArray()
+        // TODO
+        val ongoingEvents = emptyArray<String>()
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,

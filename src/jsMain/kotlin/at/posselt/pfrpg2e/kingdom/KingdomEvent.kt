@@ -84,7 +84,7 @@ fun RawKingdomEvent.parse() =
 @JsPlainObject
 external interface RawActiveKingdomEvent {
     val stage: Int
-    val event: RawKingdomEvent
+    val id: String
 }
 
 
