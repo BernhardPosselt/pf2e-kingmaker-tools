@@ -60,6 +60,7 @@ enum class Resource(val value: String) {
     CRIME("crime"),
     DECAY("decay"),
     CORRUPTION("corruption"),
+    CONSUMPTION("consumption"),
     STRIFE("strife"),
     RESOURCE_POINTS("resource-points"),
     FOOD("food"),
@@ -160,6 +161,11 @@ data class ResourceButton(
         val message = "$mode ${abs(value)} ${resource.label}$turnLabel$hints"
         postChatMessage(message)
         val setter = when (resource) {
+            Resource.CONSUMPTION -> when (turn) {
+                Turn.NOW -> kingdom.consumption::now
+                Turn.NEXT -> kingdom.consumption::next
+            }
+
             Resource.RESOURCE_DICE -> when (turn) {
                 Turn.NOW -> kingdom.resourceDice::now
                 Turn.NEXT -> kingdom.resourceDice::next
@@ -230,6 +236,7 @@ data class ResourceButton(
             Resource.RESOURCE_DICE,
             Resource.RESOURCE_POINTS,
             Resource.ROLLED_RESOURCE_DICE,
+            Resource.CONSUMPTION,
             Resource.SUPERNATURAL_SOLUTION,
             Resource.CREATIVE_SOLUTION -> when (turn) {
                 Turn.NOW -> setter.set(updatedValue.coerceIn(0, Int.MAX_VALUE))

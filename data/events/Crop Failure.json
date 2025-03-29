@@ -1,5 +1,25 @@
 {
   "id": "crop-failure",
   "name": "Crop Failure",
-  "traits": ["dangerous", "hex"]
+  "traits": ["dangerous", "hex"],
+  "location": "A Farmland hex of the GM’s choice. If there are no Farmlands in the kingdom, this event has no effect.",
+  "description": "Pests, blight, or bad weather damage the harvest.",
+  "stages": [
+    {
+      "leader": "treasurer",
+      "skills": ["agriculture"],
+      "criticalSuccess": {
+        "msg": "You contain the damage from the crop failure without it impacting your kingdom’s resources."
+      },
+      "success": {
+        "msg": "You contain the crop failure, but not before it impacts your kingdom. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Consumption Next Turn</button>"
+      },
+      "failure": {
+        "msg": "The crop failure wipes out entire fields. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4+1\">Gain 1d4+1 Consumption Next Turn</button>"
+      },
+      "criticalFailure": {
+        "msg": "The crop failure wipes out entire fields. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4+1\">Gain 1d4+1 Consumption Next Turn</button>. In addition, the crop failure is so devastating that the Farmland is destroyed."
+      }
+    }
+  ]
 }

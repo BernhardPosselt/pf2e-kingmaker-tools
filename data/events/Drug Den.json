@@ -2,5 +2,27 @@
   "id": "drug-den",
   "name": "Drug Den",
   "traits": ["continuous", "dangerous", "settlement"],
-  "modifier": 1
+  "modifier": 1,
+  "location": "The largest settlement in the kingdom; the GM secretly selects one of the Residential lots to house a drug den.",
+  "description": "One of the Residential lots in your settlement has become an illicit hive for trading harmful and addictive drugs, and as long as it continues to operate, it could bring ruin to your entire kingdom.",
+  "stages": [
+    {
+      "leader": "counselor",
+      "skills": ["intrigue"],
+      "criticalSuccess": {
+        "msg": "You uncover and stop the drug ring before it causes a lot of damage, bringing counseling to those who may need it."
+      },
+      "success": {
+        "msg": "You work to minimize the damage done by the illicit drug trade, but the activity continues. Gain 1 Unrest."
+      },
+      "failure": {
+        "msg": "Drug dealers continue to spread their influence. Addiction increases and harms productivity, and drug- related crime grows. Increase Unrest, Crime, and Decay by 1 each."
+      },
+      "criticalFailure": {
+        "msg": "Your attempt is a total failure. Increase Unrest by 1d4 and increase Crime and Decay (one score by 1, the other score by 2). In addition, the Residential lot that the drug den was located in is reduced to Rubble. The drug den then moves to another lot chosen by the GM (see Location, above)."
+      }
+    }
+  ],
+  "resolvedOn": ["criticalSuccess"],
+  "resolution": "A critical success on the check ends this continuous event. Optionally, the GM can instead build a short adventure for the PCs to infiltrate the drug den and defeat the criminals in encounter mode."
 }

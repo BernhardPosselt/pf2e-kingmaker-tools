@@ -1,5 +1,26 @@
 {
   "id": "expansion-demand",
   "name": "Expansion Demand",
-  "traits": ["continuous", "dangerous"]
+  "traits": ["continuous", "dangerous"],
+  "description": "The citizens of your kingdom want expansion! If you successfully Claimed a Hex this turn, the result of your check for this event is improved one degree.",
+  "stages": [
+    {
+      "leader": "warden",
+      "skills": ["exploration"],
+      "criticalSuccess": {
+        "msg": "Your citizens are pleased with the growth of the kingdom."
+      },
+      "success": {
+        "msg": "You satisfy the citizens’ demands for growth, but if you don’t successfully Claim a Hex during your next Kingdom turn, increase Unrest by 1."
+      },
+      "failure": {
+        "msg": "Your citizens remain unhappy with your kingdom’s growth. Increase Unrest by 1. If you don’t successfully Claim a hex during your next Kingdom turn, increase Unrest by 1 again."
+      },
+      "criticalFailure": {
+        "msg": "As failure, but increase the Unrest by 2."
+      }
+    }
+  ],
+  "resolvedOn": ["criticalSuccess", "success"],
+  "resolution": "Achieve either a success or critical success at this event."
 }

@@ -2,5 +2,27 @@
   "id": "building-demand",
   "name": "Building Demand",
   "modifier": -1,
-  "traits": ["continuous", "dangerous", "settlement"]
+  "traits": ["continuous", "dangerous", "settlement"],
+  "location": "The largest settlement in the nation",
+  "description": "The citizens of the affected settlement demand that a particular structure be either built or demolished (equal chance of either). If the citizens demand a new structure, the GM chooses one as close to the kingdom’s level as possible, preferably one that decreases Unrest when built. If the citizens demand a structure be demolished, the GM chooses one that best fits the storyline of the campaign, preferably one whose item bonus or other benefits have been rendered obsolete by newer structures. If you are willing to commit each upcoming Civic activity granted by this settlement to attempting the requested Build Structure or Demolish activity until they succeed, you do not attempt the check.",
+  "stages": [
+    {
+      "leader": "viceroy",
+      "skills": ["politics"],
+      "criticalSuccess": {
+        "msg": "You persuade the citizens to give up their demands."
+      },
+      "success": {
+        "msg": "You quell the citizens’ demands for now, but they are not happy about your refusal to comply. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      },
+      "failure": {
+        "msg": "The citizens continue their demands and some refuse to work in protest. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
+      },
+      "criticalFailure": {
+        "msg": "The citizens continue their demands and some refuse to work in protest. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>. In addition, violence during the protests also causes you to <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>"
+      }
+    }
+  ],
+  "resolvedOn": ["criticalSuccess", "success"],
+  "resolution": "You can end this continuous event by critically succeeding or succeeding at the check or successfully building or demolishing the requested structure."
 }

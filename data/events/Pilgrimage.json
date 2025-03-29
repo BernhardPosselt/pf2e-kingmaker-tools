@@ -2,5 +2,24 @@
   "id": "pilgrimage",
   "name": "Pilgrimage",
   "modifier": 1,
-  "traits": ["beneficial"]
+  "traits": ["beneficial"],
+  "description": "A large number of pilgrims flock to your settlements to celebrate their high holy days or to bask in your kingdom’s faith. If your kingdom does not have at least one shrine, temple, or cathedral, this event does not occur.",
+  "stages": [
+    {
+      "leader": "magister",
+      "skills": ["folklore"],
+      "criticalSuccess": {
+        "msg": "Pilgrims visit all of your settlements to engage in acts of worship. Not only do they provide their own food and supplies, but they also bring gifts to your shrines, temples, and cathedrals. Gain 1d6 Luxuries, reduce Unrest by 1d6, and reduce one Ruin of your choice by 1."
+      },
+      "success": {
+        "msg": "The pilgrims celebrate their holy days at your settlements, and their good cheer and attitudes prove infectious. Reduce Unrest by 1d4."
+      },
+      "failure": {
+        "msg": "As success, but the pilgrims put a strain on your kingdom’s resources. Increase Consumption by 1d4 on the next turn."
+      },
+      "criticalFailure": {
+        "msg": "The pilgrims hold their festivals, but their devout displays by a few strident zealots who stay behind stir up controversy with locals of other faiths. Increase Corruption by 1 and increase Consumption by 1d4 on the next turn."
+      }
+    }
+  ]
 }

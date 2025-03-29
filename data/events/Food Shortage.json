@@ -2,5 +2,24 @@
   "id": "food-shortage",
   "name": "Food Shortage",
   "modifier": 1,
-  "traits": ["dangerous"]
+  "traits": ["dangerous"],
+  "description": "Spoilage, treachery, or bad luck has caused a food shortage this turn.",
+  "stages": [
+    {
+      "leader": "treasurer",
+      "skills": ["agriculture"],
+      "criticalSuccess": {
+        "msg": "Through careful rationing, you manage to get through the shortage without harm."
+      },
+      "success": {
+        "msg": "Your shortages are manageable, with some workers going hungry. Your kingdom’s Consumption is increased by 1 at the start of the next turn. Attempt a DC 6 flat check. On a failure, this event reoccurs next turn (in addition to any other event that would occur)."
+      },
+      "failure": {
+        "msg": "The shortages are severe. Your kingdom’s Consumption is increased by 1 per settlement at the start of the next turn. Attempt a DC 16 flat check. On a failure, this event reoccurs next turn (in addition to any other event that would occur)."
+      },
+      "criticalFailure": {
+        "msg": "The shortages are catastrophic. Increase Unrest by 2 and Strife by 1, and your kingdom’s Consumption is increased by 1 per settlement at the start of the next turn. This event reoccurs next turn (in addition to any other event that would occur)."
+      }
+    }
+  ]
 }

@@ -2,5 +2,25 @@
   "id": "economic-surge",
   "name": "Economic Surge",
   "modifier": 2,
-  "traits": ["beneficial", "continuous"]
+  "traits": ["beneficial", "continuous"],
+  "stages": [
+    {
+      "leader": "treasurer",
+      "skills": ["trade"],
+      "criticalSuccess": {
+        "msg": "A trade bonanza brings unexpected\nprofits. Gain 2 bonus Resource Dice at the start of your\nnext Kingdom turn."
+      },
+      "success": {
+        "msg": "As critical success but you gain only 1 bonus\nResource Die at the start of your next Kingdom turn."
+      },
+      "failure": {
+        "msg": "The economic surge slows for a bit; if you failed\nat this check on your previous Kingdom turn, the\nEconomic Surge event ends."
+      },
+      "criticalFailure": {
+        "msg": "The economic surge comes to an end."
+      }
+    }
+  ],
+  "resolvedOn": ["criticalFailure"],
+  "resolution": "This continuous event ends following either a\ncritical failure or two consecutive failures on the check."
 }

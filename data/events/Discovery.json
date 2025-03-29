@@ -1,5 +1,24 @@
 {
   "id": "discovery",
   "name": "Discovery",
-  "traits": ["beneficial"]
+  "traits": ["beneficial"],
+  "description": "Scholars unearth a bit of ancient lore or devise important new research of their own.",
+  "stages": [
+    {
+      "leader": "counselor",
+      "skills": ["scholarship"],
+      "criticalSuccess": {
+        "msg": "Your discovery brings glory and a boon to your resources! At the start of your next Kingdom turn, gain 1 Fame or Infamy point (as appropriate) and gain 6 bonus Resource Dice. Your people are amazed. Reduce Unrest by 2."
+      },
+      "success": {
+        "msg": "Your discovery is a helpful (but not overly amazing) boon to your kingdom’s resources. On your next turn, gain 3 bonus Resource Dice."
+      },
+      "failure": {
+        "msg": "Your discovery is of some academic interest but ultimately of limited use. Gain 1 bonus Resource Die at the start of your next turn."
+      },
+      "criticalFailure": {
+        "msg": "Your discovery turns out to be a dead end and a wasteful boondoggle. Reduce your total Resource Dice by 2 next turn."
+      }
+    }
+  ]
 }

@@ -1,5 +1,25 @@
 {
   "id": "noblesse-oblige",
   "name": "Noblesse Oblige",
-  "traits": ["beneficial", "settlement"]
+  "traits": ["beneficial", "settlement"],
+  "location": "A settlement that includes at least one mansion or noble villa. If there are no settlements in the kingdom with these structures, this event doesn’t occur.",
+  "description": "A noble family or wealthy benefactor offers to build an improvement to beautify the settlement.",
+  "stages": [
+    {
+      "leader": "viceroy",
+      "skills": ["arts"],
+      "criticalSuccess": {
+        "msg": "The nobles build a monument and a park in lots of the players’ choice at no expense to the kingdom (the Build Structure activity is not required)."
+      },
+      "success": {
+        "msg": "The nobles pay the RP and Commodity cost of either a monument or a park, provided the party uses the Civic activity granted by this settlement in the next Kingdom turn to Build the Structure. The Build Structure check automatically succeeds."
+      },
+      "failure": {
+        "msg": "Although the nobles had good intentions, bickering among individual aristocrats ultimately prevents the project from ever taking place."
+      },
+      "criticalFailure": {
+        "msg": "As failure, but the bickering persists. Gain 1 Unrest and attempt a DC 11 flat check. On a failure, your kingdom suffers a Feud event on the next turn’s Event phase (in addition to any other event)."
+      }
+    }
+  ]
 }

@@ -1,5 +1,24 @@
 {
   "id": "natures-blessing",
   "name": "Nature's Blessing",
-  "traits": ["beneficial"]
+  "traits": ["beneficial"],
+  "description": "A natural event, such as a bloom of rare wildflowers in a previously empty field, a glorious omen in the night sky like the northern lights, or the return to prominence of a previously rare type of wildlife raises your kingdom’s morale and inspires its creators.",
+  "stages": [
+    {
+      "leader": "magister",
+      "skills": ["arts"],
+      "criticalSuccess": {
+        "msg": "The glow of the blessing brings lasting delight. During your next turn, the results of checks to Craft Luxuries or Create a Masterpiece are improved one degree. Decrease Unrest by 1d6."
+      },
+      "success": {
+        "msg": "Your blessing touches the hearts of all. You gain a +1 status bonus to Culture- and Stability-based checks on your next Kingdom turn."
+      },
+      "failure": {
+        "msg": "The blessing inspires some of your people but not all of them."
+      },
+      "criticalFailure": {
+        "msg": "Arguments over the meaning of the blessing taint people’s goodwill. Increase Unrest by 1."
+      }
+    }
+  ]
 }

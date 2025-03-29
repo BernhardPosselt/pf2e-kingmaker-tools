@@ -2,5 +2,24 @@
   "id": "good-weather",
   "name": "Good Weather",
   "traits": ["beneficial", "fortune"],
-  "modifier": 1
+  "modifier": 1,
+  "description": "Good weather raises spirits among citizens.",
+  "stages": [
+    {
+      "leader": "magister",
+      "skills": ["wilderness"],
+      "criticalSuccess": {
+        "msg": "The glorious climate puts everyone in an excellent mood. Reduce Unrest by 1d6, and once during your next Kingdom turn when you attempt an Agriculture, Boating, Exploration, or Wilderness check, you can roll twice and take the better result."
+      },
+      "success": {
+        "msg": "Extended good weather makes life pleasant and easy. Reduce Unrest by 1d4."
+      },
+      "failure": {
+        "msg": "Good weather produces a short but pleasant respite. Reduce Unrest by 1."
+      },
+      "criticalFailure": {
+        "msg": "The good weather doesn’t last long enough to help."
+      }
+    }
+  ]
 }

@@ -2,5 +2,26 @@
   "id": "inquisition",
   "name": "Inquisition",
   "traits": ["continuous", "dangerous"],
-  "modifier": 1
+  "modifier": 1,
+  "description": "Demagogues and zealots mobilize public opinion against a particular ancestry, religion, kingdom, behavior, or leader. This particular inquisition’s dogma and beliefs are driven by a combination of fear, hatred, and ignorance, yet its members are nevertheless compelling and charismatic.",
+  "stages": [
+    {
+      "leader": "magister",
+      "skills": ["folklore"],
+      "criticalSuccess": {
+        "msg": "Choose to either pacify or defeat the inquisitors. If you pacify them, the inquisition event ends but the inquisitors remain active—if this event occurs again, they are even more headstrong; increase the event’s level modifier by 2. If you defeat them, the inquisition ends but the violence of the event increases one Ruin of your choice by 1."
+      },
+      "success": {
+        "msg": "You protect the targeted victims of the inquisition, though the inquisition’s ideas continue to spread. Increase Unrest by 1."
+      },
+      "failure": {
+        "msg": "The inquisitors strike out in force. Gain 1d4 Unrest and increase two Ruins of your choice by 1."
+      },
+      "criticalFailure": {
+        "msg": "As failure, but the Inquisition targets a specific structure in one of your settlements (the GM selects a structure appropriate to the inquisition’s nature of intolerance or hatred). Attempt a basic Defense check. If you fail, that structure is reduced to Rubble and increase Decay by 1."
+      }
+    }
+  ],
+  "resolvedOn": ["criticalSuccess"],
+  "resolution": "This event continues until you achieve a critical success at resolving the event. Alternately, the inquisition can be ended by having the PCs go on a short quest to infiltrate the inquisition’s headquarters to confront and defeat its leaders."
 }

@@ -1,5 +1,24 @@
 {
   "id": "food-surplus",
   "name": "Food Surplus",
-  "traits": ["beneficial"]
+  "traits": ["beneficial"],
+  "description": "Local crops thrive, hunters do very well, or livestock numbers are greater than expected. If this event occurs, it immediately ends any ongoing food shortage event.",
+  "stages": [
+    {
+      "leader": "treasurer",
+      "skills": ["agriculture"],
+      "criticalSuccess": {
+        "msg": "Your bumper crops include wild harvests that allow you to skip the entire Pay Consumption step of the Upkeep phase of your next Kingdom turn. Gain 1d6 Food Commodities."
+      },
+      "success": {
+        "msg": "Your excess crops lead to increased supplies. Treat your Consumption during the next Kingdom turn as 2 lower than its actual score and gain 1d6 Food Commodities."
+      },
+      "failure": {
+        "msg": "The food surplus isn’t as huge as you’d expected. Treat your Consumption during the next turn as 1 lower than its actual score."
+      },
+      "criticalFailure": {
+        "msg": "What you thought was an excess of food is infested with spoilage, ergot, or other contamination. Increase Unrest by 1 and one Ruin of your choice by1."
+      }
+    }
+  ]
 }

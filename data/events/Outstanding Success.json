@@ -1,5 +1,24 @@
 {
   "id": "outstanding-success",
   "name": "Outstanding Success",
-  "traits": ["beneficial"]
+  "traits": ["beneficial"],
+  "description": "One of your kingdom’s citizens brings glory to the kingdom, be it through an artistic masterpiece, an architectural marvel, a grand voyage of discovery, a landmark academic treatise, a new magical theory, or a similar discovery, as decided upon by the party.",
+  "stages": [
+    {
+      "leader": "counselor",
+      "skills": ["arts"],
+      "criticalSuccess": {
+        "msg": "The citizen’s success is truly legendary. Gain 3 bonus Resource Dice on your next turn."
+      },
+      "success": {
+        "msg": "This success brings fame and fortune to your kingdom. Gain 1 bonus Resource Die on your next turn."
+      },
+      "failure": {
+        "msg": "The success inspires imitators and rapidly loses its specialness, but you suffer no jealousy-driven backlash."
+      },
+      "criticalFailure": {
+        "msg": "Scandal! Either the artist’s sinister motives are exposed by their sudden fame, competitors work to undermine them, or the public simply refuses to accept the success. Increase Unrest by 1 and Corruption by 1."
+      }
+    }
+  ]
 }
