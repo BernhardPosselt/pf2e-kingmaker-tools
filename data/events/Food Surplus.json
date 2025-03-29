@@ -8,16 +8,16 @@
       "leader": "treasurer",
       "skills": ["agriculture"],
       "criticalSuccess": {
-        "msg": "Your bumper crops include wild harvests that allow you to skip the entire Pay Consumption step of the Upkeep phase of your next Kingdom turn. Gain 1d6 Food Commodities."
+        "msg": "Your bumper crops include wild harvests that allow you to skip the entire Pay Consumption step of the Upkeep phase of your next Kingdom turn. <button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Food</button>"
       },
       "success": {
-        "msg": "Your excess crops lead to increased supplies. Treat your Consumption during the next Kingdom turn as 2 lower than its actual score and gain 1d6 Food Commodities."
+        "msg": "Your excess crops lead to increased supplies. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Consumption Next Turn</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Food</button>"
       },
       "failure": {
-        "msg": "The food surplus isn’t as huge as you’d expected. Treat your Consumption during the next turn as 1 lower than its actual score."
+        "msg": "The food surplus isn’t as huge as you’d expected. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Lose 1 Consumption Next Turn</button>"
       },
       "criticalFailure": {
-        "msg": "What you thought was an excess of food is infested with spoilage, ergot, or other contamination. Increase Unrest by 1 and one Ruin of your choice by1."
+        "msg": "What you thought was an excess of food is infested with spoilage, ergot, or other contamination. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and increase a Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>"
       }
     }
   ]

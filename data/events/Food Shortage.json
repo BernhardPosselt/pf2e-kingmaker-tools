@@ -12,13 +12,13 @@
         "msg": "Through careful rationing, you manage to get through the shortage without harm."
       },
       "success": {
-        "msg": "Your shortages are manageable, with some workers going hungry. Your kingdom’s Consumption is increased by 1 at the start of the next turn. Attempt a DC 6 flat check. On a failure, this event reoccurs next turn (in addition to any other event that would occur)."
+        "msg": "Your shortages are manageable, with some workers going hungry. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Consumption Next Turn</button> Attempt a @Check[type:flat|dc:6]. On a failure, this event reoccurs next turn (in addition to any other event that would occur)."
       },
       "failure": {
-        "msg": "The shortages are severe. Your kingdom’s Consumption is increased by 1 per settlement at the start of the next turn. Attempt a DC 16 flat check. On a failure, this event reoccurs next turn (in addition to any other event that would occur)."
+        "msg": "The shortages are severe. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"true\" data-value=\"1\">Gain 1 Consumption Per Settlement Next Turn</button>. Attempt a @Check[type:flat|dc:16]. On a failure, this event reoccurs next turn (in addition to any other event that would occur)."
       },
       "criticalFailure": {
-        "msg": "The shortages are catastrophic. Increase Unrest by 2 and Strife by 1, and your kingdom’s Consumption is increased by 1 per settlement at the start of the next turn. This event reoccurs next turn (in addition to any other event that would occur)."
+        "msg": "The shortages are catastrophic. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button>, and your <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"true\" data-value=\"1\">Gain 1 Consumption Per Settlement Next Turn</button>. This event reoccurs next turn (in addition to any other event that would occur)."
       }
     }
   ]
