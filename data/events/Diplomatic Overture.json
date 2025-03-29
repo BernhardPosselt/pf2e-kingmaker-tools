@@ -1,4 +1,5 @@
 {
   "id": "diplomatic-overture",
-  "name": "Diplomatic Overture"
+  "name": "Diplomatic Overture",
+  "traits": ["beneficial"]
 }

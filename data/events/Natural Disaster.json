@@ -1,4 +1,6 @@
 {
   "id": "natural-disaster",
-  "name": "Natural Disaster"
+  "name": "Natural Disaster",
+  "modifier": 2,
+  "traits": ["dangerous"]
 }

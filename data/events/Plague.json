@@ -1,4 +1,6 @@
 {
   "id": "plague",
-  "name": "Plague"
+  "name": "Plague",
+  "modifier": 1,
+  "traits": ["continuous", "dangerous", "settlement"]
 }

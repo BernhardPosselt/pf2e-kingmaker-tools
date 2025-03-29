@@ -1,4 +1,5 @@
 {
   "id": "monster-activity",
-  "name": "Monster Activity"
+  "name": "Monster Activity",
+  "traits": ["dangerous", "continuous", "hex"]
 }

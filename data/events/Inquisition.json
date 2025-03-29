@@ -1,4 +1,6 @@
 {
   "id": "inquisition",
-  "name": "Inquisition"
+  "name": "Inquisition",
+  "traits": ["continuous", "dangerous"],
+  "modifier": 1
 }

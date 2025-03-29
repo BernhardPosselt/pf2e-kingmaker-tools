@@ -1,4 +1,5 @@
 {
   "id": "noblesse-oblige",
-  "name": "Noblesse Oblige"
+  "name": "Noblesse Oblige",
+  "traits": ["beneficial", "settlement"]
 }

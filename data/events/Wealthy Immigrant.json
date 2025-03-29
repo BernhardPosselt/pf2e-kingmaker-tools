@@ -1,4 +1,6 @@
 {
   "id": "wealthy-immigrant",
-  "name": "Wealthy Immigrant"
+  "name": "Wealthy Immigrant",
+  "traits": ["beneficial", "continuous", "settlement"],
+  "modifier": 2
 }

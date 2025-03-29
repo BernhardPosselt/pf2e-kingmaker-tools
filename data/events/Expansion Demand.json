@@ -1,4 +1,5 @@
 {
   "id": "expansion-demand",
-  "name": "Expansion Demand"
+  "name": "Expansion Demand",
+  "traits": ["continuous", "dangerous"]
 }

@@ -1,4 +1,6 @@
 {
   "id": "sensational-crime",
-  "name": "Sensational Crime"
+  "name": "Sensational Crime",
+  "modifier": 1,
+  "traits": ["continuous", "dangerous", "settlement"]
 }

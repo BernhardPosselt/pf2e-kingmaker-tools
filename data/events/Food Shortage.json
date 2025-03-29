@@ -1,4 +1,6 @@
 {
   "id": "food-shortage",
-  "name": "Food Shortage"
+  "name": "Food Shortage",
+  "modifier": 1,
+  "traits": ["dangerous"]
 }

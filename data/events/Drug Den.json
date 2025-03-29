@@ -1,4 +1,6 @@
 {
   "id": "drug-den",
-  "name": "Drug Den"
+  "name": "Drug Den",
+  "traits": ["continuous", "dangerous", "settlement"],
+  "modifier": 1
 }

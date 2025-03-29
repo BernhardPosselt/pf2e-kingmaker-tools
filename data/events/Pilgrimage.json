@@ -1,4 +1,6 @@
 {
   "id": "pilgrimage",
-  "name": "Pilgrimage"
+  "name": "Pilgrimage",
+  "modifier": 1,
+  "traits": ["beneficial"]
 }

@@ -1,4 +1,6 @@
 {
   "id": "remarkable-treasure",
-  "name": "Remarkable Treasure"
+  "name": "Remarkable Treasure",
+  "traits": ["beneficial", "fortune"],
+  "modifier": 2
 }

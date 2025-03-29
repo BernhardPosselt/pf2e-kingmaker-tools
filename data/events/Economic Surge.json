@@ -1,4 +1,6 @@
 {
   "id": "economic-surge",
-  "name": "Economic Surge"
+  "name": "Economic Surge",
+  "modifier": 2,
+  "traits": ["beneficial", "continuous"]
 }

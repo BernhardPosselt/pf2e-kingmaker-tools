@@ -1,4 +1,5 @@
 {
   "id": "food-surplus",
-  "name": "Food Surplus"
+  "name": "Food Surplus",
+  "traits": ["beneficial"]
 }

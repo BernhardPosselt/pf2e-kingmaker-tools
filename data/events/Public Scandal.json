@@ -1,4 +1,5 @@
 {
   "id": "public-scandal",
-  "name": "Public Scandal"
+  "name": "Public Scandal",
+  "traits": ["dangerous"]
 }

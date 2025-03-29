@@ -1,4 +1,6 @@
 {
   "id": "land-rush",
-  "name": "Land Rush"
+  "name": "Land Rush",
+  "modifier": 1,
+  "traits": ["dangerous","hex"]
 }

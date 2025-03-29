@@ -1,4 +1,5 @@
 {
   "id": "unexpected-find",
-  "name": "Unexpected Find"
+  "name": "Unexpected Find",
+  "traits": ["beneficial", "settlement"]
 }

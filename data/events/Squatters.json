@@ -1,4 +1,6 @@
 {
   "id": "squatters",
-  "name": "Squatters"
+  "name": "Squatters",
+  "modifier": -1,
+  "traits": ["continuous", "dangerous", "settlement"]
 }

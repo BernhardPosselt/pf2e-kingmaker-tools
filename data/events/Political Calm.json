@@ -1,4 +1,6 @@
 {
   "id": "political-calm",
-  "name": "Political Calm"
+  "name": "Political Calm",
+  "modifier": -1,
+  "traits": ["beneficial"]
 }

@@ -1,4 +1,5 @@
 {
   "id": "feud",
-  "name": "Feud"
+  "name": "Feud",
+  "traits": ["continuous", "dangerous", "settlement"]
 }

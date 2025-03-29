@@ -1,4 +1,5 @@
 {
   "id": "crop-failure",
-  "name": "Crop Failure"
+  "name": "Crop Failure",
+  "traits": ["dangerous", "hex"]
 }

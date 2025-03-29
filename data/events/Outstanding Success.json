@@ -1,4 +1,5 @@
 {
   "id": "outstanding-success",
-  "name": "Outstanding Success"
+  "name": "Outstanding Success",
+  "traits": ["beneficial"]
 }

@@ -1,4 +1,6 @@
 {
   "id": "good-weather",
-  "name": "Good Weather"
+  "name": "Good Weather",
+  "traits": ["beneficial", "fortune"],
+  "modifier": 1
 }

@@ -1,4 +1,5 @@
 {
   "id": "local-disaster",
-  "name": "Local Disaster"
+  "name": "Local Disaster",
+  "traits": ["dangerous", "settlement"]
 }

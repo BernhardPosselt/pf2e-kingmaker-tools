@@ -1,4 +1,5 @@
 {
   "id": "new-subjects",
-  "name": "New Subjects"
+  "name": "New Subjects",
+  "traits": ["beneficial"]
 }

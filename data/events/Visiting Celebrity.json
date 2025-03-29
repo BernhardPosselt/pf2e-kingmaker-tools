@@ -1,4 +1,6 @@
 {
   "id": "visiting-celebrity",
-  "name": "Visiting Celebrity"
+  "name": "Visiting Celebrity",
+  "traits": ["beneficial", "settlement"],
+  "modifier": 1
 }

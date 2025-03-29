@@ -1,4 +1,6 @@
 {
   "id": "sacrifices",
-  "name": "Sacrifices"
+  "name": "Sacrifices",
+  "traits": ["dangerous", "continuous", "hex"],
+  "modifier": 2
 }

@@ -1,4 +1,6 @@
 {
   "id": "building-demand",
-  "name": "Building Demand"
+  "name": "Building Demand",
+  "modifier": -1,
+  "traits": ["continuous", "dangerous", "settlement"]
 }

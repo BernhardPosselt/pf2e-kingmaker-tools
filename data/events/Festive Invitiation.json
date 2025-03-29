@@ -1,4 +1,5 @@
 {
   "id": "festive-invitation",
-  "name": "Festive Invitation"
+  "name": "Festive Invitation",
+  "traits": ["beneficial"]
 }

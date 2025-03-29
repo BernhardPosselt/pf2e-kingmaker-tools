@@ -1,4 +1,6 @@
 {
   "id": "cult-activity",
-  "name": "Cult Activity"
+  "name": "Cult Activity",
+  "modifier": 1,
+  "traits": ["continuous", "dangerous", "settlement"]
 }

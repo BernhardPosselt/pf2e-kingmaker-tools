@@ -1,4 +1,5 @@
 {
   "id": "undead-uprising",
-  "name": "Undead Uprising"
+  "name": "Undead Uprising",
+  "traits": ["continuous", "dangerous", "settlement"],
 }

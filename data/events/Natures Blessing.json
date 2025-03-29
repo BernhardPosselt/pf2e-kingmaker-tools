@@ -1,4 +1,5 @@
 {
   "id": "natures-blessing",
-  "name": "Nature's Blessing"
+  "name": "Nature's Blessing",
+  "traits": ["beneficial"]
 }
