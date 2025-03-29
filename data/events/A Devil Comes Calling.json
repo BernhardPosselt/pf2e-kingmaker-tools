@@ -8,7 +8,7 @@
   "stages": [
     {
       "leader": "warden",
-      "skill": "intrigue",
+      "skills": ["intrigue"],
       "criticalSuccess": {
         "msg": "Kingdom agents manage to isolate the source of the diabolic influence: the devil has made a hidden lair within the settlement; the PCs have discovered where this secret den is located, and can finally take direct action to resolve the event."
       },

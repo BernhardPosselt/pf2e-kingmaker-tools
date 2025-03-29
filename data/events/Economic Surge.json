@@ -3,6 +3,7 @@
   "name": "Economic Surge",
   "modifier": 2,
   "traits": ["beneficial", "continuous"],
+  "description": "Trade and productivity have been booming throughout your kingdom.",
   "stages": [
     {
       "leader": "treasurer",

@@ -41,6 +41,8 @@ class ExpressionTest {
             settlementEvent = false,
             hexEvent = false,
             eventLeader = null,
+            event = null,
+            structures = emptySet(),
         )
         val result = Not(
             All(listOf(
