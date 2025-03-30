@@ -158,7 +158,8 @@ data class ResourceButton(
         val turnLabel = if (turn == Turn.NEXT) " Next Turn" else ""
         val hints = hints?.let { " ($it)" } ?: ""
         val mode = if (mode == ResourceMode.GAIN) "Gaining" else "Losing"
-        val message = "$mode ${abs(value)} ${resource.label}$turnLabel$hints"
+        val label = if (resource == Resource.ROLLED_RESOURCE_DICE) "Resource Points" else resource.label
+        val message = "$mode ${abs(value)} $label$turnLabel$hints"
         postChatMessage(message)
         val setter = when (resource) {
             Resource.CONSUMPTION -> when (turn) {
