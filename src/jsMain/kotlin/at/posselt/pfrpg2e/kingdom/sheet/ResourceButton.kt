@@ -235,10 +235,7 @@ data class ResourceButton(
             // values that only can go below 0 in the next turn column
             Resource.RESOURCE_DICE,
             Resource.RESOURCE_POINTS,
-            Resource.ROLLED_RESOURCE_DICE,
-            Resource.CONSUMPTION,
-            Resource.SUPERNATURAL_SOLUTION,
-            Resource.CREATIVE_SOLUTION -> when (turn) {
+            Resource.ROLLED_RESOURCE_DICE -> when (turn) {
                 Turn.NOW -> setter.set(updatedValue.coerceIn(0, Int.MAX_VALUE))
                 Turn.NEXT -> setter.set(updatedValue)
             }
@@ -248,7 +245,11 @@ data class ResourceButton(
             Resource.CORRUPTION,
             Resource.STRIFE,
             Resource.UNREST,
+            Resource.SUPERNATURAL_SOLUTION,
+            Resource.CREATIVE_SOLUTION,
             Resource.XP -> setter.set(updatedValue.coerceIn(0, Int.MAX_VALUE))
+            // values that can be both negative in the now and next column
+            Resource.CONSUMPTION -> setter.set(updatedValue)
         }
     }
 }

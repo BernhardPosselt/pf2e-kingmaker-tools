@@ -54,12 +54,14 @@ suspend fun buildChatButtons(
     modifiers: Array<RawModifier>,
     actorUuid: String,
     eventIndex: Int,
+    eventId: String?,
 ): String {
     return tpl(
         path = "chatmessages/roll-chat-buttons.hbs",
         ctx = ChatButtonContext(
             criticalSuccess = degree == DegreeOfSuccess.CRITICAL_SUCCESS,
             eventIndex = eventIndex,
+            eventId = eventId,
             modifiers = modifiers.map {
                 ChatModifier(
                     label = it.buttonLabel ?: it.name,
@@ -211,14 +213,20 @@ suspend fun postComplexDegreeOfSuccess(
         DegreeOfSuccess.SUCCESS -> degreeMessages?.success
         DegreeOfSuccess.CRITICAL_SUCCESS -> degreeMessages?.criticalSuccess
     }
-    val eventButtonIndex = eventIndex.takeIf {
-        val isLastStage = event?.stages?.size == eventStageIndex + 1
+    val buttonEvent = event?.takeIf {
+        val isLastStage = it.stages.size == eventStageIndex + 1
         val resolvedOnDegree = changedDegreeOfSuccess in resolveEventOn
-        val isNotContinuousEvent = KingdomEventTrait.CONTINUOUS.value !in event?.traits.orEmpty()
+        val isNotContinuousEvent = KingdomEventTrait.CONTINUOUS.value !in event.traits
         (resolvedOnDegree || isNotContinuousEvent) && isLastStage
-    } ?: 0
+    }
     val postHtml = if (chatModifiers.isNotEmpty() || changedDegreeOfSuccess == DegreeOfSuccess.CRITICAL_SUCCESS) {
-        buildChatButtons(changedDegreeOfSuccess, chatModifiers, kingdomActor.uuid, eventButtonIndex)
+        buildChatButtons(
+            degree = changedDegreeOfSuccess,
+            modifiers = chatModifiers,
+            actorUuid = kingdomActor.uuid,
+            eventIndex = eventIndex,
+            eventId = buttonEvent?.id,
+        )
     } else {
         ""
     }

@@ -86,7 +86,10 @@ private val buttons = listOf(
     ChatButton("km-resolve-event") { game, actor, event, button ->
         actor.getKingdom()?.let { kingdom ->
             val eventIndex = button.dataset["eventIndex"]?.toInt()!!
-            val event = kingdom.getOngoingEvents().getOrNull(eventIndex)
+            val eventId = button.dataset["eventId"]!!
+            val event = kingdom.getOngoingEvents()
+                .getOrNull(eventIndex)
+                ?.takeIf { it.event.id == eventId }
             checkNotNull(event) {
                 "Could not find event with index $eventIndex"
             }
