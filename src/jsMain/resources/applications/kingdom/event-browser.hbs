@@ -1,0 +1,49 @@
+<ul class="km-add-events">
+    {{#each events}}
+        <li>
+            <details>
+                <summary>
+                    <span>{{label}}</span>
+                    <button data-id="{{id}}"
+                            data-settlement-event="{{sisSettlement}}"
+                            type="button"
+                            data-action="add-event">
+                        Add
+                    </button>
+                </summary>
+                <div class="km-add-event-description">
+                    <ul class="km-event-traits">
+                        {{#each traits}}
+                            <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                    {{#if location}}<p><b>Location:</b> {{location}}</p>{{/if}}
+                    <p>{{{description}}}</p>
+                </div>
+                {{#each stages}}
+                    {{#unless @first}}
+                        <hr>{{/unless}}
+                    <p><b>Leader</b>: {{leader}}</p>
+                    <p><b>Skills</b>: {{#each skills}}{{this}}{{/each}}</p>
+                    <ul class="km-event-degrees">
+                        {{#if criticalSuccess}}
+                            <li><b>Critical Success:</b> {{{criticalSuccess}}}</li>{{/if}}
+                        {{#if success}}
+                            <li><b>Success:</b> {{{success}}}</li>{{/if}}
+                        {{#if failure}}
+                            <li><b>Failure:</b> {{{failure}}}</li>{{/if}}
+                        {{#if criticalFailure}}
+                            <li><b>Critical Failure:</b> {{{criticalFailure}}}</li>{{/if}}
+                    </ul>
+                {{/each}}
+                {{#if resolution}}
+                    <hr>
+                    <p><b>Resolution:</b> {{resolution}}</p>
+                {{/if}}
+                {{#if special}}
+                    <hr>
+                    <p><b>Special:</b> {{special}}</p>{{/if}}
+            </details>
+        </li>
+    {{/each}}
+</ul>

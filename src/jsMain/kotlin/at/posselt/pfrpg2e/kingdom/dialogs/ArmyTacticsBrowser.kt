@@ -54,6 +54,7 @@ private class ArmyTacticsBrowser(
 ) : SimpleApp<ArmyTacticsContext>(
     title = "Learnable Tactics: ${army.name}",
     template = "applications/kingdom/army-tactics-browser.hbs",
+    classes = arrayOf("km-scroll-application"),
     id = "kmArmyTactics-${kingdomActor.uuid}",
     width = 600,
 ) {

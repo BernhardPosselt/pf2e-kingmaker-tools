@@ -40,6 +40,7 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.data.getChosenHeartland
 import at.posselt.pfrpg2e.kingdom.dialogs.ActivityManagement
+import at.posselt.pfrpg2e.kingdom.dialogs.AddEvent
 import at.posselt.pfrpg2e.kingdom.dialogs.AddModifier
 import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
@@ -647,11 +648,18 @@ class KingdomSheet(
             "add-event" -> {
                 val kingdom = getKingdom()
                 buildPromise {
-                    if (event != null) {
-                        // TODO
-//                        kingdom.ongoingEvents = kingdom.ongoingEvents + OngoingEvent(name = event)
-                        actor.setKingdom(kingdom)
-                    }
+                    val settlements = kingdom.getAllSettlements(game)
+                    AddEvent(
+                        game = game,
+                        kingdomActor = actor,
+                        kingdom = kingdom,
+                        settlements = settlements.allSettlements,
+                        onSave = {
+                            val k = getKingdom()
+                            k.ongoingEvents = k.ongoingEvents + it
+                            actor.setKingdom(k)
+                        }
+                    ).launch()
                 }
             }
 

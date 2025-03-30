@@ -5,6 +5,7 @@
 @import "./components/skill-picker/skill-picker.css";
 @import "./components/skill-picker/skill-picker-input.css";
 @import "./components/activity-effects/activity-effects-input.css";
+@import "./applications/kingdom/event-browser.css";
 @import "./applications/kingdom/check.css";
 @import "./applications/kingdom/kingdom-sheet.css";
 @import "./applications/kingdom/structure-browser.css";
@@ -28,6 +29,12 @@
     --rarity-uncommon: #98513d;
     --rarity-rare: #002664;
     --rarity-unique: #54166e;
+}
+
+.km-scroll-application {
+    .window-content {
+        overflow: auto;
+    }
 }
 
 .km-degree-of-success {

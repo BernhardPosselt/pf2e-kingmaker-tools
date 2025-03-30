@@ -52,6 +52,7 @@ private class ArmyBrowser(
 ) : SimpleApp<ArmiesContext>(
     title = "Armies in 'Recruitable Armies' Folder",
     template = "applications/kingdom/army-browser.hbs",
+    classes = arrayOf("km-scroll-application"),
     width = 600,
     id = "kmArmies-${kingdomActor.uuid}",
 ) {

@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
+import com.foundryvtt.core.ui
 import kotlinx.js.JsPlainObject
 
 
@@ -29,6 +30,11 @@ data class PickEventSettlementResult(
 suspend fun pickEventSettlement(
     settlements: List<Settlement>,
 ): PickEventSettlementResult {
+    check(settlements.isEmpty()) {
+        val message = "Can not add Settlement event without settlements"
+        ui.notifications.error(message)
+        message
+    }
     return awaitablePrompt<PickEventSettlementData, PickEventSettlementResult>(
         title = "Choose a Settlement",
         templateContext = PickEventSettlementContext(
