@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.0] - 2025-03-30
+
+### Added
+
+* Events are now completely automated and can be managed like every other homebrew item
+* Compendium links to the official Kingmaker module will be migrated to the new built-in events, everything else has to be migrated manually; you will receive a chat message with events that couldn't be migrated
+
 ### Changed
 
 * Inspect Settlement dialog now picks up changes on the canvas allowing you to see added and deleted structures without reopening the dialog
@@ -14,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fix copy-paste mistake that caused all primal, occult and arcane shopping bonuses to register under divine
+* Fixed Compendium Weather Events
 
 
 ## [4.2.5] - 2025-03-28
