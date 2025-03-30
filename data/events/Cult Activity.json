@@ -71,6 +71,7 @@
     }
   ],
   "resolution": "After the cult’s headquarters are discovered, to end this continuous event the PCs must defeat the cult by succeeding at the Folklore check. Optionally, the GM can build a short adventure for the PCs to infiltrate the cult headquarters and defeat them in encounter mode.",
+  "resolvedOn": ["criticalSuccess"],
   "special": "If this event occurs in a settlement with a Sewer System, you take a –2 item penalty to Intrigue checks to discover the cult’s hideout. If this event occurs while the PCs are playing through Chapter 5, increase the event’s level modifier to +3. The cult in this case is always associated with the worship of Lamashtu.",
   "modifiers": [
     {

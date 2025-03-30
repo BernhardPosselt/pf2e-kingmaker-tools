@@ -46,8 +46,12 @@ suspend fun skillChecks(
         event = null,
         eventStage = null,
         flags = emptySet(),
-        structureNames = emptySet(),
-        waterBorders = 0,
+        structureNames = settlements.current
+            ?.constructedStructures
+            ?.map { it.name }
+            ?.toSet()
+            .orEmpty(),
+        waterBorders = settlements.current?.waterBorders ?: 0,
     )
     val allSettlements = settlements.allSettlements
     val globalBonuses = evaluateGlobalBonuses(allSettlements)
