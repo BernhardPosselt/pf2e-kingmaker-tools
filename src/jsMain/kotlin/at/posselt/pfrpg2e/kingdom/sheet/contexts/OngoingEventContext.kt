@@ -56,7 +56,6 @@ suspend fun List<OngoingEvent>.toContext(
             val settlement = settlements.allSettlements
                 .find { s -> s.id == it.settlementSceneId && (!it.secretLocation || isGM) }
                 ?.name
-            console.log(settlement)
             OngoingEventContext(
                 id = "${it.event.id}-$index",
                 label = it.event.name,

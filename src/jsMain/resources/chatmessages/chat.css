@@ -23,10 +23,23 @@
     width: auto;
 }
 
-.strike-through  {
+.strike-through {
     text-decoration: line-through;
 }
 
 .km-chat-hidden {
     display: none;
+}
+
+.km-chat-event-traits {
+    list-style-type: none;
+    display: flex;
+    gap: .2em;
+    margin:0;
+    padding: 0;
+    li {
+        border-radius: 5px;
+        border: 1px solid;
+        padding: .2em;
+    }
 }

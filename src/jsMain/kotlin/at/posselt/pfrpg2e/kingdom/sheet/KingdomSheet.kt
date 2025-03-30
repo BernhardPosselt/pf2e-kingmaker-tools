@@ -66,6 +66,7 @@ import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
+import at.posselt.pfrpg2e.kingdom.getEvent
 import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getFeats
 import at.posselt.pfrpg2e.kingdom.getGovernments
@@ -105,9 +106,11 @@ import at.posselt.pfrpg2e.kingdom.structures.importStructures
 import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
+import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.TableAndDraw
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.d20Check
+import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.postChatMessage
@@ -133,6 +136,7 @@ import com.foundryvtt.core.documents.onUpdateToken
 import com.foundryvtt.core.onApplyTokenStatusEffect
 import com.foundryvtt.core.onCanvasReady
 import com.foundryvtt.core.ui
+import com.foundryvtt.core.ui.enrichHtml
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
 import io.github.uuidjs.uuid.v4
@@ -443,6 +447,7 @@ class KingdomSheet(
             "delete-settlement" -> buildPromise {
                 target.dataset["id"]?.let { id ->
                     val kingdom = getKingdom()
+                    kingdom.ongoingEvents = kingdom.ongoingEvents.filter { it.settlementSceneId != id }.toTypedArray()
                     kingdom.settlements = kingdom.settlements.filter { it.sceneId != id }.toTypedArray()
                     actor.setKingdom(kingdom)
                 }
@@ -609,29 +614,29 @@ class KingdomSheet(
             }
 
             "roll-cult-event" -> buildPromise {
-                val uuid = actor.getKingdom()
-                    ?.settings
-                    ?.kingdomCultTable
+                val kingdom = getKingdom()
+                val uuid = kingdom.settings.kingdomCultTable
                 val rollMode = game.settings.pfrpg2eKingdomCampingWeather.getKingdomEventRollMode()
                 val result = game.rollWithCompendiumFallback(
                     tableName = "Random Cult Events",
                     rollMode = rollMode,
                     uuid = uuid,
+                    forceCompendiumIfNoUuid = true,
                 )
-                postAddToOngoingEvents(result, rollMode)
+                postAddToOngoingEvents(result, rollMode, kingdom)
             }
 
             "roll-event" -> buildPromise {
-                val uuid = actor.getKingdom()
-                    ?.settings
-                    ?.kingdomEventsTable
+                val kingdom = getKingdom()
+                val uuid = kingdom.settings.kingdomEventsTable
                 val rollMode = game.settings.pfrpg2eKingdomCampingWeather.getKingdomEventRollMode()
                 val result = game.rollWithCompendiumFallback(
                     tableName = "Random Kingdom Events",
                     rollMode = rollMode,
                     uuid = uuid,
+                    forceCompendiumIfNoUuid = true,
                 )
-                postAddToOngoingEvents(result, rollMode)
+                postAddToOngoingEvents(result, rollMode, kingdom)
             }
 
             "delete-event" -> buildPromise {
@@ -964,19 +969,48 @@ class KingdomSheet(
 
     private suspend fun postAddToOngoingEvents(
         result: TableAndDraw?,
-        rollMode: RollMode
-    ): Unit? = result
-        ?.draw
-        ?.results
-        ?.mapNotNull { it.getChatText() }
-        ?.firstNotNullOfOrNull { Regex("@UUID\\[(.+)\\]").find(it)?.destructured?.component1() }
-        ?.let {
-            postChatTemplate(
-                templatePath = "chatmessages/event.hbs",
-                templateContext = recordOf("actorUuid" to actor.uuid, "link" to it),
-                rollMode = rollMode,
-            )
-        }
+        rollMode: RollMode,
+        kingdom: KingdomData,
+    ) {
+        result
+            ?.draw
+            ?.results
+            ?.firstNotNullOf { it.text }
+            ?.let { kingdom.getEvent(it) }
+            ?.let { event ->
+                val modifier = event.modifier
+                val stages = event.stages.map {
+                    val criticalSuccess = enrichHtml(it.criticalSuccess?.msg ?: "")
+                    val success = enrichHtml(it.success?.msg ?: "")
+                    val failure = enrichHtml(it.failure?.msg ?: "")
+                    val criticalFailure = enrichHtml(it.criticalFailure?.msg ?: "")
+                    recordOf(
+                        "leader" to it.leader.toLabel(),
+                        "skills" to it.skills.map { it.toLabel() }.toTypedArray(),
+                        "criticalSuccess" to criticalSuccess,
+                        "success" to success,
+                        "failure" to failure,
+                        "criticalFailure" to criticalFailure,
+                    )
+                }.toTypedArray()
+                val description = enrichHtml(event.description)
+                postChatTemplate(
+                    templatePath = "chatmessages/event.hbs",
+                    templateContext = recordOf(
+                        "actorUuid" to actor.uuid,
+                        "eventId" to event.id,
+                        "label" to event.name + if (modifier != null && modifier != 0) " (${modifier.formatAsModifier()})" else "",
+                        "traits" to event.traits.map { it.toLabel() }.toTypedArray(),
+                        "location" to event.location,
+                        "special" to event.special,
+                        "description" to description,
+                        "resolution" to event.resolution,
+                        "stages" to stages
+                    ),
+                    rollMode = rollMode,
+                )
+            }
+    }
 
     suspend fun importStructures() {
         if (game.importStructures().isNotEmpty()) {

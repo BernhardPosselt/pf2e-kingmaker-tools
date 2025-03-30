@@ -62,6 +62,8 @@ class Migration14 : Migration(14) {
         val ongoingEvents = kingdom.asDynamic().ongoingEvents.unsafeCast<Array<OngoingEvent>>()
         kingdom.homebrewKingdomEvents = emptyArray()
         kingdom.kingdomEventBlacklist = emptyArray()
+        kingdom.settings.kingdomCultTable = null
+        kingdom.settings.kingdomEventsTable = null
         kingdom.ongoingEvents = ongoingEvents
             .mapNotNull { kingdomEventIdMapping[it.name] }
             .map {
