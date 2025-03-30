@@ -36,7 +36,7 @@
         "msg": "Rumors that the affliction might be beyond the party’s capability to stop make it difficult to quell fear. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
       },
       "criticalFailure": {
-        "msg": "As failure, but the rumors spread more quickly and have kernels of truth to them. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>, and at the end of the next day, a Cult event automatically happens."
+        "msg": "As failure, but the rumors spread more quickly and have kernels of truth to them. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>, and at the end of the next day, a Cult event automatically happens."
       }
     }
   ]

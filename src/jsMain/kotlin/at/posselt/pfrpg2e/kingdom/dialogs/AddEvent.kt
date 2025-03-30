@@ -8,9 +8,13 @@ import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawOngoingKingdomEvent
 import at.posselt.pfrpg2e.kingdom.getEvents
+import at.posselt.pfrpg2e.kingdom.getKingdom
+import at.posselt.pfrpg2e.kingdom.sheet.executeResourceButton
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import com.foundryvtt.core.Game
+import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.ui.enrichHtml
 import kotlinx.coroutines.async
@@ -18,6 +22,7 @@ import kotlinx.coroutines.await
 import kotlinx.coroutines.awaitAll
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
@@ -52,7 +57,8 @@ external interface AddEventsContext : HandlebarsRenderContext {
 }
 
 class AddEvent(
-    kingdomActor: KingdomActor,
+    private val game: Game,
+    private val kingdomActor: KingdomActor,
     private val kingdom: KingdomData,
     private val settlements: List<Settlement>,
     private val onSave: suspend (event: RawOngoingKingdomEvent) -> Unit,
@@ -135,5 +141,25 @@ class AddEvent(
             partId = parent.partId,
             events = events,
         )
+    }
+
+    override fun _attachPartListeners(partId: String, htmlElement: HTMLElement, options: ApplicationRenderOptions) {
+        super._attachPartListeners(partId, htmlElement, options)
+        htmlElement.querySelectorAll(".km-gain-lose").asList()
+            .filterIsInstance<HTMLElement>()
+            .forEach { elem ->
+                elem.addEventListener("click", {
+                    kingdomActor.getKingdom()?.let { kingdom ->
+                        buildPromise {
+                            executeResourceButton(
+                                game = game,
+                                actor = kingdomActor,
+                                kingdom = kingdom,
+                                elem = elem,
+                            )
+                        }
+                    }
+                })
+            }
     }
 }

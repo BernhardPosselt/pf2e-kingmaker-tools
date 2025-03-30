@@ -40,7 +40,7 @@
                         <p>{{{description}}}</p>
                     </div>
                     <p><b>Leader</b>: {{leader}}</p>
-                    <p><b>Skills</b>: {{#each skills}}{{this}}{{/each}}</p>
+                    <p><b>Skills</b>: {{#each skills}}{{#unless @first}}, {{/unless}}{{this}}{{/each}}</p>
                     <ul class="km-summary-degrees">
                         {{#if criticalSuccess}}
                             <li><b>Critical Success:</b> {{{criticalSuccess}}}</li>{{/if}}

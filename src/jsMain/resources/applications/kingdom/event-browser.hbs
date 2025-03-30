@@ -24,7 +24,7 @@
                     {{#unless @first}}
                         <hr>{{/unless}}
                     <p><b>Leader</b>: {{leader}}</p>
-                    <p><b>Skills</b>: {{#each skills}}{{this}}{{/each}}</p>
+                    <p><b>Skills</b>: {{#each skills}}{{#unless @first}}, {{/unless}}{{this}}{{/each}}</p>
                     <ul class="km-event-degrees">
                         {{#if criticalSuccess}}
                             <li><b>Critical Success:</b> {{{criticalSuccess}}}</li>{{/if}}

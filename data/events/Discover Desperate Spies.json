@@ -8,7 +8,7 @@
     "dangerous",
     "settlement"
   ],
-  "description": "The kobold spies slink and skulk around the city, looking for weaknesses to report back to the Troll King and taking advantage of opportunities to perform minor acts of vandalism and sabotage. Once this story event begins, it continues daily for a week. Each day, the kingdom attempts a skill check to resolve the event. The Intrigue check gains the Secret trait.",
+  "description": "The kobold spies slink and skulk around the city, looking for weaknesses to report back to the troll king and taking advantage of opportunities to perform minor acts of vandalism and sabotage. Once this story event begins, it continues daily for a week. Each day, the kingdom attempts a skill check to resolve the event. The Intrigue check gains the Secret trait.",
   "stages": [
     {
       "skills": ["intrigue", "defense"],
