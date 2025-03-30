@@ -25,7 +25,6 @@ external interface OngoingEventContext {
     var description: String
     var special: String?
     var resolution: String?
-    var modifier: String
     var traits: Array<String>
     var location: String?
     var stages: Array<OngoingEventStageContext>
@@ -56,13 +55,15 @@ suspend fun List<OngoingEvent>.toContext(
             val settlement = settlements.allSettlements
                 .find { s -> s.id == it.settlementSceneId && (!it.secretLocation || isGM) }
                 ?.name
+            val modifier = it.event.modifier
+            val modifierLabel = if (modifier != 0) " (${modifier.formatAsModifier()})" else ""
+            val settlementLabel = if (settlement == null) "" else " - $settlement"
             OngoingEventContext(
                 id = "${it.event.id}-$index",
-                label = it.event.name,
+                label = it.event.name + modifierLabel + settlementLabel,
                 description = description,
                 special = it.event.special,
                 resolution = it.event.resolution,
-                modifier = it.event.modifier.formatAsModifier(),
                 traits = it.event.traits.map { it.label }.toTypedArray(),
                 location = it.event.location,
                 hideStageButton = it.event.stages.size < 2 || !isGM,
@@ -82,7 +83,6 @@ suspend fun List<OngoingEvent>.toContext(
                 failure = failure,
                 criticalFailure = criticalFailure,
                 open = ("event-${it.event.id}-$index") in openedDetails,
-                settlement = settlement,
             )
         }
     }
