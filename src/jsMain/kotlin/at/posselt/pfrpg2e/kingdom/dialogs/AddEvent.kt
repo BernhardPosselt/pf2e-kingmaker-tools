@@ -11,7 +11,6 @@ import at.posselt.pfrpg2e.kingdom.getEvents
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatAsModifier
-import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.ui.enrichHtml
 import kotlinx.coroutines.async
@@ -53,8 +52,7 @@ external interface AddEventsContext : HandlebarsRenderContext {
 }
 
 class AddEvent(
-    private val game: Game,
-    private val kingdomActor: KingdomActor,
+    kingdomActor: KingdomActor,
     private val kingdom: KingdomData,
     private val settlements: List<Settlement>,
     private val onSave: suspend (event: RawOngoingKingdomEvent) -> Unit,

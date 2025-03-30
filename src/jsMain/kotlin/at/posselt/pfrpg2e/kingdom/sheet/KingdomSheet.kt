@@ -650,7 +650,6 @@ class KingdomSheet(
                 buildPromise {
                     val settlements = kingdom.getAllSettlements(game)
                     AddEvent(
-                        game = game,
                         kingdomActor = actor,
                         kingdom = kingdom,
                         settlements = settlements.allSettlements,

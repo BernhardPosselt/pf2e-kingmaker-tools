@@ -53,6 +53,10 @@ suspend fun List<OngoingEvent>.toContext(
             val failure = enrichHtml(stage.failure?.msg ?: "")
             val criticalFailure = enrichHtml(stage.criticalFailure?.msg ?: "")
             val description = enrichHtml(it.event.description)
+            val settlement = settlements.allSettlements
+                .find { s -> s.id == it.settlementSceneId && (!it.secretLocation || isGM) }
+                ?.name
+            console.log(settlement)
             OngoingEventContext(
                 id = "${it.event.id}-$index",
                 label = it.event.name,
@@ -79,9 +83,7 @@ suspend fun List<OngoingEvent>.toContext(
                 failure = failure,
                 criticalFailure = criticalFailure,
                 open = ("event-${it.event.id}-$index") in openedDetails,
-                settlement = settlements.allSettlements
-                    .takeIf { _ -> it.secretLocation }
-                    ?.find { settlement -> settlement.id == it.settlementSceneId }?.name,
+                settlement = settlement,
             )
         }
     }

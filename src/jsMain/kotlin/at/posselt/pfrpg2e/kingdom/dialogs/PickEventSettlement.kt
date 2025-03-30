@@ -30,10 +30,10 @@ data class PickEventSettlementResult(
 suspend fun pickEventSettlement(
     settlements: List<Settlement>,
 ): PickEventSettlementResult {
-    check(settlements.isEmpty()) {
+    if(settlements.isEmpty()) {
         val message = "Can not add Settlement event without settlements"
         ui.notifications.error(message)
-        message
+        throw IllegalStateException(message)
     }
     return awaitablePrompt<PickEventSettlementData, PickEventSettlementResult>(
         title = "Choose a Settlement",
