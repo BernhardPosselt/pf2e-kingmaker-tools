@@ -13,9 +13,9 @@
             "buttonLabel": "+1 Status to Dangerous Bickering Event",
             "applyIf": [
                 {
-                    "eq": [
-                        "@dangerousEvent",
-                        true
+                    "in": [
+                        "dangerous",
+                        "@eventTraits"
                     ]
                 }
             ]

@@ -1,6 +1,13 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.expressions
 
-data class In(val needle: Any?, val haystack: List<Any?>) : Expression<Boolean> {
-    override fun evaluate(context: ExpressionContext): Boolean =
-        haystack.map { context.evaluateExpression(it) }.contains(context.evaluateExpression(needle))
+import at.posselt.pfrpg2e.takeIfInstance
+
+data class In(val needle: Any?, val haystack: Any) : Expression<Boolean> {
+    override fun evaluate(context: ExpressionContext): Boolean {
+        val stack = context.evaluateExpression(haystack)
+            ?.takeIfInstance<Collection<*>>()
+            ?.map { context.evaluateExpression(it) }
+            .orEmpty()
+        return stack.contains(context.evaluateExpression(needle))
+    }
 }

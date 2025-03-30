@@ -483,9 +483,6 @@
     }
 
     .km-kingdom-sheet-turn {
-        .km-detail-label {
-            cursor: pointer;
-        }
 
         .km-upkeep-button {
             font-size: 1.2em;
@@ -538,12 +535,20 @@
         }
 
         .km-kingdom-details {
+            .km-detail-label {
+                cursor: pointer;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
             details {
                 summary {
                     font-size: 1.2em;
                     display: flex;
                     align-items: center;
                     gap: .5em;
+                    width: 572px;
 
                     .km-detail-controls {
                         display: flex;

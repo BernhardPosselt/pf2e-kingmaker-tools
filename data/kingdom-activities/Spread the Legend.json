@@ -19,8 +19,11 @@
           "value": 1,
           "type": "untyped",
           "applyIf": [{
-                "eq": ["@dangerousEvent", true]
-            }]
+                    "in": [
+                        "dangerous",
+                        "@eventTraits"
+                    ]
+                }]
         }]
     },
     "success": {

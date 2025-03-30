@@ -49,15 +49,15 @@
       "buttonLabel": "+1 Status to Dangerous Event Impacting Defenses",
       "applyIf": [
         {
-          "eq": [
-            "@settlementEvent",
-            true
+          "in": [
+            "settlement",
+            "@eventTraits"
           ]
         },
         {
-          "eq": [
-            "@dangerousEvent",
-            true
+          "in": [
+            "dangerous",
+            "@eventTraits"
           ]
         }
       ],

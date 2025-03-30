@@ -1205,6 +1205,7 @@ class KingdomSheet(
         val ongoingEvents = kingdom.getOngoingEvents().toContext(
             openedDetails = openedDetails,
             isGM = isGM,
+            settlements = settlements
         )
         KingdomSheetContext(
             partId = parent.partId,

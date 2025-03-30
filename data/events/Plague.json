@@ -18,10 +18,12 @@
       "enabled": true,
       "applyIf": [
         {
-          "eq": [
-            "@hasDump",
-            false
-          ]
+          "not": {
+            "in": [
+              "Dump",
+              "@structures"
+            ]
+          }
         }
       ]
     },
@@ -33,9 +35,9 @@
       "enabled": true,
       "applyIf": [
         {
-          "eq": [
-            "@hasSewerSystem",
-            true
+          "in": [
+            "Sewer System",
+            "@structures"
           ]
         }
       ]
@@ -58,7 +60,7 @@
             "name": "Settlement suffering from Plague",
             "buttonLabel": "Add Settlement suffering from Plague Civic penalty",
             "value": -2,
-            "enabled": false,
+            "enabled": true,
             "applyIf": [
               {
                 "eq": [
@@ -67,10 +69,18 @@
                 ]
               },
               {
-                "eq": [
-                  "@hasSewerSystem",
-                  false
+                "in": [
+                  "plague",
+                  "@settlementEvents"
                 ]
+              },
+              {
+                "not": {
+                  "in": [
+                    "Sewer System",
+                    "@structures"
+                  ]
+                }
               }
             ]
           }
@@ -84,7 +94,7 @@
             "name": "Settlement suffering from Plague",
             "buttonLabel": "Add Settlement suffering from Plague Civic penalty",
             "value": -2,
-            "enabled": false,
+            "enabled": true,
             "applyIf": [
               {
                 "eq": [
@@ -93,10 +103,18 @@
                 ]
               },
               {
-                "eq": [
-                  "@hasSewerSystem",
-                  false
+                "in": [
+                  "plague",
+                  "@settlementEvents"
                 ]
+              },
+              {
+                "not": {
+                  "in": [
+                    "Sewer System",
+                    "@structures"
+                  ]
+                }
               }
             ]
           }
@@ -110,7 +128,7 @@
             "name": "Settlement suffering from Plague",
             "buttonLabel": "Add Settlement suffering from Plague Civic penalty",
             "value": -2,
-            "enabled": false,
+            "enabled": true,
             "applyIf": [
               {
                 "eq": [
@@ -119,10 +137,18 @@
                 ]
               },
               {
-                "eq": [
-                  "@hasSewerSystem",
-                  false
+                "in": [
+                  "plague",
+                  "@settlementEvents"
                 ]
+              },
+              {
+                "not": {
+                  "in": [
+                    "Sewer System",
+                    "@structures"
+                  ]
+                }
               }
             ]
           }

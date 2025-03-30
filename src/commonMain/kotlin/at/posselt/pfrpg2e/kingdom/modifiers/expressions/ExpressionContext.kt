@@ -22,11 +22,8 @@ data class ExpressionContext(
     val structure: Structure?,
     val anarchyAt: Int,
     val atWar: Boolean,
-    val dangerousEvent: Boolean,
-    val continuousEvent: Boolean,
-    val beneficialEvent: Boolean,
-    val settlementEvent: Boolean,
-    val hexEvent: Boolean,
+    val eventTraits: Set<String>,
+    val settlementEvents: Set<String>,
     val eventLeader: Leader?,
     val event: String?,
     val structures: Set<String>,
@@ -80,15 +77,11 @@ data class ExpressionContext(
             "@kingdomLevel" -> level
             "@skillRank" -> ranks.resolve(usedSkill)
             "@atWar" -> atWar
-            "@dangerousEvent" -> dangerousEvent
-            "@continuousEvent" -> continuousEvent
-            "@beneficialEvent" -> beneficialEvent
-            "@hexEvent" -> hexEvent
-            "@settlementEvent" -> settlementEvent
             "@eventLeader" -> eventLeader?.value
             "@skill" -> usedSkill.toCamelCase()
-            "@hasSewerSystem" -> "Sewer System" in structures
-            "@hasDump" -> "Dump" in structures
+            "@structures" -> structures
+            "@settlementEvents" -> settlementEvents
+            "@eventTraits" -> eventTraits
             "@waterBorders" -> waterBorders
             else -> expression
         }

@@ -23,9 +23,9 @@
                 "enabled": false,
                 "applyIf": [
                     {
-                        "eq": [
-                            "@continuousEvent",
-                            true
+                        "in": [
+                            "continuous",
+                            "@eventTraits"
                         ]
                     }
                 ],

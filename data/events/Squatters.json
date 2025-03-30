@@ -38,7 +38,10 @@
       "enabled": true,
       "applyIf": [
         {
-          "eq": ["@hasSewerSystem", true]
+          "in": [
+            "Sewer System",
+            "@structures"
+          ]
         }
       ]
     }

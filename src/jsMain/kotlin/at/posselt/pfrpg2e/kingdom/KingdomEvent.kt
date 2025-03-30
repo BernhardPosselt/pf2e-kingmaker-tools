@@ -85,12 +85,16 @@ fun RawKingdomEvent.parse() =
 external interface RawOngoingKingdomEvent {
     val stage: Int
     val id: String
+    var settlementSceneId: String?
+    var secretLocation: Boolean?
 }
 
 data class OngoingEvent(
     val stageIndex: Int,
     val event: KingdomEvent,
     val eventIndex: Int,
+    val secretLocation: Boolean,
+    val settlementSceneId: String?,
 ) {
     val stageCount = event.stages.size
     val currentStage = event.stages[stageIndex]
@@ -104,6 +108,8 @@ fun KingdomData.getOngoingEvents(applyBlacklist: Boolean = false): List<OngoingE
                 stageIndex = ongoing.stage,
                 event = event.parse(),
                 eventIndex = index,
+                secretLocation = ongoing.secretLocation == true,
+                settlementSceneId = ongoing.settlementSceneId,
             )
         }
     }

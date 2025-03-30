@@ -36,15 +36,12 @@ val defaultContext = ExpressionContext(
     structure = null,
     anarchyAt = 20,
     atWar = false,
-    dangerousEvent = false,
-    continuousEvent = false,
-    beneficialEvent = false,
-    settlementEvent = false,
-    hexEvent = false,
     eventLeader = null,
     event = null,
     structures = emptySet(),
     waterBorders = 0,
+    settlementEvents = emptySet(),
+    eventTraits = emptySet(),
 )
 
 class EvaluateModifiersTest {

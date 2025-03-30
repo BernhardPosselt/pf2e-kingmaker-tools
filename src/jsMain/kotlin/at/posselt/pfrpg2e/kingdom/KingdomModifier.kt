@@ -3,7 +3,6 @@ package at.posselt.pfrpg2e.kingdom
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.events.KingdomEvent
 import at.posselt.pfrpg2e.data.events.KingdomEventStage
-import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
@@ -62,7 +61,7 @@ external interface RawLte : RawExpression<Boolean> {
 
 @JsPlainObject
 external interface RawIn : RawExpression<Boolean> {
-    val `in`: JsTuple2<Any?, Array<out Any?>>  // String, null or number
+    val `in`: JsTuple2<Any?, Any>  // String, null or number in Array<Any?> or String
 }
 
 @JsPlainObject
@@ -178,9 +177,14 @@ fun RawExpression<Boolean>.parse(): Expression<Boolean> {
         )
     } else if (Object.hasOwn(this, "in")) {
         val p = this.unsafeCast<RawIn>()
+        val component2 = p.`in`.component2()
         In(
             needle = p.`in`.component1(),
-            haystack = p.`in`.component2().toList(),
+            haystack = if(component2 is Array<*>) {
+                component2.toSet()
+            } else {
+                component2
+            },
         )
     } else if (Object.hasOwn(this, "not")) {
         val p = this.unsafeCast<RawNot>()
@@ -286,6 +290,7 @@ fun KingdomData.createExpressionContext(
 ): ExpressionContext {
     val chosenFeatures = getChosenFeatures(getExplodedFeatures())
     val chosenFeats = getChosenFeats(chosenFeatures)
+    val settlementSceneId = activeSettlement
     return ExpressionContext(
         usedSkill = usedSkill,
         ranks = parseSkillRanks(
@@ -306,14 +311,18 @@ fun KingdomData.createExpressionContext(
         structure = structure,
         anarchyAt = calculateAnarchy(chosenFeats),
         atWar = atWar,
-        dangerousEvent = event?.traits?.contains(KingdomEventTrait.DANGEROUS) == true,
-        continuousEvent = event?.traits?.contains(KingdomEventTrait.CONTINUOUS) == true,
-        beneficialEvent = event?.traits?.contains(KingdomEventTrait.BENEFICIAL) == true,
-        settlementEvent = event?.traits?.contains(KingdomEventTrait.SETTLEMENT) == true,
-        hexEvent = event?.traits?.contains(KingdomEventTrait.HEX) == true,
+        eventTraits = event?.traits?.map { it.value }?.toSet().orEmpty(),
         eventLeader = eventStage?.leader,
         event = event?.id,
         structures = structureNames,
         waterBorders = waterBorders,
+        settlementEvents = if(settlementSceneId == null) {
+            emptySet()
+        } else {
+            getOngoingEvents()
+                .filter { it.settlementSceneId == settlementSceneId }
+                .map { it.event.id }
+                .toSet()
+        },
     )
 }

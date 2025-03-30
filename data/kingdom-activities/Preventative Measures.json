@@ -1,65 +1,68 @@
 {
-    "id": "preventative-measures",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Preventative Measures",
-    "description": "You help to organize magical defenses and resources to combat potential upcoming disasters or dangers to the kingdom. Attempt a basic Magic check to determine how effective the magical preparations are.",
-    "skills": {
-        "magic": 0
-    },
-    "criticalSuccess": {
-        "msg": "The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check and, unless you roll a critical failure, the result is improved one degree. If you reach the end of this Kingdom turn and haven’t had a dangerous event, you may decrease one Ruin of your choice by 1.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "buttonLabel": "+2 Circumstance To Resolve Dangerous Event",
-                "isConsumedAfterRoll": true,
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@dangerousEvent",
-                            true
-                        ]
-                    }
-                ],
-                "enabled": false,
-                "value": 2,
-                "name": "Preventative Measures: Critical Success",
-                "type": "circumstance",
-                "upgradeResults": [{
-                    "upgrade": "failure"
-                }, {
-                    "upgrade": "success"
-                }]
-            }
+  "id": "preventative-measures",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "Preventative Measures",
+  "description": "You help to organize magical defenses and resources to combat potential upcoming disasters or dangers to the kingdom. Attempt a basic Magic check to determine how effective the magical preparations are.",
+  "skills": {
+    "magic": 0
+  },
+  "criticalSuccess": {
+    "msg": "The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check and, unless you roll a critical failure, the result is improved one degree. If you reach the end of this Kingdom turn and haven’t had a dangerous event, you may decrease one Ruin of your choice by 1.",
+    "modifiers": [
+      {
+        "turns": 1,
+        "buttonLabel": "+2 Circumstance To Resolve Dangerous Event",
+        "isConsumedAfterRoll": true,
+        "applyIf": [
+          {
+            "in": [
+              "dangerous",
+              "@eventTraits"
+            ]
+          }
+        ],
+        "enabled": false,
+        "value": 2,
+        "name": "Preventative Measures: Critical Success",
+        "type": "circumstance",
+        "upgradeResults": [
+          {
+            "upgrade": "failure"
+          },
+          {
+            "upgrade": "success"
+          }
         ]
-    },
-    "success": {
-        "msg": "The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "buttonLabel": "+2 Circumstance to Resolve Dangerous Event",
-                "isConsumedAfterRoll": true,
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@dangerousEvent",
-                            true
-                        ]
-                    }
-                ],
-                "enabled": false,
-                "value": 2,
-                "name": "Preventative Measures: Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "criticalFailure": {
-        "msg": "The attempt to put preventative measures in place has resulted in significant waste of resources. You can’t use Preventative Measures again on your next Kingdom turn, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
-    }
+      }
+    ]
+  },
+  "success": {
+    "msg": "The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check.",
+    "modifiers": [
+      {
+        "turns": 1,
+        "buttonLabel": "+2 Circumstance to Resolve Dangerous Event",
+        "isConsumedAfterRoll": true,
+        "applyIf": [
+          {
+            "in": [
+              "dangerous",
+              "@eventTraits"
+            ]
+          }
+        ],
+        "enabled": false,
+        "value": 2,
+        "name": "Preventative Measures: Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "msg": "The attempt to put preventative measures in place has resulted in significant waste of resources. You can’t use Preventative Measures again on your next Kingdom turn, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
+  }
 }

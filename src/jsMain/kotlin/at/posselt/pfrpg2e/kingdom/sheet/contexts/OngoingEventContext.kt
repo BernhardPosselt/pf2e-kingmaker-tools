@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.kingdom.OngoingEvent
+import at.posselt.pfrpg2e.kingdom.SettlementResult
 import at.posselt.pfrpg2e.utils.formatAsModifier
 import kotlinx.js.JsPlainObject
 
@@ -32,9 +33,14 @@ external interface OngoingEventContext {
     var failure: String
     var criticalFailure: String
     var hideStageButton: Boolean
+    var settlement: String?
 }
 
-fun List<OngoingEvent>.toContext(openedDetails: Set<String>, isGM: Boolean): Array<OngoingEventContext> =
+fun List<OngoingEvent>.toContext(
+    openedDetails: Set<String>,
+    isGM: Boolean,
+    settlements: SettlementResult,
+): Array<OngoingEventContext> =
     mapIndexed { index, it ->
         val stage = it.currentStage
         OngoingEventContext(
@@ -63,5 +69,8 @@ fun List<OngoingEvent>.toContext(openedDetails: Set<String>, isGM: Boolean): Arr
             failure = stage.failure?.msg ?: "",
             criticalFailure = stage.criticalFailure?.msg ?: "",
             open = ("event-${it.event.id}-$index") in openedDetails,
+            settlement = settlements.allSettlements
+                .takeIf { _ -> it.secretLocation }
+                ?.find { settlement -> settlement.id == it.settlementSceneId }?.name,
         )
     }.toTypedArray()

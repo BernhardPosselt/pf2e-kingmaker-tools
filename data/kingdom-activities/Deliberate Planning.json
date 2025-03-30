@@ -39,9 +39,9 @@
                 "fortune": true,
                 "applyIf": [
                     {
-                        "eq": [
-                            "@continuousEvent",
-                            true
+                        "in": [
+                            "continuous",
+                            "@eventTraits"
                         ]
                     }
                 ]
@@ -61,9 +61,9 @@
                 "type": "circumstance",
                 "applyIf": [
                     {
-                        "eq": [
-                            "@continuousEvent",
-                            true
+                        "in": [
+                            "continuous",
+                            "@eventTraits"
                         ]
                     }
                 ]
@@ -87,9 +87,9 @@
                 "rollTwiceKeepLowest": true,
                 "applyIf": [
                     {
-                        "eq": [
-                            "@continuousEvent",
-                            true
+                        "in": [
+                            "continuous",
+                            "@eventTraits"
                         ]
                     }
                 ]

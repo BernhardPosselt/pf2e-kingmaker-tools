@@ -316,10 +316,17 @@
               "$ref": "#/$defs/AnyScalar"
             },
             {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/AnyScalar"
-              }
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/AnyScalar"
+                  }
+                },
+                {
+                  "type": "string"
+                }
+              ]
             }
           ],
           "items": false,

@@ -23,15 +23,15 @@
         "fortune": true,
         "applyIf": [
           {
-            "eq": [
-              "@dangerousEvent",
-              true
+            "in": [
+              "dangerous",
+              "@eventTraits"
             ]
           },
           {
-            "eq": [
-              "@hexEvent",
-              true
+            "in": [
+              "hex",
+              "@eventTraits"
             ]
           }
         ],

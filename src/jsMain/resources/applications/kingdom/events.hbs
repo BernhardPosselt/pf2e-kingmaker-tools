@@ -12,7 +12,7 @@
                                 type="button"
                                 class="{{#if active}}km-event-stage-active{{/if}}"
                                 data-action="change-event-stage">
-                            {{label}}
+                            {{label}}{{#if settlement}} - {{settlement}}{{/if}}
                         </button>
                         {{/each}}
                         <button data-index="{{@index}}"
