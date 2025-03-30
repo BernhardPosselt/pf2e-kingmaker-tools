@@ -1,7 +1,10 @@
 package at.posselt.pfrpg2e.kingdom.dialogs
 
+import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
-import at.posselt.pfrpg2e.app.forms.SimpleApp
+import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
+import at.posselt.pfrpg2e.app.forms.FormElementContext
+import at.posselt.pfrpg2e.app.forms.SearchInput
 import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.kingdom.KingdomActor
@@ -13,10 +16,15 @@ import at.posselt.pfrpg2e.kingdom.sheet.executeResourceButton
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.ui.enrichHtml
+import js.core.Void
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
 import kotlinx.coroutines.awaitAll
@@ -52,8 +60,27 @@ external interface AddEventContext {
 
 
 @JsPlainObject
-external interface AddEventsContext : HandlebarsRenderContext {
+external interface AddEventsContext : ValidatedHandlebarsContext {
     var events: Array<AddEventContext>
+    var search: FormElementContext
+}
+
+@JsPlainObject
+external interface AddEventsData {
+    val search: String
+}
+
+@JsExport
+class AddEventsDataModel(
+    value: AnyObject,
+    options: DocumentConstructionContext?
+) : DataModel(value, options) {
+    companion object {
+        @JsStatic
+        fun defineSchema() = buildSchema {
+            string("search")
+        }
+    }
 }
 
 class AddEvent(
@@ -62,13 +89,16 @@ class AddEvent(
     private val kingdom: KingdomData,
     private val settlements: List<Settlement>,
     private val onSave: suspend (event: RawOngoingKingdomEvent) -> Unit,
-) : SimpleApp<AddEventsContext>(
+) : FormApp<AddEventsContext, AddEventsData>(
     title = "Add Event",
     template = "applications/kingdom/event-browser.hbs",
-    classes = arrayOf("km-scroll-application"),
     width = 600,
     id = "kmEvents-${kingdomActor.uuid}",
+    dataModel = AddEventsDataModel::class.js,
+    scrollable = arrayOf(".km-add-events"),
 ) {
+    var search = ""
+
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "add-event" -> {
@@ -104,6 +134,17 @@ class AddEvent(
         val parent = super._preparePartContext(partId, context, options).await()
         val events = kingdom.getEvents(applyBlacklist = true)
             .sortedBy { it.name }
+            .filter {
+                val stages = it.stages.joinToString(" ") {
+                    (it.criticalSuccess?.msg ?: "") +
+                            (it.success?.msg ?: "") +
+                            (it.failure?.msg ?: "") +
+                            (it.criticalFailure?.msg ?: "")
+                }
+                val haystack =
+                    "${it.name} ${it.resolution ?: ""} ${it.special ?: ""} ${it.location ?: ""} $stages".lowercase()
+                search.split(" ").all { haystack.contains(it) }
+            }
             .map {
                 async {
                     val modifier = it.modifier
@@ -140,6 +181,15 @@ class AddEvent(
         AddEventsContext(
             partId = parent.partId,
             events = events,
+            isFormValid = isFormValid,
+            search = SearchInput(
+                name = "search",
+                label = "Filter",
+                hideLabel = true,
+                value = search,
+                placeholder = "Search",
+                required = false,
+            ).toContext()
         )
     }
 
@@ -161,5 +211,10 @@ class AddEvent(
                     }
                 })
             }
+    }
+
+    override fun onParsedSubmit(value: AddEventsData): Promise<Void> = buildPromise {
+        search = value.search
+        undefined
     }
 }

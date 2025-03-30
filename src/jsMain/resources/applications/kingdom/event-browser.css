@@ -1,4 +1,6 @@
 ul.km-add-events {
+    overflow: auto;
+    height: calc(100vh - 300px);
     list-style-type: none;
     margin: 0;
     padding: 0;
