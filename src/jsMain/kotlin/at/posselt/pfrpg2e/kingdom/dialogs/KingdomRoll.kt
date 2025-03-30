@@ -219,7 +219,9 @@ suspend fun postComplexDegreeOfSuccess(
         val isNotContinuousEvent = KingdomEventTrait.CONTINUOUS.value !in event.traits
         (resolvedOnDegree || isNotContinuousEvent) && isLastStage
     }
-    val postHtml = if (chatModifiers.isNotEmpty() || changedDegreeOfSuccess == DegreeOfSuccess.CRITICAL_SUCCESS) {
+    val postHtml = if (chatModifiers.isNotEmpty()
+        || buttonEvent != null
+        || changedDegreeOfSuccess == DegreeOfSuccess.CRITICAL_SUCCESS) {
         buildChatButtons(
             degree = changedDegreeOfSuccess,
             modifiers = chatModifiers,
