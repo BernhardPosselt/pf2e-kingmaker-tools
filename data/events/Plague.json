@@ -121,7 +121,7 @@
         ]
       },
       "criticalFailure": {
-        "msg": "As failure, but the plague spreads to the nearest unaffected settlement in your kingdom. Treat additional plagues in different settlements as separate continuous Plague events.",
+        "msg": "The plague spreads and claims more victims. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button> and increase all Ruins by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>. In addition, the plague spreads to the nearest unaffected settlement in your kingdom. Treat additional plagues in different settlements as separate continuous Plague events.",
         "modifiers": [
           {
             "type": "status",

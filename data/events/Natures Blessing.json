@@ -8,7 +8,7 @@
       "leader": "magister",
       "skills": ["arts"],
       "criticalSuccess": {
-        "msg": "The glow of the blessing brings lasting delight. During your next turn, the results of checks to Craft Luxuries or Create a Masterpiece are improved one degree. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>",
+        "msg": "The glow of the blessing brings lasting delight. During your next turn, the results of checks to Craft Luxuries or Create a Masterpiece are improved one degree. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>",
         "modifiers": [{
           "type": "untyped",
           "name": "Nature's Blessing: Critical Success",
