@@ -255,6 +255,7 @@ private data class CheckDialogParams(
     val armyConditions: ArmyConditionInfo? = null,
     val event: KingdomEvent? = null,
     val eventStageIndex: Int = 0,
+    val eventIndex: Int= 0,
 )
 
 typealias AfterRoll = suspend (degree: DegreeOfSuccess) -> Unit
@@ -286,6 +287,7 @@ private class KingdomCheckDialog(
     val activity = params.activity
     val event = params.event
     val eventStageIndex = params.eventStageIndex
+    val eventIndex = params.eventIndex
     val validSkills = params.validSkills
     val structure = params.structure
     val removableIds = mutableSetOf<String>()
@@ -433,6 +435,7 @@ private class KingdomCheckDialog(
             notes = notes,
             eventStageIndex = eventStageIndex,
             event = event,
+            eventIndex = eventIndex,
         )
         if (data.supernaturalSolution && !data.assurance) {
             KingdomCheckDialog(
@@ -798,6 +801,7 @@ suspend fun kingdomCheckDialog(
 
         is CheckType.HandleEvent -> {
             val event = check.ongoingEvent.event
+            val eventIndex = check.ongoingEvent.eventIndex
             val stageIndex = check.ongoingEvent.stageIndex
             val stage = event.stages[stageIndex]
             checkNotNull(stage) {
@@ -817,6 +821,7 @@ suspend fun kingdomCheckDialog(
                 phase = KingdomPhase.EVENT,
                 event = event,
                 eventStageIndex = stageIndex,
+                eventIndex = eventIndex,
             )
         }
     }

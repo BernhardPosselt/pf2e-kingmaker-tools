@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.events.KingdomEvent
+import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawActivity
@@ -44,6 +45,7 @@ private external interface ChatModifier {
 private external interface ChatButtonContext {
     val criticalSuccess: Boolean
     val eventId: String?
+    val eventIndex: Int
     val modifiers: Array<ChatModifier>
 }
 
@@ -51,13 +53,13 @@ suspend fun buildChatButtons(
     degree: DegreeOfSuccess,
     modifiers: Array<RawModifier>,
     actorUuid: String,
-    eventId: String?,
+    eventIndex: Int,
 ): String {
     return tpl(
         path = "chatmessages/roll-chat-buttons.hbs",
         ctx = ChatButtonContext(
             criticalSuccess = degree == DegreeOfSuccess.CRITICAL_SUCCESS,
-            eventId = eventId,
+            eventIndex = eventIndex,
             modifiers = modifiers.map {
                 ChatModifier(
                     label = it.buttonLabel ?: it.name,
@@ -93,6 +95,7 @@ suspend fun rollCheck(
     notes: Set<Note>,
     eventStageIndex: Int,
     event: KingdomEvent?,
+    eventIndex: Int,
 ): DegreeOfSuccess {
     val result = d20Check(
         dc = dc,
@@ -143,6 +146,7 @@ suspend fun rollCheck(
         downgrades = downgrades,
         notes = notes,
         eventId = event?.id,
+        eventIndex = eventIndex,
         eventStageIndex = eventStageIndex,
     )
     result.toChat(rollMeta)
@@ -160,6 +164,7 @@ suspend fun rollCheck(
             additionalChatMessages = serializeB64Json(degreeMessages),
             actorUuid = kingdomActor.uuid,
             eventId = event?.id,
+            eventIndex = eventIndex,
             eventStageIndex = eventStageIndex,
             notes = serializeB64Json(notes.map { it.serialize() }.toTypedArray()),
         )
@@ -176,6 +181,7 @@ suspend fun postComplexDegreeOfSuccess(
     val kingdom = kingdomActor.getKingdom() ?: return
     val rollMode = RollMode.fromString(metaContext.rollMode) ?: return
     val degree = DegreeOfSuccess.fromString(metaContext.degree) ?: return
+    val eventIndex = metaContext.eventIndex
     val activity = metaContext.activityId?.let { kingdom.getActivity(it) }
     val event = metaContext.eventId?.let { kingdom.getEvent(it) }
     val eventStageIndex = metaContext.eventStageIndex
@@ -205,13 +211,14 @@ suspend fun postComplexDegreeOfSuccess(
         DegreeOfSuccess.SUCCESS -> degreeMessages?.success
         DegreeOfSuccess.CRITICAL_SUCCESS -> degreeMessages?.criticalSuccess
     }
-    val eventButtonId = event?.id?.takeIf {
-        val isLastStage = event.stages.size == eventStageIndex + 1
+    val eventButtonIndex = eventIndex.takeIf {
+        val isLastStage = event?.stages?.size == eventStageIndex + 1
         val resolvedOnDegree = changedDegreeOfSuccess in resolveEventOn
-        resolvedOnDegree && isLastStage
-    }
+        val isNotContinuousEvent = KingdomEventTrait.CONTINUOUS.value !in event?.traits.orEmpty()
+        (resolvedOnDegree || isNotContinuousEvent) && isLastStage
+    } ?: 0
     val postHtml = if (chatModifiers.isNotEmpty() || changedDegreeOfSuccess == DegreeOfSuccess.CRITICAL_SUCCESS) {
-        buildChatButtons(changedDegreeOfSuccess, chatModifiers, kingdomActor.uuid, eventButtonId)
+        buildChatButtons(changedDegreeOfSuccess, chatModifiers, kingdomActor.uuid, eventButtonIndex)
     } else {
         ""
     }

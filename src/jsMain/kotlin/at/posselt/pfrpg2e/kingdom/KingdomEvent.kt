@@ -90,6 +90,7 @@ external interface RawOngoingKingdomEvent {
 data class OngoingEvent(
     val stageIndex: Int,
     val event: KingdomEvent,
+    val eventIndex: Int,
 ) {
     val stageCount = event.stages.size
     val currentStage = event.stages[stageIndex]
@@ -97,11 +98,12 @@ data class OngoingEvent(
 
 fun KingdomData.getOngoingEvents(applyBlacklist: Boolean = false): List<OngoingEvent> {
     val eventsById = getEvents(applyBlacklist).associateBy { it.id }
-    return ongoingEvents.mapNotNull {ongoing ->
+    return ongoingEvents.mapIndexedNotNull { index, ongoing ->
         eventsById[ongoing.id]?.let { event ->
             OngoingEvent(
                 stageIndex = ongoing.stage,
                 event = event.parse(),
+                eventIndex = index,
             )
         }
     }

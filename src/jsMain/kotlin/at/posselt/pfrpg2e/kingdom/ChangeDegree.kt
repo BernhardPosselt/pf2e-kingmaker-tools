@@ -16,6 +16,7 @@ external interface UpgradeMetaContext {
     val additionalChatMessages: String?
     val notes: String?
     val actorUuid: String
+    val eventIndex: Int
 }
 
 private fun parseUpgradeMeta(elem: HTMLElement) =
@@ -28,6 +29,7 @@ private fun parseUpgradeMeta(elem: HTMLElement) =
         actorUuid = elem.dataset["kingdomActorUuid"] ?: "",
         eventId = elem.dataset["eventId"],
         eventStageIndex = elem.dataset["eventStageIndex"]?.toInt() ?: 0,
+        eventIndex = elem.dataset["eventIndex"]?.toInt() ?: 0,
     )
 
 enum class ChangeDegree {

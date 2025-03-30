@@ -49,6 +49,7 @@ private external interface RollMetaContext {
     val additionalChatMessages: String?
     val isCreativeSolution: Boolean
     val notes: String?
+    val eventIndex: Int
 }
 
 private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
@@ -79,6 +80,7 @@ private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
         notes = meta?.dataset["notes"],
         eventStageIndex = meta?.dataset["eventStageIndex"]?.toInt() ?: 0,
         eventId = meta?.dataset["eventId"],
+        eventIndex = meta?.dataset["eventIndex"]?.toInt() ?: 0,
     )
 }
 
@@ -101,6 +103,7 @@ suspend fun generateRollMeta(
     notes: Set<Note>,
     eventId: String?,
     eventStageIndex: Int,
+    eventIndex: Int,
 ): String {
     val upgradeData = upgrades
         .map { UpOrDowngrade(degree = it.upgrade.value, times = it.times) }
@@ -131,6 +134,7 @@ suspend fun generateRollMeta(
             notes = serializeB64Json(notes.map { it.serialize() }.toTypedArray()),
             eventId = eventId,
             eventStageIndex = eventStageIndex,
+            eventIndex = eventIndex,
         ),
     )
 }
@@ -152,6 +156,7 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
     val activity = meta.activityId?.let { kingdom.getActivity(it) }
     val event = meta.eventId?.let { kingdom.getEvent(it) }
     val eventStageIndex = meta.eventStageIndex
+    val eventIndex = meta.eventIndex
     val upgrades = meta.upgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val downgrades = meta.downgrades?.let { deserializeB64Json<Array<UpOrDowngrade>>(it) }.orEmpty()
     val degreeMessages = meta.additionalChatMessages?.let { deserializeB64Json<DegreeMessages>(it) }
@@ -187,5 +192,6 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
         notes = notes,
         event = event?.parse(),
         eventStageIndex = eventStageIndex,
+        eventIndex = eventIndex,
     )
 }
