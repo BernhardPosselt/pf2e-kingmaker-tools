@@ -1,3 +1,21 @@
-2025/03/31-02:49:38.604720 7b9c9b1ee6c0 Recovering log #975
-2025/03/31-02:49:38.622926 7b9c9b1ee6c0 Delete type=0 #975
-2025/03/31-02:49:38.622939 7b9c9b1ee6c0 Delete type=3 #974
+2025/03/31-03:19:00.370941 7fb95fdee6c0 Recovering log #979
+2025/03/31-03:19:00.389360 7fb95fdee6c0 Delete type=0 #979
+2025/03/31-03:19:00.389374 7fb95fdee6c0 Delete type=3 #978
+2025/03/31-03:20:18.141832 7fb957bff6c0 Level-0 table #983: started
+2025/03/31-03:20:18.141840 7fb957bff6c0 Level-0 table #983: 0 bytes OK
+2025/03/31-03:20:18.154386 7fb957bff6c0 Delete type=0 #981
+2025/03/31-03:20:18.167172 7fb957bff6c0 Manual compaction at level-0 from '!scenes!XmDdx6ufrqqjhkJE' @ 72057594037927935 : 1 .. '!scenes.tiles!XmDdx6ufrqqjhkJE.xLcW33GKOxgEuFGE' @ 0 : 0; will stop at '!scenes.tiles!scMVzLi4TXW9CM7I.xLcW33GKOxgEuFGE' @ 2268 : 0
+2025/03/31-03:20:18.167176 7fb957bff6c0 Compacting 1@0 + 0@1 files
+2025/03/31-03:20:18.173633 7fb957bff6c0 Generated table #984@0: 11 keys, 1941 bytes
+2025/03/31-03:20:18.173640 7fb957bff6c0 Compacted 1@0 + 0@1 files => 1941 bytes
+2025/03/31-03:20:18.185877 7fb957bff6c0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/03/31-03:20:18.185909 7fb957bff6c0 Delete type=2 #964
+2025/03/31-03:20:18.198157 7fb957bff6c0 Manual compaction at level-0 from '!scenes.tiles!scMVzLi4TXW9CM7I.xLcW33GKOxgEuFGE' @ 2268 : 0 .. '!scenes.tiles!XmDdx6ufrqqjhkJE.xLcW33GKOxgEuFGE' @ 0 : 0; will stop at (end)
+2025/03/31-03:20:18.210624 7fb957bff6c0 Manual compaction at level-1 from '!scenes!XmDdx6ufrqqjhkJE' @ 72057594037927935 : 1 .. '!scenes.tiles!XmDdx6ufrqqjhkJE.xLcW33GKOxgEuFGE' @ 0 : 0; will stop at '!scenes.tiles!scMVzLi4TXW9CM7I.xLcW33GKOxgEuFGE' @ 2268 : 0
+2025/03/31-03:20:18.210626 7fb957bff6c0 Compacting 1@1 + 1@2 files
+2025/03/31-03:20:18.216798 7fb957bff6c0 Generated table #985@1: 4 keys, 1827 bytes
+2025/03/31-03:20:18.216802 7fb957bff6c0 Compacted 1@1 + 1@2 files => 1827 bytes
+2025/03/31-03:20:18.229372 7fb957bff6c0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/03/31-03:20:18.229393 7fb957bff6c0 Delete type=2 #938
+2025/03/31-03:20:18.229416 7fb957bff6c0 Delete type=2 #984
+2025/03/31-03:20:18.241528 7fb957bff6c0 Manual compaction at level-1 from '!scenes.tiles!scMVzLi4TXW9CM7I.xLcW33GKOxgEuFGE' @ 2268 : 0 .. '!scenes.tiles!XmDdx6ufrqqjhkJE.xLcW33GKOxgEuFGE' @ 0 : 0; will stop at (end)
