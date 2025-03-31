@@ -76,7 +76,19 @@ suspend fun createPartyActor(index: Int): PF2EParty {
 }
 
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
-    val currentVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
+    val existingVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
+    val currentVersion = if (existingVersion == 0) {
+        // fix version
+        val version = if (getKingdomActors().any { it.getKingdom()?.homebrewKingdomEvents == null }) {
+            13
+        } else {
+            latestMigrationVersion
+        }
+        settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(latestMigrationVersion)
+        version
+    } else {
+        existingVersion
+    }
     console.log("${Config.moduleName}: Upgrading from $currentVersion to $latestMigrationVersion")
     if (currentVersion < 9) {
         ui.notifications.error(

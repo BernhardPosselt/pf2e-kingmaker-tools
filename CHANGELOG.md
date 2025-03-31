@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.2] - 2025-03-30
+
+### Fixed
+
+* Fixed Schema migrations for 4.3.0. Earlier versions need manual intervention as described in the Upgrading Notices for 4.0.0
+
+
 ## [4.3.1] - 2025-03-30
 
 ### Fixed

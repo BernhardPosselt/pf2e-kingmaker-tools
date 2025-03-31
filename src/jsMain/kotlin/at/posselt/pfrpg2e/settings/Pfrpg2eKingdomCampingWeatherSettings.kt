@@ -4,7 +4,6 @@ import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.fromCamelCase
-import at.posselt.pfrpg2e.migrations.latestMigrationVersion
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.newInstance
 import at.posselt.pfrpg2e.utils.toMutableRecord
@@ -259,7 +258,6 @@ object Pfrpg2eKingdomCampingWeatherSettings {
         game.settings.registerInt(
             key = "schemaVersion",
             name = "Schema Version",
-            default = latestMigrationVersion,
             hidden = true,
         )
         game.settings.registerDataModel<ClimateConfigurationDataModel>(
