@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
+import at.posselt.pfrpg2e.utils.unsetAppFlag
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.utils.deepClone
@@ -388,6 +389,10 @@ fun CampingActor.getCamping(): CampingData? =
 
 suspend fun CampingActor.setCamping(data: CampingData) {
     setAppFlag("camping-sheet", data)
+}
+
+suspend fun CampingActor.clearCamping() {
+    unsetAppFlag("camping-sheet")
 }
 
 fun Game.getCampingActors(): List<CampingActor> =

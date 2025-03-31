@@ -1,0 +1,11 @@
+<div>
+    <h2>Kingdom</h2>
+    <p><button {{#unless hasKingdom}}disabled{{/unless}} data-action="export-kingdom" type="button">Export Kingdom</button></p>
+    <p><button data-action="import-kingdom" type="button">Import Kingdom</button></p>
+    <p><button {{#unless hasKingdom}}disabled{{/unless}} data-action="reset-kingdom" type="button">Delete Kingdom</button></p>
+
+    <h2>Camping</h2>
+    <p><button {{#unless hasCamping}}disabled{{/unless}} data-action="export-camping" type="button">Export Camping</button></p>
+    <p><button data-action="import-camping" type="button">Import Camping</button></p>
+    <p><button {{#unless hasCamping}}disabled{{/unless}} data-action="reset-camping" type="button">Delete Camping</button></p>
+</div>

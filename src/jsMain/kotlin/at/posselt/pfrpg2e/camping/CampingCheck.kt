@@ -32,7 +32,7 @@ suspend fun askDc(activity: String): Int? =
             templateContext = recordOf(
                 "formRows" to formContext(Select.dc())
             ),
-        ) {
+        ) { it, _ ->
             it.dc
         }
     } catch (e: Throwable) {

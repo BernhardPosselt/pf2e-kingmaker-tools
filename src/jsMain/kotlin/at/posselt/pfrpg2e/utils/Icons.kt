@@ -51,8 +51,8 @@ fun createPartyActorIcon(
     icon: Set<String>,
     toolTip: String,
     sheetType: SheetType,
-    macroName: String,
-    macroImg: String,
+    macroName: String? = null,
+    macroImg: String? = null,
     onClick: suspend (id: String) -> Unit,
 ): HTMLElement {
     val kingdomLink = document.create.a {
@@ -62,19 +62,21 @@ fun createPartyActorIcon(
         }
         attributes["data-tooltip"] = toolTip
         attributes["draggable"] = "true"
-        onDragStartFunction = {
-            it.stopPropagation()
-            val ev = it as DragEvent
-            val data = MacroData(
-                name = macroName,
-                img = macroImg,
-                type = sheetType.value,
-                // language=javascript
-                command = """
+        if (macroImg != null && macroName != null) {
+            onDragStartFunction = {
+                it.stopPropagation()
+                val ev = it as DragEvent
+                val data = MacroData(
+                    name = macroName,
+                    img = macroImg,
+                    type = sheetType.value,
+                    // language=javascript
+                    command = """
                     game.pf2eKingmakerTools.macros.openSheet('${sheetType.value}', '$id');
                 """.trimIndent(),
-            )
-            ev.dataTransfer!!.setData("text/plain", JSON.stringify(data))
+                )
+                ev.dataTransfer!!.setData("text/plain", JSON.stringify(data))
+            }
         }
         onClickFunction = {
             it.preventDefault()

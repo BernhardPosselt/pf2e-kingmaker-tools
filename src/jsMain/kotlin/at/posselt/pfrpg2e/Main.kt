@@ -22,6 +22,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.bindChatButtons
 import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
+import at.posselt.pfrpg2e.kingdom.dialogs.ActorActions
 import at.posselt.pfrpg2e.kingdom.registerContextMenus
 import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
@@ -45,9 +46,12 @@ import at.posselt.pfrpg2e.macros.toggleWeatherMacro
 import at.posselt.pfrpg2e.migrations.migratePfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.Pfrpg2eKingdomCampingWeather
+import at.posselt.pfrpg2e.utils.SheetType
 import at.posselt.pfrpg2e.utils.ToolsMacros
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.createPartyActorIcon
 import at.posselt.pfrpg2e.utils.fixVisibility
+import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.loadTemplatePartials
 import at.posselt.pfrpg2e.utils.pf2eKingmakerTools
 import at.posselt.pfrpg2e.utils.registerMacroDropHooks
@@ -60,6 +64,7 @@ import com.foundryvtt.core.onInit
 import com.foundryvtt.core.onReady
 import com.foundryvtt.core.onRenderChatLog
 import com.foundryvtt.core.onRenderChatMessage
+import com.foundryvtt.pf2e.actor.PF2EParty
 import io.kvision.jquery.get
 import js.objects.recordOf
 import org.w3c.dom.HTMLElement
@@ -96,13 +101,23 @@ fun main() {
                 ?.asList()
                 ?.filterIsInstance<HTMLElement>()
                 ?.forEach {
-                    val uuid = it.dataset["documentId"]
-                    if (uuid != null) {
-                        val kingdomLink = createKingmakerIcon(uuid, actionDispatcher)
-                        val campingSheetLink = createCampingIcon(uuid, actionDispatcher)
+                    val id = it.dataset["documentId"]
+                    console.log(it)
+                    if (id != null) {
                         val insertAfter = it.querySelector("h3")
-                        insertAfter?.insertAdjacentElement("afterend", campingSheetLink)
-                        insertAfter?.insertAdjacentElement("afterend", kingdomLink)
+                        insertAfter?.insertAdjacentElement("afterend", createPartyActorIcon(
+                            id = id,
+                            icon = setOf("fa-solid", "fa-ellipsis-vertical"),
+                            toolTip = "PFRPG2E Actor Settings",
+                            sheetType = SheetType.KINGDOM,
+                            onClick = {
+                                game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
+                                    ActorActions(actor=actor).launch()
+                                }
+                            },
+                        ))
+                        insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
+                        insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))
                         if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
                             it.querySelector(".fa-crown")
                                 ?.parentElement

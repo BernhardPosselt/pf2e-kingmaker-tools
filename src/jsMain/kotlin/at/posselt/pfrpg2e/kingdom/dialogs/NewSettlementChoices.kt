@@ -54,7 +54,7 @@ suspend fun newSettlementChoices(terrain: SettlementTerrain? = null): NewSettlem
             )
         ).asAnyObject(),
         templatePath = "components/forms/form.hbs",
-    ) { data -> NewSettlementChoices(
+    ) { data, _ -> NewSettlementChoices(
         name = data.name,
         waterBorders = data.waterBorders,
         terrain = SettlementTerrain.fromString(data.terrain) ?: SettlementTerrain.FOREST,

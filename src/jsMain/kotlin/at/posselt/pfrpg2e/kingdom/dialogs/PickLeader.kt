@@ -30,5 +30,5 @@ suspend fun pickLeader(): Leader {
             )
         ),
         templatePath = "components/forms/form.hbs",
-    ) { data -> Leader.fromString(data.leader) ?: Leader.RULER }
+    ) { data, _ -> Leader.fromString(data.leader) ?: Leader.RULER }
 }

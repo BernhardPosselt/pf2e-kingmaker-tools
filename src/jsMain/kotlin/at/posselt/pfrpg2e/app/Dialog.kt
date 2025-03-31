@@ -7,6 +7,7 @@ import com.foundryvtt.core.applications.api.*
 import js.objects.ReadonlyRecord
 import js.objects.jso
 import kotlinx.coroutines.await
+import org.w3c.dom.HTMLFormElement
 
 enum class PromptType(val label: String, val icon: String? = null) {
     ROLL("Roll", "fa-solid fa-dice-d20"),
@@ -39,7 +40,7 @@ suspend fun <I, O> awaitablePrompt(
     templateContext: Any = jso(),
     promptType: PromptType = PromptType.OK,
     width: Int? = undefined,
-    submit: suspend (I) -> O,
+    submit: suspend (I, HTMLFormElement) -> O,
 ): O {
     val content = tpl(templatePath, templateContext)
     val button = DialogV2Button(
@@ -48,9 +49,10 @@ suspend fun <I, O> awaitablePrompt(
         default = true,
         icon = promptType.icon,
     ) { ev, button, dialog ->
-        val data = FormDataExtended<I>(button.form!!)
+        val form = button.form!!
+        val data = FormDataExtended<I>(form)
         buildPromise {
-            submit(data.`object`)
+            submit(data.`object`, form)
         }
     }
 

@@ -52,7 +52,7 @@ suspend fun pickEventSettlement(
             )
         ),
         templatePath = "components/forms/form.hbs",
-    ) { data -> PickEventSettlementResult(
+    ) { data, _ -> PickEventSettlementResult(
         settlementId = data.settlementId,
         secretLocation = data.secretLocation,
     )}

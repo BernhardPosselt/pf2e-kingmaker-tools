@@ -59,6 +59,7 @@ external interface FormElementContext {
     val step: Int?
     val readonly: Boolean
     val type: String
+    val accept: String?
 }
 
 

@@ -83,7 +83,7 @@ suspend fun pickSpecialRecipe(
         templateContext = LearnSpecialRecipeContext(
             formRows = rows,
         ).unsafeCast<AnyObject>()
-    ) { data ->
+    ) { data, _ ->
         allRecipes.find { it.name == data.recipe }
     }
 }

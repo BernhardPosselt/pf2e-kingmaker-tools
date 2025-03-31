@@ -39,7 +39,7 @@ suspend fun chooseParty(game: Game): PF2EParty {
                     ),
                 )
             )
-        ) {
+        ) { it, _ ->
             val party = fromUuidTypeSafe<PF2EParty>(it.partyUuid)
             checkNotNull(party) {
                 "No party chosen"

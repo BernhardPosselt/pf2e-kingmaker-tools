@@ -29,5 +29,5 @@ suspend fun requestAmount(): Int {
             )
         ),
         templatePath = "components/forms/form.hbs",
-    ) { data -> data.amount ?: 1}
+    ) { data, _ -> data.amount ?: 1}
 }
