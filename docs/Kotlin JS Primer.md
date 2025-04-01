@@ -6,7 +6,7 @@ To run tests out of your IDE, enable [experimental multiplatform in advanced set
 
 ## Async
 
-Instead of marking a function async, using await and returning promises, Kotlin has **suspend**ing function that are
+Instead of marking a function async, using await and returning promises, Kotlin has **suspend**ing functions that are
 awaited automatically:
 
 JS:
@@ -37,7 +37,7 @@ suspend fun f(): Int {
 
 You can also use Promises like in JavaScript, but Promises are not suspending functions, so you need to call the *
 *.await()** method on it which itself is a suspending function.
-**Promise.all()** functionality is provided out of the box with a **.awaitAll()** extension function on a list.
+**Promise.all()** functionality is provided out of the box with an **.awaitAll()** extension function on a list.
 
 JS:
 
@@ -90,7 +90,7 @@ fun main() {
 ```
 
 Suspend functions can only be called from another suspend function or from within a coroutine context. To start an async
-block in a normal function you can use the **buildPromise** utility:
+block in a normal function you can use the **buildPromise** utility function:
 
 ```js
 await promiseFunction(3);
@@ -137,6 +137,12 @@ fun main() {
     )
 }
 ```
+
+Note that there are currently several bugs affecting @JsPlainObject:
+
+* https://youtrack.jetbrains.com/issue/KT-70664/Extending-a-JsPlainObject-interface-with-a-generic-type-parameter-fails-with-a-compile-error
+* https://youtrack.jetbrains.com/issue/KT-76440/JsPlainObject-compiles-broken-code-when-inlining-suspend-function-and-non-suspend-function
+* https://youtrack.jetbrains.com/issue/KT-68904/JsPlainObject-breaks-when-inside-a-file-with-fileJsQualifier
 
 ## Arrays/Lists
 
@@ -274,8 +280,8 @@ Promise<Void> and end that with a return null.
 
 Passing values to JS APIs that have optional parameters is tricky. There are a couple cases:
 
-* Passing an object using @JsPlainObject: these properties will be omitted if you don't pass a value; they will not be
-  omitted if you pass null however. Example:
+* Passing an object using @JsPlainObject: these properties will be omitted if you don't pass a value; however, they will not be
+  omitted if you pass null. Example:
     ```kt
     @JsPlainObject
     external interface Test {
@@ -346,11 +352,3 @@ null === undefined // false
 // objects with "equals" methods use that one
 // === checks are used for everything else
 ```
-
-## Bugs
-
-* https://youtrack.jetbrains.com/issue/KT-70260/JsPlainObject-improve-compiler-error-if-a-method-is-present
-* https://youtrack.jetbrains.com/issue/KT-70664/Extending-a-JsPlainObject-interface-with-a-generic-type-parameter-fails-with-a-compile-error
-* https://youtrack.jetbrains.com/issue/KT-68904/JsPlainObject-breaks-when-inside-a-file-with-fileJsQualifier
-* https://youtrack.jetbrains.com/issue/KT-70078/JsPlainObject-compiles-broken-code-when-inlining-suspend-function
-* https://youtrack.jetbrains.com/issue/KT-70987/Kotlin-JS-Exporting-a-class-with-a-private-data-class-produces-a-compilation-error
