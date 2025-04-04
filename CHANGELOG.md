@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.1] - 2025-04-05
+
+### Fixed
+* Improve event automation
+* Rename Terrain to Map in add settlement dialog
+
 ## [4.4.0] - 2025-03-31
 
 ### Added

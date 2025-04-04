@@ -39,6 +39,7 @@
                         {{#if location}}<p><b>Location:</b> {{location}}</p>{{/if}}
                         <p>{{{description}}}</p>
                     </div>
+                    {{#if automationNotes}}<p><b>Automation Notes:</b> {{automationNotes}}</p>{{/if}}
                     <p><b>Leader</b>: {{leader}}</p>
                     <p><b>Skills</b>: {{#each skills}}{{#unless @first}}, {{/unless}}{{this}}{{/each}}</p>
                     <ul class="km-summary-degrees">

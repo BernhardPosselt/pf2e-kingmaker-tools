@@ -40,6 +40,7 @@ external interface RawKingdomEvent {
     var traits: Array<String>
     var location: String?
     var stages: Array<RawKingdomEventStage>
+    var automationNotes: String?
 }
 
 
@@ -79,6 +80,7 @@ fun RawKingdomEvent.parse() =
         traits = traits.mapNotNull { KingdomEventTrait.fromString(it) }.toSet(),
         location = location,
         stages = stages.map { it.parse() },
+        automationNotes = automationNotes,
     )
 
 @JsPlainObject

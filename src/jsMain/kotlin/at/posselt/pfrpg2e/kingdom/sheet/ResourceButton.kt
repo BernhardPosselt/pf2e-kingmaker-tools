@@ -133,9 +133,12 @@ data class ResourceButton(
         }.outerHTML
     }
 
-    private suspend fun evaluateValueExpression(value: String): Int {
+    private suspend fun evaluateValueExpression(
+        value: String,
+        resourceDieSize: ResourceDieSize,
+    ): Int {
         return if ("d" in value) {
-            roll(value, flavor = "Rolling Resources")
+            roll(value.replace("rd", resourceDieSize.value), flavor = "Rolling Resources")
         } else {
             value.toInt()
         }
@@ -146,14 +149,15 @@ data class ResourceButton(
         dice: ResourceDieSize,
         maximumFame: Int,
         storage: CommodityStorage,
+        resourceDieSize: ResourceDieSize,
     ) {
         val factor = if (multiple) requestAmount() else 1
         val sign = if (mode == ResourceMode.GAIN) 1 else -1
         val value = if (resource == Resource.ROLLED_RESOURCE_DICE) {
-            val diceNum = evaluateValueExpression(value)
+            val diceNum = evaluateValueExpression(value, resourceDieSize)
             roll(dice.formula(diceNum))
         } else {
-            evaluateValueExpression(value)
+            evaluateValueExpression(value, resourceDieSize)
         } * factor * sign
         val turnLabel = if (turn == Turn.NEXT) " Next Turn" else ""
         val hints = hints?.let { " ($it)" } ?: ""
@@ -271,6 +275,7 @@ suspend fun executeResourceButton(
         dice = realm.sizeInfo.resourceDieSize,
         maximumFame = kingdom.settings.maximumFamePoints,
         storage = storage,
+        resourceDieSize = realm.sizeInfo.resourceDieSize,
     )
     beforeKingdomUpdate(previous, kingdom)
     actor.setKingdom(kingdom)

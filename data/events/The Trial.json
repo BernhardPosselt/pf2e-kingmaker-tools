@@ -18,5 +18,7 @@
     "criticalFailure": {
       "msg": "The trial ends with the criminal being found not guilty. He is released from imprisonment but knows better than to stay where he's not welcome. He flees the kingdom and may become a recurring foil. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and increase two Ruins of your choice by 2 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Strife</button></li></ul>"
     }
-  }]
+  }],
+  "resolvedOn": ["success", "criticalSuccess", "criticalFailure"],
+  "resolution": "This event is resolved with a Success, Critical Success, or Critical Failure, as detailed above."
 }

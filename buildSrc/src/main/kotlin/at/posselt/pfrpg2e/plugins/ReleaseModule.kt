@@ -12,7 +12,6 @@ import io.ktor.util.cio.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.Json.Default.decodeFromString
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
@@ -86,12 +85,13 @@ private suspend fun HttpClient.uploadGithubAsset(
 private suspend fun HttpClient.createGithubRelease(
     repo: String,
     githubToken: String,
-    releaseVersion: String
+    releaseVersion: String,
+    body: String,
 ) = post("https://api.github.com/repos/$repo/releases") {
     contentType(ContentType.Application.Json)
     accept(ContentType.Application.Json)
     bearerAuth(githubToken)
-    setBody(GetRelase(tag_name = releaseVersion, name = releaseVersion))
+    setBody(GetRelase(tag_name = releaseVersion, name = releaseVersion, body = body))
 }.body<GetReleaseResponse>()
 
 private suspend fun HttpClient.createFoundryRelease(
@@ -142,6 +142,9 @@ abstract class ReleaseModule : DefaultTask() {
     abstract val releaseZip: RegularFileProperty
 
     @get:InputFile
+    abstract val changelogFile: RegularFileProperty
+
+    @get:InputFile
     abstract val releaseModuleJson: RegularFileProperty
 
     @get:Input
@@ -181,12 +184,15 @@ abstract class ReleaseModule : DefaultTask() {
             }
 
         }
+        val parser = ChangelogParser()
+        val body = parser.parse(changelogFile.get().asFile, releaseVersion)
         runBlocking {
             httpClient.use { client ->
                 val releaseId = client.createGithubRelease(
                     repo = repo,
                     githubToken = githubToken,
                     releaseVersion = releaseVersion,
+                    body = body ?: "",
                 ).id
                 client.uploadGithubAsset(
                     repo = repo,
@@ -229,4 +235,17 @@ abstract class ReleaseModule : DefaultTask() {
             }
         }
     }
+}
+
+private class ChangelogParser {
+
+    fun parse(file: File, version: String): String? {
+        val text = file.readText()
+        val releases = text.split("## [")
+        val release = releases.find { it.startsWith("$version]") }
+        return release?.split("\n")
+            ?.drop(1)
+            ?.joinToString("\n")
+    }
+
 }

@@ -22,6 +22,7 @@
                         {{#if location}}<p><b>Location:</b> {{location}}</p>{{/if}}
                         <p>{{{description}}}</p>
                     </div>
+                    {{#if automationNotes}}<p><b>Automation Notes:</b> {{automationNotes}}</p>{{/if}}
                     {{#each stages}}
                         {{#unless @first}}
                             <hr>{{/unless}}

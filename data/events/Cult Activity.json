@@ -97,9 +97,16 @@
     },
     {
       "type": "untyped",
+      "value": -1,
+      "buttonLabel": "Dangerous Cult",
+      "name": "Dangerous Cult",
+      "enabled": false
+    },
+    {
+      "type": "untyped",
       "value": -2,
-      "buttonLabel": "Cult associated with Lamashtu",
-      "name": "Cult associated with Lamashtu",
+      "buttonLabel": "Even More Dangerous Cult",
+      "name": "Even More Dangerous Cult",
       "enabled": false
     }
   ]

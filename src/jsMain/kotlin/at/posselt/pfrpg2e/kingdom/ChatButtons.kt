@@ -19,14 +19,7 @@ import kotlinx.browser.document
 import kotlinx.html.org.w3c.dom.events.Event
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.get
-import kotlin.collections.contains
-import kotlin.collections.filterIndexed
-import kotlin.collections.forEach
-import kotlin.collections.getOrNull
-import kotlin.collections.listOf
-import kotlin.collections.orEmpty
 import kotlin.collections.plus
-import kotlin.collections.toTypedArray
 
 private data class ChatButton(
     val buttonClass: String,
@@ -80,6 +73,7 @@ private val buttons = listOf(
                 dice = realm.sizeInfo.resourceDieSize,
                 maximumFame = kingdom.settings.maximumFamePoints,
                 storage = storage,
+                resourceDieSize = realm.sizeInfo.resourceDieSize,
             )
             actor.setKingdom(kingdom)
         }

@@ -50,6 +50,7 @@ external interface AddEventContext {
     var id: String
     var label: String
     var description: String
+    var automationNotes: String?
     var special: String?
     var resolution: String?
     var traits: Array<String>
@@ -173,6 +174,7 @@ class AddEvent(
                         location = it.location,
                         stages = stages,
                         isSettlement = KingdomEventTrait.SETTLEMENT.value in it.traits,
+                        automationNotes = it.automationNotes,
                     )
                 }
             }

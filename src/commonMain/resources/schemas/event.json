@@ -18,6 +18,9 @@
         "name": {
           "type": "string"
         },
+        "automationNotes": {
+          "type": "string"
+        },
         "special": {
           "type": "string"
         },

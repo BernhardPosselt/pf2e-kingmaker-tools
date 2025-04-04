@@ -37,6 +37,7 @@ external interface OngoingEventContext {
     var criticalFailure: String
     var hideStageButton: Boolean
     var settlement: String?
+    var automationNotes: String?
 }
 
 suspend fun List<OngoingEvent>.toContext(
@@ -83,6 +84,7 @@ suspend fun List<OngoingEvent>.toContext(
                 failure = failure,
                 criticalFailure = criticalFailure,
                 open = ("event-${it.event.id}-$index") in openedDetails,
+                automationNotes = it.event.automationNotes,
             )
         }
     }
