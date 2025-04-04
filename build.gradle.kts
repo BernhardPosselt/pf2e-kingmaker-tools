@@ -219,6 +219,7 @@ tasks.register<ReleaseModule>("release") {
     dependsOn("package")
     releaseZip = layout.buildDirectory.file("release.zip")
     releaseModuleJson = layout.buildDirectory.file("module.json")
+    changelogFile = layout.projectDirectory.file("CHANGELOG.md")
     githubRepo = "BernhardPosselt/pf2e-kingmaker-tools"
 }
 
