@@ -285,7 +285,7 @@ fun KingdomData.createExpressionContext(
     event: KingdomEvent?,
     eventStage: KingdomEventStage?,
     flags: Set<String> = emptySet(),
-    structureNames: Set<String>,
+    structureIds: Set<String>,
     waterBorders: Int,
 ): ExpressionContext {
     val chosenFeatures = getChosenFeatures(getExplodedFeatures())
@@ -314,7 +314,7 @@ fun KingdomData.createExpressionContext(
         eventTraits = event?.traits?.map { it.value }?.toSet().orEmpty(),
         eventLeader = eventStage?.leader,
         event = event?.id,
-        structures = structureNames,
+        structures = structureIds,
         waterBorders = waterBorders,
         settlementEvents = if(settlementSceneId == null) {
             emptySet()

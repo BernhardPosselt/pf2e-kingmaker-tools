@@ -1,4 +1,5 @@
 {
+    "id": "hospital",
     "name": "Hospital",
     "activityBonusRules": [
         {
@@ -18,7 +19,7 @@
     "reducesUnrest": false,
     "level": 9,
     "upgradeFrom": [
-        "Herbalist"
+        "herbalist"
     ],
     "construction": {
         "rp": 30,

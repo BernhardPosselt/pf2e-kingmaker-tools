@@ -1,4 +1,5 @@
 {
+    "id": "arena",
     "name": "Arena",
     "activityBonusRules": [
         {

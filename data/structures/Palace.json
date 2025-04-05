@@ -1,4 +1,5 @@
 {
+    "id": "palace",
     "name": "Palace",
     "activityBonusRules": [
         {
@@ -69,8 +70,8 @@
     },
     "level": 15,
     "upgradeFrom": [
-        "Castle",
-        "Castle (V&K)"
+        "castle",
+        "castle-vk"
     ],
     "construction": {
         "rp": 108,

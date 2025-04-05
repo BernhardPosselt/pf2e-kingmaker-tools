@@ -1,4 +1,5 @@
 {
+    "id": "bank",
     "name": "Bank",
     "activityBonusRules": [
         {

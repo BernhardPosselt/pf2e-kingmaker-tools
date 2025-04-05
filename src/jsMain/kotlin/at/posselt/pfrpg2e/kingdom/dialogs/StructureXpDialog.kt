@@ -28,7 +28,7 @@ suspend fun structureXpDialog(
 ) {
     val importedStructures = game.getImportedStructures()
     val options = importedStructures
-        .map { SelectOption(label = it.name, value =it.name) }
+        .map { SelectOption(label = it.id, value =it.name) }
     prompt<StructureXpDialogData, Unit>(
         title = "Gain XP From Built Structure",
         templateContext = StructureXpDialogContext(
@@ -43,7 +43,7 @@ suspend fun structureXpDialog(
         templatePath = "components/forms/form.hbs",
     ) { data ->
         val structure = importedStructures
-            .find { it.name == data.structure }
+            .find { it.id == data.structure }
         if (structure != null) {
             val isEdifice = StructureTrait.EDIFICE in structure.traits
             val rp = structure.construction.rp

@@ -1,4 +1,5 @@
 {
+    "id": "menagerie",
     "name": "Menagerie",
     "skillBonusRules": [
         {
@@ -17,7 +18,7 @@
     "reducesRuin": true,
     "level": 12,
     "upgradeFrom": [
-        "Park"
+        "park"
     ],
     "construction": {
         "rp": 26,

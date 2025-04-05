@@ -1,4 +1,5 @@
 {
+    "id": "general-store",
     "name": "General Store",
     "preventItemLevelPenalty": true,
     "traits": [

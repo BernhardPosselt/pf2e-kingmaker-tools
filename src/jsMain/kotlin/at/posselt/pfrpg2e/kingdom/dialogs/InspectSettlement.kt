@@ -287,7 +287,7 @@ class InspectSettlement(
             hideLabel = true,
         )
         val settlementStructures = parsed.constructedStructures
-            .groupBy { it.name }
+            .groupBy { it.id }
             .values
             .sortedBy { it.first().name }
             .map { instances ->

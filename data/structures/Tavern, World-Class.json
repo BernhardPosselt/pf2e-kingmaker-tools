@@ -1,4 +1,5 @@
 {
+    "id": "tavern-world-class",
     "name": "Tavern, World-Class",
     "activityBonusRules": [
         {
@@ -30,8 +31,8 @@
     },
     "level": 15,
     "upgradeFrom": [
-        "Tavern, Luxury",
-        "Tavern, Luxury (V&K)"
+        "tavern-luxury",
+        "tavern-luxury-vk"
     ],
     "construction": {
         "rp": 64,

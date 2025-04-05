@@ -1,4 +1,5 @@
 {
+    "id": "waterfront",
     "name": "Waterfront",
     "activityBonusRules": [
         {
@@ -24,8 +25,8 @@
     "reducesUnrest": false,
     "level": 8,
     "upgradeFrom": [
-        "Pier",
-        "Pier (V&K)"
+        "pier",
+        "pier-vk"
     ],
     "construction": {
         "rp": 90,

@@ -1,4 +1,5 @@
 {
+    "id": "guildhall",
     "name": "Guildhall",
     "notes": "While in a settlement with a guildhall, you gain a +1 item bonus to all related skill checks to Earn Income or to Repair.",
     "traits": [
@@ -19,7 +20,7 @@
         "dc": 20
     },
     "upgradeFrom": [
-        "Trade Shop"
+        "trade-shop"
     ],
     "lots": 2
 }

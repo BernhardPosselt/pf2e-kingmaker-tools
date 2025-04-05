@@ -1,4 +1,5 @@
 {
+    "id": "brewery",
     "name": "Brewery",
     "activityBonusRules": [
         {

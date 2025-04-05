@@ -1,4 +1,5 @@
 {
+    "id": "university",
     "name": "University",
     "activityBonusRules": [
         {
@@ -16,7 +17,7 @@
     "reducesUnrest": false,
     "level": 15,
     "upgradeFrom": [
-        "Academy"
+        "academy"
     ],
     "construction": {
         "rp": 78,

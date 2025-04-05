@@ -40,7 +40,7 @@ typealias StructureActor = PF2ENpc
     "CANNOT_CHECK_FOR_ERASED",
     "ERROR_IN_CONTRACT_DESCRIPTION"
 )
-private fun isStructureRef(obj: AnyObject): Boolean {
+fun isStructureRef(obj: AnyObject): Boolean {
     contract {
         returns(true) implies (obj is StructureRef)
     }
@@ -54,7 +54,7 @@ fun StructureActor.getRawResolvedStructureData(): RawStructureData? {
     if (data == null) return null
     val record = data.asAnyObject()
     return if (isStructureRef(record)) {
-        structures.find { it.name == record.ref }
+        structures.find { it.id == record.ref }
             ?: throw StructureParsingException("Could not find existing structure with ref ${record.ref}")
     } else {
         data.unsafeCast<RawStructureData>()
@@ -183,6 +183,7 @@ fun RawStructureData.parseStructure(
     ignoreConsumptionReductionOf = ignoreConsumptionReductionOf?.toSet() ?: emptySet(),
     inConstruction = inConstruction,
     uuid = uuid,
+    id = id,
 )
 
 fun Game.getImportedStructures() =

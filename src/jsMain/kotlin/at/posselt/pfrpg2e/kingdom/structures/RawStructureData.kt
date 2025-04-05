@@ -92,6 +92,7 @@ external interface RawIncreaseResourceDice {
 
 @JsPlainObject
 external interface RawStructureData : RawStructure {
+    val id: String
     val name: String
     val stacksWith: String?
     val construction: RawConstruction?

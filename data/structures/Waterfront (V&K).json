@@ -1,4 +1,5 @@
 {
+    "id": "waterfront-vk",
     "name": "Waterfront (V&K)",
     "activityBonusRules": [
         {
@@ -23,8 +24,8 @@
     "reducesUnrest": false,
     "level": 8,
     "upgradeFrom": [
-        "Pier",
-        "Pier (V&K)"
+        "pier",
+        "pier-vk"
     ],
     "construction": {
         "rp": 90,
@@ -40,6 +41,6 @@
     "lots": 4,
     "consumptionReduction": 2,
     "ignoreConsumptionReductionOf": [
-        "Pier (V&K)"
+        "pier-vk"
     ]
 }

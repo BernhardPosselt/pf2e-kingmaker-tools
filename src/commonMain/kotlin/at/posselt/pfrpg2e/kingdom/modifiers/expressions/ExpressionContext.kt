@@ -44,7 +44,7 @@ data class ExpressionContext(
             "@ability" -> usedSkill.ability.value
             "@leader" -> leader?.value
             "@phase" -> phase?.value
-            "@structure" -> structure?.name
+            "@structure" -> structure?.id
             "@activity" -> activity
             "@event" -> event
             "@unrest" -> unrest

@@ -1,4 +1,5 @@
 {
+    "id": "theater",
     "name": "Theater",
     "activityBonusRules": [
         {
@@ -21,8 +22,8 @@
     },
     "level": 9,
     "upgradeFrom": [
-        "Festival Hall",
-        "Festival Hall (V&K)"
+        "festival-hall",
+        "festival-hall-vk"
     ],
     "construction": {
         "rp": 24,

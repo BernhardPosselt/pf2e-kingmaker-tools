@@ -1,4 +1,5 @@
 {
+    "id": "opera-house",
     "name": "Opera House",
     "activityBonusRules": [
         {
@@ -28,7 +29,7 @@
     },
     "level": 15,
     "upgradeFrom": [
-        "Theater"
+        "theater"
     ],
     "construction": {
         "rp": 40,

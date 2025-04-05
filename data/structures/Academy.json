@@ -1,4 +1,5 @@
 {
+    "id": "academy",
     "name": "Academy",
     "activityBonusRules": [
         {
@@ -14,8 +15,8 @@
     "affectsDowntime": true,
     "level": 10,
     "upgradeFrom": [
-        "Library",
-        "Library (V&K)"
+        "library",
+        "library-vk"
     ],
     "construction": {
         "skills": [

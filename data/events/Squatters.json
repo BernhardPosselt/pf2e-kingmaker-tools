@@ -40,7 +40,7 @@
       "applyIf": [
         {
           "in": [
-            "Sewer System",
+            "sewer-system",
             "@structures"
           ]
         }

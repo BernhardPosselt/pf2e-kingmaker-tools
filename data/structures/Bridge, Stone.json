@@ -1,4 +1,5 @@
 {
+    "id": "bridge-stone",
     "name": "Bridge, Stone",
     "isBridge": true,
     "traits": [

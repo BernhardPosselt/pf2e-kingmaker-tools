@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.data.kingdom.structures
 
 data class Structure(
+    val id: String,
     val uuid: String,
     val name: String,
     val img: String? = null,

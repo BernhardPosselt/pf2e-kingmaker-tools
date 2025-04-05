@@ -1,4 +1,5 @@
 {
+    "id": "marketplace",
     "name": "Marketplace",
     "activityBonusRules": [
         {
@@ -15,7 +16,7 @@
     "reducesUnrest": false,
     "level": 4,
     "upgradeFrom": [
-        "General Store"
+        "general-store"
     ],
     "construction": {
         "rp": 48,

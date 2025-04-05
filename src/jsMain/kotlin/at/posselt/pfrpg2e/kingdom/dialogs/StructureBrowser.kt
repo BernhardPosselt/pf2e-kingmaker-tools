@@ -226,10 +226,9 @@ class StructureBrowser(
 
             "build-structure" -> buildPromise {
                 val structuresByUuid = worldStructures.associateBy { it.uuid }
-                val structuresByName = worldStructures.associateBy { it.name }
                 val uuid = target.dataset["uuid"]
                 val structure = uuid?.let { structuresByUuid[it] }
-                val rubble = structuresByName["Rubble"]
+                val rubble = worldStructures.find { it.id == "Rubble" }
                 val ore = target.dataset["ore"]?.toInt() ?: 0
                 val lumber = target.dataset["lumber"]?.toInt() ?: 0
                 val stone = target.dataset["stone"]?.toInt() ?: 0
@@ -281,11 +280,11 @@ class StructureBrowser(
     ): List<Structure> {
         return when (mode) {
             Cost.UPGRADE -> {
-                val settlementStructuresByName = structures.associateBy { it.name }
+                val settlementStructuresById = structures.associateBy { it.id }
                 worldStructures
                     .flatMap { structure ->
-                        structure.upgradeFrom.mapNotNull { name ->
-                            settlementStructuresByName[name]?.let { upgradeFrom ->
+                        structure.upgradeFrom.mapNotNull { id ->
+                            settlementStructuresById[id]?.let { upgradeFrom ->
                                 structure.copy(
                                     construction = structure.construction
                                         .upgradeFrom(upgradeFrom.construction),
@@ -299,7 +298,7 @@ class StructureBrowser(
             Cost.HALF -> structures.map { it.copy(notes = null, construction = it.construction.halveCost()) }
             Cost.FULL -> structures.map { it.copy(notes = null) }
             Cost.FREE -> structures.map { it.copy(notes = null, construction = it.construction.free()) }
-        }.filter { s -> filters.all { it(s) } && s.name != "Rubble"}
+        }.filter { s -> filters.all { it(s) } && s.id != "rubble"}
     }
 
     override fun _preparePartContext(
@@ -360,7 +359,7 @@ class StructureBrowser(
                 add { it.upgradeFrom.isNotEmpty() }
             }
             if (MainFilters.UPGRADEABLE in mainFilters) {
-                add { it.name in structuresUpgradedFrom }
+                add { it.id in structuresUpgradedFrom }
             }
             addAll(activityStructureFilters)
         }

@@ -1,39 +1,40 @@
 {
-    "name": "Inn (V&K)",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "hire-adventurers"
-        }
+  "id": "inn-vk",
+  "name": "Inn (V&K)",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "hire-adventurers"
+    }
+  ],
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "construction": {
+    "rp": 10,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "trade"
+      }
     ],
-    "traits": [
-        "building",
-        "residential"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 1,
-    "construction": {
-        "rp": 10,
-        "lumber": 2,
-        "skills": [
-            {
-                "skill": "trade"
-            }
-        ],
-        "dc": 15
+    "dc": 15
+  },
+  "lots": 1,
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "activity": "clear-hex",
+      "skill": "exploration"
     },
-    "lots": 1,
-    "skillBonusRules": [
-        {
-            "value": 1,
-            "activity": "clear-hex",
-            "skill": "exploration"
-        },
-        {
-            "value": 1,
-            "activity": "clear-hex-vk",
-            "skill": "exploration"
-        }
-    ]
+    {
+      "value": 1,
+      "activity": "clear-hex-vk",
+      "skill": "exploration"
+    }
+  ]
 }

@@ -20,7 +20,7 @@
         {
           "not": {
             "in": [
-              "Dump",
+              "dump",
               "@structures"
             ]
           }
@@ -36,7 +36,7 @@
       "applyIf": [
         {
           "in": [
-            "Sewer System",
+            "sewer-system",
             "@structures"
           ]
         }
@@ -77,7 +77,7 @@
               {
                 "not": {
                   "in": [
-                    "Sewer System",
+                    "sewer-system",
                     "@structures"
                   ]
                 }
@@ -111,7 +111,7 @@
               {
                 "not": {
                   "in": [
-                    "Sewer System",
+                    "sewer-system",
                     "@structures"
                   ]
                 }
@@ -145,7 +145,7 @@
               {
                 "not": {
                   "in": [
-                    "Sewer System",
+                    "sewer-system",
                     "@structures"
                   ]
                 }

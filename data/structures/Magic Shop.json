@@ -1,4 +1,5 @@
 {
+    "id": "magic-shop",
     "name": "Magic Shop",
     "activityBonusRules": [
         {
@@ -20,7 +21,7 @@
     "reducesUnrest": false,
     "level": 8,
     "upgradeFrom": [
-        "Luxury Store"
+        "luxury-store"
     ],
     "construction": {
         "rp": 44,

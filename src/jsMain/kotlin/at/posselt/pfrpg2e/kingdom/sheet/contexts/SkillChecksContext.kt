@@ -46,9 +46,9 @@ suspend fun skillChecks(
         event = null,
         eventStage = null,
         flags = emptySet(),
-        structureNames = settlements.current
+        structureIds = settlements.current
             ?.constructedStructures
-            ?.map { it.name }
+            ?.map { it.id }
             ?.toSet()
             .orEmpty(),
         waterBorders = settlements.current?.waterBorders ?: 0,

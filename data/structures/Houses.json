@@ -1,4 +1,5 @@
 {
+    "id": "houses",
     "name": "Houses",
     "traits": [
         "building",
@@ -8,7 +9,7 @@
     "reducesUnrest": false,
     "level": 1,
     "upgradeFrom": [
-        "Tenement"
+        "tenement"
     ],
     "construction": {
         "rp": 3,

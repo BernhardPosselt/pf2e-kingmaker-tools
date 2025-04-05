@@ -1,4 +1,5 @@
 {
+    "id": "temple",
     "name": "Temple",
     "activityBonusRules": [
         {
@@ -33,7 +34,7 @@
     },
     "level": 7,
     "upgradeFrom": [
-        "Shrine"
+        "shrine"
     ],
     "construction": {
         "rp": 32,

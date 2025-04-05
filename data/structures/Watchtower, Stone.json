@@ -1,6 +1,7 @@
 {
+    "id": "watchtower-stone",
     "name": "Watchtower, Stone",
-    "stacksWith": "Watchtower",
+    "stacksWith": "watchtower",
     "settlementEventRules": [
         {
             "value": 1

@@ -22,106 +22,105 @@ These take the form of
 
 and reference to built-in rules that get maintained and updated with the module. The following refs are available:
 
-* Academy
-* Alchemy Laboratory
-* Arcanist's Tower
-* Arena
-* Bank
-* Bank (V&K)
-* Barracks
-* Brewery
-* Castle
-* Castle (V&K)
-* Cathedral
-* Construction Yard
-* Construction Yard (V&K)
-* Dump
-* Embassy
-* Festival Hall
-* Festival Hall (V&K)
-* Fishing Fleets (V&K)
-* Foundry
-* Garrison
-* Garrison (V&K)
-* General Store
-* Gladiatorial Arena
-* Granary
-* Granary (V&K)
-* Guildhall
-* Herbalist
-* Hospital
-* Illicit Market
-* Inn
-* Inn (V&K)
-* Jail
-* Keep
-* Library
-* Library (V&K)
-* Lumberyard
-* Luxury Store
-* Magic Shop
-* Magic Shop (V&K)
-* Mansion
-* Marketplace
-* Menagerie
-* Military Academy
-* Mill
-* Mint
-* Monument
-* Monument (V&K)
-* Museum
-* Noble Villa
-* Occult Shop
-* Occult Shop (V&K)
-* Opera House
-* Palace
-* Palace (V&K)
-* Park
-* Pier
-* Pier (V&K)
-* Printing House
-* Sacred Grove
-* Secure Warehouse
-* Sewer System
-* Shrine
-* Smithy
-* Smithy (V&K)
-* Specialized Artisan
-* Stable
-* Stockyard
-* Stonemason
-* Tannery
-* Tavern, Dive
-* Tavern, Dive (V&K)
-* Tavern, Luxury
-* Tavern, Luxury (V&K)
-* Tavern, Popular
-* Tavern, Popular (V&K)
-* Tavern, World-Class
-* Tavern, World-Class (V&K)
-* Temple
-* Theater
-* Thieves' Guild
-* Town Hall
-* Town Hall (V&K)
-* Trade Shop
-* University
-* Watchtower
-* Watchtower, Stone
-* Waterfront
-* Bridge
-* Bridge, Stone
-* Cemetery
-* Houses
-* Magical Streetlamps
-* Orphanage
-* Paved Streets
-* Rubble
-* Tavern, Dive
-* Tenement
-* Wall, Stone
-* Wall, Wooden
-* Waterfront (V&K)
+* academy
+* alchemy-laboratory
+* arcanists-tower
+* arena
+* bank
+* barracks
+* brewery
+* bridge
+* bridge-stone
+* castle
+* cathedral
+* cemetery
+* construction-yard
+* dump
+* embassy
+* festival-hall
+* fishing-fleets-vk
+* foundry
+* garrison
+* general-store
+* gladiatorial-arena
+* houses
+* granary
+* guildhall
+* herbalist
+* hospital
+* illicit-market
+* inn
+* jail
+* keep
+* library
+* lumberyard
+* luxury-store
+* magic-shop
+* magical-streetlamps
+* mansion
+* marketplace
+* menagerie
+* military-academy
+* mill
+* mint
+* monument
+* museum
+* noble-villa
+* occult-shop
+* opera-house
+* orphanage
+* palace
+* park
+* paved-streets
+* pier
+* rubble
+* printing-house
+* sacred-grove
+* secure-warehouse
+* sewer-system
+* shrine
+* smithy
+* specialized-artisan
+* stable
+* stockyard
+* stonemason
+* tannery
+* tavern-dive
+* tavern-luxury
+* tavern-popular
+* tavern-world-class
+* temple
+* tenement
+* theater
+* thieves-guild
+* town-hall
+* trade-shop
+* university
+* wall-stone
+* wall-wooden
+* watchtower
+* watchtower-stone
+* bank-vk
+* castle-vk
+* construction-yard-vk
+* festival-hall-vk
+* garrison-vk
+* granary-vk
+* inn-vk
+* library-vk
+* magic-shop-vk
+* monument-vk
+* occult-shop-vk
+* palace-vk
+* smithy-vk
+* tavern-dive-vk
+* town-hall-vk
+* pier-vk
+* tavern-luxury-vk
+* tavern-popular-vk
+* tavern-world-class-vk
+* waterfront-vk
+* waterfront
 
 ## Full Rules
 
@@ -132,6 +131,7 @@ A full structure rule would look something like this:
 
 ```json
 {
+  "id": "magic-school",
   "name": "Magic School",
   "notes": "Allows you to retrain your grades",
   "preventItemLevelPenalty": false,
@@ -190,7 +190,7 @@ A full structure rule would look something like this:
   "reducesUnrest": false,
   "reducesRuin": false,
   "upgradeFrom": [
-    "Pier"
+    "pier"
   ],
   "construction": {
     "skills": [
@@ -206,7 +206,7 @@ A full structure rule would look something like this:
     "rp": 2,
     "dc": 2
   },
-  "stacksWith": "Slightly Different Magic School",
+  "stacksWith": "other-magic-school-id",
   "reduceUnrestBy": {
     "value": 1,
     "moreThanOncePerTurn": false,
@@ -224,10 +224,11 @@ A full structure rule would look something like this:
     "town": 1,
     "metropolis": 3
   },
-  "ignoreConsumptionReductionOf": ["Pier"]
+  "ignoreConsumptionReductionOf": ["pier"]
 }
 ```
 
+* **id**: building id
 * **name**: building name
 * **notes**: optional, is shown at the bottom in the **Building Effects** section
 * **preventItemLevelPenalty**: optional, if not at least one structure in your settlement has this set to true, it will
@@ -304,7 +305,7 @@ A full structure rule would look something like this:
 * **affectsDowntime**: optional, used to filter for structures that have downtime bonuses
 * **reducesUnrest**: optional, used to filter for structures that reduce unrest
 * **reducesRuin**: optional, used to filter for structures that reduce ruin
-* **upgradeFrom**: optional, includes a list of structure names that this structure can be upgraded from
+* **upgradeFrom**: optional, includes a list of structure ids that this structure can be upgraded from
 * **construction**:
     * **skills**:
         * **skill**: a skill in lower case
@@ -326,5 +327,5 @@ A full structure rule would look something like this:
   * **ruin**: one of either **decay**, **crime**, **strife**, **corruption** or **any**
 * **gainRuin**: optional, exactly the same as **reduceRuinBy**
 * **increaseResourceDice**: optional, key is either **village**, **town**, **city** or **metropolis** and value is a number that increases resource dice gained each turn
-* **ignoreConsumptionReductionOf**: optional, a structure name that is removed from consumption reduction in a settlement
+* **ignoreConsumptionReductionOf**: optional, a structure id that is removed from consumption reduction in a settlement
 * **consumptionReductionStacks**: optional, if true, all structures with the same name in a settlement add up their consumption reduction

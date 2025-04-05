@@ -1,4 +1,5 @@
 {
+    "id": "occult-shop-vk",
     "name": "Occult Shop (V&K)",
     "activityBonusRules": [
         {
@@ -21,6 +22,7 @@
     "traits": [
         "building"
     ],
+    "upgradeFrom": ["magic-shop"],
     "affectsDowntime": true,
     "reducesUnrest": false,
     "level": 13,

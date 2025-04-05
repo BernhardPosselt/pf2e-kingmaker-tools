@@ -1,4 +1,5 @@
 {
+    "id": "castle-vk",
     "name": "Castle (V&K)",
     "activityBonusRules": [
         {
@@ -76,8 +77,8 @@
     },
     "level": 9,
     "upgradeFrom": [
-        "Town Hall",
-        "Town Hall (V&K)"
+        "town-hall",
+        "town-hall-vk"
     ],
     "construction": {
         "skills": [

@@ -11,9 +11,13 @@
       "required": [
         "name",
         "lots",
-        "level"
+        "level",
+        "id"
       ],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },

@@ -1,4 +1,5 @@
 {
+    "id": "military-academy",
     "name": "Military Academy",
     "activityBonusRules": [
         {
@@ -21,7 +22,7 @@
     "reducesUnrest": false,
     "level": 12,
     "upgradeFrom": [
-        "Academy"
+        "academy"
     ],
     "construction": {
         "rp": 36,

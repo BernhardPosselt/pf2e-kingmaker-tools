@@ -1,4 +1,5 @@
 {
+    "id": "town-hall",
     "name": "Town Hall",
     "increaseLeadershipActivities": true,
     "traits": [

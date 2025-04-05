@@ -25,6 +25,7 @@ class EvaluateStructuresTest {
         val structures = listOf(
             Structure(
                 name = "stackwith",
+                id = "stackwith",
                 stacksWith = "residential",
                 consumptionReduction = 1,
                 uuid = "",
@@ -38,6 +39,7 @@ class EvaluateStructuresTest {
             ),
             Structure(
                 name = "residential",
+                id = "residential",
                 lots = 2,
                 enableCapitalInvestment = true,
                 traits = setOf(StructureTrait.RESIDENTIAL),
@@ -69,6 +71,7 @@ class EvaluateStructuresTest {
             ),
             Structure(
                 name = "residential",
+                id = "residential",
                 lots = 1,
                 traits = setOf(StructureTrait.RESIDENTIAL),
                 settlementEventBonus = 1,
@@ -95,12 +98,12 @@ class EvaluateStructuresTest {
         val result = evaluateSettlement(
             data = SettlementData(
                 name = "name",
+                id = "name",
                 level = 20,
                 type = SettlementType.CAPITAL,
                 waterBorders = 4,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
-                id = "hi",
             ),
             structures = structures,
             allStructuresStack = false,
@@ -157,12 +160,12 @@ class EvaluateStructuresTest {
         val result = evaluateSettlement(
             data = SettlementData(
                 name = "name",
+                id = "name",
                 level = 20,
                 type = SettlementType.CAPITAL,
                 waterBorders = 4,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
-                id = "hi",
             ),
             structures = emptyList(),
             allStructuresStack = false,
@@ -176,16 +179,17 @@ class EvaluateStructuresTest {
         val result = evaluateSettlement(
             data = SettlementData(
                 name = "name",
+                id = "name",
                 level = 14,
                 type = SettlementType.CAPITAL,
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
-                id = "hi",
             ),
             structures = listOf(
                 Structure(
                     name = "residential",
+                    id = "residential",
                     uuid = "",
                     bonuses = setOf(
                         StructureBonus(
@@ -197,6 +201,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     bonuses = setOf(
                         StructureBonus(
@@ -228,22 +233,24 @@ class EvaluateStructuresTest {
         val result = evaluateSettlement(
             data = SettlementData(
                 name = "name",
+                id = "name",
                 level = 14,
                 type = SettlementType.CAPITAL,
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
-                id = "hi",
             ),
             structures = listOf(
                 Structure(
                     name = "residential",
+                    id = "residential",
                     consumptionReduction = 1,
                     consumptionReductionStacks = true,
                     uuid = "",
                 ),
                 Structure(
                     name = "residential",
+                    id = "residential",
                     consumptionReduction = 1,
                     consumptionReductionStacks = true,
                     uuid = "",
@@ -260,22 +267,24 @@ class EvaluateStructuresTest {
         val result = evaluateSettlement(
             data = SettlementData(
                 name = "name",
+                id = "name",
                 level = 14,
                 type = SettlementType.CAPITAL,
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
-                id = "hi",
             ),
             structures = listOf(
                 Structure(
                     name = "residential",
+                    id = "residential",
                     consumptionReduction = 1,
                     consumptionReductionStacks = true,
                     uuid = "",
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     consumptionReduction = 3,
                     ignoreConsumptionReductionOf = setOf("residential"),
                     uuid = "",
@@ -292,22 +301,24 @@ class EvaluateStructuresTest {
         val result = evaluateSettlement(
             data = SettlementData(
                 name = "name",
+                id = "name",
                 level = 14,
                 type = SettlementType.CAPITAL,
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
-                id = "hi",
             ),
             structures = listOf(
                 Structure(
                     name = "residential",
+                    id = "residential",
                     consumptionReduction = 1,
                     uuid = "",
                 ),
                 Structure(
                     stacksWith = "residential",
                     name = "other",
+                    id = "other",
                     consumptionReduction = 1,
                     uuid = "",
                 ),
@@ -324,6 +335,7 @@ class EvaluateStructuresTest {
             listOf(
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -342,6 +354,7 @@ class EvaluateStructuresTest {
             listOf(
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -351,6 +364,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -360,6 +374,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -378,6 +393,7 @@ class EvaluateStructuresTest {
             listOf(
                 Structure(
                     name = "other1",
+                    id = "other1",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 3,
@@ -387,6 +403,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other1",
+                    id = "other1",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 3,
@@ -396,6 +413,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -405,6 +423,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -414,6 +433,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -432,6 +452,7 @@ class EvaluateStructuresTest {
             listOf(
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -440,6 +461,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -448,6 +470,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -456,6 +479,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -473,6 +497,7 @@ class EvaluateStructuresTest {
             listOf(
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -483,6 +508,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other",
+                    id = "other",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -493,6 +519,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other1",
+                    id = "other1",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
@@ -502,6 +529,7 @@ class EvaluateStructuresTest {
                 ),
                 Structure(
                     name = "other1",
+                    id = "other1",
                     uuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,

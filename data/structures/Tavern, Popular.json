@@ -1,4 +1,5 @@
 {
+    "id": "tavern-popular",
     "name": "Tavern, Popular",
     "activityBonusRules": [
         {
@@ -24,8 +25,8 @@
     },
     "level": 3,
     "upgradeFrom": [
-        "Tavern, Dive",
-        "Tavern, Dive (V&K)"
+        "tavern-dive",
+        "tavern-dive-vk"
     ],
     "construction": {
         "rp": 24,

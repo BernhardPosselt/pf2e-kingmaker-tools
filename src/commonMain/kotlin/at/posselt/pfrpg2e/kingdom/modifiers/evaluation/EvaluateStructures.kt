@@ -16,12 +16,12 @@ private data class CombinedBonuses(
 )
 
 private fun calculateConsumptionReduction(structures: List<Structure>): Int {
-    val allowedNames = structures.map { it.name }.toSet() -
+    val allowedIds = structures.map { it.id }.toSet() -
             structures.flatMap { it.ignoreConsumptionReductionOf }.toSet()
-    val structuresToSum = structures.filter { allowedNames.contains(it.name) }
+    val structuresToSum = structures.filter { allowedIds.contains(it.id) }
     val nonStacking = structuresToSum
         .filterNot { it.consumptionReductionStacks }
-        .distinctBy { it.stacksWith ?: it.name }
+        .distinctBy { it.stacksWith ?: it.id }
     val stacking = structuresToSum
         .filter { it.consumptionReductionStacks }
     return (nonStacking + stacking)
@@ -36,23 +36,25 @@ private fun combineBonuses(
 ): CombinedBonuses {
     val leaderBonus = structures.maxOfOrNull { it.leadershipActivityBonus } ?: 0
     val eventBonus = structures.sumOf { it.settlementEventBonus }.coerceIn(0, maxItemBonus)
-    val grouped = structures.groupBy { if (allStructuresStack) "" else (it.stacksWith ?: it.name) }
+    val grouped = structures.groupBy { if (allStructuresStack) "" else (it.stacksWith ?: it.id) }
+    val structuresById = structures.associateBy { it.id }
     val bonuses = grouped.flatMap { groupedStructures ->
         val structures = groupedStructures.value
-        val names = structures.map { it.stacksWith ?: it.name }
+        val ids = structures.map { it.stacksWith ?: it.id }
         val structuresByBonus = structures
             .flatMap { structure -> structure.bonuses.map { it to structure } }
             .groupBy { it.first.skill to it.first.activity }
-            .mapValues { (_, structures) -> structures.map { it.second.stacksWith ?: it.second.name } }
+            .mapValues { (_, structures) -> structures.map { it.second.stacksWith ?: it.second.id } }
         val groupedBonuses = structures.flatMap { it.bonuses }.groupBy { it }
         groupedBonuses.values.map { bonuses ->
             val value = bonuses.sumOf { it.value }.coerceIn(0, maxItemBonus)
             val bonus = bonuses.first()
             val namesIndex = bonus.skill to bonus.activity
             GroupedStructureBonus(
-                structureNames = names
+                structureNames = ids
                     .mapNotNull { structuresByBonus[namesIndex] }
                     .flatMap { it }
+                    .mapNotNull { structuresById[it]?.name }
                     .toSet(),
                 skill = bonus.skill,
                 activity = bonus.activity,
@@ -69,9 +71,9 @@ private fun combineBonuses(
 }
 
 fun parseAvailableItems(structures: List<Structure>): AvailableItemBonuses {
-    val structuresByName = structures
-        .groupBy { it.stacksWith ?: it.name }
-    val bonusesPerGroup = structuresByName
+    val structuresById = structures
+        .groupBy { it.stacksWith ?: it.id }
+    val bonusesPerGroup = structuresById
         .map { (_, structure) -> calculateItemsFromSameStructures(structure, alwaysStacks = false) }
         // for each structure, we only want the maximum bonus per category
         .fold(mapOf<ItemGroup, Int>()) { prev, curr ->
@@ -81,7 +83,7 @@ fun parseAvailableItems(structures: List<Structure>): AvailableItemBonuses {
                 it to if (currentBonus > previousBonus) currentBonus else previousBonus
             }
         }
-    val bonusesPerGroupThatAlwaysStack = structuresByName
+    val bonusesPerGroupThatAlwaysStack = structuresById
         .map { (_, structure) -> calculateItemsFromSameStructures(structure, alwaysStacks = true) }
         // for each structure, we only want the maximum bonus per category
         .fold(mapOf<ItemGroup, Int>()) { prev, curr ->

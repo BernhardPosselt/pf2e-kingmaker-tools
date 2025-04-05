@@ -1,4 +1,5 @@
 {
+    "id": "orphanage",
     "name": "Orphanage",
     "traits": [
         "building",
@@ -11,7 +12,7 @@
     },
     "level": 2,
     "upgradeFrom": [
-        "Houses"
+        "houses"
     ],
     "construction": {
         "rp": 6,

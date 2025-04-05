@@ -1,4 +1,5 @@
 {
+    "id": "tenement",
     "name": "Tenement",
     "traits": [
         "building",
