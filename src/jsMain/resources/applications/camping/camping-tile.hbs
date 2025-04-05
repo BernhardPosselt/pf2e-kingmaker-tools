@@ -1,7 +1,7 @@
 <div class="km-camping-activity km-camping-tile"
     {{#if hidden}}hidden{{/if}}
     {{#if actor}}data-actor-uuid="{{actor.uuid}}"{{/if}}
-     data-activity-name="{{name}}"
+     data-activity-id="{{id}}"
 >
     <header>
         {{#if journalUuid}}
@@ -15,7 +15,7 @@
             <button class="km-camping-action"
                     data-action="clear-activity"
                     type="button"
-                    data-name="{{name}}"><i
+                    data-id="{{id}}"><i
                     class="fa-regular fa-circle-xmark"></i></button>
             <a href="#"
                data-uuid="{{actor.uuid}}"

@@ -17,14 +17,14 @@ import kotlinx.coroutines.coroutineScope
 
 
 private data class EffectAndTarget(
-    val activityName: String,
+    val activityId: String,
     val effect: PF2EEffect,
     val target: ActivityEffectTarget,
     val degreeOfSuccess: DegreeOfSuccess?,
 )
 
 private data class NullableEffectAndTarget(
-    val activityName: String,
+    val activityId: String,
     val effect: PF2EEffect?,
     val target: ActivityEffectTarget,
     val degreeOfSuccess: DegreeOfSuccess?,
@@ -34,7 +34,7 @@ private data class NullableEffectAndTarget(
             null
         } else {
             EffectAndTarget(
-                activityName = activityName,
+                activityId = activityId,
                 effect = effect,
                 target = target,
                 degreeOfSuccess = degreeOfSuccess,
@@ -43,22 +43,22 @@ private data class NullableEffectAndTarget(
 }
 
 private suspend fun parseActivityEffect(
-    activityName: String,
+    activityId: String,
     degreeOfSuccess: DegreeOfSuccess?,
     effect: ActivityEffect,
 ) = NullableEffectAndTarget(
     effect = fromUuidTypeSafe<PF2EEffect>(effect.uuid),
     target = effect.target?.let { fromCamelCase<ActivityEffectTarget>(it) } ?: ActivityEffectTarget.ALL,
     degreeOfSuccess = degreeOfSuccess,
-    activityName = activityName,
+    activityId = activityId,
 )
 
 private suspend fun parseActivityEffects(
-    activityName: String,
+    activityId: String,
     degreeOfSuccess: DegreeOfSuccess?,
     effects: Array<ActivityEffect>?,
 ): List<Deferred<NullableEffectAndTarget>> = coroutineScope {
-    effects?.map { async { parseActivityEffect(activityName, degreeOfSuccess, it) } }
+    effects?.map { async { parseActivityEffect(activityId, degreeOfSuccess, it) } }
         ?: emptyList()
 }
 
@@ -66,11 +66,11 @@ private suspend fun parseActivityEffects(
 private suspend fun CampingData.getCampingEffectItems(): List<EffectAndTarget> {
     return getAllActivities()
         .flatMap {
-            parseActivityEffects(it.name, null, it.effectUuids) +
-                    parseActivityEffects(it.name, DegreeOfSuccess.CRITICAL_FAILURE, it.criticalFailure?.effectUuids) +
-                    parseActivityEffects(it.name, DegreeOfSuccess.FAILURE, it.failure?.effectUuids) +
-                    parseActivityEffects(it.name, DegreeOfSuccess.SUCCESS, it.success?.effectUuids) +
-                    parseActivityEffects(it.name, DegreeOfSuccess.CRITICAL_SUCCESS, it.criticalSuccess?.effectUuids)
+            parseActivityEffects(it.id, null, it.effectUuids) +
+                    parseActivityEffects(it.id, DegreeOfSuccess.CRITICAL_FAILURE, it.criticalFailure?.effectUuids) +
+                    parseActivityEffects(it.id, DegreeOfSuccess.FAILURE, it.failure?.effectUuids) +
+                    parseActivityEffects(it.id, DegreeOfSuccess.SUCCESS, it.success?.effectUuids) +
+                    parseActivityEffects(it.id, DegreeOfSuccess.CRITICAL_SUCCESS, it.criticalSuccess?.effectUuids)
         }
         .awaitAll()
         .mapNotNull(NullableEffectAndTarget::validate)
@@ -84,10 +84,10 @@ private fun PF2EActor.findCampingEffectsInInventory(compendiumItems: List<PF2EEf
 suspend fun CampingData.syncCampingEffects(activities: Array<CampingActivity>) = coroutineScope {
     val actors = getActorsInCamp(campingActivityOnly = true)
     val allEffects = getCampingEffectItems()
-    val activitiesByName = activities.associateBy { it.activity }
-    val allRelevantEffectsByName = allEffects
+    val activitiesById = activities.associateBy { it.activityId }
+    val allRelevantEffectsById = allEffects
         .filter { effect ->
-            val activity = activitiesByName[effect.activityName]
+            val activity = activitiesById[effect.activityId]
             if (activity != null) {
                 val result = activity.result?.let { fromCamelCase<DegreeOfSuccess>(it) }
                 effect.degreeOfSuccess == null || effect.degreeOfSuccess == result
@@ -95,13 +95,13 @@ suspend fun CampingData.syncCampingEffects(activities: Array<CampingActivity>) =
                 false
             }
         }
-        .groupBy { it.activityName }
+        .groupBy { it.activityId }
     val compendiumItems = allEffects.map { it.effect }
     actors.flatMap { actor ->
         val existingEffects = actor.findCampingEffectsInInventory(compendiumItems)
         val syncEffects = activities
             .flatMap { activity ->
-                allRelevantEffectsByName[activity.activity]?.asSequence()
+                allRelevantEffectsById[activity.activityId]?.asSequence()
                     ?.filter { actorTargetedByActivityEffect(it.target, activity.actorUuid, actor.uuid) }
                     ?.map { it.effect }
                     ?.toList()

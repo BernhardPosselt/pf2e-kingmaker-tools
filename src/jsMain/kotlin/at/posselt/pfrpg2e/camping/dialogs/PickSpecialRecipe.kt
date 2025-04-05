@@ -52,7 +52,7 @@ suspend fun pickSpecialRecipe(
     val totalItems = camping.getTotalCarriedFood(partyActor, items)
     val rows = allRecipes.asSequence()
         .filter { it.level <= (camping.findCurrentRegion()?.level ?: 0) }
-        .filter { it.name !in learnedRecipes }
+        .filter { it.id !in learnedRecipes }
         .sortedBy { it.level }
         .mapIndexed { index, recipe ->
             async {

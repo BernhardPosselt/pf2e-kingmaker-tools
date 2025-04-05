@@ -4,7 +4,13 @@ import at.posselt.pfrpg2e.app.CrudApplication
 import at.posselt.pfrpg2e.app.CrudData
 import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
-import at.posselt.pfrpg2e.camping.*
+import at.posselt.pfrpg2e.camping.CampingActivityData
+import at.posselt.pfrpg2e.camping.CampingActor
+import at.posselt.pfrpg2e.camping.getAllActivities
+import at.posselt.pfrpg2e.camping.getCamping
+import at.posselt.pfrpg2e.camping.isCookMeal
+import at.posselt.pfrpg2e.camping.isPrepareCampsite
+import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import com.foundryvtt.core.Game
@@ -23,8 +29,8 @@ class ManageActivitiesApplication(
     override fun deleteEntry(id: String) = buildPromise {
         actor.getCamping()?.let { camping ->
             camping.homebrewCampingActivities =
-                camping.homebrewCampingActivities.filter { it.name != id }.toTypedArray()
-            camping.campingActivities = camping.campingActivities.filter { it.activity != id }.toTypedArray()
+                camping.homebrewCampingActivities.filter { it.id != id }.toTypedArray()
+            camping.campingActivities = camping.campingActivities.filter { it.activityId != id }.toTypedArray()
             camping.lockedActivities = camping.lockedActivities.filter { it != id }.toTypedArray()
             actor.setCamping(camping)
             render()
@@ -45,7 +51,7 @@ class ManageActivitiesApplication(
         ActivityApplication(
             game,
             actor,
-            actor.getCamping()?.homebrewCampingActivities?.find { it.name == id },
+            actor.getCamping()?.homebrewCampingActivities?.find { it.id == id },
             afterSubmit = { render() },
         ).launch()
         undefined
@@ -57,12 +63,11 @@ class ManageActivitiesApplication(
             camping.getAllActivities()
                 .sortedWith(compareBy(CampingActivityData::name))
                 .map { activity ->
-                    val name = activity.name
                     val canBeEdited = activity.isHomebrew
-                    val enabled = !locked.contains(name)
+                    val enabled = !locked.contains(activity.id)
                     CrudItem(
-                        id = name,
-                        name = name,
+                        id = activity.id,
+                        name =  activity.name,
                         nameIsHtml = false,
                         additionalColumns = emptyArray(),
                         enable = CheckboxInput(
@@ -70,7 +75,7 @@ class ManageActivitiesApplication(
                             label = "Enable",
                             hideLabel = true,
                             disabled = activity.isPrepareCampsite() || activity.isCookMeal(),
-                            name = "enabledIds.$name",
+                            name = "enabledIds.$id",
                         ).toContext(),
                         canBeEdited = canBeEdited,
                         canBeDeleted = canBeEdited,
@@ -84,11 +89,11 @@ class ManageActivitiesApplication(
     }
 
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {
-        val enabled = value.enabledIds.toSet() + setOf("Prepare Campsite", "Cook Meal")
+        val enabled = value.enabledIds.toSet() + setOf("prepare-campsite", "cook-meal")
         actor.getCamping()?.let { camping ->
             camping.lockedActivities = camping.getAllActivities()
-                .filter { !enabled.contains(it.name) }
-                .map { it.name }
+                .filter { !enabled.contains(it.id) }
+                .map { it.id }
                 .toTypedArray()
             actor.setCamping(camping)
         }

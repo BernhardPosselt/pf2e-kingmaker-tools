@@ -85,9 +85,9 @@ data class CampingCheckData(
     val skill: ParsedCampingSkill,
 )
 
-fun PF2ECreature.getCampingCheckData(camping: CampingData, activityName: String): CampingCheckData? {
+fun PF2ECreature.getCampingCheckData(camping: CampingData, activityId: String): CampingCheckData? {
     val region = camping.findCurrentRegion()
-    val data = camping.groupActivities().find { it.data.name == activityName && it.result.actorUuid == uuid }
+    val data = camping.groupActivities().find { it.data.id == activityId && it.result.actorUuid == uuid }
     val skill = data?.result?.selectedSkill
         ?.let { Attribute.fromString(it) }
         ?.let { attr -> data.data.getCampingSkills(this).find { it.attribute == attr } }

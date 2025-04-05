@@ -38,7 +38,7 @@ class ManageRecipesApplication(
     override fun deleteEntry(id: String) = buildPromise {
         actor.getCamping()?.let { camping ->
             camping.cooking.knownRecipes = camping.cooking.knownRecipes.filter { it != id }.toTypedArray()
-            camping.cooking.homebrewMeals = camping.cooking.homebrewMeals.filter { it.name != id }.toTypedArray()
+            camping.cooking.homebrewMeals = camping.cooking.homebrewMeals.filter { it.id != id }.toTypedArray()
             camping.cooking.actorMeals.forEach {
                 if (it.chosenMeal == id) {
                     it.chosenMeal = "nothing"
@@ -48,7 +48,7 @@ class ManageRecipesApplication(
                 }
             }
             camping.cooking.results = camping.cooking.results.asSequence()
-                .filter { it.recipeName != id }
+                .filter { it.recipeId != id }
                 .toTypedArray()
             actor.setCamping(camping)
             render()
@@ -69,7 +69,7 @@ class ManageRecipesApplication(
         RecipeApplication(
             game,
             actor,
-            actor.getCamping()?.cooking?.homebrewMeals?.find { it.name == id },
+            actor.getCamping()?.cooking?.homebrewMeals?.find { it.id == id },
             afterSubmit = { render() },
         ).launch()
         undefined
@@ -83,10 +83,10 @@ class ManageRecipesApplication(
             camping.getAllRecipes()
                 .sortedWith(compareBy(RecipeData::level, RecipeData::name))
                 .map { recipe ->
-                    val recipeName = recipe.name
-                    val link = TextEditor.enrichHTML(buildUuid(recipe.uuid, recipeName)).await()
+                    val id = recipe.id
+                    val link = TextEditor.enrichHTML(buildUuid(recipe.uuid, recipe.name)).await()
                     val editable = recipe.isHomebrew == true
-                    val enabled = learnedRecipes.contains(recipeName)
+                    val enabled = learnedRecipes.contains(id)
                     val cook = tpl(
                         "components/food-cost/food-cost.hbs",
                         buildFoodCost(recipe.cookingCost(), total, foodItems).unsafeCast<AnyMutableObject>().apply {
@@ -95,7 +95,7 @@ class ManageRecipesApplication(
                     )
                     CrudItem(
                         nameIsHtml = true,
-                        id = recipeName,
+                        id = id,
                         name = link,
                         additionalColumns = arrayOf(
                             CrudColumn(value = recipe.rarity, escapeHtml = true),
@@ -108,8 +108,8 @@ class ManageRecipesApplication(
                             value = enabled,
                             label = "Enable",
                             hideLabel = true,
-                            name = "enabledIds.$recipeName",
-                            disabled = recipeName == "Basic Meal" || recipeName == "Hearty Meal",
+                            name = "enabledIds.$id",
+                            disabled = id == "basic-meal" || id == "hearty-meal",
                         ).toContext(),
                         canBeEdited = editable,
                         canBeDeleted = editable,
@@ -125,14 +125,14 @@ class ManageRecipesApplication(
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {
         console.log("saving", value)
         actor.getCamping()?.let { camping ->
-            val enabledRecipes = value.enabledIds + arrayOf("Hearty Meal", "Basic Meal")
+            val enabledRecipes = value.enabledIds + arrayOf("hearty-meal", "basic-meal")
             camping.cooking.knownRecipes = enabledRecipes
             camping.cooking.actorMeals.forEach {
                 if (it.chosenMeal !in enabledRecipes) it.chosenMeal = "nothing"
                 if (it.favoriteMeal !in enabledRecipes) it.favoriteMeal = null
             }
             camping.cooking.results = camping.cooking.results.asSequence()
-                .filter { it.recipeName in enabledRecipes }
+                .filter { it.recipeId in enabledRecipes }
                 .toTypedArray()
             actor.setCamping(camping)
         }

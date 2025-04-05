@@ -1,4 +1,5 @@
 {
+  "id": "oysters",
   "name": "Oysters",
   "icon": "icons/environment/creatures/crustacean-oyster.webp",
   "basicIngredients": 3,

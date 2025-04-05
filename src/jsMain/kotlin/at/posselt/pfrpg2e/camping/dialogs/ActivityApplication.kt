@@ -28,6 +28,7 @@ import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCampingSkills
 import at.posselt.pfrpg2e.camping.requiresACheck
 import at.posselt.pfrpg2e.camping.setCamping
+import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
@@ -84,6 +85,7 @@ class ActivityDataModel(
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {
+            string("id")
             string("name")
             boolean("isSecret")
             string("journalUuid", nullable = true)
@@ -162,6 +164,7 @@ class ActivityApplication(
         success = null,
         failure = null,
         criticalFailure = null,
+        id = "",
     )
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -309,12 +312,19 @@ class ActivityApplication(
                     formRows = formContext(
                         TextInput(
                             stacked = false,
+                            label = "Id",
+                            name = "id",
+                            readonly = editActivityName != null,
+                            value = currentActivity.id,
+                            required = true,
+                            help = "To override an existing activity, use the same id",
+                        ),
+                        TextInput(
+                            stacked = false,
                             label = "Name",
                             name = "name",
-                            readonly = editActivityName != null,
                             value = currentActivity.name,
                             required = true,
-                            help = "To override an existing activity, use the same name",
                         ),
                         Select(
                             label = "Journal",
@@ -409,7 +419,7 @@ class ActivityApplication(
                         .toTypedArray()
                     camping.homebrewCampingActivities = camping.homebrewCampingActivities + data
                     camping.campingActivities = camping.campingActivities
-                        .filter { it.activity != data.name }
+                        .filter { it.activityId != data.id }
                         .toTypedArray()
                     actor.setCamping(camping)
                     close().await()
@@ -422,7 +432,8 @@ class ActivityApplication(
 
     override fun onParsedSubmit(value: ActivitySubmitData): Promise<Void> = buildPromise {
         currentActivity = CampingActivityData(
-            name = editActivityName ?: value.name,
+            id = editActivityName ?: value.name.slugify(),
+            name = value.name,
             journalUuid = value.journalEntryUuid ?: value.journalUuid,
             skills = currentActivity.skills,
             modifyRandomEncounterDc = value.modifyRandomEncounterDc,

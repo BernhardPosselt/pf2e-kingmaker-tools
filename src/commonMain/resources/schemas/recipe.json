@@ -17,6 +17,7 @@
     "Recipe": {
       "type": "object",
       "required": [
+        "id",
         "name",
         "basicIngredients",
         "specialIngredients",
@@ -31,6 +32,9 @@
         "criticalFailure"
       ],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },

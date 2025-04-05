@@ -65,13 +65,13 @@ private fun homebrewCampingActivitiesChanged(camping: CampingData, update: Any):
 }
 
 private fun campingActivitiesChanged(camping: CampingData, update: Any): Boolean {
-    val current = camping.campingActivities.sortedBy { it.activity }
-    val updateList = update.unsafeCast<Array<CampingActivity>>().sortedBy { it.activity }
+    val current = camping.campingActivities.sortedBy { it.activityId }
+    val updateList = update.unsafeCast<Array<CampingActivity>>().sortedBy { it.activityId }
     return doObjectArraysDiffer(current.asAnyObjectList(), updateList.asAnyObjectList())
 }
 
 private fun alwaysPerformActivitiesChanged(camping: CampingData, update: Any): Boolean {
-    val current = camping.alwaysPerformActivities.sorted()
+    val current = camping.alwaysPerformActivityIds.sorted()
     val updateList = update.unsafeCast<Array<String>>().sorted()
     return current != updateList
 }
@@ -101,13 +101,13 @@ fun checkPreActorUpdate(actor: Actor, update: AnyObject): SyncActivities? {
         ?: camping.campingActivities
     val alwaysPerformActivities = getProperty(update, alwaysPerformPath)
         ?.unsafeCast<Array<String>>()
-        ?: camping.alwaysPerformActivities
-    val activitiesByName = camping.campingActivities.associateBy { it.activity }
-    val activityDataByName = camping.getAllActivities().associateBy { it.name }
+        ?: camping.alwaysPerformActivityIds
+    val activitiesById = camping.campingActivities.associateBy { it.activityId }
+    val activityDataById = camping.getAllActivities().associateBy { it.id }
     val activityStateChanged = getActivityChanges(
         activities,
-        activityDataByName,
-        activitiesByName
+        activityDataById,
+        activitiesById
     )
     val needsSync = settingsChanged
             || activityStateChanged.isNotEmpty()
@@ -140,7 +140,7 @@ private fun getActivitiesToSync(
     alwaysPerformActivities
         .map {
             CampingActivity(
-                activity = it,
+                activityId = it,
                 actorUuid = null
             )
         }
@@ -166,12 +166,12 @@ private fun setSection(
 
 private fun getActivityChanges(
     activities: Array<CampingActivity>,
-    activityDataByName: Map<String, CampingActivityData>,
-    activitiesByName: Map<String, CampingActivity>,
+    activityDataById: Map<String, CampingActivityData>,
+    activitiesById: Map<String, CampingActivity>,
 ): List<ActivityChange> {
     return activities.mapNotNull { new ->
-        val data = activityDataByName[new.activity]
-        val previous = activitiesByName[new.activity]
+        val data = activityDataById[new.activityId]
+        val previous = activitiesById[new.activityId]
         val hasDifferentResult = previous != null && (new.result != previous.result)
         val hasDifferentActor = previous != null && (new.actorUuid != previous.actorUuid)
         if (data != null && (hasDifferentActor || hasDifferentResult)) {

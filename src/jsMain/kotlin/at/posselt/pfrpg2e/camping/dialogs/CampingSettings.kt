@@ -104,19 +104,18 @@ enum class RestRollMode {
     ONE_EVERY_FOUR_HOURS,
 }
 
-private val companionActivities = setOf(
-    "Blend Into The Night",
-    "Bolster Confidence",
-    "Bolster Confidence",
-    "Enhance Weapons",
-    "Healer's Blessing",
-    "Intimidating Posture",
-    "Maintain Armor",
-    "Set Alarms",
-    "Set Traps",
-    "Undead Guardians",
-    "Water Hazards",
-    "Wilderness Survival",
+private val companionActivities = mapOf<String, String>(
+    "blend-into-the-night" to "Blend Into The Night",
+    "bolster-confidence" to "Bolster Confidence",
+    "enhance-weapons" to "Enhance Weapons",
+    "healers-blessing" to "Healer's Blessing",
+    "intimidating-posture" to "Intimidating Posture",
+    "maintain-armor" to "Maintain Armor",
+    "set-alarms" to "Set Alarms",
+    "set-traps" to "Set Traps",
+    "undead-guardians" to "Undead Guardians",
+    "water-hazards" to "Water Hazards",
+    "wilderness-survival" to "Wilderness Survival",
 )
 
 @JsExport
@@ -146,7 +145,7 @@ class CampingSettingsApplication(
             ignoreSkillRequirements = camping.ignoreSkillRequirements,
             minimumTravelSpeed = camping.minimumTravelSpeed,
             minimumSubsistence = camping.cooking.minimumSubsistence,
-            alwaysPerformActivities = camping.alwaysPerformActivities,
+            alwaysPerformActivities = camping.alwaysPerformActivityIds,
             restingPlaylistUuid = camping.restingTrack?.playlistUuid,
             restingPlaylistSoundUuid = camping.restingTrack?.trackUuid,
             worldSceneId = camping.worldSceneId,
@@ -244,11 +243,11 @@ class CampingSettingsApplication(
                 ),
                 Section(
                     legend = "Always Performed Activities",
-                    formRows = companionActivities.map {
+                    formRows = companionActivities.map { (id, label) ->
                         CheckboxInput(
-                            label = it,
-                            name = "alwaysPerformActivities.$it",
-                            value = settings.alwaysPerformActivities.contains(it),
+                            label = label,
+                            name = "alwaysPerformActivities.$id",
+                            value = settings.alwaysPerformActivities.contains(id),
                             stacked = false,
                             help = "Activity will be hidden from list of activities and will be automatically enabled"
                         )
@@ -345,7 +344,7 @@ class CampingSettingsApplication(
             "km-save" -> {
                 buildPromise {
                     campingActor.getCamping()?.let { camping ->
-                        val alwaysPerformNames = settings.alwaysPerformActivities.toSet()
+                        val alwaysPerformIds = settings.alwaysPerformActivities.toSet()
                         camping.gunsToClean = settings.gunsToClean
                         camping.restRollMode = settings.restRollMode
                         camping.increaseWatchActorNumber = settings.increaseWatchActorNumber
@@ -356,13 +355,13 @@ class CampingSettingsApplication(
                         camping.ignoreSkillRequirements = settings.ignoreSkillRequirements
                         camping.minimumTravelSpeed = settings.minimumTravelSpeed
                         camping.cooking.minimumSubsistence = settings.minimumSubsistence
-                        camping.alwaysPerformActivities = settings.alwaysPerformActivities
+                        camping.alwaysPerformActivityIds = settings.alwaysPerformActivities
                         camping.restingTrack = settings.restingPlaylistUuid?.let {
                             Track(playlistUuid = it, trackUuid = settings.restingPlaylistSoundUuid)
                         }
                         camping.worldSceneId = settings.worldSceneId
                         camping.campingActivities = camping.campingActivities
-                            .filter { it.activity !in alwaysPerformNames }
+                            .filter { it.activityId !in alwaysPerformIds }
                             .toTypedArray()
                         campingActor.setCamping(camping)
                     }

@@ -24,6 +24,7 @@ import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.data.general.Rarity
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
@@ -63,6 +64,7 @@ external interface OutcomeSubmitData {
 
 @JsPlainObject
 external interface RecipeSubmitData {
+    val id: String
     val name: String
     val uuid: String
     val level: Int
@@ -86,6 +88,7 @@ class RecipeDataModel(
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {
+            string("id")
             string("name")
             string("uuid")
             int("level")
@@ -202,7 +205,7 @@ class RecipeApplication(
     dataModel = RecipeDataModel::class.js,
     id = "kmRecipe-${actor.uuid}"
 ) {
-    private val editRecipeName = recipe?.name
+    private val editRecipeId = recipe?.id
     private var currentRecipe: RecipeData? = recipe?.let(::deepClone)
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -255,12 +258,19 @@ class RecipeApplication(
                     formRows = formContext(
                         TextInput(
                             stacked = false,
+                            label = "Id",
+                            name = "id",
+                            readonly = editRecipeId != null,
+                            value = currentRecipe?.id ?: "",
+                            required = true,
+                            help = "To override an existing recipe, use the same id",
+                        ),
+                        TextInput(
+                            stacked = false,
                             label = "Name",
                             name = "name",
-                            readonly = editRecipeName != null,
                             value = currentRecipe?.name ?: "",
                             required = true,
-                            help = "To override an existing recipe, use the same name",
                         ),
                         Select(
                             label = "Recipe Item",
@@ -359,7 +369,8 @@ class RecipeApplication(
 
     override fun onParsedSubmit(value: RecipeSubmitData): Promise<Void> = buildPromise {
         currentRecipe = RecipeData(
-            name = editRecipeName ?: value.name,
+            id = editRecipeId ?: value.id.slugify(),
+            name = value.name,
             basicIngredients = value.basicIngredients,
             specialIngredients = value.specialIngredients,
             cookingLoreDC = value.cookingLoreDC,

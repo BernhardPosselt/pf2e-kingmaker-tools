@@ -22,7 +22,7 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface ApplyMealEffects {
-    val recipe: String
+    val recipeId: String
     val degree: String
     val campingActorUuid: String
 }
@@ -32,9 +32,9 @@ class ApplyMealEffectsHandler(val game: Game) : ActionHandler("applyMealEffects"
         val data = action.data.unsafeCast<ApplyMealEffects>()
         val campingActor = fromUuidTypeSafe<CampingActor>(data.campingActorUuid)
         val camping = campingActor?.getCamping() ?: return
-        val recipesByName = camping.getAllRecipes().associateBy { it.name }
+        val recipesById = camping.getAllRecipes().associateBy { it.id }
         val degree = fromCamelCase<DegreeOfSuccess>(data.degree) ?: return
-        val recipe = recipesByName[data.recipe] ?: return
+        val recipe = recipesById[data.recipeId] ?: return
 
         // reduce meal cost
         val charactersInCampByUuid = camping.getActorsInCamp()
@@ -43,12 +43,12 @@ class ApplyMealEffectsHandler(val game: Game) : ActionHandler("applyMealEffects"
         val party = campingActor
         val parsed = camping.findCookingChoices(
             charactersInCampByUuid = charactersInCampByUuid,
-            recipesByName = recipesByName
+            recipesById = recipesById
         )
         val mealChoices = parsed.meals
             .filterIsInstance<MealChoice.ParsedMeal>()
         val chosenMeals = mealChoices
-            .filter { it.name == data.recipe }
+            .filter { it.id == data.recipeId }
         val totalCost = chosenMeals.map { it.cookingCost }.sum()
         reduceFoodBy(
             actors = camping.getActorsCarryingFood(party),
@@ -73,7 +73,7 @@ class ApplyMealEffectsHandler(val game: Game) : ActionHandler("applyMealEffects"
 
         recipe.favoriteMeal?.let { favoriteOutcome ->
             val favoriteMealActors = mealChoices
-                .filter { it.favoriteMeal?.name == data.recipe && it.actor.uuid in actorUuids }
+                .filter { it.favoriteMeal?.id == data.recipeId && it.actor.uuid in actorUuids }
                 .map { it.actor }
             applyConsumptionMealEffects(
                 actors = favoriteMealActors,

@@ -120,7 +120,7 @@ class FavoriteMealsApplication(
             ?.getAllRecipes()
             ?.filter { it.canBeFavoriteMeal() }
             ?.sortedBy { it.name }
-            ?.map { SelectOption(label = it.name, value = it.name) }
+            ?.map { SelectOption(label = it.name, value = it.id) }
             ?: emptyList()
 
         FavoriteMealContext(

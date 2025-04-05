@@ -1,4 +1,5 @@
 {
+  "id": "basic-meal",
   "name": "Basic Meal",
   "icon": "icons/consumables/grains/bread-loaf-sliced-wheat-brown.webp",
   "basicIngredients": 2,

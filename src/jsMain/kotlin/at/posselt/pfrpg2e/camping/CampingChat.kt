@@ -31,17 +31,17 @@ suspend fun postPassTimeMessage(message: String, hours: Int) {
 fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
     bindChatClick(".km-add-recipe") { _, el ->
         val actorUuid = el.dataset["actorUuid"]
-        val name = el.dataset["name"]
+        val id = el.dataset["id"]
         val degree = el.dataset["degree"]
         val campingActorUuid = el.dataset["campingActorUuid"]
-        if (actorUuid != null && degree != null && name != null && campingActorUuid != null) {
+        if (actorUuid != null && degree != null && id != null && campingActorUuid != null) {
             buildPromise {
                 dispatcher.dispatch(
                     ActionMessage(
                         action = "learnSpecialRecipe",
                         data = LearnSpecialRecipeData(
                             actorUuid = actorUuid,
-                            name = name,
+                            id = id,
                             degree = degree,
                             campingActorUuid = campingActorUuid,
                         ).unsafeCast<AnyObject>()
@@ -103,16 +103,16 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
     }
     bindChatClick(".km-apply-meal-effect") { _, el ->
         val degree = el.dataset["degree"]
-        val recipe = el.dataset["recipe"]
+        val id = el.dataset["recipe"]
         val campingActorUuid = el.dataset["campingActorUuid"]
-        if (degree != null && recipe != null && campingActorUuid != null) {
+        if (degree != null && id != null && campingActorUuid != null) {
             buildPromise {
                 dispatcher.dispatch(
                     ActionMessage(
                         action = "applyMealEffects",
                         data = ApplyMealEffects(
                             degree = degree,
-                            recipe = recipe,
+                            recipeId = id,
                             campingActorUuid = campingActorUuid,
                         ).unsafeCast<AnyObject>()
                     )

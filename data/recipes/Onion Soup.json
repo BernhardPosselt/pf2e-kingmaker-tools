@@ -1,4 +1,5 @@
 {
+  "id": "onion-soup",
   "name": "Onion Soup",
   "icon": "icons/consumables/food/soup-broth-bowl-wooden-yellow.webp",
   "basicIngredients": 2,
