@@ -59,8 +59,8 @@ fun doObjectArraysDiffer(source: List<AnyObject>, target: List<AnyObject>): Bool
 }
 
 private fun homebrewCampingActivitiesChanged(camping: CampingData, update: Any): Boolean {
-    val current = camping.homebrewCampingActivities.sortedBy { it.name }
-    val updateList = update.unsafeCast<Array<CampingActivityData>>().sortedBy { it.name }
+    val current = camping.homebrewCampingActivities.sortedBy { it.id }
+    val updateList = update.unsafeCast<Array<CampingActivityData>>().sortedBy { it.id }
     return doObjectArraysDiffer(current.asAnyObjectList(), updateList.asAnyObjectList())
 }
 

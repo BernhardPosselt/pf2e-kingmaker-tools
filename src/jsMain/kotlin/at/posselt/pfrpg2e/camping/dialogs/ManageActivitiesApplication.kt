@@ -75,7 +75,7 @@ class ManageActivitiesApplication(
                             label = "Enable",
                             hideLabel = true,
                             disabled = activity.isPrepareCampsite() || activity.isCookMeal(),
-                            name = "enabledIds.$id",
+                            name = "enabledIds.${activity.id}",
                         ).toContext(),
                         canBeEdited = canBeEdited,
                         canBeDeleted = canBeEdited,

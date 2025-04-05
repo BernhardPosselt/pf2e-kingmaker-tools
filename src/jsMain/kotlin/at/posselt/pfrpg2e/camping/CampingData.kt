@@ -174,7 +174,7 @@ fun getDefaultCamping(game: Game): CampingData {
         homebrewCampingActivities = emptyArray(),
         lockedActivities = campingActivityData
             .filter(CampingActivityData::isLocked)
-            .map(CampingActivityData::name)
+            .map(CampingActivityData::id)
             .toTypedArray(),
         cooking = Cooking(
             actorMeals = emptyArray(),

@@ -242,6 +242,7 @@ class CampingSheet(
     ),
     scrollable = arrayOf(".km-camping-activities-wrapper", ".km-camping-actors"),
     renderOnSubmit = false,
+    debug = true,
 ) {
     init {
         actor.apps[id] = this
@@ -932,7 +933,7 @@ class CampingSheet(
                 }
             }
             .toMap()
-        val groupActivities = camping.groupActivities().sortedBy { it.data.name }
+        val groupActivities = camping.groupActivities().sortedBy { it.data.id }
         val section = fromCamelCase<CampingSheetSection>(camping.section) ?: CampingSheetSection.PREPARE_CAMPSITE
         val prepareCampSection = section == CampingSheetSection.PREPARE_CAMPSITE
         val campingActivitiesSection = section == CampingSheetSection.CAMPING_ACTIVITIES
@@ -991,7 +992,7 @@ class CampingSheet(
                             label = "Degree of Success",
                             hideLabel = true,
                             required = false,
-                            name = "activities.degreeOfSuccess.${data.name}",
+                            name = "activities.degreeOfSuccess.${data.id}",
                             value = degree,
                             elementClasses = listOf("km-degree-of-success"),
                         ).toContext(),
@@ -1141,7 +1142,7 @@ private fun getActivitySkills(
             .sortedBy { it.label }
         Select(
             label = "Selected Skill",
-            name = "activities.selectedSkill.${groupedActivity.data.name}",
+            name = "activities.selectedSkill.${groupedActivity.data.id}",
             hideLabel = true,
             options = options,
             elementClasses = listOf("km-proficiency"),

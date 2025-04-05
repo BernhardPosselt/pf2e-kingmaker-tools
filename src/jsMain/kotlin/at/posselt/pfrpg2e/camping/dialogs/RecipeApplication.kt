@@ -355,7 +355,7 @@ class RecipeApplication(
             actor.getCamping()?.let { camping ->
                 currentRecipe?.let { data ->
                     camping.cooking.homebrewMeals = camping.cooking.homebrewMeals
-                        .filter { it.name != data.name }
+                        .filter { it.id != data.id }
                         .toTypedArray()
                     camping.cooking.homebrewMeals = camping.cooking.homebrewMeals + data
                     actor.setCamping(camping)

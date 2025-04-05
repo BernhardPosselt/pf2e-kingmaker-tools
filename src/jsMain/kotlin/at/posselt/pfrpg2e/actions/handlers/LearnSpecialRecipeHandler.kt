@@ -55,7 +55,7 @@ class LearnSpecialRecipeHandler() : ActionHandler("learnSpecialRecipe") {
                 camping.cooking.knownRecipes = (camping.cooking.knownRecipes + recipeId).distinct().toTypedArray()
                 campingActor.setCamping(camping)
             }
-            postChatMessage("Learned recipe $recipeId")
+            postChatMessage("Learned recipe ${recipe.name}")
         }
     }
 }

@@ -68,7 +68,7 @@ suspend fun pickSpecialRecipe(
                     input = RadioInput(
                         name = "recipe",
                         checked = index == 0,
-                        value = recipe.name,
+                        value = recipe.id,
                         label = recipe.name,
                         hideLabel = true,
                     ).toContext(),
@@ -84,6 +84,6 @@ suspend fun pickSpecialRecipe(
             formRows = rows,
         ).unsafeCast<AnyObject>()
     ) { data, _ ->
-        allRecipes.find { it.name == data.recipe }
+        allRecipes.find { it.id == data.recipe }
     }
 }

@@ -4,6 +4,7 @@
             <thead>
             <tr>
                 <th>Name</th>
+                <th>ID</th>
                 {{#each additionalColumnHeadings}}
                     <th>{{this}}</th>
                 {{/each}}
@@ -16,6 +17,7 @@
             {{#each items}}
                 <tr>
                     <td>{{#if nameIsHtml}}{{{name}}}{{else}}{{name}}{{/if}}</td>
+                    <td>{{id}}</td>
                     {{#each additionalColumns}}
                         <td>{{#if escapeHtml}}{{value}}{{else}}{{{value}}}{{/if}}</td>
                     {{/each}}

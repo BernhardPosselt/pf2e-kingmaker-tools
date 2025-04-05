@@ -416,7 +416,7 @@ class ActivityApplication(
             actor.getCamping()?.let { camping ->
                 currentActivity.let { data ->
                     camping.homebrewCampingActivities = camping.homebrewCampingActivities
-                        .filter { it.name != data.name }
+                        .filter { it.id != data.id }
                         .toTypedArray()
                     camping.homebrewCampingActivities = camping.homebrewCampingActivities + data
                     camping.campingActivities = camping.campingActivities
