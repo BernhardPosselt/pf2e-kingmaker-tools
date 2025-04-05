@@ -45,6 +45,7 @@ external interface CampingSkill {
 
 @JsPlainObject
 external interface CampingActivityData {
+    var id: String
     var name: String
     var journalUuid: String?
     var skills: Array<CampingSkill>
@@ -60,16 +61,16 @@ external interface CampingActivityData {
 }
 
 fun CampingActivityData.isCookMeal() =
-    name == "Cook Meal"
+    id == "cook-meal"
 
 fun CampingActivityData.isPrepareCampsite() =
-    name == "Prepare Campsite"
+    id == "prepare-campsite"
 
 fun CampingActivityData.isHuntAndGather() =
-    name == "Hunt and Gather"
+    id == "hunt-and-gather"
 
 fun CampingActivityData.isDiscoverSpecialMeal() =
-    name == "Discover Special Meal"
+    id == "discover-special-meal"
 
 fun CampingActivityData.getOutcome(degreeOfSuccess: DegreeOfSuccess) =
     when (degreeOfSuccess) {
@@ -170,10 +171,10 @@ fun CampingActivityData.getCampingSkills(
 }
 
 fun CampingData.groupActivities(): List<ActivityAndData> {
-    val activitiesByName = campingActivities.associateBy { it.activity }
+    val activitiesById = campingActivities.associateBy { it.activityId }
     return getAllActivities().map { data ->
-        val activity = activitiesByName[data.name] ?: CampingActivity(
-            activity = data.name,
+        val activity = activitiesById[data.id] ?: CampingActivity(
+            activityId = data.id,
             actorUuid = null,
             result = null,
             selectedSkill = null,

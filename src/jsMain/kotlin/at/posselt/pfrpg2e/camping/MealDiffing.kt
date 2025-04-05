@@ -19,10 +19,10 @@ private const val mealResultPath = "flags.${Config.moduleId}.camping-sheet.cooki
 
 private fun relevantUpdate(camping: CampingData, update: AnyObject): Boolean {
     val current = camping.cooking.results
-        .sortedBy { it.recipeName }
+        .sortedBy { it.recipeId }
     val updated = getProperty(update, mealResultPath)
         ?.unsafeCast<Array<CookingResult>>()
-        ?.sortedBy { it.recipeName }
+        ?.sortedBy { it.recipeId }
         ?: emptyList()
     return doObjectArraysDiffer(current.asAnyObjectList(), updated.asAnyObjectList())
 }
@@ -31,18 +31,18 @@ private suspend fun checkPreActorMealUpdate(actor: Actor, update: AnyObject) {
     val camping = actor.takeIfInstance<CampingActor>()?.getCamping() ?: return
     console.log("Received camping update", update)
     if (!relevantUpdate(camping, update)) return
-    val recipesByName = camping.getAllRecipes().associateBy { it.name }
-    val current = camping.cooking.results.associateBy { it.recipeName }
+    val recipesById = camping.getAllRecipes().associateBy { it.id }
+    val current = camping.cooking.results.associateBy { it.recipeId }
     val updated = getProperty(update, mealResultPath)
         ?.unsafeCast<Array<CookingResult>>()
         ?: emptyArray()
     updated
         .filter {
-            it.result != null && it.result != current[it.recipeName]?.result
+            it.result != null && it.result != current[it.recipeId]?.result
         }
         .forEach { result ->
             val degree = result.result?.let { fromCamelCase<DegreeOfSuccess>(it) }
-            val data = recipesByName[result.recipeName]
+            val data = recipesById[result.recipeId]
             val message = when (degree) {
                 DegreeOfSuccess.CRITICAL_FAILURE -> data?.criticalFailure?.message
                 DegreeOfSuccess.SUCCESS -> data?.success?.message
@@ -52,7 +52,8 @@ private suspend fun checkPreActorMealUpdate(actor: Actor, update: AnyObject) {
             postChatTemplate(
                 templatePath = "chatmessages/apply-meal-result.hbs",
                 templateContext = recordOf(
-                    "name" to result.recipeName,
+                    "id" to result.recipeId,
+                    "name" to data?.name,
                     "degree" to result.result,
                     "label" to degree?.toLabel(),
                     "message" to message,

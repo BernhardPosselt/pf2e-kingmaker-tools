@@ -24,7 +24,7 @@ import kotlinx.js.JsPlainObject
 external interface LearnSpecialRecipeData {
     val campingActorUuid: String
     val actorUuid: String
-    val name: String
+    val id: String
     val degree: String
 }
 
@@ -34,9 +34,9 @@ class LearnSpecialRecipeHandler() : ActionHandler("learnSpecialRecipe") {
         val campingActor = fromUuidTypeSafe<CampingActor>(data.campingActorUuid) ?: return
         val camping = campingActor.getCamping() ?: return
         val degreeOfSuccess = fromCamelCase<DegreeOfSuccess>(data.degree) ?: return
-        val recipeName = data.name
+        val recipeId = data.id
         val actor = getCampingActorByUuid(data.actorUuid)
-        val recipe = camping.getAllRecipes().find { it.name == recipeName }
+        val recipe = camping.getAllRecipes().find { it.id == recipeId }
         if (recipe != null && actor != null) {
             val cost = if (degreeOfSuccess == DegreeOfSuccess.CRITICAL_SUCCESS) {
                 recipe.cookingCost()
@@ -52,10 +52,10 @@ class LearnSpecialRecipeHandler() : ActionHandler("learnSpecialRecipe") {
                 foodItems = getCompendiumFoodItems(),
             )
             if (degreeOfSuccess.succeeded()) {
-                camping.cooking.knownRecipes = (camping.cooking.knownRecipes + recipeName).distinct().toTypedArray()
+                camping.cooking.knownRecipes = (camping.cooking.knownRecipes + recipeId).distinct().toTypedArray()
                 campingActor.setCamping(camping)
             }
-            postChatMessage("Learned recipe $recipeName")
+            postChatMessage("Learned recipe ${recipe.name}")
         }
     }
 }

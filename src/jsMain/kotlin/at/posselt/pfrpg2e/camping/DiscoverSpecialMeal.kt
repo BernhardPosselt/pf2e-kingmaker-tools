@@ -9,6 +9,7 @@ import kotlinx.js.JsPlainObject
 @Suppress("unused")
 @JsPlainObject
 private external interface DiscoverSpecialMealChatContext {
+    val id: String
     val degree: String
     val name: String
     val actorUuid: String
@@ -26,6 +27,7 @@ suspend fun postDiscoverSpecialMeal(
     postChatTemplate(
         templatePath = "chatmessages/discover-special-meal.hbs",
         templateContext = DiscoverSpecialMealChatContext(
+            id = recipe.id,
             name = recipe.name,
             actorUuid = actorUuid,
             degree = degreeOfSuccess.toCamelCase(),

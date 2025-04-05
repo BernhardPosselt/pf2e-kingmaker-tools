@@ -28,6 +28,7 @@ import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCampingSkills
 import at.posselt.pfrpg2e.camping.requiresACheck
 import at.posselt.pfrpg2e.camping.setCamping
+import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
@@ -64,6 +65,7 @@ external interface ActivityOutcomeSubmitData {
 
 @JsPlainObject
 external interface ActivitySubmitData {
+    val id: String
     val name: String
     val journalUuid: String
     val journalEntryUuid: String?
@@ -84,6 +86,7 @@ class ActivityDataModel(
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {
+            string("id")
             string("name")
             boolean("isSecret")
             string("journalUuid", nullable = true)
@@ -147,7 +150,7 @@ class ActivityApplication(
     dataModel = ActivityDataModel::class.js,
     id = "kmActivity-${actor.uuid}"
 ) {
-    private val editActivityName = data?.name
+    private val editActivityId = data?.id
     private val editActivityLocked = data?.isLocked
     private var currentActivity: CampingActivityData = data?.let(::deepClone) ?: CampingActivityData(
         name = "",
@@ -162,6 +165,7 @@ class ActivityApplication(
         success = null,
         failure = null,
         criticalFailure = null,
+        id = "",
     )
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -309,12 +313,19 @@ class ActivityApplication(
                     formRows = formContext(
                         TextInput(
                             stacked = false,
+                            label = "Id",
+                            name = "id",
+                            readonly = editActivityId != null,
+                            value = currentActivity.id,
+                            required = true,
+                            help = "To override an existing activity, use the same id",
+                        ),
+                        TextInput(
+                            stacked = false,
                             label = "Name",
                             name = "name",
-                            readonly = editActivityName != null,
                             value = currentActivity.name,
                             required = true,
-                            help = "To override an existing activity, use the same name",
                         ),
                         Select(
                             label = "Journal",
@@ -405,11 +416,11 @@ class ActivityApplication(
             actor.getCamping()?.let { camping ->
                 currentActivity.let { data ->
                     camping.homebrewCampingActivities = camping.homebrewCampingActivities
-                        .filter { it.name != data.name }
+                        .filter { it.id != data.id }
                         .toTypedArray()
                     camping.homebrewCampingActivities = camping.homebrewCampingActivities + data
                     camping.campingActivities = camping.campingActivities
-                        .filter { it.activity != data.name }
+                        .filter { it.activityId != data.id }
                         .toTypedArray()
                     actor.setCamping(camping)
                     close().await()
@@ -422,7 +433,8 @@ class ActivityApplication(
 
     override fun onParsedSubmit(value: ActivitySubmitData): Promise<Void> = buildPromise {
         currentActivity = CampingActivityData(
-            name = editActivityName ?: value.name,
+            id = editActivityId ?: value.id.slugify(),
+            name = value.name,
             journalUuid = value.journalEntryUuid ?: value.journalUuid,
             skills = currentActivity.skills,
             modifyRandomEncounterDc = value.modifyRandomEncounterDc,

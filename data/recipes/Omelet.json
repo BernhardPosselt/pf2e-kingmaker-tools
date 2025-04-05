@@ -1,4 +1,5 @@
 {
+  "id": "omelet",
   "name": "Omelet",
   "icon": "icons/consumables/eggs/egg-nest-dotted-red.webp",
   "basicIngredients": 4,

@@ -1,4 +1,5 @@
 {
+  "id": "haggis",
   "name": "Haggis",
   "icon": "icons/commodities/biological/organ-brain-red.webp",
   "basicIngredients": 2,

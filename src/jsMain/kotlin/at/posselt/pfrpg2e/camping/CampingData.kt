@@ -37,7 +37,7 @@ external interface ActorMeal {
 
 @JsPlainObject
 external interface CookingResult {
-    val recipeName: String
+    val recipeId: String
     var result: String?
     val skill: String
 }
@@ -53,7 +53,7 @@ external interface Cooking {
 
 @JsPlainObject
 external interface CampingActivity {
-    var activity: String
+    var activityId: String
     var actorUuid: String?
     var result: String?
     var selectedSkill: String?
@@ -75,7 +75,7 @@ external interface CampingData {
     var restRollMode: String
     var increaseWatchActorNumber: Int
     var actorUuidsNotKeepingWatch: Array<String>
-    var alwaysPerformActivities: Array<String>
+    var alwaysPerformActivityIds: Array<String>
     var huntAndGatherTargetActorUuid: String?
     var proxyRandomEncounterTableUuid: String?
     var randomEncounterRollMode: String
@@ -125,10 +125,10 @@ fun CampingActivity.checkPerformed() =
     result != null && actorUuid != null
 
 fun CampingActivity.isPrepareCampsite() =
-    activity == "Prepare Campsite"
+    activityId == "prepare-campsite"
 
 fun CampingActivity.isCookMeal() =
-    activity == "Cook Meal"
+    activityId == "cook-meal"
 
 enum class CampingSheetSection {
     PREPARE_CAMPSITE,
@@ -174,11 +174,11 @@ fun getDefaultCamping(game: Game): CampingData {
         homebrewCampingActivities = emptyArray(),
         lockedActivities = campingActivityData
             .filter(CampingActivityData::isLocked)
-            .map(CampingActivityData::name)
+            .map(CampingActivityData::id)
             .toTypedArray(),
         cooking = Cooking(
             actorMeals = emptyArray(),
-            knownRecipes = arrayOf("Basic Meal", "Hearty Meal"),
+            knownRecipes = arrayOf("basic-meal", "hearty-meal"),
             homebrewMeals = emptyArray(),
             results = emptyArray(),
             minimumSubsistence = 0,
@@ -193,7 +193,7 @@ fun getDefaultCamping(game: Game): CampingData {
         ignoreSkillRequirements = false,
         randomEncounterRollMode = "gmroll",
         section = "prepareCampsite",
-        alwaysPerformActivities = emptyArray(),
+        alwaysPerformActivityIds = emptyArray(),
         restingTrack = null,
         regionSettings = RegionSettings(
             regions = arrayOf(
@@ -409,16 +409,16 @@ fun Game.getActiveCamping(): CampingData? {
 
 
 fun CampingData.getAllActivities(): Array<CampingActivityData> {
-    val homebrewNames = homebrewCampingActivities.map { it.name }.toSet()
+    val homebrewIds = homebrewCampingActivities.map { it.id }.toSet()
     return campingActivityData
-        .filter { it.name !in homebrewNames }
+        .filter { it.id !in homebrewIds }
         .toTypedArray() + homebrewCampingActivities
 }
 
 fun CampingData.getAllRecipes(): Array<RecipeData> {
-    val homebrewNames = cooking.homebrewMeals.map { it.name }.toSet()
+    val homebrewIds = cooking.homebrewMeals.map { it.id }.toSet()
     return recipes
-        .filter { it.name !in homebrewNames }
+        .filter { it.id !in homebrewIds }
         .toTypedArray() + cooking.homebrewMeals
 }
 
@@ -439,12 +439,14 @@ sealed interface MealChoice {
     val favoriteMeal: RecipeData?
     val name: String
     val cookingCost: FoodAmount
+    val id: String
 
     data class Nothing(
         override val actor: PF2ECharacter,
         override val favoriteMeal: RecipeData?
     ) : MealChoice {
         override val name = "nothing"
+        override val id = "nothing"
         override val cookingCost = FoodAmount()
     }
 
@@ -452,6 +454,7 @@ sealed interface MealChoice {
         override val actor: PF2ECharacter,
         override val favoriteMeal: RecipeData?,
     ) : MealChoice {
+        override val id: String = "rationsOrSubsistence"
         override val name: String = "rationsOrSubsistence"
         override val cookingCost = FoodAmount(rations = 1)
     }
@@ -461,6 +464,7 @@ sealed interface MealChoice {
         val recipe: RecipeData,
         override val favoriteMeal: RecipeData?,
     ) : MealChoice {
+        override val id = recipe.id
         override val name: String = recipe.name
         override val cookingCost = recipe.cookingCost()
     }
@@ -488,15 +492,15 @@ data class ParsedRecipeResult(
 private fun parseMealChoices(
     camping: CampingData,
     charactersInCamp: Map<String, PF2ECharacter>,
-    recipes: Map<String, RecipeData>
+    recipesById: Map<String, RecipeData>
 ): List<MealChoice> {
     val chosenMeals = camping.cooking.actorMeals.mapNotNull { meal ->
         charactersInCamp[meal.actorUuid]?.let { actor ->
-            val favoriteMeal = meal.favoriteMeal?.let { recipes[it] }
+            val favoriteMeal = meal.favoriteMeal?.let { recipesById[it] }
             when (val chosenMeal = meal.chosenMeal) {
                 "nothing" -> MealChoice.Nothing(actor = actor, favoriteMeal = favoriteMeal)
                 "rationsOrSubsistence" -> MealChoice.Rations(actor = actor, favoriteMeal = favoriteMeal)
-                else -> recipes[chosenMeal]?.let { recipe ->
+                else -> recipesById[chosenMeal]?.let { recipe ->
                     MealChoice.ParsedMeal(
                         actor = actor,
                         recipe = recipe,
@@ -511,7 +515,7 @@ private fun parseMealChoices(
 
 fun CampingData.findCookingChoices(
     charactersInCampByUuid: Map<String, PF2ECharacter>,
-    recipesByName: Map<String, RecipeData>,
+    recipesById: Map<String, RecipeData>,
 ): ParsedMeals {
     val cook = campingActivities
         .find { it.isCookMeal() && it.actorUuid != null }
@@ -529,8 +533,8 @@ fun CampingData.findCookingChoices(
     } else {
         listOfNotNull(Skill.SURVIVAL, if (cook.hasAttribute(cookingLore)) cookingLore else null)
     }
-    val mealChoices = parseMealChoices(this, charactersInCampByUuid, recipesByName)
-    val resultsByRecipeName = cooking.results.associateBy { it.recipeName }
+    val mealChoices = parseMealChoices(this, charactersInCampByUuid, recipesById)
+    val resultsByRecipeId = cooking.results.associateBy { it.recipeId }
     val effectiveMealChoices = mealChoices.map {
         if (cook == null && it is MealChoice.ParsedMeal) {
             MealChoice.Rations(
@@ -545,9 +549,9 @@ fun CampingData.findCookingChoices(
         cook = cook,
         skills = cookingSkills,
         meals = effectiveMealChoices,
-        results = recipesByName.values.map { recipe ->
-            val result: CookingResult = resultsByRecipeName[recipe.name] ?: CookingResult(
-                recipeName = recipe.name,
+        results = recipesById.values.map { recipe ->
+            val result: CookingResult = resultsByRecipeId[recipe.id] ?: CookingResult(
+                recipeId = recipe.id,
                 result = null,
                 skill = "survival",
             )

@@ -52,7 +52,7 @@ suspend fun pickSpecialRecipe(
     val totalItems = camping.getTotalCarriedFood(partyActor, items)
     val rows = allRecipes.asSequence()
         .filter { it.level <= (camping.findCurrentRegion()?.level ?: 0) }
-        .filter { it.name !in learnedRecipes }
+        .filter { it.id !in learnedRecipes }
         .sortedBy { it.level }
         .mapIndexed { index, recipe ->
             async {
@@ -68,7 +68,7 @@ suspend fun pickSpecialRecipe(
                     input = RadioInput(
                         name = "recipe",
                         checked = index == 0,
-                        value = recipe.name,
+                        value = recipe.id,
                         label = recipe.name,
                         hideLabel = true,
                     ).toContext(),
@@ -84,6 +84,6 @@ suspend fun pickSpecialRecipe(
             formRows = rows,
         ).unsafeCast<AnyObject>()
     ) { data, _ ->
-        allRecipes.find { it.name == data.recipe }
+        allRecipes.find { it.id == data.recipe }
     }
 }

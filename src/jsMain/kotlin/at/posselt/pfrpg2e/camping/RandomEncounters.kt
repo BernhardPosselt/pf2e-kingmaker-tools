@@ -76,10 +76,10 @@ private suspend fun rollRandomEncounter(
                 it.isPrepareCampsite() && result != null && result != DegreeOfSuccess.CRITICAL_FAILURE
             }) {
             postCombatEffects(
-                activeActivities = camping.alwaysPerformActivities.toSet() +
+                activeActivities = camping.alwaysPerformActivityIds.toSet() +
                         camping.campingActivities
                             .filter { it.actorUuid != null }
-                            .map { it.activity },
+                            .map { it.activityId },
                 partyLevel = partyLevel
             )
         }
@@ -97,7 +97,7 @@ fun findEncounterDcModifier(
 
 private fun calculateModifierIncrease(camping: CampingData, isDay: Boolean): Int =
     camping.groupActivities().asSequence()
-        .filter { it.done() || camping.alwaysPerformActivities.contains(it.data.name) }
+        .filter { it.done() || camping.alwaysPerformActivityIds.contains(it.data.id) }
         .map { (data, activity) -> calculateModifierIncrease(data, isDay, activity.parseResult()) }
         .sum()
 

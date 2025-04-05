@@ -38,6 +38,7 @@ external interface CookingOutcome {
 
 @JsPlainObject
 external interface RecipeData {
+    val id: String
     val name: String
     val basicIngredients: Int
     val specialIngredients: Int?
@@ -67,7 +68,7 @@ enum class ReduceConditionMode {
 }
 
 
-fun RecipeData.canBeFavoriteMeal() = name != "Basic Meal"
+fun RecipeData.canBeFavoriteMeal() = id != "basic-meal"
 
 fun RecipeData.cookingCost(): FoodAmount =
     FoodAmount(

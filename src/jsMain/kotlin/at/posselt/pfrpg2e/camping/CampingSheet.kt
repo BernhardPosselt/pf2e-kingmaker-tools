@@ -89,6 +89,7 @@ external interface CampingSheetActor : BaseActorContext {
 @Suppress("unused")
 @JsPlainObject
 external interface CampingSheetActivity {
+    val id: String
     val journalUuid: String?
     val actor: CampingSheetActor?
     val name: String
@@ -97,6 +98,8 @@ external interface CampingSheetActivity {
     val secret: Boolean
     val skills: FormElementContext?
 }
+
+fun CampingSheetActivity.isPrepareCampsite() = id == "prepare-campsite"
 
 @Suppress("unused")
 @JsPlainObject
@@ -239,6 +242,7 @@ class CampingSheet(
     ),
     scrollable = arrayOf(".km-camping-activities-wrapper", ".km-camping-actors"),
     renderOnSubmit = false,
+    debug = true,
 ) {
     init {
         actor.apps[id] = this
@@ -274,10 +278,10 @@ class CampingSheet(
                 val tile = target.closest(".km-camping-activity") as HTMLElement?
                 val actor = tile?.dataset?.get("actorUuid")
                     ?.let { fromUuidTypeSafe<PF2EActor>(it) }
-                val activityName = tile?.dataset?.get("activityName")
-                if (documentRef is ActorRef && activityName != null) {
-                    assignActivityTo(documentRef.uuid, activityName)
-                } else if (actor != null && activityName != null) {
+                val activityId = tile?.dataset?.get("activityId")
+                if (documentRef is ActorRef && activityId != null) {
+                    assignActivityTo(documentRef.uuid, activityId)
+                } else if (actor != null && activityId != null) {
                     addItemToActor(documentRef, actor)
                 }
             }
@@ -289,9 +293,9 @@ class CampingSheet(
             buildPromise {
                 val target = event.target as HTMLElement
                 val tile = target.closest(".km-camping-recipe") as HTMLElement?
-                val recipeName = tile?.dataset?.get("recipeName")
-                if (documentRef is ActorRef && recipeName != null) {
-                    assignRecipeTo(documentRef.uuid, recipeName)
+                val recipeId = tile?.dataset?.get("recipeId")
+                if (documentRef is ActorRef && recipeId != null) {
+                    assignRecipeTo(documentRef.uuid, recipeId)
                 }
             }
         }
@@ -359,7 +363,7 @@ class CampingSheet(
             "roll-recipe-check" -> buildPromise {
                 target.closest(".km-camping-recipe")
                     ?.takeIfInstance<HTMLElement>()
-                    ?.dataset["recipeName"]
+                    ?.dataset["recipeId"]
                     ?.let { rollRecipeCheck(it) }
             }
 
@@ -371,7 +375,7 @@ class CampingSheet(
                 target.closest(".km-camping-activity")
                     ?.takeIfInstance<HTMLElement>()
                     ?.let { tile ->
-                        tile.dataset["activityName"]?.let { activity ->
+                        tile.dataset["activityId"]?.let { activity ->
                             tile.dataset["actorUuid"]?.let { actorUuid ->
                                 rollCheck(activity, actorUuid)
                             }
@@ -400,7 +404,7 @@ class CampingSheet(
 
             "clear-activity" -> {
                 buildPromise {
-                    target.dataset["name"]?.let { clearActivity(it) }
+                    target.dataset["id"]?.let { clearActivity(it) }
                 }
             }
 
@@ -472,8 +476,8 @@ class CampingSheet(
             charactersInCampByUuid = camping.getActorsInCamp()
                 .filterIsInstance<PF2ECharacter>()
                 .associateBy { it.uuid },
-            recipesByName = camping.getAllRecipes()
-                .associateBy { it.name },
+            recipesById = camping.getAllRecipes()
+                .associateBy { it.id },
         )
         val rations = parsed.meals
             .filterIsInstance<MealChoice.Rations>()
@@ -486,7 +490,7 @@ class CampingSheet(
         )
     }
 
-    private suspend fun rollRecipeCheck(recipeName: String) {
+    private suspend fun rollRecipeCheck(recipeId: String) {
         // the following lines should all be non-null if everything went right
         val camping = actor.getCamping()
         checkNotNull(camping) { "Could not find camping data on actor ${actor.uuid}" }
@@ -498,13 +502,13 @@ class CampingSheet(
             charactersInCampByUuid = camping.getActorsInCamp()
                 .filterIsInstance<PF2ECharacter>()
                 .associateBy { it.uuid },
-            recipesByName = camping.getAllRecipes()
-                .associateBy { it.name },
+            recipesById = camping.getAllRecipes()
+                .associateBy { it.id },
         )
         val cook = parsed.cook
         checkNotNull(cook) { "Trying to cook a meal without a selected cook" }
-        val mealToCook = parsed.results.find { it.recipe.name == recipeName }
-        checkNotNull(mealToCook) { "Could not find meal with name $recipeName" }
+        val mealToCook = parsed.results.find { it.recipe.id == recipeId }
+        checkNotNull(mealToCook) { "Could not find meal with id $recipeId" }
 
         val result = cook.campingActivityCheck(
             data = CampingCheckData(
@@ -518,10 +522,10 @@ class CampingSheet(
             ),
             overrideDc = mealToCook.dc,
         )
-        val existing = camping.cooking.results.find { it.recipeName == recipeName }
+        val existing = camping.cooking.results.find { it.recipeId == recipeId }
         if (existing == null) {
             camping.cooking.results = camping.cooking.results + CookingResult(
-                recipeName = recipeName,
+                recipeId = recipeId,
                 skill = mealToCook.selectedSkill.value,
                 result = result?.toCamelCase(),
             )
@@ -531,14 +535,14 @@ class CampingSheet(
         actor.setCamping(camping)
     }
 
-    private suspend fun rollCheck(activityName: String, actorUuid: String) {
+    private suspend fun rollCheck(activityId: String, actorUuid: String) {
         val checkActor = getCampingActivityCreatureByUuid(actorUuid)
         checkNotNull(checkActor) { "Could not find camping actor with uuid $actorUuid" }
 
         val camping = actor.getCamping()
         checkNotNull(camping) { "Could not find camping data on actor ${actor.uuid}" }
 
-        val campingCheckData = checkActor.getCampingCheckData(camping, activityName)
+        val campingCheckData = checkActor.getCampingCheckData(camping, activityId)
         checkNotNull(campingCheckData) { "Could not resolve skill or region" }
 
         val activity = campingCheckData.activityData.data
@@ -557,7 +561,7 @@ class CampingSheet(
                 && confirm("Reuse existing camp (${existingCampingResult.toLabel()})?")
             ) {
                 camping.campingActivities
-                    .find { it.activity == activityName }?.result = existingCampingResult.toCamelCase()
+                    .find { it.activityId== activityId }?.result = existingCampingResult.toCamelCase()
                 postPassTimeMessage("Reusing a previous campsite", 1)
                 actor.setCamping(camping)
                 return
@@ -570,7 +574,7 @@ class CampingSheet(
             data = campingCheckData,
             overrideDc = recipe?.cookingLoreDC,
         )?.let { result ->
-            camping.campingActivities.find { it.activity == activityName }?.result = result.toCamelCase()
+            camping.campingActivities.find { it.activityId == activityId }?.result = result.toCamelCase()
             actor.setCamping(camping)
 
             if (activity.isHuntAndGather()) {
@@ -654,7 +658,7 @@ class CampingSheet(
         rollRandomEncounter(game, actor, includeFlatCheck)
     }
 
-    private suspend fun assignRecipeTo(actorUuid: String, recipeName: String) {
+    private suspend fun assignRecipeTo(actorUuid: String, recipeId: String) {
         if (getCampingActivityActorByUuid(actorUuid) == null) {
             ui.notifications.error("Only Characters can consume meals")
             return
@@ -664,36 +668,36 @@ class CampingSheet(
             if (existingMeal == null) {
                 camping.cooking.actorMeals = camping.cooking.actorMeals + ActorMeal(
                     actorUuid = actorUuid,
-                    chosenMeal = recipeName,
+                    chosenMeal = recipeId,
                 )
             } else {
-                existingMeal.chosenMeal = recipeName
+                existingMeal.chosenMeal = recipeId
             }
             actor.setCamping(camping)
         }
     }
 
-    private suspend fun assignActivityTo(actorUuid: String, activityName: String) {
+    private suspend fun assignActivityTo(actorUuid: String, activityId: String) {
         actor.getCamping()?.let { camping ->
-            val activity = camping.getAllActivities().find { it.name == activityName }
+            val activity = camping.getAllActivities().find { it.id == activityId }
             val activityActor = getCampingActivityCreatureByUuid(actorUuid)
             if (activityActor == null) {
                 ui.notifications.error("Only Characters can perform camping activities")
             } else if (activity == null) {
-                ui.notifications.error("Activity with name $activityName not found")
+                ui.notifications.error("Activity with id $activityId not found")
             } else if (!activityActor.satisfiesAnyActivitySkillRequirement(activity, camping.ignoreSkillRequirements)) {
-                ui.notifications.error("Actor does not satisfy skill requirements to perform $activityName")
+                ui.notifications.error("Actor does not satisfy skill requirements to perform ${activity.name}")
             } else if (activity.requiresACheck() && !activityActor.hasAnyActivitySkill(activity)) {
-                ui.notifications.error("Actor does not have the required skills to perform $activityName")
+                ui.notifications.error("Actor does not have the required skills to perform ${activity.name}")
             } else {
                 camping.campingActivities =
-                    camping.campingActivities.filter { it.activity != activityName }.toTypedArray()
+                    camping.campingActivities.filter { it.activityId != activityId }.toTypedArray()
                 val skill = activityActor
                     .findCampingActivitySkills(activity, camping.ignoreSkillRequirements)
                     .filterNot { it.validateOnly }
                     .firstOrNull()
                 camping.campingActivities = camping.campingActivities + CampingActivity(
-                    activity = activityName,
+                    activityId = activity.id,
                     actorUuid = actorUuid,
                     selectedSkill = skill?.attribute?.value,
                 )
@@ -766,10 +770,10 @@ class CampingSheet(
         }
     }
 
-    private suspend fun clearActivity(name: String) {
+    private suspend fun clearActivity(id: String) {
         actor.getCamping()?.let {
             it.campingActivities
-                .find { activity -> activity.activity == name }
+                .find { activity -> activity.activityId == id }
                 ?.actorUuid = null
             actor.setCamping(it)
         }
@@ -866,12 +870,12 @@ class CampingSheet(
                 val result = parsedCookingChoices.results.find { it.recipe.name == recipe.name }
                 RecipeContext(
                     name = recipe.name,
-                    targetRecipe = recipe.name,
+                    targetRecipe = recipe.id,
                     cost = cookingCost,
                     uuid = recipe.uuid,
                     icon = recipe.icon ?: item?.img ?: "icons/consumables/food/shank-meat-bone-glazed-brown.webp",
                     requiresCheck = true,
-                    hidden = section != CampingSheetSection.EATING || cookMealActor == null || recipe.name !in knownRecipes,
+                    hidden = section != CampingSheetSection.EATING || cookMealActor == null || recipe.id !in knownRecipes,
                     rations = false,
                     consumeRationsEnabled = false,
                     actors = actorsByChosenMeal[recipe.name]?.toTypedArray() ?: emptyArray(),
@@ -929,7 +933,7 @@ class CampingSheet(
                 }
             }
             .toMap()
-        val groupActivities = camping.groupActivities().sortedBy { it.data.name }
+        val groupActivities = camping.groupActivities().sortedBy { it.data.id }
         val section = fromCamelCase<CampingSheetSection>(camping.section) ?: CampingSheetSection.PREPARE_CAMPSITE
         val prepareCampSection = section == CampingSheetSection.PREPARE_CAMPSITE
         val campingActivitiesSection = section == CampingSheetSection.CAMPING_ACTIVITIES
@@ -939,7 +943,7 @@ class CampingSheet(
         val availableFood = buildFoodCost(totalFood, items = foodItems)
         val parsedCookingChoices = camping.findCookingChoices(
             charactersInCampByUuid = charactersByUuid,
-            recipesByName = camping.getAllRecipes().associateBy { it.name },
+            recipesById = camping.getAllRecipes().associateBy { it.id },
         )
         val recipesContext = getRecipeContext(
             parsedCookingChoices = parsedCookingChoices,
@@ -964,12 +968,13 @@ class CampingSheet(
                 groupedActivity = groupedActivity,
                 ignoreSkillRequirements = camping.ignoreSkillRequirements,
             )
-            val hidden = camping.lockedActivities.contains(data.name)
+            val hidden = camping.lockedActivities.contains(data.id)
                     || (prepareCampSection && !groupedActivity.isPrepareCamp())
                     || (campingActivitiesSection && groupedActivity.isPrepareCamp())
                     || eatingSection
-                    || camping.alwaysPerformActivities.contains(data.name)
+                    || camping.alwaysPerformActivityIds.contains(data.id)
             CampingSheetActivity(
+                id = data.id,
                 secret = data.isSecret && !game.user.isGM,
                 journalUuid = data.journalUuid,
                 name = data.name,
@@ -987,7 +992,7 @@ class CampingSheet(
                             label = "Degree of Success",
                             hideLabel = true,
                             required = false,
-                            name = "activities.degreeOfSuccess.${data.name}",
+                            name = "activities.degreeOfSuccess.${data.id}",
                             value = degree,
                             elementClasses = listOf("km-degree-of-success"),
                         ).toContext(),
@@ -1042,8 +1047,8 @@ class CampingSheet(
             time = time.toDateInputString(),
             isGM = isGM,
             isDay = time.isDay(),
-            prepareCamp = activities.find { it.name == "Prepare Campsite" },
-            activities = activities.filter { it.name != "Prepare Campsite" }.toTypedArray(),
+            prepareCamp = activities.find { it.isPrepareCampsite() },
+            activities = activities.filter { !it.isPrepareCampsite() }.toTypedArray(),
             actors = camping.actorUuids.mapNotNull { uuid ->
                 actorsByUuid[uuid]?.let { actor ->
                     val meal = if (eatingSection) {
@@ -1087,16 +1092,16 @@ class CampingSheet(
             camping.currentRegion = value.region
             camping.campingActivities = camping.campingActivities.map {
                 CampingActivity(
-                    activity = it.activity,
+                    activityId = it.activityId,
                     actorUuid = it.actorUuid,
-                    result = value.activities.degreeOfSuccess?.get(it.activity),
-                    selectedSkill = value.activities.selectedSkill?.get(it.activity),
+                    result = value.activities.degreeOfSuccess?.get(it.activityId),
+                    selectedSkill = value.activities.selectedSkill?.get(it.activityId),
                 )
             }.toTypedArray()
-            val cookingResultsByRecipe = camping.cooking.results.associateBy { it.recipeName }
+            val cookingResultsByRecipe = camping.cooking.results.associateBy { it.recipeId }
             camping.cooking.results = camping.getAllRecipes().map {
-                val result = cookingResultsByRecipe[it.name] ?: CookingResult(
-                    recipeName = it.name,
+                val result = cookingResultsByRecipe[it.id] ?: CookingResult(
+                    recipeId = it.id,
                     result = null,
                     skill = "survival",
                 )
@@ -1137,7 +1142,7 @@ private fun getActivitySkills(
             .sortedBy { it.label }
         Select(
             label = "Selected Skill",
-            name = "activities.selectedSkill.${groupedActivity.data.name}",
+            name = "activities.selectedSkill.${groupedActivity.data.id}",
             hideLabel = true,
             options = options,
             elementClasses = listOf("km-proficiency"),

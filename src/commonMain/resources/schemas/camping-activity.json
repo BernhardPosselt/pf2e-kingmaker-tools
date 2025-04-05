@@ -13,10 +13,14 @@
         "isHomebrew",
         "isSecret",
         "isLocked",
-        "skills"
+        "skills",
+        "id"
       ],
       "properties": {
         "name": {
+          "type": "string"
+        },
+        "id": {
           "type": "string"
         },
         "journalUuid": {

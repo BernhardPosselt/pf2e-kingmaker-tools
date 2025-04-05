@@ -124,7 +124,7 @@ class Migration10 : Migration(10) {
         } else {
             camping.restRollMode
         }
-        camping.alwaysPerformActivities = emptyArray()
+        camping.asDynamic().alwaysPerformActivities = emptyArray<String>()
         camping.cooking.actorMeals = camping.cooking.actorMeals.map {
             ActorMeal(
                 actorUuid = it.actorUuid,
