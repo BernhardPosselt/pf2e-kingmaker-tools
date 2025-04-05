@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Migrate structure name lookups to ids. If you have custom structures, you will need to set an id field
+
 ## [4.4.1] - 2025-04-05
 
 ### Fixed
