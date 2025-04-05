@@ -65,6 +65,7 @@ external interface ActivityOutcomeSubmitData {
 
 @JsPlainObject
 external interface ActivitySubmitData {
+    val id: String
     val name: String
     val journalUuid: String
     val journalEntryUuid: String?
@@ -149,7 +150,7 @@ class ActivityApplication(
     dataModel = ActivityDataModel::class.js,
     id = "kmActivity-${actor.uuid}"
 ) {
-    private val editActivityName = data?.name
+    private val editActivityId = data?.id
     private val editActivityLocked = data?.isLocked
     private var currentActivity: CampingActivityData = data?.let(::deepClone) ?: CampingActivityData(
         name = "",
@@ -314,7 +315,7 @@ class ActivityApplication(
                             stacked = false,
                             label = "Id",
                             name = "id",
-                            readonly = editActivityName != null,
+                            readonly = editActivityId != null,
                             value = currentActivity.id,
                             required = true,
                             help = "To override an existing activity, use the same id",
@@ -432,7 +433,7 @@ class ActivityApplication(
 
     override fun onParsedSubmit(value: ActivitySubmitData): Promise<Void> = buildPromise {
         currentActivity = CampingActivityData(
-            id = editActivityName ?: value.name.slugify(),
+            id = editActivityId ?: value.id.slugify(),
             name = value.name,
             journalUuid = value.journalEntryUuid ?: value.journalUuid,
             skills = currentActivity.skills,
