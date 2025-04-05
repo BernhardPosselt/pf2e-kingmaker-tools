@@ -19,32 +19,32 @@ private data class CombatEffect(
 private fun getCombatEffects(partyLevel: Int, activeActivities: Set<String>): List<CombatEffect> {
     return activeActivities.mapNotNull {
         when (it) {
-            "Enhance Weapons" -> CombatEffect(
-                label = it,
+            "enhance-weapons" -> CombatEffect(
+                label = "Enhance Weapons",
                 target = "Allies",
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.ZKJlIqyFgbKDACnG"
             )
 
-            "Set Traps" -> CombatEffect(
-                label = it,
+            "set-traps" -> CombatEffect(
+                label = "Set Traps",
                 target = "Enemies",
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.PSBOS7ZEl9RGWBqD"
             )
 
-            "Undead Guardians" -> CombatEffect(
-                label = it,
+            "undead-guardians" -> CombatEffect(
+                label = "Undead Guardians",
                 target = "1 Ally",
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.KysTaC245mOnSnmE"
             )
 
-            "Water Hazards" -> CombatEffect(
-                label = it,
+            "water-hazards" -> CombatEffect(
+                label = "Water Hazards",
                 target = "Enemies",
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.LN6mH7Muj4hgvStt"
             )
 
-            "Maintain Armor" -> CombatEffect(
-                label = it,
+            "maintain-armor" -> CombatEffect(
+                label = "Maintain Armor",
                 target = if (partyLevel < 3) "1 Ally" else "${1 + ((partyLevel - 1) / 2)} Allies",
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.wojV4NiAOYsnfFby"
             )
