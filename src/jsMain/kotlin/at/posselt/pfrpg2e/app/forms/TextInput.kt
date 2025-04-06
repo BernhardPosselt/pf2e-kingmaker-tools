@@ -3,7 +3,7 @@ package at.posselt.pfrpg2e.app.forms
 data class TextInput(
     override val label: String,
     override val name: String,
-    val value: String,
+    val value: String?,
     val required: Boolean = true,
     override val help: String? = null,
     override val hideLabel: Boolean = false,
@@ -21,7 +21,7 @@ data class TextInput(
         label = label,
         name = name,
         help = help,
-        value = value,
+        value = value ?: "",
         required = required,
         type = "text",
         disabled = false,

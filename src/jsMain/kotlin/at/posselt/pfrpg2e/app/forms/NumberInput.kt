@@ -4,7 +4,7 @@ package at.posselt.pfrpg2e.app.forms
 data class NumberInput(
     override val label: String,
     override val name: String,
-    val value: Int = 0,
+    val value: Int? = 0,
     val required: Boolean = true,
     override val help: String? = null,
     override val hideLabel: Boolean = false,
@@ -21,7 +21,7 @@ data class NumberInput(
         label = label,
         name = name,
         help = help,
-        value = value,
+        value = value ?: "",
         type = "number",
         required = required,
         disabled = disabled,

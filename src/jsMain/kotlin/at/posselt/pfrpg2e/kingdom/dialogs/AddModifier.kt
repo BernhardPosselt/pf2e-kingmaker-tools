@@ -51,7 +51,7 @@ class ModifierModel(
             string("activityId", nullable = true)
             boolean("enabled")
             int("turns", nullable = true) {
-                min = 0
+                min = 1
             }
             boolean("isConsumedAfterRoll")
             int("value")
@@ -69,7 +69,7 @@ external interface AddModifierData {
     val phase: String?
     val activityId: String?
     val enabled: Boolean
-    val turns: Int
+    val turns: Int?
     val isConsumedAfterRoll: Boolean
     val value: Int
 }
@@ -98,7 +98,7 @@ class AddModifier(
         phase = null,
         activityId = null,
         enabled = true,
-        turns = 1,
+        turns = null,
         isConsumedAfterRoll = false,
     )
 
