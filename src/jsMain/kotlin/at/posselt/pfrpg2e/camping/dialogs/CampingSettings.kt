@@ -51,20 +51,20 @@ import kotlin.js.Promise
 
 @JsPlainObject
 external interface CampingSettings {
-    val gunsToClean: Int
-    val restRollMode: String
-    val increaseWatchActorNumber: Int
-    val actorUuidsNotKeepingWatch: Array<String>
-    val huntAndGatherTargetActorUuid: String?
-    val proxyRandomEncounterTableUuid: String?
-    val randomEncounterRollMode: String
-    val ignoreSkillRequirements: Boolean
-    val minimumTravelSpeed: Int?
-    val minimumSubsistence: Int
-    val alwaysPerformActivities: Array<String>
-    val restingPlaylistUuid: String?
-    val restingPlaylistSoundUuid: String?
-    val worldSceneId: String?
+    var gunsToClean: Int
+    var restRollMode: String
+    var increaseWatchActorNumber: Int
+    var actorUuidsNotKeepingWatch: Array<String>
+    var huntAndGatherTargetActorUuid: String?
+    var proxyRandomEncounterTableUuid: String?
+    var randomEncounterRollMode: String
+    var ignoreSkillRequirements: Boolean
+    var minimumTravelSpeed: Int?
+    var minimumSubsistence: Int
+    var alwaysPerformActivities: Array<String>
+    var restingPlaylistUuid: String?
+    var restingPlaylistSoundUuid: String?
+    var worldSceneId: String?
 }
 
 @JsExport
@@ -283,7 +283,7 @@ class CampingSettingsApplication(
                             "Playlist Track",
                             name = "restingPlaylistSoundUuid",
                             value = playlistSound?.uuid,
-                            required = playlist != null,
+                            required = false,
                             stacked = false,
                             options = playlist?.sounds?.contents?.mapNotNull { it.toOption(useUuid = true) }
                                 ?: emptyList(),
@@ -335,6 +335,9 @@ class CampingSettingsApplication(
     }
 
     override fun onParsedSubmit(value: CampingSettings): Promise<Void> = buildPromise {
+        if (settings.restingPlaylistUuid != value.restingPlaylistUuid) {
+            value.restingPlaylistSoundUuid = null
+        }
         settings = value
         undefined
     }
