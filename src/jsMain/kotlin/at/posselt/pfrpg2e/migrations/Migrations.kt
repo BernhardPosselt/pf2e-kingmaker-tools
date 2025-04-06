@@ -25,6 +25,7 @@ import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.isFirstGM
 import at.posselt.pfrpg2e.utils.openJournal
+import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.Game
@@ -80,8 +81,8 @@ suspend fun createPartyActor(index: Int): PF2EParty {
     ).await()
 }
 
-private fun hasUnmigratedHouses(game: Game): Boolean {
-    return game.actors.contents
+private fun Game.hasUnmigratedHouses() =
+    actors.contents
         .filterIsInstance<StructureActor>()
         .any {
             val rawStructureData = it.getRawStructureData()
@@ -91,26 +92,9 @@ private fun hasUnmigratedHouses(game: Game): Boolean {
                 false
             }
         }
-}
 
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
-    val existingVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
-    val currentVersion = if (existingVersion == 0) {
-        // fix version
-        val version = if (getKingdomActors().any { it.getKingdom()?.homebrewKingdomEvents == null }) {
-            13
-        } else if(
-            (getCampingActors().isNotEmpty() || getKingdomActors().isNotEmpty()) &&
-            (getCampingActors().any { it.getCamping()?.alwaysPerformActivityIds == null} || hasUnmigratedHouses(this))) {
-            14
-        } else {
-            latestMigrationVersion
-        }
-        settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(latestMigrationVersion)
-        version
-    } else {
-        existingVersion
-    }
+    val currentVersion = determineVersion()
     console.log("${Config.moduleName}: Upgrading from $currentVersion to $latestMigrationVersion")
     if (currentVersion < 9) {
         ui.notifications.error(
@@ -177,5 +161,39 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
         if (migrationsToRun.any { it.showUpgradingNotices }) {
             openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.wz1mIWMxDJVsMIUd")
         }
+    }
+}
+
+private suspend fun showUpgradeWarning() {
+    postChatMessage("Kingdom Building, Camping & Weather: You are upgrading from a version prior to 4.0.0 and are affected by a data migration bug. Consult the upgrading notices for version 4.0.0 to find out how to fix it. If in doubt, join the Discord server at https://discord.gg/dRu96mef and channel https://discord.com/channels/880968862240239708/1079113556823396352 or file an issue on the issue tracker for assistance https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/new")
+    openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.wz1mIWMxDJVsMIUd")
+}
+
+private suspend fun Game.determineVersion(): Int {
+    val existingVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
+    return if (existingVersion == 0) {
+        val hasOldActors = actors.contents
+            .filterIsInstance<PF2ENpc>()
+            .any { it.name == "Kingdom Sheet" || it.name == "Camping Sheet" }
+        val isAtLeastVersion4 = getCampingActors().isNotEmpty() || getKingdomActors().isNotEmpty()
+        if (hasOldActors && !isAtLeastVersion4) {
+            showUpgradeWarning()
+        }
+        // fix version for versions higher than 4
+        val version = if (isAtLeastVersion4) {
+            if (getKingdomActors().any { it.getKingdom()?.homebrewKingdomEvents == null }) {
+                13
+            } else if ((getCampingActors().any { it.getCamping()?.alwaysPerformActivityIds == null } || hasUnmigratedHouses())) {
+                14
+            } else {
+                latestMigrationVersion
+            }
+        } else {
+            latestMigrationVersion
+        }
+        settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(version)
+        version
+    } else {
+        existingVersion
     }
 }
