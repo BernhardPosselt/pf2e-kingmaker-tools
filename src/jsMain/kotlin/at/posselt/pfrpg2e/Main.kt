@@ -102,7 +102,6 @@ fun main() {
                 ?.filterIsInstance<HTMLElement>()
                 ?.forEach {
                     val id = it.dataset["documentId"]
-                    console.log(it)
                     if (id != null) {
                         val insertAfter = it.querySelector("h3")
                         insertAfter?.insertAdjacentElement("afterend", createPartyActorIcon(
