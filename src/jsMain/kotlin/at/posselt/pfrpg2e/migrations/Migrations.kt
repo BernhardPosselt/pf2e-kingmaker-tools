@@ -83,6 +83,8 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
         // fix version
         val version = if (getKingdomActors().any { it.getKingdom()?.homebrewKingdomEvents == null }) {
             13
+        } else if(getCampingActors().any { it.getCamping()?.alwaysPerformActivityIds == null}) {
+            14
         } else {
             latestMigrationVersion
         }
