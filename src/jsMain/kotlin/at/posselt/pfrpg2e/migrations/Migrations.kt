@@ -11,6 +11,9 @@ import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.kingdom.setKingdom
+import at.posselt.pfrpg2e.kingdom.structures.StructureActor
+import at.posselt.pfrpg2e.kingdom.structures.getRawStructureData
+import at.posselt.pfrpg2e.kingdom.structures.isStructureRef
 import at.posselt.pfrpg2e.migrations.migrations.Migration10
 import at.posselt.pfrpg2e.migrations.migrations.Migration11
 import at.posselt.pfrpg2e.migrations.migrations.Migration12
@@ -77,13 +80,28 @@ suspend fun createPartyActor(index: Int): PF2EParty {
     ).await()
 }
 
+private fun hasUnmigratedHouses(game: Game): Boolean {
+    return game.actors.contents
+        .filterIsInstance<StructureActor>()
+        .any {
+            val rawStructureData = it.getRawStructureData()
+            if (rawStructureData != null && isStructureRef(rawStructureData)) {
+                rawStructureData.ref == "Houses"
+            } else {
+                false
+            }
+        }
+}
+
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     val existingVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
     val currentVersion = if (existingVersion == 0) {
         // fix version
         val version = if (getKingdomActors().any { it.getKingdom()?.homebrewKingdomEvents == null }) {
             13
-        } else if(getCampingActors().any { it.getCamping()?.alwaysPerformActivityIds == null}) {
+        } else if(
+            (getCampingActors().isNotEmpty() || getKingdomActors().isNotEmpty()) &&
+            (getCampingActors().any { it.getCamping()?.alwaysPerformActivityIds == null} || hasUnmigratedHouses(this))) {
             14
         } else {
             latestMigrationVersion

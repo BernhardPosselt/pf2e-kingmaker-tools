@@ -15,7 +15,6 @@ import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
 import at.posselt.pfrpg2e.takeIfInstance
-import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.unsetAppFlag
@@ -40,11 +39,11 @@ typealias StructureActor = PF2ENpc
     "CANNOT_CHECK_FOR_ERASED",
     "ERROR_IN_CONTRACT_DESCRIPTION"
 )
-fun isStructureRef(obj: AnyObject): Boolean {
+fun isStructureRef(obj: RawStructure): Boolean {
     contract {
         returns(true) implies (obj is StructureRef)
     }
-    return obj["ref"] is String
+    return obj.unsafeCast<AnyObject>()["ref"] is String
 }
 
 class StructureParsingException(message: String) : Exception(message)
@@ -52,10 +51,9 @@ class StructureParsingException(message: String) : Exception(message)
 fun StructureActor.getRawResolvedStructureData(): RawStructureData? {
     val data = getRawStructureData()
     if (data == null) return null
-    val record = data.asAnyObject()
-    return if (isStructureRef(record)) {
-        structures.find { it.id == record.ref }
-            ?: throw StructureParsingException("Could not find existing structure with ref ${record.ref}")
+    return if (isStructureRef(data)) {
+        structures.find { it.id == data.ref }
+            ?: throw StructureParsingException("Could not find existing structure with ref ${data.ref}")
     } else {
         data.unsafeCast<RawStructureData>()
     }
