@@ -25,15 +25,15 @@
               "in": [
                 "@structure",
                 [
-                  "Barracks",
-                  "Castle",
-                  "Castle (V&K)",
-                  "Garrison",
-                  "Garrison (V&K)",
-                  "Keep",
-                  "Keep (V&K)",
-                  "Wall, Stone",
-                  "Wall, Wooden"
+                  "barracks",
+                  "castle",
+                  "castle-vk",
+                  "garrison",
+                  "garrison-vk",
+                  "keep",
+                  "keep-vk",
+                  "wall-stone",
+                  "wall-wooden"
                 ]
               ]
             }

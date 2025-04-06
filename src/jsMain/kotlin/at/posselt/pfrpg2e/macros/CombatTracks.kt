@@ -106,10 +106,10 @@ private class CombatTrackApplication(
 
     override fun onParsedSubmit(value: CombatTrackData): Promise<Void> = buildPromise {
         val playlist = value.playlistUuid
-        if (playlist == null) {
-            combatTrack = null
+        combatTrack = if (playlist == null) {
+            null
         } else {
-            combatTrack = Track(playlistUuid = playlist, trackUuid = value.trackUuid)
+            Track(playlistUuid = playlist, trackUuid = value.trackUuid)
         }
         undefined
     }
