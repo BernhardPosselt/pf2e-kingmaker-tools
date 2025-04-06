@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Migrate structure name lookups to ids. If you have custom structures, you will need to set an id field
 * Add ids to recipes and camping activities
 
+### Fixed
+
+* Show message when upgrading from a version with migration issues
+
 ## [4.4.1] - 2025-04-05
 
 ### Fixed
