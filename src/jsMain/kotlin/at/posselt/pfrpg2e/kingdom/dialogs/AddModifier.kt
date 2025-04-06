@@ -50,7 +50,7 @@ class ModifierModel(
             enum<KingdomPhase>("phase", nullable = true)
             string("activityId", nullable = true)
             boolean("enabled")
-            int("turns") {
+            int("turns", nullable = true) {
                 min = 0
             }
             boolean("isConsumedAfterRoll")
@@ -214,7 +214,8 @@ class AddModifier(
                 label = "Turns",
                 value = data.turns,
                 stacked = false,
-                help = "Use 0 for indefinite"
+                required = false,
+                help = "leave empty for indefinite"
             ),
             CheckboxInput(
                 name = "isConsumedAfterRoll",
