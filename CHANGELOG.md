@@ -23,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Show message when upgrading from a version with migration issues
 * Fix issue that caused wrong resting playlist sound to be set if you changed the playlist but not the track
 * Display Feat Prerequisites
 * Prevent adding the same bonus feat twice
