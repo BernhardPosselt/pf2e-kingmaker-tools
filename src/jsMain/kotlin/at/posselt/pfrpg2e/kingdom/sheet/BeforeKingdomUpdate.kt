@@ -21,6 +21,7 @@ suspend fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
     chosenKingdomFeatsById.forEach { feat ->
         if (previousChosenKingdomFeatsById[feat.id]?.featId != feat.featId) {
             feat.featRuinThresholdIncreases = emptyArray()
+            feat.supportedLeader = null
         }
     }
 

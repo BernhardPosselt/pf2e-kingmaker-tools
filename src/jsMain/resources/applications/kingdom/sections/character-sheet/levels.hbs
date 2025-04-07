@@ -50,6 +50,7 @@
                         </div>
                     {{/each}}
                 {{/if}}
+                {{#if removeLeaderVacancyPenalty}}{{> formElement removeLeaderVacancyPenalty}}{{/if}}
                 {{#if ruinThresholdIncreases}}
                     <div class="km-choose-ruins">
                         <p>Choose {{ruinThresholdIncreases.amount}} Ruins to increase

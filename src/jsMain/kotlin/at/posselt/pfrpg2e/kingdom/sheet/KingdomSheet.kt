@@ -1058,13 +1058,16 @@ class KingdomSheet(
     ): Promise<KingdomSheetContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
         val kingdom = getKingdom()
-        val vacancies = kingdom.vacancies()
+        val allFeatures = kingdom.getExplodedFeatures()
+        val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
+        val vacancies = kingdom.vacancies(
+            choices = chosenFeatures,
+            bonusFeats = kingdom.bonusFeats,
+        )
         val realm = game.getRealmData(actor, kingdom)
         val settlements = kingdom.getAllSettlements(game)
         val controlDc = calculateControlDC(kingdom.level, realm, vacancies.ruler)
         val globalBonuses = evaluateGlobalBonuses(settlements.allSettlements)
-        val allFeatures = kingdom.getExplodedFeatures()
-        val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
         val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
         val leaderActors = kingdom.parseLeaderActors()
         val storage = calculateStorage(realm, settlements.allSettlements)
@@ -1230,7 +1233,11 @@ class KingdomSheet(
             kingdom = kingdom,
             chosenFeats = chosenFeats,
         )
-        val leadersContext = kingdom.leaders.toContext(leaderActors, defaultLeaderBonuses)
+        val leadersContext = kingdom.leaders.toContext(
+            leaderActors = leaderActors,
+            bonuses = defaultLeaderBonuses,
+            vacancies = vacancies,
+        )
         val automateStats = kingdom.settings.automateStats
         val checks = skillChecks(
             kingdom = kingdom,

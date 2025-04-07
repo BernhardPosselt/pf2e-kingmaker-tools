@@ -48,6 +48,9 @@
             }
           }
         },
+        "removeLeaderVacancyPenalty": {
+          "type": "boolean"
+        },
         "increaseActivityUnrestReductionBy": {
           "type": "object",
           "required": [

@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.data.actor.highestProficiencyByLevel
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
 import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
@@ -63,6 +64,7 @@ external interface FeatureContext {
     val skillProficiency: FormElementContext?
     val ruinThresholdIncreases: RuinThresholdIncreases?
     val featRuinThresholdIncreases: Array<RuinThresholdIncreases>
+    val removeLeaderVacancyPenalty: FormElementContext?
 }
 
 fun RawRuinThresholdIncreaseContext.toContext(
@@ -173,6 +175,17 @@ fun Array<RawFeatureChoices>.toContext(
                             skillRanks = skillRanks,
                             abilityScores = abilityScores,
                         ) == true,
+                        removeLeaderVacancyPenalty = if (feat?.removeLeaderVacancyPenalty == true) {
+                            Select.fromEnum<Leader>(
+                                label = "Supported Leader",
+                                name = "features.$index.supportedLeader",
+                                required = false,
+                                stacked = false,
+                                value = choice.supportedLeader?.let { Leader.fromString(it) }
+                            ).toContext()
+                        } else {
+                            null
+                        },
                         featAutomationNotes = feat?.automationNotes,
                         featRequirements = feat?.requirements?.formatRequirements(feats),
                         abilityBoosts = if (abilityBoosts != null) {
@@ -203,6 +216,7 @@ fun Array<RawFeatureChoices>.toContext(
                         } else {
                             null
                         },
+
                         featDescription = feat?.text ?: "",
                         skillProficiency = if (feature.skillIncrease == true) {
                             Select(

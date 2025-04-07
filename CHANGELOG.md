@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Automate additional unrest reduction of Endure Anarchy
+* Automate Civil Service supported leader choice
 * Mark feat prerequisites as red if they are not satisfied
 
 ### Changed

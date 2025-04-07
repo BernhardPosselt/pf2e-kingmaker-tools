@@ -31,6 +31,7 @@
             <p>{{description}}</p>
             {{#if requirements}}<p {{#unless satisfiesRequirements}}class="km-unsatisfied-requirement"{{/unless}}><b>Prerequisites:</b> {{requirements}}</p>{{/if}}
             {{#if automationNotes}}<p><b>Automation Notes:</b> {{automationNotes}}</p>{{/if}}
+            {{#if removeLeaderVacancyPenalty}}{{> formElement removeLeaderVacancyPenalty}}{{/if}}
             {{#each ruinThresholdIncreases}}
                 <div class="km-choose-boosts">
                     <p>Choose {{amount}} Ruins to increase by {{value}}</p>

@@ -84,12 +84,14 @@ external interface RawFeatureChoices {
     var featId: String?
     var ruinThresholdIncreases: RawRuinThresholdIncreasesContext?
     var featRuinThresholdIncreases: Array<RawRuinThresholdIncreasesContext>
+    var supportedLeader: String?
 }
 
 @JsPlainObject
 external interface RawBonusFeat {
     var id: String
     var ruinThresholdIncreases: Array<RawRuinThresholdIncreasesContext>
+    var supportedLeader: String?
 }
 
 

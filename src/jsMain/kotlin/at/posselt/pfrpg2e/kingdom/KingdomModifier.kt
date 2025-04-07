@@ -263,7 +263,10 @@ suspend fun KingdomData.checkModifiers(
         allSettlements = allSettlements,
         ruins = parseRuins(chosenFeatures, settings.ruinThreshold),
         unrest = unrest,
-        vacancies = vacancies(),
+        vacancies = vacancies(
+            choices = chosenFeatures,
+            bonusFeats = bonusFeats,
+        ),
         targetedArmy = armyConditions,
         untrainedProficiencyMode = UntrainedProficiencyMode
             .fromString(settings.proficiencyMode) ?: UntrainedProficiencyMode.NONE,
@@ -307,7 +310,10 @@ fun KingdomData.createExpressionContext(
             .flatMap { it.feat.flags?.toSet().orEmpty() }
             .toSet() + flags,
         rollOptions = rollOptions,
-        vacancies = vacancies(),
+        vacancies = vacancies(
+            choices = chosenFeatures,
+            bonusFeats = bonusFeats,
+        ),
         structure = structure,
         anarchyAt = calculateAnarchy(chosenFeats),
         atWar = atWar,

@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.RawRuinThresholdIncreases
@@ -38,6 +39,7 @@ external interface BonusFeatContext {
     val ruinThresholdIncreases: Array<RuinThresholdIncreases>
     val requirements: String?
     val satisfiesRequirements: Boolean
+    val removeLeaderVacancyPenalty: FormElementContext?
 }
 
 fun createBonusFeatContext(
@@ -99,6 +101,17 @@ fun Array<RawBonusFeat>.toContext(
                     skillRanks = skillRanks,
                     abilityScores = abilityScores,
                 ) == true,
+                removeLeaderVacancyPenalty = if (feat?.removeLeaderVacancyPenalty == true) {
+                    Select.fromEnum<Leader>(
+                        label = "Supported Leader",
+                        name = "bonusFeats.$index.supportedLeader",
+                        required = false,
+                        stacked = false,
+                        value = rawFeat.supportedLeader?.let { Leader.fromString(it) }
+                    ).toContext()
+                } else {
+                    null
+                },
                 automationNotes = feat.automationNotes,
                 requirements = feat.requirements?.formatRequirements(feats),
                 ruinThresholdIncreases = increases.mapIndexed { ruinIndex, value ->

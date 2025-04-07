@@ -3,6 +3,8 @@ package at.posselt.pfrpg2e.kingdom.sheet
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
+import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.unrest.calculateUnrest
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.utils.postChatMessage
@@ -30,7 +32,11 @@ suspend fun adjustUnrest(
     settlements: List<Settlement>,
     chosenFeats: List<ChosenFeat>,
 ): Int {
-    val unrest = calculateUnrest(kingdom.atWar, settlements, kingdom.vacancies())
+    val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+    val unrest = calculateUnrest(kingdom.atWar, settlements, kingdom.vacancies(
+        choices = chosenFeatures,
+        bonusFeats = kingdom.bonusFeats,
+    ))
     val ruler = if (unrest.rulerVacant) roll(formula = "1d4", flavor = "Ruler is vacant, gaining Unrest") else 0
     val newUnrest = unrest.war + unrest.secondaryTerritory + unrest.overcrowded + ruler
     return if (kingdom.level >= 20 && newUnrest > 0) {

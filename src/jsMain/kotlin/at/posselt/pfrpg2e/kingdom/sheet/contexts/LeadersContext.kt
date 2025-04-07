@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActor
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
+import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.kingdom.data.RawLeaderValues
 import at.posselt.pfrpg2e.kingdom.data.RawLeaders
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.LeaderBonuses
@@ -45,6 +46,7 @@ fun RawLeaderValues.toContext(
     leaderActor: LeaderActor?,
     leader: Leader,
     bonus: Int,
+    vacancies: Vacancies,
 ): LeaderValuesContext {
     val leaderActorName = leaderActor?.name
     val label = document.create.span {
@@ -78,7 +80,7 @@ fun RawLeaderValues.toContext(
         ).toContext(),
         vacant = CheckboxInput(
             escapeLabel = false,
-            value = vacant || uuid == null,
+            value = vacancies.resolveVacancy(leader),
             name = "leaders.${leader.value}.vacant",
             label = label.outerHTML,
         ).toContext(),
@@ -95,45 +97,54 @@ fun RawLeaderValues.toContext(
 fun RawLeaders.toContext(
     leaderActors: LeaderActors,
     bonuses: LeaderBonuses,
+    vacancies: Vacancies,
 ): Array<LeaderValuesContext> = arrayOf(
     ruler.toContext(
         leaderActors.resolve(Leader.RULER),
         Leader.RULER,
-        bonuses.resolve(Leader.RULER)
+        bonuses.resolve(Leader.RULER),
+        vacancies,
     ),
     counselor.toContext(
         leaderActors.resolve(Leader.COUNSELOR),
         Leader.COUNSELOR,
-        bonuses.resolve(Leader.COUNSELOR)
+        bonuses.resolve(Leader.COUNSELOR),
+        vacancies,
     ),
     emissary.toContext(
         leaderActors.resolve(Leader.EMISSARY),
         Leader.EMISSARY,
-        bonuses.resolve(Leader.EMISSARY)
+        bonuses.resolve(Leader.EMISSARY),
+        vacancies,
     ),
     general.toContext(
         leaderActors.resolve(Leader.GENERAL),
         Leader.GENERAL,
-        bonuses.resolve(Leader.GENERAL)
+        bonuses.resolve(Leader.GENERAL),
+        vacancies,
     ),
     magister.toContext(
         leaderActors.resolve(Leader.MAGISTER),
         Leader.MAGISTER,
-        bonuses.resolve(Leader.MAGISTER)
+        bonuses.resolve(Leader.MAGISTER),
+        vacancies,
     ),
     treasurer.toContext(
         leaderActors.resolve(Leader.TREASURER),
         Leader.TREASURER,
-        bonuses.resolve(Leader.TREASURER)
+        bonuses.resolve(Leader.TREASURER),
+        vacancies,
     ),
     viceroy.toContext(
         leaderActors.resolve(Leader.VICEROY),
         Leader.VICEROY,
-        bonuses.resolve(Leader.VICEROY)
+        bonuses.resolve(Leader.VICEROY),
+        vacancies,
     ),
     warden.toContext(
         leaderActors.resolve(Leader.WARDEN),
         Leader.WARDEN,
-        bonuses.resolve(Leader.WARDEN)
+        bonuses.resolve(Leader.WARDEN),
+        vacancies,
     ),
 )

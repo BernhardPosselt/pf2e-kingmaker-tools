@@ -83,6 +83,7 @@ external interface RawFeat {
     val ruinThresholdIncreases: Array<RawRuinThresholdIncreases>?
     val increaseGainedLuxuriesOncePerTurnBy: Int?
     val requirements: RawFeatRequirements?
+    val removeLeaderVacancyPenalty: Boolean?
     val increaseActivityUnrestReductionBy: IncreaseActivityUnrestReductionBy?
 }
 

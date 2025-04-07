@@ -202,17 +202,33 @@ fun RawLeaderSkills.deleteLore(attribute: Attribute) = RawLeaderSkills(
     warden = warden.filter { it != attribute.value }.toTypedArray(),
 )
 
-fun KingdomData.vacancies() =
-    Vacancies(
-        ruler = leaders.ruler.vacant == true || leaders.ruler.uuid == null,
-        counselor = leaders.counselor.vacant == true || leaders.counselor.uuid == null,
-        emissary = leaders.emissary.vacant == true || leaders.emissary.uuid == null,
-        general = leaders.general.vacant == true || leaders.general.uuid == null,
-        magister = leaders.magister.vacant == true || leaders.magister.uuid == null,
-        treasurer = leaders.treasurer.vacant == true || leaders.treasurer.uuid == null,
-        viceroy = leaders.viceroy.vacant == true || leaders.viceroy.uuid == null,
-        warden = leaders.warden.vacant == true || leaders.warden.uuid == null,
+fun KingdomData.vacancies(
+    choices: List<ChosenFeature>,
+    bonusFeats: Array<RawBonusFeat>,
+): Vacancies {
+    val supportedLeaders = (choices.mapNotNull { it.choice.supportedLeader } +
+            bonusFeats.mapNotNull { it.supportedLeader })
+        .mapNotNull { Leader.fromString(it) }
+        .toSet()
+    return Vacancies(
+        ruler = Leader.RULER !in supportedLeaders &&
+                (leaders.ruler.vacant == true || leaders.ruler.uuid == null),
+        counselor = Leader.COUNSELOR !in supportedLeaders &&
+                (leaders.counselor.vacant == true || leaders.counselor.uuid == null),
+        emissary = Leader.EMISSARY !in supportedLeaders &&
+                (leaders.emissary.vacant == true || leaders.emissary.uuid == null),
+        general = Leader.GENERAL !in supportedLeaders &&
+                (leaders.general.vacant == true || leaders.general.uuid == null),
+        magister = Leader.MAGISTER !in supportedLeaders &&
+                (leaders.magister.vacant == true || leaders.magister.uuid == null),
+        treasurer = Leader.TREASURER !in supportedLeaders &&
+                (leaders.treasurer.vacant == true || leaders.treasurer.uuid == null),
+        viceroy = Leader.VICEROY !in supportedLeaders &&
+                (leaders.viceroy.vacant == true || leaders.viceroy.uuid == null),
+        warden = Leader.WARDEN !in supportedLeaders &&
+                (leaders.warden.vacant == true || leaders.warden.uuid == null),
     )
+}
 
 fun KingdomData.getTrainedSkills(
     chosenFeats: List<ChosenFeat>,

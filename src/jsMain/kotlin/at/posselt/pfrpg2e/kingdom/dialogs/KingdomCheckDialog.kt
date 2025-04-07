@@ -721,19 +721,22 @@ suspend fun kingdomCheckDialog(
     overrideDc: Int? = null,
     flags: Set<String> = emptySet(),
 ) {
+    val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+    val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
+    val vacancies = kingdom.vacancies(
+        choices = chosenFeatures,
+        bonusFeats = kingdom.bonusFeats,
+    )
     val params = when (check) {
         is CheckType.PerformActivity -> {
             val activity = check.activity
             val realm = game.getRealmData(kingdomActor, kingdom)
-            val vacancies = kingdom.vacancies()
             val dc = overrideDc ?: (activity.resolveDc(
                 kingdomLevel = kingdom.level,
                 realm = realm,
                 rulerVacant = vacancies.ruler,
                 enemyArmyScoutingDcs = game.getSelectedArmies().map { it.system.scouting }
             ) ?: 0)
-            val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
-            val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
             val skills = getValidActivitySkills(
                 ranks = kingdom.parseSkillRanks(
                     chosenFeatures,
@@ -758,7 +761,6 @@ suspend fun kingdomCheckDialog(
 
         is CheckType.RollSkill -> {
             val realm = game.getRealmData(kingdomActor, kingdom)
-            val vacancies = kingdom.vacancies()
             val dc = overrideDc ?: calculateControlDC(
                 kingdomLevel = kingdom.level,
                 realm = realm,
@@ -808,7 +810,6 @@ suspend fun kingdomCheckDialog(
                 "Stage index $stageIndex for event with id ${event.id} does not exist"
             }
             val realm = game.getRealmData(kingdomActor, kingdom)
-            val vacancies = kingdom.vacancies()
             val dc = overrideDc ?: (calculateControlDC(
                 kingdomLevel = kingdom.level,
                 realm = realm,

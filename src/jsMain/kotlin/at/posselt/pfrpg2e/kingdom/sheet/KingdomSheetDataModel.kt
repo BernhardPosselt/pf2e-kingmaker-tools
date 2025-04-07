@@ -152,6 +152,7 @@ class KingdomSheetDataModel(
             array("features") {
                 schema {
                     string("id")
+                    enum<Leader>("supportedLeader", nullable = true)
                     enum<KingdomSkill>("skillIncrease", nullable = true)
                     schema("abilityBoosts", nullable = true) {
                         boolean("culture")
@@ -203,6 +204,7 @@ class KingdomSheetDataModel(
             array("bonusFeats") {
                 schema {
                     string("id")
+                    enum<Leader>("supportedLeader", nullable = true)
                     array("ruinThresholdIncreases") {
                         schema {
                             schema("crime") {
