@@ -2,7 +2,11 @@
   "id": "practical-magic-vk",
   "name": "Practical Magic (V&K)",
   "level": 7,
-  "prerequisites": "Trained in Magic",
+  "requirements": {
+    "skillRanks": {
+      "magic": 1
+    }
+  },
   "text": "Magic has an honored place in your society, and your people incorporate it into their everyday work to make life easier. You gain a +1 status bonus to Magic checks, and if you have Expert Magic you gain a +1 status bonus to Engineering checks. If you have Master Magic, this bonus increases to +2. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.",
   "modifiers": [
     {

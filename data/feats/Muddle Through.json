@@ -2,7 +2,11 @@
     "id": "muddle-through",
     "name": "Muddle Through",
     "level": 1,
-    "prerequisites": "Trained in Wilderness",
+    "requirements": {
+        "skillRanks": {
+            "wilderness": 1
+        }
+    },
     "text": "Your people are independent-minded and take care of the small things around the kingdom, not letting them pile up into bigger problems. Increase two of your Ruin thresholds by 1 and one of them by 2.",
     "ruinThresholdIncreases": [{
         "amount": 1,

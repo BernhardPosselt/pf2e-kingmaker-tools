@@ -389,6 +389,10 @@
         }
     }
 
+    .km-unsatisfied-requirement {
+        color: red;
+    }
+
     .km-kingdom-sheet-sub-content,
     .km-kingdom-sheet-sub-nav {
         border-radius: 10px;

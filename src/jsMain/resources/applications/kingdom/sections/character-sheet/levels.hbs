@@ -24,6 +24,7 @@
                 {{/if}}
                 {{#if feat}}
                     <p>{{featDescription}}</p>
+                    {{#if featRequirements}}<p {{#unless featSatisfiesRequirements}}class="km-unsatisfied-requirement"{{/unless}}><b>Prerequisites:</b> {{featRequirements}}</p>{{/if}}
                     {{#if featAutomationNotes}}<p><b>Automation Notes:</b> {{featAutomationNotes}}</p>{{/if}}
                     {{#each featRuinThresholdIncreases}}
                         <div class="km-choose-boosts">

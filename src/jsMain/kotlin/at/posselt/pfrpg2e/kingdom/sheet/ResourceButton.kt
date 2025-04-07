@@ -5,8 +5,12 @@ import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.dialogs.requestAmount
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
+import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
@@ -150,15 +154,25 @@ data class ResourceButton(
         maximumFame: Int,
         storage: CommodityStorage,
         resourceDieSize: ResourceDieSize,
+        activityId: String?,
+        chosenFeats: List<ChosenFeat>,
     ) {
         val factor = if (multiple) requestAmount() else 1
         val sign = if (mode == ResourceMode.GAIN) 1 else -1
-        val value = if (resource == Resource.ROLLED_RESOURCE_DICE) {
+        val initialValue = if (resource == Resource.ROLLED_RESOURCE_DICE) {
             val diceNum = evaluateValueExpression(value, resourceDieSize)
             roll(dice.formula(diceNum))
         } else {
             evaluateValueExpression(value, resourceDieSize)
         } * factor * sign
+        val value = if(activityId != null && mode == ResourceMode.LOSE && resource == Resource.UNREST) {
+            val decreases = chosenFeats.mapNotNull { it.feat.increaseActivityUnrestReductionBy }
+                .filter { kingdom.unrest >= it.minimumCurrentUnrest }
+                .sumOf { it.value }
+            initialValue - decreases
+        } else {
+            initialValue
+        }
         val turnLabel = if (turn == Turn.NEXT) " Next Turn" else ""
         val hints = hints?.let { " ($it)" } ?: ""
         val mode = if (mode == ResourceMode.GAIN) "Gaining" else "Losing"
@@ -255,6 +269,8 @@ data class ResourceButton(
             Resource.XP -> setter.set(updatedValue.coerceIn(0, Int.MAX_VALUE))
             // values that can be both negative in the now and next column
             Resource.CONSUMPTION -> setter.set(updatedValue)
+            // special handling based off feats
+
         }
     }
 }
@@ -263,12 +279,15 @@ suspend fun executeResourceButton(
     game: Game,
     actor: KingdomActor,
     kingdom: KingdomData,
-    elem: HTMLElement
+    elem: HTMLElement,
+    activityId: String?,
 ) {
     val previous = deepClone(kingdom)
     val button = ResourceButton.fromHtml(elem)
     val realm = game.getRealmData(actor, kingdom)
     val settlements = kingdom.getAllSettlements(game)
+    val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+    val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
     val storage = calculateStorage(realm = realm, settlements = settlements.allSettlements)
     button.evaluate(
         kingdom = kingdom,
@@ -276,6 +295,8 @@ suspend fun executeResourceButton(
         maximumFame = kingdom.settings.maximumFamePoints,
         storage = storage,
         resourceDieSize = realm.sizeInfo.resourceDieSize,
+        activityId = activityId,
+        chosenFeats = chosenFeats,
     )
     beforeKingdomUpdate(previous, kingdom)
     actor.setKingdom(kingdom)

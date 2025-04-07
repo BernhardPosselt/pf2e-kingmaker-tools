@@ -48,8 +48,101 @@
             }
           }
         },
-        "prerequisites": {
-          "type": "string"
+        "increaseActivityUnrestReductionBy": {
+          "type": "object",
+          "required": [
+            "minimumCurrentUnrest",
+            "value"
+          ],
+          "properties": {
+            "minimumCurrentUnrest": {
+              "type": "number"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        "requirements": {
+          "type": "object",
+          "properties": {
+            "skillRanks": {
+              "type": "object",
+              "properties": {
+                "agriculture": {
+                  "type": "number"
+                },
+                "arts": {
+                  "type": "number"
+                },
+                "boating": {
+                  "type": "number"
+                },
+                "defense": {
+                  "type": "number"
+                },
+                "engineering": {
+                  "type": "number"
+                },
+                "exploration": {
+                  "type": "number"
+                },
+                "folklore": {
+                  "type": "number"
+                },
+                "industry": {
+                  "type": "number"
+                },
+                "intrigue": {
+                  "type": "number"
+                },
+                "magic": {
+                  "type": "number"
+                },
+                "politics": {
+                  "type": "number"
+                },
+                "scholarship": {
+                  "type": "number"
+                },
+                "statecraft": {
+                  "type": "number"
+                },
+                "trade": {
+                  "type": "number"
+                },
+                "warfare": {
+                  "type": "number"
+                },
+                "wilderness": {
+                  "type": "number"
+                }
+              }
+            },
+            "abilityScores": {
+              "type": "object",
+              "properties": {
+                "stability": {
+                  "type": "number"
+                },
+                "loyalty": {
+                  "type": "number"
+                },
+                "economy": {
+                  "type": "number"
+                },
+                "culture": {
+                  "type": "number"
+                }
+              }
+            },
+            "featIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         },
         "increaseAnarchyLimit": {
           "type": "number"
@@ -213,7 +306,9 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["note"],
+            "required": [
+              "note"
+            ],
             "properties": {
               "note": {
                 "type": "string"

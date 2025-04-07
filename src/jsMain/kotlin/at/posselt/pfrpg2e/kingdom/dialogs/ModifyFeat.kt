@@ -38,7 +38,6 @@ external interface ModifyFeatData {
     val id: String
     val text: String
     val level: Int
-    val prerequisites: String?
     val resourceDice: Int
     val settlementMagicItemLevelIncrease: Int
     val flag: String?
@@ -59,7 +58,6 @@ class ModifyFeatDataModel(
             string("name")
             string("text")
             int("level")
-            string("prerequisites", nullable = true)
             int("resourceDice")
             int("settlementMagicItemLevelIncrease")
             string("flag", nullable = true)
@@ -87,10 +85,10 @@ class ModifyFeat(
         id = data?.id ?: "",
         text = data?.text ?: "",
         level = data?.level ?: 1,
-        prerequisites = data?.prerequisites,
         automationNotes = data?.automationNotes,
         modifiers = data?.modifiers,
         resourceDice = data?.resourceDice,
+        requirements = data?.requirements,
         settlementMagicItemLevelIncrease = data?.settlementMagicItemLevelIncrease,
         trainSkill = data?.trainSkill,
         assuranceForSkill = data?.assuranceForSkill,
@@ -99,6 +97,7 @@ class ModifyFeat(
         increaseAnarchyLimit = data?.increaseAnarchyLimit,
         ruinThresholdIncreases = data?.ruinThresholdIncreases,
         increaseGainedLuxuriesOncePerTurnBy = data?.increaseGainedLuxuriesOncePerTurnBy,
+        increaseActivityUnrestReductionBy = data?.increaseActivityUnrestReductionBy,
     )
 
     init {
@@ -148,13 +147,6 @@ class ModifyFeat(
                     value = current.level,
                     label = "Level",
                     stacked = false
-                ),
-                TextInput(
-                    name = "prerequisites",
-                    value = current.prerequisites ?: "",
-                    label = "Prerequisites",
-                    stacked = false,
-                    required = false,
                 ),
                 NumberInput(
                     name = "resourceDice",
@@ -215,7 +207,6 @@ class ModifyFeat(
             id = value.id.slugify(),
             text = value.text,
             level = value.level,
-            prerequisites = value.prerequisites,
             automationNotes = current.automationNotes,
             modifiers = current.modifiers,
             resourceDice = value.resourceDice,
@@ -224,6 +215,7 @@ class ModifyFeat(
             assuranceForSkill = current.assuranceForSkill,
             increaseUsableSkills = current.increaseUsableSkills,
             increaseGainedLuxuriesOncePerTurnBy = current.increaseGainedLuxuriesOncePerTurnBy,
+            increaseActivityUnrestReductionBy = current.increaseActivityUnrestReductionBy,
             flags = value.flag?.takeIf { it.isNotEmpty() }?.let { arrayOf(it) } ?: emptyArray(),
             increaseAnarchyLimit = value.increaseAnarchyLimit,
             ruinThresholdIncreases = if (value.ruinThresholdIncreasesAmount > 0 || value.ruinThresholdIncreasesValue > 0) {

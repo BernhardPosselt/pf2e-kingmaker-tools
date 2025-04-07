@@ -208,6 +208,7 @@ class AddEvent(
                                 actor = kingdomActor,
                                 kingdom = kingdom,
                                 elem = elem,
+                                activityId = null,
                             )
                         }
                     }

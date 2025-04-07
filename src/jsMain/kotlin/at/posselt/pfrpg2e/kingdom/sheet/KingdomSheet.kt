@@ -106,6 +106,7 @@ import at.posselt.pfrpg2e.kingdom.structures.importStructures
 import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
+import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.TableAndDraw
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -339,6 +340,7 @@ class KingdomSheet(
                         id = featId,
                         ruinThresholdIncreases = emptyArray(),
                     )
+                    bonusFeat = null
                     actor.setKingdom(kingdom)
                 }
             }
@@ -1178,7 +1180,7 @@ class KingdomSheet(
             .filter { it.id !in kingdom.featBlacklist }
             .toTypedArray()
         val increaseScorePicksBy = kingdom.settings.increaseScorePicksBy
-        val kingdomSectionNav = createKingdomSectionNav(kingdom)
+        val kingdomSectionNav = createKingdomSectionNav()
         val heartlandBlacklist = kingdom.heartlandBlacklist.toSet()
         val charterBlacklist = kingdom.charterBlacklist.toSet()
         val governmentBlacklist = kingdom.governmentBlacklist.toSet()
@@ -1296,6 +1298,9 @@ class KingdomSheet(
                 navigationEntry = currentCharacterSheetNavEntry,
                 bonusFeats = kingdom.bonusFeats,
                 trainedSkills = trainedSkills,
+                chosenFeats = chosenFeats,
+                abilityScores = abilityScores,
+                skillRanks = kingdomSkillRanks,
             )
                 .sortedBy { it.level }
                 .toTypedArray(),
@@ -1306,9 +1311,15 @@ class KingdomSheet(
                 bonusFeats = kingdom.bonusFeats,
                 value = bonusFeat,
                 trainedSkills = trainedSkills,
+                chosenFeats = chosenFeats,
+                abilityScores = abilityScores,
+                skillRanks = kingdomSkillRanks,
             ),
             bonusFeats = kingdom.bonusFeats.toContext(
                 kingdom.getFeats(),
+                chosenFeats = chosenFeats,
+                abilityScores = abilityScores,
+                skillRanks = kingdomSkillRanks,
             ),
             groups = kingdom.groups.toContext(),
             abilityScores = kingdom.abilityScores.toContext(abilityScores, automateStats),
@@ -1382,15 +1393,12 @@ class KingdomSheet(
             .toTypedArray()
     }
 
-    private fun createKingdomSectionNav(kingdom: KingdomData): Array<NavEntryContext> {
-        val selectLv1 = currentCharacterSheetNavEntry != "Creation"
-                && currentCharacterSheetNavEntry != "Bonus"
-                && currentCharacterSheetNavEntry.toInt() > kingdom.level
+    private fun createKingdomSectionNav(): Array<NavEntryContext> {
         return (1..20).map { it.toString() }
             .map {
                 NavEntryContext(
                     label = it,
-                    active = (selectLv1 && it == "1") || currentCharacterSheetNavEntry == it,
+                    active = currentCharacterSheetNavEntry == it,
                     link = it,
                     title = "Level: $it",
                     action = "change-kingdom-section-nav",
@@ -1407,11 +1415,15 @@ class KingdomSheet(
                 elem.addEventListener("click", {
                     actor.getKingdom()?.let { kingdom ->
                         buildPromise {
+                            val activityId = elem.closest(".km-kingdom-activity")
+                                ?.takeIfInstance<HTMLElement>()
+                                ?.dataset["activityId"]
                             executeResourceButton(
                                 game = game,
                                 actor = actor,
                                 kingdom = kingdom,
                                 elem = elem,
+                                activityId = activityId,
                             )
                         }
                     }

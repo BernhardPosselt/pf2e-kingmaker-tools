@@ -3,8 +3,8 @@ package at.posselt.pfrpg2e.kingdom
 import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.kingdom.dialogs.pickEventSettlement
 import at.posselt.pfrpg2e.kingdom.dialogs.pickLeader
-import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
-import at.posselt.pfrpg2e.kingdom.sheet.ResourceButton
+import at.posselt.pfrpg2e.kingdom.sheet.executeResourceButton
+import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.postChatMessage
@@ -18,6 +18,7 @@ import js.objects.JsPlainObject
 import kotlinx.browser.document
 import kotlinx.html.org.w3c.dom.events.Event
 import org.w3c.dom.HTMLButtonElement
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.collections.plus
 
@@ -63,19 +64,18 @@ private val buttons = listOf(
         }
     },
     ChatButton("km-gain-lose") { game, actor, event, button ->
-        val resourceButton = ResourceButton.fromHtml(button)
+        val activityId = button.closest(".chat-message")
+            ?.querySelector(".km-upgrade-result")
+            ?.takeIfInstance<HTMLElement>()
+            ?.dataset["activityId"]
         actor.getKingdom()?.let { kingdom ->
-            val realm = game.getRealmData(actor, kingdom)
-            val settlements = kingdom.getAllSettlements(game)
-            val storage = calculateStorage(realm = realm, settlements = settlements.allSettlements)
-            resourceButton.evaluate(
+            executeResourceButton(
+                game = game,
+                actor = actor,
                 kingdom = kingdom,
-                dice = realm.sizeInfo.resourceDieSize,
-                maximumFame = kingdom.settings.maximumFamePoints,
-                storage = storage,
-                resourceDieSize = realm.sizeInfo.resourceDieSize,
+                elem = button,
+                activityId = activityId,
             )
-            actor.setKingdom(kingdom)
         }
 
     },

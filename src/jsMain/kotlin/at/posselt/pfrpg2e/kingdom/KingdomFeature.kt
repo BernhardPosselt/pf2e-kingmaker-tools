@@ -55,6 +55,7 @@ fun KingdomFeature.explodeLevels(): List<RawExplodedKingdomFeature> =
             skillIncrease = skillIncrease,
             kingdomFeat = kingdomFeat,
             claimHexAttempts = claimHexAttempts,
+            automationNotes = automationNotes,
         )
     }
 

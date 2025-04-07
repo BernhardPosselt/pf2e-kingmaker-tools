@@ -7,15 +7,20 @@ import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.data.actor.highestProficiencyByLevel
+import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
 import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
 import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreaseContext
 import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreasesContext
+import at.posselt.pfrpg2e.kingdom.formatRequirements
+import at.posselt.pfrpg2e.kingdom.satisfiesRequirements
 import js.objects.JsPlainObject
 
 @Suppress("unused")
@@ -49,10 +54,12 @@ external interface FeatureContext {
     val name: String
     val description: String
     val automationNotes: String?
+    val featRequirements: String?
     val abilityBoosts: AbilityBoostContext?
     val feat: FormElementContext?
     val featDescription: String?
     val featAutomationNotes: String?
+    val featSatisfiesRequirements: Boolean
     val skillProficiency: FormElementContext?
     val ruinThresholdIncreases: RuinThresholdIncreases?
     val featRuinThresholdIncreases: Array<RuinThresholdIncreases>
@@ -128,8 +135,12 @@ fun Array<RawFeatureChoices>.toContext(
     navigationEntry: String,
     bonusFeats: Array<RawBonusFeat>,
     trainedSkills: Set<KingdomSkill>,
+    chosenFeats: List<ChosenFeat>,
+    abilityScores: KingdomAbilityScores,
+    skillRanks: KingdomSkillRanks,
 ): Array<FeatureByLevelContext> {
     val choices = this
+    val chosenFeatIds = chosenFeats.map { it.feat.id }.toSet()
     val featsById = feats.associateBy { it.id }
     val choicesById = choices.associateBy { it.id }
     val skillIncreaseOptions = KingdomSkill.entries.map { SelectOption(it.label, it.value) }
@@ -156,6 +167,14 @@ fun Array<RawFeatureChoices>.toContext(
                         } else {
                             feature.description
                         },
+                        automationNotes = feature.automationNotes,
+                        featSatisfiesRequirements = feat?.satisfiesRequirements(
+                            chosenFeatIds = chosenFeatIds,
+                            skillRanks = skillRanks,
+                            abilityScores = abilityScores,
+                        ) == true,
+                        featAutomationNotes = feat?.automationNotes,
+                        featRequirements = feat?.requirements?.formatRequirements(feats),
                         abilityBoosts = if (abilityBoosts != null) {
                             val free = abilityBoosts + increaseBoostsBy
                             val boosts = choice?.abilityBoosts ?: RawAbilityBoostChoices(

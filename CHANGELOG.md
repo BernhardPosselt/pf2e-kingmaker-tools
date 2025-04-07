@@ -9,15 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.5.0] - 2025-04-xx
 
+### Added
+
+* Automate additional unrest reduction of Endure Anarchy
+* Mark feat prerequisites as red if they are not satisfied
+
 ### Changed
 
 * Migrate structure name lookups to ids. If you have custom structures, you will need to set an id field
 * Add ids to recipes and camping activities
+* Show ids in homebrew dialogs to allow you to override them easier
 
 ### Fixed
 
 * Show message when upgrading from a version with migration issues
 * Fix issue that caused wrong resting playlist sound to be set if you changed the playlist but not the track
+* Display Feat Prerequisites
+* Prevent adding the same bonus feat twice
+* Do not mark more than 1 tab as active in the Kingdom section
+* Disable dragging for sheet tabs
+* Display automation notes for features
+* Fix data migration bug back to version 2.0.0
 
 ## [4.4.1] - 2025-04-05
 

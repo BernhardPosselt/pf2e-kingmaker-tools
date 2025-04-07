@@ -1,6 +1,6 @@
 <ul class="km-kingdom-activities">
     {{#each activities}}
-        <li class="km-kingdom-activity km-kingdom-details">
+        <li class="km-kingdom-activity km-kingdom-details" data-activity-id="{{id}}">
             <details {{#if open}}open{{/if}}>
                 <summary data-id="activity-{{id}}"><span class="action-glyph">{{actions}}</span><span class="km-detail-label">{{label}}</span>{{#if fortune}}
                     <i title="Fortune" class="fa-solid fa-clover"></i>{{/if}}

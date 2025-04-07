@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.migrations
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.actor.npcs
 import at.posselt.pfrpg2e.camping.CampingActor
+import at.posselt.pfrpg2e.camping.CampingData
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCampingActors
 import at.posselt.pfrpg2e.camping.setCamping
@@ -25,7 +26,6 @@ import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.isFirstGM
 import at.posselt.pfrpg2e.utils.openJournal
-import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.Game
@@ -164,30 +164,44 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     }
 }
 
-private suspend fun showUpgradeWarning() {
-    postChatMessage("Kingdom Building, Camping & Weather: You are upgrading from a version prior to 4.0.0 and are affected by a data migration bug. Consult the upgrading notices for version 4.0.0 to find out how to fix it. If in doubt, join the Discord server at https://discord.gg/dRu96mef and channel https://discord.com/channels/880968862240239708/1079113556823396352 or file an issue on the issue tracker for assistance https://github.com/BernhardPosselt/pf2e-kingmaker-tools/issues/new")
-    openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.wz1mIWMxDJVsMIUd")
-}
+private fun PF2ENpc.getOldKingdom(): KingdomData? =
+    getAppFlag<PF2ENpc, KingdomData>("kingdom-sheet")
+
+private fun PF2ENpc.getOldCamping(): CampingData? =
+    getAppFlag<PF2ENpc, CampingData>("camping-sheet")
 
 private suspend fun Game.determineVersion(): Int {
     val existingVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
     return if (existingVersion == 0) {
-        val hasOldActors = actors.contents
+        // TODO: this code exists to migrate versions without a persisted schema version by guessing
+        // once we drop compatibility, always use the latest migration version if the existing version is 0
+        val hasNewActors = getCampingActors().isNotEmpty() || getKingdomActors().isNotEmpty()
+        val oldKingdomActor = actors.contents
             .filterIsInstance<PF2ENpc>()
-            .any { it.name == "Kingdom Sheet" || it.name == "Camping Sheet" }
-        val isAtLeastVersion4 = getCampingActors().isNotEmpty() || getKingdomActors().isNotEmpty()
-        if (hasOldActors && !isAtLeastVersion4) {
-            showUpgradeWarning()
-        }
-        // fix version for versions higher than 4
-        val version = if (isAtLeastVersion4) {
-            if (getKingdomActors().any { it.getKingdom()?.homebrewKingdomEvents == null }) {
-                13
-            } else if ((getCampingActors().any { it.getCamping()?.alwaysPerformActivityIds == null } || hasUnmigratedHouses())) {
-                14
-            } else {
-                latestMigrationVersion
-            }
+            .find { it.name == "Kingdom Sheet" && it.getOldKingdom() != null }
+        val oldCampingActor = actors.contents
+            .filterIsInstance<PF2ENpc>()
+            .find { it.name == "Camping Sheet" && it.getOldCamping() != null }
+        val hasOnlyOldActors = (oldCampingActor != null || oldKingdomActor != null) && !hasNewActors
+
+        val isVersion14 = hasNewActors &&
+                (getCampingActors().any { it.getCamping()?.alwaysPerformActivityIds == null } || hasUnmigratedHouses())
+        val isVersion13 = hasNewActors &&
+                getKingdomActors().any { it.getKingdom()?.homebrewKingdomEvents == null }
+        val isVersion12 = hasOnlyOldActors &&
+                oldKingdomActor != null &&
+                oldKingdomActor.getOldKingdom()?.settings?.leaderKingdomSkills == null
+        val isVersion10 = hasOnlyOldActors &&
+                oldCampingActor != null &&
+                oldCampingActor.getOldCamping()?.section == null
+        val version = if (isVersion10) {
+            9 // version 9 includes an optional modifier migration
+        } else if (isVersion12) {
+            11 // version 11 includes an optional modifier migration
+        } else if (isVersion13) {
+            13
+        } else if (isVersion14) {
+            14
         } else {
             latestMigrationVersion
         }

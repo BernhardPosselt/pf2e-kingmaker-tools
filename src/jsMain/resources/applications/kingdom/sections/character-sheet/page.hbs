@@ -69,10 +69,10 @@
     <nav class="km-kingdom-sheet-sub-nav">
         <ul class="km-center-middle">
             <li><a title="Creation" data-action="change-kingdom-section-nav"
-                   {{#unless hideCreation}}class="active"{{/unless}} href="#" data-link="Creation">Creation</a></li>
+                   {{#unless hideCreation}}class="active"{{/unless}} href="#" data-link="Creation" draggable="false">Creation</a></li>
             {{#each kingdomSectionNav}}
                 <li><a title="{{title}}" data-action="{{action}}"
-                       {{#if active}}class="active"{{/if}} href="#" data-link="{{link}}">{{label}}</a></li>
+                       {{#if active}}class="active"{{/if}} href="#" data-link="{{link}}" draggable="false">{{label}}</a></li>
             {{/each}}
             <li><a title="Bonus" data-action="change-kingdom-section-nav"
                    {{#unless hideBonus}}class="active"{{/unless}} href="#" data-link="Bonus">Bonus</a></li>
