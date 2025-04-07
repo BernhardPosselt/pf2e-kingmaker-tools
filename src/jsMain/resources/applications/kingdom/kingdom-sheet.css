@@ -426,11 +426,11 @@
             line-height: 1.5;
         }
 
-        .km-kingdom-activity {
-            .km-detail-description {
-                padding-top: 1em;
-            }
+
+        .km-detail-description {
+            padding-top: 1em;
         }
+
 
         details {
             margin: 1em 0 0 0;
