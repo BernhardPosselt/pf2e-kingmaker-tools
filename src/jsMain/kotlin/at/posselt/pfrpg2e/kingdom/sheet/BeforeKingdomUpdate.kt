@@ -40,6 +40,8 @@ suspend fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
     if (previous.government.type != governmentType) {
         val government = previous.getGovernments().find { it.id == governmentType }
         resetAbilityBoosts(current.government.abilityBoosts)
+        current.government.featSupportedLeader = null
+        current.government.featRuinThresholdIncreases = null
         if (government != null) {
             val governmentFeats = government.skillProficiencies
                 .map { "skill-training-$it" }

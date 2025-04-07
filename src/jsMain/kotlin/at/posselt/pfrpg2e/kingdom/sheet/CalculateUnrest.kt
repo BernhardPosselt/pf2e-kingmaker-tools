@@ -36,6 +36,7 @@ suspend fun adjustUnrest(
     val unrest = calculateUnrest(kingdom.atWar, settlements, kingdom.vacancies(
         choices = chosenFeatures,
         bonusFeats = kingdom.bonusFeats,
+        government = kingdom.government,
     ))
     val ruler = if (unrest.rulerVacant) roll(formula = "1d4", flavor = "Ruler is vacant, gaining Unrest") else 0
     val newUnrest = unrest.war + unrest.secondaryTerritory + unrest.overcrowded + ruler

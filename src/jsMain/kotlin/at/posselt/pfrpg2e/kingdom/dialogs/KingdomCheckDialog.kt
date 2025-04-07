@@ -726,6 +726,7 @@ suspend fun kingdomCheckDialog(
     val vacancies = kingdom.vacancies(
         choices = chosenFeatures,
         bonusFeats = kingdom.bonusFeats,
+        government = kingdom.government,
     )
     val params = when (check) {
         is CheckType.PerformActivity -> {

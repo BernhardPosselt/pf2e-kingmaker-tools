@@ -141,7 +141,7 @@ class ModifyGovernment(
                     name = "bonusFeat",
                     value = current.bonusFeat,
                     label = "Bonus Feat",
-                    options = feats.map { SelectOption(it.name, it.id) }
+                    options = feats.map { SelectOption(it.name, it.id) },
                 ),
             ) + KingdomAbility.entries.mapIndexed { index, it ->
                 CheckboxInput(

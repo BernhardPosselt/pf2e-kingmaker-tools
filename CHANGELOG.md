@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Disable dragging for sheet tabs
 * Display automation notes for features
 * Fix data migration bug back to version 2.0.0
+* Show ruin threshold increase checkboxes for government feats
 
 ## [4.4.1] - 2025-04-05
 

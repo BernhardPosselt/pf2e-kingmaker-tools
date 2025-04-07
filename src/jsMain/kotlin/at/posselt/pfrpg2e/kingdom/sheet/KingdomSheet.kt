@@ -1063,6 +1063,7 @@ class KingdomSheet(
         val vacancies = kingdom.vacancies(
             choices = chosenFeatures,
             bonusFeats = kingdom.bonusFeats,
+            government = kingdom.government,
         )
         val realm = game.getRealmData(actor, kingdom)
         val settlements = kingdom.getAllSettlements(game)
@@ -1275,7 +1276,11 @@ class KingdomSheet(
             anarchyAt = anarchyAt,
             ruinContext = kingdom.ruin.toContext(
                 automateStats,
-                kingdom.parseRuins(chosenFeatures, kingdom.settings.ruinThreshold)
+                kingdom.parseRuins(
+                    choices = chosenFeatures,
+                    baseThreshold = kingdom.settings.ruinThreshold,
+                    government = kingdom.government,
+                )
             ),
             commoditiesContext = kingdom.commodities.toContext(storage),
             worksitesContext = kingdom.workSites.toContext(realm.worksites, automateResources),

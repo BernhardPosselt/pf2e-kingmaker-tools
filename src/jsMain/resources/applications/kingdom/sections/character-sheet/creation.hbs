@@ -49,6 +49,30 @@
                 <p class="km-detail-description">{{government.featDescription}}</p>
                 {{#if government.featRequirements}}<p><b>Prerequisites:</b> {{government.featRequirements}}</p>{{/if}}
                 {{#if government.featAutomationNotes}}<p><b>Automation Notes:</b> {{government.featAutomationNotes}}</p>{{/if}}
+                {{#each government.featRuinThresholdIncreases}}
+                    <div class="km-choose-boosts">
+                        <p>Choose {{amount}} Ruins to increase by {{value}}</p>
+                        <ul class="km-choose-ruins">
+                            <li>
+                                {{> formElement crime.input}}
+                                {{> formElement crime.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement corruption.input}}
+                                {{> formElement corruption.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement strife.input}}
+                                {{> formElement strife.valueInput}}
+                            </li>
+                            <li>
+                                {{> formElement stability.input}}
+                                {{> formElement stability.valueInput}}
+                            </li>
+                        </ul>
+                    </div>
+                {{/each}}
+                {{#if government.removeLeaderVacancyPenalty}}{{> formElement government.removeLeaderVacancyPenalty}}{{/if}}
             </details>
         {{/if}}
     </section>

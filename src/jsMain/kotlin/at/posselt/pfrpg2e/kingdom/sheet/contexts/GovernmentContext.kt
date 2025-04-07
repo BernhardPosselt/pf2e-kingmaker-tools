@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
@@ -22,6 +23,8 @@ external interface GovernmentContext {
     val featDescription: String
     val featAutomationNotes: String?
     val featRequirements: String?
+    val removeLeaderVacancyPenalty: FormElementContext?
+    val featRuinThresholdIncreases: Array<RuinThresholdIncreases>
 }
 
 fun RawGovernmentChoices.toContext(
@@ -42,6 +45,25 @@ fun RawGovernmentChoices.toContext(
             stacked = false,
             hideLabel = true,
         ).toContext(),
+        featRuinThresholdIncreases = feat?.ruinThresholdIncreases?.mapIndexed { ruinIndex, value ->
+            val choice: RuinThresholdIncreases? =
+                featRuinThresholdIncreases?.getOrNull(ruinIndex)
+                    ?.toContext("government.featRuinThresholdIncreases.$ruinIndex", value.amount)
+            val increase: RuinThresholdIncreases = defaultRuinThresholdIncrease(value.increase)
+                .toContext("government.featRuinThresholdIncreases.$ruinIndex", value.amount)
+            choice ?: increase
+        }?.toTypedArray() ?: emptyArray(),
+        removeLeaderVacancyPenalty = if (feat?.removeLeaderVacancyPenalty == true) {
+            Select.fromEnum<Leader>(
+                label = "Supported Leader",
+                name = "government.featSupportedLeader",
+                required = false,
+                stacked = false,
+                value = featSupportedLeader?.let { Leader.fromString(it) }
+            ).toContext()
+        } else {
+            null
+        },
         boosts = governmentBoosts?.joinToString(", ") { it.toLabel() } ?: "",
         description = government?.description,
         skills = government?.skillProficiencies?.joinToString(", ") { it.toLabel() } ?: "",

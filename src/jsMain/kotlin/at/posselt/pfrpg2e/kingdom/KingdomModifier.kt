@@ -241,7 +241,7 @@ suspend fun KingdomData.checkModifiers(
 ): List<Modifier> {
     val chosenFeatures = getChosenFeatures(getExplodedFeatures())
     val chosenFeats = getChosenFeats(chosenFeatures)
-    val government = getChosenGovernment()
+    val chosenGovernment = getChosenGovernment()
     return createAllModifiers(
         kingdomLevel = level,
         globalBonuses = globalBonuses,
@@ -249,7 +249,7 @@ suspend fun KingdomData.checkModifiers(
         abilityScores = parseAbilityScores(
             getChosenCharter(),
             getChosenHeartland(),
-            government,
+            chosenGovernment,
             chosenFeatures,
         ),
         leaderActors = parseLeaderActors(),
@@ -257,15 +257,16 @@ suspend fun KingdomData.checkModifiers(
         leaderKingdomSkills = settings.leaderKingdomSkills.parse(),
         kingdomSkillRanks = parseSkillRanks(
             chosenFeats = chosenFeats,
-            government = government,
+            government = chosenGovernment,
             chosenFeatures = chosenFeatures,
         ),
         allSettlements = allSettlements,
-        ruins = parseRuins(chosenFeatures, settings.ruinThreshold),
+        ruins = parseRuins(chosenFeatures, settings.ruinThreshold, government),
         unrest = unrest,
         vacancies = vacancies(
             choices = chosenFeatures,
             bonusFeats = bonusFeats,
+            government = government,
         ),
         targetedArmy = armyConditions,
         untrainedProficiencyMode = UntrainedProficiencyMode
@@ -313,6 +314,7 @@ fun KingdomData.createExpressionContext(
         vacancies = vacancies(
             choices = chosenFeatures,
             bonusFeats = bonusFeats,
+            government = government,
         ),
         structure = structure,
         anarchyAt = calculateAnarchy(chosenFeats),

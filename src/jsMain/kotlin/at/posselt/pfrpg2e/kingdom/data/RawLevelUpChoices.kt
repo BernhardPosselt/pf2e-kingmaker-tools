@@ -22,6 +22,8 @@ external interface RawHeartlandChoices {
 external interface RawGovernmentChoices {
     var type: String?
     var abilityBoosts: RawAbilityBoostChoices
+    var featRuinThresholdIncreases: Array<RawRuinThresholdIncreasesContext>?
+    var featSupportedLeader: String?
 }
 
 @JsPlainObject

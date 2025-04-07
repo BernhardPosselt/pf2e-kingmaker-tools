@@ -136,6 +136,27 @@ class KingdomSheetDataModel(
             }
             schema("government") {
                 string("type", nullable = true)
+                enum<Leader>("featSupportedLeader", nullable = true)
+                array("featRuinThresholdIncreases") {
+                    schema {
+                        schema("crime") {
+                            int("value")
+                            boolean("increase")
+                        }
+                        schema("corruption") {
+                            int("value")
+                            boolean("increase")
+                        }
+                        schema("strife") {
+                            int("value")
+                            boolean("increase")
+                        }
+                        schema("decay") {
+                            int("value")
+                            boolean("increase")
+                        }
+                    }
+                }
                 schema("abilityBoosts") {
                     boolean("culture")
                     boolean("economy")

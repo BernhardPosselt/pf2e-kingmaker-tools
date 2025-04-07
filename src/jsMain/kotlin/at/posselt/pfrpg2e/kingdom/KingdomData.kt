@@ -205,9 +205,11 @@ fun RawLeaderSkills.deleteLore(attribute: Attribute) = RawLeaderSkills(
 fun KingdomData.vacancies(
     choices: List<ChosenFeature>,
     bonusFeats: Array<RawBonusFeat>,
+    government: RawGovernmentChoices?,
 ): Vacancies {
     val supportedLeaders = (choices.mapNotNull { it.choice.supportedLeader } +
-            bonusFeats.mapNotNull { it.supportedLeader })
+            bonusFeats.mapNotNull { it.supportedLeader } +
+            listOfNotNull(government?.featSupportedLeader))
         .mapNotNull { Leader.fromString(it) }
         .toSet()
     return Vacancies(
@@ -313,13 +315,15 @@ fun KingdomData.hasAssurance(
 fun KingdomData.parseRuins(
     choices: List<ChosenFeature>,
     baseThreshold: Int,
+    government: RawGovernmentChoices?,
 ): RuinValues {
     val defaults = ruin.parse()
     return if (settings.automateStats) {
         val choiceIncreases = choices.map { it.choice }
             .flatMap { listOfNotNull(it.ruinThresholdIncreases) + it.featRuinThresholdIncreases }
         val bonusFeatIncreases = bonusFeats.flatMap { it.ruinThresholdIncreases.toList() }
-        val increases = (choiceIncreases + bonusFeatIncreases)
+        val governmentIncreases = government?.featRuinThresholdIncreases.orEmpty()
+        val increases = (choiceIncreases + bonusFeatIncreases + governmentIncreases)
             .map { it.parse() }
             .fold(RuinThresholdIncreases()) { prev, curr -> prev + curr }
         defaults.copy(
