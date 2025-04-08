@@ -104,17 +104,19 @@ fun main() {
                     val id = it.dataset["documentId"]
                     if (id != null) {
                         val insertAfter = it.querySelector("h3")
-                        insertAfter?.insertAdjacentElement("afterend", createPartyActorIcon(
-                            id = id,
-                            icon = setOf("fa-solid", "fa-ellipsis-vertical"),
-                            toolTip = "PFRPG2E Actor Settings",
-                            sheetType = SheetType.KINGDOM,
-                            onClick = {
-                                game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
-                                    ActorActions(actor=actor).launch()
-                                }
-                            },
-                        ))
+                        if (game.user.isGM) {
+                            insertAfter?.insertAdjacentElement("afterend", createPartyActorIcon(
+                                id = id,
+                                icon = setOf("fa-solid", "fa-ellipsis-vertical"),
+                                toolTip = "PFRPG2E Actor Settings",
+                                sheetType = SheetType.KINGDOM,
+                                onClick = {
+                                    game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
+                                        ActorActions(actor=actor).launch()
+                                    }
+                                },
+                            ))
+                        }
                         insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
                         insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))
                         if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {

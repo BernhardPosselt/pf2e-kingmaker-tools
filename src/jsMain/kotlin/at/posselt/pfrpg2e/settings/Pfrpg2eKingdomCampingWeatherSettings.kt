@@ -2,9 +2,11 @@ package at.posselt.pfrpg2e.settings
 
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.data.checks.RollMode
+import at.posselt.pfrpg2e.data.kingdom.KingdomSizeType
 import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.newInstance
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.*
@@ -13,6 +15,21 @@ import com.foundryvtt.core.applications.api.ApplicationV2
 import js.core.JsNumber
 import js.objects.ReadonlyRecord
 import kotlinx.coroutines.await
+
+enum class SettingsScope {
+    CLIENT,
+    WORLD;
+
+    companion object {
+        fun fromString(value: String) = fromCamelCase<KingdomSizeType>(value)
+    }
+
+    val value: String
+        get() = toCamelCase()
+
+    val label: String
+        get() = toLabel()
+}
 
 inline fun <reified T : DataModel> Settings.registerDataModel(
     key: String,
@@ -68,6 +85,7 @@ inline fun <reified T : Any> Settings.registerScalar(
     hidden: Boolean = false,
     requiresReload: Boolean = false,
     choices: ReadonlyRecord<String, T>? = undefined,
+    scope: SettingsScope = SettingsScope.WORLD,
 ) {
     register<T>(
         Config.moduleId,
@@ -79,7 +97,7 @@ inline fun <reified T : Any> Settings.registerScalar(
             default = default,
             requiresReload = requiresReload,
             type = T::class.js,
-            scope = "world",
+            scope = scope.value,
             choices = choices,
         )
     )
@@ -122,6 +140,14 @@ suspend fun Settings.setString(key: String, value: String) {
     set(Config.moduleId, key, value).await()
 }
 
+fun Settings.getNullableString(key: String): String? =
+    get(Config.moduleId, key)
+
+suspend fun Settings.setNullableString(key: String, value: String?) {
+    set(Config.moduleId, key, value).await()
+}
+
+
 fun Settings.getBoolean(key: String): Boolean =
     get(Config.moduleId, key)
 
@@ -141,6 +167,12 @@ val Settings.pfrpg2eKingdomCampingWeather: Pfrpg2eKingdomCampingWeatherSettings
 
 @Suppress("unused", "ClassName")
 object Pfrpg2eKingdomCampingWeatherSettings {
+    suspend fun setKingdomActiveLeader(value: String?) =
+        game.settings.setNullableString("kingdomActiveLeader", value)
+
+    fun getKingdomActiveLeader(): String? =
+        game.settings.getNullableString("kingdomActiveLeader")
+
     suspend fun setEnableTokenMapping(value: Boolean) =
         game.settings.setBoolean("enableTokenMapping", value)
 
@@ -254,6 +286,13 @@ object Pfrpg2eKingdomCampingWeatherSettings {
             hint = "If enabled, hides the built in kingdom sheet icon on the party actor",
             default = false,
             requiresReload = true,
+        )
+        game.settings.registerScalar<String>(
+            key = "kingdomActiveLeader",
+            name = "Actively Filtered Kingdom Leader",
+            default = null,
+            hidden = true,
+            scope = SettingsScope.CLIENT,
         )
         game.settings.registerInt(
             key = "schemaVersion",

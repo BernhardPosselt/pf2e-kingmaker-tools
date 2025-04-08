@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.6.0] - 2025-04-08
+
+### Added
+
+* Each logged-in user can now select an active leader. Doing so will update the action cost in the turn tab when using V&K Leadership Modifiers and preselect the leader in all check popups 
+* When using V&K Leadership Modifiers, the check popup now includes action cost based on the selected leader
+
+### Fixed
+
+* Fix issue that prevented you from building structures
+* Hide Kingdom/Camping export buttons for non GM users
+
 ## [4.5.0] - 2025-04-07
 
 ### Added

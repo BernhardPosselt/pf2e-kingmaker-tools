@@ -31,6 +31,7 @@ class KingdomSheetDataModel(
             int("xp")
             int("size")
             int("unrest")
+            enum<Leader>("activeLeader", nullable = true)
             schema("resourcePoints") {
                 int("now")
                 int("next")

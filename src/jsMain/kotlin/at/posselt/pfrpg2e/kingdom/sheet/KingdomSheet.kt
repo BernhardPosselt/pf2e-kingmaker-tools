@@ -62,6 +62,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.newSettlementChoices
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
+import at.posselt.pfrpg2e.kingdom.getActiveLeader
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
@@ -701,6 +702,7 @@ class KingdomSheet(
                         kingdom = kingdom,
                         kingdomActor = actor,
                         check = CheckType.HandleEvent(event),
+                        selectedLeader = game.getActiveLeader(),
                     )
                 }
             }
@@ -904,6 +906,7 @@ class KingdomSheet(
                     kingdom = kingdom,
                     kingdomActor = actor,
                     check = CheckType.RollSkill(skill),
+                    selectedLeader = game.getActiveLeader(),
                 )
             }
 
@@ -963,6 +966,7 @@ class KingdomSheet(
                             kingdom = kingdom,
                             kingdomActor = actor,
                             check = CheckType.PerformActivity(activity),
+                            selectedLeader = game.getActiveLeader(),
                         )
                     }
                 }
@@ -1233,6 +1237,7 @@ class KingdomSheet(
             openedDetails = openedDetails,
             kingdom = kingdom,
             chosenFeats = chosenFeats,
+            activeLeader = game.getActiveLeader(),
         )
         val leadersContext = kingdom.leaders.toContext(
             leaderActors = leaderActors,
@@ -1259,6 +1264,13 @@ class KingdomSheet(
             isGM = isGM,
             settlements = settlements
         )
+        val activeLeaderContext = Select.fromEnum<Leader>(
+            name = "activeLeader",
+            label = "Active Leader",
+            required = false,
+            value = game.getActiveLeader(),
+            labelClasses = listOf("km-slim-inputs"),
+        ).toContext()
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -1374,6 +1386,7 @@ class KingdomSheet(
             useLeadershipModifiers = kingdom.settings.enableLeadershipModifiers,
             activeSettlementType = settlements.current?.size?.type?.value ?: "none",
             actorUuid = actor.uuid,
+            activeLeader = activeLeaderContext,
         )
     }
 
@@ -1503,6 +1516,7 @@ class KingdomSheet(
             beforeKingdomUpdate(previousKingdom, kingdom)
             actor.setKingdom(kingdom)
             bonusFeat = value.bonusFeat
+            game.settings.pfrpg2eKingdomCampingWeather.setKingdomActiveLeader(value.activeLeader)
         }
         null
     }

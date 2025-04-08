@@ -77,4 +77,5 @@ external interface KingdomSheetContext : ValidatedHandlebarsContext {
     val useLeadershipModifiers: Boolean
     val activeSettlementType: String
     val actorUuid: String
+    val activeLeader: FormElementContext
 }

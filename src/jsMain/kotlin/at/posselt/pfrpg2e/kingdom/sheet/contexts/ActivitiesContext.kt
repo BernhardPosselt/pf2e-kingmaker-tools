@@ -2,12 +2,17 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.canBePerformed
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
+import at.posselt.pfrpg2e.kingdom.dialogs.getValidActivitySkills
+import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.label
+import at.posselt.pfrpg2e.kingdom.parse
+import at.posselt.pfrpg2e.kingdom.skillRanks
 import com.foundryvtt.core.ui.enrichHtml
 import js.objects.JsPlainObject
 import js.objects.Object
@@ -21,7 +26,7 @@ external interface ActivityContext {
     val label: String
     val disabled: Boolean
     val description: String
-    val actions: Int
+    val actions: Array<Int>
     val id: String
     val special: String?
     val automationNotes: String?
@@ -57,6 +62,7 @@ private suspend fun toActivityContext(
     chosenFeats: List<ChosenFeat>,
     chosenFeatures: List<ChosenFeature>,
     openedDetails: Set<String>,
+    activeLeader: Leader?,
 ): ActivityContext = coroutineScope {
     val descriptionP = async { enrichHtml(activity.description) }
     val criticalSuccessP = async { activity.criticalSuccess?.msg?.let { enrichHtml(it) } }
@@ -68,6 +74,29 @@ private suspend fun toActivityContext(
     val success = successP.await()
     val failure = failureP.await()
     val criticalFailure = criticalFailureP.await()
+    val actions = if (kingdom.settings.enableLeadershipModifiers &&
+        (activity.actions == 1 || activity.actions == null) &&
+        activeLeader != null
+    ) {
+        val validSkills = getValidActivitySkills(
+            ranks = kingdomSkillRanks,
+            activityRanks = activity.skillRanks(),
+            ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
+            expandMagicUse = kingdom.settings.expandMagicUse,
+            activityId = activity.id,
+            increaseSkills = chosenFeats.map { it.feat.increasedSkills() }
+        )
+        val activeLeaderSkills = kingdom.settings.leaderKingdomSkills.parse().resolveAttributes(activeLeader)
+        if (validSkills.isEmpty() || validSkills.all { it in activeLeaderSkills }) {
+            arrayOf(1)
+        } else if (validSkills.any { it in activeLeaderSkills }) {
+            arrayOf(1, 2)
+        } else {
+            arrayOf(2)
+        }
+    } else {
+        arrayOf(activity.actions ?: 1)
+    }
     ActivityContext(
         id = activity.id,
         label = activity.label(
@@ -75,7 +104,7 @@ private suspend fun toActivityContext(
             activity = activity,
             chosenFeatures = chosenFeatures,
         ),
-        actions = activity.actions ?: 1,
+        actions = actions,
         description = description,
         special = activity.special,
         automationNotes = activity.automationNotes,
@@ -106,6 +135,7 @@ suspend fun activitiesToActivityContext(
     openedDetails: Set<String>,
     kingdom: KingdomData,
     chosenFeats: List<ChosenFeat>,
+    activeLeader: Leader?,
 ) = coroutineScope {
     activities
         .map {
@@ -119,6 +149,7 @@ suspend fun activitiesToActivityContext(
                     openedDetails = openedDetails,
                     kingdom = kingdom,
                     chosenFeats = chosenFeats,
+                    activeLeader = activeLeader,
                 )
             }
         }
@@ -137,6 +168,7 @@ suspend fun toActivitiesContext(
     kingdomSkillRanks: KingdomSkillRanks,
     chosenFeatures: List<ChosenFeature>,
     openedDetails: Set<String>,
+    activeLeader: Leader?,
 ): ActivitiesContext = coroutineScope {
     val activitiesByPhase = activities
         .asSequence()
@@ -150,6 +182,7 @@ suspend fun toActivitiesContext(
         openedDetails,
         kingdom,
         chosenFeats,
+        activeLeader,
     )
     val leadership = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.LEADERSHIP.value].orEmpty(),
@@ -159,6 +192,7 @@ suspend fun toActivitiesContext(
         openedDetails,
         kingdom,
         chosenFeats,
+        activeLeader,
     )
     val civic = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.CIVIC.value].orEmpty(),
@@ -168,6 +202,7 @@ suspend fun toActivitiesContext(
         openedDetails,
         kingdom,
         chosenFeats,
+        activeLeader,
     )
     val region = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.REGION.value].orEmpty(),
@@ -177,6 +212,7 @@ suspend fun toActivitiesContext(
         openedDetails,
         kingdom,
         chosenFeats,
+        activeLeader,
     )
     val army = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.ARMY.value].orEmpty(),
@@ -186,6 +222,7 @@ suspend fun toActivitiesContext(
         openedDetails,
         kingdom,
         chosenFeats,
+        activeLeader,
     )
     val upkeep = activitiesToActivityContext(
         activitiesByPhase[KingdomPhase.UPKEEP.value].orEmpty(),
@@ -195,6 +232,7 @@ suspend fun toActivitiesContext(
         openedDetails,
         kingdom,
         chosenFeats,
+        activeLeader,
     )
     ActivitiesContext(
         upkeep = upkeep,

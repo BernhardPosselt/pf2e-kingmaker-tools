@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.kingdom.armies.getAllAvailableArmyTactics
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmies
 import at.posselt.pfrpg2e.kingdom.armies.hasTactic
 import at.posselt.pfrpg2e.kingdom.armies.isArmyTactic
+import at.posselt.pfrpg2e.kingdom.getActiveLeader
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.awaitAll
@@ -123,6 +124,7 @@ private class ArmyTacticsBrowser(
                     success = degreeMessage,
                 ),
                 overrideDc = getLevelBasedDC(item.level),
+                selectedLeader = game.getActiveLeader(),
             )
         }
     }

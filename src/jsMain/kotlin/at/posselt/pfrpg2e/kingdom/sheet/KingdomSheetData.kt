@@ -54,4 +54,5 @@ external interface KingdomSheetData {
     val ongoingEvent: String?
     val bonusFeat: String?
     val initialProficiencies: Array<String?>
+    val activeLeader: String?
 }

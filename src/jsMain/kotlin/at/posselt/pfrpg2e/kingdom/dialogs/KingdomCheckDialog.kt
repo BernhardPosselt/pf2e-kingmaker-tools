@@ -255,7 +255,7 @@ private data class CheckDialogParams(
     val armyConditions: ArmyConditionInfo? = null,
     val event: KingdomEvent? = null,
     val eventStageIndex: Int = 0,
-    val eventIndex: Int= 0,
+    val eventIndex: Int = 0,
 )
 
 typealias AfterRoll = suspend (degree: DegreeOfSuccess) -> Unit
@@ -276,13 +276,14 @@ private class KingdomCheckDialog(
     private val flags: Set<String>,
     private val isSupernaturalSolution: Boolean = false,
     private val settlementResult: SettlementResult,
+    val selectedLeader: Leader?,
 ) : FormApp<CheckContext, CheckData>(
     title = params.title,
     template = "applications/kingdom/check.hbs",
     debug = true,
     dataModel = CheckModel::class.js,
     id = "kmCheck-${kingdomActor.uuid}",
-    width = 600,
+    width = 700,
 ) {
     val activity = params.activity
     val event = params.event
@@ -294,7 +295,7 @@ private class KingdomCheckDialog(
 
     var data = CheckData(
         modifiers = baseModifiers.map { ModifierIdEnabled(it.id, it.enabled) }.toTypedArray(),
-        leader = Leader.RULER.value,
+        leader = selectedLeader?.value ?: Leader.RULER.value,
         rollMode = if (event == null) RollMode.PUBLICROLL.value else kingdom.settings.kingdomEventRollMode,
         skill = params.validSkills.first().value,
         phase = params.phase?.value,
@@ -457,6 +458,7 @@ private class KingdomCheckDialog(
                 flags = flags,
                 isSupernaturalSolution = true,
                 settlementResult = settlementResult,
+                selectedLeader = Leader.fromString(data.leader),
             ).launch()
         }
 
@@ -478,10 +480,11 @@ private class KingdomCheckDialog(
         val enabledModifiers = baseModifiers.map { it.copy(enabled = it.id in currentlyEnabledModIds) }
         val phase = data.phase?.let { fromCamelCase<KingdomPhase>(it) }
         val usedSkill = KingdomSkill.fromString(data.skill)!!
+        val leader = Leader.fromString(data.leader)!!
         val context = kingdom.createExpressionContext(
             phase = phase,
             activity = activity,
-            leader = Leader.fromString(data.leader)!!,
+            leader = leader,
             usedSkill = usedSkill,
             rollOptions = emptySet(),
             structure = structure,
@@ -531,6 +534,8 @@ private class KingdomCheckDialog(
         if (evaluatedModifiers.fortune) {
             data.supernaturalSolution = false
         }
+        val leaderKingdomSkills = kingdom.settings.leaderKingdomSkills.parse()
+            .resolveAttributes(leader)
         CheckContext(
             partId = parent.partId,
             isFormValid = isFormValid,
@@ -563,7 +568,21 @@ private class KingdomCheckDialog(
                         context = skillContext
                     )
                     val mod = evaluateModifiers(skillFiltered).total
-                    val label = "${it.label} (${mod.formatAsModifier()})"
+                    val actions = if (kingdom.settings.enableLeadershipModifiers && activity != null) {
+                        val actions = activity.actions ?: 1
+                        val isLeaderSkill = it in leaderKingdomSkills
+                        val num = if (actions == 1 && isLeaderSkill) {
+                            1
+                        } else if (actions == 1 && !isLeaderSkill) {
+                            2
+                        } else {
+                            actions
+                        }
+                        ", ${if(num == 1) "1 Action" else "$num Actions"}"
+                    } else {
+                        ""
+                    }
+                    val label = "${it.label} (${mod.formatAsModifier()}$actions)"
                     SelectOption(label, it.value)
                 },
             ).toContext(),
@@ -720,6 +739,7 @@ suspend fun kingdomCheckDialog(
     overrideSkills: Set<KingdomSkillRank>? = null,
     overrideDc: Int? = null,
     flags: Set<String> = emptySet(),
+    selectedLeader: Leader?,
 ) {
     val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
     val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
@@ -853,5 +873,6 @@ suspend fun kingdomCheckDialog(
         degreeMessages = degreeMessages,
         flags = flags,
         settlementResult = settlementResult,
+        selectedLeader = selectedLeader,
     ).launch()
 }

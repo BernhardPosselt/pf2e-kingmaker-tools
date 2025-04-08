@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.armies.getRecruitableArmies
 import at.posselt.pfrpg2e.kingdom.armies.importBasicArmies
 import at.posselt.pfrpg2e.kingdom.armies.isSpecial
+import at.posselt.pfrpg2e.kingdom.getActiveLeader
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.toLabel
@@ -121,6 +122,7 @@ private class ArmyBrowser(
                     success = degreeMessage,
                 ),
                 overrideDc = army.system.recruitmentDC,
+                selectedLeader = game.getActiveLeader(),
             )
         }
     }

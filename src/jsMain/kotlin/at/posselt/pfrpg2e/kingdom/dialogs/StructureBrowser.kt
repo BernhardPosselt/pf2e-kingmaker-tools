@@ -19,6 +19,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.getActiveLeader
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.setKingdom
@@ -228,7 +229,7 @@ class StructureBrowser(
                 val structuresByUuid = worldStructures.associateBy { it.uuid }
                 val uuid = target.dataset["uuid"]
                 val structure = uuid?.let { structuresByUuid[it] }
-                val rubble = worldStructures.find { it.id == "Rubble" }
+                val rubble = worldStructures.find { it.id == "rubble" }
                 val ore = target.dataset["ore"]?.toInt() ?: 0
                 val lumber = target.dataset["lumber"]?.toInt() ?: 0
                 val stone = target.dataset["stone"]?.toInt() ?: 0
@@ -258,7 +259,8 @@ class StructureBrowser(
                     check = CheckType.BuildStructure(structure),
                     afterRoll = { close() },
                     degreeMessages = degreeMessages,
-                    flags = if (repair) setOf("repair-structure") else emptySet()
+                    flags = if (repair) setOf("repair-structure") else emptySet(),
+                    selectedLeader = game.getActiveLeader(),
                 )
             }
 
