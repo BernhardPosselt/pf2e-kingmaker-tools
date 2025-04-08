@@ -522,7 +522,6 @@ private class KingdomCheckDialog(
                 context.copy(rollOptions = context.rollOptions + setOf("free-and-fair"))
             )
         )
-        console.log(evaluatedModifiers.total, freeAndFairModifiers.total)
         val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
         val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
         val upgrades = evaluatedModifiers.upgradeResults
