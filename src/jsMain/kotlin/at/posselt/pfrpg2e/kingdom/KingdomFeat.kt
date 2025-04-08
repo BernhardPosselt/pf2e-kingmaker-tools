@@ -84,6 +84,7 @@ external interface RawFeat {
     val increaseGainedLuxuriesOncePerTurnBy: Int?
     val requirements: RawFeatRequirements?
     val removeLeaderVacancyPenalty: Boolean?
+    val isFreeAndFair: Boolean?
     val increaseActivityUnrestReductionBy: IncreaseActivityUnrestReductionBy?
 }
 

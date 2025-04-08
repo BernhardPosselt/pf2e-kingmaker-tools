@@ -1,6 +1,8 @@
 package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.push
@@ -89,6 +91,28 @@ private val entries = listOf<ContextEntry>(
         name = "Re-Roll Keep Lower",
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.isKingdomRoll() },
         callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.ROLL_TWICE_KEEP_LOWEST) } }
+    ),
+    ContextEntry(
+        name = "Re-Roll using 2 RP",
+        condition = { game, elem ->
+            val rollMeta = elem.rollMeta()
+            val activity = rollMeta?.dataset["activityId"]
+            val degree = rollMeta
+                ?.dataset["degree"]
+                ?.let { DegreeOfSuccess.fromString(it) }
+            elem.findKingdomActor(game)
+                ?.getKingdom()
+                ?.let { kingdom ->
+                    val features = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+                    val hasTwoRp = kingdom.resourcePoints.now >= 2
+                    val hasFreeAndFair = kingdom.getChosenFeats(features).any { it.feat.isFreeAndFair == true }
+                    val failed = degree?.failed() == true
+                    val newLeadershipOrPledgeOfFealty =
+                        activity in setOf("new-leadership", "new-leadership-vk", "pledge-of-fealty")
+                    hasFreeAndFair && hasTwoRp && failed && newLeadershipOrPledgeOfFealty
+                } == true
+        },
+        callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.FREE_AND_FAIR) } }
     ),
     ContextEntry(
         name = "Upgrade Degree of Success",

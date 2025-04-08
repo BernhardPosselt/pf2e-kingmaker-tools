@@ -145,6 +145,8 @@ private external interface CheckContext : ValidatedHandlebarsContext {
     val assuranceDegree: String
     val creativeSolutionModifier: Int
     val creativeSolutionPills: String
+    val modifierWithoutFreeAndFair: Int
+    val freeAndFairPills: String
     val fortune: Boolean
     val downgrades: String
     val consumeModifiers: String
@@ -326,6 +328,8 @@ private class KingdomCheckDialog(
                         consumedModifiers = emptySet(),
                         assurance = true,
                         notes = emptySet(),
+                        freeAndFairPills = emptyArray(),
+                        modifierWithoutFreeAndFair = 0,
                     )
                 }
             }
@@ -337,9 +341,12 @@ private class KingdomCheckDialog(
                     val fortune = target.dataset["fortune"] == "true"
                     val modifier = target.dataset["modifier"]?.toInt() ?: 0
                     val creativeSolutionModifier = target.dataset["creativeSolutionModifier"]?.toInt() ?: 0
+                    val modifierWithoutFreeAndFair = target.dataset["modifierWithoutFreeAndFair"]?.toInt() ?: 0
                     val pills = deserializeB64Json<Array<String>>(target.dataset["pills"]!!)
                     val creativeSolutionPills =
                         deserializeB64Json<Array<String>>(target.dataset["creativeSolutionPills"]!!)
+                    val freeAndFairPills =
+                        deserializeB64Json<Array<String>>(target.dataset["freeAndFairPills"]!!)
                     val upgrades = deserializeB64Json<Array<SerializedDegree>>(target.dataset["upgrades"]!!)
                         .mapNotNull { el ->
                             DegreeOfSuccess.fromString(el.degree)
@@ -368,6 +375,8 @@ private class KingdomCheckDialog(
                         consumedModifiers = consumedModifiers,
                         assurance = false,
                         notes = notes,
+                        freeAndFairPills = freeAndFairPills,
+                        modifierWithoutFreeAndFair = modifierWithoutFreeAndFair,
                     )
                 }
             }
@@ -404,6 +413,7 @@ private class KingdomCheckDialog(
         modifier: Int,
         creativeSolutionModifier: Int,
         creativeSolutionPills: Array<String>,
+        freeAndFairPills: Array<String>,
         pills: Array<String>,
         upgrades: Set<UpgradeResult>,
         fortune: Boolean,
@@ -413,6 +423,7 @@ private class KingdomCheckDialog(
         rollTwiceKeepLowest: Boolean,
         assurance: Boolean,
         notes: Set<Note>,
+        modifierWithoutFreeAndFair: Int,
     ) {
         rollCheck(
             afterRoll = afterRoll,
@@ -437,6 +448,9 @@ private class KingdomCheckDialog(
             eventStageIndex = eventStageIndex,
             event = event,
             eventIndex = eventIndex,
+            isFreeAndFair = false,
+            modifierWithoutFreeAndFair = modifierWithoutFreeAndFair,
+            freeAndFairPills = freeAndFairPills,
         )
         if (data.supernaturalSolution && !data.assurance) {
             KingdomCheckDialog(
@@ -499,9 +513,16 @@ private class KingdomCheckDialog(
         val creativeSolutionModifiers = evaluateModifiers(
             filterModifiersAndUpdateContext(
                 enabledModifiers,
-                context.copy(rollOptions = setOf("creative-solution"))
+                context.copy(rollOptions = context.rollOptions + setOf("creative-solution"))
             )
         )
+        val freeAndFairModifiers = evaluateModifiers(
+            filterModifiersAndUpdateContext(
+                enabledModifiers,
+                context.copy(rollOptions = context.rollOptions + setOf("free-and-fair"))
+            )
+        )
+        console.log(evaluatedModifiers.total, freeAndFairModifiers.total)
         val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
         val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
         val upgrades = evaluatedModifiers.upgradeResults
@@ -523,6 +544,9 @@ private class KingdomCheckDialog(
             }.toTypedArray())
         }
         val creativeSolutionPills = serializeB64Json(creativeSolutionModifiers.modifiers.map {
+            "${it.name} ${it.value.formatAsModifier()}"
+        }.toTypedArray())
+        val freeAndFairPills = serializeB64Json(freeAndFairModifiers.modifiers.map {
             "${it.name} ${it.value.formatAsModifier()}"
         }.toTypedArray())
         val notes = serializeB64Json(enabledModifiers.flatMap { it.notes.map { it.serialize() } }.toTypedArray())
@@ -578,7 +602,7 @@ private class KingdomCheckDialog(
                         } else {
                             actions
                         }
-                        ", ${if(num == 1) "1 Action" else "$num Actions"}"
+                        ", ${if (num == 1) "1 Action" else "$num Actions"}"
                     } else {
                         ""
                     }
@@ -658,6 +682,8 @@ private class KingdomCheckDialog(
             rollTwiceKeepHighest = evaluatedModifiers.rollTwiceKeepHighest,
             rollTwiceKeepLowest = evaluatedModifiers.rollTwiceKeepLowest,
             notes = notes,
+            freeAndFairPills=freeAndFairPills,
+            modifierWithoutFreeAndFair=freeAndFairModifiers.total,
         )
     }
 

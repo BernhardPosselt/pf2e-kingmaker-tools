@@ -89,6 +89,7 @@ suspend fun rollCheck(
     rollTwiceKeepHighest: Boolean,
     rollTwiceKeepLowest: Boolean,
     creativeSolutionPills: Array<String>,
+    freeAndFairPills: Array<String>,
     isCreativeSolution: Boolean = false,
     downgrades: Set<DowngradeResult>,
     degreeMessages: DegreeMessages?,
@@ -98,10 +99,18 @@ suspend fun rollCheck(
     eventStageIndex: Int,
     event: KingdomEvent?,
     eventIndex: Int,
+    isFreeAndFair: Boolean,
+    modifierWithoutFreeAndFair: Int,
 ): DegreeOfSuccess {
     val result = d20Check(
         dc = dc,
-        modifier = if (isCreativeSolution) modifierWithCreativeSolution else modifier,
+        modifier = if (isCreativeSolution) {
+            modifierWithCreativeSolution
+        } else if (isFreeAndFair) {
+            modifierWithoutFreeAndFair
+        } else {
+            modifier
+        },
         rollMode = rollMode,
         rollTwiceKeepHighest = rollTwiceKeepHighest,
         rollTwiceKeepLowest = rollTwiceKeepLowest,
@@ -113,6 +122,14 @@ suspend fun rollCheck(
         kingdomActor.getKingdom()?.let {
             postChatMessage("Reduced Creative Solutions by 1")
             it.creativeSolutions = max(0, it.creativeSolutions - 1)
+            kingdomActor.setKingdom(it)
+        }
+    }
+
+    if(isFreeAndFair) {
+        kingdomActor.getKingdom()?.let {
+            postChatMessage("Losing 2 RP")
+            it.resourcePoints.now = max(0, it.resourcePoints.now - 2)
             kingdomActor.setKingdom(it)
         }
     }
@@ -150,6 +167,9 @@ suspend fun rollCheck(
         eventId = event?.id,
         eventIndex = eventIndex,
         eventStageIndex = eventStageIndex,
+        freeAndFairPills = freeAndFairPills,
+        modifierWithoutFreeAndFair = modifierWithoutFreeAndFair,
+        isFreeAndFair = isFreeAndFair,
     )
     result.toChat(rollMeta)
     if (activity == null && event == null) {

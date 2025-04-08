@@ -44,12 +44,14 @@ private external interface RollMetaContext {
     val creativeSolutionPills: Array<String>
     val fortune: Boolean
     val modifierWithCreativeSolution: Int
+    val modifierWithoutFreeAndFair: Int
     val upgrades: String?
     val downgrades: String?
     val additionalChatMessages: String?
-    val isCreativeSolution: Boolean
+    val pillMode: String
     val notes: String?
     val eventIndex: Int
+    val freeAndFairPills: Array<String>
 }
 
 private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
@@ -57,7 +59,10 @@ private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
     val creativePills = rollElement.querySelectorAll(".km-modifier-pill.km-creative-solution-pills").asList()
         .map { it.textContent ?: "" }
         .toTypedArray()
-    val pills = rollElement.querySelectorAll(".km-modifier-pill:not(.km-creative-solution-pills)").asList()
+    val pills = rollElement.querySelectorAll(".km-modifier-pill.km-default-pills").asList()
+        .map { it.textContent ?: "" }
+        .toTypedArray()
+    val freeAndFairPills = rollElement.querySelectorAll(".km-modifier-pill.km-free-and-fair-pills").asList()
         .map { it.textContent ?: "" }
         .toTypedArray()
     return RollMetaContext(
@@ -74,9 +79,11 @@ private fun parseRollMeta(rollElement: HTMLElement): RollMetaContext {
         upgrades = meta?.dataset["upgrades"],
         downgrades = meta?.dataset["downgrades"],
         creativeSolutionPills = creativePills,
+        freeAndFairPills = freeAndFairPills,
         fortune = meta?.dataset["fortune"] == "true",
         modifierWithCreativeSolution = meta?.dataset["modifierWithCreativeSolution"]?.toInt() ?: 0,
-        isCreativeSolution = false,
+        modifierWithoutFreeAndFair = meta?.dataset["modifierWithoutFreeAndFair"]?.toInt() ?: 0,
+        pillMode = "default",
         notes = meta?.dataset["notes"],
         eventStageIndex = meta?.dataset["eventStageIndex"]?.toInt() ?: 0,
         eventId = meta?.dataset["eventId"],
@@ -95,8 +102,11 @@ suspend fun generateRollMeta(
     dc: Int,
     fortune: Boolean,
     creativeSolutionPills: Array<String>,
+    freeAndFairPills: Array<String>,
     modifierWithCreativeSolution: Int,
+    modifierWithoutFreeAndFair: Int,
     isCreativeSolution: Boolean,
+    isFreeAndFair: Boolean,
     additionalChatMessages: DegreeMessages?,
     upgrades: Set<UpgradeResult>,
     downgrades: Set<DowngradeResult>,
@@ -130,11 +140,19 @@ suspend fun generateRollMeta(
             modifierWithCreativeSolution = modifierWithCreativeSolution,
             pills = modifierPills,
             creativeSolutionPills = creativeSolutionPills,
-            isCreativeSolution = isCreativeSolution,
+            freeAndFairPills = freeAndFairPills,
+            pillMode = if(isCreativeSolution) {
+                "creativeSolution"
+            } else if (isFreeAndFair) {
+                "freeAndFair"
+            } else {
+                "default"
+            },
             notes = serializeB64Json(notes.map { it.serialize() }.toTypedArray()),
             eventId = eventId,
             eventStageIndex = eventStageIndex,
             eventIndex = eventIndex,
+            modifierWithoutFreeAndFair = modifierWithoutFreeAndFair,
         ),
     )
 }
@@ -144,6 +162,7 @@ enum class ReRollMode {
     ROLL_TWICE_KEEP_LOWEST,
     DEFAULT,
     FAME_OR_INFAMY,
+    FREE_AND_FAIR,
     CREATIVE_SOLUTION;
 }
 
@@ -168,6 +187,7 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
         skill = skill,
         modifier = meta.modifier,
         modifierWithCreativeSolution = meta.modifierWithCreativeSolution,
+        modifierWithoutFreeAndFair = meta.modifierWithoutFreeAndFair,
         fortune = meta.fortune,
         modifierPills = meta.pills,
         dc = meta.dc,
@@ -177,6 +197,7 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
                 UpgradeResult(upgrade = degree, times = result.times)
             }
         }.toSet(),
+        isFreeAndFair = mode == ReRollMode.FREE_AND_FAIR,
         rollTwiceKeepHighest = mode == ReRollMode.ROLL_TWICE_KEEP_HIGHEST,
         rollTwiceKeepLowest = mode == ReRollMode.ROLL_TWICE_KEEP_LOWEST,
         creativeSolutionPills = meta.creativeSolutionPills,
@@ -193,5 +214,6 @@ suspend fun reRoll(chatMessage: HTMLElement, mode: ReRollMode) {
         event = event?.parse(),
         eventStageIndex = eventStageIndex,
         eventIndex = eventIndex,
+        freeAndFairPills = meta.freeAndFairPills,
     )
 }

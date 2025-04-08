@@ -7,6 +7,7 @@
      data-skill="{{skill}}"
      data-modifier="{{modifier}}"
      data-modifier-with-creative-solution="{{modifierWithCreativeSolution}}"
+     data-modifier-without-free-and-fair="{{modifierWithoutFreeAndFair}}"
      data-fortune="{{fortune}}"
      data-event-id="{{eventId}}"
      data-event-stage-index="{{eventStageIndex}}"
@@ -20,10 +21,13 @@
 </div>
 <hr>
 <div class="km-modifier-breakdown">
+    {{#each freeAndFairPills}}
+        <div class="km-modifier-pill km-free-and-fair-pills {{#unless (eq ../pillMode 'freeAndFair')}}km-chat-hidden{{/unless}}">{{this}}</div>
+    {{/each}}
     {{#each creativeSolutionPills}}
-        <div class="km-modifier-pill km-creative-solution-pills {{#unless ../isCreativeSolution}}km-chat-hidden{{/unless}}">{{this}}</div>
+        <div class="km-modifier-pill km-creative-solution-pills {{#unless (eq ../pillMode 'creativeSolution')}}km-chat-hidden{{/unless}}">{{this}}</div>
     {{/each}}
     {{#each pills}}
-        <div class="km-modifier-pill {{#if ../isCreativeSolution}}km-chat-hidden{{/if}}">{{this}}</div>
+        <div class="km-modifier-pill km-default-pills {{#unless (eq ../pillMode 'default')}}km-chat-hidden{{/unless}}">{{this}}</div>
     {{/each}}
 </div>

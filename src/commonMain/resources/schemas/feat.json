@@ -51,6 +51,9 @@
         "removeLeaderVacancyPenalty": {
           "type": "boolean"
         },
+        "isFreeAndFair": {
+          "type": "boolean"
+        },
         "increaseActivityUnrestReductionBy": {
           "type": "object",
           "required": [
