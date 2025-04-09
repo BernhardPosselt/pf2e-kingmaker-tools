@@ -27,7 +27,6 @@ import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Expression
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Gt
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Gte
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasFlag
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasRollOption
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.In
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Lt
@@ -87,11 +86,6 @@ external interface RawAll : RawExpression<Boolean> {
 @JsPlainObject
 external interface RawNot : RawExpression<Boolean> {
     val not: RawExpression<Boolean>
-}
-
-@JsPlainObject
-external interface RawHasFlag : RawExpression<Boolean> {
-    val hasFlag: String
 }
 
 @JsPlainObject
@@ -165,11 +159,6 @@ fun RawExpression<Boolean>.parse(): Expression<Boolean> {
     } else if (Object.hasOwn(this, "eq")) {
         val p = this.unsafeCast<RawEq>()
         Eq(p.eq.component1(), p.eq.component2())
-    } else if (Object.hasOwn(this, "hasFlag")) {
-        val p = this.unsafeCast<RawHasFlag>()
-        HasFlag(
-            flag = p.hasFlag
-        )
     } else if (Object.hasOwn(this, "hasRollOption")) {
         val p = this.unsafeCast<RawHasRollOption>()
         HasRollOption(
@@ -288,7 +277,6 @@ fun KingdomData.createExpressionContext(
     structure: Structure?,
     event: KingdomEvent?,
     eventStage: KingdomEventStage?,
-    flags: Set<String> = emptySet(),
     structureIds: Set<String>,
     waterBorders: Int,
 ): ExpressionContext {
@@ -307,10 +295,9 @@ fun KingdomData.createExpressionContext(
         phase = phase,
         level = level,
         unrest = unrest,
-        flags = chosenFeats
-            .flatMap { it.feat.flags?.toSet().orEmpty() }
-            .toSet() + flags,
-        rollOptions = rollOptions,
+        rollOptions = chosenFeats
+            .flatMap { it.feat.rollOptions?.toSet().orEmpty() }
+            .toSet() + rollOptions,
         vacancies = vacancies(
             choices = chosenFeatures,
             bonusFeats = bonusFeats,

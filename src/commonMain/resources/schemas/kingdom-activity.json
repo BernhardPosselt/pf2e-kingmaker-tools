@@ -292,9 +292,6 @@
           "$ref": "#/$defs/NotPredicate"
         },
         {
-          "$ref": "#/$defs/HasFlagPredicate"
-        },
-        {
           "$ref": "#/$defs/HasRollOptionPredicate"
         },
         {
@@ -465,18 +462,6 @@
       "properties": {
         "not": {
           "$ref": "#/$defs/Predicate"
-        }
-      }
-    },
-    "HasFlagPredicate": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "hasFlag"
-      ],
-      "properties": {
-        "hasFlag": {
-          "type": "string"
         }
       }
     },

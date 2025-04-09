@@ -45,7 +45,6 @@ suspend fun skillChecks(
         structure = null,
         event = null,
         eventStage = null,
-        flags = emptySet(),
         structureIds = settlements.current
             ?.constructedStructures
             ?.map { it.id }

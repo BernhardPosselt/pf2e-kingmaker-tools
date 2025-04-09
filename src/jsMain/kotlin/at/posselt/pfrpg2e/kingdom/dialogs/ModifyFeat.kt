@@ -40,7 +40,7 @@ external interface ModifyFeatData {
     val level: Int
     val resourceDice: Int
     val settlementMagicItemLevelIncrease: Int
-    val flag: String?
+    val rollOption: String?
     val increaseAnarchyLimit: Int
     val ruinThresholdIncreasesAmount: Int
     val ruinThresholdIncreasesValue: Int
@@ -60,7 +60,7 @@ class ModifyFeatDataModel(
             int("level")
             int("resourceDice")
             int("settlementMagicItemLevelIncrease")
-            string("flag", nullable = true)
+            string("rollOption", nullable = true)
             int("increaseAnarchyLimit")
             int("ruinThresholdIncreasesAmount")
             int("ruinThresholdIncreasesValue")
@@ -93,7 +93,7 @@ class ModifyFeat(
         trainSkill = data?.trainSkill,
         assuranceForSkill = data?.assuranceForSkill,
         increaseUsableSkills = data?.increaseUsableSkills,
-        flags = data?.flags,
+        rollOptions = data?.rollOptions,
         increaseAnarchyLimit = data?.increaseAnarchyLimit,
         ruinThresholdIncreases = data?.ruinThresholdIncreases,
         increaseGainedLuxuriesOncePerTurnBy = data?.increaseGainedLuxuriesOncePerTurnBy,
@@ -181,9 +181,9 @@ class ModifyFeat(
                     stacked = false
                 ),
                 TextInput(
-                    name = "flag",
-                    value = current.flags?.firstOrNull() ?: "",
-                    label = "Flag",
+                    name = "rollOption",
+                    value = current.rollOptions?.firstOrNull() ?: "",
+                    label = "Roll Option",
                     stacked = false,
                     required = false,
                     help = "Can be matched against in modifiers when selecting eligible modifiers."
@@ -216,7 +216,7 @@ class ModifyFeat(
             increaseUsableSkills = current.increaseUsableSkills,
             increaseGainedLuxuriesOncePerTurnBy = current.increaseGainedLuxuriesOncePerTurnBy,
             increaseActivityUnrestReductionBy = current.increaseActivityUnrestReductionBy,
-            flags = value.flag?.takeIf { it.isNotEmpty() }?.let { arrayOf(it) } ?: emptyArray(),
+            rollOptions = value.rollOption?.takeIf { it.isNotEmpty() }?.let { arrayOf(it) } ?: emptyArray(),
             increaseAnarchyLimit = value.increaseAnarchyLimit,
             ruinThresholdIncreases = if (value.ruinThresholdIncreasesAmount > 0 || value.ruinThresholdIncreasesValue > 0) {
                 arrayOf(

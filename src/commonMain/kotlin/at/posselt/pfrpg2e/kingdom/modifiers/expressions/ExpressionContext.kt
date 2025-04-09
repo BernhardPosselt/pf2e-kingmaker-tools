@@ -16,7 +16,6 @@ data class ExpressionContext(
     val phase: KingdomPhase?,
     val level: Int,
     val unrest: Int,
-    val flags: Set<String>,
     val rollOptions: Set<String>,
     val vacancies: Vacancies,
     val structure: Structure?,

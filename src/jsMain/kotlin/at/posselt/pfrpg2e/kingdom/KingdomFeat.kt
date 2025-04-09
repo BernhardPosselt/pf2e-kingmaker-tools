@@ -78,7 +78,7 @@ external interface RawFeat {
     val trainSkill: String?
     val assuranceForSkill: String?
     val increaseUsableSkills: Record<String, Array<String>>?
-    val flags: Array<String>?
+    val rollOptions: Array<String>?
     val increaseAnarchyLimit: Int?
     val ruinThresholdIncreases: Array<RawRuinThresholdIncreases>?
     val increaseGainedLuxuriesOncePerTurnBy: Int?

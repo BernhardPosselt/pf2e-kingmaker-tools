@@ -35,8 +35,8 @@
                 "buttonLabel": "+2 Circumstance to Aided Check",
                 "value": 0,
                 "valueExpression": {"when":{"cases":[
-                    {"case": [{"not": {"hasFlag": "cooperative-leadership"}}, 2]},
-                    {"case": [{"hasFlag": "cooperative-leadership"}, 3]}
+                    {"case": [{"not": {"hasRollOption": "cooperative-leadership"}}, 2]},
+                    {"case": [{"hasRollOption": "cooperative-leadership"}, 3]}
                 ], "default":2
                 }},
                 "name": "Focused Attention",
@@ -57,8 +57,8 @@
                 "buttonLabel": "+2 Circumstance to Aided Check",
                 "value": 0,
                 "valueExpression":{"when":{"cases":[
-                    {"case": [{"not": {"hasFlag": "cooperative-leadership"}}, 2]},
-                    {"case": [{"hasFlag": "cooperative-leadership"}, 3]}
+                    {"case": [{"not": {"hasRollOption": "cooperative-leadership"}}, 2]},
+                    {"case": [{"hasRollOption": "cooperative-leadership"}, 3]}
                 ], "default":2
                 }},
                 "name": "Focused Attention",

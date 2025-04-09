@@ -8,7 +8,6 @@ import at.posselt.pfrpg2e.kingdom.modifiers.expressions.All
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Eq
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Gte
-import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasFlag
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasRollOption
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Lt
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Not
@@ -26,8 +25,7 @@ class ExpressionTest {
             ),
             level = 2,
             unrest = 1,
-            rollOptions = setOf("option"),
-            flags = setOf("flag"),
+            rollOptions = setOf("option", "flag"),
             leader = Leader.COUNSELOR,
             activity = null,
             phase = null,
@@ -44,7 +42,7 @@ class ExpressionTest {
         )
         val result = Not(
             All(listOf(
-                All(listOf(HasFlag("flag"),  HasRollOption("option"))),
+                All(listOf(HasRollOption("flag"),  HasRollOption("option"))),
                 All(listOf(
                     Gte("@kingdomLevel", "@unrest"),
                     Some(

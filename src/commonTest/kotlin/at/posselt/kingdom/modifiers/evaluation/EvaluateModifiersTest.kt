@@ -27,7 +27,6 @@ val defaultContext = ExpressionContext(
     ranks = KingdomSkillRanks(),
     level = 2,
     unrest = 0,
-    flags = setOf("flag"),
     rollOptions = setOf("option"),
     phase = null,
     activity = null,

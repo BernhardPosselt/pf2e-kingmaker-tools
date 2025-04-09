@@ -259,7 +259,7 @@ class StructureBrowser(
                     check = CheckType.BuildStructure(structure),
                     afterRoll = { close() },
                     degreeMessages = degreeMessages,
-                    flags = if (repair) setOf("repair-structure") else emptySet(),
+                    rollOptions = if (repair) setOf("repair-structure") else emptySet(),
                     selectedLeader = game.getActiveLeader(),
                 )
             }

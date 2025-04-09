@@ -275,7 +275,7 @@ private class KingdomCheckDialog(
     private val afterRoll: AfterRoll,
     private val params: CheckDialogParams,
     private val degreeMessages: DegreeMessages,
-    private val flags: Set<String>,
+    private val rollOptions: Set<String>,
     private val isSupernaturalSolution: Boolean = false,
     private val settlementResult: SettlementResult,
     val selectedLeader: Leader?,
@@ -469,7 +469,7 @@ private class KingdomCheckDialog(
                     title = "Supernatural Solution: ${params.title}"
                 ),
                 degreeMessages = degreeMessages,
-                flags = flags,
+                rollOptions = rollOptions,
                 isSupernaturalSolution = true,
                 settlementResult = settlementResult,
                 selectedLeader = Leader.fromString(data.leader),
@@ -500,9 +500,8 @@ private class KingdomCheckDialog(
             activity = activity,
             leader = leader,
             usedSkill = usedSkill,
-            rollOptions = emptySet(),
+            rollOptions = rollOptions,
             structure = structure,
-            flags = flags,
             event = event,
             eventStage = event?.stages[eventStageIndex],
             structureIds = settlementResult.current?.constructedStructures?.map { it.id }?.toSet().orEmpty(),
@@ -763,7 +762,7 @@ suspend fun kingdomCheckDialog(
     degreeMessages: DegreeMessages = DegreeMessages(),
     overrideSkills: Set<KingdomSkillRank>? = null,
     overrideDc: Int? = null,
-    flags: Set<String> = emptySet(),
+    rollOptions: Set<String> = emptySet(),
     selectedLeader: Leader?,
 ) {
     val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
@@ -896,7 +895,7 @@ suspend fun kingdomCheckDialog(
         kingdom = kingdom,
         baseModifiers = baseModifiers,
         degreeMessages = degreeMessages,
-        flags = flags,
+        rollOptions = rollOptions,
         settlementResult = settlementResult,
         selectedLeader = selectedLeader,
     ).launch()

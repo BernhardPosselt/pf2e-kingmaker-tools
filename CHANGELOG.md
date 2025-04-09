@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Collapsed modifier flags and roll options into one
+
 ## [4.7.0] - 2025-04-08
 
 ### Added

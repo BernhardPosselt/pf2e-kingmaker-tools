@@ -11,7 +11,7 @@ external interface KingdomFeature {
     val name: String
     val automationNotes: String?
     val description: String
-    val flags: Array<String>?
+    val rollOptions: Array<String>?
     val modifiers: Array<RawModifier>?
     val freeBoosts: Int?
     val skillProficiencies: Int?
@@ -46,7 +46,7 @@ fun KingdomFeature.explodeLevels(): List<RawExplodedKingdomFeature> =
             levels = levels,
             name = name,
             description = description,
-            flags = flags,
+            rollOptions = rollOptions,
             modifiers = modifiers,
             freeBoosts = freeBoosts,
             skillProficiencies = skillProficiencies,
