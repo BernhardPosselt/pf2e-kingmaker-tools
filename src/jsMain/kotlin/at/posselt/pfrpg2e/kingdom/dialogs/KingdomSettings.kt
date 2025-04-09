@@ -44,6 +44,10 @@ class KingdomSettingsDataModel(
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {
+            int("eventDc")
+            int("eventDcStep")
+            int("cultEventDc")
+            int("cultEventDcStep")
             int("rpToXpConversionRate")
             int("rpToXpConversionLimit")
             int("resourceDicePerVillage")
@@ -203,11 +207,52 @@ class KingdomSettingsApplication(
                 Section(
                     legend = "Events",
                     formRows = listOf(
+                        Select.range(
+                            from = 0,
+                            to = 20,
+                            name = "eventDc",
+                            label = "Base Event DC",
+                            value = settings.eventDc,
+                            stacked = false,
+                        ),
+                        Select.range(
+                            from = 0,
+                            to = 20,
+                            name = "eventDcStep",
+                            label = "Event DC Reduction per Check",
+                            value = settings.eventDcStep,
+                            stacked = false,
+                        ),
+                        Select(
+                            name = "kingdomEventsTable",
+                            label = "Kingdom Events Roll Table",
+                            options = kingdomEventsTableOptions,
+                            value = settings.kingdomEventsTable,
+                            stacked = false,
+                            required = false,
+                            help = "If none selected, falls back to the Random Kingdom Events table in this module's Roll Tables compendium",
+                        ),
                         CheckboxInput(
                             name = "cultOfTheBloomEvents",
                             label = "Enable Cult of the Bloom Events",
                             value = settings.cultOfTheBloomEvents,
                             help = "If enabled, adds a Cult of the Bloom Events section in Event Phase",
+                        ),
+                        Select.range(
+                            from = 0,
+                            to = 20,
+                            name = "cultEventDc",
+                            label = "Cult Base Event DC",
+                            value = settings.cultEventDc,
+                            stacked = false,
+                        ),
+                        Select.range(
+                            from = 0,
+                            to = 20,
+                            name = "cultEventDcStep",
+                            label = "Cult Event DC Reduction per Check",
+                            value = settings.cultEventDcStep,
+                            stacked = false,
                         ),
                         Select(
                             name = "kingdomCultTable",
@@ -224,15 +269,6 @@ class KingdomSettingsApplication(
                             value = fromCamelCase<RollMode>(settings.kingdomEventRollMode),
                             labelFunction = { it.label },
                             stacked = false,
-                        ),
-                        Select(
-                            name = "kingdomEventsTable",
-                            label = "Kingdom Events Roll Table",
-                            options = kingdomEventsTableOptions,
-                            value = settings.kingdomEventsTable,
-                            stacked = false,
-                            required = false,
-                            help = "If none selected, falls back to the Random Kingdom Events table in this module's Roll Tables compendium",
                         ),
                     ),
                 ),

@@ -88,6 +88,10 @@ external interface KingdomSettings {
     var leaderSkills: RawLeaderSkills
     var automateStats: Boolean
     var recruitableArmiesFolderId: String?
+    var eventDc: Int
+    var eventDcStep: Int
+    var cultEventDc: Int
+    var cultEventDcStep: Int
 }
 
 @JsPlainObject

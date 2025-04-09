@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.8.0] - 2025-04-09
+
+### Added
+
+* Make Event DC and Step configurable
+
 ### Changed
 
 * Collapsed modifier flags and roll options into one

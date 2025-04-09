@@ -11,5 +11,9 @@ class Migration16 : Migration(16) {
         kingdom.modifiers = kingdom.modifiers.filter {
             it.valueExpression == null
         }.toTypedArray()
+        kingdom.settings.eventDc = 16
+        kingdom.settings.eventDcStep = 5
+        kingdom.settings.cultEventDc = 20
+        kingdom.settings.cultEventDcStep = 2
     }
 }

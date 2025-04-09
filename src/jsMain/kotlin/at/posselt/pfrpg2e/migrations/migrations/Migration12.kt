@@ -144,6 +144,10 @@ class Migration12 : Migration(12, true) {
                 warden = arrayOf(AGRICULTURE, BOATING, DEFENSE, EXPLORATION, WILDERNESS).map { it.value }
                     .toTypedArray(),
             ),
+            eventDc = 16,
+            eventDcStep = 5,
+            cultEventDc = 20,
+            cultEventDcStep = 2,
             leaderSkills = RawLeaderSkills(
                 ruler = arrayOf(
                     "diplomacy",

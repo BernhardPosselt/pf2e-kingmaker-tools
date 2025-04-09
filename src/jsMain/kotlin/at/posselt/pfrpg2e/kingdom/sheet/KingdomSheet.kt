@@ -1390,9 +1390,9 @@ class KingdomSheet(
         )
     }
 
-    private fun getCultEventDC(kingdom: KingdomData): Int = max(1, 20 - kingdom.turnsWithoutCultEvent * 2)
+    private fun getCultEventDC(kingdom: KingdomData): Int = max(1, kingdom.settings.cultEventDc - kingdom.turnsWithoutCultEvent * kingdom.settings.cultEventDcStep)
 
-    private fun getEventDC(kingdom: KingdomData): Int = max(1, 16 - kingdom.turnsWithoutEvent * 5)
+    private fun getEventDC(kingdom: KingdomData): Int = max(1, kingdom.settings.eventDc - kingdom.turnsWithoutEvent * kingdom.settings.eventDcStep)
 
     private fun createMainNav(kingdom: KingdomData): Array<NavEntryContext> {
         val tradeAgreements = kingdom.groups.count { it.relations == Relations.TRADE_AGREEMENT.value }
