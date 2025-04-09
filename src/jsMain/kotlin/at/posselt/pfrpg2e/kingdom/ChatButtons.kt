@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.kingdom.dialogs.pickEventSettlement
 import at.posselt.pfrpg2e.kingdom.dialogs.pickLeader
 import at.posselt.pfrpg2e.kingdom.sheet.executeResourceButton
+import at.posselt.pfrpg2e.kingdom.structures.validateUsingSchema
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.deserializeB64Json
@@ -12,11 +13,13 @@ import at.posselt.pfrpg2e.utils.postChatTemplate
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.onRenderChatLog
+import com.foundryvtt.core.ui
 import io.github.uuidjs.uuid.v4
 import js.array.tupleOf
 import js.objects.JsPlainObject
 import kotlinx.browser.document
 import kotlinx.html.org.w3c.dom.events.Event
+import kotlinx.serialization.json.Json.Default.parseToJsonElement
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -132,16 +135,24 @@ private val buttons = listOf(
     },
     ChatButton("km-apply-modifier-effect") { game, actor, event, button ->
         val mod = deserializeB64Json<RawModifier>(button.dataset["data"] ?: "")
-        val parsedMod = if (mod.name == "Focused Attention") {
-            val leader = pickLeader()
-            mod.copy(applyIf = mod.applyIf.orEmpty() + RawEq(eq = tupleOf("@leader", leader.value)))
+        val jsonMod = JSON.stringify(mod)
+        val results = validateUsingSchema(parsedModifierSchema, parseToJsonElement(jsonMod))
+        if (results.isNotEmpty()) {
+            ui.notifications.error("Failed to validate modifier $jsonMod")
+            ui.notifications.error("Check console log for exact errors")
+            console.error(results.toTypedArray())
         } else {
-            mod
-        }.copy(id = v4())
-        actor.getKingdom()?.let { kingdom ->
-            kingdom.modifiers = kingdom.modifiers + parsedMod
-            actor.setKingdom(kingdom)
-            postChatMessage("Added modifier ${parsedMod.buttonLabel}")
+            val parsedMod = if (mod.name == "Focused Attention") {
+                val leader = pickLeader()
+                mod.copy(applyIf = mod.applyIf.orEmpty() + RawEq(eq = tupleOf("@leader", leader.value)))
+            } else {
+                mod
+            }.copy(id = v4())
+            actor.getKingdom()?.let { kingdom ->
+                kingdom.modifiers = kingdom.modifiers + parsedMod
+                actor.setKingdom(kingdom)
+                postChatMessage("Added modifier ${parsedMod.buttonLabel}")
+            }
         }
     }
 )

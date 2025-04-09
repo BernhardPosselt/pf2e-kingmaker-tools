@@ -8,7 +8,6 @@ import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import js.objects.JsPlainObject
-import kotlinx.serialization.json.JsonElement
 
 @JsPlainObject
 external interface RawKingdomEventStage {
@@ -46,10 +45,6 @@ external interface RawKingdomEvent {
 
 @JsModule("./events.json")
 external val kingdomEvents: Array<RawKingdomEvent>
-
-@Suppress("unused")
-@JsModule("./schemas/event.json")
-external val kingdomEventSchema: JsonElement
 
 fun RawKingdomEventOutcome.parse() =
     KingdomEventOutcome(

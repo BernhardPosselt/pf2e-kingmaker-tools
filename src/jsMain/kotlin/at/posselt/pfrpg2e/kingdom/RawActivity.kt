@@ -14,7 +14,6 @@ import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.utils.asSequence
 import js.objects.JsPlainObject
 import js.objects.Record
-import kotlinx.serialization.json.JsonElement
 
 typealias KingdomDc = Any // number or control, custom, none, scouting
 
@@ -105,11 +104,6 @@ fun RawActivity.label(
 
 @JsModule("./kingdom-activities.json")
 external val kingdomActivities: Array<RawActivity>
-
-@Suppress("unused")
-@JsModule("./schemas/kingdom-activity.json")
-external val kingdomActivitySchema: JsonElement
-
 
 fun RawActivity.resolveDc(
     enemyArmyScoutingDcs: List<Int>,

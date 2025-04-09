@@ -2,9 +2,9 @@ package at.posselt.pfrpg2e.kingdom.structures
 
 import io.github.optimumcode.json.schema.JsonSchema
 import io.github.optimumcode.json.schema.ValidationError
+import kotlinx.serialization.json.Json.Default.parseToJsonElement
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.Json.Default.parseToJsonElement
 
 class StructureValidationError(
     val input: String,
@@ -18,7 +18,7 @@ fun validateStructure(jsonText: String, schema: JsonElement) {
         return throw StructureValidationError(input = jsonText, message = "Not a valid JSON Object")
     }
     if (json.containsKey("ref")) {
-        val errors = validate(schema, json)
+        val errors = validateUsingSchema(schema, json)
         if (errors.isEmpty()) {
             val ref = json["ref"].toString()
             if (structures.find { it.name == ref } != null) {
@@ -29,14 +29,14 @@ fun validateStructure(jsonText: String, schema: JsonElement) {
         }
     } else {
         val schema = parseToJsonElement(JSON.stringify(structureSchema))
-        val errors = validate(schema, json)
+        val errors = validateUsingSchema(schema, json)
         if (errors.isNotEmpty()) {
             throw StructureValidationError(input = jsonText, message = errors.joinToString("\n"), errors = errors)
         }
     }
 }
 
-private fun validate(schema: JsonElement, value: JsonElement): List<ValidationError> {
+fun validateUsingSchema(schema: JsonElement, value: JsonElement): List<ValidationError> {
     val errorCollector = mutableListOf<ValidationError>()
     val validator = JsonSchema.fromJsonElement(schema)
     validator.validate(value, errorCollector::add)

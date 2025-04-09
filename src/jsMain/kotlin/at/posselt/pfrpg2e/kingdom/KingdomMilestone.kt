@@ -1,7 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
 import kotlinx.js.JsPlainObject
-import kotlinx.serialization.json.JsonElement
 
 @JsPlainObject
 external interface RawMilestone {
@@ -15,10 +14,6 @@ external interface RawMilestone {
 
 @JsModule("./milestones.json")
 external val kingdomMilestones: Array<RawMilestone>
-
-@Suppress("unused")
-@JsModule("./schemas/milestone.json")
-external val milestoneSchema: JsonElement
 
 fun KingdomData.getMilestones(): Array<RawMilestone> {
     val overrides = homebrewMilestones.map { it.id }.toSet()

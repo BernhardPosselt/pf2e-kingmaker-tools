@@ -1,7 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
 import kotlinx.js.JsPlainObject
-import kotlinx.serialization.json.JsonElement
 
 @JsPlainObject
 external interface RawGovernment {
@@ -16,10 +15,6 @@ external interface RawGovernment {
 
 @JsModule("./governments.json")
 external val governments: Array<RawGovernment>
-
-@Suppress("unused")
-@JsModule("./schemas/government.json")
-external val governmentSchema: JsonElement
 
 fun KingdomData.getGovernments(): Array<RawGovernment> {
     val overrides = homebrewGovernments.map { it.id }.toSet()

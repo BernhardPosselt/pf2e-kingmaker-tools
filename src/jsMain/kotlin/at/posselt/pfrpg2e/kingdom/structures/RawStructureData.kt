@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.structures
 
+import com.foundryvtt.core.AnyObject
 import kotlinx.js.JsPlainObject
-import kotlinx.serialization.json.JsonElement
 
 @JsPlainObject
 external interface RawRuinAmount {
@@ -129,7 +129,7 @@ external interface RawStructureData : RawStructure {
 external val structures: Array<RawStructureData>
 
 @JsModule("./schemas/structure.json")
-external val structureSchema: JsonElement
+external val structureSchema: AnyObject
 
 @JsModule("./schemas/structure-ref.json")
-external val structureRefSchema: JsonElement
+external val structureRefSchema: AnyObject

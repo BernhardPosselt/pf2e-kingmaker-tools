@@ -1,7 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
 import kotlinx.js.JsPlainObject
-import kotlinx.serialization.json.JsonElement
 
 @JsPlainObject
 external interface RawCharter {
@@ -15,11 +14,6 @@ external interface RawCharter {
 
 @JsModule("./charters.json")
 external val charters: Array<RawCharter>
-
-@Suppress("unused")
-@JsModule("./schemas/charter.json")
-external val charterSchema: JsonElement
-
 
 fun KingdomData.getCharters(): Array<RawCharter> {
     val overrides = homebrewCharters.map { it.id }.toSet()

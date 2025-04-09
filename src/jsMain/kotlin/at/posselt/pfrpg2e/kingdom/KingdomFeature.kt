@@ -1,7 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
 import js.objects.JsPlainObject
-import kotlinx.serialization.json.JsonElement
 
 
 @JsPlainObject
@@ -67,7 +66,3 @@ external interface RawExplodedKingdomFeature : KingdomFeature {
 
 @JsModule("./features.json")
 external val kingdomFeatures: Array<KingdomFeature>
-
-@Suppress("unused")
-@JsModule("./schemas/feature.json")
-external val kingdomFeatureSchema: JsonElement

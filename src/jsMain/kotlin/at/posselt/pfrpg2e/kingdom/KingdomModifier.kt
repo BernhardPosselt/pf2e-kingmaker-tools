@@ -36,10 +36,12 @@ import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Some
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.When
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
 import at.posselt.pfrpg2e.kingdom.sheet.calculateAnarchy
+import com.foundryvtt.core.AnyObject
 import io.github.uuidjs.uuid.v4
 import js.array.JsTuple2
 import js.objects.Object
 import kotlinx.js.JsPlainObject
+import kotlinx.serialization.json.Json.Default.parseToJsonElement
 
 sealed external interface RawExpression<T>
 
@@ -321,3 +323,8 @@ fun KingdomData.createExpressionContext(
         },
     )
 }
+
+@JsModule("./schemas/modifier.json")
+private external val modifierSchema: AnyObject
+
+val parsedModifierSchema = parseToJsonElement(JSON.stringify(modifierSchema))

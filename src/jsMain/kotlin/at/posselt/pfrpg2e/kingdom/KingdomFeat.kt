@@ -13,7 +13,6 @@ import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.utils.asSequence
 import js.objects.JsPlainObject
 import js.objects.Record
-import kotlinx.serialization.json.JsonElement
 
 
 @JsPlainObject
@@ -151,6 +150,3 @@ fun KingdomData.getFeats(): Array<RawFeat> {
 @JsModule("./feats.json")
 external val kingdomFeats: Array<RawFeat>
 
-@Suppress("unused")
-@JsModule("./schemas/feat.json")
-external val kingdomFeatSchema: JsonElement
