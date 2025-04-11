@@ -167,6 +167,10 @@ class Migration13 : Migration(13, true) {
         kingdom.consumption.now = kingdom.consumption.now ?: 0
         kingdom.consumption.next = kingdom.consumption.next ?: 0
         kingdom.size = kingdom.size ?: 0
+        kingdom.xp = kingdom.xp ?: 0
+        kingdom.xpThreshold = kingdom.xpThreshold ?: 1000
+        kingdom.name = kingdom.name ?: ""
+        kingdom.level = kingdom.level ?: 1
         // end nullability fixes
         kingdom.initialProficiencies = emptyArray()
         kingdom.groups = kingdom.groups.map {
