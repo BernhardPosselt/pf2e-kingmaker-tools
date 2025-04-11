@@ -1,4 +1,4 @@
 {
-  "test": "guten tag {blubb} bep",
+  "test": "guten tag {blubb} \nbep",
   "test_one": "guten tag {count}"
 }

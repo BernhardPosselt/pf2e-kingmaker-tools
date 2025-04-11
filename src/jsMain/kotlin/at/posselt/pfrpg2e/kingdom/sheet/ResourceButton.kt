@@ -14,8 +14,10 @@ import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
+import at.posselt.pfrpg2e.lowercaseFirst
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
+import at.posselt.pfrpg2e.uppercaseFirst
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.roll
 import com.foundryvtt.core.Game
@@ -59,14 +61,14 @@ enum class ResourceMode {
         get() = toLabel()
 }
 
-enum class Resource(val value: String) {
+enum class Resource(val value: String, val camel: String? = null) {
     RESOURCE_DICE("resource-dice"),
     CRIME("crime"),
     DECAY("decay"),
     CORRUPTION("corruption"),
     CONSUMPTION("consumption"),
     STRIFE("strife"),
-    RESOURCE_POINTS("resource-points"),
+    RESOURCE_POINTS("resource-points", "resourcePoints"),
     FOOD("food"),
     LUXURIES("luxuries"),
     UNREST("unrest"),
@@ -75,16 +77,31 @@ enum class Resource(val value: String) {
     FAME("fame"),
     STONE("stone"),
     XP("xp"),
-    SUPERNATURAL_SOLUTION("supernatural-solution"),
-    CREATIVE_SOLUTION("creative-solution"),
-    ROLLED_RESOURCE_DICE("rolled-resource-dice");
+    SUPERNATURAL_SOLUTION("supernatural-solution", "supernaturalSolution"),
+    CREATIVE_SOLUTION("creative-solution", "creativeSolution"),
+    ROLLED_RESOURCE_DICE("rolled-resource-dice", "rolledResourceDice");
 
     companion object {
         fun fromString(value: String) = entries.find { it.value == value }
+        fun fromCamelCaseString(value: String) = entries.find { (it.camel ?: it.value) == value }
     }
 
     val label: String
         get() = value.split("-").joinToString(" ") { it.toLabel() }
+}
+
+private val fromStringRegex = Regex(
+    "@(?<mode>gain|lose)" +
+            "(?<multiple>Multiple)?" +
+            "(?<value>[0-9rd+]+)" +
+            "(?<resource>${Resource.entries.joinToString("|") { (it.camel ?: it.value).uppercaseFirst() }})" +
+            "(?<turn>NextTurn)?"
+)
+
+fun insertButtons(source: String): String {
+    return source.replace(fromStringRegex) {
+        ResourceButton.fromMatch(it).toHtml()
+    }
 }
 
 data class ResourceButton(
@@ -96,6 +113,41 @@ data class ResourceButton(
     val multiple: Boolean = false,
 ) {
     companion object {
+        /**
+         * Create a button from a string like
+         * @gain1d4+3ResourcePointsNextTurn
+         * @loseMultiple1rdFame
+         */
+        fun fromString(value: String): ResourceButton {
+            val match = fromStringRegex.find(value)
+            checkNotNull(match) {
+                "match is null $value"
+            }
+            return ResourceButton.fromMatch(match)
+        }
+
+        fun fromMatch(match: MatchResult): ResourceButton {
+            val turn = if (match.groups["turn"] == null) Turn.NOW else Turn.NEXT
+            val mode = if (match.groups["mode"]?.value == "gain") ResourceMode.GAIN else ResourceMode.LOSE
+            val multiple = match.groups["multiple"] != null
+            val value = match.groups["value"]?.value
+            val resource = match.groups["resource"]
+                ?.value?.let { Resource.fromCamelCaseString(it.lowercaseFirst()) }
+            checkNotNull(resource) {
+                "Resource must not be null"
+            }
+            checkNotNull(value) {
+                "Value must not be null"
+            }
+            return ResourceButton(
+                turn = turn,
+                value = value,
+                mode = mode,
+                resource = resource,
+                multiple = multiple,
+            )
+        }
+
         fun fromHtml(target: HTMLElement): ResourceButton {
             val turn = target.dataset["turn"]
                 ?.let { Turn.fromString(it) }
@@ -165,7 +217,7 @@ data class ResourceButton(
         } else {
             evaluateValueExpression(value, resourceDieSize)
         } * factor * sign
-        val value = if(activityId != null && mode == ResourceMode.LOSE && resource == Resource.UNREST) {
+        val value = if (activityId != null && mode == ResourceMode.LOSE && resource == Resource.UNREST) {
             val decreases = chosenFeats.mapNotNull { it.feat.increaseActivityUnrestReductionBy }
                 .filter { kingdom.unrest >= it.minimumCurrentUnrest }
                 .sumOf { it.value }
@@ -236,16 +288,19 @@ data class ResourceButton(
         }
         val updatedValue = setter.get() + value
         when (resource) {
-            Resource.FAME -> when(turn) {
+            Resource.FAME -> when (turn) {
                 Turn.NOW -> setter.set(updatedValue.coerceIn(0, maximumFame))
                 Turn.NEXT -> setter.set(updatedValue)
             }
             // values gated by capacity limit in the now column
-            in listOf(Resource.FOOD,
-            Resource.LUXURIES,
-            Resource.ORE,
-            Resource.LUMBER,
-            Resource.STONE) if turn == Turn.NEXT -> setter.set(updatedValue)
+            in listOf(
+                Resource.FOOD,
+                Resource.LUXURIES,
+                Resource.ORE,
+                Resource.LUMBER,
+                Resource.STONE
+            ) if turn == Turn.NEXT -> setter.set(updatedValue)
+
             Resource.FOOD -> setter.set(storage.limitFood(updatedValue))
             Resource.LUXURIES -> setter.set(storage.limitLuxuries(updatedValue))
             Resource.ORE -> setter.set(storage.limitOre(updatedValue))

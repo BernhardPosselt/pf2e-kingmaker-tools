@@ -24,6 +24,7 @@ import at.posselt.pfrpg2e.kingdom.bindChatButtons
 import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
 import at.posselt.pfrpg2e.kingdom.dialogs.ActorActions
 import at.posselt.pfrpg2e.kingdom.registerContextMenus
+import at.posselt.pfrpg2e.kingdom.sheet.insertButtons
 import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
@@ -105,6 +106,7 @@ fun main() {
                     )
                 ).await()
             registerI18NextHelper(window.Handlebars, i18next)
+            console.log(insertButtons("<p>this is @lose1Unrest</p>"))
         }
     }
     Hooks.onInit {

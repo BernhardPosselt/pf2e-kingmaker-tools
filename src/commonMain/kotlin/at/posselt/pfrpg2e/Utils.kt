@@ -40,9 +40,15 @@ fun String.unslugify(): String =
     split("-")
         .joinToString(" ") { it.replaceFirstChar(Char::uppercase) }
 
+fun String.uppercaseFirst() =
+    replaceFirstChar { c -> c.uppercase() }
+
+fun String.lowercaseFirst() =
+    replaceFirstChar { c -> c.lowercase() }
+
 fun String.deCamelCase(): String =
     this.split("(?=\\p{Upper})".toRegex())
-        .joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }
+        .joinToString(" ") { it.uppercaseFirst() }
 
 fun String.toEnumConstant(): String =
     this.split("(?=\\p{Upper})".toRegex())
