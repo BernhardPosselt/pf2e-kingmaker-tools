@@ -20,6 +20,6 @@
         "msg": "Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn."
     },
     "criticalFailure": {
-        "msg": "Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn. In addition, your hunters and trappers have accidentally attracted the attention of dangerous wildlife. Either <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> or increase a Ruin of your choice by 1."
+        "msg": "Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn. In addition, your hunters and trappers have accidentally attracted the attention of dangerous wildlife. Either <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> or increase a Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
     }
 }

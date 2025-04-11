@@ -11,7 +11,7 @@
     "magic": 0
   },
   "criticalSuccess": {
-    "msg": "The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check and, unless you roll a critical failure, the result is improved one degree. If you reach the end of this Kingdom turn and haven’t had a dangerous event, you may decrease one Ruin of your choice by 1.",
+    "msg": "The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check and, unless you roll a critical failure, the result is improved one degree. If you reach the end of this Kingdom turn and haven’t had a dangerous event, you may decrease one Ruin of your choice by 1: <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>",
     "modifiers": [
       {
         "turns": 1,

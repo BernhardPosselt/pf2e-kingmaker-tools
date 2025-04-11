@@ -11,6 +11,7 @@ import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
 import at.posselt.pfrpg2e.kingdom.dialogs.getValidActivitySkills
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.sheet.insertButtons
 import at.posselt.pfrpg2e.utils.asSequence
 import js.objects.JsPlainObject
 import js.objects.Record
@@ -22,6 +23,12 @@ external interface ActivityResult {
     var msg: String
     val modifiers: Array<RawModifier>
 }
+
+private fun ActivityResult.insertButtons(): ActivityResult =
+    copy(
+        msg = insertButtons(msg),
+        modifiers = modifiers
+    )
 
 @JsPlainObject
 external interface RawActivity {
@@ -103,7 +110,20 @@ fun RawActivity.label(
 }
 
 @JsModule("./kingdom-activities.json")
-external val kingdomActivities: Array<RawActivity>
+private external val rawKingdomActivities: Array<RawActivity>
+
+
+val kingdomActivities: Array<RawActivity> = rawKingdomActivities
+    .map {
+        it.copy(
+            description = insertButtons(it.description),
+            criticalSuccess = it.criticalSuccess?.insertButtons(),
+            success = it.success?.insertButtons(),
+            failure = it.failure?.insertButtons(),
+            criticalFailure = it.criticalFailure?.insertButtons(),
+        )
+    }
+    .toTypedArray()
 
 fun RawActivity.resolveDc(
     enemyArmyScoutingDcs: List<Int>,

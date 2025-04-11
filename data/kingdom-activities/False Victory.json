@@ -12,7 +12,7 @@
     "intrigue": 0
   },
   "criticalSuccess": {
-    "msg": "At the end of this Kingdom turn’s Event Phase, roll again on the random kingdom events table. Rumors of this event being resolved spread throughout your kingdom. You don’t gain any of the benefits of resolving this false victory, but instead <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button> and one Ruin of your choice by 1. If you randomly roll that same random kingdom event at any time during the next four kingdom turns, you can attempt an Intrigue check with a +1 circumstance bonus to resolve it rather than the normal check to resolve it.",
+    "msg": "At the end of this Kingdom turn’s Event Phase, roll again on the random kingdom events table. Rumors of this event being resolved spread throughout your kingdom. You don’t gain any of the benefits of resolving this false victory, but instead <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button> and one Ruin of your choice by 1: <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul> If you randomly roll that same random kingdom event at any time during the next four kingdom turns, you can attempt an Intrigue check with a +1 circumstance bonus to resolve it rather than the normal check to resolve it.",
     "modifiers": [
       {
         "turns": 5,

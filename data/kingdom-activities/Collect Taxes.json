@@ -33,7 +33,7 @@
         ]
     },
     "success": {
-        "msg": "Your tax collectors gather enough to grant you a +1 circumstance bonus to Economy-based checks for the remainder of the Kingdom turn. If you attempted to Collect Taxes during the previous turn, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>",
+        "msg": "Your tax collectors gather enough to grant you a +1 circumstance bonus to Economy-based checks for the remainder of the Kingdom turn. If you attempted to Collect Taxes during the previous turn, @gain1Unrest",
         "modifiers": [
             {
                 "buttonLabel": "+1 Circumstance to Economy",
@@ -54,7 +54,7 @@
         ]
     },
     "failure": {
-        "msg": "Your tax collectors gather enough to grant you a +1 circumstance bonus to Economy-based checks for the remainder of the Kingdom turn. In addition, people are unhappy about taxes—<button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> (or <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button> if you attempted to Collect Taxes the previous turn).",
+        "msg": "Your tax collectors gather enough to grant you a +1 circumstance bonus to Economy-based checks for the remainder of the Kingdom turn. In addition, people are unhappy about taxes—@gain1Unrest (or @gain2Unrest if you attempted to Collect Taxes the previous turn).",
         "modifiers": [
             {
                 "turns": 1,
@@ -75,6 +75,6 @@
         ]
     },
     "criticalFailure": {
-        "msg": "Your tax collectors encounter resistance from the citizens and their attempts to gather taxes are rebuffed. While the tax collectors still manage to gather enough taxes to support essential government, they have angered the kingdom's citizens and encouraged rebellious acts. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button>, and choose one Ruin to increase by 1."
+        "msg": "Your tax collectors encounter resistance from the citizens and their attempts to gather taxes are rebuffed. While the tax collectors still manage to gather enough taxes to support essential government, they have angered the kingdom's citizens and encouraged rebellious acts. @gain2Unrest, and choose one Ruin to increase by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
     }
 }

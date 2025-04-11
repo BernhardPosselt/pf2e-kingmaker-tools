@@ -18,9 +18,9 @@
         "msg": "The move goes smoothly and with minimal disruption, but some folks are upset or homesick. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
     },
     "failure": {
-        "msg": "The move causes unhappiness. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and increase two Ruins of your choice by 1."
+        "msg": "The move causes unhappiness. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and increase two Ruins of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
     },
     "criticalFailure": {
-        "msg": "The people reject the idea of the new capital and demand you move it back. The move is unsuccessful, and your capital remains unchanged. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>. Increase three Ruins of your choice by 1 and the fourth Ruin by 3."
+        "msg": "The people reject the idea of the new capital and demand you move it back. The move is unsuccessful, and your capital remains unchanged. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>. Increase three Ruins of your choice by 1 and the fourth Ruin by 3: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
     }
 }

@@ -20,6 +20,6 @@
         "msg": "Your artisans fail to produce anything noteworthy."
     },
     "criticalFailure": {
-        "msg": "Your artisans not only fail to produce anything noteworthy, but some took advantage of the opportunity to push their own agendas or earn more for themselves by selling to underground markets. Increase one of your Ruins by 1."
+        "msg": "Your artisans not only fail to produce anything noteworthy, but some took advantage of the opportunity to push their own agendas or earn more for themselves by selling to underground markets. Increase one of your Ruins by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
     }
 }

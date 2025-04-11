@@ -30,7 +30,10 @@ tasks.register<CombineJsonFiles>("combineJsonFiles") {
 }
 
 // TODO: this task does not only need to copy strings into the resources folder but also
-// needs to sanitize HTML
+// needs to sanitize HTML;
+// the following things need sanitation:
+// kingdom activities: description, criticalSuccess.msg, success.msg, failure.msg, criticalFailure.msg
+// kingdom events: description, criticalSuccess.msg, success.msg, failure.msg, criticalFailure.msg
 tasks.register<Copy>("processTranslations") {
     from(layout.projectDirectory.dir("lang/"))
     into(layout.buildDirectory.dir("generated/resources/lang"))
