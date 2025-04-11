@@ -39,3 +39,4 @@ inline var Game.pf2eKingmakerTools: Pfrpg2eKingdomCampingWeather
     set(value) {
         asDynamic().pf2eKingmakerTools = value
     }
+

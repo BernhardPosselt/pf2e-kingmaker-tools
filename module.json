@@ -11,6 +11,18 @@
     "styles": [
         "dist/style.css"
     ],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "dist/lang/en.json"
+        },
+        {
+            "lang": "de",
+            "name": "German",
+            "path": "dist/lang/de.json"
+        }
+    ],
     "packs": [
         {
             "name": "kingmaker-tools-structures",

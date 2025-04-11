@@ -100,9 +100,9 @@ fun <O> HooksEventListener.onSightRefresh(callback: (CanvasVisibility) -> O) =
 fun <O> HooksEventListener.onApplyTokenStatusEffect(callback: (TokenDocument, String, Boolean) -> O) =
     on("applyTokenStatusEffect", callback)
 
-fun <O> HooksEventListener.onHotBarDrop(callback: (bar: Hotbar, data: AnyObject, slot: Int) -> O) {
-    on("hotbarDrop", callback)
-}
+fun <O> HooksEventListener.onHotBarDrop(callback: (bar: Hotbar, data: AnyObject, slot: Int) -> O) =    on("hotbarDrop", callback)
+
+fun <O> HooksEventListener.onI18NInit(callback: () -> O) = on("i18nInit", callback)
 
 external object Hooks : HooksEventListener {
     override fun <T> on(key: String, callback: Function<T>)
