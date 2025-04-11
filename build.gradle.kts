@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
 import at.posselt.pfrpg2e.plugins.ReleaseModule
 import at.posselt.pfrpg2e.plugins.UnpackJsonFiles
 import de.undercouch.gradle.tasks.download.Download
+import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 
 plugins {
@@ -53,7 +54,7 @@ kotlin {
         browser {
             @OptIn(ExperimentalDistributionDsl::class)
             distribution {
-                outputDirectory = file( "dist")
+                outputDirectory = file("dist")
             }
             webpackTask {
                 mainOutputFileName = "main.js"
@@ -243,19 +244,35 @@ tasks.register<UnpackJsonFiles>("unpackJson") {
 
 // transifex setup
 tasks.register<Download>("downloadTxClient") {
-    src("https://github.com/transifex/cli/releases/download/v1.6.17/tx-linux-amd64.tar.gz")
-    dest(layout.buildDirectory.file("tx-linux-amd64.tar.gz"))
+    val current = OperatingSystem.current()
+    // note that we assume the most popular architecture here
+    val type = if (current.isLinux) {
+        "linux-amd64"
+    } else if (current.isMacOsX) {
+        "darwin-arm64"
+    } else {
+        "windows-amd64"
+    }
+    src("https://github.com/transifex/cli/releases/download/v1.6.17/tx-$type.tar.gz")
+    dest(layout.buildDirectory.file("tx.tar.gz"))
 }
 
 tasks.register<Copy>("extractTxClient") {
     dependsOn("downloadTxClient")
-    from(tarTree(resources.gzip(layout.buildDirectory.file("tx-linux-amd64.tar.gz"))))
+    from(tarTree(resources.gzip(layout.buildDirectory.file("tx.tar.gz"))))
     into(layout.buildDirectory.dir("transifex"))
 }
 
-tasks.register<Exec>("transifexPush") {
+tasks.register<Exec>("txPush") {
     dependsOn("extractTxClient")
     workingDir(projectDir)
     executable("build/transifex/tx")
     args(listOf("push"))
+}
+
+tasks.register<Exec>("txPull") {
+    dependsOn("extractTxClient")
+    workingDir(projectDir)
+    executable("build/transifex/tx")
+    args(listOf("pull", "-a"))
 }

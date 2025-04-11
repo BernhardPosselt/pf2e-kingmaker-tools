@@ -1,5 +1,4 @@
 {
-  "test": {
-    "trans": "ho {blubb}"
-  }
+  "test": "guten tag {blubb} bep",
+  "test_one": "guten tag {count}"
 }
