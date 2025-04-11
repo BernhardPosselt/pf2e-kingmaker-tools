@@ -45,6 +45,7 @@ import at.posselt.pfrpg2e.macros.toggleShelteredMacro
 import at.posselt.pfrpg2e.macros.toggleWeatherMacro
 import at.posselt.pfrpg2e.migrations.migratePfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
+import at.posselt.pfrpg2e.utils.Handlebars
 import at.posselt.pfrpg2e.utils.Pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.SheetType
 import at.posselt.pfrpg2e.utils.ToolsMacros
@@ -54,25 +55,58 @@ import at.posselt.pfrpg2e.utils.fixVisibility
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.loadTemplatePartials
 import at.posselt.pfrpg2e.utils.pf2eKingmakerTools
+import at.posselt.pfrpg2e.utils.registerI18NextHelper
 import at.posselt.pfrpg2e.utils.registerMacroDropHooks
 import at.posselt.pfrpg2e.weather.registerWeatherHooks
 import at.posselt.pfrpg2e.weather.rollWeather
 import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.directories.onRenderActorDirectory
 import com.foundryvtt.core.game
+import com.foundryvtt.core.onI18NInit
 import com.foundryvtt.core.onInit
 import com.foundryvtt.core.onReady
 import com.foundryvtt.core.onRenderChatLog
 import com.foundryvtt.core.onRenderChatMessage
 import com.foundryvtt.pf2e.actor.PF2EParty
+import com.i18next.HttpApi
+import com.i18next.I18NextBackendOptions
+import com.i18next.I18NextInitOptions
+import com.i18next.I18NextInterpolationOptions
+import com.i18next.ICU
+import com.i18next.i18next
 import io.kvision.jquery.get
 import js.objects.recordOf
+import kotlinx.browser.window
+import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 
 fun main() {
     registerContextMenus()
+    Hooks.onI18NInit {
+        buildPromise {
+            val lang = game.i18n.lang
+            i18next
+                .use(HttpApi::class.js)
+                .use(ICU::class.js)
+                .init(
+                    I18NextInitOptions(
+                        lng = lang,
+                        debug = false,
+                        fallbackLng = "en",
+                        load = "languageOnly",
+                        interpolation = I18NextInterpolationOptions(
+                            escapeValue = false,
+                        ),
+                        backend = I18NextBackendOptions(
+                            loadPath = "modules/${Config.moduleId}/dist/lang/{{lng}}.json"
+                        )
+                    )
+                ).await()
+            registerI18NextHelper(window.Handlebars, i18next)
+        }
+    }
     Hooks.onInit {
         val actionDispatcher = ActionDispatcher(
             game = game,
@@ -105,17 +139,19 @@ fun main() {
                     if (id != null) {
                         val insertAfter = it.querySelector("h3")
                         if (game.user.isGM) {
-                            insertAfter?.insertAdjacentElement("afterend", createPartyActorIcon(
-                                id = id,
-                                icon = setOf("fa-solid", "fa-ellipsis-vertical"),
-                                toolTip = "PFRPG2E Actor Settings",
-                                sheetType = SheetType.KINGDOM,
-                                onClick = {
-                                    game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
-                                        ActorActions(actor=actor).launch()
-                                    }
-                                },
-                            ))
+                            insertAfter?.insertAdjacentElement(
+                                "afterend", createPartyActorIcon(
+                                    id = id,
+                                    icon = setOf("fa-solid", "fa-ellipsis-vertical"),
+                                    toolTip = "PFRPG2E Actor Settings",
+                                    sheetType = SheetType.KINGDOM,
+                                    onClick = {
+                                        game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
+                                            ActorActions(actor = actor).launch()
+                                        }
+                                    },
+                                )
+                            )
                         }
                         insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
                         insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))

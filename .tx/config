@@ -1,0 +1,12 @@
+[main]
+host = https://app.transifex.com
+
+[o:pfrpg-2e-kingdom-building-camping-weather:p:pfrpg-2e-kingdom-building-camping-weather:r:enjson]
+file_filter            = lang/<lang>.json
+source_file            = lang/en.json
+type                   = KEYVALUEJSON
+minimum_perc           = 0
+resource_name          = en.json
+replace_edited_strings = false
+keep_translations      = false
+

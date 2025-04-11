@@ -1,0 +1,4 @@
+{
+  "test": "hi {blubb} john",
+  "test_one": "hi {count}"
+}
