@@ -319,6 +319,173 @@
         "rolledResourceDice": "{count} Rolled Resource Dice"
       }
     },
+    "campingActivities": {
+      "blend-into-the-night": {
+        "name": "Blend Into The Night"
+      },
+      "bolster-confidence": {
+        "name": "Bolster Confidence"
+      },
+      "camouflage-campsite": {
+        "name": "Camouflage Campsite",
+        "criticalSuccess": {
+          "message": "Your camouflage attempt exceeds expectation. Increase the Encounter DC for your camp by 2. The first time a flat check would result in an encounter during this camping session, instead treat that result as a failure with no encounter."
+        },
+        "success": {
+          "message": "Your work helps hide your camp from detection. Increase the Encounter DC for your camp by 1."
+        },
+        "criticalFailure": {
+          "message": "You believe you’ve done well at your camouflage attempt but have actually forgotten something important or accidentally did something to make the campsite more noticeable. Decrease the Encounter DC for your camp by 2, and flat checks made to determine encounters result in a critical success on a roll of 19 or 20."
+        }
+      },
+      "camp-management": {
+        "name": "Camp Management",
+        "criticalSuccess": {
+          "message": "During the hour immediately following this critical success, each PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt."
+        },
+        "success": {
+          "message": "During the hour immediately following this critical success, one PC may attempt two Camping activities instead of one. This success does not increase the number of activities companions may attempt."
+        },
+        "criticalFailure": {
+          "message": "All checks made to resolve Camping activities take a –2 circumstance penalty for the remainder of this camping session."
+        }
+      },
+      "cook-meal": {
+        "name": "Cook Meal",
+        "criticalSuccess": {
+          "message": "The character gains the recipe’s listed critical success effect."
+        },
+        "success": {
+          "message": "The character gains the recipe’s listed success effect."
+        },
+        "failure": {
+          "message": "The character gains no special benefit from the meal, though it still prevents starvation."
+        },
+        "criticalFailure": {
+          "message": "The character suffers the recipe’s critical failure effect."
+        }
+      },
+      "discover-special-meal": {
+        "name": "Discover Special Meal",
+        "criticalSuccess": {
+          "message": "You discover the special meal and add it to the list of recipes the party knows. In addition, your research was efficient, and you recover half of the ingredients you had to expend to attempt this activity."
+        },
+        "success": {
+          "message": "As critical success, but you do not recover any ingredients."
+        },
+        "failure": {
+          "message": "You fail to discover the special meal and do not recover any ingredients."
+        },
+        "criticalFailure": {
+          "message": "As failure, but you also expose yourself to the special meal’s critical failure effect while performing an unwise taste test."
+        }
+      },
+      "enhance-campfire": {
+        "name": "Enhance Campfire"
+      },
+      "enhance-weapons": {
+        "name": "Enhance Weapons"
+      },
+      "healers-blessing": {
+        "name": "Healer's Blessing"
+      },
+      "hunt-and-gather": {
+        "name": "Hunt and Gather",
+        "criticalSuccess": {
+          "message": "You find a number of Basic Ingredients equal to twice the zone’s DC, plus 4 Special Ingredients. If you’re Hunting and Gathering in a zone that’s at least level 7, increase the number of special ingredients found to 8; if you’re doing so in a zone that’s at least level 14, increase it to 12."
+        },
+        "success": {
+          "message": "You find a number of Basic Ingredients equal to the zone’s DC, plus [[/r 1d4]] Special Ingredients. If you’re Hunting and Gathering in a zone that’s at least level 7, increase the number of special ingredients found to [[/r 2d4]]; if you’re doing so in a zone that’s at least level 14, increase it to [[/r 3d4]]."
+        },
+        "failure": {
+          "message": "You find a number of Basic Ingredients equal to the zone’s DC."
+        },
+        "criticalFailure": {
+          "message": "You find [[/r 1d4]] Basic Ingredients (maximum equal to the zone’s DC). In addition, you’ve attracted attention. Make an additional flat check to determine if a random encounter occurs at your campsite following this activity."
+        }
+      },
+      "intimidating-posture": {
+        "name": "Intimidating Posture"
+      },
+      "learn-from-a-companion": {
+        "name": "Learn from a Companion",
+        "criticalSuccess": {
+          "message": "You learn the companion’s special activity. Any PC who meets that activity’s requirements (see table above) can now perform that activity even when the companion isn’t in the camp."
+        },
+        "success": {
+          "message": "You make progress in learning the special activity but require at least one more day to master it. If you attempt to Learn from this Companion the next time you camp, the result of that check is improved by one degree of success from the result rolled."
+        },
+        "failure": {
+          "message": "You fail to learn anything from the companion."
+        },
+        "criticalFailure": {
+          "message": "You fail to learn from the companion, who grows frustrated with the party. No further attempts to Learn from this Companion can be attempted during this camping session."
+        }
+      },
+      "maintain-armor": {
+        "name": "Maintain Armor"
+      },
+      "organize-watch": {
+        "name": "Organize Watch",
+        "criticalSuccess": {
+          "message": "The camp’s watch is efficient. Treat the total time required for rest as if the party size were 1 more, and all characters gain a +2 status bonus to Perception checks made during their shift on watch."
+        },
+        "success": {
+          "message": "Characters gain a +1 status bonus to Perception checks made during their shift on watch."
+        },
+        "failure": {
+          "message": "Your attempt to organize the watch doesn’t grant any additional benefits."
+        },
+        "criticalFailure": {
+          "message": "As failure, but you may have attracted unwanted attention. Attempt a flat check against the zone’s Encounter DC to determine if a random encounter occurs."
+        }
+      },
+      "prepare-campsite": {
+        "name": "Prepare Campsite",
+        "criticalSuccess": {
+          "message": "Prepare Campsite: You find the perfect spot for a camp. Flat checks to determine encounters at the campsite for the next 24 hours have a DC 2 higher than normal, and the first 2 hours spent performing Camping activities does not incur the usual flat check for random encounters."
+        },
+        "success": {
+          "message": "Prepare Campsite: You find a serviceable spot for a camp and for Camping activities."
+        },
+        "failure": {
+          "message": "Prepare Campsite: Your campsite will work, but it’s not the best. Campsite activities that require checks take a –2 penalty."
+        },
+        "criticalFailure": {
+          "message": "Prepare Campsite: Your campsite is a mess. You can use it to rest and to perform daily preparations, but it isn’t good enough to allow for Campsite activities at all. Worse, your attempt to secure a campsite has possibly attracted unwanted attention—attempt a flat check against the zone’s Encounter DC. If successful, a random encounter automatically occurs."
+        }
+      },
+      "set-alarms": {
+        "name": "Set Alarms"
+      },
+      "set-traps": {
+        "name": "Set Traps"
+      },
+      "tell-campfire-story": {
+        "name": "Tell Campfire Story",
+        "criticalSuccess": {
+          "message": "You inspire your allies dramatically. For the remainder of the camping session, your allies gain a +2 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. If an ally spent the hour Relaxing, they can also choose to reroll a failed roll at any time once during the remainder of the camping session while the status bonus persists; this is a fortune effect."
+        },
+        "success": {
+          "message": "You inspire your allies dramatically. For the remainder of the camping session, your allies gain a +1 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. An ally who spent the hour Relaxing receives a +2 status bonus."
+        },
+        "failure": {
+          "message": "Your allies are unmoved and receive no benefits."
+        },
+        "criticalFailure": {
+          "message": "Your story distracts or unsettles your allies. They each take a –1 status penalty to skill checks until they Relax or until they begin daily preparations."
+        }
+      },
+      "undead-guardians": {
+        "name": "Undead Guardians"
+      },
+      "water-hazards": {
+        "name": "Water Hazards"
+      },
+      "wilderness-survival": {
+        "name": "Wilderness Survival"
+      }
+    },
     "recipes": {
       "baked-spider-legs": {
         "name": "Baked Spider Legs"

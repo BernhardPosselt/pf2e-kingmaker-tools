@@ -1,6 +1,6 @@
 {
   "id": "organize-watch",
-  "name": "Organize Watch",
+  "name": "campingActivities.organize-watch.name",
   "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.wgyPZBRgPjTeK0Ch",
   "isLocked": false,
   "isSecret": false,
@@ -13,7 +13,7 @@
     }
   ],
   "criticalSuccess": {
-    "message": "The camp’s watch is efficient. Treat the total time required for rest as if the party size were 1 more, and all characters gain a +2 status bonus to Perception checks made during their shift on watch.",
+    "message": "campingActivities.organize-watch.criticalSuccess.message",
     "effectUuids": [
       {
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.010XlkzzjX38BHsO"
@@ -21,7 +21,7 @@
     ]
   },
   "success": {
-    "message": "Characters gain a +1 status bonus to Perception checks made during their shift on watch.",
+    "message": "campingActivities.organize-watch.success.message",
     "effectUuids": [
       {
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.MOXWga7l8dsypUPy"
@@ -29,10 +29,10 @@
     ]
   },
   "failure": {
-    "message": "Your attempt to organize the watch doesn’t grant any additional benefits."
+    "message": "campingActivities.organize-watch.failure.message"
   },
   "criticalFailure": {
-    "message": "As failure, but you may have attracted unwanted attention. Attempt a flat check against the zone’s Encounter DC to determine if a random encounter occurs.",
+    "message": "campingActivities.organize-watch.criticalFailure.message",
     "checkRandomEncounter": true
   }
 }

@@ -1,6 +1,6 @@
 {
   "id": "prepare-campsite",
-  "name": "Prepare Campsite",
+  "name": "campingActivities.prepare-campsite.name",
   "isHomebrew": false,
   "skills": [
     {
@@ -13,17 +13,17 @@
   "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.Iuen7iSvZAlnAJFB",
   "isLocked": false,
   "criticalSuccess": {
-    "message": "Prepare Campsite: You find the perfect spot for a camp. Flat checks to determine encounters at the campsite for the next 24 hours have a DC 2 higher than normal, and the first 2 hours spent performing Camping activities does not incur the usual flat check for random encounters.",
+    "message": "campingActivities.prepare-campsite.criticalSuccess.message",
     "modifyRandomEncounterDc": {
       "day": 2,
       "night": 2
     }
   },
   "success": {
-    "message": "Prepare Campsite: You find a serviceable spot for a camp and for Camping activities."
+    "message": "campingActivities.prepare-campsite.success.message"
   },
   "failure": {
-    "message": "Prepare Campsite: Your campsite will work, but it’s not the best. Campsite activities that require checks take a –2 penalty.",
+    "message": "campingActivities.prepare-campsite.failure.message",
     "effectUuids": [
       {
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.X1OvR5j1cAXZ4Lbp"
@@ -31,7 +31,7 @@
     ]
   },
   "criticalFailure": {
-    "message": "Prepare Campsite: Your campsite is a mess. You can use it to rest and to perform daily preparations, but it isn’t good enough to allow for Campsite activities at all. Worse, your attempt to secure a campsite has possibly attracted unwanted attention—attempt a flat check against the zone’s Encounter DC. If successful, a random encounter automatically occurs.",
+    "message": "campingActivities.prepare-campsite.criticalFailure.message",
     "checkRandomEncounter": true
   }
 }

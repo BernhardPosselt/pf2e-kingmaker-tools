@@ -1,6 +1,6 @@
 {
   "id": "hunt-and-gather",
-  "name": "Hunt and Gather",
+  "name": "campingActivities.hunt-and-gather.name",
   "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.RujdVNvLpoQBBdVV",
   "isLocked": false,
   "isSecret": false,
@@ -19,16 +19,16 @@
     }
   ],
   "criticalSuccess": {
-    "message": "You find a number of Basic Ingredients equal to twice the zone’s DC, plus 4 Special Ingredients. If you’re Hunting and Gathering in a zone that’s at least level 7, increase the number of special ingredients found to 8; if you’re doing so in a zone that’s at least level 14, increase it to 12."
+    "message": "campingActivities.hunt-and-gather.criticalSuccess.message"
   },
   "success": {
-    "message": "You find a number of Basic Ingredients equal to the zone’s DC, plus [[/r 1d4]] Special Ingredients. If you’re Hunting and Gathering in a zone that’s at least level 7, increase the number of special ingredients found to [[/r 2d4]]; if you’re doing so in a zone that’s at least level 14, increase it to [[/r 3d4]]."
+    "message": "campingActivities.hunt-and-gather.success.message"
   },
   "failure": {
-    "message": "You find a number of Basic Ingredients equal to the zone’s DC."
+    "message": "campingActivities.hunt-and-gather.failure.message"
   },
   "criticalFailure": {
-    "message": "You find [[/r 1d4]] Basic Ingredients (maximum equal to the zone’s DC). In addition, you’ve attracted attention. Make an additional flat check to determine if a random encounter occurs at your campsite following this activity.",
+    "message": "campingActivities.hunt-and-gather.criticalFailure.message",
     "checkRandomEncounter": true
   }
 }

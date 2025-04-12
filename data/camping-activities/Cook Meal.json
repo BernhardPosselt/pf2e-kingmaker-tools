@@ -1,21 +1,21 @@
 {
   "id": "cook-meal",
-  "name": "Cook Meal",
+  "name": "campingActivities.cook-meal.name",
   "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.S72BNBTfKfkCjriU",
   "isLocked": false,
   "isSecret": false,
   "isHomebrew": false,
   "skills": [],
   "criticalSuccess": {
-    "message": "The character gains the recipe’s listed critical success effect."
+    "message": "campingActivities.cook-meal.criticalSuccess.message"
   },
   "success": {
-    "message": "The character gains the recipe’s listed success effect."
+    "message": "campingActivities.cook-meal.success.message"
   },
   "failure": {
-    "message": "The character gains no special benefit from the meal, though it still prevents starvation."
+    "message": "campingActivities.cook-meal.failure.message"
   },
   "criticalFailure": {
-    "message": "The character suffers the recipe’s critical failure effect."
+    "message": "campingActivities.cook-meal.criticalFailure.message"
   }
 }

@@ -35,7 +35,6 @@ abstract class CopyAndSanitizeTranslations : DefaultTask() {
             .filter { it.isRegularFile() }
             .forEach {
                 val target = into.resolve(it.fileName)
-                print(target.toAbsolutePath().toString())
                 transformAndWrite(it, target)
             }
     }

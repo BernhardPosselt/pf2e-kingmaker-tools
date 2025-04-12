@@ -1,6 +1,6 @@
 {
   "id": "tell-campfire-story",
-  "name": "Tell Campfire Story",
+  "name": "campingActivities.tell-campfire-story.name",
   "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.XaKD1oGTAgZUjlQ5",
   "isLocked": false,
   "isSecret": false,
@@ -13,7 +13,7 @@
   ],
   "isHomebrew": false,
   "criticalSuccess": {
-    "message": "You inspire your allies dramatically. For the remainder of the camping session, your allies gain a +2 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. If an ally spent the hour Relaxing, they can also choose to reroll a failed roll at any time once during the remainder of the camping session while the status bonus persists; this is a fortune effect.",
+    "message": "campingActivities.tell-campfire-story.criticalSuccess.message",
     "effectUuids": [
       {
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.2vdskbqd0VrWKR9Y",
@@ -22,7 +22,7 @@
     ]
   },
   "success": {
-    "message": "You inspire your allies dramatically. For the remainder of the camping session, your allies gain a +1 status bonus to attack rolls, saving throws, and skill checks during combat at the campsite. The bonuses end as soon as daily preparations begin after resting is concluded. An ally who spent the hour Relaxing receives a +2 status bonus.",
+    "message": "campingActivities.tell-campfire-story.success.message",
     "effectUuids": [
       {
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.wT2NzrfgmWmCMRtv",
@@ -31,10 +31,10 @@
     ]
   },
   "failure": {
-    "message": "Your allies are unmoved and receive no benefits."
+    "message": "campingActivities.tell-campfire-story.failure.message"
   },
   "criticalFailure": {
-    "message": "Your story distracts or unsettles your allies. They each take a –1 status penalty to skill checks until they Relax or until they begin daily preparations.",
+    "message": "campingActivities.tell-campfire-story.criticalFailure.message",
     "effectUuids": [
       {
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.y5Jqw40SWNOgcxvC",

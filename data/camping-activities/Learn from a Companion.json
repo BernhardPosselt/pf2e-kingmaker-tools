@@ -1,6 +1,6 @@
 {
   "id": "learn-from-a-companion",
-  "name": "Learn from a Companion",
+  "name": "campingActivities.learn-from-a-companion.name",
   "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.MyeB2g0yDwEsqfI9",
   "isLocked": true,
   "isSecret": false,
@@ -14,15 +14,15 @@
     }
   ],
   "criticalSuccess": {
-    "message": "You learn the companion’s special activity. Any PC who meets that activity’s requirements (see table above) can now perform that activity even when the companion isn’t in the camp."
+    "message": "campingActivities.learn-from-a-companion.criticalSuccess.message"
   },
   "success": {
-    "message": "You make progress in learning the special activity but require at least one more day to master it. If you attempt to Learn from this Companion the next time you camp, the result of that check is improved by one degree of success from the result rolled."
+    "message": "campingActivities.learn-from-a-companion.success.message"
   },
   "failure": {
-    "message": "You fail to learn anything from the companion."
+    "message": "campingActivities.learn-from-a-companion.failure.message"
   },
   "criticalFailure": {
-    "message": "You fail to learn from the companion, who grows frustrated with the party. No further attempts to Learn from this Companion can be attempted during this camping session."
+    "message": "campingActivities.learn-from-a-companion.criticalFailure.message"
   }
 }

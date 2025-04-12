@@ -1,6 +1,6 @@
 {
   "id": "discover-special-meal",
-  "name": "Discover Special Meal",
+  "name": "campingActivities.discover-special-meal.name",
   "journalUuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.uSTTCqRYCWj7a38F.JournalEntryPage.5I8jnFjirbbIUkGy",
   "isLocked": false,
   "isSecret": false,
@@ -13,15 +13,15 @@
     }
   ],
   "criticalSuccess": {
-    "message": "You discover the special meal and add it to the list of recipes the party knows. In addition, your research was efficient, and you recover half of the ingredients you had to expend to attempt this activity."
+    "message": "campingActivities.discover-special-meal.criticalSuccess.message"
   },
   "success": {
-    "message": "As critical success, but you do not recover any ingredients."
+    "message": "campingActivities.discover-special-meal.success.message"
   },
   "failure": {
-    "message": "You fail to discover the special meal and do not recover any ingredients."
+    "message": "campingActivities.discover-special-meal.failure.message"
   },
   "criticalFailure": {
-    "message": "As failure, but you also expose yourself to the special meal’s critical failure effect while performing an unwise taste test."
+    "message": "campingActivities.discover-special-meal.criticalFailure.message"
   }
 }
