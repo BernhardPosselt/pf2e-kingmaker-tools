@@ -1,6 +1,6 @@
 {
     "id": "mountain-or-ruins",
-    "name": "Mountain or Ruins",
-    "description": "Your nation is founded in the mountains or includes a significant ruined location, and it uses these natural or artificial features to bolster defense. Your citizens tend to be hale and hardy, if not stubborn to a fault.",
+    "name": "heartlands.mountain-or-ruins.name",
+    "description": "heartlands.mountain-or-ruins.description",
     "boost": "stability"
 }

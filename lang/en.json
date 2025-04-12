@@ -600,6 +600,30 @@
         "description": "If you would prefer to be truly free agents and trailblazers staking your own claim, you can simply choose an open charter with no restrictions—and no direct support. An open charter grants a single ability boost to any ability score, and the new nation has no built-in ability flaw."
       }
     },
+    "heartlands": {
+      "forest-or-swamp": {
+        "name": "Forest or Swamp",
+        "description": "Your nation begins in woodlands or swamplands, so there are no shortages in natural resources or wonders to bolster your citizens’ imagination and mood."
+      },
+      "hill-or-plain": {
+        "name": "Hill or Plain",
+        "description": "Your nation starts in an area that is easy to traverse. This is reflected in your citizens’ temperament; they appreciate that your choice makes their lives a bit easier."
+      },
+      "lake-or-river": {
+        "name": "Lake or River",
+        "description": "By establishing your nation on the shores of a lake or river, you ensure a built-in mechanism for trade. Even before a road is built, merchants and travelers can reach your settlement with relative ease via boat."
+      },
+      "mountain-or-ruins": {
+        "name": "Mountain or Ruins",
+        "description": "Your nation is founded in the mountains or includes a significant ruined location, and it uses these natural or artificial features to bolster defense. Your citizens tend to be hale and hardy, if not stubborn to a fault."
+      }
+    },
+    "governments": {
+      "": {
+        "name": "",
+        "description": ""
+      }
+    },
     "activities": {
       "abandon-hex": {
         "title": "Abandon Hex",

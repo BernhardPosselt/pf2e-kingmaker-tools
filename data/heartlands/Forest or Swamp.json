@@ -1,6 +1,6 @@
 {
     "id": "forest-or-swamp",
-    "name": "Forest or Swamp",
-    "description": "Your nation begins in woodlands or swamplands, so there are no shortages in natural resources or wonders to bolster your citizens’ imagination and mood.",
+    "name": "heartlands.forest-or-swamp.name",
+    "description": "heartlands.forest-or-swamp.description",
     "boost": "culture"
 }
