@@ -52,7 +52,7 @@ fun StructureActor.getRawResolvedStructureData(): RawStructureData? {
     val data = getRawStructureData()
     if (data == null) return null
     return if (isStructureRef(data)) {
-        structures.find { it.id == data.ref }
+        translatedStructures.find { it.id == data.ref }
             ?: throw StructureParsingException("Could not find existing structure with ref ${data.ref}")
     } else {
         data.unsafeCast<RawStructureData>()

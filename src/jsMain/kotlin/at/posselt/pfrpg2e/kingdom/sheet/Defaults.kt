@@ -5,7 +5,6 @@ import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.RawLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.RawLeaderSkills
-import at.posselt.pfrpg2e.kingdom.data.MilestoneChoice
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityScores
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
@@ -25,7 +24,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSite
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.disabledActivityIds
-import at.posselt.pfrpg2e.kingdom.kingdomMilestones
+import at.posselt.pfrpg2e.kingdom.initialMilestoneChoices
 
 fun createKingdomDefaults(name: String) =
     KingdomData(
@@ -349,13 +348,7 @@ fun createKingdomDefaults(name: String) =
             loyalty = 10,
             stability = 10,
         ),
-        milestones = kingdomMilestones.map {
-            MilestoneChoice(
-                id = it.id,
-                completed = false,
-                enabled = it.enabledOnFirstRun,
-            )
-        }.toTypedArray(),
+        milestones = initialMilestoneChoices,
         charterBlacklist = emptyArray(),
         governmentBlacklist = emptyArray(),
         initialProficiencies = emptyArray(),

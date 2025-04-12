@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import kotlinx.js.JsPlainObject
 
@@ -198,4 +199,38 @@ fun CampingActivityData.requiresACheck(): Boolean =
     skills.any { it.validateOnly != true }
 
 @JsModule("./camping-activities.json")
-external val campingActivityData: Array<CampingActivityData>
+private external val campingActivityData: Array<CampingActivityData>
+
+private fun ActivityOutcome.translate() =
+    copy(
+        message = message?.let { t(it) }
+    )
+
+private fun CampingActivityData.translate() =
+    copy(
+        name = t(name),
+        criticalSuccess = criticalSuccess?.translate(),
+        success = success?.translate(),
+        failure = failure?.translate(),
+        criticalFailure = criticalFailure?.translate(),
+    )
+
+private var translatedCampingActivities = emptyArray<CampingActivityData>()
+
+val lockedCampingActivityIds = campingActivityData
+    .filter(CampingActivityData::isLocked)
+    .map(CampingActivityData::id)
+    .toTypedArray()
+
+fun translateCampingActivities() {
+    translatedCampingActivities = campingActivityData
+        .map { it.translate() }
+        .toTypedArray()
+}
+
+fun CampingData.getAllActivities(): Array<CampingActivityData> {
+    val homebrewIds = homebrewCampingActivities.map { it.id }.toSet()
+    return translatedCampingActivities
+        .filter { it.id !in homebrewIds }
+        .toTypedArray() + homebrewCampingActivities
+}

@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.structures
 
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import kotlinx.js.JsPlainObject
 
@@ -133,3 +134,17 @@ external val structureSchema: AnyObject
 
 @JsModule("./schemas/structure-ref.json")
 external val structureRefSchema: AnyObject
+
+private fun RawStructureData.translate() =
+    copy(
+        name = t(name),
+        notes = notes?.let { t(it) },
+    )
+
+var translatedStructures = emptyArray<RawStructureData>()
+
+fun translateStructureData() {
+    translatedStructures = structures
+        .map { it.translate() }
+        .toTypedArray()
+}

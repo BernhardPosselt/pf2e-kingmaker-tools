@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -15,7 +16,21 @@ external interface RawCharter {
 @JsModule("./charters.json")
 external val charters: Array<RawCharter>
 
+private fun RawCharter.translate() =
+    copy(
+        name = t(name),
+        description = t(description)
+    )
+
+private var translatedCharters = emptyArray<RawCharter>()
+
+fun translateCharters() {
+    translatedCharters = charters
+        .map { it.translate() }
+        .toTypedArray()
+}
+
 fun KingdomData.getCharters(): Array<RawCharter> {
     val overrides = homebrewCharters.map { it.id }.toSet()
-    return homebrewCharters + charters.filter { it.id !in overrides }
+    return homebrewCharters + translatedCharters.filter { it.id !in overrides }
 }

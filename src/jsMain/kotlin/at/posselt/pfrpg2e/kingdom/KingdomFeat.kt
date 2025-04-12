@@ -145,9 +145,24 @@ fun RawFeat.increasedSkills(): Map<KingdomSkill, Set<KingdomSkill>> =
 
 fun KingdomData.getFeats(): Array<RawFeat> {
     val overrides = homebrewFeats.map { it.id }.toSet()
-    return homebrewFeats + kingdomFeats.filter { it.id !in overrides }
+    return homebrewFeats + translatedFeats.filter { it.id !in overrides }
 }
 
 @JsModule("./feats.json")
 external val kingdomFeats: Array<RawFeat>
+
+private fun RawFeat.translate() =
+    copy(
+        name = t(name),
+        text = t(text),
+        automationNotes = automationNotes?.let { t(it) },
+    )
+
+private var translatedFeats = emptyArray<RawFeat>()
+
+fun translateFeats() {
+    translatedFeats = kingdomFeats
+        .map { it.translate() }
+        .toTypedArray()
+}
 

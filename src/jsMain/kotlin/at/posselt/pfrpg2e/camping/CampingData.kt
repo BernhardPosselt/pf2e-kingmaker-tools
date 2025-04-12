@@ -172,10 +172,7 @@ fun getDefaultCamping(game: Game): CampingData {
         actorUuids = emptyArray(),
         campingActivities = emptyArray(),
         homebrewCampingActivities = emptyArray(),
-        lockedActivities = campingActivityData
-            .filter(CampingActivityData::isLocked)
-            .map(CampingActivityData::id)
-            .toTypedArray(),
+        lockedActivities = lockedCampingActivityIds,
         cooking = Cooking(
             actorMeals = emptyArray(),
             knownRecipes = arrayOf("basic-meal", "hearty-meal"),
@@ -405,21 +402,6 @@ fun Game.getActiveCamping(): CampingData? {
     return campingActors.firstOrNull()?.getCamping() ?: campingActors
         .mapNotNull { it.getCamping() }
         .firstOrNull { it.isActive == true }
-}
-
-
-fun CampingData.getAllActivities(): Array<CampingActivityData> {
-    val homebrewIds = homebrewCampingActivities.map { it.id }.toSet()
-    return campingActivityData
-        .filter { it.id !in homebrewIds }
-        .toTypedArray() + homebrewCampingActivities
-}
-
-fun CampingData.getAllRecipes(): Array<RecipeData> {
-    val homebrewIds = cooking.homebrewMeals.map { it.id }.toSet()
-    return recipes
-        .filter { it.id !in homebrewIds }
-        .toTypedArray() + cooking.homebrewMeals
 }
 
 fun CampingData.canPerformActivities(): Boolean {

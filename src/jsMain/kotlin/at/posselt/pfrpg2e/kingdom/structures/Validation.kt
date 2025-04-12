@@ -21,7 +21,7 @@ fun validateStructure(jsonText: String, schema: JsonElement) {
         val errors = validateUsingSchema(schema, json)
         if (errors.isEmpty()) {
             val ref = json["ref"].toString()
-            if (structures.find { it.name == ref } != null) {
+            if (translatedStructures.find { it.name == ref } != null) {
                 throw StructureValidationError(input = jsonText, message = "Can not find existing structure with ref $ref")
             }
         } else {

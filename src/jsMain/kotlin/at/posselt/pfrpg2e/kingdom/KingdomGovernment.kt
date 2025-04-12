@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -16,7 +17,21 @@ external interface RawGovernment {
 @JsModule("./governments.json")
 external val governments: Array<RawGovernment>
 
+private fun RawGovernment.translate() =
+    copy(
+        name = t(name),
+        description = t(description)
+    )
+
+private var translatedGovernments = emptyArray<RawGovernment>()
+
+fun translateGovernments() {
+    translatedGovernments = governments
+        .map { it.translate() }
+        .toTypedArray()
+}
+
 fun KingdomData.getGovernments(): Array<RawGovernment> {
     val overrides = homebrewGovernments.map { it.id }.toSet()
-    return homebrewGovernments + governments.filter { it.id !in overrides }
+    return homebrewGovernments + translatedGovernments.filter { it.id !in overrides }
 }

@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.camping
 import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -59,7 +60,7 @@ external interface RecipeData {
     val favoriteMeal: CookingOutcome?
 }
 
-enum class HealMode: ValueEnum, Translatable {
+enum class HealMode : ValueEnum, Translatable {
     AFTER_CONSUMPTION,
     AFTER_REST,
     AFTER_CONSUMPTION_AND_REST;
@@ -71,7 +72,7 @@ enum class HealMode: ValueEnum, Translatable {
         get() = "healMode.$value"
 }
 
-enum class ReduceConditionMode: ValueEnum, Translatable {
+enum class ReduceConditionMode : ValueEnum, Translatable {
     ALL,
     RANDOM;
 
@@ -98,4 +99,33 @@ fun RecipeData.discoverCost(): FoodAmount =
 
 
 @JsModule("./recipes.json")
-external val recipes: Array<RecipeData>
+private external val recipes: Array<RecipeData>
+
+private fun CookingOutcome.translate() =
+    copy(
+        message = message?.let { t(it) }
+    )
+
+private fun RecipeData.translate() =
+    copy(
+        name = t(name),
+        criticalSuccess = criticalSuccess.translate(),
+        success = success.translate(),
+        criticalFailure = criticalFailure.translate(),
+        favoriteMeal = favoriteMeal?.translate(),
+    )
+
+private var translatedRecipes = emptyArray<RecipeData>()
+
+fun translateRecipes() {
+    translatedRecipes = recipes
+        .map { it.translate() }
+        .toTypedArray()
+}
+
+fun CampingData.getAllRecipes(): Array<RecipeData> {
+    val homebrewIds = cooking.homebrewMeals.map { it.id }.toSet()
+    return translatedRecipes
+        .filter { it.id !in homebrewIds }
+        .toTypedArray() + cooking.homebrewMeals
+}

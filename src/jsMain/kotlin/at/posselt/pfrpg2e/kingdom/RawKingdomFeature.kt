@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 
 @JsPlainObject
-external interface KingdomFeature {
+external interface RawKingdomFeature {
     val id: String
     val levels: Array<Int>
     val name: String
@@ -21,9 +22,9 @@ external interface KingdomFeature {
     val claimHexAttempts: Int?
 }
 
-fun KingdomData.getFeatures(): Array<KingdomFeature> =
+fun KingdomData.getFeatures(): Array<RawKingdomFeature> =
     if (settings.kingdomSkillIncreaseEveryLevel) {
-        kingdomFeatures.map {
+        translatedKingdomFeatures.map {
             if (it.id == "skill-increase") {
                 it.copy(levels = (2..20).toList().toTypedArray())
             } else {
@@ -31,13 +32,13 @@ fun KingdomData.getFeatures(): Array<KingdomFeature> =
             }
         }.toTypedArray()
     } else {
-        kingdomFeatures
+        translatedKingdomFeatures
     }
 
 fun KingdomData.getExplodedFeatures() =
     getFeatures().flatMap { it.explodeLevels() }
 
-fun KingdomFeature.explodeLevels(): List<RawExplodedKingdomFeature> =
+fun RawKingdomFeature.explodeLevels(): List<RawExplodedKingdomFeature> =
     levels.map {
         RawExplodedKingdomFeature(
             id = "$id-level-$it",
@@ -59,10 +60,25 @@ fun KingdomFeature.explodeLevels(): List<RawExplodedKingdomFeature> =
     }
 
 @JsPlainObject
-external interface RawExplodedKingdomFeature : KingdomFeature {
+external interface RawExplodedKingdomFeature : RawKingdomFeature {
     val level: Int
 }
 
 
 @JsModule("./features.json")
-external val kingdomFeatures: Array<KingdomFeature>
+private external val kingdomFeatures: Array<RawKingdomFeature>
+
+private fun RawKingdomFeature.translate() =
+    copy(
+        name = t(name),
+        description = t(description),
+        automationNotes = automationNotes?.let { t(it) },
+    )
+
+private var translatedKingdomFeatures = emptyArray<RawKingdomFeature>()
+
+fun translateKingdomFeatures() {
+    translatedKingdomFeatures = kingdomFeatures
+        .map { it.translate() }
+        .toTypedArray()
+}

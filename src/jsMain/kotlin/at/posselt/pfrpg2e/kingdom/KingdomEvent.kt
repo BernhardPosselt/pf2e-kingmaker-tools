@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.data.events.KingdomEventStage
 import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @JsPlainObject
@@ -44,7 +45,7 @@ external interface RawKingdomEvent {
 
 
 @JsModule("./events.json")
-external val kingdomEvents: Array<RawKingdomEvent>
+private external val kingdomEvents: Array<RawKingdomEvent>
 
 fun RawKingdomEventOutcome.parse() =
     KingdomEventOutcome(
@@ -112,21 +113,43 @@ fun KingdomData.getOngoingEvents(applyBlacklist: Boolean = false): List<OngoingE
     }
 }
 
-fun KingdomData.getEvents(applyBlacklist: Boolean = false): Array<RawKingdomEvent> {
-    val overrides = homebrewKingdomEvents.map { it.id }.toSet()
-    val result = homebrewKingdomEvents + kingdomEvents.filter { it.id !in overrides }
-    return if (applyBlacklist) {
-        result.filter { it.id !in kingdomEventBlacklist }.toTypedArray()
-    } else {
-        result
-    }
+private fun RawKingdomEventOutcome.translate() =
+    copy(
+        msg = t(msg)
+    )
+
+private fun RawKingdomEventStage.translate() =
+    copy(
+        criticalSuccess = criticalSuccess?.let { it.translate() },
+        success = success?.let { it.translate() },
+        failure = failure?.let { it.translate() },
+        criticalFailure = criticalFailure?.let { it.translate() },
+    )
+
+private fun RawKingdomEvent.translate() =
+    copy(
+        name = t(name),
+        description = t(description),
+        special = special?.let { t(it) },
+        resolution = resolution?.let { t(it) },
+        location = location?.let { t(it) },
+        stages = stages.map { it.translate() }.toTypedArray(),
+        automationNotes = automationNotes?.let { t(it) },
+    )
+
+private var translatedKingdomEvents = emptyArray<RawKingdomEvent>()
+
+fun translateKingdomEvents() {
+    translatedKingdomEvents = kingdomEvents
+        .map { it.translate() }
+        .toTypedArray()
 }
 
-fun KingdomData.getParsedEvents(applyBlacklist: Boolean = false): List<KingdomEvent> {
+fun KingdomData.getEvents(applyBlacklist: Boolean = false): Array<RawKingdomEvent> {
     val overrides = homebrewKingdomEvents.map { it.id }.toSet()
-    val result = (homebrewKingdomEvents + kingdomEvents.filter { it.id !in overrides }).map { it.parse() }
+    val result = homebrewKingdomEvents + translatedKingdomEvents.filter { it.id !in overrides }
     return if (applyBlacklist) {
-        result.filter { it.id !in kingdomEventBlacklist }
+        result.filter { it.id !in kingdomEventBlacklist }.toTypedArray()
     } else {
         result
     }
