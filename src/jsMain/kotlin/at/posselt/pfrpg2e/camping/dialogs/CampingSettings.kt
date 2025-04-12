@@ -17,8 +17,10 @@ import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.resetCampsites
 import at.posselt.pfrpg2e.camping.setCamping
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -98,10 +100,16 @@ class CampingSettingsDataModel(
 @JsPlainObject
 external interface CampingSettingsContext : ValidatedHandlebarsContext, SectionsContext
 
-enum class RestRollMode {
+enum class RestRollMode: ValueEnum, Translatable {
     NONE,
     ONE,
-    ONE_EVERY_FOUR_HOURS,
+    ONE_EVERY_FOUR_HOURS;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "restRollMode.$value"
 }
 
 private val companionActivities = mapOf<String, String>(

@@ -27,7 +27,7 @@ suspend fun postDegreeOfSuccess(
     title: String = "",
 ) {
     val original = if (originalDegreeOfSuccess != null && originalDegreeOfSuccess != degreeOfSuccess) {
-        originalDegreeOfSuccess.label
+        t(originalDegreeOfSuccess)
     } else {
         null
     }

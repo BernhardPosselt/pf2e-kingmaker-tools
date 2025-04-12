@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.SettlementResult
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.ui.enrichHtml
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -65,7 +66,7 @@ suspend fun List<OngoingEvent>.toContext(
                 description = description,
                 special = it.event.special,
                 resolution = it.event.resolution,
-                traits = it.event.traits.map { it.label }.toTypedArray(),
+                traits = it.event.traits.map { t(it) }.toTypedArray(),
                 location = it.event.location,
                 hideStageButton = it.event.stages.size < 2 || !isGM,
                 stages = it.event.stages
@@ -77,8 +78,8 @@ suspend fun List<OngoingEvent>.toContext(
                         )
                     }
                     .toTypedArray(),
-                skills = stage.skills.map { it.label }.toTypedArray(),
-                leader = stage.leader.label,
+                skills = stage.skills.map { t(it) }.toTypedArray(),
+                leader = t(stage.leader),
                 criticalSuccess = criticalSuccess,
                 success = success,
                 failure = failure,

@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.data.actor
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 
-enum class Proficiency(val increaseLockedUntil: Int = 0) {
+enum class Proficiency(val increaseLockedUntil: Int = 0): Translatable, ValueEnum {
     UNTRAINED,
     TRAINED,
     EXPERT,
@@ -19,11 +20,11 @@ enum class Proficiency(val increaseLockedUntil: Int = 0) {
     val rank: Int
         get() = ordinal
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "proficiency.$value"
 }
 
 fun findHighestProficiency(level: Int) : Proficiency? =
@@ -32,5 +33,5 @@ fun findHighestProficiency(level: Int) : Proficiency? =
         .maxByOrNull { it.rank }
 
 val highestProficiencyByLevel = (1..20)
-    .mapNotNull { it to findHighestProficiency(it)?.label }
+    .mapNotNull { it to findHighestProficiency(it) }
     .toMap()

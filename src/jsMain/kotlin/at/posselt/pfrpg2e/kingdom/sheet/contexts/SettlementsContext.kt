@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import js.objects.JsPlainObject
 
@@ -41,7 +42,7 @@ fun Array<RawSettlement>.toContext(
                 id = parsed.id,
                 isCapital = parsed.type == SettlementType.CAPITAL,
                 name = parsed.name,
-                size = parsed.size.type.label,
+                size = t(parsed.size.type),
                 level = parsed.occupiedBlocks,
                 residentialLots = parsed.residentialLots,
                 isSecondaryTerritory = parsed.isSecondaryTerritory,

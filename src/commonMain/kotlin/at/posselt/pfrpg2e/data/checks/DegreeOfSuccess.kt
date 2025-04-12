@@ -1,11 +1,12 @@
 package at.posselt.pfrpg2e.data.checks
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import kotlin.math.abs
 
-enum class DegreeOfSuccess {
+enum class DegreeOfSuccess: Translatable, ValueEnum {
     CRITICAL_FAILURE,
     FAILURE,
     SUCCESS,
@@ -32,11 +33,10 @@ enum class DegreeOfSuccess {
         fun fromString(value: String) = fromCamelCase<DegreeOfSuccess>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey = "degreeOfSuccess.$value"
 }
 
 fun <T> Int.repeat(initial: T, block: (T) -> T): T {

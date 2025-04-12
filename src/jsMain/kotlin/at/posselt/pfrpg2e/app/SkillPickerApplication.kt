@@ -21,6 +21,7 @@ import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -366,7 +367,7 @@ fun launchCampingSkillPicker(
         val existingValue = skillsByAttribute[attribute]
         if (existingValue == null) {
             PickerSkill(
-                label = attribute.label,
+                label = t(attribute),
                 name = attribute.value,
                 enabled = false,
                 isLore = attribute is Lore,
@@ -378,7 +379,7 @@ fun launchCampingSkillPicker(
             )
         } else {
             PickerSkill(
-                label = existingValue.attribute.label,
+                label = t(existingValue.attribute),
                 name = existingValue.attribute.value,
                 enabled = true,
                 isLore = attribute is Lore,

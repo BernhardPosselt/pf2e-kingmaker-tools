@@ -1,7 +1,11 @@
 package at.posselt.pfrpg2e.data.regions
 
+import at.posselt.pfrpg2e.data.ValueEnum
+import at.posselt.pfrpg2e.localization.Translatable
+import at.posselt.pfrpg2e.toCamelCase
 
-enum class Terrain {
+
+enum class Terrain: ValueEnum, Translatable {
     AQUATIC,
     DESERT,
     PLAINS,
@@ -10,5 +14,11 @@ enum class Terrain {
     MOUNTAIN,
     SWAMP,
     URBAN,
-    DUNGEON,
+    DUNGEON;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "zoneTerrain.$value"
 }

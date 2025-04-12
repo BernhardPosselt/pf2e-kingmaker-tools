@@ -63,3 +63,4 @@ inline fun <reified T> Any.takeIfInstance(): T? =
 
 fun Int.divideRoundingUp(divisor: Int): Int =
     ceil(this.toDouble() / divisor).toInt()
+

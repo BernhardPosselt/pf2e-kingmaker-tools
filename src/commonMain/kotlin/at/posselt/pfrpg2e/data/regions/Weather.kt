@@ -1,6 +1,10 @@
 package at.posselt.pfrpg2e.data.regions
 
-enum class WeatherEffect {
+import at.posselt.pfrpg2e.data.ValueEnum
+import at.posselt.pfrpg2e.localization.Translatable
+import at.posselt.pfrpg2e.toCamelCase
+
+enum class WeatherEffect: Translatable, ValueEnum {
     NONE,
     SNOW,
     RAIN,
@@ -9,16 +13,28 @@ enum class WeatherEffect {
     RAIN_STORM,
     FOG,
     BLIZZARD;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "weatherEffect.$value"
 }
 
-enum class Season {
+enum class Season: Translatable, ValueEnum {
     SPRING,
     SUMMER,
     FALL,
     WINTER;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "season.$value"
 }
 
-enum class Month {
+enum class Month: Translatable, ValueEnum {
     JANUARY,
     FEBRUARY,
     MARCH,
@@ -31,6 +47,12 @@ enum class Month {
     OCTOBER,
     NOVEMBER,
     DECEMBER;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "month.$value"
 }
 
 data class Climate(
@@ -41,11 +63,17 @@ data class Climate(
     val weatherEventDc: Int? = 18
 )
 
-enum class WeatherType {
+enum class WeatherType: Translatable, ValueEnum {
     COLD,
     SNOWY,
     RAINY,
-    SUNNY,
+    SUNNY;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "weatherType.$value"
 }
 
 fun getMonth(index: Int): Month =

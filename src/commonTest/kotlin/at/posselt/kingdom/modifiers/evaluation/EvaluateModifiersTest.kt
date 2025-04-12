@@ -1,16 +1,13 @@
 package at.posselt.kingdom.modifiers.evaluation
 
 import at.posselt.pfrpg2e.data.actor.Proficiency.*
-import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill.*
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
-import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.ABILITY
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType.PROFICIENCY
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createProficiencyModifier
-import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createSkillAbilityModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.FilterResult
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.Case
@@ -44,28 +41,6 @@ val defaultContext = ExpressionContext(
 )
 
 class EvaluateModifiersTest {
-    @Test
-    fun testBasic() {
-        val modifiers = listOf(
-            createSkillAbilityModifiers(
-                AGRICULTURE,
-                KingdomAbilityScores(11, 13, 15, 16)
-            ).copy(rollOptions = setOf("option")),
-            createProficiencyModifier(AGRICULTURE, proficiency = LEGENDARY, level = 3)
-        )
-        val result = evaluateModifiers(
-            FilterResult(
-                context = defaultContext,
-                modifiers = modifiers,
-            )
-        )
-        assertEquals(12, result.total)
-        assertEquals(11, result.bonuses[PROFICIENCY])
-        assertEquals(1, result.bonuses[ABILITY])
-        assertEquals(modifiers, result.filteredModifiers)
-        assertEquals(setOf("option"), result.rollOptions)
-    }
-
     @Test
     fun higherOverridesLowerInSameCategory() {
         val modifiers = listOf(

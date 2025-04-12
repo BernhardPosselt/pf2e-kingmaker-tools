@@ -29,7 +29,7 @@ fun createProficiencyModifier(
 ): Modifier {
     return Modifier(
         id = skill.value,
-        name = "${skill.label} (${proficiency.label})",
+        name = proficiency.i18nKey,
         type = ModifierType.PROFICIENCY,
         value = when (proficiency) {
             Proficiency.UNTRAINED -> when (mode) {

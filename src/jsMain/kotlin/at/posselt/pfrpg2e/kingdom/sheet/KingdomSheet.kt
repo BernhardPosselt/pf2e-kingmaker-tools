@@ -119,6 +119,7 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
 import at.posselt.pfrpg2e.utils.rollWithCompendiumFallback
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
@@ -1050,7 +1051,7 @@ class KingdomSheet(
             )
             kingdom.activeSettlement = it
             actor.setKingdom(kingdom)
-            ui.notifications.info("Imported and added ${type.label}")
+            ui.notifications.info("Imported and added ${t(type)}")
             scene.activate().await()
         }
     }
@@ -1213,7 +1214,7 @@ class KingdomSheet(
                 label = "Skill Training",
                 value = proficiency?.value,
                 options = KingdomSkill.entries.filter { it == proficiency || it !in trainedSkills }
-                    .map { SelectOption(value = it.value, label = it.label) },
+                    .map { SelectOption(value = it.value, label = t(it)) },
                 required = false,
                 hideLabel = true,
             ).toContext()
@@ -1298,7 +1299,7 @@ class KingdomSheet(
             worksitesContext = kingdom.workSites.toContext(realm.worksites, automateResources),
             sizeInput = sizeInput.toContext(),
             size = realm.size,
-            kingdomSize = realm.sizeInfo.type.label,
+            kingdomSize = t(realm.sizeInfo.type),
             resourcePointsContext = kingdom.resourcePoints.toContext("resourcePoints"),
             resourceDiceContext = kingdom.resourceDice.toContext("resourceDice"),
             consumptionContext = kingdom.consumption.toContext(kingdom.settings.autoCalculateArmyConsumption),

@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.data.kingdom.leaders
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 
-enum class LeaderType {
+enum class LeaderType: Translatable, ValueEnum {
     PC,
     REGULAR_NPC,
     HIGHLY_MOTIVATED_NPC,
@@ -14,9 +15,9 @@ enum class LeaderType {
         fun fromString(value: String) = fromCamelCase<LeaderType>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "leaderType.$value"
 }

@@ -11,6 +11,7 @@ import at.posselt.pfrpg2e.kingdom.RawLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.hasSkill
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -144,7 +145,7 @@ class ConfigureLeaderKingdomSkills(
         val rows = KingdomSkill.entries
             .map { skill ->
                 LeaderKingdomSkillsRow(
-                    label = skill.label,
+                    label = t(skill),
                     cells = Leader.entries
                         .map { leader ->
                             val name = leader.value + "." + skill.value
@@ -162,7 +163,7 @@ class ConfigureLeaderKingdomSkills(
             .toTypedArray()
         ConfigureLeaderKingdomSkillsContext(
             partId = parent.partId,
-            headers = Leader.entries.map { it.label }.toTypedArray(),
+            headers = Leader.entries.map { t(it) }.toTypedArray(),
             formRows = rows,
             isFormValid = true,
             compact = true,

@@ -1,5 +1,8 @@
 package at.posselt.pfrpg2e.camping
 
+import at.posselt.pfrpg2e.data.ValueEnum
+import at.posselt.pfrpg2e.localization.Translatable
+import at.posselt.pfrpg2e.toCamelCase
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -56,15 +59,27 @@ external interface RecipeData {
     val favoriteMeal: CookingOutcome?
 }
 
-enum class HealMode {
+enum class HealMode: ValueEnum, Translatable {
     AFTER_CONSUMPTION,
     AFTER_REST,
-    AFTER_CONSUMPTION_AND_REST,
+    AFTER_CONSUMPTION_AND_REST;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "healMode.$value"
 }
 
-enum class ReduceConditionMode {
+enum class ReduceConditionMode: ValueEnum, Translatable {
     ALL,
-    RANDOM
+    RANDOM;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "reduceConditionMode.$value"
 }
 
 

@@ -11,7 +11,7 @@ fun createAnarchyPenalty() =
         id = "anarchy",
         type = ModifierType.UNTYPED,
         value = 0,
-        name = "Anarch worsens all checks by 1 degree",
+        name = "Anarchy worsens all checks by 1 degree",
         applyIf = listOf(
             Gte("@unrest", "@anarchyAt")
         ),

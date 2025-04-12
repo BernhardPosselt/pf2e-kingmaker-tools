@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.sheet
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.kingdom.ResourceDieSize
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.fromCamelCase
@@ -14,6 +15,7 @@ import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.lowercaseFirst
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
@@ -33,7 +35,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.math.abs
 
-enum class Turn {
+enum class Turn: Translatable {
     NOW,
     NEXT;
 
@@ -41,7 +43,7 @@ enum class Turn {
         fun fromString(value: String) = fromCamelCase<Turn>(value)
     }
 
-    val key = "resourceButton.turn.$value"
+    override val i18nKey = "resourceButton.turn.$value"
 
     val value: String
         get() = toCamelCase()
@@ -50,7 +52,7 @@ enum class Turn {
         get() = toLabel()
 }
 
-enum class ResourceMode {
+enum class ResourceMode: Translatable {
     GAIN,
     LOSE;
 
@@ -58,7 +60,7 @@ enum class ResourceMode {
         fun fromString(value: String) = fromCamelCase<ResourceMode>(value)
     }
 
-    val key = "resourceButton.mode.$value"
+    override val i18nKey = "resourceButton.mode.$value"
 
     val value: String
         get() = toCamelCase()
@@ -67,42 +69,41 @@ enum class ResourceMode {
         get() = toLabel()
 }
 
-enum class Resource(val value: String, val camel: String? = null) {
-    RESOURCE_DICE("resource-dice", "resourceDice"),
-    CRIME("crime"),
-    DECAY("decay"),
-    CORRUPTION("corruption"),
-    CONSUMPTION("consumption"),
-    STRIFE("strife"),
-    RESOURCE_POINTS("resource-points", "resourcePoints"),
-    FOOD("food"),
-    LUXURIES("luxuries"),
-    UNREST("unrest"),
-    ORE("ore"),
-    LUMBER("lumber"),
-    FAME("fame"),
-    STONE("stone"),
-    XP("xp"),
-    SUPERNATURAL_SOLUTION("supernatural-solution", "supernaturalSolution"),
-    CREATIVE_SOLUTION("creative-solution", "creativeSolution"),
-    ROLLED_RESOURCE_DICE("rolled-resource-dice", "rolledResourceDice");
+enum class Resource: Translatable, ValueEnum {
+    RESOURCE_DICE,
+    CRIME,
+    DECAY,
+    CORRUPTION,
+    CONSUMPTION,
+    STRIFE,
+    RESOURCE_POINTS,
+    FOOD,
+    LUXURIES,
+    UNREST,
+    ORE,
+    LUMBER,
+    FAME,
+    STONE,
+    XP,
+    SUPERNATURAL_SOLUTION,
+    CREATIVE_SOLUTION,
+    ROLLED_RESOURCE_DICE;
 
     companion object {
         fun fromString(value: String) = entries.find { it.value == value }
-        fun fromCamelCaseString(value: String) = entries.find { (it.camel ?: it.value) == value }
     }
 
-    val label: String
-        get() = value.split("-").joinToString(" ") { it.toLabel() }
+    override val value: String
+        get() = toCamelCase()
 
-    val key = "resourceButton.resource.${camel ?: value}"
+    override val i18nKey = "resourceButton.resource.$value"
 }
 
 private val fromStringRegex = Regex(
     "@(?<mode>gain|lose)" +
             "(?<multiple>Multiple)?" +
             "(?<value>[0-9rd+]+)" +
-            "(?<resource>${Resource.entries.joinToString("|") { (it.camel ?: it.value).uppercaseFirst() }})" +
+            "(?<resource>${Resource.entries.joinToString("|") { it.value.uppercaseFirst() }})" +
             "(?<turn>NextTurn)?"
 )
 
@@ -139,7 +140,7 @@ data class ResourceButton(
             val multiple = match.groups["multiple"] != null
             val value = match.groups["value"]?.value
             val resource = match.groups["resource"]
-                ?.value?.let { Resource.fromCamelCaseString(it.lowercaseFirst()) }
+                ?.value?.let { Resource.fromString(it.lowercaseFirst()) }
             checkNotNull(resource) {
                 "Resource must not be null"
             }
@@ -178,8 +179,8 @@ data class ResourceButton(
     }
 
     fun toHtml(): String {
-        val turnLabel = if (turn == Turn.NEXT) " ${t(turn.key)}" else ""
-        val label = "${t(mode.key)} ${t(resource.key, recordOf("count" to value))}$turnLabel"
+        val turnLabel = if (turn == Turn.NEXT) " ${t(turn)}" else ""
+        val label = "${t(mode)} ${t(resource.i18nKey, recordOf("count" to value))}$turnLabel"
         val value2 = value
         return document.create.button {
             type = ButtonType.button
@@ -229,9 +230,9 @@ data class ResourceButton(
         } else {
             initialValue
         }
-        val turnLabel = if (turn == Turn.NEXT) " ${t(turn.key)}" else ""
+        val turnLabel = if (turn == Turn.NEXT) " ${t(turn)}" else ""
         val mode = if (mode == ResourceMode.GAIN) "resourceButton.mode.gaining" else "resourceButton.mode.losing"
-        val resourceKey = if (resource == Resource.ROLLED_RESOURCE_DICE) Resource.RESOURCE_POINTS.key else resource.key
+        val resourceKey = if (resource == Resource.ROLLED_RESOURCE_DICE) Resource.RESOURCE_POINTS.i18nKey else resource.i18nKey
         val message = "${t(mode)} ${t(resourceKey, recordOf("count" to abs(value)))}$turnLabel"
         postChatMessage(message, isHtml = true)
         val setter = when (resource) {

@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.data.kingdom
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 
-enum class KingdomAbility() {
+enum class KingdomAbility : Translatable, ValueEnum {
     CULTURE,
     ECONOMY,
     LOYALTY,
@@ -14,11 +15,11 @@ enum class KingdomAbility() {
         fun fromString(value: String) = fromCamelCase<KingdomAbility>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "kingdomAbility.$value"
 }
 
 fun calculateScore(boosts: Int, flaws: Int): Int {

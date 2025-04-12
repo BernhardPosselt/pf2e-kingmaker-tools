@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.data.kingdom.structures
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 
-enum class ItemGroup(val isMagical: Boolean) {
+enum class ItemGroup(val isMagical: Boolean): Translatable, ValueEnum {
     DIVINE(true),
     PRIMAL(true),
     OCCULT(true),
@@ -18,9 +19,9 @@ enum class ItemGroup(val isMagical: Boolean) {
         fun fromString(value: String) = fromCamelCase<ItemGroup>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "extendedItemGroup.$value"
 }

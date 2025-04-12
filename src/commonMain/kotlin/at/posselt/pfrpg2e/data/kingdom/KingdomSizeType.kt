@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.data.kingdom
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 
-enum class KingdomSizeType {
+enum class KingdomSizeType: Translatable, ValueEnum {
     TERRITORY,
     PROVINCE,
     STATE,
@@ -15,9 +16,9 @@ enum class KingdomSizeType {
         fun fromString(value: String) = fromCamelCase<KingdomSizeType>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "kingdomSizeType.$value"
 }

@@ -11,6 +11,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.serializeB64Json
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -125,7 +126,7 @@ suspend fun generateRollMeta(
     return tpl(
         path = "chatmessages/roll-flavor.hbs",
         ctx = RollMetaContext(
-            label = activity?.title ?: skill.label,
+            label = activity?.title ?: t(skill),
             dc = dc,
             activityId = activity?.id,
             actorUuid = actor.uuid,

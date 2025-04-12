@@ -13,6 +13,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawLeaderValues
 import at.posselt.pfrpg2e.kingdom.data.RawLeaders
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.LeaderBonuses
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.browser.document
 import kotlinx.html.b
 import kotlinx.html.classes
@@ -52,14 +53,14 @@ fun RawLeaderValues.toContext(
     val label = document.create.span {
         classes = setOf("km-leader-vacant-label")
         b {
-            +leader.label
+            +t(leader)
         }
         +(leaderActorName?.let { ": $it" } ?: "")
     }
 
     return LeaderValuesContext(
-        label = leader.label,
-        keyAbility = leader.keyAbility.label,
+        label = t(leader),
+        keyAbility = t(leader.keyAbility),
         actor = leaderActor?.let { actor ->
             ActorLeaderContext(
                 uuid = actor.uuid,
@@ -76,7 +77,7 @@ fun RawLeaderValues.toContext(
         invested = CheckboxInput(
             value = invested && uuid != null,
             name = "leaders.${leader.value}.invested",
-            label = "Invest ${leader.keyAbility.label}",
+            label = "Invest ${t(leader.keyAbility)}",
         ).toContext(),
         vacant = CheckboxInput(
             escapeLabel = false,

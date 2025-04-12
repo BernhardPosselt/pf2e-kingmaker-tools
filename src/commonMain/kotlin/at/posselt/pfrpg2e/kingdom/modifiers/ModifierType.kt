@@ -1,10 +1,12 @@
 package at.posselt.pfrpg2e.kingdom.modifiers
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 
-enum class ModifierType {
+enum class ModifierType : Translatable, ValueEnum {
     ABILITY,
     PROFICIENCY,
     ITEM,
@@ -18,11 +20,11 @@ enum class ModifierType {
         fun fromString(value: String) = fromCamelCase<ModifierType>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
     val label: String
         get() = toLabel()
 
-    val key = "modifierType.$value"
+    override val i18nKey = "modifierType.$value"
 }

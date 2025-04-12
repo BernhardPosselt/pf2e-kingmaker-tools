@@ -1,5 +1,268 @@
 {
   "pf2e-kingmaker-tools": {
+    "builtInModifierNames": {
+      "invested": "Invested"
+    },
+    "settlementTerrain": {
+      "forest": "Forest",
+      "swamp": "Swamp",
+      "mountains": "Mountains",
+      "plains": "Plains"
+    },
+    "untrainedProficiencyMode": {
+      "none": "None",
+      "half": "Half",
+      "full": "Full"
+    },
+    "activityEffectTarget": {
+      "allies": "Allies",
+      "all": "All",
+      "self": "Self"
+    },
+    "reduceConditionMode": {
+      "all": "All",
+      "random": "Random"
+    },
+    "healMode": {
+      "afterConsumption": "After Consumption",
+      "afterRest": "After Rest",
+      "afterConsumptionAndRest": "After Consumption And Rest"
+    },
+    "zoneTerrain": {
+      "aquatic": "Aquatic",
+      "desert": "Desert",
+      "plains": "Plains",
+      "hills": "Hills",
+      "forest": "Forest",
+      "mountain": "Mountain",
+      "swamp": "Swamp",
+      "urban": "Urban",
+      "dungeon": "Dungeon"
+    },
+    "month": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
+    "weatherType": {
+      "cold": "Cold",
+      "snowy": "Snowy",
+      "rainy": "Rainy",
+      "sunny": "Sunny"
+    },
+    "weatherEffect": {
+      "none": "None",
+      "snow": "Snow",
+      "rain": "Rain",
+      "sunny": "Sunny",
+      "leaves": "Leaves",
+      "rainStorm": "RainStorm",
+      "fog": "Fog",
+      "blizzard": "Blizzard"
+    },
+    "season": {
+      "spring": "Spring",
+      "summer": "Summer",
+      "fall": "Fall",
+      "winter": "Winter"
+    },
+    "automateResources": {
+      "kingmaker": "Kingmaker",
+      "tileBased": "Tile Based",
+      "manual": "Manual"
+    },
+    "activityDcType": {
+      "value": "Value",
+      "control": "Control",
+      "custom": "Custom",
+      "none": "None",
+      "scouting": "Scouting"
+    },
+    "realmTileType": {
+      "mine": "Mine",
+      "ore": "Ore",
+      "lumber": "Lumber",
+      "lumberCamp": "Lumber Camp",
+      "quarry": "Quarry",
+      "stone": "Stone",
+      "luxury": "Luxury",
+      "luxuryWorksite": "Luxury Worksite",
+      "farmland": "Farmland",
+      "food": "Food",
+      "claimed": "Claimed"
+    },
+    "restRollMode": {
+      "none": "None",
+      "one": "One",
+      "oneEveryFourHours": "One Every Four Hours"
+    },
+    "perception": "Perception",
+    "fameType": {
+      "famous": "Famous",
+      "infamous": "Infamous"
+    },
+    "commodityType": {
+      "ore": "Ore",
+      "lumber": "Lumber",
+      "stone": "Stone",
+      "luxury": "Luxury",
+      "food": "Food"
+    },
+    "structureTrait": {
+      "edifice": "Edifice",
+      "yard": "Yard",
+      "building": "Building",
+      "famous": "Famous",
+      "infamous": "Infamous",
+      "residential": "Residential",
+      "infrastructure": "Infrastructure"
+    },
+    "extendedItemGroup": {
+      "divine": "Divine",
+      "primal": "Primal",
+      "occult": "Occult",
+      "arcane": "Arcane",
+      "divineLuxury": "Divine Luxury",
+      "primalLuxury": "Primal Luxury",
+      "occultLuxury": "Occult Luxury",
+      "arcaneLuxury": "Arcane Luxury",
+      "magical": "Magical",
+      "alchemical": "Alchemical",
+      "luxury": "Luxury",
+      "other": "Other"
+    },
+    "settlementType": {
+      "settlement": "Settlement",
+      "capital": "Capital"
+    },
+    "settlementSizeType": {
+      "village": "Village",
+      "town": "Town",
+      "city": "City",
+      "metropolis": "Metropolis"
+    },
+    "leaderType": {
+      "pc": "PC",
+      "regularNpc": "Regular NPC",
+      "highlyMotivatedNpc": "Highly Motivated NPC",
+      "nonPathfinderNpc": "Non-Pathfinder NPC"
+    },
+    "leader": {
+      "ruler": "Ruler",
+      "counselor": "Counselor",
+      "emissary": "Emissary",
+      "general": "General",
+      "magister": "Magister",
+      "treasurer": "Treasurer",
+      "viceroy": "Viceroy",
+      "warden": "Warden"
+    },
+    "rarity": {
+      "common": "Common",
+      "uncommon": "Uncommon",
+      "rare": "Rare",
+      "unique": "Unique"
+    },
+    "rollMode": {
+      "publicroll": "Public Roll",
+      "gmroll": "GM Roll",
+      "blindroll": "Blind Roll",
+      "selfroll": "Self Roll"
+    },
+    "kingdomEventTrait": {
+      "downtime": "Downtime",
+      "leadership": "Leadership",
+      "hex": "Hex",
+      "dangerous": "Dangerous",
+      "beneficial": "Beneficial",
+      "settlement": "Settlement",
+      "continuous": "Continuous"
+    },
+    "proficiency": {
+      "untrained": "Untrained",
+      "trained": "Trained",
+      "expert": "Expert",
+      "master": "Master",
+      "legendary": "Legendary"
+    },
+    "skill": {
+      "acrobatics": "Acrobatics",
+      "arcana": "Arcana",
+      "athletics": "Athletics",
+      "crafting": "Crafting",
+      "deception": "Deception",
+      "diplomacy": "Diplomacy",
+      "intimidation": "Intimidation",
+      "medicine": "Medicine",
+      "nature": "Nature",
+      "occultism": "Occultism",
+      "performance": "Performance",
+      "religion": "Religion",
+      "society": "Society",
+      "stealth": "Stealth",
+      "survival": "Survival",
+      "thievery": "Thievery"
+    },
+    "kingdomAbility": {
+      "culture": "Culture",
+      "economy": "Economy",
+      "loyalty": "Loyalty",
+      "stability": "Stability"
+    },
+    "kingdomSizeType": {
+      "territory": "Territory",
+      "province": "Province",
+      "state": "State",
+      "country": "Country",
+      "dominion": "Dominion"
+    },
+    "kingdomRelations": {
+      "none": "None",
+      "diplomaticRelations": "Diplomatic Relations",
+      "tradeAgreement": "Trade Agreement"
+    },
+    "kingdomPhase": {
+      "army": "Army",
+      "civic": "Civic",
+      "commerce": "Commerce",
+      "event": "Event",
+      "leadership": "Leadership",
+      "region": "Region",
+      "upkeep": "Upkeep"
+    },
+    "kingdomSkill": {
+      "agriculture": "Agriculture",
+      "arts": "Arts",
+      "boating": "Boating",
+      "defense": "Defense",
+      "engineering": "Engineering",
+      "exploration": "Exploration",
+      "folklore": "Folklore",
+      "industry": "Industry",
+      "intrigue": "Intrigue",
+      "magic": "Magic",
+      "politics": "Politics",
+      "scholarship": "Scholarship",
+      "statecraft": "Statecraft",
+      "trade": "Trade",
+      "warfare": "Warfare",
+      "wilderness": "Wilderness"
+    },
+    "degreeOfSuccess": {
+      "criticalSuccess": "Critical Success",
+      "success": "Success",
+      "failure": "Failure",
+      "criticalFailure": "Critical Failure"
+    },
     "modifierType": {
       "ability": "Ability",
       "proficiency": "Proficiency",
@@ -9,6 +272,12 @@
       "leadership": "Leadership",
       "vacancy": "Vacancy",
       "untyped": "Untyped"
+    },
+    "ruin": {
+      "corruption": "Corruption",
+      "crime": "Crime",
+      "decay": "Decay",
+      "strife": "Strife"
     },
     "resourceButton": {
       "rolling": "Rolling Resources",

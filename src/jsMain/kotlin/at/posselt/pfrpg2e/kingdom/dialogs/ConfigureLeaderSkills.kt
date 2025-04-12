@@ -19,6 +19,7 @@ import at.posselt.pfrpg2e.kingdom.hasAttribute
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -203,7 +204,7 @@ private class ConfigureLeaderSkills(
                     disabled = attribute !is Lore,
                 )
                 LeaderSkillsRow(
-                    label = attribute.label,
+                    label = t(attribute),
                     cells = Leader.entries
                         .map { leader ->
                             val name = leader.value + "." + attributeIndex
@@ -221,7 +222,7 @@ private class ConfigureLeaderSkills(
             .toTypedArray()
         ConfigureLeaderSkillsContext(
             partId = parent.partId,
-            headers = Leader.entries.map { it.label }
+            headers = Leader.entries.map { t(it) }
                 .toTypedArray() + if (readonly) emptyArray() else arrayOf("Delete"),
             formRows = rows,
             isFormValid = true,

@@ -11,6 +11,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.utils.asSequence
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 import js.objects.Record
 
@@ -120,13 +121,13 @@ fun RawFeatRequirements.formatRequirements(allFeats: Array<RawFeat>): String {
     val scores = KingdomAbility.entries
         .mapNotNull {ability ->
             scoreRecord?.get(ability.value)?.let {
-                "${ability.label}: $it"
+                "${t(ability)}: $it"
             }
         }
     val ranks = KingdomSkill.entries
         .mapNotNull {skill ->
             skillRecord?.get(skill.value)?.let { rank ->
-                "${skill.label} (${Proficiency.fromRank(rank).label})"
+                "${t(skill)} (${t(Proficiency.fromRank(rank))})"
             }
         }
     return (feats + scores + ranks).joinToString(", ")

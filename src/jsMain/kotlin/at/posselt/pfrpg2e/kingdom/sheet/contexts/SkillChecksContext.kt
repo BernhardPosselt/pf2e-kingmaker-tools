@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @Suppress("unused")
@@ -74,7 +75,7 @@ suspend fun skillChecks(
         val proficiency = skillRanks.resolveProficiency(it)
         SkillChecksContext(
             skill = it.value,
-            label = it.label,
+            label = t(it),
             rank = rank,
             valueClass = when (proficiency) {
                 Proficiency.UNTRAINED -> "km-proficiency-untrained"
@@ -91,17 +92,17 @@ suspend fun skillChecks(
                 ).toContext()
             } else {
                 Select(
-                    label = it.label,
+                    label = t(it),
                     hideLabel = true,
                     value = rank.toString(),
-                    options = Proficiency.entries.map { SelectOption(label = it.label, value = it.rank.toString()) },
+                    options = Proficiency.entries.map { SelectOption(label = t(it), value = it.rank.toString()) },
                     name = "skillRanks.${it.value}",
                     overrideType = OverrideType.NUMBER,
                     elementClasses = listOf("km-proficiency"),
                     labelClasses = listOf("km-slim-inputs"),
                 ).toContext()
             },
-            proficiency = proficiency.label,
+            proficiency = t(proficiency),
             modifier = evaluatedModifiers.total.formatAsModifier(),
         )
     }.toTypedArray()

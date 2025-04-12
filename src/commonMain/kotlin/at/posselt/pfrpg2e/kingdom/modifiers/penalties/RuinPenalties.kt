@@ -14,7 +14,7 @@ fun createRuinModifiers(values: RuinValues): List<Modifier> =
         } else {
             Modifier(
                 id = "ruin-${it.value}",
-                name = "Ruin (${it.label})",
+                name = it.i18nKey,
                 type = ModifierType.ITEM,
                 value = -value,
                 applyIf = listOf(

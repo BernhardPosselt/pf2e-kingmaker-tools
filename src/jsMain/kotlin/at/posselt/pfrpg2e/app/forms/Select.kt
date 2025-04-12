@@ -1,9 +1,11 @@
 package at.posselt.pfrpg2e.app.forms
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.deCamelCase
-import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toLabel
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Item
 import com.foundryvtt.core.documents.JournalEntry
@@ -153,7 +155,7 @@ data class Select(
             escapeLabel = escapeLabel,
         )
 
-        inline fun <reified T : Enum<T>> fromEnum(
+        inline fun <reified T> fromEnum(
             label: String,
             name: String,
             value: T? = null,
@@ -166,10 +168,10 @@ data class Select(
             elementClasses: List<String> = emptyList(),
             labelClasses: List<String> = emptyList(),
             escapeLabel: Boolean = true,
-        ) = Select(
+        ) where T : Translatable, T : Enum<T>, T : ValueEnum = Select(
             name = name,
             label = label,
-            value = value?.toCamelCase(),
+            value = value?.value,
             required = required,
             help = help,
             hideLabel = hideLabel,
@@ -290,11 +292,11 @@ fun Item.toOption(useUuid: Boolean = false) =
         }
     }
 
-inline fun <reified T : Enum<T>> enumToOptions(labelFunction: (T) -> String = { it.toLabel() }) =
+inline fun <reified T> enumToOptions(labelFunction: (T) -> String = { t(it) }) where T : Translatable, T : Enum<T>, T : ValueEnum =
     enumEntries<T>().map {
         SelectOption(
             label = labelFunction(it),
-            value = it.toCamelCase()
+            value = it.value
         )
     }
 

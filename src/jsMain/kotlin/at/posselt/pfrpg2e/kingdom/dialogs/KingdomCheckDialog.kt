@@ -539,14 +539,14 @@ private class KingdomCheckDialog(
             )
         } else {
             serializeB64Json(evaluatedModifiers.modifiers.map {
-                if (it.value == 0) it.name else "${it.name} ${it.value.formatAsModifier()}"
+                if (it.value == 0) t(it.name) else "${t(it.name)} ${it.value.formatAsModifier()}"
             }.toTypedArray())
         }
         val creativeSolutionPills = serializeB64Json(creativeSolutionModifiers.modifiers.map {
-            "${it.name} ${it.value.formatAsModifier()}"
+            "${t(it.name)} ${it.value.formatAsModifier()}"
         }.toTypedArray())
         val freeAndFairPills = serializeB64Json(freeAndFairModifiers.modifiers.map {
-            "${it.name} ${it.value.formatAsModifier()}"
+            "${t(it.name)} ${it.value.formatAsModifier()}"
         }.toTypedArray())
         val notes = serializeB64Json(enabledModifiers.flatMap { it.notes.map { it.serialize() } }.toTypedArray())
         val checkModifier = if (data.assurance) {
@@ -605,7 +605,7 @@ private class KingdomCheckDialog(
                     } else {
                         ""
                     }
-                    val label = "${it.label} (${mod.formatAsModifier()}$actions)"
+                    val label = "${t(it)} (${mod.formatAsModifier()}$actions)"
                     SelectOption(label, it.value)
                 },
             ).toContext(),
@@ -692,7 +692,7 @@ private class KingdomCheckDialog(
         downgradeDegrees: Set<DowngradeResult>
     ): String {
         var degree = determineDegreeOfSuccess(data.dc, modifier + 10, 10)
-        return determineDegree(degree, upgradeDegrees, downgradeDegrees).changedDegree.label
+        return t(determineDegree(degree, upgradeDegrees, downgradeDegrees).changedDegree)
     }
 
     fun toModifierContext(
@@ -707,7 +707,7 @@ private class KingdomCheckDialog(
         val enabled = evaluatedModifier?.enabled ?: modifier.enabled
         return ModifierContext(
             label = t(modifier.name),
-            type = t(modifier.type.key),
+            type = t(modifier.type),
             modifier = value.formatAsModifier(),
             id = modifier.id,
             removable = modifier.id in removableIds,
@@ -813,7 +813,7 @@ suspend fun kingdomCheckDialog(
                 rulerVacant = vacancies.ruler,
             )
             CheckDialogParams(
-                title = check.skill.label, dc = dc, validSkills = setOf(check.skill),
+                title = t(check.skill), dc = dc, validSkills = setOf(check.skill),
                 phase = KingdomPhase.EVENT,
             )
         }

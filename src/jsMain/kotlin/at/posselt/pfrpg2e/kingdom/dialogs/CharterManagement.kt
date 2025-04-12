@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.resetAbilityBoosts
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import js.core.Void
 import kotlin.js.Promise
 
@@ -85,11 +86,11 @@ class CharterManagement(
                         additionalColumns = arrayOf(
                             CrudColumn(
                                 escapeHtml = true,
-                                value = item.boost?.let { KingdomAbility.fromString(it) }?.label ?: "",
+                                value = item.boost?.let { KingdomAbility.fromString(it) }?.let { t(it) } ?: "",
                             ),
                             CrudColumn(
                                 escapeHtml = true,
-                                value = item.flaw?.let { KingdomAbility.fromString(it) }?.label ?: "",
+                                value = item.flaw?.let { KingdomAbility.fromString(it) }?.let { t(it) } ?: "",
                             )
                         ),
                         enable = CheckboxInput(

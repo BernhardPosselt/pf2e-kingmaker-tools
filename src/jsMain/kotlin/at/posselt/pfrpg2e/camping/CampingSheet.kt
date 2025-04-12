@@ -45,6 +45,7 @@ import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.openItem
 import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toDateInputString
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.Game
@@ -1134,7 +1135,7 @@ private fun getActivitySkills(
             .filter { !it.validateOnly }
             .map {
                 SelectOption(
-                    label = it.attribute.label,
+                    label = t(it.attribute),
                     value = it.attribute.value,
                     classes = listOf("km-proficiency-${it.proficiency.toCamelCase()}")
                 )

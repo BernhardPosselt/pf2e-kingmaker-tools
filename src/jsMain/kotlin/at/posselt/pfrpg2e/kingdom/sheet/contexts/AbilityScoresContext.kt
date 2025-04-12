@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityScores
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -33,14 +34,14 @@ private fun toAbilityContext(
     } else {
         NumberInput(
             name = "abilityScores.${ability.value}",
-            label = ability.label,
+            label = t(ability),
             hideLabel = true,
             value = rawValue,
             elementClasses = listOf("km-slim-inputs", "km-width-small"),
         ).toContext()
     },
     mod = scores.resolveModifier(ability).formatAsModifier(),
-    label = ability.label,
+    label = t(ability),
     value = scores.resolve(ability),
 )
 

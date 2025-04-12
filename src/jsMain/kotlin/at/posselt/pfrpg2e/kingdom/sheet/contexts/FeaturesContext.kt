@@ -145,7 +145,6 @@ fun Array<RawFeatureChoices>.toContext(
     val chosenFeatIds = chosenFeats.map { it.feat.id }.toSet()
     val featsById = feats.associateBy { it.id }
     val choicesById = choices.associateBy { it.id }
-    val skillIncreaseOptions = KingdomSkill.entries.map { SelectOption(it.label, it.value) }
     val takenFeats = getTakenFeats(choices, government, bonusFeats, trainedSkills)
     return features
         .asSequence()
@@ -219,11 +218,10 @@ fun Array<RawFeatureChoices>.toContext(
 
                         featDescription = feat?.text ?: "",
                         skillProficiency = if (feature.skillIncrease == true) {
-                            Select(
+                            Select.fromEnum<KingdomSkill>(
                                 label = "Skill Increase",
                                 name = "features.$index.skillIncrease",
-                                value = choice?.skillIncrease,
-                                options = skillIncreaseOptions,
+                                value = choice?.skillIncrease?.let { KingdomSkill.fromString(it) },
                                 required = false,
                                 stacked = false,
                                 hideLabel = true,

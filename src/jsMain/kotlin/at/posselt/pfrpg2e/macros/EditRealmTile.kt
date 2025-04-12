@@ -4,8 +4,10 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.getKingdomActors
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.RealmTileData
@@ -39,7 +41,7 @@ enum class RealmTileCategory {
         get() = toLabel()
 }
 
-enum class RealmTileType(val category: RealmTileCategory) {
+enum class RealmTileType(val category: RealmTileCategory): ValueEnum, Translatable {
     MINE(RealmTileCategory.WORKSITE),
     ORE(RealmTileCategory.COMMODITY),
     LUMBER(RealmTileCategory.COMMODITY),
@@ -56,11 +58,11 @@ enum class RealmTileType(val category: RealmTileCategory) {
         fun fromString(value: String) = fromCamelCase<RealmTileType>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "realmTypeType.$value"
 }
 
 suspend fun editRealmTileMacro(game: Game) {

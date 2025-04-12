@@ -13,6 +13,7 @@ import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import js.core.Void
 import kotlin.js.Promise
 
@@ -80,7 +81,7 @@ class HeartlandManagement(
                         additionalColumns = arrayOf(
                             CrudColumn(
                                 escapeHtml = true,
-                                value = KingdomAbility.fromString(item.boost)?.label ?: "",
+                                value = KingdomAbility.fromString(item.boost)?.let { t(it) } ?: "",
                             )
                         ),
                         enable = CheckboxInput(

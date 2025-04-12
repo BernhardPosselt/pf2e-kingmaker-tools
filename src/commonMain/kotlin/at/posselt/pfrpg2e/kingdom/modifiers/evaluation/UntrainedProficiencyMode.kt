@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 
-enum class UntrainedProficiencyMode {
+enum class UntrainedProficiencyMode: ValueEnum, Translatable {
     NONE,
     HALF,
     FULL;
@@ -13,9 +14,9 @@ enum class UntrainedProficiencyMode {
         fun fromString(value: String) = fromCamelCase<UntrainedProficiencyMode>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "untrainedProficiencyMode.$value"
 }

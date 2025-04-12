@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.kingdom
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 
-enum class SettlementTerrain {
+enum class SettlementTerrain: ValueEnum, Translatable {
     FOREST,
     SWAMP,
     MOUNTAINS,
@@ -14,9 +15,9 @@ enum class SettlementTerrain {
         fun fromString(value: String) = fromCamelCase<SettlementTerrain>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "settlementTerrain.$value"
 }

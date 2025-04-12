@@ -1,10 +1,11 @@
 package at.posselt.pfrpg2e.data.kingdom.activities
 
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 
-enum class ActivityDcType {
+enum class ActivityDcType: ValueEnum, Translatable {
     VALUE,
     CONTROL,
     CUSTOM,
@@ -15,11 +16,11 @@ enum class ActivityDcType {
         fun fromString(value: String) = fromCamelCase<ActivityDcType>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "activityDcType.$value"
 }
 
 fun getDcType(value: Any): ActivityDcType =

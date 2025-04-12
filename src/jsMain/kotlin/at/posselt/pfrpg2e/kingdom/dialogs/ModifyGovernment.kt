@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -147,13 +148,13 @@ class ModifyGovernment(
                 CheckboxInput(
                     name = "boosts.$index",
                     value = it.value in current.boosts,
-                    label = "Boost: ${it.label}",
+                    label = "Boost: ${t(it)}",
                 ).toContext()
             }.toTypedArray() + KingdomSkill.entries.mapIndexed { index, it ->
                 CheckboxInput(
                     name = "skillProficiencies.$index",
                     value = it.value in current.skillProficiencies,
-                    label = "Skill Training: ${it.label}",
+                    label = "Skill Training: ${t(it)}",
                 ).toContext()
             }.toTypedArray()
         )

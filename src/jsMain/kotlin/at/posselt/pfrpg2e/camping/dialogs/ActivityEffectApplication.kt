@@ -9,7 +9,9 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.camping.ActivityEffect
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
@@ -52,10 +54,16 @@ external interface ActivityEffectContext : ValidatedHandlebarsContext {
     val formRows: Array<FormElementContext>
 }
 
-enum class ActivityEffectTarget {
+enum class ActivityEffectTarget: ValueEnum, Translatable {
     ALLIES,
     ALL,
-    SELF
+    SELF;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "activityEffectTarget.$value"
 }
 
 @JsPlainObject

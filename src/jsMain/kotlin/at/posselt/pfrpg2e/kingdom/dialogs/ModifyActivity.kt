@@ -21,6 +21,7 @@ import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -191,7 +192,7 @@ class ModifyActivity(
                     stacked = false,
                     options = KingdomPhase.entries
                         .filter { it != KingdomPhase.UPKEEP && it != KingdomPhase.EVENT }
-                        .map { SelectOption(label = it.label, value = it.value) },
+                        .map { SelectOption(label = t(it), value = it.value) },
                 ),
                 TextInput(
                     name = "requirement",

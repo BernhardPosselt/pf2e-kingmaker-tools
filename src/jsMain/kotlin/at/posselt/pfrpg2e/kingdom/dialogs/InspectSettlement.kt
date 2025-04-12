@@ -25,6 +25,7 @@ import at.posselt.pfrpg2e.unslugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
@@ -305,9 +306,9 @@ class InspectSettlement(
                 val skill = bonus.skill
                 val mod = bonus.value.formatAsModifier()
                 if (activity != null && skill != null) {
-                    "$mod to ${activity.unslugify()} using ${skill.label}"
+                    "$mod to ${activity.unslugify()} using ${t(skill)}"
                 } else if (skill != null) {
-                    "$mod to ${skill.label}"
+                    "$mod to ${t(skill)}"
                 } else if (activity != null) {
                     "$mod to ${activity.unslugify()}"
                 } else {
@@ -333,7 +334,7 @@ class InspectSettlement(
             magicalItemLevelIncrease = magicItemLevelIncreases,
             bonuses = parsed.availableItems,
         ).toEntries().map { (group, amount) ->
-            group.label to if (amount >= 0) {
+            t(group) to if (amount >= 0) {
                 "Level $amount"
             } else {
                 "Not Available"
@@ -352,7 +353,7 @@ class InspectSettlement(
             waterBordersInput = waterBordersInput.toContext(),
             blocks = parsed.occupiedBlocks,
             level = parsed.occupiedBlocks,
-            type = parsed.type.label,
+            type = t(parsed.type),
             lacksBridge = parsed.lacksBridge,
             isOvercrowded = parsed.isOvercrowded,
             residentialLots = parsed.residentialLots,

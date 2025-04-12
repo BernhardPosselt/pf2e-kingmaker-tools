@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.utils
 
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.kingdom.translateActivities
+import at.posselt.pfrpg2e.localization.Translatable
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.game
 import com.foundryvtt.core.ui
@@ -54,6 +55,9 @@ fun t(key: String, value: AnyObject) =
 
 fun t(key: String) =
     i18next.t(key)
+
+fun t(translatable: Translatable) =
+    i18next.t(translatable.i18nKey)
 
 suspend fun initLocalization() {
     val lang = game.i18n.lang
