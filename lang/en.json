@@ -1,5 +1,11 @@
 {
   "pf2e-kingmaker-tools": {
+    "currency": {
+      "cp": "cp",
+      "sp": "sp",
+      "gp": "gp",
+      "pp": "pp"
+    },
     "builtInModifierNames": {
       "invested": "Invested"
     },

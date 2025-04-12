@@ -8,7 +8,10 @@
   "cookingLoreDC": 20,
   "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.OXKHrajfyBjEBLTM",
   "level": 5,
-  "cost": "8 gp",
+  "cost": {
+    "currency": "gp",
+    "value": 8
+  },
   "rarity": "common",
   "criticalFailure": {
     "effects": [

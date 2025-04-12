@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.camping
 
+import at.posselt.pfrpg2e.data.Currency
 import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
@@ -39,6 +40,14 @@ external interface CookingOutcome {
     val message: String?
 }
 
+@JsPlainObject
+external interface RawCost {
+    val currency: String
+    val value: Int
+}
+
+fun RawCost.format() =
+    "$value ${Currency.fromString(currency)?.let { t(it) }}"
 
 @JsPlainObject
 external interface RecipeData {
@@ -51,7 +60,7 @@ external interface RecipeData {
     val uuid: String
     val icon: String?
     val level: Int
-    val cost: String
+    val cost: RawCost
     val rarity: String
     val isHomebrew: Boolean?
     val criticalSuccess: CookingOutcome

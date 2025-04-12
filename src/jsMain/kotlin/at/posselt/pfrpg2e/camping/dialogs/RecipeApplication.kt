@@ -17,15 +17,16 @@ import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.CookingOutcome
 import at.posselt.pfrpg2e.camping.HealMode
 import at.posselt.pfrpg2e.camping.MealEffect
+import at.posselt.pfrpg2e.camping.RawCost
 import at.posselt.pfrpg2e.camping.RecipeData
 import at.posselt.pfrpg2e.camping.ReduceConditionMode
 import at.posselt.pfrpg2e.camping.ReduceConditions
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.setCamping
+import at.posselt.pfrpg2e.data.Currency
 import at.posselt.pfrpg2e.data.general.Rarity
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.slugify
-import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
@@ -69,7 +70,8 @@ external interface RecipeSubmitData {
     val uuid: String
     val level: Int
     val rarity: String
-    val cost: String
+    val coins: Int
+    val currency: String
     val cookingLoreDC: Int
     val survivalDC: Int
     val basicIngredients: Int
@@ -92,10 +94,9 @@ class RecipeDataModel(
             string("name")
             string("uuid")
             int("level")
-            string("rarity") {
-                choices = Rarity.entries.map { it.toCamelCase() }.toTypedArray()
-            }
-            string("cost")
+            enum<Rarity>("rarity")
+            enum<Currency>("currency")
+            int("coins")
             int("cookingLoreDC")
             int("survivalDC")
             int("basicIngredients")
@@ -109,17 +110,13 @@ class RecipeDataModel(
                 boolean("removeAfterRest")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
-                string("healMode") {
-                    choices = HealMode.entries.map { it.toCamelCase() }.toTypedArray()
-                }
+                enum<HealMode>("healMode")
                 schema("reduceConditions") {
                     int("drained")
                     int("enfeebled")
                     int("clumsy")
                     int("stupefied")
-                    string("mode") {
-                        choices = ReduceConditionMode.entries.map { it.toCamelCase() }.toTypedArray()
-                    }
+                    enum<ReduceConditionMode>("mode")
                 }
             }
             schema("criticalSuccess") {
@@ -131,17 +128,13 @@ class RecipeDataModel(
                 boolean("removeAfterRest")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
-                string("healMode") {
-                    choices = HealMode.entries.map { it.toCamelCase() }.toTypedArray()
-                }
+                enum<HealMode>("healMode")
                 schema("reduceConditions") {
                     int("drained")
                     int("enfeebled")
                     int("clumsy")
                     int("stupefied")
-                    string("mode") {
-                        choices = ReduceConditionMode.entries.map { it.toCamelCase() }.toTypedArray()
-                    }
+                    enum<ReduceConditionMode>("mode")
                 }
             }
             schema("success") {
@@ -153,17 +146,13 @@ class RecipeDataModel(
                 boolean("removeAfterRest")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
-                string("healMode") {
-                    choices = HealMode.entries.map { it.toCamelCase() }.toTypedArray()
-                }
+                enum<HealMode>("healMode")
                 schema("reduceConditions") {
                     int("drained")
                     int("enfeebled")
                     int("clumsy")
                     int("stupefied")
-                    string("mode") {
-                        choices = ReduceConditionMode.entries.map { it.toCamelCase() }.toTypedArray()
-                    }
+                    enum<ReduceConditionMode>("mode")
                 }
             }
             schema("criticalFailure") {
@@ -175,17 +164,13 @@ class RecipeDataModel(
                 boolean("removeAfterRest")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
-                string("healMode") {
-                    choices = HealMode.entries.map { it.toCamelCase() }.toTypedArray()
-                }
+                enum<HealMode>("healMode")
                 schema("reduceConditions") {
                     int("drained")
                     int("enfeebled")
                     int("clumsy")
                     int("stupefied")
-                    string("mode") {
-                        choices = ReduceConditionMode.entries.map { it.toCamelCase() }.toTypedArray()
-                    }
+                    enum<ReduceConditionMode>("mode")
                 }
             }
         }
@@ -292,12 +277,18 @@ class RecipeApplication(
                             elementClasses = listOf("km-rarity"),
                             value = currentRecipe?.rarity?.let { fromCamelCase<Rarity>(it) } ?: Rarity.COMMON,
                         ),
-                        TextInput(
-                            label = "Cost",
-                            name = "cost",
+                        NumberInput(
+                            label = "Coins",
+                            name = "coins",
                             stacked = false,
-                            value = currentRecipe?.cost ?: "0 gp",
-                        )
+                            value = currentRecipe?.cost?.value ?: 0,
+                        ),
+                        Select.fromEnum<Currency>(
+                            label = "Currency",
+                            name = "currency",
+                            stacked = false,
+                            value = Currency.fromString(currentRecipe?.cost?.currency ?: "gp"),
+                        ),
                     )
                 ),
                 SectionContext(
@@ -377,7 +368,7 @@ class RecipeApplication(
             survivalDC = value.survivalDC,
             uuid = value.uuid,
             level = value.level,
-            cost = value.cost,
+            cost = RawCost(value=value.coins, currency=value.currency),
             rarity = value.rarity,
             isHomebrew = true,
             criticalSuccess = toOutcome(value.criticalSuccess),

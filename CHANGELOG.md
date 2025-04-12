@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* The module can now be translated into different langauges
+
+### Changed
+
+* Migrate recipe cost to parsed values
+
 ## [4.8.0] - 2025-04-09
 
 ### Added

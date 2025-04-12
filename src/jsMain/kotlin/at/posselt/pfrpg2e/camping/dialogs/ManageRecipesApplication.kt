@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.RecipeData
 import at.posselt.pfrpg2e.camping.buildFoodCost
 import at.posselt.pfrpg2e.camping.cookingCost
+import at.posselt.pfrpg2e.camping.format
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCompendiumFoodItems
@@ -102,7 +103,7 @@ class ManageRecipesApplication(
                             CrudColumn(value = recipe.level.toString(), escapeHtml = true),
                             CrudColumn(value = recipe.cookingLoreDC.toString(), escapeHtml = true),
                             CrudColumn(value = cook, escapeHtml = false),
-                            CrudColumn(value = recipe.cost, escapeHtml = true),
+                            CrudColumn(value = recipe.cost.format(), escapeHtml = true),
                         ),
                         enable = CheckboxInput(
                             value = enabled,

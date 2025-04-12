@@ -4,7 +4,6 @@ import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.localization.Translatable
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Item
@@ -162,7 +161,7 @@ data class Select(
             required: Boolean = true,
             help: String? = null,
             hideLabel: Boolean = false,
-            labelFunction: (T) -> String = { it.toLabel() },
+            labelFunction: (T) -> String = { t(it) },
             disabled: Boolean = false,
             stacked: Boolean = true,
             elementClasses: List<String> = emptyList(),
@@ -292,7 +291,7 @@ fun Item.toOption(useUuid: Boolean = false) =
         }
     }
 
-inline fun <reified T> enumToOptions(labelFunction: (T) -> String = { t(it) }) where T : Translatable, T : Enum<T>, T : ValueEnum =
+inline fun <reified T> enumToOptions(labelFunction: (T) -> String) where T : Translatable, T : Enum<T>, T : ValueEnum =
     enumEntries<T>().map {
         SelectOption(
             label = labelFunction(it),

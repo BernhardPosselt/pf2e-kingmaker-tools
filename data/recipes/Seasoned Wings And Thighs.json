@@ -8,7 +8,10 @@
   "survivalDC": 32,
   "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.BTKN1IgANoof0tfB",
   "level": 12,
-  "cost": "100 gp",
+  "cost": {
+    "currency": "gp",
+    "value": 100
+  },
   "rarity": "common",
   "criticalSuccess": {
     "effects": [
