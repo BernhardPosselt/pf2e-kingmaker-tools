@@ -99,7 +99,6 @@ kotlin {
                 implementation(libs.jsonschemavalidator.js)
                 implementation(npm("uuid", "11.1.0"))
                 implementation(npm("i18next", "24.2.3"))
-                implementation(npm("i18next-http-backend", "3.0.2"))
                 implementation(npm("i18next-icu", "2.3.0"))
                 implementation(npm("intl-messageformat", "10.7.16"))
                 api(libs.jquery)

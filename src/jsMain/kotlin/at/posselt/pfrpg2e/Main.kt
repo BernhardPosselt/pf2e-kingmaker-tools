@@ -26,6 +26,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.ActorActions
 import at.posselt.pfrpg2e.kingdom.registerContextMenus
 import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
+import at.posselt.pfrpg2e.kingdom.translateActivities
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
 import at.posselt.pfrpg2e.macros.awardXPMacro
 import at.posselt.pfrpg2e.macros.chooseParty
@@ -68,8 +69,6 @@ import com.foundryvtt.core.onReady
 import com.foundryvtt.core.onRenderChatLog
 import com.foundryvtt.core.onRenderChatMessage
 import com.foundryvtt.pf2e.actor.PF2EParty
-import com.i18next.HttpApi
-import com.i18next.I18NextBackendOptions
 import com.i18next.I18NextInitOptions
 import com.i18next.I18NextInterpolationOptions
 import com.i18next.ICU
@@ -87,24 +86,24 @@ fun main() {
     Hooks.onI18NInit {
         buildPromise {
             val lang = game.i18n.lang
+            val translations = game.i18n.translations[Config.moduleId]
             i18next
-                .use(HttpApi::class.js)
                 .use(ICU::class.js)
                 .init(
                     I18NextInitOptions(
                         lng = lang,
                         debug = false,
-                        fallbackLng = "en",
-                        load = "languageOnly",
+                        defaultNS = Config.moduleId,
+                        resources = recordOf(
+                            lang to recordOf(Config.moduleId to translations)
+                        ),
                         interpolation = I18NextInterpolationOptions(
                             escapeValue = false,
                         ),
-                        backend = I18NextBackendOptions(
-                            loadPath = "modules/${Config.moduleId}/dist/lang/{{lng}}.json"
-                        )
                     )
                 ).await()
             registerI18NextHelper(window.Handlebars, i18next)
+            translateActivities(i18next)
         }
     }
     Hooks.onInit {

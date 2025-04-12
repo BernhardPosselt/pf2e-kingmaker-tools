@@ -15,20 +15,14 @@ external interface I18NextInterpolationOptions {
 }
 
 @JsPlainObject
-external interface I18NextBackendOptions {
-    val loadPath: String
-    // TODO
-}
-
-@JsPlainObject
 external interface I18NextInitOptions {
-    val fallbackLng: String
-    val load: String
+    val fallbackLng: String?
+    val defaultNS: String?
+    val load: String?
     val lng: String
-    val debug: Boolean
+    val debug: Boolean?
     val resources: AnyObject?
-    val backend: I18NextBackendOptions
-    val interpolation: I18NextInterpolationOptions
+    val interpolation: I18NextInterpolationOptions?
 }
 
 external interface I18Next {

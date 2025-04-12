@@ -22,6 +22,8 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.roll
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.utils.deepClone
+import com.i18next.i18next
+import js.objects.recordOf
 import kotlinx.browser.document
 import kotlinx.html.ButtonType
 import kotlinx.html.classes
@@ -39,6 +41,8 @@ enum class Turn {
         fun fromString(value: String) = fromCamelCase<Turn>(value)
     }
 
+    val key = "resourceButton.turn.$value"
+
     val value: String
         get() = toCamelCase()
 
@@ -54,6 +58,8 @@ enum class ResourceMode {
         fun fromString(value: String) = fromCamelCase<ResourceMode>(value)
     }
 
+    val key = "resourceButton.mode.$value"
+
     val value: String
         get() = toCamelCase()
 
@@ -62,7 +68,7 @@ enum class ResourceMode {
 }
 
 enum class Resource(val value: String, val camel: String? = null) {
-    RESOURCE_DICE("resource-dice"),
+    RESOURCE_DICE("resource-dice", "resourceDice"),
     CRIME("crime"),
     DECAY("decay"),
     CORRUPTION("corruption"),
@@ -88,6 +94,8 @@ enum class Resource(val value: String, val camel: String? = null) {
 
     val label: String
         get() = value.split("-").joinToString(" ") { it.toLabel() }
+
+    val key = "resourceButton.resource.${camel ?: value}"
 }
 
 private val fromStringRegex = Regex(
@@ -109,7 +117,6 @@ data class ResourceButton(
     val value: String,
     val mode: ResourceMode = ResourceMode.GAIN,
     val resource: Resource,
-    val hints: String? = null,
     val multiple: Boolean = false,
 ) {
     companion object {
@@ -159,23 +166,20 @@ data class ResourceButton(
                 ?.let { Resource.fromString(it) }
                 ?: Resource.RESOURCE_DICE
             val value = target.dataset["value"] ?: ""
-            val hints = target.dataset["hints"]
             val multiple = target.dataset["multiple"] == "true"
             return ResourceButton(
                 turn = turn,
                 value = value,
                 mode = mode,
                 resource = resource,
-                hints = hints,
                 multiple = multiple,
             )
         }
     }
 
     fun toHtml(): String {
-        val turnLabel = if (turn == Turn.NEXT) " Next Turn" else ""
-        val hints = hints?.let { " ($it)" } ?: ""
-        val label = "${mode.label} $value ${resource.label}$turnLabel$hints"
+        val turnLabel = if (turn == Turn.NEXT) " ${i18next.t(turn.key)}" else ""
+        val label = "${i18next.t(mode.key)} ${i18next.t(resource.key, recordOf("count" to value))}$turnLabel"
         val value2 = value
         return document.create.button {
             type = ButtonType.button
@@ -194,7 +198,7 @@ data class ResourceButton(
         resourceDieSize: ResourceDieSize,
     ): Int {
         return if ("d" in value) {
-            roll(value.replace("rd", resourceDieSize.value), flavor = "Rolling Resources")
+            roll(value.replace("rd", resourceDieSize.value), flavor = i18next.t("resourceButton.rolling"))
         } else {
             value.toInt()
         }
@@ -225,12 +229,11 @@ data class ResourceButton(
         } else {
             initialValue
         }
-        val turnLabel = if (turn == Turn.NEXT) " Next Turn" else ""
-        val hints = hints?.let { " ($it)" } ?: ""
-        val mode = if (mode == ResourceMode.GAIN) "Gaining" else "Losing"
-        val label = if (resource == Resource.ROLLED_RESOURCE_DICE) "Resource Points" else resource.label
-        val message = "$mode ${abs(value)} $label$turnLabel$hints"
-        postChatMessage(message)
+        val turnLabel = if (turn == Turn.NEXT) " ${i18next.t(turn.key)}" else ""
+        val mode = if (mode == ResourceMode.GAIN) "resourceButton.mode.gaining" else "resourceButton.mode.losing"
+        val resourceKey = if (resource == Resource.ROLLED_RESOURCE_DICE) Resource.RESOURCE_POINTS.key else resource.key
+        val message = "${i18next.t(mode)} ${i18next.t(resourceKey, recordOf("count" to abs(value)))}$turnLabel"
+        postChatMessage(message, isHtml = true)
         val setter = when (resource) {
             Resource.CONSUMPTION -> when (turn) {
                 Turn.NOW -> kingdom.consumption::now

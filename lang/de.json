@@ -1,4 +1,9 @@
 {
-  "test": "guten tag {blubb} \nbep",
-  "test_one": "guten tag {count}"
+  "pf2e-kingmaker-tools": {
+    "activities": {
+      "new-leadership": {
+        "title": "Neue Führerschaft"
+      }
+    }
+  }
 }

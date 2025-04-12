@@ -24,7 +24,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawRuinValues
 import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSite
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
-import at.posselt.pfrpg2e.kingdom.kingdomActivities
+import at.posselt.pfrpg2e.kingdom.disabledActivityIds
 import at.posselt.pfrpg2e.kingdom.kingdomMilestones
 
 fun createKingdomDefaults(name: String) =
@@ -250,10 +250,7 @@ fun createKingdomDefaults(name: String) =
         homebrewHeartlands = emptyArray(),
         homebrewFeats = emptyArray(),
         featBlacklist = emptyArray(),
-        activityBlacklist = kingdomActivities
-            .filterNot { it.enabled }
-            .map { it.id }
-            .toTypedArray(),
+        activityBlacklist = disabledActivityIds,
         modifiers = emptyArray(),
         settlements = emptyArray(),
         leaders = RawLeaders(

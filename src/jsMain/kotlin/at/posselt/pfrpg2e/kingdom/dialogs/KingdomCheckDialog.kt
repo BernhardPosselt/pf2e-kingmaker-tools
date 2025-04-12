@@ -74,6 +74,7 @@ import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
+import com.i18next.i18next
 import io.github.uuidjs.uuid.v4
 import js.core.Void
 import js.objects.recordOf
@@ -705,8 +706,8 @@ private class KingdomCheckDialog(
         val hidden = id !in evaluatedModifiersById || data.assurance && modifier.type != ModifierType.PROFICIENCY
         val enabled = evaluatedModifier?.enabled ?: modifier.enabled
         return ModifierContext(
-            label = modifier.name,
-            type = modifier.type.label,
+            label = i18next.t(modifier.name),
+            type = i18next.t(modifier.type.key),
             modifier = value.formatAsModifier(),
             id = modifier.id,
             removable = modifier.id in removableIds,
