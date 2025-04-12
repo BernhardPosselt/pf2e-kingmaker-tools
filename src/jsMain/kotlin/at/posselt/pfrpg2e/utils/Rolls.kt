@@ -25,9 +25,9 @@ data class D20CheckResult(
     val roll: Roll,
     val rollMode: RollMode,
 ) {
-    suspend fun toChat(flavor: String? = undefined) {
+    suspend fun toChat(flavor: String? = undefined, isHtml: Boolean) {
         roll.toMessage(
-            recordOf("flavor" to flavor),
+            recordOf("flavor" to if(!isHtml && flavor != undefined) escapeHtml(flavor) else flavor),
             RollMessageOptions(rollMode = rollMode.toCamelCase())
         ).await()
     }
@@ -42,6 +42,7 @@ suspend fun d20Check(
     rollTwiceKeepHighest: Boolean = false,
     rollTwiceKeepLowest: Boolean = false,
     assurance: Boolean = false,
+    isHtml: Boolean = false,
 ): D20CheckResult {
     val d20 = if (assurance) {
         "10"
@@ -62,7 +63,7 @@ suspend fun d20Check(
         rollMode = rollMode ?: RollMode.PUBLICROLL,
     )
     if (toChat) {
-        result.toChat(flavor)
+        result.toChat(flavor, isHtml)
     }
     return result
 }
@@ -73,12 +74,12 @@ suspend fun roll(
     rollMode: RollMode = RollMode.PUBLICROLL,
     speaker: Actor? = null,
     toChat: Boolean = true,
-    escapeFlavor: Boolean = true,
+    isHtml: Boolean = false,
 ): Int {
     val roll = Roll(formula).evaluate().await()
     if (toChat) {
         val data: Record<String, Any?> = recordOf(
-            "flavor" to if (escapeFlavor && flavor != undefined) escapeHtml(flavor) else flavor,
+            "flavor" to if (!isHtml && flavor != undefined) escapeHtml(flavor) else flavor,
         )
         if (speaker != null) {
             data["speaker"] = ChatMessage.getSpeaker(

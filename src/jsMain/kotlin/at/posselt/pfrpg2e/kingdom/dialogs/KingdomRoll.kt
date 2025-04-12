@@ -126,7 +126,7 @@ suspend fun rollCheck(
         }
     }
 
-    if(isFreeAndFair) {
+    if (isFreeAndFair) {
         kingdomActor.getKingdom()?.let {
             postChatMessage("Losing 2 RP")
             it.resourcePoints.now = max(0, it.resourcePoints.now - 2)
@@ -171,7 +171,7 @@ suspend fun rollCheck(
         modifierWithoutFreeAndFair = modifierWithoutFreeAndFair,
         isFreeAndFair = isFreeAndFair,
     )
-    result.toChat(rollMeta)
+    result.toChat(rollMeta, isHtml = true)
     if (activity == null && event == null) {
         postDegreeOfSuccess(
             degreeOfSuccess = changed,
@@ -241,7 +241,8 @@ suspend fun postComplexDegreeOfSuccess(
     }
     val postHtml = if (chatModifiers.isNotEmpty()
         || buttonEvent != null
-        || changedDegreeOfSuccess == DegreeOfSuccess.CRITICAL_SUCCESS) {
+        || changedDegreeOfSuccess == DegreeOfSuccess.CRITICAL_SUCCESS
+    ) {
         buildChatButtons(
             degree = changedDegreeOfSuccess,
             modifiers = chatModifiers,
