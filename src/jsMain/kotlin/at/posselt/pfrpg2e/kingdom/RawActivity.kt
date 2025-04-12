@@ -13,7 +13,7 @@ import at.posselt.pfrpg2e.kingdom.dialogs.getValidActivitySkills
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.sheet.insertButtons
 import at.posselt.pfrpg2e.utils.asSequence
-import com.i18next.I18Next
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 import js.objects.Record
 
@@ -120,30 +120,30 @@ val disabledActivityIds = rawKingdomActivities
 
 private var kingdomActivities: Array<RawActivity> = emptyArray()
 
-private fun ActivityResult.translate(i18Next: I18Next): ActivityResult =
+private fun ActivityResult.translate(): ActivityResult =
     copy(
-        msg = i18Next.t(msg),
+        msg = t(msg),
         modifiers = modifiers
     )
 
-private fun RawActivity.translate(i18Next: I18Next): RawActivity =
+private fun RawActivity.translate(): RawActivity =
     copy(
-        title = i18Next.t(title),
-        description = i18Next.t(description),
-        requirement = requirement?.let { i18Next.t(it) },
-        special = special?.let { i18Next.t(it) },
-        automationNotes = automationNotes?.let { i18Next.t(it) },
-        hint = hint?.let { i18Next.t(it) },
-        criticalSuccess = criticalSuccess?.translate(i18Next),
-        success = success?.translate(i18Next),
-        failure = failure?.translate(i18Next),
-        criticalFailure = criticalFailure?.translate(i18Next),
+        title = t(title),
+        description = t(description),
+        requirement = requirement?.let { t(it) },
+        special = special?.let { t(it) },
+        automationNotes = automationNotes?.let { t(it) },
+        hint = hint?.let { t(it) },
+        criticalSuccess = criticalSuccess?.translate(),
+        success = success?.translate(),
+        failure = failure?.translate(),
+        criticalFailure = criticalFailure?.translate(),
     )
 
-fun translateActivities(i18Next: I18Next) {
+fun translateActivities() {
     kingdomActivities = rawKingdomActivities
         .map {
-            val translated = it.translate(i18Next)
+            val translated = it.translate()
             translated.copy(
                 description = insertButtons(translated.description),
                 criticalSuccess = translated.criticalSuccess?.insertButtons(),

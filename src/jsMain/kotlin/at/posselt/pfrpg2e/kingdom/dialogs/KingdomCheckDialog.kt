@@ -68,13 +68,13 @@ import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.serializeB64Json
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
-import com.i18next.i18next
 import io.github.uuidjs.uuid.v4
 import js.core.Void
 import js.objects.recordOf
@@ -706,8 +706,8 @@ private class KingdomCheckDialog(
         val hidden = id !in evaluatedModifiersById || data.assurance && modifier.type != ModifierType.PROFICIENCY
         val enabled = evaluatedModifier?.enabled ?: modifier.enabled
         return ModifierContext(
-            label = i18next.t(modifier.name),
-            type = i18next.t(modifier.type.key),
+            label = t(modifier.name),
+            type = t(modifier.type.key),
             modifier = value.formatAsModifier(),
             id = modifier.id,
             removable = modifier.id in removableIds,

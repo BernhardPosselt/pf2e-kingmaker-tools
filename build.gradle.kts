@@ -1,5 +1,6 @@
 import at.posselt.pfrpg2e.plugins.ChangeModuleVersion
 import at.posselt.pfrpg2e.plugins.CombineJsonFiles
+import at.posselt.pfrpg2e.plugins.CopyAndSanitizeTranslations
 import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
 import at.posselt.pfrpg2e.plugins.ReleaseModule
 import at.posselt.pfrpg2e.plugins.UnpackJsonFiles
@@ -29,14 +30,9 @@ tasks.register<CombineJsonFiles>("combineJsonFiles") {
     targetDirectory = layout.buildDirectory.dir("generated/resources")
 }
 
-// TODO: this task does not only need to copy strings into the resources folder but also
-// needs to sanitize HTML;
-// the following things need sanitation:
-// kingdom activities: description, criticalSuccess.msg, success.msg, failure.msg, criticalFailure.msg
-// kingdom events: description, criticalSuccess.msg, success.msg, failure.msg, criticalFailure.msg
-tasks.register<Copy>("processTranslations") {
-    from(layout.projectDirectory.dir("lang/"))
-    into(layout.buildDirectory.dir("generated/resources/lang"))
+tasks.register<CopyAndSanitizeTranslations>("processTranslations") {
+    from = layout.projectDirectory.dir("lang/")
+    into = layout.buildDirectory.dir("generated/resources/lang")
 }
 
 kotlin {

@@ -189,16 +189,16 @@ In Kotlin code:
 
 ```kt
 // single value
-i18next.t("key.something")
+t("key.something")
 // values with context
-i18next.t("key.something", recordOf("greeting" to "hello"))
+t("key.something", recordOf("greeting" to "hello"))
 ```
 
 In Handlebars templates:
 
 ```handlebars
-{{t "key.something"}}
-{{t "key.something" greeting="hello"}}
+{{localizeKM "key.something"}}
+{{localizeKM "key.something" greeting="hello"}}
 ```
 
 #### Pushing Changes

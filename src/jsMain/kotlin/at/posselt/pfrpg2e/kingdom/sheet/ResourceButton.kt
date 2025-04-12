@@ -20,9 +20,9 @@ import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.uppercaseFirst
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.roll
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.utils.deepClone
-import com.i18next.i18next
 import js.objects.recordOf
 import kotlinx.browser.document
 import kotlinx.html.ButtonType
@@ -178,8 +178,8 @@ data class ResourceButton(
     }
 
     fun toHtml(): String {
-        val turnLabel = if (turn == Turn.NEXT) " ${i18next.t(turn.key)}" else ""
-        val label = "${i18next.t(mode.key)} ${i18next.t(resource.key, recordOf("count" to value))}$turnLabel"
+        val turnLabel = if (turn == Turn.NEXT) " ${t(turn.key)}" else ""
+        val label = "${t(mode.key)} ${t(resource.key, recordOf("count" to value))}$turnLabel"
         val value2 = value
         return document.create.button {
             type = ButtonType.button
@@ -198,7 +198,7 @@ data class ResourceButton(
         resourceDieSize: ResourceDieSize,
     ): Int {
         return if ("d" in value) {
-            roll(value.replace("rd", resourceDieSize.value), flavor = i18next.t("resourceButton.rolling"))
+            roll(value.replace("rd", resourceDieSize.value), flavor = t("resourceButton.rolling"))
         } else {
             value.toInt()
         }
@@ -229,10 +229,10 @@ data class ResourceButton(
         } else {
             initialValue
         }
-        val turnLabel = if (turn == Turn.NEXT) " ${i18next.t(turn.key)}" else ""
+        val turnLabel = if (turn == Turn.NEXT) " ${t(turn.key)}" else ""
         val mode = if (mode == ResourceMode.GAIN) "resourceButton.mode.gaining" else "resourceButton.mode.losing"
         val resourceKey = if (resource == Resource.ROLLED_RESOURCE_DICE) Resource.RESOURCE_POINTS.key else resource.key
-        val message = "${i18next.t(mode)} ${i18next.t(resourceKey, recordOf("count" to abs(value)))}$turnLabel"
+        val message = "${t(mode)} ${t(resourceKey, recordOf("count" to abs(value)))}$turnLabel"
         postChatMessage(message, isHtml = true)
         val setter = when (resource) {
             Resource.CONSUMPTION -> when (turn) {
