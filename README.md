@@ -143,7 +143,7 @@ This module skips the built-in Foundry translation system since it's broken and 
 
 #### Making Changes in Code
 
-Translations are persisted in **lang/en.json**. You can arbitrarily nest JSON values and reference them using the path. For instance: 
+Translations are persisted in **lang/en.json**. **DO NOT EDIT other translation files directly since they will be overriden from Transifex**. You can arbitrarily nest JSON values and reference them using the path. For instance: 
 
 ```json
 {
@@ -208,7 +208,7 @@ Strings are not edited in the repository. Instead, they are pushed to Transifex 
 In order to pull/push, you first need to set up a token on transifex
 
 Then create a **~/.transifexrc** with the token:
-```toml
+```ini
 [https://app.transifex.com]
 rest_hostname = https://rest.api.transifex.com
 token         = TOKEN_HERE
