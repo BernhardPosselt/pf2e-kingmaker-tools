@@ -73,11 +73,12 @@ suspend fun roll(
     rollMode: RollMode = RollMode.PUBLICROLL,
     speaker: Actor? = null,
     toChat: Boolean = true,
+    escapeFlavor: Boolean = true,
 ): Int {
     val roll = Roll(formula).evaluate().await()
     if (toChat) {
         val data: Record<String, Any?> = recordOf(
-            "flavor" to flavor,
+            "flavor" to if (escapeFlavor && flavor != undefined) escapeHtml(flavor) else flavor,
         )
         if (speaker != null) {
             data["speaker"] = ChatMessage.getSpeaker(
