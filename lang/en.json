@@ -619,9 +619,29 @@
       }
     },
     "governments": {
-      "": {
-        "name": "",
-        "description": ""
+      "feudalism": {
+        "name": "Feudalism",
+        "description": "Your nation’s rule is vested in a dynastic royal family, though much of the real power is distributed among their vassals and fiefdoms."
+      },
+      "oligarchy": {
+        "name": "Oligarchy",
+        "description": "Your nation’s rule is determined by a council of influential leaders who make decisions for all others."
+      },
+      "republic": {
+        "name": "Republic",
+        "description": "Your nation draws its leadership from its own citizens. Elected representatives meet in parliamentary bodies to guide the nation."
+      },
+      "thaumocracy": {
+        "name": "Thaumocracy",
+        "description": "Your nation is governed by those most skilled in magic, using their knowledge and power to determine the best ways to rule. While the type of magic wielded by the nation’s rulers can adjust its themes (or even its name—a thaumocracy run by divine spellcasters would be a theocracy, for example), the details below remain the same whether it’s arcane, divine, occult, primal, or any combination of the four."
+      },
+      "yeomanry": {
+        "name": "Yeomanry",
+        "description": "Your nation is decentralized and relies on local leaders and citizens to handle government issues, sending representatives to each other as needed to deal with issues that concern more than one locality."
+      },
+      "despotism": {
+        "name": "Despotism",
+        "description": "Your nation’s rule is centered around a single individual who seized or inherited command and whose authority is absolute. The ruler of this kingdom still retains advisors and assistants, but only when they obey the ruler’s whims."
       }
     },
     "activities": {

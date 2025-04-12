@@ -1,7 +1,7 @@
 {
     "id": "oligarchy",
-    "name": "Oligarchy",
-    "description": "Your nation’s rule is determined by a council of influential leaders who make decisions for all others.",
+    "name": "governments.oligarchy.name",
+    "description": "governments.oligarchy.description",
     "boosts": [
         "loyalty",
         "economy"
