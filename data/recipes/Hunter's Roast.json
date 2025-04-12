@@ -1,6 +1,6 @@
 {
   "id": "hunters-roast",
-  "name": "Hunter's Roast",
+  "name": "recipes.hunters-roast.name",
   "icon": "icons/consumables/food/plate-chicken-grilled-mushroom-brown.webp",
   "basicIngredients": 4,
   "specialIngredients": 0,

@@ -1,6 +1,6 @@
 {
   "id": "omelet",
-  "name": "Omelet",
+  "name": "recipes.omelet.name",
   "icon": "icons/consumables/eggs/egg-nest-dotted-red.webp",
   "basicIngredients": 4,
   "specialIngredients": 1,

@@ -1,6 +1,6 @@
 {
   "id": "sweet-pancakes",
-  "name": "Sweet Pancakes",
+  "name": "recipes.sweet-pancakes.name",
   "icon": "icons/commodities/cloth/cloth-roll-orange.webp",
   "basicIngredients": 2,
   "specialIngredients": 2,

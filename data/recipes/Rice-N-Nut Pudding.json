@@ -1,6 +1,6 @@
 {
   "id": "rice-n-nut-pudding",
-  "name": "Rice-N-Nut Pudding",
+  "name": "recipes.rice-n-nut-pudding.name",
   "icon": "icons/consumables/food/pot-soup-white.webp",
   "basicIngredients": 2,
   "specialIngredients": 1,

@@ -319,6 +319,98 @@
         "rolledResourceDice": "{count} Rolled Resource Dice"
       }
     },
+    "recipes": {
+      "baked-spider-legs": {
+        "name": "Baked Spider Legs"
+      },
+      "basic-meal": {
+        "name": "Basic Meal"
+      },
+      "berry-pie": {
+        "name": "Berry Pie"
+      },
+      "black-linnorm-stew": {
+        "name": "Black Linnorm Stew"
+      },
+      "broiled-oysters": {
+        "name": "Broiled Oysters"
+      },
+      "cheese-crostata": {
+        "name": "Cheese Crostata"
+      },
+      "chocolate-ice-cream": {
+        "name": "Chocolate Ice Cream"
+      },
+      "fish-on-a-stick": {
+        "name": "Fish-On-A-Stick"
+      },
+      "giant-scrambled-egg": {
+        "name": "Giant Scrambled Egg"
+      },
+      "grilled-silver-eel": {
+        "name": "Grilled Silver Eel"
+      },
+      "haggis": {
+        "name": "Haggis"
+      },
+      "hearty-meal": {
+        "name": "Hearty Meal"
+      },
+      "hearty-purple-soup": {
+        "name": "Hearty Purple Soup"
+      },
+      "hunters-roast": {
+        "name": "Hunter's Roast"
+      },
+      "jeweled-rice": {
+        "name": "Jeweled Rice",
+        "criticalFailure": {
+          "message": "The meal was a bit too light; you must eat another meal to stave off starvation."
+        }
+      },
+      "mastodon-steak": {
+        "name": "Mastodon Steak"
+      },
+      "monster-casserole": {
+        "name": "Monster Casserole"
+      },
+      "omelet": {
+        "name": "Omelet"
+      },
+      "onion-soup": {
+        "name": "Onion Soup"
+      },
+      "oysters": {
+        "name": "Oysters"
+      },
+      "ragout": {
+        "name": "Ragout"
+      },
+      "rice-n-nut-pudding": {
+        "name": "Rice-N-Nut Pudding"
+      },
+      "seasoned-wings-and-thighs": {
+        "name": "Seasoned Wings And Thighs"
+      },
+      "shepherds-pie": {
+        "name": "Shepherd's Pie"
+      },
+      "smoked-trout-and-hydra-plate": {
+        "name": "Smoked Trout And Hydra Pate",
+        "criticalSuccess": {
+          "message": "All eaters treat light armor they're at least trained in as if the armor had the comfort trait."
+        }
+      },
+      "succulent-sausages": {
+        "name": "Succulent Sausages"
+      },
+      "supernatural-mince-pie": {
+        "name": "Supernatural Mince Pie"
+      },
+      "sweet-pancakes": {
+        "name": "Sweet Pancakes"
+      }
+    },
     "activities": {
       "abandon-hex": {
         "title": "Abandon Hex",

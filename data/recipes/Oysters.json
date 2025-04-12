@@ -1,6 +1,6 @@
 {
   "id": "oysters",
-  "name": "Oysters",
+  "name": "recipes.oysters.name",
   "icon": "icons/environment/creatures/crustacean-oyster.webp",
   "basicIngredients": 3,
   "specialIngredients": 2,

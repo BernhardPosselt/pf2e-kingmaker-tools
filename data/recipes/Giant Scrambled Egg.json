@@ -1,6 +1,6 @@
 {
   "id": "giant-scrambled-egg",
-  "name": "Giant Scrambled Egg",
+  "name": "recipes.giant-scrambled-egg.name",
   "icon": "icons/consumables/food/bowl-stew-tofu-potato-brown.webp",
   "basicIngredients": 6,
   "specialIngredients": 2,

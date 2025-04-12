@@ -1,6 +1,6 @@
 {
   "id": "supernatural-mince-pie",
-  "name": "Supernatural Mince Pie",
+  "name": "recipes.supernatural-mince-pie.name",
   "icon": "icons/consumables/food/cheese-round-glowing-yellow.webp",
   "basicIngredients": 8,
   "specialIngredients": 4,

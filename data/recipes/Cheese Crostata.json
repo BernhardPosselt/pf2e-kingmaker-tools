@@ -1,6 +1,6 @@
 {
   "id": "cheese-crostata",
-  "name": "Cheese Crostata",
+  "name": "recipes.cheese-crostata.name",
   "icon": "icons/consumables/food/cheese-wheel-round-yellow.webp",
   "basicIngredients": 4,
   "specialIngredients": 0,

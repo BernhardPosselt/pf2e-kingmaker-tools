@@ -1,6 +1,6 @@
 {
   "id": "smoked-trout-and-hydra-plate",
-  "name": "Smoked Trout And Hydra Pate",
+  "name": "recipes.smoked-trout-and-hydra-plate.name",
   "icon": "icons/consumables/food/plate-fish-grilled-brown.webp",
   "basicIngredients": 6,
   "specialIngredients": 2,
@@ -19,7 +19,7 @@
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.4d6roHW75xe52o7A"
       }
     ],
-    "message": "All eaters treat light armor they're at least trained in as if the armor had the comfort trait."
+    "message": "recipes.smoked-trout-and-hydra-plate.criticalSuccess.message"
   },
   "criticalFailure": {
     "effects": [

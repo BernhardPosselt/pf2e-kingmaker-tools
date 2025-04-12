@@ -1,6 +1,6 @@
 {
   "id": "succulent-sausages",
-  "name": "Succulent Sausages",
+  "name": "recipes.succulent-sausages.name",
   "icon": "icons/consumables/food/sausage-bratwurst-mustard-red-yellow.webp",
   "basicIngredients": 3,
   "specialIngredients": 1,

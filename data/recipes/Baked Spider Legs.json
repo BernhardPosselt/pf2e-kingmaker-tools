@@ -1,6 +1,6 @@
 {
   "id": "baked-spider-legs",
-  "name": "Baked Spider Legs",
+  "name": "recipes.baked-spider-legs.name",
   "icon": "icons/consumables/meat/kebab-skewer-vegetable-brown.webp",
   "basicIngredients": 4,
   "specialIngredients": 1,

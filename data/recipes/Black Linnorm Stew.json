@@ -1,6 +1,6 @@
 {
   "id": "black-linnorm-stew",
-  "name": "Black Linnorm Stew",
+  "name": "recipes.black-linnorm-stew.name",
   "icon": "icons/tools/cooking/bowl-steaming-brown.webp",
   "basicIngredients": 8,
   "specialIngredients": 3,

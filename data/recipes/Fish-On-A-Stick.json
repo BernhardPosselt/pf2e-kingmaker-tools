@@ -1,6 +1,6 @@
 {
   "id": "fish-on-a-stick",
-  "name": "Fish-On-A-Stick",
+  "name": "recipes.fish-on-a-stick.name",
   "icon": "icons/consumables/food/cooked-kebab-meat-skewer-orange.webp",
   "basicIngredients": 2,
   "specialIngredients": 0,

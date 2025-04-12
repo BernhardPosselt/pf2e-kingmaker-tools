@@ -1,6 +1,6 @@
 {
   "id": "monster-casserole",
-  "name": "Monster Casserole",
+  "name": "recipes.monster-casserole.name",
   "icon": "icons/consumables/food/soup-broth-bowl-tentacle.webp",
   "basicIngredients": 7,
   "specialIngredients": 2,

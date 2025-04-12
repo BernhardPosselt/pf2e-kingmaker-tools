@@ -1,6 +1,6 @@
 {
   "id": "chocolate-ice-cream",
-  "name": "Chocolate Ice Cream",
+  "name": "recipes.chocolate-ice-cream.name",
   "icon": "icons/tools/laboratory/powder-red.webp",
   "basicIngredients": 2,
   "specialIngredients": 1,

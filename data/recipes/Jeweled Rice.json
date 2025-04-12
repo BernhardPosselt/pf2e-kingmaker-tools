@@ -1,6 +1,6 @@
 {
   "id": "jeweled-rice",
-  "name": "Jeweled Rice",
+  "name": "recipes.jeweled-rice.name",
   "icon": "icons/commodities/materials/bowl-powder-gold.webp",
   "basicIngredients": 1,
   "specialIngredients": 0,
@@ -19,7 +19,7 @@
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.MGFPIxwSgRLvkV71"
       }
     ],
-    "message": "The meal was a bit too light; you must eat another meal to stave off starvation."
+    "message": "recipes.jeweled-rice.criticalFailure.message"
   },
   "criticalSuccess": {
     "effects": [

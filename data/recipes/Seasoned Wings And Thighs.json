@@ -1,6 +1,6 @@
 {
   "id": "seasoned-wings-and-thighs",
-  "name": "Seasoned Wings And Thighs",
+  "name": "recipes.seasoned-wings-and-thighs.name",
   "icon": "icons/consumables/food/chicken-bird-cooked.webp",
   "basicIngredients": 4,
   "specialIngredients": 2,

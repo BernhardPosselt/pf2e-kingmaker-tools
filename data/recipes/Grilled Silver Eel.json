@@ -1,6 +1,6 @@
 {
   "id": "grilled-silver-eel",
-  "name": "Grilled Silver Eel",
+  "name": "recipes.grilled-silver-eel.name",
   "icon": "icons/commodities/biological/tail-rodent-orange.webp",
   "basicIngredients": 4,
   "specialIngredients": 1,

@@ -1,6 +1,6 @@
 {
   "id": "ragout",
-  "name": "Ragout",
+  "name": "recipes.ragout.name",
   "icon": "icons/consumables/food/bowl-stew-tofu-potato-red.webp",
   "basicIngredients": 4,
   "specialIngredients": 0,

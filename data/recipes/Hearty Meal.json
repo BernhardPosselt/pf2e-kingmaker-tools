@@ -1,6 +1,6 @@
 {
   "id": "hearty-meal",
-  "name": "Hearty Meal",
+  "name": "recipes.hearty-meal.name",
   "icon": "icons/consumables/food/bowl-stew-brown.webp ",
   "basicIngredients": 4,
   "specialIngredients": 0,

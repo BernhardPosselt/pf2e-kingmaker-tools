@@ -1,6 +1,6 @@
 {
   "id": "berry-pie",
-  "name": "Berry Pie",
+  "name": "recipes.berry-pie.name",
   "icon": "icons/consumables/grains/pastry-bread-brown.webp",
   "basicIngredients": 3,
   "specialIngredients": 2,

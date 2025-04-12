@@ -1,6 +1,6 @@
 {
   "id": "shepherds-pie",
-  "name": "Shepherd's Pie",
+  "name": "recipes.shepherds-pie.name",
   "icon": "icons/consumables/food/bowl-ribs-meat-rice-mash-brown-white.webp",
   "basicIngredients": 4,
   "specialIngredients": 0,

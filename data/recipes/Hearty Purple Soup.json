@@ -1,6 +1,6 @@
 {
   "id": "hearty-purple-soup",
-  "name": "Hearty Purple Soup",
+  "name": "recipes.hearty-purple-soup.name",
   "icon": "icons/tools/laboratory/mortar-liquid-pink.webp",
   "basicIngredients": 6,
   "specialIngredients": 3,

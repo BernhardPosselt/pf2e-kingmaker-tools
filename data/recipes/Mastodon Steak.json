@@ -1,6 +1,6 @@
 {
   "id": "mastodon-steak",
-  "name": "Mastodon Steak",
+  "name": "recipes.mastodon-steak.name",
   "icon": "icons/consumables/food/steak-cooked-grilled-brown.webp",
   "basicIngredients": 4,
   "specialIngredients": 3,
