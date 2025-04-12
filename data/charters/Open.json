@@ -1,6 +1,6 @@
 {
     "id": "open",
-    "name": "Open",
-    "description": "If you would prefer to be truly free agents and trailblazers staking your own claim, you can simply choose an open charter with no restrictions—and no direct support. An open charter grants a single ability boost to any ability score, and the new nation has no built-in ability flaw.",
+    "name": "charters.open.name",
+    "description": "charters.open.description",
     "freeBoosts": 1
 }

@@ -1,7 +1,7 @@
 {
     "id": "grant",
-    "name": "Grant",
-    "description": "Your patron grants a large amount of funding and other resources without restriction on the nature of your kingdom’s development—but they do require you to employ many of their citizens and allies. Your nation’s wealth and supplies are secure, but a portion of your kingdom’s residents have split allegiances between your nation and that of your sponsor.",
+    "name": "charters.grant.name",
+    "description": "charters.grant.description",
     "boost": "economy",
     "freeBoosts": 1,
     "flaw": "loyalty"

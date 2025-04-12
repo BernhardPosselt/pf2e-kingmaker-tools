@@ -1,7 +1,7 @@
 {
     "id": "conquest",
-    "name": "Conquest",
-    "description": "Your sponsors have conquered an area and its former leaders have been routed or even killed. This charter places you in charge of some portion of this conquered territory (or land abandoned by the defeated enemy) and commands you to hold and pacify it in the name of your patron. The people are particularly devoted and supportive of your rule (if partially out of fear), but the constant threat of potential war hinders the arts and makes it difficult for citizens to truly relax.",
+    "name": "charters.conquest.name",
+    "description": "charters.conquest.description",
     "boost": "loyalty",
     "freeBoosts": 1,
     "flaw": "culture"
