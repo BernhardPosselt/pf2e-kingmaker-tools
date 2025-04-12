@@ -31,21 +31,20 @@ suspend fun postDegreeOfSuccess(
     } else {
         null
     }
-    postChatMessage(
-        message = tpl(
-            "chatmessages/degree-of-success.hbs", recordOf(
-                "isCriticalFailure" to (DegreeOfSuccess.CRITICAL_FAILURE == degreeOfSuccess),
-                "isFailure" to (DegreeOfSuccess.FAILURE == degreeOfSuccess),
-                "isSuccess" to (DegreeOfSuccess.SUCCESS == degreeOfSuccess),
-                "isCriticalSuccess" to (DegreeOfSuccess.CRITICAL_SUCCESS == degreeOfSuccess),
-                "degree" to degreeOfSuccess.toLabel(),
-                "meta" to metaHtml,
-                "message" to message,
-                "original" to original,
-                "postHtml" to postHtml,
-                "preHtml" to preHtml,
-                "title" to title,
-            )
+    postChatTemplate(
+        "chatmessages/degree-of-success.hbs",
+        recordOf(
+            "isCriticalFailure" to (DegreeOfSuccess.CRITICAL_FAILURE == degreeOfSuccess),
+            "isFailure" to (DegreeOfSuccess.FAILURE == degreeOfSuccess),
+            "isSuccess" to (DegreeOfSuccess.SUCCESS == degreeOfSuccess),
+            "isCriticalSuccess" to (DegreeOfSuccess.CRITICAL_SUCCESS == degreeOfSuccess),
+            "degree" to degreeOfSuccess.toLabel(),
+            "meta" to metaHtml,
+            "message" to message,
+            "original" to original,
+            "postHtml" to postHtml,
+            "preHtml" to preHtml,
+            "title" to title,
         ),
         rollMode = rollMode,
     )
@@ -59,18 +58,20 @@ suspend fun postChatTemplate(
     speaker: Actor? = null,
 ) {
     val message = tpl(templatePath, templateContext)
-    postChatMessage(message, rollMode, speaker = speaker)
+    postChatMessage(message, rollMode, speaker = speaker, isHtml = true)
 }
 
 suspend fun postChatMessage(
     message: String,
     rollMode: RollMode? = null,
-    speaker: Actor? = null
+    speaker: Actor? = null,
+    isHtml: Boolean = false,
 ) {
+    val value = if (isHtml) message else escapeHtml(message)
     val fixedMessage = if (rollMode == RollMode.BLINDROLL) {
-        "<div hidden class=\"km-hide-from-user\"></div>$message"
+        "<div hidden class=\"km-hide-from-user\"></div>$value"
     } else {
-        message
+        value
     }
     val data = recordOf<String, Any?>(
         "content" to fixedMessage

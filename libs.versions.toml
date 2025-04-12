@@ -26,10 +26,11 @@ ktor-client-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 logback = { module = "ch.qos.logback:logback-classic", version = "1.5.8" }
-
+jsoup = { module = "org.jsoup:jsoup", version = "1.19.1" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-plain-objects = { id = "org.jetbrains.kotlin.plugin.js-plain-objects", version.ref = "kotlin" }
 versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
+download = { id = "de.undercouch.download", version = "5.6.0" }

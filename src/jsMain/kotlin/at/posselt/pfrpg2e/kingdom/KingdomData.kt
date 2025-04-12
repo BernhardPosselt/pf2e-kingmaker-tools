@@ -302,14 +302,6 @@ fun KingdomData.parseSkillRanks(
     )
 }
 
-fun KingdomData.getAllActivities(): List<RawActivity> {
-    val homebrew = homebrewActivities.map { it.id }.toSet()
-    return kingdomActivities.filter { it.id !in homebrew } + homebrewActivities
-}
-
-fun KingdomData.getActivity(id: String): RawActivity? =
-    getAllActivities().associateBy { it.id }[id]
-
 fun KingdomData.hasAssurance(
     chosenFeats: List<ChosenFeat>,
     skill: KingdomSkill

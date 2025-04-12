@@ -1,9 +1,11 @@
 import at.posselt.pfrpg2e.plugins.ChangeModuleVersion
 import at.posselt.pfrpg2e.plugins.CombineJsonFiles
+import at.posselt.pfrpg2e.plugins.CopyAndSanitizeTranslations
 import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
 import at.posselt.pfrpg2e.plugins.ReleaseModule
 import at.posselt.pfrpg2e.plugins.UnpackJsonFiles
-import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
+import de.undercouch.gradle.tasks.download.Download
+import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 
 plugins {
@@ -11,6 +13,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.plain.objects)
     alias(libs.plugins.versions)
+    alias(libs.plugins.download)
 }
 
 group = "at.posselt"
@@ -27,10 +30,16 @@ tasks.register<CombineJsonFiles>("combineJsonFiles") {
     targetDirectory = layout.buildDirectory.dir("generated/resources")
 }
 
+tasks.register<CopyAndSanitizeTranslations>("processTranslations") {
+    from = layout.projectDirectory.dir("lang/")
+    into = layout.buildDirectory.dir("generated/resources/lang")
+}
+
 kotlin {
     js {
         useEsModules()
         compilerOptions {
+            target = "es2015"
             freeCompilerArgs.addAll(
                 "-opt-in=kotlin.io.encoding.ExperimentalEncodingApi",
                 "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
@@ -40,13 +49,11 @@ kotlin {
                 "-opt-in=kotlin.js.ExperimentalJsStatic",
                 "-Xwhen-guards",
             )
-            moduleKind = JsModuleKind.MODULE_ES
-            useEsClasses = true
         }
         browser {
             @OptIn(ExperimentalDistributionDsl::class)
             distribution {
-                outputDirectory = file( "dist")
+                outputDirectory = file("dist")
             }
             webpackTask {
                 mainOutputFileName = "main.js"
@@ -62,6 +69,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             resources.srcDirs(
+                tasks.named("processTranslations"),
                 tasks.named("combineJsonFiles"),
             )
             dependencies {
@@ -86,6 +94,9 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.js)
                 implementation(libs.jsonschemavalidator.js)
                 implementation(npm("uuid", "11.1.0"))
+                implementation(npm("i18next", "24.2.3"))
+                implementation(npm("i18next-icu", "2.3.0"))
+                implementation(npm("intl-messageformat", "10.7.16"))
                 api(libs.jquery)
             }
         }
@@ -227,4 +238,39 @@ tasks.register<UnpackJsonFiles>("unpackJson") {
     fileNameProperty = "name"
     file = layout.projectDirectory.file("data/milestones/milestones.json")
     targetDirectory = layout.projectDirectory.dir("data/milestones")
+}
+
+// transifex setup
+tasks.register<Download>("downloadTxClient") {
+    val current = OperatingSystem.current()
+    // note that we assume the most popular architecture here
+    val type = if (current.isLinux) {
+        "linux-amd64"
+    } else if (current.isMacOsX) {
+        "darwin-arm64"
+    } else {
+        "windows-amd64"
+    }
+    src("https://github.com/transifex/cli/releases/download/v1.6.17/tx-$type.tar.gz")
+    dest(layout.buildDirectory.file("tx.tar.gz"))
+}
+
+tasks.register<Copy>("extractTxClient") {
+    dependsOn("downloadTxClient")
+    from(tarTree(resources.gzip(layout.buildDirectory.file("tx.tar.gz"))))
+    into(layout.buildDirectory.dir("transifex"))
+}
+
+tasks.register<Exec>("txPush") {
+    dependsOn("extractTxClient")
+    workingDir(projectDir)
+    executable("build/transifex/tx")
+    args(listOf("push"))
+}
+
+tasks.register<Exec>("txPull") {
+    dependsOn("extractTxClient")
+    workingDir(projectDir)
+    executable("build/transifex/tx")
+    args(listOf("pull", "-a"))
 }

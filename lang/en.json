@@ -1,0 +1,118 @@
+{
+  "pf2e-kingmaker-tools": {
+    "modifierType": {
+      "ability": "Ability",
+      "proficiency": "Proficiency",
+      "item": "Item",
+      "status": "Status",
+      "circumstance": "Circumstance",
+      "leadership": "Leadership",
+      "vacancy": "Vacancy",
+      "untyped": "Untyped"
+    },
+    "resourceButton": {
+      "rolling": "Rolling Resources",
+      "mode": {
+        "gaining": "Gaining",
+        "losing": "Losing",
+        "gain": "Gain",
+        "lose": "Lose"
+      },
+      "multiple": "Multiple",
+      "turn": {
+        "next": "Next Turn",
+        "now": "This Turn"
+      },
+      "resource": {
+        "resourceDice": "{count, plural, =1 {1 Resource Dice} other {# Resource Dice}}",
+        "resourcePoints": "{count, plural, =1 {1 Resource Point} other {# Resource Points}}",
+        "crime": "{count} Crime",
+        "decay": "{count} Decay",
+        "corruption": "{count} Corruption",
+        "consumption": "{count} Consumption",
+        "strife": "{count} Strife",
+        "food": "{count} Food",
+        "luxuries": "{count} Luxuries",
+        "unrest": "{count} Unrest",
+        "ore": "{count} Ore",
+        "lumber": "{count} Lumber",
+        "fame": "{count} Fame",
+        "stone": "{count} Stone",
+        "xp": "{count} XP",
+        "supernaturalSolution": "{count, plural, =1 {1 Supernatural Solution} other {# Supernatural Solutions}}",
+        "creativeSolution": "{count, plural, =1 {1 Creative Solution} other {# Creative Solutions}}",
+        "rolledResourceDice": "{count} Rolled Resource Dice"
+      }
+    },
+    "activities": {
+      "abandon-hex": {
+        "title": "Abandon Hex",
+        "description": "<p>After careful consideration, you decide that you would rather not hold onto a particular hex as part of your claimed territory. You renounce your claim to it and pull back any settlers or explorers. Attempt a basic Exploration or Wilderness check. You can abandon more than one hex at a time, but each additional hex you abandon increases the DC of this check by 1.</p>",
+        "requirement": "The hex to be abandoned must be controlled.",
+        "automationNotes": "If listed, Kingdom Events need to be run by hand during the event phase.",
+        "criticalSuccess": {
+          "msg": "You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. @gain1ResourcePoints per abandoned hex."
+        },
+        "success": {
+          "msg": "You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. @gain1Unrest"
+        },
+        "failure": {
+          "msg": "You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Some citizens become disgruntled refugees who refuse to leave the hex. @gain2Unrest and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, your kingdom experiences a Squatters kingdom event automatically in addition to any other event that might occur."
+        },
+        "criticalFailure": {
+          "msg": "You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Some citizens become disgruntled refugees who refuse to leave the hex. @gain3Unrest and automatically experience a Bandit Activity kingdom event."
+        },
+        "special": "The Unrest gained from abandoning a hex doubles if it includes a settlement. A settlement in an abandoned hex becomes a Freehold."
+      },
+      "build-roads": {
+        "title": "Build Roads",
+        "description": "<p>You order your kingdom’s engineers to construct a network of robust roads through the hex. Travel along roads uses a terrain type one step better than the surrounding terrain; for example, roads through forest hexes—normally difficult terrain—allow travel as if it were open terrain.</p><p>Spend RP as determined by the hex’s most inhospitable terrain (if the hex includes any rivers that cross the hex from one hex side to any other, you must spend double the normal RP cost to also build bridges; this adds the Bridge structure to that hex):</p><ul><li><b>Mountains</b>: @lose12ResourcePoints</li><li><b>Swamps</b>: @lose8ResourcePoints</li><li><b>Forests</b>: @lose4ResourcePoints</li><li><b>Hills</b>: @lose2ResourcePoints</li><li><b>Plains</b>: @lose1ResourcePoints</li></ul><p>Then attempt a basic check. Work with the GM to determine where your roads appear on the map.</p>",
+        "requirement": "The hex in which you seek to build roads must be claimed by your kingdom.",
+        "criticalSuccess": {
+          "msg": "You build roads into the target hex and, if possible, one adjacent claimed hex that doesn’t yet have roads and whose terrain features are at least as hospitable as those of the target hex"
+        },
+        "success": {
+          "msg": "You build roads in the hex."
+        },
+        "failure": {
+          "msg": "You fail to build roads in the hex."
+        },
+        "criticalFailure": {
+          "msg": "Your attempt to build roads ends in disaster. Not only do you fail to build roads, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. @gain1Unrest"
+        }
+      },
+      "new-leadership": {
+        "title": "New Leadership",
+        "description": "<p>You announce the promotion of a character into a leadership role, whether they’re a newly appointed leader or just shifting from one leadership role to another. You normally perform this activity at the start of a Kingdom turn, but if unexpected events (such as the death of the character) remove a leader from a leadership role, you may immediately use the New Leadership activity to attempt to assign a new leader to that role, even outside of a Kingdom turn (applying the vacancy penalty for that role as appropriate). Attempt a basic Intrigue, Politics, Statecraft, or Warfare skill check—while any of these skills can be used, each skill is particularly suited to assigning two specific leadership roles.</p><ul><li><b>Intrigue</b>: Grants a +2 circumstance bonus to checks to assign Emissaries and Treasurers.</li><li><b>Politics</b>: Grants a +2 circumstance bonus to checks to assign Counselors and Rulers.</li><li><b>Statecraft</b>: Grants a +2 circumstance bonus to checks to assign Magisters and Viceroys.</li><li><b>Warfare</b>: Grants a +2 circumstance bonus to checks to assign Generals and Wardens.</li></ul><p>Rulers are particularly difficult to assign; when you take this activity to assign a new Ruler, you take a –4 circumstance penalty to the skill check, and unless you achieve a critical success, you @gain1Unrest. Whether or not you are simultaneously assigning a leader, you may also use this activity to attempt to reselect the four leadership roles that you have invested. Any result other than a critical failure allows this.</p>",
+        "modifiers": {
+          "appointingRulerPenalty": {
+            "name": "-4 Circumstance When Appointing Ruler"
+          },
+          "matchingSkillBonus": {
+            "name": "+2 Circumstance When Using Correct Skill"
+          }
+        },
+        "criticalSuccess": {
+          "msg": "The people love the new leader. The leader immediately provides the benefits tied to occupying the new role and gains a +1 circumstance bonus to all Kingdom skill checks they attempt before the end of the next Kingdom turn.",
+          "modifiers": {
+            "name": "New Leadership: Critical Success",
+            "buttonLabel": "+1 Circumstance to All Checks"
+          }
+        },
+        "success": {
+          "msg": "The people accept the new leader. The leader immediately provides the benefits tied to occupying the new role. @gain1Unrest"
+        },
+        "failure": {
+          "msg": "The people are unsure about the new leader. The leader takes a –1 circumstance penalty to all checks they attempt as part of their activities during the Activity phase of each Kingdom turn. At the end of the next Kingdom turn, the leader can attempt any Loyalty-based basic skill check to ingratiate themselves with the populace. The leader may attempt this check at the end of each Kingdom turn until they succeed. Success removes this penalty, but a critical failure results in the development detailed in Critical Failure below. @gain1Unrest",
+          "modifiers": {
+            "name": "New Leadership: Failure",
+            "buttonLabel": "-1 Circumstance to All Checks"
+          }
+        },
+        "criticalFailure": {
+          "msg": "The people reject the new leader. The leadership role is treated as vacant and you must attempt to reassign it using the New Leadership activity at the start of the next Kingdom turn. @gain1Unrest"
+        }
+      }
+    }
+  }
+}

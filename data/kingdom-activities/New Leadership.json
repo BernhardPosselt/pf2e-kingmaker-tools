@@ -5,22 +5,22 @@
     "enabled": true,
     "phase": "upkeep",
     "dc": "control",
-    "title": "New Leadership",
-    "description": "<p>You announce the promotion of a character into a leadership role, whether they’re a newly appointed leader or just shifting from one leadership role to another. You normally perform this activity at the start of a Kingdom turn, but if unexpected events (such as the death of the character) remove a leader from a leadership role, you may immediately use the New Leadership activity to attempt to assign a new leader to that role, even outside of a Kingdom turn (applying the vacancy penalty for that role as appropriate). Attempt a basic Intrigue, Politics, Statecraft, or Warfare skill check—while any of these skills can be used, each skill is particularly suited to assigning two specific leadership roles.</p>\n<ul>\n<li><b>Intrigue</b>: Grants a +2 circumstance bonus to checks to assign Emissaries and Treasurers.</li>\n<li><b>Politics</b>: Grants a +2 circumstance bonus to checks to assign Counselors and Rulers.</li>\n<li><b>Statecraft</b>: Grants a +2 circumstance bonus to checks to assign Magisters and Viceroys.</li>\n<li><b>Warfare</b>: Grants a +2 circumstance bonus to checks to assign Generals and Wardens.</li>\n</ul><p>Rulers are particularly difficult to assign; when you take this activity to assign a new Ruler, you take a –4 circumstance penalty to the skill check, and unless you achieve a critical success, you <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>. Whether or not you are simultaneously assigning a leader, you may also use this activity to attempt to reselect the four leadership roles that you have invested. Any result other than a critical failure allows this.</p>",
+    "title": "activities.new-leadership.title",
+    "description": "activities.new-leadership.description",
     "modifiers": [
         {
             "type": "circumstance",
             "value": 2,
             "enabled": false,
-            "buttonLabel": "+2 Circumstance When Using Correct Skill",
-            "name": "+2 Circumstance When Using Correct Skill"
+            "buttonLabel": "activities.new-leadership.modifiers.matchingSkillBonus.buttonLabel",
+            "name": "activities.new-leadership.modifiers.matchingSkillBonus.name"
         },
         {
             "type": "circumstance",
             "value": -4,
             "enabled": false,
-            "buttonLabel": "-4 Circumstance When Appointing Ruler",
-            "name": "-4 Circumstance When Appointing Ruler"
+            "buttonLabel": "activities.new-leadership.modifiers.appointingRulerPenalty.buttonLabel",
+            "name": "activities.new-leadership.modifiers.appointingRulerPenalty.name"
         }
     ],
     "skills": {
@@ -30,34 +30,34 @@
         "warfare": 0
     },
     "criticalSuccess": {
-        "msg": "The people love the new leader. The leader immediately provides the benefits tied to occupying the new role and gains a +1 circumstance bonus to all Kingdom skill checks they attempt before the end of the next Kingdom turn.",
+        "msg": "activities.new-leadership.criticalSuccess.msg",
         "modifiers": [
             {
                 "turns": 2,
                 "enabled": false,
-                "buttonLabel": "+1 Circumstance to All Checks",
                 "value": 1,
-                "name": "New Leadership: Critical Success",
+                "buttonLabel": "activities.new-leadership.criticalSuccess.modifiers.buttonLabel",
+                "name": "activities.new-leadership.criticalSuccess.modifiers.name",
                 "type": "circumstance"
             }
         ]
     },
     "success": {
-        "msg": "The people accept the new leader. The leader immediately provides the benefits tied to occupying the new role. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+        "msg": "activities.new-leadership.success.msg"
     },
     "failure": {
-        "msg": "The people are unsure about the new leader. The leader takes a –1 circumstance penalty to all checks they attempt as part of their activities during the Activity phase of each Kingdom turn. At the end of the next Kingdom turn, the leader can attempt any Loyalty-based basic skill check to ingratiate themselves with the populace. The leader may attempt this check at the end of each Kingdom turn until they succeed. Success removes this penalty, but a critical failure results in the development detailed in Critical Failure below. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>",
+        "msg": "activities.new-leadership.failure.msg",
         "modifiers": [
             {
                 "enabled": false,
-                "buttonLabel": "-1 Circumstance to All Checks",
+                "buttonLabel": "activities.new-leadership.failure.modifiers.buttonLabel",
+                "name": "activities.new-leadership.failure.modifiers.name",
                 "value": -1,
-                "name": "New Leadership: Failure",
                 "type": "circumstance"
             }
         ]
     },
     "criticalFailure": {
-        "msg": "The people reject the new leader. The leadership role is treated as vacant and you must attempt to reassign it using the New Leadership activity at the start of the next Kingdom turn. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+        "msg": "activities.new-leadership.criticalFailure.msg"
     }
 }

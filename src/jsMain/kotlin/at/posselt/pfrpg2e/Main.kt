@@ -51,6 +51,7 @@ import at.posselt.pfrpg2e.utils.ToolsMacros
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.createPartyActorIcon
 import at.posselt.pfrpg2e.utils.fixVisibility
+import at.posselt.pfrpg2e.utils.initLocalization
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.loadTemplatePartials
 import at.posselt.pfrpg2e.utils.pf2eKingmakerTools
@@ -60,6 +61,7 @@ import at.posselt.pfrpg2e.weather.rollWeather
 import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.directories.onRenderActorDirectory
 import com.foundryvtt.core.game
+import com.foundryvtt.core.onI18NInit
 import com.foundryvtt.core.onInit
 import com.foundryvtt.core.onReady
 import com.foundryvtt.core.onRenderChatLog
@@ -73,6 +75,11 @@ import org.w3c.dom.get
 
 fun main() {
     registerContextMenus()
+    Hooks.onI18NInit {
+        buildPromise {
+            initLocalization()
+        }
+    }
     Hooks.onInit {
         val actionDispatcher = ActionDispatcher(
             game = game,
@@ -105,17 +112,19 @@ fun main() {
                     if (id != null) {
                         val insertAfter = it.querySelector("h3")
                         if (game.user.isGM) {
-                            insertAfter?.insertAdjacentElement("afterend", createPartyActorIcon(
-                                id = id,
-                                icon = setOf("fa-solid", "fa-ellipsis-vertical"),
-                                toolTip = "PFRPG2E Actor Settings",
-                                sheetType = SheetType.KINGDOM,
-                                onClick = {
-                                    game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
-                                        ActorActions(actor=actor).launch()
-                                    }
-                                },
-                            ))
+                            insertAfter?.insertAdjacentElement(
+                                "afterend", createPartyActorIcon(
+                                    id = id,
+                                    icon = setOf("fa-solid", "fa-ellipsis-vertical"),
+                                    toolTip = "PFRPG2E Actor Settings",
+                                    sheetType = SheetType.KINGDOM,
+                                    onClick = {
+                                        game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
+                                            ActorActions(actor = actor).launch()
+                                        }
+                                    },
+                                )
+                            )
                         }
                         insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
                         insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))

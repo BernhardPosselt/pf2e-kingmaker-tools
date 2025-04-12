@@ -23,4 +23,6 @@ enum class ModifierType {
 
     val label: String
         get() = toLabel()
+
+    val key = "modifierType.$value"
 }

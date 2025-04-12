@@ -27,4 +27,5 @@ dependencies {
     implementation(libs.ktor.client.json)
     implementation(libs.logback)
     implementation(libs.jsonschemavalidator)
+    implementation(libs.jsoup)
 }

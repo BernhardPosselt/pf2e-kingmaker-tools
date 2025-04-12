@@ -25,6 +25,6 @@
         "msg": "You fail to reduce Unrest."
     },
     "criticalFailure": {
-        "msg": "You not only fail to reduce Unrest, but actually incite further anger among the citizenry. Choose one of the following: <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> or increase two Ruins of your choice by 1."
+        "msg": "You not only fail to reduce Unrest, but actually incite further anger among the citizenry. Choose one of the following: <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> or increase two Ruins of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
     }
 }

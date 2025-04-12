@@ -11,7 +11,9 @@ import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
 import at.posselt.pfrpg2e.kingdom.dialogs.getValidActivitySkills
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.sheet.insertButtons
 import at.posselt.pfrpg2e.utils.asSequence
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 import js.objects.Record
 
@@ -22,6 +24,12 @@ external interface ActivityResult {
     var msg: String
     val modifiers: Array<RawModifier>
 }
+
+private fun ActivityResult.insertButtons(): ActivityResult =
+    copy(
+        msg = insertButtons(msg),
+        modifiers = modifiers
+    )
 
 @JsPlainObject
 external interface RawActivity {
@@ -103,7 +111,57 @@ fun RawActivity.label(
 }
 
 @JsModule("./kingdom-activities.json")
-external val kingdomActivities: Array<RawActivity>
+private external val rawKingdomActivities: Array<RawActivity>
+
+val disabledActivityIds = rawKingdomActivities
+    .filterNot { it.enabled }
+    .map { it.id }
+    .toTypedArray()
+
+private var kingdomActivities: Array<RawActivity> = emptyArray()
+
+private fun ActivityResult.translate(): ActivityResult =
+    copy(
+        msg = t(msg),
+        modifiers = modifiers
+    )
+
+private fun RawActivity.translate(): RawActivity =
+    copy(
+        title = t(title),
+        description = t(description),
+        requirement = requirement?.let { t(it) },
+        special = special?.let { t(it) },
+        automationNotes = automationNotes?.let { t(it) },
+        hint = hint?.let { t(it) },
+        criticalSuccess = criticalSuccess?.translate(),
+        success = success?.translate(),
+        failure = failure?.translate(),
+        criticalFailure = criticalFailure?.translate(),
+    )
+
+fun translateActivities() {
+    kingdomActivities = rawKingdomActivities
+        .map {
+            val translated = it.translate()
+            translated.copy(
+                description = insertButtons(translated.description),
+                criticalSuccess = translated.criticalSuccess?.insertButtons(),
+                success = translated.success?.insertButtons(),
+                failure = translated.failure?.insertButtons(),
+                criticalFailure = translated.criticalFailure?.insertButtons(),
+            )
+        }
+        .toTypedArray()
+}
+
+fun KingdomData.getAllActivities(): List<RawActivity> {
+    val homebrew = homebrewActivities.map { it.id }.toSet()
+    return kingdomActivities.filter { it.id !in homebrew } + homebrewActivities
+}
+
+fun KingdomData.getActivity(id: String): RawActivity? =
+    getAllActivities().associateBy { it.id }[id]
 
 fun RawActivity.resolveDc(
     enemyArmyScoutingDcs: List<Int>,

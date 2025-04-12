@@ -68,6 +68,7 @@ import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.serializeB64Json
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -705,8 +706,8 @@ private class KingdomCheckDialog(
         val hidden = id !in evaluatedModifiersById || data.assurance && modifier.type != ModifierType.PROFICIENCY
         val enabled = evaluatedModifier?.enabled ?: modifier.enabled
         return ModifierContext(
-            label = modifier.name,
-            type = modifier.type.label,
+            label = t(modifier.name),
+            type = t(modifier.type.key),
             modifier = value.formatAsModifier(),
             id = modifier.id,
             removable = modifier.id in removableIds,

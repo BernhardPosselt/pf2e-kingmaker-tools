@@ -130,3 +130,96 @@ Example:
     * **Name**: Recipes
     * **Schema file or URL**: schemas/recipes.json
     * **Directory**: data/recipes
+
+## Translations
+
+### Help out as a Translator
+
+If you want to help translating this module as a Translator, create an account on [Transifex](https://app.transifex.com) and open an issue on GitHub with your username and language, so I can add you to the project.
+
+### Help out as a Developer
+
+This module skips the built-in Foundry translation system since it's broken and unusable. Nonetheless, you need to link your json files in the module.json file for each language, otherwise Foundry will not let you change your language in the settings.
+
+#### Making Changes in Code
+
+Translations are persisted in **lang/en.json**. You can arbitrarily nest JSON values and reference them using the path. For instance: 
+
+```json
+{
+  "key": {
+    "something": "value"
+  }
+}
+```
+
+would be referenced using **key.something**. Translations can be parameterized:
+
+```json
+{
+  "key": {
+    "something": "{greeting} to you"
+  }
+}
+```
+
+Plurals can be translated using [ICU](https://unicode-org.github.io/icu/userguide/format_parse/messages/) (with **coins** being passed as an int parameter):
+
+```json
+{
+  "key": {
+    "something": "He paid {coins, plural, =0 {nothing} =1 {one coin} =other{# coins}} for his groceries"
+  }
+}
+```
+
+It's also possible to use different translations based on a parameter, e.g. gender (with **gender** being passed as either "male" or "female"; other is the catchall case):
+
+```json
+{
+  "key": {
+    "something": "{gender, select, female {She} male {He} other {They}} went to the party"
+  }
+}
+```
+
+There are 2 places where you can translate strings:
+
+In Kotlin code:
+
+```kt
+// single value
+t("key.something")
+// values with context
+t("key.something", recordOf("greeting" to "hello"))
+```
+
+In Handlebars templates:
+
+```handlebars
+{{localizeKM "key.something"}}
+{{localizeKM "key.something" greeting="hello"}}
+```
+
+#### Pushing Changes
+
+Strings are not edited in the repository. Instead, they are pushed to Transifex first, edited and then pulled.
+
+In order to pull/push, you first need to set up a token on transifex
+
+Then create a **~/.transifexrc** with the token:
+```toml
+[https://app.transifex.com]
+rest_hostname = https://rest.api.transifex.com
+token         = TOKEN_HERE
+```
+
+You can also persist it in the **TX_TOKEN** environment variable.
+
+Then you can edit **lang/en.json** as normal. Once you are done with your changes, you need to push it to your translators using:
+
+    ./gradlew txPush
+
+To download the latest translations, use
+
+    ./gradlew txPull
