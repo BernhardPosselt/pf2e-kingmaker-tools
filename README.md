@@ -123,7 +123,7 @@ Then compile the application using:
 
     ./gradlew assemble
 
-Now open FoundryVTT. The module should be listed as installed. You will need to run the **assemble** command again each time you change a file or pull a translation from Transifex
+Now open FoundryVTT. The module should be listed as installed. You will need to run the **assemble** command again each time you change a file, git pull or pull  translations from Transifex
 
 You can pull the latest changes inside the folder using:
 
