@@ -69,7 +69,29 @@ for a quick intro on how to interact with the js api.
 
 ### Setup
 
+#### Windows
+
 Install the following things:
+
+* [git](https://git-scm.com/downloads/win)
+* [node](https://nodejs.org/en/download) (make sure to pick yarn as the package manager)
+* [JDK 21](https://adoptium.net/installation/):
+
+      winget install EclipseAdoptium.Temurin.21.JDK
+
+Then open your git terminal in **%localappdata%/FoundryVTT/Data/modules/** by right-clicking onto an empty space inside the folder (in Windows 11, that option is hidden under **Show more options**) or create a symlink from another directory:
+
+    git clone https://github.com/BernhardPosselt/pf2e-kingmaker-tools.git 
+
+The folder **Data/modules/pf2e-kingmaker-tools** should now exist. 
+
+Next, change into the folder and open your git terminal inside:
+
+
+
+#### Linux & macOS
+
+Install the following things using your package manager or homebrew:
 
 * JDK 21
 * git
@@ -85,9 +107,9 @@ Then link this directory to your foundry data folder:
 
     ln -s /home/bernhard/dev/pf2e-kingmaker-tools/ /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools/
 
-Pull all language files from Transifex:
+Optionally, if you want all translations present locally, pull all language files from Transifex where TX_TOKEN is obtained from your [account settings page]( https://app.transifex.com/user/settings/api/):
 
-    ./gradlew txPull
+    TX_TOKEN=token_here ./gradlew txPull
 
 Run the package task to build everything from scratch:
 
