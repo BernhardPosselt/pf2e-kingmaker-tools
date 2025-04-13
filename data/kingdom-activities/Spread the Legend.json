@@ -30,9 +30,9 @@
         "msg": "The rousing and inspiring stories you spread about the PCs helps to bring the nation together. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>"
     },
     "failure": {
-        "msg": "You avoid spreading unfortunate news, but only just barely. The citizens are only slightly entertained by their leaders’ exploits. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>."
+        "msg": "You avoid spreading unfortunate news, but only just barely. The citizens are only slightly entertained by their leaders’ exploits. @lose1Unrest."
     },
     "criticalFailure": {
-        "msg": "You accidentally spreads news of a humiliating or embarrassing nature, causing the people of the kingdom to lose respect for their leaders. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>."
+        "msg": "You accidentally spreads news of a humiliating or embarrassing nature, causing the people of the kingdom to lose respect for their leaders. @gain1d4Unrest."
     }
 }

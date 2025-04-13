@@ -8,16 +8,16 @@
       "leader": "counselor",
       "skills": ["industry"],
       "criticalSuccess": {
-        "msg": "You gain access to the Read All About It leadership activity. More importantly, your industrious editors prove to be more than up to the task of keeping the presses running, and the people of the kingdom take to the new paper with delight. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button>"
+        "msg": "You gain access to the Read All About It leadership activity. More importantly, your industrious editors prove to be more than up to the task of keeping the presses running, and the people of the kingdom take to the new paper with delight. @lose1d4Unrest, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button>"
       },
       "success": {
-        "msg": "You gain access to the Read All About It leadership activity, and while your people enjoy the paper, it’s always a grind to hit your deadlines. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>"
+        "msg": "You gain access to the Read All About It leadership activity, and while your people enjoy the paper, it’s always a grind to hit your deadlines. @lose1Unrest"
       },
       "failure": {
-        "msg": "You gain access to the Read All About It leadership activity, but the stress of hitting deadlines puts a strain on your editors. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+        "msg": "You gain access to the Read All About It leadership activity, but the stress of hitting deadlines puts a strain on your editors. @gain1Unrest"
       },
       "criticalFailure": {
-        "msg": "You fail to get the local paper off the ground, and your frustrated editors spread word of how you mismanaged the affair. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button>"
+        "msg": "You fail to get the local paper off the ground, and your frustrated editors spread word of how you mismanaged the affair. @gain1d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button>"
       }
     }
   ]

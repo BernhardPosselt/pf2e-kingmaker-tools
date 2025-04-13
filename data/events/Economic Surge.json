@@ -9,10 +9,10 @@
       "leader": "treasurer",
       "skills": ["trade"],
       "criticalSuccess": {
-        "msg": "A trade bonanza brings unexpected profits. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Gain 2 Resource Dice Next Turn</button>"
+        "msg": "A trade bonanza brings unexpected profits. @gain2ResourceDiceNextTurn"
       },
       "success": {
-        "msg": "As critical success but you gain only <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>"
+        "msg": "As critical success but you gain only @gain1ResourceDiceNextTurn"
       },
       "failure": {
         "msg": "The economic surge slows for a bit; if you failed at this check on your previous Kingdom turn, the Economic Surge event ends."

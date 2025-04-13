@@ -25,10 +25,10 @@
         }]
       },
       "success": {
-        "msg": "Extended good weather makes life pleasant and easy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Unrest</button>"
+        "msg": "Extended good weather makes life pleasant and easy. @lose1d4Unrest"
       },
       "failure": {
-        "msg": "Good weather produces a short but pleasant respite. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>"
+        "msg": "Good weather produces a short but pleasant respite. @lose1Unrest"
       },
       "criticalFailure": {
         "msg": "The good weather doesn’t last long enough to help."

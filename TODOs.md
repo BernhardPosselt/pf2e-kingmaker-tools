@@ -7,4 +7,3 @@
 * translate templates
 * translate events
 * translate kingdom activities
-* translate structures

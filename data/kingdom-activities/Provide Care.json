@@ -11,15 +11,15 @@
         "defense": 0
     },
     "criticalSuccess": {
-        "msg": "You provide unexpectedly compassionate support for the people. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button> and reduce one Ruin of your choice by 1: <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
+        "msg": "You provide unexpectedly compassionate support for the people. @lose1Unrest and reduce one Ruin of your choice by 1: <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
     },
     "success": {
-        "msg": "Your care soothes the worries and fears of the populace; <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>."
+        "msg": "Your care soothes the worries and fears of the populace; @lose1Unrest."
     },
     "failure": {
         "msg": "You don’t provide any notable care for the citizens, but at least you don’t make things worse."
     },
     "criticalFailure": {
-        "msg": "Your attempt to provide care backfires. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> or a Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "Your attempt to provide care backfires. @gain1Unrest or a Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
     }
 }

@@ -13,13 +13,13 @@
         "msg": "You persuade the citizens to give up their demands."
       },
       "success": {
-        "msg": "You quell the citizens’ demands for now, but they are not happy about your refusal to comply. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+        "msg": "You quell the citizens’ demands for now, but they are not happy about your refusal to comply. @gain1Unrest"
       },
       "failure": {
-        "msg": "The citizens continue their demands and some refuse to work in protest. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
+        "msg": "The citizens continue their demands and some refuse to work in protest. @gain1Unrest and @lose2ResourceDiceNextTurn"
       },
       "criticalFailure": {
-        "msg": "The citizens continue their demands and some refuse to work in protest. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>. In addition, violence during the protests also causes you to <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>"
+        "msg": "The citizens continue their demands and some refuse to work in protest. @gain1Unrest and @lose2ResourceDiceNextTurn. In addition, violence during the protests also causes you to @gain1Decay"
       }
     }
   ],

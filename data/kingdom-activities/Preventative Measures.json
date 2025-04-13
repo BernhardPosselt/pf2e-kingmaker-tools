@@ -63,6 +63,6 @@
     ]
   },
   "criticalFailure": {
-    "msg": "The attempt to put preventative measures in place has resulted in significant waste of resources. You can’t use Preventative Measures again on your next Kingdom turn, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
+    "msg": "The attempt to put preventative measures in place has resulted in significant waste of resources. You can’t use Preventative Measures again on your next Kingdom turn, and @lose2ResourceDiceNextTurn"
   }
 }

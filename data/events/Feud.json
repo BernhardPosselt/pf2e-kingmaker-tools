@@ -9,16 +9,16 @@
       "leader": "counselor",
       "skills": ["politics"],
       "criticalSuccess": {
-        "msg": "You mediate the rivals’ differences and not only get them to drop their feud, but also broker an alliance between the two. The feud ends, and the rivals are particularly productive during the next turn. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Gain 2 Resource Dice Next Turn</button>"
+        "msg": "You mediate the rivals’ differences and not only get them to drop their feud, but also broker an alliance between the two. The feud ends, and the rivals are particularly productive during the next turn. @gain2ResourceDiceNextTurn"
       },
       "success": {
         "msg": "You get the rivals to back down, though their mutual dislike simmers behind the scenes. The feud continues into the next turn."
       },
       "failure": {
-        "msg": "You fail to quiet the rivals and they continue duels, rumormongering, intrigue, and strife. The conflict prevents you from recruiting armies in the two affected settlements until the next Kingdom turn. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+        "msg": "You fail to quiet the rivals and they continue duels, rumormongering, intrigue, and strife. The conflict prevents you from recruiting armies in the two affected settlements until the next Kingdom turn. @gain1Unrest"
       },
       "criticalFailure": {
-        "msg": "The rivals ignore royal commands and disrupt both settlements with their private war. The ongoing feud prevents you from recruiting armies in the two affected settlements until the feud ends. In addition, skirmishing causes you to <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button> and increase a Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>These increases are doubled to 4 Unrest and 2 Ruin if you critically failed this check last turn."
+        "msg": "The rivals ignore royal commands and disrupt both settlements with their private war. The ongoing feud prevents you from recruiting armies in the two affected settlements until the feud ends. In addition, skirmishing causes you to <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button> and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>These increases are doubled to 4 Unrest and 2 Ruin if you critically failed this check last turn."
       }
     }
   ],

@@ -9,16 +9,16 @@
       "leader": "treasurer",
       "skills": ["trade"],
       "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Gain 4 Resource Dice Next Turn</button>. For the rest of that turn, item bonuses from structures in the settlement are doubled; this increase can exceed the normal maximum item bonus your structures can provide."
+        "msg": "@gain4ResourceDiceNextTurn. For the rest of that turn, item bonuses from structures in the settlement are doubled; this increase can exceed the normal maximum item bonus your structures can provide."
       },
       "success": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Gain 2 Resource Dice Next Turn</button>. For the remainder of that turn, the item bonus granted by one of the settlement’s structures (chosen by the players) is doubled; this increase can exceed the normal maximum item bonus your structures can provide."
+        "msg": "@gain2ResourceDiceNextTurn. For the remainder of that turn, the item bonus granted by one of the settlement’s structures (chosen by the players) is doubled; this increase can exceed the normal maximum item bonus your structures can provide."
       },
       "failure": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>"
+        "msg": "@gain1ResourceDiceNextTurn"
       },
       "criticalFailure": {
-        "msg": "The boom is brief before it bursts like a bubble, leaving many merchants jealous and frustrated about not being able to take part. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
+        "msg": "The boom is brief before it bursts like a bubble, leaving many merchants jealous and frustrated about not being able to take part. @lose2ResourceDiceNextTurn"
       }
     }
   ]

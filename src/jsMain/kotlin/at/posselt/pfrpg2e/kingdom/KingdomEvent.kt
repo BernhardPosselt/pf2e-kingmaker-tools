@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.data.events.KingdomEventStage
 import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.kingdom.sheet.insertButtons
 import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
@@ -115,7 +116,7 @@ fun KingdomData.getOngoingEvents(applyBlacklist: Boolean = false): List<OngoingE
 
 private fun RawKingdomEventOutcome.translate() =
     copy(
-        msg = t(msg)
+        msg = insertButtons(t(msg))
     )
 
 private fun RawKingdomEventStage.translate() =
@@ -129,7 +130,7 @@ private fun RawKingdomEventStage.translate() =
 private fun RawKingdomEvent.translate() =
     copy(
         name = t(name),
-        description = t(description),
+        description = insertButtons(t(description)),
         special = special?.let { t(it) },
         resolution = resolution?.let { t(it) },
         location = location?.let { t(it) },

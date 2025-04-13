@@ -17,9 +17,9 @@
         "msg": "The kingdom’s criminals take note of the show of force. <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Crime</button>"
     },
     "failure": {
-        "msg": "The show of force fails to impress criminals but unsettles the rest of the citizens. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>."
+        "msg": "The show of force fails to impress criminals but unsettles the rest of the citizens. @gain1Unrest."
     },
     "criticalFailure": {
-        "msg": "The criminals are emboldened by the failed show of force. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>."
+        "msg": "The criminals are emboldened by the failed show of force. @gain1d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>."
     }
 }

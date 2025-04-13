@@ -43,16 +43,16 @@
         "defense"
       ],
       "criticalSuccess": {
-        "msg": "The enormous owlbear inflicted only relatively minor damage, and while it wounded dozens, miraculously no one was killed. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>."
+        "msg": "The enormous owlbear inflicted only relatively minor damage, and while it wounded dozens, miraculously no one was killed. @gain1Unrest."
       },
       "success": {
-        "msg": "The owlbear managed to destroy a portion of the city, killed a few citizens, and wounded dozens. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>. Choose one Walled border or one lot with a structure in it; that structure or improvement is destroyed."
+        "msg": "The owlbear managed to destroy a portion of the city, killed a few citizens, and wounded dozens. @gain1d4Unrest and @gain1Decay. Choose one Walled border or one lot with a structure in it; that structure or improvement is destroyed."
       },
       "failure": {
-        "msg": "The owlbear rampaged through the settlement, killing dozens and laying waste to structures. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Decay</button>. Choose one Walled border and two lots with structures in it; those structures and improvements are destroyed."
+        "msg": "The owlbear rampaged through the settlement, killing dozens and laying waste to structures. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button> and @gain1d4Decay. Choose one Walled border and two lots with structures in it; those structures and improvements are destroyed."
       },
       "criticalFailure": {
-        "msg": "The owlbear rampaged through the settlement, killing dozens and laying waste to structures. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2d4\">Gain 2d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Decay</button>. Choose one Walled border and four lots with structures in it; those structures or improvements are destroyed."
+        "msg": "The owlbear rampaged through the settlement, killing dozens and laying waste to structures. @gain2d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Decay</button>. Choose one Walled border and four lots with structures in it; those structures or improvements are destroyed."
       }
     }
   ],

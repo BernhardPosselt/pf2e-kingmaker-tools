@@ -33,10 +33,10 @@
         "msg": "The citizens are somewhat comforted, and you prevent Unrest from rising."
       },
       "failure": {
-        "msg": "Rumors that the affliction might be beyond the party’s capability to stop make it difficult to quell fear. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+        "msg": "Rumors that the affliction might be beyond the party’s capability to stop make it difficult to quell fear. @gain1Unrest"
       },
       "criticalFailure": {
-        "msg": "As failure, but the rumors spread more quickly and have kernels of truth to them. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>, and at the end of the next day, a Cult event automatically happens."
+        "msg": "As failure, but the rumors spread more quickly and have kernels of truth to them. @gain1d4Unrest, and at the end of the next day, a Cult event automatically happens."
       }
     }
   ]

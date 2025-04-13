@@ -17,13 +17,13 @@
         "msg": "The two kobold spies are captured and kept imprisoned until the PCs have a chance to speak to them."
       },
       "success": {
-        "msg": "Rumors of kobold spies in town begin to spread. Attempt a @Check[type:flat|dc:11]; on a failure, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>."
+        "msg": "Rumors of kobold spies in town begin to spread. Attempt a @Check[type:flat|dc:11]; on a failure, @gain1Unrest."
       },
       "failure": {
-        "msg": "Someone or something in town is causing trouble. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+        "msg": "Someone or something in town is causing trouble. @gain1Unrest"
       },
       "criticalFailure": {
-        "msg": "Not only do the kobolds continue to cause trouble <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, but they also perform acts of vandalism and sabotage. <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>"
+        "msg": "Not only do the kobolds continue to cause trouble @gain1Unrest, but they also perform acts of vandalism and sabotage. @gain1Decay"
       }
     }
   ],

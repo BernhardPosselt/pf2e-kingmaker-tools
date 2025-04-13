@@ -21,6 +21,6 @@
         "msg": "You fail to recruit the army."
     },
     "criticalFailure": {
-        "msg": "Many of the individuals in the army you attempted to recruit took offense at the attempt. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, and you cannot attempt to recruit an army again until the next Kingdom turn."
+        "msg": "Many of the individuals in the army you attempted to recruit took offense at the attempt. @gain1Unrest, and you cannot attempt to recruit an army again until the next Kingdom turn."
     }
 }

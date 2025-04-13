@@ -15,7 +15,7 @@
         "wilderness": 0
     },
     "criticalSuccess": {
-        "msg": "The citizens enjoy the time off and are ready to get back to work. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>, and the next Leadership activity you take gains a +2 circumstance bonus.",
+        "msg": "The citizens enjoy the time off and are ready to get back to work. @lose1Unrest, and the next Leadership activity you take gains a +2 circumstance bonus.",
         "modifiers": [
             {
                 "turns": 1,
@@ -53,7 +53,7 @@
         ]
     },
     "success": {
-        "msg": "The time spent relaxing has calmed nerves; <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Unrest</button>.",
+        "msg": "The time spent relaxing has calmed nerves; @lose1Unrest.",
         "modifiers": [{
             "name": "Rest and Relax performed last turn",
             "buttonLabel": "+4 DC increase if Rest and Relax performed next turn",

@@ -11,10 +11,10 @@
         "trade": 0
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Gain 2 Resource Dice Next Turn</button>"
+        "msg": "@gain2ResourceDiceNextTurn"
     },
     "success": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>, but the citizens suspect something is going on: if you attempt to Process Hidden Fees on the next Kingdom turn, the result is worsened one degree.",
+        "msg": "@gain1ResourceDiceNextTurn, but the citizens suspect something is going on: if you attempt to Process Hidden Fees on the next Kingdom turn, the result is worsened one degree.",
         "modifiers": [{
             "name": "Processed Hidden Fees on the Previous turn",
             "buttonLabel": "Worsen Degree of Success when processing hidden fees next turn",
@@ -35,9 +35,9 @@
         }]
     },
     "failure": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>, but the citizens catch wind of the fees and grow unhappy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, and you cannot Process Hidden Fees on your next Kingdom turn."
+        "msg": "@gain1ResourceDiceNextTurn, but the citizens catch wind of the fees and grow unhappy. @gain1Unrest, and you cannot Process Hidden Fees on your next Kingdom turn."
     },
     "criticalFailure": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>, but the citizens catch wind of the fees and grow unhappy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button>, and you cannot Process Hidden Fees on your next Kingdom turn."
+        "msg": "@gain1ResourceDiceNextTurn, but the citizens catch wind of the fees and grow unhappy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button>, and you cannot Process Hidden Fees on your next Kingdom turn."
     }
 }

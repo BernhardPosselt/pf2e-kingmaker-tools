@@ -35,7 +35,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.math.abs
 
-enum class Turn: Translatable {
+enum class Turn : Translatable {
     NOW,
     NEXT;
 
@@ -52,7 +52,7 @@ enum class Turn: Translatable {
         get() = toLabel()
 }
 
-enum class ResourceMode: Translatable {
+enum class ResourceMode : Translatable {
     GAIN,
     LOSE;
 
@@ -69,7 +69,7 @@ enum class ResourceMode: Translatable {
         get() = toLabel()
 }
 
-enum class Resource: Translatable, ValueEnum {
+enum class Resource : Translatable, ValueEnum {
     RESOURCE_DICE,
     CRIME,
     DECAY,
@@ -131,7 +131,7 @@ data class ResourceButton(
             checkNotNull(match) {
                 "match is null $value"
             }
-            return ResourceButton.fromMatch(match)
+            return fromMatch(match)
         }
 
         fun fromMatch(match: MatchResult): ResourceButton {
@@ -179,8 +179,14 @@ data class ResourceButton(
     }
 
     fun toHtml(): String {
+        val isRd = value.contains("rd")
+        val resourceLabel = if (isRd) {
+            t("resourceButton.resourceDice.${resource.value}", recordOf("count" to value.replace("rd", "")))
+        } else {
+            t(resource.i18nKey, recordOf("count" to value))
+        }
         val turnLabel = if (turn == Turn.NEXT) " ${t(turn)}" else ""
-        val label = "${t(mode)} ${t(resource.i18nKey, recordOf("count" to value))}$turnLabel"
+        val label = "${t(mode)} ${resourceLabel}$turnLabel"
         val value2 = value
         return document.create.button {
             type = ButtonType.button
@@ -232,7 +238,8 @@ data class ResourceButton(
         }
         val turnLabel = if (turn == Turn.NEXT) " ${t(turn)}" else ""
         val mode = if (mode == ResourceMode.GAIN) "resourceButton.mode.gaining" else "resourceButton.mode.losing"
-        val resourceKey = if (resource == Resource.ROLLED_RESOURCE_DICE) Resource.RESOURCE_POINTS.i18nKey else resource.i18nKey
+        val resourceKey =
+            if (resource == Resource.ROLLED_RESOURCE_DICE) Resource.RESOURCE_POINTS.i18nKey else resource.i18nKey
         val message = "${t(mode)} ${t(resourceKey, recordOf("count" to abs(value)))}$turnLabel"
         postChatMessage(message, isHtml = true)
         val setter = when (resource) {

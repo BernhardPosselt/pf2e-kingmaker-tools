@@ -8,16 +8,16 @@
       "leader": "counselor",
       "skills": ["arts"],
       "criticalSuccess": {
-        "msg": "The special edition proves to be a rousing success! <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Gain 2 Resource Dice Next Turn</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries Next Turn</button>"
+        "msg": "The special edition proves to be a rousing success! @gain2ResourceDiceNextTurn and <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries Next Turn</button>"
       },
       "success": {
-        "msg": "The special edition is popular but takes a while to sell out. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>"
+        "msg": "The special edition is popular but takes a while to sell out. @gain1ResourceDiceNextTurn"
       },
       "failure": {
         "msg": "The special edition fails to connect with any readers and provides no significant benefit to your nation as a result."
       },
       "criticalFailure": {
-        "msg": "The special edition is controversial in some way and incites anger in a key portion of your population. Increase a Ruin of your choice by 1 <ul><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button></li><li><button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button></li></ul>"
+        "msg": "The special edition is controversial in some way and incites anger in a key portion of your population. Increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
       }
     }
   ]

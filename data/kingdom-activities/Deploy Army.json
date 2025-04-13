@@ -96,6 +96,6 @@
     "msg": "The army arrives at its destination, but ran into some sort of trouble along the way. Increase the army’s weary condition by 1 and attempt a @Check[type:flat|dc:6]; on a failure, reduce the army’s HP by 1."
   },
   "criticalFailure": {
-    "msg": "Rather than arriving at its destination, the army becomes lost until it recovers from this condition. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>, and attempt a @Check[type:flat|dc:11]; on a failure, reduce the army’s HP by 1."
+    "msg": "Rather than arriving at its destination, the army becomes lost until it recovers from this condition. @gain1d4Unrest, and attempt a @Check[type:flat|dc:11]; on a failure, reduce the army’s HP by 1."
   }
 }

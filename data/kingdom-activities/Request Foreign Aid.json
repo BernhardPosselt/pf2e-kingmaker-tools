@@ -43,6 +43,6 @@
         "msg": "Your ally marshals its resources but cannot get aid to you in time to deal with your current situation. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Resource Points Next Turn</button>"
     },
     "criticalFailure": {
-        "msg": "Your ally is tangled up in its own problems and is unable to assist you, is insulted by your request for aid, or might even have an interest in seeing your kingdom struggle against one of your ongoing events. Whatever the case, your pleas for aid make your kingdom look desperate. You gain no aid, but you do <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button>."
+        "msg": "Your ally is tangled up in its own problems and is unable to assist you, is insulted by your request for aid, or might even have an interest in seeing your kingdom struggle against one of your ongoing events. Whatever the case, your pleas for aid make your kingdom look desperate. You gain no aid, but you do @gain1d4Unrest."
     }
 }

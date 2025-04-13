@@ -298,6 +298,26 @@
         "next": "Next Turn",
         "now": "This Turn"
       },
+      "resourceDice": {
+        "resourceDice": "{count, plural, other {# Rolled Resource Dice of Resource Dice}}",
+        "resourcePoints": "{count, plural, other {# Rolled Resource Dice of Resource Points}}",
+        "crime": "{count, plural, other {# Rolled Resource Dice of Crime}}",
+        "decay": "{count, plural, other {# Rolled Resource Dice of Decay}}",
+        "corruption": "{count, plural, other {# Rolled Resource Dice of Corruption}}",
+        "consumption": "{count, plural, other {# Rolled Resource Dice of Consumption}}",
+        "strife": "{count, plural, other {# Rolled Resource Dice of Strife}}",
+        "food": "{count, plural, other {# Rolled Resource Dice of Food}}",
+        "luxuries": "{count, plural, other {# Rolled Resource Dice of Luxuries}}",
+        "unrest": "{count, plural, other {# Rolled Resource Dice of Unrest}}",
+        "ore": "{count, plural, other {# Rolled Resource Dice of Ore}}",
+        "lumber": "{count, plural, other {# Rolled Resource Dice of Lumber}}",
+        "fame": "{count, plural, other {# Rolled Resource Dice of Fame}}",
+        "stone": "{count, plural, other {# Rolled Resource Dice of Stone}}",
+        "xp": "{count, plural, other {# Rolled Resource Dice of XP}}",
+        "supernaturalSolution": "{count, plural, other {# Rolled Resource Dice of Supernatural Solutions}}",
+        "creativeSolution": "{count, plural, other {# Rolled Resource Dice of Creative Solutions}}",
+        "rolledResourceDice": "{count, plural, other {# Rolled Resource Dice of Rolled Resource Dice}}"
+      },
       "resource": {
         "resourceDice": "{count, plural, =1 {1 Resource Dice} other {# Resource Dice}}",
         "resourcePoints": "{count, plural, =1 {1 Resource Point} other {# Resource Points}}",

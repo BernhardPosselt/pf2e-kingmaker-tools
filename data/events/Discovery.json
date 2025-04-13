@@ -8,16 +8,16 @@
       "leader": "counselor",
       "skills": ["scholarship"],
       "criticalSuccess": {
-        "msg": "Your discovery brings glory and a boon to your resources! <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"6\">Gain 6 Resource Dice Next Turn</button>. Your people are amazed. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Unrest</button>"
+        "msg": "Your discovery brings glory and a boon to your resources! <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"6\">Gain 6 Resource Dice Next Turn</button>. Your people are amazed. @lose2Unrest"
       },
       "success": {
         "msg": "Your discovery is a helpful (but not overly amazing) boon to your kingdom’s resources. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"3\">Gain 3 Resource Dice Next Turn</button>"
       },
       "failure": {
-        "msg": "Your discovery is of some academic interest but ultimately of limited use. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>"
+        "msg": "Your discovery is of some academic interest but ultimately of limited use. @gain1ResourceDiceNextTurn"
       },
       "criticalFailure": {
-        "msg": "Your discovery turns out to be a dead end and a wasteful boondoggle. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Dice Next Turn</button>"
+        "msg": "Your discovery turns out to be a dead end and a wasteful boondoggle. @lose2ResourceDiceNextTurn"
       }
     }
   ]

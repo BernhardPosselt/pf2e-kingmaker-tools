@@ -14,10 +14,10 @@
         "msg": "Your new subjects are welcomed, and their contributions help in the short term. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"3\">Gain 3 Resource Dice Next Turn</button>"
       },
       "failure": {
-        "msg": "Your new subjects endure discrimination from intolerant citizens in your kingdom, but they nonetheless bring willing hands to work and such resources as they possess. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button>"
+        "msg": "Your new subjects endure discrimination from intolerant citizens in your kingdom, but they nonetheless bring willing hands to work and such resources as they possess. @gain1Unrest and @gain1ResourceDiceNextTurn"
       },
       "criticalFailure": {
-        "msg": "Your new subjects encounter discrimination and xenophobia, and they are eventually driven back into the wild. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button>"
+        "msg": "Your new subjects encounter discrimination and xenophobia, and they are eventually driven back into the wild. @gain1d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button>"
       }
     }
   ]

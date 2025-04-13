@@ -14,18 +14,18 @@
         "name": "Managed Trade Agreements last turn",
         "type": "untyped"
     }],
-    "description": "You send agents out to attend to established trade agreements. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"true\" data-value=\"2\">Lose 2 Resource Points</button> per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.",
+    "description": "You send agents out to attend to established trade agreements. @loseMultiple2ResourcePoints per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.",
     "skills": {
         "trade": 0
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"true\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button> per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries)."
+        "msg": "@gainMultiple1ResourceDiceNextTurn per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries)."
     },
     "success": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"true\" data-value=\"1\">Gain 1 Resource Dice Next Turn</button> per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries)."
+        "msg": "@gainMultiple1ResourceDiceNextTurn per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries)."
     },
     "failure": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"true\" data-value=\"1\">Gain 1 Resource Points Next Turn</button> per trade agreement"
+        "msg": "@gainMultiple1ResourcePointsNextTurn per trade agreement"
     },
     "criticalFailure": {
         "msg": "You gain no benefit, as your traders and merchants met with bad luck on the road. You can’t Manage Trade Agreements for 1 Kingdom turn."

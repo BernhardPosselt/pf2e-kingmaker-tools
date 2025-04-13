@@ -10,13 +10,13 @@
       "msg": "The trolls are rebuffed with ease, with no damage to the kingdom. Even better, the kingdom’s scouts manage to track the trolls back to their home, revealing the troll king’s lair at area NM7 to the PCs."
     },
     "success": {
-      "msg": "Kingdom forces manage to hold the trolls back, but worry still spreads - <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>"
+      "msg": "Kingdom forces manage to hold the trolls back, but worry still spreads - @gain1Unrest"
     },
     "failure": {
-      "msg": "The trolls manage to slaughter a few victims despite the kingdom’s best efforts. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>."
+      "msg": "The trolls manage to slaughter a few victims despite the kingdom’s best efforts. @gain1d4Unrest and @gain1Decay."
     },
     "criticalFailure": {
-      "msg": "The trolls manage to slaughter a few victims despite the kingdom’s best efforts. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Unrest</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Decay</button>. In addition, but the trolls manage to also invade the kingdom and raze some of its lands. If the kingdom has any Farmlands, one randomly determined Farmland is reduced back to its original terrain and must be rebuilt. If it has no farmlands, one hex along the border (as close to area NM7 as possible) is lost."
+      "msg": "The trolls manage to slaughter a few victims despite the kingdom’s best efforts. @gain1d4Unrest and @gain1Decay. In addition, but the trolls manage to also invade the kingdom and raze some of its lands. If the kingdom has any Farmlands, one randomly determined Farmland is reduced back to its original terrain and must be rebuilt. If it has no farmlands, one hex along the border (as close to area NM7 as possible) is lost."
     }
   }],
   "resolution": "This event ends once the PCs defeat the troll king"

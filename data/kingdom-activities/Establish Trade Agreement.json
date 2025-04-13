@@ -23,7 +23,7 @@
         "msg": "Your traders reach their destination but need to sweeten the deal to secure the trade agreement. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Rolled Resource Dice</button>. If you do so, you successfully establish a trade agreement, otherwise the attempt fails."
     },
     "criticalFailure": {
-        "msg": "Your trade agreement is a total loss and your traders do not return. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Unrest</button>, and until the end of the next Kingdom turn, take a –1 circumstance penalty to all Economy-related checks.",
+        "msg": "Your trade agreement is a total loss and your traders do not return. @gain1Unrest, and until the end of the next Kingdom turn, take a –1 circumstance penalty to all Economy-related checks.",
         "modifiers": [
             {
                 "turns": 2,
