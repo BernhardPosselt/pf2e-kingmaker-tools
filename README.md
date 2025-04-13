@@ -109,12 +109,12 @@ Optionally, log into your Transifex account and retrieve your token from your [a
 
     nano ~/.transifexrc
 
-Paste the following contents and change **TOKEN_HERE** to your token
+Paste the following contents and change **TX_TOKEN** to your token
 
 ```ini
 [https://app.transifex.com]
 rest_hostname = https://rest.api.transifex.com
-token         = TOKEN_HERE
+token         = TX_TOKEN
 ```
 
 Save the file with **CTRL + o**, then exit with **CTRL + x**.
@@ -181,12 +181,12 @@ Optionally, if you want all translations present locally, pull all language file
 
     nano ~/.transifexrc
 
-Paste the following contents and change **TOKEN_HERE** to your token
+Paste the following contents and change **TX_TOKEN** to your token
 
 ```ini
 [https://app.transifex.com]
 rest_hostname = https://rest.api.transifex.com
-token         = TOKEN_HERE
+token         = TX_TOKEN
 ```
 
 Save the file with **CTRL + o**, then exit with **CTRL + x**.
