@@ -84,9 +84,9 @@ fun unfuckFoundryTranslations(obj: ReadonlyRecord<String, Any>): ReadonlyRecord<
 
 suspend fun initLocalization() {
     val lang = game.i18n.lang
-    val trans = game.i18n.translations[Config.moduleId].unsafeCast<ReadonlyRecord<String, Any>>()
+    val trans = (game.i18n.translations[Config.moduleId] ?: englishTranslations[Config.moduleId])
+        .unsafeCast<ReadonlyRecord<String, Any>>()
     val translations = unfuckFoundryTranslations(trans)
-    console.log(translations)
     val options = I18NextInitOptions(
         lng = lang,
         debug = false,
@@ -115,3 +115,6 @@ suspend fun initLocalization() {
     translateRecipes()
     translateStructureData()
 }
+
+@JsModule("./lang/en.json")
+private external val englishTranslations: ReadonlyRecord<String, Any>

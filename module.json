@@ -18,9 +18,24 @@
             "path": "dist/lang/en.json"
         },
         {
+            "lang": "ru",
+            "name": "Russian",
+            "path": "dist/lang/ru.json"
+        },
+        {
             "lang": "de",
             "name": "German",
             "path": "dist/lang/de.json"
+        },
+        {
+            "lang": "fr",
+            "name": "French",
+            "path": "dist/lang/fr.json"
+        },
+        {
+            "lang": "it",
+            "name": "Italian",
+            "path": "dist/lang/it.json"
         }
     ],
     "packs": [

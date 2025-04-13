@@ -10,5 +10,4 @@
 * translate camping sheet
 * translate apps
 * translate templates
-* translate kingdom activity modifiers
 * translate default bonuses/penalties
