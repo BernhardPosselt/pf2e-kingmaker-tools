@@ -67,9 +67,13 @@ If you've enabled the official module, the following things are automatically ta
 If you are interested in hacking on the code base, take a look at the [Kotlin JS Primer](./docs/Kotlin%20JS%20Primer.md)
 for a quick intro on how to interact with the js api.
 
+I highly recommend [IntelliJ Idea Ultimate or IntelliJ Community Edition](https://www.jetbrains.com/idea/download/?section=linux)
+
+Community Edition is free while Ultimate offers better integration. Scroll down a bit to find the Community Edition download link.
+
 ### Windows Setup
 
-Make sure you have FoundryVTT installed and you've launched it at least once to ensure all directories are created properly.
+Make sure you have FoundryVTT installed, and that you've launched it at least once to ensure all directories are created properly.
 
 Install the following things:
 
@@ -138,24 +142,44 @@ Install the following things using your package manager or homebrew:
 * node
 * yarn
 
-First, clone the repository into a local folder, e.g. **/home/bernhard/dev**:
+First, create a folder to clone the repository into:
 
-    cd /home/bernhard/dev
-    git clone https://github.com/BernhardPosselt/pf2e-kingmaker-tools.git 
+    mkdir dev
+    cd dev
+
+Then, clone the repository:
+
+    git clone https://github.com/BernhardPosselt/pf2e-kingmaker-tools.git
 
 Then link this directory to your foundry data folder:
 
-    ln -s /home/bernhard/dev/pf2e-kingmaker-tools/ /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools/
+Linux:
 
-Optionally, if you want all translations present locally, pull all language files from Transifex where TX_TOKEN is obtained from your [account settings page]( https://app.transifex.com/user/settings/api/):
+    ln -s /home/$(whoami)/dev/pf2e-kingmaker-tools/ /home/$(whoami)/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools/
 
-    TX_TOKEN=token_here ./gradlew txPull
+macOS:
 
-Run the package task to build everything from scratch:
+    ln -s /Users/$(whoami)/dev/pf2e-kingmaker-tools/ /Users/$(whoami)/Library/Application Support/FoundryVTT/Data/modules/pf2e-kingmaker-tools/
 
-    ./gradlew build
+Optionally, if you want all translations present locally, pull all language files from Transifex where TX_TOKEN is obtained from your [account settings page]( https://app.transifex.com/user/settings/api/). Then create your rc file using:
 
-Then, you can keep building the project using:
+    nano ~/.transifexrc
+
+Paste the following contents and change **TOKEN_HERE** to your token
+
+```ini
+[https://app.transifex.com]
+rest_hostname = https://rest.api.transifex.com
+token         = TOKEN_HERE
+```
+
+Save the file with **CTRL + o**, then exit with **CTRL + x**.
+
+Pull all translation files using:
+
+    ./gradlew txPull
+
+Then compile the application using:
 
     ./gradlew assemble
 
@@ -167,10 +191,7 @@ To execute tests run:
 
     ./gradlew jsTest
 
-Finally, start foundry
-
-    cd dev/FoundryVTT-12.330/
-    ./foundryvtt
+Finally, start Foundry.
 
 You can release a new version by changing the version in **build.gradle.kts** and then executing:
 
@@ -203,14 +224,12 @@ Example:
 
 If you want to help translating this module as a Translator open an issue on GitHub with your email and language or contact me on Discord, so I can send you an invite to the project on Transifex.
 
-Don't edit the files in **lang/** directly. Every file except for **en.json** will be overridden by changes from Transifex. Instead, edit the translations in Transifex, then pull and build the project to get a preview:
+Don't edit the files in **lang/** directly. Every file except for **en.json** will be overridden by changes from Transifex. Instead, edit the translations in Transifex, then pull and build the project to get a preview (check out the relevant Setup section above!):
 
     ./gradlew txPull
     ./gradlew assemble
 
 Note that if you want to preview changes locally, you need to follow the **Setup** mentioned above.
-
-When you pull new code and there is a conflict in a file **other than en.json**, always opt to throw away your local changes. 
 
 ### Help out as a Developer
 
@@ -280,21 +299,6 @@ In Handlebars templates:
 
 Strings are not edited in the repository. Instead, they are pushed to Transifex first, edited and then pulled.
 
-In order to pull/push, [you first need to set up a token on transifex](https://app.transifex.com/user/settings/api/) by clicking on Generate a token.
-
-Then create a **~/.transifexrc** in your home directory (or **C:\\\\Users\\\\USERNAME\\\\.transifexrc** on Windows) with the token:
-```ini
-[https://app.transifex.com]
-rest_hostname = https://rest.api.transifex.com
-token         = TOKEN_HERE
-```
-
-You can also persist it in the **TX_TOKEN** environment variable.
-
-Then you can edit **lang/en.json** as normal. Once you are done with your changes, you need to push it to your translators using:
+After you've made your changes in **lang/en.json**, you need to push it to your translators using:
 
     ./gradlew txPush
-
-To download the latest translations, use
-
-    ./gradlew txPull
