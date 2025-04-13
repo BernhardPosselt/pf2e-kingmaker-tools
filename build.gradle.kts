@@ -208,7 +208,7 @@ tasks.register<ChangeModuleVersion>("changeModuleVersion") {
  * Run using ./gradlew package
  */
 tasks.register<Zip>("package") {
-    dependsOn("clean", "build", "changeModuleVersion")
+    dependsOn("clean", "build", "changeModuleVersion", "txPull")
     tasks.named("build").get().mustRunAfter("clean")
     archiveFileName = "release.zip"
     destinationDirectory = layout.buildDirectory
