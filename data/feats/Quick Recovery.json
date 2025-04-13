@@ -1,13 +1,13 @@
 {
   "id": "quick-recovery",
-  "name": "Quick Recovery",
+  "name": "kingdomFeats.quick-recovery.name",
   "level": 3,
   "requirements": {
     "abilityScores": {
       "stability": 14
     }
   },
-  "text": "Your kingdom recovers more quickly from danger and disaster. Whenever you attempt a skill check to end an ongoing harmful kingdom event, you gain a +4 circumstance bonus to the check.",
+  "text": "kingdomFeats.quick-recovery.text",
   "modifiers": [
     {
       "name": "Ongoing Harmful Event",

@@ -1,18 +1,21 @@
 {
-    "id": "muddle-through-vk",
-    "name": "Muddle Through (V&K)",
-    "level": 7,
-    "requirements": {
-        "skillRanks": {
-            "wilderness": 1
-        }
+  "id": "muddle-through-vk",
+  "name": "kingdomFeats.muddle-through-vk.name",
+  "level": 7,
+  "requirements": {
+    "skillRanks": {
+      "wilderness": 1
+    }
+  },
+  "text": "kingdomFeats.muddle-through-vk.text",
+  "ruinThresholdIncreases": [
+    {
+      "amount": 1,
+      "increase": 2
     },
-    "text": "Your people are independent-minded and take care of the small things around the kingdom, not letting them pile up into bigger problems. Increase two of your Ruin thresholds by 1 and one of them by 2.",
-    "ruinThresholdIncreases": [{
-        "amount": 1,
-        "increase": 2
-    }, {
-        "amount": 2,
-        "increase": 1
-    }]
+    {
+      "amount": 2,
+      "increase": 1
+    }
+  ]
 }

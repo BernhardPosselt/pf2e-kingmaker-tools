@@ -1,35 +1,35 @@
 {
-    "id": "insider-trading-vk",
-    "name": "Insider Trading (V&K)",
-    "level": 7,
-    "requirements": {
-        "skillRanks": {
-            "industry": 1
-        }
-    },
-    "text": "Your leading citizens share valuable business information with one another and with associates in other lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 status bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn.",
-    "modifiers": [
+  "id": "insider-trading-vk",
+  "name": "kingdomFeats.insider-trading-vk.name",
+  "level": 7,
+  "requirements": {
+    "skillRanks": {
+      "industry": 1
+    }
+  },
+  "text": "kingdomFeats.insider-trading-vk.text",
+  "modifiers": [
+    {
+      "name": "Insider Trading",
+      "type": "status",
+      "buttonLabel": "+1 Status to Establish Worksite, Establish Trade Agreement and Trade Commodities",
+      "applyIf": [
         {
-            "name": "Insider Trading",
-            "type": "status",
-            "buttonLabel": "+1 Status to Establish Worksite, Establish Trade Agreement and Trade Commodities",
-            "applyIf": [
-                {
-                    "in": [
-                        "@activity",
-                        [
-                            "establish-work-site-quarry",
-                            "establish-work-site-lumber",
-                            "establish-work-site-mine",
-                            "establish-trade-agreement",
-                            "trade-commodities"
-                        ]
-                    ]
-                }
-            ],
-            "enabled": true,
-            "value": 1
+          "in": [
+            "@activity",
+            [
+              "establish-work-site-quarry",
+              "establish-work-site-lumber",
+              "establish-work-site-mine",
+              "establish-trade-agreement",
+              "trade-commodities"
+            ]
+          ]
         }
-    ],
-    "resourceDice": 1
+      ],
+      "enabled": true,
+      "value": 1
+    }
+  ],
+  "resourceDice": 1
 }

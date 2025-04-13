@@ -1,31 +1,34 @@
 {
-    "id": "inspiring-entertainment",
-    "name": "Inspiring Entertainment",
-    "level": 3,
-    "requirements": {
-        "abilityScores": {
-            "culture": 14
-        }
-    },
-    "text": "Your kingdom’s artists and entertainers are talented and prolific, and there’s never a shortage of new plays, operas, novels, music, sculptures, paintings, or other forms of distraction to entertain the citizens, even during times of upheaval. Your kingdom gains a +2 circumstance bonus to all Culture-based skill checks whenever your kingdom has at least 1 Unrest.",
-    "modifiers": [
+  "id": "inspiring-entertainment",
+  "name": "kingdomFeats.inspiring-entertainment.name",
+  "level": 3,
+  "requirements": {
+    "abilityScores": {
+      "culture": 14
+    }
+  },
+  "text": "kingdomFeats.inspiring-entertainment.text",
+  "modifiers": [
+    {
+      "name": "Inspiring Entertainment",
+      "buttonLabel": "+2 Circumstance to Culture When Unrest",
+      "type": "circumstance",
+      "enabled": true,
+      "value": 2,
+      "applyIf": [
         {
-            "name": "Inspiring Entertainment",
-            "buttonLabel": "+2 Circumstance to Culture When Unrest",
-            "type": "circumstance",
-            "enabled": true,
-            "value": 2,
-            "applyIf": [
-                {
-                    "gte": [
-                        "@unrest",
-                        "1"
-                    ]
-                },
-                {
-                    "eq": ["@ability", "culture"]
-                }
-            ]
+          "gte": [
+            "@unrest",
+            "1"
+          ]
+        },
+        {
+          "eq": [
+            "@ability",
+            "culture"
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }

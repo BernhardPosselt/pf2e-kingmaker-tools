@@ -1,33 +1,33 @@
 {
-    "id": "practical-magic",
-    "name": "Practical Magic",
-    "level": 1,
-    "requirements": {
-        "skillRanks": {
-            "magic": 1
-        }
-    },
-    "text": "Magic has an honored place in your society, and your people incorporate it into their everyday work to make life easier. You gain a +1 circumstance bonus to Magic checks, and you can use Magic checks in place of Engineering checks. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.",
-    "modifiers": [
-        {
-            "name": "Practical Magic",
-            "buttonLabel": "+1 Circumstance to Magic",
-            "type": "circumstance",
-            "applyIf": [
-                {
-                    "eq": [
-                        "@skill",
-                        "magic"
-                    ]
-                }
-            ],
-            "enabled": true,
-            "value": 1
-        }
-    ],
-    "increaseUsableSkills": {
-        "engineering": [
-            "magic"
-        ]
+  "id": "practical-magic",
+  "name": "kingdomFeats.practical-magic.name",
+  "level": 1,
+  "requirements": {
+    "skillRanks": {
+      "magic": 1
     }
+  },
+  "text": "kingdomFeats.practical-magic.text",
+  "modifiers": [
+    {
+      "name": "Practical Magic",
+      "buttonLabel": "+1 Circumstance to Magic",
+      "type": "circumstance",
+      "applyIf": [
+        {
+          "eq": [
+            "@skill",
+            "magic"
+          ]
+        }
+      ],
+      "enabled": true,
+      "value": 1
+    }
+  ],
+  "increaseUsableSkills": {
+    "engineering": [
+      "magic"
+    ]
+  }
 }

@@ -1,7 +1,7 @@
 {
-    "id": "skill-training-arts",
-    "name": "Skill Training (Arts)",
-    "level": 1,
-    "text": "Your kingdom receives the trained proficiency rank in a Kingdom skill of your choice. You can select this feat multiple times, choosing a new skill each time.",
-    "trainSkill": "arts"
+  "id": "skill-training-arts",
+  "name": "kingdomFeats.skill-training-arts.name",
+  "level": 1,
+  "text": "kingdomFeats.skill-training-arts.text",
+  "trainSkill": "arts"
 }

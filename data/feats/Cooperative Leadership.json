@@ -1,59 +1,63 @@
 {
-    "id": "cooperative-leadership",
-    "name": "Cooperative Leadership",
-    "level": 1,
-    "text": "Your leaders are skilled at working with one another. When a leader uses the Focused Attention kingdom activity to aid another leader’s kingdom check, the circumstance bonus granted by a success is increased to +3. At 11th level, your leaders’ collaborative style leads them to ever greater successes when they work together. When a leader uses the Focused Attention kingdom activity to aid another leader’s check, treat a critical failure on the aided check as a failure. If your kingdom has at least the expert rank in the skill used in the aided check, treat a failure on the check as a success. (This does not allow you to ever improve a critical failure to a success.)",
-    "rollOptions": [
-        "cooperative-leadership"
-    ],
-    "modifiers": [
+  "id": "cooperative-leadership",
+  "name": "kingdomFeats.cooperative-leadership.name",
+  "level": 1,
+  "text": "kingdomFeats.cooperative-leadership.text",
+  "rollOptions": [
+    "cooperative-leadership"
+  ],
+  "modifiers": [
+    {
+      "name": "Cooperative Leadership: Upgrade Critical Failures",
+      "buttonLabel": "Cooperative Leadership",
+      "type": "untyped",
+      "value": 0,
+      "enabled": true,
+      "upgradeResults": [
         {
-            "name": "Cooperative Leadership: Upgrade Critical Failures",
-            "buttonLabel": "Cooperative Leadership",
-            "type": "untyped",
-            "value": 0,
-            "enabled": true,
-            "upgradeResults": [{
-                "upgrade": "criticalFailure"
-            }],
-            "applyIf": [
-                {
-                    "hasRollOption": "focused-attention"
-                },
-                {
-                    "gte": [
-                        "@kingdomLevel",
-                        11
-                    ]
-                }
-            ]
+          "upgrade": "criticalFailure"
+        }
+      ],
+      "applyIf": [
+        {
+          "hasRollOption": "focused-attention"
         },
         {
-            "name": "Cooperative Leadership: Upgrade Failures",
-            "buttonLabel": "Cooperative Leadership",
-            "type": "untyped",
-            "value": 0,
-            "enabled": true,
-            "upgradeResults": [{
-                "upgrade": "failure"
-            }],
-            "applyIf": [
-                {
-                    "hasRollOption": "focused-attention"
-                },
-                {
-                    "gte": [
-                        "@kingdomLevel",
-                        11
-                    ]
-                },
-                {
-                    "gte": [
-                        "@skillRank",
-                        2
-                    ]
-                }
-            ]
+          "gte": [
+            "@kingdomLevel",
+            11
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "name": "Cooperative Leadership: Upgrade Failures",
+      "buttonLabel": "Cooperative Leadership",
+      "type": "untyped",
+      "value": 0,
+      "enabled": true,
+      "upgradeResults": [
+        {
+          "upgrade": "failure"
+        }
+      ],
+      "applyIf": [
+        {
+          "hasRollOption": "focused-attention"
+        },
+        {
+          "gte": [
+            "@kingdomLevel",
+            11
+          ]
+        },
+        {
+          "gte": [
+            "@skillRank",
+            2
+          ]
+        }
+      ]
+    }
+  ]
 }

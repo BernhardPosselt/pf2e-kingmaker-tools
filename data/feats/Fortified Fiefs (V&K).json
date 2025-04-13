@@ -1,13 +1,13 @@
 {
   "id": "fortified-fiefs-vk",
-  "name": "Fortified Fiefs (V&K)",
+  "name": "kingdomFeats.fortified-fiefs-vk.name",
   "level": 7,
   "requirements": {
     "skillRanks": {
       "defense": 1
     }
   },
-  "text": "Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize the value of a strong defense when it comes to building settlements and fortifications. You gain a +2 status bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 status bonus to all kingdom checks attempted during dangerous events that directly impact your settlements’ defenses.",
+  "text": "kingdomFeats.fortified-fiefs-vk.text",
   "modifiers": [
     {
       "name": "Fortified Fiefs",
