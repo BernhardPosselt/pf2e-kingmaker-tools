@@ -220,7 +220,7 @@ Strings are not edited in the repository. Instead, they are pushed to Transifex 
 
 In order to pull/push, [you first need to set up a token on transifex](https://app.transifex.com/user/settings/api/) by clicking on Generate a token.
 
-Then create a **~/.transifexrc** in your home directory (or **C:\\Users\\USERNAME\\.transifexrc** on Windows) with the token:
+Then create a **~/.transifexrc** in your home directory (or **C:\\\\Users\\\\USERNAME\\\\.transifexrc** on Windows) with the token:
 ```ini
 [https://app.transifex.com]
 rest_hostname = https://rest.api.transifex.com
