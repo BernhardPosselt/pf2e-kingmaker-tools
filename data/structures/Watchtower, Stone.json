@@ -1,31 +1,31 @@
 {
-    "id": "watchtower-stone",
-    "name": "Watchtower, Stone",
-    "stacksWith": "watchtower",
-    "settlementEventRules": [
-        {
-            "value": 1
-        }
+  "id": "watchtower-stone",
+  "name": "structures.watchtower-stone.name",
+  "stacksWith": "watchtower",
+  "settlementEventRules": [
+    {
+      "value": 1
+    }
+  ],
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "level": 3,
+  "construction": {
+    "rp": 12,
+    "stone": 4,
+    "skills": [
+      {
+        "skill": "defense",
+        "proficiencyRank": 1
+      }
     ],
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "1"
-    },
-    "level": 3,
-    "construction": {
-        "rp": 12,
-        "stone": 4,
-        "skills": [
-            {
-                "skill": "defense",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 18
-    },
-    "lots": 1
+    "dc": 18
+  },
+  "lots": 1
 }

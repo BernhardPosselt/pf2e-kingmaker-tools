@@ -1,53 +1,53 @@
 {
-    "id": "town-hall-vk",
-    "name": "Town Hall (V&K)",
-    "increaseLeadershipActivities": true,
-    "traits": [
-        "building",
-        "edifice"
+  "id": "town-hall-vk",
+  "name": "structures.town-hall-vk.name",
+  "increaseLeadershipActivities": true,
+  "traits": [
+    "building",
+    "edifice"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "level": 2,
+  "construction": {
+    "rp": 22,
+    "lumber": 4,
+    "stone": 4,
+    "skills": [
+      {
+        "skill": "defense",
+        "proficiencyRank": 1
+      },
+      {
+        "skill": "industry",
+        "proficiencyRank": 1
+      },
+      {
+        "skill": "magic",
+        "proficiencyRank": 1
+      },
+      {
+        "skill": "statecraft",
+        "proficiencyRank": 1
+      }
     ],
-    "affectsDowntime": false,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "1"
+    "dc": 16
+  },
+  "lots": 2,
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "manage-trade-agreements"
     },
-    "level": 2,
-    "construction": {
-        "rp": 22,
-        "lumber": 4,
-        "stone": 4,
-        "skills": [
-            {
-                "skill": "defense",
-                "proficiencyRank": 1
-            },
-            {
-                "skill": "industry",
-                "proficiencyRank": 1
-            },
-            {
-                "skill": "magic",
-                "proficiencyRank": 1
-            },
-            {
-                "skill": "statecraft",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 16
-    },
-    "lots": 2,
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "manage-trade-agreements"
-        },
-        {
-            "value": 1,
-            "activity": "retrain-vk"
-        }
-    ],
-    "increaseResourceDice": {
-        "town": 1
+    {
+      "value": 1,
+      "activity": "retrain-vk"
     }
+  ],
+  "increaseResourceDice": {
+    "town": 1
+  }
 }

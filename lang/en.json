@@ -1035,6 +1035,334 @@
         "description": "If you would prefer to be truly free agents and trailblazers staking your own claim, you can simply choose an open charter with no restrictions—and no direct support. An open charter grants a single ability boost to any ability score, and the new nation has no built-in ability flaw."
       }
     },
+    "structures": {
+      "academy": {
+        "name": "Academy",
+        "notes": "While in a settlement with an Academy, you gain a +2 item bonus to Lore checks made to Recall Knowledge while Investigate, to all checks made while Researching, and to Decipher Writing."
+      },
+      "alchemy-laboratory": {
+        "name": "Alchemy Laboratory",
+        "notes": "Checks attempted to Identify Alchemy in any settlement with at least one alchemy laboratory gain a +1 item bonus."
+      },
+      "arcanists-tower": {
+        "name": "Arcanist's Tower",
+        "notes": "While in a settlement with an arcanist's tower, you gain a +1 item bonus to checks made to Borrow an Arcane Spell or Learn a Spell."
+      },
+      "arena": {
+        "name": "Arena",
+        "notes": "An arena lets you to retrain combat-themed feats more efficiently while in the settlement; doing so takes only 5 days rather than a week of downtime."
+      },
+      "bank-vk": {
+        "name": "Bank (V&K)"
+      },
+      "bank": {
+        "name": "Bank"
+      },
+      "barracks": {
+        "name": "Barracks"
+      },
+      "brewery": {
+        "name": "Brewery"
+      },
+      "bridge-stone": {
+        "name": "Bridge, Stone"
+      },
+      "bridge": {
+        "name": "Bridge"
+      },
+      "castle-vk": {
+        "name": "Castle (V&K)"
+      },
+      "castle": {
+        "name": "Castle"
+      },
+      "cathedral": {
+        "name": "Cathedral",
+        "notes": "While in a settlement with a cathedral, you gain a +3 item bonus to Lore and Religion checks made to Recall Knowledge while Investigating, and to all faith-themed checks made while Researching."
+      },
+      "cemetery": {
+        "name": "Cemetery"
+      },
+      "construction-yard-vk": {
+        "name": "Construction Yard (V&K)"
+      },
+      "construction-yard": {
+        "name": "Construction Yard"
+      },
+      "dump": {
+        "name": "Dump"
+      },
+      "embassy": {
+        "name": "Embassy"
+      },
+      "festival-hall-vk": {
+        "name": "Festival Hall (V&K)"
+      },
+      "festival-hall": {
+        "name": "Festival Hall"
+      },
+      "fishing-fleets-vk": {
+        "name": "Fishing Fleets (V&K)"
+      },
+      "foundry": {
+        "name": "Foundry"
+      },
+      "garrison-vk": {
+        "name": "Garrison (V&K)"
+      },
+      "garrison": {
+        "name": "Garrison"
+      },
+      "general-store": {
+        "name": "General Store"
+      },
+      "gladiatorial-arena": {
+        "name": "Gladiatorial Arena",
+        "notes": "A gladiatorial arena allows a PC in the settlement to retrain combat-themed feats (at the GM's discretion) more efficiently; doing so takes only 4 days rather than a week of downtime."
+      },
+      "granary-vk": {
+        "name": "Granary (V&K)"
+      },
+      "granary": {
+        "name": "Granary"
+      },
+      "guildhall": {
+        "name": "Guildhall",
+        "notes": "While in a settlement with a guildhall, you gain a +1 item bonus to all related skill checks to Earn Income or to Repair."
+      },
+      "herbalist": {
+        "name": "Herbalist"
+      },
+      "hospital": {
+        "name": "Hospital",
+        "notes": "While in a settlement with a hospital, you gain a +2 item bonus to Medicine checks to Treat Disease and Treat Wounds."
+      },
+      "houses": {
+        "name": "Houses"
+      },
+      "illicit-market": {
+        "name": "Illicit Market"
+      },
+      "inn-vk": {
+        "name": "Inn (V&K)"
+      },
+      "inn": {
+        "name": "Inn"
+      },
+      "jail": {
+        "name": "Jail"
+      },
+      "keep": {
+        "name": "Keep"
+      },
+      "library-vk": {
+        "name": "Library (V&K)",
+        "notes": "While in a settlement with a library, you gain a +1 item bonus to Lore checks made to Recall Knowledge while Investigating, as well as to Researching checks, and to Decipher Writing checks."
+      },
+      "library": {
+        "name": "Library",
+        "notes": "While in a settlement with a library, you gain a +1 item bonus to Lore checks made to Recall Knowledge while Investigating, as well as to Researching checks, and to Decipher Writing checks."
+      },
+      "lumberyard": {
+        "name": "Lumberyard"
+      },
+      "luxury-store": {
+        "name": "Luxury Store"
+      },
+      "magic-shop-vk": {
+        "name": "Magic Shop (V&K)"
+      },
+      "magic-shop": {
+        "name": "Magic Shop"
+      },
+      "magical-streetlamps": {
+        "name": "Magical Streetlamps"
+      },
+      "mansion": {
+        "name": "Mansion"
+      },
+      "marketplace": {
+        "name": "Marketplace"
+      },
+      "menagerie": {
+        "name": "Menagerie",
+        "notes": "A menagerie typically contains a selection of level 5 or lower animals. If your party captures a living creature of level 6 or higher and can transport the creature back to a settlement with a menagerie, you can add that creature to the menagerie as long as your kingdom level is at least 4 higher than the creature's level. Each time such a creature is added to a menagerie, gain 1 Fame or Infamy point (as appropriate) or reduce one Ruin of your choice by 1.\nOnly creatures with Intelligence modifiers of –4 or –5 are appropriate to place in a menagerie. A kingdom gains 1 Unrest at the start of a Kingdom turn for each sapient creature (anything with an Intelligence modifier of –3 or higher) on display in a menagerie."
+      },
+      "military-academy": {
+        "name": "Military Academy"
+      },
+      "mill": {
+        "name": "Mill"
+      },
+      "mint": {
+        "name": "Mint"
+      },
+      "monument-vk": {
+        "name": "Monument (V&K)"
+      },
+      "monument": {
+        "name": "Monument"
+      },
+      "museum": {
+        "name": "Museum",
+        "notes": "A magic item of level 6 or higher that has a particular import or bears significant historical or regional value (at the GM's discretion) can be donated to a museum. Each time such an item is donated, reduce Unrest by 1. If that item is later removed from display, increase Unrest by 1."
+      },
+      "noble-villa": {
+        "name": "Noble Villa"
+      },
+      "occult-shop-vk": {
+        "name": "Occult Shop (V&K)",
+        "notes": "While in a settlement with an occult shop, you gain a +2 item bonus to all checks made to Research esoteric subjects or to Recall Knowledge about the same."
+      },
+      "occult-shop": {
+        "name": "Occult Shop",
+        "notes": "While in a settlement with an occult shop, you gain a +2 item bonus to all checks made to Research esoteric subjects or to Recall Knowledge about the same."
+      },
+      "opera-house": {
+        "name": "Opera House",
+        "notes": "While in a settlement with an opera house, you gain a +3 item bonus to Performance checks made to Earn Income."
+      },
+      "orphanage": {
+        "name": "Orphanage"
+      },
+      "palace-vk": {
+        "name": "Palace (V&K)"
+      },
+      "palace": {
+        "name": "Palace"
+      },
+      "park": {
+        "name": "Park"
+      },
+      "paved-streets": {
+        "name": "Paved Streets"
+      },
+      "pier-vk": {
+        "name": "Pier (V&K)"
+      },
+      "pier": {
+        "name": "Pier"
+      },
+      "printing-house": {
+        "name": "Printing House",
+        "notes": "A PC in a settlement with a printing house gains a +2 item bonus to checks to Gather Information or to Research any topic in a library or similar structure."
+      },
+      "rubble": {
+        "name": "Rubble"
+      },
+      "sacred-grove": {
+        "name": "Sacred Grove"
+      },
+      "secure-warehouse": {
+        "name": "Secure Warehouse"
+      },
+      "sewer-system": {
+        "name": "Sewer System"
+      },
+      "shrine": {
+        "name": "Shrine"
+      },
+      "smithy-vk": {
+        "name": "Smithy (V&K)",
+        "notes": "While in a settlement with a smithy, you gain a +1 item bonus to Craft checks made to work with metal."
+      },
+      "smithy": {
+        "name": "Smithy",
+        "notes": "While in a settlement with a smithy, you gain a +1 item bonus to Craft checks made to work with metal."
+      },
+      "specialized-artisan": {
+        "name": "Specialized Artisan",
+        "notes": "While in a settlement with a specialized artisan, you gain a +1 item bonus to Craft checks made to craft specialized goods like jewelry."
+      },
+      "stable": {
+        "name": "Stable"
+      },
+      "stockyard": {
+        "name": "Stockyard"
+      },
+      "stonemason": {
+        "name": "Stonemason"
+      },
+      "tannery": {
+        "name": "Tannery"
+      },
+      "tavern-dive-vk": {
+        "name": "Tavern, Dive (V&K)"
+      },
+      "tavern-dive": {
+        "name": "Tavern, Dive"
+      },
+      "tavern-luxury-vk": {
+        "name": "Tavern, Luxury (V&K)",
+        "notes": "If attempt a Performance check to Earn Income in a settlement with a luxury tavern, you gain a +2 item bonus to the check. All checks made to Gather Information in a settlement with at least one luxury tavern gain a +2 item bonus."
+      },
+      "tavern-luxury": {
+        "name": "Tavern, Luxury",
+        "notes": "If attempt a Performance check to Earn Income in a settlement with a luxury tavern, you gain a +2 item bonus to the check. All checks made to Gather Information in a settlement with at least one luxury tavern gain a +2 item bonus."
+      },
+      "tavern-popular-vk": {
+        "name": "Tavern, Popular (V&K)",
+        "notes": "If you attempt a Performance check to Earn Income in a settlement with a popular tavern, you gain a +1 item bonus to the check. All checks made to Gather Information in a settlement with at least one popular tavern gain a +1 item bonus."
+      },
+      "tavern-popular": {
+        "name": "Tavern, Popular",
+        "notes": "If you attempt a Performance check to Earn Income in a settlement with a popular tavern, you gain a +1 item bonus to the check. All checks made to Gather Information in a settlement with at least one popular tavern gain a +1 item bonus."
+      },
+      "tavern-world-class-vk": {
+        "name": "Tavern, World-Class (V&K)",
+        "notes": "If you attempt a Performance check to Earn Income in a settlement with a world-class tavern, you gain a +3 item bonus to the check. All checks made to Gather Information in a settlement with a world-class tavern gain a +3 item bonus."
+      },
+      "tavern-world-class": {
+        "name": "Tavern, World-Class",
+        "notes": "If you attempt a Performance check to Earn Income in a settlement with a world-class tavern, you gain a +3 item bonus to the check. All checks made to Gather Information in a settlement with a world-class tavern gain a +3 item bonus."
+      },
+      "temple": {
+        "name": "Temple"
+      },
+      "tenement": {
+        "name": "Tenement"
+      },
+      "theater": {
+        "name": "Theater",
+        "notes": "While in a settlement with a theater, you gain a +2 item bonus to Performance checks made to Earn Income."
+      },
+      "thieves-guild": {
+        "name": "Thieves' Guild",
+        "notes": "While in a settlement with a thieves' guild, you gain a +1 item bonus to Create Forgeries."
+      },
+      "town-hall-vk": {
+        "name": "Town Hall (V&K)"
+      },
+      "town-hall": {
+        "name": "Town Hall"
+      },
+      "trade-shop": {
+        "name": "Trade Shop",
+        "notes": "When you build a trade shop, indicate the kind of shop it is, such as a bakery, carpenter, tailor, and so on. While in a settlement with a trade shop, you gain a +1 item bonus to all associated Crafting checks."
+      },
+      "university": {
+        "name": "University",
+        "notes": "While in a settlement with a university, you gain a +3 item bonus to Lore checks made to Recall Knowledge while Investigating, to Research checks (Gamemastery Guide 154), and to Decipher Writing."
+      },
+      "wall-stone": {
+        "name": "Wall, Stone"
+      },
+      "wall-wooden": {
+        "name": "Wall, Wooden"
+      },
+      "watchtower-stone": {
+        "name": "Watchtower, Stone"
+      },
+      "watchtower": {
+        "name": "Watchtower"
+      },
+      "waterfront-vk": {
+        "name": "Waterfront (V&K)"
+      },
+      "waterfront": {
+        "name": "Waterfront"
+      }
+    },
     "heartlands": {
       "forest-or-swamp": {
         "name": "Forest or Swamp",

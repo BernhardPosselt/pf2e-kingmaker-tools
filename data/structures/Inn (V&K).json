@@ -1,6 +1,6 @@
 {
   "id": "inn-vk",
-  "name": "Inn (V&K)",
+  "name": "structures.inn-vk.name",
   "activityBonusRules": [
     {
       "value": 1,

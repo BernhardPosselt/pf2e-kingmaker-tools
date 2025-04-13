@@ -1,28 +1,28 @@
 {
-    "id": "inn",
-    "name": "Inn",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "hire-adventurers"
-        }
+  "id": "inn",
+  "name": "structures.inn.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "hire-adventurers"
+    }
+  ],
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "construction": {
+    "rp": 10,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "trade"
+      }
     ],
-    "traits": [
-        "building",
-        "residential"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 1,
-    "construction": {
-        "rp": 10,
-        "lumber": 2,
-        "skills": [
-            {
-                "skill": "trade"
-            }
-        ],
-        "dc": 15
-    },
-    "lots": 1
+    "dc": 15
+  },
+  "lots": 1
 }

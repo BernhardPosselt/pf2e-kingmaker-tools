@@ -1,41 +1,41 @@
 {
-    "id": "arena",
-    "name": "Arena",
-    "activityBonusRules": [
-        {
-            "value": 2,
-            "activity": "celebrate-holiday"
-        },
-        {
-            "value": 2,
-            "activity": "celebrate-holiday-vk"
-        }
-    ],
-    "skillBonusRules": [
-        {
-            "value": 1,
-            "skill": "warfare",
-            "activity": "quell-unrest"
-        }
-    ],
-    "notes": "An arena lets you to retrain combat-themed feats more efficiently while in the settlement; doing so takes only 5 days rather than a week of downtime.",
-    "traits": [
-        "edifice",
-        "yard"
-    ],
-    "affectsDowntime": true,
-    "level": 9,
-    "construction": {
-        "skills": [
-            {
-                "skill": "warfare",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 26,
-        "rp": 40,
-        "lumber": 6,
-        "stone": 12
+  "id": "arena",
+  "name": "structures.arena.name",
+  "activityBonusRules": [
+    {
+      "value": 2,
+      "activity": "celebrate-holiday"
     },
-    "lots": 4
+    {
+      "value": 2,
+      "activity": "celebrate-holiday-vk"
+    }
+  ],
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "skill": "warfare",
+      "activity": "quell-unrest"
+    }
+  ],
+  "notes": "structures.arena.notes",
+  "traits": [
+    "edifice",
+    "yard"
+  ],
+  "affectsDowntime": true,
+  "level": 9,
+  "construction": {
+    "skills": [
+      {
+        "skill": "warfare",
+        "proficiencyRank": 2
+      }
+    ],
+    "dc": 26,
+    "rp": 40,
+    "lumber": 6,
+    "stone": 12
+  },
+  "lots": 4
 }

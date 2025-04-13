@@ -1,25 +1,25 @@
 {
-    "id": "houses",
-    "name": "Houses",
-    "traits": [
-        "building",
-        "residential"
+  "id": "houses",
+  "name": "structures.houses.name",
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "upgradeFrom": [
+    "tenement"
+  ],
+  "construction": {
+    "rp": 3,
+    "lumber": 1,
+    "skills": [
+      {
+        "skill": "industry"
+      }
     ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 1,
-    "upgradeFrom": [
-        "tenement"
-    ],
-    "construction": {
-        "rp": 3,
-        "lumber": 1,
-        "skills": [
-            {
-                "skill": "industry"
-            }
-        ],
-        "dc": 15
-    },
-    "lots": 1
+    "dc": 15
+  },
+  "lots": 1
 }

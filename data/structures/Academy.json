@@ -1,35 +1,35 @@
 {
-    "id": "academy",
-    "name": "Academy",
-    "activityBonusRules": [
-        {
-            "value": 2,
-            "activity": "creative-solution"
-        }
+  "id": "academy",
+  "name": "structures.academy.name",
+  "activityBonusRules": [
+    {
+      "value": 2,
+      "activity": "creative-solution"
+    }
+  ],
+  "notes": "structures.academy.notes",
+  "traits": [
+    "building",
+    "edifice"
+  ],
+  "affectsDowntime": true,
+  "level": 10,
+  "upgradeFrom": [
+    "library",
+    "library-vk"
+  ],
+  "construction": {
+    "skills": [
+      {
+        "skill": "scholarship",
+        "proficiencyRank": 2
+      }
     ],
-    "notes": "While in a settlement with an Academy, you gain a +2 item bonus to Lore checks made to Recall Knowledge while Investigate, to all checks made while Researching, and to Decipher Writing.",
-    "traits": [
-        "building",
-        "edifice"
-    ],
-    "affectsDowntime": true,
-    "level": 10,
-    "upgradeFrom": [
-        "library",
-        "library-vk"
-    ],
-    "construction": {
-        "skills": [
-            {
-                "skill": "scholarship",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 27,
-        "rp": 52,
-        "lumber": 12,
-        "luxuries": 6,
-        "stone": 12
-    },
-    "lots": 2
+    "dc": 27,
+    "rp": 52,
+    "lumber": 12,
+    "luxuries": 6,
+    "stone": 12
+  },
+  "lots": 2
 }

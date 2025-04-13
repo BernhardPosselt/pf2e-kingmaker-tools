@@ -1,41 +1,41 @@
 {
-    "id": "theater",
-    "name": "Theater",
-    "activityBonusRules": [
-        {
-            "value": 2,
-            "activity": "celebrate-holiday"
-        },
-        {
-            "value": 2,
-            "activity": "celebrate-holiday-vk"
-        }
-    ],
-    "notes": "While in a settlement with a theater, you gain a +2 item bonus to Performance checks made to Earn Income.",
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "1"
+  "id": "theater",
+  "name": "structures.theater.name",
+  "activityBonusRules": [
+    {
+      "value": 2,
+      "activity": "celebrate-holiday"
     },
-    "level": 9,
-    "upgradeFrom": [
-        "festival-hall",
-        "festival-hall-vk"
+    {
+      "value": 2,
+      "activity": "celebrate-holiday-vk"
+    }
+  ],
+  "notes": "structures.theater.notes",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "level": 9,
+  "upgradeFrom": [
+    "festival-hall",
+    "festival-hall-vk"
+  ],
+  "construction": {
+    "rp": 24,
+    "lumber": 8,
+    "stone": 3,
+    "skills": [
+      {
+        "skill": "arts",
+        "proficiencyRank": 2
+      }
     ],
-    "construction": {
-        "rp": 24,
-        "lumber": 8,
-        "stone": 3,
-        "skills": [
-            {
-                "skill": "arts",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 26
-    },
-    "lots": 2
+    "dc": 26
+  },
+  "lots": 2
 }

@@ -1,35 +1,35 @@
 {
-    "id": "fishing-fleets-vk",
-    "name": "Fishing Fleets (V&K)",
-    "level": 5,
-    "traits": [
-        "infrastructure"
+  "id": "fishing-fleets-vk",
+  "name": "structures.fishing-fleets-vk.name",
+  "level": 5,
+  "traits": [
+    "infrastructure"
+  ],
+  "lots": 0,
+  "construction": {
+    "skills": [
+      {
+        "skill": "boating",
+        "proficiencyRank": 2
+      }
     ],
-    "lots": 0,
-    "construction": {
-        "skills": [
-            {
-                "skill": "boating",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 20,
-        "rp": 10,
-        "lumber": 2
-    },
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "go-fishing"
-        }
-    ],
-    "skillBonusRules": [
-        {
-            "value": 1,
-            "activity": "rest-and-relax",
-            "skill": "boating"
-        }
-    ],
-    "consumptionReduction": 1,
-    "consumptionReductionStacks": true
+    "dc": 20,
+    "rp": 10,
+    "lumber": 2
+  },
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "go-fishing"
+    }
+  ],
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "activity": "rest-and-relax",
+      "skill": "boating"
+    }
+  ],
+  "consumptionReduction": 1,
+  "consumptionReductionStacks": true
 }

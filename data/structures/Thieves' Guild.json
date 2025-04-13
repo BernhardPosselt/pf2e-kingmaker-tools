@@ -1,35 +1,35 @@
 {
-    "id": "thieves-guild",
-    "name": "Thieves' Guild",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "infiltration"
-        }
+  "id": "thieves-guild",
+  "name": "structures.thieves-guild.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "infiltration"
+    }
+  ],
+  "notes": "structures.thieves-guild.notes",
+  "traits": [
+    "building",
+    "infamous"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": false,
+  "gainRuin": {
+    "value": "1",
+    "ruin": "crime",
+    "moreThanOncePerTurn": true
+  },
+  "level": 5,
+  "construction": {
+    "rp": 25,
+    "lumber": 4,
+    "skills": [
+      {
+        "skill": "intrigue",
+        "proficiencyRank": 1
+      }
     ],
-    "notes": "While in a settlement with a thieves' guild, you gain a +1 item bonus to Create Forgeries.",
-    "traits": [
-        "building",
-        "infamous"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": false,
-    "gainRuin": {
-        "value": "1",
-        "ruin": "crime",
-        "moreThanOncePerTurn": true
-    },
-    "level": 5,
-    "construction": {
-        "rp": 25,
-        "lumber": 4,
-        "skills": [
-            {
-                "skill": "intrigue",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 20
-    },
-    "lots": 1
+    "dc": 20
+  },
+  "lots": 1
 }

@@ -1,25 +1,25 @@
 {
-    "id": "magical-streetlamps",
-    "name": "Magical Streetlamps",
-    "traits": [
-        "infrastructure"
+  "id": "magical-streetlamps",
+  "name": "structures.magical-streetlamps.name",
+  "traits": [
+    "infrastructure"
+  ],
+  "lots": 0,
+  "affectsDowntime": false,
+  "reducesRuin": true,
+  "reduceRuinBy": {
+    "value": "1",
+    "ruin": "crime"
+  },
+  "level": 5,
+  "construction": {
+    "rp": 20,
+    "skills": [
+      {
+        "skill": "magic",
+        "proficiencyRank": 2
+      }
     ],
-    "lots": 0,
-    "affectsDowntime": false,
-    "reducesRuin": true,
-    "reduceRuinBy": {
-        "value": "1",
-        "ruin": "crime"
-    },
-    "level": 5,
-    "construction": {
-        "rp": 20,
-        "skills": [
-            {
-                "skill": "magic",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 20
-    }
+    "dc": 20
+  }
 }

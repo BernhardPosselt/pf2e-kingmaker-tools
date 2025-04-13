@@ -1,55 +1,55 @@
 {
-    "id": "tavern-world-class-vk",
-    "name": "Tavern, World-Class (V&K)",
-    "activityBonusRules": [
-        {
-            "value": 3,
-            "activity": "hire-adventurers"
-        },
-        {
-            "value": 3,
-            "activity": "repair-reputation-strife"
-        },
-        {
-            "value": 3,
-            "activity": "reconnoiter-hex-vk"
-        }
-    ],
-    "skillBonusRules": [
-        {
-            "value": 3,
-            "skill": "trade",
-            "activity": "rest-and-relax"
-        }
-    ],
-    "notes": "If you attempt a Performance check to Earn Income in a settlement with a world-class tavern, you gain a +3 item bonus to the check. All checks made to Gather Information in a settlement with a world-class tavern gain a +3 item bonus.",
-    "traits": [
-        "building",
-        "edifice",
-        "famous"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "2d4"
+  "id": "tavern-world-class-vk",
+  "name": "structures.tavern-world-class-vk.name",
+  "activityBonusRules": [
+    {
+      "value": 3,
+      "activity": "hire-adventurers"
     },
-    "level": 15,
-    "upgradeFrom": [
-        "tavern-luxury",
-        "tavern-luxury-vk"
-    ],
-    "construction": {
-        "rp": 64,
-        "lumber": 18,
-        "stone": 15,
-        "luxuries": 15,
-        "skills": [
-            {
-                "skill": "trade",
-                "proficiencyRank": 3
-            }
-        ],
-        "dc": 34
+    {
+      "value": 3,
+      "activity": "repair-reputation-strife"
     },
-    "lots": 2
+    {
+      "value": 3,
+      "activity": "reconnoiter-hex-vk"
+    }
+  ],
+  "skillBonusRules": [
+    {
+      "value": 3,
+      "skill": "trade",
+      "activity": "rest-and-relax"
+    }
+  ],
+  "notes": "structures.tavern-world-class-vk.notes",
+  "traits": [
+    "building",
+    "edifice",
+    "famous"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "2d4"
+  },
+  "level": 15,
+  "upgradeFrom": [
+    "tavern-luxury",
+    "tavern-luxury-vk"
+  ],
+  "construction": {
+    "rp": 64,
+    "lumber": 18,
+    "stone": 15,
+    "luxuries": 15,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 3
+      }
+    ],
+    "dc": 34
+  },
+  "lots": 2
 }

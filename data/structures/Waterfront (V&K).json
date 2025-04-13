@@ -1,46 +1,46 @@
 {
-    "id": "waterfront-vk",
-    "name": "Waterfront (V&K)",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "go-fishing"
-        },
-        {
-            "value": 1,
-            "activity": "establish-trade-agreement"
-        }
-    ],
-    "availableItemsRules": [
-        {
-            "value": 1,
-            "maximumStacks": 1
-        }
-    ],
-    "traits": [
-        "yard"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 8,
-    "upgradeFrom": [
-        "pier",
-        "pier-vk"
-    ],
-    "construction": {
-        "rp": 90,
-        "lumber": 10,
-        "skills": [
-            {
-                "skill": "boating",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 24
+  "id": "waterfront-vk",
+  "name": "structures.waterfront-vk.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "go-fishing"
     },
-    "lots": 4,
-    "consumptionReduction": 2,
-    "ignoreConsumptionReductionOf": [
-        "pier-vk"
-    ]
+    {
+      "value": 1,
+      "activity": "establish-trade-agreement"
+    }
+  ],
+  "availableItemsRules": [
+    {
+      "value": 1,
+      "maximumStacks": 1
+    }
+  ],
+  "traits": [
+    "yard"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 8,
+  "upgradeFrom": [
+    "pier",
+    "pier-vk"
+  ],
+  "construction": {
+    "rp": 90,
+    "lumber": 10,
+    "skills": [
+      {
+        "skill": "boating",
+        "proficiencyRank": 2
+      }
+    ],
+    "dc": 24
+  },
+  "lots": 4,
+  "consumptionReduction": 2,
+  "ignoreConsumptionReductionOf": [
+    "pier-vk"
+  ]
 }

@@ -1,60 +1,60 @@
 {
-    "id": "barracks",
-    "name": "Barracks",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "garrison-army"
-        },
-        {
-            "value": 1,
-            "activity": "recover-army-damaged"
-        },
-        {
-            "value": 1,
-            "activity": "recover-army-defeated"
-        },
-        {
-            "value": 1,
-            "activity": "recover-army-lost"
-        },
-        {
-            "value": 1,
-            "activity": "recover-army-mired-pinned"
-        },
-        {
-            "value": 1,
-            "activity": "recover-army-shaken"
-        },
-        {
-            "value": 1,
-            "activity": "recover-army-weary"
-        },
-        {
-            "value": 1,
-            "activity": "recruit-army"
-        }
-    ],
-    "traits": [
-        "building",
-        "residential"
-    ],
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "1",
-        "moreThanOncePerTurn": true
+  "id": "barracks",
+  "name": "structures.barracks.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "garrison-army"
     },
-    "level": 3,
-    "construction": {
-        "skills": [
-            {
-                "skill": "defense"
-            }
-        ],
-        "dc": 16,
-        "rp": 6,
-        "lumber": 2,
-        "stone": 1
+    {
+      "value": 1,
+      "activity": "recover-army-damaged"
     },
-    "lots": 1
+    {
+      "value": 1,
+      "activity": "recover-army-defeated"
+    },
+    {
+      "value": 1,
+      "activity": "recover-army-lost"
+    },
+    {
+      "value": 1,
+      "activity": "recover-army-mired-pinned"
+    },
+    {
+      "value": 1,
+      "activity": "recover-army-shaken"
+    },
+    {
+      "value": 1,
+      "activity": "recover-army-weary"
+    },
+    {
+      "value": 1,
+      "activity": "recruit-army"
+    }
+  ],
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1",
+    "moreThanOncePerTurn": true
+  },
+  "level": 3,
+  "construction": {
+    "skills": [
+      {
+        "skill": "defense"
+      }
+    ],
+    "dc": 16,
+    "rp": 6,
+    "lumber": 2,
+    "stone": 1
+  },
+  "lots": 1
 }

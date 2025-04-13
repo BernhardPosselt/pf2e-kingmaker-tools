@@ -1,48 +1,48 @@
 {
-    "id": "opera-house",
-    "name": "Opera House",
-    "activityBonusRules": [
-        {
-            "value": 3,
-            "activity": "celebrate-holiday"
-        },
-        {
-            "value": 3,
-            "activity": "celebrate-holiday-vk"
-        },
-        {
-            "value": 3,
-            "activity": "create-a-masterpiece"
-        }
-    ],
-    "notes": "While in a settlement with an opera house, you gain a +3 item bonus to Performance checks made to Earn Income.",
-    "traits": [
-        "building",
-        "edifice",
-        "famous",
-        "infamous"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "2"
+  "id": "opera-house",
+  "name": "structures.opera-house.name",
+  "activityBonusRules": [
+    {
+      "value": 3,
+      "activity": "celebrate-holiday"
     },
-    "level": 15,
-    "upgradeFrom": [
-        "theater"
-    ],
-    "construction": {
-        "rp": 40,
-        "lumber": 20,
-        "stone": 16,
-        "luxuries": 18,
-        "skills": [
-            {
-                "skill": "arts",
-                "proficiencyRank": 3
-            }
-        ],
-        "dc": 34
+    {
+      "value": 3,
+      "activity": "celebrate-holiday-vk"
     },
-    "lots": 2
+    {
+      "value": 3,
+      "activity": "create-a-masterpiece"
+    }
+  ],
+  "notes": "structures.opera-house.notes",
+  "traits": [
+    "building",
+    "edifice",
+    "famous",
+    "infamous"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "2"
+  },
+  "level": 15,
+  "upgradeFrom": [
+    "theater"
+  ],
+  "construction": {
+    "rp": 40,
+    "lumber": 20,
+    "stone": 16,
+    "luxuries": 18,
+    "skills": [
+      {
+        "skill": "arts",
+        "proficiencyRank": 3
+      }
+    ],
+    "dc": 34
+  },
+  "lots": 2
 }

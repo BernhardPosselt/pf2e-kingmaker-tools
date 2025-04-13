@@ -1,37 +1,37 @@
 {
-    "id": "hospital",
-    "name": "Hospital",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "provide-care"
-        },
-        {
-            "value": 1,
-            "activity": "quell-unrest"
-        }
-    ],
-    "notes": "While in a settlement with a hospital, you gain a +2 item bonus to Medicine checks to Treat Disease and Treat Wounds.",
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": false,
-    "level": 9,
-    "upgradeFrom": [
-        "herbalist"
-    ],
-    "construction": {
-        "rp": 30,
-        "lumber": 10,
-        "stone": 6,
-        "skills": [
-            {
-                "skill": "defense",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 26
+  "id": "hospital",
+  "name": "structures.hospital.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "provide-care"
     },
-    "lots": 2
+    {
+      "value": 1,
+      "activity": "quell-unrest"
+    }
+  ],
+  "notes": "structures.hospital.notes",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": false,
+  "level": 9,
+  "upgradeFrom": [
+    "herbalist"
+  ],
+  "construction": {
+    "rp": 30,
+    "lumber": 10,
+    "stone": 6,
+    "skills": [
+      {
+        "skill": "defense",
+        "proficiencyRank": 2
+      }
+    ],
+    "dc": 26
+  },
+  "lots": 2
 }

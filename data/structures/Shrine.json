@@ -1,40 +1,40 @@
 {
-    "id": "shrine",
-    "name": "Shrine",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "celebrate-holiday"
-        },
-        {
-            "value": 1,
-            "activity": "celebrate-holiday-vk"
-        }
-    ],
-    "availableItemsRules": [
-        {
-            "value": 1,
-            "group": "divine",
-            "maximumStacks": 3
-        }
-    ],
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 1,
-    "construction": {
-        "rp": 8,
-        "lumber": 2,
-        "stone": 1,
-        "skills": [
-            {
-                "skill": "folklore",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 15
+  "id": "shrine",
+  "name": "structures.shrine.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "celebrate-holiday"
     },
-    "lots": 1
+    {
+      "value": 1,
+      "activity": "celebrate-holiday-vk"
+    }
+  ],
+  "availableItemsRules": [
+    {
+      "value": 1,
+      "group": "divine",
+      "maximumStacks": 3
+    }
+  ],
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "construction": {
+    "rp": 8,
+    "lumber": 2,
+    "stone": 1,
+    "skills": [
+      {
+        "skill": "folklore",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 15
+  },
+  "lots": 1
 }

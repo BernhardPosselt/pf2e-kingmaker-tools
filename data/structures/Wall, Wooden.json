@@ -1,26 +1,26 @@
 {
-    "id": "wall-wooden",
-    "name": "Wall, Wooden",
-    "traits": [
-        "infrastructure"
+  "id": "wall-wooden",
+  "name": "structures.wall-wooden.name",
+  "traits": [
+    "infrastructure"
+  ],
+  "lots": 0,
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1",
+    "moreThanOncePerTurn": true,
+    "note": "as long as it's the first wall in a settlement"
+  },
+  "level": 1,
+  "construction": {
+    "rp": 2,
+    "lumber": 4,
+    "skills": [
+      {
+        "skill": "defense"
+      }
     ],
-    "lots": 0,
-    "affectsDowntime": false,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "1",
-        "moreThanOncePerTurn": true,
-        "note": "as long as it's the first wall in a settlement"
-    },
-    "level": 1,
-    "construction": {
-        "rp": 2,
-        "lumber": 4,
-        "skills": [
-            {
-                "skill": "defense"
-            }
-        ],
-        "dc": 15
-    }
+    "dc": 15
+  }
 }

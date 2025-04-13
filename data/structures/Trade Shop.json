@@ -1,29 +1,29 @@
 {
-    "id": "trade-shop",
-    "name": "Trade Shop",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "purchase-commodities"
-        }
+  "id": "trade-shop",
+  "name": "structures.trade-shop.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "purchase-commodities"
+    }
+  ],
+  "notes": "structures.trade-shop.notes",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": false,
+  "level": 3,
+  "construction": {
+    "rp": 10,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 1
+      }
     ],
-    "notes": "When you build a trade shop, indicate the kind of shop it is, such as a bakery, carpenter, tailor, and so on. While in a settlement with a trade shop, you gain a +1 item bonus to all associated Crafting checks.",
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": false,
-    "level": 3,
-    "construction": {
-        "rp": 10,
-        "lumber": 2,
-        "skills": [
-            {
-                "skill": "trade",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 18
-    },
-    "lots": 1
+    "dc": 18
+  },
+  "lots": 1
 }

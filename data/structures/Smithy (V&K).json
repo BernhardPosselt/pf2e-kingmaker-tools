@@ -1,47 +1,47 @@
 {
-    "id": "smithy-vk",
-    "name": "Smithy (V&K)",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "trade-commodities"
-        },
-        {
-            "value": 1,
-            "activity": "outfit-army"
-        }
-    ],
-    "notes": "While in a settlement with a smithy, you gain a +1 item bonus to Craft checks made to work with metal.",
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": false,
-    "level": 3,
-    "construction": {
-        "rp": 8,
-        "lumber": 2,
-        "stone": 1,
-        "ore": 1,
-        "skills": [
-            {
-                "skill": "industry",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 18
+  "id": "smithy-vk",
+  "name": "structures.smithy-vk.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "trade-commodities"
     },
-    "lots": 1,
-    "skillBonusRules": [
-        {
-            "value": 1,
-            "activity": "clear-hex",
-            "skill": "engineering"
-        },
-        {
-            "value": 1,
-            "activity": "clear-hex-vk",
-            "skill": "engineering"
-        }
-    ]
+    {
+      "value": 1,
+      "activity": "outfit-army"
+    }
+  ],
+  "notes": "structures.smithy-vk.notes",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": false,
+  "level": 3,
+  "construction": {
+    "rp": 8,
+    "lumber": 2,
+    "stone": 1,
+    "ore": 1,
+    "skills": [
+      {
+        "skill": "industry",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 18
+  },
+  "lots": 1,
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "activity": "clear-hex",
+      "skill": "engineering"
+    },
+    {
+      "value": 1,
+      "activity": "clear-hex-vk",
+      "skill": "engineering"
+    }
+  ]
 }

@@ -1,28 +1,28 @@
 {
-    "id": "orphanage",
-    "name": "Orphanage",
-    "traits": [
-        "building",
-        "residential"
+  "id": "orphanage",
+  "name": "structures.orphanage.name",
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "level": 2,
+  "upgradeFrom": [
+    "houses"
+  ],
+  "construction": {
+    "rp": 6,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "industry"
+      }
     ],
-    "affectsDowntime": false,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "1"
-    },
-    "level": 2,
-    "upgradeFrom": [
-        "houses"
-    ],
-    "construction": {
-        "rp": 6,
-        "lumber": 2,
-        "skills": [
-            {
-                "skill": "industry"
-            }
-        ],
-        "dc": 16
-    },
-    "lots": 1
+    "dc": 16
+  },
+  "lots": 1
 }

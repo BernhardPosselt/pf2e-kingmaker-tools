@@ -1,26 +1,26 @@
 {
-    "id": "guildhall",
-    "name": "Guildhall",
-    "notes": "While in a settlement with a guildhall, you gain a +1 item bonus to all related skill checks to Earn Income or to Repair.",
-    "traits": [
-        "building"
+  "id": "guildhall",
+  "name": "structures.guildhall.name",
+  "notes": "structures.guildhall.notes",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": false,
+  "level": 5,
+  "construction": {
+    "rp": 34,
+    "lumber": 8,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 2
+      }
     ],
-    "affectsDowntime": true,
-    "reducesUnrest": false,
-    "level": 5,
-    "construction": {
-        "rp": 34,
-        "lumber": 8,
-        "skills": [
-            {
-                "skill": "trade",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 20
-    },
-    "upgradeFrom": [
-        "trade-shop"
-    ],
-    "lots": 2
+    "dc": 20
+  },
+  "upgradeFrom": [
+    "trade-shop"
+  ],
+  "lots": 2
 }

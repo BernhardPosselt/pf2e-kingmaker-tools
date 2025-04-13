@@ -1,31 +1,31 @@
 {
-    "id": "stonemason",
-    "name": "Stonemason",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "establish-work-site-quarry"
-        }
+  "id": "stonemason",
+  "name": "structures.stonemason.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "establish-work-site-quarry"
+    }
+  ],
+  "storage": {
+    "stone": 1
+  },
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 3,
+  "construction": {
+    "rp": 16,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "industry",
+        "proficiencyRank": 1
+      }
     ],
-    "storage": {
-        "stone": 1
-    },
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 3,
-    "construction": {
-        "rp": 16,
-        "lumber": 2,
-        "skills": [
-            {
-                "skill": "industry",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 18
-    },
-    "lots": 2
+    "dc": 18
+  },
+  "lots": 2
 }

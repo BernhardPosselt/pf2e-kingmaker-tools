@@ -1,36 +1,36 @@
 {
-    "id": "monument-vk",
-    "name": "Monument (V&K)",
-    "traits": [
-        "building",
-        "edifice"
+  "id": "monument-vk",
+  "name": "structures.monument-vk.name",
+  "traits": [
+    "building",
+    "edifice"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1"
+  },
+  "reduceRuinBy": {
+    "value": "1",
+    "ruin": "any"
+  },
+  "level": 3,
+  "construction": {
+    "rp": 6,
+    "stone": 1,
+    "skills": [
+      {
+        "skill": "arts",
+        "proficiencyRank": 1
+      }
     ],
-    "affectsDowntime": false,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "1"
-    },
-    "reduceRuinBy": {
-        "value": "1",
-        "ruin": "any"
-    },
-    "level": 3,
-    "construction": {
-        "rp": 6,
-        "stone": 1,
-        "skills": [
-            {
-                "skill": "arts",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 18
-    },
-    "lots": 1,
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "create-a-masterpiece"
-        }
-    ]
+    "dc": 18
+  },
+  "lots": 1,
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "create-a-masterpiece"
+    }
+  ]
 }

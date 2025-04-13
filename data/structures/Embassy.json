@@ -1,37 +1,37 @@
 {
-    "id": "embassy",
-    "name": "Embassy",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "send-diplomatic-envoy"
-        },
-        {
-            "value": 1,
-            "activity": "request-foreign-aid"
-        },
-        {
-            "value": 1,
-            "activity": "request-foreign-aid-vk"
-        }
-    ],
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 8,
-    "construction": {
-        "skills": [
-            {
-                "skill": "politics"
-            }
-        ],
-        "dc": 24,
-        "rp": 26,
-        "lumber": 10,
-        "stone": 4,
-        "luxuries": 6
+  "id": "embassy",
+  "name": "structures.embassy.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "send-diplomatic-envoy"
     },
-    "lots": 2
+    {
+      "value": 1,
+      "activity": "request-foreign-aid"
+    },
+    {
+      "value": 1,
+      "activity": "request-foreign-aid-vk"
+    }
+  ],
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 8,
+  "construction": {
+    "skills": [
+      {
+        "skill": "politics"
+      }
+    ],
+    "dc": 24,
+    "rp": 26,
+    "lumber": 10,
+    "stone": 4,
+    "luxuries": 6
+  },
+  "lots": 2
 }

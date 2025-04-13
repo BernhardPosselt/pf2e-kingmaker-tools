@@ -1,44 +1,44 @@
 {
-    "id": "tavern-popular",
-    "name": "Tavern, Popular",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "hire-adventurers"
-        }
+  "id": "tavern-popular",
+  "name": "structures.tavern-popular.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "hire-adventurers"
+    }
+  ],
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "skill": "trade",
+      "activity": "rest-and-relax"
+    }
+  ],
+  "notes": "structures.tavern-popular.notes",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "2"
+  },
+  "level": 3,
+  "upgradeFrom": [
+    "tavern-dive",
+    "tavern-dive-vk"
+  ],
+  "construction": {
+    "rp": 24,
+    "lumber": 6,
+    "stone": 2,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 2
+      }
     ],
-    "skillBonusRules": [
-        {
-            "value": 1,
-            "skill": "trade",
-            "activity": "rest-and-relax"
-        }
-    ],
-    "notes": "If you attempt a Performance check to Earn Income in a settlement with a popular tavern, you gain a +1 item bonus to the check. All checks made to Gather Information in a settlement with at least one popular tavern gain a +1 item bonus.",
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "2"
-    },
-    "level": 3,
-    "upgradeFrom": [
-        "tavern-dive",
-        "tavern-dive-vk"
-    ],
-    "construction": {
-        "rp": 24,
-        "lumber": 6,
-        "stone": 2,
-        "skills": [
-            {
-                "skill": "trade",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 18
-    },
-    "lots": 1
+    "dc": 18
+  },
+  "lots": 1
 }

@@ -1,22 +1,22 @@
 {
-    "id": "cemetery",
-    "name": "Cemetery",
-    "traits": [
-        "yard"
+  "id": "cemetery",
+  "name": "structures.cemetery.name",
+  "traits": [
+    "yard"
+  ],
+  "affectsEvents": true,
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "level": 1,
+  "construction": {
+    "skills": [
+      {
+        "skill": "folklore"
+      }
     ],
-    "affectsEvents": true,
-    "affectsDowntime": false,
-    "reducesUnrest": true,
-    "level": 1,
-    "construction": {
-        "skills": [
-            {
-                "skill": "folklore"
-            }
-        ],
-        "dc": 15,
-        "rp": 4,
-        "stone": 1
-    },
-    "lots": 1
+    "dc": 15,
+    "rp": 4,
+    "stone": 1
+  },
+  "lots": 1
 }

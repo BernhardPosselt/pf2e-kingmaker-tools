@@ -1,31 +1,31 @@
 {
-    "id": "granary-vk",
-    "name": "Granary (V&K)",
-    "storage": {
-        "food": 1
-    },
-    "traits": [
-        "building"
+  "id": "granary-vk",
+  "name": "structures.granary-vk.name",
+  "storage": {
+    "food": 1
+  },
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "construction": {
+    "rp": 12,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "agriculture",
+        "proficiencyRank": 1
+      }
     ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 1,
-    "construction": {
-        "rp": 12,
-        "lumber": 2,
-        "skills": [
-            {
-                "skill": "agriculture",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 15
-    },
-    "lots": 1,
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "establish-farmland"
-        }
-    ]
+    "dc": 15
+  },
+  "lots": 1,
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "establish-farmland"
+    }
+  ]
 }

@@ -1,46 +1,46 @@
 {
-    "id": "tavern-luxury",
-    "name": "Tavern, Luxury",
-    "activityBonusRules": [
-        {
-            "value": 2,
-            "activity": "hire-adventurers"
-        }
+  "id": "tavern-luxury",
+  "name": "structures.tavern-luxury.name",
+  "activityBonusRules": [
+    {
+      "value": 2,
+      "activity": "hire-adventurers"
+    }
+  ],
+  "skillBonusRules": [
+    {
+      "value": 2,
+      "skill": "trade",
+      "activity": "rest-and-relax"
+    }
+  ],
+  "notes": "structures.tavern-luxury.notes",
+  "traits": [
+    "building",
+    "famous"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "1d4+1"
+  },
+  "level": 9,
+  "upgradeFrom": [
+    "tavern-popular",
+    "tavern-popular-vk"
+  ],
+  "construction": {
+    "rp": 48,
+    "lumber": 10,
+    "stone": 8,
+    "luxuries": 8,
+    "skills": [
+      {
+        "skill": "trade",
+        "proficiencyRank": 3
+      }
     ],
-    "skillBonusRules": [
-        {
-            "value": 2,
-            "skill": "trade",
-            "activity": "rest-and-relax"
-        }
-    ],
-    "notes": "If attempt a Performance check to Earn Income in a settlement with a luxury tavern, you gain a +2 item bonus to the check. All checks made to Gather Information in a settlement with at least one luxury tavern gain a +2 item bonus.",
-    "traits": [
-        "building",
-        "famous"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "1d4+1"
-    },
-    "level": 9,
-    "upgradeFrom": [
-        "tavern-popular",
-        "tavern-popular-vk"
-    ],
-    "construction": {
-        "rp": 48,
-        "lumber": 10,
-        "stone": 8,
-        "luxuries": 8,
-        "skills": [
-            {
-                "skill": "trade",
-                "proficiencyRank": 3
-            }
-        ],
-        "dc": 26
-    },
-    "lots": 2
+    "dc": 26
+  },
+  "lots": 2
 }

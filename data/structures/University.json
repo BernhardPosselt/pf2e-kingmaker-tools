@@ -1,36 +1,36 @@
 {
-    "id": "university",
-    "name": "University",
-    "activityBonusRules": [
-        {
-            "value": 3,
-            "activity": "creative-solution"
-        }
+  "id": "university",
+  "name": "structures.university.name",
+  "activityBonusRules": [
+    {
+      "value": 3,
+      "activity": "creative-solution"
+    }
+  ],
+  "notes": "structures.university.notes",
+  "traits": [
+    "building",
+    "edifice",
+    "famous"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": false,
+  "level": 15,
+  "upgradeFrom": [
+    "academy"
+  ],
+  "construction": {
+    "rp": 78,
+    "lumber": 18,
+    "stone": 18,
+    "luxuries": 18,
+    "skills": [
+      {
+        "skill": "scholarship",
+        "proficiencyRank": 3
+      }
     ],
-    "notes": "While in a settlement with a university, you gain a +3 item bonus to Lore checks made to Recall Knowledge while Investigating, to Research checks (Gamemastery Guide 154), and to Decipher Writing.",
-    "traits": [
-        "building",
-        "edifice",
-        "famous"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": false,
-    "level": 15,
-    "upgradeFrom": [
-        "academy"
-    ],
-    "construction": {
-        "rp": 78,
-        "lumber": 18,
-        "stone": 18,
-        "luxuries": 18,
-        "skills": [
-            {
-                "skill": "scholarship",
-                "proficiencyRank": 3
-            }
-        ],
-        "dc": 34
-    },
-    "lots": 4
+    "dc": 34
+  },
+  "lots": 4
 }

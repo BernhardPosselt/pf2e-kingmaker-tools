@@ -1,33 +1,33 @@
 {
-    "id": "secure-warehouse",
-    "name": "Secure Warehouse",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "craft-luxuries"
-        }
+  "id": "secure-warehouse",
+  "name": "structures.secure-warehouse.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "craft-luxuries"
+    }
+  ],
+  "storage": {
+    "luxuries": 1
+  },
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 6,
+  "construction": {
+    "rp": 24,
+    "lumber": 6,
+    "stone": 6,
+    "ore": 4,
+    "skills": [
+      {
+        "skill": "industry",
+        "proficiencyRank": 2
+      }
     ],
-    "storage": {
-        "luxuries": 1
-    },
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 6,
-    "construction": {
-        "rp": 24,
-        "lumber": 6,
-        "stone": 6,
-        "ore": 4,
-        "skills": [
-            {
-                "skill": "industry",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 22
-    },
-    "lots": 2
+    "dc": 22
+  },
+  "lots": 2
 }

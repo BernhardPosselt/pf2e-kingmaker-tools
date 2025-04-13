@@ -1,37 +1,37 @@
 {
-    "id": "library-vk",
-    "name": "Library (V&K)",
-    "skillBonusRules": [
-        {
-            "value": 1,
-            "skill": "scholarship",
-            "activity": "rest-and-relax"
-        }
+  "id": "library-vk",
+  "name": "structures.library-vk.name",
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "skill": "scholarship",
+      "activity": "rest-and-relax"
+    }
+  ],
+  "notes": "structures.library-vk.notes",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": true,
+  "reducesUnrest": false,
+  "level": 2,
+  "construction": {
+    "rp": 6,
+    "lumber": 4,
+    "stone": 2,
+    "skills": [
+      {
+        "skill": "scholarship",
+        "proficiencyRank": 1
+      }
     ],
-    "notes": "While in a settlement with a library, you gain a +1 item bonus to Lore checks made to Recall Knowledge while Investigating, as well as to Researching checks, and to Decipher Writing checks.",
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": true,
-    "reducesUnrest": false,
-    "level": 2,
-    "construction": {
-        "rp": 6,
-        "lumber": 4,
-        "stone": 2,
-        "skills": [
-            {
-                "skill": "scholarship",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 16
-    },
-    "lots": 1,
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "creative-solution"
-        }
-    ]
+    "dc": 16
+  },
+  "lots": 1,
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "creative-solution"
+    }
+  ]
 }

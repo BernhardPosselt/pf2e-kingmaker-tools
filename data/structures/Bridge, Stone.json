@@ -1,22 +1,22 @@
 {
-    "id": "bridge-stone",
-    "name": "Bridge, Stone",
-    "isBridge": true,
-    "traits": [
-        "infrastructure"
+  "id": "bridge-stone",
+  "name": "structures.bridge-stone.name",
+  "isBridge": true,
+  "traits": [
+    "infrastructure"
+  ],
+  "lots": 0,
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 2,
+  "construction": {
+    "skills": [
+      {
+        "skill": "engineering"
+      }
     ],
-    "lots": 0,
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 2,
-    "construction": {
-        "skills": [
-            {
-                "skill": "engineering"
-            }
-        ],
-        "dc": 16,
-        "rp": 6,
-        "stone": 1
-    }
+    "dc": 16,
+    "rp": 6,
+    "stone": 1
+  }
 }

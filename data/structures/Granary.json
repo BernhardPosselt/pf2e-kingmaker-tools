@@ -1,24 +1,24 @@
 {
-    "id": "granary",
-    "name": "Granary",
-    "storage": {
-        "food": 1
-    },
-    "traits": [
-        "building"
+  "id": "granary",
+  "name": "structures.granary.name",
+  "storage": {
+    "food": 1
+  },
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "construction": {
+    "rp": 12,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "agriculture"
+      }
     ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 1,
-    "construction": {
-        "rp": 12,
-        "lumber": 2,
-        "skills": [
-            {
-                "skill": "agriculture"
-            }
-        ],
-        "dc": 15
-    },
-    "lots": 1
+    "dc": 15
+  },
+  "lots": 1
 }

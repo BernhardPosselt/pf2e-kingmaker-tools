@@ -1,27 +1,27 @@
 {
-    "id": "pier",
-    "name": "Pier",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "go-fishing"
-        }
+  "id": "pier",
+  "name": "structures.pier.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "go-fishing"
+    }
+  ],
+  "traits": [
+    "yard"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 3,
+  "construction": {
+    "rp": 16,
+    "lumber": 2,
+    "skills": [
+      {
+        "skill": "boating"
+      }
     ],
-    "traits": [
-        "yard"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 3,
-    "construction": {
-        "rp": 16,
-        "lumber": 2,
-        "skills": [
-            {
-                "skill": "boating"
-            }
-        ],
-        "dc": 18
-    },
-    "lots": 1
+    "dc": 18
+  },
+  "lots": 1
 }

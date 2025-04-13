@@ -1,103 +1,103 @@
 {
-    "id": "palace",
-    "name": "Palace",
-    "activityBonusRules": [
-        {
-            "value": 3,
-            "activity": "new-leadership"
-        },
-        {
-            "value": 3,
-            "activity": "new-leadership-vk"
-        },
-        {
-            "value": 3,
-            "activity": "pledge-of-fealty"
-        },
-        {
-            "value": 3,
-            "activity": "send-diplomatic-envoy"
-        },
-        {
-            "value": 3,
-            "activity": "garrison-army"
-        },
-        {
-            "value": 3,
-            "activity": "recover-army-damaged"
-        },
-        {
-            "value": 3,
-            "activity": "recover-army-defeated"
-        },
-        {
-            "value": 3,
-            "activity": "recover-army-lost"
-        },
-        {
-            "value": 3,
-            "activity": "recover-army-mired-pinned"
-        },
-        {
-            "value": 3,
-            "activity": "recover-army-shaken"
-        },
-        {
-            "value": 3,
-            "activity": "recover-army-weary"
-        },
-        {
-            "value": 3,
-            "activity": "recruit-army"
-        }
-    ],
-    "leadershipActivityRules": [
-        {
-            "value": 3
-        }
-    ],
-    "increaseLeadershipActivities": true,
-    "traits": [
-        "building",
-        "edifice",
-        "famous",
-        "infamous"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": true,
-    "reduceUnrestBy": {
-        "value": "10"
+  "id": "palace",
+  "name": "structures.palace.name",
+  "activityBonusRules": [
+    {
+      "value": 3,
+      "activity": "new-leadership"
     },
-    "level": 15,
-    "upgradeFrom": [
-        "castle",
-        "castle-vk"
-    ],
-    "construction": {
-        "rp": 108,
-        "lumber": 20,
-        "stone": 20,
-        "ore": 15,
-        "luxuries": 12,
-        "skills": [
-            {
-                "skill": "defense",
-                "proficiencyRank": 3
-            },
-            {
-                "skill": "industry",
-                "proficiencyRank": 3
-            },
-            {
-                "skill": "magic",
-                "proficiencyRank": 3
-            },
-            {
-                "skill": "statecraft",
-                "proficiencyRank": 3
-            }
-        ],
-        "dc": 34
+    {
+      "value": 3,
+      "activity": "new-leadership-vk"
     },
-    "lots": 4
+    {
+      "value": 3,
+      "activity": "pledge-of-fealty"
+    },
+    {
+      "value": 3,
+      "activity": "send-diplomatic-envoy"
+    },
+    {
+      "value": 3,
+      "activity": "garrison-army"
+    },
+    {
+      "value": 3,
+      "activity": "recover-army-damaged"
+    },
+    {
+      "value": 3,
+      "activity": "recover-army-defeated"
+    },
+    {
+      "value": 3,
+      "activity": "recover-army-lost"
+    },
+    {
+      "value": 3,
+      "activity": "recover-army-mired-pinned"
+    },
+    {
+      "value": 3,
+      "activity": "recover-army-shaken"
+    },
+    {
+      "value": 3,
+      "activity": "recover-army-weary"
+    },
+    {
+      "value": 3,
+      "activity": "recruit-army"
+    }
+  ],
+  "leadershipActivityRules": [
+    {
+      "value": 3
+    }
+  ],
+  "increaseLeadershipActivities": true,
+  "traits": [
+    "building",
+    "edifice",
+    "famous",
+    "infamous"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": true,
+  "reduceUnrestBy": {
+    "value": "10"
+  },
+  "level": 15,
+  "upgradeFrom": [
+    "castle",
+    "castle-vk"
+  ],
+  "construction": {
+    "rp": 108,
+    "lumber": 20,
+    "stone": 20,
+    "ore": 15,
+    "luxuries": 12,
+    "skills": [
+      {
+        "skill": "defense",
+        "proficiencyRank": 3
+      },
+      {
+        "skill": "industry",
+        "proficiencyRank": 3
+      },
+      {
+        "skill": "magic",
+        "proficiencyRank": 3
+      },
+      {
+        "skill": "statecraft",
+        "proficiencyRank": 3
+      }
+    ],
+    "dc": 34
+  },
+  "lots": 4
 }

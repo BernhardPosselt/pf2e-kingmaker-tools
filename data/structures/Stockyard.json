@@ -1,28 +1,28 @@
 {
-    "id": "stockyard",
-    "name": "Stockyard",
-    "activityBonusRules": [
-        {
-            "value": 1,
-            "activity": "gather-livestock"
-        }
+  "id": "stockyard",
+  "name": "structures.stockyard.name",
+  "activityBonusRules": [
+    {
+      "value": 1,
+      "activity": "gather-livestock"
+    }
+  ],
+  "consumptionReduction": 1,
+  "traits": [
+    "yard"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 3,
+  "construction": {
+    "rp": 20,
+    "lumber": 4,
+    "skills": [
+      {
+        "skill": "industry"
+      }
     ],
-    "consumptionReduction": 1,
-    "traits": [
-        "yard"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 3,
-    "construction": {
-        "rp": 20,
-        "lumber": 4,
-        "skills": [
-            {
-                "skill": "industry"
-            }
-        ],
-        "dc": 18
-    },
-    "lots": 4
+    "dc": 18
+  },
+  "lots": 4
 }

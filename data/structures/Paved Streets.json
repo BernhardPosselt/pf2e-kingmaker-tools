@@ -1,22 +1,22 @@
 {
-    "id": "paved-streets",
-    "name": "Paved Streets",
-    "traits": [
-        "infrastructure"
+  "id": "paved-streets",
+  "name": "structures.paved-streets.name",
+  "traits": [
+    "infrastructure"
+  ],
+  "lots": 0,
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 4,
+  "construction": {
+    "rp": 12,
+    "stone": 6,
+    "skills": [
+      {
+        "skill": "industry",
+        "proficiencyRank": 1
+      }
     ],
-    "lots": 0,
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 4,
-    "construction": {
-        "rp": 12,
-        "stone": 6,
-        "skills": [
-            {
-                "skill": "industry",
-                "proficiencyRank": 1
-            }
-        ],
-        "dc": 19
-    }
+    "dc": 19
+  }
 }

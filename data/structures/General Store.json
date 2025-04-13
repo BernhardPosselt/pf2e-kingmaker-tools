@@ -1,22 +1,22 @@
 {
-    "id": "general-store",
-    "name": "General Store",
-    "preventItemLevelPenalty": true,
-    "traits": [
-        "building"
+  "id": "general-store",
+  "name": "structures.general-store.name",
+  "preventItemLevelPenalty": true,
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 1,
+  "construction": {
+    "skills": [
+      {
+        "skill": "trade"
+      }
     ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 1,
-    "construction": {
-        "skills": [
-            {
-                "skill": "trade"
-            }
-        ],
-        "dc": 15,
-        "rp": 8,
-        "lumber": 1
-    },
-    "lots": 1
+    "dc": 15,
+    "rp": 8,
+    "lumber": 1
+  },
+  "lots": 1
 }

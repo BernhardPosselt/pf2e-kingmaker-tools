@@ -1,36 +1,36 @@
 {
-    "id": "arcanists-tower",
-    "name": "Arcanist's Tower",
-    "skillBonusRules": [
-        {
-            "value": 1,
-            "skill": "magic",
-            "activity": "quell-unrest"
-        }
+  "id": "arcanists-tower",
+  "name": "structures.arcanists-tower.name",
+  "skillBonusRules": [
+    {
+      "value": 1,
+      "skill": "magic",
+      "activity": "quell-unrest"
+    }
+  ],
+  "availableItemsRules": [
+    {
+      "value": 1,
+      "group": "arcane",
+      "maximumStacks": 3
+    }
+  ],
+  "notes": "structures.arcanists-tower.notes",
+  "traits": [
+    "building"
+  ],
+  "affectsDowntime": true,
+  "level": 5,
+  "construction": {
+    "skills": [
+      {
+        "skill": "magic",
+        "proficiencyRank": 1
+      }
     ],
-    "availableItemsRules": [
-        {
-            "value": 1,
-            "group": "arcane",
-            "maximumStacks": 3
-        }
-    ],
-    "notes": "While in a settlement with an arcanist's tower, you gain a +1 item bonus to checks made to Borrow an Arcane Spell or Learn a Spell.",
-    "traits": [
-        "building"
-    ],
-    "affectsDowntime": true,
-    "level": 5,
-    "construction": {
-        "skills": [
-            {
-                "skill": "magic",
-                "proficiencyRank": 1
-            }
-        ],
-        "rp": 30,
-        "stone": 6,
-        "dc": 20
-    },
-    "lots": 1
+    "rp": 30,
+    "stone": 6,
+    "dc": 20
+  },
+  "lots": 1
 }

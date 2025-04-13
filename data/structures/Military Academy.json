@@ -1,41 +1,41 @@
 {
-    "id": "military-academy",
-    "name": "Military Academy",
-    "activityBonusRules": [
-        {
-            "value": 2,
-            "activity": "train-army"
-        }
+  "id": "military-academy",
+  "name": "structures.military-academy.name",
+  "activityBonusRules": [
+    {
+      "value": 2,
+      "activity": "train-army"
+    }
+  ],
+  "skillBonusRules": [
+    {
+      "value": 2,
+      "skill": "warfare",
+      "activity": "pledge-of-fealty"
+    }
+  ],
+  "traits": [
+    "building",
+    "edifice"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 12,
+  "upgradeFrom": [
+    "academy"
+  ],
+  "construction": {
+    "rp": 36,
+    "lumber": 12,
+    "stone": 10,
+    "ore": 6,
+    "skills": [
+      {
+        "skill": "warfare",
+        "proficiencyRank": 2
+      }
     ],
-    "skillBonusRules": [
-        {
-            "value": 2,
-            "skill": "warfare",
-            "activity": "pledge-of-fealty"
-        }
-    ],
-    "traits": [
-        "building",
-        "edifice"
-    ],
-    "affectsDowntime": false,
-    "reducesUnrest": false,
-    "level": 12,
-    "upgradeFrom": [
-        "academy"
-    ],
-    "construction": {
-        "rp": 36,
-        "lumber": 12,
-        "stone": 10,
-        "ore": 6,
-        "skills": [
-            {
-                "skill": "warfare",
-                "proficiencyRank": 2
-            }
-        ],
-        "dc": 30
-    },
-    "lots": 2
+    "dc": 30
+  },
+  "lots": 2
 }
