@@ -135,7 +135,16 @@ Example:
 
 ### Help out as a Translator
 
-If you want to help translating this module as a Translator, create an account on [Transifex](https://app.transifex.com) and open an issue on GitHub with your username and language, so I can add you to the project.
+If you want to help translating this module as a Translator open an issue on GitHub with your email and language or contact me on Discord, so I can send you an invite to the project on Transifex.
+
+Don't edit the files in **lang/** directly. Every file except for **en.json** will be overridden by changes from Transifex. Instead, edit the translations in Transifex, then pull and build the project to get a preview:
+
+    ./gradlew txPull
+    ./gradlew assemble
+
+Note that if you want to preview changes locally, you need to follow the **Setup** mentioned above.
+
+When you pull new code and there is a conflict in a file **other than en.json**, always opt to throw away your local changes. 
 
 ### Help out as a Developer
 
@@ -143,7 +152,7 @@ This module skips the built-in Foundry translation system since it's broken and 
 
 #### Making Changes in Code
 
-Translations are persisted in **lang/en.json**. **DO NOT EDIT other translation files directly since they will be overriden from Transifex**. You can arbitrarily nest JSON values and reference them using the path. For instance: 
+Translations are persisted in **lang/en.json**. **DO NOT EDIT other translation files directly since they will be overridden by changes from Transifex**. You can arbitrarily nest JSON values and reference them using the path. For instance: 
 
 ```json
 {
