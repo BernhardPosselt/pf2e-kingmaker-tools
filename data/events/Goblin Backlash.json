@@ -9,15 +9,15 @@
   "description": "events.goblin-backlash.description",
   "modifiers": [
     {
-      "name": "Goblin Companion is Chaotic Evil",
-      "buttonLabel": "Goblin Companion is Chaotic Evil",
+      "name": "events.goblin-backlash.modifiers.chaoticEvil.name",
+      "buttonLabel": "events.goblin-backlash.modifiers.chaoticEvil.buttonLabel",
       "value": -2,
       "type": "circumstance",
       "enabled": false
     },
     {
-      "name": "Not the First Time This Event Happened",
-      "buttonLabel": "Not the First Time This Event Happened",
+      "name": "events.goblin-backlash.modifiers.notFirstTimeHappening.name",
+      "buttonLabel": "events.goblin-backlash.modifiers.notFirstTimeHappening.buttonLabel",
       "value": -1,
       "type": "untyped",
       "enabled": false
@@ -37,8 +37,8 @@
         "msg": "events.goblin-backlash.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
-            "name": "Goblin Backlash: Critical Success",
-            "buttonLabel": "+1 Circumstance to New Leadership, Quell Unrest, and Pledge of Fealty",
+            "name": "events.goblin-backlash.stage-0.criticalSuccess.modifiers.acceptanceBonus.name",
+            "buttonLabel": "events.goblin-backlash.stage-0.criticalSuccess.modifiers.acceptanceBonus.buttonLabel",
             "value": 1,
             "type": "circumstance",
             "enabled": true,

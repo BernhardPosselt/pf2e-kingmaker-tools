@@ -16,8 +16,8 @@
         "msg": "events.barbarian-immigrants.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
-            "name": "Barbarian Immigrants: Critical Success",
-            "buttonLabel": "+2 Circumstance to Bandit Activity, Monster Activity, and Undead Uprising",
+            "name": "events.barbarian-immigrants.stage-0.criticalSuccess.modifiers.barbarianSupport.name",
+            "buttonLabel": "events.barbarian-immigrants.stage-0.criticalSuccess.modifiers.barbarianSupport.buttonLabel",
             "type": "circumstance",
             "value": 2,
             "enabled": true,
@@ -40,8 +40,8 @@
         "msg": "events.barbarian-immigrants.stage-0.success.msg",
         "modifiers": [
           {
-            "name": "Barbarian Immigrants: Critical Success",
-            "buttonLabel": "+1 Circumstance to Bandit Activity, Monster Activity, and Undead Uprising",
+            "name": "events.barbarian-immigrants.stage-0.criticalSuccess.modifiers.barbarianSupport.name",
+            "buttonLabel": "events.barbarian-immigrants.stage-0.criticalSuccess.modifiers.barbarianSupport.buttonLabel",
             "type": "circumstance",
             "value": 1,
             "enabled": true,

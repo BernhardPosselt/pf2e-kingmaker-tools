@@ -26,8 +26,8 @@
         "msg": "events.sacrifices.stage-0.success.msg",
         "modifiers": [
           {
-            "name": "Sacrifices: Success",
-            "buttonLabel": "Reduce DC of Fighting Cult on Subsequent Turns",
+            "name": "events.sacrifices.stage-0.success.modifiers.determinedHex.name",
+            "buttonLabel": "events.sacrifices.stage-0.success.modifiers.determinedHex.buttonLabel",
             "value": 4,
             "type": "untyped",
             "enabled": true,

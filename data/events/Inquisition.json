@@ -11,8 +11,8 @@
     {
       "value": -2,
       "type": "untyped",
-      "name": "Pacify Inquisitors",
-      "buttonLabel": "Pacify Inquisitors",
+      "name": "events.inquisition.modifiers.pacify.name",
+      "buttonLabel": "events.inquisition.modifiers.pacify.buttonLabel",
       "enabled": false
     }
   ],

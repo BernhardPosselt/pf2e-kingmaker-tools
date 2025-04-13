@@ -17,8 +17,8 @@
         "msg": "events.good-weather.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
-            "name": "Good Weather: Critical Success",
-            "buttonLabel": "Roll twice when attempting a Agriculture, Boating, Exploration, or Wilderness check",
+            "name": "events.good-weather.stage-0.criticalSuccess.modifiers.gloriousClimate.name",
+            "buttonLabel": "events.good-weather.stage-0.criticalSuccess.modifiers.gloriousClimate.buttonLabel",
             "value": 0,
             "enabled": false,
             "type": "untyped",

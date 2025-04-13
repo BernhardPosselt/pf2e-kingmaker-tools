@@ -11,8 +11,8 @@
     {
       "type": "untyped",
       "value": -3,
-      "name": "Assassination during War",
-      "buttonLabel": "Assassination during War",
+      "name": "events.assassination-attempt.modifiers.assassinationDuringWar.name",
+      "buttonLabel": "events.assassination-attempt.modifiers.assassinationDuringWar.buttonLabel",
       "applyIf": [
         {
           "eq": [

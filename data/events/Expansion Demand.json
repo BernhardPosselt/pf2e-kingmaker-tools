@@ -8,8 +8,8 @@
   "description": "events.expansion-demand.description",
   "modifiers": [
     {
-      "name": "Claimed Hex this Turn",
-      "buttonLabel": "Claimed Hex this Turn",
+      "name": "events.expansion-demand.modifiers.claimedHexThisTurn.name",
+      "buttonLabel": "events.expansion-demand.modifiers.claimedHexThisTurn.buttonLabel",
       "value": 0,
       "type": "untyped",
       "enabled": false,

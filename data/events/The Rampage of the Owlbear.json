@@ -10,8 +10,8 @@
   "description": "events.the-rampage-of-the-owlbear.description",
   "modifiers": [
     {
-      "name": "Settlement has only Water Borders",
-      "buttonLabel": "Settlement has only Water Borders",
+      "name": "events.the-rampage-of-the-owlbear.modifiers.onlyWaterBorders.name",
+      "buttonLabel": "events.the-rampage-of-the-owlbear.modifiers.onlyWaterBorders.buttonLabel",
       "value": 0,
       "enabled": true,
       "applyIf": [

@@ -18,8 +18,8 @@
           {
             "value": 2,
             "type": "status",
-            "name": "Political Calm: Critical Success",
-            "buttonLabel": "+2 Status to Events",
+            "name": "events.political-calm.stage-0.criticalSuccess.modifiers.publicApproval.name",
+            "buttonLabel": "events.political-calm.stage-0.criticalSuccess.modifiers.publicApproval.buttonLabel",
             "turns": 2,
             "enabled": true,
             "applyIf": [

@@ -24,8 +24,8 @@
         "msg": "events.diplomatic-overture.stage-0.criticalFailure.msg",
         "modifiers": [
           {
-            "name": "Diplomatic Overture: Critical Failure",
-            "buttonLabel": "-2 Circumstance to Send Diplomatic Envoy",
+            "name": "events.diplomatic-overture.stage-0.criticalFailure.modifiers.diplomaticEnvoyPenalty.name",
+            "buttonLabel": "events.diplomatic-overture.stage-0.criticalFailure.modifiers.diplomaticEnvoyPenalty.buttonLabel",
             "enabled": false,
             "value": -2,
             "isConsumedAfterRoll": true,

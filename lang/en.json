@@ -2826,7 +2826,13 @@
         "location": "A claimed hex of the GM’s choosing but not in the influence of a settlement",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>The site proves to be an ancient settlement that greatly predates the expansion into the region. Your people are delighted by the discovery. @lose1d4Unrest, and until the end of your next Kingdom turn, all Culture- and Economy-based skill checks gain a +2 circumstance bonus. If any of your settlements has a Museum, you put archaeological findings from this hex on display to the further delight of your citizens. @lose1Unrest</p>"
+            "msg": "<p>The site proves to be an ancient settlement that greatly predates the expansion into the region. Your people are delighted by the discovery. @lose1d4Unrest, and until the end of your next Kingdom turn, all Culture- and Economy-based skill checks gain a +2 circumstance bonus. If any of your settlements has a Museum, you put archaeological findings from this hex on display to the further delight of your citizens. @lose1Unrest</p>",
+            "modifiers": {
+              "discoveryBonus": {
+                "name": "Archeological Find",
+                "buttonLabel": "+2 circumstance to Culture and Economy"
+              }
+            }
           },
           "success": {
             "msg": "<p>The site proves to be remains of an old camp. The discovery is interesting but not particularly surprising. @lose2Unrest</p>"
@@ -2835,7 +2841,13 @@
             "msg": "<p>The site proves to be the remains of a relatively recent village abandoned during a previous attempt to settle the lands. Nothing particularly interesting is discovered.</p>"
           },
           "criticalFailure": {
-            "msg": "<p>You never hear from your archaeologists again. @gain1d4Unrest and @gain1Decay. You can try to investigate this site again as a Region activity during the Activity phase of any Kingdom turn by attempting another Exploration check, but as the investigation has proven dangerous, the DC increases by 2.</p>"
+            "msg": "<p>You never hear from your archaeologists again. @gain1d4Unrest and @gain1Decay. You can try to investigate this site again as a Region activity during the Activity phase of any Kingdom turn by attempting another Exploration check, but as the investigation has proven dangerous, the DC increases by 2.</p>",
+            "modifiers": {
+              "reattemptPenalty": {
+                "name": "Reattempt Archeological Find",
+                "buttonLabel": "Reattempt Archeological Find"
+              }
+            }
           }
         }
       },
@@ -2843,6 +2855,12 @@
         "name": "Assassination Attempt",
         "description": "<p>One of your leaders or prominent citizens is targeted by assassins. The GM determines who hired these assassins, then attempts a @Check[type:flat|dc:11]. On a success, the target is an NPC assigned to a leadership role. On a failure (or if the PCs have no NPC leaders), the target is a notable NPC in the kingdom, preferably one with whom the PCs have established a friendly relationship.</p>",
         "special": "If this event occurs while the kingdom is at war, increase the event's level modifier to +3.",
+        "modifiers": {
+          "assassinationDuringWar": {
+            "name": "Assassination during War",
+            "buttonLabel": "Assassination during War"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
             "msg": "<p>The assassins are caught, driven off, or otherwise thwarted without ever endangering their targets. The targeted NPC may not even realize they were in danger, but criminal elements in your nation take notice. @lose1d4Unrest and reduce one Ruin of your choice by 1</p> <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
@@ -2864,7 +2882,13 @@
         "resolution": "You can end this continuous event with a critical success on the check. Alternately, if the PCs are eager to seek out the bandits, the GM could build a short side quest to play out their attempt to defeat them.",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>The bandits are captured, run off, or defeated, and merchants can confidently ply their wares. @lose1d4Unrest, and during the next Kingdom turn, you gain a +1 circumstance bonus to Economy-based checks.</p>"
+            "msg": "<p>The bandits are captured, run off, or defeated, and merchants can confidently ply their wares. @lose1d4Unrest, and during the next Kingdom turn, you gain a +1 circumstance bonus to Economy-based checks.</p>",
+            "modifiers": {
+              "defeatedBonus": {
+                "name": "Bandit Activity: Critical Success",
+                "buttonLabel": "+1 Circumstance to Economy"
+              }
+            }
           },
           "success": {
             "msg": "<p>The bandits are prevented from preying upon your people, but they continue to be active. @lose1ResourceDiceNextTurn</p>"
@@ -2882,10 +2906,22 @@
         "description": "<p>Once the PCs defeat the barbarian chieftain, the barbarians scatter back into the surrounding wilderness, but some of them are drawn by your barbarian companion's reputation and look to join the PCs’ kingdom. This event occurs during the first Kingdom turn after the barbarian chieftain’s defeat.</p>",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>A large number of barbarians are welcomed into several settlements. Their presence helps to bolster a sense of security @lose1d6Unrest, and also helps to curtail bandit and monster activity. From this point on, kingdom checks made to resolve the following random events gain a +2 circumstance bonus: Bandit Activity, Monster Activity, and Undead Uprising.</p>"
+            "msg": "<p>A large number of barbarians are welcomed into several settlements. Their presence helps to bolster a sense of security @lose1d6Unrest, and also helps to curtail bandit and monster activity. From this point on, kingdom checks made to resolve the following random events gain a +2 circumstance bonus: Bandit Activity, Monster Activity, and Undead Uprising.</p>",
+            "modifiers": {
+              "barbarianSupport": {
+                "name": "Barbarian Immigrants: Critical Success",
+                "buttonLabel": "+2 Circumstance to Bandit Activity, Monster Activity, and Undead Uprising"
+              }
+            }
           },
           "success": {
-            "msg": "<p>A large number of barbarians are welcomed into several settlements. Their presence helps to bolster a sense of security @lose1d4Unrest, and also helps to curtail bandit and monster activity. From this point on, kingdom checks made to resolve the following random events gain a +1 circumstance bonus: Bandit Activity, Monster Activity, and Undead Uprising.</p>"
+            "msg": "<p>A large number of barbarians are welcomed into several settlements. Their presence helps to bolster a sense of security @lose1d4Unrest, and also helps to curtail bandit and monster activity. From this point on, kingdom checks made to resolve the following random events gain a +1 circumstance bonus: Bandit Activity, Monster Activity, and Undead Uprising.</p>",
+            "modifiers": {
+              "barbarianSupport": {
+                "name": "Barbarian Immigrants: Success",
+                "buttonLabel": "+1 Circumstance to Bandit Activity, Monster Activity, and Undead Uprising"
+              }
+            }
           },
           "failure": {
             "msg": "<p>The integration of the barbarians into the kingdom is a bit rougher than expected and doesn’t provide additional defense against events. @lose1Unrest</p>"
@@ -2959,9 +2995,29 @@
         "special": "If this event occurs in a settlement with a Sewer System, you take a –2 item penalty to Intrigue checks to discover the cult’s hideout. If this event occurs while the PCs are playing through Chapter 5, increase the event’s level modifier to +3. The cult in this case is always associated with the worship of Lamashtu.",
         "resolution": "After the cult’s headquarters are discovered, to end this continuous event the PCs must defeat the cult by succeeding at the Folklore check. Optionally, the GM can build a short adventure for the PCs to infiltrate the cult headquarters and defeat them in encounter mode.",
         "location": "A randomly determined settlement of the GM’s choice—the GM should not reveal which one to the PCs until they succeed at this event’s Intrigue check, as until then the location of the cult’s hideout should remain a mystery to solve!",
+        "modifiers": {
+          "sewerSystem": {
+            "name": "City has Sewer System",
+            "buttonLabel": "City has Sewer System"
+          },
+          "dangerousCult": {
+            "name": "Dangerous Cult",
+            "buttonLabel": "Dangerous Cult"
+          },
+          "evenMoreDangerousCult": {
+            "name": "Even More Dangerous Cult",
+            "buttonLabel": "Even More Dangerous Cult"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>You discover which settlement houses the cult’s headquarters. When you attempt Folklore checks to defeat the cult, reduce the DC by 5.</p>"
+            "msg": "<p>You discover which settlement houses the cult’s headquarters. When you attempt Folklore checks to defeat the cult, reduce the DC by 5.</p>",
+            "modifiers": {
+              "folkloreBonus": {
+                "name": "Cult Activity Stage 1: Critical Success",
+                "buttonLabel": "Cult Activity Stage 1: Critical Success"
+              }
+            }
           },
           "success": {
             "msg": "<p>You discover which settlement houses the cult’s headquarters. @gain1Unrest as a result of the cult’s activities.</p>"
@@ -3002,7 +3058,13 @@
             "msg": "<p>Your meeting is cordial but unproductive.</p>"
           },
           "criticalFailure": {
-            "msg": "<p>Your diplomatic meeting goes poorly. Unless you bribe the group by either losing 5 Commodities of your choice</p> <ul><li>@lose5Food</li><li>@lose5Ore</li><li>@lose5Lumber</li><li>@lose5Stone</li><li>@lose5Luxuries</li></ul><p>or @lose10ResourcePoints, they break off diplomatic relations with you. Reestablishing diplomatic relations can be attempted via future Send Diplomatic Envoy activities in the usual manner, but with a –2 circumstance penalty.</p>"
+            "msg": "<p>Your diplomatic meeting goes poorly. Unless you bribe the group by either losing 5 Commodities of your choice</p> <ul><li>@lose5Food</li><li>@lose5Ore</li><li>@lose5Lumber</li><li>@lose5Stone</li><li>@lose5Luxuries</li></ul><p>or @lose10ResourcePoints, they break off diplomatic relations with you. Reestablishing diplomatic relations can be attempted via future Send Diplomatic Envoy activities in the usual manner, but with a –2 circumstance penalty.</p>",
+            "modifiers": {
+              "diplomaticEnvoyPenalty": {
+                "name": "Diplomatic Overture: Critical Failure",
+                "buttonLabel": "-2 Circumstance to Send Diplomatic Envoy"
+              }
+            }
           }
         }
       },
@@ -3087,6 +3149,12 @@
         "name": "Expansion Demand",
         "description": "<p>The citizens of your kingdom want expansion! If you successfully Claimed a Hex this turn, the result of your check for this event is improved one degree.</p>",
         "resolution": "Achieve either a success or critical success at this event.",
+        "modifiers": {
+          "claimedHexThisTurn": {
+            "name": "Claimed Hex this Turn",
+            "buttonLabel": "Claimed Hex this Turn"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
             "msg": "<p>Your citizens are pleased with the growth of the kingdom.</p>"
@@ -3180,9 +3248,25 @@
         "name": "Goblin Backlash",
         "description": "<p>Your citizens doubt your wisdom in appointing your goblin companion and worry that his unsavory personality traits might cause issues for the kingdom overall. If your goblin companion is still chaotic evil, you take a –2 circumstance penalty in resolving this event.</p>",
         "resolution": "You can end this continuous event with a critical success on the check. Alternately, if the PCs remove their goblin companion from his leadership position (including if he’s killed), the event ends. If the PCs do this though, and then attempt to install their goblin companion as a leader at a later date, this event occurs again but its level is increased by 1.",
+        "modifiers": {
+          "chaoticEvil": {
+            "name": "Goblin Companion is Chaotic Evil",
+            "buttonLabel": "Goblin Companion is Chaotic Evil"
+          },
+          "notFirstTimeHappening": {
+            "name": "Not the First Time This Event Happened",
+            "buttonLabel": "Not the First Time This Event Happened"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>You convince the citizens that your goblin companion will do well, and use his appointment to prove that you are seeking to build a diverse kingdom where anyone can find a role in shaping its destiny. The event ends, and your citizens grow more accepting of all people. Word of your kingdom’s acceptance of normally shunned elements of society spreads, and from this point on, you gain a +1 circumstance bonus to all New Leadership, Quell Unrest, and Pledge of Fealty checks.</p>"
+            "msg": "<p>You convince the citizens that your goblin companion will do well, and use his appointment to prove that you are seeking to build a diverse kingdom where anyone can find a role in shaping its destiny. The event ends, and your citizens grow more accepting of all people. Word of your kingdom’s acceptance of normally shunned elements of society spreads, and from this point on, you gain a +1 circumstance bonus to all New Leadership, Quell Unrest, and Pledge of Fealty checks.</p>",
+            "modifiers": {
+              "acceptanceBonus": {
+                "name": "Goblin Backlash: Critical Success",
+                "buttonLabel": "+1 Circumstance to New Leadership, Quell Unrest, and Pledge of Fealty"
+              }
+            }
           },
           "success": {
             "msg": "<p>You prevent the unrest from growing, but the citizens continue to grumble and grouse about your goblin companion into the next kingdom turn.</p>"
@@ -3200,7 +3284,13 @@
         "description": "<p>Good weather raises spirits among citizens.</p>",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>The glorious climate puts everyone in an excellent mood. @lose1d6Unrest, and once during your next Kingdom turn when you attempt an Agriculture, Boating, Exploration, or Wilderness check, you can roll twice and take the better result.</p>"
+            "msg": "<p>The glorious climate puts everyone in an excellent mood. @lose1d6Unrest, and once during your next Kingdom turn when you attempt an Agriculture, Boating, Exploration, or Wilderness check, you can roll twice and take the better result.</p>",
+            "modifiers": {
+              "gloriousClimate": {
+                "name": "Good Weather: Critical Success",
+                "buttonLabel": "Roll twice when attempting a Agriculture, Boating, Exploration, or Wilderness check"
+              }
+            }
           },
           "success": {
             "msg": "<p>Extended good weather makes life pleasant and easy. @lose1d4Unrest</p>"
@@ -3217,6 +3307,12 @@
         "name": "Inquisition",
         "description": "<p>Demagogues and zealots mobilize public opinion against a particular ancestry, religion, kingdom, behavior, or leader. This particular inquisition’s dogma and beliefs are driven by a combination of fear, hatred, and ignorance, yet its members are nevertheless compelling and charismatic.</p>",
         "resolution": "This event continues until you achieve a critical success at resolving the event. Alternately, the inquisition can be ended by having the PCs go on a short quest to infiltrate the inquisition’s headquarters to confront and defeat its leaders.",
+        "modifiers": {
+          "pacify": {
+            "name": "Pacify Inquisitors",
+            "buttonLabel": "Pacify Inquisitors"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
             "msg": "<p>Choose to either pacify or defeat the inquisitors. If you pacify them, the inquisition event ends but the inquisitors remain active—if this event occurs again, they are even more headstrong; increase the event’s level modifier by 2. If you defeat them, the inquisition ends but the violence of the event increases a Ruin of your choice by 1 </p><ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
@@ -3350,10 +3446,22 @@
         "description": "<p>A natural event, such as a bloom of rare wildflowers in a previously empty field, a glorious omen in the night sky like the northern lights, or the return to prominence of a previously rare type of wildlife raises your kingdom’s morale and inspires its creators.</p>",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>The glow of the blessing brings lasting delight. During your next turn, the results of checks to Craft Luxuries or Create a Masterpiece are improved one degree. @lose1d6Unrest</p>"
+            "msg": "<p>The glow of the blessing brings lasting delight. During your next turn, the results of checks to Craft Luxuries or Create a Masterpiece are improved one degree. @lose1d6Unrest</p>",
+            "modifier": {
+              "glow": {
+                "name": "Nature's Blessing: Critical Success",
+                "buttonLabel": "Increase Results of Craft Luxuries and Create a Masterpiece by One Degree"
+              }
+            }
           },
           "success": {
-            "msg": "<p>Your blessing touches the hearts of all. You gain a +1 status bonus to Culture- and Stability-based checks on your next Kingdom turn.</p>"
+            "msg": "<p>Your blessing touches the hearts of all. You gain a +1 status bonus to Culture- and Stability-based checks on your next Kingdom turn.</p>",
+            "modifier": {
+              "glow": {
+                "name": "Nature's Blessing: Success",
+                "buttonLabel": "+1 Status to Culture and Stability"
+              }
+            }
           },
           "failure": {
             "msg": "<p>The blessing inspires some of your people but not all of them.</p>"
@@ -3442,6 +3550,20 @@
         "special": "If the plague strikes a settlement that has no dumps, filth in the streets allows the disease to spread more easily. You take a –4 item penalty to checks to resolve this event. On the other hand, if a plague-stricken settlement has a sewer system, the increased sanitation provides a +2 item bonus to checks to resolve this event.",
         "resolution": "This Plague event ends if you achieve a critical success on the check or after you achieve a total of 4 successes with the Provide Care activity (a critical success with Provide Care counts as 2 successes in this case).",
         "location": "The largest settlement in the kingdom",
+        "modifiers": {
+          "noDump": {
+            "name": "No Dump in Settlement",
+            "buttonLabel": "No Dump in Settlement"
+          },
+          "hasSewerSystem": {
+            "name": "Has Sewer System in Settlement",
+            "buttonLabel": "Has Sewer System in Settlement"
+          },
+          "affectedByPlague": {
+            "name": "Settlement without Sewer System suffering from Plague",
+            "buttonLabel": "-2 Status to Civic Activities"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
             "msg": "<p>You halt the spread of the plague and are able to cure it, but even so, the plague’s effects cause you to @lose2ResourceDiceNextTurn</p>"
@@ -3462,7 +3584,13 @@
         "description": "<p>A sudden absence of political machinations and distracting intrigue coincides with a rise in public approval for its leaders.</p>",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>You capitalize upon the public approval with efficiency and speed. @lose1d6Unrest or reduce one Ruin of your choice by 1</p> <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul><p>Gain a +2 status bonus to all checks made to resolve events during your next Kingdom turn.</p>"
+            "msg": "<p>You capitalize upon the public approval with efficiency and speed. @lose1d6Unrest or reduce one Ruin of your choice by 1</p> <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul><p>Gain a +2 status bonus to all checks made to resolve events during your next Kingdom turn.</p>",
+            "modifiers": {
+              "publicApproval": {
+                "name": "Political Calm: Critical Success",
+                "buttonLabel": "+2 Status to Events"
+              }
+            }
           },
           "success": {
             "msg": "<p>Loyalty is up across the board. @lose1d4Unrest</p>"
@@ -3478,6 +3606,16 @@
       "public-outburst": {
         "name": "Public Outburst",
         "description": "<p>The citizens of the kingdom grow particularly nervous and fearful about the spread of monster attacks, with more reports of monsters bursting out of random victims. Each time this event occurs, increase the event’s level modifier by 1 to a maximum of +2, at which point the curse has become the populace’s greatest fear. The PCs must work to calm the nation and convince the people that they are doing everything they can to stop this supernatural affliction.</p>",
+        "modifiers": {
+          "occurredOnce": {
+            "name": "Event Occurred Once",
+            "buttonLabel": "Event Occurred Once"
+          },
+          "occurredMoreThanOnce": {
+            "name": "Event Occurred More Than Once",
+            "buttonLabel": "Event Occurred More Than Once"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
             "msg": "<p>The citizens are comforted by promises. This occurrence of Public Outburst does not increase the level modifier of the next occurrence.</p>"
@@ -3516,7 +3654,13 @@
         "description": "<p>Adventurers from outside of your kingdom discover a cache of rare and unusual treasures while exploring wilderness claimed by your nation.</p>",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>The adventurers are only too eager to share their discoveries with the kingdom. The treasures buoy the local economy and spawn a rush of prospectors out looking for their own treasures. @gain1d6Luxuries and @lose1d4Unrest. @gain1FameNextTurn. If you Hire Adventurers during your next Kingdom turn, roll twice for the skill check and take the better result.</p>"
+            "msg": "<p>The adventurers are only too eager to share their discoveries with the kingdom. The treasures buoy the local economy and spawn a rush of prospectors out looking for their own treasures. @gain1d6Luxuries and @lose1d4Unrest. @gain1FameNextTurn. If you Hire Adventurers during your next Kingdom turn, roll twice for the skill check and take the better result.</p>",
+            "modifiers": {
+              "eagerAdventurers": {
+                "name": "Remarkable Treasure: Critical Success",
+                "buttonLabel": "Roll Twice and Take Better Result if Hiring Adventurers"
+              }
+            }
           },
           "success": {
             "msg": "<p>The adventurers agree to share their discoveries with the kingdom. @gain1d4Luxuries and @lose1d4Unrest</p>"
@@ -3534,7 +3678,13 @@
         "description": "<p>After the PCs disrupted the mercenaries' plans and slaughtered several of their lower-ranking members during the raid on the manor, the mercenary killers have seethed and plotted. As word of the PCs’ new nation reaches the neighboring country, the mercenaries take note and send a new group of killers south to infiltrate the kingdom. These mercenaries make their presence known by attempting a very public attack on the kingdom to send a clear message to its leaders: The mercenaries do not forget!</p><p>Once this kingdom event is completed, whether the mercenaries continue to cause periodic trouble for the PCs is left to you to decide. For example, you could link them to some random events like Assassination Attempts, Bandit Activity, Feuds, Public Scandals, Sensational Crimes, and Vandals.</p>",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>Your agents intercept the mercenaries before they can even get started on their nefarious plans. @lose1d4Unrest, and the next time a random event occurs that includes mercenaries' influence, treat the rolled result as one degree of success better than the actual result.</p>"
+            "msg": "<p>Your agents intercept the mercenaries before they can even get started on their nefarious plans. @lose1d4Unrest, and the next time a random event occurs that includes mercenaries' influence, treat the rolled result as one degree of success better than the actual result.</p>",
+            "modifiers": {
+              "inInfluence": {
+                "name": "Event includes Mercenaries' Influence",
+                "buttonLabel": "Improve Mercenaries Events by 1 Degree"
+              }
+            }
           },
           "success": {
             "msg": "<p>The mercenaries set their plans in motion, but the kingdom’s defenses stop them before they cause any damage. Nevertheless, public knowledge that the mercenaries have taken an interest in the kingdom @gain1Unrest.</p>"
@@ -3543,7 +3693,13 @@
             "msg": "<p>The mercenaries are successful in their plot to attack the kingdom. They publicly rob a caravan of merchants, murder some citizens in broad daylight, or vandalize several buildings while leaving their mark of three black tears as proof of their action. @gain1d4Unrest and increase a Ruin of your choice by 1 </p><ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
           },
           "criticalFailure": {
-            "msg": "<p>The mercenaries are successful in their plot to attack the kingdom. They publicly rob a caravan of merchants, murder some citizens in broad daylight, or vandalize several buildings while leaving their mark of three black tears as proof of their action. @gain1d4Unrest and increase a Ruin of your choice by 1 </p><ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul><p>The mercenaries also manage to establish a foothold in the kingdom. @gain2Crime, and the next time there’s a random event that includes mercenaries influence, treat the rolled result as one degree of success worse than the actual result.</p>"
+            "msg": "<p>The mercenaries are successful in their plot to attack the kingdom. They publicly rob a caravan of merchants, murder some citizens in broad daylight, or vandalize several buildings while leaving their mark of three black tears as proof of their action. @gain1d4Unrest and increase a Ruin of your choice by 1 </p><ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul><p>The mercenaries also manage to establish a foothold in the kingdom. @gain2Crime, and the next time there’s a random event that includes mercenaries influence, treat the rolled result as one degree of success worse than the actual result.</p>",
+            "modifiers": {
+              "establishedFoothold": {
+                "name": "Event Includes Mercenaries' Influence",
+                "buttonLabel": "Worsen Mercenaries Events by 1 Degree"
+              }
+            }
           }
         }
       },
@@ -3557,7 +3713,13 @@
             "msg": "<p>The cultists are defeated, and many of your captured citizens are rescued.</p>"
           },
           "success": {
-            "msg": "<p>The cult continues to function, but you have managed to determine which hex their base of operations is located in. The DC to defeat the Sacrifices event is reduced by 4 in subsequent turns. @gain1Unrest</p>"
+            "msg": "<p>The cult continues to function, but you have managed to determine which hex their base of operations is located in. The DC to defeat the Sacrifices event is reduced by 4 in subsequent turns. @gain1Unrest</p>",
+            "modifiers": {
+              "determinedHex": {
+                "name": "Sacrifices: Success",
+                "buttonLabel": "Reduce DC of Fighting Cult on Subsequent Turns"
+              }
+            }
           },
           "failure": {
             "msg": "<p>The cultists prey on travelers, hunters, trappers, and anyone else who strays too far from civilization. @gain1d4Unrest and increase a Ruin of your choice by 1 </p><ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
@@ -3612,6 +3774,12 @@
         "special": "If the settlement has a Sewer System, most of the squatters opt to live there instead; gain a +2 item bonus to checks to resolve this event.",
         "resolution": "This continuous event ends when you achieve a critical success on the check or when you build a Residential structure in the lot the Squatters have chosen to live in.",
         "location": "The settlement with the highest Consumption in the kingdom or the largest settlement in the kingdom (as chosen by the GM)",
+        "modifiers": {
+          "hasSewerSystem": {
+            "name": "Sewer System in Settlement",
+            "buttonLabel": "Sewer System in Settlement"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
             "msg": "<p>You find opportunities for the squatters to improve their lot in life.</p>"
@@ -3669,6 +3837,12 @@
         "description": "<p>The city was attacked by a terrifying owlbear of immense size that crashed into the town and potentially killed dozens before it had its fill of destruction and lumbered off into the hills. If the settlement has only Water borders, then the owlbear has a more difficult time reaching the settlement; increase the rolled result by one degree of success)</p>",
         "resolution": "If the PCs don’t defeat the owlbear by the next Kingdom turn, it becomes a Monster Activity event.",
         "location": "A settlement of the GM’s choice (preferably the PCs’ capital city)",
+        "modifiers": {
+          "onlyWaterBorders": {
+            "name": "Settlement has only Water Borders",
+            "buttonLabel": "Settlement has only Water Borders"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
             "msg": "<p>The enormous owlbear inflicted only relatively minor damage, and while it wounded dozens, miraculously no one was killed. @gain1Unrest.</p>"
@@ -3851,7 +4025,13 @@
             "msg": "<p>The visitor has an agreeable if pedestrian visit. @lose1Unrest</p>"
           },
           "criticalFailure": {
-            "msg": "<p>The visitor leaves unimpressed and spreads reports of their unpleasant visit abroad. @gain1d4Unrest. The next time your kingdom has a Visiting Celebrity, increase that event’s level modifier by 2.</p>"
+            "msg": "<p>The visitor leaves unimpressed and spreads reports of their unpleasant visit abroad. @gain1d4Unrest. The next time your kingdom has a Visiting Celebrity, increase that event’s level modifier by 2.</p>",
+            "modifiers": {
+              "unpleasantVisit": {
+                "name": "Visiting Celebrity: Critical Failure",
+                "buttonLabel": "Next Time Encountering Event, Increase Modifier by 2"
+              }
+            }
           }
         }
       },
@@ -3860,6 +4040,12 @@
         "description": "<p>A rich merchant or prominent noble from another land is impressed with your kingdom and asks to construct an estate in your kingdom’s capital. If you give permission, proceed with this event. If you deny the request, this event doesn’t occur; the next time you have a Wealthy Immigrant event, increase the event’s level modifier by 1.</p>",
         "resolution": "Achieve a success, critical success, or critical failure against this event",
         "location": "The kingdom’s capital",
+        "modifiers": {
+          "deniedPermission": {
+            "name": "Denied Wealthy Immigrant Permission Previously",
+            "buttonLabel": "Denied Wealthy Immigrant Permission Previously"
+          }
+        },
         "stage-0": {
           "criticalSuccess": {
             "msg": "<p>The immigrant constructs a noble villa, free of charge and without you having to Build the Structure in an available spot in the capital. If there isn’t enough room in the capital, the immigrant builds in the largest settlement that has enough room.</p>"

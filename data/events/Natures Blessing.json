@@ -16,8 +16,8 @@
         "modifiers": [
           {
             "type": "untyped",
-            "name": "Nature's Blessing: Critical Success",
-            "buttonLabel": "Increase Results of Craft Luxuries and Create a Masterpiece by One Degree",
+            "name": "events.natures-blessing.stage-0.criticalSuccess.modifiers.glow.name",
+            "buttonLabel": "events.natures-blessing.stage-0.criticalSuccess.modifiers.glow.buttonLabel",
             "value": 0,
             "turns": 2,
             "enabled": true,
@@ -50,8 +50,8 @@
         "msg": "events.natures-blessing.stage-0.success.msg",
         "modifiers": [
           {
-            "name": "Nature's Blessing: Success",
-            "buttonLabel": "+1 Status to Culture and Stability",
+            "name": "events.natures-blessing.stage-0.success.modifiers.glow.name",
+            "buttonLabel": "events.natures-blessing.stage-0.success.modifiers.glow.buttonLabel",
             "enabled": true,
             "value": 1,
             "turns": 2,

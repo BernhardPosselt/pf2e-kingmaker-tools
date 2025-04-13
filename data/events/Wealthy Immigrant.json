@@ -11,8 +11,8 @@
   "description": "events.wealthy-immigrant.description",
   "modifiers": [
     {
-      "name": "Denied Wealthy Immigrant Permission Previously",
-      "buttonLabel": "Denied Wealthy Immigrant Permission Previously",
+      "name": "events.wealthy-immigrant.modifiers.deniedPermission.name",
+      "buttonLabel": "events.wealthy-immigrant.modifiers.deniedPermission.buttonLabel",
       "value": -1,
       "type": "untyped",
       "enabled": true,

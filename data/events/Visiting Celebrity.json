@@ -27,8 +27,8 @@
         "msg": "events.visiting-celebrity.stage-0.criticalFailure.msg",
         "modifiers": [
           {
-            "name": "Visiting Celebrity: Critical Failure",
-            "buttonLabel": "Next Time Encountering Event, Increase Modifier by 2",
+            "name": "events.visiting-celebrity.stage-0.criticalFailure.modifiers.unpleasantVisit.name",
+            "buttonLabel": "events.visiting-celebrity.stage-0.criticalFailure.modifiers.unpleasantVisit.buttonLabel",
             "isConsumedAfterRoll": true,
             "enabled": true,
             "value": -2,

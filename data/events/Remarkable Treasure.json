@@ -17,8 +17,8 @@
         "msg": "events.remarkable-treasure.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
-            "name": "Remarkable Treasure: Critical Success",
-            "buttonLabel": "Roll Twice and Take Better Result if Hiring Adventurers",
+            "name": "events.remarkable-treasure.stage-0.criticalSuccess.modifiers.eagerAdventurers.name",
+            "buttonLabel": "events.remarkable-treasure.stage-0.criticalSuccess.modifiers.eagerAdventurers.buttonLabel",
             "turns": 2,
             "rollTwiceKeepHighest": true,
             "type": "untyped",

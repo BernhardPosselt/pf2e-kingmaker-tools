@@ -9,15 +9,15 @@
     {
       "type": "untyped",
       "value": -1,
-      "name": "Event Occurred Once",
-      "buttonLabel": "Event Occurred Once",
+      "name": "events.public-outburst.modifiers.occurredOnce.name",
+      "buttonLabel": "events.public-outburst.modifiers.occurredOnce.buttonLabel",
       "enabled": false
     },
     {
       "type": "untyped",
       "value": -2,
-      "name": "Event Occurred More Than Once",
-      "buttonLabel": "Event Occurred More Than Once",
+      "name": "events.public-outburst.modifiers.occurredMoreThanOnce.name",
+      "buttonLabel": "events.public-outburst.modifiers.occurredMoreThanOnce.buttonLabel",
       "enabled": false
     }
   ],

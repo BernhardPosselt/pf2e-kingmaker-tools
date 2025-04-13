@@ -17,8 +17,8 @@
         "msg": "events.archeological-find.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
-            "name": "Archeological Find",
-            "buttonLabel": "+2 circumstance to Culture and Economy",
+            "name": "events.archeological-find.stage-0.criticalSuccess.modifiers.discoveryBonus.name",
+            "buttonLabel": "events.archeological-find.stage-0.criticalSuccess.modifiers.discoveryBonus.buttonLabel",
             "turns": 2,
             "enabled": true,
             "type": "circumstance",
@@ -54,8 +54,8 @@
         "msg": "events.archeological-find.stage-0.criticalFailure.msg",
         "modifiers": [
           {
-            "name": "Reattempt Archeological Find",
-            "buttonLabel": "Reattempt Archeological Find",
+            "name": "events.archeological-find.stage-0.criticalFailure.modifiers.reattemptPenalty.name",
+            "buttonLabel": "events.archeological-find.stage-0.criticalFailure.modifiers.reattemptPenalty.buttonLabel",
             "enabled": true,
             "type": "untyped",
             "value": -2

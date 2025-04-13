@@ -5,7 +5,9 @@
 
 # translations
 
+* translate macros
+* translate kingdom sheet
+* translate camping sheet
 * translate apps
 * translate templates
-* translate event modifiers
 * translate kingdom activity modifiers

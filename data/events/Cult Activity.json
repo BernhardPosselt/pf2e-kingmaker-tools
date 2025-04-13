@@ -21,8 +21,8 @@
           {
             "value": 5,
             "type": "untyped",
-            "name": "Cult Activity Stage 1: Critical Success",
-            "buttonLabel": "Cult Activity Stage 1: Critical Success",
+            "name": "events.cult-activity.stage-0.criticalSuccess.modifiers.folkloreBonus.name",
+            "buttonLabel": "events.cult-activity.stage-0.criticalSuccess.modifiers.folkloreBonus.buttonLabel",
             "enabled": true,
             "applyIf": [
               {
@@ -79,8 +79,8 @@
     {
       "type": "item",
       "value": -2,
-      "buttonLabel": "City has Sewer System",
-      "name": "City has Sewer System",
+      "buttonLabel": "events.cult-activity.modifiers.sewerSystem.buttonLabel",
+      "name": "events.cult-activity.modifiers.sewerSystem.name",
       "enabled": true,
       "applyIf": [
         {
@@ -100,15 +100,15 @@
     {
       "type": "untyped",
       "value": -1,
-      "buttonLabel": "Dangerous Cult",
-      "name": "Dangerous Cult",
+      "buttonLabel": "events.cult-activity.modifiers.dangerousCult.buttonLabel",
+      "name": "events.cult-activity.modifiers.dangerousCult.name",
       "enabled": false
     },
     {
       "type": "untyped",
       "value": -2,
-      "buttonLabel": "Even More Dangerous Cult",
-      "name": "Even More Dangerous Cult",
+      "buttonLabel": "events.cult-activity.modifiers.evenMoreDangerousCult.buttonLabel",
+      "name": "events.cult-activity.modifiers.evenMoreDangerousCult.name",
       "enabled": false
     }
   ]

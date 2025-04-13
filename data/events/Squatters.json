@@ -32,8 +32,8 @@
   ],
   "modifiers": [
     {
-      "name": "Sewer System in Settlement",
-      "buttonLabel": "Sewer System in Settlement",
+      "name": "events.squatters.modifiers.hasSewerSystem.name",
+      "buttonLabel": "events.squatters.modifiers.hasSewerSystem.buttonLabel",
       "value": 2,
       "type": "item",
       "enabled": true,

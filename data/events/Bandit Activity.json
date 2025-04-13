@@ -21,8 +21,8 @@
         "msg": "events.bandit-activity.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
-            "name": "Bandit Activity: Critical Success",
-            "buttonLabel": "+1 Circumstance to Economy",
+            "name": "events.bandit-activity.stage-0.criticalSuccess.defeatedBonus.name",
+            "buttonLabel": "events.bandit-activity.stage-0.criticalSuccess.defeatedBonus.buttonLabel",
             "turns": 2,
             "enabled": true,
             "value": 1,

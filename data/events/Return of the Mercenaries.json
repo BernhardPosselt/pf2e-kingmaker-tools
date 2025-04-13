@@ -15,8 +15,8 @@
         "msg": "events.return-of-the-mercenaries.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
-            "name": "Event includes Mercenaries' Influence",
-            "buttonLabel": "Improve Mercenaries Events by 1 Degree",
+            "name": "events.return-of-the-mercenaries.stage-0.criticalSuccess.modifiers.inInfluence.name",
+            "buttonLabel": "events.return-of-the-mercenaries.stage-0.criticalSuccess.modifiers.inInfluence.buttonLabel",
             "value": 0,
             "type": "untyped",
             "enabled": false,
@@ -44,8 +44,8 @@
         "msg": "events.return-of-the-mercenaries.stage-0.criticalFailure.msg",
         "modifiers": [
           {
-            "name": "Event Includes Mercenaries' Influence",
-            "buttonLabel": "Worsen Mercenaries Events by 1 Degree",
+            "name": "events.return-of-the-mercenaries.stage-0.criticalFailure.modifiers.establishedFoothold.name",
+            "buttonLabel": "events.return-of-the-mercenaries.stage-0.criticalFailure.modifiers.establishedFoothold.buttonLabel",
             "value": 0,
             "type": "untyped",
             "enabled": false,
