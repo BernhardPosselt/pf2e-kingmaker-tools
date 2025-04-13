@@ -81,7 +81,7 @@ Install the following things:
 
 Then, restart your PC.
 
-Next, open your file explorer and paste the following path into the URL bar:
+Next, open your file explorer and paste the following path into the URL bar (CTRL + l):
 
     %localappdata%/FoundryVTT/Data/modules/ 
 
@@ -89,7 +89,11 @@ This will take you to Foundry's modules folder. Inside the folder, right click o
 
 From now on, all commands will be run via the Git Bash instead of the Windows terminal.
 
-Paste (right click -> paste) the following command into the Git Bash to download the code (if you are more well versed with Windows, you can probably also clone the code somewhere else and create a symlink):
+Paste (right click -> paste) the following command into the Git Bash to install yarn:
+
+    npm install --global yarn
+
+Then, download the code (if you are more well versed with Windows, you can probably also clone the code somewhere else and create a symlink):
 
     git clone https://github.com/BernhardPosselt/pf2e-kingmaker-tools.git 
 
@@ -101,7 +105,7 @@ Optionally, log into your Transifex account and retrieve your token from your [a
 
     nano ~/.transifexrc
 
-Paste the following contents
+Paste the following contents and change **TOKEN_HERE** to your token
 
 ```ini
 [https://app.transifex.com]
@@ -119,7 +123,7 @@ Then compile the application using:
 
     ./gradlew assemble
 
-And open FoundryVTT. The module should be listed as installed. You will need to run the **assemble** command again each time you change a file or pull a translation from Transifex
+Now open FoundryVTT. The module should be listed as installed. You will need to run the **assemble** command again each time you change a file or pull a translation from Transifex
 
 You can pull the latest changes inside the folder using:
 
