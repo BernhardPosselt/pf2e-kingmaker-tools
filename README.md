@@ -142,6 +142,22 @@ Install the following things using your package manager or homebrew:
 * node
 * yarn
 
+Ubuntu:
+
+    sudo apt install nodejs git openjdk-21-jdk
+    sudo npm install --global yarn
+
+Arch:
+
+    sudo pacman -S nodejs git jdk21-openjdk yarn
+
+macOS:
+
+    brew install --cask temurin@21
+    brew install git node@22 yarn
+
+Then restart your machine for the JVM changes to take effect.
+
 First, create a folder to clone the repository into:
 
     mkdir dev
