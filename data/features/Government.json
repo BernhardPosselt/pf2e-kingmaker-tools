@@ -3,6 +3,6 @@
   "levels": [
     1
   ],
-  "name": "Government",
-  "description": "Your kingdom gains the benefits of your selected heartland"
+  "name": "features.government.name",
+  "description": "features.government.description"
 }

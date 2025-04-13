@@ -1,10 +1,10 @@
 {
     "id": "ruin-resistance",
     "levels": [5, 8, 11, 14, 17, 20],
-    "name": "Ruin Resistance",
-    "description": "Your kingdom becomes more resistant to Ruin. Choose one of the four Ruin categories and increase its threshold by 2. When you do so, reset that Ruin’s penalty to 0.",
     "ruinThresholdIncreases": {
         "amount": 2,
         "increase": 2
-    }
+    },
+    "name": "features.ruin-resistance.name",
+    "description": "features.ruin-resistance.description"
 }

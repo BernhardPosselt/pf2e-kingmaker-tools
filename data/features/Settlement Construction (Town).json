@@ -1,6 +1,6 @@
 {
     "id": "settlement-construction-town",
     "levels": [3],
-    "name": "Settlement Construction (Town)",
-    "description": "You can expand villages into towns."
+    "name": "features.settlement-construction-town.name",
+    "description": "features.settlement-construction-town.description"
 }

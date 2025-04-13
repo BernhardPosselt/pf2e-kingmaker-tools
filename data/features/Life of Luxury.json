@@ -1,6 +1,6 @@
 {
     "id": "life-of-luxury",
     "levels": [10],
-    "name": "Life of Luxury",
-    "description": "Your people lavish you with every creature comfort. This is identical to Fine Living, but all PC leaders enjoy an Extravagant standard of living at no cost whenever they’re in the kingdom. You gain a +2 circumstance bonus to all checks made to Craft or Earn Income while in your kingdom."
+    "name": "features.life-of-luxury.name",
+    "description": "features.life-of-luxury.description"
 }

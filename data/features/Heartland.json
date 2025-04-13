@@ -1,6 +1,6 @@
 {
   "id": "heartland",
   "levels": [1],
-  "name": "Heartland",
-  "description": "The new kingdom consists of a single hex. The PCs can choose any hex (subject to GM approval) that they have Reconnoitered. Tell the players that it’s wisest to select a hex that already has a structure, since their first settlement—their capital—will be located in this initial hex. Note that terrain features can grant other benefits to the kingdom when claimed; see Terrain Features on page 41. The heartland grants an additional boost to one of the kingdom’s ability scores based on a significant terrain feature present in that hex. If the hex has more than one terrain feature, the PCs should choose only one of them to provide the boost. The choice of terrain made here influences how the Favored Land kingdom ability functions. On the kingdom sheet, record the heartland terrain the PCs chose. On a separate sheet, record which kingdom ability received a boost in this step; refer to it when finalizing ability scores in step 5."
+  "name": "features.heartland.name",
+  "description": "features.heartland.description"
 }

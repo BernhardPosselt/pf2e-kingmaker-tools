@@ -1,6 +1,6 @@
 {
     "id": "civic-planning",
     "levels": [12],
-    "name": "Civic Planning",
-    "description": "During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs after all other settlements have taken their individual Civic activities."
+    "name": "features.civic-planning.name",
+    "description": "features.civic-planning.description"
 }

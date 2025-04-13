@@ -1,6 +1,6 @@
 {
     "id": "settlement-construction-metropolis",
     "levels": [15],
-    "name": "Settlement Construction (Metropolis)",
-    "description": "You can expand cities into metropolises."
+    "name": "features.settlement-construction-metropolis.name",
+    "description": "features.settlement-construction-metropolis.description"
 }

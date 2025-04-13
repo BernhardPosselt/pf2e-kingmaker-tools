@@ -1,7 +1,7 @@
 {
     "id": "skill-increase",
     "levels": [3, 5, 7, 9, 11, 13, 15, 17, 19],
-    "name": "Skill Increase",
-    "description": "Your kingdom gains a skill increase. You can use this to increase your rank to trained in one skill in which your kingdom is untrained, or to increase your rank in one skill.",
-    "skillIncrease": true
+    "skillIncrease": true,
+    "name": "features.skill-increase.name",
+    "description": "features.skill-increase.description"
 }

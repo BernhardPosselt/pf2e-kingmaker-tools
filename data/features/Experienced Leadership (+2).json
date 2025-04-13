@@ -2,5 +2,7 @@
     "id": "experienced-leadership-1",
     "levels": [8],
     "name": "Experienced Leadership (+2)",
-    "description": "Invested leadership roles in your kingdom now grant a +2 status bonus to kingdom checks associated with their leadership role’s key ability."
+    "description": "Invested leadership roles in your kingdom now grant a +2 status bonus to kingdom checks associated with their leadership role’s key ability.",
+    "name": "features.experienced-leadership-1.name",
+    "description": "features.experienced-leadership-1.description"
 }

@@ -578,6 +578,85 @@
         "name": "Sweet Pancakes"
       }
     },
+    "features": {
+      "ability-boosts": {
+        "name": "Ability Boosts",
+        "description": "Boost two different kingdom ability scores. You can use these ability boosts to increase your kingdom’s ability scores above 18. Boosting an ability score increases it by 2 if it starts out below 18, or by 1 if it’s already 18 or above."
+      },
+      "charter": {
+        "name": "Charter",
+        "description": "Your kingdom gains the benefits of your selected charter"
+      },
+      "civic-planning": {
+        "name": "Civic Planning",
+        "description": "During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs after all other settlements have taken their individual Civic activities."
+      },
+      "envy-of-the-world": {
+        "name": "Envy of the World",
+        "description": "Your kingdom is one of the world’s prominent nations. The first time in a Kingdom turn when your kingdom would gain Unrest or Ruin, ignore that increase. You can ignore additional increases to Unrest or Ruin later in the same turn as well, but you must spend a Fame or Infamy point each time you do so. Your maximum Fame or Infamy point total increases by 1.",
+        "automationNotes": "Ignore ruin increase is only implemented if gained during the Upkeep Phase"
+      },
+      "expansion-expert-1": {
+        "name": "Expansion Expert (+2)",
+        "description": "Your kingdom is better at expanding its territory. You gain a +2 circumstance bonus to skill checks made to Claim Hex and can attempt to Claim Hex up to twice during a Kingdom turn."
+      },
+      "expansion-expert-2": {
+        "name": "Expansion Expert (+3)",
+        "description": "You can attempt to Claim Hex up to three times during a Kingdom turn."
+      },
+      "favored-land": {
+        "name": "Favored Land",
+        "description": "Your heartland’s terrain becomes your kingdom’s favored land—the wilderness terrain that your people feel the strongest emotional ties to and to which your resource gatherers tend to flock. Once per Kingdom turn, during the Region Activities step of the Activity phase, you can attempt two Region activities simultaneously as long as both activities take place in the same hex and that hex contains the same terrain as your heartland. You take a –2 penalty to Kingdom skill checks made during these two activities."
+      },
+      "fine-living": {
+        "name": "Fine Living",
+        "description": "Your people celebrate by indulging you with feasts and finery. All PCs associated with the kingdom enjoy a Fine standard of living at no cost whenever they’re in the kingdom. Any PCs in hostile wilderness, a monster‑filled dungeon, or otherwise cut off from their citizens must provide their own sustenance as usual even if they are within the boundaries of their kingdom. You gain a +1 circumstance bonus to all checks made to Craft or Earn Income while in your kingdom."
+      },
+      "government": {
+        "name": "Government",
+        "description": "Your kingdom gains the benefits of your selected heartland"
+      },
+      "heartland": {
+        "name": "Heartland",
+        "description": "The new kingdom consists of a single hex. The PCs can choose any hex (subject to GM approval) that they have Reconnoitered. Tell the players that it’s wisest to select a hex that already has a structure, since their first settlement—their capital—will be located in this initial hex. Note that terrain features can grant other benefits to the kingdom when claimed; see Terrain Features on page 41. The heartland grants an additional boost to one of the kingdom’s ability scores based on a significant terrain feature present in that hex. If the hex has more than one terrain feature, the PCs should choose only one of them to provide the boost. The choice of terrain made here influences how the Favored Land kingdom ability functions. On the kingdom sheet, record the heartland terrain the PCs chose. On a separate sheet, record which kingdom ability received a boost in this step; refer to it when finalizing ability scores in step 5."
+      },
+      "initial-proficiencies": {
+        "name": "Initial Proficiencies",
+        "description": "At 1st level, a kingdom receives the trained proficiency rank in two Kingdom skills gained from your initial choice of government and in up to four additional Kingdom skills determined by your invested leaders, giving you a proficiency bonus to checks using these skills equal to your kingdom level plus 2. Proficiencies cannot be changed, even if the kingdom’s government or leaders later change."
+      },
+      "kingdom-feat": {
+        "name": "Kingdom Feat",
+        "description": "The kingdom gains a Kingdom feat."
+      },
+      "life-of-luxury": {
+        "name": "Life of Luxury",
+        "description": "Your people lavish you with every creature comfort. This is identical to Fine Living, but all PC leaders enjoy an Extravagant standard of living at no cost whenever they’re in the kingdom. You gain a +2 circumstance bonus to all checks made to Craft or Earn Income while in your kingdom."
+      },
+      "ruin-resistance": {
+        "name": "Ruin Resistance",
+        "description": "Your kingdom becomes more resistant to Ruin. Choose one of the four Ruin categories and increase its threshold by 2. When you do so, reset that Ruin’s penalty to 0."
+      },
+      "settlement-construction-city": {
+        "name": "Settlement Construction (City)",
+        "description": "You can expand towns into cities."
+      },
+      "settlement-construction-metropolis": {
+        "name": "Settlement Construction (Metropolis)",
+        "description": "You can expand cities into metropolises."
+      },
+      "settlement-construction-town": {
+        "name": "Settlement Construction (Town)",
+        "description": "You can expand villages into towns."
+      },
+      "settlement-construction-village": {
+        "name": "Settlement Construction (Village)",
+        "description": "You can establish villages in your kingdom immediately, but none can grow into Towns yet. As villages grow into larger settlements, you not only gain more room to build, but the maximum item bonus you can gain from that settlement’s structures increases as well."
+      },
+      "skill-increase": {
+        "name": "Skill Increase",
+        "description": "Your kingdom gains a skill increase. You can use this to increase your rank to trained in one skill in which your kingdom is untrained, or to increase your rank in one skill."
+      }
+    },
     "charters": {
       "conquest": {
         "name": "Conquest",
