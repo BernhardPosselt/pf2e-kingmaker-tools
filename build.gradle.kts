@@ -264,7 +264,7 @@ tasks.register<Copy>("extractTxClient") {
     if(current.isLinux || current.isMacOsX) {
         from(tarTree(resources.gzip(layout.buildDirectory.file("tx.tar.gz"))))
     } else {
-        from(zipTree(layout.buildDirectory.file("tx.tar.gz")))
+        from(zipTree(layout.buildDirectory.file("tx.zip")))
     }
     into(layout.buildDirectory.dir("transifex"))
 }
