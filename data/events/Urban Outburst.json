@@ -1,25 +1,30 @@
 {
   "id": "urban-outburst",
-  "name": "Urban Outburst",
-  "traits": ["dangerous", "settlement"],
+  "name": "events.urban-outburst.name",
+  "traits": [
+    "dangerous",
+    "settlement"
+  ],
   "modifier": 2,
-  "location": "The settlement the PCs are currently located in, or the closest settlement to the PCs’ location if they’re not in a settlement.",
-  "description": "A monster blooms from a citizen in the city itself and runs rampage through the streets! The type of monster should be chosen by the GM; its level should equal the party’s level + 2 (a Moderate threat encounter). The PCs can choose to resolve this event with a Kingdom skill check, or they can travel to the settlement the monster is rampaging in to challenge it in encounter mode. If they don’t defeat the monster by the end of the next day, treat this event as having a Critical Failure result.",
+  "location": "events.urban-outburst.location",
+  "description": "events.urban-outburst.description",
   "stages": [
     {
       "leader": "warden",
-      "skills": ["defense"],
+      "skills": [
+        "defense"
+      ],
       "criticalSuccess": {
-        "msg": "The monster is defeated before any more lives are lost"
+        "msg": "events.urban-outburst.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The monster is defeated but slew a citizen. @gain1Unrest"
+        "msg": "events.urban-outburst.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The monster slays several citizens before it is defeated. @gain1d4Unrest and @gain1Decay"
+        "msg": "events.urban-outburst.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The monster continues to rampage unopposed. This event becomes Continuous and occurs every day until the monster is defeated; additional Cult events still occur as normal. @gain1d6Unrest and @gain2Decay"
+        "msg": "events.urban-outburst.stage-0.criticalFailure.msg"
       }
     }
   ]

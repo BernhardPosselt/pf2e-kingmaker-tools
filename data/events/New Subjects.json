@@ -1,23 +1,27 @@
 {
   "id": "new-subjects",
-  "name": "New Subjects",
-  "traits": ["beneficial"],
-  "description": "A small group of intelligent creatures joins your kingdom and submits to your rule, bringing along their knowledge of hidden places within your kingdom. (The exact nature and ancestry of these new subjects is determined by the GM.)",
+  "name": "events.new-subjects.name",
+  "traits": [
+    "beneficial"
+  ],
+  "description": "events.new-subjects.description",
   "stages": [
     {
       "leader": "emissary",
-      "skills": ["statecraft"],
+      "skills": [
+        "statecraft"
+      ],
       "criticalSuccess": {
-        "msg": "Your subjects blend in seamlessly and are welcomed by your citizens, while bringing their own unique contributions to your kingdom. You @gain6ResourceDiceNextTurn, and you gain an additional Region activity during the Activity phase of the next Kingdom turn."
+        "msg": "events.new-subjects.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "Your new subjects are welcomed, and their contributions help in the short term. @gain3ResourceDiceNextTurn"
+        "msg": "events.new-subjects.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Your new subjects endure discrimination from intolerant citizens in your kingdom, but they nonetheless bring willing hands to work and such resources as they possess. @gain1Unrest and @gain1ResourceDiceNextTurn"
+        "msg": "events.new-subjects.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Your new subjects encounter discrimination and xenophobia, and they are eventually driven back into the wild. @gain1d4Unrest and @gain1Strife"
+        "msg": "events.new-subjects.stage-0.criticalFailure.msg"
       }
     }
   ]

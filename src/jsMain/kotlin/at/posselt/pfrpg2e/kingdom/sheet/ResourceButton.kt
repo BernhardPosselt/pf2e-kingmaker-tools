@@ -97,6 +97,8 @@ enum class Resource : Translatable, ValueEnum {
         get() = toCamelCase()
 
     override val i18nKey = "resourceButton.resource.$value"
+
+    val i18nKeyExpression = "resourceButton.resourceExpression.$value"
 }
 
 private val fromStringRegex = Regex(
@@ -180,8 +182,11 @@ data class ResourceButton(
 
     fun toHtml(): String {
         val isRd = value.contains("rd")
+        val isDiceExpression = value.contains("d")
         val resourceLabel = if (isRd) {
             t("resourceButton.resourceDice.${resource.value}", recordOf("count" to value.replace("rd", "")))
+        } else if(isDiceExpression) {
+            t(resource.i18nKeyExpression, recordOf("expression" to value))
         } else {
             t(resource.i18nKey, recordOf("count" to value))
         }

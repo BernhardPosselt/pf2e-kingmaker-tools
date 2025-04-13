@@ -1,23 +1,27 @@
 {
   "id": "festive-invitation",
-  "name": "Festive Invitation",
-  "traits": ["beneficial"],
-  "description": "<p>Your kingdom’s leaders are invited to a festival in a region in which the kingdom has established diplomatic relations. The GM chooses an existing diplomatic ally to send the invitation and should customize the details of that event to match that ally; if your kingdom has no diplomatic relations, this event has no effect.</p><p>When your leaders attend the festival, you can bring up to 4 Resource Dice as “gifts” to the festival; reduce the number of Resource Dice you roll on the next Kingdom turn by this amount.</p> @loseMultiple1ResourceDiceNextTurn",
+  "name": "events.festive-invitation.name",
+  "traits": [
+    "beneficial"
+  ],
+  "description": "events.festive-invitation.description",
   "stages": [
     {
       "leader": "ruler",
-      "skills": ["arts"],
+      "skills": [
+        "arts"
+      ],
       "criticalSuccess": {
-        "msg": "<p>You entertain and delight your host and bolster your alliance with their people, and they gratefully reciprocate your gifts. For each Resource Die you brought as a gift, choose a type of Commodity. Then roll the die; you gain that amount of that Commodity</p><ul><li>@gain1rdFood</li><li>@gain1rdOre</li><li>@gain1rdLumber</li><li>@gain1rdLuxuries</li><li>@gain1rdStone</li></ul><p>Attempt a @Check[type:flat|dc:11]. If you are successful, your ally extends a Diplomatic Overture or a Visiting Celebrity event (equal chance of either) during the Event phase of your next Kingdom turn (in addition to any other event that would occur).</p>"
+        "msg": "events.festive-invitation.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The festival is a delight. If you brought Resource Dice as gifts, choose a Commodity. You gain an amount of that Commodity equal to the number of Resource Dice you brought as gifts <ul><li>@gainMultiple1Food</li><li>@gainMultiple1Ore</li><li>@gainMultiple1Lumber</li><li>@gainMultiple1Luxuries</li><li>@gainMultiple1Stone</li></ul>"
+        "msg": "events.festive-invitation.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The festival was entertaining enough, but if you brought Resource Dice as gifts, they’re not reciprocated."
+        "msg": "events.festive-invitation.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "One of your leaders committed a faux pas during the festival, and the celebration ends prematurely. Attempt a @Check[type:flat|dc:11]. If you fail, your host cuts ties with your kingdom; @gain1Unrest. (In the future, you may attempt to reestablish diplomatic relations in the usual way.)"
+        "msg": "events.festive-invitation.stage-0.criticalFailure.msg"
       }
     }
   ]

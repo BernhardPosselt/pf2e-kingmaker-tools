@@ -1,24 +1,29 @@
 {
   "id": "boomtown",
-  "name": "Boomtown",
-  "traits": ["beneficial","settlement"],
-  "location": "The smallest settlement in the nation",
-  "description": "Commerce and trade booms in one of your settlements, drawing many join the flurry of activity.",
+  "name": "events.boomtown.name",
+  "traits": [
+    "beneficial",
+    "settlement"
+  ],
+  "location": "events.boomtown.location",
+  "description": "events.boomtown.description",
   "stages": [
     {
       "leader": "treasurer",
-      "skills": ["trade"],
+      "skills": [
+        "trade"
+      ],
       "criticalSuccess": {
-        "msg": "@gain4ResourceDiceNextTurn. For the rest of that turn, item bonuses from structures in the settlement are doubled; this increase can exceed the normal maximum item bonus your structures can provide."
+        "msg": "events.boomtown.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "@gain2ResourceDiceNextTurn. For the remainder of that turn, the item bonus granted by one of the settlement’s structures (chosen by the players) is doubled; this increase can exceed the normal maximum item bonus your structures can provide."
+        "msg": "events.boomtown.stage-0.success.msg"
       },
       "failure": {
-        "msg": "@gain1ResourceDiceNextTurn"
+        "msg": "events.boomtown.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The boom is brief before it bursts like a bubble, leaving many merchants jealous and frustrated about not being able to take part. @lose2ResourceDiceNextTurn"
+        "msg": "events.boomtown.stage-0.criticalFailure.msg"
       }
     }
   ]

@@ -1,10 +1,10 @@
 {
   "id": "return-of-the-mercenaries",
-  "name": "Return of the Mercenaries",
+  "name": "events.return-of-the-mercenaries.name",
   "traits": [
     "dangerous"
   ],
-  "description": "<p>After the PCs disrupted the mercenaries' plans and slaughtered several of their lower-ranking members during the raid on the manor, the mercenary killers have seethed and plotted. As word of the PCs’ new nation reaches the neighboring country, the mercenaries take note and send a new group of killers south to infiltrate the kingdom. These mercenaries make their presence known by attempting a very public attack on the kingdom to send a clear message to its leaders: The mercenaries do not forget!</p><p>Once this kingdom event is completed, whether the mercenaries continue to cause periodic trouble for the PCs is left to you to decide. For example, you could link them to some random events like Assassination Attempts, Bandit Activity, Feuds, Public Scandals, Sensational Crimes, and Vandals.</p>",
+  "description": "events.return-of-the-mercenaries.description",
   "stages": [
     {
       "skills": [
@@ -12,7 +12,7 @@
       ],
       "leader": "emissary",
       "criticalSuccess": {
-        "msg": "Your agents intercept the mercenaries before they can even get started on their nefarious plans. @lose1d4Unrest, and the next time a random event occurs that includes mercenaries' influence, treat the rolled result as one degree of success better than the actual result.",
+        "msg": "events.return-of-the-mercenaries.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
             "name": "Event includes Mercenaries' Influence",
@@ -35,13 +35,13 @@
         ]
       },
       "success": {
-        "msg": "The mercenaries set their plans in motion, but the kingdom’s defenses stop them before they cause any damage. Nevertheless, public knowledge that the mercenaries have taken an interest in the kingdom @gain1Unrest."
+        "msg": "events.return-of-the-mercenaries.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The mercenaries are successful in their plot to attack the kingdom. They publicly rob a caravan of merchants, murder some citizens in broad daylight, or vandalize several buildings while leaving their mark of three black tears as proof of their action. @gain1d4Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.return-of-the-mercenaries.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The mercenaries are successful in their plot to attack the kingdom. They publicly rob a caravan of merchants, murder some citizens in broad daylight, or vandalize several buildings while leaving their mark of three black tears as proof of their action. @gain1d4Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul> The mercenaries also manage to establish a foothold in the kingdom. @gain2Crime, and the next time there’s a random event that includes mercenaries influence, treat the rolled result as one degree of success worse than the actual result.",
+        "msg": "events.return-of-the-mercenaries.stage-0.criticalFailure.msg",
         "modifiers": [
           {
             "name": "Event Includes Mercenaries' Influence",

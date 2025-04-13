@@ -1,23 +1,30 @@
 {
   "id": "troll-sightings",
-  "name": "Troll Sightings",
-  "traits": ["continuous", "dangerous"],
-  "description": "<p>Trolls have grown more common and more aggressive along the borders of the kingdom, and their attacks on travelers, hunters, and others coming and going from the kingdom undermine the nation’s sense of safety and well-being.</p><p>This event should occur once the PCs reach 5th level, or once they come within one hex of area NM7. The event then continues to repeat during every Kingdom turn’s event phase automatically until it is resolved, in addition to any other potential events that might take place during the turn.</p>",
-  "stages": [{
-    "leader": "warden",
-    "skills": ["defense"],
-    "criticalSuccess": {
-      "msg": "The trolls are rebuffed with ease, with no damage to the kingdom. Even better, the kingdom’s scouts manage to track the trolls back to their home, revealing the troll king’s lair at area NM7 to the PCs."
-    },
-    "success": {
-      "msg": "Kingdom forces manage to hold the trolls back, but worry still spreads - @gain1Unrest"
-    },
-    "failure": {
-      "msg": "The trolls manage to slaughter a few victims despite the kingdom’s best efforts. @gain1d4Unrest and @gain1Decay."
-    },
-    "criticalFailure": {
-      "msg": "The trolls manage to slaughter a few victims despite the kingdom’s best efforts. @gain1d4Unrest and @gain1Decay. In addition, but the trolls manage to also invade the kingdom and raze some of its lands. If the kingdom has any Farmlands, one randomly determined Farmland is reduced back to its original terrain and must be rebuilt. If it has no farmlands, one hex along the border (as close to area NM7 as possible) is lost."
+  "name": "events.troll-sightings.name",
+  "traits": [
+    "continuous",
+    "dangerous"
+  ],
+  "description": "events.troll-sightings.description",
+  "stages": [
+    {
+      "leader": "warden",
+      "skills": [
+        "defense"
+      ],
+      "criticalSuccess": {
+        "msg": "events.troll-sightings.stage-0.criticalSuccess.msg"
+      },
+      "success": {
+        "msg": "events.troll-sightings.stage-0.success.msg"
+      },
+      "failure": {
+        "msg": "events.troll-sightings.stage-0.failure.msg"
+      },
+      "criticalFailure": {
+        "msg": "events.troll-sightings.stage-0.criticalFailure.msg"
+      }
     }
-  }],
-  "resolution": "This event ends once the PCs defeat the troll king"
+  ],
+  "resolution": "events.troll-sightings.resolution"
 }

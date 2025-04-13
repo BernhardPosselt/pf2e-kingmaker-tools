@@ -1,37 +1,48 @@
 {
   "id": "remarkable-treasure",
-  "name": "Remarkable Treasure",
-  "traits": ["beneficial", "fortune"],
+  "name": "events.remarkable-treasure.name",
+  "traits": [
+    "beneficial",
+    "fortune"
+  ],
   "modifier": 2,
-  "description": "Adventurers from outside of your kingdom discover a cache of rare and unusual treasures while exploring wilderness claimed by your nation.",
+  "description": "events.remarkable-treasure.description",
   "stages": [
     {
       "leader": "emissary",
-      "skills": ["exploration"],
+      "skills": [
+        "exploration"
+      ],
       "criticalSuccess": {
-        "msg": "The adventurers are only too eager to share their discoveries with the kingdom. The treasures buoy the local economy and spawn a rush of prospectors out looking for their own treasures. @gain1d6Luxuries and @lose1d4Unrest. @gain1FameNextTurn. If you Hire Adventurers during your next Kingdom turn, roll twice for the skill check and take the better result.",
-        "modifiers": [{
-          "name": "Remarkable Treasure: Critical Success",
-          "buttonLabel": "Roll Twice and Take Better Result if Hiring Adventurers",
-          "turns": 2,
-          "rollTwiceKeepHighest": true,
-          "type": "untyped",
-          "enabled": true,
-          "value": 0,
-          "applyIf": [{
-            "eq": ["@action", "hire-adventurers"]
+        "msg": "events.remarkable-treasure.stage-0.criticalSuccess.msg",
+        "modifiers": [
+          {
+            "name": "Remarkable Treasure: Critical Success",
+            "buttonLabel": "Roll Twice and Take Better Result if Hiring Adventurers",
+            "turns": 2,
+            "rollTwiceKeepHighest": true,
+            "type": "untyped",
+            "enabled": true,
+            "value": 0,
+            "applyIf": [
+              {
+                "eq": [
+                  "@action",
+                  "hire-adventurers"
+                ]
+              }
+            ]
           }
-          ]
-        }]
+        ]
       },
       "success": {
-        "msg": "The adventurers agree to share their discoveries with the kingdom. @gain1d4Luxuries and @lose1d4Unrest"
+        "msg": "events.remarkable-treasure.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The adventurers aren’t particularly eager to share their discoveries, but the excitement of the news still helps delight the populace. @lose1Unrest"
+        "msg": "events.remarkable-treasure.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The adventurers are particularly hostile or even disrespectful toward your kingdom and its citizens. Your citizens see them less as heroes and more as bandits plundering the nation’s resources, or even outright villains. Whether this perception is right or not, the damage is done. @gain1Unrest. The GM should consider building up these adventurers as recurring antagonists in future events."
+        "msg": "events.remarkable-treasure.stage-0.criticalFailure.msg"
       }
     }
   ]

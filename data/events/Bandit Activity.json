@@ -1,22 +1,24 @@
 {
   "id": "bandit-activity",
-  "name": "Bandit Activity",
+  "name": "events.bandit-activity.name",
   "traits": [
     "continuous",
     "dangerous"
   ],
   "modifier": 1,
-  "description": "Bandits have begun to prey upon your kingdom!",
-  "resolution": "You can end this continuous event with a critical success on the check. Alternately, if the PCs are eager to seek out the bandits, the GM could build a short side quest to play out their attempt to defeat them.",
+  "description": "events.bandit-activity.description",
+  "resolution": "events.bandit-activity.resolution",
   "resolvedOn": [
     "criticalSuccess"
   ],
   "stages": [
     {
       "leader": "warden",
-      "skills": ["defense"],
+      "skills": [
+        "defense"
+      ],
       "criticalSuccess": {
-        "msg": "The bandits are captured, run off, or defeated, and merchants can confidently ply their wares. @lose1d4Unrest, and during the next Kingdom turn, you gain a +1 circumstance bonus to Economy-based checks.",
+        "msg": "events.bandit-activity.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
             "name": "Bandit Activity: Critical Success",
@@ -37,13 +39,13 @@
         ]
       },
       "success": {
-        "msg": "The bandits are prevented from preying upon your people, but they continue to be active. @lose1ResourceDiceNextTurn"
+        "msg": "events.bandit-activity.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The bandits plunder caravans and remote storehouses, and merchants grow cautious and afraid. @gain1Unrest and @lose4ResourceDiceNextTurn"
+        "msg": "events.bandit-activity.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Bandits rampage the land, and even start to encroach into your settlements. @gain1d4Unrest, increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>, and at the start of your next Kingdom turn your Resource Dice are halved or @lose4ResourceDiceNextTurn, whichever results in a lower total."
+        "msg": "events.bandit-activity.stage-0.criticalFailure.msg"
       }
     }
   ]

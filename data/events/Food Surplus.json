@@ -1,23 +1,27 @@
 {
   "id": "food-surplus",
-  "name": "Food Surplus",
-  "traits": ["beneficial"],
-  "description": "Local crops thrive, hunters do very well, or livestock numbers are greater than expected. If this event occurs, it immediately ends any ongoing food shortage event.",
+  "name": "events.food-surplus.name",
+  "traits": [
+    "beneficial"
+  ],
+  "description": "events.food-surplus.description",
   "stages": [
     {
       "leader": "treasurer",
-      "skills": ["agriculture"],
+      "skills": [
+        "agriculture"
+      ],
       "criticalSuccess": {
-        "msg": "Your bumper crops include wild harvests that allow you to skip the entire Pay Consumption step of the Upkeep phase of your next Kingdom turn. @gain1d6Food"
+        "msg": "events.food-surplus.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "Your excess crops lead to increased supplies. @lose2ConsumptionNextTurn and @gain1d6Food"
+        "msg": "events.food-surplus.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The food surplus isn’t as huge as you’d expected. @lose1ConsumptionNextTurn"
+        "msg": "events.food-surplus.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "What you thought was an excess of food is infested with spoilage, ergot, or other contamination. @gain1Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.food-surplus.stage-0.criticalFailure.msg"
       }
     }
   ]

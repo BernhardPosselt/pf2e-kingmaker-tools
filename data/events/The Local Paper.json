@@ -1,23 +1,27 @@
 {
   "id": "the-local-paper",
-  "name": "The Local Paper",
-  "traits": ["beneficial"],
-  "description": "<p>This event takes place on the one Kingdom Turn after the turn during which the PCs build their first printing house. Access to the printing press allows for the production of an initially modest weekly flyer that gathers news and presents stories of interest. Over time, this flyer grows in size, potentially becoming something akin to a local newspaper, but only if your printing house can keep up with the demand.</p><p>While it doesn’t directly impact the effects of this event, you should encourage your players to come up with a fun name for their kingdom’s paper.</p>",
+  "name": "events.the-local-paper.name",
+  "traits": [
+    "beneficial"
+  ],
+  "description": "events.the-local-paper.description",
   "stages": [
     {
       "leader": "counselor",
-      "skills": ["industry"],
+      "skills": [
+        "industry"
+      ],
       "criticalSuccess": {
-        "msg": "You gain access to the Read All About It leadership activity. More importantly, your industrious editors prove to be more than up to the task of keeping the presses running, and the people of the kingdom take to the new paper with delight. @lose1d4Unrest, and @gain1FameNextTurn"
+        "msg": "events.the-local-paper.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "You gain access to the Read All About It leadership activity, and while your people enjoy the paper, it’s always a grind to hit your deadlines. @lose1Unrest"
+        "msg": "events.the-local-paper.stage-0.success.msg"
       },
       "failure": {
-        "msg": "You gain access to the Read All About It leadership activity, but the stress of hitting deadlines puts a strain on your editors. @gain1Unrest"
+        "msg": "events.the-local-paper.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "You fail to get the local paper off the ground, and your frustrated editors spread word of how you mismanaged the affair. @gain1d4Unrest and @gain1Strife"
+        "msg": "events.the-local-paper.stage-0.criticalFailure.msg"
       }
     }
   ]

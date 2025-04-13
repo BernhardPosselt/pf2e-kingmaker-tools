@@ -1,37 +1,54 @@
 {
   "id": "good-weather",
-  "name": "Good Weather",
-  "traits": ["beneficial", "fortune"],
+  "name": "events.good-weather.name",
+  "traits": [
+    "beneficial",
+    "fortune"
+  ],
   "modifier": 1,
-  "description": "Good weather raises spirits among citizens.",
+  "description": "events.good-weather.description",
   "stages": [
     {
       "leader": "magister",
-      "skills": ["wilderness"],
+      "skills": [
+        "wilderness"
+      ],
       "criticalSuccess": {
-        "msg": "The glorious climate puts everyone in an excellent mood. @lose1d6Unrest, and once during your next Kingdom turn when you attempt an Agriculture, Boating, Exploration, or Wilderness check, you can roll twice and take the better result.",
-        "modifiers": [{
-          "name": "Good Weather: Critical Success",
-          "buttonLabel": "Roll twice when attempting a Agriculture, Boating, Exploration, or Wilderness check",
-          "value": 0,
-          "enabled": false,
-          "type": "untyped",
-          "turns": 2,
-          "isConsumedAfterRoll": true,
-          "rollTwiceKeepHighest": true,
-          "applyIf": [{
-            "in": ["@skill", ["agriculture", "boating", "exploration", "wilderness"]]
-          }]
-        }]
+        "msg": "events.good-weather.stage-0.criticalSuccess.msg",
+        "modifiers": [
+          {
+            "name": "Good Weather: Critical Success",
+            "buttonLabel": "Roll twice when attempting a Agriculture, Boating, Exploration, or Wilderness check",
+            "value": 0,
+            "enabled": false,
+            "type": "untyped",
+            "turns": 2,
+            "isConsumedAfterRoll": true,
+            "rollTwiceKeepHighest": true,
+            "applyIf": [
+              {
+                "in": [
+                  "@skill",
+                  [
+                    "agriculture",
+                    "boating",
+                    "exploration",
+                    "wilderness"
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
       },
       "success": {
-        "msg": "Extended good weather makes life pleasant and easy. @lose1d4Unrest"
+        "msg": "events.good-weather.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Good weather produces a short but pleasant respite. @lose1Unrest"
+        "msg": "events.good-weather.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The good weather doesn’t last long enough to help."
+        "msg": "events.good-weather.stage-0.criticalFailure.msg"
       }
     }
   ]

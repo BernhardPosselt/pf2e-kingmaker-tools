@@ -5,5 +5,5 @@
 # translations
 * translate apps
 * translate templates
-* translate events
-* translate kingdom activities
+* translate event modifiers
+* translate kingdom activity modifiers

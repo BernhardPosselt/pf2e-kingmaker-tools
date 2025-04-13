@@ -1,24 +1,28 @@
 {
   "id": "natural-disaster",
-  "name": "Natural Disaster",
+  "name": "events.natural-disaster.name",
   "modifier": 2,
-  "traits": ["dangerous"],
-  "description": "A natural cataclysm such as a wildfire, devastating weather, earthquake, or flood (as determined by the GM) devastates your kingdom. While in a worst-case scenario the disaster’s immediate and most destructive effects affect a single settlement, many of its effects are larger in scope and can affect the entire kingdom.",
+  "traits": [
+    "dangerous"
+  ],
+  "description": "events.natural-disaster.description",
   "stages": [
     {
       "leader": "magister",
-      "skills": ["wilderness"],
+      "skills": [
+        "wilderness"
+      ],
       "criticalSuccess": {
-        "msg": "You prepared well for the disaster. While disruptive, the damage is minimized."
+        "msg": "events.natural-disaster.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "Your quick response keeps your people safe and allows you to recover quickly. During the next turn, @lose4ResourceDiceNextTurn"
+        "msg": "events.natural-disaster.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The disaster causes severe damage. Choose one claimed hex in which you have a Farmland or Work Site; that feature is destroyed. @gain1Decay and @gain1d6Unrest. @lose6ResourceDiceNextTurn"
+        "msg": "events.natural-disaster.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Multiple hexes are totally devastated. Choose [[/r 1d6]] claimed hexes in which you have Farmlands or Work Sites; those features are destroyed. @gainMultiple1Decay for each hex affected, and @gain2d6Unrest. In addition, one settlement of your choice is particularly hard hit; that settlement immediately suffers the effects of a Local Disaster. @lose8ResourceDiceNextTurn"
+        "msg": "events.natural-disaster.stage-0.criticalFailure.msg"
       }
     }
   ]

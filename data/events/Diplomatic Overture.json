@@ -1,35 +1,45 @@
 {
   "id": "diplomatic-overture",
-  "name": "Diplomatic Overture",
-  "traits": ["beneficial"],
-  "description": "Another nation or group sends an ambassador to your kingdom. The group sending the overture is randomly selected from the Negotiation DCs sidebar on page 519. If the kingdom has established diplomatic relations with that group, the event proceeds with the Statecraft check below. If the kingdom has not yet established diplomatic relations with the group, this event instead gives the kingdom the opportunity to immediately use the Send Diplomatic Envoy Leadership activity.",
+  "name": "events.diplomatic-overture.name",
+  "traits": [
+    "beneficial"
+  ],
+  "description": "events.diplomatic-overture.description",
   "stages": [
     {
       "leader": "emissary",
-      "skills": ["statecraft"],
+      "skills": [
+        "statecraft"
+      ],
       "criticalSuccess": {
-        "msg": "The diplomatic meeting is incredibly successful, and you can choose two of the following benefits: gain 5 Commodities of your choice <ul><li>@gain5Food</li><li>@gain5Ore</li><li>@gain5Lumber</li><li>@gain5Stone</li><li>@gain5Luxuries</li></ul>, @gain2ResourceDiceNextTurn, or automatically establish a trade agreement with the group."
+        "msg": "events.diplomatic-overture.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The diplomatic meeting is successful, and you can choose one of the following benefits: gain 5 Commodities of your choice <ul><li>@gain5Food</li><li>@gain5Ore</li><li>@gain5Lumber</li><li>@gain5Stone</li><li>@gain5Luxuries</li></ul>, @gain2ResourceDiceNextTurn, or automatically establish a trade agreement with the group."
+        "msg": "events.diplomatic-overture.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Your meeting is cordial but unproductive."
+        "msg": "events.diplomatic-overture.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Your diplomatic meeting goes poorly. Unless you bribe the group by either losing 5 Commodities of your choice <ul><li>@lose5Food</li><li>@lose5Ore</li><li>@lose5Lumber</li><li>@lose5Stone</li><li>@lose5Luxuries</li></ul> or @lose10ResourcePoints, they break off diplomatic relations with you. Reestablishing diplomatic relations can be attempted via future Send Diplomatic Envoy activities in the usual manner, but with a –2 circumstance penalty.",
-        "modifiers": [{
-          "name": "Diplomatic Overture: Critical Failure",
-          "buttonLabel": "-2 Circumstance to Send Diplomatic Envoy",
-          "enabled": false,
-          "value": -2,
-          "isConsumedAfterRoll": true,
-          "type": "circumstance",
-          "applyIf": [{
-            "eq": ["@activity", "send-diplomatic-envoy"]
+        "msg": "events.diplomatic-overture.stage-0.criticalFailure.msg",
+        "modifiers": [
+          {
+            "name": "Diplomatic Overture: Critical Failure",
+            "buttonLabel": "-2 Circumstance to Send Diplomatic Envoy",
+            "enabled": false,
+            "value": -2,
+            "isConsumedAfterRoll": true,
+            "type": "circumstance",
+            "applyIf": [
+              {
+                "eq": [
+                  "@activity",
+                  "send-diplomatic-envoy"
+                ]
+              }
+            ]
           }
-          ]
-        }]
+        ]
       }
     }
   ]

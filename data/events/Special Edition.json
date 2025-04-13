@@ -1,23 +1,27 @@
 {
   "id": "special-edition",
-  "name": "Special Edition",
-  "traits": ["beneficial"],
-  "description": "A famous writer approaches your printing house with an offer to produce a special, limited edition of one of their previously published works, or a brand new edition of a previously unpublished story. This event can occur multiple times at the GM’s discretion, but never more than twice a game year.",
+  "name": "events.special-edition.name",
+  "traits": [
+    "beneficial"
+  ],
+  "description": "events.special-edition.description",
   "stages": [
     {
       "leader": "counselor",
-      "skills": ["arts"],
+      "skills": [
+        "arts"
+      ],
       "criticalSuccess": {
-        "msg": "The special edition proves to be a rousing success! @gain2ResourceDiceNextTurn and @gain1d4LuxuriesNextTurn"
+        "msg": "events.special-edition.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The special edition is popular but takes a while to sell out. @gain1ResourceDiceNextTurn"
+        "msg": "events.special-edition.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The special edition fails to connect with any readers and provides no significant benefit to your nation as a result."
+        "msg": "events.special-edition.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The special edition is controversial in some way and incites anger in a key portion of your population. Increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.special-edition.stage-0.criticalFailure.msg"
       }
     }
   ]

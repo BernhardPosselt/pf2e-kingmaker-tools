@@ -1,38 +1,52 @@
 {
   "id": "sacrifices",
-  "name": "Sacrifices",
-  "traits": ["dangerous", "continuous", "hex"],
+  "name": "events.sacrifices.name",
+  "traits": [
+    "dangerous",
+    "continuous",
+    "hex"
+  ],
   "modifier": 2,
-  "location": "A claimed hex in the area of influence of a settlement secretly chosen by the GM",
-  "description": "A cabal of cultists begin snatching citizens and preparing them for sacrifice to their vile god. The cultists maintain a hidden base of operations somewhere near one of the kingdom’s settlements.",
-  "resolution": "A critical success ends this continuous event. The GM can instead build a short adventure for the PCs to track down and defeat the sinister cultists in encounter mode, provided the PCs know where to go to confront the cultists!",
-  "resolvedOn": ["criticalSuccess"],
+  "location": "events.sacrifices.location",
+  "description": "events.sacrifices.description",
+  "resolution": "events.sacrifices.resolution",
+  "resolvedOn": [
+    "criticalSuccess"
+  ],
   "stages": [
     {
       "leader": "emissary",
-      "skills": ["exploration"],
+      "skills": [
+        "exploration"
+      ],
       "criticalSuccess": {
-        "msg": "The cultists are defeated, and many of your captured citizens are rescued."
+        "msg": "events.sacrifices.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The cult continues to function, but you have managed to determine which hex their base of operations is located in. The DC to defeat the Sacrifices event is reduced by 4 in subsequent turns. @gain1Unrest",
-        "modifiers": [{
-          "name": "Sacrifices: Success",
-          "buttonLabel": "Reduce DC of Fighting Cult on Subsequent Turns",
-          "value": 4,
-          "type": "untyped",
-          "enabled": true,
-          "applyIf": [{
-            "eq": ["@event", "sacrifices"]
+        "msg": "events.sacrifices.stage-0.success.msg",
+        "modifiers": [
+          {
+            "name": "Sacrifices: Success",
+            "buttonLabel": "Reduce DC of Fighting Cult on Subsequent Turns",
+            "value": 4,
+            "type": "untyped",
+            "enabled": true,
+            "applyIf": [
+              {
+                "eq": [
+                  "@event",
+                  "sacrifices"
+                ]
+              }
+            ]
           }
-          ]
-        }]
+        ]
       },
       "failure": {
-        "msg": "The cultists prey on travelers, hunters, trappers, and anyone else who strays too far from civilization. @gain1d4Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.sacrifices.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "As failure, but the cultists start snatching victims from your settlements. If you’ve already determined where they’ve based their operations, they successfully relocate to a new secret hex as chosen by the GM, and the DC to defeat the cultists returns to normal. @gain1d6Unrest and increase two Ruins of your choice by 2 <ul><li>@gain2Crime</li><li>@gain2Corruption</li><li>@gain2Decay</li><li>@gain2Strife</li></ul>"
+        "msg": "events.sacrifices.stage-0.criticalFailure.msg"
       }
     }
   ]

@@ -1,22 +1,28 @@
 {
   "id": "trouble-with-a-weird-gnome",
-  "name": "Trouble with a Weird Gnome",
-  "traits": ["dangerous"],
-  "description": "Rumors of a weird gnome with bright orange hair and glowing eyes have spread through the kingdom.",
-  "stages": [{
-    "leader": "magister",
-    "skills": ["intrigue"],
-    "criticalSuccess": {
-      "msg": "Kingdom investigators and spellcasters confirm that the weird gnome is likely no gnome at all, but a mischievous trickster fey, potentially from the fey world. This knowledge allows your kingdom to both respond to the mischief more quickly and soothes the worries of the citizens. @lose1Unrest"
-    },
-    "success": {
-      "msg": "Kingdom investigators fail to track down the gnome, and while sightings eventually taper off, the damage is done and the citizens continue to worry. @gain1Unrest"
-    },
-    "failure": {
-      "msg": "No explanation for the weird gnome’s antics are ever arrived at, and in addition to making the citizens uneasy, some of the gnome’s pranks had lasting effects. @gain1Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
-    },
-    "criticalFailure": {
-      "msg": "No explanation for the weird gnome’s antics are ever arrived at, and in addition to making the citizens uneasy, some of the gnome’s pranks had lasting effects. @gain2Unrest and increase two Ruins of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+  "name": "events.trouble-with-a-weird-gnome.name",
+  "traits": [
+    "dangerous"
+  ],
+  "description": "events.trouble-with-a-weird-gnome.description",
+  "stages": [
+    {
+      "leader": "magister",
+      "skills": [
+        "intrigue"
+      ],
+      "criticalSuccess": {
+        "msg": "events.trouble-with-a-weird-gnome.stage-0.criticalSuccess.msg"
+      },
+      "success": {
+        "msg": "events.trouble-with-a-weird-gnome.stage-0.success.msg"
+      },
+      "failure": {
+        "msg": "events.trouble-with-a-weird-gnome.stage-0.failure.msg"
+      },
+      "criticalFailure": {
+        "msg": "events.trouble-with-a-weird-gnome.stage-0.criticalFailure.msg"
+      }
     }
-  }]
+  ]
 }

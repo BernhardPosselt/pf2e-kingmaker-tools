@@ -1,23 +1,27 @@
 {
   "id": "public-scandal",
-  "name": "Public Scandal",
-  "traits": ["dangerous"],
-  "description": "One of your NPC leaders is implicated in a crime or an embarrassing situation. If you have no NPC leaders, this event involves a PC leader only if the GM determines that the PC leader has been acting in a way that could cause a scandal; otherwise this event does not occur.",
+  "name": "events.public-scandal.name",
+  "traits": [
+    "dangerous"
+  ],
+  "description": "events.public-scandal.description",
   "stages": [
     {
       "leader": "counselor",
-      "skills": ["intrigue"],
+      "skills": [
+        "intrigue"
+      ],
       "criticalSuccess": {
-        "msg": "You quiet the scandal before it spawns more than rumors."
+        "msg": "events.public-scandal.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "Word gets out, but an apology and careful words manage to blunt the outrage. @gain1Unrest"
+        "msg": "events.public-scandal.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The people are very unhappy with their leader’s behavior. @gain1d4Unrest and @gain1Corruption"
+        "msg": "events.public-scandal.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The people are outraged by the scandal and demand the leader be replaced. @gain1d6Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul> Then immediately use the New Leadership kingdom activity to attempt to replace the leader. If you fail, this event occurs again with the same leadership role on the kingdom’s next Event phase. If the leader involved in the scandal takes any leadership role during the next [[/r 1d4]] Kingdom turns, this event occurs again with that character at the focus of the scandal."
+        "msg": "events.public-scandal.stage-0.criticalFailure.msg"
       }
     }
   ]

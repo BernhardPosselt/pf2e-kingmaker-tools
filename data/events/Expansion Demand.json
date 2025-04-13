@@ -1,11 +1,11 @@
 {
   "id": "expansion-demand",
-  "name": "Expansion Demand",
+  "name": "events.expansion-demand.name",
   "traits": [
     "continuous",
     "dangerous"
   ],
-  "description": "The citizens of your kingdom want expansion! If you successfully Claimed a Hex this turn, the result of your check for this event is improved one degree.",
+  "description": "events.expansion-demand.description",
   "modifiers": [
     {
       "name": "Claimed Hex this Turn",
@@ -33,16 +33,16 @@
         "exploration"
       ],
       "criticalSuccess": {
-        "msg": "Your citizens are pleased with the growth of the kingdom."
+        "msg": "events.expansion-demand.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "You satisfy the citizens’ demands for growth, but if you don’t successfully Claim a Hex during your next Kingdom turn, @gain1Unrest"
+        "msg": "events.expansion-demand.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Your citizens remain unhappy with your kingdom’s growth. @gain1Unrest. If you don’t successfully Claim a hex during your next Kingdom turn, @gain1Unrest again."
+        "msg": "events.expansion-demand.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Your citizens remain unhappy with your kingdom’s growth. @gain2Unrest. If you don’t successfully Claim a hex during your next Kingdom turn, @gain2Unrest again."
+        "msg": "events.expansion-demand.stage-0.criticalFailure.msg"
       }
     }
   ],
@@ -50,5 +50,5 @@
     "criticalSuccess",
     "success"
   ],
-  "resolution": "Achieve either a success or critical success at this event."
+  "resolution": "events.expansion-demand.resolution"
 }

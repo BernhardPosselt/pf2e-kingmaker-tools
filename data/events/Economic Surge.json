@@ -1,27 +1,34 @@
 {
   "id": "economic-surge",
-  "name": "Economic Surge",
+  "name": "events.economic-surge.name",
   "modifier": 2,
-  "traits": ["beneficial", "continuous"],
-  "description": "Trade and productivity have been booming throughout your kingdom.",
+  "traits": [
+    "beneficial",
+    "continuous"
+  ],
+  "description": "events.economic-surge.description",
   "stages": [
     {
       "leader": "treasurer",
-      "skills": ["trade"],
+      "skills": [
+        "trade"
+      ],
       "criticalSuccess": {
-        "msg": "A trade bonanza brings unexpected profits. @gain2ResourceDiceNextTurn"
+        "msg": "events.economic-surge.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "As critical success but you gain only @gain1ResourceDiceNextTurn"
+        "msg": "events.economic-surge.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The economic surge slows for a bit; if you failed at this check on your previous Kingdom turn, the Economic Surge event ends."
+        "msg": "events.economic-surge.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The economic surge comes to an end."
+        "msg": "events.economic-surge.stage-0.criticalFailure.msg"
       }
     }
   ],
-  "resolvedOn": ["criticalFailure"],
-  "resolution": "This continuous event ends following either a critical failure or two consecutive failures on the check."
+  "resolvedOn": [
+    "criticalFailure"
+  ],
+  "resolution": "events.economic-surge.resolution"
 }

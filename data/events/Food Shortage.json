@@ -1,24 +1,28 @@
 {
   "id": "food-shortage",
-  "name": "Food Shortage",
+  "name": "events.food-shortage.name",
   "modifier": 1,
-  "traits": ["dangerous"],
-  "description": "Spoilage, treachery, or bad luck has caused a food shortage this turn.",
+  "traits": [
+    "dangerous"
+  ],
+  "description": "events.food-shortage.description",
   "stages": [
     {
       "leader": "treasurer",
-      "skills": ["agriculture"],
+      "skills": [
+        "agriculture"
+      ],
       "criticalSuccess": {
-        "msg": "Through careful rationing, you manage to get through the shortage without harm."
+        "msg": "events.food-shortage.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "Your shortages are manageable, with some workers going hungry. @gain1ConsumptionNextTurn Attempt a @Check[type:flat|dc:6]. On a failure, this event reoccurs next turn (in addition to any other event that would occur)."
+        "msg": "events.food-shortage.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The shortages are severe. @gainMultiple1ConsumptionNextTurn per Settlement. Attempt a @Check[type:flat|dc:16]. On a failure, this event reoccurs next turn (in addition to any other event that would occur)."
+        "msg": "events.food-shortage.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The shortages are catastrophic. @gain2Unrest and @gain1Strife, and your @gainMultiple1ConsumptionNextTurn per Settlement. This event reoccurs next turn (in addition to any other event that would occur)."
+        "msg": "events.food-shortage.stage-0.criticalFailure.msg"
       }
     }
   ]

@@ -1,52 +1,80 @@
 {
   "id": "natures-blessing",
-  "name": "Nature's Blessing",
-  "traits": ["beneficial"],
-  "description": "A natural event, such as a bloom of rare wildflowers in a previously empty field, a glorious omen in the night sky like the northern lights, or the return to prominence of a previously rare type of wildlife raises your kingdom’s morale and inspires its creators.",
+  "name": "events.natures-blessing.name",
+  "traits": [
+    "beneficial"
+  ],
+  "description": "events.natures-blessing.description",
   "stages": [
     {
       "leader": "magister",
-      "skills": ["arts"],
+      "skills": [
+        "arts"
+      ],
       "criticalSuccess": {
-        "msg": "The glow of the blessing brings lasting delight. During your next turn, the results of checks to Craft Luxuries or Create a Masterpiece are improved one degree. @lose1d6Unrest",
-        "modifiers": [{
-          "type": "untyped",
-          "name": "Nature's Blessing: Critical Success",
-          "buttonLabel": "Increase Results of Craft Luxuries and Create a Masterpiece by One Degree",
-          "value": 0,
-          "turns": 2,
-          "enabled": true,
-          "applyIf": [{
-            "in": ["@activity", ["create-a-masterpiece", "craft-luxuries"]]
-          }],
-          "upgradeResults": [{
-            "upgrade": "success"
-          }, {
-            "upgrade": "failure"
-          }, {
-            "upgrade": "criticalFailure"
-          }]
-        }]
+        "msg": "events.natures-blessing.stage-0.criticalSuccess.msg",
+        "modifiers": [
+          {
+            "type": "untyped",
+            "name": "Nature's Blessing: Critical Success",
+            "buttonLabel": "Increase Results of Craft Luxuries and Create a Masterpiece by One Degree",
+            "value": 0,
+            "turns": 2,
+            "enabled": true,
+            "applyIf": [
+              {
+                "in": [
+                  "@activity",
+                  [
+                    "create-a-masterpiece",
+                    "craft-luxuries"
+                  ]
+                ]
+              }
+            ],
+            "upgradeResults": [
+              {
+                "upgrade": "success"
+              },
+              {
+                "upgrade": "failure"
+              },
+              {
+                "upgrade": "criticalFailure"
+              }
+            ]
+          }
+        ]
       },
       "success": {
-        "msg": "Your blessing touches the hearts of all. You gain a +1 status bonus to Culture- and Stability-based checks on your next Kingdom turn.",
-        "modifiers": [{
-          "name": "Nature's Blessing: Success",
-          "buttonLabel": "+1 Status to Culture and Stability",
-          "enabled": true,
-          "value": 1,
-          "turns": 2,
-          "type": "status",
-          "applyIf": [{
-            "in": ["@ability", ["culture", "stability"]]
-          }]
-        }]
+        "msg": "events.natures-blessing.stage-0.success.msg",
+        "modifiers": [
+          {
+            "name": "Nature's Blessing: Success",
+            "buttonLabel": "+1 Status to Culture and Stability",
+            "enabled": true,
+            "value": 1,
+            "turns": 2,
+            "type": "status",
+            "applyIf": [
+              {
+                "in": [
+                  "@ability",
+                  [
+                    "culture",
+                    "stability"
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
       },
       "failure": {
-        "msg": "The blessing inspires some of your people but not all of them."
+        "msg": "events.natures-blessing.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Arguments over the meaning of the blessing taint people’s goodwill. @gain1Unrest"
+        "msg": "events.natures-blessing.stage-0.criticalFailure.msg"
       }
     }
   ]

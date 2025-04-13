@@ -1,36 +1,48 @@
 {
   "id": "visiting-celebrity",
-  "name": "Visiting Celebrity",
-  "traits": ["beneficial", "settlement"],
+  "name": "events.visiting-celebrity.name",
+  "traits": [
+    "beneficial",
+    "settlement"
+  ],
   "modifier": 1,
-  "location": "A randomly determined settlement",
-  "description": "A celebrity from another nation or even a distant land visits one of your settlements, causing a sudden influx of notoriety, visitors, and lavish spending. The GM determines the nature of the visiting celebrity.",
+  "location": "events.visiting-celebrity.location",
+  "description": "events.visiting-celebrity.description",
   "stages": [
     {
       "leader": "emissary",
-      "skills": ["arts"],
+      "skills": [
+        "arts"
+      ],
       "criticalSuccess": {
-        "msg": "The visit is a rousing success. Not only are your citizens delighted by the visitor, but the visitor is quite taken with your kingdom and leaves you with a parting gift. Choose two of the following: @gain4ResourceDiceNextTurn, @gain1d6Luxuries, or @lose1d6Unrest"
+        "msg": "events.visiting-celebrity.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The visit is a success. Not only are your citizens delighted by the visitor, but the visitor is quite taken with your kingdom and leaves you with a parting gift. Choose one of the following: @gain4ResourceDiceNextTurn, @gain1d6Luxuries, or @lose1d6Unrest"
+        "msg": "events.visiting-celebrity.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The visitor has an agreeable if pedestrian visit. @lose1Unrest"
+        "msg": "events.visiting-celebrity.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The visitor leaves unimpressed and spreads reports of their unpleasant visit abroad. @gain1d4Unrest. The next time your kingdom has a Visiting Celebrity, increase that event’s level modifier by 2.",
-        "modifiers": [{
-          "name": "Visiting Celebrity: Critical Failure",
-          "buttonLabel": "Next Time Encountering Event, Increase Modifier by 2",
-          "isConsumedAfterRoll": true,
-          "enabled": true,
-          "value": -2,
-          "type": "untyped",
-          "applyIf": [{
-            "eq": ["@event", "visiting-celebrity"]
-          }]
-        }]
+        "msg": "events.visiting-celebrity.stage-0.criticalFailure.msg",
+        "modifiers": [
+          {
+            "name": "Visiting Celebrity: Critical Failure",
+            "buttonLabel": "Next Time Encountering Event, Increase Modifier by 2",
+            "isConsumedAfterRoll": true,
+            "enabled": true,
+            "value": -2,
+            "type": "untyped",
+            "applyIf": [
+              {
+                "eq": [
+                  "@event",
+                  "visiting-celebrity"
+                ]
+              }
+            ]
+          }
+        ]
       }
     }
   ]

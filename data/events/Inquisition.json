@@ -1,35 +1,43 @@
 {
   "id": "inquisition",
-  "name": "Inquisition",
-  "traits": ["continuous", "dangerous"],
+  "name": "events.inquisition.name",
+  "traits": [
+    "continuous",
+    "dangerous"
+  ],
   "modifier": 1,
-  "description": "Demagogues and zealots mobilize public opinion against a particular ancestry, religion, kingdom, behavior, or leader. This particular inquisition’s dogma and beliefs are driven by a combination of fear, hatred, and ignorance, yet its members are nevertheless compelling and charismatic.",
-  "modifiers": [{
-    "value": -2,
-    "type": "untyped",
-    "name": "Pacify Inquisitors",
-    "buttonLabel": "Pacify Inquisitors",
-    "enabled": false
-  }
+  "description": "events.inquisition.description",
+  "modifiers": [
+    {
+      "value": -2,
+      "type": "untyped",
+      "name": "Pacify Inquisitors",
+      "buttonLabel": "Pacify Inquisitors",
+      "enabled": false
+    }
   ],
   "stages": [
     {
       "leader": "magister",
-      "skills": ["folklore"],
+      "skills": [
+        "folklore"
+      ],
       "criticalSuccess": {
-        "msg": "Choose to either pacify or defeat the inquisitors. If you pacify them, the inquisition event ends but the inquisitors remain active—if this event occurs again, they are even more headstrong; increase the event’s level modifier by 2. If you defeat them, the inquisition ends but the violence of the event increases a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.inquisition.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "You protect the targeted victims of the inquisition, though the inquisition’s ideas continue to spread. @gain1Unrest"
+        "msg": "events.inquisition.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The inquisitors strike out in force. @gain1d4Unrest and increase two Ruins of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.inquisition.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The inquisitors strike out in force. @gain1d4Unrest and increase two Ruins of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul> In addition, the Inquisition targets a specific structure in one of your settlements (the GM selects a structure appropriate to the inquisition’s nature of intolerance or hatred). Attempt a basic Defense check. If you fail, that structure is reduced to Rubble and @gain1Decay"
+        "msg": "events.inquisition.stage-0.criticalFailure.msg"
       }
     }
   ],
-  "resolvedOn": ["criticalSuccess"],
-  "resolution": "This event continues until you achieve a critical success at resolving the event. Alternately, the inquisition can be ended by having the PCs go on a short quest to infiltrate the inquisition’s headquarters to confront and defeat its leaders."
+  "resolvedOn": [
+    "criticalSuccess"
+  ],
+  "resolution": "events.inquisition.resolution"
 }

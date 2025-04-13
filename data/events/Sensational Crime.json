@@ -1,28 +1,36 @@
 {
   "id": "sensational-crime",
-  "name": "Sensational Crime",
+  "name": "events.sensational-crime.name",
   "modifier": 1,
-  "traits": ["continuous", "dangerous", "settlement"],
-  "location": "A randomly determined settlement in the kingdom",
-  "description": "A notorious serial killer, deadly arsonist, flamboyant jewel thief, or otherwise sensational criminal plagues your kingdom.",
+  "traits": [
+    "continuous",
+    "dangerous",
+    "settlement"
+  ],
+  "location": "events.sensational-crime.location",
+  "description": "events.sensational-crime.description",
   "stages": [
     {
       "leader": "warden",
-      "skills": ["intrigue"],
+      "skills": [
+        "intrigue"
+      ],
       "criticalSuccess": {
-        "msg": "The criminal has been caught and the one-person crime wave ends. @lose2Crime, and reduce one Ruin of your choice by 2 <ul><li>@lose2Corruption</li><li>@lose2Decay</li><li>@lose2Strife</li></ul>In addition, if you achieve this level of success on the turn this event begins, the criminal was caught in the act of perpetrating their first crime but prevented from completing it; in this case, you discourage future criminals — @lose1Crime."
+        "msg": "events.sensational-crime.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "You foil the criminal’s current plans and perhaps arrest some accomplices, but the mastermind gets away to plot future crimes. @gain1Unrest"
+        "msg": "events.sensational-crime.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The criminal succeeds in their crime and escapes justice. @gain1d4Unrest and @gain1Crime."
+        "msg": "events.sensational-crime.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The criminal succeeds in their crime and escapes justice. In addition, the criminal also makes fools out of law enforcement, frames an innocent for the crime, or taunts the authorities for their failure. @gain1d6Unrest, @gain2Crime, and increase a Ruin of your choice by 2 <ul><li>@gain2Corruption</li><li>@gain2Decay</li><li>@gain2Strife</li></ul>"
+        "msg": "events.sensational-crime.stage-0.criticalFailure.msg"
       }
     }
   ],
-  "resolvedOn": ["criticalSuccess"],
-  "resolution": "This continuous event ends when you achieve a critical success on the check. Alternately, the GM could create a short adventure to allow the PCs to step in, track down, and confront the criminal to end the event."
+  "resolvedOn": [
+    "criticalSuccess"
+  ],
+  "resolution": "events.sensational-crime.resolution"
 }

@@ -1,23 +1,27 @@
 {
   "id": "justice-prevails",
-  "name": "Justice Prevails",
-  "traits": ["beneficial"],
-  "description": "The authorities catch a notorious criminal, exonerate a wrongfully accused innocent, shut down a major criminal operation, or thwart a plot against a settlement. Whatever the case, some injustice that has long vexed your citizens has finally been resolved.",
+  "name": "events.justice-prevails.name",
+  "traits": [
+    "beneficial"
+  ],
+  "description": "events.justice-prevails.description",
   "stages": [
     {
       "leader": "warden",
-      "skills": ["statecraft"],
+      "skills": [
+        "statecraft"
+      ],
       "criticalSuccess": {
-        "msg": "The triumph of law and justice invites celebration. @lose1d6Unrest and reduce all Ruins by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul> Alternately, if you’re suffering from a continuous Bandit Activity, Cult Activity, Drug Den, Inquisition, Sacrifices, Sensational Crime, Squatters, or Vandals event, you can instead cause that event to end."
+        "msg": "events.justice-prevails.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "A celebration of the common good delights the locals. @lose1d4Unrest or reduce two Ruins of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
+        "msg": "events.justice-prevails.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Justice is done, but at a cost of bad publicity. If you don’t Quell Unrest at least once during the next Kingdom turn, @gain1d4Unrest at the end of the next turn."
+        "msg": "events.justice-prevails.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The victory is undercut by backdoor deals that let the guilty escape justice or reveal unpleasant secrets. @gain1d4Unrest, @gain2Crime, and increase another Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.justice-prevails.stage-0.criticalFailure.msg"
       }
     }
   ]

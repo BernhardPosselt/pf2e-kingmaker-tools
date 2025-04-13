@@ -1,27 +1,36 @@
 {
   "id": "vandals",
-  "name": "Vandals",
+  "name": "events.vandals.name",
   "modifier": 1,
-  "traits": ["continuous", "dangerous", "settlement"],
-  "resolvedOn": ["criticalSuccess", "success"],
-  "resolution": "This event ends when you succeed at the check.",
-  "location": "A randomly determined settlement",
-  "description": "Vandals, troublemakers, and dissidents destroy property in your settlement",
+  "traits": [
+    "continuous",
+    "dangerous",
+    "settlement"
+  ],
+  "resolvedOn": [
+    "criticalSuccess",
+    "success"
+  ],
+  "resolution": "events.vandals.resolution",
+  "location": "events.vandals.location",
+  "description": "events.vandals.description",
   "stages": [
     {
       "leader": "warden",
-      "skills": ["industry"],
+      "skills": [
+        "industry"
+      ],
       "criticalSuccess": {
-        "msg": "You root out the vandals and stop them from causing any damage."
+        "msg": "events.vandals.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The vandals are caught in the act of damaging an area in your settlement. The event ends, but @lose2ResourceDiceNextTurn"
+        "msg": "events.vandals.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The vandals damage and deface several minor structures in the settlement and remain uncaught for now. Fortunately, the damage done can be easily repaired, but @lose4ResourceDiceNextTurn"
+        "msg": "events.vandals.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The vandals also manage to reduce one structure (chosen by the players) to rubble. @gain1d4Unrest and @lose4ResourceDiceNextTurn"
+        "msg": "events.vandals.stage-0.criticalFailure.msg"
       }
     }
   ]

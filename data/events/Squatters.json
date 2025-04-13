@@ -1,15 +1,15 @@
 {
   "id": "squatters",
-  "name": "Squatters",
+  "name": "events.squatters.name",
   "modifier": -1,
   "traits": [
     "continuous",
     "dangerous",
     "settlement"
   ],
-  "location": "The settlement with the highest Consumption in the kingdom or the largest settlement in the kingdom (as chosen by the GM)",
-  "description": "An empty lot in your settlement is taken over by desperate people unable to find adequate work or housing. They set up camp with tents, wagons, and shanties. You cannot use the lot for anything until the squatters are given places to live.",
-  "automationNotes": "Consumption increase per settlement on a Critical Failure is not implemented",
+  "location": "events.squatters.location",
+  "description": "events.squatters.description",
+  "automationNotes": "events.squatters.automationNotes",
   "stages": [
     {
       "leader": "viceroy",
@@ -17,16 +17,16 @@
         "politics"
       ],
       "criticalSuccess": {
-        "msg": "You find opportunities for the squatters to improve their lot in life."
+        "msg": "events.squatters.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The squatters are removed from their lot, and they try to relocate and reintegrate with other citizens, but there is some strife. @gain1Unrest"
+        "msg": "events.squatters.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. @gain1d4Unrest"
+        "msg": "events.squatters.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. @gain1d4Unrest. In addition, on your next Kingdom turn attempt a @Check[type:flat|dc:6]; on failure, the squatters spread to the nearest empty lot in the settlement, creating a separate continuous Squatters event starting with your next Kingdom turn. In addition, the squatters increase the settlement’s Consumption by 1 each month until the event is resolved. @gain1ConsumptionNextTurn"
+        "msg": "events.squatters.stage-0.criticalFailure.msg"
       }
     }
   ],
@@ -47,8 +47,8 @@
       ]
     }
   ],
-  "special": "If the settlement has a Sewer System, most of the squatters opt to live there instead; gain a +2 item bonus to checks to resolve this event.",
-  "resolution": "This continuous event ends when you achieve a critical success on the check or when you build a Residential structure in the lot the Squatters have chosen to live in.",
+  "special": "events.squatters.special",
+  "resolution": "events.squatters.resolution",
   "resolvedOn": [
     "criticalSuccess"
   ]

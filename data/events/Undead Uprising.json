@@ -1,24 +1,30 @@
 {
   "id": "undead-uprising",
-  "name": "Undead Uprising",
-  "traits": ["continuous", "dangerous", "settlement"],
-  "location": "The settlement with the most cemeteries or (if no settlements have cemeteries) the largest settlement",
-  "description": "A malign force, be it a sinister curse, a nefarious necromancer, or an invasion of ghouls, vampires, or other undead-creating monsters, causes the dead to rise from their graves and threaten the settlement.",
+  "name": "events.undead-uprising.name",
+  "traits": [
+    "continuous",
+    "dangerous",
+    "settlement"
+  ],
+  "location": "events.undead-uprising.location",
+  "description": "events.undead-uprising.description",
   "stages": [
     {
       "leader": "magister",
-      "skills": ["folklore"],
+      "skills": [
+        "folklore"
+      ],
       "criticalSuccess": {
-        "msg": "The undead are defeated."
+        "msg": "events.undead-uprising.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The undead are temporarily contained with little physical damage to your settlement, but the populace still grow fearful each night. @gain1Unrest"
+        "msg": "events.undead-uprising.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The undead prey upon your citizens! @gain1d4Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.undead-uprising.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The undead gain the advantage and bring disaster. @gain2d4Unrest, increase all Ruins by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>and one non-cemetery lot in your settlement (chosen by the players) is reduced to rubble."
+        "msg": "events.undead-uprising.stage-0.criticalFailure.msg"
       }
     }
   ]

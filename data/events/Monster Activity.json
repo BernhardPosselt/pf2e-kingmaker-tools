@@ -1,27 +1,35 @@
 {
   "id": "monster-activity",
-  "name": "Monster Activity",
-  "traits": ["dangerous", "continuous", "hex"],
-  "location": "A claimed hex chosen by the GM that isn’t in the influence of a settlement",
-  "description": "A monster, or even an entire group of monsters attacks the kingdom! Determine the encounter by rolling on the random encounter table for the current Zone that is the same level as the kingdom’s level. If the kingdom is 20th level, roll on the highest region and apply the elite adjustments (Pathfinder Bestiary 6) to the creatures.",
+  "name": "events.monster-activity.name",
+  "traits": [
+    "dangerous",
+    "continuous",
+    "hex"
+  ],
+  "location": "events.monster-activity.location",
+  "description": "events.monster-activity.description",
   "stages": [
     {
       "leader": "ruler",
-      "skills": ["defense"],
+      "skills": [
+        "defense"
+      ],
       "criticalSuccess": {
-        "msg": "The monsters are slain or driven off without harm to your kingdom. Even better, an unexpected claim of treasure gained from the monster lair causes you to @gain1d4Luxuries and @gain2ResourceDiceNextTurn"
+        "msg": "events.monster-activity.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The monsters attack some of your citizens but are driven off before they do too much damage. The threat persists, and while fear continues to slowly spread, your kingdom suffers no physical damage at this time. @gain1Unrest"
+        "msg": "events.monster-activity.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The monsters’ rampage terrorizes the countryside and results in frightening rumors even in the heart of the kingdom’s safest cities. The closest Farmland or Work Site to the monster’s hex is destroyed. @gain1d4Unrest and @gain1Decay"
+        "msg": "events.monster-activity.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "<p>The monsters’ rampage terrorizes the countryside and results in frightening rumors even in the heart of the kingdom’s safest cities. The closest Farmland or Work Site to the monster’s hex is destroyed. @gain1d4Unrest and @gain1Decay. In addition, the monsters’ assaults spread into the settlement closest to the monster’s hex, spreading the danger they represent more and more through your kingdom.</p><p>If any of your settlement’s borders aren’t protected by water or a wall, or if the monster can fly or swim (as appropriate) across any of your protective borders, the monster enters the settlement and one structure chosen by the players is reduced to rubble. @gain1d4Unrest and @gain2Decay</p><p>Otherwise, the monsters’ ability to harm the settlement is hampered by your defenses. @gain1Unrest and one of the settlement’s walls is destroyed; uncheck it on your Urban Grid.</p>"
+        "msg": "events.monster-activity.stage-0.criticalFailure.msg"
       }
     }
   ],
-  "resolvedOn": ["criticalSuccess"],
-  "resolution": "This event continues until you achieve a critical success on the check or until the PCs step in to track down and defeat the monster(s) themselves."
+  "resolvedOn": [
+    "criticalSuccess"
+  ],
+  "resolution": "events.monster-activity.resolution"
 }

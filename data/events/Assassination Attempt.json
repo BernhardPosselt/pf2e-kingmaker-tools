@@ -1,36 +1,46 @@
 {
-  "id":"assassination-attempt",
-  "name": "Assassination Attempt",
-  "traits": ["dangerous"],
+  "id": "assassination-attempt",
+  "name": "events.assassination-attempt.name",
+  "traits": [
+    "dangerous"
+  ],
   "modifier": 1,
-  "description": "One of your leaders or prominent citizens is targeted by assassins. The GM determines who hired these assassins, then attempts a @Check[type:flat|dc:11]. On a success, the target is an NPC assigned to a leadership role. On a failure (or if the PCs have no NPC leaders), the target is a notable NPC in the kingdom, preferably one with whom the PCs have established a friendly relationship.",
-  "special": "If this event occurs while the kingdom is at war, increase the event's level modifier to +3.",
-  "modifiers": [{
-    "type": "untyped",
-    "value": -3,
-    "name": "Assassination during War",
-    "buttonLabel": "Assassination during War",
-    "applyIf": [{
-      "eq": ["@atWar", true]
-    }],
-    "enabled": true
-  }
+  "description": "events.assassination-attempt.description",
+  "special": "events.assassination-attempt.special",
+  "modifiers": [
+    {
+      "type": "untyped",
+      "value": -3,
+      "name": "Assassination during War",
+      "buttonLabel": "Assassination during War",
+      "applyIf": [
+        {
+          "eq": [
+            "@atWar",
+            true
+          ]
+        }
+      ],
+      "enabled": true
+    }
   ],
   "stages": [
     {
       "leader": "warden",
-      "skills": ["intrigue"],
+      "skills": [
+        "intrigue"
+      ],
       "criticalSuccess": {
-        "msg": "The assassins are caught, driven off, or otherwise thwarted without ever endangering their targets. The targeted NPC may not even realize they were in danger, but criminal elements in your nation take notice. @lose1d4Unrest and reduce one Ruin of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
+        "msg": "events.assassination-attempt.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The assassins reach their target but are driven off or defeated before the NPC is harmed."
+        "msg": "events.assassination-attempt.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The assassins reach their target and manage to harm but not kill the target before they are driven off or defeated. @gain1d4Unrest, and if the NPC was a leader, they are removed from that leadership role until the end of the next Kingdom turn."
+        "msg": "events.assassination-attempt.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The assassins slay the NPC and escape. If the NPC was a leader, that leadership role is now vacant. @gain2d4Unrest and @gain1d4Decay."
+        "msg": "events.assassination-attempt.stage-0.criticalFailure.msg"
       }
     }
   ]

@@ -1,13 +1,13 @@
 {
   "id": "the-rampage-of-the-owlbear",
-  "name": "The Rampage of the Owlbear",
+  "name": "events.the-rampage-of-the-owlbear.name",
   "modifier": 4,
   "traits": [
     "dangerous",
     "settlement"
   ],
-  "location": "A settlement of the GM’s choice (preferably the PCs’ capital city)",
-  "description": "The city was attacked by a terrifying owlbear of immense size that crashed into the town and potentially killed dozens before it had its fill of destruction and lumbered off into the hills. If the settlement has only Water borders, then the owlbear has a more difficult time reaching the settlement; increase the rolled result by one degree of success)",
+  "location": "events.the-rampage-of-the-owlbear.location",
+  "description": "events.the-rampage-of-the-owlbear.description",
   "modifiers": [
     {
       "name": "Settlement has only Water Borders",
@@ -43,18 +43,18 @@
         "defense"
       ],
       "criticalSuccess": {
-        "msg": "The enormous owlbear inflicted only relatively minor damage, and while it wounded dozens, miraculously no one was killed. @gain1Unrest."
+        "msg": "events.the-rampage-of-the-owlbear.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The owlbear managed to destroy a portion of the city, killed a few citizens, and wounded dozens. @gain1d4Unrest and @gain1Decay. Choose one Walled border or one lot with a structure in it; that structure or improvement is destroyed."
+        "msg": "events.the-rampage-of-the-owlbear.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The owlbear rampaged through the settlement, killing dozens and laying waste to structures. @gain1d6Unrest and @gain1d4Decay. Choose one Walled border and two lots with structures in it; those structures and improvements are destroyed."
+        "msg": "events.the-rampage-of-the-owlbear.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The owlbear rampaged through the settlement, killing dozens and laying waste to structures. @gain2d4Unrest and @gain1d6Decay. Choose one Walled border and four lots with structures in it; those structures or improvements are destroyed."
+        "msg": "events.the-rampage-of-the-owlbear.stage-0.criticalFailure.msg"
       }
     }
   ],
-  "resolution": "If the PCs don’t defeat the owlbear by the next Kingdom turn, it becomes a Monster Activity event."
+  "resolution": "events.the-rampage-of-the-owlbear.resolution"
 }

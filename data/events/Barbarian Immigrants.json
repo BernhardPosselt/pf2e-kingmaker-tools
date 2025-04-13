@@ -1,7 +1,7 @@
 {
   "id": "barbarian-immigrants",
-  "name": "Barbarian Immigrants",
-  "description": "Once the PCs defeat the barbarian chieftain, the barbarians scatter back into the surrounding wilderness, but some of them are drawn by your barbarian companion's reputation and look to join the PCs’ kingdom. This event occurs during the first Kingdom turn after the barbarian chieftain’s defeat.",
+  "name": "events.barbarian-immigrants.name",
+  "description": "events.barbarian-immigrants.description",
   "modifier": 2,
   "traits": [
     "beneficial"
@@ -13,7 +13,7 @@
         "statecraft"
       ],
       "criticalSuccess": {
-        "msg": "A large number of barbarians are welcomed into several settlements. Their presence helps to bolster a sense of security @lose1d6Unrest, and also helps to curtail bandit and monster activity. From this point on, kingdom checks made to resolve the following random events gain a +2 circumstance bonus: Bandit Activity, Monster Activity, and Undead Uprising.",
+        "msg": "events.barbarian-immigrants.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
             "name": "Barbarian Immigrants: Critical Success",
@@ -37,7 +37,7 @@
         ]
       },
       "success": {
-        "msg": "A large number of barbarians are welcomed into several settlements. Their presence helps to bolster a sense of security @lose1d4Unrest, and also helps to curtail bandit and monster activity. From this point on, kingdom checks made to resolve the following random events gain a +1 circumstance bonus: Bandit Activity, Monster Activity, and Undead Uprising.",
+        "msg": "events.barbarian-immigrants.stage-0.success.msg",
         "modifiers": [
           {
             "name": "Barbarian Immigrants: Critical Success",
@@ -61,10 +61,10 @@
         ]
       },
       "failure": {
-        "msg": "The integration of the barbarians into the kingdom is a bit rougher than expected and doesn’t provide additional defense against events. @lose1Unrest"
+        "msg": "events.barbarian-immigrants.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The barbarians and citizens clash violently. @gain1d4Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul> The barbarians then scatter back into the wilderness."
+        "msg": "events.barbarian-immigrants.stage-0.criticalFailure.msg"
       }
     }
   ]

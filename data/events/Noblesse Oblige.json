@@ -1,24 +1,29 @@
 {
   "id": "noblesse-oblige",
-  "name": "Noblesse Oblige",
-  "traits": ["beneficial", "settlement"],
-  "location": "A settlement that includes at least one mansion or noble villa. If there are no settlements in the kingdom with these structures, this event doesn’t occur.",
-  "description": "A noble family or wealthy benefactor offers to build an improvement to beautify the settlement.",
+  "name": "events.noblesse-oblige.name",
+  "traits": [
+    "beneficial",
+    "settlement"
+  ],
+  "location": "events.noblesse-oblige.location",
+  "description": "events.noblesse-oblige.description",
   "stages": [
     {
       "leader": "viceroy",
-      "skills": ["arts"],
+      "skills": [
+        "arts"
+      ],
       "criticalSuccess": {
-        "msg": "The nobles build a monument and a park in lots of the players’ choice at no expense to the kingdom (the Build Structure activity is not required)."
+        "msg": "events.noblesse-oblige.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The nobles pay the RP and Commodity cost of either a monument or a park, provided the party uses the Civic activity granted by this settlement in the next Kingdom turn to Build the Structure. The Build Structure check automatically succeeds."
+        "msg": "events.noblesse-oblige.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Although the nobles had good intentions, bickering among individual aristocrats ultimately prevents the project from ever taking place."
+        "msg": "events.noblesse-oblige.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Although the nobles had good intentions, bickering among individual aristocrats ultimately prevents the project from ever taking place. In addition, the bickering persists. @gain1Unrest and attempt a @Check[type:flat|dc:11] On a failure, your kingdom suffers a Feud event on the next turn’s Event phase (in addition to any other event)."
+        "msg": "events.noblesse-oblige.stage-0.criticalFailure.msg"
       }
     }
   ]

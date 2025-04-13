@@ -1,32 +1,37 @@
 {
   "id": "discover-desperate-spies",
-  "name": "Discover Desperate Spies",
+  "name": "events.discover-desperate-spies.name",
   "modifier": 3,
-  "location": "The kingdom’s capital city",
+  "location": "events.discover-desperate-spies.location",
   "traits": [
     "continuous",
     "dangerous",
     "settlement"
   ],
-  "description": "The kobold spies slink and skulk around the city, looking for weaknesses to report back to the troll king and taking advantage of opportunities to perform minor acts of vandalism and sabotage. Once this story event begins, it continues daily for a week. Each day, the kingdom attempts a skill check to resolve the event. The Intrigue check gains the Secret trait.",
+  "description": "events.discover-desperate-spies.description",
   "stages": [
     {
-      "skills": ["intrigue", "defense"],
+      "skills": [
+        "intrigue",
+        "defense"
+      ],
       "leader": "warden",
       "criticalSuccess": {
-        "msg": "The two kobold spies are captured and kept imprisoned until the PCs have a chance to speak to them."
+        "msg": "events.discover-desperate-spies.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "Rumors of kobold spies in town begin to spread. Attempt a @Check[type:flat|dc:11]; on a failure, @gain1Unrest."
+        "msg": "events.discover-desperate-spies.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Someone or something in town is causing trouble. @gain1Unrest"
+        "msg": "events.discover-desperate-spies.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Not only do the kobolds continue to cause trouble @gain1Unrest, but they also perform acts of vandalism and sabotage. @gain1Decay"
+        "msg": "events.discover-desperate-spies.stage-0.criticalFailure.msg"
       }
     }
   ],
-  "resolvedOn": ["criticalSuccess"],
-  "resolution": "This daily event ends on a Critical Success or after 7 days have passed."
+  "resolvedOn": [
+    "criticalSuccess"
+  ],
+  "resolution": "events.discover-desperate-spies.resolution"
 }

@@ -1,10 +1,10 @@
 {
   "id": "public-outburst",
-  "name": "Public Outburst",
+  "name": "events.public-outburst.name",
   "traits": [
     "dangerous"
   ],
-  "description": "The citizens of the kingdom grow particularly nervous and fearful about the spread of monster attacks, with more reports of monsters bursting out of random victims. Each time this event occurs, increase the event’s level modifier by 1 to a maximum of +2, at which point the curse has become the populace’s greatest fear. The PCs must work to calm the nation and convince the people that they are doing everything they can to stop this supernatural affliction.",
+  "description": "events.public-outburst.description",
   "modifiers": [
     {
       "type": "untyped",
@@ -12,7 +12,8 @@
       "name": "Event Occurred Once",
       "buttonLabel": "Event Occurred Once",
       "enabled": false
-    }, {
+    },
+    {
       "type": "untyped",
       "value": -2,
       "name": "Event Occurred More Than Once",
@@ -27,16 +28,16 @@
         "politics"
       ],
       "criticalSuccess": {
-        "msg": "The citizens are comforted by promises. This occurrence of Public Outburst does not increase the level modifier of the next occurrence."
+        "msg": "events.public-outburst.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The citizens are somewhat comforted, and you prevent Unrest from rising."
+        "msg": "events.public-outburst.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Rumors that the affliction might be beyond the party’s capability to stop make it difficult to quell fear. @gain1Unrest"
+        "msg": "events.public-outburst.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "As failure, but the rumors spread more quickly and have kernels of truth to them. @gain1d4Unrest, and at the end of the next day, a Cult event automatically happens."
+        "msg": "events.public-outburst.stage-0.criticalFailure.msg"
       }
     }
   ]

@@ -1,24 +1,29 @@
 {
   "id": "crop-failure",
-  "name": "Crop Failure",
-  "traits": ["dangerous", "hex"],
-  "location": "A Farmland hex of the GM’s choice. If there are no Farmlands in the kingdom, this event has no effect.",
-  "description": "Pests, blight, or bad weather damage the harvest.",
+  "name": "events.crop-failure.name",
+  "traits": [
+    "dangerous",
+    "hex"
+  ],
+  "location": "events.crop-failure.location",
+  "description": "events.crop-failure.description",
   "stages": [
     {
       "leader": "treasurer",
-      "skills": ["agriculture"],
+      "skills": [
+        "agriculture"
+      ],
       "criticalSuccess": {
-        "msg": "You contain the damage from the crop failure without it impacting your kingdom’s resources."
+        "msg": "events.crop-failure.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "You contain the crop failure, but not before it impacts your kingdom. @gain1ConsumptionNextTurn"
+        "msg": "events.crop-failure.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The crop failure wipes out entire fields. @gain1d4+1ConsumptionNextTurn"
+        "msg": "events.crop-failure.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The crop failure wipes out entire fields. @gain1d4+1ConsumptionNextTurn. In addition, the crop failure is so devastating that the Farmland is destroyed."
+        "msg": "events.crop-failure.stage-0.criticalFailure.msg"
       }
     }
   ]

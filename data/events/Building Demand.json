@@ -1,28 +1,37 @@
 {
   "id": "building-demand",
-  "name": "Building Demand",
+  "name": "events.building-demand.name",
   "modifier": -1,
-  "traits": ["continuous", "dangerous", "settlement"],
-  "location": "The largest settlement in the nation",
-  "description": "The citizens of the affected settlement demand that a particular structure be either built or demolished (equal chance of either). If the citizens demand a new structure, the GM chooses one as close to the kingdom’s level as possible, preferably one that decreases Unrest when built. If the citizens demand a structure be demolished, the GM chooses one that best fits the storyline of the campaign, preferably one whose item bonus or other benefits have been rendered obsolete by newer structures. If you are willing to commit each upcoming Civic activity granted by this settlement to attempting the requested Build Structure or Demolish activity until they succeed, you do not attempt the check.",
+  "traits": [
+    "continuous",
+    "dangerous",
+    "settlement"
+  ],
+  "location": "events.building-demand.location",
+  "description": "events.building-demand.description",
   "stages": [
     {
       "leader": "viceroy",
-      "skills": ["politics"],
+      "skills": [
+        "politics"
+      ],
       "criticalSuccess": {
-        "msg": "You persuade the citizens to give up their demands."
+        "msg": "events.building-demand.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "You quell the citizens’ demands for now, but they are not happy about your refusal to comply. @gain1Unrest"
+        "msg": "events.building-demand.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The citizens continue their demands and some refuse to work in protest. @gain1Unrest and @lose2ResourceDiceNextTurn"
+        "msg": "events.building-demand.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The citizens continue their demands and some refuse to work in protest. @gain1Unrest and @lose2ResourceDiceNextTurn. In addition, violence during the protests also causes you to @gain1Decay"
+        "msg": "events.building-demand.stage-0.criticalFailure.msg"
       }
     }
   ],
-  "resolvedOn": ["criticalSuccess", "success"],
-  "resolution": "You can end this continuous event by critically succeeding or succeeding at the check or successfully building or demolishing the requested structure."
+  "resolvedOn": [
+    "criticalSuccess",
+    "success"
+  ],
+  "resolution": "events.building-demand.resolution"
 }

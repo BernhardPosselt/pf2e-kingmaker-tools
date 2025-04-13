@@ -1,25 +1,30 @@
 {
   "id": "land-rush",
-  "name": "Land Rush",
+  "name": "events.land-rush.name",
   "modifier": 1,
-  "location": "An unclaimed hex adjacent to your kingdom’s border",
-  "description": "Overeager settlers attempt to construct Farmland or a Work Site (as chosen by the GM) at their own expense in the wilderness, and they begin squabbling over the site’s ownership.",
-  "traits": ["dangerous","hex"],
+  "location": "events.land-rush.location",
+  "description": "events.land-rush.description",
+  "traits": [
+    "dangerous",
+    "hex"
+  ],
   "stages": [
     {
       "leader": "viceroy",
-      "skills": ["politics"],
+      "skills": [
+        "politics"
+      ],
       "criticalSuccess": {
-        "msg": "You mediate the conflict among the settlers, and in thanks, they agree to join your kingdom. You automatically claim the Hex, gain XP for the claimed hex and increasing your kingdom’s Size by 1. You immediately gain the benefits of the Farmland or Work Site the settlers built. @lose1Unrest"
+        "msg": "events.land-rush.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "You mediate the conflict among the settlers, and they agree to join your kingdom if you @lose4RolledResourceDice. If you do so, treat this as a critical success. If you refuse, treat this as a Failure."
+        "msg": "events.land-rush.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The settlers refuse any overture to join your kingdom and their bickering continues, ultimately resulting in the destruction of their hard work and many deaths. Your kingdom isn’t significantly impacted, but your failure to handle the situation generates unease. @gain1Unrest"
+        "msg": "events.land-rush.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "As failure, but the fighting spills over into your kingdom before it resolves itself. @gain1d4Unrest and increase two Ruins of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.land-rush.stage-0.criticalFailure.msg"
       }
     }
   ]

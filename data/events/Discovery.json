@@ -1,23 +1,27 @@
 {
   "id": "discovery",
-  "name": "Discovery",
-  "traits": ["beneficial"],
-  "description": "Scholars unearth a bit of ancient lore or devise important new research of their own.",
+  "name": "events.discovery.name",
+  "traits": [
+    "beneficial"
+  ],
+  "description": "events.discovery.description",
   "stages": [
     {
       "leader": "counselor",
-      "skills": ["scholarship"],
+      "skills": [
+        "scholarship"
+      ],
       "criticalSuccess": {
-        "msg": "Your discovery brings glory and a boon to your resources! @gain1FameNextTurn and @gain6ResourceDiceNextTurn. Your people are amazed. @lose2Unrest"
+        "msg": "events.discovery.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "Your discovery is a helpful (but not overly amazing) boon to your kingdom’s resources. @gain3ResourceDiceNextTurn"
+        "msg": "events.discovery.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Your discovery is of some academic interest but ultimately of limited use. @gain1ResourceDiceNextTurn"
+        "msg": "events.discovery.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Your discovery turns out to be a dead end and a wasteful boondoggle. @lose2ResourceDiceNextTurn"
+        "msg": "events.discovery.stage-0.criticalFailure.msg"
       }
     }
   ]

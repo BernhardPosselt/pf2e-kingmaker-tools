@@ -1,18 +1,20 @@
 {
   "id": "archeological-find",
-  "name": "Archeological Find",
+  "name": "events.archeological-find.name",
   "traits": [
     "beneficial",
     "hex"
   ],
-  "location": "A claimed hex of the GM’s choosing but not in the influence of a settlement",
-  "description": "You hear that a well-preserved ruin in a remote reach of your kingdom may contain historical artifacts connected to people who lived in your land long ago. You can send a team of archaeologists to investigate.",
+  "location": "events.archeological-find.location",
+  "description": "events.archeological-find.description",
   "stages": [
     {
       "leader": "viceroy",
-      "skills": ["exploration"],
+      "skills": [
+        "exploration"
+      ],
       "criticalSuccess": {
-        "msg": "The site proves to be an ancient settlement that greatly predates the expansion into the region. Your people are delighted by the discovery. @lose1d4Unrest, and until the end of your next Kingdom turn, all Culture- and Economy-based skill checks gain a +2 circumstance bonus. If any of your settlements has a Museum, you put archaeological findings from this hex on display to the further delight of your citizens. @lose1Unrest",
+        "msg": "events.archeological-find.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
             "name": "Archeological Find",
@@ -43,13 +45,13 @@
         ]
       },
       "success": {
-        "msg": "The site proves to be remains of an old camp. The discovery is interesting but not particularly surprising. @lose2Unrest"
+        "msg": "events.archeological-find.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The site proves to be the remains of a relatively recent village abandoned during a previous attempt to settle the lands. Nothing particularly interesting is discovered."
+        "msg": "events.archeological-find.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "You never hear from your archaeologists again. @gain1d4Unrest and @gain1Decay. You can try to investigate this site again as a Region activity during the Activity phase of any Kingdom turn by attempting another Exploration check, but as the investigation has proven dangerous, the DC increases by 2.",
+        "msg": "events.archeological-find.stage-0.criticalFailure.msg",
         "modifiers": [
           {
             "name": "Reattempt Archeological Find",

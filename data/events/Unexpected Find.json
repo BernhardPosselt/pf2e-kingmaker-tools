@@ -1,24 +1,29 @@
 {
   "id": "unexpected-find",
-  "name": "Unexpected Find",
-  "traits": ["beneficial", "settlement"],
-  "location": "The kingdom’s newest settlement",
-  "description": "Local citizens discover a forgotten magic item while working on a construction site or while clearing out an old storage area.",
+  "name": "events.unexpected-find.name",
+  "traits": [
+    "beneficial",
+    "settlement"
+  ],
+  "location": "events.unexpected-find.location",
+  "description": "events.unexpected-find.description",
   "stages": [
     {
       "leader": "ruler",
-      "skills": ["trade"],
+      "skills": [
+        "trade"
+      ],
       "criticalSuccess": {
-        "msg": "The citizens donate the magic item to the PCs as thanks. The item is either a permanent item or four consumable items (equal chance of each) of a level equal to your kingdom. The exact item discovered is determined by the GM. If the PCs decide to donate the discovery to the community, @lose2d4Unrest."
+        "msg": "events.unexpected-find.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The magic treasure is donated to the community; @lose1d4Unrest"
+        "msg": "events.unexpected-find.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The found item is grudgingly donated to the community; @lose1Unrest"
+        "msg": "events.unexpected-find.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The recovered item is stolen before it can be donated, found to be cursed, or turns out to be worthless junk. @gain1Unrest"
+        "msg": "events.unexpected-find.stage-0.criticalFailure.msg"
       }
     }
   ]

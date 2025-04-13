@@ -1,28 +1,36 @@
 {
   "id": "a-devil-comes-calling",
-  "name": "A Devil Comes Calling",
-  "location": "The closest settlement to the kobold caverns",
-  "description": "The devil comes looking for the its worshippers, finds them allied with the PCs, and works from behind the scenes in a nearby settlement to wreak havoc and bolster the cult he didn’t know he had, spreading his influence through the kingdom.",
+  "name": "events.a-devil-comes-calling.name",
+  "location": "events.a-devil-comes-calling.location",
+  "description": "events.a-devil-comes-calling.description",
   "modifier": 3,
-  "traits": ["continuous", "dangerous", "settlement"],
+  "traits": [
+    "continuous",
+    "dangerous",
+    "settlement"
+  ],
   "stages": [
     {
       "leader": "warden",
-      "skills": ["intrigue"],
+      "skills": [
+        "intrigue"
+      ],
       "criticalSuccess": {
-        "msg": "Kingdom agents manage to isolate the source of the diabolic influence: the devil has made a hidden lair within the settlement; the PCs have discovered where this secret den is located, and can finally take direct action to resolve the event."
+        "msg": "events.a-devil-comes-calling.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The devil's influence spreads, but the speed of its growth is stemmed by the investigations. @gain1Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.a-devil-comes-calling.stage-0.success.msg"
       },
       "failure": {
-        "msg": "The devil's cult gains ground as he begins to destroy the kingdom from within. @gain1d4Unrest and increase three Ruins of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "events.a-devil-comes-calling.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "The devil's cult gains ground as he begins to destroy the kingdom from within. @gain1d4Unrest and increase three Ruins of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>In addition, the devil corrupts an NPC leader, convincing them to join his cult and abandon their responsibilities to the kingdom. Treat that leadership role as vacant until this event is resolved or the NPC leader is replaced or redeemed."
+        "msg": "events.a-devil-comes-calling.stage-0.criticalFailure.msg"
       }
     }
   ],
-  "resolvedOn": ["criticalSuccess"],
-  "resolution": "Once the PCs get a critical success (or at your discretion, after the PCs undertake an adventure of your own design to discover his lair), they can drive the devil out of their kingdom by attacking and defeating him (in which case you’ll need to play the battle out in a location of your choice), or they can attempt a Hire Adventurers activity to do the same. If, by the Event phase of the next Kingdom turn, he hasn’t been defeated, he moves to a new settlement and the event continues."
+  "resolvedOn": [
+    "criticalSuccess"
+  ],
+  "resolution": "events.a-devil-comes-calling.resolution"
 }

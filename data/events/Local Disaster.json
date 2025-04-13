@@ -1,26 +1,31 @@
 {
   "id": "local-disaster",
-  "name": "Local Disaster",
-  "traits": ["dangerous", "settlement"],
-  "location": "A randomly determined settlement",
-  "description": "A disaster strikes the settlement, be it fire, flooding, earthquakes, an architectural failure, or the like.",
+  "name": "events.local-disaster.name",
+  "traits": [
+    "dangerous",
+    "settlement"
+  ],
+  "location": "events.local-disaster.location",
+  "description": "events.local-disaster.description",
   "stages": [
     {
       "leader": "magister",
-      "skills": ["industry"],
+      "skills": [
+        "industry"
+      ],
       "criticalSuccess": {
-        "msg": "You prepared well for the disaster and the settlement survives intact and undamaged."
+        "msg": "events.local-disaster.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "The settlement still functions despite the loss of some resources. @lose2ResourceDiceNextTurn (or @lose1ResourceDiceNextTurn in a settlement with a cemetery)"
+        "msg": "events.local-disaster.stage-0.success.msg"
       },
       "failure": {
-        "msg": "Several lots in the settlement are torn up, including at least one structure. @gain1Decay and place rubble into three lots of the PCs’ choice in the settlement’s Urban Grid. @lose4ResourceDiceNextTurn (or @lose2ResourceDiceNextTurn in a settlement with a cemetery)"
+        "msg": "events.local-disaster.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "Destruction is widespread. @gain1d6Decay. Then select an equal number of adjacent blocks in your settlement and place rubble into one lot of your choice within each selected block. If a structure is in that lot, it’s reduced to rubble. @lose6ResourceDiceNextTurn (or @lose3ResourceDiceNextTurn in a settlement with a cemetery)"
+        "msg": "events.local-disaster.stage-0.criticalFailure.msg"
       }
     }
   ],
-  "special": "If this event occurs in a settlement with a cemetery, fewer resources are needed to properly honor those who die during the event. Halve all Resource Dice reductions created by this event."
+  "special": "events.local-disaster.special"
 }
