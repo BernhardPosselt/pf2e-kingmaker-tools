@@ -621,23 +621,53 @@
     "kingdomFeats": {
       "civil-service-status-bonus": {
         "name": "Civil Service (Status Bonus)",
-        "text": "Everyone has a place and a role, and as long as those roles are filled, the government functions. When you select this feat, choose one leadership role; that role is now supported by your efficient civil servants, so its vacancy penalty is no longer applicable. If you wish to change the leadership role to which Civil Service applies, you can do so using the New Leadership activity at the start of a Kingdom turn. You gain a +2 status bonus to New Leadership checks."
+        "text": "Everyone has a place and a role, and as long as those roles are filled, the government functions. When you select this feat, choose one leadership role; that role is now supported by your efficient civil servants, so its vacancy penalty is no longer applicable. If you wish to change the leadership role to which Civil Service applies, you can do so using the New Leadership activity at the start of a Kingdom turn. You gain a +2 status bonus to New Leadership checks.",
+        "modifiers": {
+          "newLeadership": {
+            "name": "Swapping Civil Service",
+            "buttonLabel": "+2 Status to New Leadership"
+          }
+        }
       },
       "civil-service": {
         "name": "Civil Service",
-        "text": "Everyone has a place and a role, and as long as those roles are filled, the government functions. When you select this feat, choose one leadership role; that role is now supported by your efficient civil servants, so its vacancy penalty is no longer applicable. If you wish to change the leadership role to which Civil Service applies, you can do so using the New Leadership activity at the start of a Kingdom turn. You gain a +2 circumstance bonus to New Leadership checks."
+        "text": "Everyone has a place and a role, and as long as those roles are filled, the government functions. When you select this feat, choose one leadership role; that role is now supported by your efficient civil servants, so its vacancy penalty is no longer applicable. If you wish to change the leadership role to which Civil Service applies, you can do so using the New Leadership activity at the start of a Kingdom turn. You gain a +2 circumstance bonus to New Leadership checks.",
+        "modifiers": {
+          "newLeadership": {
+            "name": "Swapping Civil Service",
+            "buttonLabel": "+2 Circumstance to New Leadership"
+          }
+        }
       },
       "cooperative-leadership": {
         "name": "Cooperative Leadership",
-        "text": "Your leaders are skilled at working with one another. When a leader uses the Focused Attention kingdom activity to aid another leader’s kingdom check, the circumstance bonus granted by a success is increased to +3. At 11th level, your leaders’ collaborative style leads them to ever greater successes when they work together. When a leader uses the Focused Attention kingdom activity to aid another leader’s check, treat a critical failure on the aided check as a failure. If your kingdom has at least the expert rank in the skill used in the aided check, treat a failure on the check as a success. (This does not allow you to ever improve a critical failure to a success.)"
+        "text": "Your leaders are skilled at working with one another. When a leader uses the Focused Attention kingdom activity to aid another leader’s kingdom check, the circumstance bonus granted by a success is increased to +3. At 11th level, your leaders’ collaborative style leads them to ever greater successes when they work together. When a leader uses the Focused Attention kingdom activity to aid another leader’s check, treat a critical failure on the aided check as a failure. If your kingdom has at least the expert rank in the skill used in the aided check, treat a failure on the check as a success. (This does not allow you to ever improve a critical failure to a success.)",
+        "modifiers": {
+          "focusedAttention": {
+            "name": "Cooperative Leadership: Upgrade Critical Failures",
+            "buttonLabel": "Cooperative Leadership"
+          }
+        }
       },
       "crush-dissent-vk": {
         "name": "Crush Dissent (V&K)",
-        "text": "Your rule brooks no dissent and stamps out traitors, making harsh examples of them. Once per Kingdom turn when you gain Unrest, you can attempt to crush the dissent by attempting a basic Warfare check. On a success, the Unrest increase is canceled, but on a critical failure, the Unrest increase is doubled. In addition, you gain a +1 status bonus to checks to resolve dangerous kingdom events that involve internal bickering, such as Feud."
+        "text": "Your rule brooks no dissent and stamps out traitors, making harsh examples of them. Once per Kingdom turn when you gain Unrest, you can attempt to crush the dissent by attempting a basic Warfare check. On a success, the Unrest increase is canceled, but on a critical failure, the Unrest increase is doubled. In addition, you gain a +1 status bonus to checks to resolve dangerous kingdom events that involve internal bickering, such as Feud.",
+        "modifiers": {
+          "bickering": {
+            "name": "Dangerous Kingdom Event involving internal bickering",
+            "buttonLabel": "+1 Status to Dangerous Bickering Event"
+          }
+        }
       },
       "crush-dissent": {
         "name": "Crush Dissent",
-        "text": "Your rule brooks no dissent and stamps out traitors, making harsh examples of them. Once per Kingdom turn when you gain Unrest, you can attempt to crush the dissent by attempting a basic Warfare check. On a success, the Unrest increase is canceled, but on a critical failure, the Unrest increase is doubled. In addition, you gain a +1 circumstance bonus to checks to resolve dangerous kingdom events that involve internal bickering, such as Feud."
+        "text": "Your rule brooks no dissent and stamps out traitors, making harsh examples of them. Once per Kingdom turn when you gain Unrest, you can attempt to crush the dissent by attempting a basic Warfare check. On a success, the Unrest increase is canceled, but on a critical failure, the Unrest increase is doubled. In addition, you gain a +1 circumstance bonus to checks to resolve dangerous kingdom events that involve internal bickering, such as Feud.",
+        "modifiers": {
+          "bickering": {
+            "name": "Dangerous Kingdom Event involving internal bickering",
+            "buttonLabel": "+1 Circumstance to Dangerous Bickering Event"
+          }
+        }
       },
       "diverse-leadership-vk": {
         "name": "Diverse Leadership (V&K)",
@@ -653,31 +683,81 @@
       },
       "fame-and-fortune": {
         "name": "Fame and Fortune",
-        "text": "Your kingdom’s reputation has spread far and wide, bringing in visitors to behold the spectacle of your greatness and pay their respects. Whenever you achieve a critical success on any Kingdom skill check during the Activity phase of a Kingdom turn, gain 1 bonus Resource Die at the start of your next Kingdom turn."
+        "text": "Your kingdom’s reputation has spread far and wide, bringing in visitors to behold the spectacle of your greatness and pay their respects. Whenever you achieve a critical success on any Kingdom skill check during the Activity phase of a Kingdom turn, gain 1 bonus Resource Die at the start of your next Kingdom turn.",
+        "modifiers": {
+          "additionalRd": {
+            "name": "Fame & Fortune",
+            "buttonLabel": "Gain additional RD on a Critical Success"
+          }
+        }
       },
       "fortified-fiefs-vk": {
         "name": "Fortified Fiefs (V&K)",
-        "text": "Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize the value of a strong defense when it comes to building settlements and fortifications. You gain a +2 status bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 status bonus to all kingdom checks attempted during dangerous events that directly impact your settlements’ defenses."
+        "text": "Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize the value of a strong defense when it comes to building settlements and fortifications. You gain a +2 status bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 status bonus to all kingdom checks attempted during dangerous events that directly impact your settlements’ defenses.",
+        "modifiers": {
+          "dangerousEvent": {
+            "name": "Dangerous Event Impacting Settlement Defenses",
+            "buttonLabel": "+1 Status to Dangerous Event Impacting Defenses"
+          },
+          "fortified": {
+            "name": "Fortified Fiefs",
+            "buttonLabel": "+2 Status to Fortify Hex or Build/Repair Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall"
+          }
+        }
       },
       "fortified-fiefs": {
         "name": "Fortified Fiefs",
-        "text": "Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize the value of a strong defense when it comes to building settlements and fortifications. You gain a +2 circumstance bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 circumstance bonus to all kingdom checks attempted during dangerous events that directly impact your settlements’ defenses."
+        "text": "Your vassals take their duty to protect those under their stewardship seriously, and your engineers emphasize the value of a strong defense when it comes to building settlements and fortifications. You gain a +2 circumstance bonus to checks attempted as part of the Fortify Hex activity and on activities to build or repair a Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall. In addition, you gain a +1 circumstance bonus to all kingdom checks attempted during dangerous events that directly impact your settlements’ defenses.",
+        "modifiers": {
+          "dangerousEvent": {
+            "name": "Dangerous Event Impacting Settlement Defenses",
+            "buttonLabel": "+1 Circumstance to Dangerous Event Impacting Defenses"
+          },
+          "fortified": {
+            "name": "Fortified Fiefs",
+            "buttonLabel": "+2 Circumstance to Fortify Hex or Build/Repair Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall"
+          }
+        }
       },
       "free-and-fair": {
         "name": "Free and Fair",
-        "text": "Your reputation for transparency and fairness in conducting elections, appointments, and other changes in government inspires tremendous public trust. You gain a +2 circumstance bonus to Loyalty-based checks attempted as part of the New Leadership and Pledge of Fealty activities. If you fail or critically fail such a check, you can spend 2 RP to reroll the check (but without the +2 circumstance bonus); attempting this adds the Fortune trait. You must take the result of the second roll, even if it is worse than the original roll."
+        "text": "Your reputation for transparency and fairness in conducting elections, appointments, and other changes in government inspires tremendous public trust. You gain a +2 circumstance bonus to Loyalty-based checks attempted as part of the New Leadership and Pledge of Fealty activities. If you fail or critically fail such a check, you can spend 2 RP to reroll the check (but without the +2 circumstance bonus); attempting this adds the Fortune trait. You must take the result of the second roll, even if it is worse than the original roll.",
+        "modifiers": {
+          "fairness": {
+            "name": "Free & Fair",
+            "buttonLabel": "+2 Circumstance to Loyalty During New Leadership/Pledge of Fealty"
+          }
+        }
       },
       "insider-trading-vk": {
         "name": "Insider Trading (V&K)",
-        "text": "Your leading citizens share valuable business information with one another and with associates in other lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 status bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn."
+        "text": "Your leading citizens share valuable business information with one another and with associates in other lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 status bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn.",
+        "modifiers": {
+          "businessInformation": {
+            "name": "Insider Trading",
+            "buttonLabel": "+1 Status to Establish Worksite, Establish Trade Agreement and Trade Commodities"
+          }
+        }
       },
       "insider-trading": {
         "name": "Insider Trading",
-        "text": "Your leading citizens share valuable business information with one another and with associates in other lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 circumstance bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn."
+        "text": "Your leading citizens share valuable business information with one another and with associates in other lands, and they hire one another’s workers to supply the labor they need to fuel their production. You gain a +1 circumstance bonus to Establish Work Site, Establish Trade Agreement, and Trade Commodities activities. In addition, gain 1 bonus Resource Die at the start of each Kingdom turn.",
+        "modifiers": {
+          "businessInformation": {
+            "name": "Insider Trading",
+            "buttonLabel": "+1 Circumstance to Establish Worksite, Establish Trade Agreement and Trade Commodities"
+          }
+        }
       },
       "inspiring-entertainment": {
         "name": "Inspiring Entertainment",
-        "text": "Your kingdom’s artists and entertainers are talented and prolific, and there’s never a shortage of new plays, operas, novels, music, sculptures, paintings, or other forms of distraction to entertain the citizens, even during times of upheaval. Your kingdom gains a +2 circumstance bonus to all Culture-based skill checks whenever your kingdom has at least 1 Unrest."
+        "text": "Your kingdom’s artists and entertainers are talented and prolific, and there’s never a shortage of new plays, operas, novels, music, sculptures, paintings, or other forms of distraction to entertain the citizens, even during times of upheaval. Your kingdom gains a +2 circumstance bonus to all Culture-based skill checks whenever your kingdom has at least 1 Unrest.",
+        "modifiers": {
+          "talentedArtists": {
+            "name": "Inspiring Entertainment",
+            "buttonLabel": "+2 Circumstance to Culture When Unrest"
+          }
+        }
       },
       "kingdom-assurance-agriculture": {
         "name": "Kingdom Assurance (Agriculture)",
@@ -758,11 +838,27 @@
       },
       "practical-magic-vk": {
         "name": "Practical Magic (V&K)",
-        "text": "Magic has an honored place in your society, and your people incorporate it into their everyday work to make life easier. You gain a +1 status bonus to Magic checks, and if you have Expert Magic you gain a +1 status bonus to Engineering checks. If you have Master Magic, this bonus increases to +2. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP."
+        "text": "Magic has an honored place in your society, and your people incorporate it into their everyday work to make life easier. You gain a +1 status bonus to Magic checks, and if you have Expert Magic you gain a +1 status bonus to Engineering checks. If you have Master Magic, this bonus increases to +2. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.",
+        "modifiers": {
+          "magicBonus": {
+            "name": "Practical Magic",
+            "buttonLabel": "+1 Status to Magic"
+          },
+          "engineeringBonus": {
+            "name": "Practical Magic: Engineering",
+            "buttonLabel": "+1/+2 Status to Engineering"
+          }
+        }
       },
       "practical-magic": {
         "name": "Practical Magic",
-        "text": "Magic has an honored place in your society, and your people incorporate it into their everyday work to make life easier. You gain a +1 circumstance bonus to Magic checks, and you can use Magic checks in place of Engineering checks. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP."
+        "text": "Magic has an honored place in your society, and your people incorporate it into their everyday work to make life easier. You gain a +1 circumstance bonus to Magic checks, and you can use Magic checks in place of Engineering checks. In addition, as magic-wielding NPCs find your nation a comfortable place to live and work, you reduce the cost of using the Hire Adventurers activity to 1 RP.",
+        "modifiers": {
+          "magicBonus": {
+            "name": "Practical Magic",
+            "buttonLabel": "+1 Circumstance to Magic"
+          }
+        }
       },
       "pull-together-vk": {
         "name": "Pull Together (V&K)",
@@ -781,11 +877,23 @@
       },
       "quick-recovery-status-bonus": {
         "name": "Quick Recovery (Status Bonus)",
-        "text": "Your kingdom recovers more quickly from danger and disaster. Whenever you attempt a skill check to end an ongoing harmful kingdom event, you gain a +4 status bonus to the check."
+        "text": "Your kingdom recovers more quickly from danger and disaster. Whenever you attempt a skill check to end an ongoing harmful kingdom event, you gain a +4 status bonus to the check.",
+        "modifiers": {
+          "harmfulEvent": {
+            "name": "Ongoing Harmful Event",
+            "buttonLabel": "+4 Status to End Harmful Event"
+          }
+        }
       },
       "quick-recovery": {
         "name": "Quick Recovery",
-        "text": "Your kingdom recovers more quickly from danger and disaster. Whenever you attempt a skill check to end an ongoing harmful kingdom event, you gain a +4 circumstance bonus to the check."
+        "text": "Your kingdom recovers more quickly from danger and disaster. Whenever you attempt a skill check to end an ongoing harmful kingdom event, you gain a +4 circumstance bonus to the check.",
+        "modifiers": {
+          "harmfulEvent": {
+            "name": "Ongoing Harmful Event",
+            "buttonLabel": "+4 Circumstance to End Harmful Event"
+          }
+        }
       },
       "skill-training-agriculture": {
         "name": "Skill Training (Agriculture)",
@@ -883,6 +991,14 @@
       "expansion-expert-2": {
         "name": "Expansion Expert (+3)",
         "description": "You can attempt to Claim Hex up to three times during a Kingdom turn."
+      },
+      "experienced-leadership-1": {
+        "name": "Experienced Leadership (+2)",
+        "description": "Invested leadership roles in your kingdom now grant a +2 status bonus to kingdom checks associated with their leadership role’s key ability."
+      },
+      "experienced-leadership-2": {
+        "name": "Experienced Leadership (+3)",
+        "description": "Invested leadership roles in your kingdom now grant a +3 status bonus to kingdom checks associated with their leadership role’s key ability."
       },
       "favored-land": {
         "name": "Favored Land",

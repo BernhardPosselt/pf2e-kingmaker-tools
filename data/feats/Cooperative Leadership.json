@@ -8,8 +8,8 @@
   ],
   "modifiers": [
     {
-      "name": "Cooperative Leadership: Upgrade Critical Failures",
-      "buttonLabel": "Cooperative Leadership",
+      "name": "kingdomFeats.cooperative-leadership.modifiers.focusedAttention.name",
+      "buttonLabel": "kingdomFeats.cooperative-leadership.modifiers.focusedAttention.buttonLabel",
       "type": "untyped",
       "value": 0,
       "enabled": true,

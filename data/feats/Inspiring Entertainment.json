@@ -10,8 +10,8 @@
   "text": "kingdomFeats.inspiring-entertainment.text",
   "modifiers": [
     {
-      "name": "Inspiring Entertainment",
-      "buttonLabel": "+2 Circumstance to Culture When Unrest",
+      "name": "kingdomFeats.inspiring-entertainment.talentedArtists.name",
+      "buttonLabel": "kingdomFeats.inspiring-entertainment.talentedArtists.buttonLabel",
       "type": "circumstance",
       "enabled": true,
       "value": 2,

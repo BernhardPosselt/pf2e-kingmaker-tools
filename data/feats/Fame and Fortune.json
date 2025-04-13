@@ -6,7 +6,8 @@
   "modifiers": [
     {
       "type": "untyped",
-      "name": "Fame & Fortune",
+      "name": "kingdomFeats.fame-and-fortune.modifiers.additionalRd.name",
+      "buttonLabel": "kingdomFeats.fame-and-fortune.modifiers.additionalRd.buttonLabel",
       "applyIf": [
         {
           "in": [
@@ -21,7 +22,6 @@
         }
       ],
       "value": 0,
-      "buttonLabel": "Gain additional RD when crit succeeding",
       "enabled": true,
       "notes": [
         {

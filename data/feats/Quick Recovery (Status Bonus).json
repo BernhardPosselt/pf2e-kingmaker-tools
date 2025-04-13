@@ -10,8 +10,8 @@
   "text": "kingdomFeats.quick-recovery-status-bonus.text",
   "modifiers": [
     {
-      "name": "Ongoing Harmful Event",
-      "buttonLabel": "+4 Status to End Harmful Event",
+      "name": "kingdomFeats.quick-recovery-status-bonus.harmfulEvent.name",
+      "buttonLabel": "kingdomFeats.quick-recovery-status-bonus.harmfulEvent.buttonLabel",
       "type": "status",
       "enabled": false,
       "applyIf": [

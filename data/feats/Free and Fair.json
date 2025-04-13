@@ -5,8 +5,8 @@
   "text": "kingdomFeats.free-and-fair.text",
   "modifiers": [
     {
-      "name": "Free & Fair",
-      "buttonLabel": "+2 Circumstance to Loyalty During New Leadership/Pledge of Fealty",
+      "name": "kingdomFeats.free-and-fair.modifiers.fairness.name",
+      "buttonLabel": "kingdomFeats.free-and-fair.modifiers.fairness.buttonLabel",
       "type": "circumstance",
       "applyIf": [
         {

@@ -11,4 +11,4 @@
 * translate apps
 * translate templates
 * translate kingdom activity modifiers
-* translate feat modifiers
+* translate default bonuses/penalties

@@ -10,9 +10,9 @@
   "text": "kingdomFeats.insider-trading.text",
   "modifiers": [
     {
-      "name": "Insider Trading",
+      "name": "kingdomFeats.insider-trading.modifiers.businessInformation.name",
+      "buttonLabel": "kingdomFeats.insider-trading.modifiers.businessInformation.buttonLabel",
       "type": "circumstance",
-      "buttonLabel": "+1 Circumstance to Establish Worksite, Establish Trade Agreement and Trade Commodities",
       "applyIf": [
         {
           "in": [

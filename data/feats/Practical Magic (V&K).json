@@ -10,8 +10,8 @@
   "text": "kingdomFeats.practical-magic-vk.text",
   "modifiers": [
     {
-      "name": "Practical Magic",
-      "buttonLabel": "+1 Status to Magic",
+      "name": "kingdomFeats.practical-magic-vk.modifiers.magicBonus.name",
+      "buttonLabel": "kingdomFeats.practical-magic-vk.modifiers.magicBonus.buttonLabel",
       "type": "status",
       "applyIf": [
         {
@@ -25,9 +25,9 @@
       "value": 1
     },
     {
-      "name": "Practical Magic: Engineering",
+      "name": "kingdomFeats.practical-magic-vk.modifiers.engineeringBonus.name",
+      "buttonLabel": "kingdomFeats.practical-magic-vk.modifiers.engineeringBonus.buttonLabel",
       "type": "status",
-      "buttonLabel": "+1/+2 Status to Engineering",
       "applyIf": [
         {
           "eq": [

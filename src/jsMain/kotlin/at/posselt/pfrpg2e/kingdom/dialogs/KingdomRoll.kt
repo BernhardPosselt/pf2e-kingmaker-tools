@@ -20,6 +20,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
 import at.posselt.pfrpg2e.kingdom.serialize
 import at.posselt.pfrpg2e.kingdom.setKingdom
+import at.posselt.pfrpg2e.kingdom.sheet.insertButtons
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
@@ -256,6 +257,7 @@ suspend fun postComplexDegreeOfSuccess(
     val notesContext = metaContext.notes
         ?.let { deserializeB64Json<Array<RawNote>>(it) }
         ?.filter { it.degree == null || it.degree == changedDegreeOfSuccess.value }
+        ?.map { insertButtons(it.note) }
         ?.toTypedArray()
         ?: emptyArray()
     val notesHtml = tpl(

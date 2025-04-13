@@ -10,8 +10,8 @@
   "text": "kingdomFeats.practical-magic.text",
   "modifiers": [
     {
-      "name": "Practical Magic",
-      "buttonLabel": "+1 Circumstance to Magic",
+      "name": "kingdomFeats.practical-magic.modifiers.magicBonus.name",
+      "buttonLabel": "kingdomFeats.practical-magic.modifiers.magicBonus.buttonLabel",
       "type": "circumstance",
       "applyIf": [
         {

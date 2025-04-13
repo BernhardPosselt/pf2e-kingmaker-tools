@@ -6,11 +6,11 @@
   "text": "kingdomFeats.civil-service.text",
   "modifiers": [
     {
-      "name": "Swapping Civil Service",
+      "name": "kingdomFeats.civil-service.modifiers.newLeadership.name",
+      "buttonLabel": "kingdomFeats.civil-service.modifiers.newLeadership.buttonLabel",
       "enabled": false,
       "value": 2,
       "type": "circumstance",
-      "buttonLabel": "+2 Circumstance to New Leadership",
       "applyIf": [
         {
           "in": [

@@ -10,9 +10,9 @@
   "text": "kingdomFeats.fortified-fiefs-vk.text",
   "modifiers": [
     {
-      "name": "Fortified Fiefs",
+      "name": "kingdomFeats.fortified-fiefs-vk.modifiers.fortified.name",
+      "buttonLabel": "kingdomFeats.fortified-fiefs-vk.modifiers.fortified.buttonLabel",
       "type": "status",
-      "buttonLabel": "+2 status to Fortify Hex or Build/Repair Barracks, Castle, Garrison, Keep, Stone Wall, or Wooden Wall",
       "applyIf": [
         {
           "some": [
@@ -48,9 +48,9 @@
       "value": 2
     },
     {
-      "name": "Dangerous Event impacting settlement defenses",
+      "name": "kingdomFeats.fortified-fiefs-vk.modifiers.dangerousEvent.name",
+      "buttonLabel": "kingdomFeats.fortified-fiefs-vk.modifiers.dangerousEvent.buttonLabel",
       "type": "status",
-      "buttonLabel": "+1 Status to Dangerous Event Impacting Defenses",
       "applyIf": [
         {
           "in": [

@@ -10,11 +10,11 @@
   "text": "kingdomFeats.crush-dissent-vk.text",
   "modifiers": [
     {
-      "name": "Dangerous Kingdom Event involving internal bickering",
+      "name": "kingdomFeats.crush-dissent-vk.modifiers.bickering.name",
+      "buttonLabel": "kingdomFeats.crush-dissent-vk.modifiers.bickering.buttonLabel",
       "enabled": false,
       "value": 1,
       "type": "status",
-      "buttonLabel": "+1 Status to Dangerous Bickering Event",
       "applyIf": [
         {
           "in": [

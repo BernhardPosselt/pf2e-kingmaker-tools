@@ -10,9 +10,9 @@
   "text": "kingdomFeats.insider-trading-vk.text",
   "modifiers": [
     {
-      "name": "Insider Trading",
+      "name": "kingdomFeats.insider-trading-vk.modifiers.businessInformation.name",
+      "buttonLabel": "kingdomFeats.insider-trading-vk.modifiers.businessInformation.buttonLabel",
       "type": "status",
-      "buttonLabel": "+1 Status to Establish Worksite, Establish Trade Agreement and Trade Commodities",
       "applyIf": [
         {
           "in": [
