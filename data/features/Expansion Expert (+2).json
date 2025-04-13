@@ -7,9 +7,9 @@
   "description": "features.expansion-expert-1.description",
   "modifiers": [
     {
-      "name": "Expansion Expert",
+      "name": "features.expansion-expert-1.modifiers.claimHex.name",
+      "buttonLabel": "features.expansion-expert-1.modifiers.claimHex.buttonLabel",
       "type": "circumstance",
-      "buttonLabel": "+2 Circumstance to Claim Hex",
       "applyIf": [
         {
           "eq": [

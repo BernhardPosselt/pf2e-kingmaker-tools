@@ -872,7 +872,13 @@
       },
       "expansion-expert-1": {
         "name": "Expansion Expert (+2)",
-        "description": "Your kingdom is better at expanding its territory. You gain a +2 circumstance bonus to skill checks made to Claim Hex and can attempt to Claim Hex up to twice during a Kingdom turn."
+        "description": "Your kingdom is better at expanding its territory. You gain a +2 circumstance bonus to skill checks made to Claim Hex and can attempt to Claim Hex up to twice during a Kingdom turn.",
+        "modifiers": {
+          "claimHex": {
+            "name": "Expansion Expert",
+            "buttonLabel": "+2 Circumstance to Claim Hex"
+          }
+        }
       },
       "expansion-expert-2": {
         "name": "Expansion Expert (+3)",
