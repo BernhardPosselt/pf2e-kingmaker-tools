@@ -79,6 +79,8 @@ Install the following things:
 
       winget install EclipseAdoptium.Temurin.21.JDK
 
+Then, restart your PC.
+
 Then open your git terminal in **%localappdata%/FoundryVTT/Data/modules/** by right-clicking onto an empty space inside the folder (in Windows 11, that option is hidden under **Show more options**) or create a symlink from another directory:
 
     git clone https://github.com/BernhardPosselt/pf2e-kingmaker-tools.git 
