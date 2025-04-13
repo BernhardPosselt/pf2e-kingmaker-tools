@@ -1,2 +1,2 @@
-/*.json
-!/en.json
+*.json
+!en.json
