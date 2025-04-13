@@ -32,7 +32,7 @@ abstract class CopyAndSanitizeTranslations : DefaultTask() {
         Files.createDirectories(into)
         Files.walk(source)
             .parallel()
-            .filter { it.isRegularFile() && it.fileName.endsWith(".json") }
+            .filter { it.isRegularFile() && it.fileName.toString().endsWith(".json") }
             .forEach {
                 val target = into.resolve(it.fileName)
                 transformAndWrite(it, target)
