@@ -11,15 +11,15 @@
         "wilderness": 0
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Food</button>"
+        "msg": "@gain1d4Food"
     },
     "success": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Food</button>"
+        "msg": "@gain1Food"
     },
     "failure": {
         "msg": "Gain no Food commodities."
     },
     "criticalFailure": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Lose 1d4 Food</button> to spoilage. If you have no Food to lose, you instead @gain1Unrest"
+        "msg": "@lose1d4Food to spoilage. If you have no Food to lose, you instead @gain1Unrest"
     }
 }

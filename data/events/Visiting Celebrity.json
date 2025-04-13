@@ -10,10 +10,10 @@
       "leader": "emissary",
       "skills": ["arts"],
       "criticalSuccess": {
-        "msg": "The visit is a rousing success. Not only are your citizens delighted by the visitor, but the visitor is quite taken with your kingdom and leaves you with a parting gift. Choose two of the following: @gain4ResourceDiceNextTurn, <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Luxuries</button>, or <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>"
+        "msg": "The visit is a rousing success. Not only are your citizens delighted by the visitor, but the visitor is quite taken with your kingdom and leaves you with a parting gift. Choose two of the following: @gain4ResourceDiceNextTurn, @gain1d6Luxuries, or @lose1d6Unrest"
       },
       "success": {
-        "msg": "The visit is a success. Not only are your citizens delighted by the visitor, but the visitor is quite taken with your kingdom and leaves you with a parting gift. Choose one of the following: @gain4ResourceDiceNextTurn, <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Luxuries</button>, or <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>"
+        "msg": "The visit is a success. Not only are your citizens delighted by the visitor, but the visitor is quite taken with your kingdom and leaves you with a parting gift. Choose one of the following: @gain4ResourceDiceNextTurn, @gain1d6Luxuries, or @lose1d6Unrest"
       },
       "failure": {
         "msg": "The visitor has an agreeable if pedestrian visit. @lose1Unrest"

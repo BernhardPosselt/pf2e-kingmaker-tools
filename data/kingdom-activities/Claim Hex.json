@@ -7,7 +7,7 @@
     "phase": "region",
     "dc": "control",
     "requirement": "You have Reconnoitered the hex to be claimed during hexploration. This hex must be adjacent to at least one hex that’s already part of your kingdom. If the hex to be claimed contains dangerous hazards or monsters, they must first be cleared out—either via standard adventuring or the Clear Hex activity.",
-    "description": "Your surveyors fully explore the hex and attempt to add it into your kingdom’s domain. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button> and then attempt a basic Exploration, Intrigue, Magic, or Wilderness check.",
+    "description": "Your surveyors fully explore the hex and attempt to add it into your kingdom’s domain. @lose1ResourcePoints and then attempt a basic Exploration, Intrigue, Magic, or Wilderness check.",
     "skills": {
         "exploration": 0,
         "intrigue": 0,

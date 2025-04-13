@@ -9,7 +9,7 @@
       "leader": "magister",
       "skills": ["wilderness"],
       "criticalSuccess": {
-        "msg": "The glorious climate puts everyone in an excellent mood. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>, and once during your next Kingdom turn when you attempt an Agriculture, Boating, Exploration, or Wilderness check, you can roll twice and take the better result.",
+        "msg": "The glorious climate puts everyone in an excellent mood. @lose1d6Unrest, and once during your next Kingdom turn when you attempt an Agriculture, Boating, Exploration, or Wilderness check, you can roll twice and take the better result.",
         "modifiers": [{
           "name": "Good Weather: Critical Success",
           "buttonLabel": "Roll twice when attempting a Agriculture, Boating, Exploration, or Wilderness check",

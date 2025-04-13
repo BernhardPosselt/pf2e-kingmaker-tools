@@ -6,15 +6,15 @@
     "phase": "leadership",
     "dc": "control",
     "title": "Craft Luxuries",
-    "description": "You encourage your artisans to craft luxury goods and may even aid them in this pursuit. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button>. Then attempt a basic check.",
+    "description": "You encourage your artisans to craft luxury goods and may even aid them in this pursuit. @lose1RolledResourceDice. Then attempt a basic check.",
     "skills": {
         "arts": 0
     },
     "criticalSuccess": {
-        "msg": "Your artisans exceed expectations and craft extravagant goods. <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries</button>"
+        "msg": "Your artisans exceed expectations and craft extravagant goods. @gain1d4Luxuries"
     },
     "success": {
-        "msg": "Your artisans produce some delightful goods. <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Luxuries</button>"
+        "msg": "Your artisans produce some delightful goods. @gain1Luxuries"
     },
     "failure": {
         "msg": "Your artisans fail to produce anything noteworthy."

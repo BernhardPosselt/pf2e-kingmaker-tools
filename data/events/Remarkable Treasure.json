@@ -9,7 +9,7 @@
       "leader": "emissary",
       "skills": ["exploration"],
       "criticalSuccess": {
-        "msg": "The adventurers are only too eager to share their discoveries with the kingdom. The treasures buoy the local economy and spawn a rush of prospectors out looking for their own treasures. <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Luxuries</button> and @lose1d4Unrest. <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button>. If you Hire Adventurers during your next Kingdom turn, roll twice for the skill check and take the better result.",
+        "msg": "The adventurers are only too eager to share their discoveries with the kingdom. The treasures buoy the local economy and spawn a rush of prospectors out looking for their own treasures. @gain1d6Luxuries and @lose1d4Unrest. @gain1FameNextTurn. If you Hire Adventurers during your next Kingdom turn, roll twice for the skill check and take the better result.",
         "modifiers": [{
           "name": "Remarkable Treasure: Critical Success",
           "buttonLabel": "Roll Twice and Take Better Result if Hiring Adventurers",
@@ -25,7 +25,7 @@
         }]
       },
       "success": {
-        "msg": "The adventurers agree to share their discoveries with the kingdom. <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries</button> and @lose1d4Unrest"
+        "msg": "The adventurers agree to share their discoveries with the kingdom. @gain1d4Luxuries and @lose1d4Unrest"
       },
       "failure": {
         "msg": "The adventurers aren’t particularly eager to share their discoveries, but the excitement of the news still helps delight the populace. @lose1Unrest"

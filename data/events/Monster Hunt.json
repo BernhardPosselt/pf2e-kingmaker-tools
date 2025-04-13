@@ -8,7 +8,7 @@
       "leader": "warden",
       "skills": ["wilderness"],
       "criticalSuccess": {
-        "msg": "The eager monster hunters confront and defeat a Huge (or larger) monster in the wilderness. The GM can determine the exact type of monster hunted down (but it shouldn’t be a specific creature still awaiting discovery by the PCs in a hex encounter). Trophies from the monster are put on display in a tavern or other public building in the capital city. <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>"
+        "msg": "The eager monster hunters confront and defeat a Huge (or larger) monster in the wilderness. The GM can determine the exact type of monster hunted down (but it shouldn’t be a specific creature still awaiting discovery by the PCs in a hex encounter). Trophies from the monster are put on display in a tavern or other public building in the capital city. @gain1FameNextTurn and @lose1d6Unrest"
       },
       "success": {
         "msg": "As critical success, but the monster hunters track down and slay a Large monster in the wilderness. @lose1d4Unrest"

@@ -6,7 +6,7 @@
     "phase": "leadership",
     "dc": 25,
     "title": "Restore the Temple",
-    "description": "You work with several worshippers of the temple's faith, gifted masons, and skilled laborers to restore the temple and once more consecrate it as a sacred place devoted to the worship of their god. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Resource Points</button>, then attempt a DC 25 Folklore check.",
+    "description": "You work with several worshippers of the temple's faith, gifted masons, and skilled laborers to restore the temple and once more consecrate it as a sacred place devoted to the worship of their god. @lose1d6ResourcePoints, then attempt a DC 25 Folklore check.",
     "skills": {
         "folklore": 0
     },

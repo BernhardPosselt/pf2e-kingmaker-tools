@@ -8,7 +8,7 @@
       "leader": "counselor",
       "skills": ["arts"],
       "criticalSuccess": {
-        "msg": "The special edition proves to be a rousing success! @gain2ResourceDiceNextTurn and <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries Next Turn</button>"
+        "msg": "The special edition proves to be a rousing success! @gain2ResourceDiceNextTurn and @gain1d4LuxuriesNextTurn"
       },
       "success": {
         "msg": "The special edition is popular but takes a while to sell out. @gain1ResourceDiceNextTurn"

@@ -13,7 +13,7 @@
         "statecraft"
       ],
       "criticalSuccess": {
-        "msg": "A large number of barbarians are welcomed into several settlements. Their presence helps to bolster a sense of security <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>, and also helps to curtail bandit and monster activity. From this point on, kingdom checks made to resolve the following random events gain a +2 circumstance bonus: Bandit Activity, Monster Activity, and Undead Uprising.",
+        "msg": "A large number of barbarians are welcomed into several settlements. Their presence helps to bolster a sense of security @lose1d6Unrest, and also helps to curtail bandit and monster activity. From this point on, kingdom checks made to resolve the following random events gain a +2 circumstance bonus: Bandit Activity, Monster Activity, and Undead Uprising.",
         "modifiers": [
           {
             "name": "Barbarian Immigrants: Critical Success",

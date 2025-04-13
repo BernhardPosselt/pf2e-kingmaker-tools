@@ -6,7 +6,7 @@
     "phase": "leadership",
     "dc": 32,
     "title": "Repair the Flooded Mine",
-    "description": "A group of engineers work to drain the flooded mine, shore up its damaged section, and establish the mine as a functional Work Site. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"20\">Lose 20 Resource Points</button>, then attempt a DC 32 Engineering check.",
+    "description": "A group of engineers work to drain the flooded mine, shore up its damaged section, and establish the mine as a functional Work Site. @lose20ResourcePoints, then attempt a DC 32 Engineering check.",
     "skills": {
         "engineering": 3
     },
@@ -20,6 +20,6 @@
         "msg": "Work on repairing the mine proceeds, but at a much slower (and more expensive) pace than you’d hoped. The mine remains flooded, but you can attempt this check again on the next Kingdom turn."
     },
     "criticalFailure": {
-        "msg": "Work on repairing the mine proceeds, but at a much slower (and more expensive) pace than you’d hoped. The mine remains flooded, but you can attempt this check again on the next Kingdom turn. In addition, a catastrophic failure costs the lives of several workers. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button> and @gain1Decay. The next time you attempt to Repair the Flooded Mine, it costs 40 RP."
+        "msg": "Work on repairing the mine proceeds, but at a much slower (and more expensive) pace than you’d hoped. The mine remains flooded, but you can attempt this check again on the next Kingdom turn. In addition, a catastrophic failure costs the lives of several workers. @gain2Unrest and @gain1Decay. The next time you attempt to Repair the Flooded Mine, it costs 40 RP."
     }
 }

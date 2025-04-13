@@ -14,13 +14,13 @@
         "magic": 3
     },
     "criticalSuccess": {
-        "msg": "You successfully establish a trade agreement with your target, and your merchants return with gifts! <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Rolled Resource Dice</button>"
+        "msg": "You successfully establish a trade agreement with your target, and your merchants return with gifts! @gain2RolledResourceDice"
     },
     "success": {
         "msg": "You successfully establish a trade agreement."
     },
     "failure": {
-        "msg": "Your traders reach their destination but need to sweeten the deal to secure the trade agreement. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Rolled Resource Dice</button>. If you do so, you successfully establish a trade agreement, otherwise the attempt fails."
+        "msg": "Your traders reach their destination but need to sweeten the deal to secure the trade agreement. @lose2RolledResourceDice. If you do so, you successfully establish a trade agreement, otherwise the attempt fails."
     },
     "criticalFailure": {
         "msg": "Your trade agreement is a total loss and your traders do not return. @gain1Unrest, and until the end of the next Kingdom turn, take a –1 circumstance penalty to all Economy-related checks.",

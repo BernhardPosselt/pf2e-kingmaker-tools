@@ -11,10 +11,10 @@
         "folklore": 0
     },
     "criticalSuccess": {
-        "msg": "Your prayers soothe and calm the more criminal-minded citizens for the time being. @lose1d4Unrest, and either <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Crime</button> or <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Corruption</button> or <button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Strife</button>."
+        "msg": "Your prayers soothe and calm the more criminal-minded citizens for the time being. @lose1d4Unrest, and either @lose2Crime or @lose1Corruption or @lose1Strife."
     },
     "success": {
-        "msg": "Your prayers serve to redirect and calm discord. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d3\">Lose 1d3 Unrest</button>"
+        "msg": "Your prayers serve to redirect and calm discord. @lose1d3Unrest"
     },
     "failure": {
         "msg": "Your prayers serve to redirect and calm discord. @lose1Unrest"

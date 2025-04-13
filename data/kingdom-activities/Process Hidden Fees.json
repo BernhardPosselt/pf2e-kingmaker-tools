@@ -38,6 +38,6 @@
         "msg": "@gain1ResourceDiceNextTurn, but the citizens catch wind of the fees and grow unhappy. @gain1Unrest, and you cannot Process Hidden Fees on your next Kingdom turn."
     },
     "criticalFailure": {
-        "msg": "@gain1ResourceDiceNextTurn, but the citizens catch wind of the fees and grow unhappy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button>, and you cannot Process Hidden Fees on your next Kingdom turn."
+        "msg": "@gain1ResourceDiceNextTurn, but the citizens catch wind of the fees and grow unhappy. @gain1d6Unrest, and you cannot Process Hidden Fees on your next Kingdom turn."
     }
 }

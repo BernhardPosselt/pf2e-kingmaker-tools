@@ -63,6 +63,6 @@
         ]
     },
     "criticalFailure": {
-        "msg": "Disaster! Your envoy fails to reach their destination, is turned back at the border, or is taken prisoner or executed, at the GM’s discretion. The repercussions on your kingdom’s morale and reputation are significant. Choose one of the following results: @gain1d4Unrest, add 1 to a Ruin of your choice: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul> or <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Rolled Resource Dice</button>. In any event, you cannot attempt to Send a Diplomatic Envoy to this same target for the next 3 Kingdom Turns."
+        "msg": "Disaster! Your envoy fails to reach their destination, is turned back at the border, or is taken prisoner or executed, at the GM’s discretion. The repercussions on your kingdom’s morale and reputation are significant. Choose one of the following results: @gain1d4Unrest, add 1 to a Ruin of your choice: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul> or @lose2RolledResourceDice. In any event, you cannot attempt to Send a Diplomatic Envoy to this same target for the next 3 Kingdom Turns."
     }
 }

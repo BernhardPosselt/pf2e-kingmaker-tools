@@ -8,16 +8,16 @@
       "leader": "emissary",
       "skills": ["statecraft"],
       "criticalSuccess": {
-        "msg": "Your subjects blend in seamlessly and are welcomed by your citizens, while bringing their own unique contributions to your kingdom. You <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"6\">Gain 6 Resource Dice Next Turn</button>, and you gain an additional Region activity during the Activity phase of the next Kingdom turn."
+        "msg": "Your subjects blend in seamlessly and are welcomed by your citizens, while bringing their own unique contributions to your kingdom. You @gain6ResourceDiceNextTurn, and you gain an additional Region activity during the Activity phase of the next Kingdom turn."
       },
       "success": {
-        "msg": "Your new subjects are welcomed, and their contributions help in the short term. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"3\">Gain 3 Resource Dice Next Turn</button>"
+        "msg": "Your new subjects are welcomed, and their contributions help in the short term. @gain3ResourceDiceNextTurn"
       },
       "failure": {
         "msg": "Your new subjects endure discrimination from intolerant citizens in your kingdom, but they nonetheless bring willing hands to work and such resources as they possess. @gain1Unrest and @gain1ResourceDiceNextTurn"
       },
       "criticalFailure": {
-        "msg": "Your new subjects encounter discrimination and xenophobia, and they are eventually driven back into the wild. @gain1d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"strife\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Strife</button>"
+        "msg": "Your new subjects encounter discrimination and xenophobia, and they are eventually driven back into the wild. @gain1d4Unrest and @gain1Strife"
       }
     }
   ]

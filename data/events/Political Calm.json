@@ -13,7 +13,7 @@
         "politics"
       ],
       "criticalSuccess": {
-        "msg": "You capitalize upon the public approval with efficiency and speed. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button> or reduce one Ruin of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul> Gain a +2 status bonus to all checks made to resolve events during your next Kingdom turn.",
+        "msg": "You capitalize upon the public approval with efficiency and speed. @lose1d6Unrest or reduce one Ruin of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul> Gain a +2 status bonus to all checks made to resolve events during your next Kingdom turn.",
         "modifiers": [
           {
             "value": 2,

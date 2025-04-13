@@ -9,7 +9,7 @@
       "leader": "ruler",
       "skills": ["defense"],
       "criticalSuccess": {
-        "msg": "The monsters are slain or driven off without harm to your kingdom. Even better, an unexpected claim of treasure gained from the monster lair causes you to <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries</button> and @gain2ResourceDiceNextTurn"
+        "msg": "The monsters are slain or driven off without harm to your kingdom. Even better, an unexpected claim of treasure gained from the monster lair causes you to @gain1d4Luxuries and @gain2ResourceDiceNextTurn"
       },
       "success": {
         "msg": "The monsters attack some of your citizens but are driven off before they do too much damage. The threat persists, and while fear continues to slowly spread, your kingdom suffers no physical damage at this time. @gain1Unrest"
@@ -18,7 +18,7 @@
         "msg": "The monsters’ rampage terrorizes the countryside and results in frightening rumors even in the heart of the kingdom’s safest cities. The closest Farmland or Work Site to the monster’s hex is destroyed. @gain1d4Unrest and @gain1Decay"
       },
       "criticalFailure": {
-        "msg": "<p>The monsters’ rampage terrorizes the countryside and results in frightening rumors even in the heart of the kingdom’s safest cities. The closest Farmland or Work Site to the monster’s hex is destroyed. @gain1d4Unrest and @gain1Decay. In addition, the monsters’ assaults spread into the settlement closest to the monster’s hex, spreading the danger they represent more and more through your kingdom.</p><p>If any of your settlement’s borders aren’t protected by water or a wall, or if the monster can fly or swim (as appropriate) across any of your protective borders, the monster enters the settlement and one structure chosen by the players is reduced to rubble. @gain1d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Decay</button></p><p>Otherwise, the monsters’ ability to harm the settlement is hampered by your defenses. @gain1Unrest and one of the settlement’s walls is destroyed; uncheck it on your Urban Grid.</p>"
+        "msg": "<p>The monsters’ rampage terrorizes the countryside and results in frightening rumors even in the heart of the kingdom’s safest cities. The closest Farmland or Work Site to the monster’s hex is destroyed. @gain1d4Unrest and @gain1Decay. In addition, the monsters’ assaults spread into the settlement closest to the monster’s hex, spreading the danger they represent more and more through your kingdom.</p><p>If any of your settlement’s borders aren’t protected by water or a wall, or if the monster can fly or swim (as appropriate) across any of your protective borders, the monster enters the settlement and one structure chosen by the players is reduced to rubble. @gain1d4Unrest and @gain2Decay</p><p>Otherwise, the monsters’ ability to harm the settlement is hampered by your defenses. @gain1Unrest and one of the settlement’s walls is destroyed; uncheck it on your Urban Grid.</p>"
       }
     }
   ],

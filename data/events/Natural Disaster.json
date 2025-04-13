@@ -12,13 +12,13 @@
         "msg": "You prepared well for the disaster. While disruptive, the damage is minimized."
       },
       "success": {
-        "msg": "Your quick response keeps your people safe and allows you to recover quickly. During the next turn, <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Lose 4 Resource Dice Next Turn</button>"
+        "msg": "Your quick response keeps your people safe and allows you to recover quickly. During the next turn, @lose4ResourceDiceNextTurn"
       },
       "failure": {
-        "msg": "The disaster causes severe damage. Choose one claimed hex in which you have a Farmland or Work Site; that feature is destroyed. @gain1Decay and <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button>. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"6\">Lose 6 Resource Dice Next Turn</button>"
+        "msg": "The disaster causes severe damage. Choose one claimed hex in which you have a Farmland or Work Site; that feature is destroyed. @gain1Decay and @gain1d6Unrest. @lose6ResourceDiceNextTurn"
       },
       "criticalFailure": {
-        "msg": "Multiple hexes are totally devastated. Choose [[/r 1d6]] claimed hexes in which you have Farmlands or Work Sites; those features are destroyed. @gainMultiple1Decay for each hex affected, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2d6\">Gain 2d6 Unrest</button>. In addition, one settlement of your choice is particularly hard hit; that settlement immediately suffers the effects of a Local Disaster. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"8\">Lose 8 Resource Dice Next Turn</button>"
+        "msg": "Multiple hexes are totally devastated. Choose [[/r 1d6]] claimed hexes in which you have Farmlands or Work Sites; those features are destroyed. @gainMultiple1Decay for each hex affected, and @gain2d6Unrest. In addition, one settlement of your choice is particularly hard hit; that settlement immediately suffers the effects of a Local Disaster. @lose8ResourceDiceNextTurn"
       }
     }
   ]

@@ -16,7 +16,7 @@
         "warfare": 0
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>"
+        "msg": "@lose1d6Unrest"
     },
     "success": {
         "msg": "@lose1Unrest"

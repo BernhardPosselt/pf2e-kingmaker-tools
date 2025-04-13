@@ -42,7 +42,7 @@
         "msg": "Your citizens remain unhappy with your kingdom’s growth. @gain1Unrest. If you don’t successfully Claim a hex during your next Kingdom turn, @gain1Unrest again."
       },
       "criticalFailure": {
-        "msg": "Your citizens remain unhappy with your kingdom’s growth. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button>. If you don’t successfully Claim a hex during your next Kingdom turn, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button> again."
+        "msg": "Your citizens remain unhappy with your kingdom’s growth. @gain2Unrest. If you don’t successfully Claim a hex during your next Kingdom turn, @gain2Unrest again."
       }
     }
   ],

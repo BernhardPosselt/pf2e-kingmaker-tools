@@ -14,10 +14,10 @@
         "msg": "Word gets out, but an apology and careful words manage to blunt the outrage. @gain1Unrest"
       },
       "failure": {
-        "msg": "The people are very unhappy with their leader’s behavior. @gain1d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button>"
+        "msg": "The people are very unhappy with their leader’s behavior. @gain1d4Unrest and @gain1Corruption"
       },
       "criticalFailure": {
-        "msg": "The people are outraged by the scandal and demand the leader be replaced. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button> and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul> Then immediately use the New Leadership kingdom activity to attempt to replace the leader. If you fail, this event occurs again with the same leadership role on the kingdom’s next Event phase. If the leader involved in the scandal takes any leadership role during the next [[/r 1d4]] Kingdom turns, this event occurs again with that character at the focus of the scandal."
+        "msg": "The people are outraged by the scandal and demand the leader be replaced. @gain1d6Unrest and increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul> Then immediately use the New Leadership kingdom activity to attempt to replace the leader. If you fail, this event occurs again with the same leadership role on the kingdom’s next Event phase. If the leader involved in the scandal takes any leadership role during the next [[/r 1d4]] Kingdom turns, this event occurs again with that character at the focus of the scandal."
       }
     }
   ]

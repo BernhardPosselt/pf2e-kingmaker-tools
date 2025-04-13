@@ -11,15 +11,15 @@
         "arts": 1
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame</button>, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame Next Turn</button>. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Rolled Resource Dice</button>"
+        "msg": "@gain1Fame, and @gain1FameNextTurn. @gain2RolledResourceDice"
     },
     "success": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Fame</button>"
+        "msg": "@gain1Fame"
     },
     "failure": {
         "msg": "Your attempt to create a masterpiece fails."
     },
     "criticalFailure": {
-        "msg": "Not only does your attempt to create a masterpiece fail, it does so in a dramatic and humiliating way. <button type=\"button\" class=\"km-gain-lose\" data-type=\"fame\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Fame</button>; if you have no Fame or Infamy points to lose, instead @gain1d4Unrest"
+        "msg": "Not only does your attempt to create a masterpiece fail, it does so in a dramatic and humiliating way. @lose1Fame; if you have no Fame or Infamy points to lose, instead @gain1d4Unrest"
     }
 }

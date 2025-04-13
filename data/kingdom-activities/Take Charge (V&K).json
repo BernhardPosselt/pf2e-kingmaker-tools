@@ -26,7 +26,7 @@
         "wilderness": 1
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Points</button>. In addition you get a +1 Circumstance Bonus to the next Check you make this turn with the chosen skill. ",
+        "msg": "@gain1ResourcePoints. In addition you get a +1 Circumstance Bonus to the next Check you make this turn with the chosen skill. ",
         "modifiers": [
             {
                 "turns": 1,
@@ -40,7 +40,7 @@
         ]
     },
     "success": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Resource Points</button>"
+        "msg": "@gain1ResourcePoints"
     },
     "failure": {
         "msg": "You fail to generate RP."

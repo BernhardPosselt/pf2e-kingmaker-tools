@@ -30,12 +30,12 @@
         "msg": "The Retrain succeeds and goes very smoothly. If the Retrain was for a Feat or Skill Increase, spend one RP. If it was for a Skill Specialization, no RP is spent. If you can’t afford the RP cost, treat this result as a Failure instead."
     },
     "success": {
-        "msg": "The Retrain succeeds. If the Retrain was for a Feat or Skill Increase, immediately <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button>. If it was for a Skill Specialization, <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button>. If you can’t afford the RP cost, treat this result as a Failure instead."
+        "msg": "The Retrain succeeds. If the Retrain was for a Feat or Skill Increase, immediately @lose1RolledResourceDice. If it was for a Skill Specialization, @lose1ResourcePoints. If you can’t afford the RP cost, treat this result as a Failure instead."
     },
     "failure": {
-        "msg": "The Retrain fails and the old Feat, Skill Increase, or Skill Specialization remains in place. If the Retrain was for a Feat or Skill Increase, immediately <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button>. If it was for a Skill Specialization, <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button>."
+        "msg": "The Retrain fails and the old Feat, Skill Increase, or Skill Specialization remains in place. If the Retrain was for a Feat or Skill Increase, immediately @lose1RolledResourceDice. If it was for a Skill Specialization, @lose1ResourcePoints."
     },
     "criticalFailure": {
-        "msg": "The Retrain fails badly with costly results. The Kingdom may not use the Retrain activity next Turn. If the Retrain was for a Feat or Skill Increase, immediately <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Rolled Resource Dice</button>. If it was for a Skill Specialization, <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button>"
+        "msg": "The Retrain fails badly with costly results. The Kingdom may not use the Retrain activity next Turn. If the Retrain was for a Feat or Skill Increase, immediately @lose2RolledResourceDice. If it was for a Skill Specialization, @lose1RolledResourceDice"
     }
 }

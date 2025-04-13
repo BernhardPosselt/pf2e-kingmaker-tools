@@ -12,15 +12,15 @@
         "trade": 0
     },
     "criticalSuccess": {
-        "msg": "Success Your kingdom reaps the benefits of your investment. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"4\">Gain 4 Rolled Resource Dice</button>"
+        "msg": "Success Your kingdom reaps the benefits of your investment. @gain4RolledResourceDice"
     },
     "success": {
-        "msg": "Your investment helps the economy. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Rolled Resource Dice</button>"
+        "msg": "Your investment helps the economy. @gain2RolledResourceDice"
     },
     "failure": {
-        "msg": "Your investment ends up being used to shore up shortfalls elsewhere. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Resource Points</button>"
+        "msg": "Your investment ends up being used to shore up shortfalls elsewhere. @gain1d4ResourcePoints"
     },
     "criticalFailure": {
-        "msg": "Your investment is embezzled, lost, or otherwise misappropriated. Choose one of the following: either <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Rolled Resource Dice</button> and also increase your Crime by an equal amount, or gain 0 RP and <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>"
+        "msg": "Your investment is embezzled, lost, or otherwise misappropriated. Choose one of the following: either @gain1RolledResourceDice and also increase your Crime by an equal amount, or gain 0 RP and @gain1Crime"
     }
 }

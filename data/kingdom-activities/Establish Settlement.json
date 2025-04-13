@@ -15,13 +15,13 @@
         "scholarship": 0
     },
     "criticalSuccess": {
-        "msg": "You establish the settlement largely with the aid of enthusiastic volunteers. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Resource Points</button>"
+        "msg": "You establish the settlement largely with the aid of enthusiastic volunteers. @lose1d6ResourcePoints"
     },
     "success": {
-        "msg": "You establish the settlement. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"3d6\">Lose 3d6 Resource Points</button>"
+        "msg": "You establish the settlement. @lose3d6ResourcePoints"
     },
     "failure": {
-        "msg": "You establish the settlement, but inefficiently and at great expense. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"6d6\">Lose 6d6 Resource Points</button>"
+        "msg": "You establish the settlement, but inefficiently and at great expense. @lose6d6ResourcePoints"
     },
     "criticalFailure": {
         "msg": "You fail to establish the settlement."

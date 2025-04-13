@@ -6,7 +6,7 @@
     "phase": "leadership",
     "dc": "control",
     "title": "Reconnoiter Hex (V&K)",
-    "description": "You send a team to spend time surveying and exploring a specific hex, getting the lay of the land and looking for unusual features and specific sites. <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button> and then attempt a Basic check.",
+    "description": "You send a team to spend time surveying and exploring a specific hex, getting the lay of the land and looking for unusual features and specific sites. @lose1ResourcePoints and then attempt a Basic check.",
     "skills": {
         "wilderness": 0
     },

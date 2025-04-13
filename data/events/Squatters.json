@@ -26,7 +26,7 @@
         "msg": "The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. @gain1d4Unrest"
       },
       "criticalFailure": {
-        "msg": "The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. @gain1d4Unrest. In addition, on your next Kingdom turn attempt a @Check[type:flat|dc:6]; on failure, the squatters spread to the nearest empty lot in the settlement, creating a separate continuous Squatters event starting with your next Kingdom turn. In addition, the squatters increase the settlement’s Consumption by 1 each month until the event is resolved. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Consumption Next Turn</button>"
+        "msg": "The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. @gain1d4Unrest. In addition, on your next Kingdom turn attempt a @Check[type:flat|dc:6]; on failure, the squatters spread to the nearest empty lot in the settlement, creating a separate continuous Squatters event starting with your next Kingdom turn. In addition, the squatters increase the settlement’s Consumption by 1 each month until the event is resolved. @gain1ConsumptionNextTurn"
       }
     }
   ],

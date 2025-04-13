@@ -12,13 +12,13 @@
         "msg": "You contain the damage from the crop failure without it impacting your kingdom’s resources."
       },
       "success": {
-        "msg": "You contain the crop failure, but not before it impacts your kingdom. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1\">Gain 1 Consumption Next Turn</button>"
+        "msg": "You contain the crop failure, but not before it impacts your kingdom. @gain1ConsumptionNextTurn"
       },
       "failure": {
-        "msg": "The crop failure wipes out entire fields. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4+1\">Gain 1d4+1 Consumption Next Turn</button>"
+        "msg": "The crop failure wipes out entire fields. @gain1d4+1ConsumptionNextTurn"
       },
       "criticalFailure": {
-        "msg": "The crop failure wipes out entire fields. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4+1\">Gain 1d4+1 Consumption Next Turn</button>. In addition, the crop failure is so devastating that the Farmland is destroyed."
+        "msg": "The crop failure wipes out entire fields. @gain1d4+1ConsumptionNextTurn. In addition, the crop failure is so devastating that the Farmland is destroyed."
       }
     }
   ]

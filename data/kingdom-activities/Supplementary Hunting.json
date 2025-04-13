@@ -11,10 +11,10 @@
         "wilderness": 0
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Food</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Luxuries</button>, and @gain1ResourceDiceNextTurn"
+        "msg": "@gain1d4Food, @gain1Luxuries, and @gain1ResourceDiceNextTurn"
     },
     "success": {
-        "msg": "Choose one: <button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Food</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Luxuries</button>, or @gain1ResourceDiceNextTurn"
+        "msg": "Choose one: @gain1d4Food, @gain1Luxuries, or @gain1ResourceDiceNextTurn"
     },
     "failure": {
         "msg": "Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn."

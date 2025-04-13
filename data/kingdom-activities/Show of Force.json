@@ -14,12 +14,12 @@
         "msg": "The kingdom’s criminals are cowed by the show of force. @lose2Crime and reduce one other Ruin of your choice by 1: <ul><li>@lose1Corruption</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
     },
     "success": {
-        "msg": "The kingdom’s criminals take note of the show of force. <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Crime</button>"
+        "msg": "The kingdom’s criminals take note of the show of force. @lose1Crime"
     },
     "failure": {
         "msg": "The show of force fails to impress criminals but unsettles the rest of the citizens. @gain1Unrest."
     },
     "criticalFailure": {
-        "msg": "The criminals are emboldened by the failed show of force. @gain1d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>."
+        "msg": "The criminals are emboldened by the failed show of force. @gain1d4Unrest and @gain1Crime."
     }
 }

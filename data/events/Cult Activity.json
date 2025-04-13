@@ -48,7 +48,7 @@
         "msg": "You fail to determine where the cult’s headquarters are. @gain1Unrest as a result of the cult’s activities."
       },
       "criticalFailure": {
-        "msg": "As failure, but @gain1d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button>"
+        "msg": "As failure, but @gain1d4Unrest and @gain1Corruption"
       }
     },
     {
@@ -57,16 +57,16 @@
         "folklore"
       ],
       "criticalSuccess": {
-        "msg": "The cult is destroyed. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button> and reduce one Ruin of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul><button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Luxuries</button> from valuables recovered from the cult headquarters."
+        "msg": "The cult is destroyed. @lose1d6Unrest and reduce one Ruin of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>@gain1d6Luxuries from valuables recovered from the cult headquarters."
       },
       "success": {
-        "msg": "The cult is driven out of town but not destroyed. Choose one of the following rewards: @lose1d4Unrest, <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries</button>, or reduce one Ruin of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
+        "msg": "The cult is driven out of town but not destroyed. Choose one of the following rewards: @lose1d4Unrest, @gain1d4Luxuries, or reduce one Ruin of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
       },
       "failure": {
-        "msg": "The cult persists and expands its nefarious plans. @gain1Unrest and attempt a @Check[type:flat|dc:6]; if you fail this check, <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button>"
+        "msg": "The cult persists and expands its nefarious plans. @gain1Unrest and attempt a @Check[type:flat|dc:6]; if you fail this check, @gain1Corruption"
       },
       "criticalFailure": {
-        "msg": "The cult’s activities grow particularly blatant and disruptive. @gain1d4Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button>"
+        "msg": "The cult’s activities grow particularly blatant and disruptive. @gain1d4Unrest and @gain1Corruption"
       }
     }
   ],

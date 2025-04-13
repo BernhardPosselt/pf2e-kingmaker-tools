@@ -12,10 +12,10 @@
         "engineering": 1
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Decay</button> and reduce its current ruin penalty by 1 to a minimum of 0."
+        "msg": "@lose2Decay and reduce its current ruin penalty by 1 to a minimum of 0."
     },
     "success": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"decay\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Decay</button>"
+        "msg": "@lose1Decay"
     },
     "failure": {
         "msg": "You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn."

@@ -12,10 +12,10 @@
         "boating": 0
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Food</button>"
+        "msg": "@gain1d4Food"
     },
     "success": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"food\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Food</button>"
+        "msg": "@gain1Food"
     },
     "failure": {
         "msg": "Gain no Food commodities."

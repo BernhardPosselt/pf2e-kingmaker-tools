@@ -6,7 +6,7 @@
   "enabled": true,
   "phase": "region",
   "dc": "control",
-  "description": "You plant crops and establish livestock in permanent farms, ranches, and other growing operations to create Farmland. If you’re attempting to Establish Farmland in a hex that is predominantly plains, you must <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Resource Points</button> and the check is against your Control DC. If you’re targeting a hex that is predominantly hills, you must spend <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-points\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Lose 2 Resource Points</button> and the check is against your Control DC + 5.",
+  "description": "You plant crops and establish livestock in permanent farms, ranches, and other growing operations to create Farmland. If you’re attempting to Establish Farmland in a hex that is predominantly plains, you must @lose1ResourcePoints and the check is against your Control DC. If you’re targeting a hex that is predominantly hills, you must spend @lose2ResourcePoints and the check is against your Control DC + 5.",
   "requirement": "Plains or hills are the predominant terrain feature in the hex; the hex is in the influence of one of your settlements.",
   "skills": {
     "agriculture": 0

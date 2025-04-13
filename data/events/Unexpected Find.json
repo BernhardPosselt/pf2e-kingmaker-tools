@@ -9,7 +9,7 @@
       "leader": "ruler",
       "skills": ["trade"],
       "criticalSuccess": {
-        "msg": "The citizens donate the magic item to the PCs as thanks. The item is either a permanent item or four consumable items (equal chance of each) of a level equal to your kingdom. The exact item discovered is determined by the GM. If the PCs decide to donate the discovery to the community, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2d4\">Lose 2d4 Unrest</button>."
+        "msg": "The citizens donate the magic item to the PCs as thanks. The item is either a permanent item or four consumable items (equal chance of each) of a level equal to your kingdom. The exact item discovered is determined by the GM. If the PCs decide to donate the discovery to the community, @lose2d4Unrest."
       },
       "success": {
         "msg": "The magic treasure is donated to the community; @lose1d4Unrest"

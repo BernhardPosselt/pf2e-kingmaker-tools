@@ -40,10 +40,10 @@
         "msg": "The bandits are prevented from preying upon your people, but they continue to be active. @lose1ResourceDiceNextTurn"
       },
       "failure": {
-        "msg": "The bandits plunder caravans and remote storehouses, and merchants grow cautious and afraid. @gain1Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Lose 4 Resource Dice Next Turn</button>"
+        "msg": "The bandits plunder caravans and remote storehouses, and merchants grow cautious and afraid. @gain1Unrest and @lose4ResourceDiceNextTurn"
       },
       "criticalFailure": {
-        "msg": "Bandits rampage the land, and even start to encroach into your settlements. @gain1d4Unrest, increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>, and at the start of your next Kingdom turn your Resource Dice are halved or <button type=\"button\" class=\"km-gain-lose\" data-type=\"resource-dice\" data-mode=\"lose\" data-turn=\"next\" data-multiple=\"false\" data-value=\"4\">Lose 4 Resource Dice Next Turn</button>, whichever results in a lower total."
+        "msg": "Bandits rampage the land, and even start to encroach into your settlements. @gain1d4Unrest, increase a Ruin of your choice by 1 <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>, and at the start of your next Kingdom turn your Resource Dice are halved or @lose4ResourceDiceNextTurn, whichever results in a lower total."
       }
     }
   ]

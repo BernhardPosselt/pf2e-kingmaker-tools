@@ -12,15 +12,15 @@
         "intrigue": 1
     },
     "criticalSuccess": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Rolled Resource Dice</button>. In addition, you <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries</button>. The public is none the wiser."
+        "msg": "@gain2RolledResourceDice. In addition, you @gain1d4Luxuries. The public is none the wiser."
     },
     "success": {
-        "msg": "Either <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Rolled Resource Dice</button>, or gain <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Luxuries</button>. Regardless of your choice, rumors spread about where the government is getting these “gifts.” @gain1Unrest."
+        "msg": "Either @gain2RolledResourceDice, or gain @gain1d4Luxuries. Regardless of your choice, rumors spread about where the government is getting these “gifts.” @gain1Unrest."
     },
     "failure": {
-        "msg": "<button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Rolled Resource Dice</button>. Rumors are backed up with eyewitness accounts. @gain1Unrest and <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button>."
+        "msg": "@gain1RolledResourceDice. Rumors are backed up with eyewitness accounts. @gain1Unrest and @gain1Corruption."
     },
     "criticalFailure": {
-        "msg": "You gain nothing from the Clandestine Business but angry citizens. <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Unrest</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Corruption</button>, and one other Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "You gain nothing from the Clandestine Business but angry citizens. @gain1d6Unrest, @gain2Corruption, and one other Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
     }
 }

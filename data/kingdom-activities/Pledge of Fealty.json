@@ -16,12 +16,12 @@
         "msg": "The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, gain 10XP and increasing your kingdom's Size by 1. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty."
     },
     "success": {
-        "msg": "The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty. <button type=\"button\" class=\"km-gain-lose\" data-type=\"rolled-resource-dice\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Lose 1 Rolled Resource Dice</button> to the result to integrate the group into your kingdom."
+        "msg": "The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty. @lose1RolledResourceDice to the result to integrate the group into your kingdom."
     },
     "failure": {
         "msg": "The group refuses to pledge to you at this time. You can attempt to get them to Pledge Fealty next turn. @gain1Unrest"
     },
     "criticalFailure": {
-        "msg": "The group refuses to pledge to you—furthermore, it will never Pledge Fealty to your kingdom, barring significant in-play changes or actions by the PCs (subject to the GM’s approval). The group’s potentially violent rebuff of your offer <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Unrest</button> and increases a Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+        "msg": "The group refuses to pledge to you—furthermore, it will never Pledge Fealty to your kingdom, barring significant in-play changes or actions by the PCs (subject to the GM’s approval). The group’s potentially violent rebuff of your offer @gain2Unrest and increases a Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
     }
 }

@@ -9,16 +9,16 @@
       "leader": "magister",
       "skills": ["folklore"],
       "criticalSuccess": {
-        "msg": "Pilgrims visit all of your settlements to engage in acts of worship. Not only do they provide their own food and supplies, but they also bring gifts to your shrines, temples, and cathedrals. <button type=\"button\" class=\"km-gain-lose\" data-type=\"luxuries\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Gain 1d6 Luxuries</button>, <button type=\"button\" class=\"km-gain-lose\" data-type=\"unrest\" data-mode=\"lose\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1d6\">Lose 1d6 Unrest</button>, and reduce one Ruin of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
+        "msg": "Pilgrims visit all of your settlements to engage in acts of worship. Not only do they provide their own food and supplies, but they also bring gifts to your shrines, temples, and cathedrals. @gain1d6Luxuries, @lose1d6Unrest, and reduce one Ruin of your choice by 1 <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
       },
       "success": {
         "msg": "The pilgrims celebrate their holy days at your settlements, and their good cheer and attitudes prove infectious. @lose1d4Unrest"
       },
       "failure": {
-        "msg": "The pilgrims celebrate their holy days at your settlements, and their good cheer and attitudes prove infectious. @lose1d4Unrest. In addition, the pilgrims put a strain on your kingdom’s resources. <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Consumption Next Turn</button>"
+        "msg": "The pilgrims celebrate their holy days at your settlements, and their good cheer and attitudes prove infectious. @lose1d4Unrest. In addition, the pilgrims put a strain on your kingdom’s resources. @gain1d4ConsumptionNextTurn"
       },
       "criticalFailure": {
-        "msg": "The pilgrims hold their festivals, but their devout displays by a few strident zealots who stay behind stir up controversy with locals of other faiths. <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button> and <button type=\"button\" class=\"km-gain-lose\" data-type=\"consumption\" data-mode=\"gain\" data-turn=\"next\" data-multiple=\"false\" data-value=\"1d4\">Gain 1d4 Consumption Next Turn</button>"
+        "msg": "The pilgrims hold their festivals, but their devout displays by a few strident zealots who stay behind stir up controversy with locals of other faiths. @gain1Corruption and @gain1d4ConsumptionNextTurn"
       }
     }
   ]

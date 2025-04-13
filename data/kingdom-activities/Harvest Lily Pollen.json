@@ -14,12 +14,12 @@
         "msg": "You create 2 doses of @UUID[Compendium.pf2e.equipment-srd.Item.MvMa010Je10GN5dx]{Azure Lily Pollen}."
     },
     "success": {
-        "msg": "You create 1 dose of @UUID[Compendium.pf2e.equipment-srd.Item.MvMa010Je10GN5dx]{Azure Lily Pollen} but must also attempt a @Check[type:basic|dc:11|showDC:all]. On a failure, some of the poison makes its way into criminal hands; <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>"
+        "msg": "You create 1 dose of @UUID[Compendium.pf2e.equipment-srd.Item.MvMa010Je10GN5dx]{Azure Lily Pollen} but must also attempt a @Check[type:basic|dc:11|showDC:all]. On a failure, some of the poison makes its way into criminal hands; @gain1Crime"
     },
     "failure": {
-        "msg": "You fail to harvest any @UUID[Compendium.pf2e.equipment-srd.Item.MvMa010Je10GN5dx]{Azure Lily Pollen}, in part because many of the resources make their way into the kingdom’s criminal underworld. <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Crime</button>"
+        "msg": "You fail to harvest any @UUID[Compendium.pf2e.equipment-srd.Item.MvMa010Je10GN5dx]{Azure Lily Pollen}, in part because many of the resources make their way into the kingdom’s criminal underworld. @gain1Crime"
     },
     "criticalFailure": {
-        "msg": "Not only do you fail to harvest any pollen, and not only do resources make their way into the hands of criminals, but whispers and rumors that you allowed this to happen on purpose spread through the kingdom. @gain1d4Unrest, <button type=\"button\" class=\"km-gain-lose\" data-type=\"corruption\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"1\">Gain 1 Corruption</button>, and <button type=\"button\" class=\"km-gain-lose\" data-type=\"crime\" data-mode=\"gain\" data-turn=\"now\" data-multiple=\"false\" data-value=\"2\">Gain 2 Crime</button>"
+        "msg": "Not only do you fail to harvest any pollen, and not only do resources make their way into the hands of criminals, but whispers and rumors that you allowed this to happen on purpose spread through the kingdom. @gain1d4Unrest, @gain1Corruption, and @gain2Crime"
     }
 }
