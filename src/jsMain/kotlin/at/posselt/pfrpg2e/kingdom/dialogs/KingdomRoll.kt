@@ -268,7 +268,7 @@ suspend fun postComplexDegreeOfSuccess(
         title = activity?.title ?: event?.name ?: "",
         rollMode = rollMode,
         metaHtml = metaHtml,
-        preHtml = "<p>${activity?.description ?: event?.description}</p>",
+        preHtml = "${activity?.description ?: event?.description}",
         postHtml = notesHtml + postHtml,
         message = message,
     )

@@ -183,6 +183,7 @@ class ModifyActivity(
                     value = current.description,
                     label = "Description",
                     stacked = false,
+                    help = "Text should be wrapped in a <p></p> element",
                 ),
                 Select(
                     name = "phase",
@@ -260,6 +261,7 @@ class ModifyActivity(
                     label = "Critical Success Message",
                     stacked = false,
                     required = false,
+                    help = "Text should be wrapped in a <p></p> element",
                 ),
                 TextArea(
                     name = "success",
@@ -267,6 +269,7 @@ class ModifyActivity(
                     label = "Success Message",
                     stacked = false,
                     required = false,
+                    help = "Text should be wrapped in a <p></p> element",
                 ),
                 TextArea(
                     name = "failure",
@@ -274,6 +277,7 @@ class ModifyActivity(
                     label = "Failure Message",
                     stacked = false,
                     required = false,
+                    help = "Text should be wrapped in a <p></p> element",
                 ),
                 TextArea(
                     name = "criticalFailure",
@@ -281,6 +285,7 @@ class ModifyActivity(
                     label = "Critical Failure Message",
                     stacked = false,
                     required = false,
+                    help = "Text should be wrapped in a <p></p> element",
                 ),
             )
         )
