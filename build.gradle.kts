@@ -244,20 +244,28 @@ tasks.register<UnpackJsonFiles>("unpackJson") {
 tasks.register<Download>("downloadTxClient") {
     val current = OperatingSystem.current()
     // note that we assume the most popular architecture here
-    val type = if (current.isLinux) {
-        "linux-amd64"
+    if (current.isLinux) {
+        src("https://github.com/transifex/cli/releases/download/v1.6.17/tx-linux-amd64.tar.gz")
     } else if (current.isMacOsX) {
-        "darwin-arm64"
+        src("https://github.com/transifex/cli/releases/download/v1.6.17/tx-darwin-arm64.tar.gz")
     } else {
-        "windows-amd64"
+        src("https://github.com/transifex/cli/releases/download/v1.6.17/tx-windows-amd64.zip")
     }
-    src("https://github.com/transifex/cli/releases/download/v1.6.17/tx-$type.tar.gz")
-    dest(layout.buildDirectory.file("tx.tar.gz"))
+    if (current.isLinux || current.isMacOsX) {
+        dest(layout.buildDirectory.file("tx.tar.gz"))
+    } else {
+        dest(layout.buildDirectory.file("tx.zip"))
+    }
 }
 
 tasks.register<Copy>("extractTxClient") {
     dependsOn("downloadTxClient")
-    from(tarTree(resources.gzip(layout.buildDirectory.file("tx.tar.gz"))))
+    val current = OperatingSystem.current()
+    if(current.isLinux || current.isMacOsX) {
+        from(tarTree(resources.gzip(layout.buildDirectory.file("tx.tar.gz"))))
+    } else {
+        from(zipTree(layout.buildDirectory.file("tx.tar.gz")))
+    }
     into(layout.buildDirectory.dir("transifex"))
 }
 

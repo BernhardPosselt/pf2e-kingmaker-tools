@@ -67,31 +67,65 @@ If you've enabled the official module, the following things are automatically ta
 If you are interested in hacking on the code base, take a look at the [Kotlin JS Primer](./docs/Kotlin%20JS%20Primer.md)
 for a quick intro on how to interact with the js api.
 
-### Setup
+### Windows Setup
 
-#### Windows
+Make sure you have FoundryVTT installed and you've launched it at least once to ensure all directories are created properly.
 
 Install the following things:
 
-* [git](https://git-scm.com/downloads/win)
-* [node](https://nodejs.org/en/download) (make sure to pick yarn as the package manager)
-* [JDK 21](https://adoptium.net/installation/):
+* [git](https://git-scm.com/downloads/win) (pick all the default options)
+* [node](https://nodejs.org/en/download) click the green button named **Windows Installer (.msi)**
+* [JDK 21](https://adoptium.net/installation/) launch a Windows terminal and paste the following:
 
       winget install EclipseAdoptium.Temurin.21.JDK
 
 Then, restart your PC.
 
-Then open your git terminal in **%localappdata%/FoundryVTT/Data/modules/** by right-clicking onto an empty space inside the folder (in Windows 11, that option is hidden under **Show more options**) or create a symlink from another directory:
+Next, open your file explorer and paste the following path into the URL bar:
+
+    %localappdata%/FoundryVTT/Data/modules/ 
+
+This will take you to Foundry's modules folder. Inside the folder, right click onto an empty space and click **Open Git Bash here** (in Windows 11, that option is hidden under **Show more options**).
+
+From now on, all commands will be run via the Git Bash instead of the Windows terminal.
+
+Paste (right click -> paste) the following command into the Git Bash to download the code (if you are more well versed with Windows, you can probably also clone the code somewhere else and create a symlink):
 
     git clone https://github.com/BernhardPosselt/pf2e-kingmaker-tools.git 
 
-The folder **Data/modules/pf2e-kingmaker-tools** should now exist. 
+The folder **pf2e-kingmaker-tools** should now exist. Change into it:
 
-Next, change into the folder and open your git terminal inside:
+    cd pf2e-kingmaker-tools
 
+Optionally, log into your Transifex account and retrieve your token from your [account settings page]( https://app.transifex.com/user/settings/api/). Then create your rc file using:
 
+    nano ~/.transifexrc
 
-#### Linux & macOS
+Paste the following contents
+
+```ini
+[https://app.transifex.com]
+rest_hostname = https://rest.api.transifex.com
+token         = TOKEN_HERE
+```
+
+Save the file with **CTRL + o**, then exit with **CTRL + x**.
+
+Pull all translation files using:
+
+    ./gradlew txPull
+
+Then compile the application using:
+
+    ./gradlew assemble
+
+And open FoundryVTT. The module should be listed as installed. You will need to run the **assemble** command again each time you change a file or pull a translation from Transifex
+
+You can pull the latest changes inside the folder using:
+
+    git pull
+
+### Linux & macOS Setup
 
 Install the following things using your package manager or homebrew:
 
