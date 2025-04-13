@@ -22,6 +22,7 @@ import at.posselt.pfrpg2e.migrations.migrations.Migration13
 import at.posselt.pfrpg2e.migrations.migrations.Migration14
 import at.posselt.pfrpg2e.migrations.migrations.Migration15
 import at.posselt.pfrpg2e.migrations.migrations.Migration16
+import at.posselt.pfrpg2e.migrations.migrations.Migration17
 import at.posselt.pfrpg2e.migrations.migrations.Migration9
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.getAppFlag
@@ -67,6 +68,7 @@ private val migrations = listOf(
     Migration14(),
     Migration15(),
     Migration16(),
+    Migration17(),
 )
 
 val latestMigrationVersion = migrations.maxOfOrNull { it.version }!!
