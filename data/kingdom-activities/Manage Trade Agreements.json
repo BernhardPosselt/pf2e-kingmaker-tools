@@ -1,33 +1,35 @@
 {
-    "id": "manage-trade-agreements",
-    "order": 5,
-    "oncePerRound": true,
-    "fortune": false,
-    "enabled": true,
-    "phase": "commerce",
-    "dc": "control",
-    "title": "Manage Trade Agreements",
-    "modifiers": [{
-        "enabled": false,
-        "value": -5,
-        "buttonLabel": "+5 DC Increase managed on previous turn",
-        "name": "Managed Trade Agreements last turn",
-        "type": "untyped"
-    }],
-    "description": "You send agents out to attend to established trade agreements. @loseMultiple2ResourcePoints per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.",
-    "skills": {
-        "trade": 0
-    },
-    "criticalSuccess": {
-        "msg": "@gainMultiple1ResourceDiceNextTurn per trade agreement, and 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries)."
-    },
-    "success": {
-        "msg": "@gainMultiple1ResourceDiceNextTurn per trade agreement, or 1 Commodity of your choice per trade agreement (no more than half of these Commodities may be Luxuries)."
-    },
-    "failure": {
-        "msg": "@gainMultiple1ResourcePointsNextTurn per trade agreement"
-    },
-    "criticalFailure": {
-        "msg": "You gain no benefit, as your traders and merchants met with bad luck on the road. You can’t Manage Trade Agreements for 1 Kingdom turn."
+  "id": "manage-trade-agreements",
+  "order": 5,
+  "oncePerRound": true,
+  "fortune": false,
+  "enabled": true,
+  "phase": "commerce",
+  "dc": "control",
+  "title": "activities.manage-trade-agreements.title",
+  "modifiers": [
+    {
+      "enabled": false,
+      "value": -5,
+      "buttonLabel": "+5 DC Increase managed on previous turn",
+      "name": "Managed Trade Agreements last turn",
+      "type": "untyped"
     }
+  ],
+  "description": "activities.manage-trade-agreements.description",
+  "skills": {
+    "trade": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.manage-trade-agreements.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.manage-trade-agreements.success.msg"
+  },
+  "failure": {
+    "msg": "activities.manage-trade-agreements.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.manage-trade-agreements.criticalFailure.msg"
+  }
 }

@@ -1,38 +1,42 @@
 {
-    "id": "spread-the-legend",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Spread the Legend",
-    "description": "You work to spread the word of the party’s heroics and achievements, both through word of mouth and by distributing chapbooks or one-sheets detailing their exploits. Attempt a basic Arts check to determine the success of your efforts. If you have secured a printing press for the kingdom, the Arts check gains a +2 item bonus.",
-    "skills": {
-        "arts": 0
-    },
-    "criticalSuccess": {
-        "msg": "Not only do your stories bring pride and patriotism to the nation, but they also help increase its glory. @lose1d6Unrest, and @gain1FameNextTurn. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.",
-        "modifiers": [{
-          "name": "Spread the Legend: Critical Success",
-          "buttonLabel": "Reduce Dangerous Event Modifier by 1",
-          "enabled": true,
-          "value": 1,
-          "type": "untyped",
-          "applyIf": [{
-                    "in": [
-                        "dangerous",
-                        "@eventTraits"
-                    ]
-                }]
-        }]
-    },
-    "success": {
-        "msg": "The rousing and inspiring stories you spread about the PCs helps to bring the nation together. @lose1d6Unrest"
-    },
-    "failure": {
-        "msg": "You avoid spreading unfortunate news, but only just barely. The citizens are only slightly entertained by their leaders’ exploits. @lose1Unrest."
-    },
-    "criticalFailure": {
-        "msg": "You accidentally spreads news of a humiliating or embarrassing nature, causing the people of the kingdom to lose respect for their leaders. @gain1d4Unrest."
-    }
+  "id": "spread-the-legend",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.spread-the-legend.title",
+  "description": "activities.spread-the-legend.description",
+  "skills": {
+    "arts": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.spread-the-legend.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "name": "Spread the Legend: Critical Success",
+        "buttonLabel": "Reduce Dangerous Event Modifier by 1",
+        "enabled": true,
+        "value": 1,
+        "type": "untyped",
+        "applyIf": [
+          {
+            "in": [
+              "dangerous",
+              "@eventTraits"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "success": {
+    "msg": "activities.spread-the-legend.success.msg"
+  },
+  "failure": {
+    "msg": "activities.spread-the-legend.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.spread-the-legend.criticalFailure.msg"
+  }
 }

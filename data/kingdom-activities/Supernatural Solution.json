@@ -1,26 +1,26 @@
 {
-    "id": "supernatural-solution",
-    "enabled": true,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Supernatural Solution",
-    "description": "Your spellcasters try to resolve issues when mundane solutions just aren’t enough. Attempt a basic check.",
-    "oncePerRound": false,
-    "fortune": true,
-    "skills": {
-        "magic": 0
-    },
-    "criticalSuccess": {
-        "msg": "You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn @gain1SupernaturalSolution. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10XP instead."
-    },
-    "success": {
-        "msg": "You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn @gain1SupernaturalSolution. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10XP instead. However, you @lose1d4ResourcePoints to research the solution. This cost is paid now, whether or not you use your supernatural solution."
-    },
-    "failure": {
-        "msg": "Your attempt at researching a supernatural solution costs additional RP to research, but is ultimately a failure, providing no advantage. @lose2d6ResourcePoints"
-    },
-    "criticalFailure": {
-        "msg": "Your attempt at researching a supernatural solution costs additional RP to research, but is ultimately a failure, providing no advantage. @lose2d6ResourcePoints. In addition, your spellcasters’ resources and morale are impacted such that you cannot attempt a Supernatural Solution again for 2 Kingdom turns."
-    },
-    "special": "You cannot influence a check with Supernatural Solution and Creative Solution simultaneously."
+  "id": "supernatural-solution",
+  "enabled": true,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.supernatural-solution.title",
+  "description": "activities.supernatural-solution.description",
+  "oncePerRound": false,
+  "fortune": true,
+  "skills": {
+    "magic": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.supernatural-solution.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.supernatural-solution.success.msg"
+  },
+  "failure": {
+    "msg": "activities.supernatural-solution.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.supernatural-solution.criticalFailure.msg"
+  },
+  "special": "activities.supernatural-solution.special"
 }

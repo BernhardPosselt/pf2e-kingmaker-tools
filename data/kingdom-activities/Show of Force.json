@@ -1,25 +1,25 @@
 {
-    "id": "show-of-force",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Show of Force",
-    "description": "Using your advice, a public show of force is performed in an attempt to curtail criminal activity or subversive activity in the kingdom. Attempt a basic Warfare check to determine how effective the Show of Force is.",
-    "skills": {
-        "warfare": 0
-    },
-    "criticalSuccess": {
-        "msg": "The kingdom’s criminals are cowed by the show of force. @lose2Crime and reduce one other Ruin of your choice by 1: <ul><li>@lose1Corruption</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
-    },
-    "success": {
-        "msg": "The kingdom’s criminals take note of the show of force. @lose1Crime"
-    },
-    "failure": {
-        "msg": "The show of force fails to impress criminals but unsettles the rest of the citizens. @gain1Unrest."
-    },
-    "criticalFailure": {
-        "msg": "The criminals are emboldened by the failed show of force. @gain1d4Unrest and @gain1Crime."
-    }
+  "id": "show-of-force",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.show-of-force.title",
+  "description": "activities.show-of-force.description",
+  "skills": {
+    "warfare": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.show-of-force.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.show-of-force.success.msg"
+  },
+  "failure": {
+    "msg": "activities.show-of-force.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.show-of-force.criticalFailure.msg"
+  }
 }

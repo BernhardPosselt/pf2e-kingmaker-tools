@@ -1,26 +1,26 @@
 {
-    "id": "recover-army-lost",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "army",
-    "dc": "control",
-    "title": "Recover Army: Lost",
-    "description": "When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check.",
-    "skills": {
-        "exploration": 0,
-        "wilderness": 2
-    },
-    "criticalSuccess": {
-        "msg": "You remove the affliction."
-    },
-    "success": {
-        "msg": "You remove the affliction."
-    },
-    "failure": {
-        "msg": "You fail to remove the affliction."
-    },
-    "criticalFailure": {
-        "msg": "You fail to remove the affliction and your soldier’s lowered morale spreads discontent; @gain1Unrest."
-    }
+  "id": "recover-army-lost",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "army",
+  "dc": "control",
+  "title": "activities.recover-army-lost.title",
+  "description": "activities.recover-army-lost.description",
+  "skills": {
+    "exploration": 0,
+    "wilderness": 2
+  },
+  "criticalSuccess": {
+    "msg": "activities.recover-army-lost.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.recover-army-lost.success.msg"
+  },
+  "failure": {
+    "msg": "activities.recover-army-lost.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.recover-army-lost.criticalFailure.msg"
+  }
 }

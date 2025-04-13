@@ -1,27 +1,27 @@
 {
-    "id": "irrigation",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "region",
-    "dc": "control",
-    "title": "Irrigation",
-    "automationNotes": "Critical Failure Flat Check increase is not automated",
-    "description": "<p>You send excavators to build waterways, canals, or drainage systems to convey water from areas that have natural access to a river or lake. Spend RP as determined by the hex’s most inhospitable terrain feature:</p>\n<ul>\n<li><b>Mountains</b>: @lose12ResourcePoints</li>\n<li><b>Swamps</b>: @lose8ResourcePoints</li>\n<li><b>Forests</b>: @lose4ResourcePoints</li>\n<li><b>Hills</b>: @lose2ResourcePoints</li>\n<li><b>Plains</b>: @lose1ResourcePoints</li>\n</ul>\n<p>Then attempt a basic check.</p>",
-    "requirement": "You control a hex adjacent to a river or lake that itself does not contain a river or lake.",
-    "skills": {
-        "engineering": 1
-    },
-    "criticalSuccess": {
-        "msg": "The hex gains a river or lake terrain feature (or you change the effects of a previous critical failure at Irrigation in this hex into a failure); work with your GM to determine where these features appear in the hex. In addition, your workers were efficient and quick, and you regain half the RP you spent building the waterways."
-    },
-    "success": {
-        "msg": "The hex gains a river or lake terrain feature (or you change the effects of a previous critical failure at Irrigation in this hex into a failure); work with your GM to determine where these features appear in the hex."
-    },
-    "failure": {
-        "msg": "You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature."
-    },
-    "criticalFailure": {
-        "msg": "You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature. Your attempts at Irrigation are so completely useless that they become breeding grounds for disease. @gain1Unrest. From this point onward, at the start of your Kingdom turn’s Event phase, attempt a @Check[type:flat|dc:4]. This flat check’s DC increases by 1 for each hex in your kingdom that contains a critically failed attempt at Irrigation. If you fail this flat check, your kingdom suffers a Plague event in addition to any other event it might have. You can attempt this activity again in a later Kingdom turn to undo a critically failed Irrigation attempt."
-    }
+  "id": "irrigation",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "region",
+  "dc": "control",
+  "title": "activities.irrigation.title",
+  "automationNotes": "activities.irrigation.automationNotes",
+  "description": "activities.irrigation.description",
+  "requirement": "activities.irrigation.requirement",
+  "skills": {
+    "engineering": 1
+  },
+  "criticalSuccess": {
+    "msg": "activities.irrigation.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.irrigation.success.msg"
+  },
+  "failure": {
+    "msg": "activities.irrigation.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.irrigation.criticalFailure.msg"
+  }
 }

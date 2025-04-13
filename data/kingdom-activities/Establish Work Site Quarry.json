@@ -1,26 +1,26 @@
 {
-    "id": "establish-work-site-quarry",
-    "title": "Establish Work Site Quarry",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "region",
-    "dc": "control",
-    "automationNotes": "Doubled commodity yields on a critical success are not implemented",
-    "description": "<p>Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:</p>\n<ul>\n<li><b>Mountains</b>: @lose12ResourcePoints</li>\n<li><b>Swamps</b>: @lose8ResourcePoints</li>\n<li><b>Forests</b>: @lose4ResourcePoints</li>\n<li><b>Hills</b>: @lose2ResourcePoints</li>\n<li><b>Plains</b>: @lose1ResourcePoints</li>\n</ul>\n<p>Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.</p>",
-    "skills": {
-        "engineering": 0
-    },
-    "criticalSuccess": {
-        "msg": "You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn."
-    },
-    "success": {
-        "msg": "You establish a Work Site in the hex."
-    },
-    "failure": {
-        "msg": "You fail to establish a Work Site in the hex."
-    },
-    "criticalFailure": {
-        "msg": "Not only do you fail to establish a Work Site, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. @gain1Unrest"
-    }
+  "id": "establish-work-site-quarry",
+  "title": "activities.establish-work-site-quarry.title",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "region",
+  "dc": "control",
+  "automationNotes": "activities.establish-work-site-quarry.automationNotes",
+  "description": "activities.establish-work-site-quarry.description",
+  "skills": {
+    "engineering": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.establish-work-site-quarry.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.establish-work-site-quarry.success.msg"
+  },
+  "failure": {
+    "msg": "activities.establish-work-site-quarry.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.establish-work-site-quarry.criticalFailure.msg"
+  }
 }

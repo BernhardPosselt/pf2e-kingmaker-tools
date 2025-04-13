@@ -1,48 +1,48 @@
 {
-    "id": "request-foreign-aid",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "leadership",
-    "dc": "custom",
-    "title": "Request Foreign Aid",
-    "description": "When disaster strikes, you send out a call for help to another nation with whom you have diplomatic relations. The DC of this check is equal to the other group’s Negotiation DC +2 (see the sidebar on page 519).",
-    "requirement": "You have diplomatic relations with the group you are requesting aid from.",
-    "skills": {
-        "statecraft": 1
-    },
-    "criticalSuccess": {
-        "msg": "Your ally’s aid grants a +4 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn. You can choose to apply this bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known. In addition, @gain2RolledResourceDice; this RP does not accrue into XP at the end of the turn if you don’t spend it.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "buttonLabel": "+4 Circumstance to Any Check",
-                "isConsumedAfterRoll": true,
-                "enabled": false,
-                "value": 4,
-                "name": "Request Foreign Aid: Critical Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "success": {
-        "msg": "Your ally’s aid grants you either a +2 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn or @gain1RolledResourceDice. This RP does not accrue into XP at the end of the turn if you don’t spend it. You can choose to apply the bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "isConsumedAfterRoll": true,
-                "buttonLabel": "+2 Circumstance to Any Check",
-                "enabled": false,
-                "value": 2,
-                "name": "Request Foreign Aid: Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "failure": {
-        "msg": "Your ally marshals its resources but cannot get aid to you in time to deal with your current situation. @gain1d4ResourcePointsNextTurn"
-    },
-    "criticalFailure": {
-        "msg": "Your ally is tangled up in its own problems and is unable to assist you, is insulted by your request for aid, or might even have an interest in seeing your kingdom struggle against one of your ongoing events. Whatever the case, your pleas for aid make your kingdom look desperate. You gain no aid, but you do @gain1d4Unrest."
-    }
+  "id": "request-foreign-aid",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "leadership",
+  "dc": "custom",
+  "title": "activities.request-foreign-aid.title",
+  "description": "activities.request-foreign-aid.description",
+  "requirement": "activities.request-foreign-aid.requirement",
+  "skills": {
+    "statecraft": 1
+  },
+  "criticalSuccess": {
+    "msg": "activities.request-foreign-aid.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "buttonLabel": "+4 Circumstance to Any Check",
+        "isConsumedAfterRoll": true,
+        "enabled": false,
+        "value": 4,
+        "name": "Request Foreign Aid: Critical Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "success": {
+    "msg": "activities.request-foreign-aid.success.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "isConsumedAfterRoll": true,
+        "buttonLabel": "+2 Circumstance to Any Check",
+        "enabled": false,
+        "value": 2,
+        "name": "Request Foreign Aid: Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "failure": {
+    "msg": "activities.request-foreign-aid.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.request-foreign-aid.criticalFailure.msg"
+  }
 }

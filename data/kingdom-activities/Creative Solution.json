@@ -1,44 +1,44 @@
 {
-    "id": "creative-solution",
-    "enabled": true,
-    "oncePerRound": false,
-    "fortune": true,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Creative Solution",
-    "description": "You work with your kingdom’s scholars, thinkers, and practitioners of magical and mundane experimentation to come up with new ways to resolve issues when business as usual is just not working. Attempt a basic check. (Clarification: This was clarified to act as a reroll with +2 Circumstance Bonus and Fortune. The PCs might know the degree of success before they attempt the reroll, but the GM must not tell them the consequence of that degree before they reroll. This will mostly come up when handling kingdom events)",
-    "skills": {
-        "scholarship": 0
-    },
-    "criticalSuccess": {
-        "msg": "You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn @gain1CreativeSolution. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead."
-    },
-    "success": {
-        "msg": "You can call upon the solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn @gain1CreativeSolution. Do so when a Kingdom skill check is rolled, but before you learn the result. Immediately reroll that check with a +2 circumstance bonus; you must take the new result. If you don’t use your Creative Solution by the end of this turn, you lose this benefit and gain 10XP instead. In addition, @lose1d4ResourcePoints to research the solution. This cost is paid now, whether or not you use your Creative Solution."
-    },
-    "failure": {
-        "msg": "Your attempt at researching is a failure and you @lose2d6ResourcePoints. It provides no advantage."
-    },
-    "criticalFailure": {
-        "msg": "Your attempt at researching is a failure and you @lose2d6ResourcePoints. It provides no advantage. In addition, your scholars and thinkers are so frustrated that you take a –1 circumstance penalty to Culture-based checks until the end of the next Kingdom turn.",
-        "modifiers": [
-            {
-                "turns": 2,
-                "enabled": true,
-                "value": -1,
-                "buttonLabel": "-1 Circumstance to Culture",
-                "name": "Creative Solution: Critical Failure",
-                "type": "circumstance",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "culture"
-                        ]
-                    }
-                ]
-            }
+  "id": "creative-solution",
+  "enabled": true,
+  "oncePerRound": false,
+  "fortune": true,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.creative-solution.title",
+  "description": "activities.creative-solution.description",
+  "skills": {
+    "scholarship": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.creative-solution.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.creative-solution.success.msg"
+  },
+  "failure": {
+    "msg": "activities.creative-solution.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.creative-solution.criticalFailure.msg",
+    "modifiers": [
+      {
+        "turns": 2,
+        "enabled": true,
+        "value": -1,
+        "buttonLabel": "-1 Circumstance to Culture",
+        "name": "Creative Solution: Critical Failure",
+        "type": "circumstance",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "culture"
+            ]
+          }
         ]
-    },
-    "special": "You cannot influence a check with Supernatural Solution and Creative Solution simultaneously."
+      }
+    ]
+  },
+  "special": "activities.creative-solution.special"
 }

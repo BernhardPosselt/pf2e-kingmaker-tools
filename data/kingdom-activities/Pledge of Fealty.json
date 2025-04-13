@@ -1,27 +1,27 @@
 {
-    "id": "pledge-of-fealty",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Pledge of Fealty",
-    "description": "When your representatives encounter freeholders, refugees, independent groups, or other bands of individuals gathered in the wilderness who aren’t already part of a nation, you can offer them a place in your kingdom, granting them the benefits of protection, security, and prosperity in exchange for their fealty. The benefits granted to your kingdom can vary wildly, but often manifest as one-time boons to your commodities or unique bonuses against certain types of events. The adventure text in this campaign offers numerous examples of groups who could accept a Pledge of Fealty. You can attempt this skill check with Intrigue, Statecraft, or Warfare; however, certain groups will respond better (or worse) to specific skills. The DC is the group’s Negotiation DC.",
-    "skills": {
-        "intrigue": 1,
-        "statecraft": 1,
-        "warfare": 1
-    },
-    "criticalSuccess": {
-        "msg": "The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If you haven’t already claimed the hex in which the group dwells, you immediately do so, gain 10XP and increasing your kingdom's Size by 1. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty."
-    },
-    "success": {
-        "msg": "The group becomes part of your kingdom, granting the specific boon or advantage listed in that group’s entry. If the hex doesn’t share a border with your kingdom, it becomes a secondary territory and checks involving this location take a Control penalty. @lose1RolledResourceDice to the result to integrate the group into your kingdom."
-    },
-    "failure": {
-        "msg": "The group refuses to pledge to you at this time. You can attempt to get them to Pledge Fealty next turn. @gain1Unrest"
-    },
-    "criticalFailure": {
-        "msg": "The group refuses to pledge to you—furthermore, it will never Pledge Fealty to your kingdom, barring significant in-play changes or actions by the PCs (subject to the GM’s approval). The group’s potentially violent rebuff of your offer @gain2Unrest and increases a Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
-    }
+  "id": "pledge-of-fealty",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.pledge-of-fealty.title",
+  "description": "activities.pledge-of-fealty.description",
+  "skills": {
+    "intrigue": 1,
+    "statecraft": 1,
+    "warfare": 1
+  },
+  "criticalSuccess": {
+    "msg": "activities.pledge-of-fealty.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.pledge-of-fealty.success.msg"
+  },
+  "failure": {
+    "msg": "activities.pledge-of-fealty.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.pledge-of-fealty.criticalFailure.msg"
+  }
 }

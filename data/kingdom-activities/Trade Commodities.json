@@ -1,34 +1,35 @@
 {
-    "id": "trade-commodities",
-    "order": 4,
-    "oncePerRound": true,
-    "fortune": false,
-    "enabled": true,
-    "phase": "commerce",
-    "dc": "control",
-    "title": "Trade Commodities",
-    "description": "There are five different categories of Commodities: Food, Lumber, Luxuries, Ore, and Stone. When you Trade Commodities, select one Commodity that your kingdom currently stockpiles and reduce that Commodity’s stockpile by up to 4. Then attempt a basic check. If you trade with a group that you’ve established diplomatic relations with, you gain a +1 circumstance bonus to the check.",
-    "modifiers": [{
-        "type": "circumstance",
-        "value": 1,
-        "enabled": false,
-        "name": "Trading with a group with established diplomatic relationships",
-        "buttonLabel": "+1 Circumstance to trade with a group with established diplomatic relationships"
+  "id": "trade-commodities",
+  "order": 4,
+  "oncePerRound": true,
+  "fortune": false,
+  "enabled": true,
+  "phase": "commerce",
+  "dc": "control",
+  "title": "activities.trade-commodities.title",
+  "description": "activities.trade-commodities.description",
+  "modifiers": [
+    {
+      "type": "circumstance",
+      "value": 1,
+      "enabled": false,
+      "name": "Trading with a group with established diplomatic relationships",
+      "buttonLabel": "+1 Circumstance to trade with a group with established diplomatic relationships"
     }
-    ],
-    "skills": {
-        "industry": 0
-    },
-    "criticalSuccess": {
-        "msg": "@gainMultiple2ResourceDiceNextTurn per point of stockpile expended from your Commodity now."
-    },
-    "success": {
-        "msg": "@gainMultiple1ResourceDiceNextTurn per point of stockpile expended from your Commodity now."
-    },
-    "failure": {
-        "msg": "@gain1ResourceDiceNextTurn"
-    },
-    "criticalFailure": {
-        "msg": "You gain no bonus Resource Dice (though the Commodity remains depleted). If you Traded Commodities the previous turn, @gain1Unrest"
-    }
+  ],
+  "skills": {
+    "industry": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.trade-commodities.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.trade-commodities.success.msg"
+  },
+  "failure": {
+    "msg": "activities.trade-commodities.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.trade-commodities.criticalFailure.msg"
+  }
 }

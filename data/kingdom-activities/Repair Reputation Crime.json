@@ -1,26 +1,26 @@
 {
-    "id": "repair-reputation-crime",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "leadership",
-    "dc": "control",
-    "dcAdjustment": 2,
-    "title": "Repair Reputation Crime",
-    "description": "When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.\nThe skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.",
-    "skills": {
-        "trade": 1
-    },
-    "criticalSuccess": {
-        "msg": "@lose2Crime and reduce its current ruin penalty by 1 to a minimum of 0."
-    },
-    "success": {
-        "msg": "@lose1Crime"
-    },
-    "failure": {
-        "msg": "You fail to reduce the targeted Ruin. You cannot attempt to Repair Reputation on this Ruin for 1 Kingdom turn."
-    },
-    "criticalFailure": {
-        "msg": "You fail to reduce the targeted Ruin in a particularly public and embarrassing way. @gain1d4Unrest, and you cannot attempt to Repair Reputation for 3 Kingdom turns."
-    }
+  "id": "repair-reputation-crime",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "leadership",
+  "dc": "control",
+  "dcAdjustment": 2,
+  "title": "activities.repair-reputation-crime.title",
+  "description": "activities.repair-reputation-crime.description",
+  "skills": {
+    "trade": 1
+  },
+  "criticalSuccess": {
+    "msg": "activities.repair-reputation-crime.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.repair-reputation-crime.success.msg"
+  },
+  "failure": {
+    "msg": "activities.repair-reputation-crime.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.repair-reputation-crime.criticalFailure.msg"
+  }
 }

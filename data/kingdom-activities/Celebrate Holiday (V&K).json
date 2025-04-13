@@ -1,89 +1,89 @@
 {
-    "id": "celebrate-holiday-vk",
-    "oncePerRound": true,
-    "fortune": false,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Celebrate Holiday (V&K)",
-    "description": "You declare a day of celebration. Holidays may be religious, historical, martial, or simply festive, but all relieve your citizens from their labors and give them a chance to make merry at the kingdom’s expense. Attempt a basic check, but if your kingdom Celebrated a Holiday the previous turn, the DC increases by 4, as your kingdom hasn’t had a chance to recover from the previous gala.",
-    "skills": {
-        "folklore": 0,
-        "politics": 0
-    },
-    "modifiers": [
-        {
-            "name": "Celebrated holiday on the previous turn",
-            "type": "untyped",
-            "enabled": false,
-            "value": -4,
-            "buttonLabel": "+4 DC increase if celebrated holiday on the previous turn"
-        }
-    ],
-    "criticalSuccess": {
-        "msg": "Your holidays are a delight to your people. The event is expensive, but incidental income from the celebrants covers the cost. You gain a +2 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn.",
-        "modifiers": [
-            {
-                "turns": 2,
-                "enabled": true,
-                "buttonLabel": "+2 Circumstance to Loyalty",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "loyalty"
-                        ]
-                    }
-                ],
-                "value": 2,
-                "name": "Celebrate Holiday: Critical Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "success": {
-        "msg": "Your holidays are a success, but they’re also expensive. You gain a +1 circumstance bonus to Loyalty-based checks until the end of your next Kingdom turn. @lose1RolledResourceDice. If you can’t afford this cost, treat this result as a Critical Failure instead.",
-        "modifiers": [
-            {
-                "turns": 2,
-                "enabled": true,
-                "buttonLabel": "+1 Circumstance to Loyalty",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "loyalty"
-                        ]
-                    }
-                ],
-                "value": 1,
-                "name": "Celebrate Holiday: Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "failure": {
-        "msg": "The holiday passes with little enthusiasm, but is still expensive. @lose1RolledResourceDice. If you can’t afford this cost, treat this result as a Critical Failure instead."
-    },
-    "criticalFailure": {
-        "msg": "Your festival days are poorly organized, and the citizens actively mock your failed attempt to celebrate. @lose4ResourceDiceNextTurn. The failure also causes you to take a –1 circumstance penalty to Loyalty-based checks until the end of the next Kingdom turn.",
-        "modifiers": [
-            {
-                "turns": 2,
-                "enabled": true,
-                "buttonLabel": "-1 Circumstance to Loyalty",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "loyalty"
-                        ]
-                    }
-                ],
-                "value": -1,
-                "name": "Celebrate Holiday: Critical Failure",
-                "type": "circumstance"
-            }
-        ]
+  "id": "celebrate-holiday-vk",
+  "oncePerRound": true,
+  "fortune": false,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.celebrate-holiday-vk.title",
+  "description": "activities.celebrate-holiday-vk.description",
+  "skills": {
+    "folklore": 0,
+    "politics": 0
+  },
+  "modifiers": [
+    {
+      "name": "Celebrated holiday on the previous turn",
+      "type": "untyped",
+      "enabled": false,
+      "value": -4,
+      "buttonLabel": "+4 DC increase if celebrated holiday on the previous turn"
     }
+  ],
+  "criticalSuccess": {
+    "msg": "activities.celebrate-holiday-vk.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "turns": 2,
+        "enabled": true,
+        "buttonLabel": "+2 Circumstance to Loyalty",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "loyalty"
+            ]
+          }
+        ],
+        "value": 2,
+        "name": "Celebrate Holiday: Critical Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "success": {
+    "msg": "activities.celebrate-holiday-vk.success.msg",
+    "modifiers": [
+      {
+        "turns": 2,
+        "enabled": true,
+        "buttonLabel": "+1 Circumstance to Loyalty",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "loyalty"
+            ]
+          }
+        ],
+        "value": 1,
+        "name": "Celebrate Holiday: Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "failure": {
+    "msg": "activities.celebrate-holiday-vk.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.celebrate-holiday-vk.criticalFailure.msg",
+    "modifiers": [
+      {
+        "turns": 2,
+        "enabled": true,
+        "buttonLabel": "-1 Circumstance to Loyalty",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "loyalty"
+            ]
+          }
+        ],
+        "value": -1,
+        "name": "Celebrate Holiday: Critical Failure",
+        "type": "circumstance"
+      }
+    ]
+  }
 }

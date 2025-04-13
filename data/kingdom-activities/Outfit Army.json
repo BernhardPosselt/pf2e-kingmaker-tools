@@ -1,26 +1,26 @@
 {
-    "id": "outfit-army",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "army",
-    "dc": "control",
-    "title": "Outfit Army",
-    "description": "You provide your army with better gear. Choose what sort of gear you wish to provide your army with from the list. The level of the gear chosen must be equal to or less than the army’s level. If you’re crafting or purchasing gear, the level of the gear chosen must be equal to or less than your kingdom level. If you’re distributing resources gained from battle, the level of the gear chosen must be equal to or less than the highest level of an enemy army defeated in that battle. If you’re purchasing the gear, this activity requires a basic Trade check and costs the standard amount of RP for the gear; you cannot purchase magic gear unless your kingdom is at least expert rank in Magic. If you’re distributing gear gained from battle, this activity requires a basic Warfare check and does not cost RP.",
-    "skills": {
-        "trade": 0,
-        "warfare": 0
-    },
-    "criticalSuccess": {
-        "msg": "The gear proved particularly easy to outfit, and the army becomes efficient."
-    },
-    "success": {
-        "msg": "The gear is sufficient, and your army becomes outfitted with it immediately."
-    },
-    "failure": {
-        "msg": "The gear proves to be unusable and the attempt to outfit the army fails. If you spent RP on the check, it is refunded."
-    },
-    "criticalFailure": {
-        "msg": "The gear proves to be unusable and the attempt to outfit the army fails."
-    }
+  "id": "outfit-army",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "army",
+  "dc": "control",
+  "title": "activities.outfit-army.title",
+  "description": "activities.outfit-army.description",
+  "skills": {
+    "trade": 0,
+    "warfare": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.outfit-army.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.outfit-army.success.msg"
+  },
+  "failure": {
+    "msg": "activities.outfit-army.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.outfit-army.criticalFailure.msg"
+  }
 }

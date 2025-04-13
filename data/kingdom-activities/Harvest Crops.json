@@ -1,25 +1,25 @@
 {
-    "id": "harvest-crops",
-    "title": "Harvest Crops",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "region",
-    "dc": "control",
-    "description": "Attempt a basic check to forage for wild edibles or gather excess crops from farms.",
-    "skills": {
-        "agriculture": 0
-    },
-    "criticalSuccess": {
-        "msg": "@gain1d4Food"
-    },
-    "success": {
-        "msg": "@gain1Food"
-    },
-    "failure": {
-        "msg": "Gain no Food commodities."
-    },
-    "criticalFailure": {
-        "msg": "@lose1d4Food to spoilage; if you have no Food to lose, you instead @gain1Unrest"
-    }
+  "id": "harvest-crops",
+  "title": "activities.harvest-crops.title",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "region",
+  "dc": "control",
+  "description": "activities.harvest-crops.description",
+  "skills": {
+    "agriculture": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.harvest-crops.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.harvest-crops.success.msg"
+  },
+  "failure": {
+    "msg": "activities.harvest-crops.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.harvest-crops.criticalFailure.msg"
+  }
 }

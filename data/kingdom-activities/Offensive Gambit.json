@@ -1,26 +1,26 @@
 {
-    "id": "offensive-gambit",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "army",
-    "dc": "scouting",
-    "title": "Offensive Gambit",
-    "description": "You order an attack against an enemy army, causing a war encounter to begin after this Kingdom turn ends. No check is necessary if you wish to engage the enemy without attempting to gain an advantage in initiative. If you want to gain an advantage by surprising the enemy, attempt an Intrigue check. If you want to gain an advantage by intimidating the enemy, attempt a Warfare check. In either case, the DC is equal to the enemy army’s Scouting DC.",
-    "requirement": "You have at least one army in the same hex as an enemy army.",
-    "skills": {
-        "intrigue": 0
-    },
-    "criticalSuccess": {
-        "msg": "Your approach surprises or intimidates the enemy. Your armies in this hex gain a +2 circumstance bonus on their initiative checks, and one enemy army of the party’s choice in this hex becomes shaken 1."
-    },
-    "success": {
-        "msg": "Your approach gives you an advantage. Your armies in this hex gain a +2 circumstance bonus on their initiative checks."
-    },
-    "failure": {
-        "msg": "You gain no advantage in the battle."
-    },
-    "criticalFailure": {
-        "msg": "Not only do you fail to gain advantage, but the enemy forces have anticipated the attack. Enemy armies in this hex at the time of the Offensive"
-    }
+  "id": "offensive-gambit",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "army",
+  "dc": "scouting",
+  "title": "activities.offensive-gambit.title",
+  "description": "activities.offensive-gambit.description",
+  "requirement": "activities.offensive-gambit.requirement",
+  "skills": {
+    "intrigue": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.offensive-gambit.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.offensive-gambit.success.msg"
+  },
+  "failure": {
+    "msg": "activities.offensive-gambit.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.offensive-gambit.criticalFailure.msg"
+  }
 }

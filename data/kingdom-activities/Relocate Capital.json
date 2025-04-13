@@ -1,26 +1,26 @@
 {
-    "id": "relocate-capital",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "leadership",
-    "dc": "control",
-    "dcAdjustment": 5,
-    "title": "Relocate Capital",
-    "description": "One of your settlements that is not your current capital must contain a Castle, Palace, or Town Hall. All leaders must spend all of their leadership activities during the Activity phase of a Kingdom turn on this activity. The kingdom leaders announce that they are uprooting the seat of government from its current home and reestablishing it in another settlement. Attempt a check with a DC equal to the kingdom’s Control DC + 5. You cannot Relocate your Capital again for at least 3 Kingdom turns.",
-    "skills": {
-        "industry": 1
-    },
-    "criticalSuccess": {
-        "msg": "The move goes off splendidly, with people excited about the new capital and celebrating the leadership’s wisdom."
-    },
-    "success": {
-        "msg": "The move goes smoothly and with minimal disruption, but some folks are upset or homesick. @gain1Unrest"
-    },
-    "failure": {
-        "msg": "The move causes unhappiness. @gain1Unrest and increase two Ruins of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
-    },
-    "criticalFailure": {
-        "msg": "The people reject the idea of the new capital and demand you move it back. The move is unsuccessful, and your capital remains unchanged. @gain1d4Unrest. Increase three Ruins of your choice by 1 and the fourth Ruin by 3: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
-    }
+  "id": "relocate-capital",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "leadership",
+  "dc": "control",
+  "dcAdjustment": 5,
+  "title": "activities.relocate-capital.title",
+  "description": "activities.relocate-capital.description",
+  "skills": {
+    "industry": 1
+  },
+  "criticalSuccess": {
+    "msg": "activities.relocate-capital.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.relocate-capital.success.msg"
+  },
+  "failure": {
+    "msg": "activities.relocate-capital.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.relocate-capital.criticalFailure.msg"
+  }
 }

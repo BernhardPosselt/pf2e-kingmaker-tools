@@ -1,80 +1,80 @@
 {
-    "order": 1,
-    "id": "collect-taxes",
-    "oncePerRound": true,
-    "fortune": false,
-    "enabled": true,
-    "phase": "commerce",
-    "dc": "control",
-    "title": "Collect Taxes",
-    "description": "Tax collectors travel through the lands to collect funds for the betterment of the kingdom. Attempt a basic check.",
-    "skills": {
-        "trade": 1
-    },
-    "criticalSuccess": {
-        "msg": "Your tax collectors are wildly successful! For the remainder of the Kingdom turn, gain a +2 circumstance bonus to Economy-based checks.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "buttonLabel": "+2 Circumstance to Economy",
-                "enabled": true,
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "economy"
-                        ]
-                    }
-                ],
-                "value": 2,
-                "name": "Collect Taxes: Critical Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "success": {
-        "msg": "Your tax collectors gather enough to grant you a +1 circumstance bonus to Economy-based checks for the remainder of the Kingdom turn. If you attempted to Collect Taxes during the previous turn, @gain1Unrest",
-        "modifiers": [
-            {
-                "buttonLabel": "+1 Circumstance to Economy",
-                "turns": 1,
-                "enabled": true,
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "economy"
-                        ]
-                    }
-                ],
-                "value": 1,
-                "name": "Collect Taxes: Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "failure": {
-        "msg": "Your tax collectors gather enough to grant you a +1 circumstance bonus to Economy-based checks for the remainder of the Kingdom turn. In addition, people are unhappy about taxes—@gain1Unrest (or @gain2Unrest if you attempted to Collect Taxes the previous turn).",
-        "modifiers": [
-            {
-                "turns": 1,
-                "enabled": true,
-                "buttonLabel": "+1 Circumstance to Economy",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "economy"
-                        ]
-                    }
-                ],
-                "value": 1,
-                "name": "Collect Taxes: Failure",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "criticalFailure": {
-        "msg": "Your tax collectors encounter resistance from the citizens and their attempts to gather taxes are rebuffed. While the tax collectors still manage to gather enough taxes to support essential government, they have angered the kingdom's citizens and encouraged rebellious acts. @gain2Unrest, and choose one Ruin to increase by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
-    }
+  "order": 1,
+  "id": "collect-taxes",
+  "oncePerRound": true,
+  "fortune": false,
+  "enabled": true,
+  "phase": "commerce",
+  "dc": "control",
+  "title": "activities.collect-taxes.title",
+  "description": "activities.collect-taxes.description",
+  "skills": {
+    "trade": 1
+  },
+  "criticalSuccess": {
+    "msg": "activities.collect-taxes.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "buttonLabel": "+2 Circumstance to Economy",
+        "enabled": true,
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "economy"
+            ]
+          }
+        ],
+        "value": 2,
+        "name": "Collect Taxes: Critical Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "success": {
+    "msg": "activities.collect-taxes.success.msg",
+    "modifiers": [
+      {
+        "buttonLabel": "+1 Circumstance to Economy",
+        "turns": 1,
+        "enabled": true,
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "economy"
+            ]
+          }
+        ],
+        "value": 1,
+        "name": "Collect Taxes: Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "failure": {
+    "msg": "activities.collect-taxes.failure.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "enabled": true,
+        "buttonLabel": "+1 Circumstance to Economy",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "economy"
+            ]
+          }
+        ],
+        "value": 1,
+        "name": "Collect Taxes: Failure",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "msg": "activities.collect-taxes.criticalFailure.msg"
+  }
 }

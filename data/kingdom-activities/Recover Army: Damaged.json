@@ -1,26 +1,26 @@
 {
-    "id": "recover-army-damaged",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "army",
-    "dc": "control",
-    "title": "Recover Army: Damaged",
-    "description": "When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check.",
-    "skills": {
-        "defense": 0,
-        "folklore": 2
-    },
-    "criticalSuccess": {
-        "msg": "You increase its HP by 2 up to its maximum."
-    },
-    "success": {
-        "msg": "You increase its HP by 1 up to its maximum."
-    },
-    "failure": {
-        "msg": "You fail to remove the affliction. "
-    },
-    "criticalFailure": {
-        "msg": "You fail to remove the affliction and your soldier’s lowered morale spreads discontent; @gain1Unrest."
-    }
+  "id": "recover-army-damaged",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "army",
+  "dc": "control",
+  "title": "activities.recover-army-damaged.title",
+  "description": "activities.recover-army-damaged.description",
+  "skills": {
+    "defense": 0,
+    "folklore": 2
+  },
+  "criticalSuccess": {
+    "msg": "activities.recover-army-damaged.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.recover-army-damaged.success.msg"
+  },
+  "failure": {
+    "msg": "activities.recover-army-damaged.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.recover-army-damaged.criticalFailure.msg"
+  }
 }

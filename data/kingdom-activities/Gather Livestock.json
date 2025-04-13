@@ -1,25 +1,25 @@
 {
-    "id": "gather-livestock",
-    "title": "Gather Livestock",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "region",
-    "dc": "control",
-    "description": "Attempt a basic check to gather excess livestock from local wildlife, ranches, and farms. This generates a number of Food commodities.",
-    "skills": {
-        "wilderness": 0
-    },
-    "criticalSuccess": {
-        "msg": "@gain1d4Food"
-    },
-    "success": {
-        "msg": "@gain1Food"
-    },
-    "failure": {
-        "msg": "Gain no Food commodities."
-    },
-    "criticalFailure": {
-        "msg": "@lose1d4Food to spoilage. If you have no Food to lose, you instead @gain1Unrest"
-    }
+  "id": "gather-livestock",
+  "title": "activities.gather-livestock.title",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "region",
+  "dc": "control",
+  "description": "activities.gather-livestock.description",
+  "skills": {
+    "wilderness": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.gather-livestock.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.gather-livestock.success.msg"
+  },
+  "failure": {
+    "msg": "activities.gather-livestock.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.gather-livestock.criticalFailure.msg"
+  }
 }

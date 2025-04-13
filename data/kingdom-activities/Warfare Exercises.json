@@ -5,13 +5,13 @@
   "enabled": false,
   "phase": "leadership",
   "dc": "control",
-  "title": "Warfare Exercises",
-  "description": "You spend time studying the nation’s armies, speaking with its commanders, researching historical records of battles, and running simulations in war rooms to help predict the best ways to prepare for upcoming conflicts. Attempt a basic Warfare check to determine the success of these exercises.",
+  "title": "activities.warfare-exercises.title",
+  "description": "activities.warfare-exercises.description",
   "skills": {
     "warfare": 0
   },
   "criticalSuccess": {
-    "msg": "The exercises reveal a wide range of suggestions for the PCs to use during that month’s military exercises. All Army activities taken during this Kingdom turn’s Activity Phase gain a +1 circumstance bonus. This bonus increases to +2 at Kingdom level 9 and +3 at Kingdom level 15. In addition, the next time this Kingdom turn that you roll a critical failure on an Army activity, the result is improved to a regular failure instead.",
+    "msg": "activities.warfare-exercises.criticalSuccess.msg",
     "modifiers": [
       {
         "turns": 1,
@@ -93,7 +93,7 @@
     ]
   },
   "success": {
-    "msg": "The exercises grant a +1 circumstance bonus to your first Army activity taken during the Kingdom turn’s Activity Phase. This bonus increases to +2 at Kingdom level 9 and +3 at Kingdom level 15.",
+    "msg": "activities.warfare-exercises.success.msg",
     "modifiers": [
       {
         "turns": 1,
@@ -154,9 +154,9 @@
     ]
   },
   "failure": {
-    "msg": "The warfare exercises provide no insight this turn."
+    "msg": "activities.warfare-exercises.failure.msg"
   },
   "criticalFailure": {
-    "msg": "You accidentally form incorrect assumptions about your military tactics. The next time you roll a failure on an Army activity this Kingdom turn, it becomes a critical failure instead."
+    "msg": "activities.warfare-exercises.criticalFailure.msg"
   }
 }

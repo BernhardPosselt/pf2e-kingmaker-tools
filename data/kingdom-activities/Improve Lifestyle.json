@@ -1,114 +1,114 @@
 {
-    "id": "improve-lifestyle",
-    "order": 2,
-    "oncePerRound": true,
-    "fortune": false,
-    "enabled": true,
-    "phase": "commerce",
-    "dc": "control",
-    "title": "Improve Lifestyle",
-    "description": "Attempt a basic check to draw upon your kingdom’s treasury to enhance the quality of life for your citizens. This activity can be taken only during the Commerce phase of a Kingdom turn",
-    "skills": {
-        "politics": 0
-    },
-    "criticalSuccess": {
-        "msg": "Your push to Improve Lifestyles affords your citizens significant free time to pursue recreational activities. For the remainder of the Kingdom turn, you gain a +2 circumstance bonus to Culture-based checks.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "buttonLabel": "+2 Circumstance to Culture",
-                "enabled": true,
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "culture"
-                        ]
-                    }
-                ],
-                "value": 2,
-                "name": "Improve Lifestyle: Critical Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "success": {
-        "msg": "Your push to Improve Lifestyles helps your citizens enjoy life. For the remainder of the Kingdom turn, you gain a +1 circumstance bonus to Culture-based checks.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "enabled": true,
-                "buttonLabel": "+1 Circumstance to Culture",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "culture"
-                        ]
-                    }
-                ],
-                "value": 1,
-                "name": "Improve Lifestyle: Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "failure": {
-        "msg": "Your push to Improve Lifestyles helps your citizens enjoy life. For the remainder of the Kingdom turn, you gain a +1 circumstance bonus to Culture-based checks. In addition, you’ve strained your treasury. Take a –1 circumstance penalty to Economy-based checks for the remainder of this Kingdom turn.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "enabled": true,
-                "buttonLabel": "-1 Circumstance to Economy",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "economy"
-                        ]
-                    }
-                ],
-                "value": -1,
-                "name": "Improve Lifestyle: Failure",
-                "type": "circumstance"
-            },
-            {
-                "turns": 1,
-                "enabled": true,
-                "buttonLabel": "+1 Circumstance to Culture",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "culture"
-                        ]
-                    }
-                ],
-                "value": 1,
-                "name": "Improve Lifestyle: Failure",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "criticalFailure": {
-        "msg": "Your attempt to Improve Lifestyles backfires horribly as criminal elements in your kingdom abuse your generosity. You take a –1 circumstance penalty to Economy-based checks for the remainder of the Kingdom turn, @gain1Unrest, and add 1 to a Ruin of your choice: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>",
-        "modifiers": [
-            {
-                "turns": 1,
-                "enabled": true,
-                "buttonLabel": "-1 Circumstance to Economy",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "economy"
-                        ]
-                    }
-                ],
-                "value": -1,
-                "name": "Improve Lifestyle: Critical Failure",
-                "type": "circumstance"
-            }
-        ]
-    }
+  "id": "improve-lifestyle",
+  "order": 2,
+  "oncePerRound": true,
+  "fortune": false,
+  "enabled": true,
+  "phase": "commerce",
+  "dc": "control",
+  "title": "activities.improve-lifestyle.title",
+  "description": "activities.improve-lifestyle.description",
+  "skills": {
+    "politics": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.improve-lifestyle.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "buttonLabel": "+2 Circumstance to Culture",
+        "enabled": true,
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "culture"
+            ]
+          }
+        ],
+        "value": 2,
+        "name": "Improve Lifestyle: Critical Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "success": {
+    "msg": "activities.improve-lifestyle.success.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "enabled": true,
+        "buttonLabel": "+1 Circumstance to Culture",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "culture"
+            ]
+          }
+        ],
+        "value": 1,
+        "name": "Improve Lifestyle: Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "failure": {
+    "msg": "activities.improve-lifestyle.failure.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "enabled": true,
+        "buttonLabel": "-1 Circumstance to Economy",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "economy"
+            ]
+          }
+        ],
+        "value": -1,
+        "name": "Improve Lifestyle: Failure",
+        "type": "circumstance"
+      },
+      {
+        "turns": 1,
+        "enabled": true,
+        "buttonLabel": "+1 Circumstance to Culture",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "culture"
+            ]
+          }
+        ],
+        "value": 1,
+        "name": "Improve Lifestyle: Failure",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "criticalFailure": {
+    "msg": "activities.improve-lifestyle.criticalFailure.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "enabled": true,
+        "buttonLabel": "-1 Circumstance to Economy",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "economy"
+            ]
+          }
+        ],
+        "value": -1,
+        "name": "Improve Lifestyle: Critical Failure",
+        "type": "circumstance"
+      }
+    ]
+  }
 }

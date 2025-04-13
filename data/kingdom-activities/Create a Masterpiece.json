@@ -1,25 +1,25 @@
 {
-    "id": "create-a-masterpiece",
-    "oncePerRound": true,
-    "fortune": false,
-    "enabled": true,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Create a Masterpiece",
-    "description": "You encourage your kingdom’s artists to create and display a masterful work of art to bolster your kingdom’s reputation. Attempt a basic check; the result affects either Fame or Infamy (depending on the type of kingdom you’re running). Create a Masterpiece may be attempted only once per Kingdom turn regardless of the number of leaders pursuing activities.",
-    "skills": {
-        "arts": 1
-    },
-    "criticalSuccess": {
-        "msg": "@gain1Fame, and @gain1FameNextTurn. @gain2RolledResourceDice"
-    },
-    "success": {
-        "msg": "@gain1Fame"
-    },
-    "failure": {
-        "msg": "Your attempt to create a masterpiece fails."
-    },
-    "criticalFailure": {
-        "msg": "Not only does your attempt to create a masterpiece fail, it does so in a dramatic and humiliating way. @lose1Fame; if you have no Fame or Infamy points to lose, instead @gain1d4Unrest"
-    }
+  "id": "create-a-masterpiece",
+  "oncePerRound": true,
+  "fortune": false,
+  "enabled": true,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.create-a-masterpiece.title",
+  "description": "activities.create-a-masterpiece.description",
+  "skills": {
+    "arts": 1
+  },
+  "criticalSuccess": {
+    "msg": "activities.create-a-masterpiece.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.create-a-masterpiece.success.msg"
+  },
+  "failure": {
+    "msg": "activities.create-a-masterpiece.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.create-a-masterpiece.criticalFailure.msg"
+  }
 }

@@ -1,35 +1,35 @@
 {
-    "id": "clear-hex",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "title": "Clear Hex",
-    "phase": "region",
-    "dc": "custom",
-    "modifiers": [
-        {
-            "name": "Hex is not part of your kingdom",
-            "type": "untyped",
-            "enabled": false,
-            "value": -2,
-            "buttonLabel": "+2 DC increase if not part of your kingdom"
-        }
-    ],
-    "description": "<p>Engineers and mercenaries attempt to prepare a hex to serve as the site for a settlement, or they work to remove an existing improvement, a dangerous hazard, or an encounter.</p>\n<p>If you’re trying to prepare a hex for a settlement or demolish an improvement you previously built (or that was already present in the hex), spend RP as determined by the hex’s most inhospitable terrain feature:</p>\n<ul>\n<li><b>Mountains</b>: @lose12ResourcePoints</li>\n<li><b>Swamps</b>: @lose8ResourcePoints</li>\n<li><b>Forests</b>: @lose4ResourcePoints</li>\n<li><b>Hills</b>: @lose2ResourcePoints</li>\n<li><b>Plains</b>: @lose1ResourcePoints</li>\n</ul>\n<p>Then attempt a basic Engineering check. If you’re trying to remove a hazard or encounter, instead attempt an Exploration check. The DC of this check is set by the highest level creature or hazard in the hex (as set by Table 10–5: DCs by Level, on page 503 of the Pathfinder Core Rulebook).</p><p>If the hex you’re attempting to Clear has existing Ruins or an existing Structure, your action doesn’t physically remove the buildings from the area and you can later incorporate these buildings (or repair ruined ones) into a Settlement you build here later. Regardless of the skill used, increase the basic DC by 2 if the hex to be cleared is not yet part of your kingdom.</p>",
-    "skills": {
-        "engineering": 0,
-        "exploration": 0
-    },
-    "criticalSuccess": {
-        "msg": "You successfully clear the hex. If you spent RP to attempt this activity, you’re refunded half of the RP cost. If you were removing dangerous creatures (but not hazards) from the hex, your explorers and mercenaries recover 2 Luxury Commodities as treasure. @gain2Luxuries"
-    },
-    "success": {
-        "msg": "You successfully clear the hex."
-    },
-    "failure": {
-        "msg": "You fail to clear the hex."
-    },
-    "criticalFailure": {
-        "msg": "You catastrophically fail to clear the hex and several workers lose their lives. @gain1Unrest"
+  "id": "clear-hex",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "title": "activities.clear-hex.title",
+  "phase": "region",
+  "dc": "custom",
+  "modifiers": [
+    {
+      "name": "Hex is not part of your kingdom",
+      "type": "untyped",
+      "enabled": false,
+      "value": -2,
+      "buttonLabel": "+2 DC increase if not part of your kingdom"
     }
+  ],
+  "description": "activities.clear-hex.description",
+  "skills": {
+    "engineering": 0,
+    "exploration": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.clear-hex.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.clear-hex.success.msg"
+  },
+  "failure": {
+    "msg": "activities.clear-hex.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.clear-hex.criticalFailure.msg"
+  }
 }

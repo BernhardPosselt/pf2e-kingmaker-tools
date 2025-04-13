@@ -1,43 +1,54 @@
 {
-    "id": "process-hidden-fees",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Process Hidden Fees",
-    "description": "With your aid, you can process additional taxes, fees, and payments. Attempt a basic Trade check to determine what sorts of additional resources you gather.",
-    "skills": {
-        "trade": 0
-    },
-    "criticalSuccess": {
-        "msg": "@gain2ResourceDiceNextTurn"
-    },
-    "success": {
-        "msg": "@gain1ResourceDiceNextTurn, but the citizens suspect something is going on: if you attempt to Process Hidden Fees on the next Kingdom turn, the result is worsened one degree.",
-        "modifiers": [{
-            "name": "Processed Hidden Fees on the Previous turn",
-            "buttonLabel": "Worsen Degree of Success when processing hidden fees next turn",
-            "downgradeResults": [{
-                "downgrade": "criticalSuccess"
-            }, {
-                "downgrade": "success"
-            }, {
-                "downgrade": "failure"
-            }],
-            "turns": 2,
-            "applyIf": [{
-                "eq": ["@activity", "process-hidden-fees"]
-            }],
-            "value": 0,
-            "type": "untyped",
-            "enabled": true
-        }]
-    },
-    "failure": {
-        "msg": "@gain1ResourceDiceNextTurn, but the citizens catch wind of the fees and grow unhappy. @gain1Unrest, and you cannot Process Hidden Fees on your next Kingdom turn."
-    },
-    "criticalFailure": {
-        "msg": "@gain1ResourceDiceNextTurn, but the citizens catch wind of the fees and grow unhappy. @gain1d6Unrest, and you cannot Process Hidden Fees on your next Kingdom turn."
-    }
+  "id": "process-hidden-fees",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.process-hidden-fees.title",
+  "description": "activities.process-hidden-fees.description",
+  "skills": {
+    "trade": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.process-hidden-fees.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.process-hidden-fees.success.msg",
+    "modifiers": [
+      {
+        "name": "Processed Hidden Fees on the Previous turn",
+        "buttonLabel": "Worsen Degree of Success when processing hidden fees next turn",
+        "downgradeResults": [
+          {
+            "downgrade": "criticalSuccess"
+          },
+          {
+            "downgrade": "success"
+          },
+          {
+            "downgrade": "failure"
+          }
+        ],
+        "turns": 2,
+        "applyIf": [
+          {
+            "eq": [
+              "@activity",
+              "process-hidden-fees"
+            ]
+          }
+        ],
+        "value": 0,
+        "type": "untyped",
+        "enabled": true
+      }
+    ]
+  },
+  "failure": {
+    "msg": "activities.process-hidden-fees.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.process-hidden-fees.criticalFailure.msg"
+  }
 }

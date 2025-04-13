@@ -1,25 +1,25 @@
 {
-    "id": "demolish",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "civic",
-    "dc": "control",
-    "title": "Demolish",
-    "description": "Choose a single occupied lot in one of your settlements and attempt a basic check to reduce it to Rubble and then clear the Rubble away to make ready for a new structure. For multiple-lot structures, you’ll need to perform multiple Demolish activities (or critically succeed at the activity) to fully clear all of the lots. As soon as you begin Demolishing a multiple-lot structure, all of the lots occupied by that structure no longer function.",
-    "skills": {
-        "engineering": 0
-    },
-    "criticalSuccess": {
-        "msg": "Choose one of the following effects: you demolish an entire multiple-lot structure all at once and clear all of the lots it occupied, or you recover [[/r 1d6#Commodities]] Commodities (chosen from lumber, stone, and ore) from the Rubble of a single-lot demolition."
-    },
-    "success": {
-        "msg": "You demolish the lot successfully."
-    },
-    "failure": {
-        "msg": "You fail to demolish the lot. It remains in Rubble and cannot be used for further construction until you successfully Demolish it."
-    },
-    "criticalFailure": {
-        "msg": "You fail to demolish the lot. It remains in Rubble and cannot be used for further construction until you successfully Demolish it. In addition, accidents during the demolition cost you the lives of some of your workers. @gain1Unrest"
-    }
+  "id": "demolish",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "civic",
+  "dc": "control",
+  "title": "activities.demolish.title",
+  "description": "activities.demolish.description",
+  "skills": {
+    "engineering": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.demolish.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.demolish.success.msg"
+  },
+  "failure": {
+    "msg": "activities.demolish.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.demolish.criticalFailure.msg"
+  }
 }

@@ -1,82 +1,82 @@
 {
-    "id": "read-all-about-it",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Read All About It",
-    "description": "You take advantage of your nation’s paper to print an extra edition, a bonus-sized issue, or something to spread news to the citizens of the nation so that they are more prepared for upcoming events or more informed on how to deal with ongoing events. Attempt a basic Scholarship check to determine how helpful the information proves to be.",
-    "requirement": "You have built a Printing Press",
-    "skills": {
-        "scholarship": 0
-    },
-    "criticalSuccess": {
-        "msg": "Your kingdom becomes particularly prepared. The next time you attempt a skill check to resolve any event during this Kingdom turn, you gain a +4 circumstance bonus to the roll.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "buttonLabel": "+4 Circumstance to Resolve Event",
-                "isConsumedAfterRoll": true,
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@phase",
-                            "event"
-                        ]
-                    }
-                ],
-                "enabled": true,
-                "value": 4,
-                "name": "Read All About It: Critical Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "success": {
-        "msg": "The information is helpful, but only against ongoing events. The next time you attempt a skill check to resolve an ongoing event during this Kingdom turn, you gain a +2 circumstance bonus to the roll.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "buttonLabel": "+2 Circumstance to Ongoing Event",
-                "isConsumedAfterRoll": true,
-                "applyIf": [
-                    {
-                        "in": [
-                            "continuous",
-                            "@eventTraits"
-                        ]
-                    }
-                ],
-                "enabled": false,
-                "value": 2,
-                "name": "Read All About It: Success",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "failure": {
-        "msg": "You fail to prepare your people for the worst."
-    },
-    "criticalFailure": {
-        "msg": "Critical parts of the information you published are false. You take a –2 circumstance penalty to all skill checks made to resolve Kingdom events for the remainder of this Kingdom turn",
-        "modifiers": [
-            {
-                "buttonLabel": "-2 Circumstance Events",
-                "turns": 1,
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@phase",
-                            "event"
-                        ]
-                    }
-                ],
-                "enabled": true,
-                "value": -2,
-                "name": "Read All About It: Critical Failure",
-                "type": "circumstance"
-            }
-        ]
-    }
+  "id": "read-all-about-it",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.read-all-about-it.title",
+  "description": "activities.read-all-about-it.description",
+  "requirement": "activities.read-all-about-it.requirement",
+  "skills": {
+    "scholarship": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.read-all-about-it.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "buttonLabel": "+4 Circumstance to Resolve Event",
+        "isConsumedAfterRoll": true,
+        "applyIf": [
+          {
+            "eq": [
+              "@phase",
+              "event"
+            ]
+          }
+        ],
+        "enabled": true,
+        "value": 4,
+        "name": "Read All About It: Critical Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "success": {
+    "msg": "activities.read-all-about-it.success.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "buttonLabel": "+2 Circumstance to Ongoing Event",
+        "isConsumedAfterRoll": true,
+        "applyIf": [
+          {
+            "in": [
+              "continuous",
+              "@eventTraits"
+            ]
+          }
+        ],
+        "enabled": false,
+        "value": 2,
+        "name": "Read All About It: Success",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "failure": {
+    "msg": "activities.read-all-about-it.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.read-all-about-it.criticalFailure.msg",
+    "modifiers": [
+      {
+        "buttonLabel": "-2 Circumstance Events",
+        "turns": 1,
+        "applyIf": [
+          {
+            "eq": [
+              "@phase",
+              "event"
+            ]
+          }
+        ],
+        "enabled": true,
+        "value": -2,
+        "name": "Read All About It: Critical Failure",
+        "type": "circumstance"
+      }
+    ]
+  }
 }

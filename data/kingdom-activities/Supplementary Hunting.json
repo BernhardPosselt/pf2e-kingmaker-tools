@@ -1,25 +1,25 @@
 {
-    "id": "supplementary-hunting",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": false,
-    "phase": "region",
-    "dc": "control",
-    "title": "Supplementary Hunting",
-    "description": "Following your advice, rural-dwelling citizens work to supplement stores of food and resources through hunting and trapping. Attempt a basic Wilderness check to gather excess livestock from the local wildlife, ranches, and farms to generate food commodities.",
-    "skills": {
-        "wilderness": 0
-    },
-    "criticalSuccess": {
-        "msg": "@gain1d4Food, @gain1Luxuries, and @gain1ResourceDiceNextTurn"
-    },
-    "success": {
-        "msg": "Choose one: @gain1d4Food, @gain1Luxuries, or @gain1ResourceDiceNextTurn"
-    },
-    "failure": {
-        "msg": "Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn."
-    },
-    "criticalFailure": {
-        "msg": "Your hunters and trappers fail to supplement your stores and must spend time resupplying and setting new traps; you cannot attempt Supplementary Hunting on the next Kingdom turn. In addition, your hunters and trappers have accidentally attracted the attention of dangerous wildlife. Either @gain1d4Unrest or increase a Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
-    }
+  "id": "supplementary-hunting",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": false,
+  "phase": "region",
+  "dc": "control",
+  "title": "activities.supplementary-hunting.title",
+  "description": "activities.supplementary-hunting.description",
+  "skills": {
+    "wilderness": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.supplementary-hunting.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.supplementary-hunting.success.msg"
+  },
+  "failure": {
+    "msg": "activities.supplementary-hunting.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.supplementary-hunting.criticalFailure.msg"
+  }
 }

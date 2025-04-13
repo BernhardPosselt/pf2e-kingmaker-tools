@@ -1,25 +1,25 @@
 {
-    "id": "purchase-commodities",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Purchase Commodities",
-    "description": "You can spend RP to Purchase Commodities, but doing so is more expensive than gathering them or relying upon trade agreements. When you Purchase Commodities, select the Commodity you wish to purchase (Food, Lumber, Luxuries, Ore, or Stone). @lose8ResourcePoints if you’re purchasing Luxuries or @lose4ResourcePoints if you’re purchasing any other Commodity. Then attempt a basic check.",
-    "skills": {
-        "trade": 0
-    },
-    "criticalSuccess": {
-        "msg": "<p>You immediately gain 4 Commodities of the chosen type:</p> <ul><li>@gain4Food</li><li>@gain4Ore</li><li>@gain4Lumber</li><li>@gain4Stone</li><li>@gain4Luxuries</li></ul><p>and 2 Commodities of any other type (except Luxuries):</p> <ul><li>@gain2Food</li><li>@gain2Ore</li><li>@gain2Lumber</li><li>@gain2Stone</li></ul>"
-    },
-    "success": {
-        "msg": "<p>You gain 2 Commodities of the chosen type.<p> <ul><li>@gain2Food</li><li>@gain2Ore</li><li>@gain2Lumber</li><li>@gain2Stone</li><li>@gain2Luxuries</li></ul>"
-    },
-    "failure": {
-        "msg": "<p>You gain 1 Commodity of the chosen type.</p> <ul><li>@gain1Food</li><li>@gain1Ore</li><li>@gain1Lumber</li><li>@gain1Stone</li><li>@gain1Luxuries</li></ul>"
-    },
-    "criticalFailure": {
-        "msg": "Failure You gain no Commodities."
-    }
+  "id": "purchase-commodities",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.purchase-commodities.title",
+  "description": "activities.purchase-commodities.description",
+  "skills": {
+    "trade": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.purchase-commodities.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.purchase-commodities.success.msg"
+  },
+  "failure": {
+    "msg": "activities.purchase-commodities.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.purchase-commodities.criticalFailure.msg"
+  }
 }

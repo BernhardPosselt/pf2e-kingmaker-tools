@@ -1,26 +1,26 @@
 {
-    "id": "fortify-hex",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "region",
-    "dc": "control",
-    "title": "Fortify Hex",
-    "description": "<p>Your command your engineers to construct a protected encampment, such as a fort or barbican, to serve as a defensive post in the hex. Spend RP as determined by the hex’s most inhospitable terrain:</p>\n<ul>\n<li><b>Mountains</b>: @lose12ResourcePoints</li>\n<li><b>Swamps</b>: @lose8ResourcePoints</li>\n<li><b>Forests</b>: @lose4ResourcePoints</li>\n<li><b>Hills</b>: @lose2ResourcePoints</li>\n<li><b>Plains</b>: @lose1ResourcePoints</li>\n</ul>\n<p>Then attempt a basic check. A fortified hex grants an additional bonus in warfare, but also gives traveling PCs a place to rest that prevents wandering monsters from interrupting their rest.</p>",
-    "requirement": "The target hex must be claimed by your kingdom and must not have a settlement in it.",
-    "skills": {
-        "defense": 0
-    },
-    "criticalSuccess": {
-        "msg": "You find a defensible position for your fortification and finish construction efficiently. Gain a refund of half the RP you spent to build in the hex, then @lose1Unrest"
-    },
-    "success": {
-        "msg": "You establish your fortification in the hex. @lose1Unrest"
-    },
-    "failure": {
-        "msg": "You fail to fortify the hex."
-    },
-    "criticalFailure": {
-        "msg": "Your attempt ends in disaster. Not only do you fail to build a structure, but you lose several workers to an accident, banditry, a vicious monster, or some other unforeseen occurrence. @gain1Unrest"
-    }
+  "id": "fortify-hex",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "region",
+  "dc": "control",
+  "title": "activities.fortify-hex.title",
+  "description": "activities.fortify-hex.description",
+  "requirement": "activities.fortify-hex.requirement",
+  "skills": {
+    "defense": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.fortify-hex.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.fortify-hex.success.msg"
+  },
+  "failure": {
+    "msg": "activities.fortify-hex.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.fortify-hex.criticalFailure.msg"
+  }
 }

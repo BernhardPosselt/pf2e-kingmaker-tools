@@ -1,26 +1,26 @@
 {
-    "id": "clandestine-business",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Clandestine Business",
-    "automationNotes": "DC increase from previous turns is not implemented",
-    "description": "You know there are criminals in your kingdom, and they know you know. You encourage them to send kickbacks in the form of resources and Commodities to the government, but the common citizens will be more than upset if they find out! This starts as a basic check against your Control DC, but every subsequent Kingdom turn you pursue Clandestine Business, the DC increases by 2. Every Kingdom turn that passes without Clandestine Business reduces the DC by 1 (until you reach your Control DC).",
-    "skills": {
-        "intrigue": 1
-    },
-    "criticalSuccess": {
-        "msg": "@gain2RolledResourceDice. In addition, you @gain1d4Luxuries. The public is none the wiser."
-    },
-    "success": {
-        "msg": "Either @gain2RolledResourceDice, or gain @gain1d4Luxuries. Regardless of your choice, rumors spread about where the government is getting these “gifts.” @gain1Unrest."
-    },
-    "failure": {
-        "msg": "@gain1RolledResourceDice. Rumors are backed up with eyewitness accounts. @gain1Unrest and @gain1Corruption."
-    },
-    "criticalFailure": {
-        "msg": "You gain nothing from the Clandestine Business but angry citizens. @gain1d6Unrest, @gain2Corruption, and one other Ruin of your choice by 1: <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
-    }
+  "id": "clandestine-business",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.clandestine-business.title",
+  "automationNotes": "activities.clandestine-business.automationNotes",
+  "description": "activities.clandestine-business.description",
+  "skills": {
+    "intrigue": 1
+  },
+  "criticalSuccess": {
+    "msg": "activities.clandestine-business.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.clandestine-business.success.msg"
+  },
+  "failure": {
+    "msg": "activities.clandestine-business.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.clandestine-business.criticalFailure.msg"
+  }
 }

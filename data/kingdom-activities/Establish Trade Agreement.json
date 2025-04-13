@@ -1,46 +1,46 @@
 {
-    "id": "establish-trade-agreement",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "leadership",
-    "dc": "custom",
-    "title": "Establish Trade Agreement",
-    "description": "You send a band of merchants out to establish a trade agreement between your kingdom and a group with whom you’ve established diplomatic relations. If a navigable river connects your kingdom with the other group’s territory, you can attempt a Boating check to Establish the Trade Agreement. If your kingdom’s proficiency rank in Magic is Master or higher, you can attempt a Magic check. Otherwise, attempt a Trade check.The check’s DC is either the group’s Negotiation DC (see sidebar) or your kingdom’s Control DC, whichever is higher.",
-    "requirement": "You have diplomatic relations with the group you wish to establish an agreement with.",
-    "skills": {
-        "boating": 0,
-        "trade": 0,
-        "magic": 3
-    },
-    "criticalSuccess": {
-        "msg": "You successfully establish a trade agreement with your target, and your merchants return with gifts! @gain2RolledResourceDice"
-    },
-    "success": {
-        "msg": "You successfully establish a trade agreement."
-    },
-    "failure": {
-        "msg": "Your traders reach their destination but need to sweeten the deal to secure the trade agreement. @lose2RolledResourceDice. If you do so, you successfully establish a trade agreement, otherwise the attempt fails."
-    },
-    "criticalFailure": {
-        "msg": "Your trade agreement is a total loss and your traders do not return. @gain1Unrest, and until the end of the next Kingdom turn, take a –1 circumstance penalty to all Economy-related checks.",
-        "modifiers": [
-            {
-                "turns": 2,
-                "enabled": false,
-                "value": -1,
-                "buttonLabel": "-1 Circumstance to Economy",
-                "name": "Establish Trade Agreement: Critical Failure",
-                "type": "circumstance",
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "economy"
-                        ]
-                    }
-                ]
-            }
+  "id": "establish-trade-agreement",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "leadership",
+  "dc": "custom",
+  "title": "activities.establish-trade-agreement.title",
+  "description": "activities.establish-trade-agreement.description",
+  "requirement": "activities.establish-trade-agreement.requirement",
+  "skills": {
+    "boating": 0,
+    "trade": 0,
+    "magic": 3
+  },
+  "criticalSuccess": {
+    "msg": "activities.establish-trade-agreement.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.establish-trade-agreement.success.msg"
+  },
+  "failure": {
+    "msg": "activities.establish-trade-agreement.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.establish-trade-agreement.criticalFailure.msg",
+    "modifiers": [
+      {
+        "turns": 2,
+        "enabled": false,
+        "value": -1,
+        "buttonLabel": "-1 Circumstance to Economy",
+        "name": "Establish Trade Agreement: Critical Failure",
+        "type": "circumstance",
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "economy"
+            ]
+          }
         ]
-    }
+      }
+    ]
+  }
 }

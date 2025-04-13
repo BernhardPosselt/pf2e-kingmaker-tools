@@ -1,57 +1,66 @@
 {
-    "id": "reconnoiter-hex-vk",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Reconnoiter Hex (V&K)",
-    "description": "You send a team to spend time surveying and exploring a specific hex, getting the lay of the land and looking for unusual features and specific sites. @lose1ResourcePoints and then attempt a Basic check.",
-    "skills": {
-        "wilderness": 0
-    },
-    "criticalSuccess": {
-        "msg": "Your team successfully explores the hex and it is now Reconnoitered for the purpose of Claim Hex. Your team automatically finds one Special or Hidden feature if the hex contains one. If the hex contains multiple Special or Hidden Features the GM chooses one. If the hex contains an Encounter or Hazard, the team avoids it and reports back useful and detailed information on it. In addition, your team's reconnaissance of the hex goes so smoothly you may immediately attempt an additional Reconnoiter Hex activity on an adjacent hex. Treat a Critical Success on this additional check as a Success instead.",
-        "modifiers": [{
-            "name": "Reconnoitering a second time",
-            "buttonLabel": "Worsen Degree of Success when reconnoitering a second time",
-            "downgradeResults": [{
-                "downgrade": "criticalSuccess"
-            }],
-            "turns": 1,
-            "applyIf": [{
-                "eq": ["@activity", "reconnoiter-hex-vk"]
-            }],
-            "value": 0,
-            "type": "untyped",
-            "enabled": true
-        }]
-    },
-    "success": {
-        "msg": "Your team successfully explores the hex and it is now Reconnoitered for the purpose of Claim Hex. If the hex contains a Special feature your team may find it if your GM wishes. If the hex contains an Encounter or Hazard, the team avoids it and reports basic information on it."
-    },
-    "failure": {
-        "msg": "Your team fails to explore the hex sufficiently. If the hex contains an Encounter or Hazard, the team escapes it and reports basic information on it."
-    },
-    "criticalFailure": {
-        "msg": "Your team fails to explore the hex sufficiently and a number of the team are lost, causing you to take a -1 circumstance penalty to Loyalty-based checks until the end of your next Kingdom turn. If the hex contains an Encounter or Hazard, the team members were lost to it and the survivors can report back basic information on it.",
-        "modifiers": [
-            {
-                "turns": 2,
-                "buttonLabel": "-1 Circumstance to Loyalty",
-                "enabled": true,
-                "applyIf": [
-                    {
-                        "eq": [
-                            "@ability",
-                            "loyalty"
-                        ]
-                    }
-                ],
-                "value": -1,
-                "name": "Reconnoiter Hex: Critical Failure",
-                "type": "circumstance"
-            }
-        ]
-    }
+  "id": "reconnoiter-hex-vk",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.reconnoiter-hex-vk.title",
+  "description": "activities.reconnoiter-hex-vk.description",
+  "skills": {
+    "wilderness": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.reconnoiter-hex-vk.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "name": "Reconnoitering a second time",
+        "buttonLabel": "Worsen Degree of Success when reconnoitering a second time",
+        "downgradeResults": [
+          {
+            "downgrade": "criticalSuccess"
+          }
+        ],
+        "turns": 1,
+        "applyIf": [
+          {
+            "eq": [
+              "@activity",
+              "reconnoiter-hex-vk"
+            ]
+          }
+        ],
+        "value": 0,
+        "type": "untyped",
+        "enabled": true
+      }
+    ]
+  },
+  "success": {
+    "msg": "activities.reconnoiter-hex-vk.success.msg"
+  },
+  "failure": {
+    "msg": "activities.reconnoiter-hex-vk.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.reconnoiter-hex-vk.criticalFailure.msg",
+    "modifiers": [
+      {
+        "turns": 2,
+        "buttonLabel": "-1 Circumstance to Loyalty",
+        "enabled": true,
+        "applyIf": [
+          {
+            "eq": [
+              "@ability",
+              "loyalty"
+            ]
+          }
+        ],
+        "value": -1,
+        "name": "Reconnoiter Hex: Critical Failure",
+        "type": "circumstance"
+      }
+    ]
+  }
 }

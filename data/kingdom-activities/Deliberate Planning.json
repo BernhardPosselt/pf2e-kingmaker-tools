@@ -1,99 +1,99 @@
 {
-    "id": "deliberate-planning",
-    "oncePerRound": false,
-    "fortune": true,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": "custom",
-    "title": "Deliberate Planning",
-    "description": "You take time and weigh all options when faced with decisions, regardless of their importance. While this can sometimes lead you to taking too long to make choices, your theoretical analysis can be quite helpful in navigating continuous events. Choose a single continuous event that will affect your kingdom on this turn’s Event Phase, then attempt a Scholarship check against that event’s DC.",
-    "skills": {
-        "agriculture": 0,
-        "arts": 0,
-        "boating": 0,
-        "defense": 0,
-        "engineering": 0,
-        "exploration": 0,
-        "folklore": 0,
-        "industry": 0,
-        "intrigue": 0,
-        "magic": 0,
-        "politics": 0,
-        "scholarship": 0,
-        "statecraft": 0,
-        "trade": 0,
-        "warfare": 0,
-        "wilderness": 0
-    },
-    "criticalSuccess": {
-        "msg": "Your aid has been monumentally helpful. When you roll to resolve the continuous event you chose, you can roll twice and choose which result to apply. You gain a +1 circumstance bonus to each roll. This is a Fortune effect.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "enabled": false,
-                "value": 1,
-                "isConsumedAfterRoll": true,
-                "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
-                "name": "Deliberate Planning: Critical Success",
-                "type": "circumstance",
-                "fortune": true,
-                "applyIf": [
-                    {
-                        "in": [
-                            "continuous",
-                            "@eventTraits"
-                        ]
-                    }
-                ]
-            }
+  "id": "deliberate-planning",
+  "oncePerRound": false,
+  "fortune": true,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": "custom",
+  "title": "activities.deliberate-planning.title",
+  "description": "activities.deliberate-planning.description",
+  "skills": {
+    "agriculture": 0,
+    "arts": 0,
+    "boating": 0,
+    "defense": 0,
+    "engineering": 0,
+    "exploration": 0,
+    "folklore": 0,
+    "industry": 0,
+    "intrigue": 0,
+    "magic": 0,
+    "politics": 0,
+    "scholarship": 0,
+    "statecraft": 0,
+    "trade": 0,
+    "warfare": 0,
+    "wilderness": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.deliberate-planning.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "enabled": false,
+        "value": 1,
+        "isConsumedAfterRoll": true,
+        "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
+        "name": "Deliberate Planning: Critical Success",
+        "type": "circumstance",
+        "fortune": true,
+        "applyIf": [
+          {
+            "in": [
+              "continuous",
+              "@eventTraits"
+            ]
+          }
         ]
-    },
-    "success": {
-        "msg": "Your suggestions are useful, granting you a +1 circumstance bonus to rolls to resolve the chosen continuous event.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "enabled": false,
-                "value": 1,
-                "isConsumedAfterRoll": true,
-                "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
-                "name": "Deliberate Planning: Success",
-                "type": "circumstance",
-                "applyIf": [
-                    {
-                        "in": [
-                            "continuous",
-                            "@eventTraits"
-                        ]
-                    }
-                ]
-            }
+      }
+    ]
+  },
+  "success": {
+    "msg": "activities.deliberate-planning.success.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "enabled": false,
+        "value": 1,
+        "isConsumedAfterRoll": true,
+        "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
+        "name": "Deliberate Planning: Success",
+        "type": "circumstance",
+        "applyIf": [
+          {
+            "in": [
+              "continuous",
+              "@eventTraits"
+            ]
+          }
         ]
-    },
-    "failure": {
-        "msg": "Your advice isn’t helpful, but neither does it hinder your ability to handle the event."
-    },
-    "criticalFailure": {
-        "msg": "You got too caught up in your theoretical analysis and spent too much time preparing. When you roll to resolve the continuous event you tried to plan for, roll twice and take the worse result.",
-        "modifiers": [
-            {
-                "turns": 1,
-                "enabled": false,
-                "value": 0,
-                "buttonLabel": "Roll twice and take the worse result when resolving continuous event",
-                "name": "Resolving continuous event",
-                "type": "untyped",
-                "isConsumedAfterRoll": true,
-                "rollTwiceKeepLowest": true,
-                "applyIf": [
-                    {
-                        "in": [
-                            "continuous",
-                            "@eventTraits"
-                        ]
-                    }
-                ]
-            }
+      }
+    ]
+  },
+  "failure": {
+    "msg": "activities.deliberate-planning.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.deliberate-planning.criticalFailure.msg",
+    "modifiers": [
+      {
+        "turns": 1,
+        "enabled": false,
+        "value": 0,
+        "buttonLabel": "Roll twice and take the worse result when resolving continuous event",
+        "name": "Resolving continuous event",
+        "type": "untyped",
+        "isConsumedAfterRoll": true,
+        "rollTwiceKeepLowest": true,
+        "applyIf": [
+          {
+            "in": [
+              "continuous",
+              "@eventTraits"
+            ]
+          }
         ]
-    }
+      }
+    ]
+  }
 }

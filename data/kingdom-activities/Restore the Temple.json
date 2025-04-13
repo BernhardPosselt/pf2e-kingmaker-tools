@@ -1,40 +1,42 @@
 {
-    "id": "restore-the-temple",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": 25,
-    "title": "Restore the Temple",
-    "description": "You work with several worshippers of the temple's faith, gifted masons, and skilled laborers to restore the temple and once more consecrate it as a sacred place devoted to the worship of their god. @lose1d6ResourcePoints, then attempt a DC 25 Folklore check.",
-    "skills": {
-        "folklore": 0
-    },
-    "criticalSuccess": {
-        "msg": "The temple is restored and can now serve as a Refuge terrain feature. If you later build a settlement here, the temple instead functions as a free Shrine in the settlement. In addition, your work was so excellent that you’ve attracted their god’s attention! The PC who rolled the Folklore check is granted @UUID[Compendium.pf2e.boons-and-curses.Item.hrTl9kfSNrOQeNze]: whenever that PC critically fails a check to Subsist in the wild, they gain a failure instead."
-    },
-    "success": {
-        "msg": "The temple is restored and can now serve as a Refuge terrain feature. If you later build a settlement here, the temple instead functions as a free Shrine in the settlement."
-    },
-    "failure": {
-        "msg": "Work proceeds but is not yet complete; you can attempt to restore the temple again on the next Kingdom turn."
-    },
-    "criticalFailure": {
-        "msg": "Disaster strikes as the temple’s cavern collapses and rubble spills out to bury and destroy much of the temple’s plaza. @gain1Decay and @gain1d4Unrest. You can still attempt to Restore the Temple, but the DC for success increases by 4. This increase is cumulative with successive critical failures.",
-        "modifiers": [{
-            "name": "Previously failed critically",
-            "buttonLabel": "+4 DC increase if previously failed critically",
-            "applyIf": [
-                {
-                    "eq": [
-                        "@activity",
-                        "restore-the-temple"
-                    ]
-                }
-            ],
-            "value": -4,
-            "type": "untyped",
-            "enabled": true
-        }]
-    }
+  "id": "restore-the-temple",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": 25,
+  "title": "activities.restore-the-temple.title",
+  "description": "activities.restore-the-temple.description",
+  "skills": {
+    "folklore": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.restore-the-temple.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.restore-the-temple.success.msg"
+  },
+  "failure": {
+    "msg": "activities.restore-the-temple.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.restore-the-temple.criticalFailure.msg",
+    "modifiers": [
+      {
+        "name": "Previously failed critically",
+        "buttonLabel": "+4 DC increase if previously failed critically",
+        "applyIf": [
+          {
+            "eq": [
+              "@activity",
+              "restore-the-temple"
+            ]
+          }
+        ],
+        "value": -4,
+        "type": "untyped",
+        "enabled": true
+      }
+    ]
+  }
 }

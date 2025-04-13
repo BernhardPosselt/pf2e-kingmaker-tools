@@ -123,7 +123,6 @@ private var kingdomActivities: Array<RawActivity> = emptyArray()
 private fun ActivityResult.translate(): ActivityResult =
     copy(
         msg = t(msg),
-        modifiers = modifiers
     )
 
 private fun RawActivity.translate(): RawActivity =

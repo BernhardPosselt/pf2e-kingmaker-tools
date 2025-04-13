@@ -1,26 +1,26 @@
 {
-    "id": "recover-army-mired-pinned",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "army",
-    "dc": "control",
-    "title": "Recover Army: Mired or Pinned",
-    "description": "When an army endures ill fortune, it can become afflicted by negative conditions. You can use the Recover Army activity to work at removing an affliction with a basic skill check.",
-    "skills": {
-        "engineering": 0,
-        "magic": 2
-    },
-    "criticalSuccess": {
-        "msg": "You reduce the affliction’s value by 2. If the affliction does not have a value, it is removed."
-    },
-    "success": {
-        "msg": "As critical success but you reduce the affliction’s value by 1."
-    },
-    "failure": {
-        "msg": "You fail to remove the affliction."
-    },
-    "criticalFailure": {
-        "msg": "You fail to remove the affliction and your soldier’s lowered morale spreads discontent; @gain1Unrest."
-    }
+  "id": "recover-army-mired-pinned",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "army",
+  "dc": "control",
+  "title": "activities.recover-army-mired-pinned.title",
+  "description": "activities.recover-army-mired-pinned.description",
+  "skills": {
+    "engineering": 0,
+    "magic": 2
+  },
+  "criticalSuccess": {
+    "msg": "activities.recover-army-mired-pinned.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.recover-army-mired-pinned.success.msg"
+  },
+  "failure": {
+    "msg": "activities.recover-army-mired-pinned.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.recover-army-mired-pinned.criticalFailure.msg"
+  }
 }

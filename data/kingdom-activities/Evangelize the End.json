@@ -1,25 +1,25 @@
 {
-    "id": "evangelize-the-end",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": false,
-    "phase": "leadership",
-    "dc": "control",
-    "title": "Evangelize the End",
-    "description": "You spend time preaching the End Times. While your sermons certainly aren’t for everyone, your methods avoid deliberately antagonizing those who see hope in the world while simultaneously providing ease and calm to the more desperate among the kingdom’s citizens. Attempt a basic Folklore check to determine how effective your sermons are.",
-    "skills": {
-        "folklore": 0
-    },
-    "criticalSuccess": {
-        "msg": "Your prayers soothe and calm the more criminal-minded citizens for the time being. @lose1d4Unrest, and either @lose2Crime or @lose1Corruption or @lose1Strife."
-    },
-    "success": {
-        "msg": "Your prayers serve to redirect and calm discord. @lose1d3Unrest"
-    },
-    "failure": {
-        "msg": "Your prayers serve to redirect and calm discord. @lose1Unrest"
-    },
-    "criticalFailure": {
-        "msg": "Your prayers have unsettled some of your citizens. @gain1d4Unrest and @gain1Decay "
-    }
+  "id": "evangelize-the-end",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": false,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.evangelize-the-end.title",
+  "description": "activities.evangelize-the-end.description",
+  "skills": {
+    "folklore": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.evangelize-the-end.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.evangelize-the-end.success.msg"
+  },
+  "failure": {
+    "msg": "activities.evangelize-the-end.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.evangelize-the-end.criticalFailure.msg"
+  }
 }

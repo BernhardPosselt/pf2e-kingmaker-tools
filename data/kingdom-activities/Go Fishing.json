@@ -1,26 +1,26 @@
 {
-    "id": "go-fishing",
-    "title": "Go Fishing",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "phase": "region",
-    "dc": "control",
-    "description": "Attempt a basic check to fish for food from the rivers and lakes in your kingdom.",
-    "requirement": "Must have at least one claimed hex that includes river or lake terrain.",
-    "skills": {
-        "boating": 0
-    },
-    "criticalSuccess": {
-        "msg": "@gain1d4Food"
-    },
-    "success": {
-        "msg": "@gain1Food"
-    },
-    "failure": {
-        "msg": "Gain no Food commodities."
-    },
-    "criticalFailure": {
-        "msg": "You lose some fishers to tragic accidents; @gain1Unrest"
-    }
+  "id": "go-fishing",
+  "title": "activities.go-fishing.title",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "phase": "region",
+  "dc": "control",
+  "description": "activities.go-fishing.description",
+  "requirement": "activities.go-fishing.requirement",
+  "skills": {
+    "boating": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.go-fishing.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.go-fishing.success.msg"
+  },
+  "failure": {
+    "msg": "activities.go-fishing.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.go-fishing.criticalFailure.msg"
+  }
 }
