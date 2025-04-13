@@ -9,4 +9,3 @@
 * translate templates
 * translate event modifiers
 * translate kingdom activity modifiers
-* touch up kingdom activity description, degrees html
