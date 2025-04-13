@@ -13,8 +13,8 @@
   },
   "modifiers": [
     {
-      "name": "Celebrated holiday on the previous turn",
-      "buttonLabel": "+4 DC increase if celebrated holiday on the previous turn",
+      "name": "activities.celebrate-holiday-vk.modifiers.celebratedLastTurn.name",
+      "buttonLabel": "activities.celebrate-holiday-vk.modifiers.celebratedLastTurn.buttonLabel",
       "type": "untyped",
       "enabled": false,
       "value": -4
@@ -26,8 +26,8 @@
       {
         "turns": 2,
         "enabled": true,
-        "buttonLabel": "+2 Circumstance to Loyalty",
-        "name": "Celebrate Holiday: Critical Success",
+        "buttonLabel": "activities.celebrate-holiday-vk.criticalSuccess.modifiers.delightfulHolidays.buttonLabel",
+        "name": "activities.celebrate-holiday-vk.criticalSuccess.modifiers.delightfulHolidays.name",
         "applyIf": [
           {
             "eq": [
@@ -47,8 +47,8 @@
       {
         "turns": 2,
         "enabled": true,
-        "name": "Celebrate Holiday: Success",
-        "buttonLabel": "+1 Circumstance to Loyalty",
+        "buttonLabel": "activities.celebrate-holiday-vk.success.modifiers.expensiveHolidays.buttonLabel",
+        "name": "activities.celebrate-holiday-vk.success.modifiers.expensiveHolidays.name",
         "applyIf": [
           {
             "eq": [
@@ -71,8 +71,8 @@
       {
         "turns": 2,
         "enabled": true,
-        "name": "Celebrate Holiday: Critical Failure",
-        "buttonLabel": "-1 Circumstance to Loyalty",
+        "buttonLabel": "activities.celebrate-holiday-vk.criticalFailure.modifiers.poorlyOrganized.buttonLabel",
+        "name": "activities.celebrate-holiday-vk.criticalFailure.modifiers.poorlyOrganized.name",
         "applyIf": [
           {
             "eq": [

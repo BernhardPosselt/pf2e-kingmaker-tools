@@ -8,11 +8,11 @@
   "title": "activities.celebrate-holiday.title",
   "modifiers": [
     {
-      "name": "Celebrated holiday on the previous turn",
+      "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
+      "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
       "type": "untyped",
       "enabled": false,
-      "value": -4,
-      "buttonLabel": "+4 DC increase if celebrated holiday on the previous turn"
+      "value": -4
     }
   ],
   "description": "activities.celebrate-holiday.description",
@@ -24,7 +24,8 @@
     "modifiers": [
       {
         "turns": 2,
-        "buttonLabel": "+2 Circumstance to Loyalty",
+        "buttonLabel": "activities.celebrate-holiday.criticalSuccess.modifiers.delightfulHolidays.buttonLabel",
+        "name": "activities.celebrate-holiday.criticalSuccess.modifiers.delightfulHolidays.name",
         "enabled": true,
         "applyIf": [
           {
@@ -35,7 +36,6 @@
           }
         ],
         "value": 2,
-        "name": "Celebrate Holiday: Critical Success",
         "type": "circumstance"
       }
     ]
@@ -46,7 +46,8 @@
       {
         "turns": 2,
         "enabled": true,
-        "buttonLabel": "+1 Circumstance to Loyalty",
+        "buttonLabel": "activities.celebrate-holiday.success.modifiers.expensiveHolidays.buttonLabel",
+        "name": "activities.celebrate-holiday.success.modifiers.expensiveHolidays.name",
         "applyIf": [
           {
             "eq": [
@@ -56,7 +57,6 @@
           }
         ],
         "value": 1,
-        "name": "Celebrate Holiday: Success",
         "type": "circumstance"
       }
     ]
@@ -70,7 +70,8 @@
       {
         "turns": 2,
         "enabled": true,
-        "buttonLabel": "-1 Circumstance to Loyalty",
+        "buttonLabel": "activities.celebrate-holiday.criticalFailure.modifiers.poorlyOrganized.buttonLabel",
+        "name": "activities.celebrate-holiday.criticalFailure.modifiers.poorlyOrganized.name",
         "applyIf": [
           {
             "eq": [
@@ -80,7 +81,6 @@
           }
         ],
         "value": -1,
-        "name": "Celebrate Holiday: Critical Failure",
         "type": "circumstance"
       }
     ]
