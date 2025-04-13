@@ -85,6 +85,10 @@ Then link this directory to your foundry data folder:
 
     ln -s /home/bernhard/dev/pf2e-kingmaker-tools/ /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools/
 
+Pull all language files from Transifex:
+
+    ./gradlew txPull
+
 Run the package task to build everything from scratch:
 
     ./gradlew build
