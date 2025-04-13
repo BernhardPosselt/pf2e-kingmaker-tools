@@ -1,7 +1,7 @@
 {
-    "id": "build-your-first-famousinfamous-structure",
-    "name": "Build your first Famous/Infamous Structure (V&K)",
-    "xp": 20,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "build-your-first-famousinfamous-structure",
+  "name": "milestones.build-your-first-famousinfamous-structure.name",
+  "xp": 20,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

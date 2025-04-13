@@ -8,6 +8,4 @@
 * translate events
 * translate kingdom activities
 * translate feats
-* translate features
-* translate milestones
 * translate structures

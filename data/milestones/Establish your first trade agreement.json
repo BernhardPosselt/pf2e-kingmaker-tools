@@ -1,7 +1,7 @@
 {
-    "id": "establish-your-first-trade-agreement",
-    "name": "Establish your first trade agreement",
-    "xp": 80,
-    "enabledOnFirstRun": true,
-    "isCultMilestone": false
+  "id": "establish-your-first-trade-agreement",
+  "name": "milestones.establish-your-first-trade-agreement.name",
+  "xp": 80,
+  "enabledOnFirstRun": true,
+  "isCultMilestone": false
 }

@@ -1,7 +1,7 @@
 {
-    "id": "cult-event-chapter-5-urban-outburst",
-    "name": "Cult Event (Chapter 5): Urban Outburst",
-    "xp": 80,
-    "enabledOnFirstRun": true,
-    "isCultMilestone": true
+  "id": "cult-event-chapter-5-urban-outburst",
+  "name": "milestones.cult-event-chapter-5-urban-outburst.name",
+  "xp": 80,
+  "enabledOnFirstRun": true,
+  "isCultMilestone": true
 }

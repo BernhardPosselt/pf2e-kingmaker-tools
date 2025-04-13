@@ -1,7 +1,7 @@
 {
-    "id": "cult-event-chapter-5-too-close-to-home",
-    "name": "Cult Event (Chapter 5): Too Close to Home",
-    "xp": 80,
-    "enabledOnFirstRun": true,
-    "isCultMilestone": true
+  "id": "cult-event-chapter-5-too-close-to-home",
+  "name": "milestones.cult-event-chapter-5-too-close-to-home.name",
+  "xp": 80,
+  "enabledOnFirstRun": true,
+  "isCultMilestone": true
 }

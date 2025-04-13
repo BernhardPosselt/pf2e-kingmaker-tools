@@ -1,7 +1,7 @@
 {
-    "id": "complete-your-first-successful-infiltration",
-    "name": "Complete your First successful Infiltration (V&K)",
-    "xp": 20,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "complete-your-first-successful-infiltration",
+  "name": "milestones.complete-your-first-successful-infiltration.name",
+  "xp": 20,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

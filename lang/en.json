@@ -657,6 +657,128 @@
         "description": "Your kingdom gains a skill increase. You can use this to increase your rank to trained in one skill in which your kingdom is untrained, or to increase your rank in one skill."
       }
     },
+    "milestones": {
+      "achieve-your-first-successful-pledge-of-fealty": {
+        "name": "Achieve your first successful Pledge of Fealty (V&K)"
+      },
+      "all-eight-leadership-roles-are-assigned": {
+        "name": "All eight leadership roles are assigned"
+      },
+      "build-roads-for-the-first-time": {
+        "name": "Build Roads for the first time (V&K)"
+      },
+      "build-your-first-famousinfamous-structure": {
+        "name": "Build your first Famous/Infamous Structure (V&K)"
+      },
+      "build-your-first-structure-requiring-expert-in-a-kingdom-skill": {
+        "name": "Build your first Structure requiring Expert in a Kingdom Skill (V&K)"
+      },
+      "build-your-first-structure-requiring-master-in-a-kingdom-skill": {
+        "name": "Build your first Structure requiring Master in a Kingdom Skill (V&K)"
+      },
+      "build-your-first-seat-of-government-town-hall-castle-or-palace": {
+        "name": "Build your first seat of government (Town Hall, Castle, or Palace) (V&K)"
+      },
+      "celebrate-your-first-successful-holiday": {
+        "name": "Celebrate your first successful Holiday (V&K)"
+      },
+      "claim-your-first-landmark": {
+        "name": "Claim your first Landmark"
+      },
+      "claim-your-first-refuge": {
+        "name": "Claim your first Refuge"
+      },
+      "claim-your-first-new-hex-2nd-hex-overall": {
+        "name": "Claim your first new Hex (2nd hex overall) (V&K)"
+      },
+      "complete-your-first-successful-infiltration": {
+        "name": "Complete your First successful Infiltration (V&K)"
+      },
+      "create-your-first-masterpiece": {
+        "name": "Create your first Masterpiece (V&K)"
+      },
+      "cult-event-chapter-5-cult-activity": {
+        "name": "Cult Event (Chapter 5): Cult Activity"
+      },
+      "cult-event-chapter-5-public-outburst": {
+        "name": "Cult Event (Chapter 5): Public Outburst"
+      },
+      "cult-event-chapter-5-too-close-to-home": {
+        "name": "Cult Event (Chapter 5): Too Close to Home"
+      },
+      "cult-event-chapter-5-urban-outburst": {
+        "name": "Cult Event (Chapter 5): Urban Outburst"
+      },
+      "establish-diplomatic-relations-for-the-first-time": {
+        "name": "Establish diplomatic relations for the first time"
+      },
+      "establish-your-first-farmland": {
+        "name": "Establish your first Farmland (V&K)"
+      },
+      "establish-your-first-lumber-camp": {
+        "name": "Establish your first Lumber Camp (V&K)"
+      },
+      "establish-your-first-mine": {
+        "name": "Establish your first Mine (V&K)"
+      },
+      "establish-your-first-quarry": {
+        "name": "Establish your first Quarry (V&K)"
+      },
+      "establish-your-first-trade-agreement": {
+        "name": "Establish your first trade agreement"
+      },
+      "establish-your-first-village": {
+        "name": "Establish your first village"
+      },
+      "establish-your-second-village": {
+        "name": "Establish your second Village (V&K)"
+      },
+      "expand-a-city-into-your-first-metropolis": {
+        "name": "Expand a city into your first metropolis"
+      },
+      "expand-a-town-into-your-first-city": {
+        "name": "Expand a town into your first city"
+      },
+      "expand-a-village-into-your-first-town": {
+        "name": "Expand a village into your first town"
+      },
+      "fortify-your-first-hex": {
+        "name": "Fortify your first hex (V&K)"
+      },
+      "reach-kingdom-size-10": {
+        "name": "Reach kingdom Size 10"
+      },
+      "reach-kingdom-size-100": {
+        "name": "Reach kingdom Size 100"
+      },
+      "reach-kingdom-size-25": {
+        "name": "Reach kingdom Size 25"
+      },
+      "reach-kingdom-size-50": {
+        "name": "Reach kingdom Size 50"
+      },
+      "recruit-your-first-specialized-army": {
+        "name": "Recruit your first Specialized Army (V&K)"
+      },
+      "recruit-your-first-regular-army": {
+        "name": "Recruit your first regular Army (V&K)"
+      },
+      "spend-100-rp-during-a-kingdom-turn": {
+        "name": "Spend 100 RP during a Kingdom turn"
+      },
+      "successfully-resolve-a-random-kingdom-event": {
+        "name": "Successfully resolve a random Kingdom Event (V&K)"
+      },
+      "successfully-use-your-first-creative-solution": {
+        "name": "Successfully use your first Creative Solution (V&K)"
+      },
+      "successfully-use-your-first-supernatural-solution": {
+        "name": "Successfully use your first Supernatural Solution (V&K)"
+      },
+      "win-your-first-war-encounter": {
+        "name": "Win your first War Encounter (V&K)"
+      }
+    },
     "charters": {
       "conquest": {
         "name": "Conquest",

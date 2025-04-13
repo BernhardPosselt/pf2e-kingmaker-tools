@@ -1,7 +1,7 @@
 {
-    "id": "win-your-first-war-encounter",
-    "name": "Win your first War Encounter (V&K)",
-    "xp": 60,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "win-your-first-war-encounter",
+  "name": "milestones.win-your-first-war-encounter.name",
+  "xp": 60,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

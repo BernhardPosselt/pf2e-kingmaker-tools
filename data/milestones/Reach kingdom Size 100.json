@@ -1,7 +1,7 @@
 {
-    "id": "reach-kingdom-size-100",
-    "name": "Reach kingdom Size 100",
-    "xp": 120,
-    "enabledOnFirstRun": true,
-    "isCultMilestone": false
+  "id": "reach-kingdom-size-100",
+  "name": "milestones.reach-kingdom-size-100.name",
+  "xp": 120,
+  "enabledOnFirstRun": true,
+  "isCultMilestone": false
 }

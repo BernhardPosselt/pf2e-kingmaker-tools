@@ -1,7 +1,7 @@
 {
-    "id": "establish-your-second-village",
-    "name": "Establish your second Village (V&K)",
-    "xp": 40,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "establish-your-second-village",
+  "name": "milestones.establish-your-second-village.name",
+  "xp": 40,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

@@ -1,7 +1,7 @@
 {
-    "id": "establish-your-first-farmland",
-    "name": "Establish your first Farmland (V&K)",
-    "xp": 20,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "establish-your-first-farmland",
+  "name": "milestones.establish-your-first-farmland.name",
+  "xp": 20,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

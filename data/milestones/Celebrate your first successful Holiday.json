@@ -1,7 +1,7 @@
 {
-    "id": "celebrate-your-first-successful-holiday",
-    "name": "Celebrate your first successful Holiday (V&K)",
-    "xp": 20,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "celebrate-your-first-successful-holiday",
+  "name": "milestones.celebrate-your-first-successful-holiday.name",
+  "xp": 20,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

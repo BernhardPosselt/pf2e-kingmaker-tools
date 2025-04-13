@@ -1,7 +1,7 @@
 {
-    "id": "recruit-your-first-regular-army",
-    "name": "Recruit your first regular Army (V&K)",
-    "xp": 40,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "recruit-your-first-regular-army",
+  "name": "milestones.recruit-your-first-regular-army.name",
+  "xp": 40,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

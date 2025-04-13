@@ -1,7 +1,7 @@
 {
-    "id": "recruit-your-first-specialized-army",
-    "name": "Recruit your first Specialized Army (V&K)",
-    "xp": 60,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "recruit-your-first-specialized-army",
+  "name": "milestones.recruit-your-first-specialized-army.name",
+  "xp": 60,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

@@ -1,7 +1,7 @@
 {
-    "id": "all-eight-leadership-roles-are-assigned",
-    "name": "All eight leadership roles are assigned",
-    "xp": 60,
-    "enabledOnFirstRun": true,
-    "isCultMilestone": false
+  "id": "all-eight-leadership-roles-are-assigned",
+  "name": "milestones.all-eight-leadership-roles-are-assigned.name",
+  "xp": 60,
+  "enabledOnFirstRun": true,
+  "isCultMilestone": false
 }

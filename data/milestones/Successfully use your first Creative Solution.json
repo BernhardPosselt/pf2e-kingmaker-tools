@@ -1,7 +1,7 @@
 {
-    "id": "successfully-use-your-first-creative-solution",
-    "name": "Successfully use your first Creative Solution (V&K)",
-    "xp": 20,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "successfully-use-your-first-creative-solution",
+  "name": "milestones.successfully-use-your-first-creative-solution.name",
+  "xp": 20,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

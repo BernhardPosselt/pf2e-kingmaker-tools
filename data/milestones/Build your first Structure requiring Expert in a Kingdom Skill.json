@@ -1,7 +1,7 @@
 {
-    "id": "build-your-first-structure-requiring-expert-in-a-kingdom-skill",
-    "name": "Build your first Structure requiring Expert in a Kingdom Skill (V&K)",
-    "xp": 20,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "build-your-first-structure-requiring-expert-in-a-kingdom-skill",
+  "name": "milestones.build-your-first-structure-requiring-expert-in-a-kingdom-skill.name",
+  "xp": 20,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

@@ -1,7 +1,7 @@
 {
-    "id": "fortify-your-first-hex",
-    "name": "Fortify your first hex (V&K)",
-    "xp": 20,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "fortify-your-first-hex",
+  "name": "milestones.fortify-your-first-hex.name",
+  "xp": 20,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

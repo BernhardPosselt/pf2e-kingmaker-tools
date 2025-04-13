@@ -1,7 +1,7 @@
 {
-    "id": "build-roads-for-the-first-time",
-    "name": "Build Roads for the first time (V&K)",
-    "xp": 20,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "build-roads-for-the-first-time",
+  "name": "milestones.build-roads-for-the-first-time.name",
+  "xp": 20,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }

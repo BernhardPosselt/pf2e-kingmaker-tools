@@ -22,6 +22,7 @@ import com.i18next.I18NextInterpolationOptions
 import com.i18next.ICU
 import com.i18next.i18next
 import js.objects.Object
+import js.objects.ReadonlyRecord
 import js.objects.Record
 import js.objects.recordOf
 import kotlinx.browser.window
@@ -69,24 +70,37 @@ fun t(key: String) =
 fun t(translatable: Translatable) =
     i18next.t(translatable.i18nKey)
 
+fun unfuckFoundryTranslations(obj: ReadonlyRecord<String, Any>): ReadonlyRecord<String, Any> {
+    return obj.asSequence()
+        .map { (key, value) ->
+            if (value is String) {
+                key to value.replace("&amp;", "&")
+            } else {
+                key to unfuckFoundryTranslations(value.unsafeCast<Record<String, Any>>())
+            }
+        }
+        .toRecord()
+}
+
 suspend fun initLocalization() {
     val lang = game.i18n.lang
-    val translations = game.i18n.translations[Config.moduleId]
+    val trans = game.i18n.translations[Config.moduleId].unsafeCast<ReadonlyRecord<String, Any>>()
+    val translations = unfuckFoundryTranslations(trans)
+    val options = I18NextInitOptions(
+        lng = lang,
+        debug = false,
+        defaultNS = Config.moduleId,
+        resources = recordOf(
+            lang to recordOf(Config.moduleId to translations)
+        ),
+        interpolation = I18NextInterpolationOptions(
+            escapeValue = false,
+        ),
+    )
     i18next
         .use(ICU::class.js)
-        .init(
-            I18NextInitOptions(
-                lng = lang,
-                debug = false,
-                defaultNS = Config.moduleId,
-                resources = recordOf(
-                    lang to recordOf(Config.moduleId to translations)
-                ),
-                interpolation = I18NextInterpolationOptions(
-                    escapeValue = false,
-                ),
-            )
-        ).await()
+        .init(options)
+        .await()
     registerI18NextHelper(window.Handlebars, i18next)
     translateActivities()
     translateCharters()

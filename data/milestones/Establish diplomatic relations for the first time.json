@@ -1,7 +1,7 @@
 {
-    "id": "establish-diplomatic-relations-for-the-first-time",
-    "name": "Establish diplomatic relations for the first time",
-    "xp": 60,
-    "enabledOnFirstRun": true,
-    "isCultMilestone": false
+  "id": "establish-diplomatic-relations-for-the-first-time",
+  "name": "milestones.establish-diplomatic-relations-for-the-first-time.name",
+  "xp": 60,
+  "enabledOnFirstRun": true,
+  "isCultMilestone": false
 }

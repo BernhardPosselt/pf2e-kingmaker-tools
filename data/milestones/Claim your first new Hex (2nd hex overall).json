@@ -1,7 +1,7 @@
 {
-    "id": "claim-your-first-new-hex-2nd-hex-overall",
-    "name": "Claim your first new Hex (2nd hex overall) (V&K)",
-    "xp": 20,
-    "enabledOnFirstRun": false,
-    "isCultMilestone": false
+  "id": "claim-your-first-new-hex-2nd-hex-overall",
+  "name": "milestones.claim-your-first-new-hex-2nd-hex-overall.name",
+  "xp": 20,
+  "enabledOnFirstRun": false,
+  "isCultMilestone": false
 }
