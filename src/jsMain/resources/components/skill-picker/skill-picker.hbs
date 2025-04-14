@@ -1,7 +1,7 @@
 <div>
     <ul>
-        <li><b>Validate Only</b>: Will not make the skill available in the skill selection</li>
-        <li><b>Required</b>: Actor must have this skill and proficiency regardless of alternative skills</li>
+        <li><b>{{localizeKM "applications.skillPicker.validateOnly"}}</b>: {{localizeKM "applications.skillPicker.validateOnlyHelp"}}</li>
+        <li><b>{{localizeKM "applications.skillPicker.required"}}</b>: {{localizeKM "applications.skillPicker.requiredHelp"}}</li>
     </ul>
     <div class="row km-skill-picker-row">
         {{#each anySkill.cells}}
@@ -28,11 +28,11 @@
         <button class="full-width"
                 type="button"
                 data-action="add-lore"
-                {{#if anyEnabled}}hidden{{/if}}>Add Lore
+                {{#if anyEnabled}}hidden{{/if}}>{{localizeKM "applications.skillPicker.addLore"}}
         </button>
     {{/if}}
     {{#if atLeastOneSkillError}}
-        <p class="km-picker-error">Pick at least one skill!</p>
+        <p class="km-picker-error">{{localizeKM "applications.skillPicker.pickOneSkill"}}</p>
     {{/if}}
-    <button type="submit" data-action="km-save" {{#unless isFormValid}}disabled{{/unless}}>Save</button>
+    <button type="submit" data-action="km-save" {{#unless isFormValid}}disabled{{/unless}}>{{localizeKM "applications.save"}}</button>
 </div>

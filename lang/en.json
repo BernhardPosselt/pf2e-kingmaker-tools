@@ -37,6 +37,18 @@
       "level": "Level",
       "formElement": {
         "openDocument": "Open Document"
+      },
+      "skillPicker": {
+        "addLore": "Add Lore",
+        "pickOneSkill": "Pick at least one skill!",
+        "validateOnly": "Validate Only",
+        "noCheck": "No check required",
+        "validateOnlyHelp": "Will not make the skill available in the skill selection",
+        "required": "Required",
+        "requiredHelp": "Actor must have this skill and proficiency regardless of alternative skills"
+      },
+      "activityEffects": {
+        "add": "Add Effect"
       }
     },
     "macros": {
