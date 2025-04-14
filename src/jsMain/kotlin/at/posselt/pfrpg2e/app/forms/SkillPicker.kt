@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.camping.CampingSkill
 import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.asSequence
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import js.objects.Record
 import kotlinx.js.JsPlainObject
@@ -16,7 +17,7 @@ external interface SkillInputContext {
 }
 
 class SkillPicker(
-    override val label: String = "Skills",
+    override val label: String = "",
     val context: SkillInputContext,
     val stacked: Boolean = true,
     override val name: String = "",
@@ -25,7 +26,7 @@ class SkillPicker(
 ) : IntoFormElementContext {
     override fun toContext() =
         Component(
-            label = label,
+            label = label.takeIf { it.isNotBlank() } ?: t("applications.skills"),
             templatePartial = "skillPickerInput",
             value = context.unsafeCast<AnyObject>(),
             stacked = false,
@@ -69,7 +70,7 @@ fun toSkillContext(skills: Array<CampingSkill>): SkillInputContext {
             hideProficiency = false,
             skills = arrayOf(
                 SkillInputArrayContext(
-                    label = "Any",
+                    label = t("applications.any"),
                     proficiency = anySkill.proficiency.toLabel(),
                 )
             )

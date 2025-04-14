@@ -2,7 +2,6 @@
 
 package at.posselt.pfrpg2e.camping
 
-import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.actor.hasAttribute
 import at.posselt.pfrpg2e.camping.dialogs.RegionSetting
 import at.posselt.pfrpg2e.camping.dialogs.RegionSettings
@@ -16,6 +15,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.unsetAppFlag
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.Game
@@ -23,6 +23,7 @@ import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2EParty
+import js.objects.recordOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -168,7 +169,7 @@ private val rolltableUuids = arrayOf(
 
 fun getDefaultCamping(game: Game): CampingData {
     return CampingData(
-        currentRegion = Config.regions.defaultRegion,
+        currentRegion = t("camping.zone", recordOf("id" to "00")),
         actorUuids = emptyArray(),
         campingActivities = emptyArray(),
         homebrewCampingActivities = emptyArray(),
@@ -195,7 +196,7 @@ fun getDefaultCamping(game: Game): CampingData {
         regionSettings = RegionSettings(
             regions = arrayOf(
                 RegionSetting(
-                    name = "Zone 00",
+                    name = t("camping.zone", recordOf("id" to "00")),
                     zoneDc = 14,
                     encounterDc = 12,
                     level = 0,
@@ -203,7 +204,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     terrain = Terrain.HILLS.toCamelCase(),
                 ),
                 RegionSetting(
-                    name = "Zone 01",
+                    name = t("camping.zone", recordOf("id" to "01")),
                     zoneDc = 15,
                     encounterDc = 12,
                     level = 1,
@@ -212,7 +213,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[0],
                 ),
                 RegionSetting(
-                    name = "Zone 02",
+                    name = t("camping.zone", recordOf("id" to "02")),
                     zoneDc = 16,
                     encounterDc = 14,
                     level = 2,
@@ -221,7 +222,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[1],
                 ),
                 RegionSetting(
-                    name = "Zone 03",
+                    name = t("camping.zone", recordOf("id" to "03")),
                     zoneDc = 18,
                     encounterDc = 12,
                     level = 3,
@@ -230,7 +231,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[2],
                 ),
                 RegionSetting(
-                    name = "Zone 04",
+                    name = t("camping.zone", recordOf("id" to "04")),
                     zoneDc = 19,
                     encounterDc = 12,
                     level = 4,
@@ -239,7 +240,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[3],
                 ),
                 RegionSetting(
-                    name = "Zone 05",
+                    name = t("camping.zone", recordOf("id" to "05")),
                     zoneDc = 20,
                     encounterDc = 14,
                     level = 5,
@@ -248,7 +249,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[4],
                 ),
                 RegionSetting(
-                    name = "Zone 06",
+                    name = t("camping.zone", recordOf("id" to "06")),
                     zoneDc = 20,
                     encounterDc = 12,
                     level = 6,
@@ -257,7 +258,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[5],
                 ),
                 RegionSetting(
-                    name = "Zone 07",
+                    name = t("camping.zone", recordOf("id" to "07")),
                     zoneDc = 18,
                     encounterDc = 12,
                     level = 7,
@@ -266,7 +267,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[6],
                 ),
                 RegionSetting(
-                    name = "Zone 08",
+                    name = t("camping.zone", recordOf("id" to "08")),
                     zoneDc = 24,
                     encounterDc = 12,
                     level = 8,
@@ -275,7 +276,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[7],
                 ),
                 RegionSetting(
-                    name = "Zone 09",
+                    name = t("camping.zone", recordOf("id" to "09")),
                     zoneDc = 28,
                     encounterDc = 16,
                     level = 9,
@@ -284,7 +285,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[8],
                 ),
                 RegionSetting(
-                    name = "Zone 10",
+                    name = t("camping.zone", recordOf("id" to "10")),
                     zoneDc = 32,
                     encounterDc = 14,
                     level = 10,
@@ -293,7 +294,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[9],
                 ),
                 RegionSetting(
-                    name = "Zone 11",
+                    name = t("camping.zone", recordOf("id" to "11")),
                     zoneDc = 28,
                     encounterDc = 12,
                     level = 11,
@@ -302,7 +303,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[10],
                 ),
                 RegionSetting(
-                    name = "Zone 12",
+                    name = t("camping.zone", recordOf("id" to "12")),
                     zoneDc = 28,
                     encounterDc = 12,
                     level = 12,
@@ -311,7 +312,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[11],
                 ),
                 RegionSetting(
-                    name = "Zone 13",
+                    name = t("camping.zone", recordOf("id" to "13")),
                     zoneDc = 26,
                     encounterDc = 12,
                     level = 13,
@@ -320,7 +321,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[12],
                 ),
                 RegionSetting(
-                    name = "Zone 14",
+                    name = t("camping.zone", recordOf("id" to "14")),
                     zoneDc = 30,
                     encounterDc = 12,
                     level = 14,
@@ -329,7 +330,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[13],
                 ),
                 RegionSetting(
-                    name = "Zone 15",
+                    name = t("camping.zone", recordOf("id" to "15")),
                     zoneDc = 29,
                     encounterDc = 12,
                     level = 15,
@@ -338,7 +339,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[14],
                 ),
                 RegionSetting(
-                    name = "Zone 16",
+                    name = t("camping.zone", recordOf("id" to "16")),
                     zoneDc = 35,
                     encounterDc = 12,
                     level = 16,
@@ -347,7 +348,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[15],
                 ),
                 RegionSetting(
-                    name = "Zone 17",
+                    name = t("camping.zone", recordOf("id" to "17")),
                     zoneDc = 36,
                     encounterDc = 12,
                     level = 17,
@@ -356,7 +357,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[16],
                 ),
                 RegionSetting(
-                    name = "Zone 18",
+                    name = t("camping.zone", recordOf("id" to "18")),
                     zoneDc = 43,
                     encounterDc = 14,
                     level = 18,
@@ -365,7 +366,7 @@ fun getDefaultCamping(game: Game): CampingData {
                     rollTableUuid = rolltableUuids[17],
                 ),
                 RegionSetting(
-                    name = "Zone 19",
+                    name = t("camping.zone", recordOf("id" to "19")),
                     zoneDc = 41,
                     encounterDc = 16,
                     level = 19,

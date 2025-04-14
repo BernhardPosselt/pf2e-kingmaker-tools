@@ -1,6 +1,13 @@
 {
   "pf2e-kingmaker-tools": {
     "moduleName": "Kingdom Building, Camping & Weather",
+    "migrations": {
+      "unsupportedVersions": "Upgrades from versions prior to 1.1.1 are not supported anymore. Please upgrade to 1.1.1 first",
+      "upgradingFromTo": "Upgrading from {fromVersion} to {toVersion}",
+      "doNotClose": "Running migrations, please do not close the window",
+      "runningMigration": "Running migration version {version}",
+      "successful": "Migration successful"
+    },
     "enums": {
       "skill": "Skill",
       "modifierType": "Type",
@@ -26,6 +33,7 @@
       "weatherEffect": "Weather Effect"
     },
     "applications": {
+      "any": "Any",
       "save": "Save",
       "edit": "Edit",
       "add": "Add",
@@ -42,22 +50,35 @@
       "skills": "Skills",
       "skillCheck": "Skill Check",
       "description": "Description",
+      "dialog": {
+        "roll": "Roll",
+        "ok": "Ok"
+      },
+      "jsonFilePicker": {
+        "file": "File",
+        "upload": "Upload",
+        "selectFile": "Please select a file!"
+      },
       "formElement": {
         "openDocument": "Open Document"
       },
       "skillPicker": {
         "addLore": "Add Lore",
-        "pickOneSkill": "Pick at least one skill!",
+        "pickOneSkill": "Pick at Least One Skill",
+        "pickSkills": "Pick Skills",
         "validateOnly": "Validate Only",
+        "dcType": "DC Type",
         "noCheck": "No check required",
         "validateOnlyHelp": "Will not make the skill available in the skill selection",
         "required": "Required",
-        "requiredHelp": "Actor must have this skill and proficiency regardless of alternative skills"
+        "requiredHelp": "Actor must have this skill and proficiency regardless of alternative skills",
+        "newLore": "New Lore"
       },
       "activityEffects": {
         "add": "Add Effect"
       },
       "actorActions": {
+        "tooltip": "PFRPG2E Actor Settings",
         "exportKingdom": "Export Kingdom",
         "deleteKingdom": "Delete Kingdom",
         "importKingdom": "Import Kingdom",
@@ -66,7 +87,14 @@
         "importCamping": "Import Camping"
       }
     },
+    "forms": {
+      "effects": "Effects"
+    },
     "camping": {
+      "healingMoreHp": "Healing {hp} HP more due to recipes or camping activities",
+      "healingFewerHp": "Healing {hp} HP fewer due to recipes",
+      "enemyStealth": "Enemy Stealth",
+      "zone": "Zone {id}",
       "basicIngredients": "Basic Ingredients",
       "specialIngredients": "Special Ingredients",
       "rations": "Rations",
@@ -297,7 +325,10 @@
         "getStarted": "To get started, create a kingdom or camping sheet by clicking on the Party actors Tent or Fortress icon:",
         "manual": "You can view the instruction manual here:",
         "upgradingNotice": "Make sure to carefully review the Upgrading Notices when    updating to major releases:",
-        "macrosNotice": "All macros and journals can be found in the Compendium Tab!"
+        "macrosNotice": "All macros and journals can be found in the Compendium Tab!",
+        "disabled": "Disabled Kingdom Building, Camping & Weather first run message",
+        "licenses": "Licenses",
+        "upgradeNotices": "UpgradeNotices"
       },
       "unrest": {
         "overcrowded": "Overcrowded Settlements",
@@ -312,7 +343,8 @@
       "discoverSpecialMeal": {
         "removeIngredients": "Remove Ingredients",
         "criticalFailure": "Suffer Critical Failure Effect",
-        "learn": "Learn {recipeName}"
+        "learn": "Learn {recipeName}",
+        "learned": "Learned {recipeName}"
       }
     },
     "macros": {
@@ -328,7 +360,8 @@
       },
       "createFood": {
         "title": "How Many Provisions?",
-        "amount": "Amount"
+        "amount": "Amount",
+        "adding": "Adding {count, plural, =1 {1 Provision} other {# Provisions}}"
       },
       "editRealmTile": {
         "title": "Edit Selected Realm Tiles/Drawings",

@@ -124,7 +124,7 @@ class SkillPickerApplication(
     private val dcTypes: Array<String>,
     private val afterSubmit: (skills: Array<PickerSkill>) -> Unit,
 ) : FormApp<SkillPickerContext, SkillPickerSubmitData>(
-    title = if (chooseOne) "Choose At Least One Skill" else "Choose Skills",
+    title = if (chooseOne) t("applications.skillPicker.pickOneSkill") else t("applications.skillPicker.pickSkills"),
     template = "components/skill-picker/skill-picker.hbs",
     width = 1000,
     debug = true,
@@ -147,9 +147,9 @@ class SkillPickerApplication(
 
             "add-lore" -> buildPromise {
                 val label = if (currentSkills.none { it.name == "new-lore" }) {
-                    "New Lore"
+                    t("applications.skillPicker.newLore")
                 } else {
-                    "New Lore " + generateSequence(1) { it + 1 }
+                    t("applications.skillPicker.newLore") + " " + generateSequence(1) { it + 1 }
                         .dropWhile { index -> currentSkills.any { skill -> skill.name == "new-lore-$index" } }
                         .first()
                 }
@@ -269,7 +269,7 @@ class SkillPickerApplication(
                 Select(
                     name = "skills.$index.dcType",
                     value = skill.dcType,
-                    label = "DC Type",
+                    label = t("applications.skillPicker.dcType"),
                     stacked = false,
                     options = dcTypes.map { SelectOption(label = it.toLabel(), value = it) },
                 ),
@@ -281,7 +281,7 @@ class SkillPickerApplication(
                     disabled = skill.dcType != "static",
                 ),
                 CheckboxInput(
-                    label = "Validate Only",
+                    label = t("applications.skillPicker.validateOnly"),
                     name = "skills.$index.validateOnly",
                     value = skill.validateOnly,
                     stacked = false,
@@ -289,7 +289,7 @@ class SkillPickerApplication(
                     elementClasses = if (hideValidateOnly) listOf("km-hidden") else emptyList(),
                 ),
                 CheckboxInput(
-                    label = "Required",
+                    label = t("applications.skillPicker.required"),
                     name = "skills.$index.required",
                     value = skill.required,
                     stacked = false,
@@ -340,7 +340,7 @@ fun launchCampingSkillPicker(
     val loreAttributes = skills.filter { it.attribute is Lore }.map { it.attribute }
     val anySkill = skills.find { it.attribute.value == "any" }?.let {
         PickerSkill(
-            label = "Any",
+            label = t("applications.any"),
             name = "any",
             enabled = true,
             isLore = false,
@@ -351,7 +351,7 @@ fun launchCampingSkillPicker(
             dc = it.dc,
         )
     } ?: PickerSkill(
-        label = "Any",
+        label = t("applications.any"),
         name = "any",
         enabled = false,
         isLore = false,

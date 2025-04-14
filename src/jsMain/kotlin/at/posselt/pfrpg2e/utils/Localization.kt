@@ -47,7 +47,7 @@ inline val Window.Handlebars: Handlebars
  */
 fun registerI18NextHelper(handlebars: Handlebars, i18Next: I18Next) {
     if (Object.hasOwn(handlebars.helpers, "localizeKM")) {
-        ui.notifications.error("${Config.moduleName}: Handlebars helper 'localizeKM' already defined by another module, translations won't work")
+        ui.notifications.error("Handlebars helper 'localizeKM' already defined by another module, translations won't work")
     } else {
         handlebars.registerHelper("localizeKM", { key: String, options: AnyObject ->
             val defaults = recordOf("returnObjects" to false)

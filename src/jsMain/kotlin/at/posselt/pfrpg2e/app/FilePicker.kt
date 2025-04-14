@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.app
 
 import at.posselt.pfrpg2e.app.forms.FileInput
 import at.posselt.pfrpg2e.app.forms.formContext
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.ui
 import js.objects.JsPlainObject
 import js.objects.recordOf
@@ -18,18 +19,18 @@ private external interface FilePickerData {
 
 suspend fun jsonFilePicker(
     title: String,
-    label: String = "File",
+    label: String? = null,
     accept: List<String> = listOf("application/json"),
     help: String? = null,
 ): String = awaitablePrompt<FilePickerData, String>(
     title = title,
-    buttonLabel = "Upload",
+    buttonLabel = t("applications.jsonFilePicker.upload"),
     templatePath = "components/forms/form.hbs",
     templateContext = recordOf(
         "formRows" to formContext(
             FileInput(
                 name = "file",
-                label = label,
+                label = label ?: t("applications.jsonFilePicker.file"),
                 accept = accept,
                 help = help,
             )
@@ -39,7 +40,7 @@ suspend fun jsonFilePicker(
     val input = form.querySelector("input") as HTMLInputElement
     val file = input.files?.item(0)
     if (file == null) {
-        val msg = "Please select a file!"
+        val msg = t("applications.jsonFilePicker.selectFile")
         ui.notifications.error(msg)
         throw IllegalArgumentException(msg)
     }

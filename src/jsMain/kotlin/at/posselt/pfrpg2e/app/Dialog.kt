@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.app
 
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.*
 import com.foundryvtt.core.applications.api.*
@@ -9,9 +10,9 @@ import js.objects.jso
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLFormElement
 
-enum class PromptType(val label: String, val icon: String? = null) {
-    ROLL("Roll", "fa-solid fa-dice-d20"),
-    OK("Ok"),
+enum class PromptType(val i18nKey: String, val icon: String? = null) {
+    ROLL("applications.dialog.roll", "fa-solid fa-dice-d20"),
+    OK("applications.dialog.ok"),
 }
 
 suspend fun confirm(message: String) =
@@ -19,7 +20,7 @@ suspend fun confirm(message: String) =
         DialogV2.confirm(
             ConfirmOptions(content = message)
         ).await().unsafeCast<Boolean>()
-    } catch (e: Throwable) {
+    } catch (_: Throwable) {
         false
     }
 
@@ -45,7 +46,7 @@ suspend fun <I, O> awaitablePrompt(
     val content = tpl(templatePath, templateContext)
     val button = DialogV2Button(
         action = "ok",
-        label = buttonLabel ?: promptType.label,
+        label = buttonLabel ?: t(promptType.i18nKey),
         default = true,
         icon = promptType.icon,
     ) { ev, button, dialog ->
@@ -80,7 +81,7 @@ suspend fun <I, O> prompt(
     val content = tpl(templatePath, templateContext)
     val button = DialogV2Button(
         action = "ok",
-        label = buttonLabel ?: promptType.label,
+        label = buttonLabel ?: t(promptType.i18nKey),
         default = true,
         icon = promptType.icon,
     ) { ev, button, dialog ->

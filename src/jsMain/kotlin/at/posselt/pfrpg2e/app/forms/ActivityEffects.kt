@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.app.forms
 import at.posselt.pfrpg2e.camping.ActivityEffect
 import at.posselt.pfrpg2e.camping.dialogs.ActivityEffectTarget
 import at.posselt.pfrpg2e.toLabel
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.pf2e.item.PF2EEffect
 import kotlinx.js.JsPlainObject
@@ -22,7 +23,7 @@ external interface ActivityEffectsContext {
 }
 
 class ActivityEffects(
-    override val label: String = "Effects",
+    override val label: String = "",
     val value: ActivityEffectsContext,
     val stacked: Boolean = true,
     override val name: String = "",
@@ -31,7 +32,7 @@ class ActivityEffects(
 ) : IntoFormElementContext {
     override fun toContext() =
         Component(
-            label = label,
+            label = label.takeIf { it.isNotBlank() } ?: t("forms.effects"),
             templatePartial = "activityEffectsInput",
             value = value.unsafeCast<AnyObject>(),
             stacked = false,

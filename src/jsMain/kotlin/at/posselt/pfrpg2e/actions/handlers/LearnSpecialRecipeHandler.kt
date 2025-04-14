@@ -17,7 +17,9 @@ import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.pf2e.actor.PF2ECharacter
+import js.objects.recordOf
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -55,7 +57,7 @@ class LearnSpecialRecipeHandler() : ActionHandler("learnSpecialRecipe") {
                 camping.cooking.knownRecipes = (camping.cooking.knownRecipes + recipeId).distinct().toTypedArray()
                 campingActor.setCamping(camping)
             }
-            postChatMessage("Learned recipe ${recipe.name}")
+            postChatMessage(t("chatMessages.discoverSpecialMeal.learned", recordOf("recipeName" to recipe.name)))
         }
     }
 }

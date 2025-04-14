@@ -37,6 +37,7 @@ import at.posselt.pfrpg2e.utils.awaitAll
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatSeconds
 import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.AnyObject
@@ -46,6 +47,7 @@ import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2EParty
 import com.foundryvtt.pf2e.pf2e
+import js.objects.recordOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
 import kotlinx.coroutines.awaitAll
@@ -209,9 +211,9 @@ private suspend fun applyAdditionalHealing(healingAfterRest: List<Pair<PF2EChara
         val value = min(actor.hitPoints.value + healing, actor.hitPoints.max)
         async {
             if (healing > 0) {
-                postChatMessage("Healing $healing HP more from recipes or camping activities", speaker = actor)
+                postChatMessage(t("camping.healingMoreHp", recordOf("hp" to healing)), speaker = actor)
             } else if (healing < 0) {
-                postChatMessage("Healing ${abs(healing)}healing HP fewer from recipes", speaker = actor)
+                postChatMessage(t("camping.healingFewerHp", recordOf("hp" to abs(healing))), speaker = actor)
             }
             actor.typeSafeUpdate { system.attributes.hp.value = value }
         }
@@ -270,7 +272,7 @@ private suspend fun beginRest(
         watchDurationSeconds = watchDurationSeconds,
     )
     if (disableRandomEncounter == false && randomEncounterAt != null) {
-        askDc("Enemy Stealth")?.let { dc ->
+        askDc(t("camping.enemyStealth"))?.let { dc ->
             watchers
                 .filterIsInstance<PF2ECharacter>()
                 .randomOrNull()

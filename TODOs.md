@@ -7,4 +7,8 @@
 
 * translate kingdom sheet
 * translate camping sheet
-* translate apps
+* translate code folders:
+  * weather/
+  * settings/
+  * kingdom/
+  * camping/

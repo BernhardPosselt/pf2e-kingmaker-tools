@@ -56,6 +56,7 @@ import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.loadTemplatePartials
 import at.posselt.pfrpg2e.utils.pf2eKingmakerTools
 import at.posselt.pfrpg2e.utils.registerMacroDropHooks
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.weather.registerWeatherHooks
 import at.posselt.pfrpg2e.weather.rollWeather
 import com.foundryvtt.core.Hooks
@@ -116,7 +117,7 @@ fun main() {
                                 "afterend", createPartyActorIcon(
                                     id = id,
                                     icon = setOf("fa-solid", "fa-ellipsis-vertical"),
-                                    toolTip = "PFRPG2E Actor Settings",
+                                    toolTip = t("applications.actorActions.tooltip"),
                                     sheetType = SheetType.KINGDOM,
                                     onClick = {
                                         game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->

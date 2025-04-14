@@ -5,8 +5,10 @@ import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.camping.addConsumableToInventory
 import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.fromUuid
 import com.foundryvtt.pf2e.actor.PF2EActor
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 
@@ -24,7 +26,7 @@ class GainProvisionsHandler() : ActionHandler("gainProvisions") {
             .unsafeCast<PF2EActor?>()
         if (quantity > 0 && actor != null) {
             actor.addConsumableToInventory(Config.items.provisionsUuid, quantity)
-            postChatMessage("Adding $quantity provisions", speaker = actor)
+            postChatMessage(t("macros.createFood.adding", recordOf("count" to quantity)), speaker = actor)
         }
     }
 }

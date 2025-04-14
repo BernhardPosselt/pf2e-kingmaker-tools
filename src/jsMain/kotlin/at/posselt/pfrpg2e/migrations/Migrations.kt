@@ -1,6 +1,5 @@
 package at.posselt.pfrpg2e.migrations
 
-import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.actor.npcs
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.CampingData
@@ -29,6 +28,7 @@ import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.isFirstGM
 import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.setAppFlag
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.ui
@@ -99,16 +99,15 @@ private fun Game.hasUnmigratedHouses() =
 
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     val currentVersion = determineVersion()
-    console.log("${Config.moduleName}: Upgrading from $currentVersion to $latestMigrationVersion")
+    console.log("${t("moduleName")}: ${t("migrations.upgradingFromTo", recordOf("fromVersion" to currentVersion, "toVersion" to latestMigrationVersion))}")
     if (currentVersion < 9) {
         ui.notifications.error(
-            "${Config.moduleName}: Upgrades from versions prior to 1.1.1 are not supported anymore. " +
-                    "Please upgrade to 1.1.1 first"
+            "${t("moduleName")}: ${t("migrations.unsupportedVersions")}"
         )
         return
     }
     if (isFirstGM() && currentVersion < latestMigrationVersion) {
-        ui.notifications.info("${Config.moduleName}: Running migrations, please do not close the window")
+        ui.notifications.info("${t("moduleName")}: ${t("migrations.doNotClose")}")
 
         // special handling needed to copy actors onto party actor
         // this can be removed in Foundry 14
@@ -141,7 +140,7 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
 
         migrationsToRun
             .forEach { migration ->
-                ui.notifications.info("Running migration ${Config.moduleName} version ${migration.version}")
+                ui.notifications.info("${t("moduleName")}: ${t("migration.runningMigration", recordOf("version" to migration.version))}")
                 campingActors.forEach { actor ->
                     actor.getCamping()?.let { camping ->
                         migration.migrateCamping(this, camping)
@@ -160,7 +159,7 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
             }
 
         settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(latestMigrationVersion)
-        ui.notifications.info("Kingdom Building, Camping & Weather: Migration successful")
+        ui.notifications.info("${t("moduleName")}: ${t("migration.runningMigration")}")
 
         if (migrationsToRun.any { it.showUpgradingNotices }) {
             openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.wz1mIWMxDJVsMIUd")
