@@ -1,12 +1,10 @@
 package at.posselt.pfrpg2e.plugins
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.Json.Default.parseToJsonElement
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.encodeToStream
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
@@ -39,6 +37,7 @@ abstract class CombineJsonFiles : DefaultTask() {
     fun action() {
         val source = sourceDirectory.asFile.get().toPath()
         val target = targetDirectory.asFile.get().toPath()
+        Files.createDirectories(target)
         Files.walk(source, 1)
             .filter { Files.isDirectory(it) }
             .filter { it != source }

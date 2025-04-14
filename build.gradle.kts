@@ -27,12 +27,13 @@ repositories {
 // before referencing them in source sets below
 tasks.register<CombineJsonFiles>("combineJsonFiles") {
     sourceDirectory = layout.projectDirectory.dir("data/")
-    targetDirectory = layout.buildDirectory.dir("generated/resources")
+    targetDirectory = layout.buildDirectory.dir("generated/data/")
 }
 
 tasks.register<CopyAndSanitizeTranslations>("processTranslations") {
     from = layout.projectDirectory.dir("lang/")
-    into = layout.buildDirectory.dir("generated/resources/lang")
+    into = layout.buildDirectory.dir("generated/lang/")
+    targetFolderName = "lang"
 }
 
 kotlin {

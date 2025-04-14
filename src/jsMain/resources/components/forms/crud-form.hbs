@@ -3,14 +3,14 @@
         <table>
             <thead>
             <tr>
-                <th>Name</th>
-                <th>ID</th>
+                <th>{{localizeKM "applications.name"}}</th>
+                <th>{{localizeKM "applications.id"}}</th>
                 {{#each additionalColumnHeadings}}
                     <th>{{this}}</th>
                 {{/each}}
-                <th>Enable</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th>{{localizeKM "applications.enable"}}</th>
+                <th>{{localizeKM "applications.edit"}}</th>
+                <th>{{localizeKM "applications.delete"}}</th>
             </tr>
             </thead>
             <tbody>
@@ -27,7 +27,7 @@
                                 type="button"
                                 data-action="edit"
                                 data-id="{{id}}"
-                                title="Edit"
+                                title="{{localizeKM "applications.edit"}}"
                                 {{#unless canBeEdited}}hidden{{/unless}}
                         ><i class="fa-solid fa-pencil"></i></button>
                     </td>
@@ -36,7 +36,7 @@
                                 type="button"
                                 data-action="delete"
                                 data-id="{{id}}"
-                                title="Delete"
+                                title="{{localizeKM "applications.delete"}}"
                                 {{#unless canBeDeleted}}hidden{{/unless}}
                         ><i class="fa-solid fa-minus"></i></button>
                     </td>
@@ -44,6 +44,6 @@
             {{/each}}
             </tbody>
         </table>
-        <button type="button" data-action="add" class="full-width">Add</button>
+        <button type="button" data-action="add" class="full-width">{{localizeKM "applications.add"}}</button>
     </div>
 </div>

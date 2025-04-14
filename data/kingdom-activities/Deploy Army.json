@@ -23,8 +23,8 @@
           "upgrade": "success"
         }
       ],
-      "buttonLabel": "Starting and End Point connected by a Road",
-      "name": "Starting and End Point connected by a Road",
+      "buttonLabel": "activities.deploy-army.modifiers.connectedByRoad.buttonLabel and End Point connected by a Road",
+      "name": "activities.deploy-army.modifiers.connectedByRoad.name",
       "type": "untyped",
       "applyIf": [
         {
@@ -38,8 +38,8 @@
     {
       "enabled": false,
       "value": 4,
-      "buttonLabel": "+4 circumstance to Force a March",
-      "name": "Force a March",
+      "buttonLabel": "activities.deploy-army.modifiers.forceAMarch.buttonLabel",
+      "name": "activities.deploy-army.modifiers.forceAMarch.name",
       "type": "circumstance",
       "applyIf": [
         {
@@ -53,8 +53,8 @@
     {
       "enabled": false,
       "value": -5,
-      "buttonLabel": "+5 DC Increase if Deploying across your border",
-      "name": "Deploying across your border",
+      "buttonLabel": "activities.deploy-army.modifiers.crossingBorders.buttonLabel",
+      "name": "activities.deploy-army.modifiers.crossingBorders.name",
       "type": "untyped",
       "applyIf": [
         {
@@ -68,8 +68,8 @@
     {
       "enabled": false,
       "value": -10,
-      "buttonLabel": "+10 DC Increase if Deploying into enemy territory",
-      "name": "Deploying into enemy territory",
+      "buttonLabel": "activities.deploy-army.modifiers.crossingEnemyBorders.buttonLabel",
+      "name": "activities.deploy-army.modifiers.crossingEnemyBorders.name",
       "type": "untyped",
       "applyIf": [
         {

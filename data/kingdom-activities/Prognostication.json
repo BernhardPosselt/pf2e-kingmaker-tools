@@ -15,7 +15,8 @@
     "modifiers": [
       {
         "turns": 1,
-        "buttonLabel": "+2 Circumstance to Resolve Event",
+        "buttonLabel": "activities.prognostication.criticalSuccess.modifiers.randomEvent.buttonLabel",
+        "name": "activities.prognostication.criticalSuccess.modifiers.randomEvent.name",
         "isConsumedAfterRoll": true,
         "applyIf": [
           {
@@ -27,7 +28,6 @@
         ],
         "enabled": true,
         "value": 2,
-        "name": "Prognostication: Critical Success",
         "type": "circumstance"
       }
     ]
@@ -37,7 +37,8 @@
     "modifiers": [
       {
         "turns": 1,
-        "buttonLabel": "+1 Circumstance to Resolve Event",
+        "buttonLabel": "activities.prognostication.success.modifiers.randomEvent.buttonLabel",
+        "name": "activities.prognostication.success.modifiers.randomEvent.name",
         "isConsumedAfterRoll": true,
         "applyIf": [
           {
@@ -49,7 +50,6 @@
         ],
         "enabled": true,
         "value": 1,
-        "name": "Prognostication: Critical Success",
         "type": "circumstance"
       }
     ]

@@ -11,7 +11,7 @@ fun createFavoredLandPenalty() =
         type = ModifierType.UNTYPED,
         id = "favored-land",
         enabled = false,
-        name = "Favored Land",
+        name = "modifiers.penalties.favoredLand",
         applyIf = listOf(
             Eq("@phase", KingdomPhase.REGION.value)
         )

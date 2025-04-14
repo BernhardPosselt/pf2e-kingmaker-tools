@@ -16,7 +16,8 @@
       {
         "turns": 1,
         "enabled": true,
-        "buttonLabel": "+1/+2/+3 Circumstance to Army Activities",
+        "buttonLabel": "activities.warfare-exercises.criticalSuccess.modifiers.exercised.buttonLabel",
+        "name": "activities.warfare-exercises.criticalSuccess.modifiers.exercised.name",
         "applyIf": [
           {
             "eq": [
@@ -65,13 +66,13 @@
             "default": 1
           }
         },
-        "name": "Warfare Exercises",
         "type": "circumstance"
       },
       {
         "turns": 1,
         "enabled": true,
-        "buttonLabel": "Prevent Critical Failure on Army Activity Once",
+        "buttonLabel": "activities.warfare-exercises.criticalSuccess.modifiers.armyFailure.buttonLabel",
+        "name": "activities.warfare-exercises.criticalSuccess.modifiers.armyFailure.name",
         "isConsumedAfterRoll": true,
         "applyIf": [
           {
@@ -87,7 +88,6 @@
             "upgrade": "criticalFailure"
           }
         ],
-        "name": "Prevent Critical Failure on Army Activity Once",
         "type": "untyped"
       }
     ]
@@ -99,7 +99,8 @@
         "turns": 1,
         "isConsumedAfterRoll": true,
         "enabled": true,
-        "buttonLabel": "+1/+2/+3 Circumstance to Army Activities",
+        "buttonLabel": "activities.warfare-exercises.success.modifiers.exercised.buttonLabel",
+        "name": "activities.warfare-exercises.success.modifiers.exercised.name",
         "applyIf": [
           {
             "eq": [
@@ -148,7 +149,6 @@
             "default": 1
           }
         },
-        "name": "Warfare Exercises",
         "type": "circumstance"
       }
     ]

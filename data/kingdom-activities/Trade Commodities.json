@@ -13,8 +13,8 @@
       "type": "circumstance",
       "value": 1,
       "enabled": false,
-      "name": "Trading with a group with established diplomatic relationships",
-      "buttonLabel": "+1 Circumstance to trade with a group with established diplomatic relationships"
+      "name": "activities.trade-commodities.modifiers.establishedRelations.name",
+      "buttonLabel": "activities.trade-commodities.modifiers.establishedRelations.buttonLabel"
     }
   ],
   "skills": {

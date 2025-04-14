@@ -10,7 +10,7 @@ fun createStructureEventBonuses(currentSettlement: Settlement): Modifier? =
     if (currentSettlement.settlementEventBonus > 0) {
         Modifier(
             type = ModifierType.ITEM,
-            name = "Structure Event Bonus",
+            name = "modifiers.bonuses.structureEventBonus",
             value = currentSettlement.settlementEventBonus,
             applyIf = listOf(
                 Eq("@phase", KingdomPhase.EVENT.value)

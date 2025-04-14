@@ -21,5 +21,5 @@
     <button type="button" class="full-width" data-action="add-entry">{{addEntry}}</button>
     {{/if}}
     <button type="submit" class="full-width" data-action="km-save" {{#unless isFormValid}}disabled{{/unless}}>{{#if
-            saveLabel}}{{saveLabel}}{{else}}Save{{/if}}</button>
+            saveLabel}}{{saveLabel}}{{else}}{{localizeKM "applications.save"}}{{/if}}</button>
 </div>

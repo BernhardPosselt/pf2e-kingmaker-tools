@@ -20,7 +20,8 @@
       {
         "turns": 1,
         "isConsumedAfterRoll": true,
-        "buttonLabel": "+2 Circumstance to Next Leadership Activity",
+        "name": "activities.rest-and-relax.criticalSuccess.modifiers.timeOff.name",
+        "buttonLabel": "activities.rest-and-relax.criticalSuccess.modifiers.timeOff.buttonLabel",
         "applyIf": [
           {
             "eq": [
@@ -31,12 +32,11 @@
         ],
         "enabled": true,
         "value": 2,
-        "name": "Rest and Relax: Success",
         "type": "circumstance"
       },
       {
-        "name": "Rest and Relax performed last turn",
-        "buttonLabel": "+4 DC increase if Rest and Relax performed next turn",
+        "name": "activities.rest-and-relax.criticalSuccess.modifiers.nextTurn.name",
+        "buttonLabel": "activities.rest-and-relax.criticalSuccess.modifiers.nextTurn.buttonLabel",
         "turns": 2,
         "applyIf": [
           {
@@ -56,8 +56,8 @@
     "msg": "activities.rest-and-relax.success.msg",
     "modifiers": [
       {
-        "name": "Rest and Relax performed last turn",
-        "buttonLabel": "+4 DC increase if Rest and Relax performed next turn",
+        "name": "activities.rest-and-relax.success.modifiers.nextTurn.name",
+        "buttonLabel": "activities.rest-and-relax.success.modifiers.nextTurn.buttonLabel",
         "turns": 2,
         "applyIf": [
           {
@@ -77,8 +77,8 @@
     "msg": "activities.rest-and-relax.failure.msg",
     "modifiers": [
       {
-        "name": "Rest and Relax performed last turn",
-        "buttonLabel": "+4 DC increase if Rest and Relax performed next turn",
+        "name": "activities.rest-and-relax.failure.modifiers.nextTurn.name",
+        "buttonLabel": "activities.rest-and-relax.failure.modifiers.nextTurn.buttonLabel",
         "turns": 2,
         "applyIf": [
           {
@@ -98,8 +98,9 @@
     "msg": "activities.rest-and-relax.criticalFailure.msg",
     "modifiers": [
       {
-        "turns": 1,
-        "buttonLabel": "-2 Circumstance to Next Leadership Skill Check",
+        "turns": 2,
+        "name": "activities.rest-and-relax.criticalFailure.modifiers.wastedTime.name",
+        "buttonLabel": "activities.rest-and-relax.criticalFailure.modifiers.wastedTime.buttonLabel",
         "isConsumedAfterRoll": true,
         "applyIf": [
           {
@@ -111,12 +112,11 @@
         ],
         "enabled": true,
         "value": -2,
-        "name": "Rest and Relax: Critical Failure",
         "type": "circumstance"
       },
       {
-        "name": "Rest and Relax performed last turn",
-        "buttonLabel": "+4 DC increase if Rest and Relax performed next turn",
+        "name": "activities.rest-and-relax.criticalFailure.modifiers.nextTurn.name",
+        "buttonLabel": "activities.rest-and-relax.criticalFailure.modifiers.nextTurn.buttonLabel",
         "turns": 2,
         "applyIf": [
           {

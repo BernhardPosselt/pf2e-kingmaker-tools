@@ -14,8 +14,8 @@
     "msg": "activities.spread-the-legend.criticalSuccess.msg",
     "modifiers": [
       {
-        "name": "Spread the Legend: Critical Success",
-        "buttonLabel": "Reduce Dangerous Event Modifier by 1",
+        "name": "activities.spread-the-legend.criticalSuccess.modifiers.increaseGlory.name",
+        "buttonLabel": "activities.spread-the-legend.criticalSuccess.modifiers.increaseGlory.buttonLabel",
         "enabled": true,
         "value": 1,
         "type": "untyped",

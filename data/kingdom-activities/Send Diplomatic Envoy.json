@@ -13,10 +13,10 @@
   "modifiers": [
     {
       "enabled": false,
-      "name": "At War with Group",
+      "name": "activities.send-diplomatic-envoy.modifiers.atWar.name",
+      "buttonLabel": "activities.send-diplomatic-envoy.modifiers.atWar.buttonLabel",
       "value": -4,
       "type": "circumstance",
-      "buttonLabel": "At War with Group",
       "downgradeResults": [
         {
           "downgrade": "criticalSuccess"
@@ -35,10 +35,10 @@
     "modifiers": [
       {
         "turns": 1,
-        "buttonLabel": "+2 Circumstance to Checks Made With Group",
+        "buttonLabel": "activities.send-diplomatic-envoy.criticalSuccess.modifiers.goodFirstImpression.buttonLabel",
+        "name": "activities.send-diplomatic-envoy.criticalSuccess.modifiers.goodFirstImpression.name",
         "enabled": false,
         "value": 2,
-        "name": "Send Diplomatic Envoy: Critical Success",
         "type": "circumstance"
       }
     ]
@@ -51,7 +51,8 @@
     "modifiers": [
       {
         "turns": 2,
-        "buttonLabel": "+2 Circumstance to Checks Made With Group",
+        "buttonLabel": "activities.send-diplomatic-envoy.failure.modifiers.notReady.buttonLabel",
+        "name": "activities.send-diplomatic-envoy.failure.modifiers.notReady.name",
         "enabled": false,
         "value": 2,
         "applyIf": [
@@ -62,7 +63,6 @@
             ]
           }
         ],
-        "name": "Send Diplomatic Envoy: Success",
         "type": "circumstance"
       }
     ]

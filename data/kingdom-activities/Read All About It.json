@@ -16,7 +16,8 @@
     "modifiers": [
       {
         "turns": 1,
-        "buttonLabel": "+4 Circumstance to Resolve Event",
+        "buttonLabel": "activities.read-all-about-it.criticalSuccess.modifiers.prepared.buttonLabel",
+        "name": "activities.read-all-about-it.criticalSuccess.modifiers.prepared.name",
         "isConsumedAfterRoll": true,
         "applyIf": [
           {
@@ -28,7 +29,6 @@
         ],
         "enabled": true,
         "value": 4,
-        "name": "Read All About It: Critical Success",
         "type": "circumstance"
       }
     ]
@@ -38,7 +38,8 @@
     "modifiers": [
       {
         "turns": 1,
-        "buttonLabel": "+2 Circumstance to Ongoing Event",
+        "buttonLabel": "activities.read-all-about-it.success.modifiers.helpful.buttonLabel",
+        "name": "activities.read-all-about-it.success.modifiers.helpful.name",
         "isConsumedAfterRoll": true,
         "applyIf": [
           {
@@ -50,7 +51,6 @@
         ],
         "enabled": false,
         "value": 2,
-        "name": "Read All About It: Success",
         "type": "circumstance"
       }
     ]
@@ -62,7 +62,8 @@
     "msg": "activities.read-all-about-it.criticalFailure.msg",
     "modifiers": [
       {
-        "buttonLabel": "-2 Circumstance Events",
+        "buttonLabel": "activities.read-all-about-it.criticalFailure.modifiers.falseInformation.buttonLabel",
+        "name": "activities.read-all-about-it.criticalFailure.modifiers.falseInformation.name",
         "turns": 1,
         "applyIf": [
           {
@@ -74,7 +75,6 @@
         ],
         "enabled": true,
         "value": -2,
-        "name": "Read All About It: Critical Failure",
         "type": "circumstance"
       }
     ]

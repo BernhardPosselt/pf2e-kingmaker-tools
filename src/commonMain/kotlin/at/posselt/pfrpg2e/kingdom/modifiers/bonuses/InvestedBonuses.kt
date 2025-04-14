@@ -43,7 +43,7 @@ fun createInvestedBonuses(
                     type = ModifierType.STATUS,
                     value = value,
                     id = "invested-$ability",
-                    name = "builtInModifierNames.invested",
+                    name = "modifiers.bonuses.invested",
                     applyIf = listOf(
                         Eq("@ability", ability)
                     )

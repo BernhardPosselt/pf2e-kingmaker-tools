@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.armies
 
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Folder
@@ -16,11 +17,25 @@ fun Game.getSelectedArmyConditions() =
     getSelectedArmies()
         .firstOrNull()
         ?.let {
+            val miredCount = it.miredValue() ?: 0
+            val wearyCount = it.wearyValue() ?: 0
             ArmyConditionInfo(
                 armyName = it.name,
                 armyUuid = it.uuid,
-                miredValue = it.miredValue() ?: 0,
-                wearyValue = it.wearyValue() ?: 0,
+                miredValue = miredCount,
+                wearyValue = wearyCount,
+                wearyLabel = t(
+                    "modifiers.penalties.weary", recordOf(
+                        "armyName" to it.name,
+                        "count" to wearyCount,
+                    )
+                ),
+                miredLabel = t(
+                    "modifiers.penalties.mired", recordOf(
+                        "armyName" to it.name,
+                        "count" to miredCount,
+                    )
+                ),
             )
         }
 

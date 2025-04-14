@@ -30,11 +30,11 @@
     "modifiers": [
       {
         "turns": 1,
-        "buttonLabel": "+1 Circumstance to Next Check with Chosen Skill",
+        "name": "activities.take-charge-vk.criticalSuccess.modifiers.nextCheck.name",
+        "buttonLabel": "activities.take-charge-vk.criticalSuccess.modifiers.nextCheck.buttonLabel",
         "isConsumedAfterRoll": true,
         "enabled": false,
         "value": 1,
-        "name": "Take Charge: Critical Success",
         "type": "circumstance"
       }
     ]
@@ -51,10 +51,10 @@
       {
         "turns": 1,
         "isConsumedAfterRoll": true,
-        "buttonLabel": "-1 Circumstance to Next Check with Chosen Skill",
+        "name": "activities.take-charge-vk.criticalFailure.modifiers.nextCheck.name",
+        "buttonLabel": "activities.take-charge-vk.criticalFailure.modifiers.nextCheck.buttonLabel",
         "enabled": false,
         "value": -1,
-        "name": "Take Charge: Critical Failure",
         "type": "circumstance"
       }
     ]

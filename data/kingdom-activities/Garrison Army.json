@@ -13,15 +13,15 @@
     {
       "enabled": false,
       "value": -5,
-      "buttonLabel": "+5 DC Increase if outside of your kingdom",
-      "name": "Outside of your kingdom",
+      "buttonLabel": "activities.garrison-army.modifiers.outsideKingdom.buttonLabel",
+      "name": "activities.garrison-army.modifiers.outsideKingdom.name",
       "type": "untyped"
     },
     {
       "enabled": false,
       "value": -10,
-      "buttonLabel": "+10 DC Increase if in enemy territory",
-      "name": "In enemy territory",
+      "buttonLabel": "activities.garrison-army.modifiers.enemyTerritory.buttonLabel",
+      "name": "activities.garrison-army.modifiers.enemyTerritory.name",
       "type": "untyped"
     }
   ],

@@ -26,8 +26,8 @@
         "turns": 2,
         "enabled": true,
         "value": -1,
-        "buttonLabel": "-1 Circumstance to Culture",
-        "name": "Creative Solution: Critical Failure",
+        "buttonLabel": "activities.creative-solution.criticalFailure.modifiers.frustratedScholars.buttonLabel",
+        "name": "activities.creative-solution.criticalFailure.modifiers.frustratedScholars.name",
         "type": "circumstance",
         "applyIf": [
           {

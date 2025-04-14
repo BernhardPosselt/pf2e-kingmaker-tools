@@ -105,7 +105,7 @@ fun createLeadershipModifiers(
                 id = "leadership-specialized-" + leader.value,
                 type = LEADERSHIP,
                 value = value,
-                name = "Leadership (Specialized)",
+                name = "modifiers.bonuses.leadershipSpecialized",
                 applyIf = listOf(
                     Eq("@leader", leader.value),
                     In(
@@ -117,7 +117,7 @@ fun createLeadershipModifiers(
             val halfModifier = fullModifier.copy(
                 id = "leadership-unspecialized-" + leader.value,
                 value = fullModifier.value / 2,
-                name = "Leadership (Unspecialized)",
+                name = "modifiers.bonuses.leadershipUnspecialized",
                 applyIf = listOf(Eq("@leader", leader.value)),
             )
             listOf(

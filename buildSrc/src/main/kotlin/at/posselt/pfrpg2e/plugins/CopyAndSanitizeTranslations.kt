@@ -6,6 +6,8 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -15,6 +17,7 @@ import java.io.BufferedWriter
 import java.io.FileWriter
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.readText
 
@@ -25,16 +28,24 @@ abstract class CopyAndSanitizeTranslations : DefaultTask() {
     @get:OutputDirectory
     abstract val into: DirectoryProperty
 
+    // this extra folder is needed to create a subfolder in the final dist/ folder
+    // because we depend on the output directory as a resources src that folder is taken as the root
+    // folder so subfolders are not picked up
+
+    @get:Input
+    abstract val targetFolderName: Property<String>
+
     @TaskAction
     fun action() {
         val source = from.get().asFile.toPath()
         val into = into.get().asFile.toPath()
-        Files.createDirectories(into)
+        val folder = into.resolve(Paths.get(targetFolderName.get()))
+        Files.createDirectories(folder)
         Files.walk(source)
             .parallel()
             .filter { it.isRegularFile() && it.fileName.toString().endsWith(".json") }
             .forEach {
-                val target = into.resolve(it.fileName)
+                val target = folder.resolve(it.fileName)
                 transformAndWrite(it, target)
             }
     }

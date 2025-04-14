@@ -14,8 +14,8 @@
     "msg": "activities.reconnoiter-hex-vk.criticalSuccess.msg",
     "modifiers": [
       {
-        "name": "Reconnoitering a second time",
-        "buttonLabel": "Worsen Degree of Success when reconnoitering a second time",
+        "name": "activities.reconnoiter-hex-vk.criticalSuccess.modifiers.reconnoiteringSecondTime.name",
+        "buttonLabel": "activities.reconnoiter-hex-vk.criticalSuccess.modifiers.reconnoiteringSecondTime.buttonLabel",
         "downgradeResults": [
           {
             "downgrade": "criticalSuccess"
@@ -47,7 +47,8 @@
     "modifiers": [
       {
         "turns": 2,
-        "buttonLabel": "-1 Circumstance to Loyalty",
+        "name": "activities.reconnoiter-hex-vk.criticalFailure.modifiers.lostTeam.name",
+        "buttonLabel": "activities.reconnoiter-hex-vk.criticalFailure.modifiers.lostTeam.buttonLabel",
         "enabled": true,
         "applyIf": [
           {
@@ -58,7 +59,6 @@
           }
         ],
         "value": -1,
-        "name": "Reconnoiter Hex: Critical Failure",
         "type": "circumstance"
       }
     ]

@@ -18,15 +18,15 @@
       "type": "circumstance",
       "value": 2,
       "enabled": false,
-      "buttonLabel": "+2 Circumstance When Using Correct Skill",
-      "name": "+2 Circumstance When Using Correct Skill"
+      "buttonLabel": "activities.new-leadership-vk.modifiers.matchingSkillBonus.buttonLabel",
+      "name": "activities.new-leadership-vk.modifiers.matchingSkillBonus.name"
     },
     {
       "type": "circumstance",
       "value": -4,
       "enabled": false,
-      "buttonLabel": "-4 Circumstance When Appointing Ruler",
-      "name": "-4 Circumstance When Appointing Ruler"
+      "buttonLabel": "activities.new-leadership-vk.modifiers.appointingRulerPenalty.buttonLabel",
+      "name": "activities.new-leadership-vk.modifiers.appointingRulerPenalty.name"
     }
   ],
   "criticalSuccess": {
@@ -35,9 +35,9 @@
       {
         "turns": 2,
         "enabled": false,
-        "buttonLabel": "+1 Circumstance to All Checks",
         "value": 1,
-        "name": "New Leadership: Critical Success",
+        "buttonLabel": "activities.new-leadership-vk.criticalSuccess.modifiers.buttonLabel",
+        "name": "activities.new-leadership-vk.criticalSuccess.modifiers.name",
         "type": "circumstance"
       }
     ]
@@ -50,9 +50,9 @@
     "modifiers": [
       {
         "enabled": false,
+        "buttonLabel": "activities.new-leadership-vk.failure.modifiers.buttonLabel",
+        "name": "activities.new-leadership-vk.failure.modifiers.name",
         "value": -1,
-        "buttonLabel": "-1 Circumstance to All Checks",
-        "name": "New Leadership: Failure",
         "type": "circumstance"
       }
     ]

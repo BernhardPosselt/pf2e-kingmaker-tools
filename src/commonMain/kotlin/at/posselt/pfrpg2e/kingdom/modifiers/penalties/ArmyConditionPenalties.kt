@@ -10,7 +10,9 @@ data class ArmyConditionInfo(
     val armyName: String,
     val armyUuid: String,
     val miredValue: Int,
-    val wearyValue: Int
+    val wearyValue: Int,
+    val wearyLabel: String,
+    val miredLabel: String,
 )
 
 fun createArmyConditionPenalties(
@@ -20,7 +22,7 @@ fun createArmyConditionPenalties(
     if (info.miredValue > 0) {
         modifiers.add(
             Modifier(
-                name = "$info.armyName (Mired $info.miredValue)",
+                name = info.miredLabel,
                 type = ModifierType.CIRCUMSTANCE,
                 value = -info.miredValue,
                 id = "mired-$info.armyUuid",
@@ -33,7 +35,7 @@ fun createArmyConditionPenalties(
     if (info.wearyValue > 0) {
         modifiers.add(
             Modifier(
-                name = "$info.armyName (Weary $info.wearyValue)",
+                name = info.wearyLabel,
                 type = ModifierType.CIRCUMSTANCE,
                 value = -info.wearyValue,
                 id = "weary-$info.armyUuid",

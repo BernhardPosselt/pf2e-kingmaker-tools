@@ -8,11 +8,11 @@
   "dc": "custom",
   "modifiers": [
     {
-      "name": "Hex is not part of your kingdom",
+      "name": "activities.clear-hex.modifiers.notPartOfKingdom.name",
+      "buttonLabel": "activities.clear-hex.modifiers.notPartOfKingdom.buttonLabel",
       "type": "untyped",
       "enabled": false,
-      "value": -2,
-      "buttonLabel": "+2 DC increase if not part of your kingdom"
+      "value": -2
     }
   ],
   "description": "activities.clear-hex.description",

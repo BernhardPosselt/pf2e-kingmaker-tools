@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.actions.handlers.GainProvisions
 import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import js.objects.recordOf
@@ -19,13 +20,13 @@ external interface CreateFoodData {
 
 suspend fun createFoodMacro(game: Game, dispatcher: ActionDispatcher) {
     prompt<CreateFoodData, Unit>(
-        title = "How Many Provisions?",
+        title = t("macros.createFood.title"),
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(
             "formRows" to formContext(
                 NumberInput(
                     name = "amount",
-                    label = "Amount",
+                    label = t("macros.createFood.amount"),
                     value = localStorage.getItem("kmCreateFood")?.toInt() ?: 0
                 )
             )

@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.ui
@@ -38,7 +39,7 @@ private suspend fun updateXP(players: Array<PF2ECharacter>, amount: Int) = corou
             }
         }
     }.awaitAll()
-    postChatMessage("Players gained $amount XP!")
+    postChatMessage(t("macros.xp.gained", recordOf("count" to amount)))
 }
 
 @JsPlainObject
@@ -51,24 +52,24 @@ suspend fun awardXPMacro(game: Game) {
     val parties = game.actors.contents
         .filterIsInstance<PF2EParty>()
     if (parties.isEmpty()) {
-        ui.notifications.error("Can not grant xp since no party is configured")
+        ui.notifications.error(t("macros.noPartiesFound"))
         return
     }
     prompt<XpFormData, Unit>(
-        title = "Award Party XP",
+        title = t("macros.xp.title"),
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(
             "formRows" to formContext(
                 Select(
                     name = "partyUuid",
-                    label = "Party",
+                    label = t("macros.xp.party"),
                     value = parties.first().uuid,
                     options = parties
                         .map { SelectOption(value = it.uuid, label = it.name) }
                 ),
                 NumberInput(
                     name = "amount",
-                    label = "Amount",
+                    label = t("macros.xp.amount"),
                 ),
             )
         )

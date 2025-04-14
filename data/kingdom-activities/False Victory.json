@@ -18,8 +18,8 @@
         "turns": 5,
         "enabled": false,
         "value": 1,
-        "name": "False Victory: Critical Success",
-        "buttonLabel": "+1 Circumstance to Check to skip the Same Event",
+        "name": "activities.false-victory.criticalSuccess.modifiers.resolvedEvent.name",
+        "buttonLabel": "activities.false-victory.criticalSuccess.modifiers.resolvedEvent.buttonLabel",
         "type": "circumstance",
         "applyIf": [
           {

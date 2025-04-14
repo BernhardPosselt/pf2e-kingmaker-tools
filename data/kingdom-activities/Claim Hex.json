@@ -29,7 +29,8 @@
       {
         "turns": 2,
         "enabled": true,
-        "buttonLabel": "-1 Circumstance to Stability",
+        "buttonLabel": "activities.claim-hex.criticalFailure.modifiers.settlersLost.buttonLabel",
+        "name": "activities.claim-hex.criticalFailure.modifiers.settlersLost.name",
         "applyIf": [
           {
             "eq": [
@@ -39,7 +40,6 @@
           }
         ],
         "value": -1,
-        "name": "Claim Hex: Critical Failure",
         "type": "circumstance"
       }
     ]

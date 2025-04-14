@@ -15,8 +15,8 @@
     {
       "enabled": false,
       "value": -5,
-      "buttonLabel": "+5 DC Increase if predominantly hills",
-      "name": "predominantly hills",
+      "buttonLabel": "activities.establish-farmland.modifiers.predominantlyHills.buttonLabel",
+      "name": "activities.establish-farmland.modifiers.predominantlyHills.name",
       "type": "untyped"
     }
   ],

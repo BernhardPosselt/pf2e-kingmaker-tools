@@ -97,7 +97,7 @@ data class Select(
         )
 
         fun dc(
-            label: String = "DC",
+            label: String? = null,
             name: String = "dc",
             value: Int? = null,
             required: Boolean = true,
@@ -108,7 +108,7 @@ data class Select(
             elementClasses: List<String> = emptyList(),
             escapeLabel: Boolean = true,
         ) = Select(
-            label = label,
+            label = label ?: t("applications.dc"),
             name = name,
             value = value.toString(),
             required = required,

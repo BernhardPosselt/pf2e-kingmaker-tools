@@ -19,7 +19,8 @@
     "modifiers": [
       {
         "turns": 2,
-        "buttonLabel": "+2 Circumstance to Resolve Event",
+        "buttonLabel": "activities.hire-adventurers.success.modifiers.resolveBonus.buttonLabel",
+        "name": "activities.hire-adventurers.success.modifiers.resolveBonus.name",
         "enabled": false,
         "applyIf": [
           {
@@ -30,7 +31,6 @@
           }
         ],
         "value": 2,
-        "name": "Hire Adventurers: Success",
         "type": "circumstance"
       }
     ]

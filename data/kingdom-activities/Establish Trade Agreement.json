@@ -29,8 +29,8 @@
         "turns": 2,
         "enabled": false,
         "value": -1,
-        "buttonLabel": "-1 Circumstance to Economy",
-        "name": "Establish Trade Agreement: Critical Failure",
+        "buttonLabel": "activities.establish-trade-agreement.criticalFailure.modifiers.totalLoss.buttonLabel",
+        "name": "activities.establish-trade-agreement.criticalFailure.modifiers.totalLoss.name",
         "type": "circumstance",
         "applyIf": [
           {

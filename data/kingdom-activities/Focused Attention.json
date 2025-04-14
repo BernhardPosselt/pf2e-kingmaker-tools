@@ -32,7 +32,8 @@
         "turns": 1,
         "enabled": false,
         "isConsumedAfterRoll": true,
-        "buttonLabel": "+2/+3 Circumstance to Aided Check",
+        "buttonLabel": "activities.focused-attention.criticalSuccess.modifiers.aided.buttonLabel",
+        "name": "activities.focused-attention.criticalSuccess.modifiers.aided.name",
         "value": 0,
         "valueExpression": {
           "when": {
@@ -59,7 +60,6 @@
             "default": 2
           }
         },
-        "name": "Focused Attention",
         "type": "circumstance",
         "rollOptions": [
           "focused-attention"
@@ -73,7 +73,8 @@
       {
         "turns": 1,
         "enabled": false,
-        "buttonLabel": "+2/+3 Circumstance to Aided Check",
+        "buttonLabel": "activities.focused-attention.success.modifiers.aided.buttonLabel",
+        "name": "activities.focused-attention.success.modifiers.aided.name",
         "isConsumedAfterRoll": true,
         "value": 0,
         "valueExpression": {
@@ -101,7 +102,6 @@
             "default": 2
           }
         },
-        "name": "Focused Attention",
         "type": "circumstance",
         "rollOptions": [
           "focused-attention"

@@ -26,8 +26,8 @@
         "turns": 2,
         "enabled": true,
         "value": -2,
-        "name": "Infiltration: Critical Failure",
-        "buttonLabel": "-2 Circumstance to All Checks",
+        "name": "activities.infiltration.criticalFailure.modifiers.captured.name",
+        "buttonLabel": "activities.infiltration.criticalFailure.modifiers.captured.buttonLabel",
         "type": "circumstance"
       }
     ]

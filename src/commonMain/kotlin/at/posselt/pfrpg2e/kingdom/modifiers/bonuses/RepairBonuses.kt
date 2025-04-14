@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.expressions.HasRollOption
 
 fun createRepairBonus() = Modifier(
     id = "repair-structure-item-bonus",
-    name = "Repair Structure",
+    name = "modifiers.bonuses.repairingStructure",
     type = ModifierType.ITEM,
     enabled = true,
     value = 2,

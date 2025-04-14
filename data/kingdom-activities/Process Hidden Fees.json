@@ -17,8 +17,8 @@
     "msg": "activities.process-hidden-fees.success.msg",
     "modifiers": [
       {
-        "name": "Processed Hidden Fees on the Previous turn",
-        "buttonLabel": "Worsen Degree of Success when processing hidden fees next turn",
+        "name": "activities.process-hidden-fees.success.modifiers.nextTurn.name",
+        "buttonLabel": "activities.process-hidden-fees.success.modifiers.nextTurn.buttonLabel",
         "downgradeResults": [
           {
             "downgrade": "criticalSuccess"

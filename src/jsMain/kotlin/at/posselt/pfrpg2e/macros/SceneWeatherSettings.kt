@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.macros
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.weather.SceneWeatherSettings
 import at.posselt.pfrpg2e.weather.getWeatherSettings
 import at.posselt.pfrpg2e.weather.setWeatherSettings
@@ -13,21 +14,21 @@ import js.objects.recordOf
 suspend fun sceneWeatherSettingsMacro(scene: Scene) {
     val settings = scene.getWeatherSettings()
     prompt<SceneWeatherSettings, Unit>(
-        title = "Scene Weather Settings",
+        title = t("macros.sceneWeatherSettings.title"),
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(
             "formRows" to formContext(
                 CheckboxInput(
                     name = "syncWeather",
-                    label = "Sync Weather",
+                    label = t("macros.sceneWeatherSettings.syncWeather"),
                     value = settings.syncWeather,
-                    help = "If enabled, changes weather on this scene to the current value"
+                    help = t("macros.sceneWeatherSettings.syncWeatherHelp"),
                 ),
                 CheckboxInput(
                     name = "syncWeatherPlaylist",
-                    label = "Sync Weather Playlist",
+                    label = t("macros.sceneWeatherSettings.syncWeatherPlaylist"),
                     value = settings.syncWeatherPlaylist,
-                    help = "If enabled, plays the current weather effect playlist"
+                    help = t("macros.sceneWeatherSettings.syncWeatherPlaylistHelp"),
                 ),
             )
         )

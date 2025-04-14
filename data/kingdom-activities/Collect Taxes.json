@@ -16,7 +16,8 @@
     "modifiers": [
       {
         "turns": 1,
-        "buttonLabel": "+2 Circumstance to Economy",
+        "buttonLabel": "activities.collect-taxes.criticalSuccess.modifiers.wildlySuccessful.buttonLabel",
+        "name": "activities.collect-taxes.criticalSuccess.modifiers.wildlySuccessful.name",
         "enabled": true,
         "applyIf": [
           {
@@ -27,7 +28,6 @@
           }
         ],
         "value": 2,
-        "name": "Collect Taxes: Critical Success",
         "type": "circumstance"
       }
     ]
@@ -36,7 +36,8 @@
     "msg": "activities.collect-taxes.success.msg",
     "modifiers": [
       {
-        "buttonLabel": "+1 Circumstance to Economy",
+        "buttonLabel": "activities.collect-taxes.success.modifiers.gatheredEnough.buttonLabel",
+        "name": "activities.collect-taxes.success.modifiers.gatheredEnough.name",
         "turns": 1,
         "enabled": true,
         "applyIf": [
@@ -48,7 +49,6 @@
           }
         ],
         "value": 1,
-        "name": "Collect Taxes: Success",
         "type": "circumstance"
       }
     ]
@@ -59,7 +59,8 @@
       {
         "turns": 1,
         "enabled": true,
-        "buttonLabel": "+1 Circumstance to Economy",
+        "buttonLabel": "activities.collect-taxes.failure.modifiers.gatheredEnoughButUnhappy.buttonLabel",
+        "name": "activities.collect-taxes.failure.modifiers.gatheredEnoughButUnhappy.name",
         "applyIf": [
           {
             "eq": [
@@ -69,7 +70,6 @@
           }
         ],
         "value": 1,
-        "name": "Collect Taxes: Failure",
         "type": "circumstance"
       }
     ]

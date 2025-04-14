@@ -69,6 +69,7 @@ import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.serializeB64Json
 import at.posselt.pfrpg2e.utils.t
+import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -539,14 +540,14 @@ private class KingdomCheckDialog(
             )
         } else {
             serializeB64Json(evaluatedModifiers.modifiers.map {
-                if (it.value == 0) t(it.name) else "${t(it.name)} ${it.value.formatAsModifier()}"
+                if (it.value == 0) tName(it) else "${tName(it)} ${it.value.formatAsModifier()}"
             }.toTypedArray())
         }
         val creativeSolutionPills = serializeB64Json(creativeSolutionModifiers.modifiers.map {
-            "${t(it.name)} ${it.value.formatAsModifier()}"
+            "${tName(it)} ${it.value.formatAsModifier()}"
         }.toTypedArray())
         val freeAndFairPills = serializeB64Json(freeAndFairModifiers.modifiers.map {
-            "${t(it.name)} ${it.value.formatAsModifier()}"
+            "${tName(it)} ${it.value.formatAsModifier()}"
         }.toTypedArray())
         val notes = serializeB64Json(enabledModifiers.flatMap { it.notes.map { it.serialize() } }.toTypedArray())
         val checkModifier = if (data.assurance) {
@@ -681,8 +682,8 @@ private class KingdomCheckDialog(
             rollTwiceKeepHighest = evaluatedModifiers.rollTwiceKeepHighest,
             rollTwiceKeepLowest = evaluatedModifiers.rollTwiceKeepLowest,
             notes = notes,
-            freeAndFairPills=freeAndFairPills,
-            modifierWithoutFreeAndFair=freeAndFairModifiers.total,
+            freeAndFairPills = freeAndFairPills,
+            modifierWithoutFreeAndFair = freeAndFairModifiers.total,
         )
     }
 
@@ -706,7 +707,7 @@ private class KingdomCheckDialog(
         val hidden = id !in evaluatedModifiersById || data.assurance && modifier.type != ModifierType.PROFICIENCY
         val enabled = evaluatedModifier?.enabled ?: modifier.enabled
         return ModifierContext(
-            label = t(modifier.name),
+            label = tName(modifier),
             type = t(modifier.type),
             modifier = value.formatAsModifier(),
             id = modifier.id,
@@ -731,6 +732,12 @@ private class KingdomCheckDialog(
                 ).toContext()
             }
         )
+    }
+
+    private fun tName(modifier: Modifier): String = if (modifier.i18nContext.isEmpty()) {
+        t(modifier.name)
+    } else {
+        t(modifier.name, modifier.i18nContext.toRecord())
     }
 
     override fun onParsedSubmit(value: CheckData): Promise<Void> = buildPromise {

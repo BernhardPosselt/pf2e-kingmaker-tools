@@ -23,8 +23,8 @@
     "msg": "activities.restore-the-temple.criticalFailure.msg",
     "modifiers": [
       {
-        "name": "Previously failed critically",
-        "buttonLabel": "+4 DC increase if previously failed critically",
+        "name": "activities.restore-the-temple.criticalFailure.modifiers.disaster.name",
+        "buttonLabel": "activities.restore-the-temple.criticalFailure.modifiers.disaster.buttonLabel",
         "applyIf": [
           {
             "eq": [

@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.kingdom.structures.structureRefSchema
 import at.posselt.pfrpg2e.kingdom.structures.unsetStructureData
 import at.posselt.pfrpg2e.kingdom.structures.validateStructure
 import at.posselt.pfrpg2e.takeIfInstance
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.ui
 import js.objects.jso
@@ -31,7 +32,7 @@ suspend fun editStructureMacro(actor: Actor?) {
         ?.parent.unsafeCast<StructureActor?>()
         ?.baseActor.unsafeCast<StructureActor?>()
     if (npcActor == null) {
-        ui.notifications.error("Please select an NPC actor")
+        ui.notifications.error(t("macros.editStructure.selectActor"))
         return
     }
     val existing = npcActor.getRawStructureData() ?: jso()
@@ -40,21 +41,21 @@ suspend fun editStructureMacro(actor: Actor?) {
         templateContext = recordOf(
             "formRows" to formContext(
                 TextArea(
-                    label = "Data",
+                    label = t("macros.editStructure.data"),
                     name = "data",
                     value = JSON.stringify(existing, null, 2),
-                    help = "Leave completely empty to remove structure data",
+                    help = t("macros.editStructure.dataHelp"),
                     required = false,
                     elementClasses = listOf("larger-textarea")
                 ),
             )
         ),
-        title = "Edit Structure Data",
+        title = t("macros.editStructure.title"),
         width = 600,
     ) { data ->
         try {
             if (data.data.isBlank()) {
-                ui.notifications.info("Removed Structure Data from Actor")
+                ui.notifications.info(t("macros.editStructure.removedData"))
                 npcActor.unsetStructureData()
             } else {
                 try {
@@ -62,8 +63,7 @@ suspend fun editStructureMacro(actor: Actor?) {
                     val value = JSON.parse<RawStructureData>(data.data)
                     npcActor.setStructureData(value)
                 } catch (e: StructureValidationError) {
-                    ui.notifications.error("Failed to validate structure ${e.message}")
-                    ui.notifications.error("Check console log for exact errors")
+                    ui.notifications.error(t("macros.editStructure.validationError", recordOf("message" to e.message)))
                     console.error(e.message)
                     e.errors.forEach { console.log(it.message, it) }
                 }

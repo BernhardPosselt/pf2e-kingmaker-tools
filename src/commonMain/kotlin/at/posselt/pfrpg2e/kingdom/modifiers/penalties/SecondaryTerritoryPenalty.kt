@@ -10,7 +10,7 @@ fun createSecondaryTerritoryPenalty(currentSettlement: Settlement): Modifier? =
             type = ModifierType.CIRCUMSTANCE,
             value = -4,
             id = "secondary-territory",
-            name = "Check in Secondary Territory",
+            name = "modifiers.penalties.secondaryTerritory",
         )
     } else {
         null

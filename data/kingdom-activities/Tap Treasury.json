@@ -15,8 +15,8 @@
     "msg": "activities.tap-treasury.criticalSuccess.msg",
     "modifiers": [
       {
-        "name": "Tapped Treasury",
-        "buttonLabel": "Future attempts worsened 2 degrees if not paid back",
+        "name": "activities.tap-treasury.criticalSuccess.modifiers.futureAttempts.name",
+        "buttonLabel": "activities.tap-treasury.criticalSuccess.modifiers.futureAttempts.buttonLabel",
         "applyIf": [
           {
             "eq": [
@@ -38,7 +38,7 @@
             "downgrade": "failure"
           }
         ],
-        "value": 1,
+        "value": 0,
         "type": "untyped",
         "enabled": true
       }
@@ -49,8 +49,8 @@
     "modifiers": [
       {
         "value": -1,
-        "buttonLabel": "-1 Circumstance to Economy",
-        "name": "Tap Treasury: Success",
+        "buttonLabel": "activities.tap-treasury.success.modifiers.overdrawn.buttonLabel",
+        "name": "activities.tap-treasury.success.modifiers.overdrawn.name",
         "applyIf": [
           {
             "eq": [
@@ -64,8 +64,8 @@
         "type": "circumstance"
       },
       {
-        "name": "Tapped Treasury",
-        "buttonLabel": "Future attempts worsened 2 degrees if not paid back",
+        "name": "activities.tap-treasury.success.modifiers.futureAttempts.name",
+        "buttonLabel": "activities.tap-treasury.success.modifiers.futureAttempts.buttonLabel",
         "applyIf": [
           {
             "eq": [
@@ -87,7 +87,7 @@
             "downgrade": "failure"
           }
         ],
-        "value": 1,
+        "value": 0,
         "type": "untyped",
         "enabled": true
       }
@@ -98,8 +98,8 @@
     "modifiers": [
       {
         "value": -1,
-        "buttonLabel": "-1 Circumstance to Economy and Loyalty",
-        "name": "Tap Treasury: Success",
+        "buttonLabel": "activities.tap-treasury.failure.modifiers.failedToSecure.buttonLabel",
+        "name": "activities.tap-treasury.failure.modifiers.failedToSecure.name",
         "applyIf": [
           {
             "in": [
@@ -116,8 +116,8 @@
         "type": "circumstance"
       },
       {
-        "name": "Tapped Treasury",
-        "buttonLabel": "Future attempts worsened 2 degrees if not paid back",
+        "name": "activities.tap-treasury.failure.modifiers.futureAttempts.name",
+        "buttonLabel": "activities.tap-treasury.failure.modifiers.futureAttempts.buttonLabel",
         "applyIf": [
           {
             "eq": [
@@ -139,7 +139,7 @@
             "downgrade": "failure"
           }
         ],
-        "value": 1,
+        "value": 0,
         "type": "untyped",
         "enabled": true
       }
@@ -150,8 +150,8 @@
     "modifiers": [
       {
         "value": -1,
-        "buttonLabel": "-1 Circumstance to Economy and Loyalty",
-        "name": "Tap Treasury: Success",
+        "buttonLabel": "activities.tap-treasury.criticalFailure.modifiers.rumors.buttonLabel",
+        "name": "activities.tap-treasury.criticalFailure.modifiers.rumors.name",
         "applyIf": [
           {
             "in": [
@@ -168,8 +168,8 @@
         "type": "circumstance"
       },
       {
-        "name": "Tapped Treasury",
-        "buttonLabel": "Future attempts worsened 2 degrees if not paid back",
+        "name": "activities.tap-treasury.criticalFailure.modifiers.futureAttempts.name",
+        "buttonLabel": "activities.tap-treasury.criticalFailure.modifiers.futureAttempts.buttonLabel",
         "applyIf": [
           {
             "eq": [
@@ -191,7 +191,7 @@
             "downgrade": "failure"
           }
         ],
-        "value": 1,
+        "value": 0,
         "type": "untyped",
         "enabled": true
       }

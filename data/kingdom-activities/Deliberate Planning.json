@@ -33,8 +33,8 @@
         "enabled": false,
         "value": 1,
         "isConsumedAfterRoll": true,
-        "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
-        "name": "Deliberate Planning: Critical Success",
+        "buttonLabel": "activities.deliberate-planning.criticalSuccess.modifiers.monumentallyHelpful.buttonLabel",
+        "name": "activities.deliberate-planning.criticalSuccess.modifiers.monumentallyHelpful.name",
         "type": "circumstance",
         "fortune": true,
         "applyIf": [
@@ -56,8 +56,8 @@
         "enabled": false,
         "value": 1,
         "isConsumedAfterRoll": true,
-        "buttonLabel": "+1 Circumstance to Resolve Continuous Event",
-        "name": "Deliberate Planning: Success",
+        "buttonLabel": "activities.deliberate-planning.success.modifiers.useful.buttonLabel",
+        "name": "activities.deliberate-planning.success.modifiers.useful.name",
         "type": "circumstance",
         "applyIf": [
           {
@@ -80,8 +80,8 @@
         "turns": 1,
         "enabled": false,
         "value": 0,
-        "buttonLabel": "Roll twice and take the worse result when resolving continuous event",
-        "name": "Resolving continuous event",
+        "buttonLabel": "activities.deliberate-planning.criticalFailure.modifiers.tooMuchTimePreparing.buttonLabel",
+        "name": "activities.deliberate-planning.criticalFailure.modifiers.tooMuchTimePreparing.name",
         "type": "untyped",
         "isConsumedAfterRoll": true,
         "rollTwiceKeepLowest": true,

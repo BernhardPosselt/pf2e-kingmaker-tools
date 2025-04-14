@@ -11,8 +11,8 @@
     {
       "enabled": false,
       "value": -5,
-      "buttonLabel": "+5 DC Increase managed on previous turn",
-      "name": "Managed Trade Agreements last turn",
+      "buttonLabel": "activities.manage-trade-agreements.modifiers.previousTurn.buttonLabel",
+      "name": "activities.manage-trade-agreements.modifiers.previousTurn.name",
       "type": "untyped"
     }
   ],

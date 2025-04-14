@@ -2,21 +2,27 @@ package at.posselt.pfrpg2e.macros
 
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.SetTimeOfDayMode
-import at.posselt.pfrpg2e.app.forms.TimeInput
 import at.posselt.pfrpg2e.app.WaitButton
+import at.posselt.pfrpg2e.app.forms.TimeInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.wait
 import at.posselt.pfrpg2e.secondsBetweenNowAndTarget
 import at.posselt.pfrpg2e.toUtcInstant
 import at.posselt.pfrpg2e.utils.fromDateInputString
 import at.posselt.pfrpg2e.utils.getPF2EWorldTime
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toDateInputString
 import at.posselt.pfrpg2e.utils.toLocalUtcDate
 import com.foundryvtt.core.Game
 import js.objects.recordOf
 import kotlinx.browser.localStorage
 import kotlinx.coroutines.await
-import kotlinx.datetime.*
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -29,25 +35,25 @@ suspend fun setTimeOfDayMacro(game: Game) {
     val stored = localStorage.getItem("${Config.moduleId}.time-input") ?: "00:00"
     val time = LocalTime.fromDateInputString(stored)
     wait<TimeOfDayData, Unit>(
-        title = "Advance/Retract to Time of Day",
+        title = t("macros.setTimeOfDay.title"),
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(
             "formRows" to formContext(
                 TimeInput(
                     name = "time",
-                    label = "Time",
+                    label = t("macros.setTimeOfDay.time"),
                     value = time,
                 ),
             )
         ),
         buttons = listOf(
-            WaitButton(label = "Retract") { data, action ->
+            WaitButton(label = t("macros.setTimeOfDay.retract")) { data, action ->
                 val now = game.getPF2EWorldTime().toUtcInstant()
                 val target = getTargetTime(data.time, now)
                 val seconds = secondsBetweenNowAndTarget(now, target, SetTimeOfDayMode.RETRACT)
                 advanceTimeTo(game, seconds, target)
             },
-            WaitButton(label = "Advance") { data, action ->
+            WaitButton(label = t("macros.setTimeOfDay.advance")) { data, action ->
                 val now = game.getPF2EWorldTime().toUtcInstant()
                 val target = getTargetTime(data.time, now)
                 val seconds = secondsBetweenNowAndTarget(now, target, SetTimeOfDayMode.ADVANCE)

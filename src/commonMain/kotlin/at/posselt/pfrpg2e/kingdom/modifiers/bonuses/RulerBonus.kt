@@ -11,7 +11,7 @@ fun createRulerBonus(global: GlobalStructureBonuses): Modifier? =
     if (global.leaderLeadershipActivityBonus > 0) {
         Modifier(
             type = ModifierType.ITEM,
-            name = "Ruler Performs Leadership Activity",
+            name = "modifiers.bonuses.rulerLeadershipBonus",
             value = global.leaderLeadershipActivityBonus,
             applyIf = listOf(
                 Eq("@leader", Leader.RULER.value),

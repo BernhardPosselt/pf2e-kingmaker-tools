@@ -17,7 +17,7 @@ fun createLeaderEventBonus(
     }
     return Modifier(
         id = "leader-event-bonus",
-        name = "Listed, Non-Vacant Leader",
+        name = "modifiers.bonuses.listedEventLeader",
         value = value,
         applyIf = listOf(
             Eq("@phase", KingdomPhase.EVENT.value),

@@ -12,7 +12,7 @@ fun createUnrestModifier(unrest: Int): Modifier? {
             id = "unrest",
             value = -value,
             type = ModifierType.STATUS,
-            name = "Unrest"
+            name = "modifiers.penalties.unrest"
         )
     }
 }

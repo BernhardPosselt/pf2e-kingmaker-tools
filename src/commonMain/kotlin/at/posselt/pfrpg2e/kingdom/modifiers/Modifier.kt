@@ -20,4 +20,5 @@ data class Modifier(
     val upgradeResults: List<UpgradeResult> = emptyList(),
     val downgradeResults: List<DowngradeResult> = emptyList(),
     val notes: Set<Note> = emptySet(),
+    val i18nContext: Map<String, Any> = emptyMap(),
 )

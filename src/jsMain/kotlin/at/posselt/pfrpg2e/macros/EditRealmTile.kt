@@ -9,10 +9,10 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.RealmTileData
 import at.posselt.pfrpg2e.utils.getRealmTileData
 import at.posselt.pfrpg2e.utils.setRealmTileData
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.unsetRealmTileData
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.ui
@@ -36,9 +36,6 @@ enum class RealmTileCategory {
 
     val value: String
         get() = toCamelCase()
-
-    val label: String
-        get() = toLabel()
 }
 
 enum class RealmTileType(val category: RealmTileCategory): ValueEnum, Translatable {
@@ -69,7 +66,7 @@ suspend fun editRealmTileMacro(game: Game) {
     val drawings = game.canvas.drawings.controlled.map { it.document }
     val tiles = game.canvas.tiles.controlled.map { it.document }
     if (drawings.isEmpty() && tiles.isEmpty()) {
-        ui.notifications.error("Please select drawings or tiles")
+        ui.notifications.error(t("macros.editRealmTile.selectDrawingOrTile"))
         return
     }
     val data = drawings.firstOrNull()?.getRealmTileData()
@@ -77,19 +74,19 @@ suspend fun editRealmTileMacro(game: Game) {
     val kingdoms = game.getKingdomActors()
         .map { SelectOption(label = it.name, value = it.uuid) }
     prompt<EditRealmTileData, Unit>(
-        title = "Edit Selected Realm Tiles/Drawings",
+        title = t("macros.editRealmTile.title"),
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(
             "formRows" to formContext(
                 Select.fromEnum<RealmTileType>(
                     name = "type",
-                    label = "Realm Tile/Drawing Type",
+                    label = t("macros.editRealmTile.type"),
                     value = data?.type?.let { RealmTileType.fromString(it) },
                     required = false,
                 ),
                 Select(
                     name = "kingdomActorUuid",
-                    label = "Kingdom",
+                    label = t("macros.editRealmTile.kingdom"),
                     value = data?.kingdomActorUuid,
                     options = kingdoms,
                     required = false,

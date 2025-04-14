@@ -16,11 +16,11 @@
     "modifiers": [
       {
         "turns": 1,
-        "buttonLabel": "+4 Circumstance to Any Check",
+        "buttonLabel": "activities.request-foreign-aid.criticalSuccess.modifiers.greatAid.buttonLabel",
+        "name": "activities.request-foreign-aid.criticalSuccess.modifiers.greatAid.name",
         "isConsumedAfterRoll": true,
         "enabled": false,
         "value": 4,
-        "name": "Request Foreign Aid: Critical Success",
         "type": "circumstance"
       }
     ]
@@ -31,10 +31,10 @@
       {
         "turns": 1,
         "isConsumedAfterRoll": true,
-        "buttonLabel": "+2 Circumstance to Any Check",
+        "buttonLabel": "activities.request-foreign-aid.success.modifiers.aid.buttonLabel",
+        "name": "activities.request-foreign-aid.success.modifiers.aid.name",
         "enabled": false,
         "value": 2,
-        "name": "Request Foreign Aid: Success",
         "type": "circumstance"
       }
     ]

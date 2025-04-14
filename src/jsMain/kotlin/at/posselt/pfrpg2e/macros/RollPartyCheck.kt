@@ -35,14 +35,14 @@ suspend fun rollPartyCheckMacro(players: Array<PF2ECharacter>) {
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(
             "formRows" to formContext(
-                Select.dc(label = "DC", name = "dc", required = false),
-                CheckboxInput(label = "Private GM Roll", name = "private", value = true, required = false),
-                Select(label = "Skill", name = "skill", options = skills.map {
+                Select.dc(name = "dc", required = false),
+                CheckboxInput(label = t("macros.rollPartyCheck.privateRoll"), name = "private", value = true, required = false),
+                Select(label = t("enums.skill"), name = "skill", options = skills.map {
                     SelectOption(label = t(it), value = it.value)
                 })
             )
         ),
-        title = "Roll Party Skill Check",
+        title = t("macros.rollPartyCheck.title"),
         promptType = PromptType.ROLL,
     ) { data ->
         players.rollChecks(

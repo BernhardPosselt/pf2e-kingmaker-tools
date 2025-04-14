@@ -16,7 +16,8 @@
     "modifiers": [
       {
         "turns": 1,
-        "buttonLabel": "+2 Circumstance to Culture",
+        "name": "activities.improve-lifestyle.criticalSuccess.modifiers.freeTime.name",
+        "buttonLabel": "activities.improve-lifestyle.criticalSuccess.modifiers.freeTime.buttonLabel",
         "enabled": true,
         "applyIf": [
           {
@@ -27,7 +28,6 @@
           }
         ],
         "value": 2,
-        "name": "Improve Lifestyle: Critical Success",
         "type": "circumstance"
       }
     ]
@@ -38,7 +38,8 @@
       {
         "turns": 1,
         "enabled": true,
-        "buttonLabel": "+1 Circumstance to Culture",
+        "name": "activities.improve-lifestyle.success.modifiers.improving.name",
+        "buttonLabel": "activities.improve-lifestyle.success.modifiers.improving.buttonLabel",
         "applyIf": [
           {
             "eq": [
@@ -48,7 +49,6 @@
           }
         ],
         "value": 1,
-        "name": "Improve Lifestyle: Success",
         "type": "circumstance"
       }
     ]
@@ -59,7 +59,8 @@
       {
         "turns": 1,
         "enabled": true,
-        "buttonLabel": "-1 Circumstance to Economy",
+        "buttonLabel": "activities.improve-lifestyle.failure.modifiers.enjoyablePenalty.buttonLabel",
+        "name": "activities.improve-lifestyle.failure.modifiers.enjoyablePenalty.name",
         "applyIf": [
           {
             "eq": [
@@ -69,13 +70,13 @@
           }
         ],
         "value": -1,
-        "name": "Improve Lifestyle: Failure",
         "type": "circumstance"
       },
       {
         "turns": 1,
         "enabled": true,
-        "buttonLabel": "+1 Circumstance to Culture",
+        "buttonLabel": "activities.improve-lifestyle.failure.modifiers.enjoyableBonus.buttonLabel",
+        "name": "activities.improve-lifestyle.failure.modifiers.enjoyableBonus.name",
         "applyIf": [
           {
             "eq": [
@@ -85,7 +86,6 @@
           }
         ],
         "value": 1,
-        "name": "Improve Lifestyle: Failure",
         "type": "circumstance"
       }
     ]
@@ -96,7 +96,8 @@
       {
         "turns": 1,
         "enabled": true,
-        "buttonLabel": "-1 Circumstance to Economy",
+        "buttonLabel": "activities.improve-lifestyle.criticalFailure.modifiers.backfires.buttonLabel",
+        "name": "activities.improve-lifestyle.criticalFailure.modifiers.backfires.name",
         "applyIf": [
           {
             "eq": [
@@ -106,7 +107,6 @@
           }
         ],
         "value": -1,
-        "name": "Improve Lifestyle: Critical Failure",
         "type": "circumstance"
       }
     ]

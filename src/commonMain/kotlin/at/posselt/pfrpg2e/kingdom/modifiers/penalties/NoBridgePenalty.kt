@@ -11,10 +11,14 @@ fun noBridgePenalty(settlements: List<Settlement>): Modifier? {
     return if (settlementsLackingBridge.isNotEmpty()) {
         Modifier(
             id = "lacking-bridge",
-            name = "Lacking Bridges (${settlementsLackingBridge.joinToString(", ") { it.name }})",
+            name = "modifiers.penalties.lackingBridges",
             value = -settlementsLackingBridge.size,
             applyIf = listOf(
                 Eq("@skill", KingdomSkill.TRADE.value)
+            ),
+            i18nContext = mapOf(
+                "count" to settlementsLackingBridge.size,
+                "settlements" to settlementsLackingBridge.joinToString(", ") { it.name }
             ),
             type = ModifierType.ITEM,
         )

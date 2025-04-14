@@ -18,6 +18,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.postChatTemplate
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.ui
@@ -50,7 +51,7 @@ private external interface AskActorContext {
 suspend fun subsistMacro(game: Game, actor: Actor?) {
     val chosenActor = actor?.takeIfInstance<PF2ECharacter>()
     if (chosenActor == null) {
-        ui.notifications.error("Please select a Character")
+        ui.notifications.error(t("macros.subsist.selectCharacter"))
         return
     }
     val campingActor = game.getCampingActors()
@@ -64,19 +65,18 @@ suspend fun subsistMacro(game: Game, actor: Actor?) {
     val isUrban = currentRegion?.terrain?.let { fromCamelCase<Terrain>(it) } == Terrain.URBAN
     val defaultSkill = if (isUrban) "society" else "survival"
     prompt<SubsistData, Unit>(
-        title = "Subsist",
+        title = t("macros.subsist.title"),
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(
             "formRows" to formContext(
                 Select(
                     name = "skill",
-                    label = "Skill",
+                    label = t("enums.skill"),
                     options = skills,
                     value = defaultSkill,
                 ),
                 Select.dc(
                     name = "dc",
-                    label = "DC",
                     value = defaultDc,
                 )
             )
