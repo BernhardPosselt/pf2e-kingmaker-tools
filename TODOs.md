@@ -8,7 +8,6 @@
 * translate kingdom sheet
 * translate camping sheet
 * translate code folders:
-  * weather/
   * settings/
   * kingdom/
   * camping/

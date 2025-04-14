@@ -90,6 +90,16 @@
     "forms": {
       "effects": "Effects"
     },
+    "weather": {
+      "cold": "Weather: Cold",
+      "snow": "Weather: Cold & Snowing",
+      "rainy": "Weather: Rainy",
+      "sunny": "Weather: Sunny",
+      "checkPrecipitation": "Checking for Precipitation with DC {dc}",
+      "checkingCold": "Checking for Cold with DC {dc}",
+      "checkingWeatherEvent": "Checking for Weather Event with DC {dc}",
+      "checkingSecondWeatherEvent": "Checking for Second Weather Event with DC {dc}"
+    },
     "camping": {
       "healingMoreHp": "Healing {hp} HP more due to recipes or camping activities",
       "healingFewerHp": "Healing {hp} HP fewer due to recipes",

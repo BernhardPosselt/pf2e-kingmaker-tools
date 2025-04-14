@@ -73,14 +73,14 @@ private suspend fun rollWeather(
             val checkPrecipitation = it.precipitationDc?.let { precipitationDc ->
                 d20Check(
                     precipitationDc,
-                    flavor = "Checking for Precipitation with DC $precipitationDc",
+                    flavor = t("weather.checkPrecipitation", recordOf("dc" to precipitationDc)),
                     rollMode = rollMode,
                 )
             }
             val checkCold = it.coldDc?.let { coldDc ->
                 d20Check(
                     coldDc,
-                    flavor = "Checking for Cold with DC $coldDc",
+                    flavor = t("weather.checkingCold", recordOf("dc" to coldDc)),
                     rollMode = rollMode,
                 )
             }
@@ -88,7 +88,7 @@ private suspend fun rollWeather(
                 // 2. check if weather events happen
                 val checkEvent = d20Check(
                     weatherEventDc,
-                    flavor = "Checking for Weather Event with DC $weatherEventDc",
+                    flavor = t("weather.checkingWeatherEvent", recordOf("dc" to weatherEventDc)),
                     rollMode = rollMode,
                 )
                 val checkSecondEvent = checkEvent.dieValue
@@ -96,7 +96,7 @@ private suspend fun rollWeather(
                     ?.run {
                         d20Check(
                             weatherEventDc,
-                            flavor = "Checking for Second Weather Event with DC $weatherEventDc",
+                            flavor = t("weather.checkingSecondWeatherEvent", recordOf("dc" to weatherEventDc)),
                             rollMode = rollMode,
                         )
                     }
@@ -121,22 +121,22 @@ private suspend fun rollWeather(
             )
             val weatherEffect = when (type) {
                 WeatherType.COLD -> {
-                    postChatMessage("Weather: Cold")
+                    postChatMessage(t("weather.cold"))
                     WeatherEffect.SUNNY
                 }
 
                 WeatherType.SNOWY -> {
-                    postChatMessage("Weather: Cold & Snowing")
+                    postChatMessage(t("weather.snow"))
                     WeatherEffect.SNOW
                 }
 
                 WeatherType.RAINY -> {
-                    postChatMessage("Weather: Rainy")
+                    postChatMessage(t("weather.rainy"))
                     WeatherEffect.RAIN
                 }
 
                 WeatherType.SUNNY -> {
-                    postChatMessage("Weather: Sunny")
+                    postChatMessage(t("weather.sunny"))
                     WeatherEffect.SUNNY
                 }
             }
