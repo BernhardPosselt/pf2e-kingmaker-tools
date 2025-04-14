@@ -5,14 +5,14 @@
                     data-action="advance-hour"
                     type="button"
                     data-hours="-2"
-                    title="Retract 2 Hours">
+                    title="{{localizeKM "camping.retractHours" count=2}}">
                 -2h
             </button>
             <button class="km-camping-action {{#if night.retract1}}night-mode{{/if}}"
                     data-action="advance-hour"
                     type="button"
                     data-hours="-1"
-                    title="Retract 1 Hour">
+                    title="{{localizeKM "camping.retractHours" count=1}}">
                 -1h
             </button>
             <button class="km-camping-action {{#if night.retractHex}}night-mode{{/if}}"
@@ -20,7 +20,7 @@
                     type="button"
                     data-action="advance-hexploration"
                     data-activities="-1"
-                    title="Retract 1 Hexploration Activity ({{hexplorationActivityDuration}})">-1
+                    title="{{localizeKM "camping.retractHexActivity" duration=hexplorationActivityDuration}}">-1
             </button>
         {{/if}}
         <div id="km-camping-time" class="{{#if night.time}}night-mode{{/if}}">
@@ -39,20 +39,20 @@
                     type="button"
                     data-action="advance-hexploration"
                     data-activities="1"
-                    title="Advance 1 Hexploration Activity ({{hexplorationActivityDuration}})">+1
+                    title="{{localizeKM "camping.advanceHexActivity" duration=hexplorationActivityDuration}}">+1
             </button>
             <button class="km-camping-action {{#if night.advance1}}night-mode{{/if}}"
                     data-action="advance-hour"
                     type="button"
                     data-hours="1"
-                    title="Advance 1 Hour">
+                    title="{{localizeKM "camping.advanceHours" count=1}}">
                 +1h
             </button>
             <button class="km-camping-action {{#if night.advance2}}night-mode{{/if}}"
                     data-action="advance-hour"
                     type="button"
                     data-hours="2"
-                    title="Advance 2 Hours">
+                    title="{{localizeKM "camping.advanceHours" count=2}}">
                 +2h
             </button>
             <button class="km-camping-action {{#if night.rest}}night-mode{{/if}}"
@@ -60,8 +60,8 @@
                     type="button"
                     data-action="rest"
                     title="{{#if restDurationLeft}}
-                        Continue until fully rested: {{restDurationLeft}}
-                    {{else}}Rest & Daily Preparations: {{restDuration}}{{/if}}h"
+                        {{localizeKM "camping.continueUntilFullyRested"}}: {{restDurationLeft}}
+                    {{else}}{{localizeKM "camping.restAndDailyPreps"}}: {{restDuration}}{{/if}}{{localizeKM "camping.hoursSymbol"}}"
             >
                 {{#if restDurationLeft}}
                     <span>Continue </span><i class="fa-solid fa-bed"></i>
@@ -73,36 +73,36 @@
         {{/if}}
     </div>
     <div id="km-camping-hexploration" class="km-row">
-        <div id="km-adventuring-for"><b>Adventuring: </b> {{adventuringFor}}
+        <div id="km-adventuring-for"><b>{{localizeKM "camping.adventuringDuration"}}</b> {{adventuringFor}}
             {{#if isGM}}
                 <button type="button"
                         data-action="reset-adventuring-for"
-                        title="Reset Adventuring Time Tracker">
+                        title="{{localizeKM "camping.resetTimeTracker"}}">
                     <i class="fa-solid fa-rotate-left"></i>
                 </button>
             {{/if}}
         </div>
-        <div title="Hexploration Activities"><b>Hex. Activities:</b> {{hexplorationActivitiesAvailable}}
+        <div title="Hexploration Activities"><b>{{localizeKM "camping.hexActivities"}}:</b> {{hexplorationActivitiesAvailable}}
             /{{hexplorationActivitiesMax}}</div>
         <div>{{> formElement region}}</div>
         {{#if isGM}}
             <div id="km-camping-encounter">
-                <button type="button" data-action="increase-encounter-dc" data-value="-1" title="Decrease Encounter DC">
+                <button type="button" data-action="increase-encounter-dc" data-value="-1" title="{{localizeKM "camping.decreaseDc"}}">
                     <i class="fa-solid fa-minus"></i></button>
-                <div><b>Encounter DC:</b> {{encounterDc}}</div>
-                <button type="button" data-action="increase-encounter-dc" data-value="1" title="Increase Encounter DC">
+                <div><b>{{localizeKM "camping.encounterDc"}}:</b> {{encounterDc}}</div>
+                <button type="button" data-action="increase-encounter-dc" data-value="1" title="{{localizeKM "camping.increaseDc"}}">
                     <i class="fa-solid fa-plus"></i></button>
-                <button type="button" data-action="reset-encounter-dc" title="Reset Encounter DC"><i
+                <button type="button" data-action="reset-encounter-dc" title="{{localizeKM "camping.resetDc"}}"><i
                         class="fa-solid fa-rotate-left"></i></button>
                 <button type="button"
                         {{#unless canRollEncounter}}disabled{{/unless}}
                         data-action="roll-encounter"
-                        title="Roll Random Encounter"><i
+                        title="{{localizeKM "camping.randomEncounterRoll"}}"><i
                         class="fa-solid fa-skull"></i></button>
                 <button type="button"
                         {{#unless canRollEncounter}}disabled{{/unless}}
                         data-action="check-encounter"
-                        title="Check for Random Encounter"><i
+                        title="{{localizeKM "camping.randomEncounterCheck"}}"><i
                         class="fa-solid fa-dice-d20"></i><i
                         class="fa-solid fa-skull"></i></button>
             </div>
@@ -127,7 +127,7 @@
             </li>
         {{/each}}
         <li class="km-camping-add-actor">
-            <span>Drop Actor from Sidebar</span>
+            <span>{{localizeKM "camping.dropActorFromSidebar"}}</span>
             <i class="fa-solid fa-plus"></i>
         </li>
     </ul>
@@ -146,11 +146,11 @@
                 type="button"><i class="fa-solid fa-chevron-right"></i></button>
         <div {{#unless eatingSection}}hidden{{/unless}} class="km-camping-eating-total">
             <span>
-                {{> foodCost availableFood hideEmpty=false title="Available"}}
+                {{> foodCost availableFood hideEmpty=false title="camping.available"}}
             </span>
             <hr>
             <span>
-                {{> foodCost totalFoodCost hideEmpty=false title="Uncooked Cost"}}
+                {{> foodCost totalFoodCost hideEmpty=false title="camping.uncookedCost"}}
             </span>
         </div>
         <div id="km-camping-content-wrapper">

@@ -3,10 +3,10 @@
         <table>
             <thead>
             <tr>
-                <th>Recipe</th>
-                <th>DC</th>
-                <th>Cost</th>
-                <th>Choose</th>
+                <th>{{localizeKM "camping.recipe"}}</th>
+                <th>{{localizeKM "applications.dc"}}</th>
+                <th>{{localizeKM "camping.cost"}}</th>
+                <th>{{localizeKM "camping.pick"}}</th>
             </tr>
             </thead>
             <tbody>
@@ -14,7 +14,7 @@
                 <tr>
                     <td>{{{label}}}</td>
                     <td>{{dc}}</td>
-                    <td>{{> foodCost discoverCost title="Consumed"}}</td>
+                    <td>{{> foodCost discoverCost title="camping.consumed"}}</td>
                     <td>{{> formElement input}}</td>
                 </tr>
             {{/each}}

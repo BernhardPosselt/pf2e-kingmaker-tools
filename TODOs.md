@@ -10,4 +10,3 @@
 * translate apps
 * translate templates:
   * kingdom
-  * camping
