@@ -86,7 +86,7 @@ suspend fun editRealmTileMacro(game: Game) {
                 ),
                 Select(
                     name = "kingdomActorUuid",
-                    label = t("macros.editRealmTile.kingdom"),
+                    label = t("applications.kingdom"),
                     value = data?.kingdomActorUuid,
                     options = kingdoms,
                     required = false,

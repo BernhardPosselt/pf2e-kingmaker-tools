@@ -1,11 +1,11 @@
 <div>
-    <h2>Kingdom</h2>
-    <p><button {{#unless hasKingdom}}disabled{{/unless}} data-action="export-kingdom" type="button">Export Kingdom</button></p>
-    <p><button data-action="import-kingdom" type="button">Import Kingdom</button></p>
-    <p><button {{#unless hasKingdom}}disabled{{/unless}} data-action="reset-kingdom" type="button">Delete Kingdom</button></p>
+    <h2>{{localizeKM "applications.kingdom"}}</h2>
+    <p><button {{#unless hasKingdom}}disabled{{/unless}} data-action="export-kingdom" type="button">{{localizeKM "applications.actorActions.exportKingdom"}}</button></p>
+    <p><button data-action="import-kingdom" type="button">{{localizeKM "applications.actorActions.importKingdom"}}</button></p>
+    <p><button {{#unless hasKingdom}}disabled{{/unless}} data-action="reset-kingdom" type="button">{{localizeKM "applications.actorActions.deleteKingdom"}}</button></p>
 
-    <h2>Camping</h2>
-    <p><button {{#unless hasCamping}}disabled{{/unless}} data-action="export-camping" type="button">Export Camping</button></p>
-    <p><button data-action="import-camping" type="button">Import Camping</button></p>
-    <p><button {{#unless hasCamping}}disabled{{/unless}} data-action="reset-camping" type="button">Delete Camping</button></p>
+    <h2>{{localizeKM "applications.camping"}}</h2>
+    <p><button {{#unless hasCamping}}disabled{{/unless}} data-action="export-camping" type="button">{{localizeKM "applications.actorActions.exportCamping"}}</button></p>
+    <p><button data-action="import-camping" type="button">{{localizeKM "applications.actorActions.importCamping"}}</button></p>
+    <p><button {{#unless hasCamping}}disabled{{/unless}} data-action="reset-camping" type="button">{{localizeKM "applications.actorActions.deleteCamping"}}</button></p>
 </div>

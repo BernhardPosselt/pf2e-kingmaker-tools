@@ -20,7 +20,7 @@
                                     type="button"
                                     data-action="delete"
                                     data-index="{{@index}}"
-                                    title="Remove Row"
+                                    title="{{localizeKM "applications.delete"}}"
                             >
                                 <i class="fa-solid fa-minus"></i>
                             </button>
@@ -29,7 +29,7 @@
                                     type="button"
                                     data-action="delete"
                                     data-index="{{@index}}"
-                                    title="Remove Row"
+                                    title="{{localizeKM "applications.delete"}}"
                                     {{#unless ../allowDelete}}disabled{{/unless}}
                             >
                                 <i class="fa-solid fa-minus"></i>
@@ -40,7 +40,7 @@
             {{/each}}
             </tbody>
         </table>
-        <button type="button" data-action="add" class="full-width">Add Region</button>
+        <button type="button" data-action="add" class="full-width">{{localizeKM "applications.add"}}</button>
     </div>
-    <button data-action="km-save" {{#unless isFormValid}}disabled{{/unless}}>Save</button>
+    <button data-action="km-save" {{#unless isFormValid}}disabled{{/unless}}>{{localizeKM "applications.save"}}</button>
 </div>

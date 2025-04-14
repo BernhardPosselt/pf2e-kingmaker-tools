@@ -35,6 +35,8 @@
       "dc": "DC",
       "open": "Open",
       "level": "Level",
+      "kingdom": "Kingdom",
+      "camping": "Camping",
       "formElement": {
         "openDocument": "Open Document"
       },
@@ -49,6 +51,14 @@
       },
       "activityEffects": {
         "add": "Add Effect"
+      },
+      "actorActions": {
+        "exportKingdom": "Export Kingdom",
+        "deleteKingdom": "Delete Kingdom",
+        "importKingdom": "Import Kingdom",
+        "exportCamping": "Export Camping",
+        "deleteCamping": "Delete Camping",
+        "importCamping": "Import Camping"
       }
     },
     "macros": {
@@ -69,8 +79,7 @@
       "editRealmTile": {
         "title": "Edit Selected Realm Tiles/Drawings",
         "selectDrawingOrTile": "Please select drawings or tiles",
-        "type": "Realm Tile/Drawing Type",
-        "kingdom": "Kingdom"
+        "type": "Realm Tile/Drawing Type"
       },
       "editStructure": {
         "title": "Edit Structure Data",
