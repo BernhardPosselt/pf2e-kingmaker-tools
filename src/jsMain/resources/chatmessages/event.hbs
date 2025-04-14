@@ -9,7 +9,7 @@
 {{#each stages}}
     {{#unless @first}}
         <hr>{{/unless}}
-    <p><b>{{localizeKM "enum.leader"}}</b>: {{leader}}</p>
+    <p><b>{{localizeKM "enums.leader"}}</b>: {{leader}}</p>
     <p><b>{{localizeKM "applications.skills"}}</b>: {{#each skills}}{{#unless @first}}, {{/unless}}{{this}}{{/each}}</p>
     <ul class="km-event-degrees">
         {{#if criticalSuccess}}

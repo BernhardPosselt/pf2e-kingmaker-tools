@@ -234,9 +234,9 @@ class KingdomSettingsApplication(
                         ),
                         CheckboxInput(
                             name = "cultOfTheBloomEvents",
-                            label = "Enable Cult of the Bloom Events",
+                            label = "Enable Cult Events",
                             value = settings.cultOfTheBloomEvents,
-                            help = "If enabled, adds a Cult of the Bloom Events section in Event Phase",
+                            help = "If enabled, adds a Cult Events section in Event Phase",
                         ),
                         Select.range(
                             from = 0,

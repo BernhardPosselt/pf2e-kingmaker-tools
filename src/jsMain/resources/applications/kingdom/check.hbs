@@ -19,7 +19,7 @@
                             data-id="{{id}}"
                             data-action="delete-modifier"
                             {{#unless removable}}disabled{{/unless}}
-                            title="Delete Modifier"
+                            title="{{localizeKM "kingdom.deleteModifier"}}"
                     ><i class="fa-solid fa-trash"></i></button>
                 </td>
                 {{> formElement idInput }}
@@ -34,7 +34,7 @@
                         {{#unless isFormValid}}disabled{{/unless}}
                         class="km-no-button-margin"
                         data-action="add-modifier"
-                        title="Add Modifier"
+                        title="{{localizeKM "kingdom.addModifier"}}"
                 ><i class="fa-solid fa-plus"></i></button>
             </td>
         </tr>
@@ -61,14 +61,14 @@
                 data-roll-twice-keep-lowest="{{rollTwiceKeepLowest}}"
                 data-creative-solution-modifier="{{creativeSolutionModifier}}"
                 data-consume-modifiers="{{consumeModifiers}}"
-                {{#if fortune}}title="Roll With Fortune"{{/if}}
-        >Roll ({{checkModifierLabel}})<span> </span><i
+                {{#if fortune}}title="{{localizeKM "kingdom.rollWithFortune"}}"{{/if}}
+        >{{localizeKM "kingdom.roll"}} ({{checkModifierLabel}})<span> </span><i
                 class="fa-solid fa-dice-d20"></i>{{#if fortune}}<i class="fa-solid fa-clover"></i>{{/if}}
         </button>
         <button
                 {{#unless useAssurance}}hidden{{/unless}}
                 data-action="assurance"
                 data-modifier="{{checkModifier}}"
-        >Assurance ({{assuranceModifier}}: {{assuranceDegree}})</button>
+        >{{localizeKM "kingdom.assurance"}} ({{assuranceModifier}}: {{assuranceDegree}})</button>
     </div>
 </div>

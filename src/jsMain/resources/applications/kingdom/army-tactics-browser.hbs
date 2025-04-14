@@ -1,9 +1,9 @@
 <table>
     <thead>
-    <th>Tactic</th>
-    <th>Level</th>
-    <th>DC</th>
-    <th>Learn</th>
+    <th>{{localizeKM "kingdom.tactic"}}</th>
+    <th>{{localizeKM "applications.level"}}</th>
+    <th>{{localizeKM "applications.dc"}}</th>
+    <th>{{localizeKM "kingdom.learn"}}</th>
     </thead>
     <tbody>
     {{#each tactics}}
@@ -13,7 +13,7 @@
             <td>{{dc}}</td>
             <td>
                 <button type="button" data-action="train-tactic" data-uuid="{{uuid}}"
-                        {{#unless enabled}}disabled{{/unless}}>Learn
+                        {{#unless enabled}}disabled{{/unless}}>{{localizeKM "kingdom.learn"}}
                 </button>
             </td>
         </tr>

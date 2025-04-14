@@ -1,10 +1,10 @@
 <table>
     <thead>
-    <th>Army</th>
-    <th>Type</th>
-    <th>DC</th>
-    <th>Special</th>
-    <th>Recruit</th>
+    <th>{{localizeKM "kingdom.army"}}</th>
+    <th>{{localizeKM "kingdom.armyType"}}</th>
+    <th>{{localizeKM "applications.dc"}}</th>
+    <th>{{localizeKM "kingdom.special"}}</th>
+    <th>{{localizeKM "kingdom.recruit"}}</th>
     </thead>
     <tbody>
     {{#each armies}}
@@ -14,7 +14,7 @@
             <td>{{dc}}</td>
             <td>{{#if special}}<i class="fa-solid fa-circle-check"></i>{{/if}}</td>
             <td>
-                <button type="button" data-action="recruit-army" data-uuid="{{uuid}}">Recruit</button>
+                <button type="button" data-action="recruit-army" data-uuid="{{uuid}}">{{localizeKM "kingdom.recruit"}}</button>
             </td>
         </tr>
     {{/each}}

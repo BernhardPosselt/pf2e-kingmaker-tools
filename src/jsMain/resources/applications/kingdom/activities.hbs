@@ -3,14 +3,14 @@
         <li class="km-kingdom-activity km-kingdom-details" data-activity-id="{{id}}">
             <details {{#if open}}open{{/if}}>
                 <summary data-id="activity-{{id}}">{{#each actions}}{{#unless @first}}/{{/unless}}<span class="action-glyph">{{this}}</span>{{/each}}<span class="km-detail-label">{{label}}</span>{{#if fortune}}
-                    <i title="Fortune" class="fa-solid fa-clover"></i>{{/if}}
+                    <i title="{{localizeKM "kingdom.fortune"}}" class="fa-solid fa-clover"></i>{{/if}}
                     <div class="km-detail-controls">
                         {{#if isCollectTaxes}}
                             <button {{#if ../collectTaxesReduceUnrestDisabled}}disabled{{/if}}
                                     type="button"
                                     class="km-kingdom-activity-check"
                                     data-action="skip-collect-taxes">
-                                Skip & Reduce Unrest <i class="fa-solid fa-dice-d20"></i>
+                                {{localizeKM "kingdom.skipReduceUnrest"}} <i class="fa-solid fa-dice-d20"></i>
                             </button>
                         {{/if}}
                         {{#if hasCheck}}
@@ -19,26 +19,26 @@
                                 type="button"
                                 class="km-kingdom-activity-check"
                                 data-action="perform-activity">
-                            Perform <i class="fa-solid fa-dice-d20"></i>
+                            {{localizeKM "kingdom.performCheck"}} <i class="fa-solid fa-dice-d20"></i>
                         </button>
                         {{/if}}
                     </div>
                 </summary>
-                {{#if requirement}}<p><b>Requirement:</b> {{requirement}}</p>{{/if}}
+                {{#if requirement}}<p><b>{{localizeKM "kingdom.requirement"}}:</b> {{requirement}}</p>{{/if}}
                 <div class="km-detail-description">{{{description}}}</div>
                 <ul class="km-summary-degrees">
                     {{#if criticalSuccess}}
-                        <li><b>Critical Success:</b> {{{criticalSuccess}}}</li>{{/if}}
+                        <li><b>{{localizeKM "degreeOfSuccess.criticalSuccess"}}:</b> {{{criticalSuccess}}}</li>{{/if}}
                     {{#if success}}
-                        <li><b>Success:</b> {{{success}}}</li>{{/if}}
+                        <li><b>{{localizeKM "degreeOfSuccess.success"}}:</b> {{{success}}}</li>{{/if}}
                     {{#if failure}}
-                        <li><b>Failure:</b> {{{failure}}}</li>{{/if}}
+                        <li><b>{{localizeKM "degreeOfSuccess.failure"}}:</b> {{{failure}}}</li>{{/if}}
                     {{#if criticalFailure}}
-                        <li><b>Critical Failure:</b> {{{criticalFailure}}}</li>{{/if}}
+                        <li><b>{{localizeKM "degreeOfSuccess.criticalFailure"}}:</b> {{{criticalFailure}}}</li>{{/if}}
                 </ul>
                 {{#if special}}
                     <hr>
-                    <p><b>Special:</b> {{special}}</p>{{/if}}
+                    <p><b>{{localizeKM "kingdom.special"}}:</b> {{special}}</p>{{/if}}
             </details>
         </li>
     {{/each}}
