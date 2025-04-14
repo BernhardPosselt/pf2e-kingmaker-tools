@@ -238,7 +238,6 @@ class ModifyActivity(
                 Select.fromEnum<ActivityDcType>(
                     name = "dcType",
                     value = getDcType(current.dc),
-                    label = "DC Type",
                     stacked = false,
                 ),
                 Select.dc(

@@ -271,7 +271,6 @@ class RecipeApplication(
                             value = currentRecipe?.level ?: 1,
                         ),
                         Select.fromEnum<Rarity>(
-                            label = "Rarity",
                             name = "rarity",
                             stacked = false,
                             elementClasses = listOf("km-rarity"),
@@ -284,7 +283,6 @@ class RecipeApplication(
                             value = currentRecipe?.cost?.value ?: 0,
                         ),
                         Select.fromEnum<Currency>(
-                            label = "Currency",
                             name = "currency",
                             stacked = false,
                             value = Currency.fromString(currentRecipe?.cost?.currency ?: "gp"),
@@ -444,7 +442,6 @@ private suspend fun createMealInputs(
             stacked = false,
         ),
         Select.fromEnum<HealMode>(
-            label = "Heal Mode",
             help = "When to roll healing, damage and reduce conditions",
             name = "$namePrefix.healMode",
             value = firstEffect?.healMode?.let { fromCamelCase<HealMode>(it) } ?: HealMode.AFTER_CONSUMPTION,
@@ -475,7 +472,6 @@ private suspend fun createMealInputs(
             value = firstEffect?.reduceConditions?.stupefied ?: 0,
         ),
         Select.fromEnum<ReduceConditionMode>(
-            label = "Reduce Condition Mode",
             help = "All reduces all conditions, random picks one at random if more than one applies",
             name = "$namePrefix.reduceConditions.mode",
             value = firstEffect?.reduceConditions?.mode?.let { fromCamelCase<ReduceConditionMode>(it) }

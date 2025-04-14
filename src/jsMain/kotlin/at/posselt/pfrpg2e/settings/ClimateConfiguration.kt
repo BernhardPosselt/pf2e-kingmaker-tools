@@ -127,7 +127,6 @@ class ClimateConfiguration : FormApp<ClimateSettingsContext, ClimateSettings>(
                     month.toLabel(),
                     Select.fromEnum<Season>(
                         name = "months.$index.season",
-                        label = "Season",
                         value = Season.entries.find { it.toCamelCase() == row.season },
                         hideLabel = true
                     ).toContext(),

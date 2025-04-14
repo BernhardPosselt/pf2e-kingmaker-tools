@@ -889,7 +889,6 @@ class CampingSheet(
                         value = result?.selectedSkill?.value,
                     ).toContext(),
                     degreeOfSuccess = Select.fromEnum<DegreeOfSuccess>(
-                        label = "Degree of Success",
                         hideLabel = true,
                         required = false,
                         name = "recipes.degreeOfSuccess.${recipe.name}",
@@ -990,7 +989,6 @@ class CampingSheet(
                         image = act.img,
                         choseActivity = true,
                         degreeOfSuccess = Select.fromEnum<DegreeOfSuccess>(
-                            label = "Degree of Success",
                             hideLabel = true,
                             required = false,
                             name = "activities.degreeOfSuccess.${data.id}",

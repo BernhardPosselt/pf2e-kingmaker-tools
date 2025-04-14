@@ -43,15 +43,9 @@ fun RawFame.toContext(maximumFamePoints: Int): FameContext {
         ).toContext(),
         type = Select.fromEnum<FameType>(
             name = "fame.type",
-            label = "Fame Type",
             value = fameType,
             stacked = false,
             hideLabel = true,
-            labelFunction = { when(it) {
-                FameType.FAMOUS -> "Fame"
-                FameType.INFAMOUS -> "Infamy"
-            }
-            }
         ).toContext(),
     )
 }

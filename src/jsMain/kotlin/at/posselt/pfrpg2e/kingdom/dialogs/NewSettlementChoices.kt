@@ -48,7 +48,6 @@ suspend fun newSettlementChoices(terrain: SettlementTerrain? = null): NewSettlem
                 ),
                 Select.fromEnum<SettlementTerrain>(
                     name = "terrain",
-                    label = "Map",
                     value = terrain ?: SettlementTerrain.FOREST,
                 )
             )

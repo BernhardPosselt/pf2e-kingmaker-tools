@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.localization.Translatable
+import at.posselt.pfrpg2e.lowercaseFirst
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Item
@@ -126,7 +127,7 @@ data class Select(
         )
 
         fun level(
-            label: String = "Level",
+            label: String? = null,
             name: String = "level",
             value: Int? = null,
             required: Boolean = true,
@@ -137,7 +138,7 @@ data class Select(
             elementClasses: List<String> = emptyList(),
             escapeLabel: Boolean = true,
         ) = Select(
-            label = label,
+            label = label ?: t("applications.level"),
             name = name,
             value = value.toString(),
             required = required,
@@ -155,7 +156,7 @@ data class Select(
         )
 
         inline fun <reified T> fromEnum(
-            label: String,
+            label: String? = null,
             name: String,
             value: T? = null,
             required: Boolean = true,
@@ -169,7 +170,7 @@ data class Select(
             escapeLabel: Boolean = true,
         ) where T : Translatable, T : Enum<T>, T : ValueEnum = Select(
             name = name,
-            label = label,
+            label = label ?: t("enums.${T::class.simpleName?.lowercaseFirst()}"),
             value = value?.value,
             required = required,
             help = help,

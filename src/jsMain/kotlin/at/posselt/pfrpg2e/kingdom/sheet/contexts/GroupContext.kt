@@ -40,7 +40,6 @@ fun Array<RawGroup>.toContext() =
             ).toContext(),
             relations = Select.fromEnum<Relations>(
                 name = "groups.$index.relations",
-                label = "Relations",
                 hideLabel = true,
                 value = Relations.fromString(group.relations) ?: Relations.NONE,
             ).toContext(),

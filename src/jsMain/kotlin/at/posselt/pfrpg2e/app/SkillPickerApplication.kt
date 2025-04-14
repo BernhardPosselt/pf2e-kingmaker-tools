@@ -264,7 +264,6 @@ class SkillPickerApplication(
                     value = skill.proficiency,
                     hideLabel = true,
                     elementClasses = listOf("km-proficiency"),
-                    label = "Proficiency",
                     stacked = false,
                 ),
                 Select(
@@ -277,7 +276,6 @@ class SkillPickerApplication(
                 Select.dc(
                     name = "skills.$index.dc",
                     required = false,
-                    label = "DC",
                     stacked = false,
                     value = if (skill.dcType == "static") skill.dc else null,
                     disabled = skill.dcType != "static",

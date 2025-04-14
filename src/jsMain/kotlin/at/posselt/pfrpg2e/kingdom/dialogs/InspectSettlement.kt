@@ -265,7 +265,6 @@ class InspectSettlement(
         }
         val typeInput = Select.fromEnum<SettlementType>(
             name = "type",
-            label = "Level",
             value = SettlementType.fromString(current.type) ?: SettlementType.SETTLEMENT,
             hideLabel = true,
         )

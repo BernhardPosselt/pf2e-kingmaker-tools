@@ -565,19 +565,16 @@ private class KingdomCheckDialog(
             isFormValid = isFormValid,
             leaderInput = Select.fromEnum<Leader>(
                 name = "leader",
-                label = "Leader",
                 value = fromCamelCase<Leader>(data.leader),
             ).toContext(),
             rollModeInput = Select.fromEnum<RollMode>(
                 name = "rollMode",
-                label = "Roll Mode",
                 value = fromCamelCase<RollMode>(data.rollMode),
                 labelFunction = { it.label },
                 hideLabel = true,
                 stacked = false,
             ).toContext(),
             phaseInput = Select.fromEnum(
-                label = "Phase",
                 name = "phase",
                 value = phase,
             ).toContext(),
@@ -612,7 +609,6 @@ private class KingdomCheckDialog(
             ).toContext(),
             dcInput = Select.dc(
                 name = "dc",
-                label = "DC",
                 value = data.dc,
             ).toContext(),
             supernaturalSolutionInput = CheckboxInput(
@@ -664,7 +660,6 @@ private class KingdomCheckDialog(
             ).toContext(),
             newModifierTypeInput = Select.fromEnum<ModifierType>(
                 name = "newModifierType",
-                label = "Type",
                 value = ModifierType.fromString(data.newModifierType) ?: ModifierType.UNTYPED,
             ).toContext(),
             newModifierModifierInput = NumberInput(

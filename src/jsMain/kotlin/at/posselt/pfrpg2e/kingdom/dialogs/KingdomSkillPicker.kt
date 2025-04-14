@@ -151,14 +151,12 @@ class KingdomSkillPicker(
                         Select.fromEnum<Proficiency>(
                             name = "skills.$index.proficiency",
                             value = fromCamelCase<Proficiency>(skill.proficiency) ?: Proficiency.UNTRAINED,
-                            label = "Proficiency",
                             hideLabel = true,
                         )
                     } else {
                         HiddenInput(
                             name = "skills.$index.proficiency",
                             value = Proficiency.UNTRAINED.value,
-                            label = "Proficiency",
                         )
                     },
                 )

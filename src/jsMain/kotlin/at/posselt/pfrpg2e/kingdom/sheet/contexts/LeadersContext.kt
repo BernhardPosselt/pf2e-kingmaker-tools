@@ -87,7 +87,6 @@ fun RawLeaderValues.toContext(
         ).toContext(),
         type = Select.fromEnum<LeaderType>(
             name = "leaders.${leader.value}.type",
-            label = "Type",
             hideLabel = true,
             value = LeaderType.fromString(type) ?: LeaderType.PC,
         ).toContext(),

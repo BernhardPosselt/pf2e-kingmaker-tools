@@ -171,27 +171,23 @@ class AddModifier(
             ),
             Select.fromEnum<ModifierType>(
                 name = "type",
-                label = "Type",
                 value = ModifierType.fromString(data.type),
                 stacked = false
             ),
             Select.fromEnum<KingdomAbility>(
                 name = "ability",
-                label = "Ability",
                 value = data.ability?.let { KingdomAbility.fromString(it) },
                 required = false,
                 stacked = false
             ),
             Select.fromEnum<KingdomSkill>(
                 name = "skill",
-                label = "Skill",
                 value = data.skill?.let { KingdomSkill.fromString(it) },
                 required = false,
                 stacked = false
             ),
             Select.fromEnum<KingdomPhase>(
                 name = "phase",
-                label = "Phase",
                 value = data.phase?.let { KingdomPhase.fromString(it) },
                 required = false,
                 stacked = false

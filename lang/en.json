@@ -1,7 +1,28 @@
 {
   "pf2e-kingmaker-tools": {
     "enums": {
-      "skill": "Skill"
+      "skill": "Skill",
+      "modifierType": "Type",
+      "kingdomAbility": "Ability",
+      "kingdomSkill": "Skill",
+      "kingdomPhase": "Phase",
+      "degreeOfSuccess": "Degree of Success",
+      "season": "Season",
+      "fameType": "Fame Type",
+      "relations": "Relations",
+      "settlementType": "Settlement Type",
+      "leader": "Leader",
+      "rollMode": "Roll Mode",
+      "proficiency": "Proficiency",
+      "leaderType": "Type",
+      "activityDcType": "DC Type",
+      "settlementTerrain": "Map",
+      "rarity": "Rarity",
+      "currency": "Currency",
+      "healMode": "Heal Mode",
+      "reduceConditionMode": "Reduce Condition Mode",
+      "terrain": "Terrain",
+      "weatherEffect": "Weather Effect"
     },
     "applications": {
       "save": "Save",
@@ -13,6 +34,7 @@
       "id": "Id",
       "dc": "DC",
       "open": "Open",
+      "level": "Level",
       "formElement": {
         "openDocument": "Open Document"
       }
@@ -71,8 +93,7 @@
         "advance": "Advance"
       },
       "setWeather": {
-        "title": "Set Weather",
-        "weather": "Weather"
+        "title": "Set Weather"
       },
       "subsist": {
         "selectCharacter": "Please select a Character",
@@ -217,8 +238,8 @@
     },
     "perception": "Perception",
     "fameType": {
-      "famous": "Famous",
-      "infamous": "Infamous"
+      "famous": "Fame",
+      "infamous": "Infamy"
     },
     "commodityType": {
       "ore": "Ore",

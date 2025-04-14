@@ -28,7 +28,6 @@ suspend fun setWeatherMacro(game: Game) {
             "formRows" to formContext(
                 Select.fromEnum<WeatherEffect>(
                     name = "weather",
-                    label = t("macros.setWeather.weather"),
                     value = currentWeatherEffect,
                 )
             )

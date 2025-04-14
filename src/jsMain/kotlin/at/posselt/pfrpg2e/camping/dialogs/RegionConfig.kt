@@ -184,13 +184,11 @@ class RegionConfig(
                     ).toContext(),
                     Select.level(
                         name = "regions.$index.level",
-                        label = "Level",
                         value = row.level,
                         hideLabel = true
                     ).toContext(),
                     Select.fromEnum<Terrain>(
                         name = "regions.$index.terrain",
-                        label = "Terrain",
                         value = fromCamelCase<Terrain>(row.terrain),
                         hideLabel = true
                     ).toContext(),

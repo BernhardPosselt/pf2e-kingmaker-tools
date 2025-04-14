@@ -255,7 +255,6 @@ class ModifyKingdomEvent(
                 ),
                 Select.fromEnum<Leader>(
                     name = "leader",
-                    label = "Leader",
                     value = stage.leader.let { Leader.fromString(it) },
                     stacked = false,
                 ),

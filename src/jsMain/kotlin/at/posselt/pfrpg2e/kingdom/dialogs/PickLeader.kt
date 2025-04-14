@@ -24,7 +24,6 @@ suspend fun pickLeader(): Leader {
             formRows = formContext(
                 Select.fromEnum<Leader>(
                     name = "leader",
-                    label = "Leader",
                     value = Leader.RULER,
                 )
             )
