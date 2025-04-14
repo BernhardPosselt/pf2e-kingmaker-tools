@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.data.actor.highestProficiencyByLevel
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
@@ -22,6 +23,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreaseContext
 import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreasesContext
 import at.posselt.pfrpg2e.kingdom.formatRequirements
 import at.posselt.pfrpg2e.kingdom.satisfiesRequirements
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @Suppress("unused")
@@ -151,7 +153,7 @@ fun Array<RawFeatureChoices>.toContext(
         .mapIndexed { index, feature -> index to feature }
         .groupBy { (_, feature) -> feature.level }
         .map { (level, f) ->
-            val highestProficiency = highestProficiencyByLevel[level] ?: "Untrained"
+            val highestProficiency = highestProficiencyByLevel[level] ?: Proficiency.UNTRAINED
             FeatureByLevelContext(
                 level = level,
                 hidden = navigationEntry != "$level",
@@ -164,7 +166,7 @@ fun Array<RawFeatureChoices>.toContext(
                         id = HiddenInput(name = "features.$index.id", value = feature.id).toContext(),
                         name = feature.name,
                         description = if (feature.skillIncrease == true) {
-                            feature.description + ". You can increase a skill up to $highestProficiency."
+                            feature.description + ". You can increase a skill up to ${t(highestProficiency)}."
                         } else {
                             feature.description
                         },

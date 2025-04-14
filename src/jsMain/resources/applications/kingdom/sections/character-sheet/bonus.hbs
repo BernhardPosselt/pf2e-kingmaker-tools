@@ -1,19 +1,19 @@
 <section {{#if hideBonus}}hidden{{/if}}>
     <section class="km-kingdom-sheet-section">
-        <h2>Add Bonus Feat <span class="km-header-right-align">{{> formElement bonusFeat.feat}}</span></h2>
+        <h2>{{localizeKM "kingdom.addBonusFeat"}} <span class="km-header-right-align">{{> formElement bonusFeat.feat}}</span></h2>
         {{#if bonusFeat.description}}
             <details open>
                 <summary>{{bonusFeat.name}}</summary>
                 <p class="km-detail-description">{{bonusFeat.description}}</p>
-                {{#if bonusFeat.requirements}}<p {{#unless bonusFeat.satisfiesRequirements}}class="km-unsatisfied-requirement"{{/unless}}><b>Prerequisites:</b> {{bonusFeat.requirements}}</p>{{/if}}
-                {{#if bonusFeat.automationNotes}}<p><b>Automation Notes:</b> {{bonusFeat.automationNotes}}</p>{{/if}}
+                {{#if bonusFeat.requirements}}<p {{#unless bonusFeat.satisfiesRequirements}}class="km-unsatisfied-requirement"{{/unless}}><b>{{localizeKM "kingdom.prerequisites"}}:</b> {{bonusFeat.requirements}}</p>{{/if}}
+                {{#if bonusFeat.automationNotes}}<p><b>{{localizeKM "kingdom.automationNotes"}}:</b> {{bonusFeat.automationNotes}}</p>{{/if}}
             </details>
             <p>
                 <button type="button"
                         class="km-no-button-margin"
                         data-action="add-bonus-feat"
-                        title="Add Bonus Feat"
-                >Add</button>
+                        title="{{localizeKM "kingdom.addBonusFeat"}}"
+                >{{localizeKM "applications.add"}}</button>
             </p>
         {{/if}}
     </section>
@@ -25,16 +25,16 @@
                         class="km-no-button-margin"
                         data-id="{{idValue}}"
                         data-action="delete-bonus-feat"
-                        title="Delete Bonus Feat"
+                        title="{{localizeKM "applications.delete"}}"
                 ><i class="fa-solid fa-trash"></i></button>
             </span></h2>
             <p>{{description}}</p>
-            {{#if requirements}}<p {{#unless satisfiesRequirements}}class="km-unsatisfied-requirement"{{/unless}}><b>Prerequisites:</b> {{requirements}}</p>{{/if}}
-            {{#if automationNotes}}<p><b>Automation Notes:</b> {{automationNotes}}</p>{{/if}}
+            {{#if requirements}}<p {{#unless satisfiesRequirements}}class="km-unsatisfied-requirement"{{/unless}}><b>{{localizeKM "kingdom.prerequisites"}}:</b> {{requirements}}</p>{{/if}}
+            {{#if automationNotes}}<p><b>{{localizeKM "kingdom.automationNotes"}}:</b> {{automationNotes}}</p>{{/if}}
             {{#if removeLeaderVacancyPenalty}}{{> formElement removeLeaderVacancyPenalty}}{{/if}}
             {{#each ruinThresholdIncreases}}
                 <div class="km-choose-boosts">
-                    <p>Choose {{amount}} Ruins to increase by {{value}}</p>
+                    <p>{{localizeKM "kingdom.pickRuinIncreases" count=amount value=value}}</p>
                     <ul class="km-choose-ruins">
                         <li>
                             {{> formElement crime.input}}

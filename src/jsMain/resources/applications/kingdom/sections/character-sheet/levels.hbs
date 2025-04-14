@@ -9,11 +9,11 @@
                     </span></h2>
                 {{#unless feat}}
                     <p>{{description}}</p>
-                    {{#if automationNotes}}<p><b>Automation Notes:</b> {{automationNotes}}</p>{{/if}}
+                    {{#if automationNotes}}<p><b>{{localizeKM "kingdom.automationNotes"}}:</b> {{automationNotes}}</p>{{/if}}
                 {{/unless}}
                 {{#if abilityBoosts}}
                     <div class="km-choose-boosts">
-                        <p>Pick {{abilityBoosts.free}} boosts:</p>
+                        <p>{{localizeKM "kingdom.pickBoosts" count=abilityBoosts.free}}:</p>
                         <ul>
                             <li>{{> formElement abilityBoosts.culture}}</li>
                             <li>{{> formElement abilityBoosts.economy}}</li>
@@ -24,11 +24,11 @@
                 {{/if}}
                 {{#if feat}}
                     <p>{{featDescription}}</p>
-                    {{#if featRequirements}}<p {{#unless featSatisfiesRequirements}}class="km-unsatisfied-requirement"{{/unless}}><b>Prerequisites:</b> {{featRequirements}}</p>{{/if}}
-                    {{#if featAutomationNotes}}<p><b>Automation Notes:</b> {{featAutomationNotes}}</p>{{/if}}
+                    {{#if featRequirements}}<p {{#unless featSatisfiesRequirements}}class="km-unsatisfied-requirement"{{/unless}}><b>{{localizeKM "kingdom.prerequisites"}}:</b> {{featRequirements}}</p>{{/if}}
+                    {{#if featAutomationNotes}}<p><b>{{localizeKM "kingdom.automationNotes"}}:</b> {{featAutomationNotes}}</p>{{/if}}
                     {{#each featRuinThresholdIncreases}}
                         <div class="km-choose-boosts">
-                            <p>Choose {{amount}} Ruins to increase by {{value}}</p>
+                            <p>{{localizeKM "kingdom.pickRuinIncreases" count=amount value=value}}</p>
                             <ul class="km-choose-ruins">
                                 <li>
                                     {{> formElement crime.input}}
@@ -53,8 +53,7 @@
                 {{/if}}
                 {{#if ruinThresholdIncreases}}
                     <div class="km-choose-ruins">
-                        <p>Choose {{ruinThresholdIncreases.amount}} Ruins to increase
-                            by {{ruinThresholdIncreases.value}}:</p>
+                        <p>{{localizeKM "kingdom.pickRuinIncreases" count=ruinThresholdIncreases.amount value=ruinThresholdIncreases.value}}:</p>
                         <ul>
                             <li>
                                 {{> formElement ruinThresholdIncreases.crime.input}}

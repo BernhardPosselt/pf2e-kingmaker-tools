@@ -1,12 +1,12 @@
 <section {{#if hideCreation}}hidden{{/if}}>
     <section class="km-kingdom-sheet-section">
-        <h2>Select Charter <span class="km-header-right-align">{{> formElement charter.type}}</span></h2>
+        <h2>{{localizeKM "kingdom.selectCharter"}} <span class="km-header-right-align">{{> formElement charter.type}}</span></h2>
         {{#if charter.description}}<p>{{charter.description}}</p>
             <hr>{{/if}}
-        {{#if charter.boost}}<p><b>Ability Boost</b>: {{charter.boost}}</p>{{/if}}
-        {{#if charter.flaw}}<p><b>Ability Flaw</b>: {{charter.flaw}}</p>{{/if}}
+        {{#if charter.boost}}<p><b>{{localizeKM "kingdom.abilityBoosts"}}</b>: {{charter.boost}}</p>{{/if}}
+        {{#if charter.flaw}}<p><b>{{localizeKM "kingdom.abilityFlaws"}}</b>: {{charter.flaw}}</p>{{/if}}
         <div class="km-choose-boosts" {{#unless charter.description}}hidden{{/unless}}>
-            <p><b>Pick {{charter.abilityBoosts.free}} Boost:</b></p>
+            <p><b>{{localizeKM "kingdom.pickBoosts" count=charter.abilityBoosts.free}}:</b></p>
             <ul>
                 <li {{#if charter.abilityBoosts.cultureHidden}}hidden{{/if}}>{{> formElement charter.abilityBoosts.culture}}</li>
                 <li {{#if charter.abilityBoosts.economyHidden}}hidden{{/if}}>{{> formElement charter.abilityBoosts.economy}}</li>
@@ -16,22 +16,20 @@
         </div>
     </section>
     <section class="km-kingdom-sheet-section">
-        <h2>Choose a Heartland <span class="km-header-right-align">{{> formElement heartland.type}}</span></h2>
-        {{#unless heartland.description}}<p>The PCs can choose any hex that they have Reconnoitered. Note that terrain features
-            can grant other benefits to the kingdom when claimed. The choice of terrain made here influences how the
-            Favored Land kingdom ability functions (see section <b>1</b> next to the <b>Creation</b> section).</p>{{/unless}}
+        <h2>{{localizeKM "kingdom.chooseHeartland"}} <span class="km-header-right-align">{{> formElement heartland.type}}</span></h2>
+        {{#unless heartland.description}}<p>{{localizeKM "kingdom.heartlandRequirement"}}</p>{{/unless}}
         {{#if heartland.description}}<p>{{heartland.description}}</p>
             <hr>{{/if}}
-        {{#if heartland.description}}<p><b>Ability Boost</b>: {{heartland.boost}}</p>{{/if}}
+        {{#if heartland.description}}<p><b>{{localizeKM "kingdom.abilityBoosts"}}</b>: {{heartland.boost}}</p>{{/if}}
     </section>
     <section class="km-kingdom-sheet-section">
-        <h2>Choose a Government <span class="km-header-right-align">{{> formElement government.type}}</span></h2>
+        <h2>{{localizeKM "kingdom.chooseGovernment"}} <span class="km-header-right-align">{{> formElement government.type}}</span></h2>
         {{#if government.description}}<p>{{government.description}}</p>
             <hr>{{/if}}
 
         <div class="km-choose-boosts" {{#unless government.description}}hidden{{/unless}}>
-            <p><b>Ability Boosts</b>: {{government.boosts}}</p>
-            <p class="km-government-pick-label"><b>Pick {{government.abilityBoosts.free}} Boost:</b></p>
+            <p><b>{{localizeKM "kingdom.abilityBoosts"}}</b>: {{government.boosts}}</p>
+            <p class="km-government-pick-label"><b>{{localizeKM "kingdom.pickBoosts" count=government.abilityBoosts.free}}:</b></p>
             <ul>
                 <li {{#if government.abilityBoosts.cultureHidden}}hidden{{/if}}>{{> formElement government.abilityBoosts.culture}}</li>
                 <li {{#if government.abilityBoosts.economyHidden}}hidden{{/if}}>{{> formElement government.abilityBoosts.economy}}</li>
@@ -40,18 +38,18 @@
             </ul>
         </div>
         {{#if government.skills}}
-            <p><b>Skill Proficiencies</b>: {{government.skills}}</p>
+            <p><b>{{localizeKM "kingdom.skillProficiencies"}}</b>: {{government.skills}}</p>
         {{/if}}
         {{#if government.description}}
-            {{#unless government.feat}}<p><b>Feat disabled in Feat management!</b></p>{{/unless}}
+            {{#unless government.feat}}<p><b>{{localizeKM "kingdom.featDisabled"}}</b></p>{{/unless}}
             <details {{# unless government.feat}}hidden{{/unless}} open>
-                <summary><b>Bonus Feat</b>: {{government.feat}}</summary>
+                <summary><b>{{localizeKM "kingdom.bonusFeat"}}</b>: {{government.feat}}</summary>
                 <p class="km-detail-description">{{government.featDescription}}</p>
-                {{#if government.featRequirements}}<p><b>Prerequisites:</b> {{government.featRequirements}}</p>{{/if}}
-                {{#if government.featAutomationNotes}}<p><b>Automation Notes:</b> {{government.featAutomationNotes}}</p>{{/if}}
+                {{#if government.featRequirements}}<p><b>{{localizeKM "kingdom.prerequisites"}}:</b> {{government.featRequirements}}</p>{{/if}}
+                {{#if government.featAutomationNotes}}<p><b>{{localizeKM "kingdom.automationNotes"}}:</b> {{government.featAutomationNotes}}</p>{{/if}}
                 {{#each government.featRuinThresholdIncreases}}
                     <div class="km-choose-boosts">
-                        <p>Choose {{amount}} Ruins to increase by {{value}}</p>
+                        <p>{{localizeKM "kingdom.pickRuinIncreases" count=amount value=value}}</p>
                         <ul class="km-choose-ruins">
                             <li>
                                 {{> formElement crime.input}}
@@ -77,9 +75,9 @@
         {{/if}}
     </section>
     <section class="km-kingdom-sheet-section">
-        <h2>Finalize Ability Scores</h2>
+        <h2>{{localizeKM "kingdom.finalizeScores"}}</h2>
         <div class="km-choose-boosts">
-            <p><b>Pick {{abilityBoosts.free}} Boosts:</b></p>
+            <p><b>{{localizeKM "kingdom.pickBoosts" count=abilityBoosts.free}}:</b></p>
             <ul>
                 <li>{{> formElement abilityBoosts.culture}}</li>
                 <li>{{> formElement abilityBoosts.economy}}</li>
@@ -89,9 +87,8 @@
         </div>
     </section>
     <section class="km-kingdom-sheet-section">
-        <h2>Choose Leaders</h2>
-        <p>Assign your leaders by drag and dropping <b>Character</b> or <b>NPC</b> actors from the sidebar onto each tile.{{#unless enableLeadershipModifiers}} Next, choose four leadership roles to invest. Investing a role provides a status bonus to Kingdom
-            skill checks based on that role's key ability.{{/unless}}</p>
+        <h2>{{localizeKM "kingdom.chooseLeaders"}}</h2>
+        <p>{{localizeKM "kingdom.chooseLeadersHelp"}}{{#unless enableLeadershipModifiers}} {{localizeKM "kingdom.chooseLeadersHelpVk"}}{{/unless}}</p>
         <ul class="km-choose-leaders">
             {{#each leadersContext}}
                 <li data-leader="{{leader}}">
@@ -105,7 +102,7 @@
                         </div>
                     {{else}}
                         <div class="km-choose-leader-placeholder">
-                            <span>Drop Actor from Sidebar</span>
+                            <span>{{localizeKM "kingdom.dropActorFromSidebar"}}</span>
                             <i class="fa-solid fa-plus"></i>
                         </div>
                     {{/if}}
@@ -114,7 +111,7 @@
                 </li>
             {{/each}}
         </ul>
-        <p>Then, {{#if enableLeadershipModifiers}}choose four skills to apply the trained proficiency rank to{{else}}each of the four invested leaders chooses to apply the trained proficiency rank to a different skill{{/if}}. These proficiency ranks cannot be reassigned later.</p>
+        <p>{{#if enableLeadershipModifiers}}{{localizeKM "kingdom.choose4SkillsVk"}}{{else}}{{localizeKM "kingdom.choose4Skills"}}{{/if}} {{localizeKM "kingdom.cannotBeReassigned"}}</p>
         <div class="km-choose-skills">
             <ul>
                 {{#each initialProficiencies}}
@@ -123,22 +120,20 @@
             </ul>
         </div>
         <hr>
-        <p><b>Additional Trained Skills (V&K)</b>: You can add additional Skill Trainings in the Bonus tab.</p>
+        <p><b>{{localizeKM "kingdom.additionalTrainedSkills"}}</b>: {{localizeKM "kingdom.additionalTrainedSkillsDescription"}}</p>
     </section>
     <section class="km-kingdom-sheet-section">
-        <h2>First Village</h2>
-        <p>First, <button class="km-inline-button" type="button" data-action="structures-import">Import All Structures</button> into your world.</p>
-        <p>Next, <button class="km-inline-button" type="button" data-action="create-capital">Create a Capital</button> within your Heartland's terrain. The Scene includes blocks, onto which you can place your structures to automatically calculate settlement level. Only visible blocks are included in the calculation.</p>
+        <h2>{{localizeKM "kingdom.firstVillage"}}</h2>
+        <p>{{localizeKM "kingdom.firstImportStructures"}} <button class="km-inline-button" type="button" data-action="structures-import">{{localizeKM "kingdom.importAllStructures"}}</button></p>
+        <p>{{localizeKM "kingdom.thenCreateCapitalScene"}} <button class="km-inline-button" type="button" data-action="create-capital">{{localizeKM "kingdom.createACapital"}}</button> {{localizeKM "kingdom.capitalRequirement"}}</p>
         <img src="modules/pf2e-kingmaker-tools/img/kingdom/docs/settlement.webp" alt="structures on blocks">
-        <p>Since this is their first village, the PCs gain 40 kingdom XP as a milestone award. Check off the <b>Establish your first village</b> milestone in the <b>XP</b> section in the <b>Turn</b> tab.</p>
-        <p>Finally, place any existing structures on the chosen hex onto the scene's blocks from the <b>Structures</b> folder in your
-            actors directory.</p>
+        <p>{{localizeKM "kingdom.gainVillageXp"}}</p>
+        <p>{{localizeKM "kingdom.placeStructures"}}</p>
         <img src="modules/pf2e-kingmaker-tools/img/kingdom/docs/structures.webp" alt="structures entry in the sidebar">
-        <p>Further settlements can be added in the <b>Settlements</b> tab.</p>
+        <p>{{localizeKM "kingdom.villageFurther"}}</p>
     </section>
     <section class="km-kingdom-sheet-section">
-        <h2>Fame or Infamy? <span class="km-header-right-align">{{> formElement fameContext.type}}</span></h2>
-        <p>The choice here solely determines whether the kingdom uses Fame or Infamy points and the influence certain
-            structures might have on the kingdom.</p>
+        <h2>{{localizeKM "kingdom.fameOrInfamy"}} <span class="km-header-right-align">{{> formElement fameContext.type}}</span></h2>
+        <p>{{localizeKM "kingdom.fameOrInfamyHelp"}}</p>
     </section>
 </section>

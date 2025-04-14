@@ -8,5 +8,3 @@
 * translate kingdom sheet
 * translate camping sheet
 * translate apps
-* translate templates:
-  * kingdom

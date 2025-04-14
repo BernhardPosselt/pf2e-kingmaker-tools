@@ -1,16 +1,16 @@
 <aside class="km-kingdom-sheet-sidebar km-kingdom-sheet-sidebar-kingdom"
        {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
     <div {{#if (ne currentNavEntry 'kingdom')}}hidden{{/if}}>
-        <h3>Size <span class="km-header-right-align"><button type="button" data-action="kingdom-size-info" title="Kingdom Size"><i class="fa-solid fa-circle-info"></i></button></span></h3>
+        <h3>Size <span class="km-header-right-align"><button type="button" data-action="kingdom-size-info" title="{{localizeKM "kingdom.kingdomSize"}}"><i class="fa-solid fa-circle-info"></i></button></span></h3>
         <table class="km-unrest-ruin">
             <tr>
-                <td class="km-ability-score-label">Claimed Hexes</td>
+                <td class="km-ability-score-label">{{localizeKM "kingdom.claimedHexes"}}</td>
                 <td>{{#if automateResources}}<span class="km-ability-stat">{{size}}</span>{{/if}}
                     {{> formElement sizeInput }}</td>
                 <td>{{kingdomSize}}</td>
             </tr>
         </table>
-        <h3>Consumption ({{consumption}}) <span class="km-header-right-align"><button type="button" data-action="consumption-breakdown" title="Consumption Breakdown"><i class="fa-solid fa-circle-info"></i></button></span></h3>
+        <h3>{{localizeKM "kingdom.consumption"}} ({{consumption}}) <span class="km-header-right-align"><button type="button" data-action="consumption-breakdown" title="{{localizeKM "kingdom.consumptionBreakdown"}}"><i class="fa-solid fa-circle-info"></i></button></span></h3>
         <table class="km-unrest-ruin">
             <tr>
                 <td>{{> formElement consumptionContext.armies }}</td>
@@ -18,7 +18,7 @@
                 <td>{{> formElement consumptionContext.next }}</td>
             </tr>
         </table>
-        <h3>Ability Scores</h3>
+        <h3>{{localizeKM "kingdom.abilityScores"}}</h3>
         <table class="km-unrest-ruin">
             {{#each abilityScores}}
                 <tr>
@@ -30,7 +30,7 @@
                 </tr>
             {{/each}}
         </table>
-        <h3>Skills</h3>
+        <h3>{{localizeKM "applications.skills"}}</h3>
         {{#if (ne currentNavEntry 'turn')}}
             <table class="km-skill-checks">
                 {{#each skillChecks}}
@@ -43,7 +43,7 @@
                 {{/each}}
             </table>
         {{/if}}
-        <h3>Worksites (+ Resource)</h3>
+        <h3>{{localizeKM "kingdom.worksitesAndResources"}}</h3>
         <table class="km-worksites">
             {{#each worksitesContext}}
             <tr>
@@ -69,13 +69,13 @@
     <nav class="km-kingdom-sheet-sub-nav">
         <ul class="km-center-middle">
             <li><a title="Creation" data-action="change-kingdom-section-nav"
-                   {{#unless hideCreation}}class="active"{{/unless}} href="#" data-link="Creation" draggable="false">Creation</a></li>
+                   {{#unless hideCreation}}class="active"{{/unless}} href="#" data-link="Creation" draggable="false">{{localizeKM "kingdom.creation"}}</a></li>
             {{#each kingdomSectionNav}}
                 <li><a title="{{title}}" data-action="{{action}}"
                        {{#if active}}class="active"{{/if}} href="#" data-link="{{link}}" draggable="false">{{label}}</a></li>
             {{/each}}
             <li><a title="Bonus" data-action="change-kingdom-section-nav"
-                   {{#unless hideBonus}}class="active"{{/unless}} href="#" data-link="Bonus">Bonus</a></li>
+                   {{#unless hideBonus}}class="active"{{/unless}} href="#" data-link="Bonus">{{localizeKM "kingdom.bonus"}}</a></li>
         </ul>
     </nav>
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-kingdom">
