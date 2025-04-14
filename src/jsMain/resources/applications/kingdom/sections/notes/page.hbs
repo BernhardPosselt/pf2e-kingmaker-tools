@@ -1,14 +1,14 @@
 <div {{#if (ne currentNavEntry 'notes')}}hidden{{/if}} class="km-kingdom-sheet-content">
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-notes">
         <section>
-            <h2>Public Notes</h2>
+            <h2>{{localizeKM "kingdom.publicNotes"}}</h2>
 
             <prose-mirror name="notes.public" value="{{notesContext.rawPublic}}" data-document-u-u-i-d="{{actor.uuid}}" collaborate="true" toggled="true">
                 {{{notesContext.public}}}
             </prose-mirror>
         </section>
         <section {{#unless isGM}}hidden{{/unless}}>
-            <h2>GM Notes</h2>
+            <h2>{{localizeKM "kingdom.gmNotes"}}</h2>
             <prose-mirror name="notes.gm" value="{{notesContext.rawGm}}" data-document-u-u-i-d="{{actor.uuid}}" collaborate="true" toggled="true">
                 {{{notesContext.gm}}}
             </prose-mirror>

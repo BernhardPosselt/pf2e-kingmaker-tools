@@ -1,15 +1,15 @@
 <div {{#if (ne currentNavEntry 'tradeAgreements')}}hidden{{/if}} class="km-kingdom-sheet-content">
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-trade-agreements">
         <section>
-            <h2>Groups  <span class="km-header-right-align"><button type="button" data-action="add-group"><i class="fa-solid fa-plus"></i></button></span></h2>
+            <h2>{{localizeKM "kingdom.groups"}}  <span class="km-header-right-align"><button type="button" data-action="add-group"><i class="fa-solid fa-plus"></i></button></span></h2>
             <table>
                 <thead>
                 <tr>
-                    <td>Name</td>
-                    <td>Negotiation DC</td>
-                    <td>At War</td>
-                    <td>Relations</td>
-                    <td>Delete</td>
+                    <td>{{localizeKM "applications.name"}}</td>
+                    <td>{{localizeKM "kingdom.negotiationDc"}}</td>
+                    <td>{{localizeKM "kingdom.atWar"}}</td>
+                    <td>{{localizeKM "kingdom.relations"}}</td>
+                    <td>{{localizeKM "applications.delete"}}</td>
                 </tr>
                 </thead>
                 <tbody>

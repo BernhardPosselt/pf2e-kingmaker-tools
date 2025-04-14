@@ -1,24 +1,24 @@
 <div {{#if (ne currentNavEntry 'settlements')}}hidden{{/if}} class="km-kingdom-sheet-content">
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-settlements">
         <section>
-            <h2>Settlements  <span class="km-header-right-align">
+            <h2>{{localizeKM "kingdom.settlements"}}  <span class="km-header-right-align">
 
-                <button type="button" data-action="create-settlement">New Settlement</button>
+                <button type="button" data-action="create-settlement">{{localizeKM "kingdom.newSettlement"}}</button>
 
-                <button type="button" data-action="add-settlement" {{#unless canAddCurrentSceneAsSettlement}}disabled{{/unless}}>Add Current Scene</button>
+                <button type="button" data-action="add-settlement" {{#unless canAddCurrentSceneAsSettlement}}disabled{{/unless}}>{{localizeKM "kingdom.addCurrentScene"}}</button>
 
-                <button type="button" data-action="settlement-size-info" title="Settlement Size"><i class="fa-solid fa-circle-info"></i></button></span></h2>
+                <button type="button" data-action="settlement-size-info" title="{{localizeKM "kingdom.settlementSize"}}"><i class="fa-solid fa-circle-info"></i></button></span></h2>
             <table>
                 <thead>
                 <tr>
-                    <td>Name</td>
-                    <td>View</td>
-                    <td>Activate</td>
-                    <td>Size</td>
-                    <td>Level</td>
-                    <td>Issues</td>
-                    <td>Details</td>
-                    <td>Delete</td>
+                    <td>{{localizeKM "applications.name"}}</td>
+                    <td>{{localizeKM "kingdom.view"}}</td>
+                    <td>{{localizeKM "kingdom.activate"}}</td>
+                    <td>{{localizeKM "kingdom.size"}}</td>
+                    <td>{{localizeKM "applications.level"}}</td>
+                    <td>{{localizeKM "kingdom.issues"}}</td>
+                    <td>{{localizeKM "kingdom.details"}}</td>
+                    <td>{{localizeKM "applications.delete"}}</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -31,9 +31,9 @@
                             <i class="fa-solid fa-bullseye"></i></button></td>
                         <td>{{size}}</td>
                         <td>{{level}} ({{residentialLots}})</td>
-                        <td>{{#if isOvercrowded}}<i class="fa-solid fa-people-roof" title="Overcrowded"></i>{{/if}}
-                        {{#if isSecondaryTerritory}}<i class="fa-solid fa-road-circle-xmark" title="Secondary Territory"></i>{{/if}}
-                        {{#if lacksBridge}}<i class="fa-solid fa-bridge-circle-xmark" title="Lacks Bridge"></i>{{/if}}</td>
+                        <td>{{#if isOvercrowded}}<i class="fa-solid fa-people-roof" title="{{localizeKM "kingdom.overcrowded"}}"></i>{{/if}}
+                        {{#if isSecondaryTerritory}}<i class="fa-solid fa-road-circle-xmark" title="{{localizeKM "kingdom.secondaryTerritory"}}"></i>{{/if}}
+                        {{#if lacksBridge}}<i class="fa-solid fa-bridge-circle-xmark" title="{{localizeKM "kingdom.lacksBridge"}}"></i>{{/if}}</td>
                         <td><button type="button" data-action="inspect-settlement" data-id="{{id}}">
                             <i class="fa-solid fa-magnifying-glass"></i></button></td>
                         <td><button type="button" data-action="delete-settlement" data-id="{{id}}">
@@ -43,7 +43,6 @@
                 {{/each}}
                 </tbody>
             </table>
-
         </section>
     </div>
 </div>

@@ -1,15 +1,15 @@
 <div {{#if (ne currentNavEntry 'modifiers')}}hidden{{/if}} class="km-kingdom-sheet-content">
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-modifiers">
         <section>
-            <h2>Modifiers  <span class="km-header-right-align"><button type="button" data-action="add-modifier"><i class="fa-solid fa-plus"></i></button></span></h2>
+            <h2>{{localizeKM "applications.modifiers"}} <span class="km-header-right-align"><button type="button" data-action="add-modifier"><i class="fa-solid fa-plus"></i></button></span></h2>
             <table>
                 <thead>
                 <tr>
-                    <td>Name</td>
-                    <td>Description</td>
-                    <td>Turns</td>
-                    <td>Consumed</td>
-                    <td>Delete</td>
+                    <td>{{localizeKM "applications.name"}}</td>
+                    <td>{{localizeKM "applications.description"}}</td>
+                    <td>{{localizeKM "kingdom.turns"}}</td>
+                    <td>{{localizeKM "kingdom.consumed"}}</td>
+                    <td>{{localizeKM "applications.delete"}}</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,7 +26,6 @@
                 {{/each}}
                 </tbody>
             </table>
-
         </section>
     </div>
 </div>

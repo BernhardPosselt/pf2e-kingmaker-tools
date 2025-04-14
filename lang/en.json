@@ -41,6 +41,7 @@
       "total": "Total",
       "skills": "Skills",
       "skillCheck": "Skill Check",
+      "description": "Description",
       "formElement": {
         "openDocument": "Open Document"
       },
@@ -219,7 +220,23 @@
       "farmOrWorksite": "Farm or Worksite",
       "bridgeOrRoad": "Bridge or Road",
       "endTurn": "End Turn",
-      "levelUp": "Level Up"
+      "levelUp": "Level Up",
+      "groups": "Groups",
+      "negotiationDc": "Negotiation DC",
+      "atWar": "At War",
+      "relations": "Relations",
+      "newSettlement": "New Settlement",
+      "addCurrentScene": "Add Current Scene",
+      "settlementSize": "Settlement Size",
+      "view": "View",
+      "activate": "Activate",
+      "issues": "Issues",
+      "details": "Details",
+      "publicNotes": "Public Notes",
+      "gmNotes": "GM Notes",
+      "modifiers": "Modifiers",
+      "turns": "Turns",
+      "consumed": "Consumed"
     },
     "chatMessages": {
       "addHuntAndGather": {
