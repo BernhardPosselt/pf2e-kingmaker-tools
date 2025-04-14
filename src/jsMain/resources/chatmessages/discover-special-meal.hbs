@@ -4,6 +4,6 @@
         data-id="{{id}}"
         data-degree="{{degree}}"
         data-camping-actor-uuid="{{campingActorUuid}}"
->Remove Ingredients {{#if learnRecipe}}& Learn {{name}}{{/if}}
-    {{#if criticalFailure}}& Suffer Critical Failure Effect{{/if}}
+>{{localizeKM "chatMessages.discoverSpecialMeal.removeIngredients"}} {{#if learnRecipe}}& {{localizeKM "chatMessages.discoverSpecialMeal.learn" recipeName=name}}{{/if}}
+    {{#if criticalFailure}}& {{localizeKM "chatMessages.discoverSpecialMeal.criticalFailure"}}{{/if}}
 </button>

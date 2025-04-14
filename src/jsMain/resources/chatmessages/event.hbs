@@ -4,35 +4,35 @@
         <li>{{this}}</li>
     {{/each}}
 </ul>
-{{#if location}}<p><b>Location:</b> {{location}}</p>{{/if}}
+{{#if location}}<p><b>{{localizeKM "kingdom.eventLocation"}}:</b> {{location}}</p>{{/if}}
 {{{description}}}
 {{#each stages}}
     {{#unless @first}}
         <hr>{{/unless}}
-    <p><b>Leader</b>: {{leader}}</p>
-    <p><b>Skills</b>: {{#each skills}}{{#unless @first}}, {{/unless}}{{this}}{{/each}}</p>
+    <p><b>{{localizeKM "enum.leader"}}</b>: {{leader}}</p>
+    <p><b>{{localizeKM "applications.skills"}}</b>: {{#each skills}}{{#unless @first}}, {{/unless}}{{this}}{{/each}}</p>
     <ul class="km-event-degrees">
         {{#if criticalSuccess}}
-            <li><b>Critical Success:</b> {{{criticalSuccess}}}</li>{{/if}}
+            <li><b>{{localizeKM "degreeOfSuccess.criticalSuccess"}}:</b> {{{criticalSuccess}}}</li>{{/if}}
         {{#if success}}
-            <li><b>Success:</b> {{{success}}}</li>{{/if}}
+            <li><b>{{localizeKM "degreeOfSuccess.success"}}:</b> {{{success}}}</li>{{/if}}
         {{#if failure}}
-            <li><b>Failure:</b> {{{failure}}}</li>{{/if}}
+            <li><b>{{localizeKM "degreeOfSuccess.failure"}}:</b> {{{failure}}}</li>{{/if}}
         {{#if criticalFailure}}
-            <li><b>Critical Failure:</b> {{{criticalFailure}}}</li>{{/if}}
+            <li><b>{{localizeKM "degreeOfSuccess.criticalFailure"}}:</b> {{{criticalFailure}}}</li>{{/if}}
     </ul>
 {{/each}}
 {{#if resolution}}
     <hr>
-    <p><b>Resolution:</b> {{resolution}}</p>
+    <p><b>{{localizeKM "kingdom.eventResolution"}}:</b> {{resolution}}</p>
 {{/if}}
 {{#if special}}
     <hr>
-    <p><b>Special:</b> {{special}}</p>{{/if}}
+    <p><b>{{localizeKM "kingdom.special"}}:</b> {{special}}</p>{{/if}}
 <hr>
 <button type="button"
         class="km-add-ongoing-event"
         data-kingdom-actor-uuid="{{actorUuid}}"
         data-event-id="{{eventId}}"
->Add to Active Events
+>{{localizeKM "kingdom.addToActiveEvents"}}
 </button>

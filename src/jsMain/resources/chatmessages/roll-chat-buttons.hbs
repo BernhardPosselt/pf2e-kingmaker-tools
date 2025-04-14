@@ -1,6 +1,6 @@
 <div class="km-chat-buttons">
-    {{#if criticalSuccess}}<button type="button" data-kingdom-actor-uuid="{{actorUuid}}" class="km-gain-fame-button">Gain 1 Fame</button>{{/if}}
-    {{#if eventId}}<button type="button" data-kingdom-actor-uuid="{{actorUuid}}" data-event-index="{{eventIndex}}" data-event-id="{{eventId}}" class="km-resolve-event">Resolve Event</button>{{/if}}
+    {{#if criticalSuccess}}<button type="button" data-kingdom-actor-uuid="{{actorUuid}}" class="km-gain-fame-button">{{localizeKM "kingdom.gain1Fame"}}</button>{{/if}}
+    {{#if eventId}}<button type="button" data-kingdom-actor-uuid="{{actorUuid}}" data-event-index="{{eventIndex}}" data-event-id="{{eventId}}" class="km-resolve-event">{{localizeKM "kingdom.resolveEvent"}}</button>{{/if}}
     {{#each modifiers}}
         <button class="km-apply-modifier-effect"
                 data-kingdom-actor-uuid="{{actorUuid}}"

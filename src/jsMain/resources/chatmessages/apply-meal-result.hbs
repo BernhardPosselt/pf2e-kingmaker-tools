@@ -5,5 +5,9 @@
         data-camping-actor-uuid="{{campingActorUuid}}"
         data-degree="{{degree}}"
         data-recipe="{{id}}"
->{{#unless failure}}Apply Meal Effects & {{/unless}}Remove Ingredients
+>{{#if failure}}
+    {{localizeKM "chatMessages.applyMealResults.applyFailed"}}
+{{else}}
+    {{localizeKM "chatMessages.applyMealResults.apply"}}
+{{/if}}
 </button>

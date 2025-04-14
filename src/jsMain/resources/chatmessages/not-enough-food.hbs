@@ -1,8 +1,8 @@
-<p data-kingdom-actor-uuid="{{actorUuid}}">Missing {{food}} food commodities. Either
+<p data-kingdom-actor-uuid="{{actorUuid}}">{{localizeKM "kingdom.missingFood" count=food}}
     <button type="button" class="km-gain-lose" data-type="resource-points" data-mode="lose" data-turn="now"
-            data-multiple="true" data-value="5">Lose 5 Resource Points
-    </button> per missing food commodity or gain
+            data-multiple="true" data-value="5">{{localizeKM "kingdom.lose5RP"}}
+    </button>
     <button type="button" class="km-gain-lose" data-type="unrest" data-mode="gain" data-turn="now" data-multiple="false"
-            data-value="1d4">Gain 1d4 Unrest
+            data-value="1d4">{{localizeKM "kingdom.gain1d4Unrest"}}
     </button>
 </p>

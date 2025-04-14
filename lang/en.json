@@ -1,5 +1,6 @@
 {
   "pf2e-kingmaker-tools": {
+    "moduleName": "Kingdom Building, Camping & Weather",
     "enums": {
       "skill": "Skill",
       "modifierType": "Type",
@@ -37,6 +38,9 @@
       "level": "Level",
       "kingdom": "Kingdom",
       "camping": "Camping",
+      "total": "Total",
+      "skills": "Skills",
+      "skillCheck": "Skill Check",
       "formElement": {
         "openDocument": "Open Document"
       },
@@ -59,6 +63,76 @@
         "exportCamping": "Export Camping",
         "deleteCamping": "Delete Camping",
         "importCamping": "Import Camping"
+      }
+    },
+    "camping": {
+      "basicIngredients": "Basic Ingredients",
+      "specialIngredients": "Special Ingredients",
+      "rations": "Rations",
+      "consumingFood": "Consuming Food",
+      "missingFood": "Missing the following ingredients:",
+      "actorGathered": "<b>{actorName}</b> gathered:",
+      "randomEncounterCheck": "Check for Random Encounter"
+    },
+    "kingdom": {
+      "resourcePoints": "Resource Points",
+      "ore": "Ore",
+      "lumber": "Lumber",
+      "stone": "Stone",
+      "luxuries": "Luxuries",
+      "collecting": "Collecting Resources",
+      "gainingUnrest": "Gaining Unrest",
+      "loseRuinOfChoice": "Lose 1 ruin of your choice",
+      "paidStructure": "Paid Structure",
+      "constructing": "Constructing {structureName}",
+      "payStructure": "Pay",
+      "dragToBuild": "Drag onto scene to build",
+      "dragToBuildFailure": "Drag onto scene to build and apply Slowed",
+      "gain1Fame": "Gain 1 Fame",
+      "resolveEvent": "Resolve Event",
+      "hit0Ruin": "{ruinType} has hit 0. You can try to reduce its penalty by 1 with a successful check",
+      "eventLocation": "Location",
+      "eventResolution": "Resolution",
+      "special": "Special",
+      "addToActiveEvents": "Add to Active Events",
+      "missingFood": "Missing {count, plural, =1 {1 Food Commodity} other {# Food Commodities}}. Choose one:",
+      "lose5RP": "Lose 5 Resource Points per missing Commodity",
+      "gain1d4Unrest": "Gain 1d4 Unrest"
+    },
+    "chatMessages": {
+      "addHuntAndGather": {
+        "gained": "{actorName} gained:"
+      },
+      "endTurn": {
+        "title": "Ending Turn",
+        "resetRP": "Setting Resource Points to 0",
+        "reduceMods": "Reducing Modifiers' Turns by 1",
+        "resetSolutions": "Setting available Supernatural and Creative Solutions to 0",
+        "moveValues": "Adding values from the <b>next</b> columns to the <b>now</b> columns, respecting their resource limits"
+      },
+      "firstRun": {
+        "dontShowAgain": "Don't show this again",
+        "intro": "You've just enabled the <b>Kingdom Building, Camping & Weather</b> module for PFRPG 2e.",
+        "license": "This module is licensed under the OGL and AGPLv3:",
+        "getStarted": "To get started, create a kingdom or camping sheet by clicking on the Party actors Tent or Fortress icon:",
+        "manual": "You can view the instruction manual here:",
+        "upgradingNotice": "Make sure to carefully review the Upgrading Notices when    updating to major releases:",
+        "macrosNotice": "All macros and journals can be found in the Compendium Tab!"
+      },
+      "unrest": {
+        "overcrowded": "Overcrowded Settlements",
+        "secondaryTerritory": "At Least One Secondary Territory",
+        "atWar": "Kingdom at War",
+        "rulerVacant": "Ruler Vacancy Penalty"
+      },
+      "applyMealResults": {
+        "apply": "Apply Meal Effects & Remove Ingredients",
+        "applyFailed": "Remove Ingredients"
+      },
+      "discoverSpecialMeal": {
+        "removeIngredients": "Remove Ingredients",
+        "criticalFailure": "Suffer Critical Failure Effect",
+        "learn": "Learn {recipeName}"
       }
     },
     "macros": {
@@ -118,7 +192,7 @@
       },
       "subsist": {
         "selectCharacter": "Please select a Character",
-        "title":"Subsist",
+        "title": "Subsist",
         "gainProvisions": "Gain {count, plural, =1 {1 Provision} other {# Provisions}}"
       },
       "xp": {
