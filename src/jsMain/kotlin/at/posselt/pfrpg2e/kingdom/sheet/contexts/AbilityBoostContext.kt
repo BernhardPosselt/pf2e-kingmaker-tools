@@ -4,7 +4,9 @@ import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
+import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @Suppress("unused")
@@ -44,7 +46,7 @@ fun RawAbilityBoostChoices.toContext(
         CheckboxInput(
             name = "${prefix}abilityBoosts.culture",
             value = culture,
-            label = "Culture",
+            label = t(KingdomAbility.CULTURE),
             stacked = true
         )
     }.toContext(),
@@ -58,7 +60,7 @@ fun RawAbilityBoostChoices.toContext(
         CheckboxInput(
             name = "${prefix}abilityBoosts.economy",
             value = economy,
-            label = "Economy",
+            label = t(KingdomAbility.ECONOMY),
             stacked = true
         )
     }.toContext(),
@@ -72,7 +74,7 @@ fun RawAbilityBoostChoices.toContext(
         CheckboxInput(
             name = "${prefix}abilityBoosts.loyalty",
             value = loyalty,
-            label = "Loyalty",
+            label = t(KingdomAbility.LOYALTY),
             stacked = true
         )
     }.toContext(),
@@ -86,7 +88,7 @@ fun RawAbilityBoostChoices.toContext(
         CheckboxInput(
             name = "${prefix}abilityBoosts.stability",
             value = stability,
-            label = "Stability",
+            label = t(KingdomAbility.STABILITY),
             stacked = true
         )
     }.toContext(),

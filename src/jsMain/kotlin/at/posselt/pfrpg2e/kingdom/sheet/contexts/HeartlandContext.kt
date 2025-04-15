@@ -23,7 +23,7 @@ fun RawHeartlandChoices.toContext(heartlands: List<RawHeartland>): HeartlandCont
             name = "heartland.type",
             value = type,
             options = heartlands.map { SelectOption(it.name, it.id) },
-            label = "Heartland",
+            label = t("kingdom.heartland"),
             required = false,
             stacked = false,
             hideLabel = true,

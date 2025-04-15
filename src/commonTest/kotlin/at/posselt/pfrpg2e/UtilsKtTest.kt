@@ -7,13 +7,6 @@ import kotlin.test.assertNull
 
 class UtilsKtTest {
     @Test
-    fun deCamelCase() {
-        assertEquals("Test", "test".deCamelCase())
-        assertEquals("Test It", "testIt".deCamelCase())
-        assertEquals("", "".deCamelCase())
-    }
-
-    @Test
     fun enumOrdinal() {
         assertEquals(DegreeOfSuccess.CRITICAL_FAILURE, fromOrdinal<DegreeOfSuccess>(0))
         assertEquals(DegreeOfSuccess.FAILURE, fromOrdinal<DegreeOfSuccess>(1))

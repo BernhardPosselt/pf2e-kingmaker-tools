@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @Suppress("unused")
@@ -22,19 +23,19 @@ fun Array<RawGroup>.toContext() =
         GroupContext(
             name = TextInput(
                 name = "groups.$index.name",
-                label = "Name",
+                label = t("applications.name"),
                 hideLabel = true,
                 value = group.name,
             ).toContext(),
             negotiationDC = Select.dc(
                 name = "groups.$index.negotiationDC",
-                label = "Negotiation DC",
+                label = t("kingdom.negotiationDc"),
                 hideLabel = true,
                 value = group.negotiationDC,
             ).toContext(),
             atWar = CheckboxInput(
                 name = "groups.$index.atWar",
-                label = "At War",
+                label = t("kingdom.atWar"),
                 hideLabel = true,
                 value = group.atWar,
             ).toContext(),

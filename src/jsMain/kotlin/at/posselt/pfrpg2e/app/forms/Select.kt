@@ -2,7 +2,6 @@ package at.posselt.pfrpg2e.app.forms
 
 import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.actor.Attribute
-import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.lowercaseFirst
 import at.posselt.pfrpg2e.utils.t
@@ -302,6 +301,6 @@ inline fun <reified T> enumToOptions(labelFunction: (T) -> String) where T : Tra
 
 fun Attribute.toOption() =
     SelectOption(
-        label = value.deCamelCase(),
+        label = t(value),
         value = value,
     )

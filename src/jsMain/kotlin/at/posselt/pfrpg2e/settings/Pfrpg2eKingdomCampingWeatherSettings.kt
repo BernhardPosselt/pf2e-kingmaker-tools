@@ -3,7 +3,6 @@ package at.posselt.pfrpg2e.settings
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.kingdom.KingdomSizeType
-import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.newInstance
@@ -356,7 +355,7 @@ private inline fun <reified T : Any> registerSimple(
         settings.registerScalar<T>(
             key = key,
             default = value,
-            name = key.deCamelCase(),
+            name = key,
             hidden = hidden,
         )
     }

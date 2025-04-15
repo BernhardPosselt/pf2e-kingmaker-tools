@@ -2,7 +2,9 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.NumberInput
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @JsPlainObject
@@ -28,97 +30,97 @@ external interface SkillRanksContext {
 fun RawSkillRanks.toContext() =
     SkillRanksContext(
         agriculture = NumberInput(
-            label = "Agriculture",
+            label = t(KingdomSkill.AGRICULTURE),
             hideLabel = true,
             value = agriculture,
             name = "skillRanks.agriculture",
         ).toContext(),
         arts = NumberInput(
-            label = "Arts",
+            label = t(KingdomSkill.ARTS),
             hideLabel = true,
             value = arts,
             name = "skillRanks.arts",
         ).toContext(),
         boating = NumberInput(
-            label = "Boating",
+            label = t(KingdomSkill.BOATING),
             hideLabel = true,
             value = boating,
             name = "skillRanks.boating",
         ).toContext(),
         defense = NumberInput(
-            label = "Defense",
+            label = t(KingdomSkill.DEFENSE),
             hideLabel = true,
             value = defense,
             name = "skillRanks.defense",
         ).toContext(),
         engineering = NumberInput(
-            label = "Engineering",
+            label = t(KingdomSkill.ENGINEERING),
             hideLabel = true,
             value = engineering,
             name = "skillRanks.engineering",
         ).toContext(),
         exploration = NumberInput(
-            label = "Exploration",
+            label = t(KingdomSkill.EXPLORATION),
             hideLabel = true,
             value = exploration,
             name = "skillRanks.exploration",
         ).toContext(),
         folklore = NumberInput(
-            label = "Folklore",
+            label = t(KingdomSkill.FOLKLORE),
             hideLabel = true,
             value = folklore,
             name = "skillRanks.folklore",
         ).toContext(),
         industry = NumberInput(
-            label = "Industry",
+            label = t(KingdomSkill.INDUSTRY),
             hideLabel = true,
             value = industry,
             name = "skillRanks.industry",
         ).toContext(),
         intrigue = NumberInput(
-            label = "Intrigue",
+            label = t(KingdomSkill.INTRIGUE),
             hideLabel = true,
             value = intrigue,
             name = "skillRanks.intrigue",
         ).toContext(),
         magic = NumberInput(
-            label = "Magic",
+            label = t(KingdomSkill.MAGIC),
             hideLabel = true,
             value = magic,
             name = "skillRanks.magic",
         ).toContext(),
         politics = NumberInput(
-            label = "Politics",
+            label = t(KingdomSkill.POLITICS),
             hideLabel = true,
             value = politics,
             name = "skillRanks.politics",
         ).toContext(),
         scholarship = NumberInput(
-            label = "Scholarship",
+            label = t(KingdomSkill.SCHOLARSHIP),
             hideLabel = true,
             value = scholarship,
             name = "skillRanks.scholarship",
         ).toContext(),
         statecraft = NumberInput(
-            label = "Statecraft",
+            label = t(KingdomSkill.STATECRAFT),
             hideLabel = true,
             value = statecraft,
             name = "skillRanks.statecraft",
         ).toContext(),
         trade = NumberInput(
-            label = "Trade",
+            label = t(KingdomSkill.TRADE),
             hideLabel = true,
             value = trade,
             name = "skillRanks.trade",
         ).toContext(),
         warfare = NumberInput(
-            label = "Warfare",
+            label = t(KingdomSkill.WARFARE),
             hideLabel = true,
             value = warfare,
             name = "skillRanks.warfare",
         ).toContext(),
         wilderness = NumberInput(
-            label = "Wilderness",
+            label = t(KingdomSkill.WILDERNESS),
             hideLabel = true,
             value = wilderness,
             name = "skillRanks.wilderness",

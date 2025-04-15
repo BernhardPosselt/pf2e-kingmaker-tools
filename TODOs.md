@@ -7,4 +7,3 @@
 
 * translate code folders:
   * kingdom/dialogs
-  * kingdom/sheet/contexts

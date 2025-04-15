@@ -2,8 +2,8 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.NumberInput
-import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.kingdom.data.RawResources
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -12,11 +12,11 @@ external interface ResourceContext {
     var next: FormElementContext
 }
 
-fun RawResources.toContext(key: String) =
+fun RawResources.toContext(key: String, label: String) =
     ResourceContext(
         now = NumberInput(
             name = "$key.now",
-            label = key.deCamelCase(),
+            label = label,
             value = now,
             stacked = false,
             elementClasses = listOf("km-width-small"),
@@ -24,7 +24,7 @@ fun RawResources.toContext(key: String) =
         ).toContext(),
         next = NumberInput(
             name = "$key.next",
-            label = "Next",
+            label = t("kingdom.next"),
             value = next,
             stacked = false,
             elementClasses = listOf("km-width-small"),

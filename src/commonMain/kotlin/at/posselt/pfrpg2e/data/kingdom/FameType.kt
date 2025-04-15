@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 
+@Suppress("unused")
 enum class FameType: Translatable, ValueEnum {
     FAMOUS,
     INFAMOUS;

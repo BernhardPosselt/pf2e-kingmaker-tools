@@ -42,7 +42,7 @@ fun RawGovernmentChoices.toContext(
             name = "government.type",
             value = type,
             options = governments.map { SelectOption(it.name, it.id) },
-            label = "Government",
+            label = t("kingdom.government"),
             required = false,
             stacked = false,
             hideLabel = true,
@@ -57,7 +57,7 @@ fun RawGovernmentChoices.toContext(
         }?.toTypedArray() ?: emptyArray(),
         removeLeaderVacancyPenalty = if (feat?.removeLeaderVacancyPenalty == true) {
             Select.fromEnum<Leader>(
-                label = "Supported Leader",
+                label = t("kingdom.supportedLeader"),
                 name = "government.featSupportedLeader",
                 required = false,
                 stacked = false,

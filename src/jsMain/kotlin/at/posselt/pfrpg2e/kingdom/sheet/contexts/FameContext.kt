@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.data.kingdom.FameType
 import at.posselt.pfrpg2e.kingdom.data.RawFame
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @JsPlainObject
@@ -14,12 +15,8 @@ external interface FameContext {
 }
 
 fun RawFame.toContext(maximumFamePoints: Int): FameContext {
-    val fameType = FameType.fromString(type)
-    val label = when (fameType) {
-        FameType.FAMOUS -> "Fame"
-        FameType.INFAMOUS -> "Infamy"
-        else -> "Fame"
-    }
+    val fameType = FameType.fromString(type) ?: FameType.FAMOUS
+    val label = t(fameType)
     return FameContext(
         now = Select.range(
             name = "fame.now",
@@ -33,7 +30,7 @@ fun RawFame.toContext(maximumFamePoints: Int): FameContext {
         ).toContext(),
         next = Select.range(
             name = "fame.next",
-            label = "Next",
+            label = t("kingdom.next"),
             value = next,
             from = 0,
             to = maximumFamePoints,

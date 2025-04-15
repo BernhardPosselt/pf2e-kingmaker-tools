@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.kingdom.RawMilestone
 import at.posselt.pfrpg2e.kingdom.data.MilestoneChoice
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -34,7 +35,7 @@ fun Array<MilestoneChoice>.toContext(
                 id = HiddenInput(
                     name = "milestones.$index.id",
                     value = id,
-                    label = "Id",
+                    label = t("applications.id"),
                 ).toContext(),
                 name = milestone.name,
                 xp = milestone.xp,
@@ -46,7 +47,7 @@ fun Array<MilestoneChoice>.toContext(
                 enabled = HiddenInput(
                     name = "milestones.$index.enabled",
                     value = (choicesById[id]?.enabled == true).toString(),
-                    label = "Enabled",
+                    label = t("applications.enabled"),
                     overrideType = OverrideType.BOOLEAN,
                 ).toContext(),
                 hidden = !visible,

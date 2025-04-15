@@ -38,10 +38,6 @@ fun String.uppercaseFirst() =
 fun String.lowercaseFirst() =
     replaceFirstChar { c -> c.lowercase() }
 
-fun String.deCamelCase(): String =
-    this.split("(?=\\p{Upper})".toRegex())
-        .joinToString(" ") { it.uppercaseFirst() }
-
 fun String.toEnumConstant(): String =
     this.split("(?=\\p{Upper})".toRegex())
         .joinToString("_") { it.uppercase() }

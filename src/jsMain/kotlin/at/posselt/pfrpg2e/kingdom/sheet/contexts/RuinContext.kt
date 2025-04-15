@@ -45,7 +45,7 @@ private fun RawRuinValues.toInput(
             from = 0,
             to = 4,
             name = "ruin.$key.penalty",
-            label = "Penalty",
+            label = t("kingdom.penalty"),
             value = penalty,
             stacked = false,
             hideLabel = true,
@@ -61,7 +61,7 @@ private fun RawRuinValues.toInput(
         } else {
             NumberInput(
                 name = "ruin.$key.threshold",
-                label = "Threshold",
+                label = t("kingdom.threshold"),
                 value = threshold,
                 stacked = false,
                 hideLabel = true,

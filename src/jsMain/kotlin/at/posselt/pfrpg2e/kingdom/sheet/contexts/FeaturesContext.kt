@@ -11,6 +11,7 @@ import at.posselt.pfrpg2e.data.actor.highestProficiencyByLevel
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbilityScores
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.Ruin
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.RawExplodedKingdomFeature
 import at.posselt.pfrpg2e.kingdom.RawFeat
@@ -25,6 +26,7 @@ import at.posselt.pfrpg2e.kingdom.formatRequirements
 import at.posselt.pfrpg2e.kingdom.satisfiesRequirements
 import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
+import js.objects.recordOf
 
 @Suppress("unused")
 @JsPlainObject
@@ -90,10 +92,10 @@ fun RawRuinThresholdIncreasesContext.toContext(prefix: String, amount: Int): Rui
     RuinThresholdIncreases(
         value = crime.value,
         amount = amount,
-        crime = crime.toContext("$prefix.crime", "Crime"),
-        corruption = corruption.toContext("$prefix.corruption", "Corruption"),
-        strife = strife.toContext("$prefix.strife", "Strife"),
-        stability = decay.toContext("$prefix.decay", "Decay"),
+        crime = crime.toContext("$prefix.crime", t(Ruin.CRIME)),
+        corruption = corruption.toContext("$prefix.corruption", t(Ruin.CORRUPTION)),
+        strife = strife.toContext("$prefix.strife", t(Ruin.STRIFE)),
+        stability = decay.toContext("$prefix.decay", t(Ruin.DECAY)),
     )
 
 
@@ -166,7 +168,7 @@ fun Array<RawFeatureChoices>.toContext(
                         id = HiddenInput(name = "features.$index.id", value = feature.id).toContext(),
                         name = feature.name,
                         description = if (feature.skillIncrease == true) {
-                            feature.description + ". You can increase a skill up to ${t(highestProficiency)}."
+                            feature.description + ". " + t("kingdom.youCanIncreaseSkillsUpTo", recordOf("proficiency" to highestProficiency))
                         } else {
                             feature.description
                         },
@@ -178,7 +180,7 @@ fun Array<RawFeatureChoices>.toContext(
                         ) == true,
                         removeLeaderVacancyPenalty = if (feat?.removeLeaderVacancyPenalty == true) {
                             Select.fromEnum<Leader>(
-                                label = "Supported Leader",
+                                label = t("kingdom.supportedLeader"),
                                 name = "features.$index.supportedLeader",
                                 required = false,
                                 stacked = false,
@@ -206,7 +208,7 @@ fun Array<RawFeatureChoices>.toContext(
                                 .filter { it.level <= level && (it.id == feat?.id || it.id !in takenFeats) }
                                 .map { SelectOption(it.name, it.id) }
                             Select(
-                                label = "Kingdom Feat",
+                                label = t("kingdom.feat"),
                                 name = "features.$index.featId",
                                 value = feat?.id,
                                 options = featSelectOptions,
@@ -221,7 +223,7 @@ fun Array<RawFeatureChoices>.toContext(
                         featDescription = feat?.text ?: "",
                         skillProficiency = if (feature.skillIncrease == true) {
                             Select.fromEnum<KingdomSkill>(
-                                label = "Skill Increase",
+                                label = t("kingdom.skillIncrease"),
                                 name = "features.$index.skillIncrease",
                                 value = choice?.skillIncrease?.let { KingdomSkill.fromString(it) },
                                 required = false,

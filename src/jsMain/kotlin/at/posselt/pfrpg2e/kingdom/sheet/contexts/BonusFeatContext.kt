@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
 import at.posselt.pfrpg2e.kingdom.formatRequirements
 import at.posselt.pfrpg2e.kingdom.satisfiesRequirements
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @JsPlainObject
@@ -59,7 +60,7 @@ fun createBonusFeatContext(
     return AddBonusFeatContext(
         feat = Select(
             name = "bonusFeat",
-            label = "Feat",
+            label = t("kingdom.feat"),
             value = value,
             options = feats
                 .filter { it.id == value || it.id !in takenFeats }
@@ -103,7 +104,7 @@ fun Array<RawBonusFeat>.toContext(
                 ) == true,
                 removeLeaderVacancyPenalty = if (feat?.removeLeaderVacancyPenalty == true) {
                     Select.fromEnum<Leader>(
-                        label = "Supported Leader",
+                        label = t("kingdom.supportedLeader"),
                         name = "bonusFeats.$index.supportedLeader",
                         required = false,
                         stacked = false,

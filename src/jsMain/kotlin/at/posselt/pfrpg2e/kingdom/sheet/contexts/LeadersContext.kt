@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawLeaders
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.LeaderBonuses
 import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.t
+import js.objects.recordOf
 import kotlinx.browser.document
 import kotlinx.html.b
 import kotlinx.html.classes
@@ -77,7 +78,7 @@ fun RawLeaderValues.toContext(
         invested = CheckboxInput(
             value = invested && uuid != null,
             name = "leaders.${leader.value}.invested",
-            label = "Invest ${t(leader.keyAbility)}",
+            label = t("kingdom.investedAbility", recordOf("ability" to t(leader.keyAbility))),
         ).toContext(),
         vacant = CheckboxInput(
             escapeLabel = false,

@@ -27,7 +27,7 @@ fun RawCharterChoices.toContext(charters: List<RawCharter>): CharterContext {
             name = "charter.type",
             value = type,
             options = charters.map { SelectOption(it.name, it.id) },
-            label = "Charter",
+            label = t("kingdom.charter"),
             required = false,
             stacked = false,
             hideLabel = true,

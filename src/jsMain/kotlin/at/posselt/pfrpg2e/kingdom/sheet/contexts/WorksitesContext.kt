@@ -5,9 +5,9 @@ import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.data.kingdom.RealmData
-import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSite
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
@@ -20,9 +20,9 @@ external interface WorkSiteContext {
     val resourcesValue: Int
 }
 
-fun RawWorkSite.toContext(worksites: RealmData.WorkSite, key: String, automate: Boolean) =
+fun RawWorkSite.toContext(worksites: RealmData.WorkSite, key: String, label: String, automate: Boolean) =
     WorkSiteContext(
-        label = key.deCamelCase(),
+        label = label,
         quantity = if (automate) {
             HiddenInput(
                 value = quantity.toString(),
@@ -32,7 +32,7 @@ fun RawWorkSite.toContext(worksites: RealmData.WorkSite, key: String, automate: 
         } else {
             NumberInput(
                 value = quantity,
-                label = "Quantity",
+                label = t("kingdom.quantity"),
                 name = "workSites.$key.quantity",
                 elementClasses = listOf("km-slim-inputs", "km-width-small"),
                 hideLabel = true,
@@ -48,7 +48,7 @@ fun RawWorkSite.toContext(worksites: RealmData.WorkSite, key: String, automate: 
         } else {
             NumberInput(
                 value = resources,
-                label = "Resources",
+                label = t("kingdom.resources"),
                 name = "workSites.$key.resources",
                 elementClasses = listOf("km-slim-inputs", "km-width-small"),
                 hideLabel = true,
@@ -61,9 +61,9 @@ fun RawWorkSite.toContext(worksites: RealmData.WorkSite, key: String, automate: 
 
 fun RawWorkSites.toContext(worksites: RealmData.WorkSites, automate: Boolean) =
     arrayOf(
-        farmlands.toContext(worksites.farmlands, "farmlands", automate),
-        lumberCamps.toContext(worksites.lumberCamps, "lumberCamps", automate),
-        mines.toContext(worksites.mines, "mines", automate),
-        quarries.toContext(worksites.quarries, "quarries", automate),
-        luxurySources.toContext(worksites.luxurySources, "luxurySources", automate),
+        farmlands.toContext(worksites.farmlands, "farmlands", t("kingdom.farmlands"), automate),
+        lumberCamps.toContext(worksites.lumberCamps, "lumberCamps", t("kingdom.lumberCamps"), automate),
+        mines.toContext(worksites.mines, "mines", t("kingdom.mines"), automate),
+        quarries.toContext(worksites.quarries, "quarries", t("kingdom.quarries"), automate),
+        luxurySources.toContext(worksites.luxurySources, "luxurySources", t("kingdom.luxurySources"), automate),
     )

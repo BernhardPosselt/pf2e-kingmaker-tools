@@ -1,7 +1,7 @@
 <div {{#if (ne currentNavEntry 'modifiers')}}hidden{{/if}} class="km-kingdom-sheet-content">
     <div class="km-kingdom-sheet-sub-content km-kingdom-sheet-modifiers">
         <section>
-            <h2>{{localizeKM "applications.modifiers"}} <span class="km-header-right-align"><button type="button" data-action="add-modifier"><i class="fa-solid fa-plus"></i></button></span></h2>
+            <h2>{{localizeKM "kingdom.modifiers"}} <span class="km-header-right-align"><button type="button" data-action="add-modifier"><i class="fa-solid fa-plus"></i></button></span></h2>
             <table>
                 <thead>
                 <tr>
@@ -15,8 +15,8 @@
                 <tbody>
                 {{#each modifiers}}
                     <tr>
-                        <td>{{name}}</td>
-                        <td>{{description}}</td>
+                        <td>{{localizeKM name}}</td>
+                        <td>{{localizeKM description}}</td>
                         <td>{{turns}}</td>
                         <td>{{#if isConsumedAfterRoll}}<i class="fa-regular fa-circle-check"></i>{{/if}}</td>
                         <td><button type="button" data-action="delete-modifier" data-index="{{@index}}">
