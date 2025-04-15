@@ -1,12 +1,21 @@
 package at.posselt.pfrpg2e.utils
 
+import at.posselt.pfrpg2e.actions.ActionDispatcher
+import at.posselt.pfrpg2e.camping.createCampingIcon
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
+import at.posselt.pfrpg2e.kingdom.dialogs.ActorActions
+import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
+import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
+import com.foundryvtt.core.directories.onRenderActorDirectory
 import com.foundryvtt.core.documents.Macro
 import com.foundryvtt.core.onHotBarDrop
+import com.foundryvtt.pf2e.actor.PF2EParty
+import io.kvision.jquery.get
 import js.objects.Object
 import js.objects.recordOf
 import kotlinx.browser.document
@@ -20,6 +29,8 @@ import kotlinx.html.js.onDragStartFunction
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.DragEvent
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.asList
+import org.w3c.dom.get
 
 
 @JsPlainObject
@@ -101,5 +112,44 @@ fun registerMacroDropHooks(game: Game) {
             }
         }
         undefined
+    }
+}
+
+fun registerIcons(game: Game, actionDispatcher: ActionDispatcher) {
+    Hooks.onRenderActorDirectory { _, html, _ ->
+        html[0]?.querySelectorAll(".party-header")
+            ?.asList()
+            ?.filterIsInstance<HTMLElement>()
+            ?.forEach {
+                val id = it.dataset["documentId"]
+                if (id != null) {
+                    val insertAfter = it.querySelector("h3")
+                    if (com.foundryvtt.core.game.user.isGM) {
+                        insertAfter?.insertAdjacentElement(
+                            "afterend", createPartyActorIcon(
+                                id = id,
+                                icon = setOf("fa-solid", "fa-ellipsis-vertical"),
+                                toolTip = t("applications.actorActions.tooltip"),
+                                sheetType = SheetType.KINGDOM,
+                                onClick = {
+                                    com.foundryvtt.core.game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
+                                        ActorActions(actor = actor).launch()
+                                    }
+                                },
+                            )
+                        )
+                    }
+                    insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
+                    insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))
+                    if (com.foundryvtt.core.game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
+                        it.querySelector(".fa-crown")
+                            ?.parentElement
+                            ?.takeIfInstance<HTMLElement>()
+                            ?.let {
+                                it.hidden = true
+                            }
+                    }
+                }
+            }
     }
 }
