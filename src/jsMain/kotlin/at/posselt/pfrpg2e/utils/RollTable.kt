@@ -12,20 +12,16 @@ import kotlinx.coroutines.await
 data class TableAndDraw(val table: RollTable, val draw: RollTableDraw)
 
 suspend fun Game.rollWithCompendiumFallback(
-    tableName: String,
     rollMode: RollMode,
     uuid: String? = null,
-    forceCompendiumIfNoUuid: Boolean = false,
+    compendiumUuid: String,
     displayChat: Boolean? = true,
-    fallbackName: String? = null,
     compendium: String = Config.rollTables.compendium,
 ): TableAndDraw? {
     val table = findRollTableWithCompendiumFallback(
-        tableName = tableName,
-        fallbackName = fallbackName,
+        compendiumUuid = compendiumUuid,
         compendium = compendium,
         uuid = uuid,
-        forceCompendiumIfNoUuid = forceCompendiumIfNoUuid,
     )
     return table?.rollWithDraw(rollMode = rollMode, displayChat = displayChat)
 }
@@ -40,28 +36,21 @@ suspend fun RollTable.rollWithDraw(
 }
 
 suspend fun Game.findRollTableWithCompendiumFallback(
-    tableName: String,
     uuid: String? = null,
-    fallbackName: String? = null,
+    compendiumUuid: String,
     compendium: String = Config.rollTables.compendium,
-    forceCompendiumIfNoUuid: Boolean,
 ) =
     if (uuid == null) {
-        val pack = packs.get(compendium)
+        packs.get(compendium)
             ?.getDocuments()
             ?.await()
             ?.filterIsInstance<RollTable>()
-            ?.find { it.name == (fallbackName ?: tableName) }
-        if (forceCompendiumIfNoUuid) {
-            pack
-        } else {
-            tables.getName(tableName) ?: pack
-        }
+            ?.find { it.uuid == compendiumUuid }
     } else {
         tables.contents.find { it.uuid == uuid }
             ?: packs.get(compendium)
                 ?.getDocuments()
                 ?.await()
                 ?.filterIsInstance<RollTable>()
-                ?.find { it.name == (fallbackName ?: tableName) }
+                ?.find { it.uuid == compendiumUuid }
     }

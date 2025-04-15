@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.push
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.applications.api.ContextMenuEntry
@@ -58,7 +59,7 @@ private data class ContextEntry(
 
 private val entries = listOf<ContextEntry>(
     ContextEntry(
-        name = "Re-Roll Using Fame/Infamy",
+        name = t("kingdom.rerollUsingFame"),
         condition = { game, elem ->
             val fame = elem.findKingdomActor(game)
                 ?.let { it.getKingdom()?.fame?.now }
@@ -68,7 +69,7 @@ private val entries = listOf<ContextEntry>(
         callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.FAME_OR_INFAMY) } }
     ),
     ContextEntry(
-        name = "Re-Roll Using Creative Solution",
+        name = t("kingdom.rerollUsingSolution"),
         condition = { game, elem ->
             val creativeSolution = elem.findKingdomActor(game)
                 ?.let { it.getKingdom()?.creativeSolutions }
@@ -78,22 +79,22 @@ private val entries = listOf<ContextEntry>(
         callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.CREATIVE_SOLUTION) } }
     ),
     ContextEntry(
-        name = "Re-Roll",
+        name = t("kingdom.reroll"),
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.isKingdomRoll() },
         callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.DEFAULT) } }
     ),
     ContextEntry(
-        name = "Re-Roll Keep Higher",
+        name = t("kingdom.rerollKH"),
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.isKingdomRoll() },
         callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.ROLL_TWICE_KEEP_HIGHEST) } }
     ),
     ContextEntry(
-        name = "Re-Roll Keep Lower",
+        name = t("kingdom.rerollKL"),
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.isKingdomRoll() },
         callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.ROLL_TWICE_KEEP_LOWEST) } }
     ),
     ContextEntry(
-        name = "Re-Roll using 2 RP",
+        name = t("kingdom.rerollUsingRp"),
         condition = { game, elem ->
             val rollMeta = elem.rollMeta()
             val activity = rollMeta?.dataset["activityId"]
@@ -115,7 +116,7 @@ private val entries = listOf<ContextEntry>(
         callback = { game, elem -> buildPromise { reRoll(elem, ReRollMode.FREE_AND_FAIR) } }
     ),
     ContextEntry(
-        name = "Upgrade Degree of Success",
+        name = t("kingdom.upgradeDegree"),
         icon = "<i class=\"fa-solid fa-arrow-up\"></i>",
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.canUpgrade() },
         callback = { game, elem ->
@@ -127,7 +128,7 @@ private val entries = listOf<ContextEntry>(
         }
     ),
     ContextEntry(
-        name = "Downgrade Degree of Success",
+        name = t("kingdom.downgradeDegree"),
         icon = "<i class=\"fa-solid fa-arrow-down\"></i>",
         condition = { game, elem -> elem.findKingdomActor(game) != null && elem.canDowngrade() },
         callback = { game, elem ->

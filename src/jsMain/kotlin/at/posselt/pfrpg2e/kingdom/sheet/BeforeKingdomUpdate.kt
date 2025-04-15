@@ -1,11 +1,13 @@
 package at.posselt.pfrpg2e.kingdom.sheet
 
+import at.posselt.pfrpg2e.data.kingdom.Ruin
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawRuinValues
 import at.posselt.pfrpg2e.kingdom.getGovernments
 import at.posselt.pfrpg2e.kingdom.getMilestones
 import at.posselt.pfrpg2e.utils.postChatTemplate
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.ui.enrichHtml
 import js.objects.recordOf
 
@@ -59,10 +61,10 @@ suspend fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
     change.toChat()
     current.xp += change.addXp
     current.level += change.addLevel
-    checkRuin(previous.ruin.corruption, current.ruin.corruption, "Corruption")
-    checkRuin(previous.ruin.crime, current.ruin.crime, "Crime")
-    checkRuin(previous.ruin.decay, current.ruin.decay, "Decay")
-    checkRuin(previous.ruin.strife, current.ruin.strife, "Strife")
+    checkRuin(previous.ruin.corruption, current.ruin.corruption, t(Ruin.CORRUPTION))
+    checkRuin(previous.ruin.crime, current.ruin.crime, t(Ruin.CRIME))
+    checkRuin(previous.ruin.decay, current.ruin.decay, t(Ruin.DECAY))
+    checkRuin(previous.ruin.strife, current.ruin.strife, t(Ruin.STRIFE))
 }
 
 private suspend fun checkRuin(

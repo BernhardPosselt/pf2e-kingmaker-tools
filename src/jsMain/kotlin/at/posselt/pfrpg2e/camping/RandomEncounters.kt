@@ -9,9 +9,11 @@ import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.getPF2EWorldTime
 import at.posselt.pfrpg2e.utils.isDay
 import at.posselt.pfrpg2e.utils.rollWithDraw
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.RollTable
 import com.foundryvtt.core.ui
+import js.objects.recordOf
 
 suspend fun rollRandomEncounter(
     game: Game,
@@ -44,7 +46,7 @@ private suspend fun rollRandomEncounter(
     val table = region.rollTableUuid?.let { fromUuidTypeSafe<RollTable>(it) }
     if (table == null) {
         if (region.rollTableUuid != null) {
-            ui.notifications.error("Could not find random encounter roll table for region ${region.name}")
+            ui.notifications.error(t("camping.encounterTableNotFound", recordOf("regionName" to region.name)))
         }
         return false
     }
@@ -54,7 +56,7 @@ private suspend fun rollRandomEncounter(
     val rollCheck = if (includeFlatCheck) {
         d20Check(
             dc = dc,
-            flavor = "Rolling Random Encounter for terrain ${region.name} with Flat DC $dc",
+            flavor = t("camping.rollingRandomEncounter", recordOf("regionName" to region.name, "dc" to dc)),
             rollMode = rollMode,
         ).degreeOfSuccess.succeeded()
     } else {

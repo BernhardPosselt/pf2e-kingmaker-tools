@@ -6,7 +6,6 @@ object Config {
 
     object rollTables {
         const val compendium = "$moduleId.kingmaker-tools-rolltables"
-        const val weather = "Weather Events"
     }
 
     object items {

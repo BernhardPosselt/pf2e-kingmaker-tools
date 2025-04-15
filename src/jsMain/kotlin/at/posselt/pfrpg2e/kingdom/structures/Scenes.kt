@@ -94,7 +94,7 @@ fun Scene.parseSettlement(
 }
 
 suspend fun Game.importSettlementScene(
-    compendiumSceneName: String,
+    uuid: String,
     sceneName: String,
     terrain: SettlementTerrain,
     waterBorders: Int,
@@ -104,7 +104,7 @@ suspend fun Game.importSettlementScene(
         ?.await()
         ?.asSequence()
         ?.filterIsInstance<Scene>()
-        ?.find { it.name == compendiumSceneName }
+        ?.find { it.uuid == uuid }
         ?.let {
             val obj = deepClone(it.toObject())
             Reflect.deleteProperty(obj, "_id")

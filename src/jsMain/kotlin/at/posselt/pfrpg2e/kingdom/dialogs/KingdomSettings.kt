@@ -18,8 +18,8 @@ import at.posselt.pfrpg2e.kingdom.AutomateResources
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.UntrainedProficiencyMode
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
@@ -83,12 +83,12 @@ class KingdomSettingsDataModel(
             }
             string("automateResources") {
                 choices = AutomateResources.entries
-                    .map { it.toCamelCase() to it.toLabel() }
+                    .map { it.toCamelCase() to t(it) }
                     .toRecord()
             }
             string("proficiencyMode") {
                 choices = UntrainedProficiencyMode.entries
-                    .map { it.toCamelCase() to it.toLabel() }
+                    .map { it.toCamelCase() to t(it) }
                     .toRecord()
             }
             string("realmSceneId", nullable = true)

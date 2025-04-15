@@ -6,6 +6,8 @@ import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.SearchInput
 import at.posselt.pfrpg2e.data.events.KingdomEventTrait
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
@@ -13,9 +15,9 @@ import at.posselt.pfrpg2e.kingdom.RawOngoingKingdomEvent
 import at.posselt.pfrpg2e.kingdom.getEvents
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.executeResourceButton
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -155,8 +157,10 @@ class AddEvent(
                         val failure = enrichHtml(stage.failure?.msg ?: "")
                         val criticalFailure = enrichHtml(stage.criticalFailure?.msg ?: "")
                         AddEventStagesContext(
-                            skills = stage.skills.map { it.toLabel() }.toTypedArray(),
-                            leader = stage.leader.toLabel(),
+                            skills = stage.skills.mapNotNull { KingdomSkill.fromString(it) }
+                                .map { t(it) }
+                                .toTypedArray(),
+                            leader = stage.leader.let { Leader.fromString(it) ?: Leader.RULER }.let { t(it) },
                             criticalSuccess = criticalSuccess,
                             success = success,
                             failure = failure,
@@ -170,7 +174,7 @@ class AddEvent(
                         description = description,
                         special = it.special,
                         resolution = it.resolution,
-                        traits = it.traits.map { it.toLabel() }.toTypedArray(),
+                        traits = it.traits.mapNotNull { KingdomEventTrait.fromString(it) }.map { t(it) }.toTypedArray(),
                         location = it.location,
                         stages = stages,
                         isSettlement = KingdomEventTrait.SETTLEMENT.value in it.traits,

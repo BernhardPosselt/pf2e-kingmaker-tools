@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.postChatTemplate
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.pf2e.actor.PF2EActor
 import js.objects.recordOf
 import kotlinx.coroutines.async
@@ -20,32 +21,36 @@ private fun getCombatEffects(partyLevel: Int, activeActivities: Set<String>): Li
     return activeActivities.mapNotNull {
         when (it) {
             "enhance-weapons" -> CombatEffect(
-                label = "Enhance Weapons",
-                target = "Allies",
+                label = t("camping.enhanceWeapons"),
+                target = t("camping.allies"),
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.ZKJlIqyFgbKDACnG"
             )
 
             "set-traps" -> CombatEffect(
-                label = "Set Traps",
-                target = "Enemies",
+                label = t("camping.setTraps"),
+                target = t("camping.enemies"),
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.PSBOS7ZEl9RGWBqD"
             )
 
             "undead-guardians" -> CombatEffect(
-                label = "Undead Guardians",
-                target = "1 Ally",
+                label = t("camping.undeadGuardians"),
+                target = t("camping.numAllies", recordOf("count" to 1)),
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.KysTaC245mOnSnmE"
             )
 
             "water-hazards" -> CombatEffect(
-                label = "Water Hazards",
-                target = "Enemies",
+                label = t("camping.waterHazards"),
+                target = t("camping.enemies"),
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.LN6mH7Muj4hgvStt"
             )
 
             "maintain-armor" -> CombatEffect(
-                label = "Maintain Armor",
-                target = if (partyLevel < 3) "1 Ally" else "${1 + ((partyLevel - 1) / 2)} Allies",
+                label = t("camping.maintainArmor"),
+                target = if (partyLevel < 3) {
+                    t("camping.numAllies", recordOf("count" to 1))
+                } else {
+                    t("camping.numAllies", recordOf("count" to 1 + ((partyLevel - 1) / 2)))
+                },
                 uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.wojV4NiAOYsnfFby"
             )
 
@@ -88,8 +93,8 @@ suspend fun removeCombatEffects(actors: List<PF2EActor>) = coroutineScope {
         async {
             actor.removeEffectsByName(
                 setOf(
-                    "Undead Guardians (Aided)",
-                    "Undead Guardians (Defended)",
+                    t("camping.undeadGuardiansAided"),
+                    t("camping.undeadGuardiansDefended"),
                 )
             )
         }

@@ -3,9 +3,10 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.kingdom.RawCharter
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
-import at.posselt.pfrpg2e.toLabel
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
@@ -40,7 +41,7 @@ fun RawCharterChoices.toContext(charters: List<RawCharter>): CharterContext {
             disableStability = charterBoost == "stability",
         ),
         description = charter?.description ?: "",
-        flaw = charter?.flaw?.toLabel(),
-        boost = charterBoost?.toLabel(),
+        flaw = charter?.flaw?.let { KingdomAbility.fromString(it) }?.let { t(it) },
+        boost = charterBoost?.let { KingdomAbility.fromString(it) }?.let { t(it) },
     )
 }

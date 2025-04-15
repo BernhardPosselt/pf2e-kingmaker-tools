@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.resources.calculateConsumption
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
+import at.posselt.pfrpg2e.utils.t
 import js.objects.recordOf
 import kotlin.math.abs
 
@@ -26,7 +27,7 @@ suspend fun payConsumption(
     return if (consumption > 0) {
         val consumedFood = availableFood - consumption
         val paidFood = consumedFood.coerceIn(0, Int.MAX_VALUE)
-        postChatMessage("Reducing Food by $consumption")
+        postChatMessage(t("kingdom.reducingFoodBy", recordOf("consumption" to consumption)))
         if (consumedFood < 0) {
             postChatTemplate(
                 templatePath = "chatmessages/not-enough-food.hbs",
@@ -38,7 +39,7 @@ suspend fun payConsumption(
         }
         paidFood
     } else {
-        postChatMessage("Paying Consumption")
+        postChatMessage(t("kingdom.payingConsumption"))
         availableFood
     }
 }

@@ -75,10 +75,11 @@ import org.w3c.dom.asList
 import org.w3c.dom.get
 
 fun main() {
-    registerContextMenus()
     Hooks.onI18NInit {
         buildPromise {
             initLocalization()
+            game.settings.pfrpg2eKingdomCampingWeather.register()
+            registerContextMenus()
         }
     }
     Hooks.onInit {
@@ -99,9 +100,6 @@ fun main() {
         }
 
         bindChatButtons(game)
-
-        game.settings.pfrpg2eKingdomCampingWeather.register()
-
         registerMacroDropHooks(game)
 
         Hooks.onRenderActorDirectory { _, html, _ ->

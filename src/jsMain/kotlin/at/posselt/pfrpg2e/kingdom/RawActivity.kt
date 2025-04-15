@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 import js.objects.Record
+import js.objects.recordOf
 
 typealias KingdomDc = Any // number or control, custom, none, scouting
 
@@ -79,29 +80,25 @@ fun RawActivity.label(
     val claimHexAttempts = chosenFeatures.maxOfOrNull { it.feature.claimHexAttempts ?: 1 } ?: 1
     val id = activity.id
     val activityHints = if (id == "claim-hex") {
-        when (claimHexAttempts) {
-            1 -> "once per turn"
-            2 -> "twice per turn"
-            else -> "three times per turn"
-        }
+        t("kingdom.claimHexAttempts", recordOf("count" to claimHexAttempts))
     } else if (id == "train-army") {
-        "max ${findMaximumArmyTactics(kingdomLevel)} per army"
+        t("kingdom.maxArmyTactics", recordOf("count" to findMaximumArmyTactics(kingdomLevel)))
     } else {
         null
     }
     val skillRanks = activity.skillRanks()
     val proficiency = if (skillRanks.all { it.proficiency >= Proficiency.LEGENDARY }) {
-        "legendary"
+        t(Proficiency.LEGENDARY)
     } else if (skillRanks.all { it.proficiency >= Proficiency.MASTER }) {
-        "master"
+        t(Proficiency.MASTER)
     } else if (skillRanks.all { it.proficiency >= Proficiency.EXPERT }) {
-        "expert"
+        t(Proficiency.EXPERT)
     } else if (skillRanks.all { it.proficiency >= Proficiency.TRAINED }) {
-        "trained"
+        t(Proficiency.TRAINED)
     } else {
         null
     }
-    val oncePerRound = if (activity.oncePerRound) "once per turn" else null
+    val oncePerRound = if (activity.oncePerRound) t("kingdom.oncePerRound") else null
     val hints = listOfNotNull(activityHints, oncePerRound, activity.hint, proficiency).joinToString(", ")
     return if (hints.isEmpty()) {
         activity.title

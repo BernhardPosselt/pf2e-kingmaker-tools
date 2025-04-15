@@ -18,9 +18,9 @@ import at.posselt.pfrpg2e.kingdom.RawExpression
 import at.posselt.pfrpg2e.kingdom.RawIn
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -123,11 +123,12 @@ class AddModifier(
                     predicates.add(RawIn(`in` = tupleOf("@activity", arrayOf(data.activityId))))
                 }
                 val activity = activities.find { it.id == data.activityId }
+                val type = ModifierType.fromString(data.type) ?: ModifierType.UNTYPED
                 val buttonLabel = listOfNotNull(
-                    data.value.formatAsModifier() + " ${data.type.toLabel()}",
-                    data.phase?.let { "Phase: ${it.toLabel()}" },
-                    data.ability?.let { "Ability: ${it.toLabel()}" },
-                    data.skill?.let { "Skill: ${it.toLabel()}" },
+                    data.value.formatAsModifier() + " ${t(type)}",
+                    data.phase?.let{ KingdomPhase.fromString(it)}?.let { "Phase: ${t(it)}" },
+                    data.ability?.let{ KingdomAbility.fromString(it)}?.let { "Ability: ${t(it)}" },
+                    data.skill?.let{ KingdomSkill.fromString(it)}?.let { "Skill: ${t(it)}" },
                     activity?.let { "Activity: ${it.title}" },
                 ).joinToString(", ")
                 val modifier = RawModifier(

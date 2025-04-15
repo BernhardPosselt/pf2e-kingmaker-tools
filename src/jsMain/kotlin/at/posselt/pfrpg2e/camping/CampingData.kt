@@ -6,12 +6,14 @@ import at.posselt.pfrpg2e.actor.hasAttribute
 import at.posselt.pfrpg2e.camping.dialogs.RegionSetting
 import at.posselt.pfrpg2e.camping.dialogs.RegionSettings
 import at.posselt.pfrpg2e.camping.dialogs.Track
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.regions.Terrain
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
@@ -131,10 +133,15 @@ fun CampingActivity.isPrepareCampsite() =
 fun CampingActivity.isCookMeal() =
     activityId == "cook-meal"
 
-enum class CampingSheetSection {
+enum class CampingSheetSection : Translatable, ValueEnum {
     PREPARE_CAMPSITE,
     CAMPING_ACTIVITIES,
-    EATING,
+    EATING;
+
+    override val value: String
+        get() = toCamelCase()
+    override val i18nKey: String
+        get() = "campingSection.$value"
 }
 
 private const val playlistUuid = "Playlist.7CiwVus60FiuKFhK"

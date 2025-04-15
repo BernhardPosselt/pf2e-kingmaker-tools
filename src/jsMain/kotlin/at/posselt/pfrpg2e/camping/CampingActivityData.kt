@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.actor.getLoreAttributes
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.actor.Lore
 import at.posselt.pfrpg2e.data.actor.Perception
@@ -8,6 +9,8 @@ import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
+import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import kotlinx.js.JsPlainObject
@@ -88,11 +91,17 @@ fun ModifyEncounterDc.atTime(isDay: Boolean) =
         night
     }
 
-enum class DcType {
+enum class DcType: ValueEnum, Translatable {
     ZONE,
     ACTOR_LEVEL,
     NONE,
-    STATIC
+    STATIC;
+
+    override val value: String
+        get() = toCamelCase()
+
+    override val i18nKey: String
+        get() = "campingActivityDcType.$value"
 }
 
 data class ParsedCampingSkill(

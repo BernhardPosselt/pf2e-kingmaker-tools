@@ -5,7 +5,8 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.kingdom.data.RawCommodities
 import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
-import at.posselt.pfrpg2e.toLabel
+import at.posselt.pfrpg2e.kingdom.sheet.Turn
+import at.posselt.pfrpg2e.utils.t
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -34,14 +35,14 @@ external interface CommoditiesContext {
     val capacity: CapacityContext
 }
 
-fun RawCommodities.toContext(round: String, capacity: CommodityStorage) =
+fun RawCommodities.toContext(round: Turn, capacity: CommodityStorage) =
     CommodityContext(
         food = Select.range(
             from = 0,
             to = capacity.food,
             value = food,
-            name = "commodities.$round.food",
-            label = if (round == "now") "Food" else round.toLabel(),
+            name = "commodities.${round.value}.food",
+            label = if (round == Turn.NOW) "Food" else t(round),
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
             stacked = false,
@@ -50,8 +51,8 @@ fun RawCommodities.toContext(round: String, capacity: CommodityStorage) =
             from = 0,
             to = capacity.lumber,
             value = lumber,
-            name = "commodities.$round.lumber",
-            label = if (round == "now") "Lumber" else round.toLabel(),
+            name = "commodities.${round.value}.lumber",
+            label = if (round == Turn.NOW) "Lumber" else t(round),
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
             stacked = false,
@@ -60,8 +61,8 @@ fun RawCommodities.toContext(round: String, capacity: CommodityStorage) =
             from = 0,
             to = capacity.luxuries,
             value = luxuries,
-            name = "commodities.$round.luxuries",
-            label = if (round == "now") "Luxuries" else round.toLabel(),
+            name = "commodities.${round.value}.luxuries",
+            label = if (round == Turn.NOW) "Luxuries" else t(round),
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
             stacked = false,
@@ -70,8 +71,8 @@ fun RawCommodities.toContext(round: String, capacity: CommodityStorage) =
             from = 0,
             to = capacity.ore,
             value = ore,
-            name = "commodities.$round.ore",
-            label = if (round == "now") "Ore" else round.toLabel(),
+            name = "commodities.${round.value}.ore",
+            label = if (round == Turn.NOW) "Ore" else t(round),
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
             stacked = false,
@@ -80,8 +81,8 @@ fun RawCommodities.toContext(round: String, capacity: CommodityStorage) =
             from = 0,
             to = capacity.stone,
             value = stone,
-            name = "commodities.$round.stone",
-            label = if (round == "now") "Stone" else round.toLabel(),
+            name = "commodities.${round.value}.stone",
+            label = if (round == Turn.NOW) "Stone" else t(round),
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
             stacked = false,
@@ -92,8 +93,8 @@ fun RawCommodities.toContext(round: String, capacity: CommodityStorage) =
 
 fun RawCurrentCommodities.toContext(capacity: CommodityStorage) =
     CommoditiesContext(
-        now = now.toContext("now", capacity),
-        next = next.toContext("next", capacity),
+        now = now.toContext(Turn.NOW, capacity),
+        next = next.toContext(Turn.NEXT, capacity),
         capacity = CapacityContext(
             ore = capacity.ore,
             food = capacity.food,

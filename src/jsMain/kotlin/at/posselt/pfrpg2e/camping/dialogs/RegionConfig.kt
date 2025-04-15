@@ -15,6 +15,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
@@ -101,7 +102,7 @@ class RegionSettingsDataModel(
 class RegionConfig(
     private val actor: CampingActor,
 ) : FormApp<RegionSettingsContext, RegionSettings>(
-    title = "Regions",
+    title = t("camping.regions"),
     width = 1200,
     template = "applications/settings/configure-regions.hbs",
     dataModel = RegionSettingsDataModel::class.js,
@@ -159,15 +160,15 @@ class RegionConfig(
             partId = parent.partId,
             isFormValid = isFormValid,
             heading = arrayOf(
-                TableHead("Name"),
-                TableHead("Level", arrayOf("number-select-heading")),
-                TableHead("Terrain"),
-                TableHead("Zone DC", arrayOf("number-select-heading")),
-                TableHead("Encounter DC", arrayOf("number-select-heading")),
-                TableHead("Roll Table"),
-                TableHead("Combat Playlist"),
-                TableHead("Combat Track"),
-                TableHead("Remove", arrayOf("small-heading"))
+                TableHead(t("applications.name")),
+                TableHead(t("applications.level"), arrayOf("number-select-heading")),
+                TableHead(t("camping.terrain")),
+                TableHead(t("camping.zoneDc"), arrayOf("number-select-heading")),
+                TableHead(t("camping.encounterDc"), arrayOf("number-select-heading")),
+                TableHead(t("camping.rollTable")),
+                TableHead(t("camping.combatPlaylist")),
+                TableHead(t("camping.combatTrack")),
+                TableHead(t("applications.delete"), arrayOf("small-heading"))
             ),
             allowDelete = currentSettings.regions.size > 1,
             formRows = currentSettings.regions.mapIndexed { index, row ->
@@ -178,7 +179,7 @@ class RegionConfig(
                 arrayOf(
                     TextInput(
                         name = "regions.$index.name",
-                        label = "Name",
+                        label = t("applications.name"),
                         value = row.name,
                         hideLabel = true
                     ).toContext(),
@@ -194,19 +195,19 @@ class RegionConfig(
                     ).toContext(),
                     Select.dc(
                         name = "regions.$index.zoneDc",
-                        label = "Zone DC",
+                        label = t("camping.zoneDc"),
                         value = row.zoneDc,
                         hideLabel = true
                     ).toContext(),
                     Select.flatCheck(
                         name = "regions.$index.encounterDc",
-                        label = "Encounter DC",
+                        label = t("camping.encounterDc"),
                         value = row.encounterDc,
                         hideLabel = true,
                     ).toContext(),
                     Select(
                         name = "regions.$index.rollTableUuid",
-                        label = "Roll Table",
+                        label = t("camping.rollTable"),
                         value = row.rollTableUuid,
                         required = false,
                         hideLabel = true,
@@ -214,7 +215,7 @@ class RegionConfig(
                     ).toContext(),
                     Select(
                         name = "regions.$index.combatTrack.playlistUuid",
-                        label = "Combat Playlist",
+                        label = t("camping.combatPlaylist"),
                         value = row.combatTrack?.playlistUuid,
                         required = false,
                         hideLabel = true,
@@ -222,7 +223,7 @@ class RegionConfig(
                     ).toContext(),
                     Select(
                         name = "regions.$index.combatTrack.trackUuid",
-                        label = "Combat Track",
+                        label = t("camping.combatTrack"),
                         value = row.combatTrack?.trackUuid,
                         required = false,
                         hideLabel = true,
@@ -249,7 +250,7 @@ class RegionConfig(
 
     private fun addDefaultRegion() {
         currentSettings.regions = currentSettings.regions + RegionSetting(
-            name = "New Region",
+            name = t("camping.newRegion"),
             zoneDc = 15,
             encounterDc = 12,
             level = 1,

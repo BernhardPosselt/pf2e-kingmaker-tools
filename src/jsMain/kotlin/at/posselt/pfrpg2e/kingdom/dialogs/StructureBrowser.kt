@@ -11,6 +11,7 @@ import at.posselt.pfrpg2e.app.forms.RangeInput
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
@@ -25,10 +26,11 @@ import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.unslugify
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -43,7 +45,7 @@ import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
-enum class StructureBrowserNav {
+enum class StructureBrowserNav : Translatable, ValueEnum {
     BUILDABLE,
     REPAIRABLE,
     UPGRADEABLE,
@@ -53,11 +55,11 @@ enum class StructureBrowserNav {
         fun fromString(value: String) = fromCamelCase<StructureBrowserNav>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "structureBrowserNav.$value"
 }
 
 @Suppress("unused")
@@ -140,14 +142,14 @@ class StructureBrowserDataModel(
             array("mainFilters") {
                 schema {
                     boolean("enabled")
-                    enum<MainFilters>("id")
+                    enum<MainFilter>("id")
                 }
             }
         }
     }
 }
 
-enum class MainFilters {
+enum class MainFilter : Translatable, ValueEnum {
     IGNORE_PROFICIENCY,
     IGNORE_BUILDING_COST,
     REDUCES_RUIN,
@@ -162,14 +164,14 @@ enum class MainFilters {
     UPGRADEABLE;
 
     companion object {
-        fun fromString(value: String) = fromCamelCase<MainFilters>(value)
+        fun fromString(value: String) = fromCamelCase<MainFilter>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "structureBrowserMainFilters.$value"
 }
 
 private enum class Cost {
@@ -203,7 +205,7 @@ class StructureBrowser(
     var maxLots = 4
     var maxLevel = kingdom.level
     var search: String? = null
-    var mainFilters = setOf<MainFilters>()
+    var mainFilters = setOf<MainFilter>()
     var activityFilters = setOf<String>()
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -300,7 +302,7 @@ class StructureBrowser(
             Cost.HALF -> structures.map { it.copy(notes = null, construction = it.construction.halveCost()) }
             Cost.FULL -> structures.map { it.copy(notes = null) }
             Cost.FREE -> structures.map { it.copy(notes = null, construction = it.construction.free()) }
-        }.filter { s -> filters.all { it(s) } && s.id != "rubble"}
+        }.filter { s -> filters.all { it(s) } && s.id != "rubble" }
     }
 
     override fun _preparePartContext(
@@ -318,10 +320,10 @@ class StructureBrowser(
         val filters = buildList<StructureFilter> {
             add { s -> s.lots >= minLots && s.lots <= maxLots && s.level <= maxLevel }
             search?.let { add { s -> it.lowercase() in s.name.lowercase() } }
-            if (MainFilters.IGNORE_PROFICIENCY !in mainFilters) {
+            if (MainFilter.IGNORE_PROFICIENCY !in mainFilters) {
                 add { canBuild(it, increaseSkills) }
             }
-            if (MainFilters.IGNORE_BUILDING_COST !in mainFilters) {
+            if (MainFilter.IGNORE_BUILDING_COST !in mainFilters) {
                 val now = kingdom.commodities.now
                 add {
                     it.construction.hasFunds(
@@ -333,34 +335,34 @@ class StructureBrowser(
                     )
                 }
             }
-            if (MainFilters.REDUCES_RUIN in mainFilters) {
+            if (MainFilter.REDUCES_RUIN in mainFilters) {
                 add { it.reducesRuin }
             }
-            if (MainFilters.REDUCES_UNREST in mainFilters) {
+            if (MainFilter.REDUCES_UNREST in mainFilters) {
                 add { it.reducesUnrest }
             }
-            if (MainFilters.REDUCES_CONSUMPTION in mainFilters) {
+            if (MainFilter.REDUCES_CONSUMPTION in mainFilters) {
                 add { it.consumptionReduction > 0 }
             }
-            if (MainFilters.HOUSING in mainFilters) {
+            if (MainFilter.HOUSING in mainFilters) {
                 add { StructureTrait.RESIDENTIAL in it.traits }
             }
-            if (MainFilters.DOWNTIME in mainFilters) {
+            if (MainFilter.DOWNTIME in mainFilters) {
                 add { it.affectsDowntime }
             }
-            if (MainFilters.SHOPPING in mainFilters) {
+            if (MainFilter.SHOPPING in mainFilters) {
                 add { it.availableItemsRules.isNotEmpty() }
             }
-            if (MainFilters.AFFECTS_EVENTS in mainFilters) {
+            if (MainFilter.AFFECTS_EVENTS in mainFilters) {
                 add { it.affectsEvents }
             }
-            if (MainFilters.INCREASES_CAPACITY in mainFilters) {
+            if (MainFilter.INCREASES_CAPACITY in mainFilters) {
                 add { it.storage.isNotEmpty() }
             }
-            if (MainFilters.CHEAPER_WHEN_UPGRADED in mainFilters) {
+            if (MainFilter.CHEAPER_WHEN_UPGRADED in mainFilters) {
                 add { it.upgradeFrom.isNotEmpty() }
             }
-            if (MainFilters.UPGRADEABLE in mainFilters) {
+            if (MainFilter.UPGRADEABLE in mainFilters) {
                 add { it.id in structuresUpgradedFrom }
             }
             addAll(activityStructureFilters)
@@ -445,7 +447,7 @@ class StructureBrowser(
         val buildable = buildableStructures.size
         val upgradeable = upgradeableStructures.size
         val free = freeStructures.size
-        val mainFilters = MainFilters.entries.flatMapIndexed { index, it ->
+        val mainFilters = MainFilter.entries.flatMapIndexed { index, it ->
             listOf(
                 HiddenInput(
                     name = "mainFilters.$index.id",
@@ -453,7 +455,7 @@ class StructureBrowser(
                 ).toContext(),
                 CheckboxInput(
                     name = "mainFilters.$index.enabled",
-                    label = it.label,
+                    label = t(it),
                     value = it in mainFilters,
                 ).toContext()
             )
@@ -479,9 +481,9 @@ class StructureBrowser(
         val nav = createTabs<StructureBrowserNav>("change-nav", currentNav)
             .map {
                 when (it.link) {
-                    StructureBrowserNav.BUILDABLE.value -> it.copy(label = "${it.label} ($buildable)")
-                    StructureBrowserNav.UPGRADEABLE.value -> it.copy(label = "${it.label} ($upgradeable)")
-                    StructureBrowserNav.FREE.value -> it.copy(label = "${it.label} ($free)")
+                    StructureBrowserNav.BUILDABLE.value -> it.copy(label = "${t(StructureBrowserNav.BUILDABLE)} ($buildable)")
+                    StructureBrowserNav.UPGRADEABLE.value -> it.copy(label = "${t(StructureBrowserNav.UPGRADEABLE)} ($upgradeable)")
+                    StructureBrowserNav.FREE.value -> it.copy(label = "${t(StructureBrowserNav.FREE)} ($free)")
                     else -> it
                 }
             }
@@ -523,7 +525,7 @@ class StructureBrowser(
         search = value.search
         mainFilters = value.mainFilters
             .filter { it.enabled }
-            .mapNotNull { MainFilters.fromString(it.id) }
+            .mapNotNull { MainFilter.fromString(it.id) }
             .toSet()
         activityFilters = value.activityFilters
             .filter { it.enabled }

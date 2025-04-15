@@ -4,11 +4,22 @@ import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.camping.getActiveCamping
 import at.posselt.pfrpg2e.camping.getAveragePartyLevel
 import at.posselt.pfrpg2e.data.checks.RollMode
-import at.posselt.pfrpg2e.data.regions.*
+import at.posselt.pfrpg2e.data.regions.Climate
+import at.posselt.pfrpg2e.data.regions.Month
+import at.posselt.pfrpg2e.data.regions.Season
+import at.posselt.pfrpg2e.data.regions.WeatherEffect
+import at.posselt.pfrpg2e.data.regions.WeatherType
+import at.posselt.pfrpg2e.data.regions.findWeatherType
+import at.posselt.pfrpg2e.data.regions.getMonth
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.utils.*
+import at.posselt.pfrpg2e.utils.DieValue
+import at.posselt.pfrpg2e.utils.d20Check
+import at.posselt.pfrpg2e.utils.getCurrentMonth
+import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.rollWithCompendiumFallback
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.TableMessageOptions
 import js.objects.recordOf
@@ -30,10 +41,11 @@ private suspend fun rollWeatherEvent(
     maximumRange: Int,
     rollMode: RollMode,
 ) {
-    val tableName = Config.rollTables.weather
+    val tableName = "Weather Events"
+    val uuid = game.tables.find { it.name == tableName }?.uuid
     val result = game.rollWithCompendiumFallback(
-        tableName = tableName,
-        fallbackName = tableName,
+        uuid = uuid,
+        compendiumUuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-rolltables.RollTable.LFhri3HZpH7j8QpV",
         rollMode = rollMode,
         displayChat = false
     )

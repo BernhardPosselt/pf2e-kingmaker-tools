@@ -26,6 +26,7 @@ import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.fromUuidsOfTypes
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -43,6 +44,7 @@ import js.array.toTypedArray
 import js.core.Void
 import js.objects.Record
 import js.objects.jso
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -131,7 +133,7 @@ class CampingSettingsApplication(
     private val game: Game,
     private val campingActor: CampingActor,
 ) : FormApp<CampingSettingsContext, CampingSettings>(
-    title = "Camping Settings",
+    title = t("camping.settings"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = CampingSettingsDataModel::class.js,
@@ -188,33 +190,33 @@ class CampingSettingsApplication(
             isFormValid = isFormValid,
             sections = formContext(
                 Section(
-                    legend = "Exploration",
+                    legend = t("camping.exploration"),
                     formRows = listOf(
                         Select(
-                            label = "Hexploration Scene",
+                            label = t("camping.hexplorationScene"),
                             name = "worldSceneId",
-                            help = "Store party actor token positions on this map each time you Prepare Campsite to reuse camp locations",
+                            help = t("camping.hexplorationSceneHelp"),
                             options = hexScenes,
                             required = false,
                             value = settings.worldSceneId,
                             stacked = false,
                         ),
                         Menu(
-                            label = "Camping Positions",
-                            name = "Reset",
+                            label = t("camping.campingPositions"),
+                            name = t("camping.reset"),
                             value = "reset-camping-positions",
                             disabled = settings.worldSceneId == null,
                         ),
                         NumberInput(
                             name = "minimumTravelSpeed",
-                            label = "Minimum Travel Speed",
+                            label = t("camping.minimumTravelSpeed"),
                             value = settings.minimumTravelSpeed ?: 0,
-                            help = "If PCs use horses, use 40",
+                            help = t("camping.minimumTravelSpeedHelp"),
                             stacked = false,
                         ),
                         Select.fromEnum<RollMode>(
                             name = "randomEncounterRollMode",
-                            label = "Random Encounter Roll Mode",
+                            label = t("camping.randomEncounterRollMode"),
                             value = fromCamelCase<RollMode>(settings.randomEncounterRollMode),
                             labelFunction = { it.label },
                             stacked = false,
@@ -222,73 +224,73 @@ class CampingSettingsApplication(
                         Select(
                             name = "proxyRandomEncounterTableUuid",
                             value = settings.proxyRandomEncounterTableUuid,
-                            label = "Proxy Random Encounter Table",
+                            label = t("camping.proxyRandomEncounterTableUuid"),
                             required = false,
                             options = game.tables.contents.mapNotNull { it.toOption(useUuid = true) },
-                            help = "Custom Roll Table; use 'Creature' text result to roll on the default random encounter table",
+                            help = t("camping.proxyRandomEncounterTableUuidHelp"),
                             stacked = false,
                         ),
                     )
                 ),
                 Section(
-                    legend = "Activities",
+                    legend = t("camping.activities"),
                     formRows = listOf(
                         CheckboxInput(
                             name = "ignoreSkillRequirements",
-                            label = "Do not validate activity skill proficiency",
+                            label = t("camping.ignoreSkillRequirements"),
                             value = settings.ignoreSkillRequirements,
                         ),
                         Select(
                             name = "huntAndGatherTargetActorUuid",
                             value = settings.huntAndGatherTargetActorUuid,
-                            label = "Add Ingredients from Hunt and Gather to",
+                            label = t("camping.huntAndGatherTargetActorUuid"),
                             required = false,
                             options = huntAndGatherUuids,
-                            help = "Default is the actor performing the activity",
+                            help = t("camping.huntAndGatherTargetActorUuidHelp"),
                             stacked = false,
                         ),
                     )
                 ),
                 Section(
-                    legend = "Always Performed Activities",
+                    legend = t("camping.alwaysPerformedActivities"),
                     formRows = companionActivities.map { (id, label) ->
                         CheckboxInput(
                             label = label,
                             name = "alwaysPerformActivities.$id",
                             value = settings.alwaysPerformActivities.contains(id),
                             stacked = false,
-                            help = "Activity will be hidden from list of activities and will be automatically enabled"
+                            help = t("camping.alwaysPerformActivities")
                         )
                     }
                 ),
                 Section(
-                    legend = "Cooking",
+                    legend = t("camping.cooking"),
                     formRows = listOf(
                         NumberInput(
                             name = "minimumSubsistence",
-                            label = "Minimum Subsistence",
-                            help = "Gain this many provisions after resting",
+                            label = t("camping.minimumSubsistence"),
+                            help = t("camping.minimumSubsistenceHelp"),
                             value = settings.minimumSubsistence,
                             stacked = false,
                         ),
                     )
                 ),
                 Section(
-                    legend = "Resting",
+                    legend = t("camping.resting"),
                     formRows = listOf(
                         Select(
-                            "Playlist",
+                            label = t("camping.playlist"),
                             name = "restingPlaylistUuid",
                             value = playlist?.uuid,
                             required = false,
                             stacked = false,
-                            help = "Played when resting. Make sure to select a track and change the Playback Mode to Soundboard Only to only play it once.",
+                            help = t("camping.playlistHelp"),
                             options = game.playlists.contents
                                 .sortedBy { it.name }
                                 .mapNotNull { it.toOption(useUuid = true) },
                         ),
                         Select(
-                            "Playlist Track",
+                            label = t("camping.playlistTrack"),
                             name = "restingPlaylistSoundUuid",
                             value = playlistSound?.uuid,
                             required = false,
@@ -298,27 +300,27 @@ class CampingSettingsApplication(
                         ),
                         NumberInput(
                             name = "gunsToClean",
-                            label = "Guns To Clean",
+                            label = t("camping.gunsToClean"),
                             value = settings.gunsToClean,
                             stacked = false,
-                            help = "Up to 4 guns can be cleaned in an hour during Daily Preparations. If you go over 4 guns, Daily Preparations will take an additional hour for every set of 4 guns rounded up."
+                            help = t("camping.gunsToCleanHelp")
                         ),
                         NumberInput(
                             name = "increaseWatchActorNumber",
-                            label = "Increase Actors Keeping Watch",
+                            label = t("camping.increaseWatchActorNumber"),
                             value = settings.increaseWatchActorNumber,
                             stacked = false,
                         ),
                         Select.fromEnum<RestRollMode>(
                             name = "restRollMode",
-                            label = "Roll Random Encounter During Rest",
+                            label = t("camping.restRollMode"),
                             value = fromCamelCase<RestRollMode>(settings.restRollMode),
                             stacked = false,
                         ),
                         *actors.mapIndexed { index, actor ->
                             CheckboxInput(
                                 name = "actorUuidsNotKeepingWatch.${actor.uuid}",
-                                label = "Skip Watch: ${actor.name}",
+                                label = t("camping.actorSkipWatch", recordOf("actorName" to actor.name)),
                                 value = uuidsNotKeepingWatch.contains(actor.uuid),
                             )
                         }.toTypedArray()
@@ -384,7 +386,7 @@ class CampingSettingsApplication(
                 settings.worldSceneId
                     ?.let { worldSceneId -> game.scenes.get(worldSceneId) }
                     ?.let { scene ->
-                        if (confirm("${scene.name}: Reset all Camping Positions?")) {
+                        if (confirm(t("camping.confirmResetCampingPositions", recordOf("sceneName" to scene.name)))) {
                             scene.resetCampsites()
                         }
                     }

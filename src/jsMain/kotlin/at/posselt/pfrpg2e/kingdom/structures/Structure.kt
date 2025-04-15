@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.unsetAppFlag
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
@@ -53,7 +54,7 @@ fun StructureActor.getRawResolvedStructureData(): RawStructureData? {
     if (data == null) return null
     return if (isStructureRef(data)) {
         translatedStructures.find { it.id == data.ref }
-            ?: throw StructureParsingException("Could not find existing structure with ref ${data.ref}")
+            ?: throw StructureParsingException(t("kingdom.canNotFindStructureRef", recordOf("ref" to data.ref)))
     } else {
         data.unsafeCast<RawStructureData>()
     }

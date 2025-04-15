@@ -52,6 +52,13 @@ fun Game.getRecruitableArmies(folderName: String): Array<PF2EArmy> =
         .filter { it.folder?.name == folderName }
         .toTypedArray()
 
+private val basicArmyUuids = setOf(
+    "Compendium.pf2e.kingmaker-bestiary.Actor.MN2Bw4uzDJxuIOWa",
+    "Compendium.pf2e.kingmaker-bestiary.Actor.FLmrdtZlP2LZTkyr",
+    "Compendium.pf2e.kingmaker-bestiary.Actor.rRFSwMaphI2v0CCZ",
+    "Compendium.pf2e.kingmaker-bestiary.Actor.WFKh1twN246LMp8Z"
+)
+
 suspend fun Game.importBasicArmies(folderName: String): Folder {
     val folder = Folder.create(
         recordOf(
@@ -66,7 +73,7 @@ suspend fun Game.importBasicArmies(folderName: String): Folder {
         ?.await()
         ?.asSequence()
         ?.filterIsInstance<PF2EArmy>()
-        ?.filter { it.name.startsWith("Basic") }
+        ?.filter { it.uuid in basicArmyUuids }
         ?.map {
             val obj = deepClone(it.toObject())
             val update = recordOf(

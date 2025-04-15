@@ -18,7 +18,6 @@ import at.posselt.pfrpg2e.data.actor.Skill
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.t
@@ -115,13 +114,19 @@ class SkillPickerDataModel(
     }
 }
 
+@JsPlainObject
+external interface SkillPickerDcType {
+    val value: String
+    val label: String
+}
+
 
 @JsExport
 class SkillPickerApplication(
     skills: Array<PickerSkill>,
     private val chooseOne: Boolean = false,
     private val allowLores: Boolean = false,
-    private val dcTypes: Array<String>,
+    private val dcTypes: Array<SkillPickerDcType>,
     private val afterSubmit: (skills: Array<PickerSkill>) -> Unit,
 ) : FormApp<SkillPickerContext, SkillPickerSubmitData>(
     title = if (chooseOne) t("applications.skillPicker.pickOneSkill") else t("applications.skillPicker.pickSkills"),
@@ -161,7 +166,7 @@ class SkillPickerApplication(
                     proficiency = Proficiency.UNTRAINED,
                     required = false,
                     validateOnly = false,
-                    dcType = dcTypes.first(),
+                    dcType = dcTypes.first().value,
                     dc = null,
                 )
                 validateAtLeastOnePresent(currentSkills)
@@ -271,7 +276,7 @@ class SkillPickerApplication(
                     value = skill.dcType,
                     label = t("applications.skillPicker.dcType"),
                     stacked = false,
-                    options = dcTypes.map { SelectOption(label = it.toLabel(), value = it) },
+                    options = dcTypes.map { SelectOption(label = it.label, value = it.value) },
                 ),
                 Select.dc(
                     name = "skills.$index.dc",
@@ -393,7 +398,9 @@ fun launchCampingSkillPicker(
         allowLores = true,
         chooseOne = false,
         skills = skills + anySkill,
-        dcTypes = DcType.entries.map { it.toCamelCase() }.toTypedArray(),
+        dcTypes = DcType.entries.map {
+            SkillPickerDcType(value=it.value, label=t(it))
+        }.toTypedArray(),
         afterSubmit = {
             afterSubmit(
                 it.map {

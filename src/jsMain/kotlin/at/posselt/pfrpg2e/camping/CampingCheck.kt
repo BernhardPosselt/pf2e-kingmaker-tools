@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.data.checks.getLevelBasedDC
 import at.posselt.pfrpg2e.fromOrdinal
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.postDegreeOfSuccess
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.pf2e.actions.CheckDC
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.actor.StatisticRollParameters
@@ -27,7 +28,7 @@ private external interface AskDcData {
 suspend fun askDc(activity: String): Int? =
     try {
         awaitablePrompt<AskDcData, Int>(
-            title = "$activity: Select DC",
+            title = t("camping.selectCampingActivityDc", recordOf("activityName" to activity)),
             templatePath = "components/forms/form.hbs",
             templateContext = recordOf(
                 "formRows" to formContext(Select.dc())
@@ -35,7 +36,7 @@ suspend fun askDc(activity: String): Int? =
         ) { it, _ ->
             it.dc
         }
-    } catch (e: Throwable) {
+    } catch (_: Throwable) {
         null
     }
 

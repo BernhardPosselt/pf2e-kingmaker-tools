@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.SimpleApp
+import at.posselt.pfrpg2e.data.armies.ArmyType
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
 import at.posselt.pfrpg2e.kingdom.KingdomActor
@@ -12,12 +13,12 @@ import at.posselt.pfrpg2e.kingdom.armies.isSpecial
 import at.posselt.pfrpg2e.kingdom.getActiveLeader
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.setKingdom
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.awaitAll
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.ui
@@ -80,9 +81,10 @@ private class ArmyBrowser(
             .map {
                 buildPromise {
                     val link = TextEditor.enrichHTML(buildUuid(it.uuid, it.name)).await()
+                    val type = ArmyType.fromString(it.system.traits.type) ?: ArmyType.INFANTRY
                     ArmyContext(
                         link = link,
-                        type = it.system.traits.type.toLabel(),
+                        type = t(type),
                         dc = it.system.recruitmentDC,
                         special = it.isSpecial,
                         uuid = it.uuid,

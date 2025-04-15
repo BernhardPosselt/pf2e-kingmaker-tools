@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.checks.RollMode
+import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
@@ -108,7 +109,6 @@ import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.takeIfInstance
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.TableAndDraw
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.d20Check
@@ -153,6 +153,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
+import kotlin.collections.plus
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -169,16 +170,16 @@ class KingdomSheet(
     id = "kmKingdomSheet-${actor.uuid}",
     width = 970,
     controls = arrayOf(
-        MenuControl(label = "Show Players", action = "show-players", gmOnly = true),
-        MenuControl(label = "Activities", action = "configure-activities", gmOnly = true),
-        MenuControl(label = "Charters", action = "configure-charters", gmOnly = true),
-        MenuControl(label = "Events", action = "configure-events", gmOnly = true),
-        MenuControl(label = "Feats", action = "configure-feats", gmOnly = true),
-        MenuControl(label = "Governments", action = "configure-governments", gmOnly = true),
-        MenuControl(label = "Heartlands", action = "configure-heartlands", gmOnly = true),
-        MenuControl(label = "Milestones", action = "configure-milestones", gmOnly = true),
-        MenuControl(label = "Settings", action = "settings", gmOnly = true),
-        MenuControl(label = "Help", action = "help"),
+        MenuControl(label = t("kingdom.showPlayers"), action = "show-players", gmOnly = true),
+        MenuControl(label = t("kingdom.activities"), action = "configure-activities", gmOnly = true),
+        MenuControl(label = t("kingdom.charters"), action = "configure-charters", gmOnly = true),
+        MenuControl(label = t("kingdom.events"), action = "configure-events", gmOnly = true),
+        MenuControl(label = t("kingdom.feats"), action = "configure-feats", gmOnly = true),
+        MenuControl(label = t("kingdom.governments"), action = "configure-governments", gmOnly = true),
+        MenuControl(label = t("kingdom.heartlands"), action = "configure-heartlands", gmOnly = true),
+        MenuControl(label = t("kingdom.milestones"), action = "configure-milestones", gmOnly = true),
+        MenuControl(label = t("applications.settings"), action = "settings", gmOnly = true),
+        MenuControl(label = t("applications.help"), action = "help"),
     ),
     scrollable = arrayOf(
         ".km-kingdom-sheet-sidebar-kingdom",
@@ -376,7 +377,7 @@ class KingdomSheet(
                 val kingdom = getKingdom()
                 val realm = game.getRealmData(actor, kingdom)
                 kingdom.groups = kingdom.groups + RawGroup(
-                    name = "Group Name",
+                    name = t("kingdom.groupName"),
                     negotiationDC = 10 + findKingdomSize(realm.size).controlDCModifier,
                     atWar = false,
                     relations = "none",
@@ -585,12 +586,12 @@ class KingdomSheet(
                     val rollMode = RollMode.fromString(kingdom.settings.kingdomEventRollMode)
                     val succeeded = d20Check(
                         dc = dc,
-                        flavor = "Checking for Cult Event with Flat DC $dc",
+                        flavor = t("kingdom.checkingForCultEvent", recordOf("dc" to dc)),
                         rollMode = rollMode,
                     ).degreeOfSuccess.succeeded()
                     if (succeeded) {
                         kingdom.turnsWithoutCultEvent = 0
-                        postChatMessage("Cult Event occurs, roll a Cult Event", rollMode = rollMode)
+                        postChatMessage(t("kingdom.cultEventOccurs"), rollMode = rollMode)
                     } else {
                         kingdom.turnsWithoutCultEvent += 1
                     }
@@ -604,12 +605,12 @@ class KingdomSheet(
                     val rollMode = RollMode.fromString(kingdom.settings.kingdomEventRollMode)
                     val succeeded = d20Check(
                         dc = dc,
-                        flavor = "Checking for Kingdom Event with Flat DC $dc",
+                        flavor = t("kingdom.checkingForKingdomEvent", recordOf("dc" to dc)),
                         rollMode = rollMode,
                     ).degreeOfSuccess.succeeded()
                     if (succeeded) {
                         kingdom.turnsWithoutEvent = 0
-                        postChatMessage("Kingdom Event occurs, roll a Kingdom Event", rollMode = rollMode)
+                        postChatMessage(t("kingdom.kingdomEventOccurs"), rollMode = rollMode)
                     } else {
                         kingdom.turnsWithoutEvent += 1
                     }
@@ -620,12 +621,12 @@ class KingdomSheet(
             "roll-cult-event" -> buildPromise {
                 val kingdom = getKingdom()
                 val uuid = kingdom.settings.kingdomCultTable
-                val rollMode = game.settings.pfrpg2eKingdomCampingWeather.getKingdomEventRollMode()
+                val rollMode = kingdom.settings.kingdomEventRollMode
+                    .let { RollMode.fromString(it) } ?: RollMode.GMROLL
                 val result = game.rollWithCompendiumFallback(
-                    tableName = "Random Cult Events",
                     rollMode = rollMode,
                     uuid = uuid,
-                    forceCompendiumIfNoUuid = true,
+                    compendiumUuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-rolltables.RollTable.aYQXu2GwIf5gdyQa",
                 )
                 postAddToOngoingEvents(result, rollMode, kingdom)
             }
@@ -633,12 +634,12 @@ class KingdomSheet(
             "roll-event" -> buildPromise {
                 val kingdom = getKingdom()
                 val uuid = kingdom.settings.kingdomEventsTable
-                val rollMode = game.settings.pfrpg2eKingdomCampingWeather.getKingdomEventRollMode()
+                val rollMode = kingdom.settings.kingdomEventRollMode
+                    .let { RollMode.fromString(it) } ?: RollMode.GMROLL
                 val result = game.rollWithCompendiumFallback(
-                    tableName = "Random Kingdom Events",
                     rollMode = rollMode,
                     uuid = uuid,
-                    forceCompendiumIfNoUuid = true,
+                    compendiumUuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-rolltables.RollTable.ZXk2yVZH7JMswXbD",
                 )
                 postAddToOngoingEvents(result, rollMode, kingdom)
             }
@@ -713,7 +714,7 @@ class KingdomSheet(
                     kingdom.modifiers = kingdom.modifiers + RawModifier(
                         id = v4(),
                         turns = 2,
-                        name = "Claimed Refuge",
+                        name = "kingdom.claimedRefuge",
                         type = ModifierType.CIRCUMSTANCE.value,
                         value = 2,
                         enabled = true,
@@ -738,7 +739,7 @@ class KingdomSheet(
                     kingdom.modifiers = kingdom.modifiers + RawModifier(
                         id = v4(),
                         turns = 2,
-                        name = "Claimed Landmark",
+                        name = "kingdom.claimedLandmark",
                         type = ModifierType.CIRCUMSTANCE.value,
                         value = 2,
                         enabled = true,
@@ -768,7 +769,7 @@ class KingdomSheet(
             "gain-fame" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     kingdom.fame.now = (kingdom.fame.now + 1).coerceIn(0, kingdom.settings.maximumFamePoints)
-                    postChatMessage("Gaining 1 Fame")
+                    postChatMessage(t("kingdom.gaining1Fame"))
                     actor.setKingdom(kingdom)
                 }
             }
@@ -887,10 +888,10 @@ class KingdomSheet(
                 actor.getKingdom()?.let { kingdom ->
                     val succeeded = d20Check(
                         dc = 11,
-                        flavor = "Trying to reduce unrest on a Flat Check 11",
+                        flavor = t("kingdom.skipCollectTaxesCheck"),
                     ).degreeOfSuccess.succeeded()
                     if (succeeded && kingdom.unrest > 0) {
-                        postChatMessage("Reducing Unrest by 1")
+                        postChatMessage(t("kingdom.reducing1Unrest"))
                         kingdom.unrest = (kingdom.unrest - 1).coerceIn(0, Int.MAX_VALUE)
                     }
                     actor.setKingdom(kingdom)
@@ -987,14 +988,19 @@ class KingdomSheet(
             ?.let { kingdom.getEvent(it) }
             ?.let { event ->
                 val modifier = event.modifier
+                val traits = event.traits.mapNotNull { KingdomEventTrait.fromString(it) }
                 val stages = event.stages.map {
+                    val leader = Leader.fromString(it.leader) ?: Leader.RULER
                     val criticalSuccess = enrichHtml(it.criticalSuccess?.msg ?: "")
                     val success = enrichHtml(it.success?.msg ?: "")
                     val failure = enrichHtml(it.failure?.msg ?: "")
                     val criticalFailure = enrichHtml(it.criticalFailure?.msg ?: "")
                     recordOf(
-                        "leader" to it.leader.toLabel(),
-                        "skills" to it.skills.map { it.toLabel() }.toTypedArray(),
+                        "leader" to t(leader),
+                        "skills" to it.skills
+                            .mapNotNull { KingdomSkill.fromString(it) }
+                            .map { t(it) }
+                            .toTypedArray(),
                         "criticalSuccess" to criticalSuccess,
                         "success" to success,
                         "failure" to failure,
@@ -1008,7 +1014,7 @@ class KingdomSheet(
                         "actorUuid" to actor.uuid,
                         "eventId" to event.id,
                         "label" to event.name + if (modifier != null && modifier != 0) " (${modifier.formatAsModifier()})" else "",
-                        "traits" to event.traits.map { it.toLabel() }.toTypedArray(),
+                        "traits" to traits.map { t(it) }.toTypedArray(),
                         "location" to event.location,
                         "special" to event.special,
                         "description" to description,
@@ -1022,7 +1028,7 @@ class KingdomSheet(
 
     suspend fun importStructures() {
         if (game.importStructures().isNotEmpty()) {
-            ui.notifications.info("Imported Structures into Structures folder")
+            ui.notifications.info(t("kingdom.importedStructures"))
         }
     }
 
@@ -1033,7 +1039,7 @@ class KingdomSheet(
         type: SettlementType,
     ) {
         val scene = game.importSettlementScene(
-            compendiumSceneName = "Settlement",
+            uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-settlements.Scene.XmDdx6ufrqqjhkJE",
             sceneName = sceneName,
             terrain = terrain,
             waterBorders = waterBorders,
@@ -1051,7 +1057,6 @@ class KingdomSheet(
             )
             kingdom.activeSettlement = it
             actor.setKingdom(kingdom)
-            ui.notifications.info("Imported and added ${t(type)}")
             scene.activate().await()
         }
     }
@@ -1094,7 +1099,7 @@ class KingdomSheet(
         )
         val kingdomNameInput = TextInput(
             name = "name",
-            label = "Kingdom",
+            label = t("applications.kingdom"),
             value = kingdom.name,
             elementClasses = listOf("km-width-medium"),
             labelClasses = listOf("km-slim-inputs"),
@@ -1103,7 +1108,7 @@ class KingdomSheet(
         )
         val settlementInput = Select(
             name = "activeSettlement",
-            label = "Active Settlement",
+            label = t("kingdom.activeSettlement"),
             value = kingdom.activeSettlement,
             options = settlements.allSettlements.map { SelectOption(it.name, it.id) },
             required = false,
@@ -1111,7 +1116,7 @@ class KingdomSheet(
         )
         val xpInput = NumberInput(
             name = "xp",
-            label = "XP",
+            label = t("applications.xp"),
             hideLabel = true,
             elementClasses = listOf("km-width-small", "km-slim-inputs"),
             value = kingdom.xp,
@@ -1119,7 +1124,7 @@ class KingdomSheet(
         )
         val xpThresholdInput = NumberInput(
             name = "xpThreshold",
-            label = "XP Threshold",
+            label = t("kingdom.xpThreshold"),
             hideLabel = true,
             elementClasses = listOf("km-width-small", "km-slim-inputs"),
             value = kingdom.xpThreshold,
@@ -1127,7 +1132,7 @@ class KingdomSheet(
         )
         val levelInput = Select.range(
             name = "level",
-            label = "Level",
+            label = t("applications.level"),
             value = kingdom.level,
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
@@ -1138,12 +1143,12 @@ class KingdomSheet(
         val atWarInput = CheckboxInput(
             name = "atWar",
             value = kingdom.atWar,
-            label = "At War"
+            label = t("kingdom.atWar")
         )
         val anarchyAt = calculateAnarchy(chosenFeats)
         val unrestInput = Select.range(
             name = "unrest",
-            label = "Unrest",
+            label = t("kingdom.unrest"),
             value = kingdom.unrest,
             from = 0,
             to = anarchyAt,
@@ -1154,7 +1159,7 @@ class KingdomSheet(
         val sizeInput = if (kingdom.settings.automateResources == AutomateResources.MANUAL.value) {
             NumberInput(
                 name = "size",
-                label = "Size",
+                label = t("kingdom.size"),
                 value = kingdom.size,
                 elementClasses = listOf("km-slim-inputs", "km-width-small"),
                 hideLabel = true,
@@ -1163,7 +1168,6 @@ class KingdomSheet(
         } else {
             HiddenInput(
                 name = "size",
-                label = "Size",
                 value = kingdom.size.toString(),
                 overrideType = OverrideType.NUMBER,
             )
@@ -1171,7 +1175,7 @@ class KingdomSheet(
         val supernaturalSolutionsInput = NumberInput(
             name = "supernaturalSolutions",
             value = kingdom.supernaturalSolutions,
-            label = "Supernatural Solutions",
+            label = t("kingdom.supernaturalSolutions"),
             stacked = false,
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
@@ -1179,7 +1183,7 @@ class KingdomSheet(
         val creativeSolutionsInput = NumberInput(
             name = "creativeSolutions",
             value = kingdom.creativeSolutions,
-            label = "Creative Solutions",
+            label = t("kingdom.creativeSolutions"),
             stacked = false,
             elementClasses = listOf("km-width-small"),
             labelClasses = listOf("km-slim-inputs"),
@@ -1211,7 +1215,7 @@ class KingdomSheet(
                 ?.let { KingdomSkill.fromString(it) }
             val result = Select(
                 name = "initialProficiencies.$index",
-                label = "Skill Training",
+                label = t("kingdom.skillTraining"),
                 value = proficiency?.value,
                 options = KingdomSkill.entries.filter { it == proficiency || it !in trainedSkills }
                     .map { SelectOption(value = it.value, label = t(it)) },
@@ -1267,7 +1271,7 @@ class KingdomSheet(
         )
         val activeLeaderContext = Select.fromEnum<Leader>(
             name = "activeLeader",
-            label = "Active Leader",
+            label = t("kingdom.activeLeader"),
             required = false,
             value = game.getActiveLeader(),
             labelClasses = listOf("km-slim-inputs"),
@@ -1409,10 +1413,10 @@ class KingdomSheet(
                 else -> ""
             }
             NavEntryContext(
-                label = "${it.label}$postfix",
+                label = "${t(it)}$postfix",
                 active = currentNavEntry == it,
                 link = it.value,
-                title = it.label,
+                title = t(it),
                 action = "change-nav",
             )
         }
@@ -1525,7 +1529,7 @@ class KingdomSheet(
 
 suspend fun openOrCreateKingdomSheet(game: Game, dispatcher: ActionDispatcher, actor: KingdomActor) {
     if (actor.getKingdom() == null) {
-        actor.setKingdom(createKingdomDefaults("New Kingdom"))
+        actor.setKingdom(createKingdomDefaults(t("kingdom.newKingdom")))
         openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.FwcyYZARAnOHlKkE")
     }
     KingdomSheet(game, actor, dispatcher).launch()

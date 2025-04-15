@@ -8,8 +8,8 @@ import at.posselt.pfrpg2e.camping.dialogs.TableHead
 import at.posselt.pfrpg2e.data.regions.Month
 import at.posselt.pfrpg2e.data.regions.Season
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -115,16 +115,16 @@ class ClimateConfiguration : FormApp<ClimateSettingsContext, ClimateSettings>(
             partId = parent.partId,
             isFormValid = isFormValid,
             heading = arrayOf(
-                TableHead("Month"),
-                TableHead("Season"),
-                TableHead("Cold DC", arrayOf("number-select-heading")),
-                TableHead("Precipitation DC", arrayOf("number-select-heading")),
-                TableHead("Weather Event DC", arrayOf("number-select-heading")),
+                TableHead(t("enums.month")),
+                TableHead(t("enums.season")),
+                TableHead(t("weather.coldDc"), arrayOf("number-select-heading")),
+                TableHead(t("weather.precipitationDc"), arrayOf("number-select-heading")),
+                TableHead(t("weather.weatherEventDc"), arrayOf("number-select-heading")),
             ),
             formRows = currentSettings.months.mapIndexed { index, row ->
                 val month = Month.entries[index]
                 arrayOf(
-                    month.toLabel(),
+                    t(month),
                     Select.fromEnum<Season>(
                         name = "months.$index.season",
                         value = Season.entries.find { it.toCamelCase() == row.season },
@@ -132,21 +132,21 @@ class ClimateConfiguration : FormApp<ClimateSettingsContext, ClimateSettings>(
                     ).toContext(),
                     Select.flatCheck(
                         name = "months.$index.coldDc",
-                        label = "Cold DC",
+                        label = t("weather.coldDc"),
                         value = row.coldDc,
                         hideLabel = true,
                         required = false,
                     ).toContext(),
                     Select.flatCheck(
                         name = "months.$index.precipitationDc",
-                        label = "Precipitation DC",
+                        label = t("weather.precipitationDc"),
                         value = row.precipitationDc,
                         hideLabel = true,
                         required = false,
                     ).toContext(),
                     Select.flatCheck(
                         name = "months.$index.weatherEventDc",
-                        label = "Precipitation DC",
+                        label = t("weather.weatherEventDc"),
                         value = row.weatherEventDc,
                         hideLabel = true,
                         required = false,

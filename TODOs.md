@@ -6,6 +6,5 @@
 # translations
 
 * translate code folders:
-  * settings/
-  * kingdom/
-  * camping/
+  * kingdom/dialogs
+  * kingdom/sheet/contexts

@@ -3,12 +3,14 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
 import at.posselt.pfrpg2e.kingdom.formatRequirements
-import at.posselt.pfrpg2e.toLabel
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @Suppress("unused")
@@ -64,9 +66,13 @@ fun RawGovernmentChoices.toContext(
         } else {
             null
         },
-        boosts = governmentBoosts?.joinToString(", ") { it.toLabel() } ?: "",
+        boosts = governmentBoosts
+            ?.mapNotNull { KingdomAbility.fromString(it) }
+            ?.joinToString(", ") { t(it) } ?: "",
         description = government?.description,
-        skills = government?.skillProficiencies?.joinToString(", ") { it.toLabel() } ?: "",
+        skills = government?.skillProficiencies
+            ?.mapNotNull { KingdomSkill.fromString(it) }
+            ?.joinToString(", ") { t(it) } ?: "",
         feat = feat?.name ?: "",
         featDescription = feat?.text ?: "",
         featAutomationNotes = feat?.automationNotes,

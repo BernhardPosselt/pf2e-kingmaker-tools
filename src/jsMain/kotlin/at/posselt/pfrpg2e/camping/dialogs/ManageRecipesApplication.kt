@@ -18,6 +18,7 @@ import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.AnyMutableObject
 import com.foundryvtt.core.Game
@@ -33,7 +34,7 @@ class ManageRecipesApplication(
     private val actor: CampingActor,
 ) : CrudApplication(
     id = "kmManageRecipes-${actor.uuid}",
-    title = "Manage Recipes",
+    title = t("camping.manageRecipes"),
     debug = true,
 ) {
     override fun deleteEntry(id: String) = buildPromise {
@@ -91,7 +92,7 @@ class ManageRecipesApplication(
                     val cook = tpl(
                         "components/food-cost/food-cost.hbs",
                         buildFoodCost(recipe.cookingCost(), total, foodItems).unsafeCast<AnyMutableObject>().apply {
-                            this["title"] = "Consumed"
+                            this["title"] = t("camping.consumed")
                         },
                     )
                     CrudItem(
@@ -107,7 +108,7 @@ class ManageRecipesApplication(
                         ),
                         enable = CheckboxInput(
                             value = enabled,
-                            label = "Enable",
+                            label = t("applications.enable"),
                             hideLabel = true,
                             name = "enabledIds.$id",
                             disabled = id == "basic-meal" || id == "hearty-meal",
@@ -120,11 +121,10 @@ class ManageRecipesApplication(
     }
 
     override fun getHeadings(): Promise<Array<String>> = buildPromise {
-        arrayOf("Rarity", "Level", "DC", "Cooking Cost", "Purchase Cost")
+        arrayOf(t("enums.rarity"), t("applications.level"), t("applications.dc"), t("camping.cookingCost"), t("camping.purchaseCost"))
     }
 
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {
-        console.log("saving", value)
         actor.getCamping()?.let { camping ->
             val enabledRecipes = value.enabledIds + arrayOf("hearty-meal", "basic-meal")
             camping.cooking.knownRecipes = enabledRecipes

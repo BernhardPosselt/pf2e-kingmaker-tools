@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -80,7 +81,7 @@ class ActivityEffectApplication(
     data: ActivityEffect? = null,
     private val afterSubmit: (ActivityEffect) -> Unit,
 ) : FormApp<ActivityEffectContext, ActivityEffectSubmitData>(
-    title = if (data == null) "Add Effect" else "Edit Effect",
+    title = if (data == null) t("camping.addEffect") else t("camping.editEffect"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ActivityEffectDataModel::class.js,
@@ -132,7 +133,7 @@ class ActivityEffectApplication(
             isFormValid = isFormValid,
             formRows = formContext(
                 Select(
-                    label = "Effect",
+                    label = t("camping.effect"),
                     name = "uuid",
                     stacked = false,
                     options = effects.mapNotNull { it.toOption(useUuid = true) },
@@ -140,16 +141,16 @@ class ActivityEffectApplication(
                     value = item?.uuid,
                 ),
                 Select.fromEnum<ActivityEffectTarget>(
-                    label = "Target",
+                    label = t("camping.target"),
                     name = "target",
                     stacked = false,
                     value = currentActivityEffect?.target?.let { fromCamelCase<ActivityEffectTarget>(it) }
                         ?: ActivityEffectTarget.ALL,
-                    help = "Allies excludes yourself",
+                    help = t("camping.targetHelp"),
                 ),
                 CheckboxInput(
                     name = "doublesHealing",
-                    label = "Doubles Healing",
+                    label = t("camping.doublesHealing"),
                     stacked = false,
                     value = currentActivityEffect?.doublesHealing == true,
                 )

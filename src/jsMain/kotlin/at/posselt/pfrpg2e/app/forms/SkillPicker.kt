@@ -2,12 +2,10 @@ package at.posselt.pfrpg2e.app.forms
 
 import at.posselt.pfrpg2e.app.SkillInputArrayContext
 import at.posselt.pfrpg2e.camping.CampingSkill
+import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.actor.Proficiency
-import at.posselt.pfrpg2e.toLabel
-import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
-import js.objects.Record
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -35,21 +33,6 @@ class SkillPicker(
         ).toContext()
 }
 
-fun toSkillContext(skills: Record<String, Int>, hideProficiency: Boolean = false): SkillInputContext {
-    return SkillInputContext(
-        hideProficiency = hideProficiency,
-        skills = skills.asSequence()
-            .map { (skill, rank) ->
-                SkillInputArrayContext(
-                    label = skill.toLabel(),
-                    proficiency = Proficiency.fromRank(rank).value,
-                )
-            }
-            .toList()
-            .toTypedArray()
-    )
-}
-
 fun toSkillContext(skills: Array<CampingSkill>): SkillInputContext {
     val anySkill = skills.find { it.name == "any" }
     return if (anySkill == null) {
@@ -59,8 +42,8 @@ fun toSkillContext(skills: Array<CampingSkill>): SkillInputContext {
                 .filter { it.validateOnly != true }
                 .map {
                     SkillInputArrayContext(
-                        label = it.name.toLabel(),
-                        proficiency = it.proficiency.toLabel(),
+                        label = t(Attribute.fromString(it.name)),
+                        proficiency = t(Proficiency.fromString(it.proficiency) ?: Proficiency.UNTRAINED),
                     )
                 }
                 .toTypedArray()
@@ -71,7 +54,7 @@ fun toSkillContext(skills: Array<CampingSkill>): SkillInputContext {
             skills = arrayOf(
                 SkillInputArrayContext(
                     label = t("applications.any"),
-                    proficiency = anySkill.proficiency.toLabel(),
+                    proficiency = t(Proficiency.fromString(anySkill.proficiency) ?: Proficiency.UNTRAINED),
                 )
             )
         )

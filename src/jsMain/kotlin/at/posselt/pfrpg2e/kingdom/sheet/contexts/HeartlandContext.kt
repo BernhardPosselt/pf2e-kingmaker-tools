@@ -3,9 +3,10 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.kingdom.RawHeartland
 import at.posselt.pfrpg2e.kingdom.data.RawHeartlandChoices
-import at.posselt.pfrpg2e.toLabel
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @JsPlainObject
@@ -28,6 +29,6 @@ fun RawHeartlandChoices.toContext(heartlands: List<RawHeartland>): HeartlandCont
             hideLabel = true,
         ).toContext(),
         description = heartland?.description,
-        boost = heartland?.boost?.toLabel() ?: "",
+        boost = heartland?.boost?.let { KingdomAbility.fromString(it) }?.let { t(it) } ?: "",
     )
 }

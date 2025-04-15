@@ -4,7 +4,6 @@ import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 
 enum class ModifierType : Translatable, ValueEnum {
     ABILITY,
@@ -22,9 +21,6 @@ enum class ModifierType : Translatable, ValueEnum {
 
     override val value: String
         get() = toCamelCase()
-
-    val label: String
-        get() = toLabel()
 
     override val i18nKey = "modifierType.$value"
 }

@@ -2,7 +2,6 @@ package at.posselt.pfrpg2e.app.forms
 
 import at.posselt.pfrpg2e.camping.ActivityEffect
 import at.posselt.pfrpg2e.camping.dialogs.ActivityEffectTarget
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.pf2e.item.PF2EEffect
@@ -54,7 +53,7 @@ fun toActivityEffectContext(
                 uuid = effect.uuid,
                 img = effectItem.img,
                 label = effectItem.name!!,
-                target = effect.target?.toLabel() ?: ActivityEffectTarget.ALL.toLabel(),
+                target = effect.target?.let { t(it) } ?: t(ActivityEffectTarget.ALL),
             )
         }
     }.toTypedArray()

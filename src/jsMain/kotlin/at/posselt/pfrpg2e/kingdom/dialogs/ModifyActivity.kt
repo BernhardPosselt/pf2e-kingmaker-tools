@@ -2,23 +2,27 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.SkillInputArrayContext
 import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
+import at.posselt.pfrpg2e.app.forms.SkillInputContext
 import at.posselt.pfrpg2e.app.forms.SkillPicker
 import at.posselt.pfrpg2e.app.forms.TextArea
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
-import at.posselt.pfrpg2e.app.forms.toSkillContext
+import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.activities.ActivityDcType
 import at.posselt.pfrpg2e.data.kingdom.activities.getDcType
 import at.posselt.pfrpg2e.kingdom.ActivityResult
 import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.slugify
+import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.t
@@ -251,7 +255,20 @@ class ModifyActivity(
                     stacked = false,
                 ),
                 SkillPicker(
-                    context = toSkillContext(current.skills),
+                    context = SkillInputContext(
+                        hideProficiency = false,
+                        skills = current.skills.asSequence()
+                            .mapNotNull { (skill, rank) ->
+                                KingdomSkill.fromString(skill)?.let{
+                                    SkillInputArrayContext(
+                                        label = t(it),
+                                        proficiency = t(Proficiency.fromRank(rank)),
+                                    )
+                                }
+                            }
+                            .toList()
+                            .toTypedArray()
+                    ),
                     stacked = false,
                 ),
                 TextArea(

@@ -6,8 +6,8 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSizeType
 import at.posselt.pfrpg2e.deCamelCase
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.newInstance
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.*
 import com.foundryvtt.core.abstract.DataModel
@@ -26,9 +26,6 @@ enum class SettingsScope {
 
     val value: String
         get() = toCamelCase()
-
-    val label: String
-        get() = toLabel()
 }
 
 inline fun <reified T : DataModel> Settings.registerDataModel(
@@ -204,13 +201,6 @@ object Pfrpg2eKingdomCampingWeatherSettings {
         fromCamelCase<RollMode>(game.settings.getString("weatherRollMode"))
             ?: throw IllegalStateException("Null value set for setting 'weatherRollMode'")
 
-    suspend fun setKingdomEventRollMode(value: RollMode) =
-        game.settings.setString("kingdomEventRollMode", value.toCamelCase())
-
-    fun getKingdomEventRollMode(): RollMode =
-        fromCamelCase<RollMode>(game.settings.getString("kingdomEventRollMode"))
-            ?: throw IllegalStateException("Null value set for setting 'kingdomEventRollMode'")
-
     suspend fun setEnableWeatherSoundFx(value: Boolean) =
         game.settings.setBoolean("enableWeatherSoundFx", value)
 
@@ -282,83 +272,74 @@ object Pfrpg2eKingdomCampingWeatherSettings {
         registerSimple(game.settings, nonUserVisibleSettings.booleans, hidden = true)
         game.settings.registerScalar(
             key = "hideBuiltinKingdomSheet",
-            name = "Hide PF2 System Kingdom Sheet Icon",
-            hint = "If enabled, hides the built in kingdom sheet icon on the party actor",
+            name = t("settings.hideBuiltinKingdomSheet"),
+            hint = t("settings.hideBuiltinKingdomSheetHelp"),
             default = false,
             requiresReload = true,
         )
         game.settings.registerScalar<String>(
             key = "kingdomActiveLeader",
-            name = "Actively Filtered Kingdom Leader",
+            name = t("settings.kingdomActiveLeader"),
             default = null,
             hidden = true,
             scope = SettingsScope.CLIENT,
         )
         game.settings.registerInt(
             key = "schemaVersion",
-            name = "Schema Version",
+            name = t("settings.schemaVersion"),
             hidden = true,
         )
         game.settings.registerDataModel<ClimateConfigurationDataModel>(
             key = "climate",
-            name = "Climate Settings",
+            name = t("settings.climateSettings"),
         )
         game.settings.createMenu(
             key = "climateMenu",
-            label = "Customize Climate",
-            name = "Climate",
+            label = t("settings.climateButton"),
+            name = t("settings.climate"),
             app = ClimateConfiguration::class.js,
         )
         game.settings.registerScalar(
-            name = "Enable Weather",
+            name = t("settings.enableWeather"),
             key = "enableWeather",
             default = true,
         )
         game.settings.registerScalar<Boolean>(
             key = "enableWeatherSoundFx",
-            name = "Enable Ambient Weather Sounds",
-            hint = "If enabled, will play rain and snow tracks from the official module. You can override this behavior by creating playlists named like \"weather.blizzard\" or \"weather.rain\".",
+            name = t("settings.enableWeatherSoundFx"),
+            hint = t("settings.enableWeatherSoundFxHelp"),
             default = true,
         )
         game.settings.registerScalar<Boolean>(
             key = "autoRollWeather",
-            name = "Auto Roll Weather",
-            hint = "When a new day begins (00:00), automatically roll weather",
+            name = t("settings.autoRollWeather"),
+            hint = t("settings.autoRollWeatherHelp"),
             default = true,
         )
         game.settings.registerScalar<String>(
             key = "weatherRollMode",
-            name = "Weather Roll Mode",
+            name = t("settings.weatherRollMode"),
             choices = RollMode.entries.asSequence()
-                .map { it.toCamelCase() to it.label }
+                .map { it.toCamelCase() to t(it) }
                 .toMutableRecord(),
             default = "gmroll"
         )
         game.settings.registerInt(
             key = "weatherHazardRange",
-            name = "Weather Hazard Range",
+            name = t("settings.weatherHazardRange"),
             default = 4,
-            hint = "Roll weather events up and equal to Party Level plus this value"
-        )
-        game.settings.registerScalar<String>(
-            key = "kingdomEventRollMode",
-            name = "Kingdom Event Roll Mode",
-            choices = RollMode.entries.asSequence()
-                .map { it.toCamelCase() to it.label }
-                .toMutableRecord(),
-            default = "gmroll",
-            hidden = true,
+            hint = t("settings.weatherHazardRangeHelp")
         )
         game.settings.registerScalar<Boolean>(
             key = "enableCombatTracks",
-            name = "Enable Combat Tracks",
-            hint = "If enabled, starts a combat track depending on the current region, actor or scene.",
+            name = t("settings.enableCombatTracks"),
+            hint = t("settings.enableCombatTracksHelp"),
             default = true,
         )
         game.settings.registerScalar<Boolean>(
             key = "enableTokenMapping",
-            name = "Enable Token Mapping",
-            hint = "If enabled, automatically maps token images to your bestiary browser based on the documented file structure in the manual if the official module is not enabled",
+            name = t("settings.enableTokenMapping"),
+            hint = t("settings.enableTokenMappingHelp"),
             default = true,
             requiresReload = true,
         )

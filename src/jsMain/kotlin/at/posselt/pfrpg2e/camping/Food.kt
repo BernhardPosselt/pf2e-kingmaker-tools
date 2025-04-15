@@ -11,6 +11,7 @@ import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.fromUuidsTypeSafe
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.documents.ChatMessage
@@ -290,7 +291,7 @@ private suspend fun PF2ECharacter.applyMealHealEffects(
     val totalHealing = healingFormulas.sumOf {
         roll(
             it.formula,
-            flavor = "Automatically applying healing from ${it.name}",
+            flavor = t("camping.applyingMealHealing", recordOf("recipeName" to it.name)),
             speaker = this,
         )
     }
@@ -299,7 +300,7 @@ private suspend fun PF2ECharacter.applyMealHealEffects(
     damageFormulas.forEach {
         DamageRoll(it.formula).toMessage(
             recordOf(
-                "flavor" to "Rolling damage from ${it.name}, please apply manually",
+                "flavor" to t("camping.applyingMealDamage", recordOf("recipeName" to it.name)),
                 "speaker" to ChatMessage.getSpeaker(
                     GetSpeakerOptions(
                         actor = this
@@ -314,15 +315,15 @@ private suspend fun PF2ECharacter.applyMealHealEffects(
             templateContext = recordOf(
                 "effect" to condition.name,
                 "heading" to if (condition.reduceConditions.mode == "random") {
-                    "Manually lower one of the following conditions (or choose one at random if more than one applies)"
+                    t("camping.manuallyLowerOneCondition")
                 } else {
-                    "Manually lower all of the following conditions"
+                    t("camping.manuallyLowerAllConditions")
                 },
                 "values" to listOfNotNull(
-                    condition.reduceConditions.clumsy?.takeIf { it > 0 }?.let { "Clumsy: $it" },
-                    condition.reduceConditions.enfeebled?.takeIf { it > 0 }?.let { "Enfeebled: $it" },
-                    condition.reduceConditions.drained?.takeIf { it > 0 }?.let { "Drained: $it" },
-                    condition.reduceConditions.stupefied?.takeIf { it > 0 }?.let { "Stupefied: $it" },
+                    condition.reduceConditions.clumsy?.takeIf { it > 0 }?.let { "${t("camping.clumsy")}: $it" },
+                    condition.reduceConditions.enfeebled?.takeIf { it > 0 }?.let { "${t("camping.enfeebled")}: $it" },
+                    condition.reduceConditions.drained?.takeIf { it > 0 }?.let { "${t("camping.drained")}: $it" },
+                    condition.reduceConditions.stupefied?.takeIf { it > 0 }?.let { "${t("camping.stupefied")}: $it" },
                 ).toTypedArray()
             ),
             speaker = this

@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.onRenderChatLog
@@ -17,6 +18,7 @@ import com.foundryvtt.core.ui
 import io.github.uuidjs.uuid.v4
 import js.array.tupleOf
 import js.objects.JsPlainObject
+import js.objects.recordOf
 import kotlinx.browser.document
 import kotlinx.html.org.w3c.dom.events.Event
 import kotlinx.serialization.json.Json.Default.parseToJsonElement
@@ -85,7 +87,7 @@ private val buttons = listOf(
     ChatButton("km-gain-fame-button") { game, actor, event, button ->
         actor.getKingdom()?.let { kingdom ->
             kingdom.fame.now = (kingdom.fame.now + 1).coerceIn(0, kingdom.settings.maximumFamePoints)
-            postChatMessage("Gaining 1 Fame")
+            postChatMessage(t("kingdom.gaining1Fame"))
             actor.setKingdom(kingdom)
         }
     },
@@ -99,7 +101,7 @@ private val buttons = listOf(
             checkNotNull(event) {
                 "Could not find event with index $eventIndex"
             }
-            postChatMessage("Resolved event ${event.event.name}")
+            postChatMessage(t("kingdom.resolvedEvent", recordOf("name" to event.event.name)))
             kingdom.ongoingEvents = kingdom.ongoingEvents
                 .filterIndexed { index, _ -> index != eventIndex }
                 .toTypedArray()
@@ -138,11 +140,10 @@ private val buttons = listOf(
         val jsonMod = JSON.stringify(mod)
         val results = validateUsingSchema(parsedModifierSchema, parseToJsonElement(jsonMod))
         if (results.isNotEmpty()) {
-            ui.notifications.error("Failed to validate modifier $jsonMod")
-            ui.notifications.error("Check console log for exact errors")
+            ui.notifications.error(t("kingdom.modifierValidationFailed"))
             console.error(results.toTypedArray())
         } else {
-            val parsedMod = if (mod.name == "Focused Attention") {
+            val parsedMod = if (mod.rollOptions.orEmpty().contains("focused-attention")) {
                 val leader = pickLeader()
                 mod.copy(applyIf = mod.applyIf.orEmpty() + RawEq(eq = tupleOf("@leader", leader.value)))
             } else {
@@ -151,7 +152,9 @@ private val buttons = listOf(
             actor.getKingdom()?.let { kingdom ->
                 kingdom.modifiers = kingdom.modifiers + parsedMod
                 actor.setKingdom(kingdom)
-                postChatMessage("Added modifier ${parsedMod.buttonLabel}")
+                parsedMod.buttonLabel?.let { key ->
+                    postChatMessage(t("kingdom.addedModifier", recordOf("name" to t(key))))
+                }
             }
         }
     }

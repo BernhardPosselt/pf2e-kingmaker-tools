@@ -4,7 +4,6 @@ import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.ChatMessage
@@ -38,7 +37,7 @@ suspend fun postDegreeOfSuccess(
             "isFailure" to (DegreeOfSuccess.FAILURE == degreeOfSuccess),
             "isSuccess" to (DegreeOfSuccess.SUCCESS == degreeOfSuccess),
             "isCriticalSuccess" to (DegreeOfSuccess.CRITICAL_SUCCESS == degreeOfSuccess),
-            "degree" to degreeOfSuccess.toLabel(),
+            "degree" to t(degreeOfSuccess),
             "meta" to metaHtml,
             "message" to message,
             "original" to original,

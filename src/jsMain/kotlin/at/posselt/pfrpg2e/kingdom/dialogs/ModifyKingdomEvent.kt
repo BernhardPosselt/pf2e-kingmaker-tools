@@ -2,15 +2,17 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
+import at.posselt.pfrpg2e.app.SkillInputArrayContext
 import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
+import at.posselt.pfrpg2e.app.forms.SkillInputContext
 import at.posselt.pfrpg2e.app.forms.SkillPicker
 import at.posselt.pfrpg2e.app.forms.TextArea
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
-import at.posselt.pfrpg2e.app.forms.toSkillContext
+import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.RawKingdomEvent
@@ -19,6 +21,7 @@ import at.posselt.pfrpg2e.kingdom.RawKingdomEventStage
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
@@ -192,11 +195,20 @@ class ModifyKingdomEvent(
                     stacked = false,
                 ),
                 SkillPicker(
-                    context = toSkillContext(
+                    context = SkillInputContext(
                         hideProficiency = true,
-                        skills = stage.skills
-                            .map { it to 0 }
-                            .toMutableRecord()),
+                        skills = stage.skills.asSequence()
+                            .mapNotNull { skill ->
+                                KingdomSkill.fromString(skill)?.let{
+                                    SkillInputArrayContext(
+                                        label = t(it),
+                                        proficiency = t(Proficiency.UNTRAINED),
+                                    )
+                                }
+                            }
+                            .toList()
+                            .toTypedArray()
+                    ),
                     stacked = false,
                 ),
                 TextInput(

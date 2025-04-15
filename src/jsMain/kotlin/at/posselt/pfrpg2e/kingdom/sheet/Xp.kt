@@ -7,6 +7,8 @@ import at.posselt.pfrpg2e.kingdom.data.MilestoneChoice
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.t
+import js.objects.recordOf
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -19,13 +21,13 @@ data class XpChange(
     suspend fun toChat() {
         if (addXp > 0) {
             if (gain) {
-                postChatMessage("Gaining $addXp XP!")
+                postChatMessage(t("kingdom.gainingXp", recordOf("xp" to addXp)))
             } else {
-                postChatMessage("Losing $addXp XP!")
+                postChatMessage(t("kingdom.losingXp", recordOf("xp" to addXp)))
             }
         }
         if (losingLevel) {
-            postChatMessage("Losing 1 Level!")
+            postChatMessage(t("kingdom.losingLevel"))
         }
     }
 }
@@ -82,7 +84,7 @@ suspend fun KingdomActor.levelUp() {
     getKingdom()?.let {
         it.level += 1
         it.xp = if (it.level >= 20) 0 else max(0, it.xp - it.xpThreshold)
-        postChatMessage("Leveled up to level ${it.level}")
+        postChatMessage(t("kingdom.leveledUpTo", recordOf("level" to it.level)))
         setKingdom(it)
     }
 }

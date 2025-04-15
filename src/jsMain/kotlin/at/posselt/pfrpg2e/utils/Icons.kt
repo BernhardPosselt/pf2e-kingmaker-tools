@@ -3,7 +3,6 @@ package at.posselt.pfrpg2e.utils
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.documents.Macro
@@ -41,9 +40,6 @@ enum class SheetType {
 
     val value: String
         get() = toCamelCase()
-
-    val label: String
-        get() = toLabel()
 }
 
 fun createPartyActorIcon(

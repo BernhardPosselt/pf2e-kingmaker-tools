@@ -240,12 +240,14 @@ Example:
 
 If you want to help translating this module as a Translator open an issue on GitHub with your email and language or contact me on Discord, so I can send you an invite to the project on Transifex.
 
-Don't edit the files in **lang/** directly. Every file except for **en.json** will be overridden by changes from Transifex. Instead, edit the translations in Transifex, then pull and build the project to get a preview (check out the relevant Setup section above!):
+Don't edit the files in **lang/** directly. Every file except for **en.json** will be overridden by changes from Transifex. Instead, edit the translations in Transifex.
+
+You can pull changes either by setting up the project locally (check out the relevant Setup section above!):
 
     ./gradlew txPull
     ./gradlew assemble
 
-Note that if you want to preview changes locally, you need to follow the **Setup** mentioned above.
+or by manually downloading by clicking on your language in Transifex and choosing **Download for use** ![](docs/img/transifex-download.png) Then place the downloaded file into **Data/modules/pf2e-kingmaker-tools/dist/lang/ru.json** (adjust name depending on your translation). The location of the data folder [depends on your Operating System](https://foundryvtt.com/article/user-data/). However, make sure to only perform this **on your local dev instance and not on your hosted services due to security reasons**: translations might include malicious HTML and those strings are only stripped when building the project.
 
 ### Help out as a Developer
 

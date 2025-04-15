@@ -92,9 +92,9 @@ private fun relevantUpdate(camping: CampingData, update: AnyObject): Set<String>
 
 fun checkPreActorUpdate(actor: Actor, update: AnyObject): SyncActivities? {
     val camping = actor.takeIfInstance<CampingActor>()?.getCamping() ?: return null
-    console.log("Received camping update", update)
     val updates = relevantUpdate(camping, update)
     if (updates.isEmpty()) return null
+    console.log("Received camping update", update)
     val settingsChanged = updates.intersect(settingAttributes).isNotEmpty()
     val activities = getProperty(update, campingActivitiesPath)
         ?.unsafeCast<Array<CampingActivity>>()

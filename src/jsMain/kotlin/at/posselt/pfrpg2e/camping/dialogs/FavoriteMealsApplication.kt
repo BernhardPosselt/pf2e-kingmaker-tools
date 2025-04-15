@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -68,7 +69,7 @@ class FavoriteMealsApplication(
     private val game: Game,
     private val actor: CampingActor,
 ) : FormApp<FavoriteMealContext, FavoriteMealSubmitData>(
-    title = "Favorite Meals",
+    title = t("camping.favoriteMeals"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = FavoriteMealDataModel::class.js,

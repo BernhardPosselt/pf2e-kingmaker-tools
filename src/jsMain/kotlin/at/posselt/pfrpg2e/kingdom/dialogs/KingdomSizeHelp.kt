@@ -2,8 +2,8 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 
 import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.kingdom.kingdomSizeData
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.asAnyObject
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @Suppress("unused")
@@ -34,8 +34,8 @@ suspend fun kingdomSizeHelp() {
                     val size = it.sizeFrom.toString() + if (sizeTo != null) "-$sizeTo" else ""
                     SizeContext(
                         size = size,
-                        type = it.type.toLabel(),
-                        dice = "1" + it.resourceDieSize.toLabel(),
+                        type = t(it.type),
+                        dice = "1" + t(it.resourceDieSize),
                         modifier = "+" + it.controlDCModifier,
                         storage = it.commodityCapacity.toString(),
                     )

@@ -13,6 +13,7 @@ import at.posselt.pfrpg2e.camping.isPrepareCampsite
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import js.core.Void
 import kotlin.js.Promise
@@ -22,7 +23,7 @@ class ManageActivitiesApplication(
     private val game: Game,
     private val actor: CampingActor,
 ) : CrudApplication(
-    title = "Manage Activities",
+    title = t("camping.manageActivities"),
     debug = true,
     id = "kmManageActivities-${actor.uuid}"
 ) {
@@ -72,7 +73,7 @@ class ManageActivitiesApplication(
                         additionalColumns = emptyArray(),
                         enable = CheckboxInput(
                             value = enabled,
-                            label = "Enable",
+                            label = t("applications.enable"),
                             hideLabel = true,
                             disabled = activity.isPrepareCampsite() || activity.isCookMeal(),
                             name = "enabledIds.${activity.id}",

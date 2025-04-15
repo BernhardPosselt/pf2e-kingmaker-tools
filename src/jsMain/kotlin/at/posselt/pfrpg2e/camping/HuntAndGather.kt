@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.camping
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.actor.PF2EParty
@@ -37,7 +38,7 @@ private suspend fun getHuntAndGatherQuantities(
         } else {
             1
         }
-        val specialIngredients = roll("${dice}d4", "Special Ingredients")
+        val specialIngredients = roll("${dice}d4", t("camping.specialIngredients"))
         return FoodAmount(
             basicIngredients = regionDc,
             specialIngredients = specialIngredients,
@@ -51,7 +52,7 @@ private suspend fun getHuntAndGatherQuantities(
         )
     } else {
         return FoodAmount(
-            basicIngredients = min(roll("1d4", "Basic Ingredients"), regionDc),
+            basicIngredients = min(roll("1d4", t("camping.basicIngredients")), regionDc),
             specialIngredients = 0,
             rations = 0,
         )

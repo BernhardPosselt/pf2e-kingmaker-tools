@@ -11,8 +11,8 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.data.actor.Proficiency
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.fromCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
@@ -133,8 +133,9 @@ class KingdomSkillPicker(
         val parent = super._preparePartContext(partId, context, options).await()
 
         val rows = data.skills.mapIndexed { index, skill ->
+            val label = KingdomSkill.fromString(skill.skill) ?: KingdomSkill.AGRICULTURE
             KingdomSkillPickerRow(
-                label = skill.skill.toLabel(),
+                label = t(label),
                 cells = formContext(
                     HiddenInput(
                         name = "skills.$index.skill",

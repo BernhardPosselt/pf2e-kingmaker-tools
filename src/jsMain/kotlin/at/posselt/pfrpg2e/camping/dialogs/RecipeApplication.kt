@@ -30,6 +30,7 @@ import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -39,6 +40,7 @@ import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.item.PF2EEffect
 import js.core.Void
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -184,7 +186,10 @@ class RecipeApplication(
     recipe: RecipeData? = null,
     private val afterSubmit: () -> Unit,
 ) : FormApp<RecipeContext, RecipeSubmitData>(
-    title = if (recipe == null) "Add Recipe" else "Edit Recipe: ${recipe.name}",
+    title = if (recipe == null) t("camping.addRecipe") else t(
+        "camping.editRecipe",
+        recordOf("recipeName" to recipe.name)
+    ),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = RecipeDataModel::class.js,
@@ -239,11 +244,11 @@ class RecipeApplication(
             isFormValid = isFormValid,
             sections = arrayOf(
                 SectionContext(
-                    legend = "Basic",
+                    legend = t("camping.basic"),
                     formRows = formContext(
                         TextInput(
                             stacked = false,
-                            label = "Id",
+                            label = t("applications.id"),
                             name = "id",
                             readonly = editRecipeId != null,
                             value = currentRecipe?.id ?: "",
@@ -252,15 +257,15 @@ class RecipeApplication(
                         ),
                         TextInput(
                             stacked = false,
-                            label = "Name",
+                            label = t("applications.name"),
                             name = "name",
                             value = currentRecipe?.name ?: "",
                             required = true,
                         ),
                         Select(
-                            label = "Recipe Item",
+                            label = t("camping.recipeItem"),
                             name = "uuid",
-                            help = "Needs to be an Effect Item",
+                            help = t("camping.recipeItemHelp"),
                             value = recipeItem?.uuid,
                             options = effects.mapNotNull { it.toOption(useUuid = true) },
                             stacked = false,
@@ -277,7 +282,7 @@ class RecipeApplication(
                             value = currentRecipe?.rarity?.let { fromCamelCase<Rarity>(it) } ?: Rarity.COMMON,
                         ),
                         NumberInput(
-                            label = "Coins",
+                            label = t("camping.coins"),
                             name = "coins",
                             stacked = false,
                             value = currentRecipe?.cost?.value ?: 0,
@@ -290,28 +295,28 @@ class RecipeApplication(
                     )
                 ),
                 SectionContext(
-                    legend = "Cooking",
+                    legend = t("camping.cooking"),
                     formRows = formContext(
                         Select.dc(
-                            label = "Cooking Lore DC",
+                            label = t("camping.cookingLoreDC"),
                             name = "cookingLoreDC",
                             stacked = false,
                             value = currentRecipe?.cookingLoreDC ?: 13,
                         ),
                         Select.dc(
-                            label = "Survival DC",
+                            label = t("camping.survivalDC"),
                             name = "survivalDC",
                             stacked = false,
                             value = currentRecipe?.survivalDC ?: 15,
                         ),
                         NumberInput(
-                            label = "Basic Ingredients",
+                            label = t("camping.basicIngredients"),
                             name = "basicIngredients",
                             stacked = false,
                             value = currentRecipe?.basicIngredients ?: 0,
                         ),
                         NumberInput(
-                            label = "Special Ingredients",
+                            label = t("camping.specialIngredients"),
                             name = "specialIngredients",
                             stacked = false,
                             value = currentRecipe?.specialIngredients ?: 0,
@@ -319,19 +324,19 @@ class RecipeApplication(
                     )
                 ),
                 SectionContext(
-                    legend = "Favorite Meal",
+                    legend = t("camping.favoriteMeal"),
                     formRows = favoriteMeal,
                 ),
                 SectionContext(
-                    legend = "Critical Success",
+                    legend = t("degreeOfSuccess.criticalSuccess"),
                     formRows = criticalSuccess,
                 ),
                 SectionContext(
-                    legend = "Success",
+                    legend = t("degreeOfSuccess.success"),
                     formRows = success,
                 ),
                 SectionContext(
-                    legend = "Critical Failure",
+                    legend = t("degreeOfSuccess.criticalFailure"),
                     formRows = criticalFailure,
                 ),
             )
@@ -366,7 +371,7 @@ class RecipeApplication(
             survivalDC = value.survivalDC,
             uuid = value.uuid,
             level = value.level,
-            cost = RawCost(value=value.coins, currency=value.currency),
+            cost = RawCost(value = value.coins, currency = value.currency),
             rarity = value.rarity,
             isHomebrew = true,
             criticalSuccess = toOutcome(value.criticalSuccess),
@@ -390,15 +395,15 @@ private suspend fun createMealInputs(
         ?: allEffects.firstOrNull()
     return formContext(
         TextArea(
-            label = "Message",
-            help = "If given, posted to chat after changing the meal's degree of success",
+            label = t("camping.cookingMessage"),
+            help = t("camping.cookingMessageHelp"),
             value = cookingOutcome?.message ?: "",
             required = false,
             stacked = false,
             name = "$namePrefix.message",
         ),
         Select(
-            label = "Effect",
+            label = t("camping.effect"),
             name = "$namePrefix.uuid",
             options = allEffects.mapNotNull { it.toOption(useUuid = true) },
             stacked = false,
@@ -406,26 +411,26 @@ private suspend fun createMealInputs(
             value = item?.uuid,
         ),
         CheckboxInput(
-            label = "Remove after Rest",
+            label = t("camping.removeAfterRest"),
             name = "$namePrefix.removeAfterRest",
             stacked = false,
             value = firstEffect?.removeAfterRest == true,
         ),
         CheckboxInput(
-            label = "Doubles Healing",
-            help = "Double HP regained from resting, does not stack with other effects that double healing",
+            label = t("camping.doublesHealing"),
+            help = t("camping.doublesHealingHelp"),
             name = "$namePrefix.doublesHealing",
             value = firstEffect?.doublesHealing == true,
         ),
         CheckboxInput(
-            label = "Halves Healing",
-            help = "Halves HP regained from resting, does not stack with other effects that halve healing",
+            label = t("camping.halvesHealing"),
+            help = t("camping.halvesHealingHelp"),
             name = "$namePrefix.halvesHealing",
             value = firstEffect?.halvesHealing == true,
         ),
         TextInput(
-            label = "Healing Formula",
-            help = "Restore hit points equal to this roll upon consumption",
+            label = t("camping.healFormula"),
+            help = t("camping.healFormulaHelp"),
             placeholder = "3d8",
             name = "$namePrefix.healFormula",
             value = firstEffect?.healFormula ?: "",
@@ -433,8 +438,8 @@ private suspend fun createMealInputs(
             stacked = false,
         ),
         TextInput(
-            label = "Damage Formula",
-            help = "Deal damage equal to this roll upon consumption",
+            label = t("camping.damageFormula"),
+            help = t("camping.damageFormulaHelp"),
             name = "$namePrefix.damageFormula",
             value = firstEffect?.damageFormula ?: "",
             placeholder = "3d8[poison]",
@@ -442,45 +447,45 @@ private suspend fun createMealInputs(
             stacked = false,
         ),
         Select.fromEnum<HealMode>(
-            help = "When to roll healing, damage and reduce conditions",
+            help = t("camping.healModeHelp"),
             name = "$namePrefix.healMode",
             value = firstEffect?.healMode?.let { fromCamelCase<HealMode>(it) } ?: HealMode.AFTER_CONSUMPTION,
             stacked = false,
         ),
         NumberInput(
-            label = "Reduce Clumsy By",
+            label = t("camping.reduceClumsyBy"),
             name = "$namePrefix.reduceConditions.clumsy",
             stacked = false,
             value = firstEffect?.reduceConditions?.clumsy ?: 0,
         ),
         NumberInput(
-            label = "Reduce Drained By",
+            label = t("camping.reduceDrainedBy"),
             name = "$namePrefix.reduceConditions.drained",
             stacked = false,
             value = firstEffect?.reduceConditions?.drained ?: 0,
         ),
         NumberInput(
-            label = "Reduce Enfeebled By",
+            label = t("camping.reduceEnfeebledBy"),
             name = "$namePrefix.reduceConditions.enfeebled",
             stacked = false,
             value = firstEffect?.reduceConditions?.enfeebled ?: 0,
         ),
         NumberInput(
-            label = "Reduce Stupefied By",
+            label = t("camping.reduceStupefiedBy"),
             name = "$namePrefix.reduceConditions.stupefied",
             stacked = false,
             value = firstEffect?.reduceConditions?.stupefied ?: 0,
         ),
         Select.fromEnum<ReduceConditionMode>(
-            help = "All reduces all conditions, random picks one at random if more than one applies",
+            help = t("camping.reduceConditionHelp"),
             name = "$namePrefix.reduceConditions.mode",
             value = firstEffect?.reduceConditions?.mode?.let { fromCamelCase<ReduceConditionMode>(it) }
                 ?: ReduceConditionMode.ALL,
             stacked = false,
         ),
         NumberInput(
-            label = "Rest Duration",
-            help = "Seconds to add to an individuals rest duration; can be negative",
+            label = t("camping.restDuration"),
+            help = t("camping.restDurationHelp"),
             name = "$namePrefix.changeRestDurationSeconds",
             stacked = false,
             value = firstEffect?.changeRestDurationSeconds ?: 0,

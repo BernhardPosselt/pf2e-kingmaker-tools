@@ -33,6 +33,7 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.openItem
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.without
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
@@ -45,6 +46,7 @@ import com.foundryvtt.core.documents.JournalEntryPage
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.item.PF2EEffect
 import js.core.Void
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -144,7 +146,7 @@ class ActivityApplication(
     data: CampingActivityData? = null,
     private val afterSubmit: () -> Unit,
 ) : FormApp<ActivityContext, ActivitySubmitData>(
-    title = if (data == null) "Add Activity" else "Edit Activity: ${data.name}",
+    title = if (data == null) t("camping.addActivity") else t("camping.editActivity", recordOf("activityName" to data.name)),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ActivityDataModel::class.js,
@@ -309,26 +311,26 @@ class ActivityApplication(
             isFormValid = isFormValid,
             sections = arrayOf(
                 SectionContext(
-                    legend = "Basic",
+                    legend = t("camping.basic"),
                     formRows = formContext(
                         TextInput(
                             stacked = false,
-                            label = "Id",
+                            label = t("applications.id"),
                             name = "id",
                             readonly = editActivityId != null,
                             value = currentActivity.id,
                             required = true,
-                            help = "To override an existing activity, use the same id",
+                            help = t("camping.overrideActivityHelp"),
                         ),
                         TextInput(
                             stacked = false,
-                            label = "Name",
+                            label = t("applications.name"),
                             name = "name",
                             value = currentActivity.name,
                             required = true,
                         ),
                         Select(
-                            label = "Journal",
+                            label = t("camping.journal"),
                             name = "journalUuid",
                             value = journal?.entry?.uuid,
                             required = false,
@@ -336,7 +338,7 @@ class ActivityApplication(
                             stacked = false,
                         ),
                         Select(
-                            label = "Journal Entry",
+                            label = t("camping.journalEntry"),
                             name = "journalEntryUuid",
                             required = false,
                             value = journal?.page?.uuid,
@@ -349,14 +351,14 @@ class ActivityApplication(
                             stacked = false,
                         ),
                         CheckboxInput(
-                            label = "Secret Check",
+                            label = t("camping.secretCheck"),
                             name = "isSecret",
                             value = currentActivity.isSecret ?: false,
                         ),
                     ),
                 ),
                 SectionContext(
-                    legend = "When Performed",
+                    legend = t("camping.whenPerformed"),
                     formRows = formContext(
                         *createEncounterModifierInputs(
                             dc = currentActivity.modifyRandomEncounterDc,
@@ -372,7 +374,7 @@ class ActivityApplication(
                 ),
                 SectionContext(
                     hidden = !hasCheck,
-                    legend = "Critical Success",
+                    legend = t("degreeOfSuccess.criticalSuccess"),
                     formRows = createActivityEffectInputs(
                         namePrefix = "criticalSuccess.",
                         outcome = currentActivity.criticalSuccess,
@@ -381,7 +383,7 @@ class ActivityApplication(
                 ),
                 SectionContext(
                     hidden = !hasCheck,
-                    legend = "Success",
+                    legend = t("degreeOfSuccess.success"),
                     formRows = createActivityEffectInputs(
                         namePrefix = "success.",
                         outcome = currentActivity.success,
@@ -390,7 +392,7 @@ class ActivityApplication(
                 ),
                 SectionContext(
                     hidden = !hasCheck,
-                    legend = "Failure",
+                    legend = t("degreeOfSuccess.failure"),
                     formRows = createActivityEffectInputs(
                         namePrefix = "failure.",
                         outcome = currentActivity.failure,
@@ -399,7 +401,7 @@ class ActivityApplication(
                 ),
                 SectionContext(
                     hidden = !hasCheck,
-                    legend = "Critical Failure",
+                    legend = t("degreeOfSuccess.criticalFailure"),
                     formRows = createActivityEffectInputs(
                         namePrefix = "criticalFailure.",
                         outcome = currentActivity.criticalFailure,
@@ -458,16 +460,16 @@ private fun createEncounterModifierInputs(
 ): Array<NumberInput> {
     return arrayOf(
         NumberInput(
-            label = "Day: Encounter DC Modifier",
+            label = t("camping.dayEncounterDcModifier"),
             name = "${namePrefix}modifyRandomEncounterDc.day",
-            help = "Negative values decrease the modifier",
+            help = t("camping.negativeValuesDecreaseMod"),
             value = dc?.day ?: 0,
             stacked = false,
         ),
         NumberInput(
-            label = "Night: Encounter DC Modifier",
+            label = t("camping.nightEncounterDcModifier"),
             name = "${namePrefix}modifyRandomEncounterDc.night",
-            help = "Negative values decrease the modifier",
+            help = t("camping.negativeValuesDecreaseMod"),
             value = dc?.night ?: 0,
             stacked = false,
         ),
@@ -482,7 +484,7 @@ private fun createActivityEffectInputs(
     return formContext(
         TextArea(
             name = "${namePrefix}message",
-            label = "Chat Message",
+            label = t("camping.chatMessage"),
             value = outcome?.message ?: "",
             required = false,
             stacked = false,
@@ -490,7 +492,7 @@ private fun createActivityEffectInputs(
         CheckboxInput(
             name = "${namePrefix}checkRandomEncounter",
             value = outcome?.checkRandomEncounter == true,
-            label = "Random Encounter Check",
+            label = t("camping.randomEncounterCheck"),
         ),
         *createEncounterModifierInputs(namePrefix = namePrefix, dc = outcome?.modifyRandomEncounterDc),
         ActivityEffects(

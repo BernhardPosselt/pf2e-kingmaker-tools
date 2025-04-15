@@ -1,7 +1,3 @@
-@file:Suppress(
-    "SpellCheckingInspection"
-)
-
 package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
@@ -34,7 +30,6 @@ import at.posselt.pfrpg2e.resting.getTotalRestDuration
 import at.posselt.pfrpg2e.resting.rest
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatSeconds
 import at.posselt.pfrpg2e.utils.fromDateInputString
@@ -61,6 +56,7 @@ import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.item.itemFromUuid
 import js.core.Void
 import js.objects.ReadonlyRecord
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.datetime.LocalTime
 import kotlinx.js.JsPlainObject
@@ -224,22 +220,22 @@ class CampingSheet(
     private val actor: CampingActor,
     private val dispatcher: ActionDispatcher,
 ) : FormApp<CampingSheetContext, CampingSheetFormData>(
-    title = "Camping",
+    title = t("applications.camping"),
     template = "applications/camping/camping-sheet.hbs",
     id = "kmCamping-${actor.uuid}",
     width = windowWidth,
     classes = arrayOf("km-camping-sheet"),
     controls = arrayOf(
-        MenuControl(label = "Show Players", action = "show-players", gmOnly = true),
-        MenuControl(label = "Activate", action = "activate", gmOnly = true),
-        MenuControl(label = "Reset Activities", action = "reset-activities", gmOnly = true),
-        MenuControl(label = "Reset Meals", action = "reset-meals", gmOnly = true),
-        MenuControl(label = "Favorite Meals", action = "favorite-meals", gmOnly = false),
-        MenuControl(label = "Activities", action = "configure-activities", gmOnly = true),
-        MenuControl(label = "Recipes", action = "configure-recipes", gmOnly = true),
-        MenuControl(label = "Regions", action = "configure-regions", gmOnly = true),
-        MenuControl(label = "Settings", action = "settings", gmOnly = true),
-        MenuControl(label = "Help", action = "help"),
+        MenuControl(label = t("camping.showPlayers"), action = "show-players", gmOnly = true),
+        MenuControl(label = t("camping.activate"), action = "activate", gmOnly = true),
+        MenuControl(label = t("camping.resetActivities"), action = "reset-activities", gmOnly = true),
+        MenuControl(label = t("camping.resetMeals"), action = "reset-meals", gmOnly = true),
+        MenuControl(label = t("camping.favoriteMeals"), action = "favorite-meals", gmOnly = false),
+        MenuControl(label = t("camping.activities"), action = "configure-activities", gmOnly = true),
+        MenuControl(label = t("camping.recipes"), action = "configure-recipes", gmOnly = true),
+        MenuControl(label = t("camping.regions"), action = "configure-regions", gmOnly = true),
+        MenuControl(label = t("applications.settings"), action = "settings", gmOnly = true),
+        MenuControl(label = t("applications.help"), action = "help"),
     ),
     scrollable = arrayOf(".km-camping-activities-wrapper", ".km-camping-actors"),
     renderOnSubmit = false,
@@ -312,13 +308,13 @@ class CampingSheet(
             "configure-recipes" -> ManageRecipesApplication(game, actor).launch()
             "configure-activities" -> ManageActivitiesApplication(game, actor).launch()
             "reset-activities" -> buildPromise {
-                if (confirm("Reset all camping activity results?")) {
+                if (confirm(t("camping.confirmActivityReset"))) {
                     resetActivities()
                 }
             }
 
             "reset-meals" -> buildPromise {
-                if (confirm("Reset all meal choices back to Skip Meal?")) {
+                if (confirm(t("camping.confirmMealReset"))) {
                     resetMeals()
                 }
             }
@@ -556,14 +552,14 @@ class CampingSheet(
                 data = ClearMealEffectsMessage(campingActorUuid = actor.uuid)
             )
             dispatcher.dispatch(message)
-            postChatMessage("Preparing Campsite, removing all existing Meal Effects")
+            postChatMessage(t("camping.preparingCampsite"))
             val existingCampingResult = camping.worldSceneId?.let { findExistingCampsiteResult(game, it, actor) }
             if (existingCampingResult != null
-                && confirm("Reuse existing camp (${existingCampingResult.toLabel()})?")
+                && confirm(t("camping.reuseCampsiteConfirmation", recordOf("degreeOfSuccess" to t(existingCampingResult))))
             ) {
                 camping.campingActivities
                     .find { it.activityId== activityId }?.result = existingCampingResult.toCamelCase()
-                postPassTimeMessage("Reusing a previous campsite", 1)
+                postPassTimeMessage(t("camping.reuseCampsite"), 1)
                 actor.setCamping(camping)
                 return
             }
@@ -594,7 +590,7 @@ class CampingSheet(
                     campingActorUuid = actor.uuid,
                 )
             } else if (activity.isPrepareCampsite()) {
-                postPassTimeMessage("Preparing a new campsite", 2)
+                postPassTimeMessage(t("camping.prepareNewCampsite"), 2)
             }
         }
     }
@@ -605,7 +601,7 @@ class CampingSheet(
         try {
             pickSpecialRecipe(camping = camping, partyActor = actor)
         } catch (_: Exception) {
-            ui.notifications.error("Discover Special Meal: No recipe chosen!")
+            ui.notifications.error(t("camping.noRecipeChosen"))
             null
         }
 
@@ -661,7 +657,7 @@ class CampingSheet(
 
     private suspend fun assignRecipeTo(actorUuid: String, recipeId: String) {
         if (getCampingActivityActorByUuid(actorUuid) == null) {
-            ui.notifications.error("Only Characters can consume meals")
+            ui.notifications.error(t("camping.onlyCharactersConsumeMeals"))
             return
         }
         actor.getCamping()?.let { camping ->
@@ -683,13 +679,13 @@ class CampingSheet(
             val activity = camping.getAllActivities().find { it.id == activityId }
             val activityActor = getCampingActivityCreatureByUuid(actorUuid)
             if (activityActor == null) {
-                ui.notifications.error("Only Characters can perform camping activities")
+                ui.notifications.error(t("camping.onlyCharactersCanPerformActivities"))
             } else if (activity == null) {
-                ui.notifications.error("Activity with id $activityId not found")
+                ui.notifications.error(t("camping.activityNotFound", recordOf("id" to activityId)))
             } else if (!activityActor.satisfiesAnyActivitySkillRequirement(activity, camping.ignoreSkillRequirements)) {
-                ui.notifications.error("Actor does not satisfy skill requirements to perform ${activity.name}")
+                ui.notifications.error(t("camping.actorLacksSkillRequirements", recordOf("activityName" to activity.name)))
             } else if (activity.requiresACheck() && !activityActor.hasAnyActivitySkill(activity)) {
-                ui.notifications.error("Actor does not have the required skills to perform ${activity.name}")
+                ui.notifications.error(t("camping.actorLacksSkills", recordOf("activityName" to activity.name)))
             } else {
                 camping.campingActivities =
                     camping.campingActivities.filter { it.activityId != activityId }.toTypedArray()
@@ -739,7 +735,7 @@ class CampingSheet(
             if (uuid !in camping.actorUuids) {
                 val campingActor = getCampingActorByUuid(uuid)
                 if (campingActor == null) {
-                    ui.notifications.error("Only NPCs, Characters, Loot and Vehicles can be added to the camping sheet")
+                    ui.notifications.error(t("camping.wrongActorAddedToSheet"))
                 } else {
                     camping.actorUuids = camping.actorUuids + uuid
                     camping.cooking.actorMeals = camping.cooking.actorMeals + ActorMeal(
@@ -758,7 +754,7 @@ class CampingSheet(
         if (allowedDnDItems.any { it.isInstance(document) }) {
             actor.addToInventory(document.toObject())
         } else {
-            ui.notifications.error("Unsupported Item dragged onto camping actors")
+            ui.notifications.error(t("camping.wrongItemAddedToActor"))
         }
     }
 
@@ -830,7 +826,7 @@ class CampingSheet(
             }
             .groupBy { it.chosenMeal }
         val starving = RecipeContext(
-            name = "Skip Meal",
+            name = t("camping.skipMeal"),
             targetRecipe = "nothing",
             icon = "icons/containers/kitchenware/bowl-clay-brown.webp",
             requiresCheck = false,
@@ -842,7 +838,7 @@ class CampingSheet(
         val rationActors: Array<RecipeActorContext> =
             actorsByChosenMeal["rationsOrSubsistence"]?.toTypedArray() ?: emptyArray()
         val rations = RecipeContext(
-            name = "Rations",
+            name = t("camping.rations"),
             targetRecipe = "rationsOrSubsistence",
             icon = "icons/consumables/food/berries-ration-round-red.webp",
             requiresCheck = false,
@@ -881,7 +877,7 @@ class CampingSheet(
                     consumeRationsEnabled = false,
                     actors = actorsByChosenMeal[recipe.name]?.toTypedArray() ?: emptyArray(),
                     skills = Select(
-                        label = "Selected Skill",
+                        label = t("camping.selectedSkill"),
                         name = "recipes.selectedSkill.${recipe.name}",
                         hideLabel = true,
                         options = cookingSkillOptions,
@@ -1032,7 +1028,7 @@ class CampingSheet(
             recipes = recipesContext,
             terrain = currentRegion?.terrain ?: "plains",
             region = Select(
-                label = "Region",
+                label = t("camping.region"),
                 value = currentRegion?.name,
                 options = regions.map {
                     SelectOption(label = it.name, value = it.name)
@@ -1078,7 +1074,7 @@ class CampingSheet(
             restDuration = fullRestDuration.total.label,
             restDurationLeft = fullRestDuration.left?.label,
             encounterDc = findEncounterDcModifier(camping, game.getPF2EWorldTime().time.isDay()),
-            section = section.toLabel(),
+            section = t(section),
             prepareCampSection = prepareCampSection,
             campingActivitiesSection = campingActivitiesSection,
             eatingSection = eatingSection,
@@ -1140,7 +1136,7 @@ private fun getActivitySkills(
             }
             .sortedBy { it.label }
         Select(
-            label = "Selected Skill",
+            label = t("camping.selectedSkill"),
             name = "activities.selectedSkill.${groupedActivity.data.id}",
             hideLabel = true,
             options = options,

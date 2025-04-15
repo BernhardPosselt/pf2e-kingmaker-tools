@@ -5,6 +5,8 @@ import at.posselt.pfrpg2e.app.CrudColumn
 import at.posselt.pfrpg2e.app.CrudData
 import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
+import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
+import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.getFeats
@@ -12,9 +14,9 @@ import at.posselt.pfrpg2e.kingdom.getGovernments
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.resetAbilityBoosts
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import js.core.Void
 import kotlin.js.Promise
 
@@ -90,11 +92,13 @@ class GovernmentManagement(
                         additionalColumns = arrayOf(
                             CrudColumn(
                                 escapeHtml = true,
-                                value = item.boosts.joinToString(", ") { it.toLabel() },
+                                value = item.boosts.mapNotNull { KingdomAbility.fromString(it) }
+                                    .joinToString(", ") { t(it) },
                             ),
                             CrudColumn(
                                 escapeHtml = true,
-                                value = item.skillProficiencies.joinToString(", ") { it.toLabel() },
+                                value = item.skillProficiencies.mapNotNull { KingdomSkill.fromString(it) }
+                                    .joinToString(", ") { t(it) },
                             ),
                         ),
                         enable = CheckboxInput(

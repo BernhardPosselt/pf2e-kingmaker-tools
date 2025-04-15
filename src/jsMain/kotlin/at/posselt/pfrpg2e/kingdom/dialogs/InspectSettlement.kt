@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.app.forms.HiddenInput
 import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.calculateAvailableItems
@@ -19,8 +20,8 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.unslugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
@@ -123,7 +124,7 @@ class InspectSettlementDataModel(
 }
 
 @Suppress("unused")
-enum class SettlementNav {
+enum class SettlementNav: Translatable, ValueEnum {
     STATUS,
     SHOPPING,
     STRUCTURES,
@@ -135,11 +136,11 @@ enum class SettlementNav {
         fun fromString(value: String) = fromCamelCase<SettlementNav>(value)
     }
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
 
-    val label: String
-        get() = toLabel()
+    override val i18nKey: String
+        get() = "settlementNav.$value"
 }
 
 

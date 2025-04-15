@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.kingdom.resources.calculateIncome
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @Suppress("unused")
@@ -34,7 +35,7 @@ suspend fun collectResources(
         resourceDice = resourceDice,
         increaseGainedLuxuries = increaseGainedLuxuries,
     )
-    val rolledRp = roll(income.resourcePointsFormula, flavor = "Gaining Resource Points")
+    val rolledRp = roll(income.resourcePointsFormula, flavor = t("kingdom.gainingResourcePoints"))
     postChatTemplate(
         templatePath = "chatmessages/collect-resources.hbs",
         templateContext = CollectResources(

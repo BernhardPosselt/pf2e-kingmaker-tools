@@ -18,7 +18,6 @@ import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.lowercaseFirst
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.toLabel
 import at.posselt.pfrpg2e.uppercaseFirst
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.roll
@@ -35,24 +34,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.math.abs
 
-enum class Turn : Translatable {
-    NOW,
-    NEXT;
-
-    companion object {
-        fun fromString(value: String) = fromCamelCase<Turn>(value)
-    }
-
-    override val i18nKey = "resourceButton.turn.$value"
-
-    val value: String
-        get() = toCamelCase()
-
-    val label: String
-        get() = toLabel()
-}
-
-enum class ResourceMode : Translatable {
+enum class ResourceMode : Translatable, ValueEnum {
     GAIN,
     LOSE;
 
@@ -62,11 +44,8 @@ enum class ResourceMode : Translatable {
 
     override val i18nKey = "resourceButton.mode.$value"
 
-    val value: String
+    override val value: String
         get() = toCamelCase()
-
-    val label: String
-        get() = toLabel()
 }
 
 enum class Resource : Translatable, ValueEnum {

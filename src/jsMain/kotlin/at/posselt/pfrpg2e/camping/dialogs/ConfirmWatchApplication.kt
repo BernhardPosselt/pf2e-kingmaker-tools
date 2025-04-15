@@ -11,6 +11,7 @@ import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCampingActorsByUuid
 import at.posselt.pfrpg2e.resting.getTotalRestDuration
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -18,6 +19,7 @@ import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.pf2e.actor.PF2EActor
 import js.core.Void
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -63,7 +65,7 @@ class ConfirmWatchApplication(
         checkRandomEncounter: Boolean
     ) -> Unit,
 ) : FormApp<ConfirmWatchContext, ConfirmWatchData>(
-    title = "Begin Rest",
+    title = t("camping.beginRest"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ConfirmWatchDataModel::class.js,
@@ -107,26 +109,26 @@ class ConfirmWatchApplication(
         ConfirmWatchContext(
             partId = parent.partId,
             isFormValid = isFormValid,
-            saveLabel = "Rest: $calculateWatch",
+            saveLabel = t("camping.confirmRest", recordOf("duration" to calculateWatch)),
             formRows = formContext(
                 CheckboxInput(
-                    label = "Enable Watch",
+                    label = t("camping.enableWatch"),
                     name = "enableWatch",
-                    help = "If enabled, includes time spent on watch in rest duration. Disable when resting in a safe area that does not require watches.",
+                    help = t("camping.enableWatchHelp"),
                     stacked = false,
                     value = enableWatch,
                 ),
                 CheckboxInput(
-                    label = "Enable Daily Preparations",
+                    label = t("camping.enableDailyPreparations"),
                     name = "enableDailyPreparations",
-                    help = "If enabled, includes time spent on daily preparations in rest duration",
+                    help = t("camping.enableDailyPreparationsHelp"),
                     stacked = false,
                     value = enableDailyPreparations,
                 ),
                 CheckboxInput(
-                    label = "Check for Random Encounter",
+                    label = t("camping.checkRandomEncounter"),
                     name = "checkRandomEncounter",
-                    help = "If enabled, rolls a random encounter from the current region's roll table",
+                    help = t("camping.checkRandomEncounterHelp"),
                     stacked = false,
                     value = checkRandomEncounter,
                 ),

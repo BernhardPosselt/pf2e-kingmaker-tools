@@ -10,7 +10,9 @@ import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
+import js.objects.recordOf
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -38,10 +40,10 @@ suspend fun adjustUnrest(
         bonusFeats = kingdom.bonusFeats,
         government = kingdom.government,
     ))
-    val ruler = if (unrest.rulerVacant) roll(formula = "1d4", flavor = "Ruler is vacant, gaining Unrest") else 0
+    val ruler = if (unrest.rulerVacant) roll(formula = "1d4", flavor = t("kingdom.rulerVacantGainingUnrest")) else 0
     val newUnrest = unrest.war + unrest.secondaryTerritory + unrest.overcrowded + ruler
     return if (kingdom.level >= 20 && newUnrest > 0) {
-        postChatMessage("Ignoring any Unrest increase due to \"Envy of the World\" Kingdom Feature")
+        postChatMessage(t("kingdom.ignoringUnrestIncrease"))
         kingdom.unrest
     } else {
         postChatTemplate(
@@ -56,14 +58,14 @@ suspend fun adjustUnrest(
         )
         val totalUnrest = newUnrest + kingdom.unrest
         if (totalUnrest >= 10) {
-            roll(formula = "1d10", flavor = "Gaining points to Ruin (distribute as you wish)")
-            if (roll(formula = "1d20", flavor = "Losing Hex on a Flat Check 11") >= 11) {
-                postChatMessage("You lose one hex of your choice")
+            roll(formula = "1d10", flavor = t("kingdom.gainingPointsToRuins"))
+            if (roll(formula = "1d20", flavor = t("kingdom.losingHexOnFlatCheck")) >= 11) {
+                postChatMessage(t("kingdom.loseHexOfChoice"))
             }
         }
         val anarchyAt = calculateAnarchy(chosenFeats)
         if (totalUnrest >= anarchyAt) {
-            postChatMessage("Kingdom falls into anarchy, unless you spend all fame/infamy points. Only Quell Unrest leadership activities can be performed and all checks are worsened by a degree")
+            postChatMessage(t("kingdom.fallsIntoAnarchy"))
         }
         min(anarchyAt, totalUnrest)
     }
@@ -74,11 +76,11 @@ suspend fun KingdomData.addUnrest(amount: Int, chosenFeats: List<ChosenFeat>): I
     val result = (unrest + amount).coerceIn(0, anarchyAt)
     val difference = result - unrest
     if (difference > 0) {
-        postChatMessage("Gaining $difference unrest")
+        postChatMessage(t("kingdom.gainingNUnrest", recordOf("count" to difference)))
     } else if (difference < 0) {
-        postChatMessage("Losing ${abs(difference)} unrest")
+        postChatMessage(t("kingdom.losingNUnrest", recordOf("count" to abs(difference))))
     } else {
-        postChatMessage("Already at 0 unrest")
+        postChatMessage(t("kingdom.already0Unrest"))
     }
     return result
 }
