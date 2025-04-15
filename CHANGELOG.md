@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* The module can now be translated into different langauges
+* The module can now be translated into different languages
 
 ### Changed
 
