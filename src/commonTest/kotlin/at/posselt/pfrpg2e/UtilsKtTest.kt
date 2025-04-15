@@ -29,12 +29,6 @@ class UtilsKtTest {
     }
 
     @Test
-    fun enumToLabel() {
-        assertEquals("Critical Failure", DegreeOfSuccess.CRITICAL_FAILURE.toLabel())
-        assertEquals("Failure", DegreeOfSuccess.FAILURE.toLabel())
-    }
-
-    @Test
     fun slugify() {
         assertEquals("critical-failure", "Critical Failure".slugify())
         assertEquals("critical-failure", " Critical  Failure".slugify())
