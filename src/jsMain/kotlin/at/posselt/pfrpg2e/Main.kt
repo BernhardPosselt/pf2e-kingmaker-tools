@@ -96,7 +96,7 @@ fun main() {
 
         bindChatButtons(game)
         registerMacroDropHooks(game)
-        registerIcons(game, actionDispatcher)
+        registerIcons(actionDispatcher)
 
         buildPromise {
             // register partials

@@ -115,7 +115,7 @@ fun registerMacroDropHooks(game: Game) {
     }
 }
 
-fun registerIcons(game: Game, actionDispatcher: ActionDispatcher) {
+fun registerIcons(actionDispatcher: ActionDispatcher) {
     Hooks.onRenderActorDirectory { _, html, _ ->
         html[0]?.querySelectorAll(".party-header")
             ?.asList()
