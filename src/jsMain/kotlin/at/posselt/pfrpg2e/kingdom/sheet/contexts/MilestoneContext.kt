@@ -47,7 +47,7 @@ fun Array<MilestoneChoice>.toContext(
                 enabled = HiddenInput(
                     name = "milestones.$index.enabled",
                     value = (choicesById[id]?.enabled == true).toString(),
-                    label = t("applications.enabled"),
+                    label = t("applications.enable"),
                     overrideType = OverrideType.BOOLEAN,
                 ).toContext(),
                 hidden = !visible,

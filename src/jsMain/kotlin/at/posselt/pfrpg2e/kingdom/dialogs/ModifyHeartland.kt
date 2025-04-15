@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.kingdom.RawHeartland
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -60,7 +61,7 @@ class ModifyHeartland(
     data: RawHeartland? = null,
     private val afterSubmit: suspend (data: RawHeartland) -> Unit,
 ) : FormApp<ModifyHeartlandContext, ModifyHeartlandData>(
-    title = if (data == null) "Add Heartland" else "Edit Heartland",
+    title = if (data == null) t("kingdom.addHeartland") else t("kingdom.editHeartland"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ModifyHeartlandDataModel::class.js,
@@ -97,24 +98,24 @@ class ModifyHeartland(
                 TextInput(
                     name = "id",
                     value = current.id,
-                    label = "Id",
-                    help = "Choose the same Id as an existing heartland to override it",
+                    label = t("applications.id"),
+                    help = t("kingdom.overrideExistingElement"),
                     readonly = edit == true,
                 ),
                 TextInput(
                     name = "name",
                     value = current.name,
-                    label = "Name",
+                    label = t("applications.name"),
                 ),
                 TextArea(
                     name = "description",
                     value = current.description,
-                    label = "Description",
+                    label = t("applications.description"),
                 ),
                 Select.fromEnum<KingdomAbility>(
                     name = "boost",
                     value = KingdomAbility.fromString(current.boost) ?: KingdomAbility.CULTURE,
-                    label = "Boost",
+                    label = t("kingdom.boost"),
                 )
             )
         )

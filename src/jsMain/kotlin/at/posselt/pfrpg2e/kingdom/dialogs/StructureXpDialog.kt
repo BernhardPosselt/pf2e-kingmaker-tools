@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
 import at.posselt.pfrpg2e.kingdom.structures.getImportedStructures
 import at.posselt.pfrpg2e.utils.asAnyObject
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import js.objects.JsPlainObject
 
@@ -30,12 +31,12 @@ suspend fun structureXpDialog(
     val options = importedStructures
         .map { SelectOption(label = it.id, value =it.name) }
     prompt<StructureXpDialogData, Unit>(
-        title = "Gain XP From Built Structure",
+        title = t("kingdom.gainStructureXp"),
         templateContext = StructureXpDialogContext(
             formRows = arrayOf(
                 Select(
                     name = "structure",
-                    label = "Structure",
+                    label = t("kingdom.structure"),
                     options = options,
                 ).toContext()
             )

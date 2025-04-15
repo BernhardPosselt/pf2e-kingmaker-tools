@@ -13,6 +13,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.kingdom.RawCharter
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -65,7 +66,7 @@ class ModifyCharter(
     data: RawCharter? = null,
     private val afterSubmit: suspend (data: RawCharter) -> Unit,
 ) : FormApp<ModifyCharterContext, ModifyCharterData>(
-    title = if (data == null) "Add Charter" else "Edit Charter",
+    title = if (data == null) t("kingdom.addCharter") else t("kingdom.editCharter"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ModifyCharterDataModel::class.js,
@@ -104,36 +105,36 @@ class ModifyCharter(
                 TextInput(
                     name = "id",
                     value = current.id,
-                    label = "Id",
-                    help = "Choose the same Id as an existing charter to override it",
+                    label = t("applications.id"),
+                    help = t("kingdom.overrideExistingElement"),
                     readonly = edit == true,
                 ),
                 TextInput(
                     name = "name",
                     value = current.name,
-                    label = "Name",
+                    label = t("applications.name"),
                 ),
                 TextArea(
                     name = "description",
                     value = current.description,
-                    label = "Description",
+                    label = t("applications.description"),
                 ),
                 Select.fromEnum<KingdomAbility>(
                     name = "boost",
                     value = current.boost?.let { KingdomAbility.fromString(it) },
-                    label = "Boost",
+                    label = t("kingdom.boost"),
                     required = false,
                 ),
                 Select.fromEnum<KingdomAbility>(
                     name = "flaw",
                     value = current.flaw?.let { KingdomAbility.fromString(it) },
-                    label = "Flaw",
+                    label = t("kingdom.flaw"),
                     required = false,
                 ),
                 NumberInput(
                     name = "freeBoosts",
                     value = current.freeBoosts,
-                    label = "Free Boosts",
+                    label = t("kingdom.freeBoosts"),
                 ),
             )
         )

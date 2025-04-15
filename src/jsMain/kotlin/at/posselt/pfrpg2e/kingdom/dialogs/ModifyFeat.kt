@@ -13,6 +13,7 @@ import at.posselt.pfrpg2e.kingdom.RawFeat
 import at.posselt.pfrpg2e.kingdom.RawRuinThresholdIncreases
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -73,7 +74,7 @@ class ModifyFeat(
     data: RawFeat? = null,
     private val afterSubmit: suspend (data: RawFeat) -> Unit,
 ) : FormApp<ModifyFeatContext, ModifyFeatData>(
-    title = if (data == null) "Add Feat" else "Edit Feat",
+    title = if (data == null) t("kingdom.addFeat") else t("kingdom.editFeat"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ModifyFeatDataModel::class.js,
@@ -123,21 +124,21 @@ class ModifyFeat(
                 TextInput(
                     name = "id",
                     value = current.id,
-                    label = "Id",
-                    help = "Choose the same Id as an existing charter to override it",
+                    label = t("applications.id"),
+                    help = t("kingdom.overrideExistingElement"),
                     readonly = edit == true,
                     stacked = false
                 ),
                 TextInput(
                     name = "name",
                     value = current.name,
-                    label = "Name",
+                    label = t("applications.name"),
                     stacked = false
                 ),
                 TextArea(
                     name = "text",
                     value = current.text,
-                    label = "Description",
+                    label = t("applications.description"),
                     stacked = false
                 ),
                 Select.range(
@@ -145,48 +146,48 @@ class ModifyFeat(
                     to = 20,
                     name = "level",
                     value = current.level,
-                    label = "Level",
+                    label = t("applications.level"),
                     stacked = false
                 ),
                 NumberInput(
                     name = "resourceDice",
                     value = current.resourceDice ?: 0,
-                    label = "Bonus Resource Dice",
+                    label = t("kingdom.bonusResourceDice"),
                     stacked = false
                 ),
                 NumberInput(
                     name = "settlementMagicItemLevelIncrease",
                     value = current.settlementMagicItemLevelIncrease ?: 0,
-                    label = "Increase Level of Magic Items in Settlements",
+                    label = t("kingdom.settlementMagicItemLevelIncrease"),
                     stacked = false
                 ),
                 NumberInput(
                     name = "increaseAnarchyLimit",
                     value = current.increaseAnarchyLimit ?: 0,
-                    label = "Increase Anarchy Limit",
+                    label = t("kingdom.increaseAnarchyLimit"),
                     stacked = false
                 ),
                 NumberInput(
                     name = "ruinThresholdIncreasesAmount",
                     value = current.ruinThresholdIncreases?.firstOrNull()?.amount ?:0,
-                    label = "Ruin Threshold Increases",
-                    help = "Number of eligible Ruin Thresholds increases; only used if a value is provided as well",
+                    label = t("kingdom.ruinThresholdIncreases"),
+                    help = t("kingdom.ruinThresholdIncreasesHelp"),
                     stacked = false,
                 ),
                 NumberInput(
                     name = "ruinThresholdIncreasesValue",
                     value = current.ruinThresholdIncreases?.firstOrNull()?.increase ?:0,
-                    label = "Ruin Threshold Increase Value",
-                    help = "Adds this value to each increased Ruin Threshold",
+                    label = t("kingdom.ruinThresholdIncreasesValue"),
+                    help = t("kingdom.ruinThresholdIncreasesValueHelp"),
                     stacked = false
                 ),
                 TextInput(
                     name = "rollOption",
                     value = current.rollOptions?.firstOrNull() ?: "",
-                    label = "Roll Option",
+                    label = t("kingdom.rollOption"),
                     stacked = false,
                     required = false,
-                    help = "Can be matched against in modifiers when selecting eligible modifiers."
+                    help = t("kingdom.rollOptionHelp")
                 ),
             )
         )

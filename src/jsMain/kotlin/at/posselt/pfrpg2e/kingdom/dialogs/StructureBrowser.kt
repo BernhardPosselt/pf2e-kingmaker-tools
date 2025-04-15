@@ -38,6 +38,7 @@ import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import js.core.Void
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -191,7 +192,7 @@ class StructureBrowser(
     private val kingdomRanks: KingdomSkillRanks,
     private val chosenFeats: List<ChosenFeat>,
 ) : FormApp<StructureBrowserContext, StructureBrowserData>(
-    title = "Structure Browser",
+    title = t("kingdom.structureBrowser"),
     template = "applications/kingdom/structure-browser.hbs",
     debug = true,
     width = 1100,
@@ -292,7 +293,7 @@ class StructureBrowser(
                                 structure.copy(
                                     construction = structure.construction
                                         .upgradeFrom(upgradeFrom.construction),
-                                    notes = "Upgraded from ${upgradeFrom.name}"
+                                    notes = t("kingdom.upgradedFrom", recordOf("structure" to upgradeFrom.name))
                                 )
                             }
                         }
@@ -411,7 +412,7 @@ class StructureBrowser(
                 )
             }.toTypedArray()
         val activeSettlement = Select(
-            label = "Active Settlement",
+            label = t("kingdom.activeSettlement"),
             value = kingdom.activeSettlement,
             options = settlements.allSettlements.map { SelectOption(label = it.name, value = it.id) },
             required = false,
@@ -420,28 +421,28 @@ class StructureBrowser(
         val maxLevelInput = RangeInput(
             value = maxLevel,
             name = "maxLevel",
-            label = "Max Level",
+            label = t("kingdom.maxLevel"),
             min = 1,
             max = 20,
         )
         val maxLotsInput = RangeInput(
             value = maxLots,
             name = "maxLots",
-            label = "Max Lots",
+            label = t("kingdom.maxLots"),
             min = 0,
             max = 4,
         )
         val minLotsInput = RangeInput(
             value = minLots,
             name = "minLots",
-            label = "Min Lots",
+            label = t("kingdom.minLots"),
             min = 0,
             max = 4,
         )
         val searchInput = TextInput(
             name = "search",
             value = search ?: "",
-            label = "Name",
+            label = t("applications.name"),
             required = false,
         )
         val buildable = buildableStructures.size

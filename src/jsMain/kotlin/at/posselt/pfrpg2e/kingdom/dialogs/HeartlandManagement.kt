@@ -20,7 +20,7 @@ import kotlin.js.Promise
 class HeartlandManagement(
     private val kingdomActor: KingdomActor,
 ) : CrudApplication(
-    title = "Manage Heartlands",
+    title = t("kingdom.manageHeartlands"),
     debug = true,
     id = "kmManageHeartlands-${kingdomActor.uuid}"
 ) {
@@ -86,7 +86,7 @@ class HeartlandManagement(
                         ),
                         enable = CheckboxInput(
                             value = item.id !in disabledIds,
-                            label = "Enable",
+                            label = t("applications.enable"),
                             hideLabel = true,
                             name = "enabledIds.${item.id}",
                         ).toContext(),
@@ -98,7 +98,7 @@ class HeartlandManagement(
     }
 
     override fun getHeadings(): Promise<Array<String>> = buildPromise {
-        arrayOf("Boost")
+        arrayOf(t("kingdom.boost"))
     }
 
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {

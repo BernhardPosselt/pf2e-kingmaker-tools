@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.events.KingdomEvent
 import at.posselt.pfrpg2e.data.events.KingdomEventTrait
+import at.posselt.pfrpg2e.data.kingdom.FameType
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawActivity
@@ -27,6 +28,7 @@ import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postDegreeOfSuccess
 import at.posselt.pfrpg2e.utils.serializeB64Json
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
 import js.objects.JsPlainObject
 import js.objects.recordOf
@@ -121,7 +123,7 @@ suspend fun rollCheck(
 
     if (isCreativeSolution) {
         kingdomActor.getKingdom()?.let {
-            postChatMessage("Reduced Creative Solutions by 1")
+            postChatMessage(t("kingdom.reducingCreativeSolutions"))
             it.creativeSolutions = max(0, it.creativeSolutions - 1)
             kingdomActor.setKingdom(it)
         }
@@ -129,7 +131,7 @@ suspend fun rollCheck(
 
     if (isFreeAndFair) {
         kingdomActor.getKingdom()?.let {
-            postChatMessage("Losing 2 RP")
+            postChatMessage(t("kingdom.losing2Rp"))
             it.resourcePoints.now = max(0, it.resourcePoints.now - 2)
             kingdomActor.setKingdom(it)
         }
@@ -137,8 +139,8 @@ suspend fun rollCheck(
 
     if (useFameInfamy) {
         kingdomActor.getKingdom()?.let {
-            val fameType = if (it.fame.type == "famous") "Fame" else "Infamy"
-            postChatMessage("Reducing $fameType by 1")
+            val fameType = if (it.fame.type == "famous") t(FameType.FAMOUS) else t(FameType.INFAMOUS)
+            postChatMessage(t("kingdom.reducingFame", recordOf("type" to fameType)))
             it.fame.now = max(0, it.fame.now - 1)
             kingdomActor.setKingdom(it)
         }

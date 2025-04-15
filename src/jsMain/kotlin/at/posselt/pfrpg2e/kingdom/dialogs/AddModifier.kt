@@ -83,13 +83,13 @@ class AddModifier(
     private val activities: Array<RawActivity>,
     private val onSave: suspend (modifier: RawModifier) -> Unit,
 ) : FormApp<AddModifierContext, AddModifierData>(
-    title = "Add Modifier",
+    title = t("kingdom.addModifier"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ModifierModel::class.js,
     id = "kmAddModifier",
 ) {
-    var data = AddModifierData(
+    var data: AddModifierData = AddModifierData(
         name = "",
         type = ModifierType.UNTYPED.value,
         value = 1,
@@ -126,10 +126,10 @@ class AddModifier(
                 val type = ModifierType.fromString(data.type) ?: ModifierType.UNTYPED
                 val buttonLabel = listOfNotNull(
                     data.value.formatAsModifier() + " ${t(type)}",
-                    data.phase?.let{ KingdomPhase.fromString(it)}?.let { "Phase: ${t(it)}" },
-                    data.ability?.let{ KingdomAbility.fromString(it)}?.let { "Ability: ${t(it)}" },
-                    data.skill?.let{ KingdomSkill.fromString(it)}?.let { "Skill: ${t(it)}" },
-                    activity?.let { "Activity: ${it.title}" },
+                    data.phase?.let{ KingdomPhase.fromString(it)}?.let { "${t("kingdom.phase")}: ${t(it)}" },
+                    data.ability?.let{ KingdomAbility.fromString(it)}?.let { "${t("kingdom.ability")}: ${t(it)}" },
+                    data.skill?.let{ KingdomSkill.fromString(it)}?.let { "${t("applications.skill")}: ${t(it)}" },
+                    activity?.let { "${t("kingdom.activity")}: ${it.title}" },
                 ).joinToString(", ")
                 val modifier = RawModifier(
                     type = data.type,
@@ -158,13 +158,13 @@ class AddModifier(
         val rows = formContext(
             TextInput(
                 name = "name",
-                label = "Name",
+                label = t("applications.name"),
                 stacked = false,
                 value = data.name
             ),
             Select.range(
                 name = "value",
-                label = "Value",
+                label = t("applications.value"),
                 value = data.value,
                 from = -4,
                 to = 4,
@@ -195,7 +195,7 @@ class AddModifier(
             ),
             Select(
                 name = "activityId",
-                label = "Activity",
+                label = t("kingdom.activity"),
                 value = data.activityId,
                 required = false,
                 options = activities.map { SelectOption(label = it.title, value = it.id) },
@@ -203,20 +203,20 @@ class AddModifier(
             ),
             CheckboxInput(
                 name = "enabled",
-                label = "Enabled",
+                label = t("applications.enable"),
                 value = data.enabled,
             ),
             NumberInput(
                 name = "turns",
-                label = "Turns",
+                label = t("kingdom.turns"),
                 value = data.turns,
                 stacked = false,
                 required = false,
-                help = "leave empty for indefinite"
+                help = t("kingdom.leaveEmptyForIndefinite")
             ),
             CheckboxInput(
                 name = "isConsumedAfterRoll",
-                label = "Remove After Roll",
+                label = t("kingdom.removeAfterRoll"),
                 value = data.isConsumedAfterRoll,
             ),
         )

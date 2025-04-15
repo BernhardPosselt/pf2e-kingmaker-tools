@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.kingdom.SettlementTerrain
 import at.posselt.pfrpg2e.utils.asAnyObject
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 
@@ -31,17 +32,17 @@ data class NewSettlementChoices(
 
 suspend fun newSettlementChoices(terrain: SettlementTerrain? = null): NewSettlementChoices =
     awaitablePrompt<NewSettlementChoicesData, NewSettlementChoices>(
-        title = "New Settlement",
+        title = t("kingdom.newSettlement"),
         templateContext = NewSettlementChoicesContext(
             formRows = formContext(
                 TextInput(
                     name = "name",
-                    label = "Name",
+                    label = t("applications.name"),
                     value = "",
                 ),
                 Select.range(
                     name = "waterBorders",
-                    label = "Water Borders",
+                    label = t("kingdom.waterBorders"),
                     from = 0,
                     to = 4,
                     value = 0,

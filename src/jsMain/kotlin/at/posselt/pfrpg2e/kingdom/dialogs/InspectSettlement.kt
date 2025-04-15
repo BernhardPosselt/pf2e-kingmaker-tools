@@ -46,6 +46,7 @@ import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.TextEditor
 import js.core.Void
 import js.objects.ReadonlyRecord
+import js.objects.recordOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
 import kotlinx.coroutines.awaitAll
@@ -231,7 +232,7 @@ class InspectSettlement(
             allowCapitalInvestmentInCapitalWithoutBank = allowCapitalInvestmentInCapitalWithoutBank,
         )
         checkNotNull(parsed) {
-            val msg = "Settlement Scene deleted, closing Dialog"
+            val msg = t("kingdom.settlementSceneDeleted")
             ui.notifications.error(msg)
             msg
         }
@@ -239,7 +240,7 @@ class InspectSettlement(
         val blocksInput = if (manualSettlementLevel) {
             NumberInput(
                 name = "blocks",
-                label = "Blocks",
+                label = t("kingdom.blocks"),
                 value = current.lots,
                 hideLabel = true,
             )
@@ -253,7 +254,7 @@ class InspectSettlement(
         val levelInput = if (manualSettlementLevel) {
             NumberInput(
                 name = "level",
-                label = "Level",
+                label = t("applications.level"),
                 value = current.level,
                 hideLabel = true,
             )
@@ -271,19 +272,19 @@ class InspectSettlement(
         )
         val secondaryTerritoryInput = CheckboxInput(
             name = "secondaryTerritory",
-            label = "Secondary Territory",
+            label = t("kingdom.secondaryTerritory"),
             value = current.secondaryTerritory,
             hideLabel = true,
         )
         val manualSettlementLevelInput = CheckboxInput(
             name = "manualSettlementLevel",
-            label = "Manual",
+            label = t("kingdom.manualManagement"),
             value = manualSettlementLevel,
             hideLabel = true,
         )
         val waterBordersInput = NumberInput(
             name = "waterBorders",
-            label = "Water Borders",
+            label = t("kingdom.waterBorders"),
             value = current.waterBorders,
             hideLabel = true,
         )
@@ -306,11 +307,21 @@ class InspectSettlement(
                 val skill = bonus.skill
                 val mod = bonus.value.formatAsModifier()
                 if (activity != null && skill != null) {
-                    "$mod to ${activity.unslugify()} using ${t(skill)}"
+                    t("kingdom.bonusToActivityUsingSkill", recordOf(
+                        "modifier" to mod,
+                        "activity" to activity.unslugify(),
+                        "skill" to t(skill)
+                    ))
                 } else if (skill != null) {
-                    "$mod to ${t(skill)}"
+                    t("kingdom.bonusTo", recordOf(
+                        "modifier" to mod,
+                        "selector" to t(skill),
+                    ))
                 } else if (activity != null) {
-                    "$mod to ${activity.unslugify()}"
+                    t("kingdom.bonusTo", recordOf(
+                        "modifier" to mod,
+                        "selector" to activity.unslugify(),
+                    ))
                 } else {
                     null
                 }
@@ -319,11 +330,11 @@ class InspectSettlement(
         val parsedStorage = parsed.constructedStructures.map { it.storage }
             .fold(CommodityStorage()) { prev, curr -> prev + curr }
         val storage = listOf(
-            "Food" to parsedStorage.food,
-            "Lumber" to parsedStorage.lumber,
-            "Luxuries" to parsedStorage.luxuries,
-            "Ore" to parsedStorage.ore,
-            "Stone" to parsedStorage.stone,
+            t("kingdom.food") to parsedStorage.food,
+            t("kingdom.lumber") to parsedStorage.lumber,
+            t("kingdom.luxuries") to parsedStorage.luxuries,
+            t("kingdom.ore") to parsedStorage.ore,
+            t("kingdom.stone") to parsedStorage.stone,
         )
             .filter { it.second > 0 }
             .map { LabelValueContext(label = it.first, value = it.second) }
@@ -335,9 +346,9 @@ class InspectSettlement(
             bonuses = parsed.availableItems,
         ).toEntries().map { (group, amount) ->
             t(group) to if (amount >= 0) {
-                "Level $amount"
+                t("kingdom.availableItemLevels", recordOf("itemLevel" to amount))
             } else {
-                "Not Available"
+                t("kingdom.notAvailable")
             }
         }.toRecord()
         val notes = parsed.notes.toTypedArray()

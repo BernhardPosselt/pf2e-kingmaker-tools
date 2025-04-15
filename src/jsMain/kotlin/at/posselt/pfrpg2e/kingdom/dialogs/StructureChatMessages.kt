@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.Resource
 import at.posselt.pfrpg2e.kingdom.sheet.ResourceButton
 import at.posselt.pfrpg2e.kingdom.sheet.ResourceMode
 import at.posselt.pfrpg2e.utils.buildUuid
+import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.ui.enrichHtml
 import kotlinx.browser.document
@@ -67,9 +68,9 @@ private fun buildStructureHints(structure: Structure): List<String> {
 
 private fun generatePrefix(moreThanOnce: Boolean) =
     if (moreThanOnce) {
-        "Each time you build this structure, choose one of"
+        t("kingdom.eachTimeYouBuild")
     } else {
-        "The first time you build this structure each turn, choose one of"
+        t("kingdom.theFirstTimeYouBuild")
     }
 
 private fun createButtons(
@@ -115,9 +116,9 @@ suspend fun buildDegreeMessages(
     rubble: Structure,
     actorUuid: String,
 ): DegreeMessages {
-    val rubbleLink = enrichHtml(buildUuid(rubble.uuid, "Rubble"))
+    val rubbleLink = enrichHtml(buildUuid(rubble.uuid, t("kingdom.rubble")))
     val buildingLink = enrichHtml(buildUuid(structure.uuid, structure.name))
-    val slowedLink = enrichHtml(buildUuid("Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3", "Slowed"))
+    val slowedLink = enrichHtml(buildUuid("Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3", t("kingdom.slowed")))
     val isFree = ore == 0 && stone == 0 && rp == 0 && lumber == 0 && luxuries == 0
     val cost = ChatCost(
         ore = ore,
@@ -126,11 +127,11 @@ suspend fun buildDegreeMessages(
         lumber = lumber,
         luxuries = luxuries,
         label = listOf(
-            "RP" to rp,
-            "Ore" to ore,
-            "Stone" to stone,
-            "Lumber" to lumber,
-            "Luxuries" to luxuries,
+            t("kingdom.rp") to rp,
+            t("kingdom.ore") to ore,
+            t("kingdom.stone") to stone,
+            t("kingdom.lumber") to lumber,
+            t("kingdom.luxuries") to luxuries,
         )
             .filter { (_, value) -> value > 0 }
             .joinToString(", ") { (label, amount) -> "$label: $amount" }
@@ -142,11 +143,11 @@ suspend fun buildDegreeMessages(
         lumber = lumber / 2,
         luxuries = luxuries / 2,
         label = listOf(
-            "RP" to rp,
-            "Ore" to ore / 2,
-            "Stone" to stone / 2,
-            "Lumber" to lumber / 2,
-            "Luxuries" to luxuries / 2,
+            t("kingdom.rp") to rp,
+            t("kingdom.ore") to ore / 2,
+            t("kingdom.stone") to stone / 2,
+            t("kingdom.lumber") to lumber / 2,
+            t("kingdom.luxuries") to luxuries / 2,
         )
             .filter { (_, value) -> value > 0 }
             .joinToString(", ") { (label, amount) -> "$label: $amount" },

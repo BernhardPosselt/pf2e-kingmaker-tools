@@ -119,7 +119,7 @@ class ConfigureLeaderKingdomSkills(
     private val readonly: Boolean,
     private val onSave: (skills: RawLeaderKingdomSkills) -> Unit,
 ) : FormApp<ConfigureLeaderKingdomSkillsContext, LeaderKingdomSkillsData>(
-    title = "Kingdom Skills${if (readonly) " (readonly, change in the settings)" else ""}",
+    title = "${t("kingdom.kingdomSkills")}${if (readonly) " (${t("kingdom.readonlySkills")})" else ""}",
     template = "components/forms/xy-form.hbs",
     debug = true,
     dataModel = ConfigureLeaderKingdomSkillsModel::class.js,
@@ -167,7 +167,7 @@ class ConfigureLeaderKingdomSkills(
             formRows = rows,
             isFormValid = true,
             compact = true,
-            saveLabel = if(readonly) "Close" else "Save",
+            saveLabel = if (readonly) t("applications.close") else t("applications.save"),
         )
     }
 

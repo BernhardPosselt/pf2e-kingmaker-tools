@@ -93,7 +93,7 @@ class AddEvent(
     private val settlements: List<Settlement>,
     private val onSave: suspend (event: RawOngoingKingdomEvent) -> Unit,
 ) : FormApp<AddEventsContext, AddEventsData>(
-    title = "Add Event",
+    title = t("kingdom.addEvent"),
     template = "applications/kingdom/event-browser.hbs",
     width = 600,
     id = "kmEvents-${kingdomActor.uuid}",
@@ -190,10 +190,10 @@ class AddEvent(
             isFormValid = isFormValid,
             search = SearchInput(
                 name = "search",
-                label = "Filter",
+                label = t("kingdom.filter"),
                 hideLabel = true,
                 value = search,
-                placeholder = "Search",
+                placeholder = t("kingdom.search"),
                 required = false,
             ).toContext()
         )

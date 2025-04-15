@@ -133,7 +133,7 @@ private class ConfigureLeaderSkills(
     private val readonly: Boolean = false,
     private val onSave: (skills: RawLeaderSkills) -> Unit,
 ) : FormApp<ConfigureLeaderSkillsContext, LeaderSkillsData>(
-    title = "Character Skills${if (readonly) " (readonly, change in the settings)" else ""}",
+    title = "${t("kingdom.characterSkills")}${if (readonly) " (${t("kingdom.readonlySkills")})" else ""}",
     template = "components/forms/xy-form.hbs",
     debug = true,
     dataModel = ConfigureLeaderSkillsModel::class.js,
@@ -161,12 +161,12 @@ private class ConfigureLeaderSkills(
             "add-entry" -> {
                 buildPromise {
                     prompt<AddEntryData, Unit>(
-                        title = "Add Lore",
+                        title = t("kingdom.addLore"),
                         templatePath = "components/forms/form.hbs",
                         templateContext = AddEntryContext(
                             formRows = arrayOf(
                                 TextInput(
-                                    label = "Lore",
+                                    label = t("kingdom.lore"),
                                     name = "lore",
                                     value = "",
                                 ).toContext()
@@ -175,9 +175,9 @@ private class ConfigureLeaderSkills(
                     ) { data ->
                         val lore = Attribute.fromString(data.lore.slugify())
                         if (data.lore.isBlank() || lore is Skill) {
-                            ui.notifications.error("Not a valid lore")
+                            ui.notifications.error(t("kingdom.invalidLore"))
                         } else if (lores.contains(lore)) {
-                            ui.notifications.error("Lore exists already")
+                            ui.notifications.error(t("kingdom.loreAlreadyExists"))
                         } else {
                             lores = lores + lore
                             render()
@@ -223,12 +223,12 @@ private class ConfigureLeaderSkills(
         ConfigureLeaderSkillsContext(
             partId = parent.partId,
             headers = Leader.entries.map { t(it) }
-                .toTypedArray() + if (readonly) emptyArray() else arrayOf("Delete"),
+                .toTypedArray() + if (readonly) emptyArray() else arrayOf(t("applications.delete")),
             formRows = rows,
             isFormValid = true,
             compact = true,
-            addEntry = if (readonly) "" else "Add Lore",
-            saveLabel = if (readonly) "Close" else "Save",
+            addEntry = if (readonly) "" else t("kingdom.addLore"),
+            saveLabel = if(readonly) t("applications.close") else t("applications.save"),
         )
     }
 

@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.kingdom.RawMilestone
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
@@ -56,7 +57,7 @@ class ModifyMilestone(
     data: RawMilestone? = null,
     private val afterSubmit: suspend (data: RawMilestone) -> Unit,
 ) : FormApp<ModifyMilestoneContext, ModifyMilestoneData>(
-    title = if (data == null) "Add Milestone" else "Edit Milestone",
+    title = if (data == null) t("kingdom.addMilestone") else t("kingdom.editMilestone"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ModifyMilestoneDataModel::class.js,
@@ -95,19 +96,19 @@ class ModifyMilestone(
                 TextInput(
                     name = "id",
                     value = current.id,
-                    label = "Id",
-                    help = "Choose the same Id as an existing milestone to override it",
+                    label = t("applications.id"),
+                    help = t("kingdom.overrideExistingElement"),
                     readonly = edit == true,
                 ),
                 TextInput(
                     name = "name",
                     value = current.name,
-                    label = "Name",
+                    label = t("applications.name"),
                 ),
                 NumberInput(
                     name = "xp",
                     value = current.xp,
-                    label = "XP"
+                    label = t("applications.xp")
                 ),
             )
         )

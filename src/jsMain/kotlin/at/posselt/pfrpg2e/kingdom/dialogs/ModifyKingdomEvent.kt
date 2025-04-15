@@ -98,7 +98,7 @@ class ModifyKingdomEvent(
     data: RawKingdomEvent? = null,
     private val afterSubmit: suspend (data: RawKingdomEvent) -> Unit,
 ) : FormApp<ModifyKingdomEventContext, ModifyKingdomEventData>(
-    title = if (data == null) "Add Kingdom Event" else "Edit Kingdom Event",
+    title = if (data == null) t("kingdom.addEvent") else t("kingdom.editEvent"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ModifyKingdomEventDataModel::class.js,
@@ -176,22 +176,22 @@ class ModifyKingdomEvent(
                 TextInput(
                     name = "id",
                     value = current.id,
-                    label = "Id",
-                    help = "Choose the same Id as an existing event to override it",
+                    label = t("applications.id"),
+                    help = t("kingdom.overrideExistingElement"),
                     readonly = edit == true,
                     stacked = false,
                 ),
                 TextInput(
                     name = "name",
                     value = current.name,
-                    label = "Title",
+                    label = t("applications.name"),
                     stacked = false,
                 ),
                 TextArea(
                     name = "description",
                     value = current.description,
-                    label = "Description",
-                    help = "Text should be wrapped in a <p></p> element",
+                    label = t("applications.description"),
+                    help = t("kingdom.wrapTextInParagraph"),
                     stacked = false,
                 ),
                 SkillPicker(
@@ -214,21 +214,21 @@ class ModifyKingdomEvent(
                 TextInput(
                     name = "location",
                     value = current.location ?: "",
-                    label = "Location",
+                    label = t("kingdom.eventLocation"),
                     required = false,
                     stacked = false,
                 ),
                 TextInput(
                     name = "special",
                     value = current.special ?: "",
-                    label = "Special",
+                    label = t("kingdom.special"),
                     required = false,
                     stacked = false,
                 ),
                 TextInput(
                     name = "resolution",
                     value = current.resolution ?: "",
-                    label = "Resolution",
+                    label = t("kingdom.eventResolution"),
                     required = false,
                     stacked = false,
                 ),
@@ -236,33 +236,33 @@ class ModifyKingdomEvent(
                     from = -4,
                     to = 4,
                     name = "modifier",
-                    label = "Modifier",
+                    label = t("kingdom.modifier"),
                     value = current.modifier ?: 0,
                     stacked = false,
                 ),
                 CheckboxInput(
                     name = "hex",
-                    label = "Trait: Hex",
+                    label = t("kingdom.traitHex"),
                     value = "hex" in current.traits
                 ),
                 CheckboxInput(
                     name = "dangerous",
-                    label = "Trait: Dangerous",
+                    label = t("kingdom.traitDangerous"),
                     value = "dangerous" in current.traits
                 ),
                 CheckboxInput(
                     name = "beneficial",
-                    label = "Trait: Beneficial",
+                    label = t("kingdom.traitBeneficial"),
                     value = "beneficial" in current.traits
                 ),
                 CheckboxInput(
                     name = "settlement",
-                    label = "Trait: Settlement",
+                    label = t("kingdom.traitSettlement"),
                     value = "settlement" in current.traits
                 ),
                 CheckboxInput(
                     name = "continuous",
-                    label = "Trait: Continuous",
+                    label = t("kingdom.traitContinuous"),
                     value = "continuous" in current.traits
                 ),
                 Select.fromEnum<Leader>(
@@ -273,32 +273,32 @@ class ModifyKingdomEvent(
                 TextArea(
                     name = "criticalSuccessMsg",
                     value = stage.criticalSuccess?.msg ?: "",
-                    label = "Critical Success Message",
-                    help = "Text should be wrapped in a <p></p> element",
+                    label = t("kingdom.criticalSuccessMessage"),
+                    help = t("kingdom.wrapTextInParagraph"),
                     stacked = false,
                     required = false,
                 ),
                 TextArea(
                     name = "successMsg",
                     value = stage.success?.msg ?: "",
-                    label = "Success Message",
-                    help = "Text should be wrapped in a <p></p> element",
+                    label = t("kingdom.successMessage"),
+                    help = t("kingdom.wrapTextInParagraph"),
                     stacked = false,
                     required = false,
                 ),
                 TextArea(
                     name = "failureMsg",
                     value = stage.failure?.msg ?: "",
-                    label = "Failure Message",
-                    help = "Text should be wrapped in a <p></p> element",
+                    label = t("kingdom.failureMessage"),
+                    help = t("kingdom.wrapTextInParagraph"),
                     stacked = false,
                     required = false,
                 ),
                 TextArea(
                     name = "criticalFailureMsg",
                     value = stage.criticalFailure?.msg ?: "",
-                    label = "Critical Failure Message",
-                    help = "Text should be wrapped in a <p></p> element",
+                    label = t("kingdom.criticalFailureMessage"),
+                    help = t("kingdom.wrapTextInParagraph"),
                     stacked = false,
                     required = false,
                 ),

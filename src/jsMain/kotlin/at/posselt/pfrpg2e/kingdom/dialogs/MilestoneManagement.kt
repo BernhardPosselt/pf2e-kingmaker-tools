@@ -13,13 +13,14 @@ import at.posselt.pfrpg2e.kingdom.getMilestones
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import js.core.Void
 import kotlin.js.Promise
 
 class MilestoneManagement(
     private val kingdomActor: KingdomActor,
 ) : CrudApplication(
-    title = "Manage Milestones",
+    title = t("kingdom.manageMilestones"),
     debug = true,
     id = "kmManageMilestones-${kingdomActor.uuid}"
 ) {
@@ -94,7 +95,7 @@ class MilestoneManagement(
                         ),
                         enable = CheckboxInput(
                             value = enabled[item.id]?.enabled == true,
-                            label = "Enable",
+                            label = t("applications.enable"),
                             hideLabel = true,
                             name = "enabledIds.${item.id}",
                         ).toContext(),
@@ -106,7 +107,7 @@ class MilestoneManagement(
     }
 
     override fun getHeadings(): Promise<Array<String>> = buildPromise {
-        arrayOf("Completed", "XP")
+        arrayOf(t("kingdom.completed"), t("applications.xp"))
     }
 
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {

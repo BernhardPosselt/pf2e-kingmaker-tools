@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 
 @JsPlainObject
@@ -19,7 +20,7 @@ external interface PickLeaderData {
 
 suspend fun pickLeader(): Leader {
     return awaitablePrompt<PickLeaderData, Leader>(
-        title = "Pick a Leader to Support",
+        title = t("kingdom.pickLeaderToSupport"),
         templateContext = PickLeaderContext(
             formRows = formContext(
                 Select.fromEnum<Leader>(

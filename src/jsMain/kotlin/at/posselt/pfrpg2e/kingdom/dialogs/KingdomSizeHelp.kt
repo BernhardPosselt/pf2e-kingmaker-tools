@@ -24,9 +24,9 @@ private external interface KingdomSizeContext {
 
 suspend fun kingdomSizeHelp() {
     prompt<Unit, Unit>(
-        title = "Kingdom Size",
+        title = t("kingdom.kingdomSize"),
         templatePath = "applications/kingdom/kingdom-size-help.hbs",
-        buttonLabel = "Close",
+        buttonLabel = t("applications.close"),
         templateContext = KingdomSizeContext(
             data = kingdomSizeData
                 .map {

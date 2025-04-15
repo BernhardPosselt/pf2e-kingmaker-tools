@@ -104,7 +104,7 @@ class KingdomSettingsApplication(
     private val onSave: suspend (settings: KingdomSettings) -> Unit,
     val kingdomSettings: KingdomSettings,
 ) : FormApp<KingdomSettingsContext, KingdomSettings>(
-    title = "Kingdom Settings",
+    title = t("kingdom.kingdomSettings"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = KingdomSettingsDataModel::class.js,
@@ -136,11 +136,11 @@ class KingdomSettingsApplication(
             isFormValid = isFormValid,
             sections = formContext(
                 Section(
-                    legend = "Automation",
+                    legend = t("kingdom.automation"),
                     formRows = listOf(
                         Select.range(
                             name = "maximumFamePoints",
-                            label = "Maximum Fame Points",
+                            label = t("kingdom.maximumFamePoints"),
                             value = settings.maximumFamePoints,
                             from = 1,
                             to = 10,
@@ -148,70 +148,63 @@ class KingdomSettingsApplication(
                         ),
                         CheckboxInput(
                             name = "automateStats",
-                            label = "Automate Kingdom Stats",
+                            label = t("kingdom.automateStats"),
                             value = settings.automateStats,
-                            help = "If enabled, automatically calculates skill proficiencies, ability scores and ruin thresholds from select choices"
+                            help = t("kingdom.automateStatsHelp")
                         ),
                         Select.fromEnum<AutomateResources>(
                             name = "automateResources",
-                            label = "Automatically Calculate Kingdom Resources",
-                            help = "Official Module parses the Stolen Lands data, Tile Based sums up worksites, size and farmlands from special Tiles or Drawings, Manual requires you to manage it manually in the Status tab",
+                            label = t("kingdom.automateResources"),
+                            help = t("kingdom.automateResourcesHelp"),
                             value = fromCamelCase<AutomateResources>(settings.automateResources),
                             stacked = false,
-                            labelFunction = {
-                                when(it) {
-                                    AutomateResources.KINGMAKER -> "Official Module"
-                                    AutomateResources.TILE_BASED -> "Tile Based"
-                                    AutomateResources.MANUAL -> "Manual"
-                                }
-                            }
                         ),
                         Select(
                             name = "realmSceneId",
-                            label = "Realm Scene",
+                            label = t("kingdom.realmSceneId"),
                             value = settings.realmSceneId,
-                            disabled = this@KingdomSettingsApplication.settings.automateResources != AutomateResources.TILE_BASED.value,
+                            disabled = settings.automateResources != AutomateResources.TILE_BASED.value,
                             options = realmSceneOptions,
-                            help = "Automatically Calculate Kingdom Resources is set to tile based, use this scene to calculate it based off drawings/tiles",
+                            help = t("kingdom.realmSceneIdHelp"),
                             required = false,
                             stacked = false,
                         ),
                         CheckboxInput(
                             name = "autoCalculateSettlementLevel",
-                            label = "Automatically Calculate Settlement Level",
+                            label = t("kingdom.autoCalculateSettlementLevel"),
                             value = settings.autoCalculateSettlementLevel,
-                            help = "Placing structures on the shipped settlement scene blocks automatically sets the settlement's level",
+                            help = t("kingdom.autoCalculateSettlementLevelHelp"),
                         ),
                         CheckboxInput(
                             name = "autoCalculateArmyConsumption",
-                            label = "Automatically Calculate Army Consumption",
+                            label = t("kingdom.autoCalculateArmyConsumption"),
                             value = settings.autoCalculateArmyConsumption,
-                            help = "If enabled, gets all visible army tokens on all scenes and sums up their consumption",
+                            help = t("kingdom.autoCalculateArmyConsumptionHelp"),
                         ),
                         CheckboxInput(
                             name = "kingdomIgnoreSkillRequirements",
-                            label = "Disable Activity Skill Proficiency Requirements",
+                            label = t("kingdom.kingdomIgnoreSkillRequirements"),
                             value = settings.kingdomIgnoreSkillRequirements,
-                            help = "If disabled, all activities can be performed regardless of skill proficiencies",
+                            help = t("kingdom.kingdomIgnoreSkillRequirementsHelp"),
                         ),
                         Select(
                             name = "recruitableArmiesFolderId",
-                            label = "Recruitable Armies Folder",
+                            label = t("kingdom.recruitableArmiesFolderId"),
                             options = folders,
                             value = settings.recruitableArmiesFolderId,
-                            help = "This folder will be used to look up armies for the Recruit Army activity and to calculate army consumption. When you first perform the Recruit Army activity, this folder will be created automatically and set if this setting is empty",
+                            help = t("kingdom.recruitableArmiesFolderIdHelp"),
                             stacked = false,
                         )
                     ),
                 ),
                 Section(
-                    legend = "Events",
+                    legend = t("kingdom.events"),
                     formRows = listOf(
                         Select.range(
                             from = 0,
                             to = 20,
                             name = "eventDc",
-                            label = "Base Event DC",
+                            label = t("kingdom.eventDc"),
                             value = settings.eventDc,
                             stacked = false,
                         ),
@@ -219,30 +212,30 @@ class KingdomSettingsApplication(
                             from = 0,
                             to = 20,
                             name = "eventDcStep",
-                            label = "Event DC Reduction per Check",
+                            label = t("kingdom.eventDcStep"),
                             value = settings.eventDcStep,
                             stacked = false,
                         ),
                         Select(
                             name = "kingdomEventsTable",
-                            label = "Kingdom Events Roll Table",
+                            label = t("kingdom.kingdomEventsTable"),
                             options = kingdomEventsTableOptions,
                             value = settings.kingdomEventsTable,
                             stacked = false,
                             required = false,
-                            help = "If none selected, falls back to the Random Kingdom Events table in this module's Roll Tables compendium",
+                            help = t("kingdom.kingdomEventsTableHelp"),
                         ),
                         CheckboxInput(
                             name = "cultOfTheBloomEvents",
-                            label = "Enable Cult Events",
+                            label = t("kingdom.cultOfTheBloomEvents"),
                             value = settings.cultOfTheBloomEvents,
-                            help = "If enabled, adds a Cult Events section in Event Phase",
+                            help = t("kingdom.cultOfTheBloomEventsHelp"),
                         ),
                         Select.range(
                             from = 0,
                             to = 20,
                             name = "cultEventDc",
-                            label = "Cult Base Event DC",
+                            label = t("kingdom.cultEventDc"),
                             value = settings.cultEventDc,
                             stacked = false,
                         ),
@@ -250,22 +243,22 @@ class KingdomSettingsApplication(
                             from = 0,
                             to = 20,
                             name = "cultEventDcStep",
-                            label = "Cult Event DC Reduction per Check",
+                            label = t("kingdom.cultEventDcStep"),
                             value = settings.cultEventDcStep,
                             stacked = false,
                         ),
                         Select(
                             name = "kingdomCultTable",
-                            label = "Cult Events Roll Table",
+                            label = t("kingdom.kingdomCultTable"),
                             options = cultTableOptions,
                             value = settings.kingdomCultTable,
                             stacked = false,
                             required = false,
-                            help = "If none selected, falls back to the Random Cult Events table in this module's Roll Tables compendium",
+                            help = t("kingdom.kingdomCultTableHelp"),
                         ),
                         Select.fromEnum<RollMode>(
                             name = "kingdomEventRollMode",
-                            label = "Kingdom Event Roll Mode",
+                            label = t("kingdom.kingdomEventRollMode"),
                             value = fromCamelCase<RollMode>(settings.kingdomEventRollMode),
                             labelFunction = { it.label },
                             stacked = false,
@@ -273,18 +266,18 @@ class KingdomSettingsApplication(
                     ),
                 ),
                 Section(
-                    legend = "Companion Guide",
+                    legend = t("kingdom.companionGuide"),
                     formRows = listOf(
                         CheckboxInput(
                             name = "reduceDCToBuildLumberStructures",
-                            label = "Reduce DC for building Structures made out of Lumber by 2",
+                            label = t("kingdom.reduceDCToBuildLumberStructures"),
                             value = settings.reduceDCToBuildLumberStructures,
                         ),
                         CheckboxInput(
                             name = "expandMagicUse",
-                            label = "Expand Magic Use",
+                            label = t("kingdom.expandMagicUse"),
                             value = settings.expandMagicUse,
-                            help = "When enabled, you can use Magic for the following activities: Celebrate Holiday, Craft Luxuries, Create a Masterpiece, and Rest and Relax",
+                            help = t("kingdom.expandMagicUseHelp"),
                         ),
                     ),
                 ),
@@ -293,123 +286,115 @@ class KingdomSettingsApplication(
                     formRows = listOf(
                         CheckboxInput(
                             name = "kingdomAllStructureItemBonusesStack",
-                            label = "All Structure Item Bonuses Stack",
+                            label = t("kingdom.kingdomAllStructureItemBonusesStack"),
                             value = settings.kingdomAllStructureItemBonusesStack,
-                            help = "If enabled, stacks item bonuses from all structures in a settlement, regardless of building type"
+                            help = t("kingdom.kingdomAllStructureItemBonusesStackHelp")
                         ),
                         Select.range(
                             from = 0,
                             to = 2,
-                            label = "Increase Ability Score Picks By",
+                            label = t("kingdom.increaseScorePicksBy"),
                             value = settings.increaseScorePicksBy,
                             name = "increaseScorePicksBy",
-                            help = "Whenever you gain an Ability Score increase, gain this value in addition to the default 2",
+                            help = t("kingdom.increaseScorePicksByHelp"),
                             stacked = false,
                         ),
                         NumberInput(
                             name = "ruinThreshold",
-                            label = "Starting Ruin Threshold",
+                            label = t("kingdom.ruinThreshold"),
                             value = settings.ruinThreshold,
                             stacked = false,
                         ),
                         CheckboxInput(
                             name = "capitalInvestmentInCapital",
-                            label = "Enable Capital Investment in Capital without Bank",
+                            label = t("kingdom.capitalInvestmentInCapital"),
                             value = settings.capitalInvestmentInCapital,
                         ),
                         CheckboxInput(
                             name = "includeCapitalItemModifier",
-                            label = "Enable Capital Item Modifier Fallback",
+                            label = t("kingdom.includeCapitalItemModifier"),
                             value = settings.includeCapitalItemModifier,
-                            help = "If enabled, falls back to the item bonus of the capital if it is higher than the currently selected settlement",
+                            help = t("kingdom.includeCapitalItemModifierHelp"),
                         ),
                         CheckboxInput(
                             name = "vanceAndKerensharaXP",
-                            label = "XP Rules",
+                            label = t("kingdom.xpRules"),
                             value = settings.vanceAndKerensharaXP,
-                            help = "Adds additional milestones, gain XP buttons and increases XP for claiming hexes and converting XP based on kingdom level",
+                            help = t("kingdom.xpRulesHelp"),
                         ),
                         NumberInput(
                             name = "rpToXpConversionRate",
-                            label = "RP to XP Conversion Rate",
+                            label = t("kingdom.rpToXpConversionRate"),
                             value = settings.rpToXpConversionRate,
                             stacked = false,
                             readonly = settings.vanceAndKerensharaXP,
                         ),
                         NumberInput(
                             name = "rpToXpConversionLimit",
-                            label = "RP to XP Conversion Limit",
+                            label = t("kingdom.rpToXpConversionLimit"),
                             value = settings.rpToXpConversionLimit,
                             stacked = false,
                             readonly = settings.vanceAndKerensharaXP,
                         ),
                         NumberInput(
                             name = "xpPerClaimedHex",
-                            label = "XP per Claimed Hex",
+                            label = t("kingdom.xpPerClaimedHex"),
                             value = settings.xpPerClaimedHex,
                             stacked = false,
                             readonly = settings.vanceAndKerensharaXP,
                         ),
                         CheckboxInput(
                             name = "enableLeadershipModifiers",
-                            label = "Use Leadership Modifiers",
+                            label = t("kingdom.enableLeadershipModifiers"),
                             value = settings.enableLeadershipModifiers,
-                            help = "Replaces Invested Status Bonus with Bonuses based on PC skill ranks",
+                            help = t("kingdom.enableLeadershipModifiersHelp"),
                         ),
                         Menu(
-                            label = "Leader Skills",
-                            name = "Configure",
+                            label =t("kingdom.configureLeaderSkills") ,
+                            name = t("kingdom.configure"),
                             value = "configure-leader-skills",
                             disabled = !settings.enableLeadershipModifiers,
-                            help = "If Leadership Modifiers are enabled, configure which skills and lores are used to calculate Leadership bonuses",
+                            help = t("kingdom.configureLeaderSkillsHelp"),
                         ),
                         Menu(
-                            label = "Leader Kingdom Skills",
-                            name = "Configure",
+                            label =t("kingdom.configureLeaderKingdomSkills") ,
+                            name = t("kingdom.configure"),
                             value = "configure-leader-kingdom-skills",
                             disabled = !settings.enableLeadershipModifiers,
-                            help = "If Leadership Modifiers are enabled, configure which leaders and kingdom skills receive the full Leadership bonus",
+                            help = t("kingdom.configureLeaderKingdomSkillsHelp"),
                         ),
                         NumberInput(
                             name = "resourceDicePerVillage",
-                            label = "Resource Dice each turn per Village",
+                            label = t("kingdom.resourceDicePerVillage"),
                             value = settings.resourceDicePerVillage,
                             stacked = false,
                         ),
                         NumberInput(
                             name = "resourceDicePerTown",
-                            label = "Resource Dice each turn per Town",
+                            label = t("kingdom.resourceDicePerTown"),
                             value = settings.resourceDicePerTown,
                             stacked = false,
                         ),
                         NumberInput(
                             name = "resourceDicePerCity",
-                            label = "Resource Dice each turn per City",
+                            label = t("kingdom.resourceDicePerCity"),
                             value = settings.resourceDicePerCity,
                             stacked = false,
                         ),
                         NumberInput(
                             name = "resourceDicePerMetropolis",
-                            label = "Resource Dice each turn per Metropolis",
+                            label = t("kingdom.resourceDicePerMetropolis"),
                             value = settings.resourceDicePerMetropolis,
                             stacked = false,
                         ),
                         Select.fromEnum<UntrainedProficiencyMode>(
                             name = "proficiencyMode",
-                            label = "Always Increase Untrained Skills By",
                             value = fromCamelCase<UntrainedProficiencyMode>(settings.proficiencyMode),
                             stacked = false,
-                            labelFunction = {
-                                when (it) {
-                                    UntrainedProficiencyMode.NONE -> "Nothing"
-                                    UntrainedProficiencyMode.HALF -> "Half Level"
-                                    UntrainedProficiencyMode.FULL -> "Full Level"
-                                }
-                            },
                         ),
                         CheckboxInput(
                             name = "kingdomSkillIncreaseEveryLevel",
-                            label = "Kingdom Skill Increase Every Level",
+                            label = t("kingdom.kingdomSkillIncreaseEveryLevel"),
                             value = settings.kingdomSkillIncreaseEveryLevel,
                         ),
                     )

@@ -21,7 +21,7 @@ import kotlin.js.Promise
 class CharterManagement(
     private val kingdomActor: KingdomActor,
 ) : CrudApplication(
-    title = "Manage Charters",
+    title = t("kingdom.manageCharters"),
     debug = true,
     id = "kmManageCharters-${kingdomActor.uuid}"
 ) {
@@ -95,7 +95,7 @@ class CharterManagement(
                         ),
                         enable = CheckboxInput(
                             value = item.id !in disabledIds,
-                            label = "Enable",
+                            label = t("applications.enable"),
                             hideLabel = true,
                             name = "enabledIds.${item.id}",
                         ).toContext(),
@@ -107,7 +107,7 @@ class CharterManagement(
     }
 
     override fun getHeadings(): Promise<Array<String>> = buildPromise {
-        arrayOf("Boost", "Flaw")
+        arrayOf(t("kingdom.boost"), t("kingdom.flaw"))
     }
 
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {

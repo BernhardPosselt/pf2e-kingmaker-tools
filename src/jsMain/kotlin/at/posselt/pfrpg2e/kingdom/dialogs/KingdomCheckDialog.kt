@@ -315,7 +315,7 @@ private class KingdomCheckDialog(
         when (target.dataset["action"]) {
             "assurance" -> {
                 val modifier = target.dataset["modifier"]?.toInt() ?: 0
-                val pills = arrayOf("Assurance $modifier")
+                val pills = arrayOf("${t("kingdom.assurance")} $modifier")
                 buildPromise {
                     roll(
                         modifier = modifier,
@@ -461,14 +461,14 @@ private class KingdomCheckDialog(
                 baseModifiers = baseModifiers,
                 afterRoll = {
                     kingdomActor.getKingdom()?.let {
-                        postChatMessage("Reduced Supernatural Solutions by 1")
+                        postChatMessage(t("kingdom.reducingSupernaturalSolutions"))
                         it.supernaturalSolutions = max(0, it.supernaturalSolutions - 1)
                         kingdomActor.setKingdom(it)
                     }
                 },
                 params = params.copy(
                     validSkills = setOf(KingdomSkill.MAGIC),
-                    title = "Supernatural Solution: ${params.title}"
+                    title = "${t("kingdom.supernaturalSolution")}: ${params.title}"
                 ),
                 degreeMessages = degreeMessages,
                 rollOptions = rollOptions,
@@ -536,7 +536,7 @@ private class KingdomCheckDialog(
             .toTypedArray()
         val pills = if (data.assurance) {
             serializeB64Json(
-                arrayOf("Assurance ${evaluatedModifiers.total.formatAsModifier()}")
+                arrayOf("${t("kingdom.assurance")} ${evaluatedModifiers.total.formatAsModifier()}")
             )
         } else {
             serializeB64Json(evaluatedModifiers.modifiers.map {
@@ -579,7 +579,7 @@ private class KingdomCheckDialog(
                 value = phase,
             ).toContext(),
             skillInput = Select(
-                label = "Skill",
+                label = t("applications.skill"),
                 name = "skill",
                 value = selectedSkill.value,
                 options = validSkills.map {
@@ -599,7 +599,7 @@ private class KingdomCheckDialog(
                         } else {
                             actions
                         }
-                        ", ${if (num == 1) "1 Action" else "$num Actions"}"
+                        ", ${t("kingdom.numActions", recordOf("count" to num))}"
                     } else {
                         ""
                     }
@@ -613,14 +613,14 @@ private class KingdomCheckDialog(
             ).toContext(),
             supernaturalSolutionInput = CheckboxInput(
                 name = "supernaturalSolution",
-                label = "Supernatural Solution",
+                label = t("kingdom.supernaturalSolution"),
                 value = data.supernaturalSolution,
                 disabled = kingdom.supernaturalSolutions == 0 || evaluatedModifiers.fortune
             ).toContext(),
             assuranceInput = if (hasAssurance) {
                 CheckboxInput(
                     name = "assurance",
-                    label = "Assurance",
+                    label = t("kingdom.assurance"),
                     value = data.assurance,
                 ).toContext()
             } else {
@@ -653,7 +653,7 @@ private class KingdomCheckDialog(
             hidePhase = event != null,
             checkModifierLabel = checkModifier.formatAsModifier(),
             newModifierNameInput = TextInput(
-                label = "Name",
+                label = t("applications.name"),
                 value = data.newModifierName,
                 name = "newModifierName",
                 required = false,
@@ -663,7 +663,7 @@ private class KingdomCheckDialog(
                 value = ModifierType.fromString(data.newModifierType) ?: ModifierType.UNTYPED,
             ).toContext(),
             newModifierModifierInput = NumberInput(
-                label = "Modifier",
+                label = t("kingdom.modifier"),
                 value = data.newModifierModifier,
                 name = "newModifierModifier",
             ).toContext(),
@@ -721,7 +721,7 @@ private class KingdomCheckDialog(
                 ).toContext()
             } else {
                 CheckboxInput(
-                    label = "Enable",
+                    label = t("applications.enable"),
                     name = "modifiers.$index.enabled",
                     value = enabled,
                 ).toContext()

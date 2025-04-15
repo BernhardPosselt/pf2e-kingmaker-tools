@@ -93,7 +93,7 @@ class KingdomSkillPicker(
     private val includeProficiency: Boolean = true,
     private val requireAtLeastOneSkill: Boolean = false,
 ) : FormApp<KingdomSkillPickerContext, KingdomSkillPickerData>(
-    title = "Pick Skills",
+    title = t("kingdom.pickSkills"),
     template = "components/forms/xy-form.hbs",
     debug = true,
     dataModel = KingdomSkillPickerModel::class.js,
@@ -139,12 +139,12 @@ class KingdomSkillPicker(
                 cells = formContext(
                     HiddenInput(
                         name = "skills.$index.skill",
-                        label = "Skill",
+                        label = t("applications.skill"),
                         value = skill.skill,
                     ),
                     CheckboxInput(
                         name = "skills.$index.enabled",
-                        label = "Enabled",
+                        label = t("applications.enable"),
                         hideLabel = true,
                         value = skill.enabled,
                     ),
@@ -167,9 +167,9 @@ class KingdomSkillPicker(
             partId = parent.partId,
             formRows = rows,
             isFormValid = isFormValid,
-            headers = if (includeProficiency) arrayOf("", "Allow Skill", "Minimum Proficiency") else arrayOf(
+            headers = if (includeProficiency) arrayOf("", t("kingdom.allowSkill"), t("kingdom.minimumProficiency")) else arrayOf(
                 "",
-                "Allow Skill"
+                t("kingdom.allowSkill")
             )
         )
     }

@@ -74,7 +74,7 @@ class ModifyGovernment(
     private val feats: Array<RawFeat>,
     private val afterSubmit: suspend (data: RawGovernment) -> Unit,
 ) : FormApp<ModifyGovernmentContext, ModifyGovernmentData>(
-    title = if (data == null) "Add Government" else "Edit Government",
+    title = if (data == null) t("kingdom.addGovernment") else t("kingdom.editGovernment"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ModifyGovernmentDataModel::class.js,
@@ -115,46 +115,46 @@ class ModifyGovernment(
                     stacked = false,
                     name = "id",
                     value = current.id,
-                    label = "Id",
-                    help = "Choose the same Id as an existing government to override it",
+                    label = t("applications.id"),
+                    help = t("kingdom.overrideExistingElement"),
                     readonly = edit == true,
                 ),
                 TextInput(
                     stacked = false,
                     name = "name",
                     value = current.name,
-                    label = "Name",
+                    label = t("applications.name"),
                 ),
                 TextArea(
                     stacked = false,
                     name = "description",
                     value = current.description,
-                    label = "Description",
+                    label = t("applications.description"),
                 ),
                 NumberInput(
                     stacked = false,
                     name = "freeBoosts",
                     value = current.freeBoosts,
-                    label = "Free Boosts",
+                    label = t("kingdom.freeBoosts"),
                 ),
                 Select(
                     stacked = false,
                     name = "bonusFeat",
                     value = current.bonusFeat,
-                    label = "Bonus Feat",
+                    label = t("kingdom.bonusFeat"),
                     options = feats.map { SelectOption(it.name, it.id) },
                 ),
             ) + KingdomAbility.entries.mapIndexed { index, it ->
                 CheckboxInput(
                     name = "boosts.$index",
                     value = it.value in current.boosts,
-                    label = "Boost: ${t(it)}",
+                    label = "${t("kingdom.boost")}: ${t(it)}",
                 ).toContext()
             }.toTypedArray() + KingdomSkill.entries.mapIndexed { index, it ->
                 CheckboxInput(
                     name = "skillProficiencies.$index",
                     value = it.value in current.skillProficiencies,
-                    label = "Skill Training: ${t(it)}",
+                    label = "${t("kingdom.skillTraining")}: ${t(it)}",
                 ).toContext()
             }.toTypedArray()
         )

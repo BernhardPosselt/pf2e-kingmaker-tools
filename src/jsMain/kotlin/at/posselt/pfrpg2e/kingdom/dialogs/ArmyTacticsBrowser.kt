@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.utils.awaitAll
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.ui
@@ -24,6 +25,7 @@ import com.foundryvtt.pf2e.actor.PF2EArmy
 import com.foundryvtt.pf2e.item.PF2ECampaignFeature
 import com.foundryvtt.pf2e.item.itemFromUuid
 import js.objects.JsPlainObject
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -53,7 +55,7 @@ private class ArmyTacticsBrowser(
     private val kingdom: KingdomData,
     private val army: PF2EArmy,
 ) : SimpleApp<ArmyTacticsContext>(
-    title = "Learnable Tactics: ${army.name}",
+    title = t("kingdom.armyTacticsBrowserTitle", recordOf("armyName" to army.name)),
     template = "applications/kingdom/army-tactics-browser.hbs",
     classes = arrayOf("km-scroll-application"),
     id = "kmArmyTactics-${kingdomActor.uuid}",
@@ -112,7 +114,7 @@ private class ArmyTacticsBrowser(
             checkNotNull(activity) {
                 "Could not find train-army activity"
             }
-            val degreeMessage = "<b>Learned Tactic</b>: ${buildUuid(item.uuid, item.name)}"
+            val degreeMessage = "<b>${t("kingdom.learnedTactic")}</b>: ${buildUuid(item.uuid, item.name)}"
             kingdomCheckDialog(
                 game = this.game,
                 kingdom = this.kingdom,
@@ -134,7 +136,7 @@ fun armyTacticsBrowser(game: Game, kingdomActor: KingdomActor, kingdom: KingdomD
     val selectedArmies = game.getSelectedArmies()
     val army = selectedArmies.firstOrNull()
     if (army == null || selectedArmies.size > 1) {
-        ui.notifications.error("Please select a single army on the scene")
+        ui.notifications.error(t("kingdom.selectArmy"))
     } else {
         ArmyTacticsBrowser(game, kingdomActor, kingdom, army).launch()
     }

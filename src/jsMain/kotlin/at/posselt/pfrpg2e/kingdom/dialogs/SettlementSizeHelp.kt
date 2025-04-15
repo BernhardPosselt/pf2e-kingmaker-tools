@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.settlementSizeData
 import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
+import js.objects.recordOf
 
 @Suppress("unused")
 @JsPlainObject
@@ -26,7 +27,7 @@ private external interface SettlementSizeContext {
 
 suspend fun settlementSizeHelp() {
     prompt<Unit, Unit>(
-        title = "Settlement Size",
+        title = t("kingdom.settlementSize"),
         templatePath = "applications/kingdom/settlement-size-help.hbs",
         buttonLabel = "Close",
         templateContext = SettlementSizeContext(
@@ -41,11 +42,7 @@ suspend fun settlementSizeHelp() {
                     } else {
                         "${it.levelFrom}+"
                     }
-                    val influence = if (it.influence == 1) {
-                        "1 hex"
-                    } else {
-                        "${it.influence} hexes"
-                    }
+                    val influence = t("kingdom.hex", recordOf("count" to it.influence))
                     SSizeContext(
                         type = t(it.type),
                         blocks = it.maximumBlocks,

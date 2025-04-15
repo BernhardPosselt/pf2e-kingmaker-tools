@@ -25,6 +25,7 @@ import com.foundryvtt.core.ui
 import com.foundryvtt.core.ui.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import js.objects.JsPlainObject
+import js.objects.recordOf
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -52,7 +53,7 @@ private class ArmyBrowser(
     private val kingdom: KingdomData,
     private val folderName: String,
 ) : SimpleApp<ArmiesContext>(
-    title = "Armies in 'Recruitable Armies' Folder",
+    title = t("kingdom.armyBrowserTitle"),
     template = "applications/kingdom/army-browser.hbs",
     classes = arrayOf("km-scroll-application"),
     width = 600,
@@ -107,7 +108,7 @@ private class ArmyBrowser(
             checkNotNull(activity) {
                 "Could not find recruit-army activity"
             }
-            val degreeMessage = "<b>Recruited Army</b>: ${buildUuid(army.uuid, army.name)}"
+            val degreeMessage = "<b>${t("kingdom.recruitedArmy")}</b>: ${buildUuid(army.uuid, army.name)}"
             kingdomCheckDialog(
                 game = this.game,
                 kingdom = this.kingdom,
@@ -131,18 +132,18 @@ private class ArmyBrowser(
 }
 
 suspend fun armyBrowser(game: Game, kingdomActor: KingdomActor, kingdom: KingdomData) {
-    val folderName = "Recruitable Armies"
+    val folderName = t("kingdom.recruitableArmies")
     val allPlayerArmies = game.getRecruitableArmies(folderName)
     if (allPlayerArmies.isNotEmpty()) {
         ArmyBrowser(game, kingdomActor, kingdom, folderName).launch()
     } else if (allPlayerArmies.isEmpty() && game.user.isGM) {
-        ui.notifications.info("Importing Basic Armies into '$folderName' folder")
+        ui.notifications.info(t("kingdom.importingBasicArmies", recordOf("folderName" to folderName)))
         val folder = game.importBasicArmies(folderName)
         kingdom.settings.recruitableArmiesFolderId = folder.id
         kingdomActor.setKingdom(kingdom)
-        ui.notifications.info("Import finished")
+        ui.notifications.info(t("kingdom.importFinished"))
         ArmyBrowser(game, kingdomActor, kingdom, folderName).launch()
     } else {
-        ui.notifications.error("No armies found in the '$folderName' folder. Let your GM open this dialog to import basic armies")
+        ui.notifications.error(t("kingdom.noArmiesFoundInFolder", recordOf("folderName" to folderName)))
     }
 }

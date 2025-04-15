@@ -11,13 +11,14 @@ import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.t
 import js.core.Void
 import kotlin.js.Promise
 
 class KingdomEventManagement(
     private val kingdomActor: KingdomActor,
 ) : CrudApplication(
-    title = "Manage Kingdom Events",
+    title = t("kingdom.manageKingdomEvents"),
     debug = true,
     id = "kmManageKingdomEvents-${kingdomActor.uuid}"
 ) {
@@ -76,7 +77,7 @@ class KingdomEventManagement(
                         additionalColumns = arrayOf(),
                         enable = CheckboxInput(
                             value = item.id !in disabledIds,
-                            label = "Enable",
+                            label = t("applications.enable"),
                             hideLabel = true,
                             name = "enabledIds.${item.id}",
                         ).toContext(),

@@ -23,7 +23,7 @@ import kotlin.js.Promise
 class GovernmentManagement(
     private val kingdomActor: KingdomActor,
 ) : CrudApplication(
-    title = "Manage Governments",
+    title = t("kingdom.manageGovernments"),
     debug = true,
     id = "kmManageGovernments-${kingdomActor.uuid}"
 ) {
@@ -103,7 +103,7 @@ class GovernmentManagement(
                         ),
                         enable = CheckboxInput(
                             value = item.id !in disabledIds,
-                            label = "Enable",
+                            label = t("applications.enable"),
                             hideLabel = true,
                             name = "enabledIds.${item.id}",
                         ).toContext(),
@@ -115,7 +115,7 @@ class GovernmentManagement(
     }
 
     override fun getHeadings(): Promise<Array<String>> = buildPromise {
-        arrayOf("Boosts", "Skills")
+        arrayOf(t("kingdom.boosts"), t("applications.skills"))
     }
 
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {
