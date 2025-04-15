@@ -64,6 +64,10 @@
                 aspect-ratio: 1;
             }
 
+            .km-lots-2 img {
+                padding-bottom: 90px;
+            }
+
             .km-lots-1 img {
                 height: 50%;
             }
