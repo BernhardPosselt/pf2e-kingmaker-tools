@@ -210,7 +210,8 @@ tasks.register<ChangeModuleVersion>("changeModuleVersion") {
  */
 tasks.register<Zip>("package") {
     dependsOn("clean", "build", "changeModuleVersion", "txPull")
-    tasks.named("build").get().mustRunAfter("clean")
+    tasks.named("txPull").get().mustRunAfter("clean")
+    tasks.named("build").get().mustRunAfter("txPull")
     archiveFileName = "release.zip"
     destinationDirectory = layout.buildDirectory
     from("dist") { into("pf2e-kingmaker-tools/dist") }
