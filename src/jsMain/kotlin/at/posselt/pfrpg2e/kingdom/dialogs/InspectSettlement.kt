@@ -14,7 +14,9 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.calculateAvailableItems
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
@@ -22,7 +24,6 @@ import at.posselt.pfrpg2e.kingdom.structures.isStructure
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.unslugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.formatAsModifier
@@ -147,6 +148,7 @@ enum class SettlementNav: Translatable, ValueEnum {
 
 class InspectSettlement(
     private val game: Game,
+    private val kingdom: KingdomData,
     title: String,
     private val autoCalculateSettlementLevel: Boolean,
     private val allStructuresStack: Boolean,
@@ -301,6 +303,7 @@ class InspectSettlement(
             .awaitAll()
             .map { LabelValueContext(label=it.first, value=it.second) }
             .toTypedArray()
+        val activitiesById = kingdom.getAllActivities().associateBy { it.id }
         val bonuses = parsed.bonuses
             .mapNotNull { bonus ->
                 val activity = bonus.activity
@@ -309,7 +312,7 @@ class InspectSettlement(
                 if (activity != null && skill != null) {
                     t("kingdom.bonusToActivityUsingSkill", recordOf(
                         "modifier" to mod,
-                        "activity" to activity.unslugify(),
+                        "activity" to (activitiesById[activity]?.title ?: ""),
                         "skill" to t(skill)
                     ))
                 } else if (skill != null) {
@@ -320,7 +323,7 @@ class InspectSettlement(
                 } else if (activity != null) {
                     t("kingdom.bonusTo", recordOf(
                         "modifier" to mod,
-                        "selector" to activity.unslugify(),
+                        "selector" to (activitiesById[activity]?.title ?: ""),
                     ))
                 } else {
                     null

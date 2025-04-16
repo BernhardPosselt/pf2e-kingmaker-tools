@@ -21,6 +21,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.getActiveLeader
+import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.setKingdom
@@ -28,7 +29,6 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.unslugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
@@ -461,6 +461,7 @@ class StructureBrowser(
                 ).toContext()
             )
         }.toTypedArray()
+        val activitiesById = kingdom.getAllActivities().associateBy { it.id }
         val activityFilters = worldStructures
             .flatMap { it.bonuses.mapNotNull { b -> b.activity } }
             .distinct()
@@ -472,7 +473,7 @@ class StructureBrowser(
                     ).toContext(),
                     CheckboxInput(
                         name = "activityFilters.$index.enabled",
-                        label = it.unslugify(),
+                        label = activitiesById[it]?.title ?: "",
                         value = it in activityFilters,
                     ).toContext()
                 )

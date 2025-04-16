@@ -141,6 +141,8 @@
       "checkingSecondWeatherEvent": "Checking for Second Weather Event with DC {dc}"
     },
     "camping": {
+      "rest": "Rest",
+      "continue": "Continue",
       "reduceClumsyBy": "Reduce Clumsy By",
       "reduceDrainedBy": "Reduce Drained By",
       "reduceEnfeebledBy": "Reduce Enfeebled By",

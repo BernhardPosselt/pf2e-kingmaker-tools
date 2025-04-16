@@ -22,7 +22,7 @@ val settlementSizeData = listOf(
         levelFrom = 1,
         levelTo = 1,
         maxItemBonus = 1,
-        population = "400 or less",
+        population = "<401",
     ), SettlementSize(
         type = SettlementSizeType.TOWN,
         consumption = 2,

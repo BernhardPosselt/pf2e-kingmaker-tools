@@ -153,7 +153,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.collections.plus
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -490,7 +489,8 @@ class KingdomSheet(
                         allStructuresStack = allStructuresStack,
                         allowCapitalInvestmentInCapitalWithoutBank = kingdom.settings.capitalInvestmentInCapital,
                         settlement = settlement,
-                        feats = kingdom.getChosenFeats(kingdom.getChosenFeatures(kingdom.getExplodedFeatures()))
+                        feats = kingdom.getChosenFeats(kingdom.getChosenFeatures(kingdom.getExplodedFeatures())),
+                        kingdom = kingdom,
                     ) { data ->
                         val kingdom = getKingdom()
                         kingdom.settlements = kingdom.settlements
