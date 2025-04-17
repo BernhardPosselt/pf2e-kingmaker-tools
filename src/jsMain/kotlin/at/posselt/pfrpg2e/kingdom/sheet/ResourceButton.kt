@@ -173,10 +173,10 @@ data class ResourceButton(
             resourceKey, recordOf(
                 // TODO: this does not support RD expressions like 1d4rd
                 (if (isDiceExpression && !isRd) "expression" else "count") to if (isRd) value.replace("rd", "") else value,
-                "mode" to t(mode),
-                "turn" to if (turn == Turn.NEXT) t(turn) else "",
-                "rawMode" to mode.value, // needed for translations
-                "rawTurn" to turn.value, // needed for translations
+                "mode" to mode.value,
+                "multiple" to multiple.toString(),
+                "turn" to turn.value,
+                "location" to "button"
             )
         ).trim()
         // rename needed since value is a property on an HTML element
@@ -230,7 +230,6 @@ data class ResourceButton(
         } else {
             initialValue
         }
-        val modeKey = if (mode == ResourceMode.GAIN) "resourceButton.mode.gaining" else "resourceButton.mode.losing"
         val resourceKey = if (resource == Resource.ROLLED_RESOURCE_DICE) {
             Resource.RESOURCE_POINTS.i18nKey
         } else {
@@ -239,10 +238,10 @@ data class ResourceButton(
         val message = t(
             resourceKey, recordOf(
                 "count" to abs(value),
-                "mode" to t(modeKey),
-                "turn" to if (turn == Turn.NEXT) t(turn) else "",
-                "rawMode" to mode.value, // needed for translations
-                "rawTurn" to turn.value, // needed for translations
+                "mode" to mode.value,
+                "multiple" to multiple.toString(),
+                "turn" to turn.value,
+                "location" to "chat"
             )
         ).trim()
         postChatMessage(message, isHtml = true)
