@@ -167,7 +167,7 @@ class KingdomSheet(
     dataModel = KingdomSheetDataModel::class.js,
     classes = arrayOf("km-kingdom-sheet"),
     id = "kmKingdomSheet-${actor.uuid}",
-    width = 970,
+    width = 1000,
     controls = arrayOf(
         MenuControl(label = t("kingdom.showPlayers"), action = "show-players", gmOnly = true),
         MenuControl(label = t("kingdom.activities"), action = "configure-activities", gmOnly = true),

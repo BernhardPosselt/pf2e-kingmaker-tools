@@ -233,6 +233,13 @@
             border-radius: 0;
             border: 0;
 
+            .km-worksite-label{
+                text-overflow: ellipsis;
+                overflow-x: hidden;
+                max-width: 116px;
+                white-space: nowrap;
+            }
+
             td {
                 padding: 3px;
 
@@ -561,7 +568,7 @@
                     display: flex;
                     align-items: center;
                     gap: .5em;
-                    width: 572px;
+                    width: 602px;
 
                     .km-detail-controls {
                         display: flex;

@@ -47,7 +47,7 @@
         <table class="km-worksites">
             {{#each worksitesContext}}
             <tr>
-                <td>{{label}}</td>
+                <td class="km-worksite-label" title="{{label}}">{{label}}</td>
                 <td>
                     {{> formElement quantity }}
                     {{#if ../automateResources}}
