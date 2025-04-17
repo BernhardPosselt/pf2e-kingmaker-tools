@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Migrate recipe cost to parsed values
+* Indicate activity ordering in Upkeep and Commerce phase
 
 ### Fixed
 

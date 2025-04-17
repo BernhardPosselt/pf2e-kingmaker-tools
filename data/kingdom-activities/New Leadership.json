@@ -3,6 +3,7 @@
     "oncePerRound": false,
     "fortune": false,
     "enabled": true,
+    "order": 2,
     "phase": "upkeep",
     "dc": "control",
     "title": "activities.new-leadership.title",
