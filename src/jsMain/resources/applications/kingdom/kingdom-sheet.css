@@ -57,8 +57,11 @@
         padding: 0;
     }
 
+    select.km-width-small {
+        padding: 0 .2rem;
+    }
     .km-width-small {
-        width: 54px !important;;
+        width: 50px !important;;
     }
 
     .km-width-medium {
@@ -276,6 +279,19 @@
             }
         }
 
+        .km-slash-header {
+            padding: 0;
+            width: 5px;
+        }
+
+        .km-next-header {
+            max-width: 75px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 0.2rem 0;
+        }
+
         .km-unrest-ruin {
             border-radius: 0;
             border: 0;
@@ -298,11 +314,11 @@
                 padding: 3px;
 
                 .km-threshold-value {
-                    width: 54px;
+                    /*width: 54px;*/
                 }
 
                 &.km-capacity {
-                    padding-right: 34px;
+                    /*padding-right: 34px;*/
                 }
             }
         }
@@ -420,7 +436,7 @@
     .km-kingdom-sheet-sub-nav,
     .km-kingdom-sheet-sidebar {
         button {
-            height: 30px;
+            height: auto;
             margin-left: 5px;
 
             i {

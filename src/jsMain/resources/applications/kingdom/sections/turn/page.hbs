@@ -54,6 +54,10 @@
         <h3>{{localizeKM "kingdom.resources"}}</h3>
         <table class="km-unrest-ruin">
             <tr>
+                <th>{{localizeKM "resourceButton.turnShort.now"}}</th>
+                <th>{{localizeKM "resourceButton.turnShort.next"}}</th>
+            </tr>
+            <tr>
                 <td>{{> formElement resourceDiceContext.now }}</td>
                 <td>{{> formElement resourceDiceContext.next }}</td>
             </tr>
@@ -64,6 +68,12 @@
         </table>
         <h3>{{localizeKM "kingdom.commodities"}}</h3>
         <table class="km-unrest-ruin">
+            <tr>
+                <th>{{localizeKM "resourceButton.turnShort.now"}}</th>
+                <th class="km-slash-header"></th>
+                <th></th>
+                <th class="km-next-header" title="{{localizeKM "resourceButton.turnShort.next"}}">{{localizeKM "resourceButton.turnShort.next"}}</th>
+            </tr>
             <tr>
                 <td>{{> formElement commoditiesContext.now.food }}</td>
                 <td>/</td>

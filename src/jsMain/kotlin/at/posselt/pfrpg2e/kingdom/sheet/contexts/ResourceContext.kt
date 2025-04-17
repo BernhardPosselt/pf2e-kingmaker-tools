@@ -27,7 +27,7 @@ fun RawResources.toContext(key: String, label: String) =
             label = t("kingdom.next"),
             value = next,
             stacked = false,
-            elementClasses = listOf("km-width-small"),
-            labelClasses = listOf("km-slim-inputs"),
+            elementClasses = listOf("km-width-small", "km-slim-inputs"),
+            hideLabel = true,
         ).toContext(),
     )
