@@ -179,6 +179,7 @@ data class ResourceButton(
                 "rawTurn" to turn.value, // needed for translations
             )
         ).trim()
+        // rename needed since value is a property on an HTML element
         val value2 = value
         val button = document.create.button {
             type = ButtonType.button

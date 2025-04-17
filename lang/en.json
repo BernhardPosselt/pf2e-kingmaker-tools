@@ -1280,7 +1280,7 @@
         "xp": "{mode} {expression} XP {turn}",
         "supernaturalSolution": "{mode} {expression} Supernatural Solutions {turn}",
         "creativeSolution": "{mode} {expression} Creative Solutions {turn}",
-        "rolledResourceDice": "{mode} {expression} Rolled Resource Dic {turn}e"
+        "rolledResourceDice": "{mode} {expression} Rolled Resource Dice {turn}"
       }
     },
     "campingActivities": {
