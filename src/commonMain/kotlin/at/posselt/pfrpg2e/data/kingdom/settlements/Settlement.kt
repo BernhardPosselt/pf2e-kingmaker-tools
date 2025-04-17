@@ -39,4 +39,13 @@ data class Settlement(
         .takeIf { it < 0 }
         ?.let { abs(it) }
         ?: 0
+    val highestUniqueBonuses: Set<GroupedStructureBonus>
+        get() {
+            val bonusesByType = bonuses.groupBy { it.skill to it.activity }
+            return bonusesByType
+                .values.map { structures ->
+                    structures.maxBy { it.value }
+                }
+                .toSet()
+        }
 }

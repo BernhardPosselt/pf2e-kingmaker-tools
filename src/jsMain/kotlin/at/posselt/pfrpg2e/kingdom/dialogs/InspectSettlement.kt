@@ -304,7 +304,7 @@ class InspectSettlement(
             .map { LabelValueContext(label=it.first, value=it.second) }
             .toTypedArray()
         val activitiesById = kingdom.getAllActivities().associateBy { it.id }
-        val bonuses = parsed.bonuses
+        val bonuses = parsed.highestUniqueBonuses
             .mapNotNull { bonus ->
                 val activity = bonus.activity
                 val skill = bonus.skill
