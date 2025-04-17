@@ -163,7 +163,7 @@ class InspectSettlement(
     classes = arrayOf("km-inspect-settlement"),
     dataModel = InspectSettlementDataModel::class.js,
     id = "kmInspectSettlement-${settlement.sceneId}",
-    width = 500,
+    width = 700,
 ) {
     init {
         appHook.onDeleteScene { _, _, _ -> render() }
