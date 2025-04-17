@@ -21,9 +21,9 @@ data class XpChange(
     suspend fun toChat() {
         if (addXp > 0) {
             if (gain) {
-                postChatMessage(t("kingdom.gainingXp", recordOf("xp" to addXp)))
+                postChatMessage(t("kingdom.gainingXp", recordOf("count" to addXp)))
             } else {
-                postChatMessage(t("kingdom.losingXp", recordOf("xp" to addXp)))
+                postChatMessage(t("kingdom.losingXp", recordOf("count" to addXp)))
             }
         }
         if (losingLevel) {

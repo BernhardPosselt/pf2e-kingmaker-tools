@@ -181,6 +181,14 @@
         .km-skill-checks {
             border-radius: 0;
 
+            .km-skills-label {
+                text-overflow: ellipsis;
+                overflow-y: hidden;
+                white-space: nowrap;
+                max-width: 105px;
+                overflow-x: hidden;
+            }
+
             .km-proficiency-value,
             select {
                 border: 1px solid var(--color-light-5);

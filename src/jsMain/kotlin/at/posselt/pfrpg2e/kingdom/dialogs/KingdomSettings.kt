@@ -282,7 +282,7 @@ class KingdomSettingsApplication(
                     ),
                 ),
                 Section(
-                    legend = "Vance & Kerenshara",
+                    legend = "Vance & Kerenshara ${t("kingdom.homebrew")}",
                     formRows = listOf(
                         CheckboxInput(
                             name = "kingdomAllStructureItemBonusesStack",

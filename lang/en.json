@@ -377,6 +377,7 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "homebrew": "Homebrew",
       "automation": "Automation",
       "maximumFamePoints": "Maximum Fame Points",
       "automateStats": "Automate Kingdom Stats",
@@ -2725,7 +2726,7 @@
       },
       "collect-taxes": {
         "title": "Collect Taxes",
-        "description": "<p>Tax collectors travel through the lands to collect funds for the betterment of the kingdom. Attempt a basic check.</p>",
+        "description": "<p>Tax collectors travel through the lands to collect funds for the betterment of the kingdom. Attempt a basic check. If you don’t attempt to Collect Taxes, you can instead attempt a @Check[dc:11|type:flat]; on a success, reduce @lose1Unrest.</p>",
         "criticalSuccess": {
           "msg": "<p>Your tax collectors are wildly successful! For the remainder of the Kingdom turn, gain a +2 circumstance bonus to Economy-based checks.</p>",
           "modifiers": {
