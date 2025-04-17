@@ -257,6 +257,8 @@ You can pull changes either by setting up the project locally (check out the rel
 
 or by manually downloading by clicking on your language in Transifex and choosing **Download for use** ![](docs/img/transifex-download.png) Then place the downloaded file into **Data/modules/pf2e-kingmaker-tools/dist/lang/ru.json** (adjust name depending on your translation). The location of the data folder [depends on your Operating System](https://foundryvtt.com/article/user-data/). However, make sure to only perform this **on your local dev instance and not on your hosted services due to security reasons**: translations might include malicious HTML and those strings are only stripped when building the project.
 
+**A note on Lores**: Lores in the 2e system can currently not be translated properly and if you use translated lores, you lose automation that matches on the lore name. You can use translated lores in this module by overriding activities and lores manually. Translations will be implemented once the 2e system allows for it
+
 ### Help out as a Developer
 
 This module skips the built-in Foundry translation system since it's broken and unusable. Nonetheless, you need to link your json files in the module.json file for each language, otherwise Foundry will not let you change your language in the settings.
