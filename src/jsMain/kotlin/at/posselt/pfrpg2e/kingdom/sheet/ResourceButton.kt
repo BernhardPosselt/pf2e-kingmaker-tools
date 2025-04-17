@@ -174,7 +174,9 @@ data class ResourceButton(
                 // TODO: this does not support RD expressions like 1d4rd
                 (if (isDiceExpression && !isRd) "expression" else "count") to if (isRd) value.replace("rd", "") else value,
                 "mode" to t(mode),
-                "turn" to if (turn == Turn.NEXT) t(turn) else ""
+                "turn" to if (turn == Turn.NEXT) t(turn) else "",
+                "rawMode" to mode.value, // needed for translations
+                "rawTurn" to turn.value, // needed for translations
             )
         ).trim()
         val value2 = value
@@ -227,7 +229,7 @@ data class ResourceButton(
         } else {
             initialValue
         }
-        val mode = if (mode == ResourceMode.GAIN) "resourceButton.mode.gaining" else "resourceButton.mode.losing"
+        val modeKey = if (mode == ResourceMode.GAIN) "resourceButton.mode.gaining" else "resourceButton.mode.losing"
         val resourceKey = if (resource == Resource.ROLLED_RESOURCE_DICE) {
             Resource.RESOURCE_POINTS.i18nKey
         } else {
@@ -236,8 +238,10 @@ data class ResourceButton(
         val message = t(
             resourceKey, recordOf(
                 "count" to abs(value),
-                "mode" to t(mode),
-                "turn" to if (turn == Turn.NEXT) t(turn) else ""
+                "mode" to t(modeKey),
+                "turn" to if (turn == Turn.NEXT) t(turn) else "",
+                "rawMode" to mode.value, // needed for translations
+                "rawTurn" to turn.value, // needed for translations
             )
         ).trim()
         postChatMessage(message, isHtml = true)
