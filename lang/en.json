@@ -377,6 +377,7 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "resolve": "Resolve",
       "homebrew": "Homebrew",
       "automation": "Automation",
       "maximumFamePoints": "Maximum Fame Points",
