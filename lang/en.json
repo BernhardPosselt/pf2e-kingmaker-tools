@@ -377,6 +377,7 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "perform": "Perform",
       "resolve": "Resolve",
       "homebrew": "Homebrew",
       "automation": "Automation",
@@ -1217,6 +1218,10 @@
       "turn": {
         "next": "Next Turn",
         "now": "This Turn"
+      },
+      "turnShort": {
+        "next": "Next",
+        "now": "Now"
       },
       "resourceDice": {
         "resourceDice": "{location, select, chat {{mode, select, gain {Gaining} other {Losing}}} other {{mode, select, gain {Gain} other {Lose}}}} {multiple, select, true {Multiple} other {}} {count} Rolled Resource Dice of Resource Dice {turn, select, next {Next Turn} other {}}",

@@ -203,6 +203,9 @@
                 width: 101px;
                 margin-left: auto;
                 text-align: left;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
 
             select {

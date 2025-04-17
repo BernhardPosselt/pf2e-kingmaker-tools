@@ -15,6 +15,8 @@ enum class Turn : Translatable, ValueEnum {
 
     override val i18nKey = "resourceButton.turn.$value"
 
+    val i18nKeyShort = "resourceButton.turnShort.$value"
+
     override val value: String
         get() = toCamelCase()
 }
