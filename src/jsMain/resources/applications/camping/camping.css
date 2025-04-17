@@ -651,6 +651,9 @@ ul.km-camping-actors {
                     box-shadow: none;
                     font-size: 1em;
                     height: 2em;
+                    width: 150px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                 }
             }
         }
