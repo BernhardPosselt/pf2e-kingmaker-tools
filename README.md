@@ -105,7 +105,11 @@ The folder **pf2e-kingmaker-tools** should now exist. Change into it:
 
     cd pf2e-kingmaker-tools
 
-Optionally, log into your Transifex account and retrieve your token from your [account settings page]( https://app.transifex.com/user/settings/api/). Then create your rc file using:
+If you **don't have access to Transifex and aren't interested in becoming a translator**, you need to create dummy localization files locally, otherwise the app won't load:
+
+    ./gradlew createDummyTranslations
+
+If you have access to Transifex, log into your Transifex account and retrieve your token from your [account settings page]( https://app.transifex.com/user/settings/api/). Then create your rc file using:
 
     nano ~/.transifexrc
 
@@ -177,7 +181,11 @@ macOS:
 
     ln -s /Users/$(whoami)/dev/pf2e-kingmaker-tools/ /Users/$(whoami)/Library/Application Support/FoundryVTT/Data/modules/pf2e-kingmaker-tools/
 
-Optionally, if you want all translations present locally, pull all language files from Transifex where TX_TOKEN is obtained from your [account settings page]( https://app.transifex.com/user/settings/api/). Then create your rc file using:
+If you **don't have access to Transifex and aren't interested in becoming a translator**, you need to create dummy localization files locally, otherwise the app won't load:
+
+    ./gradlew createDummyTranslations
+
+If you have access to Transifex, you need to pull all language files from Transifex where TX_TOKEN is obtained from your [account settings page]( https://app.transifex.com/user/settings/api/). Create your rc file using:
 
     nano ~/.transifexrc
 

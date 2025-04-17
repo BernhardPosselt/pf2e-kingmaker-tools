@@ -1,6 +1,7 @@
 import at.posselt.pfrpg2e.plugins.ChangeModuleVersion
 import at.posselt.pfrpg2e.plugins.CombineJsonFiles
 import at.posselt.pfrpg2e.plugins.CopyAndSanitizeTranslations
+import at.posselt.pfrpg2e.plugins.CreateDummyTranslations
 import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
 import at.posselt.pfrpg2e.plugins.ReleaseModule
 import at.posselt.pfrpg2e.plugins.UnpackJsonFiles
@@ -283,4 +284,10 @@ tasks.register<Exec>("txPull") {
     workingDir(projectDir)
     executable("build/transifex/tx")
     args(listOf("pull", "-a"))
+}
+
+tasks.register<CreateDummyTranslations>("createDummyTranslations") {
+    moduleJson = layout.projectDirectory.file("module.json")
+    enTranslation = layout.projectDirectory.file("lang/en.json")
+    langDirectory = layout.projectDirectory.dir("lang/")
 }
