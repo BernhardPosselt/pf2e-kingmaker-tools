@@ -65,18 +65,6 @@ import io.kvision.jquery.get
 import org.w3c.dom.HTMLElement
 
 fun main() {
-    Hooks.onI18NInit {
-        buildPromise {
-            initLocalization()
-            game.settings.pfrpg2eKingdomCampingWeather.register()
-            registerContextMenus()
-            registerTokenMappings(game)
-            registerWeatherHooks(game)
-            registerCombatTrackHooks(game)
-            registerMealDiffingHooks()
-            registerArmyConsumptionHooks(game)
-        }
-    }
     Hooks.onInit {
         val actionDispatcher = ActionDispatcher(
             game = game,
@@ -94,9 +82,22 @@ fun main() {
             listen()
         }
 
+        Hooks.onI18NInit {
+            buildPromise {
+                initLocalization()
+                game.settings.pfrpg2eKingdomCampingWeather.register()
+                registerContextMenus()
+                registerTokenMappings(game)
+                registerWeatherHooks(game)
+                registerCombatTrackHooks(game)
+                registerMealDiffingHooks()
+                registerArmyConsumptionHooks(game)
+                registerIcons(actionDispatcher)
+            }
+        }
+
         bindChatButtons(game)
         registerMacroDropHooks(game)
-        registerIcons(actionDispatcher)
 
         buildPromise {
             // register partials

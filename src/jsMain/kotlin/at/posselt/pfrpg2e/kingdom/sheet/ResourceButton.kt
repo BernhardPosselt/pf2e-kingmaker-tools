@@ -162,17 +162,23 @@ data class ResourceButton(
     fun toHtml(): String {
         val isRd = value.contains("rd")
         val isDiceExpression = value.contains("d")
-        val resourceLabel = if (isRd) {
-            t("resourceButton.resourceDice.${resource.value}", recordOf("count" to value.replace("rd", "")))
-        } else if(isDiceExpression) {
-            t(resource.i18nKeyExpression, recordOf("expression" to value))
+        val resourceKey = if (isRd) {
+            "resourceButton.resourceDice.${resource.value}"
+        } else if (isDiceExpression) {
+            resource.i18nKeyExpression
         } else {
-            t(resource.i18nKey, recordOf("count" to value))
+            resource.i18nKey
         }
-        val turnLabel = if (turn == Turn.NEXT) " ${t(turn)}" else ""
-        val label = "${t(mode)} ${resourceLabel}$turnLabel"
+        val label = t(
+            resourceKey, recordOf(
+                // TODO: this does not support RD expressions like 1d4rd
+                (if (isDiceExpression && !isRd) "expression" else "count") to if (isRd) value.replace("rd", "") else value,
+                "mode" to t(mode),
+                "turn" to if (turn == Turn.NEXT) t(turn) else ""
+            )
+        ).trim()
         val value2 = value
-        return document.create.button {
+        val button = document.create.button {
             type = ButtonType.button
             classes = setOf("km-gain-lose")
             attributes["data-type"] = resource.value
@@ -182,6 +188,7 @@ data class ResourceButton(
             attributes["data-value"] = value2
             +label
         }.outerHTML
+        return button
     }
 
     private suspend fun evaluateValueExpression(
@@ -220,11 +227,19 @@ data class ResourceButton(
         } else {
             initialValue
         }
-        val turnLabel = if (turn == Turn.NEXT) " ${t(turn)}" else ""
         val mode = if (mode == ResourceMode.GAIN) "resourceButton.mode.gaining" else "resourceButton.mode.losing"
-        val resourceKey =
-            if (resource == Resource.ROLLED_RESOURCE_DICE) Resource.RESOURCE_POINTS.i18nKey else resource.i18nKey
-        val message = "${t(mode)} ${t(resourceKey, recordOf("count" to abs(value)))}$turnLabel"
+        val resourceKey = if (resource == Resource.ROLLED_RESOURCE_DICE) {
+            Resource.RESOURCE_POINTS.i18nKey
+        } else {
+            resource.i18nKey
+        }
+        val message = t(
+            resourceKey, recordOf(
+                "count" to abs(value),
+                "mode" to t(mode),
+                "turn" to if (turn == Turn.NEXT) t(turn) else ""
+            )
+        ).trim()
         postChatMessage(message, isHtml = true)
         val setter = when (resource) {
             Resource.CONSUMPTION -> when (turn) {
