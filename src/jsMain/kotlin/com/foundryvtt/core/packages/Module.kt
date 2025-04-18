@@ -1,4 +1,4 @@
-package com.foundryvtt.core
+package com.foundryvtt.core.packages
 
 import kotlin.js.Promise
 

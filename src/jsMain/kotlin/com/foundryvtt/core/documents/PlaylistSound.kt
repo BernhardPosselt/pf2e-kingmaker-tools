@@ -8,10 +8,10 @@ import com.foundryvtt.core.HooksEventListener
 import com.foundryvtt.core.PreCreateDocumentCallback
 import com.foundryvtt.core.PreDeleteDocumentCallback
 import com.foundryvtt.core.PreUpdateDocumentCallback
-import com.foundryvtt.core.Sound
 import com.foundryvtt.core.UpdateDocumentCallback
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
+import com.foundryvtt.core.audio.Sound
 import js.objects.jso
 import kotlin.js.Promise
 

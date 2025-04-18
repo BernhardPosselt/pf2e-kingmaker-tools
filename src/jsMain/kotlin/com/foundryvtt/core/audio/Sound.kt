@@ -1,5 +1,6 @@
-package com.foundryvtt.core
+package com.foundryvtt.core.audio
 
+import com.foundryvtt.core.AudioContext
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLAudioElement
 import kotlin.js.Promise

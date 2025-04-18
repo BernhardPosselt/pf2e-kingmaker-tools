@@ -1,6 +1,6 @@
 package com.foundryvtt.kingmaker
 
-import com.foundryvtt.core.Module
+import com.foundryvtt.core.packages.Module
 import js.objects.ReadonlyRecord
 import kotlinx.js.JsPlainObject
 
