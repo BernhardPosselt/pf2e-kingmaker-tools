@@ -12,8 +12,8 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
-import com.foundryvtt.core.onRenderChatLog
+import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.helpers.onRenderChatLog
 import com.foundryvtt.core.ui
 import io.github.uuidjs.uuid.v4
 import js.array.tupleOf
@@ -161,7 +161,7 @@ private val buttons = listOf(
 )
 
 fun bindChatButtons(game: Game) {
-    Hooks.onRenderChatLog { application, _, data ->
+    TypedHooks.onRenderChatLog { application, _, data ->
         val chatLog = document.getElementById("chat")
         chatLog?.addEventListener("click", { ev ->
             buttons.forEach { data ->

@@ -48,7 +48,7 @@ import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.documents.onCreateItem
 import com.foundryvtt.core.documents.onDeleteItem
 import com.foundryvtt.core.documents.onUpdateItem
-import com.foundryvtt.core.onUpdateWorldTime
+import com.foundryvtt.core.helpers.onUpdateWorldTime
 import com.foundryvtt.core.ui
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter

@@ -43,7 +43,7 @@ import com.foundryvtt.core.documents.onDeleteTile
 import com.foundryvtt.core.documents.onDeleteToken
 import com.foundryvtt.core.documents.onUpdateTile
 import com.foundryvtt.core.documents.onUpdateToken
-import com.foundryvtt.core.onApplyTokenStatusEffect
+import com.foundryvtt.core.helpers.onApplyTokenStatusEffect
 import com.foundryvtt.core.ui
 import js.core.Void
 import js.objects.ReadonlyRecord

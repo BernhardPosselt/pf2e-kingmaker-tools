@@ -137,8 +137,8 @@ import com.foundryvtt.core.documents.onUpdateDrawing
 import com.foundryvtt.core.documents.onUpdateItem
 import com.foundryvtt.core.documents.onUpdateTile
 import com.foundryvtt.core.documents.onUpdateToken
-import com.foundryvtt.core.onApplyTokenStatusEffect
-import com.foundryvtt.core.onCanvasReady
+import com.foundryvtt.core.helpers.onApplyTokenStatusEffect
+import com.foundryvtt.core.helpers.onCanvasReady
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit

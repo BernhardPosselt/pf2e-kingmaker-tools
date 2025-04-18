@@ -1,5 +1,7 @@
-package com.foundryvtt.core
+package com.foundryvtt.core.helpers
 
+import com.foundryvtt.core.AnyMutableObject
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseCreateOperation
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
@@ -10,20 +12,8 @@ import com.foundryvtt.core.canvas.Canvas
 import com.foundryvtt.core.canvas.groups.CanvasVisibility
 import com.foundryvtt.core.documents.ChatMessage
 import com.foundryvtt.core.documents.TokenDocument
-import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 
-@JsPlainObject
-external interface OnErrorOptions {
-    val msg: String?
-    val log: String?
-    val notify: String?
-    val data: Any
-}
-
-external interface HooksEventListener {
-    fun <T> on(key: String, callback: Function<T>)
-}
 
 typealias PreCreateDocumentCallback<T, O> = (
     document: T,
@@ -103,16 +93,16 @@ fun <O> HooksEventListener.onSightRefresh(callback: (CanvasVisibility) -> O) =
 fun <O> HooksEventListener.onApplyTokenStatusEffect(callback: (TokenDocument, String, Boolean) -> O) =
     on("applyTokenStatusEffect", callback)
 
-fun <O> HooksEventListener.onHotBarDrop(callback: (bar: Hotbar, data: AnyObject, slot: Int) -> O) =    on("hotbarDrop", callback)
+fun <O> HooksEventListener.onHotBarDrop(callback: (bar: Hotbar, data: AnyObject, slot: Int) -> O) =
+    on("hotbarDrop", callback)
 
 fun <O> HooksEventListener.onI18NInit(callback: () -> O) = on("i18nInit", callback)
 
-external object Hooks : HooksEventListener {
-    override fun <T> on(key: String, callback: Function<T>)
-    fun <T> once(key: String, callback: Function<T>)
-    fun <T> off(key: String, callback: Function<T>)
-    fun callAll(key: String, args: Array<Any>)
-    fun call(key: String, args: Array<Any>)
-    fun onError(location: String, error: Throwable, options: OnErrorOptions = definedExternally)
+object TypedHooks: HooksEventListener {
+    override fun <T> on(key: String, callback: Function<T>) {
+        Hooks.on(key, callback)
+    }
+    fun <T> off(key: String, callback: Function<T>) {
+        Hooks.off(key, callback)
+    }
 }
-

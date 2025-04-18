@@ -8,10 +8,10 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.push
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.applications.api.ContextMenuEntry
 import com.foundryvtt.core.game
-import com.foundryvtt.core.onGetChatMessageContextOptions
+import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.helpers.onGetChatMessageContextOptions
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -141,7 +141,7 @@ private val entries = listOf<ContextEntry>(
 
 
 fun registerContextMenus() {
-    Hooks.onGetChatMessageContextOptions { elem, items ->
+    TypedHooks.onGetChatMessageContextOptions { elem, items ->
         entries.forEach { but ->
             items.push(
                 ContextMenuEntry(

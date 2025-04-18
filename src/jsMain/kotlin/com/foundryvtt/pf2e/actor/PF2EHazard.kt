@@ -1,10 +1,10 @@
 package com.foundryvtt.pf2e.actor
 
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.Hooks
-import com.foundryvtt.core.RenderApplication
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
+import com.foundryvtt.core.helpers.HooksEventListener
+import com.foundryvtt.core.helpers.RenderApplication
 import js.objects.ReadonlyRecord
 import js.objects.jso
 import kotlinx.js.JsPlainObject
@@ -36,5 +36,5 @@ external interface PF2EHazardSheetData {
     val document: PF2EHazard
 }
 
-fun <O> Hooks.onRenderPF2EHazardSheet(callback: RenderApplication<PF2EHazardSheetData, O>) =
+fun <O> HooksEventListener.onRenderPF2EHazardSheet(callback: RenderApplication<PF2EHazardSheetData, O>) =
     on("renderHazardSheetPF2e", callback)
