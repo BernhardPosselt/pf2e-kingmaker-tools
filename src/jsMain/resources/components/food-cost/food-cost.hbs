@@ -3,25 +3,25 @@
         {{#if rations}}
             <span
                     class="{{#if missingRations}}km-missing-ingredients{{/if}}"
-                    title="{{localizeKM title}}: {{rations}}{{#if showTotal}}/{{totalRations}}{{/if}}"
+                    title="{{localizeKM title}}: {{rations}}{{#if showTotal}}/{{totalRations}}{{/if}} {{localizeKM "camping.rations"}}"
             >{{rationsLabel}}
-                <img src="{{rationImage}}" alt="rations">
+                <img src="{{rationImage}}" alt="{{localizeKM "camping.rations"}}">
         </span>
         {{/if}}
         {{#if basicIngredients}}
             <span
                     class="{{#if missingBasic}}km-missing-ingredients{{/if}}"
-                    title="{{localizeKM title}}: {{basicIngredients}}{{#if showTotal}}/{{totalBasicIngredients}}{{/if}}"
+                    title="{{localizeKM title}}: {{basicIngredients}}{{#if showTotal}}/{{totalBasicIngredients}}{{/if}} {{localizeKM "camping.basicIngredients"}}"
             >{{basicIngredientsLabel}}
-                <img src="{{basicImage}}" alt="basic ingredients">
+                <img src="{{basicImage}}" alt="{{localizeKM "camping.basicIngredients"}}">
         </span>
         {{/if}}
         {{#if specialIngredients}}
             <span
                     class="{{#if missingSpecial}}km-missing-ingredients{{/if}}"
-                    title="{{localizeKM title}}: {{specialIngredients}}{{#if showTotal}}/{{totalSpecialIngredients}}{{/if}}"
+                    title="{{localizeKM title}}: {{specialIngredients}}{{#if showTotal}}/{{totalSpecialIngredients}}{{/if}} {{localizeKM "camping.specialIngredients"}}"
             >{{specialIngredientsLabel}}
-                <img src="{{specialImage}}" alt="special ingredients">
+                <img src="{{specialImage}}" alt="{{localizeKM "camping.specialIngredients"}}">
         </span>
         {{/if}}
     </div>
@@ -29,21 +29,21 @@
     <div class="km-food-cost">
             <span
                     class="{{#if missingRations}}km-missing-ingredients{{/if}}"
-                    title="{{localizeKM title}}: {{rations}}{{#if showTotal}}/{{totalRations}}{{/if}}"
+                    title="{{localizeKM title}}: {{rations}}{{#if showTotal}}/{{totalRations}}{{/if}} {{localizeKM "camping.rations"}}"
             >{{rationsLabel}}
-                <img src="{{rationImage}}" alt="rations">
+                <img src="{{rationImage}}" alt="{{localizeKM "camping.rations"}}">
         </span>
         <span
                 class="{{#if missingBasic}}km-missing-ingredients{{/if}}"
-                title="{{localizeKM title}}: {{basicIngredients}}{{#if showTotal}}/{{totalBasicIngredients}}{{/if}}"
+                title="{{localizeKM title}}: {{basicIngredients}}{{#if showTotal}}/{{totalBasicIngredients}}{{/if}} {{localizeKM "camping.basicIngredients"}}"
         >{{basicIngredientsLabel}}
-            <img src="{{basicImage}}" alt="basic ingredients">
+            <img src="{{basicImage}}" alt="{{localizeKM "camping.basicIngredients"}}">
         </span>
         <span
                 class="{{#if missingSpecial}}km-missing-ingredients{{/if}}"
-                title="{{localizeKM title}}: {{specialIngredients}}{{#if showTotal}}/{{totalSpecialIngredients}}{{/if}}"
+                title="{{localizeKM title}}: {{specialIngredients}}{{#if showTotal}}/{{totalSpecialIngredients}}{{/if}} {{localizeKM "camping.specialIngredients"}}"
         >{{specialIngredientsLabel}}
-            <img src="{{specialImage}}" alt="special ingredients">
+            <img src="{{specialImage}}" alt="{{localizeKM "camping.specialIngredients"}}">
         </span>
     </div>
 {{/if}}
