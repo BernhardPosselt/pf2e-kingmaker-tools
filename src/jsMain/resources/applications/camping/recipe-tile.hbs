@@ -1,5 +1,5 @@
 <div class="km-camping-tile km-camping-recipe" {{#if hidden}}hidden{{/if}} data-recipe-id="{{targetRecipe}}">
-    <header>
+        <header title="{{name}}" class="{{#unless uuid}}non-journal-recipe-tile-header{{/unless}}">
         {{#if uuid}}
             <a href="#" data-uuid="{{uuid}}" data-action="open-item">{{name}}</a>
         {{else}}

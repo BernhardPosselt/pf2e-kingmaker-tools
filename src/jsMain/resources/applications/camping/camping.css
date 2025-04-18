@@ -5,6 +5,13 @@
         gap: 10px;
     }
 
+    .non-journal-recipe-tile-header {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-wrap: nowrap;
+        display: block;
+    }
+
     .window-content {
         padding: 0;
     }
