@@ -3,8 +3,8 @@
 package com.foundryvtt.core.applications.api
 
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.FormDataExtended
 import com.foundryvtt.core.abstract.Document
+import com.foundryvtt.core.applications.ux.FormDataExtended
 import kotlinx.html.org.w3c.dom.events.Event
 import org.w3c.dom.HTMLFormElement
 import kotlin.js.Promise

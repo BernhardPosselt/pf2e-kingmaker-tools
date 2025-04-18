@@ -171,8 +171,8 @@
         ]
     },
     "compatibility": {
-        "minimum": "12",
-        "maximum": "12",
-        "verified": "12"
+        "minimum": "13",
+        "maximum": "13",
+        "verified": "13"
     }
 }

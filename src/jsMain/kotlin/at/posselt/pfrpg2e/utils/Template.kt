@@ -1,8 +1,8 @@
 package at.posselt.pfrpg2e.utils
 
 import at.posselt.pfrpg2e.Config
-import com.foundryvtt.core.loadTemplates
-import com.foundryvtt.core.renderTemplate
+import com.foundryvtt.core.applications.handlebars.loadTemplates
+import com.foundryvtt.core.applications.handlebars.renderTemplate
 import kotlinx.coroutines.await
 
 private const val DIST_PATH = "modules/${Config.moduleId}/dist"

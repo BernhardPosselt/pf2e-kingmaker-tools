@@ -10,7 +10,7 @@ import com.foundryvtt.core.PreUpdateDocumentCallback
 import com.foundryvtt.core.UpdateDocumentCallback
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
-import com.foundryvtt.core.collections.EmbeddedCollection
+import com.foundryvtt.core.documents.collections.EmbeddedCollection
 import js.objects.jso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise

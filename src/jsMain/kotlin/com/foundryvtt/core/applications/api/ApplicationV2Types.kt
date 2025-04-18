@@ -2,11 +2,15 @@ package com.foundryvtt.core.applications.api
 
 
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.FormDataExtended
+import com.foundryvtt.core.applications.ux.FormDataExtended
 import js.objects.ReadonlyRecord
 import kotlinx.html.org.w3c.dom.events.Event
 import kotlinx.js.JsPlainObject
-import org.w3c.dom.*
+import org.w3c.dom.HTMLButtonElement
+import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLFormElement
+import org.w3c.dom.HTMLHeadingElement
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 

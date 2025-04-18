@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.*
 import com.foundryvtt.core.applications.api.*
+import com.foundryvtt.core.applications.ux.FormDataExtended
 import js.objects.ReadonlyRecord
 import js.objects.jso
 import kotlinx.coroutines.await

@@ -11,12 +11,12 @@ import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Combatant
 import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.documents.onDeleteCombat
 import com.foundryvtt.core.documents.onPreUpdateCombat
+import com.foundryvtt.core.Hooks
 import com.foundryvtt.pf2e.actor.PF2EActor
 import kotlinx.coroutines.await
 

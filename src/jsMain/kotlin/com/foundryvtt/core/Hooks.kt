@@ -5,6 +5,9 @@ import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.applications.api.ApplicationV2
 import com.foundryvtt.core.applications.api.ContextMenuEntry
+import com.foundryvtt.core.applications.ui.Hotbar
+import com.foundryvtt.core.canvas.Canvas
+import com.foundryvtt.core.canvas.groups.CanvasVisibility
 import com.foundryvtt.core.documents.ChatMessage
 import com.foundryvtt.core.documents.TokenDocument
 import io.kvision.jquery.JQuery

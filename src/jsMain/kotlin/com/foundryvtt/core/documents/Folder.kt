@@ -13,8 +13,8 @@ import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.abstract.Document
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.PromptOptions
-import com.foundryvtt.core.collections.CompendiumCollection
-import com.foundryvtt.core.collections.DocumentCollection
+import com.foundryvtt.core.documents.abstract.DocumentCollection
+import com.foundryvtt.core.documents.collections.CompendiumCollection
 import js.objects.jso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise

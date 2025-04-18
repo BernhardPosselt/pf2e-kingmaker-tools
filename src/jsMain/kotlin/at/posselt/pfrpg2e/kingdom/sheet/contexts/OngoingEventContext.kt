@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.SettlementResult
 import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.t
-import com.foundryvtt.core.ui.enrichHtml
+import com.foundryvtt.core.applications.ux.TextEditor.enrichHtml
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope

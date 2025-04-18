@@ -6,7 +6,6 @@ import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.documents.onCreateItem
@@ -18,6 +17,7 @@ import com.foundryvtt.core.documents.onDeleteToken
 import com.foundryvtt.core.documents.onUpdateActor
 import com.foundryvtt.core.documents.onUpdateItem
 import com.foundryvtt.core.documents.onUpdateToken
+import com.foundryvtt.core.Hooks
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import kotlin.math.max
 

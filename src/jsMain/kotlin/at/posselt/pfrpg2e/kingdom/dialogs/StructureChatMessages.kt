@@ -8,7 +8,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.ResourceMode
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
-import com.foundryvtt.core.ui.enrichHtml
+import com.foundryvtt.core.applications.ux.TextEditor.enrichHtml
 import kotlinx.browser.document
 import kotlinx.html.dom.create
 import kotlinx.html.js.ul

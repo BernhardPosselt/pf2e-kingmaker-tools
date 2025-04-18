@@ -123,6 +123,7 @@ import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.applications.ux.TextEditor.enrichHtml
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.onCreateDrawing
 import com.foundryvtt.core.documents.onCreateTile
@@ -139,7 +140,6 @@ import com.foundryvtt.core.documents.onUpdateToken
 import com.foundryvtt.core.onApplyTokenStatusEffect
 import com.foundryvtt.core.onCanvasReady
 import com.foundryvtt.core.ui
-import com.foundryvtt.core.ui.enrichHtml
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.kingmaker.onCloseKingmakerHexEdit
 import io.github.uuidjs.uuid.v4
@@ -153,6 +153,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
+import kotlin.collections.plus
 import kotlin.js.Promise
 import kotlin.math.max
 

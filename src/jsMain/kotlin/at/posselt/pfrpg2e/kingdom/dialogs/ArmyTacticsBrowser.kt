@@ -19,8 +19,8 @@ import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
 import com.foundryvtt.core.ui
-import com.foundryvtt.core.ui.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import com.foundryvtt.pf2e.item.PF2ECampaignFeature
 import com.foundryvtt.pf2e.item.itemFromUuid

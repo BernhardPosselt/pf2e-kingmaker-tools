@@ -13,6 +13,7 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.directories.onRenderActorDirectory
 import com.foundryvtt.core.documents.Macro
+import com.foundryvtt.core.game
 import com.foundryvtt.core.onHotBarDrop
 import com.foundryvtt.pf2e.actor.PF2EParty
 import io.kvision.jquery.get
@@ -124,7 +125,7 @@ fun registerIcons(actionDispatcher: ActionDispatcher) {
                 val id = it.dataset["documentId"]
                 if (id != null) {
                     val insertAfter = it.querySelector("h3")
-                    if (com.foundryvtt.core.game.user.isGM) {
+                    if (game.user.isGM) {
                         insertAfter?.insertAdjacentElement(
                             "afterend", createPartyActorIcon(
                                 id = id,
@@ -132,7 +133,7 @@ fun registerIcons(actionDispatcher: ActionDispatcher) {
                                 toolTip = t("applications.actorActions.tooltip"),
                                 sheetType = SheetType.KINGDOM,
                                 onClick = {
-                                    com.foundryvtt.core.game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
+                                    game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
                                         ActorActions(actor = actor).launch()
                                     }
                                 },
@@ -141,7 +142,7 @@ fun registerIcons(actionDispatcher: ActionDispatcher) {
                     }
                     insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
                     insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))
-                    if (com.foundryvtt.core.game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
+                    if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
                         it.querySelector(".fa-crown")
                             ?.parentElement
                             ?.takeIfInstance<HTMLElement>()

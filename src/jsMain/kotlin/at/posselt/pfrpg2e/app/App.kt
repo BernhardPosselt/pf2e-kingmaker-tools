@@ -3,8 +3,8 @@ package at.posselt.pfrpg2e.app
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Hooks
-import com.foundryvtt.core.HooksEventListener
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
+import com.foundryvtt.core.HooksEventListener
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.html.org.w3c.dom.events.Event
