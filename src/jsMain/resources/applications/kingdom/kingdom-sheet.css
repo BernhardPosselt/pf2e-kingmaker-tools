@@ -163,6 +163,8 @@
 
             select {
                 margin-top: -4px;
+                font-size: 14px;
+                font-weight: normal;
             }
         }
     }
@@ -178,6 +180,7 @@
         }
 
         h3 {
+            font-size: 16pt;
             display: flex;
         }
 
