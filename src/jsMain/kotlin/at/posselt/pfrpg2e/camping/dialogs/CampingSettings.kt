@@ -114,18 +114,18 @@ enum class RestRollMode: ValueEnum, Translatable {
         get() = "restRollMode.$value"
 }
 
-private val companionActivities = mapOf<String, String>(
-    "blend-into-the-night" to "Blend Into The Night",
-    "bolster-confidence" to "Bolster Confidence",
-    "enhance-weapons" to "Enhance Weapons",
-    "healers-blessing" to "Healer's Blessing",
-    "intimidating-posture" to "Intimidating Posture",
-    "maintain-armor" to "Maintain Armor",
-    "set-alarms" to "Set Alarms",
-    "set-traps" to "Set Traps",
-    "undead-guardians" to "Undead Guardians",
-    "water-hazards" to "Water Hazards",
-    "wilderness-survival" to "Wilderness Survival",
+private val companionActivities = setOf(
+    "blend-into-the-night",
+    "bolster-confidence",
+    "enhance-weapons",
+    "healers-blessing",
+    "intimidating-posture",
+    "maintain-armor",
+    "set-alarms",
+    "set-traps",
+    "undead-guardians",
+    "water-hazards",
+    "wilderness-survival",
 )
 
 @JsExport
@@ -253,9 +253,9 @@ class CampingSettingsApplication(
                 ),
                 Section(
                     legend = t("camping.alwaysPerformedActivities"),
-                    formRows = companionActivities.map { (id, label) ->
+                    formRows = companionActivities.map { id ->
                         CheckboxInput(
-                            label = label,
+                            label = t("campingActivities.$id.name"),
                             name = "alwaysPerformActivities.$id",
                             value = settings.alwaysPerformActivities.contains(id),
                             stacked = false,

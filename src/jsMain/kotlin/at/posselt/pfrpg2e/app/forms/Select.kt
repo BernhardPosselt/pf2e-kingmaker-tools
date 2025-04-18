@@ -301,6 +301,6 @@ inline fun <reified T> enumToOptions(labelFunction: (T) -> String) where T : Tra
 
 fun Attribute.toOption() =
     SelectOption(
-        label = t(value),
+        label = t(this),
         value = value,
     )
