@@ -141,6 +141,7 @@
       "checkingSecondWeatherEvent": "Checking for Second Weather Event with DC {dc}"
     },
     "camping": {
+      "hours": "{count, plural, =1 {1 Hour} other {# Hours}}",
       "rest": "Rest",
       "continue": "Continue",
       "reduceClumsyBy": "Reduce Clumsy By",

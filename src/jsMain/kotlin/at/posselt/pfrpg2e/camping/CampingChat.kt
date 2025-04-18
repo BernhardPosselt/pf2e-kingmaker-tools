@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.utils.bindChatClick
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.postChatTemplate
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import js.objects.recordOf
@@ -22,7 +23,7 @@ suspend fun postPassTimeMessage(message: String, hours: Int) {
         templateContext = recordOf(
             "message" to message,
             "seconds" to hours * 3600,
-            "label" to "$hours hours"
+            "label" to t("camping.hours", recordOf("count" to hours))
         ),
         rollMode = RollMode.GMROLL,
     )
