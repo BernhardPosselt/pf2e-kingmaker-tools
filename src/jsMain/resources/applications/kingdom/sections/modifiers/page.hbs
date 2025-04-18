@@ -15,8 +15,8 @@
                 <tbody>
                 {{#each modifiers}}
                     <tr>
-                        <td>{{localizeKM name}}</td>
-                        <td>{{localizeKM description}}</td>
+                        <td>{{name}}</td>
+                        <td>{{description}}</td>
                         <td>{{turns}}</td>
                         <td>{{#if isConsumedAfterRoll}}<i class="fa-regular fa-circle-check"></i>{{/if}}</td>
                         <td><button type="button" data-action="delete-modifier" data-index="{{@index}}">

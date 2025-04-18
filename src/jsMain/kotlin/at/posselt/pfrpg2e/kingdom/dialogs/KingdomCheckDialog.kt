@@ -392,6 +392,7 @@ private class KingdomCheckDialog(
                     type = ModifierType.fromString(data.newModifierType) ?: ModifierType.UNTYPED,
                     value = data.newModifierModifier,
                     name = data.newModifierName,
+                    requiresTranslation = false,
                 )
                 data.newModifierName = ""
                 data.newModifierType = ModifierType.UNTYPED.value
@@ -729,7 +730,9 @@ private class KingdomCheckDialog(
         )
     }
 
-    private fun tName(modifier: Modifier): String = if (modifier.i18nContext.isEmpty()) {
+    private fun tName(modifier: Modifier): String = if(!modifier.requiresTranslation) {
+        modifier.name
+    } else if (modifier.i18nContext.isEmpty()) {
         t(modifier.name)
     } else {
         t(modifier.name, modifier.i18nContext.toRecord())

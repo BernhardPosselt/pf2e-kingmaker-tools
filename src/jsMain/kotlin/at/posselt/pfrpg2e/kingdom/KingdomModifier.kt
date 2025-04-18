@@ -137,6 +137,7 @@ external interface RawModifier {
     var upgradeResults: Array<RawUpgradeResult>?
     var downgradeResults: Array<RawDowngradeResult>?
     var notes: Array<RawNote>?
+    var requiresTranslation: Boolean?
 }
 
 fun RawExpression<Boolean>.parse(): Expression<Boolean> {
@@ -221,7 +222,8 @@ fun RawModifier.parse(): Modifier =
         fortune = fortune == true,
         upgradeResults = upgradeResults?.mapNotNull { it.parse() }.orEmpty(),
         downgradeResults = downgradeResults?.mapNotNull { it.parse() }.orEmpty(),
-        notes = notes?.map { it.parse() }?.toSet().orEmpty()
+        notes = notes?.map { it.parse() }?.toSet().orEmpty(),
+        requiresTranslation = requiresTranslation != false,
     )
 
 suspend fun KingdomData.checkModifiers(

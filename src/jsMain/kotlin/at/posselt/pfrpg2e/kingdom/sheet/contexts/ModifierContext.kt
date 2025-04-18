@@ -16,9 +16,12 @@ external interface ModifierContext {
 
 fun Array<RawModifier>.toContext(): Array<ModifierContext> {
     return map {
+        val name = if(it.requiresTranslation != false) t(it.name) else it.name
+        val buttonLabel = it.buttonLabel
+        val label = if(it.requiresTranslation != false && buttonLabel != null) t(buttonLabel) else buttonLabel
         ModifierContext(
-            name = it.name,
-            description = it.buttonLabel ?: it.name,
+            name = name,
+            description = label ?: name,
             turns = if ((it.turns ?: 0) > 0) "${it.turns}" else t("kingdom.indefinite"),
             isConsumedAfterRoll = it.isConsumedAfterRoll == true,
         )

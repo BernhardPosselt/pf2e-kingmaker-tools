@@ -66,8 +66,11 @@ suspend fun buildChatButtons(
             eventIndex = eventIndex,
             eventId = eventId,
             modifiers = modifiers.map {
+                val name = if(it.requiresTranslation != false) t(it.name) else it.name
+                val buttonLabel = it.buttonLabel
+                val label = if(it.requiresTranslation != false && buttonLabel != null) t(buttonLabel) else buttonLabel
                 ChatModifier(
-                    label = it.buttonLabel ?: it.name,
+                    label = label ?: name,
                     data = serializeB64Json(it),
                     actorUuid = actorUuid,
                 )

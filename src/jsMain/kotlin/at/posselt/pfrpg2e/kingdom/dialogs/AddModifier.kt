@@ -140,6 +140,7 @@ class AddModifier(
                     turns = data.turns,
                     isConsumedAfterRoll = data.isConsumedAfterRoll,
                     applyIf = predicates.toTypedArray(),
+                    requiresTranslation = false,
                 )
                 buildPromise {
                     onSave(modifier)
