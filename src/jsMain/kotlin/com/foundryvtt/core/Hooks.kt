@@ -10,8 +10,8 @@ import com.foundryvtt.core.canvas.Canvas
 import com.foundryvtt.core.canvas.groups.CanvasVisibility
 import com.foundryvtt.core.documents.ChatMessage
 import com.foundryvtt.core.documents.TokenDocument
-import io.kvision.jquery.JQuery
 import kotlinx.js.JsPlainObject
+import org.w3c.dom.HTMLElement
 
 @JsPlainObject
 external interface OnErrorOptions {
@@ -67,7 +67,7 @@ typealias DeleteDocumentCallback<T, O> = (
 
 typealias RenderApplication<D, O> = (
     application: ApplicationV2,
-    html: JQuery,
+    html: HTMLElement,
     data: D,
 ) -> O
 
@@ -91,11 +91,11 @@ fun <O> HooksEventListener.onCanvasReady(callback: (Canvas) -> O) =
 fun <O> HooksEventListener.onRenderChatLog(callback: RenderApplication<AnyObject, O>) =
     on("renderChatLog", callback)
 
-fun <O> HooksEventListener.onRenderChatMessage(callback: (message: ChatMessage, html: JQuery, messageData: AnyObject) -> O) =
-    on("renderChatMessage", callback)
+fun <O> HooksEventListener.onRenderChatMessage(callback: (message: ChatMessage, html: HTMLElement, messageData: AnyObject) -> O) =
+    on("renderChatMessageHTML", callback)
 
-fun <O> HooksEventListener.onGetChatLogEntryContext(callback: ApplicationEntryContext<O>) =
-    on("getChatLogEntryContext", callback)
+fun <O> HooksEventListener.onGetChatMessageContextOptions(callback: ApplicationEntryContext<O>) =
+    on("getChatMessageContextOptions", callback)
 
 fun <O> HooksEventListener.onSightRefresh(callback: (CanvasVisibility) -> O) =
     on("sightRefresh", callback)

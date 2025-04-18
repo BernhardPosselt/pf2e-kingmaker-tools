@@ -16,7 +16,6 @@ import com.foundryvtt.core.documents.Macro
 import com.foundryvtt.core.game
 import com.foundryvtt.core.onHotBarDrop
 import com.foundryvtt.pf2e.actor.PF2EParty
-import io.kvision.jquery.get
 import js.objects.Object
 import js.objects.recordOf
 import kotlinx.browser.document
@@ -118,10 +117,10 @@ fun registerMacroDropHooks(game: Game) {
 
 fun registerIcons(actionDispatcher: ActionDispatcher) {
     Hooks.onRenderActorDirectory { _, html, _ ->
-        html[0]?.querySelectorAll(".party-header")
-            ?.asList()
-            ?.filterIsInstance<HTMLElement>()
-            ?.forEach {
+        html.querySelectorAll(".party-header")
+            .asList()
+            .filterIsInstance<HTMLElement>()
+            .forEach {
                 val id = it.dataset["documentId"]
                 if (id != null) {
                     val insertAfter = it.querySelector("h3")
@@ -146,8 +145,8 @@ fun registerIcons(actionDispatcher: ActionDispatcher) {
                         it.querySelector(".fa-crown")
                             ?.parentElement
                             ?.takeIfInstance<HTMLElement>()
-                            ?.let {
-                                it.hidden = true
+                            ?.let { elem ->
+                                elem.hidden = true
                             }
                     }
                 }

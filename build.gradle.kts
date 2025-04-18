@@ -99,7 +99,6 @@ kotlin {
                 implementation(npm("i18next", "24.2.3"))
                 implementation(npm("i18next-icu", "2.3.0"))
                 implementation(npm("intl-messageformat", "10.7.16"))
-                api(libs.jquery)
             }
         }
         val jsTest by getting {

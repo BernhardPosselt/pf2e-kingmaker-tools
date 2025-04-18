@@ -5,8 +5,8 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.dice.Roll
-import io.kvision.jquery.JQuery
 import js.objects.ReadonlyRecord
+import org.w3c.dom.HTMLElement
 import kotlin.js.Promise
 
 
@@ -47,5 +47,5 @@ external class ChatMessage : ClientDocument {
     fun prepareDerivedData()
     fun applyRollMode(rollMode: String)
     fun getRollData(): ReadonlyRecord<String, Any>
-    fun getHTML(): Promise<JQuery>
+    fun renderHTML(): Promise<HTMLElement>
 }

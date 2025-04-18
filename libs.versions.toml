@@ -19,7 +19,6 @@ kotlin-test-js = { module = "org.jetbrains.kotlin:kotlin-test-js-runner", versio
 kotlinx-coroutines-js = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-js", version.ref = "coroutines" }
 jsonschemavalidator = { module = "io.github.optimumcode:json-schema-validator", version.ref = "schema-validator" }
 jsonschemavalidator-js = { module = "io.github.optimumcode:json-schema-validator-js", version.ref = "schema-validator" }
-jquery = { module = "io.kvision:jquery-kotlin", version = "1.0.0" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }

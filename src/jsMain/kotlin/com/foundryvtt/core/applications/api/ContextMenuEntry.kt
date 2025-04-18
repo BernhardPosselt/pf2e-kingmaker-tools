@@ -1,7 +1,7 @@
 package com.foundryvtt.core.applications.api
 
-import io.kvision.jquery.JQuery
 import kotlinx.js.JsPlainObject
+import org.w3c.dom.HTMLElement
 
 @JsPlainObject
 external interface ContextMenuEntry {
@@ -9,6 +9,6 @@ external interface ContextMenuEntry {
     val icon: String
     val classes: Array<String>?
     val group: String?
-    val callback: (JQuery) -> Unit
-    val condition: (JQuery) -> Boolean // Boolean or ContextMenuCondition
+    val callback: (HTMLElement) -> Unit
+    val condition: (HTMLElement) -> Boolean // Boolean or ContextMenuCondition
 }

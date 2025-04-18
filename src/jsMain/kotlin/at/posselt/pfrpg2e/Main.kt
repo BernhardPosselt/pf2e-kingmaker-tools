@@ -61,8 +61,6 @@ import com.foundryvtt.core.onInit
 import com.foundryvtt.core.onReady
 import com.foundryvtt.core.onRenderChatLog
 import com.foundryvtt.core.onRenderChatMessage
-import io.kvision.jquery.get
-import org.w3c.dom.HTMLElement
 
 fun main() {
     Hooks.onInit {
@@ -202,8 +200,7 @@ fun main() {
         }
 
         Hooks.onRenderChatMessage { message, html, _ ->
-            val elem = html[0] as HTMLElement
-            fixVisibility(game, elem, message)
+            fixVisibility(game, html, message)
         }
 
         Hooks.onRenderChatLog { _, _, _ ->

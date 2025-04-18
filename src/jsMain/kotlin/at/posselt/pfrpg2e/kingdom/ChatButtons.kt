@@ -161,8 +161,8 @@ private val buttons = listOf(
 )
 
 fun bindChatButtons(game: Game) {
-    Hooks.onRenderChatLog { application, html, data ->
-        val chatLog = document.getElementById("chat-log")
+    Hooks.onRenderChatLog { application, _, data ->
+        val chatLog = document.getElementById("chat")
         chatLog?.addEventListener("click", { ev ->
             buttons.forEach { data ->
                 val target = ev.target

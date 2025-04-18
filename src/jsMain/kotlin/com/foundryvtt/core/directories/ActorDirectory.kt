@@ -5,10 +5,10 @@ import com.foundryvtt.core.HooksEventListener
 import com.foundryvtt.core.applications.api.ApplicationV2
 import com.foundryvtt.core.applications.sidebar.DocumentDirectory
 import com.foundryvtt.core.documents.Actor
-import io.kvision.jquery.JQuery
+import org.w3c.dom.HTMLElement
 
 @Suppress("unused")
 external class ActorDirectory<T: Actor>: DocumentDirectory<T>
 
-fun <O> HooksEventListener.onRenderActorDirectory(callback: (app: ApplicationV2, html: JQuery, data: AnyObject) -> O) =
+fun <O> HooksEventListener.onRenderActorDirectory(callback: (app: ApplicationV2, html: HTMLElement, data: AnyObject) -> O) =
     on("renderActorDirectory", callback)
