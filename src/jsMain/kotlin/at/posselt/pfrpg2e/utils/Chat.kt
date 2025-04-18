@@ -92,7 +92,7 @@ fun fixVisibility(game: Game, html: HTMLElement, message: ChatMessage) {
 }
 
 fun bindChatClick(selector: String, callback: (Event, HTMLElement) -> Unit) {
-    document.getElementById("chat-log")
+    document.getElementById("chat")
         ?.addEventListener("click", { event ->
             event.target
                 ?.takeIfInstance<HTMLElement>()
