@@ -1,6 +1,7 @@
-package com.foundryvtt.core.documents
+package com.foundryvtt.core.dice
 
 import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.documents.ChatMessage
 import kotlin.js.Promise
 
 open external class Roll(formula: String) {

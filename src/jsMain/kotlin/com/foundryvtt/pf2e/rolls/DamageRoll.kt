@@ -1,6 +1,6 @@
 package com.foundryvtt.pf2e.rolls
 
-import com.foundryvtt.core.documents.Roll
+import com.foundryvtt.core.dice.Roll
 
 
 @Suppress("NAME_CONTAINS_ILLEGAL_CHARS")

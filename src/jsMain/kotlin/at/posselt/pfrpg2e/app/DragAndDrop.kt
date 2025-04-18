@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.Document
 import com.foundryvtt.core.documents.JournalEntry
-import com.foundryvtt.core.fromUuid
+import com.foundryvtt.core.utils.fromUuid
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.item.PF2EAction
 import com.foundryvtt.pf2e.item.PF2EAffliction

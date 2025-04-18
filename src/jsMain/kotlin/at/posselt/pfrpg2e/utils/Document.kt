@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.takeIfInstance
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.Document
-import com.foundryvtt.core.fromUuid
+import com.foundryvtt.core.utils.fromUuid
 import js.objects.PropertyKey
 import js.objects.jso
 import js.objects.recordOf

@@ -1,4 +1,4 @@
-package com.foundryvtt.core.documents
+package com.foundryvtt.core.dice
 
 import kotlinx.js.JsPlainObject
 

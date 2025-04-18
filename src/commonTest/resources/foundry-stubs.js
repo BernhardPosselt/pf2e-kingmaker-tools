@@ -14,6 +14,9 @@ const foundry = {
         expandObject: () => {
         }
     },
+    documents: {
+
+    },
     data: {
         fields: {}
     },

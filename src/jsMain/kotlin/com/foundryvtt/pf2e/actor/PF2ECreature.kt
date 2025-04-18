@@ -15,5 +15,5 @@ external interface PF2ECreature {
     val uuid: String
     val img: String?
 
-    fun addToInventory(value: AnyObject, container: PF2EEquipment?, stack: Boolean): Promise<PF2EItem?>
+    fun addToInventory(value: AnyObject, container: PF2EEquipment?, doNotStack: Boolean): Promise<PF2EItem?>
 }
