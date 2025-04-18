@@ -11,6 +11,9 @@ import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.*
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.ApplicationV2
+import com.foundryvtt.core.helpers.ClientSettings
+import com.foundryvtt.core.helpers.SettingsData
+import com.foundryvtt.core.helpers.SettingsMenuData
 import js.core.JsNumber
 import js.objects.ReadonlyRecord
 import kotlinx.coroutines.await
@@ -27,7 +30,7 @@ enum class SettingsScope {
         get() = toCamelCase()
 }
 
-inline fun <reified T : DataModel> Settings.registerDataModel(
+inline fun <reified T : DataModel> ClientSettings.registerDataModel(
     key: String,
     name: String,
     hint: String? = undefined,
@@ -36,7 +39,7 @@ inline fun <reified T : DataModel> Settings.registerDataModel(
     register<AnyObject>(
         Config.moduleId,
         key,
-        SettingsData<AnyObject>(
+        com.foundryvtt.core.helpers.SettingsData<AnyObject>(
             name = name,
             hint = hint,
             config = false,
@@ -48,7 +51,7 @@ inline fun <reified T : DataModel> Settings.registerDataModel(
     )
 }
 
-fun Settings.registerInt(
+fun ClientSettings.registerInt(
     key: String,
     name: String,
     hint: String? = undefined,
@@ -57,7 +60,7 @@ fun Settings.registerInt(
     requiresReload: Boolean = false,
     choices: ReadonlyRecord<String, Int>? = undefined,
 ) {
-    register<Int>(
+    register(
         Config.moduleId,
         key,
         SettingsData<Int>(
@@ -73,7 +76,7 @@ fun Settings.registerInt(
     )
 }
 
-inline fun <reified T : Any> Settings.registerScalar(
+inline fun <reified T : Any> ClientSettings.registerScalar(
     key: String,
     name: String,
     hint: String? = undefined,
@@ -99,7 +102,7 @@ inline fun <reified T : Any> Settings.registerScalar(
     )
 }
 
-fun Settings.createMenu(
+fun ClientSettings.createMenu(
     key: String,
     name: String,
     label: String,
@@ -122,43 +125,43 @@ fun Settings.createMenu(
     )
 }
 
-fun Settings.getInt(key: String): Int =
+fun ClientSettings.getInt(key: String): Int =
     get(Config.moduleId, key)
 
-suspend fun Settings.setInt(key: String, value: Int) {
+suspend fun ClientSettings.setInt(key: String, value: Int) {
     set(Config.moduleId, key, value).await()
 }
 
-fun Settings.getString(key: String): String =
+fun ClientSettings.getString(key: String): String =
     get(Config.moduleId, key)
 
-suspend fun Settings.setString(key: String, value: String) {
+suspend fun ClientSettings.setString(key: String, value: String) {
     set(Config.moduleId, key, value).await()
 }
 
-fun Settings.getNullableString(key: String): String? =
+fun ClientSettings.getNullableString(key: String): String? =
     get(Config.moduleId, key)
 
-suspend fun Settings.setNullableString(key: String, value: String?) {
+suspend fun ClientSettings.setNullableString(key: String, value: String?) {
     set(Config.moduleId, key, value).await()
 }
 
 
-fun Settings.getBoolean(key: String): Boolean =
+fun ClientSettings.getBoolean(key: String): Boolean =
     get(Config.moduleId, key)
 
-suspend fun Settings.setBoolean(key: String, value: Boolean) {
+suspend fun ClientSettings.setBoolean(key: String, value: Boolean) {
     set(Config.moduleId, key, value).await()
 }
 
-fun <T : Any> Settings.getObject(key: String): T =
+fun <T : Any> ClientSettings.getObject(key: String): T =
     get(Config.moduleId, key)
 
-suspend fun Settings.setObject(key: String, value: Any) {
+suspend fun ClientSettings.setObject(key: String, value: Any) {
     set(Config.moduleId, key, value).await()
 }
 
-val Settings.pfrpg2eKingdomCampingWeather: Pfrpg2eKingdomCampingWeatherSettings
+val ClientSettings.pfrpg2eKingdomCampingWeather: Pfrpg2eKingdomCampingWeatherSettings
     get() = Pfrpg2eKingdomCampingWeatherSettings
 
 @Suppress("unused", "ClassName")
@@ -347,7 +350,7 @@ object Pfrpg2eKingdomCampingWeatherSettings {
 
 
 private inline fun <reified T : Any> registerSimple(
-    settings: Settings,
+    settings: ClientSettings,
     values: Map<String, T>,
     hidden: Boolean,
 ) {

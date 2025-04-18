@@ -1,6 +1,6 @@
 package com.foundryvtt.pf2e.actions
 
-import com.foundryvtt.core.Roll
+import com.foundryvtt.core.documents.Roll
 import com.foundryvtt.core.documents.User
 
 external class CheckRoll : Roll {

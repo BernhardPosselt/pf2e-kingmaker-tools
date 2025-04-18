@@ -7,7 +7,6 @@ import com.foundryvtt.core.HooksEventListener
 import com.foundryvtt.core.PreCreateDocumentCallback
 import com.foundryvtt.core.PreDeleteDocumentCallback
 import com.foundryvtt.core.PreUpdateDocumentCallback
-import com.foundryvtt.core.Roll
 import com.foundryvtt.core.UpdateDocumentCallback
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation

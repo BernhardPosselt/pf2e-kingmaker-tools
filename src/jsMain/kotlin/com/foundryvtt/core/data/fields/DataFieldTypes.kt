@@ -1,7 +1,7 @@
 package com.foundryvtt.core.data.fields
 
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.FormInputConfig
+import com.foundryvtt.core.helpers.FormInputConfig
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLDivElement
 

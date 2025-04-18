@@ -14,6 +14,7 @@ import com.foundryvtt.core.documents.collections.Playlists
 import com.foundryvtt.core.documents.collections.RollTables
 import com.foundryvtt.core.documents.collections.Scenes
 import com.foundryvtt.core.documents.collections.Users
+import com.foundryvtt.core.helpers.ClientSettings
 import com.foundryvtt.core.helpers.GameTime
 import com.foundryvtt.core.helpers.Localization
 import com.foundryvtt.core.packages.Module
@@ -26,7 +27,7 @@ import io.socket.Socket
  * Note: many if not all of these objects are only available after init
  */
 external class Game {
-    val settings: Settings
+    val settings: ClientSettings
     val actors: Actors
     val playlists: Playlists
     val folders: Folders
