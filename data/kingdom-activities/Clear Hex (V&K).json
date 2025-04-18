@@ -2,7 +2,7 @@
   "id": "clear-hex-vk",
   "oncePerRound": false,
   "fortune": false,
-  "enabled": true,
+  "enabled": false,
   "title": "activities.clear-hex-vk.title",
   "phase": "region",
   "dc": "custom",

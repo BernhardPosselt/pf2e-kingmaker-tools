@@ -2,7 +2,7 @@
   "id": "fortify-hex-vk",
   "oncePerRound": false,
   "fortune": false,
-  "enabled": true,
+  "enabled": false,
   "phase": "region",
   "dc": "control",
   "title": "activities.fortify-hex-vk.title",
