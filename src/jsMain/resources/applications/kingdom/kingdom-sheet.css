@@ -641,6 +641,7 @@
                         position: absolute;
                         width: 1em;
                         height: 1em;
+                        min-height: 1em;
                         font-size: 1.5em;
                         top: .3em;
                         right: .3em;

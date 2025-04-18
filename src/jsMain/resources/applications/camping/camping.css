@@ -40,6 +40,7 @@
         position: absolute;
         width: 1em;
         height: 1em;
+        min-height: 1em;
         font-size: 1.5em;
         top: .1em;
         right: .1em;
@@ -626,7 +627,7 @@ ul.km-camping-actors {
                     outline: none;
                     box-shadow: none;
                     font-size: 1em;
-                    height: 2em;
+                    height: calc(2em + 1px);
                     border-style: none;
                     width: calc(9em + 2px);
                     text-overflow: ellipsis;
