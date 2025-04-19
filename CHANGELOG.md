@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Filter out lower bonuses in inspect settlement
 * Fix Political Calm bonus
 * Correctly exclude all V&K activities when first creating a kingdom sheet
+* Automatically enable Civil Service bonus
+* Fix Fame & Fortune
 
 ## [4.8.0] - 2025-04-09
 

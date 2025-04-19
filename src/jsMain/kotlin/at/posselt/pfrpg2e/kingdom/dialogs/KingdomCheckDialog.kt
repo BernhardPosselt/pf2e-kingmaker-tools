@@ -104,6 +104,8 @@ import kotlin.math.max
 import kotlin.sequences.filter
 import kotlin.sequences.map
 import kotlin.sequences.toSet
+import kotlin.takeIf
+import kotlin.text.isNotBlank
 import kotlin.text.toInt
 import kotlin.to
 
@@ -390,7 +392,7 @@ private class KingdomCheckDialog(
                     id = id,
                     type = ModifierType.fromString(data.newModifierType) ?: ModifierType.UNTYPED,
                     value = data.newModifierModifier,
-                    name = data.newModifierName,
+                    name = data.newModifierName.takeIf { it.isNotBlank() } ?: "New Modifier",
                     requiresTranslation = false,
                 )
                 data.newModifierName = ""
@@ -550,7 +552,7 @@ private class KingdomCheckDialog(
         val freeAndFairPills = serializeB64Json(freeAndFairModifiers.modifiers.map {
             "${tName(it)} ${it.value.formatAsModifier()}"
         }.toTypedArray())
-        val notes = serializeB64Json(enabledModifiers.flatMap { it.notes.map { it.serialize() } }.toTypedArray())
+        val notes = serializeB64Json(filtered.modifiers.flatMap { it.notes.map { it.serialize() } }.toTypedArray())
         val checkModifier = if (data.assurance) {
             evaluatedModifiers.assurance
         } else {

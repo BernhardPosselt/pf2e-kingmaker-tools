@@ -8,7 +8,7 @@
     {
       "name": "kingdomFeats.civil-service.modifiers.newLeadership.name",
       "buttonLabel": "kingdomFeats.civil-service.modifiers.newLeadership.buttonLabel",
-      "enabled": false,
+      "enabled": true,
       "value": 2,
       "type": "circumstance",
       "applyIf": [
