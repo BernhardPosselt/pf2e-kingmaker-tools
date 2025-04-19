@@ -50,7 +50,7 @@ suspend fun showFirstRunMessage(game: Game) {
             )
         )
     }
-    bindChatClick(".km-disable-firstrun-message") { _, _ ->
+    bindChatClick(".km-disable-firstrun-message") { _, _, _ ->
         buildPromise {
             settings.setDisableFirstRunMessage(true)
             postChatMessage(t("chatMessages.firstRun.disabled"))

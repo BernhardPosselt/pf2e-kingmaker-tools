@@ -91,13 +91,21 @@ fun fixVisibility(game: Game, html: HTMLElement, message: ChatMessage) {
     }
 }
 
-fun bindChatClick(selector: String, callback: (Event, HTMLElement) -> Unit) {
-    document.getElementById("chat")
-        ?.addEventListener("click", { event ->
-            event.target
-                ?.takeIfInstance<HTMLElement>()
-                ?.closest(selector)
-                ?.takeIfInstance<HTMLElement>()
-                ?.let { callback(event, it) }
-        })
+fun bindChatClick(
+    targetSelector: String,
+    parentSelector: String = ".chat-message",
+    callback: (event: Event, target: HTMLElement, parent: HTMLElement) -> Unit
+) {
+    listOf("chat-notifications", "chat")
+        .mapNotNull { document.getElementById(it) }
+        .forEach { elem ->
+            elem.addEventListener("click", { event ->
+                val target = event.target
+                if (target is HTMLElement && target.matches(targetSelector)) {
+                    target.closest(parentSelector)
+                        ?.takeIfInstance<HTMLElement>()
+                        ?.let { callback(event, target, it) }
+                }
+            })
+        }
 }

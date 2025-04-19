@@ -21,8 +21,8 @@
         "msg": "events.bandit-activity.stage-0.criticalSuccess.msg",
         "modifiers": [
           {
-            "name": "events.bandit-activity.stage-0.criticalSuccess.defeatedBonus.name",
-            "buttonLabel": "events.bandit-activity.stage-0.criticalSuccess.defeatedBonus.buttonLabel",
+            "name": "events.bandit-activity.stage-0.criticalSuccess.modifiers.defeatedBonus.name",
+            "buttonLabel": "events.bandit-activity.stage-0.criticalSuccess.modifiers.defeatedBonus.buttonLabel",
             "turns": 2,
             "enabled": true,
             "value": 1,
