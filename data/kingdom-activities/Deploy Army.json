@@ -23,7 +23,7 @@
           "upgrade": "success"
         }
       ],
-      "buttonLabel": "activities.deploy-army.modifiers.connectedByRoad.buttonLabel and End Point connected by a Road",
+      "buttonLabel": "activities.deploy-army.modifiers.connectedByRoad.buttonLabel",
       "name": "activities.deploy-army.modifiers.connectedByRoad.name",
       "type": "untyped",
       "applyIf": [
@@ -82,7 +82,7 @@
     }
   ],
   "skills": {
-    "warfare": 0,
+    "exploration": 0,
     "boating": 0,
     "magic": 3
   },
