@@ -3172,11 +3172,11 @@
         "modifiers": {
           "outsideKingdom": {
             "buttonLabel": "+5 DC Increase if outside of your kingdom",
-            "name": "Outside of your kingdom"
+            "name": "Outside of Your Kingdom"
           },
           "enemyTerritory": {
             "buttonLabel": "+10 DC Increase if in enemy territory",
-            "name": "In enemy territory"
+            "name": "In Enemy Territory"
           }
         },
         "criticalSuccess": {
@@ -3337,7 +3337,13 @@
           "msg": "<p>Your spies fail to learn anything of import, but they are not themselves compromised.</p>"
         },
         "criticalFailure": {
-          "msg": "<p>You never hear from your spies again, but someone certainly does! You take a –2 circumstance penalty on all kingdom checks until the end of the next Kingdom turn as counter-infiltration from an unknown enemy tampers with your kingdom’s inner workings.</p>"
+          "msg": "<p>You never hear from your spies again, but someone certainly does! You take a –2 circumstance penalty on all kingdom checks until the end of the next Kingdom turn as counter-infiltration from an unknown enemy tampers with your kingdom’s inner workings.</p>",
+          "modifiers": {
+            "captured": {
+              "name": "Infiltration: Critical Failure",
+              "buttonLabel": "-2 Circumstance to All Checks"
+            }
+          }
         }
       },
       "irrigation": {
@@ -3355,13 +3361,7 @@
           "msg": "<p>You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature.</p>"
         },
         "criticalFailure": {
-          "msg": "<p>You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature. Your attempts at Irrigation are so completely useless that they become breeding grounds for disease. @gain1Unrest. From this point onward, at the start of your Kingdom turn’s Event phase, attempt a @Check[type:flat|dc:4]. This flat check’s DC increases by 1 for each hex in your kingdom that contains a critically failed attempt at Irrigation. If you fail this flat check, your kingdom suffers a Plague event in addition to any other event it might have. You can attempt this activity again in a later Kingdom turn to undo a critically failed Irrigation attempt.</p>",
-          "modifiers": {
-            "captured": {
-              "name": "Infiltration: Critical Failure",
-              "buttonLabel": "-2 Circumstance to All Checks"
-            }
-          }
+          "msg": "<p>You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature. Your attempts at Irrigation are so completely useless that they become breeding grounds for disease. @gain1Unrest. From this point onward, at the start of your Kingdom turn’s Event phase, attempt a @Check[type:flat|dc:4]. This flat check’s DC increases by 1 for each hex in your kingdom that contains a critically failed attempt at Irrigation. If you fail this flat check, your kingdom suffers a Plague event in addition to any other event it might have. You can attempt this activity again in a later Kingdom turn to undo a critically failed Irrigation attempt.</p>"
         }
       },
       "manage-trade-agreements": {
@@ -3369,8 +3369,8 @@
         "description": "<p>You send agents out to attend to established trade agreements. @loseMultiple2ResourcePoints per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.</p>",
         "modifiers": {
           "previousTurn": {
-            "buttonLabel": "+5 DC Increase managed on previous turn",
-            "name": "Managed Trade Agreements last turn"
+            "buttonLabel": "+5 DC Increase Managed on Previous Turn",
+            "name": "Managed Trade Agreements Last Turn"
           }
         },
         "criticalSuccess": {
@@ -4121,7 +4121,7 @@
         "description": "<p>You work to spread the word of the party’s heroics and achievements, both through word of mouth and by distributing chapbooks or one-sheets detailing their exploits. Attempt a basic Arts check to determine the success of your efforts. If you have secured a printing press for the kingdom, the Arts check gains a +2 item bonus.</p>",
         "criticalSuccess": {
           "msg": "<p>Not only do your stories bring pride and patriotism to the nation, but they also help increase its glory. @lose1d6Unrest, and @gain1FameNextTurn. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.</p>",
-          "modifier": {
+          "modifiers": {
             "increaseGlory": {
               "name": "Spread the Legend: Critical Success",
               "buttonLabel": "Reduce Dangerous Event Modifier by 1"
@@ -4207,7 +4207,7 @@
           "modifiers": {
             "futureAttempts": {
               "name": "Tapped Treasury",
-              "buttonLabel": "Future attempts worsened 2 degrees if until paid back"
+              "buttonLabel": "Future Attempts Worsened By 2 Degrees Until Paid Back"
             }
           }
         },
@@ -4220,7 +4220,7 @@
             },
             "futureAttempts": {
               "name": "Tapped Treasury",
-              "buttonLabel": "Future attempts worsened 2 degrees if until paid back"
+              "buttonLabel": "Future Attempts Worsened By 2 Degrees Until Paid Back"
             }
           }
         },
@@ -4233,7 +4233,7 @@
             },
             "futureAttempts": {
               "name": "Tapped Treasury",
-              "buttonLabel": "Future attempts worsened 2 degrees if until paid back"
+              "buttonLabel": "Future Attempts Worsened By 2 Degrees Until Paid Back"
             }
           }
         },
@@ -4246,7 +4246,7 @@
             },
             "futureAttempts": {
               "name": "Tapped Treasury",
-              "buttonLabel": "Future attempts worsened 2 degrees if until paid back"
+              "buttonLabel": "Future Attempts Worsened By 2 Degrees Until Paid Back"
             }
           }
         }
