@@ -16,7 +16,6 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.RawLeaderSkills
 import at.posselt.pfrpg2e.kingdom.deleteLore
 import at.posselt.pfrpg2e.kingdom.hasAttribute
-import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.t
@@ -140,7 +139,7 @@ private class ConfigureLeaderSkills(
     id = "kmConfigureLeaderSkills",
 ) {
     var data = deepClone(skills)
-    var lores = data.allLores()
+    var lores = data.allLores().sortedBy { it.value.lowercase() }.toTypedArray()
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
@@ -173,13 +172,13 @@ private class ConfigureLeaderSkills(
                             )
                         ).unsafeCast<AnyObject>()
                     ) { data ->
-                        val lore = Attribute.fromString(data.lore.slugify())
+                        val lore = Attribute.fromString(data.lore)
                         if (data.lore.isBlank() || lore is Skill) {
                             ui.notifications.error(t("kingdom.invalidLore"))
                         } else if (lores.contains(lore)) {
                             ui.notifications.error(t("kingdom.loreAlreadyExists"))
                         } else {
-                            lores = lores + lore
+                            lores = (lores + lore).sortedBy { it.value.lowercase() }.toTypedArray()
                             render()
                         }
                     }
@@ -194,7 +193,7 @@ private class ConfigureLeaderSkills(
         options: HandlebarsRenderOptions
     ): Promise<ConfigureLeaderSkillsContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
-        val rows = (Skill.entries + lores)
+        val rows = (Skill.entries + lores.sortedBy { it.value.lowercase() })
             .mapIndexed { attributeIndex, attribute ->
                 val deleteButton = Button(
                     value = "delete-lore",
@@ -234,7 +233,7 @@ private class ConfigureLeaderSkills(
 
     override fun onParsedSubmit(value: LeaderSkillsData): Promise<Void> = buildPromise {
         if (readonly == false) {
-            data = value.toSkills(Skill.entries.toTypedArray() + lores)
+            data = value.toSkills(Skill.entries.toTypedArray() + lores.sortedBy { it.value.lowercase() })
         }
         null
     }

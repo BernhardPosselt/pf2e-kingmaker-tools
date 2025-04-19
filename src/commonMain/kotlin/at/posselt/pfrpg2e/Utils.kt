@@ -20,7 +20,7 @@ fun <T : Enum<T>> Enum<T>.toCamelCase(): String =
 inline fun <reified T : Enum<T>> fromOrdinal(index: Int): T? =
     enumEntries<T>().getOrNull(index)
 
-val specialCharacterRegex = "[\"$&+,:;=?@#|'<>.^*/()%\\\\!-]".toRegex()
+val specialCharacterRegex = "[\"$&+,:;=?@#|'<>.^*/()%\\\\!]".toRegex()
 
 fun String.slugify(): String =
     replace(specialCharacterRegex, "")

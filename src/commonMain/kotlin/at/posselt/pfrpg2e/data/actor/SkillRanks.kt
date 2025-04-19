@@ -1,5 +1,7 @@
 package at.posselt.pfrpg2e.data.actor
 
+import at.posselt.pfrpg2e.slugify
+
 data class SkillRanks(
     val acrobatics: Int = 0,
     val arcana: Int = 0,
@@ -25,9 +27,9 @@ data class SkillRanks(
         val name: String,
         val rank: Int,
     )
-    fun resolveRank(attribute: Attribute): Int =
-        when (attribute) {
-            is Lore -> loresByName[attribute.value]?.rank ?: 0
+    fun resolveRank(attribute: Attribute): Int {
+        return when (attribute) {
+            is Lore -> loresByName[attribute.value.slugify()]?.rank ?: 0
             Perception -> perception
             Skill.ACROBATICS -> acrobatics
             Skill.ARCANA -> arcana
@@ -46,4 +48,5 @@ data class SkillRanks(
             Skill.SURVIVAL -> survival
             Skill.THIEVERY -> thievery
         }
+    }
 }

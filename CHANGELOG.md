@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Automatically enable Civil Service bonus
 * Fix Fame & Fortune
 * Fix Deploy Army Skills
+* Fix leadership lores with containing characters
 
 ## [4.8.0] - 2025-04-09
 
