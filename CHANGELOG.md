@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Filter out lower bonuses in inspect settlement
+* Fix Political Calm bonus
 
 ## [4.8.0] - 2025-04-09
 
