@@ -10,8 +10,8 @@
   "text": "kingdomFeats.quick-recovery-status-bonus.text",
   "modifiers": [
     {
-      "name": "kingdomFeats.quick-recovery-status-bonus.harmfulEvent.name",
-      "buttonLabel": "kingdomFeats.quick-recovery-status-bonus.harmfulEvent.buttonLabel",
+      "name": "kingdomFeats.quick-recovery-status-bonus.modifiers.harmfulEvent.name",
+      "buttonLabel": "kingdomFeats.quick-recovery-status-bonus.modifiers.harmfulEvent.buttonLabel",
       "type": "status",
       "enabled": false,
       "applyIf": [

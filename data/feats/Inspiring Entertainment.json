@@ -10,8 +10,8 @@
   "text": "kingdomFeats.inspiring-entertainment.text",
   "modifiers": [
     {
-      "name": "kingdomFeats.inspiring-entertainment.talentedArtists.name",
-      "buttonLabel": "kingdomFeats.inspiring-entertainment.talentedArtists.buttonLabel",
+      "name": "kingdomFeats.inspiring-entertainment.modifiers.talentedArtists.name",
+      "buttonLabel": "kingdomFeats.inspiring-entertainment.modifiers.talentedArtists.buttonLabel",
       "type": "circumstance",
       "enabled": true,
       "value": 2,
