@@ -9,9 +9,9 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.onPreUpdateActor
+import com.foundryvtt.core.helpers.TypedHooks
 import com.foundryvtt.core.utils.getProperty
 import js.objects.recordOf
 
@@ -65,7 +65,7 @@ private suspend fun checkPreActorMealUpdate(actor: Actor, update: AnyObject) {
 }
 
 fun registerMealDiffingHooks() {
-    Hooks.onPreUpdateActor { actor, update, _, _ ->
+    TypedHooks.onPreUpdateActor { actor, update, _, _ ->
         buildPromise {
             checkPreActorMealUpdate(actor, update)
         }

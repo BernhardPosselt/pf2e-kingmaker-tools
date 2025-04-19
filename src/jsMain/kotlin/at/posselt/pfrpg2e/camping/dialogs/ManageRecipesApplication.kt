@@ -22,7 +22,7 @@ import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.AnyMutableObject
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.ui.TextEditor
+import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
 import js.array.toTypedArray
 import js.core.Void
 import kotlinx.coroutines.await

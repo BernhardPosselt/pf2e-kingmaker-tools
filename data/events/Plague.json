@@ -7,6 +7,37 @@
     "dangerous",
     "settlement"
   ],
+  "globalModifiers": [
+    {
+      "type": "status",
+      "name": "events.plague.modifiers.affectedByPlague.name",
+      "buttonLabel": "events.plague.modifiers.affectedByPlague.buttonLabel",
+      "value": -2,
+      "enabled": true,
+      "applyIf": [
+        {
+          "eq": [
+            "@phase",
+            "civic"
+          ]
+        },
+        {
+          "in": [
+            "plague",
+            "@settlementEvents"
+          ]
+        },
+        {
+          "not": {
+            "in": [
+              "sewer-system",
+              "@structures"
+            ]
+          }
+        }
+      ]
+    }
+  ],
   "location": "events.plague.location",
   "description": "events.plague.description",
   "modifiers": [
@@ -53,106 +84,13 @@
         "msg": "events.plague.stage-0.criticalSuccess.msg"
       },
       "success": {
-        "msg": "events.plague.stage-0.success.msg",
-        "modifiers": [
-          {
-            "type": "status",
-            "name": "events.plague.modifiers.affectedByPlague.name",
-            "buttonLabel": "events.plague.modifiers.affectedByPlague.buttonLabel",
-            "value": -2,
-            "enabled": true,
-            "applyIf": [
-              {
-                "eq": [
-                  "@phase",
-                  "civic"
-                ]
-              },
-              {
-                "in": [
-                  "plague",
-                  "@settlementEvents"
-                ]
-              },
-              {
-                "not": {
-                  "in": [
-                    "sewer-system",
-                    "@structures"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
+        "msg": "events.plague.stage-0.success.msg"
       },
       "failure": {
-        "msg": "events.plague.stage-0.failure.msg",
-        "modifiers": [
-          {
-            "type": "status",
-            "name": "events.plague.modifiers.affectedByPlague.name",
-            "buttonLabel": "events.plague.modifiers.affectedByPlague.buttonLabel",
-            "value": -2,
-            "enabled": true,
-            "applyIf": [
-              {
-                "eq": [
-                  "@phase",
-                  "civic"
-                ]
-              },
-              {
-                "in": [
-                  "plague",
-                  "@settlementEvents"
-                ]
-              },
-              {
-                "not": {
-                  "in": [
-                    "sewer-system",
-                    "@structures"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
+        "msg": "events.plague.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "events.plague.stage-0.criticalFailure.msg",
-        "modifiers": [
-          {
-            "type": "status",
-            "name": "events.plague.modifiers.affectedByPlague.name",
-            "buttonLabel": "events.plague.modifiers.affectedByPlague.buttonLabel",
-            "value": -2,
-            "enabled": true,
-            "applyIf": [
-              {
-                "eq": [
-                  "@phase",
-                  "civic"
-                ]
-              },
-              {
-                "in": [
-                  "plague",
-                  "@settlementEvents"
-                ]
-              },
-              {
-                "not": {
-                  "in": [
-                    "sewer-system",
-                    "@structures"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
+        "msg": "events.plague.stage-0.criticalFailure.msg"
       }
     }
   ],

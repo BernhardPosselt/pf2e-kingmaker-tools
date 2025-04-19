@@ -3,8 +3,8 @@
 package com.foundryvtt.core.data.fields
 
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.FormInputConfig
 import com.foundryvtt.core.abstract.DataModel
+import com.foundryvtt.core.helpers.FormInputConfig
 
 
 abstract external class DataField<T>(

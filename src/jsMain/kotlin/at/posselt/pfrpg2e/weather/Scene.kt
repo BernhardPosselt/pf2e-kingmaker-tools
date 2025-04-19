@@ -5,13 +5,17 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.settings.Pfrpg2eKingdomCampingWeatherSettings
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.utils.*
+import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.getAppFlag
+import at.posselt.pfrpg2e.utils.isFirstGM
+import at.posselt.pfrpg2e.utils.setAppFlag
+import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.documents.onPreUpdateScene
 import com.foundryvtt.core.documents.onUpdateScene
-import com.foundryvtt.core.onUpdateWorldTime
+import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.helpers.onUpdateWorldTime
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -54,7 +58,7 @@ fun registerWeatherHooks(game: Game) {
     // the new scene is synced to the current weather effect and playlist
     val settings = game.settings.pfrpg2eKingdomCampingWeather
     // update scene weather
-    Hooks.onPreUpdateScene { document, changed, _, _ ->
+    TypedHooks.onPreUpdateScene { document, changed, _, _ ->
         val shouldSyncWeather = game.isFirstGM()
                 && settings.getEnableWeather()
                 && document.getWeatherSettings().syncWeather
@@ -65,7 +69,7 @@ fun registerWeatherHooks(game: Game) {
         }
     }
     // update playlist
-    Hooks.onUpdateScene { document, changed, _, _ ->
+    TypedHooks.onUpdateScene { document, changed, _, _ ->
         val shouldSyncWeather = game.isFirstGM()
                 && settings.getEnableWeather()
                 && settings.getEnableWeatherSoundFx()
@@ -78,7 +82,7 @@ fun registerWeatherHooks(game: Game) {
             }
         }
     }
-    Hooks.onUpdateWorldTime { _, deltaInSeconds, _, _ ->
+    TypedHooks.onUpdateWorldTime { _, deltaInSeconds, _, _ ->
         if (game.settings.pfrpg2eKingdomCampingWeather.getAutoRollWeather()) {
             if (game.isFirstGM() && dayHasChanged(game, deltaInSeconds)) {
                 buildPromise {

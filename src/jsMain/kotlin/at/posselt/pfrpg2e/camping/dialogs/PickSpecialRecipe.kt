@@ -15,7 +15,7 @@ import at.posselt.pfrpg2e.camping.getTotalCarriedFood
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.ui.TextEditor
+import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
 import com.foundryvtt.pf2e.actor.PF2EParty
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await

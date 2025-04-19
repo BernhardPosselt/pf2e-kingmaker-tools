@@ -8,7 +8,7 @@ import at.posselt.pfrpg2e.kingdom.getGovernments
 import at.posselt.pfrpg2e.kingdom.getMilestones
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
-import com.foundryvtt.core.ui.enrichHtml
+import com.foundryvtt.core.applications.ux.TextEditor.enrichHtml
 import js.objects.recordOf
 
 suspend fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {

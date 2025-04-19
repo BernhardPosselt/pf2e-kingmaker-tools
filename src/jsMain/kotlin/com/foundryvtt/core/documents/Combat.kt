@@ -1,32 +1,12 @@
+@file:JsQualifier("foundry.documents")
 package com.foundryvtt.core.documents
 
-import com.foundryvtt.core.*
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
-import com.foundryvtt.core.collections.EmbeddedCollection
-import js.objects.jso
-import kotlinx.js.JsPlainObject
+import com.foundryvtt.core.documents.collections.EmbeddedCollection
 import kotlin.js.Promise
 
-@JsPlainObject
-external interface RollInitiativeOptions {
-    val formula: String?
-    val updateTurn: Boolean?
-    val messageOptions: AnyObject?
-}
-
-@JsPlainObject
-external interface CombatHistoryData {
-    val round: Int?
-    val turn: Int?
-    val tokenId: String?
-    val combatantId: String?
-}
-
-// required to make instance of work, but since the classes are not registered here
-// at page load, we can't use @file:JsQualifier
-@JsName("CONFIG.Combat.documentClass")
-@Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 external class Combat : ClientDocument {
     companion object : DocumentStatic<Combat> {
         val CONFIG_SETTING: String
@@ -73,25 +53,3 @@ external class Combat : ClientDocument {
     fun setupTurns(): Array<Combatant>
     fun updateCombatantActors()
 }
-
-@Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun Combat.update(data: Combat, operation: DatabaseUpdateOperation = jso()): Promise<Combat?> =
-    update(data as AnyObject, operation)
-
-fun <O> HooksEventListener.onPreCreateCombat(callback: PreCreateDocumentCallback<Combat, O>) =
-    on("preCreateCombat", callback)
-
-fun <O> HooksEventListener.onPreUpdateCombat(callback: PreUpdateDocumentCallback<Combat, O>): Unit =
-    on("preUpdateCombat", callback)
-
-fun <O> HooksEventListener.onPreDeleteCombat(callback: PreDeleteDocumentCallback<Combat, O>) =
-    on("preDeleteCombat", callback)
-
-fun <O> HooksEventListener.onCreateCombat(callback: CreateDocumentCallback<Combat, O>) =
-    on("createCombat", callback)
-
-fun <O> HooksEventListener.onUpdateCombat(callback: UpdateDocumentCallback<Combat, O>) =
-    on("updateCombat", callback)
-
-fun <O> HooksEventListener.onDeleteCombat(callback: DeleteDocumentCallback<Combat, O>) =
-    on("deleteCombat", callback)

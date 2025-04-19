@@ -34,6 +34,7 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.documents.onCreateTile
 import com.foundryvtt.core.documents.onCreateToken
@@ -42,9 +43,8 @@ import com.foundryvtt.core.documents.onDeleteTile
 import com.foundryvtt.core.documents.onDeleteToken
 import com.foundryvtt.core.documents.onUpdateTile
 import com.foundryvtt.core.documents.onUpdateToken
-import com.foundryvtt.core.onApplyTokenStatusEffect
+import com.foundryvtt.core.helpers.onApplyTokenStatusEffect
 import com.foundryvtt.core.ui
-import com.foundryvtt.core.ui.TextEditor
 import js.core.Void
 import js.objects.ReadonlyRecord
 import js.objects.recordOf

@@ -13,7 +13,7 @@ import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.label
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.skillRanks
-import com.foundryvtt.core.ui.enrichHtml
+import com.foundryvtt.core.applications.ux.TextEditor.enrichHtml
 import js.objects.JsPlainObject
 import js.objects.Object
 import kotlinx.coroutines.async

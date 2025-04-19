@@ -1,15 +1,12 @@
+@file:JsQualifier("foundry.documents")
 package com.foundryvtt.core.documents
 
-import com.foundryvtt.core.*
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
-import js.objects.jso
+import com.foundryvtt.core.dice.Roll
 import kotlin.js.Promise
 
-// required to make instance of work, but since the classes are not registered here
-// at page load, we can't use @file:JsQualifier
-@JsName("CONFIG.Combatant.documentClass")
-@Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 external class Combatant : ClientDocument {
     companion object : DocumentStatic<Combatant>;
 
@@ -38,25 +35,3 @@ external class Combatant : ClientDocument {
     fun rollInitiative(formula: String): Promise<Combatant>
     fun updateResource(): AnyObject?
 }
-
-@Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun Combatant.update(data: Combatant, operation: DatabaseUpdateOperation = jso()): Promise<Combatant?> =
-    update(data as AnyObject, operation)
-
-fun <O> HooksEventListener.onPreCreateCombatant(callback: PreCreateDocumentCallback<Combatant, O>) =
-    on("preCreateCombatant", callback)
-
-fun <O> HooksEventListener.onPreUpdateCombatant(callback: PreUpdateDocumentCallback<Combatant, O>): Unit =
-    on("preUpdateCombatant", callback)
-
-fun <O> HooksEventListener.onPreDeleteCombatant(callback: PreDeleteDocumentCallback<Combatant, O>) =
-    on("preDeleteCombatant", callback)
-
-fun <O> HooksEventListener.onCreateCombatant(callback: CreateDocumentCallback<Combatant, O>) =
-    on("createCombatant", callback)
-
-fun <O> HooksEventListener.onUpdateCombatant(callback: UpdateDocumentCallback<Combatant, O>) =
-    on("updateCombatant", callback)
-
-fun <O> HooksEventListener.onDeleteCombatant(callback: DeleteDocumentCallback<Combatant, O>) =
-    on("deleteCombatant", callback)

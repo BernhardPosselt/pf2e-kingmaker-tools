@@ -11,9 +11,9 @@ import at.posselt.pfrpg2e.utils.asAnyObjectList
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.onPreUpdateActor
+import com.foundryvtt.core.helpers.TypedHooks
 import com.foundryvtt.core.utils.diffObject
 import com.foundryvtt.core.utils.getProperty
 import com.foundryvtt.core.utils.setProperty
@@ -210,7 +210,7 @@ private fun prepareCampsiteChanged(activityStateChanged: List<ActivityChange>) =
         .find { it.isPrepareCampsite() }
 
 fun registerActivityDiffingHooks(game: Game, dispatcher: ActionDispatcher) {
-    Hooks.onPreUpdateActor { actor, update, _, _ ->
+    TypedHooks.onPreUpdateActor { actor, update, _, _ ->
         checkPreActorUpdate(actor, update)?.let {
             buildPromise {
                 dispatcher.dispatch(

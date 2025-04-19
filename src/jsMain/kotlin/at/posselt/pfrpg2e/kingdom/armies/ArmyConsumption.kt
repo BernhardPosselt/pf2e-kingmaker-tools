@@ -6,7 +6,6 @@ import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.documents.onCreateItem
@@ -18,6 +17,7 @@ import com.foundryvtt.core.documents.onDeleteToken
 import com.foundryvtt.core.documents.onUpdateActor
 import com.foundryvtt.core.documents.onUpdateItem
 import com.foundryvtt.core.documents.onUpdateToken
+import com.foundryvtt.core.helpers.TypedHooks
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import kotlin.math.max
 
@@ -61,16 +61,16 @@ private suspend fun checkedUpdate(game: Game, hookActor: Actor) {
 }
 
 fun registerArmyConsumptionHooks(game: Game) {
-    Hooks.onCreateToken { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
-    Hooks.onDeleteToken { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
-    Hooks.onUpdateToken { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    TypedHooks.onCreateToken { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    TypedHooks.onDeleteToken { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    TypedHooks.onUpdateToken { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
 
-    Hooks.onCreateItem { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
-    Hooks.onDeleteItem { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
-    Hooks.onUpdateItem { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    TypedHooks.onCreateItem { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    TypedHooks.onDeleteItem { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    TypedHooks.onUpdateItem { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
 
-    Hooks.onDeleteActor { document, _, _ -> buildPromise { checkedUpdate(game, document) } }
-    Hooks.onUpdateActor { document, _, _, _ -> buildPromise { checkedUpdate(game, document) } }
+    TypedHooks.onDeleteActor { document, _, _ -> buildPromise { checkedUpdate(game, document) } }
+    TypedHooks.onUpdateActor { document, _, _, _ -> buildPromise { checkedUpdate(game, document) } }
 
-    Hooks.onDeleteScene { document, _, _ -> buildPromise { updateArmyConsumption(game) } }
+    TypedHooks.onDeleteScene { document, _, _ -> buildPromise { updateArmyConsumption(game) } }
 }

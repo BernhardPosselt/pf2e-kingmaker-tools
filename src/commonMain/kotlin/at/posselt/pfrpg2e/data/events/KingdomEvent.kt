@@ -9,6 +9,7 @@ data class KingdomEvent(
     val description: String,
     val special: String?,
     val modifiers: List<Modifier>,
+    val globalModifiers: List<Modifier>,
     val resolution: String?,
     val resolvedOn: Set<DegreeOfSuccess>,
     val modifier: Int,

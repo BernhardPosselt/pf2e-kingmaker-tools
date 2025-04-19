@@ -18,6 +18,12 @@
         "name": {
           "type": "string"
         },
+        "globalModifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Modifier"
+          }
+        },
         "automationNotes": {
           "type": "string"
         },

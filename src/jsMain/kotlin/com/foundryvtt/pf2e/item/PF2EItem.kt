@@ -4,7 +4,7 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.documents.Item
-import com.foundryvtt.core.fromUuid
+import com.foundryvtt.core.utils.fromUuid
 import js.objects.jso
 import kotlinx.coroutines.await
 import kotlin.js.Promise

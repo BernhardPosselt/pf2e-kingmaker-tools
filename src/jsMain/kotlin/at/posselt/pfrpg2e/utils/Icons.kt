@@ -10,12 +10,12 @@ import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.directories.onRenderActorDirectory
 import com.foundryvtt.core.documents.Macro
-import com.foundryvtt.core.onHotBarDrop
+import com.foundryvtt.core.game
+import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.helpers.onHotBarDrop
 import com.foundryvtt.pf2e.actor.PF2EParty
-import io.kvision.jquery.get
 import js.objects.Object
 import js.objects.recordOf
 import kotlinx.browser.document
@@ -97,7 +97,7 @@ fun createPartyActorIcon(
 }
 
 fun registerMacroDropHooks(game: Game) {
-    Hooks.onHotBarDrop { bar, data, slot ->
+    TypedHooks.onHotBarDrop { bar, data, slot ->
         buildPromise {
             if (Object.hasOwn(data, "type") && (data["type"] == "camping" || data["type"] == "kingdom")) {
                 val macroData = data.unsafeCast<MacroData>()
@@ -116,15 +116,15 @@ fun registerMacroDropHooks(game: Game) {
 }
 
 fun registerIcons(actionDispatcher: ActionDispatcher) {
-    Hooks.onRenderActorDirectory { _, html, _ ->
-        html[0]?.querySelectorAll(".party-header")
-            ?.asList()
-            ?.filterIsInstance<HTMLElement>()
-            ?.forEach {
+    TypedHooks.onRenderActorDirectory { _, html, _ ->
+        html.querySelectorAll(".party-header")
+            .asList()
+            .filterIsInstance<HTMLElement>()
+            .forEach {
                 val id = it.dataset["documentId"]
                 if (id != null) {
                     val insertAfter = it.querySelector("h3")
-                    if (com.foundryvtt.core.game.user.isGM) {
+                    if (game.user.isGM) {
                         insertAfter?.insertAdjacentElement(
                             "afterend", createPartyActorIcon(
                                 id = id,
@@ -132,7 +132,7 @@ fun registerIcons(actionDispatcher: ActionDispatcher) {
                                 toolTip = t("applications.actorActions.tooltip"),
                                 sheetType = SheetType.KINGDOM,
                                 onClick = {
-                                    com.foundryvtt.core.game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
+                                    game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
                                         ActorActions(actor = actor).launch()
                                     }
                                 },
@@ -141,12 +141,12 @@ fun registerIcons(actionDispatcher: ActionDispatcher) {
                     }
                     insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
                     insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))
-                    if (com.foundryvtt.core.game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
+                    if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
                         it.querySelector(".fa-crown")
                             ?.parentElement
                             ?.takeIfInstance<HTMLElement>()
-                            ?.let {
-                                it.hidden = true
+                            ?.let { elem ->
+                                elem.hidden = true
                             }
                     }
                 }

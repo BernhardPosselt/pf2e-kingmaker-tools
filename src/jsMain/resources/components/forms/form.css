@@ -51,6 +51,11 @@
         margin-top: 1rem;
     }
 
+    textarea {
+        width: 100%;
+        display: block;
+    }
+
     .form-element-inline {
         display: flex;
         justify-content: space-between;
@@ -73,6 +78,7 @@
 
     button.full-width {
         margin-top: 10px;
+        width: 100%;
     }
 
     button[data-action="km-save"] {

@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.kingdom.data.RawNotes
-import com.foundryvtt.core.ui.TextEditor
+import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 

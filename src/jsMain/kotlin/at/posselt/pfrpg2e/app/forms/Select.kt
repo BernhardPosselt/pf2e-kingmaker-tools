@@ -182,7 +182,7 @@ data class Select(
             escapeLabel = escapeLabel,
         )
 
-        inline fun range(
+        fun range(
             label: String,
             name: String,
             from: Int,

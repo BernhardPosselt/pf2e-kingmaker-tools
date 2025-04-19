@@ -30,7 +30,7 @@ suspend fun postPassTimeMessage(message: String, hours: Int) {
 }
 
 fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
-    bindChatClick(".km-add-recipe") { _, el ->
+    bindChatClick(".km-add-recipe") { _, el, _ ->
         val actorUuid = el.dataset["actorUuid"]
         val id = el.dataset["id"]
         val degree = el.dataset["degree"]
@@ -51,14 +51,14 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
             }
         }
     }
-    bindChatClick(".km-pass-time") { _, el ->
+    bindChatClick(".km-pass-time") { _, el, _ ->
         el.dataset["seconds"]?.toInt()?.let {
             buildPromise {
                 game.time.advance(it).await()
             }
         }
     }
-    bindChatClick(".km-random-encounter") { _, el ->
+    bindChatClick(".km-random-encounter") { _, el, _ ->
         el.dataset["campingActorUuid"]?.let {
             buildPromise {
                 fromUuidTypeSafe<CampingActor>(it)?.let { actor ->
@@ -69,7 +69,7 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
             }
         }
     }
-    bindChatClick(".gain-provisions") { _, el ->
+    bindChatClick(".gain-provisions") { _, el, _ ->
         buildPromise {
             val actorUuid = el.dataset["actorUuid"]
             val quantity = el.dataset["quantity"]?.toInt() ?: 0
@@ -86,7 +86,7 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
             }
         }
     }
-    bindChatClick(".km-add-food") { _, el ->
+    bindChatClick(".km-add-food") { _, el, _ ->
         el.dataset["campingActorUuid"]?.let {
             val action = ActionMessage(
                 action = "addHuntAndGatherResult",
@@ -102,7 +102,7 @@ fun bindCampingChatEventListeners(game: Game, dispatcher: ActionDispatcher) {
             }
         }
     }
-    bindChatClick(".km-apply-meal-effect") { _, el ->
+    bindChatClick(".km-apply-meal-effect") { _, el, _ ->
         val degree = el.dataset["degree"]
         val id = el.dataset["recipe"]
         val campingActorUuid = el.dataset["campingActorUuid"]

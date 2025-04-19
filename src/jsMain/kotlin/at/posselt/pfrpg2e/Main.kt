@@ -54,18 +54,16 @@ import at.posselt.pfrpg2e.utils.registerMacroDropHooks
 import at.posselt.pfrpg2e.utils.registerTokenMappings
 import at.posselt.pfrpg2e.weather.registerWeatherHooks
 import at.posselt.pfrpg2e.weather.rollWeather
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.game
-import com.foundryvtt.core.onI18NInit
-import com.foundryvtt.core.onInit
-import com.foundryvtt.core.onReady
-import com.foundryvtt.core.onRenderChatLog
-import com.foundryvtt.core.onRenderChatMessage
-import io.kvision.jquery.get
-import org.w3c.dom.HTMLElement
+import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.helpers.onI18NInit
+import com.foundryvtt.core.helpers.onInit
+import com.foundryvtt.core.helpers.onReady
+import com.foundryvtt.core.helpers.onRenderChatLog
+import com.foundryvtt.core.helpers.onRenderChatMessage
 
 fun main() {
-    Hooks.onInit {
+    TypedHooks.onInit {
         val actionDispatcher = ActionDispatcher(
             game = game,
             handlers = listOf(
@@ -82,7 +80,7 @@ fun main() {
             listen()
         }
 
-        Hooks.onI18NInit {
+        TypedHooks.onI18NInit {
             buildPromise {
                 initLocalization()
                 game.settings.pfrpg2eKingdomCampingWeather.register()
@@ -192,7 +190,7 @@ fun main() {
             ),
         )
 
-        Hooks.onReady {
+        TypedHooks.onReady {
             buildPromise {
                 game.migratePfrpg2eKingdomCampingWeather()
                 registerActivityDiffingHooks(game, actionDispatcher)
@@ -201,12 +199,11 @@ fun main() {
             }
         }
 
-        Hooks.onRenderChatMessage { message, html, _ ->
-            val elem = html[0] as HTMLElement
-            fixVisibility(game, elem, message)
+        TypedHooks.onRenderChatMessage { message, html, _ ->
+            fixVisibility(game, html, message)
         }
 
-        Hooks.onRenderChatLog { _, _, _ ->
+        TypedHooks.onRenderChatLog { _, _, _ ->
             bindCampingChatEventListeners(game, actionDispatcher)
         }
     }

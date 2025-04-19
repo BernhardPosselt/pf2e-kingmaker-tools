@@ -24,8 +24,8 @@ import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.applications.ux.TextEditor.enrichHtml
 import com.foundryvtt.core.data.dsl.buildSchema
-import com.foundryvtt.core.ui.enrichHtml
 import js.core.Void
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await

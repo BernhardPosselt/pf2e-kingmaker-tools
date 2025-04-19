@@ -1,40 +1,11 @@
+@file:JsQualifier("foundry.documents")
 package com.foundryvtt.core.documents
 
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.CreateDocumentCallback
-import com.foundryvtt.core.DeleteDocumentCallback
-import com.foundryvtt.core.HooksEventListener
-import com.foundryvtt.core.PreCreateDocumentCallback
-import com.foundryvtt.core.PreDeleteDocumentCallback
-import com.foundryvtt.core.PreUpdateDocumentCallback
-import com.foundryvtt.core.UpdateDocumentCallback
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
-import js.objects.jso
-import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
-@JsPlainObject
-external interface TileRestrictions {
-    val light: Boolean
-    val weather: Boolean
-}
-
-@JsPlainObject
-external interface TileOcclusion {
-    val mode: Int
-    val alpha: Double
-}
-
-@JsPlainObject
-external interface TileVideo {
-    val loop: Boolean
-    val autoplay: Boolean
-    val alpha: Double
-}
-
-@JsName("CONFIG.Tile.documentClass")
-@Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 external class TileDocument : ClientDocument {
     companion object : DocumentStatic<TileDocument>
 
@@ -57,25 +28,3 @@ external class TileDocument : ClientDocument {
     var occlusion: TileOcclusion
     var video: TileVideo
 }
-
-@Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun TileDocument.update(data: TileDocument, operation: DatabaseUpdateOperation = jso()): Promise<TileDocument?> =
-    update(data as AnyObject, operation)
-
-fun <O> HooksEventListener.onPreCreateTile(callback: PreCreateDocumentCallback<TileDocument, O>) =
-    on("preCreateTile", callback)
-
-fun <O> HooksEventListener.onPreUpdateTile(callback: PreUpdateDocumentCallback<TileDocument, O>): Unit =
-    on("preUpdateTile", callback)
-
-fun <O> HooksEventListener.onPreDeleteTile(callback: PreDeleteDocumentCallback<TileDocument, O>) =
-    on("preDeleteTile", callback)
-
-fun <O> HooksEventListener.onCreateTile(callback: CreateDocumentCallback<TileDocument, O>) =
-    on("createTile", callback)
-
-fun <O> HooksEventListener.onUpdateTile(callback: UpdateDocumentCallback<TileDocument, O>) =
-    on("updateTile", callback)
-
-fun <O> HooksEventListener.onDeleteTile(callback: DeleteDocumentCallback<TileDocument, O>) =
-    on("deleteTile", callback)

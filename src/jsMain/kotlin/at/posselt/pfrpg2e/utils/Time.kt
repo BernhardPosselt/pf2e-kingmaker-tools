@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.data.regions.Month
 import at.posselt.pfrpg2e.data.regions.getMonth
 import at.posselt.pfrpg2e.toUtcInstant
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.GameTime
+import com.foundryvtt.core.helpers.GameTime
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate

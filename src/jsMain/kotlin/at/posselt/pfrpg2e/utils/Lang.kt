@@ -89,7 +89,7 @@ fun <T> Sequence<Pair<String, T>>.toRecord(): ReadonlyRecord<String, T> =
 fun <T> Sequence<JsTuple2<String, T>>.toRecord(): ReadonlyRecord<String, T> =
     Object.fromEntries(toTypedArray())
 
-inline fun <T> Array<T>.push(
+fun <T> Array<T>.push(
     item: T,
 ) {
     asDynamic().push(item)

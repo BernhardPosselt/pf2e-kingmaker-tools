@@ -4,6 +4,7 @@ class Hooks {
 }
 
 const foundry = {
+    ux: {},
     abstract: {
         DataModel: class {
 
@@ -13,10 +14,27 @@ const foundry = {
         expandObject: () => {
         }
     },
+    documents: {
+
+    },
     data: {
         fields: {}
     },
+    helpers: {},
     applications: {
+        sidebar: {
+            ActorDirectory: class {}
+        },
+        ui: {
+            Hotbar: class {}
+        },
+        ux: {
+            TextEditor: {
+                implementation: class {
+                }
+            }
+        },
+        handlebars: {},
         api: {
             HandlebarsApplicationMixin: (klass) => {
                 return class extends klass {

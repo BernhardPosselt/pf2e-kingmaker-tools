@@ -52,6 +52,12 @@
             "$ref": "#/$defs/UpgradeResult"
           }
         },
+        "downgradeResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DowngradeResult"
+          }
+        },
         "fortune": {
           "type": "boolean"
         },

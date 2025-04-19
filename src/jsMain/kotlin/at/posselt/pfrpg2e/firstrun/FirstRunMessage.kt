@@ -10,7 +10,7 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.ui.TextEditor
+import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
 import js.objects.recordOf
 import kotlinx.coroutines.await
 
@@ -50,7 +50,7 @@ suspend fun showFirstRunMessage(game: Game) {
             )
         )
     }
-    bindChatClick(".km-disable-firstrun-message") { _, _ ->
+    bindChatClick(".km-disable-firstrun-message") { _, _, _ ->
         buildPromise {
             settings.setDisableFirstRunMessage(true)
             postChatMessage(t("chatMessages.firstRun.disabled"))

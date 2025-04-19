@@ -2,9 +2,9 @@ package at.posselt.pfrpg2e.app
 
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.Hooks
-import com.foundryvtt.core.HooksEventListener
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
+import com.foundryvtt.core.helpers.HooksEventListener
+import com.foundryvtt.core.helpers.TypedHooks
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.html.org.w3c.dom.events.Event
@@ -38,14 +38,14 @@ abstract class App<C : HandlebarsRenderContext>(
     protected val appHook = object : HooksEventListener {
         override fun <T> on(key: String, callback: Function<T>) {
             appHooks.add(AppHook(key = key, callback = callback))
-            Hooks.on(key, callback)
+            TypedHooks.on(key, callback)
         }
     }
 
     override fun _preClose(options: ApplicationRenderOptions): Promise<Unit> = buildPromise {
         super._preClose(options).await()
         appHooks.forEach {
-            Hooks.off(it.key, it.callback)
+            TypedHooks.off(it.key, it.callback)
         }
     }
 

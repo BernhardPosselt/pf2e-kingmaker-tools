@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.camping.addConsumableToInventory
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.t
-import com.foundryvtt.core.fromUuid
+import com.foundryvtt.core.utils.fromUuid
 import com.foundryvtt.pf2e.actor.PF2EActor
 import js.objects.recordOf
 import kotlinx.coroutines.await

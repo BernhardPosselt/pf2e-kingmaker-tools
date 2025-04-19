@@ -1,13 +1,11 @@
 package com.foundryvtt.core
 
-external val ui: Ui
+import com.foundryvtt.core.applications.ui.Notifications
+import js.objects.JsPlainObject
 
-external class Notifications {
-    fun error(message: String)
-    fun info(message: String)
-    fun warn(message: String)
-}
 
-external object Ui {
+
+@JsPlainObject
+external interface Ui {
     val notifications: Notifications
 }

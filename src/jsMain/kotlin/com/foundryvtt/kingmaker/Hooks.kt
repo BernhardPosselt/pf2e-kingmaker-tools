@@ -1,6 +1,6 @@
 package com.foundryvtt.kingmaker
 
-import com.foundryvtt.core.HooksEventListener
+import com.foundryvtt.core.helpers.HooksEventListener
 import org.w3c.dom.HTMLElement
 
 typealias KingmakerHexEditApp = Any

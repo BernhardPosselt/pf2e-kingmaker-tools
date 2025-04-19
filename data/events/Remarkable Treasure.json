@@ -27,7 +27,7 @@
             "applyIf": [
               {
                 "eq": [
-                  "@action",
+                  "@activity",
                   "hire-adventurers"
                 ]
               }

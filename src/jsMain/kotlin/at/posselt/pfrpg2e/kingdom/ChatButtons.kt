@@ -6,30 +6,29 @@ import at.posselt.pfrpg2e.kingdom.dialogs.pickLeader
 import at.posselt.pfrpg2e.kingdom.sheet.executeResourceButton
 import at.posselt.pfrpg2e.kingdom.structures.validateUsingSchema
 import at.posselt.pfrpg2e.takeIfInstance
+import at.posselt.pfrpg2e.utils.bindChatClick
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
-import com.foundryvtt.core.onRenderChatLog
+import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.helpers.onRenderChatLog
 import com.foundryvtt.core.ui
 import io.github.uuidjs.uuid.v4
 import js.array.tupleOf
 import js.objects.JsPlainObject
 import js.objects.recordOf
-import kotlinx.browser.document
 import kotlinx.html.org.w3c.dom.events.Event
 import kotlinx.serialization.json.Json.Default.parseToJsonElement
-import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.collections.plus
 
 private data class ChatButton(
     val buttonClass: String,
-    val callback: suspend (game: Game, actor: KingdomActor, event: Event, button: HTMLButtonElement) -> Unit,
+    val callback: suspend (game: Game, actor: KingdomActor, event: Event, button: HTMLElement) -> Unit,
 )
 
 @Suppress("unused")
@@ -161,19 +160,14 @@ private val buttons = listOf(
 )
 
 fun bindChatButtons(game: Game) {
-    Hooks.onRenderChatLog { application, html, data ->
-        val chatLog = document.getElementById("chat-log")
-        chatLog?.addEventListener("click", { ev ->
-            buttons.forEach { data ->
-                val target = ev.target
-                if (target is HTMLButtonElement && target.classList.contains(data.buttonClass)) {
-                    buildPromise {
-                        target.closest(".chat-message")
-                            ?.findKingdomActor(game)
-                            ?.let { data.callback(game, it, ev, target) }
-                    }
+    TypedHooks.onRenderChatLog { application, _, data ->
+        buttons.forEach { data ->
+            bindChatClick(".${data.buttonClass}") { ev, target, parent ->
+                buildPromise {
+                    parent.findKingdomActor(game)
+                        ?.let { data.callback(game, it, ev, target) }
                 }
             }
-        })
+        }
     }
 }

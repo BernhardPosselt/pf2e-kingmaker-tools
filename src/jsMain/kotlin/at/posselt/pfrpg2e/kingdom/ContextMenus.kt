@@ -8,12 +8,10 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.push
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.applications.api.ContextMenuEntry
 import com.foundryvtt.core.game
-import com.foundryvtt.core.onGetChatLogEntryContext
-import io.kvision.jquery.JQuery
-import io.kvision.jquery.get
+import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.helpers.onGetChatMessageContextOptions
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
@@ -143,16 +141,16 @@ private val entries = listOf<ContextEntry>(
 
 
 fun registerContextMenus() {
-    Hooks.onGetChatLogEntryContext { elem, items ->
+    TypedHooks.onGetChatMessageContextOptions { elem, items ->
         entries.forEach { but ->
             items.push(
                 ContextMenuEntry(
                     name = but.name,
-                    condition = { elem: JQuery ->
-                        elem[0]?.let { html -> but.condition(game, html) } == true
+                    condition = { elem: HTMLElement ->
+                        but.condition(game, elem)
                     },
                     icon = but.icon,
-                    callback = { elem -> elem[0]?.let { html -> but.callback(game, html) } },
+                    callback = { elem -> elem.let { html -> but.callback(game, html) } },
                 ).asDynamic()
             )
         }

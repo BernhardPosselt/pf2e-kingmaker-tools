@@ -35,6 +35,7 @@ external interface RawKingdomEvent {
     var description: String
     var special: String?
     var modifiers: Array<RawModifier>?
+    var globalModifiers: Array<RawModifier>?
     var resolution: String?
     var resolvedOn: Array<String>?
     var modifier: Int?
@@ -78,6 +79,7 @@ fun RawKingdomEvent.parse() =
         location = location,
         stages = stages.map { it.parse() },
         automationNotes = automationNotes,
+        globalModifiers = globalModifiers?.map { it.parse() }?.toList().orEmpty(),
     )
 
 @JsPlainObject

@@ -5,13 +5,13 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.newInstance
 import at.posselt.pfrpg2e.utils.resolveTemplatePath
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.FormDataExtended
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.ApplicationFormConfiguration
 import com.foundryvtt.core.applications.api.ApplicationHeaderControlsEntry
 import com.foundryvtt.core.applications.api.ApplicationPosition
 import com.foundryvtt.core.applications.api.HandlebarsTemplatePart
 import com.foundryvtt.core.applications.api.Window
+import com.foundryvtt.core.applications.ux.FormDataExtended
 import com.foundryvtt.core.game
 import js.core.Void
 import js.objects.JsPlainObject

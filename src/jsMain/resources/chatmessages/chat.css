@@ -21,6 +21,7 @@
 
 .km-gain-lose {
     width: auto;
+    display: inline;
 }
 
 .strike-through {
@@ -42,4 +43,8 @@
         border: 1px solid;
         padding: .2em;
     }
+}
+
+.km-apply-modifier-effect {
+    height: auto;
 }

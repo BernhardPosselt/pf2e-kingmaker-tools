@@ -3,10 +3,10 @@
 package at.posselt.pfrpg2e.app
 
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.FormDataExtended
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.ApplicationV2
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.applications.ux.FormDataExtended
 import js.core.Void
 import js.objects.Record
 import kotlinx.html.org.w3c.dom.events.Event

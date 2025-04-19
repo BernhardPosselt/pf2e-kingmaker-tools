@@ -11,12 +11,12 @@ import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.Hooks
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Combatant
 import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.documents.onDeleteCombat
 import com.foundryvtt.core.documents.onPreUpdateCombat
+import com.foundryvtt.core.helpers.TypedHooks
 import com.foundryvtt.pf2e.actor.PF2EActor
 import kotlinx.coroutines.await
 
@@ -72,7 +72,7 @@ suspend fun Game.stopCombatTrack(combatants: Array<Combatant>, active: Scene) {
 }
 
 fun registerCombatTrackHooks(game: Game) {
-    Hooks.onPreUpdateCombat { document, changed, _, _ ->
+    TypedHooks.onPreUpdateCombat { document, changed, _, _ ->
         if (document.round == 0 && changed["round"] == 1) {
             buildPromise {
                 val active = game.scenes.active
@@ -82,7 +82,7 @@ fun registerCombatTrackHooks(game: Game) {
             }
         }
     }
-    Hooks.onDeleteCombat { document, _, _ ->
+    TypedHooks.onDeleteCombat { document, _, _ ->
         buildPromise {
             val active = game.scenes.active
             if (game.settings.pfrpg2eKingdomCampingWeather.getEnableCombatTracks() && active != null) {
