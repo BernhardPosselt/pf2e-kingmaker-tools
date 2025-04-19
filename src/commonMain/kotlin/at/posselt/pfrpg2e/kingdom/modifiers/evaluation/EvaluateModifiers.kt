@@ -5,7 +5,10 @@ import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 
 
-private fun evaluateValueExpression(modifier: Modifier, context: ExpressionContext): Modifier {
+private fun evaluateValueExpression(
+    modifier: Modifier,
+    context: ExpressionContext
+): Modifier {
     val valueExpression = modifier.valueExpression
     return if (valueExpression == null) {
         modifier.copy()

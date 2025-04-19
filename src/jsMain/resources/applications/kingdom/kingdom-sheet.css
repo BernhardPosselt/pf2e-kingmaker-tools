@@ -329,6 +329,7 @@
 
     .km-kingdom-sheet-sidebar-kingdom {
         min-width: 256px;
+        width: 256px;
     }
 
     .km-kingdom-sheet-sidebar-turn {

@@ -32,6 +32,8 @@ import at.posselt.pfrpg2e.kingdom.RawEq
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.RawSome
 import at.posselt.pfrpg2e.kingdom.SettlementTerrain
+import at.posselt.pfrpg2e.kingdom.createConsumptionExpressionContext
+import at.posselt.pfrpg2e.kingdom.createModifiers
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.endTurn
@@ -153,7 +155,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.collections.plus
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -824,11 +825,13 @@ class KingdomSheet(
                     val settlements = kingdom.getAllSettlements(game)
                     kingdom.commodities.now.food = payConsumption(
                         kingdomActor = actor,
-                        availableFood = kingdom.commodities.now.food,
                         settlements = settlements.allSettlements,
                         realmData = realm,
                         armyConsumption = kingdom.consumption.armies,
+                        availableFood = kingdom.commodities.now.food,
                         now = kingdom.consumption.now,
+                        expressionContext = kingdom.createConsumptionExpressionContext(settlements),
+                        modifiers = kingdom.createModifiers(settlements),
                     )
                     actor.setKingdom(kingdom)
                 }
@@ -880,6 +883,8 @@ class KingdomSheet(
                         realmData = realm,
                         armyConsumption = kingdom.consumption.armies,
                         now = kingdom.consumption.now,
+                        expressionContext = kingdom.createConsumptionExpressionContext(settlements),
+                        modifiers = kingdom.createModifiers(settlements),
                     )
                     consumptionBreakdown(consumption.toContext())
                 }
@@ -1097,6 +1102,8 @@ class KingdomSheet(
             realmData = realm,
             armyConsumption = kingdom.consumption.armies,
             now = kingdom.consumption.now,
+            expressionContext = kingdom.createConsumptionExpressionContext(settlements),
+            modifiers = kingdom.createModifiers(settlements),
         )
         val kingdomNameInput = TextInput(
             name = "name",

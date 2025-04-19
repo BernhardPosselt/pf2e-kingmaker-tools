@@ -31,8 +31,8 @@ import at.posselt.pfrpg2e.kingdom.RawNote
 import at.posselt.pfrpg2e.kingdom.SettlementResult
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmies
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmyConditions
-import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
+import at.posselt.pfrpg2e.kingdom.createModifiers
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
@@ -45,14 +45,13 @@ import at.posselt.pfrpg2e.kingdom.hasAssurance
 import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierSelector
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.Note
 import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseModifiers
@@ -510,26 +509,27 @@ private class KingdomCheckDialog(
             structureIds = settlementResult.current?.constructedStructures?.map { it.id }?.toSet().orEmpty(),
             waterBorders = settlementResult.current?.waterBorders ?: 0,
         )
-        val filtered = filterModifiersAndUpdateContext(enabledModifiers, context)
+        val filtered = filterModifiersAndUpdateContext(enabledModifiers, context, ModifierSelector.CHECK)
         val evaluatedModifiers = evaluateModifiers(filtered)
         val creativeSolutionModifiers = evaluateModifiers(
             filterModifiersAndUpdateContext(
                 enabledModifiers,
-                context.copy(rollOptions = context.rollOptions + setOf("creative-solution"))
+                context.copy(rollOptions = context.rollOptions + setOf("creative-solution")),
+                ModifierSelector.CHECK
             )
         )
         val freeAndFairModifiers = evaluateModifiers(
             filterModifiersAndUpdateContext(
                 enabledModifiers,
-                context.copy(rollOptions = context.rollOptions + setOf("free-and-fair"))
+                context.copy(rollOptions = context.rollOptions + setOf("free-and-fair")),
+                ModifierSelector.CHECK
             )
         )
         val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
         val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
         val upgrades = evaluatedModifiers.upgradeResults
         val downgrades = evaluatedModifiers.downgradeResults
-        val selectedSkill = context.usedSkill
-        val hasAssurance = kingdom.hasAssurance(chosenFeats, selectedSkill)
+        val hasAssurance = kingdom.hasAssurance(chosenFeats, usedSkill)
         val evaluatedModifiersById = evaluatedModifiers.filteredModifiers.associateBy { it.id }
         val consumeModifierIds = evaluatedModifiers.modifiers
             .filter { it.isConsumedAfterRoll }
@@ -582,12 +582,13 @@ private class KingdomCheckDialog(
             skillInput = Select(
                 label = t("applications.skill"),
                 name = "skill",
-                value = selectedSkill.value,
+                value = usedSkill.value,
                 options = validSkills.map {
                     val skillContext = context.copy(usedSkill = it)
                     val skillFiltered = filterModifiersAndUpdateContext(
                         modifiers = enabledModifiers,
-                        context = skillContext
+                        context = skillContext,
+                        selector = ModifierSelector.CHECK,
                     )
                     val mod = evaluateModifiers(skillFiltered).total
                     val actions = if (kingdom.settings.enableLeadershipModifiers && activity != null) {
@@ -730,7 +731,7 @@ private class KingdomCheckDialog(
         )
     }
 
-    private fun tName(modifier: Modifier): String = if(!modifier.requiresTranslation) {
+    private fun tName(modifier: Modifier): String = if (!modifier.requiresTranslation) {
         modifier.name
     } else if (modifier.i18nContext.isEmpty()) {
         t(modifier.name)
@@ -877,21 +878,9 @@ suspend fun kingdomCheckDialog(
             )
         }
     }
-
     val settlementResult = kingdom.getAllSettlements(game)
-    val allSettlements = settlementResult.allSettlements
-    val globalBonuses = evaluateGlobalBonuses(allSettlements)
-    val currentSettlement = settlementResult.current?.let {
-        includeCapital(
-            settlement = it,
-            capital = settlementResult.capital,
-            capitalModifierFallbackEnabled = kingdom.settings.includeCapitalItemModifier
-        )
-    }
-    val baseModifiers = kingdom.checkModifiers(
-        globalBonuses = globalBonuses,
-        currentSettlement = currentSettlement,
-        allSettlements = allSettlements,
+    val baseModifiers = kingdom.createModifiers(
+        settlements = settlementResult,
         armyConditions = params.armyConditions,
     ) + params.activity?.parseModifiers().orEmpty() + params.event?.modifiers.orEmpty()
     KingdomCheckDialog(

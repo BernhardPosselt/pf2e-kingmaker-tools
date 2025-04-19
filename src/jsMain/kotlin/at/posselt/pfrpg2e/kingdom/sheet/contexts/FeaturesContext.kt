@@ -146,6 +146,7 @@ fun Array<RawFeatureChoices>.toContext(
     skillRanks: KingdomSkillRanks,
 ): Array<FeatureByLevelContext> {
     val choices = this
+    val sortedFeats = feats.sortedBy { it.name }
     val chosenFeatIds = chosenFeats.map { it.feat.id }.toSet()
     val featsById = feats.associateBy { it.id }
     val choicesById = choices.associateBy { it.id }
@@ -204,7 +205,7 @@ fun Array<RawFeatureChoices>.toContext(
                             null
                         },
                         feat = if (feature.kingdomFeat == true) {
-                            val featSelectOptions = feats
+                            val featSelectOptions = sortedFeats
                                 .filter { it.level <= level && (it.id == feat?.id || it.id !in takenFeats) }
                                 .map { SelectOption(it.name, it.id) }
                             Select(

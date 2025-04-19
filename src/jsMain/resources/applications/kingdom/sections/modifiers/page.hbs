@@ -6,6 +6,7 @@
                 <thead>
                 <tr>
                     <td>{{localizeKM "applications.name"}}</td>
+                    <td>{{localizeKM "enums.modifierSelector"}}</td>
                     <td>{{localizeKM "applications.description"}}</td>
                     <td>{{localizeKM "kingdom.turns"}}</td>
                     <td>{{localizeKM "kingdom.consumed"}}</td>
@@ -16,6 +17,7 @@
                 {{#each modifiers}}
                     <tr>
                         <td>{{name}}</td>
+                        <td>{{selector}}</td>
                         <td>{{description}}</td>
                         <td>{{turns}}</td>
                         <td>{{#if isConsumedAfterRoll}}<i class="fa-regular fa-circle-check"></i>{{/if}}</td>

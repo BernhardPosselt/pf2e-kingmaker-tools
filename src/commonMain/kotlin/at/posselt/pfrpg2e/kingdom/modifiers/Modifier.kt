@@ -22,4 +22,5 @@ data class Modifier(
     val notes: Set<Note> = emptySet(),
     val i18nContext: Map<String, Any> = emptyMap(),
     val requiresTranslation: Boolean = true,
+    val selector: ModifierSelector = ModifierSelector.CHECK,
 )

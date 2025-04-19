@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.kingdom.RawActivity
 import at.posselt.pfrpg2e.kingdom.RawExpression
 import at.posselt.pfrpg2e.kingdom.RawIn
 import at.posselt.pfrpg2e.kingdom.RawModifier
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierSelector
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatAsModifier
@@ -45,6 +46,7 @@ class ModifierModel(
         fun defineSchema() = buildSchema {
             string("name")
             enum<ModifierType>("type")
+            enum<ModifierSelector>("selector")
             enum<KingdomAbility>("ability", nullable = true)
             enum<KingdomSkill>("skill", nullable = true)
             enum<KingdomPhase>("phase", nullable = true)
@@ -72,6 +74,7 @@ external interface AddModifierData {
     val turns: Int?
     val isConsumedAfterRoll: Boolean
     val value: Int
+    val selector: String
 }
 
 @JsPlainObject
@@ -100,6 +103,7 @@ class AddModifier(
         enabled = true,
         turns = null,
         isConsumedAfterRoll = false,
+        selector = "check"
     )
 
     init {
@@ -141,6 +145,7 @@ class AddModifier(
                     isConsumedAfterRoll = data.isConsumedAfterRoll,
                     applyIf = predicates.toTypedArray(),
                     requiresTranslation = false,
+                    selector = data.selector
                 )
                 buildPromise {
                     onSave(modifier)
@@ -170,6 +175,11 @@ class AddModifier(
                 from = -4,
                 to = 4,
                 stacked = false
+            ),
+            Select.fromEnum<ModifierSelector>(
+                name = "selector",
+                value = ModifierSelector.fromString(data.selector),
+                stacked = false,
             ),
             Select.fromEnum<ModifierType>(
                 name = "type",

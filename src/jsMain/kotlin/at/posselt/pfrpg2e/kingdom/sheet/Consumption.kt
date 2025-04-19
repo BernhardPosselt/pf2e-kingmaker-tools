@@ -3,6 +3,8 @@ package at.posselt.pfrpg2e.kingdom.sheet
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.kingdom.KingdomActor
+import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.resources.calculateConsumption
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
@@ -17,12 +19,16 @@ suspend fun payConsumption(
     armyConsumption: Int,
     availableFood: Int,
     now: Int,
+    expressionContext: ExpressionContext,
+    modifiers: List<Modifier>,
 ): Int {
     val consumption = calculateConsumption(
         settlements = settlements,
         realmData = realmData,
         armyConsumption = armyConsumption,
         now = now,
+        expressionContext = expressionContext,
+        modifiers = modifiers,
     ).total
     return if (consumption > 0) {
         val consumedFood = availableFood - consumption

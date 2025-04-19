@@ -146,6 +146,10 @@
         "buttonLabel": {
           "type": "string"
         },
+        "selector": {
+          "type": "string",
+          "enum": ["check", "consumption"]
+        },
         "enabled": {
           "type": "boolean"
         },

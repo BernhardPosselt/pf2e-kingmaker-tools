@@ -9,7 +9,6 @@
   ],
   "location": "events.squatters.location",
   "description": "events.squatters.description",
-  "automationNotes": "events.squatters.automationNotes",
   "stages": [
     {
       "leader": "viceroy",
@@ -26,7 +25,15 @@
         "msg": "events.squatters.stage-0.failure.msg"
       },
       "criticalFailure": {
-        "msg": "events.squatters.stage-0.criticalFailure.msg"
+        "msg": "events.squatters.stage-0.criticalFailure.msg",
+        "modifiers": [{
+          "name": "events.squatters.stage-0.criticalFailure.modifiers.increasedConsumption.name",
+          "buttonLabel": "events.squatters.stage-0.criticalFailure.modifiers.increasedConsumption.buttonLabel",
+          "selector": "consumption",
+          "type": "untyped",
+          "value": 1,
+          "enabled": true
+        }]
       }
     }
   ],

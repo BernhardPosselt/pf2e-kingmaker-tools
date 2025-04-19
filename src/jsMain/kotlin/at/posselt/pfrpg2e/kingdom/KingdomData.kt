@@ -42,6 +42,10 @@ import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.data.RuinThresholdIncreases
 import at.posselt.pfrpg2e.kingdom.data.getBoosts
 import at.posselt.pfrpg2e.kingdom.data.parse
+import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
+import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import at.posselt.pfrpg2e.utils.asSequence
@@ -51,7 +55,6 @@ import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import kotlinx.js.JsPlainObject
-
 
 
 @JsPlainObject
@@ -476,6 +479,27 @@ data class SettlementResult(
     val capital: Settlement?,
     val current: Settlement?,
 )
+
+suspend fun KingdomData.createModifiers(
+    settlements: SettlementResult,
+    armyConditions: ArmyConditionInfo? = null,
+): List<Modifier> {
+    val allSettlements = settlements.allSettlements
+    val globalBonuses = evaluateGlobalBonuses(allSettlements)
+    val currentSettlement = settlements.current?.let {
+        includeCapital(
+            settlement = it,
+            capital = settlements.capital,
+            capitalModifierFallbackEnabled = settings.includeCapitalItemModifier
+        )
+    }
+    return checkModifiers(
+        globalBonuses = globalBonuses,
+        currentSettlement = currentSettlement,
+        allSettlements = allSettlements,
+        armyConditions = armyConditions,
+    )
+}
 
 fun KingdomData.getAllSettlements(game: Game): SettlementResult {
     val settlementAndActive = settlements.mapNotNull { raw ->

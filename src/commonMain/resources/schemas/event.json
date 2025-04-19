@@ -185,6 +185,10 @@
         "buttonLabel": {
           "type": "string"
         },
+        "selector": {
+          "type": "string",
+          "enum": ["check", "consumption"]
+        },
         "value": {
           "type": "number"
         },

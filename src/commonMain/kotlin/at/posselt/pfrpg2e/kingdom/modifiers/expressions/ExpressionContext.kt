@@ -6,10 +6,9 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.leaders.Vacancies
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
-import at.posselt.pfrpg2e.toCamelCase
 
 data class ExpressionContext(
-    val usedSkill: KingdomSkill,
+    val usedSkill: KingdomSkill?,
     val ranks: KingdomSkillRanks,
     val leader: Leader?,
     val activity: String?,
@@ -40,7 +39,7 @@ data class ExpressionContext(
 
     fun evaluateExpression(expression: Any?): Any? {
         return when (expression) {
-            "@ability" -> usedSkill.ability.value
+            "@ability" -> usedSkill?.ability?.value
             "@leader" -> leader?.value
             "@phase" -> phase?.value
             "@structure" -> structure?.id
@@ -74,10 +73,10 @@ data class ExpressionContext(
             "@warfareRank" -> ranks.warfare
             "@wildernessRank" -> ranks.wilderness
             "@kingdomLevel" -> level
-            "@skillRank" -> ranks.resolve(usedSkill)
+            "@skillRank" -> usedSkill?.let { ranks.resolve(it) }
             "@atWar" -> atWar
             "@eventLeader" -> eventLeader?.value
-            "@skill" -> usedSkill.toCamelCase()
+            "@skill" -> usedSkill?.value
             "@structures" -> structures
             "@settlementEvents" -> settlementEvents
             "@eventTraits" -> eventTraits

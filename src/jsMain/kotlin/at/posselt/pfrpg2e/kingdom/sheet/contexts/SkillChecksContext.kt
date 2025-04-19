@@ -10,12 +10,11 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.SettlementResult
-import at.posselt.pfrpg2e.kingdom.checkModifiers
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateGlobalBonuses
+import at.posselt.pfrpg2e.kingdom.createModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierSelector
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
-import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.includeCapital
 import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
@@ -53,23 +52,9 @@ suspend fun skillChecks(
             .orEmpty(),
         waterBorders = settlements.current?.waterBorders ?: 0,
     )
-    val allSettlements = settlements.allSettlements
-    val globalBonuses = evaluateGlobalBonuses(allSettlements)
-    val currentSettlement = settlements.current?.let {
-        includeCapital(
-            settlement = it,
-            capital = settlements.capital,
-            capitalModifierFallbackEnabled = kingdom.settings.includeCapitalItemModifier
-        )
-    }
-    val baseModifiers = kingdom.checkModifiers(
-        globalBonuses = globalBonuses,
-        currentSettlement = currentSettlement,
-        allSettlements = allSettlements,
-        armyConditions = null,
-    )
+    val baseModifiers = kingdom.createModifiers(settlements)
     return KingdomSkill.entries.map {
-        val filtered = filterModifiersAndUpdateContext(baseModifiers, context.copy(usedSkill = it))
+        val filtered = filterModifiersAndUpdateContext(baseModifiers, context.copy(usedSkill = it),  ModifierSelector.CHECK)
         val evaluatedModifiers = evaluateModifiers(filtered)
         val rank = skillRanks.resolve(it)
         val proficiency = skillRanks.resolveProficiency(it)

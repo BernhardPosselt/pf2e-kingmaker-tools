@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
 import at.posselt.pfrpg2e.kingdom.data.getChosenHeartland
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierSelector
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierType
 import at.posselt.pfrpg2e.kingdom.modifiers.Note
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.GlobalStructureBonuses
@@ -138,6 +139,7 @@ external interface RawModifier {
     var downgradeResults: Array<RawDowngradeResult>?
     var notes: Array<RawNote>?
     var requiresTranslation: Boolean?
+    var selector: String?
 }
 
 fun RawExpression<Boolean>.parse(): Expression<Boolean> {
@@ -224,6 +226,7 @@ fun RawModifier.parse(): Modifier =
         downgradeResults = downgradeResults?.mapNotNull { it.parse() }.orEmpty(),
         notes = notes?.map { it.parse() }?.toSet().orEmpty(),
         requiresTranslation = requiresTranslation != false,
+        selector = selector?.let { ModifierSelector.fromString(it) } ?: ModifierSelector.CHECK,
     )
 
 suspend fun KingdomData.checkModifiers(
@@ -274,11 +277,29 @@ suspend fun KingdomData.checkModifiers(
     ) + modifiers.map { it.parse() }
 }
 
+fun KingdomData.createConsumptionExpressionContext(settlements: SettlementResult) =
+    createExpressionContext(
+        phase = null,
+        activity = null,
+        leader = null,
+        usedSkill = KingdomSkill.MAGIC,
+        rollOptions = emptySet(),
+        structure = null,
+        event = null,
+        eventStage = null,
+        structureIds = settlements.current
+            ?.constructedStructures
+            ?.map { it.id }
+            ?.toSet()
+            .orEmpty(),
+        waterBorders = settlements.current?.waterBorders ?: 0,
+    )
+
 fun KingdomData.createExpressionContext(
     phase: KingdomPhase?,
     activity: RawActivity?,
     leader: Leader?,
-    usedSkill: KingdomSkill,
+    usedSkill: KingdomSkill?,
     rollOptions: Set<String>,
     structure: Structure?,
     event: KingdomEvent?,

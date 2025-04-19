@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderActors
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderKingdomSkills
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderSkills
 import at.posselt.pfrpg2e.data.kingdom.leaders.LeaderType
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierSelector
 import at.posselt.pfrpg2e.kingdom.modifiers.bonuses.createLeadershipModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
@@ -37,7 +38,7 @@ class LeadershipModifierTest {
                 )
             ),
         )
-        val filteredModifiers = filterModifiersAndUpdateContext(modifiers, defaultContext)
+        val filteredModifiers = filterModifiersAndUpdateContext(modifiers, defaultContext, ModifierSelector.CHECK)
         val result = evaluateModifiers(filteredModifiers)
         assertEquals(2, result.total)
     }

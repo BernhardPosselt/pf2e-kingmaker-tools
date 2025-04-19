@@ -182,6 +182,10 @@
         "buttonLabel": {
           "type": "string"
         },
+        "selector": {
+          "type": "string",
+          "enum": ["check", "consumption"]
+        },
         "fortune": {
           "type": "boolean"
         },
