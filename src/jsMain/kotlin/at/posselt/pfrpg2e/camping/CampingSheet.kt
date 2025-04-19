@@ -245,6 +245,7 @@ class CampingSheet(
     init {
         actor.apps[id] = this
         onDocumentRefDragstart(".km-camping-actor")
+        onDocumentRefDragstart(".km-recipe-actor")
         onDocumentRefDrop(".km-camping-add-actor") { _, documentRef ->
             if (documentRef is ActorRef) {
                 buildPromise {
@@ -286,7 +287,7 @@ class CampingSheet(
         }
         onDocumentRefDrop(
             ".km-camping-recipe",
-            { it.dragstartSelector == ".km-camping-actor" }
+            { it.dragstartSelector == ".km-camping-actor" || it.dragstartSelector == ".km-recipe-actor"}
         ) { event, documentRef ->
             buildPromise {
                 val target = event.target as HTMLElement
