@@ -180,6 +180,7 @@ class KingdomSheet(
         MenuControl(label = t("kingdom.heartlands"), action = "configure-heartlands", gmOnly = true),
         MenuControl(label = t("kingdom.milestones"), action = "configure-milestones", gmOnly = true),
         MenuControl(label = t("applications.settings"), action = "settings", gmOnly = true),
+        MenuControl(label = t("applications.quickstart"), action = "quickstart", gmOnly = true),
         MenuControl(label = t("applications.help"), action = "help"),
     ),
     scrollable = arrayOf(
@@ -518,6 +519,10 @@ class KingdomSheet(
                         kingdomSettings = kingdom.settings
                     ).launch()
                 }
+            }
+
+            "quickstart" -> buildPromise {
+                openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.FwcyYZARAnOHlKkE")
             }
 
             "help" -> buildPromise {

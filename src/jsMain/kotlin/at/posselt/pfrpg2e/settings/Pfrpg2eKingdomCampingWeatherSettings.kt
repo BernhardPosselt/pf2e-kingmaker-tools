@@ -299,6 +299,7 @@ object Pfrpg2eKingdomCampingWeatherSettings {
             key = "climateMenu",
             label = t("settings.climateButton"),
             name = t("settings.climate"),
+            restricted = true,
             app = ClimateConfiguration::class.js,
         )
         game.settings.registerScalar(

@@ -87,6 +87,7 @@
       "skills": "Skills",
       "skillCheck": "Skill Check",
       "description": "Description",
+      "quickstart": "Quickstart",
       "xp": "XP",
       "dialog": {
         "roll": "Roll",
@@ -814,12 +815,12 @@
         "intro": "You've just enabled the Kingdom Building, Camping & Weather module for PFRPG 2e.",
         "license": "This module is licensed under the OGL and AGPLv3:",
         "getStarted": "To get started, create a kingdom or camping sheet by clicking on the Party actors Tent or Fortress icon:",
-        "manual": "You can view the instruction manual here:",
-        "upgradingNotice": "Make sure to carefully review the Upgrading Notices when    updating to major releases:",
+        "manual": "You can view the instruction manual here or can find them in the camping and kingdom sheet menu under the Help entry:",
+        "upgradingNotice": "Make sure to carefully review the Upgrading Notices when updating to major releases:",
         "macrosNotice": "All macros and journals can be found in the Compendium Tab!",
         "disabled": "Disabled Kingdom Building, Camping & Weather first run message",
         "licenses": "Licenses",
-        "upgradeNotices": "UpgradeNotices"
+        "upgradeNotices": "Upgrade Notices"
       },
       "unrest": {
         "overcrowded": "Overcrowded Settlements",

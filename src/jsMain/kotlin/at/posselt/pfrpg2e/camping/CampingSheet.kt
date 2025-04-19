@@ -235,6 +235,7 @@ class CampingSheet(
         MenuControl(label = t("camping.recipes"), action = "configure-recipes", gmOnly = true),
         MenuControl(label = t("camping.regions"), action = "configure-regions", gmOnly = true),
         MenuControl(label = t("applications.settings"), action = "settings", gmOnly = true),
+        MenuControl(label = t("applications.quickstart"), action = "quickstart", gmOnly = true),
         MenuControl(label = t("applications.help"), action = "help"),
     ),
     scrollable = arrayOf(".km-camping-activities-wrapper", ".km-camping-actors"),
@@ -429,6 +430,11 @@ class CampingSheet(
                     target.dataset["uuid"]?.let { openItem(it) }
                 }
             }
+
+            "quickstart" -> buildPromise {
+                openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.kd8cT1Uv9hZOrpgS")
+            }
+
 
             "help" -> buildPromise {
                 openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.iAQCUYEAq4Dy8uCY.JournalEntryPage.7z4cDr3FMuSy22t1")
