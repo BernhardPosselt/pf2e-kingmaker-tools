@@ -7,12 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2025-05-xx
+
 ### Added
 
 * The module can now be translated into different languages
 
 ### Changed
-
+* Require FoundryVTT 13
+* Apply Plague event civic penalty automatically without having to add it first
 * Migrate recipe cost to parsed values
 * Indicate activity ordering in Upkeep and Commerce phase
 

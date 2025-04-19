@@ -269,6 +269,8 @@ suspend fun KingdomData.checkModifiers(
             .flatMap { it.feat.modifiers?.map { it.parse() } ?: emptyList() },
         featureModifiers = chosenFeatures
             .flatMap { it.feature.modifiers?.map { it.parse() } ?: emptyList() },
+        eventModifiers = getOngoingEvents()
+            .flatMap { it.event.globalModifiers }
     ) + modifiers.map { it.parse() }
 }
 
