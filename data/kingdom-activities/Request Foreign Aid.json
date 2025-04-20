@@ -4,7 +4,7 @@
   "fortune": false,
   "enabled": true,
   "phase": "leadership",
-  "dc": "custom",
+  "dc": "negotiation",
   "dcAdjustment": 2,
   "title": "activities.request-foreign-aid.title",
   "description": "activities.request-foreign-aid.description",

@@ -79,7 +79,9 @@
                 "control",
                 "custom",
                 "none",
-                "scouting"
+                "scouting",
+                "negotiation",
+                "negotiationOrControl"
               ]
             }
           ]

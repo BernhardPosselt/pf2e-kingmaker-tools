@@ -4,7 +4,7 @@
   "fortune": false,
   "enabled": true,
   "phase": "leadership",
-  "dc": "control",
+  "dc": "negotiation",
   "title": "activities.pledge-of-fealty.title",
   "description": "activities.pledge-of-fealty.description",
   "skills": {

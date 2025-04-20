@@ -389,6 +389,9 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "noGroupsAvailable": "No groups available, create one under the Trade Agreements tab first or check if they are valid ones for this activity!",
+      "pickGroup": "Pick Group",
+      "group": "Group",
       "preventPledgeOfFealty": "Pledge of Fealty Blocked",
       "pickEventToRemove": "Pick Event to Remove",
       "perform": "Perform",
@@ -1032,7 +1035,9 @@
       "control": "Control",
       "custom": "Custom",
       "none": "None",
-      "scouting": "Scouting"
+      "scouting": "Scouting",
+      "negotiation": "Negotiation",
+      "negotiationOrControl": "Negotiation or Control"
     },
     "realmTileType": {
       "mine": "Mine",

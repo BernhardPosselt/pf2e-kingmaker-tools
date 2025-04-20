@@ -4,7 +4,7 @@
   "fortune": false,
   "enabled": true,
   "phase": "leadership",
-  "dc": "custom",
+  "dc": "negotiationOrControl",
   "title": "activities.establish-trade-agreement.title",
   "description": "activities.establish-trade-agreement.description",
   "requirement": "activities.establish-trade-agreement.requirement",

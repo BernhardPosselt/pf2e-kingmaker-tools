@@ -17,8 +17,9 @@ import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
 import js.objects.Record
 import js.objects.recordOf
+import kotlin.math.max
 
-typealias KingdomDc = Any // number or control, custom, none, scouting
+typealias KingdomDc = Any // number or control, custom, none, scouting, negotiation, negotiationOrControl
 
 @JsPlainObject
 external interface ActivityResult {
@@ -164,6 +165,7 @@ fun RawActivity.resolveDc(
     kingdomLevel: Int,
     realm: RealmData,
     rulerVacant: Boolean,
+    groupDc: Int?,
 ): Int? {
     val dc = when (dc) {
         "control" -> calculateControlDC(
@@ -171,7 +173,12 @@ fun RawActivity.resolveDc(
             realm = realm,
             rulerVacant = rulerVacant,
         )
-
+        "negotiationOrControl" -> max(calculateControlDC(
+            kingdomLevel = kingdomLevel,
+            realm = realm,
+            rulerVacant = rulerVacant,
+        ), (groupDc ?: 0))
+        "negotiation" -> groupDc
         "custom" -> 0
         "none" -> null
         "scouting" -> enemyArmyScoutingDcs.maxOrNull() ?: 0

@@ -713,6 +713,7 @@ class KingdomSheet(
                         kingdomActor = actor,
                         check = CheckType.HandleEvent(event),
                         selectedLeader = game.getActiveLeader(),
+                        groups = emptyArray(),
                     )
                 }
             }
@@ -761,7 +762,13 @@ class KingdomSheet(
                         )
                     )
                     val ruinButtons = sequenceOf(Resource.CRIME, Resource.DECAY, Resource.CORRUPTION, Resource.STRIFE)
-                        .map { ResourceButton(value = "1", resource = it, mode = ResourceMode.LOSE).toHtml(emptyArray()) }
+                        .map {
+                            ResourceButton(
+                                value = "1",
+                                resource = it,
+                                mode = ResourceMode.LOSE
+                            ).toHtml(emptyArray())
+                        }
                         .toTypedArray()
                     postChatTemplate(
                         templatePath = "chatmessages/landmark.hbs",
@@ -921,6 +928,7 @@ class KingdomSheet(
                     kingdomActor = actor,
                     check = CheckType.RollSkill(skill),
                     selectedLeader = game.getActiveLeader(),
+                    groups = emptyArray(),
                 )
             }
 
@@ -975,13 +983,37 @@ class KingdomSheet(
                             kingdom = kingdom
                         )
 
-                        else -> kingdomCheckDialog(
-                            game = game,
-                            kingdom = kingdom,
-                            kingdomActor = actor,
-                            check = CheckType.PerformActivity(activity),
-                            selectedLeader = game.getActiveLeader(),
-                        )
+                        else -> {
+                            val groups = when (activity.id) {
+                                "request-foreign-aid",
+                                "request-foreign-aid-vk",
+                                    -> kingdom.groups.filter {
+                                    it.relations != Relations.NONE.value
+                                }.toTypedArray()
+
+                                "send-diplomatic-envoy" -> kingdom.groups.filter {
+                                    it.relations == Relations.NONE.value
+                                }.toTypedArray()
+
+                                "establish-trade-agreement" -> kingdom.groups.filter {
+                                    it.relations == Relations.DIPLOMATIC_RELATIONS.value
+                                }.toTypedArray()
+
+                                "pledge-of-fealty" -> kingdom.groups.filterNot {
+                                    it.preventPledgeOfFealty
+                                }.toTypedArray()
+
+                                else -> kingdom.groups
+                            }
+                            kingdomCheckDialog(
+                                game = game,
+                                kingdom = kingdom,
+                                kingdomActor = actor,
+                                check = CheckType.PerformActivity(activity),
+                                selectedLeader = game.getActiveLeader(),
+                                groups = groups,
+                            )
+                        }
                     }
                 }
             }
@@ -1409,9 +1441,11 @@ class KingdomSheet(
         )
     }
 
-    private fun getCultEventDC(kingdom: KingdomData): Int = max(1, kingdom.settings.cultEventDc - kingdom.turnsWithoutCultEvent * kingdom.settings.cultEventDcStep)
+    private fun getCultEventDC(kingdom: KingdomData): Int =
+        max(1, kingdom.settings.cultEventDc - kingdom.turnsWithoutCultEvent * kingdom.settings.cultEventDcStep)
 
-    private fun getEventDC(kingdom: KingdomData): Int = max(1, kingdom.settings.eventDc - kingdom.turnsWithoutEvent * kingdom.settings.eventDcStep)
+    private fun getEventDC(kingdom: KingdomData): Int =
+        max(1, kingdom.settings.eventDc - kingdom.turnsWithoutEvent * kingdom.settings.eventDcStep)
 
     private fun createMainNav(kingdom: KingdomData): Array<NavEntryContext> {
         val tradeAgreements = kingdom.groups.count { it.relations == Relations.TRADE_AGREEMENT.value }

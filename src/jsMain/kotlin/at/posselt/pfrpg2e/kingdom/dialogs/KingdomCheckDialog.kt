@@ -33,6 +33,7 @@ import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmies
 import at.posselt.pfrpg2e.kingdom.armies.getSelectedArmyConditions
 import at.posselt.pfrpg2e.kingdom.createExpressionContext
 import at.posselt.pfrpg2e.kingdom.createModifiers
+import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
@@ -106,6 +107,7 @@ import kotlin.sequences.map
 import kotlin.sequences.toSet
 import kotlin.takeIf
 import kotlin.text.isNotBlank
+import kotlin.text.startsWith
 import kotlin.text.toInt
 import kotlin.to
 
@@ -261,6 +263,7 @@ private data class CheckDialogParams(
     val event: KingdomEvent? = null,
     val eventStageIndex: Int = 0,
     val eventIndex: Int = 0,
+    val rollOptions: Set<String> = emptySet(),
 )
 
 typealias AfterRoll = suspend (degree: DegreeOfSuccess) -> Unit
@@ -504,7 +507,7 @@ private class KingdomCheckDialog(
             activity = activity,
             leader = leader,
             usedSkill = usedSkill,
-            rollOptions = rollOptions,
+            rollOptions = rollOptions + params.rollOptions,
             structure = structure,
             event = event,
             eventStage = event?.stages[eventStageIndex],
@@ -773,6 +776,7 @@ suspend fun kingdomCheckDialog(
     overrideDc: Int? = null,
     rollOptions: Set<String> = emptySet(),
     selectedLeader: Leader?,
+    groups: Array<RawGroup>,
 ) {
     val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
     val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
@@ -785,11 +789,19 @@ suspend fun kingdomCheckDialog(
         is CheckType.PerformActivity -> {
             val activity = check.activity
             val realm = game.getRealmData(kingdomActor, kingdom)
+            val activityDc = activity.dc
+            console.log(activity.dc)
+            val group = if (activityDc is String && activityDc.startsWith("negotiation")) {
+                pickGroup(groups)
+            } else {
+                null
+            }
             val dc = overrideDc ?: (activity.resolveDc(
                 kingdomLevel = kingdom.level,
                 realm = realm,
                 rulerVacant = vacancies.ruler,
-                enemyArmyScoutingDcs = game.getSelectedArmies().map { it.system.scouting }
+                enemyArmyScoutingDcs = game.getSelectedArmies().map { it.system.scouting },
+                groupDc = group?.negotiationDC,
             ) ?: 0)
             val skills = getValidActivitySkills(
                 ranks = kingdom.parseSkillRanks(
@@ -801,7 +813,7 @@ suspend fun kingdomCheckDialog(
                 ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
                 expandMagicUse = kingdom.settings.expandMagicUse,
                 activityId = activity.id,
-                increaseSkills = chosenFeats.map { it.feat.increasedSkills() }
+                increaseSkills = chosenFeats.map { it.feat.increasedSkills() },
             )
             CheckDialogParams(
                 title = activity.title,
@@ -810,6 +822,7 @@ suspend fun kingdomCheckDialog(
                 phase = KingdomPhase.fromString(activity.phase),
                 activity = activity,
                 armyConditions = game.getSelectedArmyConditions(),
+                rollOptions = if(group?.atWar == true) setOf("group-at-war") else emptySet(),
             )
         }
 

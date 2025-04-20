@@ -276,6 +276,7 @@ class StructureBrowser(
                     degreeMessages = degreeMessages,
                     rollOptions = if (repair) setOf("repair-structure") else emptySet(),
                     selectedLeader = game.getActiveLeader(),
+                    groups = emptyArray(),
                 )
             }
 

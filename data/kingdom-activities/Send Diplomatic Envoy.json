@@ -4,7 +4,7 @@
   "fortune": false,
   "enabled": true,
   "phase": "leadership",
-  "dc": "custom",
+  "dc": "negotiation",
   "title": "activities.send-diplomatic-envoy.title",
   "description": "activities.send-diplomatic-envoy.description",
   "automationNotes": "activities.send-diplomatic-envoy.automationNotes",
@@ -13,11 +13,14 @@
   },
   "modifiers": [
     {
-      "enabled": false,
+      "enabled": true,
       "name": "activities.send-diplomatic-envoy.modifiers.atWar.name",
       "buttonLabel": "activities.send-diplomatic-envoy.modifiers.atWar.buttonLabel",
       "value": -4,
       "type": "circumstance",
+      "applyIf": [{
+        "hasRollOption": "group-at-war"
+      }],
       "downgradeResults": [
         {
           "downgrade": "criticalSuccess"

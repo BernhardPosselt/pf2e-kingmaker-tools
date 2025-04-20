@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add Gain Fame button if built building type matches kingdom
 * Add buttons to add and resolve kingdom events
 * Allow tracking of blocked pledge of fealty
+* Pledge of Fealty, Establish Trade Agreement, Send Diplomatic Envoy and Request Foreign Aid now query the Group and its DC when performing the activity
 
 ### Changed
 * Require FoundryVTT 13

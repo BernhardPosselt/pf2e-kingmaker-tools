@@ -10,6 +10,8 @@ enum class ActivityDcType: ValueEnum, Translatable {
     CONTROL,
     CUSTOM,
     NONE,
+    NEGOTIATION,
+    NEGOTIATION_OR_CONTROL,
     SCOUTING;
 
     companion object {

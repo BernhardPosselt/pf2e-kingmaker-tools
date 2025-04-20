@@ -126,6 +126,7 @@ private class ArmyBrowser(
                 ),
                 overrideDc = army.system.recruitmentDC,
                 selectedLeader = game.getActiveLeader(),
+                groups = emptyArray(),
             )
         }
     }
