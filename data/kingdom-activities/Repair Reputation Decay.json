@@ -8,6 +8,7 @@
   "dcAdjustment": 2,
   "title": "activities.repair-reputation-decay.title",
   "description": "activities.repair-reputation-decay.description",
+  "automationNotes": "activities.repair-reputation-crime.automationNotes",
   "skills": {
     "engineering": 1
   },

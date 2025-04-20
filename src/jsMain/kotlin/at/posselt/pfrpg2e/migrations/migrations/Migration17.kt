@@ -12,6 +12,9 @@ class Migration17 : Migration(17) {
         kingdom.modifiers = kingdom.modifiers
             .map { it.copy(requiresTranslation = false) }
             .toTypedArray()
+        kingdom.groups = kingdom.groups.map {
+            it.copy(preventPledgeOfFealty = false)
+        }.toTypedArray()
     }
 
     override suspend fun migrateCamping(game: Game, camping: CampingData) {

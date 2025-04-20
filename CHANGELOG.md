@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Allow users to re-enable the first run message
 * Add all structure traits to Structure Browser filters
 * Add Gain Fame button if built building type matches kingdom
-* Add buttons to add and resolve kingdom events 
+* Add buttons to add and resolve kingdom events
+* Allow tracking of blocked pledge of fealty
 
 ### Changed
 * Require FoundryVTT 13
@@ -35,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix Fame & Fortune
 * Fix Deploy Army skills
 * Fix leadership lores not working when containing special characters
+* Display kingdom activity automation notes
+* Various activities had their optional penalties turned into automatically enabled ones
 
 ## [4.8.0] - 2025-04-09
 

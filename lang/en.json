@@ -389,6 +389,7 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "preventPledgeOfFealty": "Pledge of Fealty Blocked",
       "pickEventToRemove": "Pick Event to Remove",
       "perform": "Perform",
       "resolve": "Resolve",
@@ -2518,7 +2519,7 @@
         "description": "<p>After careful consideration, you decide that you would rather not hold onto a particular hex as part of your claimed territory. You renounce your claim to it and pull back any settlers or explorers. Attempt a basic Exploration or Wilderness check. You can abandon more than one hex at a time, but each additional hex you abandon increases the DC of this check by 1.</p>",
         "requirement": "The hex to be abandoned must be controlled.",
         "criticalSuccess": {
-          "msg": "<p>You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. @gain1ResourcePoints per abandoned hex.</p>"
+          "msg": "<p>You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. @gainMultiple1ResourcePoints per abandoned hex.</p>"
         },
         "success": {
           "msg": "<p>You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. @gain1Unrest</p>"
@@ -2550,7 +2551,7 @@
       },
       "build-structure": {
         "title": "Build Structure",
-        "description": "<p>You attempt to build a structure in the settlement that’s granting the Civic activity. You may choose any structure for which you meet the requirements. Select the appropriate number of contiguous buildable lots in a single block as specified by the structure’s entry and spend the specified RP and Commodity cost. Then attempt the structure’s skill check. You can also use this activity to attempt to repair a structure that was damaged as the result of an event but hasn’t been replaced by Rubble. To do this, first spend half the structure’s listed RP and Commodity cost, and then attempt the specified check. The existing structure gives you a +2 item bonus to the check. On a success, record the new construction on the Urban Grid. Unless the structure’s entry states otherwise, its effects are immediate; if the structure adjusts a Ruin’s point total, adjust it upon construction.</p>",
+        "description": "<p>You attempt to build a structure in the settlement that’s granting the Civic activity. You may choose any structure for which you meet the requirements. Select the appropriate number of contiguous buildable lots in a single block as specified by the structure’s entry and spend the specified RP and Commodity cost. Then attempt the structure’s skill check.</p><p>You can also use this activity to attempt to repair a structure that was damaged as the result of an event but hasn’t been replaced by Rubble. To do this, first spend half the structure’s listed RP and Commodity cost, and then attempt the specified check. The existing structure gives you a +2 item bonus to the check.</p><p>On a success, record the new construction on the Urban Grid. Unless the structure’s entry states otherwise, its effects are immediate; if the structure adjusts a Ruin’s point total, adjust it upon construction.</p>",
         "criticalSuccess": {
           "msg": "<p>You construct or repair the structure with great efficiency and get back half of the Commodities spent in construction or repair.</p>"
         },
@@ -2625,8 +2626,8 @@
         "title": "Celebrate Holiday",
         "modifiers": {
           "celebratedLastTurn": {
-            "name": "Celebrated holiday on the previous turn",
-            "buttonLabel": "+4 DC increase if celebrated holiday on the previous turn"
+            "name": "Celebrated Holiday on the Previous Turn",
+            "buttonLabel": "+4 DC Increase if Celebrate Holiday on the Next Turn"
           }
         },
         "description": "<p>You declare a day of celebration. Holidays may be religious, historical, martial, or simply festive, but all relieve your citizens from their labors and give them a chance to make merry at the kingdom’s expense. Attempt a basic check, but if your kingdom Celebrated a Holiday the previous turn, the DC increases by 4, as your kingdom hasn’t had a chance to recover from the previous gala.</p>",
@@ -2699,7 +2700,7 @@
           "msg": "<p>@gain1RolledResourceDice. Rumors are backed up with eyewitness accounts. @gain1Unrest and @gain1Corruption.</p>"
         },
         "criticalFailure": {
-          "msg": "<p>You gain nothing from the Clandestine Business but angry citizens. @gain1d6Unrest, @gain2Corruption, and one other Ruin of your choice by 1</p> <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
+          "msg": "<p>You gain nothing from the Clandestine Business but angry citizens. @gain1d6Unrest, @gain2Corruption, and one other Ruin of your choice by 1</p> <ul><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
         }
       },
       "clear-hex-vk": {
@@ -3337,7 +3338,7 @@
         "title": "Infiltration",
         "description": "<p>You send spies out to gather intelligence on a neighboring nation, a cult or thieves’ guild within your borders, an unclaimed Freehold, or even an unexplored adventure site. Alternately, you can simply send your spies out to investigate the current health of your kingdom. Attempt a basic check.</p>",
         "criticalSuccess": {
-          "msg": "<p>You learn something valuable or helpful. If you were infiltrating a specific target, the GM decides what is learned, but the information is exact and precise. For example, if you were infiltrating an unexplored ruin, you might learn that the site is infested with web lurkers and spider swarms. If you were investigating your kingdom’s health, your spies reveal easy methods to address citizen dissatisfaction, allowing you to choose one of the following: @lose1d4Unrest or reduce a Ruin of your choice by 1.</p>"
+          "msg": "<p>You learn something valuable or helpful. If you were infiltrating a specific target, the GM decides what is learned, but the information is exact and precise. For example, if you were infiltrating an unexplored ruin, you might learn that the site is infested with web lurkers and spider swarms. If you were investigating your kingdom’s health, your spies reveal easy methods to address citizen dissatisfaction, allowing you to choose one of the following: @lose1d4Unrest or reduce a Ruin of your choice by 1</p><ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
         },
         "success": {
           "msg": "<p>You learn something helpful about the target, but the information is vague and imprecise. For example, if you were infiltrating the same ruin mentioned in the critical success above, you might learn that some sort of aberration uses the ruins as its lair. If you were investigating your kingdom’s health, your spies learn enough that you can take action. @lose1Unrest</p>"
@@ -3378,7 +3379,7 @@
         "description": "<p>You send agents out to attend to established trade agreements. @loseMultiple2ResourcePoints per Trade Agreement you wish to manage. Then attempt a basic check. If you Managed Trade Agreements on the previous turn, increase this DC by 5.</p>",
         "modifiers": {
           "previousTurn": {
-            "buttonLabel": "+5 DC Increase Managed on Previous Turn",
+            "buttonLabel": "+5 DC Increase When Managing Trade Agreements on Next Turn",
             "name": "Managed Trade Agreements Last Turn"
           }
         },
@@ -3397,7 +3398,7 @@
       },
       "new-leadership-vk": {
         "title": "New Leadership (V&K)",
-        "description": "<p>You announce the promotion of a character into a leadership role, whether they’re a newly appointed leader or just shifting from one leadership role to another. You normally perform this activity at the start of a Kingdom turn, but if unexpected events (such as the death of the character) remove a leader from a leadership role, you may immediately use the New Leadership activity to attempt to assign a new leader to that role, even outside of a Kingdom turn (applying the vacancy penalty for that role as appropriate). Attempt a basic Intrigue, Politics, Statecraft, or Warfare skill check—while any of these skills can be used, each skill is particularly suited to assigning two specific leadership roles.</p> <ul> <li><b>Intrigue</b>: Grants a +2 circumstance bonus to checks to assign Emissaries and Treasurers.</li> <li><b>Politics</b>: Grants a +2 circumstance bonus to checks to assign Counselors and Rulers.</li> <li><b>Statecraft</b>: Grants a +2 circumstance bonus to checks to assign Magisters and Viceroys.</li> <li><b>Warfare</b>: Grants a +2 circumstance bonus to checks to assign Generals and Wardens.</li> </ul><p>Rulers are particularly difficult to assign; when you take this activity to assign a new Ruler, you take a –4 circumstance penalty to the skill check, and unless you achieve a critical success, you @gain1Unrest. Whether or not you are simultaneously assigning a leader, you may also use this activity to attempt to reselect the four leadership roles that you have invested. Any result other than a critical failure allows this.</p> <p>On the Turn a new Leader is appointed, that Leader gains one fewer actions to spend during that Kingdom Turn: two for PCs, and one for NPCs.</p>",
+        "description": "<p>You announce the promotion of a character into a leadership role, whether they’re a newly appointed leader or just shifting from one leadership role to another. You normally perform this activity at the start of a Kingdom turn, but if unexpected events (such as the death of the character) remove a leader from a leadership role, you may immediately use the New Leadership activity to attempt to assign a new leader to that role, even outside of a Kingdom turn (applying the vacancy penalty for that role as appropriate). Attempt a basic Intrigue, Politics, Statecraft, or Warfare skill check—while any of these skills can be used, each skill is particularly suited to assigning two specific leadership roles.</p> <ul> <li><b>Intrigue</b>: Grants a +2 circumstance bonus to checks to assign Emissaries and Treasurers.</li> <li><b>Politics</b>: Grants a +2 circumstance bonus to checks to assign Counselors and Rulers.</li> <li><b>Statecraft</b>: Grants a +2 circumstance bonus to checks to assign Magisters and Viceroys.</li> <li><b>Warfare</b>: Grants a +2 circumstance bonus to checks to assign Generals and Wardens.</li> </ul><p>Rulers are particularly difficult to assign; when you take this activity to assign a new Ruler, you take a –4 circumstance penalty to the skill check, and unless you achieve a critical success, you @gain1Unrest.</p><p>Whether or not you are simultaneously assigning a leader, you may also use this activity to attempt to reselect the four leadership roles that you have invested. Any result other than a critical failure allows this.</p> <p>On the Turn a new Leader is appointed, that Leader gains one fewer actions to spend during that Kingdom Turn: two for PCs, and one for NPCs.</p>",
         "modifiers": {
           "appointingRulerPenalty": {
             "name": "-4 Circumstance When Appointing Ruler"
@@ -3429,7 +3430,7 @@
       },
       "new-leadership": {
         "title": "New Leadership",
-        "description": "<p>You announce the promotion of a character into a leadership role, whether they’re a newly appointed leader or just shifting from one leadership role to another. You normally perform this activity at the start of a Kingdom turn, but if unexpected events (such as the death of the character) remove a leader from a leadership role, you may immediately use the New Leadership activity to attempt to assign a new leader to that role, even outside of a Kingdom turn (applying the vacancy penalty for that role as appropriate). Attempt a basic Intrigue, Politics, Statecraft, or Warfare skill check—while any of these skills can be used, each skill is particularly suited to assigning two specific leadership roles.</p><ul><li><b>Intrigue</b>: Grants a +2 circumstance bonus to checks to assign Emissaries and Treasurers.</li><li><b>Politics</b>: Grants a +2 circumstance bonus to checks to assign Counselors and Rulers.</li><li><b>Statecraft</b>: Grants a +2 circumstance bonus to checks to assign Magisters and Viceroys.</li><li><b>Warfare</b>: Grants a +2 circumstance bonus to checks to assign Generals and Wardens.</li></ul><p>Rulers are particularly difficult to assign; when you take this activity to assign a new Ruler, you take a –4 circumstance penalty to the skill check, and unless you achieve a critical success, you @gain1Unrest. Whether or not you are simultaneously assigning a leader, you may also use this activity to attempt to reselect the four leadership roles that you have invested. Any result other than a critical failure allows this.</p>",
+        "description": "<p>You announce the promotion of a character into a leadership role, whether they’re a newly appointed leader or just shifting from one leadership role to another. You normally perform this activity at the start of a Kingdom turn, but if unexpected events (such as the death of the character) remove a leader from a leadership role, you may immediately use the New Leadership activity to attempt to assign a new leader to that role, even outside of a Kingdom turn (applying the vacancy penalty for that role as appropriate). Attempt a basic Intrigue, Politics, Statecraft, or Warfare skill check—while any of these skills can be used, each skill is particularly suited to assigning two specific leadership roles.</p><ul><li><b>Intrigue</b>: Grants a +2 circumstance bonus to checks to assign Emissaries and Treasurers.</li><li><b>Politics</b>: Grants a +2 circumstance bonus to checks to assign Counselors and Rulers.</li><li><b>Statecraft</b>: Grants a +2 circumstance bonus to checks to assign Magisters and Viceroys.</li><li><b>Warfare</b>: Grants a +2 circumstance bonus to checks to assign Generals and Wardens.</li></ul><p>Rulers are particularly difficult to assign; when you take this activity to assign a new Ruler, you take a –4 circumstance penalty to the skill check, and unless you achieve a critical success, you @gain1Unrest.</p><p>Whether or not you are simultaneously assigning a leader, you may also use this activity to attempt to reselect the four leadership roles that you have invested. Any result other than a critical failure allows this.</p>",
         "modifiers": {
           "appointingRulerPenalty": {
             "name": "-4 Circumstance When Appointing Ruler"
@@ -3810,7 +3811,7 @@
         "title": "Recruit Monsters",
         "description": "<p>While you are quick to suggest that most of the monsters the party encounters during their adventures deserve killing, you also understands that there can be exceptions. Some can be bribed or allied with, while others can be trusted to act on their instincts—a canny person can capitalize on these instincts or alliances to bolster a kingdom’s defenses. Attempt a basic Intrigue check.</p>",
         "criticalSuccess": {
-          "msg": "<p>You manage to locate a monster’s lair and take steps to incorporate it into your kingdom’s defense. The next time your kingdom suffers a Bandit Activity, Monster Activity, Sacrifices, or Undead Uprising random event, you can use your recruited monster to help resolve the event. Doing so removes the Recruited Monster from your kingdom (you can attempt to recruit a new monster on a future kingdom turn though) but allows you to roll a skill check twice when resolving the Dangerous Hex event, taking the better of the two results as your actual result. This is a fortune effect.Your kingdom can support 1 Recruited Monster at a time. If your kingdom is master in Intrigue, you can support up to 2 Recruited Monsters at a time, and if your kingdom is legendary in Intrigue, you can support up to 3 Recruited Monsters at a time.</p>",
+          "msg": "<p>You manage to locate a monster’s lair and take steps to incorporate it into your kingdom’s defense. The next time your kingdom suffers a Bandit Activity, Monster Activity, Sacrifices, or Undead Uprising random event, you can use your recruited monster to help resolve the event. Doing so removes the Recruited Monster from your kingdom (you can attempt to recruit a new monster on a future kingdom turn though) but allows you to roll a skill check twice when resolving the Dangerous Hex event, taking the better of the two results as your actual result. This is a fortune effect. Your kingdom can support 1 Recruited Monster at a time. If your kingdom is master in Intrigue, you can support up to 2 Recruited Monsters at a time, and if your kingdom is legendary in Intrigue, you can support up to 3 Recruited Monsters at a time.</p>",
           "modifiers": {
             "gainMonster": {
               "name": "Use Recruited Monster to resolve Bandit Activity, Monster Activity, Sacrifices, or Undead Uprising",
@@ -3836,7 +3837,9 @@
       },
       "relocate-capital": {
         "title": "Relocate Capital",
-        "description": "<p>One of your settlements that is not your current capital must contain a Castle, Palace, or Town Hall. All leaders must spend all of their leadership activities during the Activity phase of a Kingdom turn on this activity. The kingdom leaders announce that they are uprooting the seat of government from its current home and reestablishing it in another settlement. Attempt a check with a DC equal to the kingdom’s Control DC + 5. You cannot Relocate your Capital again for at least 3 Kingdom turns.</p>",
+        "automationNotes": "3 turn timeout after moving capital is not tracked",
+        "requirement": "One of your settlements that is not your current capital must contain a Castle, Palace, or Town Hall. All leaders must spend all of their leadership activities during the Activity phase of a Kingdom turn on this activity.",
+        "description": "<p>The kingdom leaders announce that they are uprooting the seat of government from its current home and reestablishing it in another settlement. Attempt a check with a DC equal to the kingdom’s Control DC + 5. You cannot Relocate your Capital again for at least 3 Kingdom turns.</p>",
         "criticalSuccess": {
           "msg": "<p>The move goes off splendidly, with people excited about the new capital and celebrating the leadership’s wisdom.</p>"
         },
@@ -3852,7 +3855,7 @@
       },
       "repair-reputation-corruption": {
         "title": "Repair Reputation Corruption",
-        "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
+        "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.</p><p>The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
         "criticalSuccess": {
           "msg": "<p>@lose2Corruption and reduce its current ruin penalty by 1 to a minimum of 0.</p>"
         },
@@ -3867,8 +3870,9 @@
         }
       },
       "repair-reputation-crime": {
+        "automationNotes": "Critical Failure timeout for 3 turns is not tracked",
         "title": "Repair Reputation Crime",
-        "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions. The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
+        "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions. </p><p>The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
         "criticalSuccess": {
           "msg": "<p>@lose2Crime and reduce its current ruin penalty by 1 to a minimum of 0.</p>"
         },
@@ -3884,7 +3888,7 @@
       },
       "repair-reputation-decay": {
         "title": "Repair Reputation Decay",
-        "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions. The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
+        "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions. </p><p>The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
         "criticalSuccess": {
           "msg": "<p>@lose2Decay and reduce its current ruin penalty by 1 to a minimum of 0.</p>"
         },
@@ -3900,7 +3904,7 @@
       },
       "repair-reputation-strife": {
         "title": "Repair Reputation Strife",
-        "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
+        "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.</p><p>The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
         "criticalSuccess": {
           "msg": "<p>@lose2Strife and reduce its current ruin penalty by 1 to a minimum of 0.</p>"
         },
@@ -3933,7 +3937,7 @@
       "request-foreign-aid-vk": {
         "title": "Request Foreign Aid (V&K)",
         "description": "<p>When disaster strikes, you send out a call for help to another nation with whom you have diplomatic relations. The DC of this check starts at the other group’s Negotiation DC +2, but every subsequent Kingdom turn you Request Foreign Aid from the same group, the DC increases by 2. Every Kingdom turn that passes without Requesting Foreign Aid from that Group reduces the DC by 1 (until you reach the other group’s Negotiation DC +2). You may only attempt to request Foreign Aid with a given group once per Kingdom turn regardless of the number of leaders pursuing activities.</p>",
-        "automationNotes": "DC increases are not tracked",
+        "automationNotes": "DC increases are not tracked and circumstance bonuses are not applied after, but before the roll",
         "requirement": "You have diplomatic relations with the group you are requesting aid from.",
         "criticalSuccess": {
           "msg": "<p>Your ally’s aid grants a +4 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn. You can choose to apply this bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known. In addition, @gain2RolledResourceDice; this RP does not accrue into XP at the end of the turn if you don’t spend it.</p>",
@@ -3964,6 +3968,7 @@
         "title": "Request Foreign Aid",
         "description": "<p>When disaster strikes, you send out a call for help to another nation with whom you have diplomatic relations. The DC of this check is equal to the other group’s Negotiation DC +2 (see the sidebar on page 519).</p>",
         "requirement": "You have diplomatic relations with the group you are requesting aid from.",
+        "automationNotes": "Circumstance bonuses are not applied after, but before the roll",
         "criticalSuccess": {
           "msg": "<p>Your ally’s aid grants a +4 circumstance bonus to any one Kingdom skill check attempted during the remainder of this Kingdom turn. You can choose to apply this bonus to any Kingdom skill check after the die is rolled, but must do so before the result is known. In addition, @gain2RolledResourceDice; this RP does not accrue into XP at the end of the turn if you don’t spend it.</p>",
           "modifiers": {
@@ -3991,7 +3996,7 @@
       },
       "rest-and-relax": {
         "title": "Rest and Relax",
-        "description": "<p>Working non-stop can burn out even the most devoted and dedicated individual. As such, it’s important to take time for yourself, and thus set a good example for the nation.You take time to relax, and you extend the chance to unwind to your citizens as well. The Kingdom skill you use to determine the effectiveness of your time off depends on how you want to spend it: Use a basic Arts check to spend the time engaged in entertainment or the pursuit of a hobby. Use a basic Boating check to enjoy trips on the lakes and rivers of your kingdom. Use a basic Scholarship check to spend the time reading or studying a topic of personal interest beyond your daily duties. Use a basic Trade check to spend your time shopping or feasting. Use a basic Wilderness check to get away from the bustle and relax in the countryside. If your kingdom Rested and Relaxed the previous Kingdom turn, the DC increases by 4, as your kingdom’s production and output hasn’t had a chance to catch up to all those vacation days.</p>",
+        "description": "<p>Working non-stop can burn out even the most devoted and dedicated individual. As such, it’s important to take time for yourself, and thus set a good example for the nation.</p><p>You take time to relax, and you extend the chance to unwind to your citizens as well. The Kingdom skill you use to determine the effectiveness of your time off depends on how you want to spend it: Use a basic Arts check to spend the time engaged in entertainment or the pursuit of a hobby. Use a basic Boating check to enjoy trips on the lakes and rivers of your kingdom. Use a basic Scholarship check to spend the time reading or studying a topic of personal interest beyond your daily duties. Use a basic Trade check to spend your time shopping or feasting. Use a basic Wilderness check to get away from the bustle and relax in the countryside. If your kingdom Rested and Relaxed the previous Kingdom turn, the DC increases by 4, as your kingdom’s production and output hasn’t had a chance to catch up to all those vacation days.</p>",
         "criticalSuccess": {
           "msg": "<p>The citizens enjoy the time off and are ready to get back to work. @lose1Unrest, and the next Leadership activity you take gains a +2 circumstance bonus.</p>",
           "modifiers": {
@@ -4078,6 +4083,7 @@
       "send-diplomatic-envoy": {
         "title": "Send Diplomatic Envoy",
         "description": "<p>You send emissaries to another group to foster positive relations and communication. The DC of this check is the group’s Negotiation DC (see the sidebar on page 519). Attempts to Send a Diplomatic Envoy to a nation with which your kingdom is at war take a –4 circumstance penalty to the check and have the result worsened one degree. At the GM’s option, some wars might be so heated that this activity has no chance of success.</p>",
+        "automationNotes": "Group is not tracked plus on a Critical Failure, the 2 turn timeout is not tracked",
         "modifiers": {
           "atWar": {
             "name": "At War with Group",
@@ -4151,6 +4157,7 @@
         "title": "Supernatural Solution",
         "description": "<p>Your spellcasters try to resolve issues when mundane solutions just aren’t enough. Attempt a basic check.</p>",
         "special": "You cannot influence a check with Supernatural Solution and Creative Solution simultaneously.",
+        "automationNotes": "2 turn timeout on a Critical Failure is not tracked",
         "criticalSuccess": {
           "msg": "<p>You can call upon your spellcasters’ supernatural solution to aid in resolving any Kingdom skill check made during the remainder of this Kingdom turn @gain1SupernaturalSolution. Do so just before a Kingdom skill check is rolled (by yourself or any other PC). Attempt a Magic check against the same DC in addition to the Kingdom skill check, and take whichever of the two results you prefer. If you don’t use your Supernatural Solution by the end of this Kingdom turn, this benefit ends and you gain 10XP instead.</p>"
         },

@@ -8,6 +8,7 @@
   "dcAdjustment": 2,
   "title": "activities.repair-reputation-strife.title",
   "description": "activities.repair-reputation-strife.description",
+  "automationNotes": "activities.repair-reputation-crime.automationNotes",
   "skills": {
     "intrigue": 1
   },

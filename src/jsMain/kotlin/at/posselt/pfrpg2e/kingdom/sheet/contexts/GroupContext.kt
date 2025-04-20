@@ -11,15 +11,16 @@ import js.objects.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject
-external interface GroupContext  {
+external interface GroupContext {
     val name: FormElementContext
     val negotiationDC: FormElementContext
     val atWar: FormElementContext
+    val preventPledgeOfFealty: FormElementContext
     val relations: FormElementContext
 }
 
 fun Array<RawGroup>.toContext() =
-    mapIndexed {index, group ->
+    mapIndexed { index, group ->
         GroupContext(
             name = TextInput(
                 name = "groups.$index.name",
@@ -38,6 +39,12 @@ fun Array<RawGroup>.toContext() =
                 label = t("kingdom.atWar"),
                 hideLabel = true,
                 value = group.atWar,
+            ).toContext(),
+            preventPledgeOfFealty = CheckboxInput(
+                name = "groups.$index.preventPledgeOfFealty",
+                label = t("kingdom.preventPledgeOfFealty"),
+                hideLabel = true,
+                value = group.preventPledgeOfFealty,
             ).toContext(),
             relations = Select.fromEnum<Relations>(
                 name = "groups.$index.relations",

@@ -8,6 +8,7 @@
   "dcAdjustment": 2,
   "title": "activities.repair-reputation-crime.title",
   "description": "activities.repair-reputation-crime.description",
+  "automationNotes": "activities.repair-reputation-crime.automationNotes",
   "skills": {
     "trade": 1
   },

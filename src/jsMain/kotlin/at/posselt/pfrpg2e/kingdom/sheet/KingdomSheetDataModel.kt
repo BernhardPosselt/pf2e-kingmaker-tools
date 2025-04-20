@@ -254,6 +254,7 @@ class KingdomSheetDataModel(
                     string("name")
                     int("negotiationDC")
                     boolean("atWar")
+                    boolean("preventPledgeOfFealty")
                     enum<Relations>("relations")
                 }
             }

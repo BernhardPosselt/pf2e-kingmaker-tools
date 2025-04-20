@@ -5,9 +5,11 @@
   "enabled": true,
   "phase": "leadership",
   "dc": "custom",
+  "dcAdjustment": 2,
   "title": "activities.request-foreign-aid.title",
   "description": "activities.request-foreign-aid.description",
   "requirement": "activities.request-foreign-aid.requirement",
+  "automationNotes": "activities.request-foreign-aid.automationNotes",
   "skills": {
     "statecraft": 1
   },

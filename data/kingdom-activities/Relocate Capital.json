@@ -7,7 +7,9 @@
   "dc": "control",
   "dcAdjustment": 5,
   "title": "activities.relocate-capital.title",
+  "requirement": "activities.relocate-capital.requirement",
   "description": "activities.relocate-capital.description",
+  "automationNotes": "activities.relocate-capital.automationNotes",
   "skills": {
     "industry": 1
   },

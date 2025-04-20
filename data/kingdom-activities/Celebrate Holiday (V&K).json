@@ -11,15 +11,6 @@
     "folklore": 0,
     "politics": 0
   },
-  "modifiers": [
-    {
-      "name": "activities.celebrate-holiday-vk.modifiers.celebratedLastTurn.name",
-      "buttonLabel": "activities.celebrate-holiday-vk.modifiers.celebratedLastTurn.buttonLabel",
-      "type": "untyped",
-      "enabled": false,
-      "value": -4
-    }
-  ],
   "criticalSuccess": {
     "msg": "activities.celebrate-holiday-vk.criticalSuccess.msg",
     "modifiers": [
@@ -38,6 +29,25 @@
         ],
         "value": 2,
         "type": "circumstance"
+      },
+      {
+        "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
+        "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
+        "type": "untyped",
+        "turns": 2,
+        "enabled": true,
+        "value": -4,
+        "applyIf": [
+          {
+            "in": [
+              "@activity",
+              [
+                "celebrate-holiday",
+                "celebrate-holiday-vk"
+              ]
+            ]
+          }
+        ]
       }
     ]
   },
@@ -59,11 +69,51 @@
         ],
         "value": 1,
         "type": "circumstance"
+      },
+      {
+        "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
+        "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
+        "type": "untyped",
+        "turns": 2,
+        "enabled": true,
+        "value": -4,
+        "applyIf": [
+          {
+            "in": [
+              "@activity",
+              [
+                "celebrate-holiday",
+                "celebrate-holiday-vk"
+              ]
+            ]
+          }
+        ]
       }
     ]
   },
   "failure": {
-    "msg": "activities.celebrate-holiday-vk.failure.msg"
+    "msg": "activities.celebrate-holiday-vk.failure.msg",
+    "modifiers": [
+      {
+        "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
+        "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
+        "type": "untyped",
+        "turns": 2,
+        "enabled": true,
+        "value": -4,
+        "applyIf": [
+          {
+            "in": [
+              "@activity",
+              [
+                "celebrate-holiday",
+                "celebrate-holiday-vk"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
   },
   "criticalFailure": {
     "msg": "activities.celebrate-holiday-vk.criticalFailure.msg",
@@ -83,6 +133,25 @@
         ],
         "value": -1,
         "type": "circumstance"
+      },
+      {
+        "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
+        "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
+        "type": "untyped",
+        "turns": 2,
+        "enabled": true,
+        "value": -4,
+        "applyIf": [
+          {
+            "in": [
+              "@activity",
+              [
+                "celebrate-holiday",
+                "celebrate-holiday-vk"
+              ]
+            ]
+          }
+        ]
       }
     ]
   }

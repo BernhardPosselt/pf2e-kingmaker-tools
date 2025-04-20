@@ -7,29 +7,92 @@
   "phase": "commerce",
   "dc": "control",
   "title": "activities.manage-trade-agreements.title",
-  "modifiers": [
-    {
-      "enabled": false,
-      "value": -5,
-      "buttonLabel": "activities.manage-trade-agreements.modifiers.previousTurn.buttonLabel",
-      "name": "activities.manage-trade-agreements.modifiers.previousTurn.name",
-      "type": "untyped"
-    }
-  ],
   "description": "activities.manage-trade-agreements.description",
   "skills": {
     "trade": 0
   },
   "criticalSuccess": {
-    "msg": "activities.manage-trade-agreements.criticalSuccess.msg"
+    "msg": "activities.manage-trade-agreements.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "enabled": true,
+        "value": -5,
+        "buttonLabel": "activities.manage-trade-agreements.modifiers.previousTurn.buttonLabel",
+        "name": "activities.manage-trade-agreements.modifiers.previousTurn.name",
+        "type": "untyped",
+        "turns": 2,
+        "applyIf": [
+          {
+            "eq": [
+              "@activity",
+              "manage-trade-agreements"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "success": {
-    "msg": "activities.manage-trade-agreements.success.msg"
+    "msg": "activities.manage-trade-agreements.success.msg",
+    "modifiers": [
+      {
+        "enabled": true,
+        "value": -5,
+        "buttonLabel": "activities.manage-trade-agreements.modifiers.previousTurn.buttonLabel",
+        "name": "activities.manage-trade-agreements.modifiers.previousTurn.name",
+        "type": "untyped",
+        "turns": 2,
+        "applyIf": [
+          {
+            "eq": [
+              "@activity",
+              "manage-trade-agreements"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "failure": {
-    "msg": "activities.manage-trade-agreements.failure.msg"
+    "msg": "activities.manage-trade-agreements.failure.msg",
+    "modifiers": [
+      {
+        "enabled": true,
+        "value": -5,
+        "buttonLabel": "activities.manage-trade-agreements.modifiers.previousTurn.buttonLabel",
+        "name": "activities.manage-trade-agreements.modifiers.previousTurn.name",
+        "type": "untyped",
+        "turns": 2,
+        "applyIf": [
+          {
+            "eq": [
+              "@activity",
+              "manage-trade-agreements"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "criticalFailure": {
-    "msg": "activities.manage-trade-agreements.criticalFailure.msg"
+    "msg": "activities.manage-trade-agreements.criticalFailure.msg",
+    "modifiers": [
+      {
+        "enabled": true,
+        "value": -5,
+        "buttonLabel": "activities.manage-trade-agreements.modifiers.previousTurn.buttonLabel",
+        "name": "activities.manage-trade-agreements.modifiers.previousTurn.name",
+        "type": "untyped",
+        "turns": 2,
+        "applyIf": [
+          {
+            "eq": [
+              "@activity",
+              "manage-trade-agreements"
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

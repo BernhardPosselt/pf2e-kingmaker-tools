@@ -1,64 +1,77 @@
 {
-    "id": "new-leadership",
-    "oncePerRound": false,
-    "fortune": false,
-    "enabled": true,
-    "order": 2,
-    "phase": "upkeep",
-    "dc": "control",
-    "title": "activities.new-leadership.title",
-    "description": "activities.new-leadership.description",
-    "modifiers": [
-        {
-            "type": "circumstance",
-            "value": 2,
-            "enabled": false,
-            "buttonLabel": "activities.new-leadership.modifiers.matchingSkillBonus.buttonLabel",
-            "name": "activities.new-leadership.modifiers.matchingSkillBonus.name"
-        },
-        {
-            "type": "circumstance",
-            "value": -4,
-            "enabled": false,
-            "buttonLabel": "activities.new-leadership.modifiers.appointingRulerPenalty.buttonLabel",
-            "name": "activities.new-leadership.modifiers.appointingRulerPenalty.name"
-        }
-    ],
-    "skills": {
-        "intrigue": 0,
-        "politics": 0,
-        "statecraft": 0,
-        "warfare": 0
+  "id": "new-leadership",
+  "oncePerRound": false,
+  "fortune": false,
+  "enabled": true,
+  "order": 2,
+  "phase": "upkeep",
+  "dc": "control",
+  "title": "activities.new-leadership.title",
+  "description": "activities.new-leadership.description",
+  "modifiers": [
+    {
+      "type": "circumstance",
+      "value": 2,
+      "enabled": false,
+      "buttonLabel": "activities.new-leadership.modifiers.matchingSkillBonus.buttonLabel",
+      "name": "activities.new-leadership.modifiers.matchingSkillBonus.name"
     },
-    "criticalSuccess": {
-        "msg": "activities.new-leadership.criticalSuccess.msg",
-        "modifiers": [
-            {
-                "turns": 2,
-                "enabled": false,
-                "value": 1,
-                "buttonLabel": "activities.new-leadership.criticalSuccess.modifiers.buttonLabel",
-                "name": "activities.new-leadership.criticalSuccess.modifiers.name",
-                "type": "circumstance"
-            }
-        ]
-    },
-    "success": {
-        "msg": "activities.new-leadership.success.msg"
-    },
-    "failure": {
-        "msg": "activities.new-leadership.failure.msg",
-        "modifiers": [
-            {
-                "enabled": false,
-                "buttonLabel": "activities.new-leadership.failure.modifiers.buttonLabel",
-                "name": "activities.new-leadership.failure.modifiers.name",
-                "value": -1,
-                "type": "circumstance"
-            }
-        ]
-    },
-    "criticalFailure": {
-        "msg": "activities.new-leadership.criticalFailure.msg"
+    {
+      "type": "circumstance",
+      "value": -4,
+      "enabled": false,
+      "buttonLabel": "activities.new-leadership.modifiers.appointingRulerPenalty.buttonLabel",
+      "name": "activities.new-leadership.modifiers.appointingRulerPenalty.name"
     }
+  ],
+  "skills": {
+    "intrigue": 0,
+    "politics": 0,
+    "statecraft": 0,
+    "warfare": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.new-leadership.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "turns": 2,
+        "enabled": false,
+        "value": 1,
+        "buttonLabel": "activities.new-leadership.criticalSuccess.modifiers.buttonLabel",
+        "name": "activities.new-leadership.criticalSuccess.modifiers.name",
+        "type": "circumstance"
+      }
+    ]
+  },
+  "success": {
+    "msg": "activities.new-leadership.success.msg"
+  },
+  "failure": {
+    "msg": "activities.new-leadership.failure.msg",
+    "modifiers": [
+      {
+        "enabled": false,
+        "buttonLabel": "activities.new-leadership.failure.modifiers.buttonLabel",
+        "name": "activities.new-leadership.failure.modifiers.name",
+        "value": -1,
+        "type": "circumstance",
+        "applyIf": [
+          {
+            "in": [
+              "@phase",
+              [
+                "leadership",
+                "army",
+                "region",
+                "civic"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "criticalFailure": {
+    "msg": "activities.new-leadership.criticalFailure.msg"
+  }
 }

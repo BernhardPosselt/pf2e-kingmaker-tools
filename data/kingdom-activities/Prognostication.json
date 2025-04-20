@@ -39,7 +39,6 @@
         "turns": 1,
         "buttonLabel": "activities.prognostication.success.modifiers.randomEvent.buttonLabel",
         "name": "activities.prognostication.success.modifiers.randomEvent.name",
-        "isConsumedAfterRoll": true,
         "applyIf": [
           {
             "eq": [

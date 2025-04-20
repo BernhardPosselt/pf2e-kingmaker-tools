@@ -383,6 +383,7 @@ class KingdomSheet(
                     negotiationDC = 10 + findKingdomSize(realm.size).controlDCModifier,
                     atWar = false,
                     relations = "none",
+                    preventPledgeOfFealty = false,
                 )
                 actor.setKingdom(kingdom)
             }

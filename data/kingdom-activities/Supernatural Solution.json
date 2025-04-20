@@ -5,6 +5,7 @@
   "dc": "control",
   "title": "activities.supernatural-solution.title",
   "description": "activities.supernatural-solution.description",
+  "automationNotes": "activities.supernatural-solution.automationNotes",
   "oncePerRound": false,
   "fortune": true,
   "skills": {

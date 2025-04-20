@@ -6,15 +6,6 @@
   "phase": "leadership",
   "dc": "control",
   "title": "activities.celebrate-holiday.title",
-  "modifiers": [
-    {
-      "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
-      "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
-      "type": "untyped",
-      "enabled": false,
-      "value": -4
-    }
-  ],
   "description": "activities.celebrate-holiday.description",
   "skills": {
     "folklore": 0
@@ -37,6 +28,25 @@
         ],
         "value": 2,
         "type": "circumstance"
+      },
+      {
+        "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
+        "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
+        "type": "untyped",
+        "turns": 2,
+        "enabled": true,
+        "value": -4,
+        "applyIf": [
+          {
+            "in": [
+              "@activity",
+              [
+                "celebrate-holiday",
+                "celebrate-holiday-vk"
+              ]
+            ]
+          }
+        ]
       }
     ]
   },
@@ -58,11 +68,51 @@
         ],
         "value": 1,
         "type": "circumstance"
+      },
+      {
+        "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
+        "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
+        "type": "untyped",
+        "turns": 2,
+        "enabled": true,
+        "value": -4,
+        "applyIf": [
+          {
+            "in": [
+              "@activity",
+              [
+                "celebrate-holiday",
+                "celebrate-holiday-vk"
+              ]
+            ]
+          }
+        ]
       }
     ]
   },
   "failure": {
-    "msg": "activities.celebrate-holiday.failure.msg"
+    "msg": "activities.celebrate-holiday.failure.msg",
+    "modifiers": [
+      {
+        "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
+        "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
+        "type": "untyped",
+        "turns": 2,
+        "enabled": true,
+        "value": -4,
+        "applyIf": [
+          {
+            "in": [
+              "@activity",
+              [
+                "celebrate-holiday",
+                "celebrate-holiday-vk"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
   },
   "criticalFailure": {
     "msg": "activities.celebrate-holiday.criticalFailure.msg",
@@ -82,6 +132,25 @@
         ],
         "value": -1,
         "type": "circumstance"
+      },
+      {
+        "name": "activities.celebrate-holiday.modifiers.celebratedLastTurn.name",
+        "buttonLabel": "activities.celebrate-holiday.modifiers.celebratedLastTurn.buttonLabel",
+        "type": "untyped",
+        "turns": 2,
+        "enabled": true,
+        "value": -4,
+        "applyIf": [
+          {
+            "in": [
+              "@activity",
+              [
+                "celebrate-holiday",
+                "celebrate-holiday-vk"
+              ]
+            ]
+          }
+        ]
       }
     ]
   }

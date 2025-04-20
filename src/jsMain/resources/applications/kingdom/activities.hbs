@@ -25,7 +25,7 @@
                     </div>
                 </summary>
                 {{#if requirement}}<p><b>{{localizeKM "kingdom.requirement"}}:</b> {{requirement}}</p>{{/if}}
-                <div class="km-detail-description">{{{description}}}</div>
+                <div class="km-detail-description">{{#if automationNotes}}<p><b>{{localizeKM "kingdom.automationNotes"}}:</b> {{automationNotes}}</p>{{/if}}{{{description}}}</div>
                 <ul class="km-summary-degrees">
                     {{#if criticalSuccess}}
                         <li><b>{{localizeKM "degreeOfSuccess.criticalSuccess"}}:</b> {{{criticalSuccess}}}</li>{{/if}}
