@@ -26,6 +26,7 @@ external interface ChatStructure {
     val cost: ChatCost
     val messages: Array<String>?
     val actorUuid: String
+    val addFamePoint: Boolean
 }
 
 @JsPlainObject
@@ -115,6 +116,7 @@ suspend fun buildDegreeMessages(
     structure: Structure,
     rubble: Structure,
     actorUuid: String,
+    addFamePoint: Boolean,
 ): DegreeMessages {
     val rubbleLink = enrichHtml(buildUuid(rubble.uuid, t("kingdom.rubble")))
     val buildingLink = enrichHtml(buildUuid(structure.uuid, structure.name))
@@ -162,6 +164,7 @@ suspend fun buildDegreeMessages(
             cost = halvedCost,
             actorUuid = actorUuid,
             messages = messages.toTypedArray(),
+            addFamePoint = addFamePoint,
         ),
     )
     val success = tpl(
@@ -173,6 +176,7 @@ suspend fun buildDegreeMessages(
             cost = cost,
             actorUuid = actorUuid,
             messages = messages.toTypedArray(),
+            addFamePoint = addFamePoint,
         ),
     )
     val failure = tpl(
@@ -184,6 +188,7 @@ suspend fun buildDegreeMessages(
             slowedLink = slowedLink,
             actorUuid = actorUuid,
             cost = cost,
+            addFamePoint = addFamePoint,
         ),
     )
     val criticalFailure = tpl(
@@ -194,6 +199,7 @@ suspend fun buildDegreeMessages(
             link = rubbleLink,
             actorUuid = actorUuid,
             cost = cost,
+            addFamePoint = false,
         ),
     )
     return DegreeMessages(

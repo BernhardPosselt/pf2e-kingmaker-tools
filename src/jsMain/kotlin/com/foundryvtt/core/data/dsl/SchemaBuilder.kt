@@ -284,8 +284,13 @@ class Schema {
         name: String,
         context: DataFieldContext<AnyObject>? = undefined,
         block: (DataFieldOptions/*<AnyObject>*/.() -> Unit)? = null,
+        nullable: Boolean = false,
     ) {
-        val options = DataFieldOptions/*<AnyObject>*/(required = true, nullable=false)
+        val options = if (nullable) {
+            DataFieldOptions(nullable = true, initial = null)
+        } else {
+            DataFieldOptions(required = true, nullable=false)
+        }
         block?.invoke(options)
         fields[name] = ObjectField(options = options, context = context)
     }

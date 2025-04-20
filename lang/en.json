@@ -350,13 +350,19 @@
       "reducesRuin": "Reduces Ruin",
       "reducesUnrest": "Reduces Unrest",
       "reducesConsumption": "Reduces Consumption",
-      "housing": "Housing",
+      "residential": "Residential",
       "downtime": "Downtime",
       "shopping": "Shopping",
       "affectsEvents": "Affects Events",
       "increasesCapacity": "Increases Capacity",
       "cheaperWhenUpgraded": "Cheaper when Upgraded",
-      "upgradeable": "Upgradeable"
+      "upgradeable": "Upgradeable",
+      "famous": "Famous",
+      "infamous": "Infamous",
+      "infrastructure": "Infrastructure",
+      "edifice": "Edifice",
+      "yard": "Yard",
+      "building": "Building"
     },
     "campingSection": {
       "prepareCampsite": "Prepare Campsite",

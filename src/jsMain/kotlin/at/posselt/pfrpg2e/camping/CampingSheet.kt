@@ -224,6 +224,7 @@ class CampingSheet(
     template = "applications/camping/camping-sheet.hbs",
     id = "kmCamping-${actor.uuid}",
     width = windowWidth,
+    dataModel = CampingSheetDataModel::class.js,
     classes = arrayOf("km-camping-sheet"),
     controls = arrayOf(
         MenuControl(label = t("camping.showPlayers"), action = "show-players", gmOnly = true),

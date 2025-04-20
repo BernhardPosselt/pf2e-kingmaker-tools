@@ -49,7 +49,7 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
     resizable: Boolean? = undefined,
     protected val debug: Boolean = false,
     protected val renderOnSubmit: Boolean = true,
-    protected val dataModel: JsClass<out DataModel>? = null,
+    protected val dataModel: JsClass<out DataModel>,
 //    protected val initial: O
 ) : App<T>(
     HandlebarsFormApplicationOptions(
@@ -113,7 +113,7 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
                 console.log("Parsed object ${JSON.stringify(parsedData)}")
             }
             val model = try {
-                dataModel?.newInstance(arrayOf(parsedData))
+                dataModel.newInstance(arrayOf(parsedData))
             } catch (e: Throwable) {
                 if (debug) {
                     console.log(e)

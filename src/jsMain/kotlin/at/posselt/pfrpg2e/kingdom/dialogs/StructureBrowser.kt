@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.ValueEnum
+import at.posselt.pfrpg2e.data.kingdom.FameType
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
@@ -156,7 +157,13 @@ enum class MainFilter : Translatable, ValueEnum {
     REDUCES_RUIN,
     REDUCES_UNREST,
     REDUCES_CONSUMPTION,
-    HOUSING,
+    BUILDING,
+    EDIFICE,
+    FAMOUS,
+    INFAMOUS,
+    INFRASTRUCTURE,
+    RESIDENTIAL,
+    YARD,
     DOWNTIME,
     SHOPPING,
     AFFECTS_EVENTS,
@@ -245,6 +252,7 @@ class StructureBrowser(
                 checkNotNull(rubble) {
                     "Rubble was null"
                 }
+                val fameType = FameType.fromString(kingdom.fame.type) ?: FameType.FAMOUS
                 val degreeMessages = buildDegreeMessages(
                     ore = ore,
                     lumber = lumber,
@@ -254,6 +262,10 @@ class StructureBrowser(
                     structure = structure,
                     rubble = rubble,
                     actorUuid = actor.uuid,
+                    addFamePoint = when(fameType) {
+                        FameType.FAMOUS -> structure.traits.contains(StructureTrait.FAMOUS)
+                        FameType.INFAMOUS -> structure.traits.contains(StructureTrait.INFAMOUS)
+                    }
                 )
                 kingdomCheckDialog(
                     game = game,
@@ -345,8 +357,26 @@ class StructureBrowser(
             if (MainFilter.REDUCES_CONSUMPTION in mainFilters) {
                 add { it.consumptionReduction > 0 }
             }
-            if (MainFilter.HOUSING in mainFilters) {
+            if (MainFilter.RESIDENTIAL in mainFilters) {
                 add { StructureTrait.RESIDENTIAL in it.traits }
+            }
+            if (MainFilter.FAMOUS in mainFilters) {
+                add { StructureTrait.FAMOUS in it.traits }
+            }
+            if (MainFilter.INFAMOUS in mainFilters) {
+                add { StructureTrait.INFAMOUS in it.traits }
+            }
+            if (MainFilter.INFRASTRUCTURE in mainFilters) {
+                add { StructureTrait.INFRASTRUCTURE in it.traits }
+            }
+            if (MainFilter.BUILDING in mainFilters) {
+                add { StructureTrait.BUILDING in it.traits }
+            }
+            if (MainFilter.YARD in mainFilters) {
+                add { StructureTrait.YARD in it.traits }
+            }
+            if (MainFilter.EDIFICE in mainFilters) {
+                add { StructureTrait.EDIFICE in it.traits }
             }
             if (MainFilter.DOWNTIME in mainFilters) {
                 add { it.affectsDowntime }
