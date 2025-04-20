@@ -39,7 +39,7 @@ fun String.lowercaseFirst() =
     replaceFirstChar { c -> c.lowercase() }
 
 fun String.toEnumConstant(): String =
-    this.split("(?=\\p{Upper})".toRegex())
+    split("(?=\\p{Upper})".toRegex())
         .joinToString("_") { it.uppercase() }
 
 fun String.toDataAttributeKey(): String =

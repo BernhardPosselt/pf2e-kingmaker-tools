@@ -456,6 +456,7 @@
         .km-gain-lose {
             display: inline-block;
             margin: 2px 0;
+            height: auto;
         }
 
         p,

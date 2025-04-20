@@ -48,7 +48,7 @@ private fun buildStructureHints(structure: Structure): List<String> {
                     value = it.value,
                     mode = ResourceMode.LOSE,
                     resource = Resource.UNREST,
-                ).toHtml(),
+                ).toHtml(emptyArray()),
                 it.note,
             ).joinToString(" ")
         },
@@ -100,7 +100,7 @@ private fun createButtons(
         buttons.forEach {
             li {
                 unsafe {
-                    +it.toHtml()
+                    +it.toHtml(emptyArray())
                 }
             }
         }

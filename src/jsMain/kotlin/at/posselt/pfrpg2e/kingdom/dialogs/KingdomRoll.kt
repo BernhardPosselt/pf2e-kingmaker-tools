@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.kingdom.UpgradeMetaContext
 import at.posselt.pfrpg2e.kingdom.generateRollMeta
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getEvent
+import at.posselt.pfrpg2e.kingdom.getEvents
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.modifiers.DowngradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.Note
@@ -262,7 +263,7 @@ suspend fun postComplexDegreeOfSuccess(
     val notesContext = metaContext.notes
         ?.let { deserializeB64Json<Array<RawNote>>(it) }
         ?.filter { it.degree == null || it.degree == changedDegreeOfSuccess.value }
-        ?.map { insertButtons(it.note) }
+        ?.map { insertButtons(it.note, kingdom.getEvents()) }
         ?.toTypedArray()
         ?: emptyArray()
     val notesHtml = tpl(

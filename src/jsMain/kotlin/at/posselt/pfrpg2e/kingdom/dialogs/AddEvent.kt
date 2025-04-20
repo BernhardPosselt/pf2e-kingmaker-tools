@@ -86,6 +86,25 @@ class AddEventsDataModel(
     }
 }
 
+suspend fun createOngoingEvent(
+    id: String,
+    isSettlementEvent: Boolean,
+    settlements: List<Settlement>,
+) = if (isSettlementEvent) {
+    val pick = pickEventSettlement(settlements)
+    RawOngoingKingdomEvent(
+        stage = 0,
+        id = id,
+        settlementSceneId = pick.settlementId,
+        secretLocation = pick.secretLocation,
+    )
+} else {
+    RawOngoingKingdomEvent(
+        stage = 0,
+        id = id,
+    )
+}
+
 class AddEvent(
     private val game: Game,
     private val kingdomActor: KingdomActor,
@@ -108,20 +127,11 @@ class AddEvent(
                 buildPromise {
                     val id = target.dataset["id"] as String
                     val isSettlementEvent = target.dataset["settlementEvent"] == "true"
-                    val event = if (isSettlementEvent) {
-                        val pick = pickEventSettlement(settlements)
-                        RawOngoingKingdomEvent(
-                            stage = 0,
-                            id = id,
-                            settlementSceneId = pick.settlementId,
-                            secretLocation = pick.secretLocation,
-                        )
-                    } else {
-                        RawOngoingKingdomEvent(
-                            stage = 0,
-                            id = id,
-                        )
-                    }
+                    val event = createOngoingEvent(
+                        id = id,
+                        isSettlementEvent = isSettlementEvent,
+                        settlements = settlements,
+                    )
                     onSave(event)
                     close()
                 }

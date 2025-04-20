@@ -26,9 +26,9 @@ external interface ActivityResult {
     val modifiers: Array<RawModifier>
 }
 
-private fun ActivityResult.insertButtons(): ActivityResult =
+private fun ActivityResult.addButtons(events: Array<RawKingdomEvent>): ActivityResult =
     copy(
-        msg = insertButtons(msg),
+        msg = insertButtons(msg, events),
         modifiers = modifiers
     )
 
@@ -136,16 +136,16 @@ private fun RawActivity.translate(): RawActivity =
         criticalFailure = criticalFailure?.translate(),
     )
 
-fun translateActivities() {
+fun translateActivities(events: Array<RawKingdomEvent>) {
     kingdomActivities = rawKingdomActivities
         .map {
             val translated = it.translate()
             translated.copy(
-                description = insertButtons(translated.description),
-                criticalSuccess = translated.criticalSuccess?.insertButtons(),
-                success = translated.success?.insertButtons(),
-                failure = translated.failure?.insertButtons(),
-                criticalFailure = translated.criticalFailure?.insertButtons(),
+                description = insertButtons(translated.description, events),
+                criticalSuccess = translated.criticalSuccess?.addButtons(events),
+                success = translated.success?.addButtons(events),
+                failure = translated.failure?.addButtons(events),
+                criticalFailure = translated.criticalFailure?.addButtons(events),
             )
         }
         .toTypedArray()

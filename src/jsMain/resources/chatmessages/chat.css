@@ -22,6 +22,7 @@
 .km-gain-lose {
     width: auto;
     display: inline;
+    height: auto;
 }
 
 .strike-through {

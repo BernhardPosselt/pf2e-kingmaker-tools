@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Allow users to re-enable the first run message
 * Add all structure traits to Structure Browser filters
 * Add Gain Fame button if built building type matches kingdom
+* Add buttons to add and resolve kingdom events 
 
 ### Changed
 * Require FoundryVTT 13

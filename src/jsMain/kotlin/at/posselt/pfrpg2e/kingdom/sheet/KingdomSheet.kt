@@ -760,7 +760,7 @@ class KingdomSheet(
                         )
                     )
                     val ruinButtons = sequenceOf(Resource.CRIME, Resource.DECAY, Resource.CORRUPTION, Resource.STRIFE)
-                        .map { ResourceButton(value = "1", resource = it, mode = ResourceMode.LOSE).toHtml() }
+                        .map { ResourceButton(value = "1", resource = it, mode = ResourceMode.LOSE).toHtml(emptyArray()) }
                         .toTypedArray()
                     postChatTemplate(
                         templatePath = "chatmessages/landmark.hbs",

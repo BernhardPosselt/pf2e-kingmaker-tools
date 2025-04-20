@@ -1,17 +1,23 @@
 package at.posselt.pfrpg2e.kingdom.sheet
 
 import at.posselt.pfrpg2e.data.ValueEnum
+import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.ResourceDieSize
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.RawKingdomEvent
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
+import at.posselt.pfrpg2e.kingdom.dialogs.createOngoingEvent
+import at.posselt.pfrpg2e.kingdom.dialogs.removeEvent
 import at.posselt.pfrpg2e.kingdom.dialogs.requestAmount
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
+import at.posselt.pfrpg2e.kingdom.getEvents
 import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
+import at.posselt.pfrpg2e.kingdom.getOngoingEvents
 import at.posselt.pfrpg2e.kingdom.getRealmData
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
 import at.posselt.pfrpg2e.kingdom.setKingdom
@@ -51,6 +57,7 @@ enum class ResourceMode : Translatable, ValueEnum {
 enum class Resource : Translatable, ValueEnum {
     RESOURCE_DICE,
     CRIME,
+    EVENT,
     DECAY,
     CORRUPTION,
     CONSUMPTION,
@@ -84,15 +91,24 @@ private val fromStringRegex = Regex(
     "@(?<mode>gain|lose)" +
             "(?<multiple>Multiple)?" +
             "(?<value>[0-9rd+]+)" +
-            "(?<resource>${Resource.entries.joinToString("|") { it.value.uppercaseFirst() }})" +
+            "(?<resource>${
+                Resource.entries
+                    .joinToString("|") { if (it == Resource.EVENT) "[a-zA-Z]+Event" else it.value.uppercaseFirst() }
+            })" +
             "(?<turn>NextTurn)?"
 )
 
-fun insertButtons(source: String): String {
+fun insertButtons(source: String, events: Array<RawKingdomEvent>): String {
     return source.replace(fromStringRegex) {
-        ResourceButton.fromMatch(it).toHtml()
+        ResourceButton.fromMatch(it).toHtml(events)
     }
 }
+
+private fun parseEventId(value: String) = value
+    .removeSuffix("Event")
+    .split("(?=\\p{Upper})".toRegex())
+    .filter { it.isNotBlank() }
+    .joinToString("-") { it.lowercase() }
 
 data class ResourceButton(
     val turn: Turn = Turn.NOW,
@@ -120,8 +136,17 @@ data class ResourceButton(
             val mode = if (match.groups["mode"]?.value == "gain") ResourceMode.GAIN else ResourceMode.LOSE
             val multiple = match.groups["multiple"] != null
             val value = match.groups["value"]?.value
-            val resource = match.groups["resource"]
-                ?.value?.let { Resource.fromString(it.lowercaseFirst()) }
+            val resourceValue = match.groups["resource"]?.value
+            val isEvent = resourceValue?.endsWith("Event") == true
+            if (isEvent) console.log(
+                "------------------------------------------___" + resourceValue,
+                parseEventId(resourceValue!!)
+            )
+            val resource = if (isEvent) {
+                Resource.EVENT
+            } else {
+                resourceValue?.let { Resource.fromString(it.lowercaseFirst()) }
+            }
             checkNotNull(resource) {
                 "Resource must not be null"
             }
@@ -130,7 +155,11 @@ data class ResourceButton(
             }
             return ResourceButton(
                 turn = turn,
-                value = value,
+                value = if (isEvent) {
+                    parseEventId(resourceValue)
+                } else {
+                    value
+                },
                 mode = mode,
                 resource = resource,
                 multiple = multiple,
@@ -159,10 +188,13 @@ data class ResourceButton(
         }
     }
 
-    fun toHtml(): String {
+    fun toHtml(events: Array<RawKingdomEvent>): String {
+        val isEvent = resource == Resource.EVENT
         val isRd = value.contains("rd")
         val isDiceExpression = value.contains("d")
-        val resourceKey = if (isRd) {
+        val resourceKey = if (isEvent) {
+            "resourceButton.resource.${Resource.EVENT.value}"
+        } else if (isRd) {
             "resourceButton.resourceDice.${resource.value}"
         } else if (isDiceExpression) {
             resource.i18nKeyExpression
@@ -172,11 +204,21 @@ data class ResourceButton(
         val label = t(
             resourceKey, recordOf(
                 // TODO: this does not support RD expressions like 1d4rd
-                (if (isDiceExpression && !isRd) "expression" else "count") to if (isRd) value.replace("rd", "") else value,
+                (if (isDiceExpression && !isRd) "expression" else "count") to if (isRd) value.replace(
+                    "rd",
+                    ""
+                ) else value,
                 "mode" to mode.value,
                 "multiple" to multiple.toString(),
                 "turn" to turn.value,
-                "location" to "button"
+                "location" to "button",
+                "eventName" to if (isEvent) {
+                    events.find { it.id == value }
+                        ?.name
+                        ?: throw IllegalStateException("Event with id $value does not exist, check your event buttons")
+                } else {
+                    null
+                }
             )
         ).trim()
         // rename needed since value is a property on an HTML element
@@ -206,6 +248,7 @@ data class ResourceButton(
     }
 
     suspend fun evaluate(
+        game: Game,
         kingdom: KingdomData,
         dice: ResourceDieSize,
         maximumFame: Int,
@@ -214,9 +257,18 @@ data class ResourceButton(
         activityId: String?,
         chosenFeats: List<ChosenFeat>,
     ) {
+        val isEvent = resource == Resource.EVENT
+        val event = if (isEvent) {
+            kingdom.getEvents()
+                .find { it.id == this.value }
+        } else {
+            null
+        }
         val factor = if (multiple) requestAmount() else 1
         val sign = if (mode == ResourceMode.GAIN) 1 else -1
-        val initialValue = if (resource == Resource.ROLLED_RESOURCE_DICE) {
+        val initialValue = if (isEvent) {
+            1
+        } else if (resource == Resource.ROLLED_RESOURCE_DICE) {
             val diceNum = evaluateValueExpression(value, resourceDieSize)
             roll(dice.formula(diceNum))
         } else {
@@ -241,7 +293,8 @@ data class ResourceButton(
                 "mode" to mode.value,
                 "multiple" to multiple.toString(),
                 "turn" to turn.value,
-                "location" to "chat"
+                "location" to "chat",
+                "eventName" to event?.name,
             )
         ).trim()
         postChatMessage(message, isHtml = true)
@@ -299,12 +352,13 @@ data class ResourceButton(
 
             Resource.SUPERNATURAL_SOLUTION -> kingdom::supernaturalSolutions
             Resource.CREATIVE_SOLUTION -> kingdom::creativeSolutions
+            Resource.EVENT -> null
         }
-        val updatedValue = setter.get() + value
+        val updatedValue = (setter?.get() ?: 0) + value
         when (resource) {
             Resource.FAME -> when (turn) {
-                Turn.NOW -> setter.set(updatedValue.coerceIn(0, maximumFame))
-                Turn.NEXT -> setter.set(updatedValue)
+                Turn.NOW -> setter?.set(updatedValue.coerceIn(0, maximumFame))
+                Turn.NEXT -> setter?.set(updatedValue)
             }
             // values gated by capacity limit in the now column
             in listOf(
@@ -313,19 +367,19 @@ data class ResourceButton(
                 Resource.ORE,
                 Resource.LUMBER,
                 Resource.STONE
-            ) if turn == Turn.NEXT -> setter.set(updatedValue)
+            ) if turn == Turn.NEXT -> setter?.set(updatedValue)
 
-            Resource.FOOD -> setter.set(storage.limitFood(updatedValue))
-            Resource.LUXURIES -> setter.set(storage.limitLuxuries(updatedValue))
-            Resource.ORE -> setter.set(storage.limitOre(updatedValue))
-            Resource.LUMBER -> setter.set(storage.limitLumber(updatedValue))
-            Resource.STONE -> setter.set(storage.limitStone(updatedValue))
+            Resource.FOOD -> setter?.set(storage.limitFood(updatedValue))
+            Resource.LUXURIES -> setter?.set(storage.limitLuxuries(updatedValue))
+            Resource.ORE -> setter?.set(storage.limitOre(updatedValue))
+            Resource.LUMBER -> setter?.set(storage.limitLumber(updatedValue))
+            Resource.STONE -> setter?.set(storage.limitStone(updatedValue))
             // values that only can go below 0 in the next turn column
             Resource.RESOURCE_DICE,
             Resource.RESOURCE_POINTS,
             Resource.ROLLED_RESOURCE_DICE -> when (turn) {
-                Turn.NOW -> setter.set(updatedValue.coerceIn(0, Int.MAX_VALUE))
-                Turn.NEXT -> setter.set(updatedValue)
+                Turn.NOW -> setter?.set(updatedValue.coerceIn(0, Int.MAX_VALUE))
+                Turn.NEXT -> setter?.set(updatedValue)
             }
             // values that should never go below 0
             Resource.CRIME,
@@ -335,11 +389,39 @@ data class ResourceButton(
             Resource.UNREST,
             Resource.SUPERNATURAL_SOLUTION,
             Resource.CREATIVE_SOLUTION,
-            Resource.XP -> setter.set(updatedValue.coerceIn(0, Int.MAX_VALUE))
+            Resource.XP -> setter?.set(updatedValue.coerceIn(0, Int.MAX_VALUE))
             // values that can be both negative in the now and next column
-            Resource.CONSUMPTION -> setter.set(updatedValue)
+            Resource.CONSUMPTION -> setter?.set(updatedValue)
             // special handling based off feats
-
+            Resource.EVENT -> {
+                checkNotNull(event) {
+                    "No event with id ${this.value} found"
+                }
+                val settlements = kingdom.getAllSettlements(game).allSettlements
+                when(mode) {
+                    ResourceMode.GAIN -> {
+                        kingdom.ongoingEvents = kingdom.ongoingEvents + createOngoingEvent(
+                            id = event.id,
+                            isSettlementEvent = event.traits.contains(KingdomEventTrait.SETTLEMENT.value),
+                            settlements = settlements,
+                        )
+                    }
+                    ResourceMode.LOSE -> {
+                        val events = kingdom.getOngoingEvents()
+                            .filter { it.event.id == event.id }
+                        if (events.isNotEmpty()) {
+                            val indexToRemove = if (events.size > 1) {
+                                removeEvent(events, settlements)
+                            } else {
+                                events.first().eventIndex
+                            }
+                            kingdom.ongoingEvents = kingdom.ongoingEvents
+                                .filterIndexed { index, _ -> index != indexToRemove }
+                                .toTypedArray()
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -366,6 +448,7 @@ suspend fun executeResourceButton(
         resourceDieSize = realm.sizeInfo.resourceDieSize,
         activityId = activityId,
         chosenFeats = chosenFeats,
+        game = game,
     )
     beforeKingdomUpdate(previous, kingdom)
     actor.setKingdom(kingdom)

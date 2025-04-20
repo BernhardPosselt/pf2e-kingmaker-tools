@@ -116,36 +116,41 @@ fun KingdomData.getOngoingEvents(applyBlacklist: Boolean = false): List<OngoingE
     }
 }
 
-private fun RawKingdomEventOutcome.translate() =
+private fun RawKingdomEventOutcome.translate(events: Array<RawKingdomEvent>) =
     copy(
-        msg = insertButtons(t(msg))
+        msg = insertButtons(t(msg), events)
     )
 
-private fun RawKingdomEventStage.translate() =
+private fun RawKingdomEventStage.translate(events: Array<RawKingdomEvent>) =
     copy(
-        criticalSuccess = criticalSuccess?.let { it.translate() },
-        success = success?.let { it.translate() },
-        failure = failure?.let { it.translate() },
-        criticalFailure = criticalFailure?.let { it.translate() },
+        criticalSuccess = criticalSuccess?.let { it.translate(events) },
+        success = success?.let { it.translate(events) },
+        failure = failure?.let { it.translate(events) },
+        criticalFailure = criticalFailure?.let { it.translate(events) },
     )
 
-private fun RawKingdomEvent.translate() =
+private fun RawKingdomEvent.translate(events: Array<RawKingdomEvent>) =
     copy(
-        name = t(name),
-        description = insertButtons(t(description)),
+        description = insertButtons(t(description), events),
         special = special?.let { t(it) },
         resolution = resolution?.let { t(it) },
         location = location?.let { t(it) },
-        stages = stages.map { it.translate() }.toTypedArray(),
+        stages = stages.map { it.translate(events) }.toTypedArray(),
         automationNotes = automationNotes?.let { t(it) },
     )
 
 private var translatedKingdomEvents = emptyArray<RawKingdomEvent>()
 
-fun translateKingdomEvents() {
+
+fun translateKingdomEvents(): Array<RawKingdomEvent> {
+    // name needs to be translated first to then translate @gainEvent buttons
     translatedKingdomEvents = kingdomEvents
-        .map { it.translate() }
+        .map { it.copy(name = t(it.name),) }
         .toTypedArray()
+    translatedKingdomEvents = translatedKingdomEvents
+        .map { it.translate(translatedKingdomEvents) }
+        .toTypedArray()
+    return translatedKingdomEvents
 }
 
 fun KingdomData.getEvents(applyBlacklist: Boolean = false): Array<RawKingdomEvent> {

@@ -12,7 +12,6 @@
     "title": "activities.abandon-hex.title",
     "description": "activities.abandon-hex.description",
     "requirement": "activities.abandon-hex.requirement",
-    "automationNotes": "activities.abandon-hex.automationNotes",
     "criticalSuccess": {
         "msg": "activities.abandon-hex.criticalSuccess.msg"
     },

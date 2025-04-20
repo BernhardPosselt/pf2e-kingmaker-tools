@@ -389,6 +389,7 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "pickEventToRemove": "Pick Event to Remove",
       "perform": "Perform",
       "resolve": "Resolve",
       "homebrew": "Homebrew",
@@ -1260,6 +1261,7 @@
         "rolledResourceDice": "{location, select, chat {{mode, select, gain {Gaining} other {Losing}}} other {{mode, select, gain {Gain} other {Lose}}}} {multiple, select, true {Multiple} other {}} {count} Rolled Resource Dice of Rolled Resource Dice {turn, select, next {Next Turn} other {}}"
       },
       "resource": {
+        "event": "{location, select, chat {{mode, select, gain {Experiencing} other {Resolving}}} other {{mode, select, gain {Experience} other {Resolve}}}} a {eventName} Kingdom Event",
         "resourceDice": "{location, select, chat {{mode, select, gain {Gaining} other {Losing}}} other {{mode, select, gain {Gain} other {Lose}}}} {multiple, select, true {Multiple} other {}} {count, plural, =1 {1 Resource Dice} other {# Resource Dice}} {turn, select, next {Next Turn} other {}}",
         "resourcePoints": "{location, select, chat {{mode, select, gain {Gaining} other {Losing}}} other {{mode, select, gain {Gain} other {Lose}}}} {multiple, select, true {Multiple} other {}} {count, plural, =1 {1 Resource Point} other {# Resource Points}} {turn, select, next {Next Turn} other {}}",
         "crime": "{location, select, chat {{mode, select, gain {Gaining} other {Losing}}} other {{mode, select, gain {Gain} other {Lose}}}} {multiple, select, true {Multiple} other {}} {count} Crime {turn, select, next {Next Turn} other {}}",
@@ -2515,7 +2517,6 @@
         "title": "Abandon Hex",
         "description": "<p>After careful consideration, you decide that you would rather not hold onto a particular hex as part of your claimed territory. You renounce your claim to it and pull back any settlers or explorers. Attempt a basic Exploration or Wilderness check. You can abandon more than one hex at a time, but each additional hex you abandon increases the DC of this check by 1.</p>",
         "requirement": "The hex to be abandoned must be controlled.",
-        "automationNotes": "If listed, Kingdom Events need to be run by hand during the event phase.",
         "criticalSuccess": {
           "msg": "<p>You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. @gain1ResourcePoints per abandoned hex.</p>"
         },
@@ -2523,10 +2524,10 @@
           "msg": "<p>You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Settlers and explorers return and resettle elsewhere in your kingdom, bringing with them bits of salvage from the abandoned hexes. @gain1Unrest</p>"
         },
         "failure": {
-          "msg": "<p>You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Some citizens become disgruntled refugees who refuse to leave the hex. @gain2Unrest and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, your kingdom experiences a Squatters kingdom event automatically in addition to any other event that might occur.</p>"
+          "msg": "<p>You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Some citizens become disgruntled refugees who refuse to leave the hex. @gain2Unrest and then attempt a @Check[type:flat|dc:6]. If you fail, the refugees become bandits, and during your next Event phase, @gain1SquattersEvent in addition to any other event that might occur.</p>"
         },
         "criticalFailure": {
-          "msg": "<p>You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Some citizens become disgruntled refugees who refuse to leave the hex. @gain3Unrest and automatically experience a Bandit Activity kingdom event.</p>"
+          "msg": "<p>You abandon the hex or hexes, decreasing your kingdom's Size by 1 per hex abandoned. Some citizens become disgruntled refugees who refuse to leave the hex. @gain3Unrest and automatically @gain1BanditActivityEvent.</p>"
         },
         "special": "The Unrest gained from abandoning a hex doubles if it includes a settlement. A settlement in an abandoned hex becomes a Freehold."
       },
@@ -2961,7 +2962,7 @@
           "msg": "<p>You fail to establish a Farmland hex.</p>"
         },
         "criticalFailure": {
-          "msg": "<p>You fail to establish a Farmland hex, and your attempt potentially causes the spread of a blight. At the start of each of the next two Event phases, attempt a @Check[type:flat|dc:6|showDC:all]; on a failure, your kingdom experiences a Crop Failure event in this and all adjacent hexes.</p>"
+          "msg": "<p>You fail to establish a Farmland hex, and your attempt potentially causes the spread of a blight. At the start of each of the next two Event phases, attempt a @Check[type:flat|dc:6|showDC:all]; on a failure, @gain1CropFailureEvent in this and all adjacent hexes.</p>"
         }
       },
       "establish-settlement": {
@@ -3091,7 +3092,7 @@
           "msg": "<p>The false event fails to manifest, and rumors of the truth spread throughout the kingdom. @gain1Unrest. You cannot attempt False Victory on your next Kingdom turn.</p>"
         },
         "criticalFailure": {
-          "msg": "<p>The truth comes out, and the citizens revolt against this attempt to manipulate them. A Public Scandal event takes place during this kingdom’s event phase, in addition to any other events that would normally take place. Attempt a DC @Check[type:flat|dc:11|showDC:all] check. On a success, the Public Scandal involves a randomly determined leader, but on a failure, the blame falls on Kanerah. Regardless of how the Public Scandal plays out, you cannot attempt False Victory again for 6 Kingdom turns.</p>"
+          "msg": "<p>The truth comes out, and the citizens revolt against this attempt to manipulate them. @gain1PublicScandalEvent in addition to any other events that would normally take place. Attempt a DC @Check[type:flat|dc:11|showDC:all] check. On a success, the Public Scandal involves a randomly determined leader, but on a failure, the blame falls on your leader. Regardless of how the Public Scandal plays out, you cannot attempt False Victory again for 6 Kingdom turns.</p>"
         }
       },
       "focused-attention-vk": {
@@ -3369,7 +3370,7 @@
           "msg": "<p>You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature.</p>"
         },
         "criticalFailure": {
-          "msg": "<p>You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature. Your attempts at Irrigation are so completely useless that they become breeding grounds for disease. @gain1Unrest. From this point onward, at the start of your Kingdom turn’s Event phase, attempt a @Check[type:flat|dc:4]. This flat check’s DC increases by 1 for each hex in your kingdom that contains a critically failed attempt at Irrigation. If you fail this flat check, your kingdom suffers a Plague event in addition to any other event it might have. You can attempt this activity again in a later Kingdom turn to undo a critically failed Irrigation attempt.</p>"
+          "msg": "<p>You fail to build workable systems or to restore a previous critical failure, and the hex does not gain the river or lake terrain feature. Your attempts at Irrigation are so completely useless that they become breeding grounds for disease. @gain1Unrest. From this point onward, at the start of your Kingdom turn’s Event phase, attempt a @Check[type:flat|dc:4]. This flat check’s DC increases by 1 for each hex in your kingdom that contains a critically failed attempt at Irrigation. If you fail this flat check, @gain1PlagueEvent in addition to any other event it might have. You can attempt this activity again in a later Kingdom turn to undo a critically failed Irrigation attempt.</p>"
         }
       },
       "manage-trade-agreements": {
@@ -3830,7 +3831,7 @@
           "msg": "<p>You fail to locate a monster, or if you were recruiting a monster you didn’t succeed at recruiting on the previous turn, that monster moves on and you must start the recruitment procedure from scratch in the future.</p>"
         },
         "criticalFailure": {
-          "msg": "<p>You found a monster, but it proves impossible to recruit. Worse, you’ve attracted its attention. A Monster Activity event occurs during the kingdom’s next Event Phase, in addition to any other potential random events.</p>"
+          "msg": "<p>You found a monster, but it proves impossible to recruit. Worse, you’ve attracted its attention. @gain1MonsterActivityEvent in addition to any other potential random events.</p>"
         }
       },
       "relocate-capital": {
@@ -4706,7 +4707,7 @@
         "description": "<p>Your kingdom’s leaders are invited to a festival in a region in which the kingdom has established diplomatic relations. The GM chooses an existing diplomatic ally to send the invitation and should customize the details of that event to match that ally; if your kingdom has no diplomatic relations, this event has no effect.</p><p>When your leaders attend the festival, you can bring up to 4 Resource Dice as “gifts” to the festival; reduce the number of Resource Dice you roll on the next Kingdom turn by this amount. @loseMultiple1ResourceDiceNextTurn</p>",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>You entertain and delight your host and bolster your alliance with their people, and they gratefully reciprocate your gifts. For each Resource Die you brought as a gift, choose a type of Commodity. Then roll the die; you gain that amount of that Commodity</p><ul><li>@gain1rdFood</li><li>@gain1rdOre</li><li>@gain1rdLumber</li><li>@gain1rdLuxuries</li><li>@gain1rdStone</li></ul><p>Attempt a @Check[type:flat|dc:11]. If you are successful, your ally extends a Diplomatic Overture or a Visiting Celebrity event (equal chance of either) during the Event phase of your next Kingdom turn (in addition to any other event that would occur).</p>"
+            "msg": "<p>You entertain and delight your host and bolster your alliance with their people, and they gratefully reciprocate your gifts. For each Resource Die you brought as a gift, choose a type of Commodity. Then roll the die; you gain that amount of that Commodity</p><ul><li>@gain1rdFood</li><li>@gain1rdOre</li><li>@gain1rdLumber</li><li>@gain1rdLuxuries</li><li>@gain1rdStone</li></ul><p>Attempt a @Check[type:flat|dc:11]. If you are successful, your ally extends their hand: @gain1DiplomaticOvertureEvent or @gain1VisitingCelebrityEvent (equal chance of either) during the Event phase of your next Kingdom turn (in addition to any other event that would occur).</p>"
           },
           "success": {
             "msg": "<p>The festival is a delight. If you brought Resource Dice as gifts, choose a Commodity. You gain an amount of that Commodity equal to the number of Resource Dice you brought as gifts</p><ul><li>@gainMultiple1Food</li><li>@gainMultiple1Ore</li><li>@gainMultiple1Lumber</li><li>@gainMultiple1Luxuries</li><li>@gainMultiple1Stone</li></ul>"
@@ -4806,7 +4807,7 @@
             "msg": "<p>The people rise up, with protests and even a few riots taking place as concerned citizens fan the flames of dissent in the kingdom. @gain1Unrest</p>"
           },
           "criticalFailure": {
-            "msg": "<p>The people rise up, with protests and even a few riots taking place as concerned citizens fan the flames of dissent in the kingdom. @gain1d4Unrest. In addition, an Assassination Attempt event takes place immediately after resolving this event, with your goblin companion as the target. The assassin itself should be a non-good, previously unnamed NPC citizen in the PC’s kingdom. They weren’t hired by anyone, instead acting on their own to remove a perceived threat (your goblin companion) to the kingdom’s well-being.</p>"
+            "msg": "<p>The people rise up, with protests and even a few riots taking place as concerned citizens fan the flames of dissent in the kingdom. @gain1d4Unrest. In addition, @gain1AssassinationAttemptEvent immediately after resolving this event, with your goblin companion as the target. The assassin itself should be a non-good, previously unnamed NPC citizen in the PC’s kingdom. They weren’t hired by anyone, instead acting on their own to remove a perceived threat (your goblin companion) to the kingdom’s well-being.</p>"
           }
         }
       },
@@ -4864,7 +4865,7 @@
         "description": "<p>The authorities catch a notorious criminal, exonerate a wrongfully accused innocent, shut down a major criminal operation, or thwart a plot against a settlement. Whatever the case, some injustice that has long vexed your citizens has finally been resolved.</p>",
         "stage-0": {
           "criticalSuccess": {
-            "msg": "<p>The triumph of law and justice invites celebration. @lose1d6Unrest and reduce all Ruins by 1</p> <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul><p>Alternately, if you’re suffering from a continuous Bandit Activity, Cult Activity, Drug Den, Inquisition, Sacrifices, Sensational Crime, Squatters, or Vandals event, you can instead cause that event to end.</p>"
+            "msg": "<p>The triumph of law and justice invites celebration. @lose1d6Unrest and reduce all Ruins by 1</p> <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul><p>Alternately, if you’re suffering from a continuous Bandit Activity, Cult Activity, Drug Den, Inquisition, Sacrifices, Sensational Crime, Squatters, or Vandals event, you can instead cause that event to end.</p><ul><li>@lose1BanditActivityEvent</li><li>@lose1CultActivityEvent</li><li>@lose1DrugDenEvent</li><li>@lose1InquisitionEvent</li><li>@lose1SacrificesEvent</li><li>@lose1SensationalCrimeEvent</li><li>@lose1SquattersEvent</li><li>@lose1VandalsEvent</li></ul>"
           },
           "success": {
             "msg": "<p>A celebration of the common good delights the locals. @lose1d4Unrest or reduce two Ruins of your choice by 1</p><ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>"
@@ -4950,7 +4951,7 @@
             "msg": "<p>The monster hunters fail in their attempt to hunt a creature, but the kingdom was, if only for a short while, distracted by the attempt. @lose1Unrest</p>"
           },
           "criticalFailure": {
-            "msg": "<p>The monster hunters confront a Huge (or larger) monster but fail to defeat it. Worse, the monster follows the surviving hunters back home and attacks the kingdom’s capital city! @gain1d4Unrest and increase a Ruin of your choice by 1</p><ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul><p>The monster then retreats to the wilderness, but it continues to be a danger. A Monster Activity event automatically takes place during the next Kingdom turn as this creature continues to threaten the region.</p>"
+            "msg": "<p>The monster hunters confront a Huge (or larger) monster but fail to defeat it. Worse, the monster follows the surviving hunters back home and attacks the kingdom’s capital city! @gain1d4Unrest and increase a Ruin of your choice by 1</p><ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul><p>The monster then retreats to the wilderness, but it continues to be a danger. @gain1MonsterActivityEvent during the next Kingdom turn as this creature continues to threaten the region.</p>"
           }
         }
       },
@@ -5035,7 +5036,7 @@
             "msg": "<p>Although the nobles had good intentions, bickering among individual aristocrats ultimately prevents the project from ever taking place.</p>"
           },
           "criticalFailure": {
-            "msg": "<p>Although the nobles had good intentions, bickering among individual aristocrats ultimately prevents the project from ever taking place. In addition, the bickering persists. @gain1Unrest and attempt a @Check[type:flat|dc:11] On a failure, your kingdom suffers a Feud event on the next turn’s Event phase (in addition to any other event).</p>"
+            "msg": "<p>Although the nobles had good intentions, bickering among individual aristocrats ultimately prevents the project from ever taking place. In addition, the bickering persists. @gain1Unrest and attempt a @Check[type:flat|dc:11] On a failure, @gain1FeudEvent on the next turn’s Event phase (in addition to any other event).</p>"
           }
         }
       },
@@ -5106,7 +5107,7 @@
             "msg": "<p>The plague spreads and claims more victims. @gain1d6Unrest and increase all Ruins by 1</p> <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul>"
           },
           "criticalFailure": {
-            "msg": "<p>The plague spreads and claims more victims. @gain1d6Unrest and increase all Ruins by 1</p> <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul><p>In addition, the plague spreads to the nearest unaffected settlement in your kingdom. Treat additional plagues in different settlements as separate continuous Plague events.</p>"
+            "msg": "<p>The plague spreads and claims more victims. @gain1d6Unrest and increase all Ruins by 1</p> <ul><li>@gain1Corruption</li><li>@gain1Crime</li><li>@gain1Decay</li><li>@gain1Strife</li></ul><p>In addition, the plague spreads to the nearest unaffected settlement in your kingdom: @gain1PlagueEvent Treat additional plagues in different settlements as separate continuous Plague events.</p>"
           }
         }
       },
@@ -5158,7 +5159,7 @@
             "msg": "<p>Rumors that the affliction might be beyond the party’s capability to stop make it difficult to quell fear. @gain1Unrest</p>"
           },
           "criticalFailure": {
-            "msg": "<p>As failure, but the rumors spread more quickly and have kernels of truth to them. @gain1d4Unrest, and at the end of the next day, a Cult event automatically happens.</p>"
+            "msg": "<p>As failure, but the rumors spread more quickly and have kernels of truth to them. @gain1d4Unrest, and at the end of the next day, @gain1CultActivityEvent</p>"
           }
         }
       },
@@ -5301,7 +5302,6 @@
       "squatters": {
         "name": "Squatters",
         "description": "<p>An empty lot in your settlement is taken over by desperate people unable to find adequate work or housing. They set up camp with tents, wagons, and shanties. You cannot use the lot for anything until the squatters are given places to live.</p>",
-        "automationNotes": "Consumption increase per settlement on a Critical Failure is not implemented",
         "special": "If the settlement has a Sewer System, most of the squatters opt to live there instead; gain a +2 item bonus to checks to resolve this event.",
         "resolution": "This continuous event ends when you achieve a critical success on the check or when you build a Residential structure in the lot the Squatters have chosen to live in.",
         "location": "The settlement with the highest Consumption in the kingdom or the largest settlement in the kingdom (as chosen by the GM)",
@@ -5322,7 +5322,7 @@
             "msg": "<p>The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. @gain1d4Unrest</p>"
           },
           "criticalFailure": {
-            "msg": "<p>The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. @gain1d4Unrest. In addition, on your next Kingdom turn attempt a @Check[type:flat|dc:6]; on failure, the squatters spread to the nearest empty lot in the settlement, creating a separate continuous Squatters event starting with your next Kingdom turn. In addition, the squatters increase the settlement’s Consumption by 1 each month until the event is resolved.</p>",
+            "msg": "<p>The squatters refuse to leave their lot and other citizens are split, with some decrying their mistreatment while others call for harsh measures to drive them out. @gain1d4Unrest. In addition, on your next Kingdom turn attempt a @Check[type:flat|dc:6]; on failure, the squatters spread to the nearest empty lot in the settlement, @gain1SquattersEvent starting with your next Kingdom turn. In addition, the squatters increase the settlement’s Consumption by 1 each month until the event is resolved.</p>",
             "modifiers": {
               "increasedConsumption": {
                 "name": "Squatters Increase Consumption by 1",
