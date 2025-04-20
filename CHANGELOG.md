@@ -29,8 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Correctly exclude all V&K activities when first creating a kingdom sheet
 * Automatically enable Civil Service bonus
 * Fix Fame & Fortune
-* Fix Deploy Army Skills
-* Fix leadership lores with containing characters
+* Fix Deploy Army skills
+* Fix leadership lores not working when containing special characters
 
 ## [4.8.0] - 2025-04-09
 
