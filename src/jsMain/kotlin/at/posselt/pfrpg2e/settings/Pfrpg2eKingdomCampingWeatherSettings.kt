@@ -260,7 +260,6 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     private object nonUserVisibleSettings {
         val booleans = mapOf(
             "enableSheltered" to false,
-            "disableFirstRunMessage" to false,
         )
         val strings = mapOf(
             "currentWeatherFx" to "none",
@@ -276,6 +275,13 @@ object Pfrpg2eKingdomCampingWeatherSettings {
             key = "hideBuiltinKingdomSheet",
             name = t("settings.hideBuiltinKingdomSheet"),
             hint = t("settings.hideBuiltinKingdomSheetHelp"),
+            default = false,
+            requiresReload = true,
+        )
+        game.settings.registerScalar(
+            key = "disableFirstRunMessage",
+            name = t("settings.disableFirstRunMessage"),
+            hint = t("settings.disableFirstRunMessageHelp"),
             default = false,
             requiresReload = true,
         )

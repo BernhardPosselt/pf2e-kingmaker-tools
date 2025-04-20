@@ -43,6 +43,8 @@
       "untrainedProficiencyMode": "Always Increase Untrained Skills By"
     },
     "settings": {
+      "disableFirstRunMessage": "Disable First Run Message",
+      "disableFirstRunMessageHelp": "If checked, will hide initial setup instructions and guidelines",
       "hideBuiltinKingdomSheet": "Hide PF2 System Kingdom Sheet Icon",
       "hideBuiltinKingdomSheetHelp": "If enabled, hides the built in kingdom sheet icon on the party actor",
       "climateSettings": "Climate Settings",

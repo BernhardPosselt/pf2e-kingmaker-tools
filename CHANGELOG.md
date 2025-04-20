@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add modifiers that increase consumption
 * Automate Squatters event consumption increase
 * Allow dragging actor images from a recipe to another recipe
+* Allow users to re-enable the first run message
 
 ### Changed
 * Require FoundryVTT 13
