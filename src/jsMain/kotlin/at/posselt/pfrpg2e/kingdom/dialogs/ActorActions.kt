@@ -37,6 +37,7 @@ class ActorActions(
     title = actor.name,
     template = "applications/settings/actor-actions.hbs",
     id = "kmActorActions",
+    classes = setOf("km-actor-actions"),
 ) {
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {

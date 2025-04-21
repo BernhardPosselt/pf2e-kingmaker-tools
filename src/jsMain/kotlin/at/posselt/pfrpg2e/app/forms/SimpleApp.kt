@@ -17,13 +17,13 @@ abstract class SimpleApp<T : HandlebarsRenderContext>(
     title: String,
     template: String,
     controls: Array<MenuControl> = emptyArray(),
-    classes: Array<String> = emptyArray(),
-    scrollable: Array<String> = emptyArray(),
+    classes: Set<String> = emptySet(),
+    scrollable: Set<String> = emptySet(),
     width: Int? = undefined,
     height: Int? = null,
     id: String? = null,
     resizable: Boolean? = undefined,
-): App<T>(
+) : App<T>(
     HandlebarsFormApplicationOptions(
         window = Window(
             title = title,
@@ -37,25 +37,35 @@ abstract class SimpleApp<T : HandlebarsRenderContext>(
                 )
             }.toTypedArray()
         ),
-        position = if (height == null) {
-            ApplicationPosition(
-                width = width,
-            )
-        } else {
-            ApplicationPosition(
-                width = width,
-                height = height,
-            )
-        },
-        classes = classes,
+        classes = (classes + setOf("km-simple-app")).toTypedArray(),
         tag = "div",
         parts = recordOf(
             "div" to HandlebarsTemplatePart(
                 template = resolveTemplatePath(template),
-                scrollable = scrollable,
+                scrollable = scrollable.toTypedArray(),
             )
         )
-    ).apply {
-        id?.let { this.unsafeCast<Record<String, Any>>()["id"] = it }
-    }
+    )
+        .apply {
+            id?.let { this.unsafeCast<Record<String, Any>>()["id"] = it }
+        }
+        .apply {
+            val position = if (height == null && width != null) {
+                ApplicationPosition(
+                    width = width,
+                )
+            } else if (height != null && width == null) {
+                ApplicationPosition(
+                    height = height,
+                )
+            } else if (height != null && width != null) {
+                ApplicationPosition(
+                    width = width,
+                    height = height,
+                )
+            } else {
+                null
+            }
+            position?.let { this.unsafeCast<Record<String, Any>>()["position"] = it }
+        }
 )

@@ -26,14 +26,16 @@ globalThis.foundryvttKotlinPatches = {};
 
             constructor(config) {
                 const parts = {};
-                super(
-                    copyParts({
-                        ...config,
-                        form: config.form !== undefined ?
-                            {...config.form, handler: Hack._onSubmit}
-                            : undefined,
-                    }, parts)
-                );
+                const parentOptions = copyParts({
+                    ...config,
+                    form: config.form !== undefined ?
+                        {...config.form, handler: Hack._onSubmit}
+                        : undefined,
+                }, parts);
+                if (parentOptions.form === undefined) {
+                    delete parentOptions.form;
+                }
+                super(parentOptions);
                 this.constructor.PARTS = {}
                 copy(parts, this.constructor.PARTS)
             }

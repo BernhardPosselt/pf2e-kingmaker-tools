@@ -57,7 +57,7 @@ private class ArmyTacticsBrowser(
 ) : SimpleApp<ArmyTacticsContext>(
     title = t("kingdom.armyTacticsBrowserTitle", recordOf("armyName" to army.name)),
     template = "applications/kingdom/army-tactics-browser.hbs",
-    classes = arrayOf("km-scroll-application"),
+    classes = setOf("km-scroll-application"),
     id = "kmArmyTactics-${kingdomActor.uuid}",
     width = 600,
 ) {

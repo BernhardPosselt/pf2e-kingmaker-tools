@@ -117,13 +117,13 @@ fun registerMacroDropHooks(game: Game) {
 
 fun registerIcons(actionDispatcher: ActionDispatcher) {
     TypedHooks.onRenderActorDirectory { _, html, _ ->
-        html.querySelectorAll(".party-header")
+        html.querySelectorAll(".folder[data-party]")
             .asList()
             .filterIsInstance<HTMLElement>()
             .forEach {
-                val id = it.dataset["documentId"]
+                val id = it.dataset["entryId"]
                 if (id != null) {
-                    val insertAfter = it.querySelector("h3")
+                    val insertAfter = it.querySelector(".folder-name")
                     if (game.user.isGM) {
                         insertAfter?.insertAdjacentElement(
                             "afterend", createPartyActorIcon(

@@ -55,8 +55,7 @@ private class ArmyBrowser(
 ) : SimpleApp<ArmiesContext>(
     title = t("kingdom.armyBrowserTitle"),
     template = "applications/kingdom/army-browser.hbs",
-    classes = arrayOf("km-scroll-application"),
-    width = 600,
+    classes = setOf("km-scroll-application"),
     id = "kmArmies-${kingdomActor.uuid}",
 ) {
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
