@@ -15,6 +15,16 @@
                             {{label}}
                         </button>
                         {{/each}}
+                        {{#if allowToggleContinuous}}
+                        <button class="km-mark-continuous"
+                                type="button"
+                                data-event-index="{{@index}}"
+                                title="{{#if becameContinuous}}{{localizeKM "kingdom.unsetEventAsContinuous"}}{{else}}{{localizeKM "kingdom.setEventAsContinuous"}}{{/if}}"
+                                data-action="toggle-continuous"
+                        >
+                            {{#if becameContinuous}}<i class="fa-solid fa-bookmark"></i>{{else}}<i class="fa-regular fa-bookmark"></i>{{/if}}
+                        </button>
+                        {{/if}}
                         <button data-index="{{@index}}"
                                 type="button"
                                 data-action="handle-event">

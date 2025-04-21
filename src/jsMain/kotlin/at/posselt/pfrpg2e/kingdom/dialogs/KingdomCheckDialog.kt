@@ -14,11 +14,11 @@ import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.checks.determineDegreeOfSuccess
-import at.posselt.pfrpg2e.data.events.KingdomEvent
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.activities.ActivityDcType
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
@@ -107,7 +107,6 @@ import kotlin.sequences.map
 import kotlin.sequences.toSet
 import kotlin.takeIf
 import kotlin.text.isNotBlank
-import kotlin.text.startsWith
 import kotlin.text.toInt
 import kotlin.to
 
@@ -260,7 +259,7 @@ private data class CheckDialogParams(
     val structure: Structure? = null,
     val activity: RawActivity? = null,
     val armyConditions: ArmyConditionInfo? = null,
-    val event: KingdomEvent? = null,
+    val event: OngoingEvent? = null,
     val eventStageIndex: Int = 0,
     val eventIndex: Int = 0,
     val rollOptions: Set<String> = emptySet(),
@@ -453,7 +452,7 @@ private class KingdomCheckDialog(
             assurance = assurance,
             notes = notes,
             eventStageIndex = eventStageIndex,
-            event = event,
+            event = event?.event,
             eventIndex = eventIndex,
             isFreeAndFair = false,
             modifierWithoutFreeAndFair = modifierWithoutFreeAndFair,
@@ -510,7 +509,7 @@ private class KingdomCheckDialog(
             rollOptions = rollOptions + params.rollOptions,
             structure = structure,
             event = event,
-            eventStage = event?.stages[eventStageIndex],
+            eventStage = event?.event?.stages[eventStageIndex],
             structureIds = settlementResult.current?.constructedStructures?.map { it.id }?.toSet().orEmpty(),
             waterBorders = settlementResult.current?.waterBorders ?: 0,
         )
@@ -777,7 +776,9 @@ suspend fun kingdomCheckDialog(
     rollOptions: Set<String> = emptySet(),
     selectedLeader: Leader?,
     groups: Array<RawGroup>,
+    events: List<OngoingEvent>,
 ) {
+    val settlementResult = kingdom.getAllSettlements(game)
     val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
     val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
     val vacancies = kingdom.vacancies(
@@ -790,9 +791,15 @@ suspend fun kingdomCheckDialog(
             val activity = check.activity
             val realm = game.getRealmData(kingdomActor, kingdom)
             val activityDc = activity.dc
-            console.log(activity.dc)
-            val group = if (activityDc is String && activityDc.startsWith("negotiation")) {
-                pickGroup(groups)
+            val group = if (activityDc is String &&
+                (activityDc == ActivityDcType.NEGOTIATION.value || activityDc == ActivityDcType.NEGOTIATION_OR_CONTROL.value)
+            ) {
+                pickGroup(groups, required=false)
+            } else {
+                null
+            }
+            val event = if (activityDc == ActivityDcType.EVENT.value) {
+                pickEvent(events, settlementResult.allSettlements, required=false)
             } else {
                 null
             }
@@ -802,6 +809,7 @@ suspend fun kingdomCheckDialog(
                 rulerVacant = vacancies.ruler,
                 enemyArmyScoutingDcs = game.getSelectedArmies().map { it.system.scouting },
                 groupDc = group?.negotiationDC,
+                eventModifier = event?.event?.modifier
             ) ?: 0)
             val skills = getValidActivitySkills(
                 ranks = kingdom.parseSkillRanks(
@@ -822,7 +830,8 @@ suspend fun kingdomCheckDialog(
                 phase = KingdomPhase.fromString(activity.phase),
                 activity = activity,
                 armyConditions = game.getSelectedArmyConditions(),
-                rollOptions = if(group?.atWar == true) setOf("group-at-war") else emptySet(),
+                rollOptions = if (group?.atWar == true) setOf("group-at-war") else emptySet(),
+                event = event,
             )
         }
 
@@ -887,17 +896,20 @@ suspend fun kingdomCheckDialog(
                 dc = dc,
                 validSkills = stage.skills,
                 phase = KingdomPhase.EVENT,
-                event = event,
+                event = check.ongoingEvent,
                 eventStageIndex = stageIndex,
                 eventIndex = eventIndex,
             )
         }
     }
-    val settlementResult = kingdom.getAllSettlements(game)
     val baseModifiers = kingdom.createModifiers(
         settlements = settlementResult,
         armyConditions = params.armyConditions,
-    ) + params.activity?.parseModifiers().orEmpty() + params.event?.modifiers.orEmpty()
+    ) + params.activity?.parseModifiers().orEmpty() + if(check is CheckType.HandleEvent) {
+        params.event?.event?.modifiers.orEmpty()
+    } else {
+        emptyList()
+    }
     KingdomCheckDialog(
         params = params,
         afterRoll = afterRoll,

@@ -1,8 +1,8 @@
 package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
-import at.posselt.pfrpg2e.data.events.KingdomEvent
 import at.posselt.pfrpg2e.data.events.KingdomEventStage
+import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.data.kingdom.KingdomPhase
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
@@ -174,7 +174,7 @@ fun RawExpression<Boolean>.parse(): Expression<Boolean> {
         val component2 = p.`in`.component2()
         In(
             needle = p.`in`.component1(),
-            haystack = if(component2 is Array<*>) {
+            haystack = if (component2 is Array<*>) {
                 component2.toSet()
             } else {
                 component2
@@ -302,7 +302,7 @@ fun KingdomData.createExpressionContext(
     usedSkill: KingdomSkill?,
     rollOptions: Set<String>,
     structure: Structure?,
-    event: KingdomEvent?,
+    event: OngoingEvent?,
     eventStage: KingdomEventStage?,
     structureIds: Set<String>,
     waterBorders: Int,
@@ -333,12 +333,17 @@ fun KingdomData.createExpressionContext(
         structure = structure,
         anarchyAt = calculateAnarchy(chosenFeats),
         atWar = atWar,
-        eventTraits = event?.traits?.map { it.value }?.toSet().orEmpty(),
+        eventTraits = event?.event?.traits?.map { it.value }?.toSet()
+            .orEmpty() + if (event?.becameContinuous == true) {
+            setOf(KingdomEventTrait.CONTINUOUS.value)
+        } else {
+            emptySet()
+        },
         eventLeader = eventStage?.leader,
-        event = event?.id,
+        event = event?.event?.id,
         structures = structureIds,
         waterBorders = waterBorders,
-        settlementEvents = if(settlementSceneId == null) {
+        settlementEvents = if (settlementSceneId == null) {
             emptySet()
         } else {
             getOngoingEvents()

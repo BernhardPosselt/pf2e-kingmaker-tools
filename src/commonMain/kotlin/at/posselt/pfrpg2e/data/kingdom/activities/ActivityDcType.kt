@@ -10,6 +10,7 @@ enum class ActivityDcType: ValueEnum, Translatable {
     CONTROL,
     CUSTOM,
     NONE,
+    EVENT,
     NEGOTIATION,
     NEGOTIATION_OR_CONTROL,
     SCOUTING;

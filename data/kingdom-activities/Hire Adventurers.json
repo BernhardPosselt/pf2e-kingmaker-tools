@@ -4,7 +4,7 @@
   "fortune": false,
   "enabled": true,
   "phase": "leadership",
-  "dc": "custom",
+  "dc": "event",
   "title": "activities.hire-adventurers.title",
   "automationNotes": "activities.hire-adventurers.automationNotes",
   "description": "activities.hire-adventurers.description",

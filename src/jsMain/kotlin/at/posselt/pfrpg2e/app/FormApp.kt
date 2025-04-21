@@ -12,6 +12,7 @@ import com.foundryvtt.core.applications.api.ApplicationPosition
 import com.foundryvtt.core.applications.api.HandlebarsTemplatePart
 import com.foundryvtt.core.applications.api.Window
 import com.foundryvtt.core.applications.ux.FormDataExtended
+import com.foundryvtt.core.documents.ClientDocument
 import com.foundryvtt.core.game
 import js.core.Void
 import js.objects.JsPlainObject
@@ -47,8 +48,8 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
     height: Int? = null,
     id: String? = null,
     resizable: Boolean? = undefined,
+    protected val syncedDocument: ClientDocument? = null,
     protected val debug: Boolean = false,
-    protected val renderOnSubmit: Boolean = true,
     protected val dataModel: JsClass<out DataModel>,
 //    protected val initial: O
 ) : App<T>(
@@ -91,6 +92,10 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
         id?.let { this.unsafeCast<Record<String, Any>>()["id"] = it }
     }
 ) {
+    init {
+        syncedDocument?.apps[super.id] = this
+    }
+
     protected var isFormValid: Boolean = true
 
     protected fun isValid() =
@@ -129,7 +134,7 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
                 console.log("Data model object ${JSON.stringify(dataModelData)}")
             }
             onParsedSubmit(dataModelData).await()
-            if (renderOnSubmit) {
+            if (syncedDocument == null) {
                 render()
             }
             null

@@ -4,7 +4,7 @@
   "fortune": true,
   "enabled": false,
   "phase": "leadership",
-  "dc": "custom",
+  "dc": "event",
   "title": "activities.deliberate-planning.title",
   "description": "activities.deliberate-planning.description",
   "skills": {

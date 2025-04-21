@@ -240,11 +240,10 @@ class CampingSheet(
         MenuControl(label = t("applications.help"), action = "help"),
     ),
     scrollable = arrayOf(".km-camping-activities-wrapper", ".km-camping-actors"),
-    renderOnSubmit = false,
+    syncedDocument = actor,
     debug = true,
 ) {
     init {
-        actor.apps[id] = this
         onDocumentRefDragstart(".km-camping-actor")
         onDocumentRefDragstart(".km-recipe-actor")
         onDocumentRefDrop(".km-camping-add-actor") { _, documentRef ->

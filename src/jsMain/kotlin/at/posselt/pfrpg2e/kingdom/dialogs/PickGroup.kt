@@ -17,23 +17,26 @@ external interface PickGroupContext {
 
 @JsPlainObject
 external interface PickGroupData {
-    val index: Int
+    val index: Int?
 }
 
-suspend fun pickGroup(groups: Array<RawGroup>): RawGroup {
-    if (groups.isEmpty()) {
+suspend fun pickGroup(groups: Array<RawGroup>, required: Boolean): RawGroup? {
+    if (groups.isEmpty() && required) {
         val message = t("kingdom.noGroupsAvailable")
         ui.notifications.error(message)
         throw IllegalArgumentException(message)
+    } else if (groups.isEmpty() && !required) {
+        return null
     }
     val sortedGroups = groups.sortedBy { it.name }
-    return awaitablePrompt<PickGroupData, RawGroup>(
+    return awaitablePrompt<PickGroupData, RawGroup?>(
         title = t("kingdom.pickGroup"),
         templateContext = PickGroupContext(
             formRows = formContext(
                 Select(
                     name = "index",
                     value = "0",
+                    required = required,
                     label = t("kingdom.group"),
                     options = sortedGroups.mapIndexed { index, group ->
                         SelectOption(
@@ -45,5 +48,5 @@ suspend fun pickGroup(groups: Array<RawGroup>): RawGroup {
             )
         ),
         templatePath = "components/forms/form.hbs",
-    ) { data, _ -> sortedGroups[data.index] }
+    ) { data, _ -> data.index?.let { index -> sortedGroups[index] } }
 }

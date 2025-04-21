@@ -193,6 +193,7 @@
         </section>
         <section class="km-kingdom-sheet-section">
             <h3>{{localizeKM "kingdom.activeEvents"}} <span class="km-header-right-align" {{#unless isGM}}hidden{{/unless}}><button type="button" data-action="add-event">{{localizeKM "kingdom.addEvent"}}</button></span></h3>
+            <p>{{localizeKM "kingdom.continuousTraitHelp"}}</p>
             {{> kingdom-events ongoingEvents=ongoingEvents isGM=isGM}}
         </section>
         <section class="km-kingdom-sheet-section">

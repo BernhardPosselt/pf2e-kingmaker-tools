@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.utils.t
+import com.foundryvtt.core.ui
 import kotlinx.js.JsPlainObject
 
 
@@ -19,16 +20,24 @@ external interface RemoveEventContext {
 
 @JsPlainObject
 external interface RemoveEventData {
-    val index: Int
+    val index: Int?
 }
 
 
-suspend fun removeEvent(
+suspend fun pickEvent(
     events: List<OngoingEvent>,
     settlements: List<Settlement>,
-): Int {
-    return awaitablePrompt<RemoveEventData, Int>(
-        title = t("kingdom.pickEventToRemove"),
+    required: Boolean,
+): OngoingEvent? {
+    if (events.isEmpty() && required) {
+        val message = t("kingdom.noEventsAvailable")
+        ui.notifications.error(message)
+        throw IllegalArgumentException(message)
+    } else if (events.isEmpty() && !required) {
+        return null
+    }
+    return awaitablePrompt<RemoveEventData, OngoingEvent?>(
+        title = t("kingdom.pickEvent"),
         templateContext = RemoveEventContext(
             formRows = formContext(
                 Select(
@@ -36,6 +45,7 @@ suspend fun removeEvent(
                     label = t("kingdom.event"),
                     value = events.first().eventIndex.toString(),
                     overrideType = OverrideType.NUMBER,
+                    required = required,
                     options = events.mapIndexed { index, it ->
                         val name = it.event.name
                         val settlement = it.settlementSceneId
@@ -51,5 +61,5 @@ suspend fun removeEvent(
             )
         ),
         templatePath = "components/forms/form.hbs",
-    ) { data, _ -> data.index }
+    ) { data, _ -> data.index?.let { index -> events.find { it.eventIndex == index }} }
 }

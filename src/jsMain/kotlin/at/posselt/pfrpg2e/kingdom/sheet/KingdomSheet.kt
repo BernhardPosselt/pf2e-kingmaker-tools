@@ -155,27 +155,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.collections.contains
-import kotlin.collections.count
-import kotlin.collections.filter
-import kotlin.collections.filterIndexed
-import kotlin.collections.filterIsInstance
-import kotlin.collections.filterNot
-import kotlin.collections.find
-import kotlin.collections.firstNotNullOf
-import kotlin.collections.forEach
-import kotlin.collections.getOrNull
-import kotlin.collections.isNotEmpty
-import kotlin.collections.listOf
-import kotlin.collections.map
-import kotlin.collections.mapIndexed
-import kotlin.collections.mapNotNull
-import kotlin.collections.mutableSetOf
-import kotlin.collections.plus
-import kotlin.collections.sortedBy
-import kotlin.collections.sumOf
-import kotlin.collections.toSet
-import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -191,6 +170,7 @@ class KingdomSheet(
     classes = arrayOf("km-kingdom-sheet"),
     id = "kmKingdomSheet-${actor.uuid}",
     width = 1000,
+    syncedDocument = actor,
     controls = arrayOf(
         MenuControl(label = t("kingdom.showPlayers"), action = "show-players", gmOnly = true),
         MenuControl(label = t("kingdom.activities"), action = "configure-activities", gmOnly = true),
@@ -223,7 +203,6 @@ class KingdomSheet(
     private val openedDetails = mutableSetOf<String>()
 
     init {
-        actor.apps[id] = this
         appHook.onDeleteScene { _, _, _ -> render() }
         appHook.onCreateTile { _, _, _, _ -> render() }
         appHook.onUpdateTile { _, _, _, _ -> render() }
@@ -609,6 +588,24 @@ class KingdomSheet(
                 }
             }
 
+            "toggle-continuous" -> buildPromise {
+                val eventIndex = target.dataset["eventIndex"]?.toInt()
+                checkNotNull(eventIndex) { "event index is null" }
+                actor.getKingdom()?.let { kingdom ->
+                    kingdom.ongoingEvents = kingdom.ongoingEvents
+                        .mapIndexed { index, event ->
+                            if (index == eventIndex) {
+                                val isContinuous = event.becameContinuous == true
+                                event.copy(becameContinuous = !isContinuous)
+                            } else {
+                                event
+                            }
+                        }
+                        .toTypedArray()
+                    actor.setKingdom(kingdom)
+                }
+            }
+
             "check-cult-event" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     val dc = getCultEventDC(kingdom)
@@ -735,6 +732,7 @@ class KingdomSheet(
                         check = CheckType.HandleEvent(event),
                         selectedLeader = game.getActiveLeader(),
                         groups = emptyArray(),
+                        events = emptyList(),
                     )
                 }
             }
@@ -952,6 +950,7 @@ class KingdomSheet(
                     check = CheckType.RollSkill(skill),
                     selectedLeader = game.getActiveLeader(),
                     groups = emptyArray(),
+                    events = emptyList(),
                 )
             }
 
@@ -1028,6 +1027,9 @@ class KingdomSheet(
 
                                 else -> kingdom.groups
                             }
+                            val events = when (activity.id) {
+                                else -> kingdom.getOngoingEvents()
+                            }
                             kingdomCheckDialog(
                                 game = game,
                                 kingdom = kingdom,
@@ -1035,6 +1037,7 @@ class KingdomSheet(
                                 check = CheckType.PerformActivity(activity),
                                 selectedLeader = game.getActiveLeader(),
                                 groups = groups,
+                                events = events,
                             )
                         }
                     }

@@ -128,6 +128,7 @@ private class ArmyTacticsBrowser(
                 overrideDc = getLevelBasedDC(item.level),
                 selectedLeader = game.getActiveLeader(),
                 groups = emptyArray(),
+                events = emptyList(),
             )
         }
     }

@@ -389,11 +389,15 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "continuousTraitHelp": "Events that do not possess the Continuous trait can sometimes become Continuous. Use the bookmark icon to manually toggle the Continuous trait so that existing modifiers will match.",
+      "setEventAsContinuous": "Click to add Continuous trait",
+      "unsetEventAsContinuous": "Click to remove Continuous trait",
+      "noEventsAvailable": "No ongoing events available!",
       "noGroupsAvailable": "No groups available, create one under the Trade Agreements tab first or check if they are valid ones for this activity!",
       "pickGroup": "Pick Group",
       "group": "Group",
       "preventPledgeOfFealty": "Pledge of Fealty Blocked",
-      "pickEventToRemove": "Pick Event to Remove",
+      "pickEvent": "Pick Event",
       "perform": "Perform",
       "resolve": "Resolve",
       "homebrew": "Homebrew",
@@ -1037,6 +1041,7 @@
       "none": "None",
       "scouting": "Scouting",
       "negotiation": "Negotiation",
+      "event": "Event",
       "negotiationOrControl": "Negotiation or Control"
     },
     "realmTileType": {
@@ -2890,8 +2895,8 @@
           "msg": "<p>You got too caught up in your theoretical analysis and spent too much time preparing. When you roll to resolve the continuous event you tried to plan for, roll twice and take the worse result.</p>",
           "modifiers": {
             "tooMuchTimePreparing": {
-              "buttonLabel": "Roll twice and take the worse result when resolving continuous event",
-              "name": "Resolving continuous event"
+              "buttonLabel": "Roll Twice and Take the Worse Result When Resolving Continuous Event",
+              "name": "Resolving Deliberately Planned for Event: Critical Failure"
             }
           }
         }

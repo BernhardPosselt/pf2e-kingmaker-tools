@@ -277,6 +277,7 @@ class StructureBrowser(
                     rollOptions = if (repair) setOf("repair-structure") else emptySet(),
                     selectedLeader = game.getActiveLeader(),
                     groups = emptyArray(),
+                    events = emptyList(),
                 )
             }
 

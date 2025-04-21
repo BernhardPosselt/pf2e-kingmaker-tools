@@ -129,6 +129,12 @@
         white-space: nowrap;
     }
 
+    button.km-mark-continuous {
+        i {
+            margin-left: 0 !important;
+        }
+    }
+
     .km-kingdom-sheet-main[data-settlement-type="none"] {
         background-image: url("../../../img/camping/backgrounds/hills-day.webp");
     }

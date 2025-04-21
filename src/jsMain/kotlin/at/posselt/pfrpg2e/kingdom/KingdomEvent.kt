@@ -88,6 +88,7 @@ external interface RawOngoingKingdomEvent {
     val id: String
     var settlementSceneId: String?
     var secretLocation: Boolean?
+    var becameContinuous: Boolean?
 }
 
 data class OngoingEvent(
@@ -96,8 +97,8 @@ data class OngoingEvent(
     val eventIndex: Int,
     val secretLocation: Boolean,
     val settlementSceneId: String?,
+    val becameContinuous: Boolean,
 ) {
-    val stageCount = event.stages.size
     val currentStage = event.stages[stageIndex]
 }
 
@@ -111,6 +112,7 @@ fun KingdomData.getOngoingEvents(applyBlacklist: Boolean = false): List<OngoingE
                 eventIndex = index,
                 secretLocation = ongoing.secretLocation == true,
                 settlementSceneId = ongoing.settlementSceneId,
+                becameContinuous = ongoing.becameContinuous == true,
             )
         }
     }

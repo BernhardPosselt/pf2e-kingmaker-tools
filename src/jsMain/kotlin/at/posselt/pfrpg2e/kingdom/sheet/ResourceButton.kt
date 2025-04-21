@@ -12,7 +12,7 @@ import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.dialogs.createOngoingEvent
-import at.posselt.pfrpg2e.kingdom.dialogs.removeEvent
+import at.posselt.pfrpg2e.kingdom.dialogs.pickEvent
 import at.posselt.pfrpg2e.kingdom.dialogs.requestAmount
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getEvents
@@ -138,10 +138,6 @@ data class ResourceButton(
             val value = match.groups["value"]?.value
             val resourceValue = match.groups["resource"]?.value
             val isEvent = resourceValue?.endsWith("Event") == true
-            if (isEvent) console.log(
-                "------------------------------------------___" + resourceValue,
-                parseEventId(resourceValue!!)
-            )
             val resource = if (isEvent) {
                 Resource.EVENT
             } else {
@@ -411,7 +407,7 @@ data class ResourceButton(
                             .filter { it.event.id == event.id }
                         if (events.isNotEmpty()) {
                             val indexToRemove = if (events.size > 1) {
-                                removeEvent(events, settlements)
+                                pickEvent(events, settlements, required = true)!!.eventIndex
                             } else {
                                 events.first().eventIndex
                             }

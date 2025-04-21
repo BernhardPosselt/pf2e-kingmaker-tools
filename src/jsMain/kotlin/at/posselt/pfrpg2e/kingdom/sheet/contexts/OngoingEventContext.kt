@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
+import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.kingdom.OngoingEvent
 import at.posselt.pfrpg2e.kingdom.SettlementResult
 import at.posselt.pfrpg2e.utils.formatAsModifier
@@ -39,6 +40,8 @@ external interface OngoingEventContext {
     var hideStageButton: Boolean
     var settlement: String?
     var automationNotes: String?
+    var becameContinuous: Boolean
+    var allowToggleContinuous: Boolean
 }
 
 suspend fun List<OngoingEvent>.toContext(
@@ -86,6 +89,8 @@ suspend fun List<OngoingEvent>.toContext(
                 criticalFailure = criticalFailure,
                 open = ("event-${it.event.id}-$index") in openedDetails,
                 automationNotes = it.event.automationNotes,
+                becameContinuous = it.becameContinuous,
+                allowToggleContinuous = !it.event.traits.contains(KingdomEventTrait.CONTINUOUS)
             )
         }
     }

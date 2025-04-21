@@ -76,6 +76,7 @@
             {
               "type": "string",
               "enum": [
+                "event",
                 "control",
                 "custom",
                 "none",

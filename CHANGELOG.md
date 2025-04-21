@@ -20,8 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add Gain Fame button if built building type matches kingdom
 * Add buttons to add and resolve kingdom events
 * Allow tracking of blocked pledge of fealty
-* Pledge of Fealty, Establish Trade Agreement, Send Diplomatic Envoy and Request Foreign Aid now query the Group and its DC when performing the activity
+* Pledge of Fealty, Establish Trade Agreement, Send Diplomatic Envoy and Request Foreign Aid now allow you to pick a group when performing the activity
 * Automate income increase when critically succeeding at building a worksite
+* Deliberate Planning and Hire Adventurers now allow you to pick an Event
+* Add button to mark an event as continuous
 
 ### Changed
 * Require FoundryVTT 13
@@ -31,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* Only re-render kingdom sheet once on changes
 * Filter out lower bonuses in inspect settlement
 * Fix Political Calm bonus
 * Correctly exclude all V&K activities when first creating a kingdom sheet
