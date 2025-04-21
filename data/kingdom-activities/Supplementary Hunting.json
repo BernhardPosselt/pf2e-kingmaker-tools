@@ -7,6 +7,7 @@
   "dc": "control",
   "title": "activities.supplementary-hunting.title",
   "description": "activities.supplementary-hunting.description",
+  "automationNotes": "activities.supplementary-hunting.automationNotes",
   "skills": {
     "wilderness": 0
   },

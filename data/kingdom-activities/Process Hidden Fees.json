@@ -6,6 +6,7 @@
   "phase": "leadership",
   "dc": "control",
   "title": "activities.process-hidden-fees.title",
+  "automationNotes": "activities.process-hidden-fees.automationNotes",
   "description": "activities.process-hidden-fees.description",
   "skills": {
     "trade": 0

@@ -3535,6 +3535,7 @@
       "preventative-measures": {
         "title": "Preventative Measures",
         "description": "<p>You help to organize magical defenses and resources to combat potential upcoming disasters or dangers to the kingdom. Attempt a basic Magic check to determine how effective the magical preparations are.</p>",
+        "automationNotes": "Critical Failure timeout of 1 turn is not tracked",
         "criticalSuccess": {
           "msg": "<p>The next time during this Kingdom turn that you attempt a Kingdom skill check to resolve a dangerous event, you gain a +2 circumstance bonus to the check and, unless you roll a critical failure, the result is improved one degree. If you reach the end of this Kingdom turn and haven’t had a dangerous event, you may decrease one Ruin of your choice by 1</p> <ul><li>@lose1Corruption</li><li>@lose1Crime</li><li>@lose1Decay</li><li>@lose1Strife</li></ul>",
           "modifiers": {
@@ -3560,6 +3561,7 @@
       "process-hidden-fees": {
         "title": "Process Hidden Fees",
         "description": "<p>With your aid, you can process additional taxes, fees, and payments. Attempt a basic Trade check to determine what sorts of additional resources you gather.</p>",
+        "automationNotes": "Failure and Critical Failure timeout of 1 turn is not tracked",
         "criticalSuccess": {
           "msg": "<p>@gain2ResourceDiceNextTurn</p>"
         },
@@ -4157,6 +4159,12 @@
       "spread-the-legend": {
         "title": "Spread the Legend",
         "description": "<p>You work to spread the word of the party’s heroics and achievements, both through word of mouth and by distributing chapbooks or one-sheets detailing their exploits. Attempt a basic Arts check to determine the success of your efforts. If you have secured a printing press for the kingdom, the Arts check gains a +2 item bonus.</p>",
+        "modifiers": {
+          "printingPress": {
+            "name": "Printing Press Secured",
+            "buttonLabel": "Printing Press Secured"
+          }
+        },
         "criticalSuccess": {
           "msg": "<p>Not only do your stories bring pride and patriotism to the nation, but they also help increase its glory. @lose1d6Unrest, and @gain1FameNextTurn. In addition, if the kingdom experiences a dangerous random event during this turn’s Event Phase, reduce that event’s level modifier by 1.</p>",
           "modifiers": {
@@ -4197,6 +4205,7 @@
       "supplementary-hunting": {
         "title": "Supplementary Hunting",
         "description": "<p>Following your advice, rural-dwelling citizens work to supplement stores of food and resources through hunting and trapping. Attempt a basic Wilderness check to gather excess livestock from the local wildlife, ranches, and farms to generate food commodities.</p>",
+        "automationNotes": "Failure and Critical Failure timeout of 1 turn is not tracked",
         "criticalSuccess": {
           "msg": "<p>@gain1d4Food, @gain1Luxuries, and @gain1ResourceDiceNextTurn</p>"
         },

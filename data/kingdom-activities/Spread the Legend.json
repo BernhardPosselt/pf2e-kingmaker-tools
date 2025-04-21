@@ -10,6 +10,15 @@
   "skills": {
     "arts": 0
   },
+  "modifiers": [
+    {
+      "type": "item",
+      "buttonLabel": "activities.spread-the-legend.modifiers.printingPress.buttonLabel",
+      "name": "activities.spread-the-legend.modifiers.printingPress.name",
+      "value": 2,
+      "enabled": false
+    }
+  ],
   "criticalSuccess": {
     "msg": "activities.spread-the-legend.criticalSuccess.msg",
     "modifiers": [
