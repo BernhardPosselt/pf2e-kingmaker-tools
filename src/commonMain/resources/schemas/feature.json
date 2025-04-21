@@ -148,7 +148,7 @@
         },
         "selector": {
           "type": "string",
-          "enum": ["check", "consumption"]
+          "enum": ["check", "consumption", "ore", "lumber", "stone"]
         },
         "enabled": {
           "type": "boolean"

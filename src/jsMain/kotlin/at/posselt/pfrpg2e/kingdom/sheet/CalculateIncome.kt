@@ -5,6 +5,11 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementSizeType
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
+import at.posselt.pfrpg2e.kingdom.modifiers.ModifierSelector
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
+import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.resources.Income
 import at.posselt.pfrpg2e.kingdom.resources.calculateIncome
 import at.posselt.pfrpg2e.kingdom.resources.calculateStorage
@@ -29,20 +34,25 @@ suspend fun collectResources(
     resourceDice: Int,
     increaseGainedLuxuries: Int,
     settlements: List<Settlement>,
+    expressionContext: ExpressionContext,
+    modifiers: List<Modifier>,
 ): Income {
     val income = calculateIncome(
         realmData = realmData,
         resourceDice = resourceDice,
         increaseGainedLuxuries = increaseGainedLuxuries,
     )
+    val ore = calculateModifierResource(modifiers, expressionContext, ModifierSelector.ORE)
+    val stone = calculateModifierResource(modifiers, expressionContext, ModifierSelector.STONE)
+    val lumber = calculateModifierResource(modifiers, expressionContext, ModifierSelector.LUMBER)
     val rolledRp = roll(income.resourcePointsFormula, flavor = t("kingdom.gainingResourcePoints"))
     postChatTemplate(
         templatePath = "chatmessages/collect-resources.hbs",
         templateContext = CollectResources(
             rp = rolledRp,
-            ore = income.ore,
-            stone = income.stone,
-            lumber = income.lumber,
+            ore = income.ore + ore,
+            stone = income.stone + stone,
+            lumber = income.lumber + lumber,
             luxuries = income.luxuries,
         ),
     )
@@ -57,6 +67,12 @@ suspend fun collectResources(
         )
         .limitBy(calculateStorage(realmData, settlements))
 }
+
+private fun calculateModifierResource(
+    modifiers: List<Modifier>,
+    expressionContext: ExpressionContext,
+    selector: ModifierSelector
+): Int = evaluateModifiers(filterModifiersAndUpdateContext(modifiers, expressionContext, selector)).total
 
 fun KingdomData.getResourceDiceAmount(
     allFeats: List<ChosenFeat>,

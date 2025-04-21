@@ -7,6 +7,9 @@ import at.posselt.pfrpg2e.toCamelCase
 
 enum class ModifierSelector : Translatable, ValueEnum {
     CHECK,
+    ORE,
+    STONE,
+    LUMBER,
     CONSUMPTION;
 
     companion object {

@@ -32,8 +32,8 @@ import at.posselt.pfrpg2e.kingdom.RawEq
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.RawSome
 import at.posselt.pfrpg2e.kingdom.SettlementTerrain
-import at.posselt.pfrpg2e.kingdom.createConsumptionExpressionContext
 import at.posselt.pfrpg2e.kingdom.createModifiers
+import at.posselt.pfrpg2e.kingdom.createSimpleContext
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.endTurn
@@ -155,6 +155,27 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
+import kotlin.collections.contains
+import kotlin.collections.count
+import kotlin.collections.filter
+import kotlin.collections.filterIndexed
+import kotlin.collections.filterIsInstance
+import kotlin.collections.filterNot
+import kotlin.collections.find
+import kotlin.collections.firstNotNullOf
+import kotlin.collections.forEach
+import kotlin.collections.getOrNull
+import kotlin.collections.isNotEmpty
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.mapIndexed
+import kotlin.collections.mapNotNull
+import kotlin.collections.mutableSetOf
+import kotlin.collections.plus
+import kotlin.collections.sortedBy
+import kotlin.collections.sumOf
+import kotlin.collections.toSet
+import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -821,6 +842,8 @@ class KingdomSheet(
                         ),
                         increaseGainedLuxuries = chosenFeats.sumOf { it.feat.increaseGainedLuxuriesOncePerTurnBy ?: 0 },
                         settlements = settlements.allSettlements,
+                        expressionContext = kingdom.createSimpleContext(settlements),
+                        modifiers = kingdom.createModifiers(settlements),
                     )
                     kingdom.resourcePoints.now = resources.resourcePoints
                     kingdom.resourceDice.now = resources.resourceDice
@@ -843,7 +866,7 @@ class KingdomSheet(
                         armyConsumption = kingdom.consumption.armies,
                         availableFood = kingdom.commodities.now.food,
                         now = kingdom.consumption.now,
-                        expressionContext = kingdom.createConsumptionExpressionContext(settlements),
+                        expressionContext = kingdom.createSimpleContext(settlements),
                         modifiers = kingdom.createModifiers(settlements),
                     )
                     actor.setKingdom(kingdom)
@@ -896,7 +919,7 @@ class KingdomSheet(
                         realmData = realm,
                         armyConsumption = kingdom.consumption.armies,
                         now = kingdom.consumption.now,
-                        expressionContext = kingdom.createConsumptionExpressionContext(settlements),
+                        expressionContext = kingdom.createSimpleContext(settlements),
                         modifiers = kingdom.createModifiers(settlements),
                     )
                     consumptionBreakdown(consumption.toContext())
@@ -1140,7 +1163,7 @@ class KingdomSheet(
             realmData = realm,
             armyConsumption = kingdom.consumption.armies,
             now = kingdom.consumption.now,
-            expressionContext = kingdom.createConsumptionExpressionContext(settlements),
+            expressionContext = kingdom.createSimpleContext(settlements),
             modifiers = kingdom.createModifiers(settlements),
         )
         val kingdomNameInput = TextInput(

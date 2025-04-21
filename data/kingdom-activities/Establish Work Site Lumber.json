@@ -12,7 +12,18 @@
     "engineering": 0
   },
   "criticalSuccess": {
-    "msg": "activities.establish-work-site-lumber.criticalSuccess.msg"
+    "msg": "activities.establish-work-site-lumber.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "name": "activities.establish-work-site-lumber.criticalSuccess.modifiers.doubleIncome.name",
+        "buttonLabel": "activities.establish-work-site-lumber.criticalSuccess.modifiers.doubleIncome.buttonLabel",
+        "value": 1,
+        "type": "untyped",
+        "turns": 1,
+        "selector": "lumber",
+        "enabled": true
+      }
+    ]
   },
   "success": {
     "msg": "activities.establish-work-site-lumber.success.msg"

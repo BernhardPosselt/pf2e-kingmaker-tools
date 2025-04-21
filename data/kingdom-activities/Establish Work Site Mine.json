@@ -12,7 +12,18 @@
     "engineering": 0
   },
   "criticalSuccess": {
-    "msg": "activities.establish-work-site-mine.criticalSuccess.msg"
+    "msg": "activities.establish-work-site-mine.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "name": "activities.establish-work-site-mine.criticalSuccess.modifiers.doubleIncome.name",
+        "buttonLabel": "activities.establish-work-site-mine.criticalSuccess.modifiers.doubleIncome.buttonLabel",
+        "value": 1,
+        "type": "untyped",
+        "turns": 1,
+        "selector": "ore",
+        "enabled": true
+      }
+    ]
   },
   "success": {
     "msg": "activities.establish-work-site-mine.success.msg"

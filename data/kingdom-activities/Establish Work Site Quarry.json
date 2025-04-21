@@ -12,7 +12,18 @@
     "engineering": 0
   },
   "criticalSuccess": {
-    "msg": "activities.establish-work-site-quarry.criticalSuccess.msg"
+    "msg": "activities.establish-work-site-quarry.criticalSuccess.msg",
+    "modifiers": [
+      {
+        "name": "activities.establish-work-site-quarry.criticalSuccess.modifiers.doubleIncome.name",
+        "buttonLabel": "activities.establish-work-site-quarry.criticalSuccess.modifiers.doubleIncome.buttonLabel",
+        "value": 1,
+        "type": "untyped",
+        "turns": 1,
+        "selector": "stone",
+        "enabled": true
+      }
+    ]
   },
   "success": {
     "msg": "activities.establish-work-site-quarry.success.msg"

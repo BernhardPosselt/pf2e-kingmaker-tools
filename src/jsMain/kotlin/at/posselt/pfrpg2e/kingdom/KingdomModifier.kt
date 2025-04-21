@@ -277,7 +277,7 @@ suspend fun KingdomData.checkModifiers(
     ) + modifiers.map { it.parse() }
 }
 
-fun KingdomData.createConsumptionExpressionContext(settlements: SettlementResult) =
+fun KingdomData.createSimpleContext(settlements: SettlementResult) =
     createExpressionContext(
         phase = null,
         activity = null,

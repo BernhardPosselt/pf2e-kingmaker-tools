@@ -351,7 +351,7 @@
         },
         "selector": {
           "type": "string",
-          "enum": ["check", "consumption"]
+          "enum": ["check", "consumption", "ore", "lumber", "stone"]
         },
         "value": {
           "type": "number"
