@@ -34,15 +34,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Only re-render kingdom sheet once
 * Filter out lower bonuses in inspect settlement
 * Fix Political Calm bonus
 * Correctly exclude all V&K activities when first creating a kingdom sheet
 * Automatically enable Civil Service bonus
 * Fix Fame & Fortune
-* Fix Deploy Army skills
 * Fix leadership lores not working when containing special characters
 * Display kingdom activity automation notes
+
+## [4.8.1] - 2025-04-21
+
+### Fixed
+
+* Fix Deploy Army skills
+* Only re-render kingdom sheet once
+* Try to prevent possible null values being migrated when upgrading from versions prior to 4.0.0
 
 ## [4.8.0] - 2025-04-09
 
