@@ -17,9 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Allow dragging actor images from a recipe to another recipe
 * Allow users to re-enable the first run message
 * Add all structure traits to Structure Browser filters
-* Add Gain Fame button if built building type matches kingdom
+* Add Gain Fame button if built famous/infamous trait type matches kingdom fame type
 * Add buttons to add and resolve kingdom events
-* Allow tracking of blocked pledge of fealty
+* Allow tracking of blocked Pledge of Fealty
 * Pledge of Fealty, Establish Trade Agreement, Send Diplomatic Envoy and Request Foreign Aid now allow you to pick a group when performing the activity
 * Automate income increase when critically succeeding at building a worksite
 * Deliberate Planning and Hire Adventurers now allow you to pick an Event
@@ -30,10 +30,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Apply Plague event civic penalty automatically without having to add it first
 * Migrate recipe cost to parsed values
 * Indicate activity ordering in Upkeep and Commerce phase
+* Various activity modifiers that give a penalty when performing the activity during consecutive turns now use modifiers to track rather than requiring a toggle
 
 ### Fixed
 
-* Only re-render kingdom sheet once on changes
+* Only re-render kingdom sheet once
 * Filter out lower bonuses in inspect settlement
 * Fix Political Calm bonus
 * Correctly exclude all V&K activities when first creating a kingdom sheet
@@ -42,7 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix Deploy Army skills
 * Fix leadership lores not working when containing special characters
 * Display kingdom activity automation notes
-* Various activities had their optional penalties turned into automatically enabled ones
 
 ## [4.8.0] - 2025-04-09
 
