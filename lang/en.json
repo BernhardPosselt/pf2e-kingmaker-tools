@@ -3066,7 +3066,7 @@
           "modifiers": {
             "doubleIncome": {
               "name": "Double Quarry Yields Next Turn",
-              "buttonLabel": "Double Quarry Yield Next Turns"
+              "buttonLabel": "Double Quarry Yield Next Turn"
             }
           }
         },
