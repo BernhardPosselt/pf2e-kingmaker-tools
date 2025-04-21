@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.8.1] - 2025-04-21
+
+### Fixed
+
+* Fix Deploy Army skills
+* Only re-render kingdom sheet once
+* Try to prevent possible null values being migrated when upgrading from versions prior to 4.0.0
+
 ## [4.8.0] - 2025-04-09
 
 ### Added

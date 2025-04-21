@@ -167,6 +167,7 @@ class KingdomSheet(
     classes = arrayOf("km-kingdom-sheet"),
     id = "kmKingdomSheet-${actor.uuid}",
     width = 970,
+    renderOnSubmit = false,
     controls = arrayOf(
         MenuControl(label = "Show Players", action = "show-players", gmOnly = true),
         MenuControl(label = "Activities", action = "configure-activities", gmOnly = true),

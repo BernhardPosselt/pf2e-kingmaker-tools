@@ -7,12 +7,19 @@ import at.posselt.pfrpg2e.kingdom.RawIn
 import at.posselt.pfrpg2e.kingdom.charters
 import at.posselt.pfrpg2e.kingdom.data.MilestoneChoice
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
+import at.posselt.pfrpg2e.kingdom.data.RawAbilityScores
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
+import at.posselt.pfrpg2e.kingdom.data.RawCommodities
+import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
 import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
 import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
 import at.posselt.pfrpg2e.kingdom.data.RawHeartlandChoices
+import at.posselt.pfrpg2e.kingdom.data.RawRuin
+import at.posselt.pfrpg2e.kingdom.data.RawRuinValues
 import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
+import at.posselt.pfrpg2e.kingdom.data.RawWorkSite
+import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
 import at.posselt.pfrpg2e.kingdom.governments
 import at.posselt.pfrpg2e.kingdom.kingdomFeats
 import at.posselt.pfrpg2e.slugify
@@ -81,6 +88,90 @@ class Migration13 : Migration(13, true) {
                 stability = false,
             )
         )
+        // prevent these things from being null from the previous sheet
+        kingdom.workSites = RawWorkSites(
+            farmlands = RawWorkSite(
+                quantity = kingdom.workSites.farmlands.quantity ?: 0,
+                resources = kingdom.workSites.farmlands.resources ?: 0,
+            ),
+            lumberCamps = RawWorkSite(
+                quantity = kingdom.workSites.lumberCamps.quantity ?: 0,
+                resources = kingdom.workSites.lumberCamps.resources ?: 0,
+            ),
+            mines = RawWorkSite(
+                quantity = kingdom.workSites.mines.quantity ?: 0,
+                resources = kingdom.workSites.mines.resources ?: 0,
+            ),
+            quarries = RawWorkSite(
+                quantity = kingdom.workSites.quarries.quantity ?: 0,
+                resources = kingdom.workSites.quarries.resources ?: 0,
+            ),
+            luxurySources = RawWorkSite(
+                quantity = kingdom.workSites.luxurySources.quantity ?: 0,
+                resources = kingdom.workSites.luxurySources.resources ?: 0,
+            ),
+        )
+        kingdom.supernaturalSolutions = kingdom.supernaturalSolutions ?: 0
+        kingdom.creativeSolutions = kingdom.creativeSolutions ?: 0
+        kingdom.fame.now = kingdom.fame.now ?: 0
+        kingdom.fame.next = kingdom.fame.next ?: 0
+        kingdom.commodities = RawCurrentCommodities(
+            now = RawCommodities(
+                food = kingdom.commodities.now.food ?: 0,
+                lumber = kingdom.commodities.now.lumber ?: 0,
+                luxuries = kingdom.commodities.now.luxuries ?: 0,
+                ore = kingdom.commodities.now.ore ?: 0,
+                stone = kingdom.commodities.now.stone ?: 0,
+            ),
+            next = RawCommodities(
+                food = kingdom.commodities.next.food ?: 0,
+                lumber = kingdom.commodities.next.lumber ?: 0,
+                luxuries = kingdom.commodities.next.luxuries ?: 0,
+                ore = kingdom.commodities.next.ore ?: 0,
+                stone = kingdom.commodities.next.stone ?: 0,
+            ),
+        )
+        kingdom.resourcePoints.now = kingdom.resourcePoints.now ?: 0
+        kingdom.resourcePoints.next = kingdom.resourcePoints.next ?: 0
+        kingdom.resourceDice.now = kingdom.resourceDice.now ?: 0
+        kingdom.resourceDice.next = kingdom.resourceDice.next ?: 0
+        kingdom.unrest = kingdom.unrest ?: 0
+        kingdom.abilityScores = RawAbilityScores(
+            economy = kingdom.abilityScores.economy ?: 0,
+            stability = kingdom.abilityScores.stability ?: 0,
+            loyalty = kingdom.abilityScores.loyalty ?: 0,
+            culture = kingdom.abilityScores.culture ?: 0,
+        )
+        kingdom.ruin = RawRuin(
+            corruption = RawRuinValues(
+                value = kingdom.ruin.corruption.value ?: 0,
+                penalty = kingdom.ruin.corruption.penalty ?: 0,
+                threshold = kingdom.ruin.corruption.threshold ?: 10,
+            ),
+            crime = RawRuinValues(
+                value = kingdom.ruin.crime.value ?: 0,
+                penalty = kingdom.ruin.crime.penalty ?: 0,
+                threshold = kingdom.ruin.crime.threshold ?: 10,
+            ),
+            decay = RawRuinValues(
+                value = kingdom.ruin.decay.value ?: 0,
+                penalty = kingdom.ruin.decay.penalty ?: 0,
+                threshold = kingdom.ruin.decay.threshold ?: 10,
+            ),
+            strife = RawRuinValues(
+                value = kingdom.ruin.strife.value ?: 0,
+                penalty = kingdom.ruin.strife.penalty ?: 0,
+                threshold = kingdom.ruin.strife.threshold ?: 10,
+            ),
+        )
+        kingdom.consumption.now = kingdom.consumption.now ?: 0
+        kingdom.consumption.next = kingdom.consumption.next ?: 0
+        kingdom.size = kingdom.size ?: 0
+        kingdom.xp = kingdom.xp ?: 0
+        kingdom.xpThreshold = kingdom.xpThreshold ?: 1000
+        kingdom.name = kingdom.name ?: ""
+        kingdom.level = kingdom.level ?: 1
+        // end nullability fixes
         kingdom.initialProficiencies = emptyArray()
         kingdom.groups = kingdom.groups.map {
             it.copy(
