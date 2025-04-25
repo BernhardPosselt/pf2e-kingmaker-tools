@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Added a macro that changes all NPCs' Health Bars on all scenes to always display
+* 
+
 ## [5.0.0] - 2025-04-21
 
 ### Added

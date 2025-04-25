@@ -1,3 +1,4 @@
+@file:JsQualifier("foundry.utils")
 package com.foundryvtt.core.utils
 
 import com.foundryvtt.core.abstract.Document

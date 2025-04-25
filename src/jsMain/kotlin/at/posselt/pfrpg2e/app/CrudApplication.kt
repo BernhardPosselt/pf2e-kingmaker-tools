@@ -74,7 +74,7 @@ abstract class CrudApplication(
     title = title,
     template = "components/forms/crud-form.hbs",
     width = width,
-    scrollable = arrayOf(".window-content"),
+    scrollable = setOf(".window-content"),
     debug = debug,
     id = id,
     dataModel = CrudApplicationDataModel::class.js,

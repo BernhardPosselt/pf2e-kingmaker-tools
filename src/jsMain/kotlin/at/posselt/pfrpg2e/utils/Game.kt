@@ -26,6 +26,7 @@ external interface ToolsMacros {
     val createFoodMacro: () -> Unit
     val subsistMacro: (Actor?) -> Unit
     val openSheet: (type: String, id: String) -> Unit
+    val showAllNpcHpBars: () -> Unit
 }
 
 @JsPlainObject

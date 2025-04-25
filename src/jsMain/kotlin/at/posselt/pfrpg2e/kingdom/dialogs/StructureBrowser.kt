@@ -203,8 +203,8 @@ class StructureBrowser(
     template = "applications/kingdom/structure-browser.hbs",
     debug = true,
     width = 1100,
-    scrollable = arrayOf(".km-structures", ".km-structure-filters"),
-    classes = arrayOf("km-structure-browser"),
+    scrollable = setOf(".km-structures", ".km-structure-filters"),
+    classes = setOf("km-structure-browser"),
     dataModel = StructureBrowserDataModel::class.js,
     id = "kmStructureBrowser-${actor.uuid}"
 ) {

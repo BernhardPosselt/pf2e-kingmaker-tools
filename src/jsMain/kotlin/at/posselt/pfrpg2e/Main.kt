@@ -36,6 +36,7 @@ import at.posselt.pfrpg2e.macros.rollPartyCheckMacro
 import at.posselt.pfrpg2e.macros.sceneWeatherSettingsMacro
 import at.posselt.pfrpg2e.macros.setTimeOfDayMacro
 import at.posselt.pfrpg2e.macros.setWeatherMacro
+import at.posselt.pfrpg2e.macros.showAllNpcHpBars
 import at.posselt.pfrpg2e.macros.subsistMacro
 import at.posselt.pfrpg2e.macros.toggleCombatTracksMacro
 import at.posselt.pfrpg2e.macros.toggleShelteredMacro
@@ -187,6 +188,7 @@ fun main() {
                 editStructureMacro = { actor -> buildPromise { editStructureMacro(actor) } },
                 subsistMacro = { actor -> buildPromise { subsistMacro(game, actor) } },
                 createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
+                showAllNpcHpBars = { buildPromise { game.showAllNpcHpBars() }},
             ),
         )
 

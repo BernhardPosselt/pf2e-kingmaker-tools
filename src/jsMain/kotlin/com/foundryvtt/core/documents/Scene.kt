@@ -32,6 +32,7 @@ external class Scene : ClientDocument {
     var tokens: EmbeddedCollection<TokenDocument>
     var tiles: EmbeddedCollection<TileDocument>
     var notes: EmbeddedCollection<NoteDocument>
+    var regions: EmbeddedCollection<RegionDocument>
 
     // TODO
     //    var lights: EmbeddedCollection<Light>

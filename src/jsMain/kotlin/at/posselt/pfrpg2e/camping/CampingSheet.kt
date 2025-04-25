@@ -225,7 +225,7 @@ class CampingSheet(
     id = "kmCamping-${actor.uuid}",
     width = windowWidth,
     dataModel = CampingSheetDataModel::class.js,
-    classes = arrayOf("km-camping-sheet"),
+    classes = setOf("km-camping-sheet"),
     controls = arrayOf(
         MenuControl(label = t("camping.showPlayers"), action = "show-players", gmOnly = true),
         MenuControl(label = t("camping.activate"), action = "activate", gmOnly = true),
@@ -239,7 +239,7 @@ class CampingSheet(
         MenuControl(label = t("applications.quickstart"), action = "quickstart", gmOnly = true),
         MenuControl(label = t("applications.help"), action = "help"),
     ),
-    scrollable = arrayOf(".km-camping-activities-wrapper", ".km-camping-actors"),
+    scrollable = setOf(".km-camping-activities-wrapper", ".km-camping-actors"),
     syncedDocument = actor,
     debug = true,
 ) {

@@ -117,7 +117,7 @@ class AddEvent(
     width = 600,
     id = "kmEvents-${kingdomActor.uuid}",
     dataModel = AddEventsDataModel::class.js,
-    scrollable = arrayOf(".km-add-events"),
+    scrollable = setOf(".km-add-events"),
 ) {
     var search = ""
 

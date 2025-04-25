@@ -42,8 +42,8 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
     submitOnChange: Boolean = true,
     closeOnSubmit: Boolean = false,
     controls: Array<MenuControl> = emptyArray(),
-    classes: Array<String> = emptyArray(),
-    scrollable: Array<String> = emptyArray(),
+    classes: Set<String> = emptySet(),
+    scrollable: Set<String> = emptySet(),
     width: Int? = undefined,
     height: Int? = null,
     id: String? = null,
@@ -76,7 +76,7 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
                 height = height,
             )
         },
-        classes = if (isDialogForm) arrayOf("km-dialog-form").plus(classes) else classes,
+        classes = if (isDialogForm) setOf("km-dialog-form").plus(classes).toTypedArray() else classes.toTypedArray(),
         tag = "form",
         form = ApplicationFormConfiguration(
             submitOnChange = submitOnChange,
@@ -85,7 +85,7 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
         parts = recordOf(
             "form" to HandlebarsTemplatePart(
                 template = resolveTemplatePath(template),
-                scrollable = scrollable,
+                scrollable = scrollable.toTypedArray(),
             )
         )
     ).apply {

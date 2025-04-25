@@ -167,7 +167,7 @@ class KingdomSheet(
     template = "applications/kingdom/kingdom-sheet.hbs",
     debug = true,
     dataModel = KingdomSheetDataModel::class.js,
-    classes = arrayOf("km-kingdom-sheet"),
+    classes = setOf("km-kingdom-sheet"),
     id = "kmKingdomSheet-${actor.uuid}",
     width = 1000,
     syncedDocument = actor,
@@ -184,7 +184,7 @@ class KingdomSheet(
         MenuControl(label = t("applications.quickstart"), action = "quickstart", gmOnly = true),
         MenuControl(label = t("applications.help"), action = "help"),
     ),
-    scrollable = arrayOf(
+    scrollable = setOf(
         ".km-kingdom-sheet-sidebar-kingdom",
         ".km-kingdom-sheet-turn",
         ".km-kingdom-sheet-kingdom",

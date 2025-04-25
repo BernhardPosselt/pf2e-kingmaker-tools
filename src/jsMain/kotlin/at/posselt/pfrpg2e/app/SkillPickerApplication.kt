@@ -133,7 +133,7 @@ class SkillPickerApplication(
     template = "components/skill-picker/skill-picker.hbs",
     width = 1000,
     debug = true,
-    classes = arrayOf("skill-picker"),
+    classes = setOf("skill-picker"),
     dataModel = SkillPickerDataModel::class.js,
 ) {
     var currentSkills = deepClone(skills)

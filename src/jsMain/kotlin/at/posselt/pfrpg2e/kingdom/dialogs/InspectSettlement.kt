@@ -160,7 +160,7 @@ class InspectSettlement(
     title = title,
     template = "applications/kingdom/settlement.hbs",
     debug = true,
-    classes = arrayOf("km-inspect-settlement"),
+    classes = setOf("km-inspect-settlement"),
     dataModel = InspectSettlementDataModel::class.js,
     id = "kmInspectSettlement-${settlement.sceneId}",
     width = 700,
