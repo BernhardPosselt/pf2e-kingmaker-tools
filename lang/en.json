@@ -861,7 +861,8 @@
         "title": "{sceneName}: Create Teleporter Pairs",
         "name": "Region Name",
         "color": "Region Color",
-        "missingScene": "Can not create teleporters without region"
+        "missingScene": "Can not create teleporters without region",
+        "description": "This macro creates two regions that are linked to each other using teleporters. After executing it, you need to select the newly created regions in the Region Controls overlay one by one and then draw a rectangle onto the map."
       },
       "chooseParty": "Choose Party",
       "noPartyChosen": "No party chosen",

@@ -30,7 +30,9 @@ suspend fun Game.createTeleporterPair() {
     awaitablePrompt<CreateTeleporterData, Unit>(
         title = t("macros.createTeleporters.title", recordOf("sceneName" to scene.name)),
         templatePath = "components/forms/form.hbs",
+        width = 400,
         templateContext = recordOf(
+            "description" to t("macros.createTeleporters.description"),
             "formRows" to formContext(
                 TextInput(
                     name = "name",
