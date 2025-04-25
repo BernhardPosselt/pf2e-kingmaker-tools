@@ -16,6 +16,7 @@
       "d12": "D12"
     },
     "enums": {
+      "displayBars": "Display Bars",
       "skill": "Skill",
       "modifierType": "Type",
       "modifierSelector": "Selector",
@@ -66,6 +67,7 @@
       "kingdomActiveLeader": "Actively Filtered Kingdom Leader"
     },
     "applications": {
+      "apply": "Apply",
       "close": "Close",
       "settings": "Settings",
       "help": "Help",
@@ -856,7 +858,19 @@
         "learned": "Learned {recipeName}"
       }
     },
+    "displayBars": {
+      "neverDisplayed": "Never Displayed",
+      "whenControlled": "When Controlled",
+      "hoveredByOwner": "Hovered by Owner",
+      "hoveredByAnyone": "Hovered by Anyone",
+      "alwaysForOwner": "Always for Owner",
+      "alwaysForEveryone": "Always for Everyone"
+    },
     "macros": {
+      "showAllNpcHpBars": {
+        "title": "Change All NPC Token Display Bars",
+        "description": "This changes all token display bars across all scenes to this value (except structures). This can take a while after clicking Apply"
+      },
       "createTeleporters": {
         "title": "{sceneName}: Create Teleporter Pairs",
         "name": "Region Name",
