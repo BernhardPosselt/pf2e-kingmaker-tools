@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added a macro that changes all NPCs' Health Bars on all scenes to always display
-* 
+* Added a macro that creates 2 regions used for teleporting tokens between each other
 
 ## [5.0.0] - 2025-04-21
 

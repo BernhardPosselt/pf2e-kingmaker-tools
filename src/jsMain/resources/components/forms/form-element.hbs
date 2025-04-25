@@ -38,6 +38,9 @@
         <input type="file" name="{{name}}" {{#if accept}}accept="{{accept}}"{{/if}} {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if
                 elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}}>
+{{else if  (eq type 'color')}}
+        <input type="color" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
+                required}}required{{/if}}{{#if elementClasses}}class="{{elementClasses}}"{{/if}} {{#if disabled}}disabled{{/if}} {{#if readonly}}readonly{{/if}}>
 {{else if  (eq type 'text')}}
         <input type="text" name="{{name}}" value="{{value}}" {{#if hideLabel}}aria-label="{{label}}"{{/if}} {{#if
                 required}}required{{/if}} {{#if overrideType}}data-dtype="{{overrideType}}"{{/if}} {{#if

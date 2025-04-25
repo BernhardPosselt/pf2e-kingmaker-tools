@@ -857,6 +857,12 @@
       }
     },
     "macros": {
+      "createTeleporters": {
+        "title": "{sceneName}: Create Teleporter Pairs",
+        "name": "Region Name",
+        "color": "Region Color",
+        "missingScene": "Can not create teleporters without region"
+      },
       "chooseParty": "Choose Party",
       "noPartyChosen": "No party chosen",
       "noPartiesFound": "No parties found",

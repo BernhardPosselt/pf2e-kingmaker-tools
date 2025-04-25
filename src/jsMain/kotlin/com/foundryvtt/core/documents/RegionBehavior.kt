@@ -4,6 +4,7 @@ package com.foundryvtt.core.documents
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
+import com.foundryvtt.core.data.regionBehaviors.RegionBehaviorType
 import kotlin.js.Promise
 
 external class RegionBehavior : ClientDocument {
@@ -14,6 +15,6 @@ external class RegionBehavior : ClientDocument {
     var _id: String
     var name: String
     var type: String
-    var system: AnyObject
+    var system: RegionBehaviorType
     var disabled: Boolean
 }

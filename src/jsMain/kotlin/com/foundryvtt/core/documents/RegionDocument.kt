@@ -5,10 +5,11 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.data.BaseShapeData
+import com.foundryvtt.core.documents.collections.EmbeddedCollection
 import com.foundryvtt.core.utils.Color
 import kotlin.js.Promise
 
-external class RegionDocument : ClientDocument {
+external class RegionDocument : CanvasDocument {
     companion object : DocumentStatic<RegionDocument>
 
     override fun delete(operation: DatabaseDeleteOperation): Promise<RegionDocument>
@@ -18,7 +19,7 @@ external class RegionDocument : ClientDocument {
     var name: String
     var color: Color
     var shapes: Array<BaseShapeData>
-    var behaviors: Array<RegionBehavior>
+    var behaviors: EmbeddedCollection<RegionBehavior>
     var elevation: Int
     var visibility: Int
     var locked: Boolean

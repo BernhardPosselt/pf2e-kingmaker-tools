@@ -32,7 +32,7 @@ external class EmbeddedCollection<T>(
     val _source: T
     val invalidDocumentIds: JsSet<String>
 
-    fun createDocument(data: T, context: DocumentConstructionContext = definedExternally): Document
+    fun createDocument(data: Any, context: DocumentConstructionContext = definedExternally): Document
     fun initialize(context: DocumentConstructionContext = definedExternally)
     fun _initializeDocument(data: T, context: DocumentConstructionContext)
     fun _handleInvalidDocument(id: String, err: Throwable, options: InvalidDocumentOptions = definedExternally)

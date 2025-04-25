@@ -1,3 +1,4 @@
+@file:JsQualifier("foundry.data")
 package com.foundryvtt.core.data
 
 import com.foundryvtt.core.AnyObject
