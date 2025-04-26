@@ -140,7 +140,7 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
 
         migrationsToRun
             .forEach { migration ->
-                ui.notifications.info("${t("moduleName")}: ${t("migration.runningMigration", recordOf("version" to migration.version))}")
+                ui.notifications.info("${t("moduleName")}: ${t("migrations.runningMigration", recordOf("version" to migration.version))}")
                 campingActors.forEach { actor ->
                     actor.getCamping()?.let { camping ->
                         migration.migrateCamping(this, camping)
@@ -159,7 +159,7 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
             }
 
         settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(latestMigrationVersion)
-        ui.notifications.info("${t("moduleName")}: ${t("migration.runningMigration")}")
+        ui.notifications.info("${t("moduleName")}: ${t("migrations.runningMigration")}")
 
         if (migrationsToRun.any { it.showUpgradingNotices }) {
             openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.wz1mIWMxDJVsMIUd")
