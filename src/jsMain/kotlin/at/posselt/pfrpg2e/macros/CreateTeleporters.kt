@@ -2,6 +2,8 @@ package at.posselt.pfrpg2e.macros
 
 import at.posselt.pfrpg2e.app.awaitablePrompt
 import at.posselt.pfrpg2e.app.forms.ColorInput
+import at.posselt.pfrpg2e.app.forms.Select
+import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.utils.t
@@ -18,6 +20,7 @@ import kotlinx.js.JsPlainObject
 external interface CreateTeleporterData {
     val name: String
     val color: String
+    val targetScene: String
 }
 
 suspend fun Game.createTeleporterPair() {
@@ -45,25 +48,38 @@ suspend fun Game.createTeleporterPair() {
                     name = "color",
                     value = "#000000",
                     stacked = false
+                ),
+                Select(
+                    name = "targetScene",
+                    label = t("macros.createTeleporters.targetScene"),
+                    value = scene.id!!,
+                    stacked = false,
+                    options = scenes.contents.map { SelectOption(label = it.name, value = it.id!!) }
                 )
             )
         )
     ) { data, _ ->
-        console.log(data)
+        val targetScene = scenes.get(data.targetScene)
+        checkNotNull(targetScene) {
+            "Target Scene ${data.targetScene} was not found"
+        }
         val color = Color(data.color.replace("#", "").toInt(16))
-        val documents = scene.createEmbeddedDocuments<RegionDocument>(
+        val first = scene.createEmbeddedDocuments<RegionDocument>(
             "Region", arrayOf(
                 recordOf(
                     "name" to "${data.name} 1",
                     "color" to color,
-                ), recordOf(
+                )
+            )
+        ).await().first()
+        val second = targetScene.createEmbeddedDocuments<RegionDocument>(
+            "Region", arrayOf(
+                recordOf(
                     "name" to "${data.name} 2",
                     "color" to color,
                 )
             )
-        ).await()
-        val first = documents.first()
-        val second = documents[1]
+        ).await().first()
         first.createEmbeddedDocuments<RegionBehavior>(
             "RegionBehavior", arrayOf(
                 recordOf(
