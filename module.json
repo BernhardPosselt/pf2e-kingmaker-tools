@@ -36,6 +36,11 @@
             "lang": "it",
             "name": "Italian",
             "path": "dist/lang/it.json"
+        },
+        {
+            "lang": "pl",
+            "name": "Polish",
+            "path": "dist/lang/pl.json"
         }
     ],
     "packs": [
