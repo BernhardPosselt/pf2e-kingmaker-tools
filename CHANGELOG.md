@@ -7,7 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.3] - 2025-04-30
+
+### Fixed
+
+* If more than one user has playlist permissions, only start the track once
+
+
 ## [5.1.2] - 2025-04-29
+
+### Added
 
 * Added Polish translation, thanks @Lioheart
 
