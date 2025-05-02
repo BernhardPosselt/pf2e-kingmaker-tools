@@ -29,7 +29,7 @@ suspend fun structureXpDialog(
 ) {
     val importedStructures = game.getImportedStructures()
     val options = importedStructures
-        .map { SelectOption(label = it.id, value =it.name) }
+        .map { SelectOption(value = it.id, label = it.name) }
     prompt<StructureXpDialogData, Unit>(
         title = t("kingdom.gainStructureXp"),
         templateContext = StructureXpDialogContext(
