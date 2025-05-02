@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.camping.getActiveCamping
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.getAppFlag
+import at.posselt.pfrpg2e.utils.isFirstGM
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
@@ -72,21 +73,23 @@ suspend fun Game.stopCombatTrack(combatants: Array<Combatant>, active: Scene) {
 }
 
 fun registerCombatTrackHooks(game: Game) {
-    Hooks.onPreUpdateCombat { document, changed, _, _ ->
-        if (document.round == 0 && changed["round"] == 1) {
-            buildPromise {
-                val active = game.scenes.active
-                if (game.settings.pfrpg2eKingdomCampingWeather.getEnableCombatTracks() && active != null) {
-                    game.startCombatTrack(document.combatants.contents, active)
+    if (game.isFirstGM()) {
+        Hooks.onPreUpdateCombat { document, changed, _, _ ->
+            if (document.round == 0 && changed["round"] == 1) {
+                buildPromise {
+                    val active = game.scenes.active
+                    if (game.settings.pfrpg2eKingdomCampingWeather.getEnableCombatTracks() && active != null) {
+                        game.startCombatTrack(document.combatants.contents, active)
+                    }
                 }
             }
         }
-    }
-    Hooks.onDeleteCombat { document, _, _ ->
-        buildPromise {
-            val active = game.scenes.active
-            if (game.settings.pfrpg2eKingdomCampingWeather.getEnableCombatTracks() && active != null) {
-                game.stopCombatTrack(document.combatants.contents, active)
+        Hooks.onDeleteCombat { document, _, _ ->
+            buildPromise {
+                val active = game.scenes.active
+                if (game.settings.pfrpg2eKingdomCampingWeather.getEnableCombatTracks() && active != null) {
+                    game.stopCombatTrack(document.combatants.contents, active)
+                }
             }
         }
     }
