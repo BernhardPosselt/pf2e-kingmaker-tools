@@ -19,7 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * If more than one user has playlist permissions, only start the track once
 
-
 ## [5.1.2] - 2025-04-29
 
 ### Added
@@ -75,6 +74,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix Fame & Fortune
 * Fix leadership lores not working when containing special characters
 * Display kingdom activity automation notes
+
+
+## [4.8.2] - 2025-05-03
+
+### Fixed
+
+* Fix structure XP dialog
+* If more than one user has playlist permissions, only start the track once
+
 
 ## [4.8.1] - 2025-04-21
 
