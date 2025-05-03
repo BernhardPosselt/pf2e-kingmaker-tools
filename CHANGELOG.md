@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.5] - 2025-05-03
+
+### Fixed
+
+* Fix structure name migrations when updating from Foundry V12 without having upgraded to the latest version
+* Abort migrations and show a user error if structures with a broken ref are encountered
+
 ## [5.1.4] - 2025-05-03
 
 ### Fixed

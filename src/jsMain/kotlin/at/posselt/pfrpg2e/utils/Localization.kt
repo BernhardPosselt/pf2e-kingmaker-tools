@@ -117,4 +117,4 @@ suspend fun initLocalization() {
 }
 
 @JsModule("./lang/en.json")
-private external val englishTranslations: ReadonlyRecord<String, Any>
+external val englishTranslations: ReadonlyRecord<String, Any>

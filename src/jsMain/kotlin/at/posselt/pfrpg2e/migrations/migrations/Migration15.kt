@@ -13,7 +13,11 @@ import at.posselt.pfrpg2e.kingdom.structures.isStructureRef
 import at.posselt.pfrpg2e.kingdom.structures.setStructureData
 import at.posselt.pfrpg2e.kingdom.structures.structures
 import at.posselt.pfrpg2e.slugify
+import at.posselt.pfrpg2e.utils.englishTranslations
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.ui
+import com.foundryvtt.core.utils.getProperty
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import kotlinx.js.JsPlainObject
 
@@ -34,7 +38,11 @@ external interface OldCampingActivity {
 
 class Migration15 : Migration(15) {
     override suspend fun migrateOther(game: Game) {
-        val structuresByName = structures.associateBy { it.name }
+        val structuresByName = structures.associateBy {
+            getProperty(englishTranslations.get("pf2e-kingmaker-tools").unsafeCast<AnyObject>(), it.name)
+                .unsafeCast<String>()
+                .replace("&amp;", "&")
+        }
         game.actors
             .contents
             .filterIsInstance<PF2ENpc>()
@@ -46,6 +54,12 @@ class Migration15 : Migration(15) {
                     val id = structuresByName[name]?.id
                     if (id != null) {
                         it.setStructureData(StructureRef(ref = id))
+                    } else {
+                        val validNames = structuresByName.keys.toTypedArray()
+                            .joinToString(", ") { name -> "'$name'"}
+                        val message = "Could not migrate structure with reference $name, migrations aborted. Valid names that can be migrated include $validNames"
+                        ui.notifications.error(message)
+                        throw IllegalStateException(message)
                     }
                 }
             }
