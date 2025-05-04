@@ -39,7 +39,7 @@ private suspend fun updateXP(players: Array<PF2ECharacter>, amount: Int) = corou
             }
         }
     }.awaitAll()
-    postChatMessage(t("macros.xp.gained", recordOf("count" to amount)))
+    postChatMessage(t("macros.xp.gained", recordOf("amount" to amount)))
 }
 
 @JsPlainObject
