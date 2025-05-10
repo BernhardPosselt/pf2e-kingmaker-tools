@@ -53,7 +53,7 @@ suspend fun getCampingActivityActorByUuid(actorUuid: String) =
     getCampingActivityCreatureByUuid(actorUuid).unsafeCast<PF2EActor?>()
 
 suspend fun getCampingActorByUuid(uuid: String) =
-    fromUuidOfTypes<dynamic>(uuid, *allowedCampingActorTypes).unsafeCast<PF2EActor?>()
+    fromUuidOfTypes(uuid, *allowedCampingActorTypes).unsafeCast<PF2EActor?>()
 
 suspend fun getCampingActorsByUuid(uuids: Array<String>) =
     fromUuidsOfTypes(uuids, *allowedCampingActorTypes).unsafeCast<Array<PF2EActor>>()

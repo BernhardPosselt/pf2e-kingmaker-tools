@@ -693,7 +693,7 @@ private class KingdomCheckDialog(
         upgradeDegrees: Set<UpgradeResult>,
         downgradeDegrees: Set<DowngradeResult>
     ): String {
-        var degree = determineDegreeOfSuccess(data.dc, modifier + 10, 10)
+        val degree = determineDegreeOfSuccess(data.dc, modifier + 10, 10)
         return t(determineDegree(degree, upgradeDegrees, downgradeDegrees).changedDegree)
     }
 

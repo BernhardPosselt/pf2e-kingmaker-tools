@@ -147,7 +147,7 @@ private var translatedKingdomEvents = emptyArray<RawKingdomEvent>()
 fun translateKingdomEvents(): Array<RawKingdomEvent> {
     // name needs to be translated first to then translate @gainEvent buttons
     translatedKingdomEvents = kingdomEvents
-        .map { it.copy(name = t(it.name),) }
+        .map { it.copy(name = t(it.name)) }
         .toTypedArray()
     translatedKingdomEvents = translatedKingdomEvents
         .map { it.translate(translatedKingdomEvents) }

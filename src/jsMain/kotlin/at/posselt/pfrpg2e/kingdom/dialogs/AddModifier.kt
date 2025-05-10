@@ -61,7 +61,6 @@ class ModifierModel(
     }
 }
 
-@Suppress("unused")
 @JsPlainObject
 external interface AddModifierData {
     val name: String

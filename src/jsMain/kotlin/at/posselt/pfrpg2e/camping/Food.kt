@@ -438,7 +438,7 @@ suspend fun PF2EActor.removeConsumableFromInventory(name: String, quantity: Int)
                     itemUses = consumable.system.uses.value,
                     itemMaxUses = consumable.system.uses.max,
                 )
-                updates.add(consumable.buildUpdate<PF2EConsumable> {
+                updates.add(consumable.buildUpdate {
                     _id = id
                     system.quantity = chargeUpdates.quantity
                     system.uses.value = chargeUpdates.charges

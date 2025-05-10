@@ -261,10 +261,10 @@ fun KingdomData.parseSkillRanks(
             it.choice.skillIncrease?.let { KingdomSkill.fromString(it) }
         }.groupBy { it }
     val skillTrainings = getTrainedSkills(chosenFeats, government)
-    val ranks = KingdomSkill.entries.associate {
+    val ranks = KingdomSkill.entries.associateWith {
         val base = if (it in skillTrainings) 1 else 0
         val increase = skillIncreases[it]?.size ?: 0
-        it to (base + increase).coerceIn(0, 4)
+        (base + increase).coerceIn(0, 4)
     }
     KingdomSkillRanks(
         agriculture = ranks[KingdomSkill.AGRICULTURE] ?: 0,
@@ -364,8 +364,8 @@ fun KingdomData.parseAbilityScores(
     val flawsByAbility = listOfNotNull(charterFlaw)
         .mapNotNull { KingdomAbility.fromString(it) }
         .groupBy { it }
-    val boosts = KingdomAbility.entries.associate {
-        it to calculateScore(boostsByAbility[it]?.size ?: 0, flawsByAbility[it]?.size ?: 0)
+    val boosts = KingdomAbility.entries.associateWith {
+        calculateScore(boostsByAbility[it]?.size ?: 0, flawsByAbility[it]?.size ?: 0)
     }
 
     KingdomAbilityScores(

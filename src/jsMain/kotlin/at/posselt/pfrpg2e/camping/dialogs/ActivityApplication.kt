@@ -22,7 +22,6 @@ import at.posselt.pfrpg2e.camping.ActivityEffect
 import at.posselt.pfrpg2e.camping.ActivityOutcome
 import at.posselt.pfrpg2e.camping.CampingActivityData
 import at.posselt.pfrpg2e.camping.CampingActor
-import at.posselt.pfrpg2e.camping.CampingSkill
 import at.posselt.pfrpg2e.camping.ModifyEncounterDc
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCampingSkills
@@ -157,7 +156,7 @@ class ActivityApplication(
     private var currentActivity: CampingActivityData = data?.let(::deepClone) ?: CampingActivityData(
         name = "",
         journalUuid = null,
-        skills = emptyArray<CampingSkill>(),
+        skills = emptyArray(),
         modifyRandomEncounterDc = null,
         isSecret = false,
         isLocked = false,
@@ -228,27 +227,23 @@ class ActivityApplication(
     }
 
     private fun removeEffectAt(section: String?, index: Int) {
-        if (section == "effects") {
-            currentActivity.effectUuids = currentActivity
+        when (section) {
+            "effects" -> currentActivity.effectUuids = currentActivity
                 .effectUuids
                 ?.without(index)
-        } else if (section == "criticalSuccess") {
-            currentActivity.criticalSuccess?.effectUuids = currentActivity
+            "criticalSuccess" -> currentActivity.criticalSuccess?.effectUuids = currentActivity
                 .criticalSuccess
                 ?.effectUuids
                 ?.without(index)
-        } else if (section == "success") {
-            currentActivity.success?.effectUuids = currentActivity
+            "success" -> currentActivity.success?.effectUuids = currentActivity
                 .success
                 ?.effectUuids
                 ?.without(index)
-        } else if (section == "failure") {
-            currentActivity.failure?.effectUuids = currentActivity
+            "failure" -> currentActivity.failure?.effectUuids = currentActivity
                 .failure
                 ?.effectUuids
                 ?.without(index)
-        } else if (section == "criticalFailure") {
-            currentActivity.criticalFailure?.effectUuids = currentActivity
+            "criticalFailure" -> currentActivity.criticalFailure?.effectUuids = currentActivity
                 .criticalFailure
                 ?.effectUuids
                 ?.without(index)
@@ -257,33 +252,24 @@ class ActivityApplication(
     }
 
     private fun createEffectAt(section: String, effect: ActivityEffect) {
-        if (section == "effects") {
-            currentActivity.effectUuids = currentActivity.effectUuids?.plus(effect)
-        } else if (section == "criticalSuccess") {
-            currentActivity.criticalSuccess?.effectUuids = currentActivity.criticalSuccess?.effectUuids?.plus(effect)
-        } else if (section == "success") {
-            currentActivity.success?.effectUuids = currentActivity.success?.effectUuids?.plus(effect)
-        } else if (section == "failure") {
-            currentActivity.failure?.effectUuids = currentActivity.failure?.effectUuids?.plus(effect)
-        } else if (section == "criticalFailure") {
-            currentActivity.criticalFailure?.effectUuids = currentActivity.criticalFailure?.effectUuids?.plus(effect)
+        when (section) {
+            "effects" -> currentActivity.effectUuids = currentActivity.effectUuids?.plus(effect)
+            "criticalSuccess" -> currentActivity.criticalSuccess?.effectUuids = currentActivity.criticalSuccess?.effectUuids?.plus(effect)
+            "success" -> currentActivity.success?.effectUuids = currentActivity.success?.effectUuids?.plus(effect)
+            "failure" -> currentActivity.failure?.effectUuids = currentActivity.failure?.effectUuids?.plus(effect)
+            "criticalFailure" -> currentActivity.criticalFailure?.effectUuids = currentActivity.criticalFailure?.effectUuids?.plus(effect)
         }
         render()
     }
 
     private fun getEffectsSection(section: String?): Array<ActivityEffect>? =
-        if (section == "effects") {
-            currentActivity.effectUuids
-        } else if (section == "criticalSuccess") {
-            currentActivity.criticalSuccess?.effectUuids
-        } else if (section == "success") {
-            currentActivity.success?.effectUuids
-        } else if (section == "failure") {
-            currentActivity.failure?.effectUuids
-        } else if (section == "criticalFailure") {
-            currentActivity.criticalFailure?.effectUuids
-        } else {
-            null
+        when (section) {
+            "effects" -> currentActivity.effectUuids
+            "criticalSuccess" -> currentActivity.criticalSuccess?.effectUuids
+            "success" -> currentActivity.success?.effectUuids
+            "failure" -> currentActivity.failure?.effectUuids
+            "criticalFailure" -> currentActivity.criticalFailure?.effectUuids
+            else -> null
         }
 
 

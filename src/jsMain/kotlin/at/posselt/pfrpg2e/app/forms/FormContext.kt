@@ -16,7 +16,6 @@ external interface SectionsContext {
     val sections: Array<SectionContext>
 }
 
-@Suppress("unused")
 @JsPlainObject
 external interface SectionContext {
     val hidden: Boolean?

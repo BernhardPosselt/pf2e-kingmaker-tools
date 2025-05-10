@@ -77,20 +77,20 @@ fun parseAvailableItems(structures: List<Structure>): AvailableItemBonuses {
         .map { (_, structure) -> calculateItemsFromSameStructures(structure, alwaysStacks = false) }
         // for each structure, we only want the maximum bonus per category
         .fold(mapOf<ItemGroup, Int>()) { prev, curr ->
-            ItemGroup.entries.associate {
+            ItemGroup.entries.associateWith {
                 val previousBonus = prev[it] ?: 0
                 val currentBonus = curr[it] ?: 0
-                it to if (currentBonus > previousBonus) currentBonus else previousBonus
+                if (currentBonus > previousBonus) currentBonus else previousBonus
             }
         }
     val bonusesPerGroupThatAlwaysStack = structuresById
         .map { (_, structure) -> calculateItemsFromSameStructures(structure, alwaysStacks = true) }
         // for each structure, we only want the maximum bonus per category
         .fold(mapOf<ItemGroup, Int>()) { prev, curr ->
-            ItemGroup.entries.associate {
+            ItemGroup.entries.associateWith {
                 val previousBonus = prev[it] ?: 0
                 val currentBonus = curr[it] ?: 0
-                it to previousBonus + currentBonus
+                previousBonus + currentBonus
             }
         }
     return AvailableItemBonuses(

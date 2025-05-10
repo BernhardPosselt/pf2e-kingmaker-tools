@@ -36,10 +36,10 @@ inline fun <reified T : DataModel> ClientSettings.registerDataModel(
     hint: String? = undefined,
     requiresReload: Boolean = false,
 ) {
-    register<AnyObject>(
+    register(
         Config.moduleId,
         key,
-        com.foundryvtt.core.helpers.SettingsData<AnyObject>(
+        SettingsData(
             name = name,
             hint = hint,
             config = false,
@@ -63,7 +63,7 @@ fun ClientSettings.registerInt(
     register(
         Config.moduleId,
         key,
-        SettingsData<Int>(
+        SettingsData(
             name = name,
             hint = hint,
             config = !hidden,
@@ -86,10 +86,10 @@ inline fun <reified T : Any> ClientSettings.registerScalar(
     choices: ReadonlyRecord<String, T>? = undefined,
     scope: SettingsScope = SettingsScope.WORLD,
 ) {
-    register<T>(
+    register(
         Config.moduleId,
         key,
-        SettingsData<T>(
+        SettingsData(
             name = name,
             hint = hint,
             config = !hidden,
@@ -111,10 +111,10 @@ fun ClientSettings.createMenu(
     restricted: Boolean = false,
     app: JsClass<out ApplicationV2>
 ) {
-    registerMenu<ApplicationV2>(
+    registerMenu(
         Config.moduleId,
         key,
-        SettingsMenuData<ApplicationV2>(
+        SettingsMenuData(
             name = name,
             label = label,
             hint = hint,

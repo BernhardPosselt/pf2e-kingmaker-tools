@@ -58,7 +58,6 @@ fun StructureActor.getRawResolvedStructureData(): RawStructureData? {
     } else {
         data.unsafeCast<RawStructureData>()
     }
-    return null
 }
 
 fun TokenDocument.isStructure() =
@@ -114,14 +113,14 @@ fun RawStructureData.parseStructure(
                 value = rule.value,
             )
         }
-    }?.toSet() ?: emptySet()) + (activityBonusRules?.mapNotNull { rule ->
+    }?.toSet() ?: emptySet()) + (activityBonusRules?.map { rule ->
         StructureBonus(
             activity = rule.activity,
             value = rule.value,
             skill = null,
         )
     }?.toSet() ?: emptySet()),
-    availableItemsRules = availableItemsRules?.mapNotNull { rule ->
+    availableItemsRules = availableItemsRules?.map { rule ->
         val group = rule.group?.let { group -> ItemGroup.fromString(group) }
         AvailableItemsRule(
             value = rule.value,

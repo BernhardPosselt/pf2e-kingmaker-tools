@@ -31,8 +31,8 @@ fun getHighestLeadershipModifiers(
     leaderActors: LeaderActors,
     leaderSkills: LeaderSkills,
 ): LeaderBonuses {
-    val bonuses = Leader.entries.associate { leader ->
-        val bonus = leaderActors.resolve(leader)?.let { actor ->
+    val bonuses = Leader.entries.associateWith { leader ->
+        leaderActors.resolve(leader)?.let { actor ->
             calculateLeadershipBonus(
                 leaderLevel = actor.level,
                 leaderType = actor.type,
@@ -40,7 +40,6 @@ fun getHighestLeadershipModifiers(
                 leaderSkillRanks = actor.ranks,
             )
         } ?: 0
-        leader to bonus
     }
     return LeaderBonuses(
         ruler = bonuses[Leader.RULER] ?: 0,

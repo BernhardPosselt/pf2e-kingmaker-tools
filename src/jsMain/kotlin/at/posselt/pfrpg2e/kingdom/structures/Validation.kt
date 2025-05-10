@@ -17,7 +17,7 @@ class StructureValidationError(
 fun validateStructure(jsonText: String, schema: JsonElement) {
     val json = parseToJsonElement(jsonText)
     if (json !is JsonObject) {
-        return throw StructureValidationError(input = jsonText, message = t("kingdom.notValidJsonObject"))
+        throw StructureValidationError(input = jsonText, message = t("kingdom.notValidJsonObject"))
     }
     if (json.containsKey("ref")) {
         val errors = validateUsingSchema(schema, json)

@@ -55,7 +55,7 @@ private data class ContextEntry(
     val callback: (game: Game, HTMLElement) -> Unit,
 )
 
-private val entries = listOf<ContextEntry>(
+private val entries = listOf(
     ContextEntry(
         name = t("kingdom.rerollUsingFame"),
         condition = { game, elem ->

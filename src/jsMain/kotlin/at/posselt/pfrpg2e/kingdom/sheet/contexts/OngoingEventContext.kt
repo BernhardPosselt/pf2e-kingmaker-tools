@@ -11,7 +11,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.js.JsPlainObject
 
-@Suppress("unused")
 @JsPlainObject
 external interface OngoingEventStageContext {
     val index: Int

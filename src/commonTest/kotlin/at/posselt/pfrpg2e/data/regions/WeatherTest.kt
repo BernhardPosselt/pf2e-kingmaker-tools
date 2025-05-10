@@ -6,9 +6,9 @@ import kotlin.test.assertEquals
 class WeatherTest {
     @Test
     fun weatherType() {
-        assertEquals(WeatherType.SNOWY, findWeatherType(true, true))
-        assertEquals(WeatherType.RAINY, findWeatherType(false, true))
-        assertEquals(WeatherType.COLD, findWeatherType(true, false))
-        assertEquals(WeatherType.SUNNY, findWeatherType(false, false))
+        assertEquals(WeatherType.SNOWY, findWeatherType(isCold = true, hasPrecipitation = true))
+        assertEquals(WeatherType.RAINY, findWeatherType(isCold = false, hasPrecipitation = true))
+        assertEquals(WeatherType.COLD, findWeatherType(isCold = true, hasPrecipitation = false))
+        assertEquals(WeatherType.SUNNY, findWeatherType(isCold = false, hasPrecipitation = false))
     }
 }

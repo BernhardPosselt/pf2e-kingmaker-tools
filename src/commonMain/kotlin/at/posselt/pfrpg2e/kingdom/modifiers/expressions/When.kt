@@ -5,9 +5,9 @@ data class When(
     val default: Any?,
 ) : Expression<Any?> {
     override fun evaluate(context: ExpressionContext): Any? =
-        cases.asSequence<Case>()
-            .mapNotNull<Case, Any> { it.evaluate(context) }
-            .firstOrNull<Any>()
+        cases.asSequence()
+            .mapNotNull { it.evaluate(context) }
+            .firstOrNull()
             ?: context.evaluateExpression(default)
 
     fun evaluateInt(context: ExpressionContext): Int =

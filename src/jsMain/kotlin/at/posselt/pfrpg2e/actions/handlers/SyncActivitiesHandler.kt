@@ -27,7 +27,6 @@ external interface SyncActivitiesAction {
     val campingActorUuid: String
 }
 
-@Suppress("unused")
 @JsPlainObject
 external interface RandomEncounterContext {
     val campingActorUuid: String

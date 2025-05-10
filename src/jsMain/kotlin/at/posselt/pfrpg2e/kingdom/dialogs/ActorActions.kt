@@ -4,11 +4,9 @@ import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.confirm
 import at.posselt.pfrpg2e.app.forms.SimpleApp
 import at.posselt.pfrpg2e.app.jsonFilePicker
-import at.posselt.pfrpg2e.camping.CampingData
 import at.posselt.pfrpg2e.camping.clearCamping
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.setCamping
-import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.clearKingdom
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
@@ -54,13 +52,13 @@ class ActorActions(
 
             "import-kingdom" -> buildPromise {
                 val json = jsonFilePicker(title = t("kingdom.uploadKingdomJson"), t("applications.kingdom"))
-                actor.setKingdom(JSON.parse<KingdomData>(json))
+                actor.setKingdom(JSON.parse(json))
                 close()
             }
 
             "import-camping" -> buildPromise {
                 val json = jsonFilePicker(title = t("kingdom.uploadCampingJson"), t("applications.camping"))
-                actor.setCamping(JSON.parse<CampingData>(json))
+                actor.setCamping(JSON.parse(json))
                 close()
             }
 
