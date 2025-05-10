@@ -101,7 +101,7 @@ private suspend fun Game.migrateFrom(currentVersion: Int) {
         }
 
     settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(latestMigrationVersion)
-    ui.notifications.info("${t("moduleName")}: ${t("migrations.runningMigration")}")
+    ui.notifications.info("${t("moduleName")}: ${t("migrations.successful")}")
 
     if (migrationsToRun.any { it.showUpgradingNotices }) {
         openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.wz1mIWMxDJVsMIUd")

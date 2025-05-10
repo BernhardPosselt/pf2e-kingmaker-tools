@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Prevent users from upgrading from versions that haven't been properly migrated on V12 yet to prevent potential bugs during data migration
-
+* Fix migration successful popup
 
 ## [5.1.6] - 2025-05-04
 

@@ -3,7 +3,7 @@
     "moduleName": "Kingdom Building, Camping & Weather",
     "migrations": {
       "failed": "Failed to upgrade from version {version}. Please check the output of your console log (F12) and file an issue on GitHub or request support on our Discord channel.",
-      "unsupportedVersions": "Upgrades from versions prior to 1.1.1 are not supported anymore. Please upgrade to 1.1.1 first",
+      "unsupportedVersions": "Upgrades from versions prior to {version} are not supported anymore. Please upgrade to {version} first",
       "upgradingFromTo": "Upgrading from {fromVersion} to {toVersion}",
       "doNotClose": "Running migrations, please do not close the window",
       "runningMigration": "Running migration version {version}",
