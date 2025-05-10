@@ -18,11 +18,11 @@ fun filterModifiersAndUpdateContext(
     val selectedMods = modifiers.filter { it.selector == selector }
     // first filter applicable modifiers and get their roll options
     val rollOptions = selectedMods.asSequence()
-        .filter { it.applyIf.all { it.evaluate(context) } && it.enabled }
+        .filter { it.applyIf.all { mod -> mod.evaluate(context) } && it.enabled }
         .flatMap { it.rollOptions }
         .toSet()
     val filteredModifiers = selectedMods.asSequence()
-        .filter { it.applyIf.all { it.evaluate(context.copy(rollOptions = context.rollOptions + rollOptions)) } }
+        .filter { it.applyIf.all { mod -> mod.evaluate(context.copy(rollOptions = context.rollOptions + rollOptions)) } }
         .toList()
     val enabledRollOptions = filteredModifiers.flatMap { it.rollOptions }.toSet()
     return FilterResult(

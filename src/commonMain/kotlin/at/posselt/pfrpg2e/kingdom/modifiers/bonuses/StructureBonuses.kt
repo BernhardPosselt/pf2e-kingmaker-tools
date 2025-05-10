@@ -9,7 +9,7 @@ import at.posselt.pfrpg2e.slugify
 fun createStructureBonuses(mergedSettlement: MergedSettlement) =
     mergedSettlement.settlement.highestUniqueBonuses.map {
         val ids = listOfNotNull(it.skill, it.activity, it.locatedIn.slugify()) +
-                it.structureNames.map { it.slugify() }
+                it.structureNames.map { name -> name.slugify() }
         Modifier(
             value = it.value,
             id = "structure-${ids.joinToString("-")}",
