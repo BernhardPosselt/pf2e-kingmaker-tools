@@ -4,6 +4,10 @@ This module ships all OGL licensed rules to run the Kingdom, Camping and Weather
 
 **Documentation is included in a journal inside FoundryVTT!**
 
+## Support
+
+If you are having issues, you can either file an issue on GitHub or drop into our [Discord Server](https://discord.com/invite/pf2e) ([Channel](https://discord.com/channels/880968862240239708/1079113556823396352))
+
 ## Licensing
 
 All PFRPG 2e content uses the [Open Gaming License](./OpenGameLicense.md). If you find non OGL content, please file an

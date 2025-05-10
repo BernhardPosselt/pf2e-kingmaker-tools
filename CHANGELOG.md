@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.7] - 2025-05-10
+
+### Fixed
+
+* Prevent users from upgrading from versions that haven't been properly migrated on V12 yet to prevent potential bugs during data migration
+
+
 ## [5.1.6] - 2025-05-04
 
 ### Fixed
