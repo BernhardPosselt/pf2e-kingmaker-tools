@@ -42,7 +42,7 @@ private val migrations = listOf(
     Migration17(),
 )
 
-val latestMigrationVersion = migrations.maxOfOrNull { it.version }!!
+private val latestMigrationVersion = migrations.maxOfOrNull { it.version }!!
 
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     val currentVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
