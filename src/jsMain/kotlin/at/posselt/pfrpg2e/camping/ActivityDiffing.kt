@@ -36,7 +36,7 @@ private data class ActivityChange(
 )
 
 private const val homebrewPath = "flags.${Config.moduleId}.camping-sheet.homebrewCampingActivities"
-private const val alwaysPerformPath = "flags.${Config.moduleId}.camping-sheet.alwaysPerformActivities"
+private const val alwaysPerformPath = "flags.${Config.moduleId}.camping-sheet.alwaysPerformActivityIds"
 private const val campingActivitiesPath = "flags.${Config.moduleId}.camping-sheet.campingActivities"
 
 private val settingAttributes = setOf(
