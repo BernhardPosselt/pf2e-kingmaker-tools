@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Fix activity syncing when always performed activities are changed in settings
+
 ## [5.1.7] - 2025-05-10
 
 ### Fixed
