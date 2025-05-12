@@ -16,7 +16,7 @@ These take the form of
 
 ```json
 {
-  "ref": "Herbalist"
+  "ref": "herbalist"
 }
 ```
 
