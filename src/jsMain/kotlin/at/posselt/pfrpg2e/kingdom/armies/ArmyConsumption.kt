@@ -42,7 +42,7 @@ private fun calculateTotalArmyConsumption(game: Game, folderId: String) =
         .distinctBy(PF2EArmy::uuid)
         .sumOf { it.system.consumption }
 
-private suspend fun updateArmyConsumption(game: Game) {
+suspend fun updateArmyConsumption(game: Game) {
     game.getKingdomActors()
         .forEach {
             val kingdom = it.getKingdom()

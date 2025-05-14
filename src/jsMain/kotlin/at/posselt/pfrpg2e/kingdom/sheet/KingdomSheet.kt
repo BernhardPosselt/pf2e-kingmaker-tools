@@ -32,6 +32,7 @@ import at.posselt.pfrpg2e.kingdom.RawEq
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.RawSome
 import at.posselt.pfrpg2e.kingdom.SettlementTerrain
+import at.posselt.pfrpg2e.kingdom.armies.updateArmyConsumption
 import at.posselt.pfrpg2e.kingdom.createModifiers
 import at.posselt.pfrpg2e.kingdom.createSimpleContext
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
@@ -516,6 +517,10 @@ class KingdomSheet(
                             kingdom.fame.now = kingdom.fame.now.coerceIn(0, kingdom.settings.maximumFamePoints)
                             beforeKingdomUpdate(previous, kingdom)
                             actor.setKingdom(kingdom)
+                            if (!previous.settings.autoCalculateArmyConsumption
+                                && kingdom.settings.autoCalculateArmyConsumption) {
+                                updateArmyConsumption(game)
+                            }
                         },
                         kingdomSettings = kingdom.settings
                     ).launch()

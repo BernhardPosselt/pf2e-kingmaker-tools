@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.9] - 2025-05-14
+
+### Fixed
+
+* When changing from manual army consumption to automatic, immediately update army consumption on the sheet
+
 ## [5.1.8] - 2025-05-11
 
 ### Fixed
