@@ -517,8 +517,9 @@ class KingdomSheet(
                             kingdom.fame.now = kingdom.fame.now.coerceIn(0, kingdom.settings.maximumFamePoints)
                             beforeKingdomUpdate(previous, kingdom)
                             actor.setKingdom(kingdom)
-                            if (!previous.settings.autoCalculateArmyConsumption
-                                && kingdom.settings.autoCalculateArmyConsumption) {
+                            val armyFolderIdChanged =
+                                previous.settings.recruitableArmiesFolderId != kingdom.settings.recruitableArmiesFolderId
+                            if (kingdom.settings.autoCalculateArmyConsumption && (!previous.settings.autoCalculateArmyConsumption || armyFolderIdChanged)) {
                                 updateArmyConsumption(game)
                             }
                         },

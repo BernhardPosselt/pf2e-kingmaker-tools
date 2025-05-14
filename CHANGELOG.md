@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.10] - 2025-05-14
+
+### Fixed
+
+* Also update army consumption when changing the army folder in kingdom settings
+
+
 ## [5.1.9] - 2025-05-14
 
 ### Fixed
