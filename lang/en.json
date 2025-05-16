@@ -65,7 +65,10 @@
       "enableTokenMapping": "Enable Token Mapping",
       "enableTokenMappingHelp": "If enabled, automatically maps token images to your bestiary browser based on the documented file structure in the manual if the official module is not enabled",
       "schemaVersion": "Schema Version",
-      "kingdomActiveLeader": "Actively Filtered Kingdom Leader"
+      "schemaVersionHelp": "All data migrations greater than this version are run at page load. Do not edit unless you know what you are doing!",
+      "kingdomActiveLeader": "Actively Filtered Kingdom Leader",
+      "enablePartyActorIcons": "Enable Party Actor Icons",
+      "enablePartyActorIconsHelp": "If enabled, shows icons next to the party actor. Disable if you only use macros."
     },
     "applications": {
       "apply": "Apply",

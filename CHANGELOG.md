@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.00] - 2025-05-16
+
+### Added
+
+* Party actor icons can now be hidden if you only rely on macros
+* Schema version is now visible and changeable through settings to make debugging/support easier
+
 ## [5.1.10] - 2025-05-14
 
 ### Fixed

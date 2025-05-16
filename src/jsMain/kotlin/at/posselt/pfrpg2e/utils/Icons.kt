@@ -116,40 +116,42 @@ fun registerMacroDropHooks(game: Game) {
 }
 
 fun registerIcons(actionDispatcher: ActionDispatcher) {
-    TypedHooks.onRenderActorDirectory { _, html, _ ->
-        html.querySelectorAll(".folder[data-party]")
-            .asList()
-            .filterIsInstance<HTMLElement>()
-            .forEach {
-                val id = it.dataset["entryId"]
-                if (id != null) {
-                    val insertAfter = it.querySelector(".folder-name")
-                    if (game.user.isGM) {
-                        insertAfter?.insertAdjacentElement(
-                            "afterend", createPartyActorIcon(
-                                id = id,
-                                icon = setOf("fa-solid", "fa-ellipsis-vertical"),
-                                toolTip = t("applications.actorActions.tooltip"),
-                                sheetType = SheetType.KINGDOM,
-                                onClick = {
-                                    game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
-                                        ActorActions(actor = actor).launch()
-                                    }
-                                },
+    if (game.settings.pfrpg2eKingdomCampingWeather.getEnablePartyActorIcons()) {
+        TypedHooks.onRenderActorDirectory { _, html, _ ->
+            html.querySelectorAll(".folder[data-party]")
+                .asList()
+                .filterIsInstance<HTMLElement>()
+                .forEach {
+                    val id = it.dataset["entryId"]
+                    if (id != null) {
+                        val insertAfter = it.querySelector(".folder-name")
+                        if (game.user.isGM) {
+                            insertAfter?.insertAdjacentElement(
+                                "afterend", createPartyActorIcon(
+                                    id = id,
+                                    icon = setOf("fa-solid", "fa-ellipsis-vertical"),
+                                    toolTip = t("applications.actorActions.tooltip"),
+                                    sheetType = SheetType.KINGDOM,
+                                    onClick = {
+                                        game.actors.get(id)?.takeIfInstance<PF2EParty>()?.let { actor ->
+                                            ActorActions(actor = actor).launch()
+                                        }
+                                    },
+                                )
                             )
-                        )
-                    }
-                    insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
-                    insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))
-                    if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
-                        it.querySelector(".fa-crown")
-                            ?.parentElement
-                            ?.takeIfInstance<HTMLElement>()
-                            ?.let { elem ->
-                                elem.hidden = true
-                            }
+                        }
+                        insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
+                        insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))
+                        if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
+                            it.querySelector(".fa-crown")
+                                ?.parentElement
+                                ?.takeIfInstance<HTMLElement>()
+                                ?.let { elem ->
+                                    elem.hidden = true
+                                }
+                        }
                     }
                 }
-            }
+        }
     }
 }

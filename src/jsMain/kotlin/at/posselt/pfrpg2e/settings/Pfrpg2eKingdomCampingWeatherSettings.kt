@@ -172,6 +172,12 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     fun getKingdomActiveLeader(): String? =
         game.settings.getNullableString("kingdomActiveLeader")
 
+    suspend fun setEnablePartyActorIcons(value: Boolean) =
+        game.settings.setBoolean("enablePartyActorIcons", value)
+
+    fun getEnablePartyActorIcons(): Boolean =
+        game.settings.getBoolean("enablePartyActorIcons")
+
     suspend fun setEnableTokenMapping(value: Boolean) =
         game.settings.setBoolean("enableTokenMapping", value)
 
@@ -295,7 +301,8 @@ object Pfrpg2eKingdomCampingWeatherSettings {
         game.settings.registerInt(
             key = "schemaVersion",
             name = t("settings.schemaVersion"),
-            hidden = true,
+            hidden = false,
+            hint = t("settings.schemaVersionHelp")
         )
         game.settings.registerDataModel<ClimateConfigurationDataModel>(
             key = "climate",
@@ -312,6 +319,13 @@ object Pfrpg2eKingdomCampingWeatherSettings {
             name = t("settings.enableWeather"),
             key = "enableWeather",
             default = true,
+        )
+        game.settings.registerScalar(
+            name = t("settings.enablePartyActorIcons"),
+            key = "enablePartyActorIcons",
+            hint = t("settings.enablePartyActorIconsHelp"),
+            default = true,
+            requiresReload = true,
         )
         game.settings.registerScalar<Boolean>(
             key = "enableWeatherSoundFx",
