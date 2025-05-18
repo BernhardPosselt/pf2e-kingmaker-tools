@@ -171,7 +171,6 @@ fun main() {
                     ?.updateSource(data)
             }
             registerWeatherHooks(game)
-            registerCombatTrackHooks(game)
             registerActivityDiffingHooks(game, actionDispatcher)
             registerMealDiffingHooks()
             registerArmyConsumptionHooks(game)
@@ -246,6 +245,7 @@ fun main() {
 
         Hooks.onReady {
             buildPromise {
+                registerCombatTrackHooks(game)
                 game.migratePfrpg2eKingdomCampingWeather()
                 showFirstRunMessage(game)
                 validateStructures(game)
