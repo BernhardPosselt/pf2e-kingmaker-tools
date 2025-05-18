@@ -123,6 +123,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Display kingdom activity automation notes
 
 
+## [4.8.4] - 2025-05-18
+
+### Fixed
+
+* Fix pre update hooks breaking preventing meal updates and combat tracks from working properly
+
 ## [4.8.3] - 2025-05-11
 
 ### Fixed
