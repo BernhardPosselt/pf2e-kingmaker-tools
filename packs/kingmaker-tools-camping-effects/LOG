@@ -1,3 +1,21 @@
-2025/05/18-11:24:03.150150 7ac7fa7ed6c0 Recovering log #1777
-2025/05/18-11:24:03.168646 7ac7fa7ed6c0 Delete type=0 #1777
-2025/05/18-11:24:03.168667 7ac7fa7ed6c0 Delete type=3 #1776
+2025/05/19-07:59:14.017986 747fdb5ef6c0 Recovering log #1779
+2025/05/19-07:59:14.036540 747fdb5ef6c0 Delete type=0 #1779
+2025/05/19-07:59:14.036556 747fdb5ef6c0 Delete type=3 #1778
+2025/05/19-08:01:33.192462 747fcd6a16c0 Level-0 table #1783: started
+2025/05/19-08:01:33.192473 747fcd6a16c0 Level-0 table #1783: 0 bytes OK
+2025/05/19-08:01:33.204536 747fcd6a16c0 Delete type=0 #1781
+2025/05/19-08:01:33.222913 747fcd6a16c0 Manual compaction at level-0 from '!items!010XlkzzjX38BHsO' @ 72057594037927935 : 1 .. '!items!zliIP2agG0TVwKV4' @ 0 : 0; will stop at '!items!zliIP2agG0TVwKV4' @ 443 : 1
+2025/05/19-08:01:33.222915 747fcd6a16c0 Compacting 1@0 + 0@1 files
+2025/05/19-08:01:33.229204 747fcd6a16c0 Generated table #1784@0: 23 keys, 15041 bytes
+2025/05/19-08:01:33.229210 747fcd6a16c0 Compacted 1@0 + 0@1 files => 15041 bytes
+2025/05/19-08:01:33.241208 747fcd6a16c0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/05/19-08:01:33.241255 747fcd6a16c0 Delete type=2 #1764
+2025/05/19-08:01:33.271553 747fcd6a16c0 Manual compaction at level-0 from '!items!zliIP2agG0TVwKV4' @ 443 : 1 .. '!items!zliIP2agG0TVwKV4' @ 0 : 0; will stop at (end)
+2025/05/19-08:01:33.290594 747fcd6a16c0 Manual compaction at level-1 from '!items!010XlkzzjX38BHsO' @ 72057594037927935 : 1 .. '!items!zliIP2agG0TVwKV4' @ 0 : 0; will stop at '!items!zliIP2agG0TVwKV4' @ 443 : 1
+2025/05/19-08:01:33.290596 747fcd6a16c0 Compacting 1@1 + 1@2 files
+2025/05/19-08:01:33.296738 747fcd6a16c0 Generated table #1785@1: 23 keys, 15041 bytes
+2025/05/19-08:01:33.296743 747fcd6a16c0 Compacted 1@1 + 1@2 files => 15041 bytes
+2025/05/19-08:01:33.308811 747fcd6a16c0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/05/19-08:01:33.308849 747fcd6a16c0 Delete type=2 #1586
+2025/05/19-08:01:33.308888 747fcd6a16c0 Delete type=2 #1784
+2025/05/19-08:01:33.333252 747fcd6a16c0 Manual compaction at level-1 from '!items!zliIP2agG0TVwKV4' @ 443 : 1 .. '!items!zliIP2agG0TVwKV4' @ 0 : 0; will stop at (end)

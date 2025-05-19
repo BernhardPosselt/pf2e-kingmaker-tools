@@ -1,3 +1,21 @@
-2025/05/18-11:24:03.248616 7ac7f9fec6c0 Recovering log #1785
-2025/05/18-11:24:03.266951 7ac7f9fec6c0 Delete type=0 #1785
-2025/05/18-11:24:03.266974 7ac7f9fec6c0 Delete type=3 #1784
+2025/05/19-07:59:14.119011 747fda5ed6c0 Recovering log #1787
+2025/05/19-07:59:14.137875 747fda5ed6c0 Delete type=0 #1787
+2025/05/19-07:59:14.137892 747fda5ed6c0 Delete type=3 #1786
+2025/05/19-08:01:33.321069 747fcd6a16c0 Level-0 table #1791: started
+2025/05/19-08:01:33.321081 747fcd6a16c0 Level-0 table #1791: 0 bytes OK
+2025/05/19-08:01:33.333192 747fcd6a16c0 Delete type=0 #1789
+2025/05/19-08:01:33.351706 747fcd6a16c0 Manual compaction at level-0 from '!macros!0NhBWcZQf1GHp73f' @ 72057594037927935 : 1 .. '!macros!tsqRp4OXdkrzRajS' @ 0 : 0; will stop at '!macros!tsqRp4OXdkrzRajS' @ 224 : 1
+2025/05/19-08:01:33.351708 747fcd6a16c0 Compacting 1@0 + 0@1 files
+2025/05/19-08:01:33.357914 747fcd6a16c0 Generated table #1792@0: 20 keys, 4618 bytes
+2025/05/19-08:01:33.357919 747fcd6a16c0 Compacted 1@0 + 0@1 files => 4618 bytes
+2025/05/19-08:01:33.369998 747fcd6a16c0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/05/19-08:01:33.370033 747fcd6a16c0 Delete type=2 #1772
+2025/05/19-08:01:33.400427 747fcd6a16c0 Manual compaction at level-0 from '!macros!tsqRp4OXdkrzRajS' @ 224 : 1 .. '!macros!tsqRp4OXdkrzRajS' @ 0 : 0; will stop at (end)
+2025/05/19-08:01:33.437510 747fcd6a16c0 Manual compaction at level-1 from '!macros!0NhBWcZQf1GHp73f' @ 72057594037927935 : 1 .. '!macros!tsqRp4OXdkrzRajS' @ 0 : 0; will stop at '!macros!tsqRp4OXdkrzRajS' @ 224 : 1
+2025/05/19-08:01:33.437512 747fcd6a16c0 Compacting 1@1 + 1@2 files
+2025/05/19-08:01:33.443685 747fcd6a16c0 Generated table #1793@1: 20 keys, 4618 bytes
+2025/05/19-08:01:33.443690 747fcd6a16c0 Compacted 1@1 + 1@2 files => 4618 bytes
+2025/05/19-08:01:33.455685 747fcd6a16c0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/05/19-08:01:33.455725 747fcd6a16c0 Delete type=2 #1746
+2025/05/19-08:01:33.455768 747fcd6a16c0 Delete type=2 #1792
+2025/05/19-08:01:33.467940 747fcd6a16c0 Manual compaction at level-1 from '!macros!tsqRp4OXdkrzRajS' @ 224 : 1 .. '!macros!tsqRp4OXdkrzRajS' @ 0 : 0; will stop at (end)
