@@ -2,7 +2,7 @@
     "id": "ruin-resistance",
     "levels": [5, 8, 11, 14, 17, 20],
     "ruinThresholdIncreases": {
-        "amount": 2,
+        "amount": 1,
         "increase": 2
     },
     "name": "features.ruin-resistance.name",
