@@ -1,6 +1,8 @@
 <div class="km-browser">
     <div class="km-structure-filters">
         <div class="km-space-form-elements">{{> formElement activeSettlement}}</div>
+        <button type="button" class="full-width" data-action="settlement-details" {{#unless settlementChosen}}disabled{{/unless}}>{{localizeKM "kingdom.details"}}</button>
+        <hr>
         <button type="button" data-action="clear-filters">{{localizeKM "kingdom.clearFilters"}}</button>
         <div class="km-space-form-elements">{{> formElement search}}</div>
         <div class="km-space-form-elements">{{> formElement maxLevel}}</div>

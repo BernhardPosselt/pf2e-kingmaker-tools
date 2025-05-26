@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [5.2.1] - 2025-05-19
+## [5.3.0] - 2025-05-26
+
+### Added
+
+* Allow to open Settlement Inspect dialog in structure browser 
 
 ### Fixed
 

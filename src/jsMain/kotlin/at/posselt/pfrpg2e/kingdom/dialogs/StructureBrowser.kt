@@ -21,9 +21,12 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.getActiveLeader
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
+import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
@@ -31,6 +34,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
@@ -103,6 +107,7 @@ external interface StructureBrowserContext : ValidatedHandlebarsContext {
     val currentNav: String
     val structures: Array<StructureContext>
     val repairActive: Boolean
+    val settlementChosen: Boolean
 }
 
 @JsPlainObject
@@ -227,6 +232,35 @@ class StructureBrowser(
                 render()
             }
 
+            "settlement-details" -> {
+                kingdom.activeSettlement?.let { id ->
+                    val settlement = kingdom.settlements
+                        .find { it.sceneId == kingdom.activeSettlement }
+                    checkNotNull(settlement) {
+                        "Could not find raw settlement with id $id"
+                    }
+                    val title = game.scenes.get(id)?.name
+                    checkNotNull(title) {
+                        "Scene with id $id not found"
+                    }
+                    InspectSettlement(
+                        game = game,
+                        title = title,
+                        autoCalculateSettlementLevel = kingdom.settings.autoCalculateSettlementLevel,
+                        allStructuresStack = kingdom.settings.kingdomAllStructureItemBonusesStack,
+                        allowCapitalInvestmentInCapitalWithoutBank = kingdom.settings.capitalInvestmentInCapital,
+                        settlement = settlement,
+                        feats = kingdom.getChosenFeats(kingdom.getChosenFeatures(kingdom.getExplodedFeatures())),
+                        kingdom = kingdom,
+                    ) { data ->
+                        kingdom.settlements = kingdom.settlements
+                            .filter { it.sceneId != data.sceneId }
+                            .toTypedArray() + data
+                        actor.setKingdom(kingdom)
+                    }.launch()
+                }
+            }
+
             "open-structure" -> buildPromise {
                 event.preventDefault()
                 event.stopPropagation()
@@ -262,7 +296,7 @@ class StructureBrowser(
                     structure = structure,
                     rubble = rubble,
                     actorUuid = actor.uuid,
-                    addFamePoint = when(fameType) {
+                    addFamePoint = when (fameType) {
                         FameType.FAMOUS -> structure.traits.contains(StructureTrait.FAMOUS)
                         FameType.INFAMOUS -> structure.traits.contains(StructureTrait.INFAMOUS)
                     }
@@ -536,6 +570,7 @@ class StructureBrowser(
             nav = nav,
             structures = structures,
             repairActive = currentNav == StructureBrowserNav.REPAIRABLE,
+            settlementChosen = kingdom.activeSettlement != null,
         )
     }
 
