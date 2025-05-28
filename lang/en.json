@@ -3691,7 +3691,7 @@
       "read-all-about-it": {
         "title": "Read All About It",
         "description": "<p>You take advantage of your nation’s paper to print an extra edition, a bonus-sized issue, or something to spread news to the citizens of the nation so that they are more prepared for upcoming events or more informed on how to deal with ongoing events. Attempt a basic Scholarship check to determine how helpful the information proves to be.</p>",
-        "requirement": "You have built a Printing Press",
+        "requirement": "You have built a Printing House",
         "criticalSuccess": {
           "msg": "<p>Your kingdom becomes particularly prepared. The next time you attempt a skill check to resolve any event during this Kingdom turn, you gain a +4 circumstance bonus to the roll.</p>",
           "modifiers": {
