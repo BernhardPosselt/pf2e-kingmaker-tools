@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fix Read All About It requirement text
+* Fix Hospital downtime description
 
 ## [5.3.0] - 2025-05-26
 
