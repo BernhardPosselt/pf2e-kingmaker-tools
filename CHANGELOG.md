@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Fix Read All About It requirement text
 * Fix Hospital downtime description
+* Make Seasoned Wings and Thighs effect critical success descriptions more apparent in what each effect does
 
 ## [5.3.0] - 2025-05-26
 
