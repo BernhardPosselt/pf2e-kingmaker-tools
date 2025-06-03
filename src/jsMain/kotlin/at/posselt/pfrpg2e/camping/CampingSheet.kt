@@ -228,7 +228,6 @@ class CampingSheet(
     classes = setOf("km-camping-sheet"),
     controls = arrayOf(
         MenuControl(label = t("camping.showPlayers"), action = "show-players", gmOnly = true),
-        MenuControl(label = t("camping.activate"), action = "activate", gmOnly = true),
         MenuControl(label = t("camping.resetActivities"), action = "reset-activities", gmOnly = true),
         MenuControl(label = t("camping.resetMeals"), action = "reset-meals", gmOnly = true),
         MenuControl(label = t("camping.favoriteMeals"), action = "favorite-meals", gmOnly = false),
@@ -459,15 +458,6 @@ class CampingSheet(
 
             "reset-adventuring-for" -> buildPromise {
                 resetAdventuringTimeTracker()
-            }
-
-            "activate" -> buildPromise {
-                game.getCampingActors().forEach {
-                    it.getCamping()?.let { camping ->
-                        camping.isActive = actor.uuid == it.uuid
-                        it.setCamping(camping)
-                    }
-                }
             }
         }
     }

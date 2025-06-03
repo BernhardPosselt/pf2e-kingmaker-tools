@@ -7,11 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.4.0] - 2025-06-04
+
+### Changed
+
+* Require PF2E 7.1.0
+* Instead of activating parties from the camping sheet menu, use the new checkbox on the party actor in the actor sidebar 
+
 ### Fixed
 
+* Remove Leadership activity increase text from V&K Palace, Town Hall & Castle
 * Fix Read All About It requirement text
 * Fix Hospital downtime description
 * Make Seasoned Wings and Thighs effect critical success descriptions more apparent in what each effect does
+* Fixed Camping Sheet not opening due to API breaks in PF2 7.1.0
 
 ## [5.3.0] - 2025-05-26
 

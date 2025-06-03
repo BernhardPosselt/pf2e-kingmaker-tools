@@ -34,6 +34,7 @@ external class PF2EParty : PF2EActor {
 
     val members: Array<PF2EActor>
     val system: PF2EPartyData
+    val active: Boolean
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")

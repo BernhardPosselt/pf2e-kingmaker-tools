@@ -5,7 +5,7 @@ import at.posselt.pfrpg2e.data.regions.getMonth
 import at.posselt.pfrpg2e.toUtcInstant
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.helpers.GameTime
-import kotlinx.datetime.DateTimeUnit
+import com.foundryvtt.pf2e.pf2e
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -14,14 +14,12 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
 import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
-import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import kotlin.js.Date
 
 fun Game.getPF2EWorldTime(): LocalDateTime {
-    val createdOn = settings.get<String>("pf2e", "worldClock.worldCreatedOn")
-    return Instant.parse(createdOn)
-        .plus(time.worldTime.toInt(), DateTimeUnit.SECOND)
+    val ms = pf2e.worldClock.worldTime.valueOf()
+    return Instant.fromEpochMilliseconds(ms.toLong())
         .toLocalDateTime(TimeZone.UTC)
 }
 

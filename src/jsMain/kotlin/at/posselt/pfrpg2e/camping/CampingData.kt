@@ -88,7 +88,6 @@ external interface CampingData {
     var section: String
     var restingTrack: Track?
     var worldSceneId: String?
-    var isActive: Boolean?
 }
 
 suspend fun CampingData.getActorsCarryingFood(party: PF2EParty?): List<PF2EActor> =
@@ -407,9 +406,9 @@ fun Game.getCampingActors(): List<CampingActor> =
 
 fun Game.getActiveCamping(): CampingData? {
     val campingActors = getCampingActors()
-    return campingActors.firstOrNull()?.getCamping() ?: campingActors
-        .mapNotNull { it.getCamping() }
-        .firstOrNull { it.isActive == true }
+    return campingActors
+        .firstOrNull { it.active }
+        ?.getCamping() ?: campingActors.firstOrNull()?.getCamping()
 }
 
 fun CampingData.canPerformActivities(): Boolean {
