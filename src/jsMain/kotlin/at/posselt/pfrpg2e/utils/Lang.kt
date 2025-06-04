@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.utils
 
 import com.foundryvtt.core.AnyObject
-import js.array.JsTuple2
+import js.array.Tuple2
 import js.array.ReadonlyArray
 import js.array.toTypedArray
 import js.array.tupleOf
@@ -77,16 +77,16 @@ fun <T> deserializeB64Json(value: String): T =
     JSON.parse(Base64.decode(value).decodeToString())
 
 
-fun <T> ReadonlyRecord<String, T>.asSequence(): Sequence<JsTuple2<String, T>> =
+fun <T> ReadonlyRecord<String, T>.asSequence(): Sequence<Tuple2<String, T>> =
     Object.entries(this).asSequence()
 
-fun <T> ReadonlyRecord<String, T>.toList(): List<JsTuple2<String, T>> =
+fun <T> ReadonlyRecord<String, T>.toList(): List<Tuple2<String, T>> =
     Object.entries(this).toList()
 
 fun <T> Sequence<Pair<String, T>>.toRecord(): ReadonlyRecord<String, T> =
     Object.fromEntries(map { tupleOf(it.first, it.second) }.toTypedArray())
 
-fun <T> Sequence<JsTuple2<String, T>>.toRecord(): ReadonlyRecord<String, T> =
+fun <T> Sequence<Tuple2<String, T>>.toRecord(): ReadonlyRecord<String, T> =
     Object.fromEntries(toTypedArray())
 
 fun <T> Array<T>.push(
@@ -96,7 +96,7 @@ fun <T> Array<T>.push(
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
-fun <T> Sequence<JsTuple2<String, T>>.toMutableRecord(): Record<String, T> =
+fun <T> Sequence<Tuple2<String, T>>.toMutableRecord(): Record<String, T> =
     Object.fromEntries(toTypedArray()) as Record<String, T>
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")

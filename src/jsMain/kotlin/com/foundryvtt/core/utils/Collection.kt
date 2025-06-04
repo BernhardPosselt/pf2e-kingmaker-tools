@@ -2,12 +2,12 @@
 
 package com.foundryvtt.core.utils
 
-import js.array.JsTuple2
+import js.array.Tuple2
 import js.array.ReadonlyArray
 import js.iterable.JsIterable
 
 open external class Collection<T>(
-    values: ReadonlyArray<JsTuple2<String, T>> = definedExternally,
+    values: ReadonlyArray<Tuple2<String, T>> = definedExternally,
 ) : JsIterable<T> {
     val contents: Array<T>
     fun toJSON(): Array<Any>

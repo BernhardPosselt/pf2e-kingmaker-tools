@@ -5,7 +5,7 @@ import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.pf2e.system.ItemTraits
 import com.foundryvtt.pf2e.system.MaxValue
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -29,5 +29,5 @@ external class PF2EConsumable : PF2EItem {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun PF2EConsumable.update(data: PF2EConsumable, operation: DatabaseUpdateOperation = jso()): Promise<PF2EConsumable?> =
+fun PF2EConsumable.update(data: PF2EConsumable, operation: DatabaseUpdateOperation = unsafeJso()): Promise<PF2EConsumable?> =
     update(data as AnyObject, operation)

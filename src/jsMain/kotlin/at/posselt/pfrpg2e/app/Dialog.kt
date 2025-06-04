@@ -7,7 +7,7 @@ import com.foundryvtt.core.*
 import com.foundryvtt.core.applications.api.*
 import com.foundryvtt.core.applications.ux.FormDataExtended
 import js.objects.ReadonlyRecord
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLFormElement
 
@@ -39,7 +39,7 @@ suspend fun <I, O> awaitablePrompt(
     title: String,
     buttonLabel: String? = null,
     templatePath: String,
-    templateContext: Any = jso(),
+    templateContext: Any = unsafeJso(),
     promptType: PromptType = PromptType.OK,
     width: Int? = undefined,
     submit: suspend (I, HTMLFormElement) -> O,
@@ -74,7 +74,7 @@ suspend fun <I, O> prompt(
     title: String,
     buttonLabel: String? = null,
     templatePath: String,
-    templateContext: Any = jso(),
+    templateContext: Any = unsafeJso(),
     promptType: PromptType = PromptType.OK,
     width: Int? = undefined,
     submit: suspend (I) -> O,
@@ -113,7 +113,7 @@ data class WaitButton<T, R>(
 suspend fun <I, O> wait(
     title: String,
     templatePath: String,
-    templateContext: ReadonlyRecord<String, Any?> = jso(),
+    templateContext: ReadonlyRecord<String, Any?> = unsafeJso(),
     buttons: List<WaitButton<I, O>>,
 ) {
     val content = tpl(templatePath, templateContext)

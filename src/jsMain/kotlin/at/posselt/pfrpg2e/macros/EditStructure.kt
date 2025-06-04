@@ -15,8 +15,8 @@ import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.ui
-import js.objects.jso
 import js.objects.recordOf
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json.Default.parseToJsonElement
@@ -35,7 +35,7 @@ suspend fun editStructureMacro(actor: Actor?) {
         ui.notifications.error(t("macros.editStructure.selectActor"))
         return
     }
-    val existing = npcActor.getRawStructureData() ?: jso()
+    val existing = npcActor.getRawStructureData() ?: unsafeJso()
     prompt<StructureMacroData, Unit>(
         templatePath = "components/forms/form.hbs",
         templateContext = recordOf(

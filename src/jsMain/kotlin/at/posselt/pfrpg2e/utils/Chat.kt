@@ -8,8 +8,8 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.ChatMessage
 import com.foundryvtt.core.documents.GetSpeakerOptions
-import js.objects.jso
 import js.objects.recordOf
+import js.objects.unsafeJso
 import kotlinx.browser.document
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
@@ -52,7 +52,7 @@ suspend fun postDegreeOfSuccess(
 
 suspend fun postChatTemplate(
     templatePath: String,
-    templateContext: Any? = jso(),
+    templateContext: Any? = unsafeJso(),
     rollMode: RollMode? = null,
     speaker: Actor? = null,
 ) {

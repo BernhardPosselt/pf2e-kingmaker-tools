@@ -6,8 +6,8 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.Document
 import com.foundryvtt.core.utils.fromUuid
 import js.objects.PropertyKey
-import js.objects.jso
 import js.objects.recordOf
+import js.objects.unsafeJso
 import js.reflect.Proxy
 import js.reflect.ProxyHandler
 import js.symbol.Symbol
@@ -36,7 +36,7 @@ private class Handler(
     fun get(target: Any, p: PropertyKey, receiver: Any): Any {
         if (p === isProxy) return isProxy
         return Handler(buildPath("$p"), updates)
-            .asProxy(jso())
+            .asProxy(unsafeJso())
     }
 
     fun asProxy(target: Any): Proxy<Any> {

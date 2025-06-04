@@ -5,7 +5,7 @@ import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.documents.Item
 import com.foundryvtt.core.utils.fromUuid
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.coroutines.await
 import kotlin.js.Promise
 
@@ -22,7 +22,7 @@ open external class PF2EItem : Item {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun PF2EItem.update(data: PF2EItem, operation: DatabaseUpdateOperation = jso()): Promise<PF2EItem?> =
+fun PF2EItem.update(data: PF2EItem, operation: DatabaseUpdateOperation = unsafeJso()): Promise<PF2EItem?> =
     update(data as AnyObject, operation)
 
 suspend fun itemFromUuid(uuid: String): PF2EItem? =

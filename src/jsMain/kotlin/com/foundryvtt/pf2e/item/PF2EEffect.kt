@@ -4,7 +4,7 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.pf2e.system.IntValue
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -27,5 +27,5 @@ external class PF2EEffect : PF2EItem {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun PF2EEffect.update(data: PF2EEffect, operation: DatabaseUpdateOperation = jso()): Promise<PF2EEffect?> =
+fun PF2EEffect.update(data: PF2EEffect, operation: DatabaseUpdateOperation = unsafeJso()): Promise<PF2EEffect?> =
     update(data as AnyObject, operation)

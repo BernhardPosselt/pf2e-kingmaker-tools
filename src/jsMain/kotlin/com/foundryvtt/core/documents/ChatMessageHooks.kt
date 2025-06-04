@@ -9,12 +9,12 @@ import com.foundryvtt.core.helpers.PreCreateDocumentCallback
 import com.foundryvtt.core.helpers.PreDeleteDocumentCallback
 import com.foundryvtt.core.helpers.PreUpdateDocumentCallback
 import com.foundryvtt.core.helpers.UpdateDocumentCallback
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlin.js.Promise
 
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun ChatMessage.update(data: ChatMessage, operation: DatabaseUpdateOperation = jso()): Promise<ChatMessage?> =
+fun ChatMessage.update(data: ChatMessage, operation: DatabaseUpdateOperation = unsafeJso()): Promise<ChatMessage?> =
     update(data as AnyObject, operation)
 
 fun <O> HooksEventListener.onPreCreateChatMessage(callback: PreCreateDocumentCallback<ChatMessage, O>) =

@@ -3,7 +3,7 @@ package com.foundryvtt.pf2e.item
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -33,5 +33,5 @@ external class PF2ECondition : PF2EItem {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun PF2ECondition.update(data: PF2ECondition, operation: DatabaseUpdateOperation = jso()): Promise<PF2ECondition?> =
+fun PF2ECondition.update(data: PF2ECondition, operation: DatabaseUpdateOperation = unsafeJso()): Promise<PF2ECondition?> =
     update(data as AnyObject, operation)

@@ -9,7 +9,7 @@ import com.foundryvtt.pf2e.system.MinMaxValue
 import com.foundryvtt.pf2e.system.StringValue
 import js.collections.JsSet
 import js.objects.ReadonlyRecord
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -131,5 +131,5 @@ external class PF2ECharacter : PF2EActor, PF2ECreature {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun PF2ECharacter.update(data: PF2ECharacter, operation: DatabaseUpdateOperation = jso()): Promise<PF2ECharacter?> =
+fun PF2ECharacter.update(data: PF2ECharacter, operation: DatabaseUpdateOperation = unsafeJso()): Promise<PF2ECharacter?> =
     update(data as AnyObject, operation)
