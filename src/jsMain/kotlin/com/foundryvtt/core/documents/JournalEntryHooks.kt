@@ -9,12 +9,12 @@ import com.foundryvtt.core.helpers.PreCreateDocumentCallback
 import com.foundryvtt.core.helpers.PreDeleteDocumentCallback
 import com.foundryvtt.core.helpers.PreUpdateDocumentCallback
 import com.foundryvtt.core.helpers.UpdateDocumentCallback
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlin.js.Promise
 
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun JournalEntry.update(data: JournalEntry, operation: DatabaseUpdateOperation = jso()): Promise<JournalEntry?> =
+fun JournalEntry.update(data: JournalEntry, operation: DatabaseUpdateOperation = unsafeJso()): Promise<JournalEntry?> =
     update(data as AnyObject, operation)
 
 fun <O> HooksEventListener.onPreCreateJournalEntry(callback: PreCreateDocumentCallback<JournalEntry, O>) =

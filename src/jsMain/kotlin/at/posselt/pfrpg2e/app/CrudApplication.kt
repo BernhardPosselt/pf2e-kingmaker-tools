@@ -12,7 +12,7 @@ import com.foundryvtt.core.utils.flattenObject
 import js.array.toTypedArray
 import js.core.Void
 import js.objects.Record
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -110,7 +110,7 @@ abstract class CrudApplication(
     protected abstract fun editEntry(id: String): Promise<Void>
 
     override fun fixObject(value: dynamic) {
-        val ids = (value["enabledIds"] ?: jso()).unsafeCast<Record<String, Boolean>>()
+        val ids = (value["enabledIds"] ?: unsafeJso()).unsafeCast<Record<String, Boolean>>()
         value["enabledIds"] = flattenObject(ids).asSequence()
             .filter { it.component2() == true }
             .map { it.component1() }

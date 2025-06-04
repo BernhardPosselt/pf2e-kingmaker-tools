@@ -5,7 +5,7 @@ import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.pf2e.system.IntValue
 import com.foundryvtt.pf2e.system.ItemTraits
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -33,6 +33,6 @@ external class PF2ECampaignFeature : PF2EItem {
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
 fun PF2ECampaignFeature.update(
     data: PF2ECampaignFeature,
-    operation: DatabaseUpdateOperation = jso()
+    operation: DatabaseUpdateOperation = unsafeJso()
 ): Promise<PF2ECampaignFeature?> =
     update(data as AnyObject, operation)

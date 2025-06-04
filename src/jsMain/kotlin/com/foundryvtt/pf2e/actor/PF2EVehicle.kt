@@ -3,7 +3,7 @@ package com.foundryvtt.pf2e.actor
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -24,5 +24,5 @@ external class PF2EVehicle : PF2EActor {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun PF2EVehicle.update(data: PF2EVehicle, operation: DatabaseUpdateOperation = jso()): Promise<PF2EVehicle?> =
+fun PF2EVehicle.update(data: PF2EVehicle, operation: DatabaseUpdateOperation = unsafeJso()): Promise<PF2EVehicle?> =
     update(data as AnyObject, operation)

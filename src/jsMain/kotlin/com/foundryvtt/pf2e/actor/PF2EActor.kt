@@ -15,7 +15,7 @@ import com.foundryvtt.pf2e.item.PF2EEffect
 import com.foundryvtt.pf2e.item.PF2EEquipment
 import com.foundryvtt.pf2e.item.PF2EFeat
 import com.foundryvtt.pf2e.item.PF2EItem
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -70,7 +70,7 @@ open external class PF2EActor : Actor {
 // required to make instance of work, but since the classes are not registered here
 // at page load, we can't use @file:JsQualifier
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun PF2EActor.update(data: PF2EActor, operation: DatabaseUpdateOperation = jso()): Promise<PF2EActor?> =
+fun PF2EActor.update(data: PF2EActor, operation: DatabaseUpdateOperation = unsafeJso()): Promise<PF2EActor?> =
     update(data as AnyObject, operation)
 
 fun PF2EActor.items() = items.unsafeCast<EmbeddedCollection<PF2EItem>>()

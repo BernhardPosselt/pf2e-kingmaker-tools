@@ -43,8 +43,8 @@ import com.foundryvtt.pf2e.actor.PF2EVehicle
 import js.array.toTypedArray
 import js.core.Void
 import js.objects.Record
-import js.objects.jso
 import js.objects.recordOf
+import js.objects.unsafeJso
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -332,12 +332,12 @@ class CampingSettingsApplication(
 
     override fun fixObject(value: dynamic) {
         @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
-        val actors = (value["actorUuidsNotKeepingWatch"] ?: jso()) as Record<String, Boolean>
+        val actors = (value["actorUuidsNotKeepingWatch"] ?: unsafeJso()) as Record<String, Boolean>
         value["actorUuidsNotKeepingWatch"] = flattenObject(actors).asSequence()
             .filter { it.component2() == true }
             .map { it.component1() }
             .toTypedArray()
-        val activities = (value["alwaysPerformActivities"] ?: jso()).unsafeCast<Record<String, Boolean>>()
+        val activities = (value["alwaysPerformActivities"] ?: unsafeJso()).unsafeCast<Record<String, Boolean>>()
         value["alwaysPerformActivities"] = flattenObject(activities).asSequence()
             .filter { it.component2() == true }
             .map { it.component1() }

@@ -4,7 +4,7 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import js.objects.ReadonlyRecord
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -26,5 +26,5 @@ external class PF2EFamiliar : PF2EActor, PF2ECreature {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun PF2EFamiliar.update(data: PF2EFamiliar, operation: DatabaseUpdateOperation = jso()): Promise<PF2EFamiliar?> =
+fun PF2EFamiliar.update(data: PF2EFamiliar, operation: DatabaseUpdateOperation = unsafeJso()): Promise<PF2EFamiliar?> =
     update(data as AnyObject, operation)

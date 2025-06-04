@@ -33,7 +33,7 @@ import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.deepClone
 import js.core.Void
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
@@ -123,7 +123,7 @@ class ModifyActivity(
         fortune = data?.fortune == true,
         oncePerRound = data?.oncePerRound == true,
         hint = data?.hint,
-        skills = data?.skills ?: jso(),
+        skills = data?.skills ?: unsafeJso(),
         criticalSuccess = data?.criticalSuccess,
         success = data?.success,
         failure = data?.failure,

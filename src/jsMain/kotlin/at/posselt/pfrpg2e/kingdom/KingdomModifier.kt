@@ -39,7 +39,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
 import at.posselt.pfrpg2e.kingdom.sheet.calculateAnarchy
 import com.foundryvtt.core.AnyObject
 import io.github.uuidjs.uuid.v4
-import js.array.JsTuple2
+import js.array.Tuple2
 import js.objects.Object
 import kotlinx.js.JsPlainObject
 import kotlinx.serialization.json.Json.Default.parseToJsonElement
@@ -48,32 +48,32 @@ sealed external interface RawExpression<T>
 
 @JsPlainObject
 external interface RawGte : RawExpression<Boolean> {
-    val gte: JsTuple2<Any?, Any?>  // String, null or number
+    val gte: Tuple2<Any?, Any?>  // String, null or number
 }
 
 @JsPlainObject
 external interface RawGt : RawExpression<Boolean> {
-    val gt: JsTuple2<Any?, Any?>  // String, null or number
+    val gt: Tuple2<Any?, Any?>  // String, null or number
 }
 
 @JsPlainObject
 external interface RawLte : RawExpression<Boolean> {
-    val lte: JsTuple2<Any?, Any?>  // String, null or number
+    val lte: Tuple2<Any?, Any?>  // String, null or number
 }
 
 @JsPlainObject
 external interface RawIn : RawExpression<Boolean> {
-    val `in`: JsTuple2<Any?, Any>  // String, null or number in Array<Any?> or String
+    val `in`: Tuple2<Any?, Any>  // String, null or number in Array<Any?> or String
 }
 
 @JsPlainObject
 external interface RawLt : RawExpression<Boolean> {
-    val lt: JsTuple2<Any?, Any?>
+    val lt: Tuple2<Any?, Any?>
 }
 
 @JsPlainObject
 external interface RawEq : RawExpression<Boolean> {
-    val eq: JsTuple2<Any?, Any?>
+    val eq: Tuple2<Any?, Any?>
 }
 
 @JsPlainObject
@@ -109,7 +109,7 @@ external interface RawWhen : RawExpression<Any?> {
 
 @JsPlainObject
 external interface RawCase {
-    val case: JsTuple2<RawExpression<Boolean>, Any?>
+    val case: Tuple2<RawExpression<Boolean>, Any?>
 }
 
 @JsPlainObject

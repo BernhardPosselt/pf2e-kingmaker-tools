@@ -6,7 +6,7 @@ import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.helpers.HooksEventListener
 import com.foundryvtt.core.helpers.RenderApplication
 import js.objects.ReadonlyRecord
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -28,7 +28,7 @@ external class PF2EHazard : PF2EActor, PF2ECreature {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun PF2EHazard.update(data: PF2EHazard, operation: DatabaseUpdateOperation = jso()): Promise<PF2EHazard?> =
+fun PF2EHazard.update(data: PF2EHazard, operation: DatabaseUpdateOperation = unsafeJso()): Promise<PF2EHazard?> =
     update(data as AnyObject, operation)
 
 @JsPlainObject

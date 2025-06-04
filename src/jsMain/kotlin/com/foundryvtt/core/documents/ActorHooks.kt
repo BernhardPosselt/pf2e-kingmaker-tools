@@ -9,11 +9,11 @@ import com.foundryvtt.core.helpers.PreCreateDocumentCallback
 import com.foundryvtt.core.helpers.PreDeleteDocumentCallback
 import com.foundryvtt.core.helpers.PreUpdateDocumentCallback
 import com.foundryvtt.core.helpers.UpdateDocumentCallback
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlin.js.Promise
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun Actor.update(data: Actor, operation: DatabaseUpdateOperation = jso()): Promise<Actor?> =
+fun Actor.update(data: Actor, operation: DatabaseUpdateOperation = unsafeJso()): Promise<Actor?> =
     update(data as AnyObject, operation)
 
 @Suppress("unused")

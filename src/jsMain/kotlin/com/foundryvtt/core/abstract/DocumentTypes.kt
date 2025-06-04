@@ -2,7 +2,7 @@ package com.foundryvtt.core.abstract
 
 import com.foundryvtt.core.AnyObject
 import js.objects.ReadonlyRecord
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
@@ -68,5 +68,5 @@ external interface DatabaseDeleteOperation : DatabaseOperation {
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
-fun Document.update(data: Document, operation: DatabaseUpdateOperation = jso()): Promise<Document?> =
+fun Document.update(data: Document, operation: DatabaseUpdateOperation = unsafeJso()): Promise<Document?> =
     update(data as AnyObject, operation)
