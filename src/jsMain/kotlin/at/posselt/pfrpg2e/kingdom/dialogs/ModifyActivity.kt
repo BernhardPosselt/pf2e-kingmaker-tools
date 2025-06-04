@@ -67,7 +67,6 @@ external interface ModifyActivityData {
     val actions: Int
 }
 
-@JsExport
 class ModifyActivityDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

@@ -68,7 +68,6 @@ external interface KingdomSkillPickerData {
     val skills: Array<KingdomSkillPickerSkillData>
 }
 
-@JsExport
 class KingdomSkillPickerModel(
     value: AnyObject,
     options: DocumentConstructionContext?

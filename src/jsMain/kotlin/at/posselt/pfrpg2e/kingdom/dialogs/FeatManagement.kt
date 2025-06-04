@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.RawFeat
+import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
 import at.posselt.pfrpg2e.kingdom.getFeats
 import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.setKingdom
@@ -27,7 +28,7 @@ class FeatManagement(
             kingdom.homebrewFeats = kingdom.homebrewFeats.filter { it.id != id }.toTypedArray()
             kingdom.features = kingdom.features.map {
                 if (it.featId == id) {
-                    it.copy(featId = null, featRuinThresholdIncreases = emptyArray())
+                    RawFeatureChoices.copy(it, featId = null, featRuinThresholdIncreases = emptyArray())
                 } else {
                     it
                 }
@@ -107,7 +108,7 @@ class FeatManagement(
                 .toTypedArray()
             kingdom.features = kingdom.features.map {
                 if (it.featId !in enabled) {
-                    it.copy(featId = null, featRuinThresholdIncreases = emptyArray())
+                    RawFeatureChoices.copy(it, featId = null, featRuinThresholdIncreases = emptyArray())
                 } else {
                     it
                 }

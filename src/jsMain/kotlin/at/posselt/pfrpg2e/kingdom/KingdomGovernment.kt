@@ -18,7 +18,8 @@ external interface RawGovernment {
 external val governments: Array<RawGovernment>
 
 private fun RawGovernment.translate() =
-    copy(
+    RawGovernment.copy(
+        this,
         name = t(name),
         description = t(description)
     )

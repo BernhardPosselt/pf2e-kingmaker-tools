@@ -119,12 +119,14 @@ fun KingdomData.getOngoingEvents(applyBlacklist: Boolean = false): List<OngoingE
 }
 
 private fun RawKingdomEventOutcome.translate(events: Array<RawKingdomEvent>) =
-    copy(
+    RawKingdomEventOutcome.copy(
+        this,
         msg = insertButtons(t(msg), events)
     )
 
 private fun RawKingdomEventStage.translate(events: Array<RawKingdomEvent>) =
-    copy(
+    RawKingdomEventStage.copy(
+        this,
         criticalSuccess = criticalSuccess?.let { it.translate(events) },
         success = success?.let { it.translate(events) },
         failure = failure?.let { it.translate(events) },
@@ -132,7 +134,8 @@ private fun RawKingdomEventStage.translate(events: Array<RawKingdomEvent>) =
     )
 
 private fun RawKingdomEvent.translate(events: Array<RawKingdomEvent>) =
-    copy(
+    RawKingdomEvent.copy(
+        this,
         description = insertButtons(t(description), events),
         special = special?.let { t(it) },
         resolution = resolution?.let { t(it) },
@@ -147,7 +150,7 @@ private var translatedKingdomEvents = emptyArray<RawKingdomEvent>()
 fun translateKingdomEvents(): Array<RawKingdomEvent> {
     // name needs to be translated first to then translate @gainEvent buttons
     translatedKingdomEvents = kingdomEvents
-        .map { it.copy(name = t(it.name)) }
+        .map { RawKingdomEvent.copy(it, name = t(it.name)) }
         .toTypedArray()
     translatedKingdomEvents = translatedKingdomEvents
         .map { it.translate(translatedKingdomEvents) }

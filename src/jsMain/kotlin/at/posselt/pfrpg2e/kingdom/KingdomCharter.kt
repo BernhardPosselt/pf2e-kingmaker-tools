@@ -17,7 +17,8 @@ external interface RawCharter {
 external val charters: Array<RawCharter>
 
 private fun RawCharter.translate() =
-    copy(
+    RawCharter.copy(
+        this,
         name = t(name),
         description = t(description)
     )

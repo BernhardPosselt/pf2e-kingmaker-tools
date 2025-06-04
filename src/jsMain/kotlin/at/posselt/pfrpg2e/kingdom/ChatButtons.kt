@@ -144,12 +144,13 @@ private val buttons = listOf(
         } else {
             val parsedMod = if (mod.rollOptions.orEmpty().contains("focused-attention")) {
                 val leader = pickLeader()
-                mod.copy(applyIf = mod.applyIf.orEmpty() + RawEq(eq = tupleOf("@leader", leader.value)))
+                RawModifier.copy(mod, applyIf = mod.applyIf.orEmpty() + RawEq(eq = tupleOf("@leader", leader.value)))
             } else {
                 mod
-            }.copy(id = v4())
+            }
             actor.getKingdom()?.let { kingdom ->
-                kingdom.modifiers = kingdom.modifiers + parsedMod
+                kingdom.modifiers = kingdom.modifiers +
+                        RawModifier.copy(parsedMod, id = v4())
                 actor.setKingdom(kingdom)
                 parsedMod.buttonLabel?.let { key ->
                     postChatMessage(t("kingdom.addedModifier", recordOf("name" to t(key))))

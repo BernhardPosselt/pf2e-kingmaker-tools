@@ -211,12 +211,14 @@ fun CampingActivityData.requiresACheck(): Boolean =
 private external val campingActivityData: Array<CampingActivityData>
 
 private fun ActivityOutcome.translate() =
-    copy(
+    ActivityOutcome.copy(
+        this,
         message = message?.let { t(it) }
     )
 
 private fun CampingActivityData.translate() =
-    copy(
+    CampingActivityData.copy(
+        this,
         name = t(name),
         criticalSuccess = criticalSuccess?.translate(),
         success = success?.translate(),

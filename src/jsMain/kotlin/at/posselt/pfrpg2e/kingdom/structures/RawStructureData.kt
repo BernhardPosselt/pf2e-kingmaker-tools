@@ -136,7 +136,8 @@ external val structureSchema: AnyObject
 external val structureRefSchema: AnyObject
 
 private fun RawStructureData.translate() =
-    copy(
+    RawStructureData.copy(
+        this,
         name = t(name),
         notes = notes?.let { t(it) },
     )

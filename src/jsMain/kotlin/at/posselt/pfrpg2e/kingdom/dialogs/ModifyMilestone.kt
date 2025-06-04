@@ -37,7 +37,6 @@ external interface ModifyMilestoneData {
     val xp: Int
 }
 
-@JsExport
 class ModifyMilestoneDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

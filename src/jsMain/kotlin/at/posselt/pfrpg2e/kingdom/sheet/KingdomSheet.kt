@@ -30,12 +30,14 @@ import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawEq
 import at.posselt.pfrpg2e.kingdom.RawModifier
+import at.posselt.pfrpg2e.kingdom.RawOngoingKingdomEvent
 import at.posselt.pfrpg2e.kingdom.RawSome
 import at.posselt.pfrpg2e.kingdom.SettlementTerrain
 import at.posselt.pfrpg2e.kingdom.armies.updateArmyConsumption
 import at.posselt.pfrpg2e.kingdom.createModifiers
 import at.posselt.pfrpg2e.kingdom.createSimpleContext
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
+import at.posselt.pfrpg2e.kingdom.data.RawConsumption
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.endTurn
 import at.posselt.pfrpg2e.kingdom.data.getChosenCharter
@@ -156,6 +158,29 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
+import kotlin.collections.contains
+import kotlin.collections.count
+import kotlin.collections.emptyList
+import kotlin.collections.filter
+import kotlin.collections.filterIndexed
+import kotlin.collections.filterIsInstance
+import kotlin.collections.filterNot
+import kotlin.collections.find
+import kotlin.collections.firstNotNullOf
+import kotlin.collections.forEach
+import kotlin.collections.getOrNull
+import kotlin.collections.isNotEmpty
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.mapIndexed
+import kotlin.collections.mapNotNull
+import kotlin.collections.mutableSetOf
+import kotlin.collections.plus
+import kotlin.collections.setOf
+import kotlin.collections.sortedBy
+import kotlin.collections.sumOf
+import kotlin.collections.toSet
+import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -602,7 +627,7 @@ class KingdomSheet(
                         .mapIndexed { index, event ->
                             if (index == eventIndex) {
                                 val isContinuous = event.becameContinuous == true
-                                event.copy(becameContinuous = !isContinuous)
+                                RawOngoingKingdomEvent.copy(event, becameContinuous = !isContinuous)
                             } else {
                                 event
                             }
@@ -714,7 +739,7 @@ class KingdomSheet(
                     kingdom.ongoingEvents = kingdom.ongoingEvents
                         .mapIndexed { index, event ->
                             if (index == eventIndex) {
-                                event.copy(stage = stage)
+                                RawOngoingKingdomEvent.copy(event, stage = stage)
                             } else {
                                 event
                             }
@@ -898,7 +923,7 @@ class KingdomSheet(
                         } else if (turns == 1) {
                             null
                         } else {
-                            it.copy(turns = turns - 1)
+                            RawModifier.copy(it, turns = turns - 1)
                         }
                     }.toTypedArray()
                     actor.setKingdom(kingdom)
@@ -1581,7 +1606,7 @@ class KingdomSheet(
             kingdom.supernaturalSolutions = value.supernaturalSolutions
             kingdom.creativeSolutions = value.creativeSolutions
             kingdom.consumption = if (kingdom.settings.autoCalculateArmyConsumption) {
-                value.consumption.copy(armies = kingdom.consumption.armies)
+                RawConsumption.copy(value.consumption, armies = kingdom.consumption.armies)
             } else {
                 value.consumption
             }

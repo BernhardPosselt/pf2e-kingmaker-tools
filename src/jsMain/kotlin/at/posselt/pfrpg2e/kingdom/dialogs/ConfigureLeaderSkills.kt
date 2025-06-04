@@ -112,7 +112,6 @@ private fun LeaderSkillsData.toSkills(attributes: Array<Attribute>): RawLeaderSk
         warden = toAttributeValues(warden, attributes),
     )
 
-@JsExport
 class ConfigureLeaderSkillsModel(
     value: AnyObject,
     options: DocumentConstructionContext?

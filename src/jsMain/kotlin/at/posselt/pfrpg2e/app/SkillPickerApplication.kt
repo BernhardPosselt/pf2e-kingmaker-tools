@@ -89,7 +89,6 @@ external interface SkillPickerSubmitData {
     val skills: Array<SkillSubmitData>
 }
 
-@JsExport
 class SkillPickerDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

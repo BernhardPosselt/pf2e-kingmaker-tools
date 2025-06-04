@@ -50,7 +50,6 @@ external interface CrudData {
     val enabledIds: Array<String>
 }
 
-@JsExport
 class CrudApplicationDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

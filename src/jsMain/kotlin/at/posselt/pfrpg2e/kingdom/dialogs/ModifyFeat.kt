@@ -47,7 +47,6 @@ external interface ModifyFeatData {
     val ruinThresholdIncreasesValue: Int
 }
 
-@JsExport
 class ModifyFeatDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

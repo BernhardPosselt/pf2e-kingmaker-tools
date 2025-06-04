@@ -111,12 +111,14 @@ fun RecipeData.discoverCost(): FoodAmount =
 private external val recipes: Array<RecipeData>
 
 private fun CookingOutcome.translate() =
-    copy(
+    CookingOutcome.copy(
+        this,
         message = message?.let { t(it) }
     )
 
 private fun RecipeData.translate() =
-    copy(
+    RecipeData.copy(
+        this,
         name = t(name),
         criticalSuccess = criticalSuccess.translate(),
         success = success.translate(),

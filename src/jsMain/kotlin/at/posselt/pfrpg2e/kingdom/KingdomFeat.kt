@@ -152,7 +152,8 @@ fun KingdomData.getFeats(): Array<RawFeat> {
 external val kingdomFeats: Array<RawFeat>
 
 private fun RawFeat.translate() =
-    copy(
+    RawFeat.copy(
+        this,
         name = t(name),
         text = t(text),
         automationNotes = automationNotes?.let { t(it) },

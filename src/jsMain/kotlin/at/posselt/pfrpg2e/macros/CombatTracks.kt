@@ -46,7 +46,6 @@ private external interface CombatTrackContext : ValidatedHandlebarsContext {
     val formRows: Array<FormElementContext>
 }
 
-@JsExport
 class CombatTrackDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

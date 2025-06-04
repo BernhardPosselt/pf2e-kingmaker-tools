@@ -220,7 +220,7 @@ suspend fun postComplexDegreeOfSuccess(
         ?.let { deserializeB64Json<DegreeMessages>(it) }
     val metaHtml = tpl(
         path = "chatmessages/upgrade-roll-meta.hbs",
-        ctx = metaContext.copy(degree = changedDegreeOfSuccess.value),
+        ctx = UpgradeMetaContext.copy(metaContext, degree = changedDegreeOfSuccess.value),
     )
     val chatModifiers = when (changedDegreeOfSuccess) {
         DegreeOfSuccess.CRITICAL_FAILURE -> activity?.criticalFailure?.modifiers ?: stage?.criticalFailure?.modifiers

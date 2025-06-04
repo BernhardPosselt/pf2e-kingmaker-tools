@@ -70,7 +70,6 @@ external interface RegionSettingsContext : ValidatedHandlebarsContext {
 }
 
 
-@JsExport
 class RegionSettingsDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

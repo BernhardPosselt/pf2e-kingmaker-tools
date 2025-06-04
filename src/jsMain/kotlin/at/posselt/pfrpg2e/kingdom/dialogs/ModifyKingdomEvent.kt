@@ -64,7 +64,6 @@ external interface ModifyKingdomEventData {
     val criticalFailureMsg: String
 }
 
-@JsExport
 class ModifyKingdomEventDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

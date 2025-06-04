@@ -73,7 +73,6 @@ external interface AddEventsData {
     val search: String
 }
 
-@JsExport
 class AddEventsDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

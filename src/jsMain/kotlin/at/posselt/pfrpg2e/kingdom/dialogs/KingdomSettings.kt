@@ -36,7 +36,6 @@ import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
-@JsExport
 class KingdomSettingsDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?
@@ -404,7 +403,8 @@ class KingdomSettingsApplication(
     }
 
     override fun onParsedSubmit(value: KingdomSettings): Promise<Void> = buildPromise {
-        settings = value.copy(
+        settings = KingdomSettings.copy(
+            value,
             leaderKingdomSkills = settings.leaderKingdomSkills,
             leaderSkills = settings.leaderSkills,
         )

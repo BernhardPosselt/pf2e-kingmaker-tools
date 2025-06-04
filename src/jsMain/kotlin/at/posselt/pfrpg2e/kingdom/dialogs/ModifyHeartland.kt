@@ -40,7 +40,6 @@ external interface ModifyHeartlandData {
     val boost: String
 }
 
-@JsExport
 class ModifyHeartlandDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?
