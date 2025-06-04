@@ -3,7 +3,20 @@ package com.foundryvtt.core.data.dsl
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.AnyObject
-import com.foundryvtt.core.data.fields.*
+import com.foundryvtt.core.data.fields.ArrayField
+import com.foundryvtt.core.data.fields.ArrayFieldOptions
+import com.foundryvtt.core.data.fields.BooleanField
+import com.foundryvtt.core.data.fields.DataField
+import com.foundryvtt.core.data.fields.DataFieldContext
+import com.foundryvtt.core.data.fields.DataFieldOptions
+import com.foundryvtt.core.data.fields.DataSchema
+import com.foundryvtt.core.data.fields.NumberField
+import com.foundryvtt.core.data.fields.NumberFieldOptions
+import com.foundryvtt.core.data.fields.ObjectField
+import com.foundryvtt.core.data.fields.SchemaField
+import com.foundryvtt.core.data.fields.StringField
+import com.foundryvtt.core.data.fields.StringFieldOptions
+import js.objects.ReadonlyRecord
 import js.objects.Record
 import js.objects.recordOf
 import kotlin.enums.enumEntries
@@ -303,7 +316,7 @@ class Schema {
     }
 }
 
-fun buildSchema(block: Schema.() -> Unit): DataSchema<out Any> {
+fun buildSchema(block: Schema.() -> Unit): ReadonlyRecord<String, DataField<Any>> {
     val schema = Schema()
     schema.block()
     return schema.build()

@@ -58,6 +58,7 @@ external interface ClimateSettingsContext : ValidatedHandlebarsContext {
     var formRows: Array<Array<Any>>
 }
 
+@JsExport
 class ClimateConfigurationDataModel(
     value: AnyObject? = undefined,
     context: DocumentConstructionContext? = undefined,
