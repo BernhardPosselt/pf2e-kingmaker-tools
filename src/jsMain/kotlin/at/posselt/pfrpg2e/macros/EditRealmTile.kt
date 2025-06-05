@@ -59,7 +59,7 @@ enum class RealmTileType(val category: RealmTileCategory): ValueEnum, Translatab
         get() = toCamelCase()
 
     override val i18nKey: String
-        get() = "realmTypeType.$value"
+        get() = "realmTileType.$value"
 }
 
 suspend fun editRealmTileMacro(game: Game) {
