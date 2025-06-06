@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.2.0-RC"
+kotlin = "2.2.0-RC2"
 coroutines = "1.10.2"
 schema-validator = "0.5.1"
 ktor = "2.3.12"
@@ -11,7 +11,7 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.2" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-js", version = "0.12.0" }
-kotlin-wrappers = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version = "2025.6.0" }
+kotlin-wrappers = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version = "2025.6.3" }
 kotlin-plain-objects = { module = "org.jetbrains.kotlin:kotlin-js-plain-objects", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-wrappers-js = { module = "org.jetbrains.kotlin-wrappers:kotlin-js" }
