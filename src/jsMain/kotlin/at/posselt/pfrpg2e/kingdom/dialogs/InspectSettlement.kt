@@ -106,6 +106,7 @@ external interface InspectSettlementData {
     val waterBorders: Int
 }
 
+@JsExport
 class InspectSettlementDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

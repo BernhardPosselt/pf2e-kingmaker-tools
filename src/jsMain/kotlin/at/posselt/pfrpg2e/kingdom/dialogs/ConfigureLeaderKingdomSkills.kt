@@ -95,6 +95,7 @@ private fun LeaderKingdomSkillsData.toKingdomSkills(): RawLeaderKingdomSkills =
         warden = warden.toStringArray(),
     )
 
+@JsExport
 class ConfigureLeaderKingdomSkillsModel(
     value: AnyObject,
     options: DocumentConstructionContext?

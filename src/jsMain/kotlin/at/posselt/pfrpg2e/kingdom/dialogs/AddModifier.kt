@@ -36,6 +36,7 @@ import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
+@JsExport
 class ModifierModel(
     value: AnyObject,
     options: DocumentConstructionContext?

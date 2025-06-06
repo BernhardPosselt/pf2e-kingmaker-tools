@@ -49,6 +49,7 @@ external interface ModifyGovernmentData {
     val boosts: Array<Boolean>
 }
 
+@JsExport
 class ModifyGovernmentDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

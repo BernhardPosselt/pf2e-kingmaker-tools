@@ -79,6 +79,7 @@ external interface ActivitySubmitData {
     val criticalFailure: ActivityOutcomeSubmitData
 }
 
+@JsExport
 class ActivityDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?
@@ -137,6 +138,7 @@ private data class Journals(
     val page: JournalEntryPage? = null
 )
 
+@JsExport
 class ActivityApplication(
     private val game: Game,
     private val actor: CampingActor,

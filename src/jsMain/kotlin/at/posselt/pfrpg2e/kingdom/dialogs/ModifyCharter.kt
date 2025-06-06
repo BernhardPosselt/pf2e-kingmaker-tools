@@ -43,6 +43,7 @@ external interface ModifyCharterData {
     val freeBoosts: Int
 }
 
+@JsExport
 class ModifyCharterDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

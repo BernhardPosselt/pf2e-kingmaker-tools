@@ -5,6 +5,7 @@ import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.data.dsl.buildSchema
 
+@JsExport
 class CampingSheetDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

@@ -127,6 +127,7 @@ external interface StructureBrowserData {
     val activityFilters: Array<FilterContext>
 }
 
+@JsExport
 class StructureBrowserDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

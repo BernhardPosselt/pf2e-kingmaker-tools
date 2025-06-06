@@ -34,6 +34,7 @@ external interface ConfirmWatchContext: ValidatedHandlebarsContext {
     val saveLabel: String
 }
 
+@JsExport
 class ConfirmWatchDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

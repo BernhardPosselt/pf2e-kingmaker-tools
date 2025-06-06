@@ -84,6 +84,7 @@ external interface RecipeSubmitData {
     val criticalFailure: OutcomeSubmitData
 }
 
+@JsExport
 class RecipeDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

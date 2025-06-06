@@ -16,7 +16,6 @@ import com.foundryvtt.core.data.fields.ObjectField
 import com.foundryvtt.core.data.fields.SchemaField
 import com.foundryvtt.core.data.fields.StringField
 import com.foundryvtt.core.data.fields.StringFieldOptions
-import js.objects.ReadonlyRecord
 import js.objects.Record
 import js.objects.recordOf
 import kotlin.enums.enumEntries
@@ -316,7 +315,7 @@ class Schema {
     }
 }
 
-fun buildSchema(block: Schema.() -> Unit): ReadonlyRecord<String, DataField<Any>> {
+fun buildSchema(block: Schema.() -> Unit): DataSchema<Any> {
     val schema = Schema()
     schema.block()
     return schema.build()

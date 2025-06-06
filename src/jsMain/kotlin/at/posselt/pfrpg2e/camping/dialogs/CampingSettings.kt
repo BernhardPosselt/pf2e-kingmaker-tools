@@ -71,6 +71,7 @@ external interface CampingSettings {
     var worldSceneId: String?
 }
 
+@JsExport
 class CampingSettingsDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

@@ -182,6 +182,7 @@ private external interface CheckData {
     var newModifierModifier: Int
 }
 
+@JsExport
 class CheckModel(
     value: AnyObject,
     options: DocumentConstructionContext?

@@ -69,7 +69,7 @@ external interface RegionSettingsContext : ValidatedHandlebarsContext {
     var allowDelete: Boolean
 }
 
-
+@JsExport
 class RegionSettingsDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?

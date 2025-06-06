@@ -9,6 +9,7 @@ import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.data.dsl.buildSchema
 
+@JsExport
 class KingdomSheetDataModel(
     value: AnyObject,
     options: DocumentConstructionContext?
