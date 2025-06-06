@@ -18,7 +18,8 @@ external interface RawMilestone {
 private external val kingdomMilestones: Array<RawMilestone>
 
 private fun RawMilestone.translate() =
-    copy(
+    RawMilestone.copy(
+        this,
         name = t(name),
     )
 

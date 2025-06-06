@@ -29,7 +29,8 @@ external interface ActivityResult {
 }
 
 private fun ActivityResult.addButtons(events: Array<RawKingdomEvent>): ActivityResult =
-    copy(
+    ActivityResult.copy(
+        this,
         msg = insertButtons(msg, events),
         modifiers = modifiers
     )
@@ -120,12 +121,14 @@ val disabledActivityIds = rawKingdomActivities
 private var kingdomActivities: Array<RawActivity> = emptyArray()
 
 private fun ActivityResult.translate(): ActivityResult =
-    copy(
+    ActivityResult.copy(
+        this,
         msg = t(msg),
     )
 
 private fun RawActivity.translate(): RawActivity =
-    copy(
+    RawActivity.copy(
+        this,
         title = t(title),
         description = t(description),
         requirement = requirement?.let { t(it) },
@@ -142,7 +145,8 @@ fun translateActivities(events: Array<RawKingdomEvent>) {
     kingdomActivities = rawKingdomActivities
         .map {
             val translated = it.translate()
-            translated.copy(
+            RawActivity.copy(
+                translated,
                 description = insertButtons(translated.description, events),
                 criticalSuccess = translated.criticalSuccess?.addButtons(events),
                 success = translated.success?.addButtons(events),

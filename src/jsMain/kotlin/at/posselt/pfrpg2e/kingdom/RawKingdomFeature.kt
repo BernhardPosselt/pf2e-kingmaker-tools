@@ -26,7 +26,7 @@ fun KingdomData.getFeatures(): Array<RawKingdomFeature> =
     if (settings.kingdomSkillIncreaseEveryLevel) {
         translatedKingdomFeatures.map {
             if (it.id == "skill-increase") {
-                it.copy(levels = (2..20).toList().toTypedArray())
+                RawKingdomFeature.copy(it, levels = (2..20).toList().toTypedArray())
             } else {
                 it
             }
@@ -69,7 +69,8 @@ external interface RawExplodedKingdomFeature : RawKingdomFeature {
 private external val kingdomFeatures: Array<RawKingdomFeature>
 
 private fun RawKingdomFeature.translate() =
-    copy(
+    RawKingdomFeature.copy(
+        this,
         name = t(name),
         description = t(description),
         automationNotes = automationNotes?.let { t(it) },

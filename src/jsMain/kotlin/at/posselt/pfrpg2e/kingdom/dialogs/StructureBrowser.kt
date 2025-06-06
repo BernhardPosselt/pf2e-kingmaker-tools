@@ -549,9 +549,9 @@ class StructureBrowser(
         val nav = createTabs<StructureBrowserNav>("change-nav", currentNav)
             .map {
                 when (it.link) {
-                    StructureBrowserNav.BUILDABLE.value -> it.copy(label = "${t(StructureBrowserNav.BUILDABLE)} ($buildable)")
-                    StructureBrowserNav.UPGRADEABLE.value -> it.copy(label = "${t(StructureBrowserNav.UPGRADEABLE)} ($upgradeable)")
-                    StructureBrowserNav.FREE.value -> it.copy(label = "${t(StructureBrowserNav.FREE)} ($free)")
+                    StructureBrowserNav.BUILDABLE.value -> NavEntryContext.copy(it, label = "${t(StructureBrowserNav.BUILDABLE)} ($buildable)")
+                    StructureBrowserNav.UPGRADEABLE.value -> NavEntryContext.copy(it, label = "${t(StructureBrowserNav.UPGRADEABLE)} ($upgradeable)")
+                    StructureBrowserNav.FREE.value -> NavEntryContext.copy(it, label = "${t(StructureBrowserNav.FREE)} ($free)")
                     else -> it
                 }
             }

@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.1.21"
+kotlin = "2.2.0-RC"
 coroutines = "1.10.2"
 schema-validator = "0.5.1"
 ktor = "2.3.12"

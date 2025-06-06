@@ -404,7 +404,8 @@ class KingdomSettingsApplication(
     }
 
     override fun onParsedSubmit(value: KingdomSettings): Promise<Void> = buildPromise {
-        settings = value.copy(
+        settings = KingdomSettings.copy(
+            value,
             leaderKingdomSkills = settings.leaderKingdomSkills,
             leaderSkills = settings.leaderSkills,
         )

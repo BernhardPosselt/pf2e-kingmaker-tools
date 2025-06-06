@@ -113,7 +113,7 @@ class MilestoneManagement(
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {
         val enabled = value.enabledIds.toSet()
         kingdomActor.getKingdom()?.let { kingdom ->
-            kingdom.milestones = kingdom.milestones.map { it.copy(enabled = it.id in enabled) }.toTypedArray()
+            kingdom.milestones = kingdom.milestones.map { MilestoneChoice.copy(it, enabled = it.id in enabled) }.toTypedArray()
             kingdomActor.setKingdom(kingdom)
         }
         undefined

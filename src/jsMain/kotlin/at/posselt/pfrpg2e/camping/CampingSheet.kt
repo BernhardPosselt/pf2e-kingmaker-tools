@@ -1097,7 +1097,8 @@ class CampingSheet(
                     result = null,
                     skill = "survival",
                 )
-                result.copy(
+                CookingResult.copy(
+                    result,
                     result = value.recipes?.degreeOfSuccess?.get(it.name),
                     skill = value.recipes?.selectedSkill?.get(it.name) ?: "survival",
                 )

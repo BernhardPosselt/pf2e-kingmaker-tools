@@ -15,7 +15,8 @@ external interface RawHeartland {
 private external val heartlands: Array<RawHeartland>
 
 private fun RawHeartland.translate() =
-    copy(
+    RawHeartland.copy(
+        this,
         name = t(name),
         description = t(description)
     )
