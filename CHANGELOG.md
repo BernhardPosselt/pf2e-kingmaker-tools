@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+### Fixed
+
+* Allow configuring all hex scenes to store party actor location in camping settings
+
+
 ## [5.4.1] - 2025-06-06
 
 ### Fixed

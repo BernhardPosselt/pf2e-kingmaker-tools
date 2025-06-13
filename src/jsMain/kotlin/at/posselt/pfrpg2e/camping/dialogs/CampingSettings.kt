@@ -182,7 +182,7 @@ class CampingSettingsApplication(
         val playlist = settings.restingPlaylistUuid?.let { fromUuidTypeSafe<Playlist>(it) }
         val playlistSound = settings.restingPlaylistSoundUuid?.let { fromUuidTypeSafe<PlaylistSound>(it) }
         val hexScenes = game.scenes
-            .filter { it.grid.type == 2 }
+            .filter { it.grid.type >= 2 && it.grid.type <= 5}
             .sortedBy { it.name }
             .mapNotNull { it.id?.let { id -> SelectOption(label = it.name, value = id) } }
         CampingSettingsContext(
