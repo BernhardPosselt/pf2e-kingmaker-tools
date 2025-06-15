@@ -6,6 +6,7 @@ import kotlin.math.min
 data class Structure(
     val id: String,
     val uuid: String,
+    val actorUuid: String,
     val name: String,
     val img: String? = null,
     val stacksWith: String? = null,

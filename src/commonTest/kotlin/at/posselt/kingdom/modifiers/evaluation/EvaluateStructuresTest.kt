@@ -29,6 +29,7 @@ class EvaluateStructuresTest {
                 stacksWith = "residential",
                 consumptionReduction = 1,
                 uuid = "",
+                actorUuid = "",
                 bonuses = setOf(
                     StructureBonus(
                         skill = KingdomSkill.AGRICULTURE,
@@ -51,6 +52,7 @@ class EvaluateStructuresTest {
                 storage = CommodityStorage(ore = 1, lumber = 1),
                 consumptionReduction = 1,
                 uuid = "",
+                actorUuid = "",
                 bonuses = setOf(
                     StructureBonus(
                         skill = KingdomSkill.AGRICULTURE,
@@ -80,6 +82,7 @@ class EvaluateStructuresTest {
                 storage = CommodityStorage(stone = 1, lumber = 1),
                 consumptionReduction = 1,
                 uuid = "",
+                actorUuid = "",
                 bonuses = setOf(
                     StructureBonus(
                         skill = KingdomSkill.AGRICULTURE,
@@ -191,6 +194,7 @@ class EvaluateStructuresTest {
                     name = "residential",
                     id = "residential",
                     uuid = "",
+                    actorUuid = "",
                     bonuses = setOf(
                         StructureBonus(
                             skill = KingdomSkill.AGRICULTURE,
@@ -203,6 +207,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     bonuses = setOf(
                         StructureBonus(
                             skill = KingdomSkill.AGRICULTURE,
@@ -247,6 +252,7 @@ class EvaluateStructuresTest {
                     consumptionReduction = 1,
                     consumptionReductionStacks = true,
                     uuid = "",
+                    actorUuid = ""
                 ),
                 Structure(
                     name = "residential",
@@ -254,6 +260,7 @@ class EvaluateStructuresTest {
                     consumptionReduction = 1,
                     consumptionReductionStacks = true,
                     uuid = "",
+                    actorUuid = ""
                 ),
             ),
             allStructuresStack = false,
@@ -281,6 +288,7 @@ class EvaluateStructuresTest {
                     consumptionReduction = 1,
                     consumptionReductionStacks = true,
                     uuid = "",
+                    actorUuid = ""
                 ),
                 Structure(
                     name = "other",
@@ -288,6 +296,7 @@ class EvaluateStructuresTest {
                     consumptionReduction = 3,
                     ignoreConsumptionReductionOf = setOf("residential"),
                     uuid = "",
+                    actorUuid = ""
                 ),
             ),
             allStructuresStack = false,
@@ -314,6 +323,7 @@ class EvaluateStructuresTest {
                     id = "residential",
                     consumptionReduction = 1,
                     uuid = "",
+                    actorUuid = ""
                 ),
                 Structure(
                     stacksWith = "residential",
@@ -321,6 +331,7 @@ class EvaluateStructuresTest {
                     id = "other",
                     consumptionReduction = 1,
                     uuid = "",
+                    actorUuid = ""
                 ),
             ),
             allStructuresStack = false,
@@ -337,6 +348,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -356,6 +368,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -366,6 +379,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -376,6 +390,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -395,6 +410,7 @@ class EvaluateStructuresTest {
                     name = "other1",
                     id = "other1",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 3,
                         group = ItemGroup.DIVINE,
@@ -405,6 +421,7 @@ class EvaluateStructuresTest {
                     name = "other1",
                     id = "other1",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 3,
                         group = ItemGroup.DIVINE,
@@ -415,6 +432,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -425,6 +443,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -435,6 +454,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -454,6 +474,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -463,6 +484,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -472,6 +494,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -481,6 +504,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -499,6 +523,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -510,6 +535,7 @@ class EvaluateStructuresTest {
                     name = "other",
                     id = "other",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -521,6 +547,7 @@ class EvaluateStructuresTest {
                     name = "other1",
                     id = "other1",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,
@@ -531,6 +558,7 @@ class EvaluateStructuresTest {
                     name = "other1",
                     id = "other1",
                     uuid = "",
+                    actorUuid = "",
                     availableItemsRules = setOf(AvailableItemsRule(
                         value = 1,
                         group = ItemGroup.DIVINE,

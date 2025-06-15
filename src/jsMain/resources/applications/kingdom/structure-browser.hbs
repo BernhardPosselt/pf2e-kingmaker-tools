@@ -29,18 +29,27 @@
     </div>
     <div class="km-structure-list">
         {{> tabs nav}}
-        {{# if underConstructionActive}}
-            hello construction
-        {{else}}
-            <ul class="km-structures">
-                {{#each structures}}
-                    <li class="km-structure"
-                        {{#if notes}}title="{{notes}}"{{/if}}>
-                        <header><a href="#" data-action="open-structure" data-uuid="{{uuid}}">{{name}}</a>
-                        </header>
-                        <div class="km-image km-lots-{{lots}}">
-                            <img src="{{img}}" alt="{{name}}">
-                        </div>
+        <ul class="km-structures">
+            {{#each structures}}
+                <li class="km-structure"
+                    {{#if notes}}title="{{notes}}"{{/if}}>
+                    <header><a href="#" data-action="open-structure" data-uuid="{{# if ../underConstructionActive}}{{actorUuid}}{{else}}{{uuid}}{{/if}}">{{name}}</a>
+                    </header>
+                    <div class="km-image km-lots-{{lots}}">
+                        <img src="{{img}}" alt="{{name}}">
+                    </div>
+                    {{# if ../underConstructionActive}}
+                        <ul class="km-resources">
+                            {{#if rp.value}}
+                                <li class="km-rp {{#if rp.lacksFunds}}km-lacks-funds{{/if}}">{{currentRp}}/{{constructedRp}}</li>{{/if}}
+                        </ul>
+                        <button type="button"
+                                data-uuid="{{uuid}}"
+                                data-actor-uuid="{{actorUuid}}"
+                                data-action="advance-construction">
+                            {{localizeKM "kingdom.spendRp"}}
+                        </button>
+                    {{else}}
                         <ul class="km-resources">
                             {{#if rp.value}}
                                 <li class="km-rp {{#if rp.lacksFunds}}km-lacks-funds{{/if}}">{{rp.value}}</li>{{/if}}
@@ -68,9 +77,9 @@
                                 data-action="build-structure">
                             {{localizeKM "kingdom.buildStructure"}}
                         </button>
-                    </li>
-                {{/each}}
-            </ul>
-        {{/if}}
+                    {{/if}}
+                </li>
+            {{/each}}
+        </ul>
     </div>
 </div>

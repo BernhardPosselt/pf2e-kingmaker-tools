@@ -69,7 +69,7 @@ fun StructureActor.isStructure() = getRawStructureData() != null
 fun StructureActor.isSlowed() = itemTypes.condition.any { it.slug == "slowed" }
 
 fun StructureActor.parseStructure(): Structure? {
-    val uuid = parent
+    val baseActorUuid = parent
         ?.takeIfInstance<TokenDocument>()
         ?.baseActor
         ?.uuid
@@ -77,7 +77,8 @@ fun StructureActor.parseStructure(): Structure? {
     return getRawResolvedStructureData()
         ?.parseStructure(
             inConstruction = isSlowed(),
-            uuid = uuid,
+            uuid = baseActorUuid,
+            actorUuid = uuid,
             img = img,
             currentRp = hitPoints.value,
             constructedRp = hitPoints.max,
@@ -87,6 +88,7 @@ fun StructureActor.parseStructure(): Structure? {
 fun RawStructureData.parseStructure(
     inConstruction: Boolean,
     uuid: String,
+    actorUuid: String,
     img: String?,
     currentRp: Int,
     constructedRp: Int,
@@ -112,6 +114,7 @@ fun RawStructureData.parseStructure(
         rp = construction?.rp ?: 0,
         dc = construction?.dc ?: 0,
     ),
+    actorUuid = actorUuid,
     notes = notes,
     preventItemLevelPenalty = preventItemLevelPenalty == true,
     enableCapitalInvestment = enableCapitalInvestment == true,

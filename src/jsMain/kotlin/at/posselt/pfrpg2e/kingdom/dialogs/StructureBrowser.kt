@@ -33,6 +33,7 @@ import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.kingdom.structures.StructureActor
+import at.posselt.pfrpg2e.kingdom.structures.parseStructure
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -87,6 +88,7 @@ external interface StructureContext {
     val lots: Int
     val name: String
     val uuid: String
+    val actorUuid: String
     val img: String?
     val canBuild: Boolean
     val infrastructure: Boolean
@@ -247,20 +249,16 @@ class StructureBrowser(
             }
 
             "advance-construction" -> {
-                val settlements = kingdom.getAllSettlements(game)
-                val underConstructionStructures = settlements.current?.structuresUnderConstruction ?: emptyList()
-                val structuresByUuid = underConstructionStructures.associateBy { it.uuid }
-                val uuid = target.dataset["uuid"]
-                val structure = uuid?.let { structuresByUuid[it] }
-                checkNotNull(structure) {
-                    "Structure with $uuid was null"
-                }
-                val maxRpPerTurn = realmData.sizeInfo.maximumStructureRpPerTurn
-                val maxRp = structure.calculateTurnRpCost(maxRpPerTurn)
+                val uuid = target.dataset["actorUuid"]!!
                 buildPromise {
                     val structure = fromUuidTypeSafe<StructureActor>(uuid)
                     checkNotNull(structure) {
-                        "Structure Actor with $uuid was null"
+                        "Structure with $uuid was null"
+                    }
+                    val maxRpPerTurn = realmData.sizeInfo.maximumStructureRpPerTurn
+                    val maxRp = structure.parseStructure()?.calculateTurnRpCost(maxRpPerTurn)
+                    checkNotNull(maxRp) {
+                        "Structure data rp for actor with $uuid was null"
                     }
                     val rp = askRpDialog(maxRp)
                     val hp = structure.hitPoints.value + rp
@@ -268,15 +266,23 @@ class StructureBrowser(
                         system.attributes.hp.value = hp
                     }
                     if (structure.hitPoints.value == structure.hitPoints.max) {
-                        postChatMessage(t("kingdom.advanceConstruction", recordOf(
-                            "structureName" to structure.name,
-                            "rp" to rp
-                        )))
+                        postChatMessage(
+                            t(
+                                "kingdom.finishedConstruction", recordOf(
+                                    "structureName" to structure.name,
+                                    "rp" to rp
+                                )
+                            )
+                        )
                     } else {
-                        postChatMessage(t("kingdom.finishedConstruction", recordOf(
-                            "structureName" to structure.name,
-                            "rp" to rp
-                        )))
+                        postChatMessage(
+                            t(
+                                "kingdom.advanceConstruction", recordOf(
+                                    "structureName" to structure.name,
+                                    "rp" to rp
+                                )
+                            )
+                        )
                     }
                     render()
                 }
@@ -522,6 +528,7 @@ class StructureBrowser(
                     name = it.name,
                     notes = it.notes,
                     uuid = it.uuid,
+                    actorUuid = it.actorUuid,
                     img = it.img,
                     currentRp = it.currentRp,
                     constructedRp = it.constructedRp,

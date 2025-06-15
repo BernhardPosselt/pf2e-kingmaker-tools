@@ -396,6 +396,7 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "spendRp": "Spend RP",
       "advanceConstruction": "Spending {rp, plural, =1 {1 RP} other {# RP}} to advance construction of structure {structureName}",
       "finishedConstruction": "Spent {rp, plural, =1 {1 RP} other {# RP}} and finished construction of structure {structureName}",
       "continuousTraitHelp": "Events that do not possess the Continuous trait can sometimes become Continuous. Use the bookmark icon to manually toggle the Continuous trait so that existing modifiers will match.",
