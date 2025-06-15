@@ -12,7 +12,11 @@
     </button>
 <p>{{#if slowedLink}}{{localizeKM "kingdom.dragToBuildFailure"}}{{else}}{{localizeKM "kingdom.dragToBuild"}}{{/if}}{{{slowedLink}}}</p>
 <p>{{{link}}}</p>
-    {{#if initialRp}}<p><b>{{localizeKM 'kingdom.setStructureHp'}}</b> {{initialRp}}</p>{{/if}}
+    {{#if initialRp}}<p>{{localizeKM 'kingdom.setStructureHpHelp'}} <button
+            class="km-set-structure-hp"
+            data-kingdom-actor-uuid="{{actorUuid}}"
+            data-action="set-structure-hp"
+            data-hp="{{initialRp}}">{{localizeKM 'kingdom.setStructureHp' hp=initialRp}}</button></p>{{/if}}
 {{else}}
     {{#if slowedLink}}{{localizeKM "kingdom.failedToCompleteStructure"}}{{/if}}
 {{/unless}}

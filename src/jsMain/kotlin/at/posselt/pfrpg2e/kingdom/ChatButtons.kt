@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.data.events.KingdomEventTrait
 import at.posselt.pfrpg2e.kingdom.dialogs.pickEventSettlement
 import at.posselt.pfrpg2e.kingdom.dialogs.pickLeader
 import at.posselt.pfrpg2e.kingdom.sheet.executeResourceButton
+import at.posselt.pfrpg2e.kingdom.structures.StructureActor
 import at.posselt.pfrpg2e.kingdom.structures.validateUsingSchema
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.bindChatClick
@@ -12,6 +13,7 @@ import at.posselt.pfrpg2e.utils.deserializeB64Json
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
+import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.helpers.TypedHooks
 import com.foundryvtt.core.helpers.onRenderChatLog
@@ -105,6 +107,21 @@ private val buttons = listOf(
                 .filterIndexed { index, _ -> index != eventIndex }
                 .toTypedArray()
             actor.setKingdom(kingdom)
+        }
+    },
+    ChatButton("km-set-structure-hp") { game, actor, event, button ->
+        val selected = game.canvas.tokens.controlled
+            .mapNotNull { it.actor }
+            .filterIsInstance<StructureActor>()
+        val first = selected.firstOrNull()
+        val hp = button.dataset["hp"]?.toInt() ?: 0
+        if (first == null) {
+            ui.notifications.error(t("kingdom.selectAtLeastOneStructure"))
+        } else {
+            first.typeSafeUpdate {
+                system.attributes.hp.value = hp
+            }
+            postChatMessage(t("kingdom.setStructureHp", recordOf("hp" to hp)))
         }
     },
     ChatButton("km-add-ongoing-event") { game, actor, event, button ->

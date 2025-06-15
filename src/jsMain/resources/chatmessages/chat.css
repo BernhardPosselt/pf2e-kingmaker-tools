@@ -19,7 +19,8 @@
 }
 
 
-.km-gain-lose {
+.km-gain-lose,
+.km-set-structure-hp {
     width: auto;
     display: inline;
     height: auto;
