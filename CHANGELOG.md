@@ -12,10 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 * When placing V&K Civic buildings, the structure browser now shows the amount of additional settlement actions that you can take for each settlement
+* Added a setting to enable structure rp cost tracking. RP is tracked using the structure actors HP
 
 ### Changed
 
-* Changes to V&K 1.1 rules changed how resource dice per settlements are calculated. This required hard coding the RD values; instead of configuring it per settlement type, you now need to toggle a new setting (Settlements Generate Resource Dice) now to enable this behavior.
+* Changes to V&K 1.1 rules changed how resource dice per settlements are calculated. This required hard coding the RD values; instead of configuring it per settlement type, you now need to toggle a new setting (Settlements Generate Resource Dice) to enable this behavior.
 
 ### Fixed
 
