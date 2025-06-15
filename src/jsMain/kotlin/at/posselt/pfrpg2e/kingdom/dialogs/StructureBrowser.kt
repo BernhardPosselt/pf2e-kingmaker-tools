@@ -110,6 +110,7 @@ external interface StructureBrowserContext : ValidatedHandlebarsContext {
     val repairActive: Boolean
     val settlementChosen: Boolean
     val settlementActions: Int
+    val rpPerTurn: Int
 }
 
 @JsPlainObject
@@ -555,6 +556,11 @@ class StructureBrowser(
             }
             .sortedBy { it.label }
             .toTypedArray()
+        val rpPerTurn = if(kingdom.settings.partialStructureConstruction) {
+            realmData.sizeInfo.maximumStructureRpPerTurn
+        } else {
+            0
+        }
         val nav = createTabs<StructureBrowserNav>("change-nav", currentNav)
             .map {
                 when (it.link) {
@@ -580,7 +586,8 @@ class StructureBrowser(
             structures = structures,
             repairActive = currentNav == StructureBrowserNav.REPAIRABLE,
             settlementChosen = kingdom.activeSettlement != null,
-            settlementActions = settlements.current?.settlementActions ?: 0
+            settlementActions = settlements.current?.settlementActions ?: 0,
+            rpPerTurn = rpPerTurn,
         )
     }
 
