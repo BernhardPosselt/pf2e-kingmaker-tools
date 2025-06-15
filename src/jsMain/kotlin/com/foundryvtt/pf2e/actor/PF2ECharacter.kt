@@ -104,13 +104,13 @@ external interface PF2ECharacterSystem {
 
 @JsPlainObject
 external interface HitPoints {
-    val value: Int
-    val max: Int
-    val temp: Int
-    val unrecoverable: Int
-    val negativeHealing: Boolean
-    val recoveryMultiplier: Int
-    val recoveryAddend: Int
+    var value: Int
+    var max: Int
+    var temp: Int
+    var unrecoverable: Int
+    var negativeHealing: Boolean
+    var recoveryMultiplier: Int
+    var recoveryAddend: Int
 }
 
 // required to make instance of work, but since the classes are not registered here

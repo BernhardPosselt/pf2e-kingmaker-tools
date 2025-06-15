@@ -11,8 +11,19 @@ import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
 @JsPlainObject
-external interface PF2ENpcData {
+external interface PF2ENpcAttributesHp {
+    var value: Int
+    var max: Int
+}
 
+@JsPlainObject
+external interface PF2ENpcAttributes {
+    val hp: PF2ENpcAttributesHp
+}
+
+@JsPlainObject
+external interface PF2ENpcData {
+    val attributes: PF2ENpcAttributes
 }
 
 // required to make instance of work, but since the classes are not registered here
