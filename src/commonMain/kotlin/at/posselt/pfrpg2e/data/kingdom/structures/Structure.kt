@@ -1,6 +1,5 @@
 package at.posselt.pfrpg2e.data.kingdom.structures
 
-import kotlin.math.max
 import kotlin.math.min
 
 data class Structure(
@@ -47,9 +46,6 @@ data class Structure(
 
     fun calculateInitialRpCost(maxRpPerTurn: Int) =
         min(constructedRp, maxRpPerTurn)
-
-    fun calculateRemainingRpCost(maxRpPerTurn: Int) =
-        min(max(0, constructedRp - currentRp), maxRpPerTurn)
 }
 
 

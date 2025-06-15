@@ -342,6 +342,7 @@
       "buildable": "Buildable",
       "repairable": "Repairable",
       "upgradeable": "Upgradeable",
+      "underConstruction": "Under Construction",
       "free": "Free"
     },
     "armyType": {

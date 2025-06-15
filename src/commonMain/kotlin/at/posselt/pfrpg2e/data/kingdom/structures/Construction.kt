@@ -1,6 +1,8 @@
 package at.posselt.pfrpg2e.data.kingdom.structures
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
+import kotlin.math.max
+import kotlin.math.min
 
 data class Construction(
     val skills: Set<KingdomSkillRank> = emptySet(),
@@ -25,6 +27,18 @@ data class Construction(
         ore = ore / 2,
         stone = stone / 2,
         rp = rp / 2,
+    )
+
+    fun remainingCost(
+        maxRpPerStructure: Int,
+        constructedRp: Int,
+        currentRp: Int
+    ) = copy(
+        lumber = 0,
+        luxuries = 0,
+        ore = 0,
+        stone = 0,
+        rp = min(max(0, constructedRp - currentRp), maxRpPerStructure)
     )
 
     fun upgradeFrom(other: Construction) = copy(

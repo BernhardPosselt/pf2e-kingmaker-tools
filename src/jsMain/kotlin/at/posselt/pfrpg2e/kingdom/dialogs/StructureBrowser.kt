@@ -56,6 +56,7 @@ enum class StructureBrowserNav : Translatable, ValueEnum {
     BUILDABLE,
     REPAIRABLE,
     UPGRADEABLE,
+    UNDER_CONSTRUCTION,
     FREE;
 
     companion object {
@@ -194,6 +195,7 @@ private enum class Cost {
     UPGRADE,
     HALF,
     FREE,
+    PARTIAL,
     FULL;
 }
 
@@ -360,6 +362,18 @@ class StructureBrowser(
 
             Cost.HALF -> structures.map { it.copy(notes = null, construction = it.construction.halveCost()) }
             Cost.FULL -> structures.map { it.copy(notes = null) }
+            Cost.PARTIAL ->
+                structures.map {
+                    it.copy(
+                        notes = null,
+                        construction = it.construction.remainingCost(
+                            maxRpPerStructure = realmData.sizeInfo.maximumStructureRpPerTurn,
+                            constructedRp = it.constructedRp,
+                            currentRp = it.currentRp,
+                        )
+                    )
+                }
+
             Cost.FREE -> structures.map { it.copy(notes = null, construction = it.construction.free()) }
         }.filter { s -> filters.all { it(s) } && s.id != "rubble" }
     }
@@ -373,6 +387,7 @@ class StructureBrowser(
         val increaseSkills = chosenFeats.map { it.feat.increasedSkills() }
         val settlements = kingdom.getAllSettlements(game)
         val settlementStructures = settlements.current?.constructedStructures ?: emptyList()
+        val underConstructionStructures = settlements.current?.unpaidStructures ?: emptyList()
         val activityStructureFilters: List<StructureFilter> =
             activityFilters.map { activityId -> { s -> s.bonuses.any { it.activity == activityId } } }
         val structuresUpgradedFrom = worldStructures.flatMap { it.upgradeFrom }.toSet()
@@ -449,11 +464,13 @@ class StructureBrowser(
             settlements.current?.structuresInConstruction ?: emptyList(), filters, Cost.FREE
         )
         val upgradeableStructures = filterStructures(settlementStructures, filters, Cost.UPGRADE)
+        val structuresUnderConstruction = filterStructures(underConstructionStructures, filters, Cost.PARTIAL)
         val structures = when (currentNav) {
             StructureBrowserNav.BUILDABLE -> buildableStructures
             StructureBrowserNav.REPAIRABLE -> filterStructures(worldStructures, filters, Cost.HALF)
             StructureBrowserNav.UPGRADEABLE -> upgradeableStructures
             StructureBrowserNav.FREE -> freeStructures
+            StructureBrowserNav.UNDER_CONSTRUCTION -> structuresUnderConstruction
         }
             .map {
                 StructureContext(
@@ -523,6 +540,7 @@ class StructureBrowser(
         )
         val buildable = buildableStructures.size
         val upgradeable = upgradeableStructures.size
+        val underConstruction = structuresUnderConstruction.size
         val free = freeStructures.size
         val mainFilters = MainFilter.entries.flatMapIndexed { index, it ->
             listOf(
@@ -556,17 +574,41 @@ class StructureBrowser(
             }
             .sortedBy { it.label }
             .toTypedArray()
-        val rpPerStructure = if(kingdom.settings.partialStructureConstruction) {
+        val rpPerStructure = if (kingdom.settings.partialStructureConstruction) {
             realmData.sizeInfo.maximumStructureRpPerTurn
         } else {
             0
         }
         val nav = createTabs<StructureBrowserNav>("change-nav", currentNav)
+            .filter {
+                if (kingdom.settings.partialStructureConstruction) {
+                    true
+                } else {
+                    it.link != StructureBrowserNav.UNDER_CONSTRUCTION.value
+                }
+            }
             .map {
                 when (it.link) {
-                    StructureBrowserNav.BUILDABLE.value -> NavEntryContext.copy(it, label = "${t(StructureBrowserNav.BUILDABLE)} ($buildable)")
-                    StructureBrowserNav.UPGRADEABLE.value -> NavEntryContext.copy(it, label = "${t(StructureBrowserNav.UPGRADEABLE)} ($upgradeable)")
-                    StructureBrowserNav.FREE.value -> NavEntryContext.copy(it, label = "${t(StructureBrowserNav.FREE)} ($free)")
+                    StructureBrowserNav.BUILDABLE.value -> NavEntryContext.copy(
+                        it,
+                        label = "${t(StructureBrowserNav.BUILDABLE)} ($buildable)"
+                    )
+
+                    StructureBrowserNav.UPGRADEABLE.value -> NavEntryContext.copy(
+                        it,
+                        label = "${t(StructureBrowserNav.UPGRADEABLE)} ($upgradeable)"
+                    )
+
+                    StructureBrowserNav.UNDER_CONSTRUCTION.value -> NavEntryContext.copy(
+                        it,
+                        label = "${t(StructureBrowserNav.UNDER_CONSTRUCTION)} ($underConstruction)"
+                    )
+
+                    StructureBrowserNav.FREE.value -> NavEntryContext.copy(
+                        it,
+                        label = "${t(StructureBrowserNav.FREE)} ($free)"
+                    )
+
                     else -> it
                 }
             }
