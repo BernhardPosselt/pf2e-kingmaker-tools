@@ -50,10 +50,7 @@ class KingdomSettingsDataModel(
             int("cultEventDcStep")
             int("rpToXpConversionRate")
             int("rpToXpConversionLimit")
-            int("resourceDicePerVillage")
-            int("resourceDicePerTown")
-            int("resourceDicePerCity")
-            int("resourceDicePerMetropolis")
+            boolean("settlementsGenerateRd")
             int("xpPerClaimedHex")
             int("maximumFamePoints")
             int("ruinThreshold") {
@@ -363,28 +360,10 @@ class KingdomSettingsApplication(
                             disabled = !settings.enableLeadershipModifiers,
                             help = t("kingdom.configureLeaderKingdomSkillsHelp"),
                         ),
-                        NumberInput(
-                            name = "resourceDicePerVillage",
-                            label = t("kingdom.resourceDicePerVillage"),
-                            value = settings.resourceDicePerVillage,
-                            stacked = false,
-                        ),
-                        NumberInput(
-                            name = "resourceDicePerTown",
-                            label = t("kingdom.resourceDicePerTown"),
-                            value = settings.resourceDicePerTown,
-                            stacked = false,
-                        ),
-                        NumberInput(
-                            name = "resourceDicePerCity",
-                            label = t("kingdom.resourceDicePerCity"),
-                            value = settings.resourceDicePerCity,
-                            stacked = false,
-                        ),
-                        NumberInput(
-                            name = "resourceDicePerMetropolis",
-                            label = t("kingdom.resourceDicePerMetropolis"),
-                            value = settings.resourceDicePerMetropolis,
+                        CheckboxInput(
+                            name = "settlementsGenerateRd",
+                            label = t("kingdom.settlementsGenerateRd"),
+                            value = settings.settlementsGenerateRd,
                             stacked = false,
                         ),
                         Select.fromEnum<UntrainedProficiencyMode>(

@@ -21,6 +21,9 @@
         "name": {
           "type": "string"
         },
+        "maximumCivicRdLimit": {
+          "type": "number"
+        },
         "stacksWith": {
           "type": "string"
         },

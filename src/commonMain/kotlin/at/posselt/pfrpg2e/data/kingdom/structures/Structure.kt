@@ -34,6 +34,7 @@ data class Structure(
     val consumptionReductionStacks: Boolean = false,
     val inConstruction: Boolean = false,
     val ignoreConsumptionReductionOf: Set<String> = emptySet(),
+    val maximumCivicRdLimit: Int = 0,
 ) {
     val isResidential = traits.contains(StructureTrait.RESIDENTIAL)
 }

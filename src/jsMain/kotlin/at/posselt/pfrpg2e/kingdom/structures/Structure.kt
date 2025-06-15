@@ -179,6 +179,7 @@ fun RawStructureData.parseStructure(
     ),
     consumptionReductionStacks = consumptionReductionStacks == true,
     ignoreConsumptionReductionOf = ignoreConsumptionReductionOf?.toSet() ?: emptySet(),
+    maximumCivicRdLimit = maximumCivicRdLimit ?: 0,
     inConstruction = inConstruction,
     uuid = uuid,
     id = id,

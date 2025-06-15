@@ -17,6 +17,8 @@ import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
 import at.posselt.pfrpg2e.utils.t
 import js.objects.JsPlainObject
+import kotlin.math.max
+import kotlin.math.min
 
 @Suppress("unused")
 @JsPlainObject
@@ -78,13 +80,19 @@ fun KingdomData.getResourceDiceAmount(
     allFeats: List<ChosenFeat>,
     settlements: List<Settlement>,
     kingdomLevel: Int,
-) = 4 + kingdomLevel + allFeats.sumOf { it.feat.resourceDice ?: 0 } +
+) = 4 +
+        kingdomLevel +
+        allFeats.sumOf { it.feat.resourceDice ?: 0 } +
         resourceDice.now +
-        settlements.sumOf {
-            when (it.size.type) {
-                SettlementSizeType.VILLAGE -> settings.resourceDicePerVillage
-                SettlementSizeType.TOWN -> settings.resourceDicePerTown
-                SettlementSizeType.CITY -> settings.resourceDicePerCity
-                SettlementSizeType.METROPOLIS -> settings.resourceDicePerMetropolis
+        if (settings.settlementsGenerateRd) {
+            settlements.sumOf {
+                when (it.size.type) {
+                    SettlementSizeType.VILLAGE -> 0
+                    SettlementSizeType.TOWN -> min(it.maximumCivicRdLimit, 1)
+                    SettlementSizeType.CITY -> max(1, min(it.maximumCivicRdLimit, 2))
+                    SettlementSizeType.METROPOLIS -> max(1, min(it.maximumCivicRdLimit, 4))
+                }
             }
+        } else {
+            0
         }

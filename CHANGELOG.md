@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.5.0] - 2025-06-15
+
+### Changed
+
+* Changes to V&K 1.1 rules changed how resource dice per settlements are calculated. This required hard coding the RD values; instead of configuring it per settlement type, you now need to toggle a new setting (Settlements Generate Resource Dice) now to enable this behavior.
 
 ### Fixed
 

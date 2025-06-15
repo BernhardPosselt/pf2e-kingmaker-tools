@@ -189,6 +189,7 @@ A full structure rule would look something like this:
   "affectsDowntime": false,
   "reducesUnrest": false,
   "reducesRuin": false,
+  "maximumCivicRdLimit": 0,
   "upgradeFrom": [
     "pier"
   ],
@@ -329,3 +330,4 @@ A full structure rule would look something like this:
 * **increaseResourceDice**: optional, key is either **village**, **town**, **city** or **metropolis** and value is a number that increases resource dice gained each turn
 * **ignoreConsumptionReductionOf**: optional, a structure id that is removed from consumption reduction in a settlement
 * **consumptionReductionStacks**: optional, if true, all structures with the same name in a settlement add up their consumption reduction
+* **maximumCivicRdLimit**: optional, increases the limit of RD gained by Town, City and Metropolis RD settings

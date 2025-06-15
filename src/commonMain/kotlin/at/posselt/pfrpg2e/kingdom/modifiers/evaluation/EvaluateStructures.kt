@@ -235,6 +235,7 @@ fun evaluateSettlement(
         structuresInConstruction = structuresInConstruction,
         constructedStructures = constructedStructures,
         availableItems = availableItems,
-        preventItemLevelPenalty = constructedStructures.any { it.preventItemLevelPenalty }
+        preventItemLevelPenalty = constructedStructures.any { it.preventItemLevelPenalty },
+        maximumCivicRdLimit = structures.maxOfOrNull { it.maximumCivicRdLimit } ?: 0,
     )
 }

@@ -6,6 +6,7 @@
     "building",
     "edifice"
   ],
+  "maximumCivicRdLimit": 2,
   "affectsDowntime": false,
   "reducesUnrest": true,
   "reduceUnrestBy": {

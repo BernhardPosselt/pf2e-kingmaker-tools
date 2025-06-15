@@ -9,6 +9,7 @@ import at.posselt.pfrpg2e.kingdom.getKingdom
 import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.migrations.migrations.Migration17
+import at.posselt.pfrpg2e.migrations.migrations.Migration18
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.isFirstGM
 import at.posselt.pfrpg2e.utils.openJournal
@@ -40,6 +41,7 @@ private suspend fun createBackups(
 
 private val migrations = listOf(
     Migration17(),
+    Migration18(),
 )
 
 private val latestMigrationVersion = migrations.maxOfOrNull { it.version }!!

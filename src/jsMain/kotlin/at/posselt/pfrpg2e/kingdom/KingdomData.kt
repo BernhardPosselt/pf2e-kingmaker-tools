@@ -61,13 +61,10 @@ import kotlinx.js.JsPlainObject
 external interface KingdomSettings {
     var rpToXpConversionRate: Int
     var rpToXpConversionLimit: Int
-    var resourceDicePerVillage: Int
-    var resourceDicePerTown: Int
-    var resourceDicePerCity: Int
+    var settlementsGenerateRd: Boolean
     var ruinThreshold: Int
     var increaseScorePicksBy: Int
     var realmSceneId: String?
-    var resourceDicePerMetropolis: Int
     var xpPerClaimedHex: Int
     var includeCapitalItemModifier: Boolean
     var cultOfTheBloomEvents: Boolean

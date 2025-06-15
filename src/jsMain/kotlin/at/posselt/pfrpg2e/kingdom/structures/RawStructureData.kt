@@ -124,6 +124,7 @@ external interface RawStructureData : RawStructure {
     val increaseResourceDice: RawIncreaseResourceDice?
     val consumptionReductionStacks: Boolean?
     val ignoreConsumptionReductionOf: Array<String>?
+    val maximumCivicRdLimit: Int?
 }
 
 @JsModule("./structures.json")

@@ -1,6 +1,7 @@
 {
   "id": "castle-vk",
   "name": "structures.castle-vk.name",
+  "maximumCivicRdLimit": 3,
   "activityBonusRules": [
     {
       "value": 2,
