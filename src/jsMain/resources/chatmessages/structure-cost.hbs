@@ -10,9 +10,11 @@
             class="km-pay-structure">
         <b>{{localizeKM "kingdom.payStructure"}}</b>: {{cost.label}}
     </button>
-{{/unless}}
 <p>{{#if slowedLink}}{{localizeKM "kingdom.dragToBuildFailure"}}{{else}}{{localizeKM "kingdom.dragToBuild"}}{{/if}}{{{slowedLink}}}</p>
 <p>{{{link}}}</p>
+{{else}}
+    {{#if slowedLink}}{{localizeKM "kingdom.failedToCompleteStructure"}}{{/if}}
+{{/unless}}
 {{#if messages}}
     <hr>
     {{#each messages}}

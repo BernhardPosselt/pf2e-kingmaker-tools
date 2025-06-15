@@ -56,6 +56,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
+import kotlin.math.max
 
 enum class StructureBrowserNav : Translatable, ValueEnum {
     BUILDABLE,
@@ -284,6 +285,8 @@ class StructureBrowser(
                             )
                         )
                     }
+                    kingdom.resourcePoints.now = max(0, kingdom.resourcePoints.now - rp)
+                    actor.setKingdom(kingdom)
                     render()
                 }
             }
@@ -342,7 +345,7 @@ class StructureBrowser(
                 checkNotNull(rubble) {
                     "Rubble was null"
                 }
-                val rp = if (kingdom.settings.partialStructureConstruction) {
+                val rp = if (kingdom.settings.partialStructureConstruction && totalRp > 0) {
                     val maxRp = realmData.sizeInfo.maximumStructureRpPerTurn
                     structure.calculateInitialRpCost(maxRp)
                 } else {

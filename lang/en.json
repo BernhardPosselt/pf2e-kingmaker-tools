@@ -396,6 +396,7 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "failedToCompleteStructure": "Failed to complete structure; it is delayed further.",
       "spendRp": "Spend RP",
       "advanceConstruction": "Spending {rp, plural, =1 {1 RP} other {# RP}} to advance construction of structure {structureName}",
       "finishedConstruction": "Spent {rp, plural, =1 {1 RP} other {# RP}} and finished construction of structure {structureName}",
