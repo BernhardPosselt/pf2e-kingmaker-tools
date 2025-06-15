@@ -68,6 +68,8 @@ fun StructureActor.isStructure() = getRawStructureData() != null
 
 fun StructureActor.isSlowed() = itemTypes.condition.any { it.slug == "slowed" }
 
+fun StructureActor.isCompleted() = hitPoints.value >= hitPoints.max
+
 fun StructureActor.parseStructure(): Structure? {
     val uuid = parent
         ?.takeIfInstance<TokenDocument>()
@@ -75,16 +77,26 @@ fun StructureActor.parseStructure(): Structure? {
         ?.uuid
         ?: uuid
     return getRawResolvedStructureData()
-        ?.parseStructure(isSlowed(), uuid, img)
+        ?.parseStructure(
+            inConstruction = isSlowed(),
+            uuid = uuid,
+            img = img,
+            currentRp = hitPoints.value,
+            constructedRp = hitPoints.max,
+        )
 }
 
 fun RawStructureData.parseStructure(
     inConstruction: Boolean,
     uuid: String,
     img: String?,
+    currentRp: Int,
+    constructedRp: Int,
 ) = Structure(
     name = name,
     img = img,
+    currentRp = currentRp,
+    constructedRp = constructedRp,
     stacksWith = stacksWith,
     construction = Construction(
         skills = construction?.skills?.mapNotNull {
@@ -180,6 +192,7 @@ fun RawStructureData.parseStructure(
     consumptionReductionStacks = consumptionReductionStacks == true,
     ignoreConsumptionReductionOf = ignoreConsumptionReductionOf?.toSet() ?: emptySet(),
     maximumCivicRdLimit = maximumCivicRdLimit ?: 0,
+    increaseMinimumSettlementActions = increaseMinimumSettlementActions ?: 0,
     inConstruction = inConstruction,
     uuid = uuid,
     id = id,

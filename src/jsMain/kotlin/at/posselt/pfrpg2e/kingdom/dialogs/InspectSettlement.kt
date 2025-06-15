@@ -94,6 +94,7 @@ external interface InspectSettlementContext : ValidatedHandlebarsContext {
     val currentTab: String
     val tabs: Array<NavEntryContext>
     val storage: Array<LabelValueContext>
+    val settlementActions: Int
 }
 
 @JsPlainObject
@@ -125,7 +126,7 @@ class InspectSettlementDataModel(
 }
 
 @Suppress("unused")
-enum class SettlementNav: Translatable, ValueEnum {
+enum class SettlementNav : Translatable, ValueEnum {
     STATUS,
     SHOPPING,
     STRUCTURES,
@@ -300,7 +301,7 @@ class InspectSettlement(
                 }
             }
             .awaitAll()
-            .map { LabelValueContext(label=it.first, value=it.second) }
+            .map { LabelValueContext(label = it.first, value = it.second) }
             .toTypedArray()
         val activitiesById = kingdom.getAllActivities().associateBy { it.id }
         val bonuses = parsed.highestUniqueBonuses
@@ -309,21 +310,27 @@ class InspectSettlement(
                 val skill = bonus.skill
                 val mod = bonus.value.formatAsModifier()
                 if (activity != null && skill != null) {
-                    t("kingdom.bonusToActivityUsingSkill", recordOf(
-                        "modifier" to mod,
-                        "activity" to (activitiesById[activity]?.title ?: ""),
-                        "skill" to t(skill)
-                    ))
+                    t(
+                        "kingdom.bonusToActivityUsingSkill", recordOf(
+                            "modifier" to mod,
+                            "activity" to (activitiesById[activity]?.title ?: ""),
+                            "skill" to t(skill)
+                        )
+                    )
                 } else if (skill != null) {
-                    t("kingdom.bonusTo", recordOf(
-                        "modifier" to mod,
-                        "selector" to t(skill),
-                    ))
+                    t(
+                        "kingdom.bonusTo", recordOf(
+                            "modifier" to mod,
+                            "selector" to t(skill),
+                        )
+                    )
                 } else if (activity != null) {
-                    t("kingdom.bonusTo", recordOf(
-                        "modifier" to mod,
-                        "selector" to (activitiesById[activity]?.title ?: ""),
-                    ))
+                    t(
+                        "kingdom.bonusTo", recordOf(
+                            "modifier" to mod,
+                            "selector" to (activitiesById[activity]?.title ?: ""),
+                        )
+                    )
                 } else {
                     null
                 }
@@ -380,6 +387,7 @@ class InspectSettlement(
             structures = settlementStructures,
             bonuses = bonuses,
             notes = notes,
+            settlementActions = parsed.settlementActions,
             availableItems = availableItems,
             currentTab = currentNav.value,
             storage = storage,

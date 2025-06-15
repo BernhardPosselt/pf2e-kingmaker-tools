@@ -331,3 +331,4 @@ A full structure rule would look something like this:
 * **ignoreConsumptionReductionOf**: optional, a structure id that is removed from consumption reduction in a settlement
 * **consumptionReductionStacks**: optional, if true, all structures with the same name in a settlement add up their consumption reduction
 * **maximumCivicRdLimit**: optional, increases the limit of RD gained by Town, City and Metropolis RD settings
+* **increaseMinimumSettlementActions** optional, increase V&K Settlement Actions viewable in the structure browser

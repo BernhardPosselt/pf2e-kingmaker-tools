@@ -92,6 +92,7 @@ external interface KingdomSettings {
     var eventDcStep: Int
     var cultEventDc: Int
     var cultEventDcStep: Int
+    var partialStructureConstruction: Boolean
 }
 
 @JsPlainObject

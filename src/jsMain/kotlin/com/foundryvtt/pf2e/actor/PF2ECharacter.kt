@@ -124,7 +124,7 @@ external class PF2ECharacter : PF2EActor, PF2ECreature {
     override fun update(data: AnyObject, operation: DatabaseUpdateOperation): Promise<PF2ECharacter?>
 
     val abilities: Abilities
-    val hitPoints: HitPoints
+    override val hitPoints: HitPoints
     override val skills: ReadonlyRecord<String, PF2EAttribute>
     val system: PF2ECharacterSystem
     val parties: JsSet<PF2EParty>

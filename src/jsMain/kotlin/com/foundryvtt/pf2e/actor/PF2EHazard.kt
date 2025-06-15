@@ -24,6 +24,7 @@ external class PF2EHazard : PF2EActor, PF2ECreature {
     override fun update(data: AnyObject, operation: DatabaseUpdateOperation): Promise<PF2EHazard?>
 
     override val skills: ReadonlyRecord<String, PF2EAttribute>
+    override val hitPoints: HitPoints
     val system: PF2EHazardData
 }
 

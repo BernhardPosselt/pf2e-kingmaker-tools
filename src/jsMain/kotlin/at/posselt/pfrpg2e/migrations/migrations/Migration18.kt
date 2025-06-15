@@ -6,5 +6,6 @@ import com.foundryvtt.core.Game
 class Migration18: Migration(18, showUpgradingNotices = true) {
     override suspend fun migrateKingdom(game: Game, kingdom: KingdomData) {
         kingdom.settings.settlementsGenerateRd = false
+        kingdom.settings.partialStructureConstruction = false
     }
 }

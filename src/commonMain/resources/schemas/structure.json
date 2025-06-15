@@ -21,6 +21,9 @@
         "name": {
           "type": "string"
         },
+        "increaseMinimumSettlementActions": {
+          "type": "number"
+        },
         "maximumCivicRdLimit": {
           "type": "number"
         },

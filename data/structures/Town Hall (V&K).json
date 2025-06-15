@@ -7,6 +7,7 @@
     "edifice"
   ],
   "maximumCivicRdLimit": 2,
+  "increaseMinimumSettlementActions": 1,
   "affectsDowntime": false,
   "reducesUnrest": true,
   "reduceUnrestBy": {

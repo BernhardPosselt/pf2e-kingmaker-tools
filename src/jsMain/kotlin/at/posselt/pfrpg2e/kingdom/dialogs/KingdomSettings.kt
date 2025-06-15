@@ -51,6 +51,7 @@ class KingdomSettingsDataModel(
             int("rpToXpConversionRate")
             int("rpToXpConversionLimit")
             boolean("settlementsGenerateRd")
+            boolean("partialStructureConstruction")
             int("xpPerClaimedHex")
             int("maximumFamePoints")
             int("ruinThreshold") {
@@ -364,6 +365,12 @@ class KingdomSettingsApplication(
                             name = "settlementsGenerateRd",
                             label = t("kingdom.settlementsGenerateRd"),
                             value = settings.settlementsGenerateRd,
+                            stacked = false,
+                        ),
+                        CheckboxInput(
+                            name = "partialStructureConstruction",
+                            label = t("kingdom.partialStructureConstruction"),
+                            value = settings.partialStructureConstruction,
                             stacked = false,
                         ),
                         Select.fromEnum<UntrainedProficiencyMode>(

@@ -22,6 +22,7 @@ external class PF2EFamiliar : PF2EActor, PF2ECreature {
     override fun update(data: AnyObject, operation: DatabaseUpdateOperation): Promise<PF2EFamiliar?>
 
     override val skills: ReadonlyRecord<String, PF2EAttribute>
+    override val hitPoints: HitPoints
     val system: PF2EFamiliarData
 }
 

@@ -186,8 +186,9 @@ fun evaluateSettlement(
 ): Settlement {
     val settlementSize = findSettlementSize(data.level)
     val maxItemBonus = settlementSize.maxItemBonus
-    val constructedStructures = structures.filterNot { it.inConstruction }
+    val constructedStructures = structures.filterNot { it.inConstruction && !it.rpPaid }
     val structuresInConstruction = structures.filter { it.inConstruction }
+    val unpaidStructures = structures.filterNot { it.rpPaid }
     val consumptionReduction = calculateConsumptionReduction(constructedStructures)
     val (bonuses, eventBonus, leaderBonus) = combineBonuses(
         constructedStructures,
@@ -234,8 +235,10 @@ fun evaluateSettlement(
         type = data.type,
         structuresInConstruction = structuresInConstruction,
         constructedStructures = constructedStructures,
+        unpaidStructures= unpaidStructures,
         availableItems = availableItems,
         preventItemLevelPenalty = constructedStructures.any { it.preventItemLevelPenalty },
         maximumCivicRdLimit = structures.maxOfOrNull { it.maximumCivicRdLimit } ?: 0,
+        settlementActions = structures.maxOfOrNull { it.increaseMinimumSettlementActions } ?: 0,
     )
 }

@@ -11,7 +11,9 @@ import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
 @JsPlainObject
-external interface PF2ENpcData
+external interface PF2ENpcData {
+
+}
 
 // required to make instance of work, but since the classes are not registered here
 // at page load, we can't use @file:JsQualifier
@@ -24,6 +26,7 @@ external class PF2ENpc : PF2EActor, PF2ECreature {
     override fun update(data: AnyObject, operation: DatabaseUpdateOperation): Promise<PF2ENpc?>
 
     override val skills: ReadonlyRecord<String, PF2EAttribute>
+    override val hitPoints: HitPoints
     val system: PF2ENpcData
 }
 

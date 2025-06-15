@@ -92,6 +92,7 @@ fun createKingdomDefaults(name: String) =
             autoCalculateArmyConsumption = true,
             enableLeadershipModifiers = false,
             expandMagicUse = false,
+            partialStructureConstruction = false,
             kingdomEventRollMode = "gmroll",
             automateResources = "kingmaker",
             proficiencyMode = "none",

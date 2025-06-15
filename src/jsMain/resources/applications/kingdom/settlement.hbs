@@ -12,6 +12,12 @@
                     <th>Type</th>
                     <td>{{> formElement typeInput}}</td>
                 </tr>
+                {{# if settlementActions}}
+                    <tr>
+                        <th>{{localizeKM "kingdom.settlementActions"}}</th>
+                        <td>{{settlementActions}}</td>
+                    </tr>
+                {{/if}}
                 <tr>
                     <th>{{localizeKM "kingdom.blocksWithMaximum" count=maximumBlocks}}</th>
                     <td>

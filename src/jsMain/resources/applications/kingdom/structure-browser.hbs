@@ -1,7 +1,13 @@
 <div class="km-browser">
     <div class="km-structure-filters">
         <div class="km-space-form-elements">{{> formElement activeSettlement}}</div>
-        <button type="button" class="full-width" data-action="settlement-details" {{#unless settlementChosen}}disabled{{/unless}}>{{localizeKM "kingdom.details"}}</button>
+        {{#if settlementActions}}
+            <div class="km-space-form-elements">
+                <b>{{localizeKM "kingdom.settlementActions"}}</b>: {{settlementActions}}
+            </div>
+        {{/if}}
+        <button type="button" class="full-width" data-action="settlement-details"
+                {{#unless settlementChosen}}disabled{{/unless}}>{{localizeKM "kingdom.details"}}</button>
         <hr>
         <button type="button" data-action="clear-filters">{{localizeKM "kingdom.clearFilters"}}</button>
         <div class="km-space-form-elements">{{> formElement search}}</div>
@@ -31,9 +37,11 @@
                         {{#if rp.value}}
                             <li class="km-rp {{#if rp.lacksFunds}}km-lacks-funds{{/if}}">{{rp.value}}</li>{{/if}}
                         {{#if lumber.value}}
-                            <li class="km-lumber {{#if lumber.lacksFunds}}km-lacks-funds{{/if}}">{{lumber.value}}</li>{{/if}}
+                            <li class="km-lumber {{#if
+                                    lumber.lacksFunds}}km-lacks-funds{{/if}}">{{lumber.value}}</li>{{/if}}
                         {{#if stone.value}}
-                            <li class="km-stone {{#if stone.lacksFunds}}km-lacks-funds{{/if}}">{{stone.value}}</li>{{/if}}
+                            <li class="km-stone {{#if
+                                    stone.lacksFunds}}km-lacks-funds{{/if}}">{{stone.value}}</li>{{/if}}
                         {{#if ore.value}}
                             <li class="km-ore {{#if ore.lacksFunds}}km-lacks-funds{{/if}}">{{ore.value}}</li>{{/if}}
                         {{#if luxuries.value}}

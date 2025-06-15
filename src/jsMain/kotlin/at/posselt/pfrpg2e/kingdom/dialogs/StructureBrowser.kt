@@ -108,6 +108,7 @@ external interface StructureBrowserContext : ValidatedHandlebarsContext {
     val structures: Array<StructureContext>
     val repairActive: Boolean
     val settlementChosen: Boolean
+    val settlementActions: Int
 }
 
 @JsPlainObject
@@ -571,6 +572,7 @@ class StructureBrowser(
             structures = structures,
             repairActive = currentNav == StructureBrowserNav.REPAIRABLE,
             settlementChosen = kingdom.activeSettlement != null,
+            settlementActions = settlements.current?.settlementActions ?: 0
         )
     }
 

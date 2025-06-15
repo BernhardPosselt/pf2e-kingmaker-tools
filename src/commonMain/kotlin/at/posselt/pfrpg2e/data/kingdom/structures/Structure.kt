@@ -26,6 +26,8 @@ data class Structure(
     val reducesUnrest: Boolean = false,
     val reducesRuin: Boolean = false,
     val level: Int = 0,
+    val currentRp: Int = 0,
+    val constructedRp: Int = 0,
     val upgradeFrom: Set<String> = emptySet(),
     val reduceUnrestBy: ReduceUnrestBy? = null,
     val reduceRuinBy: RuinAmount? = null,
@@ -35,8 +37,10 @@ data class Structure(
     val inConstruction: Boolean = false,
     val ignoreConsumptionReductionOf: Set<String> = emptySet(),
     val maximumCivicRdLimit: Int = 0,
+    val increaseMinimumSettlementActions: Int = 0,
 ) {
     val isResidential = traits.contains(StructureTrait.RESIDENTIAL)
+    val rpPaid = currentRp >= constructedRp
 }
 
 

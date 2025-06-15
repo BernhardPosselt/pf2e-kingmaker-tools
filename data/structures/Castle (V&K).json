@@ -110,5 +110,6 @@
     "town": 1,
     "city": 2,
     "metropolis": 3
-  }
+  },
+  "increaseMinimumSettlementActions": 2
 }

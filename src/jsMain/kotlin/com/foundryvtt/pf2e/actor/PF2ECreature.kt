@@ -14,6 +14,6 @@ external interface PF2ECreature {
     val name: String
     val uuid: String
     val img: String?
-
+    val hitPoints: HitPoints
     fun addToInventory(value: AnyObject, container: PF2EEquipment?, doNotStack: Boolean): Promise<PF2EItem?>
 }
