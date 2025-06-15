@@ -32,11 +32,15 @@ import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.NavEntryContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
+import at.posselt.pfrpg2e.kingdom.structures.StructureActor
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch
+import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.t
+import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
@@ -93,6 +97,9 @@ external interface StructureContext {
     val stone: CostContext
     val luxuries: CostContext
     val notes: String?
+    val currentRp: Int
+    val constructedRp: Int
+    val remainingRp: Int
 }
 
 @Suppress("unused")
@@ -236,6 +243,41 @@ class StructureBrowser(
                 mainFilters = emptySet()
                 activityFilters = emptySet()
                 render()
+            }
+
+            "advance-construction" -> {
+                val settlements = kingdom.getAllSettlements(game)
+                val underConstructionStructures = settlements.current?.unpaidStructures ?: emptyList()
+                val structuresByUuid = underConstructionStructures.associateBy { it.uuid }
+                val uuid = target.dataset["uuid"]
+                val structure = uuid?.let { structuresByUuid[it] }
+                checkNotNull(structure) {
+                    "Structure with $uuid was null"
+                }
+                val maxRp = realmData.sizeInfo.maximumStructureRpPerTurn
+                val rp = structure.calculateTurnRpCost(maxRp)
+                buildPromise {
+                    val structure = fromUuidTypeSafe<StructureActor>(uuid)
+                    checkNotNull(structure) {
+                        "Structure Actor with $uuid was null"
+                    }
+                    val hp = structure.hitPoints.value + rp
+                    structure.typeSafeUpdate {
+                        system.attributes.hp.value = hp
+                    }
+                    if (structure.hitPoints.value == structure.hitPoints.max) {
+                        postChatMessage(t("kingdom.advanceConstruction", recordOf(
+                            "structureName" to structure.name,
+                            "rp" to rp
+                        )))
+                    } else {
+                        postChatMessage(t("kingdom.finishedConstruction", recordOf(
+                            "structureName" to structure.name,
+                            "rp" to rp
+                        )))
+                    }
+                    render()
+                }
             }
 
             "settlement-details" -> {
@@ -479,6 +521,9 @@ class StructureBrowser(
                     notes = it.notes,
                     uuid = it.uuid,
                     img = it.img,
+                    currentRp = it.currentRp,
+                    constructedRp = it.constructedRp,
+                    remainingRp = it.remainingRp,
                     canBuild = canBuild(it, increaseSkills),
                     infrastructure = it.traits.contains(StructureTrait.INFRASTRUCTURE),
                     residential = it.traits.contains(StructureTrait.RESIDENTIAL),
