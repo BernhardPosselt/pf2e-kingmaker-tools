@@ -248,7 +248,7 @@ class StructureBrowser(
 
             "advance-construction" -> {
                 val settlements = kingdom.getAllSettlements(game)
-                val underConstructionStructures = settlements.current?.unpaidStructures ?: emptyList()
+                val underConstructionStructures = settlements.current?.structuresUnderConstruction ?: emptyList()
                 val structuresByUuid = underConstructionStructures.associateBy { it.uuid }
                 val uuid = target.dataset["uuid"]
                 val structure = uuid?.let { structuresByUuid[it] }
@@ -430,7 +430,7 @@ class StructureBrowser(
         val increaseSkills = chosenFeats.map { it.feat.increasedSkills() }
         val settlements = kingdom.getAllSettlements(game)
         val settlementStructures = settlements.current?.constructedStructures ?: emptyList()
-        val underConstructionStructures = settlements.current?.unpaidStructures ?: emptyList()
+        val underConstructionStructures = settlements.current?.structuresUnderConstruction ?: emptyList()
         val activityStructureFilters: List<StructureFilter> =
             activityFilters.map { activityId -> { s -> s.bonuses.any { it.activity == activityId } } }
         val structuresUpgradedFrom = worldStructures.flatMap { it.upgradeFrom }.toSet()
@@ -504,7 +504,7 @@ class StructureBrowser(
         }
         val buildableStructures = filterStructures(worldStructures, filters, Cost.FULL)
         val freeStructures = filterStructures(
-            settlements.current?.structuresInConstruction ?: emptyList(), filters, Cost.FREE
+            settlements.current?.delayedStructures ?: emptyList(), filters, Cost.FREE
         )
         val upgradeableStructures = filterStructures(settlementStructures, filters, Cost.UPGRADE)
         val structuresUnderConstruction = filterStructures(underConstructionStructures, filters, Cost.PARTIAL)

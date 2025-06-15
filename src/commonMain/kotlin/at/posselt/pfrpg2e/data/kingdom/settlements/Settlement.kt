@@ -28,9 +28,9 @@ data class Settlement(
     val hasBridge: Boolean,
     val occupiedBlocks: Int,
     val preventItemLevelPenalty: Boolean,
-    val structuresInConstruction: List<Structure>,
+    val delayedStructures: List<Structure>,
     val constructedStructures: List<Structure>,
-    val unpaidStructures: List<Structure>,
+    val structuresUnderConstruction: List<Structure>,
     val maximumCivicRdLimit: Int,
     val settlementActions: Int,
 ) {
