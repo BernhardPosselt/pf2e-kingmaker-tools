@@ -255,13 +255,14 @@ class StructureBrowser(
                 checkNotNull(structure) {
                     "Structure with $uuid was null"
                 }
-                val maxRp = realmData.sizeInfo.maximumStructureRpPerTurn
-                val rp = structure.calculateTurnRpCost(maxRp)
+                val maxRpPerTurn = realmData.sizeInfo.maximumStructureRpPerTurn
+                val maxRp = structure.calculateTurnRpCost(maxRpPerTurn)
                 buildPromise {
                     val structure = fromUuidTypeSafe<StructureActor>(uuid)
                     checkNotNull(structure) {
                         "Structure Actor with $uuid was null"
                     }
+                    val rp = askRpDialog(maxRp)
                     val hp = structure.hitPoints.value + rp
                     structure.typeSafeUpdate {
                         system.attributes.hp.value = hp
