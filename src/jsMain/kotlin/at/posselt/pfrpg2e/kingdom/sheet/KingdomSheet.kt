@@ -124,6 +124,7 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
 import at.posselt.pfrpg2e.utils.rollWithCompendiumFallback
+import at.posselt.pfrpg2e.utils.stripHtml
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
@@ -1064,6 +1065,7 @@ class KingdomSheet(
             ?.draw
             ?.results
             ?.firstNotNullOf { it.text }
+            ?.stripHtml()
             ?.let { kingdom.getEvent(it) }
             ?.let { event ->
                 val modifier = event.modifier
@@ -1603,7 +1605,10 @@ class KingdomSheet(
             kingdom.initialProficiencies = value.initialProficiencies
             beforeKingdomUpdate(previousKingdom, kingdom)
             actor.setKingdom(kingdom)
-            bonusFeat = value.bonusFeat
+            if (bonusFeat != value.bonusFeat) {
+                bonusFeat = value.bonusFeat
+                render()
+            }
             game.settings.pfrpg2eKingdomCampingWeather.setKingdomActiveLeader(value.activeLeader)
         }
         null

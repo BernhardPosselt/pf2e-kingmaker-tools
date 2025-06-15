@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.5.2] - 2025-06-16
+
+### Fixed
+
+* Rerender sheet upon changing bonus feat drop downs
+* Strip HTML from new Rolltable entries which is generated in V13
+
+
 ## [5.5.1] - 2025-06-15
 
 ### Fixed

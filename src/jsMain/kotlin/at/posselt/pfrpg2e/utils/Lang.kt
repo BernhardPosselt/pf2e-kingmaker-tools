@@ -1,8 +1,8 @@
 package at.posselt.pfrpg2e.utils
 
 import com.foundryvtt.core.AnyObject
-import js.array.Tuple2
 import js.array.ReadonlyArray
+import js.array.Tuple2
 import js.array.toTypedArray
 import js.array.tupleOf
 import js.objects.Object
@@ -44,6 +44,12 @@ suspend fun <T> Iterable<Promise<T>>.awaitAll(): List<T> =
 
 suspend fun <T> Array<Promise<T>>.awaitAll(): Array<T> =
     map { it.asDeferred() }.awaitAll().toTypedArray()
+
+fun String.stripHtml(): String? {
+    val x = document.createElement("div")
+    x.innerHTML = this
+    return x.textContent
+}
 
 fun <F : Any, S> Array<Pair<F, S>>.toRecord(): ReadonlyRecord<F, S> =
     recordOf(*this)
