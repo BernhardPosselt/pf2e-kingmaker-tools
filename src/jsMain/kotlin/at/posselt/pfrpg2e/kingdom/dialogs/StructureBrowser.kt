@@ -110,7 +110,7 @@ external interface StructureBrowserContext : ValidatedHandlebarsContext {
     val repairActive: Boolean
     val settlementChosen: Boolean
     val settlementActions: Int
-    val rpPerTurn: Int
+    val rpPerStructure: Int
 }
 
 @JsPlainObject
@@ -556,7 +556,7 @@ class StructureBrowser(
             }
             .sortedBy { it.label }
             .toTypedArray()
-        val rpPerTurn = if(kingdom.settings.partialStructureConstruction) {
+        val rpPerStructure = if(kingdom.settings.partialStructureConstruction) {
             realmData.sizeInfo.maximumStructureRpPerTurn
         } else {
             0
@@ -587,7 +587,7 @@ class StructureBrowser(
             repairActive = currentNav == StructureBrowserNav.REPAIRABLE,
             settlementChosen = kingdom.activeSettlement != null,
             settlementActions = settlements.current?.settlementActions ?: 0,
-            rpPerTurn = rpPerTurn,
+            rpPerStructure = rpPerStructure,
         )
     }
 

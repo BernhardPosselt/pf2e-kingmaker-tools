@@ -459,7 +459,7 @@
       "configureLeaderKingdomSkillsHelp": "If Leadership Modifiers are enabled, configure which leaders and kingdom skills receive the full Leadership bonus",
       "configure": "Configure",
       "settlementActions": "Settlement Actions",
-      "rpPerTurn": "RP per Turn",
+      "rpPerStructure": "RP per Structure",
       "settlementsGenerateRd": "Settlements Generate Resource Dice",
       "partialStructureConstruction": "Partial Structure Construction",
       "kingdomSkillIncreaseEveryLevel": "Kingdom Skill Increase Every Level",

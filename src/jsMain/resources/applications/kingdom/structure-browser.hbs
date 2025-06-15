@@ -1,18 +1,18 @@
 <div class="km-browser">
     <div class="km-structure-filters">
         <div class="km-space-form-elements">{{> formElement activeSettlement}}</div>
-        <button type="button" class="full-width" data-action="settlement-details"
-                {{#unless settlementChosen}}disabled{{/unless}}>{{localizeKM "kingdom.details"}}</button>
         {{#if settlementActions}}
             <div class="km-space-form-elements">
                 <b>{{localizeKM "kingdom.settlementActions"}}</b>: {{settlementActions}}
             </div>
         {{/if}}
-        {{#if rpPerTurn}}
+        {{#if rpPerStructure}}
             <div class="km-space-form-elements">
-                <b>{{localizeKM "kingdom.rpPerTurn"}}</b>: {{rpPerTurn}}
+                <b>{{localizeKM "kingdom.rpPerStructure"}}</b>: {{rpPerStructure}}
             </div>
         {{/if}}
+        <button type="button" class="full-width" data-action="settlement-details"
+                {{#unless settlementChosen}}disabled{{/unless}}>{{localizeKM "kingdom.details"}}</button>
         <hr>
         <button type="button" data-action="clear-filters">{{localizeKM "kingdom.clearFilters"}}</button>
         <div class="km-space-form-elements">{{> formElement search}}</div>
