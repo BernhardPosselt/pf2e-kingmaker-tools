@@ -125,6 +125,7 @@ external interface StructureBrowserContext : ValidatedHandlebarsContext {
     val settlementChosen: Boolean
     val settlementActions: Int
     val rpPerStructure: Int
+    val linkActorUuid: Boolean
 }
 
 @JsPlainObject
@@ -698,6 +699,8 @@ class StructureBrowser(
             settlementActions = settlements.current?.settlementActions ?: 0,
             rpPerStructure = rpPerStructure,
             underConstructionActive = currentNav == StructureBrowserNav.UNDER_CONSTRUCTION,
+            linkActorUuid = currentNav == StructureBrowserNav.UNDER_CONSTRUCTION
+                    || currentNav == StructureBrowserNav.FREE
         )
     }
 

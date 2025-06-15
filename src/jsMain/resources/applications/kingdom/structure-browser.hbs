@@ -33,7 +33,7 @@
             {{#each structures}}
                 <li class="km-structure"
                     {{#if notes}}title="{{notes}}"{{/if}}>
-                    <header><a href="#" data-action="open-structure" data-uuid="{{# if ../underConstructionActive}}{{actorUuid}}{{else}}{{uuid}}{{/if}}">{{name}}</a>
+                    <header><a href="#" data-action="open-structure" data-uuid="{{# if ../linkActorUuid}}{{actorUuid}}{{else}}{{uuid}}{{/if}}">{{name}}</a>
                     </header>
                     <div class="km-image km-lots-{{lots}}">
                         <img src="{{img}}" alt="{{name}}">

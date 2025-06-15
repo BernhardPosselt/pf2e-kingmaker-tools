@@ -38,7 +38,7 @@ data class Structure(
     val gainRuin: RuinAmount? = null,
     val increaseResourceDice: IncreaseResourceDice = IncreaseResourceDice(),
     val consumptionReductionStacks: Boolean = false,
-    val inConstruction: Boolean = false,
+    val slowed: Boolean = false,
     val ignoreConsumptionReductionOf: Set<String> = emptySet(),
     val maximumCivicRdLimit: Int = 0,
     val increaseMinimumSettlementActions: Int = 0,
