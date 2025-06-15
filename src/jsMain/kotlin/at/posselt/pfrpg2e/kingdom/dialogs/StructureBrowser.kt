@@ -15,6 +15,7 @@ import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.kingdom.FameType
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
+import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.data.kingdom.structures.StructureTrait
 import at.posselt.pfrpg2e.fromCamelCase
@@ -204,6 +205,7 @@ class StructureBrowser(
     private val worldStructures: List<Structure>,
     private val kingdomRanks: KingdomSkillRanks,
     private val chosenFeats: List<ChosenFeat>,
+    private val realmData: RealmData,
 ) : FormApp<StructureBrowserContext, StructureBrowserData>(
     title = t("kingdom.structureBrowser"),
     template = "applications/kingdom/structure-browser.hbs",
@@ -279,13 +281,19 @@ class StructureBrowser(
                 val lumber = target.dataset["lumber"]?.toInt() ?: 0
                 val stone = target.dataset["stone"]?.toInt() ?: 0
                 val luxuries = target.dataset["luxuries"]?.toInt() ?: 0
-                val rp = target.dataset["rp"]?.toInt() ?: 0
+                val totalRp = target.dataset["rp"]?.toInt() ?: 0
                 val repair = target.dataset["repair"] == "true"
                 checkNotNull(structure) {
                     "Structure with $uuid was null"
                 }
                 checkNotNull(rubble) {
                     "Rubble was null"
+                }
+                val rp = if (kingdom.settings.partialStructureConstruction) {
+                    val maxRp = realmData.sizeInfo.maximumStructureRpPerTurn
+                    structure.calculateInitialRpCost(maxRp)
+                } else {
+                    totalRp
                 }
                 val fameType = FameType.fromString(kingdom.fame.type) ?: FameType.FAMOUS
                 val degreeMessages = buildDegreeMessages(

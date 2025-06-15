@@ -158,7 +158,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.collections.plus
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -999,6 +998,7 @@ class KingdomSheet(
                                 game = game,
                                 kingdomRanks = kingdomRanks,
                                 chosenFeats = chosenFeats,
+                                realmData = game.getRealmData(actor, kingdom),
                             ).launch()
                         }
 

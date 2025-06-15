@@ -68,8 +68,6 @@ fun StructureActor.isStructure() = getRawStructureData() != null
 
 fun StructureActor.isSlowed() = itemTypes.condition.any { it.slug == "slowed" }
 
-fun StructureActor.isCompleted() = hitPoints.value >= hitPoints.max
-
 fun StructureActor.parseStructure(): Structure? {
     val uuid = parent
         ?.takeIfInstance<TokenDocument>()

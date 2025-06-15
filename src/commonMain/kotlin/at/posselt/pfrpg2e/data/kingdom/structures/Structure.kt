@@ -1,5 +1,8 @@
 package at.posselt.pfrpg2e.data.kingdom.structures
 
+import kotlin.math.max
+import kotlin.math.min
+
 data class Structure(
     val id: String,
     val uuid: String,
@@ -41,6 +44,12 @@ data class Structure(
 ) {
     val isResidential = traits.contains(StructureTrait.RESIDENTIAL)
     val rpPaid = currentRp >= constructedRp
+
+    fun calculateInitialRpCost(maxRpPerTurn: Int) =
+        min(constructedRp, maxRpPerTurn)
+
+    fun calculateRemainingRpCost(maxRpPerTurn: Int) =
+        min(max(0, constructedRp - currentRp), maxRpPerTurn)
 }
 
 
