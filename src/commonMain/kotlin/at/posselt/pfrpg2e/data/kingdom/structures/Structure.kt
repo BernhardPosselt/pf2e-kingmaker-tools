@@ -47,9 +47,6 @@ data class Structure(
     val rpPaid = currentRp >= constructedRp
     val remainingRp = max(0, constructedRp - currentRp)
 
-    fun calculateInitialRpCost(maxRpPerTurn: Int) =
-        min(constructedRp, maxRpPerTurn)
-
     fun calculateTurnRpCost(maxRpPerTurn: Int) =
         min(remainingRp, maxRpPerTurn)
 }

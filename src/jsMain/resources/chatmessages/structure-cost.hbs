@@ -8,10 +8,11 @@
             data-ore="{{cost.ore}}"
             data-kingdom-actor-uuid="{{actorUuid}}"
             class="km-pay-structure">
-        <b>{{localizeKM "kingdom.payStructure"}}</b>: {{cost.label}}
+        {{localizeKM "kingdom.payStructure"}}: {{cost.label}}
     </button>
 <p>{{#if slowedLink}}{{localizeKM "kingdom.dragToBuildFailure"}}{{else}}{{localizeKM "kingdom.dragToBuild"}}{{/if}}{{{slowedLink}}}</p>
 <p>{{{link}}}</p>
+    {{#if initialRp}}<p><b>{{localizeKM 'kingdom.setStructureHp'}}</b> {{initialRp}}</p>{{/if}}
 {{else}}
     {{#if slowedLink}}{{localizeKM "kingdom.failedToCompleteStructure"}}{{/if}}
 {{/unless}}

@@ -68,6 +68,7 @@
                         <button {{#unless canBuild}}disabled{{/unless}}
                                 type="button"
                                 data-uuid="{{uuid}}"
+                                {{#if initialRp}}data-initial-rp="{{initialRp}}"{{/if}}
                                 data-ore="{{ore.value}}"
                                 data-lumber="{{lumber.value}}"
                                 data-stone="{{stone.value}}"

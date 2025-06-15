@@ -57,6 +57,7 @@ import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 import kotlin.math.max
+import kotlin.math.min
 
 enum class StructureBrowserNav : Translatable, ValueEnum {
     BUILDABLE,
@@ -103,6 +104,7 @@ external interface StructureContext {
     val currentRp: Int
     val constructedRp: Int
     val remainingRp: Int
+    val initialRp: Int?
 }
 
 @Suppress("unused")
@@ -339,6 +341,7 @@ class StructureBrowser(
                 val luxuries = target.dataset["luxuries"]?.toInt() ?: 0
                 val totalRp = target.dataset["rp"]?.toInt() ?: 0
                 val repair = target.dataset["repair"] == "true"
+                val initialRp = target.dataset["initialRp"]?.toInt()
                 checkNotNull(structure) {
                     "Structure with $uuid was null"
                 }
@@ -347,7 +350,7 @@ class StructureBrowser(
                 }
                 val rp = if (kingdom.settings.partialStructureConstruction && totalRp > 0) {
                     val maxRp = realmData.sizeInfo.maximumStructureRpPerTurn
-                    structure.calculateInitialRpCost(maxRp)
+                    min(totalRp, maxRp)
                 } else {
                     totalRp
                 }
@@ -358,6 +361,7 @@ class StructureBrowser(
                     stone = stone,
                     luxuries = luxuries,
                     rp = rp,
+                    initialRp = initialRp,
                     structure = structure,
                     rubble = rubble,
                     actorUuid = actor.uuid,
@@ -441,6 +445,11 @@ class StructureBrowser(
         val settlements = kingdom.getAllSettlements(game)
         val settlementStructures = settlements.current?.constructedStructures ?: emptyList()
         val underConstructionStructures = settlements.current?.structuresUnderConstruction ?: emptyList()
+        val rpPerStructure = if (kingdom.settings.partialStructureConstruction) {
+            realmData.sizeInfo.maximumStructureRpPerTurn
+        } else {
+            0
+        }
         val activityStructureFilters: List<StructureFilter> =
             activityFilters.map { activityId -> { s -> s.bonuses.any { it.activity == activityId } } }
         val structuresUpgradedFrom = worldStructures.flatMap { it.upgradeFrom }.toSet()
@@ -526,6 +535,11 @@ class StructureBrowser(
             StructureBrowserNav.UNDER_CONSTRUCTION -> structuresUnderConstruction
         }
             .map {
+                val initialRp = if (kingdom.settings.partialStructureConstruction) {
+                    min(it.constructedRp, it.constructedRp - it.construction.rp + rpPerStructure)
+                } else {
+                    null
+                }
                 StructureContext(
                     lots = it.lots,
                     name = it.name,
@@ -559,6 +573,7 @@ class StructureBrowser(
                         value = it.construction.luxuries,
                         lacksFunds = it.construction.luxuries > kingdom.commodities.now.luxuries,
                     ),
+                    initialRp = initialRp,
                 )
             }.toTypedArray()
         val activeSettlement = Select(
@@ -631,11 +646,6 @@ class StructureBrowser(
             }
             .sortedBy { it.label }
             .toTypedArray()
-        val rpPerStructure = if (kingdom.settings.partialStructureConstruction) {
-            realmData.sizeInfo.maximumStructureRpPerTurn
-        } else {
-            0
-        }
         val nav = createTabs<StructureBrowserNav>("change-nav", currentNav)
             .filter {
                 if (kingdom.settings.partialStructureConstruction) {
