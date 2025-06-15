@@ -170,7 +170,7 @@
             {
                 "id": "pf2e",
                 "compatibility": {
-                    "minimum": "7.1.0"
+                    "minimum": "7.2.0"
                 }
             }
         ]
