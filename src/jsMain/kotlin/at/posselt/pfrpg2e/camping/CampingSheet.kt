@@ -298,7 +298,7 @@ class CampingSheet(
             }
         }
         appHook.onUpdateWorldTime { _, _, _, _ -> render() }
-        appHook.onCreateItem { _, _, _, _ -> render() }
+        appHook.onCreateItem { _, _, _ -> render() }
         appHook.onDeleteItem { _, _, _ -> render() }
         appHook.onUpdateItem { _, _, _, _ -> render() }
     }

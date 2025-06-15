@@ -21,6 +21,7 @@ import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.bindChatButtons
 import at.posselt.pfrpg2e.kingdom.registerContextMenus
+import at.posselt.pfrpg2e.kingdom.registerPartialConstructionHooks
 import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
@@ -93,6 +94,7 @@ fun main() {
                 registerMealDiffingHooks()
                 registerArmyConsumptionHooks(game)
                 registerIcons(actionDispatcher)
+                registerPartialConstructionHooks(game)
             }
         }
 

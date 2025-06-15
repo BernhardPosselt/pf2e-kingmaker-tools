@@ -61,11 +61,11 @@ private suspend fun checkedUpdate(game: Game, hookActor: Actor) {
 }
 
 fun registerArmyConsumptionHooks(game: Game) {
-    TypedHooks.onCreateToken { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    TypedHooks.onCreateToken { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
     TypedHooks.onDeleteToken { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
     TypedHooks.onUpdateToken { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
 
-    TypedHooks.onCreateItem { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
+    TypedHooks.onCreateItem { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
     TypedHooks.onDeleteItem { document, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
     TypedHooks.onUpdateItem { document, _, _, _ -> document.actor?.let { buildPromise { checkedUpdate(game, it) } } }
 

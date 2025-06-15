@@ -158,29 +158,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
-import kotlin.collections.contains
-import kotlin.collections.count
-import kotlin.collections.emptyList
-import kotlin.collections.filter
-import kotlin.collections.filterIndexed
-import kotlin.collections.filterIsInstance
-import kotlin.collections.filterNot
-import kotlin.collections.find
-import kotlin.collections.firstNotNullOf
-import kotlin.collections.forEach
-import kotlin.collections.getOrNull
-import kotlin.collections.isNotEmpty
-import kotlin.collections.listOf
-import kotlin.collections.map
-import kotlin.collections.mapIndexed
-import kotlin.collections.mapNotNull
-import kotlin.collections.mutableSetOf
 import kotlin.collections.plus
-import kotlin.collections.setOf
-import kotlin.collections.sortedBy
-import kotlin.collections.sumOf
-import kotlin.collections.toSet
-import kotlin.collections.toTypedArray
 import kotlin.js.Promise
 import kotlin.math.max
 
@@ -230,10 +208,10 @@ class KingdomSheet(
 
     init {
         appHook.onDeleteScene { _, _, _ -> render() }
-        appHook.onCreateTile { _, _, _, _ -> render() }
+        appHook.onCreateTile { _, _, _ -> render() }
         appHook.onUpdateTile { _, _, _, _ -> render() }
         appHook.onDeleteTile { _, _, _ -> render() }
-        appHook.onCreateDrawing { _, _, _, _ -> render() }
+        appHook.onCreateDrawing { _, _, _ -> render() }
         appHook.onUpdateDrawing { _, _, _, _ -> render() }
         appHook.onDeleteDrawing { _, _, _ -> render() }
         appHook.onDeleteToken { token, _, _ ->
@@ -246,7 +224,7 @@ class KingdomSheet(
                 render()
             }
         }
-        appHook.onCreateToken { token, _, _, _ ->
+        appHook.onCreateToken { token, _, _ ->
             if (token.isStructure()) {
                 render()
             }

@@ -82,6 +82,7 @@ external class TokenDocument : Document {
     val combatant: Combatant?
     val inCombat: Boolean
     val visible: Boolean
+    val scene: Scene
 //    val regions: JsSet<Region>
 
     fun getBarAttribute(options: BarAttributeOptions = definedExternally): AnyObject?

@@ -37,7 +37,6 @@ typealias PreDeleteDocumentCallback<T, O> = (
 
 typealias CreateDocumentCallback<T, O> = (
     document: T,
-    data: AnyMutableObject,
     options: DatabaseCreateOperation,
     userId: String
 ) -> O

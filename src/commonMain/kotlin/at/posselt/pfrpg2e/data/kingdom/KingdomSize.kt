@@ -7,7 +7,9 @@ data class KingdomSize(
     val controlDCModifier: Int,
     val commodityCapacity: Int,
     val sizeTo: Int? = null,
-)
+) {
+    val maximumStructureRpPerTurn = resourceDieSize.faceSize * 2
+}
 
 val kingdomSizeData = listOf(
     KingdomSize(

@@ -167,7 +167,7 @@ class InspectSettlement(
 ) {
     init {
         appHook.onDeleteScene { _, _, _ -> render() }
-        appHook.onCreateTile { _, _, _, _ -> render() }
+        appHook.onCreateTile { _, _, _ -> render() }
         appHook.onUpdateTile { _, _, _, _ -> render() }
         appHook.onDeleteTile { _, _, _ -> render() }
         appHook.onDeleteToken { token, _, _ ->
@@ -180,7 +180,7 @@ class InspectSettlement(
                 render()
             }
         }
-        appHook.onCreateToken { token, _, _, _ ->
+        appHook.onCreateToken { token, _, _ ->
             if (token.isStructure()) {
                 render()
             }
