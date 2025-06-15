@@ -1516,7 +1516,10 @@ class KingdomSheet(
             kingdom.initialProficiencies = value.initialProficiencies
             beforeKingdomUpdate(previousKingdom, kingdom)
             actor.setKingdom(kingdom)
-            bonusFeat = value.bonusFeat
+            if (bonusFeat != value.bonusFeat) {
+                bonusFeat = value.bonusFeat
+                render()
+            }
             game.settings.pfrpg2eKingdomCampingWeather.setKingdomActiveLeader(value.activeLeader)
         }
         null

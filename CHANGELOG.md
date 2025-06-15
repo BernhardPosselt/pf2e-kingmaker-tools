@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.8.5] - 2025-06-16
+
+### Fixed
+
+* Fix Kingdom Sheet not re-rendering when choosing bonus feats in the Bonus tab
+
+
 ## [4.8.4] - 2025-05-18
 
 ### Fixed
