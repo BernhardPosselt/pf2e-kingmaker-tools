@@ -186,7 +186,7 @@ fun evaluateSettlement(
 ): Settlement {
     val settlementSize = findSettlementSize(data.level)
     val maxItemBonus = settlementSize.maxItemBonus
-    val constructedStructures = structures.filterNot { it.inConstruction && !it.rpPaid }
+    val constructedStructures = structures.filter { !it.inConstruction && it.rpPaid }
     val structuresInConstruction = structures.filter { it.inConstruction }
     val unpaidStructures = structures.filterNot { it.rpPaid }
     val consumptionReduction = calculateConsumptionReduction(constructedStructures)
