@@ -116,6 +116,7 @@ external interface StructureBrowserContext : ValidatedHandlebarsContext {
     val currentNav: String
     val structures: Array<StructureContext>
     val repairActive: Boolean
+    val underConstructionActive: Boolean
     val settlementChosen: Boolean
     val settlementActions: Int
     val rpPerStructure: Int
@@ -675,6 +676,7 @@ class StructureBrowser(
             settlementChosen = kingdom.activeSettlement != null,
             settlementActions = settlements.current?.settlementActions ?: 0,
             rpPerStructure = rpPerStructure,
+            underConstructionActive = currentNav == StructureBrowserNav.UNDER_CONSTRUCTION,
         )
     }
 
