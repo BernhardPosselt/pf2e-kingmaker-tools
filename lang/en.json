@@ -749,6 +749,7 @@
       "claimedRefuge": "Claimed Refuge",
       "claimedLandmark": "Claimed Landmark",
       "civic": "Civic (1 per settlement)",
+      "vacanciesHelp": "Checked means leader position is vacant!",
       "civicPlanning": "During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs after all other settlements have taken their individual Civic activities",
       "civicHelp": "First, import all structures from the Structures compendium in the Kingdom Building, Camping & Weather folder, then add the relevant scene in the Settlements tab. Then hit Build Structure and choose a building. After rolling the check, and drag the building link from chat onto the settlement scene.",
       "event": "Event",
