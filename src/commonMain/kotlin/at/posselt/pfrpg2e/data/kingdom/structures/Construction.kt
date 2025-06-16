@@ -60,4 +60,17 @@ data class Construction(
             ore <= existingOre &&
             stone <= existingStone &&
             rp <= existingRp
+
+    fun hasFundsPartialConstruction(
+        existingLumber: Int,
+        existingLuxuries: Int,
+        existingOre: Int,
+        existingStone: Int,
+        existingRp: Int,
+        rpPerStructure: Int,
+    ) = lumber <= existingLumber &&
+            luxuries <= existingLuxuries &&
+            ore <= existingOre &&
+            stone <= existingStone &&
+            min(rp, rpPerStructure) <= existingRp
 }

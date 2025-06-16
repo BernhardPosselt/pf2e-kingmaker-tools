@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.5.3] - 2025-06-16
+
+### Fixed
+
+* Rerender sheet when changing active leader drop down
+* Cleanup weather effects and post precipitation effects to chat
+* When using partial construction, display the amount paid in addition to the total amount on the structure browser section if it is different
+* When using partial construction, mark structures as buildable if their RP cost per structure or total cost, whichever is lower, is lower or equal than your total funds
+* Always allow spending RP in Under Construction tab if RP are available
+* Limit spending RP for structures under construction to current RP amount
+* Disable Spend RP button if kingdom has 0 RP available
+
 ## [5.5.2] - 2025-06-16
 
 ### Fixed

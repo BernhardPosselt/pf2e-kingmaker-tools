@@ -15,6 +15,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.DieValue
+import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.getCurrentMonth
 import at.posselt.pfrpg2e.utils.postChatMessage
@@ -139,11 +140,13 @@ private suspend fun rollWeather(
 
                 WeatherType.SNOWY -> {
                     postChatMessage(t("weather.snow"))
+                    postLightPrecipitationEffect()
                     WeatherEffect.SNOW
                 }
 
                 WeatherType.RAINY -> {
                     postChatMessage(t("weather.rainy"))
+                    postLightPrecipitationEffect()
                     WeatherEffect.RAIN
                 }
 
@@ -155,6 +158,11 @@ private suspend fun rollWeather(
             // 5. set new weather
             setWeather(game, weatherEffect)
         }
+}
+
+private suspend fun postLightPrecipitationEffect() {
+    val uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-weather-effects.Item.YRCfmtAtySyeBFwt"
+    postChatMessage(buildUuid(uuid), isHtml = true)
 }
 
 suspend fun rollWeather(game: Game) {

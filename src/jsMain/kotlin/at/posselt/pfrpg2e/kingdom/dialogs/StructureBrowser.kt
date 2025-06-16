@@ -82,6 +82,7 @@ enum class StructureBrowserNav : Translatable, ValueEnum {
 external interface CostContext {
     val value: Int
     val lacksFunds: Boolean
+    val label: String
 }
 
 @Suppress("unused")
@@ -126,6 +127,7 @@ external interface StructureBrowserContext : ValidatedHandlebarsContext {
     val settlementActions: Int
     val rpPerStructure: Int
     val linkActorUuid: Boolean
+    val canSpendRp: Boolean
 }
 
 @JsPlainObject
@@ -264,7 +266,7 @@ class StructureBrowser(
                     checkNotNull(maxRp) {
                         "Structure data rp for actor with $uuid was null"
                     }
-                    val rp = askRpDialog(maxRp)
+                    val rp = askRpDialog(min(maxRp, kingdom.resourcePoints.now))
                     val hp = structure.hitPoints.value + rp
                     structure.typeSafeUpdate {
                         system.attributes.hp.value = hp
@@ -463,13 +465,26 @@ class StructureBrowser(
             if (MainFilter.IGNORE_BUILDING_COST !in mainFilters) {
                 val now = kingdom.commodities.now
                 add {
-                    it.construction.hasFunds(
-                        existingLumber = now.lumber,
-                        existingLuxuries = now.luxuries,
-                        existingOre = now.ore,
-                        existingStone = now.stone,
-                        existingRp = kingdom.resourcePoints.now,
-                    )
+                    if (currentNav == StructureBrowserNav.UNDER_CONSTRUCTION && kingdom.resourcePoints.now > 0) {
+                        true
+                    } else if (kingdom.settings.partialStructureConstruction) {
+                        it.construction.hasFundsPartialConstruction(
+                            existingLumber = now.lumber,
+                            existingLuxuries = now.luxuries,
+                            existingOre = now.ore,
+                            existingStone = now.stone,
+                            existingRp = kingdom.resourcePoints.now,
+                            rpPerStructure = rpPerStructure,
+                        )
+                    } else {
+                        it.construction.hasFunds(
+                            existingLumber = now.lumber,
+                            existingLuxuries = now.luxuries,
+                            existingOre = now.ore,
+                            existingStone = now.stone,
+                            existingRp = kingdom.resourcePoints.now,
+                        )
+                    }
                 }
             }
             if (MainFilter.REDUCES_RUIN in mainFilters) {
@@ -541,6 +556,16 @@ class StructureBrowser(
                 } else {
                     null
                 }
+                val rpLabel = if (kingdom.settings.partialStructureConstruction && it.construction.rp > rpPerStructure) {
+                    "$rpPerStructure/${it.construction.rp}"
+                } else {
+                    it.construction.rp.toString()
+                }
+                val lacksRpFunds = if (kingdom.settings.partialStructureConstruction) {
+                    min(rpPerStructure, it.construction.rp) > kingdom.resourcePoints.now
+                } else {
+                    it.construction.rp > kingdom.resourcePoints.now
+                }
                 StructureContext(
                     lots = it.lots,
                     name = it.name,
@@ -556,22 +581,27 @@ class StructureBrowser(
                     residential = it.traits.contains(StructureTrait.RESIDENTIAL),
                     rp = CostContext(
                         value = it.construction.rp,
-                        lacksFunds = it.construction.rp > kingdom.resourcePoints.now,
+                        label = rpLabel,
+                        lacksFunds = lacksRpFunds,
                     ),
                     lumber = CostContext(
                         value = it.construction.lumber,
+                        label = it.construction.lumber.toString(),
                         lacksFunds = it.construction.lumber > kingdom.commodities.now.lumber,
                     ),
                     ore = CostContext(
                         value = it.construction.ore,
+                        label = it.construction.ore.toString(),
                         lacksFunds = it.construction.ore > kingdom.commodities.now.ore,
                     ),
                     stone = CostContext(
                         value = it.construction.stone,
+                        label = it.construction.stone.toString(),
                         lacksFunds = it.construction.stone > kingdom.commodities.now.stone,
                     ),
                     luxuries = CostContext(
                         value = it.construction.luxuries,
+                        label = it.construction.luxuries.toString(),
                         lacksFunds = it.construction.luxuries > kingdom.commodities.now.luxuries,
                     ),
                     initialRp = initialRp,
@@ -700,7 +730,8 @@ class StructureBrowser(
             rpPerStructure = rpPerStructure,
             underConstructionActive = currentNav == StructureBrowserNav.UNDER_CONSTRUCTION,
             linkActorUuid = currentNav == StructureBrowserNav.UNDER_CONSTRUCTION
-                    || currentNav == StructureBrowserNav.FREE
+                    || currentNav == StructureBrowserNav.FREE,
+            canSpendRp = kingdom.resourcePoints.now > 0,
         )
     }
 
