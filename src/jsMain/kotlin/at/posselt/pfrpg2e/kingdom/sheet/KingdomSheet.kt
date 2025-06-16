@@ -1516,11 +1516,15 @@ class KingdomSheet(
             kingdom.initialProficiencies = value.initialProficiencies
             beforeKingdomUpdate(previousKingdom, kingdom)
             actor.setKingdom(kingdom)
-            if (bonusFeat != value.bonusFeat) {
-                bonusFeat = value.bonusFeat
+            // custom handling for values, that don't persist data on the document and therefore don't
+            // trigger a rerender by default
+            val needsReRender = bonusFeat != value.bonusFeat ||
+                    game.settings.pfrpg2eKingdomCampingWeather.getKingdomActiveLeader() != value.activeLeader
+            bonusFeat = value.bonusFeat
+            game.settings.pfrpg2eKingdomCampingWeather.setKingdomActiveLeader(value.activeLeader)
+            if (needsReRender) {
                 render()
             }
-            game.settings.pfrpg2eKingdomCampingWeather.setKingdomActiveLeader(value.activeLeader)
         }
         null
     }
