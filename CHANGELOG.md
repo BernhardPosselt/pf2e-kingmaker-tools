@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.5.4] - 2025-06-16
+
+### Fixed
+
+* Improve labelling of vacancies and add available actions to phases
+* Ask DC before performing Clear Hex instead of simply setting 0
+
 ## [5.5.3] - 2025-06-16
 
 ### Fixed

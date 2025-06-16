@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.data.kingdom.activities.ActivityDcType
 import at.posselt.pfrpg2e.data.kingdom.calculateControlDC
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
+import at.posselt.pfrpg2e.kingdom.dialogs.askDc
 import at.posselt.pfrpg2e.kingdom.dialogs.getValidActivitySkills
 import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.sheet.insertButtons
@@ -165,7 +166,7 @@ fun KingdomData.getAllActivities(): List<RawActivity> {
 fun KingdomData.getActivity(id: String): RawActivity? =
     getAllActivities().associateBy { it.id }[id]
 
-fun RawActivity.resolveDc(
+suspend fun RawActivity.resolveDc(
     enemyArmyScoutingDcs: List<Int>,
     kingdomLevel: Int,
     realm: RealmData,
@@ -190,7 +191,7 @@ fun RawActivity.resolveDc(
             rulerVacant = rulerVacant,
         ), (groupDc ?: 0))
         ActivityDcType.NEGOTIATION.value -> groupDc
-        ActivityDcType.CUSTOM.value -> 0
+        ActivityDcType.CUSTOM.value -> askDc(title)
         ActivityDcType.NONE.value -> null
         ActivityDcType.SCOUTING.value -> enemyArmyScoutingDcs.maxOrNull() ?: 0
         else -> dc as Int

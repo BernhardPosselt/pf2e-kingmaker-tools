@@ -746,6 +746,7 @@
       "favoredLand": "You can attempt 2 Region activities simultaneously as long as both activities take place in the same hex and the hex is a {heartland}. You take a –2 penalty to Kingdom skill checks made during these two activities.",
       "terrainFeature": "A hex can have at most one of these: Farmland, Freehold, Ruins, Settlement, Structure, or Work Site. A Settlement can be built in a hex that contains Ruins or a Structure. A Free Hold can be brought into your kingdom in which case it becomes a Settlement instead.",
       "clickToClaim": "Click these buttons after successfully claiming a hex containing a refuge or landmark",
+      "selectKingdomActivityDc": "{activityName}: Select DC",
       "claimedRefuge": "Claimed Refuge",
       "claimedLandmark": "Claimed Landmark",
       "civic": "Civic (1 per settlement)",
