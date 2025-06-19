@@ -902,7 +902,6 @@ class CampingSheet(
         val amount = actorMeals
             .map { it.cookingCost }
             .sum()
-        console.log(actorMeals, amount.toString())
         return buildFoodCost(amount, totalAmount = availableFood, items = foodItems)
     }
 
