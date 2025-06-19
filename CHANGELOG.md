@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.5.5] - 2025-06-19
+
+### Fixed
+
+* Also include ration cost when consuming rations in cost sidebar
+* Allow non Character actors to consume rations
+
 ## [5.5.4] - 2025-06-16
 
 ### Fixed

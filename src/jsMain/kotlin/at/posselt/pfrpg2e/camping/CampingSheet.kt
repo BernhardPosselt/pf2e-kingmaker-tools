@@ -468,7 +468,6 @@ class CampingSheet(
         checkNotNull(camping) { "Could not find camping data on actor ${actor.uuid}" }
         val parsed = camping.findCookingChoices(
             charactersInCampByUuid = camping.getActorsInCamp()
-                .filterIsInstance<PF2ECharacter>()
                 .associateBy { it.uuid },
             recipesById = camping.getAllRecipes()
                 .associateBy { it.id },
@@ -653,7 +652,9 @@ class CampingSheet(
     }
 
     private suspend fun assignRecipeTo(actorUuid: String, recipeId: String) {
-        if (getCampingActivityActorByUuid(actorUuid) == null) {
+        val isNotACharacter = getCampingActivityActorByUuid(actorUuid) == null
+        val isNotARation = recipeId != "rationsOrSubsistence" && recipeId != "nothing"
+        if (isNotARation && isNotACharacter) {
             ui.notifications.error(t("camping.onlyCharactersConsumeMeals"))
             return
         }
@@ -901,6 +902,7 @@ class CampingSheet(
         val amount = actorMeals
             .map { it.cookingCost }
             .sum()
+        console.log(actorMeals, amount.toString())
         return buildFoodCost(amount, totalAmount = availableFood, items = foodItems)
     }
 
@@ -916,14 +918,10 @@ class CampingSheet(
         val pxTimeOffset = -((dayPercentage * widthWithoutBorder).toInt() - widthWithoutBorder / 2)
         val camping = actor.getCamping() ?: getDefaultCamping(game)
         val actorsByUuid = getCampingActorsByUuid(camping.actorUuids).associateBy(PF2EActor::uuid)
-        val charactersByUuid: Map<String, PF2ECharacter> = actorsByUuid
+        val charactersByUuid: Map<String, PF2EActor> = actorsByUuid
             .mapNotNull {
                 val value = it.value
-                if (value is PF2ECharacter) {
-                    it.key to value
-                } else {
-                    null
-                }
+                it.key to value
             }
             .toMap()
         val groupActivities = camping.groupActivities().sortedBy { it.data.id }
@@ -1017,7 +1015,7 @@ class CampingSheet(
             availableFood = availableFood,
             totalFoodCost = calculateTotalFoodCost(
                 actorMeals = parsedCookingChoices.meals
-                    .filter<MealChoice> { it.name in uncookedMeals },
+                    .filter { it.name in uncookedMeals || it.id == "rationsOrSubsistence"},
                 foodItems = foodItems,
                 availableFood = totalFood,
             ),

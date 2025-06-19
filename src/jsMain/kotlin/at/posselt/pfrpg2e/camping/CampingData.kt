@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.regions.Terrain
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.localization.Translatable
+import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
@@ -21,6 +22,7 @@ import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.unsetAppFlag
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
@@ -424,14 +426,14 @@ fun CampingData.findCurrentRegion(): RegionSetting? =
 
 
 sealed interface MealChoice {
-    val actor: PF2ECharacter
+    val actor: Actor
     val favoriteMeal: RecipeData?
     val name: String
     val cookingCost: FoodAmount
     val id: String
 
     data class Nothing(
-        override val actor: PF2ECharacter,
+        override val actor: PF2EActor,
         override val favoriteMeal: RecipeData?
     ) : MealChoice {
         override val name = "nothing"
@@ -440,7 +442,7 @@ sealed interface MealChoice {
     }
 
     data class Rations(
-        override val actor: PF2ECharacter,
+        override val actor: PF2EActor,
         override val favoriteMeal: RecipeData?,
     ) : MealChoice {
         override val id: String = "rationsOrSubsistence"
@@ -449,7 +451,7 @@ sealed interface MealChoice {
     }
 
     data class ParsedMeal(
-        override val actor: PF2ECharacter,
+        override val actor: PF2EActor,
         val recipe: RecipeData,
         override val favoriteMeal: RecipeData?,
     ) : MealChoice {
@@ -480,7 +482,7 @@ data class ParsedRecipeResult(
 
 private fun parseMealChoices(
     camping: CampingData,
-    charactersInCamp: Map<String, PF2ECharacter>,
+    charactersInCamp: Map<String, PF2EActor>,
     recipesById: Map<String, RecipeData>
 ): List<MealChoice> {
     val chosenMeals = camping.cooking.actorMeals.mapNotNull { meal ->
@@ -503,12 +505,13 @@ private fun parseMealChoices(
 }
 
 fun CampingData.findCookingChoices(
-    charactersInCampByUuid: Map<String, PF2ECharacter>,
+    charactersInCampByUuid: Map<String, PF2EActor>,
     recipesById: Map<String, RecipeData>,
 ): ParsedMeals {
     val cook = campingActivities
         .find { it.isCookMeal() && it.actorUuid != null }
         ?.let { charactersInCampByUuid[it.actorUuid] }
+        ?.takeIfInstance<PF2ECharacter>()
         ?.takeIf {
             campingActivities.any {
                 it.isPrepareCampsite()
