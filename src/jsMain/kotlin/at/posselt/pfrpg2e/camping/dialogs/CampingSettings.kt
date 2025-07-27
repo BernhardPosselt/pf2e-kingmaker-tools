@@ -40,6 +40,8 @@ import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ELoot
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.pf2e.actor.PF2EVehicle
+import js.array.component1
+import js.array.component2
 import js.array.toTypedArray
 import js.core.Void
 import js.objects.Record
@@ -51,7 +53,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
-
 
 @JsPlainObject
 external interface CampingSettings {

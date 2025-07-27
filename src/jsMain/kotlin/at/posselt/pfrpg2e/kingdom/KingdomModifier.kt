@@ -40,6 +40,8 @@ import at.posselt.pfrpg2e.kingdom.sheet.calculateAnarchy
 import com.foundryvtt.core.AnyObject
 import io.github.uuidjs.uuid.v4
 import js.array.Tuple2
+import js.array.component1
+import js.array.component2
 import js.objects.Object
 import kotlinx.js.JsPlainObject
 import kotlinx.serialization.json.Json.Default.parseToJsonElement

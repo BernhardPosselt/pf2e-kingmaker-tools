@@ -26,6 +26,8 @@ import com.foundryvtt.pf2e.actions.CheckDC
 import com.foundryvtt.pf2e.actions.SingleCheckActionUseOptions
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.pf2e
+import js.array.component1
+import js.array.component2
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject

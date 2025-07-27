@@ -211,6 +211,7 @@ suspend fun Game.importStructures(): Array<Actor> {
             "type" to "Actor",
             "parent" to null,
             "color" to null,
+            "ownership" to recordOf("default" to 3),
         )
     ).await()
     val data = packs.get("${Config.moduleId}.kingmaker-tools-structures")

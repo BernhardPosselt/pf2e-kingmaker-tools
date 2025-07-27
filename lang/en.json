@@ -832,7 +832,7 @@
       "thenCreateCapitalScene": "Then, create a capital scene",
       "importAllStructures": "Import Structures",
       "createACapital": "Create a Capital",
-      "capitalRequirement": "The capital must be located within your Heartland's terrain. The Scene includes blocks, onto which you can place your structures to automatically calculate settlement level. Only visible blocks are included in the calculation."
+      "capitalRequirement": "The capital must be located within your Heartland's terrain. The Scene includes blocks, onto which you can place your structures to automatically calculate settlement level. Once a Village has all of its spaces filled and your kingdom has reached level 2, simply copy and paste an existing tile to add new blocks; rotating tiles is not supported, which is why both a hidden 1x4 and 4x1 tile are included on a scene. Only visible blocks are included in the calculation."
     },
     "chatMessages": {
       "addHuntAndGather": {

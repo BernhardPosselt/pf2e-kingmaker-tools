@@ -49,6 +49,7 @@ kotlin {
                 "-opt-in=kotlin.ExperimentalStdlibApi",
                 "-opt-in=kotlin.js.ExperimentalJsExport",
                 "-opt-in=kotlin.js.ExperimentalJsStatic",
+                "-opt-in=kotlin.time.ExperimentalTime",
                 "-Xwhen-guards",
             )
         }

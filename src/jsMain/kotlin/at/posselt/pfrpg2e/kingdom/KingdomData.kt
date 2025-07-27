@@ -54,8 +54,9 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.actor.PF2ENpc
+import js.array.component1
+import js.array.component2
 import kotlinx.js.JsPlainObject
-
 
 @JsPlainObject
 external interface KingdomSettings {

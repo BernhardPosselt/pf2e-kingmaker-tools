@@ -16,6 +16,8 @@ import at.posselt.pfrpg2e.kingdom.modifiers.Modifier
 import at.posselt.pfrpg2e.kingdom.sheet.insertButtons
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.t
+import js.array.component1
+import js.array.component2
 import js.objects.JsPlainObject
 import js.objects.Record
 import js.objects.recordOf
