@@ -18,6 +18,8 @@ import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.deepClone
+import js.array.component1
+import js.array.component2
 import js.array.toTypedArray
 import js.core.Void
 import js.objects.Object
@@ -27,7 +29,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
-
 
 @Suppress("unused")
 @JsPlainObject

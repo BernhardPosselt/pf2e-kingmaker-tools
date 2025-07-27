@@ -757,7 +757,7 @@
       "armyHelp": "Select an army on the scene before performing the activity to correctly apply conditions and DCs. For Offensive Gambit, select all enemy units)",
       "cultEvents": "Cult Events",
       "kingdomEvents": "Kingdom Events",
-      "cultHelp": "These events happen after completing a day of downtime researching the cult in Chapter 5. The first time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the kingdom was in dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet tracks them as milestones.",
+      "cultHelp": "Cult events happen after completing a day of downtime researching the cult in Chapter 5. The first time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the kingdom was in dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet tracks them as milestones.",
       "checkCultEvent": "Check for Cult Event (DC {dc})",
       "rollCultEvent": "Roll Cult Event",
       "checkKingdomEvent": "Check for Kingdom Event (DC {dc})",
@@ -832,7 +832,7 @@
       "thenCreateCapitalScene": "Then, create a capital scene",
       "importAllStructures": "Import Structures",
       "createACapital": "Create a Capital",
-      "capitalRequirement": "The capital must be located within your Heartland's terrain. The Scene includes blocks, onto which you can place your structures to automatically calculate settlement level. Only visible blocks are included in the calculation."
+      "capitalRequirement": "The capital must be located within your Heartland's terrain. The Scene includes blocks, onto which you can place your structures to automatically calculate settlement level. Once a Village has all of its spaces filled and your kingdom has reached level 2, simply copy and paste an existing tile to add new blocks; rotating tiles is not supported, which is why both a hidden 1x4 and 4x1 tile are included on a scene. Only visible blocks are included in the calculation."
     },
     "chatMessages": {
       "addHuntAndGather": {

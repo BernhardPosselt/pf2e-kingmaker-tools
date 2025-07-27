@@ -21,6 +21,8 @@ import com.i18next.I18NextInitOptions
 import com.i18next.I18NextInterpolationOptions
 import com.i18next.ICU
 import com.i18next.i18next
+import js.array.component1
+import js.array.component2
 import js.objects.Object
 import js.objects.ReadonlyRecord
 import js.objects.Record

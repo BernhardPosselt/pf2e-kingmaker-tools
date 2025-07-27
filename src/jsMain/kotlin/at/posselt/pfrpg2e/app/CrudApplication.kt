@@ -9,6 +9,8 @@ import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.flattenObject
+import js.array.component1
+import js.array.component2
 import js.array.toTypedArray
 import js.core.Void
 import js.objects.Record

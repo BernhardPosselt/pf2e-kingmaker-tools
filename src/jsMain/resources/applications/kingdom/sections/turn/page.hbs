@@ -13,8 +13,10 @@
         {{/each}}
         {{#useLeadershipModifiers}}
             <div class="km-leadership-modifier-info">
-                <button type="button" data-action="inspect-leader-skills">{{localizeKM "kingdom.characterSkills"}}</button>
-                <button type="button" data-action="inspect-kingdom-skills">{{localizeKM "kingdom.kingdomSkills"}}</button>
+                <button type="button" data-action="inspect-leader-skills">{{localizeKM
+                        "kingdom.characterSkills"}}</button>
+                <button type="button" data-action="inspect-kingdom-skills">{{localizeKM
+                        "kingdom.kingdomSkills"}}</button>
             </div>
         {{/useLeadershipModifiers}}
         <h3>{{localizeKM "kingdom.unrest"}}</h3>
@@ -42,15 +44,20 @@
         </table>
         <h3>{{localizeKM "applications.skills"}} ({{localizeKM "kingdom.controlDc"}}: {{controlDc}})</h3>
         {{#if (eq currentNavEntry 'turn')}}
-        <table class="km-skill-checks">
-        {{#each skillChecks}}
-            <tr>
-                <td class="km-skills-label" title="{{label}}">{{label}}</td>
-                <td>{{> formElement input }}{{#if ../automateStats}}<span class="km-proficiency km-proficiency-value {{valueClass}}">{{proficiency}}</span>{{/if}}</td>
-                <td><button type="button" data-action="roll-skill-check" data-skill="{{skill}}">{{modifier}} <i class="fa-solid fa-dice-d20"></i></button></td>
-            </tr>
-        {{/each}}
-        </table>
+            <table class="km-skill-checks">
+                {{#each skillChecks}}
+                    <tr>
+                        <td class="km-skills-label" title="{{label}}">{{label}}</td>
+                        <td>{{> formElement input }}{{#if ../automateStats}}
+                            <span class="km-proficiency km-proficiency-value {{valueClass}}">{{proficiency}}</span>{{/if}}
+                        </td>
+                        <td>
+                            <button type="button" data-action="roll-skill-check" data-skill="{{skill}}">{{modifier}} <i
+                                    class="fa-solid fa-dice-d20"></i></button>
+                        </td>
+                    </tr>
+                {{/each}}
+            </table>
         {{/if}}
         <h3>{{localizeKM "kingdom.resources"}}</h3>
         <table class="km-unrest-ruin">
@@ -73,7 +80,8 @@
                 <th>{{localizeKM "resourceButton.turnShort.now"}}</th>
                 <th class="km-slash-header"></th>
                 <th></th>
-                <th class="km-next-header" title="{{localizeKM "resourceButton.turnShort.next"}}">{{localizeKM "resourceButton.turnShort.next"}}</th>
+                <th class="km-next-header" title="{{localizeKM "resourceButton.turnShort.next"}}">{{localizeKM
+                        "resourceButton.turnShort.next"}}</th>
             </tr>
             <tr>
                 <td>{{> formElement commoditiesContext.now.food }}</td>
@@ -115,7 +123,8 @@
     <nav class="km-kingdom-sheet-sub-nav">
         <ul class="km-grow-subnav">
             {{#each turnSectionNav}}
-                <li><a title="{{title}}"{{#if active}}class="active"{{/if}} href="#" data-id="{{../actorUuid}}-km-turn-{{link}}"
+                <li><a title="{{title}}"
+                       {{#if active}}class="active"{{/if}} href="#" data-id="{{../actorUuid}}-km-turn-{{link}}"
                        data-action="{{action}}">{{label}}</a></li>
             {{/each}}
         </ul>
@@ -138,15 +147,18 @@
             </div>
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="{{actorUuid}}-km-turn-commerce" {{#unless activities.commerce}}hidden{{/unless}}>{{localizeKM "kingdom.commerce"}}</h2>
+            <h2 id="{{actorUuid}}-km-turn-commerce" {{#unless activities.commerce}}hidden{{/unless}}>{{localizeKM
+                    "kingdom.commerce"}}</h2>
             {{> kingdom-activities activities=activities.commerce collectTaxesReduceUnrestDisabled=collectTaxesReduceUnrestDisabled}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="{{actorUuid}}-km-turn-leadership" {{#unless activities.leadership}}hidden{{/unless}}>{{localizeKM "kingdom.leadership" count=leadershipActivities}}</h2>
+            <h2 id="{{actorUuid}}-km-turn-leadership" {{#unless activities.leadership}}hidden{{/unless}}>{{localizeKM
+                    "kingdom.leadership" count=leadershipActivities}}</h2>
             {{> kingdom-activities activities=activities.leadership}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="{{actorUuid}}-km-turn-region" {{#unless activities.region}}hidden{{/unless}}>{{localizeKM "kingdom.region"}}</h2>
+            <h2 id="{{actorUuid}}-km-turn-region" {{#unless activities.region}}hidden{{/unless}}>{{localizeKM
+                    "kingdom.region"}}</h2>
 
             {{#if heartlandLabel}}
                 <p>{{localizeKM "kingdom.favoredLand" heartland=heartlandLabel}}</p>
@@ -162,7 +174,8 @@
             {{> kingdom-activities activities=activities.region}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="{{actorUuid}}-km-turn-civic" {{#unless activities.civic}}hidden{{/unless}}>{{localizeKM "kingdom.civic"}}</h2>
+            <h2 id="{{actorUuid}}-km-turn-civic" {{#unless activities.civic}}hidden{{/unless}}>{{localizeKM
+                    "kingdom.civic"}}</h2>
             {{#if civicPlanning}}
                 <p>{{localizeKM "kingdom.civicPlanning"}}</p>
             {{/if}}
@@ -170,30 +183,31 @@
             {{> kingdom-activities activities=activities.civic}}
         </section>
         <section class="km-kingdom-sheet-section">
-            <h2 id="{{actorUuid}}-km-turn-army" {{#unless activities.army}}hidden{{/unless}}>{{localizeKM "kingdom.armyPhaseTitle"}}</h2>
+            <h2 id="{{actorUuid}}-km-turn-army" {{#unless activities.army}}hidden{{/unless}}>{{localizeKM
+                    "kingdom.armyPhaseTitle"}}</h2>
             <p>{{localizeKM "kingdom.armyHelp"}}</p>
             {{> kingdom-activities activities=activities.army}}
         </section>
         <section class="km-kingdom-sheet-section">
             <h2 id="{{actorUuid}}-km-turn-event">{{localizeKM "kingdom.event"}}</h2>
-            <div {{#unless cultOfTheBloomEvents}}hidden{{/unless}}>
-                <h3>{{localizeKM "kingdom.cultEvents"}}</h3>
-                <p>{{localizeKM "kingdom.cultHelp"}}</p>
-                <p class="km-turn-buttons">
-                    <button type="button" data-action="check-cult-event">{{localizeKM "kingdom.checkCultEvent" dc=cultEventDC}}</button>
+            {{#if isGM}}
+                <p {{#unless cultOfTheBloomEvents}}hidden{{/unless}}>{{localizeKM "kingdom.cultHelp"}}</p>
+                <p class="km-turn-buttons" {{#unless cultOfTheBloomEvents}}hidden{{/unless}}>
+                    <button type="button" data-action="check-cult-event">{{localizeKM "kingdom.checkCultEvent"
+                                                                                      dc=cultEventDC}}</button>
                     <button type="button" data-action="roll-cult-event">{{localizeKM "kingdom.rollCultEvent"}}</button>
                 </p>
-            </div>
-        </section>
-        <section class="km-kingdom-sheet-section">
-            <h3>{{localizeKM "kingdom.kingdomEvents"}}</h3>
-            <p class="km-turn-buttons">
-                <button {{#unless isGM}}hidden{{/unless}} type="button" data-action="check-event">{{localizeKM "kingdom.checkKingdomEvent" dc=eventDC}}</button>
-                <button {{#unless isGM}}hidden{{/unless}} type="button" data-action="roll-event">{{localizeKM "kingdom.rollKingdomEvent"}}</button>
-            </p>
-        </section>
-        <section class="km-kingdom-sheet-section">
-            <h3>{{localizeKM "kingdom.activeEvents"}} <span class="km-header-right-align" {{#unless isGM}}hidden{{/unless}}><button type="button" data-action="add-event">{{localizeKM "kingdom.addEvent"}}</button></span></h3>
+                <hr>
+                <p class="km-turn-buttons">
+                    <button type="button" data-action="check-event">{{localizeKM "kingdom.checkKingdomEvent"
+                                                                                 dc=eventDC}}</button>
+                    <button type="button" data-action="roll-event">{{localizeKM "kingdom.rollKingdomEvent"}}</button>
+                </p>
+            {{/if}}
+            <h3>{{localizeKM "kingdom.activeEvents"}} <span class="km-header-right-align"
+                                                            {{#unless isGM}}hidden{{/unless}}><button type="button"
+                                                                                                      data-action="add-event">{{localizeKM
+                    "kingdom.addEvent"}}</button></span></h3>
             <p>{{localizeKM "kingdom.continuousTraitHelp"}}</p>
             {{> kingdom-events ongoingEvents=ongoingEvents isGM=isGM}}
         </section>
@@ -222,15 +236,18 @@
             {{#if vkXp}}
                 <p>{{localizeKM "kingdom.constructedTerrainOrStructure"}}:</p>
                 <p class="km-turn-buttons">
-                    <button type="button" data-action="gain-xp" data-xp="10">{{localizeKM "kingdom.farmOrWorksite"}}</button>
-                    <button type="button" data-action="gain-xp" data-xp="5">{{localizeKM "kingdom.bridgeOrRoad"}}</button>
+                    <button type="button" data-action="gain-xp" data-xp="10">{{localizeKM
+                            "kingdom.farmOrWorksite"}}</button>
+                    <button type="button" data-action="gain-xp" data-xp="5">{{localizeKM
+                            "kingdom.bridgeOrRoad"}}</button>
                     <button type="button" data-action="structure-xp">{{localizeKM "kingdom.structure"}}</button>
                 </p>
                 <hr>
             {{/if}}
             <p>{{localizeKM "kingdom.unusedResources"}}:</p>
             <p class="km-turn-buttons">
-                <button type="button" data-action="solution-xp">{{localizeKM "kingdom.creativeOrSupernaturalSolution"}}</button>
+                <button type="button" data-action="solution-xp">{{localizeKM
+                        "kingdom.creativeOrSupernaturalSolution"}}</button>
                 <button type="button" data-action="rp-xp">{{localizeKM "kingdom.resourcePoints"}}</button>
             </p>
             <hr>
@@ -252,7 +269,8 @@
         <section class="km-kingdom-sheet-section">
             <h2 id="{{actorUuid}}-km-turn-end">{{localizeKM "kingdom.endTurn"}}</h2>
             <p class="km-turn-buttons">
-                <button type="button" {{#unless canLevelUp}}disabled{{/unless}} data-action="level-up">{{localizeKM "kingdom.levelUp"}}</button>
+                <button type="button" {{#unless canLevelUp}}disabled{{/unless}} data-action="level-up">{{localizeKM
+                        "kingdom.levelUp"}}</button>
                 <button type="button" data-action="end-turn">{{localizeKM "kingdom.endTurn"}}</button>
             </p>
         </section>

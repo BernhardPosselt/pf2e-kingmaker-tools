@@ -6,7 +6,11 @@ import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.getPF2EWorldTime
 import at.posselt.pfrpg2e.utils.isFirstGM
 import com.foundryvtt.core.Game
-import kotlinx.datetime.*
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * Read the persisted weather effect name and sound and apply them
@@ -37,7 +41,7 @@ fun dayHasChanged(game: Game, deltaInSeconds: Int): Boolean {
     val beforeUpdate = now.toInstant(TimeZone.UTC)
         .minus(deltaInSeconds, DateTimeUnit.SECOND)
         .toLocalDateTime(TimeZone.UTC)
-    return now.dayOfMonth != beforeUpdate.dayOfMonth
+    return now.day != beforeUpdate.day
             || now.month != beforeUpdate.month
             || now.year != beforeUpdate.year
 }

@@ -17,13 +17,13 @@ import com.foundryvtt.core.Game
 import js.objects.recordOf
 import kotlinx.browser.localStorage
 import kotlinx.coroutines.await
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.js.JsPlainObject
+import kotlin.time.Instant
 
 @JsPlainObject
 private external interface TimeOfDayData {

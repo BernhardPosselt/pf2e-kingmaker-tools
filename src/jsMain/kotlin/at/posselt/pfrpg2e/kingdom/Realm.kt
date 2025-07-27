@@ -14,6 +14,8 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.kingmaker.HexState
 import com.foundryvtt.kingmaker.kingmaker
+import js.array.component1
+import js.array.component2
 
 private fun parseKingmakerWorksite(
     hexes: List<HexState>,

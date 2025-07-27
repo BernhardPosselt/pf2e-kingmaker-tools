@@ -6,6 +6,8 @@ import at.posselt.pfrpg2e.utils.toMutableRecord
 import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.utils.expandObject
+import js.array.component1
+import js.array.component2
 import js.array.toTypedArray
 import js.objects.Object
 import js.objects.ReadonlyRecord
