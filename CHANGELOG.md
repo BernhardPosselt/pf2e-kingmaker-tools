@@ -7,12 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [5.5.5] - 2025-06-19
+## [5.6.0] - 2025-07-27
 
-### Fixed
+### Added
 
 * Also include ration cost when consuming rations in cost sidebar
 * Allow non Character actors to consume rations
+
+### Fixed
+
+* Do not render cult activity event section for players
+
+### Changed
+
+* Update toolchain and dependencies
 
 ## [5.5.4] - 2025-06-16
 
