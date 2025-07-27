@@ -757,7 +757,7 @@
       "armyHelp": "Select an army on the scene before performing the activity to correctly apply conditions and DCs. For Offensive Gambit, select all enemy units)",
       "cultEvents": "Cult Events",
       "kingdomEvents": "Kingdom Events",
-      "cultHelp": "These events happen after completing a day of downtime researching the cult in Chapter 5. The first time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the kingdom was in dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet tracks them as milestones.",
+      "cultHelp": "Cult events happen after completing a day of downtime researching the cult in Chapter 5. The first time one of these Cult events occurs, the PCs earn 80 Kingdom XP regardless of how successful the kingdom was in dealing with the event; they do not earn additional Kingdom XP for repeated events. This sheet tracks them as milestones.",
       "checkCultEvent": "Check for Cult Event (DC {dc})",
       "rollCultEvent": "Roll Cult Event",
       "checkKingdomEvent": "Check for Kingdom Event (DC {dc})",
