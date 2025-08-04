@@ -117,7 +117,7 @@ If they do not wake up, they skip their turn.
 
 ## Kingdom Management
 
-This might be the most labor-intensive system in this AP. If you run it as written, it will be terrible at low levels. XP won't advance the kingdom's level by much, you don't have enough materials to build interesting stuff and there are no outside pressures. My players often ran out of Leadership activities that they could perform, even with faster levelling. One player left the campaign early because of kingdom management.
+This might be the most labor-intensive system in this AP. If you run it as written, it will be terrible at low levels. XP won't advance the kingdom's level by much, you don't have enough materials to build interesting stuff and there are no outside pressures. My players often ran out of Leadership activities that they could perform, even with faster leveling. One player left the campaign early because of kingdom management.
 
 At levels 9+ I can happily report that it turned out quite fun. The players became somewhat familiar with the system so turns sped up. Being at war pretty much constantly created unrest each turn. Furthermore, the DCs were at a point where untrained skills needed to be supplemented by supernatural solution. That competed with purchasing goods to prevent famine or build structures to increase item bonuses or storage. In a nutshell: they needed to think about which actions to take.
 
@@ -131,6 +131,33 @@ What you need to do is to bridge the period between levels 1-9 and fix the broke
 * At earlier levels when unrest and ruin are scarce, maybe cut down on the amount of available Leadership activities per turn (3-6). Also limit the amount of Leadership activities to prevent analysis paralysis.
 
 **PS**: It surprised me in my games, but you will notice that PCs start to critically succeed at building lower level structures at higher levels, significantly reducing commodity cost. You should keep that in mind if you are looking into re-balancing structure costs
+
+### A word on Settlements
+
+RAW there are very few reasons to really build settlements in your kingdom, and even worse: the more you build, the longer your kingdom turns are going to get and the tighter your RP reserves will become. The following adjustments make them more important for hexploration:
+
+* Your 1 week of downtime to prevent the vacancy penalty must be spent in a Town or better which is connected via road to your capital
+* When resting in a Town or better, restore all HP during rest
+* After founding a settlement, you can immediately connect as many settlements within 5 hexes as you want to with roads. Pay the normal RP cost for each completed connection (see Build Roads activity). If you don't have enough funds, you can partially construct the road.
+
+Furthermore, structures in settlements other than your capital seem largely unimportant because their bonuses don't apply to the whole kingdom. And the more you have, the longer your kingdom turns will become (1 action per settlement). If your players love building structures, keep the original rules; if they don't, use the following adjustments:
+
+You can no longer build structures outside your capital, unless they are destroyed; in that case you can only ever rebuild the listed structures of each settlement type. In addition, gain the following civic activity:
+
+* **Improve Settlement (Civic, Downtime)**: You are sending your best workers to improve one of your non-capital settlements to the next highest settlement type (kingdom level restrictions still apply). Spend the following amount of resources based on the settlement type you want to upgrade to:
+  * **Town**: 5 Stone, 5 Ore, 5 Lumber, 1 Luxury, 10RP
+  * **City**: 10 Stone, 10 Ore, 10 Lumber, 3 Luxuries, 25RP
+  * **Metropolis**: 20 Stone, 20 Ore, 20 Lumber, 5 Luxuries, 50RP
+  
+  Then place the following structures in the settlement (and enough houses to prevent being overcrowded):
+  * **Town**: Bridge (if it has 4 Water Borders), 4 Wooden Walls, General Store, Lumberyard, Granary
+  * **City**: 4 Stone Walls, Stockyard, Stonemason, Magic Shop
+  * **Metropolis**: Foundry, Secure Warehouse, Sewer System, Occult Shop
+
+Use the following settlement levels when trying to buy items:
+* **Town**: 3
+* **City**: 7
+* **Metropolis**: 15
 
 ### A word on Vance & Kerenshara's home brew
 
@@ -274,7 +301,42 @@ From what I've seen from armies so far, armies have the following issues:
 * I've looked into the 1e rules and oh boy, the 1e rules suck even more
 * You can move an unlimited amount of armies on the hex map (giant ball of death) but each army on its own might get lost which is neither fun nor realistic
 
-### House Rules
+### Battlecry Skirmish Rules
+
+Since army combat has quite a bit of rules, but is ultimately incredibly bland and boring, I instead recommend to replace the entire system with Battlecry's skirmish rules.
+
+You can take a look at [military units](https://2e.aonprd.com/NPCs.aspx?ID=3522) from NPC core or [all available troops](https://2e.aonprd.com/Traits.aspx?ID=849) for custom units. Many fit very well and can easily replace the built-in army units.
+
+You will fight these encounters at around level 7 and 14-15. Note that not many statblocks are available at those levels, and you'll likely need to upscale/downscale enemy units to fit that level (plus there's still the Elite/Weak template). Keep in mind that throwing 4 level 15 armies against 4 level 15 PCs is an extreme encounter so Pitax' armies can consist of an equal amount of level 13 First-Class Infantry units to make up medium encounter.
+
+Make the following adjustments:
+
+* **Number of troops in combat**: as usual, adding more units to a fight just makes it take longer. Each PC should be able to take a turn, whether they have an assigned troop or not (in which case, they fight alone). If your players send a significantly stronger and larger force of units against their foes (encounter difficulty trivial or easier), instead of adding more troops into initiative for the players, simply increase the outcome of the war encounter by 1 degree 
+* **Divisions**: instead of rolling Deploy Army and Offensive Gambit checks for each troop, consider grouping them together into divisions with a maximum troop number equal to the number of PCs. Use the highest DC of the available units when performing checks. 
+* **Deploy Army**: Use Sickened instead of Weary. Instead of reducing the army's HP by 1 step, remove one of its HP segments
+* **Garrison Army**: Unit gains greater cover
+* **Offensive Gambit**: Use the highest enemy Perception DC; Apply Frightened instead of Shaken
+* **Outfit Army**: Modifiers and item bonuses are built into the troop stat-block. Nonetheless, magic item and armor upgrades are so expensive, that I'd keep them in place. That way, a level 12 Archer Regiment can surpass a level 13 first class infantry. Healing Potions heal 1 entire HP segment and take 2 actions to consume.
+* **Recruit Army**: Recruits a Troop whose level is lower or equal to your kingdom's level. Automatically apply the Elite or Weak template automatically if needed.
+* **Recover Army**: Recover 1 segment of the troop's HP or remove any leftover Sickened/Drained conditions
+* **Train Army**: Unit Receives either a Skirmish Bond, removes the Weak template or adds the Elite template. You can not increase a unit's level above your kingdom in this fashion.
+* **Consumption**: every army has consumption 1 unless it consists of large units (e.g. Cavalry on horses) or is uncommon/rare/unique: for those use 2 consumption; huge and larger units use 3 consumption
+* **Scouting DC**: replace this one with the Perception DC
+* **Fortifications**: Keep those the same since combat between stationary units isn't terribly interesting; on a hit, siege units deal 1 damage, on a critical hit 2. 
+* **Determining Victory or Defeat**: Roll that check after combat. Instead of restoring 1 HP, let each troop recover 1 segment worth of HP.
+
+If you want your players to recruit different types of units, you can add the following additional rules:
+
+* Units gain a +2 circumstance bonus to attacks against unit compositions they're particularly effective against:
+
+* Siege beats Archers
+* Archers beat Cavalry
+* Cavalry beats Infantry
+* Infantry beats Siege
+
+### Kingmaker Army Combat House Rules
+
+If you want to use the original rules, make at least the following adjustments
 
 * Armies are grouped together as divisions. Each division can hold up to n armies, where n is equal to the number of players: this will give each player an army to run in combat to keep them engaged
 * No more than 1 division of each faction can be present in any hex at any time: this prevents players from overwhelming an enemy by sheer number of armies. Think of it as preventing the players from running all companions in combats balanced for 4 PCs. If you don't do that, you can't balance battles at all, which makes army combat incredibly boring. Furthermore, it will prevent you from pulling your hair out when stacking tokens on the world map.

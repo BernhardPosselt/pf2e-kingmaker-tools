@@ -6,7 +6,6 @@
   "enabled": true,
   "phase": "region",
   "dc": "control",
-  "automationNotes": "activities.establish-work-site-mine.automationNotes",
   "description": "activities.establish-work-site-mine.description",
   "skills": {
     "engineering": 0
