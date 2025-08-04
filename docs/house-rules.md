@@ -327,7 +327,7 @@ Make the following adjustments:
 
 If you want your players to recruit different types of units, you can add the following additional rules:
 
-* Units gain a +2 circumstance bonus to attacks against unit compositions they're particularly effective against:
+Units gain a +2 circumstance bonus to attacks against unit compositions they're particularly effective against:
 
 * Siege beats Archers
 * Archers beat Cavalry
