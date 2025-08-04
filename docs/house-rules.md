@@ -156,7 +156,7 @@ You can no longer build structures outside your capital, unless they are destroy
 
 Use the following settlement levels when trying to buy items:
 * **Town**: 3
-* **City**: 7
+* **City**: 9
 * **Metropolis**: 15
 
 ### A word on Vance & Kerenshara's home brew
