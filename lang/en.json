@@ -45,6 +45,8 @@
       "untrainedProficiencyMode": "Always Increase Untrained Skills By"
     },
     "settings": {
+      "enableAfterCombatDialog": "Enable End Combat Dialog",
+      "enableAfterCombatDialogHelp": "If enabled, shows a popup after ending combat that allows you to award XP and hero points",
       "disableFirstRunMessage": "Disable First Run Message",
       "disableFirstRunMessageHelp": "If checked, will hide initial setup instructions and guidelines",
       "hideBuiltinKingdomSheet": "Hide PF2 System Kingdom Sheet Icon",
@@ -97,6 +99,7 @@
       "description": "Description",
       "quickstart": "Quickstart",
       "xp": "XP",
+      "heroPoints": "Hero Points",
       "dialog": {
         "roll": "Roll",
         "ok": "Ok"
@@ -922,6 +925,9 @@
         "dataHelp": "Leave completely empty to remove structure data",
         "removedData": "Removed Structure Data from Actor",
         "validationError": "Failed to validate structure {message}. Check console log for exact errors"
+      },
+      "combatXp": {
+        "title": "Award Combat Boons"
       },
       "heroPoints": {
         "resetPointsConfirmation": "Reset Hero Points to 1?",

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.7.0] - 2025-08-13
+
+### Added
+
+* After combat, the GM will get a popup to award XP and hero points
 
 ### Fixed
 

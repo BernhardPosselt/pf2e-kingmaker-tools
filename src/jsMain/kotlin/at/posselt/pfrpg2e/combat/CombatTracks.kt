@@ -1,4 +1,4 @@
-package at.posselt.pfrpg2e.combattracks
+package at.posselt.pfrpg2e.combat
 
 import at.posselt.pfrpg2e.camping.dialogs.Track
 import at.posselt.pfrpg2e.camping.dialogs.play

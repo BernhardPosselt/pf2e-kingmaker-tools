@@ -20,7 +20,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.js.JsPlainObject
 import kotlin.math.min
 
-private suspend fun updateXP(players: Array<PF2ECharacter>, amount: Int) = coroutineScope {
+suspend fun updateXP(players: Array<PF2ECharacter>, amount: Int) = coroutineScope {
     players.map {
         val currentXP = it.system.details.xp.value
         val xpThreshold = it.system.details.xp.max

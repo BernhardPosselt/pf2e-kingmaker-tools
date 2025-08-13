@@ -8,8 +8,8 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.camping.dialogs.Track
-import at.posselt.pfrpg2e.combattracks.getCombatTrack
-import at.posselt.pfrpg2e.combattracks.setCombatTrack
+import at.posselt.pfrpg2e.combat.getCombatTrack
+import at.posselt.pfrpg2e.combat.setCombatTrack
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
 import at.posselt.pfrpg2e.utils.launch

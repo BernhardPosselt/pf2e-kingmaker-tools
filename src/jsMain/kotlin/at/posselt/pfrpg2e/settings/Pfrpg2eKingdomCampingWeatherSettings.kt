@@ -8,9 +8,9 @@ import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.newInstance
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toMutableRecord
-import com.foundryvtt.core.*
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.applications.api.ApplicationV2
+import com.foundryvtt.core.game
 import com.foundryvtt.core.helpers.ClientSettings
 import com.foundryvtt.core.helpers.SettingsData
 import com.foundryvtt.core.helpers.SettingsMenuData
@@ -172,6 +172,12 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     fun getKingdomActiveLeader(): String? =
         game.settings.getNullableString("kingdomActiveLeader")
 
+    suspend fun setEnableAfterCombatDialog(value: Boolean) =
+        game.settings.setBoolean("enableAfterCombatDialog", value)
+
+    fun getEnableAfterCombatDialog(): Boolean =
+        game.settings.getBoolean("enableAfterCombatDialog")
+
     suspend fun setEnablePartyActorIcons(value: Boolean) =
         game.settings.setBoolean("enablePartyActorIcons", value)
 
@@ -277,6 +283,13 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     fun register() {
         registerSimple(game.settings, nonUserVisibleSettings.strings, hidden = true)
         registerSimple(game.settings, nonUserVisibleSettings.booleans, hidden = true)
+        game.settings.registerScalar(
+            key = "enableAfterCombatDialog",
+            name = t("settings.enableAfterCombatDialog"),
+            hint = t("settings.enableAfterCombatDialogHelp"),
+            default = true,
+            requiresReload = false,
+        )
         game.settings.registerScalar(
             key = "hideBuiltinKingdomSheet",
             name = t("settings.hideBuiltinKingdomSheet"),

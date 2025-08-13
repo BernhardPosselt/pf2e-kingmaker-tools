@@ -18,13 +18,13 @@ import kotlinx.coroutines.coroutineScope
 import kotlin.math.max
 import kotlin.math.min
 
-private enum class AwardMode {
+enum class AwardMode {
     SUBTRACT,
     ADD,
     SET
 }
 
-private data class PointsForPlayer(
+data class PointsForPlayer(
     val player: PF2ECharacter,
     val points: Int,
     val mode: AwardMode = AwardMode.ADD
@@ -41,7 +41,7 @@ suspend fun resetHeroPointsMacro(actors: Array<PF2ECharacter>) {
     }
 }
 
-private suspend fun updateHeroPoints(points: Array<PointsForPlayer>): Unit = coroutineScope {
+suspend fun updateHeroPoints(points: Array<PointsForPlayer>): Unit = coroutineScope {
     points.map {
         val actor = it.player
         val actualPoints = when (it.mode) {

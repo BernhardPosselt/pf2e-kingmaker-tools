@@ -128,6 +128,7 @@ external class PF2ECharacter : PF2EActor, PF2ECreature {
     override val skills: ReadonlyRecord<String, PF2EAttribute>
     val system: PF2ECharacterSystem
     val parties: JsSet<PF2EParty>
+    val alliance: String
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
