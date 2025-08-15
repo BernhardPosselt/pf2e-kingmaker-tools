@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.7.1] - 2025-08-15
+
+### Fixed
+
+* Update Polish translations
+
+### Changed
+
+* Update library dependencies
+
+
 ## [5.7.0] - 2025-08-13
 
 ### Added
