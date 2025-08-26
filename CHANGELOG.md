@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* @MarkPearce improved kingdom turn styling
+
 ## [5.7.1] - 2025-08-15
 
 ### Fixed
