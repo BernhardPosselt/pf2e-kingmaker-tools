@@ -473,19 +473,41 @@
 
 
         .km-detail-description {
-            padding-top: 1em;
+            padding-top: .6em;
         }
 
 
         details {
-            margin: 1em 0 0 0;
+            margin: .5em 0 0 0;
             border: 1px solid;
             border-radius: .5em;
-            padding: .6em 1em;
+            padding: .3em 1em;
+            border-color: #5c5c5c;
 
             .km-detail-description {
+                margin-top: .3em;
                 border-top: 1px solid;
+                border-color: #5c5c5c;
             }
+        }
+
+        .km-kingdom-sheet-section h2 {
+            margin-top: 1em;
+            font-size: 1.5em;
+            font-family: Signika, "Palatino Linotype", sans-serif;
+            font-weight: 700;
+            color: #ee9b3a;
+            
+
+            
+        }
+        .km-detail-description p {
+            color: #ccc;
+        }
+
+        details:hover {
+            background-color: rgba(0, 0, 0, 0.5); 
+            transition: background-color 0.15s ease; 
         }
 
         td, th {
@@ -493,7 +515,7 @@
         }
 
         .km-kingdom-sheet-section:not(:nth-of-type(1)) {
-            margin-top: 3em;
+            margin-top: 1em;
         }
 
         h2, h3 {
@@ -514,7 +536,7 @@
     .km-kingdom-sheet-notes {
 
         section:last-child {
-            margin-top: 3em;
+            margin-top: 4em;
         }
 
         .editor {
@@ -537,11 +559,12 @@
             font-size: 1.2em;
             display: flex;
             align-items: center;
-            gap: .5em;
-            margin: 1em 0 0 0;
+            gap: .3em;
+            margin: .3em 0 0 0;
             border: 1px solid;
             border-radius: .5em;
-            padding: .6em 1em;
+            padding: .3em 1em;
+            border-color: #5c5c5c;
 
             button {
                 margin-left: auto;
@@ -550,6 +573,11 @@
                     margin-left: .25em;
                 }
             }
+        }
+
+        .km-upkeep-button:hover {
+            background-color: rgba(0, 0, 0, 0.5); 
+            transition: background-color 0.15s ease; 
         }
 
         .km-kingdom-activities,
@@ -566,7 +594,7 @@
             }
 
             .km-detail-description {
-                margin-top: 0.5rem;
+                margin-top: 1rem;
             }
         }
 
