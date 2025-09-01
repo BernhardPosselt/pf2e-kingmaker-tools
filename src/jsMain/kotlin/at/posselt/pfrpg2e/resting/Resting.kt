@@ -47,6 +47,7 @@ import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2EParty
 import com.foundryvtt.pf2e.pf2e
+import js.objects.Object
 import js.objects.recordOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
@@ -305,8 +306,8 @@ private suspend fun completeDailyPreparations(
     camping.watchSecondsRemaining = 0
     camping.encounterModifier = 0
     camping.dailyPrepsAtTime = game.time.worldTimeSeconds
-    camping.campingActivities.forEach { it.result = null }
-    camping.cooking.results.forEach { it.result = null }
+    Object.values(camping.campingActivities).forEach { it.result = null }
+    Object.values(camping.cooking.results).forEach { it.result = null }
     campingActor.setCamping(camping)
 
     val additionalHealing = additionalHealingPerActorAfterRest(recipes, camping, actors)

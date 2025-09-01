@@ -5,7 +5,7 @@ import at.posselt.pfrpg2e.app.awaitablePrompt
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.camping.dialogs.RegionSetting
-import at.posselt.pfrpg2e.data.actor.*
+import at.posselt.pfrpg2e.data.actor.Attribute
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.checks.getLevelBasedDC
@@ -99,6 +99,8 @@ fun PF2ECreature.getCampingCheckData(camping: CampingData, activityId: String): 
             skill = skill,
         )
     } else {
+        if (skill == null) console.log("Could not resolve skill for activity $activityId")
+        if (region == null) console.log("Could not resolve region ${camping.currentRegion}")
         null
     }
 }

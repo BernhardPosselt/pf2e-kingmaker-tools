@@ -27,6 +27,7 @@ import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2EParty
+import js.objects.Record
 import js.objects.recordOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -35,30 +36,27 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface ActorMeal {
-    var actorUuid: String
     var favoriteMeal: String?
     var chosenMeal: String
 }
 
 @JsPlainObject
 external interface CookingResult {
-    val recipeId: String
     var result: String?
-    val skill: String
+    var skill: String
 }
 
 @JsPlainObject
 external interface Cooking {
     var knownRecipes: Array<String>
-    var actorMeals: Array<ActorMeal>
+    var actorMeals: Record<String, ActorMeal>
     var homebrewMeals: Array<RecipeData>
-    var results: Array<CookingResult>
+    var results: Record<String, CookingResult>
     var minimumSubsistence: Int
 }
 
 @JsPlainObject
 external interface CampingActivity {
-    var activityId: String
     var actorUuid: String?
     var result: String?
     var selectedSkill: String?
@@ -69,7 +67,7 @@ external interface CampingActivity {
 external interface CampingData {
     var currentRegion: String
     var actorUuids: Array<String>
-    var campingActivities: Array<CampingActivity>
+    var campingActivities: Record<String, CampingActivity>
     var homebrewCampingActivities: Array<CampingActivityData>
     var lockedActivities: Array<String>
     var cooking: Cooking

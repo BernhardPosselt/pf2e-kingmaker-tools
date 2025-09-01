@@ -25,6 +25,7 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
 import js.array.toTypedArray
 import js.core.Void
+import js.objects.Object
 import kotlinx.coroutines.await
 import kotlin.js.Promise
 
@@ -39,9 +40,19 @@ class ManageRecipesApplication(
 ) {
     override fun deleteEntry(id: String) = buildPromise {
         actor.getCamping()?.let { camping ->
-            camping.cooking.knownRecipes = camping.cooking.knownRecipes.filter { it != id }.toTypedArray()
-            camping.cooking.homebrewMeals = camping.cooking.homebrewMeals.filter { it.id != id }.toTypedArray()
-            camping.cooking.actorMeals.forEach {
+            camping.update {
+                cooking {
+                    knownRecipes = camping.cooking.knownRecipes
+                        .filter { it != id }
+                        .toTypedArray()
+                    homebrewMeals = camping.cooking.homebrewMeals
+                        .filter { it.id != id }
+                        .toTypedArray()
+                }
+            }
+//            camping.cooking.knownRecipes = camping.cooking.knownRecipes.filter { it != id }.toTypedArray()
+//            camping.cooking.homebrewMeals = camping.cooking.homebrewMeals.filter { it.id != id }.toTypedArray()
+            Object.values(camping.cooking.actorMeals).forEach {
                 if (it.chosenMeal == id) {
                     it.chosenMeal = "nothing"
                 }
