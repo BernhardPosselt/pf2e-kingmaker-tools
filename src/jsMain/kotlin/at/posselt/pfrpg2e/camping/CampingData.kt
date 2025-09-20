@@ -27,6 +27,8 @@ import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2EParty
+import js.array.toTypedArray
+import js.objects.Object
 import js.objects.Record
 import js.objects.recordOf
 import kotlinx.coroutines.async
@@ -395,8 +397,51 @@ suspend fun CampingActor.setCamping(data: CampingData) {
     setAppFlag("camping-sheet", data)
 }
 
+suspend fun CampingActor.partialUpdate(data: Record<String, Any?>) {
+    setAppFlag("camping-sheet", data)
+}
+
 suspend fun CampingActor.clearCamping() {
     unsetAppFlag("camping-sheet")
+}
+
+suspend fun CampingActor.deleteRecipe(id: String) {
+    getCamping()?.let { camping ->
+        Object.values(camping.cooking.actorMeals).forEach {
+            if (it.chosenMeal == id) {
+                it.chosenMeal = "nothing"
+            }
+            if (it.favoriteMeal == id) {
+                it.favoriteMeal = null
+            }
+        }
+        val update = recordOf(
+            "cooking.knownRecipes" to camping.cooking.knownRecipes.filter { it != id }.toTypedArray(),
+            "cooking.homebrewMeals" to camping.cooking.homebrewMeals.filter { it.id != id }.toTypedArray(),
+            "cooking.actorMeals" to camping.cooking.actorMeals,
+            "cooking.results.-=$id" to null,
+        )
+        partialUpdate(update)
+    }
+}
+
+suspend fun CampingActor.syncEnabledRecipes(enabledRecipeIds: Set<String>) {
+    getCamping()?.let { camping ->
+        Object.values(camping.cooking.actorMeals).forEach {
+            if (it.chosenMeal !in enabledRecipeIds) it.chosenMeal = "nothing"
+            if (it.favoriteMeal !in enabledRecipeIds) it.favoriteMeal = null
+        }
+        val resultUpdates = Object.keys(camping.cooking.results).asSequence()
+            .filter { it !in enabledRecipeIds }
+            .map { "cooking.results.-=$it" to null }
+            .toTypedArray()
+        val update = recordOf(
+            "cooking.knownRecipes" to enabledRecipeIds.toTypedArray(),
+            "cooking.actorMeals" to camping.cooking.actorMeals,
+            *resultUpdates,
+        )
+        partialUpdate(update)
+    }
 }
 
 fun Game.getCampingActors(): List<CampingActor> =
