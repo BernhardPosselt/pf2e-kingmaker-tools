@@ -8,18 +8,23 @@ import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
 @JsPlainObject
-external interface PF2EPartySpeed {
-    val total: Int
+external interface PF2ETravelSpeed {
+    val value: Int
 }
 
 @JsPlainObject
-external interface PF2EPartyAttributes {
-    val speed: PF2EPartySpeed
+external interface PF2EPartySpeeds {
+    val travel: PF2ETravelSpeed
+}
+
+@JsPlainObject
+external interface PF2EPartyMovement {
+    val speeds: PF2EPartySpeeds
 }
 
 @JsPlainObject
 external interface PF2EPartyData {
-    val attributes: PF2EPartyAttributes
+    val movement: PF2EPartyMovement
 }
 
 // required to make instance of work, but since the classes are not registered here

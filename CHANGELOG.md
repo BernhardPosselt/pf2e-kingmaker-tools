@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.7.2] - 2025-09-20
+
+### Fixed
+
+* Fix API break in 2e system 7.5.0
+
 ### Changed
 
 * @MarkPearce improved kingdom turn styling

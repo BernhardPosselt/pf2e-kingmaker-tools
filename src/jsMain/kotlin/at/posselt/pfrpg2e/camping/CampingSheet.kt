@@ -784,7 +784,7 @@ class CampingSheet(
 
     private fun getHexplorationActivities(): Double {
         val camping = actor.getCamping()
-        val travelSpeed = actor.system.attributes.speed.total
+        val travelSpeed = actor.system.movement.speeds.travel.value
         val override = max(camping?.minimumTravelSpeed ?: 0, travelSpeed)
         return calculateHexplorationActivities(override)
     }
