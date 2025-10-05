@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Added note to skip Adjusting Unrest and Paying Consumption on the first turn
+* Fixed empty labels in resource consumption breakdown
+* Fix "Lose 5 Resource Points per Missing Commodity" button not subtracting RP
+* Properly add Portuguese and Chinese (Simplified) to available languages 
+
 ## [5.7.2] - 2025-09-20
 
 ### Fixed

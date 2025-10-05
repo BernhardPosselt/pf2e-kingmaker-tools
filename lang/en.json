@@ -399,6 +399,7 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "firstTurnNotice": "On your first turn after founding your kingdom, skip the Adjust Unrest and Pay Consumption steps.",
       "failedToCompleteStructure": "Failed to complete structure; it is delayed further.",
       "spendRp": "Spend RP",
       "advanceConstruction": "Spending {rp, plural, =1 {1 RP} other {# RP}} to advance construction of structure {structureName}",
@@ -676,7 +677,7 @@
       "special": "Special",
       "addToActiveEvents": "Add to Active Events",
       "missingFood": "Missing {count, plural, =1 {1 Food Commodity} other {# Food Commodities}}. Choose one:",
-      "lose5RP": "Lose 5 Resource Points per missing Commodity",
+      "lose5RP": "Lose 5 Resource Points per Missing Commodity",
       "gain1d4Unrest": "Gain 1d4 Unrest",
       "clearFilters": "Clear Filters",
       "buildStructure": "Build",
@@ -703,8 +704,8 @@
       "controlDcModifier": "Control DC Modifier",
       "commodityStorage": "Commodity Storage",
       "automationNotes": "Automation Notes",
-      "resourceSurplus": "",
-      "settlementSurplus": "",
+      "resourceSurplus": "Resource Surplus",
+      "settlementSurplus": "Settlement Surplus",
       "now": "Now",
       "next": "Next",
       "armies": "Armies",

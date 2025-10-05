@@ -5,6 +5,7 @@ package com.foundryvtt.core.canvas
 import com.foundryvtt.core.canvas.layers.DrawingsLayer
 import com.foundryvtt.core.canvas.layers.TilesLayer
 import com.foundryvtt.core.canvas.layers.TokenLayer
+import com.foundryvtt.core.grid.BaseGrid
 import js.collections.JsSet
 
 
@@ -24,4 +25,5 @@ external class Canvas {
     val tokens: TokenLayer
     val drawings: DrawingsLayer
     val tiles: TilesLayer
+    val grid: BaseGrid
 }
