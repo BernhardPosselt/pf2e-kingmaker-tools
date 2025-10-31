@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.7.4] - 2025-10-31
+
+### Fixed
+
+* Fixed Brazilian language tag
+
 ## [5.7.3] - 2025-10-31
 
 ### Fixed

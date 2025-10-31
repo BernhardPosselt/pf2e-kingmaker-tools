@@ -48,7 +48,7 @@
             "path": "dist/lang/zh-Hans.json"
         },
         {
-            "lang": "pt_BR",
+            "lang": "pt-BR",
             "name": "Portuguese (Brazilian)",
             "path": "dist/lang/pt_BR.json"
         }
