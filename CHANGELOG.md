@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.7.3] - 2025-10-31
+
 ### Fixed
 
 * Added note to skip Adjusting Unrest and Paying Consumption on the first turn

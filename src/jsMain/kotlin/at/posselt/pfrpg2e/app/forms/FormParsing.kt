@@ -41,7 +41,7 @@ fun <T> parseFormData(value: AnyObject, and: (dynamic) -> Unit): T {
  */
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
 fun <T> normalizeArrays(obj: ReadonlyRecord<String, T>): Any {
-    if (Object.hasOwn(obj, 0)) {
+    if (Object.hasOwn(obj, "0")) {
         return obj.asSequence()
             .sortedBy { it.component1().toInt() }
             .map {

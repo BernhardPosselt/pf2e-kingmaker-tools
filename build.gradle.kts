@@ -18,7 +18,7 @@ plugins {
 }
 
 group = "at.posselt"
-version = "5.7.2"
+version = "5.7.3"
 
 repositories {
     mavenCentral()
@@ -48,6 +48,7 @@ kotlin {
                 "-opt-in=kotlin.contracts.ExperimentalContracts",
                 "-opt-in=kotlin.ExperimentalStdlibApi",
                 "-opt-in=kotlin.js.ExperimentalJsExport",
+                "-opt-in=kotlin.js.ExperimentalWasmJsInterop",
                 "-opt-in=kotlin.js.ExperimentalJsStatic",
                 "-opt-in=kotlin.time.ExperimentalTime",
                 "-Xwhen-guards",
