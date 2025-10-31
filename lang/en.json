@@ -677,7 +677,7 @@
       "special": "Special",
       "addToActiveEvents": "Add to Active Events",
       "missingFood": "Missing {count, plural, =1 {1 Food Commodity} other {# Food Commodities}}. Choose one:",
-      "lose5RP": "Lose 5 Resource Points per Missing Commodity",
+      "lose5RP": "Lose 5 Resource Points per Missing Commodity ({total})",
       "gain1d4Unrest": "Gain 1d4 Unrest",
       "clearFilters": "Clear Filters",
       "buildStructure": "Build",

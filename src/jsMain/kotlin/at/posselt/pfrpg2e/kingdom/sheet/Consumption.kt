@@ -35,11 +35,13 @@ suspend fun payConsumption(
         val paidFood = consumedFood.coerceIn(0, Int.MAX_VALUE)
         postChatMessage(t("kingdom.reducingFoodBy", recordOf("consumption" to consumption)))
         if (consumedFood < 0) {
+            val missingFood = abs(consumedFood)
             postChatTemplate(
                 templatePath = "chatmessages/not-enough-food.hbs",
                 templateContext = recordOf(
-                    "food" to abs(consumedFood),
-                    "actorUuid" to kingdomActor.uuid
+                    "food" to missingFood,
+                    "actorUuid" to kingdomActor.uuid,
+                    "loseRp" to missingFood * 5,
                 )
             )
         }

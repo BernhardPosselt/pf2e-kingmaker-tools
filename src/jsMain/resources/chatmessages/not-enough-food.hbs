@@ -1,6 +1,5 @@
 <p data-kingdom-actor-uuid="{{actorUuid}}">{{localizeKM "kingdom.missingFood" count=food}}
-    <button type="button" class="km-gain-lose" data-type="resourcePoints" data-mode="lose" data-turn="now"
-            data-multiple="true" data-value="5">{{localizeKM "kingdom.lose5RP"}}
+    <button type="button" class="km-gain-lose" data-type="resourcePoints" data-mode="lose" data-turn="now" data-value="{{loseRp}}">{{localizeKM "kingdom.lose5RP" total=loseRp}}
     </button>
     <button type="button" class="km-gain-lose" data-type="unrest" data-mode="gain" data-turn="now" data-multiple="false"
             data-value="1d4">{{localizeKM "kingdom.gain1d4Unrest"}}
