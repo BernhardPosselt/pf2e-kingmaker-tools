@@ -83,9 +83,9 @@ Install the following things:
 
 * [git](https://git-scm.com/downloads/win) (pick all the default options)
 * [node](https://nodejs.org/en/download) click the green button named **Windows Installer (.msi)**
-* [JDK 21](https://adoptium.net/installation/) launch a Windows terminal and paste the following:
+* [JDK 25](https://adoptium.net/installation/) launch a Windows terminal and paste the following:
 
-      winget install EclipseAdoptium.Temurin.21.JDK
+      winget install EclipseAdoptium.Temurin.25.JDK
 
 Then, restart your PC.
 
@@ -145,23 +145,23 @@ You can pull the latest changes inside the folder using:
 
 Install the following things using your package manager or homebrew:
 
-* JDK 21
+* JDK 25
 * git
 * node
 * yarn
 
 Ubuntu:
 
-    sudo apt install nodejs git openjdk-21-jdk
+    sudo apt install nodejs git openjdk-25-jdk
     sudo npm install --global yarn
 
 Arch:
 
-    sudo pacman -S nodejs git jdk21-openjdk yarn
+    sudo pacman -S nodejs git jdk25-openjdk yarn
 
 macOS:
 
-    brew install --cask temurin@21
+    brew install --cask temurin@25
     brew install git node@22 yarn
 
 Then restart your machine for the JVM changes to take effect.
