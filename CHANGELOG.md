@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* When using manual settlement management, always use occupied blocks when figuring out settlement level; remove unused settlement level configuration
+
+
 ## [5.7.5] - 2025-10-31
 
 ### Fixed

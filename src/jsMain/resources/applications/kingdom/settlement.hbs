@@ -37,10 +37,7 @@
                 <tr>
                     <th>{{localizeKM "applications.level"}}</th>
                     <td>
-                        {{#unless manualSettlementLevel}}
-                            {{level}}
-                        {{/unless}}
-                        {{> formElement levelInput}}
+                        {{level}}
                     </td>
                 </tr>
                 <tr>
@@ -69,11 +66,11 @@
                 </tr>
                 <tr>
                     <th>{{localizeKM "kingdom.lacksBridge"}}</th>
-                    <td>{{#if lacksBridge}}<i class="fa-solid fa-circle-check"></i>{{/if}}</td>
+                    <td>{{#if lacksBridge}}<i class="fa-solid fa-triangle-exclamation"></i>{{/if}}</td>
                 </tr>
                 <tr>
                     <th>{{localizeKM "kingdom.overcrowded"}}</th>
-                    <td>{{#if isOvercrowded}}<i class="fa-solid fa-circle-check"></i>{{/if}}</td>
+                    <td>{{#if isOvercrowded}}<i class="fa-solid fa-triangle-exclamation"></i>{{/if}}</td>
                 </tr>
                 </tbody>
             </table>

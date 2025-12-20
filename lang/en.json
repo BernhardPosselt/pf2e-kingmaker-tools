@@ -683,7 +683,7 @@
       "buildStructure": "Build",
       "settlement": "Settlement",
       "blocks": "Blocks",
-      "blocksWithMaximum": "Blocks (Maximum: {count})",
+      "blocksWithMaximum": "Occupied Blocks (Maximum: {count})",
       "surplus": "Surplus",
       "population": "Population",
       "consumption": "Consumption",

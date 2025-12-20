@@ -171,7 +171,6 @@ fun evaluateGlobalBonuses(settlements: List<Settlement>) =
 data class SettlementData(
     val name: String,
     val occupiedBlocks: Int,
-    val level: Int,
     val type: SettlementType,
     val isSecondaryTerritory: Boolean,
     val waterBorders: Int,
@@ -184,7 +183,7 @@ fun evaluateSettlement(
     allStructuresStack: Boolean,
     allowCapitalInvestmentInCapitalWithoutBank: Boolean,
 ): Settlement {
-    val settlementSize = findSettlementSize(data.level)
+    val settlementSize = findSettlementSize(data.occupiedBlocks)
     val maxItemBonus = settlementSize.maxItemBonus
     val constructedStructures = structures.filter { !it.slowed && it.rpPaid }
     val slowedStructures = structures.filter { it.slowed }

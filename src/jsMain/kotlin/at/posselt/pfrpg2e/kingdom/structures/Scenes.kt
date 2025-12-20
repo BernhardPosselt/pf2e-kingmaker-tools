@@ -21,7 +21,6 @@ import js.objects.recordOf
 import js.reflect.Reflect
 import kotlinx.coroutines.await
 import kotlin.math.max
-import kotlin.math.min
 
 private fun Scene.structureTokens(): List<TokenDocument> =
     tokens.contents
@@ -72,16 +71,11 @@ fun Scene.parseSettlement(
         0,
         calculateOccupiedBlocks()
     ) else rawSettlement.lots
-    val settlementLevel = if (autoCalculateSettlementLevel && rawSettlement.manualSettlementLevel != true) min(
-        20,
-        occupiedBlocks
-    ) else rawSettlement.level
     return evaluateSettlement(
         data = SettlementData(
             id = rawSettlement.sceneId,
             name = name,
             occupiedBlocks = occupiedBlocks,
-            level = settlementLevel,
             type = SettlementType.fromString(rawSettlement.type)
                 ?: SettlementType.SETTLEMENT,
             isSecondaryTerritory = rawSettlement.secondaryTerritory,

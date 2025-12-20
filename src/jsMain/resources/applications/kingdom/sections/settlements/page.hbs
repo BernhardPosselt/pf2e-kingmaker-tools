@@ -30,7 +30,7 @@
                         <td><button type="button" data-action="activate-settlement" data-id="{{id}}">
                             <i class="fa-solid fa-bullseye"></i></button></td>
                         <td>{{size}}</td>
-                        <td>{{level}} ({{residentialLots}})</td>
+                        <td>{{level}} <span title="{{localizeKM "kingdom.residentialLots"}}">({{residentialLots}})</span></td>
                         <td>{{#if isOvercrowded}}<i class="fa-solid fa-people-roof" title="{{localizeKM "kingdom.overcrowded"}}"></i>{{/if}}
                         {{#if isSecondaryTerritory}}<i class="fa-solid fa-road-circle-xmark" title="{{localizeKM "kingdom.secondaryTerritory"}}"></i>{{/if}}
                         {{#if lacksBridge}}<i class="fa-solid fa-bridge-circle-xmark" title="{{localizeKM "kingdom.lacksBridge"}}"></i>{{/if}}</td>

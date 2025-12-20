@@ -68,7 +68,6 @@ external interface LabelValueContext {
 @JsPlainObject
 external interface InspectSettlementContext : ValidatedHandlebarsContext {
     val blocksInput: FormElementContext
-    val levelInput: FormElementContext
     val typeInput: FormElementContext
     val secondaryTerritoryInput: FormElementContext
     val manualSettlementLevelInput: FormElementContext
@@ -100,7 +99,6 @@ external interface InspectSettlementContext : ValidatedHandlebarsContext {
 @JsPlainObject
 external interface InspectSettlementData {
     val blocks: Int
-    val level: Int
     val type: String
     val secondaryTerritory: Boolean
     val manualSettlementLevel: Boolean
@@ -116,7 +114,6 @@ class InspectSettlementDataModel(
         @JsStatic
         fun defineSchema() = buildSchema {
             int("blocks")
-            int("level")
             enum<SettlementType>("type")
             boolean("secondaryTerritory")
             boolean("manualSettlementLevel")
@@ -253,20 +250,6 @@ class InspectSettlement(
                 overrideType = OverrideType.NUMBER,
             )
         }
-        val levelInput = if (manualSettlementLevel) {
-            NumberInput(
-                name = "level",
-                label = t("applications.level"),
-                value = current.level,
-                hideLabel = true,
-            )
-        } else {
-            HiddenInput(
-                name = "level",
-                value = current.level.toString(),
-                overrideType = OverrideType.NUMBER,
-            )
-        }
         val typeInput = Select.fromEnum<SettlementType>(
             name = "type",
             value = SettlementType.fromString(current.type) ?: SettlementType.SETTLEMENT,
@@ -366,13 +349,12 @@ class InspectSettlement(
             isFormValid = isFormValid,
             manualSettlementLevel = manualSettlementLevel,
             blocksInput = blocksInput.toContext(),
-            levelInput = levelInput.toContext(),
             typeInput = typeInput.toContext(),
             secondaryTerritoryInput = secondaryTerritoryInput.toContext(),
             manualSettlementLevelInput = manualSettlementLevelInput.toContext(),
             waterBordersInput = waterBordersInput.toContext(),
             blocks = parsed.occupiedBlocks,
-            level = parsed.occupiedBlocks,
+            level = parsed.level,
             type = t(parsed.type),
             lacksBridge = parsed.lacksBridge,
             isOvercrowded = parsed.isOvercrowded,
@@ -409,7 +391,6 @@ class InspectSettlement(
 
     override fun onParsedSubmit(value: InspectSettlementData): Promise<Void> = buildPromise {
         current.lots = value.blocks
-        current.level = value.level
         current.type = value.type
         current.secondaryTerritory = value.secondaryTerritory
         current.manualSettlementLevel = value.manualSettlementLevel

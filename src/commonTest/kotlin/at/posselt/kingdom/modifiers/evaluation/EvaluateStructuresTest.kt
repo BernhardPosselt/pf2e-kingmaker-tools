@@ -102,10 +102,9 @@ class EvaluateStructuresTest {
             data = SettlementData(
                 name = "name",
                 id = "name",
-                level = 20,
                 type = SettlementType.CAPITAL,
                 waterBorders = 4,
-                occupiedBlocks = 4,
+                occupiedBlocks = 20,
                 isSecondaryTerritory = true,
             ),
             structures = structures,
@@ -121,7 +120,7 @@ class EvaluateStructuresTest {
         assertEquals(3, result.settlementEventBonus)
         assertEquals(2, result.leaderLeadershipActivityBonus)
         assertFalse(result.hasBridge)
-        assertEquals(4, result.occupiedBlocks)
+        assertEquals(20, result.occupiedBlocks)
         assertTrue(result.increaseLeadershipActivities)
         assertEquals(settlementSizeData.find { it.type == SettlementSizeType.METROPOLIS }, result.size)
         assertEquals(3, result.residentialLots)
@@ -164,7 +163,6 @@ class EvaluateStructuresTest {
             data = SettlementData(
                 name = "name",
                 id = "name",
-                level = 20,
                 type = SettlementType.CAPITAL,
                 waterBorders = 4,
                 occupiedBlocks = 4,
@@ -183,10 +181,9 @@ class EvaluateStructuresTest {
             data = SettlementData(
                 name = "name",
                 id = "name",
-                level = 14,
                 type = SettlementType.CAPITAL,
                 waterBorders = 3,
-                occupiedBlocks = 4,
+                occupiedBlocks = 14,
                 isSecondaryTerritory = true,
             ),
             structures = listOf(
@@ -239,7 +236,6 @@ class EvaluateStructuresTest {
             data = SettlementData(
                 name = "name",
                 id = "name",
-                level = 14,
                 type = SettlementType.CAPITAL,
                 waterBorders = 3,
                 occupiedBlocks = 4,
@@ -275,7 +271,6 @@ class EvaluateStructuresTest {
             data = SettlementData(
                 name = "name",
                 id = "name",
-                level = 14,
                 type = SettlementType.CAPITAL,
                 waterBorders = 3,
                 occupiedBlocks = 4,
@@ -311,7 +306,6 @@ class EvaluateStructuresTest {
             data = SettlementData(
                 name = "name",
                 id = "name",
-                level = 14,
                 type = SettlementType.CAPITAL,
                 waterBorders = 3,
                 occupiedBlocks = 4,

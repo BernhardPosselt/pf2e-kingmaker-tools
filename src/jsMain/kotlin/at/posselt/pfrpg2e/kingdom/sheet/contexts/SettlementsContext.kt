@@ -43,7 +43,7 @@ fun Array<RawSettlement>.toContext(
                 isCapital = parsed.type == SettlementType.CAPITAL,
                 name = parsed.name,
                 size = t(parsed.size.type),
-                level = parsed.occupiedBlocks,
+                level = parsed.level,
                 residentialLots = parsed.residentialLots,
                 isSecondaryTerritory = parsed.isSecondaryTerritory,
                 isOvercrowded = parsed.isOvercrowded,

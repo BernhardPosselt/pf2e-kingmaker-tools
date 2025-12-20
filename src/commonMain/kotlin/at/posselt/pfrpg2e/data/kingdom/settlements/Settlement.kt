@@ -51,4 +51,5 @@ data class Settlement(
                 }
                 .toSet()
         }
+    val level = max(1, occupiedBlocks)
 }
