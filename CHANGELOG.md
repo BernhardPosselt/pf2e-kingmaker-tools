@@ -10,7 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * When using manual settlement management, always use occupied blocks when figuring out settlement level; remove unused settlement level configuration
-
+* Default to the skill with the highest modifier for the following kingdom activities:
+  * Abandon Hex
+  * Claim Hex
+  * Establish Settlement
+  * Rest and Relax
+  * Celebrate Holiday (V&K)
+  * Recover Army variants
+  * Train Army
 
 ## [5.7.5] - 2025-10-31
 

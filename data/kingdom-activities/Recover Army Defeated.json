@@ -8,6 +8,7 @@
   "dcAdjustment": 5,
   "title": "activities.recover-army-defeated.title",
   "description": "activities.recover-army-defeated.description",
+  "defaultToBestSkill": true,
   "skills": {
     "politics": 3,
     "warfare": 2

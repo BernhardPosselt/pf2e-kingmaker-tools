@@ -8,6 +8,7 @@
   "dc": "control",
   "description": "activities.establish-settlement.description",
   "requirement": "activities.establish-settlement.requirement",
+  "defaultToBestSkill": true,
   "skills": {
     "engineering": 0,
     "industry": 0,

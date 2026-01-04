@@ -7,6 +7,7 @@
   "dc": "control",
   "title": "activities.recover-army-lost.title",
   "description": "activities.recover-army-lost.description",
+  "defaultToBestSkill": true,
   "skills": {
     "exploration": 0,
     "wilderness": 2

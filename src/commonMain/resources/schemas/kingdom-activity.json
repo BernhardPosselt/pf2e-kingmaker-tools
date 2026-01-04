@@ -59,6 +59,9 @@
         "title": {
           "type": "string"
         },
+        "defaultToBestSkill": {
+          "type": "boolean"
+        },
         "description": {
           "type": "string"
         },

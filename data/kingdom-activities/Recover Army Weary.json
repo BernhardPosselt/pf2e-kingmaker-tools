@@ -7,6 +7,7 @@
   "dc": "control",
   "title": "activities.recover-army-weary.title",
   "description": "activities.recover-army-weary.description",
+  "defaultToBestSkill": true,
   "skills": {
     "defense": 0,
     "arts": 2

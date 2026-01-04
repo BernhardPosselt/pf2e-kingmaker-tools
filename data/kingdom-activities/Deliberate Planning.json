@@ -8,22 +8,7 @@
   "title": "activities.deliberate-planning.title",
   "description": "activities.deliberate-planning.description",
   "skills": {
-    "agriculture": 0,
-    "arts": 0,
-    "boating": 0,
-    "defense": 0,
-    "engineering": 0,
-    "exploration": 0,
-    "folklore": 0,
-    "industry": 0,
-    "intrigue": 0,
-    "magic": 0,
-    "politics": 0,
-    "scholarship": 0,
-    "statecraft": 0,
-    "trade": 0,
-    "warfare": 0,
-    "wilderness": 0
+    "scholarship": 0
   },
   "criticalSuccess": {
     "msg": "activities.deliberate-planning.criticalSuccess.msg",

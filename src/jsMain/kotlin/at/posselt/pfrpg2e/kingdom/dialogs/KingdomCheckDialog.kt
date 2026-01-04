@@ -53,6 +53,7 @@ import at.posselt.pfrpg2e.kingdom.modifiers.UpgradeResult
 import at.posselt.pfrpg2e.kingdom.modifiers.determineDegree
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.evaluateModifiers
 import at.posselt.pfrpg2e.kingdom.modifiers.evaluation.filterModifiersAndUpdateContext
+import at.posselt.pfrpg2e.kingdom.modifiers.expressions.ExpressionContext
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.parseModifiers
@@ -263,6 +264,7 @@ private data class CheckDialogParams(
     val eventStageIndex: Int = 0,
     val eventIndex: Int = 0,
     val rollOptions: Set<String> = emptySet(),
+    val defaultToBestSkill: Boolean = false,
 )
 
 typealias AfterRoll = suspend (degree: DegreeOfSuccess) -> Unit
@@ -304,7 +306,25 @@ private class KingdomCheckDialog(
         modifiers = baseModifiers.map { ModifierIdEnabled(it.id, it.enabled) }.toTypedArray(),
         leader = selectedLeader?.value ?: Leader.RULER.value,
         rollMode = if (event == null) RollMode.PUBLICROLL.value else kingdom.settings.kingdomEventRollMode,
-        skill = params.validSkills.first().value,
+        skill = if (params.defaultToBestSkill) {
+            validSkills
+                .map { skill ->
+                    val skillFiltered = filterModifiersAndUpdateContext(
+                        modifiers = baseModifiers,
+                        context = createCheckContext(
+                            phase = params.phase,
+                            leader = selectedLeader ?: Leader.RULER,
+                            usedSkill = skill,
+                        ),
+                        selector = ModifierSelector.CHECK,
+                    )
+                    skill to evaluateModifiers(skillFiltered).total
+                }
+                .maxByOrNull { it.second }
+                ?.first?.value ?: params.validSkills.first().value
+        } else {
+            params.validSkills.first().value
+        },
         phase = params.phase?.value,
         assurance = false,
         dc = params.dc,
@@ -688,6 +708,23 @@ private class KingdomCheckDialog(
         )
     }
 
+    private fun createCheckContext(
+        phase: KingdomPhase?,
+        leader: Leader,
+        usedSkill: KingdomSkill
+    ): ExpressionContext = kingdom.createExpressionContext(
+        phase = phase,
+        activity = activity,
+        leader = leader,
+        usedSkill = usedSkill,
+        rollOptions = rollOptions + params.rollOptions,
+        structure = structure,
+        event = event,
+        eventStage = event?.event?.stages[eventStageIndex],
+        structureIds = settlementResult.current?.constructedStructures?.map { it.id }?.toSet().orEmpty(),
+        waterBorders = settlementResult.current?.waterBorders ?: 0,
+    )
+
     private fun determineAssuranceDegree(
         modifier: Int,
         upgradeDegrees: Set<UpgradeResult>,
@@ -794,12 +831,12 @@ suspend fun kingdomCheckDialog(
             val group = if (activityDc is String &&
                 (activityDc == ActivityDcType.NEGOTIATION.value || activityDc == ActivityDcType.NEGOTIATION_OR_CONTROL.value)
             ) {
-                pickGroup(groups, required=false)
+                pickGroup(groups, required = false)
             } else {
                 null
             }
             val event = if (activityDc == ActivityDcType.EVENT.value) {
-                pickEvent(events, settlementResult.allSettlements, required=false)
+                pickEvent(events, settlementResult.allSettlements, required = false)
             } else {
                 null
             }
@@ -832,6 +869,7 @@ suspend fun kingdomCheckDialog(
                 armyConditions = game.getSelectedArmyConditions(),
                 rollOptions = if (group?.atWar == true) setOf("group-at-war") else emptySet(),
                 event = event,
+                defaultToBestSkill = check.activity.defaultToBestSkill == true,
             )
         }
 
@@ -905,7 +943,7 @@ suspend fun kingdomCheckDialog(
     val baseModifiers = kingdom.createModifiers(
         settlements = settlementResult,
         armyConditions = params.armyConditions,
-    ) + params.activity?.parseModifiers().orEmpty() + if(check is CheckType.HandleEvent) {
+    ) + params.activity?.parseModifiers().orEmpty() + if (check is CheckType.HandleEvent) {
         params.event?.event?.modifiers.orEmpty()
     } else {
         emptyList()

@@ -7,6 +7,7 @@
   "dc": "control",
   "title": "activities.recover-army-damaged.title",
   "description": "activities.recover-army-damaged.description",
+  "defaultToBestSkill": true,
   "skills": {
     "defense": 0,
     "folklore": 2

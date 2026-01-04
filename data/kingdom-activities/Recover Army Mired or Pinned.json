@@ -7,6 +7,7 @@
   "dc": "control",
   "title": "activities.recover-army-mired-pinned.title",
   "description": "activities.recover-army-mired-pinned.description",
+  "defaultToBestSkill": true,
   "skills": {
     "engineering": 0,
     "magic": 2

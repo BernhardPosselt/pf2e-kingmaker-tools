@@ -7,6 +7,7 @@
   "dc": "control",
   "title": "activities.celebrate-holiday-vk.title",
   "description": "activities.celebrate-holiday-vk.description",
+  "defaultToBestSkill": true,
   "skills": {
     "folklore": 0,
     "politics": 0

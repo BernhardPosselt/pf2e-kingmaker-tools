@@ -61,6 +61,7 @@ external interface RawActivity {
     var criticalFailure: ActivityResult?
     var modifiers: Array<RawModifier>?
     val order: Int?
+    val defaultToBestSkill: Boolean?
 }
 
 fun RawActivity.canBePerformed(
