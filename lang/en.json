@@ -3065,7 +3065,7 @@
         }
       },
       "establish-work-site-lumber": {
-        "title": "Establish Work Site Lumber Camp",
+        "title": "Establish Work Site: Lumber Camp",
         "description": "<p>Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:</p> <ul> <li><b>Mountains</b>: @lose12ResourcePoints</li> <li><b>Swamps</b>: @lose8ResourcePoints</li> <li><b>Forests</b>: @lose4ResourcePoints</li> <li><b>Hills</b>: @lose2ResourcePoints</li> <li><b>Plains</b>: @lose1ResourcePoints</li> </ul> <p>Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.</p>",
         "criticalSuccess": {
           "msg": "<p>You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.</p>",
@@ -3087,7 +3087,7 @@
         }
       },
       "establish-work-site-mine": {
-        "title": "Establish Work Site Mine",
+        "title": "Establish Work Site: Mine",
         "description": "<p>Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:</p> <ul> <li><b>Mountains</b>: @lose12ResourcePoints</li> <li><b>Swamps</b>: @lose8ResourcePoints</li> <li><b>Forests</b>: @lose4ResourcePoints</li> <li><b>Hills</b>: @lose2ResourcePoints</li> <li><b>Plains</b>: @lose1ResourcePoints</li> </ul> <p>Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.</p>",
         "criticalSuccess": {
           "msg": "<p>You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.</p>",
@@ -3109,7 +3109,7 @@
         }
       },
       "establish-work-site-quarry": {
-        "title": "Establish Work Site Quarry",
+        "title": "Establish Work Site: Quarry",
         "description": "<p>Your hire a crew of workers to travel to a hex that contains Lumber, Ore, or Stone to be harvested. Spend RP as determined by the hex’s most inhospitable terrain:</p> <ul> <li><b>Mountains</b>: @lose12ResourcePoints</li> <li><b>Swamps</b>: @lose8ResourcePoints</li> <li><b>Forests</b>: @lose4ResourcePoints</li> <li><b>Hills</b>: @lose2ResourcePoints</li> <li><b>Plains</b>: @lose1ResourcePoints</li> </ul> <p>Then attempt a basic check. Lumber camps can be established in any hex that contains a significant amount of forest terrain. Mines and quarries can be established in any hex that contains a significant amount of hill or mountain terrain.</p>",
         "criticalSuccess": {
           "msg": "<p>You establish a Work Site in the hex and proceed to discover an unexpectedly rich supply of high quality Commodities. All Commodity yields granted by this site are doubled until the end of the next Kingdom turn.</p>",
@@ -3929,7 +3929,7 @@
         }
       },
       "repair-reputation-corruption": {
-        "title": "Repair Reputation Corruption",
+        "title": "Repair Reputation: Corruption",
         "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.</p><p>The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
         "criticalSuccess": {
           "msg": "<p>@lose2Corruption and reduce its current ruin penalty by 1 to a minimum of 0.</p>"
@@ -3946,7 +3946,7 @@
       },
       "repair-reputation-crime": {
         "automationNotes": "Critical Failure timeout for 3 turns is not tracked",
-        "title": "Repair Reputation Crime",
+        "title": "Repair Reputation: Crime",
         "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions. </p><p>The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
         "criticalSuccess": {
           "msg": "<p>@lose2Crime and reduce its current ruin penalty by 1 to a minimum of 0.</p>"
@@ -3962,7 +3962,7 @@
         }
       },
       "repair-reputation-decay": {
-        "title": "Repair Reputation Decay",
+        "title": "Repair Reputation: Decay",
         "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions. </p><p>The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
         "criticalSuccess": {
           "msg": "<p>@lose2Decay and reduce its current ruin penalty by 1 to a minimum of 0.</p>"
@@ -3978,7 +3978,7 @@
         }
       },
       "repair-reputation-strife": {
-        "title": "Repair Reputation Strife",
+        "title": "Repair Reputation: Strife",
         "description": "<p>When things have gotten out of hand in the kingdom and the nation’s reputation has become damaged, you can focus efforts on a campaign to reassure the citizens and bring them closer together, stamp down crime, organize repairs and maintenance of public structures, or strive to adjust poor public opinions.</p><p>The skill used to Repair Reputation depends on which Ruin total you wish to reduce. If you wish to reduce your Corruption, you attempt an Arts check. If you wish to reduce your Crime, you attempt a Trade check. If you wish to reduce your Decay, you attempt an Engineering check. If you wish to reduce your Strife, you attempt an Intrigue check. In all cases, the DC is your Control DC + 2.</p>",
         "criticalSuccess": {
           "msg": "<p>@lose2Strife and reduce its current ruin penalty by 1 to a minimum of 0.</p>"
