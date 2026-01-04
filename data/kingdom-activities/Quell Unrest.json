@@ -7,6 +7,7 @@
   "dc": "control",
   "title": "activities.quell-unrest.title",
   "description": "activities.quell-unrest.description",
+  "defaultToBestSkill": true,
   "skills": {
     "arts": 0,
     "folklore": 0,

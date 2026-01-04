@@ -7,6 +7,7 @@
   "dc": "control",
   "title": "activities.take-charge-vk.title",
   "description": "activities.take-charge-vk.description",
+  "defaultToBestSkill": true,
   "skills": {
     "agriculture": 1,
     "arts": 1,

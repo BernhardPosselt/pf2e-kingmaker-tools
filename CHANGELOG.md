@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Celebrate Holiday (V&K)
   * Recover Army variants
   * Train Army
+  * Pledge of Fealty
+  * Take Charge (V&K)
+  * Quell Unrest
 
 ## [5.7.5] - 2025-10-31
 

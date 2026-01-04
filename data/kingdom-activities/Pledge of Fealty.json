@@ -7,6 +7,7 @@
   "dc": "negotiation",
   "title": "activities.pledge-of-fealty.title",
   "description": "activities.pledge-of-fealty.description",
+  "defaultToBestSkill": true,
   "skills": {
     "intrigue": 1,
     "statecraft": 1,
