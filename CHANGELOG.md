@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Autocalculate total loss in food rather than requiring users to insert it manually
+* Auto calculate total loss in food rather than requiring users to insert it manually
 
 
 ## [5.7.4] - 2025-10-31

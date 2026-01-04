@@ -102,7 +102,7 @@ fun Array<RawBonusFeat>.toContext(
                     skillRanks = skillRanks,
                     abilityScores = abilityScores,
                 ) == true,
-                removeLeaderVacancyPenalty = if (feat?.removeLeaderVacancyPenalty == true) {
+                removeLeaderVacancyPenalty = if (feat.removeLeaderVacancyPenalty == true) {
                     Select.fromEnum<Leader>(
                         label = t("kingdom.supportedLeader"),
                         name = "bonusFeats.$index.supportedLeader",

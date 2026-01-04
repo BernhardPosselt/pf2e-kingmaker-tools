@@ -333,13 +333,13 @@ class ActivityApplication(
                             stacked = false,
                         ),
                         SkillPicker(
-                            context = toSkillContext(currentActivity.skills ?: emptyArray()),
+                            context = toSkillContext(currentActivity.skills),
                             stacked = false,
                         ),
                         CheckboxInput(
                             label = t("camping.secretCheck"),
                             name = "isSecret",
-                            value = currentActivity.isSecret ?: false,
+                            value = currentActivity.isSecret,
                         ),
                     ),
                 ),
