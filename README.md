@@ -82,7 +82,7 @@ Make sure you have FoundryVTT installed, and that you've launched it at least on
 Install the following things:
 
 * [git](https://git-scm.com/downloads/win) (pick all the default options)
-* [node](https://nodejs.org/en/download) click the green button named **Windows Installer (.msi)**
+* [node 24](https://nodejs.org/en/download) click the green button named **Windows Installer (.msi)**
 * [JDK 25](https://adoptium.net/installation/) launch a Windows terminal and paste the following:
 
       winget install EclipseAdoptium.Temurin.25.JDK
