@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.8.0] - 2026-01-06
+
+### Fixed
+
+* Do not refund resources when upgrading a structure where the upgraded to structure does not require more of said resource
+
 ### Changed
 
 * When using manual settlement management, always use occupied blocks when figuring out settlement level; remove unused settlement level configuration

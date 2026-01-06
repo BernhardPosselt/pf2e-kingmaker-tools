@@ -42,11 +42,11 @@ data class Construction(
     )
 
     fun upgradeFrom(other: Construction) = copy(
-        lumber = lumber - other.lumber,
-        luxuries = luxuries - other.luxuries,
-        ore = ore - other.ore,
-        stone = stone - other.stone,
-        rp = rp - other.rp,
+        lumber = max(lumber - other.lumber, 0),
+        luxuries = max(luxuries - other.luxuries, 0),
+        ore = max(ore - other.ore, 0),
+        stone = max(stone - other.stone, 0),
+        rp = max(rp - other.rp, 0),
     )
 
     fun hasFunds(
