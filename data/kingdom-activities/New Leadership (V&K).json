@@ -8,6 +8,7 @@
   "dc": "control",
   "title": "activities.new-leadership-vk.title",
   "description": "activities.new-leadership-vk.description",
+  "defaultToBestSkill": true,
   "skills": {
     "intrigue": 0,
     "politics": 0,

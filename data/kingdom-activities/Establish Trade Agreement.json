@@ -8,6 +8,7 @@
   "title": "activities.establish-trade-agreement.title",
   "description": "activities.establish-trade-agreement.description",
   "requirement": "activities.establish-trade-agreement.requirement",
+  "defaultToBestSkill": true,
   "skills": {
     "boating": 0,
     "trade": 0,

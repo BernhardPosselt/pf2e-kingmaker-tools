@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Also Default to the skill with the highest modifier for the following kingdom activities:
+  * Establish Trade Agreement
+  * New Leadership
+
+
 ## [5.8.0] - 2026-01-06
 
 ### Fixed

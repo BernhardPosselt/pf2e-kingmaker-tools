@@ -8,6 +8,7 @@
   "dc": "control",
   "title": "activities.new-leadership.title",
   "description": "activities.new-leadership.description",
+  "defaultToBestSkill": true,
   "modifiers": [
     {
       "type": "circumstance",
