@@ -95,16 +95,6 @@ external interface CampingData {
 suspend fun CampingData.getActorsCarryingFood(party: PF2EParty?): List<PF2EActor> =
     getActorsInCamp() + listOfNotNull(party)
 
-
-suspend fun CampingData.getAveragePartyLevel(): Int =
-    getActorsInCamp()
-        .filterIsInstance<PF2ECharacter>()
-        .map { it.level }
-        .takeIf { it.isNotEmpty() }
-        ?.average()
-        ?.toInt()
-        ?: 1
-
 suspend fun CampingData.getActorsInCamp(
     campingActivityOnly: Boolean = false,
 ): List<PF2EActor> = coroutineScope {
@@ -405,6 +395,20 @@ fun Game.getCampingActors(): List<CampingActor> =
     actors.contents
         .filterIsInstance<CampingActor>()
         .filter { it.getCamping() != null }
+
+fun Game.getAveragePartyLevel(): Int {
+    val members = actors.contents
+        .filterIsInstance<PF2EParty>()
+        .firstOrNull { it.active }
+        ?.members ?: emptyArray()
+    return members
+        .filterIsInstance<PF2ECharacter>()
+        .map { it.level }
+        .takeIf { it.isNotEmpty() }
+        ?.average()
+        ?.toInt()
+        ?: 1
+}
 
 fun Game.getActiveCamping(): CampingData? {
     val campingActors = getCampingActors()

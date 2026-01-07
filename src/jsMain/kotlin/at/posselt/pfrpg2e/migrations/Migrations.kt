@@ -50,6 +50,7 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     val currentVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
         .takeIf { it != 0 }
         ?: latestMigrationVersion
+    settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(currentVersion)
     console.log("${t("moduleName")}: ${t("migrations.upgradingFromTo", recordOf("fromVersion" to currentVersion, "toVersion" to latestMigrationVersion))}")
     if (currentVersion < 16) {
         ui.notifications.error(

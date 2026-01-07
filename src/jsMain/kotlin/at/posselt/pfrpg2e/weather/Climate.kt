@@ -1,7 +1,6 @@
 package at.posselt.pfrpg2e.weather
 
 import at.posselt.pfrpg2e.Config
-import at.posselt.pfrpg2e.camping.getActiveCamping
 import at.posselt.pfrpg2e.camping.getAveragePartyLevel
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.regions.Climate
@@ -177,15 +176,12 @@ suspend fun rollWeather(game: Game) {
             weatherEventDc = climateSetting.weatherEventDc,
         )
     }.toTypedArray()
-    val camping = game.getActiveCamping()
-    if (camping != null) {
-        rollWeather(
-            game = game,
-            month = game.getCurrentMonth(),
-            climate = climate,
-            averagePartyLevel = camping.getAveragePartyLevel(),
-            maximumRange = settings.getWeatherHazardRange(),
-            rollMode = settings.getWeatherRollMode(),
-        )
-    }
+    rollWeather(
+        game = game,
+        month = game.getCurrentMonth(),
+        climate = climate,
+        averagePartyLevel = game.getAveragePartyLevel(),
+        maximumRange = settings.getWeatherHazardRange(),
+        rollMode = settings.getWeatherRollMode(),
+    )
 }

@@ -23,7 +23,7 @@ suspend fun rollRandomEncounter(
     actor.getCamping()?.let { camping ->
         val currentRegion = camping.findCurrentRegion() ?: camping.regionSettings.regions.firstOrNull()
         currentRegion?.let { region ->
-            val partyLevel = camping.getAveragePartyLevel()
+            val partyLevel = game.getAveragePartyLevel()
             return rollRandomEncounter(
                 camping = camping,
                 includeFlatCheck = includeFlatCheck,

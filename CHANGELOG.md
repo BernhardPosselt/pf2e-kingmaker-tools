@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.8.1] - 2026-01-07
+
+### Fixed
+
+* Enable weather without having to create a camping sheet first
+* Properly persist current schema version if none is set yet
+
 ### Changed
 
 * Also Default to the skill with the highest modifier for the following kingdom activities:
