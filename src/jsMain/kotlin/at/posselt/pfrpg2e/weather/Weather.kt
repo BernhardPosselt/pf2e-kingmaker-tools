@@ -1,16 +1,12 @@
 package at.posselt.pfrpg2e.weather
 
 import at.posselt.pfrpg2e.data.regions.WeatherEffect
+import at.posselt.pfrpg2e.data.regions.WeatherType
+import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.utils.getPF2EWorldTime
 import at.posselt.pfrpg2e.utils.isFirstGM
 import com.foundryvtt.core.Game
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.minus
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
 
 /**
  * Read the persisted weather effect name and sound and apply them
@@ -31,17 +27,16 @@ suspend fun syncWeather(game: Game) {
 }
 
 
-suspend fun setWeather(game: Game, weatherEffect: WeatherEffect) {
+suspend fun setWeather(game: Game, weatherEffect: WeatherEffect, type: WeatherType) {
     game.settings.pfrpg2eKingdomCampingWeather.setCurrentWeatherFx(weatherEffect.toCamelCase())
+    game.settings.pfrpg2eKingdomCampingWeather.setCurrentWeatherType(type.value)
     syncWeather(game)
 }
 
-fun dayHasChanged(game: Game, deltaInSeconds: Int): Boolean {
-    val now = game.getPF2EWorldTime()
-    val beforeUpdate = now.toInstant(TimeZone.UTC)
-        .minus(deltaInSeconds, DateTimeUnit.SECOND)
-        .toLocalDateTime(TimeZone.UTC)
-    return now.day != beforeUpdate.day
-            || now.month != beforeUpdate.month
-            || now.year != beforeUpdate.year
-}
+fun Game.getCurrentWeatherType(): WeatherType =
+    if (settings.pfrpg2eKingdomCampingWeather.getEnableWeather()) {
+        fromCamelCase<WeatherType>(settings.pfrpg2eKingdomCampingWeather.getCurrentWeatherType())
+            ?: WeatherType.SUNNY
+    } else {
+        WeatherType.SUNNY
+    }

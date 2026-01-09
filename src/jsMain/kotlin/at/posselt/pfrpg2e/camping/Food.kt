@@ -63,7 +63,12 @@ suspend fun PF2EActor.getAppliedMealEffects(mealEffects: List<MealEffect>): List
 
 fun mealEffectsChangingRestDuration(recipes: List<RecipeData>): List<MealEffect> =
     mealEffectsHaving(recipes) {
-        it.changeRestDurationSeconds != null
+        it.changeRestDurationSeconds != null && it.changeRestDurationSeconds != 0
+    }
+
+fun mealEffectsChangingFatigueDuration(recipes: List<RecipeData>): List<MealEffect> =
+    mealEffectsHaving(recipes) {
+        it.changeFatigueDurationSeconds != null && it.changeFatigueDurationSeconds != 0
     }
 
 fun mealEffectsDoublingHealing(recipes: List<RecipeData>): List<MealEffect> =

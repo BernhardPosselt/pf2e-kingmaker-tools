@@ -22,6 +22,13 @@
                     data-activities="-1"
                     title="{{localizeKM "camping.retractHexActivity" duration=hexplorationActivityDuration}}">-1
             </button>
+            <button class="km-camping-action {{#if night.retractTravel}}night-mode{{/if}}"
+                    data-action="travel"
+                    type="button"
+                    data-activities="-1"
+                    title="{{localizeKM "camping.retractTravel" duration=hexplorationActivityDuration}}">
+                - <i class="fa-solid fa-route"></i>
+            </button>
         {{/if}}
         <div id="km-camping-time" class="{{#if night.time}}night-mode{{/if}}">
             <div id="km-camping-time-wrapper">
@@ -34,6 +41,13 @@
             </div>
         </div>
         {{#if isGM}}
+            <button class="km-camping-action {{#if night.advanceTravel}}night-mode{{/if}}"
+                    data-action="travel"
+                    type="button"
+                    data-activities="1"
+                    title="{{localizeKM "camping.advanceTravel" duration=hexplorationActivityDuration}}">
+                + <i class="fa-solid fa-route"></i>
+            </button>
             <button class="km-camping-action {{#if night.advanceHex}}night-mode{{/if}}"
                     id="km-camping-plus-hexploration"
                     type="button"

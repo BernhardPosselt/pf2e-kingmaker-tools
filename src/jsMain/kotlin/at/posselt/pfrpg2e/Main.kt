@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.bindCampingChatEventListeners
 import at.posselt.pfrpg2e.camping.openOrCreateCampingSheet
 import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
+import at.posselt.pfrpg2e.camping.registerFatiguedHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.combat.registerCombatTrackHooks
 import at.posselt.pfrpg2e.combat.registerCombatXpHooks
@@ -95,6 +96,7 @@ fun main() {
                 registerArmyConsumptionHooks(game)
                 registerIcons(actionDispatcher)
                 registerCombatXpHooks(game)
+                registerFatiguedHooks(game)
             }
         }
 

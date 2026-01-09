@@ -63,11 +63,13 @@ data class Climate(
     val weatherEventDc: Int? = 18
 )
 
-enum class WeatherType: Translatable, ValueEnum {
-    COLD,
-    SNOWY,
-    RAINY,
-    SUNNY;
+enum class WeatherType(
+    val fatigueDurationMultiplier: Double
+): Translatable, ValueEnum {
+    COLD(.5),
+    SNOWY(.5),
+    RAINY(.5),
+    SUNNY(1.0);
 
     override val value: String
         get() = toCamelCase()

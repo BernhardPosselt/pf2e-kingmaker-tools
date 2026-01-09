@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Add camping sheet setting to automatically apply the Fatigued condition after adventuring longer than allowed; this also includes weather (if enabled) and recipe meal effects like Fish-on-a-Stick
+* Make it possible to configure an increase/decrease in fatigue duration on meal effects 
+* Add a travel button to advance/retract 1 hexploration activity worth of travel; this is used to automatically apply the Fatigued condition if you exceed the allowed Travel duration
+
+### Changed
+
+* Previous resting choices like skipping daily preparations are now persisted on the camping sheet
+* Weather is now rolled after resting
+* Separate adventure time tracker from hexploration time tracker; this prevents reducing hexploration activities from 2 to 1 when advancing a single second
+
 ## [5.8.2] - 2026-01-09
 
 ### Fixed
