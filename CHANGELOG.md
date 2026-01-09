@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Previous resting choices like skipping daily preparations are now persisted on the camping sheet
 * Weather is now rolled after resting
-* Separate adventure time tracker from hexploration time tracker; this prevents reducing hexploration activities from 2 to 1 when advancing a single second; only travel
+* Separate adventure time tracker from hexploration time tracker; this prevents reducing hexploration activities from 2 to 1 when advancing a single second
 
 ## [5.8.2] - 2026-01-09
 
