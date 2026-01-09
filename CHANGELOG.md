@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.0] - 2026-01-09
+
 ### Added
 
 * Add camping sheet setting to automatically apply the Fatigued condition after adventuring longer than allowed; this also includes weather (if enabled) and recipe meal effects like Fish-on-a-Stick
@@ -22,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fix various meal effects not applying conditions properly
-* Distinguish between meal effects that should be removed when preparing camp and ones that shouldn't
+* Do not remove meal effects with a duration during daily preparations
 * Correctly remove special meal effects when a new special meal effect is applied
 
 ## [5.8.2] - 2026-01-09
