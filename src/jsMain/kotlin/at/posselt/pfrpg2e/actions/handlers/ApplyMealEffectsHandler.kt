@@ -68,7 +68,7 @@ class ApplyMealEffectsHandler(val game: Game) : ActionHandler("applyMealEffects"
         val actorUuids = actors.map { it.uuid }.toSet()
 
         // if the meal is a special meal, remove all other effects granted by special meals
-        if (recipe.isSpecialMeal == true) {
+        if (recipe.isSpecialMeal != false) {
             removeMealEffects(
                 recipes = camping.getAllRecipes().filter { it.isSpecialMeal != false }.toList(),
                 actors = actors,
