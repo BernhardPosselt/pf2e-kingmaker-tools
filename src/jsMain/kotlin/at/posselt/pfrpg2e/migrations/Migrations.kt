@@ -47,22 +47,36 @@ private val migrations = listOf(
 private val latestMigrationVersion = migrations.maxOfOrNull { it.version }!!
 
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
-    val currentVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
-        .takeIf { it != 0 }
-        ?: latestMigrationVersion
-    settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(currentVersion)
-    console.log("${t("moduleName")}: ${t("migrations.upgradingFromTo", recordOf("fromVersion" to currentVersion, "toVersion" to latestMigrationVersion))}")
-    if (currentVersion < 16) {
-        ui.notifications.error(
-            "${t("moduleName")}: ${t("migrations.unsupportedVersions", recordOf("version" to "4.8.2 (FoundryVTT V12)"))}"
+    if (isFirstGM()) {
+        val currentVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
+            .takeIf { it != 0 }
+            ?: latestMigrationVersion
+        settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(currentVersion)
+        console.log(
+            "${t("moduleName")}: ${
+                t(
+                    "migrations.upgradingFromTo",
+                    recordOf("fromVersion" to currentVersion, "toVersion" to latestMigrationVersion)
+                )
+            }"
         )
-    } else if (isFirstGM() && currentVersion < latestMigrationVersion) {
-        try {
-            migrateFrom(currentVersion)
-        } catch (e: Throwable) {
-            console.log(e)
-            ui.notifications.error(t("migrations.failed", recordOf("version" to currentVersion)))
-            throw e
+        if (currentVersion < 16) {
+            ui.notifications.error(
+                "${t("moduleName")}: ${
+                    t(
+                        "migrations.unsupportedVersions",
+                        recordOf("version" to "4.8.2 (FoundryVTT V12)")
+                    )
+                }"
+            )
+        } else if (currentVersion < latestMigrationVersion) {
+            try {
+                migrateFrom(currentVersion)
+            } catch (e: Throwable) {
+                console.log(e)
+                ui.notifications.error(t("migrations.failed", recordOf("version" to currentVersion)))
+                throw e
+            }
         }
     }
 }

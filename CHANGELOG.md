@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.8.2] - 2026-01-09
+
+### Fixed
+
+* Only run migration checks for first GM
+
+
 ## [5.8.1] - 2026-01-07
 
 ### Fixed
