@@ -45,7 +45,8 @@
   "favoriteMeal": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.RL8zdU7YyoiduDva"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.RL8zdU7YyoiduDva",
+        "removeWhenPreparingCampsite": false
       }
     ]
   }

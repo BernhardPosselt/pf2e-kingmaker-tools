@@ -44,6 +44,9 @@
         "id": {
           "type": "string"
         },
+        "isSpecialMeal": {
+          "type": "boolean"
+        },
         "name": {
           "type": "string"
         },
@@ -149,6 +152,9 @@
       "properties": {
         "uuid": {
           "type": "string"
+        },
+        "removeWhenPreparingCampsite": {
+          "type": "boolean"
         },
         "changeRestDurationSeconds": {
           "type": "number"

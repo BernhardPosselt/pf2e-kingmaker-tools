@@ -15,14 +15,19 @@ external interface ClearMealEffectsMessage {
     val campingActorUuid: String
 }
 
-class ClearMealEffectsHandler() : ActionHandler("clearMealEffects") {
+class ClearMealEffectsHandler : ActionHandler("clearMealEffects") {
     override suspend fun execute(action: ActionMessage, dispatcher: ActionDispatcher) {
         val data = action.data.unsafeCast<ClearMealEffectsMessage>()
         val campingActor = fromUuidTypeSafe<CampingActor>(data.campingActorUuid)
         campingActor
             ?.getCamping()
             ?.let {
-                removeMealEffects(it.getAllRecipes().toList(), it.getActorsInCamp())
+                removeMealEffects(
+                    recipes = it.getAllRecipes().toList(),
+                    actors = it.getActorsInCamp(),
+                    onlyRemoveAfterRest = false,
+                    removeWhenPreparingCampsite = true
+                )
             }
     }
 }

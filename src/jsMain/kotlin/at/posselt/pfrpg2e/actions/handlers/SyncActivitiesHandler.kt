@@ -50,7 +50,12 @@ class SyncActivitiesHandler(
                     }
                 }
             if (data.clearMealEffects) {
-                removeMealEffects(camping.getAllRecipes().toList(), camping.getActorsInCamp())
+                removeMealEffects(
+                    recipes = camping.getAllRecipes().toList(),
+                    actors = camping.getActorsInCamp(),
+                    onlyRemoveAfterRest = false,
+                    removeWhenPreparingCampsite = true,
+                )
             }
             camping.syncCampingEffects(data.activities)
             if (data.rollRandomEncounter) {

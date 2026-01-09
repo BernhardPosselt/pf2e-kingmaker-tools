@@ -30,7 +30,8 @@
   "criticalFailure": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.s1DfJpXFkJorHsuu"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.s1DfJpXFkJorHsuu",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },

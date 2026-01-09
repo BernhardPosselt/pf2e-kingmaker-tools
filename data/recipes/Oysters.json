@@ -16,7 +16,8 @@
   "favoriteMeal": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.E3tZfxCJ5GQoIbei"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.E3tZfxCJ5GQoIbei",
+        "removeWhenPreparingCampsite": false
       },
       {
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.cCKgpxIsFevgENf2",
@@ -27,7 +28,8 @@
   "criticalSuccess": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ZDDZz5ynEOR20LUC"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ZDDZz5ynEOR20LUC",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },

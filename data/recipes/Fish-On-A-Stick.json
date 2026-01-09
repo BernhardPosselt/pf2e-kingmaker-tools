@@ -17,7 +17,8 @@
     "effects": [
       {
         "changeFatigueDurationSeconds": 3600,
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.8eIGJPWFlg4L94wY"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.8eIGJPWFlg4L94wY",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },
@@ -25,7 +26,8 @@
     "effects": [
       {
         "changeFatigueDurationSeconds": 7200,
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.L5sACVlUjYP6lJ7q"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.L5sACVlUjYP6lJ7q",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },
@@ -33,7 +35,8 @@
     "effects": [
       {
         "changeRestDurationSeconds": 3600,
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.c9qgXgiAJikyTM0p"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.c9qgXgiAJikyTM0p",
+        "removeAfterRest": true
       }
     ]
   },

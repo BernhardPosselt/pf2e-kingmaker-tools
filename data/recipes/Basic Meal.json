@@ -2,6 +2,7 @@
   "id": "basic-meal",
   "name": "recipes.basic-meal.name",
   "icon": "icons/consumables/grains/bread-loaf-sliced-wheat-brown.webp",
+  "isSpecialMeal": false,
   "basicIngredients": 2,
   "specialIngredients": 0,
   "cookingLoreDC": 18,

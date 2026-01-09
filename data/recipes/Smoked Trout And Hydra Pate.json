@@ -16,7 +16,8 @@
   "criticalSuccess": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.4d6roHW75xe52o7A"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.4d6roHW75xe52o7A",
+        "removeWhenPreparingCampsite": false
       }
     ],
     "message": "recipes.smoked-trout-and-hydra-plate.criticalSuccess.message"
@@ -40,7 +41,8 @@
   "favoriteMeal": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ve7NrzeHMwLsmbl3"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ve7NrzeHMwLsmbl3",
+        "removeWhenPreparingCampsite": false
       }
     ]
   }

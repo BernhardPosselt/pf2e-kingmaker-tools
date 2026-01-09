@@ -22,6 +22,7 @@ fun ReduceConditions.reducesAnyCondition() =
 @JsPlainObject
 external interface MealEffect {
     val uuid: String
+    val removeWhenPreparingCampsite: Boolean?
     val removeAfterRest: Boolean?
     val changeRestDurationSeconds: Int?
     val doublesHealing: Boolean?
@@ -54,6 +55,7 @@ fun RawCost.format() =
 external interface RecipeData {
     val id: String
     val name: String
+    val isSpecialMeal: Boolean?
     val basicIngredients: Int
     val specialIngredients: Int?
     val cookingLoreDC: Int

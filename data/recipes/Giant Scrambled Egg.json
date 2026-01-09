@@ -23,21 +23,24 @@
   "success": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.TLxckltEWbHKCXDi"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.TLxckltEWbHKCXDi",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },
   "criticalFailure": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.pTjrRRqxUJnbDRIB"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.pTjrRRqxUJnbDRIB",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },
   "criticalSuccess": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.f2yKkelj374SNszb"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.f2yKkelj374SNszb",
+        "removeWhenPreparingCampsite": false
       }
     ]
   }

@@ -108,11 +108,14 @@ private fun getAllOutcomeEffects(recipe: RecipeData): List<MealEffect> =
 private suspend fun getMealEffectItems(
     recipe: RecipeData,
     onlyRemoveAfterRest: Boolean = false,
+    removeWhenPreparingCampsite: Boolean,
 ): List<PF2EEffect> = coroutineScope {
     getAllOutcomeEffects(recipe)
         .filter {
             if (onlyRemoveAfterRest) {
                 it.removeAfterRest == true
+            } else if (removeWhenPreparingCampsite) {
+                it.removeWhenPreparingCampsite != false
             } else {
                 true
             }
@@ -126,9 +129,10 @@ private suspend fun getMealEffectItems(
 suspend fun getMealEffectItems(
     recipes: List<RecipeData>,
     onlyRemoveAfterRest: Boolean = false,
+    removeWhenPreparingCampsite: Boolean,
 ): List<PF2EEffect> = coroutineScope {
     recipes
-        .map { async { getMealEffectItems(it, onlyRemoveAfterRest) } }
+        .map { async { getMealEffectItems(it, onlyRemoveAfterRest, removeWhenPreparingCampsite) } }
         .awaitAll()
         .flatten()
 }
@@ -160,8 +164,9 @@ suspend fun removeMealEffects(
     recipes: List<RecipeData>,
     actors: List<PF2EActor>,
     onlyRemoveAfterRest: Boolean = false,
+    removeWhenPreparingCampsite: Boolean,
 ) = coroutineScope {
-    val effects = getMealEffectItems(recipes, onlyRemoveAfterRest)
+    val effects = getMealEffectItems(recipes, onlyRemoveAfterRest, removeWhenPreparingCampsite)
     actors
         .map { async { it.clearEffects(effects) } }
         .awaitAll()

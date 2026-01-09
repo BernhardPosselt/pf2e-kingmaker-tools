@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Weather is now rolled after resting
 * Separate adventure time tracker from hexploration time tracker; this prevents reducing hexploration activities from 2 to 1 when advancing a single second
 
+### Fixed
+
+* Fix various meal effects not applying conditions properly
+* Distinguish between meal effects that should be removed when preparing camp and ones that shouldn't
+* Correctly remove special meal effects when a new special meal effect is applied
+
 ## [5.8.2] - 2026-01-09
 
 ### Fixed

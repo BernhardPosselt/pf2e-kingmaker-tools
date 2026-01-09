@@ -31,14 +31,16 @@
   "criticalFailure": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.X8sGtdz4yfVl2pKJ"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.X8sGtdz4yfVl2pKJ",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },
   "criticalSuccess": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ebP1xWOh7vGZmmlz"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ebP1xWOh7vGZmmlz",
+        "removeWhenPreparingCampsite": false
       }
     ]
   }

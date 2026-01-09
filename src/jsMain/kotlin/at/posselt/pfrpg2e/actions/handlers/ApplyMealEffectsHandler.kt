@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCompendiumFoodItems
 import at.posselt.pfrpg2e.camping.reduceFoodBy
+import at.posselt.pfrpg2e.camping.removeMealEffects
 import at.posselt.pfrpg2e.camping.sum
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
@@ -65,6 +66,16 @@ class ApplyMealEffectsHandler(val game: Game) : ActionHandler("applyMealEffects"
         } ?: return
         val actors = chosenMeals.map { it.actor }
         val actorUuids = actors.map { it.uuid }.toSet()
+
+        // if the meal is a special meal, remove all other effects granted by special meals
+        if (recipe.isSpecialMeal == true) {
+            removeMealEffects(
+                recipes = camping.getAllRecipes().filter { it.isSpecialMeal != false }.toList(),
+                actors = actors,
+                onlyRemoveAfterRest = false,
+                removeWhenPreparingCampsite = false,
+            )
+        }
 
         applyConsumptionMealEffects(
             actors = actors,

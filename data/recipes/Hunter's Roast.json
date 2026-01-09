@@ -24,7 +24,8 @@
   "criticalSuccess": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.LiXnKWPOkDBZRpLE"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.LiXnKWPOkDBZRpLE",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },

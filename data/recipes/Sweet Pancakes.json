@@ -16,28 +16,32 @@
   "success": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.BXTnX9xhnYvolrFk"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.BXTnX9xhnYvolrFk",
+        "removeAfterRest": true
       }
     ]
   },
   "favoriteMeal": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Lpo0XSUVmGDQaXtz"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.Lpo0XSUVmGDQaXtz",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },
   "criticalFailure": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ovbBMpOBtB1CrLOv"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.ovbBMpOBtB1CrLOv",
+        "removeWhenPreparingCampsite": false
       }
     ]
   },
   "criticalSuccess": {
     "effects": [
       {
-        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.q5JHZeJeAIscA1ky"
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.q5JHZeJeAIscA1ky",
+        "removeWhenPreparingCampsite": false
       }
     ]
   }

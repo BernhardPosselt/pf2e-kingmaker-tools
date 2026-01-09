@@ -316,8 +316,12 @@ private suspend fun completeDailyPreparations(
     game.pf2e.actions.restForTheNight(RestForTheNightOptions(actors = actors.toTypedArray(), skipDialog = true))
         .await()
     applyAdditionalHealing(additionalHealing)
-    applyRestHealEffects(actors, recipes, getMealEffectItems(recipes))
-    removeMealEffects(recipes, actors, onlyRemoveAfterRest = true)
+    applyRestHealEffects(actors, recipes, getMealEffectItems(
+        recipes = recipes,
+        onlyRemoveAfterRest = false,
+        removeWhenPreparingCampsite = false,
+    ))
+    removeMealEffects(recipes, actors, onlyRemoveAfterRest = true, removeWhenPreparingCampsite = false)
     removeProvisions(actors + listOfNotNull(party))
     removeCombatEffects(actors)
     gainMinimumSubsistence(dispatcher, camping.cooking.minimumSubsistence, party)
