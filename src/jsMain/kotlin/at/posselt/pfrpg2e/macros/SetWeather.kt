@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.regions.WeatherEffect
+import at.posselt.pfrpg2e.data.regions.WeatherType
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.t
@@ -37,6 +38,13 @@ suspend fun setWeatherMacro(game: Game) {
             .takeIf(String::isNotBlank)
             ?.let { name -> fromCamelCase<WeatherEffect>(name) }
             ?: WeatherEffect.NONE
-        setWeather(game, effect)
+        val type = when (effect) {
+            WeatherEffect.SNOW,
+            WeatherEffect.BLIZZARD -> WeatherType.SNOWY
+            WeatherEffect.RAIN,
+            WeatherEffect.RAIN_STORM-> WeatherType.RAINY
+            else -> WeatherType.SUNNY
+        }
+        setWeather(game, effect, type)
     }
 }

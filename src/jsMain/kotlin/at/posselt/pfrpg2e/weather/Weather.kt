@@ -27,8 +27,9 @@ suspend fun syncWeather(game: Game) {
 }
 
 
-suspend fun setWeather(game: Game, weatherEffect: WeatherEffect) {
+suspend fun setWeather(game: Game, weatherEffect: WeatherEffect, type: WeatherType) {
     game.settings.pfrpg2eKingdomCampingWeather.setCurrentWeatherFx(weatherEffect.toCamelCase())
+    game.settings.pfrpg2eKingdomCampingWeather.setCurrentWeatherType(type.value)
     syncWeather(game)
 }
 

@@ -336,7 +336,7 @@
       "autoApplyFatigued": "Automatically apply Fatigued",
       "autoApplyFatiguedHelp": "Based on weather and meal effects, apply the Fatigued condition to actors in camp after advancing time",
       "fatigueDuration": "Change Fatigued duration (Seconds)",
-      "fatigueDurationHelp": "Increase or decrease duration until character becomes fatigued in seconds. Use negative values to reduce duration and positive to increase"
+      "fatigueDurationHelp": "Increase or decrease duration until character becomes fatigued in seconds. Use negative values to decrease duration and positive to increase"
     },
     "settlementNav": {
       "status": "Status",

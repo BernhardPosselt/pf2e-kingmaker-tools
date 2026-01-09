@@ -223,6 +223,13 @@ fun getDefaultCamping(game: Game): CampingData {
         alwaysPerformActivityIds = emptyArray(),
         restingTrack = null,
         autoApplyFatigued = false,
+        restSettings = RestSettings(
+            skipWatch = false,
+            skipDailyPreparations = false,
+            disableRandomEncounter = false,
+            skipWeather = false,
+        ),
+        secondsSpentHexploring = 0,
         regionSettings = RegionSettings(
             regions = arrayOf(
                 RegionSetting(
