@@ -15,7 +15,6 @@ import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.documents.onPreUpdateScene
 import com.foundryvtt.core.documents.onUpdateScene
 import com.foundryvtt.core.helpers.TypedHooks
-import com.foundryvtt.core.helpers.onUpdateWorldTime
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -79,15 +78,6 @@ fun registerWeatherHooks(game: Game) {
             val weather = getCurrentWeatherFx(settings)
             buildPromise {
                 changeSoundTo(game, weather)
-            }
-        }
-    }
-    TypedHooks.onUpdateWorldTime { _, deltaInSeconds, _, _ ->
-        if (game.settings.pfrpg2eKingdomCampingWeather.getAutoRollWeather()) {
-            if (game.isFirstGM() && dayHasChanged(game, deltaInSeconds)) {
-                buildPromise {
-                    rollWeather(game)
-                }
             }
         }
     }

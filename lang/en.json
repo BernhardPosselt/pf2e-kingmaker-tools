@@ -57,8 +57,6 @@
       "enableWeather": "Enable Weather",
       "enableWeatherSoundFx": "Enable Ambient Weather Sounds",
       "enableWeatherSoundFxHelp": "If enabled, will play rain and snow tracks from the official module. You can override this behavior by creating playlists named like \"weather.blizzard\" or \"weather.rain\".",
-      "autoRollWeather": "Auto Roll Weather",
-      "autoRollWeatherHelp": "When a new day begins (00:00), automatically roll weather",
       "weatherRollMode": "Weather Roll Mode",
       "weatherHazardRange": "Weather Hazard Range",
       "weatherHazardRangeHelp": "Roll weather events up and equal to Party Level plus this value",
@@ -154,6 +152,7 @@
       "checkingSecondWeatherEvent": "Checking for Second Weather Event with DC {dc}"
     },
     "camping": {
+      "checkWeather": "Roll Weather",
       "hours": "{count, plural, =1 {1 Hour} other {# Hours}}",
       "rest": "Rest",
       "continue": "Continue",
@@ -321,6 +320,8 @@
       "advanceHours": "Advance {count, plural, =1 {1 Hour} other {# Hours}}",
       "retractHexActivity": "Retract 1 Hexploration Activity ({duration})",
       "advanceHexActivity": "Advance 1 Hexploration Activity ({duration})",
+      "retractTravel": "Retract 1 Travel Hexploration Activity ({duration})",
+      "advanceTravel": "Advance 1 Travel Hexploration Activity ({duration})",
       "continueUntilFullyRested": "Continue until fully rested",
       "restAndDailyPreps": "Rest & Daily Preparations",
       "adventuringDuration": "Adventuring:",
@@ -331,7 +332,11 @@
       "increaseDc": "Increase Encounter DC",
       "resetDc": "Reset Encounter DC",
       "encounterDc": "Encounter DC",
-      "hoursSymbol": "h"
+      "hoursSymbol": "h",
+      "autoApplyFatigued": "Automatically apply Fatigued",
+      "autoApplyFatiguedHelp": "Based on weather and meal effects, apply the Fatigued condition to actors in camp after advancing time",
+      "fatigueDuration": "Change Fatigued duration (Seconds)",
+      "fatigueDurationHelp": "Increase or decrease duration until character becomes fatigued in seconds. Use negative values to reduce duration and positive to increase"
     },
     "settlementNav": {
       "status": "Status",

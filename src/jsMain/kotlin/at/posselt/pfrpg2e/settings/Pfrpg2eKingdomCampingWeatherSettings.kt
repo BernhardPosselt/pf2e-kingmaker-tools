@@ -239,12 +239,6 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     fun getEnableSheltered(): Boolean =
         game.settings.getBoolean("enableSheltered")
 
-    suspend fun setAutoRollWeather(value: Boolean) =
-        game.settings.setBoolean("autoRollWeather", value)
-
-    fun getAutoRollWeather(): Boolean =
-        game.settings.getBoolean("autoRollWeather")
-
     suspend fun setEnableWeather(value: Boolean) =
         game.settings.setBoolean("enableWeather", value)
 
@@ -269,12 +263,19 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     fun getCurrentWeatherFx(): String =
         game.settings.getString("currentWeatherFx")
 
+    suspend fun setCurrentWeatherType(value: String) =
+        game.settings.setString("currentWeatherType", value)
+
+    fun getCurrentWeatherType(): String =
+        game.settings.getString("currentWeatherType")
+
     private object nonUserVisibleSettings {
         val booleans = mapOf(
             "enableSheltered" to false,
         )
         val strings = mapOf(
             "currentWeatherFx" to "none",
+            "currentWeatherType" to "sunny",
             "latestMigrationBackup" to "{}"
         )
     }
@@ -344,12 +345,6 @@ object Pfrpg2eKingdomCampingWeatherSettings {
             key = "enableWeatherSoundFx",
             name = t("settings.enableWeatherSoundFx"),
             hint = t("settings.enableWeatherSoundFxHelp"),
-            default = true,
-        )
-        game.settings.registerScalar<Boolean>(
-            key = "autoRollWeather",
-            name = t("settings.autoRollWeather"),
-            hint = t("settings.autoRollWeatherHelp"),
             default = true,
         )
         game.settings.registerScalar<String>(

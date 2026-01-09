@@ -16,6 +16,7 @@
   "success": {
     "effects": [
       {
+        "changeFatigueDurationSeconds": 7200,
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.1VchCdA1LMBhYENe"
       }
     ]
@@ -38,6 +39,7 @@
   "criticalSuccess": {
     "effects": [
       {
+        "changeFatigueDurationSeconds": 14400,
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.MI6MF3R5OswdGBUd"
       },
       {

@@ -26,6 +26,7 @@ import at.posselt.pfrpg2e.camping.dialogs.RegionConfig
 import at.posselt.pfrpg2e.camping.dialogs.pickSpecialRecipe
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.resting.EIGHT_HOURS_SECONDS
 import at.posselt.pfrpg2e.resting.getTotalRestDuration
 import at.posselt.pfrpg2e.resting.rest
 import at.posselt.pfrpg2e.takeIfInstance
@@ -108,6 +109,8 @@ external interface NightModes {
     val advanceHex: Boolean
     val advance1: Boolean
     val advance2: Boolean
+    val advanceTravel: Boolean
+    val retractTravel: Boolean
     val rest: Boolean
 }
 
@@ -200,13 +203,15 @@ private fun isNightMode(
 
 private fun calculateNightModes(time: LocalTime): NightModes {
     return NightModes(
-        retract2 = isNightMode(time, "10:00", "23:00"),
-        retract1 = isNightMode(time, "09:00", "22:00"),
-        retractHex = isNightMode(time, "08:00", "21:00"),
+        retract2 = isNightMode(time, "11:00", "00:00"),
+        retract1 = isNightMode(time, "10:00", "23:00"),
+        retractHex = isNightMode(time, "09:00", "22:00"),
+        retractTravel = isNightMode(time, "08:00", "21:00"),
         time = isNightMode(time, "06:00", "19:00"),
-        advanceHex = isNightMode(time, "04:00", "17:00"),
-        advance1 = isNightMode(time, "03:00", "16:00"),
-        advance2 = isNightMode(time, "02:00", "15:00"),
+        advanceTravel = isNightMode(time, "04:00", "17:00"),
+        advanceHex = isNightMode(time, "03:00", "16:00"),
+        advance1 = isNightMode(time, "02:00", "15:00"),
+        advance2 = isNightMode(time, "01:00", "14:00"),
         rest = isNightMode(time, "19:00", "08:00"),
     )
 }
@@ -334,13 +339,15 @@ class CampingSheet(
                                 skipWatch = false,
                                 skipDailyPreparations = false,
                                 disableRandomEncounter = false,
+                                skipWeather = camping.previousRestSettings().skipWeather,
                                 party = actor,
                             )
                         }
                     } else {
                         ConfirmWatchApplication(
                             camping = camping,
-                        ) { enableWatch, enableDailyPreparations, checkRandomEncounter ->
+                            game = game,
+                        ) { enableWatch, enableDailyPreparations, checkRandomEncounter, checkWeather ->
                             buildPromise {
                                 rest(
                                     game = game,
@@ -350,6 +357,7 @@ class CampingSheet(
                                     skipWatch = !enableWatch,
                                     skipDailyPreparations = !enableDailyPreparations,
                                     disableRandomEncounter = !checkRandomEncounter,
+                                    skipWeather = !checkWeather,
                                     party = actor,
                                 )
                             }
@@ -391,7 +399,11 @@ class CampingSheet(
             }
 
             "advance-hexploration" -> buildPromise {
-                advanceHexplorationActivities(target)
+                advanceHexplorationActivities(target, false)
+            }
+
+            "travel" -> buildPromise {
+                advanceHexplorationActivities(target, true)
             }
 
             "clear-actor" -> {
@@ -724,6 +736,8 @@ class CampingSheet(
     private suspend fun resetAdventuringTimeTracker() {
         actor.getCamping()?.let { camping ->
             camping.dailyPrepsAtTime = game.time.worldTimeSeconds
+            camping.secondsSpentTraveling = 0
+            camping.secondsSpentHexploring = 0
             actor.setCamping(camping)
         }
     }
@@ -774,13 +788,22 @@ class CampingSheet(
         }
     }
 
-    private suspend fun advanceHexplorationActivities(target: HTMLElement) {
-        val seconds = getHexplorationActivitySeconds()
-        game.time.advance(seconds * (target.dataset["activities"]?.toInt() ?: 0)).await()
+    private suspend fun advanceHexplorationActivities(target: HTMLElement, isTravel: Boolean) {
+        val seconds = getHexplorationActivitySeconds() * (target.dataset["activities"]?.toInt() ?: 0)
+        actor.getCamping()?.let {
+            if (isTravel) {
+                it.secondsSpentTraveling = it.secondsSpentTraveling() + seconds
+            }
+            it.secondsSpentHexploring = it.secondsSpentHexploring() + seconds
+            actor.setCamping(it)
+        }
+        game.time.advance(seconds).await()
     }
 
+    private fun getAvailableHexplorationSeconds(): Int = EIGHT_HOURS_SECONDS
+
     private fun getHexplorationActivitySeconds(): Int =
-        ((8 * 3600).toDouble() / getHexplorationActivities()).toInt()
+        ((getAvailableHexplorationSeconds()) / getHexplorationActivities()).toInt()
 
     private fun getHexplorationActivities(): Double {
         val camping = actor.getCamping()
@@ -793,7 +816,7 @@ class CampingSheet(
         LocalTime.fromSecondOfDay(getHexplorationActivitySeconds()).toDateInputString()
 
     private fun getHexplorationActivitiesAvailable(camping: CampingData): Int =
-        max(0, (8 * 3600 - (game.time.worldTimeSeconds - camping.dailyPrepsAtTime)) / getHexplorationActivitySeconds())
+        max(0, (getAvailableHexplorationSeconds() - camping.secondsSpentHexploring()) / getHexplorationActivitySeconds())
 
     private fun getAdventuringFor(camping: CampingData): String {
         val elapsedSeconds = game.time.worldTimeSeconds - camping.dailyPrepsAtTime

@@ -156,6 +156,7 @@ private suspend fun rollWeather(
             }
             // 5. set new weather
             setWeather(game, weatherEffect)
+            game.settings.pfrpg2eKingdomCampingWeather.setCurrentWeatherType(type.value)
         }
 }
 

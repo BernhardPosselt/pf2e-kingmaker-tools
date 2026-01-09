@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.resetCampsites
 import at.posselt.pfrpg2e.camping.setCamping
+import at.posselt.pfrpg2e.camping.shouldAutoApplyFatigued
 import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
@@ -70,6 +71,8 @@ external interface CampingSettings {
     var restingPlaylistUuid: String?
     var restingPlaylistSoundUuid: String?
     var worldSceneId: String?
+    var autoApplyFatigued: Boolean
+
 }
 
 @JsExport
@@ -96,6 +99,7 @@ class CampingSettingsDataModel(
             boolean("ignoreSkillRequirements")
             int("minimumTravelSpeed")
             int("minimumSubsistence")
+            boolean("autoApplyFatigued")
         }
     }
 }
@@ -160,6 +164,7 @@ class CampingSettingsApplication(
             restingPlaylistUuid = camping.restingTrack?.playlistUuid,
             restingPlaylistSoundUuid = camping.restingTrack?.trackUuid,
             worldSceneId = camping.worldSceneId,
+            autoApplyFatigued = camping.shouldAutoApplyFatigued(),
         )
     }
 
@@ -193,6 +198,12 @@ class CampingSettingsApplication(
                 Section(
                     legend = t("camping.exploration"),
                     formRows = listOf(
+                        CheckboxInput(
+                            name = "autoApplyFatigued",
+                            label = t("camping.autoApplyFatigued"),
+                            value = settings.autoApplyFatigued,
+                            help =  t("camping.autoApplyFatiguedHelp"),
+                        ),
                         Select(
                             label = t("camping.hexplorationScene"),
                             name = "worldSceneId",
@@ -377,6 +388,7 @@ class CampingSettingsApplication(
                         camping.campingActivities = camping.campingActivities
                             .filter { it.activityId !in alwaysPerformIds }
                             .toTypedArray()
+                        camping.autoApplyFatigued = settings.autoApplyFatigued
                         campingActor.setCamping(camping)
                     }
                     close()

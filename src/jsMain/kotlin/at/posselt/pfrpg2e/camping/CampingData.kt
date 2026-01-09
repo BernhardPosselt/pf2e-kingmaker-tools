@@ -64,6 +64,14 @@ external interface CampingActivity {
     var selectedSkill: String?
 }
 
+@JsPlainObject
+external interface RestSettings {
+    val skipWatch: Boolean
+    val skipDailyPreparations: Boolean
+    val disableRandomEncounter: Boolean
+    val skipWeather: Boolean
+}
+
 
 @JsPlainObject
 external interface CampingData {
@@ -90,7 +98,29 @@ external interface CampingData {
     var section: String
     var restingTrack: Track?
     var worldSceneId: String?
+    var autoApplyFatigued: Boolean?  // TODO: migrate to non optional in v14
+    var restSettings: RestSettings? // TODO: migrate to non optional in v14
+    var secondsSpentTraveling: Int? // TODO: migrate to non optional in v14
+    var secondsSpentHexploring: Int? // TODO: migrate to non optional in v14
+
 }
+
+fun CampingData.shouldAutoApplyFatigued() =
+    autoApplyFatigued ?: true
+
+fun CampingData.secondsSpentTraveling() =
+    secondsSpentTraveling ?: 0
+
+fun CampingData.secondsSpentHexploring() =
+    secondsSpentHexploring ?: 0
+
+fun CampingData.previousRestSettings() =
+    restSettings ?: RestSettings(
+        skipWatch = false,
+        skipDailyPreparations = false,
+        disableRandomEncounter = false,
+        skipWeather = false,
+    )
 
 suspend fun CampingData.getActorsCarryingFood(party: PF2EParty?): List<PF2EActor> =
     getActorsInCamp() + listOfNotNull(party)
@@ -185,12 +215,14 @@ fun getDefaultCamping(game: Game): CampingData {
         encounterModifier = 0,
         restRollMode = "one",
         increaseWatchActorNumber = 0,
+        secondsSpentTraveling = 0,
         actorUuidsNotKeepingWatch = emptyArray(),
         ignoreSkillRequirements = false,
         randomEncounterRollMode = "gmroll",
         section = "prepareCampsite",
         alwaysPerformActivityIds = emptyArray(),
         restingTrack = null,
+        autoApplyFatigued = false,
         regionSettings = RegionSettings(
             regions = arrayOf(
                 RegionSetting(

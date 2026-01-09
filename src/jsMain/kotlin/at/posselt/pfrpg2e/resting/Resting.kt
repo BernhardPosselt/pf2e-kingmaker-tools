@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.CampingData
 import at.posselt.pfrpg2e.camping.MealEffect
 import at.posselt.pfrpg2e.camping.RecipeData
+import at.posselt.pfrpg2e.camping.RestSettings
 import at.posselt.pfrpg2e.camping.applyRestHealEffects
 import at.posselt.pfrpg2e.camping.askDc
 import at.posselt.pfrpg2e.camping.calculateDailyPreparationSeconds
@@ -26,6 +27,7 @@ import at.posselt.pfrpg2e.camping.mealEffectsChangingRestDuration
 import at.posselt.pfrpg2e.camping.mealEffectsDoublingHealing
 import at.posselt.pfrpg2e.camping.mealEffectsHalvingHealing
 import at.posselt.pfrpg2e.camping.performCampingCheck
+import at.posselt.pfrpg2e.camping.previousRestSettings
 import at.posselt.pfrpg2e.camping.removeCombatEffects
 import at.posselt.pfrpg2e.camping.removeMealEffects
 import at.posselt.pfrpg2e.camping.removeProvisions
@@ -40,6 +42,7 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
+import at.posselt.pfrpg2e.weather.rollWeather
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actions.RestForTheNightOptions
@@ -57,7 +60,8 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
 
-private const val EIGHT_HOURS_SECONDS = 8 * 60 * 60
+const val SIXTEEN_HOURS_SECONDS = 16 * 60 * 60
+const val EIGHT_HOURS_SECONDS = 8 * 60 * 60
 private const val FOUR_HOURS_SECONDS = 4 * 3600
 
 private suspend fun getRestSecondsPerPlayer(
@@ -249,9 +253,6 @@ private suspend fun beginRest(
     dispatcher: ActionDispatcher,
     campingActor: CampingActor,
     camping: CampingData,
-    skipWatch: Boolean,
-    skipDailyPreparations: Boolean,
-    disableRandomEncounter: Boolean,
     party: PF2EParty?,
 ) {
     val actorsByUuid = getCampingActorsByUuid(camping.actorUuids).associateBy(PF2EActor::uuid)
@@ -262,8 +263,8 @@ private suspend fun beginRest(
         recipes = camping.getAllRecipes().toList(),
         gunsToClean = camping.gunsToClean,
         increaseActorsKeepingWatch = camping.increaseWatchActorNumber,
-        skipWatch = skipWatch,
-        skipDailyPreparations = skipDailyPreparations,
+        skipWatch = camping.previousRestSettings().skipWatch,
+        skipDailyPreparations = camping.previousRestSettings().skipDailyPreparations,
     )
     val randomEncounterAt = findRandomEncounterAt(
         game = game,
@@ -271,7 +272,7 @@ private suspend fun beginRest(
         camping = camping,
         watchDurationSeconds = watchDurationSeconds,
     )
-    if (disableRandomEncounter == false && randomEncounterAt != null) {
+    if (camping.previousRestSettings().disableRandomEncounter == false && randomEncounterAt != null) {
         askDc(t("camping.enemyStealth"))?.let { dc ->
             watchers
                 .filterIsInstance<PF2ECharacter>()
@@ -305,6 +306,8 @@ private suspend fun completeDailyPreparations(
     camping.watchSecondsRemaining = 0
     camping.encounterModifier = 0
     camping.dailyPrepsAtTime = game.time.worldTimeSeconds
+    camping.secondsSpentTraveling = 0
+    camping.secondsSpentHexploring = 0
     camping.campingActivities.forEach { it.result = null }
     camping.cooking.results.forEach { it.result = null }
     campingActor.setCamping(camping)
@@ -318,6 +321,9 @@ private suspend fun completeDailyPreparations(
     removeProvisions(actors + listOfNotNull(party))
     removeCombatEffects(actors)
     gainMinimumSubsistence(dispatcher, camping.cooking.minimumSubsistence, party)
+    if (!camping.previousRestSettings().skipWeather) {
+        rollWeather(game)
+    }
 }
 
 private suspend fun gainMinimumSubsistence(
@@ -347,11 +353,19 @@ suspend fun rest(
     skipWatch: Boolean,
     skipDailyPreparations: Boolean,
     disableRandomEncounter: Boolean,
+    skipWeather: Boolean,
     party: PF2EParty?,
 ) {
+    camping.restSettings = RestSettings(
+        skipWatch = skipWatch,
+        skipDailyPreparations = skipDailyPreparations,
+        disableRandomEncounter = disableRandomEncounter,
+        skipWeather = skipWeather,
+    )
+    campingActor.setCamping(camping)
     if (camping.watchSecondsRemaining == 0) {
         camping.restingTrack?.play()
-        beginRest(game, dispatcher, campingActor, camping, skipWatch, skipDailyPreparations, disableRandomEncounter, party)
+        beginRest(game, dispatcher, campingActor, camping, party)
     } else {
         completeDailyPreparations(game, dispatcher, campingActor, camping, party)
     }

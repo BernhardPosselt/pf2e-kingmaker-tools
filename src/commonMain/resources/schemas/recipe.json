@@ -153,6 +153,9 @@
         "changeRestDurationSeconds": {
           "type": "number"
         },
+        "changeFatigueDurationSeconds": {
+          "type": "number"
+        },
         "reduceConditions": {
           "type": "object",
           "mode": {

@@ -15,6 +15,7 @@ import com.foundryvtt.pf2e.item.PF2EEffect
 import com.foundryvtt.pf2e.item.PF2EEquipment
 import com.foundryvtt.pf2e.item.PF2EFeat
 import com.foundryvtt.pf2e.item.PF2EItem
+import js.core.Void
 import js.objects.unsafeJso
 import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
@@ -65,6 +66,10 @@ open external class PF2EActor : Actor {
         container: PF2EEquipment? = definedExternally,
         doNotStack: Boolean = definedExternally
     ): Promise<PF2EItem?>
+
+    fun increaseCondition(
+        slug: String,
+    ): Promise<Void>
 }
 
 // required to make instance of work, but since the classes are not registered here

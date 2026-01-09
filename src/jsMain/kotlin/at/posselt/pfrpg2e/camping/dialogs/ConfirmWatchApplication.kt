@@ -9,10 +9,13 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.camping.CampingData
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCampingActorsByUuid
+import at.posselt.pfrpg2e.camping.previousRestSettings
 import at.posselt.pfrpg2e.resting.getTotalRestDuration
+import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
+import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
@@ -29,7 +32,7 @@ import kotlin.js.Promise
 
 @Suppress("unused")
 @JsPlainObject
-external interface ConfirmWatchContext: ValidatedHandlebarsContext {
+external interface ConfirmWatchContext : ValidatedHandlebarsContext {
     val formRows: Array<FormElementContext>
     val saveLabel: String
 }
@@ -45,6 +48,7 @@ class ConfirmWatchDataModel(
             boolean("enableWatch")
             boolean("checkRandomEncounter")
             boolean("enableDailyPreparations")
+            boolean("checkWeather")
         }
     }
 }
@@ -54,15 +58,18 @@ external interface ConfirmWatchData {
     val enableWatch: Boolean
     val checkRandomEncounter: Boolean
     val enableDailyPreparations: Boolean
+    val checkWeather: Boolean
 }
 
 @JsExport
 class ConfirmWatchApplication(
+    private val game: Game,
     private val camping: CampingData,
     private val afterSubmit: (
         enableWatch: Boolean,
         enableDailyPreparations: Boolean,
-        checkRandomEncounter: Boolean
+        checkRandomEncounter: Boolean,
+        skipWeather: Boolean,
     ) -> Unit,
 ) : FormApp<ConfirmWatchContext, ConfirmWatchData>(
     title = t("camping.beginRest"),
@@ -72,15 +79,17 @@ class ConfirmWatchApplication(
     width = 400,
     id = "kmConfirmWatch"
 ) {
-    private var enableWatch: Boolean = true
-    private var enableDailyPreparations: Boolean = true
-    private var checkRandomEncounter: Boolean = true
+    private val enableWeather = game.settings.pfrpg2eKingdomCampingWeather.getEnableWeather()
+    private var enableWatch: Boolean = !camping.previousRestSettings().skipWatch
+    private var enableDailyPreparations: Boolean = !camping.previousRestSettings().skipDailyPreparations
+    private var checkRandomEncounter: Boolean = !camping.previousRestSettings().disableRandomEncounter
+    private var checkWeather: Boolean = !camping.previousRestSettings().skipWeather
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "km-save" -> buildPromise {
                 close()
-                afterSubmit(enableWatch, enableDailyPreparations, checkRandomEncounter)
+                afterSubmit(enableWatch, enableDailyPreparations, checkRandomEncounter, checkWeather)
             }
         }
     }
@@ -132,6 +141,13 @@ class ConfirmWatchApplication(
                     stacked = false,
                     value = checkRandomEncounter,
                 ),
+                CheckboxInput(
+                    label = t("camping.checkWeather"),
+                    name = "checkWeather",
+                    stacked = false,
+                    value = if (enableWeather) checkWeather else false,
+                    disabled = !enableWeather
+                ),
             )
         )
     }
@@ -140,6 +156,7 @@ class ConfirmWatchApplication(
         enableWatch = value.enableWatch
         enableDailyPreparations = value.enableDailyPreparations
         checkRandomEncounter = value.checkRandomEncounter
+        checkWeather = if (enableWeather) value.checkWeather else false
         undefined
     }
 

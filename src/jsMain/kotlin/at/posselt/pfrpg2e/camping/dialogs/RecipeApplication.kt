@@ -63,6 +63,8 @@ external interface OutcomeSubmitData {
     val healMode: String
     val reduceConditions: ReduceConditions
     val message: String?
+    val changeFatigueDurationSeconds: Int
+
 }
 
 @JsPlainObject
@@ -109,6 +111,7 @@ class RecipeDataModel(
                 string("healFormula", nullable = true)
                 string("damageFormula", nullable = true)
                 int("changeRestDurationSeconds")
+                int("changeFatigueDurationSeconds")
                 boolean("removeAfterRest")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
@@ -127,6 +130,7 @@ class RecipeDataModel(
                 string("healFormula", nullable = true)
                 string("damageFormula", nullable = true)
                 int("changeRestDurationSeconds")
+                int("changeFatigueDurationSeconds")
                 boolean("removeAfterRest")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
@@ -145,6 +149,7 @@ class RecipeDataModel(
                 string("healFormula", nullable = true)
                 string("damageFormula", nullable = true)
                 int("changeRestDurationSeconds")
+                int("changeFatigueDurationSeconds")
                 boolean("removeAfterRest")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
@@ -163,6 +168,7 @@ class RecipeDataModel(
                 string("healFormula", nullable = true)
                 string("damageFormula", nullable = true)
                 int("changeRestDurationSeconds")
+                int("changeFatigueDurationSeconds")
                 boolean("removeAfterRest")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
@@ -490,6 +496,13 @@ private suspend fun createMealInputs(
             stacked = false,
             value = firstEffect?.changeRestDurationSeconds ?: 0,
         ),
+        NumberInput(
+            label = t("camping.fatigueDuration"),
+            help = t("camping.fatigueDurationHelp"),
+            name = "$namePrefix.changeFatigueDurationSeconds",
+            stacked = false,
+            value = firstEffect?.changeFatigueDurationSeconds ?: 0,
+        ),
     )
 }
 
@@ -501,6 +514,7 @@ private fun toOutcome(outcome: OutcomeSubmitData): CookingOutcome =
                 uuid = outcome.uuid,
                 removeAfterRest = outcome.removeAfterRest,
                 changeRestDurationSeconds = outcome.changeRestDurationSeconds,
+                changeFatigueDurationSeconds = outcome.changeFatigueDurationSeconds,
                 doublesHealing = outcome.doublesHealing,
                 halvesHealing = outcome.halvesHealing,
                 healFormula = outcome.healFormula,

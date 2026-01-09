@@ -28,6 +28,7 @@ external interface MealEffect {
     val halvesHealing: Boolean?
     val healFormula: String?
     val damageFormula: String?
+    val changeFatigueDurationSeconds: Int?
     val healMode: String? // afterConsumption, afterRest, afterConsumptionAndRest
     val reduceConditions: ReduceConditions?
 }
