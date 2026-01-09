@@ -261,7 +261,7 @@
       "reuseCampsite": "Reusing a previous campsite",
       "prepareNewCampsite": "Preparing a new campsite",
       "reuseCampsiteConfirmation": "Reuse existing campsite ({degreeOfSuccess})?",
-      "preparingCampsite": "Preparing Campsite, removing all existing Meal Effects",
+      "preparingCampsite": "Preparing Campsite, removing all Meal Effects without specified duration",
       "confirmActivityReset": "Reset all camping activity results?",
       "confirmMealReset": "Reset all meal choices back to Skip Meal?",
       "showPlayers": "Show Players",
