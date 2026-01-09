@@ -199,7 +199,7 @@ class RecipeApplication(
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = RecipeDataModel::class.js,
-    id = "kmRecipe-${actor.uuid}"
+    id = "kmRecipe-${actor.uuid}",
 ) {
     private val editRecipeId = recipe?.id
     private var currentRecipe: RecipeData? = recipe?.let(::deepClone)

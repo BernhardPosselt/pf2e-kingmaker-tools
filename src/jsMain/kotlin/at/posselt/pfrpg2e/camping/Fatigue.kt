@@ -15,12 +15,11 @@ import kotlinx.coroutines.awaitAll
 
 private suspend fun PF2EActor.getFatigueDurationSeconds(
     recipes: List<RecipeData>,
-    weather: WeatherType,
 ): Int {
     val relevantEffects = mealEffectsChangingFatigueDuration(recipes)
     val increasedDuration = getAppliedMealEffects(relevantEffects)
         .sumOf { it.changeFatigueDurationSeconds ?: 0 }
-    return ((SIXTEEN_HOURS_SECONDS + increasedDuration) * weather.fatigueDurationMultiplier).toInt()
+    return SIXTEEN_HOURS_SECONDS + increasedDuration
 }
 
 fun registerFatiguedHooks(game: Game) {
@@ -46,7 +45,6 @@ fun registerFatiguedHooks(game: Game) {
                                 val travelledTooMuch = travelSeconds > fatiguedAfterTravellingSeconds
                                 if (travelledTooMuch || elapsedSeconds > it.getFatigueDurationSeconds(
                                         recipes = recipes,
-                                        weather = currentWeatherType,
                                     )
                                 ) {
                                     it.increaseCondition("fatigued")
