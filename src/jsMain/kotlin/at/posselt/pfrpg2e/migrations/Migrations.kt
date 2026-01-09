@@ -52,14 +52,6 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
             .takeIf { it != 0 }
             ?: latestMigrationVersion
         settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(currentVersion)
-        console.log(
-            "${t("moduleName")}: ${
-                t(
-                    "migrations.upgradingFromTo",
-                    recordOf("fromVersion" to currentVersion, "toVersion" to latestMigrationVersion)
-                )
-            }"
-        )
         if (currentVersion < 16) {
             ui.notifications.error(
                 "${t("moduleName")}: ${
@@ -70,6 +62,14 @@ suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
                 }"
             )
         } else if (currentVersion < latestMigrationVersion) {
+            console.log(
+                "${t("moduleName")}: ${
+                    t(
+                        "migrations.upgradingFromTo",
+                        recordOf("fromVersion" to currentVersion, "toVersion" to latestMigrationVersion)
+                    )
+                }"
+            )
             try {
                 migrateFrom(currentVersion)
             } catch (e: Throwable) {
