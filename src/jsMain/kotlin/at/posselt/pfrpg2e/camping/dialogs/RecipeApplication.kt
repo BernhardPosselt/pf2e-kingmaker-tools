@@ -55,6 +55,7 @@ external interface RecipeContext : SectionsContext, ValidatedHandlebarsContext
 external interface OutcomeSubmitData {
     val uuid: String
     val removeAfterRest: Boolean
+    var removeWhenPreparingCampsite: Boolean
     val doublesHealing: Boolean
     val halvesHealing: Boolean
     val changeRestDurationSeconds: Int
@@ -113,6 +114,7 @@ class RecipeDataModel(
                 int("changeRestDurationSeconds")
                 int("changeFatigueDurationSeconds")
                 boolean("removeAfterRest")
+                boolean("removeWhenPreparingCampsite")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
                 enum<HealMode>("healMode")
@@ -132,6 +134,7 @@ class RecipeDataModel(
                 int("changeRestDurationSeconds")
                 int("changeFatigueDurationSeconds")
                 boolean("removeAfterRest")
+                boolean("removeWhenPreparingCampsite")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
                 enum<HealMode>("healMode")
@@ -151,6 +154,7 @@ class RecipeDataModel(
                 int("changeRestDurationSeconds")
                 int("changeFatigueDurationSeconds")
                 boolean("removeAfterRest")
+                boolean("removeWhenPreparingCampsite")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
                 enum<HealMode>("healMode")
@@ -170,6 +174,7 @@ class RecipeDataModel(
                 int("changeRestDurationSeconds")
                 int("changeFatigueDurationSeconds")
                 boolean("removeAfterRest")
+                boolean("removeWhenPreparingCampsite")
                 boolean("doublesHealing")
                 boolean("halvesHealing")
                 enum<HealMode>("healMode")
@@ -423,6 +428,12 @@ private suspend fun createMealInputs(
             value = firstEffect?.removeAfterRest == true,
         ),
         CheckboxInput(
+            label = t("camping.removeWhenPreparingCampsite"),
+            name = "$namePrefix.removeWhenPreparingCampsite",
+            stacked = false,
+            value = firstEffect?.removeWhenPreparingCampsite == true,
+        ),
+        CheckboxInput(
             label = t("camping.doublesHealing"),
             help = t("camping.doublesHealingHelp"),
             name = "$namePrefix.doublesHealing",
@@ -519,6 +530,7 @@ private fun toOutcome(outcome: OutcomeSubmitData): CookingOutcome =
                 halvesHealing = outcome.halvesHealing,
                 healFormula = outcome.healFormula,
                 damageFormula = outcome.damageFormula,
+                removeWhenPreparingCampsite = outcome.removeWhenPreparingCampsite,
                 healMode = outcome.healMode,
                 reduceConditions = ReduceConditions(
                     drained = outcome.reduceConditions.drained,

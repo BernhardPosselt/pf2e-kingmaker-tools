@@ -169,6 +169,7 @@
       "halvesHealingHelp": "Halves HP regained from resting, does not stack with other effects that halve healing",
       "doublesHealingHelp": "Double HP regained from resting, does not stack with other effects that double healing",
       "removeAfterRest": "Remove after Rest",
+      "removeWhenPreparingCampsite": "Remove when preparing campsite",
       "cookingMessage": "Message",
       "cookingMessageHelp": "If given, posted to chat after changing the meal's degree of success",
       "cookingLoreDC": "Cooking Lore DC",
