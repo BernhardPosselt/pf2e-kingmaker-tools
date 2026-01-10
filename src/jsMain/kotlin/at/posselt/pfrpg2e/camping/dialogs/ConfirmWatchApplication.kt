@@ -69,7 +69,7 @@ class ConfirmWatchApplication(
         enableWatch: Boolean,
         enableDailyPreparations: Boolean,
         checkRandomEncounter: Boolean,
-        skipWeather: Boolean,
+        checkWeather: Boolean,
     ) -> Unit,
 ) : FormApp<ConfirmWatchContext, ConfirmWatchData>(
     title = t("camping.beginRest"),
@@ -83,7 +83,7 @@ class ConfirmWatchApplication(
     private var enableWatch: Boolean = !camping.previousRestSettings().skipWatch
     private var enableDailyPreparations: Boolean = !camping.previousRestSettings().skipDailyPreparations
     private var checkRandomEncounter: Boolean = !camping.previousRestSettings().disableRandomEncounter
-    private var checkWeather: Boolean = !camping.previousRestSettings().skipWeather
+    private var checkWeather: Boolean = if(enableWeather) !camping.previousRestSettings().skipWeather else false
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
@@ -145,7 +145,7 @@ class ConfirmWatchApplication(
                     label = t("camping.checkWeather"),
                     name = "checkWeather",
                     stacked = false,
-                    value = if (enableWeather) checkWeather else false,
+                    value = checkWeather,
                     disabled = !enableWeather
                 ),
             )
@@ -156,7 +156,7 @@ class ConfirmWatchApplication(
         enableWatch = value.enableWatch
         enableDailyPreparations = value.enableDailyPreparations
         checkRandomEncounter = value.checkRandomEncounter
-        checkWeather = if (enableWeather) value.checkWeather else false
+        checkWeather = value.checkWeather
         undefined
     }
 
