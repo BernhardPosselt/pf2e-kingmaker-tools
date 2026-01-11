@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.camping
 import at.posselt.pfrpg2e.data.regions.WeatherType
 import at.posselt.pfrpg2e.resting.DAY_SECONDS
 import at.posselt.pfrpg2e.resting.SIXTEEN_HOURS_SECONDS
+import at.posselt.pfrpg2e.utils.awaitAll
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.isFirstGM
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
@@ -23,18 +24,28 @@ private suspend fun PF2EActor.getFatigueDurationSeconds(
     return SIXTEEN_HOURS_SECONDS + increasedDuration
 }
 
+suspend fun resetTimeTracker(game: Game, deltaInSeconds: Int) {
+    if (deltaInSeconds >= DAY_SECONDS) {
+        game.getCampingActors()
+            .filter { it.getCamping()?.resetTimeTrackingAfterOneDay() == true }
+            .map {
+                buildPromise {
+                    val camping = it.getCamping()!!
+                    camping.resetTimeTracking(game)
+                    it.setCamping(camping)
+                }
+            }
+            .awaitAll()
+    }
+}
+
 fun registerFatiguedHooks(game: Game) {
     TypedHooks.onUpdateWorldTime { _, deltaInSeconds, _, _ ->
         if (game.isFirstGM()) {
-            val campingActor = game.getActiveCampingActor()
-            val camping = campingActor?.getCamping()
-            if (camping != null) {
-                if (camping.resetTimeTrackingAfterOneDay() && deltaInSeconds >= DAY_SECONDS) {
-                    camping.resetTimeTracking(game)
-                    buildPromise {
-                        campingActor.setCamping(camping)
-                    }
-                } else if (camping.shouldAutoApplyFatigued()) {
+            buildPromise {
+                resetTimeTracker(game, deltaInSeconds)
+                val camping = game.getActiveCamping()
+                if (camping != null && camping.shouldAutoApplyFatigued()) {
                     val currentWeatherType = game.getCurrentWeatherType()
                     val fatiguedAfterTravellingSeconds = when (currentWeatherType) {
                         WeatherType.COLD,
