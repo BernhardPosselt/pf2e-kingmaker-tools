@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.1] - 2026-01-11
+
+### Changed
+
+* Add setting that resets the adventuring time and fatigue tracker if more than one day is advanced at a time. This prevents having to reset the adventuring time duration and removing fatigue manually when taking downtime.
+
 ### Fixed
 
 * Do not roll weather when weather is disabled and the rest dialog was not changed

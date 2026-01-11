@@ -735,9 +735,7 @@ class CampingSheet(
 
     private suspend fun resetAdventuringTimeTracker() {
         actor.getCamping()?.let { camping ->
-            camping.dailyPrepsAtTime = game.time.worldTimeSeconds
-            camping.secondsSpentTraveling = 0
-            camping.secondsSpentHexploring = 0
+            camping.resetTimeTracking(game)
             actor.setCamping(camping)
         }
     }

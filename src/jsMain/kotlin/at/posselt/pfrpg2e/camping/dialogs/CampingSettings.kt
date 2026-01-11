@@ -16,6 +16,7 @@ import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.resetCampsites
+import at.posselt.pfrpg2e.camping.resetTimeTrackingAfterOneDay
 import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.camping.shouldAutoApplyFatigued
 import at.posselt.pfrpg2e.data.ValueEnum
@@ -72,6 +73,7 @@ external interface CampingSettings {
     var restingPlaylistSoundUuid: String?
     var worldSceneId: String?
     var autoApplyFatigued: Boolean
+    var resetTimeTrackingAfterOneDay: Boolean
 
 }
 
@@ -100,6 +102,7 @@ class CampingSettingsDataModel(
             int("minimumTravelSpeed")
             int("minimumSubsistence")
             boolean("autoApplyFatigued")
+            boolean("resetTimeTrackingAfterOneDay")
         }
     }
 }
@@ -165,6 +168,7 @@ class CampingSettingsApplication(
             restingPlaylistSoundUuid = camping.restingTrack?.trackUuid,
             worldSceneId = camping.worldSceneId,
             autoApplyFatigued = camping.shouldAutoApplyFatigued(),
+            resetTimeTrackingAfterOneDay = camping.resetTimeTrackingAfterOneDay(),
         )
     }
 
@@ -203,6 +207,12 @@ class CampingSettingsApplication(
                             label = t("camping.autoApplyFatigued"),
                             value = settings.autoApplyFatigued,
                             help =  t("camping.autoApplyFatiguedHelp"),
+                        ),
+                        CheckboxInput(
+                            name = "resetTimeTrackingAfterOneDay",
+                            label = t("camping.resetTimeTrackingAfterOneDay"),
+                            value = settings.resetTimeTrackingAfterOneDay,
+                            help =  t("camping.resetTimeTrackingAfterOneDayHelp"),
                         ),
                         Select(
                             label = t("camping.hexplorationScene"),
@@ -389,6 +399,7 @@ class CampingSettingsApplication(
                             .filter { it.activityId !in alwaysPerformIds }
                             .toTypedArray()
                         camping.autoApplyFatigued = settings.autoApplyFatigued
+                        camping.resetTimeTrackingAfterOneDay = settings.resetTimeTrackingAfterOneDay
                         campingActor.setCamping(camping)
                     }
                     close()

@@ -102,11 +102,16 @@ external interface CampingData {
     var restSettings: RestSettings? // TODO: migrate to non optional in v14
     var secondsSpentTraveling: Int? // TODO: migrate to non optional in v14
     var secondsSpentHexploring: Int? // TODO: migrate to non optional in v14
+    var resetTimeTrackingAfterOneDay: Boolean? // TODO: migrate to non optional in v14
 
 }
 
+fun CampingData.resetTimeTrackingAfterOneDay() =
+    resetTimeTrackingAfterOneDay ?: true
+
 fun CampingData.shouldAutoApplyFatigued() =
     autoApplyFatigued ?: true
+
 
 fun CampingData.secondsSpentTraveling() =
     secondsSpentTraveling ?: 0
@@ -449,12 +454,18 @@ fun Game.getAveragePartyLevel(): Int {
         ?: 1
 }
 
-fun Game.getActiveCamping(): CampingData? {
-    val campingActors = getCampingActors()
-    return campingActors
-        .firstOrNull { it.active }
-        ?.getCamping() ?: campingActors.firstOrNull()?.getCamping()
+fun CampingData.resetTimeTracking(game: Game) {
+    dailyPrepsAtTime = game.time.worldTimeSeconds
+    secondsSpentTraveling = 0
+    secondsSpentHexploring = 0
 }
+
+fun Game.getActiveCampingActor(): CampingActor? =
+    getCampingActors()
+        .firstOrNull { it.active } ?: getCampingActors().firstOrNull()
+
+fun Game.getActiveCamping(): CampingData? =
+    getActiveCampingActor()?.getCamping()
 
 fun CampingData.canPerformActivities(): Boolean {
     val prepareCampResult = campingActivities

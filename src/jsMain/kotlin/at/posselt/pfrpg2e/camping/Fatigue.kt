@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.data.regions.WeatherType
+import at.posselt.pfrpg2e.resting.DAY_SECONDS
 import at.posselt.pfrpg2e.resting.SIXTEEN_HOURS_SECONDS
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.isFirstGM
@@ -23,35 +24,44 @@ private suspend fun PF2EActor.getFatigueDurationSeconds(
 }
 
 fun registerFatiguedHooks(game: Game) {
-    TypedHooks.onUpdateWorldTime { _, _, _, _ ->
+    TypedHooks.onUpdateWorldTime { _, deltaInSeconds, _, _ ->
         if (game.isFirstGM()) {
-            val camping = game.getActiveCamping()
-            if (camping != null && camping.shouldAutoApplyFatigued()) {
-                val currentWeatherType = game.getCurrentWeatherType()
-                val fatiguedAfterTravellingSeconds = when (currentWeatherType) {
-                    WeatherType.COLD,
-                    WeatherType.SNOWY,
-                    WeatherType.RAINY -> 4
-                    else -> 8
-                } * 3600
-                val recipes = camping.getAllRecipes().toList()
-                val elapsedSeconds = game.time.worldTimeSeconds - camping.dailyPrepsAtTime
-                val travelSeconds = camping.secondsSpentTraveling()
-                buildPromise {
-                    val actors = camping.getActorsInCamp()
-                    actors
-                        .map {
-                            async {
-                                val travelledTooMuch = travelSeconds > fatiguedAfterTravellingSeconds
-                                if (travelledTooMuch || elapsedSeconds > it.getFatigueDurationSeconds(
-                                        recipes = recipes,
-                                    )
-                                ) {
-                                    it.increaseCondition("fatigued")
+            val campingActor = game.getActiveCampingActor()
+            val camping = campingActor?.getCamping()
+            if (camping != null) {
+                if (camping.resetTimeTrackingAfterOneDay() && deltaInSeconds >= DAY_SECONDS) {
+                    camping.resetTimeTracking(game)
+                    buildPromise {
+                        campingActor.setCamping(camping)
+                    }
+                } else if (camping.shouldAutoApplyFatigued()) {
+                    val currentWeatherType = game.getCurrentWeatherType()
+                    val fatiguedAfterTravellingSeconds = when (currentWeatherType) {
+                        WeatherType.COLD,
+                        WeatherType.SNOWY,
+                        WeatherType.RAINY -> 4
+
+                        else -> 8
+                    } * 3600
+                    val recipes = camping.getAllRecipes().toList()
+                    val elapsedSeconds = game.time.worldTimeSeconds - camping.dailyPrepsAtTime
+                    val travelSeconds = camping.secondsSpentTraveling()
+                    buildPromise {
+                        val actors = camping.getActorsInCamp()
+                        actors
+                            .map {
+                                async {
+                                    val travelledTooMuch = travelSeconds > fatiguedAfterTravellingSeconds
+                                    if (travelledTooMuch || elapsedSeconds > it.getFatigueDurationSeconds(
+                                            recipes = recipes,
+                                        )
+                                    ) {
+                                        it.increaseCondition("fatigued")
+                                    }
                                 }
                             }
-                        }
-                        .awaitAll()
+                            .awaitAll()
+                    }
                 }
             }
         }

@@ -62,6 +62,7 @@ import kotlin.random.Random
 
 const val SIXTEEN_HOURS_SECONDS = 16 * 60 * 60
 const val EIGHT_HOURS_SECONDS = 8 * 60 * 60
+const val DAY_SECONDS = 24 * 60 * 60
 private const val FOUR_HOURS_SECONDS = 4 * 3600
 
 private suspend fun getRestSecondsPerPlayer(
