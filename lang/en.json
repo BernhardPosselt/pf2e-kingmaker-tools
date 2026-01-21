@@ -969,6 +969,8 @@
       "subsist": {
         "selectCharacter": "Please select a Character",
         "title": "Subsist",
+        "subsistAfterExploration": "Subsist After Exploration",
+        "subsistAfterExplorationHelp": "Add a -5 penalty if subsisting after 8 hours of exploration.",
         "gainProvisions": "Gain {count, plural, =1 {1 Provision} other {# Provisions}}"
       },
       "xp": {

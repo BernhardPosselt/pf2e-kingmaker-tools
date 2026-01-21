@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.macros
 import at.posselt.pfrpg2e.actor.hasFeat
 import at.posselt.pfrpg2e.actor.investedArmor
 import at.posselt.pfrpg2e.actor.proficiency
+import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
@@ -36,6 +37,7 @@ import kotlinx.js.JsPlainObject
 private external interface SubsistData {
     val skill: String
     val dc: Int
+    val subsistPenalty: Boolean
 }
 
 @Suppress("unused")
@@ -80,12 +82,19 @@ suspend fun subsistMacro(game: Game, actor: Actor?) {
                 Select.dc(
                     name = "dc",
                     value = defaultDc,
+                ),
+                CheckboxInput(
+                    name = "subsistPenalty",
+                    label = t("macros.subsist.subsistAfterExploration"),
+                    help =  t("macros.subsist.subsistAfterExplorationHelp"),
+                    value = true,
                 )
             )
         )
     ) {
+        val subsistPenalty = if(it.subsistPenalty) -5 else 0
         val options = SingleCheckActionUseOptions(
-            difficultyClass = CheckDC(value = it.dc),
+            difficultyClass = CheckDC(value = it.dc + subsistPenalty),
             rollOptions = arrayOf("action:subsist:after-exploration"),
             statistic = it.skill,
             actors = arrayOf(chosenActor),

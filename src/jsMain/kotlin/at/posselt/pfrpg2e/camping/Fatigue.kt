@@ -1,6 +1,5 @@
 package at.posselt.pfrpg2e.camping
 
-import at.posselt.pfrpg2e.data.regions.WeatherType
 import at.posselt.pfrpg2e.resting.DAY_SECONDS
 import at.posselt.pfrpg2e.resting.SIXTEEN_HOURS_SECONDS
 import at.posselt.pfrpg2e.utils.awaitAll
@@ -47,13 +46,7 @@ fun registerFatiguedHooks(game: Game) {
                 val camping = game.getActiveCamping()
                 if (camping != null && camping.shouldAutoApplyFatigued()) {
                     val currentWeatherType = game.getCurrentWeatherType()
-                    val fatiguedAfterTravellingSeconds = when (currentWeatherType) {
-                        WeatherType.COLD,
-                        WeatherType.SNOWY,
-                        WeatherType.RAINY -> 4
-
-                        else -> 8
-                    } * 3600
+                    val fatiguedAfterTravellingSeconds = currentWeatherType.fatigueDurationMultiplier * 8 * 3600
                     val recipes = camping.getAllRecipes().toList()
                     val elapsedSeconds = game.time.worldTimeSeconds - camping.dailyPrepsAtTime
                     val travelSeconds = camping.secondsSpentTraveling()
