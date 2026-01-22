@@ -154,6 +154,7 @@ external interface CampingSheetContext : ValidatedHandlebarsContext {
     var hexplorationActivitiesAvailable: Int
     var hexplorationActivitiesMax: String
     var adventuringFor: String
+    var travelingFor: String
     var restDuration: String
     var restDurationLeft: String?
     var encounterDc: Int
@@ -822,6 +823,11 @@ class CampingSheet(
         return formatSeconds(elapsedSeconds, isNegative)
     }
 
+    private fun getTravelingFor(camping: CampingData): String {
+        val seconds = camping.secondsSpentTraveling()
+        return formatSeconds(seconds, seconds < 0)
+    }
+
     private suspend fun advanceHours(target: HTMLElement) {
         game.time.advance(3600 * (target.dataset["hours"]?.toInt() ?: 0)).await()
     }
@@ -1086,6 +1092,7 @@ class CampingSheet(
             hexplorationActivitiesAvailable = hexplorationActivitiesAvailable,
             hexplorationActivitiesMax = hexplorationActivitiesMax,
             adventuringFor = getAdventuringFor(camping),
+            travelingFor = getTravelingFor(camping),
             restDuration = fullRestDuration.total.label,
             restDurationLeft = fullRestDuration.left?.label,
             encounterDc = findEncounterDcModifier(camping, game.getPF2EWorldTime().time.isDay()),

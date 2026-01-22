@@ -329,6 +329,7 @@
       "continueUntilFullyRested": "Continue until fully rested",
       "restAndDailyPreps": "Rest & Daily Preparations",
       "adventuringDuration": "Adventuring:",
+      "travelingFor": "Travelling: {duration}",
       "resetTimeTracker": "Reset Adventuring Time Tracker",
       "hexActivities": "Hex. Activities",
       "hexplorationActivities": "Hexploration Activities",

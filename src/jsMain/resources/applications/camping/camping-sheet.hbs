@@ -87,7 +87,7 @@
         {{/if}}
     </div>
     <div id="km-camping-hexploration" class="km-row">
-        <div id="km-adventuring-for"><b>{{localizeKM "camping.adventuringDuration"}}</b> {{adventuringFor}}
+        <div id="km-adventuring-for"><b>{{localizeKM "camping.adventuringDuration"}}</b> <span title="{{localizeKM "camping.travelingFor" duration=travelingFor}}">{{adventuringFor}}</span>
             {{#if isGM}}
                 <button type="button"
                         data-action="reset-adventuring-for"
