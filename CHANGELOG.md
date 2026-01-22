@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.3] - 2026-01-22
+
 ### Changed
 
 * Travel duration is now displayed when hovering over adventuring duration in the camping sheet
