@@ -2,7 +2,6 @@ package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.resting.DAY_SECONDS
 import at.posselt.pfrpg2e.resting.SIXTEEN_HOURS_SECONDS
-import at.posselt.pfrpg2e.utils.awaitAll
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.isFirstGM
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
@@ -23,18 +22,16 @@ private suspend fun PF2EActor.getFatigueDurationSeconds(
     return SIXTEEN_HOURS_SECONDS + increasedDuration
 }
 
-suspend fun resetTimeTracker(game: Game, deltaInSeconds: Int) {
-    if (deltaInSeconds >= DAY_SECONDS) {
-        game.getCampingActors()
-            .filter { it.getCamping()?.resetTimeTrackingAfterOneDay() == true }
-            .map {
-                buildPromise {
-                    val camping = it.getCamping()!!
-                    camping.resetTimeTracking(game)
-                    it.setCamping(camping)
-                }
-            }
-            .awaitAll()
+suspend fun persistPassedTime(game: Game, deltaInSeconds: Int) {
+    // reset if more than one day is passed
+    game.getActiveCampingActor()?.let {
+        val camping = it.getCamping()!!
+        if (deltaInSeconds >= DAY_SECONDS && camping.resetTimeTrackingAfterOneDay()) {
+            camping.resetTimeTracking(game)
+        } else {
+            camping.persistPassedTime(deltaInSeconds)
+        }
+        it.setCamping(camping)
     }
 }
 
@@ -42,7 +39,7 @@ fun registerFatiguedHooks(game: Game) {
     TypedHooks.onUpdateWorldTime { _, deltaInSeconds, _, _ ->
         if (game.isFirstGM()) {
             buildPromise {
-                resetTimeTracker(game, deltaInSeconds)
+                persistPassedTime(game, deltaInSeconds)
                 val camping = game.getActiveCamping()
                 if (camping != null && camping.shouldAutoApplyFatigued()) {
                     val currentWeatherType = game.getCurrentWeatherType()

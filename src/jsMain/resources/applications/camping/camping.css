@@ -66,6 +66,13 @@
             rgb(32, 38, 57) 0%, /* 0:00 */ rgb(63, 76, 119) 17%, /* 4:00 */ rgba(185, 91, 229, 1) 23%, /* 5:30 */ #ff8f8f 27%, /* 6:30 */ #AFF1DA 38%, /* 9:00 */ #F9EA8F 50%, /* 12:00 */ #AFF1DA 63%, /* 15:00 */ #ff8f8f 73%, /* 17:30 */ rgba(185, 91, 229, 1) 77%, /* 18:30 */ rgb(63, 76, 119) 83%, /* 20:00 */ rgb(32, 38, 57) 100% /* 24:00 */
     );
 
+    .km-camping-travel {
+        position: absolute;
+        left: 5px;
+        top: calc(50% - 13px);
+        width: auto;
+    }
+
     button {
         color: var(--color-dark-1);
         background: none;
@@ -84,6 +91,14 @@
 
     .night-mode {
         color: white;
+    }
+
+    .black-checkbox {
+        --checkbox-checked-color: black !important;
+    }
+
+    .white-checkbox {
+        --checkbox-background-color: white !important;
     }
 
     .night-mode:hover {

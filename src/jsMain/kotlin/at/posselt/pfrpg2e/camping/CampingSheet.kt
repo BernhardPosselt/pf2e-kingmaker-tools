@@ -12,6 +12,7 @@ import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.MenuControl
 import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.confirm
+import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
@@ -43,7 +44,6 @@ import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toDateInputString
-import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.documents.onCreateItem
@@ -109,9 +109,8 @@ external interface NightModes {
     val advanceHex: Boolean
     val advance1: Boolean
     val advance2: Boolean
-    val advanceTravel: Boolean
-    val retractTravel: Boolean
     val rest: Boolean
+    val travelMode: Boolean
 }
 
 @Suppress("unused")
@@ -163,6 +162,7 @@ external interface CampingSheetContext : ValidatedHandlebarsContext {
     var prepareCampSection: Boolean
     var campingActivitiesSection: Boolean
     var eatingSection: Boolean
+    var travelMode: FormElementContext
     var recipes: Array<RecipeContext>
     var totalFoodCost: FoodCost
     var availableFood: FoodCost
@@ -186,6 +186,8 @@ external interface CampingSheetFormData {
     val region: String
     val activities: CampingSheetActivitiesFormData
     val recipes: RecipeFormData?
+    val travelModeActive: Boolean
+
 }
 
 private fun isNightMode(
@@ -204,15 +206,14 @@ private fun isNightMode(
 
 private fun calculateNightModes(time: LocalTime): NightModes {
     return NightModes(
-        retract2 = isNightMode(time, "11:00", "00:00"),
-        retract1 = isNightMode(time, "10:00", "23:00"),
-        retractHex = isNightMode(time, "09:00", "22:00"),
-        retractTravel = isNightMode(time, "08:00", "21:00"),
+        travelMode = isNightMode(time, "16:00", "05:30"),
+        retract2 = isNightMode(time, "10:00", "23:00"),
+        retract1 = isNightMode(time, "09:00", "22:00"),
+        retractHex = isNightMode(time, "08:00", "21:00"),
         time = isNightMode(time, "06:00", "19:00"),
-        advanceTravel = isNightMode(time, "04:00", "17:00"),
-        advanceHex = isNightMode(time, "03:00", "16:00"),
-        advance1 = isNightMode(time, "02:00", "15:00"),
-        advance2 = isNightMode(time, "01:00", "14:00"),
+        advanceHex = isNightMode(time, "04:00", "17:00"),
+        advance1 = isNightMode(time, "03:00", "16:00"),
+        advance2 = isNightMode(time, "02:00", "15:00"),
         rest = isNightMode(time, "19:00", "08:00"),
     )
 }
@@ -292,7 +293,7 @@ class CampingSheet(
         }
         onDocumentRefDrop(
             ".km-camping-recipe",
-            { it.dragstartSelector == ".km-camping-actor" || it.dragstartSelector == ".km-recipe-actor"}
+            { it.dragstartSelector == ".km-camping-actor" || it.dragstartSelector == ".km-recipe-actor" }
         ) { event, documentRef ->
             buildPromise {
                 val target = event.target as HTMLElement
@@ -400,11 +401,7 @@ class CampingSheet(
             }
 
             "advance-hexploration" -> buildPromise {
-                advanceHexplorationActivities(target, false)
-            }
-
-            "travel" -> buildPromise {
-                advanceHexplorationActivities(target, true)
+                advanceHexplorationActivities(target)
             }
 
             "clear-actor" -> {
@@ -564,10 +561,15 @@ class CampingSheet(
             postChatMessage(t("camping.preparingCampsite"))
             val existingCampingResult = camping.worldSceneId?.let { findExistingCampsiteResult(game, it, actor) }
             if (existingCampingResult != null
-                && confirm(t("camping.reuseCampsiteConfirmation", recordOf("degreeOfSuccess" to t(existingCampingResult))))
+                && confirm(
+                    t(
+                        "camping.reuseCampsiteConfirmation",
+                        recordOf("degreeOfSuccess" to t(existingCampingResult))
+                    )
+                )
             ) {
                 camping.campingActivities
-                    .find { it.activityId== activityId }?.result = existingCampingResult.toCamelCase()
+                    .find { it.activityId == activityId }?.result = existingCampingResult.toCamelCase()
                 postPassTimeMessage(t("camping.reuseCampsite"), 1)
                 actor.setCamping(camping)
                 return
@@ -694,7 +696,12 @@ class CampingSheet(
             } else if (activity == null) {
                 ui.notifications.error(t("camping.activityNotFound", recordOf("id" to activityId)))
             } else if (!activityActor.satisfiesAnyActivitySkillRequirement(activity, camping.ignoreSkillRequirements)) {
-                ui.notifications.error(t("camping.actorLacksSkillRequirements", recordOf("activityName" to activity.name)))
+                ui.notifications.error(
+                    t(
+                        "camping.actorLacksSkillRequirements",
+                        recordOf("activityName" to activity.name)
+                    )
+                )
             } else if (activity.requiresACheck() && !activityActor.hasAnyActivitySkill(activity)) {
                 ui.notifications.error(t("camping.actorLacksSkills", recordOf("activityName" to activity.name)))
             } else {
@@ -787,15 +794,8 @@ class CampingSheet(
         }
     }
 
-    private suspend fun advanceHexplorationActivities(target: HTMLElement, isTravel: Boolean) {
+    private suspend fun advanceHexplorationActivities(target: HTMLElement) {
         val seconds = getHexplorationActivitySeconds() * (target.dataset["activities"]?.toInt() ?: 0)
-        actor.getCamping()?.let {
-            if (isTravel) {
-                it.secondsSpentTraveling = it.secondsSpentTraveling() + seconds
-            }
-            it.secondsSpentHexploring = it.secondsSpentHexploring() + seconds
-            actor.setCamping(it)
-        }
         game.time.advance(seconds).await()
     }
 
@@ -815,17 +815,17 @@ class CampingSheet(
         LocalTime.fromSecondOfDay(getHexplorationActivitySeconds()).toDateInputString()
 
     private fun getHexplorationActivitiesAvailable(camping: CampingData): Int =
-        max(0, (getAvailableHexplorationSeconds() - camping.secondsSpentHexploring()) / getHexplorationActivitySeconds())
+        max(
+            0,
+            (getAvailableHexplorationSeconds() - camping.secondsSpentHexploring()) / getHexplorationActivitySeconds()
+        )
 
     private fun getAdventuringFor(camping: CampingData): String {
-        val elapsedSeconds = game.time.worldTimeSeconds - camping.dailyPrepsAtTime
-        val isNegative = camping.dailyPrepsAtTime > game.time.worldTime
-        return formatSeconds(elapsedSeconds, isNegative)
+        return formatSeconds(camping.secondsSpentHexploring())
     }
 
     private fun getTravelingFor(camping: CampingData): String {
-        val seconds = camping.secondsSpentTraveling()
-        return formatSeconds(seconds, seconds < 0)
+        return formatSeconds(camping.secondsSpentTraveling())
     }
 
     private suspend fun advanceHours(target: HTMLElement) {
@@ -1036,12 +1036,13 @@ class CampingSheet(
         val hexplorationActivityDuration = getHexplorationActivitiesDuration()
         val hexplorationActivitiesAvailable = getHexplorationActivitiesAvailable(camping)
         val hexplorationActivitiesMax = "${getHexplorationActivities()}"
+        val nightModes = calculateNightModes(time)
         CampingSheetContext(
             canRollEncounter = currentRegion?.rollTableUuid != null,
             availableFood = availableFood,
             totalFoodCost = calculateTotalFoodCost(
                 actorMeals = parsedCookingChoices.meals
-                    .filter { it.name in uncookedMeals || it.id == "rationsOrSubsistence"},
+                    .filter { it.name in uncookedMeals || it.id == "rationsOrSubsistence" },
                 foodItems = foodItems,
                 availableFood = totalFood,
             ),
@@ -1087,7 +1088,7 @@ class CampingSheet(
                     )
                 }
             }.toTypedArray(),
-            night = calculateNightModes(time),
+            night = nightModes,
             hexplorationActivityDuration = hexplorationActivityDuration,
             hexplorationActivitiesAvailable = hexplorationActivitiesAvailable,
             hexplorationActivitiesMax = hexplorationActivitiesMax,
@@ -1101,6 +1102,12 @@ class CampingSheet(
             campingActivitiesSection = campingActivitiesSection,
             eatingSection = eatingSection,
             isFormValid = isFormValid,
+            travelMode = CheckboxInput(
+                value = camping.isTravelModeActive(),
+                label = t("camping.traveling"),
+                name = "travelModeActive",
+                elementClasses = if (nightModes.travelMode) listOf("white-checkbox") else listOf("black-checkbox")
+            ).toContext(),
         )
     }
 
@@ -1128,6 +1135,7 @@ class CampingSheet(
                     skill = value.recipes?.selectedSkill?.get(it.name) ?: "survival",
                 )
             }.toTypedArray()
+            camping.travelModeActive = value.travelModeActive
             actor.setCamping(camping)
         }
         undefined

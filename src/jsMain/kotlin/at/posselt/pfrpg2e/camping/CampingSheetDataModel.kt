@@ -13,6 +13,7 @@ class CampingSheetDataModel(
     companion object {
         @JsStatic
         fun defineSchema() = buildSchema {
+            boolean("travelModeActive")
             string("region")
             schema("activities") {
                 record("selectedSkill")

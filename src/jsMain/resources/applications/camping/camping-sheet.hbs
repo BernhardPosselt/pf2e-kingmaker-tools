@@ -1,6 +1,9 @@
 <div>
     <div id="km-camping-time-tracker" class="km-row" style="background-position: {{pxTimeOffset}}px">
         {{#if isGM}}
+            <div class="km-camping-travel {{#if night.travelMode}}night-mode{{/if}}" title="{{localizeKM "camping.travelingHelp"}}">
+                {{> formElement travelMode}}
+            </div>
             <button class="km-camping-action {{#if night.retract2}}night-mode{{/if}}"
                     data-action="advance-hour"
                     type="button"
@@ -22,13 +25,6 @@
                     data-activities="-1"
                     title="{{localizeKM "camping.retractHexActivity" duration=hexplorationActivityDuration}}">-1
             </button>
-            <button class="km-camping-action {{#if night.retractTravel}}night-mode{{/if}}"
-                    data-action="travel"
-                    type="button"
-                    data-activities="-1"
-                    title="{{localizeKM "camping.retractTravel" duration=hexplorationActivityDuration}}">
-                - <i class="fa-solid fa-route"></i>
-            </button>
         {{/if}}
         <div id="km-camping-time" class="{{#if night.time}}night-mode{{/if}}">
             <div id="km-camping-time-wrapper">
@@ -41,13 +37,6 @@
             </div>
         </div>
         {{#if isGM}}
-            <button class="km-camping-action {{#if night.advanceTravel}}night-mode{{/if}}"
-                    data-action="travel"
-                    type="button"
-                    data-activities="1"
-                    title="{{localizeKM "camping.advanceTravel" duration=hexplorationActivityDuration}}">
-                + <i class="fa-solid fa-route"></i>
-            </button>
             <button class="km-camping-action {{#if night.advanceHex}}night-mode{{/if}}"
                     id="km-camping-plus-hexploration"
                     type="button"

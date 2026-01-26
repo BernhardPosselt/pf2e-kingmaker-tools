@@ -103,8 +103,12 @@ external interface CampingData {
     var secondsSpentTraveling: Int? // TODO: migrate to non optional in v14
     var secondsSpentHexploring: Int? // TODO: migrate to non optional in v14
     var resetTimeTrackingAfterOneDay: Boolean? // TODO: migrate to non optional in v14
+    var travelModeActive: Boolean?  // TODO: migrate to non optional in v14
 
 }
+
+fun CampingData.isTravelModeActive() =
+    travelModeActive ?: false
 
 fun CampingData.resetTimeTrackingAfterOneDay() =
     resetTimeTrackingAfterOneDay ?: true
@@ -458,6 +462,13 @@ fun CampingData.resetTimeTracking(game: Game) {
     dailyPrepsAtTime = game.time.worldTimeSeconds
     secondsSpentTraveling = 0
     secondsSpentHexploring = 0
+}
+
+fun CampingData.persistPassedTime(deltaInSeconds: Int) {
+    if (isTravelModeActive()) {
+        secondsSpentTraveling = secondsSpentTraveling() + deltaInSeconds
+    }
+    secondsSpentHexploring = secondsSpentHexploring() + deltaInSeconds
 }
 
 fun Game.getActiveCampingActor(): CampingActor? =
