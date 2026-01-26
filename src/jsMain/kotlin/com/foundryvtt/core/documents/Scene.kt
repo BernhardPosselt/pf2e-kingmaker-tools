@@ -5,6 +5,7 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DatabaseDeleteOperation
 import com.foundryvtt.core.abstract.DatabaseUpdateOperation
 import com.foundryvtt.core.documents.collections.EmbeddedCollection
+import com.foundryvtt.core.grid.BaseGrid
 import kotlin.js.Promise
 
 external class Scene : ClientDocument {
@@ -26,7 +27,7 @@ external class Scene : ClientDocument {
     var height: Int
     var padding: Double
     var initial: SceneInitial
-    var grid: SceneGrid
+    var grid: BaseGrid
     var environment: SceneEnvironmentData
     var drawings: EmbeddedCollection<DrawingDocument>
     var tokens: EmbeddedCollection<TokenDocument>

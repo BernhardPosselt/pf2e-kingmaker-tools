@@ -10,8 +10,34 @@ import com.foundryvtt.core.helpers.PreDeleteDocumentCallback
 import com.foundryvtt.core.helpers.PreUpdateDocumentCallback
 import com.foundryvtt.core.helpers.UpdateDocumentCallback
 import js.objects.unsafeJso
+import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
+@JsPlainObject
+external interface TokenLocation {
+    val elevation: Int
+    val height: Int
+    val width: Int
+    val x: Double
+    val y: Double
+    val shape: Int
+}
+
+
+
+@JsPlainObject
+external interface MoveToken {
+    val autoRotate: Boolean
+    val destination: TokenLocation
+    val origin: TokenLocation
+}
+
+typealias MoveTokenCallback<T, O> = (
+    document: T,
+    changed: MoveToken,
+    options: DatabaseUpdateOperation,
+    userId: String
+) -> O
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE", "UNCHECKED_CAST")
 fun TokenDocument.update(data: TokenDocument, operation: DatabaseUpdateOperation = unsafeJso()): Promise<TokenDocument?> =
@@ -35,3 +61,6 @@ fun <O> HooksEventListener.onUpdateToken(callback: UpdateDocumentCallback<TokenD
 
 fun <O> HooksEventListener.onDeleteToken(callback: DeleteDocumentCallback<TokenDocument, O>) =
     on("deleteToken", callback)
+
+fun <O> HooksEventListener.onMoveToken(callback: MoveTokenCallback<TokenDocument, O>) =
+    on("moveToken", callback)

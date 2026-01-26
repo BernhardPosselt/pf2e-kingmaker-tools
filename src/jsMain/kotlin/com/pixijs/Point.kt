@@ -1,6 +1,9 @@
 package com.pixijs
 
-external class Point(x: Double, y: Double) {
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
+external interface Point {
     val x: Double
     val y: Double
 }

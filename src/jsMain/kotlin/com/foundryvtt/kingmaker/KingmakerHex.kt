@@ -15,6 +15,25 @@ external interface HexOffsetCoordinate {
     val j: Int
 }
 
+@JsPlainObject
+external interface Terrain {
+    val id: String
+    val img: String
+    val label: String
+}
+
+@JsPlainObject
+external interface Zone {
+    val id: String
+    val color: String
+    val label: String
+    val level: Int
+    val terrain: String
+    val travel: String
+    val polygon: Array<Int>
+}
+
+
 external class KingmakerHex(
     coordinates: Point,
     grid: HexagonalGrid,
@@ -31,8 +50,8 @@ external class KingmakerHex(
 
     val key: Int
     val name: String
-    val zone: AnyObject // TODO
-    val terrain: AnyObject // TODO
+    val zone: Zone
+    val terrain: Terrain
     val travel: AnyObject // TODO
     val difficulty: AnyObject // TODO
     val discoveryTrait: AnyObject // TODO

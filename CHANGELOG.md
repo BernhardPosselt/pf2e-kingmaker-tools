@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.10.0] - 2026-01-26
 
+### Added
+
+* If you are using the official Kingmaker module, you can now automatically choose the correct region by moving the token to a location on the provided hexploration map. Make sure that your zone names line up or follow the default **Zone XX** schema
+
 ### Changed
 
 * Instead of tracking a fixed amount of travel time with a special button, the camping sheet now allows you to toggle a checkbox to determine if time passed should be stored as travel time
