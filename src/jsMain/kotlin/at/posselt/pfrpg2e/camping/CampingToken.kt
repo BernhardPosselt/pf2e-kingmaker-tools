@@ -4,7 +4,6 @@ import at.posselt.pfrpg2e.actor.isKingmakerInstalled
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.isFirstGM
 import com.foundryvtt.core.Game
-import com.foundryvtt.core.documents.Scene
 import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.documents.onMoveToken
 import com.foundryvtt.core.grid.GridOffset2D
@@ -17,20 +16,23 @@ import kotlin.js.Promise
 import kotlin.math.abs
 
 fun registerCampingTokenMove(game: Game) {
-    if (game.isFirstGM()) {
-        TypedHooks.onMoveToken { document, changed, options, userId ->
+    if (game.isFirstGM() && game.isKingmakerInstalled) {
+        TypedHooks.onMoveToken { document, changed, _, _ ->
             val actor = document.actor
-            if (actor is PF2EParty) {
-                val camping = actor.getCamping()
-                if (camping != null) {
-                    val hexScene = camping.worldSceneId?.let { game.scenes.get(it) }
-                    if (hexScene != null && game.scenes.current?.id == hexScene.id) {
-                        val point = Point(x = changed.destination.x, y = changed.destination.y)
-                        val offset = hexScene.grid.getOffset(point)
-                        buildPromise {
-                            trackPartyTokenPosition(game, hexScene, camping, offset)
-                            actor.setCamping(camping)
+            val hexScene = game.scenes.get(stolenLandsId)
+            if (actor is PF2EParty && hexScene != null && game.scenes.current?.id == stolenLandsId) {
+                actor.getCamping()?.let { camping ->
+                    val point = Point(x = changed.destination.x, y = changed.destination.y)
+                    val offset = hexScene.grid.getOffset(point)
+                    val abbreviatedZone = findKingmakerHexRegion(offset)
+                    val zoneNames = kingmakerRegions[abbreviatedZone].orEmpty()
+                    camping.regionSettings.regions
+                        .find { it.name.trim() in zoneNames }
+                        ?.let {
+                            camping.currentRegion = it.name
                         }
+                    buildPromise {
+                        actor.setCamping(camping)
                     }
                 }
             }
@@ -95,14 +97,3 @@ private val kingmakerRegions = mapOf(
     "TV" to setOf("Zone 18", "Thousand Voices"),
     "BR" to setOf("Zone 19", "Branthlend Mountains"),
 )
-
-private fun trackPartyTokenPosition(game: Game, scene: Scene, camping: CampingData, offset: GridOffset2D) {
-    if (game.isKingmakerInstalled && scene.id == stolenLandsId) {
-        val abbreviatedZone = findKingmakerHexRegion(offset)
-        val zoneNames = kingmakerRegions[abbreviatedZone].orEmpty()
-        camping.regionSettings.regions.find { it.name.trim() in zoneNames }
-            ?.let {
-                camping.currentRegion = it.name
-            }
-    }
-}
