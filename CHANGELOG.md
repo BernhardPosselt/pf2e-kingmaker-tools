@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * If you are using the official Kingmaker module, you can now automatically choose the correct region by moving the token to a location on the provided hexploration map. Make sure that your zone names line up or follow the default **Zone XX** schema
+* Optionally, you can also track party token positions using Scene Regions
 
 ### Changed
 
