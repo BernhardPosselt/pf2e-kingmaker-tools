@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerCampingTokenMove
 import at.posselt.pfrpg2e.camping.registerFatiguedHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
+import at.posselt.pfrpg2e.camping.updateCampingRegion
 import at.posselt.pfrpg2e.combat.registerCombatTrackHooks
 import at.posselt.pfrpg2e.combat.registerCombatXpHooks
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
@@ -49,6 +50,7 @@ import at.posselt.pfrpg2e.migrations.migratePfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.Pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.ToolsMacros
+import at.posselt.pfrpg2e.utils.ToolsScripts
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fixVisibility
 import at.posselt.pfrpg2e.utils.initLocalization
@@ -131,6 +133,9 @@ fun main() {
         }
 
         game.pf2eKingmakerTools = Pfrpg2eKingdomCampingWeather(
+            scripts = ToolsScripts(
+                updateCampingRegion = ::updateCampingRegion
+            ),
             macros = ToolsMacros(
                 toggleWeatherMacro = { buildPromise { toggleWeatherMacro(game) } },
                 toggleShelteredMacro = { buildPromise { toggleShelteredMacro(game) } },

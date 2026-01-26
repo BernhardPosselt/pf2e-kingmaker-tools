@@ -5,12 +5,15 @@ import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.isFirstGM
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Scene
+import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.documents.onMoveToken
 import com.foundryvtt.core.grid.GridOffset2D
 import com.foundryvtt.core.helpers.TypedHooks
 import com.foundryvtt.kingmaker.kingmaker
 import com.foundryvtt.pf2e.actor.PF2EParty
 import com.pixijs.Point
+import js.objects.JsPlainObject
+import kotlin.js.Promise
 import kotlin.math.abs
 
 fun registerCampingTokenMove(game: Game) {
@@ -35,7 +38,30 @@ fun registerCampingTokenMove(game: Game) {
     }
 }
 
-fun findKingmakerHexRegion(offset: GridOffset2D): String? {
+@JsPlainObject
+external interface TokenEnterEventData {
+    val token: TokenDocument
+}
+
+@JsPlainObject
+external interface TokenEnterEvent {
+    val data: TokenEnterEventData
+}
+
+@JsExport
+fun updateCampingRegion(event: TokenEnterEvent, region: String): Promise<Unit> {
+    val actor = event.data.token.actor
+    return buildPromise {
+        if (actor is PF2EParty) {
+            actor.getCamping()?.let {
+                it.currentRegion = region
+                actor.setCamping(it)
+            }
+        }
+    }
+}
+
+private fun findKingmakerHexRegion(offset: GridOffset2D): String? {
     // kingmaker hexes start at i 0 and not -1 so we need to add 1
     // furthermore, all uneven rows need to be shifted one right
     val offsetJ = if (abs(offset.i) % 2 == 1) 1 else 0

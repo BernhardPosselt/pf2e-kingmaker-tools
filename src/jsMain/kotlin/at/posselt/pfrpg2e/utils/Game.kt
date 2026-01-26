@@ -1,9 +1,11 @@
 package at.posselt.pfrpg2e.utils
 
+import at.posselt.pfrpg2e.camping.TokenEnterEvent
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.pf2e.actor.PF2EActor
 import kotlinx.js.JsPlainObject
+import kotlin.js.Promise
 
 @Suppress("unused")
 @JsPlainObject
@@ -30,9 +32,16 @@ external interface ToolsMacros {
     val createTeleporterPairMacro: () -> Unit
 }
 
+@Suppress("unused")
+@JsPlainObject
+external interface ToolsScripts {
+    val updateCampingRegion: (event: TokenEnterEvent, region: String) -> Promise<Unit>
+}
+
 @JsPlainObject
 external interface Pfrpg2eKingdomCampingWeather {
     val macros: ToolsMacros
+    val scripts: ToolsScripts
 }
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
