@@ -27,7 +27,6 @@ import at.posselt.pfrpg2e.camping.mealEffectsChangingRestDuration
 import at.posselt.pfrpg2e.camping.mealEffectsDoublingHealing
 import at.posselt.pfrpg2e.camping.mealEffectsHalvingHealing
 import at.posselt.pfrpg2e.camping.performCampingCheck
-import at.posselt.pfrpg2e.camping.previousRestSettings
 import at.posselt.pfrpg2e.camping.removeCombatEffects
 import at.posselt.pfrpg2e.camping.removeMealEffects
 import at.posselt.pfrpg2e.camping.removeProvisions
@@ -264,8 +263,8 @@ private suspend fun beginRest(
         recipes = camping.getAllRecipes().toList(),
         gunsToClean = camping.gunsToClean,
         increaseActorsKeepingWatch = camping.increaseWatchActorNumber,
-        skipWatch = camping.previousRestSettings().skipWatch,
-        skipDailyPreparations = camping.previousRestSettings().skipDailyPreparations,
+        skipWatch = camping.restSettings.skipWatch,
+        skipDailyPreparations = camping.restSettings.skipDailyPreparations,
     )
     val randomEncounterAt = findRandomEncounterAt(
         game = game,
@@ -273,7 +272,7 @@ private suspend fun beginRest(
         camping = camping,
         watchDurationSeconds = watchDurationSeconds,
     )
-    if (camping.previousRestSettings().disableRandomEncounter == false && randomEncounterAt != null) {
+    if (camping.restSettings.disableRandomEncounter == false && randomEncounterAt != null) {
         askDc(t("camping.enemyStealth"))?.let { dc ->
             watchers
                 .filterIsInstance<PF2ECharacter>()
@@ -326,7 +325,7 @@ private suspend fun completeDailyPreparations(
     removeProvisions(actors + listOfNotNull(party))
     removeCombatEffects(actors)
     gainMinimumSubsistence(dispatcher, camping.cooking.minimumSubsistence, party)
-    if (!camping.previousRestSettings().skipWeather) {
+    if (!camping.restSettings.skipWeather) {
         rollWeather(game)
     }
 }

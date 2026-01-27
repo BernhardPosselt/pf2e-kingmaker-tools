@@ -17,9 +17,7 @@ import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.deleteCampingActivitiesOld
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.resetCampsites
-import at.posselt.pfrpg2e.camping.resetTimeTrackingAfterOneDay
 import at.posselt.pfrpg2e.camping.setCamping
-import at.posselt.pfrpg2e.camping.shouldAutoApplyFatigued
 import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
@@ -168,8 +166,8 @@ class CampingSettingsApplication(
             restingPlaylistUuid = camping.restingTrack?.playlistUuid,
             restingPlaylistSoundUuid = camping.restingTrack?.trackUuid,
             worldSceneId = camping.worldSceneId,
-            autoApplyFatigued = camping.shouldAutoApplyFatigued(),
-            resetTimeTrackingAfterOneDay = camping.resetTimeTrackingAfterOneDay(),
+            autoApplyFatigued = camping.autoApplyFatigued,
+            resetTimeTrackingAfterOneDay = camping.resetTimeTrackingAfterOneDay,
         )
     }
 

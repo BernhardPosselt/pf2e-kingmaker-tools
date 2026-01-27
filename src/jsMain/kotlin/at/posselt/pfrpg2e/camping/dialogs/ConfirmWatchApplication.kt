@@ -9,7 +9,6 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.camping.CampingData
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCampingActorsByUuid
-import at.posselt.pfrpg2e.camping.previousRestSettings
 import at.posselt.pfrpg2e.resting.getTotalRestDuration
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -80,10 +79,10 @@ class ConfirmWatchApplication(
     id = "kmConfirmWatch"
 ) {
     private val enableWeather = game.settings.pfrpg2eKingdomCampingWeather.getEnableWeather()
-    private var enableWatch: Boolean = !camping.previousRestSettings().skipWatch
-    private var enableDailyPreparations: Boolean = !camping.previousRestSettings().skipDailyPreparations
-    private var checkRandomEncounter: Boolean = !camping.previousRestSettings().disableRandomEncounter
-    private var checkWeather: Boolean = if(enableWeather) !camping.previousRestSettings().skipWeather else false
+    private var enableWatch: Boolean = !camping.restSettings.skipWatch
+    private var enableDailyPreparations: Boolean = !camping.restSettings.skipDailyPreparations
+    private var checkRandomEncounter: Boolean = !camping.restSettings.disableRandomEncounter
+    private var checkWeather: Boolean = if(enableWeather) !camping.restSettings.skipWeather else false
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {

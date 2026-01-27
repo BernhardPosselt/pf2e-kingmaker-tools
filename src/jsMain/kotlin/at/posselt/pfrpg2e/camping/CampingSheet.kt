@@ -341,7 +341,7 @@ class CampingSheet(
                                 skipWatch = false,
                                 skipDailyPreparations = false,
                                 disableRandomEncounter = false,
-                                skipWeather = camping.previousRestSettings().skipWeather,
+                                skipWeather = camping.restSettings.skipWeather,
                                 party = actor,
                             )
                         }
@@ -815,15 +815,15 @@ class CampingSheet(
     private fun getHexplorationActivitiesAvailable(camping: CampingData): Int =
         max(
             0,
-            (getAvailableHexplorationSeconds() - camping.secondsSpentHexploring()) / getHexplorationActivitySeconds()
+            (getAvailableHexplorationSeconds() - camping.secondsSpentHexploring) / getHexplorationActivitySeconds()
         )
 
     private fun getAdventuringFor(camping: CampingData): String {
-        return formatSeconds(camping.secondsSpentHexploring())
+        return formatSeconds(camping.secondsSpentHexploring)
     }
 
     private fun getTravelingFor(camping: CampingData): String {
-        return formatSeconds(camping.secondsSpentTraveling())
+        return formatSeconds(camping.secondsSpentTraveling)
     }
 
     private suspend fun advanceHours(target: HTMLElement) {
@@ -1101,7 +1101,7 @@ class CampingSheet(
             eatingSection = eatingSection,
             isFormValid = isFormValid,
             travelMode = CheckboxInput(
-                value = camping.isTravelModeActive(),
+                value = camping.travelModeActive,
                 label = t("camping.traveling"),
                 name = "travelModeActive",
                 elementClasses = if (nightModes.travelMode) listOf("white-checkbox") else listOf("black-checkbox")

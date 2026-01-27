@@ -98,38 +98,13 @@ external interface CampingData {
     var section: String
     var restingTrack: Track?
     var worldSceneId: String?
-    var autoApplyFatigued: Boolean?  // TODO: migrate to non optional in v14
-    var restSettings: RestSettings? // TODO: migrate to non optional in v14
-    var secondsSpentTraveling: Int? // TODO: migrate to non optional in v14
-    var secondsSpentHexploring: Int? // TODO: migrate to non optional in v14
-    var resetTimeTrackingAfterOneDay: Boolean? // TODO: migrate to non optional in v14
-    var travelModeActive: Boolean?  // TODO: migrate to non optional in v14
-
+    var autoApplyFatigued: Boolean
+    var restSettings: RestSettings
+    var secondsSpentTraveling: Int
+    var secondsSpentHexploring: Int
+    var resetTimeTrackingAfterOneDay: Boolean
+    var travelModeActive: Boolean
 }
-
-fun CampingData.isTravelModeActive() =
-    travelModeActive ?: false
-
-fun CampingData.resetTimeTrackingAfterOneDay() =
-    resetTimeTrackingAfterOneDay ?: true
-
-fun CampingData.shouldAutoApplyFatigued() =
-    autoApplyFatigued ?: true
-
-
-fun CampingData.secondsSpentTraveling() =
-    secondsSpentTraveling ?: 0
-
-fun CampingData.secondsSpentHexploring() =
-    secondsSpentHexploring ?: 0
-
-fun CampingData.previousRestSettings() =
-    restSettings ?: RestSettings(
-        skipWatch = false,
-        skipDailyPreparations = false,
-        disableRandomEncounter = false,
-        skipWeather = false,
-    )
 
 suspend fun CampingData.getActorsCarryingFood(party: PF2EParty?): List<PF2EActor> =
     getActorsInCamp() + listOfNotNull(party)
@@ -236,6 +211,8 @@ fun getDefaultCamping(game: Game): CampingData {
             skipWeather = false,
         ),
         secondsSpentHexploring = 0,
+        resetTimeTrackingAfterOneDay = true,
+        travelModeActive = false,
         regionSettings = RegionSettings(
             regions = arrayOf(
                 RegionSetting(
@@ -462,10 +439,10 @@ fun CampingData.resetTimeTracking(game: Game) {
 }
 
 fun CampingData.persistPassedTime(deltaInSeconds: Int) {
-    if (isTravelModeActive()) {
-        secondsSpentTraveling = secondsSpentTraveling() + deltaInSeconds
+    if (travelModeActive) {
+        secondsSpentTraveling += deltaInSeconds
     }
-    secondsSpentHexploring = secondsSpentHexploring() + deltaInSeconds
+    secondsSpentHexploring += deltaInSeconds
 }
 
 fun Game.getActiveCampingActor(): CampingActor? =

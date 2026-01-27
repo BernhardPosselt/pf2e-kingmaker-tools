@@ -26,7 +26,7 @@ suspend fun persistPassedTime(game: Game, deltaInSeconds: Int) {
     // reset if more than one day is passed
     game.getActiveCampingActor()?.let {
         val camping = it.getCamping()!!
-        if (deltaInSeconds >= DAY_SECONDS && camping.resetTimeTrackingAfterOneDay()) {
+        if (deltaInSeconds >= DAY_SECONDS && camping.resetTimeTrackingAfterOneDay) {
             camping.resetTimeTracking(game)
         } else {
             camping.persistPassedTime(deltaInSeconds)
@@ -41,12 +41,12 @@ fun registerFatiguedHooks(game: Game) {
             buildPromise {
                 persistPassedTime(game, deltaInSeconds)
                 val camping = game.getActiveCamping()
-                if (camping != null && camping.shouldAutoApplyFatigued()) {
+                if (camping != null && camping.autoApplyFatigued) {
                     val currentWeatherType = game.getCurrentWeatherType()
                     val fatiguedAfterTravellingSeconds = currentWeatherType.fatigueDurationMultiplier * 8 * 3600
                     val recipes = camping.getAllRecipes().toList()
                     val elapsedSeconds = game.time.worldTimeSeconds - camping.dailyPrepsAtTime
-                    val travelSeconds = camping.secondsSpentTraveling()
+                    val travelSeconds = camping.secondsSpentTraveling
                     buildPromise {
                         val actors = camping.getActorsInCamp()
                         actors
