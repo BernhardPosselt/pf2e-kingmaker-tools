@@ -23,6 +23,7 @@ import at.posselt.pfrpg2e.camping.ActivityOutcome
 import at.posselt.pfrpg2e.camping.CampingActivityData
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.ModifyEncounterDc
+import at.posselt.pfrpg2e.camping.deleteCampingActivityOld
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCampingSkills
 import at.posselt.pfrpg2e.camping.requiresACheck
@@ -406,11 +407,9 @@ class ActivityApplication(
                     camping.homebrewCampingActivities = camping.homebrewCampingActivities
                         .filter { it.id != data.id }
                         .toTypedArray()
-                    camping.homebrewCampingActivities = camping.homebrewCampingActivities + data
-                    camping.campingActivities = camping.campingActivities
-                        .filter { it.activityId != data.id }
-                        .toTypedArray()
+                    camping.homebrewCampingActivities += data
                     actor.setCamping(camping)
+                    actor.deleteCampingActivityOld(data.id)
                     close().await()
                     afterSubmit()
                 }

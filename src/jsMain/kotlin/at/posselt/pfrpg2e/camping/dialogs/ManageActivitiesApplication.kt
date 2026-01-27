@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.camping.CampingActivityData
 import at.posselt.pfrpg2e.camping.CampingActor
+import at.posselt.pfrpg2e.camping.deleteCampingActivityOld
 import at.posselt.pfrpg2e.camping.getAllActivities
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.isCookMeal
@@ -31,9 +32,9 @@ class ManageActivitiesApplication(
         actor.getCamping()?.let { camping ->
             camping.homebrewCampingActivities =
                 camping.homebrewCampingActivities.filter { it.id != id }.toTypedArray()
-            camping.campingActivities = camping.campingActivities.filter { it.activityId != id }.toTypedArray()
             camping.lockedActivities = camping.lockedActivities.filter { it != id }.toTypedArray()
             actor.setCamping(camping)
+            actor.deleteCampingActivityOld(id)
             render()
         }
         undefined

@@ -406,7 +406,7 @@ class CampingSheet(
 
             "clear-actor" -> {
                 buildPromise {
-                    target.dataset["uuid"]?.let { clearActor(it) }
+                    target.dataset["uuid"]?.let { actor.deleteCampingActorOld(it) }
                 }
             }
 
@@ -627,8 +627,11 @@ class CampingSheet(
 
     private suspend fun resetActivities() {
         actor.getCamping()?.let { camping ->
-            camping.campingActivities = camping.campingActivities.filter { it.isPrepareCampsite() }.toTypedArray()
-            actor.setCamping(camping)
+            val ids = camping.campingActivities
+                .map { it.activityId }
+                .filter { it != prepareCampsiteId }
+                .toSet()
+            actor.deleteCampingActivitiesOld(ids)
         }
     }
 
@@ -705,17 +708,21 @@ class CampingSheet(
             } else if (activity.requiresACheck() && !activityActor.hasAnyActivitySkill(activity)) {
                 ui.notifications.error(t("camping.actorLacksSkills", recordOf("activityName" to activity.name)))
             } else {
-                camping.campingActivities =
-                    camping.campingActivities.filter { it.activityId != activityId }.toTypedArray()
                 val skill = activityActor
                     .findCampingActivitySkills(activity, camping.ignoreSkillRequirements)
                     .filterNot { it.validateOnly }
                     .firstOrNull()
-                camping.campingActivities = camping.campingActivities + CampingActivity(
-                    activityId = activity.id,
-                    actorUuid = actorUuid,
-                    selectedSkill = skill?.attribute?.value,
-                )
+                val existing = camping.campingActivities.find { it.activityId == activityId }
+                if (existing == null) {
+                    camping.campingActivities += CampingActivity(
+                        activityId = activity.id,
+                        actorUuid = actorUuid,
+                        selectedSkill = skill?.attribute?.value,
+                    )
+                } else {
+                    existing.actorUuid = actorUuid
+                    existing.selectedSkill = skill?.attribute?.value
+                }
                 actor.setCamping(camping)
             }
         }
@@ -773,15 +780,6 @@ class CampingSheet(
             actor.addToInventory(document.toObject())
         } else {
             ui.notifications.error(t("camping.wrongItemAddedToActor"))
-        }
-    }
-
-    private suspend fun clearActor(uuid: String) {
-        actor.getCamping()?.let {
-            it.actorUuids = it.actorUuids.filter { id -> id != uuid }.toTypedArray()
-            it.campingActivities = it.campingActivities.filter { a -> a.actorUuid != uuid }.toTypedArray()
-            it.cooking.actorMeals = it.cooking.actorMeals.filter { m -> m.actorUuid != uuid }.toTypedArray()
-            actor.setCamping(it)
         }
     }
 

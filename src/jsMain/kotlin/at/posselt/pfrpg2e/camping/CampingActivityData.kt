@@ -65,10 +65,10 @@ external interface CampingActivityData {
 }
 
 fun CampingActivityData.isCookMeal() =
-    id == "cook-meal"
+    id == cookMealId
 
 fun CampingActivityData.isPrepareCampsite() =
-    id == "prepare-campsite"
+    id == prepareCampsiteId
 
 fun CampingActivityData.isHuntAndGather() =
     id == "hunt-and-gather"

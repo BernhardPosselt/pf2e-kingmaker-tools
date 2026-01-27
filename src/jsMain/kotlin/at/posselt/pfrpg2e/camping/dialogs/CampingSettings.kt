@@ -14,6 +14,7 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.camping.CampingActor
+import at.posselt.pfrpg2e.camping.deleteCampingActivitiesOld
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.resetCampsites
 import at.posselt.pfrpg2e.camping.resetTimeTrackingAfterOneDay
@@ -395,12 +396,14 @@ class CampingSettingsApplication(
                             Track(playlistUuid = it, trackUuid = settings.restingPlaylistSoundUuid)
                         }
                         camping.worldSceneId = settings.worldSceneId
-                        camping.campingActivities = camping.campingActivities
-                            .filter { it.activityId !in alwaysPerformIds }
-                            .toTypedArray()
                         camping.autoApplyFatigued = settings.autoApplyFatigued
                         camping.resetTimeTrackingAfterOneDay = settings.resetTimeTrackingAfterOneDay
                         campingActor.setCamping(camping)
+                        val idsToDelete = camping.campingActivities
+                            .map { it.activityId }
+                            .filter { it in alwaysPerformIds }
+                            .toSet()
+                        campingActor.deleteCampingActivitiesOld(idsToDelete)
                     }
                     close()
                 }

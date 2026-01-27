@@ -833,7 +833,7 @@
       "additionalTrainedSkills": "Additional Trained Skills (V&K)",
       "additionalTrainedSkillsDescription": "You can add additional Skill Trainings in the Bonus tab.",
       "heartlandRequirement": "The PCs can choose any hex that they have Reconnoitered. Note that terrain features can grant other benefits to the kingdom when claimed. The choice of terrain made here influences how the Favored Land kingdom ability functions (see section 1 next to the Creation section).",
-      "chooseLeadersHelp": "Assign your leaders by drag and dropping Character or NPC actors from the sidebar onto each tile.",
+      "chooseLeadersHelp": "Assign your leaders by drag and dropping Character or NPC actors from the sidebar onto each tile. If you want to appoint new leaders later on, you do it here.",
       "chooseLeadersHelpVk": "Next, choose four leadership roles to invest. Investing a role provides a status bonus to Kingdom skill checks based on that role's key ability.",
       "dropActorFromSidebar": "Drop Actor from Sidebar",
       "choose4Skills": "Then, each of the four invested leaders chooses to apply the trained proficiency rank to a different skill.",

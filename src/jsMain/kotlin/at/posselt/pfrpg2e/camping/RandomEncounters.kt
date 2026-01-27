@@ -73,10 +73,7 @@ private suspend fun rollRandomEncounter(
         if (proxyResult == "Creature") {
             table.rollWithDraw(rollMode = rollMode)
         }
-        if (camping.campingActivities.any {
-                val result = it.parseResult()
-                it.isPrepareCampsite() && result != null && result != DegreeOfSuccess.CRITICAL_FAILURE
-            }) {
+        if (camping.hasPreparedCampsite()) {
             postCombatEffects(
                 activeActivities = camping.alwaysPerformActivityIds.toSet() +
                         camping.campingActivities

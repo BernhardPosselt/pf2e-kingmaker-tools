@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.kingdom.getKingdomActors
 import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.migrations.migrations.Migration17
 import at.posselt.pfrpg2e.migrations.migrations.Migration18
+import at.posselt.pfrpg2e.migrations.migrations.Migration19
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.utils.isFirstGM
 import at.posselt.pfrpg2e.utils.openJournal
@@ -42,12 +43,23 @@ private suspend fun createBackups(
 private val migrations = listOf(
     Migration17(),
     Migration18(),
+    Migration19(),
 )
 
 private val latestMigrationVersion = migrations.maxOfOrNull { it.version }!!
 
+suspend fun Game.fixSchemaVersionV13() {
+    val schemaVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
+    val hasKingdomData = getKingdomActors().isNotEmpty()
+    val hasCampingData = getCampingActors().isNotEmpty()
+    if (schemaVersion == 0 && (hasCampingData || hasKingdomData)) {
+        settings.pfrpg2eKingdomCampingWeather.setSchemaVersion(18)
+    }
+}
+
 suspend fun Game.migratePfrpg2eKingdomCampingWeather() {
     if (isFirstGM()) {
+        fixSchemaVersionV13()
         val currentVersion = settings.pfrpg2eKingdomCampingWeather.getSchemaVersion()
             .takeIf { it != 0 }
             ?: latestMigrationVersion

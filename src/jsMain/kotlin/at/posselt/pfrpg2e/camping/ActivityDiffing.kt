@@ -35,9 +35,10 @@ private data class ActivityChange(
     val rollRandomEncounter: Boolean,
 )
 
-private const val homebrewPath = "flags.${Config.moduleId}.camping-sheet.homebrewCampingActivities"
-private const val alwaysPerformPath = "flags.${Config.moduleId}.camping-sheet.alwaysPerformActivityIds"
-private const val campingActivitiesPath = "flags.${Config.moduleId}.camping-sheet.campingActivities"
+const val campingPath = "flags.${Config.moduleId}.camping-sheet"
+private const val homebrewPath = "$campingPath.homebrewCampingActivities"
+private const val alwaysPerformPath = "$campingPath.alwaysPerformActivityIds"
+const val campingActivitiesPath = "$campingPath.campingActivities"
 
 private val settingAttributes = setOf(
     homebrewPath,
@@ -159,7 +160,7 @@ private fun setSection(
     }
     setProperty(
         update,
-        "flags.${Config.moduleId}.camping-sheet.section",
+        "$campingPath.section",
         section,
     )
 }
@@ -207,7 +208,7 @@ private fun checkPrepareCampsiteResult(result: DegreeOfSuccess?): PrepareCampsit
 private fun prepareCampsiteChanged(activityStateChanged: List<ActivityChange>) =
     activityStateChanged
         .map { it.new }
-        .find { it.isPrepareCampsite() }
+        .find { it.activityId == prepareCampsiteId }
 
 fun registerActivityDiffingHooks(game: Game, dispatcher: ActionDispatcher) {
     TypedHooks.onPreUpdateActor { actor, update, _, _ ->

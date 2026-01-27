@@ -157,11 +157,8 @@ fun CampingActivity.parseResult() =
 fun CampingActivity.checkPerformed() =
     result != null && actorUuid != null
 
-fun CampingActivity.isPrepareCampsite() =
-    activityId == "prepare-campsite"
-
-fun CampingActivity.isCookMeal() =
-    activityId == "cook-meal"
+const val prepareCampsiteId = "prepare-campsite"
+const val cookMealId = "cook-meal"
 
 enum class CampingSheetSection : Translatable, ValueEnum {
     PREPARE_CAMPSITE,
@@ -480,7 +477,7 @@ fun Game.getActiveCamping(): CampingData? =
 
 fun CampingData.canPerformActivities(): Boolean {
     val prepareCampResult = campingActivities
-        .find { it.isPrepareCampsite() }
+        .find { it.activityId == prepareCampsiteId }
         ?.result
         ?.let { fromCamelCase<DegreeOfSuccess>(it) }
     return prepareCampResult != null && prepareCampResult != DegreeOfSuccess.CRITICAL_FAILURE
@@ -569,20 +566,23 @@ private fun parseMealChoices(
     return chosenMeals
 }
 
+fun CampingData.hasPreparedCampsite() =
+    campingActivities.any {
+        it.activityId == prepareCampsiteId
+                && it.parseResult() != null
+                && it.parseResult() != DegreeOfSuccess.CRITICAL_FAILURE
+    }
+
 fun CampingData.findCookingChoices(
     charactersInCampByUuid: Map<String, PF2EActor>,
     recipesById: Map<String, RecipeData>,
 ): ParsedMeals {
     val cook = campingActivities
-        .find { it.isCookMeal() && it.actorUuid != null }
+        .find { it.activityId == cookMealId && it.actorUuid != null }
         ?.let { charactersInCampByUuid[it.actorUuid] }
         ?.takeIfInstance<PF2ECharacter>()
         ?.takeIf {
-            campingActivities.any {
-                it.isPrepareCampsite()
-                        && it.parseResult() != null
-                        && it.parseResult() != DegreeOfSuccess.CRITICAL_FAILURE
-            }
+            hasPreparedCampsite()
         }
     val cookingLore = Lore("cooking")
     val cookingSkills: List<Attribute> = if (cook == null) {

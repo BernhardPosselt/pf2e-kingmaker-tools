@@ -3,6 +3,8 @@ package at.posselt.pfrpg2e.utils
 import com.foundryvtt.core.AnyObject
 import js.array.ReadonlyArray
 import js.array.Tuple2
+import js.array.component1
+import js.array.component2
 import js.array.toTypedArray
 import js.array.tupleOf
 import js.objects.Object
@@ -85,6 +87,10 @@ fun <T> deserializeB64Json(value: String): T =
 
 fun <T> ReadonlyRecord<String, T>.asSequence(): Sequence<Tuple2<String, T>> =
     Object.entries(this).asSequence()
+
+fun <T> ReadonlyRecord<String, T>.toMap(): Map<String, T> =
+    asSequence().associate { it.component1() to it.component2() }
+
 
 fun <T> ReadonlyRecord<String, T>.toList(): List<Tuple2<String, T>> =
     Object.entries(this).toList()
