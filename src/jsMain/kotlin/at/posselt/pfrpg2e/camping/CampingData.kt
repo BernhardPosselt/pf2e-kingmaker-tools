@@ -132,16 +132,7 @@ external interface CampingData {
 }
 
 fun CampingData.campingActivitiesWithId() =
-    campingActivities.asSequence()
-        .map {
-            CampingActivityWithId(
-                activityId = it.component1(),
-                actorUuid = it.component2().actorUuid,
-                result = it.component2().result,
-                selectedSkill = it.component2().selectedSkill,
-            )
-        }
-        .toTypedArray()
+    campingActivities.toCampingActivitiesWithId()
 
 suspend fun CampingData.getActorsCarryingFood(party: PF2EParty?): List<PF2EActor> =
     getActorsInCamp() + listOfNotNull(party)

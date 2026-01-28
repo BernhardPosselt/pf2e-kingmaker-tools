@@ -14,7 +14,6 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.camping.CampingActor
-import at.posselt.pfrpg2e.camping.campingActivitiesWithId
 import at.posselt.pfrpg2e.camping.deleteCampingActivities
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.resetCampsites
@@ -45,6 +44,7 @@ import js.array.component1
 import js.array.component2
 import js.array.toTypedArray
 import js.core.Void
+import js.objects.Object
 import js.objects.Record
 import js.objects.recordOf
 import js.objects.unsafeJso
@@ -379,8 +379,7 @@ class CampingSettingsApplication(
                 buildPromise {
                     campingActor.getCamping()?.let { camping ->
                         val alwaysPerformIds = settings.alwaysPerformActivities.toSet()
-                        val idsToDelete = camping.campingActivitiesWithId()
-                            .map { it.activityId }
+                        val idsToDelete = Object.keys(camping.campingActivities)
                             .filter { it in alwaysPerformIds }
                             .toSet()
                         campingActor.deleteCampingActivities(idsToDelete) {
