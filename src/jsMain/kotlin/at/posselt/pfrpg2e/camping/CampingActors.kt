@@ -2,7 +2,6 @@ package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.utils.fromUuidOfTypes
 import at.posselt.pfrpg2e.utils.fromUuidsOfTypes
-import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ECreature
@@ -21,8 +20,6 @@ import com.foundryvtt.pf2e.item.PF2EEquipment
 import com.foundryvtt.pf2e.item.PF2EShield
 import com.foundryvtt.pf2e.item.PF2ETreasure
 import com.foundryvtt.pf2e.item.PF2EWeapon
-import js.objects.Record
-import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlin.reflect.KClass
 
@@ -100,35 +97,37 @@ suspend fun CampingActor.deleteCampingActorOld(actorUuid: String, beforeSave: Be
 /**
  * New Replacements
  */
-typealias BeforeSave = (Record<String, out Any?>) -> Unit
+typealias BeforeSave = CampingUpdateBuilder.() -> Unit
 
 suspend fun CampingActor.deleteCampingActivity(id: String, beforeSave: BeforeSave) {
-    val data = recordOf<String, Any?>("$campingActivitiesPath.-=$id" to null)
-    beforeSave(data)
+    val data = buildCampingUpdate {
+        campingActivities.deleteEntry(id)
+        beforeSave()
+    }
     update(data).await()
 }
 
 suspend fun CampingActor.deleteCampingActivities(ids: Set<String>, beforeSave: BeforeSave) {
-    val data = ids.map { "$campingActivitiesPath.-=$it" to null }
-        .toMutableRecord<String, Any?>()
-    beforeSave(data)
+    val data = buildCampingUpdate {
+        campingActivities.deleteEntries(ids)
+        beforeSave()
+    }
     update(data).await()
 }
 
 suspend fun CampingActor.deleteCampingActor(actorUuid: String, beforeSave: BeforeSave) {
     getCamping()?.let { camping ->
-        val activitiesToRemove = camping.campingActivities
+        val ids = camping.campingActivities
             .filter { it.actorUuid == actorUuid }
             .map { it.activityId }
             .toSet()
-            .map { "$campingActivitiesPath.-=$it" to null }
-        val other = listOf(
-            "$campingPath.actorUuids" to camping.actorUuids.filter { id -> id != uuid }.toTypedArray(),
-            "$campingPath.cooking.actorMeals" to camping.cooking.actorMeals.filter { m -> m.actorUuid != uuid }
-                .toTypedArray(),
-        ) + activitiesToRemove
-        val data = (other + activitiesToRemove).toMutableRecord()
-        beforeSave(data)
+        val data = buildCampingUpdate {
+            campingActivities.deleteEntries(ids)
+            actorUuids.set(camping.actorUuids.filter { id -> id != uuid }.toTypedArray())
+            cooking.actorMeals.set(camping.cooking.actorMeals.filter { m -> m.actorUuid != uuid }
+                .toTypedArray())
+            beforeSave()
+        }
         update(data).await()
     }
 }
