@@ -23,7 +23,6 @@ import com.foundryvtt.pf2e.item.PF2ETreasure
 import com.foundryvtt.pf2e.item.PF2EWeapon
 import js.array.component1
 import js.array.component2
-import kotlinx.coroutines.await
 import kotlin.reflect.KClass
 
 private val allowedCampingActorTypes = arrayOf(
@@ -68,38 +67,30 @@ suspend fun getCampingActorsByUuid(uuids: Array<String>) =
 typealias BeforeSave = CampingUpdateBuilder.(CampingData) -> Unit
 
 suspend fun CampingActor.deleteCampingActivity(id: String, beforeSave: BeforeSave) {
-    getCamping()?.let { camping ->
-        val data = buildCampingUpdate {
-            campingActivities.deleteEntry(id)
-            beforeSave(camping)
-        }
-        update(data).await()
+    typedUpdate {
+        campingActivities.deleteEntry(id)
+        beforeSave(it)
     }
 }
 
 suspend fun CampingActor.deleteCampingActivities(ids: Set<String>, beforeSave: BeforeSave) {
-    getCamping()?.let { camping ->
-        val data = buildCampingUpdate {
-            campingActivities.deleteEntries(ids)
-            beforeSave(camping)
-        }
-        update(data).await()
+    typedUpdate {
+        campingActivities.deleteEntries(ids)
+        beforeSave(it)
     }
 }
 
 suspend fun CampingActor.deleteCampingActor(actorUuid: String, beforeSave: BeforeSave) {
-    getCamping()?.let { camping ->
+    typedUpdate { camping ->
         val ids = camping.campingActivities.asSequence()
             .filter { it.component2().actorUuid == actorUuid }
             .map { it.component1() }
             .toSet()
-        val data = buildCampingUpdate {
-            campingActivities.deleteEntries(ids)
-            actorUuids.set(camping.actorUuids.filter { id -> id != uuid }.toTypedArray())
-            cooking.actorMeals.set(camping.cooking.actorMeals.filter { m -> m.actorUuid != uuid }
-                .toTypedArray())
-            beforeSave(camping)
-        }
-        update(data).await()
+        campingActivities.deleteEntries(ids)
+        actorUuids.set(camping.actorUuids.filter { id -> id != uuid }.toTypedArray())
+        cooking.actorMeals.set(camping.cooking.actorMeals.filter { m -> m.actorUuid != uuid }
+            .toTypedArray())
+        beforeSave(camping)
+        beforeSave(camping)
     }
 }
