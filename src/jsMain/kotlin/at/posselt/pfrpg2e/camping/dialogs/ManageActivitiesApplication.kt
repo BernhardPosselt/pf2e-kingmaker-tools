@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.camping.CampingActivityData
 import at.posselt.pfrpg2e.camping.CampingActor
-import at.posselt.pfrpg2e.camping.deleteCampingActivityOld
+import at.posselt.pfrpg2e.camping.deleteCampingActivity
 import at.posselt.pfrpg2e.camping.getAllActivities
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.isCookMeal
@@ -29,10 +29,9 @@ class ManageActivitiesApplication(
     id = "kmManageActivities-${actor.uuid}"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
-        actor.deleteCampingActivityOld(id) { camping ->
-            camping.homebrewCampingActivities =
-                camping.homebrewCampingActivities.filter { it.id != id }.toTypedArray()
-            camping.lockedActivities = camping.lockedActivities.filter { it != id }.toTypedArray()
+        actor.deleteCampingActivity(id) { camping ->
+            homebrewCampingActivities.set(camping.homebrewCampingActivities.filter { it.id != id }.toTypedArray())
+            lockedActivities.set(camping.lockedActivities.filter { it != id }.toTypedArray())
         }
         render()
         undefined

@@ -81,7 +81,7 @@ private fun PF2EActor.findCampingEffectsInInventory(compendiumItems: List<PF2EEf
     return itemTypes.effect.filter { it.name in names }
 }
 
-suspend fun CampingData.syncCampingEffects(activities: Array<CampingActivity>) = coroutineScope {
+suspend fun CampingData.syncCampingEffects(activities: Array<CampingActivityWithId>) = coroutineScope {
     val actors = getActorsInCamp(campingActivityOnly = true)
     val allEffects = getCampingEffectItems()
     val activitiesById = activities.associateBy { it.activityId }

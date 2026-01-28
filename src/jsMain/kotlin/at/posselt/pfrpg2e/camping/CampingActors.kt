@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.camping
 
+import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.fromUuidOfTypes
 import at.posselt.pfrpg2e.utils.fromUuidsOfTypes
 import com.foundryvtt.pf2e.actor.PF2EActor
@@ -20,6 +21,8 @@ import com.foundryvtt.pf2e.item.PF2EEquipment
 import com.foundryvtt.pf2e.item.PF2EShield
 import com.foundryvtt.pf2e.item.PF2ETreasure
 import com.foundryvtt.pf2e.item.PF2EWeapon
+import js.array.component1
+import js.array.component2
 import kotlinx.coroutines.await
 import kotlin.reflect.KClass
 
@@ -60,73 +63,42 @@ suspend fun getCampingActorsByUuid(uuids: Array<String>) =
     fromUuidsOfTypes(uuids, *allowedCampingActorTypes).unsafeCast<Array<PF2EActor>>()
 
 /**
- * Old methods
- */
-typealias BeforeSaveOld = (CampingData) -> Unit
-
-suspend fun CampingActor.deleteCampingActivityOld(id: String, beforeSave: BeforeSaveOld) {
-    getCamping()?.let { camping ->
-        camping.campingActivities = camping.campingActivities
-            .filter { it.activityId != id }
-            .toTypedArray()
-        beforeSave(camping)
-        setCamping(camping)
-    }
-}
-
-suspend fun CampingActor.deleteCampingActivitiesOld(ids: Set<String>, beforeSave: BeforeSaveOld) {
-    getCamping()?.let { camping ->
-        camping.campingActivities = camping.campingActivities
-            .filter { it.activityId !in ids }
-            .toTypedArray()
-        beforeSave(camping)
-        setCamping(camping)
-    }
-}
-
-suspend fun CampingActor.deleteCampingActorOld(actorUuid: String, beforeSave: BeforeSaveOld) {
-    getCamping()?.let {
-        it.actorUuids = it.actorUuids.filter { id -> id != actorUuid }.toTypedArray()
-        it.campingActivities = it.campingActivities.filter { a -> a.actorUuid != actorUuid }.toTypedArray()
-        it.cooking.actorMeals = it.cooking.actorMeals.filter { m -> m.actorUuid != actorUuid }.toTypedArray()
-        beforeSave(it)
-        setCamping(it)
-    }
-}
-
-/**
  * New Replacements
  */
-typealias BeforeSave = CampingUpdateBuilder.() -> Unit
+typealias BeforeSave = CampingUpdateBuilder.(CampingData) -> Unit
 
 suspend fun CampingActor.deleteCampingActivity(id: String, beforeSave: BeforeSave) {
-    val data = buildCampingUpdate {
-        campingActivities.deleteEntry(id)
-        beforeSave()
+    getCamping()?.let { camping ->
+        val data = buildCampingUpdate {
+            campingActivities.deleteEntry(id)
+            beforeSave(camping)
+        }
+        update(data).await()
     }
-    update(data).await()
 }
 
 suspend fun CampingActor.deleteCampingActivities(ids: Set<String>, beforeSave: BeforeSave) {
-    val data = buildCampingUpdate {
-        campingActivities.deleteEntries(ids)
-        beforeSave()
+    getCamping()?.let { camping ->
+        val data = buildCampingUpdate {
+            campingActivities.deleteEntries(ids)
+            beforeSave(camping)
+        }
+        update(data).await()
     }
-    update(data).await()
 }
 
 suspend fun CampingActor.deleteCampingActor(actorUuid: String, beforeSave: BeforeSave) {
     getCamping()?.let { camping ->
-        val ids = camping.campingActivities
-            .filter { it.actorUuid == actorUuid }
-            .map { it.activityId }
+        val ids = camping.campingActivities.asSequence()
+            .filter { it.component2().actorUuid == actorUuid }
+            .map { it.component1() }
             .toSet()
         val data = buildCampingUpdate {
             campingActivities.deleteEntries(ids)
             actorUuids.set(camping.actorUuids.filter { id -> id != uuid }.toTypedArray())
             cooking.actorMeals.set(camping.cooking.actorMeals.filter { m -> m.actorUuid != uuid }
                 .toTypedArray())
-            beforeSave()
+            beforeSave(camping)
         }
         update(data).await()
     }

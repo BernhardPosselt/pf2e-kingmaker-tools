@@ -8,6 +8,7 @@ import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.asAnyObjectList
+import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
@@ -17,19 +18,22 @@ import com.foundryvtt.core.helpers.TypedHooks
 import com.foundryvtt.core.utils.diffObject
 import com.foundryvtt.core.utils.getProperty
 import com.foundryvtt.core.utils.setProperty
+import js.array.component1
+import js.array.component2
 import js.objects.Object
+import js.objects.Record
 
 
 class SyncActivities(
     val rollRandomEncounter: Boolean,
-    val activities: Array<CampingActivity>,
+    val activities: Array<CampingActivityWithId>,
     val clearMealEffects: Boolean,
     val prepareCampsiteResult: String?
 )
 
 private data class ActivityChange(
-    val previous: CampingActivity? = null,
-    val new: CampingActivity,
+    val previous: CampingActivityWithId? = null,
+    val new: CampingActivityWithId,
     val resultChanged: Boolean,
     val data: CampingActivityData,
     val rollRandomEncounter: Boolean,
@@ -66,8 +70,8 @@ private fun homebrewCampingActivitiesChanged(camping: CampingData, update: Any):
 }
 
 private fun campingActivitiesChanged(camping: CampingData, update: Any): Boolean {
-    val current = camping.campingActivities.sortedBy { it.activityId }
-    val updateList = update.unsafeCast<Array<CampingActivity>>().sortedBy { it.activityId }
+    val current = camping.campingActivitiesWithId().sortedBy { it.activityId }
+    val updateList = update.unsafeCast<Array<CampingActivityWithId>>().sortedBy { it.activityId }
     return doObjectArraysDiffer(current.asAnyObjectList(), updateList.asAnyObjectList())
 }
 
@@ -98,12 +102,12 @@ fun checkPreActorUpdate(actor: Actor, update: AnyObject): SyncActivities? {
     console.log("Received camping update", update)
     val settingsChanged = updates.intersect(settingAttributes).isNotEmpty()
     val activities = getProperty(update, campingActivitiesPath)
-        ?.unsafeCast<Array<CampingActivity>>()
+        ?.unsafeCast<Record<String, CampingActivity>>()
         ?: camping.campingActivities
     val alwaysPerformActivities = getProperty(update, alwaysPerformPath)
         ?.unsafeCast<Array<String>>()
         ?: camping.alwaysPerformActivityIds
-    val activitiesById = camping.campingActivities.associateBy { it.activityId }
+    val activitiesById = camping.campingActivitiesWithId().associateBy { it.activityId }
     val activityDataById = camping.getAllActivities().associateBy { it.id }
     val activityStateChanged = getActivityChanges(
         activities,
@@ -112,7 +116,7 @@ fun checkPreActorUpdate(actor: Actor, update: AnyObject): SyncActivities? {
     )
     val needsSync = settingsChanged
             || activityStateChanged.isNotEmpty()
-            || camping.campingActivities.size != activities.size
+            || Object.keys(camping.campingActivities).size != Object.keys(activities).size
     if (!needsSync) return null
 
     val prepareCampsiteChanged = prepareCampsiteChanged(activityStateChanged)
@@ -124,7 +128,7 @@ fun checkPreActorUpdate(actor: Actor, update: AnyObject): SyncActivities? {
     }
     return SyncActivities(
         rollRandomEncounter = activityStateChanged.any { it.resultChanged && it.rollRandomEncounter },
-        activities = getActivitiesToSync(prepareCampsiteResult, alwaysPerformActivities, activities),
+        activities = getActivitiesToSync(prepareCampsiteResult, alwaysPerformActivities, activities.toCampingActivitiesWithId()),
         clearMealEffects = result != null,
         prepareCampsiteResult = result?.toCamelCase()
     )
@@ -134,13 +138,13 @@ fun checkPreActorUpdate(actor: Actor, update: AnyObject): SyncActivities? {
 private fun getActivitiesToSync(
     prepareCampsiteResult: PrepareCampsiteResult?,
     alwaysPerformActivities: Array<String>,
-    activities: Array<CampingActivity>
+    activities: Array<CampingActivityWithId>
 ) = if (prepareCampsiteResult == PrepareCampsiteResult.SKIP_CAMPING) {
     emptyArray()
 } else {
     alwaysPerformActivities
         .map {
-            CampingActivity(
+            CampingActivityWithId(
                 activityId = it,
                 actorUuid = null
             )
@@ -166,13 +170,13 @@ private fun setSection(
 }
 
 private fun getActivityChanges(
-    activities: Array<CampingActivity>,
+    activities: Record<String, CampingActivity>,
     activityDataById: Map<String, CampingActivityData>,
-    activitiesById: Map<String, CampingActivity>,
+    activitiesById: Map<String, CampingActivityWithId>,
 ): List<ActivityChange> {
-    return activities.mapNotNull { new ->
-        val data = activityDataById[new.activityId]
-        val previous = activitiesById[new.activityId]
+    return activities.asSequence().mapNotNull { (newActivityId, new) ->
+        val data = activityDataById[newActivityId]
+        val previous = activitiesById[newActivityId]
         val hasDifferentResult = previous != null && (new.result != previous.result)
         val hasDifferentActor = previous != null && (new.actorUuid != previous.actorUuid)
         if (data != null && (hasDifferentActor || hasDifferentResult)) {
@@ -181,7 +185,12 @@ private fun getActivityChanges(
                 ?.checkRandomEncounter == true
             ActivityChange(
                 previous = previous,
-                new = new,
+                new = CampingActivityWithId(
+                    activityId = newActivityId,
+                    actorUuid = new.actorUuid,
+                    result = new.result,
+                    selectedSkill = new.selectedSkill,
+                ),
                 data = data,
                 resultChanged = hasDifferentResult,
                 rollRandomEncounter = hasDifferentResult && rollRandomEncounter
@@ -189,7 +198,7 @@ private fun getActivityChanges(
         } else {
             null
         }
-    }
+    }.toList()
 }
 
 private enum class PrepareCampsiteResult {

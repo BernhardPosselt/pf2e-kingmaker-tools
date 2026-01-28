@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.camping.dialogs.RegionSettings
+import at.posselt.pfrpg2e.camping.dialogs.Track
 import at.posselt.pfrpg2e.utils.DocumentUpdateDsl
 import at.posselt.pfrpg2e.utils.PropertyUpdateBuilder
 import at.posselt.pfrpg2e.utils.RecordPropertyUpdateBuilder
@@ -23,7 +24,7 @@ class CookingPropertyBuilder(basePath: String, updates: Record<String, Any?>, pr
 @DocumentUpdateDsl
 @Suppress("unused")
 class RestingTrackPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String)
-    : RecordPropertyUpdateBuilder<Cooking>(basePath, updates, propertyName) {
+    : RecordPropertyUpdateBuilder<Track?>(basePath, updates, propertyName) {
     val playlistUuid = PropertyUpdateBuilder<String>("$basePath.$propertyName", updates, "playlistUuid")
     val trackUuid = PropertyUpdateBuilder<String?>("$basePath.$propertyName", updates, "trackUuid")
 
@@ -56,7 +57,7 @@ class RestSettingsPropertyBuilder(basePath: String, updates: Record<String, Any?
 class CampingUpdateBuilder(val updates: Record<String, Any?>, basePath: String = campingPath) {
     val actorUuids = PropertyUpdateBuilder<Array<String>>(basePath, updates, "actorUuids")
     val campingActivities =
-        RecordPropertyUpdateBuilder<Record<String, CampingActivity>>(basePath, updates, "campingActivities")
+        RecordPropertyUpdateBuilder<Record<String, CampingActivityWithId>>(basePath, updates, "campingActivities")
     val cooking = CookingPropertyBuilder(basePath, updates, "cooking")
     val currentRegion = PropertyUpdateBuilder<String>(basePath, updates, "currentRegion")
     val homebrewCampingActivities = PropertyUpdateBuilder<Array<CampingActivityData>>(basePath, updates, "homebrewCampingActivities")

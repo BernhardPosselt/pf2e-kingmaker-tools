@@ -14,7 +14,8 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.forms.toOption
 import at.posselt.pfrpg2e.camping.CampingActor
-import at.posselt.pfrpg2e.camping.deleteCampingActivitiesOld
+import at.posselt.pfrpg2e.camping.campingActivitiesWithId
+import at.posselt.pfrpg2e.camping.deleteCampingActivities
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.resetCampsites
 import at.posselt.pfrpg2e.data.ValueEnum
@@ -337,7 +338,7 @@ class CampingSettingsApplication(
                             value = fromCamelCase<RestRollMode>(settings.restRollMode),
                             stacked = false,
                         ),
-                        *actors.mapIndexed { index, actor ->
+                        *actors.map { actor ->
                             CheckboxInput(
                                 name = "actorUuidsNotKeepingWatch.${actor.uuid}",
                                 label = t("camping.actorSkipWatch", recordOf("actorName" to actor.name)),
@@ -378,28 +379,28 @@ class CampingSettingsApplication(
                 buildPromise {
                     campingActor.getCamping()?.let { camping ->
                         val alwaysPerformIds = settings.alwaysPerformActivities.toSet()
-                        val idsToDelete = camping.campingActivities
+                        val idsToDelete = camping.campingActivitiesWithId()
                             .map { it.activityId }
                             .filter { it in alwaysPerformIds }
                             .toSet()
-                        campingActor.deleteCampingActivitiesOld(idsToDelete) {
-                            it.gunsToClean = settings.gunsToClean
-                            it.restRollMode = settings.restRollMode
-                            it.increaseWatchActorNumber = settings.increaseWatchActorNumber
-                            it.actorUuidsNotKeepingWatch = settings.actorUuidsNotKeepingWatch
-                            it.huntAndGatherTargetActorUuid = settings.huntAndGatherTargetActorUuid
-                            it.proxyRandomEncounterTableUuid = settings.proxyRandomEncounterTableUuid
-                            it.randomEncounterRollMode = settings.randomEncounterRollMode
-                            it.ignoreSkillRequirements = settings.ignoreSkillRequirements
-                            it.minimumTravelSpeed = settings.minimumTravelSpeed
-                            it.cooking.minimumSubsistence = settings.minimumSubsistence
-                            it.alwaysPerformActivityIds = settings.alwaysPerformActivities
-                            it.restingTrack = settings.restingPlaylistUuid?.let { track ->
+                        campingActor.deleteCampingActivities(idsToDelete) {
+                            gunsToClean.set( settings.gunsToClean)
+                            restRollMode.set( settings.restRollMode)
+                            increaseWatchActorNumber.set( settings.increaseWatchActorNumber)
+                            actorUuidsNotKeepingWatch.set( settings.actorUuidsNotKeepingWatch)
+                            huntAndGatherTargetActorUuid.set( settings.huntAndGatherTargetActorUuid)
+                            proxyRandomEncounterTableUuid.set( settings.proxyRandomEncounterTableUuid)
+                            randomEncounterRollMode.set( settings.randomEncounterRollMode)
+                            ignoreSkillRequirements.set( settings.ignoreSkillRequirements)
+                            minimumTravelSpeed.set( settings.minimumTravelSpeed)
+                            cooking.minimumSubsistence.set(settings.minimumSubsistence)
+                            alwaysPerformActivityIds.set( settings.alwaysPerformActivities)
+                            restingTrack.set( settings.restingPlaylistUuid?.let { track ->
                                 Track(playlistUuid = track, trackUuid = settings.restingPlaylistSoundUuid)
-                            }
-                            it.worldSceneId = settings.worldSceneId
-                            it.autoApplyFatigued = settings.autoApplyFatigued
-                            it.resetTimeTrackingAfterOneDay = settings.resetTimeTrackingAfterOneDay
+                            })
+                            worldSceneId.set( settings.worldSceneId)
+                            autoApplyFatigued.set( settings.autoApplyFatigued)
+                            resetTimeTrackingAfterOneDay.set( settings.resetTimeTrackingAfterOneDay)
                         }
                     }
                     close()
