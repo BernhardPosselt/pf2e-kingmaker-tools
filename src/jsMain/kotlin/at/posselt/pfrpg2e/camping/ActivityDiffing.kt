@@ -71,7 +71,7 @@ private fun homebrewCampingActivitiesChanged(camping: CampingData, update: Any):
 
 private fun campingActivitiesChanged(camping: CampingData, update: Any): Boolean {
     val current = camping.campingActivitiesWithId().sortedBy { it.activityId }
-    val updateList = update.unsafeCast<Array<CampingActivityWithId>>().sortedBy { it.activityId }
+    val updateList = update.unsafeCast<Record<String, CampingActivity>>().toCampingActivitiesWithId().sortedBy { it.activityId }
     return doObjectArraysDiffer(current.asAnyObjectList(), updateList.asAnyObjectList())
 }
 
