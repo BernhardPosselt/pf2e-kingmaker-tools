@@ -17,7 +17,6 @@ import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.deleteCampingActivitiesOld
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.resetCampsites
-import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.fromCamelCase
@@ -109,7 +108,7 @@ class CampingSettingsDataModel(
 @JsPlainObject
 external interface CampingSettingsContext : ValidatedHandlebarsContext, SectionsContext
 
-enum class RestRollMode: ValueEnum, Translatable {
+enum class RestRollMode : ValueEnum, Translatable {
     NONE,
     ONE,
     ONE_EVERY_FOUR_HOURS;
@@ -191,7 +190,7 @@ class CampingSettingsApplication(
         val playlist = settings.restingPlaylistUuid?.let { fromUuidTypeSafe<Playlist>(it) }
         val playlistSound = settings.restingPlaylistSoundUuid?.let { fromUuidTypeSafe<PlaylistSound>(it) }
         val hexScenes = game.scenes
-            .filter { it.grid.type >= 2 && it.grid.type <= 5}
+            .filter { it.grid.type >= 2 && it.grid.type <= 5 }
             .sortedBy { it.name }
             .mapNotNull { it.id?.let { id -> SelectOption(label = it.name, value = id) } }
         CampingSettingsContext(
@@ -205,13 +204,13 @@ class CampingSettingsApplication(
                             name = "autoApplyFatigued",
                             label = t("camping.autoApplyFatigued"),
                             value = settings.autoApplyFatigued,
-                            help =  t("camping.autoApplyFatiguedHelp"),
+                            help = t("camping.autoApplyFatiguedHelp"),
                         ),
                         CheckboxInput(
                             name = "resetTimeTrackingAfterOneDay",
                             label = t("camping.resetTimeTrackingAfterOneDay"),
                             value = settings.resetTimeTrackingAfterOneDay,
-                            help =  t("camping.resetTimeTrackingAfterOneDayHelp"),
+                            help = t("camping.resetTimeTrackingAfterOneDayHelp"),
                         ),
                         Select(
                             label = t("camping.hexplorationScene"),
@@ -379,29 +378,29 @@ class CampingSettingsApplication(
                 buildPromise {
                     campingActor.getCamping()?.let { camping ->
                         val alwaysPerformIds = settings.alwaysPerformActivities.toSet()
-                        camping.gunsToClean = settings.gunsToClean
-                        camping.restRollMode = settings.restRollMode
-                        camping.increaseWatchActorNumber = settings.increaseWatchActorNumber
-                        camping.actorUuidsNotKeepingWatch = settings.actorUuidsNotKeepingWatch
-                        camping.huntAndGatherTargetActorUuid = settings.huntAndGatherTargetActorUuid
-                        camping.proxyRandomEncounterTableUuid = settings.proxyRandomEncounterTableUuid
-                        camping.randomEncounterRollMode = settings.randomEncounterRollMode
-                        camping.ignoreSkillRequirements = settings.ignoreSkillRequirements
-                        camping.minimumTravelSpeed = settings.minimumTravelSpeed
-                        camping.cooking.minimumSubsistence = settings.minimumSubsistence
-                        camping.alwaysPerformActivityIds = settings.alwaysPerformActivities
-                        camping.restingTrack = settings.restingPlaylistUuid?.let {
-                            Track(playlistUuid = it, trackUuid = settings.restingPlaylistSoundUuid)
-                        }
-                        camping.worldSceneId = settings.worldSceneId
-                        camping.autoApplyFatigued = settings.autoApplyFatigued
-                        camping.resetTimeTrackingAfterOneDay = settings.resetTimeTrackingAfterOneDay
-                        campingActor.setCamping(camping)
                         val idsToDelete = camping.campingActivities
                             .map { it.activityId }
                             .filter { it in alwaysPerformIds }
                             .toSet()
-                        campingActor.deleteCampingActivitiesOld(idsToDelete)
+                        campingActor.deleteCampingActivitiesOld(idsToDelete) {
+                            it.gunsToClean = settings.gunsToClean
+                            it.restRollMode = settings.restRollMode
+                            it.increaseWatchActorNumber = settings.increaseWatchActorNumber
+                            it.actorUuidsNotKeepingWatch = settings.actorUuidsNotKeepingWatch
+                            it.huntAndGatherTargetActorUuid = settings.huntAndGatherTargetActorUuid
+                            it.proxyRandomEncounterTableUuid = settings.proxyRandomEncounterTableUuid
+                            it.randomEncounterRollMode = settings.randomEncounterRollMode
+                            it.ignoreSkillRequirements = settings.ignoreSkillRequirements
+                            it.minimumTravelSpeed = settings.minimumTravelSpeed
+                            it.cooking.minimumSubsistence = settings.minimumSubsistence
+                            it.alwaysPerformActivityIds = settings.alwaysPerformActivities
+                            it.restingTrack = settings.restingPlaylistUuid?.let { track ->
+                                Track(playlistUuid = track, trackUuid = settings.restingPlaylistSoundUuid)
+                            }
+                            it.worldSceneId = settings.worldSceneId
+                            it.autoApplyFatigued = settings.autoApplyFatigued
+                            it.resetTimeTrackingAfterOneDay = settings.resetTimeTrackingAfterOneDay
+                        }
                     }
                     close()
                 }

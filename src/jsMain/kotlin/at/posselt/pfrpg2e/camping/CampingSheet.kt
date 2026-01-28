@@ -406,7 +406,7 @@ class CampingSheet(
 
             "clear-actor" -> {
                 buildPromise {
-                    target.dataset["uuid"]?.let { actor.deleteCampingActorOld(it) }
+                    target.dataset["uuid"]?.let { actor.deleteCampingActorOld(it) {} }
                 }
             }
 
@@ -631,7 +631,7 @@ class CampingSheet(
                 .map { it.activityId }
                 .filter { it != prepareCampsiteId }
                 .toSet()
-            actor.deleteCampingActivitiesOld(ids)
+            actor.deleteCampingActivitiesOld(ids) {}
         }
     }
 

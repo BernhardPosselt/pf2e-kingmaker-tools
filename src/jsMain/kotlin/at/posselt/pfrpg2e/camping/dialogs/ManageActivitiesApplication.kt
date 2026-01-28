@@ -29,16 +29,15 @@ class ManageActivitiesApplication(
     id = "kmManageActivities-${actor.uuid}"
 ) {
     override fun deleteEntry(id: String) = buildPromise {
-        actor.getCamping()?.let { camping ->
+        actor.deleteCampingActivityOld(id) { camping ->
             camping.homebrewCampingActivities =
                 camping.homebrewCampingActivities.filter { it.id != id }.toTypedArray()
             camping.lockedActivities = camping.lockedActivities.filter { it != id }.toTypedArray()
-            actor.setCamping(camping)
-            actor.deleteCampingActivityOld(id)
-            render()
         }
+        render()
         undefined
     }
+
 
     override fun addEntry(): Promise<Void> = buildPromise {
         ActivityApplication(
@@ -69,7 +68,7 @@ class ManageActivitiesApplication(
                     val enabled = !locked.contains(activity.id)
                     CrudItem(
                         id = activity.id,
-                        name =  activity.name,
+                        name = activity.name,
                         nameIsHtml = false,
                         additionalColumns = emptyArray(),
                         enable = CheckboxInput(

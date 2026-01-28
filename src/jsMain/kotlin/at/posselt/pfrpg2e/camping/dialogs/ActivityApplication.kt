@@ -24,10 +24,8 @@ import at.posselt.pfrpg2e.camping.CampingActivityData
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.ModifyEncounterDc
 import at.posselt.pfrpg2e.camping.deleteCampingActivityOld
-import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCampingSkills
 import at.posselt.pfrpg2e.camping.requiresACheck
-import at.posselt.pfrpg2e.camping.setCamping
 import at.posselt.pfrpg2e.slugify
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
@@ -146,7 +144,10 @@ class ActivityApplication(
     data: CampingActivityData? = null,
     private val afterSubmit: () -> Unit,
 ) : FormApp<ActivityContext, ActivitySubmitData>(
-    title = if (data == null) t("camping.addActivity") else t("camping.editActivity", recordOf("activityName" to data.name)),
+    title = if (data == null) t("camping.addActivity") else t(
+        "camping.editActivity",
+        recordOf("activityName" to data.name)
+    ),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = ActivityDataModel::class.js,
@@ -232,18 +233,22 @@ class ActivityApplication(
             "effects" -> currentActivity.effectUuids = currentActivity
                 .effectUuids
                 ?.without(index)
+
             "criticalSuccess" -> currentActivity.criticalSuccess?.effectUuids = currentActivity
                 .criticalSuccess
                 ?.effectUuids
                 ?.without(index)
+
             "success" -> currentActivity.success?.effectUuids = currentActivity
                 .success
                 ?.effectUuids
                 ?.without(index)
+
             "failure" -> currentActivity.failure?.effectUuids = currentActivity
                 .failure
                 ?.effectUuids
                 ?.without(index)
+
             "criticalFailure" -> currentActivity.criticalFailure?.effectUuids = currentActivity
                 .criticalFailure
                 ?.effectUuids
@@ -255,10 +260,13 @@ class ActivityApplication(
     private fun createEffectAt(section: String, effect: ActivityEffect) {
         when (section) {
             "effects" -> currentActivity.effectUuids = currentActivity.effectUuids?.plus(effect)
-            "criticalSuccess" -> currentActivity.criticalSuccess?.effectUuids = currentActivity.criticalSuccess?.effectUuids?.plus(effect)
+            "criticalSuccess" -> currentActivity.criticalSuccess?.effectUuids =
+                currentActivity.criticalSuccess?.effectUuids?.plus(effect)
+
             "success" -> currentActivity.success?.effectUuids = currentActivity.success?.effectUuids?.plus(effect)
             "failure" -> currentActivity.failure?.effectUuids = currentActivity.failure?.effectUuids?.plus(effect)
-            "criticalFailure" -> currentActivity.criticalFailure?.effectUuids = currentActivity.criticalFailure?.effectUuids?.plus(effect)
+            "criticalFailure" -> currentActivity.criticalFailure?.effectUuids =
+                currentActivity.criticalFailure?.effectUuids?.plus(effect)
         }
         render()
     }
@@ -402,17 +410,15 @@ class ActivityApplication(
 
     fun save(): Promise<Void> = buildPromise {
         if (isValid()) {
-            actor.getCamping()?.let { camping ->
-                currentActivity.let { data ->
+            currentActivity.let { data ->
+                actor.deleteCampingActivityOld(data.id) { camping ->
                     camping.homebrewCampingActivities = camping.homebrewCampingActivities
                         .filter { it.id != data.id }
                         .toTypedArray()
                     camping.homebrewCampingActivities += data
-                    actor.setCamping(camping)
-                    actor.deleteCampingActivityOld(data.id)
-                    close().await()
-                    afterSubmit()
                 }
+                close().await()
+                afterSubmit()
             }
         }
         undefined
