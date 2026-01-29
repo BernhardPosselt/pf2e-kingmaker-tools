@@ -16,17 +16,24 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.unsetAppFlag
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2EParty
+import js.array.component1
+import js.array.component2
+import js.array.toTypedArray
+import js.objects.ReadonlyRecord
+import js.objects.Record
 import js.objects.recordOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -58,11 +65,30 @@ external interface Cooking {
 
 @JsPlainObject
 external interface CampingActivity {
-    var activityId: String
     var actorUuid: String?
     var result: String?
     var selectedSkill: String?
 }
+
+@JsPlainObject
+external interface CampingActivityWithId {
+    val activityId: String
+    val actorUuid: String?
+    val result: String?
+    val selectedSkill: String?
+}
+
+fun ReadonlyRecord<String, CampingActivity>.toCampingActivitiesWithId() =
+    asSequence()
+        .map {(id, data) ->
+            CampingActivityWithId(
+                activityId = id,
+                actorUuid = data.actorUuid,
+                result = data.result,
+                selectedSkill = data.selectedSkill,
+            )
+        }.toTypedArray()
+
 
 @JsPlainObject
 external interface RestSettings {
@@ -77,7 +103,7 @@ external interface RestSettings {
 external interface CampingData {
     var currentRegion: String
     var actorUuids: Array<String>
-    var campingActivities: Array<CampingActivity>
+    var campingActivities: Record<String, CampingActivity>
     var homebrewCampingActivities: Array<CampingActivityData>
     var lockedActivities: Array<String>
     var cooking: Cooking
@@ -106,6 +132,9 @@ external interface CampingData {
     var travelModeActive: Boolean
 }
 
+fun CampingData.campingActivitiesWithId() =
+    campingActivities.toCampingActivitiesWithId()
+
 suspend fun CampingData.getActorsCarryingFood(party: PF2EParty?): List<PF2EActor> =
     getActorsInCamp() + listOfNotNull(party)
 
@@ -126,10 +155,13 @@ suspend fun CampingData.getActorsInCamp(
         .filterNotNull()
 }
 
+fun CampingActivityWithId.parseResult() =
+    result?.let { fromCamelCase<DegreeOfSuccess>(it) }
+
 fun CampingActivity.parseResult() =
     result?.let { fromCamelCase<DegreeOfSuccess>(it) }
 
-fun CampingActivity.checkPerformed() =
+fun CampingActivityWithId.checkPerformed() =
     result != null && actorUuid != null
 
 const val prepareCampsiteId = "prepare-campsite"
@@ -180,7 +212,7 @@ fun getDefaultCamping(game: Game): CampingData {
     return CampingData(
         currentRegion = t("camping.zone", recordOf("id" to "00")),
         actorUuids = emptyArray(),
-        campingActivities = emptyArray(),
+        campingActivities = recordOf(),
         homebrewCampingActivities = emptyArray(),
         lockedActivities = lockedCampingActivityIds,
         cooking = Cooking(
@@ -409,6 +441,10 @@ suspend fun CampingActor.setCamping(data: CampingData) {
     setAppFlag("camping-sheet", data)
 }
 
+suspend fun CampingActor.updateCamping(data: AnyObject) {
+    setAppFlag("camping-sheet", data)
+}
+
 suspend fun CampingActor.clearCamping() {
     unsetAppFlag("camping-sheet")
 }
@@ -453,8 +489,7 @@ fun Game.getActiveCamping(): CampingData? =
     getActiveCampingActor()?.getCamping()
 
 fun CampingData.canPerformActivities(): Boolean {
-    val prepareCampResult = campingActivities
-        .find { it.activityId == prepareCampsiteId }
+    val prepareCampResult = campingActivities[prepareCampsiteId]
         ?.result
         ?.let { fromCamelCase<DegreeOfSuccess>(it) }
     return prepareCampResult != null && prepareCampResult != DegreeOfSuccess.CRITICAL_FAILURE
@@ -544,8 +579,8 @@ private fun parseMealChoices(
 }
 
 fun CampingData.hasPreparedCampsite() =
-    campingActivities.any {
-        it.activityId == prepareCampsiteId
+    campingActivities[prepareCampsiteId].let {
+        it != null
                 && it.parseResult() != null
                 && it.parseResult() != DegreeOfSuccess.CRITICAL_FAILURE
     }
@@ -554,8 +589,8 @@ fun CampingData.findCookingChoices(
     charactersInCampByUuid: Map<String, PF2EActor>,
     recipesById: Map<String, RecipeData>,
 ): ParsedMeals {
-    val cook = campingActivities
-        .find { it.activityId == cookMealId && it.actorUuid != null }
+    val cook = campingActivities[cookMealId]
+        ?.takeIf { it.actorUuid != null }
         ?.let { charactersInCampByUuid[it.actorUuid] }
         ?.takeIfInstance<PF2ECharacter>()
         ?.takeIf {

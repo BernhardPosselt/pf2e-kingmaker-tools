@@ -1,6 +1,7 @@
 package at.posselt.pfrpg2e.camping
 
 import at.posselt.pfrpg2e.camping.dialogs.RegionSettings
+import at.posselt.pfrpg2e.camping.dialogs.Track
 import at.posselt.pfrpg2e.utils.DocumentUpdateDsl
 import at.posselt.pfrpg2e.utils.PropertyUpdateBuilder
 import at.posselt.pfrpg2e.utils.RecordPropertyUpdateBuilder
@@ -9,57 +10,60 @@ import js.objects.unsafeJso
 
 @DocumentUpdateDsl
 @Suppress("unused")
-class CookingPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String)
-    : RecordPropertyUpdateBuilder<Cooking>(basePath, updates, propertyName) {
-    val actorMeals = PropertyUpdateBuilder<Array<ActorMeal>>("$basePath.$propertyName", updates, "actorMeals")
-    val knownRecipes = PropertyUpdateBuilder<Array<String>>("$basePath.$propertyName", updates, "knownRecipes")
-    val homebrewMeals = PropertyUpdateBuilder<Array<RecipeData>>("$basePath.$propertyName", updates, "homebrewMeals")
-    val results = PropertyUpdateBuilder<Array<CookingResult>>("$basePath.$propertyName", updates, "results")
-    val minimumSubsistence = PropertyUpdateBuilder<Int>("$basePath.$propertyName", updates, "minimumSubsistence")
+class CookingPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
+    RecordPropertyUpdateBuilder<Cooking>(basePath, updates, propertyName) {
+    val actorMeals = PropertyUpdateBuilder<Array<ActorMeal>>(propertyName, updates, "actorMeals")
+    val knownRecipes = PropertyUpdateBuilder<Array<String>>(propertyName, updates, "knownRecipes")
+    val homebrewMeals = PropertyUpdateBuilder<Array<RecipeData>>(propertyName, updates, "homebrewMeals")
+    val results = PropertyUpdateBuilder<Array<CookingResult>>(propertyName, updates, "results")
+    val minimumSubsistence = PropertyUpdateBuilder<Int>(propertyName, updates, "minimumSubsistence")
 
     operator fun invoke(action: CookingPropertyBuilder.() -> Unit) = action()
 }
 
 @DocumentUpdateDsl
 @Suppress("unused")
-class RestingTrackPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String)
-    : RecordPropertyUpdateBuilder<Cooking>(basePath, updates, propertyName) {
-    val playlistUuid = PropertyUpdateBuilder<String>("$basePath.$propertyName", updates, "playlistUuid")
-    val trackUuid = PropertyUpdateBuilder<String?>("$basePath.$propertyName", updates, "trackUuid")
+class RestingTrackPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
+    RecordPropertyUpdateBuilder<Track?>(basePath, updates, propertyName) {
+    val playlistUuid = PropertyUpdateBuilder<String>(propertyName, updates, "playlistUuid")
+    val trackUuid = PropertyUpdateBuilder<String?>(propertyName, updates, "trackUuid")
 
     operator fun invoke(action: RestingTrackPropertyBuilder.() -> Unit) = action()
 }
 
 @DocumentUpdateDsl
 @Suppress("unused")
-class RegionSettingsPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String)
-    : RecordPropertyUpdateBuilder<RegionSettings>(basePath, updates, propertyName) {
-    val regions = PropertyUpdateBuilder<String>("$basePath.$propertyName", updates, "regions")
+class RegionSettingsPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
+    RecordPropertyUpdateBuilder<RegionSettings>(basePath, updates, propertyName) {
+    val regions = PropertyUpdateBuilder<String>(propertyName, updates, "regions")
 
     operator fun invoke(action: RegionSettingsPropertyBuilder.() -> Unit) = action()
 }
 
 @DocumentUpdateDsl
 @Suppress("unused")
-class RestSettingsPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String)
-    : RecordPropertyUpdateBuilder<RestSettings>(basePath, updates, propertyName) {
-    val skipWatch = PropertyUpdateBuilder<Boolean>("$basePath.$propertyName", updates, "skipWatch")
-    val skipDailyPreparations = PropertyUpdateBuilder<Boolean>("$basePath.$propertyName", updates, "skipDailyPreparations")
-    val disableRandomEncounter = PropertyUpdateBuilder<Boolean>("$basePath.$propertyName", updates, "disableRandomEncounter")
-    val skipWeather = PropertyUpdateBuilder<Boolean>("$basePath.$propertyName", updates, "skipWeather")
+class RestSettingsPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
+    RecordPropertyUpdateBuilder<RestSettings>(basePath, updates, propertyName) {
+    val skipWatch = PropertyUpdateBuilder<Boolean>(propertyName, updates, "skipWatch")
+    val skipDailyPreparations =
+        PropertyUpdateBuilder<Boolean>(propertyName, updates, "skipDailyPreparations")
+    val disableRandomEncounter =
+        PropertyUpdateBuilder<Boolean>(propertyName, updates, "disableRandomEncounter")
+    val skipWeather = PropertyUpdateBuilder<Boolean>(propertyName, updates, "skipWeather")
 
     operator fun invoke(action: RestSettingsPropertyBuilder.() -> Unit) = action()
 }
 
 @DocumentUpdateDsl
 @Suppress("unused")
-class CampingUpdateBuilder(val updates: Record<String, Any?>, basePath: String = campingPath) {
+class CampingUpdateBuilder(val updates: Record<String, Any?>, basePath: String = "") {
     val actorUuids = PropertyUpdateBuilder<Array<String>>(basePath, updates, "actorUuids")
     val campingActivities =
-        RecordPropertyUpdateBuilder<Record<String, CampingActivity>>(basePath, updates, "campingActivities")
+        RecordPropertyUpdateBuilder<Record<String, CampingActivityWithId>>(basePath, updates, "campingActivities")
     val cooking = CookingPropertyBuilder(basePath, updates, "cooking")
     val currentRegion = PropertyUpdateBuilder<String>(basePath, updates, "currentRegion")
-    val homebrewCampingActivities = PropertyUpdateBuilder<Array<CampingActivityData>>(basePath, updates, "homebrewCampingActivities")
+    val homebrewCampingActivities =
+        PropertyUpdateBuilder<Array<CampingActivityData>>(basePath, updates, "homebrewCampingActivities")
     val lockedActivities = PropertyUpdateBuilder<Array<String>>(basePath, updates, "lockedActivities")
     val watchSecondsRemaining = PropertyUpdateBuilder<Int>(basePath, updates, "watchSecondsRemaining")
     val gunsToClean = PropertyUpdateBuilder<Int>(basePath, updates, "gunsToClean")
@@ -70,7 +74,8 @@ class CampingUpdateBuilder(val updates: Record<String, Any?>, basePath: String =
     val actorUuidsNotKeepingWatch = PropertyUpdateBuilder<Array<String>>(basePath, updates, "actorUuidsNotKeepingWatch")
     val alwaysPerformActivityIds = PropertyUpdateBuilder<Array<String>>(basePath, updates, "alwaysPerformActivityIds")
     val huntAndGatherTargetActorUuid = PropertyUpdateBuilder<String?>(basePath, updates, "huntAndGatherTargetActorUuid")
-    val proxyRandomEncounterTableUuid = PropertyUpdateBuilder<String?>(basePath, updates, "proxyRandomEncounterTableUuid")
+    val proxyRandomEncounterTableUuid =
+        PropertyUpdateBuilder<String?>(basePath, updates, "proxyRandomEncounterTableUuid")
     val randomEncounterRollMode = PropertyUpdateBuilder<String>(basePath, updates, "randomEncounterRollMode")
     val ignoreSkillRequirements = PropertyUpdateBuilder<Boolean>(basePath, updates, "ignoreSkillRequirements")
     val minimumTravelSpeed = PropertyUpdateBuilder<Int?>(basePath, updates, "minimumTravelSpeed")
@@ -86,8 +91,19 @@ class CampingUpdateBuilder(val updates: Record<String, Any?>, basePath: String =
     val restSettings = RestSettingsPropertyBuilder(basePath, updates, "restSettings")
 }
 
-fun buildCampingUpdate(updates: Record<String, Any?> = unsafeJso(), block: CampingUpdateBuilder.() -> Unit): Record<String, Any?> {
+fun buildCampingUpdate(
+    updates: Record<String, Any?> = unsafeJso(),
+    block: CampingUpdateBuilder.() -> Unit
+): Record<String, Any?> {
     val builder = CampingUpdateBuilder(updates)
     builder.block()
     return builder.updates
+}
+
+suspend fun CampingActor.typedCampingUpdate(block: CampingUpdateBuilder.(CampingData) -> Unit) {
+    getCamping()?.let {
+        val data = buildCampingUpdate { block(it) }
+        console.log("Performing partial update", data)
+        updateCamping(data)
+    }
 }

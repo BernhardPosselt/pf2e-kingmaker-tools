@@ -49,6 +49,7 @@ import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2EParty
 import com.foundryvtt.pf2e.pf2e
+import js.objects.Object
 import js.objects.recordOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
@@ -308,7 +309,7 @@ private suspend fun completeDailyPreparations(
     camping.dailyPrepsAtTime = game.time.worldTimeSeconds
     camping.secondsSpentTraveling = 0
     camping.secondsSpentHexploring = 0
-    camping.campingActivities.forEach { it.result = null }
+    Object.values(camping.campingActivities).forEach { it.result = null }
     camping.cooking.results.forEach { it.result = null }
     campingActor.setCamping(camping)
 

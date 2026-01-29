@@ -12,10 +12,20 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.onPreUpdateActor
 import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.utils.diffObject
 import com.foundryvtt.core.utils.getProperty
+import js.objects.Object
 import js.objects.recordOf
 
 private const val mealResultPath = "flags.${Config.moduleId}.camping-sheet.cooking.results"
+
+private fun doObjectArraysDiffer(source: List<AnyObject>, target: List<AnyObject>): Boolean {
+    return source.size != target.size ||
+            (source.asSequence() zip target.asSequence())
+                .any { (first, second) ->
+                    Object.keys(diffObject(first, second)).isNotEmpty()
+                }
+}
 
 private fun relevantUpdate(camping: CampingData, update: AnyObject): Boolean {
     val current = camping.cooking.results
