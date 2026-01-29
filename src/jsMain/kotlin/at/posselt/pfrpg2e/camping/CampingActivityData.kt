@@ -115,7 +115,7 @@ data class ParsedCampingSkill(
 
 data class ActivityAndData(
     val data: CampingActivityData,
-    val result: CampingActivity,
+    val result: CampingActivityWithId,
 ) {
     fun done(): Boolean {
         return (data.doesNotRequireACheck() && result.actorUuid != null)
@@ -181,9 +181,9 @@ fun CampingActivityData.getCampingSkills(
 }
 
 fun CampingData.groupActivities(): List<ActivityAndData> {
-    val activitiesById = campingActivities.associateBy { it.activityId }
+    val activitiesById = campingActivitiesWithId().associateBy { it.activityId }
     return getAllActivities().map { data ->
-        val activity = activitiesById[data.id] ?: CampingActivity(
+        val activity = activitiesById[data.id] ?: CampingActivityWithId(
             activityId = data.id,
             actorUuid = null,
             result = null,

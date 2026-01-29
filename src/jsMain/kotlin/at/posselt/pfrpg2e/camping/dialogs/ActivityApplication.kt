@@ -23,7 +23,7 @@ import at.posselt.pfrpg2e.camping.ActivityOutcome
 import at.posselt.pfrpg2e.camping.CampingActivityData
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.ModifyEncounterDc
-import at.posselt.pfrpg2e.camping.deleteCampingActivityOld
+import at.posselt.pfrpg2e.camping.deleteCampingActivity
 import at.posselt.pfrpg2e.camping.getCampingSkills
 import at.posselt.pfrpg2e.camping.requiresACheck
 import at.posselt.pfrpg2e.slugify
@@ -411,11 +411,11 @@ class ActivityApplication(
     fun save(): Promise<Void> = buildPromise {
         if (isValid()) {
             currentActivity.let { data ->
-                actor.deleteCampingActivityOld(data.id) { camping ->
-                    camping.homebrewCampingActivities = camping.homebrewCampingActivities
+                actor.deleteCampingActivity(data.id) { camping ->
+                    val activities = camping.homebrewCampingActivities
                         .filter { it.id != data.id }
                         .toTypedArray()
-                    camping.homebrewCampingActivities += data
+                    homebrewCampingActivities.set(activities + data)
                 }
                 close().await()
                 afterSubmit()

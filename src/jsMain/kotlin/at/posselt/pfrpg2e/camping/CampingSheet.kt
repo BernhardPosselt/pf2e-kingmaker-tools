@@ -32,6 +32,7 @@ import at.posselt.pfrpg2e.resting.getTotalRestDuration
 import at.posselt.pfrpg2e.resting.rest
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatSeconds
 import at.posselt.pfrpg2e.utils.fromDateInputString
@@ -44,6 +45,7 @@ import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toDateInputString
+import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.documents.onCreateItem
@@ -55,7 +57,10 @@ import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ECreature
 import com.foundryvtt.pf2e.item.itemFromUuid
+import js.array.component1
+import js.array.component2
 import js.core.Void
+import js.objects.Object
 import js.objects.ReadonlyRecord
 import js.objects.recordOf
 import kotlinx.coroutines.await
@@ -406,7 +411,7 @@ class CampingSheet(
 
             "clear-actor" -> {
                 buildPromise {
-                    target.dataset["uuid"]?.let { actor.deleteCampingActorOld(it) {} }
+                    target.dataset["uuid"]?.let { actor.deleteCampingActor(it) {} }
                 }
             }
 
@@ -568,8 +573,7 @@ class CampingSheet(
                     )
                 )
             ) {
-                camping.campingActivities
-                    .find { it.activityId == activityId }?.result = existingCampingResult.toCamelCase()
+                camping.campingActivities[activityId]?.result = existingCampingResult.toCamelCase()
                 postPassTimeMessage(t("camping.reuseCampsite"), 1)
                 actor.setCamping(camping)
                 return
@@ -582,7 +586,7 @@ class CampingSheet(
             data = campingCheckData,
             overrideDc = recipe?.cookingLoreDC,
         )?.let { result ->
-            camping.campingActivities.find { it.activityId == activityId }?.result = result.toCamelCase()
+            camping.campingActivities[activityId]?.result = result.toCamelCase()
             actor.setCamping(camping)
 
             if (activity.isHuntAndGather()) {
@@ -627,11 +631,10 @@ class CampingSheet(
 
     private suspend fun resetActivities() {
         actor.getCamping()?.let { camping ->
-            val ids = camping.campingActivities
-                .map { it.activityId }
+            val ids = Object.keys(camping.campingActivities)
                 .filter { it != prepareCampsiteId }
                 .toSet()
-            actor.deleteCampingActivitiesOld(ids) {}
+            actor.deleteCampingActivities(ids) {}
         }
     }
 
@@ -712,10 +715,9 @@ class CampingSheet(
                     .findCampingActivitySkills(activity, camping.ignoreSkillRequirements)
                     .filterNot { it.validateOnly }
                     .firstOrNull()
-                val existing = camping.campingActivities.find { it.activityId == activityId }
+                val existing = camping.campingActivities[activityId]
                 if (existing == null) {
-                    camping.campingActivities += CampingActivity(
-                        activityId = activity.id,
+                    camping.campingActivities[activity.id] = CampingActivity(
                         actorUuid = actorUuid,
                         selectedSkill = skill?.attribute?.value,
                     )
@@ -785,9 +787,7 @@ class CampingSheet(
 
     private suspend fun clearActivity(id: String) {
         actor.getCamping()?.let {
-            it.campingActivities
-                .find { activity -> activity.activityId == id }
-                ?.actorUuid = null
+            it.campingActivities[id]?.actorUuid = null
             actor.setCamping(it)
         }
     }
@@ -974,7 +974,7 @@ class CampingSheet(
                     .map { it.uuid to recipe }
             }
             .toMap()
-        val activities = groupActivities.mapIndexed { index, groupedActivity ->
+        val activities = groupActivities.mapIndexed { _, groupedActivity ->
             val (data, result) = groupedActivity
             val actor = result.actorUuid?.let { actorsByUuid[it] }?.unsafeCast<PF2ECreature>()
             val requiresCheck = !data.doesNotRequireACheck()
@@ -1112,14 +1112,15 @@ class CampingSheet(
     override fun onParsedSubmit(value: CampingSheetFormData): Promise<Void> = buildPromise {
         actor.getCamping()?.let { camping ->
             camping.currentRegion = value.region
-            camping.campingActivities = camping.campingActivities.map {
-                CampingActivity(
-                    activityId = it.activityId,
-                    actorUuid = it.actorUuid,
-                    result = value.activities.degreeOfSuccess?.get(it.activityId),
-                    selectedSkill = value.activities.selectedSkill?.get(it.activityId),
-                )
-            }.toTypedArray()
+            camping.campingActivities = camping.campingActivities
+                .asSequence().map {
+                    val id = it.component1()
+                    id to CampingActivity(
+                        actorUuid = it.component2().actorUuid,
+                        result = value.activities.degreeOfSuccess?.get(id),
+                        selectedSkill = value.activities.selectedSkill?.get(id),
+                    )
+                }.toMutableRecord()
             val cookingResultsByRecipe = camping.cooking.results.associateBy { it.recipeId }
             camping.cooking.results = camping.getAllRecipes().map {
                 val result = cookingResultsByRecipe[it.id] ?: CookingResult(
@@ -1145,7 +1146,7 @@ private fun getActivitySkills(
     actor: PF2ECreature?,
     groupedActivity: ActivityAndData,
     ignoreSkillRequirements: Boolean,
-): FormElementContext? {
+): FormElementContext {
     return groupedActivity.data.getCampingSkills(actor).let { skillsAndProficiencies ->
         val options = skillsAndProficiencies
             .filter {

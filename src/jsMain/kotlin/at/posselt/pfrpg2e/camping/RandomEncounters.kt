@@ -76,7 +76,7 @@ private suspend fun rollRandomEncounter(
         if (camping.hasPreparedCampsite()) {
             postCombatEffects(
                 activeActivities = camping.alwaysPerformActivityIds.toSet() +
-                        camping.campingActivities
+                        camping.campingActivitiesWithId()
                             .filter { it.actorUuid != null }
                             .map { it.activityId },
                 partyLevel = partyLevel

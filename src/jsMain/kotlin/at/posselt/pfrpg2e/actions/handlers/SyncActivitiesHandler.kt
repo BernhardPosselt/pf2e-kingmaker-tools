@@ -2,7 +2,7 @@ package at.posselt.pfrpg2e.actions.handlers
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.actions.ActionMessage
-import at.posselt.pfrpg2e.camping.CampingActivity
+import at.posselt.pfrpg2e.camping.CampingActivityWithId
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.getActorsInCamp
 import at.posselt.pfrpg2e.camping.getAllRecipes
@@ -20,7 +20,7 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface SyncActivitiesAction {
-    val activities: Array<CampingActivity>
+    val activities: Array<CampingActivityWithId>
     val rollRandomEncounter: Boolean
     val clearMealEffects: Boolean
     val prepareCampsiteResult: String?
