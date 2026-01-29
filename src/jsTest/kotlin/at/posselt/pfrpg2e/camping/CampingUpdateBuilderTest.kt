@@ -19,8 +19,8 @@ class CampingUpdateBuilderTest {
     @Test
     fun testDelete() {
         val expected = recordOf(
-            "$campingPath.actorUuids" to arrayOf("test"),
-            "$campingPath.-=currentRegion" to null,
+            "actorUuids" to arrayOf("test"),
+            "-=currentRegion" to null,
         )
         val result = buildCampingUpdate {
             actorUuids.set(arrayOf("test"))
@@ -33,7 +33,7 @@ class CampingUpdateBuilderTest {
     @Test
     fun testActorMeals() {
         val expected = recordOf(
-            "$campingPath.cooking.actorMeals" to arrayOf(
+            "cooking.actorMeals" to arrayOf(
                 ActorMeal(
                     actorUuid = "actor",
                     chosenMeal = "meal",
@@ -56,7 +56,7 @@ class CampingUpdateBuilderTest {
     @Test
     fun testNestedCooking() {
         val expected = recordOf(
-            "$campingPath.cooking.actorMeals" to arrayOf(
+            "cooking.actorMeals" to arrayOf(
                 ActorMeal(
                     actorUuid = "actor",
                     chosenMeal = "meal",
@@ -81,7 +81,7 @@ class CampingUpdateBuilderTest {
     @Test
     fun deletingParentPropertyDeletesNested() {
         val expected = recordOf(
-            "flags.pf2e-kingmaker-tools.camping-sheet.-=cooking" to null
+            "-=cooking" to null
         )
         val result = buildCampingUpdate {
             cooking {

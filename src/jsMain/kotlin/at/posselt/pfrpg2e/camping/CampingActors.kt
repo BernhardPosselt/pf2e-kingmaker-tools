@@ -67,30 +67,29 @@ suspend fun getCampingActorsByUuid(uuids: Array<String>) =
 typealias BeforeSave = CampingUpdateBuilder.(CampingData) -> Unit
 
 suspend fun CampingActor.deleteCampingActivity(id: String, beforeSave: BeforeSave) {
-    typedUpdate {
+    typedCampingUpdate {
         campingActivities.deleteEntry(id)
         beforeSave(it)
     }
 }
 
 suspend fun CampingActor.deleteCampingActivities(ids: Set<String>, beforeSave: BeforeSave) {
-    typedUpdate {
+    typedCampingUpdate {
         campingActivities.deleteEntries(ids)
         beforeSave(it)
     }
 }
 
 suspend fun CampingActor.deleteCampingActor(actorUuid: String, beforeSave: BeforeSave) {
-    typedUpdate { camping ->
+    typedCampingUpdate { camping ->
         val ids = camping.campingActivities.asSequence()
             .filter { it.component2().actorUuid == actorUuid }
             .map { it.component1() }
             .toSet()
         campingActivities.deleteEntries(ids)
-        actorUuids.set(camping.actorUuids.filter { id -> id != uuid }.toTypedArray())
-        cooking.actorMeals.set(camping.cooking.actorMeals.filter { m -> m.actorUuid != uuid }
+        actorUuids.set(camping.actorUuids.filter { id -> id != actorUuid }.toTypedArray())
+        cooking.actorMeals.set(camping.cooking.actorMeals.filter { m -> m.actorUuid != actorUuid }
             .toTypedArray())
-        beforeSave(camping)
         beforeSave(camping)
     }
 }

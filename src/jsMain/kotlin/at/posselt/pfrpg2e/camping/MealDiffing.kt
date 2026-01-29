@@ -4,7 +4,6 @@ import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.takeIfInstance
-import at.posselt.pfrpg2e.utils.asAnyObjectList
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
@@ -24,7 +23,8 @@ private fun relevantUpdate(camping: CampingData, update: AnyObject): Boolean {
         ?.unsafeCast<Array<CookingResult>>()
         ?.sortedBy { it.recipeId }
         ?: emptyList()
-    return doObjectArraysDiffer(current.asAnyObjectList(), updated.asAnyObjectList())
+//    return doObjectArraysDiffer(current.asAnyObjectList(), updated.asAnyObjectList())
+    return true
 }
 
 private suspend fun checkPreActorMealUpdate(actor: Actor, update: AnyObject) {

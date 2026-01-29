@@ -22,6 +22,7 @@ import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.unsetAppFlag
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
+import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.utils.deepClone
@@ -437,6 +438,10 @@ fun CampingActor.getCamping(): CampingData? =
         ?.let(::deepClone)
 
 suspend fun CampingActor.setCamping(data: CampingData) {
+    setAppFlag("camping-sheet", data)
+}
+
+suspend fun CampingActor.updateCamping(data: AnyObject) {
     setAppFlag("camping-sheet", data)
 }
 
