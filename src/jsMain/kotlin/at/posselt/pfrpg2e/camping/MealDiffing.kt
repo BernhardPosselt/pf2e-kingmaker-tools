@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.takeIfInstance
+import at.posselt.pfrpg2e.utils.asAnyObjectList
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
@@ -11,10 +12,20 @@ import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.onPreUpdateActor
 import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.utils.diffObject
 import com.foundryvtt.core.utils.getProperty
+import js.objects.Object
 import js.objects.recordOf
 
 private const val mealResultPath = "flags.${Config.moduleId}.camping-sheet.cooking.results"
+
+private fun doObjectArraysDiffer(source: List<AnyObject>, target: List<AnyObject>): Boolean {
+    return source.size != target.size ||
+            (source.asSequence() zip target.asSequence())
+                .any { (first, second) ->
+                    Object.keys(diffObject(first, second)).isNotEmpty()
+                }
+}
 
 private fun relevantUpdate(camping: CampingData, update: AnyObject): Boolean {
     val current = camping.cooking.results
@@ -23,8 +34,7 @@ private fun relevantUpdate(camping: CampingData, update: AnyObject): Boolean {
         ?.unsafeCast<Array<CookingResult>>()
         ?.sortedBy { it.recipeId }
         ?: emptyList()
-//    return doObjectArraysDiffer(current.asAnyObjectList(), updated.asAnyObjectList())
-    return true
+    return doObjectArraysDiffer(current.asAnyObjectList(), updated.asAnyObjectList())
 }
 
 private suspend fun checkPreActorMealUpdate(actor: Actor, update: AnyObject) {

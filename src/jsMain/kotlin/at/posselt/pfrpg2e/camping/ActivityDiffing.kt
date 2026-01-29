@@ -7,19 +7,19 @@ import at.posselt.pfrpg2e.actions.handlers.SyncActivitiesAction
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.utils.Changes
+import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.filterObject
+import at.posselt.pfrpg2e.utils.parseChanges
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.onPreUpdateActor
 import com.foundryvtt.core.helpers.TypedHooks
-import com.foundryvtt.core.utils.MergeOptions
-import com.foundryvtt.core.utils.deepClone
-import com.foundryvtt.core.utils.diffObject
 import com.foundryvtt.core.utils.getProperty
-import com.foundryvtt.core.utils.hasProperty
-import com.foundryvtt.core.utils.mergeObject
+import com.foundryvtt.core.utils.objectsEqual
 import com.foundryvtt.core.utils.setProperty
 import js.array.component1
 import js.array.component2
@@ -49,64 +49,30 @@ private val settingAttributes = setOf(
     "alwaysPerformActivityIds",
 )
 
-private val listenForAttributeChanges = setOf(
-    "campingActivities",
-    "homebrewCampingActivities",
-    "alwaysPerformActivityIds",
+private val relevantAttributes = settingAttributes + "campingActivities"
+
+fun Changes.settingsChanged() = !objectsEqual(
+    filterObject(filteredApplied, settingAttributes),
+    filterObject(filteredOriginal, settingAttributes),
 )
-
-private class Changes(
-    val original: AnyObject,
-    val applied: AnyObject,
-    val changes: AnyObject,
-) {
-    val campingActivities = getProperty(changes, "campingActivities")
-        .unsafeCast<Record<String, CampingActivity>?>()
-    val campingChanged = hasProperty(changes, "campingActivities")
-    val homebrewCampingActivities = getProperty(changes, "homebrewCampingActivities")
-        .unsafeCast<Array<CampingActivityData>?>()
-    val homebrewChanged = hasProperty(changes, "homebrewCampingActivities")
-    val alwaysPerformActivityIds = getProperty(changes, "alwaysPerformActivityIds")
-        .unsafeCast<Array<String>?>()
-    val alwaysPerformActivitiesChanged = hasProperty(changes, "alwaysPerformActivityIds")
-    val settingsChanged = homebrewChanged || alwaysPerformActivitiesChanged
-    val anyChanges = settingsChanged || campingChanged
-}
-
-private fun parseChanges(camping: CampingData, update: AnyObject): Changes {
-    val original = deepClone(camping.unsafeCast<AnyObject>())
-    val applied = mergeObject(original, update, MergeOptions(performDeletions = true, inplace = false))
-    val changes = diffObject(applied, original)
-    return Changes(original, applied, changes)
-}
 
 fun checkPreActorUpdate(actor: Actor, update: AnyObject): SyncActivities? {
     val camping = actor.takeIfInstance<CampingActor>()?.getCamping() ?: return null
     val campingUpdate = getProperty(update, campingPath).unsafeCast<AnyObject?>() ?: return null
-    val changes = parseChanges(camping, campingUpdate)
-    if (!changes.anyChanges) return null
-    console.log("Received camping update", update)
-    val settingsChanged = changes.settingsChanged
-    // TODO: refactor the following
-    val activities = getProperty(update, "campingActivitiesPath")
+    val changes = parseChanges(camping.asAnyObject(), campingUpdate, relevantAttributes) ?: return null
+    console.log("Received camping update", update, changes.filteredOriginal, changes.filteredApplied)
+    val newActivities = getProperty(changes.filteredApplied, "campingActivities")
         ?.unsafeCast<Record<String, CampingActivity>>()
-        ?: camping.campingActivities
-    val alwaysPerformActivities = getProperty(update, "alwaysPerformPath")
+        ?: return null
+    val alwaysPerformActivities = getProperty(changes.filteredApplied, "alwaysPerformActivityIds")
         ?.unsafeCast<Array<String>>()
-        ?: camping.alwaysPerformActivityIds
-    val activitiesById = camping.campingActivitiesWithId().associateBy { it.activityId }
-    val activityDataById = camping.getAllActivities().associateBy { it.id }
-    val activityStateChanged = getActivityChanges(
-        activities,
-        activityDataById,
-        activitiesById
-    )
-    val needsSync = settingsChanged
-            || activityStateChanged.isNotEmpty()
-            || Object.keys(camping.campingActivities).size != Object.keys(activities).size
+        ?: return null
+    val activityChanges = getActivityChanges(newActivities, camping)
+    val needsSync = changes.settingsChanged()
+            || activityChanges.isNotEmpty()
+            || Object.keys(camping.campingActivities).size != Object.keys(newActivities).size
     if (!needsSync) return null
-
-    val prepareCampsiteChanged = prepareCampsiteChanged(activityStateChanged)
+    val prepareCampsiteChanged = prepareCampsiteChanged(activityChanges)
     val result = prepareCampsiteChanged?.parseResult()
     val prepareCampsiteResult = prepareCampsiteChanged?.let {
         val campResult = checkPrepareCampsiteResult(result)
@@ -114,11 +80,11 @@ fun checkPreActorUpdate(actor: Actor, update: AnyObject): SyncActivities? {
         campResult
     }
     return SyncActivities(
-        rollRandomEncounter = activityStateChanged.any { it.resultChanged && it.rollRandomEncounter },
+        rollRandomEncounter = activityChanges.any { it.resultChanged && it.rollRandomEncounter },
         activities = getActivitiesToSync(
             prepareCampsiteResult,
             alwaysPerformActivities,
-            activities.toCampingActivitiesWithId()
+            newActivities.toCampingActivitiesWithId()
         ),
         clearMealEffects = result != null,
         prepareCampsiteResult = result?.toCamelCase()
@@ -161,13 +127,14 @@ private fun setSection(
 }
 
 private fun getActivityChanges(
-    activities: Record<String, CampingActivity>,
-    activityDataById: Map<String, CampingActivityData>,
-    activitiesById: Map<String, CampingActivityWithId>,
+    newActivities: Record<String, CampingActivity>,
+    oldCamping: CampingData,
 ): List<ActivityChange> {
-    return activities.asSequence().mapNotNull { (newActivityId, new) ->
+    val activityDataById = oldCamping.getAllActivities().associateBy { it.id }
+    val oldActivitiesById = oldCamping.campingActivitiesWithId().associateBy { it.activityId }
+    return newActivities.asSequence().mapNotNull { (newActivityId, new) ->
         val data = activityDataById[newActivityId]
-        val previous = activitiesById[newActivityId]
+        val previous = oldActivitiesById[newActivityId]
         val hasDifferentResult = previous != null && (new.result != previous.result)
         val hasDifferentActor = previous != null && (new.actorUuid != previous.actorUuid)
         if (data != null && (hasDifferentActor || hasDifferentResult)) {
