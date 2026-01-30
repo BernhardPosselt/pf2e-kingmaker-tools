@@ -10,12 +10,22 @@ import js.objects.unsafeJso
 
 @DocumentUpdateDsl
 @Suppress("unused")
+class CookingResultPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
+    RecordPropertyUpdateBuilder<CookingResult>(basePath, updates, propertyName) {
+    val result = PropertyUpdateBuilder<String?>(propertyName, updates, "result")
+    val skill = PropertyUpdateBuilder<String?>(propertyName, updates, "skill")
+
+    operator fun invoke(action: CookingResultPropertyBuilder.() -> Unit) = action()
+}
+
+@DocumentUpdateDsl
+@Suppress("unused")
 class CookingPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
     RecordPropertyUpdateBuilder<Cooking>(basePath, updates, propertyName) {
     val actorMeals = PropertyUpdateBuilder<Array<ActorMeal>>(propertyName, updates, "actorMeals")
     val knownRecipes = PropertyUpdateBuilder<Array<String>>(propertyName, updates, "knownRecipes")
     val homebrewMeals = PropertyUpdateBuilder<Array<RecipeData>>(propertyName, updates, "homebrewMeals")
-    val results = PropertyUpdateBuilder<Array<CookingResult>>(propertyName, updates, "results")
+    val results = CookingResultPropertyBuilder(propertyName, updates, "results")
     val minimumSubsistence = PropertyUpdateBuilder<Int>(propertyName, updates, "minimumSubsistence")
 
     operator fun invoke(action: CookingPropertyBuilder.() -> Unit) = action()

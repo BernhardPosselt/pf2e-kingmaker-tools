@@ -310,7 +310,7 @@ private suspend fun completeDailyPreparations(
     camping.secondsSpentTraveling = 0
     camping.secondsSpentHexploring = 0
     Object.values(camping.campingActivities).forEach { it.result = null }
-    camping.cooking.results.forEach { it.result = null }
+    Object.values(camping.cooking.results).forEach { it.result = null }
     campingActor.setCamping(camping)
 
     val additionalHealing = additionalHealingPerActorAfterRest(recipes, camping, actors)

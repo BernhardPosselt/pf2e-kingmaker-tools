@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.app.CrudColumn
 import at.posselt.pfrpg2e.app.CrudData
 import at.posselt.pfrpg2e.app.CrudItem
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
+import at.posselt.pfrpg2e.camping.ActorMeal
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.RecipeData
 import at.posselt.pfrpg2e.camping.buildFoodCost
@@ -14,7 +15,7 @@ import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCompendiumFoodItems
 import at.posselt.pfrpg2e.camping.getTotalCarriedFood
-import at.posselt.pfrpg2e.camping.setCamping
+import at.posselt.pfrpg2e.camping.typedCampingUpdate
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.launch
@@ -23,8 +24,8 @@ import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.AnyMutableObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
-import js.array.toTypedArray
 import js.core.Void
+import js.objects.Object
 import kotlinx.coroutines.await
 import kotlin.js.Promise
 
@@ -38,21 +39,17 @@ class ManageRecipesApplication(
     debug = true,
 ) {
     override fun deleteEntry(id: String) = buildPromise {
-        actor.getCamping()?.let { camping ->
-            camping.cooking.knownRecipes = camping.cooking.knownRecipes.filter { it != id }.toTypedArray()
-            camping.cooking.homebrewMeals = camping.cooking.homebrewMeals.filter { it.id != id }.toTypedArray()
-            camping.cooking.actorMeals.forEach {
-                if (it.chosenMeal == id) {
-                    it.chosenMeal = "nothing"
-                }
-                if (it.favoriteMeal == id) {
-                    it.favoriteMeal = null
-                }
-            }
-            camping.cooking.results = camping.cooking.results.asSequence()
-                .filter { it.recipeId != id }
-                .toTypedArray()
-            actor.setCamping(camping)
+        actor.typedCampingUpdate { camping ->
+            cooking.knownRecipes.set(camping.cooking.knownRecipes.filter { it != id }.toTypedArray())
+            cooking.homebrewMeals.set(camping.cooking.homebrewMeals.filter { it.id != id }.toTypedArray())
+            cooking.actorMeals.set(camping.cooking.actorMeals.map {
+                ActorMeal(
+                    actorUuid = it.actorUuid,
+                    favoriteMeal = if (it.favoriteMeal == id) null else it.favoriteMeal,
+                    chosenMeal = if (it.chosenMeal == id) "nothing" else it.chosenMeal
+                )
+            }.toTypedArray())
+            cooking.results.deleteEntry(id)
             render()
         }
         undefined
@@ -125,17 +122,18 @@ class ManageRecipesApplication(
     }
 
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {
-        actor.getCamping()?.let { camping ->
-            val enabledRecipes = value.enabledIds + arrayOf("hearty-meal", "basic-meal")
-            camping.cooking.knownRecipes = enabledRecipes
-            camping.cooking.actorMeals.forEach {
+        val enabledRecipes = value.enabledIds + arrayOf("hearty-meal", "basic-meal")
+        actor.typedCampingUpdate { camping ->
+            cooking.knownRecipes.set(enabledRecipes)
+            cooking.actorMeals.set(camping.cooking.actorMeals.map {
                 if (it.chosenMeal !in enabledRecipes) it.chosenMeal = "nothing"
                 if (it.favoriteMeal !in enabledRecipes) it.favoriteMeal = null
-            }
-            camping.cooking.results = camping.cooking.results.asSequence()
-                .filter { it.recipeId in enabledRecipes }
-                .toTypedArray()
-            actor.setCamping(camping)
+                it
+            }.toTypedArray())
+            val idsToRemove = Object.keys(camping.cooking.results)
+                .filter { it !in enabledRecipes }
+                .toSet()
+            cooking.results.deleteEntries(idsToRemove)
         }
         undefined
     }

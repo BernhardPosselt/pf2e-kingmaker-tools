@@ -20,6 +20,7 @@ import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.t
+import at.posselt.pfrpg2e.utils.toMap
 import at.posselt.pfrpg2e.utils.unsetAppFlag
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.AnyObject
@@ -48,8 +49,14 @@ external interface ActorMeal {
 }
 
 @JsPlainObject
-external interface CookingResult {
+external interface CookingResultWithId {
     val recipeId: String
+    var result: String?
+    val skill: String
+}
+
+@JsPlainObject
+external interface CookingResult {
     var result: String?
     val skill: String
 }
@@ -59,7 +66,7 @@ external interface Cooking {
     var knownRecipes: Array<String>
     var actorMeals: Array<ActorMeal>
     var homebrewMeals: Array<RecipeData>
-    var results: Array<CookingResult>
+    var results: Record<String, CookingResult>
     var minimumSubsistence: Int
 }
 
@@ -219,7 +226,7 @@ fun getDefaultCamping(game: Game): CampingData {
             actorMeals = emptyArray(),
             knownRecipes = arrayOf("basic-meal", "hearty-meal"),
             homebrewMeals = emptyArray(),
-            results = emptyArray(),
+            results = recordOf(),
             minimumSubsistence = 0,
         ),
         watchSecondsRemaining = 0,
@@ -603,7 +610,7 @@ fun CampingData.findCookingChoices(
         listOfNotNull(Skill.SURVIVAL, if (cook.hasAttribute(cookingLore)) cookingLore else null)
     }
     val mealChoices = parseMealChoices(this, charactersInCampByUuid, recipesById)
-    val resultsByRecipeId = cooking.results.associateBy { it.recipeId }
+    val resultsByRecipeId = cooking.results.toMap()
     val effectiveMealChoices = mealChoices.map {
         if (cook == null && it is MealChoice.ParsedMeal) {
             MealChoice.Rations(
@@ -620,7 +627,6 @@ fun CampingData.findCookingChoices(
         meals = effectiveMealChoices,
         results = recipesById.values.map { recipe ->
             val result: CookingResult = resultsByRecipeId[recipe.id] ?: CookingResult(
-                recipeId = recipe.id,
                 result = null,
                 skill = "survival",
             )

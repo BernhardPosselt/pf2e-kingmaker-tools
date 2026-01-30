@@ -45,6 +45,7 @@ import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toDateInputString
+import at.posselt.pfrpg2e.utils.toMap
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
@@ -530,10 +531,9 @@ class CampingSheet(
             ),
             overrideDc = mealToCook.dc,
         )
-        val existing = camping.cooking.results.find { it.recipeId == recipeId }
+        val existing = camping.cooking.results[recipeId]
         if (existing == null) {
-            camping.cooking.results = camping.cooking.results + CookingResult(
-                recipeId = recipeId,
+            camping.cooking.results[recipeId] = CookingResult(
                 skill = mealToCook.selectedSkill.value,
                 result = result?.toCamelCase(),
             )
@@ -901,7 +901,7 @@ class CampingSheet(
                     actors = actorsByChosenMeal[recipe.name]?.toTypedArray() ?: emptyArray(),
                     skills = Select(
                         label = t("camping.selectedSkill"),
-                        name = "recipes.selectedSkill.${recipe.name}",
+                        name = "recipes.selectedSkill.${recipe.id}",
                         hideLabel = true,
                         options = cookingSkillOptions,
                         elementClasses = listOf("km-proficiency"),
@@ -910,7 +910,7 @@ class CampingSheet(
                     degreeOfSuccess = Select.fromEnum<DegreeOfSuccess>(
                         hideLabel = true,
                         required = false,
-                        name = "recipes.degreeOfSuccess.${recipe.name}",
+                        name = "recipes.degreeOfSuccess.${recipe.id}",
                         value = result?.degreeOfSuccess,
                         elementClasses = listOf("km-degree-of-success"),
                     ).toContext(),
@@ -1121,19 +1121,18 @@ class CampingSheet(
                         selectedSkill = value.activities.selectedSkill?.get(id),
                     )
                 }.toMutableRecord()
-            val cookingResultsByRecipe = camping.cooking.results.associateBy { it.recipeId }
+            val cookingResultsByRecipe = camping.cooking.results.toMap()
             camping.cooking.results = camping.getAllRecipes().map {
                 val result = cookingResultsByRecipe[it.id] ?: CookingResult(
-                    recipeId = it.id,
                     result = null,
                     skill = "survival",
                 )
-                CookingResult.copy(
+                it.id to CookingResult.copy(
                     result,
-                    result = value.recipes?.degreeOfSuccess?.get(it.name),
-                    skill = value.recipes?.selectedSkill?.get(it.name) ?: "survival",
+                    result = value.recipes?.degreeOfSuccess?.get(it.id),
+                    skill = value.recipes?.selectedSkill?.get(it.id) ?: "survival",
                 )
-            }.toTypedArray()
+            }.toMutableRecord()
             camping.travelModeActive = value.travelModeActive
             actor.setCamping(camping)
         }
