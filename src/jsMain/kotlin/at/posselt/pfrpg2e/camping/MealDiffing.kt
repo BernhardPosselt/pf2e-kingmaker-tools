@@ -25,7 +25,7 @@ private suspend fun checkPreActorMealUpdate(actor: Actor, update: AnyObject) {
     val campingUpdate = getProperty(update, campingPath).unsafeCast<AnyObject?>() ?: return
     val changes = parseChanges(camping.asAnyObject(), campingUpdate, setOf("results"), "cooking") ?: return
     val applied = getProperty(changes.applied, "cooking.results").unsafeCast<Record<String, CookingResult>?>() ?: return
-    console.log("Received camping update", update)
+    console.log("Received camping update", update, applied)
     val recipesById = camping.getAllRecipes().associateBy { it.id }
     val current = camping.cooking.results.toMap()
     applied.asSequence()

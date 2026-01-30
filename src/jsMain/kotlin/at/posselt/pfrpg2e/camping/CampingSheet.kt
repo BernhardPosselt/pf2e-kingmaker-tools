@@ -238,6 +238,7 @@ class CampingSheet(
     id = "kmCamping-${actor.uuid}",
     width = windowWidth,
     dataModel = CampingSheetDataModel::class.js,
+    filterBlanks = false,
     classes = setOf("km-camping-sheet"),
     controls = arrayOf(
         MenuControl(label = t("camping.showPlayers"), action = "show-players", gmOnly = true),
@@ -1111,10 +1112,9 @@ class CampingSheet(
         actor.getCamping()?.let { camping ->
             camping.currentRegion = value.region
             camping.campingActivities = camping.campingActivities
-                .asSequence().map {
-                    val id = it.component1()
+                .asSequence().map {(id, data) ->
                     id to CampingActivity(
-                        actorUuid = it.component2().actorUuid,
+                        actorUuid = data.actorUuid,
                         result = value.activities.degreeOfSuccess?.get(id),
                         selectedSkill = value.activities.selectedSkill?.get(id),
                     )
