@@ -33,18 +33,16 @@ class CampingUpdateBuilderTest {
     @Test
     fun testActorMeals() {
         val expected = recordOf(
-            "cooking.actorMeals" to arrayOf(
-                ActorMeal(
-                    actorUuid = "actor",
+            "cooking.actorMeals" to recordOf(
+                "actor" to ActorMeal(
                     chosenMeal = "meal",
                 )
             )
         )
         val result = buildCampingUpdate {
             cooking.actorMeals.set(
-                arrayOf(
-                    ActorMeal(
-                        actorUuid = "actor",
+                recordOf(
+                    "actor" to ActorMeal(
                         chosenMeal = "meal",
                     )
                 )
@@ -56,9 +54,8 @@ class CampingUpdateBuilderTest {
     @Test
     fun testNestedCooking() {
         val expected = recordOf(
-            "cooking.actorMeals" to arrayOf(
-                ActorMeal(
-                    actorUuid = "actor",
+            "cooking.actorMeals" to recordOf(
+                "actor" to ActorMeal(
                     chosenMeal = "meal",
                 )
             )
@@ -66,9 +63,8 @@ class CampingUpdateBuilderTest {
         val result = buildCampingUpdate {
             cooking {
                 actorMeals.set(
-                    arrayOf(
-                        ActorMeal(
-                            actorUuid = "actor",
+                    recordOf(
+                        "actor" to ActorMeal(
                             chosenMeal = "meal",
                         )
                     )
@@ -86,9 +82,8 @@ class CampingUpdateBuilderTest {
         val result = buildCampingUpdate {
             cooking {
                 actorMeals.set(
-                    arrayOf(
-                        ActorMeal(
-                            actorUuid = "actor",
+                    recordOf(
+                        "actor" to ActorMeal(
                             chosenMeal = "meal",
                         )
                     )

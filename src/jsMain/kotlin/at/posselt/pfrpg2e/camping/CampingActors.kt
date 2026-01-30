@@ -88,8 +88,7 @@ suspend fun CampingActor.deleteCampingActor(actorUuid: String, beforeSave: Befor
             .toSet()
         campingActivities.deleteEntries(ids)
         actorUuids.set(camping.actorUuids.filter { id -> id != actorUuid }.toTypedArray())
-        cooking.actorMeals.set(camping.cooking.actorMeals.filter { m -> m.actorUuid != actorUuid }
-            .toTypedArray())
+        cooking.actorMeals.deleteEntry(actorUuid)
         beforeSave(camping)
     }
 }

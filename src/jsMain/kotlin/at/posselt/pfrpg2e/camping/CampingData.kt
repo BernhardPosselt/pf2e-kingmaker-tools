@@ -43,16 +43,8 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface ActorMeal {
-    var actorUuid: String
     var favoriteMeal: String?
     var chosenMeal: String
-}
-
-@JsPlainObject
-external interface CookingResultWithId {
-    val recipeId: String
-    var result: String?
-    val skill: String
 }
 
 @JsPlainObject
@@ -64,7 +56,7 @@ external interface CookingResult {
 @JsPlainObject
 external interface Cooking {
     var knownRecipes: Array<String>
-    var actorMeals: Array<ActorMeal>
+    var actorMeals: Record<String, ActorMeal>
     var homebrewMeals: Array<RecipeData>
     var results: Record<String, CookingResult>
     var minimumSubsistence: Int
@@ -223,7 +215,7 @@ fun getDefaultCamping(game: Game): CampingData {
         homebrewCampingActivities = emptyArray(),
         lockedActivities = lockedCampingActivityIds,
         cooking = Cooking(
-            actorMeals = emptyArray(),
+            actorMeals = recordOf(),
             knownRecipes = arrayOf("basic-meal", "hearty-meal"),
             homebrewMeals = emptyArray(),
             results = recordOf(),
@@ -566,8 +558,8 @@ private fun parseMealChoices(
     charactersInCamp: Map<String, PF2EActor>,
     recipesById: Map<String, RecipeData>
 ): List<MealChoice> {
-    val chosenMeals = camping.cooking.actorMeals.mapNotNull { meal ->
-        charactersInCamp[meal.actorUuid]?.let { actor ->
+    return camping.cooking.actorMeals.asSequence().mapNotNull { (actorUuid, meal) ->
+        charactersInCamp[actorUuid]?.let { actor ->
             val favoriteMeal = meal.favoriteMeal?.let { recipesById[it] }
             when (val chosenMeal = meal.chosenMeal) {
                 "nothing" -> MealChoice.Nothing(actor = actor, favoriteMeal = favoriteMeal)
@@ -581,8 +573,7 @@ private fun parseMealChoices(
                 }
             }
         }
-    }
-    return chosenMeals
+    }.toList()
 }
 
 fun CampingData.hasPreparedCampsite() =

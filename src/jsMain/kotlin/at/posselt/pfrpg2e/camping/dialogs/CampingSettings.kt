@@ -394,9 +394,13 @@ class CampingSettingsApplication(
                             minimumTravelSpeed.set( settings.minimumTravelSpeed)
                             cooking.minimumSubsistence.set(settings.minimumSubsistence)
                             alwaysPerformActivityIds.set( settings.alwaysPerformActivities)
-                            restingTrack.set( settings.restingPlaylistUuid?.let { track ->
-                                Track(playlistUuid = track, trackUuid = settings.restingPlaylistSoundUuid)
-                            })
+                            val restingPlaylistUuid = settings.restingPlaylistUuid
+                            if (restingPlaylistUuid == null) {
+                                restingTrack.set(null)
+                            } else {
+                                restingTrack.playlistUuid.set(restingPlaylistUuid)
+                                restingTrack.trackUuid.set(settings.restingPlaylistSoundUuid)
+                            }
                             worldSceneId.set( settings.worldSceneId)
                             autoApplyFatigued.set( settings.autoApplyFatigued)
                             resetTimeTrackingAfterOneDay.set( settings.resetTimeTrackingAfterOneDay)

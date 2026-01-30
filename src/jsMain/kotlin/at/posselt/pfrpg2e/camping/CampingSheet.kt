@@ -623,7 +623,7 @@ class CampingSheet(
 
     private suspend fun resetMeals() {
         actor.getCamping()?.let { camping ->
-            camping.cooking.actorMeals.forEach { it.chosenMeal = "nothing" }
+            Object.values(camping.cooking.actorMeals).forEach { it.chosenMeal = "nothing" }
             actor.setCamping(camping)
         }
     }
@@ -680,10 +680,9 @@ class CampingSheet(
             return
         }
         actor.getCamping()?.let { camping ->
-            val existingMeal = camping.cooking.actorMeals.find { it.actorUuid == actorUuid }
+            val existingMeal = camping.cooking.actorMeals[actorUuid]
             if (existingMeal == null) {
-                camping.cooking.actorMeals = camping.cooking.actorMeals + ActorMeal(
-                    actorUuid = actorUuid,
+                camping.cooking.actorMeals[actorUuid] = ActorMeal(
                     chosenMeal = recipeId,
                 )
             } else {
@@ -765,8 +764,7 @@ class CampingSheet(
                     ui.notifications.error(t("camping.wrongActorAddedToSheet"))
                 } else {
                     camping.actorUuids = camping.actorUuids + uuid
-                    camping.cooking.actorMeals = camping.cooking.actorMeals + ActorMeal(
-                        actorUuid = uuid,
+                    camping.cooking.actorMeals[uuid] = ActorMeal(
                         favoriteMeal = null,
                         chosenMeal = "nothing",
                     )

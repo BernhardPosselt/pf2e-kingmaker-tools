@@ -16,14 +16,18 @@ import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.getCompendiumFoodItems
 import at.posselt.pfrpg2e.camping.getTotalCarriedFood
 import at.posselt.pfrpg2e.camping.typedCampingUpdate
+import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.t
+import at.posselt.pfrpg2e.utils.toMutableRecord
 import at.posselt.pfrpg2e.utils.tpl
 import com.foundryvtt.core.AnyMutableObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
+import js.array.component1
+import js.array.component2
 import js.core.Void
 import js.objects.Object
 import kotlinx.coroutines.await
@@ -42,13 +46,12 @@ class ManageRecipesApplication(
         actor.typedCampingUpdate { camping ->
             cooking.knownRecipes.set(camping.cooking.knownRecipes.filter { it != id }.toTypedArray())
             cooking.homebrewMeals.set(camping.cooking.homebrewMeals.filter { it.id != id }.toTypedArray())
-            cooking.actorMeals.set(camping.cooking.actorMeals.map {
-                ActorMeal(
-                    actorUuid = it.actorUuid,
+            cooking.actorMeals.set(camping.cooking.actorMeals.asSequence().map { (actorUuid, it) ->
+                actorUuid to ActorMeal(
                     favoriteMeal = if (it.favoriteMeal == id) null else it.favoriteMeal,
                     chosenMeal = if (it.chosenMeal == id) "nothing" else it.chosenMeal
                 )
-            }.toTypedArray())
+            }.toMutableRecord())
             cooking.results.deleteEntry(id)
             render()
         }
@@ -118,18 +121,28 @@ class ManageRecipesApplication(
     }
 
     override fun getHeadings(): Promise<Array<String>> = buildPromise {
-        arrayOf(t("enums.rarity"), t("applications.level"), t("applications.dc"), t("camping.cookingCost"), t("camping.purchaseCost"))
+        arrayOf(
+            t("enums.rarity"),
+            t("applications.level"),
+            t("applications.dc"),
+            t("camping.cookingCost"),
+            t("camping.purchaseCost")
+        )
     }
 
     override fun onParsedSubmit(value: CrudData): Promise<Void> = buildPromise {
         val enabledRecipes = value.enabledIds + arrayOf("hearty-meal", "basic-meal")
         actor.typedCampingUpdate { camping ->
             cooking.knownRecipes.set(enabledRecipes)
-            cooking.actorMeals.set(camping.cooking.actorMeals.map {
-                if (it.chosenMeal !in enabledRecipes) it.chosenMeal = "nothing"
-                if (it.favoriteMeal !in enabledRecipes) it.favoriteMeal = null
-                it
-            }.toTypedArray())
+            cooking.actorMeals.set(
+                camping.cooking.actorMeals.asSequence()
+                    .map { (actorUuid, meal) ->
+                        actorUuid to ActorMeal(
+                            chosenMeal = if (meal.chosenMeal !in enabledRecipes) "nothing" else meal.chosenMeal,
+                            favoriteMeal = if (meal.favoriteMeal !in enabledRecipes) null else meal.favoriteMeal,
+                        )
+                    }.toMutableRecord()
+            )
             val idsToRemove = Object.keys(camping.cooking.results)
                 .filter { it !in enabledRecipes }
                 .toSet()

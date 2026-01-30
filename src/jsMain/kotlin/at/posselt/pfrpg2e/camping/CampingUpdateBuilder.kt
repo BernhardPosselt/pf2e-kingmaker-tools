@@ -11,18 +11,27 @@ import js.objects.unsafeJso
 @DocumentUpdateDsl
 @Suppress("unused")
 class CookingResultPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
-    RecordPropertyUpdateBuilder<CookingResult>(basePath, updates, propertyName) {
+    RecordPropertyUpdateBuilder<Record<String, CookingResult>>(basePath, updates, propertyName) {
     val result = PropertyUpdateBuilder<String?>(propertyName, updates, "result")
-    val skill = PropertyUpdateBuilder<String?>(propertyName, updates, "skill")
+    val skill = PropertyUpdateBuilder<String>(propertyName, updates, "skill")
 
     operator fun invoke(action: CookingResultPropertyBuilder.() -> Unit) = action()
+}
+
+@Suppress("unused")
+class ActorMealPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
+    RecordPropertyUpdateBuilder<Record<String, ActorMeal>>(basePath, updates, propertyName) {
+    val favoriteMeal = PropertyUpdateBuilder<String?>(propertyName, updates, "favoriteMeal")
+    val chosenMeal = PropertyUpdateBuilder<String>(propertyName, updates, "chosenMeal")
+
+    operator fun invoke(action: ActorMealPropertyBuilder.() -> Unit) = action()
 }
 
 @DocumentUpdateDsl
 @Suppress("unused")
 class CookingPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
     RecordPropertyUpdateBuilder<Cooking>(basePath, updates, propertyName) {
-    val actorMeals = PropertyUpdateBuilder<Array<ActorMeal>>(propertyName, updates, "actorMeals")
+    val actorMeals = ActorMealPropertyBuilder(propertyName, updates, "actorMeals")
     val knownRecipes = PropertyUpdateBuilder<Array<String>>(propertyName, updates, "knownRecipes")
     val homebrewMeals = PropertyUpdateBuilder<Array<RecipeData>>(propertyName, updates, "homebrewMeals")
     val results = CookingResultPropertyBuilder(propertyName, updates, "results")
@@ -69,7 +78,7 @@ class RestSettingsPropertyBuilder(basePath: String, updates: Record<String, Any?
 class CampingUpdateBuilder(val updates: Record<String, Any?>, basePath: String = "") {
     val actorUuids = PropertyUpdateBuilder<Array<String>>(basePath, updates, "actorUuids")
     val campingActivities =
-        RecordPropertyUpdateBuilder<Record<String, CampingActivityWithId>>(basePath, updates, "campingActivities")
+        RecordPropertyUpdateBuilder<Record<String, CampingActivity>>(basePath, updates, "campingActivities")
     val cooking = CookingPropertyBuilder(basePath, updates, "cooking")
     val currentRegion = PropertyUpdateBuilder<String>(basePath, updates, "currentRegion")
     val homebrewCampingActivities =
