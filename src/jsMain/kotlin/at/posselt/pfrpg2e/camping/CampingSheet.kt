@@ -54,6 +54,7 @@ import com.foundryvtt.core.documents.onDeleteItem
 import com.foundryvtt.core.documents.onUpdateItem
 import com.foundryvtt.core.helpers.onUpdateWorldTime
 import com.foundryvtt.core.ui
+import com.foundryvtt.core.utils.fromUuid
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ECreature
@@ -262,7 +263,8 @@ class CampingSheet(
         onDocumentRefDrop(".km-camping-add-actor") { _, documentRef ->
             if (documentRef is ActorRef) {
                 buildPromise {
-                    addActor(documentRef.uuid)
+                    val actorId = fromUuid(documentRef.uuid).await()?.id!!
+                    addActor(documentRef.uuid, actorId)
                 }
             }
         }
@@ -307,7 +309,8 @@ class CampingSheet(
                 val tile = target.closest(".km-camping-recipe") as HTMLElement?
                 val recipeId = tile?.dataset?.get("recipeId")
                 if (documentRef is ActorRef && recipeId != null) {
-                    assignRecipeTo(documentRef.uuid, recipeId)
+                    val actorId = fromUuid(documentRef.uuid).await()?.id!!
+                    assignRecipeTo(documentRef.uuid, actorId, recipeId = recipeId)
                 }
             }
         }
@@ -413,7 +416,9 @@ class CampingSheet(
 
             "clear-actor" -> {
                 buildPromise {
-                    target.dataset["uuid"]?.let { actor.deleteCampingActor(it) {} }
+                    target.dataset["uuid"]
+                        ?.let { fromUuid(it).await() }
+                        ?.let { actor.deleteCampingActor(it.uuid, it.id!!) {} }
                 }
             }
 
@@ -673,7 +678,7 @@ class CampingSheet(
         rollRandomEncounter(game, actor, includeFlatCheck)
     }
 
-    private suspend fun assignRecipeTo(actorUuid: String, recipeId: String) {
+    private suspend fun assignRecipeTo(actorUuid: String, actorId: String, recipeId: String) {
         val isNotACharacter = getCampingActivityActorByUuid(actorUuid) == null
         val isNotARation = recipeId != "rationsOrSubsistence" && recipeId != "nothing"
         if (isNotARation && isNotACharacter) {
@@ -681,9 +686,10 @@ class CampingSheet(
             return
         }
         actor.getCamping()?.let { camping ->
-            val existingMeal = camping.cooking.actorMeals[actorUuid]
+            val existingMeal = camping.cooking.actorMeals[actorId]
             if (existingMeal == null) {
-                camping.cooking.actorMeals[actorUuid] = ActorMeal(
+                camping.cooking.actorMeals[actorId] = ActorMeal(
+                    actorUuid = actorUuid,
                     chosenMeal = recipeId,
                 )
             } else {
@@ -757,15 +763,16 @@ class CampingSheet(
         }
     }
 
-    private suspend fun addActor(uuid: String) {
+    private suspend fun addActor(uuid: String, id: String) {
         actor.getCamping()?.let { camping ->
             if (uuid !in camping.actorUuids) {
                 val campingActor = getCampingActorByUuid(uuid)
                 if (campingActor == null) {
                     ui.notifications.error(t("camping.wrongActorAddedToSheet"))
                 } else {
-                    camping.actorUuids = camping.actorUuids + uuid
-                    camping.cooking.actorMeals[uuid] = ActorMeal(
+                    camping.actorUuids += uuid
+                    camping.cooking.actorMeals[id] = ActorMeal(
+                        actorUuid = uuid,
                         favoriteMeal = null,
                         chosenMeal = "nothing",
                     )

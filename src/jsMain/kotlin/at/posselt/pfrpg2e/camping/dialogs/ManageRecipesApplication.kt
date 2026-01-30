@@ -46,8 +46,9 @@ class ManageRecipesApplication(
         actor.typedCampingUpdate { camping ->
             cooking.knownRecipes.set(camping.cooking.knownRecipes.filter { it != id }.toTypedArray())
             cooking.homebrewMeals.set(camping.cooking.homebrewMeals.filter { it.id != id }.toTypedArray())
-            cooking.actorMeals.set(camping.cooking.actorMeals.asSequence().map { (actorUuid, it) ->
-                actorUuid to ActorMeal(
+            cooking.actorMeals.set(camping.cooking.actorMeals.asSequence().map { (id, it) ->
+                id to ActorMeal(
+                    actorUuid = it.actorUuid,
                     favoriteMeal = if (it.favoriteMeal == id) null else it.favoriteMeal,
                     chosenMeal = if (it.chosenMeal == id) "nothing" else it.chosenMeal
                 )
@@ -136,8 +137,9 @@ class ManageRecipesApplication(
             cooking.knownRecipes.set(enabledRecipes)
             cooking.actorMeals.set(
                 camping.cooking.actorMeals.asSequence()
-                    .map { (actorUuid, meal) ->
-                        actorUuid to ActorMeal(
+                    .map { (id, meal) ->
+                        id to ActorMeal(
+                            actorUuid = meal.actorUuid,
                             chosenMeal = if (meal.chosenMeal !in enabledRecipes) "nothing" else meal.chosenMeal,
                             favoriteMeal = if (meal.favoriteMeal !in enabledRecipes) null else meal.favoriteMeal,
                         )

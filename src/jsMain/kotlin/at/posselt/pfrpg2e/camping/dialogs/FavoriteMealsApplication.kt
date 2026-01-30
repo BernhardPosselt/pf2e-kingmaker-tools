@@ -82,9 +82,9 @@ class FavoriteMealsApplication(
         ?.cooking
         ?.actorMeals
         ?.asSequence()
-        ?.map { (actorUuid, actorMeal) ->
+        ?.map { (id, actorMeal) ->
             FavoriteMealChoice(
-                actorUuid = actorUuid,
+                actorUuid = actorMeal.actorUuid,
                 favoriteMeal = actorMeal.favoriteMeal
             )
         }?.toList() ?: emptyList()
@@ -100,9 +100,9 @@ class FavoriteMealsApplication(
                             .toSet()
                         val mealsByActorUuid = meals.associateBy { it.actorUuid }
                         camping.cooking.actorMeals.asSequence()
-                            .filter { it.component1() in allowedActorUuids }
-                            .forEach { (actorUuid, meal) ->
-                                meal.favoriteMeal = mealsByActorUuid[actorUuid]?.favoriteMeal
+                            .filter { it.component2().actorUuid in allowedActorUuids }
+                            .forEach { (_, meal) ->
+                                meal.favoriteMeal = mealsByActorUuid[meal.actorUuid]?.favoriteMeal
                             }
                         actor.setCamping(camping)
                     }

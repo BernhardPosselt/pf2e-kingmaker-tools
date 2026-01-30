@@ -35,6 +35,7 @@ class CampingUpdateBuilderTest {
         val expected = recordOf(
             "cooking.actorMeals" to recordOf(
                 "actor" to ActorMeal(
+                    actorUuid = "actoruuid",
                     chosenMeal = "meal",
                 )
             )
@@ -43,6 +44,7 @@ class CampingUpdateBuilderTest {
             cooking.actorMeals.set(
                 recordOf(
                     "actor" to ActorMeal(
+                        actorUuid = "actoruuid",
                         chosenMeal = "meal",
                     )
                 )
@@ -56,6 +58,7 @@ class CampingUpdateBuilderTest {
         val expected = recordOf(
             "cooking.actorMeals" to recordOf(
                 "actor" to ActorMeal(
+                    actorUuid = "actoruuid",
                     chosenMeal = "meal",
                 )
             )
@@ -65,6 +68,7 @@ class CampingUpdateBuilderTest {
                 actorMeals.set(
                     recordOf(
                         "actor" to ActorMeal(
+                            actorUuid = "actoruuid",
                             chosenMeal = "meal",
                         )
                     )
@@ -84,6 +88,7 @@ class CampingUpdateBuilderTest {
                 actorMeals.set(
                     recordOf(
                         "actor" to ActorMeal(
+                            actorUuid = "actoruuid",
                             chosenMeal = "meal",
                         )
                     )

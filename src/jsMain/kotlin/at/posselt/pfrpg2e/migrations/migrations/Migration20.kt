@@ -6,6 +6,8 @@ import at.posselt.pfrpg2e.camping.CampingData
 import at.posselt.pfrpg2e.camping.CookingResult
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.utils.fromUuid
+import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -50,8 +52,10 @@ class Migration20 : Migration(20) {
             }
             .toMutableRecord()
         camping.cooking.actorMeals = camping.cooking.actorMeals.unsafeCast<Array<OldActorMeal>>()
-            .map {
-                it.actorUuid to ActorMeal(
+            .mapNotNull {
+                val id = fromUuid(it.actorUuid).await()?.id ?: return@mapNotNull null
+                id to ActorMeal(
+                    actorUuid = it.actorUuid,
                     favoriteMeal = it.favoriteMeal,
                     chosenMeal = it.chosenMeal,
                 )

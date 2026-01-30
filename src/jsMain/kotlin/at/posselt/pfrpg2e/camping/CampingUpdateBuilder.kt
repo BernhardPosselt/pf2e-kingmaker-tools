@@ -21,6 +21,7 @@ class CookingResultPropertyBuilder(basePath: String, updates: Record<String, Any
 @Suppress("unused")
 class ActorMealPropertyBuilder(basePath: String, updates: Record<String, Any?>, propertyName: String) :
     RecordPropertyUpdateBuilder<Record<String, ActorMeal>>(basePath, updates, propertyName) {
+    val actorUuid = PropertyUpdateBuilder<String>(propertyName, updates, "actorUuid")
     val favoriteMeal = PropertyUpdateBuilder<String?>(propertyName, updates, "favoriteMeal")
     val chosenMeal = PropertyUpdateBuilder<String>(propertyName, updates, "chosenMeal")
 

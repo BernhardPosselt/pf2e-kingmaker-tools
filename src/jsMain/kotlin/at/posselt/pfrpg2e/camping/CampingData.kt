@@ -43,6 +43,7 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface ActorMeal {
+    var actorUuid: String
     var favoriteMeal: String?
     var chosenMeal: String
 }
@@ -558,8 +559,8 @@ private fun parseMealChoices(
     charactersInCamp: Map<String, PF2EActor>,
     recipesById: Map<String, RecipeData>
 ): List<MealChoice> {
-    return camping.cooking.actorMeals.asSequence().mapNotNull { (actorUuid, meal) ->
-        charactersInCamp[actorUuid]?.let { actor ->
+    return camping.cooking.actorMeals.asSequence().mapNotNull { (_, meal) ->
+        charactersInCamp[meal.actorUuid]?.let { actor ->
             val favoriteMeal = meal.favoriteMeal?.let { recipesById[it] }
             when (val chosenMeal = meal.chosenMeal) {
                 "nothing" -> MealChoice.Nothing(actor = actor, favoriteMeal = favoriteMeal)
