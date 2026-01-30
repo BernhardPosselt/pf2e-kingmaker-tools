@@ -4,7 +4,7 @@ package com.foundryvtt.core.grid
 import com.foundryvtt.core.utils.Color
 import com.pixijs.Point
 import js.array.Tuple4
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface CalculatedDimensions {

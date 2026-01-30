@@ -4,9 +4,9 @@ import at.posselt.pfrpg2e.app.forms.FileInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.ui
-import js.objects.JsPlainObject
 import js.objects.recordOf
 import kotlinx.coroutines.await
+import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLInputElement
 import org.w3c.fetch.Response
 
@@ -36,7 +36,7 @@ suspend fun jsonFilePicker(
             )
         )
     ),
-) { data, form ->
+) { _, form ->
     val input = form.querySelector("input") as HTMLInputElement
     val file = input.files?.item(0)
     if (file == null) {

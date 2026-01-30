@@ -15,7 +15,7 @@ import at.posselt.pfrpg2e.utils.downloadJson
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.pf2e.actor.PF2EParty
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement

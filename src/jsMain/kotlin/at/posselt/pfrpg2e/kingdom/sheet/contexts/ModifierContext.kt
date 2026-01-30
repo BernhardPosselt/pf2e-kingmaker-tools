@@ -3,7 +3,7 @@ package at.posselt.pfrpg2e.kingdom.sheet.contexts
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.modifiers.ModifierSelector
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject

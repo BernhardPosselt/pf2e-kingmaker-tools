@@ -4,7 +4,7 @@ import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.kingdom.settlements.settlementSizeData
 import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import js.objects.recordOf
 
 @Suppress("unused")

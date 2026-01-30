@@ -11,7 +11,7 @@ import at.posselt.pfrpg2e.kingdom.RawGovernment
 import at.posselt.pfrpg2e.kingdom.data.RawGovernmentChoices
 import at.posselt.pfrpg2e.kingdom.formatRequirements
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject

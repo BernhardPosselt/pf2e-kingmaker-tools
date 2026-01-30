@@ -31,7 +31,7 @@ import at.posselt.pfrpg2e.utils.postDegreeOfSuccess
 import at.posselt.pfrpg2e.utils.serializeB64Json
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import js.objects.recordOf
 import kotlin.math.max
 

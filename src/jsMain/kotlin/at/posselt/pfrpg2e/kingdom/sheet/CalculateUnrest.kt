@@ -11,7 +11,7 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import js.objects.recordOf
 import kotlin.math.abs
 import kotlin.math.min

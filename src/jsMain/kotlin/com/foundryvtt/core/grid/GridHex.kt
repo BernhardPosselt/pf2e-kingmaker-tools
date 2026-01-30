@@ -2,7 +2,7 @@
 package com.foundryvtt.core.grid
 
 import com.pixijs.Point
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface GridOffset2D {

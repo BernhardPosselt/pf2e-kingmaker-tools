@@ -11,7 +11,7 @@ import com.foundryvtt.core.helpers.TypedHooks
 import com.foundryvtt.kingmaker.kingmaker
 import com.foundryvtt.pf2e.actor.PF2EParty
 import com.pixijs.Point
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 import kotlin.math.abs
 

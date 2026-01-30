@@ -7,7 +7,7 @@ import com.foundryvtt.core.grid.HexagonalGrid
 import com.foundryvtt.core.grid.HexagonalGridCube2D
 import com.foundryvtt.core.utils.Color
 import com.pixijs.Point
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface HexOffsetCoordinate {

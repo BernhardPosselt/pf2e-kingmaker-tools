@@ -1,7 +1,7 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
 import at.posselt.pfrpg2e.kingdom.resources.Consumption
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import kotlin.math.abs
 
 @Suppress("unused")

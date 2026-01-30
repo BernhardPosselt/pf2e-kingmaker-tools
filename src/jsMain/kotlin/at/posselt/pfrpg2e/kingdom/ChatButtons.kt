@@ -20,7 +20,7 @@ import com.foundryvtt.core.helpers.onRenderChatLog
 import com.foundryvtt.core.ui
 import io.github.uuidjs.uuid.v4
 import js.array.tupleOf
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import js.objects.recordOf
 import kotlinx.html.org.w3c.dom.events.Event
 import kotlinx.serialization.json.Json.Default.parseToJsonElement

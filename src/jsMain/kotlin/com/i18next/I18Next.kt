@@ -1,7 +1,7 @@
 package com.i18next
 
 import com.foundryvtt.core.AnyObject
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import kotlin.js.Promise
 
 @JsPlainObject

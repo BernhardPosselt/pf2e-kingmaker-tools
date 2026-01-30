@@ -25,7 +25,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawRuinThresholdIncreasesContext
 import at.posselt.pfrpg2e.kingdom.formatRequirements
 import at.posselt.pfrpg2e.kingdom.satisfiesRequirements
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import js.objects.recordOf
 
 @Suppress("unused")

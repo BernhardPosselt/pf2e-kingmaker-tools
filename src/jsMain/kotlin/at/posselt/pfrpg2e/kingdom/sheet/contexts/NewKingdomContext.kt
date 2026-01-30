@@ -1,6 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject

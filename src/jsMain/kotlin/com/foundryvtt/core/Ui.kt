@@ -1,7 +1,7 @@
 package com.foundryvtt.core
 
 import com.foundryvtt.core.applications.ui.Notifications
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 
 

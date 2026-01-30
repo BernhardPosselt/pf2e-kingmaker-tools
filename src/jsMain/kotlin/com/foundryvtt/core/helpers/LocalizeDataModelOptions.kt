@@ -1,6 +1,6 @@
 package com.foundryvtt.core.helpers
 
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface LocalizeDataModelOptions {

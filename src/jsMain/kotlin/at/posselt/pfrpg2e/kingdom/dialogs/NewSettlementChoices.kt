@@ -8,7 +8,7 @@ import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.kingdom.SettlementTerrain
 import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 
 @Suppress("unused")

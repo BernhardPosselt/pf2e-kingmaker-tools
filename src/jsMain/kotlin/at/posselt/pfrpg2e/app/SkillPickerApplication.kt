@@ -28,7 +28,7 @@ import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import com.foundryvtt.core.utils.deepClone
 import js.core.Void
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get

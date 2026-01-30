@@ -15,7 +15,7 @@ import com.foundryvtt.core.applications.ux.FormDataExtended
 import com.foundryvtt.core.documents.ClientDocument
 import com.foundryvtt.core.game
 import js.core.Void
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 import js.objects.Record
 import js.objects.recordOf
 import kotlinx.coroutines.await

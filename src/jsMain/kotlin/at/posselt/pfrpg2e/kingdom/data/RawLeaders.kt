@@ -1,6 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.data
 
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface RawLeaderValues {

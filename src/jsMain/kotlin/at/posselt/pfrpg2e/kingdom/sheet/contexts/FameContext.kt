@@ -5,7 +5,7 @@ import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.data.kingdom.FameType
 import at.posselt.pfrpg2e.kingdom.data.RawFame
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface FameContext {

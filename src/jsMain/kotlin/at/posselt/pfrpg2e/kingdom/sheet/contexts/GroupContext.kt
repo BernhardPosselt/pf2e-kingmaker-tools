@@ -7,7 +7,7 @@ import at.posselt.pfrpg2e.app.forms.TextInput
 import at.posselt.pfrpg2e.data.kingdom.Relations
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject

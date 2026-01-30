@@ -2,7 +2,7 @@
 package com.foundryvtt.core.grid
 
 import com.pixijs.ColorSource
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface GridConfiguration {

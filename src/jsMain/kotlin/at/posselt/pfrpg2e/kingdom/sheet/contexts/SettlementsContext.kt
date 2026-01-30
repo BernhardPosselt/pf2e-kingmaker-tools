@@ -5,7 +5,7 @@ import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject

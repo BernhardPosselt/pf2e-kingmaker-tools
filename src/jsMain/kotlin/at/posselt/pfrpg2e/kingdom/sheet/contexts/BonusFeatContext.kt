@@ -17,7 +17,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawFeatureChoices
 import at.posselt.pfrpg2e.kingdom.formatRequirements
 import at.posselt.pfrpg2e.kingdom.satisfiesRequirements
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface AddBonusFeatContext {

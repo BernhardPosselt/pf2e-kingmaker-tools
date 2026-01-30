@@ -5,7 +5,7 @@ import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.utils.t
-import js.objects.JsPlainObject
+import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface RequestAmountContext {
