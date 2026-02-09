@@ -61,7 +61,7 @@ class Migration20 : Migration(20) {
                 )
             }
             .toMutableRecord()
-        camping.forcedMarchActive = true
+        camping.forcedMarchActive = false
         camping.secondsSpentForcedMarching = 0
     }
 }
