@@ -13,6 +13,7 @@ data class CheckboxInput(
     val stacked: Boolean = false,
     val escapeLabel: Boolean = true,
     val labelElement: String = "label",
+    val title: String? = null,
 ) : IntoFormElementContext {
     override fun toContext() = FormElementContext(
         isFormElement = true,
@@ -31,6 +32,7 @@ data class CheckboxInput(
         labelElement = labelElement,
         readonly = false,
         labelClasses = labelClasses.joinToString(" "),
+        title = title,
     )
 }
 

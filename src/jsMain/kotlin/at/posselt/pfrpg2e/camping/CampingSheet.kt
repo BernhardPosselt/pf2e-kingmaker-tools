@@ -118,6 +118,7 @@ external interface NightModes {
     val advance2: Boolean
     val rest: Boolean
     val travelMode: Boolean
+    val forcedMarch: Boolean
 }
 
 @Suppress("unused")
@@ -170,6 +171,9 @@ external interface CampingSheetContext : ValidatedHandlebarsContext {
     var campingActivitiesSection: Boolean
     var eatingSection: Boolean
     var travelMode: FormElementContext
+    var forcedMarch: FormElementContext
+    var forcedMarchDays: Int
+    var forcedMarchMaxDays: Int
     var recipes: Array<RecipeContext>
     var totalFoodCost: FoodCost
     var availableFood: FoodCost
@@ -194,7 +198,7 @@ external interface CampingSheetFormData {
     val activities: CampingSheetActivitiesFormData
     val recipes: RecipeFormData?
     val travelModeActive: Boolean
-
+    val forcedMarchActive: Boolean
 }
 
 private fun isNightMode(
@@ -214,6 +218,7 @@ private fun isNightMode(
 private fun calculateNightModes(time: LocalTime): NightModes {
     return NightModes(
         travelMode = isNightMode(time, "16:00", "05:30"),
+        forcedMarch = isNightMode(time, "13:30", "04:30"),
         retract2 = isNightMode(time, "10:00", "23:00"),
         retract1 = isNightMode(time, "09:00", "22:00"),
         retractHex = isNightMode(time, "08:00", "21:00"),
@@ -812,7 +817,8 @@ class CampingSheet(
         val camping = actor.getCamping()
         val travelSpeed = actor.system.movement.speeds.travel.value
         val override = max(camping?.minimumTravelSpeed ?: 0, travelSpeed)
-        return calculateHexplorationActivities(override)
+        val forcedMarch = if(camping?.forcedMarchActive == true) 1 else 0
+        return calculateHexplorationActivities(override) + forcedMarch
     }
 
     private fun getHexplorationActivitiesDuration(): String =
@@ -1112,8 +1118,29 @@ class CampingSheet(
                 name = "travelModeActive",
                 elementClasses = if (nightModes.travelMode) listOf("white-checkbox") else listOf("black-checkbox")
             ).toContext(),
+            forcedMarch = CheckboxInput(
+                value = camping.forcedMarchActive,
+                label = t("camping.forcedMarch"),
+                name = "forcedMarchActive",
+                elementClasses = if (nightModes.forcedMarch) listOf("white-checkbox") else listOf("black-checkbox")
+            ).toContext(),
+            forcedMarchDays = forcedMarchDays(),
+            forcedMarchMaxDays = forcedMarchMaxDays(),
         )
     }
+
+    fun forcedMarchDays() =
+        actor.getCamping()
+            ?.secondsSpentForcedMarching
+            ?.let {
+                max(0, it) / (60*60*24)
+            }
+            ?: 0
+
+    fun forcedMarchMaxDays() =
+        actor.members
+            .filterIsInstance<PF2ECharacter>()
+            .minOfOrNull { max(1, it.abilities.con.mod) } ?: 0
 
     override fun onParsedSubmit(value: CampingSheetFormData): Promise<Void> = buildPromise {
         actor.getCamping()?.let { camping ->
@@ -1139,6 +1166,10 @@ class CampingSheet(
                 )
             }.toMutableRecord()
             camping.travelModeActive = value.travelModeActive
+            camping.forcedMarchActive = value.forcedMarchActive
+            if (!value.forcedMarchActive) {
+                camping.secondsSpentForcedMarching = 0
+            }
             actor.setCamping(camping)
         }
         undefined

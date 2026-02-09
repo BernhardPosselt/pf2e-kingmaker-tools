@@ -14,6 +14,7 @@ class CampingSheetDataModel(
         @JsStatic
         fun defineSchema() = buildSchema {
             boolean("travelModeActive")
+            boolean("forcedMarchActive")
             string("region")
             schema("activities") {
                 stringRecord("selectedSkill")

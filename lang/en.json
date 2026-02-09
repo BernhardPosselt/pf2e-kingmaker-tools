@@ -319,6 +319,8 @@
       "cost": "Cost",
       "pick": "Pick",
       "traveling": "Traveling",
+      "forcedMarch": "Forced March",
+      "forcedMarchHelp": "Forced March: {days}/{maxDays, plural, =1 {1 day} other {# days}}",
       "travelingHelp": "If checked, time passed is accounted as travel time for Fatigue automation",
       "dropActorAbove": "Drop Actor from Above",
       "dropActorFromSidebar": "Drop Actor from Sidebar",

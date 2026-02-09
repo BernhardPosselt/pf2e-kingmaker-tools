@@ -130,6 +130,8 @@ external interface CampingData {
     var secondsSpentHexploring: Int
     var resetTimeTrackingAfterOneDay: Boolean
     var travelModeActive: Boolean
+    var forcedMarchActive: Boolean
+    var secondsSpentForcedMarching: Int
 }
 
 fun CampingData.campingActivitiesWithId() =
@@ -242,9 +244,11 @@ fun getDefaultCamping(game: Game): CampingData {
             disableRandomEncounter = false,
             skipWeather = false,
         ),
+        forcedMarchActive = false,
         secondsSpentHexploring = 0,
         resetTimeTrackingAfterOneDay = true,
         travelModeActive = false,
+        secondsSpentForcedMarching = 0,
         regionSettings = RegionSettings(
             regions = arrayOf(
                 RegionSetting(
