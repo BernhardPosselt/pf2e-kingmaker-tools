@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.plugins.CreateDummyTranslations
 import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
 import at.posselt.pfrpg2e.plugins.ReleaseModule
 import at.posselt.pfrpg2e.plugins.UnpackJsonFiles
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import de.undercouch.gradle.tasks.download.Download
 import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
@@ -291,4 +292,15 @@ tasks.register<CreateDummyTranslations>("createDummyTranslations") {
     moduleJson = layout.projectDirectory.file("module.json")
     enTranslation = layout.projectDirectory.file("lang/en.json")
     langDirectory = layout.projectDirectory.dir("lang/")
+}
+
+// do not show beta and milestone versions as upgrades
+tasks.withType<DependencyUpdatesTask> {
+    rejectVersionIf {
+        val version = candidate.version
+        val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
+        val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+        val isStable = stableKeyword || regex.matches(version)
+        isStable.not()
+    }
 }
