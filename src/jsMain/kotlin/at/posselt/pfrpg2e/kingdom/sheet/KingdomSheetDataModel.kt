@@ -23,7 +23,7 @@ class KingdomSheetDataModel(
             boolean("atWar")
             schema("fame") {
                 int("now")
-                int("next")
+                int("next", allowNegative = true)
                 string("type")
             }
             int("level")
@@ -34,11 +34,11 @@ class KingdomSheetDataModel(
             enum<Leader>("activeLeader", nullable = true)
             schema("resourcePoints") {
                 int("now")
-                int("next")
+                int("next", allowNegative = true)
             }
             schema("resourceDice") {
                 int("now")
-                int("next")
+                int("next", allowNegative = true)
             }
             stringArray("initialProficiencies")
             schema("workSites") {
@@ -65,7 +65,7 @@ class KingdomSheetDataModel(
             }
             schema("consumption") {
                 int("now")
-                int("next")
+                int("next", allowNegative = true)
                 int("armies")
             }
             int("supernaturalSolutions")
@@ -79,11 +79,11 @@ class KingdomSheetDataModel(
                     int("stone")
                 }
                 schema("next") {
-                    int("food")
-                    int("lumber")
-                    int("luxuries")
-                    int("ore")
-                    int("stone")
+                    int("food", allowNegative = true)
+                    int("lumber", allowNegative = true)
+                    int("luxuries", allowNegative = true)
+                    int("ore", allowNegative = true)
+                    int("stone", allowNegative = true)
                 }
             }
             schema("ruin") {

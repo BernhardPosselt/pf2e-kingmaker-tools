@@ -87,7 +87,7 @@ class ModifyKingdomEventDataModel(
             boolean("beneficial")
             boolean("settlement")
             boolean("continuous")
-            int("modifier")
+            int("modifier", allowNegative = true)
             enum<Leader>("leader")
         }
     }

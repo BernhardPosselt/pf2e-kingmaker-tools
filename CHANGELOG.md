@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Do not allow negative numbers for most number input fields
+
 ### Changed
 
 * Improve activity and meal selection parallelization in camping sheet

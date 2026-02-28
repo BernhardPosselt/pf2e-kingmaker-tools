@@ -92,39 +92,39 @@ class ActivityDataModel(
             string("journalUuid", nullable = true)
             string("journalEntryUuid", nullable = true)
             schema("modifyRandomEncounterDc") {
-                int("day")
-                int("night")
+                int("day", allowNegative = true)
+                int("night", allowNegative = true)
             }
             schema("criticalSuccess") {
                 string("message", nullable = true)
                 boolean("checkRandomEncounter")
                 schema("modifyRandomEncounterDc") {
-                    int("day")
-                    int("night")
+                    int("day", allowNegative = true)
+                    int("night", allowNegative = true)
                 }
             }
             schema("success") {
                 string("message", nullable = true)
                 boolean("checkRandomEncounter")
                 schema("modifyRandomEncounterDc") {
-                    int("day")
-                    int("night")
+                    int("day", allowNegative = true)
+                    int("night", allowNegative = true)
                 }
             }
             schema("failure") {
                 string("message", nullable = true)
                 boolean("checkRandomEncounter")
                 schema("modifyRandomEncounterDc") {
-                    int("day")
-                    int("night")
+                    int("day", allowNegative = true)
+                    int("night", allowNegative = true)
                 }
             }
             schema("criticalFailure") {
                 string("message", nullable = true)
                 boolean("checkRandomEncounter")
                 schema("modifyRandomEncounterDc") {
-                    int("day")
-                    int("night")
+                    int("day", allowNegative = true)
+                    int("night", allowNegative = true)
                 }
             }
         }

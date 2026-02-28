@@ -128,14 +128,20 @@ class StringArrayConfiguration : BaseArrayConfiguration<String>() {
 class NumberArrayConfiguration<T : Number> : BaseArrayConfiguration<T>() {
     var numberOptions: NumberFieldOptions? = undefined
 
-    fun int(block: NumberFieldOptions.() -> Unit) {
+    fun int(allowNegative: Boolean = false, block: NumberFieldOptions.() -> Unit) {
         val opts = NumberFieldOptions(integer = true, required = true)
+        if (!allowNegative) {
+            opts.min = 0
+        }
         opts.block()
         numberOptions = opts
     }
 
-    fun double(block: NumberFieldOptions.() -> Unit) {
+    fun double(allowNegative: Boolean = false, block: NumberFieldOptions.() -> Unit) {
         val opts = NumberFieldOptions(required = true)
+        if (!allowNegative) {
+            opts.min = 0
+        }
         opts.block()
         numberOptions = opts
     }
@@ -209,12 +215,16 @@ class Schema {
         name: String,
         nullable: Boolean = false,
         context: DataFieldContext<Double>? = undefined,
+        allowNegative: Boolean = false,
         block: (NumberFieldOptions.() -> Unit)? = null,
     ) {
         val options = if (nullable) {
             NumberFieldOptions(nullable = true, initial = null, integer = true)
         } else {
             NumberFieldOptions(required = true, nullable = false, integer = true)
+        }
+        if (!allowNegative) {
+            options.min = 0
         }
         block?.invoke(options)
         fields[name] = NumberField(options = options, context = context)
@@ -224,12 +234,16 @@ class Schema {
         name: String,
         nullable: Boolean = false,
         context: DataFieldContext<Double>? = undefined,
+        allowNegative: Boolean = false,
         block: (NumberFieldOptions.() -> Unit)? = null,
     ) {
         val options = if (nullable) {
             NumberFieldOptions(nullable = true, initial = null)
         } else {
             NumberFieldOptions(required = true, nullable = false)
+        }
+        if (!allowNegative) {
+            options.min = 0
         }
         block?.invoke(options)
         fields[name] = NumberField(options = options, context = context)

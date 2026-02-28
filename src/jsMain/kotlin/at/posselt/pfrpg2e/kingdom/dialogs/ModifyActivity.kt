@@ -92,7 +92,7 @@ class ModifyActivityDataModel(
             int("numericDc")
             boolean("fortune")
             boolean("oncePerRound")
-            int("dcAdjustment")
+            int("dcAdjustment", allowNegative = true)
             enum<KingdomPhase>("phase")
         }
     }

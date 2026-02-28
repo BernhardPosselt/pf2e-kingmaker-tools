@@ -202,7 +202,7 @@ class CheckModel(
             enum<KingdomPhase>("phase", nullable = true)
             string("newModifierName")
             enum<ModifierType>("newModifierType")
-            int("newModifierModifier")
+            int("newModifierModifier", allowNegative = true)
             boolean("assurance")
             array("modifiers") {
                 schema {

@@ -29,8 +29,8 @@ import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
 import js.array.tupleOf
 import js.core.Void
-import kotlinx.js.JsPlainObject
 import kotlinx.coroutines.await
+import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
@@ -56,7 +56,7 @@ class ModifierModel(
                 min = 1
             }
             boolean("isConsumedAfterRoll")
-            int("value")
+            int("value", allowNegative = true)
         }
     }
 }
