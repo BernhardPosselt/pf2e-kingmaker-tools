@@ -13,6 +13,7 @@ import at.posselt.pfrpg2e.camping.getActorsInCamp
 import at.posselt.pfrpg2e.camping.getAllRecipes
 import at.posselt.pfrpg2e.camping.getCamping
 import at.posselt.pfrpg2e.camping.setCamping
+import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.AnyObject
@@ -21,6 +22,8 @@ import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.data.dsl.buildSchema
+import js.array.component1
+import js.array.component2
 import js.core.Void
 import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
@@ -75,11 +78,16 @@ class FavoriteMealsApplication(
     dataModel = FavoriteMealDataModel::class.js,
     id = "kmFavoriteMeals-${actor.uuid}"
 ) {
-    private var meals: List<FavoriteMealChoice> = actor.getCamping()?.let {
-        it.cooking.actorMeals.map { actorMeal ->
-            FavoriteMealChoice(actorUuid = actorMeal.actorUuid, favoriteMeal = actorMeal.favoriteMeal)
-        }
-    } ?: emptyList()
+    private var meals: List<FavoriteMealChoice> = actor.getCamping()
+        ?.cooking
+        ?.actorMeals
+        ?.asSequence()
+        ?.map { (id, actorMeal) ->
+            FavoriteMealChoice(
+                actorUuid = actorMeal.actorUuid,
+                favoriteMeal = actorMeal.favoriteMeal
+            )
+        }?.toList() ?: emptyList()
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (val action = target.dataset["action"]) {
@@ -91,10 +99,10 @@ class FavoriteMealsApplication(
                             .map { it.uuid }
                             .toSet()
                         val mealsByActorUuid = meals.associateBy { it.actorUuid }
-                        camping.cooking.actorMeals
-                            .filter { it.actorUuid in allowedActorUuids }
-                            .forEach {
-                                it.favoriteMeal = mealsByActorUuid[it.actorUuid]?.favoriteMeal
+                        camping.cooking.actorMeals.asSequence()
+                            .filter { it.component2().actorUuid in allowedActorUuids }
+                            .forEach { (_, meal) ->
+                                meal.favoriteMeal = mealsByActorUuid[meal.actorUuid]?.favoriteMeal
                             }
                         actor.setCamping(camping)
                     }

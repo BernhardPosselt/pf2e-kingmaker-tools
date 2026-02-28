@@ -70,7 +70,9 @@
         position: absolute;
         left: 5px;
         top: calc(50% - 13px);
+        gap: 10px;
         width: auto;
+        display: flex;
     }
 
     button {

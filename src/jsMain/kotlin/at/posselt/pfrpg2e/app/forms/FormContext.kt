@@ -32,6 +32,7 @@ external interface DocumentLinkContext {
 @Suppress("unused")
 @JsPlainObject
 external interface FormElementContext {
+    val title: String?
     val label: String
     val name: String
     val help: String?

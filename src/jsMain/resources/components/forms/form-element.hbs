@@ -1,5 +1,5 @@
 {{#unless hideLabel}}
-    <{{labelElement}} class="km-label {{#unless stacked}}form-element-inline{{/unless}} {{labelClasses}}">
+    <{{labelElement}} class="km-label {{#unless stacked}}form-element-inline{{/unless}} {{labelClasses}}" {{# if title}}title="{{title}}"{{/if}}>
     {{#if escapeLabel}}{{label}}{{else}}{{{label}}}{{/if}}{{/unless}}
 {{#if (eq type 'select')}}
     {{#if link}}

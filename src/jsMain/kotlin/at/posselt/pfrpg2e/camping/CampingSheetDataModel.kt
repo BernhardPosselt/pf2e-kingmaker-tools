@@ -14,14 +14,23 @@ class CampingSheetDataModel(
         @JsStatic
         fun defineSchema() = buildSchema {
             boolean("travelModeActive")
+            boolean("forcedMarchActive")
             string("region")
             schema("activities") {
-                record("selectedSkill")
-                record("degreeOfSuccess", nullable = true)
+                stringRecord("selectedSkill")
+                stringRecord("degreeOfSuccess") {
+                    string(nullable = true) {
+
+                    }
+                }
             }
             schema("recipes") {
-                record("selectedSkill")
-                record("degreeOfSuccess", nullable = true)
+                stringRecord("selectedSkill")
+                stringRecord("degreeOfSuccess") {
+                    string(nullable = true) {
+
+                    }
+                }
             }
         }
     }

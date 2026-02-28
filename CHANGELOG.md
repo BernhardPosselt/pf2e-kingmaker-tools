@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Improve activity and meal selection parallelization in camping sheet
+
 ## [5.10.0] - 2026-01-26
 
 ### Added

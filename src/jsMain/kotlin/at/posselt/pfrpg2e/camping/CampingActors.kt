@@ -80,7 +80,7 @@ suspend fun CampingActor.deleteCampingActivities(ids: Set<String>, beforeSave: B
     }
 }
 
-suspend fun CampingActor.deleteCampingActor(actorUuid: String, beforeSave: BeforeSave) {
+suspend fun CampingActor.deleteCampingActor(actorUuid: String, actorId: String, beforeSave: BeforeSave) {
     typedCampingUpdate { camping ->
         val ids = camping.campingActivities.asSequence()
             .filter { it.component2().actorUuid == actorUuid }
@@ -88,8 +88,7 @@ suspend fun CampingActor.deleteCampingActor(actorUuid: String, beforeSave: Befor
             .toSet()
         campingActivities.deleteEntries(ids)
         actorUuids.set(camping.actorUuids.filter { id -> id != actorUuid }.toTypedArray())
-        cooking.actorMeals.set(camping.cooking.actorMeals.filter { m -> m.actorUuid != actorUuid }
-            .toTypedArray())
+        cooking.actorMeals.deleteEntry(actorId)
         beforeSave(camping)
     }
 }

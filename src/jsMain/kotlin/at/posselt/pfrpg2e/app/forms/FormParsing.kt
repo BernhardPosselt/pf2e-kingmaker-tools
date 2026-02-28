@@ -18,13 +18,17 @@ import js.objects.ReadonlyRecord
  * transformations and fixing until the object reaches its final
  * good state
  */
-fun <T> parseFormData(value: AnyObject, and: (dynamic) -> Unit): T {
-    val filteredBlanks = value.asSequence()
-        .filter {
-            val rhs = it.component2()
-            if (rhs is String) rhs.isNotEmpty() else true
-        }
-        .toMutableRecord()
+fun <T> parseFormData(value: AnyObject, filterBlanks: Boolean = true, and: (dynamic) -> Unit): T {
+    val filteredBlanks = if (filterBlanks) {
+        value.asSequence()
+            .filter {
+                val rhs = it.component2()
+                if (rhs is String) rhs.isNotEmpty() else true
+            }
+            .toMutableRecord()
+    } else {
+        value
+    }
     val expanded = expandObject(filteredBlanks)
     val result = normalizeArrays(expanded)
     and(result)

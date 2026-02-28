@@ -45,6 +45,7 @@ import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.toDateInputString
+import at.posselt.pfrpg2e.utils.toMap
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
@@ -53,6 +54,7 @@ import com.foundryvtt.core.documents.onDeleteItem
 import com.foundryvtt.core.documents.onUpdateItem
 import com.foundryvtt.core.helpers.onUpdateWorldTime
 import com.foundryvtt.core.ui
+import com.foundryvtt.core.utils.fromUuid
 import com.foundryvtt.pf2e.actor.PF2EActor
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ECreature
@@ -116,6 +118,7 @@ external interface NightModes {
     val advance2: Boolean
     val rest: Boolean
     val travelMode: Boolean
+    val forcedMarch: Boolean
 }
 
 @Suppress("unused")
@@ -168,6 +171,9 @@ external interface CampingSheetContext : ValidatedHandlebarsContext {
     var campingActivitiesSection: Boolean
     var eatingSection: Boolean
     var travelMode: FormElementContext
+    var forcedMarch: FormElementContext
+    var forcedMarchDays: Int
+    var forcedMarchMaxDays: Int
     var recipes: Array<RecipeContext>
     var totalFoodCost: FoodCost
     var availableFood: FoodCost
@@ -192,7 +198,7 @@ external interface CampingSheetFormData {
     val activities: CampingSheetActivitiesFormData
     val recipes: RecipeFormData?
     val travelModeActive: Boolean
-
+    val forcedMarchActive: Boolean
 }
 
 private fun isNightMode(
@@ -212,6 +218,7 @@ private fun isNightMode(
 private fun calculateNightModes(time: LocalTime): NightModes {
     return NightModes(
         travelMode = isNightMode(time, "16:00", "05:30"),
+        forcedMarch = isNightMode(time, "13:30", "04:30"),
         retract2 = isNightMode(time, "10:00", "23:00"),
         retract1 = isNightMode(time, "09:00", "22:00"),
         retractHex = isNightMode(time, "08:00", "21:00"),
@@ -237,6 +244,7 @@ class CampingSheet(
     id = "kmCamping-${actor.uuid}",
     width = windowWidth,
     dataModel = CampingSheetDataModel::class.js,
+    filterBlanks = false,
     classes = setOf("km-camping-sheet"),
     controls = arrayOf(
         MenuControl(label = t("camping.showPlayers"), action = "show-players", gmOnly = true),
@@ -260,7 +268,8 @@ class CampingSheet(
         onDocumentRefDrop(".km-camping-add-actor") { _, documentRef ->
             if (documentRef is ActorRef) {
                 buildPromise {
-                    addActor(documentRef.uuid)
+                    val actorId = fromUuid(documentRef.uuid).await()?.id!!
+                    addActor(documentRef.uuid, actorId)
                 }
             }
         }
@@ -305,7 +314,8 @@ class CampingSheet(
                 val tile = target.closest(".km-camping-recipe") as HTMLElement?
                 val recipeId = tile?.dataset?.get("recipeId")
                 if (documentRef is ActorRef && recipeId != null) {
-                    assignRecipeTo(documentRef.uuid, recipeId)
+                    val actorId = fromUuid(documentRef.uuid).await()?.id!!
+                    assignRecipeTo(documentRef.uuid, actorId, recipeId = recipeId)
                 }
             }
         }
@@ -411,7 +421,9 @@ class CampingSheet(
 
             "clear-actor" -> {
                 buildPromise {
-                    target.dataset["uuid"]?.let { actor.deleteCampingActor(it) {} }
+                    target.dataset["uuid"]
+                        ?.let { fromUuid(it).await() }
+                        ?.let { actor.deleteCampingActor(it.uuid, it.id!!) {} }
                 }
             }
 
@@ -530,10 +542,9 @@ class CampingSheet(
             ),
             overrideDc = mealToCook.dc,
         )
-        val existing = camping.cooking.results.find { it.recipeId == recipeId }
+        val existing = camping.cooking.results[recipeId]
         if (existing == null) {
-            camping.cooking.results = camping.cooking.results + CookingResult(
-                recipeId = recipeId,
+            camping.cooking.results[recipeId] = CookingResult(
                 skill = mealToCook.selectedSkill.value,
                 result = result?.toCamelCase(),
             )
@@ -623,7 +634,7 @@ class CampingSheet(
 
     private suspend fun resetMeals() {
         actor.getCamping()?.let { camping ->
-            camping.cooking.actorMeals.forEach { it.chosenMeal = "nothing" }
+            Object.values(camping.cooking.actorMeals).forEach { it.chosenMeal = "nothing" }
             actor.setCamping(camping)
         }
     }
@@ -672,7 +683,7 @@ class CampingSheet(
         rollRandomEncounter(game, actor, includeFlatCheck)
     }
 
-    private suspend fun assignRecipeTo(actorUuid: String, recipeId: String) {
+    private suspend fun assignRecipeTo(actorUuid: String, actorId: String, recipeId: String) {
         val isNotACharacter = getCampingActivityActorByUuid(actorUuid) == null
         val isNotARation = recipeId != "rationsOrSubsistence" && recipeId != "nothing"
         if (isNotARation && isNotACharacter) {
@@ -680,9 +691,9 @@ class CampingSheet(
             return
         }
         actor.getCamping()?.let { camping ->
-            val existingMeal = camping.cooking.actorMeals.find { it.actorUuid == actorUuid }
+            val existingMeal = camping.cooking.actorMeals[actorId]
             if (existingMeal == null) {
-                camping.cooking.actorMeals = camping.cooking.actorMeals + ActorMeal(
+                camping.cooking.actorMeals[actorId] = ActorMeal(
                     actorUuid = actorUuid,
                     chosenMeal = recipeId,
                 )
@@ -757,15 +768,15 @@ class CampingSheet(
         }
     }
 
-    private suspend fun addActor(uuid: String) {
+    private suspend fun addActor(uuid: String, id: String) {
         actor.getCamping()?.let { camping ->
             if (uuid !in camping.actorUuids) {
                 val campingActor = getCampingActorByUuid(uuid)
                 if (campingActor == null) {
                     ui.notifications.error(t("camping.wrongActorAddedToSheet"))
                 } else {
-                    camping.actorUuids = camping.actorUuids + uuid
-                    camping.cooking.actorMeals = camping.cooking.actorMeals + ActorMeal(
+                    camping.actorUuids += uuid
+                    camping.cooking.actorMeals[id] = ActorMeal(
                         actorUuid = uuid,
                         favoriteMeal = null,
                         chosenMeal = "nothing",
@@ -806,7 +817,8 @@ class CampingSheet(
         val camping = actor.getCamping()
         val travelSpeed = actor.system.movement.speeds.travel.value
         val override = max(camping?.minimumTravelSpeed ?: 0, travelSpeed)
-        return calculateHexplorationActivities(override)
+        val forcedMarch = if(camping?.forcedMarchActive == true) 1 else 0
+        return calculateHexplorationActivities(override) + forcedMarch
     }
 
     private fun getHexplorationActivitiesDuration(): String =
@@ -901,7 +913,7 @@ class CampingSheet(
                     actors = actorsByChosenMeal[recipe.name]?.toTypedArray() ?: emptyArray(),
                     skills = Select(
                         label = t("camping.selectedSkill"),
-                        name = "recipes.selectedSkill.${recipe.name}",
+                        name = "recipes.selectedSkill.${recipe.id}",
                         hideLabel = true,
                         options = cookingSkillOptions,
                         elementClasses = listOf("km-proficiency"),
@@ -910,7 +922,7 @@ class CampingSheet(
                     degreeOfSuccess = Select.fromEnum<DegreeOfSuccess>(
                         hideLabel = true,
                         required = false,
-                        name = "recipes.degreeOfSuccess.${recipe.name}",
+                        name = "recipes.degreeOfSuccess.${recipe.id}",
                         value = result?.degreeOfSuccess,
                         elementClasses = listOf("km-degree-of-success"),
                     ).toContext(),
@@ -1106,35 +1118,58 @@ class CampingSheet(
                 name = "travelModeActive",
                 elementClasses = if (nightModes.travelMode) listOf("white-checkbox") else listOf("black-checkbox")
             ).toContext(),
+            forcedMarch = CheckboxInput(
+                value = camping.forcedMarchActive,
+                label = t("camping.forcedMarch"),
+                name = "forcedMarchActive",
+                elementClasses = if (nightModes.forcedMarch) listOf("white-checkbox") else listOf("black-checkbox")
+            ).toContext(),
+            forcedMarchDays = forcedMarchDays(),
+            forcedMarchMaxDays = forcedMarchMaxDays(),
         )
     }
+
+    fun forcedMarchDays() =
+        actor.getCamping()
+            ?.secondsSpentForcedMarching
+            ?.let {
+                max(0, it) / (60*60*24)
+            }
+            ?: 0
+
+    fun forcedMarchMaxDays() =
+        actor.members
+            .filterIsInstance<PF2ECharacter>()
+            .minOfOrNull { max(1, it.abilities.con.mod) } ?: 0
 
     override fun onParsedSubmit(value: CampingSheetFormData): Promise<Void> = buildPromise {
         actor.getCamping()?.let { camping ->
             camping.currentRegion = value.region
             camping.campingActivities = camping.campingActivities
-                .asSequence().map {
-                    val id = it.component1()
+                .asSequence().map {(id, data) ->
                     id to CampingActivity(
-                        actorUuid = it.component2().actorUuid,
+                        actorUuid = data.actorUuid,
                         result = value.activities.degreeOfSuccess?.get(id),
                         selectedSkill = value.activities.selectedSkill?.get(id),
                     )
                 }.toMutableRecord()
-            val cookingResultsByRecipe = camping.cooking.results.associateBy { it.recipeId }
+            val cookingResultsByRecipe = camping.cooking.results.toMap()
             camping.cooking.results = camping.getAllRecipes().map {
                 val result = cookingResultsByRecipe[it.id] ?: CookingResult(
-                    recipeId = it.id,
                     result = null,
                     skill = "survival",
                 )
-                CookingResult.copy(
+                it.id to CookingResult.copy(
                     result,
-                    result = value.recipes?.degreeOfSuccess?.get(it.name),
-                    skill = value.recipes?.selectedSkill?.get(it.name) ?: "survival",
+                    result = value.recipes?.degreeOfSuccess?.get(it.id),
+                    skill = value.recipes?.selectedSkill?.get(it.id) ?: "survival",
                 )
-            }.toTypedArray()
+            }.toMutableRecord()
             camping.travelModeActive = value.travelModeActive
+            camping.forcedMarchActive = value.forcedMarchActive
+            if (!value.forcedMarchActive) {
+                camping.secondsSpentForcedMarching = 0
+            }
             actor.setCamping(camping)
         }
         undefined

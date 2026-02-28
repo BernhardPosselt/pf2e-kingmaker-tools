@@ -1,8 +1,13 @@
 <div>
     <div id="km-camping-time-tracker" class="km-row" style="background-position: {{pxTimeOffset}}px">
         {{#if isGM}}
-            <div class="km-camping-travel {{#if night.travelMode}}night-mode{{/if}}" title="{{localizeKM "camping.travelingHelp"}}">
-                {{> formElement travelMode}}
+            <div class="km-camping-travel">
+                <div class="{{#if night.travelMode}}night-mode{{/if}}" title="{{localizeKM "camping.travelingHelp"}}">
+                    {{> formElement travelMode}}
+                </div>
+                <div class="{{#if night.forcedMarch}}night-mode{{/if}}" title="{{localizeKM "camping.forcedMarchHelp" maxDays=forcedMarchMaxDays days=forcedMarchDays}}">
+                    {{> formElement forcedMarch}}
+                </div>
             </div>
             <button class="km-camping-action {{#if night.retract2}}night-mode{{/if}}"
                     data-action="advance-hour"

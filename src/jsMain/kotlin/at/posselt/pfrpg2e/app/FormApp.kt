@@ -15,11 +15,11 @@ import com.foundryvtt.core.applications.ux.FormDataExtended
 import com.foundryvtt.core.documents.ClientDocument
 import com.foundryvtt.core.game
 import js.core.Void
-import kotlinx.js.JsPlainObject
 import js.objects.Record
 import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.html.org.w3c.dom.events.Event
+import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLFormElement
 import kotlin.js.Promise
 
@@ -51,6 +51,7 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
     protected val syncedDocument: ClientDocument? = null,
     protected val debug: Boolean = false,
     protected val dataModel: JsClass<out DataModel>,
+    protected val filterBlanks: Boolean = true,
 //    protected val initial: O
 ) : App<T>(
     HandlebarsFormApplicationOptions(
@@ -113,7 +114,7 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
                 console.log("Received ${JSON.stringify(value)}")
                 console.log("Form is ${if (isFormValid) "valid" else "invalid"}")
             }
-            val parsedData = parseFormData<O>(value, ::fixObject)
+            val parsedData = parseFormData<O>(value, filterBlanks = filterBlanks, ::fixObject)
             if (debug) {
                 console.log("Parsed object ${JSON.stringify(parsedData)}")
             }

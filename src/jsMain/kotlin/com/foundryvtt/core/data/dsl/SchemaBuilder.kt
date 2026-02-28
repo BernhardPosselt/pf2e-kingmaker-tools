@@ -2,7 +2,6 @@ package com.foundryvtt.core.data.dsl
 
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.toRecord
-import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.data.fields.ArrayField
 import com.foundryvtt.core.data.fields.ArrayFieldOptions
 import com.foundryvtt.core.data.fields.BooleanField
@@ -12,10 +11,10 @@ import com.foundryvtt.core.data.fields.DataFieldOptions
 import com.foundryvtt.core.data.fields.DataSchema
 import com.foundryvtt.core.data.fields.NumberField
 import com.foundryvtt.core.data.fields.NumberFieldOptions
-import com.foundryvtt.core.data.fields.ObjectField
 import com.foundryvtt.core.data.fields.SchemaField
 import com.foundryvtt.core.data.fields.StringField
 import com.foundryvtt.core.data.fields.StringFieldOptions
+import com.foundryvtt.core.data.fields.TypedObjectField
 import js.objects.Record
 import js.objects.recordOf
 import kotlin.enums.enumEntries
@@ -78,6 +77,31 @@ import kotlin.enums.enumEntries
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE)
 annotation class SchemaDsl
 
+open class BaseRecordConfiguration<T> {
+    open var recordOptions: DataFieldOptions? = undefined
+
+    open fun options(block: DataFieldOptions.() -> Unit) {
+        val opts = DataFieldOptions(required = true)
+        opts.block()
+        recordOptions = opts
+    }
+}
+
+@SchemaDsl
+class StringRecordConfiguration : BaseRecordConfiguration<String>() {
+    var stringOptions: StringFieldOptions? = undefined
+
+    fun string(nullable: Boolean = false, block: StringFieldOptions.() -> Unit) {
+        val opts = if (nullable) {
+            StringFieldOptions(nullable = true, initial = null, blank = false)
+        } else {
+            StringFieldOptions(required = true, nullable = false)
+        }
+        opts.block()
+        stringOptions = opts
+    }
+}
+
 open class BaseArrayConfiguration<T> {
     open var arrayOptions: ArrayFieldOptions<T>? = undefined
 
@@ -98,6 +122,7 @@ class StringArrayConfiguration : BaseArrayConfiguration<String>() {
         stringOptions = opts
     }
 }
+
 
 @SchemaDsl
 class NumberArrayConfiguration<T : Number> : BaseArrayConfiguration<T>() {
@@ -293,19 +318,16 @@ class Schema {
         )
     }
 
-    fun record(
+    fun stringRecord(
         name: String,
-        context: DataFieldContext<AnyObject>? = undefined,
-        block: (DataFieldOptions/*<AnyObject>*/.() -> Unit)? = null,
-        nullable: Boolean = false,
+        context: DataFieldContext<Record<String, String>>? = undefined,
+        fieldContext: DataFieldContext<String>? = undefined,
+        block: (StringRecordConfiguration.() -> Unit)? = null,
     ) {
-        val options = if (nullable) {
-            DataFieldOptions(nullable = true, initial = null)
-        } else {
-            DataFieldOptions(required = true, nullable = false)
-        }
-        block?.invoke(options)
-        fields[name] = ObjectField(options = options, context = context)
+        val opts = StringRecordConfiguration()
+        block?.invoke(opts)
+        val element = StringField(options = opts.stringOptions, context = fieldContext)
+        fields[name] = TypedObjectField(element = element, options = opts.recordOptions, context = context)
     }
 
     fun <T> build(): DataSchema<T> {

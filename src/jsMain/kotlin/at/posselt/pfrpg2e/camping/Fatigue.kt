@@ -31,6 +31,9 @@ suspend fun persistPassedTime(game: Game, deltaInSeconds: Int) {
         } else {
             camping.persistPassedTime(deltaInSeconds)
         }
+        if (camping.forcedMarchActive) {
+            camping.secondsSpentForcedMarching += deltaInSeconds
+        }
         it.setCamping(camping)
     }
 }

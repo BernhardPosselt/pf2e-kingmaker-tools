@@ -20,6 +20,7 @@ import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.setAppFlag
 import at.posselt.pfrpg2e.utils.t
+import at.posselt.pfrpg2e.utils.toMap
 import at.posselt.pfrpg2e.utils.unsetAppFlag
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
 import com.foundryvtt.core.AnyObject
@@ -49,7 +50,6 @@ external interface ActorMeal {
 
 @JsPlainObject
 external interface CookingResult {
-    val recipeId: String
     var result: String?
     val skill: String
 }
@@ -57,9 +57,9 @@ external interface CookingResult {
 @JsPlainObject
 external interface Cooking {
     var knownRecipes: Array<String>
-    var actorMeals: Array<ActorMeal>
+    var actorMeals: Record<String, ActorMeal>
     var homebrewMeals: Array<RecipeData>
-    var results: Array<CookingResult>
+    var results: Record<String, CookingResult>
     var minimumSubsistence: Int
 }
 
@@ -130,6 +130,8 @@ external interface CampingData {
     var secondsSpentHexploring: Int
     var resetTimeTrackingAfterOneDay: Boolean
     var travelModeActive: Boolean
+    var forcedMarchActive: Boolean
+    var secondsSpentForcedMarching: Int
 }
 
 fun CampingData.campingActivitiesWithId() =
@@ -216,10 +218,10 @@ fun getDefaultCamping(game: Game): CampingData {
         homebrewCampingActivities = emptyArray(),
         lockedActivities = lockedCampingActivityIds,
         cooking = Cooking(
-            actorMeals = emptyArray(),
+            actorMeals = recordOf(),
             knownRecipes = arrayOf("basic-meal", "hearty-meal"),
             homebrewMeals = emptyArray(),
-            results = emptyArray(),
+            results = recordOf(),
             minimumSubsistence = 0,
         ),
         watchSecondsRemaining = 0,
@@ -242,9 +244,11 @@ fun getDefaultCamping(game: Game): CampingData {
             disableRandomEncounter = false,
             skipWeather = false,
         ),
+        forcedMarchActive = false,
         secondsSpentHexploring = 0,
         resetTimeTrackingAfterOneDay = true,
         travelModeActive = false,
+        secondsSpentForcedMarching = 0,
         regionSettings = RegionSettings(
             regions = arrayOf(
                 RegionSetting(
@@ -559,7 +563,7 @@ private fun parseMealChoices(
     charactersInCamp: Map<String, PF2EActor>,
     recipesById: Map<String, RecipeData>
 ): List<MealChoice> {
-    val chosenMeals = camping.cooking.actorMeals.mapNotNull { meal ->
+    return camping.cooking.actorMeals.asSequence().mapNotNull { (_, meal) ->
         charactersInCamp[meal.actorUuid]?.let { actor ->
             val favoriteMeal = meal.favoriteMeal?.let { recipesById[it] }
             when (val chosenMeal = meal.chosenMeal) {
@@ -574,8 +578,7 @@ private fun parseMealChoices(
                 }
             }
         }
-    }
-    return chosenMeals
+    }.toList()
 }
 
 fun CampingData.hasPreparedCampsite() =
@@ -603,7 +606,7 @@ fun CampingData.findCookingChoices(
         listOfNotNull(Skill.SURVIVAL, if (cook.hasAttribute(cookingLore)) cookingLore else null)
     }
     val mealChoices = parseMealChoices(this, charactersInCampByUuid, recipesById)
-    val resultsByRecipeId = cooking.results.associateBy { it.recipeId }
+    val resultsByRecipeId = cooking.results.toMap()
     val effectiveMealChoices = mealChoices.map {
         if (cook == null && it is MealChoice.ParsedMeal) {
             MealChoice.Rations(
@@ -620,7 +623,6 @@ fun CampingData.findCookingChoices(
         meals = effectiveMealChoices,
         results = recipesById.values.map { recipe ->
             val result: CookingResult = resultsByRecipeId[recipe.id] ?: CookingResult(
-                recipeId = recipe.id,
                 result = null,
                 skill = "survival",
             )
