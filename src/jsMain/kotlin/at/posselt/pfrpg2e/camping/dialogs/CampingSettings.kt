@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.app.confirm
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.Menu
 import at.posselt.pfrpg2e.app.forms.NumberInput
+import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Section
 import at.posselt.pfrpg2e.app.forms.SectionsContext
 import at.posselt.pfrpg2e.app.forms.Select
@@ -241,6 +242,7 @@ class CampingSettingsApplication(
                         ),
                         Select(
                             name = "hexSizeInMiles",
+                            overrideType = OverrideType.NUMBER,
                             label = t("camping.hexSizeInMiles"),
                             value = settings.hexSizeInMiles.toString(),
                             options = listOf(3, 6, 12).map { SelectOption(it.toString(), it.toString()) },
