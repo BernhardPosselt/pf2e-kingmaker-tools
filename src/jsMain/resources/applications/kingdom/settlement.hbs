@@ -66,11 +66,11 @@
                 </tr>
                 <tr>
                     <th>{{localizeKM "kingdom.lacksBridge"}}</th>
-                    <td>{{#if lacksBridge}}<i class="fa-solid fa-triangle-exclamation"></i>{{/if}}</td>
+                    <td>{{#if lacksBridge}}{{localizeKM "yes"}}{{else}}{{localizeKM "no"}}{{/if}}</td>
                 </tr>
                 <tr>
                     <th>{{localizeKM "kingdom.overcrowded"}}</th>
-                    <td>{{#if isOvercrowded}}<i class="fa-solid fa-triangle-exclamation"></i>{{/if}}</td>
+                    <td>{{#if isOvercrowded}}{{localizeKM "yes"}}{{else}}{{localizeKM "no"}}{{/if}}</td>
                 </tr>
                 </tbody>
             </table>

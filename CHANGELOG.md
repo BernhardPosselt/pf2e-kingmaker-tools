@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Do not allow negative numbers for most number input fields
+* Improve clarity for Lacks Bridge and Overcrowded details in settlement dialog 
 
 ### Changed
 
