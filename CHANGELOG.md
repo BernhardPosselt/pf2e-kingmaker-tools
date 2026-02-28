@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Allow to override hex mile size to 3 or 6 miles in camping settings
+
 ### Fixed
 
 * Do not allow negative numbers for most number input fields

@@ -132,6 +132,7 @@ external interface CampingData {
     var travelModeActive: Boolean
     var forcedMarchActive: Boolean
     var secondsSpentForcedMarching: Int
+    var hexSizeInMiles: Int
 }
 
 fun CampingData.campingActivitiesWithId() =
@@ -249,6 +250,7 @@ fun getDefaultCamping(game: Game): CampingData {
         resetTimeTrackingAfterOneDay = true,
         travelModeActive = false,
         secondsSpentForcedMarching = 0,
+        hexSizeInMiles = 12,
         regionSettings = RegionSettings(
             regions = arrayOf(
                 RegionSetting(

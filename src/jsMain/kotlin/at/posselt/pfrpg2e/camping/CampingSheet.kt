@@ -814,11 +814,13 @@ class CampingSheet(
         ((getAvailableHexplorationSeconds()) / getHexplorationActivities()).toInt()
 
     private fun getHexplorationActivities(): Double {
-        val camping = actor.getCamping()
+        val camping = actor.getCamping()!!
         val travelSpeed = actor.system.movement.speeds.travel.value
-        val override = max(camping?.minimumTravelSpeed ?: 0, travelSpeed)
-        val forcedMarch = if(camping?.forcedMarchActive == true) 1 else 0
-        return calculateHexplorationActivities(override) + forcedMarch
+        val override = max(camping.minimumTravelSpeed ?: 0, travelSpeed)
+        val forcedMarch = if(camping.forcedMarchActive == true) 1 else 0
+        val result = calculateHexplorationActivities(override) + forcedMarch
+        console.log(camping.hexSizeInMiles)
+        return result / (camping.hexSizeInMiles.toDouble() / 12)
     }
 
     private fun getHexplorationActivitiesDuration(): String =

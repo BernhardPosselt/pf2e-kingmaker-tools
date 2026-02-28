@@ -101,6 +101,7 @@ class CampingUpdateBuilder(val updates: Record<String, Any?>, basePath: String =
     val minimumTravelSpeed = PropertyUpdateBuilder<Int?>(basePath, updates, "minimumTravelSpeed")
     val section = PropertyUpdateBuilder<String>(basePath, updates, "section")
     val worldSceneId = PropertyUpdateBuilder<String?>(basePath, updates, "worldSceneId")
+    val hexSizeInMiles = PropertyUpdateBuilder<Int>(basePath, updates, "hexSizeInMiles")
     val autoApplyFatigued = PropertyUpdateBuilder<Boolean>(basePath, updates, "autoApplyFatigued")
     val secondsSpentTraveling = PropertyUpdateBuilder<Int>(basePath, updates, "secondsSpentTraveling")
     val secondsSpentHexploring = PropertyUpdateBuilder<Int>(basePath, updates, "secondsSpentHexploring")

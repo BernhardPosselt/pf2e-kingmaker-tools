@@ -73,7 +73,7 @@ external interface CampingSettings {
     var worldSceneId: String?
     var autoApplyFatigued: Boolean
     var resetTimeTrackingAfterOneDay: Boolean
-
+    var hexSizeInMiles: Int
 }
 
 @JsExport
@@ -90,6 +90,9 @@ class CampingSettingsDataModel(
             }
             string("worldSceneId", nullable = true)
             int("increaseWatchActorNumber")
+            int("hexSizeInMiles") {
+                min = 1
+            }
             stringArray("actorUuidsNotKeepingWatch")
             stringArray("alwaysPerformActivities")
             string("huntAndGatherTargetActorUuid", nullable = true)
@@ -168,6 +171,7 @@ class CampingSettingsApplication(
             worldSceneId = camping.worldSceneId,
             autoApplyFatigued = camping.autoApplyFatigued,
             resetTimeTrackingAfterOneDay = camping.resetTimeTrackingAfterOneDay,
+            hexSizeInMiles = camping.hexSizeInMiles,
         )
     }
 
@@ -233,6 +237,14 @@ class CampingSettingsApplication(
                             label = t("camping.minimumTravelSpeed"),
                             value = settings.minimumTravelSpeed ?: 0,
                             help = t("camping.minimumTravelSpeedHelp"),
+                            stacked = false,
+                        ),
+                        Select(
+                            name = "hexSizeInMiles",
+                            label = t("camping.hexSizeInMiles"),
+                            value = settings.hexSizeInMiles.toString(),
+                            options = listOf(3, 6, 12).map { SelectOption(it.toString(), it.toString()) },
+                            help = t("camping.hexSizeInMilesHelp"),
                             stacked = false,
                         ),
                         Select.fromEnum<RollMode>(
@@ -402,6 +414,7 @@ class CampingSettingsApplication(
                                 restingTrack.trackUuid.set(settings.restingPlaylistSoundUuid)
                             }
                             worldSceneId.set( settings.worldSceneId)
+                            hexSizeInMiles.set(settings.hexSizeInMiles)
                             autoApplyFatigued.set( settings.autoApplyFatigued)
                             resetTimeTrackingAfterOneDay.set( settings.resetTimeTrackingAfterOneDay)
                         }

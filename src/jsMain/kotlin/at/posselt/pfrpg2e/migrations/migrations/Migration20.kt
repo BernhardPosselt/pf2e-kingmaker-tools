@@ -63,5 +63,6 @@ class Migration20 : Migration(20) {
             .toMutableRecord()
         camping.forcedMarchActive = false
         camping.secondsSpentForcedMarching = 0
+        camping.hexSizeInMiles = 12
     }
 }

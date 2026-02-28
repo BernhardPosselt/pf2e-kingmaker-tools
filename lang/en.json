@@ -154,6 +154,8 @@
       "checkingSecondWeatherEvent": "Checking for Second Weather Event with DC {dc}"
     },
     "camping": {
+      "hexSizeInMiles": "Hex Size in Miles",
+      "hexSizeInMilesHelp": "If you are using smaller or wider hexes, change this value to change hexploration activity length and amount",
       "resetTimeTrackingAfterOneDay": "Reset Time Tracking After Advancing More Than 1 Day",
       "resetTimeTrackingAfterOneDayHelp": "During downtime, the adventuring tracker accumulates more and more hours and automatically applies fatigued. When adventuring, you typically don't advance more than one day at once. Turning this setting on resets the adventuring time and fatigue tracker after advancing a day or more at a time.",
       "checkWeather": "Roll Weather",
