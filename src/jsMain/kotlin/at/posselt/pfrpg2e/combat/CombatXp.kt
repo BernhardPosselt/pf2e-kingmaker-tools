@@ -17,6 +17,7 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.onPreDeleteCombat
 import com.foundryvtt.core.helpers.TypedHooks
 import com.foundryvtt.pf2e.actor.PF2ECharacter
+import js.array.JsArrays
 import js.array.toTypedArray
 import js.objects.Record
 import js.objects.recordOf
@@ -41,9 +42,14 @@ fun registerCombatXpHooks(game: Game) {
                     ?.toIntOrNull()
                     ?: 0
                 val players = d.combatants.contents
+                    .asSequence()
                     .mapNotNull { it.actor }
                     .filterIsInstance<PF2ECharacter>()
-                    .filter { it.alliance == "party" }
+                    .flatMap { JsArrays.from(it.parties).toSet() }
+                    .flatMap { it.members.asSequence() }
+                    .distinctBy { it.id }
+                    .filterIsInstance<PF2ECharacter>()
+                    .toList()
 
                 prompt<CombatXpData, Unit>(
                     title = t("macros.combatXp.title"),
