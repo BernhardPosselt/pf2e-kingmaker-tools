@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Improve activity and meal selection parallelization in camping sheet
+* XP macro now lists all players that gained XP
 
 ## [5.10.0] - 2026-01-26
 

@@ -984,7 +984,7 @@
         "title": "Award Party XP",
         "party": "Party",
         "amount": "Amount",
-        "gained": "Players gained {amount} XP!"
+        "gained": "All Characters in your party gained XP!"
       }
     },
     "modifiers": {

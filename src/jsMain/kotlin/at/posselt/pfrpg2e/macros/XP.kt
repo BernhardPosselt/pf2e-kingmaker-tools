@@ -6,7 +6,7 @@ import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.formContext
 import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.utils.fromUuidTypeSafe
-import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import com.foundryvtt.core.Game
@@ -39,7 +39,13 @@ suspend fun updateXP(players: Array<PF2ECharacter>, amount: Int) = coroutineScop
             }
         }
     }.awaitAll()
-    postChatMessage(t("macros.xp.gained", recordOf("amount" to amount)))
+    postChatTemplate(
+        "chatmessages/xp-result.hbs",
+        recordOf(
+            "characterNames" to players.map { it.name }.toTypedArray(),
+            "amount" to amount,
+        )
+    )
 }
 
 @JsPlainObject
