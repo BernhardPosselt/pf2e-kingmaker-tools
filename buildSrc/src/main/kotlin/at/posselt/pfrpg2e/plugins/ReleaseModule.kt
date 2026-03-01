@@ -83,7 +83,7 @@ private suspend fun HttpClient.uploadGithubAsset(
 }
 
 private fun String.isPrerelease() =
-    contains("-beta") || contains("-alpha")
+    contains("-beta") || contains("-alpha") || contains("-rc")
 
 private suspend fun HttpClient.createGithubRelease(
     repo: String,
