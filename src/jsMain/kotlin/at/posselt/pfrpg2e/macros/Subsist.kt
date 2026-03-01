@@ -92,10 +92,9 @@ suspend fun subsistMacro(game: Game, actor: Actor?) {
             )
         )
     ) {
-        val subsistPenalty = if(it.subsistPenalty) -5 else 0
         val options = SingleCheckActionUseOptions(
-            difficultyClass = CheckDC(value = it.dc + subsistPenalty),
-            rollOptions = arrayOf("action:subsist:after-exploration"),
+            difficultyClass = CheckDC(value = it.dc),
+            rollOptions = if (it.subsistPenalty) arrayOf("action:subsist:after-exploration") else emptyArray(),
             statistic = it.skill,
             actors = arrayOf(chosenActor),
         )
