@@ -82,6 +82,9 @@ private suspend fun HttpClient.uploadGithubAsset(
     }
 }
 
+private fun String.isPrerelease() =
+    contains("-beta") || contains("-alpha")
+
 private suspend fun HttpClient.createGithubRelease(
     repo: String,
     githubToken: String,
@@ -91,7 +94,14 @@ private suspend fun HttpClient.createGithubRelease(
     contentType(ContentType.Application.Json)
     accept(ContentType.Application.Json)
     bearerAuth(githubToken)
-    setBody(GetRelase(tag_name = releaseVersion, name = releaseVersion, body = body))
+    setBody(
+        GetRelase(
+            tag_name = releaseVersion,
+            name = releaseVersion,
+            body = body,
+            prerelease = releaseVersion.isPrerelease()
+        )
+    )
 }.body<GetReleaseResponse>()
 
 private suspend fun HttpClient.createFoundryRelease(
@@ -210,13 +220,15 @@ abstract class ReleaseModule : DefaultTask() {
                     name = "module.json",
                     contentType = ContentType.Application.Json,
                 )
-                client.createFoundryRelease(
-                    foundryToken = foundryToken,
-                    id = manifest.id,
-                    releaseVersion = releaseVersion,
-                    repo = repo,
-                    compatibility = manifest.compatibility,
-                )
+                if (!releaseVersion.isPrerelease()) {
+                    client.createFoundryRelease(
+                        foundryToken = foundryToken,
+                        id = manifest.id,
+                        releaseVersion = releaseVersion,
+                        repo = repo,
+                        compatibility = manifest.compatibility,
+                    )
+                }
             }
         }
     }
