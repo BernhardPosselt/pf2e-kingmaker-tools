@@ -59,6 +59,7 @@ class KingdomSettingsDataModel(
             }
             int("increaseScorePicksBy")
             boolean("expandMagicUse")
+            boolean("capStructureBonusAtKingdomLevel")
             boolean("includeCapitalItemModifier")
             boolean("automateStats")
             boolean("cultOfTheBloomEvents")
@@ -382,6 +383,12 @@ class KingdomSettingsApplication(
                             name = "kingdomSkillIncreaseEveryLevel",
                             label = t("kingdom.kingdomSkillIncreaseEveryLevel"),
                             value = settings.kingdomSkillIncreaseEveryLevel,
+                        ),
+                        CheckboxInput(
+                            name = "capStructureBonusAtKingdomLevel",
+                            label = t("kingdom.capStructureBonusAtKingdomLevel"),
+                            value = settings.capStructureBonusAtKingdomLevel,
+                            help = t("kingdom.capStructureBonusAtKingdomLevelHelp"),
                         ),
                     )
                 ),

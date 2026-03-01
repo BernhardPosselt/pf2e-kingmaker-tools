@@ -2,12 +2,14 @@ package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
+import at.posselt.pfrpg2e.data.kingdom.settlements.findSettlementMaxItemBonusLevel
 import at.posselt.pfrpg2e.data.kingdom.settlements.findSettlementSize
 import at.posselt.pfrpg2e.data.kingdom.structures.AvailableItemBonuses
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.GroupedStructureBonus
 import at.posselt.pfrpg2e.data.kingdom.structures.ItemGroup
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
+import kotlin.math.min
 
 private data class CombinedBonuses(
     val bonuses: Set<GroupedStructureBonus>,
@@ -182,9 +184,15 @@ fun evaluateSettlement(
     structures: List<Structure>,
     allStructuresStack: Boolean,
     allowCapitalInvestmentInCapitalWithoutBank: Boolean,
+    capStructureBonusAtKingdomLevel: Boolean,
+    kingdomLevel: Int,
 ): Settlement {
     val settlementSize = findSettlementSize(data.occupiedBlocks)
-    val maxItemBonus = settlementSize.maxItemBonus
+    val maxItemBonus = if(capStructureBonusAtKingdomLevel) {
+        min(settlementSize.maxItemBonus, findSettlementMaxItemBonusLevel(kingdomLevel))
+    } else {
+        settlementSize.maxItemBonus
+    }
     val constructedStructures = structures.filter { !it.slowed && it.rpPaid }
     val slowedStructures = structures.filter { it.slowed }
     val underConstructionStructures = structures.filter { !it.slowed && !it.rpPaid }
@@ -226,7 +234,7 @@ fun evaluateSettlement(
         storage = storage,
         increaseLeadershipActivities = increaseLeadershipActivities,
         consumptionReduction = consumptionReduction,
-        size = settlementSize,
+        size = settlementSize.copy(maxItemBonus = maxItemBonus),
         unlockActivities = unlockActivities,
         residentialLots = residentialLots,
         hasBridge = hasBridge,

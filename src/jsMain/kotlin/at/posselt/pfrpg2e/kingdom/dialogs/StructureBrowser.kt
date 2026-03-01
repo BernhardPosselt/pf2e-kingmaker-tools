@@ -316,6 +316,8 @@ class StructureBrowser(
                         settlement = settlement,
                         feats = kingdom.getChosenFeats(kingdom.getChosenFeatures(kingdom.getExplodedFeatures())),
                         kingdom = kingdom,
+                        capStructureBonusAtKingdomLevel = kingdom.settings.capStructureBonusAtKingdomLevel,
+                        kingdomLevel = kingdom.level,
                     ) { data ->
                         kingdom.settlements = kingdom.settlements
                             .filter { it.sceneId != data.sceneId }

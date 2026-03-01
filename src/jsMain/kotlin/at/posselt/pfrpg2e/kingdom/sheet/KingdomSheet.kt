@@ -499,6 +499,8 @@ class KingdomSheet(
                         settlement = settlement,
                         feats = kingdom.getChosenFeats(kingdom.getChosenFeatures(kingdom.getExplodedFeatures())),
                         kingdom = kingdom,
+                        capStructureBonusAtKingdomLevel = kingdom.settings.capStructureBonusAtKingdomLevel,
+                        kingdomLevel = kingdom.level,
                     ) { data ->
                         val kingdom = getKingdom()
                         kingdom.settlements = kingdom.settlements
@@ -1452,6 +1454,8 @@ class KingdomSheet(
                 kingdom.settings.autoCalculateSettlementLevel,
                 kingdom.settings.kingdomAllStructureItemBonusesStack,
                 kingdom.settings.capitalInvestmentInCapital,
+                capStructureBonusAtKingdomLevel = kingdom.settings.capStructureBonusAtKingdomLevel,
+                kingdomLevel = kingdom.level,
             ),
             canAddCurrentSceneAsSettlement = canAddCurrentScene,
             turnSectionNav = createTabs<TurnNavEntry>("scroll-to"),

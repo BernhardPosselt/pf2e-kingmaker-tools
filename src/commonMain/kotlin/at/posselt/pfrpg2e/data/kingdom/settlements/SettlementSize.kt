@@ -56,6 +56,17 @@ val settlementSizeData = listOf(
 )
 
 fun findSettlementSize(level: Int) =
-    settlementSizeData.find { it.levelFrom <= level
-            && (it.levelTo?.let { to -> to >= level } != false) }
+    settlementSizeData.find {
+        it.levelFrom <= level
+                && (it.levelTo?.let { to -> to >= level } != false)
+    }
         ?: settlementSizeData.first()
+
+fun findSettlementMaxItemBonusLevel(kingdomLevel: Int) =
+    if (kingdomLevel <= 4) {
+        1
+    } else if (kingdomLevel <= 9) {
+        2
+    } else {
+        3
+    }

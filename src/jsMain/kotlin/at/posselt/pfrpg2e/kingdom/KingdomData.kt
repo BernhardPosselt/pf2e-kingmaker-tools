@@ -94,6 +94,7 @@ external interface KingdomSettings {
     var cultEventDc: Int
     var cultEventDcStep: Int
     var partialStructureConstruction: Boolean
+    var capStructureBonusAtKingdomLevel: Boolean
 }
 
 @JsPlainObject
@@ -512,6 +513,8 @@ fun KingdomData.getAllSettlements(game: Game): SettlementResult {
                 settings.autoCalculateSettlementLevel,
                 settings.kingdomAllStructureItemBonusesStack,
                 settings.capitalInvestmentInCapital,
+                capStructureBonusAtKingdomLevel = settings.capStructureBonusAtKingdomLevel,
+                kingdomLevel = level,
             ) to active
         }
     }

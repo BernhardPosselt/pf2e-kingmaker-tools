@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.camping.ActorMeal
 import at.posselt.pfrpg2e.camping.CampingActivity
 import at.posselt.pfrpg2e.camping.CampingData
 import at.posselt.pfrpg2e.camping.CookingResult
+import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.utils.fromUuid
@@ -64,5 +65,9 @@ class Migration20 : Migration(20) {
         camping.forcedMarchActive = false
         camping.secondsSpentForcedMarching = 0
         camping.hexSizeInMiles = 12
+    }
+
+    override suspend fun migrateKingdom(game: Game, kingdom: KingdomData) {
+        kingdom.settings.capStructureBonusAtKingdomLevel = false
     }
 }

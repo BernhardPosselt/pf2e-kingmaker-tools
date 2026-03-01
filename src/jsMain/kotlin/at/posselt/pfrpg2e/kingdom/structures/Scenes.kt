@@ -66,6 +66,8 @@ fun Scene.parseSettlement(
     autoCalculateSettlementLevel: Boolean,
     allStructuresStack: Boolean,
     allowCapitalInvestmentInCapitalWithoutBank: Boolean,
+    capStructureBonusAtKingdomLevel: Boolean,
+    kingdomLevel: Int,
 ): Settlement {
     val occupiedBlocks = if (autoCalculateSettlementLevel && rawSettlement.manualSettlementLevel != true) max(
         0,
@@ -84,6 +86,8 @@ fun Scene.parseSettlement(
         structures = getStructures(),
         allStructuresStack = allStructuresStack,
         allowCapitalInvestmentInCapitalWithoutBank = allowCapitalInvestmentInCapitalWithoutBank,
+        capStructureBonusAtKingdomLevel = capStructureBonusAtKingdomLevel,
+        kingdomLevel = kingdomLevel,
     )
 }
 

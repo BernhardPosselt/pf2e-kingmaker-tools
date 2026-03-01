@@ -26,6 +26,8 @@ fun Array<RawSettlement>.toContext(
     autoCalculateSettlementLevel: Boolean,
     allStructuresStack: Boolean,
     allowCapitalInvestmentInCapitalWithoutBank: Boolean,
+    capStructureBonusAtKingdomLevel: Boolean,
+    kingdomLevel: Int,
 ): Array<SettlementsContext> {
     val scenesById = game.scenes.contents
         .filter { it.id != null }
@@ -37,6 +39,8 @@ fun Array<RawSettlement>.toContext(
                 autoCalculateSettlementLevel = autoCalculateSettlementLevel,
                 allStructuresStack = allStructuresStack,
                 allowCapitalInvestmentInCapitalWithoutBank = allowCapitalInvestmentInCapitalWithoutBank,
+                capStructureBonusAtKingdomLevel = capStructureBonusAtKingdomLevel,
+                kingdomLevel = kingdomLevel,
             )
             SettlementsContext(
                 id = parsed.id,

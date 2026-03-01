@@ -150,6 +150,8 @@ class InspectSettlement(
     private val autoCalculateSettlementLevel: Boolean,
     private val allStructuresStack: Boolean,
     private val allowCapitalInvestmentInCapitalWithoutBank: Boolean,
+    private val capStructureBonusAtKingdomLevel: Boolean,
+    private val kingdomLevel: Int,
     settlement: RawSettlement,
     feats: List<ChosenFeat>,
     private val afterSubmit: suspend (settlement: RawSettlement) -> Unit
@@ -229,6 +231,8 @@ class InspectSettlement(
             autoCalculateSettlementLevel = autoCalculateSettlementLevel,
             allStructuresStack = allStructuresStack,
             allowCapitalInvestmentInCapitalWithoutBank = allowCapitalInvestmentInCapitalWithoutBank,
+            capStructureBonusAtKingdomLevel = capStructureBonusAtKingdomLevel,
+            kingdomLevel = kingdomLevel,
         )
         checkNotNull(parsed) {
             val msg = t("kingdom.settlementSceneDeleted")

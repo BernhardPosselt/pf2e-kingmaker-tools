@@ -111,6 +111,7 @@ fun createKingdomDefaults(name: String) =
                 warden = arrayOf(AGRICULTURE, BOATING, DEFENSE, EXPLORATION, WILDERNESS).map { it.value }
                     .toTypedArray(),
             ),
+            capStructureBonusAtKingdomLevel = false,
             leaderSkills = RawLeaderSkills(
                 ruler = arrayOf(
                     "diplomacy",

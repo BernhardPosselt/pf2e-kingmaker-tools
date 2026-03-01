@@ -415,6 +415,8 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "capStructureBonusAtKingdomLevel": "Cap Structure Bonuses at Kingdom Level",
+      "capStructureBonusAtKingdomLevelHelp": "If disabled, maximum item bonuses are only limited by the settlement level. If enabled, all structure item bonuses are additionally limited by the maximum attainable settlement level at that point. Enable this if you want your capital to grow larger than your settlements while still staying at the expected maximum item bonus.",
       "firstTurnNotice": "On your first turn after founding your kingdom, skip the Adjust Unrest and Pay Consumption steps.",
       "failedToCompleteStructure": "Failed to complete structure; it is delayed further.",
       "spendRp": "Spend RP",
