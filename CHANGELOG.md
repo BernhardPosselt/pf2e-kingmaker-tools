@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.11.0-beta1] - 2026-03-01
+
 ### Added
 
 * Allow to override hex mile size to 3 or 6 miles in camping settings
