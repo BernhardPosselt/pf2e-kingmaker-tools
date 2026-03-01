@@ -1993,7 +1993,7 @@
       },
       "civic-planning": {
         "name": "Civic Planning",
-        "description": "During the Civic Activities step of the Activities phase of a Kingdom turn, one settlement of the party’s choice can attempt two Civic activities rather than one. The second Civic activity occurs after all other settlements have taken their individual Civic activities."
+        "description": "During the Kingdom Activities step of the Activities phase of a Kingdom turn, one settlement of the party's choice can attempt an additional Civic activity on its turn. This is cumulative with any extra activities granted by Civic structures."
       },
       "envy-of-the-world": {
         "name": "Envy of the World",
