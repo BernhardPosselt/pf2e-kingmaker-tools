@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.11.0] - 2026-03-04
+
+### Added
+
+* Allow to override hex mile size to 3 or 6 miles in camping settings
+* Add a setting to cap settlement item bonus at kingdom level
+
+### Fixed
+
+* Do not allow negative numbers for most number input fields
+* Improve clarity for Lacks Bridge and Overcrowded details in settlement dialog
+* Do not apply subsist penalty after exploration penalty in macro if unchecked
+
+### Changed
+
+* Improve activity and meal selection parallelization in camping sheet
+* XP macro now lists all players that gained XP
+* When completing a combat, the entire party now gains XP if at least one member was participating
+
+
 ## [5.11.0-beta1] - 2026-03-01
 
 ### Added
