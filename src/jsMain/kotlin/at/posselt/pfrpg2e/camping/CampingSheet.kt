@@ -819,7 +819,6 @@ class CampingSheet(
         val override = max(camping.minimumTravelSpeed ?: 0, travelSpeed)
         val forcedMarch = if(camping.forcedMarchActive == true) 1 else 0
         val result = calculateHexplorationActivities(override) + forcedMarch
-        console.log(camping.hexSizeInMiles)
         return result / (camping.hexSizeInMiles.toDouble() / 12)
     }
 

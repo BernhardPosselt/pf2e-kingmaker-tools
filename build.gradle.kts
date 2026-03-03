@@ -94,6 +94,7 @@ kotlin {
             dependencies {
                 implementation(project.dependencies.enforcedPlatform(libs.kotlin.wrappers))
                 implementation(libs.kotlin.wrappers.js)
+                implementation(libs.kotlin.wrappers.web)
                 implementation(libs.kotlin.plain.objects)
                 implementation(libs.kotlinx.html)
                 implementation(libs.kotlinx.coroutines.js)

@@ -11,10 +11,11 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.7.1" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-js", version = "0.12.0" }
-kotlin-wrappers = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version = "2026.2.22" }
+kotlin-wrappers = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version = "2026.3.1" }
 kotlin-plain-objects = { module = "org.jetbrains.kotlin:kotlin-js-plain-objects", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-wrappers-js = { module = "org.jetbrains.kotlin-wrappers:kotlin-js" }
+kotlin-wrappers-web = { module = "org.jetbrains.kotlin-wrappers:kotlin-web" }
 kotlin-test-js = { module = "org.jetbrains.kotlin:kotlin-test-js-runner", version = "2.0.21" }
 kotlinx-coroutines-js = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-js", version.ref = "coroutines" }
 jsonschemavalidator = { module = "io.github.optimumcode:json-schema-validator", version.ref = "schema-validator" }
