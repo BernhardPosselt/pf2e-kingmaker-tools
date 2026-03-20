@@ -748,12 +748,12 @@ class KingdomSheet(
                 }
             }
 
-            "claimed-refuge" -> buildPromise {
+            "claimed-landmark" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     kingdom.modifiers = kingdom.modifiers + RawModifier(
                         id = v4(),
                         turns = 2,
-                        name = "kingdom.claimedRefuge",
+                        name = "kingdom.claimedLandmark",
                         type = ModifierType.CIRCUMSTANCE.value,
                         value = 2,
                         enabled = true,
@@ -773,12 +773,12 @@ class KingdomSheet(
                 }
             }
 
-            "claimed-landmark" -> buildPromise {
+            "claimed-refuge" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     kingdom.modifiers = kingdom.modifiers + RawModifier(
                         id = v4(),
                         turns = 2,
-                        name = "kingdom.claimedLandmark",
+                        name = "kingdom.claimedRefuge",
                         type = ModifierType.CIRCUMSTANCE.value,
                         value = 2,
                         enabled = true,

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.11.1] - 2026-03-20
+
+### Fixed
+
+* Claimed Landmark and Claimed Refuge buttons had their modifiers and ruin/unrest reduction swapped.
+
+
 ## [5.11.0] - 2026-03-04
 
 ### Added
