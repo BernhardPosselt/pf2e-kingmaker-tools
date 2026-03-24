@@ -11,14 +11,14 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.roll
 import at.posselt.pfrpg2e.utils.t
-import kotlinx.js.JsPlainObject
 import js.objects.recordOf
+import kotlinx.js.JsPlainObject
 import kotlin.math.abs
 import kotlin.math.min
 
 @Suppress("unused")
 @JsPlainObject
-private external interface ChatUnrestContext {
+external interface ChatUnrestContext {
     val overcrowded: Int
     val secondary: Int
     val atWar: Int

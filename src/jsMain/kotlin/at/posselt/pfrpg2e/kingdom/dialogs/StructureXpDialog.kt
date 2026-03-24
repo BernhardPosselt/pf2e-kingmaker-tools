@@ -14,12 +14,12 @@ import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject
-private external interface StructureXpDialogContext {
+external interface StructureXpDialogContext {
     val formRows: Array<FormElementContext>
 }
 
 @JsPlainObject
-private external interface StructureXpDialogData {
+external interface StructureXpDialogData {
     val structure: String
 }
 

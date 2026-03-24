@@ -13,12 +13,12 @@ import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject
-private external interface NewSettlementChoicesContext {
+external interface NewSettlementChoicesContext {
     val formRows: Array<FormElementContext>
 }
 
 @JsPlainObject
-private external interface NewSettlementChoicesData {
+external interface NewSettlementChoicesData {
     val name: String
     val waterBorders: Int
     val terrain: String

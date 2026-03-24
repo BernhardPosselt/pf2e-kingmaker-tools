@@ -24,7 +24,7 @@ private val skills = listOf(
 )
 
 @JsPlainObject
-private external interface FormData {
+external interface FormData {
     val skill: String
     val dc: Int
     val private: Boolean

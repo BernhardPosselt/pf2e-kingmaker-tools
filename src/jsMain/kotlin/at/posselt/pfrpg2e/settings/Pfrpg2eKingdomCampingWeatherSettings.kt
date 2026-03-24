@@ -14,7 +14,7 @@ import com.foundryvtt.core.game
 import com.foundryvtt.core.helpers.ClientSettings
 import com.foundryvtt.core.helpers.SettingsData
 import com.foundryvtt.core.helpers.SettingsMenuData
-import js.core.JsNumber
+//import js.core.JsNumber
 import js.objects.ReadonlyRecord
 import kotlinx.coroutines.await
 
@@ -69,7 +69,7 @@ fun ClientSettings.registerInt(
             config = !hidden,
             default = default,
             requiresReload = requiresReload,
-            type = JsNumber::class.js,
+            type = at.posselt.pfrpg2e.utils.JsNumber::class.js,
             scope = "world",
             choices = choices,
         )

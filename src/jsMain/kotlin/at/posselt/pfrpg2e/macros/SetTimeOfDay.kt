@@ -26,7 +26,7 @@ import kotlinx.js.JsPlainObject
 import kotlin.time.Instant
 
 @JsPlainObject
-private external interface TimeOfDayData {
+external interface TimeOfDayData {
     val time: String
 }
 

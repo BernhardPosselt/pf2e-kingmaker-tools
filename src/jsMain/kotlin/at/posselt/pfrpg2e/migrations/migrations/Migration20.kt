@@ -12,7 +12,7 @@ import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
-private external interface OldCampingActivity {
+external interface OldCampingActivity {
     var activityId: String
     var actorUuid: String?
     var result: String?
@@ -20,7 +20,7 @@ private external interface OldCampingActivity {
 }
 
 @JsPlainObject
-private external interface OldCookingResult {
+external interface OldCookingResult {
     val recipeId: String
     var result: String?
     val skill: String

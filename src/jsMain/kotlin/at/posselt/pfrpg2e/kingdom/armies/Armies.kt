@@ -1,10 +1,14 @@
 package at.posselt.pfrpg2e.kingdom.armies
 
+import at.posselt.pfrpg2e.kingdom.KingdomActor
+import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.modifiers.penalties.ArmyConditionInfo
+import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.Folder
+import com.foundryvtt.core.ui
 import com.foundryvtt.core.utils.deepClone
 import com.foundryvtt.core.utils.mergeObject
 import com.foundryvtt.pf2e.actor.PF2EArmy
@@ -46,10 +50,10 @@ fun Game.getSelectedArmies(): Array<PF2EArmy> =
         .filterIsInstance<PF2EArmy>()
         .toTypedArray()
 
-fun Game.getRecruitableArmies(folderName: String): Array<PF2EArmy> =
+fun Game.getRecruitableArmies(folder: Folder): Array<PF2EArmy> =
     actors.contents.asSequence()
         .filterIsInstance<PF2EArmy>()
-        .filter { it.folder?.name == folderName }
+        .filter { it.folder?.id == folder.id }
         .toTypedArray()
 
 private val basicArmyUuids = setOf(
@@ -59,15 +63,25 @@ private val basicArmyUuids = setOf(
     "Compendium.pf2e.kingmaker-bestiary.Actor.WFKh1twN246LMp8Z"
 )
 
-suspend fun Game.importBasicArmies(folderName: String): Folder {
-    val folder = Folder.create(
+suspend fun Game.setupArmies(kingdom: KingdomData, kingdomActor: KingdomActor) {
+    val folder = setupArmyFolder()
+    importBasicArmies(folder)
+    kingdom.settings.recruitableArmiesFolderId = folder.id
+    kingdomActor.setKingdom(kingdom)
+}
+
+private suspend fun setupArmyFolder(): Folder =
+    Folder.create(
         recordOf(
-            "name" to folderName,
+            "name" to t("kingdom.recruitableArmies"),
             "type" to "Actor",
             "parent" to null,
             "color" to null,
         )
     ).await()
+
+private suspend fun Game.importBasicArmies(folder: Folder) {
+    ui.notifications.info(t("kingdom.importingBasicArmies", recordOf("folderName" to folder.name)))
     val data = packs.get("pf2e.kingmaker-bestiary")
         ?.getDocuments()
         ?.await()
@@ -88,7 +102,7 @@ suspend fun Game.importBasicArmies(folderName: String): Folder {
         ?.toTypedArray()
         ?: emptyArray()
     Actor.createDocuments(data).await()
-    return folder
+    ui.notifications.info(t("kingdom.importFinished"))
 }
 
 val PF2EArmy.isSpecial: Boolean

@@ -12,7 +12,7 @@ import org.w3c.fetch.Response
 
 @JsPlainObject
 @Suppress("unused")
-private external interface FilePickerData {
+external interface FilePickerData {
     val file: String
 }
 

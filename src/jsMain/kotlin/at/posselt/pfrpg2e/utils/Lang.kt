@@ -134,3 +134,7 @@ fun Int.formatAsModifier() = if (this > 0) {
 fun escapeHtml(value: String) = document.create.span {
     +(value)
 }.innerText
+
+
+@JsName("Number")
+external class JsNumber

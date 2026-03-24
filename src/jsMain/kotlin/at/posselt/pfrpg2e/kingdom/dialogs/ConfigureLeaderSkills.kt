@@ -38,26 +38,26 @@ import kotlin.js.Promise
 
 @Suppress("unused")
 @JsPlainObject
-private external interface AddEntryContext {
+external interface AddEntryContext {
     val formRows: Array<FormElementContext>
 }
 
 @JsPlainObject
-private external interface AddEntryData {
+external interface AddEntryData {
     val lore: String
 }
 
 
 @Suppress("unused")
 @JsPlainObject
-private external interface LeaderSkillsRow {
+external interface LeaderSkillsRow {
     val label: String
     val cells: Array<FormElementContext>
 }
 
 @Suppress("unused")
 @JsPlainObject
-private external interface ConfigureLeaderSkillsContext : ValidatedHandlebarsContext {
+external interface ConfigureLeaderSkillsContext : ValidatedHandlebarsContext {
     val headers: Array<String>
     val formRows: Array<LeaderSkillsRow>
     val compact: Boolean
@@ -73,7 +73,7 @@ private fun filterLores(values: Array<String>): Array<Attribute> =
         .toTypedArray()
 
 @JsPlainObject
-private external interface LeaderSkillsData {
+external interface LeaderSkillsData {
     val ruler: Array<Boolean>
     val counselor: Array<Boolean>
     val emissary: Array<Boolean>

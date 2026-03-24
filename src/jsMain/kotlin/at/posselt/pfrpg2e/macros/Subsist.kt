@@ -34,7 +34,7 @@ import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
-private external interface SubsistData {
+external interface SubsistData {
     val skill: String
     val dc: Int
     val subsistPenalty: Boolean
@@ -42,13 +42,13 @@ private external interface SubsistData {
 
 @Suppress("unused")
 @JsPlainObject
-private external interface AskActorSubmitData {
+external interface AskActorSubmitData {
     val name: String
 }
 
 @Suppress("unused")
 @JsPlainObject
-private external interface AskActorContext {
+external interface AskActorContext {
     val formRows: Array<FormElementContext>
 }
 

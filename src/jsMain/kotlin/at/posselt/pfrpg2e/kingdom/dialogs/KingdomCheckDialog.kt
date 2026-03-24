@@ -114,7 +114,7 @@ import kotlin.toString
 
 @Suppress("unused")
 @JsPlainObject
-private external interface ModifierContext {
+external interface ModifierContext {
     val label: String
     val type: String
     val modifier: String
@@ -128,7 +128,7 @@ private external interface ModifierContext {
 
 @Suppress("unused")
 @JsPlainObject
-private external interface CheckContext : ValidatedHandlebarsContext {
+external interface CheckContext : ValidatedHandlebarsContext {
     val leaderInput: FormElementContext
     val rollModeInput: FormElementContext
     val phaseInput: FormElementContext
@@ -163,14 +163,14 @@ private external interface CheckContext : ValidatedHandlebarsContext {
 }
 
 @JsPlainObject
-private external interface ModifierIdEnabled {
+external interface ModifierIdEnabled {
     var id: String
     var enabled: Boolean
 }
 
 
 @JsPlainObject
-private external interface CheckData {
+external interface CheckData {
     var leader: String
     var rollMode: String
     var phase: String?

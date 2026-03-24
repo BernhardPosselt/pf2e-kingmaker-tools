@@ -31,14 +31,14 @@ import at.posselt.pfrpg2e.utils.postDegreeOfSuccess
 import at.posselt.pfrpg2e.utils.serializeB64Json
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.tpl
-import kotlinx.js.JsPlainObject
 import js.objects.recordOf
+import kotlinx.js.JsPlainObject
 import kotlin.math.max
 
 
 @Suppress("unused")
 @JsPlainObject
-private external interface ChatModifier {
+external interface ChatModifier {
     val label: String
     val data: String
     val actorUuid: String
@@ -46,7 +46,7 @@ private external interface ChatModifier {
 
 @Suppress("unused")
 @JsPlainObject
-private external interface ChatButtonContext {
+external interface ChatButtonContext {
     val criticalSuccess: Boolean
     val eventId: String?
     val eventIndex: Int

@@ -4,12 +4,12 @@ import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.data.kingdom.settlements.settlementSizeData
 import at.posselt.pfrpg2e.utils.asAnyObject
 import at.posselt.pfrpg2e.utils.t
-import kotlinx.js.JsPlainObject
 import js.objects.recordOf
+import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject
-private external interface SSizeContext {
+external interface SSizeContext {
     val type: String
     val blocks: String
     val population: String
@@ -21,7 +21,7 @@ private external interface SSizeContext {
 
 @Suppress("unused")
 @JsPlainObject
-private external interface SettlementSizeContext {
+external interface SettlementSizeContext {
     val data: Array<SSizeContext>
 }
 

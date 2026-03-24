@@ -124,13 +124,18 @@
     </section>
     <section class="km-kingdom-sheet-section">
         <h2>{{localizeKM "kingdom.firstVillage"}}</h2>
-        <p>{{localizeKM "kingdom.firstImportStructures"}} <button class="km-inline-button" type="button" data-action="structures-import">{{localizeKM "kingdom.importAllStructures"}}</button></p>
+        <p>{{localizeKM "kingdom.firstImportStructures"}} <button class="km-inline-button" type="button" data-action="structures-import" {{#unless isGM}}disabled{{/unless}}>{{localizeKM "kingdom.importAllStructures"}}</button></p>
         <p>{{localizeKM "kingdom.thenCreateCapitalScene"}} <button class="km-inline-button" type="button" data-action="create-capital">{{localizeKM "kingdom.createACapital"}}</button> {{localizeKM "kingdom.capitalRequirement"}}</p>
         <img src="modules/pf2e-kingmaker-tools/img/kingdom/docs/settlement.webp" alt="structures on blocks">
         <p>{{localizeKM "kingdom.gainVillageXp"}}</p>
         <p>{{localizeKM "kingdom.placeStructures"}}</p>
         <img src="modules/pf2e-kingmaker-tools/img/kingdom/docs/structures.webp" alt="structures entry in the sidebar">
         <p>{{localizeKM "kingdom.villageFurther"}}</p>
+    </section>
+    <section class="km-kingdom-sheet-section">
+        <h2>{{localizeKM "kingdom.firstArmies"}}</h2>
+        <p>{{localizeKM "kingdom.firstImportArmies"}} <button class="km-inline-button" type="button" data-action="armies-import" {{#unless isGM}}disabled{{/unless}}>{{localizeKM "kingdom.importAllBasicArmies"}}</button></p>
+        <p>{{localizeKM "kingdom.firstImportArmiesHelp"}}</p>
     </section>
     <section class="km-kingdom-sheet-section">
         <h2>{{localizeKM "kingdom.fameOrInfamy"}} <span class="km-header-right-align">{{> formElement fameContext.type}}</span></h2>

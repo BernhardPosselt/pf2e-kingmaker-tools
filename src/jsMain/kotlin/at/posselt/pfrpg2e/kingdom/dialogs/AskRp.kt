@@ -9,12 +9,12 @@ import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject
-private external interface AskRpContext {
+external interface AskRpContext {
     val formRows: Array<FormElementContext>
 }
 
 @JsPlainObject
-private external interface AskRpData {
+external interface AskRpData {
     val rp: Int
 }
 

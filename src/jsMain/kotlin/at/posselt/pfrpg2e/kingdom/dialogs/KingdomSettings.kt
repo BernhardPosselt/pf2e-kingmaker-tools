@@ -193,6 +193,7 @@ class KingdomSettingsApplication(
                             value = settings.recruitableArmiesFolderId,
                             help = t("kingdom.recruitableArmiesFolderIdHelp"),
                             stacked = false,
+                            required = false,
                         )
                     ),
                 ),

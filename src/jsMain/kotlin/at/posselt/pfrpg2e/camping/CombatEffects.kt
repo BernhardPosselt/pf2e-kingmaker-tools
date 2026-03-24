@@ -61,7 +61,7 @@ private fun getCombatEffects(partyLevel: Int, activeActivities: Set<String>): Li
 
 @Suppress("unused")
 @JsPlainObject
-private external interface CombatEffectContext {
+external interface CombatEffectContext {
     val label: String
     val target: String
     val link: String

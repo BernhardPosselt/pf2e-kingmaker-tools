@@ -33,6 +33,7 @@ import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.RawOngoingKingdomEvent
 import at.posselt.pfrpg2e.kingdom.RawSome
 import at.posselt.pfrpg2e.kingdom.SettlementTerrain
+import at.posselt.pfrpg2e.kingdom.armies.setupArmies
 import at.posselt.pfrpg2e.kingdom.armies.updateArmyConsumption
 import at.posselt.pfrpg2e.kingdom.createModifiers
 import at.posselt.pfrpg2e.kingdom.createSimpleContext
@@ -745,6 +746,12 @@ class KingdomSheet(
                         groups = emptyArray(),
                         events = emptyList(),
                     )
+                }
+            }
+
+            "armies-import" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    game.setupArmies(kingdom, actor)
                 }
             }
 

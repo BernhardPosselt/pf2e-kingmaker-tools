@@ -22,7 +22,7 @@ import kotlin.math.min
 
 @Suppress("unused")
 @JsPlainObject
-private external interface CollectResources {
+external interface CollectResources {
     val rp: Int
     val ore: Int
     val stone: Int

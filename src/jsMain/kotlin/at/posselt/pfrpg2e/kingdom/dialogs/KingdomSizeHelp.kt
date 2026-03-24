@@ -8,7 +8,7 @@ import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject
-private external interface SizeContext {
+external interface SizeContext {
     val size: String
     val type: String
     val dice: String
@@ -18,7 +18,7 @@ private external interface SizeContext {
 
 @Suppress("unused")
 @JsPlainObject
-private external interface KingdomSizeContext {
+external interface KingdomSizeContext {
     val data: Array<SizeContext>
 }
 

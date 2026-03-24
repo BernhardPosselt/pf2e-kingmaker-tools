@@ -20,13 +20,12 @@ import com.foundryvtt.core.helpers.onRenderChatLog
 import com.foundryvtt.core.ui
 import io.github.uuidjs.uuid.v4
 import js.array.tupleOf
-import kotlinx.js.JsPlainObject
 import js.objects.recordOf
 import kotlinx.html.org.w3c.dom.events.Event
+import kotlinx.js.JsPlainObject
 import kotlinx.serialization.json.Json.Default.parseToJsonElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
-import kotlin.collections.plus
 
 private data class ChatButton(
     val buttonClass: String,
@@ -35,7 +34,7 @@ private data class ChatButton(
 
 @Suppress("unused")
 @JsPlainObject
-private external interface PayStructureContext {
+external interface PayStructureContext {
     val rp: Int
     val lumber: Int
     val luxuries: Int

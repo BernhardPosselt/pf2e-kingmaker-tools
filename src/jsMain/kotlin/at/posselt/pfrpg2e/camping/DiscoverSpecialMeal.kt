@@ -8,7 +8,7 @@ import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject
-private external interface DiscoverSpecialMealChatContext {
+external interface DiscoverSpecialMealChatContext {
     val id: String
     val degree: String
     val name: String

@@ -21,7 +21,7 @@ import kotlinx.coroutines.await
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
-private external interface AskDcData {
+external interface AskDcData {
     val dc: Int
 }
 

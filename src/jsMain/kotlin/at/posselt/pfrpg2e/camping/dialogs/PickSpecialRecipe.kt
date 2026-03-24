@@ -24,13 +24,13 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
-private external interface LearnSpecialRecipeData {
+external interface LearnSpecialRecipeData {
     val recipe: String
 }
 
 @Suppress("unused")
 @JsPlainObject
-private external interface RecipeContextRow {
+external interface RecipeContextRow {
     val label: String
     val dc: Int
     val discoverCost: FoodCost
@@ -39,7 +39,7 @@ private external interface RecipeContextRow {
 
 @Suppress("unused")
 @JsPlainObject
-private external interface LearnSpecialRecipeContext {
+external interface LearnSpecialRecipeContext {
     val formRows: Array<RecipeContextRow>
 }
 

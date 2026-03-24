@@ -24,9 +24,9 @@ import com.foundryvtt.core.ui
 import com.foundryvtt.pf2e.actor.PF2EArmy
 import com.foundryvtt.pf2e.item.PF2ECampaignFeature
 import com.foundryvtt.pf2e.item.itemFromUuid
-import kotlinx.js.JsPlainObject
 import js.objects.recordOf
 import kotlinx.coroutines.await
+import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
@@ -34,7 +34,7 @@ import kotlin.js.Promise
 
 @Suppress("unused")
 @JsPlainObject
-private external interface ArmyTacticContext {
+external interface ArmyTacticContext {
     val link: String
     val level: Int
     val dc: Int
@@ -45,7 +45,7 @@ private external interface ArmyTacticContext {
 
 @Suppress("unused")
 @JsPlainObject
-private external interface ArmyTacticsContext : HandlebarsRenderContext {
+external interface ArmyTacticsContext : HandlebarsRenderContext {
     val tactics: Array<ArmyTacticContext>
 }
 

@@ -35,14 +35,14 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
 @JsPlainObject
-private external interface CombatTrackData {
+external interface CombatTrackData {
     val playlistUuid: String?
     val trackUuid: String?
 }
 
 @Suppress("unused")
 @JsPlainObject
-private external interface CombatTrackContext : ValidatedHandlebarsContext {
+external interface CombatTrackContext : ValidatedHandlebarsContext {
     val formRows: Array<FormElementContext>
 }
 

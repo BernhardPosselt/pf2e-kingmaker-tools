@@ -8,11 +8,9 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.armies.getRecruitableArmies
-import at.posselt.pfrpg2e.kingdom.armies.importBasicArmies
 import at.posselt.pfrpg2e.kingdom.armies.isSpecial
 import at.posselt.pfrpg2e.kingdom.getActiveLeader
 import at.posselt.pfrpg2e.kingdom.getActivity
-import at.posselt.pfrpg2e.kingdom.setKingdom
 import at.posselt.pfrpg2e.utils.awaitAll
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.buildUuid
@@ -22,11 +20,12 @@ import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.applications.ux.TextEditor.TextEditor
+import com.foundryvtt.core.documents.Folder
 import com.foundryvtt.core.ui
 import com.foundryvtt.pf2e.actor.PF2EArmy
-import kotlinx.js.JsPlainObject
 import js.objects.recordOf
 import kotlinx.coroutines.await
+import kotlinx.js.JsPlainObject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
@@ -51,7 +50,7 @@ private class ArmyBrowser(
     private val game: Game,
     private val kingdomActor: KingdomActor,
     private val kingdom: KingdomData,
-    private val folderName: String,
+    private val folder: Folder,
 ) : SimpleApp<ArmiesContext>(
     title = t("kingdom.armyBrowserTitle"),
     template = "applications/kingdom/army-browser.hbs",
@@ -75,7 +74,7 @@ private class ArmyBrowser(
         options: HandlebarsRenderOptions
     ): Promise<ArmiesContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
-        val armies = game.getRecruitableArmies(folderName)
+        val armies = game.getRecruitableArmies(folder)
             .asSequence()
             .sortedWith(compareBy<PF2EArmy> { it.system.details.level.value }.thenBy { it.name })
             .map {
@@ -132,19 +131,24 @@ private class ArmyBrowser(
     }
 }
 
-suspend fun armyBrowser(game: Game, kingdomActor: KingdomActor, kingdom: KingdomData) {
-    val folderName = t("kingdom.recruitableArmies")
-    val allPlayerArmies = game.getRecruitableArmies(folderName)
-    if (allPlayerArmies.isNotEmpty()) {
-        ArmyBrowser(game, kingdomActor, kingdom, folderName).launch()
-    } else if (allPlayerArmies.isEmpty() && game.user.isGM) {
-        ui.notifications.info(t("kingdom.importingBasicArmies", recordOf("folderName" to folderName)))
-        val folder = game.importBasicArmies(folderName)
-        kingdom.settings.recruitableArmiesFolderId = folder.id
-        kingdomActor.setKingdom(kingdom)
-        ui.notifications.info(t("kingdom.importFinished"))
-        ArmyBrowser(game, kingdomActor, kingdom, folderName).launch()
+fun findArmyFolder(game: Game, kingdom: KingdomData): Folder {
+    val folder = kingdom.settings.recruitableArmiesFolderId
+        ?.let { game.folders.get(it) }
+    return if (folder == null) {
+        val message = t("kingdom.noRecruitableArmiesFolderFound")
+        ui.notifications.error(message)
+        throw IllegalStateException(message)
     } else {
-        ui.notifications.error(t("kingdom.noArmiesFoundInFolder", recordOf("folderName" to folderName)))
+        folder
+    }
+}
+
+fun armyBrowser(game: Game, kingdomActor: KingdomActor, kingdom: KingdomData) {
+    val folder = findArmyFolder(game, kingdom)
+    val armies = game.getRecruitableArmies(folder)
+    if (armies.isEmpty()) {
+        ui.notifications.error(t("kingdom.noArmiesFoundInFolder", recordOf("folderName" to folder.name)))
+    } else {
+        ArmyBrowser(game, kingdomActor, kingdom, folder).launch()
     }
 }
