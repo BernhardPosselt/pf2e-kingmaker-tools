@@ -52,7 +52,6 @@ kotlin {
                 "-opt-in=kotlin.js.ExperimentalWasmJsInterop",
                 "-opt-in=kotlin.js.ExperimentalJsStatic",
                 "-opt-in=kotlin.time.ExperimentalTime",
-                "-Xwhen-guards",
             )
         }
         browser {
