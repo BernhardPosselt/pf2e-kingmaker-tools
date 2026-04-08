@@ -33,7 +33,7 @@ private fun RawRuinValues.toInput(
     RuinContext(
         value = Select.range(
             from = 0,
-            to = threshold,
+            to = if(automateStats) calculated.threshold else threshold,
             name = "ruin.$key.value",
             label = label,
             value = value,
