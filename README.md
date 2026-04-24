@@ -147,8 +147,7 @@ Install the following things using your package manager or homebrew:
 
 * JDK 25
 * git
-* node
-* yarn
+* docker or podman 
 
 Ubuntu:
 
