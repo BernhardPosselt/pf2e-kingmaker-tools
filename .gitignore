@@ -1,3 +1,5 @@
+/docker-compose.yml
+
 .gradle
 build/
 /buildSrc/.gradle
