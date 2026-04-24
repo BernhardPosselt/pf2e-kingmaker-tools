@@ -152,17 +152,15 @@ Install the following things using your package manager or homebrew:
 
 Ubuntu:
 
-    sudo apt install nodejs git openjdk-25-jdk
-    sudo npm install --global yarn
+    sudo apt install git openjdk-25-jdk
 
 Arch:
 
-    sudo pacman -S nodejs git jdk25-openjdk yarn
+    sudo pacman -S git jdk25-openjdk yarn
 
 macOS:
 
     brew install --cask temurin@25
-    brew install git node@22 yarn
 
 Then restart your machine for the JVM changes to take effect.
 
@@ -179,11 +177,8 @@ Then link this directory to your foundry data folder:
 
 Linux:
 
-    ln -s /home/$(whoami)/dev/pf2e-kingmaker-tools/ /home/$(whoami)/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools/
+    sudo mount --bind /home/bernhard/dev/pf2e-kingmaker-tools /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools
 
-macOS:
-
-    ln -s /Users/$(whoami)/dev/pf2e-kingmaker-tools/ /Users/$(whoami)/Library/Application Support/FoundryVTT/Data/modules/pf2e-kingmaker-tools/
 
 If you **don't have access to Transifex and aren't interested in becoming a translator**, you need to create dummy localization files locally, otherwise the app won't load:
 
@@ -224,6 +219,25 @@ Finally, start Foundry.
 You can release a new version by changing the version in **build.gradle.kts** and then executing:
 
     GITHUB_TOKEN="token_here" FOUNDRY_TOKEN="token_here" ./gradlew release
+
+Finally, start your local FoundryVTT instance using the provided Dockerfile and a compose file looking roughly like this:
+
+```yml
+services:
+  foundry:
+    build:
+      context: .
+      args:
+        TIMED_URL: "https://r2.foundryvtt.com/releases/13.351/FoundryVTT-Node-13.351.zip?verify=secret"
+    ports:
+      - "30000:30000"
+    volumes:
+      # needs to be owned by user 1000:1000
+      - "/home/bernhard/.local/share/FoundryVTT/:/home/node/.local/share/FoundryVTT/"
+```
+
+    docker compose build
+    docker compose up
 
 ### Enable Schema Autocompletion Support in IntelliJ
 

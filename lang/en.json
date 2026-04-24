@@ -415,6 +415,7 @@
       "notes": "Notes"
     },
     "kingdom": {
+      "increasedRuinPenalty": "Increased {ruin} penalty by 1",
       "firstArmies": "Muster your People",
       "firstImportArmies": "Next, muster your kingdom's people",
       "importAllBasicArmies": "Import Basic Armies",

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* When automatically calculating kingdom stats, correctly increase ruin threshold
+* When ruin threshold is crossed, automatically reduce it to 0 and increase the ruin penalty by 1 if it's less than 4
+
 ## [5.12.0] - 2026-03-24
 
 ### Changed
