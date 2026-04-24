@@ -4,14 +4,21 @@ import at.posselt.pfrpg2e.data.kingdom.Ruin
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawRuinValues
+import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
+import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
 import at.posselt.pfrpg2e.kingdom.getGovernments
 import at.posselt.pfrpg2e.kingdom.getMilestones
+import at.posselt.pfrpg2e.kingdom.parseRuins
+import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.postChatTemplate
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.applications.ux.TextEditor.enrichHtml
 import js.objects.recordOf
 
-suspend fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
+suspend fun beforeKingdomUpdate(
+    previous: KingdomData,
+    current: KingdomData,
+) {
     // when choosing a new kingdom feat when the previous one had threshold increases,
     // the old checkbox are still in the dom once the new feat choice is being submitted
     // causing the new feature choice to gain the old boosts so we need to clear those on
@@ -61,26 +68,62 @@ suspend fun beforeKingdomUpdate(previous: KingdomData, current: KingdomData) {
     change.toChat()
     current.xp += change.addXp
     current.level += change.addLevel
-    checkRuin(previous.ruin.corruption, current.ruin.corruption, t(Ruin.CORRUPTION))
-    checkRuin(previous.ruin.crime, current.ruin.crime, t(Ruin.CRIME))
-    checkRuin(previous.ruin.decay, current.ruin.decay, t(Ruin.DECAY))
-    checkRuin(previous.ruin.strife, current.ruin.strife, t(Ruin.STRIFE))
+    val allFeatures = current.getExplodedFeatures()
+    val chosenFeatures = current.getChosenFeatures(allFeatures)
+    val parsedRuins = current.parseRuins(
+        choices = chosenFeatures,
+        baseThreshold = current.settings.ruinThreshold,
+        government = current.government,
+    )
+    checkRuin(
+        previous.ruin.corruption,
+        current.ruin.corruption,
+        t(Ruin.CORRUPTION),
+        parsedRuins.corruption.threshold,
+    )
+    checkRuin(
+        previous.ruin.crime,
+        current.ruin.crime,
+        t(Ruin.CRIME),
+        parsedRuins.crime.threshold,
+    )
+    checkRuin(
+        previous.ruin.decay,
+        current.ruin.decay,
+        t(Ruin.DECAY),
+        parsedRuins.decay.threshold,
+    )
+    checkRuin(
+        previous.ruin.strife,
+        current.ruin.strife,
+        t(Ruin.STRIFE),
+        parsedRuins.strife.threshold,
+    )
 }
 
 private suspend fun checkRuin(
     previous: RawRuinValues,
     current: RawRuinValues,
     label: String,
+    threshold: Int,
 ) {
-    if (previous.value != current.value && current.penalty > 0 && current.value == 0) {
-        val check = enrichHtml("@Check[type:flat|dc:16]")
-        postChatTemplate(
-            templatePath = "chatmessages/reduce-ruin-penalty.hbs",
-            templateContext = recordOf(
-                "ruin" to label,
-                "check" to check
+    if (previous.value != current.value) {
+        if (current.penalty > 0 && current.value == 0) {
+            val check = enrichHtml("@Check[type:flat|dc:16]")
+            postChatTemplate(
+                templatePath = "chatmessages/reduce-ruin-penalty.hbs",
+                templateContext = recordOf(
+                    "ruin" to label,
+                    "check" to check
+                )
             )
-        )
+        } else if (current.value > threshold && current.penalty < 4) {
+            postChatMessage(
+                t("kingdom.increasedRuinPenalty", recordOf("ruin" to label))
+            )
+            current.value = 0
+            current.penalty += 1
+        }
     }
 }
 
