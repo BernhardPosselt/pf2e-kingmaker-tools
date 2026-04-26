@@ -12,7 +12,7 @@ import kotlin.js.Promise
 
 external class ChatMessage : ClientDocument {
     companion object : DocumentStatic<ChatMessage> {
-        fun applyRollMode(data: Any, rollMode: String)
+        fun applyMode(data: Any, rollMode: String)
         fun getWhisperRecipients(name: String)
         fun getSpeaker(options: GetSpeakerOptions = definedExternally): SpeakerData
         fun getSpeakerActor(speaker: AnyObject): Actor?

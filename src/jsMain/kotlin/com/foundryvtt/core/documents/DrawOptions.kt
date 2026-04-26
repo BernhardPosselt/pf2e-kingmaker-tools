@@ -9,5 +9,5 @@ external interface DrawOptions {
     val recursive: Boolean?
     val results: Array<TableResult>?
     val displayChat: Boolean?
-    val rollMode: String?
+    val messageMode: String?
 }

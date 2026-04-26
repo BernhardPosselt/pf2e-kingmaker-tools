@@ -2,7 +2,6 @@ package at.posselt.pfrpg2e.utils
 
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.data.checks.RollMode
-import at.posselt.pfrpg2e.toCamelCase
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.DrawOptions
 import com.foundryvtt.core.documents.RollTable
@@ -31,7 +30,7 @@ suspend fun RollTable.rollWithDraw(
     rollMode: RollMode,
     displayChat: Boolean? = true,
 ): TableAndDraw {
-    val roll = draw(DrawOptions(rollMode = rollMode.toCamelCase(), displayChat = displayChat)).await()
+    val roll = draw(DrawOptions(messageMode = rollMode.toMessageMode(), displayChat = displayChat)).await()
     return TableAndDraw(this, roll)
 }
 
