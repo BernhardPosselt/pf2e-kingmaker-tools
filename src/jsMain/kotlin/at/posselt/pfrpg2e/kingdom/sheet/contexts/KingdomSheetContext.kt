@@ -75,7 +75,7 @@ external interface KingdomSheetContext : ValidatedHandlebarsContext {
     val skillChecks: Array<SkillChecksContext>
     val automateResources: Boolean
     val useLeadershipModifiers: Boolean
-    val activeSettlementType: String
     val actorUuid: String
     val activeLeader: FormElementContext
+    val sheetBackground: String
 }

@@ -166,6 +166,14 @@ val ClientSettings.pfrpg2eKingdomCampingWeather: Pfrpg2eKingdomCampingWeatherSet
 
 @Suppress("unused", "ClassName")
 object Pfrpg2eKingdomCampingWeatherSettings {
+    fun resolveKingdomBackground(activeSettlementType: String) =
+        "${game.settings.getString("artDirectory").trimEnd('/')}/kingdom/backgrounds/$activeSettlementType.webp"
+
+    fun resolveCampingBackground(terrain: String, isDay: Boolean): String {
+        val timeOfDay = if(isDay) "day" else "night"
+        return "${game.settings.getString("artDirectory").trimEnd('/')}/camping/backgrounds/$terrain-$timeOfDay.webp"
+    }
+
     suspend fun setKingdomActiveLeader(value: String?) =
         game.settings.setNullableString("kingdomActiveLeader", value)
 
@@ -284,6 +292,12 @@ object Pfrpg2eKingdomCampingWeatherSettings {
     fun register() {
         registerSimple(game.settings, nonUserVisibleSettings.strings, hidden = true)
         registerSimple(game.settings, nonUserVisibleSettings.booleans, hidden = true)
+        game.settings.registerScalar<String>(
+            key = "artDirectory",
+            name = t("settings.artDirectory"),
+            hint = t("settings.artDirectoryHelp"),
+            default = "modules/${Config.moduleId}/art",
+        )
         game.settings.registerScalar(
             key = "enableAfterCombatDialog",
             name = t("settings.enableAfterCombatDialog"),

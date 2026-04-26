@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.13.0] - 2026-04-26
+
+### Changed
+
+* Removed all AI art and made art directory configurable
+
+
 ## [5.12.1] - 2026-04-24
 
 ### Fixed

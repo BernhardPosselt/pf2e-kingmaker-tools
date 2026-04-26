@@ -1375,6 +1375,8 @@ class KingdomSheet(
             value = game.getActiveLeader(),
             labelClasses = listOf("km-slim-inputs"),
         ).toContext()
+        val activeSettlementType = settlements.current?.size?.type?.value ?: "none"
+        val background = game.settings.pfrpg2eKingdomCampingWeather.resolveKingdomBackground(activeSettlementType)
         KingdomSheetContext(
             partId = parent.partId,
             isFormValid = true,
@@ -1490,7 +1492,7 @@ class KingdomSheet(
             skillChecks = checks,
             automateResources = automateResources,
             useLeadershipModifiers = kingdom.settings.enableLeadershipModifiers,
-            activeSettlementType = settlements.current?.size?.type?.value ?: "none",
+            sheetBackground = background,
             actorUuid = actor.uuid,
             activeLeader = activeLeaderContext,
         )

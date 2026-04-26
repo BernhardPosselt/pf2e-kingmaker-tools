@@ -30,6 +30,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.resting.EIGHT_HOURS_SECONDS
 import at.posselt.pfrpg2e.resting.getTotalRestDuration
 import at.posselt.pfrpg2e.resting.rest
+import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.asSequence
@@ -178,6 +179,7 @@ external interface CampingSheetContext : ValidatedHandlebarsContext {
     var totalFoodCost: FoodCost
     var availableFood: FoodCost
     var canRollEncounter: Boolean
+    var sheetBackground: String
 }
 
 @JsPlainObject
@@ -1048,6 +1050,9 @@ class CampingSheet(
         val hexplorationActivitiesAvailable = getHexplorationActivitiesAvailable(camping)
         val hexplorationActivitiesMax = "${getHexplorationActivities()}"
         val nightModes = calculateNightModes(time)
+        val currentTerrain = currentRegion?.terrain ?: "plains"
+        val background = game.settings.pfrpg2eKingdomCampingWeather
+            .resolveCampingBackground(currentTerrain, time.isDay())
         CampingSheetContext(
             canRollEncounter = currentRegion?.rollTableUuid != null,
             availableFood = availableFood,
@@ -1059,7 +1064,7 @@ class CampingSheet(
             ),
             partId = parent.partId,
             recipes = recipesContext,
-            terrain = currentRegion?.terrain ?: "plains",
+            terrain = currentTerrain,
             region = Select(
                 label = t("camping.region"),
                 value = currentRegion?.name,
@@ -1127,6 +1132,7 @@ class CampingSheet(
             ).toContext(),
             forcedMarchDays = forcedMarchDays(),
             forcedMarchMaxDays = forcedMarchMaxDays(),
+            sheetBackground = background
         )
     }
 

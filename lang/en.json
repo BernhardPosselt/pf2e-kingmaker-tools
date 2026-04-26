@@ -47,6 +47,8 @@
       "untrainedProficiencyMode": "Always Increase Untrained Skills By"
     },
     "settings": {
+      "artDirectory": "Art Directory",
+      "artDirectoryHelp": "Path to your art directory relative to Foundry Data folder. For expected files, view the Art help journal in your kingdom sheet.",
       "enableAfterCombatDialog": "Enable End Combat Dialog",
       "enableAfterCombatDialogHelp": "If enabled, shows a popup after ending combat that allows you to award XP and hero points",
       "disableFirstRunMessage": "Disable First Run Message",
