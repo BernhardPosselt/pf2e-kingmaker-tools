@@ -3,7 +3,6 @@ package at.posselt.pfrpg2e.utils
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.checks.determineDegreeOfSuccess
-import at.posselt.pfrpg2e.toCamelCase
 import com.foundryvtt.core.dice.Roll
 import com.foundryvtt.core.dice.RollMessageOptions
 import com.foundryvtt.core.documents.Actor
@@ -28,7 +27,7 @@ data class D20CheckResult(
     suspend fun toChat(flavor: String? = undefined, isHtml: Boolean) {
         roll.toMessage(
             recordOf("flavor" to if(!isHtml && flavor != undefined) escapeHtml(flavor) else flavor),
-            RollMessageOptions(rollMode = rollMode.toCamelCase())
+            RollMessageOptions(messageMode = rollMode.toMessageMode())
         ).await()
     }
 }
@@ -91,7 +90,7 @@ suspend fun roll(
         }
         roll.toMessage(
             data,
-            RollMessageOptions(rollMode = rollMode.toCamelCase())
+            RollMessageOptions(messageMode = rollMode.toMessageMode())
         ).await()
     }
     return roll.total

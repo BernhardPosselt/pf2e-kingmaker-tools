@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.camping
 
+import com.foundryvtt.core._del
 import js.objects.recordOf
 import js.objects.unsafeJso
 import kotlin.test.Test
@@ -20,7 +21,7 @@ class CampingUpdateBuilderTest {
     fun testDelete() {
         val expected = recordOf(
             "actorUuids" to arrayOf("test"),
-            "-=currentRegion" to null,
+            "currentRegion" to _del,
         )
         val result = buildCampingUpdate {
             actorUuids.set(arrayOf("test"))
@@ -81,7 +82,7 @@ class CampingUpdateBuilderTest {
     @Test
     fun deletingParentPropertyDeletesNested() {
         val expected = recordOf(
-            "-=cooking" to null
+            "cooking" to _del
         )
         val result = buildCampingUpdate {
             cooking {

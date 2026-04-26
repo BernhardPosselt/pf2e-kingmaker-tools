@@ -5,6 +5,6 @@ import kotlinx.js.JsPlainObject
 
 @JsPlainObject
 external interface RollMessageOptions {
-    val rollMode: String?
+    val messageMode: String?
     val create: Boolean?
 }

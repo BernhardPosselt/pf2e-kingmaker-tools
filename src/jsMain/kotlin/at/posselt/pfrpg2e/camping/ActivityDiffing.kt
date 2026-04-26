@@ -18,8 +18,8 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.onPreUpdateActor
 import com.foundryvtt.core.helpers.TypedHooks
+import com.foundryvtt.core.utils.equals
 import com.foundryvtt.core.utils.getProperty
-import com.foundryvtt.core.utils.objectsEqual
 import com.foundryvtt.core.utils.setProperty
 import js.array.component1
 import js.array.component2
@@ -51,7 +51,7 @@ private val settingAttributes = setOf(
 
 private val relevantAttributes = settingAttributes + "campingActivities"
 
-fun Changes.settingsChanged() = !objectsEqual(
+fun Changes.settingsChanged() = !equals(
     filterObject(filteredApplied, settingAttributes),
     filterObject(filteredOriginal, settingAttributes),
 )

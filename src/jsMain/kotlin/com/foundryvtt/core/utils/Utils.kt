@@ -14,7 +14,7 @@ external interface MergeOptions {
     val recursive: Boolean?
     val inplace: Boolean?
     val enforceTypes: Boolean?
-    val performDeletions: Boolean?
+    val applyOperators: Boolean?
 }
 
 external fun expandObject(value: AnyObject): AnyObject
@@ -27,7 +27,7 @@ external fun diffObject(
     options: DiffObjectOptions = definedExternally
 ): AnyObject
 external fun isEmpty(value: Any?): Boolean
-external fun objectsEqual(a: AnyObject, b: AnyObject): Boolean
+external fun equals(a: Any?, b: Any?): Boolean
 external fun getProperty(`object`: AnyObject, key: String): Any?
 external fun hasProperty(`object`: AnyObject, key: String): Boolean
 external fun setProperty(`object`: AnyObject, key: String, value: Any): Boolean

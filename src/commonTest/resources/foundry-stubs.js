@@ -3,6 +3,8 @@ class Hooks {
     }
 }
 
+const _del = {}
+
 const foundry = {
     ux: {},
     abstract: {
