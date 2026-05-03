@@ -65,16 +65,6 @@
             "flags": {}
         },
         {
-            "name": "kingmaker-tools-settlements",
-            "path": "packs/kingmaker-tools-settlements",
-            "label": "Settlement Scenes",
-            "type": "Scene",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
             "name": "kingmaker-tools-meal-effects",
             "path": "packs/kingmaker-tools-meal-effects",
             "label": "Meal Effects",
@@ -150,7 +140,6 @@
             "name": "Kingdom Building, Camping & Weather",
             "sorting": "a",
             "packs": [
-                "kingmaker-tools-settlements",
                 "kingmaker-tools-structures",
                 "kingmaker-tools-meal-effects",
                 "kingmaker-tools-camping-effects",

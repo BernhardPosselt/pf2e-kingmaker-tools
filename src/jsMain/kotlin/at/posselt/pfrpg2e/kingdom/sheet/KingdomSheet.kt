@@ -59,11 +59,13 @@ import at.posselt.pfrpg2e.kingdom.dialogs.KingdomEventManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.KingdomSettingsApplication
 import at.posselt.pfrpg2e.kingdom.dialogs.MilestoneManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.StructureBrowser
+import at.posselt.pfrpg2e.kingdom.dialogs.addSettlementBlockDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.armyBrowser
 import at.posselt.pfrpg2e.kingdom.dialogs.armyTacticsBrowser
 import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderKingdomSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.configureLeaderSkills
 import at.posselt.pfrpg2e.kingdom.dialogs.consumptionBreakdown
+import at.posselt.pfrpg2e.kingdom.dialogs.deleteSettlementDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomCheckDialog
 import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.newSettlementChoices
@@ -108,6 +110,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.TurnNavEntry
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
+import at.posselt.pfrpg2e.kingdom.structures.createSettlementBlock
 import at.posselt.pfrpg2e.kingdom.structures.getImportedStructures
 import at.posselt.pfrpg2e.kingdom.structures.importSettlementScene
 import at.posselt.pfrpg2e.kingdom.structures.importStructures
@@ -459,11 +462,34 @@ class KingdomSheet(
 
             "delete-settlement" -> buildPromise {
                 target.dataset["id"]?.let { id ->
-                    val kingdom = getKingdom()
-                    kingdom.ongoingEvents = kingdom.ongoingEvents.filter { it.settlementSceneId != id }.toTypedArray()
-                    kingdom.settlements = kingdom.settlements.filter { it.sceneId != id }.toTypedArray()
-                    actor.setKingdom(kingdom)
+                    val scene = game.scenes.get(id)
+                    val settlementName = scene?.name ?: "unknown"
+                    deleteSettlementDialog(settlementName) { deleteSettlement ->
+                        val kingdom = getKingdom()
+                        kingdom.ongoingEvents =
+                            kingdom.ongoingEvents.filter { it.settlementSceneId != id }.toTypedArray()
+                        kingdom.settlements = kingdom.settlements.filter { it.sceneId != id }.toTypedArray()
+                        actor.setKingdom(kingdom)
+                        if (deleteSettlement) {
+                            scene?.delete()?.await()
+                        }
+                    }
                 }
+            }
+
+            "add-settlement-block" -> buildPromise {
+                target.dataset["id"]
+                    ?.let { game.scenes.get(it) }
+                    ?.let { scene ->
+                        addSettlementBlockDialog { options ->
+                            scene.createSettlementBlock(
+                                tile = options.shape,
+                                squareX = options.x,
+                                squareY = options.y,
+                            )
+                            ui.notifications.info(t("addSettlementBlock.success", recordOf("sceneName" to scene.name)))
+                        }
+                    }
             }
 
             "view-settlement" -> buildPromise {

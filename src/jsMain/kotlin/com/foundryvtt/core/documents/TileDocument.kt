@@ -27,4 +27,5 @@ external class TileDocument : ClientDocument {
     var restrictions: TileRestrictions
     var occlusion: TileOcclusion
     var video: TileVideo
+    // todo: associate levels
 }

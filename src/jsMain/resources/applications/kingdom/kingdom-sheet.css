@@ -45,6 +45,21 @@
 }
 
 .km-kingdom-sheet {
+    .km-settlement-utilities {
+        display: flex;
+        gap: 5px;
+    }
+
+    .km-settlement-utilities-header {
+        max-width: 0;
+        width: 0;
+        min-width: fit-content;
+    }
+
+    button[data-action="add-settlement-block"] {
+        width: 36px;
+    }
+
     .controls-dropdown {
         z-index: 2;
     }
