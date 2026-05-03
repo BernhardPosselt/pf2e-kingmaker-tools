@@ -513,15 +513,9 @@ class KingdomSheet(
             }
 
             "settings" -> {
+                console.log("hi")
                 val kingdom = getKingdom()
                 buildPromise {
-                    val allFeatures = kingdom.getExplodedFeatures()
-                    val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
-                    val parsedRuins = kingdom.parseRuins(
-                        choices = chosenFeatures,
-                        baseThreshold = kingdom.settings.ruinThreshold,
-                        government = kingdom.government,
-                    )
                     KingdomSettingsApplication(
                         game = game,
                         onSave = {

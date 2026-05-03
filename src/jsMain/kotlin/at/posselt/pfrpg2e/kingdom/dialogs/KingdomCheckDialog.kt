@@ -891,7 +891,12 @@ suspend fun kingdomCheckDialog(
             val structure = check.structure
             val activity = kingdom.getAllActivities().find { it.id == "build-structure" }
                 ?: throw IllegalArgumentException("No Build Structure Activity present")
-            val dc = structure.construction.dc
+            val structureDc = structure.construction.dc
+            val dc = if (kingdom.settings.reduceDCToBuildLumberStructures && structure.costsLumber) {
+                structure.construction.dc - 2
+            } else {
+                structureDc
+            }
             val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
             val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
             val skills = getValidActivitySkills(

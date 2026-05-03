@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Fix DC reduction of lumber structures when setting is toggled
+
 ## [5.13.0] - 2026-04-26
 
 ### Changed

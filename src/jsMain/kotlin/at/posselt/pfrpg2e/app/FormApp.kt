@@ -52,7 +52,6 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
     protected val debug: Boolean = false,
     protected val dataModel: JsClass<out DataModel>,
     protected val filterBlanks: Boolean = true,
-//    protected val initial: O
 ) : App<T>(
     HandlebarsFormApplicationOptions(
         window = Window(

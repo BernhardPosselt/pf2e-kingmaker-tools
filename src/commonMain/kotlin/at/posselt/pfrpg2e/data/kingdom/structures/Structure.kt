@@ -46,6 +46,7 @@ data class Structure(
     val isResidential = traits.contains(StructureTrait.RESIDENTIAL)
     val rpPaid = currentRp >= constructedRp
     val remainingRp = max(0, constructedRp - currentRp)
+    val costsLumber = construction.lumber > 0
 
     fun calculateTurnRpCost(maxRpPerTurn: Int) =
         min(remainingRp, maxRpPerTurn)
