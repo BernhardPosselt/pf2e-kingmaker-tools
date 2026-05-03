@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+* Removed Teleporter Pair macro since this is now shipped in core
+
 ### Changed
 
 * Deleting a settlement from the kingdom sheet now offers an option to delete the scene as well
