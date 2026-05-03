@@ -46,6 +46,27 @@ globalThis.foundryvttKotlinPatches = {};
 
             async onSubmit(event, form, formData) {
             }
+
+            // crap fix for https://github.com/foundryvtt/foundryvtt/issues/14315
+            *_headerControlContextEntries() {
+                for ( const { action, icon, label, onClick } of this._headerControlButtons() ) {
+                    let handler = this.options.actions[action];
+                    if ( typeof handler === "object" ) {
+                        if ( handler.buttons && !handler.buttons.includes(0) ) continue;
+                        handler = handler.handler;
+                    }
+                    yield {
+                        label, icon,
+                        onClick: (event) => {
+                            const li = document.createElement("li");
+                            li.dataset.action = action;
+                            if ( typeof onClick === "function" ) onClick(event, li);
+                            else if ( handler ) handler.call(this, event, li);
+                            else this._onClickAction(event, li);
+                        }
+                    };
+                }
+            }
         }
     }
 

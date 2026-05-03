@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Deleting a settlement from the kingdom sheet now offers an option to delete the scene as well
+* Settlement scenes now have a button to create blocks on the scene canvas
+
 ### Fixed
 
 * Fix DC reduction of lumber structures when setting is toggled
