@@ -12,31 +12,33 @@
                 <thead>
                 <tr>
                     <td>{{localizeKM "applications.name"}}</td>
-                    <td>{{localizeKM "kingdom.view"}}</td>
-                    <td>{{localizeKM "kingdom.activate"}}</td>
                     <td>{{localizeKM "kingdom.size"}}</td>
                     <td>{{localizeKM "applications.level"}}</td>
+                    <td>{{localizeKM "kingdom.residentialLots"}}</td>
                     <td>{{localizeKM "kingdom.issues"}}</td>
-                    <td>{{localizeKM "kingdom.details"}}</td>
-                    <td>{{localizeKM "applications.delete"}}</td>
+                    <td class="km-settlement-utilities-header">{{localizeKM "kingdom.utilities"}}</td>
                 </tr>
                 </thead>
                 <tbody>
                 {{#each settlements}}
                     <tr>
                         <td>{{name}} {{#if isCapital}}<i class="fa-solid fa-star"></i>{{/if}}</td>
-                        <td><button type="button" data-action="view-settlement" data-id="{{id}}">
-                            <i class="fa-solid fa-eye"></i></button></td>
-                        <td><button type="button" data-action="activate-settlement" data-id="{{id}}">
-                            <i class="fa-solid fa-bullseye"></i></button></td>
                         <td>{{size}}</td>
-                        <td>{{level}} <span title="{{localizeKM "kingdom.residentialLots"}}">({{residentialLots}})</span></td>
+                        <td>{{level}}</span></td>
+                        <td>{{residentialLots}}</td>
                         <td>{{#if isOvercrowded}}<i class="fa-solid fa-people-roof" title="{{localizeKM "kingdom.overcrowded"}}"></i>{{/if}}
                         {{#if isSecondaryTerritory}}<i class="fa-solid fa-road-circle-xmark" title="{{localizeKM "kingdom.secondaryTerritory"}}"></i>{{/if}}
                         {{#if lacksBridge}}<i class="fa-solid fa-bridge-circle-xmark" title="{{localizeKM "kingdom.lacksBridge"}}"></i>{{/if}}</td>
-                        <td><button type="button" data-action="inspect-settlement" data-id="{{id}}">
-                            <i class="fa-solid fa-magnifying-glass"></i></button></td>
-                        <td><button type="button" data-action="delete-settlement" data-id="{{id}}">
+                        <td class="km-settlement-utilities">
+                            <button type="button" title="{{localizeKM "kingdom.view"}}" data-action="view-settlement" data-id="{{id}}">
+                                <i class="fa-solid fa-eye"></i></button>
+                            <button type="button" title="{{localizeKM "kingdom.activate"}}" data-action="activate-settlement" data-id="{{id}}">
+                                <i class="fa-solid fa-bullseye"></i></button>
+                            <button type="button" title="{{localizeKM "addSettlementBlock.title"}}" data-action="add-settlement-block" data-id="{{id}}">
+                                <img alt="{{localizeKM "addSettlementBlock.title"}}" src="modules/pf2e-kingmaker-tools/img/settlements/block.webp"></button>
+                            <button type="button" title="{{localizeKM "kingdom.details"}}" data-action="inspect-settlement" data-id="{{id}}">
+                                <i class="fa-solid fa-magnifying-glass"></i></button>
+                            <button type="button" title="{{localizeKM "kingdom.delete"}}" data-action="delete-settlement" data-id="{{id}}">
                             <i class="fa-solid fa-trash"></i>
                         </button></td>
                     </tr>

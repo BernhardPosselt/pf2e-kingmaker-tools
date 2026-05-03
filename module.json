@@ -1,7 +1,7 @@
 {
     "title": "Kingdom Building, Camping & Weather",
     "description": "A collection of utilities to run the most popular adventure for PFRPG 2e",
-    "version": "5.13.0",
+    "version": "6.0.0-alpha1",
     "scripts": [
         "dist/api/patches.js",
         "dist/main.js"
@@ -59,16 +59,6 @@
             "path": "packs/kingmaker-tools-structures",
             "label": "Structures",
             "type": "Actor",
-            "system": "pf2e",
-            "private": false,
-            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
-            "flags": {}
-        },
-        {
-            "name": "kingmaker-tools-settlements",
-            "path": "packs/kingmaker-tools-settlements",
-            "label": "Settlement Scenes",
-            "type": "Scene",
             "system": "pf2e",
             "private": false,
             "banner": "systems/pf2e/assets/compendium-banner/red.webp",
@@ -150,7 +140,6 @@
             "name": "Kingdom Building, Camping & Weather",
             "sorting": "a",
             "packs": [
-                "kingmaker-tools-settlements",
                 "kingmaker-tools-structures",
                 "kingmaker-tools-meal-effects",
                 "kingmaker-tools-camping-effects",
@@ -166,7 +155,7 @@
         }
     ],
     "manifest": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/latest/download/module.json",
-    "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/5.13.0/release.zip",
+    "download": "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/6.0.0-alpha1/release.zip",
     "id": "pf2e-kingmaker-tools",
     "socket": true,
     "authors": [
@@ -186,8 +175,8 @@
         ]
     },
     "compatibility": {
-        "minimum": "13",
-        "maximum": "13",
-        "verified": "13"
+        "minimum": "14",
+        "maximum": "14",
+        "verified": "14"
     }
 }

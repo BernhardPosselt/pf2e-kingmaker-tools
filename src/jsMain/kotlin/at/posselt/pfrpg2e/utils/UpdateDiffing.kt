@@ -2,9 +2,9 @@ package at.posselt.pfrpg2e.utils
 
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.utils.MergeOptions
+import com.foundryvtt.core.utils.equals
 import com.foundryvtt.core.utils.getProperty
 import com.foundryvtt.core.utils.mergeObject
-import com.foundryvtt.core.utils.objectsEqual
 import js.array.component1
 
 fun filterObject(obj: AnyObject, keys: Set<String>): AnyObject =
@@ -25,7 +25,7 @@ fun parseChanges(
     relevantAttributes: Set<String>,
     path: String? = null,
 ): Changes? {
-    val applied = mergeObject(original, update, MergeOptions(performDeletions = true, inplace = false))
+    val applied = mergeObject(original, update, MergeOptions(applyOperators = true, inplace = false))
     val (originalPathed, appliedPathed) = if (path != null) {
         val a = getProperty(original, path).unsafeCast<AnyObject?>() ?: return null
         val b = getProperty(applied, path).unsafeCast<AnyObject?>() ?: return null
@@ -35,7 +35,7 @@ fun parseChanges(
     }
     val filteredOriginal = filterObject(originalPathed, relevantAttributes)
     val filteredApplied = filterObject(appliedPathed, relevantAttributes)
-    return if (objectsEqual(filteredApplied, filteredOriginal)) {
+    return if (equals(filteredApplied, filteredOriginal)) {
         null
     } else {
         Changes(

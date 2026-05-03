@@ -21,7 +21,6 @@ external class Scene : ClientDocument {
     var nagivation: Boolean
     var navOrder: Int
     var navName: String
-    var foreground: String
     var thumb: String
     var width: Int
     var height: Int
@@ -34,6 +33,7 @@ external class Scene : ClientDocument {
     var tiles: EmbeddedCollection<TileDocument>
     var notes: EmbeddedCollection<NoteDocument>
     var regions: EmbeddedCollection<RegionDocument>
+    var levels: EmbeddedCollection<Level>
 
     // TODO
     //    var lights: EmbeddedCollection<Light>
@@ -42,6 +42,7 @@ external class Scene : ClientDocument {
     //    var walls : EmbeddedCollection<Wall>
     var playlist: Playlist?
     var playlistSound: PlaylistSound?
+    var firstLevel: Level
 
     //    var journal: Journal?
     //    var journalEntryPage: JournalEntryPage?

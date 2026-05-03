@@ -19,6 +19,7 @@
       "d12": "D12"
     },
     "enums": {
+      "settlementBlockShape": "Block Shape",
       "displayBars": "Display Bars",
       "skill": "Skill",
       "modifierType": "Type",
@@ -372,6 +373,11 @@
       "siege": "Siege",
       "infantry": "Infantry"
     },
+    "settlementBlockShape": {
+      "twoByTwo": "2x2",
+      "oneByFour": "1x4",
+      "fourByOne": "4x1"
+    },
     "structureBrowserMainFilters": {
       "ignoreProficiency": "Ignore Proficiency",
       "ignoreBuildingCost": "Ignore Building Cost",
@@ -416,7 +422,17 @@
       "modifiers": "Modifiers",
       "notes": "Notes"
     },
+    "addSettlementBlock": {
+      "title": "Add Settlement Block",
+      "x": "Location X",
+      "y": "Location Y",
+      "success": "Placed block onto scene {sceneName}!"
+    },
     "kingdom": {
+      "deleteSettlement": "Delete Settlement {name}",
+      "confirmDeleteSettlement": "Do really you want to delete settlement {name} and its scene?",
+      "deleteSettlementScene": "Delete Scene",
+      "utilities": "Utilities",
       "increasedRuinPenalty": "Increased {ruin} penalty by 1",
       "firstArmies": "Muster your People",
       "firstImportArmies": "Next, muster your kingdom's people",

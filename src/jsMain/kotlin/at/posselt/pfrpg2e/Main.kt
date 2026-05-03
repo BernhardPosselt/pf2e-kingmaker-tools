@@ -32,7 +32,6 @@ import at.posselt.pfrpg2e.macros.awardXPMacro
 import at.posselt.pfrpg2e.macros.chooseParty
 import at.posselt.pfrpg2e.macros.combatTrackMacro
 import at.posselt.pfrpg2e.macros.createFoodMacro
-import at.posselt.pfrpg2e.macros.createTeleporterPair
 import at.posselt.pfrpg2e.macros.editRealmTileMacro
 import at.posselt.pfrpg2e.macros.editStructureMacro
 import at.posselt.pfrpg2e.macros.resetHeroPointsMacro
@@ -200,7 +199,6 @@ fun main() {
                 subsistMacro = { actor -> buildPromise { subsistMacro(game, actor) } },
                 createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
                 showAllNpcHpBarsMacro = { buildPromise { game.showAllNpcHpBars() }},
-                createTeleporterPairMacro = { buildPromise { game.createTeleporterPair() }},
             ),
         )
 

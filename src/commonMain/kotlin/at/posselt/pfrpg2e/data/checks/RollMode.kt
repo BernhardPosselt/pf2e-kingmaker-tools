@@ -5,7 +5,7 @@ import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 
-enum class RollMode(val label: String): Translatable, ValueEnum {
+enum class RollMode(val label: String) : Translatable, ValueEnum {
     PUBLICROLL("Public Roll"),
     GMROLL("GM Roll"),
     BLINDROLL("Blind Roll"),
@@ -20,4 +20,11 @@ enum class RollMode(val label: String): Translatable, ValueEnum {
 
     override val i18nKey: String
         get() = "rollMode.$value"
+
+    fun toMessageMode() = when (this) {
+        PUBLICROLL -> "public"
+        GMROLL -> "gm"
+        BLINDROLL -> "blind"
+        SELFROLL -> "self"
+    }
 }

@@ -167,6 +167,9 @@ Linux:
 
     sudo mount --bind /home/bernhard/dev/pf2e-kingmaker-tools /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools
 
+If you want to automount it, add this to your /etc/fstab
+
+    /home/bernhard/dev/pf2e-kingmaker-tools /home/bernhard/.local/share/FoundryVTT/Data/modules/pf2e-kingmaker-tools none defaults,bind 0 0
 
 If you **don't have access to Transifex and aren't interested in becoming a translator**, you need to create dummy localization files locally, otherwise the app won't load:
 

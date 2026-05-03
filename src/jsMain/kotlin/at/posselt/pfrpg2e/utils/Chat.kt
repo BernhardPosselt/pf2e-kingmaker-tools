@@ -3,7 +3,6 @@ package at.posselt.pfrpg2e.utils
 import at.posselt.pfrpg2e.data.checks.DegreeOfSuccess
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.takeIfInstance
-import at.posselt.pfrpg2e.toCamelCase
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.ChatMessage
@@ -78,7 +77,7 @@ suspend fun postChatMessage(
     if (speaker != null) {
         data["speaker"] = ChatMessage.getSpeaker(GetSpeakerOptions(actor = speaker))
     }
-    rollMode?.let { ChatMessage.applyRollMode(data, it.toCamelCase()) }
+    rollMode?.let { ChatMessage.applyMode(data, it.toMessageMode()) }
     ChatMessage.create(data).await()
 }
 

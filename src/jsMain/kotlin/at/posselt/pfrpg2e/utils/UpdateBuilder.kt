@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.utils
 
+import com.foundryvtt.core._del
 import js.objects.Object
 import js.objects.Record
 import js.reflect.Reflect
@@ -20,7 +21,7 @@ open class PropertyUpdateBuilder<T>(
         Object.keys(updates)
             .filter { it.startsWith("$propertyPath.") || it == propertyPath }
             .forEach { Reflect.deleteProperty(updates, it) }
-        updates["$basePath-=$propertyName"] = null
+        updates[propertyPath] = _del
     }
 
     fun set(value: T) {
@@ -36,7 +37,7 @@ open class RecordPropertyUpdateBuilder<T>(
 ) : PropertyUpdateBuilder<T>(basePath, updates, propertyName) {
     fun deleteEntry(key: String) {
         Reflect.deleteProperty(updates, "$propertyPath.$key")
-        updates["$propertyPath.-=$key"] = null
+        updates[propertyPath] = _del
     }
 
     fun deleteEntries(keys: Set<String>) = keys.forEach(::deleteEntry)
