@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.0-alpha1] - 2026-05-03
+
 ### Removed
 
 * Removed Teleporter Pair macro since this is now shipped in core
