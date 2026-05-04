@@ -11,7 +11,9 @@ import at.posselt.pfrpg2e.actions.handlers.OpenKingdomSheetHandler
 import at.posselt.pfrpg2e.actions.handlers.SyncActivitiesHandler
 import at.posselt.pfrpg2e.actor.partyMembers
 import at.posselt.pfrpg2e.camping.CampingActor
+import at.posselt.pfrpg2e.camping.beginRest
 import at.posselt.pfrpg2e.camping.bindCampingChatEventListeners
+import at.posselt.pfrpg2e.camping.getCampingActors
 import at.posselt.pfrpg2e.camping.openOrCreateCampingSheet
 import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerCampingTokenMove
@@ -199,6 +201,11 @@ fun main() {
                 subsistMacro = { actor -> buildPromise { subsistMacro(game, actor) } },
                 createFoodMacro = { buildPromise { createFoodMacro(game, actionDispatcher) } },
                 showAllNpcHpBarsMacro = { buildPromise { game.showAllNpcHpBars() }},
+                restMacro = { actorUuid ->
+                    game.getCampingActors()
+                        .find { it.uuid == actorUuid }
+                        ?.let { beginRest(it, actionDispatcher) }
+                }
             ),
         )
 

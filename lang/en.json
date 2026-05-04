@@ -157,6 +157,7 @@
       "checkingSecondWeatherEvent": "Checking for Second Weather Event with DC {dc}"
     },
     "camping": {
+      "restParty": "Rest: {partyName}",
       "hexSizeInMiles": "Hex Size in Miles",
       "hexSizeInMilesHelp": "If you are using smaller hexes, change this value to change hexploration activity length and amount",
       "resetTimeTrackingAfterOneDay": "Reset Time Tracking After Advancing More Than 1 Day",

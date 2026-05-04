@@ -29,6 +29,7 @@ external interface ToolsMacros {
     val subsistMacro: (Actor?) -> Unit
     val openSheet: (type: String, id: String) -> Unit
     val showAllNpcHpBarsMacro: () -> Unit
+    val restMacro: (actorUuid: String) -> Unit
 }
 
 @Suppress("unused")

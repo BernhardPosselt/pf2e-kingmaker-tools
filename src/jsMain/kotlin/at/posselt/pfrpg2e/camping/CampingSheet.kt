@@ -33,6 +33,8 @@ import at.posselt.pfrpg2e.resting.rest
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.utils.MacroData
+import at.posselt.pfrpg2e.utils.SheetType
 import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.formatSeconds
@@ -49,10 +51,12 @@ import at.posselt.pfrpg2e.utils.toDateInputString
 import at.posselt.pfrpg2e.utils.toMap
 import at.posselt.pfrpg2e.utils.toMutableRecord
 import com.foundryvtt.core.Game
+import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.documents.onCreateItem
 import com.foundryvtt.core.documents.onDeleteItem
 import com.foundryvtt.core.documents.onUpdateItem
+import com.foundryvtt.core.game
 import com.foundryvtt.core.helpers.onUpdateWorldTime
 import com.foundryvtt.core.ui
 import com.foundryvtt.core.utils.fromUuid
@@ -69,6 +73,7 @@ import js.objects.recordOf
 import kotlinx.coroutines.await
 import kotlinx.datetime.LocalTime
 import kotlinx.js.JsPlainObject
+import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.pointerevents.PointerEvent
@@ -346,43 +351,7 @@ class CampingSheet(
 
             "settings" -> CampingSettingsApplication(game, actor).launch()
             "rest" -> buildPromise {
-                actor.getCamping()?.let { camping ->
-                    if (camping.watchSecondsRemaining > 0) {
-                        // continue watch
-                        buildPromise {
-                            rest(
-                                game = game,
-                                dispatcher = dispatcher,
-                                campingActor = actor,
-                                camping = camping,
-                                skipWatch = false,
-                                skipDailyPreparations = false,
-                                disableRandomEncounter = false,
-                                skipWeather = camping.restSettings.skipWeather,
-                                party = actor,
-                            )
-                        }
-                    } else {
-                        ConfirmWatchApplication(
-                            camping = camping,
-                            game = game,
-                        ) { enableWatch, enableDailyPreparations, checkRandomEncounter, checkWeather ->
-                            buildPromise {
-                                rest(
-                                    game = game,
-                                    dispatcher = dispatcher,
-                                    campingActor = actor,
-                                    camping = camping,
-                                    skipWatch = !enableWatch,
-                                    skipDailyPreparations = !enableDailyPreparations,
-                                    disableRandomEncounter = !checkRandomEncounter,
-                                    skipWeather = !checkWeather,
-                                    party = actor,
-                                )
-                            }
-                        }.launch()
-                    }
-                }
+                beginRest(actor, dispatcher)
             }
 
             "roll-recipe-check" -> buildPromise {
@@ -819,7 +788,7 @@ class CampingSheet(
         val camping = actor.getCamping()!!
         val travelSpeed = actor.system.movement.speeds.travel.value
         val override = max(camping.minimumTravelSpeed ?: 0, travelSpeed)
-        val forcedMarch = if(camping.forcedMarchActive == true) 1 else 0
+        val forcedMarch = if (camping.forcedMarchActive == true) 1 else 0
         val result = calculateHexplorationActivities(override) + forcedMarch
         return result / (camping.hexSizeInMiles.toDouble() / 12)
     }
@@ -1140,7 +1109,7 @@ class CampingSheet(
         actor.getCamping()
             ?.secondsSpentForcedMarching
             ?.let {
-                max(0, it) / (60*60*24)
+                max(0, it) / (60 * 60 * 24)
             }
             ?: 0
 
@@ -1153,7 +1122,7 @@ class CampingSheet(
         actor.getCamping()?.let { camping ->
             camping.currentRegion = value.region
             camping.campingActivities = camping.campingActivities
-                .asSequence().map {(id, data) ->
+                .asSequence().map { (id, data) ->
                     id to CampingActivity(
                         actorUuid = data.actorUuid,
                         result = value.activities.degreeOfSuccess?.get(id),
@@ -1180,6 +1149,65 @@ class CampingSheet(
             actor.setCamping(camping)
         }
         undefined
+    }
+
+    override fun _attachPartListeners(partId: String, htmlElement: HTMLElement, options: ApplicationRenderOptions) {
+        super._attachPartListeners(partId, htmlElement, options)
+        htmlElement.querySelector("#km-camping-rest")
+            ?.takeIfInstance<HTMLButtonElement>()
+            ?.ondragstart = {
+            it.stopPropagation()
+            val data = MacroData(
+                name = t("camping.restParty", recordOf("partyName" to actor.name)),
+                img = "icons/svg/sleep.svg",
+                type = SheetType.CAMPING.value,
+                // language=javascript
+                command = """
+                    game.pf2eKingmakerTools.macros.restMacro('${actor.uuid}');
+                """.trimIndent(),
+            )
+            it.dataTransfer!!.setData("text/plain", JSON.stringify(data))
+        }
+    }
+}
+
+fun beginRest(actor: CampingActor, dispatcher: ActionDispatcher){
+    actor.getCamping()?.let { camping ->
+        if (camping.watchSecondsRemaining > 0) {
+            // continue watch
+            buildPromise {
+                rest(
+                    game = game,
+                    dispatcher = dispatcher,
+                    campingActor = actor,
+                    camping = camping,
+                    skipWatch = false,
+                    skipDailyPreparations = false,
+                    disableRandomEncounter = false,
+                    skipWeather = camping.restSettings.skipWeather,
+                    party = actor,
+                )
+            }
+        } else {
+            ConfirmWatchApplication(
+                camping = camping,
+                game = game,
+            ) { enableWatch, enableDailyPreparations, checkRandomEncounter, checkWeather ->
+                buildPromise {
+                    rest(
+                        game = game,
+                        dispatcher = dispatcher,
+                        campingActor = actor,
+                        camping = camping,
+                        skipWatch = !enableWatch,
+                        skipDailyPreparations = !enableDailyPreparations,
+                        disableRandomEncounter = !checkRandomEncounter,
+                        skipWeather = !checkWeather,
+                        party = actor,
+                    )
+                }
+            }.launch()
+        }
     }
 }
 

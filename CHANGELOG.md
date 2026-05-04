@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * V14 support
+* Rest button in a camping sheet can now be dragged onto the macro bar to rest quickly
 
 ### Removed
 
