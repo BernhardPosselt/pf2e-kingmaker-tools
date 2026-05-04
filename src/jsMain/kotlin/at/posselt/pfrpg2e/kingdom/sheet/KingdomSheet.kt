@@ -109,8 +109,9 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.toActivitiesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.TurnNavEntry
+import at.posselt.pfrpg2e.kingdom.structures.Block
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
-import at.posselt.pfrpg2e.kingdom.structures.createSettlementBlock
+import at.posselt.pfrpg2e.kingdom.structures.createSettlementBlocks
 import at.posselt.pfrpg2e.kingdom.structures.getImportedStructures
 import at.posselt.pfrpg2e.kingdom.structures.importSettlementScene
 import at.posselt.pfrpg2e.kingdom.structures.importStructures
@@ -482,11 +483,11 @@ class KingdomSheet(
                     ?.let { game.scenes.get(it) }
                     ?.let { scene ->
                         addSettlementBlockDialog { options ->
-                            scene.createSettlementBlock(
-                                tile = options.shape,
-                                squareX = options.x,
-                                squareY = options.y,
-                            )
+                            scene.createSettlementBlocks(listOf(Block(
+                                options.shape,
+                                options.x,
+                                options.y,
+                            )))
                             ui.notifications.info(t("addSettlementBlock.success", recordOf("sceneName" to scene.name)))
                         }
                     }
@@ -1156,7 +1157,6 @@ class KingdomSheet(
         type: SettlementType,
     ) {
         val scene = game.importSettlementScene(
-            uuid = "Compendium.pf2e-kingmaker-tools.kingmaker-tools-settlements.Scene.XmDdx6ufrqqjhkJE",
             sceneName = sceneName,
             terrain = terrain,
             waterBorders = waterBorders,

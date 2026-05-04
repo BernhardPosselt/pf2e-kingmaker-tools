@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.actor.isKingmakerInstalled
 import at.posselt.pfrpg2e.data.kingdom.RealmData
 import at.posselt.pfrpg2e.data.kingdom.RealmData.WorkSite
 import at.posselt.pfrpg2e.data.kingdom.RealmData.WorkSites
+import at.posselt.pfrpg2e.kingdom.scenes.GridType
 import at.posselt.pfrpg2e.kingdom.scenes.Rectangle
 import at.posselt.pfrpg2e.kingdom.scenes.toRectangle
 import at.posselt.pfrpg2e.macros.RealmTileCategory
@@ -90,18 +91,19 @@ private fun toRealmWorksite(
     .fold(WorkSite()) { prev, curr -> prev + curr }
 
 private fun Scene.parseRealmData(actor: KingdomActor): RealmData {
+    val gridType = GridType.HEX
     val tiles = tiles.contents
         .mapNotNull {
             it.getRealmTileData()
                 ?.takeIf { it.kingdomActorUuid == null || it.kingdomActorUuid == actor.uuid }
                 ?.let { RealmTileType.fromString(it.type) }
-                ?.let { type -> TileAndPlacement(type = type, it.toRectangle()) }
+                ?.let { type -> TileAndPlacement(type = type, it.toRectangle(gridType)) }
         } + drawings.contents
         .mapNotNull {
             it.getRealmTileData()
                 ?.takeIf { it.kingdomActorUuid == null || it.kingdomActorUuid == actor.uuid }
                 ?.let { RealmTileType.fromString(it.type) }
-                ?.let { type -> TileAndPlacement(type = type, it.toRectangle()) }
+                ?.let { type -> TileAndPlacement(type = type, it.toRectangle(gridType)) }
         }
     val claimed = tiles
         .filter { it.type == RealmTileType.CLAIMED }

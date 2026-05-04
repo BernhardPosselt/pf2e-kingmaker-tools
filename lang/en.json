@@ -429,6 +429,9 @@
       "success": "Placed block onto scene {sceneName}!"
     },
     "kingdom": {
+      "wall": "Wall",
+      "wallAndBridge": "Wall and Bridge",
+      "fishingFleets": "Fishing Fleets",
       "deleteSettlement": "Delete Settlement {name}",
       "confirmDeleteSettlement": "Do really you want to delete settlement {name} and its scene?",
       "deleteSettlementScene": "Delete Scene",

@@ -44,6 +44,7 @@ data class Structure(
     val increaseMinimumSettlementActions: Int = 0,
 ) {
     val isResidential = traits.contains(StructureTrait.RESIDENTIAL)
+    val isInfrastructure = traits.contains(StructureTrait.INFRASTRUCTURE)
     val rpPaid = currentRp >= constructedRp
     val remainingRp = max(0, constructedRp - currentRp)
     val costsLumber = construction.lumber > 0

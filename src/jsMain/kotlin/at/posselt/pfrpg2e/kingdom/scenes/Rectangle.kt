@@ -1,6 +1,11 @@
 package at.posselt.pfrpg2e.kingdom.scenes
 
 data class Rectangle(val x: Double, val y: Double, val width: Double, val height: Double) {
+    companion object {
+        fun fromCenteredCoordinates(x: Double, y: Double, width: Double, height: Double) =
+            Rectangle(x - width / 2, y - height / 2, width, height)
+    }
+
     val xEnd = x + width
     val yEnd = y + height
 

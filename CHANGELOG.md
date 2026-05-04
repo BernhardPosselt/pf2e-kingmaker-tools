@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Infrastructure structure tokens do not increase settlement level anymore when placed on a settlement block
+* Mirror non kingmaker module settlement background images to align with the official module ones
+
 ## [6.0.0-alpha1] - 2026-05-03
 
 ### Added
