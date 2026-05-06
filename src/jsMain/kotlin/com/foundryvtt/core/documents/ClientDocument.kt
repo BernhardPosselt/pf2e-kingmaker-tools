@@ -16,7 +16,7 @@ open external class ClientDocument : Document {
     val hasPlayerOwner: Boolean
     val limited: Boolean
     val link: String
-    val permission: Ownership
+    val permission: Int
     val sheet: ApplicationV2?
     val visible: Boolean
     fun render(force: Boolean = definedExternally, context: AnyObject = definedExternally)

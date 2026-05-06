@@ -2,10 +2,12 @@ package at.posselt.pfrpg2e.utils
 
 import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.camping.createCampingIcon
+import at.posselt.pfrpg2e.camping.isCampingActor
 import at.posselt.pfrpg2e.data.kingdom.KingdomAbility
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.kingdom.createKingmakerIcon
 import at.posselt.pfrpg2e.kingdom.dialogs.ActorActions
+import at.posselt.pfrpg2e.kingdom.isKingdomActor
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.toCamelCase
@@ -140,8 +142,13 @@ fun registerIcons(actionDispatcher: ActionDispatcher) {
                                 )
                             )
                         }
-                        insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
-                        insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))
+                        val actor = game.actors.get(id)
+                        if (game.user.isGM || actor?.isCampingActor() == true) {
+                            insertAfter?.insertAdjacentElement("afterend", createCampingIcon(id, actionDispatcher))
+                        }
+                        if (game.user.isGM || actor?.isKingdomActor() == true) {
+                            insertAfter?.insertAdjacentElement("afterend", createKingmakerIcon(id, actionDispatcher))
+                        }
                         if (game.settings.pfrpg2eKingdomCampingWeather.getHideBuiltinKingdomSheet()) {
                             it.querySelector(".fa-crown")
                                 ?.parentElement

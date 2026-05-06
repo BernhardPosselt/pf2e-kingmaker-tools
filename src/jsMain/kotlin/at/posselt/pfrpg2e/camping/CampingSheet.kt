@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.actions.handlers.ClearMealEffectsMessage
 import at.posselt.pfrpg2e.actions.handlers.OpenCampingSheetAction
 import at.posselt.pfrpg2e.actor.openActor
+import at.posselt.pfrpg2e.actor.ownershipOwnersOnly
 import at.posselt.pfrpg2e.app.ActorRef
 import at.posselt.pfrpg2e.app.DocumentRef
 import at.posselt.pfrpg2e.app.FormApp
@@ -1171,7 +1172,7 @@ class CampingSheet(
     }
 }
 
-fun beginRest(actor: CampingActor, dispatcher: ActionDispatcher){
+fun beginRest(actor: CampingActor, dispatcher: ActionDispatcher) {
     actor.getCamping()?.let { camping ->
         if (camping.watchSecondsRemaining > 0) {
             // continue watch
@@ -1250,6 +1251,7 @@ suspend fun openOrCreateCampingSheet(game: Game, dispatcher: ActionDispatcher, a
     if (actor.getCamping() == null) {
         actor.setCamping(getDefaultCamping(game))
         openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.kd8cT1Uv9hZOrpgS")
+        actor.update(recordOf("ownership" to actor.ownershipOwnersOnly())).await()
     }
     CampingSheet(game, actor, dispatcher).launch()
 }

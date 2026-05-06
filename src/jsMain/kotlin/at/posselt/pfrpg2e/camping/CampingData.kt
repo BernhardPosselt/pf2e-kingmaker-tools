@@ -447,6 +447,9 @@ suspend fun CampingActor.setCamping(data: CampingData) {
     setAppFlag("camping-sheet", data)
 }
 
+fun Actor.isCampingActor() =
+    this is CampingActor && getCamping() != null
+
 suspend fun CampingActor.updateCamping(data: AnyObject) {
     setAppFlag("camping-sheet", data)
 }

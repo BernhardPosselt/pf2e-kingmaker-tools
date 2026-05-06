@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.1] - 2026-05-06
+
+### Fixed
+
+* Automatically grant ownership to party actor to all actors owned by players it when first creating a kingdom or camping sheet
+* If no camping sheet or kingdom sheet exists, hide party actor icons to non GM users
+
+
 ## [6.0.0] - 2026-05-04
 
 ### Added

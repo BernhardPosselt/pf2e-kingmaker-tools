@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.actions.ActionDispatcher
 import at.posselt.pfrpg2e.actions.ActionMessage
 import at.posselt.pfrpg2e.actions.handlers.OpenKingdomSheetAction
 import at.posselt.pfrpg2e.actor.openActor
+import at.posselt.pfrpg2e.actor.ownershipOwnersOnly
 import at.posselt.pfrpg2e.app.ActorRef
 import at.posselt.pfrpg2e.app.FormApp
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
@@ -1663,6 +1664,7 @@ suspend fun openOrCreateKingdomSheet(game: Game, dispatcher: ActionDispatcher, a
     if (actor.getKingdom() == null) {
         actor.setKingdom(createKingdomDefaults(t("kingdom.newKingdom")))
         openJournal("Compendium.pf2e-kingmaker-tools.kingmaker-tools-journals.JournalEntry.FwcyYZARAnOHlKkE")
+        actor.update(recordOf("ownership" to actor.ownershipOwnersOnly())).await()
     }
     KingdomSheet(game, actor, dispatcher).launch()
 }
