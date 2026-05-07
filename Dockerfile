@@ -1,17 +1,18 @@
-FROM node:25.9.0-slim as build
+ARG NODE_VERSION="25.9.0"
 
-# click on Timed URL inside your purchased licenses
+FROM docker.io/library/node:${NODE_VERSION}-slim as build
+ARG APP_PATH="/home/node/foundry"
 ARG TIMED_URL
-
 RUN apt-get update && apt-get install -y unzip curl
 USER node
 RUN curl -v -L $TIMED_URL -o /home/node/foundry.zip
 RUN unzip /home/node/foundry.zip -d /home/node/foundry
 
-FROM node:25.9.0-alpine3.23
-# next 2 lines just for documentation
+FROM node:${NODE_VERSION}-alpine3.23
+ARG APP_PATH
 VOLUME /home/node/.local/share/FoundryVTT/
 EXPOSE 30000
 COPY --chown=node:node --from=build /home/node/foundry /home/node/foundry
 USER node
-CMD ["/home/node/foundry/main.mjs", "--port=30000", "--headless", "--noupdate"]
+WORKDIR $APP_PATH
+CMD ["main.mjs","--port=30000","--headless","--noupdate"]
