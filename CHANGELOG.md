@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.0] - 2026-05-10
+
+### Added
+
+* Add setting to allow you to configure whether to use XP or Milestone. Right now, this only affects the end combat dialog and hides the XP input when set to milestone
+
 ## [6.0.1] - 2026-05-06
 
 ### Fixed

@@ -7,6 +7,7 @@ import at.posselt.pfrpg2e.app.prompt
 import at.posselt.pfrpg2e.macros.PointsForPlayer
 import at.posselt.pfrpg2e.macros.updateHeroPoints
 import at.posselt.pfrpg2e.macros.updateXP
+import at.posselt.pfrpg2e.settings.Advancement
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.takeIfInstance
 import at.posselt.pfrpg2e.utils.buildPromise
@@ -51,22 +52,25 @@ fun registerCombatXpHooks(game: Game) {
                     .filterIsInstance<PF2ECharacter>()
                     .toList()
 
+                val xpSection =
+                    if (game.settings.pfrpg2eKingdomCampingWeather.getAdvancement() == Advancement.XP) arrayOf(
+                        SectionContext(
+                            legend = t("applications.xp"),
+                            formRows = formContext(
+                                NumberInput(
+                                    name = "xp",
+                                    label = t("macros.xp.amount"),
+                                    value = xp,
+                                    stacked = false,
+                                ),
+                            )
+                        )
+                    ) else emptyArray()
                 prompt<CombatXpData, Unit>(
                     title = t("macros.combatXp.title"),
                     templatePath = "components/forms/form.hbs",
                     templateContext = recordOf(
-                        "sections" to arrayOf(
-                            SectionContext(
-                                legend = t("applications.xp"),
-                                formRows = formContext(
-                                    NumberInput(
-                                        name = "xp",
-                                        label = t("macros.xp.amount"),
-                                        value = xp,
-                                        stacked = false,
-                                    ),
-                                )
-                            ),
+                        "sections" to (xpSection + arrayOf(
                             SectionContext(
                                 legend = t("applications.heroPoints"),
                                 formRows = formContext(
@@ -86,10 +90,10 @@ fun registerCombatXpHooks(game: Game) {
                                     }.toTypedArray()
                                 )
                             ),
-                        )
+                        ))
                     )
                 ) { data ->
-                    if (data.xp > 0) {
+                    if (data.xp > 0 && game.settings.pfrpg2eKingdomCampingWeather.getAdvancement() == Advancement.XP) {
                         updateXP(players.toTypedArray(), data.xp)
                     }
                     val record = data.unsafeCast<Record<String, Int>>()

@@ -19,6 +19,7 @@
       "d12": "D12"
     },
     "enums": {
+      "advancement": "Advancement",
       "settlementBlockShape": "Block Shape",
       "displayBars": "Display Bars",
       "skill": "Skill",
@@ -48,6 +49,7 @@
       "untrainedProficiencyMode": "Always Increase Untrained Skills By"
     },
     "settings": {
+      "advancementHelp": "If set to Milestone, will not display XP option in end combat dialog",
       "artDirectory": "Art Directory",
       "artDirectoryHelp": "Path to your art directory relative to Foundry Data folder. For expected files, view the Art help journal in your kingdom sheet.",
       "enableAfterCombatDialog": "Enable End Combat Dialog",
@@ -1329,6 +1331,10 @@
       "lumber": "Lumber",
       "stone": "Stone",
       "consumption": "Consumption"
+    },
+    "advancement": {
+      "xp": "XP",
+      "milestone": "Milestone"
     },
     "ruin": {
       "corruption": "Corruption",

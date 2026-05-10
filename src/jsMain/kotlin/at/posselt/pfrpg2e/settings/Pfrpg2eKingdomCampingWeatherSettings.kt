@@ -1,9 +1,11 @@
 package at.posselt.pfrpg2e.settings
 
 import at.posselt.pfrpg2e.Config
+import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.kingdom.KingdomSizeType
 import at.posselt.pfrpg2e.fromCamelCase
+import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
 import at.posselt.pfrpg2e.utils.newInstance
 import at.posselt.pfrpg2e.utils.t
@@ -16,7 +18,9 @@ import com.foundryvtt.core.helpers.SettingsData
 import com.foundryvtt.core.helpers.SettingsMenuData
 //import js.core.JsNumber
 import js.objects.ReadonlyRecord
+import js.objects.toReadonlyRecord
 import kotlinx.coroutines.await
+import kotlin.enums.enumEntries
 
 enum class SettingsScope {
     CLIENT,
@@ -102,6 +106,33 @@ inline fun <reified T : Any> ClientSettings.registerScalar(
     )
 }
 
+inline fun <reified T> ClientSettings.registerEnum(
+    key: String,
+    name: String? = null,
+    hint: String? = undefined,
+    default: T? = undefined,
+    hidden: Boolean = false,
+    requiresReload: Boolean = false,
+    scope: SettingsScope = SettingsScope.WORLD,
+) where T : Enum<T>, T : Translatable, T: ValueEnum {
+    register(
+        Config.moduleId,
+        key,
+        SettingsData(
+            name = name ?: t("enums." + T::class.simpleName?.lowercase()),
+            hint = hint,
+            config = !hidden,
+            default = default?.value,
+            requiresReload = requiresReload,
+            type = String::class.js,
+            scope = scope.value,
+            choices = enumEntries<T>().map {
+                it.value to t(it.i18nKey)
+            }.toReadonlyRecord(),
+        )
+    )
+}
+
 fun ClientSettings.createMenu(
     key: String,
     name: String,
@@ -170,7 +201,7 @@ object Pfrpg2eKingdomCampingWeatherSettings {
         "${game.settings.getString("artDirectory").trimEnd('/')}/kingdom/backgrounds/$activeSettlementType.webp"
 
     fun resolveCampingBackground(terrain: String, isDay: Boolean): String {
-        val timeOfDay = if(isDay) "day" else "night"
+        val timeOfDay = if (isDay) "day" else "night"
         return "${game.settings.getString("artDirectory").trimEnd('/')}/camping/backgrounds/$terrain-$timeOfDay.webp"
     }
 
@@ -185,6 +216,12 @@ object Pfrpg2eKingdomCampingWeatherSettings {
 
     fun getEnableAfterCombatDialog(): Boolean =
         game.settings.getBoolean("enableAfterCombatDialog")
+
+    suspend fun setAdvancement(value: Advancement) =
+        game.settings.setString("advancement", value.value)
+
+    fun getAdvancement(): Advancement =
+        Advancement.fromString(game.settings.getString("advancement")) ?: Advancement.XP
 
     suspend fun setEnablePartyActorIcons(value: Boolean) =
         game.settings.setBoolean("enablePartyActorIcons", value)
@@ -304,6 +341,11 @@ object Pfrpg2eKingdomCampingWeatherSettings {
             hint = t("settings.enableAfterCombatDialogHelp"),
             default = true,
             requiresReload = false,
+        )
+        game.settings.registerEnum<Advancement>(
+            key = "advancement",
+            hint = t("settings.advancementHelp"),
+            default = Advancement.XP,
         )
         game.settings.registerScalar(
             key = "hideBuiltinKingdomSheet",
