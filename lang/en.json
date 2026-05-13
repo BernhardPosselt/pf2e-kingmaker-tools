@@ -432,6 +432,7 @@
       "success": "Placed block onto scene {sceneName}!"
     },
     "kingdom": {
+      "skillNotUsable": "Skill not yet usable",
       "wall": "Wall",
       "wallAndBridge": "Wall and Bridge",
       "fishingFleets": "Fishing Fleets",

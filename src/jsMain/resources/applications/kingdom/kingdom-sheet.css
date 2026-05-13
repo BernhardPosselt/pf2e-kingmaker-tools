@@ -27,6 +27,20 @@
             }
         }
 
+        .km-detail-description p {
+            color: #000;
+        }
+
+        .km-activity-skills li.km-skill-disabled {
+            background-color: rgba(0 0 0 / 20%);
+            border-color: transparent;
+            color: var(--color-dark-3);
+        }
+
+        .km-kingdom-sheet-sub-content details:hover,
+        .km-kingdom-sheet-sub-content .km-upkeep-button:hover{
+            background-color: var(--color-light-1);
+        }
     }
 }
 
@@ -45,6 +59,28 @@
 }
 
 .km-kingdom-sheet {
+    .km-activity-skills {
+        list-style-type: none;
+        margin: 0;
+        display: flex;
+        gap: .5em;
+        padding: 0;
+        flex-wrap: wrap;
+
+        li {
+            padding: .3em;
+            font-size: var(--font-size-12);
+            border: 1px solid;
+            border-radius: 5px;
+        }
+
+        li.km-skill-disabled {
+            background-color: var(--color-cool-5);
+            border-color: transparent;
+            color: var(--color-light-5);
+        }
+    }
+
     .km-settlement-utilities {
         display: flex;
         gap: 5px;
@@ -492,10 +528,8 @@
             font-family: Signika, "Palatino Linotype", sans-serif;
             font-weight: 700;
             color: #ee9b3a;
-            
-
-            
         }
+
         .km-detail-description p {
             color: #ccc;
         }

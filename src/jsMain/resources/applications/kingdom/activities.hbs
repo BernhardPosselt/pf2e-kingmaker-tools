@@ -25,7 +25,13 @@
                     </div>
                 </summary>
                 {{#if requirement}}<p><b>{{localizeKM "kingdom.requirement"}}:</b> {{requirement}}</p>{{/if}}
-                <div class="km-detail-description">{{#if automationNotes}}<p><b>{{localizeKM "kingdom.automationNotes"}}:</b> {{automationNotes}}</p>{{/if}}{{{description}}}</div>
+                <div class="km-detail-description">
+                    <ul class="km-activity-skills">
+                        {{#each skills}}
+                            <li {{#unless usable}}class="km-skill-disabled" title="{{localizeKM "kingdom.skillNotUsable"}}"{{/unless}}>{{label}}</li>
+                        {{/each}}
+                    </ul>
+                    {{#if automationNotes}}<p><b>{{localizeKM "kingdom.automationNotes"}}:</b> {{automationNotes}}</p>{{/if}}{{{description}}}</div>
                 <ul class="km-summary-degrees">
                     {{#if criticalSuccess}}
                         <li><b>{{localizeKM "degreeOfSuccess.criticalSuccess"}}:</b> {{{criticalSuccess}}}</li>{{/if}}

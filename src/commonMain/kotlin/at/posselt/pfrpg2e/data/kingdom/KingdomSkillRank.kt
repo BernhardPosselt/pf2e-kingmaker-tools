@@ -7,5 +7,5 @@ data class KingdomSkillRank(
     val rank: Int = 0,
 ) {
     val proficiency: Proficiency
-        get() = Proficiency.Companion.fromRank(rank)
+        get() = Proficiency.fromRank(rank)
 }

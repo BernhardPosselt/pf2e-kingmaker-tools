@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRanks
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
 import at.posselt.pfrpg2e.kingdom.KingdomData
 import at.posselt.pfrpg2e.kingdom.RawActivity
+import at.posselt.pfrpg2e.kingdom.availableSkills
 import at.posselt.pfrpg2e.kingdom.canBePerformed
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
@@ -13,12 +14,20 @@ import at.posselt.pfrpg2e.kingdom.increasedSkills
 import at.posselt.pfrpg2e.kingdom.label
 import at.posselt.pfrpg2e.kingdom.parse
 import at.posselt.pfrpg2e.kingdom.skillRanks
+import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.applications.ux.TextEditor.enrichHtml
-import kotlinx.js.JsPlainObject
+import js.array.toTypedArray
 import js.objects.Object
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.js.JsPlainObject
+
+@JsPlainObject
+external interface ActivitySkillContext {
+    val label: String
+    val usable: Boolean
+}
 
 @Suppress("unused")
 @JsPlainObject
@@ -40,6 +49,7 @@ external interface ActivityContext {
     val order: Int?
     val open: Boolean
     val hasCheck: Boolean
+    val skills: Array<ActivitySkillContext>
 }
 
 @Suppress("unused")
@@ -74,18 +84,28 @@ private suspend fun toActivityContext(
     val success = successP.await()
     val failure = failureP.await()
     val criticalFailure = criticalFailureP.await()
+    val availableSkills = activity.availableSkills(kingdom.settings.expandMagicUse)
+    val validSkills = getValidActivitySkills(
+        ranks = kingdomSkillRanks,
+        activityRanks = activity.skillRanks(),
+        ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
+        expandMagicUse = kingdom.settings.expandMagicUse,
+        activityId = activity.id,
+        increaseSkills = chosenFeats.map { it.feat.increasedSkills() }
+    )
+    val skills = availableSkills.asSequence()
+        .map {
+            ActivitySkillContext(
+                label = t(it),
+                usable = it in validSkills,
+            )
+        }
+        .sortedBy { it.label }
+        .toTypedArray()
     val actions = if (kingdom.settings.enableLeadershipModifiers &&
         (activity.actions == 1 || activity.actions == null) &&
         activeLeader != null
     ) {
-        val validSkills = getValidActivitySkills(
-            ranks = kingdomSkillRanks,
-            activityRanks = activity.skillRanks(),
-            ignoreSkillRequirements = kingdom.settings.kingdomIgnoreSkillRequirements,
-            expandMagicUse = kingdom.settings.expandMagicUse,
-            activityId = activity.id,
-            increaseSkills = chosenFeats.map { it.feat.increasedSkills() }
-        )
         val activeLeaderSkills = kingdom.settings.leaderKingdomSkills.parse().resolveAttributes(activeLeader)
         if (validSkills.isEmpty() || validSkills.all { it in activeLeaderSkills }) {
             arrayOf(1)
@@ -124,6 +144,7 @@ private suspend fun toActivityContext(
         order = activity.order,
         open = ("activity-" + activity.id) in openedDetails,
         hasCheck = Object.keys(activity.skills).isNotEmpty(),
+        skills = skills,
     )
 }
 

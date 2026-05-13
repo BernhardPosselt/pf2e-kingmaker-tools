@@ -37,6 +37,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeats
 import at.posselt.pfrpg2e.kingdom.data.getChosenFeatures
 import at.posselt.pfrpg2e.kingdom.data.getChosenGovernment
+import at.posselt.pfrpg2e.kingdom.expandMagicActivities
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getExplodedFeatures
@@ -94,10 +95,34 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.arrayOf
 import kotlin.checkNotNull
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.Set
+import kotlin.collections.asSequence
+import kotlin.collections.associateBy
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.contains
+import kotlin.collections.emptyList
+import kotlin.collections.emptyMap
+import kotlin.collections.emptySet
 import kotlin.collections.filter
+import kotlin.collections.find
+import kotlin.collections.first
+import kotlin.collections.flatMap
+import kotlin.collections.fold
 import kotlin.collections.map
+import kotlin.collections.mapIndexed
+import kotlin.collections.mapNotNull
+import kotlin.collections.mapValues
+import kotlin.collections.maxByOrNull
+import kotlin.collections.mutableSetOf
+import kotlin.collections.orEmpty
 import kotlin.collections.plus
+import kotlin.collections.setOf
+import kotlin.collections.sortedWith
 import kotlin.collections.toSet
+import kotlin.collections.toTypedArray
 import kotlin.emptyArray
 import kotlin.js.Promise
 import kotlin.let
@@ -214,14 +239,6 @@ class CheckModel(
         }
     }
 }
-
-private val expandMagicActivities = setOf(
-    "celebrate-holiday",
-    "celebrate-holiday-vk",
-    "craft-luxuries",
-    "create-a-masterpiece",
-    "rest-and-relax",
-)
 
 fun getValidActivitySkills(
     ranks: KingdomSkillRanks,

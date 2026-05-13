@@ -18,9 +18,9 @@ import at.posselt.pfrpg2e.utils.asSequence
 import at.posselt.pfrpg2e.utils.t
 import js.array.component1
 import js.array.component2
-import kotlinx.js.JsPlainObject
 import js.objects.Record
 import js.objects.recordOf
+import kotlinx.js.JsPlainObject
 import kotlin.math.max
 
 typealias KingdomDc = Any // number or control, custom, none, scouting, negotiation, negotiationOrControl
@@ -62,6 +62,31 @@ external interface RawActivity {
     var modifiers: Array<RawModifier>?
     val order: Int?
     val defaultToBestSkill: Boolean?
+}
+
+val expandMagicActivities = setOf(
+    "celebrate-holiday",
+    "celebrate-holiday-vk",
+    "craft-luxuries",
+    "create-a-masterpiece",
+    "rest-and-relax",
+)
+
+fun RawActivity.isExpandedThroughMagic() =
+    id in expandMagicActivities
+
+/**
+ * Note that this method does not check if the skill can actually be performed
+ */
+fun RawActivity.availableSkills(expandMagicUse: Boolean): Set<KingdomSkill> {
+    val magicSkill = if (expandMagicUse && isExpandedThroughMagic()) {
+        setOf(KingdomSkill.MAGIC)
+    } else {
+        emptySet()
+    }
+    return skills.asSequence()
+        .mapNotNull { KingdomSkill.fromString(it.component1()) }
+        .toSet() + magicSkill
 }
 
 fun RawActivity.canBePerformed(
@@ -183,16 +208,21 @@ suspend fun RawActivity.resolveDc(
             realm = realm,
             rulerVacant = rulerVacant,
         )
+
         ActivityDcType.EVENT.value -> calculateControlDC(
             kingdomLevel = kingdomLevel,
             realm = realm,
             rulerVacant = rulerVacant,
         ) + (eventModifier ?: 0)
-        ActivityDcType.NEGOTIATION_OR_CONTROL.value -> max(calculateControlDC(
-            kingdomLevel = kingdomLevel,
-            realm = realm,
-            rulerVacant = rulerVacant,
-        ), (groupDc ?: 0))
+
+        ActivityDcType.NEGOTIATION_OR_CONTROL.value -> max(
+            calculateControlDC(
+                kingdomLevel = kingdomLevel,
+                realm = realm,
+                rulerVacant = rulerVacant,
+            ), (groupDc ?: 0)
+        )
+
         ActivityDcType.NEGOTIATION.value -> groupDc
         ActivityDcType.CUSTOM.value -> askDc(title)
         ActivityDcType.NONE.value -> null

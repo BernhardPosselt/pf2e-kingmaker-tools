@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.0] - 2026-05-13
+
+### Added
+
+* Show list of usable skills under activity description
+
+### Fixed
+
+* Improve readability of kingdom turn tab in light mode
+
 ## [6.1.0] - 2026-05-10
 
 ### Added
