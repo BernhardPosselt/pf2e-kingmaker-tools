@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 
+import at.posselt.pfrpg2e.data.kingdom.settlements.Block
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.settlements.findSettlementMaxItemBonusLevel
@@ -186,6 +187,7 @@ fun evaluateSettlement(
     allowCapitalInvestmentInCapitalWithoutBank: Boolean,
     capStructureBonusAtKingdomLevel: Boolean,
     kingdomLevel: Int,
+    blocks: List<Block>,
 ): Settlement {
     val settlementSize = findSettlementSize(data.occupiedBlocks)
     val maxItemBonus = if(capStructureBonusAtKingdomLevel) {
@@ -247,5 +249,6 @@ fun evaluateSettlement(
         preventItemLevelPenalty = constructedStructures.any { it.preventItemLevelPenalty },
         maximumCivicRdLimit = structures.maxOfOrNull { it.maximumCivicRdLimit } ?: 0,
         settlementActions = structures.maxOfOrNull { it.increaseMinimumSettlementActions } ?: 0,
+        blocks = blocks,
     )
 }

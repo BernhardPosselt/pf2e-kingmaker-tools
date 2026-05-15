@@ -3,6 +3,7 @@ package at.posselt.pfrpg2e.kingdom.structures
 import at.posselt.pfrpg2e.Config
 import at.posselt.pfrpg2e.actor.isKingmakerInstalled
 import at.posselt.pfrpg2e.data.ValueEnum
+import at.posselt.pfrpg2e.data.kingdom.settlements.Block
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
@@ -60,18 +61,28 @@ private fun isSlowedOrInfrastructure(actor: StructureActor): Boolean {
     return structure.slowed || structure.isInfrastructure
 }
 
-private fun Scene.calculateOccupiedBlocks(): Int {
+private fun Scene.getNonInfrastructureBlocks(): List<Block> {
     val sceneGridSize = grid.size.toDouble()
-    val structures = structureTokens()
-        .filterNot {
+    val structuresAndRectangles = structureTokens()
+        .mapNotNull {
             val actor = it.actor
-            actor is StructureActor && isSlowedOrInfrastructure(actor)
+            if (actor !is StructureActor) return@mapNotNull null
+            val structure = actor.parseStructure() ?: return@mapNotNull null
+            if (structure.isInfrastructure) return@mapNotNull null
+            structure to it.toRectangle(sceneGridSize, sceneGridSize)
         }
-        .map { it.toRectangle(sceneGridSize, sceneGridSize) }
-    val blocks = getBlockTiles().map { it.toRectangle(GridType.SQUARE).applyTolerance(50.0) }
-    return blocks
-        .filter { block -> structures.any { it in block } }
-        .count()
+    val blockTiles = getBlockTiles()
+        .map { it.toRectangle(GridType.SQUARE).applyTolerance(50.0) }
+    return blockTiles.map { blockTile ->
+        val structuresInBlock = structuresAndRectangles
+            .filter { it.component2() in blockTile }
+            .map { it.component1() }
+        Block(
+            delayedStructures = structuresInBlock.filter { it.slowed },
+            constructedStructures = structuresInBlock.filter { !it.slowed && it.rpPaid },
+            structuresUnderConstruction = structuresInBlock.filter { !it.slowed && !it.rpPaid },
+        )
+    }.toList()
 }
 
 fun Scene.parseSettlement(
@@ -82,10 +93,12 @@ fun Scene.parseSettlement(
     capStructureBonusAtKingdomLevel: Boolean,
     kingdomLevel: Int,
 ): Settlement {
+    val blocks = getNonInfrastructureBlocks()
     val occupiedBlocks = if (autoCalculateSettlementLevel && rawSettlement.manualSettlementLevel != true) max(
         0,
-        calculateOccupiedBlocks()
+        blocks.filter { it.isOccupied }.size
     ) else rawSettlement.lots
+    val structures = getStructures()
     return evaluateSettlement(
         data = SettlementData(
             id = rawSettlement.sceneId,
@@ -96,11 +109,12 @@ fun Scene.parseSettlement(
             isSecondaryTerritory = rawSettlement.secondaryTerritory,
             waterBorders = rawSettlement.waterBorders,
         ),
-        structures = getStructures(),
+        structures = structures,
         allStructuresStack = allStructuresStack,
         allowCapitalInvestmentInCapitalWithoutBank = allowCapitalInvestmentInCapitalWithoutBank,
         capStructureBonusAtKingdomLevel = capStructureBonusAtKingdomLevel,
         kingdomLevel = kingdomLevel,
+        blocks = blocks,
     )
 }
 
@@ -157,7 +171,7 @@ enum class InfrastructureBlockShape(
     ONE_BY_TWO("modules/pf2e-kingmaker-tools/img/settlements/1x2.webp", 2, 1);
 }
 
-suspend fun Scene.createSettlementBlocks(blocks: List<Block>): TileDocument {
+suspend fun Scene.createSettlementBlocks(blocks: List<BlockTile>): TileDocument {
     val data = blocks.map {
         val tile = it.shape
         val squareX = it.x
@@ -168,6 +182,7 @@ suspend fun Scene.createSettlementBlocks(blocks: List<Block>): TileDocument {
             "width" to grid.size * tile.squaresX,
             "height" to grid.size * tile.squaresY,
             "levels" to JsSet(arrayOf("defaultLevel0000")),
+            "locked" to true,
             "texture" to TextureData(
                 src = tile.background,
                 anchorX = 0,
@@ -202,6 +217,7 @@ suspend fun Scene.createSettlementLegends(legends: List<Legend>): DrawingDocumen
             ),
             "height" to 100,
             "width" to 500,
+            "locked" to true,
             "x" to squareX * grid.size,
             "y" to squareY * grid.size,
             "levels" to JsSet(arrayOf("defaultLevel0000")),
@@ -215,7 +231,7 @@ suspend fun Scene.createSettlementLegends(legends: List<Legend>): DrawingDocumen
     return createEmbeddedDocuments<DrawingDocument>("Drawing", data).await().first()
 }
 
-data class Block(
+data class BlockTile(
     val shape: BlockShape,
     val x: Int,
     val y: Int,
@@ -232,49 +248,51 @@ private suspend fun Scene.createInfrastructureBlocks(waterBorders: Int) {
     val hasWaterBorders = waterBorders > 0
     val shapes = listOf(
         // infrastructure
-        Block(
+        BlockTile(
             shape = InfrastructureBlockShape.ONE_BY_THREE,
             x = 11,
             y = 9,
         ),
     )
-    val waterBorderShapes = if(hasWaterBorders) {
-        listOf(Block(
-            shape = InfrastructureBlockShape.ONE_BY_THREE,
-            x = 18,
-            y = 36,
-        ))
+    val waterBorderShapes = if (hasWaterBorders) {
+        listOf(
+            BlockTile(
+                shape = InfrastructureBlockShape.ONE_BY_THREE,
+                x = 18,
+                y = 36,
+            )
+        )
     } else {
         emptyList()
     }
     val sideShapes = listOf(
         // top
-        Block(
+        BlockTile(
             if (waterBorders >= 4) InfrastructureBlockShape.ONE_BY_TWO else InfrastructureBlockShape.ONE_BY_ONE,
             19,
             7
         ),
         // left
-        Block(
+        BlockTile(
             if (waterBorders >= 3) InfrastructureBlockShape.TWO_BY_ONE else InfrastructureBlockShape.ONE_BY_ONE,
             7,
             19
         ),
         // bottom
-        Block(
+        BlockTile(
             if (waterBorders >= 1) InfrastructureBlockShape.ONE_BY_TWO else InfrastructureBlockShape.ONE_BY_ONE,
             19,
             32
         ),
         // right
-        Block(
+        BlockTile(
             if (waterBorders >= 2) InfrastructureBlockShape.TWO_BY_ONE else InfrastructureBlockShape.ONE_BY_ONE,
             32,
             19
         ),
     )
     createSettlementBlocks(shapes + sideShapes + waterBorderShapes)
-    val legends = listOf(Legend(t("structureTrait.infrastructure"), 10, 8),)
+    val legends = listOf(Legend(t("structureTrait.infrastructure"), 10, 8))
     val waterBorderLegends = if (hasWaterBorders) {
         listOf(Legend(t("kingdom.fishingFleets"), 17, 37))
     } else {
@@ -334,7 +352,7 @@ suspend fun createScene(
     scene.firstLevel.update(recordOf("background.src" to background)).await()
     scene.createSettlementBlocks(
         listOf(
-            Block(
+            BlockTile(
                 SettlementBlockShape.TWO_BY_TWO,
                 11,
                 11,

@@ -110,7 +110,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.toActivitiesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.TurnNavEntry
-import at.posselt.pfrpg2e.kingdom.structures.Block
+import at.posselt.pfrpg2e.kingdom.structures.BlockTile
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.createSettlementBlocks
 import at.posselt.pfrpg2e.kingdom.structures.getImportedStructures
@@ -227,7 +227,10 @@ class KingdomSheet(
         }
         appHook.onUpdateToken { token, _, _, _ ->
             if (token.isStructure()) {
-                render()
+                buildPromise {
+                    token.movement.animation.ended.await()
+                    render()
+                }
             }
         }
         appHook.onCreateToken { token, _, _ ->
@@ -484,7 +487,7 @@ class KingdomSheet(
                     ?.let { game.scenes.get(it) }
                     ?.let { scene ->
                         addSettlementBlockDialog { options ->
-                            scene.createSettlementBlocks(listOf(Block(
+                            scene.createSettlementBlocks(listOf(BlockTile(
                                 options.shape,
                                 options.x,
                                 options.y,

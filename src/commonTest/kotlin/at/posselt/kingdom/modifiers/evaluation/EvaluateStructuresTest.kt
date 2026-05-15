@@ -112,6 +112,7 @@ class EvaluateStructuresTest {
             allowCapitalInvestmentInCapitalWithoutBank = false,
             kingdomLevel = 1,
             capStructureBonusAtKingdomLevel = false,
+            blocks = emptyList()
         )
         assertEquals("name", result.name)
         assertEquals(4, result.waterBorders)
@@ -175,6 +176,7 @@ class EvaluateStructuresTest {
             allowCapitalInvestmentInCapitalWithoutBank = false,
             kingdomLevel = 1,
             capStructureBonusAtKingdomLevel = false,
+            blocks = emptyList(),
         )
         assertEquals(4, result.waterBorders)
     }
@@ -222,6 +224,7 @@ class EvaluateStructuresTest {
             allowCapitalInvestmentInCapitalWithoutBank = false,
             kingdomLevel = 1,
             capStructureBonusAtKingdomLevel = false,
+            blocks = emptyList(),
         )
         assertEquals(
             setOf(
@@ -269,6 +272,7 @@ class EvaluateStructuresTest {
             allowCapitalInvestmentInCapitalWithoutBank = false,
             kingdomLevel = 1,
             capStructureBonusAtKingdomLevel = false,
+            blocks = emptyList(),
         )
         assertEquals(2, result.consumptionReduction)
     }
@@ -306,6 +310,7 @@ class EvaluateStructuresTest {
             allowCapitalInvestmentInCapitalWithoutBank = false,
             kingdomLevel = 1,
             capStructureBonusAtKingdomLevel = false,
+            blocks = emptyList(),
         )
         assertEquals(3, result.consumptionReduction)
     }
@@ -342,6 +347,7 @@ class EvaluateStructuresTest {
             allowCapitalInvestmentInCapitalWithoutBank = false,
             kingdomLevel = 1,
             capStructureBonusAtKingdomLevel = false,
+            blocks = emptyList(),
         )
         assertEquals(1, result.consumptionReduction)
     }

@@ -7,6 +7,15 @@ import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import kotlin.math.abs
 import kotlin.math.max
 
+data class Block(
+    val delayedStructures: List<Structure>,
+    val constructedStructures: List<Structure>,
+    val structuresUnderConstruction: List<Structure>,
+) {
+    val occupiedLots = constructedStructures.sumOf { it.lots }
+    val isOccupied = occupiedLots > 0
+}
+
 data class Settlement(
     val id: String,
     val name: String,
@@ -33,6 +42,7 @@ data class Settlement(
     val structuresUnderConstruction: List<Structure>,
     val maximumCivicRdLimit: Int,
     val settlementActions: Int,
+    val blocks: List<Block>,
 ) {
     private val totalConsumption = size.consumption - consumptionReduction
     val isOvercrowded = occupiedBlocks > residentialLots
@@ -52,4 +62,24 @@ data class Settlement(
                 .toSet()
         }
     val level = max(1, occupiedBlocks)
+
+    fun canLevelUp(kingdomLevel: Int, allowCapitalOneSizeLarger: Boolean): SettlementLevelUpType? {
+        // you can never level up if the settlement is overcrowded
+        if (isOvercrowded) return null
+        val satisfiesTown = kingdomLevel >= 3 || allowCapitalOneSizeLarger
+        val satisfiesCity = kingdomLevel >= 9 || (kingdomLevel >= 3 && allowCapitalOneSizeLarger)
+        val satisfiesMetropolis = kingdomLevel >= 15 || (kingdomLevel >= 9 && allowCapitalOneSizeLarger)
+        return if (occupiedBlocks == 1 && blocks.sumOf { it.occupiedLots } == 4 && satisfiesTown) {
+            SettlementLevelUpType.TOWN
+        } else {
+            val blocksWithAtLeast2OccupiedLots = blocks.filter { it.occupiedLots >= 2 }.size
+            when (blocksWithAtLeast2OccupiedLots) {
+                4 if satisfiesCity -> SettlementLevelUpType.CITY
+                9 if satisfiesMetropolis -> SettlementLevelUpType.METROPOLIS
+                18 if satisfiesMetropolis -> SettlementLevelUpType.METROPOLIS_THIRD_GRID
+                27 if satisfiesMetropolis -> SettlementLevelUpType.METROPOLIS_FOURTH_GRID
+                else -> null
+            }
+        }
+    }
 }

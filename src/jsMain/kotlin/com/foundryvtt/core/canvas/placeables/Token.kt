@@ -1,4 +1,5 @@
 @file:JsQualifier("foundry.canvas.placeables")
+
 package com.foundryvtt.core.canvas.placeables
 
 import com.foundryvtt.core.AnyObject
@@ -8,7 +9,9 @@ import com.foundryvtt.core.documents.TokenDocument
 import com.foundryvtt.core.documents.User
 import com.pixijs.Point
 import js.collections.JsSet
+import js.core.Void
 import org.w3c.dom.HTMLElement
+import kotlin.js.Promise
 
 external class Token(document: TokenDocument) : PlaceableObject<TokenDocument> {
     var targeted: JsSet<User>
@@ -36,6 +39,7 @@ external class Token(document: TokenDocument) : PlaceableObject<TokenDocument> {
     val lightPerceptionRange: Double
     val sightRange: Double
     val optimalSightRange: Double
+    val movementAnimationPromise: Promise<Void>
     fun initializeSources(options: InitializeOptions = definedExternally)
     fun initializeLightSource(options: InitializeOptions = definedExternally)
     fun initializeVisionSource(options: InitializeOptions = definedExternally)

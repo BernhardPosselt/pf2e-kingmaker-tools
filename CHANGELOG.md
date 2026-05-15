@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Properly re-render kingdom sheet after structure token movement finished
+
 ## [6.2.0] - 2026-05-13
 
 ### Added

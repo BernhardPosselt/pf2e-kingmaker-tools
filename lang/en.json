@@ -19,6 +19,7 @@
       "d12": "D12"
     },
     "enums": {
+      "settlementLevelUpType": "Level Settlement Up To",
       "advancement": "Advancement",
       "settlementBlockShape": "Block Shape",
       "displayBars": "Display Bars",
@@ -1202,6 +1203,13 @@
       "town": "Town",
       "city": "City",
       "metropolis": "Metropolis"
+    },
+    "settlementLevelUpType": {
+      "town": "Town",
+      "city": "City",
+      "metropolis": "Metropolis",
+      "metropolisThirdGrid": "Metropolis (3rd Grid)",
+      "metropolisFourthGrid": "Metropolis (4th Grid)"
     },
     "leaderType": {
       "pc": "PC",
