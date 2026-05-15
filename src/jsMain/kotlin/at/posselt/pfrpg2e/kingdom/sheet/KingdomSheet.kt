@@ -25,6 +25,7 @@ import at.posselt.pfrpg2e.data.kingdom.calculateHexXP
 import at.posselt.pfrpg2e.data.kingdom.calculateRpXP
 import at.posselt.pfrpg2e.data.kingdom.findKingdomSize
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLevelUpType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.AutomateResources
 import at.posselt.pfrpg2e.kingdom.KingdomActor
@@ -482,16 +483,32 @@ class KingdomSheet(
                 }
             }
 
+            "level-up-settlement" -> buildPromise {
+                target.dataset["id"]?.let { id ->
+                    target.dataset["levelUpTo"]
+                        ?.let { SettlementLevelUpType.fromString(it) }
+                        ?.let {
+                            val scene = game.scenes.get(id) ?: return@let
+                            console.log(scene)
+                            TODO("implement")
+                        }
+                }
+            }
+
             "add-settlement-block" -> buildPromise {
                 target.dataset["id"]
                     ?.let { game.scenes.get(it) }
                     ?.let { scene ->
                         addSettlementBlockDialog { options ->
-                            scene.createSettlementBlocks(listOf(BlockTile(
-                                options.shape,
-                                options.x,
-                                options.y,
-                            )))
+                            scene.createSettlementBlocks(
+                                listOf(
+                                    BlockTile(
+                                        options.shape,
+                                        options.x,
+                                        options.y,
+                                    )
+                                )
+                            )
                             ui.notifications.info(t("addSettlementBlock.success", recordOf("sceneName" to scene.name)))
                         }
                     }
@@ -1496,6 +1513,7 @@ class KingdomSheet(
                 kingdom.settings.capitalInvestmentInCapital,
                 capStructureBonusAtKingdomLevel = kingdom.settings.capStructureBonusAtKingdomLevel,
                 kingdomLevel = kingdom.level,
+                capitalCanGrowOneSizeLarger = kingdom.settings.capitalCanGrowOneSizeLarger,
             ),
             canAddCurrentSceneAsSettlement = canAddCurrentScene,
             turnSectionNav = createTabs<TurnNavEntry>("scroll-to"),

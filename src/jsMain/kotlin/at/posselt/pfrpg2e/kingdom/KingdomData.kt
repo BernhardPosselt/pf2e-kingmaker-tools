@@ -95,6 +95,7 @@ external interface KingdomSettings {
     var cultEventDcStep: Int
     var partialStructureConstruction: Boolean
     var capStructureBonusAtKingdomLevel: Boolean
+    var capitalCanGrowOneSizeLarger: Boolean
 }
 
 @JsPlainObject

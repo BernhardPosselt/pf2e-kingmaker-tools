@@ -19,6 +19,7 @@ external interface SettlementsContext {
     val isSecondaryTerritory: Boolean
     val isOvercrowded: Boolean
     val lacksBridge: Boolean
+    val canLevelUpTo: String?
 }
 
 fun Array<RawSettlement>.toContext(
@@ -27,6 +28,7 @@ fun Array<RawSettlement>.toContext(
     allStructuresStack: Boolean,
     allowCapitalInvestmentInCapitalWithoutBank: Boolean,
     capStructureBonusAtKingdomLevel: Boolean,
+    capitalCanGrowOneSizeLarger: Boolean,
     kingdomLevel: Int,
 ): Array<SettlementsContext> {
     val scenesById = game.scenes.contents
@@ -52,6 +54,7 @@ fun Array<RawSettlement>.toContext(
                 isSecondaryTerritory = parsed.isSecondaryTerritory,
                 isOvercrowded = parsed.isOvercrowded,
                 lacksBridge = parsed.lacksBridge,
+                canLevelUpTo = parsed.canLevelUp(kingdomLevel, capitalCanGrowOneSizeLarger)?.value,
             )
         }
     }.toTypedArray()

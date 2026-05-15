@@ -71,6 +71,7 @@ class KingdomSettingsDataModel(
             boolean("kingdomAllStructureItemBonusesStack")
             boolean("kingdomIgnoreSkillRequirements")
             boolean("autoCalculateArmyConsumption")
+            boolean("capitalCanGrowOneSizeLarger")
             boolean("enableLeadershipModifiers")
             string("recruitableArmiesFolderId", nullable = true)
             string("kingdomCultTable", nullable = true)
@@ -125,7 +126,7 @@ class KingdomSettingsApplication(
             .mapNotNull { it.toOption(useUuid = true) }
             .sortedBy { it.label }
         val realmSceneOptions = game.scenes.contents
-            .mapNotNull { it.id?.let { id -> SelectOption(it.name, id)}}
+            .mapNotNull { it.id?.let { id -> SelectOption(it.name, id) } }
             .sortedBy { it.label }
         val folders = game.folders.contents
             .mapNotNull { it.id?.let { value -> SelectOption(it.name, value) } }
@@ -285,6 +286,12 @@ class KingdomSettingsApplication(
                     legend = "Vance & Kerenshara ${t("kingdom.homebrew")}",
                     formRows = listOf(
                         CheckboxInput(
+                            name = "capitalCanGrowOneSizeLarger",
+                            label = t("kingdom.capitalCanGrowOneSizeLarger"),
+                            value = settings.capitalCanGrowOneSizeLarger,
+                            help = t("kingdom.capitalCanGrowOneSizeLargerHelp")
+                        ),
+                        CheckboxInput(
                             name = "kingdomAllStructureItemBonusesStack",
                             label = t("kingdom.kingdomAllStructureItemBonusesStack"),
                             value = settings.kingdomAllStructureItemBonusesStack,
@@ -350,14 +357,14 @@ class KingdomSettingsApplication(
                             help = t("kingdom.enableLeadershipModifiersHelp"),
                         ),
                         Menu(
-                            label =t("kingdom.configureLeaderSkills") ,
+                            label = t("kingdom.configureLeaderSkills"),
                             name = t("kingdom.configure"),
                             value = "configure-leader-skills",
                             disabled = !settings.enableLeadershipModifiers,
                             help = t("kingdom.configureLeaderSkillsHelp"),
                         ),
                         Menu(
-                            label =t("kingdom.configureLeaderKingdomSkills") ,
+                            label = t("kingdom.configureLeaderKingdomSkills"),
                             name = t("kingdom.configure"),
                             value = "configure-leader-kingdom-skills",
                             disabled = !settings.enableLeadershipModifiers,
@@ -403,7 +410,7 @@ class KingdomSettingsApplication(
             leaderKingdomSkills = settings.leaderKingdomSkills,
             leaderSkills = settings.leaderSkills,
         )
-        if(settings.automateResources != AutomateResources.TILE_BASED.value) {
+        if (settings.automateResources != AutomateResources.TILE_BASED.value) {
             settings.realmSceneId = null
         }
         undefined

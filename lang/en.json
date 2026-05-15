@@ -433,6 +433,8 @@
       "success": "Placed block onto scene {sceneName}!"
     },
     "kingdom": {
+      "capitalCanGrowOneSizeLarger": "Capital can grow one size larger",
+      "capitalCanGrowOneSizeLargerHelp": "If checked, allows you to level up the capital one step earlier",
       "skillNotUsable": "Skill not yet usable",
       "wall": "Wall",
       "wallAndBridge": "Wall and Bridge",

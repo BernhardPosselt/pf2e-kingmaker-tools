@@ -63,12 +63,13 @@ data class Settlement(
         }
     val level = max(1, occupiedBlocks)
 
-    fun canLevelUp(kingdomLevel: Int, allowCapitalOneSizeLarger: Boolean): SettlementLevelUpType? {
+    fun canLevelUp(kingdomLevel: Int, capitalCanGrowOneSizeLarger: Boolean): SettlementLevelUpType? {
         // you can never level up if the settlement is overcrowded
         if (isOvercrowded) return null
-        val satisfiesTown = kingdomLevel >= 3 || allowCapitalOneSizeLarger
-        val satisfiesCity = kingdomLevel >= 9 || (kingdomLevel >= 3 && allowCapitalOneSizeLarger)
-        val satisfiesMetropolis = kingdomLevel >= 15 || (kingdomLevel >= 9 && allowCapitalOneSizeLarger)
+        val isCapitalAndLarger = capitalCanGrowOneSizeLarger && type == SettlementType.CAPITAL
+        val satisfiesTown = kingdomLevel >= 3 || isCapitalAndLarger
+        val satisfiesCity = kingdomLevel >= 9 || (kingdomLevel >= 3 && isCapitalAndLarger)
+        val satisfiesMetropolis = kingdomLevel >= 15 || (kingdomLevel >= 9 && isCapitalAndLarger)
         return if (occupiedBlocks == 1 && blocks.sumOf { it.occupiedLots } == 4 && satisfiesTown) {
             SettlementLevelUpType.TOWN
         } else {

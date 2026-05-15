@@ -112,6 +112,7 @@ fun createKingdomDefaults(name: String) =
                     .toTypedArray(),
             ),
             capStructureBonusAtKingdomLevel = false,
+            capitalCanGrowOneSizeLarger = false,
             leaderSkills = RawLeaderSkills(
                 ruler = arrayOf(
                     "diplomacy",
