@@ -484,14 +484,11 @@ class KingdomSheet(
             }
 
             "level-up-settlement" -> buildPromise {
-                target.dataset["id"]?.let { id ->
-                    target.dataset["levelUpTo"]
-                        ?.let { SettlementLevelUpType.fromString(it) }
-                        ?.let {
-                            val scene = game.scenes.get(id) ?: return@let
-                            console.log(scene)
-                            TODO("implement")
-                        }
+                val scene = target.dataset["id"]?.let { game.scenes.get(it) }
+                val levelUpTo = target.dataset["levelUpTo"]?.let { SettlementLevelUpType.fromString(it) }
+                if (scene != null && levelUpTo != null) {
+                    console.log(scene)
+                    TODO("implement")
                 }
             }
 
