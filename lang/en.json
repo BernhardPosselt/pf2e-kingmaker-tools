@@ -433,6 +433,7 @@
       "success": "Placed block onto scene {sceneName}!"
     },
     "kingdom": {
+      "canLevelUpTo": "Level Up To: {target}",
       "capitalCanGrowOneSizeLarger": "Capital can grow one size larger",
       "capitalCanGrowOneSizeLargerHelp": "If checked, allows you to level up the capital one step earlier",
       "skillNotUsable": "Skill not yet usable",

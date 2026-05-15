@@ -118,6 +118,7 @@ import at.posselt.pfrpg2e.kingdom.structures.getImportedStructures
 import at.posselt.pfrpg2e.kingdom.structures.importSettlementScene
 import at.posselt.pfrpg2e.kingdom.structures.importStructures
 import at.posselt.pfrpg2e.kingdom.structures.isStructure
+import at.posselt.pfrpg2e.kingdom.structures.levelUpTo
 import at.posselt.pfrpg2e.kingdom.vacancies
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.takeIfInstance
@@ -485,11 +486,9 @@ class KingdomSheet(
 
             "level-up-settlement" -> buildPromise {
                 val scene = target.dataset["id"]?.let { game.scenes.get(it) }
-                val levelUpTo = target.dataset["levelUpTo"]?.let { SettlementLevelUpType.fromString(it) }
-                if (scene != null && levelUpTo != null) {
-                    console.log(scene)
-                    TODO("implement")
-                }
+                target.dataset["levelUpTo"]
+                    ?.let { SettlementLevelUpType.fromString(it) }
+                    ?.let { scene?.levelUpTo(it) }
             }
 
             "add-settlement-block" -> buildPromise {
@@ -503,8 +502,10 @@ class KingdomSheet(
                                         options.shape,
                                         options.x,
                                         options.y,
+                                        false,
                                     )
-                                )
+                                ),
+                                false,
                             )
                             ui.notifications.info(t("addSettlementBlock.success", recordOf("sceneName" to scene.name)))
                         }

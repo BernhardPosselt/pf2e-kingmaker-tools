@@ -70,17 +70,31 @@ data class Settlement(
         val satisfiesTown = kingdomLevel >= 3 || isCapitalAndLarger
         val satisfiesCity = kingdomLevel >= 9 || (kingdomLevel >= 3 && isCapitalAndLarger)
         val satisfiesMetropolis = kingdomLevel >= 15 || (kingdomLevel >= 9 && isCapitalAndLarger)
-        return if (occupiedBlocks == 1 && blocks.sumOf { it.occupiedLots } == 4 && satisfiesTown) {
+        val blocksTotal = blocks.size
+        return if (blocksTotal == 1 && blocks.sumOf { it.occupiedLots } == 4 && satisfiesTown) {
             SettlementLevelUpType.TOWN
         } else {
             val blocksWithAtLeast2OccupiedLots = blocks.filter { it.occupiedLots >= 2 }.size
-            when (blocksWithAtLeast2OccupiedLots) {
-                4 if satisfiesCity -> SettlementLevelUpType.CITY
-                9 if satisfiesMetropolis -> SettlementLevelUpType.METROPOLIS
-                18 if satisfiesMetropolis -> SettlementLevelUpType.METROPOLIS_THIRD_GRID
-                27 if satisfiesMetropolis -> SettlementLevelUpType.METROPOLIS_FOURTH_GRID
-                else -> null
+            if (blocksTotal == 4 && blocksWithAtLeast2OccupiedLots == 4 && satisfiesCity) {
+                SettlementLevelUpType.CITY
+            } else if (blocksTotal == 9 && blocksWithAtLeast2OccupiedLots == 9 && satisfiesMetropolis) {
+                SettlementLevelUpType.METROPOLIS
+            } else if (blocksTotal == 18 && blocksWithAtLeast2OccupiedLots == 18 && satisfiesMetropolis) {
+                SettlementLevelUpType.METROPOLIS_THIRD_GRID
+            } else if (blocksTotal == 27 && blocksWithAtLeast2OccupiedLots == 27 && satisfiesMetropolis) {
+                SettlementLevelUpType.METROPOLIS_FOURTH_GRID
+            } else {
+                null
             }
         }
+    }
+
+    fun nextLevelUp(): SettlementLevelUpType? = when(blocks.size) {
+        1 -> SettlementLevelUpType.TOWN
+        4 -> SettlementLevelUpType.CITY
+        9 -> SettlementLevelUpType.METROPOLIS
+        18 -> SettlementLevelUpType.METROPOLIS_THIRD_GRID
+        27 -> SettlementLevelUpType.METROPOLIS_FOURTH_GRID
+        else -> null
     }
 }

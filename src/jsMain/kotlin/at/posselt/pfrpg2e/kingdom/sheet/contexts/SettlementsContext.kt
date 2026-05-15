@@ -20,6 +20,7 @@ external interface SettlementsContext {
     val isOvercrowded: Boolean
     val lacksBridge: Boolean
     val canLevelUpTo: String?
+    val nextLevelUp: String?
 }
 
 fun Array<RawSettlement>.toContext(
@@ -55,6 +56,7 @@ fun Array<RawSettlement>.toContext(
                 isOvercrowded = parsed.isOvercrowded,
                 lacksBridge = parsed.lacksBridge,
                 canLevelUpTo = parsed.canLevelUp(kingdomLevel, capitalCanGrowOneSizeLarger)?.value,
+                nextLevelUp = parsed.nextLevelUp()?.let { t(it) }
             )
         }
     }.toTypedArray()

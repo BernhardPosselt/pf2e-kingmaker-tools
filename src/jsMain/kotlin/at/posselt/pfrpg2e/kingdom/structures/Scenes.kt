@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.actor.isKingmakerInstalled
 import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.kingdom.settlements.Block
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLevelUpType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
 import at.posselt.pfrpg2e.fromCamelCase
@@ -171,18 +172,18 @@ enum class InfrastructureBlockShape(
     ONE_BY_TWO("modules/pf2e-kingmaker-tools/img/settlements/1x2.webp", 2, 1);
 }
 
-suspend fun Scene.createSettlementBlocks(blocks: List<BlockTile>): TileDocument {
+suspend fun Scene.createSettlementBlocks(blocks: List<BlockTile>, lockTiles: Boolean): TileDocument {
     val data = blocks.map {
         val tile = it.shape
         val squareX = it.x
         val squareY = it.y
-        recordOf(
+        val data = recordOf(
             "x" to squareX * grid.size,
             "y" to squareY * grid.size,
             "width" to grid.size * tile.squaresX,
             "height" to grid.size * tile.squaresY,
             "levels" to JsSet(arrayOf("defaultLevel0000")),
-            "locked" to true,
+            "locked" to lockTiles,
             "texture" to TextureData(
                 src = tile.background,
                 anchorX = 0,
@@ -193,14 +194,17 @@ suspend fun Scene.createSettlementBlocks(blocks: List<BlockTile>): TileDocument 
                 scaleX = 1.0,
                 scaleY = 1.0,
             ),
-            "flags" to recordOf(
+        )
+        if (!it.tileOnly) {
+            data["flags"] = recordOf(
                 Config.moduleId to recordOf(
                     "settlementBlockDrawing" to recordOf(
                         "isSettlementBlock" to true,
                     )
                 )
             )
-        ).unsafeCast<AnyObject>()
+        }
+        data.unsafeCast<AnyObject>()
     }.toTypedArray()
     return createEmbeddedDocuments<TileDocument>("Tile", data).await().first()
 }
@@ -235,6 +239,7 @@ data class BlockTile(
     val shape: BlockShape,
     val x: Int,
     val y: Int,
+    val tileOnly: Boolean
 )
 
 data class Legend(
@@ -252,6 +257,7 @@ private suspend fun Scene.createInfrastructureBlocks(waterBorders: Int) {
             shape = InfrastructureBlockShape.ONE_BY_THREE,
             x = 11,
             y = 9,
+            tileOnly = true,
         ),
     )
     val waterBorderShapes = if (hasWaterBorders) {
@@ -260,6 +266,7 @@ private suspend fun Scene.createInfrastructureBlocks(waterBorders: Int) {
                 shape = InfrastructureBlockShape.ONE_BY_THREE,
                 x = 18,
                 y = 36,
+                tileOnly = true,
             )
         )
     } else {
@@ -270,28 +277,32 @@ private suspend fun Scene.createInfrastructureBlocks(waterBorders: Int) {
         BlockTile(
             if (waterBorders >= 4) InfrastructureBlockShape.ONE_BY_TWO else InfrastructureBlockShape.ONE_BY_ONE,
             19,
-            7
+            7,
+            tileOnly = true,
         ),
         // left
         BlockTile(
             if (waterBorders >= 3) InfrastructureBlockShape.TWO_BY_ONE else InfrastructureBlockShape.ONE_BY_ONE,
             7,
-            19
+            19,
+            tileOnly = true,
         ),
         // bottom
         BlockTile(
             if (waterBorders >= 1) InfrastructureBlockShape.ONE_BY_TWO else InfrastructureBlockShape.ONE_BY_ONE,
             19,
-            32
+            32,
+            tileOnly = true,
         ),
         // right
         BlockTile(
             if (waterBorders >= 2) InfrastructureBlockShape.TWO_BY_ONE else InfrastructureBlockShape.ONE_BY_ONE,
             32,
-            19
+            19,
+            tileOnly = true,
         ),
     )
-    createSettlementBlocks(shapes + sideShapes + waterBorderShapes)
+    createSettlementBlocks(shapes + sideShapes + waterBorderShapes, true)
     val legends = listOf(Legend(t("structureTrait.infrastructure"), 10, 8))
     val waterBorderLegends = if (hasWaterBorders) {
         listOf(Legend(t("kingdom.fishingFleets"), 17, 37))
@@ -338,6 +349,7 @@ suspend fun createScene(
     width: Int,
     waterBorders: Int,
 ): Scene {
+    val lockTiles = false // TODO lock based on type
     val scene = Scene.create(
         recordOf(
             "name" to name,
@@ -356,11 +368,81 @@ suspend fun createScene(
                 SettlementBlockShape.TWO_BY_TWO,
                 11,
                 11,
+                false,
             )
-        )
+        ),
+        lockTiles = lockTiles,
     )
     scene.createInfrastructureBlocks(waterBorders)
     val thumbnail = scene.createThumbnail().await()
     scene.typeSafeUpdate { thumb = thumbnail.thumb }
     return scene
+}
+
+suspend fun Scene.levelUpTo(type: SettlementLevelUpType, topLeft: Coordinates = Coordinates(11, 11)) {
+    val lockTiles = false // TODO: change to true later on
+    val blocks = when (type) {
+        // we already have one block, assume that's topLeft, then skip first one
+        SettlementLevelUpType.TOWN -> generateBlockLocations(topLeft, columns = 2)
+            .drop(1)
+            .take(3)
+
+        SettlementLevelUpType.CITY -> generateBlockLocations(topLeft)
+            .take(9)
+            .filterIndexed { index, _ -> index != 0 && index != 1 && index != 3 && index != 4 }
+
+        SettlementLevelUpType.METROPOLIS -> generateBlockLocations(topLeft)
+            .drop(9)
+            .take(9)
+
+        SettlementLevelUpType.METROPOLIS_THIRD_GRID -> generateBlockLocations(topLeft)
+            .drop(18)
+            .take(9)
+
+        SettlementLevelUpType.METROPOLIS_FOURTH_GRID -> generateBlockLocations(topLeft)
+            .drop(27)
+            .take(9)
+    }
+    val blockTiles = blocks
+        .map {
+            BlockTile(
+                shape = SettlementBlockShape.TWO_BY_TWO,
+                x = it.x,
+                y = it.y,
+                tileOnly = false
+            )
+        }
+        .toList()
+    createSettlementBlocks(blockTiles, lockTiles)
+}
+
+data class Coordinates(val x: Int, val y: Int)
+
+fun generateBlockLocations(
+    start: Coordinates,
+    gap: Int = 1,
+    blockWidth: Int = 2,
+    blockHeight: Int = 2,
+    columns: Int = 3,
+    rows: Int = 3,
+    sectionColumns: Int = 2,
+    sectionGap: Int = 2,
+): Sequence<Coordinates> {
+    val sectionWidth = columns * blockWidth + (columns - 1) * gap
+    val sectionHeight = rows * blockHeight + (rows - 1) * gap
+    val sectionSize = columns * rows
+    return generateSequence(0) { i -> i + 1 }
+        .map {
+            val section = it / sectionSize
+            val sectionColumn = section % sectionColumns
+            val sectionRow = section / sectionColumns
+            val sectionOffsetX = sectionColumn * (sectionWidth + sectionGap)
+            val sectionOffsetY = sectionRow * (sectionHeight + sectionGap)
+            val relativeIndex = it % sectionSize
+            val row = relativeIndex / columns
+            val column = relativeIndex % columns
+            val x = start.x + (column * (gap + blockWidth)) + sectionOffsetX
+            val y = start.y + (row * (gap + blockHeight)) + sectionOffsetY
+            Coordinates(x, y)
+        }
 }

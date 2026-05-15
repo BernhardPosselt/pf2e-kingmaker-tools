@@ -13,7 +13,7 @@ enum class SettlementLevelUpType : Translatable, ValueEnum {
     METROPOLIS_FOURTH_GRID;
 
     companion object {
-        fun fromString(value: String) = fromCamelCase<SettlementSizeType>(value)
+        fun fromString(value: String) = fromCamelCase<SettlementLevelUpType>(value)
     }
 
     override val value: String
