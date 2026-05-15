@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.0] - 2026-05-15
+
+### Added
+
+* Settlement layout can now be managed automatically as described in the rules. Existing scenes are migrated to free form layouts since automated layouts require blocks to be situated at specific spots on the map
+
 ### Fixed
 
 * Properly re-render kingdom sheet after structure token movement finished

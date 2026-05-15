@@ -10,6 +10,7 @@ import at.posselt.pfrpg2e.app.forms.NumberInput
 import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.data.ValueEnum
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLayoutType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.data.kingdom.structures.calculateAvailableItems
@@ -72,6 +73,7 @@ external interface InspectSettlementContext : ValidatedHandlebarsContext {
     val secondaryTerritoryInput: FormElementContext
     val manualSettlementLevelInput: FormElementContext
     val waterBordersInput: FormElementContext
+    val layoutInput: FormElementContext
     val level: Int
     val type: String
     val manualSettlementLevel: Boolean
@@ -103,6 +105,7 @@ external interface InspectSettlementData {
     val secondaryTerritory: Boolean
     val manualSettlementLevel: Boolean
     val waterBorders: Int
+    val layoutType: String
 }
 
 @JsExport
@@ -115,6 +118,7 @@ class InspectSettlementDataModel(
         fun defineSchema() = buildSchema {
             int("blocks")
             enum<SettlementType>("type")
+            enum<SettlementLayoutType>("layoutType")
             boolean("secondaryTerritory")
             boolean("manualSettlementLevel")
             int("waterBorders")
@@ -197,6 +201,7 @@ class InspectSettlement(
         secondaryTerritory = settlement.secondaryTerritory,
         manualSettlementLevel = settlement.manualSettlementLevel,
         waterBorders = settlement.waterBorders,
+        layoutType = settlement.layoutType,
     )
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
@@ -263,6 +268,12 @@ class InspectSettlement(
             name = "secondaryTerritory",
             label = t("kingdom.secondaryTerritory"),
             value = current.secondaryTerritory,
+            hideLabel = true,
+        )
+        val settlementLayout = Select.fromEnum<SettlementLayoutType>(
+            name = "layoutType",
+            label = t("enums.settlementLayoutType"),
+            value = SettlementLayoutType.fromString(current.layoutType),
             hideLabel = true,
         )
         val manualSettlementLevelInput = CheckboxInput(
@@ -377,6 +388,7 @@ class InspectSettlement(
             availableItems = availableItems,
             currentTab = currentNav.value,
             storage = storage,
+            layoutInput = settlementLayout.toContext(),
             tabs = createTabs<SettlementNav>("change-nav", currentNav)
                 .filter {
                     if (it.link == SettlementNav.BONUSES.value) {
@@ -399,6 +411,7 @@ class InspectSettlement(
         current.secondaryTerritory = value.secondaryTerritory
         current.manualSettlementLevel = value.manualSettlementLevel
         current.waterBorders = value.waterBorders
+        current.layoutType = value.layoutType
         undefined
     }
 

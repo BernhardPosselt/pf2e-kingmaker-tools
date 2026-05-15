@@ -1,5 +1,6 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLayoutType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
@@ -21,6 +22,7 @@ external interface SettlementsContext {
     val lacksBridge: Boolean
     val canLevelUpTo: String?
     val nextLevelUp: String?
+    val isRigid: Boolean
 }
 
 fun Array<RawSettlement>.toContext(
@@ -56,8 +58,10 @@ fun Array<RawSettlement>.toContext(
                 isOvercrowded = parsed.isOvercrowded,
                 lacksBridge = parsed.lacksBridge,
                 canLevelUpTo = parsed.canLevelUp(kingdomLevel, capitalCanGrowOneSizeLarger)?.value,
-                nextLevelUp = parsed.nextLevelUp()?.let { t(it) }
+                nextLevelUp = parsed.nextLevelUp()?.let { t(it) },
+                isRigid = parsed.layoutType == SettlementLayoutType.RIGID,
             )
         }
-    }.toTypedArray()
+    }.sortedWith(compareBy<SettlementsContext> { !it.isCapital }.thenBy { it.name })
+        .toTypedArray()
 }

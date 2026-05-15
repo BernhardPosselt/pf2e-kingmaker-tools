@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom.modifiers.evaluation
 
 import at.posselt.pfrpg2e.data.kingdom.settlements.Block
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLayoutType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.settlements.findSettlementMaxItemBonusLevel
 import at.posselt.pfrpg2e.data.kingdom.settlements.findSettlementSize
@@ -178,6 +179,7 @@ data class SettlementData(
     val isSecondaryTerritory: Boolean,
     val waterBorders: Int,
     val id: String,
+    val layoutType: SettlementLayoutType,
 )
 
 fun evaluateSettlement(
@@ -242,6 +244,7 @@ fun evaluateSettlement(
         hasBridge = hasBridge,
         occupiedBlocks = data.occupiedBlocks,
         type = data.type,
+        layoutType = data.layoutType,
         delayedStructures = slowedStructures,
         constructedStructures = constructedStructures,
         structuresUnderConstruction = underConstructionStructures,

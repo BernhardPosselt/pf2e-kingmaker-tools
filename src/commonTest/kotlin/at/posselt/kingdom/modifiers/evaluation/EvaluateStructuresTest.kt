@@ -1,6 +1,7 @@
 package at.posselt.kingdom.modifiers.evaluation
 
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLayoutType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementSizeType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.settlements.settlementSizeData
@@ -106,6 +107,7 @@ class EvaluateStructuresTest {
                 waterBorders = 4,
                 occupiedBlocks = 20,
                 isSecondaryTerritory = true,
+                layoutType = SettlementLayoutType.RIGID,
             ),
             structures = structures,
             allStructuresStack = false,
@@ -170,6 +172,7 @@ class EvaluateStructuresTest {
                 waterBorders = 4,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                layoutType = SettlementLayoutType.RIGID,
             ),
             structures = emptyList(),
             allStructuresStack = false,
@@ -191,6 +194,7 @@ class EvaluateStructuresTest {
                 waterBorders = 3,
                 occupiedBlocks = 14,
                 isSecondaryTerritory = true,
+                layoutType = SettlementLayoutType.RIGID,
             ),
             structures = listOf(
                 Structure(
@@ -249,6 +253,7 @@ class EvaluateStructuresTest {
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                layoutType = SettlementLayoutType.RIGID,
             ),
             structures = listOf(
                 Structure(
@@ -287,6 +292,7 @@ class EvaluateStructuresTest {
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                layoutType = SettlementLayoutType.RIGID,
             ),
             structures = listOf(
                 Structure(
@@ -325,6 +331,7 @@ class EvaluateStructuresTest {
                 waterBorders = 3,
                 occupiedBlocks = 4,
                 isSecondaryTerritory = true,
+                layoutType = SettlementLayoutType.RIGID,
             ),
             structures = listOf(
                 Structure(

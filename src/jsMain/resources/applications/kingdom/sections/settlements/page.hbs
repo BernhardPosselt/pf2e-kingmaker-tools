@@ -34,10 +34,10 @@
                                 <i class="fa-solid fa-eye"></i></button>
                             <button type="button" title="{{localizeKM "kingdom.activate"}}" data-action="activate-settlement" data-id="{{id}}">
                                 <i class="fa-solid fa-bullseye"></i></button>
-                            <button type="button" data-action="level-up-settlement" data-id="{{id}}" data-level-up-to="{{canLevelUpTo}}" {{#unless canLevelUpTo}}disabled{{/unless}} {{#if nextLevelUp}} title="{{localizeKM "kingdom.canLevelUpTo" target=nextLevelUp}}"{{/if}}>
+                            <button {{#unless isRigid}}hidden{{/unless}} type="button" data-action="level-up-settlement" data-id="{{id}}" data-level-up-to="{{canLevelUpTo}}" {{#unless canLevelUpTo}}disabled{{/unless}} {{#if nextLevelUp}} title="{{localizeKM "kingdom.canLevelUpTo" target=nextLevelUp}}"{{/if}}>
                                 <i class="fa-solid fa-arrow-turn-up"></i>
                             </button>
-                            <button type="button" title="{{localizeKM "addSettlementBlock.title"}}" data-action="add-settlement-block" data-id="{{id}}">
+                            <button {{# if isRigid}}hidden{{/if}} type="button" title="{{localizeKM "addSettlementBlock.title"}}" data-action="add-settlement-block" data-id="{{id}}">
                                 <img alt="{{localizeKM "addSettlementBlock.title"}}" src="modules/pf2e-kingmaker-tools/img/settlements/block.webp"></button>
                             <button type="button" title="{{localizeKM "kingdom.details"}}" data-action="inspect-settlement" data-id="{{id}}">
                                 <i class="fa-solid fa-magnifying-glass"></i></button>

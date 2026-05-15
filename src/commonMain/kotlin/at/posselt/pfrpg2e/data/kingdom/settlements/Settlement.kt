@@ -43,6 +43,7 @@ data class Settlement(
     val maximumCivicRdLimit: Int,
     val settlementActions: Int,
     val blocks: List<Block>,
+    val layoutType: SettlementLayoutType,
 ) {
     private val totalConsumption = size.consumption - consumptionReduction
     val isOvercrowded = occupiedBlocks > residentialLots

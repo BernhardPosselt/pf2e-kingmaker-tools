@@ -25,6 +25,7 @@ import at.posselt.pfrpg2e.data.kingdom.calculateHexXP
 import at.posselt.pfrpg2e.data.kingdom.calculateRpXP
 import at.posselt.pfrpg2e.data.kingdom.findKingdomSize
 import at.posselt.pfrpg2e.data.kingdom.leaders.Leader
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLayoutType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLevelUpType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.AutomateResources
@@ -427,6 +428,7 @@ class KingdomSheet(
                         terrain = result.terrain,
                         waterBorders = result.waterBorders,
                         type = SettlementType.SETTLEMENT,
+                        layoutType = result.layoutType,
                     )
                 }
             }
@@ -447,6 +449,7 @@ class KingdomSheet(
                         terrain = result.terrain,
                         waterBorders = result.waterBorders,
                         type = SettlementType.CAPITAL,
+                        layoutType = result.layoutType,
                     )
                 }
             }
@@ -454,7 +457,7 @@ class KingdomSheet(
             "add-settlement" -> buildPromise {
                 game.scenes.current?.id?.let { id ->
                     val kingdom = getKingdom()
-                    kingdom.settlements = kingdom.settlements + RawSettlement(
+                    kingdom.settlements += RawSettlement(
                         sceneId = id,
                         lots = 1,
                         level = 1,
@@ -462,6 +465,7 @@ class KingdomSheet(
                         secondaryTerritory = false,
                         manualSettlementLevel = false,
                         waterBorders = 0,
+                        layoutType = SettlementLayoutType.FREE_FORM.value,
                     )
                     actor.setKingdom(kingdom)
                 }
@@ -1174,15 +1178,17 @@ class KingdomSheet(
         terrain: SettlementTerrain,
         waterBorders: Int,
         type: SettlementType,
+        layoutType: SettlementLayoutType,
     ) {
         val scene = game.importSettlementScene(
             sceneName = sceneName,
             terrain = terrain,
             waterBorders = waterBorders,
+            layoutType = layoutType,
         )
-        scene?.id?.let {
+        scene.id?.let {
             val kingdom = getKingdom()
-            kingdom.settlements = kingdom.settlements + RawSettlement(
+            kingdom.settlements += RawSettlement(
                 sceneId = it,
                 lots = 1,
                 level = 1,
@@ -1190,6 +1196,7 @@ class KingdomSheet(
                 secondaryTerritory = false,
                 manualSettlementLevel = false,
                 waterBorders = waterBorders,
+                layoutType = layoutType.value,
             )
             kingdom.activeSettlement = it
             actor.setKingdom(kingdom)

@@ -5,6 +5,7 @@ import at.posselt.pfrpg2e.actor.isKingmakerInstalled
 import at.posselt.pfrpg2e.data.ValueEnum
 import at.posselt.pfrpg2e.data.kingdom.settlements.Block
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
+import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLayoutType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLevelUpType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.structures.Structure
@@ -107,6 +108,8 @@ fun Scene.parseSettlement(
             occupiedBlocks = occupiedBlocks,
             type = SettlementType.fromString(rawSettlement.type)
                 ?: SettlementType.SETTLEMENT,
+            layoutType = SettlementLayoutType.fromString(rawSettlement.layoutType)
+                ?: SettlementLayoutType.RIGID,
             isSecondaryTerritory = rawSettlement.secondaryTerritory,
             waterBorders = rawSettlement.waterBorders,
         ),
@@ -123,6 +126,7 @@ suspend fun Game.importSettlementScene(
     sceneName: String,
     terrain: SettlementTerrain,
     waterBorders: Int,
+    layoutType: SettlementLayoutType,
 ): Scene {
     val bg = if (isKingmakerInstalled) {
         val type = if (waterBorders == 1) "c" else "a"
@@ -130,7 +134,7 @@ suspend fun Game.importSettlementScene(
     } else {
         "modules/pf2e-kingmaker-tools/img/settlements/backgrounds/${terrain.value}-${waterBorders}.webp"
     }
-    return createScene(sceneName, bg, 4000, 4000, waterBorders)
+    return createScene(sceneName, bg, 4000, 4000, waterBorders, layoutType)
 }
 
 interface BlockShape {
@@ -348,8 +352,8 @@ suspend fun createScene(
     height: Int,
     width: Int,
     waterBorders: Int,
+    layoutType: SettlementLayoutType,
 ): Scene {
-    val lockTiles = false // TODO lock based on type
     val scene = Scene.create(
         recordOf(
             "name" to name,
@@ -371,16 +375,20 @@ suspend fun createScene(
                 false,
             )
         ),
-        lockTiles = lockTiles,
+        lockTiles = layoutType == SettlementLayoutType.RIGID,
     )
-    scene.createInfrastructureBlocks(waterBorders)
+    if (layoutType == SettlementLayoutType.RIGID) {
+        scene.createInfrastructureBlocks(waterBorders)
+    }
     val thumbnail = scene.createThumbnail().await()
     scene.typeSafeUpdate { thumb = thumbnail.thumb }
     return scene
 }
 
-suspend fun Scene.levelUpTo(type: SettlementLevelUpType, topLeft: Coordinates = Coordinates(11, 11)) {
-    val lockTiles = false // TODO: change to true later on
+suspend fun Scene.levelUpTo(
+    type: SettlementLevelUpType,
+    topLeft: Coordinates = Coordinates(11, 11)
+) {
     val blocks = when (type) {
         // we already have one block, assume that's topLeft, then skip first one
         SettlementLevelUpType.TOWN -> generateBlockLocations(topLeft, columns = 2)
@@ -413,7 +421,7 @@ suspend fun Scene.levelUpTo(type: SettlementLevelUpType, topLeft: Coordinates = 
             )
         }
         .toList()
-    createSettlementBlocks(blockTiles, lockTiles)
+    createSettlementBlocks(blockTiles, true)
 }
 
 data class Coordinates(val x: Int, val y: Int)

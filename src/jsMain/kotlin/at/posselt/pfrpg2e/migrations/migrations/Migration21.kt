@@ -4,9 +4,10 @@ import at.posselt.pfrpg2e.kingdom.KingdomData
 import com.foundryvtt.core.Game
 
 
-class Migration21 : Migration(21) {
+class Migration21 : Migration(21, true) {
 
     override suspend fun migrateKingdom(game: Game, kingdom: KingdomData) {
         kingdom.settings.capitalCanGrowOneSizeLarger = false
+        kingdom.settlements.forEach { it.layoutType = "freeForm" }
     }
 }

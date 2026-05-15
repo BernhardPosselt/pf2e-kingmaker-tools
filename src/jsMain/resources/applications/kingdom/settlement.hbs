@@ -9,8 +9,12 @@
                     <td>{{> formElement manualSettlementLevelInput}}</td>
                 </tr>
                 <tr>
-                    <th>Type</th>
+                    <th>{{localizeKM "enums.settlementType" }}</th>
                     <td>{{> formElement typeInput}}</td>
+                </tr>
+                <tr>
+                    <th>{{localizeKM "enums.settlementLayoutType" }}</th>
+                    <td>{{> formElement layoutInput}}</td>
                 </tr>
                 {{# if settlementActions}}
                     <tr>
