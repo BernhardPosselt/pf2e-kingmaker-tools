@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.1] - 2026-05-18
+
+### Fixed
+
+* Do not break camping sheet if camping actor is removed after selecting a meal; this only affects v14
+* Do not show Legendary skill rank requirement for kingdom activities if no skill checks are required, such as in Disband Army
+
 ## [6.3.0] - 2026-05-15
 
 ### Added

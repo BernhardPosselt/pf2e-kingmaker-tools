@@ -119,7 +119,9 @@ fun RawActivity.label(
         null
     }
     val skillRanks = activity.skillRanks()
-    val proficiency = if (skillRanks.all { it.proficiency >= Proficiency.LEGENDARY }) {
+    val proficiency = if (skillRanks.isEmpty()) {
+        null
+    } else if (skillRanks.all { it.proficiency >= Proficiency.LEGENDARY }) {
         t(Proficiency.LEGENDARY)
     } else if (skillRanks.all { it.proficiency >= Proficiency.MASTER }) {
         t(Proficiency.MASTER)
