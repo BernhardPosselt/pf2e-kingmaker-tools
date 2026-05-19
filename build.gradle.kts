@@ -1,9 +1,7 @@
-import at.posselt.pfrpg2e.plugins.ChangeModuleVersion
 import at.posselt.pfrpg2e.plugins.CombineJsonFiles
 import at.posselt.pfrpg2e.plugins.CopyAndSanitizeTranslations
 import at.posselt.pfrpg2e.plugins.CreateDummyTranslations
 import at.posselt.pfrpg2e.plugins.JsonSchemaValidator
-import at.posselt.pfrpg2e.plugins.ReleaseModule
 import at.posselt.pfrpg2e.plugins.UnpackJsonFiles
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import de.undercouch.gradle.tasks.download.Download
@@ -11,6 +9,7 @@ import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 
 plugins {
+    alias(libs.plugins.foundryvtt.module)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.plain.objects)
@@ -39,6 +38,7 @@ tasks.register<CopyAndSanitizeTranslations>("processTranslations") {
 }
 
 kotlin {
+    jvmToolchain(25)
     js {
         useEsModules()
         compilerOptions {
@@ -201,42 +201,29 @@ tasks.register<JsonSchemaValidator>("validateMilestones") {
 }
 
 // release tasks
-tasks.register<ChangeModuleVersion>("changeModuleVersion") {
-    inputs.property("version", project.version)
-    moduleVersion = project.version.toString()
-    sourceFile = layout.projectDirectory.file("module.json")
-    targetFile = layout.buildDirectory.file("module.json")
+foundryvttModule {
+    githubUser = "BernhardPosselt"
+    githubRepo = "pf2e-kingmaker-tools"
+    foundryToken = providers.environmentVariable("FOUNDRY_TOKEN")
+    githubToken = providers.environmentVariable("GITHUB_TOKEN")
 }
 
-/**
- * Run using ./gradlew package
- */
-tasks.register<Zip>("package") {
-    dependsOn("clean", "build", "changeModuleVersion", "txPull")
+tasks.named<Zip>("foundryvttModulePackage") {
+    val moduleId: String by extra
+    dependsOn("clean", "build", "txPull")
     tasks.named("txPull").get().mustRunAfter("clean")
     tasks.named("build").get().mustRunAfter("txPull")
-    archiveFileName = "release.zip"
-    destinationDirectory = layout.buildDirectory
-    from("dist") { into("pf2e-kingmaker-tools/dist") }
-    from("docs") { into("pf2e-kingmaker-tools/docs") }
-    from("img") { into("pf2e-kingmaker-tools/img") }
-    from("packs") { into("pf2e-kingmaker-tools/packs") }
-    from("styles") { into("pf2e-kingmaker-tools/styles") }
-    from("templates") { into("pf2e-kingmaker-tools/templates") }
-    from("CHANGELOG.md") { into("pf2e-kingmaker-tools/") }
-    from("LICENSE") { into("pf2e-kingmaker-tools/") }
-    from("OpenGameLicense.md") { into("pf2e-kingmaker-tools/") }
-    from("README.md") { into("pf2e-kingmaker-tools/") }
-    from("token-map.json") { into("pf2e-kingmaker-tools/") }
-    from("build/module.json") { into("pf2e-kingmaker-tools/") }
-}
-
-tasks.register<ReleaseModule>("release") {
-    dependsOn("package")
-    releaseZip = layout.buildDirectory.file("release.zip")
-    releaseModuleJson = layout.buildDirectory.file("module.json")
-    changelogFile = layout.projectDirectory.file("CHANGELOG.md")
-    githubRepo = "BernhardPosselt/pf2e-kingmaker-tools"
+    from("dist") { into("$moduleId/dist") }
+    from("docs") { into("$moduleId/docs") }
+    from("img") { into("$moduleId/img") }
+    from("packs") { into("$moduleId/packs") }
+    from("styles") { into("$moduleId/styles") }
+    from("templates") { into("$moduleId/templates") }
+    from("LICENSE") { into("$moduleId/") }
+    from("OpenGameLicense.md") { into("$moduleId/") }
+    from("README.md") { into("$moduleId/") }
+    from("token-map.json") { into("$moduleId/") }
+    from("CHANGELOG.md") { into("$moduleId/") }
 }
 
 tasks.register<UnpackJsonFiles>("unpackJson") {

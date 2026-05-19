@@ -35,3 +35,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-plain-objects = { id = "org.jetbrains.kotlin.plugin.js-plain-objects", version.ref = "kotlin" }
 versions = { id = "com.github.ben-manes.versions", version = "0.54.0" }
 download = { id = "de.undercouch.download", version = "5.7.0" }
+foundryvtt-module = { id = "at.posselt.foundryvtt-module", version = "1.0-SNAPSHOT" }
