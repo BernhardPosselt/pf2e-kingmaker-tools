@@ -17,6 +17,10 @@ The source code is licensed under the AGPLv3 license, except for
 the [src/jsMain/kotlin/com/foundryvtt](./src/jsMain/kotlin/com/foundryvtt) folder which is licensed
 under [Apache License 2.0](./src/jsMain/kotlin/com/foundryvtt/LICENSE).
 
+## Art
+
+In 5.13.0, all contributed AI generated images were removed to comply with [Foundry's AI Content Policy](https://foundryvtt.com/article/ai-policy/). Instead, you can now configure an art directory in the module's settings which allows you to switch out backgrounds for the kingdom and camping sheet. If you are interested in restoring the previous behavior, you can download [an archive containing the AI images](https://github.com/BernhardPosselt/pf2e-kingmaker-tools/releases/download/5.13.0/pf2e-kingmaker-tools-art.zip) and extract the containing folder into your **Data/** directory. If you want to restore structures to their previous images as well, you need to do change them manually inside Foundry to use the provided images from the archive.
+
 ## Installation
 
 The package is available through the [module registry](https://foundryvtt.com/packages/pf2e-kingmaker-tools)
