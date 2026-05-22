@@ -33,6 +33,9 @@ abstract class FoundryVTTModuleUploadGithubRelease : DefaultTask() {
     abstract val githubRepo: Property<String>
 
     @get:Input
+    abstract val githubUser: Property<String>
+
+    @get:Input
     abstract val githubToken: Property<String>
 
     @TaskAction
@@ -67,10 +70,12 @@ abstract class FoundryVTTModuleUploadGithubRelease : DefaultTask() {
             .find { it.version == releaseVersion }
             ?.notes ?: ""
         val repo = githubRepo.get()
+        val user = githubUser.get()
         val ghToken = githubToken.get()
         runBlocking {
             httpClient.use { client ->
                 val releaseId = client.createGithubRelease(
+                    user = user,
                     repo = repo,
                     githubToken = ghToken,
                     releaseVersion = releaseVersion,
@@ -78,6 +83,7 @@ abstract class FoundryVTTModuleUploadGithubRelease : DefaultTask() {
                 ).id
                 FileInputStream(archive).use { file ->
                     client.uploadGithubAsset(
+                        user = user,
                         repo = repo,
                         releaseId = releaseId,
                         file = file,
@@ -88,6 +94,7 @@ abstract class FoundryVTTModuleUploadGithubRelease : DefaultTask() {
                 }
                 zip.manifestText.byteInputStream().use { moduleJson ->
                     client.uploadGithubAsset(
+                        user = user,
                         repo = repo,
                         releaseId = releaseId,
                         file = moduleJson,

@@ -9,6 +9,7 @@ import io.ktor.utils.io.jvm.javaio.*
 import java.io.InputStream
 
 internal suspend fun HttpClient.uploadGithubAsset(
+    user: String,
     repo: String,
     releaseId: Int,
     file: InputStream,
@@ -16,8 +17,9 @@ internal suspend fun HttpClient.uploadGithubAsset(
     name: String,
     contentType: ContentType,
 ) {
-    post("https://uploads.github.com/repos/$repo/releases/$releaseId/assets") {
-        url {
+    post {
+        url("https://uploads.github.com/repos/") {
+            appendPathSegments(user, repo, "releases", releaseId.toString(), "assets")
             parameters.append("name", name)
         }
         contentType(contentType)
@@ -28,11 +30,15 @@ internal suspend fun HttpClient.uploadGithubAsset(
 }
 
 internal suspend fun HttpClient.createGithubRelease(
+    user: String,
     repo: String,
     githubToken: String,
     releaseVersion: String,
     body: String,
-) = post("https://api.github.com/repos/$repo/releases") {
+) = post {
+    url("https://uploads.github.com/repos/") {
+        appendPathSegments(user, repo, "releases")
+    }
     contentType(ContentType.Application.Json)
     accept(ContentType.Application.Json)
     bearerAuth(githubToken)
