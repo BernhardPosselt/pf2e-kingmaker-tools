@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "at.posselt"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.2"
 
 repositories {
     mavenCentral()
@@ -39,10 +39,27 @@ dependencies {
 }
 
 gradlePlugin {
+    website = "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/tree/master/foundryvtt-module-plugin"
+    vcsUrl = "https://github.com/BernhardPosselt/pf2e-kingmaker-tools/tree/master/foundryvtt-module-plugin"
     plugins {
         create("foundryvttModule") {
             id = "at.posselt.foundryvtt-module"
             implementationClass = "at.posselt.FoundryVTTModulePlugin"
+            displayName = "FoundryVTT Module Plugin"
+            description = "Provides tasks to publish artifacts to github and the FoundryVTT module API"
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/BernhardPosselt/pf2e-kingmaker-tools")
+            credentials {
+                username = "bernhardposselt"
+                password = System.getenv("GITHUB_PACKAGES_TOKEN")
+            }
         }
     }
 }
