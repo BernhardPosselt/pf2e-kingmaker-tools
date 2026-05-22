@@ -20,7 +20,6 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.work.DisableCachingByDefault
-import java.io.FileInputStream
 import kotlin.system.exitProcess
 
 @DisableCachingByDefault
@@ -47,6 +46,8 @@ abstract class FoundryVTTModuleUploadGithubRelease : DefaultTask() {
         val parser = ReleaseZipParser()
         val zip = parser.parseZip(archive) ?: throw IllegalArgumentException("Not a release zip")
         val releaseVersion = zip.manifest.version
+        exec(listOf("git", "tag", "-d", releaseVersion), ignoreErrors = true)
+        exec(listOf("git", "push", "origin", ":$releaseVersion"), ignoreErrors = true)
         exec(listOf("git", "add", "module.json", "build.gradle.kts"), ignoreErrors = true)
         exec(listOf("git", "commit", "-m", "release"), ignoreErrors = true)
         exec(listOf("git", "push"), ignoreErrors = true)
@@ -81,26 +82,25 @@ abstract class FoundryVTTModuleUploadGithubRelease : DefaultTask() {
                     releaseVersion = releaseVersion,
                     body = notes,
                 ).id
-                FileInputStream(archive).use { file ->
-                    client.uploadGithubAsset(
-                        user = user,
-                        repo = repo,
-                        releaseId = releaseId,
-                        file = file,
-                        githubToken = ghToken,
-                        name = "release.zip",
-                        contentType = ContentType.Application.Zip,
-                    )
-                }
+                client.uploadGithubAsset(
+                    user = user,
+                    repo = repo,
+                    releaseId = releaseId,
+                    file = archive,
+                    githubToken = ghToken,
+                    name = "release.zip",
+                    contentType = ContentType.Application.Zip,
+                )
                 zip.manifestText.byteInputStream().use { moduleJson ->
                     client.uploadGithubAsset(
                         user = user,
                         repo = repo,
                         releaseId = releaseId,
-                        file = moduleJson,
+                        input = moduleJson,
                         githubToken = ghToken,
                         name = "module.json",
                         contentType = ContentType.Application.Json,
+                        size = zip.manifestText.toByteArray().size.toLong(),
                     )
                 }
             }

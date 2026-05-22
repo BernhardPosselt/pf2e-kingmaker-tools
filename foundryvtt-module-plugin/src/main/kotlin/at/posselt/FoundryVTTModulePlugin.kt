@@ -3,8 +3,6 @@ package at.posselt
 import at.posselt.tasks.FoundryVTTModuleCreateRelease
 import at.posselt.tasks.FoundryVTTModuleUpdateManifest
 import at.posselt.tasks.FoundryVTTModuleUploadGithubRelease
-import at.posselt.utils.createRepo
-import at.posselt.utils.currentTag
 import at.posselt.utils.parseManifest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -58,11 +56,5 @@ abstract class FoundryVTTModulePlugin : Plugin<Project> {
                 .mustRunAfter("foundryvttModuleUploadGithubRelease")
         }
 
-        project.tasks.register("testGit") {
-            doLast {
-                createRepo(project.layout.projectDirectory.asFile.resolve(".git"))
-                    .currentTag()
-            }
-        }
     }
 }

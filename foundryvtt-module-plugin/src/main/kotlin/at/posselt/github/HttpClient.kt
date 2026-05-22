@@ -6,26 +6,60 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.utils.io.jvm.javaio.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileInputStream
 import java.io.InputStream
+import java.nio.file.Files
 
 internal suspend fun HttpClient.uploadGithubAsset(
     user: String,
     repo: String,
     releaseId: Int,
-    file: InputStream,
+    input: InputStream,
+    size: Long,
     githubToken: String,
     name: String,
     contentType: ContentType,
 ) {
-    post {
-        url("https://uploads.github.com/repos/") {
+    post("https://uploads.github.com/repos/") {
+        url {
             appendPathSegments(user, repo, "releases", releaseId.toString(), "assets")
             parameters.append("name", name)
+        }
+        headers {
+            append(HttpHeaders.ContentLength, size.toString())
         }
         contentType(contentType)
         accept(ContentType.Application.Json)
         bearerAuth(githubToken)
-        setBody(file.toByteReadChannel())
+        setBody(input.toByteReadChannel())
+    }
+}
+
+internal suspend fun HttpClient.uploadGithubAsset(
+    user: String,
+    repo: String,
+    releaseId: Int,
+    file: File,
+    githubToken: String,
+    name: String,
+    contentType: ContentType,
+) {
+    withContext(Dispatchers.IO) {
+        FileInputStream(file).use {
+            uploadGithubAsset(
+                user = user,
+                repo = repo,
+                releaseId = releaseId,
+                input = it,
+                githubToken = githubToken,
+                name = name,
+                contentType = contentType,
+                size = Files.size(file.toPath()),
+            )
+        }
     }
 }
 
@@ -35,8 +69,8 @@ internal suspend fun HttpClient.createGithubRelease(
     githubToken: String,
     releaseVersion: String,
     body: String,
-) = post {
-    url("https://uploads.github.com/repos/") {
+) = post("https://api.github.com/repos/") {
+    url {
         appendPathSegments(user, repo, "releases")
     }
     contentType(ContentType.Application.Json)

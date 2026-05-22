@@ -29,7 +29,6 @@ tasks.test {
 }
 
 dependencies {
-    implementation(libs.jgit)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.core)

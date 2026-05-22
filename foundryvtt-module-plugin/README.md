@@ -50,12 +50,10 @@ This adds the following Gradle Tasks to your project:
 
 * **foundryvttModuleUpdateManifest**: modifies your module.json file with the new version and download links 
 * **foundryvttModulePackage**: creates a **build/foundryvttModule/release.zip** file; includes your module.json file by default, but you'll likely want to add additional files by extending the task as noted above
-* **foundryvttModuleUploadGithubRelease**: Pushes your module.json and build.gradle.kts file and adds a git tag based on the version in build.gradle.kts
 * **foundryvttRelease**: Task that executes both **foundryvttModuleRelease** and **foundryvttModuleUploadGithubRelease**
-* **foundryvttModuleUploadGithubRelease**: Uploads the package in build/foundryvttModule/release.zip to GitHub and publishes a new release on foundryvtt.com
+* **foundryvttModuleUploadGithubRelease**:
+  * Deletes version tag from local and remote if it exists
+  * Tries to commit and push build.gradle.kts and module.json
+  * Pushes the version as git tag
+  * Uploads the package in build/foundryvttModule/release.zip to GitHub and publishes a new release on foundryvtt.com
 * **foundryvttModuleCreateRelease**: Creates a new release over foundryvtt.com's REST API
-
-
-## TODOs
-
-* Improve git code
