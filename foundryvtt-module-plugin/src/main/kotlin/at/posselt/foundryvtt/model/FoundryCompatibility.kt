@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class FoundryCompatibility(
     val minimum: String,
     val verified: String,
-    val maximum: String?,
+    val maximum: String? = null,
 )
