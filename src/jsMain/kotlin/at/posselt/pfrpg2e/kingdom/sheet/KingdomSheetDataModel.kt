@@ -289,6 +289,21 @@ class KingdomSheetDataModel(
                     boolean("enabled")
                 }
             }
+            array("companions") {
+                schema {
+                    string("name")
+                    string("actorUuid", nullable = true)
+                    int("destinationX", nullable = true, allowNegative = true)
+                    int("destinationY", nullable = true, allowNegative = true)
+                    int("speed")
+                    int("eta", nullable = true, allowNegative = true)
+                    string("plotHook", nullable = true)
+                    boolean("traveling")
+                    boolean("active")
+                    string("role")
+                    string("img", nullable = true)
+                }
+            }
         }
     }
 }

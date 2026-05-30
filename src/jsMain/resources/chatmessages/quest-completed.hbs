@@ -1,0 +1,37 @@
+<h3>{{localizeKM "kingdom.quests.completed"}}: {{title}}</h3>
+{{#if giver}}
+<p><b>{{localizeKM "kingdom.quests.fields.giver"}}:</b> {{giver}}</p>
+{{/if}}
+<p><b>{{localizeKM "kingdom.quests.fields.description"}}:</b> {{description}}</p>
+{{#if flavorTextCompleted}}
+<p><i>{{flavorTextCompleted}}</i></p>
+{{/if}}
+{{#if rewards}}
+<h4>{{localizeKM "kingdom.quests.rewards"}}:</h4>
+<ul>
+    {{#if rewards.rp}}
+    <li><b>{{localizeKM "kingdom.resourcePoints"}}</b>: +{{rewards.rp}}</li>
+    {{/if}}
+    {{#if rewards.xp}}
+    <li><b>{{localizeKM "kingdom.quests.fields.xp"}}</b>: +{{rewards.xp}}</li>
+    {{/if}}
+    {{#if rewards.unrest}}
+    <li><b>{{localizeKM "kingdom.quests.fields.unrest"}}</b>: {{rewards.unrest}}</li>
+    {{/if}}
+    {{#if rewards.food}}
+    <li><b>{{localizeKM "kingdom.quests.fields.food"}}</b>: +{{rewards.food}}</li>
+    {{/if}}
+    {{#if rewards.lumber}}
+    <li><b>{{localizeKM "kingdom.quests.fields.lumber"}}</b>: +{{rewards.lumber}}</li>
+    {{/if}}
+    {{#if rewards.stone}}
+    <li><b>{{localizeKM "kingdom.quests.fields.stone"}}</b>: +{{rewards.stone}}</li>
+    {{/if}}
+    {{#if rewards.ore}}
+    <li><b>{{localizeKM "kingdom.quests.fields.ore"}}</b>: +{{rewards.ore}}</li>
+    {{/if}}
+    {{#if rewards.luxuries}}
+    <li><b>{{localizeKM "kingdom.quests.fields.luxuries"}}</b>: +{{rewards.luxuries}}</li>
+    {{/if}}
+</ul>
+{{/if}}

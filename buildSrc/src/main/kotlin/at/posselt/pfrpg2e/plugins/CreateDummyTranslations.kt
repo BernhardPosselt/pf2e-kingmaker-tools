@@ -31,7 +31,7 @@ abstract class CreateDummyTranslations : DefaultTask() {
             .filter { it.lang != "en" }
             .forEach {
                 val target = langDir.resolve("${it.lang}.json")
-                Files.copy(enTranslation, target)
+                Files.copy(enTranslation, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING)
             }
     }
 }

@@ -118,6 +118,7 @@ fun main() {
                     "kingdom-turn" to "applications/kingdom/sections/turn/page.hbs",
                     "kingdom-modifiers" to "applications/kingdom/sections/modifiers/page.hbs",
                     "kingdom-notes" to "applications/kingdom/sections/notes/page.hbs",
+                    "kingdom-quests" to "applications/kingdom/sections/quests/page.hbs",
                     "kingdom-character-sheet" to "applications/kingdom/sections/character-sheet/page.hbs",
                     "kingdom-character-sheet-creation" to "applications/kingdom/sections/character-sheet/creation.hbs",
                     "kingdom-character-sheet-bonus" to "applications/kingdom/sections/character-sheet/bonus.hbs",

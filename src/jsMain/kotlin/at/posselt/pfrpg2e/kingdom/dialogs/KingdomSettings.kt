@@ -72,6 +72,7 @@ class KingdomSettingsDataModel(
             boolean("kingdomIgnoreSkillRequirements")
             boolean("autoCalculateArmyConsumption")
             boolean("capitalCanGrowOneSizeLarger")
+            boolean("enableCouncilMissions")
             boolean("enableLeadershipModifiers")
             string("recruitableArmiesFolderId", nullable = true)
             string("kingdomCultTable", nullable = true)
@@ -290,6 +291,12 @@ class KingdomSettingsApplication(
                             label = t("kingdom.capitalCanGrowOneSizeLarger"),
                             value = settings.capitalCanGrowOneSizeLarger,
                             help = t("kingdom.capitalCanGrowOneSizeLargerHelp")
+                        ),
+                        CheckboxInput(
+                            name = "enableCouncilMissions",
+                            label = t("kingdom.enableCouncilMissions"),
+                            value = settings.enableCouncilMissions,
+                            help = t("kingdom.enableCouncilMissionsHelp"),
                         ),
                         CheckboxInput(
                             name = "kingdomAllStructureItemBonusesStack",

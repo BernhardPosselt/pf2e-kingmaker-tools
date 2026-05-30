@@ -11,6 +11,8 @@ enum class MainNavEntry: Translatable, ValueEnum {
     SETTLEMENTS,
     TRADE_AGREEMENTS,
     MODIFIERS,
+    QUESTS,
+    ROSTER,
     NOTES;
 
     companion object {

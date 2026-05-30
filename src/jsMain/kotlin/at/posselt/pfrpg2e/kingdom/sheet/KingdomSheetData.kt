@@ -18,6 +18,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawResources
 import at.posselt.pfrpg2e.kingdom.data.RawRuin
 import at.posselt.pfrpg2e.kingdom.data.RawSkillRanks
 import at.posselt.pfrpg2e.kingdom.data.RawWorkSites
+import at.posselt.pfrpg2e.kingdom.data.RawCharacter
 import kotlinx.js.JsPlainObject
 
 @JsPlainObject
@@ -55,4 +56,5 @@ external interface KingdomSheetData {
     val bonusFeat: String?
     val initialProficiencies: Array<String?>
     val activeLeader: String?
+    val companions: Array<RawCharacter>
 }

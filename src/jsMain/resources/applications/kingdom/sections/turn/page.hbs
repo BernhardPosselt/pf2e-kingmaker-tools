@@ -117,6 +117,59 @@
         <h3>{{localizeKM "kingdom.solutions"}}</h3>
         {{> formElement supernaturalSolutionsInput }}
         {{> formElement creativeSolutionsInput }}
+        {{#if enableCouncilMissions}}
+            <h3>{{localizeKM "kingdom.councilMissions.title"}}</h3>
+            <div class="km-council-missions">
+                <div class="km-mission-item" title="{{localizeKM "kingdom.councilMissions.audit.help"}}">
+                    <button type="button" data-action="council-mission-audit" {{#unless canAudit}}disabled{{/unless}}>
+                        {{localizeKM "kingdom.councilMissions.audit.btn"}}
+                    </button>
+                    <div class="km-mission-info">
+                        {{#if councilCooldowns.audit}}
+                            <span class="km-cooldown">{{localizeKM "kingdom.councilMissions.cooldown" turns=councilCooldowns.audit}}</span>
+                        {{else}}
+                            <span class="km-ready">{{localizeKM "kingdom.councilMissions.ready"}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="km-mission-item" title="{{localizeKM "kingdom.councilMissions.scrying.help"}}">
+                    <button type="button" data-action="council-mission-scrying" {{#unless canScrying}}disabled{{/unless}}>
+                        {{localizeKM "kingdom.councilMissions.scrying.btn"}}
+                    </button>
+                    <div class="km-mission-info">
+                        {{#if councilCooldowns.scrying}}
+                            <span class="km-cooldown">{{localizeKM "kingdom.councilMissions.cooldown" turns=councilCooldowns.scrying}}</span>
+                        {{else}}
+                            <span class="km-ready">{{localizeKM "kingdom.councilMissions.ready"}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="km-mission-item" title="{{localizeKM "kingdom.councilMissions.lockdown.help"}}">
+                    <button type="button" data-action="council-mission-lockdown" {{#unless canLockdown}}disabled{{/unless}}>
+                        {{localizeKM "kingdom.councilMissions.lockdown.btn"}}
+                    </button>
+                    <div class="km-mission-info">
+                        {{#if councilCooldowns.lockdown}}
+                            <span class="km-cooldown">{{localizeKM "kingdom.councilMissions.cooldown" turns=councilCooldowns.lockdown}}</span>
+                        {{else}}
+                            <span class="km-ready">{{localizeKM "kingdom.councilMissions.ready"}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="km-mission-item" title="{{localizeKM "kingdom.councilMissions.feast.help"}}">
+                    <button type="button" data-action="council-mission-feast" {{#unless canFeast}}disabled{{/unless}}>
+                        {{localizeKM "kingdom.councilMissions.feast.btn"}}
+                    </button>
+                    <div class="km-mission-info">
+                        {{#if councilCooldowns.feast}}
+                            <span class="km-cooldown">{{localizeKM "kingdom.councilMissions.cooldown" turns=councilCooldowns.feast}}</span>
+                        {{else}}
+                            <span class="km-ready">{{localizeKM "kingdom.councilMissions.ready"}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        {{/if}}
     </div>
 </aside>
 <div class="km-kingdom-sheet-content" {{#if (ne currentNavEntry 'turn')}}hidden{{/if}}>

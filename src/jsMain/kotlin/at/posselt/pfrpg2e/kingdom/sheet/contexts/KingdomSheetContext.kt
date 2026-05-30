@@ -4,11 +4,16 @@ import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.forms.FormElementContext
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomSettings
+import at.posselt.pfrpg2e.kingdom.RawCouncilCooldowns
+import at.posselt.pfrpg2e.kingdom.data.RawQuest
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.RosterContext
 import kotlinx.js.JsPlainObject
 
 @Suppress("unused")
 @JsPlainObject
 external interface KingdomSheetContext : ValidatedHandlebarsContext {
+    val activeQuests: Array<RawQuest>
+    val completedQuests: Array<RawQuest>
     val kingdomNameInput: FormElementContext
     val settlementInput: FormElementContext
     val xpInput: FormElementContext
@@ -78,4 +83,11 @@ external interface KingdomSheetContext : ValidatedHandlebarsContext {
     val actorUuid: String
     val activeLeader: FormElementContext
     val sheetBackground: String
+    val enableCouncilMissions: Boolean
+    val councilCooldowns: RawCouncilCooldowns
+    val canAudit: Boolean
+    val canScrying: Boolean
+    val canLockdown: Boolean
+    val canFeast: Boolean
+    val rosterContext: RosterContext
 }

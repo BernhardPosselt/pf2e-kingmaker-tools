@@ -1,0 +1,157 @@
+<div {{#if (ne currentNavEntry 'quests')}}hidden{{/if}} class="km-kingdom-sheet-content">
+    <div class="km-kingdom-sheet-sub-content km-quests-board">
+        <section class="km-quests-section">
+            <h2 class="km-quests-header">
+                <span><i class="fa-solid fa-scroll"></i> {{localizeKM "kingdom.quests.activeQuests"}}</span>
+                {{#if isGM}}
+                <span class="km-header-right-align">
+                    <button type="button" class="km-add-quest-btn" data-action="add-quest">
+                        <i class="fa-solid fa-plus"></i> {{localizeKM "kingdom.quests.addQuest"}}
+                    </button>
+                </span>
+                {{/if}}
+            </h2>
+
+            {{#if activeQuests.length}}
+            <div class="km-quests-grid">
+                {{#each activeQuests}}
+                <div class="km-quest-card km-quest-active" data-id="{{id}}">
+                    <div class="km-quest-card-header">
+                        <div class="km-quest-title">{{title}}</div>
+                        <div class="km-quest-badge km-quest-type-{{type}}">
+                            {{#if (eq type "explore_hex")}}<i class="fa-solid fa-compass"></i>{{/if}}
+                            {{#if (eq type "claim_hex")}}<i class="fa-solid fa-flag"></i>{{/if}}
+                            {{#if (eq type "build_structure")}}<i class="fa-solid fa-hammer"></i>{{/if}}
+                            {{#if (eq type "clear_hex")}}<i class="fa-solid fa-shield-halved"></i>{{/if}}
+                            {{#if (eq type "assign_leader")}}<i class="fa-solid fa-user-tie"></i>{{/if}}
+                            {{#if (eq type "other")}}<i class="fa-solid fa-circle-question"></i>{{/if}}
+                            {{localizeKM (concat "kingdom.quests.type." type)}}
+                        </div>
+                    </div>
+                    
+                    <div class="km-quest-meta">
+                        {{#if giver}}
+                        <span class="km-quest-meta-item" title="{{localizeKM 'kingdom.quests.fields.giver'}}">
+                            <i class="fa-solid fa-user"></i> <b>{{giver}}</b>
+                        </span>
+                        {{/if}}
+                        {{#if target}}
+                        <span class="km-quest-meta-item" title="{{localizeKM 'kingdom.quests.fields.target'}}">
+                            <i class="fa-solid fa-crosshairs"></i> <b>{{target}}</b>
+                        </span>
+                        {{/if}}
+                    </div>
+
+                    <div class="km-quest-description">
+                        {{description}}
+                    </div>
+
+                    <div class="km-quest-rewards-container">
+                        <div class="km-rewards-title">{{localizeKM "kingdom.quests.rewards"}}</div>
+                        <div class="km-rewards-pills">
+                            {{#if rewards.rp}}
+                            <span class="km-reward-pill km-reward-rp" title="{{localizeKM 'kingdom.resourcePoints'}}">
+                                <i class="fa-solid fa-crown"></i> {{rewards.rp}} RP
+                            </span>
+                            {{/if}}
+                            {{#if rewards.xp}}
+                            <span class="km-reward-pill km-reward-xp" title="{{localizeKM 'kingdom.quests.fields.xp'}}">
+                                <i class="fa-solid fa-star"></i> {{rewards.xp}} XP
+                            </span>
+                            {{/if}}
+                            {{#if rewards.unrest}}
+                            <span class="km-reward-pill km-reward-unrest" title="{{localizeKM 'kingdom.quests.fields.unrest'}}">
+                                <i class="fa-solid fa-triangle-exclamation"></i> {{rewards.unrest}} Unrest
+                            </span>
+                            {{/if}}
+                            {{#if rewards.food}}
+                            <span class="km-reward-pill km-reward-food" title="{{localizeKM 'kingdom.quests.fields.food'}}">
+                                <i class="fa-solid fa-apple-whole"></i> {{rewards.food}} Food
+                            </span>
+                            {{/if}}
+                            {{#if rewards.lumber}}
+                            <span class="km-reward-pill km-reward-lumber" title="{{localizeKM 'kingdom.quests.fields.lumber'}}">
+                                <i class="fa-solid fa-tree"></i> {{rewards.lumber}} Lumber
+                            </span>
+                            {{/if}}
+                            {{#if rewards.stone}}
+                            <span class="km-reward-pill km-reward-stone" title="{{localizeKM 'kingdom.quests.fields.stone'}}">
+                                <i class="fa-solid fa-mountain"></i> {{rewards.stone}} Stone
+                            </span>
+                            {{/if}}
+                            {{#if rewards.ore}}
+                            <span class="km-reward-pill km-reward-ore" title="{{localizeKM 'kingdom.quests.fields.ore'}}">
+                                <i class="fa-solid fa-cubes"></i> {{rewards.ore}} Ore
+                            </span>
+                            {{/if}}
+                            {{#if rewards.luxuries}}
+                            <span class="km-reward-pill km-reward-luxuries" title="{{localizeKM 'kingdom.quests.fields.luxuries'}}">
+                                <i class="fa-solid fa-gem"></i> {{rewards.luxuries}} Luxuries
+                            </span>
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    {{#if ../isGM}}
+                    <div class="km-quest-actions">
+                        <button type="button" class="km-quest-action-btn km-complete-btn" data-action="complete-quest" data-id="{{id}}" title="{{localizeKM 'kingdom.quests.completeQuest'}}">
+                            <i class="fa-solid fa-check"></i> {{localizeKM 'kingdom.quests.completeQuest'}}
+                        </button>
+                        <button type="button" class="km-quest-action-btn km-delete-btn" data-action="delete-quest" data-id="{{id}}" title="{{localizeKM 'kingdom.quests.deleteQuest'}}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                    {{/if}}
+                </div>
+                {{/each}}
+            </div>
+            {{else}}
+            <div class="km-empty-quests">
+                <i class="fa-regular fa-folder-open"></i>
+                <p>No active quests at this time.</p>
+            </div>
+            {{/if}}
+        </section>
+
+        <section class="km-quests-section km-completed-section">
+            <h2 class="km-quests-header">
+                <span><i class="fa-solid fa-book-open"></i> {{localizeKM "kingdom.quests.completedQuests"}}</span>
+            </h2>
+
+            {{#if completedQuests.length}}
+            <div class="km-quests-list">
+                {{#each completedQuests}}
+                <div class="km-quest-row km-quest-completed" data-id="{{id}}">
+                    <div class="km-quest-row-main">
+                        <div class="km-quest-row-header">
+                            <span class="km-quest-row-title"><i class="fa-solid fa-circle-check km-check-icon"></i> {{title}}</span>
+                            <span class="km-quest-row-meta">
+                                {{#if giver}}• {{localizeKM 'kingdom.quests.fields.giver'}}: <b>{{giver}}</b>{{/if}}
+                                {{#if target}}• {{localizeKM 'kingdom.quests.fields.target'}}: <b>{{target}}</b>{{/if}}
+                            </span>
+                        </div>
+                        {{#if flavorTextCompleted}}
+                        <div class="km-quest-row-flavor">
+                            "{{flavorTextCompleted}}"
+                        </div>
+                        {{/if}}
+                    </div>
+                    
+                    {{#if ../isGM}}
+                    <div class="km-quest-row-actions">
+                        <button type="button" class="km-quest-row-delete-btn" data-action="delete-quest" data-id="{{id}}" title="{{localizeKM 'kingdom.quests.deleteQuest'}}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                    {{/if}}
+                </div>
+                {{/each}}
+            </div>
+            {{else}}
+            <div class="km-empty-quests">
+                <p>No completed quests recorded.</p>
+            </div>
+            {{/if}}
+        </section>
+    </div>
+</div>

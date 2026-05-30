@@ -31,6 +31,7 @@ import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.kingdom.AutomateResources
 import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.KingdomData
+import at.posselt.pfrpg2e.kingdom.RawCouncilCooldowns
 import at.posselt.pfrpg2e.kingdom.RawEq
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.RawOngoingKingdomEvent
@@ -41,6 +42,10 @@ import at.posselt.pfrpg2e.kingdom.armies.updateArmyConsumption
 import at.posselt.pfrpg2e.kingdom.createModifiers
 import at.posselt.pfrpg2e.kingdom.createSimpleContext
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
+import at.posselt.pfrpg2e.kingdom.data.RawQuest
+import at.posselt.pfrpg2e.kingdom.data.RawQuestRewards
+import at.posselt.pfrpg2e.kingdom.data.RawCommodities
+import at.posselt.pfrpg2e.kingdom.data.limitBy
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.endTurn
@@ -52,6 +57,7 @@ import at.posselt.pfrpg2e.kingdom.data.getChosenHeartland
 import at.posselt.pfrpg2e.kingdom.dialogs.ActivityManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.AddEvent
 import at.posselt.pfrpg2e.kingdom.dialogs.AddModifier
+import at.posselt.pfrpg2e.kingdom.dialogs.AddQuest
 import at.posselt.pfrpg2e.kingdom.dialogs.CharterManagement
 import at.posselt.pfrpg2e.kingdom.dialogs.CheckType
 import at.posselt.pfrpg2e.kingdom.dialogs.FeatManagement
@@ -74,6 +80,9 @@ import at.posselt.pfrpg2e.kingdom.dialogs.kingdomSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.newSettlementChoices
 import at.posselt.pfrpg2e.kingdom.dialogs.settlementSizeHelp
 import at.posselt.pfrpg2e.kingdom.dialogs.structureXpDialog
+import at.posselt.pfrpg2e.kingdom.dialogs.RosterAddDialog
+import at.posselt.pfrpg2e.kingdom.dialogs.RosterEditDialog
+import at.posselt.pfrpg2e.kingdom.data.RawCharacter
 import at.posselt.pfrpg2e.kingdom.getActiveLeader
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getAllActivities
@@ -110,6 +119,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.createTabs
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.skillChecks
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toActivitiesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.toRosterContext
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.TurnNavEntry
 import at.posselt.pfrpg2e.kingdom.structures.BlockTile
@@ -371,6 +381,66 @@ class KingdomSheet(
                 if (featId != null) {
                     val kingdom = getKingdom()
                     kingdom.bonusFeats = kingdom.bonusFeats.filter { it.id != featId }.toTypedArray()
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "add-quest" -> buildPromise {
+                AddQuest { quest ->
+                    val current = getKingdom()
+                    val quests = current.quests ?: emptyArray()
+                    current.quests = quests + quest
+                    actor.setKingdom(current)
+                }.launch()
+            }
+
+            "complete-quest" -> buildPromise {
+                val questId = target.dataset["id"]
+                if (questId != null) {
+                    val kingdom = getKingdom()
+                    val quests = kingdom.quests ?: emptyArray()
+                    val quest = quests.find { it.id == questId }
+                    if (quest != null && quest.status == "active") {
+                        quest.status = "completed"
+                        val realm = game.getRealmData(actor, kingdom)
+                        val settlements = kingdom.getAllSettlements(game)
+                        val storage = calculateStorage(realm, settlements.allSettlements)
+                        val allFeatures = kingdom.getExplodedFeatures()
+                        val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
+                        val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
+                        
+                        val rewards = quest.rewards
+                        rewards.rp?.let { rpVal ->
+                            kingdom.resourcePoints.now += rpVal
+                        }
+                        rewards.xp?.let { xpVal ->
+                            actor.gainXp(xpVal)
+                        }
+                        rewards.unrest?.let { unrestVal ->
+                            kingdom.unrest = kingdom.addUnrest(unrestVal, chosenFeats)
+                        }
+                        val currentCommodities = kingdom.commodities.now
+                        val newCommodities = RawCommodities(
+                            food = currentCommodities.food + (rewards.food ?: 0),
+                            lumber = currentCommodities.lumber + (rewards.lumber ?: 0),
+                            luxuries = currentCommodities.luxuries + (rewards.luxuries ?: 0),
+                            ore = currentCommodities.ore + (rewards.ore ?: 0),
+                            stone = currentCommodities.stone + (rewards.stone ?: 0)
+                        ).limitBy(storage)
+                        kingdom.commodities.now = newCommodities
+                        
+                        postChatTemplate("chatmessages/quest-completed.hbs", quest, speaker = actor)
+                        actor.setKingdom(kingdom)
+                    }
+                }
+            }
+
+            "delete-quest" -> buildPromise {
+                val questId = target.dataset["id"]
+                if (questId != null) {
+                    val kingdom = getKingdom()
+                    val quests = kingdom.quests ?: emptyArray()
+                    kingdom.quests = quests.filter { it.id != questId }.toTypedArray()
                     actor.setKingdom(kingdom)
                 }
             }
@@ -940,30 +1010,108 @@ class KingdomSheet(
                 }
             }
 
+            "council-mission-audit" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val cooldowns = kingdom.councilCooldowns ?: RawCouncilCooldowns(0, 0, 0, 0)
+                    cooldowns.audit = 4
+                    kingdom.councilCooldowns = cooldowns
+                    kingdom.resourcePoints.now += 10
+                    actor.setKingdom(kingdom)
+                    postChatMessage(t("kingdom.councilMissions.audit.chat"))
+                }
+            }
+
+            "council-mission-scrying" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val cooldowns = kingdom.councilCooldowns ?: RawCouncilCooldowns(0, 0, 0, 0)
+                    cooldowns.scrying = 3
+                    kingdom.councilCooldowns = cooldowns
+                    kingdom.resourcePoints.now -= 4
+                    val modifier = RawModifier(
+                        id = v4(),
+                        type = "circumstance",
+                        value = 2,
+                        name = t("kingdom.councilMissions.scrying.btn"),
+                        enabled = true,
+                        turns = 1,
+                        selector = "check",
+                        applyIf = arrayOf(
+                            RawEq(eq = tupleOf("@skill", "exploration"))
+                        ),
+                        requiresTranslation = false,
+                    )
+                    kingdom.modifiers = kingdom.modifiers + modifier
+                    actor.setKingdom(kingdom)
+                    postChatMessage(t("kingdom.councilMissions.scrying.chat"))
+                }
+            }
+
+            "council-mission-lockdown" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val cooldowns = kingdom.councilCooldowns ?: RawCouncilCooldowns(0, 0, 0, 0)
+                    cooldowns.lockdown = 5
+                    kingdom.councilCooldowns = cooldowns
+                    kingdom.resourcePoints.now -= 2
+                    val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+                    val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
+                    kingdom.unrest = kingdom.addUnrest(-2, chosenFeats)
+                    actor.setKingdom(kingdom)
+                    postChatMessage(t("kingdom.councilMissions.lockdown.chat"))
+                }
+            }
+
+            "council-mission-feast" -> buildPromise {
+                actor.getKingdom()?.let { kingdom ->
+                    val cooldowns = kingdom.councilCooldowns ?: RawCouncilCooldowns(0, 0, 0, 0)
+                    cooldowns.feast = 4
+                    kingdom.councilCooldowns = cooldowns
+                    kingdom.commodities.now.food -= 3
+                    val modifier = RawModifier(
+                        id = v4(),
+                        type = "status",
+                        value = 1,
+                        name = t("kingdom.councilMissions.feast.btn"),
+                        enabled = true,
+                        turns = 1,
+                        selector = "check",
+                        applyIf = arrayOf(
+                            RawEq(eq = tupleOf("@ability", "loyalty"))
+                        ),
+                        requiresTranslation = false,
+                    )
+                    kingdom.modifiers = kingdom.modifiers + modifier
+                    val chosenFeatures = kingdom.getChosenFeatures(kingdom.getExplodedFeatures())
+                    val chosenFeats = kingdom.getChosenFeats(chosenFeatures)
+                    kingdom.unrest = kingdom.addUnrest(-1, chosenFeats)
+                    actor.setKingdom(kingdom)
+                    postChatMessage(t("kingdom.councilMissions.feast.chat"))
+                }
+            }
+
             "end-turn" -> buildPromise {
                 actor.getKingdom()?.let { kingdom ->
                     val realm = game.getRealmData(actor, kingdom)
                     val settlements = kingdom.getAllSettlements(game)
                     val storage = calculateStorage(realm = realm, settlements = settlements.allSettlements)
-                    kingdom.supernaturalSolutions = 0
-                    kingdom.creativeSolutions = 0
-                    kingdom.fame.now = kingdom.fame.next
-                    kingdom.fame.next = 0
-                    kingdom.resourcePoints = kingdom.resourcePoints.endTurn()
-                    kingdom.resourceDice = kingdom.resourceDice.endTurn()
-                    kingdom.consumption = kingdom.consumption.endTurn()
-                    kingdom.commodities = kingdom.commodities.endTurn(storage)
-                    // tick down modifiers
-                    kingdom.modifiers = kingdom.modifiers.mapNotNull {
-                        val turns = it.turns
-                        if (turns == 0 || turns == null) {
-                            it
-                        } else if (turns == 1) {
-                            null
-                        } else {
-                            RawModifier.copy(it, turns = turns - 1)
-                        }
-                    }.toTypedArray()
+                    val tickResult = TurnTickingEngine.tick(
+                        fame = kingdom.fame,
+                        resourcePoints = kingdom.resourcePoints,
+                        resourceDice = kingdom.resourceDice,
+                        consumption = kingdom.consumption,
+                        commodities = kingdom.commodities,
+                        storage = storage,
+                        councilCooldowns = kingdom.councilCooldowns,
+                        modifiers = kingdom.modifiers,
+                    )
+                    kingdom.supernaturalSolutions = tickResult.supernaturalSolutions
+                    kingdom.creativeSolutions = tickResult.creativeSolutions
+                    kingdom.fame = tickResult.fame
+                    kingdom.resourcePoints = tickResult.resourcePoints
+                    kingdom.resourceDice = tickResult.resourceDice
+                    kingdom.consumption = tickResult.consumption
+                    kingdom.commodities = tickResult.commodities
+                    kingdom.councilCooldowns = tickResult.councilCooldowns
+                    kingdom.modifiers = tickResult.modifiers
                     actor.setKingdom(kingdom)
                 }
                 postChatTemplate(templatePath = "chatmessages/end-turn.hbs")
@@ -1211,6 +1359,9 @@ class KingdomSheet(
     ): Promise<KingdomSheetContext> = buildPromise {
         val parent = super._preparePartContext(partId, context, options).await()
         val kingdom = getKingdom()
+        val quests = kingdom.quests ?: emptyArray()
+        val activeQuests = quests.filter { it.status == "active" }.toTypedArray()
+        val completedQuests = quests.filter { it.status == "completed" }.toTypedArray()
         val allFeatures = kingdom.getExplodedFeatures()
         val chosenFeatures = kingdom.getChosenFeatures(allFeatures)
         val vacancies = kingdom.vacancies(
@@ -1409,6 +1560,26 @@ class KingdomSheet(
         )
         val automateResources = kingdom.settings.automateResources != AutomateResources.MANUAL.value
         val isGM = game.user.isGM
+        val cooldowns = kingdom.councilCooldowns ?: RawCouncilCooldowns(0, 0, 0, 0)
+        val canAudit = kingdom.settings.enableCouncilMissions &&
+                !vacancies.resolveVacancy(Leader.TREASURER) &&
+                leaderActors.resolve(Leader.TREASURER) != null &&
+                cooldowns.audit <= 0
+        val canScrying = kingdom.settings.enableCouncilMissions &&
+                !vacancies.resolveVacancy(Leader.MAGISTER) &&
+                leaderActors.resolve(Leader.MAGISTER) != null &&
+                kingdom.resourcePoints.now >= 4 &&
+                cooldowns.scrying <= 0
+        val canLockdown = kingdom.settings.enableCouncilMissions &&
+                !vacancies.resolveVacancy(Leader.WARDEN) &&
+                leaderActors.resolve(Leader.WARDEN) != null &&
+                kingdom.resourcePoints.now >= 2 &&
+                cooldowns.lockdown <= 0
+        val canFeast = kingdom.settings.enableCouncilMissions &&
+                !vacancies.resolveVacancy(Leader.COUNSELOR) &&
+                leaderActors.resolve(Leader.COUNSELOR) != null &&
+                kingdom.commodities.now.food >= 3 &&
+                cooldowns.feast <= 0
         val ongoingEvents = kingdom.getOngoingEvents().toContext(
             openedDetails = openedDetails,
             isGM = isGM,
@@ -1542,6 +1713,15 @@ class KingdomSheet(
             sheetBackground = background,
             actorUuid = actor.uuid,
             activeLeader = activeLeaderContext,
+            enableCouncilMissions = kingdom.settings.enableCouncilMissions,
+            councilCooldowns = cooldowns,
+            canAudit = canAudit,
+            canScrying = canScrying,
+            canLockdown = canLockdown,
+            canFeast = canFeast,
+            activeQuests = activeQuests,
+            completedQuests = completedQuests,
+            rosterContext = kingdom.companions.toRosterContext(isGM),
         )
     }
 
@@ -1562,6 +1742,10 @@ class KingdomSheet(
                 }
 
                 MainNavEntry.MODIFIERS -> " (${kingdom.modifiers.size})"
+                MainNavEntry.QUESTS -> {
+                    val activeSize = (kingdom.quests ?: emptyArray()).count { it.status == "active" }
+                    " ($activeSize)"
+                }
                 else -> ""
             }
             NavEntryContext(

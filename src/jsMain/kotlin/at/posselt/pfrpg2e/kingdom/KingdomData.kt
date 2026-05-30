@@ -23,6 +23,7 @@ import at.posselt.pfrpg2e.kingdom.data.ChosenFeature
 import at.posselt.pfrpg2e.kingdom.data.MilestoneChoice
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityBoostChoices
 import at.posselt.pfrpg2e.kingdom.data.RawAbilityScores
+import at.posselt.pfrpg2e.kingdom.data.RawQuest
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
 import at.posselt.pfrpg2e.kingdom.data.RawCharterChoices
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
@@ -96,6 +97,7 @@ external interface KingdomSettings {
     var partialStructureConstruction: Boolean
     var capStructureBonusAtKingdomLevel: Boolean
     var capitalCanGrowOneSizeLarger: Boolean
+    var enableCouncilMissions: Boolean
 }
 
 @JsPlainObject
@@ -123,8 +125,18 @@ external interface RawLeaderSkills {
 }
 
 @JsPlainObject
+external interface RawCouncilCooldowns {
+    var audit: Int
+    var scrying: Int
+    var lockdown: Int
+    var feast: Int
+}
+
+@JsPlainObject
 external interface KingdomData {
     var name: String
+    var councilCooldowns: RawCouncilCooldowns?
+    var quests: Array<RawQuest>?
     var atWar: Boolean
     var fame: RawFame
     var level: Int
@@ -173,6 +185,7 @@ external interface KingdomData {
     var abilityScores: RawAbilityScores
     var initialProficiencies: Array<String?>
     var milestones: Array<MilestoneChoice>
+    var companions: Array<RawCharacter>
 }
 
 fun RawLeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =

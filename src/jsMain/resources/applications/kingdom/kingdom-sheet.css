@@ -810,4 +810,463 @@
             }
         }
     }
+
+    .km-council-missions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        margin-top: 0.5em;
+
+        .km-mission-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5px;
+
+            button {
+                flex-grow: 1;
+                margin-left: 0;
+                text-align: left;
+                padding: 0.3em 0.6em;
+                font-size: var(--font-size-13);
+            }
+
+            .km-mission-info {
+                min-width: 85px;
+                text-align: right;
+                font-size: var(--font-size-11);
+
+                .km-cooldown {
+                    color: #7a7a7a;
+                }
+
+                .km-ready {
+                    color: var(--secondary-km);
+                    font-weight: bold;
+                }
+            }
+            }
+        }
+    }
+
+    /* Quests Board */
+    .km-quests-board {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .km-quests-section {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        &.km-completed-section {
+            margin-top: 15px;
+            border-top: 1px solid rgba(120, 120, 120, 0.3);
+            padding-top: 20px;
+        }
+    }
+
+    .km-quests-header {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: var(--secondary-km, #ee9b3a);
+        border-bottom: 2px solid rgba(238, 155, 58, 0.4);
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+        align-items: center;
+
+        i {
+            margin-right: 8px;
+        }
+
+        .km-add-quest-btn {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 12px;
+            font-size: 0.75em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: linear-gradient(135deg, #27ae60, #219653);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            }
+            
+            i {
+                margin: 0;
+            }
+        }
+    }
+
+    .km-quests-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 15px;
+    }
+
+    .km-quest-card {
+        background: rgba(30, 30, 30, 0.6);
+        border: 1px solid rgba(120, 120, 120, 0.25);
+        border-radius: 8px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #95a5a6; /* Default gray top border */
+        }
+
+        &.km-quest-active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            border-color: rgba(238, 155, 58, 0.5);
+        }
+        
+        &[data-id] {
+            &:has(.km-quest-type-explore_hex)::before { background: #3498db; }
+            &:has(.km-quest-type-claim_hex)::before { background: #9b59b6; }
+            &:has(.km-quest-type-build_structure)::before { background: #e67e22; }
+            &:has(.km-quest-type-clear_hex)::before { background: #e74c3c; }
+            &:has(.km-quest-type-assign_leader)::before { background: #f1c40f; }
+            &:has(.km-quest-type-other)::before { background: #1abc9c; }
+        }
+    }
+
+    .theme-light .km-quest-card {
+        background: rgba(255, 255, 255, 0.75);
+        border-color: rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+
+    .km-quest-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 5px;
+    }
+
+    .km-quest-title {
+        font-family: Signika, "Palatino Linotype", sans-serif;
+        font-size: 1.3em;
+        font-weight: bold;
+        line-height: 1.2;
+    }
+
+    .km-quest-badge {
+        font-size: 0.75em;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+        background: rgba(120, 120, 120, 0.2);
+        color: inherit;
+        border: 1px solid rgba(120, 120, 120, 0.3);
+
+        &.km-quest-type-explore_hex { background: rgba(52, 152, 219, 0.15); color: #5dade2; border-color: rgba(52, 152, 219, 0.3); }
+        &.km-quest-type-claim_hex { background: rgba(155, 89, 182, 0.15); color: #bb8fce; border-color: rgba(155, 89, 182, 0.3); }
+        &.km-quest-type-build_structure { background: rgba(230, 126, 34, 0.15); color: #f5b041; border-color: rgba(230, 126, 34, 0.3); }
+        &.km-quest-type-clear_hex { background: rgba(231, 76, 60, 0.15); color: #f1948a; border-color: rgba(231, 76, 60, 0.3); }
+        &.km-quest-type-assign_leader { background: rgba(241, 196, 15, 0.15); color: #f4d03f; border-color: rgba(241, 196, 15, 0.3); }
+        &.km-quest-type-other { background: rgba(26, 188, 156, 0.15); color: #48c9b0; border-color: rgba(26, 188, 156, 0.3); }
+    }
+
+    .theme-light {
+        .km-quest-badge.km-quest-type-explore_hex { color: #20639b; }
+        .km-quest-badge.km-quest-type-claim_hex { color: #6c3483; }
+        .km-quest-badge.km-quest-type-build_structure { color: #b9770e; }
+        .km-quest-badge.km-quest-type-clear_hex { color: #922b21; }
+        .km-quest-badge.km-quest-type-assign_leader { color: #7d6608; }
+        .km-quest-badge.km-quest-type-other { color: #117a65; }
+    }
+
+    .km-quest-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.85em;
+        color: #888;
+        border-bottom: 1px dashed rgba(120,120,120,0.2);
+        padding-bottom: 8px;
+
+        .km-quest-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            
+            i {
+                font-size: 0.9em;
+            }
+        }
+    }
+    
+    .theme-light .km-quest-meta {
+        color: #555;
+    }
+
+    .km-quest-description {
+        font-size: 0.95em;
+        line-height: 1.4;
+        flex-grow: 1;
+        min-height: 50px;
+    }
+
+    .km-quest-rewards-container {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 6px;
+        padding: 8px 12px;
+        border: 1px solid rgba(120, 120, 120, 0.1);
+
+        .km-rewards-title {
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: bold;
+            color: #aaa;
+        }
+    }
+
+    .theme-light .km-quest-rewards-container {
+        background: rgba(0, 0, 0, 0.04);
+        .km-rewards-title {
+            color: #666;
+        }
+    }
+
+    .km-rewards-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .km-reward-pill {
+        font-size: 0.8em;
+        padding: 3px 8px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 500;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+
+        &.km-reward-rp { background: rgba(241, 196, 15, 0.15); color: #f4d03f; border: 1px solid rgba(241, 196, 15, 0.3); }
+        &.km-reward-xp { background: rgba(52, 152, 219, 0.15); color: #5dade2; border: 1px solid rgba(52, 152, 219, 0.3); }
+        &.km-reward-unrest { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); }
+        &.km-reward-food { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
+        &.km-reward-lumber { background: rgba(139, 69, 19, 0.15); color: #d2b48c; border: 1px solid rgba(139, 69, 19, 0.3); }
+        &.km-reward-stone { background: rgba(149, 165, 166, 0.15); color: #bdc3c7; border: 1px solid rgba(149, 165, 166, 0.3); }
+        &.km-reward-ore { background: rgba(127, 140, 141, 0.2); color: #ecf0f1; border: 1px solid rgba(127, 140, 141, 0.4); }
+        &.km-reward-luxuries { background: rgba(155, 89, 182, 0.15); color: #bb8fce; border: 1px solid rgba(155, 89, 182, 0.3); }
+    }
+
+    .theme-light {
+        .km-reward-pill {
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            &.km-reward-rp { color: #7d6608; }
+            &.km-reward-xp { color: #20639b; }
+            &.km-reward-unrest { color: #922b21; }
+            &.km-reward-food { color: #196f3d; }
+            &.km-reward-lumber { color: #5c3a21; }
+            &.km-reward-stone { color: #5d6d7e; }
+            &.km-reward-ore { color: #2c3e50; }
+            &.km-reward-luxuries { color: #6c3483; }
+        }
+    }
+
+    .km-quest-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 5px;
+
+        .km-quest-action-btn {
+            font-size: 0.85em;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin: 0;
+
+            &.km-complete-btn {
+                background: rgba(39, 174, 96, 0.2);
+                border: 1px solid rgba(39, 174, 96, 0.4);
+                color: #2ecc71;
+                flex-grow: 1;
+
+                &:hover {
+                    background: rgba(39, 174, 96, 0.35);
+                    border-color: #2ecc71;
+                }
+            }
+
+            &.km-delete-btn {
+                background: rgba(192, 57, 43, 0.15);
+                border: 1px solid rgba(192, 57, 43, 0.35);
+                color: #e74c3c;
+                width: 36px;
+                padding: 6px 0;
+
+                &:hover {
+                    background: rgba(192, 57, 43, 0.3);
+                    border-color: #e74c3c;
+                }
+            }
+        }
+    }
+
+    .theme-light .km-quest-actions {
+        .km-quest-action-btn.km-complete-btn {
+            background: rgba(39, 174, 96, 0.1);
+            color: #196f3d;
+            &:hover {
+                background: rgba(39, 174, 96, 0.2);
+            }
+        }
+        .km-quest-action-btn.km-delete-btn {
+            background: rgba(192, 57, 43, 0.08);
+            color: #922b21;
+            &:hover {
+                background: rgba(192, 57, 43, 0.18);
+            }
+        }
+    }
+
+    .km-empty-quests {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        color: #777;
+        text-align: center;
+        border: 2px dashed rgba(120, 120, 120, 0.15);
+        border-radius: 8px;
+
+        i {
+            font-size: 3em;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin: 0;
+        }
+    }
+
+    .km-quests-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .km-quest-row {
+        background: rgba(30, 30, 30, 0.4);
+        border: 1px solid rgba(120, 120, 120, 0.15);
+        border-radius: 6px;
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        border-left: 4px solid #27ae60;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+        .km-quest-row-main {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-grow: 1;
+        }
+
+        .km-quest-row-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .km-quest-row-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            .km-check-icon {
+                color: #2ecc71;
+            }
+        }
+
+        .km-quest-row-meta {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .km-quest-row-flavor {
+            font-size: 0.9em;
+            font-style: italic;
+            color: #aaa;
+            padding-left: 20px;
+        }
+
+        .km-quest-row-delete-btn {
+            background: rgba(192, 57, 43, 0.15);
+            border: 1px solid rgba(192, 57, 43, 0.3);
+            color: #e74c3c;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 5px 8px;
+            transition: all 0.2s ease;
+            margin: 0;
+
+            &:hover {
+                background: rgba(192, 57, 43, 0.3);
+                border-color: #e74c3c;
+            }
+        }
+    }
+
+    .theme-light .km-quest-row {
+        background: rgba(255, 255, 255, 0.5);
+        border-color: rgba(0, 0, 0, 0.1);
+        .km-quest-row-meta { color: #666; }
+        .km-quest-row-flavor { color: #555; }
+        .km-quest-row-delete-btn {
+            background: rgba(192, 57, 43, 0.08);
+            color: #922b21;
+            &:hover {
+                background: rgba(192, 57, 43, 0.18);
+            }
+        }
+    }
 }
