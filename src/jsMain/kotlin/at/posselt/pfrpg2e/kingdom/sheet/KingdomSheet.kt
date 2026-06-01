@@ -39,6 +39,7 @@ import at.posselt.pfrpg2e.kingdom.RawSome
 import at.posselt.pfrpg2e.kingdom.SettlementTerrain
 import at.posselt.pfrpg2e.kingdom.armies.setupArmies
 import at.posselt.pfrpg2e.kingdom.armies.updateArmyConsumption
+import at.posselt.pfrpg2e.kingdom.TurnTickingEngine
 import at.posselt.pfrpg2e.kingdom.createModifiers
 import at.posselt.pfrpg2e.kingdom.createSimpleContext
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
@@ -47,6 +48,8 @@ import at.posselt.pfrpg2e.kingdom.data.RawQuestRewards
 import at.posselt.pfrpg2e.kingdom.data.RawCommodities
 import at.posselt.pfrpg2e.kingdom.data.limitBy
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
+import at.posselt.pfrpg2e.utils.typeSafeUpdate
+import com.foundryvtt.core.grid.GridOffset2D
 import at.posselt.pfrpg2e.kingdom.data.RawGroup
 import at.posselt.pfrpg2e.kingdom.data.endTurn
 import at.posselt.pfrpg2e.kingdom.data.getChosenCharter
@@ -223,6 +226,7 @@ class KingdomSheet(
     private var currentCharacterSheetNavEntry: String = if (noCharter) "Creation" else "$initialKingdomLevel"
     private var currentNavEntry: MainNavEntry = if (noCharter) MainNavEntry.KINGDOM else MainNavEntry.TURN
     private var bonusFeat: String? = null
+    private var showDetailedMatrix: Boolean = false
     private val openedDetails = mutableSetOf<String>()
 
     init {
@@ -363,6 +367,13 @@ class KingdomSheet(
                 render()
             }
 
+            "toggle-settlements-view" -> {
+                event.preventDefault()
+                event.stopPropagation()
+                showDetailedMatrix = target.dataset["view"] == "matrix"
+                render()
+            }
+
             "add-bonus-feat" -> buildPromise {
                 val featId = bonusFeat
                 if (featId != null) {
@@ -442,6 +453,90 @@ class KingdomSheet(
                     val quests = kingdom.quests ?: emptyArray()
                     kingdom.quests = quests.filter { it.id != questId }.toTypedArray()
                     actor.setKingdom(kingdom)
+                }
+            }
+
+            "add-companion" -> buildPromise {
+                RosterAddDialog { character ->
+                    val current = getKingdom()
+                    current.companions = (current.companions ?: emptyArray()) + character
+                    actor.setKingdom(current)
+                }.launch()
+            }
+
+            "edit-companion" -> buildPromise {
+                val index = target.dataset["index"]?.toIntOrNull()
+                if (index != null) {
+                    val kingdom = getKingdom()
+                    val companions = kingdom.companions ?: emptyArray()
+                    if (index in companions.indices) {
+                        val existing = companions[index]
+                        RosterEditDialog(
+                            index = index,
+                            existing = existing,
+                            onSave = { idx, updated ->
+                                val current = getKingdom()
+                                val arr = (current.companions ?: emptyArray()).copyOf()
+                                arr[idx] = updated
+                                current.companions = arr
+                                actor.setKingdom(current)
+                            },
+                            onDelete = { idx ->
+                                val current = getKingdom()
+                                current.companions = (current.companions ?: emptyArray()).filterIndexed { i, _ -> i != idx }.toTypedArray()
+                                actor.setKingdom(current)
+                            },
+                        ).launch()
+                    }
+                }
+            }
+
+            "delete-companion" -> buildPromise {
+                val index = target.dataset["index"]?.toIntOrNull()
+                if (index != null) {
+                    val kingdom = getKingdom()
+                    kingdom.companions = (kingdom.companions ?: emptyArray()).filterIndexed { i, _ -> i != index }.toTypedArray()
+                    actor.setKingdom(kingdom)
+                }
+            }
+
+            "link-actor" -> buildPromise {
+                val index = target.dataset["index"]?.toIntOrNull()
+                val actorUuid = target.dataset["actorUuid"]
+                if (index != null && actorUuid != null) {
+                    val kingdom = getKingdom()
+                    val companions = (kingdom.companions ?: emptyArray()).copyOf()
+                    if (index in companions.indices) {
+                        companions[index].actorUuid = actorUuid
+                        kingdom.companions = companions
+                        actor.setKingdom(kingdom)
+                    }
+                }
+            }
+
+            "toggle-traveling" -> buildPromise {
+                val index = target.dataset["index"]?.toIntOrNull()
+                if (index != null) {
+                    val kingdom = getKingdom()
+                    val companions = (kingdom.companions ?: emptyArray()).copyOf()
+                    if (index in companions.indices) {
+                        companions[index].traveling = !companions[index].traveling
+                        kingdom.companions = companions
+                        actor.setKingdom(kingdom)
+                    }
+                }
+            }
+
+            "toggle-active" -> buildPromise {
+                val index = target.dataset["index"]?.toIntOrNull()
+                if (index != null) {
+                    val kingdom = getKingdom()
+                    val companions = (kingdom.companions ?: emptyArray()).copyOf()
+                    if (index in companions.indices) {
+                        companions[index].active = !companions[index].active
+                        kingdom.companions = companions
+                        actor.setKingdom(kingdom)
+                    }
                 }
             }
 
@@ -1112,6 +1207,55 @@ class KingdomSheet(
                     kingdom.commodities = tickResult.commodities
                     kingdom.councilCooldowns = tickResult.councilCooldowns
                     kingdom.modifiers = tickResult.modifiers
+
+                    // Tick companion travel simulation
+                    val companions = kingdom.companions ?: emptyArray()
+                    for (companion in companions) {
+                        if (companion.traveling && companion.active) {
+                            val currentEta = companion.eta
+                            if (currentEta != null) {
+                                val nextEta = currentEta - 1
+                                companion.eta = nextEta
+                                if (nextEta <= 0) {
+                                    companion.traveling = false
+                                    companion.eta = null
+                                    
+                                    val companionName = companion.actorUuid?.let { uuid ->
+                                        game.actors.get(uuid)?.name
+                                    } ?: companion.name
+                                    
+                                    val destX = companion.destinationX ?: 0
+                                    val destY = companion.destinationY ?: 0
+                                    val msg = t("kingdom.companionArrival", recordOf(
+                                        "name" to companionName,
+                                        "x" to destX,
+                                        "y" to destY
+                                    ))
+                                    postChatMessage(msg, isHtml = true)
+                                    
+                                    // Move token if activeScene is hex grid and token exists
+                                    val activeScene = game.scenes.active
+                                    if (activeScene != null && activeScene.grid.isHexagonal && companion.destinationX != null && companion.destinationY != null) {
+                                        val uuid = companion.actorUuid
+                                        if (uuid != null) {
+                                            val companionActor = game.actors.get(uuid)
+                                            val tokenDoc = activeScene.tokens.contents.find { it.actorId == companionActor?.id }
+                                            if (tokenDoc != null) {
+                                                val offset = js("{ i: companion.destinationX, j: companion.destinationY }").unsafeCast<GridOffset2D>()
+                                                val point = activeScene.grid.getTopLeftPoint(offset)
+                                                tokenDoc.typeSafeUpdate {
+                                                    x = point.x
+                                                    y = point.y
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    kingdom.companions = companions
+
                     actor.setKingdom(kingdom)
                 }
                 postChatTemplate(templatePath = "chatmessages/end-turn.hbs")
@@ -1721,7 +1865,18 @@ class KingdomSheet(
             canFeast = canFeast,
             activeQuests = activeQuests,
             completedQuests = completedQuests,
-            rosterContext = kingdom.companions.toRosterContext(isGM),
+            rosterContext = (kingdom.companions ?: emptyArray()).map { character ->
+                val uuid = character.actorUuid
+                if (uuid != null) {
+                    val companionActor = game.actors.get(uuid)
+                    if (companionActor != null) {
+                        character.name = companionActor.name
+                        character.img = companionActor.img
+                    }
+                }
+                character
+            }.toTypedArray().toRosterContext(isGM),
+            showDetailedMatrix = showDetailedMatrix,
         )
     }
 

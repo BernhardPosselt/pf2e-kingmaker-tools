@@ -82,7 +82,7 @@ external interface KingdomSheetContext : ValidatedHandlebarsContext {
     val useLeadershipModifiers: Boolean
     val actorUuid: String
     val activeLeader: FormElementContext
-    val sheetBackground: String
+    val sheetBackground: String?
     val enableCouncilMissions: Boolean
     val councilCooldowns: RawCouncilCooldowns
     val canAudit: Boolean
@@ -90,4 +90,5 @@ external interface KingdomSheetContext : ValidatedHandlebarsContext {
     val canLockdown: Boolean
     val canFeast: Boolean
     val rosterContext: RosterContext
+    val showDetailedMatrix: Boolean
 }

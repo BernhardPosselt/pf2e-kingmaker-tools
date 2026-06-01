@@ -17,5 +17,6 @@
   },
   "criticalFailure": {
     "message": "campingActivities.cook-meal.criticalFailure.message"
-  }
+  },
+  "oncePerSession": false
 }

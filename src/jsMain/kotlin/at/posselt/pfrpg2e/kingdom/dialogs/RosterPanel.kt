@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.kingdom.data.RawCharacter
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
+import com.foundryvtt.core.game
 import com.foundryvtt.pf2e.actor.PF2ECharacter
 import com.foundryvtt.pf2e.actor.PF2ENpc
 import kotlinx.coroutines.await
@@ -28,7 +29,7 @@ external interface RosterAddContext : HandlebarsRenderContext {
 }
 
 class RosterAddDialog(
-    private val onAdd: (RawCharacter) -> Unit,
+    private val onAdd: suspend (RawCharacter) -> Unit,
 ) : SimpleApp<RosterAddContext>(
     title = t("kingdom.roster.addCompanion"),
     template = "applications/kingdom/roster-add.hbs",
@@ -52,12 +53,19 @@ class RosterAddDialog(
                         ?.let { it as? org.w3c.dom.HTMLTextAreaElement }
                         ?.value ?: ""
 
+                    val actorUuid = element.querySelector("input[name='linkedActorUuid']")
+                        ?.let { it as? org.w3c.dom.HTMLInputElement }
+                        ?.value?.takeIf { it.isNotBlank() }
+                    val img = actorUuid?.let { game.actors.get(it)?.img }
+
                     val character = RawCharacter(
                         name = name,
+                        actorUuid = actorUuid,
                     ).also {
                         it.speed = speed
                         it.plotHook = plotHook
                         it.role = if (isNpc) "npc" else "companion"
+                        it.img = img
                     }
                     onAdd(character)
                     close()
@@ -141,8 +149,8 @@ external interface RosterEditContext : HandlebarsRenderContext {
 class RosterEditDialog(
     private val index: Int,
     private val existing: RawCharacter,
-    private val onSave: (Int, RawCharacter) -> Unit,
-    private val onDelete: (Int) -> Unit,
+    private val onSave: suspend (Int, RawCharacter) -> Unit,
+    private val onDelete: suspend (Int) -> Unit,
 ) : SimpleApp<RosterEditContext>(
     title = t("kingdom.roster.editCompanion"),
     template = "applications/kingdom/roster-edit.hbs",

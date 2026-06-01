@@ -120,7 +120,7 @@
         {{#if enableCouncilMissions}}
             <h3>{{localizeKM "kingdom.councilMissions.title"}}</h3>
             <div class="km-council-missions">
-                <div class="km-mission-item" title="{{localizeKM "kingdom.councilMissions.audit.help"}}">
+                <div class="km-mission-item">
                     <button type="button" data-action="council-mission-audit" {{#unless canAudit}}disabled{{/unless}}>
                         {{localizeKM "kingdom.councilMissions.audit.btn"}}
                     </button>
@@ -131,8 +131,12 @@
                             <span class="km-ready">{{localizeKM "kingdom.councilMissions.ready"}}</span>
                         {{/if}}
                     </div>
+                    <div class="km-tooltip">
+                        <div class="km-tooltip-title">{{localizeKM "kingdom.councilMissions.audit.btn"}}</div>
+                        <div class="km-tooltip-desc">{{localizeKM "kingdom.councilMissions.audit.help"}}</div>
+                    </div>
                 </div>
-                <div class="km-mission-item" title="{{localizeKM "kingdom.councilMissions.scrying.help"}}">
+                <div class="km-mission-item">
                     <button type="button" data-action="council-mission-scrying" {{#unless canScrying}}disabled{{/unless}}>
                         {{localizeKM "kingdom.councilMissions.scrying.btn"}}
                     </button>
@@ -143,8 +147,12 @@
                             <span class="km-ready">{{localizeKM "kingdom.councilMissions.ready"}}</span>
                         {{/if}}
                     </div>
+                    <div class="km-tooltip">
+                        <div class="km-tooltip-title">{{localizeKM "kingdom.councilMissions.scrying.btn"}}</div>
+                        <div class="km-tooltip-desc">{{localizeKM "kingdom.councilMissions.scrying.help"}}</div>
+                    </div>
                 </div>
-                <div class="km-mission-item" title="{{localizeKM "kingdom.councilMissions.lockdown.help"}}">
+                <div class="km-mission-item">
                     <button type="button" data-action="council-mission-lockdown" {{#unless canLockdown}}disabled{{/unless}}>
                         {{localizeKM "kingdom.councilMissions.lockdown.btn"}}
                     </button>
@@ -155,8 +163,12 @@
                             <span class="km-ready">{{localizeKM "kingdom.councilMissions.ready"}}</span>
                         {{/if}}
                     </div>
+                    <div class="km-tooltip">
+                        <div class="km-tooltip-title">{{localizeKM "kingdom.councilMissions.lockdown.btn"}}</div>
+                        <div class="km-tooltip-desc">{{localizeKM "kingdom.councilMissions.lockdown.help"}}</div>
+                    </div>
                 </div>
-                <div class="km-mission-item" title="{{localizeKM "kingdom.councilMissions.feast.help"}}">
+                <div class="km-mission-item">
                     <button type="button" data-action="council-mission-feast" {{#unless canFeast}}disabled{{/unless}}>
                         {{localizeKM "kingdom.councilMissions.feast.btn"}}
                     </button>
@@ -166,6 +178,10 @@
                         {{else}}
                             <span class="km-ready">{{localizeKM "kingdom.councilMissions.ready"}}</span>
                         {{/if}}
+                    </div>
+                    <div class="km-tooltip">
+                        <div class="km-tooltip-title">{{localizeKM "kingdom.councilMissions.feast.btn"}}</div>
+                        <div class="km-tooltip-desc">{{localizeKM "kingdom.councilMissions.feast.help"}}</div>
                     </div>
                 </div>
             </div>

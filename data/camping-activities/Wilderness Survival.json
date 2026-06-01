@@ -10,5 +10,7 @@
     {
       "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.v9i9W49PeJ9NkfXX"
     }
-  ]
+  ],
+  "requiredCompanion": "Ekundayo",
+  "oncePerSession": true
 }

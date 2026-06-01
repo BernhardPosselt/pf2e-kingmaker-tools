@@ -1,0 +1,63 @@
+<div class="km-roster-dialog km-roster-add-dialog">
+    <div class="km-roster-dialog-section">
+        <h3><i class="fa-solid fa-user-plus"></i> {{localizeKM "kingdom.roster.addCompanion"}}</h3>
+
+        <div class="km-form-group">
+            <label for="companionName">{{localizeKM "kingdom.roster.name"}}</label>
+            <input type="text" name="companionName" value="{{actorName}}" placeholder="{{localizeKM 'kingdom.roster.namePlaceholder'}}" />
+        </div>
+
+        <div class="km-form-group">
+            <label for="companionRole">{{localizeKM "kingdom.roster.role"}}</label>
+            <select name="companionRole">
+                <option value="companion" {{#unless isNpc}}selected{{/unless}}>{{localizeKM "kingdom.roster.companion"}}</option>
+                <option value="npc" {{#if isNpc}}selected{{/if}}>{{localizeKM "kingdom.roster.npc"}}</option>
+            </select>
+        </div>
+
+        <div class="km-form-group">
+            <label for="companionSpeed">{{localizeKM "kingdom.roster.speed"}}</label>
+            <input type="number" name="companionSpeed" value="{{speed}}" min="0" />
+        </div>
+
+        <div class="km-form-group">
+            <label for="companionPlotHook">{{localizeKM "kingdom.roster.plotHook"}}</label>
+            <textarea name="companionPlotHook" rows="3">{{plotHook}}</textarea>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="km-roster-dialog-section">
+        <h3><i class="fa-solid fa-search"></i> {{localizeKM "kingdom.roster.actorSearch"}}</h3>
+        <p class="km-form-hint">{{localizeKM "kingdom.roster.actorSearchHint"}}</p>
+
+        <div class="km-form-group km-inline-group">
+            <input type="text" name="actorSearch" placeholder="{{localizeKM 'kingdom.roster.searchPlaceholder'}}" />
+            <button type="button" data-action="search-actor">
+                <i class="fa-solid fa-search"></i> {{localizeKM "kingdom.roster.search"}}
+            </button>
+        </div>
+
+        <div class="km-form-group">
+            <select name="searchResults" class="km-roster-search-results">
+                <option value="">{{localizeKM "kingdom.roster.noResults"}}</option>
+            </select>
+            <input type="hidden" name="linkedActorUuid" value="" />
+            <button type="button" data-action="link-actor">
+                <i class="fa-solid fa-link"></i> {{localizeKM "kingdom.roster.linkActor"}}
+            </button>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="km-roster-dialog-actions">
+        <button type="button" data-action="save" class="km-primary-btn">
+            <i class="fa-solid fa-check"></i> {{localizeKM "applications.save"}}
+        </button>
+        <button type="button" data-action="cancel" class="km-secondary-btn">
+            <i class="fa-solid fa-times"></i> {{localizeKM "applications.cancel"}}
+        </button>
+    </div>
+</div>

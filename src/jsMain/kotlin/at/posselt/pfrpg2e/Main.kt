@@ -27,6 +27,10 @@ import at.posselt.pfrpg2e.kingdom.KingdomActor
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.bindChatButtons
 import at.posselt.pfrpg2e.kingdom.registerContextMenus
+import at.posselt.pfrpg2e.kingdom.map.registerHexGridSync
+import at.posselt.pfrpg2e.kingdom.map.syncHexDrawingsToNativeState
+import at.posselt.pfrpg2e.kingdom.map.syncSettlementMarkers
+import at.posselt.pfrpg2e.kingdom.map.syncZoneLabels
 import at.posselt.pfrpg2e.kingdom.sheet.openOrCreateKingdomSheet
 import at.posselt.pfrpg2e.kingdom.structures.validateStructures
 import at.posselt.pfrpg2e.macros.awardHeroPointsMacro
@@ -119,6 +123,7 @@ fun main() {
                     "kingdom-modifiers" to "applications/kingdom/sections/modifiers/page.hbs",
                     "kingdom-notes" to "applications/kingdom/sections/notes/page.hbs",
                     "kingdom-quests" to "applications/kingdom/sections/quests/page.hbs",
+                    "kingdom-roster" to "applications/kingdom/sections/roster/page.hbs",
                     "kingdom-character-sheet" to "applications/kingdom/sections/character-sheet/page.hbs",
                     "kingdom-character-sheet-creation" to "applications/kingdom/sections/character-sheet/creation.hbs",
                     "kingdom-character-sheet-bonus" to "applications/kingdom/sections/character-sheet/bonus.hbs",
@@ -217,6 +222,10 @@ fun main() {
                 showFirstRunMessage(game)
                 validateStructures(game)
                 registerCampingTokenMove(game)
+                registerHexGridSync(game)
+                syncHexDrawingsToNativeState(game)
+                syncSettlementMarkers(game)
+                syncZoneLabels(game)
             }
         }
 

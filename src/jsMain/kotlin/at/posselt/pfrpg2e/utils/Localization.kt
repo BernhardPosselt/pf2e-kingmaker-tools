@@ -105,6 +105,7 @@ suspend fun initLocalization() {
         .init(options)
         .await()
     registerI18NextHelper(window.Handlebars, i18next)
+    window.Handlebars.registerHelper("add", { a: Int, b: Int -> a + b })
     val events = translateKingdomEvents()
     translateActivities(events)
     translateCharters()

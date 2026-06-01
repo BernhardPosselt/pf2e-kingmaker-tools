@@ -9,7 +9,7 @@
   "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.xfIwKyG1pNFp8JbN",
   "level": 4,
   "cost": {
-    "currency": "gp",
+    "currency": "sp",
     "value": 5
   },
   "rarity": "common",
@@ -43,5 +43,6 @@
         "removeAfterRest": true
       }
     ]
-  }
+  },
+  "requirements": "ability to cast cold spell"
 }

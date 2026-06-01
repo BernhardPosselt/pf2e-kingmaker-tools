@@ -1,6 +1,6 @@
 {
-  "id": "smoked-trout-and-hydra-plate",
-  "name": "recipes.smoked-trout-and-hydra-plate.name",
+  "id": "smoked-trout-and-hydra-pate",
+  "name": "recipes.smoked-trout-and-hydra-pate.name",
   "icon": "icons/consumables/food/plate-fish-grilled-brown.webp",
   "basicIngredients": 6,
   "specialIngredients": 2,
@@ -12,7 +12,7 @@
     "currency": "gp",
     "value": 25
   },
-  "rarity": "uncommon",
+  "rarity": "common",
   "criticalSuccess": {
     "effects": [
       {
@@ -20,7 +20,7 @@
         "removeWhenPreparingCampsite": false
       }
     ],
-    "message": "recipes.smoked-trout-and-hydra-plate.criticalSuccess.message"
+    "message": "recipes.smoked-trout-and-hydra-pate.criticalSuccess.message"
   },
   "criticalFailure": {
     "effects": [

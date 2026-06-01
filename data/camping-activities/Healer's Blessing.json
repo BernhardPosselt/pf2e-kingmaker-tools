@@ -11,5 +11,6 @@
       "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.eaWmjDOIvUF9aDbq",
       "doublesHealing": true
     }
-  ]
+  ],
+  "oncePerSession": true
 }

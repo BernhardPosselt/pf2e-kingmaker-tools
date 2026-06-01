@@ -7,6 +7,7 @@ import kotlinx.js.JsPlainObject
 external interface RealmTileData {
     val type: String
     val kingdomActorUuid: String?
+    val settlementId: String?
 }
 
 fun TileDocument.getRealmTileData(): RealmTileData? =

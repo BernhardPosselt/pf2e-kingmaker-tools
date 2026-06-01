@@ -133,6 +133,7 @@ external interface CampingData {
     var forcedMarchActive: Boolean
     var secondsSpentForcedMarching: Int
     var hexSizeInMiles: Int
+    var watchSlots: Array<String>
 }
 
 fun CampingData.campingActivitiesWithId() =
@@ -173,7 +174,8 @@ const val cookMealId = "cook-meal"
 enum class CampingSheetSection : Translatable, ValueEnum {
     PREPARE_CAMPSITE,
     CAMPING_ACTIVITIES,
-    EATING;
+    EATING,
+    SET_WATCHES;
 
     override val value: String
         get() = toCamelCase()
@@ -251,6 +253,7 @@ fun getDefaultCamping(game: Game): CampingData {
         travelModeActive = false,
         secondsSpentForcedMarching = 0,
         hexSizeInMiles = 12,
+        watchSlots = emptyArray(),
         regionSettings = RegionSettings(
             regions = arrayOf(
                 RegionSetting(

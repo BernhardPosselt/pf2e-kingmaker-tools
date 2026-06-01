@@ -12,7 +12,7 @@
     "currency": "gp",
     "value": 100
   },
-  "rarity": "common",
+  "rarity": "uncommon",
   "criticalSuccess": {
     "effects": [
       {
@@ -47,5 +47,6 @@
         "removeWhenPreparingCampsite": false
       }
     ]
-  }
+  },
+  "requirements": "ability to cast fire spell"
 }

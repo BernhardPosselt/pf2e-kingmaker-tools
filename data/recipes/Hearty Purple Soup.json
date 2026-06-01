@@ -49,5 +49,6 @@
         "removeWhenPreparingCampsite": false
       }
     ]
-  }
+  },
+  "requirements": "master in Nature"
 }

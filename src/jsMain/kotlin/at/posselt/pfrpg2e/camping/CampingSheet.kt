@@ -109,6 +109,8 @@ external interface CampingSheetActivity {
     val requiresCheck: Boolean
     val secret: Boolean
     val skills: FormElementContext?
+    val disabled: Boolean
+    val disabledReason: String?
 }
 
 fun CampingSheetActivity.isPrepareCampsite() = id == "prepare-campsite"
@@ -150,6 +152,10 @@ external interface RecipeContext {
     val actors: Array<RecipeActorContext>
     val skills: FormElementContext?
     val degreeOfSuccess: FormElementContext?
+    val level: Int?
+    val rarity: String?
+    val purchaseCost: String?
+    val requirements: String?
 }
 
 @Suppress("unused")
@@ -177,6 +183,8 @@ external interface CampingSheetContext : ValidatedHandlebarsContext {
     var prepareCampSection: Boolean
     var campingActivitiesSection: Boolean
     var eatingSection: Boolean
+    var setWatchesSection: Boolean
+    var watchSlots: Array<CampingSheetActor?>
     var travelMode: FormElementContext
     var forcedMarch: FormElementContext
     var forcedMarchDays: Int
@@ -327,6 +335,33 @@ class CampingSheet(
                 }
             }
         }
+        onDocumentRefDrop(
+            ".km-camping-watch-slot",
+            { it.dragstartSelector == ".km-camping-actor" }
+        ) { event, documentRef ->
+            buildPromise {
+                val target = event.target as HTMLElement
+                val slot = target.closest(".km-camping-watch-slot") as HTMLElement?
+                val slotIndex = slot?.dataset?.get("slotIndex")?.toIntOrNull()
+                if (documentRef is ActorRef && slotIndex != null) {
+                    assignWatchSlot(documentRef.uuid, slotIndex)
+                }
+            }
+        }
+        onDocumentRefDrop(
+            ".km-camping-watch-slot",
+            { it.dragstartSelector == ".km-camping-watch-assignee" }
+        ) { event, documentRef ->
+            buildPromise {
+                val target = event.target as HTMLElement
+                val toSlot = target.closest(".km-camping-watch-slot") as HTMLElement?
+                val toIndex = toSlot?.dataset?.get("slotIndex")?.toIntOrNull()
+                val fromSlot = documentRef as? ActorRef
+                if (toIndex != null && fromSlot != null) {
+                    assignWatchSlot(fromSlot.uuid, toIndex)
+                }
+            }
+        }
         appHook.onUpdateWorldTime { _, _, _, _ -> render() }
         appHook.onCreateItem { _, _, _ -> render() }
         appHook.onDeleteItem { _, _, _ -> render() }
@@ -402,6 +437,14 @@ class CampingSheet(
             "clear-activity" -> {
                 buildPromise {
                     target.dataset["id"]?.let { clearActivity(it) }
+                }
+            }
+
+            "clear-watch-slot" -> {
+                buildPromise {
+                    target.dataset["slotIndex"]?.toIntOrNull()?.let { index ->
+                        clearWatchSlot(index)
+                    }
                 }
             }
 
@@ -624,6 +667,7 @@ class CampingSheet(
     private suspend fun previousSection() {
         actor.getCamping()?.let { camping ->
             camping.section = when (fromCamelCase<CampingSheetSection>(camping.section)) {
+                CampingSheetSection.SET_WATCHES -> CampingSheetSection.EATING
                 CampingSheetSection.EATING -> if (camping.canPerformActivities()) {
                     CampingSheetSection.CAMPING_ACTIVITIES
                 } else {
@@ -645,8 +689,13 @@ class CampingSheet(
                     CampingSheetSection.EATING
                 }
 
-                else -> CampingSheetSection.EATING
+                CampingSheetSection.CAMPING_ACTIVITIES -> CampingSheetSection.EATING
+                CampingSheetSection.EATING -> CampingSheetSection.SET_WATCHES
+                else -> CampingSheetSection.SET_WATCHES
             }.toCamelCase()
+            if (camping.section == "setWatches" && camping.watchSlots.isEmpty()) {
+                camping.watchSlots = Array(camping.actorUuids.size.coerceAtLeast(2)) { "" }
+            }
             actor.setCamping(camping)
         }
     }
@@ -676,6 +725,28 @@ class CampingSheet(
         }
     }
 
+    private suspend fun assignWatchSlot(actorUuid: String, slotIndex: Int) {
+        actor.getCamping()?.let { camping ->
+            if (slotIndex < 0 || slotIndex >= camping.watchSlots.size) return
+            // prevent duplicate assignments: remove actor from any other slot first
+            camping.watchSlots.forEachIndexed { index, existingUuid ->
+                if (existingUuid == actorUuid && index != slotIndex) {
+                    camping.watchSlots[index] = ""
+                }
+            }
+            camping.watchSlots[slotIndex] = actorUuid
+            actor.setCamping(camping)
+        }
+    }
+
+    private suspend fun clearWatchSlot(slotIndex: Int) {
+        actor.getCamping()?.let { camping ->
+            if (slotIndex < 0 || slotIndex >= camping.watchSlots.size) return
+            camping.watchSlots[slotIndex] = ""
+            actor.setCamping(camping)
+        }
+    }
+
     private suspend fun assignActivityTo(actorUuid: String, activityId: String) {
         actor.getCamping()?.let { camping ->
             val activity = camping.getAllActivities().find { it.id == activityId }
@@ -694,21 +765,38 @@ class CampingSheet(
             } else if (activity.requiresACheck() && !activityActor.hasAnyActivitySkill(activity)) {
                 ui.notifications.error(t("camping.actorLacksSkills", recordOf("activityName" to activity.name)))
             } else {
-                val skill = activityActor
-                    .findCampingActivitySkills(activity, camping.ignoreSkillRequirements)
-                    .filterNot { it.validateOnly }
-                    .firstOrNull()
-                val existing = camping.campingActivities[activityId]
-                if (existing == null) {
-                    camping.campingActivities[activity.id] = CampingActivity(
-                        actorUuid = actorUuid,
-                        selectedSkill = skill?.attribute?.value,
-                    )
+                // GMs can always (re)assign actors; players are subject to scheduling rules
+                val schedulingResult = if (game.user.isGM) {
+                    CampingActivityScheduler.SchedulingResult.Allowed
                 } else {
-                    existing.actorUuid = actorUuid
-                    existing.selectedSkill = skill?.attribute?.value
+                    CampingActivityScheduler.canAssign(
+                        activities = camping.campingActivitiesWithId(),
+                        activityData = activity,
+                        actorUuid = actorUuid,
+                    )
                 }
-                actor.setCamping(camping)
+                when (schedulingResult) {
+                    is CampingActivityScheduler.SchedulingResult.Blocked -> {
+                        ui.notifications.error(schedulingResult.reason)
+                    }
+                    is CampingActivityScheduler.SchedulingResult.Allowed -> {
+                        val skill = activityActor
+                            .findCampingActivitySkills(activity, camping.ignoreSkillRequirements)
+                            .filterNot { it.validateOnly }
+                            .firstOrNull()
+                        val existing = camping.campingActivities[activityId]
+                        if (existing == null) {
+                            camping.campingActivities[activity.id] = CampingActivity(
+                                actorUuid = actorUuid,
+                                selectedSkill = skill?.attribute?.value,
+                            )
+                        } else {
+                            existing.actorUuid = actorUuid
+                            existing.selectedSkill = skill?.attribute?.value
+                        }
+                        actor.setCamping(camping)
+                    }
+                }
             }
         }
     }
@@ -899,6 +987,10 @@ class CampingSheet(
                         value = result?.degreeOfSuccess,
                         elementClasses = listOf("km-degree-of-success"),
                     ).toContext(),
+                    level = recipe.level,
+                    rarity = recipe.rarity,
+                    purchaseCost = recipe.cost.format(),
+                    requirements = recipe.requirements,
                 )
             }
             .toTypedArray()
@@ -938,6 +1030,12 @@ class CampingSheet(
         val prepareCampSection = section == CampingSheetSection.PREPARE_CAMPSITE
         val campingActivitiesSection = section == CampingSheetSection.CAMPING_ACTIVITIES
         val eatingSection = section == CampingSheetSection.EATING
+        val setWatchesSection = section == CampingSheetSection.SET_WATCHES
+        if (setWatchesSection && camping.watchSlots.isEmpty()) {
+            camping.watchSlots = Array(camping.actorUuids.size.coerceAtLeast(2)) { "" }
+        } else if (setWatchesSection && camping.watchSlots.size < camping.actorUuids.size) {
+            camping.watchSlots += Array(camping.actorUuids.size - camping.watchSlots.size) { "" }
+        }
         val foodItems = getCompendiumFoodItems()
         val totalFood = camping.getTotalCarriedFood(actor, foodItems)
         val availableFood = buildFoodCost(totalFood, items = foodItems)
@@ -972,7 +1070,18 @@ class CampingSheet(
                     || (prepareCampSection && !groupedActivity.isPrepareCamp())
                     || (campingActivitiesSection && groupedActivity.isPrepareCamp())
                     || eatingSection
+                    || setWatchesSection
                     || camping.alwaysPerformActivityIds.contains(data.id)
+            val isCompanionPresent = data.isRequiredCompanionPresent(
+                actorNames = actorsByUuid.values.map { it.name }.toSet()
+            )
+            val disabled = !hidden && data.requiredCompanion != null && !isCompanionPresent
+            val disabledReason = if (disabled) {
+                t(
+                    "camping.activityRequiresCompanion",
+                    recordOf("companion" to data.requiredCompanion)
+                )
+            } else null
             CampingSheetActivity(
                 id = data.id,
                 secret = data.isSecret && !game.user.isGM,
@@ -981,6 +1090,8 @@ class CampingSheet(
                 hidden = hidden,
                 requiresCheck = requiresCheck,
                 skills = skills,
+                disabled = disabled,
+                disabledReason = disabledReason,
                 actor = actor?.let { act ->
                     val degree = result.result?.let { fromCamelCase<DegreeOfSuccess>(it) }
                     CampingSheetActor(
@@ -1038,8 +1149,8 @@ class CampingSheet(
             region = Select(
                 label = t("camping.region"),
                 value = currentRegion?.name,
-                options = regions.map {
-                    SelectOption(label = it.name, value = it.name)
+                options = regions.map { region ->
+                    SelectOption(label = regionDropdownLabel(region.name), value = region.name)
                 },
                 required = true,
                 name = "region",
@@ -1087,6 +1198,23 @@ class CampingSheet(
             prepareCampSection = prepareCampSection,
             campingActivitiesSection = campingActivitiesSection,
             eatingSection = eatingSection,
+            setWatchesSection = setWatchesSection,
+            watchSlots = camping.watchSlots.map { slotUuid ->
+                if (slotUuid.isEmpty()) {
+                    null
+                } else {
+                    actorsByUuid[slotUuid]?.let { act ->
+                        CampingSheetActor(
+                            name = act.name,
+                            uuid = slotUuid,
+                            image = act.img,
+                            choseActivity = false,
+                            chosenMeal = null,
+                            chosenMealImg = null,
+                        )
+                    }
+                }
+            }.toTypedArray(),
             isFormValid = isFormValid,
             travelMode = CheckboxInput(
                 value = camping.travelModeActive,

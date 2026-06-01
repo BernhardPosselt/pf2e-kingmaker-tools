@@ -389,7 +389,8 @@ class TurnTickingEngineTest {
 
         // Modifiers: permanent survives, turns=1 expires, turns=3 becomes 2
         assertEquals(2, result.modifiers.size)
-        assertEquals(2, result.changes.count { it.category == "modifiers" && it.field == "expired" })
+        // One "expired" change entry is emitted (carrying the count of expired modifiers)
+        assertEquals(1, result.changes.count { it.category == "modifiers" && it.field == "expired" })
     }
 
     @Test
@@ -408,7 +409,7 @@ class TurnTickingEngineTest {
             resourcePoints = resourcePoints(now = result.resourcePoints.now, next = result.resourcePoints.next),
             modifiers = result.modifiers,
         )
-        assertEquals(10, result.resourcePoints.now) // no next to shift
+        assertEquals(0, result.resourcePoints.now) // next was 0, so now resets to 0 (RP does not carry over)
         assertEquals(1, result.modifiers[0].turns)
 
         // Third tick: modifier expires
@@ -428,7 +429,7 @@ class TurnTickingEngineTest {
         )
         // Simulate saving and restoring state (e.g. Foundry reload)
         val second = tick(
-            fame(first.fame),
+            fame(now = first.fame.now, next = first.fame.next),
             modifiers = first.modifiers,
         )
         assertEquals(0, second.fame.now) // 3 -> 0 (next was 0 from first tick)

@@ -1,0 +1,49 @@
+{
+  "id": "kameberry-pie",
+  "name": "recipes.kameberry-pie.name",
+  "icon": "icons/consumables/grains/pastry-bread-brown.webp",
+  "basicIngredients": 3,
+  "specialIngredients": 2,
+  "cookingLoreDC": 27,
+  "survivalDC": 29,
+  "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.zX4S7wsOxB8CcVWw",
+  "level": 10,
+  "cost": {
+    "currency": "gp",
+    "value": 50
+  },
+  "rarity": "uncommon",
+  "requirements": "master in Religion",
+  "criticalSuccess": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.fd6987d921e942728f8bb1a6",
+        "removeWhenPreparingCampsite": false
+      }
+    ]
+  },
+  "success": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.3dbaaa54cd5a4c3486505ce5",
+        "removeAfterRest": true
+      }
+    ]
+  },
+  "criticalFailure": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.0f332e8028c045b187bfe50f",
+        "removeWhenPreparingCampsite": false
+      }
+    ]
+  },
+  "favoriteMeal": {
+    "effects": [
+      {
+        "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-meal-effects.Item.52fa04d46b2241bdb43657f2",
+        "removeWhenPreparingCampsite": false
+      }
+    ]
+  }
+}

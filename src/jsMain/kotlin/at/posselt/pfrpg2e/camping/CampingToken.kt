@@ -75,25 +75,63 @@ private fun findKingmakerHexRegion(offset: GridOffset2D): String? {
 
 private const val stolenLandsId = "AJ1k5II28u72JOmz"
 
-private val kingmakerRegions = mapOf(
-    "BV" to setOf("Zone 00", "Brevoy"),
-    "RL" to setOf("Zone 01", "Rostland Hinterlands"),
-    "GB" to setOf("Zone 02", "Greenbelt"),
-    "TW" to setOf("Zone 03", "Tuskwater"),
-    "KL" to setOf("Zone 04", "Kamelands"),
-    "NM" to setOf("Zone 05", "Narlmarches"),
-    "SH" to setOf("Zone 06", "Sellen Hills"),
-    "DS" to setOf("Zone 07", "Dunsward"),
-    "NH" to setOf("Zone 08", "Nomen Heights"),
-    "LV" to setOf("Zone 09", "Tor of Levenies"),
-    "HT" to setOf("Zone 10", "Hooktongue"),
-    "DR" to setOf("Zone 11", "Drelev"),
-    "TL" to setOf("Zone 12", "Tiger Lords"),
-    "RU" to setOf("Zone 13", "Rushlight"),
-    "GL" to setOf("Zone 14", "Glenebon Lowlands"),
-    "PX" to setOf("Zone 15", "Pitax"),
-    "GU" to setOf("Zone 16", "Glenebon Uplands"),
-    "NU" to setOf("Zone 17", "Numeria"),
-    "TV" to setOf("Zone 18", "Thousand Voices"),
-    "BR" to setOf("Zone 19", "Branthlend Mountains"),
+/**
+ * A Kingmaker map zone.
+ *
+ * @param id the abbreviation used by the Kingmaker module's region map (e.g. "BV")
+ * @param zoneNumber the padded zone number used in the default region name (e.g. "00")
+ * @param zoneName the canonical Kingmaker zone name (e.g. "Brevoy")
+ */
+private data class KingmakerZone(
+    val id: String,
+    val zoneNumber: String,
+    val zoneName: String,
+) {
+    /** Must match the default region name produced by `t("camping.zone", ...)`. */
+    val regionName: String get() = "Zone $zoneNumber"
+}
+
+private val kingmakerZones = listOf(
+    KingmakerZone("BV", "00", "Brevoy"),
+    KingmakerZone("RL", "01", "Rostland Hinterlands"),
+    KingmakerZone("GB", "02", "Greenbelt"),
+    KingmakerZone("TW", "03", "Tuskwater"),
+    KingmakerZone("KL", "04", "Kamelands"),
+    KingmakerZone("NM", "05", "Narlmarches"),
+    KingmakerZone("SH", "06", "Sellen Hills"),
+    KingmakerZone("DS", "07", "Dunsward"),
+    KingmakerZone("NH", "08", "Nomen Heights"),
+    KingmakerZone("LV", "09", "Tor of Levenies"),
+    KingmakerZone("HT", "10", "Hooktongue"),
+    KingmakerZone("DR", "11", "Drelev"),
+    KingmakerZone("TL", "12", "Tiger Lords"),
+    KingmakerZone("RU", "13", "Rushlight"),
+    KingmakerZone("GL", "14", "Glenebon Lowlands"),
+    KingmakerZone("PX", "15", "Pitax"),
+    KingmakerZone("GU", "16", "Glenebon Uplands"),
+    KingmakerZone("NU", "17", "Numeria"),
+    KingmakerZone("TV", "18", "Thousand Voices"),
+    KingmakerZone("BR", "19", "Branthlend Mountains"),
 )
+
+/** Maps a zone abbreviation to the region names that should select it on token move. */
+private val kingmakerRegions: Map<String, Set<String>> =
+    kingmakerZones.associate { it.id to setOf(it.regionName, it.zoneName) }
+
+/**
+ * Maps a stored region name (e.g. "Zone 00") to its canonical Kingmaker zone name
+ * (e.g. "Brevoy") so the camping region dropdown can show the zone name.
+ */
+val kingmakerZoneNamesByRegionName: Map<String, String> =
+    kingmakerZones.associate { it.regionName to it.zoneName }
+
+/**
+ * Build the label shown in the camping region dropdown for a stored [regionName].
+ *
+ * Default Kingmaker zones (e.g. "Zone 00") are enriched with their canonical zone name
+ * ("Zone 00 - Brevoy"); custom/renamed regions are returned unchanged.
+ */
+fun regionDropdownLabel(regionName: String): String {
+    val zoneName = kingmakerZoneNamesByRegionName[regionName.trim()]
+    return if (zoneName == null) regionName else "$regionName - $zoneName"
+}

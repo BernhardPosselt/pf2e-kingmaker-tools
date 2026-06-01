@@ -25,5 +25,7 @@
         "uuid": "Compendium.pf2e-kingmaker-tools.kingmaker-tools-camping-effects.Item.vpH13xgAqX4zsU6o"
       }
     ]
-  }
+  },
+  "requiredCompanion": "Jubilost",
+  "oncePerSession": true
 }

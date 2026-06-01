@@ -197,8 +197,9 @@ val ClientSettings.pfrpg2eKingdomCampingWeather: Pfrpg2eKingdomCampingWeatherSet
 
 @Suppress("unused", "ClassName")
 object Pfrpg2eKingdomCampingWeatherSettings {
-    fun resolveKingdomBackground(activeSettlementType: String) =
-        "${game.settings.getString("artDirectory").trimEnd('/')}/kingdom/backgrounds/$activeSettlementType.webp"
+    fun resolveKingdomBackground(activeSettlementType: String): String? =
+        if (activeSettlementType == "none" || activeSettlementType.isBlank()) null
+        else "${game.settings.getString("artDirectory").trimEnd('/')}/kingdom/backgrounds/$activeSettlementType.webp"
 
     fun resolveCampingBackground(terrain: String, isDay: Boolean): String {
         val timeOfDay = if (isDay) "day" else "night"

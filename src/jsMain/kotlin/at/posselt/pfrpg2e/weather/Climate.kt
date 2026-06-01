@@ -6,10 +6,13 @@ import at.posselt.pfrpg2e.data.checks.RollMode
 import at.posselt.pfrpg2e.data.regions.Climate
 import at.posselt.pfrpg2e.data.regions.Month
 import at.posselt.pfrpg2e.data.regions.Season
+import at.posselt.pfrpg2e.data.regions.RandomWeatherEventTable
 import at.posselt.pfrpg2e.data.regions.WeatherEffect
 import at.posselt.pfrpg2e.data.regions.WeatherType
 import at.posselt.pfrpg2e.data.regions.findWeatherType
 import at.posselt.pfrpg2e.data.regions.getMonth
+import at.posselt.pfrpg2e.data.regions.resolveRandomWeatherEvent
+import at.posselt.pfrpg2e.data.regions.WeatherEventResult
 import at.posselt.pfrpg2e.fromCamelCase
 import at.posselt.pfrpg2e.settings.pfrpg2eKingdomCampingWeather
 import at.posselt.pfrpg2e.toCamelCase
@@ -18,6 +21,7 @@ import at.posselt.pfrpg2e.utils.buildUuid
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.getCurrentMonth
 import at.posselt.pfrpg2e.utils.postChatMessage
+import at.posselt.pfrpg2e.utils.roll
 import at.posselt.pfrpg2e.utils.rollWithCompendiumFallback
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
@@ -71,6 +75,51 @@ private suspend fun rollWeatherEvent(
     }
 }
 
+/**
+ * Data-driven weather event roll using the KCG p.122 table.
+ * Rolls a d20 against the RandomWeatherEventTable and returns the matching event.
+ * Re-rolls if the event's level exceeds partyLevel + maximumRange.
+ *
+ * This is the programmatic alternative to the Foundry roll-table approach in [rollWeatherEvent].
+ */
+private suspend fun rollWeatherEventFromTable(
+    game: Game,
+    averagePartyLevel: Int,
+    maximumRange: Int,
+    rollMode: RollMode,
+    table: RandomWeatherEventTable,
+) {
+    val result = roll("1d20", rollMode = rollMode, toChat = false)
+    val roll = result
+    val isNat20 = roll == 20
+
+    val eventResult = resolveRandomWeatherEvent(
+        roll = roll,
+        partyLevel = averagePartyLevel,
+        maxRange = maximumRange,
+        table = table,
+    )
+
+    when (eventResult) {
+        is WeatherEventResult.Event -> {
+            postChatMessage(t(eventResult.event.name))
+        }
+        is WeatherEventResult.Reroll -> {
+            console.log("Re-rolling weather event, level exceeds party level + $maximumRange")
+            rollWeatherEventFromTable(game, averagePartyLevel, maximumRange, rollMode, table)
+        }
+        is WeatherEventResult.NoEvent -> {
+            console.log("No weather event matched for d20 roll $roll")
+        }
+    }
+
+    // On natural 20, roll a potential second event
+    if (isNat20) {
+        postChatMessage(t("weather.nat20SecondEvent"))
+        rollWeatherEventFromTable(game, averagePartyLevel, maximumRange, rollMode, table)
+    }
+}
+
 private suspend fun rollWeather(
     game: Game,
     month: Month,
@@ -78,6 +127,7 @@ private suspend fun rollWeather(
     averagePartyLevel: Int,
     maximumRange: Int,
     rollMode: RollMode,
+    weatherEventTable: RandomWeatherEventTable? = null,
 ) {
     climate.find { it.month == month }
         ?.let {
@@ -113,18 +163,20 @@ private suspend fun rollWeather(
                         )
                     }
                 // 3. roll weather events
-                if (checkEvent.degreeOfSuccess.succeeded()) rollWeatherEvent(
-                    game,
-                    averagePartyLevel,
-                    maximumRange,
-                    rollMode,
-                )
-                if (checkSecondEvent?.degreeOfSuccess?.succeeded() == true) rollWeatherEvent(
-                    game,
-                    averagePartyLevel,
-                    maximumRange,
-                    rollMode,
-                )
+                if (checkEvent.degreeOfSuccess.succeeded()) {
+                    if (weatherEventTable != null) {
+                        rollWeatherEventFromTable(game, averagePartyLevel, maximumRange, rollMode, weatherEventTable)
+                    } else {
+                        rollWeatherEvent(game, averagePartyLevel, maximumRange, rollMode)
+                    }
+                }
+                if (checkSecondEvent?.degreeOfSuccess?.succeeded() == true) {
+                    if (weatherEventTable != null) {
+                        rollWeatherEventFromTable(game, averagePartyLevel, maximumRange, rollMode, weatherEventTable)
+                    } else {
+                        rollWeatherEvent(game, averagePartyLevel, maximumRange, rollMode)
+                    }
+                }
             }
             // 4. post weather result to chat
             val type = findWeatherType(
@@ -176,6 +228,7 @@ suspend fun rollWeather(game: Game) {
             weatherEventDc = climateSetting.weatherEventDc,
         )
     }.toTypedArray()
+    val weatherEventTable = loadRandomWeatherEventTable()
     rollWeather(
         game = game,
         month = game.getCurrentMonth(),
@@ -183,5 +236,6 @@ suspend fun rollWeather(game: Game) {
         averagePartyLevel = game.getAveragePartyLevel(),
         maximumRange = settings.getWeatherHazardRange(),
         rollMode = settings.getWeatherRollMode(),
+        weatherEventTable = weatherEventTable,
     )
 }

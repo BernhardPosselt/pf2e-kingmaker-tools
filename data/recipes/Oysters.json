@@ -1,6 +1,6 @@
 {
-  "id": "oysters",
-  "name": "recipes.oysters.name",
+  "id": "whiterose-oysters",
+  "name": "recipes.whiterose-oysters.name",
   "icon": "icons/environment/creatures/crustacean-oyster.webp",
   "basicIngredients": 3,
   "specialIngredients": 2,

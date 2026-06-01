@@ -30,5 +30,6 @@
   "criticalFailure": {
     "message": "campingActivities.hunt-and-gather.criticalFailure.message",
     "checkRandomEncounter": true
-  }
+  },
+  "oncePerSession": true
 }

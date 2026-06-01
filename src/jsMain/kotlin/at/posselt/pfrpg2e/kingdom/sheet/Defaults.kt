@@ -365,4 +365,5 @@ fun createKingdomDefaults(name: String) =
         homebrewKingdomEvents = emptyArray(),
         kingdomEventBlacklist = emptyArray(),
         ongoingEvents = emptyArray(),
+        companions = emptyArray(),
     )

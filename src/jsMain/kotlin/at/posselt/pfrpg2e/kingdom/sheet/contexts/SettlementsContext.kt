@@ -23,6 +23,20 @@ external interface SettlementsContext {
     val canLevelUpTo: String?
     val nextLevelUp: String?
     val isRigid: Boolean
+    // Detailed matrix fields
+    val population: String
+    val blocks: Int
+    val lots: Int
+    val maxItemBonus: Int
+    val influence: Int
+    val consumption: Int
+    val baseItemLevel: Int
+    val alchemicalItemLevel: Int
+    val magicItemLevel: Int
+    val arcaneItemLevel: Int
+    val divineItemLevel: Int
+    val primalItemLevel: Int
+    val luxuryItemLevel: Int
 }
 
 fun Array<RawSettlement>.toContext(
@@ -47,6 +61,7 @@ fun Array<RawSettlement>.toContext(
                 capStructureBonusAtKingdomLevel = capStructureBonusAtKingdomLevel,
                 kingdomLevel = kingdomLevel,
             )
+            val itemBonusCap = parsed.size.maxItemBonus
             SettlementsContext(
                 id = parsed.id,
                 isCapital = parsed.type == SettlementType.CAPITAL,
@@ -60,6 +75,20 @@ fun Array<RawSettlement>.toContext(
                 canLevelUpTo = parsed.canLevelUp(kingdomLevel, capitalCanGrowOneSizeLarger)?.value,
                 nextLevelUp = parsed.nextLevelUp()?.let { t(it) },
                 isRigid = parsed.layoutType == SettlementLayoutType.RIGID,
+                // Detailed matrix fields
+                population = parsed.size.population,
+                blocks = parsed.occupiedBlocks,
+                lots = parsed.blocks.sumOf { it.occupiedLots },
+                maxItemBonus = itemBonusCap,
+                influence = parsed.size.influence,
+                consumption = parsed.consumption,
+                baseItemLevel = parsed.availableItems.other.coerceAtMost(itemBonusCap),
+                alchemicalItemLevel = parsed.availableItems.alchemical.coerceAtMost(itemBonusCap),
+                magicItemLevel = parsed.availableItems.magical.coerceAtMost(itemBonusCap),
+                arcaneItemLevel = parsed.availableItems.arcane.coerceAtMost(itemBonusCap),
+                divineItemLevel = parsed.availableItems.divine.coerceAtMost(itemBonusCap),
+                primalItemLevel = parsed.availableItems.primal.coerceAtMost(itemBonusCap),
+                luxuryItemLevel = parsed.availableItems.luxury.coerceAtMost(itemBonusCap),
             )
         }
     }.sortedWith(compareBy<SettlementsContext> { !it.isCapital }.thenBy { it.name })

@@ -1,0 +1,20 @@
+{
+  "_comment": "Random Weather Events table from Kingmaker Companion Guide p.122. DC 17 flat check at daily preparations; on success roll d20. Reroll hazards > party level + 4. On natural 20, potential secondary event (GM chooses). Source: Paizo Kingmaker Companion Guide, page 122. This data represents table structure only (name, roll range, level) and does not reproduce restricted mechanical text.",
+  "source": "Kingmaker Companion Guide",
+  "page": 122,
+  "dc": 17,
+  "events": [
+    { "id": "fog", "name": "camping.weatherEvent.fog", "level": 0, "rollStart": 1, "rollEnd": 3 },
+    { "id": "heavy-downpour", "name": "camping.weatherEvent.heavyDownpour", "level": 0, "rollStart": 4, "rollEnd": 7 },
+    { "id": "cold-snap", "name": "camping.weatherEvent.coldSnap", "level": 1, "rollStart": 8, "rollEnd": 9 },
+    { "id": "windstorm", "name": "camping.weatherEvent.windstorm", "level": 1, "rollStart": 10, "rollEnd": 12 },
+    { "id": "severe-hailstorm", "name": "camping.weatherEvent.severeHailstorm", "level": 2, "rollStart": 13, "rollEnd": 13 },
+    { "id": "blizzard", "name": "camping.weatherEvent.blizzard", "level": 6, "rollStart": 14, "rollEnd": 14 },
+    { "id": "supernatural-storm", "name": "camping.weatherEvent.supernaturalStorm", "level": 6, "rollStart": 15, "rollEnd": 15 },
+    { "id": "flash-flood", "name": "camping.weatherEvent.flashFlood", "level": 7, "rollStart": 16, "rollEnd": 16 },
+    { "id": "wildfire", "name": "camping.weatherEvent.wildfire", "level": 4, "levelAlt": 10, "rollStart": 17, "rollEnd": 17 },
+    { "id": "subsidence", "name": "camping.weatherEvent.subsidence", "level": 5, "levelAlt": 12, "rollStart": 18, "rollEnd": 18 },
+    { "id": "thunderstorm", "name": "camping.weatherEvent.thunderstorm", "level": 7, "levelAlt": 13, "rollStart": 19, "rollEnd": 19 },
+    { "id": "tornado", "name": "camping.weatherEvent.tornado", "level": 12, "levelAlt": 17, "rollStart": 20, "rollEnd": 20 }
+  ]
+}

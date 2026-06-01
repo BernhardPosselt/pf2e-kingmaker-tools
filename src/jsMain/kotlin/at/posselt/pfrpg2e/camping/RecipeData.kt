@@ -66,6 +66,7 @@ external interface RecipeData {
     val cost: RawCost
     val rarity: String
     val isHomebrew: Boolean?
+    val requirements: String?
     val criticalSuccess: CookingOutcome
     val success: CookingOutcome
     val criticalFailure: CookingOutcome

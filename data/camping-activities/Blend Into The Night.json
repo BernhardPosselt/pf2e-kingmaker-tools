@@ -9,5 +9,7 @@
   "modifyRandomEncounterDc": {
     "day": 0,
     "night": 2
-  }
+  },
+  "requiredCompanion": "Harrim",
+  "oncePerSession": true
 }

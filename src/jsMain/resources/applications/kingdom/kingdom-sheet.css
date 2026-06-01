@@ -822,6 +822,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 5px;
+            position: relative;
 
             button {
                 flex-grow: 1;
@@ -845,7 +846,62 @@
                     font-weight: bold;
                 }
             }
+
+            .km-tooltip {
+                position: absolute;
+                bottom: 125%;
+                left: 50%;
+                transform: translateX(-50%) translateY(10px);
+                width: 220px;
+                padding: 10px;
+                border-radius: 8px;
+                background: rgba(30, 30, 35, 0.92);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+                color: #e0e0e0;
+                z-index: 100;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+                font-family: inherit;
+                text-align: left;
+
+                .km-tooltip-title {
+                    font-weight: bold;
+                    color: var(--secondary-km, #ee9b3a);
+                    margin-bottom: 4px;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                    padding-bottom: 4px;
+                    font-size: var(--font-size-12);
+                }
+
+                .km-tooltip-desc {
+                    font-size: var(--font-size-11);
+                    line-height: 1.3;
+                    font-weight: normal;
+                }
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border-width: 6px;
+                    border-style: solid;
+                    border-color: rgba(30, 30, 35, 0.92) transparent transparent transparent;
+                }
             }
+
+            &:hover {
+                .km-tooltip {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+        }
         }
     }
 

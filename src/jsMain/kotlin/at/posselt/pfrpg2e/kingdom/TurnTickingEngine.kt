@@ -160,7 +160,27 @@ object TurnTickingEngine {
                 null
             } else {
                 // Decrement remaining turns
-                RawModifier.copy(mod, turns = turns - 1)
+                RawModifier(
+                    id = mod.id,
+                    type = mod.type,
+                    value = mod.value,
+                    name = mod.name,
+                    enabled = mod.enabled,
+                    turns = turns - 1,
+                    buttonLabel = mod.buttonLabel,
+                    valueExpression = mod.valueExpression,
+                    isConsumedAfterRoll = mod.isConsumedAfterRoll,
+                    rollOptions = mod.rollOptions,
+                    applyIf = mod.applyIf,
+                    fortune = mod.fortune,
+                    rollTwiceKeepLowest = mod.rollTwiceKeepLowest,
+                    rollTwiceKeepHighest = mod.rollTwiceKeepHighest,
+                    upgradeResults = mod.upgradeResults,
+                    downgradeResults = mod.downgradeResults,
+                    notes = mod.notes,
+                    requiresTranslation = mod.requiresTranslation,
+                    selector = mod.selector,
+                )
             }
         }.toTypedArray()
 

@@ -23,5 +23,6 @@
   },
   "criticalFailure": {
     "message": "campingActivities.discover-special-meal.criticalFailure.message"
-  }
+  },
+  "oncePerSession": true
 }

@@ -8,6 +8,125 @@
                 <button type="button" data-action="add-settlement" {{#unless canAddCurrentSceneAsSettlement}}disabled{{/unless}}>{{localizeKM "kingdom.addCurrentScene"}}</button>
 
                 <button type="button" data-action="settlement-size-info" title="{{localizeKM "kingdom.settlementSize"}}"><i class="fa-solid fa-circle-info"></i></button></span></h2>
+
+            <div class="km-settlements-matrix-toggle">
+                <button type="button" data-action="toggle-settlements-view" data-view="overview" {{#unless showDetailedMatrix}}class="km-active"{{/unless}}>{{localizeKM "kingdom.overview"}}</button>
+                <button type="button" data-action="toggle-settlements-view" data-view="matrix" {{#if showDetailedMatrix}}class="km-active"{{/if}}>{{localizeKM "kingdom.detailedMatrix"}}</button>
+            </div>
+
+            {{#if showDetailedMatrix}}
+            <table class="km-settlements-matrix">
+                <thead>
+                <tr>
+                    <td>{{localizeKM "kingdom.statistic"}}</td>
+                    {{#each settlements}}
+                    <td>{{name}} {{#if isCapital}}<i class="fa-solid fa-star"></i>{{/if}}</td>
+                    {{/each}}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{localizeKM "applications.level"}}</td>
+                    {{#each settlements}}
+                    <td>{{level}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.population"}}</td>
+                    {{#each settlements}}
+                    <td>{{population}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.blocks"}}</td>
+                    {{#each settlements}}
+                    <td>{{blocks}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.lots"}}</td>
+                    {{#each settlements}}
+                    <td>{{lots}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.residentialLots"}}</td>
+                    {{#each settlements}}
+                    <td>{{residentialLots}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.overcrowded"}}</td>
+                    {{#each settlements}}
+                    <td>{{#if isOvercrowded}}<i class="fa-solid fa-people-roof" title="{{localizeKM "kingdom.overcrowded"}}"></i>{{else}}&mdash;{{/if}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.consumption"}}</td>
+                    {{#each settlements}}
+                    <td>{{consumption}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.maxItemBonus"}}</td>
+                    {{#each settlements}}
+                    <td>{{maxItemBonus}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.influence"}}</td>
+                    {{#each settlements}}
+                    <td>{{influence}}</td>
+                    {{/each}}
+                </tr>
+                <tr class="km-matrix-section-header">
+                    <td colspan="{{settlements.length}}">{{localizeKM "kingdom.itemLevels"}}</td>
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.baseItemLevel"}}</td>
+                    {{#each settlements}}
+                    <td>{{baseItemLevel}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.alchemicalItemLevel"}}</td>
+                    {{#each settlements}}
+                    <td>{{alchemicalItemLevel}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.magicItemLevel"}}</td>
+                    {{#each settlements}}
+                    <td>{{magicItemLevel}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.arcaneItemLevel"}}</td>
+                    {{#each settlements}}
+                    <td>{{arcaneItemLevel}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.divineItemLevel"}}</td>
+                    {{#each settlements}}
+                    <td>{{divineItemLevel}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.primalItemLevel"}}</td>
+                    {{#each settlements}}
+                    <td>{{primalItemLevel}}</td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td>{{localizeKM "kingdom.luxuryItemLevel"}}</td>
+                    {{#each settlements}}
+                    <td>{{luxuryItemLevel}}</td>
+                    {{/each}}
+                </tr>
+                </tbody>
+            </table>
+            {{else}}
             <table>
                 <thead>
                 <tr>
@@ -48,6 +167,7 @@
                 {{/each}}
                 </tbody>
             </table>
+            {{/if}}
         </section>
     </div>
 </div>

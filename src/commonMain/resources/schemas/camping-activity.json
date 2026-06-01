@@ -61,6 +61,12 @@
         },
         "criticalFailure": {
           "$ref": "#/$defs/ActivityOutcome"
+        },
+        "oncePerSession": {
+          "type": "boolean"
+        },
+        "requiredCompanion": {
+          "type": "string"
         }
       }
     },

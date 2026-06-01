@@ -5,5 +5,7 @@
   "isLocked": true,
   "isSecret": false,
   "isHomebrew": false,
-  "skills": []
+  "skills": [],
+  "requiredCompanion": "Amiri",
+  "oncePerSession": true
 }

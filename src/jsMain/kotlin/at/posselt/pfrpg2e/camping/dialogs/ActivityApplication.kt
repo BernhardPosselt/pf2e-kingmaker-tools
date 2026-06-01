@@ -168,6 +168,8 @@ class ActivityApplication(
         success = null,
         failure = null,
         criticalFailure = null,
+        oncePerSession = false,
+        requiredCompanion = null,
         id = "",
     )
 
@@ -439,6 +441,8 @@ class ActivityApplication(
             success = parseOutcome(currentActivity.success, value.success),
             failure = parseOutcome(currentActivity.failure, value.failure),
             criticalFailure = parseOutcome(currentActivity.criticalFailure, value.criticalFailure),
+            oncePerSession = currentActivity.oncePerSession,
+            requiredCompanion = currentActivity.requiredCompanion,
         )
         undefined
     }

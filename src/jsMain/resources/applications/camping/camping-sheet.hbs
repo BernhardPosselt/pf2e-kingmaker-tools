@@ -148,7 +148,7 @@
             {{#if prepareCampSection}}hidden{{/if}}
                 type="button"><i class="fa-solid fa-chevron-left"></i>
         </button>
-        <button {{#if eatingSection}}hidden{{/if}}
+        <button {{#if setWatchesSection}}hidden{{/if}}
                 class="km-camping-next"
                 {{#unless isGM}}hidden{{/unless}}
                 data-action="next-section"
@@ -165,6 +165,32 @@
         <div id="km-camping-content-wrapper">
             <div class="km-camping-activities-wrapper">
                 <h1>{{section}}</h1>
+                {{#if setWatchesSection}}
+                <div class="km-camping-watch-grid">
+                    {{#each watchSlots}}
+                    <div class="km-camping-watch-slot" data-slot-index="{{@index}}">
+                        <div class="km-camping-watch-slot-header">{{localizeKM "camping.watchSlot"}} {{add @index 1}}</div>
+                        {{#if this}}
+                        <div class="km-camping-watch-assignee" draggable="true" data-uuid="{{this.uuid}}">
+                            <img src="{{this.image}}" alt="{{this.name}}">
+                            <span>{{this.name}}</span>
+                            <button class="km-camping-action"
+                                    data-action="clear-watch-slot"
+                                    type="button"
+                                    data-slot-index="{{@index}}">
+                                <i class="fa-regular fa-circle-xmark"></i>
+                            </button>
+                        </div>
+                        {{else}}
+                        <div class="km-camping-watch-empty">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>{{localizeKM "camping.dropActorOnWatch"}}</span>
+                        </div>
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+                {{else}}
                 <div class="km-camping-activities">
                     {{> campingTile prepareCamp}}
                     {{#each activities}}
@@ -174,6 +200,7 @@
                         {{> recipeTile }}
                     {{/each}}
                 </div>
+                {{/if}}
             </div>
         </div>
     </div>

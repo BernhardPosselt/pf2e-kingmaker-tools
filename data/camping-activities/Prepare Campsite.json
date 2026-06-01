@@ -33,5 +33,6 @@
   "criticalFailure": {
     "message": "campingActivities.prepare-campsite.criticalFailure.message",
     "checkRandomEncounter": true
-  }
+  },
+  "oncePerSession": true
 }

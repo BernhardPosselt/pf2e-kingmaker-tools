@@ -6,6 +6,22 @@
             {{name}}
         {{/if}}
     </header>
+    {{#if level}}
+    <div class="km-recipe-meta">
+        <span class="km-recipe-level" title="{{localizeKM "applications.level"}}">{{localizeKM "applications.level"}} {{level}}</span>
+        {{#if rarity}}
+        <span class="km-recipe-rarity km-rarity-{{rarity}}" title="{{localizeKM "enums.rarity"}}">{{localizeKM "rarity.{{rarity}}"}}</span>
+        {{/if}}
+        {{#if purchaseCost}}
+        <span class="km-recipe-purchase-cost" title="{{localizeKM "camping.purchaseCost"}}">{{purchaseCost}}</span>
+        {{/if}}
+    </div>
+    {{/if}}
+    {{#if requirements}}
+    <div class="km-recipe-requirements">
+        <span>{{localizeKM "camping.requirements"}}: {{requirements}}</span>
+    </div>
+    {{/if}}
     <div class="km-recipe-content">
         <section class="km-recipe-data {{#unless requiresCheck}}km-no-skill-check{{/unless}} {{#if
                 cost}}km-with-food-cost{{/if}} {{#if rations}}km-rations-tile{{/if}}">

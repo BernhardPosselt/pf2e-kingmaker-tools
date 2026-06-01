@@ -50,7 +50,7 @@
         {
             "lang": "pt-BR",
             "name": "Portuguese (Brazilian)",
-            "path": "dist/lang/pt_BR.json"
+            "path": "dist/lang/pt-BR.json"
         }
     ],
     "packs": [

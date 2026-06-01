@@ -1,0 +1,76 @@
+<div class="km-roster-dialog km-roster-edit-dialog">
+    <div class="km-roster-dialog-section">
+        <h3><i class="fa-solid fa-user-pen"></i> {{localizeKM "kingdom.roster.editCompanion"}}</h3>
+
+        <div class="km-form-group">
+            <label for="companionName">{{localizeKM "kingdom.roster.name"}}</label>
+            <input type="text" name="companionName" value="{{actorName}}" />
+        </div>
+
+        <div class="km-form-group">
+            <label for="companionRole">{{localizeKM "kingdom.roster.role"}}</label>
+            <select name="companionRole">
+                <option value="companion" {{#unless isNpc}}selected{{/unless}}>{{localizeKM "kingdom.roster.companion"}}</option>
+                <option value="npc" {{#if isNpc}}selected{{/if}}>{{localizeKM "kingdom.roster.npc"}}</option>
+            </select>
+        </div>
+
+        <div class="km-form-group">
+            <label for="companionSpeed">{{localizeKM "kingdom.roster.speed"}}</label>
+            <input type="number" name="companionSpeed" value="{{speed}}" min="0" />
+        </div>
+
+        <div class="km-form-group">
+            <label for="companionPlotHook">{{localizeKM "kingdom.roster.plotHook"}}</label>
+            <textarea name="companionPlotHook" rows="3">{{plotHook}}</textarea>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="km-roster-dialog-section">
+        <h3><i class="fa-solid fa-gear"></i> {{localizeKM "kingdom.roster.status"}}</h3>
+
+        <div class="km-form-group">
+            <label>{{localizeKM "kingdom.roster.traveling"}}</label>
+            <span class="km-roster-status {{#if traveling}}km-status-on{{else}}km-status-off{{/if}}">
+                {{#if traveling}}{{localizeKM "kingdom.roster.yes"}}{{else}}{{localizeKM "kingdom.roster.no"}}{{/if}}
+            </span>
+        </div>
+
+        <div class="km-form-group">
+            <label>{{localizeKM "kingdom.roster.active"}}</label>
+            <span class="km-roster-status {{#if active}}km-status-on{{else}}km-status-off{{/if}}">
+                {{#if active}}{{localizeKM "kingdom.roster.yes"}}{{else}}{{localizeKM "kingdom.roster.no"}}{{/if}}
+            </span>
+        </div>
+
+        {{#if destinationX}}
+        <div class="km-form-group">
+            <label>{{localizeKM "kingdom.roster.destination"}}</label>
+            <span>({{destinationX}}, {{destinationY}})</span>
+        </div>
+        {{/if}}
+
+        {{#if eta}}
+        <div class="km-form-group">
+            <label>{{localizeKM "kingdom.roster.eta"}}</label>
+            <span>{{eta}}</span>
+        </div>
+        {{/if}}
+    </div>
+
+    <hr>
+
+    <div class="km-roster-dialog-actions">
+        <button type="button" data-action="save" class="km-primary-btn">
+            <i class="fa-solid fa-check"></i> {{localizeKM "applications.save"}}
+        </button>
+        <button type="button" data-action="delete" class="km-danger-btn">
+            <i class="fa-solid fa-trash"></i> {{localizeKM "kingdom.roster.delete"}}
+        </button>
+        <button type="button" data-action="cancel" class="km-secondary-btn">
+            <i class="fa-solid fa-times"></i> {{localizeKM "applications.cancel"}}
+        </button>
+    </div>
+</div>

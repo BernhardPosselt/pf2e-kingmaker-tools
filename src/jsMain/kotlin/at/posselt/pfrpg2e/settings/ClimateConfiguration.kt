@@ -24,18 +24,18 @@ import org.w3c.dom.pointerevents.PointerEvent
 import kotlin.js.Promise
 
 fun getDefaultMonths(): Array<ClimateSetting> = arrayOf(
-    ClimateSetting(season = Season.WINTER.toCamelCase(), precipitationDc = 8, coldDc = 16, weatherEventDc = 18),
-    ClimateSetting(season = Season.WINTER.toCamelCase(), precipitationDc = 8, coldDc = 18, weatherEventDc = 18),
-    ClimateSetting(season = Season.SPRING.toCamelCase(), precipitationDc = 15, weatherEventDc = 18),
-    ClimateSetting(season = Season.SPRING.toCamelCase(), precipitationDc = 15, weatherEventDc = 18),
-    ClimateSetting(season = Season.SPRING.toCamelCase(), precipitationDc = 15, weatherEventDc = 18),
-    ClimateSetting(season = Season.SUMMER.toCamelCase(), precipitationDc = 20, weatherEventDc = 18),
-    ClimateSetting(season = Season.SUMMER.toCamelCase(), precipitationDc = 20, weatherEventDc = 18),
-    ClimateSetting(season = Season.SUMMER.toCamelCase(), precipitationDc = 20, weatherEventDc = 18),
-    ClimateSetting(season = Season.FALL.toCamelCase(), precipitationDc = 15, weatherEventDc = 18),
-    ClimateSetting(season = Season.FALL.toCamelCase(), precipitationDc = 15, weatherEventDc = 18),
-    ClimateSetting(season = Season.FALL.toCamelCase(), precipitationDc = 15, weatherEventDc = 18),
-    ClimateSetting(season = Season.WINTER.toCamelCase(), precipitationDc = 8, coldDc = 18, weatherEventDc = 18),
+    ClimateSetting(season = Season.WINTER.toCamelCase(), precipitationDc = 8, coldDc = 16, weatherEventDc = 17),
+    ClimateSetting(season = Season.WINTER.toCamelCase(), precipitationDc = 8, coldDc = 18, weatherEventDc = 17),
+    ClimateSetting(season = Season.SPRING.toCamelCase(), precipitationDc = 15, weatherEventDc = 17),
+    ClimateSetting(season = Season.SPRING.toCamelCase(), precipitationDc = 15, weatherEventDc = 17),
+    ClimateSetting(season = Season.SPRING.toCamelCase(), precipitationDc = 15, weatherEventDc = 17),
+    ClimateSetting(season = Season.SUMMER.toCamelCase(), precipitationDc = 20, weatherEventDc = 17),
+    ClimateSetting(season = Season.SUMMER.toCamelCase(), precipitationDc = 20, weatherEventDc = 17),
+    ClimateSetting(season = Season.SUMMER.toCamelCase(), precipitationDc = 20, weatherEventDc = 17),
+    ClimateSetting(season = Season.FALL.toCamelCase(), precipitationDc = 15, weatherEventDc = 17),
+    ClimateSetting(season = Season.FALL.toCamelCase(), precipitationDc = 15, weatherEventDc = 17),
+    ClimateSetting(season = Season.FALL.toCamelCase(), precipitationDc = 15, weatherEventDc = 17),
+    ClimateSetting(season = Season.WINTER.toCamelCase(), precipitationDc = 8, coldDc = 18, weatherEventDc = 17),
 )
 
 @JsPlainObject

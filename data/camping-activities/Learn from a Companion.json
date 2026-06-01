@@ -24,5 +24,6 @@
   },
   "criticalFailure": {
     "message": "campingActivities.learn-from-a-companion.criticalFailure.message"
-  }
+  },
+  "oncePerSession": true
 }

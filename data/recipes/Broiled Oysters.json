@@ -1,6 +1,6 @@
 {
-  "id": "broiled-oysters",
-  "name": "recipes.broiled-oysters.name",
+  "id": "broiled-tuskwater-oysters",
+  "name": "recipes.broiled-tuskwater-oysters.name",
   "icon": "icons/consumables/meat/oyster-shell-glowing-orange.webp",
   "basicIngredients": 2,
   "specialIngredients": 1,
@@ -12,7 +12,7 @@
     "currency": "gp",
     "value": 3
   },
-  "rarity": "uncommon",
+  "rarity": "common",
   "favoriteMeal": {
     "effects": [
       {

@@ -32,5 +32,6 @@
       "day": -2,
       "night": -2
     }
-  }
+  },
+  "oncePerSession": true
 }

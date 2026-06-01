@@ -1,7 +1,8 @@
-<div class="km-camping-activity km-camping-tile"
+<div class="km-camping-activity km-camping-tile{{#if disabled}} disabled{{/if}}"
     {{#if hidden}}hidden{{/if}}
     {{#if actor}}data-actor-uuid="{{actor.uuid}}"{{/if}}
      data-activity-id="{{id}}"
+    {{#if disabledReason}}title="{{disabledReason}}"{{/if}}
 >
     <header>
         {{#if journalUuid}}
@@ -31,7 +32,8 @@
         <div class="km-camping-tile-check">
             {{> formElement skills }}
             <button class="km-camping-action km-tile-check" data-action="roll-camping-check" type="button"
-                    {{#unless actor}}disabled{{/unless}}>
+                    {{#unless actor}}disabled{{/unless}}
+                    {{#if disabled}}disabled{{/if}}>
                 <i class="fa-solid fa-dice-d20"></i>
             </button>
         </div>

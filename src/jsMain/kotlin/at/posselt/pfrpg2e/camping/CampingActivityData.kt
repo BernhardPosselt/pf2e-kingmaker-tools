@@ -62,7 +62,14 @@ external interface CampingActivityData {
     var success: ActivityOutcome?
     var failure: ActivityOutcome?
     var criticalFailure: ActivityOutcome?
+    var oncePerSession: Boolean
+    var requiredCompanion: String?
 }
+
+fun CampingActivityData.isRequiredCompanionPresent(actorNames: Set<String>): Boolean =
+    requiredCompanion?.let { companionName ->
+        actorNames.any { it.equals(companionName, ignoreCase = true) }
+    } ?: true
 
 fun CampingActivityData.isCookMeal() =
     id == cookMealId

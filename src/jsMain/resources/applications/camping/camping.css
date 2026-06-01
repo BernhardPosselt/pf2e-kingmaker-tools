@@ -475,6 +475,40 @@ ul.km-camping-actors {
                 position: relative;
             }
 
+            .km-recipe-meta {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
+                padding: 2px 4px;
+                font-size: 0.75em;
+                border-bottom: 1px solid;
+                flex-wrap: wrap;
+
+                .km-recipe-level {
+                    font-weight: bold;
+                }
+
+                .km-recipe-rarity {
+                    padding: 1px 4px;
+                    border-radius: 3px;
+                    font-weight: 600;
+                }
+
+                .km-recipe-purchase-cost {
+                    color: #c9a227;
+                    font-weight: 600;
+                }
+            }
+
+            .km-recipe-requirements {
+                text-align: center;
+                font-size: 0.75em;
+                font-style: italic;
+                padding: 2px 4px;
+                border-bottom: 1px solid;
+            }
+
             .km-recipe-cost {
                 width: 100%;
                 text-align: center;
@@ -547,6 +581,21 @@ ul.km-camping-actors {
                 button.km-camping-action[data-action="clear-actor"],
                 button.km-camping-action[data-action="clear-activity"] {
                     display: flex;
+                }
+            }
+
+            &.disabled {
+                opacity: 0.45;
+                pointer-events: none;
+                filter: grayscale(0.6);
+
+                header {
+                    background-color: rgba(40, 40, 40, 1);
+                    color: rgba(180, 180, 180, 1);
+                }
+
+                .km-camping-tile-portrait {
+                    filter: grayscale(0.8);
                 }
             }
 
@@ -716,7 +765,8 @@ ul.km-camping-actors {
     button.km-camping-previous,
     button.km-camping-next {
         position: absolute;
-        z-index: 2;
+        /* keep nav arrows above the eating-total panel so they're never covered */
+        z-index: 3;
         top: calc(50% - 100px);
         height: 200px;
         width: 20px;
@@ -744,6 +794,8 @@ ul.km-camping-actors {
 
     .empty-activity,
     .km-recipe-cost,
+    .km-recipe-meta,
+    .km-recipe-requirements,
     .km-camping-eating-total,
     .km-recipe-actors li,
     .km-camping-tile-check {
@@ -764,6 +816,8 @@ ul.km-camping-actors {
     .km-camping-tile-check,
     .km-camping-tile-result,
     .km-recipe-cost,
+    .km-recipe-meta,
+    .km-recipe-requirements,
     .km-camping-eating-total,
     .km-recipe-rations button,
     .km-recipe-actors li,
@@ -793,4 +847,130 @@ ul.km-camping-actors {
     .km-camping-previous {
         color: rgba(255, 255, 255, .9);
     }
+}
+
+/* Watch-slot layout/sizing must apply in every theme (was previously nested
+   inside .theme-light, so dark theme had no sizing and dropped portraits
+   expanded to full size). */
+.km-camping-watch-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px;
+        flex: 1;
+
+        .km-camping-watch-slot {
+            border: 1px solid;
+            border-radius: 5px;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, .5);
+            width: 12em;
+            min-height: 10em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+
+            .km-camping-watch-slot-header {
+                background-color: rgba(11, 10, 19, 1);
+                text-align: center;
+                line-height: 2em;
+                width: 100%;
+                padding: 0 .75em;
+                border-top-right-radius: 5px;
+                border-top-left-radius: 5px;
+                border-bottom: 1px solid;
+            }
+
+            .km-camping-watch-assignee {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                padding: 5px;
+                cursor: grab;
+                position: relative;
+
+                img {
+                    width: 6em;
+                    height: 6em;
+                    object-fit: cover;
+                    object-position: top center;
+                    border: 0;
+                    border-radius: 5px;
+                }
+
+                span {
+                    margin-top: 4px;
+                    text-align: center;
+                    font-size: var(--font-size-12);
+                }
+
+                button.km-camping-action[data-action="clear-watch-slot"] {
+                    position: absolute;
+                    width: 1em;
+                    height: 1em;
+                    min-height: 1em;
+                    font-size: 1.5em;
+                    top: .1em;
+                    right: .1em;
+                    background-color: black;
+                    border: 0;
+                    border-radius: 100%;
+                    display: none;
+
+                    &:hover i {
+                        background-color: #931010;
+                        border-radius: 100%;
+                    }
+                }
+
+                &:hover button.km-camping-action[data-action="clear-watch-slot"] {
+                    display: flex;
+                }
+            }
+
+            .km-camping-watch-empty {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex: 1;
+                width: 100%;
+                min-height: 8em;
+                padding: 10px;
+                text-align: center;
+                opacity: 0.6;
+
+                i {
+                    font-size: 2em;
+                    margin-bottom: 8px;
+                }
+
+                span {
+                    font-size: var(--font-size-12);
+                }
+            }
+        }
+    }
+
+// Recipe rarity colors
+.km-rarity-common {
+    color: #6e6e6e;
+    background-color: rgba(110, 110, 110, 0.15);
+}
+
+.km-rarity-uncommon {
+    color: #b02ee0;
+    background-color: rgba(176, 46, 224, 0.15);
+}
+
+.km-rarity-rare {
+    color: #3b82f6;
+    background-color: rgba(59, 130, 246, 0.15);
+}
+
+.km-rarity-unique {
+    color: #f59e0b;
+    background-color: rgba(245, 158, 11, 0.15);
 }

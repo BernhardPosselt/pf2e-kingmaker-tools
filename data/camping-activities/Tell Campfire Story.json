@@ -41,5 +41,6 @@
         "target": "allies"
       }
     ]
-  }
+  },
+  "oncePerSession": true
 }
