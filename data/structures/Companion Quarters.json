@@ -1,0 +1,29 @@
+{
+  "id": "companion-quarters",
+  "name": "structures.companion-quarters.name",
+  "notes": "structures.companion-quarters.notes",
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 15,
+  "upgradeFrom": [
+    "companion-rooms"
+  ],
+  "construction": {
+    "rp": 45,
+    "lumber": 10,
+    "stone": 20,
+    "luxuries": 8,
+    "skills": [
+      {
+        "skill": "engineering",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 34
+  },
+  "lots": 4
+}

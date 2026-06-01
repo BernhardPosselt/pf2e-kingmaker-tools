@@ -852,6 +852,37 @@ ul.km-camping-actors {
 /* Watch-slot layout/sizing must apply in every theme (was previously nested
    inside .theme-light, so dark theme had no sizing and dropped portraits
    expanded to full size). */
+.km-camping-watch-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 20px 0;
+
+    .km-label {
+        margin: 0;
+    }
+}
+
+.km-camping-cook-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 12px 20px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, .35);
+    color: rgba(255, 255, 255, .9);
+    font-size: var(--font-size-13);
+    text-align: center;
+
+    i {
+        font-size: 1.1em;
+        opacity: .8;
+    }
+}
+
 .km-camping-watch-grid {
         display: flex;
         flex-wrap: wrap;
@@ -882,18 +913,31 @@ ul.km-camping-actors {
                 border-bottom: 1px solid;
             }
 
+            /* Holds one or more assignees as a wrapping row so several characters
+               can share a single watch without the slot growing unbounded. */
+            .km-camping-watch-assignees {
+                display: flex;
+                flex-wrap: wrap;
+                align-content: flex-start;
+                justify-content: center;
+                gap: 6px;
+                width: 100%;
+                flex: 1;
+                padding: 8px 5px;
+            }
+
             .km-camping-watch-assignee {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                width: 100%;
-                padding: 5px;
+                width: 4.75em;
+                padding: 2px;
                 cursor: grab;
                 position: relative;
 
                 img {
-                    width: 6em;
-                    height: 6em;
+                    width: 4em;
+                    height: 4em;
                     object-fit: cover;
                     object-position: top center;
                     border: 0;
@@ -904,6 +948,7 @@ ul.km-camping-actors {
                     margin-top: 4px;
                     text-align: center;
                     font-size: var(--font-size-12);
+                    overflow-wrap: anywhere;
                 }
 
                 button.km-camping-action[data-action="clear-watch-slot"] {
@@ -911,9 +956,9 @@ ul.km-camping-actors {
                     width: 1em;
                     height: 1em;
                     min-height: 1em;
-                    font-size: 1.5em;
-                    top: .1em;
-                    right: .1em;
+                    font-size: 1.25em;
+                    top: -.2em;
+                    right: -.2em;
                     background-color: black;
                     border: 0;
                     border-radius: 100%;

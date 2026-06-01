@@ -16,6 +16,8 @@ class CampingSheetDataModel(
             boolean("travelModeActive")
             boolean("forcedMarchActive")
             string("region")
+            // Only present in the DOM while the Set Watches section is open, so it must be nullable.
+            int("numberOfWatches", nullable = true)
             schema("activities") {
                 stringRecord("selectedSkill")
                 stringRecord("degreeOfSuccess") {

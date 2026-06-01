@@ -347,6 +347,8 @@
       "dropActorFromSidebar": "Drop Actor from Sidebar",
       "watchSlot": "Watch Slot",
       "dropActorOnWatch": "Drop actor here to assign to watch",
+      "numberOfWatches": "Number of Watches",
+      "assignCookHint": "Assign a character to the Cook Meal activity to cook special meals.",
       "retractHours": "Retract {count, plural, =1 {1 Hour} other {# Hours}}",
       "advanceHours": "Advance {count, plural, =1 {1 Hour} other {# Hours}}",
       "retractHexActivity": "Retract 1 Hexploration Activity ({duration})",
@@ -2511,6 +2513,18 @@
       "houses": {
         "name": "Houses"
       },
+      "companion-shacks": {
+        "name": "Companion Shacks",
+        "notes": "Companion Shacks provide a +1 bonus to companion activities. A settlement can have only one companion structure. The house rules list this structure as upgrading to Lodges."
+      },
+      "companion-rooms": {
+        "name": "Companion Rooms",
+        "notes": "Companion Rooms provide a +2 bonus to companion activities. A settlement can have only one companion structure. The house rules list this structure as upgrading from Companion Shacks and upgrading to Chambers."
+      },
+      "companion-quarters": {
+        "name": "Companion Quarters",
+        "notes": "Companion Quarters provide a +3 bonus to companion activities. A settlement can have only one companion structure. The house rules list this structure as upgrading from Lodges."
+      },
       "illicit-market": {
         "name": "Illicit Market"
       },
@@ -2949,6 +2963,23 @@
               "name": "Claim Hex: Critical Failure"
             }
           }
+        }
+      },
+      "cleanse-item": {
+        "title": "Cleanse Item",
+        "description": "<p>You attempt to cleanse a cursed or corrupted item by performing a kingdom-scale magical counteract check.</p>",
+        "special": "Use a Magic check. The counteract level is half the kingdom level, rounded up. The DC is the item level + 10. Items of levels 1-5 require 1 Luxuries and a Shrine; levels 6-10 require 2 Luxuries and a Temple; levels 11-15 require 4 Luxuries and a Temple; levels 16-20 require 8 Luxuries and a Cathedral.",
+        "criticalSuccess": {
+          "msg": "<p>The curse is removed and only half the materials are consumed.</p>"
+        },
+        "success": {
+          "msg": "<p>The curse is removed.</p>"
+        },
+        "failure": {
+          "msg": "<p>The curse remains.</p>"
+        },
+        "criticalFailure": {
+          "msg": "<p>The item is destroyed.</p>"
         }
       },
       "clandestine-business": {
@@ -3674,6 +3705,22 @@
         },
         "criticalFailure": {
           "msg": "<p>You gain no benefit, as your traders and merchants met with bad luck on the road. You can\u2019t Manage Trade Agreements for 1 Kingdom turn</p>."
+        }
+      },
+      "naval-support": {
+        "title": "Naval Support",
+        "description": "<p>You direct your kingdom's sailors, ports, and river traffic to support operations across the realm. Attempt a Boating check.</p>",
+        "criticalSuccess": {
+          "msg": "<p>You @gain2RegionActivities this Kingdom turn.</p>"
+        },
+        "success": {
+          "msg": "<p>You @gain1RegionActivity this Kingdom turn.</p>"
+        },
+        "failure": {
+          "msg": "<p>You @gain1RegionActivity this Kingdom turn, but you @lose2d6ResourcePoints.</p>"
+        },
+        "criticalFailure": {
+          "msg": "<p>You gain no extra Region activities and @lose2d6ResourcePoints.</p>"
         }
       },
       "new-leadership-vk": {

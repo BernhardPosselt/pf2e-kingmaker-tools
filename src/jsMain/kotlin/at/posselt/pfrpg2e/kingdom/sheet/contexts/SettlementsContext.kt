@@ -1,12 +1,31 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
+import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLayoutType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
+import at.posselt.pfrpg2e.data.kingdom.settlements.matrixBonusFor
+import at.posselt.pfrpg2e.data.kingdom.settlements.settlementDetailsMatrixRows
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
+import at.posselt.pfrpg2e.utils.formatAsModifier
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.Game
 import kotlinx.js.JsPlainObject
+
+@Suppress("unused")
+@JsPlainObject
+external interface SettlementDetailsMatrixCellContext {
+    val value: String
+}
+
+@Suppress("unused")
+@JsPlainObject
+external interface SettlementDetailsMatrixRowContext {
+    val workbookRow: Int
+    val label: String
+    val isHeader: Boolean
+    val cells: Array<SettlementDetailsMatrixCellContext>
+}
 
 @Suppress("unused")
 @JsPlainObject
@@ -37,6 +56,62 @@ external interface SettlementsContext {
     val divineItemLevel: Int
     val primalItemLevel: Int
     val luxuryItemLevel: Int
+}
+
+private fun Array<RawSettlement>.parseSettlements(
+    game: Game,
+    autoCalculateSettlementLevel: Boolean,
+    allStructuresStack: Boolean,
+    allowCapitalInvestmentInCapitalWithoutBank: Boolean,
+    capStructureBonusAtKingdomLevel: Boolean,
+    capitalCanGrowOneSizeLarger: Boolean,
+    kingdomLevel: Int,
+): List<Settlement> {
+    val scenesById = game.scenes.contents
+        .filter { it.id != null }
+        .associateBy { it.id }
+    return mapNotNull { settlement ->
+        scenesById[settlement.sceneId]?.parseSettlement(
+            rawSettlement = settlement,
+            autoCalculateSettlementLevel = autoCalculateSettlementLevel,
+            allStructuresStack = allStructuresStack,
+            allowCapitalInvestmentInCapitalWithoutBank = allowCapitalInvestmentInCapitalWithoutBank,
+            capStructureBonusAtKingdomLevel = capStructureBonusAtKingdomLevel,
+            kingdomLevel = kingdomLevel,
+        )
+    }.sortedWith(compareBy<Settlement> { it.type != SettlementType.CAPITAL }.thenBy { it.name })
+}
+
+fun Array<RawSettlement>.toSettlementDetailsMatrixRows(
+    game: Game,
+    autoCalculateSettlementLevel: Boolean,
+    allStructuresStack: Boolean,
+    allowCapitalInvestmentInCapitalWithoutBank: Boolean,
+    capStructureBonusAtKingdomLevel: Boolean,
+    capitalCanGrowOneSizeLarger: Boolean,
+    kingdomLevel: Int,
+): Array<SettlementDetailsMatrixRowContext> {
+    val settlements = parseSettlements(
+        game = game,
+        autoCalculateSettlementLevel = autoCalculateSettlementLevel,
+        allStructuresStack = allStructuresStack,
+        allowCapitalInvestmentInCapitalWithoutBank = allowCapitalInvestmentInCapitalWithoutBank,
+        capStructureBonusAtKingdomLevel = capStructureBonusAtKingdomLevel,
+        capitalCanGrowOneSizeLarger = capitalCanGrowOneSizeLarger,
+        kingdomLevel = kingdomLevel,
+    )
+    return settlementDetailsMatrixRows.map { row ->
+        SettlementDetailsMatrixRowContext(
+            workbookRow = row.workbookRow,
+            label = row.label,
+            isHeader = row.isHeader,
+            cells = settlements.map { settlement ->
+                SettlementDetailsMatrixCellContext(
+                    value = settlement.matrixBonusFor(row)?.formatAsModifier() ?: "—"
+                )
+            }.toTypedArray(),
+        )
+    }.toTypedArray()
 }
 
 fun Array<RawSettlement>.toContext(

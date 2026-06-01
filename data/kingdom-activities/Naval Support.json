@@ -1,0 +1,25 @@
+{
+  "id": "naval-support",
+  "enabled": true,
+  "oncePerRound": false,
+  "fortune": false,
+  "phase": "leadership",
+  "dc": "control",
+  "title": "activities.naval-support.title",
+  "description": "activities.naval-support.description",
+  "skills": {
+    "boating": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.naval-support.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.naval-support.success.msg"
+  },
+  "failure": {
+    "msg": "activities.naval-support.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.naval-support.criticalFailure.msg"
+  }
+}

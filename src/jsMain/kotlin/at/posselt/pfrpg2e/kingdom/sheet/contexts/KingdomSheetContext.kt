@@ -61,6 +61,7 @@ external interface KingdomSheetContext : ValidatedHandlebarsContext {
     val initialProficiencies: Array<FormElementContext>
     val enableLeadershipModifiers: Boolean
     val settlements: Array<SettlementsContext>
+    val settlementDetailsRows: Array<SettlementDetailsMatrixRowContext>
     val canAddCurrentSceneAsSettlement: Boolean
     val turnSectionNav: Array<NavEntryContext>
     val vkXp: Boolean

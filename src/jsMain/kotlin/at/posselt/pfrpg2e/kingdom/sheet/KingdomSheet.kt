@@ -123,6 +123,7 @@ import at.posselt.pfrpg2e.kingdom.sheet.contexts.skillChecks
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toActivitiesContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toContext
 import at.posselt.pfrpg2e.kingdom.sheet.contexts.toRosterContext
+import at.posselt.pfrpg2e.kingdom.sheet.contexts.toSettlementDetailsMatrixRows
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.MainNavEntry
 import at.posselt.pfrpg2e.kingdom.sheet.navigation.TurnNavEntry
 import at.posselt.pfrpg2e.kingdom.structures.BlockTile
@@ -1827,6 +1828,15 @@ class KingdomSheet(
             initialProficiencies = initialProficiencies,
             enableLeadershipModifiers = kingdom.settings.enableLeadershipModifiers,
             settlements = kingdom.settlements.toContext(
+                game,
+                kingdom.settings.autoCalculateSettlementLevel,
+                kingdom.settings.kingdomAllStructureItemBonusesStack,
+                kingdom.settings.capitalInvestmentInCapital,
+                capStructureBonusAtKingdomLevel = kingdom.settings.capStructureBonusAtKingdomLevel,
+                kingdomLevel = kingdom.level,
+                capitalCanGrowOneSizeLarger = kingdom.settings.capitalCanGrowOneSizeLarger,
+            ),
+            settlementDetailsRows = kingdom.settlements.toSettlementDetailsMatrixRows(
                 game,
                 kingdom.settings.autoCalculateSettlementLevel,
                 kingdom.settings.kingdomAllStructureItemBonusesStack,

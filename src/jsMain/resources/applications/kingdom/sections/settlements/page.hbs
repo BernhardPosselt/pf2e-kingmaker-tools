@@ -124,6 +124,17 @@
                     <td>{{luxuryItemLevel}}</td>
                     {{/each}}
                 </tr>
+                <tr class="km-matrix-section-header">
+                    <td colspan="{{settlements.length}}">Workbook Activity Bonuses</td>
+                </tr>
+                {{#each settlementDetailsRows}}
+                <tr class="{{#if isHeader}}km-matrix-section-header{{/if}}" data-workbook-row="{{workbookRow}}">
+                    <td>{{label}}</td>
+                    {{#each cells}}
+                    <td>{{value}}</td>
+                    {{/each}}
+                </tr>
+                {{/each}}
                 </tbody>
             </table>
             {{else}}

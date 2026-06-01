@@ -15,6 +15,7 @@ import at.posselt.pfrpg2e.app.ValidatedHandlebarsContext
 import at.posselt.pfrpg2e.app.confirm
 import at.posselt.pfrpg2e.app.forms.CheckboxInput
 import at.posselt.pfrpg2e.app.forms.FormElementContext
+import at.posselt.pfrpg2e.app.forms.OverrideType
 import at.posselt.pfrpg2e.app.forms.Select
 import at.posselt.pfrpg2e.app.forms.SelectOption
 import at.posselt.pfrpg2e.app.forms.toOption
@@ -117,6 +118,13 @@ fun CampingSheetActivity.isPrepareCampsite() = id == "prepare-campsite"
 
 @Suppress("unused")
 @JsPlainObject
+external interface WatchSlotContext {
+    val index: Int
+    val actors: Array<CampingSheetActor>
+}
+
+@Suppress("unused")
+@JsPlainObject
 external interface NightModes {
     val retract2: Boolean
     val retract1: Boolean
@@ -183,8 +191,10 @@ external interface CampingSheetContext : ValidatedHandlebarsContext {
     var prepareCampSection: Boolean
     var campingActivitiesSection: Boolean
     var eatingSection: Boolean
+    var needsCookAssignment: Boolean
     var setWatchesSection: Boolean
-    var watchSlots: Array<CampingSheetActor?>
+    var watchSlots: Array<WatchSlotContext>
+    var numberOfWatches: FormElementContext
     var travelMode: FormElementContext
     var forcedMarch: FormElementContext
     var forcedMarchDays: Int
@@ -215,6 +225,7 @@ external interface CampingSheetFormData {
     val recipes: RecipeFormData?
     val travelModeActive: Boolean
     val forcedMarchActive: Boolean
+    val numberOfWatches: Int?
 }
 
 private fun isNightMode(
@@ -281,6 +292,7 @@ class CampingSheet(
     init {
         onDocumentRefDragstart(".km-camping-actor")
         onDocumentRefDragstart(".km-recipe-actor")
+        onDocumentRefDragstart(".km-camping-watch-assignee")
         onDocumentRefDrop(".km-camping-add-actor") { _, documentRef ->
             if (documentRef is ActorRef) {
                 buildPromise {
@@ -442,8 +454,10 @@ class CampingSheet(
 
             "clear-watch-slot" -> {
                 buildPromise {
-                    target.dataset["slotIndex"]?.toIntOrNull()?.let { index ->
-                        clearWatchSlot(index)
+                    val index = target.dataset["slotIndex"]?.toIntOrNull()
+                    val uuid = target.dataset["uuid"]
+                    if (index != null && uuid != null) {
+                        clearWatchSlot(index, uuid)
                     }
                 }
             }
@@ -668,12 +682,7 @@ class CampingSheet(
         actor.getCamping()?.let { camping ->
             camping.section = when (fromCamelCase<CampingSheetSection>(camping.section)) {
                 CampingSheetSection.SET_WATCHES -> CampingSheetSection.EATING
-                CampingSheetSection.EATING -> if (camping.canPerformActivities()) {
-                    CampingSheetSection.CAMPING_ACTIVITIES
-                } else {
-                    CampingSheetSection.PREPARE_CAMPSITE
-                }
-
+                CampingSheetSection.EATING -> CampingSheetSection.CAMPING_ACTIVITIES
                 else -> CampingSheetSection.PREPARE_CAMPSITE
             }.toCamelCase()
             actor.setCamping(camping)
@@ -683,18 +692,13 @@ class CampingSheet(
     private suspend fun nextSection() {
         actor.getCamping()?.let { camping ->
             camping.section = when (fromCamelCase<CampingSheetSection>(camping.section)) {
-                CampingSheetSection.PREPARE_CAMPSITE -> if (camping.canPerformActivities()) {
-                    CampingSheetSection.CAMPING_ACTIVITIES
-                } else {
-                    CampingSheetSection.EATING
-                }
-
+                CampingSheetSection.PREPARE_CAMPSITE -> CampingSheetSection.CAMPING_ACTIVITIES
                 CampingSheetSection.CAMPING_ACTIVITIES -> CampingSheetSection.EATING
                 CampingSheetSection.EATING -> CampingSheetSection.SET_WATCHES
                 else -> CampingSheetSection.SET_WATCHES
             }.toCamelCase()
-            if (camping.section == "setWatches" && camping.watchSlots.isEmpty()) {
-                camping.watchSlots = Array(camping.actorUuids.size.coerceAtLeast(2)) { "" }
+            if (camping.section == "setWatches") {
+                ensureWatchSlots(camping)
             }
             actor.setCamping(camping)
         }
@@ -727,24 +731,46 @@ class CampingSheet(
 
     private suspend fun assignWatchSlot(actorUuid: String, slotIndex: Int) {
         actor.getCamping()?.let { camping ->
+            ensureWatchSlots(camping)
             if (slotIndex < 0 || slotIndex >= camping.watchSlots.size) return
-            // prevent duplicate assignments: remove actor from any other slot first
-            camping.watchSlots.forEachIndexed { index, existingUuid ->
-                if (existingUuid == actorUuid && index != slotIndex) {
-                    camping.watchSlots[index] = ""
+            // An actor can only be on one watch, so remove it from every slot first,
+            // then append it to the target slot (slots can hold multiple actors).
+            camping.watchSlots = camping.watchSlots
+                .mapIndexed { index, slot ->
+                    val without = slot.filter { it != actorUuid }
+                    if (index == slotIndex) {
+                        (without + actorUuid).toTypedArray()
+                    } else {
+                        without.toTypedArray()
+                    }
                 }
-            }
-            camping.watchSlots[slotIndex] = actorUuid
+                .toTypedArray()
             actor.setCamping(camping)
         }
     }
 
-    private suspend fun clearWatchSlot(slotIndex: Int) {
+    private suspend fun clearWatchSlot(slotIndex: Int, actorUuid: String) {
         actor.getCamping()?.let { camping ->
+            ensureWatchSlots(camping)
             if (slotIndex < 0 || slotIndex >= camping.watchSlots.size) return
-            camping.watchSlots[slotIndex] = ""
+            camping.watchSlots[slotIndex] = camping.watchSlots[slotIndex]
+                .filter { it != actorUuid }
+                .toTypedArray()
             actor.setCamping(camping)
         }
+    }
+
+    /**
+     * Resizes [CampingData.watchSlots] to the desired number of watches, preserving existing
+     * assignments. When no watches have been configured yet, falls back to
+     * [defaultNumberOfWatches]. This is the single place that determines how many watch slots
+     * exist; the slot count doubles as the value shown in the "number of watches" dropdown.
+     */
+    private fun ensureWatchSlots(camping: CampingData, desired: Int? = null) {
+        val current = camping.watchSlots
+        val target = (desired ?: current.size.takeIf { it > 0 } ?: defaultNumberOfWatches)
+            .coerceIn(minNumberOfWatches, maxNumberOfWatches)
+        camping.watchSlots = Array(target) { index -> current.getOrNull(index) ?: emptyArray() }
     }
 
     private suspend fun assignActivityTo(actorUuid: String, activityId: String) {
@@ -952,6 +978,9 @@ class CampingSheet(
         val cookingSkillOptions = parsedCookingChoices.skills.map { it.toOption() }
         val knownRecipes = camping.cooking.knownRecipes.toSet()
         return arrayOf(starving, rations) + camping.getAllRecipes()
+            // The basic meal is cooked via the Cook Meal activity tile (basic cooking roll),
+            // so it is omitted from the special-meal recipe list.
+            .filter { it.id != "basic-meal" }
             .sortedBy { it.name }
             .map { recipe ->
                 val item = itemFromUuid(recipe.uuid)
@@ -1031,10 +1060,8 @@ class CampingSheet(
         val campingActivitiesSection = section == CampingSheetSection.CAMPING_ACTIVITIES
         val eatingSection = section == CampingSheetSection.EATING
         val setWatchesSection = section == CampingSheetSection.SET_WATCHES
-        if (setWatchesSection && camping.watchSlots.isEmpty()) {
-            camping.watchSlots = Array(camping.actorUuids.size.coerceAtLeast(2)) { "" }
-        } else if (setWatchesSection && camping.watchSlots.size < camping.actorUuids.size) {
-            camping.watchSlots += Array(camping.actorUuids.size - camping.watchSlots.size) { "" }
+        if (setWatchesSection) {
+            ensureWatchSlots(camping)
         }
         val foodItems = getCompendiumFoodItems()
         val totalFood = camping.getTotalCarriedFood(actor, foodItems)
@@ -1198,23 +1225,34 @@ class CampingSheet(
             prepareCampSection = prepareCampSection,
             campingActivitiesSection = campingActivitiesSection,
             eatingSection = eatingSection,
+            needsCookAssignment = eatingSection && parsedCookingChoices.cook == null,
             setWatchesSection = setWatchesSection,
-            watchSlots = camping.watchSlots.map { slotUuid ->
-                if (slotUuid.isEmpty()) {
-                    null
-                } else {
-                    actorsByUuid[slotUuid]?.let { act ->
-                        CampingSheetActor(
-                            name = act.name,
-                            uuid = slotUuid,
-                            image = act.img,
-                            choseActivity = false,
-                            chosenMeal = null,
-                            chosenMealImg = null,
-                        )
-                    }
-                }
+            watchSlots = camping.watchSlots.mapIndexed { index, slotUuids ->
+                WatchSlotContext(
+                    index = index,
+                    actors = slotUuids.mapNotNull { slotUuid ->
+                        actorsByUuid[slotUuid]?.let { act ->
+                            CampingSheetActor(
+                                name = act.name,
+                                uuid = slotUuid,
+                                image = act.img,
+                                choseActivity = false,
+                                chosenMeal = null,
+                                chosenMealImg = null,
+                            )
+                        }
+                    }.toTypedArray(),
+                )
             }.toTypedArray(),
+            numberOfWatches = Select(
+                label = t("camping.numberOfWatches"),
+                name = "numberOfWatches",
+                value = camping.watchSlots.size.toString(),
+                overrideType = OverrideType.NUMBER,
+                options = (minNumberOfWatches..maxNumberOfWatches)
+                    .map { SelectOption(label = it.toString(), value = it.toString()) },
+                stacked = false,
+            ).toContext(),
             isFormValid = isFormValid,
             travelMode = CheckboxInput(
                 value = camping.travelModeActive,
@@ -1275,6 +1313,7 @@ class CampingSheet(
             if (!value.forcedMarchActive) {
                 camping.secondsSpentForcedMarching = 0
             }
+            ensureWatchSlots(camping, value.numberOfWatches)
             actor.setCamping(camping)
         }
         undefined

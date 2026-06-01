@@ -1,0 +1,28 @@
+{
+  "id": "companion-rooms",
+  "name": "structures.companion-rooms.name",
+  "notes": "structures.companion-rooms.notes",
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 9,
+  "upgradeFrom": [
+    "companion-shacks"
+  ],
+  "construction": {
+    "rp": 30,
+    "lumber": 5,
+    "stone": 5,
+    "skills": [
+      {
+        "skill": "engineering",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 26
+  },
+  "lots": 2
+}

@@ -1,0 +1,25 @@
+{
+  "id": "companion-shacks",
+  "name": "structures.companion-shacks.name",
+  "notes": "structures.companion-shacks.notes",
+  "traits": [
+    "building",
+    "residential"
+  ],
+  "affectsDowntime": false,
+  "reducesUnrest": false,
+  "level": 2,
+  "construction": {
+    "rp": 4,
+    "lumber": 4,
+    "stone": 4,
+    "skills": [
+      {
+        "skill": "engineering",
+        "proficiencyRank": 1
+      }
+    ],
+    "dc": 16
+  },
+  "lots": 1
+}

@@ -133,7 +133,12 @@ external interface CampingData {
     var forcedMarchActive: Boolean
     var secondsSpentForcedMarching: Int
     var hexSizeInMiles: Int
-    var watchSlots: Array<String>
+
+    /**
+     * One entry per watch slot; each entry is the list of actor UUIDs assigned to that watch.
+     * The number of watch slots equals this array's size (defaults to [defaultNumberOfWatches]).
+     */
+    var watchSlots: Array<Array<String>>
 }
 
 fun CampingData.campingActivitiesWithId() =
@@ -170,6 +175,13 @@ fun CampingActivityWithId.checkPerformed() =
 
 const val prepareCampsiteId = "prepare-campsite"
 const val cookMealId = "cook-meal"
+
+/** Default number of watch slots shown when first opening the Set Watches section. */
+const val defaultNumberOfWatches = 3
+
+/** Inclusive bounds for the "number of watches" dropdown. */
+const val minNumberOfWatches = 1
+const val maxNumberOfWatches = 8
 
 enum class CampingSheetSection : Translatable, ValueEnum {
     PREPARE_CAMPSITE,
@@ -600,13 +612,12 @@ fun CampingData.findCookingChoices(
     charactersInCampByUuid: Map<String, PF2EActor>,
     recipesById: Map<String, RecipeData>,
 ): ParsedMeals {
+    // Cooking no longer requires a prepared campsite: a cook is simply whoever is assigned
+    // to the Cook Meal activity.
     val cook = campingActivities[cookMealId]
         ?.takeIf { it.actorUuid != null }
         ?.let { charactersInCampByUuid[it.actorUuid] }
         ?.takeIfInstance<PF2ECharacter>()
-        ?.takeIf {
-            hasPreparedCampsite()
-        }
     val cookingLore = Lore("cooking")
     val cookingSkills: List<Attribute> = if (cook == null) {
         listOf(Skill.SURVIVAL, cookingLore)

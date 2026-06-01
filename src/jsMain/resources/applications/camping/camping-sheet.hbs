@@ -166,20 +166,28 @@
             <div class="km-camping-activities-wrapper">
                 <h1>{{section}}</h1>
                 {{#if setWatchesSection}}
+                <div class="km-camping-watch-controls">
+                    {{> formElement numberOfWatches}}
+                </div>
                 <div class="km-camping-watch-grid">
                     {{#each watchSlots}}
-                    <div class="km-camping-watch-slot" data-slot-index="{{@index}}">
-                        <div class="km-camping-watch-slot-header">{{localizeKM "camping.watchSlot"}} {{add @index 1}}</div>
-                        {{#if this}}
-                        <div class="km-camping-watch-assignee" draggable="true" data-uuid="{{this.uuid}}">
-                            <img src="{{this.image}}" alt="{{this.name}}">
-                            <span>{{this.name}}</span>
-                            <button class="km-camping-action"
-                                    data-action="clear-watch-slot"
-                                    type="button"
-                                    data-slot-index="{{@index}}">
-                                <i class="fa-regular fa-circle-xmark"></i>
-                            </button>
+                    <div class="km-camping-watch-slot" data-slot-index="{{index}}">
+                        <div class="km-camping-watch-slot-header">{{localizeKM "camping.watchSlot"}} {{add index 1}}</div>
+                        {{#if actors}}
+                        <div class="km-camping-watch-assignees">
+                            {{#each actors}}
+                            <div class="km-camping-watch-assignee" draggable="true" data-type="Actor" data-uuid="{{uuid}}">
+                                <img src="{{image}}" alt="{{name}}">
+                                <span>{{name}}</span>
+                                <button class="km-camping-action"
+                                        data-action="clear-watch-slot"
+                                        type="button"
+                                        data-slot-index="{{../index}}"
+                                        data-uuid="{{uuid}}">
+                                    <i class="fa-regular fa-circle-xmark"></i>
+                                </button>
+                            </div>
+                            {{/each}}
                         </div>
                         {{else}}
                         <div class="km-camping-watch-empty">
@@ -191,6 +199,12 @@
                     {{/each}}
                 </div>
                 {{else}}
+                {{#if needsCookAssignment}}
+                <div class="km-camping-cook-hint">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>{{localizeKM "camping.assignCookHint"}}</span>
+                </div>
+                {{/if}}
                 <div class="km-camping-activities">
                     {{> campingTile prepareCamp}}
                     {{#each activities}}

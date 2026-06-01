@@ -1,0 +1,26 @@
+{
+  "id": "cleanse-item",
+  "enabled": true,
+  "oncePerRound": false,
+  "fortune": false,
+  "phase": "leadership",
+  "dc": "custom",
+  "title": "activities.cleanse-item.title",
+  "description": "activities.cleanse-item.description",
+  "special": "activities.cleanse-item.special",
+  "skills": {
+    "magic": 0
+  },
+  "criticalSuccess": {
+    "msg": "activities.cleanse-item.criticalSuccess.msg"
+  },
+  "success": {
+    "msg": "activities.cleanse-item.success.msg"
+  },
+  "failure": {
+    "msg": "activities.cleanse-item.failure.msg"
+  },
+  "criticalFailure": {
+    "msg": "activities.cleanse-item.criticalFailure.msg"
+  }
+}
