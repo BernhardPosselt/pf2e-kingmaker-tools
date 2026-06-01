@@ -192,6 +192,68 @@ suspend fun syncHexDrawingsToNativeState(game: Game) {
                 ).await()
             }
         }
+
+        val cleared = shouldHaveClearedDrawing(hexState.cleared)
+
+        if (cleared) {
+            val existingCleared = activeDrawings.find { it.getRealmTileData()?.type == CLEARED_DRAWING_TYPE }
+            if (existingCleared == null) {
+                val shapeData = js("""
+                    {
+                        type: "p",
+                        width: activeScene.grid.size,
+                        height: activeScene.grid.size
+                    }
+                """)
+                // Cleared drawing: warm orange with dotted outline (strokeDashArray [2,4]).
+                // Distinct from claimed (solid green fill, fillType 1) and
+                // explored (dashed blue outline, fillType 2, strokeDashArray [8,4]).
+                val drawingData = js("""
+                    {
+                        x: point.x - activeScene.grid.size / 2,
+                        y: point.y - activeScene.grid.size / 2,
+                        shape: shapeData,
+                        fillType: 2,
+                        fillColor: "$CLEARED_FILL_COLOR",
+                        fillAlpha: $CLEARED_FILL_ALPHA,
+                        strokeWidth: $CLEARED_STROKE_WIDTH,
+                        strokeColor: "$CLEARED_STROKE_COLOR",
+                        strokeDashArray: [2, 4],
+                        flags: {
+                            "pf2e-kingmaker-tools": {
+                                "realmTile": {
+                                    "type": "$CLEARED_DRAWING_TYPE",
+                                    "kingdomActorUuid": kingdomActor.uuid
+                                }
+                            }
+                        }
+                    }
+                """)
+                activeScene.createEmbeddedDocuments<DrawingDocument>(
+                    "Drawing",
+                    arrayOf(drawingData.unsafeCast<com.foundryvtt.core.AnyObject>())
+                ).await()
+            } else {
+                // Update path: ensure existing cleared drawing has correct visual
+                existingCleared.update(
+                    recordOf<String, Any?>(
+                        "fillType" to 2,
+                        "fillColor" to CLEARED_FILL_COLOR,
+                        "fillAlpha" to CLEARED_FILL_ALPHA,
+                        "strokeWidth" to CLEARED_STROKE_WIDTH,
+                        "strokeColor" to CLEARED_STROKE_COLOR,
+                    )
+                ).await()
+            }
+        } else {
+            val existingCleared = activeDrawings.find { it.getRealmTileData()?.type == CLEARED_DRAWING_TYPE }
+            if (existingCleared != null) {
+                activeScene.deleteEmbeddedDocuments<DrawingDocument>(
+                    "Drawing",
+                    arrayOf(existingCleared._id)
+                ).await()
+            }
+        }
     }
 }
 

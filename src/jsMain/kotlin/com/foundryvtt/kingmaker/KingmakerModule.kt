@@ -16,6 +16,8 @@ external interface HexState {
     val camp: String?
     val features: Array<HexFeature>?
     val claimed: Boolean?
+    val explored: Boolean?
+    val cleared: Boolean?
 }
 
 
