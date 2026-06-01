@@ -2,6 +2,7 @@ package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
 import at.posselt.pfrpg2e.kingdom.RawModifier
+import at.posselt.pfrpg2e.kingdom.Injury
 import at.posselt.pfrpg2e.kingdom.data.RawCommodities
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
 import at.posselt.pfrpg2e.kingdom.data.RawFame
@@ -54,6 +55,16 @@ class TurnTickingEngineTest {
             turns = turns,
         )
 
+    private fun injury(
+        id: String = "test-injury",
+        name: String = "Test Injury",
+        duration: Int? = null,
+    ) = Injury(
+        id = id,
+        name = name,
+        duration = duration,
+    )
+
     private fun tick(
         fame: RawFame = fame(),
         resourcePoints: RawResources = resourcePoints(),
@@ -63,6 +74,7 @@ class TurnTickingEngineTest {
         storage: CommodityStorage = storage(),
         councilCooldowns: RawCouncilCooldowns? = null,
         modifiers: Array<RawModifier> = emptyArray(),
+        injuries: Array<Injury> = emptyArray(),
     ) = TurnTickingEngine.tick(
         fame = fame,
         resourcePoints = resourcePoints,
@@ -72,6 +84,7 @@ class TurnTickingEngineTest {
         storage = storage,
         councilCooldowns = councilCooldowns,
         modifiers = modifiers,
+        injuries = injuries,
     )
 
     // ── Solution counters ──────────────────────────────────────────────
@@ -339,6 +352,105 @@ class TurnTickingEngineTest {
     fun testNoModifiersInInput() {
         val result = tick(modifiers = emptyArray())
         assertEquals(0, result.modifiers.size)
+    }
+
+    // ── Injury-duration ticking ──────────────────────────────────────
+
+    @Test
+    fun testPermanentInjuryNullDurationPreserved() {
+        val permanent = injury(id = "inj-1", name = "Broken Leg", duration = null)
+        val result = tick(injuries = arrayOf(permanent))
+        assertEquals(1, result.injuries.size, "Permanent injury (duration=null) should be preserved")
+        assertEquals("inj-1", result.injuries[0].id)
+        assertNull(result.injuries[0].duration)
+    }
+
+    @Test
+    fun testPermanentInjuryZeroDurationPreserved() {
+        val permanent = injury(id = "inj-2", name = "Scar", duration = 0)
+        val result = tick(injuries = arrayOf(permanent))
+        assertEquals(1, result.injuries.size, "Permanent injury (duration=0) should be preserved")
+        assertEquals(0, result.injuries[0].duration)
+    }
+
+    @Test
+    fun testPermanentInjuryNoChangeRecord() {
+        val permanent = injury(id = "inj-1", name = "Broken Leg", duration = null)
+        val result = tick(injuries = arrayOf(permanent))
+        val injuryChanges = result.changes.filter { it.category == "injuries" }
+        assertEquals(0, injuryChanges.size, "Permanent injury should not emit TickChange records")
+    }
+
+    @Test
+    fun testInjuryDurationOneExpires() {
+        val expiring = injury(id = "inj-3", name = "Sprained Ankle", duration = 1)
+        val result = tick(injuries = arrayOf(expiring))
+        assertEquals(0, result.injuries.size, "Injury with duration=1 should expire and be removed")
+    }
+
+    @Test
+    fun testInjuryDurationOneEmitsExpiredChange() {
+        val expiring = injury(id = "inj-3", name = "Sprained Ankle", duration = 1)
+        val result = tick(injuries = arrayOf(expiring))
+        val expiredChange = result.changes.find { it.category == "injuries" && it.field == "expired" }
+        assertNotNull(expiredChange, "Expired injury should emit a TickChange with field=expired")
+        assertEquals("inj-3", expiredChange.oldValue, "expired oldValue should be the injury id")
+        assertEquals("Sprained Ankle", expiredChange.newValue, "expired newValue should be the injury name")
+    }
+
+    @Test
+    fun testInjuryDurationGreaterThanOneDecrements() {
+        val temp = injury(id = "inj-4", name = "Concussion", duration = 5)
+        val result = tick(injuries = arrayOf(temp))
+        assertEquals(1, result.injuries.size)
+        assertEquals(4, result.injuries[0].duration, "Injury duration should decrement by 1")
+    }
+
+    @Test
+    fun testInjuryDecrementEmitsDurationChange() {
+        val temp = injury(id = "inj-4", name = "Concussion", duration = 3)
+        val result = tick(injuries = arrayOf(temp))
+        val durationChange = result.changes.find { it.category == "injuries" && it.field == "duration" }
+        assertNotNull(durationChange, "Decrementing injury should emit a duration TickChange")
+        assertEquals(3, durationChange.oldValue)
+        assertEquals(2, durationChange.newValue)
+    }
+
+    @Test
+    fun testMultipleExpiredInjuriesEmitExpiredCount() {
+        val exp1 = injury(id = "inj-a", name = "Cut", duration = 1)
+        val exp2 = injury(id = "inj-b", name = "Bruise", duration = 1)
+        val perm = injury(id = "inj-c", name = "Scar", duration = null)
+        val result = tick(injuries = arrayOf(exp1, exp2, perm))
+        assertEquals(1, result.injuries.size, "Only the permanent injury should survive")
+        val countChange = result.changes.find { it.category == "injuries" && it.field == "expiredCount" }
+        assertNotNull(countChange, "Should emit expiredCount when >1 injury expires")
+        assertEquals(2, countChange.newValue)
+    }
+
+    @Test
+    fun testSingleExpiredInjuryDoesNotEmitExpiredCount() {
+        val exp = injury(id = "inj-a", name = "Cut", duration = 1)
+        val result = tick(injuries = arrayOf(exp))
+        val countChange = result.changes.find { it.category == "injuries" && it.field == "expiredCount" }
+        assertNull(countChange, "Should NOT emit expiredCount when only 1 injury expires")
+    }
+
+    @Test
+    fun testMixedInjuriesHandledIndependently() {
+        val permanent = injury(id = "inj-p", name = "Scar", duration = null)
+        val expiring = injury(id = "inj-e", name = "Cut", duration = 1)
+        val temp = injury(id = "inj-t", name = "Fracture", duration = 4)
+        val result = tick(injuries = arrayOf(permanent, expiring, temp))
+        assertEquals(2, result.injuries.size, "Should keep permanent and decremented temporary")
+        assertNotNull(result.injuries.find { it.id == "inj-p" }, "Permanent injury should survive")
+        assertNotNull(result.injuries.find { it.duration == 3 }, "Temporary injury should be decremented to 3")
+    }
+
+    @Test
+    fun testNoInjuriesInInput() {
+        val result = tick(injuries = emptyArray())
+        assertEquals(0, result.injuries.size)
     }
 
     // ── Simultaneous ticks (edge cases) ────────────────────────────────
