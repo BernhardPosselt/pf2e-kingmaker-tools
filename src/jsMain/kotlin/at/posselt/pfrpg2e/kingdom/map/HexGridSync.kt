@@ -133,6 +133,65 @@ suspend fun syncHexDrawingsToNativeState(game: Game) {
                 ).await()
             }
         }
+
+        val explored = shouldHaveExploredDrawing(hexState.explored)
+
+        if (explored) {
+            val existingExplored = activeDrawings.find { it.getRealmTileData()?.type == EXPLORED_DRAWING_TYPE }
+            if (existingExplored == null) {
+                val shapeData = js("""
+                    {
+                        type: "p",
+                        width: activeScene.grid.size,
+                        height: activeScene.grid.size
+                    }
+                """)
+                val drawingData = js("""
+                    {
+                        x: point.x - activeScene.grid.size / 2,
+                        y: point.y - activeScene.grid.size / 2,
+                        shape: shapeData,
+                        fillType: 2,
+                        fillColor: "$EXPLORED_FILL_COLOR",
+                        fillAlpha: $EXPLORED_FILL_ALPHA,
+                        strokeWidth: $EXPLORED_STROKE_WIDTH,
+                        strokeColor: "$EXPLORED_STROKE_COLOR",
+                        strokeDashArray: [8, 4],
+                        flags: {
+                            "pf2e-kingmaker-tools": {
+                                "realmTile": {
+                                    "type": "$EXPLORED_DRAWING_TYPE",
+                                    "kingdomActorUuid": kingdomActor.uuid
+                                }
+                            }
+                        }
+                    }
+                """)
+                activeScene.createEmbeddedDocuments<DrawingDocument>(
+                    "Drawing",
+                    arrayOf(drawingData.unsafeCast<com.foundryvtt.core.AnyObject>())
+                ).await()
+            } else {
+                // Update path: ensure existing explored drawing has correct visual
+                existingExplored.update(
+                    recordOf<String, Any?>(
+                        "fillType" to 2,
+                        "fillColor" to EXPLORED_FILL_COLOR,
+                        "fillAlpha" to EXPLORED_FILL_ALPHA,
+                        "strokeWidth" to EXPLORED_STROKE_WIDTH,
+                        "strokeColor" to EXPLORED_STROKE_COLOR,
+                    )
+                ).await()
+            }
+        } else {
+            val existingExplored = activeDrawings.find { it.getRealmTileData()?.type == EXPLORED_DRAWING_TYPE }
+            if (existingExplored != null) {
+                activeScene.deleteEmbeddedDocuments<DrawingDocument>(
+                    "Drawing",
+                    arrayOf(existingExplored._id)
+                ).await()
+            }
+        }
     }
 }
 
@@ -307,3 +366,6 @@ suspend fun syncZoneLabels(game: Game) {
         ).await()
     }
 }
+
+// Re-export from commonMain so jsMain callers and tests share the same source
+// (definition lives in commonMain/kotlin/.../map/HexDrawingHelpers.kt)
