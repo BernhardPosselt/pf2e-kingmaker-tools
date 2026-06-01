@@ -40,6 +40,7 @@ import at.posselt.pfrpg2e.kingdom.SettlementTerrain
 import at.posselt.pfrpg2e.kingdom.armies.setupArmies
 import at.posselt.pfrpg2e.kingdom.armies.updateArmyConsumption
 import at.posselt.pfrpg2e.kingdom.TurnTickingEngine
+import at.posselt.pfrpg2e.kingdom.WeatherShiftParams
 import at.posselt.pfrpg2e.kingdom.createModifiers
 import at.posselt.pfrpg2e.kingdom.createSimpleContext
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
@@ -89,6 +90,8 @@ import at.posselt.pfrpg2e.kingdom.data.RawCharacter
 import at.posselt.pfrpg2e.kingdom.getActiveLeader
 import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getAllActivities
+import at.posselt.pfrpg2e.kingdom.vkActivityIds
+import at.posselt.pfrpg2e.kingdom.vkToBaseActivityIds
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
 import at.posselt.pfrpg2e.kingdom.getEvent
@@ -149,6 +152,13 @@ import at.posselt.pfrpg2e.utils.roll
 import at.posselt.pfrpg2e.utils.rollWithCompendiumFallback
 import at.posselt.pfrpg2e.utils.stripHtml
 import at.posselt.pfrpg2e.utils.t
+import at.posselt.pfrpg2e.utils.getCurrentMonth
+import at.posselt.pfrpg2e.weather.setWeather
+import at.posselt.pfrpg2e.weather.getCurrentWeatherType
+import at.posselt.pfrpg2e.data.regions.WeatherType
+import at.posselt.pfrpg2e.data.regions.WeatherEffect
+import at.posselt.pfrpg2e.data.regions.getMonth
+import at.posselt.pfrpg2e.fromCamelCase
 import com.foundryvtt.core.Game
 import com.foundryvtt.core.applications.api.ApplicationRenderOptions
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
@@ -1189,6 +1199,27 @@ class KingdomSheet(
                     val realm = game.getRealmData(actor, kingdom)
                     val settlements = kingdom.getAllSettlements(game)
                     val storage = calculateStorage(realm = realm, settlements = settlements.allSettlements)
+
+                    // Build weather shift params from climate settings
+                    val weatherShift = if (game.settings.pfrpg2eKingdomCampingWeather.getEnableWeather()) {
+                        val climateSettings = game.settings.pfrpg2eKingdomCampingWeather.getClimateSettings()
+                        val currentMonth = game.getCurrentMonth()
+                        val monthIndex = currentMonth.ordinal
+                        val monthClimate = climateSettings.months.getOrNull(monthIndex)
+                        if (monthClimate != null) {
+                            val coldRoll = monthClimate.coldDc?.let { roll("1d20") }
+                            val precipitationRoll = monthClimate.precipitationDc?.let { roll("1d20") }
+                            WeatherShiftParams(
+                                coldDc = monthClimate.coldDc,
+                                precipitationDc = monthClimate.precipitationDc,
+                                weatherEventDc = monthClimate.weatherEventDc,
+                                coldRoll = coldRoll,
+                                precipitationRoll = precipitationRoll,
+                                weatherEventRoll = monthClimate.weatherEventDc?.let { roll("1d20") },
+                            )
+                        } else null
+                    } else null
+
                     val tickResult = TurnTickingEngine.tick(
                         fame = kingdom.fame,
                         resourcePoints = kingdom.resourcePoints,
@@ -1198,6 +1229,7 @@ class KingdomSheet(
                         storage = storage,
                         councilCooldowns = kingdom.councilCooldowns,
                         modifiers = kingdom.modifiers,
+                        weatherShift = weatherShift,
                     )
                     kingdom.supernaturalSolutions = tickResult.supernaturalSolutions
                     kingdom.creativeSolutions = tickResult.creativeSolutions
@@ -1208,6 +1240,11 @@ class KingdomSheet(
                     kingdom.commodities = tickResult.commodities
                     kingdom.councilCooldowns = tickResult.councilCooldowns
                     kingdom.modifiers = tickResult.modifiers
+
+                    // Apply weather shift result
+                    if (tickResult.weatherType != null && tickResult.weatherEffect != null) {
+                        setWeather(game, tickResult.weatherEffect, tickResult.weatherType)
+                    }
 
                     // Tick companion travel simulation
                     val companions = kingdom.companions ?: emptyArray()
@@ -1673,9 +1710,15 @@ class KingdomSheet(
             chosenFeats = chosenFeats,
             government = government,
         )
+        val effectiveBlacklist = if (kingdom.settings.vanceAndKerensharaXP) {
+            val baseIdsToDisable = vkToBaseActivityIds.values.toSet()
+            (kingdom.activityBlacklist.toSet() - vkActivityIds + baseIdsToDisable).toTypedArray()
+        } else {
+            (kingdom.activityBlacklist.toSet() + vkActivityIds - vkToBaseActivityIds.values.toSet()).toTypedArray()
+        }
         val activities = toActivitiesContext(
             activities = kingdom.getAllActivities(),
-            activityBlacklist = kingdom.activityBlacklist.toSet(),
+            activityBlacklist = effectiveBlacklist.toSet(),
             unlockedActivities = globalBonuses.unlockedActivities,
             allowCapitalInvestment = settlements.current?.allowCapitalInvestment == true,
             kingdomSkillRanks = kingdomSkillRanks,
@@ -1835,6 +1878,7 @@ class KingdomSheet(
                 capStructureBonusAtKingdomLevel = kingdom.settings.capStructureBonusAtKingdomLevel,
                 kingdomLevel = kingdom.level,
                 capitalCanGrowOneSizeLarger = kingdom.settings.capitalCanGrowOneSizeLarger,
+                structureBlacklist = kingdom.structureBlacklist,
             ),
             settlementDetailsRows = kingdom.settlements.toSettlementDetailsMatrixRows(
                 game,
@@ -1844,6 +1888,7 @@ class KingdomSheet(
                 capStructureBonusAtKingdomLevel = kingdom.settings.capStructureBonusAtKingdomLevel,
                 kingdomLevel = kingdom.level,
                 capitalCanGrowOneSizeLarger = kingdom.settings.capitalCanGrowOneSizeLarger,
+                structureBlacklist = kingdom.structureBlacklist,
             ),
             canAddCurrentSceneAsSettlement = canAddCurrentScene,
             turnSectionNav = createTabs<TurnNavEntry>("scroll-to"),

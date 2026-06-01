@@ -149,6 +149,27 @@ val disabledActivityIds = rawKingdomActivities
     .map { it.id }
     .toTypedArray()
 
+val vkActivityIds = setOf(
+    "celebrate-holiday-vk",
+    "clear-hex-vk",
+    "focused-attention-vk",
+    "fortify-hex-vk",
+    "new-leadership-vk",
+    "reconnoiter-hex-vk",
+    "request-foreign-aid-vk",
+    "retrain-vk",
+    "take-charge-vk",
+)
+
+val vkToBaseActivityIds = mapOf(
+    "celebrate-holiday-vk" to "celebrate-holiday",
+    "clear-hex-vk" to "clear-hex",
+    "focused-attention-vk" to "focused-attention",
+    "fortify-hex-vk" to "fortify-hex",
+    "new-leadership-vk" to "new-leadership",
+    "request-foreign-aid-vk" to "request-foreign-aid",
+)
+
 private var kingdomActivities: Array<RawActivity> = emptyArray()
 
 private fun ActivityResult.translate(): ActivityResult =
