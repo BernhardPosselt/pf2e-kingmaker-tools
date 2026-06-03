@@ -187,6 +187,7 @@ external interface KingdomData {
     var initialProficiencies: Array<String?>
     var milestones: Array<MilestoneChoice>
     var companions: Array<RawCharacter>?
+    var structureBlacklist: Array<String>
 }
 
 fun RawLeaderKingdomSkills.hasSkill(leader: Leader, skill: KingdomSkill) =

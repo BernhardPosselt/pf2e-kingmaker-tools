@@ -3,6 +3,9 @@ package at.posselt.pfrpg2e.kingdom.dialogs
 import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.SimpleApp
 import at.posselt.pfrpg2e.data.armies.ArmyType
+import at.posselt.pfrpg2e.data.armies.WorkbookBasicArmy
+import at.posselt.pfrpg2e.data.armies.workbookBasicArmies
+import at.posselt.pfrpg2e.data.checks.getLevelBasedDC
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkill
 import at.posselt.pfrpg2e.data.kingdom.KingdomSkillRank
 import at.posselt.pfrpg2e.kingdom.KingdomActor
@@ -40,10 +43,28 @@ external interface ArmyContext {
     val uuid: String
 }
 
+@JsPlainObject
+external interface WorkbookArmyContext {
+    val name: String
+    val type: String
+    val level: Int
+    val dc: Int
+    val hp: Int
+    val consumption: Int
+    val attacks: String
+    val maneuverSave: String
+    val accessible: Boolean
+    val faction: String?
+    val startingTactics: Array<String>
+    val description: String
+    val recruitmentDc: Int
+}
 
 @JsPlainObject
 external interface ArmiesContext : HandlebarsRenderContext {
     val armies: Array<ArmyContext>
+    val workbookArmies: Array<WorkbookArmyContext>
+    val showWorkbook: Boolean
 }
 
 private class ArmyBrowser(
@@ -93,9 +114,32 @@ private class ArmyBrowser(
             .toList()
             .awaitAll()
             .toTypedArray()
+        val workbookArmies = workbookBasicArmies
+            .sortedWith(compareBy<WorkbookBasicArmy> { it.minimumLevel }.thenBy { it.name })
+            .map { army ->
+                val dc = getLevelBasedDC(army.minimumLevel)
+                WorkbookArmyContext(
+                    name = army.name,
+                    type = t("armyType.${army.type.name.lowercase()}"),
+                    level = army.minimumLevel,
+                    dc = dc,
+                    hp = army.hitPoints,
+                    consumption = army.consumption,
+                    attacks = t("armyAttackType.${army.attacks.name.lowercase()}"),
+                    maneuverSave = t("armySaveBonus.${army.maneuverSave.name.lowercase()}"),
+                    accessible = army.accessible,
+                    faction = army.specialArmyFaction,
+                    startingTactics = army.startingTactics.toTypedArray(),
+                    description = army.description,
+                    recruitmentDc = dc,
+                )
+            }
+            .toTypedArray()
         ArmiesContext(
             partId = parent.partId,
             armies = armies,
+            workbookArmies = workbookArmies,
+            showWorkbook = workbookArmies.isNotEmpty(),
         )
     }
 

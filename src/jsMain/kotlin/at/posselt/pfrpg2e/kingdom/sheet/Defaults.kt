@@ -366,4 +366,5 @@ fun createKingdomDefaults(name: String) =
         kingdomEventBlacklist = emptyArray(),
         ongoingEvents = emptyArray(),
         companions = emptyArray(),
+        structureBlacklist = emptyArray(),
     )

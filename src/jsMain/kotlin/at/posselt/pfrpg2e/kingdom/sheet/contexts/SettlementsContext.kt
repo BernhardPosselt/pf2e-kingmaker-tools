@@ -1,10 +1,12 @@
 package at.posselt.pfrpg2e.kingdom.sheet.contexts
 
+import at.posselt.pfrpg2e.data.kingdom.structures.calculateAvailableItems
 import at.posselt.pfrpg2e.data.kingdom.settlements.Settlement
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementLayoutType
 import at.posselt.pfrpg2e.data.kingdom.settlements.SettlementType
 import at.posselt.pfrpg2e.data.kingdom.settlements.matrixBonusFor
 import at.posselt.pfrpg2e.data.kingdom.settlements.settlementDetailsMatrixRows
+import at.posselt.pfrpg2e.kingdom.data.ChosenFeat
 import at.posselt.pfrpg2e.kingdom.structures.RawSettlement
 import at.posselt.pfrpg2e.kingdom.structures.parseSettlement
 import at.posselt.pfrpg2e.utils.formatAsModifier
@@ -122,10 +124,12 @@ fun Array<RawSettlement>.toContext(
     capStructureBonusAtKingdomLevel: Boolean,
     capitalCanGrowOneSizeLarger: Boolean,
     kingdomLevel: Int,
+    chosenFeats: List<ChosenFeat> = emptyList(),
 ): Array<SettlementsContext> {
     val scenesById = game.scenes.contents
         .filter { it.id != null }
         .associateBy { it.id }
+    val magicItemLevelIncreases = chosenFeats.sumOf { it.feat.settlementMagicItemLevelIncrease ?: 0 }
     return mapNotNull { settlement ->
         scenesById[settlement.sceneId]?.let { scene ->
             val parsed = scene.parseSettlement(
@@ -137,6 +141,12 @@ fun Array<RawSettlement>.toContext(
                 kingdomLevel = kingdomLevel,
             )
             val itemBonusCap = parsed.size.maxItemBonus
+            val availableItems = calculateAvailableItems(
+                settlementLevel = parsed.level,
+                preventItemLevelPenalty = parsed.preventItemLevelPenalty,
+                magicalItemLevelIncrease = magicItemLevelIncreases,
+                bonuses = parsed.availableItems,
+            )
             SettlementsContext(
                 id = parsed.id,
                 isCapital = parsed.type == SettlementType.CAPITAL,
@@ -157,13 +167,13 @@ fun Array<RawSettlement>.toContext(
                 maxItemBonus = itemBonusCap,
                 influence = parsed.size.influence,
                 consumption = parsed.consumption,
-                baseItemLevel = parsed.availableItems.other.coerceAtMost(itemBonusCap),
-                alchemicalItemLevel = parsed.availableItems.alchemical.coerceAtMost(itemBonusCap),
-                magicItemLevel = parsed.availableItems.magical.coerceAtMost(itemBonusCap),
-                arcaneItemLevel = parsed.availableItems.arcane.coerceAtMost(itemBonusCap),
-                divineItemLevel = parsed.availableItems.divine.coerceAtMost(itemBonusCap),
-                primalItemLevel = parsed.availableItems.primal.coerceAtMost(itemBonusCap),
-                luxuryItemLevel = parsed.availableItems.luxury.coerceAtMost(itemBonusCap),
+                baseItemLevel = availableItems.other.coerceAtMost(itemBonusCap),
+                alchemicalItemLevel = availableItems.alchemical.coerceAtMost(itemBonusCap),
+                magicItemLevel = availableItems.magical.coerceAtMost(itemBonusCap),
+                arcaneItemLevel = availableItems.arcane.coerceAtMost(itemBonusCap),
+                divineItemLevel = availableItems.divine.coerceAtMost(itemBonusCap),
+                primalItemLevel = availableItems.primal.coerceAtMost(itemBonusCap),
+                luxuryItemLevel = availableItems.luxury.coerceAtMost(itemBonusCap),
             )
         }
     }.sortedWith(compareBy<SettlementsContext> { !it.isCapital }.thenBy { it.name })

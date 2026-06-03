@@ -110,4 +110,32 @@ class CompanionGatingTest {
         assertFalse(activity.isRequiredCompanionPresent(setOf("Harrim", "Amiri")))
         assertTrue(activity.isRequiredCompanionPresent(setOf("Octavia")))
     }
+
+    // === Lock bypass for companion activities ===
+    // Companion activities ship with isLocked=true so they default into lockedActivities.
+    // They must still appear (greyed out via presence gating) rather than be hidden.
+
+    @Test
+    fun testCompanionActivityNotHiddenWhenLocked() {
+        val activity = activityWithCompanion("Amiri")
+        assertFalse(activity.isHiddenByLock(setOf("test-activity")))
+    }
+
+    @Test
+    fun testCompanionActivityNotHiddenWhenAbsentFromLockSet() {
+        val activity = activityWithCompanion("Amiri")
+        assertFalse(activity.isHiddenByLock(emptySet()))
+    }
+
+    @Test
+    fun testNonCompanionActivityHiddenWhenLocked() {
+        val activity = activityWithCompanion(null)
+        assertTrue(activity.isHiddenByLock(setOf("test-activity")))
+    }
+
+    @Test
+    fun testNonCompanionActivityShownWhenUnlocked() {
+        val activity = activityWithCompanion(null)
+        assertFalse(activity.isHiddenByLock(setOf("some-other-activity")))
+    }
 }

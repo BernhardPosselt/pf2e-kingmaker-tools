@@ -59,8 +59,6 @@ class EatingPersistenceTest {
         )
     }
 
-    private fun Any?.asDynamic(): dynamic = this.asDynamic()
-
     // ==========================================
     // Cooking data structure defaults
     // ==========================================
@@ -342,7 +340,7 @@ class EatingPersistenceTest {
             }
         }
         // Access nested dynamic JS object
-        val actorMeals = result.asDynamic().cooking.actorMeals
+        val actorMeals = result["cooking.actorMeals"].asDynamic()
         assertEquals("haggis", actorMeals["actor-1"].chosenMeal)
         assertEquals("hearty-meal", actorMeals["actor-1"].favoriteMeal)
         assertEquals("actor-1", actorMeals["actor-1"].actorUuid)
@@ -363,7 +361,7 @@ class EatingPersistenceTest {
                 )
             }
         }
-        val actorMeals = result.asDynamic().cooking.actorMeals
+        val actorMeals = result["cooking.actorMeals"].asDynamic()
         assertEquals("nothing", actorMeals["fasting-actor"].chosenMeal)
         assertEquals(null, actorMeals["fasting-actor"].favoriteMeal)
     }
@@ -383,7 +381,7 @@ class EatingPersistenceTest {
                 )
             }
         }
-        val actorMeals = result.asDynamic().cooking.actorMeals
+        val actorMeals = result["cooking.actorMeals"].asDynamic()
         assertEquals("rationsOrSubsistence", actorMeals["rations-actor"].chosenMeal)
         assertEquals("haggis", actorMeals["rations-actor"].favoriteMeal)
     }
@@ -403,7 +401,7 @@ class EatingPersistenceTest {
                 )
             }
         }
-        val actorMeals = result.asDynamic().cooking.actorMeals
+        val actorMeals = result["cooking.actorMeals"].asDynamic()
         assertEquals("black-linnorm-stew", actorMeals["chef-actor"].chosenMeal)
         assertEquals(null, actorMeals["chef-actor"].favoriteMeal)
     }
@@ -433,7 +431,7 @@ class EatingPersistenceTest {
                 )
             }
         }
-        val actorMeals = result.asDynamic().cooking.actorMeals
+        val actorMeals = result["cooking.actorMeals"].asDynamic()
         assertEquals("hearty-meal", actorMeals["a1"].chosenMeal)
         assertEquals("haggis", actorMeals["a1"].favoriteMeal)
         assertEquals("rationsOrSubsistence", actorMeals["a2"].chosenMeal)
@@ -454,7 +452,7 @@ class EatingPersistenceTest {
                 )
             }
         }
-        val results = result.asDynamic().cooking.results
+        val results = result["cooking.results"].asDynamic()
         assertEquals("criticalSuccess", results["hearty-meal"].result)
         assertEquals("survival", results["hearty-meal"].skill)
         assertEquals(null, results["haggis"].result)
@@ -474,7 +472,7 @@ class EatingPersistenceTest {
                 )
             }
         }
-        val results = result.asDynamic().cooking.results
+        val results = result["cooking.results"].asDynamic()
         assertEquals("success", results["haggis"].result)
         assertEquals("cooking", results["haggis"].skill)
         assertEquals("criticalSuccess", results["hearty-meal"].result)
@@ -516,11 +514,11 @@ class EatingPersistenceTest {
 
         assertEquals(2, result["cooking.minimumSubsistence"])
 
-        val actorMeals = result.asDynamic().cooking.actorMeals
+        val actorMeals = result["cooking.actorMeals"].asDynamic()
         assertEquals("haggis", actorMeals["actor-1"].chosenMeal)
         assertEquals("hearty-meal", actorMeals["actor-1"].favoriteMeal)
 
-        val results = result.asDynamic().cooking.results
+        val results = result["cooking.results"].asDynamic()
         assertEquals("success", results["haggis"].result)
         assertEquals("cooking", results["haggis"].skill)
 
@@ -555,7 +553,7 @@ class EatingPersistenceTest {
                 ),
             )
         }
-        val actorMeals = result.asDynamic().cooking.actorMeals
+        val actorMeals = result["cooking.actorMeals"].asDynamic()
         assertEquals("meal", actorMeals["actor"].chosenMeal)
         assertEquals("fav", actorMeals["actor"].favoriteMeal)
     }
@@ -718,9 +716,9 @@ class EatingPersistenceTest {
     @Test
     fun testRecipeRequiresAllOutcomeFields() {
         val recipe = testRecipe(id = "test")
-        assertEquals(emptyArray<MealEffect>(), recipe.criticalSuccess.effects)
-        assertEquals(emptyArray<MealEffect>(), recipe.success.effects)
-        assertEquals(emptyArray<MealEffect>(), recipe.criticalFailure.effects)
+        assertEquals(0, recipe.criticalSuccess.effects?.size)
+        assertEquals(0, recipe.success.effects?.size)
+        assertEquals(0, recipe.criticalFailure.effects?.size)
     }
 
     @Test

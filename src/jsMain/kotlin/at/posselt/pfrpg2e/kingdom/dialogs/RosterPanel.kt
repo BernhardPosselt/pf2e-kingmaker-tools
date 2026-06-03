@@ -4,6 +4,7 @@ import at.posselt.pfrpg2e.app.HandlebarsRenderContext
 import at.posselt.pfrpg2e.app.forms.SimpleApp
 import at.posselt.pfrpg2e.kingdom.data.RawCharacter
 import at.posselt.pfrpg2e.utils.buildPromise
+import at.posselt.pfrpg2e.utils.fromUuidOfTypes
 import at.posselt.pfrpg2e.utils.t
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
 import com.foundryvtt.core.game
@@ -56,7 +57,7 @@ class RosterAddDialog(
                     val actorUuid = element.querySelector("input[name='linkedActorUuid']")
                         ?.let { it as? org.w3c.dom.HTMLInputElement }
                         ?.value?.takeIf { it.isNotBlank() }
-                    val img = actorUuid?.let { game.actors.get(it)?.img }
+                    val img = actorUuid?.let { fromUuidOfTypes(it, PF2ECharacter::class, PF2ENpc::class)?.img }
 
                     val character = RawCharacter(
                         name = name,
@@ -102,7 +103,7 @@ class RosterAddDialog(
                     ?.let { it as? org.w3c.dom.HTMLInputElement }
                 if (hiddenField != null) {
                     hiddenField.value = uuid
-                    val actor = game.actors.get(uuid)
+                    val actor = fromUuidOfTypes(uuid, PF2ECharacter::class, PF2ENpc::class)
                     if (actor != null) {
                         val nameInput = element.querySelector("input[name='companionName']")
                             ?.let { it as? org.w3c.dom.HTMLInputElement }
@@ -176,6 +177,29 @@ class RosterEditDialog(
                     ?.let { it as? org.w3c.dom.HTMLSelectElement }
                     ?.value == "npc"
 
+                val active = element.querySelector("input[name='companionActive']")
+                    ?.let { it as? org.w3c.dom.HTMLInputElement }
+                    ?.checked ?: existing.active
+
+                // Number fields: when the input is present we honor its value
+                // (empty string -> null, i.e. cleared); when absent we keep existing.
+                val destinationXField = element.querySelector("input[name='companionDestinationX']")
+                    ?.let { it as? org.w3c.dom.HTMLInputElement }
+                val destinationX = if (destinationXField != null) destinationXField.value.toIntOrNull() else existing.destinationX
+
+                val destinationYField = element.querySelector("input[name='companionDestinationY']")
+                    ?.let { it as? org.w3c.dom.HTMLInputElement }
+                val destinationY = if (destinationYField != null) destinationYField.value.toIntOrNull() else existing.destinationY
+
+                val etaField = element.querySelector("input[name='companionEta']")
+                    ?.let { it as? org.w3c.dom.HTMLInputElement }
+                val eta = if (etaField != null) etaField.value.toIntOrNull() else existing.eta
+
+                // A companion with a remaining ETA (>= 1 day) is en route. Derive this from
+                // the ETA so there is no separate "traveling" toggle to forget — setting a
+                // destination + ETA is all it takes to send them on their way.
+                val traveling = eta != null && eta >= 1
+
                 val updated = RawCharacter(
                     name = name,
                     actorUuid = existing.actorUuid,
@@ -183,11 +207,12 @@ class RosterEditDialog(
                     it.speed = speed
                     it.plotHook = plotHook
                     it.role = if (isNpc) "npc" else "companion"
-                    it.traveling = existing.traveling
-                    it.active = existing.active
-                    it.destinationX = existing.destinationX
-                    it.destinationY = existing.destinationY
-                    it.eta = existing.eta
+                    it.traveling = traveling
+                    it.active = active
+                    it.destinationX = destinationX
+                    it.destinationY = destinationY
+                    it.eta = eta
+                    it.img = existing.img
                 }
                 onSave(index, updated)
                 close()

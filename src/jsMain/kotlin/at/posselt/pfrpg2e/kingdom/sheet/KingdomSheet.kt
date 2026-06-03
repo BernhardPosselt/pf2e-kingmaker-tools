@@ -40,7 +40,6 @@ import at.posselt.pfrpg2e.kingdom.SettlementTerrain
 import at.posselt.pfrpg2e.kingdom.armies.setupArmies
 import at.posselt.pfrpg2e.kingdom.armies.updateArmyConsumption
 import at.posselt.pfrpg2e.kingdom.TurnTickingEngine
-import at.posselt.pfrpg2e.kingdom.WeatherShiftParams
 import at.posselt.pfrpg2e.kingdom.createModifiers
 import at.posselt.pfrpg2e.kingdom.createSimpleContext
 import at.posselt.pfrpg2e.kingdom.data.RawBonusFeat
@@ -92,6 +91,8 @@ import at.posselt.pfrpg2e.kingdom.getActivity
 import at.posselt.pfrpg2e.kingdom.getAllActivities
 import at.posselt.pfrpg2e.kingdom.vkActivityIds
 import at.posselt.pfrpg2e.kingdom.vkToBaseActivityIds
+import at.posselt.pfrpg2e.kingdom.structures.vkStructureIds
+import at.posselt.pfrpg2e.kingdom.structures.vkToBaseStructureIds
 import at.posselt.pfrpg2e.kingdom.getAllSettlements
 import at.posselt.pfrpg2e.kingdom.getCharters
 import at.posselt.pfrpg2e.kingdom.getEvent
@@ -144,6 +145,7 @@ import at.posselt.pfrpg2e.utils.TableAndDraw
 import at.posselt.pfrpg2e.utils.buildPromise
 import at.posselt.pfrpg2e.utils.d20Check
 import at.posselt.pfrpg2e.utils.formatAsModifier
+import at.posselt.pfrpg2e.utils.fromUuidOfTypes
 import at.posselt.pfrpg2e.utils.launch
 import at.posselt.pfrpg2e.utils.openJournal
 import at.posselt.pfrpg2e.utils.postChatMessage
@@ -166,6 +168,8 @@ import com.foundryvtt.core.applications.ux.TextEditor.enrichHtml
 import com.foundryvtt.core.documents.Actor
 import com.foundryvtt.core.documents.onCreateDrawing
 import com.foundryvtt.core.documents.onCreateTile
+import com.foundryvtt.pf2e.actor.PF2ECharacter
+import com.foundryvtt.pf2e.actor.PF2ENpc
 import com.foundryvtt.core.documents.onCreateToken
 import com.foundryvtt.core.documents.onDeleteDrawing
 import com.foundryvtt.core.documents.onDeleteScene
@@ -414,6 +418,24 @@ class KingdomSheet(
                     current.quests = quests + quest
                     actor.setKingdom(current)
                 }.launch()
+            }
+
+            "edit-quest" -> buildPromise {
+                val questId = target.dataset["id"]
+                if (questId != null) {
+                    val existing = (getKingdom().quests ?: emptyArray()).find { it.id == questId }
+                    if (existing != null) {
+                        AddQuest(
+                            onSave = { updated ->
+                                val current = getKingdom()
+                                val quests = current.quests ?: emptyArray()
+                                current.quests = quests.map { if (it.id == questId) updated else it }.toTypedArray()
+                                actor.setKingdom(current)
+                            },
+                            existing = existing,
+                        ).launch()
+                    }
+                }
             }
 
             "complete-quest" -> buildPromise {
@@ -1200,26 +1222,8 @@ class KingdomSheet(
                     val settlements = kingdom.getAllSettlements(game)
                     val storage = calculateStorage(realm = realm, settlements = settlements.allSettlements)
 
-                    // Build weather shift params from climate settings
-                    val weatherShift = if (game.settings.pfrpg2eKingdomCampingWeather.getEnableWeather()) {
-                        val climateSettings = game.settings.pfrpg2eKingdomCampingWeather.getClimateSettings()
-                        val currentMonth = game.getCurrentMonth()
-                        val monthIndex = currentMonth.ordinal
-                        val monthClimate = climateSettings.months.getOrNull(monthIndex)
-                        if (monthClimate != null) {
-                            val coldRoll = monthClimate.coldDc?.let { roll("1d20") }
-                            val precipitationRoll = monthClimate.precipitationDc?.let { roll("1d20") }
-                            WeatherShiftParams(
-                                coldDc = monthClimate.coldDc,
-                                precipitationDc = monthClimate.precipitationDc,
-                                weatherEventDc = monthClimate.weatherEventDc,
-                                coldRoll = coldRoll,
-                                precipitationRoll = precipitationRoll,
-                                weatherEventRoll = monthClimate.weatherEventDc?.let { roll("1d20") },
-                            )
-                        } else null
-                    } else null
-
+                    // Kingdom-turn (monthly) ticking. Day-scale ticks (weather,
+                    // companion travel) run off the world clock — see registerDailyTickHooks.
                     val tickResult = TurnTickingEngine.tick(
                         fame = kingdom.fame,
                         resourcePoints = kingdom.resourcePoints,
@@ -1229,7 +1233,6 @@ class KingdomSheet(
                         storage = storage,
                         councilCooldowns = kingdom.councilCooldowns,
                         modifiers = kingdom.modifiers,
-                        weatherShift = weatherShift,
                     )
                     kingdom.supernaturalSolutions = tickResult.supernaturalSolutions
                     kingdom.creativeSolutions = tickResult.creativeSolutions
@@ -1240,59 +1243,6 @@ class KingdomSheet(
                     kingdom.commodities = tickResult.commodities
                     kingdom.councilCooldowns = tickResult.councilCooldowns
                     kingdom.modifiers = tickResult.modifiers
-
-                    // Apply weather shift result
-                    if (tickResult.weatherType != null && tickResult.weatherEffect != null) {
-                        setWeather(game, tickResult.weatherEffect, tickResult.weatherType)
-                    }
-
-                    // Tick companion travel simulation
-                    val companions = kingdom.companions ?: emptyArray()
-                    for (companion in companions) {
-                        if (companion.traveling && companion.active) {
-                            val currentEta = companion.eta
-                            if (currentEta != null) {
-                                val nextEta = currentEta - 1
-                                companion.eta = nextEta
-                                if (nextEta <= 0) {
-                                    companion.traveling = false
-                                    companion.eta = null
-                                    
-                                    val companionName = companion.actorUuid?.let { uuid ->
-                                        game.actors.get(uuid)?.name
-                                    } ?: companion.name
-                                    
-                                    val destX = companion.destinationX ?: 0
-                                    val destY = companion.destinationY ?: 0
-                                    val msg = t("kingdom.companionArrival", recordOf(
-                                        "name" to companionName,
-                                        "x" to destX,
-                                        "y" to destY
-                                    ))
-                                    postChatMessage(msg, isHtml = true)
-                                    
-                                    // Move token if activeScene is hex grid and token exists
-                                    val activeScene = game.scenes.active
-                                    if (activeScene != null && activeScene.grid.isHexagonal && companion.destinationX != null && companion.destinationY != null) {
-                                        val uuid = companion.actorUuid
-                                        if (uuid != null) {
-                                            val companionActor = game.actors.get(uuid)
-                                            val tokenDoc = activeScene.tokens.contents.find { it.actorId == companionActor?.id }
-                                            if (tokenDoc != null) {
-                                                val offset = js("{ i: companion.destinationX, j: companion.destinationY }").unsafeCast<GridOffset2D>()
-                                                val point = activeScene.grid.getTopLeftPoint(offset)
-                                                tokenDoc.typeSafeUpdate {
-                                                    x = point.x
-                                                    y = point.y
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    kingdom.companions = companions
 
                     actor.setKingdom(kingdom)
                 }
@@ -1716,6 +1666,14 @@ class KingdomSheet(
         } else {
             (kingdom.activityBlacklist.toSet() + vkActivityIds - vkToBaseActivityIds.values.toSet()).toTypedArray()
         }
+        val effectiveStructureBlacklist = if (kingdom.settings.vanceAndKerensharaXP) {
+            // V&K ON: hide base counterparts, show V&K variants
+            vkToBaseStructureIds.values.toSet()
+        } else {
+            // V&K OFF: hide V&K variants, show base counterparts
+            vkStructureIds.toSet()
+        }
+        kingdom.structureBlacklist = effectiveStructureBlacklist.toTypedArray()
         val activities = toActivitiesContext(
             activities = kingdom.getAllActivities(),
             activityBlacklist = effectiveBlacklist.toSet(),
@@ -1878,7 +1836,7 @@ class KingdomSheet(
                 capStructureBonusAtKingdomLevel = kingdom.settings.capStructureBonusAtKingdomLevel,
                 kingdomLevel = kingdom.level,
                 capitalCanGrowOneSizeLarger = kingdom.settings.capitalCanGrowOneSizeLarger,
-                structureBlacklist = kingdom.structureBlacklist,
+                chosenFeats = chosenFeats,
             ),
             settlementDetailsRows = kingdom.settlements.toSettlementDetailsMatrixRows(
                 game,
@@ -1888,7 +1846,6 @@ class KingdomSheet(
                 capStructureBonusAtKingdomLevel = kingdom.settings.capStructureBonusAtKingdomLevel,
                 kingdomLevel = kingdom.level,
                 capitalCanGrowOneSizeLarger = kingdom.settings.capitalCanGrowOneSizeLarger,
-                structureBlacklist = kingdom.structureBlacklist,
             ),
             canAddCurrentSceneAsSettlement = canAddCurrentScene,
             turnSectionNav = createTabs<TurnNavEntry>("scroll-to"),
@@ -1923,7 +1880,7 @@ class KingdomSheet(
             rosterContext = (kingdom.companions ?: emptyArray()).map { character ->
                 val uuid = character.actorUuid
                 if (uuid != null) {
-                    val companionActor = game.actors.get(uuid)
+                    val companionActor = fromUuidOfTypes(uuid, PF2ECharacter::class, PF2ENpc::class)
                     if (companionActor != null) {
                         character.name = companionActor.name
                         character.img = companionActor.img

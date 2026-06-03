@@ -6,6 +6,7 @@ import at.posselt.pfrpg2e.actions.handlers.GainProvisions
 import at.posselt.pfrpg2e.camping.ActivityEffect
 import at.posselt.pfrpg2e.camping.CampingActor
 import at.posselt.pfrpg2e.camping.CampingData
+import at.posselt.pfrpg2e.camping.resetDowntimeHours
 import at.posselt.pfrpg2e.camping.MealEffect
 import at.posselt.pfrpg2e.camping.RecipeData
 import at.posselt.pfrpg2e.camping.RestSettings
@@ -41,7 +42,6 @@ import at.posselt.pfrpg2e.utils.postChatMessage
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
 import at.posselt.pfrpg2e.utils.worldTimeSeconds
-import at.posselt.pfrpg2e.weather.rollWeather
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.Game
 import com.foundryvtt.pf2e.actions.RestForTheNightOptions
@@ -311,6 +311,7 @@ private suspend fun completeDailyPreparations(
     camping.secondsSpentHexploring = 0
     Object.values(camping.campingActivities).forEach { it.result = null }
     Object.values(camping.cooking.results).forEach { it.result = null }
+    camping.resetDowntimeHours()
     campingActor.setCamping(camping)
 
     val additionalHealing = additionalHealingPerActorAfterRest(recipes, camping, actors)
@@ -326,9 +327,6 @@ private suspend fun completeDailyPreparations(
     removeProvisions(actors + listOfNotNull(party))
     removeCombatEffects(actors)
     gainMinimumSubsistence(dispatcher, camping.cooking.minimumSubsistence, party)
-    if (!camping.restSettings.skipWeather) {
-        rollWeather(game)
-    }
 }
 
 private suspend fun gainMinimumSubsistence(

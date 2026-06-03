@@ -144,6 +144,54 @@ private fun RawStructureData.translate() =
         notes = notes?.let { t(it) },
     )
 
+val vkStructureIds = setOf(
+    "bank-vk",
+    "castle-vk",
+    "construction-yard-vk",
+    "festival-hall-vk",
+    "fishing-fleets-vk",
+    "garrison-vk",
+    "granary-vk",
+    "inn-vk",
+    "library-vk",
+    "magic-shop-vk",
+    "monument-vk",
+    "occult-shop-vk",
+    "palace-vk",
+    "pier-vk",
+    "smithy-vk",
+    "tavern-dive-vk",
+    "tavern-luxury-vk",
+    "tavern-popular-vk",
+    "tavern-world-class-vk",
+    "town-hall-vk",
+    "waterfront-vk",
+)
+
+val vkToBaseStructureIds = mapOf(
+    "bank-vk" to "bank",
+    "castle-vk" to "castle",
+    "construction-yard-vk" to "construction-yard",
+    "festival-hall-vk" to "festival-hall",
+    "fishing-fleets-vk" to "fishing-fleets",
+    "garrison-vk" to "garrison",
+    "granary-vk" to "granary",
+    "inn-vk" to "inn",
+    "library-vk" to "library",
+    "magic-shop-vk" to "magic-shop",
+    "monument-vk" to "monument",
+    "occult-shop-vk" to "occult-shop",
+    "palace-vk" to "palace",
+    "pier-vk" to "pier",
+    "smithy-vk" to "smithy",
+    "tavern-dive-vk" to "tavern-dive",
+    "tavern-luxury-vk" to "tavern-luxury",
+    "tavern-popular-vk" to "tavern-popular",
+    "tavern-world-class-vk" to "tavern-world-class",
+    "town-hall-vk" to "town-hall",
+    "waterfront-vk" to "waterfront",
+)
+
 var translatedStructures = emptyArray<RawStructureData>()
 
 fun translateStructureData() {

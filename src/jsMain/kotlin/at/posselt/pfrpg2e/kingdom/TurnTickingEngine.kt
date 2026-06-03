@@ -1,19 +1,13 @@
 package at.posselt.pfrpg2e.kingdom
 
 import at.posselt.pfrpg2e.data.kingdom.structures.CommodityStorage
-import at.posselt.pfrpg2e.data.regions.WeatherEffect
-import at.posselt.pfrpg2e.data.regions.WeatherType
-import at.posselt.pfrpg2e.data.regions.findWeatherType
-import at.posselt.pfrpg2e.kingdom.data.RawCommodities
 import at.posselt.pfrpg2e.kingdom.data.RawCurrentCommodities
 import at.posselt.pfrpg2e.kingdom.RawModifier
 import at.posselt.pfrpg2e.kingdom.data.endTurn
-import at.posselt.pfrpg2e.kingdom.data.limitBy
 import at.posselt.pfrpg2e.kingdom.data.RawConsumption
 import at.posselt.pfrpg2e.kingdom.RawCouncilCooldowns
 import at.posselt.pfrpg2e.kingdom.data.RawFame
 import at.posselt.pfrpg2e.kingdom.data.RawResources
-import kotlinx.js.JsPlainObject
 
 /**
  * Represents the diff of a single tick operation for auditing/logging.
@@ -26,22 +20,7 @@ data class TickChange(
 )
 
 /**
- * Represents a timed injury that heals over a number of kingdom turns.
- *
- * Duration convention (same as modifier turns):
- * - null or 0 = permanent (never heals on its own)
- * - 1 = expires after this tick (remove the injury)
- * - >1 = decrement by 1 each tick
- */
-@JsPlainObject
-external interface Injury {
-	var id: String
-	var name: String
-	var duration: Int?
-}
-
-/**
- * Engine output: all state changes produced by a turn tick.
+ * Engine output: all state changes produced by a kingdom turn tick.
  * Each field holds the post-tick value to apply to KingdomData.
  */
 data class TickResult(
@@ -54,47 +33,29 @@ data class TickResult(
 	val commodities: RawCurrentCommodities,
 	val councilCooldowns: RawCouncilCooldowns?,
 	val modifiers: Array<RawModifier>,
-	val injuries: Array<Injury>,
 	val changes: List<TickChange>,
-	val weatherType: WeatherType? = null,
-	val weatherEffect: WeatherEffect? = null,
 )
 
 /**
- * Input parameters for pure weather-shift resolution.
- * All rolls are passed in from the caller so the engine stays deterministic.
- */
-data class WeatherShiftParams(
-	val coldDc: Int?,
-	val precipitationDc: Int?,
-	val weatherEventDc: Int?,
-	/** Pre-rolled d20 value for the cold check; null if no DC configured */
-	val coldRoll: Int?,
-	/** Pre-rolled d20 value for the precipitation check; null if no DC configured */
-	val precipitationRoll: Int?,
-	/** Pre-rolled d20 value for the weather event check; null if no DC configured */
-	val weatherEventRoll: Int?,
-)
-
-/**
- * Turn-triggered ticking engine.
+ * Monthly (kingdom-turn) ticking engine.
  *
- * Processes all time-based state transitions that occur at the end of a kingdom turn:
+ * Processes the state transitions that occur once per kingdom turn — i.e. at the
+ * **End Turn** action — which in PF2e Kingmaker is one calendar month:
  * - Resets one-shot solution counters
  * - Advances fame, resource points, resource dice, consumption
  * - Merges commodities with storage limits
  * - Counts down council cooldowns
  * - Ticks down modifier durations and expires finished modifiers
- * - Ticks down injury durations and removes expired injuries
- * - Resolves weather shift from pre-rolled climate checks
  *
- * The engine is designed to be called from Foundry-side code (KingdomSheet) but
- * contains no Foundry/Game dependencies, making it fully unit-testable.
+ * Day-scale concerns (weather, companion travel) are NOT handled here; they tick
+ * daily off the world clock — see [DailyTickEngine] and `registerDailyTickHooks`.
+ *
+ * The engine contains no Foundry/Game dependencies, making it fully unit-testable.
  */
 object TurnTickingEngine {
 
 	/**
-	 * Run a single turn [tick] against the provided kingdom state snapshots.
+	 * Run a single kingdom-turn [tick] against the provided kingdom state snapshots.
 	 *
 	 * @param fame Current fame state (now/next).
 	 * @param resourcePoints Current resource point state.
@@ -104,8 +65,6 @@ object TurnTickingEngine {
 	 * @param storage Commodity storage capacity (used to cap end-turn merge).
 	 * @param councilCooldowns Nullable council cooldown state.
 	 * @param modifiers Current array of active modifiers (may carry turn durations).
-	 * @param injuries Current array of active injuries (may carry turn durations).
-	 * @param weatherShift Optional weather shift parameters; when provided, weather is advanced.
 	 * @return [TickResult] with all post-tick values and a list of changes.
 	 */
 	fun tick(
@@ -117,8 +76,6 @@ object TurnTickingEngine {
 		storage: CommodityStorage,
 		councilCooldowns: RawCouncilCooldowns?,
 		modifiers: Array<RawModifier>,
-		injuries: Array<Injury> = emptyArray(),
-		weatherShift: WeatherShiftParams? = null,
 	): TickResult {
 		val changes = mutableListOf<TickChange>()
 
@@ -232,17 +189,6 @@ object TurnTickingEngine {
 			changes += TickChange("modifiers", "expired", null, expiredCount)
 		}
 
-		// 9) Tick down injury durations
-		val (newInjuries, injuryChanges) = tickInjuryDurations(injuries)
-		changes += injuryChanges
-
-		// 10) Resolve weather shift
-		val (newWeatherType, newWeatherEffect) = if (weatherShift != null) {
-			resolveWeatherShift(weatherShift, changes)
-		} else {
-			null to null
-		}
-
 		return TickResult(
 			supernaturalSolutions = 0,
 			creativeSolutions = 0,
@@ -253,86 +199,7 @@ object TurnTickingEngine {
 			commodities = newCommodities,
 			councilCooldowns = newCooldowns,
 			modifiers = newModifiers,
-			injuries = newInjuries,
 			changes = changes,
-			weatherType = newWeatherType,
-			weatherEffect = newWeatherEffect,
 		)
-	}
-
-	/**
-	 * Pure function that resolves a weather shift from pre-rolled climate checks.
-	 *
-	 * Takes pre-rolled d20 values so the engine remains deterministic and testable.
-	 * The caller (KingdomSheet) is responsible for rolling the dice via Foundry's
-	 * roll API and passing the results in.
-	 *
-	 * @param params Pre-rolled weather shift parameters.
-	 * @param changes Mutable list of [TickChange] records to append weather changes to.
-	 * @return Pair of (new WeatherType, new WeatherEffect).
-	 */
-	fun resolveWeatherShift(
-		params: WeatherShiftParams,
-		changes: MutableList<TickChange>,
-	): Pair<WeatherType, WeatherEffect> {
-		val isCold = params.coldDc != null && params.coldRoll != null && params.coldRoll >= params.coldDc
-		val hasPrecipitation = params.precipitationDc != null && params.precipitationRoll != null && params.precipitationRoll >= params.precipitationDc
-		val type = findWeatherType(isCold = isCold, hasPrecipitation = hasPrecipitation)
-		val effect = when (type) {
-			WeatherType.COLD -> WeatherEffect.SUNNY
-			WeatherType.SNOWY -> WeatherEffect.SNOW
-			WeatherType.RAINY -> WeatherEffect.RAIN
-			WeatherType.SUNNY -> WeatherEffect.SUNNY
-		}
-		changes += TickChange("weather", "type", null, type)
-		changes += TickChange("weather", "effect", null, effect)
-		return type to effect
-	}
-
-	/**
-	 * Pure function that decrements injury durations by one tick.
-	 *
-	 * Duration convention (identical to modifier turns):
-	 * - null or 0 = permanent injury, never heals on its own
-	 * - 1 = expires after this tick (removed from the result)
-	 * - >1 = decrement duration by 1
-	 *
-	 * @param injuries Current array of active injuries.
-	 * @return Pair of (surviving injuries after tick, list of TickChange records).
-	 */
-	fun tickInjuryDurations(injuries: Array<Injury>): Pair<Array<Injury>, List<TickChange>> {
-		val changes = mutableListOf<TickChange>()
-		var expiredCount = 0
-		val remaining = injuries.mapNotNull { injury ->
-			val duration = injury.duration
-			if (duration == null || duration == 0) {
-				// Permanent injury, keep as-is
-				injury
-			} else if (duration <= 1) {
-				// Expired after this tick
-				expiredCount++
-				changes += TickChange("injuries", "expired", injury.id, injury.name)
-				null
-			} else {
-				// Decrement remaining duration
-				changes += TickChange(
-					"injuries",
-					"duration",
-					duration,
-					duration - 1,
-				)
-				Injury(
-					id = injury.id,
-					name = injury.name,
-					duration = duration - 1,
-				)
-			}
-		}.toTypedArray()
-
-		if (expiredCount > 1) {
-			changes += TickChange("injuries", "expiredCount", null, expiredCount)
-		}
-
-		return Pair(remaining, changes)
 	}
 }

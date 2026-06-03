@@ -288,7 +288,9 @@ class InspectSettlement(
             value = current.waterBorders,
             hideLabel = true,
         )
+        val blacklist = kingdom.structureBlacklist.toSet()
         val settlementStructures = parsed.constructedStructures
+            .filter { it.id !in blacklist }
             .groupBy { it.id }
             .values
             .sortedBy { it.first().name }

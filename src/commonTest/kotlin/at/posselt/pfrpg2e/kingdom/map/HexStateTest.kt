@@ -266,4 +266,46 @@ class HexStateTest {
         // Explored fill should be more transparent than claimed (0.2)
         assertTrue(EXPLORED_FILL_ALPHA < 0.2)
     }
+
+    // ── Road drawing decision (feature-based) ──────────────────────────────
+
+    @Test
+    fun `shouldHaveRoadDrawing is true when a road feature is present`() {
+        assertTrue(shouldHaveRoadDrawing(listOf("road")))
+    }
+
+    @Test
+    fun `shouldHaveRoadDrawing is true when road is among several features`() {
+        assertTrue(shouldHaveRoadDrawing(listOf("farmland", "road", "bridge")))
+    }
+
+    @Test
+    fun `shouldHaveRoadDrawing is false when no road feature is present`() {
+        assertFalse(shouldHaveRoadDrawing(listOf("farmland", "ruin")))
+    }
+
+    @Test
+    fun `shouldHaveRoadDrawing is false for empty or null features`() {
+        assertFalse(shouldHaveRoadDrawing(emptyList()))
+        assertFalse(shouldHaveRoadDrawing(null))
+    }
+
+    @Test
+    fun `shouldHaveRoadDrawing ignores null feature types`() {
+        assertFalse(shouldHaveRoadDrawing(listOf(null, "farmland")))
+        assertTrue(shouldHaveRoadDrawing(listOf(null, "road")))
+    }
+
+    @Test
+    fun `removing the road feature flips shouldHaveRoadDrawing to false`() {
+        val withRoad = listOf("road", "farmland")
+        assertTrue(shouldHaveRoadDrawing(withRoad))
+        val afterRemoval = withRoad.filterNot { it == "road" }
+        assertFalse(shouldHaveRoadDrawing(afterRemoval))
+    }
+
+    @Test
+    fun `ROAD_FEATURE_TYPE constant matches native lowercase feature type`() {
+        assertEquals("road", ROAD_FEATURE_TYPE)
+    }
 }

@@ -127,6 +127,12 @@
                 {{#if chosenMealImg}}
                     <img class="chosen-meal" src="{{chosenMealImg}}" alt="{{chosenMeal}}" title="{{chosenMeal}}">
                 {{/if}}
+                {{#if downtimeHoursMax}}
+                    <div class="km-camping-actor-hours{{#if downtimeBudgetFull}} km-camping-actor-hours-full{{/if}}"
+                         title="{{localizeKM "camping.downtimeBudgetHelp" max=downtimeHoursMax}}">
+                        {{downtimeHoursRemaining}}<span class="km-hours-unit">{{localizeKM "camping.hoursSymbol"}}</span>
+                    </div>
+                {{/if}}
                 <button class="km-camping-action"
                         data-action="clear-actor"
                         type="button"

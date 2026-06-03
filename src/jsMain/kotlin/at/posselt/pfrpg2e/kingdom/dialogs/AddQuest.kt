@@ -76,15 +76,33 @@ external interface AddQuestContext : ValidatedHandlebarsContext {
 }
 
 class AddQuest(
+    private val existing: RawQuest? = null,
     private val onSave: suspend (quest: RawQuest) -> Unit,
 ) : FormApp<AddQuestContext, AddQuestData>(
-    title = t("kingdom.quests.addQuest"),
+    title = t(if (existing != null) "kingdom.quests.editQuest" else "kingdom.quests.addQuest"),
     template = "components/forms/application-form.hbs",
     debug = true,
     dataModel = QuestModel::class.js,
     id = "kmAddQuest",
 ) {
-    var data: AddQuestData = AddQuestData(
+    var data: AddQuestData = existing?.let { q ->
+        AddQuestData(
+            title = q.title,
+            description = q.description,
+            giver = q.giver,
+            type = q.type,
+            target = q.target,
+            rp = q.rewards.rp ?: 0,
+            xp = q.rewards.xp ?: 0,
+            unrest = q.rewards.unrest ?: 0,
+            food = q.rewards.food ?: 0,
+            lumber = q.rewards.lumber ?: 0,
+            stone = q.rewards.stone ?: 0,
+            ore = q.rewards.ore ?: 0,
+            luxuries = q.rewards.luxuries ?: 0,
+            flavorTextCompleted = q.flavorTextCompleted,
+        )
+    } ?: AddQuestData(
         title = "",
         description = "",
         giver = "",
@@ -102,18 +120,18 @@ class AddQuest(
     )
 
     init {
-        isFormValid = false
+        isFormValid = existing != null
     }
 
     override fun _onClickAction(event: PointerEvent, target: HTMLElement) {
         when (target.dataset["action"]) {
             "km-save" -> {
                 val quest = RawQuest(
-                    id = "quest-${js("Date.now()")}",
+                    id = existing?.id ?: "quest-${js("Date.now()")}",
                     title = data.title,
                     description = data.description,
                     giver = data.giver,
-                    status = "active",
+                    status = existing?.status ?: "active",
                     type = data.type,
                     target = data.target,
                     rewards = RawQuestRewards(

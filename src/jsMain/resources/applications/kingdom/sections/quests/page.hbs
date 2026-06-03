@@ -97,6 +97,9 @@
                         <button type="button" class="km-quest-action-btn km-complete-btn" data-action="complete-quest" data-id="{{id}}" title="{{localizeKM 'kingdom.quests.completeQuest'}}">
                             <i class="fa-solid fa-check"></i> {{localizeKM 'kingdom.quests.completeQuest'}}
                         </button>
+                        <button type="button" class="km-quest-action-btn km-edit-btn" data-action="edit-quest" data-id="{{id}}" title="{{localizeKM 'kingdom.quests.editQuest'}}">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
                         <button type="button" class="km-quest-action-btn km-delete-btn" data-action="delete-quest" data-id="{{id}}" title="{{localizeKM 'kingdom.quests.deleteQuest'}}">
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -139,6 +142,9 @@
                     
                     {{#if ../isGM}}
                     <div class="km-quest-row-actions">
+                        <button type="button" class="km-quest-row-edit-btn" data-action="edit-quest" data-id="{{id}}" title="{{localizeKM 'kingdom.quests.editQuest'}}">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
                         <button type="button" class="km-quest-row-delete-btn" data-action="delete-quest" data-id="{{id}}" title="{{localizeKM 'kingdom.quests.deleteQuest'}}">
                             <i class="fa-solid fa-trash"></i>
                         </button>

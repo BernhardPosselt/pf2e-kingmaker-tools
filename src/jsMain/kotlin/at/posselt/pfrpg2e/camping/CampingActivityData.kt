@@ -71,6 +71,14 @@ fun CampingActivityData.isRequiredCompanionPresent(actorNames: Set<String>): Boo
         actorNames.any { it.equals(companionName, ignoreCase = true) }
     } ?: true
 
+/**
+ * Companion-learning activities must stay visible in the activity list (greyed out when the
+ * required NPC is absent), so they are never hidden by the manage-activities lock. Every other
+ * activity is hidden while its id is in [lockedActivityIds].
+ */
+fun CampingActivityData.isHiddenByLock(lockedActivityIds: Set<String>): Boolean =
+    requiredCompanion == null && lockedActivityIds.contains(id)
+
 fun CampingActivityData.isCookMeal() =
     id == cookMealId
 

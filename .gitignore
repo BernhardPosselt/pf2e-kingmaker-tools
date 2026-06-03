@@ -10,6 +10,10 @@ build/
 /dist
 /packs
 packs
+foundry.zip
+.foundry-creds.env
+
+
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

@@ -18,7 +18,7 @@ external interface RawCharacter {
     var destinationY: Int?
     /** Travel: speed in hexes per day */
     var speed: Int
-    /** Travel: estimated time of arrival in kingdom turns */
+    /** Travel: estimated time of arrival in days (counted down daily off the world clock) */
     var eta: Int?
     /** Plot hook or GM note associated with this companion */
     var plotHook: String?

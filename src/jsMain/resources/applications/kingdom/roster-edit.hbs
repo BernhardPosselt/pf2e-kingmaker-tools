@@ -32,32 +32,24 @@
         <h3><i class="fa-solid fa-gear"></i> {{localizeKM "kingdom.roster.status"}}</h3>
 
         <div class="km-form-group">
-            <label>{{localizeKM "kingdom.roster.traveling"}}</label>
-            <span class="km-roster-status {{#if traveling}}km-status-on{{else}}km-status-off{{/if}}">
-                {{#if traveling}}{{localizeKM "kingdom.roster.yes"}}{{else}}{{localizeKM "kingdom.roster.no"}}{{/if}}
-            </span>
+            <label for="companionActive">{{localizeKM "kingdom.roster.active"}}</label>
+            <input type="checkbox" name="companionActive" {{#if active}}checked{{/if}} />
         </div>
 
         <div class="km-form-group">
-            <label>{{localizeKM "kingdom.roster.active"}}</label>
-            <span class="km-roster-status {{#if active}}km-status-on{{else}}km-status-off{{/if}}">
-                {{#if active}}{{localizeKM "kingdom.roster.yes"}}{{else}}{{localizeKM "kingdom.roster.no"}}{{/if}}
-            </span>
+            <label for="companionDestinationX">{{localizeKM "kingdom.roster.destination"}} X</label>
+            <input type="number" name="companionDestinationX" value="{{destinationX}}" step="1" />
         </div>
 
-        {{#if destinationX}}
         <div class="km-form-group">
-            <label>{{localizeKM "kingdom.roster.destination"}}</label>
-            <span>({{destinationX}}, {{destinationY}})</span>
+            <label for="companionDestinationY">{{localizeKM "kingdom.roster.destination"}} Y</label>
+            <input type="number" name="companionDestinationY" value="{{destinationY}}" step="1" />
         </div>
-        {{/if}}
 
-        {{#if eta}}
         <div class="km-form-group">
-            <label>{{localizeKM "kingdom.roster.eta"}}</label>
-            <span>{{eta}}</span>
+            <label for="companionEta">{{localizeKM "kingdom.roster.eta"}}</label>
+            <input type="number" name="companionEta" value="{{eta}}" min="0" step="1" />
         </div>
-        {{/if}}
     </div>
 
     <hr>

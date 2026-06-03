@@ -18,12 +18,14 @@ import at.posselt.pfrpg2e.camping.openOrCreateCampingSheet
 import at.posselt.pfrpg2e.camping.registerActivityDiffingHooks
 import at.posselt.pfrpg2e.camping.registerCampingTokenMove
 import at.posselt.pfrpg2e.camping.registerFatiguedHooks
+import at.posselt.pfrpg2e.kingdom.registerDailyTickHooks
 import at.posselt.pfrpg2e.camping.registerMealDiffingHooks
 import at.posselt.pfrpg2e.camping.updateCampingRegion
 import at.posselt.pfrpg2e.combat.registerCombatTrackHooks
 import at.posselt.pfrpg2e.combat.registerCombatXpHooks
 import at.posselt.pfrpg2e.firstrun.showFirstRunMessage
 import at.posselt.pfrpg2e.kingdom.KingdomActor
+import at.posselt.pfrpg2e.kingdom.armies.createArmyCompendiumEntries
 import at.posselt.pfrpg2e.kingdom.armies.registerArmyConsumptionHooks
 import at.posselt.pfrpg2e.kingdom.bindChatButtons
 import at.posselt.pfrpg2e.kingdom.registerContextMenus
@@ -105,6 +107,7 @@ fun main() {
                 registerIcons(actionDispatcher)
                 registerCombatXpHooks(game)
                 registerFatiguedHooks(game)
+                registerDailyTickHooks(game)
             }
         }
 
@@ -220,6 +223,7 @@ fun main() {
                 game.migratePfrpg2eKingdomCampingWeather()
                 registerActivityDiffingHooks(game, actionDispatcher)
                 showFirstRunMessage(game)
+                createArmyCompendiumEntries(game)
                 validateStructures(game)
                 registerCampingTokenMove(game)
                 registerHexGridSync(game)

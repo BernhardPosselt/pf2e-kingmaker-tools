@@ -139,6 +139,56 @@ external interface CampingData {
      * The number of watch slots equals this array's size (defaults to [defaultNumberOfWatches]).
      */
     var watchSlots: Array<Array<String>>
+
+    /**
+     * Downtime hours each actor has spent this camping session, keyed by actor UUID. Incremented
+     * every time that actor rolls a camping activity (see [spendDowntimeHours]); it is NOT
+     * recomputed from current assignments, so unassigning an actor does not refund hours and
+     * re-rolling the same activity keeps spending. Reset to empty at daily preparations.
+     * Nullable for backwards compatibility with camping data saved before this field existed.
+     */
+    var downtimeHoursSpent: Record<String, Int>?
+}
+
+/**
+ * Foundry flattens flag objects on `.` when persisting, so an actor UUID (which contains dots,
+ * e.g. `Scene.x.Token.y.Actor.z`) cannot be used directly as a [downtimeHoursSpent] key — it
+ * would be mangled into nested objects on save. Replace dots so the key round-trips intact.
+ * (The same reason `cooking.actorMeals` is keyed by `actor.id` rather than the UUID.)
+ */
+private fun downtimeHoursKey(actorUuid: String): String = actorUuid.replace('.', '_')
+
+/**
+ * Remaining downtime hours for [actorUuid] this session, clamped to
+ * `[0, MAX_DOWNTIME_HOURS]`. Derived purely from [CampingData.downtimeHoursSpent].
+ */
+fun CampingData.downtimeHoursRemaining(actorUuid: String): Int {
+    val spent = downtimeHoursSpent?.get(downtimeHoursKey(actorUuid)) ?: 0
+    return (CampingActivityScheduler.MAX_DOWNTIME_HOURS - spent)
+        .coerceIn(0, CampingActivityScheduler.MAX_DOWNTIME_HOURS)
+}
+
+/**
+ * Records that [actorUuid] spent [hours] of downtime (one camping roll). Accumulates; never
+ * decreases here. Allowed to exceed [CampingActivityScheduler.MAX_DOWNTIME_HOURS]; the display
+ * clamps remaining hours to zero.
+ */
+fun CampingData.spendDowntimeHours(actorUuid: String, hours: Int) {
+    val spent = downtimeHoursSpent ?: recordOf()
+    val key = downtimeHoursKey(actorUuid)
+    spent[key] = (spent[key] ?: 0) + hours
+    downtimeHoursSpent = spent
+}
+
+/**
+ * Resets every actor's spent downtime hours to zero for a new camping session. Entries are
+ * zeroed in place rather than dropped because Foundry merges flag objects on update (it does
+ * not remove keys), so assigning an empty map would leave stale values behind.
+ */
+fun CampingData.resetDowntimeHours() {
+    downtimeHoursSpent?.let { spent ->
+        js.objects.Object.keys(spent).forEach { spent[it] = 0 }
+    }
 }
 
 fun CampingData.campingActivitiesWithId() =
@@ -266,6 +316,7 @@ fun getDefaultCamping(game: Game): CampingData {
         secondsSpentForcedMarching = 0,
         hexSizeInMiles = 12,
         watchSlots = emptyArray(),
+        downtimeHoursSpent = recordOf(),
         regionSettings = RegionSettings(
             regions = arrayOf(
                 RegionSetting(

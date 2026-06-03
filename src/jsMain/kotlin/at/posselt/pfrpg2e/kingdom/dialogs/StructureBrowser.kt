@@ -460,6 +460,7 @@ class StructureBrowser(
         val structuresUpgradedFrom = worldStructures.flatMap { it.upgradeFrom }.toSet()
         val filters = buildList<StructureFilter> {
             add { s -> s.lots >= minLots && s.lots <= maxLots && s.level <= maxLevel }
+            add { s -> s.id !in kingdom.structureBlacklist.toSet() }
             search?.let { add { s -> it.lowercase() in s.name.lowercase() } }
             if (MainFilter.IGNORE_PROFICIENCY !in mainFilters) {
                 add { canBuild(it, increaseSkills) }

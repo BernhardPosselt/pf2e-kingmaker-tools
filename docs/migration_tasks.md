@@ -28,5 +28,16 @@ Five independent QA verification passes confirmed the implementation (see `docs/
 | Only `claimed` hex state synced to drawings | NOT_IMPLEMENTED | `explored`, `cleared`, `roads` absent from `HexState` interface |
 | `chosenFeats` not passed to `settlements.toContext()` | NOT_IMPLEMENTED | Item levels come from structures, not feats — likely intentional |
 | `write-only` companion sync | DESIGN CHOICE | `setAppFlag` writes companion-data but no read-back path; functionally sufficient |
-| Injury duration ticking in TurnTickingEngine | NOT FOUND | May be handled separately or not yet implemented |
-| Weather shift ticking in TurnTickingEngine | NOT FOUND | May be handled separately or not yet implemented |
+| Injury duration ticking | REMOVED | Was an unwired engine stub (no `injuries` data model, no UI, no source) carried over from the migration plan. Dropped entirely on 2026-06-02 rather than ship speculative dead code. |
+
+## Tick cadence: monthly vs daily (2026-06-02)
+
+Per Gregory's direction, ticks are split by timescale instead of all firing on the monthly kingdom End Turn:
+
+| Tick | Cadence | Where |
+|------|---------|-------|
+| Fame, resource points/dice, consumption, commodities, council cooldowns, modifier durations | Monthly (kingdom turn) | `TurnTickingEngine.tick()`, called from the End Turn button in `KingdomSheet.kt`. |
+| Weather | Daily | `registerDailyTickHooks` (`DailyTickHooks.kt`) hooks `onUpdateWorldTime`; on each new calendar day it calls the existing `rollWeather(game)` (flat checks, weather events, scene FX, chat), gated by the weather setting and the camping "Check Weather" toggle. |
+| Companion travel ETA | Daily | Same hook; `DailyTickEngine.tickTravelEta()` counts each traveling companion's ETA (now measured in **days**) down to arrival, then posts chat + moves the token. |
+
+The daily hook fires whenever the Foundry world clock crosses a day boundary — i.e. when the party rests in the camping sheet, uses Set Time of Day, or the GM advances the clock. The previous monthly weather/travel handling in `TurnTickingEngine` + the End-Turn handler was removed.

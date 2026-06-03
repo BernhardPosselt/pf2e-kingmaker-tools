@@ -17,6 +17,7 @@ import at.posselt.pfrpg2e.kingdom.scenes.GridType
 import at.posselt.pfrpg2e.kingdom.scenes.toRectangle
 import at.posselt.pfrpg2e.localization.Translatable
 import at.posselt.pfrpg2e.toCamelCase
+import at.posselt.pfrpg2e.utils.createDrawingsResilient
 import at.posselt.pfrpg2e.utils.getAppFlag
 import at.posselt.pfrpg2e.utils.t
 import at.posselt.pfrpg2e.utils.typeSafeUpdate
@@ -213,7 +214,7 @@ suspend fun Scene.createSettlementBlocks(blocks: List<BlockTile>, lockTiles: Boo
     return createEmbeddedDocuments<TileDocument>("Tile", data).await().first()
 }
 
-suspend fun Scene.createSettlementLegends(legends: List<Legend>): DrawingDocument {
+suspend fun Scene.createSettlementLegends(legends: List<Legend>): Array<DrawingDocument> {
     val data = legends.map {
         val squareX = it.x
         val squareY = it.y
@@ -236,7 +237,7 @@ suspend fun Scene.createSettlementLegends(legends: List<Legend>): DrawingDocumen
             "strokeAlpha" to 0,
         ).unsafeCast<AnyObject>()
     }.toTypedArray()
-    return createEmbeddedDocuments<DrawingDocument>("Drawing", data).await().first()
+    return createDrawingsResilient(data)
 }
 
 data class BlockTile(

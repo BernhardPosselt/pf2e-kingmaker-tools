@@ -44,6 +44,12 @@ data class Settlement(
     val settlementActions: Int,
     val blocks: List<Block>,
     val layoutType: SettlementLayoutType,
+    val magicalStreetlamps: Boolean = false,
+    val pavedStreets: Boolean = false,
+    val sewerSystem: Boolean = false,
+    val lotsBorderingWater: Int = 0,
+    val edges: SettlementEdges = SettlementEdges(),
+    val urbanGrid: UrbanGrid = UrbanGrid(),
 ) {
     private val totalConsumption = size.consumption - consumptionReduction
     val isOvercrowded = occupiedBlocks > residentialLots

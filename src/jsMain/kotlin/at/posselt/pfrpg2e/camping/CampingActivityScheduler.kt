@@ -35,7 +35,11 @@ object CampingActivityScheduler {
         activities.count { it.actorUuid == actorUuid }
 
     /**
-     * Check whether the actor has exceeded the 8-hour downtime budget (4 activities).
+     * Check whether the actor has reached its activity cap (4 distinct activities).
+     *
+     * This gates *assignment* of distinct activities. Downtime hours spent (which accumulate per
+     * roll and can be depleted by re-rolling a single activity) are tracked separately on
+     * [CampingData.downtimeHoursSpent] and displayed via [CampingData.downtimeHoursRemaining].
      */
     fun isOverDowntimeBudget(activities: Array<CampingActivityWithId>, actorUuid: String): Boolean =
         countActivitiesForActor(activities, actorUuid) >= MAX_ACTIVITIES_PER_PC

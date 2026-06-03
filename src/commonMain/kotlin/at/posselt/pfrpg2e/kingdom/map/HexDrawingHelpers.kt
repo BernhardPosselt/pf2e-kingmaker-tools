@@ -28,3 +28,25 @@ const val CLEARED_STROKE_WIDTH = 2
 const val CLEARED_STROKE_DASH = "2,4"   // dotted pattern (short dash, wide gap)
 
 fun shouldHaveClearedDrawing(cleared: Boolean?): Boolean = cleared == true
+
+// ── Road drawing helpers ──
+
+const val ROAD_DRAWING_TYPE = "road"
+
+// The native Kingmaker module stores roads as a hex *feature* (HexFeature.type), not as a
+// boolean — same as "farmland". Feature type values are the lowercase form of the native
+// KINGMAKER.FEATURES keys.
+const val ROAD_FEATURE_TYPE = "road"
+
+// Visual constants for road drawings.
+// Roads render as solid brown lines connecting hex centers.
+const val ROAD_STROKE_COLOR = "#8B4513"
+const val ROAD_STROKE_WIDTH = 4
+
+/**
+ * Whether a hex should render a road, based on its native feature types. A hex counts as a road
+ * hex when any of its features is of type [ROAD_FEATURE_TYPE]. [featureTypes] is the list of
+ * `HexFeature.type` values for the hex (null/absent types are ignored).
+ */
+fun shouldHaveRoadDrawing(featureTypes: List<String?>?): Boolean =
+    featureTypes?.any { it == ROAD_FEATURE_TYPE } == true

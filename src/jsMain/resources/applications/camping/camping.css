@@ -258,6 +258,37 @@ ul.km-camping-actors {
             left: 4px;
             border: 1px solid rgb(231, 209, 177);
         }
+
+        .km-camping-actor-hours {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            min-width: 18px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.78);
+            color: var(--secondary-km);
+            border: 1px solid rgb(231, 209, 177);
+            box-shadow: 0 0 4px 1px black;
+            font-size: 15px;
+            line-height: 18px;
+            font-weight: bold;
+            text-align: center;
+            pointer-events: none;
+            z-index: 2;
+
+            .km-hours-unit {
+                font-size: 11px;
+                opacity: 0.8;
+                margin-left: 1px;
+            }
+        }
+
+        .km-camping-actor-hours.km-camping-actor-hours-full {
+            background-color: rgba(120, 0, 0, 0.88);
+            color: #fff;
+            border-color: #ffb3b3;
+        }
     }
 
 

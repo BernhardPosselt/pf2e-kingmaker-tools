@@ -97,6 +97,9 @@ external interface CampingSheetActor : BaseActorContext {
     val degreeOfSuccess: FormElementContext?
     val chosenMealImg: String?
     val chosenMeal: String?
+    val downtimeHoursRemaining: Int?
+    val downtimeHoursMax: Int?
+    val downtimeBudgetFull: Boolean?
 }
 
 @Suppress("unused")
@@ -627,6 +630,10 @@ class CampingSheet(
             overrideDc = recipe?.cookingLoreDC,
         )?.let { result ->
             camping.campingActivities[activityId]?.result = result.toCamelCase()
+            if (!activity.isPrepareCampsite()) {
+                camping.spendDowntimeHours(actorUuid, CampingActivityScheduler.DOWNTIME_HOURS_PER_ACTIVITY)
+                console.log("KM_SPEND_0602 spent 2h, remaining", camping.downtimeHoursRemaining(actorUuid), "for", actorUuid)
+            }
             actor.setCamping(camping)
 
             if (activity.isHuntAndGather()) {
@@ -675,6 +682,10 @@ class CampingSheet(
                 .filter { it != prepareCampsiteId }
                 .toSet()
             actor.deleteCampingActivities(ids) {}
+            actor.getCamping()?.let { fresh ->
+                fresh.resetDowntimeHours()
+                actor.setCamping(fresh)
+            }
         }
     }
 
@@ -817,8 +828,11 @@ class CampingSheet(
                                 selectedSkill = skill?.attribute?.value,
                             )
                         } else {
+                            // Assigning a character is a fresh attempt: drop the previous roll
+                            // result so downtime hours are only consumed once it is re-rolled.
                             existing.actorUuid = actorUuid
                             existing.selectedSkill = skill?.attribute?.value
+                            existing.result = null
                         }
                         actor.setCamping(camping)
                     }
@@ -1093,7 +1107,10 @@ class CampingSheet(
                 groupedActivity = groupedActivity,
                 ignoreSkillRequirements = camping.ignoreSkillRequirements,
             )
-            val hidden = camping.lockedActivities.contains(data.id)
+            // Companion-learning activities must always be listed (greyed out when the
+            // required NPC is absent), so they bypass the manage-activities lock. Every
+            // other activity continues to respect lockedActivities as before.
+            val hidden = data.isHiddenByLock(camping.lockedActivities.toSet())
                     || (prepareCampSection && !groupedActivity.isPrepareCamp())
                     || (campingActivitiesSection && groupedActivity.isPrepareCamp())
                     || eatingSection
@@ -1208,7 +1225,16 @@ class CampingSheet(
                                     && it.done()
                         },
                         chosenMeal = meal?.name,
-                        chosenMealImg = meal?.icon
+                        chosenMealImg = meal?.icon,
+                        downtimeHoursRemaining = if (campingActivitiesSection) {
+                            camping.downtimeHoursRemaining(uuid)
+                        } else null,
+                        downtimeHoursMax = if (campingActivitiesSection) {
+                            CampingActivityScheduler.MAX_DOWNTIME_HOURS
+                        } else null,
+                        downtimeBudgetFull = if (campingActivitiesSection) {
+                            camping.downtimeHoursRemaining(uuid) <= 0
+                        } else null,
                     )
                 }
             }.toTypedArray(),

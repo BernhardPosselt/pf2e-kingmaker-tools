@@ -248,4 +248,18 @@ class CampingActivitySchedulerTest {
         assertEquals(2, CampingActivityScheduler.DOWNTIME_HOURS_PER_ACTIVITY)
         assertEquals(8, CampingActivityScheduler.MAX_DOWNTIME_HOURS)
     }
+
+    // === Downtime hours assignment cap ===
+
+    @Test
+    fun testAssignmentCapBlocksFifthActivityEvenWhenUnrolled() {
+        // The 4-activity cap gates assignment regardless of whether checks have been rolled.
+        val activities = arrayOf(
+            activityWithId("test-activity", actorUuid = "actor-1", result = null),
+            activityWithId("another-activity", actorUuid = "actor-1", result = null),
+            activityWithId("relax", actorUuid = "actor-1", result = null),
+            activityWithId("hunt-and-gather", actorUuid = "actor-1", result = null),
+        )
+        assertTrue(CampingActivityScheduler.isOverDowntimeBudget(activities, "actor-1"))
+    }
 }
