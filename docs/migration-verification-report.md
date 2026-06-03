@@ -170,3 +170,48 @@ These items **cannot be verified by static code analysis** and require clicking 
 2. Should injury durations and weather shifts tick through `TurnTickingEngine` or a separate system?
 3. Is the write-only companion sync sufficient, or should companion actor edits propagate back to the kingdom roster?
 4. Should `chosenFeats` affect settlement item levels, or is the structure-only approach correct?
+
+---
+
+# QA Checklist Update — 2026-06-03 (t_a98da4cd)
+
+**Author:** interactive maintainer session.
+**Method:** static code re-review of all checklist items **plus a live headless-Chrome render check** against the running world `kingmaker` (login as Gamemaster, `game.ready`, module active). See [[foundry-live-render-check]] for the harness.
+
+This section supersedes stale entries above where noted. The 2026-05-31 report predates migration 26, the explored/cleared/roads hex visuals, the settlement "Workbook Activity Bonuses" rows, the V&K toggles, and the army catalog UI.
+
+## Static confirmation of newer items
+
+| Item | Code evidence | Status |
+|---|---|---|
+| Migration **26** (watchSlots flat → nested, multiple actors per slot) | `Migration26.kt` `migrateCamping`; registered `Migrations.kt:20,60`; `latestMigrationVersion` now = 26 | PASS |
+| Settlement matrix **"Workbook Activity Bonuses"** rows | `sections/settlements/page.hbs:128` section header (colspan), `:131` `data-workbook-row` rows w/ `km-matrix-section-header` | PASS |
+| Settlements **toggle** + `km-active` highlight | `page.hbs:13-14` `data-action="toggle-settlements-view"` overview/matrix, `km-active` class | PASS |
+| **Overcrowded** icon | `page.hbs:61,159` `fa-people-roof` gated on `isOvercrowded` | PASS |
+| **explored / cleared / roads** hex visuals | `HexDrawingHelpers.kt`: `EXPLORED_DRAWING_TYPE` (dashed blue), `CLEARED_DRAWING_TYPE` (orange), `shouldHaveExploredDrawing/ClearedDrawing`; roads stored as `HexFeature.type`; synced in `HexGridSync.kt` | PASS — **corrects 05-31 report** (was "NOT IMPLEMENTED") |
+| **Set-watches** (multi-actor slots) | `camping-sheet.hbs:178-199` watch grid, per-slot assignees (draggable `data-type="Actor"`), `clear-watch-slot`; backed by nested `watchSlots` (Migration26) | PASS |
+| **Army catalog** in UI | `army-browser.hbs` + `ArmyBrowser.kt` workbook context; compendium via `createArmyCompendiumEntries` | PASS — **LIVE-VERIFIED**, see below |
+
+## Live-verified this pass (real Foundry render)
+
+- **Army catalog** — the "Available Basic Armies" table renders **all 11 workbook armies** (full stat columns: Level/Type/DC/HP/Consumption/Attacks/Maneuver Save/Accessible/Starting Tactics/Description). The compendium `kingmaker-tools-journals` holds **11 Army + 40 Tactic + 8 Modifier** journal entries.
+- **Bug found & fixed** during this check: `army-browser.hbs` emitted multiple root elements → Foundry ApplicationV2 threw *"Template part 'div' must render a single HTML element"* and the dialog never opened (this is what exhausted prior automated workers). Fixed by wrapping the template in a single `<div class="km-browser">` root — commit `0b87492e`.
+
+## Confirmed issue / world-data follow-up
+
+- **`recruitableArmiesFolderId` points to a deleted folder** in the live `kingmaker` world (`SRbMwBpUUwK367uO`). `findArmyFolder()` throws, so the in-app Recruit Army flow is broken until repointed. The valid folder is **"Recruitable Armies" (`7AAQ0CdAFDIWoccN`)** — fix under Kingdom → Creation or settings. (Not a code bug; the army catalog is also reachable via the compendium regardless.)
+
+## Manual Foundry click-through checklist (for Gregory)
+
+Run against a **saved** world (not fresh). Most items are static-confirmed above; these are the human visual/behavioral confirmations.
+
+- [ ] **Settlements toggle** — open Kingdom sheet → Settlements; click Overview/Matrix; the active button shows the `km-active` highlight and the view switches.
+- [ ] **Settlements matrix** — in Matrix view, item-level rows populate; the **"Workbook Activity Bonuses"** section header + its rows appear; capital **star** and **overcrowded** (people-roof) icons show on the right settlements.
+- [ ] **Roster tab** — Kingdom sheet → Roster: tab navigates; cards render with role badges, status, action buttons.
+- [ ] **Companion sheet sync** — edit a companion on its actor sheet; confirm behavior matches the write-only design (kingdom-sheet edits drive the roster; actor edits don't read back — see [[companion-sync-policy]]).
+- [ ] **Hex claim redraw** — claim a hex → claimed fill appears; verify the **explored** (dashed blue) and **cleared** (orange) outlines and **roads** render distinctly.
+- [ ] **End Turn** — click End Turn; fame/resources/consumption/commodities/cooldowns/modifiers advance and a chat summary posts.
+- [ ] **Companion travel arrival** — with a companion ETA at 0, advancing the world clock moves the token to the destination and posts a chat message (travel is world-clock driven, **not** End Turn — see [[companion-travel-trigger]]).
+- [ ] **Migrations 24, 25 & 26** — load a saved world; confirm no errors and `watchSlots` upgrades to nested arrays (Migration 26) without data loss; idempotent on reload.
+- [ ] **Set-watches** — Camping sheet: change the watch-slot count; assign **multiple** actors to a single watch slot (drag actors in); clear a slot.
+- [ ] **Army catalog** — Kingdom → Recruit Army opens the browser with the 11 basic armies **(requires a valid `recruitableArmiesFolderId`; see issue above)**; armies/tactics also browsable via the journals compendium. ✅ render confirmed live this pass.
