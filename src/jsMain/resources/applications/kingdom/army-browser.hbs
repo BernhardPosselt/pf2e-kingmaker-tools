@@ -1,3 +1,51 @@
+<div class="km-browser">
+{{#if showWorkbook}}
+<h2>{{localizeKM "kingdom.armyRecruitmentBrowserTitle"}}</h2>
+<table class="km-army-browser">
+    <thead>
+    <th>{{localizeKM "kingdom.army"}}</th>
+    <th>{{localizeKM "applications.level"}}</th>
+    <th>{{localizeKM "kingdom.armyType"}}</th>
+    <th>{{localizeKM "applications.dc"}}</th>
+    <th>{{localizeKM "kingdom.hp"}}</th>
+    <th>{{localizeKM "kingdom.consumption"}}</th>
+    <th>{{localizeKM "kingdom.attacks"}}</th>
+    <th>{{localizeKM "kingdom.maneuverSave"}}</th>
+    <th>{{localizeKM "kingdom.accessible"}}</th>
+    <th>{{localizeKM "kingdom.startingTactics"}}</th>
+    <th>{{localizeKM "applications.description"}}</th>
+    </thead>
+    <tbody>
+    {{#each workbookArmies}}
+        <tr>
+            <td><strong>{{name}}</strong></td>
+            <td>{{level}}</td>
+            <td>{{type}}</td>
+            <td>{{dc}}</td>
+            <td>{{hp}}</td>
+            <td>{{consumption}}</td>
+            <td>{{attacks}}</td>
+            <td>{{maneuverSave}}</td>
+            <td>{{#if accessible}}<i class="fa-solid fa-circle-check"></i>{{else}}<i class="fa-solid fa-circle-xmark"></i>{{/if}}</td>
+            <td>
+                {{#if startingTactics.length}}
+                    <ul class="km-tactics-list">
+                    {{#each startingTactics}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                    </ul>
+                {{else}}
+                    —
+                {{/if}}
+            </td>
+            <td>{{description}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+<h2>{{localizeKM "kingdom.armyBrowserTitle"}}</h2>
 <table>
     <thead>
     <th>{{localizeKM "kingdom.army"}}</th>
@@ -20,3 +68,4 @@
     {{/each}}
     </tbody>
 </table>
+</div>
