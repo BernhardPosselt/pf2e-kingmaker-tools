@@ -4,9 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-group = "at.posselt"
-version = "0.0.2"
-
 repositories {
     mavenCentral()
 }
