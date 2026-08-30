@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.4.0] - 2026-08-30
+
+### Changed
+
+* Macros that previously asked you to choose a party if more than one were found, now pick the active party instead
+
 ## [6.3.1] - 2026-05-18
 
 ### Fixed
