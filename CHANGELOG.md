@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.4.1] - 2026-08-30
+
+### Fixed
+
+* Also default to active party for award xp macro
+
+
 ## [6.4.0] - 2026-08-30
 
 ### Changed

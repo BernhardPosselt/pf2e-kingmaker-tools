@@ -18,7 +18,7 @@ plugins {
 }
 
 group = "at.posselt"
-version = "6.4.0"
+version = "6.4.1"
 
 repositories {
     mavenCentral()
