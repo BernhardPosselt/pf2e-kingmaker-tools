@@ -92,6 +92,7 @@ kotlin {
         // define a jsMain module
         val jsMain by getting {
             dependencies {
+                implementation("at.posselt:foundryvtt")
                 implementation(project.dependencies.enforcedPlatform(libs.kotlin.wrappers))
                 implementation(libs.kotlin.wrappers.js)
                 implementation(libs.kotlin.wrappers.web)

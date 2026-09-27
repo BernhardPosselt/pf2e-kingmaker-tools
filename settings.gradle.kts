@@ -1,5 +1,6 @@
 rootProject.name = "pfrpg2eKingdomCampingWeather"
 
+includeBuild("foundryvtt")
 includeBuild("foundryvtt-module-plugin")
 
 //pluginManagement {

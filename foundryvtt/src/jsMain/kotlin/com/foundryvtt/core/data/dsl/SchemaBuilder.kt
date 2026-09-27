@@ -1,7 +1,5 @@
 package com.foundryvtt.core.data.dsl
 
-import at.posselt.pfrpg2e.toCamelCase
-import at.posselt.pfrpg2e.utils.toRecord
 import com.foundryvtt.core.data.fields.ArrayField
 import com.foundryvtt.core.data.fields.ArrayFieldOptions
 import com.foundryvtt.core.data.fields.BooleanField
@@ -15,8 +13,10 @@ import com.foundryvtt.core.data.fields.SchemaField
 import com.foundryvtt.core.data.fields.StringField
 import com.foundryvtt.core.data.fields.StringFieldOptions
 import com.foundryvtt.core.data.fields.TypedObjectField
+import com.foundryvtt.core.toCamelCase
 import js.objects.Record
 import js.objects.recordOf
+import js.objects.toRecord
 import kotlin.enums.enumEntries
 
 /**

@@ -98,12 +98,14 @@ abstract class FormApp<T : ValidatedHandlebarsContext, O>(
 
     protected var isFormValid: Boolean = true
 
-    protected fun isValid() =
-        if (element is HTMLFormElement) {
-            element.reportValidity()
+    protected fun isValid(): Boolean {
+        val el = element
+        return if (el is HTMLFormElement) {
+            el.reportValidity()
         } else {
             throw IllegalStateException("Application ${this::class.simpleName} does not posses an outermost form element")
         }
+    }
 
     override fun onSubmit(event: Event, form: HTMLFormElement, formData: FormDataExtended<AnyObject>): Promise<Void> =
         buildPromise {

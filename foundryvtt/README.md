@@ -1,0 +1,1 @@
+# FoundryVTT Type Definitions
