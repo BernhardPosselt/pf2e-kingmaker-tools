@@ -1,0 +1,1 @@
+# FoundryVTT PF2E Type Definitions
