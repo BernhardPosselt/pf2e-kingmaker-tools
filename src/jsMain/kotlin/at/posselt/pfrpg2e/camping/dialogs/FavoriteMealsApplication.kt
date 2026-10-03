@@ -21,7 +21,7 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
-import com.foundryvtt.core.data.dsl.buildSchema
+import at.posselt.pfrpg2e.utils.buildSchema
 import js.array.component1
 import js.array.component2
 import js.core.Void

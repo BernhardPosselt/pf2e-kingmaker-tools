@@ -3,7 +3,7 @@ package at.posselt.pfrpg2e.camping
 import com.foundryvtt.core.AnyObject
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
-import com.foundryvtt.core.data.dsl.buildSchema
+import at.posselt.pfrpg2e.utils.buildSchema
 
 @JsExport
 class CampingSheetDataModel(

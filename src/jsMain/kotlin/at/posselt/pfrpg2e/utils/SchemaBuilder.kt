@@ -1,4 +1,4 @@
-package com.foundryvtt.core.data.dsl
+package at.posselt.pfrpg2e.utils
 
 import com.foundryvtt.core.data.fields.ArrayField
 import com.foundryvtt.core.data.fields.ArrayFieldOptions

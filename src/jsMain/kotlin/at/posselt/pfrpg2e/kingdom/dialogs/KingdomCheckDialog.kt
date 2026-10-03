@@ -77,7 +77,7 @@ import com.foundryvtt.core.Game
 import com.foundryvtt.core.abstract.DataModel
 import com.foundryvtt.core.abstract.DocumentConstructionContext
 import com.foundryvtt.core.applications.api.HandlebarsRenderOptions
-import com.foundryvtt.core.data.dsl.buildSchema
+import at.posselt.pfrpg2e.utils.buildSchema
 import io.github.uuidjs.uuid.v4
 import js.core.Void
 import js.objects.recordOf
@@ -131,11 +131,9 @@ import kotlin.sequences.filter
 import kotlin.sequences.map
 import kotlin.sequences.toSet
 import kotlin.takeIf
-import kotlin.text.contains
 import kotlin.text.isNotBlank
 import kotlin.text.toInt
 import kotlin.to
-import kotlin.toString
 
 @Suppress("unused")
 @JsPlainObject
